@@ -13,6 +13,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 )
@@ -55,23 +56,23 @@ type CrlValidatedID struct {
 // ParseCrlValidatedID decodes a CrlValidatedID from its DER encoding.
 // Port of CrlValidatedID.getInstance(Object).
 func ParseCrlValidatedID(der []byte) (*CrlValidatedID, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
 	if len(rest) != 0 {
 		return nil, errors.New("extra data found after the CrlValidatedID")
 	}
-	if !element.constructed || len(element.children) == 0 || len(element.children) > 2 {
+	if !element.IsConstructed() || len(element.Children()) == 0 || len(element.Children()) > 2 {
 		return nil, errors.New("malformed CrlValidatedID")
 	}
-	crlHash, err := ParseOtherHash(element.children[0].encoded)
+	crlHash, err := ParseOtherHash(element.Children()[0].Encoded())
 	if err != nil {
 		return nil, err
 	}
 	validatedID := &CrlValidatedID{CrlHash: crlHash}
-	if len(element.children) == 2 {
-		crlIdentifier, err := crlRefParseCrlIdentifier(element.children[1])
+	if len(element.Children()) == 2 {
+		crlIdentifier, err := crlRefParseCrlIdentifier(element.Children()[1])
 		if err != nil {
 			return nil, err
 		}
@@ -81,26 +82,26 @@ func ParseCrlValidatedID(der []byte) (*CrlValidatedID, error) {
 }
 
 // crlRefParseCrlIdentifier decodes an already parsed CrlIdentifier.
-func crlRefParseCrlIdentifier(element *dssASN1UtilsElement) (*CrlIdentifier, error) {
-	if !element.constructed || len(element.children) < 2 || len(element.children) > 3 {
+func crlRefParseCrlIdentifier(element *asn1ber.Element) (*CrlIdentifier, error) {
+	if !element.IsConstructed() || len(element.Children()) < 2 || len(element.Children()) > 3 {
 		return nil, errors.New("malformed CrlIdentifier")
 	}
-	if !element.children[1].isUniversal(dssASN1UtilsTagUTCTime) {
+	if !element.Children()[1].IsUniversal(asn1ber.TagUTCTime) {
 		return nil, errors.New("malformed CrlIdentifier: crlIssuedTime is not a UTCTime")
 	}
-	crlIssuedTime, err := dssASN1UtilsParseUTCTime(string(element.children[1].content))
+	crlIssuedTime, err := asn1ber.ParseUTCTime(string(element.Children()[1].Content()))
 	if err != nil {
 		return nil, err
 	}
 	identifier := &CrlIdentifier{
-		CrlIssuer:     element.children[0].encoded,
+		CrlIssuer:     element.Children()[0].Encoded(),
 		CrlIssuedTime: crlIssuedTime,
 	}
-	if len(element.children) == 3 {
-		if !element.children[2].isUniversal(dssASN1UtilsTagInteger) {
+	if len(element.Children()) == 3 {
+		if !element.Children()[2].IsUniversal(asn1ber.TagInteger) {
 			return nil, errors.New("malformed CrlIdentifier: crlNumber is not an INTEGER")
 		}
-		identifier.CrlNumber = element.children[2].integer()
+		identifier.CrlNumber = element.Children()[2].Integer()
 	}
 	return identifier, nil
 }

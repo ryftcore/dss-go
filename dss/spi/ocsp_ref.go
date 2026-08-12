@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 	"github.com/utain/esig/dss/utils"
@@ -48,23 +49,23 @@ type OcspResponsesID struct {
 // ParseOcspResponsesID decodes an OcspResponsesID from its DER encoding.
 // Port of OcspResponsesID.getInstance(Object).
 func ParseOcspResponsesID(der []byte) (*OcspResponsesID, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
 	if len(rest) != 0 {
 		return nil, errors.New("extra data found after the OcspResponsesID")
 	}
-	if !element.constructed || len(element.children) == 0 || len(element.children) > 2 {
+	if !element.IsConstructed() || len(element.Children()) == 0 || len(element.Children()) > 2 {
 		return nil, errors.New("malformed OcspResponsesID")
 	}
-	identifier, err := ocspRefParseOcspIdentifier(element.children[0])
+	identifier, err := ocspRefParseOcspIdentifier(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
 	responsesID := &OcspResponsesID{OcspIdentifier: identifier}
-	if len(element.children) == 2 {
-		hash, err := ParseOtherHash(element.children[1].encoded)
+	if len(element.Children()) == 2 {
+		hash, err := ParseOtherHash(element.Children()[1].Encoded())
 		if err != nil {
 			return nil, err
 		}
@@ -74,18 +75,18 @@ func ParseOcspResponsesID(der []byte) (*OcspResponsesID, error) {
 }
 
 // ocspRefParseOcspIdentifier decodes an already parsed OcspIdentifier.
-func ocspRefParseOcspIdentifier(element *dssASN1UtilsElement) (*OcspIdentifier, error) {
-	if !element.constructed || len(element.children) != 2 {
+func ocspRefParseOcspIdentifier(element *asn1ber.Element) (*OcspIdentifier, error) {
+	if !element.IsConstructed() || len(element.Children()) != 2 {
 		return nil, errors.New("malformed OcspIdentifier")
 	}
-	responderID, err := dssRevocationUtilsResponderIDFromElement(element.children[0])
+	responderID, err := dssRevocationUtilsResponderIDFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	if !element.children[1].isUniversal(dssASN1UtilsTagGeneralizedTime) {
+	if !element.Children()[1].IsUniversal(asn1ber.TagGeneralizedTime) {
 		return nil, errors.New("malformed OcspIdentifier: producedAt is not a GeneralizedTime")
 	}
-	return &OcspIdentifier{OcspResponderID: responderID, ProducedAt: element.children[1].encoded}, nil
+	return &OcspIdentifier{OcspResponderID: responderID, ProducedAt: element.Children()[1].Encoded()}, nil
 }
 
 // OCSPRef references an OCSP response.

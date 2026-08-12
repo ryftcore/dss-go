@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 	"github.com/utain/esig/dss/utils"
@@ -416,24 +417,24 @@ type ocspTokenCertHash struct {
 // ocspTokenParseCertHash decodes a CertHash from its DER encoding.
 // Port of CertHash.getInstance(Object).
 func ocspTokenParseCertHash(der []byte) (*ocspTokenCertHash, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
 	if len(rest) != 0 {
 		return nil, errors.New("extra data found after the CertHash")
 	}
-	if !element.constructed || len(element.children) != 2 {
+	if !element.IsConstructed() || len(element.Children()) != 2 {
 		return nil, errors.New("malformed CertHash")
 	}
-	hashAlgorithm, err := dssASN1UtilsAlgorithmIdentifierFromElement(element.children[0])
+	hashAlgorithm, err := asn1ber.AlgorithmIdentifierFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	if !element.children[1].isUniversal(dssASN1UtilsTagOctetString) {
+	if !element.Children()[1].IsUniversal(asn1ber.TagOctetString) {
 		return nil, errors.New("malformed CertHash: certificateHash is not an OCTET STRING")
 	}
-	return &ocspTokenCertHash{hashAlgorithm: hashAlgorithm, certificateHash: element.children[1].octets()}, nil
+	return &ocspTokenCertHash{hashAlgorithm: hashAlgorithm, certificateHash: element.Children()[1].Octets()}, nil
 }
 
 // ocspTokenVerifySignature verifies the response signature over the retained tbsResponseData

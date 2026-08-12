@@ -26,6 +26,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/utils"
 )
@@ -149,10 +150,10 @@ type CertID struct {
 // DER returns the DER encoding of the CertID.
 func (c *CertID) DER() []byte {
 	body := c.HashAlgorithm.DER()
-	body = append(body, dssASN1UtilsWriteTLV(dssASN1UtilsTagOctetString, c.IssuerNameHash)...)
-	body = append(body, dssASN1UtilsWriteTLV(dssASN1UtilsTagOctetString, c.IssuerKeyHash)...)
-	body = append(body, dssASN1UtilsEncodeInteger(c.SerialNumber)...)
-	return dssASN1UtilsWriteTLV(dssASN1UtilsTagSequence|dssASN1UtilsConstructed, body)
+	body = append(body, asn1ber.WriteTLV(asn1ber.TagOctetString, c.IssuerNameHash)...)
+	body = append(body, asn1ber.WriteTLV(asn1ber.TagOctetString, c.IssuerKeyHash)...)
+	body = append(body, asn1ber.EncodeInteger(c.SerialNumber)...)
+	return asn1ber.WriteTLV(asn1ber.TagSequence|asn1ber.Constructed, body)
 }
 
 // CertificateID wraps a CertID, mirroring org.bouncycastle.cert.ocsp.CertificateID.
@@ -312,7 +313,7 @@ type BasicOCSPResponse struct {
 
 // ParseBasicOCSPResponse decodes a BasicOCSPResponse from its encoding, keeping the bytes.
 func ParseBasicOCSPResponse(der []byte) (*BasicOCSPResponse, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
@@ -437,7 +438,7 @@ func NewOCSPResponse(responseStatus int, responseType asn1.ObjectIdentifier, res
 
 // ParseOCSPResponse decodes an OCSPResponse from its encoding, keeping the bytes.
 func ParseOCSPResponse(der []byte) (*OCSPResponse, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
@@ -449,14 +450,14 @@ func ParseOCSPResponse(der []byte) (*OCSPResponse, error) {
 
 // DER returns the DER encoding of the OCSPResponse.
 func (o *OCSPResponse) DER() []byte {
-	body := dssASN1UtilsWriteTLV(0x0A, []byte{byte(o.ResponseStatus)}) // ENUMERATED
+	body := asn1ber.WriteTLV(0x0A, []byte{byte(o.ResponseStatus)}) // ENUMERATED
 	if o.ResponseType != nil {
-		responseBytes := dssASN1UtilsEncodeOID(o.ResponseType)
-		responseBytes = append(responseBytes, dssASN1UtilsWriteTLV(dssASN1UtilsTagOctetString, o.Response)...)
-		responseBytes = dssASN1UtilsWriteTLV(dssASN1UtilsTagSequence|dssASN1UtilsConstructed, responseBytes)
-		body = append(body, dssASN1UtilsWriteTLV(0xA0, responseBytes)...)
+		responseBytes := asn1ber.EncodeOID(o.ResponseType)
+		responseBytes = append(responseBytes, asn1ber.WriteTLV(asn1ber.TagOctetString, o.Response)...)
+		responseBytes = asn1ber.WriteTLV(asn1ber.TagSequence|asn1ber.Constructed, responseBytes)
+		body = append(body, asn1ber.WriteTLV(0xA0, responseBytes)...)
 	}
-	return dssASN1UtilsWriteTLV(dssASN1UtilsTagSequence|dssASN1UtilsConstructed, body)
+	return asn1ber.WriteTLV(asn1ber.TagSequence|asn1ber.Constructed, body)
 }
 
 // Encoded returns the original encoding of the OCSPResponse.
@@ -534,30 +535,30 @@ type OtherHash struct {
 // ParseOtherHash decodes an OtherHash from its DER encoding.
 // Port of OtherHash.getInstance(Object).
 func ParseOtherHash(der []byte) (*OtherHash, error) {
-	element, rest, err := dssASN1UtilsParse(der)
+	element, rest, err := asn1ber.Parse(der)
 	if err != nil {
 		return nil, err
 	}
 	if len(rest) != 0 {
 		return nil, errors.New("extra data found after the OtherHash")
 	}
-	if element.isUniversal(dssASN1UtilsTagOctetString) {
+	if element.IsUniversal(asn1ber.TagOctetString) {
 		return &OtherHash{
 			HashAlgorithm: NewAlgorithmIdentifier(dssRevocationUtilsOIDSHA1),
-			HashValue:     element.octets(),
+			HashValue:     element.Octets(),
 		}, nil
 	}
-	if !element.constructed || len(element.children) != 2 {
+	if !element.IsConstructed() || len(element.Children()) != 2 {
 		return nil, errors.New("the OtherHash is neither an OCTET STRING nor an OtherHashAlgAndValue")
 	}
-	algorithm, err := dssASN1UtilsAlgorithmIdentifierFromElement(element.children[0])
+	algorithm, err := asn1ber.AlgorithmIdentifierFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	if !element.children[1].isUniversal(dssASN1UtilsTagOctetString) {
+	if !element.Children()[1].IsUniversal(asn1ber.TagOctetString) {
 		return nil, errors.New("the OtherHashAlgAndValue hashValue is not an OCTET STRING")
 	}
-	return &OtherHash{HashAlgorithm: algorithm, HashValue: element.children[1].octets()}, nil
+	return &OtherHash{HashAlgorithm: algorithm, HashValue: element.Children()[1].Octets()}, nil
 }
 
 // -----------------------------------------------------------------------------
@@ -656,7 +657,7 @@ func DSSRevocationUtilsMatches(certID *CertificateID, singleResp *SingleResp) bo
 // upstream builds it does.
 func DSSRevocationUtilsOCSPCertificateID(cert *model.CertificateToken, issuerCert *model.CertificateToken,
 	digestAlgorithm enumerations.DigestAlgorithm) (*CertificateID, error) {
-	oid, err := dssASN1UtilsObjectIdentifier(digestAlgorithm.OID())
+	oid, err := asn1ber.OIDFromString(digestAlgorithm.OID())
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause("Unable to create CertificateID", err)
 	}
@@ -677,7 +678,7 @@ func DSSRevocationUtilsOCSPCertificateID(cert *model.CertificateToken, issuerCer
 		return nil, model.NewDSSErrorMessageCause("Unable to create CertificateID", err)
 	}
 	return NewCertificateID(&CertID{
-		HashAlgorithm:  NewAlgorithmIdentifierWithParameters(oid, dssASN1UtilsDERNull),
+		HashAlgorithm:  NewAlgorithmIdentifierWithParameters(oid, asn1ber.DERNull),
 		IssuerNameHash: issuerNameHash,
 		IssuerKeyHash:  issuerKeyHash,
 		SerialNumber:   cert.SerialNumber(),
@@ -687,15 +688,15 @@ func DSSRevocationUtilsOCSPCertificateID(cert *model.CertificateToken, issuerCer
 // dssRevocationUtilsSubjectPublicKeyBits returns the value bits of the certificate's
 // subjectPublicKey BIT STRING, i.e. SubjectPublicKeyInfo#getPublicKeyData().getBytes().
 func dssRevocationUtilsSubjectPublicKeyBits(certificate *model.CertificateToken) ([]byte, error) {
-	element, _, err := dssASN1UtilsParse(certificate.PublicKey().Encoded())
+	element, _, err := asn1ber.Parse(certificate.PublicKey().Encoded())
 	if err != nil {
 		return nil, err
 	}
-	if !element.constructed || len(element.children) < 2 ||
-		!element.children[1].isUniversal(dssASN1UtilsTagBitString) {
+	if !element.IsConstructed() || len(element.Children()) < 2 ||
+		!element.Children()[1].IsUniversal(asn1ber.TagBitString) {
 		return nil, errors.New("malformed SubjectPublicKeyInfo")
 	}
-	return element.children[1].bitStringOctets(), nil
+	return element.Children()[1].BitStringOctets(), nil
 }
 
 // DSSRevocationUtilsLoadOCSPBase64Encoded loads an OCSP response from a base64-encoded
@@ -869,117 +870,117 @@ func DSSRevocationUtilsCheckIssuerValidAtRevocationProductionTime(
 // -----------------------------------------------------------------------------
 
 // dssRevocationUtilsOCSPResponseFromElement decodes an already parsed OCSPResponse.
-func dssRevocationUtilsOCSPResponseFromElement(element *dssASN1UtilsElement) (*OCSPResponse, error) {
-	if !element.constructed || len(element.children) == 0 || len(element.children) > 2 {
+func dssRevocationUtilsOCSPResponseFromElement(element *asn1ber.Element) (*OCSPResponse, error) {
+	if !element.IsConstructed() || len(element.Children()) == 0 || len(element.Children()) > 2 {
 		return nil, errors.New("malformed OCSPResponse")
 	}
-	status := element.children[0]
-	if status.class != 0 || (status.tagNumber != 0x0A && status.tagNumber != dssASN1UtilsTagInteger) {
+	status := element.Children()[0]
+	if status.Class() != asn1ber.ClassUniversal || (status.TagNumber() != 0x0A && status.TagNumber() != asn1ber.TagInteger) {
 		return nil, errors.New("malformed OCSPResponse: responseStatus is not an ENUMERATED")
 	}
-	response := &OCSPResponse{ResponseStatus: int(status.integer().Int64()), encoded: element.encoded}
-	if len(element.children) == 1 {
+	response := &OCSPResponse{ResponseStatus: int(status.Integer().Int64()), encoded: element.Encoded()}
+	if len(element.Children()) == 1 {
 		return response, nil
 	}
-	tagged := element.children[1]
-	if tagged.class != 0x80 || tagged.tagNumber != 0 || !tagged.constructed || len(tagged.children) != 1 {
+	tagged := element.Children()[1]
+	if !tagged.IsContextSpecific(0) || !tagged.IsConstructed() || len(tagged.Children()) != 1 {
 		return nil, errors.New("malformed OCSPResponse: responseBytes is not [0] EXPLICIT")
 	}
-	responseBytes := tagged.children[0]
-	if !responseBytes.constructed || len(responseBytes.children) != 2 {
+	responseBytes := tagged.Children()[0]
+	if !responseBytes.IsConstructed() || len(responseBytes.Children()) != 2 {
 		return nil, errors.New("malformed ResponseBytes")
 	}
-	responseType, err := responseBytes.children[0].objectIdentifier()
+	responseType, err := responseBytes.Children()[0].ObjectIdentifier()
 	if err != nil {
 		return nil, err
 	}
-	if !responseBytes.children[1].isUniversal(dssASN1UtilsTagOctetString) {
+	if !responseBytes.Children()[1].IsUniversal(asn1ber.TagOctetString) {
 		return nil, errors.New("malformed ResponseBytes: response is not an OCTET STRING")
 	}
 	response.ResponseType = responseType
-	response.Response = responseBytes.children[1].octets()
+	response.Response = responseBytes.Children()[1].Octets()
 	return response, nil
 }
 
 // dssRevocationUtilsBasicOCSPResponseFromElement decodes an already parsed BasicOCSPResponse.
-func dssRevocationUtilsBasicOCSPResponseFromElement(element *dssASN1UtilsElement) (*BasicOCSPResponse, error) {
-	if !element.constructed || len(element.children) < 3 {
+func dssRevocationUtilsBasicOCSPResponseFromElement(element *asn1ber.Element) (*BasicOCSPResponse, error) {
+	if !element.IsConstructed() || len(element.Children()) < 3 {
 		return nil, errors.New("malformed BasicOCSPResponse")
 	}
-	responseData, err := dssRevocationUtilsResponseDataFromElement(element.children[0])
+	responseData, err := dssRevocationUtilsResponseDataFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	signatureAlgorithm, err := dssASN1UtilsAlgorithmIdentifierFromElement(element.children[1])
+	signatureAlgorithm, err := asn1ber.AlgorithmIdentifierFromElement(element.Children()[1])
 	if err != nil {
 		return nil, err
 	}
-	if !element.children[2].isUniversal(dssASN1UtilsTagBitString) {
+	if !element.Children()[2].IsUniversal(asn1ber.TagBitString) {
 		return nil, errors.New("malformed BasicOCSPResponse: signature is not a BIT STRING")
 	}
 	response := &BasicOCSPResponse{
 		TBSResponseData:    responseData,
 		SignatureAlgorithm: signatureAlgorithm,
-		Signature:          element.children[2].bitStringOctets(),
-		encoded:            element.encoded,
+		Signature:          element.Children()[2].BitStringOctets(),
+		encoded:            element.Encoded(),
 	}
-	if len(element.children) > 3 {
-		tagged := element.children[3]
-		if tagged.class != 0x80 || tagged.tagNumber != 0 || !tagged.constructed || len(tagged.children) != 1 {
+	if len(element.Children()) > 3 {
+		tagged := element.Children()[3]
+		if !tagged.IsContextSpecific(0) || !tagged.IsConstructed() || len(tagged.Children()) != 1 {
 			return nil, errors.New("malformed BasicOCSPResponse: certs is not [0] EXPLICIT")
 		}
-		certificates := tagged.children[0]
-		if !certificates.constructed {
+		certificates := tagged.Children()[0]
+		if !certificates.IsConstructed() {
 			return nil, errors.New("malformed BasicOCSPResponse: certs is not a SEQUENCE")
 		}
-		for _, certificate := range certificates.children {
-			response.Certs = append(response.Certs, certificate.encoded)
+		for _, certificate := range certificates.Children() {
+			response.Certs = append(response.Certs, certificate.Encoded())
 		}
 	}
 	return response, nil
 }
 
 // dssRevocationUtilsResponseDataFromElement decodes an already parsed ResponseData.
-func dssRevocationUtilsResponseDataFromElement(element *dssASN1UtilsElement) (*ResponseData, error) {
-	if !element.constructed || len(element.children) < 3 {
+func dssRevocationUtilsResponseDataFromElement(element *asn1ber.Element) (*ResponseData, error) {
+	if !element.IsConstructed() || len(element.Children()) < 3 {
 		return nil, errors.New("malformed ResponseData")
 	}
-	data := &ResponseData{encoded: element.encoded}
+	data := &ResponseData{encoded: element.Encoded()}
 	index := 0
-	if element.children[index].class == 0x80 && element.children[index].tagNumber == 0 {
-		version := element.children[index]
-		if !version.constructed || len(version.children) != 1 {
+	if element.Children()[index].IsContextSpecific(0) {
+		version := element.Children()[index]
+		if !version.IsConstructed() || len(version.Children()) != 1 {
 			return nil, errors.New("malformed ResponseData: version is not [0] EXPLICIT")
 		}
-		data.Version = int(version.children[0].integer().Int64())
+		data.Version = int(version.Children()[0].Integer().Int64())
 		index++
 	}
-	if len(element.children) < index+3 {
+	if len(element.Children()) < index+3 {
 		return nil, errors.New("malformed ResponseData")
 	}
 
-	responderID, err := dssRevocationUtilsResponderIDFromElement(element.children[index])
+	responderID, err := dssRevocationUtilsResponderIDFromElement(element.Children()[index])
 	if err != nil {
 		return nil, err
 	}
 	data.ResponderID = responderID
 	index++
 
-	producedAt := element.children[index]
-	if !producedAt.isUniversal(dssASN1UtilsTagGeneralizedTime) {
+	producedAt := element.Children()[index]
+	if !producedAt.IsUniversal(asn1ber.TagGeneralizedTime) {
 		return nil, errors.New("malformed ResponseData: producedAt is not a GeneralizedTime")
 	}
-	data.ProducedAt, err = dssASN1UtilsParseGeneralizedTime(string(producedAt.content))
+	data.ProducedAt, err = asn1ber.ParseGeneralizedTime(string(producedAt.Content()))
 	if err != nil {
 		return nil, err
 	}
 	index++
 
-	responses := element.children[index]
-	if !responses.constructed {
+	responses := element.Children()[index]
+	if !responses.IsConstructed() {
 		return nil, errors.New("malformed ResponseData: responses is not a SEQUENCE")
 	}
-	for _, response := range responses.children {
+	for _, response := range responses.Children() {
 		singleResponse, err := dssRevocationUtilsSingleResponseFromElement(response)
 		if err != nil {
 			return nil, err
@@ -988,8 +989,8 @@ func dssRevocationUtilsResponseDataFromElement(element *dssASN1UtilsElement) (*R
 	}
 	index++
 
-	if index < len(element.children) {
-		extensions, err := dssRevocationUtilsExtensionsFromTagged(element.children[index], 1)
+	if index < len(element.Children()) {
+		extensions, err := dssRevocationUtilsExtensionsFromTagged(element.Children()[index], 1)
 		if err != nil {
 			return nil, err
 		}
@@ -999,56 +1000,56 @@ func dssRevocationUtilsResponseDataFromElement(element *dssASN1UtilsElement) (*R
 }
 
 // dssRevocationUtilsResponderIDFromElement decodes the ResponderID CHOICE.
-func dssRevocationUtilsResponderIDFromElement(element *dssASN1UtilsElement) (*ResponderID, error) {
-	if element.class != 0x80 || !element.constructed || len(element.children) != 1 {
+func dssRevocationUtilsResponderIDFromElement(element *asn1ber.Element) (*ResponderID, error) {
+	if element.Class() != asn1ber.ClassContextSpecific || !element.IsConstructed() || len(element.Children()) != 1 {
 		return nil, errors.New("malformed ResponderID")
 	}
-	switch element.tagNumber {
+	switch element.TagNumber() {
 	case 1:
-		return &ResponderID{Name: element.children[0].encoded}, nil
+		return &ResponderID{Name: element.Children()[0].Encoded()}, nil
 	case 2:
-		if !element.children[0].isUniversal(dssASN1UtilsTagOctetString) {
+		if !element.Children()[0].IsUniversal(asn1ber.TagOctetString) {
 			return nil, errors.New("malformed ResponderID: byKey is not an OCTET STRING")
 		}
-		return &ResponderID{KeyHash: element.children[0].octets()}, nil
+		return &ResponderID{KeyHash: element.Children()[0].Octets()}, nil
 	}
 	return nil, errors.New("malformed ResponderID: unknown CHOICE alternative")
 }
 
 // dssRevocationUtilsSingleResponseFromElement decodes an already parsed SingleResponse.
-func dssRevocationUtilsSingleResponseFromElement(element *dssASN1UtilsElement) (*SingleResponse, error) {
-	if !element.constructed || len(element.children) < 3 {
+func dssRevocationUtilsSingleResponseFromElement(element *asn1ber.Element) (*SingleResponse, error) {
+	if !element.IsConstructed() || len(element.Children()) < 3 {
 		return nil, errors.New("malformed SingleResponse")
 	}
-	certID, err := dssRevocationUtilsCertIDFromElement(element.children[0])
+	certID, err := dssRevocationUtilsCertIDFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	certStatus, err := dssRevocationUtilsCertStatusFromElement(element.children[1])
+	certStatus, err := dssRevocationUtilsCertStatusFromElement(element.Children()[1])
 	if err != nil {
 		return nil, err
 	}
-	thisUpdate := element.children[2]
-	if !thisUpdate.isUniversal(dssASN1UtilsTagGeneralizedTime) {
+	thisUpdate := element.Children()[2]
+	if !thisUpdate.IsUniversal(asn1ber.TagGeneralizedTime) {
 		return nil, errors.New("malformed SingleResponse: thisUpdate is not a GeneralizedTime")
 	}
-	thisUpdateDate, err := dssASN1UtilsParseGeneralizedTime(string(thisUpdate.content))
+	thisUpdateDate, err := asn1ber.ParseGeneralizedTime(string(thisUpdate.Content()))
 	if err != nil {
 		return nil, err
 	}
 	response := &SingleResponse{CertID: certID, CertStatus: certStatus, ThisUpdate: thisUpdateDate}
 
-	for _, child := range element.children[3:] {
-		if child.class != 0x80 {
+	for _, child := range element.Children()[3:] {
+		if child.Class() != asn1ber.ClassContextSpecific {
 			return nil, errors.New("malformed SingleResponse: unexpected component")
 		}
-		switch child.tagNumber {
+		switch child.TagNumber() {
 		case 0:
-			if !child.constructed || len(child.children) != 1 ||
-				!child.children[0].isUniversal(dssASN1UtilsTagGeneralizedTime) {
+			if !child.IsConstructed() || len(child.Children()) != 1 ||
+				!child.Children()[0].IsUniversal(asn1ber.TagGeneralizedTime) {
 				return nil, errors.New("malformed SingleResponse: nextUpdate is not [0] EXPLICIT GeneralizedTime")
 			}
-			nextUpdate, err := dssASN1UtilsParseGeneralizedTime(string(child.children[0].content))
+			nextUpdate, err := asn1ber.ParseGeneralizedTime(string(child.Children()[0].Content()))
 			if err != nil {
 				return nil, err
 			}
@@ -1065,58 +1066,58 @@ func dssRevocationUtilsSingleResponseFromElement(element *dssASN1UtilsElement) (
 }
 
 // dssRevocationUtilsCertIDFromElement decodes an already parsed CertID.
-func dssRevocationUtilsCertIDFromElement(element *dssASN1UtilsElement) (*CertID, error) {
-	if !element.constructed || len(element.children) != 4 {
+func dssRevocationUtilsCertIDFromElement(element *asn1ber.Element) (*CertID, error) {
+	if !element.IsConstructed() || len(element.Children()) != 4 {
 		return nil, errors.New("malformed CertID")
 	}
-	hashAlgorithm, err := dssASN1UtilsAlgorithmIdentifierFromElement(element.children[0])
+	hashAlgorithm, err := asn1ber.AlgorithmIdentifierFromElement(element.Children()[0])
 	if err != nil {
 		return nil, err
 	}
-	if !element.children[1].isUniversal(dssASN1UtilsTagOctetString) ||
-		!element.children[2].isUniversal(dssASN1UtilsTagOctetString) ||
-		!element.children[3].isUniversal(dssASN1UtilsTagInteger) {
+	if !element.Children()[1].IsUniversal(asn1ber.TagOctetString) ||
+		!element.Children()[2].IsUniversal(asn1ber.TagOctetString) ||
+		!element.Children()[3].IsUniversal(asn1ber.TagInteger) {
 		return nil, errors.New("malformed CertID: unexpected component types")
 	}
 	return &CertID{
 		HashAlgorithm:  hashAlgorithm,
-		IssuerNameHash: element.children[1].octets(),
-		IssuerKeyHash:  element.children[2].octets(),
-		SerialNumber:   element.children[3].integer(),
+		IssuerNameHash: element.Children()[1].Octets(),
+		IssuerKeyHash:  element.Children()[2].Octets(),
+		SerialNumber:   element.Children()[3].Integer(),
 	}, nil
 }
 
 // dssRevocationUtilsCertStatusFromElement decodes the CertStatus CHOICE, whose alternatives
 // are implicitly tagged: [0] IMPLICIT NULL, [1] IMPLICIT RevokedInfo, [2] IMPLICIT UnknownInfo.
-func dssRevocationUtilsCertStatusFromElement(element *dssASN1UtilsElement) (*OCSPCertStatus, error) {
-	if element.class != 0x80 {
+func dssRevocationUtilsCertStatusFromElement(element *asn1ber.Element) (*OCSPCertStatus, error) {
+	if element.Class() != asn1ber.ClassContextSpecific {
 		return nil, errors.New("malformed CertStatus")
 	}
-	switch element.tagNumber {
+	switch element.TagNumber() {
 	case OCSPCertStatusGood:
 		return &OCSPCertStatus{Tag: OCSPCertStatusGood}, nil
 	case OCSPCertStatusUnknown:
 		return &OCSPCertStatus{Tag: OCSPCertStatusUnknown}, nil
 	case OCSPCertStatusRevoked:
-		if !element.constructed || len(element.children) == 0 {
+		if !element.IsConstructed() || len(element.Children()) == 0 {
 			return nil, errors.New("malformed RevokedInfo")
 		}
-		revocationTimeElement := element.children[0]
-		if !revocationTimeElement.isUniversal(dssASN1UtilsTagGeneralizedTime) {
+		revocationTimeElement := element.Children()[0]
+		if !revocationTimeElement.IsUniversal(asn1ber.TagGeneralizedTime) {
 			return nil, errors.New("malformed RevokedInfo: revocationTime is not a GeneralizedTime")
 		}
-		revocationTime, err := dssASN1UtilsParseGeneralizedTime(string(revocationTimeElement.content))
+		revocationTime, err := asn1ber.ParseGeneralizedTime(string(revocationTimeElement.Content()))
 		if err != nil {
 			return nil, err
 		}
 		status := &OCSPCertStatus{Tag: OCSPCertStatusRevoked, RevocationTime: revocationTime}
-		if len(element.children) > 1 {
-			reasonElement := element.children[1]
-			if reasonElement.class != 0x80 || reasonElement.tagNumber != 0 ||
-				!reasonElement.constructed || len(reasonElement.children) != 1 {
+		if len(element.Children()) > 1 {
+			reasonElement := element.Children()[1]
+			if !reasonElement.IsContextSpecific(0) ||
+				!reasonElement.IsConstructed() || len(reasonElement.Children()) != 1 {
 				return nil, errors.New("malformed RevokedInfo: revocationReason is not [0] EXPLICIT")
 			}
-			reason := int(reasonElement.children[0].integer().Int64())
+			reason := int(reasonElement.Children()[0].Integer().Int64())
 			status.RevocationReason = &reason
 		}
 		return status, nil
@@ -1125,33 +1126,33 @@ func dssRevocationUtilsCertStatusFromElement(element *dssASN1UtilsElement) (*OCS
 }
 
 // dssRevocationUtilsExtensionsFromTagged decodes an [n] EXPLICIT Extensions component.
-func dssRevocationUtilsExtensionsFromTagged(element *dssASN1UtilsElement, tagNumber uint64) ([]Extension, error) {
-	if element.class != 0x80 || element.tagNumber != tagNumber || !element.constructed || len(element.children) != 1 {
+func dssRevocationUtilsExtensionsFromTagged(element *asn1ber.Element, tagNumber uint64) ([]Extension, error) {
+	if !element.IsContextSpecific(tagNumber) || !element.IsConstructed() || len(element.Children()) != 1 {
 		return nil, errors.New("malformed Extensions: not an EXPLICIT tagged SEQUENCE")
 	}
-	sequence := element.children[0]
-	if !sequence.constructed {
+	sequence := element.Children()[0]
+	if !sequence.IsConstructed() {
 		return nil, errors.New("malformed Extensions: not a SEQUENCE")
 	}
-	extensions := make([]Extension, 0, len(sequence.children))
-	for _, child := range sequence.children {
-		if !child.constructed || len(child.children) < 2 || len(child.children) > 3 {
+	extensions := make([]Extension, 0, len(sequence.Children()))
+	for _, child := range sequence.Children() {
+		if !child.IsConstructed() || len(child.Children()) < 2 || len(child.Children()) > 3 {
 			return nil, errors.New("malformed Extension")
 		}
-		oid, err := child.children[0].objectIdentifier()
+		oid, err := child.Children()[0].ObjectIdentifier()
 		if err != nil {
 			return nil, err
 		}
 		extension := Extension{ID: oid}
 		valueIndex := 1
-		if child.children[1].isUniversal(dssASN1UtilsTagBoolean) {
-			extension.Critical = len(child.children[1].content) > 0 && child.children[1].content[0] != 0x00
+		if child.Children()[1].IsUniversal(asn1ber.TagBoolean) {
+			extension.Critical = len(child.Children()[1].Content()) > 0 && child.Children()[1].Content()[0] != 0x00
 			valueIndex = 2
 		}
-		if valueIndex >= len(child.children) || !child.children[valueIndex].isUniversal(dssASN1UtilsTagOctetString) {
+		if valueIndex >= len(child.Children()) || !child.Children()[valueIndex].IsUniversal(asn1ber.TagOctetString) {
 			return nil, errors.New("malformed Extension: extnValue is not an OCTET STRING")
 		}
-		extension.Value = child.children[valueIndex].octets()
+		extension.Value = child.Children()[valueIndex].Octets()
 		extensions = append(extensions, extension)
 	}
 	return extensions, nil
