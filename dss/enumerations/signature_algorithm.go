@@ -22,8 +22,13 @@
 package enumerations
 
 import (
+	encoding_asn1 "encoding/asn1"
+	"errors"
 	"fmt"
 	"unicode/utf16"
+
+	"golang.org/x/crypto/cryptobyte"
+	cryptobyte_asn1 "golang.org/x/crypto/cryptobyte/asn1"
 )
 
 // SignatureAlgorithm lists supported signature algorithms.
@@ -731,19 +736,75 @@ func SignatureAlgorithmForOID(oid string) (SignatureAlgorithm, error) {
 // SignatureAlgorithmForOIDAndParams returns the corresponding SignatureAlgorithm for the
 // given OID and signature algorithm parameters.
 //
-// JUDGMENT CALL: Java refines an RSASSA-PSS result by decoding sigAlgParams as a
-// PSSParameterSpec (via java.security.AlgorithmParameters) to recover the actual digest
-// algorithm used by the PSS parameters, in case it differs from the OID's nominal
-// digest. That requires an ASN.1 AlgorithmIdentifier/PSS-params decoder, which belongs
-// in the crypto layer (dss-spi), not in dss-enumerations. This port resolves the OID
-// only and ignores sigAlgParams; the integrator porting dss-spi should extend this
-// function (or wrap it) once that decoder exists.
+// The single RSASSA-PSS OID (1.2.840.113549.1.1.10) names the padding, not the digest, so
+// for that algorithm upstream reads the digest out of the RSASSA-PSS-params structure -
+// AlgorithmParameters.getInstance("PSS").init(sigAlgParams), then
+// PSSParameterSpec#getDigestAlgorithm() and DigestAlgorithm#forJavaName. This port decodes
+// the same field directly (RFC 4055 hashAlgorithm [0], DEFAULT sha1) and resolves it by OID,
+// which is equivalent for every digest the JDK names and additionally covers the SHA-3
+// OIDs. Java's IllegalArgumentException("Unable to initialize PSS") becomes an error.
+//
+// Passing nil parameters keeps the OID's nominal algorithm, exactly as upstream does; note
+// that the nominal algorithm of the PSS OID is RSA_SSA_PSS_SHA1_MGF1.
+//
+// As upstream, a combination with no matching constant (say RSASSA-PSS over WHIRLPOOL)
+// yields the empty SignatureAlgorithm and no error, mirroring the null Java returns.
 func SignatureAlgorithmForOIDAndParams(oid string, sigAlgParams []byte) (SignatureAlgorithm, error) {
-	a, ok := signatureAlgorithmOIDForward[oid]
+	algorithm, ok := signatureAlgorithmOIDForward[oid]
 	if !ok {
 		return "", fmt.Errorf("unsupported algorithm: %s", oid)
 	}
-	return a, nil
+	if EncryptionAlgorithm_RSASSA_PSS == algorithm.EncryptionAlgorithm() && sigAlgParams != nil {
+		digestAlgorithm, err := signatureAlgorithmPSSDigestAlgorithm(sigAlgParams)
+		if err != nil {
+			return "", fmt.Errorf("Unable to initialize PSS: %w", err)
+		}
+		algorithm = signatureAlgorithmGetAlgorithm(algorithm.EncryptionAlgorithm(), digestAlgorithm)
+	}
+	return algorithm, nil
+}
+
+// signatureAlgorithmPSSDigestAlgorithm decodes the hashAlgorithm of an RFC 4055
+// RSASSA-PSS-params structure:
+//
+//	RSASSA-PSS-params ::= SEQUENCE {
+//	    hashAlgorithm     [0] HashAlgorithm    DEFAULT sha1,
+//	    maskGenAlgorithm  [1] MaskGenAlgorithm DEFAULT mgf1SHA1,
+//	    saltLength        [2] INTEGER          DEFAULT 20,
+//	    trailerField      [3] TrailerField     DEFAULT trailerFieldBC }
+//
+// The three fields DSS does not read are not validated, matching what upstream consumes
+// from PSSParameterSpec.
+func signatureAlgorithmPSSDigestAlgorithm(sigAlgParams []byte) (DigestAlgorithm, error) {
+	input := cryptobyte.String(sigAlgParams)
+	var params cryptobyte.String
+	if !input.ReadASN1(&params, cryptobyte_asn1.SEQUENCE) {
+		return "", errors.New("the parameters are not an RSASSA-PSS-params SEQUENCE")
+	}
+	if !input.Empty() {
+		return "", errors.New("extra data found after the RSASSA-PSS-params")
+	}
+
+	var hashAlgorithm cryptobyte.String
+	var present bool
+	if !params.ReadOptionalASN1(&hashAlgorithm, &present,
+		cryptobyte_asn1.Tag(0).Constructed().ContextSpecific()) {
+		return "", errors.New("malformed RSASSA-PSS-params hashAlgorithm")
+	}
+	if !present {
+		// hashAlgorithm DEFAULT sha1
+		return DigestAlgorithm_SHA1, nil
+	}
+
+	var algorithmIdentifier cryptobyte.String
+	if !hashAlgorithm.ReadASN1(&algorithmIdentifier, cryptobyte_asn1.SEQUENCE) {
+		return "", errors.New("the RSASSA-PSS-params hashAlgorithm is not an AlgorithmIdentifier")
+	}
+	var oid encoding_asn1.ObjectIdentifier
+	if !algorithmIdentifier.ReadASN1ObjectIdentifier(&oid) {
+		return "", errors.New("the RSASSA-PSS-params hashAlgorithm has no OBJECT IDENTIFIER")
+	}
+	return DigestAlgorithmForOID(oid.String())
 }
 
 // SignatureAlgorithmForJWA returns the corresponding SignatureAlgorithm for the given JWA name.

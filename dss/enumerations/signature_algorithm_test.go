@@ -1,6 +1,7 @@
 package enumerations
 
 import (
+	"encoding/hex"
 	"strconv"
 	"testing"
 )
@@ -480,5 +481,93 @@ func TestSignatureAlgorithmGetAlgorithm(t *testing.T) {
 	}
 	if got := SignatureAlgorithmGetAlgorithm(EncryptionAlgorithm("BOGUS"), ""); got != "" {
 		t.Errorf("SignatureAlgorithmGetAlgorithm(bogus) = %q, want \"\"", got)
+	}
+}
+
+// signatureAlgorithmPSSParams holds RSASSA-PSS-params DER encodings produced by
+// BouncyCastle 1.78.1's org.bouncycastle.asn1.pkcs.RSASSAPSSparams, one per hash algorithm.
+// BouncyCastle omits the DEFAULT fields, so the SHA-1 entry carries no hashAlgorithm at all -
+// which is exactly the case the DEFAULT sha1 rule has to cover.
+var signatureAlgorithmPSSParams = []struct {
+	name string
+	der  string
+	want SignatureAlgorithm
+}{
+	{"sha1 (defaulted)", "3005a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1},
+	{"all defaults", "3000", SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1},
+	{"sha224", "3034a00f300d06096086480165030402040500a11c301a06092a864886f70d010108300d06096086480165030402040500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1},
+	{"sha256", "3034a00f300d06096086480165030402010500a11c301a06092a864886f70d010108300d06096086480165030402010500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1},
+	{"sha384", "3034a00f300d06096086480165030402020500a11c301a06092a864886f70d010108300d06096086480165030402020500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
+	{"sha512", "3034a00f300d06096086480165030402030500a11c301a06092a864886f70d010108300d06096086480165030402030500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
+	{"sha3-256", "3034a00f300d06096086480165030402080500a11c301a06092a864886f70d010108300d06096086480165030402080500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1},
+}
+
+// TestSignatureAlgorithmForOIDAndParamsPSS checks that the RSASSA-PSS OID resolves to the
+// digest named by the RSASSA-PSS-params, which is what upstream reads out of a
+// PSSParameterSpec.
+func TestSignatureAlgorithmForOIDAndParamsPSS(t *testing.T) {
+	const pssOID = "1.2.840.113549.1.1.10"
+	for _, entry := range signatureAlgorithmPSSParams {
+		params, err := hex.DecodeString(entry.der)
+		if err != nil {
+			t.Fatalf("%s: %v", entry.name, err)
+		}
+		got, err := SignatureAlgorithmForOIDAndParams(pssOID, params)
+		if err != nil {
+			t.Fatalf("%s: %v", entry.name, err)
+		}
+		if got != entry.want {
+			t.Errorf("%s: got %q, want %q", entry.name, got, entry.want)
+		}
+	}
+
+	// Without parameters the OID keeps its nominal algorithm, as upstream does.
+	got, err := SignatureAlgorithmForOIDAndParams(pssOID, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1 {
+		t.Errorf("nil params: got %q, want %q", got, SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1)
+	}
+	if got, err := SignatureAlgorithmForOID(pssOID); err != nil || got != SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1 {
+		t.Errorf("forOID: got (%q, %v)", got, err)
+	}
+
+	// Parameters are only read for the RSASSA-PSS encryption algorithm.
+	got, err = SignatureAlgorithmForOIDAndParams("1.2.840.113549.1.1.11", []byte{0x05, 0x00})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != SignatureAlgorithm_RSA_SHA256 {
+		t.Errorf("RSA-SHA256: got %q", got)
+	}
+}
+
+// TestSignatureAlgorithmForOIDAndParamsPSSErrors checks the failures upstream reports as
+// IllegalArgumentException("Unable to initialize PSS").
+func TestSignatureAlgorithmForOIDAndParamsPSSErrors(t *testing.T) {
+	const pssOID = "1.2.840.113549.1.1.10"
+	for _, entry := range []struct {
+		name string
+		der  string
+	}{
+		{"not a sequence", "0500"},
+		{"trailing data", "30000500"},
+		{"hashAlgorithm is not an AlgorithmIdentifier", "3004a0020500"},
+		{"hashAlgorithm without an OID", "3004a0023000"},
+		{"unknown digest OID", "300ea00c300a06082a864886f70d0203"},
+		{"truncated", "3005a0"},
+	} {
+		params, err := hex.DecodeString(entry.der)
+		if err != nil {
+			t.Fatalf("%s: %v", entry.name, err)
+		}
+		if _, err := SignatureAlgorithmForOIDAndParams(pssOID, params); err == nil {
+			t.Errorf("%s: expected an error", entry.name)
+		}
+	}
+	// An unknown OID is rejected before the parameters are looked at.
+	if _, err := SignatureAlgorithmForOIDAndParams("1.2.3.4", nil); err == nil {
+		t.Error("an unknown OID must be rejected")
 	}
 }
