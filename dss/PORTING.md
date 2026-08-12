@@ -11,13 +11,20 @@ Binding rules for every ported package. Reviewers reject deviations.
 
 ## Enums
 
-Java enums become typed string constants whose **value is exactly Java's `name()`** (serialization compatibility):
+Java enums become typed string constants whose **value is exactly Java's `name()`** (serialization compatibility). Because Go constants share one package namespace while Java's are class-scoped, every constant is uniformly named `<TypeName>_<JAVA_NAME>`:
 
 ```go
 type SignatureLevel string
 
 const (
-    XAdES_BASELINE_B SignatureLevel = "XAdES_BASELINE_B"
+    SignatureLevel_XAdES_BASELINE_B SignatureLevel = "XAdES_BASELINE_B"
+    ...
+)
+
+type DigestAlgorithm string
+
+const (
+    DigestAlgorithm_SHA256 DigestAlgorithm = "SHA256"
     ...
 )
 ```
