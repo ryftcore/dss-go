@@ -1,0 +1,30 @@
+// Ported from dss-model/src/main/java/eu/europa/esig/dss/model/lote/identifier/LoLoTEIdentifier.java (DSS 6.5.RC1).
+//
+// Java package eu.europa.esig.dss.model.lote.identifier is flattened into this lote package
+// per the Phase 1b cycle-driven flattening table.
+package lote
+
+import "github.com/utain/esig/dss/model"
+
+// loloteIdentifierPrefix is the "LoLoTE-" prefix LoLoTEIdentifier passes to
+// AbstractLoTEIdentifier.
+const loloteIdentifierPrefix = "LoLoTE-"
+
+// LoLoTEIdentifier is the identifier for a List of Lists of Trusted Entities.
+type LoLoTEIdentifier struct {
+	AbstractLoTEIdentifier
+}
+
+// NewLoLoTEIdentifier is the default constructor. Port of the LoLoTEIdentifier(LoTEInfo)
+// constructor; Java declares the parameter as LoTEInfo even though the typical caller
+// (LoLoTEInfo#buildIdentifier) passes "this", relying on the LoLoTEInfo-extends-LoTEInfo
+// upcast. Go has no implicit upcast through embedding, so callers pass the embedded LoTEInfo
+// field explicitly (e.g. &loloteInfo.LoTEInfo).
+func NewLoLoTEIdentifier(listInfo *LoTEInfo) *LoLoTEIdentifier {
+	return &LoLoTEIdentifier{
+		AbstractLoTEIdentifier: NewAbstractLoTEIdentifier("LoLoTEIdentifier", loloteIdentifierPrefix, listInfo),
+	}
+}
+
+// compile-time interface assertion.
+var _ model.Identifier = (*LoLoTEIdentifier)(nil)
