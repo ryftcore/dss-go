@@ -110,10 +110,43 @@ func DSSUtilsFormatDateToRFC(date time.Time) string {
 // date-time pattern "yyyy-MM-dd'T'HH:mm:ss'Z'". Port of isRFCDate(String).
 func DSSUtilsIsRFCDate(dateTimeString string) bool {
 	if utils.IsStringNotEmpty(dateTimeString) {
-		_, err := time.Parse(dssUtilsGoLayout(DSSUtilsRFC3339TimeFormat), dateTimeString)
+		_, err := dssUtilsParseWithJavaPattern(DSSUtilsRFC3339TimeFormat, dateTimeString)
 		return err == nil
 	}
 	return false
+}
+
+// dssUtilsParseWithJavaPattern parses value against a java.text.SimpleDateFormat pattern in
+// the UTC time zone.
+//
+// SimpleDateFormat#parse(String) starts at index 0 and stops as soon as the pattern is
+// satisfied, IGNORING whatever follows - "2019-11-19T17:28:15Z" parses against "yyyy-MM-dd"
+// and answers the date alone. time.Parse instead rejects the leftover as "extra text", so the
+// leftover the ParseError reports is trimmed off and the prefix re-parsed, which reproduces
+// the Java behaviour exactly. Text that does not satisfy the pattern still fails, as it does
+// for the non-lenient SimpleDateFormat upstream configures.
+func dssUtilsParseWithJavaPattern(pattern, value string) (time.Time, error) {
+	layout := dssUtilsGoLayout(pattern)
+	parsed, err := time.ParseInLocation(layout, value, time.UTC)
+	if err != nil {
+		var parseError *time.ParseError
+		if !errors.As(err, &parseError) || !strings.Contains(parseError.Message, "extra text") ||
+			parseError.ValueElem == "" || len(parseError.ValueElem) >= len(value) ||
+			!strings.HasSuffix(value, parseError.ValueElem) {
+			return time.Time{}, err
+		}
+		parsed, err = time.ParseInLocation(layout, value[:len(value)-len(parseError.ValueElem)], time.UTC)
+		if err != nil {
+			return time.Time{}, err
+		}
+	}
+	// time.Parse accepts a fractional second right after the seconds field even when the
+	// layout does not declare one; SimpleDateFormat does not, so a pattern with no
+	// millisecond field must reject it.
+	if parsed.Nanosecond() != 0 && !strings.ContainsRune(pattern, 'S') {
+		return time.Time{}, fmt.Errorf("unparseable date: %q", value)
+	}
+	return parsed, nil
 }
 
 // DSSUtilsParseRFCDate parses a String date in RFC format, e.g. "2019-11-19T17:28:15Z". Port
@@ -122,7 +155,7 @@ func DSSUtilsIsRFCDate(dateTimeString string) bool {
 // load-bearing, per PORTING.md).
 func DSSUtilsParseRFCDate(dateTimeString string) time.Time {
 	if utils.IsStringNotEmpty(dateTimeString) {
-		if t, err := time.Parse(dssUtilsGoLayout(DSSUtilsRFC3339TimeFormat), dateTimeString); err == nil {
+		if t, err := dssUtilsParseWithJavaPattern(DSSUtilsRFC3339TimeFormat, dateTimeString); err == nil {
 			return t
 		}
 	}
@@ -139,7 +172,7 @@ func DSSUtilsFormatDateToISO8601(date time.Time) string {
 // date pattern "yyyy-MM-dd". Port of isISO8601Date(String).
 func DSSUtilsIsISO8601Date(dateString string) bool {
 	if utils.IsStringNotEmpty(dateString) {
-		_, err := time.Parse(dssUtilsGoLayout(DSSUtilsISO8601DateFormat), dateString)
+		_, err := dssUtilsParseWithJavaPattern(DSSUtilsISO8601DateFormat, dateString)
 		return err == nil
 	}
 	return false
@@ -149,7 +182,7 @@ func DSSUtilsIsISO8601Date(dateString string) bool {
 // parseISO8601Date(String); returns the zero Time when dateString is empty or fails to parse.
 func DSSUtilsParseISO8601Date(dateString string) time.Time {
 	if utils.IsStringNotEmpty(dateString) {
-		if t, err := time.Parse(dssUtilsGoLayout(DSSUtilsISO8601DateFormat), dateString); err == nil {
+		if t, err := dssUtilsParseWithJavaPattern(DSSUtilsISO8601DateFormat, dateString); err == nil {
 			return t
 		}
 	}
@@ -262,6 +295,13 @@ func dssUtilsGoLayout(pattern string) string {
 		case 's':
 			n := dssUtilsRunLength(runes, i, 's')
 			out.WriteString("05")
+			i += n
+		case 'S':
+			// SimpleDateFormat's millisecond field. Go expresses fractional seconds as a run
+			// of '0' attached to the '.' (or ',') that must precede it, so the decimal
+			// separator the pattern already emitted carries the run.
+			n := dssUtilsRunLength(runes, i, 'S')
+			out.WriteString(strings.Repeat("0", n))
 			i += n
 		case 'a':
 			out.WriteString("PM")
@@ -535,12 +575,15 @@ func DSSUtilsDigest(digestAlgorithm enumerations.DigestAlgorithm, data []byte) (
 		panic("The data cannot be null")
 	}
 	switch digestAlgorithm {
+	// The SHAKE output lengths are BouncyCastle's: SHAKEDigest#getDigestSize() answers
+	// fixedOutputLength / 4, i.e. TWICE the security strength in bytes - 32 bytes for
+	// SHAKE-128 and 64 for SHAKE-256, not 16 and 32.
 	case enumerations.DigestAlgorithm_SHAKE128:
-		out := make([]byte, 16)
+		out := make([]byte, 32)
 		sha3.ShakeSum128(out, data)
 		return out, nil
 	case enumerations.DigestAlgorithm_SHAKE256:
-		out := make([]byte, 32)
+		out := make([]byte, 64)
 		sha3.ShakeSum256(out, data)
 		return out, nil
 	default:

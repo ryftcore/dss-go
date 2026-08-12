@@ -32,7 +32,6 @@ func NewOCSPCertificateSource(basicOCSPResp *BasicOCSPResp) (*OCSPCertificateSou
 		RevocationCertificateSourceBase: NewRevocationCertificateSourceBase(),
 		basicOCSPResp:                   basicOCSPResp,
 	}
-	source.InitCertificateSource(source)
 	if err := source.extractCertificateTokens(); err != nil {
 		return nil, err
 	}
@@ -53,7 +52,7 @@ func (s *OCSPCertificateSource) extractCertificateTokens() error {
 		if err != nil {
 			return model.NewDSSErrorMessageCause("Unable to read the certificate of the OCSP response", err)
 		}
-		s.AddCertificate(certificateToken, enumerations.CertificateOrigin_BASIC_OCSP_RESP)
+		s.AddCertificateWithOrigin(certificateToken, enumerations.CertificateOrigin_BASIC_OCSP_RESP)
 	}
 	return nil
 }

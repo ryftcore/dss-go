@@ -23,7 +23,7 @@ import (
 // the user parameters. It avoids duplicate entries, orders certificates from the signing
 // certificate to the Root CA and filters trust anchors depending on the policy.
 type BaselineBCertificateSelector struct {
-	CertificateReorderer
+	*CertificateReorderer
 
 	// trustedCertificateSource is the trusted certificate source to be used on certificate
 	// chain building.

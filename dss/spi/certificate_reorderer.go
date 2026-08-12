@@ -182,9 +182,14 @@ func (r *CertificateReorderer) signingCertificates(certificates []*model.Certifi
 }
 
 // certificateReordererContains reports whether the list contains the given certificate token.
+//
+// It stands in for java.util.List#contains, which uses Token#equals, i.e. DSS-Id equality and
+// NOT object identity: two CertificateToken instances built from the same certificate are the
+// same entry. getAllCertificatesOnce depends on that to deduplicate a signing certificate that
+// the chain also carries as a separately loaded instance.
 func certificateReordererContains(list []*model.CertificateToken, token *model.CertificateToken) bool {
 	for _, item := range list {
-		if item == token {
+		if item.Equals(token) {
 			return true
 		}
 	}

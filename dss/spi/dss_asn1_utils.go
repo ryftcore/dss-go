@@ -1057,7 +1057,10 @@ func dssASN1UtilsDigest(digestAlgorithm enumerations.DigestAlgorithm, data ...[]
 // dssASN1UtilsValueToString ports org.bouncycastle.asn1.x500.style.IETFUtils#valueToString.
 func dssASN1UtilsValueToString(element *dssASN1UtilsElement) string {
 	var buffer []rune
-	if element.isASN1String() {
+	// IETFUtils#valueToString takes the string branch for every ASN1String EXCEPT
+	// ASN1UniversalString, which it explicitly excludes so that it is hash-encoded like a
+	// non-string value.
+	if element.isASN1String() && !element.isUniversal(dssASN1UtilsTagUniversalString) {
 		value := element.asString()
 		if len(value) > 0 && value[0] == '#' {
 			buffer = append(buffer, '\\')
@@ -1094,8 +1097,13 @@ func dssASN1UtilsValueToString(element *dssASN1UtilsElement) string {
 }
 
 // dssASN1UtilsASN1ToString reproduces ASN1Primitive#toString for the value types an X.500
-// attribute can carry: a string type yields its text, an OBJECT IDENTIFIER its dotted form,
+// attribute can carry: a string type yields its text (a BIT STRING and a UniversalString
+// their "#"+UPPER-case-hex form, see asString), an OBJECT IDENTIFIER its dotted form,
 // anything else "#" followed by the hex of its DER encoding.
+//
+// DEVIATION: BouncyCastle renders a constructed value (an attribute whose value is a SEQUENCE
+// or a SET, which no X.520 attribute type defines) as its ASN1Dump-style "[a, b]" listing;
+// this port hash-encodes it like any other non-string value.
 func dssASN1UtilsASN1ToString(element *dssASN1UtilsElement) string {
 	if element.isASN1String() {
 		return element.asString()
@@ -1125,6 +1133,19 @@ func dssASN1UtilsASN1ToString(element *dssASN1UtilsElement) string {
 // character whose code point is not greater than U+0020.
 func dssASN1UtilsJavaTrim(value string) string {
 	return strings.TrimFunc(value, func(r rune) bool { return r <= ' ' })
+}
+
+// dssASN1UtilsHexUpper renders bytes as upper-case hex without a separator, the way the
+// private hex table of ASN1BitString#getString / ASN1UniversalString#getString does.
+func dssASN1UtilsHexUpper(data []byte) string {
+	const digits = "0123456789ABCDEF"
+	var builder strings.Builder
+	builder.Grow(2 * len(data))
+	for _, b := range data {
+		builder.WriteByte(digits[b>>4])
+		builder.WriteByte(digits[b&0x0F])
+	}
+	return builder.String()
 }
 
 // dssASN1UtilsHexLower renders bytes as lower-case hex without a separator, the way
@@ -1273,29 +1294,38 @@ func (e *dssASN1UtilsElement) isUniversal(tagNumber uint64) bool {
 }
 
 // isASN1String reports whether the element is one of the types implementing BouncyCastle's
-// ASN1String interface. DERUniversalString is excluded, as IETFUtils#valueToString excludes it.
+// ASN1String interface.
+//
+// ASN1BitString and ASN1UniversalString implement it too - their getString() answers "#"
+// followed by the upper-case hex of the whole encoding, see asString - while
+// ASN1ObjectDescriptor does NOT (it wraps an ASN1GraphicString without implementing the
+// interface), so tag 7 falls through to the hash-encoded branch of the callers.
 func (e *dssASN1UtilsElement) isASN1String() bool {
 	if e.class != 0 {
 		return false
 	}
 	switch e.tagNumber {
-	case dssASN1UtilsTagObjectDesc, dssASN1UtilsTagUTF8String, dssASN1UtilsTagNumericString,
+	case dssASN1UtilsTagBitString, dssASN1UtilsTagUTF8String, dssASN1UtilsTagNumericString,
 		dssASN1UtilsTagPrintableString, dssASN1UtilsTagT61String, dssASN1UtilsTagVideotexString,
 		dssASN1UtilsTagIA5String, dssASN1UtilsTagGraphicString, dssASN1UtilsTagVisibleString,
-		dssASN1UtilsTagGeneralString, dssASN1UtilsTagBMPString:
+		dssASN1UtilsTagGeneralString, dssASN1UtilsTagUniversalString, dssASN1UtilsTagBMPString:
 		return true
 	}
 	return false
 }
 
 // asString decodes the element's content the way the matching BouncyCastle ASN1String does:
-// UTF8String as UTF-8, BMPString as UTF-16BE, UniversalString as UTF-32BE and every other
-// string type byte-per-character (ISO-8859-1), which is what org.bouncycastle.util.Strings
-// #fromByteArray produces.
+// UTF8String as UTF-8, BMPString as UTF-16BE, BIT STRING and UniversalString as "#" followed
+// by the UPPER-case hex of the complete encoding (ASN1BitString#getString and
+// ASN1UniversalString#getString are both spelled that way, and neither decodes its content as
+// text), and every other string type byte-per-character (ISO-8859-1), which is what
+// org.bouncycastle.util.Strings#fromByteArray produces.
 func (e *dssASN1UtilsElement) asString() string {
 	switch e.tagNumber {
 	case dssASN1UtilsTagUTF8String:
 		return string(e.content)
+	case dssASN1UtilsTagBitString, dssASN1UtilsTagUniversalString:
+		return "#" + dssASN1UtilsHexUpper(e.derEncoded())
 	case dssASN1UtilsTagBMPString:
 		if len(e.content)%2 != 0 {
 			return ""
@@ -1305,16 +1335,6 @@ func (e *dssASN1UtilsElement) asString() string {
 			units[index] = uint16(e.content[2*index])<<8 | uint16(e.content[2*index+1])
 		}
 		return string(utf16.Decode(units))
-	case dssASN1UtilsTagUniversalString:
-		if len(e.content)%4 != 0 {
-			return ""
-		}
-		runes := make([]rune, len(e.content)/4)
-		for index := range runes {
-			runes[index] = rune(uint32(e.content[4*index])<<24 | uint32(e.content[4*index+1])<<16 |
-				uint32(e.content[4*index+2])<<8 | uint32(e.content[4*index+3]))
-		}
-		return string(runes)
 	}
 	runes := make([]rune, len(e.content))
 	for index, b := range e.content {

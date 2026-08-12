@@ -102,9 +102,18 @@ func (r *CertificateRef) SetPublicKey(publicKey *model.PublicKey) {
 
 // DSSID returns the certificate reference identifier, building it lazily on first use.
 // Port of getDSSId().
+//
+// NewCertificateRefIdentifier's data-dependent DSSException ("One of [certDigest,
+// publicKeyDigest, issuerInfo, kid, x509Uri, publicKey] must be defined for a
+// CertificateRef!") is unchecked in Java and propagates straight out of getDSSId(); since
+// this method's signature (like Java's) carries no error, it is reproduced as a panic here.
 func (r *CertificateRef) DSSID() model.Identifier {
 	if r.identifier == nil {
-		r.identifier = NewCertificateRefIdentifier(r)
+		identifier, err := NewCertificateRefIdentifier(r)
+		if err != nil {
+			panic(err.Error())
+		}
+		r.identifier = identifier
 	}
 	return r.identifier
 }
@@ -136,13 +145,21 @@ func certificateRefSignerIdentifierString(signerIdentifier *SignerIdentifier) st
 	return signerIdentifier.String()
 }
 
-// certificateRefResponderIdString renders a possibly nil ResponderId the way Java's string
-// concatenation does.
+// certificateRefResponderIdString renders a possibly nil ResponderId.
+//
+// DEVIATION: Java's ResponderId has no toString() override, so string concatenation there
+// calls Object's default (implementation-dependent, identity-hash-based) representation -
+// not meaningful to reproduce. As with certificateRefPublicKeyString, a stable field-based
+// rendering is used instead; a cosmetic-only deviation with no effect on equality/DSS-Id.
 func certificateRefResponderIdString(responderId *ResponderId) string {
 	if responderId == nil {
 		return "null"
 	}
-	return responderId.String()
+	principal := "null"
+	if p := responderId.X500Principal(); p != nil {
+		principal = p.String()
+	}
+	return "ResponderId [subjectX500Principal=" + principal + ", ski=" + utils.ToHex(responderId.Ski()) + "]"
 }
 
 // certificateRefPublicKeyString renders a possibly nil public key. Java interpolates the

@@ -12,8 +12,8 @@
 package spi
 
 import (
-	dsshttp "github.com/utain/esig/dss/http"
 	"github.com/utain/esig/dss/model"
+	dsshttp "github.com/utain/esig/dss/spi/client/http"
 )
 
 // CommonX509URLCertificateSource is the common implementation of X509URLCertificateSource

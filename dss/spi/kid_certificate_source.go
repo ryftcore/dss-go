@@ -22,7 +22,8 @@ type KidCertificateSource struct {
 // certificate tokens relation. Port of the default constructor.
 func NewKidCertificateSource() *KidCertificateSource {
 	return &KidCertificateSource{
-		mapByKid: make(map[string]*model.CertificateToken),
+		CommonCertificateSource: NewCommonCertificateSource(),
+		mapByKid:                make(map[string]*model.CertificateToken),
 	}
 }
 
@@ -99,7 +100,7 @@ func (k *KidCertificateSource) FindTokensFromCertRef(certificateRef *Certificate
 // Reset removes all certificates from the source, including the 'kid' relation.
 // Port of the protected reset(), overriding CommonCertificateSource.
 func (k *KidCertificateSource) Reset() {
-	k.CommonCertificateSource.Reset()
+	k.CommonCertificateSource.reset()
 	k.mapByKid = make(map[string]*model.CertificateToken)
 }
 

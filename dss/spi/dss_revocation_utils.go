@@ -749,8 +749,16 @@ func DSSRevocationUtilsCRLRevocationTokenKeys(certificateToken *model.Certificat
 
 // DSSRevocationUtilsCRLRevocationTokenKey returns the CRL key, i.e. the hex-encoded SHA-1
 // digest of the URL. Port of getCRLRevocationTokenKey(String).
+//
+// DSSUtilsSHA1Digest's error is a Go-only surface (digest() throwing NoSuchAlgorithmException
+// is not reachable for SHA-1, which is always available); Java's method declares no checked
+// exception either, so an error here is reproduced as a panic.
 func DSSRevocationUtilsCRLRevocationTokenKey(crlURL string) string {
-	return DSSUtilsSHA1Digest(crlURL)
+	digest, err := DSSUtilsSHA1Digest(crlURL)
+	if err != nil {
+		panic(err.Error())
+	}
+	return digest
 }
 
 // DSSRevocationUtilsOcspRevocationTokenKeys builds the revocation token keys of the OCSP
@@ -766,8 +774,15 @@ func DSSRevocationUtilsOcspRevocationTokenKeys(certificateToken *model.Certifica
 
 // DSSRevocationUtilsOcspRevocationKey returns the OCSP key, i.e. the hex-encoded SHA-1
 // digest of "<token DSS id>:<url>". Port of getOcspRevocationKey(CertificateToken, String).
+//
+// See DSSRevocationUtilsCRLRevocationTokenKey for why DSSUtilsSHA1Digest's error is panicked
+// rather than propagated.
 func DSSRevocationUtilsOcspRevocationKey(certificateToken *model.CertificateToken, ocspURL string) string {
-	return DSSUtilsSHA1Digest(certificateToken.DSSIDAsString() + ":" + ocspURL)
+	digest, err := DSSUtilsSHA1Digest(certificateToken.DSSIDAsString() + ":" + ocspURL)
+	if err != nil {
+		panic(err.Error())
+	}
+	return digest
 }
 
 // DSSRevocationUtilsLatestSingleResponse returns the most recent single response of the OCSP

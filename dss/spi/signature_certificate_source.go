@@ -128,23 +128,25 @@ func (s *SignatureCertificateSource) AttributeCertificateRefs() []*CertificateRe
 }
 
 // SigningCertificates retrieves the Set of CertificateTokens for the signing certificate
-// (V1/V2). Port of getSigningCertificates().
-func (s *SignatureCertificateSource) SigningCertificates() []*model.CertificateToken {
+// (V1/V2), keyed by DSSIDAsString() per this package's Set<CertificateToken> convention.
+// Port of getSigningCertificates().
+func (s *SignatureCertificateSource) SigningCertificates() map[string]*model.CertificateToken {
 	return s.FindTokensFromRefs(s.SigningCertificateRefs())
 }
 
 // CompleteCertificates retrieves the Set of CertificateTokens according to references included
 // in the attribute complete-certificate-references (CAdES) or the
-// CompleteCertificateRefs/CompleteCertificateRefsV2 (XAdES). Port of getCompleteCertificates().
-func (s *SignatureCertificateSource) CompleteCertificates() []*model.CertificateToken {
+// CompleteCertificateRefs/CompleteCertificateRefsV2 (XAdES), keyed by DSSIDAsString() per this
+// package's Set<CertificateToken> convention. Port of getCompleteCertificates().
+func (s *SignatureCertificateSource) CompleteCertificates() map[string]*model.CertificateToken {
 	return s.FindTokensFromRefs(s.CompleteCertificateRefs())
 }
 
 // AttributeCertificates retrieves the Set of CertificateTokens according to references included
 // in the attribute attribute-certificate-references (CAdES) or the
-// AttributeCertificateRefs/AttributeCertificateRefsV2 (XAdES). Port of
-// getAttributeCertificates().
-func (s *SignatureCertificateSource) AttributeCertificates() []*model.CertificateToken {
+// AttributeCertificateRefs/AttributeCertificateRefsV2 (XAdES), keyed by DSSIDAsString() per
+// this package's Set<CertificateToken> convention. Port of getAttributeCertificates().
+func (s *SignatureCertificateSource) AttributeCertificates() map[string]*model.CertificateToken {
 	return s.FindTokensFromRefs(s.AttributeCertificateRefs())
 }
 

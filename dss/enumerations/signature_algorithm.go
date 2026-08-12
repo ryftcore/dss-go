@@ -773,8 +773,12 @@ func SignatureAlgorithmForOIDAndParams(oid string, sigAlgParams []byte) (Signatu
 //	    saltLength        [2] INTEGER          DEFAULT 20,
 //	    trailerField      [3] TrailerField     DEFAULT trailerFieldBC }
 //
-// The three fields DSS does not read are not validated, matching what upstream consumes
-// from PSSParameterSpec.
+// Only the hashAlgorithm is read, but maskGenAlgorithm and trailerField are validated the way
+// the JDK's sun.security.rsa.PSSParameters#engineInit(byte[]) does - it rejects a
+// maskGenAlgorithm that is not MGF1 ("Only MGF1 mgf is supported") and a trailerField other
+// than 1 ("Unsupported trailerField value") - so that parameters upstream refuses to decode
+// are refused here too. The JDK additionally restricts the MGF1 digest to a fixed name list;
+// that whitelist is provider-specific and is NOT reproduced.
 func signatureAlgorithmPSSDigestAlgorithm(sigAlgParams []byte) (DigestAlgorithm, error) {
 	input := cryptobyte.String(sigAlgParams)
 	var params cryptobyte.String
@@ -786,16 +790,62 @@ func signatureAlgorithmPSSDigestAlgorithm(sigAlgParams []byte) (DigestAlgorithm,
 	}
 
 	var hashAlgorithm cryptobyte.String
-	var present bool
-	if !params.ReadOptionalASN1(&hashAlgorithm, &present,
+	var hashAlgorithmPresent bool
+	if !params.ReadOptionalASN1(&hashAlgorithm, &hashAlgorithmPresent,
 		cryptobyte_asn1.Tag(0).Constructed().ContextSpecific()) {
 		return "", errors.New("malformed RSASSA-PSS-params hashAlgorithm")
 	}
-	if !present {
+
+	var maskGenAlgorithm cryptobyte.String
+	var maskGenAlgorithmPresent bool
+	if !params.ReadOptionalASN1(&maskGenAlgorithm, &maskGenAlgorithmPresent,
+		cryptobyte_asn1.Tag(1).Constructed().ContextSpecific()) {
+		return "", errors.New("malformed RSASSA-PSS-params maskGenAlgorithm")
+	}
+	if maskGenAlgorithmPresent {
+		var maskGenAlgorithmIdentifier cryptobyte.String
+		if !maskGenAlgorithm.ReadASN1(&maskGenAlgorithmIdentifier, cryptobyte_asn1.SEQUENCE) {
+			return "", errors.New("the RSASSA-PSS-params maskGenAlgorithm is not an AlgorithmIdentifier")
+		}
+		var maskGenOID encoding_asn1.ObjectIdentifier
+		if !maskGenAlgorithmIdentifier.ReadASN1ObjectIdentifier(&maskGenOID) {
+			return "", errors.New("the RSASSA-PSS-params maskGenAlgorithm has no OBJECT IDENTIFIER")
+		}
+		// id-mgf1 OBJECT IDENTIFIER ::= { pkcs-1 8 }
+		if maskGenOID.String() != "1.2.840.113549.1.1.8" {
+			return "", errors.New("Only MGF1 mgf is supported")
+		}
+	}
+
+	// saltLength [2] INTEGER DEFAULT 20 is skipped over, its value being unused.
+	var saltLength cryptobyte.String
+	var saltLengthPresent bool
+	if !params.ReadOptionalASN1(&saltLength, &saltLengthPresent,
+		cryptobyte_asn1.Tag(2).Constructed().ContextSpecific()) {
+		return "", errors.New("malformed RSASSA-PSS-params saltLength")
+	}
+
+	var trailerField cryptobyte.String
+	var trailerFieldPresent bool
+	if !params.ReadOptionalASN1(&trailerField, &trailerFieldPresent,
+		cryptobyte_asn1.Tag(3).Constructed().ContextSpecific()) {
+		return "", errors.New("malformed RSASSA-PSS-params trailerField")
+	}
+	if trailerFieldPresent {
+		var trailerFieldValue int
+		if !trailerField.ReadASN1Integer(&trailerFieldValue) {
+			return "", errors.New("the RSASSA-PSS-params trailerField is not an INTEGER")
+		}
+		// TrailerField ::= INTEGER { trailerFieldBC(1) }
+		if trailerFieldValue != 1 {
+			return "", fmt.Errorf("Unsupported trailerField value %d", trailerFieldValue)
+		}
+	}
+
+	if !hashAlgorithmPresent {
 		// hashAlgorithm DEFAULT sha1
 		return DigestAlgorithm_SHA1, nil
 	}
-
 	var algorithmIdentifier cryptobyte.String
 	if !hashAlgorithm.ReadASN1(&algorithmIdentifier, cryptobyte_asn1.SEQUENCE) {
 		return "", errors.New("the RSASSA-PSS-params hashAlgorithm is not an AlgorithmIdentifier")

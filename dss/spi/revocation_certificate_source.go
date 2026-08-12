@@ -27,11 +27,13 @@ type RevocationCertificateSourceBase struct {
 }
 
 // NewRevocationCertificateSourceBase builds the base state of a revocation certificate source.
-// Calling it is not required - the zero value is already usable, just like
-// TokenCertificateSource's - it exists for symmetry with the rest of this port's New.../Init...
-// pattern and so a concrete source has an explicit, self-documenting field initializer to embed.
+// It seeds the embedded CommonCertificateSource the way Java's implicit super() chain does; a
+// concrete source embedding the zero value instead still works, because
+// CommonCertificateSource initialises its state on first write.
 func NewRevocationCertificateSourceBase() RevocationCertificateSourceBase {
-	return RevocationCertificateSourceBase{}
+	return RevocationCertificateSourceBase{
+		TokenCertificateSource: NewTokenCertificateSource(),
+	}
 }
 
 // compile-time assertion: a RevocationCertificateSourceBase is a RevocationCertificateSource.

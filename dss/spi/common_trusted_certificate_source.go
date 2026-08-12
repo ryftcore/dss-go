@@ -11,6 +11,8 @@
 package spi
 
 import (
+	"time"
+
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
 )
@@ -23,7 +25,9 @@ type CommonTrustedCertificateSource struct {
 // NewCommonTrustedCertificateSource builds an empty trusted certificate source.
 // Port of the default constructor.
 func NewCommonTrustedCertificateSource() *CommonTrustedCertificateSource {
-	return &CommonTrustedCertificateSource{}
+	return &CommonTrustedCertificateSource{
+		CommonCertificateSource: NewCommonCertificateSource(),
+	}
 }
 
 // CertificateSourceType returns CertificateSourceType_TRUSTED_STORE.
@@ -52,6 +56,17 @@ func (s *CommonTrustedCertificateSource) AlternativeCRLUrls(trustAnchor *model.C
 
 // IsTrusted reports whether the given certificate is known to this source.
 // Port of isTrusted(CertificateToken).
+// IsTrustedAtTime checks if a given certificate is trusted at controlTime.
+//
+// Java inherits CommonCertificateSource#isTrustedAtTime, whose body is
+// `return isTrusted(certificateToken)` and therefore dispatches virtually to the IsTrusted
+// override below. Go binds an embedded method's calls statically, so without this
+// re-declaration the inherited method would answer CommonCertificateSource's own
+// (always-false) IsTrusted and a trusted certificate would never be trusted at a time.
+func (s *CommonTrustedCertificateSource) IsTrustedAtTime(certificateToken *model.CertificateToken, controlTime time.Time) bool {
+	return s.IsTrusted(certificateToken)
+}
+
 func (s *CommonTrustedCertificateSource) IsTrusted(certificateToken *model.CertificateToken) bool {
 	return s.IsKnown(certificateToken)
 }

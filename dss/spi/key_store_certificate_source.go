@@ -8,6 +8,15 @@
 // This port narrows KeyStoreCertificateSourceType to the two formats the brief approves:
 // KeyStoreCertificateSourceType_PKCS12 (read-only: golang.org/x/crypto/pkcs12 exposes no
 // encoder in the vendored version, so Store on a PKCS12-typed source returns an error) and
+//
+// LIMITATION (PKCS12 reading): golang.org/x/crypto/pkcs12 only understands the legacy
+// PKCS#12 profile - a SHA-1 MAC with PBE-SHA1-3DES / PBE-SHA1-RC2-40 encryption. Files
+// produced with the modern defaults (OpenSSL 3.x, `keytool` on recent JDKs: SHA-256 MAC,
+// PBES2/AES-CBC encryption) are REJECTED with "pkcs12: unknown digest algorithm ..." or
+// "pkcs12: unknown algorithm identifier ...", where java.security.KeyStore reads them all.
+// Loading such a keystore therefore needs it re-exported with `openssl pkcs12 -legacy`
+// (or an alternative PKCS#12 reader) until the dependency grows PBES2 support.
+//
 // KeyStoreCertificateSourceType_PEM (a plain concatenated PEM/DER certificate collection,
 // which Java's KeyStore SPI has no counterpart for - it stands in for "PEM/DER cert
 // collections" the brief calls for). JKS - and any other Java keystore type string - is
@@ -91,9 +100,10 @@ func NewKeyStoreCertificateSourceFromFilePath(ksFilePath string, ksType KeyStore
 // char[]) constructor, the "default" constructor upstream documents.
 func NewKeyStoreCertificateSourceFromReader(ksStream io.Reader, ksType KeyStoreCertificateSourceType, ksPassword []byte) (*KeyStoreCertificateSource, error) {
 	source := &KeyStoreCertificateSource{
-		ksType:             ksType,
-		passwordProtection: ksPassword,
-		entries:            make(map[string]*model.CertificateToken),
+		CommonCertificateSource: NewCommonCertificateSource(),
+		ksType:                  ksType,
+		passwordProtection:      ksPassword,
+		entries:                 make(map[string]*model.CertificateToken),
 	}
 	if err := source.initKeystore(ksStream); err != nil {
 		return nil, err
@@ -253,7 +263,7 @@ func (k *KeyStoreCertificateSource) DeleteCertificateFromKeyStore(alias string) 
 	if !found {
 		return
 	}
-	k.RemoveCertificate(certificate)
+	k.removeCertificate(certificate)
 	delete(k.entries, key)
 }
 
@@ -263,7 +273,7 @@ func (k *KeyStoreCertificateSource) ClearAllCertificates() {
 	for alias := range k.entries {
 		k.DeleteCertificateFromKeyStore(alias)
 	}
-	k.CommonCertificateSource.Reset()
+	k.CommonCertificateSource.reset()
 }
 
 // Store writes the keystore to w. Port of store(OutputStream).

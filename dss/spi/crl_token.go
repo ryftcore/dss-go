@@ -46,15 +46,25 @@ func NewCRLToken(certificateToken *model.CertificateToken, crlValidity *crlparse
 	return token, nil
 }
 
+// crlTokenTimeValue dereferences a nullable *time.Time the way crlparser.CRLValidity exposes
+// its Date fields, defaulting to the zero time (RevocationTokenBase's null convention) when
+// absent.
+func crlTokenTimeValue(t *time.Time) time.Time {
+	if t == nil {
+		return time.Time{}
+	}
+	return *t
+}
+
 // initInfo ports the private initInfo().
 func (t *CRLToken) initInfo() {
 	t.SetSignatureAlgorithm(t.crlValidity.SignatureAlgorithm())
-	t.SetThisUpdate(t.crlValidity.ThisUpdate())
+	t.SetThisUpdate(crlTokenTimeValue(t.crlValidity.ThisUpdate()))
 	// The dates are equal in case of a CRL.
-	t.SetProductionDate(t.crlValidity.ThisUpdate())
-	t.SetNextUpdate(t.crlValidity.NextUpdate())
+	t.SetProductionDate(crlTokenTimeValue(t.crlValidity.ThisUpdate()))
+	t.SetNextUpdate(crlTokenTimeValue(t.crlValidity.NextUpdate()))
 	t.SetCRLNumber(t.crlValidity.CRLNumber())
-	t.SetExpiredCertsOnCRL(t.crlValidity.ExpiredCertsOnCRL())
+	t.SetExpiredCertsOnCRL(crlTokenTimeValue(t.crlValidity.ExpiredCertsOnCRL()))
 
 	if issuerToken := t.crlValidity.IssuerToken(); issuerToken != nil {
 		t.SetPublicKeyOfTheSigner(issuerToken.PublicKey())

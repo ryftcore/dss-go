@@ -50,11 +50,32 @@ type CommonCertificateSource struct {
 // NewCommonCertificateSource builds the default certificate source. Port of the default
 // constructor.
 func NewCommonCertificateSource() CommonCertificateSource {
-	return CommonCertificateSource{
-		certificateMatcher:  NewCertificateTokenRefMatcher(),
-		entitiesByEntityKey: make(map[string]*equivalentCertificatesEntity),
-		entitiesByPublicKey: make(map[string]*equivalentCertificatesEntity),
-		tokensBySubject:     make(map[string]map[string]*model.CertificateToken),
+	source := CommonCertificateSource{}
+	source.commonCertificateSourceEnsureInitialized()
+	return source
+}
+
+// commonCertificateSourceEnsureInitialized brings a zero-value CommonCertificateSource into
+// the state NewCommonCertificateSource builds.
+//
+// Java's field initializers run through the implicit super() call of every subclass, so a
+// CommonCertificateSource is never observable with null maps. Go has no constructor chaining:
+// a subclass that embeds CommonCertificateSource by value and forgets to seed it with
+// NewCommonCertificateSource() would start from nil maps, and the first AddCertificate would
+// panic with "assignment to entry in nil map". Every method that writes to the state calls
+// this first, so the zero value behaves exactly like a freshly constructed one.
+func (s *CommonCertificateSource) commonCertificateSourceEnsureInitialized() {
+	if s.certificateMatcher == nil {
+		s.certificateMatcher = NewCertificateTokenRefMatcher()
+	}
+	if s.entitiesByEntityKey == nil {
+		s.entitiesByEntityKey = make(map[string]*equivalentCertificatesEntity)
+	}
+	if s.entitiesByPublicKey == nil {
+		s.entitiesByPublicKey = make(map[string]*equivalentCertificatesEntity)
+	}
+	if s.tokensBySubject == nil {
+		s.tokensBySubject = make(map[string]map[string]*model.CertificateToken)
 	}
 }
 
@@ -72,6 +93,7 @@ func (s *CommonCertificateSource) AddCertificate(certificateToAdd *model.Certifi
 	if certificateToAdd == nil {
 		panic("The certificate must be filled")
 	}
+	s.commonCertificateSourceEnsureInitialized()
 
 	entityKey := certificateToAdd.EntityKey()
 	entityKeyID := entityKey.AsXmlID()
@@ -151,9 +173,10 @@ func (s *CommonCertificateSource) removeCertificate(certificateToRemove *model.C
 
 // reset removes all certificates from the source. Port of the protected reset().
 func (s *CommonCertificateSource) reset() {
-	s.entitiesByEntityKey = make(map[string]*equivalentCertificatesEntity)
-	s.entitiesByPublicKey = make(map[string]*equivalentCertificatesEntity)
-	s.tokensBySubject = make(map[string]map[string]*model.CertificateToken)
+	s.entitiesByEntityKey = nil
+	s.entitiesByPublicKey = nil
+	s.tokensBySubject = nil
+	s.commonCertificateSourceEnsureInitialized()
 }
 
 // IsKnown checks if a given certificate is known in the current source. Port of isKnown(CertificateToken).
@@ -282,7 +305,17 @@ func (s *CommonCertificateSource) FindTokensFromCertRef(certificateRef *Certific
 // doesCertificateReferenceMatch verifies whether the CertificateRef matches the
 // CertificateToken. Port of the protected doesCertificateReferenceMatch(CertificateToken, CertificateRef).
 func (s *CommonCertificateSource) doesCertificateReferenceMatch(certificateToken *model.CertificateToken, certificateRef *CertificateRef) bool {
+	s.commonCertificateSourceEnsureInitialized()
 	return s.certificateMatcher.Match(certificateToken, certificateRef)
+}
+
+// CertificateMatcher returns the CertificateTokenRefMatcher used to match CertificateTokens
+// and CertificateRefs. Port of the protected final certificateMatcher field access; exposed
+// as an accessor since Go has no protected-field equivalent and subclasses in this package
+// (e.g. OCSPCertificateSource) need direct access to it.
+func (s *CommonCertificateSource) CertificateMatcher() *CertificateTokenRefMatcher {
+	s.commonCertificateSourceEnsureInitialized()
+	return s.certificateMatcher
 }
 
 // NumberOfCertificates returns the number of stored certificates in this source.

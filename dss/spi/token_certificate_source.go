@@ -58,6 +58,15 @@ type TokenCertificateSource struct {
 	certificateRefOrigins []tokenCertificateSourceRefEntry
 }
 
+// NewTokenCertificateSource builds the base state of a token certificate source, seeding the
+// embedded CommonCertificateSource the way Java's implicit super() chain does.
+// Port of the protected default constructor.
+func NewTokenCertificateSource() TokenCertificateSource {
+	return TokenCertificateSource{
+		CommonCertificateSource: NewCommonCertificateSource(),
+	}
+}
+
 // InitTokenCertificateSource resets a TokenCertificateSource to its default (empty) state.
 // Port of the protected default constructor; Go has no automatic superclass constructor
 // chaining, so embedders should call this from their own constructor. It exists mainly for
@@ -151,7 +160,7 @@ func (s *TokenCertificateSource) AddCertificateRef(certificateRef *CertificateRe
 func (s *TokenCertificateSource) ReferencesForCertificateToken(certificateToken *model.CertificateToken) []*CertificateRef {
 	var result []*CertificateRef
 	for _, entry := range s.certificateRefOrigins {
-		if s.DoesCertificateReferenceMatch(certificateToken, entry.ref) {
+		if s.doesCertificateReferenceMatch(certificateToken, entry.ref) {
 			result = append(result, entry.ref)
 		}
 	}
@@ -223,7 +232,7 @@ func (s *TokenCertificateSource) OrphanCertificateRefs() []*CertificateRef {
 // embedded to the certificate source). Port of the protected isOrphan(CertificateRef).
 func (s *TokenCertificateSource) IsOrphan(certificateRef *CertificateRef) bool {
 	for _, entry := range s.certificateOrigins {
-		if s.DoesCertificateReferenceMatch(entry.token, certificateRef) {
+		if s.doesCertificateReferenceMatch(entry.token, certificateRef) {
 			return false
 		}
 	}

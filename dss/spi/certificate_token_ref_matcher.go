@@ -22,11 +22,12 @@ func NewCertificateTokenRefMatcher() *CertificateTokenRefMatcher {
 // Match verifies if the given CertificateToken matches the CertificateRef.
 // Port of match(CertificateToken, CertificateRef).
 //
-// SignerIdentifier.IsRelatedToCertificate and ResponderId.IsRelatedToCertificate return an
-// error when a certificate extension cannot be read; Java lets the underlying DSSException
-// propagate unchecked from those calls, so a matching failure here is treated as "does not
-// match" rather than surfaced separately - callers that need the failure reason should call
-// the two IsRelatedToCertificate methods directly.
+// SignerIdentifier.IsRelatedToCertificate returns an error when a certificate extension
+// cannot be read; Java lets the underlying DSSException propagate unchecked from that call,
+// so a matching failure here is treated as "does not match" rather than surfaced separately -
+// callers that need the failure reason should call it directly. ResponderId.IsRelatedToCertificate
+// has no such failure mode (it never reads a fallible extension) and returns a plain bool,
+// matching its Java signature exactly.
 func (m *CertificateTokenRefMatcher) Match(certificateToken *model.CertificateToken, certificateRef *CertificateRef) bool {
 	// If we only know the public key, the token is null
 	if certificateToken == nil {
@@ -44,7 +45,7 @@ func (m *CertificateTokenRefMatcher) Match(certificateToken *model.CertificateTo
 			return true
 		}
 	} else if responderId != nil {
-		if related, err := responderId.IsRelatedToCertificate(certificateToken); err == nil && related {
+		if responderId.IsRelatedToCertificate(certificateToken) {
 			return true
 		}
 	} else if publicKey != nil && publicKey.Equals(certificateToken.PublicKey()) {
@@ -92,8 +93,7 @@ func (m *CertificateTokenRefMatcher) MatchByIssuerName(certificateToken *model.C
 func (m *CertificateTokenRefMatcher) MatchByResponderId(certificateToken *model.CertificateToken, certificateRef *CertificateRef) bool {
 	responderId := certificateRef.ResponderId()
 	if responderId != nil {
-		related, err := responderId.IsRelatedToCertificate(certificateToken)
-		return err == nil && related
+		return responderId.IsRelatedToCertificate(certificateToken)
 	}
 	return false
 }

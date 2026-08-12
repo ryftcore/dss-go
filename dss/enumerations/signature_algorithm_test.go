@@ -500,6 +500,14 @@ var signatureAlgorithmPSSParams = []struct {
 	{"sha384", "3034a00f300d06096086480165030402020500a11c301a06092a864886f70d010108300d06096086480165030402020500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
 	{"sha512", "3034a00f300d06096086480165030402030500a11c301a06092a864886f70d010108300d06096086480165030402030500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
 	{"sha3-256", "3034a00f300d06096086480165030402080500a11c301a06092a864886f70d010108300d06096086480165030402080500a203020120", SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1},
+	// Produced by the JDK itself: AlgorithmParameters.getInstance("PSS").init(new
+	// PSSParameterSpec(...)).getEncoded() on OpenJDK 21, i.e. exactly the byte sequence
+	// upstream's AlgorithmParameters#init(byte[]) round-trips. The salt lengths differ from
+	// the BouncyCastle rows above, which is what makes them worth pinning separately.
+	{"jdk sha224", "3034a00f300d06096086480165030402040500a11c301a06092a864886f70d010108300d06096086480165030402040500a20302011c", SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1},
+	{"jdk sha384", "3034a00f300d06096086480165030402020500a11c301a06092a864886f70d010108300d06096086480165030402020500a203020130", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
+	{"jdk sha512", "3034a00f300d06096086480165030402030500a11c301a06092a864886f70d010108300d06096086480165030402030500a203020140", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
+	{"jdk sha3-512", "3034a00f300d060960864801650304020a0500a11c301a06092a864886f70d010108300d060960864801650304020a0500a203020140", SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1},
 }
 
 // TestSignatureAlgorithmForOIDAndParamsPSS checks that the RSASSA-PSS OID resolves to the
@@ -557,6 +565,10 @@ func TestSignatureAlgorithmForOIDAndParamsPSSErrors(t *testing.T) {
 		{"hashAlgorithm without an OID", "3004a0023000"},
 		{"unknown digest OID", "300ea00c300a06082a864886f70d0203"},
 		{"truncated", "3005a0"},
+		// sun.security.rsa.PSSParameters rejects these two the same way, which upstream
+		// reports as IllegalArgumentException("Unable to initialize PSS").
+		{"trailerField other than 1", "3005a303020102"},
+		{"maskGenAlgorithm that is not MGF1", "300da10b3009060706052b0e03021a"},
 	} {
 		params, err := hex.DecodeString(entry.der)
 		if err != nil {
