@@ -34,6 +34,7 @@ import (
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/utils"
 )
 
 // ListCertificateSource operates on several CertificateSources with the composite design
@@ -147,18 +148,19 @@ func (l *ListCertificateSource) CertificateSourceType() enumerations.Certificate
 
 // Certificates returns the deduplicated certificates found in all embedded sources.
 // Port of getCertificates().
+//
+// Java's HashMap-backed dedup would iterate in an order that is arbitrary but stable within a
+// JVM run; a bare Go map is randomized on every run instead, so the dedup set is kept
+// insertion-ordered (slice + index map, PORTING.md's Collections rule) rather than a bare map,
+// while the dedup semantics (last write for a given DSSIDAsString() wins) are unchanged.
 func (l *ListCertificateSource) Certificates() []*model.CertificateToken {
-	seen := make(map[string]*model.CertificateToken)
+	seen := utils.NewOrderedMap[string, *model.CertificateToken]()
 	for _, certificateSource := range l.sources {
 		for _, token := range certificateSource.Certificates() {
-			seen[token.DSSIDAsString()] = token
+			seen.Set(token.DSSIDAsString(), token)
 		}
 	}
-	result := make([]*model.CertificateToken, 0, len(seen))
-	for _, token := range seen {
-		result = append(result, token)
-	}
-	return result
+	return seen.Values()
 }
 
 // IsTrusted checks in all sources if the given certificate is trusted.

@@ -81,6 +81,42 @@ func NewAbstractSignatureEvidenceRecordDigestBuilderFromSignature(signature Adva
 	}
 }
 
+// SignatureDocument returns the signature document to compute a hash value for, nil when the
+// builder was instantiated from a signature instead. Exported accessor for the Java `protected`
+// field of the same name, needed by concrete-format subclasses living in other Go packages
+// (cades, ...) - flagged out-of-manifest addition to this otherwise-frozen file, see S3_BRIEF.md
+// "flag needs in notes; the integrator arbitrates".
+func (b *AbstractSignatureEvidenceRecordDigestBuilder) SignatureDocument() model.DSSDocument {
+	return b.signatureDocument
+}
+
+// DigestAlgorithm returns the digest algorithm to be used on hash computation. Exported accessor
+// for the Java `protected` field of the same name; see SignatureDocument's doc.
+func (b *AbstractSignatureEvidenceRecordDigestBuilder) DigestAlgorithm() enumerations.DigestAlgorithm {
+	return b.digestAlgorithm
+}
+
+// Signature returns the signature incorporating the evidence record, nil when the builder was
+// instantiated from a signature document instead. Exported accessor for the Java `protected`
+// field of the same name; see SignatureDocument's doc.
+func (b *AbstractSignatureEvidenceRecordDigestBuilder) Signature() AdvancedSignature {
+	return b.signature
+}
+
+// EvidenceRecordAttribute returns the attribute containing an evidence record to compute digest
+// for. Exported accessor for the Java `protected` field of the same name; see SignatureDocument's
+// doc.
+func (b *AbstractSignatureEvidenceRecordDigestBuilder) EvidenceRecordAttribute() SignatureAttribute {
+	return b.evidenceRecordAttribute
+}
+
+// IsParallelEvidenceRecord returns whether the new evidence-record shall be added to the last
+// available evidence-record attribute, when present. Exported accessor for the Java `protected`
+// field of the same name; see SignatureDocument's doc.
+func (b *AbstractSignatureEvidenceRecordDigestBuilder) IsParallelEvidenceRecord() bool {
+	return b.parallelEvidenceRecord
+}
+
 // SetParallelEvidenceRecord sets whether the message-imprint for an evidence record shall be
 // computed as for a parallel evidence-record (i.e. to be incorporated within the latest
 // evidence-record attribute, when available). Otherwise, computes the message-imprint based on

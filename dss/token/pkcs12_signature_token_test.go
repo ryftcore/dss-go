@@ -13,20 +13,25 @@
 //	openssl pkcs12 -export -legacy -in ec.crt -inkey ec.key -out ec_test.p12 -name "ec-test" \
 //	    -passout pass:testpassword -keypbe PBE-SHA1-3DES -certpbe PBE-SHA1-3DES -macalg SHA1
 //
-// -legacy/PBE-SHA1-3DES/-macalg SHA1 are deliberate: golang.org/x/crypto/pkcs12 (pinned in
-// go.mod) only implements the classic PBE-SHA1-3DES/RC2 encryption schemes and a SHA-1 MAC, not
-// the AES/SHA-256 defaults modern OpenSSL produces - see key_store_signature_token_connection.go's
-// file header for the full list of PKCS12 gaps this pinned dependency version has.
+// -legacy/PBE-SHA1-3DES/-macalg SHA1 exercise the classic RFC 7292 Appendix B privacy/integrity
+// modes internal/pfx implements alongside the PBES2/PBKDF2/AES modern OpenSSL and the JDK
+// default to instead - see internal/pfx's package doc and
+// key_store_signature_token_connection.go's file header for the full picture of what this port
+// now reads.
 package token
 
 import (
 	"crypto"
+	"crypto/dsa" //nolint:staticcheck // DSA keys still occur in legacy key stores being loaded.
 	"crypto/ecdsa"
+	"crypto/ed25519"
 	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
+	"encoding/asn1"
+	"fmt"
+	"math/big"
 	"os"
-	"strings"
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
@@ -307,49 +312,130 @@ func TestPkcs12SignatureTokenChainPreservedX509(t *testing.T) {
 	}
 }
 
-// TestKeyStoreUnsupportedKeyTypeFixtures pins the two upstream dss-token fixtures this port
-// cannot open, so the capability gap documented in key_store_signature_token_connection.go's
-// header stays visible and any dependency change that closes it fails this test loudly.
-//
-// Both stores open under Java's JCA KeyStore in upstream Pkcs12SignatureToken, yielding one key
-// entry with a 3-certificate chain; here both ToPEM (key type it cannot re-encode) and the
-// Decode fallback (which demands exactly two safe bags) refuse them.
-func TestKeyStoreUnsupportedKeyTypeFixtures(t *testing.T) {
+// TestKeyStoreLegacyKeyTypeFixtures loads the two upstream dss-token fixtures that
+// golang.org/x/crypto/pkcs12 could never open (Ed25519 and DSA private keys inside a
+// multi-certificate chain), now that internal/pfx replaces it - see
+// key_store_signature_token_connection.go's file header. Both stores open under Java's JCA
+// KeyStore in upstream Pkcs12SignatureToken with one key entry and a 3-certificate chain; this
+// pins that this port now matches upstream exactly, rather than the DSSError this test used to
+// assert before internal/pfx existed.
+func TestKeyStoreLegacyKeyTypeFixtures(t *testing.T) {
 	for _, testCase := range []struct {
-		fixture       string
-		password      string
-		toPEMReason   string
-		fallbackCause string
+		fixture             string
+		password            string
+		wantEncryptionAlgo  enumerations.EncryptionAlgorithm
+		wantPublicKeyGoType string
 	}{
-		{
-			fixture:       "Ed25519-good-user.p12",
-			password:      "ks-password",
-			toPEMReason:   "found unknown private key type in PKCS#8 wrapping",
-			fallbackCause: "expected exactly two safe bags in the PFX PDU",
-		},
-		{
-			fixture:       "good-dsa-user.p12",
-			password:      "ks-password",
-			toPEMReason:   "unknown algorithm: 1.2.840.10040.4.1",
-			fallbackCause: "expected exactly two safe bags in the PFX PDU",
-		},
+		{"Ed25519-good-user.p12", "ks-password", enumerations.EncryptionAlgorithm_EDDSA, "ed25519.PublicKey"},
+		{"good-dsa-user.p12", "ks-password", enumerations.EncryptionAlgorithm_DSA, "*dsa.PublicKey"},
 	} {
 		t.Run(testCase.fixture, func(t *testing.T) {
 			data := mustReadFixture(t, "testdata/dss-token/src/test/resources/"+testCase.fixture)
-			_, err := NewPkcs12SignatureTokenFromBytes(data, NewPasswordProtection([]byte(testCase.password)))
-			if err == nil {
-				t.Fatalf("%s now loads: golang.org/x/crypto/pkcs12 gained support for this key type, "+
-					"so the LIMITATION note in key_store_signature_token_connection.go and this test "+
-					"must be revisited (upstream yields 1 key entry with a 3-certificate chain)", testCase.fixture)
+			signatureToken, err := NewPkcs12SignatureTokenFromBytes(data, NewPasswordProtection([]byte(testCase.password)))
+			if err != nil {
+				t.Fatalf("NewPkcs12SignatureTokenFromBytes: %v", err)
 			}
-			if !strings.Contains(err.Error(), testCase.toPEMReason) {
-				t.Errorf("chain-preserving parse failed for an unexpected reason:\n got %q\n want it to mention %q",
-					err, testCase.toPEMReason)
+			defer signatureToken.Close()
+
+			keys, err := signatureToken.Keys()
+			if err != nil || len(keys) != 1 {
+				t.Fatalf("Keys: %v (len=%d), want 1 key entry (matching upstream's JCA KeyStore)", err, len(keys))
 			}
-			if !strings.Contains(err.Error(), testCase.fallbackCause) {
-				t.Errorf("single-entry fallback failed for an unexpected reason:\n got %q\n want it to mention %q",
-					err, testCase.fallbackCause)
+			entry := keys[0]
+			if entry.EncryptionAlgorithm() != testCase.wantEncryptionAlgo {
+				t.Errorf("EncryptionAlgorithm() = %s, want %s", entry.EncryptionAlgorithm(), testCase.wantEncryptionAlgo)
+			}
+			if len(entry.CertificateChain()) != 3 {
+				t.Fatalf("len(CertificateChain()) = %d, want 3 (matching upstream's JCA KeyStore)", len(entry.CertificateChain()))
+			}
+			chain := entry.CertificateChain()
+			for i := 0; i < len(chain)-1; i++ {
+				if chain[i].Issuer().Canonical() != chain[i+1].Subject().Canonical() {
+					t.Errorf("chain[%d].Issuer() = %q, chain[%d].Subject() = %q; chain is not linked",
+						i, chain[i].Issuer().Canonical(), i+1, chain[i+1].Subject().Canonical())
+				}
+			}
+			gotType := fmt.Sprintf("%T", entryPublicKey(entry))
+			if gotType != testCase.wantPublicKeyGoType {
+				t.Errorf("public key type = %s, want %s", gotType, testCase.wantPublicKeyGoType)
 			}
 		})
+	}
+}
+
+// TestPkcs12SignatureTokenEd25519RoundTrip signs and verifies with the Ed25519-good-user.p12
+// fixture's key - a store golang.org/x/crypto/pkcs12 could never open at all (see
+// key_store_signature_token_connection.go's file header) - verifying independently with
+// crypto/ed25519, never through this port's own code.
+func TestPkcs12SignatureTokenEd25519RoundTrip(t *testing.T) {
+	data := mustReadFixture(t, "testdata/dss-token/src/test/resources/Ed25519-good-user.p12")
+	signatureToken, err := NewPkcs12SignatureTokenFromBytes(data, NewPasswordProtection([]byte("ks-password")))
+	if err != nil {
+		t.Fatalf("NewPkcs12SignatureTokenFromBytes: %v", err)
+	}
+	defer signatureToken.Close()
+
+	keys, err := signatureToken.Keys()
+	if err != nil || len(keys) != 1 {
+		t.Fatalf("Keys: %v (len=%d)", err, len(keys))
+	}
+	entry := keys[0]
+	pub, ok := entryPublicKey(entry).(ed25519.PublicKey)
+	if !ok {
+		t.Fatalf("expected an Ed25519 key, got %T", entryPublicKey(entry))
+	}
+
+	// EdDSA is a pure signature scheme: it hashes the whole message itself, so - unlike
+	// RSA/ECDSA/DSA - Sign() is called directly rather than through a chosen DigestAlgorithm
+	// (see abstractSignatureTokenConnectionPrepareMessage's EDDSA branch).
+	message := []byte("The quick brown fox jumps over the lazy dog")
+	toBeSigned := model.NewToBeSignedWithBytes(message)
+	signValue, err := signatureToken.SignWithSignatureAlgorithm(toBeSigned, enumerations.SignatureAlgorithm_ED25519, entry)
+	if err != nil {
+		t.Fatalf("SignWithSignatureAlgorithm: %v", err)
+	}
+	if !ed25519.Verify(pub, message, signValue.Value()) {
+		t.Error("ed25519.Verify: signature does not verify")
+	}
+}
+
+// TestPkcs12SignatureTokenDSARoundTrip signs and verifies with the good-dsa-user.p12 fixture's
+// key - another store golang.org/x/crypto/pkcs12 could never open, and the specific gap
+// key_store_signature_token_connection.go's DEVIATION notes describe crypto/dsa needing a
+// crypto.Signer wrapper for. Verification is independent of this port's own signing code: the
+// Dss-Sig-Value DER is decoded by hand and checked with crypto/dsa.Verify directly, matching
+// what dsaPrivateKeySigner.Sign is documented to produce.
+func TestPkcs12SignatureTokenDSARoundTrip(t *testing.T) {
+	data := mustReadFixture(t, "testdata/dss-token/src/test/resources/good-dsa-user.p12")
+	signatureToken, err := NewPkcs12SignatureTokenFromBytes(data, NewPasswordProtection([]byte("ks-password")))
+	if err != nil {
+		t.Fatalf("NewPkcs12SignatureTokenFromBytes: %v", err)
+	}
+	defer signatureToken.Close()
+
+	keys, err := signatureToken.Keys()
+	if err != nil || len(keys) != 1 {
+		t.Fatalf("Keys: %v (len=%d)", err, len(keys))
+	}
+	entry := keys[0]
+	pub, ok := entryPublicKey(entry).(*dsa.PublicKey)
+	if !ok {
+		t.Fatalf("expected a DSA key, got %T", entryPublicKey(entry))
+	}
+
+	message := []byte("The quick brown fox jumps over the lazy dog")
+	toBeSigned := model.NewToBeSignedWithBytes(message)
+	signValue, err := signatureToken.Sign(toBeSigned, enumerations.DigestAlgorithm_SHA256, entry)
+	if err != nil {
+		t.Fatalf("Sign: %v", err)
+	}
+
+	var sig struct{ R, S *big.Int }
+	if _, err := asn1.Unmarshal(signValue.Value(), &sig); err != nil {
+		t.Fatalf("decoding Dss-Sig-Value: %v", err)
+	}
+	sum := sha256.Sum256(message)
+	if !dsa.Verify(pub, sum[:], sig.R, sig.S) {
+		t.Error("dsa.Verify: signature does not verify")
 	}
 }

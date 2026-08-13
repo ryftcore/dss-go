@@ -21,7 +21,7 @@ type TimestampOCSPSource struct {
 // OIDRIOCSPResponse, OIDPKIXOCSPBasic).
 func newTimestampOCSPSource(timeStampToken *cmscore.TimeStampToken) (*TimestampOCSPSource, error) {
 	cms := timeStampToken.CMS()
-	signerInfo := timestampTokenFirstSignerInformation(cms.SignerInfos())
+	signerInfo := spi.DSSASN1UtilsFirstSignerInformation(cms.SignerInfos())
 	base, err := spi.NewCMSOCSPSource(cms.OCSPResponses(), cms.OCSPBasicResponses(),
 		signerInfo.UnsignedAttributes)
 	if err != nil {

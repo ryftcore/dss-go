@@ -27,6 +27,7 @@ import (
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 	"github.com/utain/esig/dss/spi"
+	"github.com/utain/esig/dss/utils"
 )
 
 // revocationBinaryIdentifiers converts a slice of EncapsulatedRevocationTokenIdentifier[R]
@@ -44,26 +45,27 @@ func revocationBinaryIdentifiers[R revocation.Revocation](binaries []spi.Encapsu
 // ValidationDataContainer contains a ValidationData for a list of signatures/timestamps.
 //
 // Judgment call: upstream keys signatureValidationDataMap/timestampValidationDataMap in
-// java.util.HashMaps, whose iteration order is unspecified; AdvancedSignature/TimestampToken
-// equality in Java is default (identity-based), which a Go map keyed on the same
-// interface/pointer values reproduces directly (unlike the value-equality tokens elsewhere in
-// this package that need the sorted-slice workaround; see token_status.go). Signatures() and
-// DetachedTimestamps() therefore return in Go map iteration order, an intentional, harmless
-// deviation from Java's equally-unspecified HashMap order.
+// java.util.HashMaps, whose iteration order is arbitrary but stable within a JVM run;
+// AdvancedSignature/TimestampToken equality in Java is default (identity-based), which a Go
+// map keyed on the same interface/pointer values reproduces directly (unlike the
+// value-equality tokens elsewhere in this package that need the sorted-slice workaround; see
+// token_status.go). A bare Go map's iteration order, unlike Java's, is randomized on every
+// run; since Signatures() and DetachedTimestamps() return in this map's iteration order, both
+// maps are kept insertion-ordered (slice + index map, PORTING.md's Collections rule) instead.
 type ValidationDataContainer struct {
 	// signatureValidationDataMap maps signatures to their corresponding ValidationData.
-	signatureValidationDataMap map[AdvancedSignature]*ValidationData
+	signatureValidationDataMap *utils.OrderedMap[AdvancedSignature, *ValidationData]
 
 	// timestampValidationDataMap maps timestamps to their corresponding ValidationData.
-	timestampValidationDataMap map[*TimestampToken]*ValidationData
+	timestampValidationDataMap *utils.OrderedMap[*TimestampToken, *ValidationData]
 }
 
 // NewValidationDataContainer instantiates empty maps of tokens and validation data
 // relationships. Ports the default constructor.
 func NewValidationDataContainer() *ValidationDataContainer {
 	return &ValidationDataContainer{
-		signatureValidationDataMap: make(map[AdvancedSignature]*ValidationData),
-		timestampValidationDataMap: make(map[*TimestampToken]*ValidationData),
+		signatureValidationDataMap: utils.NewOrderedMap[AdvancedSignature, *ValidationData](),
+		timestampValidationDataMap: utils.NewOrderedMap[*TimestampToken, *ValidationData](),
 	}
 }
 
@@ -71,35 +73,37 @@ func NewValidationDataContainer() *ValidationDataContainer {
 // addValidationData(AdvancedSignature, ValidationData) overload; Go has no overloading, so the
 // signature and timestamp overloads carry different names.
 func (c *ValidationDataContainer) AddValidationDataForSignature(signature AdvancedSignature, validationData *ValidationData) {
-	c.signatureValidationDataMap[signature] = validationData
+	c.signatureValidationDataMap.Set(signature, validationData)
 }
 
 // AddValidationDataForTimestamp adds validation data to the container. Port of the
 // addValidationData(TimestampToken, ValidationData) overload.
 func (c *ValidationDataContainer) AddValidationDataForTimestamp(timestampToken *TimestampToken, validationData *ValidationData) {
-	c.timestampValidationDataMap[timestampToken] = validationData
+	c.timestampValidationDataMap.Set(timestampToken, validationData)
 }
 
 // ValidationDataForSignature returns the related ValidationData for the given signature. Port
 // of the getValidationData(AdvancedSignature) overload.
 func (c *ValidationDataContainer) ValidationDataForSignature(signature AdvancedSignature) *ValidationData {
-	return c.signatureValidationDataMap[signature]
+	validationData, _ := c.signatureValidationDataMap.Get(signature)
+	return validationData
 }
 
 // ValidationDataForTimestamp returns the related ValidationData for the given timestamp token.
 // Port of the getValidationData(TimestampToken) overload.
 func (c *ValidationDataContainer) ValidationDataForTimestamp(timestampToken *TimestampToken) *ValidationData {
-	return c.timestampValidationDataMap[timestampToken]
+	validationData, _ := c.timestampValidationDataMap.Get(timestampToken)
+	return validationData
 }
 
 // AllValidationData returns a combined validation data for all tokens. Port of
 // getAllValidationData().
 func (c *ValidationDataContainer) AllValidationData() *ValidationData {
 	result := NewValidationData()
-	for _, validationData := range c.signatureValidationDataMap {
+	for _, validationData := range c.signatureValidationDataMap.Values() {
 		result.AddValidationData(validationData)
 	}
-	for _, validationData := range c.timestampValidationDataMap {
+	for _, validationData := range c.timestampValidationDataMap.Values() {
 		result.AddValidationData(validationData)
 	}
 	return result
@@ -107,30 +111,22 @@ func (c *ValidationDataContainer) AllValidationData() *ValidationData {
 
 // Signatures returns a collection of AdvancedSignatures. Port of getSignatures().
 func (c *ValidationDataContainer) Signatures() []AdvancedSignature {
-	signatures := make([]AdvancedSignature, 0, len(c.signatureValidationDataMap))
-	for signature := range c.signatureValidationDataMap {
-		signatures = append(signatures, signature)
-	}
-	return signatures
+	return c.signatureValidationDataMap.Keys()
 }
 
 // DetachedTimestamps returns a collection of TimestampTokens. Port of getDetachedTimestamps().
 func (c *ValidationDataContainer) DetachedTimestamps() []*TimestampToken {
-	timestamps := make([]*TimestampToken, 0, len(c.timestampValidationDataMap))
-	for timestampToken := range c.timestampValidationDataMap {
-		timestamps = append(timestamps, timestampToken)
-	}
-	return timestamps
+	return c.timestampValidationDataMap.Keys()
 }
 
 // IsEmpty checks if the validation data for inclusion is empty. Port of isEmpty().
 func (c *ValidationDataContainer) IsEmpty() bool {
-	for _, validationData := range c.signatureValidationDataMap {
+	for _, validationData := range c.signatureValidationDataMap.Values() {
 		if !validationData.IsEmpty() {
 			return false
 		}
 	}
-	for _, validationData := range c.timestampValidationDataMap {
+	for _, validationData := range c.timestampValidationDataMap.Values() {
 		if !validationData.IsEmpty() {
 			return false
 		}

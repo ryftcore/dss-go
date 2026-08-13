@@ -3,6 +3,7 @@ package aia
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi/exception"
@@ -42,15 +43,19 @@ func (c *CompositeAIASource) CertificatesByAIA(certificateToken *model.Certifica
 		fmt.Sprintf("Unable to retrieve the certificateTokens (%d tries)", len(c.aiaSources))))
 }
 
-// compositeAIASourceOrderedKeys returns the keys of aiaSources. Go map iteration order is
-// randomized, unlike Java's LinkedHashMap-free HashMap (whose entrySet() order is likewise
-// unspecified); the difference is behaviourally immaterial since every source is tried until
-// one succeeds.
+// compositeAIASourceOrderedKeys returns the keys of aiaSources, sorted lexically. Java's
+// HashMap iteration order is arbitrary but stable within a JVM run; Go map iteration is
+// instead randomized on every run. Sorting (PORTING.md's "order-sensitive upstream iteration
+// -> ... explicit sort" rule) keeps the try order - and therefore CertificatesByAIA's result,
+// when more than one source would answer - stable from one run to the next, rather than merely
+// "immaterial because every source is tried": two sources can both hold a (possibly
+// different) valid AIA response for the same certificate.
 func compositeAIASourceOrderedKeys(aiaSources map[string]AIASource) []string {
 	keys := make([]string, 0, len(aiaSources))
 	for key := range aiaSources {
 		keys = append(keys, key)
 	}
+	sort.Strings(keys)
 	return keys
 }
 

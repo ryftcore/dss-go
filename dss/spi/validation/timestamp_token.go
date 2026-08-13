@@ -104,23 +104,6 @@ type timestampTokenCertID struct {
 	issuerSerial *asn1ber.IssuerSerial
 }
 
-// timestampTokenFirstSignerInformation returns the signer of a CMS, warning when there is more
-// than one. Local counterpart of DSSASN1Utils#getFirstSignerInformation(SignerInformationStore),
-// which dss_asn1_utils.go defers to the CMS/timestamp phase because it takes a BouncyCastle
-// type; it is kept unexported here so that folding it into the spi package later is a pure move.
-//
-// Returns nil for a CMS without a signer, where Java's iterator().next() raises a
-// NoSuchElementException; every caller in this file has already checked that there is exactly
-// one signer.
-func timestampTokenFirstSignerInformation(signerInformations []*cmscore.SignerInfo) *cmscore.SignerInfo {
-	if len(signerInformations) == 0 {
-		return nil
-	}
-	// Upstream logs "!!! The framework handles only one signer (SignerInformation) !!!" when
-	// the store holds more than one signer.
-	return signerInformations[0]
-}
-
 // timestampTokenParseCertID reads the CertID of the TSA signer, i.e. the first value of its
 // signing-certificate or signing-certificate-v2 signed attribute. Port of the tail of the
 // BouncyCastle TimeStampToken(ContentInfo) constructor.

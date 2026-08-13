@@ -27,7 +27,7 @@ func NewTimestampCertificateSource(timestampToken *cmscore.TimeStampToken) (*Tim
 	cms := timestampToken.CMS()
 	signerInfos := cms.SignerInfos()
 	base, err := spi.NewCMSCertificateSource(signerInfos, cms.Certificates(),
-		timestampTokenFirstSignerInformation(signerInfos))
+		spi.DSSASN1UtilsFirstSignerInformation(signerInfos))
 	if err != nil {
 		return nil, err
 	}

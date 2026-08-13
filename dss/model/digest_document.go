@@ -8,6 +8,7 @@ import (
 	"io"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/utils"
 )
 
 // DigestDocument is a digest-only representation of a DSSDocument. It can
@@ -132,9 +133,9 @@ func (d *DigestDocument) AddDigestValue(digestAlgorithm enumerations.DigestAlgor
 		panic("The digest value is not defined")
 	}
 	if d.digestMap == nil {
-		d.digestMap = make(map[enumerations.DigestAlgorithm][]byte)
+		d.digestMap = utils.NewOrderedMap[enumerations.DigestAlgorithm, []byte]()
 	}
-	d.digestMap[digestAlgorithm] = digestValue
+	d.digestMap.Set(digestAlgorithm, digestValue)
 }
 
 // AddDigestBase64 adds a (DigestAlgorithm, digestValue) pair whose digest
@@ -153,7 +154,7 @@ func (d *DigestDocument) AddDigestBase64(digestAlgorithm enumerations.DigestAlgo
 // DigestValue ports DigestDocument#getDigestValue: returns an error if no
 // digest is stored for digestAlgorithm (Java IllegalArgumentException).
 func (d *DigestDocument) DigestValue(digestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
-	digestValue, ok := d.digestMap[digestAlgorithm]
+	digestValue, ok := d.digestMap.Get(digestAlgorithm)
 	if !ok {
 		// Message kept verbatim from Java's IllegalArgumentException.
 		return nil, fmt.Errorf("The digest document does not contain a digest value for the algorithm : %s", digestAlgorithm)
@@ -180,10 +181,12 @@ var ErrNoDigest = errors.New("The DigestDocument does not contain any digest! Yo
 // ExistingDigest returns the first defined digest for the DigestDocument.
 // Ports DigestDocument#getExistingDigest.
 func (d *DigestDocument) ExistingDigest() (Digest, error) {
-	for alg, value := range d.digestMap {
-		return NewDigest(alg, value), nil
+	algs := d.digestMap.Keys()
+	if len(algs) == 0 {
+		return Digest{}, ErrNoDigest
 	}
-	return Digest{}, ErrNoDigest
+	value, _ := d.digestMap.Get(algs[0])
+	return NewDigest(algs[0], value), nil
 }
 
 // ErrNotPossibleWithDigestDocument is returned by OpenStream and Save, which
@@ -217,11 +220,12 @@ func (d *DigestDocument) Equals(other *DigestDocument) bool {
 	if !commonDocumentEquals(&d.CommonDocument, &other.CommonDocument) {
 		return false
 	}
-	if len(d.digestMap) != len(other.digestMap) {
+	if d.digestMap.Len() != other.digestMap.Len() {
 		return false
 	}
-	for alg, v := range d.digestMap {
-		ov, ok := other.digestMap[alg]
+	for _, alg := range d.digestMap.Keys() {
+		v, _ := d.digestMap.Get(alg)
+		ov, ok := other.digestMap.Get(alg)
 		if !ok || string(ov) != string(v) {
 			return false
 		}

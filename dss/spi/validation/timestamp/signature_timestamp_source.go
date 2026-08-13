@@ -205,6 +205,31 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// GetTimestampMessageImprintDigestBuilderForToken returns the related TimestampMessageDigestBuilder.
 	// Port of the abstract getTimestampMessageImprintDigestBuilder(TimestampToken).
 	GetTimestampMessageImprintDigestBuilderForToken(timestampToken *validation.TimestampToken) TimestampMessageDigestBuilder
+
+	// IncorporateArchiveTimestampReferences incorporates all the timestamped references for the
+	// given archive timestampToken. Port of the protected incorporateArchiveTimestampReferences
+	// (TimestampToken, List). Java declares this method concrete, not abstract, and relies on
+	// virtual dispatch for the base's own internal callers (incorporateArchiveTimestampReferencesForTokens)
+	// to reach a format-specific override; routed through this interface for the same reason
+	// every other override above is. SignatureTimestampSource itself provides the base's
+	// original body as IncorporateArchiveTimestampReferences below, for an override with nothing
+	// prior-based-format-specific to add to delegate back to.
+	IncorporateArchiveTimestampReferences(timestampToken *validation.TimestampToken, previousTimestamps []*validation.TimestampToken)
+
+	// GetSignatureSignedDataReferences returns a list of all TimestampedReferences found into
+	// the signature's signed data (e.g. CMS SignedData for CAdES). Port of the protected
+	// getSignatureSignedDataReferences(), empty by default; concrete-not-abstract in Java, see
+	// IncorporateArchiveTimestampReferences's comment for why it is routed through this
+	// interface. SignatureTimestampSource provides the empty-by-default base body as
+	// GetSignatureSignedDataReferences below.
+	GetSignatureSignedDataReferences() []*validation.TimestampedReference
+
+	// GetCounterSignatureReferences returns a list of references extracted from counterSignature.
+	// Port of the protected getCounterSignatureReferences(AdvancedSignature); concrete-not-abstract
+	// in Java, see IncorporateArchiveTimestampReferences's comment for why it is routed through
+	// this interface. SignatureTimestampSource provides the base's original body as
+	// GetCounterSignatureReferences below.
+	GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference
 }
 
 // SignatureTimestampSource is the timestamp source of a signature.
@@ -493,6 +518,33 @@ func (s *SignatureTimestampSource[AS, SA]) UnsignedPropertiesReferences() []*val
 		s.createAndValidate()
 	}
 	return s.unsignedPropertiesReferences
+}
+
+// CertificateSource returns the merged certificate source built from the signature and its
+// timestamps. Additive accessor (integration-time, Phase 3) for the `certificateSource` field
+// Java's subclasses reach through protected field access; every format-specific
+// SignatureTimestampSourceOverrides implementation needs it the same way
+// SignerDataReferences/UnsignedPropertiesReferences already expose their own state.
+func (s *SignatureTimestampSource[AS, SA]) CertificateSource() *spi.ListCertificateSource {
+	return s.certificateSource
+}
+
+// CRLSource returns the merged CRL revocation source built from the signature and its
+// timestamps. Additive accessor (integration-time, Phase 3); see CertificateSource's comment.
+func (s *SignatureTimestampSource[AS, SA]) CRLSource() *spi.ListRevocationSource[revocation.CRL] {
+	return s.crlSource
+}
+
+// OCSPSource returns the merged OCSP revocation source built from the signature and its
+// timestamps. Additive accessor (integration-time, Phase 3); see CertificateSource's comment.
+func (s *SignatureTimestampSource[AS, SA]) OCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
+	return s.ocspSource
+}
+
+// GetAttributeOrder exposes getAttributeOrder(SA) to format-specific overrides. Additive
+// accessor (integration-time, Phase 3); see CertificateSource's comment.
+func (s *SignatureTimestampSource[AS, SA]) GetAttributeOrder(signatureAttribute SA) *int {
+	return s.getAttributeOrder(signatureAttribute)
 }
 
 // createAndValidate creates and validates all timestamps. Must be called only once.
@@ -844,7 +896,7 @@ func (s *SignatureTimestampSource[AS, SA]) getTimestampedRevocationValues(unsign
 // incorporateArchiveTimestampReferences(List, List).
 func (s *SignatureTimestampSource[AS, SA]) incorporateArchiveTimestampReferencesForTokens(createdTimestampTokens, previousTimestamps []*validation.TimestampToken) {
 	for _, timestampToken := range createdTimestampTokens {
-		s.IncorporateArchiveTimestampReferences(timestampToken, previousTimestamps)
+		s.overrides.IncorporateArchiveTimestampReferences(timestampToken, previousTimestamps)
 	}
 }
 
@@ -879,10 +931,12 @@ func (s *SignatureTimestampSource[AS, SA]) getArchiveTimestampReferences(previou
 // SignedData of the signature. NOTE: used only in ASiC-E CAdES. Port of the protected
 // getSignatureSignedDataReferences(), empty by default.
 //
-// Java subclasses may override this concrete (non-abstract) method; no upstream subclass in
-// this manifest's scope does, and ASiC-E CAdES is out of scope until a later phase, so it is
-// not wired into SignatureTimestampSourceOverrides. A future ASiC-E CAdES chunk that needs to
-// override it should add it to that interface at that point.
+// Java subclasses may override this concrete (non-abstract) method; wired into
+// SignatureTimestampSourceOverrides (integration-time fix, Phase 3) so that the base's own
+// internal callers (processExternalTimestamp, processExternalEvidenceRecord) reach a
+// format-specific override through s.overrides rather than statically binding to this body -
+// the same virtual-dispatch gap every other override above is routed around. This is the
+// default (empty) body for an override with nothing format-specific to add.
 func (s *SignatureTimestampSource[AS, SA]) GetSignatureSignedDataReferences() []*validation.TimestampedReference {
 	return nil
 }
@@ -925,15 +979,15 @@ func (s *SignatureTimestampSource[AS, SA]) getCounterSignaturesReferences(counte
 	var references []*validation.TimestampedReference
 	if len(counterSignatures) > 0 {
 		for _, counterSignature := range counterSignatures {
-			references = append(references, s.getCounterSignatureReferences(counterSignature)...)
+			references = append(references, s.overrides.GetCounterSignatureReferences(counterSignature)...)
 		}
 	}
 	return references
 }
 
-// getCounterSignatureReferences returns a list of references extracted from counterSignature.
+// GetCounterSignatureReferences returns a list of references extracted from counterSignature.
 // Port of the protected getCounterSignatureReferences(AdvancedSignature).
-func (s *SignatureTimestampSource[AS, SA]) getCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference {
+func (s *SignatureTimestampSource[AS, SA]) GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference {
 	var counterSigReferences []*validation.TimestampedReference
 
 	counterSigReferences = append(counterSigReferences, validation.NewTimestampedReference(counterSignature.ID(), enumerations.TimestampedObjectType_SIGNATURE))
@@ -1032,12 +1086,12 @@ func (s *SignatureTimestampSource[AS, SA]) getTimestampScopes(timestampToken *va
 func (s *SignatureTimestampSource[AS, SA]) processExternalTimestamp(externalTimestamp *validation.TimestampToken) {
 	// add all validation data present in Signature CMS SignedData, because an external
 	// timestamp covers a whole signature file
-	timestampAddReferences(externalTimestamp, s.GetSignatureSignedDataReferences())
+	timestampAddReferences(externalTimestamp, s.overrides.GetSignatureSignedDataReferences())
 	// add references from previously added timestamps
 	timestampAddReferences(externalTimestamp, s.getEncapsulatedReferencesFromTimestamps(
 		s.getTimestampsCoveredByManifest(externalTimestamp.ManifestFile())))
 	// add existing counter signatures
-	timestampAddReferences(externalTimestamp, s.getCounterSignatureReferences(s.signature))
+	timestampAddReferences(externalTimestamp, s.overrides.GetCounterSignatureReferences(s.signature))
 	// populate timestamp certificate source with values present in the timestamp
 	s.populateSource(externalTimestamp)
 }
@@ -1072,7 +1126,7 @@ func timestampTokenSliceContains(timestampTokens []*validation.TimestampToken, c
 func (s *SignatureTimestampSource[AS, SA]) processExternalEvidenceRecord(evidenceRecord validation.EvidenceRecord) {
 	timestampedReferences := []*validation.TimestampedReference{}
 	addReferences(&timestampedReferences, s.getSignatureTimestampReferences())
-	addReferences(&timestampedReferences, s.GetSignatureSignedDataReferences())
+	addReferences(&timestampedReferences, s.overrides.GetSignatureSignedDataReferences())
 	addReferences(&timestampedReferences, s.getEncapsulatedReferencesFromTimestamps(s.SignatureTimestamps()))
 	addReferences(&timestampedReferences, s.unsignedPropertiesReferences)
 	addReferences(&timestampedReferences, s.getEncapsulatedReferencesFromTimestamps(s.TimestampsX1()))

@@ -3,6 +3,7 @@ package validation
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
@@ -35,8 +36,12 @@ func NewCompositeTSPSource() *CompositeTSPSource {
 //
 // Go maps have no defined iteration order (Java's HashMap does not either, but callers in
 // practice pass a LinkedHashMap); sourceKeys lets callers pin down the try order the way a
-// LinkedHashMap argument would. When sourceKeys is nil the iteration order is unspecified,
-// matching Java's setTspSources(Map) as declared.
+// LinkedHashMap argument would. When sourceKeys is nil, Java's HashMap-backed
+// setTspSources(Map) would still iterate in *some* order, arbitrary but stable for the life of
+// that Map; Go map iteration is instead randomized on every run, so the fallback sorts the
+// keys lexically (PORTING.md's "order-sensitive upstream iteration -> ... explicit sort" rule)
+// to keep TimeStampResponse's try order - and therefore its result, when more than one source
+// would answer - stable from one run to the next.
 func (s *CompositeTSPSource) SetTspSources(tspSources map[string]TSPSource, sourceKeys []string) {
 	s.tspSources = tspSources
 	if sourceKeys != nil {
@@ -46,6 +51,7 @@ func (s *CompositeTSPSource) SetTspSources(tspSources map[string]TSPSource, sour
 		for sourceKey := range tspSources {
 			s.sourceOrder = append(s.sourceOrder, sourceKey)
 		}
+		sort.Strings(s.sourceOrder)
 	}
 }
 

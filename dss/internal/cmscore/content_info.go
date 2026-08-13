@@ -36,11 +36,45 @@ func NewContentInfo(contentType asn1.ObjectIdentifier, content []byte) *ContentI
 }
 
 // ParseContentInfo decodes a ContentInfo, tolerating the BER encodings a streaming producer
-// emits: an indefinite-length ContentInfo SEQUENCE and an indefinite-length [0] wrapper.
+// emits: an indefinite-length ContentInfo SEQUENCE and an indefinite-length [0] wrapper. Trailing
+// bytes after the ContentInfo are rejected, matching BC's own CMSSignedData(byte[]) constructor
+// (testdata/adversarial/craft-bad-trailing.p7s's bc-oracle.txt entry is parseOK=false for exactly
+// this). A caller that instead wants BC's other, lenient entry point - reading one ASN.1 object
+// from a stream and not caring what follows, which is what a document-level parse needs (see
+// ParseContentInfoTolerateTrailingBytes) - does not go through this function.
 func ParseContentInfo(input []byte) (*ContentInfo, error) {
 	element, err := parseOne(input, "ContentInfo")
 	if err != nil {
 		return nil, err
+	}
+	return ContentInfoFromElement(element)
+}
+
+// ParseContentInfoTolerateTrailingBytes decodes a ContentInfo the same way ParseContentInfo
+// does, except it does not require the input to be fully consumed.
+//
+// This is the entry point for parsing a whole document (CMSUtilsParseToCMSBinaries's caller uses
+// it, not ParseContentInfo) rather than an isolated byte slice: BC's own
+// CMSSignedData(InputStream) constructor - built on ASN1InputStream#readObject(), which reads
+// exactly one top-level ASN.1 object off the stream and stops - never looks at what follows it
+// either, and upstream DSS relies on exactly that leniency. A real fixture depends on it:
+// dss-cades/src/test/resources/validation/dss-1188/Test.bin.sig (DSS-1188) is a well-formed
+// 4149-byte ContentInfo followed by 15859 bytes of unrelated trailing data, and upstream DSS
+// parses and validates it without complaint - see cades/testdata/upstream/validation/dss-1188/.
+// BC is inconsistent about this across its two constructors (CMSSignedData(byte[]) does reject
+// trailing bytes, as ParseContentInfo's own doc comment notes), and DSS's own CMS-loading path
+// goes through the lenient one; this function exists to let cms's document-parsing entry point
+// mirror that specific choice without loosening ParseContentInfo for every other caller
+// (SignedData/TimeStampResp/TSTInfo already go through the strict parseOne too, since those are
+// always parsed from an already-isolated byte slice - an OCTET STRING's content, never "the rest
+// of a file" - where trailing bytes remain a real error).
+func ParseContentInfoTolerateTrailingBytes(input []byte) (*ContentInfo, error) {
+	if len(input) == 0 {
+		return nil, fmt.Errorf("cmscore: ContentInfo is empty")
+	}
+	element, _, err := asn1ber.Parse(input)
+	if err != nil {
+		return nil, fmt.Errorf("cmscore: cannot parse ContentInfo: %w", err)
 	}
 	return ContentInfoFromElement(element)
 }

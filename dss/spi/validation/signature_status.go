@@ -21,8 +21,13 @@ type SignatureStatus struct {
 	// implementations; the map is keyed by the signature's Id() (matching the convention used
 	// for AdvancedSignature elsewhere in this package) while relatedSignatures preserves the
 	// concrete signatures for GetRelatedSignatures().
+	//
+	// Java's HashMap iteration order is arbitrary but stable within a JVM run; a bare Go map
+	// is randomized on every run instead, and RelatedSignatures() returns in this map's
+	// iteration order, so relatedSignatures is kept insertion-ordered (slice + index map,
+	// PORTING.md's Collections rule) rather than a bare map.
 	relatedSignatureMap map[string]string
-	relatedSignatures   map[string]AdvancedSignature
+	relatedSignatures   *utils.OrderedMap[string, AdvancedSignature]
 }
 
 // NewSignatureStatus is the default constructor initializing an empty map.
@@ -30,7 +35,7 @@ func NewSignatureStatus() *SignatureStatus {
 	return &SignatureStatus{
 		ObjectStatus:        alert.NewObjectStatus(),
 		relatedSignatureMap: make(map[string]string),
-		relatedSignatures:   make(map[string]AdvancedSignature),
+		relatedSignatures:   utils.NewOrderedMap[string, AdvancedSignature](),
 	}
 }
 
@@ -39,17 +44,13 @@ func NewSignatureStatus() *SignatureStatus {
 func (s *SignatureStatus) AddRelatedTokenAndErrorMessage(signature AdvancedSignature, errorMessage string) {
 	s.ObjectStatus.AddRelatedObjectIdentifierAndErrorMessage(signature.ID(), errorMessage)
 	s.relatedSignatureMap[signature.ID()] = errorMessage
-	s.relatedSignatures[signature.ID()] = signature
+	s.relatedSignatures.Set(signature.ID(), signature)
 }
 
 // RelatedSignatures returns a collection of signatures concerned by failure of the processed
 // check. Port of getRelatedSignatures().
 func (s *SignatureStatus) RelatedSignatures() []AdvancedSignature {
-	signatures := make([]AdvancedSignature, 0, len(s.relatedSignatures))
-	for _, signature := range s.relatedSignatures {
-		signatures = append(signatures, signature)
-	}
-	return signatures
+	return s.relatedSignatures.Values()
 }
 
 // MessageForSignature returns the error message for the given signature. Port of

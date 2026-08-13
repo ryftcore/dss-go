@@ -19,7 +19,7 @@ type TimestampCRLSource struct {
 // is the unsignedAttrs of the TSA signer, which is absent for almost every time-stamp - a nil
 // cmscore.Attributes, which is what spi.NewCMSCRLSource reads as Java's null AttributeTable.
 func newTimestampCRLSource(timeStampToken *cmscore.TimeStampToken) (*TimestampCRLSource, error) {
-	signerInfo := timestampTokenFirstSignerInformation(timeStampToken.CMS().SignerInfos())
+	signerInfo := spi.DSSASN1UtilsFirstSignerInformation(timeStampToken.CMS().SignerInfos())
 	base, err := spi.NewCMSCRLSource(timeStampToken.CMS().CRLs(), signerInfo.UnsignedAttributes)
 	if err != nil {
 		return nil, err

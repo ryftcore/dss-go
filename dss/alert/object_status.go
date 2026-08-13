@@ -37,12 +37,16 @@ func (o *ObjectStatus) MessageForObjectWithId(objectId string) string {
 	return o.relatedObjectMap[objectId]
 }
 
-// RelatedObjectIds returns the identifiers of the objects held in the related objects map.
+// RelatedObjectIds returns the identifiers of the objects held in the related objects map,
+// sorted for determinism (see the type doc comment: upstream's HashMap iteration order is
+// itself unspecified, but stable within a JVM run; a bare Go map is randomized on every run
+// instead, matching the same treatment objectMapToString already applies to this map).
 func (o *ObjectStatus) RelatedObjectIds() []string {
 	ids := make([]string, 0, len(o.relatedObjectMap))
 	for id := range o.relatedObjectMap {
 		ids = append(ids, id)
 	}
+	sort.Strings(ids)
 	return ids
 }
 

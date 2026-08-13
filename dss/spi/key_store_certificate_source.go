@@ -44,6 +44,7 @@ import (
 	"golang.org/x/crypto/pkcs12"
 
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/utils"
 )
 
 // KeyStoreCertificateSourceType identifies the keystore format a KeyStoreCertificateSource
@@ -74,8 +75,11 @@ type KeyStoreCertificateSource struct {
 	passwordProtection []byte
 
 	// entries maps an alias to the certificate token stored under it, mirroring Java's
-	// alias-addressed KeyStore.
-	entries map[string]*model.CertificateToken
+	// alias-addressed KeyStore. Java's KeyStore aliases enumerate in provider-defined (but
+	// stable-per-run) order; a bare Go map is randomized on every run instead, and Store()
+	// writes certificates in this map's iteration order, so it is kept insertion-ordered
+	// (slice + index map, PORTING.md's Collections rule) rather than a bare map.
+	entries *utils.OrderedMap[string, *model.CertificateToken]
 }
 
 // NewKeyStoreCertificateSource creates a new, empty keystore of the given type.
@@ -103,7 +107,7 @@ func NewKeyStoreCertificateSourceFromReader(ksStream io.Reader, ksType KeyStoreC
 		CommonCertificateSource: NewCommonCertificateSource(),
 		ksType:                  ksType,
 		passwordProtection:      ksPassword,
-		entries:                 make(map[string]*model.CertificateToken),
+		entries:                 utils.NewOrderedMap[string, *model.CertificateToken](),
 	}
 	if err := source.initKeystore(ksStream); err != nil {
 		return nil, err
@@ -146,7 +150,7 @@ func (k *KeyStoreCertificateSource) initKeystore(ksStream io.Reader) error {
 
 	for i, certificateToken := range certificates {
 		alias := k.getKey("cert-" + strconv.Itoa(i))
-		k.entries[alias] = certificateToken
+		k.entries.Set(alias, certificateToken)
 		k.CommonCertificateSource.AddCertificate(certificateToken)
 	}
 	return nil
@@ -227,7 +231,8 @@ func keyStoreCertificateSourceParsePEMOrDER(data []byte) ([]*model.CertificateTo
 // Returns nil when the alias is unknown, matching Java's null return (a WARN log is dropped,
 // slf4j is not load-bearing here).
 func (k *KeyStoreCertificateSource) Certificate(alias string) *model.CertificateToken {
-	return k.entries[k.getKey(alias)]
+	certificateToken, _ := k.entries.Get(k.getKey(alias))
+	return certificateToken
 }
 
 // AddAllCertificatesToKeyStore adds a list of certificates to the keystore.
@@ -242,7 +247,7 @@ func (k *KeyStoreCertificateSource) AddAllCertificatesToKeyStore(certificates []
 // certificate's DSS Id. Port of addCertificateToKeyStore(CertificateToken).
 func (k *KeyStoreCertificateSource) AddCertificateToKeyStore(certificateToken *model.CertificateToken) {
 	alias := k.getKey(certificateToken.DSSIDAsString())
-	k.entries[alias] = certificateToken
+	k.entries.Set(alias, certificateToken)
 	k.CommonCertificateSource.AddCertificate(certificateToken)
 }
 
@@ -259,18 +264,18 @@ func (k *KeyStoreCertificateSource) AddCertificate(certificateToAdd *model.Certi
 // not load-bearing here).
 func (k *KeyStoreCertificateSource) DeleteCertificateFromKeyStore(alias string) {
 	key := k.getKey(alias)
-	certificate, found := k.entries[key]
+	certificate, found := k.entries.Get(key)
 	if !found {
 		return
 	}
 	k.removeCertificate(certificate)
-	delete(k.entries, key)
+	k.entries.Delete(key)
 }
 
 // ClearAllCertificates removes all certificates from the keystore.
 // Port of clearAllCertificates().
 func (k *KeyStoreCertificateSource) ClearAllCertificates() {
-	for alias := range k.entries {
+	for _, alias := range k.entries.Keys() {
 		k.DeleteCertificateFromKeyStore(alias)
 	}
 	k.CommonCertificateSource.reset()
@@ -284,7 +289,7 @@ func (k *KeyStoreCertificateSource) ClearAllCertificates() {
 func (k *KeyStoreCertificateSource) Store(w io.Writer) error {
 	switch k.ksType {
 	case KeyStoreCertificateSourceType_PEM:
-		for _, certificateToken := range k.entries {
+		for _, certificateToken := range k.entries.Values() {
 			block := &pem.Block{Type: "CERTIFICATE", Bytes: certificateToken.Encoded()}
 			if err := pem.Encode(w, block); err != nil {
 				return model.NewDSSErrorMessageCause("Unable to store the keystore", err)

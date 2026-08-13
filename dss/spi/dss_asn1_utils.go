@@ -18,11 +18,14 @@
 //
 // NOT PORTED (deferred to the CMS/timestamp phase, which owns the types they take):
 // getEncoded(TimeStampToken), getEncoded(CMSSignedData), getDEREncoded(TimeStampToken),
-// getDEREncoded(CMSSignedData), getAsn1Encodable(Attribute), getAsn1Attributes,
-// isEmpty(AttributeTable), emptyIfNull(AttributeTable), isAttributeOfType,
-// getTimeStampTokenGenerationTime, getRevocationValues, getCertificateRef(OtherCertID),
-// getFirstSignerInformation, toSignerIdentifier(SignerId), getX509CertificateHolder and
+// getDEREncoded(CMSSignedData), getTimeStampTokenGenerationTime, getX509CertificateHolder and
 // getCertificate(X509CertificateHolder). See the TODO markers next to their Go neighbours.
+//
+// The CMS-typed methods the CAdES phase needed have landed: isEmpty(AttributeTable),
+// emptyIfNull(AttributeTable), isAttributeOfType and getFirstSignerInformation are below;
+// getAsn1Encodable(Attribute), getAsn1Attributes, toSignerIdentifier(SignerId),
+// getCertificate(X509CertificateHolder) and getCertificateRef(OtherCertID) are in
+// cms_certificate_source.go, and getRevocationValues in cms_crl_source.go.
 package spi
 
 import (
@@ -36,6 +39,7 @@ import (
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/utain/esig/dss/internal/cmscore"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -259,10 +263,37 @@ func dssASN1UtilsDEROctetStringContent(binaries []byte) ([]byte, error) {
 	return element.Octets(), nil
 }
 
-// TODO(phase-3): getAsn1Encodable(Attribute), getAsn1Attributes(AttributeTable,
-// ASN1ObjectIdentifier), isEmpty(AttributeTable), emptyIfNull(AttributeTable) and
-// isAttributeOfType(Attribute, ASN1ObjectIdentifier) operate on the CMS attribute types.
-// They are only called from the CMS*Source classes, which are deferred with the CMS phase.
+// getAsn1Encodable(Attribute) and getAsn1Attributes(AttributeTable, ASN1ObjectIdentifier) live
+// in cms_certificate_source.go, next to the ESS structures that made the CMS attribute types
+// necessary there; the three attribute-table predicates below complete the group.
+
+// DSSASN1UtilsIsEmpty reports whether the attribute table is absent or empty.
+// Port of isEmpty(AttributeTable).
+func DSSASN1UtilsIsEmpty(attributeTable cmscore.Attributes) bool {
+	return len(attributeTable) == 0
+}
+
+// DSSASN1UtilsEmptyIfNull returns the given attribute table, or an empty one when it is nil.
+// Port of emptyIfNull(AttributeTable).
+//
+// Java hands back a fresh AttributeTable wrapping an empty Hashtable; a nil cmscore.Attributes
+// already behaves like one for every read operation, but callers append to the result, so an
+// empty non-nil slice is returned to keep "the table exists" distinguishable.
+func DSSASN1UtilsEmptyIfNull(originalAttributeTable cmscore.Attributes) cmscore.Attributes {
+	if originalAttributeTable != nil {
+		return originalAttributeTable
+	}
+	return cmscore.Attributes{}
+}
+
+// DSSASN1UtilsIsAttributeOfType reports whether the attribute carries the given type.
+// Port of isAttributeOfType(Attribute, ASN1ObjectIdentifier).
+func DSSASN1UtilsIsAttributeOfType(attribute *cmscore.Attribute, asn1ObjectIdentifier asn1.ObjectIdentifier) bool {
+	if attribute == nil {
+		return false
+	}
+	return asn1ObjectIdentifier.Equal(attribute.Type)
+}
 
 // DSSASN1UtilsAsn1SignaturePolicyDigest computes the digest of an ASN.1 signature policy
 // (used in CAdES). Port of getAsn1SignaturePolicyDigest(DigestAlgorithm, byte[]).
@@ -677,7 +708,21 @@ func dssASN1UtilsFirstNotNull(x500PrincipalHelper *model.X500PrincipalHelper, oi
 	return ""
 }
 
-// TODO(phase-3): getFirstSignerInformation(SignerInformationStore) belongs to the CMS layer.
+// DSSASN1UtilsFirstSignerInformation returns the first signer of a SignerInformationStore,
+// warning when the store holds more than one. Port of
+// getFirstSignerInformation(SignerInformationStore).
+//
+// Returns nil for a store without a signer, where Java's iterator().next() raises a
+// NoSuchElementException: every call site has already established that there is a signer, and a
+// nil result keeps the CMS-typed helper free of an error channel Java does not have either.
+func DSSASN1UtilsFirstSignerInformation(signerInformationStore []*cmscore.SignerInfo) *cmscore.SignerInfo {
+	if len(signerInformationStore) == 0 {
+		return nil
+	}
+	// Upstream logs "!!! The framework handles only one signer (SignerInformation) !!!" when
+	// the store holds more than one.
+	return signerInformationStore[0]
+}
 
 // DSSASN1UtilsIsASN1SequenceTag reports whether the byte is the identifier octet of an ASN.1
 // SEQUENCE. Port of isASN1SequenceTag(byte).
@@ -710,9 +755,19 @@ func DSSASN1UtilsDate(encodable []byte) time.Time {
 	return date
 }
 
-// TODO(phase-3): getTimeStampTokenGenerationTime(TimeStampToken),
-// getRevocationValues(ASN1Encodable) and getCertificateRef(OtherCertID) read the RFC 3161
-// and CAdES structures the CMS phase introduces.
+// DSSASN1UtilsTimeStampTokenGenerationTime returns the generation time of a timestamp token,
+// i.e. TSTInfo.genTime. Port of getTimeStampTokenGenerationTime(TimeStampToken); the
+// TSPValidationException the Java overload catches around TimeStampToken construction has no
+// counterpart here, since ParseTimeStampToken already rejected an unreadable token before this
+// is ever reached.
+//
+// Completes the TODO(phase-3) marker this used to carry (getRevocationValues(ASN1Encodable)
+// and getCertificateRef(OtherCertID), the other two methods it named, were completed earlier
+// in cms_crl_source.go and cms_certificate_source.go as DSSASN1UtilsRevocationValues and
+// DSSASN1UtilsCertificateRef).
+func DSSASN1UtilsTimeStampTokenGenerationTime(timeStampToken *cmscore.TimeStampToken) time.Time {
+	return timeStampToken.TSTInfo().GenTime
+}
 
 // DSSASN1UtilsIsAsn1Encoded reports whether the binaries are ASN.1 encoded.
 // Port of isAsn1Encoded(byte[]).

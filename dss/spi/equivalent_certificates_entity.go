@@ -9,6 +9,7 @@ import (
 	"bytes"
 
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/utils"
 )
 
 // equivalentCertificatesEntity re-groups equivalent certificates by a given property (e.g. a
@@ -24,8 +25,11 @@ type equivalentCertificatesEntity struct {
 	// equivalentCertificates holds the equivalent certificates (certificates sharing the same
 	// public key), keyed by DSSIDAsString(): Java relies on hashCode-based collections keyed
 	// on tokens, the Go equivalent keys maps on the token's identifier string (see
-	// CertificateToken.Equals in dss-model).
-	equivalentCertificates map[string]*model.CertificateToken
+	// CertificateToken.Equals in dss-model). Java's HashSet iteration order is arbitrary but
+	// stable within a JVM run; a bare Go map is randomized on every run instead, so this is
+	// kept insertion-ordered (slice + index map, PORTING.md's Collections rule) since
+	// EquivalentCertificates() feeds CommonCertificateSource.Certificates()'s returned order.
+	equivalentCertificates *utils.OrderedMap[string, *model.CertificateToken]
 }
 
 // newEquivalentCertificatesEntity builds the entity around its first member.
@@ -40,12 +44,12 @@ func newEquivalentCertificatesEntity(initialCert *model.CertificateToken) (*equi
 	if err != nil {
 		return nil, err
 	}
+	equivalentCertificates := utils.NewOrderedMap[string, *model.CertificateToken]()
+	equivalentCertificates.Set(initialCert.DSSIDAsString(), initialCert)
 	return &equivalentCertificatesEntity{
-		identifier: initialCert.EntityKey(),
-		ski:        ski,
-		equivalentCertificates: map[string]*model.CertificateToken{
-			initialCert.DSSIDAsString(): initialCert,
-		},
+		identifier:             initialCert.EntityKey(),
+		ski:                    ski,
+		equivalentCertificates: equivalentCertificates,
 	}, nil
 }
 
@@ -57,7 +61,7 @@ func newEquivalentCertificatesEntity(initialCert *model.CertificateToken) (*equi
 // silently ignored, since - unlike the SKI mismatch - it does signal a genuinely malformed
 // public key.
 func (e *equivalentCertificatesEntity) addEquivalentCertificate(token *model.CertificateToken) error {
-	if _, found := e.equivalentCertificates[token.DSSIDAsString()]; found {
+	if _, found := e.equivalentCertificates.Get(token.DSSIDAsString()); found {
 		return nil
 	}
 	// we manually recompute the SKI (we had cases with wrongly encoded value in the certificate)
@@ -69,7 +73,7 @@ func (e *equivalentCertificatesEntity) addEquivalentCertificate(token *model.Cer
 	if !bytes.Equal(newSKI, e.ski) {
 		return nil
 	}
-	e.equivalentCertificates[token.DSSIDAsString()] = token
+	e.equivalentCertificates.Set(token.DSSIDAsString(), token)
 	return nil
 }
 
@@ -78,13 +82,13 @@ func (e *equivalentCertificatesEntity) addEquivalentCertificate(token *model.Cer
 // the pool, since an empty pool is not a valid state for an entity to be in.
 func (e *equivalentCertificatesEntity) removeEquivalentCertificate(token *model.CertificateToken) {
 	key := token.DSSIDAsString()
-	if _, found := e.equivalentCertificates[key]; !found {
+	if _, found := e.equivalentCertificates.Get(key); !found {
 		return
 	}
-	if len(e.equivalentCertificates) == 1 {
+	if e.equivalentCertificates.Len() == 1 {
 		return
 	}
-	delete(e.equivalentCertificates, key)
+	e.equivalentCertificates.Delete(key)
 }
 
 // Ski gets a Subject Key Identifier (SHA-1 of the common public key). Port of getSki().
@@ -96,11 +100,19 @@ func (e *equivalentCertificatesEntity) Ski() []byte {
 // current instance, keyed by DSSIDAsString(). Port of getEquivalentCertificates(); the
 // returned map is a defensive copy, standing in for Java's Collections.unmodifiableSet.
 func (e *equivalentCertificatesEntity) EquivalentCertificates() map[string]*model.CertificateToken {
-	result := make(map[string]*model.CertificateToken, len(e.equivalentCertificates))
-	for k, v := range e.equivalentCertificates {
+	result := make(map[string]*model.CertificateToken, e.equivalentCertificates.Len())
+	for _, k := range e.equivalentCertificates.Keys() {
+		v, _ := e.equivalentCertificates.Get(k)
 		result[k] = v
 	}
 	return result
+}
+
+// orderedEquivalentCertificates returns the equivalent certificate tokens in insertion order,
+// used by CommonCertificateSource.Certificates() so its returned slice is deterministic (the
+// map-returning EquivalentCertificates() above has no order contract to preserve, unlike this).
+func (e *equivalentCertificatesEntity) orderedEquivalentCertificates() []*model.CertificateToken {
+	return e.equivalentCertificates.Values()
 }
 
 // Equals reports whether both entities were built from certificates sharing the same entity

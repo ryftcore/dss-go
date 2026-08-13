@@ -7,6 +7,8 @@
 package spi
 
 import (
+	"sort"
+
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 )
@@ -35,8 +37,12 @@ func NewCompositeRevocationSource[T revocation.Revocation]() *CompositeRevocatio
 //
 // Go maps have no defined iteration order (Java's HashMap doesn't either, but callers in
 // practice pass a LinkedHashMap); sourceKeys lets callers pin down the try order the way a
-// LinkedHashMap constructor argument would. When sourceKeys is nil the iteration order is
-// unspecified, matching Java's HashMap-backed setSources(Map) as declared.
+// LinkedHashMap constructor argument would. When sourceKeys is nil, Java's HashMap-backed
+// setSources(Map) would still iterate in *some* order, arbitrary but stable for the life of
+// that Map; Go map iteration is instead randomized on every run, so the fallback sorts the
+// keys lexically (PORTING.md's "order-sensitive upstream iteration -> ... explicit sort" rule)
+// to keep RevocationToken's try order - and therefore its result, when more than one source
+// would answer - stable from one run to the next.
 func (c *CompositeRevocationSource[T]) SetSources(compositeRevocationSources map[string]RevocationSource[T], sourceKeys []string) {
 	c.compositeRevocationSources = compositeRevocationSources
 	if sourceKeys != nil {
@@ -46,6 +52,7 @@ func (c *CompositeRevocationSource[T]) SetSources(compositeRevocationSources map
 		for sourceKey := range compositeRevocationSources {
 			c.sourceOrder = append(c.sourceOrder, sourceKey)
 		}
+		sort.Strings(c.sourceOrder)
 	}
 }
 

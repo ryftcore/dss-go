@@ -532,8 +532,18 @@ func (c *SignatureValidationContext) getCertChain(token model.Token) []model.Tok
 	issuerCertificateToken := token
 	for {
 		chain = append(chain, issuerCertificateToken)
-		issuerCertificateToken = c.getIssuerWithSource(issuerCertificateToken, c.getTokenCertificateSource(token))
-		if issuerCertificateToken == nil || signatureValidationContextContainsToken(chain, issuerCertificateToken) {
+		// getIssuerWithSource returns a concrete *model.CertificateToken; comparing that against
+		// nil before it is assigned into the model.Token interface variable matters; the
+		// interface's own dynamic type would otherwise stay *model.CertificateToken with a nil
+		// value, so the loop's "issuerCertificateToken == nil" guard below would never see a nil
+		// interface and signatureValidationContextContainsToken would call DSSIDAsString() on a
+		// nil receiver.
+		issuer := c.getIssuerWithSource(issuerCertificateToken, c.getTokenCertificateSource(token))
+		if issuer == nil {
+			break
+		}
+		issuerCertificateToken = issuer
+		if signatureValidationContextContainsToken(chain, issuerCertificateToken) {
 			break
 		}
 	}
@@ -1882,9 +1892,26 @@ func signatureValidationContextAppendRevocation(revocations []AnyRevocationToken
 	return append(revocations, revocationToken)
 }
 
+// signatureValidationContextContainsRevocation is the membership test of Java's
+// Set<RevocationToken<?>> processedRevocations, and therefore has to reproduce
+// RevocationToken#equals - which compares the DSS Id *and* the related certificate:
+//
+//	if (!getDSSId().equals(other.getDSSId())) return false;
+//	if (relatedCertificate == null) return other.relatedCertificate == null;
+//	else return relatedCertificate.equals(other.relatedCertificate);
+//
+// The related-certificate half is load-bearing, not incidental: one CRL commonly covers several
+// certificates of the same chain, and upstream deliberately keeps one RevocationToken per
+// (revocation, certificate) pair so that getRevocationData(certificate) - which matches on
+// relatedCertificateId - finds it for each of them. Comparing DSS Ids alone collapsed those into
+// a single entry, so every certificate but the first silently lost its revocation data and
+// checkAllRequiredRevocationDataPresent() reported an LT-incomplete signature (observed on
+// CAdESDoubleLTA.p7m: the intermediate good-ca kept no CRL, which downgraded the detected level
+// from CAdES-BASELINE-LTA to CAdES-BASELINE-T).
 func signatureValidationContextContainsRevocation(revocations []AnyRevocationToken, revocationToken AnyRevocationToken) bool {
 	for _, r := range revocations {
-		if r.DSSIDAsString() == revocationToken.DSSIDAsString() {
+		if r.DSSIDAsString() == revocationToken.DSSIDAsString() &&
+			r.RelatedCertificateID() == revocationToken.RelatedCertificateID() {
 			return true
 		}
 	}

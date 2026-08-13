@@ -74,7 +74,8 @@ Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, 
 | 2a | ✅ done | spi core + crlparser; native BER/DER engine + OCSP; audited vs maven-built upstream DSS |
 | CMS core | ✅ done | internal/asn1ber + internal/cmscore (RFC 5652/3161), BC-oracle byte-identical builds |
 | 2b | ✅ done | spi/validation (AdvancedSignature 86/86 methods), TimestampToken, token, document, CMS sources |
-| 3+ | pending | next: public cms pkg + CAdES + cross-validation harness |
+| 3 | ✅ done | cms + cades; CAdES-B signed attrs byte-identical to BC (36 KATs); **cross-validation GREEN both directions**: upstream Java DSS validates Go-signed CAdES-B/T; Go validates 21/21 upstream fixtures strictly. PFX parser + determinism + test backfill follow-ups closed |
+| 4+ | pending | next: XML stack (native DOM/c14n design, then xmldsig + XAdES over two windows) |
 
 Known accepted gaps (tracked): PKCS#12 Ed25519/DSA keystores unloadable (x/crypto limitation; native PFX parser planned), JKS/PKCS#11 unsupported, MD2/WHIRLPOOL digests, map-iteration ordering sweep pending at 12 sites, test backfill pending for validation/timestamp, document, analyzer, jdbc.
 

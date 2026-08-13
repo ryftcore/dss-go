@@ -3,6 +3,7 @@ package token
 
 import (
 	"crypto"
+	"crypto/dsa" //nolint:staticcheck // DSA keys still occur in legacy signatures being validated.
 	"crypto/ecdsa"
 	"crypto/ed25519"
 	"crypto/rsa"
@@ -121,6 +122,8 @@ func ksPrivateKeyEntryJCEName(publicKey crypto.PublicKey) (string, error) {
 		return "EC", nil
 	case ed25519.PublicKey:
 		return "Ed25519", nil
+	case *dsa.PublicKey:
+		return "DSA", nil
 	default:
 		return "", fmt.Errorf("unsupported algorithm: unrecognized public key type %T", publicKey)
 	}

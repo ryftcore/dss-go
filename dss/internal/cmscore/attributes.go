@@ -29,8 +29,30 @@ type Attribute struct {
 }
 
 // NewAttribute builds an Attribute from the DER encodings of its values.
+//
+// Values is populated eagerly by parsing each of them back into an *asn1ber.Element, not left
+// nil the way it would be for a "no second value" built-vs-parsed asymmetry: every reader across
+// this codebase (DSSASN1UtilsAsn1Encodable and its many siblings) goes through Values, never
+// builtValues, so a signature this package built and never round-tripped through DER bytes -
+// exactly what CAdESLevelBaselineT/-LT/-LTA's extension step does to the CMS SignDocument just
+// produced, before ever serializing it - would otherwise read every one of its own signed
+// attributes (messageDigest included) as absent. Each value is a single complete DER TLV by
+// every caller's own construction (see e.g. cadesLevelBaselineBTime's return value), so a parse
+// failure here would mean this package itself built malformed DER; Values is left nil in that
+// case rather than panicking, which reproduces the pre-existing "attribute value absent"
+// behavior instead of turning a construction bug into a crash three layers away.
 func NewAttribute(attrType asn1.ObjectIdentifier, values ...[]byte) *Attribute {
-	return &Attribute{Type: attrType, builtValues: values}
+	attribute := &Attribute{Type: attrType, builtValues: values}
+	parsedValues := make([]*asn1ber.Element, 0, len(values))
+	for _, value := range values {
+		element, rest, err := asn1ber.Parse(value)
+		if err != nil || len(rest) != 0 {
+			return attribute
+		}
+		parsedValues = append(parsedValues, element)
+	}
+	attribute.Values = parsedValues
+	return attribute
 }
 
 // AttributeFromElement decodes an already parsed Attribute.

@@ -148,6 +148,14 @@ type DefaultDocumentAnalyzerOverrides interface {
 	// InstantiateValidationDataContainer creates a new instance of ValidationDataContainer.
 	// Port of instantiateValidationDataContainer().
 	InstantiateValidationDataContainer() *validation.ValidationDataContainer
+
+	// AppendExternalEvidenceRecords appends the detached evidence record provided to the
+	// validator to the corresponding signatures covered by the evidence record document.
+	// Default: see DefaultDocumentAnalyzer.AppendExternalEvidenceRecords. Port of
+	// appendExternalEvidenceRecords(List). ADDITIVE (see that method's doc comment): promoted
+	// into this interface in phase 3 (S3_BRIEF.md) once dss-cades.CMSDocumentAnalyzer surfaced
+	// a real override this port had not yet accounted for.
+	AppendExternalEvidenceRecords(allSignatureList []validation.AdvancedSignature) []validation.AdvancedSignature
 }
 
 // DefaultDocumentAnalyzer contains a common code for processing of signed documents. It is
@@ -277,6 +285,15 @@ func (a *DefaultDocumentAnalyzer) Document() model.DSSDocument {
 	return a.document
 }
 
+// HasDocument reports whether a document has been provided, without Document's panic. Go
+// counterpart of a subclass testing its protected `document` field directly against null - e.g.
+// CMSDocumentAnalyzer.buildSignatures()'s own "if (document != null)" in
+// dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/CMSDocumentAnalyzer.java, which
+// reads the field rather than calling the accessor precisely to avoid getDocument()'s throw.
+func (a *DefaultDocumentAnalyzer) HasDocument() bool {
+	return a.document != nil
+}
+
 // SetDocument sets the document to be validated. Go counterpart of assigning the protected
 // `document` field directly, as concrete subclass constructors do in Java.
 func (a *DefaultDocumentAnalyzer) SetDocument(document model.DSSDocument) {
@@ -330,6 +347,47 @@ func (a *DefaultDocumentAnalyzer) SetTokenIdentifierProvider(tokenIdentifierProv
 // for detached signature scenarios. Port of setDetachedContents(List).
 func (a *DefaultDocumentAnalyzer) SetDetachedContents(detachedContents []model.DSSDocument) {
 	a.detachedContents = detachedContents
+}
+
+// DetachedContents returns the signed documents, in case of a detached signature. Exported
+// accessor for the protected `detachedContents` field: Java lets a subclass in another package
+// read a protected field through inheritance, which a Go subclass in another package reaches
+// only through a getter (ADDITIVE, S3_BRIEF.md porter, phase 3 - see
+// AppendExternalEvidenceRecords's doc comment on why dss-cades surfaces gaps like this one).
+func (a *DefaultDocumentAnalyzer) DetachedContents() []model.DSSDocument {
+	return a.detachedContents
+}
+
+// ContainerContents returns the list of container documents, in case of an ASiC signature.
+// ADDITIVE accessor; see DetachedContents.
+func (a *DefaultDocumentAnalyzer) ContainerContents() []model.DSSDocument {
+	return a.containerContents
+}
+
+// ManifestFile returns the related ManifestFile to the provided document. ADDITIVE accessor;
+// see DetachedContents.
+func (a *DefaultDocumentAnalyzer) ManifestFile() *model.ManifestFile {
+	return a.manifestFile
+}
+
+// SigningCertificateSource returns the certificate source that finds the signing certificate.
+// ADDITIVE accessor; see DetachedContents.
+func (a *DefaultDocumentAnalyzer) SigningCertificateSource() spi.CertificateSource {
+	return a.signingCertificateSource
+}
+
+// CertificateVerifier returns the reference to the certificate verifier. ADDITIVE accessor; see
+// DetachedContents.
+func (a *DefaultDocumentAnalyzer) CertificateVerifier() validation.CertificateVerifier {
+	return a.certificateVerifier
+}
+
+// ValidateSignaturePolicy performs validation of the signature policy's identifier, when
+// present. Exported so a subclass in another package can call it as CMSDocumentAnalyzer's
+// buildSignatures() does (Java: protected inherited method). ADDITIVE, see DetachedContents;
+// forwards to the private validateSignaturePolicy this file already defines.
+func (a *DefaultDocumentAnalyzer) ValidateSignaturePolicy(sig validation.AdvancedSignature) {
+	a.validateSignaturePolicy(sig)
 }
 
 // SetDetachedEvidenceRecordDocuments sets a list of DSSDocument containing the evidence record
@@ -586,7 +644,7 @@ func (a *DefaultDocumentAnalyzer) GetAllSignatures() []validation.AdvancedSignat
 		allSignatureList = append(allSignatureList, sig)
 		allSignatureList = a.appendCounterSignatures(allSignatureList, sig)
 	}
-	allSignatureList = a.appendExternalEvidenceRecords(allSignatureList)
+	allSignatureList = a.defaultDocumentAnalyzerOverrides().AppendExternalEvidenceRecords(allSignatureList)
 	return allSignatureList
 }
 
@@ -604,10 +662,19 @@ func (a *DefaultDocumentAnalyzer) appendCounterSignatures(allSignatureList []val
 	return allSignatureList
 }
 
-// appendExternalEvidenceRecords appends the detached evidence record provided to the validator
-// to the corresponding signatures covered by the evidence record document. Port of
-// appendExternalEvidenceRecords(List).
-func (a *DefaultDocumentAnalyzer) appendExternalEvidenceRecords(allSignatureList []validation.AdvancedSignature) []validation.AdvancedSignature {
+// AppendExternalEvidenceRecords is DefaultDocumentAnalyzerOverrides' default body: appends the
+// detached evidence record provided to the validator to the corresponding signatures covered by
+// the evidence record document. Port of appendExternalEvidenceRecords(List).
+//
+// ADDITIVE FIX (S3_BRIEF.md porter, phase 3): this method was originally ported as a concrete,
+// non-virtual method (unexported appendExternalEvidenceRecords), on the survey in this file's
+// header of upstream subclasses known to override protected DefaultDocumentAnalyzer methods at
+// the time of that port - a survey that could not yet include dss-cades's
+// CMSDocumentAnalyzer.appendExternalEvidenceRecords(List), a real override phase 3 needs to
+// reproduce. Promoted into DefaultDocumentAnalyzerOverrides/GetAllSignatures's dispatch so a
+// concrete analyzer registered via InitDefaultDocumentAnalyzer can override it; every other
+// analyzer's behaviour is unchanged since this is exactly its former body.
+func (a *DefaultDocumentAnalyzer) AppendExternalEvidenceRecords(allSignatureList []validation.AdvancedSignature) []validation.AdvancedSignature {
 	overrides := a.defaultDocumentAnalyzerOverrides()
 	detachedEvidenceRecords := a.DetachedEvidenceRecords()
 	if utils.IsCollectionNotEmpty(detachedEvidenceRecords) && utils.IsCollectionNotEmpty(allSignatureList) {

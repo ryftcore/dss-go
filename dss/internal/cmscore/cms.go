@@ -18,9 +18,24 @@ type CMS struct {
 }
 
 // ParseCMS decodes a complete CMS document. BER is accepted, and the document's original bytes
-// are preserved throughout - see the package documentation.
+// are preserved throughout - see the package documentation. Trailing bytes after the document
+// are rejected; use ParseCMSTolerateTrailingBytes for a whole-file parse that must not be
+// (see that function's doc comment for why the two differ).
 func ParseCMS(input []byte) (*CMS, error) {
 	contentInfo, err := ParseContentInfo(input)
+	if err != nil {
+		return nil, err
+	}
+	return CMSFromContentInfo(contentInfo)
+}
+
+// ParseCMSTolerateTrailingBytes decodes a complete CMS document the same way ParseCMS does,
+// except it does not require the input to be fully consumed - see
+// ParseContentInfoTolerateTrailingBytes's doc comment. cms.CMSUtilsParseToCMSBinaries, the
+// entry point for parsing a whole document (as opposed to a CMS structure embedded in a fixed
+// field, e.g. an OCTET STRING's content), uses this rather than ParseCMS.
+func ParseCMSTolerateTrailingBytes(input []byte) (*CMS, error) {
+	contentInfo, err := ParseContentInfoTolerateTrailingBytes(input)
 	if err != nil {
 		return nil, err
 	}

@@ -3,53 +3,48 @@
 // DEVIATION - java.security.KeyStore: upstream defers entirely to the JCA/JCE KeyStore SPI, which
 // dispatches on ksType ("PKCS12", "JKS", ...) to a registered provider. Go has no such SPI. Of the
 // two ksType values this port's own callers use (JKSSignatureToken, Pkcs12SignatureToken), only
-// PKCS12 has a usable implementation: golang.org/x/crypto/pkcs12 (see PORTING.md's dependency
-// policy - stdlib plus golang.org/x/... only, no cgo, no unmaintained third-party crypto for a
-// Java KeyStore SPI implementation, and JKS's proprietary binary format has no such package
-// either). Every other ksType, including "JKS", reports that gap from keyStoreSignatureTokenConnectionLoad.
+// PKCS12 has a usable implementation. JKS's proprietary binary format has no Go implementation
+// either in the standard library or under golang.org/x/... (PORTING.md's dependency policy), so
+// every other ksType, including "JKS", reports that gap from keyStoreSignatureTokenConnectionLoad.
 //
-// DEVIATION - chain preservation: PORTING.md's brief calls for "ToPEM or DecodeChain"; the pinned
-// golang.org/x/crypto/pkcs12 (see go.mod) exposes neither DecodeChain (never added to this
-// package) nor full support for every key type ToPEM's PEM re-encoding needs, and Ed25519 private
-// keys in particular are neither RSA nor ECDSA, so ToPEM's convertBag rejects them with "found
-// unknown private key type in PKCS#8 wrapping" - even to extract the leaf certificate. This port
-// therefore parses every safe bag itself through ToPEM (ASN.1 SEQUENCE/certBag/keyBag walk, chain
-// building by issuer/subject linkage across all certificate bags) for the common RSA/ECDSA case,
-// and falls back to the package's Decode (single certificate, no chain, but key-type-agnostic
-// since it never re-encodes the key) when ToPEM's PKCS#1/SEC1 re-encoding cannot represent the
-// key.
+// DEVIATION - chain preservation: PORTING.md's brief calls for "ToPEM or DecodeChain". Neither
+// exists in a form that preserves both a certificate chain and every key type: this port used to
+// be pinned to golang.org/x/crypto/pkcs12, whose ToPEM re-encodes a private key through
+// x509.MarshalPKCS1PrivateKey/MarshalECPrivateKey and therefore rejects any key type that isn't
+// RSA or ECDSA (Ed25519 and DSA both fail this way), and whose Decode is chain-agnostic but
+// refuses a PFX PDU holding anything but exactly one key bag and one cert bag. Both gaps closed
+// with internal/pfx, a native SafeBag reader/decryptor built directly on internal/asn1ber (see
+// its package doc for the RFC 7292 subset it covers): it decrypts and parses every SafeBag itself
+// - RSA, EC and Ed25519 PKCS#8 keys through crypto/x509, DSA by hand since neither
+// x509.ParsePKCS8PrivateKey nor crypto/dsa parses it - so pkcs12BuildKeyStore below only has to
+// correlate certificates with keys (by localKeyId, then by issuer/subject linkage across the
+// remaining certificates) and never re-encodes a key. golang.org/x/crypto/pkcs12 (see go.mod) is
+// no longer used by this file; dss/spi and dss/spi/validation still use its ToPEM for their own,
+// narrower needs and are unaffected by this change.
 //
-// LIMITATION - key types upstream loads and this port cannot: the Decode fallback only rescues a
-// store whose authenticated safe holds exactly two safe bags (one key, one certificate); Decode
-// rejects anything else with "expected exactly two safe bags in the PFX PDU". A store that pairs a
-// ToPEM-unmarshalable key with a certificate *chain* therefore fails both paths, so these two
-// upstream dss-token fixtures, which Java's JCA KeyStore opens with a 3-certificate chain, cannot
-// be opened here at all:
-//
-//	Ed25519-good-user.p12  ToPEM: "found unknown private key type in PKCS#8 wrapping" (Ed25519 is
-//	                       neither RSA nor ECDSA); Decode: 4 safe bags, not 2.
-//	good-dsa-user.p12      ToPEM: "unknown algorithm: 1.2.840.10040.4.1" (DSA); Decode: 4 bags.
-//
-// Closing the Ed25519 gap needs PKCS#12 safe-bag decryption that golang.org/x/crypto/pkcs12 keeps
-// unexported, i.e. a new dependency or a hand-rolled PBES1 implementation - both barred by
-// PORTING.md's dependency policy without tech-lead sign-off. DSA is unreachable regardless, as
-// crypto/dsa is deprecated and implements neither crypto.Signer nor PKCS#8 parsing.
-// TestKeyStoreUnsupportedKeyTypeFixtures pins this behaviour so the gap stays visible.
+// DEVIATION - DSA signing: crypto/dsa predates the crypto.Signer interface (it exposes
+// dsa.Sign(rand, *dsa.PrivateKey, hash) directly, not a Sign method), so a *dsa.PrivateKey
+// extracted by internal/pfx is wrapped in dsaPrivateKeySigner below, which signs through
+// dsa.Sign and DER-encodes the (r, s) pair as a Dss-Sig-Value SEQUENCE, exactly as ECDSA's own
+// crypto.Signer implementation encodes its (r, s) pair (RFC 3279 section 2.3.2). DSA itself
+// remains cryptographically supported by the Go standard library, deprecated but present.
 package token
 
 import (
 	"bytes"
 	"crypto"
+	"crypto/dsa" //nolint:staticcheck // DSA keys still occur in legacy key stores being loaded.
 	"crypto/x509"
-	"encoding/pem"
+	"encoding/asn1"
 	"errors"
 	"fmt"
 	"io"
+	"math/big"
 	"os"
 	"strconv"
 
+	"github.com/utain/esig/dss/internal/pfx"
 	"github.com/utain/esig/dss/model"
-	"golang.org/x/crypto/pkcs12"
 )
 
 // keyStoreSignatureTokenConnectionPKCS12Type is the only ksType this port can actually load.
@@ -171,70 +166,48 @@ func keyStoreSignatureTokenConnectionPasswordString(password *PasswordProtection
 	return string(password.Password())
 }
 
-// pkcs12LoadKeyStore parses a PKCS12 key store into a keyStore, preserving certificate chains
-// where golang.org/x/crypto/pkcs12's ToPEM can represent the private key, and falling back to a
-// single-certificate parse otherwise (see the file header).
+// pkcs12LoadKeyStore parses a PKCS12 key store into a keyStore using internal/pfx (see the file
+// header), which decrypts and parses every SafeBag - certificate and private key alike -
+// regardless of key type, then correlates them below.
 func pkcs12LoadKeyStore(ksBytes []byte, password string) (*keyStore, error) {
-	blocks, err := pkcs12.ToPEM(ksBytes, password)
+	store, err := pfx.Load(ksBytes, password)
 	if err != nil {
-		return pkcs12LoadKeyStoreFallback(ksBytes, password, err)
+		return nil, err
 	}
-	return pkcs12BuildKeyStore(blocks)
+	return pkcs12BuildKeyStore(store)
 }
 
-// pkcs12CertBag is a parsed CERTIFICATE PEM block from ToPEM, retaining the localKeyId attribute
-// PKCS12 producers use to correlate a certificate with the key it belongs to.
-type pkcs12CertBag struct {
-	certificate *x509.Certificate
-	localKeyID  string
-}
-
-// pkcs12KeyBag is a parsed PRIVATE KEY PEM block from ToPEM.
-type pkcs12KeyBag struct {
-	signer       crypto.Signer
-	localKeyID   string
-	friendlyName string
-}
-
-// pkcs12BuildKeyStore groups ToPEM's flat PEM block list back into per-alias entries: each
-// private key is matched to its certificate via the localKeyId attribute (or, when that
-// correlation is unavailable, the first unclaimed certificate), then the chain is completed by
-// walking Subject/Issuer linkage across the remaining certificates - the closest a Go program can
-// get to what java.security.KeyStore's PKCS12 provider does internally.
-func pkcs12BuildKeyStore(blocks []*pem.Block) (*keyStore, error) {
-	var certs []pkcs12CertBag
-	var keys []pkcs12KeyBag
-	for _, block := range blocks {
-		switch block.Type {
-		case "CERTIFICATE":
-			certificate, err := x509.ParseCertificate(block.Bytes)
-			if err != nil {
-				return nil, fmt.Errorf("pkcs12: unable to parse certificate: %w", err)
-			}
-			certs = append(certs, pkcs12CertBag{certificate: certificate, localKeyID: block.Headers["localKeyId"]})
-		case "PRIVATE KEY":
-			signer, err := pkcs12ParseLegacyPrivateKey(block.Bytes)
-			if err != nil {
-				return nil, err
-			}
-			keys = append(keys, pkcs12KeyBag{
-				signer:       signer,
-				localKeyID:   block.Headers["localKeyId"],
-				friendlyName: block.Headers["friendlyName"],
-			})
+// pkcs12BuildKeyStore groups a pfx.Store's flat certificate/private-key lists back into
+// per-alias entries: each private key is matched to its certificate via the LocalKeyID
+// attribute (or, when that correlation is unavailable, the first unclaimed certificate), then
+// the chain is completed by walking Subject/Issuer linkage across the remaining certificates -
+// the closest a Go program can get to what java.security.KeyStore's PKCS12 provider does
+// internally.
+func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
+	certs := make([]*x509.Certificate, len(store.Certificates))
+	for i, certBag := range store.Certificates {
+		certificate, err := x509.ParseCertificate(certBag.Raw)
+		if err != nil {
+			return nil, fmt.Errorf("pkcs12: unable to parse certificate: %w", err)
 		}
+		certs[i] = certificate
 	}
-	if len(keys) == 0 {
+	if len(store.PrivateKeys) == 0 {
 		return nil, errors.New("pkcs12: no private key entry found")
 	}
 
 	used := make([]bool, len(certs))
-	entries := make([]keyStoreEntry, 0, len(keys))
-	for i, key := range keys {
+	entries := make([]keyStoreEntry, 0, len(store.PrivateKeys))
+	for i, keyBag := range store.PrivateKeys {
+		signer, err := pkcs12Signer(keyBag.Key)
+		if err != nil {
+			return nil, err
+		}
+
 		leafIndex := -1
-		if key.localKeyID != "" {
+		if len(keyBag.LocalKeyID) > 0 {
 			for ci := range certs {
-				if !used[ci] && certs[ci].localKeyID == key.localKeyID {
+				if !used[ci] && bytes.Equal(store.Certificates[ci].LocalKeyID, keyBag.LocalKeyID) {
 					leafIndex = ci
 					break
 				}
@@ -253,7 +226,7 @@ func pkcs12BuildKeyStore(blocks []*pem.Block) (*keyStore, error) {
 		}
 		used[leafIndex] = true
 
-		chain := []*x509.Certificate{certs[leafIndex].certificate}
+		chain := []*x509.Certificate{certs[leafIndex]}
 		for {
 			tail := chain[len(chain)-1]
 			if bytes.Equal(tail.RawIssuer, tail.RawSubject) {
@@ -261,7 +234,7 @@ func pkcs12BuildKeyStore(blocks []*pem.Block) (*keyStore, error) {
 			}
 			nextIndex := -1
 			for ci := range certs {
-				if !used[ci] && bytes.Equal(certs[ci].certificate.RawSubject, tail.RawIssuer) {
+				if !used[ci] && bytes.Equal(certs[ci].RawSubject, tail.RawIssuer) {
 					nextIndex = ci
 					break
 				}
@@ -269,11 +242,11 @@ func pkcs12BuildKeyStore(blocks []*pem.Block) (*keyStore, error) {
 			if nextIndex == -1 {
 				break
 			}
-			chain = append(chain, certs[nextIndex].certificate)
+			chain = append(chain, certs[nextIndex])
 			used[nextIndex] = true
 		}
 
-		alias := key.friendlyName
+		alias := keyBag.FriendlyName
 		if alias == "" {
 			alias = strconv.Itoa(i + 1)
 		}
@@ -281,46 +254,50 @@ func pkcs12BuildKeyStore(blocks []*pem.Block) (*keyStore, error) {
 			alias:       alias,
 			certificate: chain[0],
 			chain:       chain,
-			privateKey:  key.signer,
+			privateKey:  signer,
 		})
 	}
 	return &keyStore{entries: entries}, nil
 }
 
-// pkcs12ParseLegacyPrivateKey parses a ToPEM "PRIVATE KEY" block. Despite the PEM type name,
-// ToPEM's own documentation states the bytes are PKCS#1 for RSA keys and SEC1 for ECDSA keys, not
-// PKCS#8.
-func pkcs12ParseLegacyPrivateKey(der []byte) (crypto.Signer, error) {
-	if key, err := x509.ParsePKCS1PrivateKey(der); err == nil {
-		return key, nil
+// pkcs12Signer adapts a pfx.PrivateKey.Key value to crypto.Signer: RSA, EC and Ed25519 already
+// implement it; DSA - which predates the interface - is wrapped in dsaPrivateKeySigner.
+func pkcs12Signer(key crypto.PrivateKey) (crypto.Signer, error) {
+	if signer, ok := key.(crypto.Signer); ok {
+		return signer, nil
 	}
-	if key, err := x509.ParseECPrivateKey(der); err == nil {
-		return key, nil
+	if dsaKey, ok := key.(*dsa.PrivateKey); ok {
+		return dsaPrivateKeySigner{dsaKey}, nil
 	}
-	return nil, errors.New("pkcs12: unable to parse private key bag (expected PKCS#1 RSA or SEC1 EC)")
+	return nil, fmt.Errorf("pkcs12: unsupported private key type %T", key)
 }
 
-// pkcs12LoadKeyStoreFallback recovers a single key/certificate pair (no chain) using the
-// package's Decode, for stores ToPEM cannot re-encode - namely an Ed25519 private key, which is
-// neither RSA nor ECDSA. See the file header.
-func pkcs12LoadKeyStoreFallback(ksBytes []byte, password string, toPEMErr error) (*keyStore, error) {
-	privateKey, certificate, err := pkcs12.Decode(ksBytes, password)
-	if err != nil {
-		return nil, fmt.Errorf("pkcs12: unable to parse key store (chain-preserving parse failed: %s; "+
-			"single-entry fallback failed too: %s)", toPEMErr, err)
-	}
-	signer, ok := privateKey.(crypto.Signer)
-	if !ok {
-		return nil, fmt.Errorf("pkcs12: unsupported private key type %T", privateKey)
-	}
-	entries := []keyStoreEntry{{
-		alias:       "1",
-		certificate: certificate,
-		chain:       []*x509.Certificate{certificate},
-		privateKey:  signer,
-	}}
-	return &keyStore{entries: entries}, nil
+// dsaPrivateKeySigner adapts a *dsa.PrivateKey to crypto.Signer. crypto/dsa predates that
+// interface: it exposes dsa.Sign(rand, *dsa.PrivateKey, hash) (r, s *big.Int, err error)
+// directly rather than a Sign method, so Sign below calls that and DER-encodes the result as a
+// Dss-Sig-Value SEQUENCE { r INTEGER, s INTEGER } (RFC 3279 section 2.3.2) - the same shape
+// crypto/ecdsa's own crypto.Signer implementation produces for its (r, s) pair.
+type dsaPrivateKeySigner struct {
+	key *dsa.PrivateKey
 }
+
+// Public implements crypto.Signer.
+func (s dsaPrivateKeySigner) Public() crypto.PublicKey {
+	return &s.key.PublicKey
+}
+
+// Sign implements crypto.Signer. opts is ignored: DSA has no padding or hash-algorithm choice
+// to make at this layer (like ECDSA, it signs whatever digest bytes it is handed).
+func (s dsaPrivateKeySigner) Sign(rand io.Reader, digest []byte, _ crypto.SignerOpts) ([]byte, error) {
+	r, sValue, err := dsa.Sign(rand, s.key, digest)
+	if err != nil {
+		return nil, err
+	}
+	return asn1.Marshal(struct{ R, S *big.Int }{r, sValue})
+}
+
+// compile-time interface assertion.
+var _ crypto.Signer = dsaPrivateKeySigner{}
 
 // compile-time interface assertion.
 var _ SignatureTokenConnection = (*KeyStoreSignatureTokenConnection)(nil)

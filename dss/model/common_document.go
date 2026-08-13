@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/utils"
 	"golang.org/x/crypto/ripemd160"
 	"golang.org/x/crypto/sha3"
 )
@@ -27,8 +28,12 @@ import (
 // are exposed here as free functions taking the owning DSSDocument, and
 // each concrete type wires up a trivial forwarding method.
 type CommonDocument struct {
-	// digestMap caches previously computed digests, keyed by algorithm.
-	digestMap map[enumerations.DigestAlgorithm][]byte
+	// digestMap caches previously computed digests, keyed by algorithm. Java's HashMap
+	// iteration order is arbitrary but stable within a JVM run; a bare Go map is randomized on
+	// every run instead. DigestDocument.ExistingDigest() picks an arbitrary entry from this
+	// same map, so it is kept insertion-ordered (slice + index map, PORTING.md's Collections
+	// rule) to make that pick deterministic across runs.
+	digestMap *utils.OrderedMap[enumerations.DigestAlgorithm, []byte]
 
 	// mimeType is the MimeType of the document.
 	mimeType enumerations.MimeType
@@ -97,9 +102,9 @@ func commonDocumentDigest(doc DSSDocument, c *CommonDocument, digestAlgorithm en
 // commonDocumentDigestValue ports CommonDocument#getDigestValue.
 func commonDocumentDigestValue(doc DSSDocument, c *CommonDocument, digestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
 	if c.digestMap == nil {
-		c.digestMap = make(map[enumerations.DigestAlgorithm][]byte)
+		c.digestMap = utils.NewOrderedMap[enumerations.DigestAlgorithm, []byte]()
 	}
-	if digest, ok := c.digestMap[digestAlgorithm]; ok {
+	if digest, ok := c.digestMap.Get(digestAlgorithm); ok {
 		return digest, nil
 	}
 	h, err := commonDocumentHash(digestAlgorithm)
@@ -115,7 +120,7 @@ func commonDocumentDigestValue(doc DSSDocument, c *CommonDocument, digestAlgorit
 		return nil, &DSSError{Message: "Unable to compute the digest", Cause: err}
 	}
 	digest := h.Sum(nil)
-	c.digestMap[digestAlgorithm] = digest
+	c.digestMap.Set(digestAlgorithm, digest)
 	return digest, nil
 }
 

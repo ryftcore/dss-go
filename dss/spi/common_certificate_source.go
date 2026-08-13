@@ -24,6 +24,7 @@ import (
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/utils"
 )
 
 // CommonCertificateSource is the common implementation for all CertificateSource. It stores
@@ -35,7 +36,12 @@ type CommonCertificateSource struct {
 	// entitiesByEntityKey holds entries keyed by AsXmlID() of a hash of the entity key
 	// (public key + subject name combination). All entries sharing a key share the same key
 	// pair and a subject name.
-	entitiesByEntityKey map[string]*equivalentCertificatesEntity
+	//
+	// Java's HashMap iteration order is arbitrary but stable within a JVM run; a bare Go map
+	// is randomized on every run instead, and Certificates()/Entities() return in this map's
+	// iteration order, so it is kept insertion-ordered (slice + index map, PORTING.md's
+	// Collections rule) rather than a bare map.
+	entitiesByEntityKey *utils.OrderedMap[string, *equivalentCertificatesEntity]
 
 	// entitiesByPublicKey holds entries keyed by AsXmlID() of a hash of a public key. For a
 	// same KeyIdentifier, different subject names (and certificates) are possible.
@@ -69,7 +75,7 @@ func (s *CommonCertificateSource) commonCertificateSourceEnsureInitialized() {
 		s.certificateMatcher = NewCertificateTokenRefMatcher()
 	}
 	if s.entitiesByEntityKey == nil {
-		s.entitiesByEntityKey = make(map[string]*equivalentCertificatesEntity)
+		s.entitiesByEntityKey = utils.NewOrderedMap[string, *equivalentCertificatesEntity]()
 	}
 	if s.entitiesByPublicKey == nil {
 		s.entitiesByPublicKey = make(map[string]*equivalentCertificatesEntity)
@@ -97,7 +103,7 @@ func (s *CommonCertificateSource) AddCertificate(certificateToAdd *model.Certifi
 
 	entityKey := certificateToAdd.EntityKey()
 	entityKeyID := entityKey.AsXmlID()
-	if poolEntity, found := s.entitiesByEntityKey[entityKeyID]; found {
+	if poolEntity, found := s.entitiesByEntityKey.Get(entityKeyID); found {
 		if err := poolEntity.addEquivalentCertificate(certificateToAdd); err != nil {
 			panic(err.Error())
 		}
@@ -106,7 +112,7 @@ func (s *CommonCertificateSource) AddCertificate(certificateToAdd *model.Certifi
 		if err != nil {
 			panic(err.Error())
 		}
-		s.entitiesByEntityKey[entityKeyID] = newEntity
+		s.entitiesByEntityKey.Set(entityKeyID, newEntity)
 	}
 
 	keyIdentifier := model.NewKeyIdentifier(certificateToAdd.PublicKey())
@@ -144,9 +150,9 @@ func (s *CommonCertificateSource) removeCertificate(certificateToRemove *model.C
 	}
 
 	entityKeyID := certificateToRemove.EntityKey().AsXmlID()
-	if poolEntity, found := s.entitiesByEntityKey[entityKeyID]; found {
+	if poolEntity, found := s.entitiesByEntityKey.Get(entityKeyID); found {
 		if len(poolEntity.EquivalentCertificates()) == 1 {
-			delete(s.entitiesByEntityKey, entityKeyID)
+			s.entitiesByEntityKey.Delete(entityKeyID)
 		} else {
 			poolEntity.removeEquivalentCertificate(certificateToRemove)
 		}
@@ -181,7 +187,7 @@ func (s *CommonCertificateSource) reset() {
 
 // IsKnown checks if a given certificate is known in the current source. Port of isKnown(CertificateToken).
 func (s *CommonCertificateSource) IsKnown(token *model.CertificateToken) bool {
-	poolEntity, found := s.entitiesByEntityKey[token.EntityKey().AsXmlID()]
+	poolEntity, found := s.entitiesByEntityKey.Get(token.EntityKey().AsXmlID())
 	if !found {
 		return false
 	}
@@ -199,18 +205,17 @@ func (s *CommonCertificateSource) IsKnown(token *model.CertificateToken) bool {
 // Port of getCertificates().
 func (s *CommonCertificateSource) Certificates() []*model.CertificateToken {
 	var allCertificates []*model.CertificateToken
-	for _, entity := range s.entitiesByEntityKey {
-		for _, token := range entity.EquivalentCertificates() {
-			allCertificates = append(allCertificates, token)
-		}
+	for _, entity := range s.entitiesByEntityKey.Values() {
+		allCertificates = append(allCertificates, entity.orderedEquivalentCertificates()...)
 	}
 	return allCertificates
 }
 
 // Entities returns a list of certificates grouped by their public keys. Port of getEntities().
 func (s *CommonCertificateSource) Entities() []CertificateSourceEntity {
-	entities := make([]CertificateSourceEntity, 0, len(s.entitiesByEntityKey))
-	for _, entity := range s.entitiesByEntityKey {
+	entityValues := s.entitiesByEntityKey.Values()
+	entities := make([]CertificateSourceEntity, 0, len(entityValues))
+	for _, entity := range entityValues {
 		entities = append(entities, entity)
 	}
 	return entities
@@ -229,7 +234,7 @@ func (s *CommonCertificateSource) ByPublicKey(publicKey *model.PublicKey) map[st
 // ByEntityKey returns the certificate tokens with the given EntityIdentifier, keyed by
 // DSSIDAsString(). Port of getByEntityKey(EntityIdentifier).
 func (s *CommonCertificateSource) ByEntityKey(entityKey *model.EntityIdentifier) map[string]*model.CertificateToken {
-	entity, found := s.entitiesByEntityKey[entityKey.AsXmlID()]
+	entity, found := s.entitiesByEntityKey.Get(entityKey.AsXmlID())
 	if !found {
 		return map[string]*model.CertificateToken{}
 	}
@@ -261,7 +266,7 @@ func (s *CommonCertificateSource) BySubject(subject *model.X500PrincipalHelper) 
 // DSSIDAsString(). Port of getBySignerIdentifier(SignerIdentifier).
 func (s *CommonCertificateSource) BySignerIdentifier(signerIdentifier *SignerIdentifier) map[string]*model.CertificateToken {
 	result := make(map[string]*model.CertificateToken)
-	for _, entry := range s.entitiesByEntityKey {
+	for _, entry := range s.entitiesByEntityKey.Values() {
 		for _, certificateToken := range entry.EquivalentCertificates() {
 			// run over all entries to compare with the SN too
 			related, err := signerIdentifier.IsRelatedToCertificate(certificateToken)
@@ -277,7 +282,7 @@ func (s *CommonCertificateSource) BySignerIdentifier(signerIdentifier *SignerIde
 // DSSIDAsString(). Port of getByCertificateDigest(Digest).
 func (s *CommonCertificateSource) ByCertificateDigest(digest model.Digest) map[string]*model.CertificateToken {
 	result := make(map[string]*model.CertificateToken)
-	for _, entry := range s.entitiesByEntityKey {
+	for _, entry := range s.entitiesByEntityKey.Values() {
 		for _, certificateToken := range entry.EquivalentCertificates() {
 			value, err := certificateToken.Digest(digest.Algorithm())
 			if err == nil && bytes.Equal(digest.Value(), value) {
@@ -292,7 +297,7 @@ func (s *CommonCertificateSource) ByCertificateDigest(digest model.Digest) map[s
 // by DSSIDAsString(). Port of findTokensFromCertRef(CertificateRef).
 func (s *CommonCertificateSource) FindTokensFromCertRef(certificateRef *CertificateRef) map[string]*model.CertificateToken {
 	result := make(map[string]*model.CertificateToken)
-	for _, entry := range s.entitiesByEntityKey {
+	for _, entry := range s.entitiesByEntityKey.Values() {
 		for _, certificateToken := range entry.EquivalentCertificates() {
 			if s.doesCertificateReferenceMatch(certificateToken, certificateRef) {
 				result[certificateToken.DSSIDAsString()] = certificateToken
@@ -327,7 +332,7 @@ func (s *CommonCertificateSource) NumberOfCertificates() int {
 // NumberOfEntities returns the number of stored entities (unique public key) in this source.
 // Port of getNumberOfEntities().
 func (s *CommonCertificateSource) NumberOfEntities() int {
-	return len(s.entitiesByEntityKey)
+	return s.entitiesByEntityKey.Len()
 }
 
 // CertificateSourceType returns the certificate source type associated with the
