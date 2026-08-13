@@ -69,6 +69,19 @@ type Node struct {
 	// doc is non-nil only on a Document node. Ownership of every other node is
 	// derived positionally, by walking Parent (see Document).
 	doc *docState
+
+	// owner remembers the document a node belonged to when it was detached from it,
+	// and is meaningful only on the root of a detached subtree (OwnerDocument walks
+	// up to that root before reading it).
+	//
+	// org.w3c.dom assigns ownerDocument at creation - every node comes out of a
+	// Document.createXxx factory - and removeChild does NOT clear it, so a detached
+	// node still answers getOwnerDocument(). DomUtils.serializeNode reads exactly that
+	// to pick the output encoding, so a subtree lifted out of an ISO-8859-1 document
+	// and serialized on its own is written in ISO-8859-1 by Java. Deriving ownership
+	// purely positionally answered nil there and fell back to UTF-8, which changed the
+	// bytes a ds:Reference digests. See OwnerDocument.
+	owner *Node
 }
 
 // docState is the per-document bookkeeping that hangs off a Document node.
@@ -85,6 +98,14 @@ type docState struct {
 	ids     map[string]*Node
 	idAttrs map[*Node][]*Node
 	dups    map[string]struct{}
+
+	// The XML declaration of the parsed source, kept because the serializer needs it:
+	// Java reads all three back off the DOM (Document.getXmlEncoding /
+	// getXmlStandalone / getXmlVersion) and they decide the declaration it writes and
+	// the charset it writes the document in. Zero values for a document built in
+	// memory, which is what Xerces reports for one too.
+	xmlEncoding   string
+	xmlStandalone bool
 }
 
 type manualID struct {
@@ -200,8 +221,20 @@ func (n *Node) link(c, ref *Node) {
 	ref.PrevSibling = c
 }
 
+// rememberOwner records the document c is being detached from, so that
+// OwnerDocument keeps answering it the way org.w3c.dom's ownerDocument does.
+func rememberOwner(c *Node) {
+	if c.Kind == Document {
+		return
+	}
+	if d := c.Document(); d != nil {
+		c.owner = d
+	}
+}
+
 // unlink removes c from its parent's child list. No validation.
 func (n *Node) unlink(c *Node) {
+	rememberOwner(c)
 	if c.PrevSibling != nil {
 		c.PrevSibling.NextSibling = c.NextSibling
 	} else {
@@ -237,6 +270,7 @@ func (n *Node) ReplaceChild(newC, oldC *Node) *Node {
 	}
 	n.checkInsert(newC, oldC)
 	n.bump()
+	rememberOwner(oldC)
 	newC.Parent = n
 	newC.PrevSibling = oldC.PrevSibling
 	newC.NextSibling = oldC.NextSibling
@@ -256,14 +290,21 @@ func (n *Node) ReplaceChild(newC, oldC *Node) *Node {
 	return oldC
 }
 
-// Clone deep- or shallow-copies n. The copy has no parent and no document.
+// Clone deep- or shallow-copies n. The copy has no parent, and - like
+// org.w3c.dom's cloneNode - keeps n's owning document as its ownerDocument until it
+// is inserted somewhere.
 func (n *Node) Clone(deep bool) *Node {
 	if n == nil {
 		return nil
 	}
-	c := &Node{Kind: n.Kind, Name: n.Name, Value: n.Value}
+	c := &Node{Kind: n.Kind, Name: n.Name, Value: n.Value, owner: n.OwnerDocument()}
 	if n.Kind == Document {
 		c.doc = newDocState()
+		// Xerces' Document.cloneNode copies the declaration fields, and
+		// DSSXMLUtils.createDeepCopy round-trips a document through them before
+		// canonicalizing, so a copy has to serialize the way its original does.
+		c.doc.xmlEncoding = n.doc.xmlEncoding
+		c.doc.xmlStandalone = n.doc.xmlStandalone
 	}
 	if len(n.Attrs) > 0 {
 		c.Attrs = make([]*Node, 0, len(n.Attrs))
@@ -281,11 +322,23 @@ func (n *Node) Clone(deep bool) *Node {
 
 // Import returns a deep or shallow copy of src owned by n's document, ready to insert.
 //
-// Ownership in this model is positional - Document walks the Parent chain - so an
-// imported node becomes owned the moment it is inserted, and Import is exactly
-// src.Clone(deep). The method exists because callers ported from org.w3c.dom expect
-// importNode to be the thing they call before adopting foreign nodes.
-func (n *Node) Import(src *Node, deep bool) *Node { return src.Clone(deep) }
+// Ownership in this model is positional whenever the node is in a tree - Document
+// walks the Parent chain - so an imported node becomes owned the moment it is
+// inserted. Until then it answers n's document, which is what importNode does. The
+// method exists because callers ported from org.w3c.dom expect importNode to be the
+// thing they call before adopting foreign nodes.
+func (n *Node) Import(src *Node, deep bool) *Node {
+	c := src.Clone(deep)
+	if c != nil {
+		c.owner = nil
+		if n.Kind == Document {
+			c.owner = n
+		} else {
+			c.owner = n.OwnerDocument()
+		}
+	}
+	return c
+}
 
 // bump invalidates the owning document's derived indexes.
 func (n *Node) bump() {

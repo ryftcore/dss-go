@@ -1,0 +1,36 @@
+# Deliberately corrupted fixtures, built by gen/mutate.py and validated by
+# gen/XmlDsigOracle.java like any other case. Columns, tab-separated:
+#
+#   <mutant path under corpus/>  <base fixture>  <kind>  <find>  <replace>
+#
+# <find> must occur exactly once in the base fixture (mutate.py aborts otherwise), so a
+# mutation can never quietly become a no-op when the upstream fixture moves.
+#
+# Escapes in <find>/<replace>: \n \t \\.
+#
+# Three kinds, chosen because they separate three different things the port could get
+# wrong, and because two of them must NOT flip a verdict:
+#
+#   content   one byte of the signed data changed. The reference covering it must fail
+#             and nothing else may move - not the ds:SignatureValue check, not the other
+#             references.
+#   attrorder two attributes swapped on a signed element. Canonicalization sorts
+#             attributes, so EVERY verdict must stay exactly where it was. A port that
+#             emitted attributes in document order would flip these and only these.
+#   ws        whitespace inserted inside ds:SignedInfo. Inclusive and exclusive c14n both
+#             keep it, so the ds:SignatureValue check must fail while every ds:Reference
+#             verdict stays put.
+#
+# Whatever Santuario actually answers is what manifest.txt records; the comments above say
+# what the mutation is FOR, never what the answer is.
+
+mutants/content-dss-signed.xml	validation/dss-signed.xml	content	<h:td>Hello</h:td>	<h:td>Hellp</h:td>
+mutants/content-dss2506.xml	validation/dss-2506.xml	content	<title>title of book 1</title>	<title>title of book 2</title>
+mutants/content-object.xml	validation/dss2517/xades-valid-object.xml	content	Valid DataObjectFormat demo file	Valid DataObjectFormat demo File
+mutants/content-manifest.xml	validation/dss2329/xades-with-enveloped-manifest.xml	content	<h:td>World</h:td>	<h:td>Worle</h:td>
+mutants/attrorder-filter2.xml	validation/qes-xades111-filter2.xml	attrorder	eb:DocumentTitle="DEMO-Rechnung" eb:DocumentType="Invoice"	eb:DocumentType="Invoice" eb:DocumentTitle="DEMO-Rechnung"
+mutants/attrorder-reference.xml	validation/valid-xades.xml	attrorder	<ds:Reference Id="r-id-1" Type="http://www.w3.org/2000/09/xmldsig#Object" URI="#o-id-1">	<ds:Reference URI="#o-id-1" Type="http://www.w3.org/2000/09/xmldsig#Object" Id="r-id-1">
+mutants/attrorder-detached.xml	validation/dss2011/xades-detached.xml	attrorder	<ds:Reference Id="r-id-98ecc9e805491a6e5fc46a7535708c97-1" URI="sample.xml">	<ds:Reference URI="sample.xml" Id="r-id-98ecc9e805491a6e5fc46a7535708c97-1">
+mutants/ws-signedinfo-valid-xades.xml	validation/valid-xades.xml	ws	<ds:SignedInfo>\n        <ds:CanonicalizationMethod	<ds:SignedInfo>\n         <ds:CanonicalizationMethod
+mutants/ws-signedinfo-dss-signed.xml	validation/dss-signed.xml	ws	<ds:SignedInfo><ds:CanonicalizationMethod	<ds:SignedInfo> <ds:CanonicalizationMethod
+mutants/ws-signedinfo-structure.xml	valid-xades-structure.xml	ws	<ds:SignedInfo><ds:CanonicalizationMethod	<ds:SignedInfo> <ds:CanonicalizationMethod

@@ -298,8 +298,11 @@ func TestDomUtilsSerializeNodeAndXmlToString(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !strings.Contains(s, `<r a="1">`) || !strings.Contains(s, "<c></c>") {
-		t.Fatalf("unexpected serialization: %q", s)
+	// Byte-for-byte what Java's DomUtils.xmlToString returns: an identity Transformer
+	// with no OMIT_XML_DECLARATION writes the declaration even here, a Document node adds
+	// standalone="no", and an empty element is written in short form.
+	if want := `<?xml version="1.0" encoding="UTF-8" standalone="no"?><r a="1"><c/></r>`; s != want {
+		t.Fatalf("serialization\n got: %q\nwant: %q", s, want)
 	}
 }
 

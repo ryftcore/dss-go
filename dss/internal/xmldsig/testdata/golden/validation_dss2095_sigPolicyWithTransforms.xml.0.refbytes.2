@@ -1,0 +1,69 @@
+<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="SignedProperties-123">
+        <xades:SignedSignatureProperties>
+          <xades:SigningTime>2016-12-30T16:14:10.159Z</xades:SigningTime>
+          <xades:SigningCertificate>
+            <xades:Cert>
+              <xades:CertDigest>
+                <ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+                <ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">guX5weUgJGz04ZJup0i6CVlZcrE2ekIvisR1cqDaX/s=</ds:DigestValue>
+              </xades:CertDigest>
+              <xades:IssuerSerial>
+                <ds:X509IssuerName xmlns:ds="http://www.w3.org/2000/09/xmldsig#">/C=NL/ST=Noord Holland/O=test AuSP.nl CA/OU=Inology B.V./CN=test AuSP.nl CA/emailAddress=support@inology.nl/serialNumber=00000001000000000000/title=Registeraccountant</ds:X509IssuerName>
+                <ds:X509SerialNumber xmlns:ds="http://www.w3.org/2000/09/xmldsig#">1048589</ds:X509SerialNumber>
+              </xades:IssuerSerial>
+            </xades:Cert>
+          </xades:SigningCertificate>
+          <xades:SignaturePolicyIdentifier>
+            <xades:SignaturePolicyId>
+              <xades:SigPolicyId>
+                <xades:Identifier>urn:sbr:signature-policy:xml:2.0</xades:Identifier>
+              </xades:SigPolicyId>
+              <ds:Transforms xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+                <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2">
+                  <XPath xmlns="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">/*/*[local-name()='SignPolicyDigest']</XPath>
+                </ds:Transform>
+                <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+              </ds:Transforms>
+              <xades:SigPolicyHash>
+                <ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+                <ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">sVHhN1eqNH/PZ1B6h//ehyC1OwRQOrz/tJ3ZYaRrBgA=</ds:DigestValue>
+              </xades:SigPolicyHash>
+              <xades:SigPolicyQualifiers>
+                <xades:SigPolicyQualifier>
+                  <xades:SPURI>http://www.nltaxonomie.nl/sbr/signature_policy_schema/v2.0/SBR-signature-policy-v2.0.xml</xades:SPURI>
+                </xades:SigPolicyQualifier>
+              </xades:SigPolicyQualifiers>
+            </xades:SignaturePolicyId>
+          </xades:SignaturePolicyIdentifier>
+        </xades:SignedSignatureProperties>
+        <xades:SignedDataObjectProperties>
+          <xades:DataObjectFormat ObjectReference="#report_ref">
+            <xades:Description>jaarrekening.xbrl</xades:Description>
+            <xades:ObjectIdentifier>
+              <xades:Identifier>jaarrekening.xbrl</xades:Identifier>
+            </xades:ObjectIdentifier>
+            <xades:MimeType>text/xml</xades:MimeType>
+            <xades:Encoding>UTF-8</xades:Encoding>
+          </xades:DataObjectFormat>
+          <xades:DataObjectFormat ObjectReference="#assurance_ref">
+            <xades:Description>accountantsverklaring.xbrl</xades:Description>
+            <xades:ObjectIdentifier>
+              <xades:Identifier>accountantsverklaring.xbrl</xades:Identifier>
+            </xades:ObjectIdentifier>
+            <xades:MimeType>text/xml</xades:MimeType>
+            <xades:Encoding>UTF-8</xades:Encoding>
+          </xades:DataObjectFormat>
+          <xades:CommitmentTypeIndication>
+            <xades:CommitmentTypeId>
+              <xades:Identifier>urn:sbr:signature-policy:proof-of-integrity-of-the-object-for-which-the-practitioner-expresses-an-opinion</xades:Identifier>
+            </xades:CommitmentTypeId>
+            <xades:ObjectReference>#report_ref</xades:ObjectReference>
+          </xades:CommitmentTypeIndication>
+          <xades:CommitmentTypeIndication>
+            <xades:CommitmentTypeId>
+              <xades:Identifier>urn:sbr:signature-policy:proof-of-intent-of-practitioner-to-express-an-opinion</xades:Identifier>
+            </xades:CommitmentTypeId>
+            <xades:ObjectReference>#assurance_ref</xades:ObjectReference>
+          </xades:CommitmentTypeIndication>
+        </xades:SignedDataObjectProperties>
+      </xades:SignedProperties>

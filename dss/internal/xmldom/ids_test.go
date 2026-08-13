@@ -114,8 +114,21 @@ func TestElementByID(t *testing.T) {
 	}
 }
 
-// TestDuplicateIDs mirrors DSSXMLUtils.isDuplicateIdsDetected: registration never
-// fails, the first occurrence in document order wins, and the collision is reported.
+// TestDuplicateIDs mirrors DSSXMLUtils.isDuplicateIdsDetected: registration never fails,
+// the collision is reported, and the LAST occurrence in document order is the one
+// getElementById answers with.
+//
+// Last, not first: CoreDocumentImpl.putIdentifier is identifiers.put(id, element) into a
+// HashMap and the recursive Id browse walks the document in order, so each duplicate
+// replaces the one before it. Probed against OpenJDK 21 with DSS's own registration loop -
+// <a Id="x">first</a><b Id="x">second</b><c Id="x">third</c> answers <c>.
+//
+// It is worth stating why this is not cosmetic. Two elements sharing an Id is the shape of
+// an XML signature wrapping attack: the attacker leaves the signed element in place and
+// appends a second one with the same Id carrying their content. Resolving "#x" to the first
+// element makes the digest match and the forgery verify;
+// internal/xmldsig/testdata/corpus/validation/dss2329/xades-with-manifest-with-duplicated-reference.xml
+// is exactly that document, and Santuario answers false on it.
 func TestDuplicateIDs(t *testing.T) {
 	doc := mustParse(t, `<r><a Id="dup"/><b Id="dup"/><c Id="other"/><d Id="dup"/><e Id="z"/><f Id="z"/></r>`)
 	doc.RegisterIDs()
@@ -124,8 +137,11 @@ func TestDuplicateIDs(t *testing.T) {
 		t.Errorf("DuplicateIDs = %v, want %v (sorted)", got, want)
 	}
 	el := doc.ElementByID("dup")
-	if el == nil || el.Name.Local != "a" {
-		t.Errorf("ElementByID(dup) = %v, want the first in document order <a>", el)
+	if el == nil || el.Name.Local != "d" {
+		t.Errorf("ElementByID(dup) = %v, want the last in document order <d>", el)
+	}
+	if el := doc.ElementByID("z"); el == nil || el.Name.Local != "f" {
+		t.Errorf("ElementByID(z) = %v, want the last in document order <f>", el)
 	}
 	if got := mustParse(t, `<r Id="x"/>`); len(func() []string { got.RegisterIDs(); return got.DuplicateIDs() }()) != 0 {
 		t.Error("a document without collisions reported duplicates")

@@ -28,26 +28,21 @@ type engine struct {
 	inclusivePrefixes []string // exclusive only, sorted; from ParsePrefixList
 
 	w        *bufio.Writer
-	subset   xmldom.NodeSet // nil selects subtree mode
+	subset   xmldom.NodeSet // explicit node-set membership; nil means "no explicit set"
 	exclude  *xmldom.Node   // subtree mode only
 	xmlAttrs *xmlAttrStack
+
+	// filters is CanonicalizerBase.nodeFilter, the NodeFilter list the XML-DSig transform
+	// pipeline attaches to its XMLSignatureInput. filterErr is the first failure any of them
+	// reported; see noteFilterErr.
+	filters   []NodeFilter
+	filterErr error
 
 	// firstCall is Canonicalizer20010315.firstCall: the flag that flushes the ancestors'
 	// namespace and xml:* context onto the apex, exactly once. Santuario never resets it,
 	// which is why a reused canonicalizer silently drops that context (SANTUARIO-463); here
 	// it lives and dies with the call.
 	firstCall bool
-}
-
-// isVisible reports node-set membership. In subtree mode there is no node set and everything
-// is visible, which is Santuario's xpathNodeSet == null. Node filters (Santuario's NodeFilter
-// list, fed by its Transform pipeline) have no counterpart here: the transform layer hands us
-// a materialized NodeSet instead.
-func (e *engine) isVisible(n *xmldom.Node) bool {
-	if e.subset == nil {
-		return true
-	}
-	return e.subset.Has(n)
 }
 
 // canonicalizeSubTree ports CanonicalizerBase.canonicalizeSubTree, iteratively and literally,
@@ -141,6 +136,9 @@ func (e *engine) canonicalizeXPathNodeSet(cur *xmldom.Node, endnode *xmldom.Node
 	if cur == nil {
 		return nil
 	}
+	if e.isVisibleInt(cur) == -1 {
+		return e.filterErr
+	}
 	if cur.Kind == xmldom.Element {
 		e.getParentNameSpaces(cur, ns)
 	}
@@ -157,7 +155,7 @@ func (e *engine) canonicalizeXPathNodeSet(cur *xmldom.Node, endnode *xmldom.Node
 			sibling = cur.FirstChild
 
 		case xmldom.Comment:
-			if e.includeComments && e.isVisible(cur) {
+			if e.includeComments && e.isVisibleDO(cur, ns.level()) == 1 {
 				e.outputComment(cur.Value, documentLevel)
 			}
 
@@ -182,7 +180,15 @@ func (e *engine) canonicalizeXPathNodeSet(cur *xmldom.Node, endnode *xmldom.Node
 		case xmldom.Element:
 			documentLevel = nodeNotBeforeOrAfterDocumentElement
 			var name string
-			currentNodeIsVisible = e.isVisible(cur)
+			// A -1 answer prunes the subtree outright: no namespace frame is pushed and
+			// outputAttributes never runs, so nothing below can be reached or declared. That
+			// is how the enveloped-signature filter removes a ds:Signature.
+			if i := e.isVisibleDO(cur, ns.level()); i == -1 {
+				sibling = cur.NextSibling
+				break
+			} else {
+				currentNodeIsVisible = i == 1
+			}
 			if currentNodeIsVisible {
 				ns.outputNodePush()
 				name = cur.Name.QName()

@@ -1,0 +1,1 @@
+<ds:Object xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xzep="http://www.ditec.sk/ep/signature_formats/xades_zep/v1.1" Id="objectId"><Record xmlns="http://some.uri.org" author="BLAŽÍČEK" endTime="12:00" key="RFP3" startTime="10:00">test</Record></ds:Object>

@@ -1,0 +1,27 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+      <ds:Reference Id="r1" URI="">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2">
+            <dsig-filter2:XPath xmlns:dsig-filter2="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">
+              /descendant::ds:Signature
+            </dsig-filter2:XPath>
+          </ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+        <ds:DigestValue>
+          mWGR8zaNcQnNWiLWeTxv1/XV8ZCxPAJBG2jZk6wVdSM=
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#p1">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+        <ds:DigestValue>
+          opAveS0L87O8pnOduF4Yu7ZvbnLubIuJaawBqqKPdHQ=
+        </ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>

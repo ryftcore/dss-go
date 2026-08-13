@@ -149,8 +149,17 @@ func (d *docState) register(elem, attr *Node) {
 	d.idAttrs[elem] = insertInAttrOrder(elem, d.idAttrs[elem], attr)
 	if _, seen := d.ids[attr.Value]; seen {
 		d.dups[attr.Value] = struct{}{}
-		return // first registration in document order wins
 	}
+	// LAST registration wins, which is what Xerces does and is not a detail:
+	// CoreDocumentImpl.putIdentifier is identifiers.put(id, element) into a HashMap, and
+	// setIdAttributeNode is called in document order by the recursive Id browse, so a
+	// second element carrying an Id already seen REPLACES the first in the index.
+	//
+	// A same-document "#id" reference therefore dereferences to the last such element.
+	// That is exactly the shape of an XML signature wrapping attack - upstream keeps
+	// xades-with-manifest-with-duplicated-reference.xml for it, where the second
+	// ds:Object holds the attacker's content - and resolving to the first element
+	// instead makes the digest match and the forged signature verify.
 	d.ids[attr.Value] = elem
 }
 

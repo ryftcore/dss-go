@@ -6,7 +6,9 @@ import "github.com/utain/esig/dss/internal/xmldom"
 // javax.xml.xpath.XPathExpression that DSS compiles once and evaluates many times.
 type Expr struct {
 	text string
-	root *pathExpr
+	// root is a *pathExpr for anything Compile produced - it refuses a top level that is not
+	// a location path - and any expression node for one CompileTransform produced.
+	root node
 }
 
 // Compile parses expression, resolving its prefixes against ns.
@@ -42,7 +44,7 @@ func (e *Expr) Evaluate(ctx *xmldom.Node) ([]*xmldom.Node, error) {
 		return nil, &EvalError{Expression: e.text, Msg: "nil context node"}
 	}
 	ev := &evaluator{}
-	return ev.sortUnique(ev.evalPath(e.root, ctx)), nil
+	return ev.sortUnique(toNodeSet(ev.eval(e.root, ctx))), nil
 }
 
 // Select compiles expression and evaluates it against ctx in one call. Prefer Compile plus
@@ -54,6 +56,13 @@ func Select(ctx *xmldom.Node, expression string, ns NamespaceContext) ([]*xmldom
 	}
 	return x.Evaluate(ctx)
 }
+
+// EvaluateNodeSet is Evaluate under the name the XPath Filter 2.0 transform reads better
+// with, where the result is a set of subtree roots rather than a query answer. An expression
+// whose value is not a node-set - which only CompileTransform can build - yields the empty
+// set, matching XPathConstants.NODESET on a boolean expression, which raises in Java only
+// because Java has a checked type system to raise from.
+func (e *Expr) EvaluateNodeSet(ctx *xmldom.Node) ([]*xmldom.Node, error) { return e.Evaluate(ctx) }
 
 // SelectOne returns the single node the expression selects, or nil when it selects none.
 //

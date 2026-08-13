@@ -41,6 +41,21 @@ type Input struct {
 	Subset            xmldom.NodeSet
 	Exclude           *xmldom.Node
 	InclusivePrefixes []string
+
+	// NodeSet forces the document-subset traversal even when Subset is nil, and Filters are
+	// the NodeFilters consulted during it. Together they are Santuario's XMLSignatureInput in
+	// its "node set" state: XMLSignatureInput.setNodeSet(true) plus its nodeFilters list,
+	// which is what the ds:XPath, XPath Filter 2.0 and enveloped-signature transforms leave
+	// behind for the canonicalizer that follows them. A non-nil Subset implies node-set mode
+	// on its own, matching an XMLSignatureInput built from an explicit Set<Node>.
+	NodeSet bool
+	Filters []NodeFilter
+}
+
+// nodeSetMode reports whether in selects CanonicalizerBase's document-subset traversal rather
+// than its subtree traversal.
+func (in Input) nodeSetMode() bool {
+	return in.Subset != nil || in.NodeSet || len(in.Filters) > 0
 }
 
 // Canonicalize writes the canonical form of in to w.
@@ -49,7 +64,7 @@ func Canonicalize(alg Algorithm, in Input, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if resolved.physical() && in.Subset != nil {
+	if resolved.physical() && in.nodeSetMode() {
 		return ErrPhysicalNodeSet
 	}
 	if in.Node == nil {
@@ -70,6 +85,7 @@ func Canonicalize(alg Algorithm, in Input, w io.Writer) error {
 		w:               bw,
 		subset:          in.Subset,
 		exclude:         in.Exclude,
+		filters:         in.Filters,
 		firstCall:       true,
 		xmlAttrs:        &xmlAttrStack{},
 	}
@@ -78,7 +94,7 @@ func Canonicalize(alg Algorithm, in Input, w io.Writer) error {
 		e.inclusivePrefixes = normalizePrefixes(in.InclusivePrefixes)
 	}
 
-	if in.Subset != nil {
+	if in.nodeSetMode() {
 		err = e.canonicalizeXPathNodeSet(in.Node, in.Node)
 	} else {
 		ns := newNSStack()
@@ -92,6 +108,11 @@ func Canonicalize(alg Algorithm, in Input, w io.Writer) error {
 	}
 	if err != nil {
 		return err
+	}
+	// A filter failure discards the output: the traversal kept running past it (see
+	// noteFilterErr) and whatever it wrote is meaningless.
+	if e.filterErr != nil {
+		return e.filterErr
 	}
 	return bw.Flush()
 }

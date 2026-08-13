@@ -1,0 +1,13 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="ID-79a0845a-c23f-499c-b4a3-122d6e375dab"><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+<ds:Reference Id="ID-68eee67e-ae0f-4d2a-94e7-894e6104882f" URI="#ID-d128ea3a-70bc-4ec7-8656-542bb96d688d"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>6cdeFJiTmFQECMlWI+a+SPTl8nHIQ3GqtNSD645rz8c=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="ID-92baa9f8-b1d7-4ede-9a82-ade8a04f5766" Type="http://uri.etsi.org/01903#SignedProperties" URI="#ID-6c01cd40-12e5-4a64-839c-bdbec8f0a316"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>easY+ZFkQ4ZB2FVC9JNP/RJDAeQCT8yfpTV1FkwD1nE=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>

@@ -103,15 +103,22 @@ func TestDomUtilsXPointerURIsAgainstJavaOracle(t *testing.T) {
 // prefix produces the name "xmlns:" - which Xerces' serializer then normalises away, emitting
 // xmlns="urn:NS2". Writing "xmlns:" through verbatim produces markup no parser accepts, so the
 // empty prefix has to become the default declaration here.
+//
+// The expectations are the Java answers whole, since DomUtilsSerializeNode is now
+// byte-identical to Java's - see TestSerializeAgainstJavaTransformerOracle, whose
+// built-xmlns-plain-attribute and built-xmlns-default-plain-attribute cases run these two
+// shapes through the real Transformer.
 func TestDomUtilsAddNamespaceAttributeDeclarationForm(t *testing.T) {
 	cases := []struct {
 		name   string
 		prefix string
 		uri    string
-		want   string // Java oracle, modulo the serializer differences recorded in doc.go
+		want   string // Java oracle, byte for byte
 	}{
-		{"prefixed", "n1", "urn:NS1", `<n1:Signature xmlns:n1="urn:NS1"></n1:Signature>`},
-		{"empty prefix becomes the default declaration", "", "urn:NS2", `<Signature xmlns="urn:NS2"></Signature>`},
+		{"prefixed", "n1", "urn:NS1",
+			`<?xml version="1.0" encoding="UTF-8"?><n1:Signature xmlns:n1="urn:NS1"/>`},
+		{"empty prefix becomes the default declaration", "", "urn:NS2",
+			`<?xml version="1.0" encoding="UTF-8"?><Signature xmlns="urn:NS2"/>`},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

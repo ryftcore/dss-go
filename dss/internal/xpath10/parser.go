@@ -24,6 +24,10 @@ type parser struct {
 	toks []token
 	i    int
 	ns   NamespaceContext
+
+	// transform widens the grammar to the XML-DSig transform subset; see transform.go. It is
+	// false for Compile, which keeps the inventory subset exactly as documented.
+	transform bool
 }
 
 // parse compiles expression to an AST, resolving prefixes against ns.
@@ -96,14 +100,38 @@ func (p *parser) parseOr() (node, error) {
 	return lhs, nil
 }
 
-func (p *parser) parseEquality() (node, error) {
+// parseUnion parses "a | b". It sits between parseEquality and parseOperand so that "|" binds
+// tighter than "=" and "or", which is XPath 1.0's precedence. Only the transform grammar
+// reaches it; parseEquality calls parseOperand directly otherwise, so Compile still refuses
+// "|" by name from parseOr's trailing-operator check.
+func (p *parser) parseUnion() (node, error) {
 	lhs, err := p.parseOperand()
+	if err != nil {
+		return nil, err
+	}
+	for p.at(tokOperator) && p.peek().text == "|" {
+		p.next()
+		rhs, err := p.parseOperand()
+		if err != nil {
+			return nil, err
+		}
+		lhs = &unionExpr{lhs: lhs, rhs: rhs}
+	}
+	return lhs, nil
+}
+
+func (p *parser) parseEquality() (node, error) {
+	operand := p.parseOperand
+	if p.transform {
+		operand = p.parseUnion
+	}
+	lhs, err := operand()
 	if err != nil {
 		return nil, err
 	}
 	for p.at(tokEq) {
 		p.next()
-		rhs, err := p.parseOperand()
+		rhs, err := operand()
 		if err != nil {
 			return nil, err
 		}
@@ -129,10 +157,43 @@ func (p *parser) parseOperand() (node, error) {
 		return nil, p.unsupported("parenthesized expression")
 	case tokName:
 		if p.toks[p.i+1].kind == tokLParen && !isNodeTypeName(t.text) {
-			return p.parseFunctionCall()
+			fn, err := p.parseFunctionCall()
+			if err != nil {
+				return nil, err
+			}
+			// XPath's FilterExpr '/' RelativeLocationPath: "id('x')/node()". Only the
+			// transform grammar admits it; without it the "/" would be trailing input.
+			if p.transform && (p.at(tokSlash) || p.at(tokDoubleSlash)) {
+				return p.parseRelativeFrom(fn)
+			}
+			return fn, nil
 		}
 	}
 	return p.parsePath()
+}
+
+// parseRelativeFrom continues a location path from an already-parsed filter expression.
+func (p *parser) parseRelativeFrom(start node) (node, error) {
+	path := &pathExpr{start: start}
+	for {
+		switch {
+		case p.at(tokSlash):
+			p.next()
+		case p.at(tokDoubleSlash):
+			p.next()
+			path.steps = append(path.steps, descendantOrSelfStep())
+		default:
+			return path, nil
+		}
+		if !p.startsStep() {
+			return nil, p.syntax("expected a step after '/'")
+		}
+		s, err := p.parseStep()
+		if err != nil {
+			return nil, err
+		}
+		path.steps = append(path.steps, s)
+	}
 }
 
 // parseFunctionCall parses not(Expr) and local-name(). Those are the only two core functions
@@ -157,6 +218,11 @@ func (p *parser) parseFunctionCall() (node, error) {
 		p.next()
 		return &notCall{arg: arg}, nil
 
+	case "here":
+		// Xalan's here() extension, which xmlsec 3.0 lost when it dropped Xalan: upstream's
+		// JDKXPathAPI registers no extension functions, so here() fails there too.
+		return nil, p.unsupportedAt(name.pos, "the here() extension function, which Apache Santuario 3.0 no longer provides either")
+
 	case "local-name":
 		// The optional node-set argument is not implemented: DSS only ever writes the
 		// no-argument form, which means "the context node".
@@ -165,6 +231,11 @@ func (p *parser) parseFunctionCall() (node, error) {
 		}
 		p.next()
 		return &localNameCall{}, nil
+	}
+	if p.transform {
+		if n, handled, err := p.parseTransformFunction(name); handled {
+			return n, err
+		}
 	}
 	return nil, p.unsupportedAt(name.pos, "function "+name.text+"()")
 }
@@ -246,6 +317,9 @@ func (p *parser) parseStep() (step, error) {
 		name := p.next()
 		p.next() // '::'
 		a, ok := axisByName(name.text)
+		if !ok && p.transform {
+			a, ok = transformAxisByName(name.text)
+		}
 		if !ok {
 			return step{}, p.unsupportedAt(name.pos, "the "+name.text+":: axis")
 		}

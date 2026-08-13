@@ -236,8 +236,12 @@ carrying line/column:
     `ParseOptions.MaxBytes` (default 0 = unlimited; callers on untrusted input set it).
 
 The XML declaration itself is **not** a node: a leading `ProcInst` with target `xml` at offset 0
-is consumed for its `version`/`encoding`/`standalone` pseudo-attributes and discarded, exactly as
-DOM does. A leading UTF-8 BOM is consumed and discarded (Go surfaces it as `CharData "﻿"`).
+is consumed for its `version`/`encoding`/`standalone` pseudo-attributes, exactly as DOM does. It
+is not discarded outright, though: the encoding and standalone flag are kept on the `Document`
+and readable through `XMLEncoding`/`XMLStandalone`, because `Document.getXmlEncoding()` and
+`getXmlStandalone()` are what `DomUtils.serializeNode` and `DOM2TO` read back to decide the
+declaration they write and the charset they write it in (§1.8). A leading UTF-8 BOM is consumed
+and discarded (Go surfaces it as `CharData "﻿"`).
 Probe confirms Santuario emits nothing for the declaration or the BOM.
 
 ### 1.6 Encoding
@@ -280,14 +284,45 @@ equals `"Id"` **case-insensitively**, calls `setIdAttribute(nodeName, true)` and
 
 ### 1.8 Serialization
 
-`Serialize` is **not** c14n and must never be used where c14n is required. It exists to emit a
-XAdES document after DOM surgery. It writes prefixes and QNames verbatim from `Name`, attributes
-in `Attrs` order (document order, *not* c14n order), `CDATA` nodes as `<![CDATA[…]]>` (splitting
-on an embedded `]]>` into two sections), empty elements as `<e></e>`, and escapes
-`&`, `<`, `>` in text; `&`, `<`, `"` in attribute values. Byte-parity with Java's `Transformer`
-is **not** a requirement — DSS's `DomUtils.serializeNode` output is never itself signed; only c14n
-output is. `SerializeOptions.XMLDeclaration` (default true) and `.Encoding` (default `UTF-8`)
-mirror `DomUtils.serializeNode`, which re-emits the document's original `xmlEncoding`.
+`Serialize` is **not** c14n and must never be used where c14n is required: it keeps prefixes and
+QNames verbatim from `Name`, does not sort attributes into c14n order, and does not import an
+ancestor's namespace axis the way c14n does. Anything covered by a `ds:Transform` goes through
+`internal/xmlc14n`.
+
+Byte-parity with Java's identity `Transformer` **is** a requirement — an earlier revision of this
+note said it was not, on the grounds that `DomUtils.serializeNode` output is "never itself
+signed". That is false. `DSSXMLUtils.applyTransforms(Node, List<DSSTransform>)` (dss-xades,
+~line 1049) returns `DomUtils.getNodeBytes(node)` when the reference carries no transforms, and
+that byte array *is* what the `ds:Reference` `DigestValue` is computed over. Audit item D6.
+
+`Serialize` therefore reproduces the two JDK classes the Transformer runs — `DOM2TO` (the DOM
+walk and namespace fixup) and `ToStream`/`ToXMLStream` (the bytes). The consequences that most
+often surprise:
+
+- The XML declaration is written for **every** node kind, not just `Document`: `DomUtils` never
+  sets `OMIT_XML_DECLARATION`. `standalone="no"` is added only when the serialized node *is* the
+  `Document` and the source did not declare `standalone="yes"`.
+- Empty elements are written `<e/>`.
+- Attributes come out in Xerces' `NamedNodeMap` order — sorted by node name, **not** source order
+  — with namespace declarations moved in front, and a fixup declaration for the element's own
+  prefix appended last when nothing else declared it. This is what lets a subtree serialized on
+  its own regain the declarations it inherited.
+- A declaration that rebinds a prefix to the URI it already has, and any declaration of a prefix
+  starting with `xml`, are dropped.
+- Text escapes `&`, `<`, `>` and writes CR as `&#13;`; attribute values additionally escape `"`
+  and write TAB/LF/CR as `&#9;`/`&#10;`/`&#13;`. Character references are **decimal**.
+- C0/C1 controls are character references in text and are written literally in attribute values;
+  supplementary characters are character references in both, but literal inside `CDATA`.
+- The declared encoding decides the declaration text, which characters are literal, and the
+  charset of the bytes; `xmldom` keeps it (and `standalone`) on the `Document` for that reason.
+
+`SerializeOptions.XMLDeclaration` (default true) is `OMIT_XML_DECLARATION`; `.Encoding` (default:
+the document's own) is `OutputKeys.ENCODING`.
+
+The gate is `xml/utils.TestSerializeAgainstJavaTransformerOracle`: an adversarial corpus
+(`xml/utils/testdata/serialize/corpus.txt`) replayed through the real `DomUtils.serializeNode`
+and `DomUtils.getNodeBytes` on OpenJDK 21 by `testdata/gen/SerializeOracle.java`, demanding byte
+equality on both.
 
 ### 1.9 Exported API — **PINNED**
 
@@ -512,17 +547,22 @@ func (n *Node) DuplicateIDs() []string
 // ---------------------------------------------------------------- serialization
 
 type SerializeOptions struct {
-	XMLDeclaration bool   // default true via nil options
-	Encoding       string // default "UTF-8"
+	XMLDeclaration bool   // OMIT_XML_DECLARATION; default true via nil options
+	Encoding       string // OutputKeys.ENCODING; default: the document's own, else UTF-8
 }
 
-// Serialize writes n as XML. It is NOT canonicalization: attributes keep document
-// order and no namespace inheritance is performed. Use internal/xmlc14n for anything
-// that is hashed or signed.
+// Serialize writes n as XML, byte for byte as OpenJDK's identity Transformer does -
+// which is what DomUtils.serializeNode runs, and what a no-transform ds:Reference
+// digests. It is still NOT canonicalization: use internal/xmlc14n for a ds:Transform.
 func (n *Node) Serialize(w io.Writer, opts *SerializeOptions) error
 
 // Bytes is Serialize into a buffer.
 func (n *Node) Bytes(opts *SerializeOptions) ([]byte, error)
+
+// XMLEncoding and XMLStandalone report the parsed source's XML declaration, which the
+// serializer needs: Document.getXmlEncoding / getXmlStandalone.
+func (n *Node) XMLEncoding() string
+func (n *Node) XMLStandalone() bool
 ```
 
 ---
@@ -898,6 +938,21 @@ type Input struct {
 	Subset            xmldom.NodeSet
 	Exclude           *xmldom.Node
 	InclusivePrefixes []string
+
+	// Added in phase 4b - see the amendment note below.
+	NodeSet bool
+	Filters []NodeFilter
+}
+
+// NodeFilter is org.apache.xml.security.signature.NodeFilter: the three-valued node-set
+// membership test the XML-DSig transform pipeline attaches to its input.
+//
+//	 1  include the node
+//	 0  exclude the node but keep walking into its subtree
+//	-1  exclude the node AND its whole subtree, with no namespace bookkeeping
+type NodeFilter interface {
+	IsNodeInclude(n *xmldom.Node) (int, error)
+	IsNodeIncludeDO(n *xmldom.Node, level int) (int, error)
 }
 
 // Canonicalize writes the canonical form of in to w.
@@ -933,6 +988,24 @@ type RelativeNamespaceError struct {
 func (e *RelativeNamespaceError) Error() string
 ```
 
+**Amendment (phase 4b, agreed with the tech lead).** `Input` gained `NodeSet` and `Filters`, and
+`NodeFilter` was added. The reason is that §4's sketch assumed the transform layer could hand
+`xmlc14n` a *materialized* `NodeSet`, and it cannot:
+
+- Santuario's `isVisibleDO` answer `-1` prunes a whole subtree **without** pushing a namespace
+  frame or running `outputAttributes`, while `0` excludes one node and keeps the frame. A
+  materialized set can only express `0`.
+- `XPath2NodeFilter` is **stateful**: `isNodeIncludeDO` records the symbol-table level at which
+  the subtree it is inside began, and `Canonicalizer20010315.outputAttributes` asks it a second
+  time at the *deeper* level after the frame is pushed. Materializing would have to replay that
+  traversal exactly, i.e. reimplement the walk it is trying to avoid.
+
+The change is additive: `Subset` still selects node-set mode on its own and every existing KAT
+is unaffected, because a materialized subset never answers `-1`. Inside the engine,
+`isVisible`/`isVisibleDO`/`isVisibleInt` are now the literal `CanonicalizerBase` trio, the
+node-set traversal honours the `-1` prune, and the two node-set emitters ask `isVisibleDO(el,
+ns.level())` where they previously asked a boolean.
+
 ---
 
 ## 3. Known-answer-test strategy
@@ -966,10 +1039,14 @@ internal/xmlc14n/testdata/
   `CanonicalizeBytes`, i.e. exactly what `XMLCanonicalizer.canonicalize(byte[])` does, so the
   parse-then-canonicalize seam is covered end to end.
 - `TestDOMRoundTrip` — `Parse` → `Serialize` → `Parse` → `CanonicalizeToBytes` must equal
-  `Parse` → `CanonicalizeToBytes`. Catches serializer bugs without demanding byte-parity with
-  Java's `Transformer`.
+  `Parse` → `CanonicalizeToBytes`. The semantic complement to the byte-parity oracle in
+  `xml/utils`: whatever the Transformer-shaped serializer rewrites must not move the canonical
+  form.
 - `FuzzCanonicalize` — `Parse` must never panic; when it succeeds, all seven algorithms must run
-  without panicking and `Serialize`+re-`Parse`+c14n must be stable. Seeded from `corpus/`.
+  without panicking and `Serialize`+re-`Parse`+c14n must be stable. Seeded from `corpus/`. The
+  physical method is excluded from the round-trip leg: it is defined to reproduce the namespace
+  declarations the serializer drops (redundant rebinds, `xmlns:xml`), so the round trip
+  legitimately moves its output — in Java exactly as here.
 
 ### 3.3 The corpus (~32 documents)
 
@@ -1069,6 +1146,20 @@ Phase 4b/4c gates, listed here so nobody designs them away:
 
 ## 4. What the `xmldsig` layer above will need (interface sketch only)
 
+**Status: superseded by the code.** `internal/xmldsig` exists; its `doc.go` carries the
+authoritative Go-name-to-Santuario-member table and its own deviations. The sketch below is
+kept because it records what the two lower packages were designed to be sufficient for, and
+because three of its guesses turned out wrong in ways worth remembering:
+
+- `Data` is a struct, not an interface. Santuario's `XMLSignatureInput` is a union whose
+  discriminator the canonicalizer dispatches on (`isOctetStream`, then `isElement`, then
+  `isNodeSet`, in that order), and an interface hierarchy cannot express states such as "an
+  element subtree that also carries an exclude node and two node filters".
+- `NodeSetData` with a materialized `Nodes` set is not enough - see the §2.9 amendment.
+- The transform signature needs the `ds:Transform` element *and* the base URI *and* the
+  secure-validation flag, because a transform resolves its own namespace prefixes against the
+  element that carries it.
+
 Not binding beyond the fact that `xmldom`/`xmlc14n` must be sufficient for it. Written now so the
 two implementers can see the consumers.
 
@@ -1153,3 +1244,61 @@ Two consequences that constrain §1 and §2 and are therefore binding:
 - [ ] `RelativeNamespaceError` fires only for *rendered* declarations, and never for physical.
 - [ ] Canonicalization allocates all state per call; no package-level mutable state.
 - [ ] Goldens are Java's answers; no golden was ever produced by the Go implementation.
+
+---
+
+## 6. Amendments from the phase 4c audit
+
+Three divergences from Xerces/Xalan found by an independent re-run of the oracles, and the
+decisions taken on them. Each is now pinned by a test whose failure was verified by mutation.
+
+### 6.1 `ownerDocument` survives detachment (`OwnerDocument`, `Node.owner`)
+
+`org.w3c.dom` assigns a node's owning document at creation and never clears it, so
+`removeChild` leaves `getOwnerDocument()` intact. `DomUtils.serializeNode` reads exactly that
+to choose its output encoding. Deriving ownership purely positionally answered `nil` for a
+detached subtree and fell back to UTF-8, so an element lifted out of an ISO-8859-1 document
+and serialized on its own came out in UTF-8 here and in ISO-8859-1 in Java — a different
+byte string under the digest of a no-transform `ds:Reference`.
+
+`Document()` keeps its positional meaning, which is what tree-scope decisions want.
+`OwnerDocument()` is the DOM one: it walks to the topmost ancestor and, when that is not a
+Document, reads an `owner` recorded at the moment of detachment (`unlink`, `ReplaceChild`,
+`RemoveAttr`, `SetTextContent`). `Clone` carries the source's owner, as `cloneNode` does;
+`Import` assigns the importing document, as `importNode` does. `XMLEncoding` and
+`XMLStandalone` read `OwnerDocument()` — for a Document node, itself.
+
+### 6.2 A duplicated `Id` resolves to the LAST element, not the first (`ids.go`)
+
+`CoreDocumentImpl.putIdentifier` is `identifiers.put(id, element)` into a `HashMap`, and
+`XAdESDOMDocument.recursiveIdBrowse` registers in document order, so each duplicate replaces
+the one before it. Probed against OpenJDK 21 with DSS's own registration loop, and again
+through the XPath `id()` function.
+
+This is not cosmetic. Two elements sharing an `Id` is the shape of an XML signature wrapping
+attack, and resolving `#id` to the first element makes the forged digest match:
+`internal/xmldsig/testdata/corpus/validation/dss2329/xades-with-manifest-with-duplicated-reference.xml`
+is that document, Santuario answers `false` on it, and this port answered `true` until the
+index was changed to last-wins. `DuplicateIDs()` still reports the collision for
+`DSSXMLUtils.isDuplicateIdsDetected`.
+
+### 6.3 ISO-8859-2 (`codepage.go`)
+
+Two upstream XAdES fixtures declare it (`validation/Signature-X-HU_MIC-1.xml`,
+`validation/BaselineBWithCertificateValues.xml`) and Xerces reads them, so refusing the
+encoding meant being unable to validate a Central-European signature at all. Added on both
+sides — decode in `decodeSource`, `writeLatin2`/`latin2InEncoding` in the output table — with
+the alias set and the declaration-echo rules probed against OpenJDK 21 rather than guessed
+(`ISO8859_2`, `ISO8859-2` and `iso-8859-2` are rewritten to `ISO-8859-2`; `latin2`,
+`csISOLatin2`, `ISO_8859-2` and `cp912` are echoed unchanged; `8859_2` is rejected outright,
+as `latin-1` is).
+
+The table is pinned character-for-character against `new String(bytes, "ISO-8859-2")`, not
+only through the serializer goldens: decode and encode read the same table, so a wrong entry
+round-trips to the same byte and is invisible in the output bytes while changing the
+character canonicalization writes out as UTF-8.
+
+### 6.4 Encodings still refused
+
+`windows-1252` and XML 1.1 remain fail-closed refusals at `Parse` (D4 for 1.1). No upstream
+fixture uses either; both are refusals, never wrong answers.

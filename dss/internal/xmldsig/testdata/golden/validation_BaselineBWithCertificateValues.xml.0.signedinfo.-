@@ -1,0 +1,15 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="SIS8aa4c85c-f351-433a-892a-3f6930a12397">
+	<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+	<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+	<ds:Reference Id="R601d3ed6-499d-4445-87ca-e19c66076295" URI="../../Data/ts_101903v010302p.txt">
+	<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+	<ds:DigestValue>DAZyrpbIYCtuKgI0+j9/x8eXL8XDoID3IBqjvLJSPyg=</ds:DigestValue>
+	</ds:Reference>
+	<ds:Reference Id="Ra766c6a8-fac9-4435-8d4d-ccf350c44085" Type="http://uri.etsi.org/01903#SignedProperties" URI="#XS8aa4c85c-f351-433a-892a-3f6930a12397">
+	<ds:Transforms>
+	<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+	</ds:Transforms>
+	<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+	<ds:DigestValue>eYJw9va2g97xyN3Nilp48R0z1I4Sj3ezeKoQvVXbTOQ=</ds:DigestValue>
+	</ds:Reference>
+	</ds:SignedInfo>

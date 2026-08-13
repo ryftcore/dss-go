@@ -12,6 +12,65 @@ func (n *Node) Document() *Node {
 	return nil
 }
 
+// OwnerDocument is org.w3c.dom's Node.getOwnerDocument(): the document a node belongs
+// to, which - unlike Document - SURVIVES detachment. It is nil for a Document node
+// itself, and nil for a node that was never part of a document.
+//
+// The two differ only for a detached subtree, and the difference is load-bearing:
+// DomUtils.serializeNode picks its output encoding off getOwnerDocument().getXmlEncoding(),
+// so an element lifted out of an ISO-8859-1 document and serialized on its own is
+// written in ISO-8859-1 by Java. Positional ownership alone answers nil there and would
+// fall back to UTF-8, changing the bytes a ds:Reference digests.
+func (n *Node) OwnerDocument() *Node {
+	if n == nil || n.Kind == Document {
+		return nil
+	}
+	top := n
+	for top.Parent != nil {
+		top = top.Parent
+	}
+	if top.Kind == Document {
+		return top
+	}
+	return top.owner
+}
+
+// ownerOrSelfDocument is what serializeNode does with the node handed to it: a Document
+// is its own document, anything else asks getOwnerDocument().
+func (n *Node) ownerOrSelfDocument() *Node {
+	if n == nil {
+		return nil
+	}
+	if n.Kind == Document {
+		return n
+	}
+	return n.OwnerDocument()
+}
+
+// XMLEncoding returns the encoding named by the parsed source's XML declaration,
+// verbatim, or "" when the source had no declaration, named no encoding, or the document
+// was built in memory. Ports Document.getXmlEncoding(), which Xerces also answers with the
+// literal declared spelling - probed against OpenJDK 21: "utf8", "iso-8859-1" and
+// "ISO8859-1" all come back unchanged. Callable on any node; it reads the owning document.
+func (n *Node) XMLEncoding() string {
+	d := n.ownerOrSelfDocument()
+	if d == nil || d.doc == nil {
+		return ""
+	}
+	return d.doc.xmlEncoding
+}
+
+// XMLStandalone reports whether the parsed source's XML declaration said
+// standalone="yes". Ports Document.getXmlStandalone(), which is false for a document with
+// no declaration, with standalone="no", or built in memory.
+func (n *Node) XMLStandalone() bool {
+	d := n.ownerOrSelfDocument()
+	if d == nil || d.doc == nil {
+		return false
+	}
+	return d.doc.xmlStandalone
+}
+
 // DocumentElement returns the single element child of a document node, else nil.
 func (n *Node) DocumentElement() *Node {
 	if n == nil || n.Kind != Document {
@@ -144,6 +203,7 @@ func (n *Node) SetTextContent(data string) {
 	n.bump()
 	for c := n.FirstChild; c != nil; {
 		next := c.NextSibling
+		rememberOwner(c)
 		c.Parent = nil
 		c.PrevSibling = nil
 		c.NextSibling = nil

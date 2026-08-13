@@ -63,12 +63,20 @@
 // a boolean or string evaluation would be API that no known answer covers.
 //
 // The XML-DSig transform expressions - XPathTransform, XPath2FilterTransform and the
-// enveloped-signature transform's not(ancestor-or-self::ds:Signature) - are deliberately NOT
-// in that inventory. Santuario evaluates them inside the Reference/Transform pipeline, never
-// through JavaXmlXPathQueryExecutor, and XPath Filter 2.0 is a different evaluation model on
-// top of a different engine. They belong to the xmldsig package. A package that needs them
-// must extend this subset deliberately, with its own known answers; until then it gets an
-// *UnsupportedError rather than a plausible guess.
+// enveloped-signature transform's not(ancestor-or-self::ds:Signature) - are NOT in that
+// inventory: Santuario evaluates them inside the Reference/Transform pipeline, never through
+// JavaXmlXPathQueryExecutor, and XPath Filter 2.0 is a different evaluation model.
+//
+// They are served by a SECOND, deliberately widened subset, reached only through
+// CompileTransform and documented in transform.go. It adds four axes (ancestor,
+// ancestor-or-self, descendant and the spelled-out attribute and descendant-or-self), three
+// functions (name(), starts-with(), id()), the union operator, a path continuing from a filter
+// expression, and a top-level expression that need not be a location path; EvaluateBoolean
+// exposes the per-node boolean evaluation the ds:XPath transform performs. That widening is
+// driven by testdata/transform-kat.txt - every ds:XPath and xpf:XPath expression in the
+// upstream dss-xades corpus - and every one of its answers is pinned against the JDK's XPath,
+// which is the engine Santuario 3.0 uses. Compile still refuses every one of those constructs,
+// so the inventory subset above is unchanged.
 //
 // # Namespaces and node identity
 //

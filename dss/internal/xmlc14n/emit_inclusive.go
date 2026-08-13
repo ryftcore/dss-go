@@ -57,7 +57,9 @@ func (e *engine) outputAttributesSubtreeInclusive(el *xmldom.Node, ns *nsStack) 
 // can force an xmlns="" onto a visible element.
 func (e *engine) outputAttributesInclusive(el *xmldom.Node, ns *nsStack) error {
 	e.xmlAttrs.push(ns.level())
-	isRealVisible := e.isVisible(el)
+	// Santuario asks isVisibleDO here a second time, AFTER the element's frame was pushed, so
+	// a stateful filter (XPath Filter 2.0) sees the deeper level than the traversal did.
+	isRealVisible := e.isVisibleDO(el, ns.level()) == 1
 	var result attrSet
 
 	for _, attr := range el.Attrs {

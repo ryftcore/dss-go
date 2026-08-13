@@ -38,8 +38,10 @@ func TestDOMDocumentOpenStreamAndMimeType(t *testing.T) {
 	if _, err := buf.ReadFrom(rc); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if !bytes.Contains(buf.Bytes(), []byte(`<r a="1">`)) {
-		t.Fatalf("unexpected serialized content: %q", buf.String())
+	// DOMDocument streams DomUtilsWriteDocumentTo's bytes, which are byte-for-byte the
+	// identity Transformer's - declaration, standalone and short empty element included.
+	if want := `<?xml version="1.0" encoding="UTF-8" standalone="no"?><r a="1"><c/></r>`; buf.String() != want {
+		t.Fatalf("serialized content\n got: %q\nwant: %q", buf.String(), want)
 	}
 }
 

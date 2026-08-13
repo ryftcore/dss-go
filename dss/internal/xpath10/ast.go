@@ -27,6 +27,12 @@ const (
 	axisSelf
 	axisParent
 	axisDescendantOrSelf
+
+	// The four the XML-DSig transform grammar adds; see transform.go. They are unreachable
+	// from Compile, which still refuses every axis name outside axisByName.
+	axisAncestor
+	axisAncestorOrSelf
+	axisDescendant
 )
 
 // principalIsAttribute reports whether the axis's principal node type is attribute, which is
@@ -68,7 +74,13 @@ type step struct {
 // descendant-or-self::node() step, exactly as XPath 1.0 clause 2.5 expands it.
 type pathExpr struct {
 	absolute bool
-	steps    []step
+
+	// start is non-nil for a path that continues from a filter expression rather than from
+	// the context node or the root - "id('x')/node()". Only the transform grammar produces
+	// one (transform.go); Compile always leaves it nil.
+	start node
+
+	steps []step
 }
 
 // orExpr is "lhs or rhs". It is the only binary operator besides "=" that the inventory uses -

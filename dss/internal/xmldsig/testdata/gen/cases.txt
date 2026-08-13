@@ -1,0 +1,252 @@
+# The KAT corpus: real upstream dss-xades test fixtures, one per line, optionally followed by
+# a tab and a comma-separated list of detached documents to hand the detached resolver.
+#
+# Paths are relative to dss-xades/src/test/resources and are reproduced verbatim under
+# testdata/corpus. Selection covers every reference-processing feature the port implements:
+# same-document "" and "#id" fragments, #xpointer(/) and #xpointer(id('x')), detached file
+# references, the enveloped-signature transform, all four canonicalization transforms the
+# corpus uses, base64, ds:XPath and XPath Filter 2.0 (intersect/subtract/union), ds:Manifest
+# references, and the RSA/ECDSA/RSASSA-PSS signature methods.
+
+# --- enveloped signatures, enveloped-signature transform
+validation/valid-xades.xml
+validation/dss-signed.xml
+validation/dss-signed-altered-refRemoved.xml
+validation/doubleSignedTest.xml
+validation/dss1135/factura_ejemplo2_32v1.xml
+validation/xsw/XSW-enveloped-fake-content.xml
+validation/xsw/XSW-enveloped-fake-signedProperties.xml
+validation/xsw/original.xml
+
+# --- ds:XPath transform: not(ancestor-or-self::ds:Signature) and friends
+validation/dss-2506.xml
+validation/TEST_S1a_C1a_InTL_VALID.xml
+validation/signing-cert-multiple-refs-sig.xml
+validation/xades-with-equivalent-certs.xml
+validation/dss1987/data2sign-signed-xades-enveloped-baseline-lta.xml
+
+# --- XPath Filter 2.0
+validation/Signature-X-AT-1.xml
+validation/Signature-X-BE_ECON-3.xml
+validation/xades-tampered-keyinfo.xml
+validation/dss2095/sigPolicyWithTransforms.xml
+validation/dss3758/xades-bes-issuer-no-linebreaks.xml
+validation/qes-xades111-filter2.xml
+
+# --- xpointer references and Canonical XML 1.1
+validation/10963_signed.xml
+validation/Signature-X-CZ_SEF-4.xml
+
+# --- ds:Manifest references
+validation/Signature-X-CY-1.xml
+validation/dss2329/xades-with-enveloped-manifest.xml	sample.png,sample.txt,sample.xml
+validation/dss2329/xades-with-manifest-with-object-reference.xml	sample.png,sample.txt,sample.xml
+validation/xades-tampered-manifest.xml	sample.png,sample.txt,sample.xml
+
+# --- enveloping signatures, base64 transform, ds:Object references
+validation/xades-extended-epes-with-sigPolStore.xml
+validation/xades-x-level.xml
+validation/dss2517/xades-valid-object.xml
+validation/dss2517/xades-valid-reference.xml
+validation/dss2517/xades-invalid-reference.xml
+valid-xades-structure.xml
+sample-counter-signed.xml
+
+# --- other national profiles: assorted transform chains and algorithms
+validation/Signature-X-FR_NOT-3.xml
+validation/Signature-X-PT-4.xml
+validation/Signature-X-HU_POL-3.xml
+validation/Signature-X-RO_TRA-4.xml
+validation/Signature-X-CZ_ICZ-1.xml
+validation/dss874/sellosFNMT-XAdES_A.xml
+validation/xades-ecc-brainpool.xml
+validation/xades-lta-valid.xml
+
+# --- negative: a reference whose content was altered after signing
+validation/xades-tampered-reference.xml
+
+# --- detached references resolved through the document list
+validation/dss2011/xades-detached.xml	sample.xml
+validation/dss2011/xades-detached-with-transform.xml	sample-c14n.xml
+
+
+# ---------------------------------------------------------------------------------------
+# The exhaustive tail: EVERY remaining file under dss-xades/src/test/resources that names
+# the XML-DSIG namespace and that Apache Santuario 3.0.6 can load, up to 300 kB. The curated
+# list above says what each fixture is FOR; this list exists so that no upstream signature
+# is quietly outside the known-answer corpus, including the deliberately broken ones the
+# upstream suite keeps around (xsw/*, *-tampered-*, *-invalid-*, dss-signed-altered-*).
+#
+# Two upstream files are excluded because Santuario cannot load them at all, so there is no
+# answer to know:
+#   validation/malformed-xades.xml           MalformedByteSequenceException (invalid UTF-8)
+#   validation/xades-with-dtd-injection.xml  SAXParseException (DOCTYPE, disallowed)
+# Both are covered instead by xmldsig_test.go, which requires the Go parser to refuse them.
+#
+# Five upstream files are excluded by the 300 kB cap; they are multi-megabyte trusted lists
+# whose signatures repeat shapes already covered here (XAdESLTA.xml, OJ_L_2016_294_FULL.xml,
+# dss-1647_OJ_L_2018_109_FULL.xml, Signature-X-HR_FIN-1.xml, OJ_C_2017_173_FULL.xml).
+ASiCManifest.xml
+XAdESBWithoutSignedDataObjectProperties.xml
+dss-817-test.xml
+fi-v5-invalid-no-sig.xml
+invalid-xades-structure.xml
+manifest-joue.xml
+manifest-no-id.xml
+manifest-oneline.xml
+sample-saml-assertion.xml
+validation/11068_signed.xml
+validation/BaselineBWithCertificateValues.xml
+validation/Signature-X-BG-1.xml
+validation/Signature-X-CZ_SEF-5.xml
+validation/Signature-X-ES-100.xml
+validation/Signature-X-ES-103.xml
+validation/Signature-X-HU_MIC-1.xml
+validation/Signature-X-RO_TRA-15.xml
+validation/Signature-X-SK_DIT-1.xml
+validation/Signature-X-UK_ASC-2.xml
+validation/Signature-X-UK_ELD-4.xml
+validation/dk_tl-sn21.xml
+validation/dss-2293.xml
+validation/dss-signed-altered-signedPropsRemoved.xml
+validation/dss1334/document-signed-xades-baseline-b--null-for-filename.xml
+validation/dss1334/simple-test-signed-xades-baseline-b.xml
+validation/dss1334/simple-test.signed-only-detached-LuxTrustCA3.xml
+validation/dss1636/detached_cts.xml
+validation/dss1636/detached_no_cts.xml
+validation/dss1688/dss1688-detached-content.xml
+validation/dss1770/dss1770.xml
+validation/dss1770/dss1770refUriRemoved.xml
+validation/dss1770/dss1770rootAndRefs.xml
+validation/dss1788/XAdESPublicKeyInKeyInfo.xml
+validation/dss1788/dss1788-noCertProvided.xml
+validation/dss1788/dss1788-original.xml
+validation/dss1788/dss1920-cert-in-certValues-without-publicKey.xml
+validation/dss1788/dss1920-cert-in-certValues.xml
+validation/dss1811-multi-algo.xml
+validation/dss1987/data2sign-signed-xades-enveloped-baseline-cts-lta.xml
+validation/dss2011/xades-alldata-tst-detached.xml
+validation/dss2011/xades-individual-content-tst-detached.xml
+validation/dss2011/xades-lta-detached.xml
+validation/dss2095/SBR-signature-policy-v2.0.xml
+validation/dss2095/sigPolicyWithBrokenTransforms.xml
+validation/dss2208/xades-content-tst-null-c14n.xml
+validation/dss2208/xades-tsts-empty-c14n.xml
+validation/dss2278/xades-with-multiple-alldatatimestamps.xml
+validation/dss2278/xades-with-multiple-archivetimestamps.xml
+validation/dss2278/xades-with-multiple-signaturetimestamps.xml
+validation/dss2329/xades-with-manifest-with-duplicated-reference.xml
+validation/dss2517/xades-dataobject-format-refer-nothing.xml
+validation/dss2517/xades-dataobjectformat-no-mandatory-attrs.xml
+validation/dss2517/xades-dataobjectformat-no-mimetype.xml
+validation/dss2517/xades-invalid-mime-type.xml
+validation/dss2517/xades-invalid-objectreference.xml
+validation/dss2517/xades-no-objectreference.xml
+validation/dss2517/xades-with-empty-dataobjectformat.xml
+validation/dss3732/xades-enveloped-arcTst132-no-objects.xml
+validation/dss3732/xades-enveloped-arcTst132.xml
+validation/dss3732/xades-enveloping-arcTst132-add-object.xml
+validation/dss3732/xades-enveloping-arcTst132.xml
+validation/dss3758/xades-bes-issuer-linebreaks-end-cr.xml
+validation/dss3758/xades-bes-issuer-linebreaks-end.xml
+validation/dss3758/xades-bes-issuer-linebreaks.xml
+validation/evidence-record/Double-sig-X-E-ERS-LT.xml
+validation/evidence-record/Signature-X-LT-5b5edd31-344d-4d66-8e95-79f9acaab566.xml
+validation/evidence-record/Signature-X-LTA-5b5edd31-344d-4d66-8e95-79f9acaab566.xml
+validation/evidence-record/X-B-B-DETACHED-1-extended-xades-baseline-lt.xml
+validation/evidence-record/X-B-B-basic.xml
+validation/evidence-record/X-B-LT-with-counter-sig-X-E-ERS.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-chain-renewal.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-data-not-covered-chain-renewal-invalid.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-data-not-covered-chain-renewal.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-data-not-covered.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-orphan-ref.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-sig-invalid-digest.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT-sig-not-covered.xml
+validation/evidence-record/X-E-ERS-DETACHED-LT.xml
+validation/evidence-record/X-E-ERS-LT.xml
+validation/evidence-record/X-E-ERS-MANIFEST.xml
+validation/evidence-record/X-E-ERS-basic-asn1.xml
+validation/evidence-record/X-E-ERS-basic-chain-renewal-master-sig-not-found.xml
+validation/evidence-record/X-E-ERS-basic-chain-renewal.xml
+validation/evidence-record/X-E-ERS-basic.xml
+validation/evidence-record/X-E-ERS-two-ers.xml
+validation/evidence-record/X-E-ERS-two-parallel-ers-one-invalid.xml
+validation/evidence-record/X-E-ERS-two-parallel-ers-one-tst-invalid.xml
+validation/evidence-record/X-E-ERS-two-parallel-ers.xml
+validation/evidence-record/X-E-ERS-with-counter-sig.xml
+validation/evidence-record/XAdES-B_ER_Renewed_can.xml
+validation/evidence-record/XAdES-B_ER_Renewed_no_can.xml
+validation/evidence-record/incorporation/X-B-B.xml
+validation/evidence-record/incorporation/X-B-LT-detached.xml
+validation/evidence-record/incorporation/X-B-LT-two-sigs.xml
+validation/evidence-record/incorporation/XAdES-B.xml
+validation/sig-with-orphan-ocsp-ref.xml
+validation/sig_bundle.signed_detached.xml
+validation/signature_property_signed.xml
+validation/valid-xades-policyId-newlines.xml
+validation/xades-500-references.xml
+validation/xades-attr-authorities-values.xml
+validation/xades-b-copied-cnttst.xml
+validation/xades-counter-sig-copied-sigtst.xml
+validation/xades-counter-signature-injected.xml
+validation/xades-counter-signature-no-type-invalid.xml
+validation/xades-counter-signature-no-type.xml
+validation/xades-counter-signature-with-type-invalid.xml
+validation/xades-detached-with-object-type-ref.xml
+validation/xades-extended-epes-sigPolStore-noDigest.xml
+validation/xades-extended-epes.xml
+validation/xades-extended-short-a.xml
+validation/xades-extended-t.xml
+validation/xades-extended-xl.xml
+validation/xades-fake-counter-signature.xml
+validation/xades-level-b-sig-policy-invalid-digest-algo.xml
+validation/xades-level-b-with-certvals.xml
+validation/xades-level-x-double-sigAndRefsTst-refsOnlyTst.xml
+validation/xades-lt-with-expired-ocsp-responder.xml
+validation/xades-lta-copied-atst.xml
+validation/xades-lta-corrupted-cert.xml
+validation/xades-lta-with-additional-cert-in-keyinfo.xml
+validation/xades-no-keyinfo-sign-cert.xml
+validation/xades-not-base64-sigValue.xml
+validation/xades-ocsp-before-cert-validity.xml
+validation/xades-ocsp-not-embeds-certs.xml
+validation/xades-sigPolicy-with-SPDocSpecification.xml
+validation/xades-sign-cert-v1-wrong-serialnumber.xml
+validation/xades-sign-cert-v2-wrong-digest.xml
+validation/xades-sign-cert-v2-wrong-issuer-serial.xml
+validation/xades-t-copied-sigtst.xml
+validation/xades-t-duplicated-sigtst-same-element.xml
+validation/xades-t-duplicated-sigtst.xml
+validation/xades-t-with-tsvd.xml
+validation/xades-two-sig-copied-tst.xml
+validation/xades-unknown-digest-algo.xml
+validation/xades-unsupported-signature-algorithm.xml
+validation/xades-with-counter-sig-type.xml
+validation/xades-with-no-name-reference.xml
+validation/xades-with-spUserNotice-refs.xml
+validation/xades-wrong-sign-cert-digest.xml
+validation/xades-x-level-v2-wrong-sigAndRefsTst-type.xml
+validation/xades-x-level-v2.xml
+validation/xades-x-level-wrong-sigAndRefsTstVersion.xml
+validation/xmldsig-only.xml
+validation/xsw/TSL-CY-sign.xml
+validation/xsw/TSL-noID.xml
+validation/xsw/XSW-enveloping-fake-manifest.xml
+validation/xsw/XSW-enveloping-fake-object.xml
+validation/xsw/disable-checks.xml
+
+# ---------------------------------------------------------------------------------------
+# Deliberately corrupted signatures, built from the fixtures above by gen/mutate.py out of
+# gen/mutants.txt. They are ordinary cases here: the oracle records whatever Santuario
+# answers for them and the port has to agree, verdict flip or no verdict flip.
+mutants/content-dss-signed.xml
+mutants/content-dss2506.xml
+mutants/content-object.xml
+mutants/content-manifest.xml	sample.png,sample.txt,sample.xml
+mutants/attrorder-filter2.xml
+mutants/attrorder-reference.xml
+mutants/attrorder-detached.xml	sample.xml
+mutants/ws-signedinfo-valid-xades.xml
+mutants/ws-signedinfo-dss-signed.xml
+mutants/ws-signedinfo-structure.xml

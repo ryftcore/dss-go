@@ -66,6 +66,11 @@ func FuzzParse(f *testing.F) {
 			return true
 		})
 
+		// The property is idempotence from the FIRST serialization onward, not equality
+		// with the parsed tree: that first pass is where the Transformer's own rewriting
+		// happens - attributes reordered into node-name order, redundant and xml-prefix
+		// declarations dropped, an empty CDATA section erased. TestSerializeRewritesTheTree
+		// pins each of those, and internal/xmlc14n asserts the canonical form survives.
 		out, err := doc.Bytes(nil)
 		if err != nil {
 			t.Fatalf("Serialize failed for a parsed document: %v", err)
@@ -74,15 +79,19 @@ func FuzzParse(f *testing.F) {
 		if err != nil {
 			t.Fatalf("reparse of %q failed: %v", out, err)
 		}
-		if got, want := dump(again), dump(doc); got != want {
-			t.Fatalf("round trip changed the tree\ninput:      %q\nserialized: %s\ngot:\n%s\nwant:\n%s", src, out, got, want)
-		}
 		out2, err := again.Bytes(nil)
 		if err != nil {
 			t.Fatalf("second Serialize failed: %v", err)
 		}
 		if string(out2) != string(out) {
-			t.Fatalf("serialization is not idempotent\nfirst:  %s\nsecond: %s", out, out2)
+			t.Fatalf("serialization is not idempotent\ninput:  %q\nfirst:  %s\nsecond: %s", src, out, out2)
+		}
+		third, err := Parse(out2, nil)
+		if err != nil {
+			t.Fatalf("third parse of %q failed: %v", out2, err)
+		}
+		if got, want := dump(third), dump(again); got != want {
+			t.Fatalf("round trip changed the tree\ninput:      %q\nserialized: %s\ngot:\n%s\nwant:\n%s", src, out, got, want)
 		}
 	})
 }

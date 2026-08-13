@@ -20,10 +20,18 @@
 //   - GetSecureDocumentBuilderFactory/GetSecureTransformerFactory/GetSecureTransformer are
 //     omitted: internal/xmldom.Parse and internal/xmldom.Serialize already apply the
 //     equivalent secure posture internally, with no factory/transformer object to return.
-//   - DomUtilsWriteDocumentTo/DomUtilsSerializeNode/DOMDocument's serialized bytes do not
-//     echo the source document's original xml declaration encoding, because internal/xmldom
-//     does not retain it after parsing (XML_DESIGN.md §1.5 discards the declaration once
-//     read). XML_DESIGN.md §1.8 explicitly does not require byte-parity here.
+//   - DomUtilsWriteDocumentTo/DomUtilsSerializeNode/DomUtilsGetNodeBytes/DOMDocument emit
+//     byte-for-byte what OpenJDK's identity Transformer emits, the source document's own
+//     declared encoding included. This is a REQUIREMENT, not a nicety: dss-xades'
+//     DSSXMLUtils.applyTransforms returns getNodeBytes(node) for a ds:Reference carrying no
+//     ds:Transforms, and the DigestValue is computed over exactly those bytes.
+//     TestSerializeAgainstJavaTransformerOracle replays an adversarial corpus through the
+//     real Java methods (testdata/gen/SerializeOracle.java) and demands equality. The one
+//     org.w3c.dom behaviour not modelled is Document.createElement(name), whose node has a
+//     null localName and therefore skips DOM2TO's xmlns="" fixup; internal/xmldom has no
+//     representation for an element without a local name, and the single upstream call site
+//     (InternallyDetachedSignatureBuilder's container) is a fresh document's root, where no
+//     default namespace is in scope and the two behaviours coincide.
 //   - NativeDOMXPathQueryExecutor and JavaXmlXPathQueryExecutor share one xpath10-backed
 //     implementation per this phase's task brief, even though xml/common/doc.go anticipated
 //     NativeDOMXPathQueryExecutor being a from-scratch MatchNode-chain walker (that logic

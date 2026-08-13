@@ -1,0 +1,20 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+<ds:Reference Id="xmldsig-ae607052-3141-4a07-bc7b-b83fb392c6fa-ref0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>4f6BCsXdlHJ/iZC64tZig0qmOpai6gWlTNjnacCdkJ0=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="xmldsig-ae607052-3141-4a07-bc7b-b83fb392c6fa-ref1" Type="http://www.w3.org/2000/09/xmldsig#Object" URI="#xmldsig-ae607052-3141-4a07-bc7b-b83fb392c6fa-object0">
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>8TvosKm6XUEhcBv20yZTmhxllYLnmYIs4lLJo7QcTRY=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xmldsig-ae607052-3141-4a07-bc7b-b83fb392c6fa-signedprops">
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>nL5RH6QLXrTSZxMPRiQzKGHSK17MS/mCY318FLEHi8s=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>

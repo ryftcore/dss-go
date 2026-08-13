@@ -68,7 +68,8 @@ func (e *engine) outputAttributesSubtreeExclusive(el *xmldom.Node, ns *nsStack) 
 // element.
 func (e *engine) outputAttributesExclusive(el *xmldom.Node, ns *nsStack) error {
 	var result attrSet
-	isOutputElement := e.isVisible(el)
+	// isVisibleDO, not isVisible: see the note in outputAttributesInclusive.
+	isOutputElement := e.isVisibleDO(el, ns.level()) == 1
 	var visiblyUtilized map[string]struct{}
 	if isOutputElement {
 		visiblyUtilized = make(map[string]struct{}, len(el.Attrs)+len(e.inclusivePrefixes)+1)

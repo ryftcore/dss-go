@@ -1,6 +1,10 @@
 package xpath10
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import (
+	"strings"
+
+	"github.com/utain/esig/dss/internal/xmldom"
+)
 
 // value is an XPath object. The subset can only produce three of the four XPath 1.0 types -
 // node-set, string and boolean - because the only operators are "or" and "=", the only
@@ -46,6 +50,15 @@ func (e *evaluator) eval(n node, ctx *xmldom.Node) value {
 		return localName(ctx)
 	case *literal:
 		return x.value
+	case *nameCall:
+		return qname(ctx)
+	case *startsWithCall:
+		return strings.HasPrefix(toString(e.eval(x.prefixOf, ctx)), toString(e.eval(x.prefix, ctx)))
+	case *idCall:
+		return e.evalID(e.eval(x.arg, ctx), ctx)
+	case *unionExpr:
+		return dedup(append(append(nodeSet(nil), toNodeSet(e.eval(x.lhs, ctx))...),
+			toNodeSet(e.eval(x.rhs, ctx))...))
 	}
 	panic("xpath10: unknown AST node")
 }
@@ -65,7 +78,13 @@ func localName(n *xmldom.Node) string {
 
 func (e *evaluator) evalPath(x *pathExpr, ctx *xmldom.Node) nodeSet {
 	current := nodeSet{ctx}
-	if x.absolute {
+	switch {
+	case x.start != nil:
+		current = toNodeSet(e.eval(x.start, ctx))
+		if len(current) == 0 {
+			return nil
+		}
+	case x.absolute:
 		current = nodeSet{rootOf(ctx)}
 	}
 	for i := range x.steps {
@@ -158,6 +177,29 @@ func appendAxis(out nodeSet, n *xmldom.Node, a axis, t *nodeTest) nodeSet {
 			out = append(out, n)
 		}
 		out = appendDescendants(out, n, a, t)
+	case axisDescendant:
+		out = appendDescendants(out, n, a, t)
+	case axisAncestorOrSelf:
+		if matches(n, a, t) {
+			out = append(out, n)
+		}
+		out = appendAncestors(out, n, a, t)
+	case axisAncestor:
+		out = appendAncestors(out, n, a, t)
+	}
+	return out
+}
+
+// appendAncestors appends the ancestors of n, nearest first. An attribute's ancestors start
+// with its owner element, per XPath 1.0 clause 5.3 - the parent of an attribute node is the
+// element it belongs to even though the attribute is not among that element's children. The
+// order is the reverse-document order of the ancestor axis; Evaluate sorts the final result
+// anyway, and a predicate cannot observe position() in this subset.
+func appendAncestors(out nodeSet, n *xmldom.Node, a axis, t *nodeTest) nodeSet {
+	for p := n.Parent; p != nil; p = p.Parent {
+		if matches(p, a, t) {
+			out = append(out, p)
+		}
 	}
 	return out
 }
@@ -278,6 +320,17 @@ func (e *evaluator) buildOrder(root *xmldom.Node) {
 
 // toBool is XPath 1.0 clause 4.3's boolean(): a node-set is true when non-empty, a string when
 // non-empty. There is no number case because number literals are refused at parse time.
+// toNodeSet converts a value that must already be a node-set. The transform grammar can put a
+// non-node-set on the left of "/" or inside "|" - "'x'/y" - which XPath 1.0 clause 3.3 makes a
+// type error; there is no error channel here and no expression in the corpus does it, so such
+// an operand contributes nothing.
+func toNodeSet(v value) nodeSet {
+	if set, ok := v.(nodeSet); ok {
+		return set
+	}
+	return nil
+}
+
 func toBool(v value) bool {
 	switch x := v.(type) {
 	case nodeSet:

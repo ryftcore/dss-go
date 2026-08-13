@@ -169,7 +169,7 @@ func TestSerializeToWriter(t *testing.T) {
 	if err := mustParse(t, `<r a="1"/>`).Serialize(&b, &SerializeOptions{}); err != nil {
 		t.Fatalf("Serialize: %v", err)
 	}
-	if got, want := b.String(), `<r a="1"></r>`; got != want {
+	if got, want := b.String(), `<r a="1"/>`; got != want {
 		t.Errorf("Serialize = %q, want %q", got, want)
 	}
 }

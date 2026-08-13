@@ -307,6 +307,17 @@ func FuzzCanonicalize(f *testing.F) {
 			return
 		}
 		for _, alg := range implemented {
+			// The physical method is excluded, and not because of a bug here.
+			// xmldom.Serialize reproduces OpenJDK's identity Transformer byte for byte,
+			// and that serializer drops a namespace declaration that rebinds a prefix to
+			// the URI it already has, along with any declaration of the "xml" prefix.
+			// Every other algorithm ignores those declarations anyway; physical
+			// canonicalization is defined to reproduce them, so a serialize/parse round
+			// trip legitimately changes its output - in Java exactly as here. DSS itself
+			// makes that round trip in DomUtils.excludeComments.
+			if alg == C14NPhysical {
+				continue
+			}
 			first, err := CanonicalizeNode(alg, doc)
 			if err != nil {
 				continue

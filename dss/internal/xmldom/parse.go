@@ -41,11 +41,11 @@ func Parse(src []byte, opts *ParseOptions) (*Node, error) {
 		return nil, &SyntaxError{Line: 1, Column: 1, Offset: int64(len(src)),
 			Msg: fmt.Sprintf("document is %d bytes, exceeding MaxBytes %d", len(src), o.MaxBytes)}
 	}
-	buf, _, err := decodeSource(src, o.CharsetReader)
+	buf, decl, err := decodeSource(src, o.CharsetReader)
 	if err != nil {
 		return nil, err
 	}
-	p := &parser{buf: buf, opts: o}
+	p := &parser{buf: buf, opts: o, decl: decl}
 	return p.run()
 }
 
@@ -73,6 +73,7 @@ type nsBinding struct{ prefix, uri string }
 type parser struct {
 	buf  []byte
 	opts ParseOptions
+	decl xmlDecl
 	dec  *xml.Decoder
 
 	doc   *Node
@@ -93,6 +94,10 @@ func (p *parser) run() (*Node, error) {
 	// consistent across the switch, which is what the raw-span recovery depends on.
 	p.dec.CharsetReader = func(_ string, in io.Reader) (io.Reader, error) { return in, nil }
 	p.doc = NewDocument()
+	// Xerces keeps the declaration's encoding and standalone on the Document; the
+	// serializer reads both back (see XMLEncoding/XMLStandalone).
+	p.doc.doc.xmlEncoding = p.decl.encoding
+	p.doc.doc.xmlStandalone = p.decl.standalone == "yes"
 	p.stack = []*Node{p.doc}
 
 	for {

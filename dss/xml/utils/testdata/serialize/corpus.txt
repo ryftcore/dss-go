@@ -1,0 +1,2802 @@
+# Adversarial corpus for the DomUtils.serializeNode / getNodeBytes oracle.
+#
+# gen/SerializeOracle.java reads this file, reproduces DomUtils.serializeNode(Node) and
+# DomUtils.getNodeBytes(Node) VERBATIM on every (document, selected node) pair, and writes
+# goldens.txt. serialize_oracle_test.go replays the same corpus through the Go port and
+# demands byte equality.
+#
+# Record syntax - one record per "case" line, keys in any order after it:
+#
+#   case <name>                unique, no spaces
+#   parse <escaped text>       source document, parsed from its UTF-8 bytes
+#   parseb64 <base64>          source document, parsed from these raw bytes
+#   build <escaped DSL>        document built programmatically (see below)
+#   sel <path>                 node to serialize; omitted/"." selects the Document
+#   divergence <text>          this case is known NOT to agree with Java; the text says why.
+#                              The Go side must still refuse it somewhere, and the golden is
+#                              not compared. May be repeated to continue the text.
+#
+# Escapes in <escaped text>: \\ \n \r \t \s (space) \uXXXX (one UTF-16 code unit).
+# The token ~ on its own means the empty string.
+#
+# sel is a dot-separated list of child indices from the Document node ("0.2" = third child
+# of the first child). A trailing "@<qname>" selects that attribute of the addressed
+# element instead.
+#
+# build DSL: ops separated by ";", arguments by spaces. "-" is a null namespace URI.
+#   e <ns> <qname>     createElementNS(ns, qname), appended and pushed
+#   a <ns> <qname> <v> setAttributeNS on the current element
+#   ap <name> <v>      setAttribute on the current element (null namespaceURI)
+#   t <text>           appendChild(createTextNode(text))
+#   c <text>           appendChild(createComment(text))
+#   d <text>           appendChild(createCDATASection(text))
+#   p <target> <data>  appendChild(createProcessingInstruction(target, data))
+#   /                  pop back to the parent
+#
+# A "build" given alongside a "parse" is DOM surgery on the parsed document, starting at
+# its document element - which is the shape XAdES signing has: parse, graft, serialize.
+#
+# There is deliberately no op for Document.createElement(name). Xerces answers null to
+# getLocalName() for such a node, and DOM2TO's namespace fixup tests exactly that - so a
+# createElement child of an element in a default namespace does NOT get xmlns="" while a
+# createElementNS(null, name) child does. internal/xmldom has no representation for an
+# element without a local name, and the one call site upstream
+# (InternallyDetachedSignatureBuilder's container element) is a fresh document's root,
+# where no default namespace is in scope and the two behave identically.
+
+# --------------------------------------------------------------- structure and selection
+case doc-simple
+parse <?xml version="1.0" encoding="UTF-8"?><r><a/></r>
+sel .
+
+case doc-simple-root
+parse <?xml version="1.0" encoding="UTF-8"?><r><a/></r>
+sel 0
+
+case doc-simple-child
+parse <?xml version="1.0" encoding="UTF-8"?><r><a/></r>
+sel 0.0
+
+case no-declaration
+parse <r><a/></r>
+sel .
+
+case no-declaration-root
+parse <r><a/></r>
+sel 0
+
+case decl-standalone-no
+parse <?xml version="1.0" encoding="UTF-8" standalone="no"?><r/>
+sel .
+
+case decl-standalone-yes
+parse <?xml version="1.0" encoding="UTF-8" standalone="yes"?><r/>
+sel .
+
+case decl-standalone-yes-root
+parse <?xml version="1.0" encoding="UTF-8" standalone="yes"?><r/>
+sel 0
+
+case decl-no-encoding
+parse <?xml version="1.0"?><r/>
+sel .
+
+case decl-no-encoding-root
+parse <?xml version="1.0"?><r/>
+sel 0
+
+case decl-lowercase-encoding
+parse <?xml version="1.0" encoding="utf-8"?><r/>
+sel .
+
+case prolog-pi-comment
+parse <?pi first?><!--top--><r/><!--tail-->
+sel .
+
+case prolog-pi-comment-root
+parse <?pi first?><!--top--><r/><!--tail-->
+sel 2
+
+case prolog-comment-node
+parse <?pi first?><!--top--><r/>
+sel 1
+
+case prolog-pi-node
+parse <?pi first?><!--top--><r/>
+sel 0
+
+# --------------------------------------------------------------------- empty elements
+case empty-element
+parse <r><e/></r>
+sel 0
+
+case empty-element-with-attrs
+parse <r><e a="1" b="2"/></r>
+sel 0.0
+
+case empty-element-long-form
+parse <r><e></e></r>
+sel 0
+
+case empty-root-only
+parse <r/>
+sel 0
+
+case whitespace-only-element
+parse <r>\s\s</r>
+sel 0
+
+# ------------------------------------------------------------------ attribute ordering
+case attr-order-plain
+parse <r b="2" a="1" c="3" B="4" _="5"/>
+sel 0
+
+case attr-order-with-namespaces
+parse <r xmlns:z="urn:Z" b="2" z:a="1" xmlns="urn:D" a="0"/>
+sel 0
+
+case attr-order-numeric-names
+parse <r a10="1" a9="2" a1="3"/>
+sel 0
+
+case attr-order-xml-prefixed
+parse <r xml:space="preserve" xml:lang="en" a="1" xmlns:b="urn:B"/>
+sel 0
+
+case attr-order-capital-vs-lower
+parse <r Id="A" id="B" ID="C"/>
+sel 0
+
+# --------------------------------------------------------------- namespace inheritance
+case subtree-inherited-prefix
+parse <r xmlns:p="urn:A"><p:a><p:b/></p:a></r>
+sel 0.0
+
+case subtree-inherited-default
+parse <r xmlns="urn:D"><a><b/></a></r>
+sel 0.0
+
+case subtree-inherited-two-levels
+parse <r xmlns:p="urn:A" xmlns:q="urn:B"><m><p:a q:x="1"/></m></r>
+sel 0.0
+
+case subtree-shadowed-prefix
+parse <a xmlns:p="urn:1"><p:b xmlns:p="urn:2"><p:c/></p:b></a>
+sel 0.0
+
+case redundant-redeclaration
+parse <a xmlns:p="urn:A"><p:b xmlns:p="urn:A"><p:c/></p:b></a>
+sel .
+
+case default-ns-undeclared
+parse <a xmlns="urn:A"><b xmlns=""><c/></b></a>
+sel .
+
+case default-ns-undeclared-subtree
+parse <a xmlns="urn:A"><b xmlns=""><c/></b></a>
+sel 0.0
+
+case two-prefixes-one-uri
+parse <r xmlns:p="urn:A" xmlns:q="urn:A"><p:a><q:b/></p:a></r>
+sel 0.0
+
+case attr-prefix-only-inherited
+parse <r xmlns:q="urn:Q"><a q:x="1"/></r>
+sel 0.0
+
+case attr-and-element-different-uris
+parse <r xmlns:p="urn:P" xmlns:q="urn:Q"><p:a q:x="1" y="2"/></r>
+sel 0.0
+
+case deep-nesting-prefixes
+parse <a xmlns:p="urn:1"><p:b xmlns:q="urn:2"><q:c xmlns:r="urn:3"><r:d p:x="1"/></q:c></p:b></a>
+sel 0.0.0
+
+case xmlns-on-descendant-only
+parse <r><a xmlns:p="urn:A"><p:b/></a></r>
+sel 0.0
+
+# ------------------------------------------------------------------- text and escaping
+case text-basic-entities
+parse <r>&amp;&lt;&gt;"'</r>
+sel 0
+
+case text-cr-and-tab
+parse <r>a&#xD;b&#x9;c</r>
+sel 0
+
+case text-newline
+parse <r>a\nb</r>
+sel 0
+
+case text-nonascii-bmp
+parse <r>é中 </r>
+sel 0
+
+case text-astral
+parse <r>😀</r>
+sel 0
+
+case text-c1-controls
+parse <r>a&#x85;b&#x9f;c&#x7f;d</r>
+sel 0
+
+case text-node-selected
+parse <r>&amp;&lt;plain&#xD;</r>
+sel 0.0
+
+case text-node-base64
+parse <r>SGVsbG8=</r>
+sel 0.0
+
+case text-node-not-base64
+parse <r>not base64!!</r>
+sel 0.0
+
+case mixed-content
+parse <r>t1<a/>t2<!--c-->t3<![CDATA[cd]]>t4<?pi d?>t5</r>
+sel 0
+
+case xml-space-preserve
+parse <r xml:space="preserve">\s\sa\s\sb\s\s</r>
+sel 0
+
+# ------------------------------------------------------------------- attribute values
+case attr-value-entities
+parse <r v="&amp;&lt;&gt;&quot;'"/>
+sel 0
+
+case attr-value-whitespace
+parse <r v="&#x9;&#xA;&#xD;\sx"/>
+sel 0
+
+case attr-value-nonascii
+parse <r v="é中"/>
+sel 0
+
+case attr-value-astral
+parse <r v="😀"/>
+sel 0
+
+case attr-value-c1
+parse <r v="a&#x85;b&#x7f;c"/>
+sel 0
+
+case attr-value-empty
+parse <r v=""/>
+sel 0
+
+case attr-node-selected
+parse <r v="x"/>
+sel 0@v
+
+# --------------------------------------------------------------------------- CDATA
+case cdata-plain
+parse <r><![CDATA[plain]]></r>
+sel 0
+
+case cdata-with-markup
+parse <r><![CDATA[<a>&amp;</a>]]></r>
+sel 0
+
+case cdata-split-bracket
+parse <r><![CDATA[a]]]]><![CDATA[>b]]></r>
+sel 0
+
+case cdata-adjacent
+parse <r><![CDATA[one]]><![CDATA[two]]></r>
+sel 0
+
+case cdata-trailing-bracket
+parse <r><![CDATA[x]]]]><![CDATA[]]></r>
+sel 0
+
+case cdata-then-text
+parse <r><![CDATA[a]]>b</r>
+sel 0
+
+case text-then-cdata
+parse <r>a<![CDATA[b]]></r>
+sel 0
+
+case cdata-nonascii
+parse <r><![CDATA[é😀]]></r>
+sel 0
+
+case cdata-node-selected
+parse <r><![CDATA[cd]]></r>
+sel 0.0
+
+case cdata-empty-built
+build e - r; d ~
+sel 0
+
+case cdata-leading-bracket-built
+build e - r; d ]]>x
+sel 0
+
+# ------------------------------------------------------ processing instructions, comments
+case pi-no-data
+parse <r><?pi?></r>
+sel 0
+
+case pi-single-space
+parse <r><?pi d?></r>
+sel 0
+
+case pi-two-spaces
+parse <r><?pi\s\sspaced\s\sdata\s?></r>
+sel 0
+
+case pi-node-selected
+parse <r><?pi d?></r>
+sel 0.0
+
+case pi-data-with-close-built
+build e - r; p pi a?>b
+sel 0
+
+case pi-empty-data-built
+build e - r; p pi ~
+sel 0
+
+case pi-leading-space-data-built
+build e - r; p pi \sdata
+sel 0
+
+case comment-empty
+parse <r><!----></r>
+sel 0
+
+case comment-single-dash
+parse <r><!-- - --></r>
+sel 0
+
+case comment-node-selected
+parse <r><!--c--></r>
+sel 0.0
+
+case comment-double-dash-built
+build e - r; c a--b
+sel 0
+
+case comment-trailing-dash-built
+build e - r; c a-
+sel 0
+
+case comment-only-dashes-built
+build e - r; c ---
+sel 0
+
+# ------------------------------------------------------------- programmatic namespaces
+case built-undeclared-prefix
+build e urn:NS1 n1:Signature; a urn:NS1 n1:Id v1
+sel 0
+
+case built-undeclared-prefix-doc
+build e urn:NS1 n1:Signature; a urn:NS1 n1:Id v1
+sel .
+
+case built-no-prefix-element
+build e urn:NS1 Signature; t x
+sel 0
+
+case built-attr-ns-no-prefix
+build e - r; a urn:ATT x v
+sel 0
+
+case built-attr-two-ns-no-prefix
+build e - r; a urn:A1 x 1; a urn:A2 y 2
+sel 0
+
+case built-attr-ns-same-uri-no-prefix
+build e - r; a urn:A1 x 1; a urn:A1 y 2
+sel 0
+
+case built-xmlns-plain-attribute
+build e urn:NS1 n1:Signature; ap xmlns:n1 urn:NS1
+sel 0
+
+case built-xmlns-default-plain-attribute
+build e urn:NS2 Signature; ap xmlns urn:NS2
+sel 0
+
+case built-xmlns-colon-only
+build e - r; ap xmlns: urn:NSX
+sel 0
+
+case built-attr-named-xmlnsfoo
+build e - r; ap xmlnsfoo bar
+sel 0
+
+case built-null-ns-child-in-default-ns
+build e urn:D a; e - b; t x
+sel 0
+
+case built-null-ns-child-subtree
+build e urn:D a; e - b; t x
+sel 0.0
+
+case built-prefix-xmlfoo
+build e urn:X xmlfoo:a; t t
+sel 0
+
+case built-nested-same-prefix-different-uri
+build e urn:1 p:a; e urn:2 p:b; e urn:1 p:c
+sel 0
+
+case built-sibling-prefix-reuse
+build e urn:R r; e urn:1 p:a; /; e urn:2 p:b
+sel 0
+
+case built-empty-document
+build ~
+sel .
+
+case built-comment-at-document-level
+build c hello; e - r
+sel .
+
+case built-deep-attr-generated-prefix
+build e urn:E e1; e - c; a urn:Q x 1; a urn:R y 2
+sel 0.0
+
+# ------------------------------------------------------------------------- encodings
+case latin1-declared
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIHY9IukiPukt/zwvcj4=
+sel .
+
+case latin1-declared-root
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIHY9IukiPukt/zwvcj4=
+sel 0
+
+case ascii-declared
+parse <?xml version="1.0" encoding="US-ASCII"?><r>a&#xe9;b</r>
+sel .
+
+case ascii-declared-root
+parse <?xml version="1.0" encoding="US-ASCII"?><r>a&#xe9;b</r>
+sel 0
+
+case utf8-bom
+parseb64 77u/PHI+w6k8L3I+
+sel .
+
+# --------------------------------------------------------------------- XAdES shapes
+case xades-signature-skeleton
+parse <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="sig-1"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference URI=""><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>abc=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>ZGVm</ds:SignatureValue></ds:Signature>
+sel 0
+
+case xades-signed-info-subtree
+parse <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="sig-1"><ds:SignedInfo><ds:Reference URI="#r1"><ds:DigestValue>abc=</ds:DigestValue></ds:Reference></ds:SignedInfo></ds:Signature>
+sel 0.0
+
+case xades-object-with-qualifying-properties
+parse <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#sig-1"><xades:SignedProperties Id="sp-1"><xades:SignedSignatureProperties><xades:SigningTime>2024-01-15T10:30:00Z</xades:SigningTime></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature>
+sel 0.0.0.0
+
+case enveloped-document-with-signature
+parse <doc xmlns="urn:doc" id="d1">text<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo/></ds:Signature></doc>
+sel 0.1
+
+case reference-target-element
+parse <r xmlns:p="urn:P"><p:Data Id="d1">payload<p:Inner x="1"/></p:Data></r>
+sel 0.0
+
+# ------------------------------------------------------- encodings, second pass
+case utf16-no-bom
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2ACIAPwA+ADwAcgAgAHYAPQAiAOkAIgA+AHgAPAAvAHIAPg==
+sel .
+
+case utf16-no-bom-root
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2ACIAPwA+ADwAcgAgAHYAPQAiAOkAIgA+AHgAPAAvAHIAPg==
+sel 0
+
+case utf16-be-bom
+parseb64 /v8APAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYAIgA/AD4APAByAD4A6QA8AC8AcgA+
+sel .
+
+case utf16-le-bom
+parseb64 //48AD8AeABtAGwAIAB2AGUAcgBzAGkAbwBuAD0AIgAxAC4AMAAiACAAZQBuAGMAbwBkAGkAbgBnAD0AIgBVAFQARgAtADEANgAiAD8APgA8AHIAPgDpADwALwByAD4A
+sel .
+
+case utf16be-declared
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2AEIARQAiAD8APgA8AHIAPgDpADwALwByAD4=
+sel .
+
+case latin1-lowercase-declared
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjxyPuk8L3I+
+sel .
+
+case ascii-lowercase-declared
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiPz48cj5hPC9yPg==
+sel .
+
+# ------------------------------------------------ further namespace-fixup shapes
+case subtree-xml-prefixed-attr
+parse <r><a xml:lang="en" xml:space="preserve"><b/></a></r>
+sel 0.0
+
+case subtree-xml-id
+parse <r xmlns:p="urn:P"><p:a xml:id="i1"/></r>
+sel 0.0
+
+case subtree-prefix-shadowing-outer
+parse <r xmlns:p="urn:OUTER"><m xmlns:p="urn:INNER"><p:a/></m></r>
+sel 0.0.0
+
+case attr-in-default-ns-element
+parse <r xmlns="urn:D"><a b="1"/></r>
+sel 0.0
+
+case element-no-ns-inside-default-ns
+parse <r xmlns="urn:D"><a xmlns=""><b/></a></r>
+sel 0.0.0
+
+case many-namespaces-one-element
+parse <r xmlns:a="urn:a" xmlns:b="urn:b" xmlns:c="urn:c" xmlns="urn:d"><a:x b:y="1" c:z="2" w="3"/></r>
+sel 0.0
+
+case built-plain-attr-with-prefix
+build e - r; ap p:x v
+sel 0
+
+case built-plain-attr-prefix-declared
+build e urn:P p:r; ap p:x v
+sel 0
+
+case built-text-with-cdata-close
+build e - r; t a]]>b
+sel 0
+
+case built-attr-value-with-newlines
+build e - r; a - v a\nb\r\nc
+sel 0
+
+case built-nested-empty-elements
+build e - a; e - b; e - c
+sel 0
+
+case built-element-then-text-sibling
+build e - r; e - a; /; t tail
+sel 0
+
+# ------------------------------------------------ declared-encoding alias table
+# One case per encoding-name spelling internal/xmldom's decodeSource accepts. Xerces reports
+# getXmlEncoding() verbatim (probed), DomUtils.serializeNode copies it onto
+# OutputKeys.ENCODING, and that one property decides three things at once: the text of the
+# declaration (Encodings.convertJava2MimeEncoding), which characters are written literally
+# rather than as decimal character references (EncodingInfo.isInEncoding), and the charset the
+# bytes are actually written in. The payload carries one ASCII, one Latin-1, one BMP and one
+# astral character so all three are visible in every row.
+case enc-00
+# encoding="UTF-8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-01
+# encoding="utf-8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-02
+# encoding="UTF8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-03
+# encoding="utf8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmOCI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-04
+# encoding="US-ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-05
+# encoding="us-ascii"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-06
+# encoding="ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iQVNDSUkiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-07
+# encoding="ANSI_X3.4-1968"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iQU5TSV9YMy40LTE5NjgiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-08
+# encoding="iso646-us"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvNjQ2LXVzIj8+PHIgdj0iYSYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7Ij5iJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDs8L3I+
+sel .
+
+case enc-09
+# encoding="iso-ir-6"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLWlyLTYiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-10
+# encoding="ISO-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-11
+# encoding="iso-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-12
+# encoding="ISO8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPODg1OS0xIj8+PHIgdj0iYSYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7Ij5iJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDs8L3I+
+sel .
+
+case enc-13
+# encoding="ISO_8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPXzg4NTktMSI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-14
+# encoding="latin1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibGF0aW4xIj8+PHIgdj0iYSYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7Ij5iJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDs8L3I+
+sel .
+
+case enc-15
+# encoding="latin-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibGF0aW4tMSI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+divergence Xerces refuses the encoding name "latin-1" outright - it is not an IANA-registered
+divergence alias of ISO-8859-1 - so Java never reaches the serializer. internal/xmldom.decodeSource
+divergence accepts it and the failure only surfaces when the output encoding is looked up. Recorded,
+divergence not fixed: narrowing the parser is a change to Parse, not to the serializer.
+
+case enc-16
+# encoding="l1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibDEiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-17
+# encoding="cp819"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iY3A4MTkiPz48ciB2PSJhJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDsiPmImI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOzwvcj4=
+sel .
+
+case enc-18
+# encoding="IBM819"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSUJNODE5Ij8+PHIgdj0iYSYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7Ij5iJiN4ZTk7JiN4NGUyZDsmI3gxZjYwMDs8L3I+
+sel .
+
+case enc-19
+# encoding="iso-ir-100"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLWlyLTEwMCI/PjxyIHY9ImEmI3hlOTsmI3g0ZTJkOyYjeDFmNjAwOyI+YiYjeGU5OyYjeDRlMmQ7JiN4MWY2MDA7PC9yPg==
+sel .
+
+case enc-20
+# encoding="UTF-16BE"
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2AEIARQAiAD8APgA8AHIAIAB2AD0AIgBhACYAIwB4AGUAOQA7ACYAIwB4ADQAZQAyAGQAOwAmACMAeAAxAGYANgAwADAAOwAiAD4AYgAmACMAeABlADkAOwAmACMAeAA0AGUAMgBkADsAJgAjAHgAMQBmADYAMAAwADsAPAAvAHIAPg==
+sel .
+
+case enc-21
+# encoding="UTF-16LE"
+parseb64 PAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYATABFACIAPwA+ADwAcgAgAHYAPQAiAGEAJgAjAHgAZQA5ADsAJgAjAHgANABlADIAZAA7ACYAIwB4ADEAZgA2ADAAMAA7ACIAPgBiACYAIwB4AGUAOQA7ACYAIwB4ADQAZQAyAGQAOwAmACMAeAAxAGYANgAwADAAOwA8AC8AcgA+AA==
+sel .
+
+case enc-22
+# encoding="UTF-16"
+parseb64 /v8APAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYAIgA/AD4APAByACAAdgA9ACIAYQAmACMAeABlADkAOwAmACMAeAA0AGUAMgBkADsAJgAjAHgAMQBmADYAMAAwADsAIgA+AGIAJgAjAHgAZQA5ADsAJgAjAHgANABlADIAZAA7ACYAIwB4ADEAZgA2ADAAMAA7ADwALwByAD4=
+sel .
+
+# ------------------------------------------- getNodeBytes' lossy charset round trip
+# getNodeBytes does new String(bytes) and then getBytes(), both in the platform default
+# charset - UTF-8 since JEP 400. When serializeNode wrote something other than UTF-8 the
+# round trip is lossy, and how lossy depends on java.nio.charset.UTF_8's malformed-input
+# lengths: a truncated multi-byte sequence collapses to ONE U+FFFD while three separately
+# invalid bytes become three. Attribute values are the vehicle because they are the one
+# place the serializer leaves C1 bytes unescaped.
+case latin1-utf8-decoder-subparts
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIGE9IumpIiBiPSLDqSIgYz0i4ICAIiBkPSLtoIAiIGU9Iv/+IiBmPSL0kICAIiBnPSLwn5giLz4=
+sel .
+
+case latin1-utf8-decoder-tail
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIGE9InjpIi8+
+sel .
+
+# ------------------------------------------- declarations the serializer drops entirely
+# Both of these are internal/xmlc14n corpus documents. A redundant redeclaration of a
+# prefix already bound to the same URI, and any declaration of a prefix beginning with
+# "xml", are swallowed by NamespaceMappings.pushNamespace - so a serialize/parse round
+# trip does NOT preserve the physical canonical form, in Java exactly as here.
+case c14n-corpus-ns-superfluous
+parse <r xmlns:p="urn:1" Id="r"><p:c xmlns:p="urn:1" Id="c"><p:d xmlns:p="urn:1" Id="d"/></p:c></r>
+sel .
+
+case c14n-corpus-ns-superfluous-subtree
+parse <r xmlns:p="urn:1" Id="r"><p:c xmlns:p="urn:1" Id="c"><p:d xmlns:p="urn:1" Id="d"/></p:c></r>
+sel 0.0
+
+case c14n-corpus-ns-xml-prefix
+parse <r xmlns:xml="http://www.w3.org/XML/1998/namespace" Id="r"><c Id="c" xml:lang="en"><t Id="t"/></c></r>
+sel .
+
+case c14n-corpus-xml-prefix-subtree
+parse <r xmlns:xml="http://www.w3.org/XML/1998/namespace" Id="r"><c Id="c" xml:lang="en"><t Id="t"/></c></r>
+sel 0.0
+
+# ---------------------------------------- U+007F and U+00A0 under every output encoding
+# escapingNotNeeded hands anything from 127 up to EncodingInfo.isInEncoding, and its
+# first-byte rule answers differently for DEL than for NBSP under three of these five.
+case del-and-nbsp-00
+# encoding="US-ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48ciB2PSJhJiN4N2Y7YiYjeGEwO2MiPmQmI3g3ZjtlJiN4YTA7Zjwvcj4=
+sel .
+
+case del-and-nbsp-01
+# encoding="ISO-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyIHY9ImEmI3g3ZjtiJiN4YTA7YyI+ZCYjeDdmO2UmI3hhMDtmPC9yPg==
+sel .
+
+case del-and-nbsp-02
+# encoding="UTF-16BE"
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2AEIARQAiAD8APgA8AHIAIAB2AD0AIgBhACYAIwB4ADcAZgA7AGIAJgAjAHgAYQAwADsAYwAiAD4AZAAmACMAeAA3AGYAOwBlACYAIwB4AGEAMAA7AGYAPAAvAHIAPg==
+sel .
+
+case del-and-nbsp-03
+# encoding="UTF-16LE"
+parseb64 PAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYATABFACIAPwA+ADwAcgAgAHYAPQAiAGEAJgAjAHgANwBmADsAYgAmACMAeABhADAAOwBjACIAPgBkACYAIwB4ADcAZgA7AGUAJgAjAHgAYQAwADsAZgA8AC8AcgA+AA==
+sel .
+
+case del-and-nbsp-04
+# encoding="UTF-8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ciB2PSJhJiN4N2Y7YiYjeGEwO2MiPmQmI3g3ZjtlJiN4YTA7Zjwvcj4=
+sel .
+
+# ------------------------------------------------- systematic character sweep (UTF-8)
+# One case per (interesting code point x node kind). This is where the escaping tables,
+# the C0/C1 rule, the XML-1.0 validity check, the CDATA character-reference break-out and
+# the comment/PI raw-write paths all get exercised against the real serializer rather than
+# against a reading of it. Cases whose golden is ERROR are the ones Java refuses.
+case sweep-text-000001
+build e - r; t a\u0001b
+sel 0
+
+case sweep-attr-000001
+build e - r; a - v a\u0001b
+sel 0
+
+case sweep-cdata-000001
+build e - r; d a\u0001b
+sel 0
+
+case sweep-comment-000001
+build e - r; c a\u0001b
+sel 0
+
+case sweep-pi-000001
+build e - r; p t a\u0001b
+sel 0
+
+case sweep-text-000008
+build e - r; t a\u0008b
+sel 0
+
+case sweep-attr-000008
+build e - r; a - v a\u0008b
+sel 0
+
+case sweep-cdata-000008
+build e - r; d a\u0008b
+sel 0
+
+case sweep-comment-000008
+build e - r; c a\u0008b
+sel 0
+
+case sweep-pi-000008
+build e - r; p t a\u0008b
+sel 0
+
+case sweep-text-000009
+build e - r; t a\u0009b
+sel 0
+
+case sweep-attr-000009
+build e - r; a - v a\u0009b
+sel 0
+
+case sweep-cdata-000009
+build e - r; d a\u0009b
+sel 0
+
+case sweep-comment-000009
+build e - r; c a\u0009b
+sel 0
+
+case sweep-pi-000009
+build e - r; p t a\u0009b
+sel 0
+
+case sweep-text-00000A
+build e - r; t a\u000Ab
+sel 0
+
+case sweep-attr-00000A
+build e - r; a - v a\u000Ab
+sel 0
+
+case sweep-cdata-00000A
+build e - r; d a\u000Ab
+sel 0
+
+case sweep-comment-00000A
+build e - r; c a\u000Ab
+sel 0
+
+case sweep-pi-00000A
+build e - r; p t a\u000Ab
+sel 0
+
+case sweep-text-00000B
+build e - r; t a\u000Bb
+sel 0
+
+case sweep-attr-00000B
+build e - r; a - v a\u000Bb
+sel 0
+
+case sweep-cdata-00000B
+build e - r; d a\u000Bb
+sel 0
+
+case sweep-comment-00000B
+build e - r; c a\u000Bb
+sel 0
+
+case sweep-pi-00000B
+build e - r; p t a\u000Bb
+sel 0
+
+case sweep-text-00000C
+build e - r; t a\u000Cb
+sel 0
+
+case sweep-attr-00000C
+build e - r; a - v a\u000Cb
+sel 0
+
+case sweep-cdata-00000C
+build e - r; d a\u000Cb
+sel 0
+
+case sweep-comment-00000C
+build e - r; c a\u000Cb
+sel 0
+
+case sweep-pi-00000C
+build e - r; p t a\u000Cb
+sel 0
+
+case sweep-text-00000D
+build e - r; t a\u000Db
+sel 0
+
+case sweep-attr-00000D
+build e - r; a - v a\u000Db
+sel 0
+
+case sweep-cdata-00000D
+build e - r; d a\u000Db
+sel 0
+
+case sweep-comment-00000D
+build e - r; c a\u000Db
+sel 0
+
+case sweep-pi-00000D
+build e - r; p t a\u000Db
+sel 0
+
+case sweep-text-00001F
+build e - r; t a\u001Fb
+sel 0
+
+case sweep-attr-00001F
+build e - r; a - v a\u001Fb
+sel 0
+
+case sweep-cdata-00001F
+build e - r; d a\u001Fb
+sel 0
+
+case sweep-comment-00001F
+build e - r; c a\u001Fb
+sel 0
+
+case sweep-pi-00001F
+build e - r; p t a\u001Fb
+sel 0
+
+case sweep-text-000020
+build e - r; t a\u0020b
+sel 0
+
+case sweep-attr-000020
+build e - r; a - v a\u0020b
+sel 0
+
+case sweep-cdata-000020
+build e - r; d a\u0020b
+sel 0
+
+case sweep-comment-000020
+build e - r; c a\u0020b
+sel 0
+
+case sweep-pi-000020
+build e - r; p t a\u0020b
+sel 0
+
+case sweep-text-000022
+build e - r; t a\u0022b
+sel 0
+
+case sweep-attr-000022
+build e - r; a - v a\u0022b
+sel 0
+
+case sweep-cdata-000022
+build e - r; d a\u0022b
+sel 0
+
+case sweep-comment-000022
+build e - r; c a\u0022b
+sel 0
+
+case sweep-pi-000022
+build e - r; p t a\u0022b
+sel 0
+
+case sweep-text-000026
+build e - r; t a\u0026b
+sel 0
+
+case sweep-attr-000026
+build e - r; a - v a\u0026b
+sel 0
+
+case sweep-cdata-000026
+build e - r; d a\u0026b
+sel 0
+
+case sweep-comment-000026
+build e - r; c a\u0026b
+sel 0
+
+case sweep-pi-000026
+build e - r; p t a\u0026b
+sel 0
+
+case sweep-text-000027
+build e - r; t a\u0027b
+sel 0
+
+case sweep-attr-000027
+build e - r; a - v a\u0027b
+sel 0
+
+case sweep-cdata-000027
+build e - r; d a\u0027b
+sel 0
+
+case sweep-comment-000027
+build e - r; c a\u0027b
+sel 0
+
+case sweep-pi-000027
+build e - r; p t a\u0027b
+sel 0
+
+case sweep-text-00002D
+build e - r; t a\u002Db
+sel 0
+
+case sweep-attr-00002D
+build e - r; a - v a\u002Db
+sel 0
+
+case sweep-cdata-00002D
+build e - r; d a\u002Db
+sel 0
+
+case sweep-comment-00002D
+build e - r; c a\u002Db
+sel 0
+
+case sweep-pi-00002D
+build e - r; p t a\u002Db
+sel 0
+
+case sweep-text-00003C
+build e - r; t a\u003Cb
+sel 0
+
+case sweep-attr-00003C
+build e - r; a - v a\u003Cb
+sel 0
+
+case sweep-cdata-00003C
+build e - r; d a\u003Cb
+sel 0
+
+case sweep-comment-00003C
+build e - r; c a\u003Cb
+sel 0
+
+case sweep-pi-00003C
+build e - r; p t a\u003Cb
+sel 0
+
+case sweep-text-00003E
+build e - r; t a\u003Eb
+sel 0
+
+case sweep-attr-00003E
+build e - r; a - v a\u003Eb
+sel 0
+
+case sweep-cdata-00003E
+build e - r; d a\u003Eb
+sel 0
+
+case sweep-comment-00003E
+build e - r; c a\u003Eb
+sel 0
+
+case sweep-pi-00003E
+build e - r; p t a\u003Eb
+sel 0
+
+case sweep-text-00003F
+build e - r; t a\u003Fb
+sel 0
+
+case sweep-attr-00003F
+build e - r; a - v a\u003Fb
+sel 0
+
+case sweep-cdata-00003F
+build e - r; d a\u003Fb
+sel 0
+
+case sweep-comment-00003F
+build e - r; c a\u003Fb
+sel 0
+
+case sweep-pi-00003F
+build e - r; p t a\u003Fb
+sel 0
+
+case sweep-text-00005D
+build e - r; t a\u005Db
+sel 0
+
+case sweep-attr-00005D
+build e - r; a - v a\u005Db
+sel 0
+
+case sweep-cdata-00005D
+build e - r; d a\u005Db
+sel 0
+
+case sweep-comment-00005D
+build e - r; c a\u005Db
+sel 0
+
+case sweep-pi-00005D
+build e - r; p t a\u005Db
+sel 0
+
+case sweep-text-00007E
+build e - r; t a\u007Eb
+sel 0
+
+case sweep-attr-00007E
+build e - r; a - v a\u007Eb
+sel 0
+
+case sweep-cdata-00007E
+build e - r; d a\u007Eb
+sel 0
+
+case sweep-comment-00007E
+build e - r; c a\u007Eb
+sel 0
+
+case sweep-pi-00007E
+build e - r; p t a\u007Eb
+sel 0
+
+case sweep-text-00007F
+build e - r; t a\u007Fb
+sel 0
+
+case sweep-attr-00007F
+build e - r; a - v a\u007Fb
+sel 0
+
+case sweep-cdata-00007F
+build e - r; d a\u007Fb
+sel 0
+
+case sweep-comment-00007F
+build e - r; c a\u007Fb
+sel 0
+
+case sweep-pi-00007F
+build e - r; p t a\u007Fb
+sel 0
+
+case sweep-text-000080
+build e - r; t a\u0080b
+sel 0
+
+case sweep-attr-000080
+build e - r; a - v a\u0080b
+sel 0
+
+case sweep-cdata-000080
+build e - r; d a\u0080b
+sel 0
+
+case sweep-comment-000080
+build e - r; c a\u0080b
+sel 0
+
+case sweep-pi-000080
+build e - r; p t a\u0080b
+sel 0
+
+case sweep-text-000085
+build e - r; t a\u0085b
+sel 0
+
+case sweep-attr-000085
+build e - r; a - v a\u0085b
+sel 0
+
+case sweep-cdata-000085
+build e - r; d a\u0085b
+sel 0
+
+case sweep-comment-000085
+build e - r; c a\u0085b
+sel 0
+
+case sweep-pi-000085
+build e - r; p t a\u0085b
+sel 0
+
+case sweep-text-00009F
+build e - r; t a\u009Fb
+sel 0
+
+case sweep-attr-00009F
+build e - r; a - v a\u009Fb
+sel 0
+
+case sweep-cdata-00009F
+build e - r; d a\u009Fb
+sel 0
+
+case sweep-comment-00009F
+build e - r; c a\u009Fb
+sel 0
+
+case sweep-pi-00009F
+build e - r; p t a\u009Fb
+sel 0
+
+case sweep-text-0000A0
+build e - r; t a\u00A0b
+sel 0
+
+case sweep-attr-0000A0
+build e - r; a - v a\u00A0b
+sel 0
+
+case sweep-cdata-0000A0
+build e - r; d a\u00A0b
+sel 0
+
+case sweep-comment-0000A0
+build e - r; c a\u00A0b
+sel 0
+
+case sweep-pi-0000A0
+build e - r; p t a\u00A0b
+sel 0
+
+case sweep-text-0000FF
+build e - r; t a\u00FFb
+sel 0
+
+case sweep-attr-0000FF
+build e - r; a - v a\u00FFb
+sel 0
+
+case sweep-cdata-0000FF
+build e - r; d a\u00FFb
+sel 0
+
+case sweep-comment-0000FF
+build e - r; c a\u00FFb
+sel 0
+
+case sweep-pi-0000FF
+build e - r; p t a\u00FFb
+sel 0
+
+case sweep-text-000100
+build e - r; t a\u0100b
+sel 0
+
+case sweep-attr-000100
+build e - r; a - v a\u0100b
+sel 0
+
+case sweep-cdata-000100
+build e - r; d a\u0100b
+sel 0
+
+case sweep-comment-000100
+build e - r; c a\u0100b
+sel 0
+
+case sweep-pi-000100
+build e - r; p t a\u0100b
+sel 0
+
+case sweep-text-002028
+build e - r; t a\u2028b
+sel 0
+
+case sweep-attr-002028
+build e - r; a - v a\u2028b
+sel 0
+
+case sweep-cdata-002028
+build e - r; d a\u2028b
+sel 0
+
+case sweep-comment-002028
+build e - r; c a\u2028b
+sel 0
+
+case sweep-pi-002028
+build e - r; p t a\u2028b
+sel 0
+
+case sweep-text-00D7FF
+build e - r; t a\uD7FFb
+sel 0
+
+case sweep-attr-00D7FF
+build e - r; a - v a\uD7FFb
+sel 0
+
+case sweep-cdata-00D7FF
+build e - r; d a\uD7FFb
+sel 0
+
+case sweep-comment-00D7FF
+build e - r; c a\uD7FFb
+sel 0
+
+case sweep-pi-00D7FF
+build e - r; p t a\uD7FFb
+sel 0
+
+case sweep-text-00E000
+build e - r; t a\uE000b
+sel 0
+
+case sweep-attr-00E000
+build e - r; a - v a\uE000b
+sel 0
+
+case sweep-cdata-00E000
+build e - r; d a\uE000b
+sel 0
+
+case sweep-comment-00E000
+build e - r; c a\uE000b
+sel 0
+
+case sweep-pi-00E000
+build e - r; p t a\uE000b
+sel 0
+
+case sweep-text-00FFFD
+build e - r; t a\uFFFDb
+sel 0
+
+case sweep-attr-00FFFD
+build e - r; a - v a\uFFFDb
+sel 0
+
+case sweep-cdata-00FFFD
+build e - r; d a\uFFFDb
+sel 0
+
+case sweep-comment-00FFFD
+build e - r; c a\uFFFDb
+sel 0
+
+case sweep-pi-00FFFD
+build e - r; p t a\uFFFDb
+sel 0
+
+case sweep-text-00FFFE
+build e - r; t a\uFFFEb
+sel 0
+
+case sweep-attr-00FFFE
+build e - r; a - v a\uFFFEb
+sel 0
+
+case sweep-cdata-00FFFE
+build e - r; d a\uFFFEb
+sel 0
+
+case sweep-comment-00FFFE
+build e - r; c a\uFFFEb
+sel 0
+
+case sweep-pi-00FFFE
+build e - r; p t a\uFFFEb
+sel 0
+
+case sweep-text-00FFFF
+build e - r; t a\uFFFFb
+sel 0
+
+case sweep-attr-00FFFF
+build e - r; a - v a\uFFFFb
+sel 0
+
+case sweep-cdata-00FFFF
+build e - r; d a\uFFFFb
+sel 0
+
+case sweep-comment-00FFFF
+build e - r; c a\uFFFFb
+sel 0
+
+case sweep-pi-00FFFF
+build e - r; p t a\uFFFFb
+sel 0
+
+case sweep-text-010000
+build e - r; t a\uD800\uDC00b
+sel 0
+
+case sweep-attr-010000
+build e - r; a - v a\uD800\uDC00b
+sel 0
+
+case sweep-cdata-010000
+build e - r; d a\uD800\uDC00b
+sel 0
+
+case sweep-comment-010000
+build e - r; c a\uD800\uDC00b
+sel 0
+
+case sweep-pi-010000
+build e - r; p t a\uD800\uDC00b
+sel 0
+
+case sweep-text-01F600
+build e - r; t a\uD83D\uDE00b
+sel 0
+
+case sweep-attr-01F600
+build e - r; a - v a\uD83D\uDE00b
+sel 0
+
+case sweep-cdata-01F600
+build e - r; d a\uD83D\uDE00b
+sel 0
+
+case sweep-comment-01F600
+build e - r; c a\uD83D\uDE00b
+sel 0
+
+case sweep-pi-01F600
+build e - r; p t a\uD83D\uDE00b
+sel 0
+
+case sweep-text-10FFFF
+build e - r; t a\uDBFF\uDFFFb
+sel 0
+
+case sweep-attr-10FFFF
+build e - r; a - v a\uDBFF\uDFFFb
+sel 0
+
+case sweep-cdata-10FFFF
+build e - r; d a\uDBFF\uDFFFb
+sel 0
+
+case sweep-comment-10FFFF
+build e - r; c a\uDBFF\uDFFFb
+sel 0
+
+case sweep-pi-10FFFF
+build e - r; p t a\uDBFF\uDFFFb
+sel 0
+
+# ------------------------------------ supplementary characters written without escaping
+# Text and attribute values turn every supplementary character into a decimal character
+# reference, so the only way one reaches the byte writer literally is inside CDATA, a
+# comment, a processing instruction or a name. Which writer that is depends on the exact
+# spelling of the encoding, and they do not agree.
+case astral-raw-03FFFF
+build e - r; d a\uD8BF\uDFFFb
+sel 0
+
+case astral-raw-040000
+build e - r; d a\uD8C0\uDC00b
+sel 0
+
+case astral-raw-040001
+build e - r; d a\uD8C0\uDC01b
+sel 0
+
+case astral-raw-07FFFF
+build e - r; d a\uD9BF\uDFFFb
+sel 0
+
+case astral-raw-080000
+build e - r; d a\uD9C0\uDC00b
+sel 0
+
+case astral-raw-0E0100
+build e - r; d a\uDB40\uDD00b
+sel 0
+
+case astral-raw-10FFFF
+build e - r; d a\uDBFF\uDFFFb
+sel 0
+
+case astral-raw-utf8alias-01F600
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxyPjwhW0NEQVRBW2Hwn5iAYl1dPjwvcj4=
+sel .
+
+case astral-raw-utf8alias-040000
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxyPjwhW0NEQVRBW2HxgICAYl1dPjwvcj4=
+sel .
+
+case astral-raw-utf8alias-10FFFF
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxyPjwhW0NEQVRBW2H0j7+/Yl1dPjwvcj4=
+sel .
+
+case astral-raw-utf8dash-01F600
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cj48IVtDREFUQVth8J+YgGJdXT48L3I+
+sel .
+
+case astral-raw-utf8dash-040000
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cj48IVtDREFUQVth8YCAgGJdXT48L3I+
+sel .
+
+case astral-raw-utf8dash-10FFFF
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cj48IVtDREFUQVth9I+/v2JdXT48L3I+
+sel .
+
+# ------------------------------------- unencodable characters on the raw-write path
+# Comment and processing-instruction data are written straight to the byte writer with no
+# escaping, so a character the output encoding cannot carry is left to that writer - and
+# which writer it is depends on the exact spelling of the encoding.
+case rawwrite-00
+# encoding="US-ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48cj48IS0tYSYjeGU5O2ImI3g0ZTJkO2MtLT48IVtDREFUQVtkXV0+PC9yPg==
+sel .
+
+case rawwrite-01
+# encoding="us-ascii"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiPz48cj48IS0tYSYjeGU5O2ImI3g0ZTJkO2MtLT48IVtDREFUQVtkXV0+PC9yPg==
+sel .
+
+case rawwrite-02
+# encoding="ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iQVNDSUkiPz48cj48IS0tYSYjeGU5O2ImI3g0ZTJkO2MtLT48IVtDREFUQVtkXV0+PC9yPg==
+sel .
+
+case rawwrite-03
+# encoding="ANSI_X3.4-1968"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iQU5TSV9YMy40LTE5NjgiPz48cj48IS0tYSYjeGU5O2ImI3g0ZTJkO2MtLT48IVtDREFUQVtkXV0+PC9yPg==
+sel .
+
+case rawwrite-04
+# encoding="ISO-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyPjwhLS1hJiN4ZTk7YiYjeDRlMmQ7Yy0tPjwhW0NEQVRBW2RdXT48L3I+
+sel .
+
+case rawwrite-05
+# encoding="latin1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibGF0aW4xIj8+PHI+PCEtLWEmI3hlOTtiJiN4NGUyZDtjLS0+PCFbQ0RBVEFbZF1dPjwvcj4=
+sel .
+
+case rawwrite-06
+# encoding="UTF-16BE"
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2AEIARQAiAD8APgA8AHIAPgA8ACEALQAtAGEAJgAjAHgAZQA5ADsAYgAmACMAeAA0AGUAMgBkADsAYwAtAC0APgA8ACEAWwBDAEQAQQBUAEEAWwBkAF0AXQA+ADwALwByAD4=
+sel .
+
+# --------------------------- characters the declared encoding cannot carry, after surgery
+# Each of these parses a document in some encoding and then grafts a comment, a processing
+# instruction, a CDATA section and a text node carrying characters outside it. The text
+# node escapes them, the CDATA section escapes only what its own rule rejects, and the
+# comment and the processing instruction hand them to the byte writer unescaped - so this
+# is where the writer's substitution behaviour, which differs between spellings of the
+# same encoding, becomes observable.
+case graft-00
+# encoding="UTF-8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ci8+
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-01
+# encoding="UTF8"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxyLz4=
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-02
+# encoding="US-ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48ci8+
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-03
+# encoding="us-ascii"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXMtYXNjaWkiPz48ci8+
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-04
+# encoding="ASCII"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iQVNDSUkiPz48ci8+
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-05
+# encoding="ISO-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxyLz4=
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-06
+# encoding="iso-8859-1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/PjxyLz4=
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-07
+# encoding="latin1"
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibGF0aW4xIj8+PHIvPg==
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-08
+# encoding="UTF-16BE"
+parseb64 ADwAPwB4AG0AbAAgAHYAZQByAHMAaQBvAG4APQAiADEALgAwACIAIABlAG4AYwBvAGQAaQBuAGcAPQAiAFUAVABGAC0AMQA2AEIARQAiAD8APgA8AHIALwA+
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-09
+# encoding="UTF-16LE"
+parseb64 PAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYATABFACIAPwA+ADwAcgAvAD4A
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+case graft-10
+# encoding="UTF-16"
+parseb64 /v8APAA/AHgAbQBsACAAdgBlAHIAcwBpAG8AbgA9ACIAMQAuADAAIgAgAGUAbgBjAG8AZABpAG4AZwA9ACIAVQBUAEYALQAxADYAIgA/AD4APAByAC8APg==
+build c aéb中c😀d; p t eéf中g; d héi中j; t kél中m
+sel .
+
+# ------------------------------------------------------ seeded randomized differential
+# 140 pseudo-random trees (Python's Mersenne twister, seed 20260813) built from the same
+# alphabet of namespaces, prefixes, node kinds and awkward characters as the hand-written
+# cases, each serialized from a randomly chosen node. Selectors that do not resolve are
+# recorded as errors on both sides. Regenerate with gen/genrand.py rather than editing.
+case rand-000
+build e urn:2 q:é; a urn:1 p:y \s; a http://www.w3.org/2000/09/xmldsig# n1:y ->\s'>\t; a http://www.w3.org/2000/09/xmldsig# p:x -; d \n-
+sel 0
+
+case rand-001
+build e urn:3 ds:b; a http://www.w3.org/2000/09/xmldsig# p:lang b\s\t-<]; a urn:3 q:Id &; d \u4E2Da; t "
+sel 0
+
+case rand-002
+build e - a; a http://www.w3.org/2000/09/xmldsig# x \r\n<
+sel 0
+
+case rand-003
+build e urn:2 xmlfoo:b; c >>]\t\s
+sel 0
+
+case rand-004
+build e - b; a urn:3 n1:lang \u00FC<a\ta; a http://www.w3.org/2000/09/xmldsig# x:y b; a urn:1 ds:y >'<a; c \r<]>b\s; p pi7 <\u00FC; e urn:2 Data; a http://www.w3.org/2000/09/xmldsig# n1:y \u00E9; t -; c \s<<'; /
+sel .
+
+case rand-005
+build e urn:2 x:Sig; a urn:1 ds:x \s>\n\u4E2D><; a urn:2 q:x -\t\u00E9-; a http://www.w3.org/2000/09/xmldsig# p:lang "\ra; e http://www.w3.org/2000/09/xmldsig# p:é; a http://www.w3.org/2000/09/xmldsig# q:x >\u4E2D>; a urn:2 xmlfoo:x <\u00E9; a urn:1 xmlfoo:Id <a; d \r>]a; d \r<\r; t \n; /; t &\r>\u00FC"; e http://www.w3.org/2000/09/xmldsig# p:b; a urn:2 n1:Id \s>]b\u4E2D"; /
+sel 0
+
+case rand-006
+build e urn:3 ds:Data; c \u00E9\n"?&\u4E2D; e http://www.w3.org/2000/09/xmldsig# q:Data; a urn:1 x \u00FC\s\u00FC; t >; /; t \t&>\u00FCb
+sel .
+
+case rand-007
+build e urn:3 p:Data; a urn:1 q:x <; a urn:1 ds:Id \sa; p pi2 -\r?>\u4E2D; t \r>b\u00E9\u4E2D-; e urn:3 a; a urn:1 x:y \s; a urn:3 Id b\s&; e urn:1 p:é; t \u00FC; e http://www.w3.org/2000/09/xmldsig# ds:a; c \s; /; /; /
+sel 0
+
+case rand-008
+build e - Data; a urn:2 p:lang >\na; a urn:2 x <\u00FC"; e http://www.w3.org/2000/09/xmldsig# ds:a; a urn:2 p:lang \n\u4E2D>\na\u00FC; t &a; /
+sel .
+
+case rand-009
+build e - a; a urn:1 xmlfoo:y <; a urn:2 lang \n\n\u00FC; a urn:2 ds:lang \s\r&; t \u00FC"<&\u00E9; p pi7 \u00E9"b
+sel .
+
+case rand-010
+build e urn:1 xmlfoo:a; a urn:1 n1:x >b\ra\t; a http://www.w3.org/2000/09/xmldsig# ds:y "a>'\r; e urn:2 x:Sig; a urn:1 p:lang b?>\u00E9-; a urn:2 lang -b; a urn:2 n1:Id \n>-; /; e - é; a urn:3 x:x ]--]""; t >\r\n"; d \s\n-?; t b; /
+sel 0.0
+
+case rand-011
+build e urn:1 q:Data; a urn:3 p:lang ]\t\s<\u4E2Db; a urn:2 xmlfoo:Id \r; a - y >; t '']
+sel 0
+
+case rand-012
+build e - a; a urn:3 x:Id >>\s; e urn:3 ds:Sig; a - x \u00FC\t?>; a http://www.w3.org/2000/09/xmldsig# y ]><&\s; t -\s\t; /; e urn:1 x:Sig; p pi6 <\u00FC\r\u4E2D\t; t ?\n>; d \r&?; /; p pi6 \t?<\s'
+sel 0
+
+case rand-013
+build e http://www.w3.org/2000/09/xmldsig# ds:é; a urn:2 p:Id ]"\u00E9; a urn:1 xmlfoo:y \u00E9\u4E2D\u4E2D&b; a urn:3 p:Id \n\u00FC\s]\u00E9; t <
+sel .
+
+case rand-014
+build e urn:2 ds:Data; a - lang \u4E2D-'; a - y '?>; e urn:3 Sig; a - x &"\n\r\r; a urn:3 p:y ]; t a>; t >\s; /
+sel 0
+
+case rand-015
+build e urn:2 x:é; a urn:1 ds:Id '>\u4E2D\s\s; a http://www.w3.org/2000/09/xmldsig# y <\n>?; e - a; a urn:1 x:lang \r; /; t "'>\u00FC; d -\s<"\n
+sel .
+
+case rand-016
+build e urn:3 n1:a; a http://www.w3.org/2000/09/xmldsig# p:Id \s]; a urn:1 p:Id >-\t>>; a http://www.w3.org/2000/09/xmldsig# x:y >; t ''b>>'
+sel .
+
+case rand-017
+build e urn:1 q:Data; a http://www.w3.org/2000/09/xmldsig# ds:lang "; a urn:2 p:lang ]\t\n"; a http://www.w3.org/2000/09/xmldsig# p:lang '\n\u00E9\s?; e - Data; a urn:1 Id \r; a urn:1 xmlfoo:lang a\s"; a urn:2 xmlfoo:Id "\n\s\u4E2D; t \u4E2D; /; e urn:3 x:Data; /
+sel .
+
+case rand-018
+build e http://www.w3.org/2000/09/xmldsig# é; a http://www.w3.org/2000/09/xmldsig# ds:x b\s]; a - lang >
+sel .
+
+case rand-019
+build e urn:1 p:a
+sel .
+
+case rand-020
+build e - b; p pi5 \r\sb"\s\r
+sel .
+
+case rand-021
+build e urn:1 xmlfoo:Sig; t \u00FCb"\u00FCb
+sel 0
+
+case rand-022
+build e urn:1 ds:a; p pi7 &<\t]\u4E2D]; e urn:2 ds:é; a urn:3 ds:lang \r>; a urn:1 ds:Id \u00E9&\u00E9; /
+sel .
+
+case rand-023
+build e http://www.w3.org/2000/09/xmldsig# x:Sig; a urn:1 ds:Id b; e - a; /
+sel .
+
+case rand-024
+build e urn:1 xmlfoo:Data; a - y -; a urn:3 y \r; a http://www.w3.org/2000/09/xmldsig# xmlfoo:Id \s\s\s; e http://www.w3.org/2000/09/xmldsig# p:é; a http://www.w3.org/2000/09/xmldsig# n1:lang >; a urn:1 x \t>b<b; t \s\sb; t '&>; t a\s&?\t?; /
+sel 0
+
+case rand-025
+build e http://www.w3.org/2000/09/xmldsig# n1:Data; a urn:3 n1:Id <-\n>; d >\s"\s]; d \u00E9b\u00FC
+sel .
+
+case rand-026
+build e urn:2 x:b; a urn:3 x:x &\s\n>'b; a urn:2 ds:Id \u00E9-; e - é; a urn:3 xmlfoo:lang b; a - lang ]b; t a-\u00E9; c \u00E9<\u00FC\sa; d &'\s\u00E9>\u00FC; /; e http://www.w3.org/2000/09/xmldsig# b; a - lang >a&\s-b; /
+sel .
+
+case rand-027
+build e urn:2 p:é; a urn:3 ds:y <"a<; a - lang \u00E9a\u4E2D
+sel 0
+
+case rand-028
+build e - é; a http://www.w3.org/2000/09/xmldsig# ds:lang ?'"; a - x "\r""'; e urn:1 Data; a urn:3 p:x \u00E9']"; a urn:1 y >\u00FC>; /
+sel 0.0
+
+case rand-029
+build e urn:2 q:a; a - x -\u00E9'\u00E9a
+sel .
+
+case rand-030
+build e urn:3 b; a urn:1 n1:y <a<]; a urn:1 ds:y -b; c ]'?>\u00E9b; c "a\s\rab; e urn:2 é; a http://www.w3.org/2000/09/xmldsig# ds:x "]<\s; a urn:1 q:y ]?<\u4E2D'; d &\s; e urn:1 xmlfoo:a; a urn:3 x:y \s\na'; e http://www.w3.org/2000/09/xmldsig# p:é; a urn:3 ds:y '<; a - lang \u00E9; a urn:1 lang \u4E2D]\t\n&; t >a\u4E2D\s\r]; t \s\u00FC?\u4E2Da>; /; /; /
+sel 0.2
+
+case rand-031
+build e urn:2 p:Sig; a - lang \s\u00FC; a http://www.w3.org/2000/09/xmldsig# n1:Id \s\u00FC'b-\u00E9; a http://www.w3.org/2000/09/xmldsig# q:lang <'\s<&\s; d b??
+sel 0
+
+case rand-032
+build e urn:1 xmlfoo:a; a urn:3 x:Id >
+sel .
+
+case rand-033
+build e urn:1 Data; e - a; a http://www.w3.org/2000/09/xmldsig# x:y \u4E2D<<; a urn:3 n1:lang \n"; p pi8 \s>-\t--; c -; /; e urn:2 q:Data; d >a<; /; p pi1 ->\s'"
+sel .
+
+case rand-034
+build e http://www.w3.org/2000/09/xmldsig# q:Data; a urn:3 ds:x \u00E9><]; a http://www.w3.org/2000/09/xmldsig# q:x \r\u4E2D; a - lang \u00FC<; c ?\t\s; e urn:1 p:b; a urn:3 xmlfoo:x '; c "-\u4E2D\s\r; /
+sel 0
+
+case rand-035
+build e urn:2 ds:a; a http://www.w3.org/2000/09/xmldsig# xmlfoo:lang b-"b"; t >>]<>\n
+sel .
+
+case rand-036
+build e urn:2 q:Sig; a http://www.w3.org/2000/09/xmldsig# xmlfoo:y ]\n; a urn:2 x:x >>&\u00FC\s; a http://www.w3.org/2000/09/xmldsig# n1:y ''?\s?; t \t\u00FCa->; e - é; d \s; /; e urn:3 p:Sig; a - lang ]\s\t\n; t \t; p pi6 \u4E2D\u00FC\s>\u4E2D\n; e urn:2 Data; a urn:1 p:x ->'; /; /
+sel 0
+
+case rand-037
+build e http://www.w3.org/2000/09/xmldsig# Sig; a urn:3 p:Id \s; a urn:2 lang "\r; a urn:1 p:x \u4E2D
+sel .
+
+case rand-038
+build e http://www.w3.org/2000/09/xmldsig# x:Data; a urn:2 xmlfoo:Id -'; p pi6 \r><>-
+sel 0
+
+case rand-039
+build e - b; a urn:3 p:y \u00E9a\u4E2D\r>
+sel 0
+
+case rand-040
+build e http://www.w3.org/2000/09/xmldsig# q:Sig; a - x a-\s; p pi3 -\u00E9\t\t
+sel .
+
+case rand-041
+build e urn:1 a; d \t; e - é; /; d ""\s<\s
+sel .
+
+case rand-042
+build e http://www.w3.org/2000/09/xmldsig# xmlfoo:Data; a urn:1 xmlfoo:Id &'ba; a urn:3 ds:y \s; a urn:1 q:lang \u00FC?\na\sb
+sel 0
+
+case rand-043
+build e urn:2 é; a urn:3 x:Id \u00E9>
+sel .
+
+case rand-044
+build e - Sig; t >>\sb
+sel 0
+
+case rand-045
+build e - é; a - x >\sa>; a http://www.w3.org/2000/09/xmldsig# xmlfoo:Id ?\s\sa\u4E2Da; e urn:1 p:b; a - lang &\u4E2D>'>\u00FC; e - Sig; a http://www.w3.org/2000/09/xmldsig# q:x ]; a http://www.w3.org/2000/09/xmldsig# xmlfoo:Id \t\u4E2D; a http://www.w3.org/2000/09/xmldsig# p:y -"\s\u00E9; t \t; c \t\u4E2D>'\s-; e urn:2 n1:a; a urn:3 ds:x ?\s\s; d ']'\r-; t >\u4E2D>>a; t >\u00FC'b\s-; /; /; e urn:3 q:b; /; e urn:3 ds:Sig; a urn:1 Id \s; a - x >b>b\s\r; e urn:2 p:a; a - x ?; t b>; /; t -\n\u00E9'; t \u00E9?<&<; /; /; e urn:1 p:Data; a http://www.w3.org/2000/09/xmldsig# q:y <<]?; a - x \t\u00E9\r>\r<; a http://www.w3.org/2000/09/xmldsig# q:x -\t\t\s; d \u4E2Da; e urn:3 x:é; a urn:1 n1:x \t>\s\u4E2D]; a - y "<a?\t'; /; d \u4E2D; /; t &\t]>\r
+sel 0.0.2
+
+case rand-046
+build e urn:3 x:Sig; a http://www.w3.org/2000/09/xmldsig# n1:Id \s\r>\u00FC; a - y b; a urn:2 xmlfoo:y \u4E2D?
+sel .
+
+case rand-047
+build e urn:1 n1:é; a urn:2 y \u00E9\t; a http://www.w3.org/2000/09/xmldsig# xmlfoo:y \u00E9; a urn:3 q:Id \s\t\u4E2D\r\u00E9&; p pi4 '; p pi3 \t?]\t\s\t; e - é; /
+sel 0.2
+
+case rand-048
+build e urn:2 p:Sig; a http://www.w3.org/2000/09/xmldsig# p:lang \u00FC?""; a urn:1 y <-; e - Data; d \r>]a\u4E2D-; c \t"\u4E2D; /; c \s
+sel 0
+
+case rand-049
+build e urn:1 xmlfoo:a; a urn:1 x >; a urn:3 x:x \u00E9]<-; a urn:1 lang \r\s\u4E2D; c b"
+sel .
+
+case rand-050
+build e urn:3 q:Sig; a urn:1 xmlfoo:Id >a\s\s\r-; a urn:2 p:Id bb\u00FC>"; a urn:3 p:Id ]\u00FCb?\sb; e urn:3 p:é; p pi5 \n&; t \s\n\u4E2D??; p pi3 >?; /
+sel 0.0
+
+case rand-051
+build e urn:3 q:Sig; a http://www.w3.org/2000/09/xmldsig# n1:y "bb<; a http://www.w3.org/2000/09/xmldsig# x b; a - x >\n\s\u00FC>\r; t \t]\u00FC&\sb; c b>\s
+sel 0
+
+case rand-052
+build e - Data; a urn:1 p:Id \u00FC\t; a urn:1 xmlfoo:x \u00E9>\u00E9\u00E9]a
+sel .
+
+case rand-053
+build e urn:1 b; e urn:2 n1:Data; a urn:3 x:lang a">"&; c \n"'\u00FC>>; t \ra&\n<\s; /
+sel 0.0
+
+case rand-054
+build e - é; a http://www.w3.org/2000/09/xmldsig# Id \s
+sel .
+
+case rand-055
+build e urn:1 x:é; e http://www.w3.org/2000/09/xmldsig# q:é; a http://www.w3.org/2000/09/xmldsig# lang ]; e urn:3 p:Data; a - Id a\u00E9a>\r; a http://www.w3.org/2000/09/xmldsig# q:lang >\n\u4E2D; a urn:2 lang \r; t ?\s\u4E2D]\t<; t \t?\u4E2D-\s?; e urn:3 n1:Sig; t \u00E9; t >>'\s\s\s; /; /; c <\u00E9; c \u4E2D\s\n; /; e - é; a urn:2 n1:lang \s>\u00E9; a urn:3 x:x a; a - y \sb\s; t \u00E9; c \t<\r>'<; /; t \u00FC\u00FC\u4E2D>\s
+sel 0
+
+case rand-056
+build e urn:1 q:a; a urn:3 lang a"-\r\u00E9b
+sel .
+
+case rand-057
+build e - b; e - a; a urn:1 x:Id '\u00E9\s; a urn:2 ds:Id \u00E9\u00FC>b-\u4E2D; c \u00FC"\t\sa&; d \s&; c b&\r; /; d \u4E2D\u00E9\r\n
+sel .
+
+case rand-058
+build e urn:1 n1:é; a urn:3 x:x \t<\t\t\s\r; a urn:3 ds:lang \n]'\s; e - b; a urn:2 ds:x \t>\u00E9; a - y \s\s; /; t >&; c ]\s>\s\u00FC\n
+sel 0.0
+
+case rand-059
+build e - é; a http://www.w3.org/2000/09/xmldsig# x \u00FC?]b; a urn:2 x:Id >\u00FC; a - Id \u00FC"b"; t ?\s?
+sel 0
+
+case rand-060
+build e urn:1 Data; a urn:2 x b-\r\u00FC"a; a - Id \r>?ba; a urn:1 ds:lang \s; e http://www.w3.org/2000/09/xmldsig# ds:é; a urn:1 p:y \s\u4E2D\s&; a http://www.w3.org/2000/09/xmldsig# x:x ?>\r; a http://www.w3.org/2000/09/xmldsig# n1:x \u00E9"\u00E9-; t \r"-\ra'; /
+sel 0.0
+
+case rand-061
+build e http://www.w3.org/2000/09/xmldsig# a; a urn:1 xmlfoo:Id -; t a-'\r; e urn:1 n1:Data; a http://www.w3.org/2000/09/xmldsig# p:y a\r\u4E2D&\na; c "\t]><; /
+sel 0.1
+
+case rand-062
+build e - a; c \u00FC; c \nb\n; d >\s?a
+sel 0
+
+case rand-063
+build e http://www.w3.org/2000/09/xmldsig# xmlfoo:Data; a urn:2 lang \t'; a http://www.w3.org/2000/09/xmldsig# q:lang a]b>\s; a http://www.w3.org/2000/09/xmldsig# x \t\s; p pi1 &&
+sel .
+
+case rand-064
+build e urn:2 b; a - Id &"]\r; a urn:2 q:y \u4E2D<>&?\t; e urn:2 é; a - y "&\r; a urn:1 y >a>; a urn:2 p:Id \u4E2Da\u00FC; /
+sel .
+
+case rand-065
+build e urn:2 q:é; a urn:3 q:Id >\u4E2D-\r\u00FC\u00E9; a - lang bb\u00E9b\u4E2D-; a urn:2 ds:Id ?\r-&
+sel 0
+
+case rand-066
+build e urn:1 xmlfoo:b; a http://www.w3.org/2000/09/xmldsig# q:lang b"; a urn:3 p:Id \r'
+sel 0
+
+case rand-067
+build e urn:1 ds:Sig; a urn:1 ds:Id \n; a urn:1 q:Id <\r&; t \n; c ]]\s\r&\s; e urn:3 xmlfoo:b; a http://www.w3.org/2000/09/xmldsig# q:Id \u00FC"\s&\s; a urn:3 p:Id '\n; a urn:3 x:y \n\sb; e urn:2 p:a; t \s; /; c '>\s>; /
+sel .
+
+case rand-068
+build e http://www.w3.org/2000/09/xmldsig# p:a; a urn:3 xmlfoo:y <-; a http://www.w3.org/2000/09/xmldsig# n1:x \s\r; a urn:2 n1:lang &
+sel 0
+
+case rand-069
+build e http://www.w3.org/2000/09/xmldsig# a; a urn:1 ds:lang \r; a urn:1 y \n; a http://www.w3.org/2000/09/xmldsig# ds:y ?'\s; c ">\r"\s]
+sel 0
+
+case rand-070
+build e urn:2 q:Sig; a - x \s?; a urn:2 Id -\s\s\t>\s; p pi0 \u4E2D; d \n<]\u4E2D>; e urn:3 n1:é; a urn:1 p:Id \u00E9\u00FC?; /
+sel 0.2
+
+case rand-071
+build e http://www.w3.org/2000/09/xmldsig# xmlfoo:a; a urn:1 x:lang \u00FC&\n>; a http://www.w3.org/2000/09/xmldsig# n1:x \r; a http://www.w3.org/2000/09/xmldsig# y \r\u4E2D\u00E9\s?>
+sel 0
+
+case rand-072
+build e urn:1 Data
+sel 0
+
+case rand-073
+build e urn:3 p:a; a http://www.w3.org/2000/09/xmldsig# x:Id <; a urn:3 q:lang \s; a urn:3 lang \s>
+sel .
+
+case rand-074
+build e urn:2 x:Sig; a urn:3 p:lang \r\u00E9&>; a - x ->&a"\u4E2D
+sel .
+
+case rand-075
+build e - Data; d "; e - Sig; a http://www.w3.org/2000/09/xmldsig# x:x \t-\n"&; a - lang a&]\u00E9-; a urn:2 n1:Id \u00E9\u00E9\n; t <\n<?; d '\u00E9]; /
+sel .
+
+case rand-076
+build e urn:1 ds:Data; a urn:2 ds:lang \r?<\s?b
+sel .
+
+case rand-077
+build e urn:2 x:b; a urn:1 xmlfoo:y >\r&'\s; a urn:2 n1:lang ?b; a urn:3 lang ]<; p pi9 a\n\u4E2D; e urn:1 x:Data; a urn:1 xmlfoo:y '\r\s; a - x &]\u4E2D\r<b; a urn:3 x:y \r\s-\s\n; e urn:3 n1:Sig; a urn:1 x:y >&\tb\s; t >-<\u00FC&; /; /; t \u4E2D\u4E2D"->
+sel 0.1.0
+
+case rand-078
+build e - é; a urn:2 x:lang ">b
+sel .
+
+case rand-079
+build e urn:2 b; a urn:2 n1:x \s\u00FC>\t; a urn:2 p:y ]\s\u4E2D\u4E2D?\t; p pi8 <\s]>>\t; t '"\t\u00FC]]; c \u00FC-\s\r
+sel .
+
+case rand-080
+build e urn:3 é; a urn:1 p:x <
+sel .
+
+case rand-081
+build e urn:2 xmlfoo:a; a - y ]?\s; e urn:2 n1:a; a - x \u00FC<\r; a urn:2 y '\u4E2D">\s&; a - y >b"\t>; c \sa\u4E2D; /; e - a; a urn:2 q:x "]\n-]; a urn:3 x ?&"]\u00FC; t <a; p pi0 ?; /; e urn:3 p:Sig; a http://www.w3.org/2000/09/xmldsig# x:y \u4E2D]\u00FC; a urn:2 n1:lang ]; t a?]\t]>; /
+sel 0.2
+
+case rand-082
+build e - é; a http://www.w3.org/2000/09/xmldsig# ds:lang \u00E9"; a urn:2 xmlfoo:Id >\s\s-?<; p pi5 "; d \r\r\u4E2D>\s
+sel .
+
+case rand-083
+build e http://www.w3.org/2000/09/xmldsig# x:é; a urn:3 ds:Id \n\n\u4E2D"\u00FC\u4E2D; a http://www.w3.org/2000/09/xmldsig# xmlfoo:Id ]<; a http://www.w3.org/2000/09/xmldsig# Id "&<\u00E9; e http://www.w3.org/2000/09/xmldsig# Data; a urn:3 y \t\u00E9\s; a urn:2 q:lang >b; d \r; e http://www.w3.org/2000/09/xmldsig# q:a; a http://www.w3.org/2000/09/xmldsig# ds:y \s; a urn:3 ds:x \t&\sbb; c -b-a\u00E9; /; /
+sel .
+
+case rand-084
+build e urn:2 n1:a; a http://www.w3.org/2000/09/xmldsig# x:Id \u00FC"; a http://www.w3.org/2000/09/xmldsig# ds:x >\r\u00FC; p pi2 \r<
+sel 0
+
+case rand-085
+build e urn:2 n1:Sig; a http://www.w3.org/2000/09/xmldsig# ds:y '; a urn:1 p:y \u4E2D\t\u00E9\n; a urn:1 ds:Id b-"\u00FC
+sel 0
+
+case rand-086
+build e urn:1 n1:Data; d \s; d ]<\t; c "]\u00FC
+sel 0
+
+case rand-087
+build e urn:2 é; a - y a\u4E2D&; a urn:1 y '->>\s; a urn:2 y '&; e http://www.w3.org/2000/09/xmldsig# xmlfoo:Sig; a urn:2 q:Id bb>\t\s; a urn:3 q:lang ?\r; e urn:1 a; c \u00FC-\t; t \r; t ba\u4E2D]<b; /; t ?>; e urn:2 n1:a; a urn:3 xmlfoo:Id >; a - y \u00FC\n>?; /; /
+sel 0
+
+case rand-088
+build e - Sig; a - y <'\u00FC; a urn:1 ds:x >b; a urn:3 xmlfoo:lang \s; e - a; a urn:2 p:y >; d \u00FC\sb\u4E2D\u00FC\u00FC; e urn:3 ds:b; a urn:1 xmlfoo:Id \t\u00E9\s]; p pi5 \s-\u00E9b; t \s??\n\u00FCb; /; e urn:1 n1:a; d \t\u00E9\u00E9\u4E2D<\n; t \sb; t a\s\u4E2D\u4E2D; /; /; e urn:2 q:Data; a urn:2 q:lang a\u00E9; a urn:2 ds:y b; a urn:2 x:Id "b\t\u00E9; t \n; /; e - Sig; a urn:1 ds:x "\r\r; t >&<\t; /
+sel 0.0.1
+
+case rand-089
+build e urn:1 x:é; a - y ?; a - Id \rb\nb; a urn:2 q:Id ?><
+sel 0
+
+case rand-090
+build e urn:1 x:Data; a http://www.w3.org/2000/09/xmldsig# x:Id \nb<\s\u00E9-; a urn:1 p:lang \s<\n; p pi8 b\r; t \r&"; t \sa&
+sel .
+
+case rand-091
+build e urn:1 q:b; a - y \r''\s\n; a urn:2 xmlfoo:y "; a urn:3 ds:lang b<>\t; t \u4E2D?'-<"; p pi8 \r<\r"\r-; t "\u4E2D\u4E2D]\t
+sel 0
+
+case rand-092
+build e urn:2 n1:Sig; a urn:2 x:x a<\u4E2D; a http://www.w3.org/2000/09/xmldsig# ds:y '\u4E2D'\n>; a urn:1 n1:y '; t -'\u00E9\u4E2D
+sel 0
+
+case rand-093
+build e urn:1 n1:é; a - y \u00FC; a http://www.w3.org/2000/09/xmldsig# n1:lang -\u00E9; t \u4E2D'; p pi4 &>b\u00E9
+sel .
+
+case rand-094
+build e urn:3 x:Sig; c >"'\u4E2D\u4E2D\s; c >
+sel .
+
+case rand-095
+build e urn:2 ds:Sig; a http://www.w3.org/2000/09/xmldsig# q:x b'''"; e http://www.w3.org/2000/09/xmldsig# n1:a; a urn:2 p:lang ]\n; a http://www.w3.org/2000/09/xmldsig# x:Id -; a urn:3 p:x ?\u4E2D>\u00E9; d ->"; /
+sel 0.0
+
+case rand-096
+build e urn:2 n1:é; e urn:1 n1:é; d a\r>\na>; c \u00FC\t\u00E9\u00FCb]; d >"\u00FC>\s; /; t >\u00FC
+sel .
+
+case rand-097
+build e urn:1 a
+sel .
+
+case rand-098
+build e - é; a urn:2 y >-&\r?; c \n]\u00FC\s<; c \n\u00E9-\u00E9
+sel 0
+
+case rand-099
+build e urn:1 x:é; a urn:3 n1:Id >\t'; t ]\t?"; t >\u00E9-a'
+sel 0
+
+case rand-100
+build e http://www.w3.org/2000/09/xmldsig# p:é; d >b<
+sel 0
+
+case rand-101
+build e urn:1 x:Data; a http://www.w3.org/2000/09/xmldsig# q:Id \u4E2D\u00FC\u4E2Da; a - y \u00FC\u00E9; a http://www.w3.org/2000/09/xmldsig# xmlfoo:x ?\u00E9; e - é; a urn:2 n1:y \n\n<; a urn:1 n1:y \u4E2D\t>; e urn:3 p:a; /; /; t '\s\t
+sel .
+
+case rand-102
+build e - b; a urn:2 p:lang ?>\t\u4E2Db; a urn:1 xmlfoo:lang &\s'\u00FC-a; e - Data; a http://www.w3.org/2000/09/xmldsig# x:y \s"; e urn:3 q:é; a http://www.w3.org/2000/09/xmldsig# x:Id \u4E2D; d \u4E2D; /; p pi3 ??\u4E2D>; c -ba'&\n; /; d &-<
+sel 0
+
+case rand-103
+build e http://www.w3.org/2000/09/xmldsig# p:a; a urn:2 ds:lang ?'; e - Data; a urn:2 n1:y \u00E9\r\r>; a urn:2 n1:lang \r\u4E2D>\sa; a urn:3 n1:Id \t\r\r-; c "; /
+sel 0.0
+
+case rand-104
+build e urn:1 Data; t >-\u4E2D\s"
+sel .
+
+case rand-105
+build e - Data; a urn:3 p:lang >\u00E9\u00FC\u00E9; a http://www.w3.org/2000/09/xmldsig# n1:x ?\r?\u00FC; t "\t\u00E9
+sel .
+
+case rand-106
+build e http://www.w3.org/2000/09/xmldsig# ds:Data; a urn:3 ds:y '>; a http://www.w3.org/2000/09/xmldsig# q:y &\s; a urn:2 n1:Id <<; t ?\r\s<
+sel .
+
+case rand-107
+build e urn:2 p:a; a - Id b\s; p pi1 >-a?\t
+sel 0
+
+case rand-108
+build e urn:1 x:a; a http://www.w3.org/2000/09/xmldsig# p:lang >; a - x \t<&"b; t ]\s\u00FC>]?
+sel 0
+
+case rand-109
+build e - a; a urn:2 q:lang \u00FC\t?\u00FC\t; a urn:2 xmlfoo:x \u00FC--\u4E2D\n\n; a - Id \u4E2D\u00E9; d \u00E9"?\n; d a\t<\t<&; e urn:1 p:Sig; a urn:2 q:lang '; a urn:3 q:x '\r"?; a urn:3 q:lang \t; p pi3 &\n]?; /
+sel .
+
+case rand-110
+build e - b; t \t>\n&"\s; t \t\s; p pi2 \u00E9
+sel 0
+
+case rand-111
+build e urn:1 p:é; a urn:2 q:Id -\sa; e urn:2 ds:Sig; /; e urn:2 q:a; /; c \u00E9
+sel 0.1
+
+case rand-112
+build e - Sig; a urn:1 Id \r>-\u00FC; a http://www.w3.org/2000/09/xmldsig# xmlfoo:Id \n\r\na; a urn:3 x:Id <\u00FC\t; e http://www.w3.org/2000/09/xmldsig# n1:Sig; /; t \u00E9\r\u00FC\u00E9\u4E2D
+sel .
+
+case rand-113
+build e urn:2 p:a; a urn:1 q:x \u4E2D"\s\t>; a http://www.w3.org/2000/09/xmldsig# xmlfoo:y \r"]\t; a http://www.w3.org/2000/09/xmldsig# y ?\sb?\u4E2D\u00E9; c >b\u00FC-\r; e urn:2 ds:Data; e http://www.w3.org/2000/09/xmldsig# xmlfoo:é; a urn:2 x:Id ?'\n; p pi6 "b\s&\u4E2D\u4E2D; e urn:2 Data; a - y \u4E2D&\t; a - lang b\r; a urn:2 ds:x &"\u4E2D-; t a; t -\n\u00E9; p pi2 \u00FC<<a; /; e urn:2 x:Sig; a - y \s-<\n>; a urn:3 q:Id b\n; a http://www.w3.org/2000/09/xmldsig# xmlfoo:x "?a\u4E2D\u00FC\u00E9; t -\s; t ]\u4E2D]\r; /; /; e urn:3 xmlfoo:Data; a urn:1 x "\r&]&\s; a urn:2 x:lang &; t >ba?-; t -\t\s??; /; e urn:3 x:Sig; /; /; e http://www.w3.org/2000/09/xmldsig# n1:Data; a urn:1 q:Id '"]\u00FC; /
+sel 0.1.2
+
+case rand-114
+build e urn:1 p:a
+sel 0
+
+case rand-115
+build e urn:3 n1:é; t \s'; c \r?\ta\s; e - a; a urn:2 ds:Id \u4E2D&\n\u4E2D; a - Id \s?]\t\sb; e urn:1 ds:é; a urn:1 xmlfoo:y \n\u00FC&; a urn:2 p:lang >\t\s\u00FC; a urn:3 x:Id \s; e - a; a - lang \s; a urn:1 xmlfoo:Id \u00E9]; t >\tb; d <"\u4E2D\u4E2D<\n; /; /; /
+sel 0.2
+
+case rand-116
+build e urn:1 x:Data; a urn:3 x:x \s\r'a\u00FC\u00E9; e urn:1 xmlfoo:é; a http://www.w3.org/2000/09/xmldsig# xmlfoo:y \r'\u4E2D<<b; a - Id \n\u00FC; a - y ?\s'\n; t \s\n>\u00FC; /
+sel .
+
+case rand-117
+build e http://www.w3.org/2000/09/xmldsig# q:Sig; a - y "<>a-\s; a urn:3 p:lang &'\r; a urn:1 p:lang >\r'\u4E2D
+sel .
+
+case rand-118
+build e urn:1 q:a; c \r\u00E9\n; t \u00FC; p pi6 &ab
+sel 0
+
+case rand-119
+build e - Sig; a urn:3 lang \r>&\s; e urn:3 xmlfoo:Sig; a http://www.w3.org/2000/09/xmldsig# lang \s; e urn:3 n1:Data; a urn:3 xmlfoo:x \s\s\u4E2D; a urn:2 x:y a; d \s\s\r\n\u4E2D; /; /; p pi9 '"; e - Data; a urn:3 x ]"\s\s\u00FC; p pi5 \s; d \t&>>; /
+sel 0.0.0
+
+case rand-120
+build e - a; e urn:1 x:Data; a urn:1 xmlfoo:x b>&'\u00E9; a - y bb-ba<; t <?<; t <\r'\r; /
+sel .
+
+case rand-121
+build e - a; a urn:1 n1:lang ?'; a - Id -\u00E9-\u00FC?\u4E2D; a urn:3 ds:Id ]'; e urn:1 x:é; t \u00FC>; d <-\u00E9\u4E2D\r]; /
+sel .
+
+case rand-122
+build e urn:3 x:Data; c \s-\u00FC
+sel .
+
+case rand-123
+build e urn:2 x:Data; e - b; a - x \u00E9\t\s"; a urn:1 q:Id ?; a urn:3 n1:y \u4E2D?\s; e urn:1 xmlfoo:Sig; t \u00E9]\n>; /; /; t <-<
+sel 0.0.0
+
+case rand-124
+build e urn:2 x:a; a - Id "; a urn:3 n1:Id ]; p pi5 \u4E2D"]>
+sel 0
+
+case rand-125
+build e http://www.w3.org/2000/09/xmldsig# n1:b; a urn:2 xmlfoo:x '&>"\n; a http://www.w3.org/2000/09/xmldsig# xmlfoo:y \t-'b\n'; a urn:3 x &\r\t'; t \u4E2D<
+sel 0
+
+case rand-126
+build e - é; a urn:2 xmlfoo:lang \r\t; a urn:2 q:Id \t\t?\u00E9\u00FC; a urn:2 xmlfoo:x ?>\n\r; t \u00E9]\u00E9&a
+sel .
+
+case rand-127
+build e urn:2 n1:Data; a urn:2 Id \u4E2D\u4E2Da\t>; p pi9 a-><\s; d >\r\t\s; e - é; a http://www.w3.org/2000/09/xmldsig# q:lang '\n\u4E2D>; a - y \t>b; a urn:3 p:x \n\u00FC<&?\u00E9; e urn:2 ds:a; a - x '; a urn:3 Id "\u4E2Db; /; c \t\s>a; p pi9 ?>; /
+sel 0.2.0
+
+case rand-128
+build e urn:1 n1:Sig; a http://www.w3.org/2000/09/xmldsig# q:lang '<; a urn:2 ds:x \t\n]\t>b; e urn:2 n1:Data; a urn:3 n1:x ?; t \u00FC>; /; d >; p pi4 a>
+sel .
+
+case rand-129
+build e urn:3 n1:Sig; a http://www.w3.org/2000/09/xmldsig# ds:lang <\u4E2D\s&\sb
+sel .
+
+case rand-130
+build e http://www.w3.org/2000/09/xmldsig# p:Sig; a urn:2 n1:Id \u4E2D; a urn:2 xmlfoo:lang >\u4E2D\u00FC\u00E9?&; a urn:1 x:lang '
+sel .
+
+case rand-131
+build e urn:2 x:é; a - lang a<-\u00E9<; a urn:2 x:lang \s\sb]; a urn:1 p:x \u00FC; t b'\s\r\t\t; c \u00FC&\u4E2D>\u00E9'
+sel 0
+
+case rand-132
+build e urn:2 n1:Sig; a - x ''\u4E2D&; a http://www.w3.org/2000/09/xmldsig# n1:lang \s>; a http://www.w3.org/2000/09/xmldsig# p:Id \s\r\u00E9\nb; e urn:2 x:é; a urn:3 n1:y <>; a http://www.w3.org/2000/09/xmldsig# ds:x a-\n\s; a - lang '\u00E9'-\t; d >>\n\t; d \s\s'\r; e - Data; t \n; t \s\s]\u4E2D\n; p pi6 \s<; /; /; e http://www.w3.org/2000/09/xmldsig# ds:Sig; a - x \u00FC<\u00FC]-\s; a http://www.w3.org/2000/09/xmldsig# x \u00E9; a urn:1 Id \u00FC'?; /
+sel 0.0
+
+case rand-133
+build e http://www.w3.org/2000/09/xmldsig# q:Data; a urn:2 q:x ]\u00E9<]]?
+sel .
+
+case rand-134
+build e - Data; a http://www.w3.org/2000/09/xmldsig# Id <b>]\n&; a urn:3 x:lang b">
+sel 0
+
+case rand-135
+build e - a; a - x \n\u00E9; a http://www.w3.org/2000/09/xmldsig# q:x \u4E2D'\t; t -\u4E2D\u00FC
+sel 0
+
+case rand-136
+build e urn:2 xmlfoo:b; a urn:3 n1:lang \t]; a - lang &b\u00E9\u4E2D]; e urn:1 n1:Sig; e urn:2 p:é; a urn:1 p:Id \n\t-; a urn:2 p:x -\u4E2D>; /; p pi0 \u00E9>b\u4E2D>; t -"\u00FC\t\t; /; p pi3 \r>\t?\s
+sel .
+
+case rand-137
+build e http://www.w3.org/2000/09/xmldsig# q:a; a urn:1 x ]\t\sb>; a http://www.w3.org/2000/09/xmldsig# ds:Id \u4E2D
+sel .
+
+case rand-138
+build e urn:2 é; a - y -\s<b; a - lang >\t>; e urn:1 ds:b; a http://www.w3.org/2000/09/xmldsig# ds:Id ]<\t; a urn:2 p:lang \t\t>&\u4E2D; /; e urn:3 x:é; t >&\u00FC]\s'; p pi4 ]\u4E2D; e urn:3 Data; a http://www.w3.org/2000/09/xmldsig# n1:y aa\u4E2Da; a urn:2 xmlfoo:x \s\r; t \s"\u4E2D>\u00E9; e - Sig; t ]\s\r\u00E9; c b?\t\u4E2D\s>; /; d &\s; /; /
+sel 0
+
+case rand-139
+build e urn:1 n1:Sig; a urn:2 ds:x \u00FC\t\s\s; a http://www.w3.org/2000/09/xmldsig# x:lang b\s'; a urn:2 n1:Id b\t"\r"b; c ?
+sel 0
+
+# ---------------------------------------------- seeded randomized differential, parsed
+# 141 pseudo-random XML documents (Python's Mersenne twister, seed 4242), each parsed and
+# then serialized from a randomly chosen node. Where the built trees of genrand.py cover
+# DOM shapes no parser produces, these cover what a parser does produce: inherited
+# namespace scopes, whitespace, entity references, mixed content and every spelling of
+# the encoding declaration. Documents Xerces rejects are recorded as errors and must be
+# rejected here too. Regenerate with gen/genparse.py rather than editing.
+case pr-000
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PGRzOmIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIElkPSJdXSZndDsiIHg9IiZxdW90OyZndDs/PiIvPg==
+sel .
+
+case pr-001
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48cDpTaWcgeG1sbnM6cD0idXJuOjIiIHA6dj0iIj4mcXVvdDtdXSZndDsgPCFbQ0RBVEFbPDxdXcOpXV0+PC9wOlNpZz4=
+sel 0
+
+case pr-003
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxuMTpEYXRhIHhtbG5zOm4xPSJ1cm46MiIgbjE6dj0iIiB4PSImbHQ7Ij48RGF0YSB4bWxuczp4PSJ1cm46MiIgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeDp2PSImIzEzOyZxdW90OyIgeD0iJiMxNjA7Jmx0O11dIj48IVtDREFUQVtdXT5hYTwvRGF0YT48P3BpMiA/PiZhcG9zOyYjMTM7PC9uMTpEYXRhPg==
+sel .
+
+case pr-004
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9InllcyI/PjxxOmEgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcTpJZD0iJiMxMzsJIiBxOnk9IiZndDsiLz4=
+sel .
+
+case pr-005
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PERhdGEgeT0iJmFwb3M7IiB2PSJdXSIvPg==
+sel 0
+
+case pr-006
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48bjE6RGF0YSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6bjE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHk9IiI+PGRzOkRhdGEgeG1sbnM6ZHM9InVybjoyIiBkczp2PSImIzEzOyI+XV0mZ3Q7JiMxMzsmYXBvczs8IS0tIC0gLS0+PC9kczpEYXRhPjxwOkRhdGEgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeT0iJmFtcDsmYW1wOyIgbjE6eD0iJiMxMzsiPjw/cGk5IGQ/PjxkczpiIHhtbG5zOng9InVybjozIiB4bWxuczpuMT0idXJuOjEiIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBuMTp4PSImIzEyODUxMjsiIHA6SWQ9IiYjOTsmYXBvczsiIGRzOnY9Il1dJmd0O2EiPjx4OmEgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zPSJ1cm46MSIgeDp5PSImIzEyODUxMjsmIzEyODUxMjsiIG4xOklkPSIJXV0gIj4mIzE2MDs8L3g6YT48L2RzOmI+PC9wOkRhdGE+PCFbQ0RBVEFb5LitXV08YV1dPjwvbjE6RGF0YT4=
+sel 0.1.1
+
+case pr-007
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxEYXRhIHk9IiZhbXA7Ii8+
+sel 0
+
+case pr-009
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxkczpTaWcgeG1sbnM9InVybjoyIiB4bWxuczpxPSJ1cm46MyIgeG1sbnM6ZHM9InVybjozIiBxOnY9IiIgeT0iJiMxMjg1MTI7XV0iIGRzOklkPSImIzEyODUxMjsmYW1wOwoiLz4=
+sel 0
+
+case pr-010
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48ZHM6U2lnIHhtbG5zPSIiIHhtbG5zPSJ1cm46MyIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIElkPSJdXSZsdDsmIzEyNzsiLz4=
+sel 0
+
+case pr-011
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxTaWcgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOnE9InVybjozIiB2PSItLSIgcTp4PSIiPjwhW0NEQVRBW11dPjxuMTphIHhtbG5zOng9InVybjoyIiB4bWxuczpuMT0idXJuOjMiIHE6dj0iIj48P3BpMiBkPz48L24xOmE+XV0mZ3Q7JmFtcDsmIzk7PC9TaWc+
+sel 0.1
+
+case pr-012
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxkczphIHhtbG5zPSIiIHhtbG5zOnE9InVybjozIiB4bWxuczpkcz0idXJuOjMiIHg9IiIgZHM6eT0i5LitJnF1b3Q7Ij48IS0tLS0+PD9waTYgPz48L2RzOmE+
+sel 0
+
+case pr-013
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHE6YSB4bWxuczp4PSJ1cm46MSIgeG1sbnM6cT0idXJuOjIiPjxEYXRhIHg6eD0iLS0gJiM5OyIgeDpJZD0iCiIgcTpJZD0iw6liJiMxNjA7Ij4/PjxhIHg6SWQ9IiZsdDsiIHE6dj0iJiMxMzsiLz4g5LitYS0tPC9EYXRhPjwhLS0gLSAtLT48cTpiIHY9Ii0tJiMxMzsiIHg6eD0iJiMxNjA7JiMxMjc7Ii8+PC9xOmE+
+sel 0
+
+case pr-014
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ieWVzIj8+PHE6U2lnIHhtbG5zOnE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHg9Il1dIiBxOnk9IiYjMTYwO11dIj48IS0tIC0gLS0+PCFbQ0RBVEFb6WFdXV1dPjwvcTpTaWc+
+sel 0
+
+case pr-015
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PGRzOmEgeG1sbnM9IiIgeG1sbnM6ZHM9InVybjoxIi8+
+sel .
+
+case pr-016
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48cTpTaWcgeG1sbnM6cT0idXJuOjEiPjxkczpTaWcgeG1sbnM6ZHM9InVybjoyIiB5PSIJ5LitIiBkczp4PSJiYiI+PHA6U2lnIHhtbG5zOng9InVybjoxIiB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBJZD0iJmFwb3M7IiB4OklkPSItLSZhbXA7JiM5OyI+w6kJJiMxMjc7JiM5OzwhW0NEQVRBW11dPjwhLS0tLT48L3A6U2lnPjwhW0NEQVRBW8OpXV0+PC9kczpTaWc+PC9xOlNpZz4=
+sel .
+
+case pr-017
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczphIHhtbG5zOmRzPSJ1cm46MSIgZHM6eT0iIiBkczp4PSIKIiB2PSIiPjxkczpTaWcgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeDpJZD0iJiMxMjc7LS0mIzEzOyIgZHM6eT0iYuS4rSI+PHA6RGF0YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBkczp5PSIgIj48cDphIHhtbG5zOng9InVybjozIiB4Onk9IiIgZHM6eT0iJmFtcDsiPiZhbXA7Jmx0OyAmcXVvdDs8IS0tIC0gLS0+PC9wOmE+PC9wOkRhdGE+PHg6YSB4bWxuczpuMT0idXJuOjMiIHhtbG5zOm4xPSJ1cm46MSI+JiMxMjc7PC94OmE+PD9waTAgIHNwICBkID8+PC9kczpTaWc+XV0mZ3Q7w6k8IVtDREFUQVsm5LitXV0+PC9kczphPg==
+sel 0.0
+
+case pr-018
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjxwOlNpZyB4bWxuczpxPSJ1cm46MyIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgSWQ9IiYjMTI4NTEyOwoiPjwhW0NEQVRBW+S4rTzkuK1dXT48L3A6U2lnPg==
+sel 0
+
+case pr-019
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48RGF0YSB4bWxuczpuMT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgbjE6eT0iIiB5PSImZ3Q7IiBuMTp4PSJhIj48ZHM6U2lnIHhtbG5zOnA9InVybjoxIiB4bWxuczpwPSJ1cm46MSIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIG4xOklkPSImcXVvdDvkuK0iIHk9IiIgeDp5PSImcXVvdDsgIj48eDpEYXRhIHhtbG5zPSJ1cm46MyIgeG1sbnM6eD0idXJuOjMiIHg6SWQ9IiIgbjE6SWQ9IiYjOTtdXSI+PCFbQ0RBVEFbw6ldXT4mIzEyNzsmYW1wOyYjMTM7JiMxMjc7PC94OkRhdGE+PC9kczpTaWc+PCEtLSAtIC0tPi0tXV1dXSYjMTI3OzwvRGF0YT4=
+sel .
+
+case pr-020
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PFNpZyB4bWxuczpxPSJ1cm46MiIgeG1sbnM6eD0idXJuOjMiIElkPSIiIHk9IiAmZ3Q7Ij48YSB4bWxuczpkcz0idXJuOjEiIHE6SWQ9IiAmIzE2MDsiIHg9IiI+w6ktLTwhW0NEQVRBW8OpPF1dPjwhLS0gLSAtLT48L2E+PC9TaWc+
+sel .
+
+case pr-023
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxwOmIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOnA9InVybjoxIj48IVtDREFUQVtdXT48IS0tIC0gLS0+PCEtLS0tPjwvcDpiPg==
+sel 0
+
+case pr-024
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHg6RGF0YSB4bWxuczp4PSJ1cm46MSI+PD9waTQgIHNwICBkID8+PC94OkRhdGE+
+sel .
+
+case pr-026
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9Im5vIj8+PHg6U2lnIHhtbG5zOng9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiLz4=
+sel 0
+
+case pr-027
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48YiB5PSJdXSZndDsiLz4=
+sel 0
+
+case pr-028
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PG4xOkRhdGEgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6bjE9InVybjoyIiBuMTp2PSIiPj8+JiMxMjc7XV0mZ3Q7PC9uMTpEYXRhPg==
+sel 0
+
+case pr-029
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6YiB4bWxuczpxPSJ1cm46MiIvPg==
+sel .
+
+case pr-031
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bjE6YiB4bWxucz0idXJuOjIiIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpuMT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgbjE6eT0iCWEiIElkPSIiIHY9Ij8+Ij48IS0tLS0+PGRzOmIgeG1sbnM6cT0idXJuOjIiIHhtbG5zOng9InVybjozIiBkczpJZD0iw6kiIGRzOnY9IiIvPjwvbjE6Yj4=
+sel 0.1
+
+case pr-032
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6U2lnIHhtbG5zOng9InVybjoyIiB4PSIiIHk9IiZxdW90OyIgdj0i5LitJiM5OyI+JiM5O11dCTx4OkRhdGEgeDp4PSIiPjwhLS0gLSAtLT4KJmFtcDsmcXVvdDtdXTwveDpEYXRhPjwhLS1jLS0+PC94OlNpZz4=
+sel 0.1
+
+case pr-033
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cTpEYXRhIHhtbG5zOnE9InVybjoyIiBxOklkPSImIzk75LitIj48cDpEYXRhIHhtbG5zOnE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOm4xPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBwOnk9IuS4reS4rWEiPjxxOmEgeG1sbnM6ZHM9InVybjoxIiB5PSLkuK0iIHA6dj0iYQkiPjwhW0NEQVRBW11dJmFdXT48P3BpMyBkPz48L3E6YT48L3A6RGF0YT4mYW1wOzwhLS0gLSAtLT48L3E6RGF0YT4=
+sel 0
+
+case pr-034
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48RGF0YSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6bjE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIG4xOklkPSIiIHk9IiYjMTI3O2EtLSIvPg==
+sel 0
+
+case pr-036
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pjx4OlNpZyB4bWxuczp4PSJ1cm46MSIgeDpJZD0iYSAiPmJdXTxuMTpEYXRhIHhtbG5zOnE9InVybjozIiB4bWxuczpuMT0idXJuOjIiIHE6eT0iYmIiLz48cTpiIHhtbG5zOnE9InVybjoyIiBxOnY9Il1dJiM5OyIgdj0iJmFwb3M7JiMxMjg1MTI7IiBJZD0iIj48cDphIHhtbG5zOnA9InVybjozIiBxOnk9IiYjMTYwOyIgSWQ9IiZndDsmIzEzOyIgcDpJZD0iPz4iPjxxOlNpZyB4bWxuczpuMT0idXJuOjMiIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4OklkPSIiLz48L3A6YT48IVtDREFUQVvDqSbDqV1dPjxwOlNpZyB4bWxuczpxPSJ1cm46MyIgeG1sbnM9InVybjoyIiB4bWxuczpwPSJ1cm46MyIgdj0iJiMxMjg1MTI7JnF1b3Q7YiIvPjwvcTpiPjwveDpTaWc+
+sel 0.2
+
+case pr-037
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48U2lnIHg9IiIgeT0iJmd0OyI+YcOpJiMxNjA7Jmx0Oy0tPC9TaWc+
+sel 0
+
+case pr-038
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxuMTphIHhtbG5zOng9InVybjozIiB4bWxucz0iIiB4bWxuczpuMT0idXJuOjIiIHg6SWQ9IiZndDsKJmx0OyIgeDp2PSJiJiM5OyI+PCEtLS0tPjx4OkRhdGEgbjE6eT0iJiMxNjA7IiB2PSJdXSZndDsiPiZhcG9zOz8+XV0mZ3Q7Jmd0OzxuMTpTaWcgSWQ9IiYjMTYwOyYjMTI4NTEyOyIgeDp4PSImIzEyODUxMjsmIzk7JiMxMjc7IiBuMTp2PSItLSYjMTI4NTEyO2EiPjxwOkRhdGEgeG1sbnM6ZHM9InVybjozIiB4bWxuczp4PSJ1cm46MyIgeG1sbnM6cD0idXJuOjMiPjw/cGkyID8+PC9wOkRhdGE+PC9uMTpTaWc+PC94OkRhdGE+PC9uMTphPg==
+sel .
+
+case pr-039
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczphIHhtbG5zOnE9InVybjozIiB4bWxuczpuMT0idXJuOjIiIHhtbG5zOmRzPSJ1cm46MiIgbjE6SWQ9Il1dJmd0OwkiIHg9IiZsdDsmbHQ7Ij4KLS0mIzEzO11dPD9waTggZD8+PC9kczphPg==
+sel 0
+
+case pr-040
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cTpEYXRhIHhtbG5zOnE9InVybjoxIiB5PSJhIiBxOnk9IiZndDsiPjxuMTpiIHhtbG5zOng9InVybjoyIiB4bWxucz0idXJuOjMiIHhtbG5zOm4xPSJ1cm46MSIgcTp5PSJhJiMxMzsiIHg6dj0iJmd0OyZxdW90OyIgcTp2PSJdXSZndDsmIzEyNzvkuK0iLz4gJiMxMzthPC9xOkRhdGE+
+sel 0
+
+case pr-042
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bjE6U2lnIHhtbG5zPSJ1cm46MiIgeG1sbnM6bjE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIG4xOnk9IiZhcG9zOy0tJmx0OyIgbjE6SWQ9ImImIzEyNzsmYXBvczsiIHg9IuS4rWIgIj4mIzEyNzsmIzEzO2E/PjwvbjE6U2lnPg==
+sel .
+
+case pr-043
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczpEYXRhIHhtbG5zOnE9InVybjoyIiB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpkcz0idXJuOjEiIHE6eT0iPz4tLV1dIj48P3BpMSBkPz48L2RzOkRhdGE+
+sel .
+
+case pr-044
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48bjE6U2lnIHhtbG5zPSJ1cm46MyIgeG1sbnM6bjE9InVybjozIj48IVtDREFUQVvkuK1hXV1dXT48L24xOlNpZz4=
+sel .
+
+case pr-045
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48ZHM6YSB4bWxucz0iIiB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgZHM6eD0iCSZhbXA7CSIvPg==
+sel .
+
+case pr-046
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48U2lnPjw/cGkyIGQ/Pjw/cGkxICBzcCAgZCA/PjxEYXRhIHhtbG5zOnE9InVybjoyIiB4PSJiIj4KJiMxMjc7JnF1b3Q7JiM5OzwhLS1hIGItLT48L0RhdGE+PC9TaWc+
+sel 0
+
+case pr-047
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6YiB4bWxuczp4PSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4Ong9IiIvPg==
+sel 0
+
+case pr-048
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczpEYXRhIHhtbG5zPSJ1cm46MiIgeG1sbnM6ZHM9InVybjoxIiB2PSImIzEzOyZsdDsiPjxhIHhtbG5zPSJ1cm46MSIgSWQ9IiI+PD9waTggZD8+PC9hPjwvZHM6RGF0YT4=
+sel .
+
+case pr-050
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pjx4OmIgeG1sbnM9InVybjozIiB4bWxuczp4PSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4Ong9IiYjMTM7IiB2PSImZ3Q7JiMxMjc7IiB4PSIiPjxwOlNpZyB4bWxuczpwPSJ1cm46MiIgeT0iw6kgIj48IS0tYy0tPjw/cGk3ICBzcCAgZCA/PjwvcDpTaWc+PCEtLS0tPjxiIHg6dj0iCuS4rWEiPjwhW0NEQVRBWyZdXT48L2I+PC94OmI+
+sel .
+
+case pr-051
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48cTpTaWcgeG1sbnM6bjE9InVybjoyIiB4bWxuczpuMT0idXJuOjIiIHhtbG5zOnE9InVybjoxIiBxOng9IiIgeD0iJiMxMjg1MTI7Ij48IVtDREFUQVtdXSZdXT48P3BpNiAgc3AgIGQgPz48L3E6U2lnPg==
+sel .
+
+case pr-052
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48YiB4bWxuczpwPSJ1cm46MiIgeD0iJiMxMjg1MTI7XV0tLSI+PFNpZyBwOnY9IuS4rWHDqSIgSWQ9IiIgdj0iCWIiPjw/cGkxID8+PCEtLWMtLT48L1NpZz48L2I+
+sel 0
+
+case pr-053
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48bjE6YSB4bWxuczp4PSJ1cm46MSIgeG1sbnM6ZHM9InVybjozIiB4bWxuczpuMT0idXJuOjEiIHg6dj0iJmFtcDvDqSYjMTYwOyI+PHE6YiB4bWxuczpwPSJ1cm46MiIgeG1sbnM9IiIgeG1sbnM6cT0idXJuOjEiIG4xOnk9IuS4rWLDqSIgcDpJZD0iIj48ZHM6RGF0YSB4Ong9Ij8+XV0iIG4xOnY9IiIgeDpJZD0iXV0mIzEzOyZndDsiPjw/cGkwID8+PD9waTEgZD8+PD9waTUgPz48L2RzOkRhdGE+PC9xOmI+PC9uMTphPg==
+sel 0.0
+
+case pr-054
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxxOmEgeG1sbnM6ZHM9InVybjozIiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBkczpJZD0iXV0mIzEyODUxMjsiPjx4OlNpZyB4bWxuczpkcz0idXJuOjIiIHhtbG5zPSJ1cm46MiIgeG1sbnM6eD0idXJuOjMiIGRzOng9IiAiPjx4OmIgeG1sbnM6bjE9InVybjozIiB2PSJdXSZndDsiPuS4rSYjMTYwO11dJmd0O2ImIzEyNzsKXV08L3g6Yj7kuK0mIzEyNzs8YSBkczp5PSIiIHg6eT0iJiM5O11dCSI+PHg6RGF0YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj48IS0tYSBiLS0+JnF1b3Q7JiMxMjc7Jmd0OzwhLS0gLSAtLT48L3g6RGF0YT48P3BpNiBkPz48IS0tLS0+PC9hPjwveDpTaWc+PGRzOmI+PHE6RGF0YSB4bWxucz0iIi8+PCFbQ0RBVEFbPGHDqeS4rV1dPjwvZHM6Yj48L3E6YT4=
+sel 0.1.0
+
+case pr-055
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHA6YSB4bWxuczpwPSJ1cm46MyIgeD0iJiM5O+S4rSIgdj0iIiBJZD0iXV0mZ3Q7CSIvPg==
+sel 0
+
+case pr-056
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48eDpEYXRhIHhtbG5zOm4xPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczp4PSJ1cm46MyIgbjE6eD0iCiIgdj0iJiMxNjA7IiB4Onk9IiYjMTI4NTEyOyIvPg==
+sel 0
+
+case pr-057
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48cDpiIHhtbG5zOnA9InVybjozIiB2PSIgIi8+
+sel .
+
+case pr-058
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxkczpTaWcgeG1sbnM6ZHM9InVybjoxIiBkczp4PSLDqeS4reS4rSIgdj0iLS0gJiMxNjA7IiB5PSImIzE2MDtdXSZndDsmIzk7Ii8+
+sel 0
+
+case pr-059
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxiIHg9IiAiIElkPSIiPjw/cGk0ICBzcCAgZCA/PiZhbXA7PC9iPg==
+sel .
+
+case pr-060
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxkczphIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpkcz0idXJuOjEiIHY9IiIgZHM6eD0iJiMxNjA7XV0iPiZsdDtdXSZndDs8L2RzOmE+
+sel .
+
+case pr-061
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjxuMTphIHhtbG5zOm4xPSJ1cm46MyIgbjE6eD0iXV0mZ3Q7IiB2PSItLWEiPjw/cGkzICBzcCAgZCA/PjwhLS1hIGItLT48cTphIHhtbG5zOnE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHY9IgomIzEyNzthIiBuMTp5PSIiIHg9Il1dJmd0Oz8+JmFtcDsiPjxuMTpiIHE6eT0i5LitIiBuMTpJZD0iJmx0OyYjMTYwOyIgcTp2PSJdXSZsdDsmbHQ7Ij48IVtDREFUQVtdXV1dXT48P3BpNSAgc3AgIGQgPz48L24xOmI+PD9waTMgIHNwICBkID8+PCEtLS0tPjwvcTphPjwvbjE6YT4=
+sel 0.2
+
+case pr-062
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjxkczpiIHhtbG5zOmRzPSJ1cm46MyIgeD0iIj4mIzEyODUxMjsgJiMxNjA7Cj8+Jmd0OyYjMTM7PGRzOlNpZz48bjE6U2lnIHhtbG5zOm4xPSJ1cm46MiIgbjE6dj0iJiMxMzthJiM5OyI+JiMxMjg1MTI7w6kmIzEzOyZndDs/PgkmcXVvdDs8P3BpMyA/PjwvbjE6U2lnPjwhW0NEQVRBWzxd5LitXV0+PCFbQ0RBVEFbXV0+PC9kczpTaWc+PC9kczpiPg==
+sel 0
+
+case pr-063
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxhIHhtbG5zOmRzPSJ1cm46MiIgeG1sbnM6cD0idXJuOjEiPl1dJmd0O2HDqTwvYT4=
+sel 0
+
+case pr-064
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9Im5vIj8+PGEgeT0iCi0tIiB2PSImIzEzOyYjMTM7Jmd0OyI+PD9waTQgZD8+PC9hPg==
+sel 0
+
+case pr-065
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48bjE6YSB4bWxuczpuMT0idXJuOjMiIG4xOnk9IiIgdj0iJiMxNjA7YSIvPg==
+sel 0
+
+case pr-067
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6YiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBJZD0iw6kmIzE2MDsmIzEyNzsiIHE6eD0iIi8+
+sel .
+
+case pr-068
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/Pjx4OlNpZyB4bWxuczp4PSJ1cm46MiIgeDp5PSImYXBvczs/PmIiIHg6dj0iIiB4Ong9IiI+PCEtLWEgYi0tPjwveDpTaWc+
+sel 0
+
+case pr-070
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6RGF0YSB4bWxuczp4PSJ1cm46MiIgeDpJZD0iIiB4OnY9ImIiLz4=
+sel 0
+
+case pr-071
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9Im5vIj8+PG4xOmIgeG1sbnM9InVybjoxIiB4bWxuczpuMT0idXJuOjIiIG4xOnk9Ij8+Ij4mIzEyNztdXSZndDsmIzEyODUxMjsmIzE2MDsmZ3Q7Jmx0OzwvbjE6Yj4=
+sel 0
+
+case pr-072
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48cTpiIHhtbG5zOnE9InVybjoyIj4JJmFwb3M75LitJmFtcDtdXSZndDsmYW1wOyZhcG9zO2EJPC9xOmI+
+sel .
+
+case pr-073
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pjx4OkRhdGEgeG1sbnM6eD0idXJuOjIiLz4=
+sel 0
+
+case pr-075
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48cDpEYXRhIHhtbG5zOnA9InVybjoxIiBwOnk9IgkmIzEzOyIgeD0iIj4mYXBvcztdXTwvcDpEYXRhPg==
+sel 0
+
+case pr-076
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48YiB4bWxuczpwPSJ1cm46MSIgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeT0iCSZsdDs/PiI+PHA6YiB4Onk9IiIgeDp2PSItLSIgeD0iIj48IVtDREFUQVtdXV0+JmFwb3M7JmFtcDsmcXVvdDsmIzEyODUxMjs8L3A6Yj48eDpEYXRhIHA6eD0iIiBwOklkPSIKJiMxMjg1MTI7IiBwOnk9IgoiPiZhcG9zO+S4rSYjMTI3OzwveDpEYXRhPjxkczpEYXRhIHhtbG5zOmRzPSJ1cm46MiIgeG1sbnM6bjE9InVybjozIiBuMTp5PSJdXSZndDsmIzEyODUxMjsiIHA6SWQ9IiIgZHM6eT0iYV1dCiI+PHE6U2lnIHhtbG5zPSJ1cm46MSIgeG1sbnM6cT0idXJuOjIiIG4xOnY9IiYjMTI4NTEyOz8+IiB5PSImIzEyNzsiIGRzOng9Ii0tIj48IS0tYSBiLS0+PC9xOlNpZz48IVtDREFUQVtdXV0+PCEtLS0tPjwvZHM6RGF0YT48L2I+
+sel 0.2.0
+
+case pr-077
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6YiB4bWxuczpwPSJ1cm46MiIgeG1sbnM6eD0idXJuOjEiIHg6eT0iJiMxMzsiIHA6dj0iJiMxMjg1MTI7CiIvPg==
+sel 0
+
+case pr-078
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHA6U2lnIHhtbG5zOnA9InVybjozIiBwOnY9Il1dIiBwOnk9IiIgeD0iLS0gJiMxNjA7Ii8+
+sel 0
+
+case pr-079
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHg6RGF0YSB4bWxuczpkcz0idXJuOjMiIHhtbG5zOng9InVybjozIiBkczp5PSI/PiIgZHM6dj0iJiMxMjg1MTI7ICIgZHM6eD0iIj4mIzEzOwo8L3g6RGF0YT4=
+sel .
+
+case pr-080
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cTpEYXRhIHhtbG5zOnE9InVybjoxIiBJZD0iXV0mZ3Q7IiB5PSJhJmFtcDsmIzEzOyIvPg==
+sel 0
+
+case pr-081
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ZHM6RGF0YSB4bWxuczpuMT0idXJuOjIiIHhtbG5zOmRzPSJ1cm46MSIgZHM6eT0iJmFtcDsiLz4=
+sel .
+
+case pr-082
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6U2lnIHhtbG5zOng9InVybjozIiB4PSLkuK0gIiB5PSJdXSYjMTI3OyIvPg==
+sel 0
+
+case pr-083
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bjE6YiB4bWxuczpxPSJ1cm46MyIgeG1sbnM6ZHM9InVybjozIiB4bWxuczpuMT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcTp4PSImIzk7Pz4mIzEzOyIgZHM6eD0iJnF1b3Q7CiZhbXA7IiB2PSImIzE2MDsiPjxxOmEgeG1sbnM9IiIgeG1sbnM6bjE9InVybjoxIj48cDpTaWcgeG1sbnM6eD0idXJuOjEiIHhtbG5zOnA9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiLz48IVtDREFUQVvDqV1dPjwvcTphPiYjMTYwOzw/cGk1ICBzcCAgZCA/PjwvbjE6Yj4=
+sel 0.0
+
+case pr-084
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxwOlNpZyB4bWxucz0idXJuOjMiIHhtbG5zOm4xPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpwPSJ1cm46MiIgcDp4PSIiIHA6SWQ9ImImYW1wOyI+ICZndDsKPC9wOlNpZz4=
+sel .
+
+case pr-085
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ieWVzIj8+PERhdGEgdj0iJiM5OyI+PHA6YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4PSIiPjw/cGk1IGQ/PjxwOmIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM9InVybjozIj48bjE6RGF0YSB4bWxuczp4PSJ1cm46MSIgeG1sbnM6eD0idXJuOjMiIHhtbG5zOm4xPSJ1cm46MSIgeT0iJiMxMjg1MTI7CSIgSWQ9ImEJYiIgeDpJZD0iJiMxMjc7Ii8+PC9wOmI+PC9wOmE+PCEtLSAtIC0tPjwvRGF0YT4=
+sel 0.0.1
+
+case pr-086
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48bjE6RGF0YSB4bWxuczpuMT0idXJuOjMiIG4xOklkPSIiPiZsdDsmIzk7PC9uMTpEYXRhPg==
+sel 0
+
+case pr-087
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ieWVzIj8+PG4xOkRhdGEgeG1sbnM6bjE9InVybjoyIiBuMTpJZD0iJmx0OyIgeT0iJiMxNjA7LS1iIj4mbHQ7JiMxMjc7YmI8L24xOkRhdGE+
+sel 0
+
+case pr-088
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9InllcyI/PjxuMTpiIHhtbG5zOnA9InVybjoxIiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpuMT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcDp2PSIgXV0mYXBvczsiPjw/cGkzIGQ/PjwvbjE6Yj4=
+sel .
+
+case pr-089
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48eDpiIHhtbG5zOm4xPSJ1cm46MiIgeG1sbnM6eD0idXJuOjIiPjwhW0NEQVRBWzxdXV1d5LitXV0+PCEtLWMtLT48bjE6RGF0YSBJZD0iICYjMTYwO11dIj48cDpTaWcgeG1sbnM6cD0idXJuOjIiIHhtbG5zOnA9InVybjoyIj48IS0tYSBiLS0+PC9wOlNpZz48L24xOkRhdGE+PC94OmI+
+sel 0
+
+case pr-090
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48cTpEYXRhIHhtbG5zOnE9InVybjozIiBxOklkPSIiIHk9Ij8+IiBxOng9IiYjMTM7JnF1b3Q7Ii8+
+sel .
+
+case pr-091
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9InllcyI/Pjx4OmIgeG1sbnM6eD0idXJuOjMiIHg9IiYjMTI3OyIgeT0iIj4mYW1wOyYjMTI4NTEyOzw/cGk5ICBzcCAgZCA/PjwveDpiPg==
+sel .
+
+case pr-092
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6RGF0YSB4bWxuczpxPSJ1cm46MyIgSWQ9IiZhcG9zOyI+PG4xOmEgeG1sbnM6ZHM9InVybjoxIiB4bWxuczpxPSJ1cm46MiIgeG1sbnM6bjE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIGRzOnY9IiYjMTI3O2IiIHE6eT0iICYjMTI4NTEyOyI+PCFbQ0RBVEFbXTw8XV0+PC9uMTphPjwvcTpEYXRhPg==
+sel 0
+
+case pr-093
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cTpEYXRhIHhtbG5zOng9InVybjoxIiB4bWxuczpxPSJ1cm46MyI+IDwvcTpEYXRhPg==
+sel 0
+
+case pr-095
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48RGF0YSB4bWxuczpkcz0idXJuOjMiIHhtbG5zOng9InVybjoxIiBJZD0iPz4iIGRzOng9Ii0tIiB4Ong9IiYjMTI4NTEyOyYjOTs/PiI+PG4xOkRhdGEgeG1sbnM6bjE9InVybjoyIiB4bWxuczpuMT0idXJuOjMiIGRzOklkPSIiPjw/cGk1ID8+PCFbQ0RBVEFb5LitXV3DqV1dPjwvbjE6RGF0YT48RGF0YSB4bWxuczpuMT0idXJuOjEiIElkPSIiIG4xOnY9IiYjMTM7JnF1b3Q7Ij48bjE6YiB4bWxuczp4PSJ1cm46MSIgeG1sbnM9InVybjozIiBJZD0iIj4mIzk7YSYjMTM7PCFbQ0RBVEFbXV0+PC9uMTpiPjwvRGF0YT48ZHM6U2lnIHhtbG5zOng9InVybjoyIiBJZD0iIiB4OklkPSI/PiYjMTI3O2EiPgk8L2RzOlNpZz48L0RhdGE+
+sel 0
+
+case pr-096
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cDpTaWcgeG1sbnM6cT0idXJuOjIiIHhtbG5zOnA9InVybjoyIiBxOnk9IiIgcDp5PSImIzEzOyYjMTI4NTEyO11dIj48ZHM6RGF0YSB4bWxuczpxPSJ1cm46MyIgeG1sbnM6ZHM9InVybjoyIiBwOnk9IiIgZHM6dj0iICIgcDp2PSIiPl1dJmd0O11dJmd0O2I8IS0tYy0tPjwvZHM6RGF0YT4mIzEyODUxMjsmZ3Q7JmFwb3M7PC9wOlNpZz4=
+sel .
+
+case pr-097
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHE6YiB4bWxuczpxPSJ1cm46MiI+PERhdGEgeG1sbnM6cT0idXJuOjEiIHE6SWQ9IiI+PCFbQ0RBVEFbXV0+PHE6YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpwPSJ1cm46MSIgcTp2PSItLQkmIzEyNzsiPjwhLS0gLSAtLT48P3BpNyBkPz48RGF0YSB5PSLkuK0mIzEyNzvDqSIvPjwvcTphPjwvRGF0YT48L3E6Yj4=
+sel 0.0
+
+case pr-098
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxxOmEgeG1sbnM6cT0idXJuOjIiPjw/cGk1IGQ/PjxTaWcgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6eD0idXJuOjMiIHk9IiI+PCFbQ0RBVEFbXV0+PCFbQ0RBVEFbPF3kuK1dXT48IVtDREFUQVtdXV1dPjwvU2lnPjx4OmIgeG1sbnM6eD0idXJuOjMiPjxkczpTaWcgeG1sbnM6ZHM9InVybjoyIiB4bWxuczp4PSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBkczp2PSIiIHE6dj0iJiMxNjA7YSIgeDp4PSJiJiMxMzsiPjxhIHhtbG5zPSJ1cm46MiIgdj0iIiBkczpJZD0iIiBxOnk9IiZxdW90O11dIj48IS0tYy0tPjwvYT48cDpTaWcgeG1sbnM6ZHM9InVybjoyIiB4bWxuczpwPSJ1cm46MSIgeDpJZD0iIiB4Ong9ImEiPjwhLS0gLSAtLT48L3A6U2lnPjwvZHM6U2lnPjx4OkRhdGEgeDp2PSIgJiM5OyYjMTYwOyIgdj0iJiMxNjA7IiBxOng9IiZhcG9zOyAiPjwhLS0tLT48eDpTaWcgeG1sbnM6eD0idXJuOjMiIHhtbG5zOnE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIElkPSI/Pl1dJmd0OyIgcTp4PSImIzE2MDsiPuS4rTwhW0NEQVRBWzxdXT4gJmFwb3M7Jmx0Oy0tPC94OlNpZz48L3g6RGF0YT48P3BpOCBkPz48L3g6Yj48L3E6YT4=
+sel .
+
+case pr-099
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ieWVzIj8+PHA6RGF0YSB4bWxuczpuMT0idXJuOjEiIHhtbG5zOmRzPSJ1cm46MSIgeG1sbnM6cD0idXJuOjIiPiZsdDsmIzEyODUxMjs8P3BpOCA/PjwvcDpEYXRhPg==
+sel .
+
+case pr-102
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6RGF0YSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6bjE9InVybjoxIiB4bWxuczpxPSJ1cm46MyIgZHM6eD0iLS0iPjxxOkRhdGEgdj0iJmd0O8OpIiBJZD0i5Litw6kmIzk7IiBxOklkPSIiPjxEYXRhPjwhW0NEQVRBW+S4rV1hXV0+PC9EYXRhPjxTaWcgZHM6eT0iIj48cTphIHhtbG5zOm4xPSJ1cm46MyIgZHM6eD0iCSYjMTM7LS0iIHE6eD0iXV0mZ3Q7JiMxMzsiLz48IS0tIC0gLS0+PHE6YiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj7DqSZhbXA7JnF1b3Q7Jmd0OzwvcTpiPjwvU2lnPjwvcTpEYXRhPjwvcTpEYXRhPg==
+sel 0.0.1
+
+case pr-103
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/Pjx4OkRhdGEgeG1sbnM9InVybjoxIiB4bWxuczp4PSJ1cm46MSIgeDp2PSImIzEyODUxMjsiIHg6SWQ9Ii0tIj48bjE6YiB4bWxuczpuMT0idXJuOjMiIHk9ImImIzk7Ij48cDpEYXRhIHhtbG5zOnA9InVybjozIj4mYXBvczs8cTpTaWcgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcDp5PSImbHQ7XV0gIiB2PSImYXBvczsiIHg6eT0iCmItLSIvPjwvcDpEYXRhPjxuMTpEYXRhIHY9Il1dw6kiIHg9IiIgbjE6dj0iID8+JiMxMjg1MTI7Ij5hXV0mZ3Q7PD9waTcgPz48cDpEYXRhIHhtbG5zOnA9InVybjoyIiBuMTp2PSImYW1wO+S4rWIiPl1dJmd0Oy0tJmd0OzwvcDpEYXRhPjwvbjE6RGF0YT48L24xOmI+PCEtLS0tPjwveDpEYXRhPg==
+sel .
+
+case pr-105
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczpiIHhtbG5zOmRzPSJ1cm46MyIgZHM6eD0iIiB4PSJdXV1dJmd0OwkiIGRzOnk9Il1dw6nkuK0iPjwhW0NEQVRBW11dPjwhW0NEQVRBW13kuK1dXT48IS0tYy0tPjwvZHM6Yj4=
+sel 0
+
+case pr-106
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9InllcyI/PjxkczphIHhtbG5zOmRzPSJ1cm46MSIgeG1sbnM6cT0idXJuOjEiIGRzOnY9IiAmIzEzOyIgdj0iJmFtcDsiPl1dJiMxMjg1MTI7YSZndDs8L2RzOmE+
+sel .
+
+case pr-107
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48RGF0YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4PSImIzE2MDsiLz4=
+sel .
+
+case pr-108
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cDphIHhtbG5zOnA9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHg9IiZndDtiIiBwOnk9ImLDqQkiPiYjMTI4NTEyOzwvcDphPg==
+sel 0
+
+case pr-109
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48YSB4bWxucz0iIiB4bWxuczpuMT0idXJuOjEiPjwhW0NEQVRBW11dXV1dXV1dPjxhIG4xOklkPSI/PiZhcG9zOyIvPmE8L2E+
+sel .
+
+case pr-110
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pjx4OmIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOng9InVybjoyIj48cDpEYXRhIHhtbG5zOnA9InVybjozIi8+PC94OmI+
+sel 0.0
+
+case pr-111
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ibm8iPz48ZHM6U2lnIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpwPSJ1cm46MyIgcDp5PSIiIHA6SWQ9IuS4rSYjOTsiIHA6dj0iIj48IVtDREFUQVthJl1dPjxiIHhtbG5zOm4xPSJ1cm46MiIgeG1sbnM6ZHM9InVybjoyIiBwOnk9IiZndDsmIzEyNzsmIzE2MDsiIHg9ImEiPjw/cGk4ICBzcCAgZCA/PjwhW0NEQVRBW11dPjxEYXRhIHA6eD0iXV0mZ3Q7JnF1b3Q7JiMxMzsiIHA6eT0iIj48IVtDREFUQVtdXT48IS0tLS0+PGRzOlNpZyB4bWxucz0idXJuOjIiIHhtbG5zOmRzPSJ1cm46MSIgcDp4PSImIzEyNztiIi8+PC9EYXRhPjwvYj48L2RzOlNpZz4=
+sel .
+
+case pr-112
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48bjE6RGF0YSB4bWxuczpuMT0idXJuOjEiIHY9IgoiIG4xOng9Il1dJmd0OyI+PGRzOmIgeG1sbnM6ZHM9InVybjozIj48eDpiIHhtbG5zOm4xPSJ1cm46MiIgeG1sbnM6ZHM9InVybjoyIiB4bWxuczp4PSJ1cm46MSIgeT0iJiMxNjA7Yj8+IiB4PSIgJnF1b3Q7Ij4mIzEyNzs8IS0tLS0+PC94OmI+YSYjMTI4NTEyOyYjMTYwOzwhLS0tLT48L2RzOmI+PHA6RGF0YSB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpxPSJ1cm46MSIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyI+CSZhbXA7XV0mZ3Q7JiMxNjA7PC9wOkRhdGE+PD9waTUgIHNwICBkID8+PC9uMTpEYXRhPg==
+sel 0.0
+
+case pr-113
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PGIgSWQ9IiYjMTM7IiB5PSI/PiZhcG9zO11dIi8+
+sel .
+
+case pr-114
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PG4xOmEgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6eD0idXJuOjIiIHhtbG5zOm4xPSJ1cm46MSI+PGRzOmEgeG1sbnM6eD0idXJuOjMiIHhtbG5zPSJ1cm46MSIgeG1sbnM6ZHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIGRzOnY9IiI+PHE6YiB4bWxuczpxPSJ1cm46MSIgeG1sbnM9IiIgbjE6eT0iJmd0OyZndDsiPjxkczpiPl1dJmd0OyZndDtdXSZndDsKJiMxMzs8L2RzOmI+PG4xOkRhdGEgeG1sbnM6ZHM9InVybjoyIiBuMTpJZD0iJiMxMzvkuK0mIzE2MDsiPsOpPCEtLWMtLT48IVtDREFUQVtdXV0+PC9uMTpEYXRhPjwvcTpiPjx4OkRhdGEgeG1sbnM6ZHM9InVybjoxIiBuMTp4PSImbHQ7JiM5O11dIiB4Onk9IiYjMTI4NTEyOyIvPjwhW0NEQVRBW11d5LitXV0+PC9kczphPjw/cGk5ID8+PC9uMTphPg==
+sel 0.0
+
+case pr-115
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczphIHhtbG5zOmRzPSJ1cm46MSIgZHM6eD0iJmx0OwoiIGRzOnk9IiZndDsiPiYjMTYwOyZndDsmIzEzOyZxdW90OzwvZHM6YT4=
+sel .
+
+case pr-116
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjxkczpiIHhtbG5zOnA9InVybjozIiB4bWxuczpkcz0idXJuOjIiIGRzOklkPSIiLz4=
+sel .
+
+case pr-117
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48bjE6YSB4bWxucz0idXJuOjIiIHhtbG5zOm4xPSJ1cm46MiI+PD9waTggPz48IS0tLS0+PC9uMTphPg==
+sel 0
+
+case pr-118
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48cTpiIHhtbG5zOnE9InVybjoyIiBJZD0iCiIvPg==
+sel 0
+
+case pr-119
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxwOmEgeG1sbnM6eD0idXJuOjIiIHhtbG5zOnA9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHg9IiYjMTI3OyYjMTI3OyIgeDp4PSImIzk7Ii8+
+sel 0
+
+case pr-120
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48bjE6U2lnIHhtbG5zOm4xPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBuMTp4PSImIzE2MDsiIElkPSJdXSZhbXA76SIvPg==
+sel .
+
+case pr-121
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PFNpZyB4bWxucz0idXJuOjMiIHhtbG5zOng9InVybjozIiB4PSImIzk7Jmd0OyAiIHg6dj0iJmFwb3M7Pz4iIHk9IiIvPg==
+sel 0
+
+case pr-122
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpTaWcgeG1sbnM6cD0idXJuOjIiIHY9IiIgcDpJZD0iIj48YiB4bWxuczpwPSJ1cm46MSIgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcTp5PSIiPjwhW0NEQVRBW2FdXeS4rV1dPl1dPC9iPjwhW0NEQVRBW11dXV0+PC9wOlNpZz4=
+sel .
+
+case pr-123
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ZHM6YSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeD0iJmFwb3M7Ij48IS0tLS0+PCEtLS0tPiBdXTwvZHM6YT4=
+sel 0
+
+case pr-124
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48bjE6RGF0YSB4bWxuczpxPSJ1cm46MiIgeG1sbnM6cT0idXJuOjIiIHhtbG5zOm4xPSJ1cm46MyIvPg==
+sel 0
+
+case pr-125
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cDpTaWcgeG1sbnM6bjE9InVybjozIiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpwPSJ1cm46MiIgcTp2PSIiIHg9IiZxdW90O11dJmd0OyYjMTI4NTEyOyIgdj0iJnF1b3Q7Ii8+
+sel .
+
+case pr-126
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pjx4OlNpZyB4bWxuczpxPSJ1cm46MiIgeG1sbnM6eD0idXJuOjMiIHE6eT0iXV0mYXBvczvDqSIgSWQ9IiZhbXA7JmFwb3M7JiMxNjA7Ii8+
+sel 0
+
+case pr-127
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6YiB4bWxuczpuMT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgbjE6SWQ9Ii0tCS0tIiBxOnY9IiYjMTYwO+S4rSI+PD9waTggZD8+PD9waTMgPz48L3E6Yj4=
+sel .
+
+case pr-128
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHE6RGF0YSB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiBJZD0iYSIgeD0iJmd0OyI+PCFbQ0RBVEFbJibDqSZdXT48L3E6RGF0YT4=
+sel 0
+
+case pr-129
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48eDpTaWcgeG1sbnM6cD0idXJuOjMiIHhtbG5zOng9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHA6eD0iJiMxMjc7LS0/PiIgcDp5PSImZ3Q7CSYjMTYwOyIgeT0iYj8+JnF1b3Q7Ij48IVtDREFUQVtdXV1dXV0+PERhdGEgcDpJZD0iJiMxMjc75LitIi8+PC94OlNpZz4=
+sel 0
+
+case pr-130
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHg6U2lnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpxPSJ1cm46MiIgeG1sbnM6eD0idXJuOjIiIHY9ImFdXSZndDsiPjxkczpiIHhtbG5zOng9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOmRzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj4gJiMxMjc75LitPHE6YiB4bWxuczpwPSJ1cm46MiIgeG1sbnM6bjE9InVybjoyIiB4OklkPSImIzEzOyZxdW90O8OpIiBuMTp5PSIKJiMxMjc7Ij48IS0tIC0gLS0+PC9xOmI+PD9waTggZD8+PC9kczpiPjwhW0NEQVRBW11dPjxxOlNpZyB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6cT0idXJuOjMiPjwhW0NEQVRBW+S4rV3DqV1dPmEmIzEzOyZxdW90O11dJmd0OyYjMTM7CjwvcTpTaWc+PC94OlNpZz4=
+sel .
+
+case pr-131
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cTphIHhtbG5zOnE9InVybjoyIiB4PSIJIiBJZD0iJiMxMjg1MTI7Ij48IS0tIC0gLS0+PC9xOmE+
+sel 0
+
+case pr-132
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxTaWcgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcDp5PSIiIHA6SWQ9Ii0tJmFtcDsiLz4=
+sel 0
+
+case pr-133
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjxEYXRhIHhtbG5zPSJ1cm46MSIgeD0iJiMxMjc7IiB2PSLDqSI+PGEgeG1sbnM6cT0idXJuOjIiIHhtbG5zPSJ1cm46MSIvPjwhLS1jLS0+PC9EYXRhPg==
+sel .
+
+case pr-134
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/Pjx4OkRhdGEgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgdj0iIiB4OklkPSIiPjxkczpTaWcgeG1sbnM6ZHM9InVybjoyIiBkczp4PSIiIHg9IiZsdDsmcXVvdDsmZ3Q7IiB4Onk9IgoiLz4mIzEyNzsmcXVvdDthJmx0OzwveDpEYXRhPg==
+sel 0
+
+case pr-135
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHE6U2lnIHhtbG5zOnE9InVybjozIiBxOng9IiIgcTpJZD0iLS0iIHY9IiYjMTI3OyIvPg==
+sel .
+
+case pr-136
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48bjE6YiB4bWxuczpuMT0idXJuOjIiIHhtbG5zOng9InVybjoyIiB4Ong9Il1dXV0JIiB4PSImZ3Q7JiM5OyYjMTI4NTEyOyI+PHg6U2lnIHhtbG5zPSJ1cm46MSIvPjx4OmIgeG1sbnM6eD0idXJuOjMiPjw/cGkyID8+PCFbQ0RBVEFbXV1dPi0t6SYjMTM7JmFwb3M7PC94OmI+CTwvbjE6Yj4=
+sel 0.1
+
+case pr-137
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHA6YSB4bWxuczpwPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj48cTpTaWcgeG1sbnM6cT0idXJuOjEiPl1dPCEtLSAtIC0tPjx4OmEgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgdj0iJiMxMjc7JmFwb3M7Ij48U2lnIHhtbG5zOnE9InVybjoyIiBJZD0iJmd0OyIgcTp5PSImIzE2MDsmIzEyNzsiIHg6eT0iJiMxNjA7JmFtcDsmIzk7Ii8+PCFbQ0RBVEFbw6km5Lit5LitXV0+PCEtLSAtIC0tPjwveDphPjwvcTpTaWc+PHg6YiB4bWxuczp4PSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB2PSImZ3Q7w6kmcXVvdDsiIHk9IsOp5LitJnF1b3Q7IiB4Onk9IiYjMTI3OyYjMTI4NTEyOyI+Yl1dJmd0OyZhbXA7PHE6U2lnIHhtbG5zOnA9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOnE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHE6eD0iJiMxMzs/PiIgcDp5PSJdXSIgcTpJZD0iIj48RGF0YSB4Onk9ImIiIHA6eD0iIj48IVtDREFUQVtdXT48L0RhdGE+YSYjOTs/PjwvcTpTaWc+IAlhPC94OmI+XV0mIzEyNzsmIzEzOzwvcDphPg==
+sel 0
+
+case pr-138
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCI/PjxwOmIgeG1sbnM6cT0idXJuOjMiIHhtbG5zOnA9InVybjozIiBxOnY9IgoiLz4=
+sel 0
+
+case pr-140
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGOCIgc3RhbmRhbG9uZT0ieWVzIj8+PHE6YiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6ZHM9InVybjoyIiB4bWxuczpxPSJ1cm46MSIgeT0iJiMxMjg1MTI7Ij48IVtDREFUQVtdw6kmXV0+PCFbQ0RBVEFb5LitXV0+PGIgcTpJZD0iIiBkczpJZD0iCSI+PCEtLS0tPjwvYj48L3E6Yj4=
+sel .
+
+case pr-143
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48bjE6YSB4bWxuczpkcz0idXJuOjEiIHhtbG5zOm4xPSJ1cm46MyIgZHM6eT0iIiB4PSIgJiM5OyYjMTI4NTEyOyIvPg==
+sel 0
+
+case pr-144
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHA6YiB4bWxuczpwPSJ1cm46MyIgSWQ9IiZsdDsiPjx4OmIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeDpJZD0i5LitJiMxMztdXSI+PGRzOkRhdGEgeG1sbnM6eD0idXJuOjIiIHhtbG5zOmRzPSJ1cm46MSIgcDp2PSIiIHg9IiYjMTM7IiBkczp2PSJiIj48ZHM6YSB4OklkPSI/Pj8+ICIgZHM6eT0iIiB5PSIiPj8+LS08L2RzOmE+PC9kczpEYXRhPjwveDpiPjwhW0NEQVRBW+S4rV1dw6ldXT48L3A6Yj4=
+sel .
+
+case pr-145
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiIHN0YW5kYWxvbmU9InllcyI/PjxwOmEgeG1sbnM6cT0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6eD0idXJuOjMiIHhtbG5zOnA9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHk9IiI+PHE6YiB4bWxuczpuMT0idXJuOjMiIElkPSImIzEzOyYjMTI3OyYjMTI4NTEyOyIgeT0iJiMxMjc7IiBxOnY9IiBdXSZndDsmIzE2MDsiLz48P3BpMiA/PjwvcDphPg==
+sel .
+
+case pr-146
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/Pjx4OkRhdGEgeG1sbnM6eD0idXJuOjEiIHhtbG5zPSIiIHg6eT0iIiB5PSJdXSZsdDsiIHg6dj0iJmd0OyIvPg==
+sel 0
+
+case pr-147
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cTpTaWcgeG1sbnM9InVybjoxIiB4bWxuczp4PSJ1cm46MyIgeG1sbnM6cT0idXJuOjMiIHE6dj0iLS1dXSZndDsmYXBvczsiPjwhW0NEQVRBW2FhXV0+PCFbQ0RBVEFbJl1dXV0+PGRzOlNpZyB4bWxuczpkcz0idXJuOjEiIHg9IiZhcG9zOyYjMTYwOyAiIHE6eT0iLS0iPjxxOlNpZyB4bWxuczpwPSJ1cm46MSIgeG1sbnM6cD0idXJuOjEiIGRzOng9IiYjMTI4NTEyOyZhbXA7IiB2PSIiPjwhW0NEQVRBWyY8w6ldXV1dPjwhW0NEQVRBW108XeS4rV1dPjwvcTpTaWc+PD9waTMgZD8+PC9kczpTaWc+PC9xOlNpZz4=
+sel 0.2
+
+case pr-148
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PERhdGEgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zPSJ1cm46MyI+PHE6YiB4bWxuczpxPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj7DqSDkuK0mbHQ7YjwhLS0tLT48L3E6Yj48L0RhdGE+
+sel .
+
+case pr-149
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVMtQVNDSUkiPz48RGF0YSB4bWxuczp4PSJ1cm46MyIgeG1sbnM6cT0idXJuOjEiIHg6eT0iJmFtcDsmcXVvdDsmIzEyNzsiLz4=
+sel 0
+
+case pr-150
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSIgc3RhbmRhbG9uZT0ibm8iPz48YiB4bWxucz0iIiB4bWxuczp4PSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIj48eDpTaWcgdj0iYiYjMTM7IiBJZD0iJnF1b3Q7JiM5OyYjMTI3OyIgeD0iJmFwb3M7Ii8+PCEtLSAtIC0tPjxkczpEYXRhIHhtbG5zOm4xPSJ1cm46MSIgeG1sbnM6ZHM9InVybjozIiBkczpJZD0iJmx0OyI+PHA6RGF0YSB4bWxuczpwPSJ1cm46MiI+XV0mZ3Q7JiMxNjA7PC9wOkRhdGE+PC9kczpEYXRhPjwvYj4=
+sel 0.2
+
+case pr-151
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHE6YSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6cT0idXJuOjEiIHg9IiAmIzk7CiIgcTp4PSJdXSZndDsmIzEyNzsmIzEzOyIgcTpJZD0iLS0iPjxuMTphIHhtbG5zPSIiIHhtbG5zOmRzPSJ1cm46MyIgeG1sbnM6bjE9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIG4xOnk9IiZsdDsmIzEzO11dJmd0OyIgZHM6eD0iXV0iPjxiIHhtbG5zOnA9InVybjoyIj4mcXVvdDsKJiMxMzsmYW1wOzx4OkRhdGEgeG1sbnM6eD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgZHM6SWQ9ImEiIHg6SWQ9IiYjMTI3O11dIj5iJmFtcDs8IVtDREFUQVtdPGFdXT4mcXVvdDtiPC94OkRhdGE+PC9iPjw/cGk1ICBzcCAgZCA/PjwvbjE6YT48IVtDREFUQVthw6lhXV0+PHg6U2lnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczp4PSJ1cm46MSIgeT0iCl1dIiB4Ong9ImImcXVvdDsKIi8+PC9xOmE+
+sel 0.0.0
+
+case pr-152
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHE6YSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiIHhtbG5zOnE9InVybjoxIiBxOng9ImJhIiB4PSIiIHE6SWQ9IuS4rSYjOTsKIj48RGF0YSBxOng9IiZndDsmZ3Q7JiMxMjc7Ij48cTpEYXRhIElkPSImZ3Q7XV0/PiIgeT0iIiBxOnY9IiYjMTYwOyI+XV0mZ3Q7JiMxMjg1MTI7IDxwOmIgeG1sbnM9InVybjoyIiB4bWxuczpxPSJ1cm46MiIgeG1sbnM6cD0idXJuOjIiPiYjMTI3OzwvcDpiPjxwOmIgeG1sbnM6cD0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgcDpJZD0iJmx0OyIgcTp5PSImYXBvczsiLz48L3E6RGF0YT48IS0tIC0gLS0+PC9EYXRhPjxwOmIgeG1sbnM6cD0idXJuOjIiIHE6SWQ9Ij8+LS0iIHE6dj0iLS0iIHE6eD0iIj48IVtDREFUQVtdw6km5LitXV0+5LitJmFwb3M7PC9wOmI+PD9waTEgZD8+PC9xOmE+
+sel 0.0.0.1
+
+case pr-153
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9Im5vIj8+PFNpZyBJZD0iID8+Jmx0OyI+PD9waTQgPz48L1NpZz4=
+sel .
+
+case pr-154
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiIHN0YW5kYWxvbmU9InllcyI/PjxkczphIHhtbG5zOm4xPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpkcz0idXJuOjMiIElkPSIiIHg9IiZsdDsiLz4=
+sel .
+
+case pr-155
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIj8+PHg6YSB4bWxuczp4PSJ1cm46MSIgeDp4PSImcXVvdDsmIzEzOyZhcG9zOyI+PCEtLWEgYi0tPjwveDphPg==
+sel .
+
+case pr-156
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48bjE6U2lnIHhtbG5zOm4xPSJ1cm46MyIgeT0iJmx0OyYjMTYwOyIgSWQ9Ii0tXV0iPjw/cGk3IGQ/PjwhLS1jLS0+PHE6U2lnIHhtbG5zOnE9InVybjoyIiBxOklkPSJiJiMxMzsiIHg9IiZxdW90OyYjMTYwOyIvPjwvbjE6U2lnPg==
+sel 0
+
+case pr-157
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMSI/PjxuMTpiIHhtbG5zOnA9InVybjozIiB4bWxuczpuMT0idXJuOjMiIHA6SWQ9IiYjMTI4NTEyOyZhbXA7Jmx0OyIgbjE6eD0iPz4mIzEyODUxMjsKIj4mIzk7CjwvbjE6Yj4=
+sel .
+
+case pr-158
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cTpiIHhtbG5zOnE9InVybjoyIiB5PSLkuK1dXSIvPg==
+sel 0
+
+case pr-159
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJ5ZXMiPz48cTpiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzA5L3htbGRzaWcjIiB4bWxuczpxPSJ1cm46MyIvPg==
+sel 0
+
+# ------------------------------------------------------------------- ISO-8859-2 (Latin-2)
+# The only single-byte charset beyond Latin-1 the upstream XAdES corpus declares -
+# validation/Signature-X-HU_MIC-1.xml and validation/BaselineBWithCertificateValues.xml both
+# do. Every one of the 96 characters in the top half is round-tripped, in text and in an
+# attribute value, so a wrong entry in the table cannot hide; the out-of-charset rows pin
+# that a character Latin-2 cannot carry becomes a DECIMAL character reference in text and in
+# an attribute and a '?' in a comment or a processing instruction; and the alias rows pin
+# which spellings Encodings.properties rewrites in the declaration and which it echoes back
+# unchanged (probed against OpenJDK 21: ISO8859_2, ISO8859-2 and iso-8859-2 all become
+# "ISO-8859-2"; latin2, csISOLatin2, ISO_8859-2 and cp912 do not).
+
+case enc-latin2-text-all
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMiI/PjxyPqChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/zwvcj4=
+sel .
+
+case enc-latin2-attr-all
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMiI/PjxyIGE9IqChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/yIvPg==
+sel 0
+
+case enc-latin2-out-of-charset
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMiI/PjxyIGI9IiYjODM2NDsmIzEyODUxMjsmIzIwMDEzOyI+JiM4MzY0OyYjMTI4NTEyOyYjMjAwMTM7JiMyMzM7PC9yPg==
+sel .
+
+case enc-latin2-comment-out-of-charset
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMiI/PjxyPjwhLS14IKEtLT48P3QgsT8+PC9yPg==
+sel .
+
+case enc-latin2-lowercase
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMiI/PjxyPqChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v8PHy8/T19vf4+fr7/P3+/zwvcj4=
+sel .
+
+case enc-latin2-javaname
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPODg1OV8yIj8+PHI+YWJjPC9yPg==
+sel .
+
+case enc-latin2-hyphenname
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPODg1OS0yIj8+PHI+YWJjPC9yPg==
+sel .
+
+case enc-latin2-alias-latin2
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0ibGF0aW4yIj8+PHI+YWJjPC9yPg==
+sel .
+
+case enc-latin2-alias-csiso
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iY3NJU09MYXRpbjIiPz48cj5hYmM8L3I+
+sel .
+
+case enc-latin2-alias-underscore
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPXzg4NTktMiI/PjxyPmFiYzwvcj4=
+sel .
+
+case enc-latin2-alias-cp912
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iY3A5MTIiPz48cj5hYmM8L3I+
+sel .
+
+case enc-latin2-subtree
+parseb64 PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iSVNPLTg4NTktMiI/PjxyPjxhIGI9IqChoqOkpaanqKmqq6ytrq+wsbKzIj60tba3uLm6u7y9vr/AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3+Dh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/PC9hPjwvcj4=
+sel 0.0

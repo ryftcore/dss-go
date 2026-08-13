@@ -24,6 +24,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/xmldom"
@@ -406,15 +407,13 @@ func DomUtilsGetChildrenNames(xmlNode *xmldom.Node, xPathString string) ([]strin
 	return childrenNames, nil
 }
 
-// DomUtilsWriteDocumentTo writes the Document content to w.
+// DomUtilsWriteDocumentTo writes the Document content to w. Ports
+// writeDocumentTo(Document, OutputStream).
 //
-// DEVIATION: Java re-emits the parsed document's own xmlEncoding (getXmlEncoding()) as the
-// declaration's encoding attribute. internal/xmldom does not retain the source document's
-// declared encoding after parsing (the XML declaration is consumed and discarded - see
-// XML_DESIGN.md §1.5), so there is nothing to read here; the declaration is always
-// "UTF-8" (xmldom.Serialize's default). Byte-parity with Java's Transformer output is
-// explicitly not required for this method (XML_DESIGN.md §1.8: "DomUtils.serializeNode
-// output is never itself signed"). Ports writeDocumentTo(Document, OutputStream).
+// The bytes are byte-for-byte the identity Transformer's, the source document's own
+// declared encoding included: internal/xmldom keeps the XML declaration's encoding and
+// standalone on the Document and Serialize re-emits both, and writes the markup in that
+// encoding. TestSerializeAgainstJavaTransformerOracle is the gate.
 func DomUtilsWriteDocumentTo(dom *xmldom.Node, w io.Writer) error {
 	if err := dom.Serialize(w, nil); err != nil {
 		return model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to store a DOM document to OutputStream : %s", err.Error()), err)
@@ -699,6 +698,13 @@ func DomUtilsBrowseRecursivelyForNamespaceWithUri(element *xmldom.Node, uri stri
 // Attribute and ProcInst nodes do. The base64-decode-failure fallback
 // (catch(Exception) -> textContent.getBytes()) is unreachable in this port: utils.FromBase64
 // mirrors commons-codec's lenient decoder, which never errors (see utils/codec.go).
+//
+// The new String(bytes)/str.getBytes() pair around the declaration-stripping is NOT a
+// no-op the way it looks: both use the platform default charset, which is UTF-8 since
+// JEP 400, so a serialization written in any other encoding - which happens whenever the
+// source document declared one - is decoded lossily and re-encoded, replacing every
+// malformed byte sequence with U+FFFD. That is what the digest of a no-transform
+// ds:Reference is then computed over, so it is reproduced here rather than skipped.
 func DomUtilsGetNodeBytes(node *xmldom.Node) ([]byte, error) {
 	switch node.Kind {
 	case xmldom.Element, xmldom.Document, xmldom.Comment:
@@ -706,7 +712,7 @@ func DomUtilsGetNodeBytes(node *xmldom.Node) ([]byte, error) {
 		if err != nil {
 			return nil, err
 		}
-		str := string(b)
+		str := javaString(b)
 		if strings.HasPrefix(str, "<?") {
 			if idx := strings.Index(str, "?>"); idx >= 0 {
 				str = str[idx+2:]
@@ -719,6 +725,80 @@ func DomUtilsGetNodeBytes(node *xmldom.Node) ([]byte, error) {
 		return nil, nil
 	}
 }
+
+// javaString is new String(bytes) under the UTF-8 default charset: a decode whose
+// malformed input is replaced with U+FFFD. The result is re-encoded to UTF-8 by the
+// caller's []byte conversion, so what actually has to match Java is how many replacement
+// characters a bad sequence collapses to, and that is decided by
+// java.nio.charset.UTF_8$Decoder's malformed-input LENGTHS, not by "one per byte":
+//
+//   - a lead byte followed by too few continuation bytes consumes the whole partial
+//     sequence and yields one U+FFFD (E9 A9 -> one, F0 9F 98 -> one);
+//   - a lead byte whose SECOND byte is not a legal continuation for it consumes one byte
+//     only, so the rest are re-examined and can produce their own (E0 80 80 -> three);
+//   - a well-formed encoding of a surrogate or of a code point above U+10FFFF is rejected
+//     as a whole (ED A0 80 -> one).
+//
+// Go's utf8.DecodeRune always reports a length of 1, which would give three replacements
+// for E9 A9 21 where Java gives two. The rows named latin1-utf8-decoder-* in
+// testdata/serialize pin every branch below.
+func javaString(b []byte) string {
+	if utf8.Valid(b) {
+		return string(b)
+	}
+	var sb strings.Builder
+	sb.Grow(len(b))
+	for i := 0; i < len(b); {
+		r, size := utf8.DecodeRune(b[i:])
+		if r != utf8.RuneError || size > 1 {
+			sb.Write(b[i : i+size])
+			i += size
+			continue
+		}
+		sb.WriteRune(utf8.RuneError)
+		i += javaMalformedLength(b[i:])
+	}
+	return sb.String()
+}
+
+// javaMalformedLength returns how many bytes UTF_8$Decoder consumes for the malformed
+// sequence starting at b[0]. It mirrors that decoder's malformedN: the second byte decides
+// whether the sequence is rejected one byte at a time or as a unit.
+func javaMalformedLength(b []byte) int {
+	b1 := b[0]
+	switch {
+	case b1&0xE0 == 0xC0: // 2-byte lead
+		// Both malformed cases (an overlong C0/C1 lead, or a bad continuation) consume
+		// one byte.
+		return 1
+	case b1&0xF0 == 0xE0: // 3-byte lead
+		if len(b) < 2 || (b1 == 0xE0 && b[1]&0xE0 == 0x80) || !isContinuation(b[1]) {
+			return 1
+		}
+		if len(b) < 3 || !isContinuation(b[2]) {
+			return 2
+		}
+		// Well formed as far as UTF-8 goes; it is the surrogate range that rejects it.
+		return 3
+	case b1&0xF8 == 0xF0: // 4-byte lead
+		if len(b) < 2 || b1 > 0xF4 ||
+			(b1 == 0xF0 && (b[1] < 0x90 || b[1] > 0xBF)) ||
+			(b1 == 0xF4 && b[1]&0xF0 != 0x80) || !isContinuation(b[1]) {
+			return 1
+		}
+		if len(b) < 3 || !isContinuation(b[2]) {
+			return 2
+		}
+		if len(b) < 4 || !isContinuation(b[3]) {
+			return 3
+		}
+		return 4
+	}
+	// A continuation byte on its own, or a 0xF8-0xFF byte that leads nothing.
+	return 1
+}
+
+func isContinuation(b byte) bool { return b&0xC0 == 0x80 }
 
 // DomUtilsCreateDeepCopy creates a deep copy of the Document for the given element, and
 // returns the corresponding element from the copied Document. This addresses a

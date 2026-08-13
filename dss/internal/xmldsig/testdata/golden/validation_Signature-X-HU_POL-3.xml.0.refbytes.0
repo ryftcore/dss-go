@@ -1,0 +1,24 @@
+<xades132:SignedProperties xmlns:xades132="http://uri.etsi.org/01903/v1.3.2#" Id="Signature-1__SignedProperties-1">
+<xades132:SignedSignatureProperties>
+<xades132:SigningTime>2014-11-05T11:50:06Z</xades132:SigningTime>
+<xades132:SigningCertificate>
+<xades132:Cert>
+<xades132:CertDigest>
+<ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue xmlns:ds="http://www.w3.org/2000/09/xmldsig#">RMen3TecFcv0G9ay4cW//FBkr5dqc/HhhaINTQn2nYI=</ds:DigestValue>
+</xades132:CertDigest>
+<xades132:IssuerSerial>
+<ds:X509IssuerName xmlns:ds="http://www.w3.org/2000/09/xmldsig#">CN=Minősített Közigazgatási Tanúsítványkiadó - GOV CA,O=NISZ Nemzeti Infokommunikációs Szolgáltató Zrt.,L=Budapest,C=HU</ds:X509IssuerName>
+<ds:X509SerialNumber xmlns:ds="http://www.w3.org/2000/09/xmldsig#">3330102775574745337</ds:X509SerialNumber>
+</xades132:IssuerSerial>
+</xades132:Cert>
+</xades132:SigningCertificate>
+<xades132:SignaturePolicyIdentifier><xades132:SignaturePolicyImplied></xades132:SignaturePolicyImplied></xades132:SignaturePolicyIdentifier></xades132:SignedSignatureProperties>
+<xades132:SignedDataObjectProperties>
+<xades132:DataObjectFormat ObjectReference="#Signature-1__Reference-2">
+<xades132:Description>tobesigned.txt</xades132:Description>
+<xades132:MimeType>text/plain</xades132:MimeType>
+<xades132:Encoding>http://www.w3.org/2000/09/xmldsig#base64</xades132:Encoding>
+</xades132:DataObjectFormat>
+</xades132:SignedDataObjectProperties>
+</xades132:SignedProperties>

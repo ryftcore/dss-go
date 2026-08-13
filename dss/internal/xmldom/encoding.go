@@ -90,8 +90,13 @@ func decodeSource(src []byte, cr func(string, io.Reader) (io.Reader, error)) ([]
 			}
 		}
 		return buf, decl, nil
-	case "iso-8859-1", "iso8859-1", "iso_8859-1", "latin1", "latin-1", "l1", "cp819", "ibm819", "iso-ir-100":
+	case "iso-8859-1", "iso8859-1", "iso8859_1", "iso_8859-1", "latin1", "latin-1", "l1", "cp819", "ibm819", "iso-ir-100":
 		return decodeLatin1(buf), decl, nil
+	// ISO-8859-2. The alias set is the one Xerces answers to, probed against OpenJDK 21;
+	// "8859_2" is deliberately absent because Xerces rejects it as it rejects "latin-1".
+	case "iso-8859-2", "iso8859-2", "iso8859_2", "iso_8859-2", "iso_8859-2:1987",
+		"latin2", "l2", "csisolatin2", "iso-ir-101", "cp912", "ibm912", "ibm-912", "912":
+		return decodeLatin2(buf), decl, nil
 	case "utf-16be":
 		b, err := decodeUTF16(buf, true)
 		return b, decl, err

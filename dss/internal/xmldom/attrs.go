@@ -50,6 +50,7 @@ func (n *Node) RemoveAttr(space, local string) bool {
 	for i, a := range n.Attrs {
 		if a.Name.Space == space && a.Name.Local == local {
 			n.bump()
+			rememberOwner(a)
 			a.Parent = nil
 			n.Attrs = append(n.Attrs[:i], n.Attrs[i+1:]...)
 			return true
