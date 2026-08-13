@@ -66,6 +66,18 @@ API-identical Java-in-Go is an anti-goal. The compatibility contract is **intero
 
 Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, an adversarial fidelity review, then commit + push.
 
+## Progress (actuals)
+
+| Phase | Status | Notes |
+|---|---|---|
+| 0, 1a, 1b | ✅ done | enumerations/alert/utils/model — audited vs OpenJDK 21 oracle |
+| 2a | ✅ done | spi core + crlparser; native BER/DER engine + OCSP; audited vs maven-built upstream DSS |
+| CMS core | ✅ done | internal/asn1ber + internal/cmscore (RFC 5652/3161), BC-oracle byte-identical builds |
+| 2b | ✅ done | spi/validation (AdvancedSignature 86/86 methods), TimestampToken, token, document, CMS sources |
+| 3+ | pending | next: public cms pkg + CAdES + cross-validation harness |
+
+Known accepted gaps (tracked): PKCS#12 Ed25519/DSA keystores unloadable (x/crypto limitation; native PFX parser planned), JKS/PKCS#11 unsupported, MD2/WHIRLPOOL digests, map-iteration ordering sweep pending at 12 sites, test backfill pending for validation/timestamp, document, analyzer, jdbc.
+
 ## Budget pacing (Claude Max 5-hour windows)
 
 - One bounded batch per usage window (≈8–12 Sonnet agents + 1–2 Opus reviewers), then commit, push, and schedule a self check-in into the next window via `send_later`.
