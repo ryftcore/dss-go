@@ -1,0 +1,273 @@
+# document	scope-slug	apex	prefixlist   (written by gen/corpus.py)
+minimal.xml	doc		
+prolog-epilog.xml	doc		
+prolog-epilog.xml	apex-r	r	
+prolog-epilog.xml	apex-x	x	
+prolog-epilog-empty-root.xml	doc		
+prolog-epilog-empty-root.xml	apex-r	r	
+prolog-pi-nodata.xml	doc		
+prolog-pi-nodata.xml	apex-r	r	
+attr-order.xml	doc		
+attr-order.xml	apex-r	r	
+attr-many.xml	doc		
+attr-many.xml	apex-r	r	
+attr-ws-normalize.xml	doc		
+attr-ws-normalize.xml	apex-r	r	
+attr-quotes.xml	doc		
+attr-quotes.xml	apex-r	r	
+text-escapes.xml	doc		
+text-escapes.xml	apex-r	r	
+cdata.xml	doc		
+cdata.xml	apex-r	r	
+cdata.xml	apex-e	e	
+comments-pi-nested.xml	doc		
+comments-pi-nested.xml	apex-r	r	
+comments-pi-nested.xml	apex-a	a	
+comments-pi-nested.xml	apex-b	b	
+ns-superfluous.xml	doc		
+ns-superfluous.xml	apex-r	r	
+ns-superfluous.xml	apex-c	c	
+ns-superfluous.xml	apex-d	d	
+ns-rebind.xml	doc		
+ns-rebind.xml	apex-r	r	
+ns-rebind.xml	apex-c	c	
+ns-rebind.xml	apex-d	d	
+ns-rebind.xml	apex-e	e	
+ns-unused.xml	doc		
+ns-unused.xml	apex-r	r	
+ns-unused.xml	apex-c	c	
+ns-unused.xml	apex-d	d	
+ns-default-undeclare.xml	doc		
+ns-default-undeclare.xml	apex-r	r	
+ns-default-undeclare.xml	apex-c	c	
+ns-default-undeclare.xml	apex-d	d	
+ns-default-undeclare.xml	apex-e	e	
+ns-default-undeclare.xml	apex-f	f	
+ns-default-apex.xml	doc		
+ns-default-apex.xml	apex-r	r	
+ns-default-apex.xml	apex-c	c	
+ns-default-apex.xml	apex-t	t	
+ns-xml-prefix.xml	doc		
+ns-xml-prefix.xml	apex-r	r	
+ns-xml-prefix.xml	apex-c	c	
+ns-xml-prefix.xml	apex-t	t	
+ns-relative.xml	doc		
+ns-relative.xml	apex-r	r	
+ns-relative.xml	apex-c	c	
+ns-relative.xml	apex-t	t	
+excl-visibly-utilized.xml	doc		
+excl-visibly-utilized.xml	apex-r	r	
+excl-visibly-utilized.xml	apex-c	c	
+excl-visibly-utilized.xml	apex-t	t	
+excl-prefixlist.xml	doc		
+excl-prefixlist.xml	apex-r	r	
+excl-prefixlist.xml	apex-c	c	
+excl-prefixlist.xml	apex-t2	t2	
+excl-prefixlist.xml	apex-c-incl-q	c	q
+excl-prefixlist.xml	apex-c-incl-default-q	c	#default q
+excl-prefixlist.xml	apex-c-incl-default	c	#default
+excl-prefixlist.xml	apex-c-incl-zz	c	zz
+excl-prefixlist.xml	apex-c-incl-p-q-zz	c	p q  zz
+excl-prefixlist.xml	apex-t2-incl-default-q	t2	#default q
+xmlattrs-lang-space.xml	doc		
+xmlattrs-lang-space.xml	apex-r	r	
+xmlattrs-lang-space.xml	apex-m	m	
+xmlattrs-lang-space.xml	apex-t	t	
+xmlattrs-lang-space.xml	apex-n	n	
+xmlattrs-lang-space.xml	apex-u	u	
+xmlattrs-lang-space.xml	apex-v	v	
+xmlbase-absolute.xml	doc		
+xmlbase-absolute.xml	apex-r	r	
+xmlbase-absolute.xml	apex-m	m	
+xmlbase-absolute.xml	apex-n	n	
+xmlbase-absolute.xml	apex-t	t	
+xmlbase-relative.xml	doc		
+xmlbase-relative.xml	apex-r	r	
+xmlbase-relative.xml	apex-m	m	
+xmlbase-relative.xml	apex-t	t	
+xmlbase-dotsegments.xml	doc		
+xmlbase-dotsegments.xml	apex-r	r	
+xmlbase-dotsegments.xml	apex-m	m	
+xmlbase-dotsegments.xml	apex-n	n	
+xmlbase-dotsegments.xml	apex-t	t	
+xml-id.xml	doc		
+xml-id.xml	apex-r	r	
+xml-id.xml	apex-m	m	
+xml-id.xml	apex-t	t	
+xml-id.xml	apex-u	u	
+unicode.xml	doc		
+unicode.xml	apex-r	r	
+sort-astral.xml	doc		
+sort-astral.xml	apex-r	r	
+bom-decl.xml	doc		
+bom-decl.xml	apex-r	r	
+encoding-latin1.xml	doc		
+encoding-latin1.xml	apex-r	r	
+entities.xml	doc		
+entities.xml	apex-r	r	
+entities.xml	apex-c	c	
+empty-elements.xml	doc		
+empty-elements.xml	apex-r	r	
+empty-elements.xml	apex-a	a	
+empty-elements.xml	apex-b	b	
+empty-elements.xml	apex-c	c	
+empty-elements.xml	apex-d	d	
+empty-elements.xml	apex-e	e	
+deep-nesting.xml	doc		
+deep-nesting.xml	apex-l000	l000	
+deep-nesting.xml	apex-l100	l100	
+deep-nesting.xml	apex-l199	l199	
+xades-signature.xml	doc		
+xades-signature.xml	apex-id-910825ec07149183c174c83fce12ac93	id-910825ec07149183c174c83fce12ac93	
+xades-signature.xml	apex-r-id-1	r-id-1	
+xades-signature.xml	apex-o-id-1	o-id-1	
+xades-signature.xml	apex-r-id-1-incl-ds	r-id-1	ds
+trusted-list.xml	doc		
+trusted-list.xml	apex-TL12345	TL12345	
+ns-default-nested.xml	doc		
+ns-default-nested.xml	apex-r	r	
+ns-default-nested.xml	apex-b	b	
+ns-default-nested.xml	apex-c	c	
+ns-default-nested.xml	apex-d	d	
+ns-default-nested.xml	apex-e	e	
+ns-default-nested.xml	apex-f	f	
+ns-default-mixed.xml	doc		
+ns-default-mixed.xml	apex-r	r	
+ns-default-mixed.xml	apex-a	a	
+ns-default-mixed.xml	apex-b	b	
+ns-default-mixed.xml	apex-c	c	
+ns-default-mixed.xml	apex-d	d	
+attr-same-local-diff-uri.xml	doc		
+attr-same-local-diff-uri.xml	apex-r	r	
+attr-collide-deep.xml	doc		
+attr-collide-deep.xml	apex-r	r	
+attr-collide-deep.xml	apex-e	e	
+attr-collide-deep.xml	apex-f	f	
+xmlattrs-outside-subtree.xml	doc		
+xmlattrs-outside-subtree.xml	apex-r	r	
+xmlattrs-outside-subtree.xml	apex-m	m	
+xmlattrs-outside-subtree.xml	apex-n	n	
+xmlattrs-outside-subtree.xml	apex-t	t	
+xmlattrs-outside-subtree.xml	apex-u	u	
+xmlbase-apex-own.xml	doc		
+xmlbase-apex-own.xml	apex-r	r	
+xmlbase-apex-own.xml	apex-m	m	
+xmlbase-apex-own.xml	apex-t	t	
+xmlbase-apex-own.xml	apex-u	u	
+xmlbase-escaped.xml	doc		
+xmlbase-escaped.xml	apex-r	r	
+xmlbase-escaped.xml	apex-m	m	
+xmlbase-escaped.xml	apex-t	t	
+xmlbase-badchars.xml	doc		
+xmlbase-badchars.xml	apex-r	r	
+xmlbase-badchars.xml	apex-m	m	
+xmlbase-badchars.xml	apex-n	n	
+xmlbase-badchars.xml	apex-t	t	
+xmlbase-query.xml	doc		
+xmlbase-query.xml	apex-r	r	
+xmlbase-query.xml	apex-m	m	
+xmlbase-query.xml	apex-n	n	
+xmlbase-query.xml	apex-t	t	
+xmlbase-opaque.xml	doc		
+xmlbase-opaque.xml	apex-r	r	
+xmlbase-opaque.xml	apex-m	m	
+xmlbase-opaque.xml	apex-t	t	
+xmlbase-unicode.xml	doc		
+xmlbase-unicode.xml	apex-r	r	
+xmlbase-unicode.xml	apex-m	m	
+xmlbase-unicode.xml	apex-t	t	
+xmlbase-plain-base.xml	doc		
+xmlbase-plain-base.xml	apex-r	r	
+xmlbase-plain-base.xml	apex-m	m	
+xmlbase-plain-base.xml	apex-t	t	
+xmlbase-plain-base.xml	apex-u	u	
+xmlbase-dotsegments2.xml	doc		
+xmlbase-dotsegments2.xml	apex-r	r	
+xmlbase-dotsegments2.xml	apex-m	m	
+xmlbase-dotsegments2.xml	apex-n	n	
+xmlbase-dotsegments2.xml	apex-o	o	
+xmlbase-dotsegments2.xml	apex-p2	p2	
+xmlbase-dotsegments2.xml	apex-t	t	
+xmlbase-norelscheme.xml	doc		
+xmlbase-norelscheme.xml	apex-r	r	
+xmlbase-norelscheme.xml	apex-m	m	
+xmlbase-norelscheme.xml	apex-n	n	
+xmlbase-norelscheme.xml	apex-t	t	
+xmlbase-empty.xml	doc		
+xmlbase-empty.xml	apex-r	r	
+xmlbase-empty.xml	apex-m	m	
+xmlbase-empty.xml	apex-n	n	
+xmlbase-empty.xml	apex-t	t	
+xmlbase-noslash.xml	doc		
+xmlbase-noslash.xml	apex-r	r	
+xmlbase-noslash.xml	apex-m	m	
+xmlbase-noslash.xml	apex-t	t	
+xmlbase-authority-empty.xml	doc		
+xmlbase-authority-empty.xml	apex-r	r	
+xmlbase-authority-empty.xml	apex-m	m	
+xmlbase-authority-empty.xml	apex-n	n	
+xmlbase-authority-empty.xml	apex-t	t	
+xmlbase-fragment.xml	doc		
+xmlbase-fragment.xml	apex-r	r	
+xmlbase-fragment.xml	apex-m	m	
+xmlbase-fragment.xml	apex-t	t	
+xmlbase-dotsegments3.xml	doc		
+xmlbase-dotsegments3.xml	apex-r	r	
+xmlbase-dotsegments3.xml	apex-m	m	
+xmlbase-dotsegments3.xml	apex-n	n	
+xmlbase-dotsegments3.xml	apex-o	o	
+xmlbase-dotsegments3.xml	apex-p3	p3	
+xmlbase-dotsegments3.xml	apex-q3	q3	
+xmlbase-dotsegments3.xml	apex-t	t	
+xmlbase-dotdot-relative.xml	doc		
+xmlbase-dotdot-relative.xml	apex-r	r	
+xmlbase-dotdot-relative.xml	apex-m	m	
+xmlbase-dotdot-relative.xml	apex-n	n	
+xmlbase-dotdot-relative.xml	apex-t	t	
+xmlbase-badescape.xml	doc		
+xmlbase-badescape.xml	apex-r	r	
+xmlbase-badescape.xml	apex-m	m	
+xmlbase-badescape.xml	apex-n	n	
+xmlbase-badescape.xml	apex-t	t	
+xmlbase-nbsp.xml	doc		
+xmlbase-nbsp.xml	apex-r	r	
+xmlbase-nbsp.xml	apex-m	m	
+xmlbase-nbsp.xml	apex-t	t	
+excl-prefixlist2.xml	doc		
+excl-prefixlist2.xml	apex-r	r	
+excl-prefixlist2.xml	apex-c	c	
+excl-prefixlist2.xml	apex-t	t	
+excl-prefixlist2.xml	apex-d	d	
+excl-prefixlist2.xml	apex-c-incl-empty	c	#empty
+excl-prefixlist2.xml	apex-t-incl-empty	t	#empty
+excl-prefixlist2.xml	apex-c-incl-default	c	#default
+excl-prefixlist2.xml	apex-t-incl-default	t	#default
+excl-prefixlist2.xml	apex-c-incl-xml	c	xml
+excl-prefixlist2.xml	apex-c-incl-dup	c	p p q q
+excl-prefixlist2.xml	apex-c-incl-un	c	un
+excl-prefixlist2.xml	apex-d-incl-default-p-un	d	#default p un
+ws-between-elements.xml	doc		
+ws-between-elements.xml	apex-r	r	
+ws-between-elements.xml	apex-a	a	
+ws-between-elements.xml	apex-b	b	
+ws-between-elements.xml	apex-c	c	
+ws-between-elements.xml	apex-d	d	
+ws-between-elements.xml	apex-e	e	
+ws-between-elements.xml	apex-f	f	
+ws-prolog-epilog.xml	doc		
+ws-prolog-epilog.xml	apex-r	r	
+ws-prolog-epilog.xml	apex-x	x	
+bom-nodecl.xml	doc		
+bom-nodecl.xml	apex-r	r	
+bom-utf16le.xml	doc		
+bom-utf16le.xml	apex-r	r	
+bom-utf16be.xml	doc		
+bom-utf16be.xml	apex-r	r	
+nel-lsep.xml	doc		
+nel-lsep.xml	apex-r	r	
+nel-lsep.xml	apex-c	c	
+attr-high-codepoints.xml	doc		
+attr-high-codepoints.xml	apex-r	r	
+attr-high-codepoints.xml	apex-c	c	
+sort-astral2.xml	doc		
+sort-astral2.xml	apex-r	r	

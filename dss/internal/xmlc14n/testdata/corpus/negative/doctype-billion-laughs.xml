@@ -1,0 +1,1 @@
+<!DOCTYPE r [<!ENTITY a "xx"><!ENTITY b "&a;&a;"><!ENTITY c "&b;&b;">]><r>&c;</r>
