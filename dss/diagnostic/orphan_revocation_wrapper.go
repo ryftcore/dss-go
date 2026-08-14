@@ -1,0 +1,39 @@
+// Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/OrphanRevocationWrapper.java (DSS 6.5.RC1).
+package diagnostic
+
+import (
+	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/utain/esig/dss/enumerations"
+)
+
+// OrphanRevocationWrapper wraps document-embedded revocation data.
+type OrphanRevocationWrapper struct {
+	OrphanRevocationTokenWrapper
+
+	// orphanRevocation is the wrapped XmlOrphanRevocation.
+	orphanRevocation *jaxb.XmlOrphanRevocation
+}
+
+// NewOrphanRevocationWrapper is the default constructor.
+func NewOrphanRevocationWrapper(orphanRevocation *jaxb.XmlOrphanRevocation) *OrphanRevocationWrapper {
+	w := &OrphanRevocationWrapper{
+		OrphanRevocationTokenWrapper: *NewOrphanRevocationTokenWrapper(orphanRevocation.Token),
+		orphanRevocation:             orphanRevocation,
+	}
+	w.InitOrphanTokenWrapper(w)
+	return w
+}
+
+// GetOrigins returns a list of orphan revocation origins. Port of getOrigins().
+func (w *OrphanRevocationWrapper) GetOrigins() []enumerations.RevocationOrigin {
+	return w.orphanRevocation.Origins
+}
+
+// GetReferences returns a list of orphan revocation references. Port of getReferences().
+func (w *OrphanRevocationWrapper) GetReferences() []*RevocationRefWrapper {
+	var revocationRefWrappers []*RevocationRefWrapper
+	for _, revocationRef := range w.orphanRevocation.RevocationRefs {
+		revocationRefWrappers = append(revocationRefWrappers, NewRevocationRefWrapper(revocationRef, w.orphanRevocation.Token.Id))
+	}
+	return revocationRefWrappers
+}
