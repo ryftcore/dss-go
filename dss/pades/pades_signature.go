@@ -105,6 +105,38 @@ func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevis
 	}
 	s.InitDefaultAdvancedSignature(s)
 	s.SetDetachedContents([]model.DSSDocument{pdfSignatureRevision.SignedData()})
+
+	// Eagerly warms the offline certificate/CRL/OCSP source caches - shared embedded
+	// DefaultAdvancedSignature fields CAdESSignature.CertificateSource/CRLSource/OCSPSource also
+	// lazily populate on first call - with THIS type's own PAdES-enriched (DSS-dictionary and
+	// VRI aware) sources, before anything else gets a chance to populate them first.
+	//
+	// Without this, the generic timestamp-source machinery (spi/validation/timestamp's
+	// SignatureTimestampSource[*cades.CAdESSignature, *cades.CAdESAttribute], concretely typed
+	// per pades_timestamp_source.go's header on why it mirrors Java's unparametrized
+	// CAdESTimestampSource<CAdESSignature,CAdESAttribute> inheritance) calls
+	// s.signature.CertificateSource()/CRLSource()/OCSPSource() through the embedded
+	// *cades.CAdESSignature field the moment DocumentTimestamps() is first queried (directly, or
+	// via PDF modification-detection post-processing in PDFDocumentAnalyzer.postProcessing).
+	// Since Go has no runtime vtable for a concrete (non-interface) generic type parameter - only
+	// Java's virtual dispatch reaches PAdESSignature.getCertificateSource() there - that call
+	// resolves to CAdESSignature's OWN method body, which lazily constructs a plain CAdES
+	// certificate source (CMS-embedded certs only, no /DSS or /VRI dictionary awareness) and
+	// PERMANENTLY caches it into the very same shared offlineCertificateSource/
+	// signatureCRLSource/signatureOCSPSource fields this type's own CertificateSource()/
+	// CRLSource()/OCSPSource() overrides read from - so whichever caller reaches the lazy
+	// "if cached == nil" check first wins the cache for the signature's whole lifetime.
+	//
+	// Confirmed by pades/testdata/upstream/validation/PAdES-LT.pdf in the PAdES cross-validation
+	// harness, whose signing certificates are embedded only in the document's /DSS and /VRI
+	// dictionaries, not in each signature's own CMS: without this warm-up,
+	// SigningCertificateToken()/SignatureCryptographicVerification()/DataFoundUpToLevel() for
+	// such a signature silently degrade to "certificate not found"/broken signature/PAdES_BES the
+	// moment DocumentTimestamps() is queried.
+	s.CertificateSource()
+	s.CRLSource()
+	s.OCSPSource()
+
 	return s
 }
 

@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"io"
 	"time"
-	"unicode/utf16"
 
 	"github.com/utain/esig/dss/internal/pdf"
 )
@@ -295,22 +294,13 @@ func (d *nativePdfDict) String() string {
 	return d.wrapped.String()
 }
 
-// nativePdfDictDecodeText reproduces COSString#getString: a UTF-16BE byte-order mark selects
-// UTF-16, anything else is PDFDocEncoding, whose lower half coincides with Latin-1 - which is
-// all the PAdES code paths (field names, /Reason, /Location, ...) ever carry.
+// nativePdfDictDecodeText reproduces COSString#getString: a UTF-16 byte-order mark selects
+// UTF-16 (BE or LE), anything else is PDFDocEncoding. Delegated to internal/pdf's own
+// DecodeTextString so the PAdES layer and the parser layer cannot drift apart; it used to
+// approximate PDFDocEncoding with Latin-1, which is wrong for every code in 0x18-0x1F and
+// 0x80-0xA0 - see that function's doc comment for the fixture this fixes.
 func nativePdfDictDecodeText(value []byte) string {
-	if len(value) >= 2 && value[0] == 0xFE && value[1] == 0xFF {
-		units := make([]uint16, 0, (len(value)-2)/2)
-		for i := 2; i+1 < len(value); i += 2 {
-			units = append(units, uint16(value[i])<<8|uint16(value[i+1]))
-		}
-		return string(utf16.Decode(units))
-	}
-	runes := make([]rune, len(value))
-	for i, b := range value {
-		runes[i] = rune(b)
-	}
-	return string(runes)
+	return pdf.DecodeTextString(value)
 }
 
 // nativePdfObjectEquals compares two resolved PDF objects by value, which is what

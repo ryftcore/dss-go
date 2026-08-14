@@ -7,6 +7,8 @@ import (
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"errors"
+	"os"
+	"strings"
 
 	"golang.org/x/crypto/cryptobyte"
 	cryptobyte_asn1 "golang.org/x/crypto/cryptobyte/asn1"
@@ -15,6 +17,47 @@ import (
 // oidPublicKeyECDSA is id-ecPublicKey, the only algorithm whose ECParameters can name one of
 // this package's curves.
 var oidPublicKeyECDSA = asn1.ObjectIdentifier{1, 2, 840, 10045, 2, 1}
+
+// init restores crypto/x509's pre-Go-1.23 tolerance for a CertificateSerialNumber whose DER
+// encoding is technically a negative INTEGER (a leading content byte >= 0x80 with no 0x00 pad -
+// RFC 5280 4.1.2.2 requires serial numbers to be non-negative, but does not require an encoder
+// to add the pad that keeps a naturally-MSB-set magnitude positive, and several real-world CAs
+// do not). Go 1.23 made crypto/x509.ParseCertificate reject such certificates outright unless
+// the GODEBUG setting x509negativeserial=1 is present; BouncyCastle (what every upstream DSS
+// signature this port cross-validates against was verified with) has no such restriction and
+// parses the certificate's ASN.1 INTEGER exactly as encoded, sign included.
+//
+// A signature-validation library must be able to read every certificate a real CA issued,
+// however imperfectly DER-encoded, in order to validate signatures made against it - this is
+// not a cryptographic weakening (the certificate's own signature is still fully verified; only
+// the serial number's sign convention is relaxed to match what it was actually encoded as) and
+// merely brings Go's parser back in line with the BC behaviour every fixture here was produced
+// against. internal/godebug (which crypto/x509 reads x509negativeserial through) re-parses
+// GODEBUG lazily on first use, so setting the environment variable here - before this program's
+// own code ever parses a certificate, since Go runs an imported package's init() before its
+// importer's - takes effect for every crypto/x509.ParseCertificate call in the process,
+// matching this package's other ParseCertificate accommodation (spliceParsablePublicKey) in
+// spirit: never fail to read a certificate stdlib is merely being stricter than necessary about.
+//
+// Confirmed necessary by pades/testdata/upstream/validation/PAdES-LT.pdf in the PAdES
+// cross-validation harness, whose /DSS dictionary carries three certificates with exactly this
+// encoding; without this, all three are silently dropped from the certificate pool (Go's
+// ParseCertificate error is swallowed the same way every other unparsable-certificate error in
+// this codebase's DSS-dictionary/VRI extraction is, per PORTING.md), and one of them is the
+// signing certificate for the PDF's oldest signature.
+func init() {
+	godebug := os.Getenv("GODEBUG")
+	for _, setting := range strings.Split(godebug, ",") {
+		if strings.HasPrefix(setting, "x509negativeserial=") {
+			// The environment (or an earlier init) already has an explicit opinion; respect it.
+			return
+		}
+	}
+	if godebug != "" {
+		godebug += ","
+	}
+	os.Setenv("GODEBUG", godebug+"x509negativeserial=1")
+}
 
 // ParseCertificate decodes an X.509 certificate, accepting the elliptic curves crypto/x509 does
 // not know about in addition to the four it does.

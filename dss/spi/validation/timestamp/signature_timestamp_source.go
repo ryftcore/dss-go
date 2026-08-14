@@ -162,6 +162,26 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// Port of the abstract isEvidenceRecord(SA).
 	IsEvidenceRecord(unsignedAttribute SA) bool
 
+	// DocumentTimestamps returns a list of document timestamps. Port of the public, overridable
+	// getDocumentTimestamps(), which the base answers with an empty list and only
+	// pades.PAdESTimestampSource overrides (a PDF /DocTimeStamp revision is not reachable through
+	// any CMS unsigned attribute, so no other format has one). Routed through this interface -
+	// rather than called on the embedded base directly - because the base's own
+	// AllTimestampsExceptLastArchiveTimestamp() below consults it, and Go embedding gives that
+	// call static, not virtual, dispatch: without this the base would read its own hard-coded
+	// empty list even for a PAdES signature whose /DocTimeStamps ARE its archive timestamps, and
+	// AllTimestampsExceptLastArchiveTimestamp() would come back empty for every PAdES signature.
+	// See the identical rationale on AllTimestamps below.
+	DocumentTimestamps() []*validation.TimestampToken
+	// AllTimestamps returns a list of all incorporated timestamps. Port of the public,
+	// overridable getAllTimestamps(); pades.PAdESTimestampSource overrides it to append the
+	// document and /VRI timestamps the base cannot know about. Routed through this interface for
+	// the same reason DocumentTimestamps above is: the base's own TimestampCertificateSources(),
+	// TimestampCRLSources(), TimestampOCSPSources(), getTimestampsCoveredByManifest() and
+	// isTimestamped() all consult it, and Java reaches the concrete override from every one of
+	// them through ordinary virtual dispatch.
+	AllTimestamps() []*validation.TimestampToken
+
 	// MakeTimestampToken creates a timestamp token from the provided signatureAttribute.
 	// Port of the abstract makeTimestampToken(SA, TimestampType, List).
 	MakeTimestampToken(signatureAttribute SA, timestampType enumerations.TimestampType,
@@ -434,7 +454,7 @@ func (s *SignatureTimestampSource[AS, SA]) AllEvidenceRecords() []validation.Evi
 // certificate sources. Port of getTimestampCertificateSources().
 func (s *SignatureTimestampSource[AS, SA]) TimestampCertificateSources() *spi.ListCertificateSource {
 	result := spi.NewListCertificateSource()
-	for _, timestampToken := range s.AllTimestamps() {
+	for _, timestampToken := range s.overrides.AllTimestamps() {
 		result.Add(timestampToken.CertificateSource())
 	}
 	return result
@@ -462,8 +482,8 @@ func (s *SignatureTimestampSource[AS, SA]) AllTimestampsExceptLastArchiveTimesta
 
 	var allArchiveTimestamps []*validation.TimestampToken
 	allArchiveTimestamps = append(allArchiveTimestamps, s.ArchiveTimestamps()...)
-	allArchiveTimestamps = append(allArchiveTimestamps, s.DocumentTimestamps()...) // can be a document timestamp for PAdES
-	allArchiveTimestamps = append(allArchiveTimestamps, s.DetachedTimestamps()...) // can be a detached timestamp for ASiC with CAdES
+	allArchiveTimestamps = append(allArchiveTimestamps, s.overrides.DocumentTimestamps()...) // can be a document timestamp for PAdES
+	allArchiveTimestamps = append(allArchiveTimestamps, s.DetachedTimestamps()...)           // can be a detached timestamp for ASiC with CAdES
 	if len(allArchiveTimestamps) > 0 {
 		if len(timestampTokens) > 0 || containsTimestampsCoveringOtherTimestamps(allArchiveTimestamps) {
 			// exclude the last archive timestamp
@@ -508,7 +528,7 @@ func containsTimestampsCoveringOtherTimestamps(timestampTokens []*validation.Tim
 // sources. Port of getTimestampCRLSources().
 func (s *SignatureTimestampSource[AS, SA]) TimestampCRLSources() *spi.ListRevocationSource[revocation.CRL] {
 	result := spi.NewListRevocationSource[revocation.CRL]()
-	for _, timestampToken := range s.AllTimestamps() {
+	for _, timestampToken := range s.overrides.AllTimestamps() {
 		result.Add(timestampToken.CRLSource())
 	}
 	return result
@@ -518,7 +538,7 @@ func (s *SignatureTimestampSource[AS, SA]) TimestampCRLSources() *spi.ListRevoca
 // sources. Port of getTimestampOCSPSources().
 func (s *SignatureTimestampSource[AS, SA]) TimestampOCSPSources() *spi.ListRevocationSource[revocation.OCSP] {
 	result := spi.NewListRevocationSource[revocation.OCSP]()
-	for _, timestampToken := range s.AllTimestamps() {
+	for _, timestampToken := range s.overrides.AllTimestamps() {
 		result.Add(timestampToken.OCSPSource())
 	}
 	return result
@@ -1127,7 +1147,7 @@ func (s *SignatureTimestampSource[AS, SA]) processExternalTimestamp(externalTime
 // getTimestampsCoveredByManifest ports the private getTimestampsCoveredByManifest(ManifestFile).
 func (s *SignatureTimestampSource[AS, SA]) getTimestampsCoveredByManifest(manifestFile *model.ManifestFile) []*validation.TimestampToken {
 	result := []*validation.TimestampToken{}
-	for _, timestampToken := range s.AllTimestamps() {
+	for _, timestampToken := range s.overrides.AllTimestamps() {
 		if timestampTokenSliceContains(s.detachedTimestamps, timestampToken) &&
 			(manifestFile == nil || !manifestFile.IsDocumentCovered(timestampToken.Filename())) {
 			// the detached timestamp is not covered, continue
@@ -1212,7 +1232,7 @@ func (s *SignatureTimestampSource[AS, SA]) IsTimestamped(tokenId string, objectT
 func (s *SignatureTimestampSource[AS, SA]) isTimestamped(signature validation.AdvancedSignature, tokenId string,
 	objectType enumerations.TimestampedObjectType) bool {
 	target := validation.NewTimestampedReference(tokenId, objectType)
-	for _, timestampToken := range s.AllTimestamps() {
+	for _, timestampToken := range s.overrides.AllTimestamps() {
 		for _, reference := range timestampToken.TimestampedReferences() {
 			if reference.Equals(target) {
 				return true

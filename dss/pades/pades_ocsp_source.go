@@ -72,6 +72,40 @@ func (s *PAdESOCSPSource) RevocationTokens(certificateToken, issuerToken *model.
 	return revocationTokens, nil
 }
 
+// AllRevocationBinaries retrieves all found revocation binaries. Port of the inherited
+// getAllRevocationBinaries(); see pades_crl_source.go's PAdESCRLSource.AllRevocationBinaries doc
+// comment - the identical CRL/OCSP asymmetry applies here (Java: virtual dispatch to THIS type's
+// own getAllRevocationBinariesWithOrigins() override below, which the promoted
+// spi.OfflineRevocationSourceBase.AllRevocationBinaries this type would otherwise inherit cannot
+// reach).
+func (s *PAdESOCSPSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
+	entries := s.AllRevocationBinariesWithOrigins()
+	result := make([]spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP], 0, len(entries))
+	for _, entry := range entries {
+		result = append(result, entry.Binary)
+	}
+	return result
+}
+
+// AllRevocationTokens retrieves a slice of all found RevocationTokens. Port of the inherited
+// getAllRevocationTokens(); see AllRevocationBinaries's doc comment.
+func (s *PAdESOCSPSource) AllRevocationTokens() []spi.RevocationToken[revocation.OCSP] {
+	entries := s.AllRevocationTokensWithOrigins()
+	result := make([]spi.RevocationToken[revocation.OCSP], 0, len(entries))
+	for _, entry := range entries {
+		result = append(result, entry.Token)
+	}
+	return result
+}
+
+// IsEmpty checks if the current source is empty. Port of the inherited isEmpty(); see
+// pades_crl_source.go's PAdESCRLSource.IsEmpty doc comment.
+func (s *PAdESOCSPSource) IsEmpty() bool {
+	return len(s.AllRevocationBinariesWithOrigins()) == 0 &&
+		len(s.AllRevocationTokensWithOrigins()) == 0 &&
+		len(s.AllRevocationReferences()) == 0
+}
+
 // OcspMap returns a map of all OCSP entries contained in DSS dictionary or into nested VRI
 // dictionaries. Port of getOcspMap().
 func (s *PAdESOCSPSource) OcspMap() map[PdfObjectKey]*spi.OCSPResponseBinary {

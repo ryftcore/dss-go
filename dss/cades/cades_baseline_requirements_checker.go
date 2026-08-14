@@ -235,7 +235,18 @@ func (b *CAdESBaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
 		signedDataCertificates = append(signedDataCertificates, certificateToken)
 	}
 
-	timestampListCertificateSource := sig.TimestampSource().(*CAdESTimestampSource).TimestampCertificateSourcesExceptLastArchiveTimestamp()
+	// TimestampCertificateSourcesExceptLastArchiveTimestamp is part of the validation.TimestampSource
+	// interface sig.TimestampSource() already returns, so no downcast is needed to reach it - and a
+	// hard *CAdESTimestampSource assertion would be actively wrong here: Java's declared-CAdESSignature-
+	// typed local still runs this method on the ACTUAL runtime object, so a PAdESSignature (whose
+	// TimestampSource() is a *pades.PAdESTimestampSource, itself embedding CAdESTimestampSource
+	// rather than being one) reaching this shared CAdES logic through
+	// PAdESBaselineRequirementsChecker.ContainsLTLevelCertificates's delegation is exactly Java's
+	// ordinary virtual dispatch, which a Go concrete-type assertion cannot reproduce. Confirmed by
+	// pades/testdata/crossgen's own downstream cross-validation fixtures (task #12, PAdES
+	// extension): a self-signed test certificate chain drives MinimalLTRequirement into this exact
+	// call, and the assertion below used to panic on every one of them.
+	timestampListCertificateSource := sig.TimestampSource().TimestampCertificateSourcesExceptLastArchiveTimestamp()
 	timestampCertificateSources := timestampListCertificateSource.Sources()
 	if utils.IsCollectionEmpty(timestampCertificateSources) {
 		return false

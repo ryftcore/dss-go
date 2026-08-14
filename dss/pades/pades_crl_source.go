@@ -91,6 +91,53 @@ func (s *PAdESCRLSource) RevocationTokens(certificateToken, issuerToken *model.C
 	return revocationTokens, nil
 }
 
+// AllRevocationBinaries retrieves all found revocation binaries. Port of the inherited
+// getAllRevocationBinaries() (OfflineRevocationSource base): Java implements it as
+// getAllRevocationBinariesWithOrigins().keySet(), which virtual dispatch resolves to THIS type's
+// own getAllRevocationBinariesWithOrigins() override above. The promoted
+// spi.OfflineRevocationSourceBase.AllRevocationBinaries this type would otherwise inherit reads
+// its own binaryOrigins field directly - populated only by RevocationTokens(cert, issuer) calls,
+// which nothing makes for every DSS-dictionary-embedded CRL up front - so it never sees the DSS
+// dictionary/VRI-sourced binaries AllRevocationBinariesWithOrigins already exposes
+// unconditionally. Shadowing here (Go method redefinition standing in for Java's virtual
+// dispatch; see PORTING.md's "Virtual dispatch" precedent, also used by
+// pades_certificate_source.go's DSSDictionaryCertValues) is required for every caller reaching
+// this type through the spi.OfflineRevocationSource[R] interface (e.g.
+// PAdESSignature.CompleteCRLSource(), and thus BaselineRequirementsChecker.MinimalLTRequirement's
+// LT-level revocation-presence check) to see the DSS dictionary's CRLs at all.
+func (s *PAdESCRLSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
+	entries := s.AllRevocationBinariesWithOrigins()
+	result := make([]spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL], 0, len(entries))
+	for _, entry := range entries {
+		result = append(result, entry.Binary)
+	}
+	return result
+}
+
+// AllRevocationTokens retrieves a slice of all found RevocationTokens. Port of the inherited
+// getAllRevocationTokens(); see AllRevocationBinaries's doc comment for why this needs the same
+// shadowing treatment (Java: getAllRevocationTokensWithOrigins().keySet()).
+func (s *PAdESCRLSource) AllRevocationTokens() []spi.RevocationToken[revocation.CRL] {
+	entries := s.AllRevocationTokensWithOrigins()
+	result := make([]spi.RevocationToken[revocation.CRL], 0, len(entries))
+	for _, entry := range entries {
+		result = append(result, entry.Token)
+	}
+	return result
+}
+
+// IsEmpty checks if the current source is empty. Port of the inherited isEmpty(); see
+// AllRevocationBinaries's doc comment for why this needs the same shadowing treatment (Java:
+// Utils.isMapEmpty(getAllRevocationBinariesWithOrigins()) &&
+// Utils.isMapEmpty(getAllRevocationTokensWithOrigins()) &&
+// Utils.isMapEmpty(getRevocationReferencesWithOrigins()) - the last of which this port's base
+// still answers correctly, since PAdES neither overrides it nor ever populates references).
+func (s *PAdESCRLSource) IsEmpty() bool {
+	return len(s.AllRevocationBinariesWithOrigins()) == 0 &&
+		len(s.AllRevocationTokensWithOrigins()) == 0 &&
+		len(s.AllRevocationReferences()) == 0
+}
+
 // CrlMap returns a map of all CRL entries contained in DSS dictionary or into nested VRI
 // dictionaries. Port of getCrlMap().
 func (s *PAdESCRLSource) CrlMap() map[PdfObjectKey]*crlparser.CRLBinary {

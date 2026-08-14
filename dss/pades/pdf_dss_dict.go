@@ -304,7 +304,26 @@ func (v *PdfVriDict) TSStream() []byte { return v.tsStream }
 // one function since Go interface values compared with == can panic when the dynamic type is
 // uncomparable (a PdfDssDict backed by maps and slices is): unlike Java's instance methods,
 // which dispatch on the receiver, this free function does the getClass()-equality check itself
-// via reflect.TypeOf before deep-comparing the token maps (and, for two *PdfVriDict, the name).
+// via reflect.TypeOf before comparing exactly the fields the three Java equals() methods do.
+//
+// It must compare EXACTLY those fields and no others. Java's AbstractPdfDssDict#equals compares
+// only certMap/crlMap/ocspMap; SingleDssDict#equals adds vris; PdfVriDict#equals adds name -
+// and NEITHER compares a VRI dictionary's 'TU' time or 'TS' stream, nor the underlying PdfDict
+// the maps were extracted from. A blanket reflect.DeepEqual over the whole struct (which this
+// used to be) is therefore strictly stricter than Java, and that difference is not cosmetic:
+// AbstractPDFSignatureService#getRevisions decides whether to emit a PdfDocDssRevision by
+// asking whether the previous revision's DSS dictionary equals this one, and the FIRST such
+// revision is what flips containsDSSRevisions() - which in turn decides whether an EARLIER
+// signature in the same document is handed the document's /DSS dictionary at all. Comparing one
+// field too many there makes two identical /DSS dictionaries look different, invents a
+// PdfDocDssRevision, and leaks the document's validation data onto a signature that must not
+// see it (upstream's own Signature-P-SK-6.pdf and pades-lt-extended-abde.pdf: the second
+// signature came out PAdES-BASELINE-LT where upstream says PAdES-BASELINE-T).
+//
+// The three token maps are compared by their entries' own Java equality - CertificateToken and
+// EncapsulatedTokenIdentifier (CRLBinary/OCSPResponseBinary) both define equals() as identity
+// of their DSS Id, the digest of the encoded token - rather than by deep structural equality of
+// the parsed objects, which would additionally (and wrongly) compare lazily-populated caches.
 func PdfDssDictEquals(a, b PdfDssDict) bool {
 	if a == nil || b == nil {
 		return a == nil && b == nil
@@ -312,5 +331,66 @@ func PdfDssDictEquals(a, b PdfDssDict) bool {
 	if reflect.TypeOf(a) != reflect.TypeOf(b) {
 		return false
 	}
-	return reflect.DeepEqual(a, b)
+	// AbstractPdfDssDict#equals: certMap, crlMap and ocspMap.
+	if !pdfDssDictTokenMapsEqual(a, b) {
+		return false
+	}
+	switch left := a.(type) {
+	case *SingleDssDict:
+		// SingleDssDict#equals: super.equals(obj) && vris.equals(other.vris) - a java.util.List
+		// equality, i.e. same size, same order, element-wise equals (PdfVriDict#equals below).
+		right := b.(*SingleDssDict)
+		if len(left.vris) != len(right.vris) {
+			return false
+		}
+		for i := range left.vris {
+			if !PdfDssDictEquals(left.vris[i], right.vris[i]) {
+				return false
+			}
+		}
+		return true
+	case *PdfVriDict:
+		// PdfVriDict#equals: super.equals(obj) && name.equals(other.name). Deliberately NOT
+		// tuTime/tsStream - see this function's doc comment.
+		return left.name == b.(*PdfVriDict).name
+	default:
+		return true
+	}
+}
+
+// pdfDssDictTokenMapsEqual ports AbstractPdfDssDict#equals's certMap/crlMap/ocspMap comparison:
+// three java.util.Map equalities, i.e. same key set and, per key, values equal by their own
+// equals() - the DSS Id for all three value types (see PdfDssDictEquals's doc comment).
+func pdfDssDictTokenMapsEqual(a, b PdfDssDict) bool {
+	aCerts, bCerts := a.CERTs(), b.CERTs()
+	if len(aCerts) != len(bCerts) {
+		return false
+	}
+	for key, left := range aCerts {
+		right, found := bCerts[key]
+		if !found || left.DSSIDAsString() != right.DSSIDAsString() {
+			return false
+		}
+	}
+	aCRLs, bCRLs := a.CRLs(), b.CRLs()
+	if len(aCRLs) != len(bCRLs) {
+		return false
+	}
+	for key, left := range aCRLs {
+		right, found := bCRLs[key]
+		if !found || !left.Equals(&right.MultipleDigestIdentifier) {
+			return false
+		}
+	}
+	aOCSPs, bOCSPs := a.OCSPs(), b.OCSPs()
+	if len(aOCSPs) != len(bOCSPs) {
+		return false
+	}
+	for key, left := range aOCSPs {
+		right, found := bOCSPs[key]
+		if !found || !left.Equals(&right.MultipleDigestIdentifier) {
+			return false
+		}
+	}
+	return true
 }

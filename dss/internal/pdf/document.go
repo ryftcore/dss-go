@@ -961,30 +961,11 @@ func (d *Document) Annotations(page int) ([]Annotation, error) {
 	return out, nil
 }
 
-// decodeTextString renders a PDF text string as Go text: UTF-16BE when the BOM
-// is present, PDFDocEncoding (approximated by Latin-1) otherwise. This mirrors
-// COSString.getString.
+// decodeTextString renders a PDF text string as Go text, mirroring COSString.getString.
+// See DecodeTextString in pdfdocencoding.go, which it now simply delegates to: this used to
+// approximate PDFDocEncoding with Latin-1, which mangles every code in 0x18-0x1F and 0x80-0xA0.
 func decodeTextString(b []byte) string {
-	if len(b) >= 2 && b[0] == 0xFE && b[1] == 0xFF {
-		var sb strings.Builder
-		for i := 2; i+1 < len(b); i += 2 {
-			r := rune(b[i])<<8 | rune(b[i+1])
-			if r >= 0xD800 && r <= 0xDBFF && i+3 < len(b) {
-				lo := rune(b[i+2])<<8 | rune(b[i+3])
-				if lo >= 0xDC00 && lo <= 0xDFFF {
-					r = 0x10000 + (r-0xD800)<<10 + (lo - 0xDC00)
-					i += 2
-				}
-			}
-			sb.WriteRune(r)
-		}
-		return sb.String()
-	}
-	var sb strings.Builder
-	for _, c := range b {
-		sb.WriteRune(rune(c))
-	}
-	return sb.String()
+	return DecodeTextString(b)
 }
 
 // --- AcroForm and signatures ----------------------------------------------
