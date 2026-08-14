@@ -1,0 +1,34 @@
+# The 30-file first-pass KAT corpus (DESIGN.md §6.3 KAT-A, first pass).
+# Chosen across producers, header versions, xref styles, encryption variants and
+# the four leniency exhibits. Paths are relative to
+# dss-pades/src/test/resources and are mirrored under testdata/corpus/.
+EmptyPage.pdf
+EmptyPage-corrupted.pdf
+EmptyPage-corrupted2.pdf
+PDF.pdf
+doc.pdf
+documentEmptySignature.pdf
+pdf-2.0.pdf
+pdf-two-fields.pdf
+pdf-xref-streams.pdf
+pdfa2u-gray.pdf
+sample.pdf
+testdoc.pdf
+protected/open_protected.pdf
+protected/restricted_fields.pdf
+protected/edition_protected_signing_allowed_with_field_signed.pdf
+validation/encrypted.pdf
+validation/51sigs.pdf
+validation/AD-RB.pdf
+validation/DSS-1443.pdf
+validation/DSS-2155.pdf
+validation/DSS-2601.pdf
+validation/DSS-3226.pdf
+validation/PAdES-LT.pdf
+validation/Signature-P-DE_SCI-4.pdf
+validation/Signature-P-HU_POL-7.pdf
+validation/Signature-P-PK7-2.pdf
+validation/doc-firmado-LT.pdf
+validation/malformed-pades.pdf
+validation/pades-5-signatures-and-1-document-timestamp.pdf
+validation/pdf-signed-corrupted.pdf
