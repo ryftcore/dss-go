@@ -1,0 +1,60 @@
+// Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESSignedProperties.java
+// (DSS 6.5.RC1).
+package jades
+
+import (
+	"github.com/utain/esig/dss/internal/jose"
+	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/spi/validation"
+)
+
+// JAdESSignedProperties represents a list of JAdES signed properties (protected header). Port of
+// the class JAdESSignedProperties, implementing validation.SignatureProperties[*JAdESAttribute].
+type JAdESSignedProperties struct {
+	// headers represent the protected header map. Port of the private final Headers headers
+	// field.
+	headers *jose.Headers
+}
+
+// NewJAdESSignedProperties is the default constructor. Port of the public
+// JAdESSignedProperties(Headers) constructor.
+func NewJAdESSignedProperties(headers *jose.Headers) *JAdESSignedProperties {
+	return &JAdESSignedProperties{headers: headers}
+}
+
+// IsExist checks if "unsigned-signature-properties" exists and can be processed. Port of
+// isExist().
+func (p *JAdESSignedProperties) IsExist() bool {
+	return p.headers != nil
+}
+
+// Attributes returns a list of children contained in the element. Port of getAttributes().
+//
+// Panics with the Java message wrapping the underlying error when the headers cannot be
+// re-parsed as a map: getMapKeyValues() throws an unchecked DSSException, propagating out of
+// getAttributes() uncaught (no AdvancedSignature accessor reached from here has an error
+// return to use instead).
+func (p *JAdESSignedProperties) Attributes() []*JAdESAttribute {
+	headerMap := p.mapKeyValues()
+
+	var attributes []*JAdESAttribute
+	for _, key := range headerMap.Keys() {
+		attributes = append(attributes, NewJAdESAttribute(key, headerMap.Value(key)))
+	}
+	return attributes
+}
+
+// mapKeyValues ports the private getMapKeyValues().
+//
+// TODO avoid to parse (upstream's own comment, reproduced verbatim).
+func (p *JAdESSignedProperties) mapKeyValues() *jose.Object {
+	headerMap, err := DSSJsonUtilsParseJSONStringToMap(p.headers.FullHeaderAsJSONString())
+	if err != nil {
+		panic(model.NewDSSErrorMessageCause("Unable to retrieve the map from the headers", err))
+	}
+	return headerMap
+}
+
+// compile-time assertion: a JAdESSignedProperties satisfies
+// validation.SignatureProperties[*JAdESAttribute].
+var _ validation.SignatureProperties[*JAdESAttribute] = (*JAdESSignedProperties)(nil)
