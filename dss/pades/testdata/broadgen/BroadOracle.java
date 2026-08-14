@@ -1,55 +1,3 @@
-// Generates testdata/upstream-cross-validation.json: ground-truth facts about the PAdES
-// signatures in testdata/upstream/, dumped straight from upstream DSS 6.5.RC1's own
-// PDFDocumentAnalyzer / PAdESSignature. This is the golden file that
-// pades_upstream_cross_validation_test.go compares its own parse of the same files against
-// (direction "UPSTREAM -> GO" of the cross-validation harness, task #12, PAdES extension).
-//
-// PAdESSignature extends CAdESSignature (dss-cades -> dss-pades in Java, cades -> pades in this
-// port), so most of what this dumps mirrors cades/testdata/gen/CrossValidationOracle.java
-// exactly (signing certificate, claimed signing time, level, CMS SignerId, cryptographic
-// verification, message-digest value) - the CMS SignerInfo remains PAdES's own natural identity
-// anchor, same as CAdES. What is new here is the PDF-specific layer PAdESSignature.getPdfRevision()
-// exposes: the /ByteRange actually signed, whether the incremental-update chain covers every byte
-// of the previous revision (areAllOriginalBytesCovered - the PAdES analogue of XAdES's per-
-// Reference "found/intact"), the /SubFilter and other PDF signature dictionary fields, the
-// signature field name(s) the /Sig dictionary is attached to, and - the most PAdES-specific probe
-// of all - PdfModificationDetection.areModificationsDetected() plus the secure/formFill/annotation/
-// undefined change buckets PdfObjectModifications sorts every object-graph diff between PDF
-// revisions into. That last one is what actually exercises this port's native PDF
-// parser/incremental-update diffing engine (internal/pdf) against real, sometimes adversarial,
-// incremental updates - several fixtures below are PDFs upstream itself flags as modified/spoofed
-// after signing, and the golden JSON captures upstream's own (true) verdict for them.
-//
-// Also dumped at the top level: the document's detached timestamps (PDF doc-timestamps not
-// covering any earlier /Sig revision), since a PDF can carry a bare DocTimeStamp with no
-// signature at all.
-//
-// Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1 and its dependencies:
-//
-//   cd /home/user/dss-upstream
-//   mvn -q -o -pl dss-pades dependency:build-classpath -Dmdep.outputFile=/tmp/cp.txt -Dmdep.includeScope=test
-//   PDFBOX=/root/.m2/repository/org/apache/pdfbox
-//   CP="dss-pades/target/classes:dss-cms-object/target/classes:dss-pades-pdfbox/target/classes"
-//   CP="$CP:$PDFBOX/pdfbox/3.0.7/pdfbox-3.0.7.jar:$PDFBOX/fontbox/3.0.7/fontbox-3.0.7.jar"
-//   CP="$CP:$PDFBOX/pdfbox-io/3.0.7/pdfbox-io-3.0.7.jar:$(cat /tmp/cp.txt)"
-//   javac -cp "$CP" -d /tmp/pvaloracle CrossValidationOracle.java
-//   java  -cp "$CP:/tmp/pvaloracle" CrossValidationOracle <testdata directory>
-//
-// dss-cms-object has to be added by hand for the same reason the CAdES/XAdES oracles need it: it
-// is the runtime CMS implementation dss-cms selects through its service loader, and dss-cades
-// (which dss-pades depends on) declares neither of the two implementations.
-//
-// dss-pades-pdfbox and the three org.apache.pdfbox jars have to be added by hand too, and for a
-// closely related reason: dss-pades declares no PDF backend either (upstream ships two,
-// dss-pades-pdfbox and dss-pades-openpdf, and ServiceLoaderPdfObjFactory picks whichever is on
-// the classpath). Without one, this oracle dies on the very first fixture with "No
-// implementation found for IPdfObjFactory in classpath". pdfbox is the backend this port's
-// golden file is generated against and the one dss-pades-pdfbox's own tests run on, so it is
-// also the reference the native internal/pdf engine's PDF-layer behaviour is compared to.
-// Its jars are pulled from the local Maven repository directly rather than through
-// `mvn -pl dss-pades-pdfbox dependency:build-classpath`, which cannot run offline here: that
-// module declares a test-scope dependency on dss-pdfa, which needs org.verapdf artifacts from
-// Maven Central (the same obstacle pades_downstream_cross_validation_test.go documents).
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
 import eu.europa.esig.dss.enumerations.TimestampType;
 import eu.europa.esig.dss.model.DSSDocument;
@@ -77,82 +25,33 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class CrossValidationOracle {
-
-    /** Files dumped, relative to testdata/upstream/. Covers PAdES-B/T/LT/LTA baseline levels,
-     *  legacy (pre-baseline) BES/EPES/PKCS7 profiles, VRI and document timestamps, multiple
-     *  signatures/revisions in one PDF, several national plugtest profiles, and - the adversarial
-     *  half of the corpus, deliberately more than half of it - PDFs upstream itself detects as
-     *  modified after signing: an added annotation, a spoofed /ByteRange gap, a replaced /Reason,
-     *  a byte-range overlap attack, and a fully rewritten page. A port that quietly ACCEPTS what
-     *  upstream flags as tampered is the dangerous failure mode, and only a corpus of genuine
-     *  incremental-update attacks can catch it. */
-    static final String[] FILES = {
-        "validation/pades-bes.pdf",
-        "validation/pades-epes.pdf",
-        "validation/pades-not-epes.pdf",
-        "validation/doc-firmado.pdf",
-        "validation/doc-firmado-T.pdf",
-        "validation/doc-firmado-LT.pdf",
-        "validation/PAdES-LT.pdf",
-        "validation/PAdES-LTA.pdf",
-        "validation/Test.signed_Certipost-2048-SHA512.extended-LTA.pdf",
-        "validation/pades-ltv.pdf",
-        "validation/pades-ltv-with-reason.pdf",
-        "validation/pades-lt-extended-dss.pdf",
-        "validation/pades-t-level-extended.pdf",
-        "validation/pades-5-signatures-and-1-document-timestamp.pdf",
-        "validation/pades-two-sig-copied-tst.pdf",
-        "validation/pdf-with-vri-timestamp.pdf",
-        "validation/test-with-vri.pdf",
-        "validation/timestamped_and_signed.pdf",
-        "validation/timestamped-fields.pdf",
-        "validation/belgian_pki_multiple_ocsps_lt.pdf",
-        "validation/Signature-P-HU_POL-3.pdf",
-        "validation/Signature-P-DE_SCI-4.pdf",
-        "validation/adbe_crl_signed.pdf",
-        "validation/adbe_ocsp_signed.pdf",
-        "validation/pkcs7.pdf",
-        "validation/pades-signed-annot-added.pdf",
-        "validation/pdf-spoofing-attack.pdf",
-        "validation/pdf-byterange-overlap.pdf",
-        "validation/pades-spoofing-replaced-reason.pdf",
-        "validation/pades-multiple-pages-annots-overlap.pdf",
-        "validation/pdf-removed-pages.pdf",
-        // Regression fixtures for the per-signature scoping of validation data in a multi-
-        // revision document, added after a mutation check showed the corpus above could not
-        // detect a broken PdfDssDict equality nor a document-timestamp source that never
-        // reaches PAdESTimestampSource's own getDocumentTimestamps(). Every one of these
-        // carries a signature upstream reports at a LOWER level than the document's latest
-        // revision would suggest - PAdES-BASELINE-T next to an LT/LTA sibling - which is
-        // exactly what over-sharing a /DSS dictionary, or losing a /DocTimeStamp on the way
-        // into the LT-level revocation-presence check, silently turns into a false LT/LTA.
-        "validation/Signature-P-SK-6.pdf",
-        "validation/pades-lt-extended-abde.pdf",
-        "validation/pades-t-duplicated-doctst.pdf",
-        "validation/pades3_Baseline_B.pdf",
-        // /Name written in PDFDocEncoding's Central-European half ("Martin Petrzela", with a
-        // z-caron at byte 0x9E): guards the PDFDocEncoding table against the Latin-1
-        // approximation it used to be (internal/pdf/pdfdocencoding.go).
-        "validation/pades-ocsp-archiveCutOff-invalid.pdf",
-    };
+public class BroadOracle {
 
     public static void main(String[] args) throws Exception {
-        Path testdata = Paths.get(args[0]).resolve("upstream");
+        Path root = Paths.get(args[0]);
+        java.util.List<Path> files = new java.util.ArrayList<>();
+        java.nio.file.Files.walk(root).filter(p -> p.toString().toLowerCase().endsWith(".pdf")).forEach(files::add);
+        java.util.Collections.sort(files);
         StringBuilder json = new StringBuilder();
-        json.append("{\n");
-        json.append("  \"_comment\": \"Ground truth from upstream DSS 6.5.RC1, generated by gen/CrossValidationOracle.java. Do not edit by hand.\",\n");
-        json.append("  \"files\": [\n");
-        for (int i = 0; i < FILES.length; i++) {
-            dumpFile(json, testdata, FILES[i]);
-            json.append(i == FILES.length - 1 ? "\n" : ",\n");
+        json.append("{\n  \"files\": [\n");
+        boolean first = true;
+        for (Path p : files) {
+            String rel = root.relativize(p).toString().replace('\\','/');
+            StringBuilder one = new StringBuilder();
+            try {
+                dumpFile(one, root, rel);
+            } catch (Throwable t) {
+                one.setLength(0);
+                one.append("    {\n      \"path\": ").append(str(rel)).append(",\n      \"error\": ")
+                   .append(str(t.getClass().getName() + ": " + String.valueOf(t.getMessage()))).append("\n    }");
+            }
+            if (!first) json.append(",\n");
+            first = false;
+            json.append(one);
         }
-        json.append("  ]\n");
-        json.append("}\n");
-
-        Path out = Paths.get(args[0]).resolve("upstream-cross-validation.json");
-        Files.write(out, json.toString().getBytes(StandardCharsets.UTF_8));
-        System.out.println("written " + out);
+        json.append("\n  ]\n}\n");
+        java.nio.file.Files.write(Paths.get(args[1]), json.toString().getBytes(StandardCharsets.UTF_8));
+        System.out.println("written " + args[1] + " (" + files.size() + " files)");
     }
 
     static void dumpFile(StringBuilder json, Path testdata, String relativePath) throws Exception {

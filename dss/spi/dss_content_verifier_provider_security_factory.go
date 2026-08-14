@@ -67,7 +67,21 @@ func (v *ContentVerifier) Verify(signatureAlgorithm enumerations.SignatureAlgori
 	// is carried by a throwaway certificate value - there is no other stdlib entry point that
 	// verifies an arbitrary signature against a bare PublicKey across every algorithm family.
 	signer := &stdx509.Certificate{PublicKey: v.publicKey}
-	return signer.CheckSignature(algorithm, signedContent, signatureValue)
+	err := signer.CheckSignature(algorithm, signedContent, signatureValue)
+	if err == nil {
+		return nil
+	}
+	// An RSA key whose public exponent is larger than crypto/rsa will work with at all fails
+	// CheckSignature before the signature is ever looked at; see rsaLargeExponentVerify for why
+	// doing the RSA verification primitive directly is the BouncyCastle-equivalent behaviour
+	// and not a weakening of the check. Applied here for the same reason the sibling
+	// SignerInformationVerifier.Verify applies it: both stand in for a BouncyCastle verifier
+	// that has no such limit.
+	if fallbackErr := rsaLargeExponentVerify(
+		v.publicKey, signatureAlgorithm, signedContent, signatureValue); fallbackErr == nil {
+		return nil
+	}
+	return err
 }
 
 // dssContentVerifierProviderSecurityFactoryClassName is ContentVerifierProvider.class.getSimpleName().

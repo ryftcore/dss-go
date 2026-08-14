@@ -76,6 +76,14 @@ func (v *SignerInformationVerifier) Verify(signatureAlgorithm enumerations.Signa
 		v.publicKey, signatureAlgorithm, signedContent, signatureValue); fallbackErr == nil {
 		return nil
 	}
+	// Second fallback: an RSA key whose public exponent is larger than crypto/rsa will work
+	// with at all. CheckSignature above failed without ever looking at the signature in that
+	// case; see rsaLargeExponentVerify for why doing the RSA verification primitive directly is
+	// the BouncyCastle-equivalent behaviour and not a weakening of the check.
+	if fallbackErr := rsaLargeExponentVerify(
+		v.publicKey, signatureAlgorithm, signedContent, signatureValue); fallbackErr == nil {
+		return nil
+	}
 	// The canonical failure is the one worth reporting; the fallback is only ever a second
 	// chance, never a different diagnosis.
 	return err
