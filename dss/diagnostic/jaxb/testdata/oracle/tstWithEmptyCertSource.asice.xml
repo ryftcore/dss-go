@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>tstWithEmptyCertSource.asice</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <ContainerInfo>
+        <ContainerType>ASiC-E</ContainerType>
+        <MimeTypeFilePresent>true</MimeTypeFilePresent>
+        <MimeTypeContent>application/vnd.etsi.asic-e+zip</MimeTypeContent>
+        <ManifestFiles>
+            <ManifestFile>
+                <Filename>META-INF/ASiCManifest0.xml</Filename>
+                <SignatureFilename>META-INF/timestamp0.tst</SignatureFilename>
+                <Entries>
+                    <Entry>toBeSigned.txt</Entry>
+                    <Entry>toBeSigned.pdf</Entry>
+                </Entries>
+            </ManifestFile>
+        </ManifestFiles>
+        <ContentFiles>
+            <ContentFile>toBeSigned.pdf</ContentFile>
+            <ContentFile>toBeSigned.txt</ContentFile>
+        </ContentFiles>
+    </ContainerInfo>
+    <UsedCertificates/>
+    <UsedRevocations/>
+    <UsedTimestamps>
+        <Timestamp Type="CONTAINER_TIMESTAMP" Id="T-A77DA74ACD5AD9E5C02B4DD39A6854EF53FDADEBF38D78A63F3A1AC85836B592">
+            <TimestampFilename>META-INF/timestamp0.tst</TimestampFilename>
+            <ProductionTime>2016-12-02T19:51:13Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT" documentName="META-INF/ASiCManifest0.xml">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>1moqjzsY+0rJL4OkbSf7LUPTNvV2KzwZ+nFq6PmvQ1E=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <DigestMatcher type="MANIFEST_ENTRY" uri="toBeSigned.txt" documentName="toBeSigned.txt">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>2+Qvrd9HTsjlZKfetS94GFYQAuSF8lWNGLEV0Yqq33k=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <DigestMatcher type="MANIFEST_ENTRY" uri="toBeSigned.pdf" documentName="toBeSigned.pdf">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>gpTJsYQtlzPMF5dsBfaEvB3VOMLAtQVfDkbrWznu6e0=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+            </BasicSignature>
+            <SigningCertificate/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=RootCAOK, OU=Plugtests_2015-2016, O=ETSI, C=FR</IssuerName>
+                    <SerialNumber>393802904868580</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <OrphanCertificate Token="C-18D6051732E476A89AABB2B76F57BC3894BD032C73B7BD93EC64979C641E806D">
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="false">MFwwUaRPME0xCzAJBgNVBAYTAkZSMQ0wCwYDVQQKEwRFVFNJMRwwGgYDVQQLDBNQbHVndGVzdHNfMjAxNS0yMDE2MREwDwYDVQQDEwhSb290Q0FPSwIHAWYpYkGW5A==</IssuerSerial>
+                        <DigestAlgoAndValue match="false">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>GNYFFzLkdqiaq7K3b1e8OJS9Ayxzt72T7GSXnGQegG0=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </OrphanCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-4004F62689F170CAE4641D3DEC00BC24255CAFEB4A5B56F71CC0B22A89BE4743" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="D-1C2D64CCA2F8E298998E65F412F599E180D49AB9A527C80C7A7FDED6D9EE7C98" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="D-E5DE6114F29943B7277B950A05FDFE76DD4879EF1C4E628B90512212D00483E8" Category="SIGNED_DATA"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-4004F62689F170CAE4641D3DEC00BC24255CAFEB4A5B56F71CC0B22A89BE4743">
+                    <Scope>FULL</Scope>
+                    <Name>META-INF/ASiCManifest0.xml</Name>
+                    <Description>Manifest document</Description>
+                </TimestampScope>
+                <TimestampScope SignerData="D-1C2D64CCA2F8E298998E65F412F599E180D49AB9A527C80C7A7FDED6D9EE7C98">
+                    <Scope>FULL</Scope>
+                    <Name>toBeSigned.txt</Name>
+                    <Description>Full document</Description>
+                </TimestampScope>
+                <TimestampScope SignerData="D-E5DE6114F29943B7277B950A05FDFE76DD4879EF1C4E628B90512212D00483E8">
+                    <Scope>FULL</Scope>
+                    <Name>toBeSigned.pdf</Name>
+                    <Description>Full document</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>MIIDKQYJKoZIhvcNAQcCoIIDGjCCAxYCAQMxDzANBglghkgBZQMEAgEFADCBjAYLKoZIhvcNAQkQAQSgfQR7MHkCAQEGDisGAQQBlRICAgUCAQEBMDEwDQYJYIZIAWUDBAIBBQAEINZqKo87GPtKyS+DpG0n+y1D0zb1dis8Gfpxauj5r0NRAgc0mvaaX5O/GBMyMDE2MTIwMjE5NTExMy4xNTRaMAkCAQGAAQGBAQECCGV463R/d+6wMYICbzCCAmsCAQEwWDBNMQswCQYDVQQGEwJGUjENMAsGA1UEChMERVRTSTEcMBoGA1UECwwTUGx1Z3Rlc3RzXzIwMTUtMjAxNjERMA8GA1UEAxMIUm9vdENBT0sCBwFmKWJBluQwDQYJYIZIAWUDBAIBBQCggekwGgYJKoZIhvcNAQkDMQ0GCyqGSIb3DQEJEAEEMC8GCSqGSIb3DQEJBDEiBCBDyY75iPsHbmHaD5LpqsrKvjRUaOL1kOGc8IQv9Te9XzCBmQYLKoZIhvcNAQkQAi8xgYkwgYYwgYMwgYAEIBjWBRcy5Haomquyt29XvDiUvQMsc7e9k+xkl5xkHoBtMFwwUaRPME0xCzAJBgNVBAYTAkZSMQ0wCwYDVQQKEwRFVFNJMRwwGgYDVQQLDBNQbHVndGVzdHNfMjAxNS0yMDE2MREwDwYDVQQDEwhSb290Q0FPSwIHAWYpYkGW5DANBgkqhkiG9w0BAQEFAASCAQA7rKyuXIGKiayHzQDn3c278bI+QHmb6V4G5FrKetJI+q8cEEN0sdImMRESrB74alUFqL8XTCt+1Fu+HHGu3KIdf0dILnsvBIkHpLVAz5qovKwOmwfL8XmKPO/t0n/BHXO2bQj5qZLefI3v8+h303WtNI8Y/7RPksBPvES03UxYasQ/CDQmhFD8X/HrT/4NZb0LFjBR9+Au0qEncWkdBoUl/3qZfgDiVi7DY3gSTMqOKozdEya2ULywQ4tf2Erctb04cbHpLvZQD9nlMekpsr5A7Jg1UJ2vx+w6ZMhBiMi6B5VFEWm+DzKmp81ehKJ6IoJ+GwRg6j+rxjg+qYt1pq6Z</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OrphanTokens>
+        <OrphanCertificate EncapsulationType="REFERENCE" Id="C-18D6051732E476A89AABB2B76F57BC3894BD032C73B7BD93EC64979C641E806D">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>GNYFFzLkdqiaq7K3b1e8OJS9Ayxzt72T7GSXnGQegG0=</DigestValue>
+            </DigestAlgoAndValue>
+        </OrphanCertificate>
+    </OrphanTokens>
+    <OriginalDocuments>
+        <SignerData Id="D-4004F62689F170CAE4641D3DEC00BC24255CAFEB4A5B56F71CC0B22A89BE4743">
+            <ReferencedName>META-INF/ASiCManifest0.xml</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>1moqjzsY+0rJL4OkbSf7LUPTNvV2KzwZ+nFq6PmvQ1E=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-1C2D64CCA2F8E298998E65F412F599E180D49AB9A527C80C7A7FDED6D9EE7C98">
+            <ReferencedName>toBeSigned.txt</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>2+Qvrd9HTsjlZKfetS94GFYQAuSF8lWNGLEV0Yqq33k=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-E5DE6114F29943B7277B950A05FDFE76DD4879EF1C4E628B90512212D00483E8">
+            <ReferencedName>toBeSigned.pdf</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>gpTJsYQtlzPMF5dsBfaEvB3VOMLAtQVfDkbrWznu6e0=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

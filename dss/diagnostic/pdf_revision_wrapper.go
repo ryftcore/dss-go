@@ -78,7 +78,7 @@ func (w *PDFRevisionWrapper) ArePdfObjectModificationsDetected() bool {
 func (w *PDFRevisionWrapper) PdfExtensionChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
-		return pdfObjectModifications.ExtensionChanges
+		return pdfObjectModifications.ExtensionChange
 	}
 	return nil
 }
@@ -100,7 +100,7 @@ func (w *PDFRevisionWrapper) PdfSignatureOrFormFillChanges() []*jaxb.XmlObjectMo
 func (w *PDFRevisionWrapper) PdfAnnotationChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
-		return pdfObjectModifications.AnnotationChanges
+		return pdfObjectModifications.AnnotationChange
 	}
 	return nil
 }
@@ -121,9 +121,9 @@ func (w *PDFRevisionWrapper) ModifiedFieldNames() []string {
 	var names []string
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.ExtensionChanges)...)
+		names = append(names, getModifiedFieldNames(pdfObjectModifications.ExtensionChange)...)
 		names = append(names, getModifiedFieldNames(pdfObjectModifications.SignatureOrFormFill)...)
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.AnnotationChanges)...)
+		names = append(names, getModifiedFieldNames(pdfObjectModifications.AnnotationChange)...)
 		names = append(names, getModifiedFieldNames(pdfObjectModifications.Undefined)...)
 	}
 	return names
@@ -131,9 +131,9 @@ func (w *PDFRevisionWrapper) ModifiedFieldNames() []string {
 
 // FirstFieldName returns the first signature field name. Port of getFirstFieldName().
 func (w *PDFRevisionWrapper) FirstFieldName() string {
-	fields := w.pdfRevision.Fields
-	if len(fields) != 0 {
-		return fields[0].Name
+	fields := w.pdfRevision.SignatureField
+	if len(fields) != 0 && fields[0].Name != nil {
+		return *fields[0].Name
 	}
 	return ""
 }
@@ -142,10 +142,12 @@ func (w *PDFRevisionWrapper) FirstFieldName() string {
 // referenced from. Port of getSignatureFieldNames().
 func (w *PDFRevisionWrapper) SignatureFieldNames() []string {
 	var names []string
-	fields := w.pdfRevision.Fields
+	fields := w.pdfRevision.SignatureField
 	if len(fields) != 0 {
 		for _, signatureField := range fields {
-			names = append(names, signatureField.Name)
+			if signatureField.Name != nil {
+				names = append(names, *signatureField.Name)
+			}
 		}
 	}
 	return names
@@ -153,39 +155,60 @@ func (w *PDFRevisionWrapper) SignatureFieldNames() []string {
 
 // SignerName returns the signer's name. Port of getSignerName().
 func (w *PDFRevisionWrapper) SignerName() string {
-	return w.pdfRevision.PDFSignatureDictionary.SignerName
+	if w.pdfRevision.PDFSignatureDictionary.SignerName != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.SignerName
+	}
+	return ""
 }
 
 // SignatureDictionaryType returns the PDF signature dictionary /Type value. Port of
 // getSignatureDictionaryType().
 func (w *PDFRevisionWrapper) SignatureDictionaryType() string {
-	return w.pdfRevision.PDFSignatureDictionary.Type
+	if w.pdfRevision.PDFSignatureDictionary.Type != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.Type
+	}
+	return ""
 }
 
 // Filter returns the PDF signature dictionary /Filter value. Port of getFilter().
 func (w *PDFRevisionWrapper) Filter() string {
-	return w.pdfRevision.PDFSignatureDictionary.Filter
+	if w.pdfRevision.PDFSignatureDictionary.Filter != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.Filter
+	}
+	return ""
 }
 
 // SubFilter returns the PDF signature dictionary /SubFilter value. Port of getSubFilter().
 func (w *PDFRevisionWrapper) SubFilter() string {
-	return w.pdfRevision.PDFSignatureDictionary.SubFilter
+	if w.pdfRevision.PDFSignatureDictionary.SubFilter != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.SubFilter
+	}
+	return ""
 }
 
 // ContactInfo returns the PDF signature dictionary /ContactInfo value. Port of
 // getContactInfo().
 func (w *PDFRevisionWrapper) ContactInfo() string {
-	return w.pdfRevision.PDFSignatureDictionary.ContactInfo
+	if w.pdfRevision.PDFSignatureDictionary.ContactInfo != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.ContactInfo
+	}
+	return ""
 }
 
 // Location returns the PDF signature dictionary /Location value. Port of getLocation().
 func (w *PDFRevisionWrapper) Location() string {
-	return w.pdfRevision.PDFSignatureDictionary.Location
+	if w.pdfRevision.PDFSignatureDictionary.Location != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.Location
+	}
+	return ""
 }
 
 // Reason returns the PDF signature dictionary /Reason value. Port of getReason().
 func (w *PDFRevisionWrapper) Reason() string {
-	return w.pdfRevision.PDFSignatureDictionary.Reason
+	if w.pdfRevision.PDFSignatureDictionary.Reason != nil {
+		return *w.pdfRevision.PDFSignatureDictionary.Reason
+	}
+	return ""
 }
 
 // SignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
@@ -222,8 +245,8 @@ func (w *PDFRevisionWrapper) IsPdfSignatureDictionaryConsistent() bool {
 // present. Port of getDocMDPPermissions().
 func (w *PDFRevisionWrapper) DocMDPPermissions() enumerations.CertificationPermission {
 	docMDP := w.pdfRevision.PDFSignatureDictionary.DocMDP
-	if docMDP != nil {
-		return docMDP.Permissions
+	if docMDP != nil && docMDP.Permissions != nil {
+		return enumerations.CertificationPermission(*docMDP.Permissions)
 	}
 	return ""
 }
@@ -235,7 +258,7 @@ func (w *PDFRevisionWrapper) FieldMDP() *jaxb.XmlPDFLockDictionary {
 
 // SigFieldLock returns a /SigFieldLock dictionary, when present. Port of getSigFieldLock().
 func (w *PDFRevisionWrapper) SigFieldLock() *jaxb.XmlPDFLockDictionary {
-	for _, field := range w.pdfRevision.Fields {
+	for _, field := range w.pdfRevision.SignatureField {
 		if field.SigFieldLock != nil {
 			return field.SigFieldLock
 		}
@@ -263,8 +286,8 @@ func getModifiedFieldNames(objectModifications []*jaxb.XmlObjectModification) []
 	var names []string
 	for _, objectModification := range objectModifications {
 		fieldName := objectModification.FieldName
-		if fieldName != "" {
-			names = append(names, fieldName)
+		if fieldName != nil && *fieldName != "" {
+			names = append(names, *fieldName)
 		}
 	}
 	return names

@@ -22,7 +22,10 @@ func NewCertificateRefWrapper(certificateRef *jaxb.XmlCertificateRef, certificat
 
 // Origin returns a certificate reference origin. Port of getOrigin().
 func (w *CertificateRefWrapper) Origin() enumerations.CertificateRefOrigin {
-	return w.certificateRef.Origin
+	if w.certificateRef.Origin != nil {
+		return enumerations.CertificateRefOrigin(*w.certificateRef.Origin)
+	}
+	return ""
 }
 
 // IssuerSerial returns IssuerSerial's binaries. Port of getIssuerSerial().
@@ -50,8 +53,8 @@ func (w *CertificateRefWrapper) IsIssuerSerialMatch() bool {
 
 // IssuerName returns IssuerName. Port of getIssuerName().
 func (w *CertificateRefWrapper) IssuerName() string {
-	if w.certificateRef.SerialInfo != nil {
-		return w.certificateRef.SerialInfo.IssuerName
+	if w.certificateRef.SerialInfo != nil && w.certificateRef.SerialInfo.IssuerName != nil {
+		return *w.certificateRef.SerialInfo.IssuerName
 	}
 	return ""
 }
@@ -59,8 +62,8 @@ func (w *CertificateRefWrapper) IssuerName() string {
 // Ski returns SKI of the certificate (SHA-1 of the certificate's public key). Port of
 // getSki().
 func (w *CertificateRefWrapper) Ski() []byte {
-	if w.certificateRef.SerialInfo != nil {
-		return w.certificateRef.SerialInfo.Ski
+	if w.certificateRef.SerialInfo != nil && w.certificateRef.SerialInfo.Ski != nil {
+		return []byte(*w.certificateRef.SerialInfo.Ski)
 	}
 	return nil
 }
@@ -69,13 +72,19 @@ func (w *CertificateRefWrapper) Ski() []byte {
 // signature contains a byte string, the returned value of the method is base64-encoded
 // result. Port of getKid().
 func (w *CertificateRefWrapper) Kid() string {
-	return w.certificateRef.KID
+	if w.certificateRef.KID != nil {
+		return *w.certificateRef.KID
+	}
+	return ""
 }
 
 // X509Url returns X.509 URL (key identifier) of the certificate reference. Port of
 // getX509Url().
 func (w *CertificateRefWrapper) X509Url() string {
-	return w.certificateRef.X509Url
+	if w.certificateRef.X509Url != nil {
+		return *w.certificateRef.X509Url
+	}
+	return ""
 }
 
 // DigestAlgoAndValue returns digest algo and value. Port of getDigestAlgoAndValue().
@@ -94,7 +103,7 @@ func (w *CertificateRefWrapper) IsDigestValuePresent() bool {
 func (w *CertificateRefWrapper) DigestMethod() enumerations.DigestAlgorithm {
 	digestAlgoAndValue := w.DigestAlgoAndValue()
 	if digestAlgoAndValue != nil && digestAlgoAndValue.DigestMethod != nil {
-		return *digestAlgoAndValue.DigestMethod
+		return enumerations.DigestAlgorithm(*digestAlgoAndValue.DigestMethod)
 	}
 	return ""
 }
@@ -115,7 +124,7 @@ func (w *CertificateRefWrapper) CertificateId() string {
 // String returns a string representation of the wrapper. Port of toString().
 func (w *CertificateRefWrapper) String() string {
 	if w.certificateRef != nil {
-		return "CertificateRefWrapper Origin='" + string(w.certificateRef.Origin) + "'"
+		return "CertificateRefWrapper Origin='" + string(w.Origin()) + "'"
 	}
-	return "CertificateRefWrapper certificateRef=<nil>"
+	return "CertificateRefWrapper certificateRef=null"
 }

@@ -43,16 +43,21 @@ func NewDiagnosticData(wrapped *jaxb.XmlDiagnosticData) *DiagnosticData {
 
 // DocumentName returns a name of the validating document. Port of getDocumentName().
 func (d *DiagnosticData) DocumentName() string {
-	return d.wrapped.DocumentName
+	if d.wrapped.DocumentName != nil {
+		return *d.wrapped.DocumentName
+	}
+	return ""
 }
 
 // SignatureIdList returns the list of the signature id. Port of getSignatureIdList().
 func (d *DiagnosticData) SignatureIdList() []string {
 	var signatureIds []string
-	signatures := d.wrapped.Signatures
+	signatures := d.wrapped.Signatures.All()
 	if signatures != nil {
 		for _, xmlSignature := range signatures {
-			signatureIds = append(signatureIds, xmlSignature.Id)
+			if xmlSignature.Id != nil {
+				signatureIds = append(signatureIds, string(*xmlSignature.Id))
+			}
 		}
 	}
 	return signatureIds
@@ -451,9 +456,11 @@ func (d *DiagnosticData) CertificatesFromSource(certificateSourceType enumeratio
 func (d *DiagnosticData) AllOrphanCertificateObjects() []*OrphanCertificateTokenWrapper {
 	var orphanCertificateValues []*OrphanCertificateTokenWrapper
 	if d.wrapped.OrphanTokens != nil {
-		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificates {
-			if orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES && !containsOrphanCertificate(orphanCertificateValues, orphanToken.Token) {
-				orphanCertificateValues = append(orphanCertificateValues, NewOrphanCertificateTokenWrapper(orphanToken.Token))
+		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificate {
+			orphanCertificate := NewOrphanCertificateTokenWrapper(orphanToken)
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES &&
+				!containsOrphanCertificate(orphanCertificateValues, orphanCertificate) {
+				orphanCertificateValues = append(orphanCertificateValues, orphanCertificate)
 			}
 		}
 	}
@@ -465,18 +472,20 @@ func (d *DiagnosticData) AllOrphanCertificateObjects() []*OrphanCertificateToken
 func (d *DiagnosticData) AllOrphanCertificateReferences() []*OrphanCertificateTokenWrapper {
 	var orphanCertificateRefs []*OrphanCertificateTokenWrapper
 	if d.wrapped.OrphanTokens != nil {
-		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificates {
-			if orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE && !containsOrphanCertificate(orphanCertificateRefs, orphanToken.Token) {
-				orphanCertificateRefs = append(orphanCertificateRefs, NewOrphanCertificateTokenWrapper(orphanToken.Token))
+		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificate {
+			orphanCertificate := NewOrphanCertificateTokenWrapper(orphanToken)
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE &&
+				!containsOrphanCertificate(orphanCertificateRefs, orphanCertificate) {
+				orphanCertificateRefs = append(orphanCertificateRefs, orphanCertificate)
 			}
 		}
 	}
 	return orphanCertificateRefs
 }
 
-func containsOrphanCertificate(values []*OrphanCertificateTokenWrapper, token *jaxb.XmlOrphanCertificateToken) bool {
+func containsOrphanCertificate(values []*OrphanCertificateTokenWrapper, candidate *OrphanCertificateTokenWrapper) bool {
 	for _, v := range values {
-		if v.Id() == token.Id {
+		if v.Id() == candidate.Id() {
 			return true
 		}
 	}
@@ -488,9 +497,11 @@ func containsOrphanCertificate(values []*OrphanCertificateTokenWrapper, token *j
 func (d *DiagnosticData) AllOrphanRevocationObjects() []*OrphanRevocationTokenWrapper {
 	var orphanRevocationValues []*OrphanRevocationTokenWrapper
 	if d.wrapped.OrphanTokens != nil {
-		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocations {
-			if orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES && !containsOrphanRevocation(orphanRevocationValues, orphanToken.Token) {
-				orphanRevocationValues = append(orphanRevocationValues, NewOrphanRevocationTokenWrapper(orphanToken.Token))
+		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocation {
+			orphanRevocation := NewOrphanRevocationTokenWrapper(orphanToken)
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES &&
+				!containsOrphanRevocation(orphanRevocationValues, orphanRevocation) {
+				orphanRevocationValues = append(orphanRevocationValues, orphanRevocation)
 			}
 		}
 	}
@@ -502,18 +513,20 @@ func (d *DiagnosticData) AllOrphanRevocationObjects() []*OrphanRevocationTokenWr
 func (d *DiagnosticData) AllOrphanRevocationReferences() []*OrphanRevocationTokenWrapper {
 	var orphanRevocationRefs []*OrphanRevocationTokenWrapper
 	if d.wrapped.OrphanTokens != nil {
-		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocations {
-			if orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE && !containsOrphanRevocation(orphanRevocationRefs, orphanToken.Token) {
-				orphanRevocationRefs = append(orphanRevocationRefs, NewOrphanRevocationTokenWrapper(orphanToken.Token))
+		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocation {
+			orphanRevocation := NewOrphanRevocationTokenWrapper(orphanToken)
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE &&
+				!containsOrphanRevocation(orphanRevocationRefs, orphanRevocation) {
+				orphanRevocationRefs = append(orphanRevocationRefs, orphanRevocation)
 			}
 		}
 	}
 	return orphanRevocationRefs
 }
 
-func containsOrphanRevocation(values []*OrphanRevocationTokenWrapper, token *jaxb.XmlOrphanRevocationToken) bool {
+func containsOrphanRevocation(values []*OrphanRevocationTokenWrapper, candidate *OrphanRevocationTokenWrapper) bool {
 	for _, v := range values {
-		if v.Id() == token.Id {
+		if v.Id() == candidate.Id() {
 			return true
 		}
 	}
@@ -537,7 +550,7 @@ func (d *DiagnosticData) CrossCertificates(certificate *CertificateWrapper) []*C
 func (d *DiagnosticData) OrphanCrossCertificates(certificate *CertificateWrapper) []*OrphanCertificateTokenWrapper {
 	var crossCertificates []*OrphanCertificateTokenWrapper
 	for _, candidate := range d.OrphanEquivalentCertificates(certificate) {
-		if certificate.CertificateDN() != candidate.GetCertificateDN() || certificate.CertificateIssuerDN() != candidate.GetCertificateIssuerDN() {
+		if certificate.CertificateDN() != candidate.CertificateDN() || certificate.CertificateIssuerDN() != candidate.CertificateIssuerDN() {
 			crossCertificates = append(crossCertificates, candidate)
 		}
 	}
@@ -561,7 +574,7 @@ func (d *DiagnosticData) EquivalentCertificates(certificate *CertificateWrapper)
 func (d *DiagnosticData) OrphanEquivalentCertificates(certificate *CertificateWrapper) []*OrphanCertificateTokenWrapper {
 	var equivalentCertificates []*OrphanCertificateTokenWrapper
 	for _, candidate := range d.AllOrphanCertificateObjects() {
-		if certificate.Id() != candidate.Id() && certificate.EntityKey() == candidate.GetEntityKey() {
+		if certificate.Id() != candidate.Id() && certificate.EntityKey() == candidate.EntityKey() {
 			equivalentCertificates = append(equivalentCertificates, candidate)
 		}
 	}
@@ -571,7 +584,7 @@ func (d *DiagnosticData) OrphanEquivalentCertificates(certificate *CertificateWr
 // Signatures retrieves a list of signature wrappers. Port of getSignatures().
 func (d *DiagnosticData) Signatures() []*SignatureWrapper {
 	if d.foundSignatures == nil {
-		xmlSignatures := d.wrapped.Signatures
+		xmlSignatures := d.wrapped.Signatures.All()
 		for _, xmlSignature := range xmlSignatures {
 			d.foundSignatures = append(d.foundSignatures, NewSignatureWrapper(xmlSignature))
 		}
@@ -582,7 +595,7 @@ func (d *DiagnosticData) Signatures() []*SignatureWrapper {
 // TimestampList retrieves a list of timestamp wrappers. Port of getTimestampList().
 func (d *DiagnosticData) TimestampList() []*TimestampWrapper {
 	if d.usedTimestamps == nil {
-		xmlTimestamps := d.wrapped.UsedTimestamps
+		xmlTimestamps := d.wrapped.UsedTimestamps.All()
 		for _, xmlTimestamp := range xmlTimestamps {
 			d.usedTimestamps = append(d.usedTimestamps, NewTimestampWrapper(xmlTimestamp))
 		}
@@ -605,7 +618,7 @@ func (d *DiagnosticData) NonEvidenceRecordTimestamps() []*TimestampWrapper {
 // EvidenceRecords retrieves a list of evidence record wrappers. Port of getEvidenceRecords().
 func (d *DiagnosticData) EvidenceRecords() []*EvidenceRecordWrapper {
 	if d.foundEvidenceRecords == nil {
-		xmlEvidenceRecords := d.wrapped.EvidenceRecords
+		xmlEvidenceRecords := d.wrapped.EvidenceRecords.All()
 		for _, xmlEvidenceRecord := range xmlEvidenceRecords {
 			d.foundEvidenceRecords = append(d.foundEvidenceRecords, NewEvidenceRecordWrapper(xmlEvidenceRecord))
 		}
@@ -627,7 +640,7 @@ func (d *DiagnosticData) EvidenceRecordById(id string) *EvidenceRecordWrapper {
 // EAAs retrieves a list of EAA wrappers. Port of getEAAs().
 func (d *DiagnosticData) EAAs() []*EAAWrapper {
 	if d.foundEAAs == nil {
-		xmlEAAs := d.wrapped.EAAs
+		xmlEAAs := d.wrapped.EAAs.All()
 		for _, xmlEAA := range xmlEAAs {
 			d.foundEAAs = append(d.foundEAAs, NewEAAWrapper(xmlEAA))
 		}
@@ -661,7 +674,7 @@ func (d *DiagnosticData) getFirstEAANullSafe() *EAAWrapper {
 // UsedCertificates retrieves a list of certificate wrappers. Port of getUsedCertificates().
 func (d *DiagnosticData) UsedCertificates() []*CertificateWrapper {
 	if d.usedCertificates == nil {
-		xmlCertificates := d.wrapped.UsedCertificates
+		xmlCertificates := d.wrapped.UsedCertificates.All()
 		for _, certificate := range xmlCertificates {
 			d.usedCertificates = append(d.usedCertificates, NewCertificateWrapper(certificate))
 		}
@@ -720,7 +733,7 @@ func (d *DiagnosticData) AllKeyBindingSignatures() []*SignatureWrapper {
 // AllRevocationData returns all revocation data. Port of getAllRevocationData().
 func (d *DiagnosticData) AllRevocationData() []*RevocationWrapper {
 	var revocationData []*RevocationWrapper
-	for _, xmlRevocation := range d.wrapped.UsedRevocations {
+	for _, xmlRevocation := range d.wrapped.UsedRevocations.All() {
 		revocationData = append(revocationData, NewRevocationWrapper(xmlRevocation))
 	}
 	return revocationData
@@ -743,7 +756,7 @@ func (d *DiagnosticData) LatestRevocationDataForCertificate(certificate *Certifi
 // AllEAA returns all electronic attestation of attributes (EAAs). Port of getAllEAA().
 func (d *DiagnosticData) AllEAA() []*EAAWrapper {
 	var eaas []*EAAWrapper
-	for _, xmlEAA := range d.wrapped.EAAs {
+	for _, xmlEAA := range d.wrapped.EAAs.All() {
 		eaas = append(eaas, NewEAAWrapper(xmlEAA))
 	}
 	return eaas
@@ -753,7 +766,7 @@ func (d *DiagnosticData) AllEAA() []*EAAWrapper {
 // getAllEAARevocationTokens().
 func (d *DiagnosticData) AllEAARevocationTokens() []*EAARevocationTokenWrapper {
 	var eaaStatusTokens []*EAARevocationTokenWrapper
-	for _, xmlEAARevocationToken := range d.wrapped.UsedEAARevocationTokens {
+	for _, xmlEAARevocationToken := range d.wrapped.UsedEAARevocationTokens.All() {
 		eaaStatusTokens = append(eaaStatusTokens, NewEAARevocationTokenWrapper(xmlEAARevocationToken))
 	}
 	return eaaStatusTokens
@@ -812,7 +825,7 @@ func containsSignerData(values []*SignerDataWrapper, candidate *SignerDataWrappe
 // timestamp(s), when applicable. Port of getAllSignerDocuments().
 func (d *DiagnosticData) AllSignerDocuments() []*SignerDataWrapper {
 	var signerDocuments []*SignerDataWrapper
-	for _, signerData := range d.wrapped.OriginalDocuments {
+	for _, signerData := range d.wrapped.OriginalDocuments.All() {
 		signerDocuments = append(signerDocuments, NewSignerDataWrapper(signerData))
 	}
 	return signerDocuments
@@ -832,8 +845,8 @@ func (d *DiagnosticData) IsContainerInfoPresent() bool {
 // ContainerType returns the container type. Port of getContainerType().
 func (d *DiagnosticData) ContainerType() enumerations.ASiCContainerType {
 	containerInfo := d.wrapped.ContainerInfo
-	if containerInfo != nil {
-		return containerInfo.ContainerType
+	if containerInfo != nil && containerInfo.ContainerType != nil {
+		return enumerations.ASiCContainerType(*containerInfo.ContainerType)
 	}
 	return ""
 }
@@ -842,8 +855,8 @@ func (d *DiagnosticData) ContainerType() enumerations.ASiCContainerType {
 // getZipComment().
 func (d *DiagnosticData) ZipComment() string {
 	containerInfo := d.wrapped.ContainerInfo
-	if containerInfo != nil {
-		return containerInfo.ZipComment
+	if containerInfo != nil && containerInfo.ZipComment != nil {
+		return *containerInfo.ZipComment
 	}
 	return ""
 }
@@ -853,7 +866,7 @@ func (d *DiagnosticData) ZipComment() string {
 func (d *DiagnosticData) IsMimetypeFilePresent() bool {
 	containerInfo := d.wrapped.ContainerInfo
 	if containerInfo != nil {
-		return containerInfo.MimeTypeFilePresent
+		return containerInfo.MimeTypeFilePresent != nil && *containerInfo.MimeTypeFilePresent
 	}
 	return false
 }
@@ -862,8 +875,8 @@ func (d *DiagnosticData) IsMimetypeFilePresent() bool {
 // getMimetypeFileContent().
 func (d *DiagnosticData) MimetypeFileContent() string {
 	containerInfo := d.wrapped.ContainerInfo
-	if containerInfo != nil {
-		return containerInfo.MimeTypeContent
+	if containerInfo != nil && containerInfo.MimeTypeContent != nil {
+		return *containerInfo.MimeTypeContent
 	}
 	return ""
 }
@@ -878,7 +891,7 @@ func (d *DiagnosticData) ContainerInfo() *jaxb.XmlContainerInfo {
 // getManifestFiles().
 func (d *DiagnosticData) ManifestFiles() []*jaxb.XmlManifestFile {
 	if d.wrapped.ContainerInfo != nil {
-		return d.wrapped.ContainerInfo.ManifestFiles
+		return d.wrapped.ContainerInfo.ManifestFiles.All()
 	}
 	return nil
 }
@@ -888,7 +901,7 @@ func (d *DiagnosticData) ManifestFiles() []*jaxb.XmlManifestFile {
 func (d *DiagnosticData) ManifestFileForFilename(filename string) *jaxb.XmlManifestFile {
 	if filename != "" {
 		for _, manifestFile := range d.ManifestFiles() {
-			if filename == manifestFile.SignatureFilename {
+			if manifestFile.SignatureFilename != nil && filename == *manifestFile.SignatureFilename {
 				return manifestFile
 			}
 		}
@@ -900,7 +913,7 @@ func (d *DiagnosticData) ManifestFileForFilename(filename string) *jaxb.XmlManif
 // getContainerContentFilenames().
 func (d *DiagnosticData) ContainerContentFilenames() []string {
 	if d.wrapped.ContainerInfo != nil {
-		return d.wrapped.ContainerInfo.ContentFiles
+		return d.wrapped.ContainerInfo.ContentFiles.All()
 	}
 	return nil
 }
@@ -913,8 +926,8 @@ func (d *DiagnosticData) IsPDFAValidationPerformed() bool {
 
 // PDFAProfileId returns evaluated PDF/A profile Id. Port of getPDFAProfileId().
 func (d *DiagnosticData) PDFAProfileId() string {
-	if d.wrapped.PDFAInfo != nil {
-		return d.wrapped.PDFAInfo.ProfileId
+	if d.wrapped.PDFAInfo != nil && d.wrapped.PDFAInfo.ProfileId != nil {
+		return *d.wrapped.PDFAInfo.ProfileId
 	}
 	return ""
 }
@@ -932,7 +945,7 @@ func (d *DiagnosticData) IsPDFACompliant() bool {
 // validation. Port of getPDFAValidationErrors().
 func (d *DiagnosticData) PDFAValidationErrors() []string {
 	if d.wrapped.PDFAInfo != nil {
-		return d.wrapped.PDFAInfo.ValidationMessages
+		return d.wrapped.PDFAInfo.ValidationMessages.All()
 	}
 	return nil
 }
@@ -940,8 +953,8 @@ func (d *DiagnosticData) PDFAValidationErrors() []string {
 // WebsiteUrl gets the remote website URL used to establish a TLS/SSL secure connection. NOTE:
 // this method is used on QWAC validation. Port of getWebsiteUrl().
 func (d *DiagnosticData) WebsiteUrl() string {
-	if d.wrapped.ConnectionInfo != nil {
-		return d.wrapped.ConnectionInfo.Url
+	if d.wrapped.ConnectionInfo != nil && d.wrapped.ConnectionInfo.Url != nil {
+		return *d.wrapped.ConnectionInfo.Url
 	}
 	return ""
 }
@@ -950,8 +963,8 @@ func (d *DiagnosticData) WebsiteUrl() string {
 // the 'Link' response header). NOTE: this method is used on QWAC validation. Port of
 // getTLSCertificateBindingUrl().
 func (d *DiagnosticData) TLSCertificateBindingUrl() string {
-	if d.wrapped.ConnectionInfo != nil {
-		return d.wrapped.ConnectionInfo.TLSCertificateBindingUrl
+	if d.wrapped.ConnectionInfo != nil && d.wrapped.ConnectionInfo.TLSCertificateBindingUrl != nil {
+		return *d.wrapped.ConnectionInfo.TLSCertificateBindingUrl
 	}
 	return ""
 }
@@ -988,8 +1001,8 @@ func (d *DiagnosticData) EAAPresentationInfo() *jaxb.XmlEAAPresentationInfo {
 // getEAAPresentationType().
 func (d *DiagnosticData) EAAPresentationType() enumerations.EAAPresentationType {
 	eaaPresentationInfo := d.EAAPresentationInfo()
-	if eaaPresentationInfo != nil {
-		return eaaPresentationInfo.EAAPresentationType
+	if eaaPresentationInfo != nil && eaaPresentationInfo.EAAPresentationType != nil {
+		return enumerations.EAAPresentationType(*eaaPresentationInfo.EAAPresentationType)
 	}
 	return ""
 }
@@ -997,8 +1010,8 @@ func (d *DiagnosticData) EAAPresentationType() enumerations.EAAPresentationType 
 // TrustedLists returns the JAXB model of the used trusted lists. Port of getTrustedLists().
 func (d *DiagnosticData) TrustedLists() []*jaxb.XmlTrustedList {
 	var result []*jaxb.XmlTrustedList
-	for _, xmlTrustedList := range d.wrapped.TrustedLists {
-		if !xmlTrustedList.LOTL {
+	for _, xmlTrustedList := range d.wrapped.TrustedLists.All() {
+		if xmlTrustedList.LOTL == nil || !*xmlTrustedList.LOTL {
 			result = append(result, xmlTrustedList)
 		}
 	}
@@ -1008,8 +1021,8 @@ func (d *DiagnosticData) TrustedLists() []*jaxb.XmlTrustedList {
 // ListOfTrustedLists returns the JAXB model of the LOTL. Port of getListOfTrustedLists().
 func (d *DiagnosticData) ListOfTrustedLists() []*jaxb.XmlTrustedList {
 	var result []*jaxb.XmlTrustedList
-	for _, xmlTrustedList := range d.wrapped.TrustedLists {
-		if xmlTrustedList.LOTL {
+	for _, xmlTrustedList := range d.wrapped.TrustedLists.All() {
+		if xmlTrustedList.LOTL != nil && *xmlTrustedList.LOTL {
 			result = append(result, xmlTrustedList)
 		}
 	}
@@ -1020,8 +1033,8 @@ func (d *DiagnosticData) ListOfTrustedLists() []*jaxb.XmlTrustedList {
 // getListsOfTrustedEntities().
 func (d *DiagnosticData) ListsOfTrustedEntities() []*jaxb.XmlListOfTrustedEntities {
 	var result []*jaxb.XmlListOfTrustedEntities
-	for _, lote := range d.wrapped.ListsOfTrustedEntities {
-		if !lote.LoLoTE {
+	for _, lote := range d.wrapped.ListsOfTrustedEntities.All() {
+		if lote.LoLoTE == nil || !*lote.LoLoTE {
 			result = append(result, lote)
 		}
 	}
@@ -1032,8 +1045,8 @@ func (d *DiagnosticData) ListsOfTrustedEntities() []*jaxb.XmlListOfTrustedEntiti
 // entities. Port of getListsOfListsOfTrustedEntities().
 func (d *DiagnosticData) ListsOfListsOfTrustedEntities() []*jaxb.XmlListOfTrustedEntities {
 	var result []*jaxb.XmlListOfTrustedEntities
-	for _, lote := range d.wrapped.ListsOfTrustedEntities {
-		if lote.LoLoTE {
+	for _, lote := range d.wrapped.ListsOfTrustedEntities.All() {
+		if lote.LoLoTE != nil && *lote.LoLoTE {
 			result = append(result, lote)
 		}
 	}
@@ -1042,5 +1055,9 @@ func (d *DiagnosticData) ListsOfListsOfTrustedEntities() []*jaxb.XmlListOfTruste
 
 // ValidationDate returns the validation time. Port of getValidationDate().
 func (d *DiagnosticData) ValidationDate() *time.Time {
-	return d.wrapped.ValidationDate
+	if d.wrapped.ValidationDate == nil {
+		return nil
+	}
+	t := d.wrapped.ValidationDate.Time()
+	return &t
 }

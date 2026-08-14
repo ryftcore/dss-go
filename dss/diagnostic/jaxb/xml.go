@@ -18,7 +18,9 @@
 //     <X></X> once characters (even the empty string) have been written.
 //     encoding/xml always writes <X></X>. jaxbCanonical collapses empty pairs to
 //     the self-closing form, keeping <X></X> for the element names the schema
-//     binds to a possibly-empty simple type (see jaxb_textelements.go).
+//     binds to a possibly-empty simple type (see jaxb_content_model.go, which
+//     derives those names by reflection over the model rather than listing
+//     them).
 //
 //  2. Character escaping. encoding/xml escapes " and ' as &#34;/&#39; everywhere
 //     and writes \t \n \r as numeric references; the RI leaves " and ' alone in
@@ -791,18 +793,6 @@ func jaxbCanonical(in []byte) []byte {
 	return out.Bytes()
 }
 
-// carriesCharData reports whether an empty <name> element would have been
-// written by JAXB as <name></name> rather than <name/>.
-func carriesCharData(name string, stack []string) bool {
-	if !textBearingElements[name] {
-		return false
-	}
-	if len(stack) > 0 && complexInParent[stack[len(stack)-1]][name] {
-		return false
-	}
-	return true
-}
-
 // tagEnd returns the index just past the '>' closing the tag starting at i.
 // encoding/xml escapes '<' and '>' inside attribute values, so no quoting-aware
 // scan is needed.
@@ -855,7 +845,7 @@ var charDataEscapes = []struct{ from, to string }{
 	{"&#39;", `'`},
 	{"&#x9;", "\t"},
 	{"&#xA;", "\n"},
-	{"&#xD;", "&#xd;"},
+	{"&#xD;", "&#13;"},
 }
 
 // attrValueEscapes maps the same references to the spelling the RI uses inside
@@ -863,9 +853,9 @@ var charDataEscapes = []struct{ from, to string }{
 var attrValueEscapes = []struct{ from, to string }{
 	{"&#34;", "&quot;"},
 	{"&#39;", `'`},
-	{"&#x9;", "&#x9;"},
-	{"&#xA;", "&#xa;"},
-	{"&#xD;", "&#xd;"},
+	{"&#x9;", "\t"},
+	{"&#xA;", "&#10;"},
+	{"&#xD;", "&#13;"},
 }
 
 func writeCharData(out *bytes.Buffer, b []byte) {

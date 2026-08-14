@@ -20,8 +20,10 @@ func NewPSD2InfoWrapper(psd2QcInfo *jaxb.XmlPSD2QcInfo) *PSD2InfoWrapper {
 // RoleOfPSPNames returns names of roles of PSP. Port of getRoleOfPSPNames().
 func (w *PSD2InfoWrapper) RoleOfPSPNames() []string {
 	var result []string
-	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP {
-		result = append(result, roleOfPSP.Name)
+	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP.All() {
+		if roleOfPSP.Name != nil {
+			result = append(result, *roleOfPSP.Name)
+		}
 	}
 	return result
 }
@@ -29,7 +31,7 @@ func (w *PSD2InfoWrapper) RoleOfPSPNames() []string {
 // RoleOfPSPOids returns OIDs of roles of PSP. Port of getRoleOfPSPOids().
 func (w *PSD2InfoWrapper) RoleOfPSPOids() []enumerations.RoleOfPspOid {
 	var result []enumerations.RoleOfPspOid
-	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP {
+	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP.All() {
 		pspOid := roleOfPSP.Oid
 		if pspOid != nil {
 			result = append(result, enumerations.RoleOfPspOidFromOid(pspOid.Value))
@@ -40,10 +42,16 @@ func (w *PSD2InfoWrapper) RoleOfPSPOids() []enumerations.RoleOfPspOid {
 
 // NcaId returns the Competent Authority Id. Port of getNcaId().
 func (w *PSD2InfoWrapper) NcaId() string {
-	return w.psd2QcInfo.NcaId
+	if w.psd2QcInfo.NcaId != nil {
+		return *w.psd2QcInfo.NcaId
+	}
+	return ""
 }
 
 // NcaName returns the Competent Authority name. Port of getNcaName().
 func (w *PSD2InfoWrapper) NcaName() string {
-	return w.psd2QcInfo.NcaName
+	if w.psd2QcInfo.NcaName != nil {
+		return *w.psd2QcInfo.NcaName
+	}
+	return ""
 }

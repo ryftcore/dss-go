@@ -16,7 +16,10 @@ func NewQCLimitValueWrapper(qcEuLimitValue *jaxb.XmlQcEuLimitValue) *QCLimitValu
 
 // Currency returns the Iso4217CurrencyCode. Port of getCurrency().
 func (w *QCLimitValueWrapper) Currency() string {
-	return w.wrapped.Currency
+	if w.wrapped.Currency != nil {
+		return *w.wrapped.Currency
+	}
+	return ""
 }
 
 // Amount returns the defined amount. Port of getAmount().

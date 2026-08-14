@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>Signature-C-HU_POL-3.p7m</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-A42D81A9C61B1654624A40A79E2A6F1471C7357B6CB0BAF0B7560CAD2F8C7635">
+            <SignatureFilename>Signature-C-HU_POL-3.p7m</SignatureFilename>
+            <ClaimedSigningTime>2014-11-28T14:55:13Z</ClaimedSigningTime>
+            <SignatureFormat>CAdES-BASELINE-T</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>JJZt41Nt8VsYahP+Xti4rR3vBDkUfRd6gquItl6R5Os=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9"/>
+                <ChainItem Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>EMAILADDRESS=info@e-szigno.hu, CN=Qualified KET e-Szigno CA 2009, O=Microsec Ltd., L=Budapest, C=HU</IssuerName>
+                    <SerialNumber>5374473564943251506991542282762</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIGaMIGIpIGFMIGCMQswCQYDVQQGEwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFjAUBgNVBAoMDU1pY3Jvc2VjIEx0ZC4xJzAlBgNVBAMMHlF1YWxpZmllZCBLRVQgZS1Temlnbm8gQ0EgMjAwOTEfMB0GCSqGSIb3DQEJARYQaW5mb0BlLXN6aWduby5odQINQ9XcVenejgGXdEOqCg==</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>BsmbdV0tw4EXBKZRq7yiR7ITGRZ1pVY3lx/+/oOO1Mk=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-8367B02B897EFF6C158AF5B5DF30CC9813FE2F505DB5391A33B061972F0FCBC1">
+                    <Type>OCSP</Type>
+                    <Origin>CMS_SIGNED_DATA</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-2E9C61B1ABD4C5C35365ADDB755CC1FFE95616F12EE9FD64156E47655D9E7392">
+                    <Type>OCSP</Type>
+                    <Origin>CMS_SIGNED_DATA</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <FoundTimestamps>
+                <FoundTimestamp Timestamp="T-632B0226FBFF5CB631115F6FE6E845B8BB534667A36BFD1F111D09FC1D06859C"/>
+                <FoundTimestamp Timestamp="T-73B7C4BCA4B69C46B8E1F33B6529B7CD17AF0493CFA6127692E3A700AA21F885"/>
+            </FoundTimestamps>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>gjqu9XNZGK1iSQkRh8yUuQ60rqf97wRzPSASN3Il2h8=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>zZ5m18aZTv8tldZYfgybD2dsVJuqSpb+W5ZWMeg39Cw=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>aC3Md8hkhIaMFgnqwbYaSuvznoUoNut8b2bGrSBPe1sfModvYq5i7mDJA496KDMZ8tddUX10BUPCzm2h0KDCVh2dm3x5h0LGtrQj73Bm04QtXrR72E+602jEhaTkX17cBRO4geO0fmfgGmqwBJp4zoJ38lIJ/Yf+sa8lw9kxdE6NyboJKDSsvyh1BW7bPA1jdZ4HKugEYsUE0OCWWnkbOWQjiEfw0iVOJTW2tn4l/ZQuyanuNLDKN5nkrSbQQ4Bq5teZnSlJmWw3qM5uj/mQPAbfra9Naz193eCRIM4TQfBVCadX03PIbryi0byiKs9ym0TrfP7l9TC/W6Xro9d40A==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.4=#0c07506f6c79c3a16b,2.5.4.12=#0c0bc3bc677976657a6574c591,2.5.4.5=#131d312e332e362e312e342e312e32313532382e322e322e312e3134363435,1.2.840.113549.1.9.1=#1618666572656e632e706f6c79616b40706f6c797379732e6575,cn=polyák ferenc árpád,o=polysys kft.,l=budapest,c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.4=#0c07506f6c79c3a16b,2.5.4.12=#0c0bc3bc677976657a6574c591,2.5.4.5=#131d312e332e362e312e342e312e32313532382e322e322e312e3134363435,1.2.840.113549.1.9.1=#1618666572656e632e706f6c79616b40706f6c797379732e6575,CN=Polyák Ferenc Árpád,O=POLYSYS Kft.,L=Budapest,C=HU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=qualified ket e-szigno ca 2009,o=microsec ltd.,l=budapest,c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified KET e-Szigno CA 2009,O=Microsec Ltd.,L=Budapest,C=HU</IssuerDistinguishedName>
+            <SerialNumber>5374473564943251506991542282762</SerialNumber>
+            <SubjectSerialNumber>1.3.6.1.4.1.21528.2.2.1.14645</SubjectSerialNumber>
+            <CommonName>Polyák Ferenc Árpád</CommonName>
+            <Locality>Budapest</Locality>
+            <CountryName>HU</CountryName>
+            <OrganizationName>POLYSYS Kft.</OrganizationName>
+            <Title>ügyvezető</Title>
+            <Surname>Polyák</Surname>
+            <Email>ferenc.polyak@polysys.eu</Email>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2015-04-10T12:15:33Z</NotAfter>
+            <NotBefore>2013-04-10T12:15:33Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-7F34544D1D42A568D2604B71171072EE21E94EEBBEC31DD54B6426CC9A5D6E03</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-AE687AA90AC3141F0C2DA8F4C45077918CB6C18D3DF8D71F10F2079F348D4263</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>7qkpA5M8u4zX2l6Dp8VIRKCxCkE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>XEB/x03fYvhCPQvNEb179GkRIHU=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cp.e-szigno.hu/qcps">0.2.216.1.100.42.101.1.2.1</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">ferenc.polyak@polysys.eu</subjectAlternativeName>
+                    <subjectAlternativeName type="otherName">#a01706062b0601050507a00d300b06092b0601040181a81802</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.e-szigno.hu/qkca2009.crt</caIssuersUrl>
+                    <ocspUrl>http://qkocsp2009.e-szigno.hu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.e-szigno.hu/qkca2009.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuLimitValue>
+                        <currency>HUF</currency>
+                        <amount>1</amount>
+                        <exponent>6</exponent>
+                    </QcEuLimitValue>
+                    <QcEuRetentionPeriod>10</QcEuRetentionPeriod>
+                    <QcSSCD present="true"/>
+                </QcStatements>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-2E9C61B1ABD4C5C35365ADDB755CC1FFE95616F12EE9FD64156E47655D9E7392">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIIJ9TCCCN2gAwIBAgINQ9XcVenejgGXdEOqCjANBgkqhkiG9w0BAQsFADCBgjELMAkGA1UEBhMCSFUxETAPBgNVBAcMCEJ1ZGFwZXN0MRYwFAYDVQQKDA1NaWNyb3NlYyBMdGQuMScwJQYDVQQDDB5RdWFsaWZpZWQgS0VUIGUtU3ppZ25vIENBIDIwMDkxHzAdBgkqhkiG9w0BCQEWEGluZm9AZS1zemlnbm8uaHUwHhcNMTMwNDEwMTIxNTMzWhcNMTUwNDEwMTIxNTMzWjCB0TELMAkGA1UEBhMCSFUxETAPBgNVBAcMCEJ1ZGFwZXN0MRUwEwYDVQQKDAxQT0xZU1lTIEtmdC4xHzAdBgNVBAMMFlBvbHnDoWsgRmVyZW5jIMOBcnDDoWQxJzAlBgkqhkiG9w0BCQEWGGZlcmVuYy5wb2x5YWtAcG9seXN5cy5ldTEmMCQGA1UEBRMdMS4zLjYuMS40LjEuMjE1MjguMi4yLjEuMTQ2NDUxFDASBgNVBAwMC8O8Z3l2ZXpldMWRMRAwDgYDVQQEDAdQb2x5w6FrMIIBIDANBgkqhkiG9w0BAQEFAAOCAQ0AMIIBCAKCAQEAo8R1Cbzb+XOm84K5qlJQqLES3991TwmRBDbg6AzUT79i7c5FmGZSJrk9C71HzVb0bLN/m3yKlFO45GmD26OmOnkAdkaBSixw7OFkRdmlSkudHxodqqBIvyWeXvuQIOJkZM6Llu8vf7hSevWXU7menhTZf4uL7YL7nKOHmYknPiad8lb0hsK1hgPB6jLWw9RNFO8WzxtRvM7Jds1mkPbTPYTs0mf09Zih5wGpqmfLNnEqHKcBlauAgcV8Eof9Kj/d99OkVETHIgSvkWmfvsBNfidWuOUmRVBL0Dj1szRaN65hNnlM7oQ/N8MunPSmWWxGrQqd3+q863exF8RQBkMqzwIBZaOCBhkwggYVMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgZAMIIEiwYDVR0gBIIEgjCCBH4wggR6BgoCgVgBZCplAQIBMIIEajAmBggrBgEFBQcCARYaaHR0cDovL2NwLmUtc3ppZ25vLmh1L3FjcHMwggGkBggrBgEFBQcCAjCCAZYeggGSAEEAIABLAEcAWQBIAFMAWgAgAGUAbABoAOEAcgDtAHQAIABtAGkAbgBkAGUAbgAgAGYAZQBsAGUAbAFRAHMAcwDpAGcAZQB0ACwAIABhAG0AZQBsAHkAIABhAHoAIADhAGwAdABhAGwAYQAgAGsAaQBhAGQAbwB0AHQAIAB0AGEAbgD6AHMA7QB0AHYA4QBuAHkAIABoAGEAcwB6AG4A4QBsAGEAdADhAGIA8wBsACwAIAB2AGkAcwBzAHoAYQB2AG8AbgDhAHMA4QBiAPMAbAAsACAAYQAgAHMAegBhAGIA4QBsAHkAegBhAHQAIABtAGUAZwBzAOkAcgB0AOkAcwDpAGIBUQBsACwAIABhACAASwBHAFkASABTAFoAIABtAGEAZwBhAHQAYQByAHQA4QBzAOEAYgDzAGwALAAgAGkAbgB0AOkAegBrAGUAZADpAHMA6QBiAVEAbAAsACAAdgBhAGcAeQAgAGEAbgBuAGEAawAgAGgAaQDhAG4AeQDhAGIA8wBsACAAZQByAGUAZAAuMIHVBggrBgEFBQcCAjCByBqBxVF1YWxpZmllZCBjZXJ0aWZpY2F0ZSAoQnJvbnplKSwgdGhlIHByaXZhdGUga2V5IHJlc2lkZXMgaW4gYSBzZWN1cmUgc2lnbmF0dXJlIGNyZWF0aW9uIGRldmljZSAoU1NDRCkuIFJldGVudGlvbiBwZXJpb2Qgb2YgbWF0ZXJpYWwgaW5mb3JtYXRpb246IDEwIHllYXJzLiBMaW1pdCBvbiB0aGUgdmFsdWUgb2YgdHJhbnNhY3Rpb25zOiBIVUYgMU0uMIIBvgYIKwYBBQUHAgIwggGwHoIBrABNAGkAbgFRAHMA7QB0AGUAdAB0ACAAdABhAG4A+gBzAO0AdAB2AOEAbgB5ACAAKABCAHIAbwBuAHoAKQAsACAAYQAgAG0AYQBnAOEAbgBrAHUAbABjAHMAbwB0ACAAYgBpAHoAdABvAG4AcwDhAGcAbwBzACAAYQBsAOEA7QByAOEAcwAtAGwA6QB0AHIAZQBoAG8AegDzACAAZQBzAHoAawD2AHoAIAAoAEIAQQBMAEUAKQAgAHYA6QBkAGkALgAgAEEAIAByAGUAZwBpAHMAegB0AHIA4QBjAGkA8wBzACAAYQBkAGEAdABvAGsAYQB0ACAAYQAgAHMAegBvAGwAZwDhAGwAdABhAHQA8wAgAGEAIAB0AGEAbgD6AHMA7QB0AHYA4QBuAHkAIABsAGUAagDhAHIAdADhAHQA8wBsACAAcwB6AOEAbQDtAHQAbwB0AHQAIAAxADAAIADpAHYAaQBnACABUQByAHoAaQAgAG0AZQBnAC4AIABUAHIAYQBuAHoAYQBrAGMAaQDzAHMAIABsAGkAbQBpAHQAOgAgADEATQAgAEYAdAAuMB0GA1UdDgQWBBRcQH/HTd9i+EI9C80RvXv0aREgdTAfBgNVHSMEGDAWgBTuqSkDkzy7jNfaXoOnxUhEoLEKQTA8BgNVHREENTAzgRhmZXJlbmMucG9seWFrQHBvbHlzeXMuZXWgFwYGKwYBBQUHoA0wCwYJKwYBBAGBqBgCMEYGCCsGAQUFBwEDBDowODAIBgYEAI5GAQEwFQYGBACORgECMAsTA0hVRgIBAQIBBjALBgYEAI5GAQMCAQowCAYGBACORgEEMDQGA1UdHwQtMCswKaAnoCWGI2h0dHA6Ly9jcmwuZS1zemlnbm8uaHUvcWtjYTIwMDkuY3JsMGoGCCsGAQUFBwEBBF4wXDApBggrBgEFBQcwAYYdaHR0cDovL3Frb2NzcDIwMDkuZS1zemlnbm8uaHUwLwYIKwYBBQUHMAKGI2h0dHA6Ly93d3cuZS1zemlnbm8uaHUvcWtjYTIwMDkuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQA9De+KZ/0DmLSX+bRI5QY+f6x3pMVtsEh05iN+aPYsQTIvyzuewnLkK0fdhn0TZX25XVyNxcKTc9Z7IGu1TumEfD+7DNUp7IOw2n7RaBs9L6wnxflJPNXTlZZsawigyvswwgTgkTWWM0Gle1ZYunLwaEWEV5I2svXLR6WuEzxALHB6kR98Sj0qRsINHZ6oL9tQmRFteVg4oRfw0GJg354WrcH+c47kulx+AKwhaRLAvTpa+byIdiJHhLOYQB2rv9H5O79CXjgotOgCYgUrbJiLAlSUu5Vh4OWxqfH/xobHhD0JywtGiuDxfJ5yBA7D3etl3gBWYgerBbTnsxoNGVts</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-17F0EE4BEDA5D26C86034B4DE5E15F7488231839C3D57F833948D1AC0F29298C">
+            <SubjectDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=qualified ket e-szigno ca 2009 ocsp responder,o=microsec ltd.,l=budapest,c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified KET e-Szigno CA 2009 OCSP Responder,O=Microsec Ltd.,L=Budapest,C=HU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=qualified ket e-szigno ca 2009,o=microsec ltd.,l=budapest,c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified KET e-Szigno CA 2009,O=Microsec Ltd.,L=Budapest,C=HU</IssuerDistinguishedName>
+            <SerialNumber>309489662041459002697071346732258744586</SerialNumber>
+            <CommonName>Qualified KET e-Szigno CA 2009 OCSP Responder</CommonName>
+            <Locality>Budapest</Locality>
+            <CountryName>HU</CountryName>
+            <OrganizationName>Microsec Ltd.</OrganizationName>
+            <Email>info@e-szigno.hu</Email>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2014-11-28T15:01:28Z</NotAfter>
+            <NotBefore>2014-11-28T14:51:28Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-CE0294393E65FCED42ADC0AC664DF5B3993FC2C39741B0E43521ACBC871E65D1</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-AE687AA90AC3141F0C2DA8F4C45077918CB6C18D3DF8D71F10F2079F348D4263</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>7qkpA5M8u4zX2l6Dp8VIRKCxCkE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>8y4qnqztPvAWLAPQOvBcQjS4bjo=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cp.e-szigno.hu/qcps">1.3.6.1.4.1.21528.2.1.1.1.7.0</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">info@e-szigno.hu</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.e-szigno.hu/qkca2009.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEzzCCA7egAwIBAgIRAOjVim9F65NOr41cJGeu2QowDQYJKoZIhvcNAQELBQAwgYIxCzAJBgNVBAYTAkhVMREwDwYDVQQHDAhCdWRhcGVzdDEWMBQGA1UECgwNTWljcm9zZWMgTHRkLjEnMCUGA1UEAwweUXVhbGlmaWVkIEtFVCBlLVN6aWdubyBDQSAyMDA5MR8wHQYJKoZIhvcNAQkBFhBpbmZvQGUtc3ppZ25vLmh1MB4XDTE0MTEyODE0NTEyOFoXDTE0MTEyODE1MDEyOFowgZExCzAJBgNVBAYTAkhVMREwDwYDVQQHDAhCdWRhcGVzdDEWMBQGA1UECgwNTWljcm9zZWMgTHRkLjE2MDQGA1UEAwwtUXVhbGlmaWVkIEtFVCBlLVN6aWdubyBDQSAyMDA5IE9DU1AgUmVzcG9uZGVyMR8wHQYJKoZIhvcNAQkBFhBpbmZvQGUtc3ppZ25vLmh1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2IWeOAgbIHdgXG5xXacXGLC+NVsBhbIy/ZX1/k7+r7dBJtQ1wSnmjNaULxsOqEYL2p2mMTchfnn800/iJi8l9VvhON9JC5Mrhqa095jTtqyoYIOXn9goWx5FGcKEQxoFJf3A7DTXVrGkFaFgV33/77TuOdJM5iXVdsM9WI4pkD/MwHVO66ndQEwxYAcMi9pTKc65RLp1V/PTYjTqCl/AMwV3FuJhNgWRU7mxG4LLHQ0Q9lKeIcOO6bTRRnc19V7M0FI6xE9qLnaNaMzXklRLt/0/LC/tzKPkcb1GsUu6ZgeVzywSW0JdZdjRCsBrfdLYa7l0wmbwcpYuvc0EgtQPCQIDAQABo4IBLTCCASkwDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwkwRQYDVR0gBD4wPDA6Bg4rBgEEAYGoGAIBAQEHADAoMCYGCCsGAQUFBwIBFhpodHRwOi8vY3AuZS1zemlnbm8uaHUvcWNwczAdBgNVHQ4EFgQU8y4qnqztPvAWLAPQOvBcQjS4bjowHwYDVR0jBBgwFoAU7qkpA5M8u4zX2l6Dp8VIRKCxCkEwGwYDVR0RBBQwEoEQaW5mb0BlLXN6aWduby5odTAPBgkrBgEFBQcwAQUEAgUAMD8GCCsGAQUFBwEBBDMwMTAvBggrBgEFBQcwAoYjaHR0cDovL3d3dy5lLXN6aWduby5odS9xa2NhMjAwOS5jcnQwDQYJKoZIhvcNAQELBQADggEBAGzN4PLS1x0O/H/Vx0QbyKbv5Ia3hF+/DnqmDT8dkCNzjqKUOqZoQs6ofamk4JjG1XTVD+yS1lpUUgU4bm/90Z5JbhnCdOfmOlb6y/O+ksJdiAQU29sjzsnFmfXXvz7Y4cZVVInnVBpu4w+CM9YGO2SzPnN/MBvT/8VYlKouBsJ962mF6QrwhOXAc6P8lT5AnybdRNXtKfT0QhEM6PUNGc3N78JGCD6tEw96aGi+2Ood7+6WpEZPXVCQ+EOJ/DdDJ9qdmJzF3Rj3b34bC/SH9iu/3XebrZilofgxvr1Gisk20QoObY325VF/PC2gLHfCV/ERLGFqVUxyHuN8S/qpNJA=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59">
+            <SubjectDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=qualified ket e-szigno ca 2009,o=microsec ltd.,l=budapest,c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified KET e-Szigno CA 2009,O=Microsec Ltd.,L=Budapest,C=HU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=kgyhsz (public administration root ca - hungary),c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=KGYHSZ (Public Administration Root CA - Hungary),C=hu</IssuerDistinguishedName>
+            <SerialNumber>1132237991</SerialNumber>
+            <CommonName>Qualified KET e-Szigno CA 2009</CommonName>
+            <Locality>Budapest</Locality>
+            <CountryName>HU</CountryName>
+            <OrganizationName>Microsec Ltd.</OrganizationName>
+            <Email>info@e-szigno.hu</Email>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2020-12-17T10:49:34Z</NotAfter>
+            <NotBefore>2010-12-17T10:19:34Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-AE687AA90AC3141F0C2DA8F4C45077918CB6C18D3DF8D71F10F2079F348D4263</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-A4194585E4FF52464C2345F12A3BAD3C1A95C72557FA7F43CB86136EF5A78DBE</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>/JzmxrAK6h/X+n4uIAVoXAdKwuI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>7qkpA5M8u4zX2l6Dp8VIRKCxCkE=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cp.kgyhsz.gov.hu">0.2.216.1.100.42.1.200.2</certificatePolicy>
+                </CertificatePolicies>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.kgyhsz.gov.hu/KGYHSZ_CA_20091210.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-8367B02B897EFF6C158AF5B5DF30CC9813FE2F505DB5391A33B061972F0FCBC1">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A">
+            <SubjectDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=qualified e-szigno tsa 2014 02,o=microsec ltd.,l=budapest,c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified e-Szigno TSA 2014 02,O=Microsec Ltd.,L=Budapest,C=HU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,cn=microsec e-szigno root ca 2009,o=microsec ltd.,l=budapest,c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Microsec e-Szigno Root CA 2009,O=Microsec Ltd.,L=Budapest,C=HU</IssuerDistinguishedName>
+            <SerialNumber>18753665408183766506591143690</SerialNumber>
+            <CommonName>Qualified e-Szigno TSA 2014 02</CommonName>
+            <Locality>Budapest</Locality>
+            <CountryName>HU</CountryName>
+            <OrganizationName>Microsec Ltd.</OrganizationName>
+            <Email>info@e-szigno.hu</Email>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2026-02-07T18:00:00Z</NotAfter>
+            <NotBefore>2014-02-07T18:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-19C1F0EEA08D3620144522B76556187385AD90FB4F6D6701CCA931581FCFD50E</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>yw/G30JDzD3LtUgjoRp6piq7NGg=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>YB3WITtra+jaE2NA59xxTkxodZI=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cp.e-szigno.hu/qcps">1.3.6.1.4.1.21528.2.1.1.1.7.0</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">info@e-szigno.hu</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.e-szigno.hu/rootca2009.crt</caIssuersUrl>
+                    <ocspUrl>http://rootocsp2009.e-szigno.hu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.e-szigno.hu/rootca2009.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFFDCCA/ygAwIBAgIMPJirHuGGPzr4+scKMA0GCSqGSIb3DQEBCwUAMIGCMQswCQYDVQQGEwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFjAUBgNVBAoMDU1pY3Jvc2VjIEx0ZC4xJzAlBgNVBAMMHk1pY3Jvc2VjIGUtU3ppZ25vIFJvb3QgQ0EgMjAwOTEfMB0GCSqGSIb3DQEJARYQaW5mb0BlLXN6aWduby5odTAeFw0xNDAyMDcxODAwMDBaFw0yNjAyMDcxODAwMDBaMIGCMQswCQYDVQQGEwJIVTERMA8GA1UEBwwIQnVkYXBlc3QxFjAUBgNVBAoMDU1pY3Jvc2VjIEx0ZC4xJzAlBgNVBAMMHlF1YWxpZmllZCBlLVN6aWdubyBUU0EgMjAxNCAwMjEfMB0GCSqGSIb3DQEJARYQaW5mb0BlLXN6aWduby5odTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMU8zfPYumM/gU/WfGagOQDUu6g1PurTYpThUTuQf2DFR2rGI5OsF842EQO+elFYG249bcqcZoI3oU3DvsqEloG3t11KOreMJFKltnDROeUfjd1L9fKXdffVkdQvaClkbr8PIP36q3wxa6XwtUvfC1pflvC1Tc9HE2T5qJyjWxjUNP6qXMqqJEOCfSrLvmH5u7LaX0KcvjYwbM+GwzuYhLpOuY/Pna62nu2+CG8AoKtElMUyi8ulPV+C7WgwE8DQHpMsHV8S/zNdReHH8tUqKuQIauZDB7yZ58x8iJi+XO17y0x6MwRC3pIoXD0DC2uxEGXe2nD/zBP515OjCaA8mOsCAwEAAaOCAYYwggGCMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgbAMBYGA1UdJQEB/wQMMAoGCCsGAQUFBwMIMEUGA1UdIAQ+MDwwOgYOKwYBBAGBqBgCAQEBBwAwKDAmBggrBgEFBQcCARYaaHR0cDovL2NwLmUtc3ppZ25vLmh1L3FjcHMwHQYDVR0OBBYEFGAd1iE7a2vo2hNjQOfccU5MaHWSMB8GA1UdIwQYMBaAFMsPxt9CQ8w9y7VII6EaeqYquzRoMBsGA1UdEQQUMBKBEGluZm9AZS1zemlnbm8uaHUwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5lLXN6aWduby5odS9yb290Y2EyMDA5LmNybDBuBggrBgEFBQcBAQRiMGAwKwYIKwYBBQUHMAGGH2h0dHA6Ly9yb290b2NzcDIwMDkuZS1zemlnbm8uaHUwMQYIKwYBBQUHMAKGJWh0dHA6Ly93d3cuZS1zemlnbm8uaHUvcm9vdGNhMjAwOS5jcnQwDQYJKoZIhvcNAQELBQADggEBALu6wEHoVjPcZ/EDaGyPvQ9TO2l7D8aa9KubbRrihGrvPi2hieoJ519hCIbNqLGOw3CPxCX1N2IKGlBc/nrQjgeOQ9haopQRflH0bg2ZH3padr6bkvK+pmLwnDrefXM2AkmHPzMUAyrno+oZW/aYyQW6PZyx1WRFHqjVIdp8LJi8i8kZMhDUAP9Bl45ruQu9ajdYWfkUBqko86D/aQBsCrvJjJYfjFYF84F3mOom4axwgAW61EG7zn16pbBbr2TMFRFna136ulvqiOx4n+MNQlZZ2EkcOawghBjjil5k+m0kCtvLGsNkcGX1tL1mnc+yR8iamCSWSItWERg4wvYNbUc=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-61F19BFD31546398B5626E7F88D1CFF5DBDF25F204BA1C12961187DEDEC4E373">
+            <SubjectDistinguishedName Format="CANONICAL">cn=kgyhsz ocsp responder,o=national media and infocommunications authority,c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=KGYHSZ OCSP Responder,O=National Media and Infocommunications Authority,C=HU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=kgyhsz (public administration root ca - hungary),c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=KGYHSZ (Public Administration Root CA - Hungary),C=hu</IssuerDistinguishedName>
+            <SerialNumber>1132239123</SerialNumber>
+            <CommonName>KGYHSZ OCSP Responder</CommonName>
+            <CountryName>HU</CountryName>
+            <OrganizationName>National Media and Infocommunications Authority</OrganizationName>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2015-01-04T15:09:34Z</NotAfter>
+            <NotBefore>2014-11-04T14:39:34Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-6E2BB451E1A1579233D7E626B70ACC92B8C1E0FC1E606A76C0A50B7BA20DDD3C</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-A4194585E4FF52464C2345F12A3BAD3C1A95C72557FA7F43CB86136EF5A78DBE</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>/JzmxrAK6h/X+n4uIAVoXAdKwuI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>0sTC8F8tUBRdgVlygdP+U1KJJnM=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cps.kgyhsz.gov.hu">0.2.216.1.100.42.1.200.1</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://aia.kgyhsz.gov.hu/KGYHSZ_CA_20091210.cer</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.kgyhsz.gov.hu/KGYHSZ_CA_20091210.crl</crlUrl>
+                </CRLDistributionPoints>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEhzCCA2+gAwIBAgIEQ3yZEzANBgkqhkiG9w0BAQsFADBIMQswCQYDVQQGEwJodTE5MDcGA1UEAwwwS0dZSFNaIChQdWJsaWMgQWRtaW5pc3RyYXRpb24gUm9vdCBDQSAtIEh1bmdhcnkpMB4XDTE0MTEwNDE0MzkzNFoXDTE1MDEwNDE1MDkzNFowZzELMAkGA1UEBhMCSFUxODA2BgNVBAoML05hdGlvbmFsIE1lZGlhIGFuZCBJbmZvY29tbXVuaWNhdGlvbnMgQXV0aG9yaXR5MR4wHAYDVQQDDBVLR1lIU1ogT0NTUCBSZXNwb25kZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDbRVnH5pLDf3K4rDfx5eqBypghVuKsxvivUyxa19U4/0p6fg70RpiRoJ4ZZ/Ih4UfD2Z7wdMfLmvKzVYckWRAPjY7h/NE4JoJMOnPpGlvmeW1rLcwEJF14nekz8JXtOzwDrEzz1vF4yb2MOOrB2Jd4LBl9jqJ2iotq2XJJakOxcGX5vq1XqwZHHfn/pjfhZdn0Hwb0OxU5bryZ8FdyOfmnoxm8bT3zHpnZs6ZcTqmVduwiVKRY6AYATkzHBjBehxTK3i8+0rH6d5l+i81xNFHK2Ye/uTw7wuu17eEBJqhA4fZdArbPSBjXMPaHgGwZWDlBozJJOXCj1NWcit5ol1klAgMBAAGjggFYMIIBVDAOBgNVHQ8BAf8EBAMCBsAwEwYDVR0lBAwwCgYIKwYBBQUHAwkwDwYJKwYBBQUHMAEFBAIFADAMBgNVHRMBAf8EAjAAMD8GA1UdIAQ4MDYwNAYKAoFYAWQqAYFIATAmMCQGCCsGAQUFBwIBFhhodHRwOi8vY3BzLmtneWhzei5nb3YuaHUwSwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYWlhLmtneWhzei5nb3YuaHUvS0dZSFNaX0NBXzIwMDkxMjEwLmNlcjBABgNVHR8EOTA3MDWgM6Axhi9odHRwOi8vY3JsLmtneWhzei5nb3YuaHUvS0dZSFNaX0NBXzIwMDkxMjEwLmNybDAfBgNVHSMEGDAWgBT8nObGsArqH9f6fi4gBWhcB0rC4jAdBgNVHQ4EFgQU0sTC8F8tUBRdgVlygdP+U1KJJnMwDQYJKoZIhvcNAQELBQADggEBADAp62rB9+QesCOFGowWxuxfVoyWnmvkmaRGagh9aC+ceQ7cHRpJb30YZvuGwJ2F83fIlrSDJitzHJRWfcwVsvtmusI2FdZP4gkB+W7PRGslgvadLBO7+CryQ/G0CtN9czc4inBGXxD3oH+cbkHS0PvIrpm+AGOs0ni/nQGvX9YocKZVXOdSXC3OTYwIRTrX49riiu7DxTVtks7KKwGj6qG8kzk35QYD7fD1l1oHLkosTX0rSyCvfK7GixxuQGZga8CUVIPslQJegXF4WmO65vX4PeRZuyD2USYs6Lmn8IIV1/Z5ALE/aNghf/40ljmMi+7UaFkB0GqfGgT/0JUZGpI=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720">
+            <SubjectDistinguishedName Format="CANONICAL">cn=kgyhsz (public administration root ca - hungary),c=hu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=KGYHSZ (Public Administration Root CA - Hungary),C=hu</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=kgyhsz (public administration root ca - hungary),c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=KGYHSZ (Public Administration Root CA - Hungary),C=hu</IssuerDistinguishedName>
+            <SerialNumber>1132237476</SerialNumber>
+            <CommonName>KGYHSZ (Public Administration Root CA - Hungary)</CommonName>
+            <CountryName>hu</CountryName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2029-12-10T15:22:58Z</NotAfter>
+            <NotBefore>2009-12-10T14:52:58Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-A4194585E4FF52464C2345F12A3BAD3C1A95C72557FA7F43CB86136EF5A78DBE</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-A4194585E4FF52464C2345F12A3BAD3C1A95C72557FA7F43CB86136EF5A78DBE</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>/JzmxrAK6h/X+n4uIAVoXAdKwuI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>/JzmxrAK6h/X+n4uIAVoXAdKwuI=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://cp.kgyhsz.gov.hu">0.2.216.1.100.42.1.200.2</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://aia.kgyhsz.gov.hu/KGYHSZ_CA_20091210.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.kgyhsz.gov.hu/KGYHSZ_CA_20091210.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIE4jCCA8qgAwIBAgIEQ3ySpDANBgkqhkiG9w0BAQsFADBIMQswCQYDVQQGEwJodTE5MDcGA1UEAwwwS0dZSFNaIChQdWJsaWMgQWRtaW5pc3RyYXRpb24gUm9vdCBDQSAtIEh1bmdhcnkpMB4XDTA5MTIxMDE0NTI1OFoXDTI5MTIxMDE1MjI1OFowSDELMAkGA1UEBhMCaHUxOTA3BgNVBAMMMEtHWUhTWiAoUHVibGljIEFkbWluaXN0cmF0aW9uIFJvb3QgQ0EgLSBIdW5nYXJ5KTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALYC9w+w1eI26CWfueo6VjbeIDNP6IfzLN1WOb4c1iJ8QfNQApAAO5XeproNe18PqU+l579nEcm1iMOyd30eLwK8obrULu32AAVhR3QSLzyiE7ZQI/whBdRTjZp3omN6zkcNTQVCA9cpiaF4wvW9WxYgHZRrdDFVlH8bIQH+s/P5VbCydvb+rjxIkcrLDYXinfcuFMh/WjV8EyVLG5VIYckpJlI2puj/snV+yAUnJbNDdZXWw3XCQIFYkxYAV+sbYHQK7akjzfvkS//6YsQzUAs9PPA3A0E0FcK/Yna3+MnrF3P+uCRukvHj326ZNgKcp4fqI2dllMAdgFZ8EHPgDY0CAwEAAaOCAdIwggHOMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MIHbBgNVHSAEgdMwgdAwgc0GCgKBWAFkKgGBSAIwgb4wIwYIKwYBBQUHAgEWF2h0dHA6Ly9jcC5rZ3loc3ouZ292Lmh1MIGWBggrBgEFBQcCAjCBiR6BhgBNAGkAbgBkAGUAbgAgAGYAZQBsAGUAbAFRAHMAcwDpAGcAIABrAGkAegDhAHIAdgBhACAAYQAgAGgAaQB0AGUAbABlAHMA7QB0AOkAcwBpACAAcgBlAG4AZABiAGUAbgAgAGYAbwBnAGwAYQBsAHQAYQBrACAAcwB6AGUAcgBpAG4AdAAuMEsGCCsGAQUFBwEBBD8wPTA7BggrBgEFBQcwAoYvaHR0cDovL2FpYS5rZ3loc3ouZ292Lmh1L0tHWUhTWl9DQV8yMDA5MTIxMC5jcnQwQAYDVR0fBDkwNzA1oDOgMYYvaHR0cDovL2NybC5rZ3loc3ouZ292Lmh1L0tHWUhTWl9DQV8yMDA5MTIxMC5jcmwwHwYDVR0jBBgwFoAU/JzmxrAK6h/X+n4uIAVoXAdKwuIwHQYDVR0OBBYEFPyc5sawCuof1/p+LiAFaFwHSsLiMA0GCSqGSIb3DQEBCwUAA4IBAQAlTwPEVBV6iUNi2mUkrduR6WKt9kAJNTl22JAjh7FY4g1+svqYSXqeV96vF8sYoKl4NHzb76qlVJKuDQKSjpxFpLej645WbzmklEp8J/omuK5TGFvUaplghhjEDG1lnydul1Rng2PDPttEtcS4y3rKx+xUHsnj/jHbOOhffsODCwTyozMgXjL1biItALHUM0eADLfQ4hNYK20IJK3feKDz67x4NKvWfICLX2q7rb+Y/xxROubsX27m8LfgTZmD3JA4e/WncKFN/iMggrlNmjCgDV6gsJVrNotuuTFrBBoJUphunW5fpZrAqeuCB+NSNQgngqpS0ZEJvDIL4SLfXZQ0</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-2E9C61B1ABD4C5C35365ADDB755CC1FFE95616F12EE9FD64156E47655D9E7392">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2014-11-28T14:55:22Z</ProductionDate>
+            <ThisUpdate>2014-11-28T14:55:22Z</ThisUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-17F0EE4BEDA5D26C86034B4DE5E15F7488231839C3D57F833948D1AC0F29298C"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-17F0EE4BEDA5D26C86034B4DE5E15F7488231839C3D57F833948D1AC0F29298C"/>
+                <ChainItem Certificate="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59"/>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-17F0EE4BEDA5D26C86034B4DE5E15F7488231839C3D57F833948D1AC0F29298C">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <IssuerName>EMAILADDRESS=info@e-szigno.hu, CN=Qualified KET e-Szigno CA 2009 OCSP Responder, O=Microsec Ltd., L=Budapest, C=HU</IssuerName>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <Base64Encoded>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</Base64Encoded>
+        </Revocation>
+        <Revocation Id="R-8367B02B897EFF6C158AF5B5DF30CC9813FE2F505DB5391A33B061972F0FCBC1">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2014-11-28T14:55:19Z</ProductionDate>
+            <ThisUpdate>2014-11-28T14:55:19Z</ThisUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-61F19BFD31546398B5626E7F88D1CFF5DBDF25F204BA1C12961187DEDEC4E373"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-61F19BFD31546398B5626E7F88D1CFF5DBDF25F204BA1C12961187DEDEC4E373"/>
+                <ChainItem Certificate="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-61F19BFD31546398B5626E7F88D1CFF5DBDF25F204BA1C12961187DEDEC4E373">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <IssuerName>CN=KGYHSZ OCSP Responder, O=National Media and Infocommunications Authority, C=HU</IssuerName>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <Base64Encoded>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</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="SIGNATURE_TIMESTAMP" Id="T-632B0226FBFF5CB631115F6FE6E845B8BB534667A36BFD1F111D09FC1D06859C">
+            <ProductionTime>2014-11-28T14:55:19Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>KUKhUE6VFRq/GvjvdlryLNGTGk2+rpnQeB7180AmMBg=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>EMAILADDRESS=info@e-szigno.hu, CN=Microsec e-Szigno Root CA 2009, O=Microsec Ltd., L=Budapest, C=HU</IssuerName>
+                    <SerialNumber>18753665408183766506591143690</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <TSAGeneralName contentMatch="true" orderMatch="true">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified e-Szigno TSA 2014 02,O=Microsec Ltd.,L=Budapest,C=HU</TSAGeneralName>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA1</DigestMethod>
+                            <DigestValue>0YFNlA+lJeFVd362Hc6qXyHYPXs=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-A42D81A9C61B1654624A40A79E2A6F1471C7357B6CB0BAF0B7560CAD2F8C7635" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9" Category="CERTIFICATE"/>
+            </TimestampedObjects>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+        <Timestamp Type="ARCHIVE_TIMESTAMP" Id="T-73B7C4BCA4B69C46B8E1F33B6529B7CD17AF0493CFA6127692E3A700AA21F885">
+            <ArchiveTimestampType>CAdES_V3</ArchiveTimestampType>
+            <ArchiveTimestampHashIndex version="ats-hash-index" valid="true"/>
+            <ProductionTime>2014-11-28T14:55:25Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>4Dl1kdtLfFgCALtMCakEKNrBjRkvgS4veoci0D3iGR8=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>EMAILADDRESS=info@e-szigno.hu, CN=Microsec e-Szigno Root CA 2009, O=Microsec Ltd., L=Budapest, C=HU</IssuerName>
+                    <SerialNumber>18753665408183766506591143690</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <TSAGeneralName contentMatch="true" orderMatch="true">1.2.840.113549.1.9.1=#1610696e666f40652d737a69676e6f2e6875,CN=Qualified e-Szigno TSA 2014 02,O=Microsec Ltd.,L=Budapest,C=HU</TSAGeneralName>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA1</DigestMethod>
+                            <DigestValue>0YFNlA+lJeFVd362Hc6qXyHYPXs=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-A42D81A9C61B1654624A40A79E2A6F1471C7357B6CB0BAF0B7560CAD2F8C7635" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-06C99B755D2DC3811704A651ABBCA247B213191675A55637971FFEFE838ED4C9" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-833492D73A6CF4E319C59F358D37DFB55198ED38A98890FE471091F4E3DF2720" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-5C045D4AC771131740DB14AAE5F9275DE90394441096D2FC2DE90C3483C11A9A" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-54D0947A37D535619E6A77C69F4F795563F43B2A59DEC08FEA34C363E5FE6F59" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-8367B02B897EFF6C158AF5B5DF30CC9813FE2F505DB5391A33B061972F0FCBC1" Category="REVOCATION"/>
+                <TimestampedObject Token="C-61F19BFD31546398B5626E7F88D1CFF5DBDF25F204BA1C12961187DEDEC4E373" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-2E9C61B1ABD4C5C35365ADDB755CC1FFE95616F12EE9FD64156E47655D9E7392" Category="REVOCATION"/>
+                <TimestampedObject Token="C-17F0EE4BEDA5D26C86034B4DE5E15F7488231839C3D57F833948D1AC0F29298C" Category="CERTIFICATE"/>
+                <TimestampedObject Token="T-632B0226FBFF5CB631115F6FE6E845B8BB534667A36BFD1F111D09FC1D06859C" Category="TIMESTAMP"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>JJZt41Nt8VsYahP+Xti4rR3vBDkUfRd6gquItl6R5Os=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

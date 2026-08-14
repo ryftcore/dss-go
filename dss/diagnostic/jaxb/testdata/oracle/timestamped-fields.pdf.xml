@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>timestamped-fields.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=good-tsa</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=good-tsa</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</IssuerDistinguishedName>
+            <SerialNumber>500</SerialNumber>
+            <CommonName>good-tsa</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2024-12-11T13:09:42Z</NotAfter>
+            <NotBefore>2023-02-11T13:09:42Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-2CD01B445833D8B97C22C66FE5E7234126AB4E7F3AEE599B678F17A5BB4D9FDD</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7CC12A426670326A93A38F22F528902A76BBE9EF01FAE9FCA7F7DC52EFF2F370</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>1hDgMtkGT8eTZStd4lhMG05HDSA=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/root-ca.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/root-ca.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-D336E18DFE4CDEDF74D3CF5C1ADDD6D3F28293DE927E182554938395464EF4C3">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIID8zCCAtugAwIBAgICAfQwDQYJKoZIhvcNAQENBQAwTTEQMA4GA1UEAwwHcm9vdC1jYTEZMBcGA1UECgwQTm93aW5hIFNvbHV0aW9uczERMA8GA1UECwwIUEtJLVRFU1QxCzAJBgNVBAYTAkxVMB4XDTIzMDIxMTEzMDk0MloXDTI0MTIxMTEzMDk0MlowTjERMA8GA1UEAwwIZ29vZC10c2ExGTAXBgNVBAoMEE5vd2luYSBTb2x1dGlvbnMxETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJMVTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM/tMewH3pwEG50yPrpFqin5PZxM2/MI+o17DNB/wUo3rZ0TMsIzFO1fd8ENLkZ3ocrAEtZOPH5tYOrXhA+d40MVvuiyyPYk8R/GhEhOvGS5m3/3pW0eBZeiE7fcHssK0xD1pPnAGl5pAwvHCpgaM6n81RImZ4S3nJ4cHctFIdD72yuSRfCOLyV+7z0kSJolxtLmUbMLoD+CMqiS5Wod0jwJvvFzxXIZgWEem1aeWpqQRZ+TAI3zhVkfGqNaVIgVI8BZ/1tYs20tcLhIJTNTdBieCQTvXI3Hw4wM5Gv9FkksN9AJMFuA6JqxxpLteFab8sVt2lCoP2H8syb5ivakdaUCAwEAAaOB2zCB2DAOBgNVHQ8BAf8EBAMCB4AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwQQYDVR0fBDowODA2oDSgMoYwaHR0cDovL2Rzcy5ub3dpbmEubHUvcGtpLWZhY3RvcnkvY3JsL3Jvb3QtY2EuY3JsMEwGCCsGAQUFBwEBBEAwPjA8BggrBgEFBQcwAoYwaHR0cDovL2Rzcy5ub3dpbmEubHUvcGtpLWZhY3RvcnkvY3J0L3Jvb3QtY2EuY3J0MB0GA1UdDgQWBBTWEOAy2QZPx5NlK13iWEwbTkcNIDANBgkqhkiG9w0BAQ0FAAOCAQEAe8UQ8S2EN1nlK+A+FI0pOMyLz87IUmp49gWk8mLSwMyeu56WExzjxEXnQS921bZl/jKQok+7lJ/TfS+WJd5ZBcLtyQYgBJi2jxMxZ3jW7+z4k/dq92eM8LPQwodIsZU4MlEzt0ZU1jiFKZsdlgrN4iSHdE1p3FzDUIqDopxVEn4pN/QqwLPmXvaFG66FGSvRwqnxY5UOd5CqiznLDfdlCDsStzf8/uUEgXCGW2de2ACPg1slNj+zPVWGV57dWn4MBw8BE7+0tABy6apq0xiXN9CHenxewY3Jau3UwE6/gobmn9YPaonucwVwEBryjzxKgeDfO6S3U6gRXh6VZtq0Lw==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</IssuerDistinguishedName>
+            <SerialNumber>1</SerialNumber>
+            <CommonName>root-ca</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2025-01-11T13:09:42Z</NotAfter>
+            <NotBefore>2023-01-11T13:09:42Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-7CC12A426670326A93A38F22F528902A76BBE9EF01FAE9FCA7F7DC52EFF2F370</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7CC12A426670326A93A38F22F528902A76BBE9EF01FAE9FCA7F7DC52EFF2F370</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>50uBlG61oCbAV6pz18dyQu2z5k8=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <Base64Encoded>MIIDVzCCAj+gAwIBAgIBATANBgkqhkiG9w0BAQ0FADBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwHhcNMjMwMTExMTMwOTQyWhcNMjUwMTExMTMwOTQyWjBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCykinZ6GuADuXRM6h1XywypYzHGghKnX8+3/Nr6E4SccZXUfR1pqVp53sATzY1IOinQOe3zz7WLazu55V5JmJdGQPyRtYophXa3Nb3mDMPZ+zxP/Gmcz9a4WDMteez1gGPDurnt0sSoZzkEMvxUvY6Dq0Vm37KRRNt7CQYs5UOx/rfziS+KyPFGi08sR/67Zy+Cu+Rdof1NCHlbsev694mygmO+Dk1VLfbeEEwaHEaCgqhTXcBFF2UvO7RPmcInbg4g653oCjlFSaZHmqK1hZ1ccvSb5G6SyYRJ6s4sz4KnyLdQFWCNcHGQQD2TUcpGVgNocHeOIr1RceLBHfYm6XDAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQU50uBlG61oCbAV6pz18dyQu2z5k8wDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQ0FAAOCAQEAL9DORdn04HyzYNNP6KINOK6zfsHmVAs5CIyQsokazEHg7VfxG7Pae03pZlVEZYl6SDRH0wSm6XkYAAdgJGHa45CdUN1ZZng1tzBO3cHjVHPw/UmG4hnrsPjv7pSsixXLvkLiTXP3Qk1p3vj9oNigYjbQnwMAC/RdYGjV8zOJqUhJHLU9DyA4GiV/1XdqyXj7ffItsrFQReDQFqBAe7ucqV5qCbdsxvcTvZz2thX9bvIa7lUhJTJh0YCNnYshaNlAWmoc2KQ2SPlylP0dqaMp8Jvxd4Tk2oApG6KwhYHAzUO2ap+cQNzHA+rGlXBBpiEkIHuQNnJ9BuWQ2FTHh5u5uQ==</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-D336E18DFE4CDEDF74D3CF5C1ADDD6D3F28293DE927E182554938395464EF4C3">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2024-01-11T13:09:48Z</ProductionDate>
+            <ThisUpdate>2024-01-11T13:09:48Z</ThisUpdate>
+            <NextUpdate>2024-07-11T12:09:43Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            </CertificateChain>
+            <Base64Encoded>MIIB3TCBxgIBATANBgkqhkiG9w0BAQsFADBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUXDTI0MDExMTEzMDk0OFoXDTI0MDcxMTEyMDk0M1owRTAhAgIB9xcNMjMxMjExMTMwOTQyWjAMMAoGA1UdFQQDCgEBMCACAQYXDTIzMTIxMTEzMDk0MlowDDAKBgNVHRUEAwoBATANBgkqhkiG9w0BAQsFAAOCAQEAbAHwV9N20nY2a0i4IgGcBN8eGiob/xuDLga+RM8xJ45U2++AbhN/QGO2CwMUEDjI+VozeUWsbCQ/Ol9Y/TqOnrE3k/1+8nmZl5fc89AYMEdu0rbOFNLZ7gX2a5Y6BnXxKxmZ8tpO2KNXIABgt7vzVM8N6sMElUTpJZrE/vFivZDO8mTjcABquh29y/jWUDE4A0B2lBBu12UFPI/Hd0DcpRKqddA5jrICPAKEXrOMxx2GwIzBvraGHnfo2KVOCP/CyA4/yo5h8YhKlG7mdRzwOIjlHUmOYvXFgWNGZHifYfLaUhbvfxN4NK6Oqg+aFswOQvnWeZCChHQ+GPxNtAVTyQ==</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="DOCUMENT_TIMESTAMP" Id="T-F04F3172F9453E4DDFB5409348724400317305CB8CA0B1FF76DE7E926E42EF09">
+            <TimestampFilename>timestamped-fields.pdf</TimestampFilename>
+            <ProductionTime>2024-01-11T13:09:45Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>gcZonsZ0PI/eZw8KvGSsVPK71+JXGhSw4aZWT6iz8Zs=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C"/>
+                <ChainItem Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>C=LU, OU=PKI-TEST, O=Nowina Solutions, CN=root-ca</IssuerName>
+                    <SerialNumber>500</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="signature1"/>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>DocTimeStamp</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.RFC3161</SubFilter>
+                    <SignatureByteRange valid="true">0 43084 62030 115756</SignatureByteRange>
+                </PDFSignatureDictionary>
+                <ModificationDetection>
+                    <ObjectModifications>
+                        <ExtensionChange action="CREATION" fieldName="signature2" type="DocTimeStamp">/Catalog /AcroForm 69 0 R /Fields 71 0 R /P 56 0 R /Annots 87 0 R</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION">/Catalog /AcroForm 69 0 R /Fields 87 0 R /AP /N 88 0 R /Length</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /AcroForm 69 0 R /Fields 87 0 R /AP /N 88 0 R /Resources 89 0 R /Font 110 0 R</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION" type="XObject">/Catalog /AcroForm 69 0 R /Fields 87 0 R /AP /N 88 0 R stream</ExtensionChange>
+                        <ExtensionChange action="CREATION" type="DocTimeStamp">/Catalog /AcroForm 69 0 R /Fields 87 0 R /V 109 0 R</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /DSS 103 0 R</ExtensionChange>
+                    </ObjectModifications>
+                </ModificationDetection>
+            </PDFRevision>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>OBxHnXsELFpiyAItO+XRruwJ8K7PDyd9095RxmGtVUw=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-B2E4051D91E70D2B73D5FC06F061EFC42014DFAD8CB1EE379748B5A96E3CA5E2" Category="SIGNED_DATA"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-B2E4051D91E70D2B73D5FC06F061EFC42014DFAD8CB1EE379748B5A96E3CA5E2">
+                    <Scope>PARTIAL</Scope>
+                    <Name>Partial PDF</Name>
+                    <Description>The document ByteRange : [0, 43084, 62030, 115756]</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+        <Timestamp Type="DOCUMENT_TIMESTAMP" Id="T-D07EF7106E940A5C371B48502C97E0B9A79F08D33A1F43D0F3123E66170F6C71">
+            <TimestampFilename>timestamped-fields.pdf</TimestampFilename>
+            <ProductionTime>2024-01-11T13:09:49Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>JqrcrOqznIKDuwdXZMpo8rbuL6xdlEb1VWAqrehel0w=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C"/>
+                <ChainItem Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>C=LU, OU=PKI-TEST, O=Nowina Solutions, CN=root-ca</IssuerName>
+                    <SerialNumber>500</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="signature2"/>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>DocTimeStamp</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.RFC3161</SubFilter>
+                    <SignatureByteRange valid="true">0 182238 201184 115759</SignatureByteRange>
+                </PDFSignatureDictionary>
+            </PDFRevision>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>OBxHnXsELFpiyAItO+XRruwJ8K7PDyd9095RxmGtVUw=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-A6F8FDC8DAECDD9C1A12E0FE8DAA2E8AC2C21FE0606B04903EA8C6794DD83CDD" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="T-F04F3172F9453E4DDFB5409348724400317305CB8CA0B1FF76DE7E926E42EF09" Category="TIMESTAMP"/>
+                <TimestampedObject Token="D-B2E4051D91E70D2B73D5FC06F061EFC42014DFAD8CB1EE379748B5A96E3CA5E2" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="C-381C479D7B042C5A62C8022D3BE5D1AEEC09F0AECF0F277DD3DE51C661AD554C" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-56BB55260039DD85472395CA8168E0FD88CED2514B67E6C3C1AA7B080047BAD8" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-D336E18DFE4CDEDF74D3CF5C1ADDD6D3F28293DE927E182554938395464EF4C3" Category="REVOCATION"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-A6F8FDC8DAECDD9C1A12E0FE8DAA2E8AC2C21FE0606B04903EA8C6794DD83CDD">
+                    <Scope>FULL</Scope>
+                    <Name>Full PDF</Name>
+                    <Description>The document ByteRange : [0, 182238, 201184, 115759]</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-B2E4051D91E70D2B73D5FC06F061EFC42014DFAD8CB1EE379748B5A96E3CA5E2">
+            <ReferencedName>Partial PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>XiQO4Lf22etfKAh6Fc58Pn/E41X0WMymMZlsBrky2BQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-A6F8FDC8DAECDD9C1A12E0FE8DAA2E8AC2C21FE0606B04903EA8C6794DD83CDD">
+            <ReferencedName>Full PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>6Mv9y9EnV+jjOoFydQuBACt7s2OSbiJZuxQCJou7aNQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>containerWithCounterSig.asics</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <ContainerInfo>
+        <ContainerType>ASiC-S</ContainerType>
+        <MimeTypeFilePresent>true</MimeTypeFilePresent>
+        <MimeTypeContent>application/vnd.etsi.asic-s+zip</MimeTypeContent>
+        <ManifestFiles/>
+        <ContentFiles>
+            <ContentFile>test_input_unsigned.txt</ContentFile>
+        </ContentFiles>
+    </ContainerInfo>
+    <Signatures>
+        <Signature Id="S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F">
+            <SignatureFilename>META-INF/signature.p7s</SignatureFilename>
+            <ClaimedSigningTime>2016-11-17T11:12:57Z</ClaimedSigningTime>
+            <SignatureFormat>CAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST" documentName="test_input_unsigned.txt">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>N5PzKJB5SagoYkWWA76TinmSLJW5IzUDup2VcRbkGRg=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>false</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>1024</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5"/>
+                <ChainItem Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D"/>
+                <ChainItem Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=ADSS Samples Test CA, OU=Ascertia Software Distribution, O=Ascertia Limited, C=GB</IssuerName>
+                    <SerialNumber>20684830325063218261</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIGBMHSkcjBwMQswCQYDVQQGEwJHQjEZMBcGA1UEChMQQXNjZXJ0aWEgTGltaXRlZDEnMCUGA1UECxMeQXNjZXJ0aWEgU29mdHdhcmUgRGlzdHJpYnV0aW9uMR0wGwYDVQQDExRBRFNTIFNhbXBsZXMgVGVzdCBDQQIJAR8PR5Z0nvRV</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>qGZuI24FaIrsN7g6Dnx2TyZuVJ67JrDwfit+mAasucU=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-855087252BA1F03AB89CEEDD1E497946143CF275BDCA2830C73B6F8AC2ACC6DB">
+                    <Scope>FULL</Scope>
+                    <Name>test_input_unsigned.txt</Name>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>WRr6J9nB0v0Lay5P6dvOffnuDTS3KuhI8b56wHB9+/w=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>f9hFWqrjnUHUGBvnknwXcFEIqk2VPON/0ANHOg6Ximk=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>EjRCi39xGB4QzrzFEgTOevhqgfhQC/7aCLGCb6/okBbdlo+ksSP0YsZLG/DABO9u67DH5bCOZ/PGsdnp14CbA8BirQJHNtjzG1rccUqI8GNR9jiRX0N30IFs5j1QpwENTCGUcZWd1rO8fCggeHuSSuaqSJ3NeVZYk0kozMEAJfc=</SignatureValue>
+        </Signature>
+        <Signature CounterSignature="true" Parent="S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F" Id="S-88956933039E05B11B244A70B3931FC56D0FE11770B5C7DEC2A4F528F7D94268">
+            <SignatureFilename>META-INF/signature.p7s</SignatureFilename>
+            <ClaimedSigningTime>2016-11-17T11:43:58Z</ClaimedSigningTime>
+            <SignatureFormat>CAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>zFV4iMeUTa8eSF5XvupmlhzogJ6EpxmAtbzxYHIBzxw=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>1024</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5"/>
+                <ChainItem Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D"/>
+                <ChainItem Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027"/>
+            </CertificateChain>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=ADSS Samples Test CA, OU=Ascertia Software Distribution, O=Ascertia Limited, C=GB</IssuerName>
+                    <SerialNumber>20684830325063218261</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIGBMHSkcjBwMQswCQYDVQQGEwJHQjEZMBcGA1UEChMQQXNjZXJ0aWEgTGltaXRlZDEnMCUGA1UECxMeQXNjZXJ0aWEgU29mdHdhcmUgRGlzdHJpYnV0aW9uMR0wGwYDVQQDExRBRFNTIFNhbXBsZXMgVGVzdCBDQQIJAR8PR5Z0nvRV</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>qGZuI24FaIrsN7g6Dnx2TyZuVJ67JrDwfit+mAasucU=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-0F7D08D7F85D6E1D3E0267C1E6AD3E30B2F47E2695B2C872FF65DCA8845FCAEF">
+                    <Scope>COUNTER_SIGNATURE</Scope>
+                    <Name>S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F</Name>
+                    <Description>Master signature with Id : S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>N4tJMskIIdNeZ+g8WzyVXEtk2ldvVKJL2po6X25zifY=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>R9T85oA7tZpL9pF09B0ZvSf9I12Oy/srXfEP2NIF8nE=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>baf8/AJ/u5D2OAXf24VpcfWrxKpS0yekxVHirAxSSZJXRb6rqmHs13OEDv9E2ABYVV3AzyzQq2ulYlZeHdWkkAaCqzTKt0+7FOhUr5OUlx0siIP8PT3oQNOXyGc2LgzceFvs6FnNri1Z7Xl7ViAuuaqmqw81kGNm44GXOq4Q2xw=</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027">
+            <SubjectDistinguishedName Format="CANONICAL">cn=adss default root ca,ou=ascertia software distribution,o=ascertia limited,c=gb</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=ADSS Default Root CA,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=adss default root ca,ou=ascertia software distribution,o=ascertia limited,c=gb</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=ADSS Default Root CA,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</IssuerDistinguishedName>
+            <SerialNumber>20413123710629807838</SerialNumber>
+            <CommonName>ADSS Default Root CA</CommonName>
+            <CountryName>GB</CountryName>
+            <OrganizationName>Ascertia Limited</OrganizationName>
+            <OrganizationalUnit>Ascertia Software Distribution</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2036-07-07T07:16:20Z</NotAfter>
+            <NotBefore>2014-01-16T07:16:20Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-A5F9FCB9427E07AFFFD3707867E73456F3EBB67BC50530440B6E3F4ECB6F6DD2</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-A5F9FCB9427E07AFFFD3707867E73456F3EBB67BC50530440B6E3F4ECB6F6DD2</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>bq8E6Nx0iAtRCrhEqGDBtPYZYME=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>bq8E6Nx0iAtRCrhEqGDBtPYZYME=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.15945.1.1.1</certificatePolicy>
+                </CertificatePolicies>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEhzCCA2+gAwIBAgIJARtJ+9yIMYbeMA0GCSqGSIb3DQEBCwUAMHAxCzAJBgNVBAYTAkdCMRkwFwYDVQQKExBBc2NlcnRpYSBMaW1pdGVkMScwJQYDVQQLEx5Bc2NlcnRpYSBTb2Z0d2FyZSBEaXN0cmlidXRpb24xHTAbBgNVBAMTFEFEU1MgRGVmYXVsdCBSb290IENBMB4XDTE0MDExNjA3MTYyMFoXDTM2MDcwNzA3MTYyMFowcDELMAkGA1UEBhMCR0IxGTAXBgNVBAoTEEFzY2VydGlhIExpbWl0ZWQxJzAlBgNVBAsTHkFzY2VydGlhIFNvZnR3YXJlIERpc3RyaWJ1dGlvbjEdMBsGA1UEAxMUQURTUyBEZWZhdWx0IFJvb3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCbcJdEzea9UWAaeUnhka6V4/bgdhoEl/ZA6omCepKQONAUQrizmwmgYUQZi1lhldxvTvSC1I+gYvpthzZhiYhsWkg0b2PnoDVQ61QkrLe1UxRoBlXN8nbfYyV5fhqOA2BpDunxEWVEP9s/epkTs9ZXKRYQ8/6CxdE9EHZ4xehSiL62p//1HlDdA/OfsPN4LQJ39eBznnzjCam06qm8XFGchb3qF7HF9vQoD+2024lchRLcFlqF0yAd3Y+iavJ0a0dPnzZ9WanjBEdA4uIJbXLrzFP4db1blXYJ0gKyBaZ0jPSDTffXNsi2KKWualp2S0AuAbEhjbJaRW5YcZN+yn8lAgMBAAGjggEiMIIBHjALBgNVHQ8EBAMCAQYwgcAGA1UdIASBuDCBtTCBsgYKKwYBBAH8SQEBATCBozCBoAYIKwYBBQUHAgIwgZMMgZBDZXJ0aWZpY2F0ZXMgaXNzdWVkIHVuZGVyIHRoaXMgcG9saWN5IGFyZSB1bmF1dGhlbnRpY2F0ZWQuIFBsZWFzZSBkbyBub3QgdXNlIHN1Y2ggY2VydGlmaWNhdGVzIGZvciB2YWx1YWJsZSB0cmFuc2FjdGlvbnMuIE5PIExJQUJJTElUWSBBQ0NFUFRFRC4wHQYDVR0OBBYEFG6vBOjcdIgLUQq4RKhgwbT2GWDBMAwGA1UdEwQFMAMBAf8wHwYDVR0jBBgwFoAUbq8E6Nx0iAtRCrhEqGDBtPYZYMEwDQYJKoZIhvcNAQELBQADggEBAIKQWuJvuaM5SpjQp2quoNfRaD9AnGaPy+qnyyvfpkwC4oRXBNrM1BM2io8GlDZ9WpcoGNhLW2q/rJXHSY+k8EYNMUnLwyrZbxOdSwUznyQ4SC0MwvTTPPhQ5r2esOr1o1W4+Z7ddc5X0pCo16cTX4xCljOWdw9zWY3PlQWWFAGoiUd9Mejw0zMAY3MWqGFl+rO3FZUrfl6CEzmjrB26FIPMWAA1hL1RXpMZf07c+fEr2WCXOgulv4LMqqCanfQpRQ/NJHWky4jSo4eMIlbhb1n/+rHbby+my2VCpgcCp1xOLhqp+A3TF/8c07EEDjhcm3KOVEFzscEsJHTHgj2/buU=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5">
+            <SubjectDistinguishedName Format="CANONICAL">cn=samples document signing certificate,ou=ascertia software distribution,o=ascertia limited,c=gb</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Samples Document Signing Certificate,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=adss samples test ca,ou=ascertia software distribution,o=ascertia limited,c=gb</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=ADSS Samples Test CA,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</IssuerDistinguishedName>
+            <SerialNumber>20684830325063218261</SerialNumber>
+            <CommonName>Samples Document Signing Certificate</CommonName>
+            <CountryName>GB</CountryName>
+            <OrganizationName>Ascertia Limited</OrganizationName>
+            <OrganizationalUnit>Ascertia Software Distribution</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2025-09-11T08:15:14Z</NotAfter>
+            <NotBefore>2014-01-16T08:15:14Z</NotBefore>
+            <PublicKeySize>1024</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-AE28411E9DC26EF4D4CC9EAF5A3831534B264E286D4938181A4C9DCB73797E01</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-48CE6B4DE872006DDA2888792F7E047CD4252DF1D1A3998A733F4678C197FE17</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D"/>
+                <ChainItem Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>OvEFwQwH+SWPgHK3leqTUIl98Bc=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>oipl+w0RE/+UwClsADiUclWByDs=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.15945.1.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid>1.2.840.113583.1.1.5</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://localhost:8777/adss/ocsp</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://localhost:8777/adss/crls/adss_samples_test_ca.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIErzCCA5egAwIBAgIJAR8PR5Z0nvRVMA0GCSqGSIb3DQEBCwUAMHAxCzAJBgNVBAYTAkdCMRkwFwYDVQQKExBBc2NlcnRpYSBMaW1pdGVkMScwJQYDVQQLEx5Bc2NlcnRpYSBTb2Z0d2FyZSBEaXN0cmlidXRpb24xHTAbBgNVBAMTFEFEU1MgU2FtcGxlcyBUZXN0IENBMB4XDTE0MDExNjA4MTUxNFoXDTI1MDkxMTA4MTUxNFowgYAxCzAJBgNVBAYTAkdCMRkwFwYDVQQKExBBc2NlcnRpYSBMaW1pdGVkMScwJQYDVQQLEx5Bc2NlcnRpYSBTb2Z0d2FyZSBEaXN0cmlidXRpb24xLTArBgNVBAMTJFNhbXBsZXMgRG9jdW1lbnQgU2lnbmluZyBDZXJ0aWZpY2F0ZTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAohrV9j3CiUzJvdwyRV6pwC9eBxy5Td7xUVJCB2axaUJ4EIHit14Y2MmpPDXg73dfI/2wqsso8Gk8ojxmyRyLazUzqbklw3VkRlhj27GhaiJYCYxZoSqu0R76oZ/s3upSJjL6bgpy+OtOl7WV5zHwLPYBHYX89cFFd5q1Xjhgi38CAwEAAaOCAb0wggG5MAsGA1UdDwQEAwIGwDCBwAYDVR0gBIG4MIG1MIGyBgorBgEEAfxJAQEBMIGjMIGgBggrBgEFBQcCAjCBkwyBkENlcnRpZmljYXRlcyBpc3N1ZWQgdW5kZXIgdGhpcyBwb2xpY3kgYXJlIHVuYXV0aGVudGljYXRlZC4gUGxlYXNlIGRvIG5vdCB1c2Ugc3VjaCBjZXJ0aWZpY2F0ZXMgZm9yIHZhbHVhYmxlIHRyYW5zYWN0aW9ucy4gTk8gTElBQklMSVRZIEFDQ0VQVEVELjAdBgNVHQ4EFgQUoipl+w0RE/+UwClsADiUclWByDswSQYDVR0fBEIwQDA+oDygOoY4aHR0cDovL2xvY2FsaG9zdDo4Nzc3L2Fkc3MvY3Jscy9hZHNzX3NhbXBsZXNfdGVzdF9jYS5jcmwwOwYIKwYBBQUHAQEELzAtMCsGCCsGAQUFBzABhh9odHRwOi8vbG9jYWxob3N0Ojg3NzcvYWRzcy9vY3NwMBQGA1UdJQQNMAsGCSqGSIb3LwEBBTAJBgNVHRMEAjAAMB8GA1UdIwQYMBaAFDrxBcEMB/klj4Byt5Xqk1CJffAXMA0GCSqGSIb3DQEBCwUAA4IBAQAO1dsfjyZKedKRcngmy42r4PjpebjWLckYFqjbJUnXQKc6Gt5JBZ9jNelvDqgn1mJI8OHt0cQQT4JBinwfRgJ00b/A9biPGxR+Bw7S3wNxNzhAhhI+Avt3t7hkPGZPEoUNtsx/1zdk/P7pYNOmFdpO7aSWcibpRTFwhjW9CO7+BKaRVFFn68cFdqRBL2/tGROjkMK/Ux+RPVXUETCZU4OjcoOnlABGimIMgeGGhwBKtg7AK7m4L+WU4hypu6+YvbTOpWNJ27dUGyBbvuJ2cwgUgkhpIgGNZyu2/pnbOljJ2fWHZiU+JoGcOxvPgVDqbw03pg7T7chks4iD2sfpykxh</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D">
+            <SubjectDistinguishedName Format="CANONICAL">cn=adss samples test ca,ou=ascertia software distribution,o=ascertia limited,c=gb</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=ADSS Samples Test CA,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=adss default root ca,ou=ascertia software distribution,o=ascertia limited,c=gb</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=ADSS Default Root CA,OU=Ascertia Software Distribution,O=Ascertia Limited,C=GB</IssuerDistinguishedName>
+            <SerialNumber>20115075588765127972</SerialNumber>
+            <CommonName>ADSS Samples Test CA</CommonName>
+            <CountryName>GB</CountryName>
+            <OrganizationName>Ascertia Limited</OrganizationName>
+            <OrganizationalUnit>Ascertia Software Distribution</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2030-09-09T07:43:02Z</NotAfter>
+            <NotBefore>2014-01-16T07:43:02Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-48CE6B4DE872006DDA2888792F7E047CD4252DF1D1A3998A733F4678C197FE17</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-A5F9FCB9427E07AFFFD3707867E73456F3EBB67BC50530440B6E3F4ECB6F6DD2</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>bq8E6Nx0iAtRCrhEqGDBtPYZYME=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>OvEFwQwH+SWPgHK3leqTUIl98Bc=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.15945.1.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://localhost:8777/adss/ocsp</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://localhost:8777/adss/crls/adss_default_root_ca.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFDzCCA/egAwIBAgIJARcnGqx6ehUkMA0GCSqGSIb3DQEBCwUAMHAxCzAJBgNVBAYTAkdCMRkwFwYDVQQKExBBc2NlcnRpYSBMaW1pdGVkMScwJQYDVQQLEx5Bc2NlcnRpYSBTb2Z0d2FyZSBEaXN0cmlidXRpb24xHTAbBgNVBAMTFEFEU1MgRGVmYXVsdCBSb290IENBMB4XDTE0MDExNjA3NDMwMloXDTMwMDkwOTA3NDMwMlowcDELMAkGA1UEBhMCR0IxGTAXBgNVBAoTEEFzY2VydGlhIExpbWl0ZWQxJzAlBgNVBAsTHkFzY2VydGlhIFNvZnR3YXJlIERpc3RyaWJ1dGlvbjEdMBsGA1UEAxMUQURTUyBTYW1wbGVzIFRlc3QgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDoBlvAAhFqkj25CSuohJmQ9ytoTk/4MbX9RQ0Y9XVz9N982Z0BBYk2LlaqiO7DVE0u1PKkbI5r4zbNzknzXhjosheqaZ5wuwkjDpmpCeRn5VJEcMfJN6xbt76oXSFVKNZf/OesyPUcykRxnJ/UBNqbcdkY6jI96g6g3V2E0NqXzW0RpB5JsGh7HM1ycAtQR1pS+vpb22JzAXk6TFHAXU2aQuhNoCACnfK/wEJjMVjdmE4cTD2XwBr7jZJ3NNi4725mMtKJ5+RybB88HH7l7LF/Wa9kaznhKPcM0tKy31inI9rEdNWs3xYQCIkATrwgSajvsq7k4vTtNlGvrpf6/mePAgMBAAGjggGqMIIBpjALBgNVHQ8EBAMCAQYwgcAGA1UdIASBuDCBtTCBsgYKKwYBBAH8SQEBATCBozCBoAYIKwYBBQUHAgIwgZMMgZBDZXJ0aWZpY2F0ZXMgaXNzdWVkIHVuZGVyIHRoaXMgcG9saWN5IGFyZSB1bmF1dGhlbnRpY2F0ZWQuIFBsZWFzZSBkbyBub3QgdXNlIHN1Y2ggY2VydGlmaWNhdGVzIGZvciB2YWx1YWJsZSB0cmFuc2FjdGlvbnMuIE5PIExJQUJJTElUWSBBQ0NFUFRFRC4wHQYDVR0OBBYEFDrxBcEMB/klj4Byt5Xqk1CJffAXMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9sb2NhbGhvc3Q6ODc3Ny9hZHNzL2NybHMvYWRzc19kZWZhdWx0X3Jvb3RfY2EuY3JsMDsGCCsGAQUFBwEBBC8wLTArBggrBgEFBQcwAYYfaHR0cDovL2xvY2FsaG9zdDo4Nzc3L2Fkc3Mvb2NzcDAMBgNVHRMEBTADAQH/MB8GA1UdIwQYMBaAFG6vBOjcdIgLUQq4RKhgwbT2GWDBMA0GCSqGSIb3DQEBCwUAA4IBAQAsU6FY8/kJ8xX7d29OureAygrANvKsjK1z1IUjQ0G1GWcIu+OtiYNah4YjFcvsf599EAoVBy129ipne4vbTRn8bCTjxbGe6PMM48MCCGFkiRMl5TG447hq3ZU0hEP/rQ87nKEAeSZVb+U27svy/m7gNPQrTL/F21F3wNHKnXbgs0ZhYLXnfP7Haiqg9nwf5+057UWvFyhrEmEhelLytPgEHe1Q9aIQmLLBQ0CFncnfZkAw3IUrJAc7nEp9IpDSoEP/9xeX36WoPYWSlhGSfqKIeJAfeh+tNI0lRV+Vbe132oyYm1dzz9GI1VqEiPqaKc8miPWb1ssF+MNylYBk7qnt</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-855087252BA1F03AB89CEEDD1E497946143CF275BDCA2830C73B6F8AC2ACC6DB">
+            <ReferencedName>test_input_unsigned.txt</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>N5PzKJB5SagoYkWWA76TinmSLJW5IzUDup2VcRbkGRg=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-0F7D08D7F85D6E1D3E0267C1E6AD3E30B2F47E2695B2C872FF65DCA8845FCAEF">
+            <ReferencedName>S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>zFV4iMeUTa8eSF5XvupmlhzogJ6EpxmAtbzxYHIBzxw=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

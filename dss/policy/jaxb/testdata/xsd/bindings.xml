@@ -1,0 +1,34 @@
+<jaxb:bindings
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" 
+	version="3.0">
+    
+    <jaxb:globalBindings localScoping="toplevel">
+		<xjc:serializable uid="1" />
+    </jaxb:globalBindings>
+
+	<jaxb:bindings schemaLocation="policy.xsd" node="/xs:schema">
+		<jaxb:schemaBindings>
+			<jaxb:package name="eu.europa.esig.dss.policy.jaxb" />
+		</jaxb:schemaBindings>
+
+		<jaxb:bindings node="//xs:complexType[@name='ListAlgo']//xs:element[@name='Algo']">
+			<jaxb:property name="Algos" />
+		</jaxb:bindings>
+
+		<jaxb:bindings node="//xs:simpleType[@name='Level']">
+			<jaxb:javaType name="eu.europa.esig.dss.enumerations.Level"
+						   parseMethod="eu.europa.esig.dss.jaxb.parsers.LevelParser.parse"
+						   printMethod="eu.europa.esig.dss.jaxb.parsers.LevelParser.print" />
+		</jaxb:bindings>
+
+		<jaxb:bindings node="//xs:simpleType[@name='Model']">
+			<jaxb:javaType name="eu.europa.esig.dss.enumerations.ValidationModel"
+						   parseMethod="eu.europa.esig.dss.jaxb.parsers.ValidationModelParser.parse"
+						   printMethod="eu.europa.esig.dss.jaxb.parsers.ValidationModelParser.print" />
+		</jaxb:bindings>
+
+	</jaxb:bindings>
+
+</jaxb:bindings>

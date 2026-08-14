@@ -123,10 +123,7 @@ func (a *AbstractTokenProxyBase) SignatureAlgorithm() enumerations.SignatureAlgo
 	encryptionAlgorithm := a.EncryptionAlgorithm()
 	digestAlgorithm := a.DigestAlgorithm()
 	if encryptionAlgorithm != "" && digestAlgorithm != "" {
-		alg, err := enumerations.SignatureAlgorithmForAlgorithms(encryptionAlgorithm, digestAlgorithm)
-		if err == nil {
-			return alg
-		}
+		return enumerations.SignatureAlgorithmGetAlgorithm(encryptionAlgorithm, digestAlgorithm)
 	}
 	return ""
 }
@@ -136,7 +133,7 @@ func (a *AbstractTokenProxyBase) SignatureAlgorithm() enumerations.SignatureAlgo
 func (a *AbstractTokenProxyBase) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
 	basicSignature := a.tokenProxyOverrides().CurrentBasicSignature()
 	if basicSignature != nil && basicSignature.EncryptionAlgoUsedToSignThisToken != nil {
-		return *basicSignature.EncryptionAlgoUsedToSignThisToken
+		return enumerations.EncryptionAlgorithm(*basicSignature.EncryptionAlgoUsedToSignThisToken)
 	}
 	return ""
 }
@@ -146,7 +143,7 @@ func (a *AbstractTokenProxyBase) EncryptionAlgorithm() enumerations.EncryptionAl
 func (a *AbstractTokenProxyBase) DigestAlgorithm() enumerations.DigestAlgorithm {
 	basicSignature := a.tokenProxyOverrides().CurrentBasicSignature()
 	if basicSignature != nil && basicSignature.DigestAlgoUsedToSignThisToken != nil {
-		return *basicSignature.DigestAlgoUsedToSignThisToken
+		return enumerations.DigestAlgorithm(*basicSignature.DigestAlgoUsedToSignThisToken)
 	}
 	return ""
 }
@@ -155,8 +152,8 @@ func (a *AbstractTokenProxyBase) DigestAlgorithm() enumerations.DigestAlgorithm 
 // getKeyLengthUsedToSignThisToken().
 func (a *AbstractTokenProxyBase) KeyLengthUsedToSignThisToken() string {
 	basicSignature := a.tokenProxyOverrides().CurrentBasicSignature()
-	if basicSignature != nil {
-		return basicSignature.KeyLengthUsedToSignThisToken
+	if basicSignature != nil && basicSignature.KeyLengthUsedToSignThisToken != nil {
+		return *basicSignature.KeyLengthUsedToSignThisToken
 	}
 	return ""
 }
@@ -175,8 +172,8 @@ func (a *AbstractTokenProxyBase) SigningCertificate() *CertificateWrapper {
 // getSigningCertificatePublicKey().
 func (a *AbstractTokenProxyBase) SigningCertificatePublicKey() []byte {
 	currentSigningCertificate := a.tokenProxyOverrides().CurrentSigningCertificate()
-	if currentSigningCertificate != nil {
-		return currentSigningCertificate.PublicKey
+	if currentSigningCertificate != nil && currentSigningCertificate.PublicKey != nil {
+		return []byte(*currentSigningCertificate.PublicKey)
 	}
 	return nil
 }

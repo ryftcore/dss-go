@@ -18,7 +18,7 @@ func NewDistinguishedNameListWrapper(xmlDistinguishedNames []*jaxb.XmlDistinguis
 func (w *DistinguishedNameListWrapper) Value(format string) string {
 	if w.xmlDistinguishedNames != nil {
 		for _, distinguishedName := range w.xmlDistinguishedNames {
-			if distinguishedName.Format == format {
+			if distinguishedName.Format != nil && *distinguishedName.Format == format {
 				return distinguishedName.Value
 			}
 		}

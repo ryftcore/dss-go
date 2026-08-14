@@ -37,13 +37,19 @@ func NewEAAWrapper(eaa *jaxb.XmlEAA) *EAAWrapper {
 
 // Id gets unique identifier. Port of getId().
 func (w *EAAWrapper) Id() string {
-	return w.eaa.Id
+	if w.eaa.Id != nil {
+		return string(*w.eaa.Id)
+	}
+	return ""
 }
 
 // Filename returns name of the EAA presentation's document, when applicable. Port of
 // getFilename().
 func (w *EAAWrapper) Filename() string {
-	return w.eaa.DocumentName
+	if w.eaa.DocumentName != nil {
+		return *w.eaa.DocumentName
+	}
+	return ""
 }
 
 // EAADocumentType gets claimed document type. NOTE: used in mdoc and the returned value
@@ -54,7 +60,10 @@ func (w *EAAWrapper) EAADocumentType() string {
 	if docType != "" {
 		return docType
 	}
-	return w.eaa.DocumentType
+	if w.eaa.DocumentType != nil {
+		return *w.eaa.DocumentType
+	}
+	return ""
 }
 
 // CurrentBasicSignature is the AbstractTokenProxy override. Port of
@@ -98,13 +107,16 @@ func (w *EAAWrapper) getEAASignature() *SignatureWrapper {
 // SelectiveDisclosuresDigestAlgorithm gets digest algorithm used on hashes computation for
 // selectively disclosable claims. Port of getSelectiveDisclosuresDigestAlgorithm().
 func (w *EAAWrapper) SelectiveDisclosuresDigestAlgorithm() enumerations.DigestAlgorithm {
-	return w.eaa.DigestMethod
+	if w.eaa.DigestMethod != nil {
+		return enumerations.DigestAlgorithm(*w.eaa.DigestMethod)
+	}
+	return ""
 }
 
 // DigestMatchers gets a list of digest matchers representing the associated hashes and
 // disclosures validation. Port of getDigestMatchers() (overridden).
 func (w *EAAWrapper) DigestMatchers() []*jaxb.XmlDigestMatcher {
-	return w.eaa.DigestMatchers
+	return w.eaa.DigestMatchers.All()
 }
 
 // FoundCertificates is the AbstractTokenProxy default (not overridden in Java). Port of
@@ -176,8 +188,8 @@ func (w *EAAWrapper) KeyBindingSignatureNonce() string {
 		return ""
 	}
 	nonce := w.eaa.KeyBindingPayload.Nonce
-	if nonce != nil {
-		return nonce.Text
+	if nonce != nil && nonce.Text != nil {
+		return *nonce.Text
 	}
 	return ""
 }
@@ -189,8 +201,8 @@ func (w *EAAWrapper) KeyBindingSignatureAudience() string {
 		return ""
 	}
 	audience := w.eaa.KeyBindingPayload.Audience
-	if audience != nil {
-		return audience.Text
+	if audience != nil && audience.Text != nil {
+		return *audience.Text
 	}
 	return ""
 }
@@ -202,8 +214,9 @@ func (w *EAAWrapper) KeyBindingSignatureIssuanceTime() *time.Time {
 		return nil
 	}
 	issuanceTime := w.eaa.KeyBindingPayload.IssuanceTime
-	if issuanceTime != nil {
-		return issuanceTime.DateTime
+	if issuanceTime != nil && issuanceTime.DateTime != nil {
+		t := issuanceTime.DateTime.Time()
+		return &t
 	}
 	return nil
 }
@@ -528,7 +541,7 @@ func (w *EAAWrapper) EAADeviceKeyAuthorizedDataElements() map[string][]string {
 // EAARevocations returns a list of statuses for the EAA. Port of getEAARevocations().
 func (w *EAAWrapper) EAARevocations() []*EAARevocationWrapper {
 	var revocationWrappers []*EAARevocationWrapper
-	for _, xmlEAARevocationStatus := range w.eaa.EAARevocations {
+	for _, xmlEAARevocationStatus := range w.eaa.EAARevocations.All() {
 		revocationWrappers = append(revocationWrappers, NewEAARevocationWrapper(xmlEAARevocationStatus))
 	}
 	return revocationWrappers
@@ -1215,7 +1228,7 @@ func (w *EAAWrapper) ShortLived() *bool {
 func (w *EAAWrapper) AttestedAttributesSubjectId() string {
 	attestedAttributesSubject := w.EAAPayload().AttestedAttributesSubject()
 	if attestedAttributesSubject != nil {
-		return payloadClaimTextValue(attestedAttributesSubject.SubjectId())
+		return payloadClaimTextValue(attestedAttributesSubject.SubjectId().AsClaim())
 	}
 	return ""
 }
@@ -1417,7 +1430,10 @@ func (w *EAAWrapper) AllEAAPayloadClaimNames() []string {
 
 // EAAType gets type of the EAA. Port of getEAAType().
 func (w *EAAWrapper) EAAType() enumerations.EAAType {
-	return w.eaa.EAAType
+	if w.eaa.EAAType != nil {
+		return enumerations.EAAType(*w.eaa.EAAType)
+	}
+	return ""
 }
 
 // Binaries is the AbstractTokenProxy override. Port of getBinaries(). TODO: add support (per

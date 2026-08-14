@@ -27,17 +27,26 @@ func NewOrphanRevocationTokenWrapper(orphanToken *jaxb.XmlOrphanRevocationToken)
 // Id returns identifier of the orphan token. Port of getId() (inherited from
 // OrphanTokenWrapper).
 func (w *OrphanRevocationTokenWrapper) Id() string {
-	return w.orphanToken.Id
+	if w.orphanToken.Id != nil {
+		return string(*w.orphanToken.Id)
+	}
+	return ""
 }
 
 // RevocationType returns a revocation data type (CRL or OCSP). Port of getRevocationType().
 func (w *OrphanRevocationTokenWrapper) RevocationType() enumerations.RevocationType {
-	return w.orphanToken.RevocationType
+	if w.orphanToken.RevocationType != nil {
+		return enumerations.RevocationType(*w.orphanToken.RevocationType)
+	}
+	return ""
 }
 
 // Binaries returns base64-encoded byte array of the token. Port of getBinaries().
 func (w *OrphanRevocationTokenWrapper) Binaries() []byte {
-	return w.orphanToken.Base64Encoded
+	if w.orphanToken.Base64Encoded == nil {
+		return nil
+	}
+	return []byte(*w.orphanToken.Base64Encoded)
 }
 
 // DigestAlgoAndValue returns digest of the token. Port of getDigestAlgoAndValue().

@@ -30,18 +30,28 @@ func NewCertificateRevocationWrapper(certificateRevocation *jaxb.XmlCertificateR
 
 // Status returns the revocation status of the concerned certificate. Port of getStatus().
 func (w *CertificateRevocationWrapper) Status() enumerations.CertificateStatus {
-	return w.certificateRevocation.Status
+	if w.certificateRevocation.Status != nil {
+		return enumerations.CertificateStatus(*w.certificateRevocation.Status)
+	}
+	return ""
 }
 
 // Reason returns the revocation reason for the concerned certificate. Port of getReason().
 func (w *CertificateRevocationWrapper) Reason() enumerations.RevocationReason {
-	return w.certificateRevocation.Reason
+	if w.certificateRevocation.Reason != nil {
+		return enumerations.RevocationReason(*w.certificateRevocation.Reason)
+	}
+	return ""
 }
 
 // RevocationDate returns the revocation time for the concerned certificate. Port of
 // getRevocationDate().
 func (w *CertificateRevocationWrapper) RevocationDate() *time.Time {
-	return w.certificateRevocation.RevocationDate
+	if w.certificateRevocation.RevocationDate == nil {
+		return nil
+	}
+	t := w.certificateRevocation.RevocationDate.Time()
+	return &t
 }
 
 // IsRevoked reports whether the concerned certificate has been revoked. Port of isRevoked().

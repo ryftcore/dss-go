@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>xades-counter-signature-no-type.xml</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-922957119A3ADB28914197AFE59D99C0AF8CC59F2196953C8553144573E0A01E">
+            <DAIdentifier>id-1ee4f689eecb8983d23ae3b46bfff9ef</DAIdentifier>
+            <SignatureFilename>xades-counter-signature-no-type.xml</SignatureFilename>
+            <ClaimedSigningTime>2025-09-04T12:34:11Z</ClaimedSigningTime>
+            <SignatureFormat>XAdES-BES</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="REFERENCE" id="Id-3a6aa3e1-6e8a-408e-9ba7-99e5e4a47af3" uri="">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>wyub8IIQCzKLfZrWCY4HMdjQO9qtAmQbVaq6kE/dwNE=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="SIGNED_PROPERTIES" uri="#xades-id-1ee4f689eecb8983d23ae3b46bfff9ef">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>bPTgWYLSPsWJ9gpTqHG5xNd3DzhvC+Bu/E92G3JcYCU=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSASSA-PSS</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD"/>
+            </CertificateChain>
+            <CommitmentTypeIndications/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MGgwXKRaMFgxCzAJBgNVBAYTAkVTMS0wKwYDVQQKDCRTYWZlbGF5ZXIgU2VjdXJlIENvbW11bmljYXRpb25zIFMuQS4xGjAYBgNVBAMMEVJTQSBTdGFuZGFsb25lIENBAghtIKBwGBoVhQ==</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA512</DigestMethod>
+                            <DigestValue>UTvSpqVPJrNHOU+FqElAUDbvfhEQfXlG6ld8ZsYmSPtnSV6XuxYC+dL4QKVr3S5u9YZ/OpatByPVnGP+ymLUrQ==</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-9C055BA4BE58E782F6EFC7B84DC9D7DDBDFB157DCE2C6037EFD50E70056E2CB7">
+                    <Scope>FULL</Scope>
+                    <Name>Full XML File</Name>
+                    <Description>The full XML file with transformations.</Description>
+                    <Transformations>
+                        <Transformation>Enveloped Signature Transform</Transformation>
+                        <Transformation>Exclusive Canonical XML (omits comments)</Transformation>
+                    </Transformations>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <CanonicalizationMethod>http://www.w3.org/2001/10/xml-exc-c14n#</CanonicalizationMethod>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>aVhUCcT8A/oxN0+2+zZplxb3Han4n/rtEJnQ6xstbu8=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>JxFcYFXn/DXSobSMhB5gNsPai8NSRo85Ebd/TlaLJL4=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>Kb/V9IGkUIum9BgHtReJ2rsnOCacAr33C72BSy+UIhOxcVyC2OKS0tOrkSIbq6eBiUxKC8S4jI0xLoF2UOJ4DelUa2WQi42g7SrqPGuWKGFuAy2LiPlqHCrT5sxtO1nnWt7s5GiwxtPPrgWhtVPnv8KJfqUQfa6LITi1ABNm9D7UR9QkeiXx1MBL64IulX8OOfpzm01FR1Eri5Yfo9rJ8jkBCVObxWTM1qWhYHL90JSAN6nHpbE/CYMVDCpH68WkRuNHEwP/i4699pm7eUh3gLCr2JtPCCLO+hfVge4FNXV8YWtm4R3Gc9S9LepeOe6w1tCM/+z3jV9804lTui+++w==</SignatureValue>
+        </Signature>
+        <Signature CounterSignature="true" Parent="S-922957119A3ADB28914197AFE59D99C0AF8CC59F2196953C8553144573E0A01E" Id="S-AB22620C8233B530A5492714873FEC4923EEC30A53CE0A44F3D5F4410671074A">
+            <DAIdentifier>id-8b9830f272bdb4a87329593be59ac03b</DAIdentifier>
+            <SignatureFilename>xades-counter-signature-no-type.xml</SignatureFilename>
+            <ClaimedSigningTime>2025-09-04T12:35:55Z</ClaimedSigningTime>
+            <SignatureFormat>XAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="COUNTER_SIGNATURE" uri="#value-id-1ee4f689eecb8983d23ae3b46bfff9ef">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>bnm6GVHP/bNmgZYrZ+uUtFq28iHdL2i887VWGe+SUVc=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="COUNTER_SIGNED_SIGNATURE_VALUE">
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="SIGNED_PROPERTIES" uri="#xades-id-8b9830f272bdb4a87329593be59ac03b">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>MrqdslwI8BvQniYiaYmo8tJ4d0LVHXz/0pIwobbiZKg=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSASSA-PSS</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD"/>
+            </CertificateChain>
+            <CommitmentTypeIndications/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MGgwXKRaMFgxCzAJBgNVBAYTAkVTMS0wKwYDVQQKDCRTYWZlbGF5ZXIgU2VjdXJlIENvbW11bmljYXRpb25zIFMuQS4xGjAYBgNVBAMMEVJTQSBTdGFuZGFsb25lIENBAghtIKBwGBoVhQ==</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA512</DigestMethod>
+                            <DigestValue>UTvSpqVPJrNHOU+FqElAUDbvfhEQfXlG6ld8ZsYmSPtnSV6XuxYC+dL4QKVr3S5u9YZ/OpatByPVnGP+ymLUrQ==</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-65496108A40A372954B7E555F8D9109A237C2C4D70C1932D7C9C768DCD41E1D7">
+                    <Scope>COUNTER_SIGNATURE</Scope>
+                    <Name>S-922957119A3ADB28914197AFE59D99C0AF8CC59F2196953C8553144573E0A01E</Name>
+                    <Description>Master signature with Id : S-922957119A3ADB28914197AFE59D99C0AF8CC59F2196953C8553144573E0A01E</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <CanonicalizationMethod>http://www.w3.org/2001/10/xml-exc-c14n#</CanonicalizationMethod>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>/zSWFnpVPZE6P0JO8s2hU20sBaFPs/p5ZDwPz+AFXO0=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>gCYzmpdFR5vuAqmSFc1ZYwA9TrfqhlrHl0/PslDMaxc=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>r3uPALu0Geq1fuqJZwKYJQLl/xHrljwLIg0a6SXavPF5fLhsOe08p0jlDtNP3CT9PkUrwS+T+4cqhlI3j+Tvy3UuuN9ZGzchTHSmgW7EqoTNWQc8hrld3eyUuFvQNNE7ArT+fgEo+7TbAcNl9nuccZ4jNsWW/lMk6GE1eL5TJhk2waBe+n5L4eT9oPgrvFY37Y34yePRewKmSjqyl/K6l41Ct9pQshIEokuGnQmdFCnz0buS8r52yYUqZZqrsReoT9KKL0PUlP1tKa3a570Bt0GaGvZlrAElFgWo/o/44/Op9O7f9N4Pel7uvWdRm8qBmifpRzSuIRDWRMCnE3T1Zg==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-BA6B7B8077E56425B7ECD95FDD824506CEBCE6BA27069CFA54F4441A6C4F6DBD">
+            <SubjectDistinguishedName Format="CANONICAL">cn=trustedx</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=trustedx</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=rsa standalone ca,o=safelayer secure communications s.a.,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=RSA Standalone CA,O=Safelayer Secure Communications S.A.,C=ES</IssuerDistinguishedName>
+            <SerialNumber>7863461352690029957</SerialNumber>
+            <CommonName>trustedx</CommonName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2027-09-04T11:04:54Z</NotAfter>
+            <NotBefore>2025-09-04T11:04:54Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-25216CB027D73F54B72BDC9F1B2A8A626A868BFDE073DD59BD8178B3B221A98C</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>BZN4BH9D8cNfk0UjIsSYtY5f4ic=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>EXDl8P1hWvLjhuFZIZJmPsOxfJE=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://crl-authority/</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl-authority/crls/xades.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIDqjCCApKgAwIBAgIIbSCgcBgaFYUwDQYJKoZIhvcNAQELBQAwWDELMAkGA1UEBhMCRVMxLTArBgNVBAoMJFNhZmVsYXllciBTZWN1cmUgQ29tbXVuaWNhdGlvbnMgUy5BLjEaMBgGA1UEAwwRUlNBIFN0YW5kYWxvbmUgQ0EwHhcNMjUwOTA0MTEwNDU0WhcNMjcwOTA0MTEwNDU0WjATMREwDwYDVQQDDAh0cnVzdGVkeDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALXGLUJ73MYG7amyo8uTI+K/VIttpmbkzT0xslAlPeZaKV3nrBEpe/pRlFDV8vLpWdtqV0dz3xoBB6URfEnGJdddCS+orT1uQcdbe8ksTwc+XV1YiK8Q6cM/P1Ju8EG2ZY0OgdobApL/VMBsQYyXQFOPWKhxd37PAcRbx+Eb+GdCyKhcyJkTWSjew97WUXZ4vYHjUJJ9v5eDxm3ZLGG79Z5hUJnXZ8lk/KzBMiqh42cmVwo3A8O1LARInOyAtNwlShqPPrsReg9fb+8aRIRBOIW8vVAIQVH2GNjh1qoNzifkxCZMA/SzTUBNMHq4LS7KGHlF5rMQt4G1asDfPn/m758CAwEAAaOBvDCBuTAdBgNVHQ4EFgQUEXDl8P1hWvLjhuFZIZJmPsOxfJEwHwYDVR0jBBgwFoAUBZN4BH9D8cNfk0UjIsSYtY5f4icwNAYDVR0fBC0wKzApoCegJYYjaHR0cDovL2NybC1hdXRob3JpdHkvY3Jscy94YWRlcy5jcmwwMQYIKwYBBQUHAQEEJTAjMCEGCCsGAQUFBzABhhVodHRwOi8vY3JsLWF1dGhvcml0eS8wDgYDVR0PAQH/BAQDAgbAMA0GCSqGSIb3DQEBCwUAA4IBAQCJJ07wOzTjTMMYPwnyU9H8bKSgIPuuJCt1wioHZC30CX3tmO3RZBBWkR3HB0O5RkWsccTjDGLHyOsSJZrNUwreIcvPBxeB9Nc4YPi96XPv1POZiKp4qACLJJD5EeuLGeXVXuk6Dz4aq4eNf5BxLdcmdQ8U03funsw8T7sSsJ2lic4Q7wvaVFWAfsQtEdvEiaYlnLy8cnqLC0NvdgGniD+XmxaP6TiMpC5H4tyUjC/dtfxes96zDKLLlxTf7m5HFJOfuT+sNALCr6HdG8B6gHsyWjW2yARG9DVfeJEJNEV1XvRZudzywiyT3r1xqNPlUvNvCSsG+Y7cNpDUKiAb7KBI</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-9C055BA4BE58E782F6EFC7B84DC9D7DDBDFB157DCE2C6037EFD50E70056E2CB7">
+            <ReferencedName>Full XML File</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>wyub8IIQCzKLfZrWCY4HMdjQO9qtAmQbVaq6kE/dwNE=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-65496108A40A372954B7E555F8D9109A237C2C4D70C1932D7C9C768DCD41E1D7">
+            <ReferencedName>S-922957119A3ADB28914197AFE59D99C0AF8CC59F2196953C8553144573E0A01E</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>bnm6GVHP/bNmgZYrZ+uUtFq28iHdL2i887VWGe+SUVc=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

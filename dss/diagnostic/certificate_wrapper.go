@@ -2,11 +2,11 @@
 //
 // getCertificateExtensionForOid(String, Class<T>) is a generic instance method in Java; Go has
 // no generic methods, so it is ported as the package-level generic function
-// CertificateExtensionForOid[T]. This assumes jaxb.XmlCertificateExtension is represented as an
-// interface (satisfied by every concrete extension struct, e.g. *jaxb.XmlSubjectAlternativeNames)
-// with an OID() string accessor, mirroring the xsi:type polymorphism the
-// List<XmlCertificateExtension> field uses in the XSD/JAXB model - flagged per S8A_BRIEF.md as a
-// cross-chunk assumption on DIAGMODEL's shape for that type.
+// CertificateExtensionForOid[T]. The xsi:type polymorphism of the schema's
+// List<XmlCertificateExtension> is represented on the Go side (see jaxb/xml.go) by the
+// jaxb.XmlCertificateExtensionItem interface, satisfied by every concrete extension struct (e.g.
+// *jaxb.XmlSubjectAlternativeNames) via its embedded XmlCertificateExtensionContent/Attrs; that
+// interface's OID accessor is ExtensionOID() *string (not OID() string).
 package diagnostic
 
 import (
@@ -38,7 +38,10 @@ func NewCertificateWrapper(certificate *jaxb.XmlCertificate) *CertificateWrapper
 
 // Id is the AbstractTokenProxy override. Port of getId().
 func (w *CertificateWrapper) Id() string {
-	return w.certificate.Id
+	if w.certificate.Id != nil {
+		return string(*w.certificate.Id)
+	}
+	return ""
 }
 
 // CurrentBasicSignature is the AbstractTokenProxy override. Port of
@@ -50,7 +53,7 @@ func (w *CertificateWrapper) CurrentBasicSignature() *jaxb.XmlBasicSignature {
 // CurrentCertificateChain is the AbstractTokenProxy override. Port of
 // getCurrentCertificateChain().
 func (w *CertificateWrapper) CurrentCertificateChain() []*jaxb.XmlChainItem {
-	return w.certificate.CertificateChain
+	return w.certificate.CertificateChain.All()
 }
 
 // CurrentSigningCertificate is the AbstractTokenProxy override. Port of
@@ -86,8 +89,9 @@ func (w *CertificateWrapper) IsTrusted() bool {
 // returned and the certificate is trusted, the certificate is considered indefinitely trusted.
 // Port of getTrustStartDate().
 func (w *CertificateWrapper) TrustStartDate() *time.Time {
-	if w.certificate.Trusted != nil {
-		return w.certificate.Trusted.StartDate
+	if w.certificate.Trusted != nil && w.certificate.Trusted.StartDate != nil {
+		t := w.certificate.Trusted.StartDate.Time()
+		return &t
 	}
 	return nil
 }
@@ -96,8 +100,9 @@ func (w *CertificateWrapper) TrustStartDate() *time.Time {
 // returned and the certificate is trusted, the certificate is considered indefinitely trusted.
 // Port of getTrustSunsetDate().
 func (w *CertificateWrapper) TrustSunsetDate() *time.Time {
-	if w.certificate.Trusted != nil {
-		return w.certificate.Trusted.SunsetDate
+	if w.certificate.Trusted != nil && w.certificate.Trusted.SunsetDate != nil {
+		t := w.certificate.Trusted.SunsetDate.Time()
+		return &t
 	}
 	return nil
 }
@@ -109,18 +114,19 @@ func (w *CertificateWrapper) IsSelfSigned() bool {
 
 // CertificateExtensions returns a list of all certificate extensions. Port of
 // getCertificateExtensions().
-func (w *CertificateWrapper) CertificateExtensions() []jaxb.XmlCertificateExtension {
-	return append([]jaxb.XmlCertificateExtension(nil), w.certificate.CertificateExtensions...)
+func (w *CertificateWrapper) CertificateExtensions() []jaxb.XmlCertificateExtensionItem {
+	return append([]jaxb.XmlCertificateExtensionItem(nil), w.certificate.CertificateExtensions.All()...)
 }
 
 // CertificateExtensionForOid returns a certificate extension with the given oid when present.
 // Port of the generic <T extends XmlCertificateExtension> T
 // getCertificateExtensionForOid(String, Class<T>); panics (Java throws
 // UnsupportedOperationException) when a match is found but does not have type T.
-func CertificateExtensionForOid[T jaxb.XmlCertificateExtension](w *CertificateWrapper, oid string) T {
+func CertificateExtensionForOid[T jaxb.XmlCertificateExtensionItem](w *CertificateWrapper, oid string) T {
 	var zero T
 	for _, certificateExtension := range w.CertificateExtensions() {
-		if oid == certificateExtension.OID() {
+		extensionOID := certificateExtension.ExtensionOID()
+		if extensionOID != nil && oid == *extensionOID {
 			if typed, ok := certificateExtension.(T); ok {
 				return typed
 			}
@@ -137,7 +143,9 @@ func (w *CertificateWrapper) CertificateExtensionsOids() []string {
 	var result []string
 	if len(certificateExtensions) != 0 {
 		for _, ext := range certificateExtensions {
-			result = append(result, ext.OID())
+			if extensionOID := ext.ExtensionOID(); extensionOID != nil {
+				result = append(result, *extensionOID)
+			}
 		}
 	}
 	return result
@@ -221,7 +229,7 @@ func (w *CertificateWrapper) getXmlInhibitAnyPolicy() *jaxb.XmlInhibitAnyPolicy 
 func (w *CertificateWrapper) PermittedSubtrees() []*jaxb.XmlGeneralSubtree {
 	nameConstraints := w.getXmlNameConstraints()
 	if nameConstraints != nil {
-		return nameConstraints.PermittedSubtrees
+		return nameConstraints.PermittedSubtree
 	}
 	return nil
 }
@@ -231,7 +239,7 @@ func (w *CertificateWrapper) PermittedSubtrees() []*jaxb.XmlGeneralSubtree {
 func (w *CertificateWrapper) ExcludedSubtrees() []*jaxb.XmlGeneralSubtree {
 	nameConstraints := w.getXmlNameConstraints()
 	if nameConstraints != nil {
-		return nameConstraints.ExcludedSubtrees
+		return nameConstraints.ExcludedSubtree
 	}
 	return nil
 }
@@ -243,10 +251,14 @@ func (w *CertificateWrapper) getXmlNameConstraints() *jaxb.XmlNameConstraints {
 // KeyUsages returns the defined key-usages for the certificate. Port of getKeyUsages().
 func (w *CertificateWrapper) KeyUsages() []enumerations.KeyUsageBit {
 	keyUsage := w.getXmlKeyUsage()
-	if keyUsage != nil {
-		return keyUsage.KeyUsageBit
+	if keyUsage == nil {
+		return nil
 	}
-	return nil
+	result := make([]enumerations.KeyUsageBit, len(keyUsage.KeyUsageBit))
+	for i, v := range keyUsage.KeyUsageBit {
+		result[i] = enumerations.KeyUsageBit(v)
+	}
+	return result
 }
 
 func (w *CertificateWrapper) getXmlKeyUsage() *jaxb.XmlKeyUsages {
@@ -256,20 +268,28 @@ func (w *CertificateWrapper) getXmlKeyUsage() *jaxb.XmlKeyUsages {
 // IsRevocationDataAvailable reports whether the revocation data is available for the
 // certificate. Port of isRevocationDataAvailable().
 func (w *CertificateWrapper) IsRevocationDataAvailable() bool {
-	return len(w.certificate.Revocations) != 0
+	return len(w.certificate.Revocations.All()) != 0
 }
 
 // Sources returns a list of sources the certificate has been obtained from (e.g.
 // TRUSTED_LIST, SIGNATURE, AIA, etc.). Port of getSources().
 func (w *CertificateWrapper) Sources() []enumerations.CertificateSourceType {
-	return w.certificate.Sources
+	values := w.certificate.Sources.All()
+	if values == nil {
+		return nil
+	}
+	result := make([]enumerations.CertificateSourceType, len(values))
+	for i, v := range values {
+		result[i] = enumerations.CertificateSourceType(v)
+	}
+	return result
 }
 
 // CertificateRevocationData returns a list of revocation data relevant to the certificate.
 // Port of getCertificateRevocationData().
 func (w *CertificateWrapper) CertificateRevocationData() []*CertificateRevocationWrapper {
 	var certRevocationWrappers []*CertificateRevocationWrapper
-	for _, xmlCertificateRevocation := range w.certificate.Revocations {
+	for _, xmlCertificateRevocation := range w.certificate.Revocations.All() {
 		certRevocationWrappers = append(certRevocationWrappers, NewCertificateRevocationWrapper(xmlCertificateRevocation))
 	}
 	return certRevocationWrappers
@@ -289,7 +309,7 @@ func (w *CertificateWrapper) RevocationDataById(revocationId string) *Certificat
 // Port of isIdPkixOcspNoCheck().
 func (w *CertificateWrapper) IsIdPkixOcspNoCheck() bool {
 	ocspNoCheck := w.getXmlIdPkixOcspNoCheck()
-	return ocspNoCheck != nil && ocspNoCheck.Present
+	return ocspNoCheck != nil && ocspNoCheck.Present != nil && *ocspNoCheck.Present
 }
 
 func (w *CertificateWrapper) getXmlIdPkixOcspNoCheck() *jaxb.XmlIdPkixOcspNoCheck {
@@ -316,7 +336,7 @@ func (w *CertificateWrapper) IsIdKpOCSPSigning() bool {
 // isValAssuredShortTermCertificate().
 func (w *CertificateWrapper) IsValAssuredShortTermCertificate() bool {
 	valAssuredShortTermCertificate := w.getXmlValAssuredShortTermCertificate()
-	return valAssuredShortTermCertificate != nil && valAssuredShortTermCertificate.Present
+	return valAssuredShortTermCertificate != nil && valAssuredShortTermCertificate.Present != nil && *valAssuredShortTermCertificate.Present
 }
 
 func (w *CertificateWrapper) getXmlValAssuredShortTermCertificate() *jaxb.XmlValAssuredShortTermCertificate {
@@ -328,7 +348,7 @@ func (w *CertificateWrapper) getXmlValAssuredShortTermCertificate() *jaxb.XmlVal
 // isNoRevAvail().
 func (w *CertificateWrapper) IsNoRevAvail() bool {
 	noRevAvail := w.getXmlNoRevAvail()
-	return noRevAvail != nil && noRevAvail.Present
+	return noRevAvail != nil && noRevAvail.Present != nil && *noRevAvail.Present
 }
 
 func (w *CertificateWrapper) getXmlNoRevAvail() *jaxb.XmlNoRevAvail {
@@ -350,18 +370,29 @@ func (w *CertificateWrapper) getXmlExtendedKeyUsages() *jaxb.XmlExtendedKeyUsage
 
 // NotBefore returns the certificate's notBefore date. Port of getNotBefore().
 func (w *CertificateWrapper) NotBefore() *time.Time {
-	return w.certificate.NotBefore
+	if w.certificate.NotBefore == nil {
+		return nil
+	}
+	t := w.certificate.NotBefore.Time()
+	return &t
 }
 
 // NotAfter returns the certificate's notAfter date. Port of getNotAfter().
 func (w *CertificateWrapper) NotAfter() *time.Time {
-	return w.certificate.NotAfter
+	if w.certificate.NotAfter == nil {
+		return nil
+	}
+	t := w.certificate.NotAfter.Time()
+	return &t
 }
 
 // EntityKey returns a string identifier of the certificate's entity key. Port of
 // getEntityKey().
 func (w *CertificateWrapper) EntityKey() string {
-	return w.certificate.EntityKey
+	if w.certificate.EntityKey != nil {
+		return *w.certificate.EntityKey
+	}
+	return ""
 }
 
 // IssuerEntityKey returns a string identifier of the certificate's issuer entity key. Port
@@ -389,12 +420,13 @@ func (w *CertificateWrapper) IsMatchingIssuerSubjectName() bool {
 // extension from TL Trusted Serviced. Port of
 // getCertificateTSPServiceExpiredCertsRevocationInfo().
 func (w *CertificateWrapper) CertificateTSPServiceExpiredCertsRevocationInfo() *time.Time {
-	trustServiceProviders := w.certificate.TrustServiceProviders
+	trustServiceProviders := w.certificate.TrustServiceProviders.All()
 	if trustServiceProviders != nil {
 		for _, trustServiceProvider := range trustServiceProviders {
-			for _, xmlTrustService := range trustServiceProvider.TrustServices {
+			for _, xmlTrustService := range trustServiceProvider.TrustServices.All() {
 				if xmlTrustService.ExpiredCertsRevocationInfo != nil {
-					return xmlTrustService.ExpiredCertsRevocationInfo // TODO improve
+					t := xmlTrustService.ExpiredCertsRevocationInfo.Time() // TODO improve
+					return &t
 				}
 			}
 		}
@@ -414,68 +446,78 @@ func (w *CertificateWrapper) SerialNumber() string {
 // SubjectSerialNumber returns the subject serial number of the certificate. Port of
 // getSubjectSerialNumber().
 func (w *CertificateWrapper) SubjectSerialNumber() string {
-	return w.certificate.SubjectSerialNumber
+	return stringOrEmpty(w.certificate.SubjectSerialNumber)
 }
 
 // Title returns the title. Port of getTitle().
 func (w *CertificateWrapper) Title() string {
-	return w.certificate.Title
+	return stringOrEmpty(w.certificate.Title)
 }
 
 // CommonName returns the common name. Port of getCommonName().
 func (w *CertificateWrapper) CommonName() string {
-	return w.certificate.CommonName
+	return stringOrEmpty(w.certificate.CommonName)
 }
 
 // CountryName returns the country code. Port of getCountryName().
 func (w *CertificateWrapper) CountryName() string {
-	return w.certificate.CountryName
+	return stringOrEmpty(w.certificate.CountryName)
 }
 
 // GivenName returns the given name. Port of getGivenName().
 func (w *CertificateWrapper) GivenName() string {
-	return w.certificate.GivenName
+	return stringOrEmpty(w.certificate.GivenName)
 }
 
 // OrganizationIdentifier returns the organization identifier. Port of
 // getOrganizationIdentifier().
 func (w *CertificateWrapper) OrganizationIdentifier() string {
-	return w.certificate.OrganizationIdentifier
+	return stringOrEmpty(w.certificate.OrganizationIdentifier)
 }
 
 // OrganizationName returns the organization name. Port of getOrganizationName().
 func (w *CertificateWrapper) OrganizationName() string {
-	return w.certificate.OrganizationName
+	return stringOrEmpty(w.certificate.OrganizationName)
 }
 
 // OrganizationalUnit returns the organization unit. Port of getOrganizationalUnit().
 func (w *CertificateWrapper) OrganizationalUnit() string {
-	return w.certificate.OrganizationalUnit
+	return stringOrEmpty(w.certificate.OrganizationalUnit)
 }
 
 // Email returns the email. Port of getEmail().
 func (w *CertificateWrapper) Email() string {
-	return w.certificate.Email
+	return stringOrEmpty(w.certificate.Email)
 }
 
 // Locality returns the locality. Port of getLocality().
 func (w *CertificateWrapper) Locality() string {
-	return w.certificate.Locality
+	return stringOrEmpty(w.certificate.Locality)
 }
 
 // State returns the state. Port of getState().
 func (w *CertificateWrapper) State() string {
-	return w.certificate.State
+	return stringOrEmpty(w.certificate.State)
 }
 
 // Surname returns the surname. Port of getSurname().
 func (w *CertificateWrapper) Surname() string {
-	return w.certificate.Surname
+	return stringOrEmpty(w.certificate.Surname)
 }
 
 // Pseudo returns the pseudo. Port of getPseudo().
 func (w *CertificateWrapper) Pseudo() string {
-	return w.certificate.Pseudonym
+	return stringOrEmpty(w.certificate.Pseudonym)
+}
+
+// stringOrEmpty dereferences a *string field, standing in for Java null with the empty string
+// (Go strings cannot be nil). Used throughout this file for the many optional xs:string
+// JAXB elements/attributes on XmlCertificate and its extensions.
+func stringOrEmpty(s *string) string {
+	if s != nil {
+		return *s
+	}
+	return ""
 }
 
 // DigestAlgoAndValue returns the certificate's Digest if present. Port of
@@ -487,13 +529,13 @@ func (w *CertificateWrapper) DigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
 // IsTrustedListReached reports whether the Trusted List has been reached for the particular
 // certificate. Port of isTrustedListReached().
 func (w *CertificateWrapper) IsTrustedListReached() bool {
-	return len(w.certificate.TrustServiceProviders) != 0
+	return len(w.certificate.TrustServiceProviders.All()) != 0
 }
 
 // TrustServiceProviders returns a list of XmlTrustServiceProvider. Port of
 // getTrustServiceProviders().
 func (w *CertificateWrapper) TrustServiceProviders() []*jaxb.XmlTrustServiceProvider {
-	return w.certificate.TrustServiceProviders
+	return w.certificate.TrustServiceProviders.All()
 }
 
 // TrustServices returns a list of TrustServiceWrapper. Port of getTrustServices().
@@ -503,38 +545,38 @@ func (w *CertificateWrapper) TrustServiceProviders() []*jaxb.XmlTrustServiceProv
 // "set"), per this port's convention elsewhere. Verify/adjust field names once DIAGWRAP_B lands.
 func (w *CertificateWrapper) TrustServices() []*TrustServiceWrapper {
 	var result []*TrustServiceWrapper
-	tsps := w.certificate.TrustServiceProviders
+	tsps := w.certificate.TrustServiceProviders.All()
 	for _, tsp := range tsps {
-		tspNames := langAndValueValues(tsp.TSPNames)
-		tspTradeNames := langAndValueValues(tsp.TSPTradeNames)
-		for _, trustService := range tsp.TrustServices {
+		tspNames := langAndValueValues(tsp.TSPNames.All())
+		tspTradeNames := langAndValueValues(tsp.TSPTradeNames.All())
+		for _, trustService := range tsp.TrustServices.All() {
 			wrapper := &TrustServiceWrapper{
 				TrustedList:              tsp.TL,
 				ListOfTrustedLists:       tsp.LOTL,
 				TspNames:                 tspNames,
 				TspTradeNames:            tspTradeNames,
 				ServiceDigitalIdentifier: NewCertificateWrapper(trustService.ServiceDigitalIdentifier),
-				ServiceNames:             langAndValueValues(trustService.ServiceNames),
-				Status:                   trustService.Status,
-				Type:                     trustService.ServiceType,
-				StartDate:                trustService.StartDate,
-				EndDate:                  trustService.EndDate,
-				CapturedQualifiers:       append([]string(nil), trustService.CapturedQualifiers...),
-				AdditionalServiceInfos:   append([]string(nil), trustService.AdditionalServiceInfoUris...),
+				ServiceNames:             langAndValueValues(trustService.ServiceNames.All()),
+				Status:                   stringOrEmpty(trustService.Status),
+				Type:                     stringOrEmpty(trustService.ServiceType),
+				StartDate:                xsDateTimePtr(trustService.StartDate),
+				EndDate:                  xsDateTimePtr(trustService.EndDate),
+				CapturedQualifiers:       append([]*jaxb.XmlQualifier(nil), trustService.CapturedQualifiers.All()...),
+				AdditionalServiceInfos:   append([]string(nil), trustService.AdditionalServiceInfoUris.All()...),
 				EnactedMRA:               trustService.EnactedMRA,
 			}
 
 			mraTrustServiceMapping := trustService.MRATrustServiceMapping
 			if mraTrustServiceMapping != nil {
-				wrapper.MraTrustServiceLegalIdentifier = mraTrustServiceMapping.TrustServiceLegalIdentifier
-				wrapper.MraTrustServiceEquivalenceStatusStartingTime = mraTrustServiceMapping.EquivalenceStatusStartingTime
-				wrapper.MraTrustServiceEquivalenceStatusEndingTime = mraTrustServiceMapping.EquivalenceStatusEndingTime
+				wrapper.MraTrustServiceLegalIdentifier = stringOrEmpty(mraTrustServiceMapping.TrustServiceLegalIdentifier)
+				wrapper.MraTrustServiceEquivalenceStatusStartingTime = xsDateTimePtr(mraTrustServiceMapping.EquivalenceStatusStartingTime)
+				wrapper.MraTrustServiceEquivalenceStatusEndingTime = xsDateTimePtr(mraTrustServiceMapping.EquivalenceStatusEndingTime)
 				originalThirdCountryMapping := mraTrustServiceMapping.OriginalThirdCountryMapping
 				if originalThirdCountryMapping != nil {
-					wrapper.OriginalTCType = originalThirdCountryMapping.ServiceType
-					wrapper.OriginalTCStatus = originalThirdCountryMapping.Status
-					wrapper.OriginalCapturedQualifiers = append([]string(nil), originalThirdCountryMapping.CapturedQualifiers...)
-					wrapper.OriginalTCAdditionalServiceInfos = append([]string(nil), originalThirdCountryMapping.AdditionalServiceInfoUris...)
+					wrapper.OriginalTCType = stringOrEmpty(originalThirdCountryMapping.ServiceType)
+					wrapper.OriginalTCStatus = stringOrEmpty(originalThirdCountryMapping.Status)
+					wrapper.OriginalCapturedQualifiers = append([]*jaxb.XmlQualifier(nil), originalThirdCountryMapping.CapturedQualifiers.All()...)
+					wrapper.OriginalTCAdditionalServiceInfos = append([]string(nil), originalThirdCountryMapping.AdditionalServiceInfoUris.All()...)
 				}
 			}
 
@@ -544,15 +586,24 @@ func (w *CertificateWrapper) TrustServices() []*TrustServiceWrapper {
 	return result
 }
 
+// xsDateTimePtr converts an optional jaxb.XSDateTime field to *time.Time, tolerating nil.
+func xsDateTimePtr(d *jaxb.XSDateTime) *time.Time {
+	if d == nil {
+		return nil
+	}
+	t := d.Time()
+	return &t
+}
+
 // IsListOfTrustedEntitiesReached reports whether the List of Trusted Entities has been reached
 // for the particular certificate. Port of isListOfTrustedEntitiesReached().
 func (w *CertificateWrapper) IsListOfTrustedEntitiesReached() bool {
-	return len(w.certificate.TrustedEntities) != 0
+	return len(w.certificate.TrustedEntities.All()) != 0
 }
 
 // TrustedEntities returns a list of XmlTrustedEntity. Port of getTrustedEntities().
 func (w *CertificateWrapper) TrustedEntities() []*jaxb.XmlTrustedEntity {
-	return w.certificate.TrustedEntities
+	return w.certificate.TrustedEntities.All()
 }
 
 // TrustedEntityServices returns a list of TrustedEntityServiceWrapper. Port of
@@ -564,22 +615,22 @@ func (w *CertificateWrapper) TrustedEntityServices() []*TrustedEntityServiceWrap
 	var result []*TrustedEntityServiceWrapper
 	tes := w.TrustedEntities()
 	for _, te := range tes {
-		entityNames := langAndValueValues(te.Names)
-		tradeNames := langAndValueValues(te.TradeNames)
-		for _, trustedService := range te.TrustedEntityServices {
+		entityNames := langAndValueValues(te.Names.All())
+		tradeNames := langAndValueValues(te.TradeNames.All())
+		for _, trustedService := range te.TrustedEntityServices.All() {
 			wrapper := &TrustedEntityServiceWrapper{
 				TrustedSourceList:        te.LoTE,
 				ListOfTrustedSourceList:  te.LoLoTE,
 				EntityNames:              entityNames,
 				TradeNames:               tradeNames,
 				ServiceDigitalIdentifier: NewCertificateWrapper(trustedService.ServiceDigitalIdentifier),
-				ServiceNames:             langAndValueValues(trustedService.ServiceNames),
-				Status:                   trustedService.Status,
-				Type:                     trustedService.ServiceType,
-				StartDate:                trustedService.StartDate,
-				EndDate:                  trustedService.EndDate,
-				CapturedQualifiers:       append([]string(nil), trustedService.CapturedQualifiers...),
-				AdditionalServiceInfos:   append([]string(nil), trustedService.AdditionalServiceInfoUris...),
+				ServiceNames:             langAndValueValues(trustedService.ServiceNames.All()),
+				Status:                   stringOrEmpty(trustedService.Status),
+				Type:                     stringOrEmpty(trustedService.ServiceType),
+				StartDate:                xsDateTimePtr(trustedService.StartDate),
+				EndDate:                  xsDateTimePtr(trustedService.EndDate),
+				CapturedQualifiers:       append([]*jaxb.XmlQualifier(nil), trustedService.CapturedQualifiers.All()...),
+				AdditionalServiceInfos:   append([]string(nil), trustedService.AdditionalServiceInfoUris.All()...),
 			}
 			result = append(result, wrapper)
 		}
@@ -641,7 +692,7 @@ func (w *CertificateWrapper) getXmlFreshestCRL() *jaxb.XmlFreshestCRL {
 func (w *CertificateWrapper) CAIssuersAccessUrls() []string {
 	authorityInformationAccess := w.getXmlAuthorityInformationAccess()
 	if authorityInformationAccess != nil {
-		return authorityInformationAccess.CaIssuersUrls
+		return authorityInformationAccess.CaIssuersUrl
 	}
 	return nil
 }
@@ -650,7 +701,7 @@ func (w *CertificateWrapper) CAIssuersAccessUrls() []string {
 func (w *CertificateWrapper) OCSPAccessUrls() []string {
 	authorityInformationAccess := w.getXmlAuthorityInformationAccess()
 	if authorityInformationAccess != nil {
-		return authorityInformationAccess.OcspUrls
+		return authorityInformationAccess.OcspUrl
 	}
 	return nil
 }
@@ -663,8 +714,8 @@ func (w *CertificateWrapper) getXmlAuthorityInformationAccess() *jaxb.XmlAuthori
 // value, when present. Port of getAuthorityKeyIdentifier().
 func (w *CertificateWrapper) AuthorityKeyIdentifier() []byte {
 	xmlAuthorityKeyIdentifier := w.getXmlAuthorityKeyIdentifier()
-	if xmlAuthorityKeyIdentifier != nil {
-		return xmlAuthorityKeyIdentifier.KeyIdentifier
+	if xmlAuthorityKeyIdentifier != nil && xmlAuthorityKeyIdentifier.KeyIdentifier != nil {
+		return []byte(*xmlAuthorityKeyIdentifier.KeyIdentifier)
 	}
 	return nil
 }
@@ -675,8 +726,8 @@ func (w *CertificateWrapper) AuthorityKeyIdentifier() []byte {
 // getAuthorityKeyIdentifierIssuerSerial().
 func (w *CertificateWrapper) AuthorityKeyIdentifierIssuerSerial() []byte {
 	xmlAuthorityKeyIdentifier := w.getXmlAuthorityKeyIdentifier()
-	if xmlAuthorityKeyIdentifier != nil {
-		return xmlAuthorityKeyIdentifier.AuthorityCertIssuerSerial
+	if xmlAuthorityKeyIdentifier != nil && xmlAuthorityKeyIdentifier.AuthorityCertIssuerSerial != nil {
+		return []byte(*xmlAuthorityKeyIdentifier.AuthorityCertIssuerSerial)
 	}
 	return nil
 }
@@ -689,8 +740,8 @@ func (w *CertificateWrapper) getXmlAuthorityKeyIdentifier() *jaxb.XmlAuthorityKe
 // when present. Port of getSubjectKeyIdentifier().
 func (w *CertificateWrapper) SubjectKeyIdentifier() []byte {
 	xmlSubjectKeyIdentifier := w.getXmlSubjectKeyIdentifier()
-	if xmlSubjectKeyIdentifier != nil {
-		return xmlSubjectKeyIdentifier.Ski
+	if xmlSubjectKeyIdentifier != nil && xmlSubjectKeyIdentifier.Ski != nil {
+		return []byte(*xmlSubjectKeyIdentifier.Ski)
 	}
 	return nil
 }
@@ -706,8 +757,8 @@ func (w *CertificateWrapper) CpsUrls() []string {
 	if xmlCertificatePolicies != nil {
 		for _, xmlCertificatePolicy := range xmlCertificatePolicies.CertificatePolicy {
 			cpsUrl := xmlCertificatePolicy.CpsUrl
-			if cpsUrl != "" {
-				result = append(result, cpsUrl)
+			if cpsUrl != nil && *cpsUrl != "" {
+				result = append(result, *cpsUrl)
 			}
 		}
 	}
@@ -775,8 +826,8 @@ func (w *CertificateWrapper) IsSupportedByQSCD() bool {
 func (w *CertificateWrapper) QcTypes() []enumerations.QCType {
 	var result []enumerations.QCType
 	xmlQcStatements := w.getXmlQcStatements()
-	if xmlQcStatements != nil && xmlQcStatements.QcTypes != nil {
-		for _, oid := range xmlQcStatements.QcTypes {
+	if xmlQcStatements != nil {
+		for _, oid := range xmlQcStatements.QcTypes.All() {
 			result = append(result, enumerations.QCTypeFromOID(oid.Value))
 		}
 	}
@@ -787,8 +838,8 @@ func (w *CertificateWrapper) QcTypes() []enumerations.QCType {
 // id-etsi-qcs-QcCClegislation extension). Port of getQcLegislationCountryCodes().
 func (w *CertificateWrapper) QcLegislationCountryCodes() []string {
 	xmlQcStatements := w.getXmlQcStatements()
-	if xmlQcStatements != nil && xmlQcStatements.QcCClegislation != nil {
-		return xmlQcStatements.QcCClegislation
+	if xmlQcStatements != nil {
+		return xmlQcStatements.QcCClegislation.All()
 	}
 	return nil
 }
@@ -825,7 +876,7 @@ func (w *CertificateWrapper) QCEuRetentionPeriod() *int {
 func (w *CertificateWrapper) QCPDSLocations() []*jaxb.XmlLangAndValue {
 	xmlQcStatements := w.getXmlQcStatements()
 	if xmlQcStatements != nil {
-		return xmlQcStatements.QcEuPDS
+		return xmlQcStatements.QcEuPDS.All()
 	}
 	return nil
 }
@@ -846,8 +897,8 @@ func (w *CertificateWrapper) SemanticsIdentifier() enumerations.SemanticsIdentif
 // id-etsi-qcs-QcQSCDlegislation extension). Port of getQcQSCDLegislation().
 func (w *CertificateWrapper) QcQSCDLegislation() []string {
 	xmlQcStatements := w.getXmlQcStatements()
-	if xmlQcStatements != nil && xmlQcStatements.QcQSCDlegislation != nil {
-		return xmlQcStatements.QcQSCDlegislation
+	if xmlQcStatements != nil {
+		return xmlQcStatements.QcQSCDlegislation.All()
 	}
 	return nil
 }
@@ -876,8 +927,8 @@ func (w *CertificateWrapper) QcPSB() *QCPSBWrapper {
 // implementation. Port of getOtherQcStatements().
 func (w *CertificateWrapper) OtherQcStatements() []string {
 	xmlQcStatements := w.getXmlQcStatements()
-	if xmlQcStatements != nil && xmlQcStatements.OtherOIDs != nil {
-		return oidValues(xmlQcStatements.OtherOIDs)
+	if xmlQcStatements != nil {
+		return oidValues(xmlQcStatements.OtherOIDs.All())
 	}
 	return nil
 }
@@ -898,7 +949,7 @@ func (w *CertificateWrapper) MRAEnactedTrustServiceLegalIdentifier() string {
 	xmlQcStatements := w.getXmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.MRACertificateMapping != nil &&
 		xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation != nil {
-		return xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.TrustServiceLegalIdentifier
+		return stringOrEmpty(xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.TrustServiceLegalIdentifier)
 	}
 	return ""
 }
@@ -910,7 +961,7 @@ func (w *CertificateWrapper) MRACertificateContentEquivalenceList() []*jaxb.XmlC
 	xmlQcStatements := w.getXmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.MRACertificateMapping != nil &&
 		xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation != nil {
-		return xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.CertificateContentEquivalenceList
+		return xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.CertificateContentEquivalenceList.All()
 	}
 	return nil
 }
@@ -956,8 +1007,8 @@ func (w *CertificateWrapper) IsOriginalThirdCountrySupportedByQSCD() bool {
 func (w *CertificateWrapper) OriginalThirdCountryQCTypes() []enumerations.QCType {
 	var result []enumerations.QCType
 	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
-	if originalThirdCountryMapping != nil && originalThirdCountryMapping.QcTypes != nil {
-		for _, oid := range originalThirdCountryMapping.QcTypes {
+	if originalThirdCountryMapping != nil {
+		for _, oid := range originalThirdCountryMapping.QcTypes.All() {
 			result = append(result, enumerations.QCTypeFromOID(oid.Value))
 		}
 	}
@@ -969,8 +1020,8 @@ func (w *CertificateWrapper) OriginalThirdCountryQCTypes() []enumerations.QCType
 // getOriginalThirdCountryQcLegislationCountryCodes().
 func (w *CertificateWrapper) OriginalThirdCountryQcLegislationCountryCodes() []string {
 	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
-	if originalThirdCountryMapping != nil && originalThirdCountryMapping.QcCClegislation != nil {
-		return originalThirdCountryMapping.QcCClegislation
+	if originalThirdCountryMapping != nil {
+		return originalThirdCountryMapping.QcCClegislation.All()
 	}
 	return nil
 }
@@ -980,37 +1031,40 @@ func (w *CertificateWrapper) OriginalThirdCountryQcLegislationCountryCodes() []s
 // getOriginalThirdCountryOtherQcStatements().
 func (w *CertificateWrapper) OriginalThirdCountryOtherQcStatements() []string {
 	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
-	if originalThirdCountryMapping != nil && originalThirdCountryMapping.OtherOIDs != nil {
-		return oidValues(originalThirdCountryMapping.OtherOIDs)
+	if originalThirdCountryMapping != nil {
+		return oidValues(originalThirdCountryMapping.OtherOIDs.All())
 	}
 	return nil
 }
 
 // Binaries is the AbstractTokenProxy override. Port of getBinaries().
 func (w *CertificateWrapper) Binaries() []byte {
-	return w.certificate.Base64Encoded
+	if w.certificate.Base64Encoded == nil {
+		return nil
+	}
+	return []byte(*w.certificate.Base64Encoded)
 }
 
 // ReadableCertificateName returns human-readable certificate name. Port of
 // getReadableCertificateName().
 func (w *CertificateWrapper) ReadableCertificateName() string {
-	if w.certificate.CommonName != "" {
-		return w.certificate.CommonName
+	if w.certificate.CommonName != nil {
+		return *w.certificate.CommonName
 	}
-	if w.certificate.GivenName != "" {
-		return w.certificate.GivenName
+	if w.certificate.GivenName != nil {
+		return *w.certificate.GivenName
 	}
-	if w.certificate.Surname != "" {
-		return w.certificate.Surname
+	if w.certificate.Surname != nil {
+		return *w.certificate.Surname
 	}
-	if w.certificate.Pseudonym != "" {
-		return w.certificate.Pseudonym
+	if w.certificate.Pseudonym != nil {
+		return *w.certificate.Pseudonym
 	}
-	if w.certificate.OrganizationName != "" {
-		return w.certificate.OrganizationName
+	if w.certificate.OrganizationName != nil {
+		return *w.certificate.OrganizationName
 	}
-	if w.certificate.OrganizationalUnit != "" {
-		return w.certificate.OrganizationalUnit
+	if w.certificate.OrganizationalUnit != nil {
+		return *w.certificate.OrganizationalUnit
 	}
 	return "?"
 }

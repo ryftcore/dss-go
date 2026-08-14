@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>er-asn1-multi-files.asice</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <ContainerInfo>
+        <ContainerType>ASiC-E</ContainerType>
+        <MimeTypeFilePresent>false</MimeTypeFilePresent>
+        <ManifestFiles>
+            <ManifestFile>
+                <Filename>META-INF/ASiCEvidenceRecordManifest.xml</Filename>
+                <SignatureFilename>META-INF/evidencerecord.ers</SignatureFilename>
+                <Entries>
+                    <Entry>test.txt</Entry>
+                    <Entry>test2.txt</Entry>
+                </Entries>
+            </ManifestFile>
+        </ManifestFiles>
+        <ContentFiles>
+            <ContentFile>test.txt</ContentFile>
+            <ContentFile>test2.txt</ContentFile>
+        </ContentFiles>
+    </ContainerInfo>
+    <EvidenceRecords>
+        <EvidenceRecord Id="ER-B691BAE4A68E2B4CD9A1E15DFDAD88BB6C7EE692446F0772CF09E18A2497F27B">
+            <DocumentName>META-INF/evidencerecord.ers</DocumentName>
+            <Type>ASN.1 Evidence Record</Type>
+            <Origin>CONTAINER</Origin>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="EVIDENCE_RECORD_ARCHIVE_OBJECT" uri="test2.txt" documentName="test2.txt">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>KSoSM6E49dKbutJ8pYA7twAxs2harKOEB8UIyVTRSQo=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="EVIDENCE_RECORD_ARCHIVE_OBJECT" uri="test.txt" documentName="test.txt">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>zqwX8CRvXfH609u/o5Wx++8h45WLHHJ5jroRfC8b3sE=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <EvidenceRecordTimestamps>
+                <FoundTimestamp Timestamp="T-AE0E69172AD6CC3040917F2018FB52591414DDC9D523819FEEA2336B2DB2F8F9"/>
+            </EvidenceRecordTimestamps>
+            <FoundCertificates/>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6" Category="SIGNED_DATA"/>
+            </TimestampedObjects>
+            <EvidenceRecordScopes>
+                <SignatureScope SignerData="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85">
+                    <Scope>FULL</Scope>
+                    <Name>test2.txt</Name>
+                    <Description>Full document</Description>
+                </SignatureScope>
+                <SignatureScope SignerData="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6">
+                    <Scope>FULL</Scope>
+                    <Name>test.txt</Name>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </EvidenceRecordScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </EvidenceRecord>
+    </EvidenceRecords>
+    <UsedCertificates>
+        <Certificate Id="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790">
+            <SubjectDistinguishedName Format="CANONICAL">cn=globaltrust 2015 advanced seal 1,ou=globaltrust certification service,o=e-commerce monitoring gmbh,l=wien,st=wien,c=at</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=GLOBALTRUST 2015 ADVANCED SEAL 1,OU=GLOBALTRUST Certification Service,O=e-commerce monitoring GmbH,L=Wien,ST=Wien,C=AT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=globaltrust 2015,ou=globaltrust certification service,o=e-commerce monitoring gmbh,l=wien,st=wien,c=at</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=GLOBALTRUST 2015,OU=GLOBALTRUST Certification Service,O=e-commerce monitoring GmbH,L=Wien,ST=Wien,C=AT</IssuerDistinguishedName>
+            <SerialNumber>128484790253575858379341461</SerialNumber>
+            <CommonName>GLOBALTRUST 2015 ADVANCED SEAL 1</CommonName>
+            <Locality>Wien</Locality>
+            <State>Wien</State>
+            <CountryName>AT</CountryName>
+            <OrganizationName>e-commerce monitoring GmbH</OrganizationName>
+            <OrganizationalUnit>GLOBALTRUST Certification Service</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2040-06-10T00:00:00Z</NotAfter>
+            <NotBefore>2018-05-17T00:00:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-9F7F1A13CA13F51557FAFFF0C4D1C46597E758A62014946ADD2F822F2469947E</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>y7DdPYw832IsK2Y8njzpFW1xtNc=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>jpHCtQYEHXOOh3vp/IntBffUqcM=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.globaltrust.eu/certificate-policy.html">1.2.40.0.36.1.1.8.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.globaltrust.eu/certificate-policy.html">1.2.40.0.36.4.1.10</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://service.globaltrust.eu/static/globaltrust-2015-der.cer</caIssuersUrl>
+                    <ocspUrl>http://ocsp.globaltrust.eu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://service.globaltrust.eu/static/globaltrust-2015.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIHpjCCBY6gAwIBAgILake2b6uxNkdovpUwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkFUMQ0wCwYDVQQIEwRXaWVuMQ0wCwYDVQQHEwRXaWVuMSMwIQYDVQQKExplLWNvbW1lcmNlIG1vbml0b3JpbmcgR21iSDEqMCgGA1UECxMhR0xPQkFMVFJVU1QgQ2VydGlmaWNhdGlvbiBTZXJ2aWNlMRkwFwYDVQQDExBHTE9CQUxUUlVTVCAyMDE1MB4XDTE4MDUxNzAwMDAwMFoXDTQwMDYxMDAwMDAwMFowgacxCzAJBgNVBAYTAkFUMQ0wCwYDVQQIEwRXaWVuMQ0wCwYDVQQHEwRXaWVuMSMwIQYDVQQKExplLWNvbW1lcmNlIG1vbml0b3JpbmcgR21iSDEqMCgGA1UECxMhR0xPQkFMVFJVU1QgQ2VydGlmaWNhdGlvbiBTZXJ2aWNlMSkwJwYDVQQDEyBHTE9CQUxUUlVTVCAyMDE1IEFEVkFOQ0VEIFNFQUwgMTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAKyc7TMbwlbOt4HdELyhnfFeCvVkwHQpK+04nr+aqInXhmZoC2pIY7AFeqw/9uPoCFFP+KS7C4YcTvrBxQp657CGpYiNuUP6oo52ctkwaTsab2L9h0M+m5x6hD8Magmv3Aki3tmGNTpYA2Q1gM9sZOhG9njitdF5wCm+FMzaZTNQuK+Ovw9FpEkZtvr7eaHFzVt+NBF6JSiZRZymmrLEDdRw46kAlugtx9BogknCLzlT9oG3FqLvakgSOOxLbgmqXmE3NIBu739aS/WCVZD9IYGdTGW48sQgDLZ0mrgrif+ij4f8OX7EkOUoaU4J2TH/l3eMKnIsRWXmExBap14fEJSvQ8LOGe/XgYdapcPiU5vkqO+fdB9hFAoFCVjhndzIWV8v2cverRZKPxekDzBU4oZggjOx1nNfdIR30NNGrNPh1IiwRl1U+B89QUhLowDyV8qy+GuL/lEON7jFuzbv3OF+RAx1I9aB45nzqFbycb5fOPOVLQ6LIrWF1B0ZdzpGXHoqGzcRS4Mv68Sx5oVZskSbRZLBKtrcnnTI5cwcQCMKRD/hE5hvSooZVAWNHHZOTRIIBUHcffqncDixexanXmTxDWi/iUsUYIBd66nSDKS14CqRsUgOzaDbrvb2Iw0YYVGk7ZPie5bgK19vv+K5GXos4MjVeIw3/yYUkvJpmFtbAgMBAAGjggHfMIIB2zASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUjpHCtQYEHXOOh3vp/IntBffUqcMwHwYDVR0jBBgwFoAUy7DdPYw832IsK2Y8njzpFW1xtNcwgYEGCCsGAQUFBwEBBHUwczAmBggrBgEFBQcwAYYaaHR0cDovL29jc3AuZ2xvYmFsdHJ1c3QuZXUwSQYIKwYBBQUHMAKGPWh0dHA6Ly9zZXJ2aWNlLmdsb2JhbHRydXN0LmV1L3N0YXRpYy9nbG9iYWx0cnVzdC0yMDE1LWRlci5jZXIwSgYDVR0fBEMwQTA/oD2gO4Y5aHR0cDovL3NlcnZpY2UuZ2xvYmFsdHJ1c3QuZXUvc3RhdGljL2dsb2JhbHRydXN0LTIwMTUuY3JsMIGkBgNVHSAEgZwwgZkwSwYIKigAJAEBCAEwPzA9BggrBgEFBQcCARYxaHR0cDovL3d3dy5nbG9iYWx0cnVzdC5ldS9jZXJ0aWZpY2F0ZS1wb2xpY3kuaHRtbDBKBgcqKAAkBAEKMD8wPQYIKwYBBQUHAgEWMWh0dHA6Ly93d3cuZ2xvYmFsdHJ1c3QuZXUvY2VydGlmaWNhdGUtcG9saWN5Lmh0bWwwDQYJKoZIhvcNAQELBQADggIBAA4yUq3SsCNUdiZTsKIr/lv80VU6NpvFl9AWy/Ht19Z6EIhfMzWabfYxblyEpSla+w4YteU+7UUo6dxC2cQ3xMBa+qVGQL/08HTBekgD2dLlWjFo0NzyatXwEXYmhKm3fsYl640wnjD2AR39hBScIQ5NCI7uTcjyXWoh1h4K0pIYcAalB6w0RPQWYZ70nO7ycSPJY1HZcwmqi8uZp3fH9F9uopufkfO9W+7X4roXcul3ik0RAalfzqKsHmk99zxRdBuFuIRoT5Fh7LiphkBxZEnRaro2vtGdp2dLcA8+jq/qIX8RTfww0miF299Bu/tx3pncBYkjEWpwg4+oX2A2/s+qQqKhH48o98c5NA7YjJtP0yuXvymMmoP5NdgiAg278Aj00EB0jAWL7PkQOv0H8ieaIGXzOOWEpSEe6bUy5EYSsX4VM4Y+IwSfwI7iLXHN9BShF+QUg6dMxFzGwCNpM/He2ZXbQGDXQrDhjJSVNHAusi+1X/38P5bMPOA4sB0yJwwY0+O5i+yidN3PYZvU/n4ym/GU85IqpvqVSRuPY3BgrJwwCfi/UZesbC4hd3ojQUTpC198uGdJHiI54tbp4dkpvGg9GaK6ffBZijDhSoxNTXIMAObNQmLFDuLpVcOsVwGqBkbmsr+6NfnLzYQf7X7QznDA7I4avDOlPohilFdE</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-BAC55ECC36D21ADB531E6AA82DED394B83AAFFF2FEDE5D97FE902042316B71EC">
+            <SubjectDistinguishedName Format="CANONICAL">cn=baltstamp qtsa tsu1,o=baltstamp uab,l=vilnius,c=lt</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=BalTstamp QTSA TSU1,O=BalTstamp UAB,L=Vilnius,C=LT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=globaltrust 2015 advanced seal 1,ou=globaltrust certification service,o=e-commerce monitoring gmbh,l=wien,st=wien,c=at</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=GLOBALTRUST 2015 ADVANCED SEAL 1,OU=GLOBALTRUST Certification Service,O=e-commerce monitoring GmbH,L=Wien,ST=Wien,C=AT</IssuerDistinguishedName>
+            <SerialNumber>149713763534566591144892782</SerialNumber>
+            <CommonName>BalTstamp QTSA TSU1</CommonName>
+            <Locality>Vilnius</Locality>
+            <CountryName>LT</CountryName>
+            <OrganizationName>BalTstamp UAB</OrganizationName>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2025-11-11T11:26:19Z</NotAfter>
+            <NotBefore>2020-11-11T09:26:19Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-FF8563C57F9454B6580C4AAE2A8B3262A70581BBFCF7C2735966594EC913DCC1</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-9F7F1A13CA13F51557FAFFF0C4D1C46597E758A62014946ADD2F822F2469947E</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>jpHCtQYEHXOOh3vp/IntBffUqcM=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>Lxn13kWa5I5/FGemeBDTMW9kgsM=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.globaltrust.eu/certificate-policy.html">1.2.40.0.36.1.1.8.1</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://service.globaltrust.eu/static/globaltrust-2015-advanced-seal-1-der.cer</caIssuersUrl>
+                    <ocspUrl>http://ocsp.globaltrust.eu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://service.globaltrust.eu/static/globaltrust-2015-advanced-seal-1.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="2.5.4.97" critical="false">
+                    <octets>BBQMElZBVExULTEwMDAxMTYzODExMA==</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIGZTCCBE2gAwIBAgILe9cfYj31VyWnmW4wDQYJKoZIhvcNAQELBQAwgacxCzAJBgNVBAYTAkFUMQ0wCwYDVQQIEwRXaWVuMQ0wCwYDVQQHEwRXaWVuMSMwIQYDVQQKExplLWNvbW1lcmNlIG1vbml0b3JpbmcgR21iSDEqMCgGA1UECxMhR0xPQkFMVFJVU1QgQ2VydGlmaWNhdGlvbiBTZXJ2aWNlMSkwJwYDVQQDEyBHTE9CQUxUUlVTVCAyMDE1IEFEVkFOQ0VEIFNFQUwgMTAeFw0yMDExMTEwOTI2MTlaFw0yNTExMTExMTI2MTlaMFUxCzAJBgNVBAYTAkxUMRAwDgYDVQQHEwdWaWxuaXVzMRYwFAYDVQQKEw1CYWxUc3RhbXAgVUFCMRwwGgYDVQQDExNCYWxUc3RhbXAgUVRTQSBUU1UxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhgS9hbjZQhtHLbkVGilMDmeSJ2gyR1LjCqXLmWNs4GYc9AgximAnXf129VI5KNlxDyHQcKaXJ+pwRExEPkcDWjHjEVaCvx0Wlq/kSuYnB/11A4asotgtZBg6Qx5mVpEKzUNGMy1wEUmvspfc2+K7r4Dpw9xy+VEd1+P/pJ1tF75tYzjAMPuNh9uUkd3jdmA6sPbXcuzCKY9Ql7yyXvfKcJJ2DMiJHwZp1OuXz5BUK1DqHfUO65lQ5zeJbbEjnjpxf/lK8o1zQXpn/NJ2IC+dtPlHwz94Ta3MD1B7xWUkep+rRzqjWTCcr9zhGs2EjU6BxucyGCR188VFXiaMPBYuAwIDAQABo4IB4TCCAd0wDAYDVR0TAQH/BAIwADAOBgNVHQ8BAf8EBAMCBkAwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwHQYDVR0OBBYEFC8Z9d5FmuSOfxRnpngQ0zFvZILDMB8GA1UdIwQYMBaAFI6RwrUGBB1zjod76fyJ7QX31KnDMIGTBggrBgEFBQcBAQSBhjCBgzAmBggrBgEFBQcwAYYaaHR0cDovL29jc3AuZ2xvYmFsdHJ1c3QuZXUwWQYIKwYBBQUHMAKGTWh0dHA6Ly9zZXJ2aWNlLmdsb2JhbHRydXN0LmV1L3N0YXRpYy9nbG9iYWx0cnVzdC0yMDE1LWFkdmFuY2VkLXNlYWwtMS1kZXIuY2VyMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9zZXJ2aWNlLmdsb2JhbHRydXN0LmV1L3N0YXRpYy9nbG9iYWx0cnVzdC0yMDE1LWFkdmFuY2VkLXNlYWwtMS5jcmwwVgYDVR0gBE8wTTBLBggqKAAkAQEIATA/MD0GCCsGAQUFBwIBFjFodHRwOi8vd3d3Lmdsb2JhbHRydXN0LmV1L2NlcnRpZmljYXRlLXBvbGljeS5odG1sMBsGA1UEYQQUDBJWQVRMVC0xMDAwMTE2MzgxMTAwDQYJKoZIhvcNAQELBQADggIBACalrbxu2qGfhGbGsYdd1kzQDbV/IoDSFQ/BPjYKvd+YiSWKqwdkcZ5lj6XF5tuaqptnnvH11fsBC7V62zdpp1lRG75z5Idkq5yaW33AGGWpXsSvQt66jlCSLIebUI2IbCH7RNRd6Hf/L1S/K8trOtV7Cux53ynf3ztUkEKcL0cAUJITwoZuOfHUnX3JGl7YUSXFOfvxI1mCJ0r9XIWWyd6yBcX4hOCmao+rCQ0A+jMczVjEV/O/cVSvXjflYPTGEnI+XfvYCZA2LJCHAk76FJFlDSXzYJHMx41U+AEtPIVowXabMGvcDX4CW8JUo6kvAjKsuElQGy4gpzBnvO/z5QPaV7abDWMu4k9H5yudcvz1SOW0XBdeSyFJyObvM4vvoIsM3AFeXVZHzPkvwqU5JsuNI6AMAKMwV3QTrj48nVR/S5cUy6PL5vaULF0GwRzEpVZzHdiBtiC2PTVQYB7+WCipE0Tyyqor9jIstPyJf5vIoV3QakNSRJ0yfWzIsaEoYOJSyToCS1KAA11ZFx6TgtyGR877rtR+ST01NZA6+qedgM7Bv6pLwYTeRIOY74OUK3AJJwzB+Xfp16axIdNEh6vJpa8nOzHQdo1J8g0azLnQRky/K9Ugt1etdQW8ohGTu0QaWQh9rpC/dBHnw8fok9kdgMXFJFWaY25vvMcQjc74</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <UsedTimestamps>
+        <Timestamp Type="EVIDENCE_RECORD_TIMESTAMP" Id="T-AE0E69172AD6CC3040917F2018FB52591414DDC9D523819FEEA2336B2DB2F8F9">
+            <ArchiveTimestampType>ASN1_EVIDENCE_RECORD</ArchiveTimestampType>
+            <EvidenceRecordTimestampType>ARCHIVE_TIMESTAMP</EvidenceRecordTimestampType>
+            <ProductionTime>2023-12-07T16:10:23Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>G0j0xMwMw43OYqxnJnE4Y9h0dTaObb3v+ueviFhmpu0=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-BAC55ECC36D21ADB531E6AA82DED394B83AAFFF2FEDE5D97FE902042316B71EC"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-BAC55ECC36D21ADB531E6AA82DED394B83AAFFF2FEDE5D97FE902042316B71EC"/>
+                <ChainItem Certificate="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=GLOBALTRUST 2015 ADVANCED SEAL 1, OU=GLOBALTRUST Certification Service, O=e-commerce monitoring GmbH, L=Wien, ST=Wien, C=AT</IssuerName>
+                    <SerialNumber>149713763534566591144892782</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <TSAGeneralName contentMatch="true" orderMatch="true">CN=BalTstamp QTSA TSU1,O=BalTstamp UAB,L=Vilnius,C=LT</TSAGeneralName>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-BAC55ECC36D21ADB531E6AA82DED394B83AAFFF2FEDE5D97FE902042316B71EC">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA1</DigestMethod>
+                            <DigestValue>PELiuEN7E4xOr4iCYH2RlBifQuY=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>usVezDbSGttTHmqoLe05S4Oq//L+3l2X/pAgQjFrcew=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <FoundEvidenceRecords/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="ER-B691BAE4A68E2B4CD9A1E15DFDAD88BB6C7EE692446F0772CF09E18A2497F27B" Category="EVIDENCE_RECORD"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85">
+                    <Scope>FULL</Scope>
+                    <Name>test2.txt</Name>
+                    <Description>Full document</Description>
+                </TimestampScope>
+                <TimestampScope SignerData="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6">
+                    <Scope>FULL</Scope>
+                    <Name>test.txt</Name>
+                    <Description>Full document</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85">
+            <ReferencedName>test2.txt</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>KSoSM6E49dKbutJ8pYA7twAxs2harKOEB8UIyVTRSQo=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6">
+            <ReferencedName>test.txt</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>zqwX8CRvXfH609u/o5Wx++8h45WLHHJ5jroRfC8b3sE=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

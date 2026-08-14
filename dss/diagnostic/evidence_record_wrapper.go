@@ -28,7 +28,10 @@ func NewEvidenceRecordWrapper(evidenceRecord *jaxb.XmlEvidenceRecord) *EvidenceR
 
 // Id gets unique identifier. Port of getId().
 func (w *EvidenceRecordWrapper) Id() string {
-	return w.evidenceRecord.Id
+	if w.evidenceRecord.Id != nil {
+		return string(*w.evidenceRecord.Id)
+	}
+	return ""
 }
 
 // IsEvidenceRecordDuplicated checks if the evidence record's Id is duplicated within the
@@ -40,13 +43,16 @@ func (w *EvidenceRecordWrapper) IsEvidenceRecordDuplicated() bool {
 // Filename returns name of the evidence record's document, when applicable. Port of
 // getFilename().
 func (w *EvidenceRecordWrapper) Filename() string {
-	return w.evidenceRecord.DocumentName
+	if w.evidenceRecord.DocumentName != nil {
+		return *w.evidenceRecord.DocumentName
+	}
+	return ""
 }
 
 // DigestMatchers gets a list of digest matchers representing the associated archival data
 // objects validation status. Port of getDigestMatchers().
 func (w *EvidenceRecordWrapper) DigestMatchers() []*jaxb.XmlDigestMatcher {
-	return w.evidenceRecord.DigestMatchers
+	return w.evidenceRecord.DigestMatchers.All()
 }
 
 // FirstTimestamp returns initial time-stamp of the evidence record. Port of
@@ -63,7 +69,7 @@ func (w *EvidenceRecordWrapper) FirstTimestamp() *TimestampWrapper {
 // of getTimestampList().
 func (w *EvidenceRecordWrapper) TimestampList() []*TimestampWrapper {
 	var tsps []*TimestampWrapper
-	for _, xmlFoundTimestamp := range w.evidenceRecord.EvidenceRecordTimestamps {
+	for _, xmlFoundTimestamp := range w.evidenceRecord.EvidenceRecordTimestamps.All() {
 		tsps = append(tsps, NewTimestampWrapper(xmlFoundTimestamp.Timestamp))
 	}
 	return tsps
@@ -93,12 +99,18 @@ func (w *EvidenceRecordWrapper) FoundRevocations() *FoundRevocationsProxy {
 
 // EvidenceRecordType gets the evidence record format type. Port of getEvidenceRecordType().
 func (w *EvidenceRecordWrapper) EvidenceRecordType() enumerations.EvidenceRecordTypeEnum {
-	return w.evidenceRecord.Type
+	if w.evidenceRecord.Type != nil {
+		return enumerations.EvidenceRecordTypeEnum(*w.evidenceRecord.Type)
+	}
+	return ""
 }
 
 // Origin gets the origin of the evidence record. Port of getOrigin().
 func (w *EvidenceRecordWrapper) Origin() enumerations.EvidenceRecordOrigin {
-	return w.evidenceRecord.Origin
+	if w.evidenceRecord.Origin != nil {
+		return enumerations.EvidenceRecordOrigin(*w.evidenceRecord.Origin)
+	}
+	return ""
 }
 
 // IsEmbedded gets whether the evidence record has been embedded into a signature (supported
@@ -120,7 +132,10 @@ func (w *EvidenceRecordWrapper) Parent() *SignatureWrapper {
 // signature. NOTE: applicable only for attached evidence records in CAdES. Port of
 // getIncorporationType().
 func (w *EvidenceRecordWrapper) IncorporationType() enumerations.EvidenceRecordIncorporationType {
-	return w.evidenceRecord.IncorporationType
+	if w.evidenceRecord.IncorporationType != nil {
+		return enumerations.EvidenceRecordIncorporationType(*w.evidenceRecord.IncorporationType)
+	}
+	return ""
 }
 
 // IsStructuralValidationValid gets if a structural validation of the evidence record is valid.
@@ -134,7 +149,7 @@ func (w *EvidenceRecordWrapper) IsStructuralValidationValid() bool {
 func (w *EvidenceRecordWrapper) StructuralValidationMessages() []string {
 	structuralValidation := w.evidenceRecord.StructuralValidation
 	if structuralValidation != nil {
-		return structuralValidation.Messages
+		return structuralValidation.Message
 	}
 	return nil
 }
@@ -142,7 +157,7 @@ func (w *EvidenceRecordWrapper) StructuralValidationMessages() []string {
 // CoveredObjects returns a list of objects covered by the evidence record. Port of
 // getCoveredObjects().
 func (w *EvidenceRecordWrapper) CoveredObjects() []*jaxb.XmlTimestampedObject {
-	return w.evidenceRecord.TimestampedObjects
+	return w.evidenceRecord.TimestampedObjects.All()
 }
 
 // CoveredSignatures returns a list of SignatureWrapper covered by the current evidence
@@ -270,11 +285,12 @@ func (w *EvidenceRecordWrapper) CoveredOrphanRevocations() []*OrphanRevocationTo
 	return orphanRevocations
 }
 
-func (w *EvidenceRecordWrapper) getCoveredObjectsByCategory(category enumerations.TimestampedObjectType) []jaxb.XmlAbstractToken {
-	var coveredObjectIds []jaxb.XmlAbstractToken
+func (w *EvidenceRecordWrapper) getCoveredObjectsByCategory(category enumerations.TimestampedObjectType) []jaxb.XmlToken {
+	var coveredObjectIds []jaxb.XmlToken
 	for _, coveredObject := range w.CoveredObjects() {
-		if category == coveredObject.Category {
-			coveredObjectIds = append(coveredObjectIds, coveredObject.Token)
+		if coveredObject.Category != nil && category == enumerations.TimestampedObjectType(*coveredObject.Category) &&
+			coveredObject.Token != nil {
+			coveredObjectIds = append(coveredObjectIds, coveredObject.Token.Token)
 		}
 	}
 	return coveredObjectIds
@@ -283,12 +299,15 @@ func (w *EvidenceRecordWrapper) getCoveredObjectsByCategory(category enumeration
 // EvidenceRecordScopes returns Evidence record's Signature Scopes. Port of
 // getEvidenceRecordScopes().
 func (w *EvidenceRecordWrapper) EvidenceRecordScopes() []*jaxb.XmlSignatureScope {
-	return w.evidenceRecord.EvidenceRecordScopes
+	return w.evidenceRecord.EvidenceRecordScopes.All()
 }
 
 // Binaries returns binaries of the evidence record. Port of getBinaries().
 func (w *EvidenceRecordWrapper) Binaries() []byte {
-	return w.evidenceRecord.Base64Encoded
+	if w.evidenceRecord.Base64Encoded == nil {
+		return nil
+	}
+	return []byte(*w.evidenceRecord.Base64Encoded)
 }
 
 // DigestAlgoAndValue returns digest algorithm and value of the timestamp token binaries,

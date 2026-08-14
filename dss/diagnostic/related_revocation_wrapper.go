@@ -27,15 +27,23 @@ func NewRelatedRevocationWrapper(relatedRevocation *jaxb.XmlRelatedRevocation) *
 
 // Origins returns a list of revocation token origins. Port of getOrigins().
 func (w *RelatedRevocationWrapper) Origins() []enumerations.RevocationOrigin {
-	return w.relatedRevocation.Origins
+	values := w.relatedRevocation.Origin
+	if values == nil {
+		return nil
+	}
+	result := make([]enumerations.RevocationOrigin, len(values))
+	for i, v := range values {
+		result[i] = enumerations.RevocationOrigin(v)
+	}
+	return result
 }
 
 // References returns a list of revocation token references from the signature. Port of
 // getReferences().
 func (w *RelatedRevocationWrapper) References() []*RevocationRefWrapper {
 	var references []*RevocationRefWrapper
-	for _, revocationRef := range w.relatedRevocation.RevocationRefs {
-		references = append(references, NewRevocationRefWrapper(revocationRef, w.relatedRevocation.Revocation.Id))
+	for _, revocationRef := range w.relatedRevocation.RevocationRef {
+		references = append(references, NewRevocationRefWrapper(revocationRef, w.Id()))
 	}
 	return references
 }

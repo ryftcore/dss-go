@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>pdf-removed-pages.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-96143198E4B756FB3951FF108C554DE52549D75A6A220808FB1402CDF594577E">
+            <SignatureFilename>pdf-removed-pages.pdf</SignatureFilename>
+            <ClaimedSigningTime>2018-07-10T11:18:33Z</ClaimedSigningTime>
+            <SignatureFormat>PAdES-BASELINE-T</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>KKLCI71tpsYiOrfeArI6v5nwDAfh/Nq8VbW/S5jPPX0=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-82F70DA3F0E7E778E54CC356314EBC613CC5CA1D907832D74C399838095D9A19"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-82F70DA3F0E7E778E54CC356314EBC613CC5CA1D907832D74C399838095D9A19"/>
+                <ChainItem Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+                <ChainItem Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=JCC Test CA for e-Signatures, OID.2.5.4.97=VATCY-10029914L, OU=JCC Trust Services, O=JCC Payment Systems Ltd, C=CY</IssuerName>
+                    <SerialNumber>33664428570000281826385154146009129250</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="Signature1"/>
+                <PDFSignatureDictionary consistent="true">
+                    <SignerName>Andreas Savva</SignerName>
+                    <Filter>Adobe.PPKMS</Filter>
+                    <SubFilter>ETSI.CAdES.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 666051 688469 5676</SignatureByteRange>
+                </PDFSignatureDictionary>
+                <ModificationDetection>
+                    <VisualDifference Page="1"/>
+                    <PageDifference Page="3"/>
+                    <PageDifference Page="2"/>
+                    <ObjectModifications>
+                        <SignatureOrFormFill action="MODIFICATION">/Catalog /AcroForm 257 0 R /DA</SignatureOrFormFill>
+                        <SignatureOrFormFill action="CREATION">/Catalog /AcroForm 257 0 R /DR 267 0 R</SignatureOrFormFill>
+                        <Undefined action="MODIFICATION">/Catalog /AcroForm 257 0 R /Fields 258 0 R /P 6 0 R /Parent 2 0 R /Count</Undefined>
+                        <Undefined action="DELETION" type="Page">/Catalog /AcroForm 257 0 R /Fields 258 0 R /P 6 0 R /Parent 2 0 R /Kids 5 0 R</Undefined>
+                        <Undefined action="DELETION" type="Page">/Catalog /AcroForm 257 0 R /Fields 258 0 R /P 6 0 R /Parent 2 0 R /Kids 7 0 R</Undefined>
+                        <Undefined action="MODIFICATION">/Catalog /Pages 2 0 R /Count</Undefined>
+                    </ObjectModifications>
+                </ModificationDetection>
+            </PDFRevision>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-82F70DA3F0E7E778E54CC356314EBC613CC5CA1D907832D74C399838095D9A19">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>gvcNo/Dn53jlTMNWMU68YTzFyh2QeDLXTDmYOAldmhk=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-BD32105F620ADFF95355D5ECC27BC8BCDD1298BBE30D8DDE2BDEFA0749B6E4FE">
+                    <Type>OCSP</Type>
+                    <Origin>ADBE_REVOCATION_INFO_ARCHIVAL</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <FoundTimestamps>
+                <FoundTimestamp Timestamp="T-90F958A7FF529940963B6417A1CCFC0E971169BFA7CF8FE551E40AA376A7CBF0"/>
+            </FoundTimestamps>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-B3443FF16C1B61B4074092062E247F180D1A3693B832E2FA76C5F886C3638822">
+                    <Scope>PARTIAL</Scope>
+                    <Name>Partial PDF</Name>
+                    <Description>The document ByteRange : [0, 666051, 688469, 5676]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>m0iM+LHjKpW7N/s0Kk4kECLZu0ozHkwwPbAnBD2/jH8=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>2ZUp4+XJjEbXOEVE7HLpAfPnVrpcrogT3mCejsnS3Bs=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>Q8C1Ga1U4KfUbFw6kCJmS73PwGWkp2A9JpZJqWj6Ku/t7I5sTEoko9/EaFPaLywNkdhXxBBzEF83w4/pxocdiJZagm6Bf0E3OlebhVfZom7qoSXUJieceQrHgq1xxRj9+5EPl0CFEOeJh/KWYBq0yKyUDqkbQ2je/wdk+HTbCy9Qwc/a8HKMoUDg0AJhOj8iF1hemNVPgGrO8a27kjUic+IeFKYu/NjruJpuKF7uyqYe5vSedRRPZsTp5zDmu/+4UpYKmhDGMmqeIAraeytLloXGSxEYDCAakb4uvIleobzYcdOsRawIObi2rLVg0Cvm5gCUWauvVG9tkP0h5+UEhA==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-24349CFB691D96D31194775A35D50292CE34A583453940B7C2884BDAFAC18DC9">
+            <SubjectDistinguishedName Format="CANONICAL">cn=jcc e- signatures test ocsp responder,o=jcc payment systems ltd,c=cy</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=JCC e- Signatures Test OCSP Responder,O=JCC Payment Systems Ltd,C=CY</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=jcc test ca for e-signatures,2.5.4.97=#130f56415443592d31303032393931344c,ou=jcc trust services,o=jcc payment systems ltd,c=cy</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=JCC Test CA for e-Signatures,2.5.4.97=#130f56415443592d31303032393931344c,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</IssuerDistinguishedName>
+            <SerialNumber>13862197196933934485416602945562123578</SerialNumber>
+            <CommonName>JCC e- Signatures Test OCSP Responder</CommonName>
+            <CountryName>CY</CountryName>
+            <OrganizationName>JCC Payment Systems Ltd</OrganizationName>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2028-03-15T23:59:59Z</NotAfter>
+            <NotBefore>2018-03-20T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-F74B5EC077FED807952191BF5F63037021915DF8F20FE8CC5F990935525740B3</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-71B30683109519DC0F65EF6AD365D6B209DB998B18535ECDF07041E4C8B7643A</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+                <ChainItem Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>U4yGefo5jSWR2MshAA+1KAOfxqA=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>nzzJLHN1P1VCnjPXfOg0T11a3Dw=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://pki.jcc.com.cy/cps">2.16.840.1.113733.1.7.23.2</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFbTCCA1WgAwIBAgIQCm3DFt2yrNWwh/Xe99CdOjANBgkqhkiG9w0BAQsFADCBjTELMAkGA1UEBhMCQ1kxIDAeBgNVBAoTF0pDQyBQYXltZW50IFN5c3RlbXMgTHRkMRswGQYDVQQLExJKQ0MgVHJ1c3QgU2VydmljZXMxGDAWBgNVBGETD1ZBVENZLTEwMDI5OTE0TDElMCMGA1UEAxMcSkNDIFRlc3QgQ0EgZm9yIGUtU2lnbmF0dXJlczAeFw0xODAzMjAwMDAwMDBaFw0yODAzMTUyMzU5NTlaMF8xCzAJBgNVBAYTAkNZMSAwHgYDVQQKExdKQ0MgUGF5bWVudCBTeXN0ZW1zIEx0ZDEuMCwGA1UEAxMlSkNDIGUtIFNpZ25hdHVyZXMgVGVzdCBPQ1NQIFJlc3BvbmRlcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALFCJvNQbuH/tispkQFMSicAv4tUNphVf89p71hwBMDZNmLEw8hN6V6J5wwu2a7jrh2o8w6glCpJc3rvEUr2/ftZnVWBlTnqCk+Q+ZagydTbKSDeM1zs9izJjDLF07Zm2efE5kq25FK4ukNUDZDXFKvwN1Ns/b2C4I/5dYDOO/iBNSxfr3AqPWPjMoKctFP8pNzMscDHAHdQCGBtLkkVZn/m2z58M8VsrkZJRUdo9o79Sp1m9eiWkDJveULQ9nzLkdodqCX1F+JDQV8kD4Y+HY3Cg5vI9KcHkah/LHXiTfxQuonFJZZgye0leLDEhAKex1+bBErQTV1qR4RLLfyqyDECAwEAAaOB9TCB8jBsBgNVHSAEZTBjMGEGC2CGSAGG+EUBBxcCMFIwJgYIKwYBBQUHAgEWGmh0dHBzOi8vcGtpLmpjYy5jb20uY3kvY3BzMCgGCCsGAQUFBwICMBwaGmh0dHBzOi8vcGtpLmpjYy5jb20uY3kvcnBhMBMGA1UdJQQMMAoGCCsGAQUFBwMJMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMA8GCSsGAQUFBzABBQQCBQAwHQYDVR0OBBYEFJ88ySxzdT9VQp4z13zoNE9dWtw8MB8GA1UdIwQYMBaAFFOMhnn6OY0lkdjLIQAPtSgDn8agMA0GCSqGSIb3DQEBCwUAA4ICAQBFJakt8ray639o3+2ijMpgDOh7ztSSkxMz2WaS+vEHOIchjTi86v+THPNU5ZBeUHgcFTrwjhf9xLYAxLjvViFMedJPUvk6+VxEpwGzaYpjYr6kaGB7/QDazA1nxUJbpLiVh9eeUmQAudB7WmhFSRbSTk1P13+op10OT37XssdKVXO8vBKmYcqvC1XF0QAqQKj+F6pxk6mEWhcQqvXf3UW/mh+ZmEkGEoRYO18WGjT4VyJihiXUNLB3ug3HegL68ZeLXBgTcJXhBxtxwfD8E0l1o2wTEuf3Yrscii/GIqX8ymirT6XIREafmeI/UmHzWCxheLFyhZaHf+pxwW5dXPrsATZxh+1In/CvNR9PPA3/ebXbsvN6V3fAZ+kj5ZiyC7l4iW7bUXFhj1uhZmMeQSzRmp4QG3LIhUGRP8nbIoKdBPzeIk+cOeL/PBeh2FrMxg1deBj4fMJgP6mZmOjAA2PKL0amTQHeZVTarAMgXNUUypSQXeQZcljdX+gGWgy9rFcEKHBjiEcT855yFbrfRvSGJfX0/NTpF8FdKiQVp68BOEW3lZpmUF082xPptWS/TLylQ8b3CCvDSNBtTVFMENhOPBhK6o4DDd2GzvMvpEIXlYpna8MPprewb2GGTPtS4QAD6nbbC0Gg7KXinDhi4NbZOJKIR3MjU2vg1GGt1MBLbQ==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272">
+            <SubjectDistinguishedName Format="CANONICAL">cn=jcc test root ca,ou=jcc trust services,o=jcc payment systems ltd,c=cy</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=JCC Test Root CA,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=jcc test root ca,ou=jcc trust services,o=jcc payment systems ltd,c=cy</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=JCC Test Root CA,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</IssuerDistinguishedName>
+            <SerialNumber>95827752330073029228430945790497042593</SerialNumber>
+            <CommonName>JCC Test Root CA</CommonName>
+            <CountryName>CY</CountryName>
+            <OrganizationName>JCC Payment Systems Ltd</OrganizationName>
+            <OrganizationalUnit>JCC Trust Services</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2028-03-15T23:59:59Z</NotAfter>
+            <NotBefore>2018-03-16T00:00:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-EABEC7B91440713A4E9C01276D4C407419DD4CC34B3CDC4E359C0EA1EE129D88</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-EABEC7B91440713A4E9C01276D4C407419DD4CC34B3CDC4E359C0EA1EE129D88</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>dabi4IGaYT1zmWylrRNO/cSaNSQ=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFvDCCA6SgAwIBAgIQSBfA9yyhoiVD4Cz1DjawoTANBgkqhkiG9w0BAQsFADBnMQswCQYDVQQGEwJDWTEgMB4GA1UEChMXSkNDIFBheW1lbnQgU3lzdGVtcyBMdGQxGzAZBgNVBAsTEkpDQyBUcnVzdCBTZXJ2aWNlczEZMBcGA1UEAxMQSkNDIFRlc3QgUm9vdCBDQTAeFw0xODAzMTYwMDAwMDBaFw0yODAzMTUyMzU5NTlaMGcxCzAJBgNVBAYTAkNZMSAwHgYDVQQKExdKQ0MgUGF5bWVudCBTeXN0ZW1zIEx0ZDEbMBkGA1UECxMSSkNDIFRydXN0IFNlcnZpY2VzMRkwFwYDVQQDExBKQ0MgVGVzdCBSb290IENBMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsU6JgROvoYTAUYbeINbtsyue/DA6amE+5haRE8VpvmRzGOzvLaICpJc+jfqt4hb490BAgYIxZGY7djXO4vNSVHadCBGe3vaDlGIFhJ0kIDfruH9a3pUCYcdj4i4nJeyFG7Opup0FEcSVCX897tqyMIfqELFSoPojMiFdgiGU8G7t5G16+jWLSbsZGshdxoIFIt/w+VYbL7NvUKQya4b5ccBkvIIhSQ5wvvzmb6t0sceFIAYlsFZKG4qXPMPoHsMvsHlPOWjdR/rTvoGd2oQ2roCYyEdmZ17zZ1xjfynTnENn45Y8puqppVzKHPe9VWOrZiWgHYYb2wv1DT93HvX/hITJiuPBY/UCkKcKS3Xch098baEVTPI+Aafe0C56KrKyi0XR93/4mHOPER0DsHDbeQUNIyqm/dcaR/chJbRUwO+UOQSDUX4uWspEF/1ae8n9bRs+EZ1N8Ouj6ophTWOaAUGFv7N0A8FOJ8poWrExHgPYRq5IR25dX55X74E4TQEh6jOihCGReqKhT01YMqM8q9K2rL2Obp7DQGaquT6r1ilGjWKjtufdnR1LENVIZ6twKl8QUH17OCrPROgWhyQpT87KIUNeCSySswKLN3le9rcSv8lG8d3fKWS+jHqp9kVg2KIlNwGj0ska11+1/89AhIaSQHrGVEaYJ1ro7VMNhgMCAwEAAaNkMGIwIAYDVR0lAQH/BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMB0GA1UdDgQWBBR1puLggZphPXOZbKWtE079xJo1JDAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIBBjANBgkqhkiG9w0BAQsFAAOCAgEAWO28LMUVIwOdhcziz7oNE831gwzAeXVp9zqht6EZlx5fphpDvniPoa7Oc18Z4UCcFJIJGGcPMspOsjlfD3oHGTKDIaTS1/mNBVIjCWoITtDxjNpbtqmeYsAASdVUSqA+lqalmsk1kUJyakJSXRRr9iAp6LDmIZC5G4p2yblTtXMy65wzVQYEls2P3VEywYd1gy+CUp0L3rFUjr4NxLX8EMc14Y/A+UXo+sVakxwZ0T00PwEpjv7sIXx+n87urUFbEr1EYIn8PR9/vTTMDgW9x2ukVgCbX4KwyeQ1rol8Mp9snJPQGcf012bHQqDZX4RRR0XQDkmTscW7ygaLN+5mpPEGNnkD/q0K8mrqRMgLwKHhFZ25k53ZQ/0s85UGMtXuL7XtJYGbMNrbXZ+aTok4bT/ATk5Tu2/oF4vYkv4eBP0ncQVWrY88q710lAc7Of5U6WE8kZa3GCqZmvK/wthk0Zj9WUCIJ4u6SmKAUWPIKmpMksrAac7buKMbFez5YAmg1p03LypPYeWygjQaW2RG3AOCvZfuPmmsuFyvrvgndM8ki9MDndUyIB0sxZlI07IgZ9uJhkCJnc7ONsJ1iKOWWU1pj6tdOjt6Fz6xYLcirN+0mNjbuM162TFlxPHP1zw1mOxzbhxW99xfijpWHBoRappy2hsolnzm2KhKW/8EQZw=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-82F70DA3F0E7E778E54CC356314EBC613CC5CA1D907832D74C399838095D9A19">
+            <SubjectDistinguishedName Format="CANONICAL">cn=andreas savva,2.5.4.42=#0c07416e6472656173,2.5.4.4=#0c055361767661,2.5.4.5=#130741553030303037,c=cy</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Andreas Savva,2.5.4.42=#0c07416e6472656173,2.5.4.4=#0c055361767661,2.5.4.5=#130741553030303037,C=CY</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=jcc test ca for e-signatures,2.5.4.97=#130f56415443592d31303032393931344c,ou=jcc trust services,o=jcc payment systems ltd,c=cy</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=JCC Test CA for e-Signatures,2.5.4.97=#130f56415443592d31303032393931344c,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</IssuerDistinguishedName>
+            <SerialNumber>33664428570000281826385154146009129250</SerialNumber>
+            <SubjectSerialNumber>AU00007</SubjectSerialNumber>
+            <CommonName>Andreas Savva</CommonName>
+            <CountryName>CY</CountryName>
+            <GivenName>Andreas</GivenName>
+            <Surname>Savva</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2019-07-10T23:59:59Z</NotAfter>
+            <NotBefore>2018-07-10T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-1CA9338591E701CA17E2FAB262EEBD4C1AB370B2512EE141A3FD5B33C85A8092</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-71B30683109519DC0F65EF6AD365D6B209DB998B18535ECDF07041E4C8B7643A</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+                <ChainItem Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>U4yGefo5jSWR2MshAA+1KAOfxqA=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ivknEvF7YQDxgXZ7VJ+vvv+J+UU=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://pki.jcc.com.cy/repository">2.16.840.1.113733.1.7.23.2</certificatePolicy>
+                    <certificatePolicy Description="qcp-natural-qscd">0.4.0.194112.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>https://pki.jcc.com.cy/repository/certs/pilot/ca-esignature.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp-test.jcc.com.cy</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://pki-test.jcc.com.cy/crl/JCCPaymentSystemsNPeSignatureForTestPurposesOnly/LatestCRL.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://pki.jcc.com.cy/repository/</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-BD32105F620ADFF95355D5ECC27BC8BCDD1298BBE30D8DDE2BDEFA0749B6E4FE">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-83E954EFB377F8344916282EE7F50B8C9899BD3C585BAD4B481BD271DF77F3B7">
+            <SubjectDistinguishedName Format="CANONICAL">cn=icedts01201804,ou=tsa,o=infocert spa,c=it</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=ICEDTS01201804,OU=TSA,O=INFOCERT SPA,C=IT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=infocert qualified time stamping authority 2,2.5.4.5=#130b3037393435323131303036,ou=tsa,o=infocert spa,c=it</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=InfoCert Qualified Time Stamping Authority 2,2.5.4.5=#130b3037393435323131303036,OU=TSA,O=INFOCERT SPA,C=IT</IssuerDistinguishedName>
+            <SerialNumber>69</SerialNumber>
+            <CommonName>ICEDTS01201804</CommonName>
+            <CountryName>IT</CountryName>
+            <OrganizationName>INFOCERT SPA</OrganizationName>
+            <OrganizationalUnit>TSA</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2021-04-24T00:00:00Z</NotAfter>
+            <NotBefore>2018-04-24T08:59:29Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-54924EA35B8D1F0462D0022668E8AD9A28F502BC12175DEC1DB4C8D53AACF85F</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>rpKB5TBVbchKdHihcW0/OQL+WIc=</keyIdentifier>
+                    <authorityCertIssuerSerial>MIGKMIGEpIGBMH8xCzAJBgNVBAYTAklUMRUwEwYDVQQKDAxJTkZPQ0VSVCBTUEExDDAKBgNVBAsMA1RTQTEUMBIGA1UEBRMLMDc5NDUyMTEwMDYxNTAzBgNVBAMMLEluZm9DZXJ0IFF1YWxpZmllZCBUaW1lIFN0YW1waW5nIEF1dGhvcml0eSAyAgEB</authorityCertIssuerSerial>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>X/ImLaYxtnUiMwgAxadgE/ALzg4=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.firma.infocert.it/documentazione/manuali.php">1.3.76.36.1.1.40</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://ocsp.sc.infocert.it/</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.infocert.it/crls/qtss/CRL.crl</crlUrl>
+                    <crlUrl>ldap://ldap.infocert.it/cn%3DInfoCert%20Qualified%20Time%20Stamping%20Authority%202,ou%3DTSA,o%3DINFOCERT%20SPA,c%3DIT?certificateRevocationList</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="2.5.29.18" description="issuerAlternativeName" critical="false">
+                    <octets>BB4wHIEaZmlybWEuZGlnaXRhbGVAaW5mb2NlcnQuaXQ=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D">
+            <SubjectDistinguishedName Format="CANONICAL">cn=jcc test ca for e-signatures,2.5.4.97=#130f56415443592d31303032393931344c,ou=jcc trust services,o=jcc payment systems ltd,c=cy</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=JCC Test CA for e-Signatures,2.5.4.97=#130f56415443592d31303032393931344c,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=jcc test root ca,ou=jcc trust services,o=jcc payment systems ltd,c=cy</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=JCC Test Root CA,OU=JCC Trust Services,O=JCC Payment Systems Ltd,C=CY</IssuerDistinguishedName>
+            <SerialNumber>57998792124450931601442876844701555561</SerialNumber>
+            <CommonName>JCC Test CA for e-Signatures</CommonName>
+            <CountryName>CY</CountryName>
+            <OrganizationIdentifier>VATCY-10029914L</OrganizationIdentifier>
+            <OrganizationName>JCC Payment Systems Ltd</OrganizationName>
+            <OrganizationalUnit>JCC Trust Services</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2028-03-15T23:59:59Z</NotAfter>
+            <NotBefore>2018-03-16T00:00:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-71B30683109519DC0F65EF6AD365D6B209DB998B18535ECDF07041E4C8B7643A</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-EABEC7B91440713A4E9C01276D4C407419DD4CC34B3CDC4E359C0EA1EE129D88</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>dabi4IGaYT1zmWylrRNO/cSaNSQ=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>U4yGefo5jSWR2MshAA+1KAOfxqA=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://pki.jcc.com.cy/cps">2.16.840.1.113733.1.7.23.2</certificatePolicy>
+                    <certificatePolicy Description="qcp-natural-qscd">0.4.0.194112.1.2</certificatePolicy>
+                    <certificatePolicy Description="normalized-certificate-policy-sscd">0.4.0.2042.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>https://pki.jcc.com.cy/repository/en/certs/pilot/files/JCC-pilot-root.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl-test.adacom.com/ca/jcc-pilot-root.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-BD32105F620ADFF95355D5ECC27BC8BCDD1298BBE30D8DDE2BDEFA0749B6E4FE">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2018-07-10T11:18:50Z</ProductionDate>
+            <ThisUpdate>2018-07-10T11:18:50Z</ThisUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-24349CFB691D96D31194775A35D50292CE34A583453940B7C2884BDAFAC18DC9"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-24349CFB691D96D31194775A35D50292CE34A583453940B7C2884BDAFAC18DC9"/>
+                <ChainItem Certificate="C-A530EBCA33366D679D6AE9C52C432767ABE9815C86C882DBD2BEBF6152480B7D"/>
+                <ChainItem Certificate="C-41429494AC73A5D6D3C3E1843CAE99FE7BAF1E972BEEA67A079FAA35BBB18272"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-24349CFB691D96D31194775A35D50292CE34A583453940B7C2884BDAFAC18DC9">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <IssuerName>CN=JCC e- Signatures Test OCSP Responder, O=JCC Payment Systems Ltd, C=CY</IssuerName>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <Base64Encoded>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</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="SIGNATURE_TIMESTAMP" Id="T-90F958A7FF529940963B6417A1CCFC0E971169BFA7CF8FE551E40AA376A7CBF0">
+            <ProductionTime>2018-07-10T11:18:50Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>7ffpvTBYMEpOCEPx3l+Hudb8fNCcdN32HDzXO4W6FUM=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-83E954EFB377F8344916282EE7F50B8C9899BD3C585BAD4B481BD271DF77F3B7"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-83E954EFB377F8344916282EE7F50B8C9899BD3C585BAD4B481BD271DF77F3B7"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=InfoCert Qualified Time Stamping Authority 2, SERIALNUMBER=07945211006, OU=TSA, O=INFOCERT SPA, C=IT</IssuerName>
+                    <SerialNumber>69</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <TSAGeneralName contentMatch="true" orderMatch="true">CN=ICEDTS01201804,OU=TSA,O=INFOCERT SPA,C=IT</TSAGeneralName>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-83E954EFB377F8344916282EE7F50B8C9899BD3C585BAD4B481BD271DF77F3B7">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIGKMIGEpIGBMH8xCzAJBgNVBAYTAklUMRUwEwYDVQQKDAxJTkZPQ0VSVCBTUEExDDAKBgNVBAsMA1RTQTEUMBIGA1UEBRMLMDc5NDUyMTEwMDYxNTAzBgNVBAMMLEluZm9DZXJ0IFF1YWxpZmllZCBUaW1lIFN0YW1waW5nIEF1dGhvcml0eSAyAgFF</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>g+lU77N3+DRJFigu5/ULjJiZvTxYW61LSBvScd9387c=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-B3443FF16C1B61B4074092062E247F180D1A3693B832E2FA76C5F886C3638822" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-96143198E4B756FB3951FF108C554DE52549D75A6A220808FB1402CDF594577E" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-82F70DA3F0E7E778E54CC356314EBC613CC5CA1D907832D74C399838095D9A19" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-BD32105F620ADFF95355D5ECC27BC8BCDD1298BBE30D8DDE2BDEFA0749B6E4FE" Category="REVOCATION"/>
+                <TimestampedObject Token="C-24349CFB691D96D31194775A35D50292CE34A583453940B7C2884BDAFAC18DC9" Category="CERTIFICATE"/>
+            </TimestampedObjects>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-B3443FF16C1B61B4074092062E247F180D1A3693B832E2FA76C5F886C3638822">
+            <ReferencedName>Partial PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>m9j6QhaA0feT6uOj4B4guEF7ntQMNXRQaY+edb8sByo=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

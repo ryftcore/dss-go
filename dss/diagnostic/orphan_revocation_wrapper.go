@@ -26,14 +26,22 @@ func NewOrphanRevocationWrapper(orphanRevocation *jaxb.XmlOrphanRevocation) *Orp
 
 // Origins returns a list of orphan revocation origins. Port of getOrigins().
 func (w *OrphanRevocationWrapper) Origins() []enumerations.RevocationOrigin {
-	return w.orphanRevocation.Origins
+	values := w.orphanRevocation.Origin
+	if values == nil {
+		return nil
+	}
+	result := make([]enumerations.RevocationOrigin, len(values))
+	for i, v := range values {
+		result[i] = enumerations.RevocationOrigin(v)
+	}
+	return result
 }
 
 // References returns a list of orphan revocation references. Port of getReferences().
 func (w *OrphanRevocationWrapper) References() []*RevocationRefWrapper {
 	var revocationRefWrappers []*RevocationRefWrapper
-	for _, revocationRef := range w.orphanRevocation.RevocationRefs {
-		revocationRefWrappers = append(revocationRefWrappers, NewRevocationRefWrapper(revocationRef, w.orphanRevocation.Token.Id))
+	for _, revocationRef := range w.orphanRevocation.RevocationRef {
+		revocationRefWrappers = append(revocationRefWrappers, NewRevocationRefWrapper(revocationRef, w.Id()))
 	}
 	return revocationRefWrappers
 }

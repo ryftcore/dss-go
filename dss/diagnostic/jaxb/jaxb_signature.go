@@ -6,8 +6,6 @@
 
 package jaxb
 
-import ()
-
 // XmlCOSESignatureType is the Go form of the generated JAXB class XmlCOSESignatureType
 // (complexType COSESignatureType).
 type XmlCOSESignatureType struct {
@@ -104,9 +102,9 @@ type XmlSignerRole struct {
 // XmlUserNotice is the Go form of the generated JAXB class XmlUserNotice
 // (complexType UserNotice).
 type XmlUserNotice struct {
-	Organization  *string        `xml:"Organization,omitempty"`
-	NoticeNumbers BigIntegerList `xml:"NoticeNumbers"`
-	ExplicitText  *string        `xml:"ExplicitText,omitempty"`
+	Organization  *string         `xml:"Organization,omitempty"`
+	NoticeNumbers *BigIntegerList `xml:"NoticeNumbers"`
+	ExplicitText  *string         `xml:"ExplicitText,omitempty"`
 }
 
 // XmlPolicyDigestAlgoAndValue is the Go form of the generated JAXB class XmlPolicyDigestAlgoAndValue

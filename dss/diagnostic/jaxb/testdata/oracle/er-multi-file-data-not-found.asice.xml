@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>er-multi-file-data-not-found.asice</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <ContainerInfo>
+        <ContainerType>ASiC-E</ContainerType>
+        <ZipComment>mimetype=application/vnd.etsi.asic-e+zip</ZipComment>
+        <MimeTypeFilePresent>true</MimeTypeFilePresent>
+        <MimeTypeContent>application/vnd.etsi.asic-e+zip</MimeTypeContent>
+        <ManifestFiles>
+            <ManifestFile>
+                <Filename>META-INF/ASiCEvidenceRecordManifest001.xml</Filename>
+                <SignatureFilename>META-INF/evidencerecord001.xml</SignatureFilename>
+                <Entries>
+                    <Entry>test.txt</Entry>
+                    <Entry>test.zip</Entry>
+                </Entries>
+            </ManifestFile>
+        </ManifestFiles>
+        <ContentFiles>
+            <ContentFile>test.txt</ContentFile>
+        </ContentFiles>
+    </ContainerInfo>
+    <EvidenceRecords>
+        <EvidenceRecord Id="ER-0A040BCE2C9613D0F7366DA2AD64F0A4D4D4C5B90E34665AF55F9EFC52DEC659">
+            <DocumentName>META-INF/evidencerecord001.xml</DocumentName>
+            <Type>XML Evidence Record</Type>
+            <Origin>CONTAINER</Origin>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="EVIDENCE_RECORD_ARCHIVE_OBJECT" uri="test.txt" documentName="test.txt">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="EVIDENCE_RECORD_ARCHIVE_OBJECT" uri="test.zip">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>fCKxuspIkjpYLn3z0/aJmxWtzb30gL6HpzADYXH6mGA=</DigestValue>
+                    <DataFound>false</DataFound>
+                    <DataIntact>false</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <EvidenceRecordTimestamps>
+                <FoundTimestamp Timestamp="T-4098C661AC79181C944B2D05FDA69AF8BA646FABC0988A208408CA49FA976E49"/>
+            </EvidenceRecordTimestamps>
+            <FoundCertificates/>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-927CEDCF891A79023C15F0F858DC9773B65C9650E8AD83EF8192F8A8E345440F" Category="SIGNED_DATA"/>
+            </TimestampedObjects>
+            <EvidenceRecordScopes>
+                <SignatureScope SignerData="D-927CEDCF891A79023C15F0F858DC9773B65C9650E8AD83EF8192F8A8E345440F">
+                    <Scope>FULL</Scope>
+                    <Name>test.txt</Name>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </EvidenceRecordScopes>
+            <Base64Encoded>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48ZXJzOkV2aWRlbmNlUmVjb3JkIHhtbG5zOmVycz0idXJuOmlldGY6cGFyYW1zOnhtbDpuczplcnMiIFZlcnNpb249IjEuMCI+CiAgICA8ZXJzOkFyY2hpdmVUaW1lU3RhbXBTZXF1ZW5jZT4KICAgICAgPGVyczpBcmNoaXZlVGltZVN0YW1wQ2hhaW4gT3JkZXI9IjEiPgogICAgICAgIDxlcnM6RGlnZXN0TWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8wNC94bWxlbmMjc2hhMjU2Ii8+CiAgICAgICAgPGVyczpDYW5vbmljYWxpemF0aW9uTWV0aG9kIEFsZ29yaXRobT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS8xMC94bWwtZXhjLWMxNG4jIi8+CiAgICAgICAgPGVyczpBcmNoaXZlVGltZVN0YW1wIE9yZGVyPSIxIj4KICAgICAgICAgIDxlcnM6SGFzaFRyZWU+CiAgICAgICAgICAgIDxlcnM6U2VxdWVuY2UgT3JkZXI9IjEiPgogICAgICAgICAgICAgIDwhLS1kNzNhNGRmMC1jMWRiLTQwYjEtYmVmYy1hZTZjNzcxMjU4ZGMgKGxldmVsOi0xKS0tPgogICAgICAgICAgICAgIDxlcnM6RGlnZXN0VmFsdWU+ZkNLeHVzcElranBZTG4zejAvYUpteFd0emIzMGdMNkhwekFEWVhINm1HQT08L2VyczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgICA8IS0tMGE2Nzc5NzMtNTNhZC00YjRhLTkwMzMtNmZmMDA3YjJlMDAwIChsZXZlbDotMSktLT4KICAgICAgICAgICAgICA8ZXJzOkRpZ2VzdFZhbHVlPm40YlFnWWhNZldXYUwrcWd4VnJRRmFPL1R4c3JDNElzMFYxc0ZiRHdDZ2c9PC9lcnM6RGlnZXN0VmFsdWU+CiAgICAgICAgICAgIDwvZXJzOlNlcXVlbmNlPgogICAgICAgICAgICA8ZXJzOlNlcXVlbmNlIE9yZGVyPSIyIj4KICAgICAgICAgICAgICA8IS0tZGFkMjcxODYtMGExYy00MzYyLWFiYTEtYjFjMDJjNzMyYmE3IChsZXZlbDowKS0tPgogICAgICAgICAgICAgIDxlcnM6RGlnZXN0VmFsdWU+OGdyR0hSQWZhK1hpQzNrNTJBNUZodlBpdkt3ank2YmVKd2tqQjdQS2dJMD08L2VyczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgPC9lcnM6U2VxdWVuY2U+CiAgICAgICAgICAgIDxlcnM6U2VxdWVuY2UgT3JkZXI9IjMiPgogICAgICAgICAgICAgIDwhLS1kYjMxZWFiZC1kODI0LTRjZDMtOWJiMi1kMTQ5YTdiYzY4NjMgKGxldmVsOjEpLS0+CiAgICAgICAgICAgICAgPGVyczpEaWdlc3RWYWx1ZT5vRlVENFRIRXNRbzdFNm9MNnEzaE9nM0tIVE9XQS9iV0JNWUpGWEVEZjJzPTwvZXJzOkRpZ2VzdFZhbHVlPgogICAgICAgICAgICA8L2VyczpTZXF1ZW5jZT4KICAgICAgICAgICAgPGVyczpTZXF1ZW5jZSBPcmRlcj0iNCI+CiAgICAgICAgICAgICAgPCEtLTY3N2NhMTA1LWQ1ZGItNDljZi1iNDEwLTYzZTExNmIzNGFkNiAobGV2ZWw6MiktLT4KICAgICAgICAgICAgICA8ZXJzOkRpZ2VzdFZhbHVlPmwzQ1d5WUFBakpUS2d2L3JvMFZjbmhJbmgwbEI2T3dEcEsxMjBKUUYwT2c9PC9lcnM6RGlnZXN0VmFsdWU+CiAgICAgICAgICAgIDwvZXJzOlNlcXVlbmNlPgogICAgICAgICAgICA8ZXJzOlNlcXVlbmNlIE9yZGVyPSI1Ij4KICAgICAgICAgICAgICA8IS0tZTVhODQ4YTctNjQ5MC00N2Y4LWJlNzktODU5M2FjZTc4N2UxIChsZXZlbDozKS0tPgogICAgICAgICAgICAgIDxlcnM6RGlnZXN0VmFsdWU+RUZiT0pwZE9sa3p1UnZrbUV1MGF3UmdVcVZpN1JMRXptRmJZM2piY2pDbz08L2VyczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgPC9lcnM6U2VxdWVuY2U+CiAgICAgICAgICAgIDxlcnM6U2VxdWVuY2UgT3JkZXI9IjYiPgogICAgICAgICAgICAgIDwhLS1mZjFjZmY5ZS02NmZhLTRlYjQtYTExZS01ODg1YWE4ZDIwMGQgKGxldmVsOjQpLS0+CiAgICAgICAgICAgICAgPGVyczpEaWdlc3RWYWx1ZT5jOERrQ2RtdE1zQU9ac2pFQ0hqYytBM3pPZHlHcVY5TkVFR2FXL3ArTHljPTwvZXJzOkRpZ2VzdFZhbHVlPgogICAgICAgICAgICA8L2VyczpTZXF1ZW5jZT4KICAgICAgICAgICAgPGVyczpTZXF1ZW5jZSBPcmRlcj0iNyI+CiAgICAgICAgICAgICAgPCEtLTYzZWM3MTQ3LWMyMmUtNGQ3OC05MWNmLTVlMTZmMzFkZGJlNyAobGV2ZWw6MyktLT4KICAgICAgICAgICAgICA8ZXJzOkRpZ2VzdFZhbHVlPjFRamJjZ0NRTmk0YVpON3dhcFUyU0R0TjRqMkxxQnFzNDhSU1ZGTWdoaG89PC9lcnM6RGlnZXN0VmFsdWU+CiAgICAgICAgICAgIDwvZXJzOlNlcXVlbmNlPgogICAgICAgICAgICA8ZXJzOlNlcXVlbmNlIE9yZGVyPSI4Ij4KICAgICAgICAgICAgICA8IS0tMjUwODY5ZTctMDQwYy00N2QzLWI3OGItZDI5NTE0ZDMwMjJhIChsZXZlbDo2KS0tPgogICAgICAgICAgICAgIDxlcnM6RGlnZXN0VmFsdWU+R2wzMzZZc2tnTmV4cE5YNFBLTjljZWhVcnAzT3VhSEFkbWZJdjlFVlRpOD08L2VyczpEaWdlc3RWYWx1ZT4KICAgICAgICAgICAgPC9lcnM6U2VxdWVuY2U+CiAgICAgICAgICA8L2VyczpIYXNoVHJlZT4KICAgICAgICAgIDxlcnM6VGltZVN0YW1wPgogICAgICAgICAgICA8ZXJzOlRpbWVTdGFtcFRva2VuIFR5cGU9IlJGQzMxNjEiPk1JQUdDU3FHU0liM0RRRUhBcUNBTUlBQ0FRTXhEVEFMQmdsZ2hrZ0JaUU1FQWdFd2VRWUxLb1pJaHZjTkFRa1FBUVNnYWdSb01HWUNBUUVHQXlvREJEQXZNQXNHQ1dDR1NBRmxBd1FDQVFRZ0hPaEFlTEhhaU5WcnM4SlduL01zUDZMR29PekRsSEFkcGRCTVZSQ0VZM3dDRUFxVnpmcERXRDlJR1h4RjdWTWc0TWtZRHpJd01qTXdPVEExTVRFMU1qRXpXZ0lJMmtIZzBLZmdJQjJnZ0RDQ0EvTXdnZ0xib0FNQ0FRSUNBZ0gwTUEwR0NTcUdTSWIzRFFFQkN3VUFNRTB4RURBT0JnTlZCQU1NQjNKdmIzUXRZMkV4R1RBWEJnTlZCQW9NRUU1dmQybHVZU0JUYjJ4MWRHbHZibk14RVRBUEJnTlZCQXNNQ0ZCTFNTMVVSVk5VTVFzd0NRWURWUVFHRXdKTVZUQWVGdzB5TWpBeU1UTXhOakF6TkROYUZ3MHlNekV5TVRNeE5qQXpORE5hTUU0eEVUQVBCZ05WQkFNTUNHZHZiMlF0ZEhOaE1Sa3dGd1lEVlFRS0RCQk9iM2RwYm1FZ1UyOXNkWFJwYjI1ek1SRXdEd1lEVlFRTERBaFFTMGt0VkVWVFZERUxNQWtHQTFVRUJoTUNURlV3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQ3R2anhWMC80MzVpd3kvOFdQdytsVjNDSHducUlmT2gxYVBzSHp4dnphM054NjYyUkhmcXBIV0hUVHZacm5CZjZRTTRuRmJ3UFpOOHNoZ3V1Z013aDRORmVtYUdGUTJsYUk4QzdIWUtTRDltTGgyRTJsY1VrVUx0T0VLY1U1cHQ3N1JaTWJudDdNOVVmZDJXc3JKR3FsRTVKb082c3htaWUvbzRCWGVZWEpHbmgxN242Y1dYdlprbm5oQkVNN21pVlhaMEFwa25JcmVPUy9LYWh5NzJMMmlzUnhaYUNpK3VicVVkZUZ1MVc2N3BTVHI3aFh0UklQRlgwcDNJc1MrRTNneFd2OTVWWEFHTXVMU0FOQmgyYWtybkowQWkrTEV6N2RhV3BtdDM0SEdkdnU0aktoK3FldngwbDhmdG04ZzFqUUNpWThGN0JQTU9hdWpzdnlYa0pOQWdNQkFBR2pnZHN3Z2Rnd0RnWURWUjBQQVFIL0JBUURBZ2VBTUJZR0ExVWRKUUVCL3dRTU1Bb0dDQ3NHQVFVRkJ3TUlNRUVHQTFVZEh3UTZNRGd3TnFBMG9ES0dNR2gwZEhBNkx5OWtjM011Ym05M2FXNWhMbXgxTDNCcmFTMW1ZV04wYjNKNUwyTnliQzl5YjI5MExXTmhMbU55YkRCTUJnZ3JCZ0VGQlFjQkFRUkFNRDR3UEFZSUt3WUJCUVVITUFLR01HaDBkSEE2THk5a2MzTXVibTkzYVc1aExteDFMM0JyYVMxbVlXTjBiM0o1TDJOeWRDOXliMjkwTFdOaExtTnlkREFkQmdOVkhRNEVGZ1FVbzJoYTg2cWFjWUlUdzYrUlpBdEJEdjl5cjRZd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFFaVEvOXZ2eldIVHJwYVZDWTlzTTYzSC9INzRWeU1xem9paFFSMkVYVFh4M3U1aFRYQTlOUlYya09BNlhQYithT3lIM2tNbVdoclZNck85ZGV1bU12QW53NWNJYjJNUmRaWTFHRnNDUnYyNmQ5QjlBS0lBZzdFSG9pTmVsUjVsd0gwekN2UlQ5S0Nncjh5c3BwUEJvR2MyZU1WYzR6NXh2ZFBuM3NvQzVoeGVaOERadzF1eFV6dW95L3ZDaGFYM2hNUmEvTGlSNWJBeGE3TkVsYi82eXRNbURTTHN4SmVyNktlNVR3R3kwT0xqQTBMME9xaHJYQWVGYjNFczRIeDFxM1A1R2QxcGdEUFpybTdYcEo1L05WanlqeDZQRzB5c0h6emRFUHg2dlJDbVZ0Z3RvVkdrUzZHSGx1UlZ6ZFg1RlVUOFVNdVA2TXl0SjlPL1dibEoyREV3Z2dOWE1JSUNQNkFEQWdFQ0FnRUJNQTBHQ1NxR1NJYjNEUUVCRFFVQU1FMHhFREFPQmdOVkJBTU1CM0p2YjNRdFkyRXhHVEFYQmdOVkJBb01FRTV2ZDJsdVlTQlRiMngxZEdsdmJuTXhFVEFQQmdOVkJBc01DRkJMU1MxVVJWTlVNUXN3Q1FZRFZRUUdFd0pNVlRBZUZ3MHlNakF4TVRNeE5qQXpNelZhRncweU5EQXhNVE14TmpBek16VmFNRTB4RURBT0JnTlZCQU1NQjNKdmIzUXRZMkV4R1RBWEJnTlZCQW9NRUU1dmQybHVZU0JUYjJ4MWRHbHZibk14RVRBUEJnTlZCQXNNQ0ZCTFNTMVVSVk5VTVFzd0NRWURWUVFHRXdKTVZUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUpFYzRSZWQ1ZVl5ejZTaXg4WHByR1RWK2lrNXFxa2JRSWxYMmdOalR1RThmU1ZOUXBmUmFsNGU5K1VYOWZSeXRSWmIzSEpzRFEwNG9lbVpHbnJ5L25sSGlkRXNIbDhkUzc5czUxMkw4ditMcEZsaXZKSVQvanN0OWNCUVN5OVJ0N0JKUjNNbFQ2TW9wQTVOS1o2ZEpsQU1MZHJ0VHZaWTV3S1pPMjQySFZ6VzI3dnA5OVl6SGNJMmdNTkltUzV3NGpxK3FhTUIvU0RiSTV0RmMzL2k2YVR6QTZEelY2SXRYcFBXbk1KWTJTNk5yVHNHb2lMUzFCeC93LzFseHVxZWdpdXhkbHhwRm5IZ045UldwQU5ycFpCanlKYXFmYnlzS0ZFWGRjYmhkR3hibEoxNUpUNGM2RnRDWjl6Vm1mcGVuM2lzeUQ5MXp1ak15ai9uV2ZVNTJ0OENBd0VBQWFOQ01FQXdEZ1lEVlIwUEFRSC9CQVFEQWdFR01CMEdBMVVkRGdRV0JCUjZUVE9yQVc2akdJc25DTlU1Y09EcEVWTXBQakFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHQ1NxR1NJYjNEUUVCRFFVQUE0SUJBUUNGWHkvRm5PVXVaYllXYzdyclIyMURDVlZ1dWxsSWlzbGppcnhkOWc1NG5pV3RvblhGWGxlMUxyV1ZNdjQrOEVHVk5FSHlVRzQwQzBjK2VyNnJFYlRwOHA4aG9hUUp3NGZyWlpYOHNEMnBpZFNsYUFKWTdsemdOUXFYSnAvMG10Q1N3MVJoM2JjZkFtY2xORVB1MUo3WkVTazZzSFo5UWZWdnJHOVd3Sm56R3dLM2RJQ2VRYTY3eVhhaGkwRUdCK3YrOW5iNlR5OTJHUkFpRWpKL3Y5aVJnRXRlS1JVaTJOblRyaERTaktsZCt3NTNuSElLZGdPUUVxY3llUHBDQSt4ckpabjh3QURFZjY2bWFKQ1NaV0l4T2JZWnN1MUl2T3dCNzl4VDFpYjczNEtMbW1jSDZGNW40dWhucXk4RXBwaGE4ZHVYckl1K2xYZlZlZTRyOUE5WkFBQ2hnRENDQWQwd2djWUNBUUV3RFFZSktvWklodmNOQVFFTkJRQXdUVEVRTUE0R0ExVUVBd3dIY205dmRDMWpZVEVaTUJjR0ExVUVDZ3dRVG05M2FXNWhJRk52YkhWMGFXOXVjekVSTUE4R0ExVUVDd3dJVUV0SkxWUkZVMVF4Q3pBSkJnTlZCQVlUQWt4VkZ3MHlNekE1TURVd09EVXpNekJhRncweU5EQXpNRFV3T0RVek16QmFNRVV3SUFJQkJoY05Nakl4TWpFek1UWXdNek0yV2pBTU1Bb0dBMVVkRlFRRENnRUJNQ0VDQWdIM0Z3MHlNakV5TVRNeE5qQXpORE5hTUF3d0NnWURWUjBWQkFNS0FRRXdEUVlKS29aSWh2Y05BUUVOQlFBRGdnRUJBQUJGSFhhWDVWN2txelFFajVJblFCbmFDb1YxRTNmWUpTMEUzY1Q5WjM0SHVGdFI0aTJBVVY2V3FlL3M1V2RvNzRuVlNYQkg5R0VXanBHNURqTU5NYk5iMlRkMEZxTlEyd2Z2R3hrYzJCZG5oY0lLQmVXY0lCVzNLOEJ2TXlBdGthSkh4QlRxZTFDUitLZDVFQ056OHY1UDNXVE5rY1JreFl0cUQ2akNuZEhKM1lGQWRNcitCTlRKVVlkanQ3RjdncFdWRHVnNFF0NWxsOHBRQThnTnUxNFNqbTNNUmNUL1QvYVRvM0VSUFY4SGxXMXlnSllFVmswR0pOV3VDbzBkWFJ5WDJ5SGhZMy9WYTN1VHFTSXYzWXp0Z2JjZWMvL0dURG9EcGRFenJUU21QbjBZNTh3bGZuVUpGRUh5U0RIMjkxT1cyT29kWUZqa29sckJtTHRBQlNjQUFER0NBbEF3Z2dKTUFnRUJNRk13VFRFUU1BNEdBMVVFQXd3SGNtOXZkQzFqWVRFWk1CY0dBMVVFQ2d3UVRtOTNhVzVoSUZOdmJIVjBhVzl1Y3pFUk1BOEdBMVVFQ3d3SVVFdEpMVlJGVTFReEN6QUpCZ05WQkFZVEFreFZBZ0lCOURBTEJnbGdoa2dCWlFNRUFnR2dnZEV3R2dZSktvWklodmNOQVFrRE1RMEdDeXFHU0liM0RRRUpFQUVFTUJ3R0NTcUdTSWIzRFFFSkJURVBGdzB5TXpBNU1EVXhNVFV5TVROYU1Dc0dDU3FHU0liM0RRRUpOREVlTUJ3d0N3WUpZSVpJQVdVREJBSUJvUTBHQ1NxR1NJYjNEUUVCQ3dVQU1DOEdDU3FHU0liM0RRRUpCREVpQkNCVGp4ZjBzczRGU3lCaXVQQTVVdWlsK3kwWVQvQ3J3aXNnbjV2NmZGZGYrakEzQmdzcWhraUc5dzBCQ1JBQ0x6RW9NQ1l3SkRBaUJDQ3FBcm1mbkV0WEtSNDhGMFRrUmtkd2twUFEvaGU3VHUwb3laNlhQSDZFY3pBTkJna3Foa2lHOXcwQkFRc0ZBQVNDQVFCaGxQUFBNTVAyN0lrdnFScTNLZktvczlmK2c3K2xzNitiajVzWXdNYThOQkFZYUplU05CQzduQ09xalFnblZVU0o4c1A5OEplSDM0MWJjTWY5NC9HQ3g2a2trTmZpamI5YUQ4RDJCNTQ2enArQVpqc1lyZ3Fud3NRWVJrYjR1eFlKZ2p1ejJ1YWlrbE5sNUs3UkMyODZORlhtVHdmQ3NTa0dXNTZMemM5M0hPOUZBOTJEelFTbk9JWS85MDhPaG1zeU5MMVY2MnVsOHV6QVBMektNcHNVb1dJNVlhMnY0R1RPNC9RN3pTVEVoS2JUaUI5enB1Nzd6QWxxcUZiSGVNWk9USWZLS1JwUldpM1E2S1h6N3ZFTkdZQUk4MWlSWlgyVVhEbnBnZWJNdGlUMmFtT3oza1BVcW9VSDI5OTdlZXpaN3ZRaFQwOFZlMDQvUCtzR0lrZFNBQUFBQUFBQTwvZXJzOlRpbWVTdGFtcFRva2VuPgogICAgICAgICAgPC9lcnM6VGltZVN0YW1wPgogICAgICAgIDwvZXJzOkFyY2hpdmVUaW1lU3RhbXA+CiAgICAgIDwvZXJzOkFyY2hpdmVUaW1lU3RhbXBDaGFpbj4KICAgIDwvZXJzOkFyY2hpdmVUaW1lU3RhbXBTZXF1ZW5jZT4KICA8L2VyczpFdmlkZW5jZVJlY29yZD4=</Base64Encoded>
+        </EvidenceRecord>
+    </EvidenceRecords>
+    <UsedCertificates>
+        <Certificate Id="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</IssuerDistinguishedName>
+            <SerialNumber>1</SerialNumber>
+            <CommonName>root-ca</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2024-01-13T16:03:35Z</NotAfter>
+            <NotBefore>2022-01-13T16:03:35Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-2C676E4F05BEBF0E5B9537A18282BD8F8E22E092851123E1945D8D5CCEB821E0</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-2C676E4F05BEBF0E5B9537A18282BD8F8E22E092851123E1945D8D5CCEB821E0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ek0zqwFuoxiLJwjVOXDg6RFTKT4=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <Base64Encoded>MIIDVzCCAj+gAwIBAgIBATANBgkqhkiG9w0BAQ0FADBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwHhcNMjIwMTEzMTYwMzM1WhcNMjQwMTEzMTYwMzM1WjBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCRHOEXneXmMs+kosfF6axk1fopOaqpG0CJV9oDY07hPH0lTUKX0WpeHvflF/X0crUWW9xybA0NOKHpmRp68v55R4nRLB5fHUu/bOddi/L/i6RZYrySE/47LfXAUEsvUbewSUdzJU+jKKQOTSmenSZQDC3a7U72WOcCmTtuNh1c1tu76ffWMx3CNoDDSJkucOI6vqmjAf0g2yObRXN/4umk8wOg81eiLV6T1pzCWNkuja07BqIi0tQcf8P9ZcbqnoIrsXZcaRZx4DfUVqQDa6WQY8iWqn28rChRF3XG4XRsW5SdeSU+HOhbQmfc1Zn6Xp94rMg/dc7ozMo/51n1OdrfAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUek0zqwFuoxiLJwjVOXDg6RFTKT4wDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQ0FAAOCAQEAhV8vxZzlLmW2FnO660dtQwlVbrpZSIrJY4q8XfYOeJ4lraJ1xV5XtS61lTL+PvBBlTRB8lBuNAtHPnq+qxG06fKfIaGkCcOH62WV/LA9qYnUpWgCWO5c4DUKlyaf9JrQksNUYd23HwJnJTRD7tSe2REpOrB2fUH1b6xvVsCZ8xsCt3SAnkGuu8l2oYtBBgfr/vZ2+k8vdhkQIhIyf7/YkYBLXikVItjZ064Q0oypXfsOd5xyCnYDkBKnMnj6QgPsayWZ/MAAxH+upmiQkmViMTm2GbLtSLzsAe/cU9Ym+9+Ci5pnB+heZ+LoZ6svBKaYWvHbl6yLvpV31XnuK/QPWQ==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-AA02B99F9C4B57291E3C1744E44647709293D0FE17BB4EED28C99E973C7E8473">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=good-tsa</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=good-tsa</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</IssuerDistinguishedName>
+            <SerialNumber>500</SerialNumber>
+            <CommonName>good-tsa</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2023-12-13T16:03:43Z</NotAfter>
+            <NotBefore>2022-02-13T16:03:43Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-7ACDB2E86D9F38D1FD254089D166BE70CBCBEA802E3D4587D585BC2FC9FF4276</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-2C676E4F05BEBF0E5B9537A18282BD8F8E22E092851123E1945D8D5CCEB821E0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>o2ha86qacYITw6+RZAtBDv9yr4Y=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/root-ca.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/root-ca.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-0A958628BC8A91F22131F352929C2F64A479AC3A6DDB4990FDFB55869E2AAC66">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIID8zCCAtugAwIBAgICAfQwDQYJKoZIhvcNAQELBQAwTTEQMA4GA1UEAwwHcm9vdC1jYTEZMBcGA1UECgwQTm93aW5hIFNvbHV0aW9uczERMA8GA1UECwwIUEtJLVRFU1QxCzAJBgNVBAYTAkxVMB4XDTIyMDIxMzE2MDM0M1oXDTIzMTIxMzE2MDM0M1owTjERMA8GA1UEAwwIZ29vZC10c2ExGTAXBgNVBAoMEE5vd2luYSBTb2x1dGlvbnMxETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJMVTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK2+PFXT/jfmLDL/xY/D6VXcIfCeoh86HVo+wfPG/Nrc3HrrZEd+qkdYdNO9mucF/pAzicVvA9k3yyGC66AzCHg0V6ZoYVDaVojwLsdgpIP2YuHYTaVxSRQu04QpxTmm3vtFkxue3sz1R93ZayskaqUTkmg7qzGaJ7+jgFd5hckaeHXufpxZe9mSeeEEQzuaJVdnQCmScit45L8pqHLvYvaKxHFloKL65upR14W7VbrulJOvuFe1Eg8VfSncixL4TeDFa/3lVcAYy4tIA0GHZqSucnQCL4sTPt1pama3fgcZ2+7iMqH6p6/HSXx+2byDWNAKJjwXsE8w5q6Oy/JeQk0CAwEAAaOB2zCB2DAOBgNVHQ8BAf8EBAMCB4AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwgwQQYDVR0fBDowODA2oDSgMoYwaHR0cDovL2Rzcy5ub3dpbmEubHUvcGtpLWZhY3RvcnkvY3JsL3Jvb3QtY2EuY3JsMEwGCCsGAQUFBwEBBEAwPjA8BggrBgEFBQcwAoYwaHR0cDovL2Rzcy5ub3dpbmEubHUvcGtpLWZhY3RvcnkvY3J0L3Jvb3QtY2EuY3J0MB0GA1UdDgQWBBSjaFrzqppxghPDr5FkC0EO/3KvhjANBgkqhkiG9w0BAQsFAAOCAQEASJD/2+/NYdOulpUJj2wzrcf8fvhXIyrOiKFBHYRdNfHe7mFNcD01FXaQ4Dpc9v5o7IfeQyZaGtUys71166Yy8CfDlwhvYxF1ljUYWwJG/bp30H0AogCDsQeiI16VHmXAfTMK9FP0oKCvzKymk8GgZzZ4xVzjPnG90+feygLmHF5nwNnDW7FTO6jL+8KFpfeExFr8uJHlsDFrs0SVv/rK0yYNIuzEl6vop7lPAbLQ4uMDQvQ6qGtcB4VvcSzgfHWrc/kZ3WmAM9mubteknn81WPKPHo8bTKwfPN0Q/Hq9EKZW2C2hUaRLoYeW5FXN1fkVRPxQy4/ozK0n079ZuUnYMQ==</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-0A958628BC8A91F22131F352929C2F64A479AC3A6DDB4990FDFB55869E2AAC66">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2023-09-05T08:53:30Z</ProductionDate>
+            <ThisUpdate>2023-09-05T08:53:30Z</ThisUpdate>
+            <NextUpdate>2024-03-05T08:53:30Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813"/>
+            </CertificateChain>
+            <Base64Encoded>MIIB3TCBxgIBATANBgkqhkiG9w0BAQ0FADBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUXDTIzMDkwNTA4NTMzMFoXDTI0MDMwNTA4NTMzMFowRTAgAgEGFw0yMjEyMTMxNjAzMzZaMAwwCgYDVR0VBAMKAQEwIQICAfcXDTIyMTIxMzE2MDM0M1owDDAKBgNVHRUEAwoBATANBgkqhkiG9w0BAQ0FAAOCAQEAAEUddpflXuSrNASPkidAGdoKhXUTd9glLQTdxP1nfge4W1HiLYBRXpap7+zlZ2jvidVJcEf0YRaOkbkOMw0xs1vZN3QWo1DbB+8bGRzYF2eFwgoF5ZwgFbcrwG8zIC2RokfEFOp7UJH4p3kQI3Py/k/dZM2RxGTFi2oPqMKd0cndgUB0yv4E1MlRh2O3sXuClZUO6DhC3mWXylADyA27XhKObcxFxP9P9pOjcRE9XweVbXKAlgRWTQYk1a4KjR1dHJfbIeFjf9Vre5OpIi/djO2Btx5z/8ZMOgOl0TOtNKY+fRjnzCV+dQkUQfJIMfb3U5bY6h1gWOSiWsGYu0AFJw==</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="EVIDENCE_RECORD_TIMESTAMP" Id="T-4098C661AC79181C944B2D05FDA69AF8BA646FABC0988A208408CA49FA976E49">
+            <ArchiveTimestampType>XML_EVIDENCE_RECORD</ArchiveTimestampType>
+            <EvidenceRecordTimestampType>ARCHIVE_TIMESTAMP</EvidenceRecordTimestampType>
+            <ProductionTime>2023-09-05T11:52:13Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>HOhAeLHaiNVrs8JWn/MsP6LGoOzDlHAdpdBMVRCEY3w=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-AA02B99F9C4B57291E3C1744E44647709293D0FE17BB4EED28C99E973C7E8473"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-AA02B99F9C4B57291E3C1744E44647709293D0FE17BB4EED28C99E973C7E8473"/>
+                <ChainItem Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>C=LU, OU=PKI-TEST, O=Nowina Solutions, CN=root-ca</IssuerName>
+                    <SerialNumber>500</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-44653083CC8E3A7D8A58A03F352588DB3AEF835AD50940E6163E030682F09813">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-AA02B99F9C4B57291E3C1744E44647709293D0FE17BB4EED28C99E973C7E8473">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>qgK5n5xLVykePBdE5EZHcJKT0P4Xu07tKMmelzx+hHM=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-0A958628BC8A91F22131F352929C2F64A479AC3A6DDB4990FDFB55869E2AAC66">
+                    <Type>CRL</Type>
+                    <Origin>CMS_SIGNED_DATA</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <FoundEvidenceRecords/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-927CEDCF891A79023C15F0F858DC9773B65C9650E8AD83EF8192F8A8E345440F" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="ER-0A040BCE2C9613D0F7366DA2AD64F0A4D4D4C5B90E34665AF55F9EFC52DEC659" Category="EVIDENCE_RECORD"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-927CEDCF891A79023C15F0F858DC9773B65C9650E8AD83EF8192F8A8E345440F">
+                    <Scope>FULL</Scope>
+                    <Name>test.txt</Name>
+                    <Description>Full document</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-927CEDCF891A79023C15F0F858DC9773B65C9650E8AD83EF8192F8A8E345440F">
+            <ReferencedName>test.txt</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>n4bQgYhMfWWaL+qgxVrQFaO/TxsrC4Is0V1sFbDwCgg=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

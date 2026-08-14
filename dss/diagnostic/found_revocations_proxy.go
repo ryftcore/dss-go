@@ -33,7 +33,7 @@ func (p *FoundRevocationsProxy) getFoundRevocations() *jaxb.XmlFoundRevocations 
 // getRelatedRevocationData().
 func (p *FoundRevocationsProxy) RelatedRevocationData() []*RelatedRevocationWrapper {
 	var revocationWrappers []*RelatedRevocationWrapper
-	for _, relatedRevocation := range p.getFoundRevocations().RelatedRevocations {
+	for _, relatedRevocation := range p.getFoundRevocations().RelatedRevocation {
 		revocationWrappers = append(revocationWrappers, NewRelatedRevocationWrapper(relatedRevocation))
 	}
 	return revocationWrappers
@@ -43,7 +43,7 @@ func (p *FoundRevocationsProxy) RelatedRevocationData() []*RelatedRevocationWrap
 // getOrphanRevocationData().
 func (p *FoundRevocationsProxy) OrphanRevocationData() []*OrphanRevocationWrapper {
 	var orphanTokens []*OrphanRevocationWrapper
-	for _, orphanRevocation := range p.getFoundRevocations().OrphanRevocations {
+	for _, orphanRevocation := range p.getFoundRevocations().OrphanRevocation {
 		orphanTokens = append(orphanTokens, NewOrphanRevocationWrapper(orphanRevocation))
 	}
 	return orphanTokens

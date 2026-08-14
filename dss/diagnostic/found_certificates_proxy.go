@@ -33,7 +33,7 @@ func (p *FoundCertificatesProxy) getFoundCertificates() *jaxb.XmlFoundCertificat
 // getRelatedCertificates().
 func (p *FoundCertificatesProxy) RelatedCertificates() []*RelatedCertificateWrapper {
 	var certificateWrappers []*RelatedCertificateWrapper
-	for _, relatedCertificate := range p.getFoundCertificates().RelatedCertificates {
+	for _, relatedCertificate := range p.getFoundCertificates().RelatedCertificate {
 		certificateWrappers = append(certificateWrappers, NewRelatedCertificateWrapper(relatedCertificate))
 	}
 	return certificateWrappers
@@ -42,7 +42,7 @@ func (p *FoundCertificatesProxy) RelatedCertificates() []*RelatedCertificateWrap
 // OrphanCertificates returns a list of orphan certificates. Port of getOrphanCertificates().
 func (p *FoundCertificatesProxy) OrphanCertificates() []*OrphanCertificateWrapper {
 	var orphanTokens []*OrphanCertificateWrapper
-	for _, orphanCertificate := range p.getFoundCertificates().OrphanCertificates {
+	for _, orphanCertificate := range p.getFoundCertificates().OrphanCertificate {
 		orphanTokens = append(orphanTokens, NewOrphanCertificateWrapper(orphanCertificate))
 	}
 	return orphanTokens

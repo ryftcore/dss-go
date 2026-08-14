@@ -3,7 +3,6 @@ package diagnostic
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/utain/esig/dss/diagnostic/jaxb"
 )
@@ -63,17 +62,13 @@ func (o *OrphanTokenWrapperBase) String() string {
 	return fmt.Sprintf("OrphanTokenWrapper Class='%T', Id='%s'", overrides, overrides.Id())
 }
 
-// Equals reports whether other wraps an orphan token of the same concrete wrapper type and the
-// same Id. Port of equals(Object obj); Java's `!(obj instanceof OrphanTokenWrapper)` /
-// getId() comparison, with the concrete wrapper's dynamic type compared via reflection since Go
-// has no class hierarchy.
+// Equals reports whether other wraps an orphan token with the same Id. Port of equals(Object
+// obj): Java's `!(obj instanceof OrphanTokenWrapper)` check accepts any OrphanTokenWrapper
+// subtype (unlike AbstractTokenProxy.equals(), it does NOT additionally compare getClass()), so
+// this compares only by Id, faithfully - no reflect.TypeOf check here.
 func (o *OrphanTokenWrapperBase) Equals(other OrphanTokenWrapperOverrides) bool {
 	if other == nil {
 		return false
 	}
-	overrides := o.orphanTokenOverrides()
-	if reflect.TypeOf(overrides) != reflect.TypeOf(other) {
-		return false
-	}
-	return overrides.Id() == other.Id()
+	return o.orphanTokenOverrides().Id() == other.Id()
 }

@@ -3,7 +3,16 @@
 // eu.europa.esig.dss.jaxb.parsers.*Parser classes. Each adapter becomes a named
 // Go type over the corresponding enumerations constant so that encoding/xml can
 // marshal it through encoding.TextMarshaler with the exact lexical form the
-// parser prints, and reject any other lexical form on the way in.
+// parser prints, and reject any other lexical form on the way in. The exhaustive
+// table test in jaxb_adapters_test.go pins every constant against the lexical
+// form the Java adapter prints for it (testdata/adapters.tsv).
+//
+// Known deviation: COSESignatureType.COSE_SIGNATURE has a null label, so the
+// Java adapter prints null and JAXB leaves the property out of the document
+// entirely. encoding.TextMarshaler cannot express "no value", so
+// COSESignatureTypeValue marshals that constant as the empty string; a document
+// carrying it is written <COSESignatureType></COSESignatureType> where the
+// reference implementation writes <COSESignatureType/>.
 
 package jaxb
 

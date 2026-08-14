@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>PAdES-LTA.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-857FDC971C23DCD697817E2D5A42A0F77C3D9066BC9C3B22FE6B4DAE93164C7D">
+            <SignatureFilename>PAdES-LTA.pdf</SignatureFilename>
+            <ClaimedSigningTime>2017-12-01T20:58:27Z</ClaimedSigningTime>
+            <SignatureFormat>PAdES-BASELINE-T</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>A6wH8Gpl0H82CpcxnQzZbdYyK/wnd75i22+EksLXprs=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-CDF3807ECA47B895C8ED8E2695A449840C849A9429D8933B4EB7C2FB8107BD1F"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-CDF3807ECA47B895C8ED8E2695A449840C849A9429D8933B4EB7C2FB8107BD1F"/>
+                <ChainItem Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=LuxTrust Global Qualified CA 2, O=LuxTrust S.A., C=LU</IssuerName>
+                    <SerialNumber>1116820</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="Cryptolog-918022117"/>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>Sig</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.CAdES.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 6501 15395 332</SignatureByteRange>
+                </PDFSignatureDictionary>
+                <ModificationDetection>
+                    <ObjectModifications>
+                        <ExtensionChange action="CREATION" fieldName="Cryptolog-1082825226" type="DocTimeStamp">/Catalog /Pages 3 0 R /Kids 4 0 R /Annots 23 0 R</ExtensionChange>
+                        <ExtensionChange action="CREATION" fieldName="Cryptolog-1082825226" type="DocTimeStamp">/Catalog /AcroForm 17 0 R /Fields 23 0 R</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION">/Catalog /Extensions /ESIC /ExtensionLevel</ExtensionChange>
+                        <ExtensionChange action="CREATION" type="DSS">/Catalog /DSS 19 0 R</ExtensionChange>
+                    </ObjectModifications>
+                </ModificationDetection>
+            </PDFRevision>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3">
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">ME4wSKRGMEQxCzAJBgNVBAYTAkxVMRYwFAYDVQQKEw1MdXhUcnVzdCBzLmEuMR0wGwYDVQQDExRMdXhUcnVzdCBHbG9iYWwgUm9vdAICC7g=</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>obLb62TnBsYWnjxBGLI7qgkBioQnZm2L8OKIkewFGVA=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-CDF3807ECA47B895C8ED8E2695A449840C849A9429D8933B4EB7C2FB8107BD1F">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MFkwUqRQME4xCzAJBgNVBAYTAkxVMRYwFAYDVQQKEw1MdXhUcnVzdCBTLkEuMScwJQYDVQQDEx5MdXhUcnVzdCBHbG9iYWwgUXVhbGlmaWVkIENBIDICAxEKlA==</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>zfOAfspHuJXI7Y4mlaRJhAyEmpQp2JM7TrfC+4EHvR8=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">ME4wSKRGMEQxCzAJBgNVBAYTAkxVMRYwFAYDVQQKEw1MdXhUcnVzdCBzLmEuMR0wGwYDVQQDExRMdXhUcnVzdCBHbG9iYWwgUm9vdAICEsM=</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>fnbanqjQ5sXGMCPQ2MBuVVrs5P40bA5QaT32vVRo5IQ=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-B471B62E070565623517E063631597A92D61629C1150FB3B6E4A55AF02CF16DF">
+                    <Type>CRL</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-960D9121F5DD4EEB99452871771E9F637DA5E5D19B14C56FE75D75DF6426792F">
+                    <Type>OCSP</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <FoundTimestamps>
+                <FoundTimestamp Timestamp="T-16756237FA40FF70479E404B5B13D9B4E6FA02C820D32FC61267A7EF05EC723A"/>
+            </FoundTimestamps>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-1425B926E774AC2594B27AEC97F2697A3DCB9B880F5CCED54892680C6568F57D">
+                    <Scope>PARTIAL</Scope>
+                    <Name>Partial PDF</Name>
+                    <Description>The document ByteRange : [0, 6501, 15395, 332]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>l9YUETbCLXWx7p5LOSBMGDPTZ41eMjmx8xY+8MNK+3s=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>ShKFHzMQWWa73pSsxiL18WbdpB6Ov83LCzMM/rMlqfo=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>DbUdWf0oGkrC5fSjgKrOtqYuRe8vBcftQMIjqI97IZDzalG5f2c/RXEcz/JZtlH7wg9UbXPNdReZeFtseoOcXh4g+rblWi5RIOGeHMY+1fRP9YvWXP25ZFKTNEjmsr2r4l7egcOkIYb8Zb5HUsho+D2Rt9e9LDMWYBRZpcp/e9bSRIyDjkDzXN/Kszc0SEIb0GyymwoCAlw0dX1ggkMEU6jZIaXpdl0g1b+I9nQjZQr1uotAHta9w81vUVH42FcPwz7X69zpvKxxERDlYLGiPLhfCP/LBovMVsMTnuqvbReJt5qcWr6ZN9N4bktbb7xuKak++/ViDQ9krbyd0YPHvw==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484">
+            <SubjectDistinguishedName Format="CANONICAL">cn=luxtrust global qualified ca 2,o=luxtrust s.a.,c=lu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=LuxTrust Global Qualified CA 2,O=LuxTrust S.A.,C=LU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=luxtrust global root,o=luxtrust s.a.,c=lu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LuxTrust Global Root,O=LuxTrust s.a.,C=LU</IssuerDistinguishedName>
+            <SerialNumber>4803</SerialNumber>
+            <CommonName>LuxTrust Global Qualified CA 2</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>LuxTrust S.A.</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2020-05-28T13:09:18Z</NotAfter>
+            <NotBefore>2014-05-28T13:09:18Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-3A282B150D0E1A281FE80BAA8642F1F3BA93A3B4C4EDD65D28896E5DD33284EC</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-8BBE85E839380202EC00C7641C457E51D0061D6AC51C34BAD17A2AFEAC4054AC</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>FxWFiQkvJIdvPx0b5PKWeYNIE84=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>75a/fWU6VbTScPgM7Eri8ycGmlI=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://repository.luxtrust.lu">1.3.171.1.1.1.10.3</certificatePolicy>
+                </CertificatePolicies>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.luxtrust.lu/LTGRCA.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>fnbanqjQ5sXGMCPQ2MBuVVrs5P40bA5QaT32vVRo5IQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3">
+            <SubjectDistinguishedName Format="CANONICAL">cn=luxtrust s.a. ocsp server,ou=pki entity,o=luxtrust s.a.,c=lu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=LuxTrust S.A. OCSP Server,OU=Pki entity,O=LuxTrust S.A.,C=LU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=luxtrust global qualified ca 2,o=luxtrust s.a.,c=lu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LuxTrust Global Qualified CA 2,O=LuxTrust S.A.,C=LU</IssuerDistinguishedName>
+            <SerialNumber>1372433</SerialNumber>
+            <CommonName>LuxTrust S.A. OCSP Server</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>LuxTrust S.A.</OrganizationName>
+            <OrganizationalUnit>Pki entity</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OCSP_RESPONSE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2018-06-27T08:58:25Z</NotAfter>
+            <NotBefore>2017-06-27T08:58:25Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-471AE05682CE4B89F5DDCBE799D3A85CFCCFF4BA9E817B1C83820FE78B84113E</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-3A282B150D0E1A281FE80BAA8642F1F3BA93A3B4C4EDD65D28896E5DD33284EC</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>75a/fWU6VbTScPgM7Eri8ycGmlI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>RvRS4fd2BaEwkt401JIKaa3fxrU=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.luxtrust.lu/LTGQCA2.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-B471B62E070565623517E063631597A92D61629C1150FB3B6E4A55AF02CF16DF">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lIqWMvT2u638NKI8QozdC+pA05d5bUyr0PgHkqYv/7M=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950">
+            <SubjectDistinguishedName Format="CANONICAL">cn=luxtrust global root,o=luxtrust s.a.,c=lu</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=LuxTrust Global Root,O=LuxTrust s.a.,C=LU</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=luxtrust global root,o=luxtrust s.a.,c=lu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LuxTrust Global Root,O=LuxTrust s.a.,C=LU</IssuerDistinguishedName>
+            <SerialNumber>3000</SerialNumber>
+            <CommonName>LuxTrust Global Root</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>LuxTrust s.a.</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2021-03-17T09:51:37Z</NotAfter>
+            <NotBefore>2011-03-17T09:51:37Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-8BBE85E839380202EC00C7641C457E51D0061D6AC51C34BAD17A2AFEAC4054AC</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-8BBE85E839380202EC00C7641C457E51D0061D6AC51C34BAD17A2AFEAC4054AC</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>FxWFiQkvJIdvPx0b5PKWeYNIE84=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>FxWFiQkvJIdvPx0b5PKWeYNIE84=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>obLb62TnBsYWnjxBGLI7qgkBioQnZm2L8OKIkewFGVA=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-CDF3807ECA47B895C8ED8E2695A449840C849A9429D8933B4EB7C2FB8107BD1F">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.12=#131350726f66657373696f6e616c20506572736f6e,1.2.840.113549.1.9.1=#1622416e64726561732e526569667363686e6569646572406469616c6f67696b612e6465,2.5.4.5=#13143130313030373533383430303033313138383635,2.5.4.42=#1307416e6472656173,2.5.4.4=#130d526569667363686e6569646572,cn=andreas reifschneider,ou=hrb nr. 7347,o=dialogika gmbh,l=de,c=de</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.12=#131350726f66657373696f6e616c20506572736f6e,1.2.840.113549.1.9.1=#1622416e64726561732e526569667363686e6569646572406469616c6f67696b612e6465,2.5.4.5=#13143130313030373533383430303033313138383635,2.5.4.42=#1307416e6472656173,2.5.4.4=#130d526569667363686e6569646572,CN=Andreas Reifschneider,OU=HRB NR. 7347,O=DIaLOGIKa GmbH,L=DE,C=DE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=luxtrust global qualified ca 2,o=luxtrust s.a.,c=lu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LuxTrust Global Qualified CA 2,O=LuxTrust S.A.,C=LU</IssuerDistinguishedName>
+            <SerialNumber>1116820</SerialNumber>
+            <SubjectSerialNumber>10100753840003118865</SubjectSerialNumber>
+            <CommonName>Andreas Reifschneider</CommonName>
+            <Locality>DE</Locality>
+            <CountryName>DE</CountryName>
+            <OrganizationName>DIaLOGIKa GmbH</OrganizationName>
+            <OrganizationalUnit>HRB NR. 7347</OrganizationalUnit>
+            <Title>Professional Person</Title>
+            <GivenName>Andreas</GivenName>
+            <Surname>Reifschneider</Surname>
+            <Email>Andreas.Reifschneider@dialogika.de</Email>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2018-02-18T09:24:47Z</NotAfter>
+            <NotBefore>2015-02-18T09:24:47Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-6FEA10C97D729DCA1FC0D5E2AF79AEA1C023418457C9E8DDFDCB0B589C8D3735</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-3A282B150D0E1A281FE80BAA8642F1F3BA93A3B4C4EDD65D28896E5DD33284EC</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>75a/fWU6VbTScPgM7Eri8ycGmlI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ToSecss7KY0=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://repository.luxtrust.lu">1.3.171.1.1.10.3.1</certificatePolicy>
+                    <certificatePolicy Description="qcp-public-with-sscd">0.4.0.1456.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://ca.luxtrust.lu/LTGQCA2.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.luxtrust.lu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.luxtrust.lu/LTGQCA2.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                </QcStatements>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-960D9121F5DD4EEB99452871771E9F637DA5E5D19B14C56FE75D75DF6426792F">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-B471B62E070565623517E063631597A92D61629C1150FB3B6E4A55AF02CF16DF">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>zfOAfspHuJXI7Y4mlaRJhAyEmpQp2JM7TrfC+4EHvR8=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-F4E7DF969A590AF41E38E5854542EBF9DF6A5BE9B16FD31494FA689509057494">
+            <SubjectDistinguishedName Format="CANONICAL">c=fr,o=cryptolog international,ou=0002 43912916400026,cn=universign timestamping unit 018</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=FR,O=Cryptolog International,OU=0002 43912916400026,CN=Universign Timestamping Unit 018</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=universign timestamping ca 2015,ou=0002 43912916400026,o=cryptolog international,c=fr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Universign Timestamping CA 2015,OU=0002 43912916400026,O=Cryptolog International,C=FR</IssuerDistinguishedName>
+            <SerialNumber>144440652068579617862909512827429075476</SerialNumber>
+            <CommonName>Universign Timestamping Unit 018</CommonName>
+            <CountryName>FR</CountryName>
+            <OrganizationName>Cryptolog International</OrganizationName>
+            <OrganizationalUnit>0002 43912916400026</OrganizationalUnit>
+            <Sources>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2023-04-21T13:18:51Z</NotAfter>
+            <NotBefore>2017-04-21T13:18:51Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-A3CD989193EB589254240340775231552B50CF16B173760D158D4A203755E23E</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>+k3tVzu9P/ORM5oLOaR/XRLdB0Y=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://docs.universign.eu/">1.3.6.1.4.1.15819.5.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.universign.eu/universign_tsa_root_2015.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>9OfflppZCvQeOOWFRULr+d9qW+mxb9MUlPpolQkFdJQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-960D9121F5DD4EEB99452871771E9F637DA5E5D19B14C56FE75D75DF6426792F">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2017-12-01T21:04:53Z</ProductionDate>
+            <ThisUpdate>2017-12-01T21:00:31Z</ThisUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3"/>
+                <ChainItem Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <Ski>RvRS4fd2BaEwkt401JIKaa3fxrU=</Ski>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lg2RIfXdTuuZRShxdx6fY32l5dGbFMVv511132QmeS8=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+        <Revocation Id="R-B471B62E070565623517E063631597A92D61629C1150FB3B6E4A55AF02CF16DF">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2017-12-01T21:00:31Z</ProductionDate>
+            <ThisUpdate>2017-12-01T21:00:31Z</ThisUpdate>
+            <NextUpdate>2017-12-02T01:30:31Z</NextUpdate>
+            <CRLNumber>161296</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484"/>
+                <ChainItem Certificate="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950"/>
+            </CertificateChain>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>tHG2LgcFZWI1F+BjYxWXqS1hYpwRUPs7bkpVrwLPFt8=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="DOCUMENT_TIMESTAMP" Id="T-16756237FA40FF70479E404B5B13D9B4E6FA02C820D32FC61267A7EF05EC723A">
+            <ArchiveTimestampType>PAdES</ArchiveTimestampType>
+            <ProductionTime>2017-12-01T21:04:55Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BNXKxIYi9PI1L3S9paHqK7zAmxTW+B9uG9MKN176rjg=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-F4E7DF969A590AF41E38E5854542EBF9DF6A5BE9B16FD31494FA689509057494"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-F4E7DF969A590AF41E38E5854542EBF9DF6A5BE9B16FD31494FA689509057494"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=Universign Timestamping CA 2015, OU=0002 43912916400026, O=Cryptolog International, C=FR</IssuerName>
+                    <SerialNumber>144440652068579617862909512827429075476</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <TSAGeneralName contentMatch="true" orderMatch="true">C=FR,O=Cryptolog International,OU=0002 43912916400026,CN=Universign Timestamping Unit 018</TSAGeneralName>
+            <PDFRevision>
+                <SignatureField name="Cryptolog-1082825226"/>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>DocTimeStamp</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.RFC3161</SubFilter>
+                    <SignatureByteRange valid="true">0 4255098 4261100 425</SignatureByteRange>
+                </PDFSignatureDictionary>
+            </PDFRevision>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-F4E7DF969A590AF41E38E5854542EBF9DF6A5BE9B16FD31494FA689509057494">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIGPMHukeTB3MQswCQYDVQQGEwJGUjEgMB4GA1UEChMXQ3J5cHRvbG9nIEludGVybmF0aW9uYWwxHDAaBgNVBAsTEzAwMDIgNDM5MTI5MTY0MDAwMjYxKDAmBgNVBAMTH1VuaXZlcnNpZ24gVGltZXN0YW1waW5nIENBIDIwMTUCEGyqQfiqHm6nmyGwV/rqOhQ=</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA1</DigestMethod>
+                            <DigestValue>IljaXi+nn6J0JKa04KJUr8ZQwrk=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-5DA9792B9E0F902CDC1F8A36DDF655BB3886704C354A5A19E3941D2FB154BF92" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="D-1425B926E774AC2594B27AEC97F2697A3DCB9B880F5CCED54892680C6568F57D" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-857FDC971C23DCD697817E2D5A42A0F77C3D9066BC9C3B22FE6B4DAE93164C7D" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-CDF3807ECA47B895C8ED8E2695A449840C849A9429D8933B4EB7C2FB8107BD1F" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-7E76DA9EA8D0E6C5C63023D0D8C06E555AECE4FE346C0E50693DF6BD5468E484" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-A1B2DBEB64E706C6169E3C4118B23BAA09018A8427666D8BF0E28891EC051950" Category="CERTIFICATE"/>
+                <TimestampedObject Token="C-948A9632F4F6BBADFC34A23C428CDD0BEA40D397796D4CABD0F80792A62FFFB3" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-B471B62E070565623517E063631597A92D61629C1150FB3B6E4A55AF02CF16DF" Category="REVOCATION"/>
+                <TimestampedObject Token="R-960D9121F5DD4EEB99452871771E9F637DA5E5D19B14C56FE75D75DF6426792F" Category="REVOCATION"/>
+            </TimestampedObjects>
+            <TimestampScopes>
+                <TimestampScope SignerData="D-5DA9792B9E0F902CDC1F8A36DDF655BB3886704C354A5A19E3941D2FB154BF92">
+                    <Scope>FULL</Scope>
+                    <Name>Full PDF</Name>
+                    <Description>The document ByteRange : [0, 4255098, 4261100, 425]</Description>
+                </TimestampScope>
+            </TimestampScopes>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>YZQ1dOhTEhYm1LMoZe4YMEf6LvFrBl0b1poxub1Lgaw=</DigestValue>
+            </DigestAlgoAndValue>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-1425B926E774AC2594B27AEC97F2697A3DCB9B880F5CCED54892680C6568F57D">
+            <ReferencedName>Partial PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>02fq9ck4wbAKLlBxJ3MIQytzH0elo27HsYFGxlJq3yA=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-5DA9792B9E0F902CDC1F8A36DDF655BB3886704C354A5A19E3941D2FB154BF92">
+            <ReferencedName>Full PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>CUmmLhlkN0ALr13atSD+jwy+B5EWFO5r8qSToasquY4=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>
