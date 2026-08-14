@@ -1,0 +1,18 @@
+<catalog>
+    <book id="book-id-01">
+        <author>author of book 4</author>
+        <title>title of book 2</title>
+        <genre>genre of book 1</genre>
+        <price>price of book 1</price>
+        <publish_date>publish_date of book 1</publish_date>
+        <description>description of book 1</description>
+    </book>
+    <book id="book-id-02">
+        <author>author of book 2</author>
+        <title>title of book 2</title>
+        <genre>genre of book 2</genre>
+        <price>price of book 2</price>
+        <publish_date>publish_date of book 2</publish_date>
+        <description>description of book 2</description>
+    </book>
+</catalog>

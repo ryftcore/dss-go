@@ -1,0 +1,41 @@
+# Prefix -> URI bindings the inventory in expressions.txt is compiled against, one
+# "prefix<TAB>uri" pair per line. Read by gen/XPathOracle.java and by TestKnownAnswers.
+#
+# This is what DSS 6.5.RC1 hands to XPathUtils.registerNamespace, which is the only way a
+# prefix enters the NamespaceContextMap the XPath engine resolves against. Every line names
+# the call site it came from; nothing here is invented.
+#
+#   ds, xades111, xades122, xades132, xades141, xadesen, saml2
+#       DSSXMLUtils.registerXAdESNamespaces(). Note the source comment "DO NOT register
+#       'xades'": the unversioned prefix appears in javadoc only, never in a query string,
+#       so it is absent here too.
+#   tl  TLStructureVerifier, XAdESTrustedListUtils, AbstractTrustedListWithSha2Predicate
+#   asic, manifest
+#       ASiCWithXAdESService, ASiCEWithXAdESManifestParser, ASiCManifestParser
+#   ers XMLEvidenceRecordAnalyzer
+#   mra, ns5
+#       AbstractMRALOTLTest. MRANamespace.NS is never registered by main code, so in a
+#       main-only configuration "mra:" would resolve to the null namespace; the MRA test
+#       harness is the configuration in which MRAPath's expressions select anything, and it
+#       is the one pinned here.
+#   h   XAdESLevelBEnvelopedWithXPathPlacementAfterTest / ...FirstChildTest / ...NoneTest
+#   xsd XAdESEnumsTest, ASiCEnumsTest
+#
+# The rule for a prefix that is NOT in this file is pinned separately, in
+# TestUnregisteredPrefixIsNullNamespace: NamespaceContextMap.getNamespaceURI returns
+# XMLConstants.NULL_NS_URI, so an unknown prefix silently means "no namespace".
+ds	http://www.w3.org/2000/09/xmldsig#
+xades111	http://uri.etsi.org/01903/v1.1.1#
+xades122	http://uri.etsi.org/01903/v1.2.2#
+xades132	http://uri.etsi.org/01903/v1.3.2#
+xades141	http://uri.etsi.org/01903/v1.4.1#
+xadesen	http://uri.etsi.org/19132/v1.1.1#
+saml2	urn:oasis:names:tc:SAML:2.0:assertion
+tl	http://uri.etsi.org/02231/v2#
+asic	http://uri.etsi.org/02918/v1.2.1#
+manifest	urn:oasis:names:tc:opendocument:xmlns:manifest:1.0
+ers	urn:ietf:params:xml:ns:ers
+mra	http://ec.europa.eu/tools/lotl/mra/schema/v2#
+ns5	http://uri.etsi.org/TrstSvc/SvcInfoExt/eSigDir-1999-93-EC-TrustedList/#
+h	http://www.w3.org/TR/html4/
+xsd	http://www.w3.org/2001/XMLSchema

@@ -1,0 +1,112 @@
+package asn1ber
+
+import "strings"
+
+// ValueToString ports org.bouncycastle.asn1.x500.style.IETFUtils#valueToString: it renders an
+// X.500 attribute value the way RFC 4514 wants it, escaping the specials and hash-encoding
+// everything that is not a string type.
+func ValueToString(element *Element) string {
+	var buffer []rune
+	// IETFUtils#valueToString takes the string branch for every ASN1String EXCEPT
+	// ASN1UniversalString, which it explicitly excludes so that it is hash-encoded like a
+	// non-string value.
+	if element.IsASN1String() && !element.IsUniversal(TagUniversalString) {
+		value := element.AsString()
+		if len(value) > 0 && value[0] == '#' {
+			buffer = append(buffer, '\\')
+		}
+		buffer = append(buffer, []rune(value)...)
+	} else {
+		buffer = append(buffer, '#')
+		buffer = append(buffer, []rune(hexLower(element.DEREncoded()))...)
+	}
+
+	index := 0
+	if len(buffer) >= 2 && buffer[0] == '\\' && buffer[1] == '#' {
+		index += 2
+	}
+	for ; index < len(buffer); index++ {
+		switch buffer[index] {
+		case ',', '"', '\\', '+', '=', '<', '>', ';':
+			buffer = append(buffer[:index], append([]rune{'\\'}, buffer[index:]...)...)
+			index++
+		}
+	}
+
+	start := 0
+	for start < len(buffer) && buffer[start] == ' ' {
+		buffer = append(buffer[:start], append([]rune{'\\'}, buffer[start:]...)...)
+		start += 2
+	}
+	end := len(buffer) - 1
+	for end >= 0 && buffer[end] == ' ' {
+		buffer = append(buffer[:end], append([]rune{'\\'}, buffer[end:]...)...)
+		end--
+	}
+	return string(buffer)
+}
+
+// ASN1ToString reproduces ASN1Primitive#toString for the value types an X.500 attribute can
+// carry: a string type yields its text (a BIT STRING and a UniversalString their
+// "#"+UPPER-case-hex form, see Element.AsString), an OBJECT IDENTIFIER its dotted form,
+// anything else "#" followed by the hex of its DER encoding.
+//
+// DEVIATION: BouncyCastle renders a constructed value (an attribute whose value is a SEQUENCE
+// or a SET, which no X.520 attribute type defines) as its ASN1Dump-style "[a, b]" listing;
+// this port hash-encodes it like any other non-string value.
+func ASN1ToString(element *Element) string {
+	if element.IsASN1String() {
+		return element.AsString()
+	}
+	switch {
+	case element.IsUniversal(TagOID):
+		if oid, err := element.ObjectIdentifier(); err == nil {
+			return oid.String()
+		}
+	case element.IsUniversal(TagInteger):
+		return element.Integer().String()
+	case element.IsUniversal(TagOctetString):
+		// ASN1OctetString#toString hexes the CONTENT, not the whole encoding.
+		return "#" + hexLower(element.Octets())
+	case element.IsUniversal(TagBoolean):
+		if len(element.content) > 0 && element.content[0] != 0x00 {
+			return "TRUE"
+		}
+		return "FALSE"
+	case element.IsUniversal(TagNull):
+		return "NULL"
+	}
+	return "#" + hexLower(element.DEREncoded())
+}
+
+// JavaTrim ports java.lang.String#trim, which strips every leading and trailing character
+// whose code point is not greater than U+0020.
+func JavaTrim(value string) string {
+	return strings.TrimFunc(value, func(r rune) bool { return r <= ' ' })
+}
+
+// hexUpper renders bytes as upper-case hex without a separator, the way the private hex table
+// of ASN1BitString#getString / ASN1UniversalString#getString does.
+func hexUpper(data []byte) string {
+	const digits = "0123456789ABCDEF"
+	var builder strings.Builder
+	builder.Grow(2 * len(data))
+	for _, b := range data {
+		builder.WriteByte(digits[b>>4])
+		builder.WriteByte(digits[b&0x0F])
+	}
+	return builder.String()
+}
+
+// hexLower renders bytes as lower-case hex without a separator, the way
+// org.bouncycastle.util.encoders.Hex#encode does.
+func hexLower(data []byte) string {
+	const digits = "0123456789abcdef"
+	var builder strings.Builder
+	builder.Grow(2 * len(data))
+	for _, b := range data {
+		builder.WriteByte(digits[b>>4])
+		builder.WriteByte(digits[b&0x0F])
+	}
+	return builder.String()
+}

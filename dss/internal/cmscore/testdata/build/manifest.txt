@@ -1,0 +1,14 @@
+b1-basic version=1 signer0=1
+b2-ski version=3 signer0=3
+b3-detached version=1 signer0=1
+b4-two-certs version=1 signer0=1
+b5-crl-other version=5 signer0=1
+b6-attr-cert-v2 version=4 signer0=1
+b7-attr-cert-v1 version=3 signer0=1
+b8-other-cert version=5 signer0=1
+b9-tstinfo-type version=3 signer0=1
+b10-unsigned-attrs version=1 signer0=1
+b11-multivalue version=1 signer0=1
+b12-two-signers version=3 signer0=3 signer1=1
+b13-ed25519 version=1 signer0=1
+b14-no-signed-attrs version=1 signer0=1

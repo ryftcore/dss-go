@@ -1,0 +1,18 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+        <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+        <ds:Reference Id="r-id-1" Type="http://www.w3.org/2000/09/xmldsig#Object" URI="#o-id-1">
+            <ds:Transforms>
+                <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#base64"></ds:Transform>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+            <ds:DigestValue>68ArneI9PhOBJytj5sP/zEewR2DkFObxewY1wiUvak=</ds:DigestValue>
+        </ds:Reference>
+        <ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-93ef2bbbf61754c3735a8f0d34aff556">
+            <ds:Transforms>
+                <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+            </ds:Transforms>
+            <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+            <ds:DigestValue>NZpI+dLFqcaP/fZH0uiNtsb4ep88PoPCIvEcUODdP94=</ds:DigestValue>
+        </ds:Reference>
+    </ds:SignedInfo>

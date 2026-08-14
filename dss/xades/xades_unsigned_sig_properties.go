@@ -1,0 +1,41 @@
+// Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESUnsignedSigProperties.java
+// (DSS 6.5.RC1).
+package xades
+
+import (
+	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/utain/esig/dss/xades/definition"
+	"github.com/utain/esig/dss/xml/utils"
+)
+
+// XAdESUnsignedSigProperties represents unsigned XAdES signature properties. Port of the class
+// XAdESUnsignedSigProperties, extending XAdESSigProperties.
+type XAdESUnsignedSigProperties struct {
+	XAdESSigProperties
+}
+
+// NewXAdESUnsignedSigProperties is the port of the public
+// XAdESUnsignedSigProperties(Element, XAdESPath) constructor.
+func NewXAdESUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESUnsignedSigProperties {
+	return &XAdESUnsignedSigProperties{
+		XAdESSigProperties: newXAdESSigProperties(unsignedSignatureProperties, xadesPaths),
+	}
+}
+
+// XAdESUnsignedSigPropertiesBuild builds a XAdESUnsignedSigProperties. Port of the static
+// build(Element, XAdESPath).
+func XAdESUnsignedSigPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESUnsignedSigProperties {
+	unsignedSignatureProperties := xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom(signatureElement, xadesPaths)
+	return NewXAdESUnsignedSigProperties(unsignedSignatureProperties, xadesPaths)
+}
+
+// xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom gets the
+// xades:UnsignedSignatureProperties element. Port of the protected static
+// getUnsignedSignaturePropertiesDom(Element, XAdESPath).
+func xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *xmldom.Node {
+	element, err := utils.XPathUtilsGetElement(signatureElement, xadesPaths.UnsignedSignaturePropertiesPath())
+	if err != nil {
+		return nil
+	}
+	return element
+}

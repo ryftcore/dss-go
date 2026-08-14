@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test>
+  <hello>world</hello>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="s1">
+    <ds:SignedInfo>
+      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+      <ds:Reference Id="r1" URI="">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2">
+            <dsig-filter2:XPath xmlns:dsig-filter2="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">
+              /descendant::ds:Signature
+            </dsig-filter2:XPath>
+          </ds:Transform>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+        <ds:DigestValue>
+          mWGR8zaNcQnNWiLWeTxv1/XV8ZCxPAJBG2jZk6wVdSM=
+        </ds:DigestValue>
+      </ds:Reference>
+      <ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#p1">
+        <ds:Transforms>
+          <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        </ds:Transforms>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+        <ds:DigestValue>
+          opAveS0L87O8pnOduF4Yu7ZvbnLubIuJaawBqqKPdHQ=
+        </ds:DigestValue>
+      </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue Id="v1">
+      erUt5asV7GodznNxb2TcPr06QaHBd9YQMuJrySanqKBGClDJmpnWI1xzQLXymN4m
+      0cT06YZ1mq4DcEw7lL1XLJh9SYoyI2y6L7qcd4STiGXgU4Y/SVGWGN5FVVqB/vlW
+      ngrrfT5z0NftXejRXLPzba3mpnYni4bBSJEPLEjiUuPuS1QdE9iBVwRFdCueKkVY
+      bhxyPjIk6WWSRLfxwyasDSm/3TJ3y45YPGCPDGmiTHoCJ0hQ0HALHfU19wkkP8nW
+      2DBe2DC0iCApp4P1GcaO4Toxc98VSxrY4p9y/b0GyhxCsPbKjQ7FvBI3A9b7lh23
+      x4784nDffrRj4VrN7dNpvw==
+    </ds:SignatureValue>
+    <ds:KeyInfo>
+      <ds:X509Data>
+        <ds:X509Certificate>
+          MIIFvzCCBKegAwIBAgITFAAW+fzV2m1clFmZYgACABb5/DANBgkqhkiG9w0BAQsF
+          ADCBmTEZMBcGA1UEBRMQQ1BKLTQtMDAwLTAwNDAxNzELMAkGA1UEBhMCQ1IxJDAi
+          BgNVBAoTG0JBTkNPIENFTlRSQUwgREUgQ09TVEEgUklDQTEiMCAGA1UECxMZRElW
+          SVNJT04gU0lTVEVNQVMgREUgUEFHTzElMCMGA1UEAxMcQ0EgU0lOUEUgLSBQRVJT
+          T05BIEZJU0lDQSB2MjAeFw0yNDEyMTUxNzI4NTZaFw0yODEyMTQxNzI4NTZaMIG7
+          MRkwFwYDVQQFExBDUEYtMDgtMDExOS0wNTkyMR4wHAYDVQQEDBVERSBMQSBQRcOR
+          QSBGRVJOQU5ERVoxEjAQBgNVBCoTCUZSQU5DSVNDTzELMAkGA1UEBhMCQ1IxFzAV
+          BgNVBAoTDlBFUlNPTkEgRklTSUNBMRIwEAYDVQQLEwlDSVVEQURBTk8xMDAuBgNV
+          BAMMJ0ZSQU5DSVNDTyBERSBMQSBQRcORQSBGRVJOQU5ERVogKEZJUk1BKTCCASIw
+          DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKyom8qEWv8PWnVylxRhGnduxqbd
+          fQAYBBfenTUOakKdCBoUJq2LQMCwyIqePv8lo+9VKYLyHio6ce3hlpUQwYgeHNp/
+          ZMLMLOfEGWWlyW5qo5BezPj93i7QfDTX2UGHOvAEufb40+Idc4dJsAyYXjtim45L
+          QZIgE91x12otzMjtg1W1zPk0BGeCRothhXuBZ/reFlK6/VvRnBFpLkEt8upNFHwb
+          Zx+CIig0WQt+EAndmW5pXmmt+YVbbfZntdDAKQ3DJ8Z8YzjtjWYbfz2j9eZIXkM8
+          l0LVZZoDvdY3RhcPrOw1zLrkvRoXqYNM3M5f4N1Qg1wsNM+ugAzlw1VmTIUCAwEA
+          AaOCAdowggHWMB0GA1UdDgQWBBQB/1YkQPwl1Uk63+ndyIPVabVYNjAfBgNVHSME
+          GDAWgBQJSP+bVAI23TCkb7PiL4n+X3fKmTBhBgNVHR8EWjBYMFagVKBShlBodHRw
+          Oi8vZmRpLnNpbnBlLmZpLmNyL3JlcG9zaXRvcmlvL0NBJTIwU0lOUEUlMjAtJTIw
+          UEVSU09OQSUyMEZJU0lDQSUyMHYyKDIpLmNybDCBmAYIKwYBBQUHAQEEgYswgYgw
+          XAYIKwYBBQUHMAKGUGh0dHA6Ly9mZGkuc2lucGUuZmkuY3IvcmVwb3NpdG9yaW8v
+          Q0ElMjBTSU5QRSUyMC0lMjBQRVJTT05BJTIwRklTSUNBJTIwdjIoMikuY3J0MCgG
+          CCsGAQUFBzABhhxodHRwOi8vb2NzcC5zaW5wZS5maS5jci9vY3NwMA4GA1UdDwEB
+          /wQEAwIGwDA9BgkrBgEEAYI3FQcEMDAuBiYrBgEEAYI3FQiFxOpbgtHjNZWRG4L5
+          lxiGpctrgX+BudJygZ6/eAIBZAIBBzATBgNVHSUEDDAKBggrBgEFBQcDBDAbBgkr
+          BgEEAYI3FQoEDjAMMAoGCCsGAQUFBwMEMBUGA1UdIAQOMAwwCgYIYIE8AQEBAQIw
+          DQYJKoZIhvcNAQELBQADggEBAE5tTyVJBMkP+I4sQ4CCaDreCXTlwc8RHLTuwI3u
+          rM7PIGpA+weqo+XD6tZ0VVT8HXvYrGZW58iByAW9TcAA1INjv4h3wxxicq6oL69o
+          RHiDrD8bU7kbcz+vvXQE32kUqoBHAg9qsUVluGOW+3Rv9ZlKeqc2C6D4aU13FhEd
+          8053DdQ6rTqgOFxvNyIqV4PjNtqQ/UMisDPhLgESexX69zom4fY1rAeW0SpXEz66
+          XJrlmlGtGFyARdzwnQYghDL9FvohbW0cgwRIHhY7bRrqEQQNzvmUBQiJI/kkjHub
+          agoPPEdR5gEG4uXiQkA6mUUR83z4f2AK06Ul3PtfyiZHw40=
+        </ds:X509Certificate>
+      </ds:X509Data>
+    </ds:KeyInfo>
+    <ds:Object>
+      <xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#s1">
+        <xades:SignedProperties Id="p1">
+          <xades:SignedSignatureProperties>
+            <xades:SigningTime>2025-12-06T21:32:37-06:00</xades:SigningTime>
+            <xades:SigningCertificate>
+              <xades:Cert>
+                <xades:CertDigest>
+                  <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                  <ds:DigestValue>
+                    EhkO5W5l6P0Q36MV/Lv/Ov2Bz3uP7TBHSA1tCzwmtP0=
+                  </ds:DigestValue>
+                </xades:CertDigest>
+                <xades:IssuerSerial>
+                  <ds:X509IssuerName>
+                    serialNumber=CPJ-4-000-004017,
+                    C=CR,
+                    O=BANCO CENTRAL DE COSTA RICA,
+                    OU=DIVISION SISTEMAS DE PAGO,
+                    CN=CA SINPE - PERSONA FISICA v2</ds:X509IssuerName>
+                  <ds:X509SerialNumber>
+                    446022722473251941102533199541112057722501628
+                  </ds:X509SerialNumber>
+                </xades:IssuerSerial>
+              </xades:Cert>
+            </xades:SigningCertificate>
+          </xades:SignedSignatureProperties>
+          <xades:SignedDataObjectProperties>
+            <xades:DataObjectFormat ObjectReference="#r1">
+              <xades:MimeType>text/xml</xades:MimeType>
+            </xades:DataObjectFormat>
+          </xades:SignedDataObjectProperties>
+        </xades:SignedProperties>
+      </xades:QualifyingProperties>
+    </ds:Object>
+  </ds:Signature>
+</test>

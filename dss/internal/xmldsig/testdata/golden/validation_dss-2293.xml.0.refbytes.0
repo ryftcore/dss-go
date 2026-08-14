@@ -1,0 +1,28 @@
+<ds:Object xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="ID-d128ea3a-70bc-4ec7-8656-542bb96d688d" MimeType="text/xml"><InitUpload xmlns="http://e-dokumenty.mf.gov.pl">
+      <DocumentType>JPK</DocumentType>
+      <Version>01.02.01.20160617</Version>
+      <EncryptionKey algorithm="RSA" encoding="Base64" mode="ECB" padding="PKCS#1">eACeoRGx3V0mwsJBjvF9aVeS/Wwx1i9Bm8MAUO6FeH9is+m1X1fhdsvw5rVHStZgTYhIGek+VLTJjonds3KbI1IuB8c3Oqj2hBEmB2jLrI/2pRwCsLCx/S6WNdkNHh6w/YOoasXbm13gGanC3CbN09ugSIHItYIJtfNZ+eUfmL97IHn4ApsZtPGybbA3OtNOihuExuXwh5iHG0xio7xpLCEnRs6Tr084/WNFuNXSmVLgF2OHT7Y9GUV0rJoK169G7oGIjpgmJ150aUZat8vWzCDiW1l7UinrZV7vEBstH3jcb9dJB+dSnQlojl0Sz1/MgE1c1wQyAFLYBi0sQx+VnA==</EncryptionKey>
+      <DocumentList>
+        <Document>
+          <FormCode schemaVersion="1-2E" systemCode="JPK_V7M (1)">JPK_V7M</FormCode>
+          <FileName>VAT7M_JPK.xml</FileName>
+          <ContentLength>2209</ContentLength>
+          <HashValue algorithm="SHA-256" encoding="Base64">bFOML/vOF9TVloen5ZobJPD2sF+0zF8ByY2mH7bOwKA=</HashValue>
+          <FileSignatureList filesNumber="1">
+            <Packaging>
+              <SplitZip mode="zip" type="split"></SplitZip>
+            </Packaging>
+            <Encryption>
+              <AES block="16" mode="CBC" padding="PKCS#7" size="256">
+                <IV bytes="16" encoding="Base64">hzXizTELVaWUMy1g/OpKHw==</IV>
+              </AES>
+            </Encryption><FileSignature>
+                <OrdinalNumber>1</OrdinalNumber>
+                <FileName>VAT7M_JPK2603240736492777338.xml.zip.aes</FileName>
+                <ContentLength>992</ContentLength>
+                <HashValue algorithm="MD5" encoding="Base64">8LXtWLLhboRdWVhiB3YhJw==</HashValue>
+              </FileSignature>
+          </FileSignatureList>
+        </Document>
+      </DocumentList>
+    </InitUpload></ds:Object>

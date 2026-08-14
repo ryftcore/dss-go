@@ -1,0 +1,219 @@
+// Generates testdata/upstream-cross-validation.json: ground-truth facts about the CAdES
+// signatures in testdata/upstream/, dumped straight from upstream DSS 6.5.RC1's own
+// CMSDocumentAnalyzer / CAdESSignature. This is the golden file that
+// cades_upstream_cross_validation_test.go compares its own parse of the same files against
+// (direction "UPSTREAM -> GO" of the cross-validation harness, task #12).
+//
+// For every file this dumps, per signature: whether a signing certificate was identified, its
+// SHA-256 digest, the claimed signing time (epoch millis, or null), the level upstream detects
+// (SignatureLevel#name(), e.g. "CAdES_BASELINE_LT"), the SignerInformation digest (used by the
+// Go test to find the matching signature rather than relying on list order), the CMS SignerId
+// (issuer/serial or SKI, hex) as an identity anchor, whether it is a counter signature, and -
+// wherever the original signed content is available to upstream (enveloping signatures, plus
+// the one genuinely-detached pair this harness feeds detached content for) - the reference/
+// signature integrity verdict and the raw message-digest value.
+//
+// Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1 and its dependencies:
+//
+//   cd /home/user/dss-upstream
+//   mvn -q -o -pl dss-cades dependency:build-classpath -Dmdep.outputFile=/tmp/cp.txt -Dmdep.includeScope=test
+//   CP="dss-cades/target/classes:dss-cms-object/target/classes:$(cat /tmp/cp.txt)"
+//   javac -cp "$CP" -d /tmp/xvaloracle CrossValidationOracle.java
+//   java  -cp "$CP:/tmp/xvaloracle" CrossValidationOracle <testdata directory>
+//
+// dss-cms-object has to be added by hand for the same reason documented in
+// AtsHashIndexOracle.java: it is the runtime CMS implementation dss-cms selects through its
+// service loader, and dss-cades declares neither of the two implementations.
+import eu.europa.esig.dss.cades.validation.CAdESSignature;
+import eu.europa.esig.dss.cades.validation.CMSDocumentAnalyzer;
+import eu.europa.esig.dss.enumerations.DigestAlgorithm;
+import eu.europa.esig.dss.model.DSSDocument;
+import eu.europa.esig.dss.model.DSSMessageDigest;
+import eu.europa.esig.dss.model.FileDocument;
+import eu.europa.esig.dss.model.signature.SignatureCryptographicVerification;
+import eu.europa.esig.dss.model.x509.CertificateToken;
+import eu.europa.esig.dss.spi.DSSUtils;
+import eu.europa.esig.dss.spi.signature.AdvancedSignature;
+import eu.europa.esig.dss.spi.validation.CommonCertificateVerifier;
+import org.bouncycastle.cms.SignerId;
+import org.bouncycastle.cms.SignerInformation;
+
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CrossValidationOracle {
+
+    /** Files dumped, relative to testdata/upstream/. Covers B/T/LT/LTA baseline levels, the
+     *  legacy (pre-baseline) BES/EPES/A profiles, attached (enveloping) and detached packaging,
+     *  counter-signatures, and several non-default digest/signature algorithm combinations
+     *  (DE_CRY, CZ_SIX use national profiles with RSA-PSS / different digest algorithms). */
+    static final String[] FILES = {
+        "CAdESDoubleLTA.p7m",
+        "Signature-C-HU_POL-3.p7m",
+        "cades-ats-v3-rev-val-crl.p7s",
+        "cades-ats-v3-wrong-cert.p7m",
+        "cades-lta-en319122.cms",
+        "cades-lta-ts101733.cms",
+        "validation/Signature-C-B-B-8.p7m",
+        "validation/Signature-C-B-LTA-10.p7m",
+        "validation/Signature-CBp-B-1.p7m",
+        "validation/Signature-CBp-LT-2.p7m",
+        "validation/counterSig.p7m",
+        "validation/counterSignedLTA.p7s",
+        "validation/cades-bes-signeddata-detached.p7s",
+        "validation/cades-bes-signeddata-enveloping.p7m",
+        "validation/cades-e-lt.p7m",
+        "validation/cades-extended-a.pkcs7",
+        "validation/cades-extended-bes.pkcs7",
+        "validation/cades-t-copied-sigtst.p7m",
+        "validation/Signature-C-DE_CRY-3.p7m",
+        "validation/Signature-C-CZ_SIX-1.p7m",
+        "validation/dss-1188/Test.bin.sig",
+    };
+
+    /** Genuinely detached signatures whose original content is checked in alongside them: file
+     *  (relative to testdata/upstream/) -> its detached content file (same directory). */
+    static final Map<String, String> DETACHED_CONTENT = new LinkedHashMap<>();
+    static {
+        DETACHED_CONTENT.put("validation/dss-1188/Test.bin.sig", "validation/dss-1188/Test.bin");
+    }
+
+    public static void main(String[] args) throws Exception {
+        Path testdata = Paths.get(args[0]).resolve("upstream");
+        StringBuilder json = new StringBuilder();
+        json.append("{\n");
+        json.append("  \"_comment\": \"Ground truth from upstream DSS 6.5.RC1, generated by gen/CrossValidationOracle.java. Do not edit by hand.\",\n");
+        json.append("  \"files\": [\n");
+        for (int i = 0; i < FILES.length; i++) {
+            dumpFile(json, testdata, FILES[i]);
+            json.append(i == FILES.length - 1 ? "\n" : ",\n");
+        }
+        json.append("  ]\n");
+        json.append("}\n");
+
+        Path out = Paths.get(args[0]).resolve("upstream-cross-validation.json");
+        Files.write(out, json.toString().getBytes(StandardCharsets.UTF_8));
+        System.out.println("written " + out);
+    }
+
+    static void dumpFile(StringBuilder json, Path testdata, String relativePath) throws Exception {
+        Path filePath = testdata.resolve(relativePath);
+        DSSDocument document = new FileDocument(filePath.toFile());
+        CMSDocumentAnalyzer analyzer = new CMSDocumentAnalyzer(document);
+        CommonCertificateVerifier certificateVerifier = new CommonCertificateVerifier();
+        analyzer.setCertificateVerifier(certificateVerifier);
+
+        String detachedRelative = DETACHED_CONTENT.get(relativePath);
+        if (detachedRelative != null) {
+            DSSDocument detached = new FileDocument(testdata.resolve(detachedRelative).toFile());
+            analyzer.setDetachedContents(Collections.singletonList(detached));
+        }
+
+        List<AdvancedSignature> signatures = analyzer.getSignatures();
+
+        json.append("    {\n");
+        json.append("      \"path\": ").append(str(relativePath)).append(",\n");
+        json.append("      \"signatureCount\": ").append(signatures.size()).append(",\n");
+        json.append("      \"signatures\": [\n");
+        for (int i = 0; i < signatures.size(); i++) {
+            CAdESSignature signature = (CAdESSignature) signatures.get(i);
+            dumpSignature(json, signature, certificateVerifier);
+            json.append(i == signatures.size() - 1 ? "\n" : ",\n");
+        }
+        json.append("      ]\n");
+        json.append("    }");
+    }
+
+    static void dumpSignature(StringBuilder json, CAdESSignature signature, CommonCertificateVerifier certificateVerifier) {
+        // Counter signatures are not initialized by CMSDocumentAnalyzer.buildSignatures() (only
+        // the top-level ones are, see CMSDocumentAnalyzer#getSignatures()); getDataFoundUpToLevel()
+        // requires it.
+        signature.initBaselineRequirementsChecker(certificateVerifier);
+        CertificateToken signingCertificate = signature.getSigningCertificateToken();
+        Long signingTimeMillis = signature.getSigningTime() != null ? signature.getSigningTime().getTime() : null;
+
+        SignerInformation signerInformation = signature.getSignerInformation();
+        String signerInfoDigest;
+        try {
+            signerInfoDigest = hex(DSSUtils.digest(DigestAlgorithm.SHA256,
+                    signerInformation.toASN1Structure().getEncoded("DER")));
+        } catch (Exception e) {
+            signerInfoDigest = null;
+        }
+
+        SignerId sid = signerInformation.getSID();
+        String signerIdIssuerSerial = sid.getIssuer() != null && sid.getSerialNumber() != null
+                ? sid.getIssuer().toString() + "#" + sid.getSerialNumber().toString()
+                : null;
+        String signerIdSki = sid.getSubjectKeyIdentifier() != null ? hex(sid.getSubjectKeyIdentifier()) : null;
+
+        // Force the cryptographic verification the same way DSS's own validation process does,
+        // capturing whatever it finds (which is "not found" rather than an exception when no
+        // original content is available for a detached signature).
+        SignatureCryptographicVerification verification = signature.getSignatureCryptographicVerification();
+
+        byte[] messageDigestValue = null;
+        try {
+            messageDigestValue = signature.getMessageDigestValue();
+        } catch (Exception e) {
+            // no message-digest attribute at all in some legacy profiles
+        }
+
+        json.append("        {\n");
+        json.append("          \"signingCertificateFound\": ").append(signingCertificate != null).append(",\n");
+        json.append("          \"signingCertificateSHA256\": ")
+                .append(signingCertificate != null ? str(hex(DSSUtils.digest(DigestAlgorithm.SHA256, signingCertificate.getEncoded()))) : "null")
+                .append(",\n");
+        json.append("          \"claimedSigningTimeMillis\": ").append(signingTimeMillis != null ? signingTimeMillis.toString() : "null").append(",\n");
+        json.append("          \"dataFoundUpToLevel\": ").append(str(signature.getDataFoundUpToLevel().name())).append(",\n");
+        json.append("          \"signerInformationDigestSHA256\": ").append(signerInfoDigest != null ? str(signerInfoDigest) : "null").append(",\n");
+        json.append("          \"signerIdIssuerSerial\": ").append(signerIdIssuerSerial != null ? str(signerIdIssuerSerial) : "null").append(",\n");
+        json.append("          \"signerIdSubjectKeyIdentifier\": ").append(signerIdSki != null ? str(signerIdSki) : "null").append(",\n");
+        json.append("          \"isCounterSignature\": ").append(signature.isCounterSignature()).append(",\n");
+        json.append("          \"referenceDataFound\": ").append(verification.isReferenceDataFound()).append(",\n");
+        json.append("          \"referenceDataIntact\": ").append(verification.isReferenceDataIntact()).append(",\n");
+        json.append("          \"signatureIntact\": ").append(verification.isSignatureIntact()).append(",\n");
+        json.append("          \"messageDigestValueHex\": ").append(messageDigestValue != null ? str(hex(messageDigestValue)) : "null").append(",\n");
+
+        List<AdvancedSignature> counterSignatures = signature.getCounterSignatures();
+        json.append("          \"counterSignatureCount\": ").append(counterSignatures.size()).append(",\n");
+        json.append("          \"counterSignatures\": [\n");
+        for (int i = 0; i < counterSignatures.size(); i++) {
+            dumpSignature(json, (CAdESSignature) counterSignatures.get(i), certificateVerifier);
+            json.append(i == counterSignatures.size() - 1 ? "\n" : ",\n");
+        }
+        json.append("          ]\n");
+        json.append("        }");
+    }
+
+    static String str(String s) {
+        StringBuilder sb = new StringBuilder("\"");
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '"': sb.append("\\\""); break;
+                case '\\': sb.append("\\\\"); break;
+                case '\n': sb.append("\\n"); break;
+                default: sb.append(c);
+            }
+        }
+        return sb.append('"').toString();
+    }
+
+    static String hex(byte[] bytes) {
+        StringBuilder builder = new StringBuilder(bytes.length * 2);
+        for (byte b : bytes) {
+            builder.append(Character.forDigit((b >> 4) & 0xf, 16));
+            builder.append(Character.forDigit(b & 0xf, 16));
+        }
+        return builder.toString();
+    }
+}

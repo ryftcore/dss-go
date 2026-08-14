@@ -1,0 +1,1 @@
+<r Id="r" xml:base="http://x/a/b/../c/./d//e"><m Id="m" xml:base="../f/.."><n Id="n" xml:base="./g/../h"><t Id="t"></t></n></m></r>

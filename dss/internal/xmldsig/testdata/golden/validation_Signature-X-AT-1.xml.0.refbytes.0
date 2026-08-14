@@ -1,0 +1,9 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+          <head>
+            <title>Ein einfaches SLXHTML-Dokument</title>
+            <style type="text/css">p { color: red; }</style>
+          </head>
+          <body>
+            <p>Ich bin ein einfacher Text in rot.</p>
+          </body>
+        </html>

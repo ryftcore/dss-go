@@ -1,0 +1,70 @@
+# Grammar-reachable XPath 1.0 semantics that testdata/expressions.txt does not happen to
+# exercise. GENERATED answers: gen/XPathOracle.java writes semantics-kat.txt from these against
+# semantics-fixtures/, exactly as it writes kat.txt from expressions.txt against fixtures/.
+#
+# expressions.txt is the upstream inventory and stays pure: it is what DSS can hand the engine,
+# and nothing else. But the grammar this package accepts is slightly larger than that inventory
+# in ways that follow from the grammar rather than from a choice - "=" between two node-sets is
+# admitted the moment "=" and location paths both are - and those corners are conversion rules
+# (clause 3.4) and string-values (clause 5) that are easy to get subtly wrong. Rather than
+# assert what Xalan does from memory, they are pinned by the same oracle.
+#
+# Namespace context: namespaces.txt, the same one the inventory uses.
+
+## node-set = node-set: existential over BOTH sides, comparing string-values
+//a[@x=@y]
+//a[@x=@z]
+//a[@y=@z]
+//nested[text=text]
+
+## node-set = string: existential over the set
+//a[@x='1']
+//a[@x='3']
+//empty[@e='']
+//empty[@e='x']
+
+## string-value of an element is the concatenation of its text descendants
+//text[.='value']
+//cdata[.='value']
+//mixed[.='onetwo']
+//mixed[.='one']
+//blank[.='   ']
+//nothing[.='']
+//r[.=.]
+
+## boolean conversion: a node-set is true when non-empty, a string when non-empty
+//*[not(@x)]
+//*[not(@nosuch)]
+//*[.='']
+//*[not(.='')]
+//*[not(not(@x))]
+
+## local-name() of the context node, which is "" for a node with no name
+//*[local-name()='a']
+//*[local-name()='named']
+//*[local-name()='']
+//*[local-name()='a' or local-name()='named']
+
+## node tests over the child axis
+//mixed/text()
+//mixed/node()
+//cdata/text()
+//nothing/node()
+//r/child::node()
+
+## the attribute axis under a namespace: @q is the unprefixed one only
+//*[@q='v']
+//*/@q
+//*/@ds:q
+
+## conversions between the non-node-set types, and local-name() of an unnamed node
+//r/child::node()[local-name()='']
+//r/child::node()[local-name()='text']
+//*[@x=not(@nosuch)]
+//*[@x=not(@x)]
+//*[not(@x)=not(@nosuch)]
+//*[not(@x)='a']
+//*['a'=not(@x)]
+//*[local-name()=local-name()]
+//*['a'='a']
+//*['a'='b']

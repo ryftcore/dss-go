@@ -1,0 +1,72 @@
+// Ported from dss-enumerations/.../ObjectIdentifierQualifier.java (DSS 6.5.RC1).
+package enumerations
+
+// ObjectIdentifierQualifier declares the type of the defined identifier.
+// Used in XAdES:
+//
+//	<xsd:simpleType name="QualifierType">
+//		<xsd:restriction base="xsd:string">
+//			<xsd:enumeration value="OIDAsURI"/>
+//			<xsd:enumeration value="OIDAsURN"/>
+//		</xsd:restriction>
+//	</xsd:simpleType>
+type ObjectIdentifierQualifier string
+
+const (
+	// ObjectIdentifierQualifier_OID_AS_URI identifies object Identifier
+	// encoded as URI (e.g. 'http://test/public').
+	ObjectIdentifierQualifier_OID_AS_URI ObjectIdentifierQualifier = "OID_AS_URI"
+	// ObjectIdentifierQualifier_OID_AS_URN identifies object Identifier
+	// encoded as URN (e.g. 'urn:oid:1.2.840.113549.1.9.16.6.3').
+	ObjectIdentifierQualifier_OID_AS_URN ObjectIdentifierQualifier = "OID_AS_URN"
+)
+
+var objectIdentifierQualifierValueTable = map[ObjectIdentifierQualifier]string{
+	ObjectIdentifierQualifier_OID_AS_URI: "OIDAsURI",
+	ObjectIdentifierQualifier_OID_AS_URN: "OIDAsURN",
+}
+
+// ObjectIdentifierQualifierValues returns all constants in declaration
+// order.
+func ObjectIdentifierQualifierValues() []ObjectIdentifierQualifier {
+	return []ObjectIdentifierQualifier{
+		ObjectIdentifierQualifier_OID_AS_URI,
+		ObjectIdentifierQualifier_OID_AS_URN,
+	}
+}
+
+// Value returns the XML value of the qualifier.
+func (o ObjectIdentifierQualifier) Value() string {
+	return objectIdentifierQualifierValueTable[o]
+}
+
+// ObjectIdentifierQualifierFromValue returns an ObjectIdentifierQualifier
+// instance from the given value. Returns "" (zero value) if unknown,
+// mirroring Java's null return.
+func ObjectIdentifierQualifierFromValue(v string) ObjectIdentifierQualifier {
+	for _, c := range ObjectIdentifierQualifierValues() {
+		if objectIdentifierQualifierValueTable[c] == v {
+			return c
+		}
+	}
+	return ""
+}
+
+// ObjectIdentifierQualifierValueOf returns the constant matching the given
+// Java enum name.
+func ObjectIdentifierQualifierValueOf(name string) (ObjectIdentifierQualifier, error) {
+	for _, v := range ObjectIdentifierQualifierValues() {
+		if string(v) == name {
+			return v, nil
+		}
+	}
+	return "", &objectIdentifierQualifierInvalidValueError{name}
+}
+
+type objectIdentifierQualifierInvalidValueError struct {
+	name string
+}
+
+func (e *objectIdentifierQualifierInvalidValueError) Error() string {
+	return "no enum constant ObjectIdentifierQualifier." + e.name
+}

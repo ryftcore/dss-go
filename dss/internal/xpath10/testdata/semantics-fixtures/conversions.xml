@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<r xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <a x="1" y="1" z="2"/>
+  <a x="1" y="2" z="2"/>
+  <empty e=""/>
+  <text>value</text>
+  <cdata><![CDATA[value]]></cdata>
+  <mixed>one<!--c-->two</mixed>
+  <blank>   </blank>
+  <nothing/>
+  <ds:named ds:q="v"/>
+  <named q="v"/>
+  <nested><text>value</text><text>other</text></nested>
+</r>

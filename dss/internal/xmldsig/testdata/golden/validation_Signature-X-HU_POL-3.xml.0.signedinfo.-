@@ -1,0 +1,18 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-1__SignedInfo-1">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+<ds:Reference Id="Signature-1__Reference-1" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature-1__SignedProperties-1">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>O+0ysUTINiYK70eIMK0r99ZSw9YJfLucRNNuJCUOAAo=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Signature-1__Reference-2" Type="http://www.w3.org/2000/09/xmldsig#Object" URI="#Signature-1__Object-2">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#base64"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>JJZt41Nt8VsYahP+Xti4rR3vBDkUfRd6gquItl6R5Os=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>

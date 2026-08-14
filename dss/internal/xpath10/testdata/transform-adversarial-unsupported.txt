@@ -1,0 +1,29 @@
+# Expressions in testdata/adversarial that the JDK's XPath answers and this package
+# deliberately does NOT: they use constructs outside the transform subset documented in
+# doc.go and transform.go, which is driven by what the upstream dss-xades corpus actually
+# contains.
+#
+# This file is a statement about the Go side, not an oracle answer - unlike every other
+# file under testdata/, it is written by hand. Its job is to keep the gap honest in both
+# directions. TestTransformAdversarialKnownAnswers requires that
+#
+#   * every expression listed here is refused by CompileTransform with an *UnsupportedError,
+#     never approximated and never answered; and
+#   * every expression NOT listed here compiles and matches the JDK node for node.
+#
+# So widening the subset fails the test until the line is deleted, and narrowing it fails
+# the test until a line is added - neither can happen quietly. A ds:XPath transform using
+# one of these constructs is a signature this port cannot validate and Santuario can; that
+# is an availability gap, and it is a refusal rather than a wrong answer, which is the side
+# to fail on.
+#
+# One expression per line, verbatim.
+
+count(ancestor-or-self::*) < 10
+count(ancestor-or-self::ds:Signature) = 1
+count(namespace::*) > 2
+count(preceding-sibling::*) > 1
+ancestor-or-self::n7 and not(ancestor-or-self::ds:Signature)
+number(.) > 0 or number(.) = 0
+position() = last()
+string-length(normalize-space(.)) > 4

@@ -1,0 +1,26 @@
+<ds:SignedInfo xmlns="http://ecaase.real.not/2007/06" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Id="REALNOT-SignedInfo">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+<ds:Reference Id="REALNOT-Reference-0" URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>VTO8PnlP8Sw1YdizLJtkRcEMX7Yobc+h305IZekodSA=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="REALNOT-Reference-1" Type="http://uri.etsi.org/01903/v1.2.2#SignedProperties" URI="#REALNOT-SignedProperties">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>q8hB8XHDQjjBPmFvtSlcnxwu9TTHR7iYWaAyXcTh7wY=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="REALNOT-Reference-2" Type="http://www.w3.org/2000/09/xmldsig#Object" URI="#REALNOT-doc-scsinfo">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+<ds:DigestValue>WAwLKOdTdzmJ3GdHgfVsc9MbQipOZRUl42e3+IAaJgw=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>

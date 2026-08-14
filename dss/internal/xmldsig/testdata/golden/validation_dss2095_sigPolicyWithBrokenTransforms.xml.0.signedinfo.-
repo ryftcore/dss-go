@@ -1,0 +1,28 @@
+<ds:SignedInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:CanonicalizationMethod>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"></ds:SignatureMethod>
+    <ds:Reference Id="report_ref" URI="jaarrekening.xbrl">
+      <ds:Transforms>
+        <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2">
+		  <XPath xmlns="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">//*[starts-with(local-name(),'DocumentAdoption') or local-name()='EmailAddressContact']</XPath>
+        </ds:Transform>
+        <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+      </ds:Transforms>
+      <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+      <ds:DigestValue>/4DWYdJDq3r+lbGC+gO1qQ+lsV90I+OGt0o1B0lOmcE=</ds:DigestValue>
+    </ds:Reference>
+    <ds:Reference Id="assurance_ref" URI="accountantsverklaring.xbrl">
+      <ds:Transforms>
+        <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:Transform>
+      </ds:Transforms>
+      <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+      <ds:DigestValue>KGCSX4xAQp3TFVlC41S+4/5oKgEV2EAjkuv5OcweBiw=</ds:DigestValue>
+    </ds:Reference>
+    <ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-123">
+      <ds:Transforms>
+        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"></ds:Transform>
+      </ds:Transforms>
+      <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"></ds:DigestMethod>
+      <ds:DigestValue>rA6T+7aqNUmqIKGW44a7dg1rEzOOzde2nvbhTP/zoDA=</ds:DigestValue>
+    </ds:Reference>
+  </ds:SignedInfo>
