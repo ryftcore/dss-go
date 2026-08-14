@@ -22,10 +22,10 @@
 //   CP="dss-validation/target/classes:dss-asic-cades/target/classes:dss-asic-common/target/classes:dss-cades/target/classes:dss-cms/target/classes:dss-cms-object/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt):$(cat /tmp/asiccp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java
 //   java  -cp "$CP:/tmp/crossgenval" CrossGenValidator <fixtures dir> \
-//       asics-cades-b.scs:ASiC_S:CAdES-BASELINE-B \
-//       asics-cades-t.scs:ASiC_S:CAdES-BASELINE-T \
-//       asice-cades-b.sce:ASiC_E:CAdES-BASELINE-B \
-//       asice-cades-t.sce:ASiC_E:CAdES-BASELINE-T
+//       asics-cades-b.scs:ASiC_S:CAdES_BASELINE_B \
+//       asics-cades-t.scs:ASiC_S:CAdES_BASELINE_T \
+//       asice-cades-b.sce:ASiC_E:CAdES_BASELINE_B \
+//       asice-cades-t.sce:ASiC_E:CAdES_BASELINE_T
 //
 // Each fixture argument is "<file>:<expectedContainerType>:<expectedLevel>". Exits 0 and prints
 // "ALL OK" when every fixture passes all assertions; otherwise prints the specific failure for

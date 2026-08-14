@@ -35,13 +35,16 @@ import (
 	"hash"
 	"io"
 	"math/big"
+	"net"
 	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 	"unicode/utf16"
+	"unicode/utf8"
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/eccurve"
@@ -87,7 +90,16 @@ const dssUtilsOidNamespacePrefix = "urn:oid:"
 
 // dssUtilsRFC3986URIPattern is the URI regex defined in RFC 3986 Appendix B. Port of
 // RFC3986_URI_PATTERN.
-var dssUtilsRFC3986URIPattern = regexp.MustCompile(`^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?`)
+//
+// Two adjustments make Go's regexp agree with how upstream applies the pattern, via
+// Matcher.matches() (see DSSUtilsEncodeURI): the pattern is anchored at BOTH ends, because
+// matches() requires the whole input to be consumed while Go's FindStringSubmatch accepts a
+// prefix; and the trailing fragment group spells out java.util.regex's '.', which - with
+// neither DOTALL nor UNIX_LINES set - excludes all five line terminators, whereas Go's '.'
+// excludes only \n. Without the second adjustment a CR (or U+0085/U+2028/U+2029) in the
+// fragment would be percent-encoded here while upstream returns the input untouched.
+var dssUtilsRFC3986URIPattern = regexp.MustCompile(
+	`^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#([^\n\r\x{0085}\x{2028}\x{2029}]*))?\z`)
 
 var dssUtilsURNOidPattern = regexp.MustCompile(`(?i)^urn:oid:.*$`)
 var dssUtilsOidCodePattern = regexp.MustCompile(`^([0-2])((\.0)|(\.[1-9][0-9]*))*$`)
@@ -964,16 +976,28 @@ func DSSUtilsDecodeURI(uri string) string {
 // DSSUtilsEncodeURI encodes a URI (e.g. to be used within a ds:Reference element). Port of
 // encodeURI(String).
 //
-// DEVIATION: upstream reconstructs the URI with java.net.URI(scheme, authority, path, query,
-// fragment), whose multi-argument constructor percent-encodes each component through JDK
-// internal per-component legal/quote character tables (see sun.net.www.ParseUtil), while
-// preserving non-ASCII Unicode letters unescaped - exactly as the upstream doc comment
-// describes. Reproducing those JDK tables byte-for-byte is out of scope here: dss-spi has no
-// caller of this function yet, and XAdES (the module that builds ds:Reference URIs with it) is
-// a later phase. This port instead percent-encodes only ASCII control characters, space and
-// RFC 2396's "unwise" characters (<>"{}|\^`[]) component-wise, leaving Unicode letters and
-// everything else untouched - matching the documented intent without matching the JDK
-// byte-for-byte. Revisit with real interop vectors once XAdES lands.
+// Upstream splits fileURI with RFC3986_URI_PATTERN and reconstructs it through
+// java.net.URI(scheme, authority, path, query, fragment), whose multi-argument constructor
+// percent-encodes each component against java.net.URI's per-component "legal character" masks
+// and leaves non-ASCII Unicode letters unescaped. The output of this function lands in signed
+// bytes (XAdES ds:Reference URIs; ASiC SigReference/DataObjectReference URI attributes), so the
+// JDK's behaviour is reproduced here rather than approximated. Two Java-isms are load-bearing
+// and are mirrored below:
+//
+//   - Matcher.matches() requires the WHOLE input to be consumed, and java.util.regex's '.'
+//     (without DOTALL/UNIX_LINES) excludes the five line terminators LF, CR, U+0085,
+//     U+2028 and U+2029.
+//     A fragment containing any of them therefore fails to match and upstream returns fileURI
+//     verbatim. Go's '.' excludes only \n, and FindStringSubmatch is happy with a prefix match,
+//     so the pattern is anchored at both ends and the fragment group spells out Java's class.
+//   - java.net.URI.quote() encodes an ASCII character when it is outside the component's legal
+//     mask, and encodes a non-ASCII rune (as UTF-8) only when Character.isSpaceChar (categories
+//     Zs/Zl/Zp) or Character.isISOControl (00-1F, 7F-9F) holds - every other rune, including
+//     accented letters, CJK and astral emoji, passes through unescaped.
+//
+// The three masks below are java.net.URI's L_PATH, L_REG_NAME|L_SERVER and L_URIC; they were
+// confirmed character-by-character against a JDK oracle over every ASCII code point in each of
+// the four component positions.
 func DSSUtilsEncodeURI(fileURI string) string {
 	if fileURI == "" {
 		return fileURI
@@ -992,37 +1016,209 @@ func DSSUtilsEncodeURI(fileURI string) string {
 	}
 	if hasAuthority != "" {
 		out.WriteString("//")
-		out.WriteString(dssUtilsEncodeURIComponent(authority))
+		out.WriteString(dssUtilsQuoteURI(authority, dssUtilsURILegalAuthority))
 	}
-	out.WriteString(dssUtilsEncodeURIComponent(path))
+	out.WriteString(dssUtilsQuoteURI(path, dssUtilsURILegalPath))
 	if hasQuery != "" {
 		out.WriteByte('?')
-		out.WriteString(dssUtilsEncodeURIComponent(query))
+		out.WriteString(dssUtilsQuoteURI(query, dssUtilsURILegalUric))
 	}
 	if hasFragment != "" {
 		out.WriteByte('#')
-		out.WriteString(dssUtilsEncodeURIComponent(fragment))
+		out.WriteString(dssUtilsQuoteURI(fragment, dssUtilsURILegalUric))
+	}
+	encoded := out.String()
+
+	// java.net.URI's 5-argument constructor does not merely concatenate: it runs checkPath and
+	// then re-parses the string it just built, and any URISyntaxException propagates out of
+	// encodeURI's try block, which returns fileURI unchanged. Reproduce that, or inputs Java
+	// passes through verbatim (a relative name whose first segment holds a colon, "urn:oid:1.2",
+	// a scheme-shaped prefix that is not a legal scheme name, ...) would come back escaped here.
+	if !dssUtilsIsValidJavaURI(encoded, scheme, path) {
+		return fileURI
+	}
+	return encoded
+}
+
+// dssUtilsIsValidJavaURI reports whether uri - as rebuilt by DSSUtilsEncodeURI from the raw
+// scheme and path components - survives the validation java.net.URI performs at the end of its
+// 5-argument constructor: checkPath(s, scheme, path) followed by new Parser(s).parse(false).
+// Only the failures reachable from an already-quoted string are modelled; each returns false
+// where the JDK throws URISyntaxException with the quoted reason.
+func dssUtilsIsValidJavaURI(uri, scheme, path string) bool {
+	// checkPath: "Relative path in absolute URI".
+	if scheme != "" && path != "" && path[0] != '/' {
+		return false
+	}
+	// Parser.parse: scan for a scheme, stopping at the first '/', '?' or '#'.
+	colon := -1
+	for i := 0; i < len(uri); i++ {
+		if c := uri[i]; c == '/' || c == '?' || c == '#' {
+			break
+		} else if c == ':' {
+			colon = i
+			break
+		}
+	}
+	if colon < 0 {
+		return dssUtilsIsValidJavaHierarchical(uri)
+	}
+	if colon == 0 {
+		return false // "Expected scheme name"
+	}
+	if !dssUtilsIsJavaSchemeName(uri[:colon]) {
+		return false // "Illegal character in scheme name"
+	}
+	rest := uri[colon+1:]
+	if strings.HasPrefix(rest, "/") {
+		return dssUtilsIsValidJavaHierarchical(rest)
+	}
+	// Opaque URI: the scheme-specific part runs up to the fragment and may not be empty.
+	ssp := rest
+	if hash := strings.IndexByte(rest, '#'); hash >= 0 {
+		ssp = rest[:hash]
+	}
+	return ssp != "" // else "Expected scheme-specific part"
+}
+
+// dssUtilsIsValidJavaHierarchical models java.net.URI.Parser.parseHierarchical for an
+// already-quoted string: the only reachable failure is an authority that is neither present
+// nor followed by anything ("Expected authority"), or one the server-authority parser rejects.
+func dssUtilsIsValidJavaHierarchical(uri string) bool {
+	if !strings.HasPrefix(uri, "//") {
+		return true
+	}
+	rest := uri[2:]
+	end := strings.IndexAny(rest, "/?#")
+	if end < 0 {
+		end = len(rest)
+	}
+	if end > 0 {
+		return dssUtilsIsValidJavaAuthority(rest[:end])
+	}
+	// An empty authority is tolerated, but only when the URI does not end right after "//".
+	return end < len(rest)
+}
+
+// dssUtilsIsValidJavaAuthority models java.net.URI.Parser.parseAuthority with
+// requireServerAuthority false: a server-based parse is attempted first and, when it fails,
+// the authority is accepted as a registry name instead - unless it is not a legal registry
+// name either, in which case the server-parse exception is rethrown. DSSUtilsEncodeURI quotes
+// the authority against L_REG_NAME|L_SERVER, so the only characters that can put it outside
+// L_REG_NAME are '[' and ']'; an authority carrying either must therefore be a well-formed
+// IPv6 literal host ("Expected closing bracket for IPv6 address", "Illegal character in
+// hostname").
+func dssUtilsIsValidJavaAuthority(authority string) bool {
+	if !strings.ContainsAny(authority, "[]") {
+		return true
+	}
+	hostPort := authority
+	if at := strings.LastIndexByte(authority, '@'); at >= 0 {
+		hostPort = authority[at+1:]
+	}
+	if !strings.HasPrefix(hostPort, "[") {
+		return false
+	}
+	close := strings.IndexByte(hostPort, ']')
+	if close < 0 {
+		return false
+	}
+	if ip := net.ParseIP(strings.TrimSuffix(strings.TrimPrefix(hostPort[:close+1], "["), "]")); ip == nil || ip.To4() != nil {
+		return false
+	}
+	port := hostPort[close+1:]
+	if port == "" {
+		return true
+	}
+	if port[0] != ':' {
+		return false
+	}
+	for i := 1; i < len(port); i++ {
+		if port[i] < '0' || port[i] > '9' {
+			return false
+		}
+	}
+	return true
+}
+
+// dssUtilsIsJavaSchemeName reports whether s is a legal java.net.URI scheme name: an ASCII
+// letter followed by ASCII letters, digits, '+', '-' or '.'.
+func dssUtilsIsJavaSchemeName(s string) bool {
+	if s == "" {
+		return false
+	}
+	if c := s[0]; !(c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
+		return false
+	}
+	for i := 1; i < len(s); i++ {
+		c := s[i]
+		if c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' ||
+			c == '+' || c == '-' || c == '.' {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+// The ASCII characters each java.net.URI component mask treats as legal, i.e. leaves unescaped.
+// Alphanumerics are legal everywhere and are tested separately, so only the punctuation is
+// spelled out here.
+//
+//   - dssUtilsURILegalMark is RFC 2396's "mark" set, java.net.URI's L_MARK.
+//   - dssUtilsURILegalPath is L_PATH = pchar ("mark" plus ":@&=+$,") plus ";" and "/".
+//   - dssUtilsURILegalAuthority is L_REG_NAME|L_SERVER: the path set without "/" (which the
+//     RFC 3986 pattern can never place in the authority group) plus "[" and "]", which
+//     java.net.URI keeps literal there for IPv6 literals.
+//   - dssUtilsURILegalUric is L_URIC = "mark" plus the full reserved set ";/?:@&=+$,[]"; it
+//     governs both query and fragment. Note "%" is absent from every mask, so a literal "%"
+//     is always re-encoded to "%25" (upstream never treats input as pre-escaped), and "#" is
+//     absent from L_URIC, so a "#" inside a fragment becomes "%23".
+const (
+	dssUtilsURILegalMark      = "-_.!~*'()"
+	dssUtilsURILegalPath      = dssUtilsURILegalMark + ":@&=+$,;/"
+	dssUtilsURILegalAuthority = dssUtilsURILegalMark + ":@&=+$,;[]"
+	dssUtilsURILegalUric      = dssUtilsURILegalMark + ":@&=+$,;/?[]"
+)
+
+// dssUtilsQuoteURI percent-encodes s for a java.net.URI component whose legal punctuation is
+// legal. Port of java.net.URI.quote(String, long, long).
+func dssUtilsQuoteURI(s, legal string) string {
+	var out strings.Builder
+	for _, r := range s {
+		switch {
+		case r < utf8.RuneSelf:
+			b := byte(r)
+			if b >= 'a' && b <= 'z' || b >= 'A' && b <= 'Z' || b >= '0' && b <= '9' ||
+				strings.IndexByte(legal, b) >= 0 {
+				out.WriteByte(b)
+			} else {
+				fmt.Fprintf(&out, "%%%02X", b)
+			}
+		case dssUtilsIsJavaSpaceChar(r) || dssUtilsIsJavaISOControl(r):
+			// Character.isSpaceChar / Character.isISOControl: quoted as UTF-8 octets.
+			var buf [utf8.UTFMax]byte
+			for _, b := range buf[:utf8.EncodeRune(buf[:], r)] {
+				fmt.Fprintf(&out, "%%%02X", b)
+			}
+		default:
+			out.WriteRune(r)
+		}
 	}
 	return out.String()
 }
 
-// dssUtilsUnwiseURIChars are the RFC 2396 "unwise" characters, percent-encoded by
-// DSSUtilsEncodeURI alongside space and ASCII control characters.
-const dssUtilsUnwiseURIChars = " <>\"{}|\\^`[]"
+// dssUtilsIsJavaSpaceChar reports whether r is a Unicode space separator in the sense of
+// java.lang.Character.isSpaceChar: general category Zs, Zl or Zp (which is narrower than Go's
+// unicode.IsSpace, e.g. \t and \n are NOT space characters here).
+func dssUtilsIsJavaSpaceChar(r rune) bool {
+	return unicode.In(r, unicode.Zs, unicode.Zl, unicode.Zp)
+}
 
-// dssUtilsEncodeURIComponent percent-encodes ASCII control characters, space and RFC 2396's
-// "unwise" characters, leaving everything else - including non-ASCII Unicode - untouched.
-func dssUtilsEncodeURIComponent(s string) string {
-	var out strings.Builder
-	for i := 0; i < len(s); i++ {
-		b := s[i]
-		if b < 0x20 || b == 0x7f || strings.IndexByte(dssUtilsUnwiseURIChars, b) >= 0 {
-			fmt.Fprintf(&out, "%%%02X", b)
-		} else {
-			out.WriteByte(b)
-		}
-	}
-	return out.String()
+// dssUtilsIsJavaISOControl reports whether r is an ISO control character in the sense of
+// java.lang.Character.isISOControl: U+0000-U+001F or U+007F-U+009F.
+func dssUtilsIsJavaISOControl(r rune) bool {
+	return r <= 0x1f || (r >= 0x7f && r <= 0x9f)
 }
 
 // DSSUtilsExceptionMessage returns a message retrieved from err, its cause's message if err's

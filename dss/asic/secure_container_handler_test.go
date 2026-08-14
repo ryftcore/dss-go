@@ -79,8 +79,8 @@ func loadDSSOracle(t *testing.T) *dssOracle {
 	if err := json.Unmarshal(data, &oracle); err != nil {
 		t.Fatalf("parse oracle: %v", err)
 	}
-	if len(oracle.Containers) != 188 {
-		t.Fatalf("oracle should cover 188 fixtures, got %d", len(oracle.Containers))
+	if len(oracle.Containers) != 189 {
+		t.Fatalf("oracle should cover 189 fixtures, got %d", len(oracle.Containers))
 	}
 	return &oracle
 }
@@ -274,8 +274,8 @@ func assertOracleTime(t *testing.T, label string, actual time.Time, expected *in
 }
 
 // TestSecureContainerHandlerReadsLocalHeaderExtraNotCentralDirectory is the evidence for this
-// port's core design choice. Of the 1218 entries the two Java views can both see, 281 have a
-// different `extra` field in the local header than in the central directory, and for 264 of them
+// port's core design choice. Of the 1224 entries the two Java views can both see, 282 have a
+// different `extra` field in the local header than in the central directory, and for 265 of them
 // the local header has none at all while the central directory carries an NTFS (0x000a) one.
 // Upstream reads local headers (ZipInputStream), so it sees no extra field for those; a
 // central-directory-based reimplementation would resurrect that metadata and write it back out on
@@ -319,8 +319,8 @@ func TestSecureContainerHandlerReadsLocalHeaderExtraNotCentralDirectory(t *testi
 			}
 		}
 	}
-	if comparable != 1218 || divergent != 281 || localAbsent != 264 {
-		t.Fatalf("local/central extra divergence = %d of %d entries (%d local-absent), want 281 of 1218 (264) as this port's design note cites",
+	if comparable != 1224 || divergent != 282 || localAbsent != 265 {
+		t.Fatalf("local/central extra divergence = %d of %d entries (%d local-absent), want 282 of 1224 (265) as this port's design note cites",
 			divergent, comparable, localAbsent)
 	}
 

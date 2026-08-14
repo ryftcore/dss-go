@@ -7,18 +7,12 @@
 // Java base belongs to the not-yet-ported dss-validation module. Drop the tag on both files
 // together once Phase 8 lands the package.
 //
-// FLAGGED CROSS-CHUNK GAP (per S7_BRIEF.md's "flag needs in notes" rule, frozen file, not
-// editable here): asic.AbstractASiCContainerAnalyzer.GetAllSignatures (frozen,
-// abstract_asic_container_analyzer.go) self-calls `a.AttachExternalTimestamps(...)` with `a`
-// statically typed *AbstractASiCContainerAnalyzer - since AttachExternalTimestamps is NOT part
-// of AbstractASiCContainerAnalyzerOverrides (unlike the five methods the base's doc comment
-// lists as shadowed), this leaf's AttachExternalTimestamps override below can never be reached
-// through the promoted GetAllSignatures() call path; Go has no virtual dispatch to rescue it the
-// way BuildSignatures/CoversSignature/etc. are rescued via the overrides interface. This mirrors
-// the "virtual-dispatch warning" bug class S7_BRIEF.md calls out, but the fix belongs in the
-// frozen asic package (adding AttachExternalTimestamps to
-// AbstractASiCContainerAnalyzerOverrides), out of scope for this CADVAL manifest. The override
-// is still ported faithfully below for when that fix lands.
+// AttachExternalTimestamps below is reached virtually: asic.AbstractASiCContainerAnalyzer's
+// GetAllSignatures self-calls it through AbstractASiCContainerAnalyzerOverrides, which the
+// method is a member of precisely so this leaf's override is not lost to Go's static dispatch
+// (the "virtual-dispatch warning" bug class S7_BRIEF.md calls out). Analyzers that do not
+// override it - ASiCContainerWithXAdESAnalyzer - inherit the base's empty body by promotion,
+// matching Java's non-abstract protected default.
 //
 // FLAGGED CROSS-CHUNK GAP: Java's getSignatureAnalyzers() forwards
 // `this.getSignaturePolicyProvider()` (a protected accessor on the frozen
@@ -234,9 +228,9 @@ func containsDocument(documents []model.DSSDocument, target model.DSSDocument) b
 	return false
 }
 
-// AttachExternalTimestamps ports the @Override protected attachExternalTimestamps(List). See the
-// file header's flagged cross-chunk gap on why this override cannot currently be reached through
-// AbstractASiCContainerAnalyzer.GetAllSignatures.
+// AttachExternalTimestamps ports the @Override protected attachExternalTimestamps(List). It is
+// reached through AbstractASiCContainerAnalyzerOverrides when the base's GetAllSignatures runs;
+// see this file's header.
 func (a *ASiCContainerWithCAdESAnalyzer) AttachExternalTimestamps(allSignatures []validation.AdvancedSignature) []*validation.TimestampToken {
 	externalTimestamps := make([]*validation.TimestampToken, 0)
 

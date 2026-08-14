@@ -193,6 +193,61 @@ func TestDSSUtilsEncodeURIPreservesUnicode(t *testing.T) {
 	}
 }
 
+// TestDSSUtilsEncodeURIJavaParity pins DSSUtilsEncodeURI against java.net.URI. Every want below
+// is the literal output of upstream's encodeURI running on a JDK; the cases are drawn from the
+// four behaviours that a previous approximation of the JDK's quoting got wrong, each of which
+// altered signed bytes (XAdES ds:Reference URIs, ASiC SigReference/DataObjectReference URIs).
+func TestDSSUtilsEncodeURIJavaParity(t *testing.T) {
+	cases := []struct{ in, want string }{
+		// Unchanged baseline: ordinary ASiC entry names and the reserved/unreserved sets.
+		{"mimetype", "mimetype"},
+		{"META-INF/signature001.p7s", "META-INF/signature001.p7s"},
+		{"hello world.txt", "hello%20world.txt"},
+		{"lt<gt>.txt", "lt%3Cgt%3E.txt"},
+		{"tilde~star*paren().txt", "tilde~star*paren().txt"},
+
+		// (1) '%' is absent from every java.net.URI component mask, so a literal '%' is always
+		// re-quoted - upstream never treats its input as already escaped.
+		{"100%_done.txt", "100%25_done.txt"},
+		{"already%20encoded.txt", "already%2520encoded.txt"},
+		{"%", "%25"},
+
+		// (2) Non-ASCII runes are escaped only when Character.isSpaceChar (Zs/Zl/Zp) or
+		// Character.isISOControl holds; letters and astral emoji pass through untouched.
+		{"u\u00a0.txt", "u%C2%A0.txt"},    // U+00A0 NBSP: category Zs
+		{"u\u3000.txt", "u%E3%80%80.txt"}, // U+3000 ideographic space: category Zs
+		{"u\u0085.txt", "u%C2%85.txt"},    // U+0085 NEL: ISO control
+		{"déjà vu/été.bin", "déjà%20vu/été.bin"},
+		{"中文.txt", "中文.txt"},
+		{"😀emoji.txt", "😀emoji.txt"},
+
+		// (3) Per-component masks differ: '[' and ']' are reserved characters, quoted in a path
+		// but legal in an authority, query or fragment; '#' is quoted inside a fragment.
+		{"[bracket].txt", "%5Bbracket%5D.txt"},
+		{"http://h/p?a[b", "http://h/p?a[b"},
+		{"http://h/p#f[g", "http://h/p#f[g"},
+		{"http://h/p#f#g", "http://h/p#f%23g"},
+
+		// (4) When java.net.URI's constructor rejects the rebuilt URI, upstream's try block
+		// returns the input verbatim: a relative name whose first segment carries a colon is a
+		// "Relative path in absolute URI", and a scheme-shaped prefix that is not a legal scheme
+		// name is an "Illegal character in scheme name".
+		{"urn:oid:1.2.3", "urn:oid:1.2.3"},
+		{"a:b c.txt", "a:b c.txt"},
+		{"100%:x y", "100%:x y"},
+		// Java's '.' excludes all five line terminators, so Matcher.matches() fails on a
+		// fragment containing CR and the input is returned unchanged.
+		{"http://h/p#f\rg", "http://h/p#f\rg"},
+		// ... while the same CR inside a path is matched by [^?#]* and duly quoted.
+		{"p\rq.txt", "p%0Dq.txt"},
+	}
+	for _, c := range cases {
+		if got := DSSUtilsEncodeURI(c.in); got != c.want {
+			t.Errorf("DSSUtilsEncodeURI(%q) = %q, want %q", c.in, got, c.want)
+		}
+	}
+}
+
 func TestDSSUtilsHost(t *testing.T) {
 	got := DSSUtilsHost("ldap://ldap.infonotary.com/dc=identity-ca,dc=infonotary,dc=com")
 	if got != "ldap.infonotary.com" {

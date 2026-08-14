@@ -96,7 +96,8 @@ func (p *ASiCEWithXAdESManifestParser) getEntries() (result []*model.ManifestEnt
 
 	entries := make([]*model.ManifestEntry, 0, len(nodeList))
 	for _, fileEntryElement := range nodeList {
-		fullPathValue := fileEntryElement.AttrValue("", ManifestPathGetFullPathAttribute(manifestNamespace))
+		fullPathValue := asiceWithXAdESManifestParserAttrValue(
+			fileEntryElement, ManifestPathGetFullPathAttribute(manifestNamespace))
 		if !p.isFolder(fullPathValue) {
 			manifestEntry := model.NewManifestEntry()
 			manifestEntry.SetUri(fullPathValue)
@@ -118,11 +119,38 @@ func (p *ASiCEWithXAdESManifestParser) getManifestNamespace(manifestDom *xmldom.
 
 // getMimeType ports the private getMimeType(Element, DSSNamespace).
 func (p *ASiCEWithXAdESManifestParser) getMimeType(fileEntryElement *xmldom.Node, manifestNamespace *common.DSSNamespace) enumerations.MimeType {
-	mediaType := fileEntryElement.AttrValue("", ManifestPathGetMediaTypeAttribute(manifestNamespace))
+	mediaType := asiceWithXAdESManifestParserAttrValue(
+		fileEntryElement, ManifestPathGetMediaTypeAttribute(manifestNamespace))
 	if strings.TrimSpace(mediaType) != "" {
 		return enumerations.MimeTypeFromMimeTypeString(mediaType)
 	}
 	return nil
+}
+
+// asiceWithXAdESManifestParserAttrValue returns element's attribute with the given QUALIFIED
+// name ("prefix:local"), or "" when it has none.
+//
+// Upstream reads these two attributes with org.w3c.dom.Element#getAttribute(String), which
+// matches an attribute's qualified name (its nodeName) rather than its expanded
+// {namespace-uri}local-name pair - and ASiCEWithXAdESManifestParser leans on that deliberately,
+// building the name from whichever prefix the document itself binds to the manifest namespace
+// (getManifestNamespace + ManifestPath.getFullPathAttribute produce e.g. "manifest:full-path").
+//
+// xmldom's Attr/AttrValue match on the expanded name, so passing them a qualified name with an
+// empty namespace - as this file previously did - never matches: every entry came back with an
+// empty URI and no mime type, which also defeated isFolder() and let the "/" root entry through.
+// The unprefixed XMLDSig and ASiCManifest attributes read elsewhere in the port are unaffected,
+// since for them qualified and expanded lookups coincide.
+func asiceWithXAdESManifestParserAttrValue(element *xmldom.Node, qualifiedName string) string {
+	if element == nil {
+		return ""
+	}
+	for _, attr := range element.Attrs {
+		if attr.Name.QName() == qualifiedName {
+			return attr.Value
+		}
+	}
+	return ""
 }
 
 // isFolder ports the private isFolder(String).

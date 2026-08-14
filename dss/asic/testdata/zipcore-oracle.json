@@ -301,6 +301,29 @@
       "centralError": null
     },
     {
+      "path": "dss-asic-cades/src/test/resources/validation/asice-cades-new-line-mimetype",
+      "size": 5034,
+      "zipComment": "mimetype=application/vnd.etsi.asic-e+zip\n",
+      "streamEntries": [
+        {"name": "emptyByteArray", "method": 8, "size": 0, "compressedSize": 2, "crc": 0, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 0, "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+        {"name": "META-INF/ASiCManifest.xml", "method": 8, "size": 1241, "compressedSize": 444, "crc": 870109773, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 1241, "contentSha256": "6b07f695c553c3135e9f92c6c5a8dd6de7ab0629e3ba50892de8be8c8aa4f9b5"},
+        {"name": "META-INF/signature001.p7s", "method": 8, "size": 5418, "compressedSize": 3710, "crc": 654048338, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 5418, "contentSha256": "2589da08725e92250005e830059c8a7ed6ce71f5cf4d9e9f55db95e5eda93b64"},
+        {"name": "mimetype", "method": 0, "size": 33, "compressedSize": 33, "crc": 2577899722, "time": 1585674930000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585674930000, "lastAccessTime": null, "isDirectory": false, "contentLength": 33, "contentSha256": "fd88991c5fb391912a546bfe322bec28ad0407b2016a2e2f77a2430b0a8da3fc"},
+        {"name": "test.text", "method": 8, "size": 13, "compressedSize": 15, "crc": 3367179740, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 13, "contentSha256": "07f2bdef34ed16e3a1ba0dbb7e47b8fd981ce0ccb3e1bfe564d82c423cba7e47"},
+        {"name": "test2.text", "method": 8, "size": 11, "compressedSize": 13, "crc": 2071781263, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 11, "contentSha256": "7d0c91c735ee8cfb7954278b13f4c095cb5eb34426f6a7ebb0ff64b10499e456"}
+      ],
+      "streamError": null,
+      "centralEntries": [
+        {"name": "emptyByteArray", "method": 8, "size": 0, "compressedSize": 2, "crc": 0, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 0, "contentSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+        {"name": "META-INF/ASiCManifest.xml", "method": 8, "size": 1241, "compressedSize": 444, "crc": 870109773, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 1241, "contentSha256": "6b07f695c553c3135e9f92c6c5a8dd6de7ab0629e3ba50892de8be8c8aa4f9b5"},
+        {"name": "META-INF/signature001.p7s", "method": 8, "size": 5418, "compressedSize": 3710, "crc": 654048338, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 5418, "contentSha256": "2589da08725e92250005e830059c8a7ed6ce71f5cf4d9e9f55db95e5eda93b64"},
+        {"name": "mimetype", "method": 0, "size": 33, "compressedSize": 33, "crc": 2577899722, "time": 1585667729478, "comment": null, "extra": "0a00200000000000010018004ab3b7366f07d6019a5ce32a6f07d6019a5ce32a6f07d601", "creationTime": 1585667709631, "lastModifiedTime": 1585667729478, "lastAccessTime": 1585667709631, "isDirectory": false, "contentLength": 33, "contentSha256": "fd88991c5fb391912a546bfe322bec28ad0407b2016a2e2f77a2430b0a8da3fc"},
+        {"name": "test.text", "method": 8, "size": 13, "compressedSize": 15, "crc": 3367179740, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 13, "contentSha256": "07f2bdef34ed16e3a1ba0dbb7e47b8fd981ce0ccb3e1bfe564d82c423cba7e47"},
+        {"name": "test2.text", "method": 8, "size": 11, "compressedSize": 13, "crc": 2071781263, "time": 1585676474000, "comment": null, "extra": null, "creationTime": null, "lastModifiedTime": 1585676474000, "lastAccessTime": null, "isDirectory": false, "contentLength": 11, "contentSha256": "7d0c91c735ee8cfb7954278b13f4c095cb5eb34426f6a7ebb0ff64b10499e456"}
+      ],
+      "centralError": null
+    },
+    {
       "path": "dss-asic-cades/src/test/resources/validation/asice-level-lta-with-custom-manifest-namespace.sce",
       "size": 8703,
       "zipComment": null,

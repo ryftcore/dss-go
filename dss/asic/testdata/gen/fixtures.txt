@@ -12,6 +12,7 @@ dss-asic-cades/src/test/resources/validation/ASICE-CAdES-BpLTA-2-BpLTA-DSS5.4.as
 dss-asic-cades/src/test/resources/validation/ASiC-E-CAdES-BpLTA-copied-arctst.sce
 dss-asic-cades/src/test/resources/validation/ASiC-E-CAdES-BpLTA.sce
 dss-asic-cades/src/test/resources/validation/asice-cades-lta-atst-v3.sce
+dss-asic-cades/src/test/resources/validation/asice-cades-new-line-mimetype
 dss-asic-cades/src/test/resources/validation/asice-level-lta-with-custom-manifest-namespace.sce
 dss-asic-cades/src/test/resources/validation/brokenReference.asice
 dss-asic-cades/src/test/resources/validation/brokenReferenceAndAlteredManifest.asice

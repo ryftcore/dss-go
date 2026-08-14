@@ -32,6 +32,15 @@ type AbstractASiCContainerAnalyzerOverrides interface {
 	// GetSignatureAnalyzers returns a list of analyzers for signature documents embedded into
 	// the container. Port of the protected abstract getSignatureAnalyzers().
 	GetSignatureAnalyzers() []analyzer.DocumentAnalyzer
+
+	// AttachExternalTimestamps attaches existing external timestamps to allSignatures. Port of
+	// the protected attachExternalTimestamps(List), which - unlike the four methods above - is
+	// NOT abstract in Java: the base supplies an empty body and only ASiCContainerWithCAdESAnalyzer
+	// overrides it. It is listed here because GetAllSignatures self-calls it, so it needs the
+	// same virtual dispatch the shadowed methods get; leaf analyzers that do not override it
+	// satisfy this method through the promoted default body below, exactly as a Java subclass
+	// inherits the base implementation.
+	AttachExternalTimestamps(allSignatures []validation.AdvancedSignature) []*validation.TimestampToken
 }
 
 // AbstractASiCContainerAnalyzer is the abstract class for an ASiC container validation. Ports
@@ -51,7 +60,9 @@ type AbstractASiCContainerAnalyzerOverrides interface {
 //     (Go promotes AbstractASiCContainerAnalyzer's 5 overridden methods automatically, so the
 //     leaf value as a whole then satisfies the full analyzer.DefaultDocumentAnalyzerOverrides
 //     interface);
-//  3. implement AbstractASiCContainerAnalyzerOverrides' 4 methods itself;
+//  3. implement AbstractASiCContainerAnalyzerOverrides' 4 abstract methods itself (its fifth
+//     member, AttachExternalTimestamps, is optional: the base supplies a default body that
+//     Go promotes, so only ASiCContainerWithCAdESAnalyzer declares its own);
 //  4. call InitAbstractASiCContainerAnalyzer(leaf) on the embedded base, then
 //     embeddedBase.InitDefaultDocumentAnalyzer(leaf) on its further-embedded
 //     analyzer.DefaultDocumentAnalyzer, then InitFromDocument/InitFromContent (in that order -
@@ -169,9 +180,16 @@ func (a *AbstractASiCContainerAnalyzer) AttachExternalTimestamps(allSignatures [
 
 // GetAllSignatures ports the @Override getAllSignatures(). Shadows the embedded
 // DefaultDocumentAnalyzer.GetAllSignatures.
+//
+// The AttachExternalTimestamps call goes through requireOverrides(): Java's is a virtual call,
+// and ASiCContainerWithCAdESAnalyzer overrides it to attach container-level (ASiC-S container /
+// ASiC-E archive) timestamps to the signatures they cover. Calling a.AttachExternalTimestamps
+// directly would bind to the empty default below and silently drop those timestamps - the
+// return value is discarded here exactly as upstream discards it, because the work the override
+// does is the side effect on the AdvancedSignatures in allSignatureList.
 func (a *AbstractASiCContainerAnalyzer) GetAllSignatures() []validation.AdvancedSignature {
 	allSignatureList := a.DefaultDocumentAnalyzer.GetAllSignatures()
-	a.AttachExternalTimestamps(allSignatureList)
+	a.requireOverrides().AttachExternalTimestamps(allSignatureList)
 	return allSignatureList
 }
 

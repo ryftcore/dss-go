@@ -1,4 +1,4 @@
-// GO -> UPSTREAM cross-validation (task #12, ASiC-with-CAdES extension): loads each container
+// GO -> UPSTREAM cross-validation (task #12, ASiC-with-XAdES extension): loads each container
 // main.go (crossgen) produced with upstream DSS 6.5.RC1's own SignedDocumentValidator/
 // SignedDocumentDiagnosticDataBuilder and asserts the container type is recognized, the
 // signature is cryptographically intact, the signing certificate was identified, and the
@@ -9,23 +9,26 @@
 // Modeled on cades/testdata/crossgen/CrossGenValidator.java and
 // xades/testdata/crossgen/CrossGenValidator.java (same three signature-level assertions), with
 // one addition: the expected ASiCContainerType (ASiC-S vs ASiC-E) is checked too, since that is
-// the property this harness extension is actually about.
+// the property this harness extension is actually about. Identical to
+// asic/cades/testdata/crossgen's copy (copied rather than shared - see this package's own
+// crossgen/main.go header for why): SignedDocumentValidator/DiagnosticData are generic across
+// signature formats, so nothing in it is CAdES/XAdES-specific.
 //
 // Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1, dss-validation AND
-// dss-asic-cades included (dss-asic-cades registers ASiCContainerWithCAdESValidatorFactory as a
+// dss-asic-xades included (dss-asic-xades registers ASiCContainerWithXAdESValidatorFactory as a
 // SignedDocumentValidator.fromDocument ServiceLoader provider - without it on the classpath,
 // fromDocument() throws "Document format not recognized/handled" for a .scs/.sce file):
 //
 //   cd /home/user/dss-upstream
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
-//   mvn -q -o -pl dss-asic-cades dependency:build-classpath -Dmdep.outputFile=/tmp/asiccp.txt -Dmdep.includeScope=runtime
-//   CP="dss-validation/target/classes:dss-asic-cades/target/classes:dss-asic-common/target/classes:dss-cades/target/classes:dss-cms/target/classes:dss-cms-object/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt):$(cat /tmp/asiccp.txt)"
+//   mvn -q -o -pl dss-asic-xades dependency:build-classpath -Dmdep.outputFile=/tmp/asiccp.txt -Dmdep.includeScope=runtime
+//   CP="dss-validation/target/classes:dss-asic-xades/target/classes:dss-asic-common/target/classes:dss-xades/target/classes:dss-xml-utils/target/classes:dss-xml-common/target/classes:specs-trusted-list/target/classes:specs-xades/target/classes:specs-xmldsig/target/classes:dss-cades/target/classes:dss-cms/target/classes:dss-cms-object/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt):$(cat /tmp/asiccp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java
 //   java  -cp "$CP:/tmp/crossgenval" CrossGenValidator <fixtures dir> \
-//       asics-cades-b.scs:ASiC_S:CAdES-BASELINE-B \
-//       asics-cades-t.scs:ASiC_S:CAdES-BASELINE-T \
-//       asice-cades-b.sce:ASiC_E:CAdES-BASELINE-B \
-//       asice-cades-t.sce:ASiC_E:CAdES-BASELINE-T
+//       asics-xades-b.scs:ASiC_S:XAdES_BASELINE_B \
+//       asics-xades-t.scs:ASiC_S:XAdES_BASELINE_T \
+//       asice-xades-b.sce:ASiC_E:XAdES_BASELINE_B \
+//       asice-xades-t.sce:ASiC_E:XAdES_BASELINE_T
 //
 // Each fixture argument is "<file>:<expectedContainerType>:<expectedLevel>". Exits 0 and prints
 // "ALL OK" when every fixture passes all assertions; otherwise prints the specific failure for

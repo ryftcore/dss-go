@@ -222,18 +222,13 @@ func TestSignatureManifestSigReferenceMimeTypes(t *testing.T) {
 // java.net.URI(scheme, authority, path, query, fragment), which quotes '%' as "%25"
 // ("100%_done.txt" -> "100%25_done.txt", "already%20encoded.txt" -> "already%2520encoded.txt").
 //
-// KNOWN FROZEN-PACKAGE GAP: dss/spi's DSSUtilsEncodeURI documents a deviation from that JDK
-// behaviour ("percent-encodes only ASCII control characters, space and RFC 2396's unwise
-// characters ... Revisit with real interop vectors once XAdES lands") and leaves '%' untouched.
-// A differential probe of 30 filenames against the Java implementation found '%' to be the ONLY
-// remaining difference - space, the unwise set (<>"{}|\^`[]), tab, the RFC 3986 reserved
-// characters and non-ASCII letters all already match - so the fix is to add '%' to the encoded
-// set in spi's dssUtilsEncodeURIComponent. Since manifests are signed, this changes bytes that
-// the CAdES signature covers, hence the assertion is kept here and only skipped until dss/spi
-// (a frozen package this chunk may not edit) is corrected.
+// This assertion was previously skipped against a "frozen package" deviation in dss/spi, where
+// DSSUtilsEncodeURI approximated java.net.URI's quoting instead of reproducing it. Because these
+// URIs sit in manifest bytes that the CAdES signature covers, the deviation was a signed-bytes
+// parity defect rather than a cosmetic one; DSSUtilsEncodeURI now ports the JDK's per-component
+// quoting masks, its non-ASCII space/ISO-control rule and its constructor-time validation, so
+// the assertion runs.
 func TestSignatureManifestPercentEncodedURIs(t *testing.T) {
-	t.Skip("blocked on the documented DSSUtilsEncodeURI deviation in the frozen dss/spi package: a literal '%' must be encoded as %25")
-
 	fixtures := loadManifestKATFixtures(t)
 	manifest, err := NewASiCWithCAdESSignatureManifestBuilder(manifestKATPercentContent(),
 		enumerations.DigestAlgorithm_SHA256, "META-INF/signature001.p7s").Build()
