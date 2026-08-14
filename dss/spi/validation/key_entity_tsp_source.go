@@ -58,6 +58,7 @@ import (
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/internal/cmscore"
+	"github.com/utain/esig/dss/internal/eccurve"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 
@@ -242,7 +243,7 @@ func NewKeyEntityTSPSourceFromKeyStore(ksContent []byte, ksType string, ksPasswo
 	for _, block := range blocks {
 		switch block.Type {
 		case "CERTIFICATE":
-			certificate, err := x509.ParseCertificate(block.Bytes)
+			certificate, err := eccurve.ParseCertificate(block.Bytes)
 			if err != nil {
 				return nil, model.NewDSSErrorMessageCause("Unable to instantiate KeyStore", err)
 			}

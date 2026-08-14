@@ -352,6 +352,32 @@ func (p *parser) parseNodeTest() (nodeTest, error) {
 		p.next()
 		return nodeTest{kind: testAny}, nil
 	}
+
+	// A QName with an explicit-but-empty prefix (a stray leading colon, e.g. the "::" axis
+	// separator immediately followed by another colon: "descendant:::Signature"). This is not
+	// valid XPath 1.0 grammar - NCName forbids an empty production - but it is exactly what
+	// XPath2FilterEnvelopedSignatureTransform's Java source generates when built with a
+	// DSSNamespace whose prefix is "" (the ds elements use the default, unprefixed xmlns="u"
+	// declaration instead of xmlns:ds="u"), and upstream's javax.xml.xpath evaluates it as a
+	// name test in the default namespace currently in scope - not as a syntax error, and not
+	// as the null namespace a genuinely unprefixed name test would get (that is a different
+	// grammar production; see NamespaceContextOf's own doc comment on that distinction).
+	// Reproduced only for CompileTransform's grammar (p.transform), since only the generated
+	// transform text is ever malformed this way; a hand-written XPath elsewhere in the corpus
+	// stays a syntax error. Pinned byte-exact against the Java oracle by
+	// xades_reference_kat_test.go's "si-enveloped-default-prefix" case.
+	if p.transform && p.at(tokColon) {
+		p.next()
+		if !p.at(tokName) {
+			return nodeTest{}, p.syntax("expected a node test")
+		}
+		local := p.next()
+		if p.at(tokColon) {
+			return nodeTest{}, p.unsupportedAt(local.pos, "the 'prefix:*' node test")
+		}
+		return nodeTest{kind: testName, space: p.ns.NamespaceURI(defaultNamespaceKey), local: local.text}, nil
+	}
+
 	if !p.at(tokName) {
 		return nodeTest{}, p.syntax("expected a node test")
 	}

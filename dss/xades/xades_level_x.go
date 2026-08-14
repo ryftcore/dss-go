@@ -1,0 +1,129 @@
+// Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/signature/XAdESLevelX.java (DSS 6.5.RC1).
+//
+// Java extends XAdESLevelC and overrides extendSignatures(List<AdvancedSignature>), calling
+// super.extendSignatures first. Go has no method overriding across embedding, so the level chain
+// follows the same convention every other level in this package uses: the concrete level embeds
+// the previous one, registers itself with the base through InitXAdESLevelX (which forwards to
+// InitXAdESLevelC), and ExtendSignatures is reached through the registered overrides. The
+// explicit super call becomes a direct call on the embedded XAdESLevelC.
+//
+// Errors: the requirements checks and the message-digest computation return errors here where
+// Java throws (PORTING.md: throw -> (T, error)).
+package xades
+
+import (
+	"fmt"
+
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/spi/validation"
+	"github.com/utain/esig/dss/utils"
+)
+
+// XAdESLevelX represents the implementation of the XAdES level -X extension.
+type XAdESLevelX struct {
+	XAdESLevelC
+}
+
+// NewXAdESLevelX is the default constructor for XAdESLevelX.
+// Port of XAdESLevelX(CertificateVerifier).
+func NewXAdESLevelX(certificateVerifier validation.CertificateVerifier) *XAdESLevelX {
+	level := &XAdESLevelX{}
+	level.InitXAdESLevelX(level, certificateVerifier)
+	return level
+}
+
+// InitXAdESLevelX registers the concrete level with this base and with XAdESLevelC.
+func (e *XAdESLevelX) InitXAdESLevelX(self XAdESSignatureExtensionOverrides,
+	certificateVerifier validation.CertificateVerifier) {
+	e.InitXAdESLevelC(self, certificateVerifier)
+}
+
+// ExtendSignatures adds the xades:SigAndRefsTimeStamp segment to
+// xades:UnsignedSignatureProperties. The time-stamp is placed on the digital signature
+// (ds:Signature element), the time-stamp(s) present in the XAdES-T form, the certification path
+// references and the revocation status references.
+//
+// A XAdES-X form MAY contain several SigAndRefsTimeStamp elements, obtained from different TSAs.
+//
+// Port of the overridden protected #extendSignatures(List).
+func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := e.XAdESLevelC.ExtendSignatures(signatures); err != nil {
+		return err
+	}
+
+	signaturesToExtend := e.extendToXLevelSignatures(signatures)
+	if utils.IsCollectionEmpty(signaturesToExtend) {
+		return nil
+	}
+
+	// document.SignatureRequirementsChecker's assertions have bare returns and panic with error
+	// values (the phase-3 precedent), so they are called for effect here.
+	signatureRequirementsChecker := e.SignatureRequirementsChecker()
+	if enumerations.SignatureLevel_XAdES_X == e.Params.SignatureLevel() {
+		signatureRequirementsChecker.AssertExtendToXLevelPossible(signaturesToExtend)
+	}
+	signatureRequirementsChecker.AssertSignaturesValid(signaturesToExtend)
+
+	for _, signature := range signaturesToExtend {
+		xadesSignature, ok := signature.(*XAdESSignature)
+		if !ok {
+			return xadesLevelXUnexpectedSignatureType(signature)
+		}
+		if _, err := e.InitializeSignatureBuilder(xadesSignature); err != nil {
+			return err
+		}
+		if !e.xLevelExtensionRequired(signature) {
+			// Unable to extend due to higher levels covering the current X-level
+			continue
+		}
+
+		levelCUnsignedProperties := e.UnsignedSignaturePropertiesDom.Clone(true)
+
+		signatureTimestampParameters := e.Params.GetSignatureTimestampParameters()
+		digestAlgorithm := signatureTimestampParameters.DigestAlgorithm()
+		canonicalizationMethod := signatureTimestampParameters.CanonicalizationMethod()
+		// AdvancedSignature.TimestampSource() is invariant in Go, so the covariant Java return
+		// (XAdESTimestampSource) is recovered by a type assertion - the same shape
+		// cades_baseline_requirements_checker.go already uses for CAdESTimestampSource.
+		timestampSource, ok := e.XadesSignature.TimestampSource().(*XAdESTimestampSource)
+		if !ok {
+			return fmt.Errorf("unexpected timestamp source type %T", e.XadesSignature.TimestampSource())
+		}
+		messageDigest := timestampSource.GetTimestampX1MessageDigest(digestAlgorithm,
+			canonicalizationMethod, e.Params.IsEn319132())
+		if err := e.CreateXAdESTimeStampType(enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP,
+			canonicalizationMethod, messageDigest); err != nil {
+			return err
+		}
+
+		indented, err := e.IndentIfPrettyPrint(e.UnsignedSignaturePropertiesDom, levelCUnsignedProperties)
+		if err != nil {
+			return err
+		}
+		e.UnsignedSignaturePropertiesDom = indented
+	}
+	return nil
+}
+
+// extendToXLevelSignatures ports the private getExtendToXLevelSignatures.
+func (e *XAdESLevelX) extendToXLevelSignatures(
+	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
+	signaturesToExtend := make([]validation.AdvancedSignature, 0)
+	for _, signature := range signatures {
+		if e.xLevelExtensionRequired(signature) {
+			signaturesToExtend = append(signaturesToExtend, signature)
+		}
+	}
+	return signaturesToExtend
+}
+
+// xLevelExtensionRequired ports the private xLevelExtensionRequired.
+func (e *XAdESLevelX) xLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+	return enumerations.SignatureLevel_XAdES_X == e.Params.SignatureLevel() || !signature.HasXProfile()
+}
+
+// xadesLevelXUnexpectedSignatureType reports a non-XAdES signature reaching this extension, which
+// Java's `(XAdESSignature) signature` cast would raise as a ClassCastException.
+func xadesLevelXUnexpectedSignatureType(signature validation.AdvancedSignature) error {
+	return fmt.Errorf("unexpected signature type %T", signature)
+}

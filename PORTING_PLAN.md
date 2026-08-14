@@ -75,7 +75,9 @@ Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, 
 | CMS core | ✅ done | internal/asn1ber + internal/cmscore (RFC 5652/3161), BC-oracle byte-identical builds |
 | 2b | ✅ done | spi/validation (AdvancedSignature 86/86 methods), TimestampToken, token, document, CMS sources |
 | 3 | ✅ done | cms + cades; CAdES-B signed attrs byte-identical to BC (36 KATs); **cross-validation GREEN both directions**: upstream Java DSS validates Go-signed CAdES-B/T; Go validates 21/21 upstream fixtures strictly. PFX parser + determinism + test backfill follow-ups closed |
-| 4+ | pending | next: XML stack (native DOM/c14n design, then xmldsig + XAdES over two windows) |
+| 4a-c | ✅ done | internal/xmldom + all 7 c14n variants (1829 Santuario byte-exact KATs); xpath10 subset (Xalan-parity); xml/common+utils; serializer Transformer-parity; internal/xmldsig (3421 oracle rows over 195 fixtures) |
+| 4d | ✅ done | dss-xades ported; **XAdES cross-validation GREEN both directions** (60 fixtures/659 reference validations upstream→Go; Go-signed B/T validated by Java DSS); byte-parity on SignedInfo/SignedProperties (164 subtests). Audit fixes: v1-CRL parsing, Brainpool curves (internal/eccurve), manifest dependent validations |
+| 5+ | pending | next: PAdES (native PDF engine, design-first) |
 
 Known accepted gaps (tracked): PKCS#12 Ed25519/DSA keystores unloadable (x/crypto limitation; native PFX parser planned), JKS/PKCS#11 unsupported, MD2/WHIRLPOOL digests, map-iteration ordering sweep pending at 12 sites, test backfill pending for validation/timestamp, document, analyzer, jdbc.
 

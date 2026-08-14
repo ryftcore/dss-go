@@ -13,6 +13,17 @@ import "sort"
 // The nil map is usable: every prefix resolves to the null namespace.
 type NamespaceContext map[string]string
 
+// defaultNamespaceKey is the sentinel NamespaceContextOf stores the innermost default namespace
+// declaration (xmlns="u", no prefix) under. It is a control character, so it can never collide
+// with a real XML prefix (NCName forbids it), and it is queried only by parser.go's deliberate
+// leniency for a QName whose prefix component is present but empty (a stray leading colon, e.g.
+// "descendant:::Signature") - never by ordinary prefix resolution. A genuinely unprefixed node
+// test (no colon at all) never even reaches NamespaceURI: per XPath 1.0 clause 2.3 it is
+// resolved to the null namespace directly, bypassing the map entirely, so storing the default
+// namespace here cannot change that pinned behaviour. See parseNodeTest's stray-colon case for
+// why the distinction matters.
+const defaultNamespaceKey = "\x00"
+
 // NamespaceURI resolves prefix. An unregistered prefix resolves to the null namespace, "",
 // rather than reporting an error - NamespaceContextMap.getNamespaceURI returns
 // XMLConstants.NULL_NS_URI for a prefix it does not know, so a typo in a prefix silently turns

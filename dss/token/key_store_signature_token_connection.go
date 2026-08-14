@@ -43,6 +43,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/utain/esig/dss/internal/eccurve"
 	"github.com/utain/esig/dss/internal/pfx"
 	"github.com/utain/esig/dss/model"
 )
@@ -186,7 +187,7 @@ func pkcs12LoadKeyStore(ksBytes []byte, password string) (*keyStore, error) {
 func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 	certs := make([]*x509.Certificate, len(store.Certificates))
 	for i, certBag := range store.Certificates {
-		certificate, err := x509.ParseCertificate(certBag.Raw)
+		certificate, err := eccurve.ParseCertificate(certBag.Raw)
 		if err != nil {
 			return nil, fmt.Errorf("pkcs12: unable to parse certificate: %w", err)
 		}

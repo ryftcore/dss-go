@@ -43,10 +43,117 @@ const (
 // cRLNumber therefore yields a usable CRLValidity (with a null CRL number) in Java but an
 // error here. Working around it would mean re-encoding the CRL, which would break the
 // original-bytes guarantee CRLBinary/getDerEncoded rests on.
+// crlUtilsParseRevocationList decodes a CertificateList, accepting X.509 v1 CRLs as well as v2
+// ones.
+//
+// DEVIATION REPAIR (v1 CRLs): crypto/x509.ParseRevocationList insists on the OPTIONAL
+// TBSCertList.version field being present and equal to 1 (v2) and rejects everything else with
+// "x509: unsupported crl version". RFC 5280 section 5.1 makes that field OPTIONAL with a DEFAULT
+// of v1, so a CRL with no extensions - which is what every conforming CRL issuer emits when it
+// has nothing to put in crlExtensions - legally omits it. Upstream reaches
+// java.security.cert.CertificateFactory#generateCRL, which parses v1 and v2 alike, so refusing
+// v1 here is a Go-side regression against upstream, not a deliberate port decision: it silently
+// drops real revocation data (found by the XAdES cross-validation harness on
+// Signature-X-BE_ECON-3.xml, whose chain is covered by two v1 CRLs - Belgium Root CA2's and
+// Belgium Root CA3's - alongside two v2 ones, so upstream reaches LT where this port stopped at
+// T; the effect is not XAdES-specific but reaches every CRL-consuming path in the port).
+//
+// The repair keeps stdlib as the only structural decoder: when, and only when, the input is a
+// well-formed CertificateList whose TBSCertList omits the version field, this splices a
+// "version v2" INTEGER into a THROWAWAY copy of the DER purely so that stdlib's parser will
+// accept it, then restores RevocationList.Raw and .RawTBSRevocationList to the caller's
+// original, untouched bytes. Nothing re-encoded ever leaves this function, and in particular the
+// signature is still verified over the original RawTBSRevocationList, so CRLBinary's
+// original-bytes guarantee holds. Every other field (issuer, thisUpdate/nextUpdate, the revoked
+// entries, extensions) decodes byte-identically either way, because inserting a field at the
+// front of the SEQUENCE changes only offsets, never content.
+func crlUtilsParseRevocationList(der []byte) (*x509.RevocationList, error) {
+	revocationList, err := x509.ParseRevocationList(der)
+	if err == nil {
+		return revocationList, nil
+	}
+
+	patched, originalTBS, ok := crlUtilsSpliceV2VersionForParsing(der)
+	if !ok {
+		// Not a versionless CRL: report stdlib's own diagnosis unchanged.
+		return nil, err
+	}
+	revocationList, patchedErr := x509.ParseRevocationList(patched)
+	if patchedErr != nil {
+		// Splicing did not help; the CRL is broken for some other reason, so the caller should
+		// still see the failure stdlib reported for the bytes it was actually given.
+		return nil, err
+	}
+	// Hand back the caller's own bytes: everything downstream (signature verification over the
+	// TBS, CRLValidity.DerEncoded, the signature-algorithm re-read off Raw) must see the DER as
+	// it arrived, never the throwaway copy.
+	revocationList.Raw = der
+	revocationList.RawTBSRevocationList = originalTBS
+	return revocationList, nil
+}
+
+// crlUtilsSpliceV2VersionForParsing returns a copy of a CertificateList with an explicit
+// "version v2" INTEGER inserted as the first TBSCertList field, together with the original
+// TBSCertList element (tag, length and content) it was derived from. ok is false - and the other
+// results meaningless - unless der really is a SEQUENCE whose first element is a SEQUENCE
+// (TBSCertList) that itself starts with something other than an INTEGER, i.e. exactly the
+// versionless v1 shape; in every other case the caller keeps stdlib's original error.
+func crlUtilsSpliceV2VersionForParsing(der []byte) (patched, originalTBS []byte, ok bool) {
+	outer := cryptobyte.String(der)
+	var certificateList cryptobyte.String
+	if !outer.ReadASN1(&certificateList, cryptobyte_asn1.SEQUENCE) || !outer.Empty() {
+		return nil, nil, false
+	}
+	tbsReader := certificateList
+	var tbsCertList cryptobyte.String
+	if !tbsReader.ReadASN1Element(&tbsCertList, cryptobyte_asn1.SEQUENCE) {
+		return nil, nil, false
+	}
+	originalTBS = []byte(tbsCertList)
+	// Peek at the first TBSCertList field: an INTEGER means the version is already there and the
+	// CRL was rejected for some other reason, which is not this repair's business.
+	var tbsContent cryptobyte.String
+	inner := cryptobyte.String(originalTBS)
+	if !inner.ReadASN1(&tbsContent, cryptobyte_asn1.SEQUENCE) {
+		return nil, nil, false
+	}
+	if tbsContent.PeekASN1Tag(cryptobyte_asn1.INTEGER) {
+		return nil, nil, false
+	}
+
+	// v1 CRLs carry no crlExtensions, so a v1 CRL that already has them is malformed; leave it.
+	var patchedTBS cryptobyte.Builder
+	patchedTBS.AddASN1(cryptobyte_asn1.SEQUENCE, func(child *cryptobyte.Builder) {
+		child.AddASN1Int64(crlUtilsX509V2Version)
+		child.AddBytes(tbsContent)
+	})
+	patchedTBSBytes, err := patchedTBS.Bytes()
+	if err != nil {
+		return nil, nil, false
+	}
+
+	// The trailing signatureAlgorithm + signatureValue are copied over verbatim.
+	trailing := []byte(tbsReader)
+	var patchedList cryptobyte.Builder
+	patchedList.AddASN1(cryptobyte_asn1.SEQUENCE, func(child *cryptobyte.Builder) {
+		child.AddBytes(patchedTBSBytes)
+		child.AddBytes(trailing)
+	})
+	patchedBytes, err := patchedList.Bytes()
+	if err != nil {
+		return nil, nil, false
+	}
+	return patchedBytes, originalTBS, true
+}
+
+// crlUtilsX509V2Version is the value RFC 5280 gives TBSCertList.version for a v2 CRL, and the
+// only one crypto/x509.ParseRevocationList accepts.
+const crlUtilsX509V2Version = 1
+
 func crlUtilsX509CRLImplBuildCRLValidity(crlBinary *CRLBinary, issuerToken *model.CertificateToken) (*CRLValidity, error) {
 	crlValidity := NewCRLValidity(crlBinary)
 
-	revocationList, err := x509.ParseRevocationList(crlBinary.Binaries())
+	revocationList, err := crlUtilsParseRevocationList(crlBinary.Binaries())
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to parse the CRL : %s", err.Error()), err)
 	}
@@ -182,7 +289,7 @@ func crlUtilsX509CRLImplRevocationInfo(crlValidity *CRLValidity, serialNumber *b
 	revocationList := crlValidity.X509CRL()
 	if revocationList == nil {
 		var err error
-		revocationList, err = x509.ParseRevocationList(crlValidity.DerEncoded())
+		revocationList, err = crlUtilsParseRevocationList(crlValidity.DerEncoded())
 		if err != nil {
 			panic(model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to get revocation info. Reason : %s", err.Error()), err))
 		}

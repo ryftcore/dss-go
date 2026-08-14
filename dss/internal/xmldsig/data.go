@@ -94,13 +94,27 @@ func (d *Data) IsOctetStream() bool {
 }
 
 // IsElement ports isElement: a subtree, not yet turned into a node set.
+//
+// FIX (integrator, Phase 4d): Santuario's isElement()/isNodeSet() test inputOctetStreamProxy
+// (i.e. whether this value was ever constructed as an octet stream), never the cached bytes
+// getBytes() leaves behind after canonicalizing a subtree - getBytes() caches into `bytes` at
+// XMLSignatureInput.java:279 and upstream still re-canonicalizes the subtree on every call
+// after that. This predicate used to also require !hasOctets, which meant a Data that had
+// already been read once (Bytes() caches its result the same way) reported "no usable state" to
+// the next transform - breaking any identity transform (EnvelopedSignatureTransform,
+// Base64Transform) followed by another one, exactly the chain EnvelopedSignatureTransform's own
+// javadoc prescribes. IsOctetStream's node==nil && nodeSet==nil guard already keeps the three
+// branches disjoint, so dropping the hasOctets term here is safe. See the dss-xades REFS chunk's
+// porter notes for the original diagnosis (55/57 -> 56/57 KAT cases verified against the Java
+// oracle in a scratch harness).
 func (d *Data) IsElement() bool {
-	return !d.hasOctets && d.node != nil && d.nodeSet == nil && !d.isNodeSet
+	return d.node != nil && d.nodeSet == nil && !d.isNodeSet
 }
 
-// IsNodeSet ports isNodeSet.
+// IsNodeSet ports isNodeSet. See IsElement's FIX note above; the same hasOctets term was dropped
+// here for the same reason.
 func (d *Data) IsNodeSet() bool {
-	return !d.hasOctets && d.nodeSet != nil || d.isNodeSet
+	return d.nodeSet != nil || d.isNodeSet
 }
 
 // IsPreCalculatedDigest ports isPreCalculatedDigest.

@@ -27,7 +27,6 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
-	"crypto/x509"
 	"encoding/asn1"
 	"encoding/binary"
 	"encoding/pem"
@@ -45,6 +44,7 @@ import (
 	"unicode/utf16"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/eccurve"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/utils"
 	"golang.org/x/crypto/ripemd160"
@@ -391,7 +391,7 @@ func dssUtilsParseCertificate(input []byte) (*model.CertificateToken, error) {
 	if block, _ := pem.Decode(input); block != nil {
 		der = block.Bytes
 	}
-	cert, err := x509.ParseCertificate(der)
+	cert, err := eccurve.ParseCertificate(der)
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause(
 			"Unable to load CertificateFactory for the given certificate. All security providers have failed.", err)
@@ -460,7 +460,7 @@ func DSSUtilsLoadCertificateFromP7cBinary(input []byte) ([]*model.CertificateTok
 	}
 	result := make([]*model.CertificateToken, 0, len(certsDER))
 	for _, der := range certsDER {
-		cert, err := x509.ParseCertificate(der)
+		cert, err := eccurve.ParseCertificate(der)
 		if err != nil {
 			return nil, model.NewDSSErrorMessageCause(fmt.Sprintf("Failed to load certificate(s) : %s", err.Error()), err)
 		}

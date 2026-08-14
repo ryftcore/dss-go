@@ -43,6 +43,7 @@ import (
 
 	"golang.org/x/crypto/pkcs12"
 
+	"github.com/utain/esig/dss/internal/eccurve"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/utils"
 )
@@ -169,7 +170,7 @@ func keyStoreCertificateSourceParsePKCS12(data []byte, password string) ([]*mode
 		if block.Type != "CERTIFICATE" {
 			continue
 		}
-		certificate, err := x509.ParseCertificate(block.Bytes)
+		certificate, err := eccurve.ParseCertificate(block.Bytes)
 		if err != nil {
 			continue
 		}
@@ -198,7 +199,7 @@ func keyStoreCertificateSourceParsePEMOrDER(data []byte) ([]*model.CertificateTo
 			if block.Type != "CERTIFICATE" {
 				continue
 			}
-			certificate, err := x509.ParseCertificate(block.Bytes)
+			certificate, err := eccurve.ParseCertificate(block.Bytes)
 			if err != nil {
 				return nil, err
 			}

@@ -69,7 +69,10 @@ func (e *Expr) EvaluateBoolean(ctx *xmldom.Node) (bool, error) {
 //
 // The default declaration (xmlns="u") is deliberately NOT bound to the empty prefix: XPath 1.0
 // clause 2.3 puts an unprefixed name in no namespace regardless of any default declaration,
-// and DOMNamespaceContext agrees - it only ever answers for a non-empty prefix.
+// and DOMNamespaceContext agrees - it only ever answers for a non-empty prefix for ordinary
+// prefix resolution. It IS recorded, under the reserved defaultNamespaceKey sentinel (see its
+// doc comment), for the one deliberate leniency parseNodeTest documents on a QName whose prefix
+// component is present but empty.
 func NamespaceContextOf(el *xmldom.Node) NamespaceContext {
 	ctx := NamespaceContext{"xml": xmldom.XMLNamespace}
 	var chain []*xmldom.Node
@@ -81,8 +84,16 @@ func NamespaceContextOf(el *xmldom.Node) NamespaceContext {
 	// Outermost first, so an inner declaration overwrites an outer one.
 	for i := len(chain) - 1; i >= 0; i-- {
 		for _, a := range chain[i].Attrs {
-			if a.Name.Space == xmldom.XMLNSNamespace && a.Name.Prefix == "xmlns" {
+			if a.Name.Space != xmldom.XMLNSNamespace {
+				continue
+			}
+			switch a.Name.Prefix {
+			case "xmlns":
 				ctx[a.Name.Local] = a.Value
+			case "":
+				if a.Name.Local == "xmlns" {
+					ctx[defaultNamespaceKey] = a.Value
+				}
 			}
 		}
 	}

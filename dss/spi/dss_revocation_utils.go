@@ -27,6 +27,7 @@ import (
 
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/utain/esig/dss/internal/eccurve"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/utils"
 )
@@ -398,7 +399,7 @@ func (b *BasicOCSPResp) Extension(oid asn1.ObjectIdentifier) *Extension {
 func (b *BasicOCSPResp) Certs() []*x509.Certificate {
 	certificates := make([]*x509.Certificate, 0, len(b.response.Certs))
 	for _, der := range b.response.Certs {
-		certificate, err := x509.ParseCertificate(der)
+		certificate, err := eccurve.ParseCertificate(der)
 		if err != nil {
 			continue
 		}

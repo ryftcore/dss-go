@@ -166,6 +166,19 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// Port of the abstract makeTimestampToken(SA, TimestampType, List).
 	MakeTimestampToken(signatureAttribute SA, timestampType enumerations.TimestampType,
 		references []*validation.TimestampedReference) *validation.TimestampToken
+	// MakeTimestampTokens creates the (possibly several) timestamp tokens carried by
+	// signatureAttribute. Port of the protected, overridable makeTimestampTokens(SA, TimestampType,
+	// List): most formats produce at most one token per attribute and get that behaviour for free
+	// from the base's own MakeTimestampTokens below (promoted by embedding, wrapping
+	// MakeTimestampToken's single result in a slice) without needing to implement this method
+	// themselves; XAdES shadows it directly since one xades132:XAdESTimeStampType element can carry
+	// more than one xades132:EncapsulatedTimeStamp. Routed through SignatureTimestampSourceOverrides
+	// for the same virtual-dispatch reason as every other override in this interface: the base's
+	// own internal populateTimestampTokens() flow calls s.overrides.MakeTimestampTokens(...), never
+	// the concrete type directly, so a format-specific override is only reachable if it is wired in
+	// here.
+	MakeTimestampTokens(signatureAttribute SA, timestampType enumerations.TimestampType,
+		references []*validation.TimestampedReference) []*validation.TimestampToken
 	// MakeEvidenceRecords creates a list of evidence records from the provided signatureAttribute.
 	// Port of the abstract makeEvidenceRecords(SA, List).
 	MakeEvidenceRecords(signatureAttribute SA, references []*validation.TimestampedReference) []validation.EvidenceRecord
@@ -789,8 +802,23 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensDefault(signatureA
 }
 
 // makeTimestampTokens creates timestamp tokens from signatureAttribute with the given list of
-// TimestampedReferences. Port of makeTimestampTokens(SA, TimestampType, List).
+// TimestampedReferences. Port of makeTimestampTokens(SA, TimestampType, List). Dispatches through
+// s.overrides.MakeTimestampTokens (plural) rather than wrapping MakeTimestampToken (singular)
+// directly, so a format that shadows the plural method (XAdES) is actually reached - see the
+// interface doc comment on MakeTimestampTokens.
 func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokens(signatureAttribute SA, timestampType enumerations.TimestampType,
+	references []*validation.TimestampedReference) []*validation.TimestampToken {
+	return s.overrides.MakeTimestampTokens(signatureAttribute, timestampType, references)
+}
+
+// MakeTimestampTokens is the default SignatureTimestampSourceOverrides.MakeTimestampTokens
+// implementation, promoted by embedding to every concrete format that does not shadow it with its
+// own: it wraps MakeTimestampToken's (singular) result in a single-element slice, i.e. exactly the
+// behaviour makeTimestampTokens (above) had before this plural override hook existed. Port of the
+// base makeTimestampTokens(SA, TimestampType, List)'s own body (Java: `TimestampToken
+// timestampToken = makeTimestampToken(...); return timestampToken == null ? emptyList() :
+// singletonList(timestampToken);`).
+func (s *SignatureTimestampSource[AS, SA]) MakeTimestampTokens(signatureAttribute SA, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
 	timestampToken := s.overrides.MakeTimestampToken(signatureAttribute, timestampType, references)
 	if timestampToken != nil {
