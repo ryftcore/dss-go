@@ -76,6 +76,14 @@ func (v *SignerInformationVerifier) Verify(signatureAlgorithm enumerations.Signa
 		v.publicKey, signatureAlgorithm, signedContent, signatureValue); fallbackErr == nil {
 		return nil
 	}
+	// Second fallback: an RSA key whose public exponent is larger than crypto/rsa will work
+	// with at all. CheckSignature above failed without ever looking at the signature in that
+	// case; see rsaLargeExponentVerify for why doing the RSA verification primitive directly is
+	// the BouncyCastle-equivalent behaviour and not a weakening of the check.
+	if fallbackErr := rsaLargeExponentVerify(
+		v.publicKey, signatureAlgorithm, signedContent, signatureValue); fallbackErr == nil {
+		return nil
+	}
 	// The canonical failure is the one worth reporting; the fallback is only ever a second
 	// chance, never a different diagnosis.
 	return err
@@ -176,8 +184,22 @@ var DSSSignerInformationVerifierSecurityFactoryPublicTokenInstance = &DSSSecurit
 }
 
 func dssSignerInformationVerifierSecurityFactoryBuild(publicKey *model.PublicKey) (*SignerInformationVerifier, error) {
+	// A nil publicKey is a legitimately reachable value here, not a caller bug: it flows straight
+	// from CertificateValidity.PublicKey() (spi/certificate_validity.go), which returns nil
+	// whenever a signing-certificate candidate is known only by its SignerIdentifier (no embedded
+	// certificate resolved for it - e.g. a PDF revision whose CMS SignerInfo names a certificate
+	// this port never located). Upstream's PUBLIC_TOKEN_INSTANCE.buildWithProvider(null, ...)
+	// passes a null PublicKey straight into BouncyCastle's JcaSimpleSignerInfoVerifierBuilder
+	// without a null check either, relying entirely on CAdESSignatureIntegrityValidator.verify's
+	// own "catch (Exception e)" to turn whatever BC throws into a graceful DSSException - so a
+	// panic here (as this used to do) turns a candidate correctly rejected as "not the signing
+	// certificate" into a process-ending crash the moment a PDF/CMS carries more than one signer
+	// candidate and only one of them resolves to a real certificate (confirmed by
+	// pades/testdata/upstream/validation/PAdES-LT.pdf, a 3-signature PDF, in the PAdES
+	// cross-validation harness). Matching Java's behavior means returning the same graceful
+	// error every other failure path here returns, not panicking.
 	if publicKey == nil {
-		panic("Input cannot be null")
+		return nil, model.NewDSSError("InvalidKeyException : the public key has not been parsed")
 	}
 	key := publicKey.Key()
 	if key == nil {

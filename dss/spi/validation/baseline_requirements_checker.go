@@ -37,6 +37,7 @@
 package validation
 
 import (
+	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	"github.com/utain/esig/dss/utils"
@@ -118,6 +119,24 @@ type BaselineRequirementsCheckerOverrides interface {
 	// level attributes. Port of the protected containsLTLevelCertificates() (default false,
 	// overridable), called back into by MinimalLTRequirement.
 	ContainsLTLevelCertificates() bool
+
+	// GetBaselineSignatureForm returns the signature form used to pick which CMS-attribute
+	// cardinality rule applies where CAdES and PAdES disagree - the signing-time attribute is
+	// the one case: EN 319 122-1 (CAdES-BASELINE-B) requires it present (cardinality == 1),
+	// EN 319 142-1 (PAdES-BASELINE-B) requires it absent (cardinality == 0). Port of the
+	// protected getBaselineSignatureForm(), which upstream's CAdESBaselineRequirementsChecker
+	// (returning SignatureForm.CAdES) declares and both PAdESBaselineRequirementsChecker AND
+	// CMSForPAdESBaselineRequirementsChecker override (returning SignatureForm.PAdES) purely
+	// through ordinary Java virtual dispatch - not part of upstream's own BaselineRequirements
+	// Checker base class at all. It is added to this port's cross-package override contract
+	// instead, because cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements() (the
+	// shared CMS-attribute check both cades.CAdESSignature and, through
+	// pades.CMSForPAdESBaselineRequirementsChecker, PAdES signatures run) needs to resolve it
+	// virtually across the cades/pades package boundary the very same way MinimalLTRequirement
+	// above resolves ContainsLTLevelCertificates - Go has no cross-package method-override
+	// mechanism to fall back on. Defaults to "" (never consulted outside cades's own
+	// cmsBaselineBRequirements(), so XAdES/JAdES concrete checkers need no override at all).
+	GetBaselineSignatureForm() enumerations.SignatureForm
 }
 
 // BaselineRequirementsChecker checks conformance of a signature to the requested baseline
@@ -214,6 +233,23 @@ func (b *BaselineRequirementsChecker[AS]) HasExtendedERSProfile() bool { return 
 // ContainsLTLevelCertificates verifies whether the signature contains some of the LT-/XL level
 // attributes. Port of the protected containsLTLevelCertificates(); FALSE by default.
 func (b *BaselineRequirementsChecker[AS]) ContainsLTLevelCertificates() bool { return false }
+
+// GetBaselineSignatureForm is the default, unset ("") signature form; see the
+// BaselineRequirementsCheckerOverrides doc comment on GetBaselineSignatureForm. Overridden by
+// cades.CAdESBaselineRequirementsChecker, pades.PAdESBaselineRequirementsChecker, and
+// pades.CMSForPAdESBaselineRequirementsChecker; never overridden (nor consulted) by XAdES/JAdES.
+func (b *BaselineRequirementsChecker[AS]) GetBaselineSignatureForm() enumerations.SignatureForm {
+	return ""
+}
+
+// BaselineSignatureForm resolves GetBaselineSignatureForm() through the registered overrides.
+// Exported (unlike baselineRequirementsCheckerOverrides itself) so cross-package call sites -
+// cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements(), reached directly from the
+// cades package and, through embedding, from pades.CMSForPAdESBaselineRequirementsChecker too -
+// can consult it without reaching into this package's unexported overrides field/accessor.
+func (b *BaselineRequirementsChecker[AS]) BaselineSignatureForm() enumerations.SignatureForm {
+	return b.baselineRequirementsCheckerOverrides().GetBaselineSignatureForm()
+}
 
 // SignatureTimestampsCreatedBeforeSignCertExpiration checks whether signature timestamps have
 // been created before expiration of the signing-certificate used to create the signature.

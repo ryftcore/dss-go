@@ -1065,7 +1065,23 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 		verification.SetErrorMessage(err.Error())
 		return
 	}
-	signingCertificateValidator := NewCAdESSignatureIntegrityValidator(signerInformationToCheck, signedContent)
+
+	// Computed up front (and reused below) so it can gate CAdESSignatureIntegrityValidator.Verify
+	// the way BouncyCastle's SignerInformation#verify itself does: BC recomputes the digest of
+	// the associated content and compares it against the message-digest signed attribute BEFORE
+	// checking the raw signature bytes, throwing CMSSignerDigestMismatchException - and thus
+	// failing every candidate uniformly - on a mismatch. See the contentDigestMismatch field doc
+	// on CAdESSignatureIntegrityValidator for the fixture this fixes.
+	refValidations := s.ReferenceValidationsForSignerInformation(signerInformationToCheck)
+	contentDigestMismatch := false
+	for _, referenceValidation := range refValidations {
+		if referenceValidation.Type() == enumerations.DigestMatcherType_MESSAGE_DIGEST &&
+			referenceValidation.IsFound() && !referenceValidation.IsIntact() {
+			contentDigestMismatch = true
+		}
+	}
+
+	signingCertificateValidator := NewCAdESSignatureIntegrityValidator(signerInformationToCheck, signedContent, contentDigestMismatch)
 	certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 	if certificateValidity != nil {
 		if err := candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity); err != nil {
@@ -1078,7 +1094,7 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 
 	referenceDataFound := true
 	referenceDataIntact := true
-	for _, referenceValidation := range s.ReferenceValidationsForSignerInformation(signerInformationToCheck) {
+	for _, referenceValidation := range refValidations {
 		referenceDataFound = referenceDataFound && referenceValidation.IsFound()
 		referenceDataIntact = referenceDataIntact && referenceValidation.IsIntact()
 	}
