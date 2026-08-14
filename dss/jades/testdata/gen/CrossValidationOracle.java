@@ -45,12 +45,15 @@ import eu.europa.esig.dss.model.x509.CertificateToken;
 import eu.europa.esig.dss.spi.DSSUtils;
 import eu.europa.esig.dss.spi.signature.AdvancedSignature;
 import eu.europa.esig.dss.spi.validation.CommonCertificateVerifier;
+import eu.europa.esig.dss.spi.x509.tsp.TimestampToken;
+import eu.europa.esig.dss.spi.x509.tsp.TimestampedReference;
 
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -81,6 +84,17 @@ public class CrossValidationOracle {
         "validation/jades-with-certified.json",
         "validation/jades-with-counter-signature.json",
         "validation/jades-with-multiple-sign-cert-refs.json",
+        // Content ('adoTst') time-stamps, i.e. time-stamps carried by a SIGNED attribute rather
+        // than by 'etsiU'. They are the only fixtures whose time-stamp identifiers exercise
+        // getAttributeOrder over the signed signature properties, which is where a port that
+        // hands back freshly-allocated attribute objects on every call silently loses the
+        // attribute's position (see the timestamps[] dump below).
+        "validation/jades-b-copied-cnttst.json",
+        "validation/jades-t-copied-sigtst.json",
+        // Two 'sigRTst'/'rfsTst' time-stamps on top of a signature time-stamp: the X1/X2 buckets,
+        // which take their timestamped references from a different base code path than the
+        // signature time-stamp does.
+        "validation/jades-with-sigAndRefsTst-with-dot.json",
         "validation/altered-jws.json",
         "validation/jws-serialization-no-signatures.json",
         "validation/dss2620/jades-b-level-with-etsiu-in-crit.json",
@@ -246,6 +260,26 @@ public class CrossValidationOracle {
         json.append("          \"serializationType\": ").append(str(serializationType.name())).append(",\n");
         json.append("          \"structureValidationErrorCount\": ").append(structureErrors.size()).append(",\n");
 
+        // Time-stamp inventory. Two columns here are deliberately identity-sensitive rather than
+        // merely structural, because both caught a real defect that every other column in this
+        // file was blind to (found by testdata/broadgen's whole-corpus differential run):
+        //
+        //  - "dssId": the DSS token identifier, which SignatureTimestampIdentifierBuilder derives
+        //    from the token binaries PLUS the signature id, the carrying attribute's identifier,
+        //    the attribute's ORDER among the signature properties, and the token's order within
+        //    that attribute. A port whose getAttributeOrder lookup fails to find the attribute
+        //    gets a null order and therefore a different id, with no other visible symptom.
+        //
+        //  - "timestampedReferences": the set of objects a time-stamp covers. JAdESTimestampSource
+        //    overrides getSignatureTimestampReferences() to fold in getKeyInfoReferences(), so a
+        //    port that misses that override produces signature time-stamps covering one
+        //    certificate fewer than upstream's.
+        dumpTimestamps(json, "contentTimestamps", signature.getContentTimestamps());
+        dumpTimestamps(json, "signatureTimestamps", signature.getSignatureTimestamps());
+        dumpTimestamps(json, "timestampsX1", signature.getTimestampsX1());
+        dumpTimestamps(json, "timestampsX2", signature.getTimestampsX2());
+        dumpTimestamps(json, "archiveTimestamps", signature.getArchiveTimestamps());
+
         List<AdvancedSignature> counterSignatures = signature.getCounterSignatures();
         json.append("          \"counterSignatureCount\": ").append(counterSignatures.size()).append(",\n");
         json.append("          \"counterSignatures\": [\n");
@@ -255,6 +289,35 @@ public class CrossValidationOracle {
         }
         json.append("          ]\n");
         json.append("        }");
+    }
+
+    /** Dumps one time-stamp bucket. See dumpSignature's comment for why "dssId" and
+     *  "timestampedReferences" are here. References are sorted so the two implementations'
+     *  insertion orders are not compared - only the covered set. */
+    static void dumpTimestamps(StringBuilder json, String field, List<TimestampToken> timestamps) {
+        json.append("          ").append(str(field)).append(": [\n");
+        for (int i = 0; i < timestamps.size(); i++) {
+            TimestampToken timestampToken = timestamps.get(i);
+            Digest messageImprint = timestampToken.getMessageImprint();
+            List<String> references = new ArrayList<>();
+            for (TimestampedReference reference : timestampToken.getTimestampedReferences()) {
+                references.add(reference.getCategory().name() + ":" + reference.getObjectId());
+            }
+            Collections.sort(references);
+            json.append("            {\n");
+            json.append("              \"type\": ").append(str(timestampToken.getTimeStampType().name())).append(",\n");
+            json.append("              \"dssId\": ").append(str(timestampToken.getDSSIdAsString())).append(",\n");
+            json.append("              \"generationTimeMillis\": ")
+                    .append(timestampToken.getGenerationTime() != null ? Long.toString(timestampToken.getGenerationTime().getTime()) : "null").append(",\n");
+            json.append("              \"messageImprintDataFound\": ").append(timestampToken.isMessageImprintDataFound()).append(",\n");
+            json.append("              \"messageImprintDataIntact\": ").append(timestampToken.isMessageImprintDataIntact()).append(",\n");
+            json.append("              \"messageImprintHex\": ")
+                    .append(messageImprint != null && messageImprint.getValue() != null ? str(hex(messageImprint.getValue())) : "null").append(",\n");
+            json.append("              \"signatureIntact\": ").append(timestampToken.isSignatureIntact()).append(",\n");
+            json.append("              \"timestampedReferences\": ").append(str(String.join(",", references))).append("\n");
+            json.append("            }").append(i == timestamps.size() - 1 ? "\n" : ",\n");
+        }
+        json.append("          ],\n");
     }
 
     static String str(String s) {

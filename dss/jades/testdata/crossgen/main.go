@@ -7,11 +7,12 @@
 // uses, copied here rather than shared across packages since go.mod has no notion of a "testdata"
 // import), and writes them to files. The point is a real, independently-verifiable artifact:
 // jades_downstream_cross_validation_test.go runs this program and then hands its output to
-// CrossGenValidator.java (an unmodified copy of cades/testdata/crossgen's - it drives upstream
-// DSS's own generic SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder, so nothing in it
-// is CAdES-specific), which asserts the signature is intact, the signing certificate is
-// identified, and the level is recognized - upstream DSS accepting what this port produced is the
-// actual proof of compatibility, not another Go-side assertion.
+// CrossGenValidator.java (adapted from cades/testdata/crossgen's - it drives upstream DSS's own
+// generic SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder, so almost nothing in it is
+// CAdES-specific; see its own header for the one deliberate change), which asserts the signature
+// is intact, the signing certificate is identified, and the level is recognized - upstream DSS
+// accepting what this port produced is the actual proof of compatibility, not another Go-side
+// assertion.
 //
 // Usage: go run . <output directory>
 //

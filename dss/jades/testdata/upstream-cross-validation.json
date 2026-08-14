@@ -19,6 +19,16 @@
           "sigDMechanism": "OBJECT_ID_BY_URI_HASH",
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -43,6 +53,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 1,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -67,6 +87,16 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -91,6 +121,26 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-ABA748C6F739C71CA77815308BCA192B055ED4B2207C8355A1C979F1D1D576D7",
+              "generationTimeMillis": 1611578133000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "74db0d7b0278c41d29b5356b67de9bf3349fcf879f9d6657ce75c6510bd41e05",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-AD6E330FE898768733FF3C51C36E05596A756540E0DD0CD135EE1C05743E825F,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -109,6 +159,36 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-3B7E2B7342788DFC1B1D85C1295FA67B01F0558148CFD197DAFC0C9AB7C175B3",
+              "generationTimeMillis": 1611570135000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "01d4145cdb64ad4bca39da5360a69d14c7f591d30d0a0840a16e18ee7878cb59",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-C6361EB5646BBFBBA20CCE69DBF29E70041CBB6C339E99CBD69C66FDFEAF0C89,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-5987C35AD8294FD95322E961AFD1A6E9AD83B0E000F43979A66E3413C56EF852",
+              "generationTimeMillis": 1611570138000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "dcccfc7dbae17275233390940e2268c2fe44845a6a01c1e82a28b342b1de6318",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-135540892349649E7A0AD2727E17FEDC193EB67E4CE2674D2C5A09677893A0EF,CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,CERTIFICATE:C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134,REVOCATION:R-68C860EBF513561D46D44E8EDCCD9AFF152D79DA3EBDAB4CEE9410B738F07B8E,REVOCATION:R-87941D02F86EC9E197CCB105F601CF424D3FA010826F22EC10F09D9F97DCCBFB,SIGNATURE:S-C6361EB5646BBFBBA20CCE69DBF29E70041CBB6C339E99CBD69C66FDFEAF0C89,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-3B7E2B7342788DFC1B1D85C1295FA67B01F0558148CFD197DAFC0C9AB7C175B3"
+            }
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -133,6 +213,36 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-7741F5DB8ABC76889B8F13651C983D87B441922FBD0B01ACD4F32ED839144DE2",
+              "generationTimeMillis": 1611570004000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "edc6b5b57015a1656c5b81159904df3219a1d27d799e290e51e1b1445e06d98d",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-6E1AA05593571272E27F44CFFF7C3752FFBD82775FA348F8C89CDE46163574F5,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-52A5C3180BC7020AA3B54640EAD5E305FAFFB337D2788E27047C6C0F300182BE",
+              "generationTimeMillis": 1611570005000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "88fb6baf9a608ffc51066cfd8d7baaa98570a5cac6b369c21897cae234a1a90f",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-135540892349649E7A0AD2727E17FEDC193EB67E4CE2674D2C5A09677893A0EF,CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,CERTIFICATE:C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134,REVOCATION:R-68C860EBF513561D46D44E8EDCCD9AFF152D79DA3EBDAB4CEE9410B738F07B8E,REVOCATION:R-6A34002313CFA5E57799111F603912E09C5D665AB4F2F408C1739A4F8A775E67,SIGNATURE:S-6E1AA05593571272E27F44CFFF7C3752FFBD82775FA348F8C89CDE46163574F5,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-7741F5DB8ABC76889B8F13651C983D87B441922FBD0B01ACD4F32ED839144DE2"
+            }
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -157,6 +267,36 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-2F80618EDEBBE6912A054F12A8996B2F01F95174D363E8274557A39435D7C0E1",
+              "generationTimeMillis": 1611569701000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "a59361f635a5a7444f15cdf9809c070fb6ef267e6174d69b84b869eaaae78e21",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-047295420431F05B14D1C3D30F857BB100489CA7EB2697044120A5728FDCB420,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-452DBBA77CACB31F877B03BCDCC0A8D13DECB68B133EB1DC9352B5D16F1B4FA2",
+              "generationTimeMillis": 1611569701000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": false,
+              "messageImprintHex": "71cd649eb01825923ef399be3e9a342a2558dd2a944e64cb05344578171bab21",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-135540892349649E7A0AD2727E17FEDC193EB67E4CE2674D2C5A09677893A0EF,CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,CERTIFICATE:C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134,REVOCATION:R-68C860EBF513561D46D44E8EDCCD9AFF152D79DA3EBDAB4CEE9410B738F07B8E,REVOCATION:R-70927F1802D44536B5F544E2933DD1C0581A10212969BC4758669EEEEA664A84,SIGNATURE:S-047295420431F05B14D1C3D30F857BB100489CA7EB2697044120A5728FDCB420,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-2F80618EDEBBE6912A054F12A8996B2F01F95174D363E8274557A39435D7C0E1"
+            }
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -181,6 +321,26 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-3735B5EE2E6F455C35CF1FBAC4C7150016B0F793929B8C60B060E97D7A8D2676",
+              "generationTimeMillis": 1606398158000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": false,
+              "messageImprintHex": "9375dfa12115e19007d4ace68c1d7e7c283a6bf6770b51e52ccc2fd9cb2592aa",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-076D005C9D84FC8913D145013478F20BDFE6AC89BFED013C7FC3E1876D88DCA8,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -205,6 +365,36 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-3ECD504EEBC9B5133C519F52366DBF86469A5D212619D449D7FFF400855D4439",
+              "generationTimeMillis": 1702026227000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "6afda1b8085ed5dcce627a665249fba1ec421c354e90edb4789a9d602fb54cfa",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-26366357DF3F35185F202574F38EB007F6CF37BAF2D52C8D7E9D27307DA27759,CERTIFICATE:C-E110EF0CBCDB667CC40A6E2E107AE8718F04B16A7BDD91A18E029C361CA41AC8,SIGNATURE:S-AE0F830470368AA0D53FA4B3811D9B3186A93C544AACEC0446DD31DDFAC4D498,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            },
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-0BD38361567FA5FB0FA8934773850EB4D0D6F62A3C5294C482F3B3CC051BF5BF",
+              "generationTimeMillis": 1702026227000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "6afda1b8085ed5dcce627a665249fba1ec421c354e90edb4789a9d602fb54cfa",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-26366357DF3F35185F202574F38EB007F6CF37BAF2D52C8D7E9D27307DA27759,CERTIFICATE:C-E110EF0CBCDB667CC40A6E2E107AE8718F04B16A7BDD91A18E029C361CA41AC8,SIGNATURE:S-AE0F830470368AA0D53FA4B3811D9B3186A93C544AACEC0446DD31DDFAC4D498,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -229,6 +419,56 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-20715FD4F30F04BEF4F1EDBBCA65DCC8BB16E1405EA0DD5BE62F0B154AC8009B",
+              "generationTimeMillis": 1627248644000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "afcf5e67ff08db773db338293db8880a5c8928ff0cbc65f16c59560fe0bdd71e",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-4F20D78FB6BCA6D494726BE30DEAE93C4286A6D2E71F696185B9664F27A5E04F,SIGNATURE:S-87D03F7445A891CA977C7BA59A718EE312D2F3F6D442C4309F67D3FD23DADE1A,SIGNED_DATA:D-9E92C87D16A88D12E454B36C7C6551B7CFE4BBD4E15049F632E49C76D5F76D33"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-49585C5B22DB9210E45A14C5F70E2215CAD71295C1AB88885E7E20482F097E1E",
+              "generationTimeMillis": 1627248645000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "4964d187b5055f61cfb675ca8542ddf9cb29d37f3ea0cc731fc40d05f781049c",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-2626B19563BC78D9B1442B93CE98D14A1E4B74264ACC90222F1F3C2385C27337,CERTIFICATE:C-4F20D78FB6BCA6D494726BE30DEAE93C4286A6D2E71F696185B9664F27A5E04F,CERTIFICATE:C-7ED19361AD734D703FBADF029F52EC3B6648D8DD56BABA0884ED4F859B5B9375,CERTIFICATE:C-8E5B8BAEDC4D58BE0E301CCCB6ED173C08D7C77CE4350973389FF1AFA11D7A65,CERTIFICATE:C-CF2058AAC27925521FC7F2ABACD2EE5429DD8D938DEBD3395BA4A6C042465DA7,CERTIFICATE:C-CF719BDBAC89C948399D74749CACB63A09DBD3D35597C374C2C753C0CE7AA257,CERTIFICATE:C-D0968A073AC646F686ACCDA844BBA6CE830CD0E1A2F4E228DBA67347C9F3617C,REVOCATION:R-7F7F9EB8E90D17A31874EF2021BF18E9E1608D27421AA52AB33B73CCCB73F1FE,SIGNATURE:S-87D03F7445A891CA977C7BA59A718EE312D2F3F6D442C4309F67D3FD23DADE1A,SIGNED_DATA:D-9E92C87D16A88D12E454B36C7C6551B7CFE4BBD4E15049F632E49C76D5F76D33,TIMESTAMP:T-20715FD4F30F04BEF4F1EDBBCA65DCC8BB16E1405EA0DD5BE62F0B154AC8009B"
+            },
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-969069A817C9A9D3DE6A441F6189202ED9C0DC55DDAFFCCF8B2F3732A30362B0",
+              "generationTimeMillis": 1627680386694,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "1049f7cb954d27a7799bfb31db3f7cb1b51f0ea16ca022b88f1c0097c926c00c",
+              "signatureIntact": true,
+              "timestampedReferences": "CERTIFICATE:C-2626B19563BC78D9B1442B93CE98D14A1E4B74264ACC90222F1F3C2385C27337,CERTIFICATE:C-4F20D78FB6BCA6D494726BE30DEAE93C4286A6D2E71F696185B9664F27A5E04F,CERTIFICATE:C-7ED19361AD734D703FBADF029F52EC3B6648D8DD56BABA0884ED4F859B5B9375,CERTIFICATE:C-8E5B8BAEDC4D58BE0E301CCCB6ED173C08D7C77CE4350973389FF1AFA11D7A65,CERTIFICATE:C-CF2058AAC27925521FC7F2ABACD2EE5429DD8D938DEBD3395BA4A6C042465DA7,CERTIFICATE:C-CF719BDBAC89C948399D74749CACB63A09DBD3D35597C374C2C753C0CE7AA257,CERTIFICATE:C-D0968A073AC646F686ACCDA844BBA6CE830CD0E1A2F4E228DBA67347C9F3617C,REVOCATION:R-7F7F9EB8E90D17A31874EF2021BF18E9E1608D27421AA52AB33B73CCCB73F1FE,REVOCATION:R-A6A85C272FA4C1E9BBE7570E2980AB8366ECF0F0E370CE8A7E4C5FE5EEED01DF,SIGNATURE:S-87D03F7445A891CA977C7BA59A718EE312D2F3F6D442C4309F67D3FD23DADE1A,SIGNED_DATA:D-9E92C87D16A88D12E454B36C7C6551B7CFE4BBD4E15049F632E49C76D5F76D33,TIMESTAMP:T-20715FD4F30F04BEF4F1EDBBCA65DCC8BB16E1405EA0DD5BE62F0B154AC8009B,TIMESTAMP:T-49585C5B22DB9210E45A14C5F70E2215CAD71295C1AB88885E7E20482F097E1E"
+            },
+            {
+              "type": "ARCHIVE_TIMESTAMP",
+              "dssId": "T-B777F0C737F5F2EB9302C9A0583DBD8FDB7705B256B8FD556CEACB56BF5DB9E6",
+              "generationTimeMillis": 1627680608000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "42bcd3b1ec4447963ab90632d77c29f3ab95a9c5f54d52c69bd7104bd23ba8fa",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-2626B19563BC78D9B1442B93CE98D14A1E4B74264ACC90222F1F3C2385C27337,CERTIFICATE:C-416B1F9E84E74C1D19B23D8D7191C6AD81246E641601F599132729F507BEB3CC,CERTIFICATE:C-4F20D78FB6BCA6D494726BE30DEAE93C4286A6D2E71F696185B9664F27A5E04F,CERTIFICATE:C-7ED19361AD734D703FBADF029F52EC3B6648D8DD56BABA0884ED4F859B5B9375,CERTIFICATE:C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790,CERTIFICATE:C-8E5B8BAEDC4D58BE0E301CCCB6ED173C08D7C77CE4350973389FF1AFA11D7A65,CERTIFICATE:C-CF2058AAC27925521FC7F2ABACD2EE5429DD8D938DEBD3395BA4A6C042465DA7,CERTIFICATE:C-CF719BDBAC89C948399D74749CACB63A09DBD3D35597C374C2C753C0CE7AA257,CERTIFICATE:C-D0968A073AC646F686ACCDA844BBA6CE830CD0E1A2F4E228DBA67347C9F3617C,CERTIFICATE:C-DDD8912EE93608BE991C15D636D084AF0928425C6B37A0DA2DB16E3F72084B1E,REVOCATION:R-7F7F9EB8E90D17A31874EF2021BF18E9E1608D27421AA52AB33B73CCCB73F1FE,REVOCATION:R-A6A85C272FA4C1E9BBE7570E2980AB8366ECF0F0E370CE8A7E4C5FE5EEED01DF,SIGNATURE:S-87D03F7445A891CA977C7BA59A718EE312D2F3F6D442C4309F67D3FD23DADE1A,SIGNED_DATA:D-9E92C87D16A88D12E454B36C7C6551B7CFE4BBD4E15049F632E49C76D5F76D33,TIMESTAMP:T-20715FD4F30F04BEF4F1EDBBCA65DCC8BB16E1405EA0DD5BE62F0B154AC8009B,TIMESTAMP:T-49585C5B22DB9210E45A14C5F70E2215CAD71295C1AB88885E7E20482F097E1E,TIMESTAMP:T-969069A817C9A9D3DE6A441F6189202ED9C0DC55DDAFFCCF8B2F3732A30362B0"
+            }
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -253,6 +493,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -277,6 +527,16 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 1,
           "counterSignatures": [
         {
@@ -293,6 +553,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -319,6 +589,16 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 1,
           "counterSignatures": [
         {
@@ -335,6 +615,16 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -361,6 +651,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -385,6 +685,16 @@
           "sigDMechanism": null,
           "serializationType": "FLATTENED_JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 1,
           "counterSignatures": [
         {
@@ -401,6 +711,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -427,6 +747,198 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
+          "counterSignatureCount": 0,
+          "counterSignatures": [
+          ]
+        }
+      ]
+    },
+    {
+      "path": "validation/jades-b-copied-cnttst.json",
+      "signatureCount": 1,
+      "signatures": [
+        {
+          "signingCertificateFound": true,
+          "signingCertificateSHA256": "7396959e10a8528dce133c4a2c606a02314e2456d52081c1207f11e88025ef60",
+          "claimedSigningTimeMillis": 1702022821000,
+          "dataFoundUpToLevel": "JAdES_BASELINE_B",
+          "isCounterSignature": false,
+          "referenceDataFound": true,
+          "referenceDataIntact": true,
+          "signatureIntact": true,
+          "dtbsrAlgorithm": "SHA256",
+          "dtbsrHex": "cf3fde06fbf1e8051ab45a3103fea6021ae8a2b45844deaffda3954d5cbb1e92",
+          "sigDMechanism": null,
+          "serializationType": "COMPACT_SERIALIZATION",
+          "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+            {
+              "type": "CONTENT_TIMESTAMP",
+              "dssId": "T-D744D354C75EFE221443B810BDEBA3512226473535CF6E17CF3F26D99EED0BAF",
+              "generationTimeMillis": 1702022821000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "8828f496b6f8321c78c5deb3938931a862c69e5aab2a97797686c2dd6b40e803",
+              "signatureIntact": false,
+              "timestampedReferences": "SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            },
+            {
+              "type": "CONTENT_TIMESTAMP",
+              "dssId": "T-3EE694DFCD4EE0212AB73D52EB83EF712F953AC66EBEB96601C0F7D0D740A54D",
+              "generationTimeMillis": 1702022821000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "8828f496b6f8321c78c5deb3938931a862c69e5aab2a97797686c2dd6b40e803",
+              "signatureIntact": false,
+              "timestampedReferences": "SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
+          "counterSignatureCount": 0,
+          "counterSignatures": [
+          ]
+        }
+      ]
+    },
+    {
+      "path": "validation/jades-t-copied-sigtst.json",
+      "signatureCount": 1,
+      "signatures": [
+        {
+          "signingCertificateFound": true,
+          "signingCertificateSHA256": "aeeda2f835a39f240a425fccf1633b11cf74482af6ee42f5bdbc812d83bba57a",
+          "claimedSigningTimeMillis": 1702027448000,
+          "dataFoundUpToLevel": "JAdES_BASELINE_T",
+          "isCounterSignature": false,
+          "referenceDataFound": true,
+          "referenceDataIntact": true,
+          "signatureIntact": true,
+          "dtbsrAlgorithm": "SHA256",
+          "dtbsrHex": "b46b8e9b93f9e2d4a45b6ee17310c3f5ae4d4110eb9575d7677d8d9235fb4009",
+          "sigDMechanism": null,
+          "serializationType": "FLATTENED_JSON_SERIALIZATION",
+          "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+            {
+              "type": "CONTENT_TIMESTAMP",
+              "dssId": "T-36C1563C697C6A9BFC9CC877F197D3F3E81312354D919C9AB5E5C6BCB0F18E62",
+              "generationTimeMillis": 1702027448000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "8828f496b6f8321c78c5deb3938931a862c69e5aab2a97797686c2dd6b40e803",
+              "signatureIntact": false,
+              "timestampedReferences": "SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-B000DD7F1FC3EC4D526C72A3FF9224563C8FE1EB8F0C971B66541C8BA9C3D00E",
+              "generationTimeMillis": 1702027448000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": false,
+              "messageImprintHex": "8828f496b6f8321c78c5deb3938931a862c69e5aab2a97797686c2dd6b40e803",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-9A17D09D09CB3587C0DD65C2C6423BE921B39C60FA30DD2C50DB783D6238054B,CERTIFICATE:C-A3C80DEEADA6780344645B8A47E60B3E78F6C14CAAD54917AEBBA51D7AD48DC8,CERTIFICATE:C-AEEDA2F835A39F240A425FCCF1633B11CF74482AF6EE42F5BDBC812D83BBA57A,CERTIFICATE:C-AF30E58C9C9734C118F3FCA112E16708FB23E1205918D97615CB9576219B4065,SIGNATURE:S-FFF0031A134FA268A04558CA523F42F32A1077971E547B8629CE187F225A3A7B,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-36C1563C697C6A9BFC9CC877F197D3F3E81312354D919C9AB5E5C6BCB0F18E62"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
+          "counterSignatureCount": 0,
+          "counterSignatures": [
+          ]
+        }
+      ]
+    },
+    {
+      "path": "validation/jades-with-sigAndRefsTst-with-dot.json",
+      "signatureCount": 1,
+      "signatures": [
+        {
+          "signingCertificateFound": true,
+          "signingCertificateSHA256": "bb550ea50a3cdc4dfd3b3adbce9abddee811a568aaf82e2759868f04a561f873",
+          "claimedSigningTimeMillis": 1611570133000,
+          "dataFoundUpToLevel": "JAdES_BASELINE_T",
+          "isCounterSignature": false,
+          "referenceDataFound": true,
+          "referenceDataIntact": true,
+          "signatureIntact": true,
+          "dtbsrAlgorithm": "SHA256",
+          "dtbsrHex": "b86ab96c962dacc902533d205b864886125ae20707828160992563977aef81a8",
+          "sigDMechanism": null,
+          "serializationType": "FLATTENED_JSON_SERIALIZATION",
+          "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-DC7E3C5693ECA7D24468B7C9277A61054576EF7559950E7D8481E10F021818E7",
+              "generationTimeMillis": 1611570135000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "01d4145cdb64ad4bca39da5360a69d14c7f591d30d0a0840a16e18ee7878cb59",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,SIGNATURE:S-6FCF49D5F39140D9078C406453D7429E92293C8CBA446C966AB7FD262215D0FC,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+            {
+              "type": "VALIDATION_DATA_TIMESTAMP",
+              "dssId": "T-D5791ECC7425C42B2CE46360FD4F736F1B30A584C9BBD5FFCDB1085B58EA96FB",
+              "generationTimeMillis": 1611573715000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "1d5c6a3e0aee02c331bc404f1c35f02f3f33cb2d8c3da9a8f73c4e098d595894",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,CERTIFICATE:C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134,REVOCATION:R-0A97D44E5ACA98335B5996FA73D159E159682E5C623EBE65C66B4C69F61976A6,REVOCATION:R-D2A87A0A5C5F07181105845F6232826FBD82117452C606F28CCE894FBCA9FA0F,SIGNATURE:S-6FCF49D5F39140D9078C406453D7429E92293C8CBA446C966AB7FD262215D0FC,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-DC7E3C5693ECA7D24468B7C9277A61054576EF7559950E7D8481E10F021818E7"
+            },
+            {
+              "type": "VALIDATION_DATA_TIMESTAMP",
+              "dssId": "T-2EF7888156089A6E61EC72069D34467A2B3DB43491872A4451D84D6B9ADA1DFB",
+              "generationTimeMillis": 1611574733000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "87adefdec53ae9e780088f6db6e53634938a34fac11e2da5540f8933af779fca",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-135540892349649E7A0AD2727E17FEDC193EB67E4CE2674D2C5A09677893A0EF,CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,CERTIFICATE:C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134,REVOCATION:R-0A97D44E5ACA98335B5996FA73D159E159682E5C623EBE65C66B4C69F61976A6,REVOCATION:R-D2A87A0A5C5F07181105845F6232826FBD82117452C606F28CCE894FBCA9FA0F,SIGNATURE:S-6FCF49D5F39140D9078C406453D7429E92293C8CBA446C966AB7FD262215D0FC,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90,TIMESTAMP:T-DC7E3C5693ECA7D24468B7C9277A61054576EF7559950E7D8481E10F021818E7"
+            }
+          ],
+          "timestampsX2": [
+            {
+              "type": "VALIDATION_DATA_REFSONLY_TIMESTAMP",
+              "dssId": "T-B3EF78D4CA9494541709A89457029B50D4F5948AA274968BEB4364D438930DC9",
+              "generationTimeMillis": 1611574444000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "6b137ad374a21a1c578dd6bfbfa21c7a4e52870d87acbe5c955fe71214b462b4",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-135540892349649E7A0AD2727E17FEDC193EB67E4CE2674D2C5A09677893A0EF,CERTIFICATE:C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625,CERTIFICATE:C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA,CERTIFICATE:C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873,REVOCATION:R-0A97D44E5ACA98335B5996FA73D159E159682E5C623EBE65C66B4C69F61976A6,REVOCATION:R-D2A87A0A5C5F07181105845F6232826FBD82117452C606F28CCE894FBCA9FA0F"
+            }
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -451,6 +963,16 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -481,6 +1003,16 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -505,6 +1037,26 @@
           "sigDMechanism": null,
           "serializationType": "JSON_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+            {
+              "type": "SIGNATURE_TIMESTAMP",
+              "dssId": "T-66826066875B5782249A8B1017EA82EA5DC98F12A5335E104816AA6A1F29B36F",
+              "generationTimeMillis": 1637147024000,
+              "messageImprintDataFound": true,
+              "messageImprintDataIntact": true,
+              "messageImprintHex": "42234b901430e52a65f0b6c94a54e843a115878126ebf8c43c8282d5288bb336",
+              "signatureIntact": false,
+              "timestampedReferences": "CERTIFICATE:C-3DB7CECC65FF29DEFE92600DA9052366FE7CA55A041AA50BCB5CA1205F35E724,CERTIFICATE:C-BBC106F1D17D733421060262F4AE0566B056C99BFAECEAA058A67ADB5B19F409,SIGNATURE:S-85D444E265EC7753A7D1F1B6EEA27837EF555A15E7B38C1C14413F6BA90FD864,SIGNED_DATA:D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90"
+            }
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -529,6 +1081,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -553,6 +1115,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 1,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -577,6 +1149,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -601,6 +1183,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 1,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -625,6 +1217,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -649,6 +1251,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -673,6 +1285,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]
@@ -697,6 +1319,16 @@
           "sigDMechanism": null,
           "serializationType": "COMPACT_SERIALIZATION",
           "structureValidationErrorCount": 0,
+          "contentTimestamps": [
+          ],
+          "signatureTimestamps": [
+          ],
+          "timestampsX1": [
+          ],
+          "timestampsX2": [
+          ],
+          "archiveTimestamps": [
+          ],
           "counterSignatureCount": 0,
           "counterSignatures": [
           ]

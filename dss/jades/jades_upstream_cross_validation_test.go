@@ -31,6 +31,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 
@@ -55,8 +56,35 @@ type jvalSignature struct {
 	SigDMechanism            *string         `json:"sigDMechanism"`
 	SerializationType        string          `json:"serializationType"`
 	StructureValidationCount int             `json:"structureValidationErrorCount"`
+	ContentTimestamps        []jvalTimestamp `json:"contentTimestamps"`
+	SignatureTimestamps      []jvalTimestamp `json:"signatureTimestamps"`
+	TimestampsX1             []jvalTimestamp `json:"timestampsX1"`
+	TimestampsX2             []jvalTimestamp `json:"timestampsX2"`
+	ArchiveTimestamps        []jvalTimestamp `json:"archiveTimestamps"`
 	CounterSignatureCount    int             `json:"counterSignatureCount"`
 	CounterSignatures        []jvalSignature `json:"counterSignatures"`
+}
+
+// jvalTimestamp mirrors gen/CrossValidationOracle.java's dumpTimestamps(). Two of these columns
+// are there because the broad whole-corpus differential (testdata/broadgen/) caught defects no
+// other column in this golden could see, and they stay asserted so those defects cannot return:
+//
+//   - DSSID: SignatureTimestampIdentifierBuilder mixes the carrying attribute's position among
+//     the signature properties into the token identifier. Losing that position (a lookup that
+//     misses because the attribute objects are rebuilt on every access) changes every content
+//     time-stamp's id without changing anything else.
+//   - TimestampedReferences: JAdESTimestampSource's getSignatureTimestampReferences() override
+//     folds getKeyInfoReferences() into a signature time-stamp's covered set. Missing that
+//     override drops exactly one certificate reference per signature time-stamp.
+type jvalTimestamp struct {
+	Type                     string  `json:"type"`
+	DSSID                    string  `json:"dssId"`
+	GenerationTimeMillis     *int64  `json:"generationTimeMillis"`
+	MessageImprintDataFound  bool    `json:"messageImprintDataFound"`
+	MessageImprintDataIntact bool    `json:"messageImprintDataIntact"`
+	MessageImprintHex        *string `json:"messageImprintHex"`
+	SignatureIntact          bool    `json:"signatureIntact"`
+	TimestampedReferences    string  `json:"timestampedReferences"`
 }
 
 type jvalFile struct {
@@ -291,6 +319,12 @@ func checkJvalSignature(t *testing.T, sig *JAdESSignature, want jvalSignature, i
 			index, gotHasErrors, wantHasErrors, sig.StructureValidationResult())
 	}
 
+	checkJvalTimestamps(t, index, "contentTimestamps", sig.ContentTimestamps(), want.ContentTimestamps)
+	checkJvalTimestamps(t, index, "signatureTimestamps", sig.SignatureTimestamps(), want.SignatureTimestamps)
+	checkJvalTimestamps(t, index, "timestampsX1", sig.TimestampsX1(), want.TimestampsX1)
+	checkJvalTimestamps(t, index, "timestampsX2", sig.TimestampsX2(), want.TimestampsX2)
+	checkJvalTimestamps(t, index, "archiveTimestamps", sig.ArchiveTimestamps(), want.ArchiveTimestamps)
+
 	// DSS-Id stability: building the identifier twice from the same, already-parsed signature
 	// must yield the same string both times.
 	id1 := sig.ID()
@@ -308,6 +342,70 @@ func checkJvalSignature(t *testing.T, sig *JAdESSignature, want jvalSignature, i
 	}
 	for i, cs := range counterSignatures {
 		checkJvalSignature(t, cs.(*JAdESSignature), want.CounterSignatures[i], i, true)
+	}
+}
+
+// checkJvalTimestamps asserts one time-stamp bucket against the golden's, field by field. See
+// jvalTimestamp's own doc comment for why DSSID and TimestampedReferences are asserted.
+func checkJvalTimestamps(t *testing.T, index int, bucket string, got []*validation.TimestampToken, want []jvalTimestamp) {
+	t.Helper()
+
+	if len(got) != len(want) {
+		t.Errorf("signature[%d]: %s count = %d, want %d", index, bucket, len(got), len(want))
+		return
+	}
+	for i, timestampToken := range got {
+		expected := want[i]
+		prefix := fmt.Sprintf("signature[%d]: %s[%d]", index, bucket, i)
+
+		if gotType := string(timestampToken.TimeStampType()); gotType != expected.Type {
+			t.Errorf("%s: type = %s, want %s", prefix, gotType, expected.Type)
+		}
+		if gotID := timestampToken.DSSIDAsString(); gotID != expected.DSSID {
+			t.Errorf("%s: DSSIDAsString() = %s, want %s", prefix, gotID, expected.DSSID)
+		}
+		gotGenerationTime := timestampToken.GenerationTime()
+		switch {
+		case expected.GenerationTimeMillis == nil && !gotGenerationTime.IsZero():
+			t.Errorf("%s: generation time = %v, want none", prefix, gotGenerationTime)
+		case expected.GenerationTimeMillis != nil && gotGenerationTime.IsZero():
+			t.Errorf("%s: generation time = none, want %d", prefix, *expected.GenerationTimeMillis)
+		case expected.GenerationTimeMillis != nil:
+			if gotMillis := gotGenerationTime.UnixMilli(); gotMillis != *expected.GenerationTimeMillis {
+				t.Errorf("%s: generation time = %d ms, want %d ms", prefix, gotMillis, *expected.GenerationTimeMillis)
+			}
+		}
+		if got := timestampToken.IsMessageImprintDataFound(); got != expected.MessageImprintDataFound {
+			t.Errorf("%s: IsMessageImprintDataFound() = %v, want %v", prefix, got, expected.MessageImprintDataFound)
+		}
+		if got := timestampToken.IsMessageImprintDataIntact(); got != expected.MessageImprintDataIntact {
+			t.Errorf("%s: IsMessageImprintDataIntact() = %v, want %v", prefix, got, expected.MessageImprintDataIntact)
+		}
+		messageImprint := timestampToken.MessageImprint()
+		switch {
+		case expected.MessageImprintHex == nil && messageImprint.Value() != nil:
+			t.Errorf("%s: message imprint = %s, want none", prefix, hexEncode(messageImprint.Value()))
+		case expected.MessageImprintHex != nil && messageImprint.Value() == nil:
+			t.Errorf("%s: message imprint = none, want %s", prefix, *expected.MessageImprintHex)
+		case expected.MessageImprintHex != nil:
+			if gotHex := hexEncode(messageImprint.Value()); gotHex != *expected.MessageImprintHex {
+				t.Errorf("%s: message imprint = %s, want %s", prefix, gotHex, *expected.MessageImprintHex)
+			}
+		}
+		if got := timestampToken.IsSignatureIntact(); got != expected.SignatureIntact {
+			t.Errorf("%s: IsSignatureIntact() = %v, want %v", prefix, got, expected.SignatureIntact)
+		}
+
+		// Sorted, so only the covered SET is compared, not the order the two implementations
+		// happened to append references in - the same normalization the oracle applies.
+		var references []string
+		for _, reference := range timestampToken.TimestampedReferences() {
+			references = append(references, string(reference.Category())+":"+reference.ObjectId())
+		}
+		sort.Strings(references)
+		if gotReferences := strings.Join(references, ","); gotReferences != expected.TimestampedReferences {
+			t.Errorf("%s: timestamped references =\n  %s\nwant\n  %s", prefix, gotReferences, expected.TimestampedReferences)
+		}
 	}
 }
 

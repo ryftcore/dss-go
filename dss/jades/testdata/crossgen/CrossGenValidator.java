@@ -1,24 +1,34 @@
-// GO -> UPSTREAM cross-validation (task #12): loads each CAdES file main.go (crossgen) produced
-// with upstream DSS 6.5.RC1's own SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder and
-// asserts the signature is cryptographically intact, the signing certificate was identified, and
-// the expected baseline level was recognized. This is the actual compatibility proof of the
-// GO -> UPSTREAM direction: upstream DSS accepting what the Go port produced, not another
-// Go-side self-check.
+// GO -> UPSTREAM cross-validation (task #12, JAdES extension): loads each JAdES file main.go
+// (crossgen) produced with upstream DSS 6.5.RC1's own SignedDocumentValidator/
+// SignedDocumentDiagnosticDataBuilder and asserts the signature is cryptographically intact, the
+// signing certificate was identified, and the expected baseline level was recognized. This is the
+// actual compatibility proof of the GO -> UPSTREAM direction: upstream DSS accepting what the Go
+// port produced, not another Go-side self-check.
 //
-// Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1, dss-validation included:
+// Adapted from cades/testdata/crossgen/CrossGenValidator.java (SignedDocumentValidator/
+// DiagnosticData are generic across signature formats, so most of this is a plain copy), with one
+// deliberate change: the level-ending-in-"_T" timestamp check below is spelled with
+// String#endsWith rather than the CAdES-specific SignatureLevel.CAdES_BASELINE_T constant (the
+// form xades/testdata/crossgen's own copy already uses), so it actually fires for
+// JAdES_BASELINE_T fixtures instead of silently never matching.
+//
+// Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1, dss-validation AND dss-jades
+// included (dss-jades registers JWSDocumentValidatorFactory/JWSDocumentAnalyzerFactory as
+// SignedDocumentValidator.fromDocument's ServiceLoader providers for JWS/JAdES documents -
+// without it on the classpath, fromDocument() throws "Document format not recognized/handled"):
 //
 //   cd /home/user/dss-upstream
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
-//   CP="dss-validation/target/classes:dss-cades/target/classes:dss-cms-object/target/classes:$(cat /tmp/valcp.txt)"
+//   CP="dss-validation/target/classes:dss-jades/target/classes:specs-jades/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java
 //   java  -cp "$CP:/tmp/crossgenval" CrossGenValidator <fixtures dir> \
-//       cades-b-enveloping.p7m:CAdES-BASELINE-B \
-//       cades-t-enveloping.p7m:CAdES-BASELINE-T \
-//       cades-b-detached.p7s:CAdES-BASELINE-B:cades-b-detached-content.bin
+//       jades-b-compact.json:JAdES-BASELINE-B \
+//       jades-t-flattened.json:JAdES-BASELINE-T \
+//       jades-b-detached.json:JAdES-BASELINE-B:jades-b-detached-content.txt
 //
 // Each fixture argument is "<file>:<expectedLevel>[:<detachedContentFile>]". Exits 0 and prints
 // "ALL OK" when every fixture passes all three assertions; otherwise prints the specific failure
-// for each fixture and exits 1 - cades_downstream_cross_validation_test.go greps stdout for
+// for each fixture and exits 1 - jades_downstream_cross_validation_test.go greps stdout for
 // exactly those two markers, so a genuine rejection surfaces as a Go test failure rather than
 // being swallowed.
 import eu.europa.esig.dss.diagnostic.DiagnosticData;
@@ -115,7 +125,7 @@ public class CrossGenValidator {
         // exactly that, and upstream was silently failing to validate the token at all because
         // the test TSA certificate carried no timeStamping extended key usage (BouncyCastle's
         // TSPUtil.validateCertificate rejects such a certificate outright).
-        if (expectedLevel == SignatureLevel.CAdES_BASELINE_T) {
+        if (expectedLevel.name().endsWith("_T")) {
             checkSignatureTimestamp(signature);
         }
     }

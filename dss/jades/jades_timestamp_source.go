@@ -67,6 +67,19 @@ import (
 // header's "DEVIATION" note.
 type jadesSignedPropertiesAsEtsiUComponents struct {
 	signedProperties validation.SignatureProperties[*JAdESAttribute]
+
+	// components caches the boxed attributes so that repeated Attributes() calls hand back the
+	// SAME pointers. This is load-bearing, not an optimization: the frozen base's
+	// getAttributeOrder(SA) locates an attribute with Go's `==` on the SA type parameter (here a
+	// *EtsiUComponent, i.e. pointer identity), where Java's getAttributeOrder uses
+	// signatureAttribute.equals(property), i.e. SignatureAttributeIdentifier equality. Re-boxing
+	// on every call made the base's lookup always miss, so a content time-stamp's
+	// SignatureTimestampIdentifierBuilder got orderOfAttribute=null instead of the attribute's
+	// real index, and every content time-stamp in the corpus came out with a different DSS-Id
+	// than upstream's (visible as a diverging TIMESTAMP: reference inside the signature
+	// time-stamp that covers it). JAdESEtsiUHeader.Attributes() caches for the unsigned side
+	// already, which is why only signed (content-time-stamp) attributes were affected.
+	components []*EtsiUComponent
 }
 
 // IsExist implements validation.SignatureProperties.
@@ -74,14 +87,18 @@ func (p *jadesSignedPropertiesAsEtsiUComponents) IsExist() bool {
 	return p.signedProperties.IsExist()
 }
 
-// Attributes implements validation.SignatureProperties, boxing each *JAdESAttribute.
+// Attributes implements validation.SignatureProperties, boxing each *JAdESAttribute. The boxed
+// slice is cached: see the components field's own comment for why pointer stability matters.
 func (p *jadesSignedPropertiesAsEtsiUComponents) Attributes() []*EtsiUComponent {
-	attributes := p.signedProperties.Attributes()
-	result := make([]*EtsiUComponent, len(attributes))
-	for i, a := range attributes {
-		result[i] = &EtsiUComponent{JAdESAttribute: *a}
+	if p.components == nil {
+		attributes := p.signedProperties.Attributes()
+		components := make([]*EtsiUComponent, len(attributes))
+		for i, a := range attributes {
+			components[i] = &EtsiUComponent{JAdESAttribute: *a}
+		}
+		p.components = components
 	}
-	return result
+	return p.components
 }
 
 // JAdESTimestampSource extracts timestamps from a JAdES signature. Port of the class
@@ -657,10 +674,31 @@ func (s *JAdESTimestampSource) MakeTimestampToken(signatureAttribute *EtsiUCompo
 
 // MakeTimestampTokens is JAdES's own plural timestamp-token factory. Port of the protected
 // makeTimestampTokens(JAdESAttribute, TimestampType, List) override.
+//
+// The SIGNATURE_TIMESTAMP branch additionally folds in GetKeyInfoReferences(): see the GAP note
+// above on getSignatureTimestampReferences. Java's base builds a signature time-stamp's reference
+// list as makeTimestampTokens(attr, SIGNATURE_TIMESTAMP, getSignatureTimestampReferences()) - the
+// single call site that feeds getSignatureTimestampReferences() into a token - so virtual dispatch
+// reaches JAdESTimestampSource's override there and appends getKeyInfoReferences(). The Go base's
+// getSignatureTimestampReferences is unexported and hookless, so it statically returns the base
+// list; appending the same references here, at the only affected call site, reproduces the exact
+// reference set Java's dispatch produces. Verified against upstream on the whole
+// dss-jades/src/test/resources corpus: without this, 14 fixtures' signature time-stamps each
+// dropped the signing certificate's 'x5c' KeyInfo CERTIFICATE reference
+// (testdata/broadgen/README.md). The other three call sites need nothing: RefsOnly/SigAndRefs
+// build their own lists in the base, and the ARCHIVE_TIMESTAMP path already routes through
+// IncorporateArchiveTimestampReferences -> archiveTimestampReferences -> signatureTimestampReferences.
 func (s *JAdESTimestampSource) MakeTimestampTokens(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
 	if enumerations.TimestampType_ARCHIVE_TIMESTAMP == timestampType {
 		return s.extractArchiveTimestampTokens(signatureAttribute, references)
+	}
+	if enumerations.TimestampType_SIGNATURE_TIMESTAMP == timestampType {
+		// Copy first: the base owns the slice it passed in and reuses it across attributes.
+		augmented := make([]*validation.TimestampedReference, len(references))
+		copy(augmented, references)
+		jadesTSAddReferences(&augmented, s.GetKeyInfoReferences())
+		references = augmented
 	}
 	tstContainer := DSSJsonUtilsToMap(signatureAttribute.Value(), JAdESHeaderParameterNamesTstContainer)
 	return s.extractTimestampTokens(signatureAttribute, tstContainer, timestampType, references)
