@@ -17,8 +17,12 @@
 package cades
 
 import (
+	"archive/zip"
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -200,4 +204,176 @@ func stripJavaToolOptionsNoise(output string) string {
 		kept = append(kept, line)
 	}
 	return strings.Join(kept, "\n")
+}
+
+// roundTripFixtures are the containers UPSTREAM DSS builds at CAdES-BASELINE-B (step 1) for the Go
+// port to extend to -T (step 2), keyed to what CrossGenValidator.java must then see (step 3).
+var roundTripFixtures = []struct {
+	javaBuilt     string
+	goExtended    string
+	validatorSpec string
+}{
+	{"java-asics-cades-b.scs", "roundtrip-asics-cades-t.scs", "roundtrip-asics-cades-t.scs:ASiC_S:CAdES_BASELINE_T"},
+	{"java-asice-cades-b.sce", "roundtrip-asice-cades-t.sce", "roundtrip-asice-cades-t.sce:ASiC_E:CAdES_BASELINE_T"},
+}
+
+// TestRoundTripJavaBuiltExtendedByGo is the UPSTREAM -> GO -> UPSTREAM direction: upstream DSS
+// builds an ASiC-S and an ASiC-E container at CAdES-BASELINE-B, the Go port extends each to
+// CAdES-BASELINE-T, and upstream DSS validates the result.
+//
+// TestDownstreamCrossValidation already proves upstream accepts a container this port BUILT. That
+// is a weaker statement than it looks for the extension surface: extension rewrites an EXISTING
+// signed container - it re-encodes the CMS signature, copies every other entry across and rebuilds
+// the zip - so a port that dropped an entry, normalised entry metadata or mis-serialised the
+// existing signature would still pass a build-only test, because it would never have been handed
+// bytes it did not write itself. Here every input byte comes from upstream.
+//
+// Two things are asserted, and neither is derived by this package's own code:
+//
+//   - upstream DSS validates the extended container: right container type, signature still intact,
+//     signing certificate still identified, level now -T, and the RFC 3161 token cryptographically
+//     verified (CrossGenValidator.checkSignatureTimestamp).
+//   - the extension preserved the container: every entry of the Java-built container is still
+//     present in the Go-extended one, byte-identical except for the signature file the extension is
+//     supposed to rewrite, "mimetype" is still the first entry and still STORED, and the only new
+//     entries are the ones -T adds.
+func TestRoundTripJavaBuiltExtendedByGo(t *testing.T) {
+	if testing.Short() {
+		t.Skip("cross-validation against upstream DSS shells out to go run/mvn/javac/java; skipped under -short")
+	}
+
+	upstreamHome := os.Getenv("DSS_UPSTREAM_HOME")
+	if upstreamHome == "" {
+		upstreamHome = "/home/user/dss-upstream"
+	}
+	if skipReason := detectJavaAndUpstreamDSS(upstreamHome); skipReason != "" {
+		t.Skip(skipReason)
+	}
+
+	classpath, err := buildUpstreamDSSClasspath(upstreamHome)
+	if err != nil {
+		t.Fatalf("building upstream DSS classpath: %v", err)
+	}
+	// dss-token is not a dependency of any module already on the classpath; JavaBuiltGenerator
+	// needs it for Pkcs12SignatureToken.
+	tokenClasses := filepath.Join(upstreamHome, "dss-token", "target", "classes")
+	if info, statErr := os.Stat(tokenClasses); statErr != nil || !info.IsDir() {
+		t.Skipf("upstream dss-token is not built at %s: %v", tokenClasses, statErr)
+	}
+	classpath = classpath + string(os.PathListSeparator) + tokenClasses
+
+	javaClasses := t.TempDir()
+	javac := exec.Command("javac", "-cp", classpath, "-d", javaClasses,
+		"JavaBuiltGenerator.java", "CrossGenValidator.java")
+	javac.Dir = filepath.Join("testdata", "crossgen")
+	if javacOutput, javacErr := javac.CombinedOutput(); javacErr != nil {
+		t.Fatalf("javac JavaBuiltGenerator.java CrossGenValidator.java failed: %v\n%s", javacErr, javacOutput)
+	}
+	runtimeClasspath := classpath + string(os.PathListSeparator) + javaClasses
+
+	outDir := t.TempDir()
+
+	// Step 1: upstream DSS builds the -B containers.
+	generator := exec.Command("java", "-cp", runtimeClasspath, "JavaBuiltGenerator", outDir, "signer_rsa.p12")
+	generator.Dir = filepath.Join("testdata", "crossgen")
+	generatorOutput, err := generator.CombinedOutput()
+	generatorText := stripJavaToolOptionsNoise(string(generatorOutput))
+	if err != nil || !strings.Contains(generatorText, "GENERATED OK") {
+		t.Fatalf("JavaBuiltGenerator failed: %v\n%s", err, generatorText)
+	}
+
+	// Step 2: the Go port extends each of them to -T. A failure here is this port's failure, not
+	// something to skip past.
+	var validatorSpecs []string
+	for _, fixture := range roundTripFixtures {
+		inputPath := filepath.Join(outDir, fixture.javaBuilt)
+		outputPath := filepath.Join(outDir, fixture.goExtended)
+		extend := exec.Command("go", "run", ".", "-extend", inputPath, outputPath)
+		extend.Dir = filepath.Join("testdata", "crossgen")
+		if extendOutput, extendErr := extend.CombinedOutput(); extendErr != nil {
+			t.Fatalf("extending %s with the Go port failed: %v\n%s", fixture.javaBuilt, extendErr, extendOutput)
+		}
+		assertExtensionPreservedContainer(t, inputPath, outputPath)
+		validatorSpecs = append(validatorSpecs, fixture.validatorSpec)
+	}
+
+	// Step 3: upstream DSS validates what the Go port produced from its own bytes.
+	javaArgs := append([]string{"-cp", runtimeClasspath, "CrossGenValidator", outDir}, validatorSpecs...)
+	java := exec.Command("java", javaArgs...)
+	javaOutput, err := java.CombinedOutput()
+	outputText := stripJavaToolOptionsNoise(string(javaOutput))
+	t.Logf("CrossGenValidator output:\n%s", outputText)
+	if err != nil || !strings.Contains(outputText, "ALL OK") {
+		t.Fatalf("upstream DSS did not accept every Go-extended container (see output above): %v", err)
+	}
+}
+
+// assertExtensionPreservedContainer checks the structural half of the round trip: what the Go
+// extension did to the bytes upstream handed it.
+func assertExtensionPreservedContainer(t *testing.T, originalPath, extendedPath string) {
+	t.Helper()
+
+	original := readZipEntries(t, originalPath)
+	extended := readZipEntries(t, extendedPath)
+
+	// EN 319 162-1 A.1, on the container this port only rewrote.
+	if len(extended.order) == 0 || extended.order[0] != "mimetype" {
+		t.Errorf("%s: first entry = %v, want \"mimetype\"", filepath.Base(extendedPath), extended.order)
+	} else if extended.methods["mimetype"] != zip.Store {
+		t.Errorf("%s: mimetype compression method = %d, want STORED (0)",
+			filepath.Base(extendedPath), extended.methods["mimetype"])
+	}
+
+	for _, name := range original.order {
+		digest, present := extended.digests[name]
+		if !present {
+			t.Errorf("%s: entry %q from the Java-built container is missing after extension",
+				filepath.Base(extendedPath), name)
+			continue
+		}
+		// The signature file is the one entry extension is supposed to rewrite; everything else
+		// must survive byte-identical.
+		if strings.HasSuffix(name, ".p7s") {
+			if digest == original.digests[name] {
+				t.Errorf("%s: signature %q is unchanged after extension to -T", filepath.Base(extendedPath), name)
+			}
+			continue
+		}
+		if digest != original.digests[name] {
+			t.Errorf("%s: entry %q changed content during extension", filepath.Base(extendedPath), name)
+		}
+	}
+}
+
+// zipInventory is the entry inventory of one container, in central-directory order.
+type zipInventory struct {
+	order   []string
+	digests map[string]string
+	methods map[string]uint16
+}
+
+func readZipEntries(t *testing.T, path string) zipInventory {
+	t.Helper()
+	reader, err := zip.OpenReader(path)
+	if err != nil {
+		t.Fatalf("open %s as zip: %v", path, err)
+	}
+	defer func() { _ = reader.Close() }()
+
+	inventory := zipInventory{digests: map[string]string{}, methods: map[string]uint16{}}
+	for _, file := range reader.File {
+		entry, err := file.Open()
+		if err != nil {
+			t.Fatalf("open entry %s in %s: %v", file.Name, path, err)
+		}
+		digest := sha256.New()
+		if _, err := io.Copy(digest, entry); err != nil {
+			t.Fatalf("read entry %s in %s: %v", file.Name, path, err)
+		}
+		_ = entry.Close()
+		inventory.order = append(inventory.order, file.Name)
+		inventory.digests[file.Name] = hex.EncodeToString(digest.Sum(nil))
+		inventory.methods[file.Name] = file.Method
+	}
+	return inventory
 }

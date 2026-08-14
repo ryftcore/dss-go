@@ -44,8 +44,20 @@ var (
 )
 
 func main() {
+	// Second mode, step 2 of the UPSTREAM -> GO -> UPSTREAM round trip: extend a container that
+	// UPSTREAM DSS built (JavaBuiltGenerator.java, step 1) from CAdES-BASELINE-B to -T with this
+	// port's own service, so CrossGenValidator.java (step 3) can re-validate what the Go port only
+	// TOUCHED rather than built. See JavaBuiltGenerator.java's header for why that is a distinct
+	// proof from the build-only direction.
+	if len(os.Args) == 4 && os.Args[1] == "-extend" {
+		if err := extendToT(os.Args[2], os.Args[3]); err != nil {
+			fail(err)
+		}
+		fmt.Printf("extended %s -> %s\n", os.Args[2], os.Args[3])
+		return
+	}
 	if len(os.Args) != 2 {
-		fmt.Fprintln(os.Stderr, "usage: crossgen <output directory>")
+		fmt.Fprintln(os.Stderr, "usage: crossgen <output directory>\n       crossgen -extend <input container> <output container>")
 		os.Exit(2)
 	}
 	outDir := os.Args[1]
@@ -176,4 +188,33 @@ func writeDocument(document model.DSSDocument, path string) error {
 func fail(err error) {
 	fmt.Fprintln(os.Stderr, "crossgen:", err)
 	os.Exit(1)
+}
+
+// extendToT extends an existing signed ASiC-with-CAdES container from baseline B to baseline T
+// with this package's own ASiCWithCAdESService, using the same self-hosted EC TSA the generator
+// uses. Step 2 of the UPSTREAM -> GO -> UPSTREAM round trip (see main's -extend mode).
+func extendToT(inputPath, outputPath string) error {
+	document, err := model.NewFileDocument(inputPath)
+	if err != nil {
+		return err
+	}
+
+	selfDir, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	tspSource, err := validation.NewKeyEntityTSPSourceFromKeyStorePath(
+		filepath.Join(selfDir, "tsa_ec.p12"), "PKCS12", "testpassword", "", "testpassword")
+	if err != nil {
+		return fmt.Errorf("loading self-TSA key: %w", err)
+	}
+	tspSource.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
+
+	parameters := asiccades.NewASiCWithCAdESSignatureParameters()
+	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_T)
+
+	service := asiccades.NewASiCWithCAdESService(validation.NewCommonCertificateVerifier())
+	service.TspSource = tspSource
+
+	return writeDocument(service.ExtendDocument(document, parameters), outputPath)
 }

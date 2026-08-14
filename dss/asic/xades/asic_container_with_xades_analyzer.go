@@ -1,16 +1,20 @@
-//go:build phase8
-
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCContainerWithXAdESAnalyzer.java (DSS 6.5.RC1).
 //
 // Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
 // same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
 //
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag because
-// asic.AbstractASiCContainerAnalyzer's own base (analyzer.DefaultDocumentAnalyzer) is fine, but
-// this file's Java counterpart is only ever consumed through dss/validation
-// (SignedDocumentValidator), which does not exist yet - matching the
-// asic/cades/asic_container_with_cades_analyzer.go precedent's gating rationale exactly. Drop
-// the tag once Phase 8 lands the package.
+// NOT gated behind `phase8`, unlike its CAdES sibling. The CAdES container analyzer is forced to
+// be: asic/cades/asic_container_with_cades_analyzer.go needs ASiCWithCAdESTimestampAnalyzer, which
+// extends dss/validation's DetachedTimestampAnalyzer - a package Phase 8 has not landed, so that
+// file cannot compile at all today. Nothing in the XAdES container analyzer reaches outside the
+// already-ported tree: asic.AbstractASiCContainerAnalyzer, spi/validation{,/analyzer} and the
+// frozen dss/xades analyzer are all live, and the type is directly usable through the ported
+// analyzer.DocumentAnalyzer interface. Gating it too would have hidden a working surface -
+// per-signature analysis of ASiC containers - from the build and from cross-validation, so it is
+// live and pinned against upstream by asic/broad_corpus_cross_validation_test.go's
+// TestBroadCorpusXAdESSignatureAnalysisMatchesUpstream over the whole fixture corpus. What
+// genuinely awaits Phase 8 is the *validator* wrapper (asic_container_with_xades_validator.go),
+// which does import dss/validation.
 package xades
 
 import (

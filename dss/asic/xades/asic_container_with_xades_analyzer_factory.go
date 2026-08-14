@@ -1,12 +1,13 @@
-//go:build phase8
-
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCContainerWithXAdESAnalyzerFactory.java (DSS 6.5.RC1).
 //
 // Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
 // same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
 //
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag; see
-// asic_container_with_xades_analyzer.go's header for why.
+// Live in the default build, like the analyzer it creates - see
+// asic_container_with_xades_analyzer.go's header for why that file is not `phase8`-gated while its
+// CAdES sibling is. Registering the factory here is what makes an ASiC-E/S with XAdES container
+// resolvable through analyzer.DocumentAnalyzerFactory's registry, the Go stand-in for upstream's
+// ServiceLoader discovery.
 package xades
 
 import (
