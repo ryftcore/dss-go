@@ -37,31 +37,31 @@ func (w *EvidenceRecordWrapper) IsEvidenceRecordDuplicated() bool {
 	return w.evidenceRecord.Duplicated != nil && *w.evidenceRecord.Duplicated
 }
 
-// GetFilename returns name of the evidence record's document, when applicable. Port of
+// Filename returns name of the evidence record's document, when applicable. Port of
 // getFilename().
-func (w *EvidenceRecordWrapper) GetFilename() string {
+func (w *EvidenceRecordWrapper) Filename() string {
 	return w.evidenceRecord.DocumentName
 }
 
-// GetDigestMatchers gets a list of digest matchers representing the associated archival data
+// DigestMatchers gets a list of digest matchers representing the associated archival data
 // objects validation status. Port of getDigestMatchers().
-func (w *EvidenceRecordWrapper) GetDigestMatchers() []*jaxb.XmlDigestMatcher {
+func (w *EvidenceRecordWrapper) DigestMatchers() []*jaxb.XmlDigestMatcher {
 	return w.evidenceRecord.DigestMatchers
 }
 
-// GetFirstTimestamp returns initial time-stamp of the evidence record. Port of
+// FirstTimestamp returns initial time-stamp of the evidence record. Port of
 // getFirstTimestamp().
-func (w *EvidenceRecordWrapper) GetFirstTimestamp() *TimestampWrapper {
-	timestampList := w.GetTimestampList()
+func (w *EvidenceRecordWrapper) FirstTimestamp() *TimestampWrapper {
+	timestampList := w.TimestampList()
 	if len(timestampList) != 0 {
 		return timestampList[0]
 	}
 	return nil
 }
 
-// GetTimestampList gets a list of time-stamp tokens associated with the evidence record. Port
+// TimestampList gets a list of time-stamp tokens associated with the evidence record. Port
 // of getTimestampList().
-func (w *EvidenceRecordWrapper) GetTimestampList() []*TimestampWrapper {
+func (w *EvidenceRecordWrapper) TimestampList() []*TimestampWrapper {
 	var tsps []*TimestampWrapper
 	for _, xmlFoundTimestamp := range w.evidenceRecord.EvidenceRecordTimestamps {
 		tsps = append(tsps, NewTimestampWrapper(xmlFoundTimestamp.Timestamp))
@@ -69,11 +69,11 @@ func (w *EvidenceRecordWrapper) GetTimestampList() []*TimestampWrapper {
 	return tsps
 }
 
-// GetTimestampIdsList returns a list of time-stamp identifiers associated with the Evidence
+// TimestampIdsList returns a list of time-stamp identifiers associated with the Evidence
 // Record. Port of getTimestampIdsList().
-func (w *EvidenceRecordWrapper) GetTimestampIdsList() []string {
+func (w *EvidenceRecordWrapper) TimestampIdsList() []string {
 	var result []string
-	for _, tsp := range w.GetTimestampList() {
+	for _, tsp := range w.TimestampList() {
 		result = append(result, tsp.Id())
 	}
 	return result
@@ -91,13 +91,13 @@ func (w *EvidenceRecordWrapper) FoundRevocations() *FoundRevocationsProxy {
 	return NewFoundRevocationsProxy(w.evidenceRecord.FoundRevocations)
 }
 
-// GetEvidenceRecordType gets the evidence record format type. Port of getEvidenceRecordType().
-func (w *EvidenceRecordWrapper) GetEvidenceRecordType() enumerations.EvidenceRecordTypeEnum {
+// EvidenceRecordType gets the evidence record format type. Port of getEvidenceRecordType().
+func (w *EvidenceRecordWrapper) EvidenceRecordType() enumerations.EvidenceRecordTypeEnum {
 	return w.evidenceRecord.Type
 }
 
-// GetOrigin gets the origin of the evidence record. Port of getOrigin().
-func (w *EvidenceRecordWrapper) GetOrigin() enumerations.EvidenceRecordOrigin {
+// Origin gets the origin of the evidence record. Port of getOrigin().
+func (w *EvidenceRecordWrapper) Origin() enumerations.EvidenceRecordOrigin {
 	return w.evidenceRecord.Origin
 }
 
@@ -107,8 +107,8 @@ func (w *EvidenceRecordWrapper) IsEmbedded() bool {
 	return w.evidenceRecord.Embedded != nil && *w.evidenceRecord.Embedded
 }
 
-// GetParent returns a master-signature in case of a counter-signature. Port of getParent().
-func (w *EvidenceRecordWrapper) GetParent() *SignatureWrapper {
+// Parent returns a master-signature in case of a counter-signature. Port of getParent().
+func (w *EvidenceRecordWrapper) Parent() *SignatureWrapper {
 	parent := w.evidenceRecord.Parent
 	if parent != nil {
 		return NewSignatureWrapper(parent)
@@ -116,10 +116,10 @@ func (w *EvidenceRecordWrapper) GetParent() *SignatureWrapper {
 	return nil
 }
 
-// GetIncorporationType gets the incorporation of the evidence record within an embedding
+// IncorporationType gets the incorporation of the evidence record within an embedding
 // signature. NOTE: applicable only for attached evidence records in CAdES. Port of
 // getIncorporationType().
-func (w *EvidenceRecordWrapper) GetIncorporationType() enumerations.EvidenceRecordIncorporationType {
+func (w *EvidenceRecordWrapper) IncorporationType() enumerations.EvidenceRecordIncorporationType {
 	return w.evidenceRecord.IncorporationType
 }
 
@@ -129,9 +129,9 @@ func (w *EvidenceRecordWrapper) IsStructuralValidationValid() bool {
 	return w.evidenceRecord.StructuralValidation != nil && w.evidenceRecord.StructuralValidation.Valid
 }
 
-// GetStructuralValidationMessages returns structural validation error messages, when
+// StructuralValidationMessages returns structural validation error messages, when
 // applicable. Port of getStructuralValidationMessages().
-func (w *EvidenceRecordWrapper) GetStructuralValidationMessages() []string {
+func (w *EvidenceRecordWrapper) StructuralValidationMessages() []string {
 	structuralValidation := w.evidenceRecord.StructuralValidation
 	if structuralValidation != nil {
 		return structuralValidation.Messages
@@ -139,15 +139,15 @@ func (w *EvidenceRecordWrapper) GetStructuralValidationMessages() []string {
 	return nil
 }
 
-// GetCoveredObjects returns a list of objects covered by the evidence record. Port of
+// CoveredObjects returns a list of objects covered by the evidence record. Port of
 // getCoveredObjects().
-func (w *EvidenceRecordWrapper) GetCoveredObjects() []*jaxb.XmlTimestampedObject {
+func (w *EvidenceRecordWrapper) CoveredObjects() []*jaxb.XmlTimestampedObject {
 	return w.evidenceRecord.TimestampedObjects
 }
 
-// GetCoveredSignatures returns a list of SignatureWrapper covered by the current evidence
+// CoveredSignatures returns a list of SignatureWrapper covered by the current evidence
 // record. Port of getCoveredSignatures().
-func (w *EvidenceRecordWrapper) GetCoveredSignatures() []*SignatureWrapper {
+func (w *EvidenceRecordWrapper) CoveredSignatures() []*SignatureWrapper {
 	var signatures []*SignatureWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_SIGNATURE) {
 		xmlSignature, ok := token.(*jaxb.XmlSignature)
@@ -159,9 +159,9 @@ func (w *EvidenceRecordWrapper) GetCoveredSignatures() []*SignatureWrapper {
 	return signatures
 }
 
-// GetCoveredCertificates returns a list of certificates covered by the current evidence
+// CoveredCertificates returns a list of certificates covered by the current evidence
 // record. Port of getCoveredCertificates().
-func (w *EvidenceRecordWrapper) GetCoveredCertificates() []*CertificateWrapper {
+func (w *EvidenceRecordWrapper) CoveredCertificates() []*CertificateWrapper {
 	var certificates []*CertificateWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_CERTIFICATE) {
 		xmlCertificate, ok := token.(*jaxb.XmlCertificate)
@@ -173,9 +173,9 @@ func (w *EvidenceRecordWrapper) GetCoveredCertificates() []*CertificateWrapper {
 	return certificates
 }
 
-// GetCoveredRevocations returns a list of revocation data covered by the current evidence
+// CoveredRevocations returns a list of revocation data covered by the current evidence
 // record. Port of getCoveredRevocations().
-func (w *EvidenceRecordWrapper) GetCoveredRevocations() []*RevocationWrapper {
+func (w *EvidenceRecordWrapper) CoveredRevocations() []*RevocationWrapper {
 	var revocations []*RevocationWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_REVOCATION) {
 		xmlRevocation, ok := token.(*jaxb.XmlRevocation)
@@ -187,9 +187,9 @@ func (w *EvidenceRecordWrapper) GetCoveredRevocations() []*RevocationWrapper {
 	return revocations
 }
 
-// GetCoveredTimestamps returns a list of timestamps covered by the current evidence record.
+// CoveredTimestamps returns a list of timestamps covered by the current evidence record.
 // Port of getCoveredTimestamps().
-func (w *EvidenceRecordWrapper) GetCoveredTimestamps() []*TimestampWrapper {
+func (w *EvidenceRecordWrapper) CoveredTimestamps() []*TimestampWrapper {
 	var timestamps []*TimestampWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_TIMESTAMP) {
 		xmlTimestamp, ok := token.(*jaxb.XmlTimestamp)
@@ -201,9 +201,9 @@ func (w *EvidenceRecordWrapper) GetCoveredTimestamps() []*TimestampWrapper {
 	return timestamps
 }
 
-// GetCoveredEvidenceRecords returns a list of evidence records covered by the current evidence
+// CoveredEvidenceRecords returns a list of evidence records covered by the current evidence
 // record. Port of getCoveredEvidenceRecords().
-func (w *EvidenceRecordWrapper) GetCoveredEvidenceRecords() []*EvidenceRecordWrapper {
+func (w *EvidenceRecordWrapper) CoveredEvidenceRecords() []*EvidenceRecordWrapper {
 	var evidenceRecords []*EvidenceRecordWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_EVIDENCE_RECORD) {
 		xmlEvidenceRecord, ok := token.(*jaxb.XmlEvidenceRecord)
@@ -215,9 +215,9 @@ func (w *EvidenceRecordWrapper) GetCoveredEvidenceRecords() []*EvidenceRecordWra
 	return evidenceRecords
 }
 
-// GetCoveredSignedData returns a list of Signed data covered by the current evidence record.
+// CoveredSignedData returns a list of Signed data covered by the current evidence record.
 // Port of getCoveredSignedData().
-func (w *EvidenceRecordWrapper) GetCoveredSignedData() []*SignerDataWrapper {
+func (w *EvidenceRecordWrapper) CoveredSignedData() []*SignerDataWrapper {
 	var signerData []*SignerDataWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_SIGNED_DATA) {
 		xmlSignerData, ok := token.(*jaxb.XmlSignerData)
@@ -229,22 +229,22 @@ func (w *EvidenceRecordWrapper) GetCoveredSignedData() []*SignerDataWrapper {
 	return signerData
 }
 
-// GetAllCoveredOrphanTokens returns a list of all OrphanTokens covered by the evidence record.
+// AllCoveredOrphanTokens returns a list of all OrphanTokens covered by the evidence record.
 // Port of getAllCoveredOrphanTokens().
-func (w *EvidenceRecordWrapper) GetAllCoveredOrphanTokens() []OrphanTokenWrapperOverrides {
+func (w *EvidenceRecordWrapper) AllCoveredOrphanTokens() []OrphanTokenWrapperOverrides {
 	var timestampedObjectIds []OrphanTokenWrapperOverrides
-	for _, c := range w.GetCoveredOrphanCertificates() {
+	for _, c := range w.CoveredOrphanCertificates() {
 		timestampedObjectIds = append(timestampedObjectIds, c)
 	}
-	for _, r := range w.GetCoveredOrphanRevocations() {
+	for _, r := range w.CoveredOrphanRevocations() {
 		timestampedObjectIds = append(timestampedObjectIds, r)
 	}
 	return timestampedObjectIds
 }
 
-// GetCoveredOrphanCertificates returns a list of OrphanCertificateTokens covered by the
+// CoveredOrphanCertificates returns a list of OrphanCertificateTokens covered by the
 // evidence record. Port of getCoveredOrphanCertificates().
-func (w *EvidenceRecordWrapper) GetCoveredOrphanCertificates() []*OrphanCertificateTokenWrapper {
+func (w *EvidenceRecordWrapper) CoveredOrphanCertificates() []*OrphanCertificateTokenWrapper {
 	var orphanCertificates []*OrphanCertificateTokenWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_ORPHAN_CERTIFICATE) {
 		xmlOrphanCertificateToken, ok := token.(*jaxb.XmlOrphanCertificateToken)
@@ -256,9 +256,9 @@ func (w *EvidenceRecordWrapper) GetCoveredOrphanCertificates() []*OrphanCertific
 	return orphanCertificates
 }
 
-// GetCoveredOrphanRevocations returns a list of OrphanRevocationTokens covered by the evidence
+// CoveredOrphanRevocations returns a list of OrphanRevocationTokens covered by the evidence
 // record. Port of getCoveredOrphanRevocations().
-func (w *EvidenceRecordWrapper) GetCoveredOrphanRevocations() []*OrphanRevocationTokenWrapper {
+func (w *EvidenceRecordWrapper) CoveredOrphanRevocations() []*OrphanRevocationTokenWrapper {
 	var orphanRevocations []*OrphanRevocationTokenWrapper
 	for _, token := range w.getCoveredObjectsByCategory(enumerations.TimestampedObjectType_ORPHAN_REVOCATION) {
 		xmlOrphanRevocationToken, ok := token.(*jaxb.XmlOrphanRevocationToken)
@@ -272,7 +272,7 @@ func (w *EvidenceRecordWrapper) GetCoveredOrphanRevocations() []*OrphanRevocatio
 
 func (w *EvidenceRecordWrapper) getCoveredObjectsByCategory(category enumerations.TimestampedObjectType) []jaxb.XmlAbstractToken {
 	var coveredObjectIds []jaxb.XmlAbstractToken
-	for _, coveredObject := range w.GetCoveredObjects() {
+	for _, coveredObject := range w.CoveredObjects() {
 		if category == coveredObject.Category {
 			coveredObjectIds = append(coveredObjectIds, coveredObject.Token)
 		}
@@ -280,9 +280,9 @@ func (w *EvidenceRecordWrapper) getCoveredObjectsByCategory(category enumeration
 	return coveredObjectIds
 }
 
-// GetEvidenceRecordScopes returns Evidence record's Signature Scopes. Port of
+// EvidenceRecordScopes returns Evidence record's Signature Scopes. Port of
 // getEvidenceRecordScopes().
-func (w *EvidenceRecordWrapper) GetEvidenceRecordScopes() []*jaxb.XmlSignatureScope {
+func (w *EvidenceRecordWrapper) EvidenceRecordScopes() []*jaxb.XmlSignatureScope {
 	return w.evidenceRecord.EvidenceRecordScopes
 }
 
@@ -291,8 +291,8 @@ func (w *EvidenceRecordWrapper) Binaries() []byte {
 	return w.evidenceRecord.Base64Encoded
 }
 
-// GetDigestAlgoAndValue returns digest algorithm and value of the timestamp token binaries,
+// DigestAlgoAndValue returns digest algorithm and value of the timestamp token binaries,
 // when defined. Port of getDigestAlgoAndValue().
-func (w *EvidenceRecordWrapper) GetDigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
+func (w *EvidenceRecordWrapper) DigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
 	return w.evidenceRecord.DigestAlgoAndValue
 }

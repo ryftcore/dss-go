@@ -24,7 +24,7 @@ func NewEAARevocationWrapper(xmlEAARevocationStatus *jaxb.XmlEAARevocationStatus
 	return w
 }
 
-// GetStatus returns the status of the concerned EAA. Port of getStatus().
-func (w *EAARevocationWrapper) GetStatus() enumerations.EAAStatus {
+// Status returns the status of the concerned EAA. Port of getStatus().
+func (w *EAARevocationWrapper) Status() enumerations.EAAStatus {
 	return w.xmlEAARevocationStatus.Status
 }

@@ -24,14 +24,14 @@ func NewRelatedCertificateWrapper(relatedCertificate *jaxb.XmlRelatedCertificate
 	return w
 }
 
-// GetOrigins returns a list of certificate token origins. Port of getOrigins().
-func (w *RelatedCertificateWrapper) GetOrigins() []enumerations.CertificateOrigin {
+// Origins returns a list of certificate token origins. Port of getOrigins().
+func (w *RelatedCertificateWrapper) Origins() []enumerations.CertificateOrigin {
 	return w.relatedCertificate.Origins
 }
 
-// GetReferences returns a list of certificate token references from the signature. Port of
+// References returns a list of certificate token references from the signature. Port of
 // getReferences().
-func (w *RelatedCertificateWrapper) GetReferences() []*CertificateRefWrapper {
+func (w *RelatedCertificateWrapper) References() []*CertificateRefWrapper {
 	var references []*CertificateRefWrapper
 	for _, certificateRef := range w.relatedCertificate.CertificateRefs {
 		references = append(references, NewCertificateRefWrapper(certificateRef, w.Id()))

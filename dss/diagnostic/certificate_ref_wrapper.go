@@ -25,8 +25,8 @@ func (w *CertificateRefWrapper) Origin() enumerations.CertificateRefOrigin {
 	return w.certificateRef.Origin
 }
 
-// GetIssuerSerial returns IssuerSerial's binaries. Port of getIssuerSerial().
-func (w *CertificateRefWrapper) GetIssuerSerial() []byte {
+// IssuerSerial returns IssuerSerial's binaries. Port of getIssuerSerial().
+func (w *CertificateRefWrapper) IssuerSerial() []byte {
 	if w.certificateRef.IssuerSerial != nil {
 		return w.certificateRef.IssuerSerial.Value
 	}
@@ -48,51 +48,51 @@ func (w *CertificateRefWrapper) IsIssuerSerialMatch() bool {
 	return false
 }
 
-// GetIssuerName returns IssuerName. Port of getIssuerName().
-func (w *CertificateRefWrapper) GetIssuerName() string {
+// IssuerName returns IssuerName. Port of getIssuerName().
+func (w *CertificateRefWrapper) IssuerName() string {
 	if w.certificateRef.SerialInfo != nil {
 		return w.certificateRef.SerialInfo.IssuerName
 	}
 	return ""
 }
 
-// GetSki returns SKI of the certificate (SHA-1 of the certificate's public key). Port of
+// Ski returns SKI of the certificate (SHA-1 of the certificate's public key). Port of
 // getSki().
-func (w *CertificateRefWrapper) GetSki() []byte {
+func (w *CertificateRefWrapper) Ski() []byte {
 	if w.certificateRef.SerialInfo != nil {
 		return w.certificateRef.SerialInfo.Ski
 	}
 	return nil
 }
 
-// GetKid returns KID (key identifier) of the certificate reference. NOTE: if the original
+// Kid returns KID (key identifier) of the certificate reference. NOTE: if the original
 // signature contains a byte string, the returned value of the method is base64-encoded
 // result. Port of getKid().
-func (w *CertificateRefWrapper) GetKid() string {
+func (w *CertificateRefWrapper) Kid() string {
 	return w.certificateRef.KID
 }
 
-// GetX509Url returns X.509 URL (key identifier) of the certificate reference. Port of
+// X509Url returns X.509 URL (key identifier) of the certificate reference. Port of
 // getX509Url().
-func (w *CertificateRefWrapper) GetX509Url() string {
+func (w *CertificateRefWrapper) X509Url() string {
 	return w.certificateRef.X509Url
 }
 
-// GetDigestAlgoAndValue returns digest algo and value. Port of getDigestAlgoAndValue().
-func (w *CertificateRefWrapper) GetDigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
+// DigestAlgoAndValue returns digest algo and value. Port of getDigestAlgoAndValue().
+func (w *CertificateRefWrapper) DigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
 	return w.certificateRef.DigestAlgoAndValue
 }
 
 // IsDigestValuePresent checks if the DigestAlgoAndValue of the reference is present in the
 // certificate reference. Port of isDigestValuePresent().
 func (w *CertificateRefWrapper) IsDigestValuePresent() bool {
-	return w.GetDigestAlgoAndValue() != nil
+	return w.DigestAlgoAndValue() != nil
 }
 
-// GetDigestMethod returns a used DigestAlgorithm for a certificate reference creation. Port of
+// DigestMethod returns a used DigestAlgorithm for a certificate reference creation. Port of
 // getDigestMethod().
-func (w *CertificateRefWrapper) GetDigestMethod() enumerations.DigestAlgorithm {
-	digestAlgoAndValue := w.GetDigestAlgoAndValue()
+func (w *CertificateRefWrapper) DigestMethod() enumerations.DigestAlgorithm {
+	digestAlgoAndValue := w.DigestAlgoAndValue()
 	if digestAlgoAndValue != nil && digestAlgoAndValue.DigestMethod != nil {
 		return *digestAlgoAndValue.DigestMethod
 	}
@@ -102,13 +102,13 @@ func (w *CertificateRefWrapper) GetDigestMethod() enumerations.DigestAlgorithm {
 // IsDigestValueMatch checks if the DigestAlgoAndValue of the reference matches one of the
 // certificate. Port of isDigestValueMatch().
 func (w *CertificateRefWrapper) IsDigestValueMatch() bool {
-	digestAlgoAndValue := w.GetDigestAlgoAndValue()
+	digestAlgoAndValue := w.DigestAlgoAndValue()
 	return digestAlgoAndValue != nil && digestAlgoAndValue.Match != nil && *digestAlgoAndValue.Match
 }
 
-// GetCertificateId returns Id of the referenced certificate token (when available) or the
+// CertificateId returns Id of the referenced certificate token (when available) or the
 // reference id. Port of getCertificateId().
-func (w *CertificateRefWrapper) GetCertificateId() string {
+func (w *CertificateRefWrapper) CertificateId() string {
 	return w.certificateId
 }
 

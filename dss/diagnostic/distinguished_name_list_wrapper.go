@@ -14,8 +14,8 @@ func NewDistinguishedNameListWrapper(xmlDistinguishedNames []*jaxb.XmlDistinguis
 	return &DistinguishedNameListWrapper{xmlDistinguishedNames: xmlDistinguishedNames}
 }
 
-// GetValue returns a value according to the given format. Port of getValue(String).
-func (w *DistinguishedNameListWrapper) GetValue(format string) string {
+// Value returns a value according to the given format. Port of getValue(String).
+func (w *DistinguishedNameListWrapper) Value(format string) string {
 	if w.xmlDistinguishedNames != nil {
 		for _, distinguishedName := range w.xmlDistinguishedNames {
 			if distinguishedName.Format == format {

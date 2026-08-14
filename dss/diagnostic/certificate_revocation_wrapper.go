@@ -28,28 +28,28 @@ func NewCertificateRevocationWrapper(certificateRevocation *jaxb.XmlCertificateR
 	return w
 }
 
-// GetStatus returns the revocation status of the concerned certificate. Port of getStatus().
-func (w *CertificateRevocationWrapper) GetStatus() enumerations.CertificateStatus {
+// Status returns the revocation status of the concerned certificate. Port of getStatus().
+func (w *CertificateRevocationWrapper) Status() enumerations.CertificateStatus {
 	return w.certificateRevocation.Status
 }
 
-// GetReason returns the revocation reason for the concerned certificate. Port of getReason().
-func (w *CertificateRevocationWrapper) GetReason() enumerations.RevocationReason {
+// Reason returns the revocation reason for the concerned certificate. Port of getReason().
+func (w *CertificateRevocationWrapper) Reason() enumerations.RevocationReason {
 	return w.certificateRevocation.Reason
 }
 
-// GetRevocationDate returns the revocation time for the concerned certificate. Port of
+// RevocationDate returns the revocation time for the concerned certificate. Port of
 // getRevocationDate().
-func (w *CertificateRevocationWrapper) GetRevocationDate() *time.Time {
+func (w *CertificateRevocationWrapper) RevocationDate() *time.Time {
 	return w.certificateRevocation.RevocationDate
 }
 
 // IsRevoked reports whether the concerned certificate has been revoked. Port of isRevoked().
 func (w *CertificateRevocationWrapper) IsRevoked() bool {
-	return w.GetStatus().IsRevoked()
+	return w.Status().IsRevoked()
 }
 
 // IsKnown reports whether the revocation status is known. Port of isKnown().
 func (w *CertificateRevocationWrapper) IsKnown() bool {
-	return w.GetStatus().IsKnown()
+	return w.Status().IsKnown()
 }

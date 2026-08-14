@@ -30,8 +30,8 @@ func (w *OrphanRevocationTokenWrapper) Id() string {
 	return w.orphanToken.Id
 }
 
-// GetRevocationType returns a revocation data type (CRL or OCSP). Port of getRevocationType().
-func (w *OrphanRevocationTokenWrapper) GetRevocationType() enumerations.RevocationType {
+// RevocationType returns a revocation data type (CRL or OCSP). Port of getRevocationType().
+func (w *OrphanRevocationTokenWrapper) RevocationType() enumerations.RevocationType {
 	return w.orphanToken.RevocationType
 }
 

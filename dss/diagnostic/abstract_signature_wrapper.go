@@ -59,32 +59,32 @@ func (a *AbstractSignatureWrapperBase) ArePdfModificationsDetected() bool {
 	return false
 }
 
-// GetPdfAnnotationsOverlapConcernedPages returns a list of PDF annotation overlap concerned
+// PdfAnnotationsOverlapConcernedPages returns a list of PDF annotation overlap concerned
 // pages. Port of getPdfAnnotationsOverlapConcernedPages().
-func (a *AbstractSignatureWrapperBase) GetPdfAnnotationsOverlapConcernedPages() []*big.Int {
+func (a *AbstractSignatureWrapperBase) PdfAnnotationsOverlapConcernedPages() []*big.Int {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfAnnotationsOverlapConcernedPages()
+		return pdfRevision.PdfAnnotationsOverlapConcernedPages()
 	}
 	return nil
 }
 
-// GetPdfVisualDifferenceConcernedPages returns a list of PDF visual difference concerned
+// PdfVisualDifferenceConcernedPages returns a list of PDF visual difference concerned
 // pages. Port of getPdfVisualDifferenceConcernedPages().
-func (a *AbstractSignatureWrapperBase) GetPdfVisualDifferenceConcernedPages() []*big.Int {
+func (a *AbstractSignatureWrapperBase) PdfVisualDifferenceConcernedPages() []*big.Int {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfVisualDifferenceConcernedPages()
+		return pdfRevision.PdfVisualDifferenceConcernedPages()
 	}
 	return nil
 }
 
-// GetPdfPageDifferenceConcernedPages returns a list of pages missing/added to the final
+// PdfPageDifferenceConcernedPages returns a list of pages missing/added to the final
 // revision in a comparison with a signed one. Port of getPdfPageDifferenceConcernedPages().
-func (a *AbstractSignatureWrapperBase) GetPdfPageDifferenceConcernedPages() []*big.Int {
+func (a *AbstractSignatureWrapperBase) PdfPageDifferenceConcernedPages() []*big.Int {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfPageDifferenceConcernedPages()
+		return pdfRevision.PdfPageDifferenceConcernedPages()
 	}
 	return nil
 }
@@ -99,149 +99,149 @@ func (a *AbstractSignatureWrapperBase) ArePdfObjectModificationsDetected() bool 
 	return false
 }
 
-// GetPdfExtensionChanges returns a list of changes occurred in a PDF after the current
+// PdfExtensionChanges returns a list of changes occurred in a PDF after the current
 // signature's revision associated with a signature/document extension. Port of
 // getPdfExtensionChanges().
-func (a *AbstractSignatureWrapperBase) GetPdfExtensionChanges() []*jaxb.XmlObjectModification {
+func (a *AbstractSignatureWrapperBase) PdfExtensionChanges() []*jaxb.XmlObjectModification {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfExtensionChanges()
+		return pdfRevision.PdfExtensionChanges()
 	}
 	return nil
 }
 
-// GetPdfSignatureOrFormFillChanges returns a list of changes occurred in a PDF after the
+// PdfSignatureOrFormFillChanges returns a list of changes occurred in a PDF after the
 // current signature's revision associated with a signature creation, form filling. Port of
 // getPdfSignatureOrFormFillChanges().
-func (a *AbstractSignatureWrapperBase) GetPdfSignatureOrFormFillChanges() []*jaxb.XmlObjectModification {
+func (a *AbstractSignatureWrapperBase) PdfSignatureOrFormFillChanges() []*jaxb.XmlObjectModification {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfSignatureOrFormFillChanges()
+		return pdfRevision.PdfSignatureOrFormFillChanges()
 	}
 	return nil
 }
 
-// GetPdfAnnotationChanges returns a list of changes occurred in a PDF after the current
+// PdfAnnotationChanges returns a list of changes occurred in a PDF after the current
 // signature's revision associated with annotation(s) modification. Port of
 // getPdfAnnotationChanges().
-func (a *AbstractSignatureWrapperBase) GetPdfAnnotationChanges() []*jaxb.XmlObjectModification {
+func (a *AbstractSignatureWrapperBase) PdfAnnotationChanges() []*jaxb.XmlObjectModification {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfAnnotationChanges()
+		return pdfRevision.PdfAnnotationChanges()
 	}
 	return nil
 }
 
-// GetPdfUndefinedChanges returns a list of undefined changes occurred in a PDF after the
+// PdfUndefinedChanges returns a list of undefined changes occurred in a PDF after the
 // current signature's revision. Port of getPdfUndefinedChanges().
-func (a *AbstractSignatureWrapperBase) GetPdfUndefinedChanges() []*jaxb.XmlObjectModification {
+func (a *AbstractSignatureWrapperBase) PdfUndefinedChanges() []*jaxb.XmlObjectModification {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetPdfUndefinedChanges()
+		return pdfRevision.PdfUndefinedChanges()
 	}
 	return nil
 }
 
-// GetModifiedFieldNames returns a list of field names modified after the current signature's
+// ModifiedFieldNames returns a list of field names modified after the current signature's
 // revision. Port of getModifiedFieldNames().
-func (a *AbstractSignatureWrapperBase) GetModifiedFieldNames() []string {
+func (a *AbstractSignatureWrapperBase) ModifiedFieldNames() []string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetModifiedFieldNames()
+		return pdfRevision.ModifiedFieldNames()
 	}
 	return nil
 }
 
-// GetFirstFieldName returns the first signature field name. Port of getFirstFieldName().
-func (a *AbstractSignatureWrapperBase) GetFirstFieldName() string {
+// FirstFieldName returns the first signature field name. Port of getFirstFieldName().
+func (a *AbstractSignatureWrapperBase) FirstFieldName() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetFirstFieldName()
+		return pdfRevision.FirstFieldName()
 	}
 	return ""
 }
 
-// GetSignatureFieldNames returns a list of signature field names, where the signature is
+// SignatureFieldNames returns a list of signature field names, where the signature is
 // referenced from. Port of getSignatureFieldNames().
-func (a *AbstractSignatureWrapperBase) GetSignatureFieldNames() []string {
+func (a *AbstractSignatureWrapperBase) SignatureFieldNames() []string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSignatureFieldNames()
+		return pdfRevision.SignatureFieldNames()
 	}
 	return nil
 }
 
-// GetSignerName returns the signer's name. Port of getSignerName().
-func (a *AbstractSignatureWrapperBase) GetSignerName() string {
+// SignerName returns the signer's name. Port of getSignerName().
+func (a *AbstractSignatureWrapperBase) SignerName() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSignerName()
+		return pdfRevision.SignerName()
 	}
 	return ""
 }
 
-// GetSignatureDictionaryType returns the PDF signature dictionary /Type value. Port of
+// SignatureDictionaryType returns the PDF signature dictionary /Type value. Port of
 // getSignatureDictionaryType().
-func (a *AbstractSignatureWrapperBase) GetSignatureDictionaryType() string {
+func (a *AbstractSignatureWrapperBase) SignatureDictionaryType() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSignatureDictionaryType()
+		return pdfRevision.SignatureDictionaryType()
 	}
 	return ""
 }
 
-// GetFilter returns the PDF signature dictionary /Filter value. Port of getFilter().
-func (a *AbstractSignatureWrapperBase) GetFilter() string {
+// Filter returns the PDF signature dictionary /Filter value. Port of getFilter().
+func (a *AbstractSignatureWrapperBase) Filter() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetFilter()
+		return pdfRevision.Filter()
 	}
 	return ""
 }
 
-// GetSubFilter returns the PDF signature dictionary /SubFilter value. Port of getSubFilter().
-func (a *AbstractSignatureWrapperBase) GetSubFilter() string {
+// SubFilter returns the PDF signature dictionary /SubFilter value. Port of getSubFilter().
+func (a *AbstractSignatureWrapperBase) SubFilter() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSubFilter()
+		return pdfRevision.SubFilter()
 	}
 	return ""
 }
 
-// GetContactInfo returns the PDF signature dictionary /ContactInfo value. Port of
+// ContactInfo returns the PDF signature dictionary /ContactInfo value. Port of
 // getContactInfo().
-func (a *AbstractSignatureWrapperBase) GetContactInfo() string {
+func (a *AbstractSignatureWrapperBase) ContactInfo() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetContactInfo()
+		return pdfRevision.ContactInfo()
 	}
 	return ""
 }
 
-// GetLocation returns the PDF signature dictionary /Location value. Port of getLocation().
-func (a *AbstractSignatureWrapperBase) GetLocation() string {
+// Location returns the PDF signature dictionary /Location value. Port of getLocation().
+func (a *AbstractSignatureWrapperBase) Location() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetLocation()
+		return pdfRevision.Location()
 	}
 	return ""
 }
 
-// GetReason returns the PDF signature dictionary /Reason value. Port of getReason().
-func (a *AbstractSignatureWrapperBase) GetReason() string {
+// Reason returns the PDF signature dictionary /Reason value. Port of getReason().
+func (a *AbstractSignatureWrapperBase) Reason() string {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetReason()
+		return pdfRevision.Reason()
 	}
 	return ""
 }
 
-// GetSignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
+// SignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
 // getSignatureByteRange().
-func (a *AbstractSignatureWrapperBase) GetSignatureByteRange() []*big.Int {
+func (a *AbstractSignatureWrapperBase) SignatureByteRange() []*big.Int {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSignatureByteRange()
+		return pdfRevision.SignatureByteRange()
 	}
 	return nil
 }
@@ -266,30 +266,30 @@ func (a *AbstractSignatureWrapperBase) IsPdfSignatureDictionaryConsistent() bool
 	return false
 }
 
-// GetDocMDPPermissions returns a CertificationPermission value of a /DocMDP dictionary, when
+// DocMDPPermissions returns a CertificationPermission value of a /DocMDP dictionary, when
 // present. Port of getDocMDPPermissions().
-func (a *AbstractSignatureWrapperBase) GetDocMDPPermissions() enumerations.CertificationPermission {
+func (a *AbstractSignatureWrapperBase) DocMDPPermissions() enumerations.CertificationPermission {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetDocMDPPermissions()
+		return pdfRevision.DocMDPPermissions()
 	}
 	return ""
 }
 
-// GetFieldMDP returns a /FieldMDP dictionary content, when present. Port of getFieldMDP().
-func (a *AbstractSignatureWrapperBase) GetFieldMDP() *jaxb.XmlPDFLockDictionary {
+// FieldMDP returns a /FieldMDP dictionary content, when present. Port of getFieldMDP().
+func (a *AbstractSignatureWrapperBase) FieldMDP() *jaxb.XmlPDFLockDictionary {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetFieldMDP()
+		return pdfRevision.FieldMDP()
 	}
 	return nil
 }
 
-// GetSigFieldLock returns a /SigFieldLock dictionary, when present. Port of getSigFieldLock().
-func (a *AbstractSignatureWrapperBase) GetSigFieldLock() *jaxb.XmlPDFLockDictionary {
+// SigFieldLock returns a /SigFieldLock dictionary, when present. Port of getSigFieldLock().
+func (a *AbstractSignatureWrapperBase) SigFieldLock() *jaxb.XmlPDFLockDictionary {
 	pdfRevision := a.signatureWrapperOverrides().PDFRevision()
 	if pdfRevision != nil {
-		return pdfRevision.GetSigFieldLock()
+		return pdfRevision.SigFieldLock()
 	}
 	return nil
 }

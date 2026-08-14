@@ -36,9 +36,9 @@ func (w *PDFRevisionWrapper) ArePdfModificationsDetected() bool {
 	return false
 }
 
-// GetPdfAnnotationsOverlapConcernedPages returns a list of PDF annotation overlap concerned
+// PdfAnnotationsOverlapConcernedPages returns a list of PDF annotation overlap concerned
 // pages. Port of getPdfAnnotationsOverlapConcernedPages().
-func (w *PDFRevisionWrapper) GetPdfAnnotationsOverlapConcernedPages() []*big.Int {
+func (w *PDFRevisionWrapper) PdfAnnotationsOverlapConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
 		return getConcernedPages(modificationDetection.AnnotationOverlap)
@@ -46,9 +46,9 @@ func (w *PDFRevisionWrapper) GetPdfAnnotationsOverlapConcernedPages() []*big.Int
 	return nil
 }
 
-// GetPdfVisualDifferenceConcernedPages returns a list of PDF visual difference concerned
+// PdfVisualDifferenceConcernedPages returns a list of PDF visual difference concerned
 // pages. Port of getPdfVisualDifferenceConcernedPages().
-func (w *PDFRevisionWrapper) GetPdfVisualDifferenceConcernedPages() []*big.Int {
+func (w *PDFRevisionWrapper) PdfVisualDifferenceConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
 		return getConcernedPages(modificationDetection.VisualDifference)
@@ -56,9 +56,9 @@ func (w *PDFRevisionWrapper) GetPdfVisualDifferenceConcernedPages() []*big.Int {
 	return nil
 }
 
-// GetPdfPageDifferenceConcernedPages returns a list of pages missing/added to the final
+// PdfPageDifferenceConcernedPages returns a list of pages missing/added to the final
 // revision in a comparison with a signed one. Port of getPdfPageDifferenceConcernedPages().
-func (w *PDFRevisionWrapper) GetPdfPageDifferenceConcernedPages() []*big.Int {
+func (w *PDFRevisionWrapper) PdfPageDifferenceConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
 		return getConcernedPages(modificationDetection.PageDifference)
@@ -72,10 +72,10 @@ func (w *PDFRevisionWrapper) ArePdfObjectModificationsDetected() bool {
 	return w.getPdfObjectModifications() != nil
 }
 
-// GetPdfExtensionChanges returns a list of changes occurred in a PDF after the current
+// PdfExtensionChanges returns a list of changes occurred in a PDF after the current
 // signature's revision associated with a signature/document extension. Port of
 // getPdfExtensionChanges().
-func (w *PDFRevisionWrapper) GetPdfExtensionChanges() []*jaxb.XmlObjectModification {
+func (w *PDFRevisionWrapper) PdfExtensionChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.ExtensionChanges
@@ -83,10 +83,10 @@ func (w *PDFRevisionWrapper) GetPdfExtensionChanges() []*jaxb.XmlObjectModificat
 	return nil
 }
 
-// GetPdfSignatureOrFormFillChanges returns a list of changes occurred in a PDF after the
+// PdfSignatureOrFormFillChanges returns a list of changes occurred in a PDF after the
 // current signature's revision associated with a signature creation, form filling. Port of
 // getPdfSignatureOrFormFillChanges().
-func (w *PDFRevisionWrapper) GetPdfSignatureOrFormFillChanges() []*jaxb.XmlObjectModification {
+func (w *PDFRevisionWrapper) PdfSignatureOrFormFillChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.SignatureOrFormFill
@@ -94,10 +94,10 @@ func (w *PDFRevisionWrapper) GetPdfSignatureOrFormFillChanges() []*jaxb.XmlObjec
 	return nil
 }
 
-// GetPdfAnnotationChanges returns a list of changes occurred in a PDF after the current
+// PdfAnnotationChanges returns a list of changes occurred in a PDF after the current
 // signature's revision associated with annotation(s) modification. Port of
 // getPdfAnnotationChanges().
-func (w *PDFRevisionWrapper) GetPdfAnnotationChanges() []*jaxb.XmlObjectModification {
+func (w *PDFRevisionWrapper) PdfAnnotationChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.AnnotationChanges
@@ -105,9 +105,9 @@ func (w *PDFRevisionWrapper) GetPdfAnnotationChanges() []*jaxb.XmlObjectModifica
 	return nil
 }
 
-// GetPdfUndefinedChanges returns a list of undefined changes occurred in a PDF after the
+// PdfUndefinedChanges returns a list of undefined changes occurred in a PDF after the
 // current signature's revision. Port of getPdfUndefinedChanges().
-func (w *PDFRevisionWrapper) GetPdfUndefinedChanges() []*jaxb.XmlObjectModification {
+func (w *PDFRevisionWrapper) PdfUndefinedChanges() []*jaxb.XmlObjectModification {
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.Undefined
@@ -115,9 +115,9 @@ func (w *PDFRevisionWrapper) GetPdfUndefinedChanges() []*jaxb.XmlObjectModificat
 	return nil
 }
 
-// GetModifiedFieldNames returns a list of field names modified after the current signature's
+// ModifiedFieldNames returns a list of field names modified after the current signature's
 // revision. Port of getModifiedFieldNames().
-func (w *PDFRevisionWrapper) GetModifiedFieldNames() []string {
+func (w *PDFRevisionWrapper) ModifiedFieldNames() []string {
 	var names []string
 	pdfObjectModifications := w.getPdfObjectModifications()
 	if pdfObjectModifications != nil {
@@ -129,8 +129,8 @@ func (w *PDFRevisionWrapper) GetModifiedFieldNames() []string {
 	return names
 }
 
-// GetFirstFieldName returns the first signature field name. Port of getFirstFieldName().
-func (w *PDFRevisionWrapper) GetFirstFieldName() string {
+// FirstFieldName returns the first signature field name. Port of getFirstFieldName().
+func (w *PDFRevisionWrapper) FirstFieldName() string {
 	fields := w.pdfRevision.Fields
 	if len(fields) != 0 {
 		return fields[0].Name
@@ -138,9 +138,9 @@ func (w *PDFRevisionWrapper) GetFirstFieldName() string {
 	return ""
 }
 
-// GetSignatureFieldNames returns a list of signature field names, where the signature is
+// SignatureFieldNames returns a list of signature field names, where the signature is
 // referenced from. Port of getSignatureFieldNames().
-func (w *PDFRevisionWrapper) GetSignatureFieldNames() []string {
+func (w *PDFRevisionWrapper) SignatureFieldNames() []string {
 	var names []string
 	fields := w.pdfRevision.Fields
 	if len(fields) != 0 {
@@ -151,46 +151,46 @@ func (w *PDFRevisionWrapper) GetSignatureFieldNames() []string {
 	return names
 }
 
-// GetSignerName returns the signer's name. Port of getSignerName().
-func (w *PDFRevisionWrapper) GetSignerName() string {
+// SignerName returns the signer's name. Port of getSignerName().
+func (w *PDFRevisionWrapper) SignerName() string {
 	return w.pdfRevision.PDFSignatureDictionary.SignerName
 }
 
-// GetSignatureDictionaryType returns the PDF signature dictionary /Type value. Port of
+// SignatureDictionaryType returns the PDF signature dictionary /Type value. Port of
 // getSignatureDictionaryType().
-func (w *PDFRevisionWrapper) GetSignatureDictionaryType() string {
+func (w *PDFRevisionWrapper) SignatureDictionaryType() string {
 	return w.pdfRevision.PDFSignatureDictionary.Type
 }
 
-// GetFilter returns the PDF signature dictionary /Filter value. Port of getFilter().
-func (w *PDFRevisionWrapper) GetFilter() string {
+// Filter returns the PDF signature dictionary /Filter value. Port of getFilter().
+func (w *PDFRevisionWrapper) Filter() string {
 	return w.pdfRevision.PDFSignatureDictionary.Filter
 }
 
-// GetSubFilter returns the PDF signature dictionary /SubFilter value. Port of getSubFilter().
-func (w *PDFRevisionWrapper) GetSubFilter() string {
+// SubFilter returns the PDF signature dictionary /SubFilter value. Port of getSubFilter().
+func (w *PDFRevisionWrapper) SubFilter() string {
 	return w.pdfRevision.PDFSignatureDictionary.SubFilter
 }
 
-// GetContactInfo returns the PDF signature dictionary /ContactInfo value. Port of
+// ContactInfo returns the PDF signature dictionary /ContactInfo value. Port of
 // getContactInfo().
-func (w *PDFRevisionWrapper) GetContactInfo() string {
+func (w *PDFRevisionWrapper) ContactInfo() string {
 	return w.pdfRevision.PDFSignatureDictionary.ContactInfo
 }
 
-// GetLocation returns the PDF signature dictionary /Location value. Port of getLocation().
-func (w *PDFRevisionWrapper) GetLocation() string {
+// Location returns the PDF signature dictionary /Location value. Port of getLocation().
+func (w *PDFRevisionWrapper) Location() string {
 	return w.pdfRevision.PDFSignatureDictionary.Location
 }
 
-// GetReason returns the PDF signature dictionary /Reason value. Port of getReason().
-func (w *PDFRevisionWrapper) GetReason() string {
+// Reason returns the PDF signature dictionary /Reason value. Port of getReason().
+func (w *PDFRevisionWrapper) Reason() string {
 	return w.pdfRevision.PDFSignatureDictionary.Reason
 }
 
-// GetSignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
+// SignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
 // getSignatureByteRange().
-func (w *PDFRevisionWrapper) GetSignatureByteRange() []*big.Int {
+func (w *PDFRevisionWrapper) SignatureByteRange() []*big.Int {
 	byteRange := w.getXmlByteRange()
 	if byteRange != nil {
 		return byteRange.Value
@@ -218,9 +218,9 @@ func (w *PDFRevisionWrapper) IsPdfSignatureDictionaryConsistent() bool {
 	return w.pdfRevision.PDFSignatureDictionary.Consistent
 }
 
-// GetDocMDPPermissions returns a CertificationPermission value of a /DocMDP dictionary, when
+// DocMDPPermissions returns a CertificationPermission value of a /DocMDP dictionary, when
 // present. Port of getDocMDPPermissions().
-func (w *PDFRevisionWrapper) GetDocMDPPermissions() enumerations.CertificationPermission {
+func (w *PDFRevisionWrapper) DocMDPPermissions() enumerations.CertificationPermission {
 	docMDP := w.pdfRevision.PDFSignatureDictionary.DocMDP
 	if docMDP != nil {
 		return docMDP.Permissions
@@ -228,13 +228,13 @@ func (w *PDFRevisionWrapper) GetDocMDPPermissions() enumerations.CertificationPe
 	return ""
 }
 
-// GetFieldMDP returns a /FieldMDP dictionary content, when present. Port of getFieldMDP().
-func (w *PDFRevisionWrapper) GetFieldMDP() *jaxb.XmlPDFLockDictionary {
+// FieldMDP returns a /FieldMDP dictionary content, when present. Port of getFieldMDP().
+func (w *PDFRevisionWrapper) FieldMDP() *jaxb.XmlPDFLockDictionary {
 	return w.pdfRevision.PDFSignatureDictionary.FieldMDP
 }
 
-// GetSigFieldLock returns a /SigFieldLock dictionary, when present. Port of getSigFieldLock().
-func (w *PDFRevisionWrapper) GetSigFieldLock() *jaxb.XmlPDFLockDictionary {
+// SigFieldLock returns a /SigFieldLock dictionary, when present. Port of getSigFieldLock().
+func (w *PDFRevisionWrapper) SigFieldLock() *jaxb.XmlPDFLockDictionary {
 	for _, field := range w.pdfRevision.Fields {
 		if field.SigFieldLock != nil {
 			return field.SigFieldLock

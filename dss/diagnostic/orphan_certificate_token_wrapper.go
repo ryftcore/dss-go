@@ -31,22 +31,22 @@ func (w *OrphanCertificateTokenWrapper) Id() string {
 	return w.orphanToken.Id
 }
 
-// GetCertificateDN returns the certificate's Distinguished Name (by RFC 2253). Port of
+// CertificateDN returns the certificate's Distinguished Name (by RFC 2253). Port of
 // getCertificateDN().
-func (w *OrphanCertificateTokenWrapper) GetCertificateDN() string {
+func (w *OrphanCertificateTokenWrapper) CertificateDN() string {
 	distinguishedNameListWrapper := NewDistinguishedNameListWrapper(w.orphanToken.SubjectDistinguishedName)
-	return distinguishedNameListWrapper.GetValue("RFC2253")
+	return distinguishedNameListWrapper.Value("RFC2253")
 }
 
-// GetCertificateIssuerDN returns the certificate issuer's Distinguished Name (by RFC 2253).
+// CertificateIssuerDN returns the certificate issuer's Distinguished Name (by RFC 2253).
 // Port of getCertificateIssuerDN().
-func (w *OrphanCertificateTokenWrapper) GetCertificateIssuerDN() string {
+func (w *OrphanCertificateTokenWrapper) CertificateIssuerDN() string {
 	distinguishedNameListWrapper := NewDistinguishedNameListWrapper(w.orphanToken.IssuerDistinguishedName)
-	return distinguishedNameListWrapper.GetValue("RFC2253")
+	return distinguishedNameListWrapper.Value("RFC2253")
 }
 
-// GetSerialNumber returns the serial number of the certificate. Port of getSerialNumber().
-func (w *OrphanCertificateTokenWrapper) GetSerialNumber() string {
+// SerialNumber returns the serial number of the certificate. Port of getSerialNumber().
+func (w *OrphanCertificateTokenWrapper) SerialNumber() string {
 	serialNumber := w.orphanToken.SerialNumber
 	if serialNumber == nil {
 		return ""
@@ -54,19 +54,19 @@ func (w *OrphanCertificateTokenWrapper) GetSerialNumber() string {
 	return serialNumber.String()
 }
 
-// GetNotBefore returns the certificate's notBefore date. Port of getNotBefore().
-func (w *OrphanCertificateTokenWrapper) GetNotBefore() *time.Time {
+// NotBefore returns the certificate's notBefore date. Port of getNotBefore().
+func (w *OrphanCertificateTokenWrapper) NotBefore() *time.Time {
 	return w.orphanToken.NotBefore
 }
 
-// GetNotAfter returns the certificate's notAfter date. Port of getNotAfter().
-func (w *OrphanCertificateTokenWrapper) GetNotAfter() *time.Time {
+// NotAfter returns the certificate's notAfter date. Port of getNotAfter().
+func (w *OrphanCertificateTokenWrapper) NotAfter() *time.Time {
 	return w.orphanToken.NotAfter
 }
 
-// GetEntityKey returns a string identifier of the certificate's public key. Port of
+// EntityKey returns a string identifier of the certificate's public key. Port of
 // getEntityKey().
-func (w *OrphanCertificateTokenWrapper) GetEntityKey() string {
+func (w *OrphanCertificateTokenWrapper) EntityKey() string {
 	return w.orphanToken.EntityKey
 }
 

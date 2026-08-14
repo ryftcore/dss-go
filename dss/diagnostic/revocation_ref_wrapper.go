@@ -24,66 +24,66 @@ func NewRevocationRefWrapper(revocationRef *jaxb.XmlRevocationRef, revocationId 
 	return &RevocationRefWrapper{revocationRef: revocationRef, revocationId: revocationId}
 }
 
-// GetOrigins returns a list of revocation reference origins. Port of getOrigins().
-func (w *RevocationRefWrapper) GetOrigins() []enumerations.RevocationRefOrigin {
+// Origins returns a list of revocation reference origins. Port of getOrigins().
+func (w *RevocationRefWrapper) Origins() []enumerations.RevocationRefOrigin {
 	return w.revocationRef.Origins
 }
 
-// GetIssuer gets the CRL issuer RDN. NOTE: applicable only for CRL references. Port of
+// Issuer gets the CRL issuer RDN. NOTE: applicable only for CRL references. Port of
 // getIssuer().
-func (w *RevocationRefWrapper) GetIssuer() string {
+func (w *RevocationRefWrapper) Issuer() string {
 	return w.revocationRef.Issuer
 }
 
-// GetIssueTime gets the issue time of the CRL. NOTE: applicable only for CRL references. Port
+// IssueTime gets the issue time of the CRL. NOTE: applicable only for CRL references. Port
 // of getIssueTime().
-func (w *RevocationRefWrapper) GetIssueTime() *time.Time {
+func (w *RevocationRefWrapper) IssueTime() *time.Time {
 	return w.revocationRef.IssueTime
 }
 
-// GetCRLNumber gets the number of the CRL. NOTE: applicable only for CRL references. Port of
+// CRLNumber gets the number of the CRL. NOTE: applicable only for CRL references. Port of
 // getCRLNumber().
-func (w *RevocationRefWrapper) GetCRLNumber() *big.Int {
+func (w *RevocationRefWrapper) CRLNumber() *big.Int {
 	return w.revocationRef.CRLNumber
 }
 
-// GetProductionTime returns revocation ref production time if present. NOTE: applicable only
+// ProductionTime returns revocation ref production time if present. NOTE: applicable only
 // for OCSP response references. Port of getProductionTime().
-func (w *RevocationRefWrapper) GetProductionTime() *time.Time {
+func (w *RevocationRefWrapper) ProductionTime() *time.Time {
 	return w.revocationRef.ProducedAt
 }
 
-// GetResponderIdName returns responder's ID name if present. NOTE: applicable only for OCSP
+// ResponderIdName returns responder's ID name if present. NOTE: applicable only for OCSP
 // response references. Port of getResponderIdName().
-func (w *RevocationRefWrapper) GetResponderIdName() string {
+func (w *RevocationRefWrapper) ResponderIdName() string {
 	if w.revocationRef.ResponderId != nil {
 		return w.revocationRef.ResponderId.IssuerName
 	}
 	return ""
 }
 
-// GetResponderIdKey returns responder's ID key if present. NOTE: applicable only for OCSP
+// ResponderIdKey returns responder's ID key if present. NOTE: applicable only for OCSP
 // response references. Port of getResponderIdKey().
-func (w *RevocationRefWrapper) GetResponderIdKey() []byte {
+func (w *RevocationRefWrapper) ResponderIdKey() []byte {
 	if w.revocationRef.ResponderId != nil {
 		return w.revocationRef.ResponderId.Ski
 	}
 	return nil
 }
 
-// GetUri gets the URI reference to the revocation data, when present. Port of getUri().
-func (w *RevocationRefWrapper) GetUri() string {
+// Uri gets the URI reference to the revocation data, when present. Port of getUri().
+func (w *RevocationRefWrapper) Uri() string {
 	return w.revocationRef.Uri
 }
 
-// GetDigestAlgoAndValue returns digest algo and value. Port of getDigestAlgoAndValue().
-func (w *RevocationRefWrapper) GetDigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
+// DigestAlgoAndValue returns digest algo and value. Port of getDigestAlgoAndValue().
+func (w *RevocationRefWrapper) DigestAlgoAndValue() *jaxb.XmlDigestAlgoAndValue {
 	return w.revocationRef.DigestAlgoAndValue
 }
 
-// GetRevocationId returns an Id of the related revocation token, when present. Returns Id of
+// RevocationId returns an Id of the related revocation token, when present. Returns Id of
 // the reference otherwise. Port of getRevocationId().
-func (w *RevocationRefWrapper) GetRevocationId() string {
+func (w *RevocationRefWrapper) RevocationId() string {
 	return w.revocationId
 }
 

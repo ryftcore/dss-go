@@ -17,8 +17,8 @@ func NewPSD2InfoWrapper(psd2QcInfo *jaxb.XmlPSD2QcInfo) *PSD2InfoWrapper {
 	return &PSD2InfoWrapper{psd2QcInfo: psd2QcInfo}
 }
 
-// GetRoleOfPSPNames returns names of roles of PSP. Port of getRoleOfPSPNames().
-func (w *PSD2InfoWrapper) GetRoleOfPSPNames() []string {
+// RoleOfPSPNames returns names of roles of PSP. Port of getRoleOfPSPNames().
+func (w *PSD2InfoWrapper) RoleOfPSPNames() []string {
 	var result []string
 	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP {
 		result = append(result, roleOfPSP.Name)
@@ -26,8 +26,8 @@ func (w *PSD2InfoWrapper) GetRoleOfPSPNames() []string {
 	return result
 }
 
-// GetRoleOfPSPOids returns OIDs of roles of PSP. Port of getRoleOfPSPOids().
-func (w *PSD2InfoWrapper) GetRoleOfPSPOids() []enumerations.RoleOfPspOid {
+// RoleOfPSPOids returns OIDs of roles of PSP. Port of getRoleOfPSPOids().
+func (w *PSD2InfoWrapper) RoleOfPSPOids() []enumerations.RoleOfPspOid {
 	var result []enumerations.RoleOfPspOid
 	for _, roleOfPSP := range w.psd2QcInfo.RolesOfPSP {
 		pspOid := roleOfPSP.Oid
@@ -38,12 +38,12 @@ func (w *PSD2InfoWrapper) GetRoleOfPSPOids() []enumerations.RoleOfPspOid {
 	return result
 }
 
-// GetNcaId returns the Competent Authority Id. Port of getNcaId().
-func (w *PSD2InfoWrapper) GetNcaId() string {
+// NcaId returns the Competent Authority Id. Port of getNcaId().
+func (w *PSD2InfoWrapper) NcaId() string {
 	return w.psd2QcInfo.NcaId
 }
 
-// GetNcaName returns the Competent Authority name. Port of getNcaName().
-func (w *PSD2InfoWrapper) GetNcaName() string {
+// NcaName returns the Competent Authority name. Port of getNcaName().
+func (w *PSD2InfoWrapper) NcaName() string {
 	return w.psd2QcInfo.NcaName
 }

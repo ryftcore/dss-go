@@ -25,13 +25,13 @@ func NewOrphanCertificateWrapper(orphanCertificate *jaxb.XmlOrphanCertificate) *
 	return w
 }
 
-// GetOrigins returns a list of orphan certificate origins. Port of getOrigins().
-func (w *OrphanCertificateWrapper) GetOrigins() []enumerations.CertificateOrigin {
+// Origins returns a list of orphan certificate origins. Port of getOrigins().
+func (w *OrphanCertificateWrapper) Origins() []enumerations.CertificateOrigin {
 	return w.orphanCertificate.Origins
 }
 
-// GetReferences returns a list of orphan certificate references. Port of getReferences().
-func (w *OrphanCertificateWrapper) GetReferences() []*CertificateRefWrapper {
+// References returns a list of orphan certificate references. Port of getReferences().
+func (w *OrphanCertificateWrapper) References() []*CertificateRefWrapper {
 	var certificateRefWrappers []*CertificateRefWrapper
 	for _, certificateRef := range w.orphanCertificate.CertificateRefs {
 		certificateRefWrappers = append(certificateRefWrappers, NewCertificateRefWrapper(certificateRef, w.Id()))

@@ -65,51 +65,51 @@ func (w *EAARevocationTokenWrapper) DigestMatchers() []*jaxb.XmlDigestMatcher {
 	return nil
 }
 
-// GetOrigin gets origin of the EAA revocation token (e.g. EXTERNAL or CACHED). Port of
+// Origin gets origin of the EAA revocation token (e.g. EXTERNAL or CACHED). Port of
 // getOrigin().
-func (w *EAARevocationTokenWrapper) GetOrigin() enumerations.EAARevocationOrigin {
+func (w *EAARevocationTokenWrapper) Origin() enumerations.EAARevocationOrigin {
 	return w.eaaStatusToken.Origin
 }
 
-// GetType gets the claimed type of the EAA revocation token. Port of getType().
-func (w *EAARevocationTokenWrapper) GetType() string {
+// Type gets the claimed type of the EAA revocation token. Port of getType().
+func (w *EAARevocationTokenWrapper) Type() string {
 	return w.eaaStatusToken.Type
 }
 
-// GetSourceAddress gets the location URI used to access the original EAA source token. Port of
+// SourceAddress gets the location URI used to access the original EAA source token. Port of
 // getSourceAddress().
-func (w *EAARevocationTokenWrapper) GetSourceAddress() string {
+func (w *EAARevocationTokenWrapper) SourceAddress() string {
 	return w.eaaStatusToken.SourceAddress
 }
 
-// GetSubject gets the subject of the EAA revocation token. Port of getSubject().
-func (w *EAARevocationTokenWrapper) GetSubject() string {
+// Subject gets the subject of the EAA revocation token. Port of getSubject().
+func (w *EAARevocationTokenWrapper) Subject() string {
 	if w.eaaStatusToken.Subject != nil {
 		return w.eaaStatusToken.Subject.Value
 	}
 	return ""
 }
 
-// GetSubjectMatch gets whether the subject of the EAA revocation token matches the subject of
+// SubjectMatch gets whether the subject of the EAA revocation token matches the subject of
 // the related EAA. Port of getSubjectMatch().
-func (w *EAARevocationTokenWrapper) GetSubjectMatch() bool {
+func (w *EAARevocationTokenWrapper) SubjectMatch() bool {
 	return w.eaaStatusToken.Subject != nil && w.eaaStatusToken.Subject.Match != nil && *w.eaaStatusToken.Subject.Match
 }
 
-// GetIssuedAt gets time of the issuance of the EAA revocation token. Port of getIssuedAt().
-func (w *EAARevocationTokenWrapper) GetIssuedAt() *time.Time {
+// IssuedAt gets time of the issuance of the EAA revocation token. Port of getIssuedAt().
+func (w *EAARevocationTokenWrapper) IssuedAt() *time.Time {
 	return w.eaaStatusToken.IssuedAt
 }
 
-// GetExpirationTime gets time of the expiration of the EAA revocation token. Port of
+// ExpirationTime gets time of the expiration of the EAA revocation token. Port of
 // getExpirationTime().
-func (w *EAARevocationTokenWrapper) GetExpirationTime() *time.Time {
+func (w *EAARevocationTokenWrapper) ExpirationTime() *time.Time {
 	return w.eaaStatusToken.ExpirationTime
 }
 
-// GetTimeToLive gets number of seconds after which a new EAA Status token should be requested.
+// TimeToLive gets number of seconds after which a new EAA Status token should be requested.
 // Port of getTimeToLive().
-func (w *EAARevocationTokenWrapper) GetTimeToLive() *big.Int {
+func (w *EAARevocationTokenWrapper) TimeToLive() *big.Int {
 	return w.eaaStatusToken.TimeToLive
 }
 

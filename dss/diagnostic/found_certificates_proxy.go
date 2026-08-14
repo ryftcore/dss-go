@@ -29,9 +29,9 @@ func (p *FoundCertificatesProxy) getFoundCertificates() *jaxb.XmlFoundCertificat
 	return p.foundCertificates
 }
 
-// GetRelatedCertificates returns a list of related certificates. Port of
+// RelatedCertificates returns a list of related certificates. Port of
 // getRelatedCertificates().
-func (p *FoundCertificatesProxy) GetRelatedCertificates() []*RelatedCertificateWrapper {
+func (p *FoundCertificatesProxy) RelatedCertificates() []*RelatedCertificateWrapper {
 	var certificateWrappers []*RelatedCertificateWrapper
 	for _, relatedCertificate := range p.getFoundCertificates().RelatedCertificates {
 		certificateWrappers = append(certificateWrappers, NewRelatedCertificateWrapper(relatedCertificate))
@@ -39,8 +39,8 @@ func (p *FoundCertificatesProxy) GetRelatedCertificates() []*RelatedCertificateW
 	return certificateWrappers
 }
 
-// GetOrphanCertificates returns a list of orphan certificates. Port of getOrphanCertificates().
-func (p *FoundCertificatesProxy) GetOrphanCertificates() []*OrphanCertificateWrapper {
+// OrphanCertificates returns a list of orphan certificates. Port of getOrphanCertificates().
+func (p *FoundCertificatesProxy) OrphanCertificates() []*OrphanCertificateWrapper {
 	var orphanTokens []*OrphanCertificateWrapper
 	for _, orphanCertificate := range p.getFoundCertificates().OrphanCertificates {
 		orphanTokens = append(orphanTokens, NewOrphanCertificateWrapper(orphanCertificate))
@@ -48,36 +48,36 @@ func (p *FoundCertificatesProxy) GetOrphanCertificates() []*OrphanCertificateWra
 	return orphanTokens
 }
 
-// GetRelatedCertificatesByOrigin returns a list of found related RelatedCertificateWrapper
+// RelatedCertificatesByOrigin returns a list of found related RelatedCertificateWrapper
 // with the given origin. Port of getRelatedCertificatesByOrigin(CertificateOrigin).
-func (p *FoundCertificatesProxy) GetRelatedCertificatesByOrigin(origin enumerations.CertificateOrigin) []*RelatedCertificateWrapper {
+func (p *FoundCertificatesProxy) RelatedCertificatesByOrigin(origin enumerations.CertificateOrigin) []*RelatedCertificateWrapper {
 	var certificateWrappers []*RelatedCertificateWrapper
-	for _, relatedCertificate := range p.GetRelatedCertificates() {
-		if slices.Contains(relatedCertificate.GetOrigins(), origin) {
+	for _, relatedCertificate := range p.RelatedCertificates() {
+		if slices.Contains(relatedCertificate.Origins(), origin) {
 			certificateWrappers = append(certificateWrappers, relatedCertificate)
 		}
 	}
 	return certificateWrappers
 }
 
-// GetOrphanCertificatesByOrigin returns a list of found OrphanCertificateTokenWrapper with the
+// OrphanCertificatesByOrigin returns a list of found OrphanCertificateTokenWrapper with the
 // given origin. Port of getOrphanCertificatesByOrigin(CertificateOrigin).
-func (p *FoundCertificatesProxy) GetOrphanCertificatesByOrigin(origin enumerations.CertificateOrigin) []*OrphanCertificateWrapper {
+func (p *FoundCertificatesProxy) OrphanCertificatesByOrigin(origin enumerations.CertificateOrigin) []*OrphanCertificateWrapper {
 	var orphanCertificatesWrappers []*OrphanCertificateWrapper
-	for _, orphanCertificate := range p.GetOrphanCertificates() {
-		if slices.Contains(orphanCertificate.GetOrigins(), origin) {
+	for _, orphanCertificate := range p.OrphanCertificates() {
+		if slices.Contains(orphanCertificate.Origins(), origin) {
 			orphanCertificatesWrappers = append(orphanCertificatesWrappers, orphanCertificate)
 		}
 	}
 	return orphanCertificatesWrappers
 }
 
-// GetRelatedCertificatesByRefOrigin returns a list of found RelatedCertificateWrapper with the
+// RelatedCertificatesByRefOrigin returns a list of found RelatedCertificateWrapper with the
 // given reference origin. Port of getRelatedCertificatesByRefOrigin(CertificateRefOrigin).
-func (p *FoundCertificatesProxy) GetRelatedCertificatesByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*RelatedCertificateWrapper {
+func (p *FoundCertificatesProxy) RelatedCertificatesByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*RelatedCertificateWrapper {
 	var certificateWrappers []*RelatedCertificateWrapper
-	for _, relatedCertificate := range p.GetRelatedCertificates() {
-		for _, certificateRef := range relatedCertificate.GetReferences() {
+	for _, relatedCertificate := range p.RelatedCertificates() {
+		for _, certificateRef := range relatedCertificate.References() {
 			if refOrigin == certificateRef.Origin() {
 				certificateWrappers = append(certificateWrappers, relatedCertificate)
 				break
@@ -87,12 +87,12 @@ func (p *FoundCertificatesProxy) GetRelatedCertificatesByRefOrigin(refOrigin enu
 	return certificateWrappers
 }
 
-// GetOrphanCertificatesByRefOrigin returns a list of found OrphanCertificateTokenWrapper with
+// OrphanCertificatesByRefOrigin returns a list of found OrphanCertificateTokenWrapper with
 // the given reference origin. Port of getOrphanCertificatesByRefOrigin(CertificateRefOrigin).
-func (p *FoundCertificatesProxy) GetOrphanCertificatesByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*OrphanCertificateWrapper {
+func (p *FoundCertificatesProxy) OrphanCertificatesByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*OrphanCertificateWrapper {
 	var orphanCertificatesWrappers []*OrphanCertificateWrapper
-	for _, orphanCertificate := range p.GetOrphanCertificates() {
-		for _, certificateRef := range orphanCertificate.GetReferences() {
+	for _, orphanCertificate := range p.OrphanCertificates() {
+		for _, certificateRef := range orphanCertificate.References() {
 			if refOrigin == certificateRef.Origin() {
 				orphanCertificatesWrappers = append(orphanCertificatesWrappers, orphanCertificate)
 				break
@@ -102,32 +102,32 @@ func (p *FoundCertificatesProxy) GetOrphanCertificatesByRefOrigin(refOrigin enum
 	return orphanCertificatesWrappers
 }
 
-// GetRelatedCertificateRefs returns a list of all found references for related certificates.
+// RelatedCertificateRefs returns a list of all found references for related certificates.
 // Port of getRelatedCertificateRefs().
-func (p *FoundCertificatesProxy) GetRelatedCertificateRefs() []*CertificateRefWrapper {
+func (p *FoundCertificatesProxy) RelatedCertificateRefs() []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	for _, certificateWrapper := range p.GetRelatedCertificates() {
-		certificateRefs = append(certificateRefs, certificateWrapper.GetReferences()...)
+	for _, certificateWrapper := range p.RelatedCertificates() {
+		certificateRefs = append(certificateRefs, certificateWrapper.References()...)
 	}
 	return certificateRefs
 }
 
-// GetOrphanCertificateRefs returns a list of all found references for orphan certificates.
+// OrphanCertificateRefs returns a list of all found references for orphan certificates.
 // Port of getOrphanCertificateRefs().
-func (p *FoundCertificatesProxy) GetOrphanCertificateRefs() []*CertificateRefWrapper {
+func (p *FoundCertificatesProxy) OrphanCertificateRefs() []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	for _, certificateWrapper := range p.GetOrphanCertificates() {
-		certificateRefs = append(certificateRefs, certificateWrapper.GetReferences()...)
+	for _, certificateWrapper := range p.OrphanCertificates() {
+		certificateRefs = append(certificateRefs, certificateWrapper.References()...)
 	}
 	return certificateRefs
 }
 
-// GetRelatedCertificateRefsByRefOrigin returns a list of related certificate references by the
+// RelatedCertificateRefsByRefOrigin returns a list of related certificate references by the
 // given certificate reference origin. Port of
 // getRelatedCertificateRefsByRefOrigin(CertificateRefOrigin).
-func (p *FoundCertificatesProxy) GetRelatedCertificateRefsByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*CertificateRefWrapper {
+func (p *FoundCertificatesProxy) RelatedCertificateRefsByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	for _, ref := range p.GetRelatedCertificateRefs() {
+	for _, ref := range p.RelatedCertificateRefs() {
 		if refOrigin == ref.Origin() {
 			certificateRefs = append(certificateRefs, ref)
 		}
@@ -135,12 +135,12 @@ func (p *FoundCertificatesProxy) GetRelatedCertificateRefsByRefOrigin(refOrigin 
 	return certificateRefs
 }
 
-// GetOrphanCertificateRefsByRefOrigin returns a list of orphan certificate references by the
+// OrphanCertificateRefsByRefOrigin returns a list of orphan certificate references by the
 // given certificate reference origin. Port of
 // getOrphanCertificateRefsByRefOrigin(CertificateRefOrigin).
-func (p *FoundCertificatesProxy) GetOrphanCertificateRefsByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*CertificateRefWrapper {
+func (p *FoundCertificatesProxy) OrphanCertificateRefsByRefOrigin(refOrigin enumerations.CertificateRefOrigin) []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	for _, ref := range p.GetOrphanCertificateRefs() {
+	for _, ref := range p.OrphanCertificateRefs() {
 		if refOrigin == ref.Origin() {
 			certificateRefs = append(certificateRefs, ref)
 		}

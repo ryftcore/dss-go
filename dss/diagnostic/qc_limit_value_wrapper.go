@@ -14,17 +14,17 @@ func NewQCLimitValueWrapper(qcEuLimitValue *jaxb.XmlQcEuLimitValue) *QCLimitValu
 	return &QCLimitValueWrapper{wrapped: qcEuLimitValue}
 }
 
-// GetCurrency returns the Iso4217CurrencyCode. Port of getCurrency().
-func (w *QCLimitValueWrapper) GetCurrency() string {
+// Currency returns the Iso4217CurrencyCode. Port of getCurrency().
+func (w *QCLimitValueWrapper) Currency() string {
 	return w.wrapped.Currency
 }
 
-// GetAmount returns the defined amount. Port of getAmount().
-func (w *QCLimitValueWrapper) GetAmount() int {
+// Amount returns the defined amount. Port of getAmount().
+func (w *QCLimitValueWrapper) Amount() int {
 	return w.wrapped.Amount
 }
 
-// GetExponent returns the defined exponent. Port of getExponent().
-func (w *QCLimitValueWrapper) GetExponent() int {
+// Exponent returns the defined exponent. Port of getExponent().
+func (w *QCLimitValueWrapper) Exponent() int {
 	return w.wrapped.Exponent
 }
