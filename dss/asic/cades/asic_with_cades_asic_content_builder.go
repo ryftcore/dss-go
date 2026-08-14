@@ -1,0 +1,34 @@
+// Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/ASiCWithCAdESASiCContentBuilder.java (DSS 6.5.RC1).
+package cades
+
+import (
+	"github.com/utain/esig/dss/asic"
+	"github.com/utain/esig/dss/model"
+)
+
+// ASiCWithCAdESASiCContentBuilder builds an ASiCContent for an ASiC with CAdES container.
+//
+// Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
+// InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
+// embedding, so the base dispatches getContainerExtractor through
+// asic.AbstractASiCContentBuilderOverrides (S7_BRIEF.md's virtual-dispatch warning).
+type ASiCWithCAdESASiCContentBuilder struct {
+	*asic.AbstractASiCContentBuilder
+}
+
+var _ asic.AbstractASiCContentBuilderOverrides = (*ASiCWithCAdESASiCContentBuilder)(nil)
+
+// NewASiCWithCAdESASiCContentBuilder is the default constructor. Ports the empty
+// ASiCWithCAdESASiCContentBuilder().
+func NewASiCWithCAdESASiCContentBuilder() *ASiCWithCAdESASiCContentBuilder {
+	builder := &ASiCWithCAdESASiCContentBuilder{
+		AbstractASiCContentBuilder: asic.NewAbstractASiCContentBuilderBase(),
+	}
+	builder.InitAbstractASiCContentBuilder(builder)
+	return builder
+}
+
+// GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
+func (b *ASiCWithCAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ASiCContainerExtractor {
+	return NewASiCWithCAdESContainerExtractor(archiveDocument)
+}

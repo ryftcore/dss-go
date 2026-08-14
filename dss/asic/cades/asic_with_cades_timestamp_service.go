@@ -1,0 +1,85 @@
+// Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/timestamp/ASiCWithCAdESTimestampService.java (DSS 6.5.RC1).
+package cades
+
+import (
+	"github.com/utain/esig/dss/asic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/spi"
+	"github.com/utain/esig/dss/spi/validation"
+)
+
+// ASiCWithCAdESTimestampService creates a timestamp covering signer files.
+type ASiCWithCAdESTimestampService struct {
+	// tspSource is used to retrieve a timestamp response.
+	tspSource validation.TSPSource
+
+	// asicFilenameFactory defines rules for filename creation for a timestamp file.
+	asicFilenameFactory ASiCWithCAdESFilenameFactory
+}
+
+// NewASiCWithCAdESTimestampService is the default constructor. Ports
+// ASiCWithCAdESTimestampService(TSPSource).
+func NewASiCWithCAdESTimestampService(tspSource validation.TSPSource) *ASiCWithCAdESTimestampService {
+	return NewASiCWithCAdESTimestampServiceWithFilenameFactory(tspSource, NewDefaultASiCWithCAdESFilenameFactory())
+}
+
+// NewASiCWithCAdESTimestampServiceWithFilenameFactory is the constructor with filename factory.
+// Ports ASiCWithCAdESTimestampService(TSPSource, ASiCWithCAdESFilenameFactory).
+func NewASiCWithCAdESTimestampServiceWithFilenameFactory(tspSource validation.TSPSource,
+	asicFilenameFactory ASiCWithCAdESFilenameFactory) *ASiCWithCAdESTimestampService {
+	return &ASiCWithCAdESTimestampService{
+		tspSource:           tspSource,
+		asicFilenameFactory: asicFilenameFactory,
+	}
+}
+
+// TimestampDocuments timestamps a list of documents and returns the timestamped archive. Ports
+// timestamp(List, ASiCWithCAdESTimestampParameters); Go has no overloading, so the Java overload
+// set timestamp(List, ...) / timestamp(ASiCContent, ...) becomes TimestampDocuments / Timestamp.
+func (s *ASiCWithCAdESTimestampService) TimestampDocuments(documents []model.DSSDocument,
+	parameters *ASiCWithCAdESTimestampParameters) model.DSSDocument {
+	asicContent := NewASiCWithCAdESASiCContentBuilder().
+		Build(documents, parameters.ASiC().ContainerType())
+	asicContent = s.Timestamp(asicContent, parameters)
+	zipArchive, err := asic.ZipUtilsInstance().CreateZipArchiveAt(asicContent, parameters.ZipCreationDate())
+	if err != nil {
+		panic(err)
+	}
+	return zipArchive
+}
+
+// Timestamp adds a timestamp to the given ASiCContent, returning the content with the timestamp
+// and the related XML Manifest for an ASiC-E container. Ports
+// timestamp(ASiCContent, ASiCWithCAdESTimestampParameters).
+func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.ASiCContent,
+	parameters *ASiCWithCAdESTimestampParameters) *asic.ASiCContent {
+	dataToSignHelper := NewASiCWithCAdESTimestampDataToSignHelperBuilder(s.asicFilenameFactory).
+		Build(asicContent, parameters)
+
+	toBeTimestamped := dataToSignHelper.ToBeSigned()
+	if enumerations.ASiCContainerType_ASiC_E == parameters.ASiC().ContainerType() {
+		// XML Document in case of ASiC-E container
+		asicContent.SetManifestDocuments(append(asicContent.ManifestDocuments(), toBeTimestamped))
+	}
+
+	digestAlgorithm := parameters.DigestAlgorithm()
+	digestValue, err := toBeTimestamped.DigestValue(digestAlgorithm)
+	if err != nil {
+		panic(err)
+	}
+	timestampBinary, err := s.tspSource.TimeStampResponse(digestAlgorithm, digestValue)
+	if err != nil {
+		panic(err)
+	}
+
+	derEncoded, err := spi.DSSASN1UtilsDEREncodedTimestampBinary(timestampBinary)
+	if err != nil {
+		panic(err)
+	}
+	timestampToken := model.NewInMemoryDocumentWithMimeType(derEncoded,
+		s.asicFilenameFactory.TimestampFilename(asicContent), enumerations.MimeTypeEnum_TST)
+	asicContent.SetTimestampDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), timestampToken))
+
+	return asicContent
+}
