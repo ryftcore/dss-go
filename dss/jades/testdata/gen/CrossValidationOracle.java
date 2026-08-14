@@ -141,6 +141,35 @@ public class CrossValidationOracle {
         System.out.println("written " + out);
     }
 
+    static void dumpExceptionFile(StringBuilder json, Path testdata, String relativePath, String expectedSubstring) throws Exception {
+        DSSDocument document = new FileDocument(testdata.resolve(relativePath).toFile());
+        JWSDocumentAnalyzerFactory factory = new JWSDocumentAnalyzerFactory();
+        String gotMessage;
+        try {
+            AbstractJWSDocumentAnalyzer analyzer = factory.create(document);
+            // Force lazy JWS parsing (create() alone may defer it) the same way getSignatures()
+            // does, so a fixture that only fails once parsing actually happens is still caught.
+            analyzer.getSignatures();
+            throw new IllegalStateException("expected " + relativePath + " to raise an exception, but it parsed cleanly");
+        } catch (RuntimeException e) {
+            StringBuilder chain = new StringBuilder();
+            for (Throwable t = e; t != null; t = t.getCause()) {
+                if (t.getMessage() != null) {
+                    chain.append(t.getMessage()).append(" | ");
+                }
+            }
+            gotMessage = chain.toString();
+            if (!gotMessage.contains(expectedSubstring)) {
+                throw new AssertionError("oracle's own expectation for " + relativePath +
+                        " is stale: got exception chain [" + gotMessage + "], want it to contain [" + expectedSubstring + "]", e);
+            }
+        }
+        json.append("    {\n");
+        json.append("      \"path\": ").append(str(relativePath)).append(",\n");
+        json.append("      \"expectedMessageSubstring\": ").append(str(expectedSubstring)).append("\n");
+        json.append("    }");
+    }
+
     static void dumpFile(StringBuilder json, Path testdata, String relativePath) throws Exception {
         Path filePath = testdata.resolve(relativePath);
         DSSDocument document = new FileDocument(filePath.toFile());
