@@ -43,9 +43,14 @@ func NewCAdESBaselineRequirementsChecker(sig *CAdESSignature, offlineCertificate
 	return checker
 }
 
-// getBaselineSignatureForm returns the signature form corresponding to the signature.
-// Port of the protected getBaselineSignatureForm().
-func (b *CAdESBaselineRequirementsChecker) getBaselineSignatureForm() enumerations.SignatureForm {
+// GetBaselineSignatureForm returns the signature form corresponding to the signature: CAdES.
+// Port of the protected getBaselineSignatureForm(), exported to satisfy this port's
+// validation.BaselineRequirementsCheckerOverrides (see that interface's doc comment on
+// GetBaselineSignatureForm for why: cmsBaselineBRequirements() below - unlike upstream, which
+// resolves this through ordinary Java virtual dispatch - must reach
+// pades.PAdESBaselineRequirementsChecker/pades.CMSForPAdESBaselineRequirementsChecker's own
+// override across the cades/pades package boundary, and this is the only mechanism available).
+func (b *CAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureForm_CAdES
 }
 
@@ -80,12 +85,22 @@ func (b *CAdESBaselineRequirementsChecker) cmsBaselineBRequirements() bool {
 		// {}-BASELINE-B signature (cardinality == 1)!".
 		return false
 	}
-	// signing-time (Cardinality == 1, CAdES always requires it)
+	// signing-time (Cardinality == 1 for CAdES, EN 319 122-1; Cardinality == 0 for PAdES,
+	// EN 319 142-1 explicitly forbids it where CAdES requires it - getBaselineSignatureForm()/
+	// GetBaselineSignatureForm is exactly how upstream's shared hasBaselineBProfile() (this
+	// method) tells the two regimes apart, via ordinary Java virtual dispatch on whichever
+	// concrete checker is running: CAdESBaselineRequirementsChecker itself (CAdES) or, when this
+	// same method runs for a PDF's embedded CMS through
+	// pades.CMSForPAdESBaselineRequirementsChecker (PAdES), that checker's own override. See
+	// this port's spi/validation.BaselineRequirementsCheckerOverrides.GetBaselineSignatureForm
+	// for the cross-package plumbing this needs in Go.
 	signingTimeAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OID_pkcs_9_at_signingTime)
 	signingTimePresent := cadesBaselineAttributeValuesSize(signingTimeAttrs) == 1
-	if !signingTimePresent {
+	isCAdESForm := b.BaselineSignatureForm() == enumerations.SignatureForm_CAdES
+	if signingTimePresent != isCAdESForm {
 		// Upstream logs "signing-time attribute shall be present for {}-BASELINE-B signature
-		// (cardinality == 1})!".
+		// (cardinality == 1})!" (CAdES) or "signing-time attribute shall not be present for
+		// {}-BASELINE-B signature (cardinality == 0})!" (PAdES).
 		return false
 	}
 	// signer-attributes (Cardinality == 0 or 1)

@@ -89,8 +89,14 @@ func dssContentVerifierProviderSecurityFactoryToString(input *model.PublicKey) s
 }
 
 func dssContentVerifierProviderSecurityFactoryBuild(input *model.PublicKey) (*ContentVerifier, error) {
+	// A nil PublicKey is not a caller bug (see the identical fix and its rationale in this
+	// package's sibling dss_signer_information_verifier_security_factory.go,
+	// dssSignerInformationVerifierSecurityFactoryBuild): upstream's own
+	// buildWithProvider(PublicKey, Provider) has no null guard either and simply lets whatever a
+	// null key causes surface as a graceful, caught exception downstream. Panicking here would
+	// turn that into an unrecoverable crash instead.
 	if input == nil {
-		panic("Input cannot be null")
+		return nil, model.NewDSSError("InvalidKeyException : the public key has not been parsed")
 	}
 	key := input.Key()
 	if key == nil {
