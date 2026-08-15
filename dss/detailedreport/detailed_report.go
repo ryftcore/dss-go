@@ -15,6 +15,8 @@
 package detailedreport
 
 import (
+	"time"
+
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 )
@@ -253,11 +255,11 @@ func (r *DetailedReport) RevocationIds() []string {
 }
 
 // BestSignatureTime returns the best-signature-time for the signature with id.
-func (r *DetailedReport) BestSignatureTime(signatureId string) *jaxbTime {
+func (r *DetailedReport) BestSignatureTime(signatureId string) *time.Time {
 	poe := r.BestProofOfExistence(signatureId)
 	if poe != nil {
 		t := poe.Time.Time()
-		return &jaxbTime{t}
+		return &t
 	}
 	return nil
 }
@@ -281,13 +283,13 @@ func (r *DetailedReport) BestProofOfExistence(signatureId string) *jaxb.XmlProof
 
 // EvidenceRecordLowestPOETime returns the lowest POE of the evidence record
 // with the given Id.
-func (r *DetailedReport) EvidenceRecordLowestPOETime(evidenceRecordId string) *jaxbTime {
+func (r *DetailedReport) EvidenceRecordLowestPOETime(evidenceRecordId string) *time.Time {
 	xmlEvidenceRecord := r.XmlEvidenceRecordById(evidenceRecordId)
 	if xmlEvidenceRecord != nil && xmlEvidenceRecord.ValidationProcessEvidenceRecord != nil {
 		poe := xmlEvidenceRecord.ValidationProcessEvidenceRecord.ProofOfExistence
 		if poe != nil {
 			t := poe.Time.Time()
-			return &jaxbTime{t}
+			return &t
 		}
 	}
 	return nil
@@ -800,7 +802,7 @@ func (r *DetailedReport) CertificateQWACProfile(certificateId string) enumeratio
 // CertificateApprovalStatussAtIssuanceTime gets certificate approval statuses
 // obtained on TS 119 602 List(s) of Trusted Entities processing for the
 // certificate with the given identifier at the certificate issuance time.
-func (r *DetailedReport) CertificateApprovalStatussAtIssuanceTime(certificateId string) []*enumerations.CertificateApprovalStatus {
+func (r *DetailedReport) CertificateApprovalStatussAtIssuanceTime(certificateId string) []enumerations.CertificateApprovalStatus {
 	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME)
 }
 
@@ -808,16 +810,16 @@ func (r *DetailedReport) CertificateApprovalStatussAtIssuanceTime(certificateId 
 // statuses obtained on TS 119 602 List(s) of Trusted Entities processing for
 // the certificate with the given identifier at the certificate validation
 // time.
-func (r *DetailedReport) CertificateApprovalStatussAtValidationTime(certificateId string) []*enumerations.CertificateApprovalStatus {
+func (r *DetailedReport) CertificateApprovalStatussAtValidationTime(certificateId string) []enumerations.CertificateApprovalStatus {
 	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTime_VALIDATION_TIME)
 }
 
-func (r *DetailedReport) certificateApprovalStatussAtTime(certificateId string, validationTime enumerations.ValidationTime) []*enumerations.CertificateApprovalStatus {
+func (r *DetailedReport) certificateApprovalStatussAtTime(certificateId string, validationTime enumerations.ValidationTime) []enumerations.CertificateApprovalStatus {
 	if certificateId == "" {
-		return []*enumerations.CertificateApprovalStatus{}
+		return []enumerations.CertificateApprovalStatus{}
 	}
 
-	result := []*enumerations.CertificateApprovalStatus{}
+	result := []enumerations.CertificateApprovalStatus{}
 
 	certificate := r.XmlCertificateById(certificateId)
 	if certificate != nil {
@@ -834,16 +836,17 @@ func (r *DetailedReport) certificateApprovalStatussAtTime(certificateId string, 
 	return result
 }
 
-func buildFromXmlCertificateApprovalStatus(xmlCertificateApprovalStatus *jaxb.XmlCertificateApprovalStatus) *enumerations.CertificateApprovalStatus {
+func buildFromXmlCertificateApprovalStatus(xmlCertificateApprovalStatus *jaxb.XmlCertificateApprovalStatus) enumerations.CertificateApprovalStatus {
 	if xmlCertificateApprovalStatus == nil {
 		return nil
 	}
 	result := enumerations.CertificateApprovalStatusFromDefinition(xmlCertificateApprovalStatus.ListType,
 		xmlCertificateApprovalStatus.ServiceTypeIdentifier, xmlCertificateApprovalStatus.ServiceStatus)
-	if result != nil && result.Label() != "" && !enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN.Equal(result) {
+	if result != nil && result.Label() != "" &&
+		result != enumerations.CertificateApprovalStatus(enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN) {
 		return result
 	}
-	return enumerations.CertificateApprovalStatusCreate(enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN.Label(),
+	return enumerations.NewCertificateApprovalStatus(enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN.Label(),
 		xmlCertificateApprovalStatus.ListType, xmlCertificateApprovalStatus.ServiceTypeIdentifier, xmlCertificateApprovalStatus.ServiceStatus)
 }
 
@@ -924,15 +927,14 @@ func (r *DetailedReport) FinalSubIndication(tokenId string) enumerations.SubIndi
 	return subIndicationOf(r.FinalConclusion(tokenId))
 }
 
-// xmlConstraintsConclusion is satisfied by every generated type that embeds
-// XmlConstraintsConclusionContent, letting HighestConclusion return any of
-// them the way Java's XmlConstraintsConclusion superclass reference does.
-type xmlConstraintsConclusion interface {
-	constraintsConclusionContent() *jaxb.XmlConstraintsConclusionContent
-}
-
 // HighestConclusion gets the validation conclusion to a signature with id
-// corresponding to the highest validation level.
+// corresponding to the highest validation level. Java returns a reference
+// typed to the XmlConstraintsConclusion superclass shared by
+// ValidationProcessArchivalData/LongTermData/BasicSignature; Go has no
+// upcast between the three distinct generated struct types (see
+// jaxb_process.go's Content/Attrs embedding), but every caller only ever
+// reads .Conclusion off the result, so returning the shared
+// XmlConstraintsConclusionContent they all embed serves the same purpose.
 func (r *DetailedReport) HighestConclusion(signatureId string) *jaxb.XmlConstraintsConclusionContent {
 	xmlSignature := r.XmlSignatureById(signatureId)
 	if xmlSignature.ValidationProcessArchivalData != nil {
@@ -1076,7 +1078,7 @@ func (r *DetailedReport) QWACValidationInfos(certificateId string) []Message {
 // qualification validation errors for a certificate with the given id at
 // certificate issuance time for the given certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusErrorsAtIssuanceTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusErrorsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusErrorsAtIssuanceTime(certificateId, certificateApprovalStatus)
 }
 
@@ -1084,7 +1086,7 @@ func (r *DetailedReport) CertificateApprovalStatusErrorsAtIssuanceTime(certifica
 // qualification validation warnings for a certificate with the given id at
 // certificate issuance time for the given certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusWarningsAtIssuanceTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusWarningsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusWarningsAtIssuanceTime(certificateId, certificateApprovalStatus)
 }
 
@@ -1093,7 +1095,7 @@ func (r *DetailedReport) CertificateApprovalStatusWarningsAtIssuanceTime(certifi
 // given id at certificate issuance time for the given
 // certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusInfosAtIssuanceTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusInfosAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusInfosAtIssuanceTime(certificateId, certificateApprovalStatus)
 }
 
@@ -1101,7 +1103,7 @@ func (r *DetailedReport) CertificateApprovalStatusInfosAtIssuanceTime(certificat
 // qualification validation errors for a certificate with the given id at
 // validation time for the given certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusErrorsAtValidationTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusErrorsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusErrorsAtValidationTime(certificateId, certificateApprovalStatus)
 }
 
@@ -1109,7 +1111,7 @@ func (r *DetailedReport) CertificateApprovalStatusErrorsAtValidationTime(certifi
 // qualification validation warnings for a certificate with the given id at
 // validation time for the given certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusWarningsAtValidationTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusWarningsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusWarningsAtValidationTime(certificateId, certificateApprovalStatus)
 }
 
@@ -1117,7 +1119,7 @@ func (r *DetailedReport) CertificateApprovalStatusWarningsAtValidationTime(certi
 // qualification validation information messages for a certificate with the
 // given id at validation time for the given certificateApprovalStatus.
 // NOTE: applicable only on certificate validation.
-func (r *DetailedReport) CertificateApprovalStatusInfosAtValidationTime(certificateId string, certificateApprovalStatus *enumerations.CertificateApprovalStatus) []Message {
+func (r *DetailedReport) CertificateApprovalStatusInfosAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return r.MessageCollector().CertificateApprovalStatusInfosAtValidationTime(certificateId, certificateApprovalStatus)
 }
 
