@@ -9,8 +9,8 @@
 // modules ... revisit after Phase 9"), not merely a later numbered phase, so
 // it gets its own feature tag rather than a phaseNN one. Only this file and
 // eaa_revocation_format_checking.go in this package need the tag - every
-// other fc file is untagged and builds today. basic_building_blocks.go (the
-// only caller of NewEAAFormatChecking) is itself gated //go:build phase8d, so
+// other fc file is untagged and builds today. blocks/basic_building_blocks_eaa.go
+// (the only caller of NewEAAFormatChecking) carries the same eaa tag, so
 // no untagged code path references this file.
 //
 // UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the four

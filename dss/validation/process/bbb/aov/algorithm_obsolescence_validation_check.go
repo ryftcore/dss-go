@@ -10,12 +10,13 @@
 // Certificate/Digest/Signature/Timestamp/EvidenceRecord/EAA subclasses (the
 // classes that *produce* an XmlAOV by orchestrating bbb/xcv + the aov/cc
 // cryptographic-checker family), and not on the aov/cc package itself. Those
-// remain genuinely out of phase 8c scope (FRAME's basic_building_blocks.go
-// already gates its own bbb/aov + bbb/xcv wiring behind //go:build phase8d for
-// the same reason) and are left for 8d to add to this same package - along
-// with AlgorithmObsolescenceValidationCheckWithId.java, the sibling class in
-// the same Java package, which likewise has no caller in phase 8c and is not
-// ported here.
+// were genuinely out of phase 8c scope and were added by phase 8d to this same
+// package - along with AlgorithmObsolescenceValidationCheckWithId.java, the
+// sibling class in the same Java package, which likewise had no caller in
+// phase 8c. (The dispatcher this paragraph called "FRAME's
+// basic_building_blocks.go, gated behind //go:build phase8d" is now the
+// un-tagged dss/validation/process/blocks package; no phase8d build tag
+// remains anywhere in the tree.)
 //
 // Every dependency this file does use - jaxb.XmlAOV/XmlConclusion/
 // XmlCryptographicValidation/XmlCryptographicAlgorithm/XmlMessage/XmlBlockType,

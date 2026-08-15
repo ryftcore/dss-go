@@ -1,0 +1,61 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/eaa/checks/EAAIssuingAuthorityRegistrationIdentifierCheck.java (DSS 6.5.RC1).
+package eaa
+
+import (
+	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+	"github.com/utain/esig/dss/validation/process/bbb"
+)
+
+// EAAIssuingAuthorityRegistrationIdentifierCheck verifies whether the EAA
+// issuing authority registration identifier claim contains one of the
+// expected values.
+type EAAIssuingAuthorityRegistrationIdentifierCheck struct {
+	*bbb.AbstractMultiValuesCheckItem[*jaxb.XmlSAV]
+
+	// eaa is the EAA to check.
+	eaa *diagnostic.EAAWrapper
+}
+
+// NewEAAIssuingAuthorityRegistrationIdentifierCheck is the default constructor.
+func NewEAAIssuingAuthorityRegistrationIdentifierCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAAIssuingAuthorityRegistrationIdentifierCheck {
+	c := &EAAIssuingAuthorityRegistrationIdentifierCheck{
+		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),
+		eaa:                          eaaWrapper,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) Process() bool {
+	return c.ProcessValueCheck(c.eaa.IssuingRegistrationIdentifier())
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) MessageTag() i18n.MessageTag {
+	return i18n.MessageTag_EAA_ISS_REG_ID
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of
+// getErrorMessageTag().
+func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) ErrorMessageTag() i18n.MessageTag {
+	return i18n.MessageTag_EAA_ISS_REG_ID_ANS
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_INDETERMINATE
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of getFailedSubIndicationForConclusion().
+func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+}
