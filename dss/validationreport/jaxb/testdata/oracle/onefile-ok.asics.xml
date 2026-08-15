@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ValidationReport xmlns="http://uri.etsi.org/19102/v1.4.1#" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" xmlns:ns4="http://uri.etsi.org/02231/v2#" xmlns:ns3="http://uri.etsi.org/01903/v1.3.2#">
+    <SignatureValidationReport>
+        <SignatureIdentifier id="S-C095B57830FE86DB5522BA46AB6DB749CA11B170609FD0D548F88B51DDBF962B">
+            <DigestAlgAndValue>
+                <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <ns2:DigestValue>Zr0foTyJuuE0O1PYRQ5MacTbGGsONZ4o8kv7gdyDFQw=</ns2:DigestValue>
+            </DigestAlgAndValue>
+            <ns2:SignatureValue>ZmSyYm9wsC11ASt5FpE11pOqZ309VbMMGH/CPjWLZHFriFosgyNAM8C+cEkUM2NZ0ZkA6yyAeg6fCt9ypVXazZdrIkRYkZVj/TUk3KXfV4i0zj4zglEoJCMYOCPW78U2OJfHA4OQH4lT4TSEA31EvVCQxKWH5y4jRonri9/3bBrCcVnrYUdI18Bdt9wFo0fDcdDh+IUCz9DyctuL3HDaTKN32Aw8BJDjo5i9JBWs5zWGuv65+JUgi4747JXQTkyBk531Ssu3RwuTs7y324cNtPodDXAqM2cYPZrYJMVWMYjhfNJWJ82qIYhcfodBKnNZS6TsbPXJdcC3i1zjrfVVOA==</ns2:SignatureValue>
+            <HashOnly>false</HashOnly>
+            <DocHashOnly>false</DocHashOnly>
+        </SignatureIdentifier>
+        <ValidationConstraintsEvaluationReport>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:indeterminate</MainIndication>
+                    <SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</SubIndication>
+                    <AssociatedValidationReportData>
+                        <AdditionalValidationReportData>
+                            <ReportData>
+                                <Type>urn:cef:dss:message:error</Type>
+                                <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The key size is unknown for CA certificate!</Value>
+                            </ReportData>
+                        </AdditionalValidationReportData>
+                    </AssociatedValidationReportData>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                </ConstraintStatus>
+                <ValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:indeterminate</MainIndication>
+                    <SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                    <AssociatedValidationReportData>
+                        <AdditionalValidationReportData>
+                            <ReportData>
+                                <Type>urn:cef:dss:message:error</Type>
+                                <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Value>
+                            </ReportData>
+                        </AdditionalValidationReportData>
+                    </AssociatedValidationReportData>
+                </ValidationStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:pastSignatureValidation</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                </ConstraintStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:pastCertificateValidation</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                </ConstraintStatus>
+            </ValidationConstraint>
+            <ValidationConstraint>
+                <ValidationConstraintIdentifier>urn:cef:dss:bbb:validationTimeSliding</ValidationConstraintIdentifier>
+                <ConstraintStatus>
+                    <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                </ConstraintStatus>
+            </ValidationConstraint>
+        </ValidationConstraintsEvaluationReport>
+        <ValidationTimeInfo>
+            <ValidationTime>2025-06-15T12:00:00Z</ValidationTime>
+            <BestSignatureTime>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </BestSignatureTime>
+        </ValidationTimeInfo>
+        <SignersDocument>
+            <DigestAlgAndValue>
+                <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <ns2:DigestValue>B/K97zTtFuOhug27fke4/Zgc4Myz4b/lZNgsQjy6fkc=</ns2:DigestValue>
+            </DigestAlgAndValue>
+            <SignersDocumentRepresentation VOReference="D-ED3F26CE168D423B24FC3F809BD185172C31B0EAB36A3AA0BEEB877B37885097"/>
+        </SignersDocument>
+        <SignatureAttributes>
+            <SigningTime Signed="true">
+                <Time>2019-07-30T06:41:53Z</Time>
+            </SigningTime>
+            <SigningCertificate Signed="true">
+                <AttributeObject VOReference="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352"/>
+            </SigningCertificate>
+            <DataObjectFormat Signed="true">
+                <ContentType>1.2.840.113549.1.7.1</ContentType>
+            </DataObjectFormat>
+            <AllDataObjectsTimeStamp Signed="true">
+                <AttributeObject VOReference="T-C0A346448455CA9F33A239BFE64AECDE7A43323A4EAB7ED899C08CF9C0D74A90"/>
+                <TimeStampValue>2019-07-30T06:41:54Z</TimeStampValue>
+            </AllDataObjectsTimeStamp>
+            <MessageDigest Signed="true">
+                <Digest>B/K97zTtFuOhug27fke4/Zgc4Myz4b/lZNgsQjy6fkc=</Digest>
+            </MessageDigest>
+        </SignatureAttributes>
+        <SignerInformation>
+            <SignerCertificate VOReference="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352"/>
+            <Signer>good-user</Signer>
+        </SignerInformation>
+        <SignatureQuality>
+            <SignatureQualityInformation>urn:cef:dss:signatureQualification:notApplicable</SignatureQualityInformation>
+        </SignatureQuality>
+        <SignatureValidationProcess>
+            <SignatureValidationProcessID>urn:etsi:019102:validationprocess:LTA</SignatureValidationProcessID>
+        </SignatureValidationProcess>
+        <SignatureValidationStatus>
+            <MainIndication>urn:etsi:019102:mainindication:indeterminate</MainIndication>
+            <SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+            <AssociatedValidationReportData>
+                <CertificateChain>
+                    <SigningCertificate VOReference="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352"/>
+                    <IntermediateCertificate VOReference="C-FE7DFD7173311743BAFD5D919292663470D94A18FCF4300BE49C80AF0C4180F3"/>
+                </CertificateChain>
+                <CryptoInformation>
+                    <ValidationObjectId VOReference="S-C095B57830FE86DB5522BA46AB6DB749CA11B170609FD0D548F88B51DDBF962B"/>
+                    <Algorithm>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Algorithm>
+                    <SecureAlgorithm>true</SecureAlgorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                </CryptoInformation>
+                <AdditionalValidationReportData>
+                    <ReportData>
+                        <Type>urn:cef:dss:message:error</Type>
+                        <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Value>
+                    </ReportData>
+                    <ReportData>
+                        <Type>urn:cef:dss:message:error</Type>
+                        <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The key size is unknown for CA certificate!</Value>
+                    </ReportData>
+                </AdditionalValidationReportData>
+            </AssociatedValidationReportData>
+        </SignatureValidationStatus>
+    </SignatureValidationReport>
+    <SignatureValidationObjects>
+        <ValidationObject id="T-C0A346448455CA9F33A239BFE64AECDE7A43323A4EAB7ED899C08CF9C0D74A90">
+            <ObjectType>urn:etsi:019102:validationObject:timestamp</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>Nc8XliMe2BlVuxHxOqJ6ap0rRIJox5+5AV2n9IhYD4w=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </POE>
+            <POEProvisioning>
+                <POETime>2019-07-30T06:41:54Z</POETime>
+                <ValidationObject VOReference="D-ED3F26CE168D423B24FC3F809BD185172C31B0EAB36A3AA0BEEB877B37885097"/>
+            </POEProvisioning>
+            <ValidationReport>
+                <ValidationConstraintsEvaluationReport>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                        </ConstraintStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                        </ConstraintStatus>
+                        <ValidationStatus>
+                            <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                        </ValidationStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                        </ConstraintStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                        </ConstraintStatus>
+                        <ValidationStatus>
+                            <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                        </ValidationStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                        </ConstraintStatus>
+                        <ValidationStatus>
+                            <MainIndication>urn:etsi:019102:mainindication:passed</MainIndication>
+                        </ValidationStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:applied</Status>
+                        </ConstraintStatus>
+                        <ValidationStatus>
+                            <MainIndication>urn:etsi:019102:mainindication:indeterminate</MainIndication>
+                            <SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                            <AssociatedValidationReportData>
+                                <AdditionalValidationReportData>
+                                    <ReportData>
+                                        <Type>urn:cef:dss:message:error</Type>
+                                        <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Value>
+                                    </ReportData>
+                                </AdditionalValidationReportData>
+                            </AssociatedValidationReportData>
+                        </ValidationStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:pastSignatureValidation</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                        </ConstraintStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:pastCertificateValidation</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                        </ConstraintStatus>
+                    </ValidationConstraint>
+                    <ValidationConstraint>
+                        <ValidationConstraintIdentifier>urn:cef:dss:bbb:validationTimeSliding</ValidationConstraintIdentifier>
+                        <ConstraintStatus>
+                            <Status>urn:etsi:019102:constraintStatus:disabled</Status>
+                        </ConstraintStatus>
+                    </ValidationConstraint>
+                </ValidationConstraintsEvaluationReport>
+                <SignerInformation>
+                    <SignerCertificate VOReference="C-2AAE673BE5DBD0C72C6DAB0E065B4410E2855589BAD8AB198391C51FA182B407"/>
+                    <Signer>ee-good-tsa</Signer>
+                </SignerInformation>
+                <SignatureQuality>
+                    <SignatureQualityInformation>urn:cef:dss:timestampQualification:notApplicable</SignatureQualityInformation>
+                </SignatureQuality>
+                <SignatureValidationStatus>
+                    <MainIndication>urn:etsi:019102:mainindication:indeterminate</MainIndication>
+                    <SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                    <AssociatedValidationReportData>
+                        <CertificateChain>
+                            <SigningCertificate VOReference="C-2AAE673BE5DBD0C72C6DAB0E065B4410E2855589BAD8AB198391C51FA182B407"/>
+                            <IntermediateCertificate VOReference="C-0D80F79DB9C5FD8C9DB11E3B9FBC8B1E85303D48211BB39946E5C68DF0B2411E"/>
+                        </CertificateChain>
+                        <CryptoInformation>
+                            <ValidationObjectId VOReference="T-C0A346448455CA9F33A239BFE64AECDE7A43323A4EAB7ED899C08CF9C0D74A90"/>
+                            <Algorithm>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Algorithm>
+                            <SecureAlgorithm>true</SecureAlgorithm>
+                            <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                        </CryptoInformation>
+                        <AdditionalValidationReportData>
+                            <ReportData>
+                                <Type>urn:cef:dss:message:error</Type>
+                                <Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Value>
+                            </ReportData>
+                        </AdditionalValidationReportData>
+                    </AssociatedValidationReportData>
+                </SignatureValidationStatus>
+            </ValidationReport>
+        </ValidationObject>
+        <ValidationObject id="C-0D80F79DB9C5FD8C9DB11E3B9FBC8B1E85303D48211BB39946E5C68DF0B2411E">
+            <ObjectType>urn:etsi:019102:validationObject:certificate</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>DYD3nbnF/YydsR47n7yLHoUwPUghG7OZRuXGjfCyQR4=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </POE>
+        </ValidationObject>
+        <ValidationObject id="C-2AAE673BE5DBD0C72C6DAB0E065B4410E2855589BAD8AB198391C51FA182B407">
+            <ObjectType>urn:etsi:019102:validationObject:certificate</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>Kq5nO+Xb0McsbasOBltEEOKFVYm62KsZg5HFH6GCtAc=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </POE>
+        </ValidationObject>
+        <ValidationObject id="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352">
+            <ObjectType>urn:etsi:019102:validationObject:certificate</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>ubgFGlhkWTj2YOwSYbdTTi3HQiiC2HOyh2IEu6EHg1I=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </POE>
+        </ValidationObject>
+        <ValidationObject id="C-FE7DFD7173311743BAFD5D919292663470D94A18FCF4300BE49C80AF0C4180F3">
+            <ObjectType>urn:etsi:019102:validationObject:certificate</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>/n39cXMxF0O6/V2RkpJmNHDZShj89DAL5JyArwxBgPM=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2025-06-15T12:00:00Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+            </POE>
+        </ValidationObject>
+        <ValidationObject id="D-ED3F26CE168D423B24FC3F809BD185172C31B0EAB36A3AA0BEEB877B37885097">
+            <ObjectType>urn:etsi:019102:validationObject:signedData</ObjectType>
+            <ValidationObjectRepresentation>
+                <DigestAlgAndValue>
+                    <ns2:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <ns2:DigestValue>B/K97zTtFuOhug27fke4/Zgc4Myz4b/lZNgsQjy6fkc=</ns2:DigestValue>
+                </DigestAlgAndValue>
+            </ValidationObjectRepresentation>
+            <POE>
+                <POETime>2019-07-30T06:41:54Z</POETime>
+                <TypeOfProof>urn:etsi:019102:poetype:validation</TypeOfProof>
+                <POEObject VOReference="T-C0A346448455CA9F33A239BFE64AECDE7A43323A4EAB7ED899C08CF9C0D74A90"/>
+            </POE>
+        </ValidationObject>
+    </SignatureValidationObjects>
+</ValidationReport>

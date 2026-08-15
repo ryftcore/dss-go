@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+        All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+        target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+    </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-FE7DFD7173311743BAFD5D919292663470D94A18FCF4300BE49C80AF0C4180F3">
+        <subject>
+            <commonName>good-ca</commonName>
+            <organizationName>Nowina Solutions</organizationName>
+            <organizationUnit>PKI-TEST</organizationUnit>
+            <country>LU</country>
+        </subject>
+        <notBefore>2018-05-05T08:20:34Z</notBefore>
+        <notAfter>2020-03-05T09:20:34Z</notAfter>
+        <keyUsages>
+            <keyUsage>keyCertSign</keyUsage>
+            <keyUsage>crlSign</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls/>
+        <crlUrls>
+            <crlUrl>http://dss.nowina.lu/pki-factory/crl/root-ca.crl</crlUrl>
+        </crlUrls>
+        <aiaUrls>
+            <aiaUrl>http://dss.nowina.lu/pki-factory/crt/root-ca.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls/>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <revocation/>
+        <trustAnchors/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+        </X509ValidationDetails>
+        <Chain/>
+    </Certificate>
+</SimpleCertificateReport>

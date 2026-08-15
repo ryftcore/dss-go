@@ -200,12 +200,27 @@ func buildContentModel() {
 
 // carriesCharData reports whether an empty <name> element would have been
 // written by JAXB as <name></name> rather than <name/>. stack holds the
-// enclosing element names, innermost last.
+// enclosing element names, innermost last. name and the top of stack may
+// carry a literal "ns2:"-style prefix (see jaxb_crossns.go's header on
+// hard-coded ds: element names): the model's contentKind/contentKindByParent
+// tables are keyed by local name only, as derived from Go struct tags which
+// never carry one, so both are stripped before lookup.
 func carriesCharData(name string, stack []string) bool {
+	local := localName(name)
 	if len(stack) > 0 {
-		if k, ok := contentKindByParent[stack[len(stack)-1]][name]; ok {
+		if k, ok := contentKindByParent[localName(stack[len(stack)-1])][local]; ok {
 			return k == kindText
 		}
 	}
-	return contentKind[name] == kindText
+	return contentKind[local] == kindText
+}
+
+// localName strips a literal "prefix:" from a tag name written by hand
+// (jaxb_crossns.go's ns2:-prefixed elements); tag names encoding/xml derives
+// from Go struct tags never carry one.
+func localName(name string) string {
+	if i := strings.IndexByte(name, ':'); i >= 0 {
+		return name[i+1:]
+	}
+	return name
 }

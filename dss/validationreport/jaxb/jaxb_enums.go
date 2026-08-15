@@ -4,6 +4,7 @@
 //   - .../enums/TypeOfProof.java
 //   - .../enums/SignatureValidationProcessID.java
 //   - .../parsers/UriBasedEnumParser.java
+//
 // (DSS 6.5.RC1).
 //
 // # Why these hand-written classes live in jaxb, not dss/validationreport

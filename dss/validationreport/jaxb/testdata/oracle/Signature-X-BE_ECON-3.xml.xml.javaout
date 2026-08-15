@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ValidationReport xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:ns2="http://uri.etsi.org/19102/v1.4.1#" xmlns:ns4="http://uri.etsi.org/02231/v2#" xmlns:ns3="http://uri.etsi.org/01903/v1.3.2#">
+    <ns2:SignatureValidationReport>
+        <ns2:SignatureIdentifier id="S-639D3D318419109713B79B7CA3E3348B8F5FAC0FC6F6F696B6304EB0D3ADE3B2">
+            <ns2:DigestAlgAndValue>
+                <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <DigestValue>7sTomz+ZtrC4JB9YJPZG3aWzw24rfoQh7Nm7hbX2jqc=</DigestValue>
+            </ns2:DigestAlgAndValue>
+            <SignatureValue>Ra8GdnDqlt9y9jwWty26ol8w80lc4A0wkMQmrlcPISFJY5oJ5+tEAn5QFxHYxE9vdTW8lwO8aF1eTx5dpCWuaBc0D28L2F0/LGCBIFSvx5S1TvXVXfc5FY09nnRXAXdouRjJriCROIznVi4xO7svG+hn6m7PKfa0Pm0/3p8FTQoLuM4Xy/nhCd08KbX9IBmCrSCWaqdKSLaP8sOrZX+5SpHIuqDZnZgMglbnHBazSyNJude7jFfgR98duJAYO5FCm2kXN29NMJEdQd39BUlPsm/VZQqz0CkKEruSyuxVVkIrgRJNrpITqyWolKbLOmgpitw1RppXPgldlwzJ3H1ZOA==</SignatureValue>
+            <ns2:HashOnly>false</ns2:HashOnly>
+            <ns2:DocHashOnly>false</ns2:DocHashOnly>
+            <ns2:DAIdentifier>xmldsig-d7ae5038-53c9-4c93-81cf-fad1a44e5ea9</ns2:DAIdentifier>
+        </ns2:SignatureIdentifier>
+        <ns2:ValidationConstraintsEvaluationReport>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for signing certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                </ns2:ConstraintStatus>
+                <ns2:ValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for signature is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:ValidationStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:pastSignatureValidation</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                </ns2:ConstraintStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:pastCertificateValidation</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                </ns2:ConstraintStatus>
+            </ns2:ValidationConstraint>
+            <ns2:ValidationConstraint>
+                <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationTimeSliding</ns2:ValidationConstraintIdentifier>
+                <ns2:ConstraintStatus>
+                    <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                </ns2:ConstraintStatus>
+            </ns2:ValidationConstraint>
+        </ns2:ValidationConstraintsEvaluationReport>
+        <ns2:ValidationTimeInfo>
+            <ns2:ValidationTime>2025-06-15T12:00:00Z</ns2:ValidationTime>
+            <ns2:BestSignatureTime>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:BestSignatureTime>
+        </ns2:ValidationTimeInfo>
+        <ns2:SignersDocument>
+            <ns2:DigestAlgAndValue>
+                <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <DigestValue>CClyj5Bjeb5gDV3U/QjYuhzo7IM/xRul+bTh5lMpYk8=</DigestValue>
+            </ns2:DigestAlgAndValue>
+            <ns2:SignersDocumentRepresentation VOReference="D-348220900DC56F542B7EDE9E45D51F0814B16EE7DBE35CEA2413D05D4EC1ECA1"/>
+        </ns2:SignersDocument>
+        <ns2:SignatureAttributes>
+            <ns2:SigningTime Signed="true">
+                <ns2:Time>2014-11-12T07:03:11Z</ns2:Time>
+            </ns2:SigningTime>
+            <ns2:SigningCertificate Signed="true">
+                <ns2:AttributeObject VOReference="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D"/>
+            </ns2:SigningCertificate>
+            <ns2:DataObjectFormat Signed="true">
+                <ns2:MimeType>text/xml</ns2:MimeType>
+            </ns2:DataObjectFormat>
+            <ns2:SignatureProductionPlace Signed="true">
+                <ns2:AddressString>Vilvoorde</ns2:AddressString>
+            </ns2:SignatureProductionPlace>
+            <ns2:SignerRole Signed="true">
+                <ns2:RoleDetails>
+                    <ns2:Role>test</ns2:Role>
+                    <ns2:EndorsementType>claimed</ns2:EndorsementType>
+                </ns2:RoleDetails>
+            </ns2:SignerRole>
+            <ns2:SignatureTimeStamp>
+                <ns2:AttributeObject VOReference="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256"/>
+                <ns2:TimeStampValue>2014-11-12T07:03:15Z</ns2:TimeStampValue>
+            </ns2:SignatureTimeStamp>
+            <ns2:CertificateValues>
+                <ns2:AttributeObject VOReference="C-A2BCB1E8523FBB23B9A277AFA0B67DA2E61E9AD8BAC1B926A733A1AE07C67CDE"/>
+                <ns2:AttributeObject VOReference="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D"/>
+                <ns2:AttributeObject VOReference="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D"/>
+            </ns2:CertificateValues>
+            <ns2:RevocationValues>
+                <ns2:AttributeObject VOReference="R-3E42EA07DBC855C53FEE0A86A3DBBCA69C989C491AACF2EE6B4AE1345492EC5B"/>
+                <ns2:AttributeObject VOReference="R-8581C4B61C9CF7B842F95C608DC96D60C3284E8BFF6055FAF0999F85029C07BA"/>
+            </ns2:RevocationValues>
+            <ns2:TimeStampValidationData>
+                <ns2:AttributeObject VOReference="R-1B90709FD3C97EED90FAB0226865D98AE5C56E4F77937311483E136901E671F8"/>
+                <ns2:AttributeObject VOReference="R-911E968955C21DF1C909F177EEF0D73C7F7D580B3BC22929F895998FA40BCF34"/>
+                <ns2:AttributeObject VOReference="R-2D39D94CCE32917A8B5F8ADA67DEFBCBB7BEE8B27DC746106B144E20E419D03C"/>
+            </ns2:TimeStampValidationData>
+        </ns2:SignatureAttributes>
+        <ns2:SignerInformation>
+            <ns2:SignerCertificate VOReference="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D"/>
+            <ns2:Signer>Frank Cornelis (Signature)</ns2:Signer>
+        </ns2:SignerInformation>
+        <ns2:SignatureQuality>
+            <ns2:SignatureQualityInformation>urn:cef:dss:signatureQualification:notApplicable</ns2:SignatureQualityInformation>
+        </ns2:SignatureQuality>
+        <ns2:SignatureValidationProcess>
+            <ns2:SignatureValidationProcessID>urn:etsi:019102:validationprocess:LTA</ns2:SignatureValidationProcessID>
+        </ns2:SignatureValidationProcess>
+        <ns2:SignatureValidationStatus>
+            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+            <ns2:AssociatedValidationReportData>
+                <ns2:CertificateChain>
+                    <ns2:SigningCertificate VOReference="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D"/>
+                    <ns2:IntermediateCertificate VOReference="C-A2BCB1E8523FBB23B9A277AFA0B67DA2E61E9AD8BAC1B926A733A1AE07C67CDE"/>
+                    <ns2:IntermediateCertificate VOReference="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D"/>
+                </ns2:CertificateChain>
+                <ns2:CryptoInformation>
+                    <ns2:ValidationObjectId VOReference="S-639D3D318419109713B79B7CA3E3348B8F5FAC0FC6F6F696B6304EB0D3ADE3B2"/>
+                    <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                    <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                    <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                </ns2:CryptoInformation>
+                <ns2:AdditionalValidationReportData>
+                    <ns2:ReportData>
+                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for signature is not trusted, it does not contain a trust anchor.</ns2:Value>
+                    </ns2:ReportData>
+                    <ns2:ReportData>
+                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for signing certificate!</ns2:Value>
+                    </ns2:ReportData>
+                    <ns2:ReportData>
+                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for CA certificate!</ns2:Value>
+                    </ns2:ReportData>
+                </ns2:AdditionalValidationReportData>
+            </ns2:AssociatedValidationReportData>
+        </ns2:SignatureValidationStatus>
+    </ns2:SignatureValidationReport>
+    <ns2:SignatureValidationObjects>
+        <ns2:ValidationObject id="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:timestamp</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>0lGXYtwlIKL1W/w3xZ62zczT6gexeZofv6tb4e1hXeg=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:POEProvisioning>
+                <ns2:POETime>2014-11-12T07:03:15Z</ns2:POETime>
+                <ns2:ValidationObject VOReference="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D"/>
+                <ns2:ValidationObject VOReference="D-348220900DC56F542B7EDE9E45D51F0814B16EE7DBE35CEA2413D05D4EC1ECA1"/>
+                <ns2:SignatureReference>
+                    <ns2:CanonicalizationMethod>http://www.w3.org/2001/10/xml-exc-c14n#</ns2:CanonicalizationMethod>
+                    <ns2:DigestMethod>http://www.w3.org/2001/04/xmlenc#sha256</ns2:DigestMethod>
+                    <ns2:DigestValue>2U4eDyr9OlJfhdd7yTKSxgWAioQxxbvw7pNO12vL4Nk=</ns2:DigestValue>
+                </ns2:SignatureReference>
+            </ns2:POEProvisioning>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for time-stamp signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:pastSignatureValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:pastCertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationTimeSliding</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-D74AF393CF3B506DA33B46BC52B49CD6FAC12B2BDAA9CE1FBA25C0C1E4EBBE19"/>
+                    <ns2:Signer>Time Stamping Authority</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureQuality>
+                    <ns2:SignatureQualityInformation>urn:cef:dss:timestampQualification:notApplicable</ns2:SignatureQualityInformation>
+                </ns2:SignatureQuality>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-D74AF393CF3B506DA33B46BC52B49CD6FAC12B2BDAA9CE1FBA25C0C1E4EBBE19"/>
+                            <ns2:IntermediateCertificate VOReference="C-CFFA9C01EC59C29E718D0DD0EF5479F09B51C95780AFB7BD69D3C8054AFE4D28"/>
+                            <ns2:IntermediateCertificate VOReference="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38"/>
+                            <ns2:IntermediateCertificate VOReference="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for time-stamp signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>Fq9XqfZ2sKsSYJWqXrre8iqzERnWRKyVzUuT2/Pyaus=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>dfUhbBNcp9MEc3IyR+itYQT4Q6WYrOv4J2T1VuN41i0=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2014-11-12T07:03:15Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+                <ns2:POEObject VOReference="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256"/>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-846657709298D7E3BE131CB3F9FE47F66D76740BAC32B5608354C2DDC1060765">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>hGZXcJKY1+O+Exyz+f5H9m12dAusMrVgg1TC3cEGB2U=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>m7XMhCevJ2vyFqdIrSV4XResur3eQoLmBtpSYs2UDzg=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-A2BCB1E8523FBB23B9A277AFA0B67DA2E61E9AD8BAC1B926A733A1AE07C67CDE">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>oryx6FI/uyO5onevoLZ9ouYemti6wbkmpzOhrgfGfN4=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>qNFOlF4+UVa8rl45c3z2obH1ECi7v5gvUM5fTAVWi00=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-CFFA9C01EC59C29E718D0DD0EF5479F09B51C95780AFB7BD69D3C8054AFE4D28">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>z/qcAexZwp5xjQ3Q71R58JtRyVeAr7e9adPIBUr+TSg=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="C-D74AF393CF3B506DA33B46BC52B49CD6FAC12B2BDAA9CE1FBA25C0C1E4EBBE19">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:certificate</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>10rzk887UG2jO0a8UrSc1vrBKyvaqc4fuiXAweTrvhk=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="R-1B90709FD3C97EED90FAB0226865D98AE5C56E4F77937311483E136901E671F8">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:CRL</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>G5Bwn9PJfu2Q+rAiaGXZiuXFbk93k3MRSD4TaQHmcfg=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB"/>
+                    <ns2:Signer>Baltimore CyberTrust Root</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="R-1B90709FD3C97EED90FAB0226865D98AE5C56E4F77937311483E136901E671F8"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="R-911E968955C21DF1C909F177EEF0D73C7F7D580B3BC22929F895998FA40BCF34">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:CRL</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>kR6WiVXCHfHJCfF37vDXPH99WAs7wikp+JWZj6QLzzQ=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38"/>
+                    <ns2:Signer>Cybertrust Global Root</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38"/>
+                            <ns2:IntermediateCertificate VOReference="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="R-911E968955C21DF1C909F177EEF0D73C7F7D580B3BC22929F895998FA40BCF34"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="R-2D39D94CCE32917A8B5F8ADA67DEFBCBB7BEE8B27DC746106B144E20E419D03C">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:CRL</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>LTnZTM4ykXqLX4raZ977y7e+6LJ9x0YQaxROIOQZ0Dw=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-CFFA9C01EC59C29E718D0DD0EF5479F09B51C95780AFB7BD69D3C8054AFE4D28"/>
+                    <ns2:Signer>Belgium Root CA2</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-CFFA9C01EC59C29E718D0DD0EF5479F09B51C95780AFB7BD69D3C8054AFE4D28"/>
+                            <ns2:IntermediateCertificate VOReference="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38"/>
+                            <ns2:IntermediateCertificate VOReference="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="R-2D39D94CCE32917A8B5F8ADA67DEFBCBB7BEE8B27DC746106B144E20E419D03C"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="R-8581C4B61C9CF7B842F95C608DC96D60C3284E8BFF6055FAF0999F85029C07BA">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:OCSPResponse</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>hYHEthyc97hC+VxgjcltYMMoTov/YFX68JmfhQKcB7o=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-846657709298D7E3BE131CB3F9FE47F66D76740BAC32B5608354C2DDC1060765"/>
+                    <ns2:Signer>Belgium OCSP Responder</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-846657709298D7E3BE131CB3F9FE47F66D76740BAC32B5608354C2DDC1060765"/>
+                            <ns2:IntermediateCertificate VOReference="C-A2BCB1E8523FBB23B9A277AFA0B67DA2E61E9AD8BAC1B926A733A1AE07C67CDE"/>
+                            <ns2:IntermediateCertificate VOReference="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="R-8581C4B61C9CF7B842F95C608DC96D60C3284E8BFF6055FAF0999F85029C07BA"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for revocation data signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's CA certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="R-3E42EA07DBC855C53FEE0A86A3DBBCA69C989C491AACF2EE6B4AE1345492EC5B">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:CRL</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>PkLqB9vIVcU/7gqGo9u8ppyYnEkarPLua0rhNFSS7Fs=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2025-06-15T12:00:00Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+            </ns2:POE>
+            <ns2:ValidationReport>
+                <ns2:ValidationConstraintsEvaluationReport>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:formatChecking</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:identificationOfTheSigningCertificate</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:validationContextInitialization</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:disabled</ns2:Status>
+                        </ns2:ConstraintStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:cryptographicVerification</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:passed</ns2:MainIndication>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:signatureAcceptanceValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data signature!</ns2:Value>
+                                    </ns2:ReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                    <ns2:ValidationConstraint>
+                        <ns2:ValidationConstraintIdentifier>urn:cef:dss:bbb:x509CertificateValidation</ns2:ValidationConstraintIdentifier>
+                        <ns2:ConstraintStatus>
+                            <ns2:Status>urn:etsi:019102:constraintStatus:applied</ns2:Status>
+                        </ns2:ConstraintStatus>
+                        <ns2:ValidationStatus>
+                            <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                            <ns2:SubIndication>urn:etsi:019102:subindication:NO_CERTIFICATE_CHAIN_FOUND</ns2:SubIndication>
+                            <ns2:AssociatedValidationReportData>
+                                <ns2:AdditionalValidationReportData>
+                                    <ns2:ReportData>
+                                        <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                        <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                                    </ns2:ReportData>
+                                </ns2:AdditionalValidationReportData>
+                            </ns2:AssociatedValidationReportData>
+                        </ns2:ValidationStatus>
+                    </ns2:ValidationConstraint>
+                </ns2:ValidationConstraintsEvaluationReport>
+                <ns2:SignerInformation>
+                    <ns2:SignerCertificate VOReference="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D"/>
+                    <ns2:Signer>Belgium Root CA3</ns2:Signer>
+                </ns2:SignerInformation>
+                <ns2:SignatureValidationStatus>
+                    <ns2:MainIndication>urn:etsi:019102:mainindication:indeterminate</ns2:MainIndication>
+                    <ns2:SubIndication>urn:etsi:019102:subindication:CRYPTO_CONSTRAINTS_FAILURE_NO_POE</ns2:SubIndication>
+                    <ns2:AssociatedValidationReportData>
+                        <ns2:CertificateChain>
+                            <ns2:SigningCertificate VOReference="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D"/>
+                        </ns2:CertificateChain>
+                        <ns2:CryptoInformation>
+                            <ns2:ValidationObjectId VOReference="R-3E42EA07DBC855C53FEE0A86A3DBBCA69C989C491AACF2EE6B4AE1345492EC5B"/>
+                            <ns2:Algorithm>http://www.w3.org/2000/09/xmldsig#rsa-sha1</ns2:Algorithm>
+                            <ns2:SecureAlgorithm>false</ns2:SecureAlgorithm>
+                            <ns2:NotAfter>2012-08-01T00:00:00Z</ns2:NotAfter>
+                        </ns2:CryptoInformation>
+                        <ns2:AdditionalValidationReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data signature!</ns2:Value>
+                            </ns2:ReportData>
+                            <ns2:ReportData>
+                                <ns2:Type>urn:cef:dss:message:error</ns2:Type>
+                                <ns2:Value xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for revocation data's issuer certificate!</ns2:Value>
+                            </ns2:ReportData>
+                        </ns2:AdditionalValidationReportData>
+                    </ns2:AssociatedValidationReportData>
+                </ns2:SignatureValidationStatus>
+            </ns2:ValidationReport>
+        </ns2:ValidationObject>
+        <ns2:ValidationObject id="D-348220900DC56F542B7EDE9E45D51F0814B16EE7DBE35CEA2413D05D4EC1ECA1">
+            <ns2:ObjectType>urn:etsi:019102:validationObject:signedData</ns2:ObjectType>
+            <ns2:ValidationObjectRepresentation>
+                <ns2:DigestAlgAndValue>
+                    <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                    <DigestValue>CClyj5Bjeb5gDV3U/QjYuhzo7IM/xRul+bTh5lMpYk8=</DigestValue>
+                </ns2:DigestAlgAndValue>
+            </ns2:ValidationObjectRepresentation>
+            <ns2:POE>
+                <ns2:POETime>2014-11-12T07:03:15Z</ns2:POETime>
+                <ns2:TypeOfProof>urn:etsi:019102:poetype:validation</ns2:TypeOfProof>
+                <ns2:POEObject VOReference="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256"/>
+            </ns2:POE>
+        </ns2:ValidationObject>
+    </ns2:SignatureValidationObjects>
+</ns2:ValidationReport>

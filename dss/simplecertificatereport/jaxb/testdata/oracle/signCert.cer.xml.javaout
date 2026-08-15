@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+        All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+        target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+    </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-A8EBDDEA9BA7F78DAC4DA9F806EAA598F6143777A954BB74A223DA086495947C">
+        <subject>
+            <commonName>good-user</commonName>
+            <organizationName>Nowina Solutions</organizationName>
+            <organizationUnit>PKI-TEST</organizationUnit>
+            <country>LU</country>
+        </subject>
+        <notBefore>2019-02-07T09:37:12Z</notBefore>
+        <notAfter>2020-12-07T09:37:12Z</notAfter>
+        <keyUsages>
+            <keyUsage>nonRepudiation</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls>
+            <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/good-ca</ocspUrl>
+        </ocspUrls>
+        <crlUrls/>
+        <aiaUrls>
+            <aiaUrl>http://dss.nowina.lu/pki-factory/crt/good-ca.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls/>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <revocation/>
+        <trustAnchors/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+        </X509ValidationDetails>
+        <Chain/>
+    </Certificate>
+</SimpleCertificateReport>
