@@ -286,7 +286,11 @@ func getModifiedFieldNames(objectModifications []*jaxb.XmlObjectModification) []
 	var names []string
 	for _, objectModification := range objectModifications {
 		fieldName := objectModification.FieldName
-		if fieldName != nil && *fieldName != "" {
+		// Java guards on null only: an empty field name is a name, and it reaches
+		// AbstractPdfLockDictionaryCheck#process(), whose Level.FAIL branches turn an
+		// empty modified-field list into a PASS. Dropping "" here made SigFieldLockCheck
+		// and FieldMDPCheck answer OK where upstream answers NOT OK.
+		if fieldName != nil {
 			names = append(names, *fieldName)
 		}
 	}

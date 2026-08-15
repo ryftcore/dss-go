@@ -38,36 +38,50 @@ func (b *XmlPolicyBuilder) SetSignaturePolicyStore(signaturePolicyStore *model.S
 func (b *XmlPolicyBuilder) Build() *jaxb.XmlPolicy {
 	xmlPolicy := &jaxb.XmlPolicy{}
 
-	id := b.signaturePolicy.Identifier()
-	xmlPolicy.Id = &id
-	description := b.signaturePolicy.Description()
-	xmlPolicy.Description = &description
-	if utils.IsCollectionNotEmpty(b.signaturePolicy.DocumentationReferences()) {
-		xmlPolicy.DocumentationReferences = &jaxb.DocumentationReferencesWrapper{Items: b.signaturePolicy.DocumentationReferences()}
+	// Java setters take nullable Strings and a nullable List; a null leaves the member
+	// unset, which the generated pointer members express as nil. The Go accessors return
+	// plain strings, so "" is the null - assigning &"" would emit an empty <Id/>,
+	// <Description/> or <Url/> where the reference dumps carry no element at all.
+	if id := b.signaturePolicy.Identifier(); id != "" {
+		xmlPolicy.Id = &id
+	}
+	if description := b.signaturePolicy.Description(); description != "" {
+		xmlPolicy.Description = &description
+	}
+	// setDocumentationReferences(List) is unconditional: a non-null but empty list marshals
+	// as <DocumentationReferences/>, which the corpus carries, so the guard is nil-ness -
+	// not emptiness.
+	if documentationReferences := b.signaturePolicy.DocumentationReferences(); documentationReferences != nil {
+		xmlPolicy.DocumentationReferences = &jaxb.DocumentationReferencesWrapper{Items: documentationReferences}
 	}
 
-	url := spi.DSSUtilsRemoveControlCharacters(b.signaturePolicy.URI())
-	xmlPolicy.Url = &url
+	if url := spi.DSSUtilsRemoveControlCharacters(b.signaturePolicy.URI()); url != "" {
+		xmlPolicy.Url = &url
+	}
 	userNotice := b.signaturePolicy.UserNotice()
 	if userNotice != nil {
 		xmlUserNotice := &jaxb.XmlUserNotice{}
-		organization := userNotice.Organization()
-		xmlUserNotice.Organization = &organization
+		if organization := userNotice.Organization(); organization != "" {
+			xmlUserNotice.Organization = &organization
+		}
 		if len(userNotice.NoticeNumbers()) > 0 {
 			xmlUserNotice.NoticeNumbers = &jaxb.BigIntegerList{}
 			*xmlUserNotice.NoticeNumbers = append(*xmlUserNotice.NoticeNumbers, spi.DSSUtilsToBigIntegerList(userNotice.NoticeNumbers())...)
 		}
-		explicitText := userNotice.ExplicitText()
-		xmlUserNotice.ExplicitText = &explicitText
+		if explicitText := userNotice.ExplicitText(); explicitText != "" {
+			xmlUserNotice.ExplicitText = &explicitText
+		}
 		xmlPolicy.UserNotice = xmlUserNotice
 	}
 	spDocSpecification := b.signaturePolicy.DocSpecification()
 	if spDocSpecification != nil {
 		xmlSPDocSpecification := &jaxb.XmlSPDocSpecification{}
-		id := spDocSpecification.Id()
-		xmlSPDocSpecification.Id = &id
-		description := spDocSpecification.Description()
-		xmlSPDocSpecification.Description = &description
+		if id := spDocSpecification.Id(); id != "" {
+			xmlSPDocSpecification.Id = &id
+		}
+		if description := spDocSpecification.Description(); description != "" {
+			xmlSPDocSpecification.Description = &description
+		}
 		documentationReferences := spDocSpecification.DocumentationReferences()
 		if utils.IsArrayNotEmpty(documentationReferences) {
 			xmlSPDocSpecification.DocumentationReferences = &jaxb.DocumentationReferencesWrapper{Items: documentationReferences}
@@ -121,10 +135,12 @@ func (b *XmlPolicyBuilder) BuildSignaturePolicyStore() *jaxb.XmlSignaturePolicyS
 	xmlSignaturePolicyStore := &jaxb.XmlSignaturePolicyStore{}
 	spDocSpecification := b.signaturePolicyStore.SpDocSpecification()
 	if spDocSpecification != nil {
-		id := spDocSpecification.Id()
-		xmlSignaturePolicyStore.Id = &id
-		description := spDocSpecification.Description()
-		xmlSignaturePolicyStore.Description = &description
+		if id := spDocSpecification.Id(); id != "" {
+			xmlSignaturePolicyStore.Id = &id
+		}
+		if description := spDocSpecification.Description(); description != "" {
+			xmlSignaturePolicyStore.Description = &description
+		}
 		documentationReferences := spDocSpecification.DocumentationReferences()
 		if utils.IsArrayNotEmpty(documentationReferences) {
 			xmlSignaturePolicyStore.DocumentationReferences = &jaxb.DocumentationReferencesWrapper{Items: documentationReferences}
@@ -138,8 +154,9 @@ func (b *XmlPolicyBuilder) BuildSignaturePolicyStore() *jaxb.XmlSignaturePolicyS
 			xmlSignaturePolicyStore.DigestAlgoAndValue = b.getXmlDigestAlgoAndValue(recalculatedDigest)
 		}
 	}
-	sigPolDocLocalURI := b.signaturePolicyStore.SigPolDocLocalURI()
-	xmlSignaturePolicyStore.SigPolDocLocalURI = &sigPolDocLocalURI
+	if sigPolDocLocalURI := b.signaturePolicyStore.SigPolDocLocalURI(); sigPolDocLocalURI != "" {
+		xmlSignaturePolicyStore.SigPolDocLocalURI = &sigPolDocLocalURI
+	}
 
 	return xmlSignaturePolicyStore
 }

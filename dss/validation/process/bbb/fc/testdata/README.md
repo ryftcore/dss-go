@@ -5,17 +5,23 @@ Both files are pure Java dumps, produced by the drivers in `../../testdata/gen`.
 | file | rows | driver | input |
 | --- | --- | --- | --- |
 | `oracle/fc_blocks.jsonl` | 121 | `FcSavOracle.java` | `SignatureFormatChecking` / `TimestampFormatChecking` over every signature and time-stamp of the marshal-parity diagnostic-data corpus, default ETSI policy |
-| `oracle/fc_direct.jsonl` | 240 | `FcSavDirectOracle.java` | the ten fc checks the two chains never run under the default policy, each driven alone at `Level.FAIL` over the same corpus plus a few synthetic literals |
+| `oracle/fc_direct.jsonl` | 771 | `FcSavDirectOracle.java` | all 28 fc check classes driven alone at `Level.FAIL` - the ones the two chains never run under the default policy, and the ones the chains do run but the corpus never fails - over the same dumps plus explicitly built synthetic inputs |
 
 The real inputs are the marshal-parity corpus in `dss/diagnostic/jaxb/testdata/oracle`;
 the Go tests (`../fc_blocks_oracle_test.go`, `../fc_direct_oracle_test.go`) read the
 very same files, so neither side gets a private fixture.
 
 Four dumps (`model-deep.xml`, `model-empty.xml`, `model-full.xml`,
-`model-specials.xml`) are schema-coverage fixtures whose wrapper graph is
-incomplete; upstream's own wrappers throw on them, so they carry no rows for the
-tokens that throw. The Go tests iterate the rows, not the directory, so they skip
-exactly the same tokens.
+`model-specials.xml`) are schema-coverage fixtures, not validation output: every
+property of the generated model is filled by reflection from a counter. The blocks
+corpus carries no rows for the tokens upstream's own wrappers throw on, and the
+**direct corpus skips those four files entirely** - their IDREF graph is dangling
+(a `<SigningCertificate>` pointing at no `<Certificate>`: upstream's
+`getSigningCertificate()` answers null where the Go wrapper resolves an object) and
+their attribute values carry raw control characters (a literal TAB, which XML
+attribute-value normalisation turns into a space for the JCA parser but which
+`encoding/xml` keeps). Rows taken over them would compare two different inputs. The
+branches they used to reach are covered by explicit synthetic inputs instead.
 
 Every check class covered here has both an `OK` and a `NOT OK` row; the direct test
 fails if any check class ever loses one of the two.

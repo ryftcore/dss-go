@@ -59,6 +59,34 @@ import eu.europa.esig.dss.validation.process.bbb.fc.checks.FullScopeCheck;
 import eu.europa.esig.dss.validation.process.bbb.fc.checks.PDFAComplianceCheck;
 import eu.europa.esig.dss.validation.process.bbb.fc.checks.PDFAProfileCheck;
 import eu.europa.esig.dss.validation.process.bbb.fc.checks.ZipCommentPresentCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.ByteRangeCollisionCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.CAdESV3HashIndexCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.PdfVisualDifferenceCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.SignedFilesPresentCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.KeyIdentifierMatchCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.MessageDigestOrSignedPropertiesCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.SigningCertificateAttributePresentCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.SigningCertificateReferencesValidityCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.SigningTimeInCertificateValidityRangeCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.StructuralValidationCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.TSAGeneralNameValueMatchCheck;
+import eu.europa.esig.dss.validation.process.bbb.sav.checks.UnicitySigningCertificateAttributeCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.AcceptableMimetypeFileContentCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.AllFilesSignedCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.ContainerTypeCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.FieldMDPCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.FormatCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.ManifestFilePresentCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.MimeTypeFilePresentCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.PdfAnnotationOverlapCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.PdfSignatureDictionaryCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.ReferencesNotAmbiguousCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.SigFieldLockCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.SignatureNotAmbiguousCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.SignerInformationStoreCheck;
+import eu.europa.esig.dss.validation.process.bbb.fc.checks.UndefinedChangesCheck;
+import eu.europa.esig.dss.diagnostic.jaxb.XmlContainerInfo;
+
 import eu.europa.esig.dss.validation.process.bbb.sav.checks.AllCertificatesInPathReferencedCheck;
 import eu.europa.esig.dss.validation.process.bbb.sav.checks.ArchiveTimeStampCheck;
 import eu.europa.esig.dss.validation.process.bbb.sav.checks.CertifiedRolesCheck;
@@ -126,6 +154,21 @@ public class FcSavDirectOracle {
             for (File file : files) {
                 DiagnosticData dd;
                 String name = file.getName();
+                // The four model-*.xml dumps are schema-coverage fixtures, not validation
+                // output: every property of the generated model is filled by reflection from a
+                // counter. Their IDREF graph is dangling (e.g. <SigningCertificate> pointing at
+                // no <Certificate>) and their attribute values carry raw control characters,
+                // and the two runtimes resolve those edges differently - upstream's
+                // getSigningCertificate() answers null where the Go wrapper resolves an object,
+                // and the JCA parser normalises a literal TAB in an attribute value where
+                // encoding/xml keeps it. Rows taken over them would compare two different
+                // inputs, so the direct corpora skip them; the block corpora skip them already
+                // (upstream's own wrappers throw). Every row here comes from a real dump or
+                // from an explicitly built synthetic below.
+                if (name.startsWith("model-")) {
+                    System.err.println("SKIPPED-FIXTURE " + name);
+                    continue;
+                }
                 try {
                     XmlDiagnosticData jaxb = DiagnosticDataFacade.newFacade().unmarshall(file, false);
                     dd = new DiagnosticData(jaxb);
@@ -157,7 +200,72 @@ public class FcSavDirectOracle {
                                 (r, rule) -> new FormFillChangesCheck(i18n, r, rev, rule));
                     }
 
+                    // --- fc checks the chain does run, but which the corpus never fails:
+                    // driven alone so that both branches are recorded.
+                    fcRow(fc, i18n, name, signature.getId(), "ReferencesNotAmbiguousCheck",
+                            (r, rule) -> new ReferencesNotAmbiguousCheck(i18n, r, signature, rule));
+                    fcRow(fc, i18n, name, signature.getId(), "SignatureNotAmbiguousCheck",
+                            (r, rule) -> new SignatureNotAmbiguousCheck(i18n, r, signature, rule));
+                    fcRow(fc, i18n, name, signature.getId(), "SignerInformationStoreCheck",
+                            (r, rule) -> new SignerInformationStoreCheck(i18n, r, signature, rule));
+                    fcRowV(fc, i18n, name, signature.getId(), "FormatCheck-any",
+                            (r, rule) -> new FormatCheck(i18n, r, signature, ANY));
+                    fcRowV(fc, i18n, name, signature.getId(), "FormatCheck-none",
+                            (r, rule) -> new FormatCheck(i18n, r, signature, NONE));
+                    if (rev != null) {
+                        fcRow(fc, i18n, name, signature.getId(), "PdfSignatureDictionaryCheck",
+                                (r, rule) -> new PdfSignatureDictionaryCheck(i18n, r, rev, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "PdfAnnotationOverlapCheck",
+                                (r, rule) -> new PdfAnnotationOverlapCheck(i18n, r, rev, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "UndefinedChangesCheck",
+                                (r, rule) -> new UndefinedChangesCheck(i18n, r, rev, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "SigFieldLockCheck",
+                                (r, rule) -> new SigFieldLockCheck(i18n, r, rev, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "FieldMDPCheck",
+                                (r, rule) -> new FieldMDPCheck(i18n, r, rev, rule));
+                    }
+                    final XmlContainerInfo containerInfo = diagnosticData.getContainerInfo();
+                    if (containerInfo != null) {
+                        fcRow(fc, i18n, name, signature.getId(), "AllFilesSignedCheck",
+                                (r, rule) -> new AllFilesSignedCheck(i18n, r, signature, containerInfo, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "SignedFilesPresentCheck",
+                                (r, rule) -> new SignedFilesPresentCheck(i18n, r, containerInfo, rule));
+                        fcRow(fc, i18n, name, signature.getId(), "ManifestFilePresentCheck",
+                                (r, rule) -> new ManifestFilePresentCheck(i18n, r, containerInfo, rule));
+                        fcRowV(fc, i18n, name, signature.getId(), "ContainerTypeCheck-any",
+                                (r, rule) -> new ContainerTypeCheck(i18n, r, containerInfo.getContainerType(), ANY));
+                        fcRowV(fc, i18n, name, signature.getId(), "ContainerTypeCheck-none",
+                                (r, rule) -> new ContainerTypeCheck(i18n, r, containerInfo.getContainerType(), NONE));
+                        fcRowV(fc, i18n, name, signature.getId(), "AcceptableMimetypeFileContentCheck-any",
+                                (r, rule) -> new AcceptableMimetypeFileContentCheck(
+                                        i18n, r, containerInfo.getMimeTypeContent(), ANY));
+                        fcRowV(fc, i18n, name, signature.getId(), "AcceptableMimetypeFileContentCheck-none",
+                                (r, rule) -> new AcceptableMimetypeFileContentCheck(
+                                        i18n, r, containerInfo.getMimeTypeContent(), NONE));
+                    }
+
+                    fcRow(fc, i18n, name, signature.getId(), "ByteRangeCollisionCheck",
+                            (r, rule) -> new ByteRangeCollisionCheck(i18n, r, signature, diagnosticData, rule));
+                    if (rev != null) {
+                        fcRow(fc, i18n, name, signature.getId(), "PdfVisualDifferenceCheck",
+                                (r, rule) -> new PdfVisualDifferenceCheck(i18n, r, rev, rule));
+                    }
+
                     // --- sav, over the signature
+                    savRow(sav, i18n, name, signature.getId(), "KeyIdentifierMatchCheck",
+                            (r, rule) -> new KeyIdentifierMatchCheck(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "MessageDigestOrSignedPropertiesCheck",
+                            (r, rule) -> new MessageDigestOrSignedPropertiesCheck(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "SigningCertificateAttributePresentCheck",
+                            (r, rule) -> new SigningCertificateAttributePresentCheck(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "SigningCertificateReferencesValidityCheck",
+                            (r, rule) -> new SigningCertificateReferencesValidityCheck(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "SigningTimeInCertificateValidityRangeCheck",
+                            (r, rule) -> new SigningTimeInCertificateValidityRangeCheck<>(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "StructuralValidationCheck",
+                            (r, rule) -> new StructuralValidationCheck(i18n, r, signature, rule));
+                    savRow(sav, i18n, name, signature.getId(), "UnicitySigningCertificateAttributeCheck",
+                            (r, rule) -> new UnicitySigningCertificateAttributeCheck(i18n, r, signature, rule));
                     savRow(sav, i18n, name, signature.getId(), "AllCertificatesInPathReferencedCheck",
                             (r, rule) -> new AllCertificatesInPathReferencedCheck(i18n, r, signature, rule));
                     savRow(sav, i18n, name, signature.getId(), "ArchiveTimeStampCheck",
@@ -247,6 +355,10 @@ public class FcSavDirectOracle {
                     // default policy leaves its constraint undefined, so the corpus never runs it.
                     savRow(sav, i18n, name, timestamp.getId(), "TimestampMessageImprintWithIdCheck",
                             (r, rule) -> new TimestampMessageImprintWithIdCheck<>(i18n, r, timestamp, rule));
+                    fcRow(fc, i18n, name, timestamp.getId(), "CAdESV3HashIndexCheck",
+                            (r, rule) -> new CAdESV3HashIndexCheck(i18n, r, timestamp, rule));
+                    savRow(sav, i18n, name, timestamp.getId(), "TSAGeneralNameValueMatchCheck",
+                            (r, rule) -> new TSAGeneralNameValueMatchCheck(i18n, r, timestamp, rule));
                     savRow(sav, i18n, name, timestamp.getId(), "TSAGeneralNameFieldPresentCheck",
                             (r, rule) -> new TSAGeneralNameFieldPresentCheck(i18n, r, timestamp, rule));
                     savRow(sav, i18n, name, timestamp.getId(), "TSAGeneralNameOrderMatchCheck",
@@ -265,6 +377,54 @@ public class FcSavDirectOracle {
                 fcRowV(fc, i18n, "synthetic", "zip-comment-" + label + "-none", "AcceptableZipCommentCheck",
                         (r, rule) -> new AcceptableZipCommentCheck(i18n, r, zipComment, NONE));
             }
+            // --- the branches no corpus dump reaches
+            {
+                DiagnosticData badByteRangeData = failingByteRangeDiagnosticData();
+                fcRow(fc, i18n, "synthetic", "byte-range-invalid", "ByteRangeAllDocumentCheck",
+                        (r, rule) -> new ByteRangeAllDocumentCheck(i18n, r, badByteRangeData, rule));
+
+                final SignatureWrapper duplicatedRef = signatureWithDuplicatedReference();
+                fcRow(fc, i18n, "synthetic", "duplicated-reference", "ReferencesNotAmbiguousCheck",
+                        (r, rule) -> new ReferencesNotAmbiguousCheck(i18n, r, duplicatedRef, rule));
+
+                final SignatureWrapper duplicatedSig = signatureWithDuplicatedSignature();
+                fcRow(fc, i18n, "synthetic", "duplicated-signature", "SignatureNotAmbiguousCheck",
+                        (r, rule) -> new SignatureNotAmbiguousCheck(i18n, r, duplicatedSig, rule));
+
+                final PDFRevisionWrapper failingRevision = failingPdfRevision();
+                fcRow(fc, i18n, "synthetic", "failing-revision", "DocMDPCheck",
+                        (r, rule) -> new DocMDPCheck(i18n, r, failingRevision, rule));
+                fcRow(fc, i18n, "synthetic", "failing-revision", "SigFieldLockCheck",
+                        (r, rule) -> new SigFieldLockCheck(i18n, r, failingRevision, rule));
+                fcRow(fc, i18n, "synthetic", "failing-revision", "FieldMDPCheck",
+                        (r, rule) -> new FieldMDPCheck(i18n, r, failingRevision, rule));
+                fcRow(fc, i18n, "synthetic", "failing-revision", "PdfSignatureDictionaryCheck",
+                        (r, rule) -> new PdfSignatureDictionaryCheck(i18n, r, failingRevision, rule));
+                fcRow(fc, i18n, "synthetic", "failing-revision", "PdfAnnotationOverlapCheck",
+                        (r, rule) -> new PdfAnnotationOverlapCheck(i18n, r, failingRevision, rule));
+
+                final SignatureWrapper contentAttrs = signatureWithContentAttributes();
+                savRowV(sav, i18n, "synthetic", "content-attrs", "ContentHintsCheck-any",
+                        (r, rule) -> new ContentHintsCheck(i18n, r, contentAttrs, ANY));
+                savRowV(sav, i18n, "synthetic", "content-attrs", "ContentIdentifierCheck-any",
+                        (r, rule) -> new ContentIdentifierCheck(i18n, r, contentAttrs, ANY));
+            }
+            {
+                XmlContainerInfo emptyContainer = new XmlContainerInfo();
+                emptyContainer.setContainerType(eu.europa.esig.dss.enumerations.ASiCContainerType.ASiC_E);
+                fcRow(fc, i18n, "synthetic", "no-content-files", "SignedFilesPresentCheck",
+                        (r, rule) -> new SignedFilesPresentCheck(i18n, r, emptyContainer, rule));
+
+                final SignatureWrapper kidSignature = signatureWithMismatchedKeyIdentifier();
+                savRow(sav, i18n, "synthetic", "kid-mismatch", "KeyIdentifierMatchCheck",
+                        (r, rule) -> new KeyIdentifierMatchCheck(i18n, r, kidSignature, rule));
+
+                DiagnosticData collidingData = collidingByteRangeDiagnosticData();
+                final SignatureWrapper collidingSignature = collidingData.getSignatures().get(0);
+                fcRow(fc, i18n, "synthetic", "byte-range-collision", "ByteRangeCollisionCheck",
+                        (r, rule) -> new ByteRangeCollisionCheck(i18n, r, collidingSignature, collidingData, rule));
+            }
+
             // --- aov: AlgorithmObsolescenceValidationCheck at each conclusion shape. The
             // corpus SAV rows only ever feed it a clean PASSED XmlAOV; these pin the Level it
             // derives from errors/warnings/infos, its additional-info rendering (which is the
@@ -307,6 +467,11 @@ public class FcSavDirectOracle {
                         (r, rule) -> new EllipticCurveKeySizeCheck(i18n, r, ecSignature, rule));
             }
 
+            for (boolean present : new boolean[] { true, false }) {
+                final boolean mimetypePresent = present;
+                fcRow(fc, i18n, "synthetic", "mimetype-present-" + present, "MimeTypeFilePresentCheck",
+                        (r, rule) -> new MimeTypeFilePresentCheck(i18n, r, mimetypePresent, rule));
+            }
             for (boolean compliant : new boolean[] { true, false }) {
                 final boolean pdfaCompliant = compliant;
                 fcRow(fc, i18n, "synthetic", "pdfa-compliant-" + compliant, "PDFAComplianceCheck",
@@ -325,6 +490,148 @@ public class FcSavDirectOracle {
 
     /** Fixed validation time, shared with the AOV additional-info rendering. */
     private static final java.util.Date CURRENT_TIME = new java.util.Date(1704067200000L);
+
+    /** A dump whose single PAdES signature carries an invalid /ByteRange. */
+    private static DiagnosticData failingByteRangeDiagnosticData() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlDiagnosticData jaxb =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlDiagnosticData();
+        eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlSignature();
+        xml.setId("S-BAD-BYTERANGE");
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary dictionary =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary();
+        eu.europa.esig.dss.diagnostic.jaxb.XmlByteRange byteRange =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlByteRange();
+        byteRange.getValue().addAll(java.util.Arrays.asList(
+                java.math.BigInteger.ZERO, java.math.BigInteger.valueOf(100),
+                java.math.BigInteger.valueOf(200), java.math.BigInteger.valueOf(300)));
+        byteRange.setValid(false);
+        dictionary.setSignatureByteRange(byteRange);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision revision =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision();
+        revision.setPDFSignatureDictionary(dictionary);
+        xml.setPDFRevision(revision);
+        jaxb.getSignatures().add(xml);
+        return new DiagnosticData(jaxb);
+    }
+
+    /** A signature carrying a duplicated digest-matcher reference. */
+    private static SignatureWrapper signatureWithDuplicatedReference() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml = baseSignature();
+        eu.europa.esig.dss.diagnostic.jaxb.XmlDigestMatcher matcher =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlDigestMatcher();
+        matcher.setType(eu.europa.esig.dss.enumerations.DigestMatcherType.REFERENCE);
+        matcher.setUri("#r-id");
+        matcher.setDuplicated(true);
+        xml.getDigestMatchers().add(matcher);
+        return new SignatureWrapper(xml);
+    }
+
+    /** A signature flagged as duplicated. */
+    private static SignatureWrapper signatureWithDuplicatedSignature() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml = baseSignature();
+        xml.setDuplicated(true);
+        return new SignatureWrapper(xml);
+    }
+
+    /** A PDF revision that fails every lock / consistency / overlap check. */
+    private static PDFRevisionWrapper failingPdfRevision() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision revision =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision();
+
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary dictionary =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary();
+        dictionary.setConsistent(false);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFLockDictionary lock =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFLockDictionary();
+        lock.setAction(eu.europa.esig.dss.enumerations.PdfLockAction.ALL);
+        lock.setPermissions(eu.europa.esig.dss.enumerations.CertificationPermission.NO_CHANGE_PERMITTED);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlDocMDP docMDP =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlDocMDP();
+        docMDP.setPermissions(eu.europa.esig.dss.enumerations.CertificationPermission.NO_CHANGE_PERMITTED);
+        dictionary.setDocMDP(docMDP);
+        dictionary.setFieldMDP(lock);
+        revision.setPDFSignatureDictionary(dictionary);
+
+        eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureField field =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureField();
+        field.setSigFieldLock(lock);
+        revision.getFields().add(field);
+
+        eu.europa.esig.dss.diagnostic.jaxb.XmlObjectModification modification =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlObjectModification();
+        modification.setFieldName("field-1");
+        eu.europa.esig.dss.diagnostic.jaxb.XmlObjectModifications modifications =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlObjectModifications();
+        modifications.getUndefined().add(modification);
+        revision.setModificationDetection(new eu.europa.esig.dss.diagnostic.jaxb.XmlModificationDetection());
+        revision.getModificationDetection().setObjectModifications(modifications);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlModification overlap =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlModification();
+        overlap.setPage(java.math.BigInteger.ONE);
+        revision.getModificationDetection().getAnnotationOverlap().add(overlap);
+
+        return new PDFRevisionWrapper(revision);
+    }
+
+    /** A signature carrying content-type / content-hints / content-identifier attributes. */
+    private static SignatureWrapper signatureWithContentAttributes() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml = baseSignature();
+        xml.setContentType("1.2.840.113549.1.7.1");
+        xml.setContentHints("content-hints");
+        xml.setContentIdentifier("content-identifier");
+        return new SignatureWrapper(xml);
+    }
+
+    /** A signature whose key-identifier reference does not match the issuer serial. */
+    private static SignatureWrapper signatureWithMismatchedKeyIdentifier() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml = baseSignature();
+        eu.europa.esig.dss.diagnostic.jaxb.XmlCertificateRef ref =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlCertificateRef();
+        ref.setOrigin(eu.europa.esig.dss.enumerations.CertificateRefOrigin.KEY_IDENTIFIER);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlIssuerSerial issuerSerial =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlIssuerSerial();
+        issuerSerial.setValue(new byte[] { 1, 2, 3 });
+        issuerSerial.setMatch(false);
+        ref.setIssuerSerial(issuerSerial);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlCertificate certificate =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlCertificate();
+        certificate.setId("C-SYNTHETIC");
+        eu.europa.esig.dss.diagnostic.jaxb.XmlRelatedCertificate related =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlRelatedCertificate();
+        related.setCertificate(certificate);
+        related.getCertificateRefs().add(ref);
+        eu.europa.esig.dss.diagnostic.jaxb.XmlFoundCertificates found =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlFoundCertificates();
+        found.getRelatedCertificates().add(related);
+        xml.setFoundCertificates(found);
+        return new SignatureWrapper(xml);
+    }
+
+    /** Two PAdES signatures whose /ByteRange intervals overlap. */
+    private static DiagnosticData collidingByteRangeDiagnosticData() {
+        eu.europa.esig.dss.diagnostic.jaxb.XmlDiagnosticData jaxb =
+                new eu.europa.esig.dss.diagnostic.jaxb.XmlDiagnosticData();
+        for (int i = 0; i < 2; i++) {
+            eu.europa.esig.dss.diagnostic.jaxb.XmlSignature xml =
+                    new eu.europa.esig.dss.diagnostic.jaxb.XmlSignature();
+            xml.setId("S-COLLIDE-" + i);
+            eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary dictionary =
+                    new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFSignatureDictionary();
+            eu.europa.esig.dss.diagnostic.jaxb.XmlByteRange byteRange =
+                    new eu.europa.esig.dss.diagnostic.jaxb.XmlByteRange();
+            byteRange.getValue().addAll(java.util.Arrays.asList(
+                    java.math.BigInteger.ZERO, java.math.BigInteger.valueOf(100),
+                    java.math.BigInteger.valueOf(200), java.math.BigInteger.valueOf(300)));
+            dictionary.setSignatureByteRange(byteRange);
+            eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision revision =
+                    new eu.europa.esig.dss.diagnostic.jaxb.XmlPDFRevision();
+            revision.setPDFSignatureDictionary(dictionary);
+            xml.setPDFRevision(revision);
+            jaxb.getSignatures().add(xml);
+        }
+        return new DiagnosticData(jaxb);
+    }
 
     /** An XmlAOV whose conclusion carries the requested message shape. */
     private static XmlAOV aovOfShape(String shape) {

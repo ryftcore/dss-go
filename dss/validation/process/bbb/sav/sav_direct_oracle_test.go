@@ -162,11 +162,35 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 	}
 
 	for _, name := range files {
+		if strings.HasPrefix(name, "model-") {
+			continue // schema-coverage fixture, excluded from the direct corpus (see README)
+		}
 		diagnosticData := loadSAVDiagnosticData(t, name)
 		for _, signature := range diagnosticData.Signatures() {
 			sig := signature
 			id := sig.Id()
 
+			run(name, id, "KeyIdentifierMatchCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewKeyIdentifierMatchCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "MessageDigestOrSignedPropertiesCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewMessageDigestOrSignedPropertiesCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "SigningCertificateAttributePresentCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewSigningCertificateAttributePresentCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "SigningCertificateReferencesValidityCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewSigningCertificateReferencesValidityCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "SigningTimeInCertificateValidityRangeCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewSigningTimeInCertificateValidityRangeCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "StructuralValidationCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewStructuralValidationCheck(i18nProvider, r, sig, rule)
+			})
+			run(name, id, "UnicitySigningCertificateAttributeCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewUnicitySigningCertificateAttributeCheck(i18nProvider, r, sig, rule)
+			})
 			run(name, id, "AllCertificatesInPathReferencedCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
 				return NewAllCertificatesInPathReferencedCheck(i18nProvider, r, sig, rule)
 			})
@@ -273,6 +297,9 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 		}
 		for _, timestamp := range allTimestamps {
 			tst := timestamp
+			run(name, tst.Id(), "TSAGeneralNameValueMatchCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+				return NewTSAGeneralNameValueMatchCheck(i18nProvider, r, tst, rule)
+			})
 			run(name, tst.Id(), "TimestampMessageImprintWithIdCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
 				return vpfltvd.NewTimestampMessageImprintWithIdCheck(i18nProvider, r, tst, rule)
 			})
@@ -319,6 +346,19 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 	})
 	run("synthetic", "x509url", "X509UrlMatchCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
 		return NewX509UrlMatchCheck(i18nProvider, r, x509Signature, rule)
+	})
+
+	contentAttrs := savSignatureWithContentAttributes()
+	run("synthetic", "content-attrs", "ContentHintsCheck-any", func(r *process.Result[*jaxb.XmlSAV], _ policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+		return NewContentHintsCheck(i18nProvider, r, contentAttrs, savAnyRule)
+	})
+	run("synthetic", "content-attrs", "ContentIdentifierCheck-any", func(r *process.Result[*jaxb.XmlSAV], _ policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+		return NewContentIdentifierCheck(i18nProvider, r, contentAttrs, savAnyRule)
+	})
+
+	kidSignature := savSignatureWithMismatchedKeyIdentifier()
+	run("synthetic", "kid-mismatch", "KeyIdentifierMatchCheck", func(r *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
+		return NewKeyIdentifierMatchCheck(i18nProvider, r, kidSignature, rule)
 	})
 
 	vdRefsSignature := savSignatureWithValidationDataRefsOnlyTimestamp()
@@ -456,4 +496,36 @@ func aovOfShape(shape string) *jaxb.XmlAOV {
 func aovMessage(key, value string) *jaxb.XmlMessage {
 	k := key
 	return &jaxb.XmlMessage{Key: &k, Value: value}
+}
+
+// savSignatureWithMismatchedKeyIdentifier mirrors the oracle's synthetic signature whose
+// KEY_IDENTIFIER reference does not match the issuer serial.
+func savSignatureWithMismatchedKeyIdentifier() *diagnostic.SignatureWrapper {
+	xml := savBaseSignature()
+	certificateId := diagjaxb.CollapsedString("C-SYNTHETIC")
+	certificate := &diagjaxb.XmlCertificate{}
+	certificate.Id = &certificateId
+
+	match := false
+	origin := diagjaxb.CertificateRefOriginValue(enumerations.CertificateRefOrigin_KEY_IDENTIFIER)
+	ref := &diagjaxb.XmlCertificateRef{
+		Origin:       &origin,
+		IssuerSerial: &diagjaxb.XmlIssuerSerial{Value: diagjaxb.Base64Binary([]byte{1, 2, 3}), Match: &match},
+	}
+	related := &diagjaxb.XmlRelatedCertificate{Certificate: certificate}
+	related.CertificateRef = []*diagjaxb.XmlCertificateRef{ref}
+	xml.FoundCertificates = &diagjaxb.XmlFoundCertificates{
+		RelatedCertificate: []*diagjaxb.XmlRelatedCertificate{related},
+	}
+	return diagnostic.NewSignatureWrapper(xml)
+}
+
+// savSignatureWithContentAttributes carries content-type / content-hints /
+// content-identifier attributes.
+func savSignatureWithContentAttributes() *diagnostic.SignatureWrapper {
+	xml := savBaseSignature()
+	xml.ContentType = strPtr("1.2.840.113549.1.7.1")
+	xml.ContentHints = strPtr("content-hints")
+	xml.ContentIdentifier = strPtr("content-identifier")
+	return diagnostic.NewSignatureWrapper(xml)
 }
