@@ -22,10 +22,12 @@ func NewDrivingPrivilegeCodesClaimWrapper(wrapped *jaxb.XmlDrivingPrivilegeCodes
 // NewDrivingPrivilegeCodesClaimWrapperWithParent is the constructor with a parent provided. Port
 // of DrivingPrivilegeCodesClaimWrapper(XmlDrivingPrivilegeCodesClaim, ClaimWrapper).
 func NewDrivingPrivilegeCodesClaimWrapperWithParent(wrapped *jaxb.XmlDrivingPrivilegeCodesClaim, parent *ClaimWrapper) *DrivingPrivilegeCodesClaimWrapper {
-	return &DrivingPrivilegeCodesClaimWrapper{
+	w := &DrivingPrivilegeCodesClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // Codes gets a list of codes information for the given driving privilege. Port of getCodes():

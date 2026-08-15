@@ -18,10 +18,12 @@ type AttestedAttributesSubjectClaimWrapper struct {
 // NewAttestedAttributesSubjectClaimWrapper is the default constructor. Port of
 // AttestedAttributesSubjectClaimWrapper(XmlAttestedAttributesSubjectClaim).
 func NewAttestedAttributesSubjectClaimWrapper(wrapped *jaxb.XmlAttestedAttributesSubjectClaim) *AttestedAttributesSubjectClaimWrapper {
-	return &AttestedAttributesSubjectClaimWrapper{
+	w := &AttestedAttributesSubjectClaimWrapper{
 		ClaimWrapper: *NewClaimWrapper(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs)),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // SubjectId gets the status's unique index identifier (sic, the Java Javadoc is copy-pasted

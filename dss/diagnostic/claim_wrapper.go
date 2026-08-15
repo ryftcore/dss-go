@@ -76,6 +76,51 @@ type ClaimWrapper struct {
 	// package overrides one of isList()/getList() without the other, so - unlike the map case -
 	// one field can drive both.
 	listOverride []*ClaimWrapper
+
+	// overrides points back at the embedding claim subtype, so that the base bodies Java
+	// inherits unchanged - isNull(), isEmpty() and getDisplayValue() - reach a subtype's
+	// isList()/getList()/isMap()/getMap() override the way Java's virtual dispatch does. nil
+	// means "no subtype embeds this wrapper", i.e. dispatch to the base itself. See
+	// InitClaimOverrides.
+	overrides ClaimWrapperOverrides
+}
+
+// ClaimWrapperOverrides declares the four ClaimWrapper operations a claim subtype may override
+// in Java and that ClaimWrapper's own inherited bodies call back into: isNull(), isEmpty() and
+// getDisplayValue() are declared once on ClaimWrapper and never overridden, yet each of them
+// self-calls isList()/getList()/isMap()/getMap(), which Java resolves against the concrete
+// subtype. Go promotes those base bodies to the subtype unchanged and would resolve the
+// self-calls against the base, so a subtype registers itself with InitClaimOverrides and the
+// three inherited bodies route through this interface instead.
+//
+// This is deliberately narrower than the mapOverride/listOverride fields above: those exist so a
+// subtype's override survives the *copy* AsClaim() hands out as a plain *ClaimWrapper, whereas
+// this interface restores dispatch on the subtype value itself.
+type ClaimWrapperOverrides interface {
+	// IsList reports whether the claim value is of a list type. Port of isList().
+	IsList() bool
+	// List returns the claim value as a list. Port of getList().
+	List() []*ClaimWrapper
+	// IsMap reports whether the claim value is of a map type. Port of isMap().
+	IsMap() bool
+	// Map returns the claim value as a map. Port of getMap().
+	Map() map[string]*ClaimWrapper
+}
+
+// InitClaimOverrides registers the embedding claim subtype with its ClaimWrapper base so the
+// base's inherited IsNull/IsEmpty/DisplayValue bodies dispatch to that subtype's
+// IsList/List/IsMap/Map, as Java's virtual dispatch does. A subtype that overrides any of the
+// four calls it from each of its constructors; a plain ClaimWrapper never does.
+func (c *ClaimWrapper) InitClaimOverrides(overrides ClaimWrapperOverrides) {
+	c.overrides = overrides
+}
+
+// claimOverrides returns the registered subtype, or the wrapper itself when none was registered.
+func (c *ClaimWrapper) claimOverrides() ClaimWrapperOverrides {
+	if c.overrides == nil {
+		return c
+	}
+	return c.overrides
 }
 
 // NewClaimWrapper is the default constructor. Port of ClaimWrapper(XmlClaim); panics per
@@ -225,8 +270,9 @@ func (c *ClaimWrapper) IsMap() bool {
 
 // IsNull gets whether the claim is of no known type. Port of isNull().
 func (c *ClaimWrapper) IsNull() bool {
+	o := c.claimOverrides()
 	return !c.IsText() && !c.IsNumber() && !c.IsBoolean() && !c.IsBinary() && !c.IsDateTime() &&
-		c.List() == nil && c.Map() == nil
+		o.List() == nil && o.Map() == nil
 }
 
 // Wrapped gets the wrapped JAXB claim object. Port of getWrapped().
@@ -241,12 +287,14 @@ func (c *ClaimWrapper) Parent() *ClaimWrapper { return c.parent }
 // The Java source itself flags this with a "// TODO : review" comment; reproduced verbatim here,
 // inversion included, rather than "fixed".
 func (c *ClaimWrapper) IsEmpty() bool {
-	return c.IsText() || c.IsNumber() || c.IsBoolean() || c.IsDateTime() || c.IsList() || c.IsMap()
+	o := c.claimOverrides()
+	return c.IsText() || c.IsNumber() || c.IsBoolean() || c.IsDateTime() || o.IsList() || o.IsMap()
 }
 
 // DisplayValue converts the claim's value to its corresponding string representation. Port of
 // getDisplayValue().
 func (c *ClaimWrapper) DisplayValue() string {
+	o := c.claimOverrides()
 	switch {
 	case c.IsText():
 		return c.Text()
@@ -261,10 +309,10 @@ func (c *ClaimWrapper) DisplayValue() string {
 		return base64.StdEncoding.EncodeToString(c.Binary())
 	case c.IsDateTime():
 		return c.DateTime().UTC().Format(claimDateTimeFormat)
-	case c.IsList():
-		return claimListDisplayValue(c.List())
-	case c.IsMap():
-		return claimMapDisplayValue(c.Map())
+	case o.IsList():
+		return claimListDisplayValue(o.List())
+	case o.IsMap():
+		return claimMapDisplayValue(o.Map())
 	case c.IsNull():
 		return "null"
 	default:

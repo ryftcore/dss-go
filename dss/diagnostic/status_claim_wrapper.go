@@ -15,10 +15,12 @@ type StatusClaimWrapper struct {
 
 // NewStatusClaimWrapper is the default constructor. Port of StatusClaimWrapper(XmlStatusClaim).
 func NewStatusClaimWrapper(wrapped *jaxb.XmlStatusClaim) *StatusClaimWrapper {
-	return &StatusClaimWrapper{
+	w := &StatusClaimWrapper{
 		ClaimWrapper: *NewClaimWrapper(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs)),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // StatusList gets the status list. Port of getStatusList().

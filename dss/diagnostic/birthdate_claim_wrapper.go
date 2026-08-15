@@ -28,10 +28,12 @@ func NewBirthdateClaimWrapper(wrapped *jaxb.XmlBirthdateClaim) *BirthdateClaimWr
 // NewBirthdateClaimWrapperWithParent is the constructor with a parent claim provided. Port of
 // BirthdateClaimWrapper(XmlClaim, ClaimWrapper).
 func NewBirthdateClaimWrapperWithParent(wrapped *jaxb.XmlBirthdateClaim, parent *ClaimWrapper) *BirthdateClaimWrapper {
-	return &BirthdateClaimWrapper{
+	w := &BirthdateClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // Birthdate gets the user's birthdate. Port of getBirthdate() (the wrapped instanceof
@@ -41,7 +43,11 @@ func (w *BirthdateClaimWrapper) Birthdate() *ClaimWrapper {
 		return NewClaimWrapperWithParent(w.wrapped.Birthdate, &w.ClaimWrapper)
 	}
 	if w.IsDateTime() {
-		return w.AsClaim()
+		// Java returns `this`. Returning w.AsClaim() here would recurse - AsClaim() computes
+		// Map(), and Map() calls this getter - so the embedded base is returned instead; it is
+		// the same object rather than a copy, and InitClaimOverrides has already pointed its
+		// IsNull/IsEmpty/DisplayValue back at this subtype, which is what Java's `this` provides.
+		return &w.ClaimWrapper
 	}
 	return nil
 }
@@ -61,7 +67,12 @@ func (w *BirthdateClaimWrapper) ApproximateMask() *ClaimWrapper {
 // isMap() (the wrapped instanceof XmlBirthdateClaim conjunct is always true here, see the file
 // note above).
 func (w *BirthdateClaimWrapper) IsMap() bool {
-	return !w.IsDateTime()
+	if !w.IsDateTime() {
+		return true
+	}
+	// Java falls through to super.isMap() rather than returning false, so a birthdate claim that
+	// carries both a DateTime value and Entry children is still a map.
+	return w.ClaimWrapper.IsMap()
 }
 
 // Map is the override, assembling the map from the dedicated birthdate child claims when IsMap

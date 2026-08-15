@@ -16,10 +16,12 @@ type ValidityInfoClaimWrapper struct {
 // NewValidityInfoClaimWrapper is the default constructor. Port of
 // ValidityInfoClaimWrapper(XmlValidityInfoClaim).
 func NewValidityInfoClaimWrapper(wrapped *jaxb.XmlValidityInfoClaim) *ValidityInfoClaimWrapper {
-	return &ValidityInfoClaimWrapper{
+	w := &ValidityInfoClaimWrapper{
 		ClaimWrapper: *NewClaimWrapper(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs)),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // Signed gets the timestamp at which the MSO signature was created. Port of getSigned().

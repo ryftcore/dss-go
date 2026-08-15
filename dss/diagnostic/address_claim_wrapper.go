@@ -20,10 +20,12 @@ func NewAddressClaimWrapper(wrapped *jaxb.XmlAddressClaim) *AddressClaimWrapper 
 // NewAddressClaimWrapperWithParent is the constructor with a parent provided. Port of
 // AddressClaimWrapper(XmlAddressClaim, ClaimWrapper).
 func NewAddressClaimWrapperWithParent(wrapped *jaxb.XmlAddressClaim, parent *ClaimWrapper) *AddressClaimWrapper {
-	return &AddressClaimWrapper{
+	w := &AddressClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // PostalAddress gets the user's full postal or mailing address, formatted, when present. Port

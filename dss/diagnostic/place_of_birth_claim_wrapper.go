@@ -38,19 +38,23 @@ func NewPlaceOfBirthClaimWrapper(wrapped *jaxb.XmlPlaceOfBirthClaim) *PlaceOfBir
 // NewPlaceOfBirthClaimWrapperWithParent is the constructor with a parent claim provided. Port of
 // PlaceOfBirthClaimWrapper(XmlClaim, ClaimWrapper).
 func NewPlaceOfBirthClaimWrapperWithParent(wrapped *jaxb.XmlPlaceOfBirthClaim, parent *ClaimWrapper) *PlaceOfBirthClaimWrapper {
-	return &PlaceOfBirthClaimWrapper{
+	w := &PlaceOfBirthClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // newPlaceOfBirthClaimWrapperFromClaim builds a PlaceOfBirthClaimWrapper over a generic XmlClaim,
 // for schema positions where the JAXB field is not concretely typed XmlPlaceOfBirthClaim; see the
 // file note above.
 func newPlaceOfBirthClaimWrapperFromClaim(wrapped *jaxb.XmlClaim, parent *ClaimWrapper) *PlaceOfBirthClaimWrapper {
-	return &PlaceOfBirthClaimWrapper{
+	w := &PlaceOfBirthClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(wrapped, parent),
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // City gets the user's city or locality address, when present. Port of getCity() (the wrapped
@@ -84,7 +88,13 @@ func (w *PlaceOfBirthClaimWrapper) Country() *ClaimWrapper {
 // is not itself a bare Text leaf value. Port of isMap() (the wrapped instanceof
 // XmlPlaceOfBirthClaim conjunct; see the file note above).
 func (w *PlaceOfBirthClaimWrapper) IsMap() bool {
-	return w.wrapped != nil && !w.IsText()
+	if w.wrapped != nil && !w.IsText() {
+		return true
+	}
+	// Java falls through to super.isMap() rather than returning false, so a wrapper built from a
+	// generic XmlClaim (the instanceof-false case) or one that carries both a Text value and
+	// Entry children is still a map.
+	return w.ClaimWrapper.IsMap()
 }
 
 // Map is the override, assembling the map from the dedicated place-of-birth child claims when

@@ -17,10 +17,12 @@ type CredentialSubjectClaimWrapper struct {
 // NewCredentialSubjectClaimWrapper is the default constructor. Port of
 // CredentialSubjectClaimWrapper(XmlCredentialSubjectClaim).
 func NewCredentialSubjectClaimWrapper(wrapped *jaxb.XmlCredentialSubjectClaim) *CredentialSubjectClaimWrapper {
-	return &CredentialSubjectClaimWrapper{
+	w := &CredentialSubjectClaimWrapper{
 		ClaimWrapper: *NewClaimWrapper(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs)),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 func (w *CredentialSubjectClaimWrapper) claim(xmlClaim *jaxb.XmlClaim) *ClaimWrapper {

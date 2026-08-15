@@ -21,10 +21,12 @@ func NewIdentifierListClaimWrapper(wrapped *jaxb.XmlIdentifierListClaim) *Identi
 // NewIdentifierListClaimWrapperWithParent is the constructor with a parent provided. Port of
 // IdentifierListClaimWrapper(XmlIdentifierListClaim, ClaimWrapper).
 func NewIdentifierListClaimWrapperWithParent(wrapped *jaxb.XmlIdentifierListClaim, parent *ClaimWrapper) *IdentifierListClaimWrapper {
-	return &IdentifierListClaimWrapper{
+	w := &IdentifierListClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // Identifier gets the status's unique identifier. Port of getIdentifier().

@@ -34,10 +34,12 @@ func NewAttestedAttributesSubjectClaimIdWrapper(wrapped *jaxb.XmlAttestedAttribu
 // NewAttestedAttributesSubjectClaimIdWrapperWithParent is the constructor with a parent
 // provided. Port of AttestedAttributesSubjectClaimIdWrapper(XmlClaim, ClaimWrapper).
 func NewAttestedAttributesSubjectClaimIdWrapperWithParent(wrapped *jaxb.XmlAttestedAttributesSubjectIdClaim, parent *ClaimWrapper) *AttestedAttributesSubjectClaimIdWrapper {
-	return &AttestedAttributesSubjectClaimIdWrapper{
+	w := &AttestedAttributesSubjectClaimIdWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // FamilyName gets the family name of the attribute subject. Port of getFamilyName() (the

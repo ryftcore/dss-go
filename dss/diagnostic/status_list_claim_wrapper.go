@@ -21,10 +21,12 @@ func NewStatusListClaimWrapper(wrapped *jaxb.XmlStatusListClaim) *StatusListClai
 // NewStatusListClaimWrapperWithParent is the constructor with a parent provided. Port of
 // StatusListClaimWrapper(XmlStatusListClaim, ClaimWrapper).
 func NewStatusListClaimWrapperWithParent(wrapped *jaxb.XmlStatusListClaim, parent *ClaimWrapper) *StatusListClaimWrapper {
-	return &StatusListClaimWrapper{
+	w := &StatusListClaimWrapper{
 		ClaimWrapper: *NewClaimWrapperWithParent(claimBase(wrapped.XmlClaimContent, wrapped.XmlClaimAttrs), parent),
 		wrapped:      wrapped,
 	}
+	w.InitClaimOverrides(w)
+	return w
 }
 
 // Index gets the status's unique index identifier. Port of getIndex().
