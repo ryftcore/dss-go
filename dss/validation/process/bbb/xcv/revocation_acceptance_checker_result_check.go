@@ -87,12 +87,9 @@ func (c *RevocationAcceptanceCheckerResultCheck[T]) FailedSubIndicationForConclu
 // members (DetailedReport.xsd declares both required), so a Java null shows up
 // as the zero time and the null tests are on that.
 //
-// The dates then go through ValidationProcessUtils#getFormattedDate, which
-// answers null in Java and the empty string in Go (see its header): a
-// revocation with a production date but no thisUpdate - which
-// ThisUpdatePresenceCheck exists to catch - therefore renders "" here where
-// Java renders "null". A null RAC id, which RevocationAcceptanceChecker never
-// produces, renders the same way.
+// The dates then go through formattedDate below, which restores the "null" Java
+// renders a null date as. A null RAC id, which RevocationAcceptanceChecker never
+// produces, still renders as the empty string here where Java renders "null".
 func (c *RevocationAcceptanceCheckerResultCheck[T]) BuildAdditionalInfo() *string {
 	if !time.Time(c.racResult.RevocationProductionDate).IsZero() {
 		var thisUpdateDate *time.Time
@@ -100,8 +97,8 @@ func (c *RevocationAcceptanceCheckerResultCheck[T]) BuildAdditionalInfo() *strin
 			thisUpdateDate = &t
 		}
 		productionDateValue := time.Time(c.racResult.RevocationProductionDate)
-		thisUpdate := process.GetFormattedDate(thisUpdateDate)
-		productionDate := process.GetFormattedDate(&productionDateValue)
+		thisUpdate := c.formattedDate(thisUpdateDate)
+		productionDate := c.formattedDate(&productionDateValue)
 		var id string
 		if c.racResult.Id != nil {
 			id = *c.racResult.Id
@@ -111,6 +108,17 @@ func (c *RevocationAcceptanceCheckerResultCheck[T]) BuildAdditionalInfo() *strin
 		return &message
 	}
 	return nil
+}
+
+// formattedDate renders a date as an I18nProvider argument the way Java does:
+// ValidationProcessUtils#getFormattedDate answers null for a null Date, which
+// java.text.MessageFormat renders as the four characters "null", where the Go
+// port of that helper answers the empty string (see its header).
+func (c *RevocationAcceptanceCheckerResultCheck[T]) formattedDate(date *time.Time) string {
+	if date == nil {
+		return "null"
+	}
+	return process.GetFormattedDate(date)
 }
 
 // PreviousErrors returns a list of previous errors occurred in the chain. Port

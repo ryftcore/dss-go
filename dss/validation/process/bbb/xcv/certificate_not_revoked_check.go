@@ -32,10 +32,10 @@ func NewCertificateNotRevokedCheck(i18nProvider *i18n.I18nProvider, result *proc
 	certificateRevocation *diagnostic.CertificateRevocationWrapper, currentTime time.Time,
 	constraint policy.LevelRule, subContext enumerations.SubContext) *CertificateNotRevokedCheck {
 	c := &CertificateNotRevokedCheck{
-		ChainItemBase:          process.NewChainItemBase(i18nProvider, result, constraint),
-		certificateRevocation:  certificateRevocation,
-		currentTime:            currentTime,
-		subContext:             subContext,
+		ChainItemBase:         process.NewChainItemBase(i18nProvider, result, constraint),
+		certificateRevocation: certificateRevocation,
+		currentTime:           currentTime,
+		subContext:            subContext,
 	}
 	c.InitChainItem(c)
 	return c

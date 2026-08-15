@@ -29,9 +29,9 @@ func NewCertificateNotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *proce
 	certificateRevocation *diagnostic.CertificateRevocationWrapper, currentTime time.Time,
 	constraint policy.LevelRule) *CertificateNotOnHoldCheck {
 	c := &CertificateNotOnHoldCheck{
-		ChainItemBase:          process.NewChainItemBase(i18nProvider, result, constraint),
-		certificateRevocation:  certificateRevocation,
-		currentTime:            currentTime,
+		ChainItemBase:         process.NewChainItemBase(i18nProvider, result, constraint),
+		certificateRevocation: certificateRevocation,
+		currentTime:           currentTime,
 	}
 	c.InitChainItem(c)
 	return c

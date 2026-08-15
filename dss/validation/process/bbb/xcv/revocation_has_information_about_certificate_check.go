@@ -192,18 +192,18 @@ func (c *RevocationHasInformationAboutCertificateCheck) checkExpiredCertsRevocat
 // the field and not the lazy getter.
 func (c *RevocationHasInformationAboutCertificateCheck) getNotAfterAfterCertificateNotAfterMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_NOT_AFTER_AFTER,
-		process.GetFormattedDate(c.notAfterRevoc),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.notAfterRevoc),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 }
 
 // getRevocationConsistentMessage returns the additional information message when
 // the revocation is consistent. Port of getRevocationConsistentMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 }
 
 // getRevocationCertHashOkMessage returns the additional information message when
@@ -217,10 +217,10 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationCertHashOkM
 // Port of getRevocationConsistentWithExpiredCertsOnCRLMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithExpiredCertsOnCRLMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_CRL,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.revocationData.ExpiredCertsOnCRL()),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.revocationData.ExpiredCertsOnCRL()),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 }
 
 // getRevocationConsistentWithArchiveCutoffMessage returns the additional
@@ -228,10 +228,10 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentW
 // Port of getRevocationConsistentWithArchiveCutoffMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithArchiveCutoffMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_OCSP,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.revocationData.ArchiveCutOff()),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.revocationData.ArchiveCutOff()),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 }
 
 // getRevocationConsistentWithExpiredCertsRevocationInfoMessage returns the
@@ -240,19 +240,36 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentW
 // getRevocationConsistentWithExpiredCertsRevocationInfoMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithExpiredCertsRevocationInfoMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_TL,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.getExpiredCertsRevocationInfo(c.revocationData)),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.getExpiredCertsRevocationInfo(c.revocationData)),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 }
 
 // getRevocationInfoMessage returns the additional information message for
 // revocation data in case of other events. Port of getRevocationInfoMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationInfoMessage() string {
 	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_INFO,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
+}
+
+// formattedDate renders a date as an I18nProvider argument the way Java does.
+//
+// ValidationProcessUtils#getFormattedDate answers null for a null Date, and
+// java.text.MessageFormat renders that null as the four characters "null"; the
+// Go port of that helper answers the empty string instead (a deliberate choice
+// recorded in its header, so that the result stays usable as an argument), which
+// loses those four characters from the message. This check reaches the case -
+// notAfterRevoc is null whenever the revocation carries no thisUpdate, which is
+// exactly what ThisUpdatePresenceCheck exists to catch - so it restores the Java
+// rendering here.
+func (c *RevocationHasInformationAboutCertificateCheck) formattedDate(date *time.Time) string {
+	if date == nil {
+		return "null"
+	}
+	return process.GetFormattedDate(date)
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

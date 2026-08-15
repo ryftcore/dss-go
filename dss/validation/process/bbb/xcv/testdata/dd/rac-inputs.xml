@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>rac-inputs</DocumentName>
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-1">
+            <SignatureFilename>rac-inputs</SignatureFilename>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-SUBJECT"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-SUBJECT">
+            <NotAfter>2026-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2022-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-SUBJECT-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+            <Revocations>
+                <CertificateRevocation Revocation="R-OCSP-OK">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-OCSP-KO">
+                    <Status>UNKNOWN</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-BARE">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+        </Certificate>
+        <Certificate Id="C-EXPIRED">
+            <NotAfter>2018-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2015-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-EXPIRED-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+            <Revocations>
+                <CertificateRevocation Revocation="R-CRL-EXPIREDCERTS">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-CRL-LATE">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-OCSP-ARCHIVECUTOFF">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+        </Certificate>
+        <Certificate Id="C-ISSUER">
+            <NotAfter>2030-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2020-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-ISSUER-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SelfSigned>false</SelfSigned>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-OCSP-OK">
+            <Origin>EXTERNAL</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2023-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2023-01-01T00:00:00Z</ThisUpdate>
+            <CertHashExtensionPresent>true</CertHashExtensionPresent>
+            <CertHashExtensionMatch>true</CertHashExtensionMatch>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-ISSUER">
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+        </Revocation>
+        <Revocation Id="R-OCSP-KO">
+            <Origin>EXTERNAL</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2019-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2019-01-01T00:00:00Z</ThisUpdate>
+            <CertHashExtensionPresent>true</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+                <ChainItem Certificate="C-SUBJECT"/>
+            </CertificateChain>
+        </Revocation>
+        <Revocation Id="R-BARE">
+            <Origin>EXTERNAL</Origin>
+            <Type>CRL</Type>
+            <BasicSignature>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+        </Revocation>
+        <Revocation Id="R-CRL-EXPIREDCERTS">
+            <Origin>EXTERNAL</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2023-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2023-01-01T00:00:00Z</ThisUpdate>
+            <ExpiredCertsOnCRL>2014-01-01T00:00:00Z</ExpiredCertsOnCRL>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+        </Revocation>
+        <Revocation Id="R-CRL-LATE">
+            <Origin>EXTERNAL</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2023-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2023-01-01T00:00:00Z</ThisUpdate>
+            <ExpiredCertsOnCRL>2024-06-01T00:00:00Z</ExpiredCertsOnCRL>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+        </Revocation>
+        <Revocation Id="R-OCSP-ARCHIVECUTOFF">
+            <Origin>EXTERNAL</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2023-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2023-01-01T00:00:00Z</ThisUpdate>
+            <ArchiveCutOff>2014-01-01T00:00:00Z</ArchiveCutOff>
+            <BasicSignature>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ISSUER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ISSUER"/>
+            </CertificateChain>
+        </Revocation>
+    </UsedRevocations>
+</DiagnosticData>

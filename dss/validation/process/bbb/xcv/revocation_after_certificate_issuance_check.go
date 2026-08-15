@@ -2,6 +2,8 @@
 package xcv
 
 import (
+	"time"
+
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
@@ -48,10 +50,26 @@ func (c *RevocationAfterCertificateIssuanceCheck) Process() bool {
 // buildAdditionalInfo().
 func (c *RevocationAfterCertificateIssuanceCheck) BuildAdditionalInfo() *string {
 	message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_INFO,
-		process.GetFormattedDate(c.revocationData.ThisUpdate()),
-		process.GetFormattedDate(c.certificate.NotBefore()),
-		process.GetFormattedDate(c.certificate.NotAfter()))
+		c.formattedDate(c.revocationData.ThisUpdate()),
+		c.formattedDate(c.certificate.NotBefore()),
+		c.formattedDate(c.certificate.NotAfter()))
 	return &message
+}
+
+// formattedDate renders a date as an I18nProvider argument the way Java does.
+//
+// ValidationProcessUtils#getFormattedDate answers null for a null Date, and
+// java.text.MessageFormat renders that null as the four characters "null";
+// the Go port of that helper answers the empty string instead (a deliberate
+// choice recorded in its header, so that the result stays usable as an argument),
+// which loses those four characters from the message. This check reaches the
+// case - a revocation without a thisUpdate is exactly what ThisUpdatePresenceCheck
+// exists to catch - so it restores the Java rendering here.
+func (c *RevocationAfterCertificateIssuanceCheck) formattedDate(date *time.Time) string {
+	if date == nil {
+		return "null"
+	}
+	return process.GetFormattedDate(date)
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
