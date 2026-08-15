@@ -1,0 +1,61 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/qwac/sub/checks/TLSCertificateBindingSignatureSerializationTypeCheck.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// TLSCertificateBindingSignatureSerializationTypeCheck verifies whether the
+// serialization type of the obtained signature is allowed.
+type TLSCertificateBindingSignatureSerializationTypeCheck struct {
+	*process.ChainItemBase[*jaxb.XmlValidationQWACProcess]
+
+	// signature is the TLS Certificate Binding signature.
+	signature *diagnostic.SignatureWrapper
+}
+
+// NewTLSCertificateBindingSignatureSerializationTypeCheck is the default
+// constructor. Port of
+// TLSCertificateBindingSignatureSerializationTypeCheck(I18nProvider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
+func NewTLSCertificateBindingSignatureSerializationTypeCheck(i18nProvider *i18n.I18nProvider,
+	result *process.Result[*jaxb.XmlValidationQWACProcess], signature *diagnostic.SignatureWrapper,
+	constraint policy.LevelRule) *TLSCertificateBindingSignatureSerializationTypeCheck {
+	c := &TLSCertificateBindingSignatureSerializationTypeCheck{
+		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
+		signature:     signature,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *TLSCertificateBindingSignatureSerializationTypeCheck) Process() bool {
+	return enumerations.JWSSerializationType_COMPACT_SERIALIZATION == c.signature.JWSSerializationType()
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *TLSCertificateBindingSignatureSerializationTypeCheck) MessageTag() i18n.MessageTag {
+	return i18n.MessageTag_TLS_CERT_BINDING_SIG_SER
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
+func (c *TLSCertificateBindingSignatureSerializationTypeCheck) ErrorMessageTag() i18n.MessageTag {
+	return i18n.MessageTag_TLS_CERT_BINDING_SIG_SER_ANS
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *TLSCertificateBindingSignatureSerializationTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_FAILED
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of getFailedSubIndicationForConclusion(), whose default is null.
+func (c *TLSCertificateBindingSignatureSerializationTypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return ""
+}

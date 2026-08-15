@@ -1,21 +1,19 @@
-//go:build phase8e
-
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/ValidationProcessUtils.java (DSS 6.5.RC1).
 //
 // This is the vpfswatsp-dependent half of ValidationProcessUtils: the two public
 // methods that take a POEExtraction, plus the private helper one of them calls.
-// eu.europa.esig.dss.validation.process.vpfswatsp (POEExtraction) is ported in
-// phase 8e, so these are gated behind the "phase8e" build tag - the same
-// tag-split the ASiC chunk uses for its phase8 forward dependencies - while the
-// rest of the class compiles now (validation_process_utils.go).
+// It was gated behind the "phase8e" build tag while
+// eu.europa.esig.dss.validation.process.vpfswatsp was unported; phase 8e ported
+// that package, so the gate is gone and the file is a plain member of the
+// package again. It is kept as a separate file (rather than merged back into
+// validation_process_utils.go) so that the one-Go-file-per-Java-class rule stays
+// legible: both files carry the same "Ported from ValidationProcessUtils.java"
+// header, and the split is documented in both.
 //
-// FORWARD DEPENDENCY: POEExtraction is assumed to be ported into this same Go
-// package tree as process.POEExtraction with the shape the calls below make:
-//
-//	type POEExtraction interface {
-//	    IsPOEExists(tokenId string, controlTime time.Time) bool
-//	    IsPOEExistInRange(tokenId string, notBefore, notAfter *time.Time) bool
-//	}
+// The POEExtraction parameter is the interface declared below rather than
+// vpfswatsp.POEExtraction itself: vpfswatsp imports this package (Chain,
+// ChainItem, the rest of ValidationProcessUtils), so this package cannot import
+// vpfswatsp back. *vpfswatsp.POEExtraction satisfies it structurally.
 package process
 
 import (
@@ -26,6 +24,21 @@ import (
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/utils"
 )
+
+// POEExtraction is the set of proofs of existence the three functions below
+// consult. It is the Go stand-in for the parameter type
+// eu.europa.esig.dss.validation.process.vpfswatsp.POEExtraction, declared here
+// as an interface because that package imports this one (see the file header);
+// *vpfswatsp.POEExtraction is its only implementation.
+type POEExtraction interface {
+	// IsPOEExists returns true if a POE exists for the given token id at (or
+	// before) the control time. Port of isPOEExists(String, Date).
+	IsPOEExists(tokenId string, controlTime time.Time) bool
+	// IsPOEExistInRange checks if a POE exists for the token with the given id
+	// within the validity range between notBefore and notAfter inclusively.
+	// Port of isPOEExistInRange(String, Date, Date).
+	IsPOEExistInRange(tokenId string, notBefore, notAfter *time.Time) bool
+}
 
 // GetLatestAcceptableRevocationData returns a revocation data used for basic
 // signature validation. Port of

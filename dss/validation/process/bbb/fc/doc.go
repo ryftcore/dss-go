@@ -71,8 +71,11 @@
 // eaa_format_checking.go's header for the rationale), so the default,
 // untagged `go build ./...`/`go vet ./...`/`go test ./...` for the whole
 // module is green without needing that package - the tag simply carries the
-// gap forward instead of leaving the package broken. Building with `-tags
-// eaa` still fails on those two files alone until validation/process/eaa
-// lands; every other file in this package (42 of 44 manifest files, plus
-// this doc.go) builds, vets and tests clean either way.
+// gap forward instead of leaving the package broken.
+//
+// Integration pass (8e): the dependency landed in
+// github.com/utain/esig/dss/validation/process/eaa/checks (not the eaa root
+// package - see eaa_format_checking.go's header for why), constructors
+// exactly as predicted above. `go build -tags eaa ./...` is green for this
+// package.
 package fc

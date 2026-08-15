@@ -1,0 +1,82 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/QSCDCheck.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"fmt"
+
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// QSCDCheck checks whether the certificate was for QSCD at validation time.
+type QSCDCheck struct {
+	*process.ChainItemBase[*jaxb.XmlValidationCertificateQualification]
+
+	// qscdStatus is the certificate QSCD status at validation time.
+	qscdStatus enumerations.QSCDStatus
+
+	// validationTime is the validation time type.
+	validationTime enumerations.ValidationTime
+}
+
+// NewQSCDCheck is the default constructor. Port of
+// QSCDCheck(I18nProvider, XmlValidationCertificateQualification, QSCDStatus, ValidationTime, LevelRule).
+func NewQSCDCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+	qscdStatus enumerations.QSCDStatus, validationTime enumerations.ValidationTime,
+	constraint policy.LevelRule) *QSCDCheck {
+	c := &QSCDCheck{
+		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),
+		qscdStatus:     qscdStatus,
+		validationTime: validationTime,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *QSCDCheck) Process() bool {
+	return enumerations.QSCDStatusIsQSCD(c.qscdStatus)
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *QSCDCheck) MessageTag() i18n.MessageTag {
+	switch c.validationTime {
+	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_ST
+	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_CC
+	case enumerations.ValidationTime_VALIDATION_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_VT
+	default:
+		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
+	}
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
+func (c *QSCDCheck) ErrorMessageTag() i18n.MessageTag {
+	switch c.validationTime {
+	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_ST_ANS
+	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_CC_ANS
+	case enumerations.ValidationTime_VALIDATION_TIME:
+		return i18n.MessageTag_QUAL_QSCD_AT_VT_ANS
+	default:
+		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
+	}
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *QSCDCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_FAILED
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of getFailedSubIndicationForConclusion(), whose default is null.
+func (c *QSCDCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return ""
+}

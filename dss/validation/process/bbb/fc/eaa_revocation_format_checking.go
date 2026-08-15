@@ -5,17 +5,11 @@
 // Integration note (phase 8c pass): gated behind the "eaa" build tag - see
 // eaa_format_checking.go's header in this same package for the rationale.
 //
-// UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the check
-// this class wires (EAARevocationTokenTypeCheck) lives in the Java package
-// eu.europa.esig.dss.validation.process.eaa.status, which is NOT part of the
-// phase 8c package layout and was not present anywhere in the repository at
-// port time. This file assumes it lands in a sibling package
-// "github.com/utain/esig/dss/validation/process/eaa" (status flattened in,
-// mirroring how fc/checks flattens in here) with a constructor
-// NewEAARevocationTokenTypeCheck(i18nProvider, result *process.Result[*drjaxb.XmlFC],
-// token *diagnostic.EAARevocationTokenWrapper, constraint policy.MultiValuesRule)
-// returning process.ChainItem[*drjaxb.XmlFC]. See porter notes: this file does not
-// build until that package exists.
+// INTEGRATION UPDATE (phase 8e integration pass): the forward dependency is
+// now real and confirmed matching, landing in
+// github.com/utain/esig/dss/validation/process/eaa/checks - see
+// eaa_format_checking.go's header in this same package for why that's a
+// dedicated package rather than the eaa root package.
 package fc
 
 import (
@@ -25,7 +19,7 @@ import (
 	"github.com/utain/esig/dss/i18n"
 	policy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/eaa"
+	"github.com/utain/esig/dss/validation/process/eaa/checks"
 )
 
 // EAARevocationFormatChecking verifies the format of an EAA revocation token.
@@ -52,5 +46,5 @@ func (c *EAARevocationFormatChecking) InitChain() {
 
 func (c *EAARevocationFormatChecking) typeCheck() process.ChainItem[*drjaxb.XmlFC] {
 	constraint := c.Policy.EAARevocationTokenTypeConstraint()
-	return eaa.NewEAARevocationTokenTypeCheck(c.I18nProvider, c.Result, c.Token, constraint)
+	return checks.NewEAARevocationTokenTypeCheck(c.I18nProvider, c.Result, c.Token, constraint)
 }

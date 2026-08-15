@@ -6,21 +6,12 @@
 // eaa_acceptance_validation.go's header in this same package for the
 // rationale.
 //
-// UNPORTED DEPENDENCY (flagged per porter brief - do not invent): every check
-// this class wires (EAARevocationIssuanceTimeCheck, EAARevocationExpirationTimeCheck,
-// EAARevocationNotExpiredCheck, EAARevocationSubjectCheck, EAARevocationSubjectMatchCheck,
-// EAARevocationIssuerValidAtIssuanceTimeCheck) lives in the Java package
-// eu.europa.esig.dss.validation.process.eaa.status, which is NOT part of the
-// phase 8c package layout (bbb/{isc,vci,cv,fc,sav} only) and was not present
-// anywhere in the repository at port time. Per eaa_acceptance_validation.go
-// (this same sav chunk's identical forward dependency on the sibling
-// eaa.checks package), this file assumes eaa.status flattens into the same
-// forward-declared Go package "github.com/utain/esig/dss/validation/process/eaa"
-// (no name collisions with the eaa.checks types documented there).
-// Constructors are assumed to mirror their Java signature 1:1 (i18nProvider,
-// result *process.Result[*jaxb.XmlSAV], plus the Java constructor's remaining
-// arguments in order, constraint last) and return process.ChainItem[*jaxb.XmlSAV].
-// See porter notes: this file does not build until that package exists.
+// INTEGRATION UPDATE (phase 8e integration pass): see
+// eaa_acceptance_validation.go's header in this same package - the checks
+// this file wires live in github.com/utain/esig/dss/validation/process/eaa/checks
+// (confirmed matching), a dedicated package rather than the eaa root package,
+// specifically to keep this file's import from re-closing the
+// bbb/sav -> eaa -> qualification -> vpfswatsp -> bbb/sav cycle.
 package sav
 
 import (
@@ -32,7 +23,7 @@ import (
 	"github.com/utain/esig/dss/i18n"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/eaa"
+	"github.com/utain/esig/dss/validation/process/eaa/checks"
 )
 
 // EAARevocationTokenAcceptanceValidation performs verification of an EAA
@@ -87,30 +78,30 @@ func (c *EAARevocationTokenAcceptanceValidation) InitChain() {
 
 func (c *EAARevocationTokenAcceptanceValidation) issuanceTime() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationIssuanceTimeConstraint()
-	return eaa.NewEAARevocationIssuanceTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
+	return checks.NewEAARevocationIssuanceTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
 func (c *EAARevocationTokenAcceptanceValidation) expirationTime() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationExpirationTimeConstraint()
-	return eaa.NewEAARevocationExpirationTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
+	return checks.NewEAARevocationExpirationTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
 func (c *EAARevocationTokenAcceptanceValidation) notExpired() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationNotExpiredConstraint()
-	return eaa.NewEAARevocationNotExpiredCheck(c.I18nProvider, c.Result, c.token, c.currentTime, constraint)
+	return checks.NewEAARevocationNotExpiredCheck(c.I18nProvider, c.Result, c.token, c.currentTime, constraint)
 }
 
 func (c *EAARevocationTokenAcceptanceValidation) subject() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationSubjectConstraint()
-	return eaa.NewEAARevocationSubjectCheck(c.I18nProvider, c.Result, c.token, constraint)
+	return checks.NewEAARevocationSubjectCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
 func (c *EAARevocationTokenAcceptanceValidation) subjectMatches() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationSubjectMatchConstraint()
-	return eaa.NewEAARevocationSubjectMatchCheck(c.I18nProvider, c.Result, c.token, constraint)
+	return checks.NewEAARevocationSubjectMatchCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
 func (c *EAARevocationTokenAcceptanceValidation) issuerValidAtIssuanceTime() process.ChainItem[*jaxb.XmlSAV] {
 	constraint := c.validationPolicy.EAARevocationIssuerValidAtIssuanceTimeConstraint()
-	return eaa.NewEAARevocationIssuerValidAtIssuanceTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
+	return checks.NewEAARevocationIssuerValidAtIssuanceTimeCheck(c.I18nProvider, c.Result, c.token, constraint)
 }

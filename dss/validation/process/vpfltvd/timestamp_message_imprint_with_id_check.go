@@ -4,7 +4,7 @@
 // Java's eu.europa.esig.dss.validation.process.vpfltvd package tree (assigned
 // to phase 8e - "LTV+qualification" - per PORTING_PLAN.md). Only this one
 // check class is ported here, plus its immediate base
-// vpftspwatsp.TimestampMessageImprintCheck (see that package's header) - the
+// vpftspwatsp/checks.TimestampMessageImprintCheck (see that package's header) - the
 // two-level forward dependency the SAV porter flagged. It is the sole caller
 // of both classes anywhere in phase 8c:
 // bbb/sav's SignatureAcceptanceValidation.contentTimestampMessageImprint().
@@ -18,13 +18,13 @@ import (
 	"github.com/utain/esig/dss/i18n"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/vpftspwatsp"
+	vpftspwatspchecks "github.com/utain/esig/dss/validation/process/vpftspwatsp/checks"
 )
 
 // TimestampMessageImprintWithIdCheck checks a timestamp's message-imprint and
 // returns an Id of the provided token.
 type TimestampMessageImprintWithIdCheck[T any] struct {
-	*vpftspwatsp.TimestampMessageImprintCheck[T]
+	*vpftspwatspchecks.TimestampMessageImprintCheck[T]
 }
 
 // NewTimestampMessageImprintWithIdCheck is the default constructor. Port of
@@ -33,7 +33,7 @@ func NewTimestampMessageImprintWithIdCheck[T any](i18nProvider *i18n.I18nProvide
 	timestamp *diagnostic.TimestampWrapper, constraint policy.LevelRule) *TimestampMessageImprintWithIdCheck[T] {
 	tokenId := timestamp.Id()
 	c := &TimestampMessageImprintWithIdCheck[T]{
-		TimestampMessageImprintCheck: vpftspwatsp.NewTimestampMessageImprintCheckWithId(i18nProvider, result,
+		TimestampMessageImprintCheck: vpftspwatspchecks.NewTimestampMessageImprintCheckWithId(i18nProvider, result,
 			timestamp, constraint, &tokenId),
 	}
 	// Re-register with the outer type so overridden methods (BuildAdditionalInfo
