@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>poe-orphans-and-signer-data</DocumentName>
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="SIG-1">
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-SIGNER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-SIGNER"/>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-1">
+                    <Name>doc.bin</Name>
+                </SignatureScope>
+            </SignatureScopes>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-SIGNER">
+            <NotAfter>2019-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2015-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+        </Certificate>
+        <Certificate Id="C-ROOT">
+            <NotAfter>2035-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2010-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <Trusted>true</Trusted>
+            <SelfSigned>true</SelfSigned>
+        </Certificate>
+    </UsedCertificates>
+    <UsedTimestamps>
+        <Timestamp Type="ARCHIVE_TIMESTAMP" Id="T-1">
+            <ProductionTime>2016-06-01T00:00:00Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BAUG</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <TimestampedObjects>
+                <TimestampedObject Token="SIG-1" Category="SIGNATURE"/>
+                <TimestampedObject Token="D-1" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="OC-1" Category="ORPHAN_CERTIFICATE"/>
+            </TimestampedObjects>
+        </Timestamp>
+    </UsedTimestamps>
+    <OrphanTokens>
+        <OrphanCertificate Id="OC-1"/>
+    </OrphanTokens>
+    <OriginalDocuments>
+        <SignerData Id="D-1">
+            <ReferencedName>doc.bin</ReferencedName>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

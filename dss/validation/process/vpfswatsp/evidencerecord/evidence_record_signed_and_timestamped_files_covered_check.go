@@ -1,7 +1,15 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfswatsp/evidencerecord/checks/EvidenceRecordSignedAndTimestampedFilesCoveredCheck.java (DSS 6.5.RC1).
 //
-// See poe.go for the package-flattening note.
-package vpfswatsp
+// See poe.go for the package-flattening note.//
+// PACKAGE-BOUNDARY DEVIATION (LTVA, phase 8e): Java's vpfswatsp.evidencerecord
+// is a package of its own, distinct from vpfswatsp; the phase 8e layout folds
+// the whole vpfswatsp tree into one Go package, but EvidenceRecordTimestampsValidationBlock
+// extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
+// (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
+// therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
+// in vpfswatsp, vpftsp or vpftspwatsp imports them (only the validation
+// executor's DetailedReportBuilder does), so the edge only ever points upward.
+package evidencerecord
 
 import (
 	"github.com/utain/esig/dss/detailedreport/jaxb"

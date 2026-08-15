@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>poe-revoked-revived</DocumentName>
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="SIG-1">
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-SIGNER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-SIGNER"/>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-SIGNER">
+            <NotAfter>2019-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2015-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+            <Revocations>
+                <CertificateRevocation Revocation="R-1">
+                    <Status>REVOKED</Status>
+                    <RevocationDate>2017-01-01T00:00:00Z</RevocationDate>
+                </CertificateRevocation>
+            </Revocations>
+        </Certificate>
+        <Certificate Id="C-ROOT">
+            <NotAfter>2035-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2010-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <Trusted>true</Trusted>
+            <SelfSigned>true</SelfSigned>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-1">
+            <Origin>EXTERNAL</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2017-06-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2017-06-01T00:00:00Z</ThisUpdate>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="ARCHIVE_TIMESTAMP" Id="T-1">
+            <ProductionTime>2016-06-01T00:00:00Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BAUG</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <TimestampedObjects>
+                <TimestampedObject Token="SIG-1" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-SIGNER" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-1" Category="REVOCATION"/>
+            </TimestampedObjects>
+        </Timestamp>
+    </UsedTimestamps>
+</DiagnosticData>

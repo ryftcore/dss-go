@@ -19,10 +19,31 @@ import (
 	"github.com/utain/esig/dss/validation/process/bbb/xcv"
 )
 
+// LongTermValidationCertificateRevocationSelectorOverrides declares the
+// overridable protected methods this class adds on top of the ones
+// CertificateRevocationSelector already routes. vpfswatsp's two subclasses
+// (PastSignatureValidationCertificateRevocationSelector, which reads the
+// revocation BBB out of the bbbs map instead of running
+// RevocationBasicValidationProcess, and ValidationTimeSlidingCertificateRevocationSelector)
+// register through InitLongTermValidationCertificateRevocationSelector, so the
+// self-calls below reach the subclass the way Java's virtual dispatch does.
+type LongTermValidationCertificateRevocationSelectorOverrides interface {
+	xcv.CertificateRevocationSelectorOverrides
+
+	// RevocationBBBConclusion returns a conclusion of the revocation basic
+	// building block execution process. Port of the protected
+	// getRevocationBBBConclusion(CertificateRevocationWrapper).
+	RevocationBBBConclusion(revocationWrapper *diagnostic.CertificateRevocationWrapper) *jaxb.XmlConclusion
+}
+
 // LongTermValidationCertificateRevocationSelector verifies and returns the
 // latest acceptable revocation data for a long-term validation process.
 type LongTermValidationCertificateRevocationSelector struct {
 	*xcv.CertificateRevocationSelector
+
+	// ltvOverrides points back at the concrete selector; see
+	// InitLongTermValidationCertificateRevocationSelector.
+	ltvOverrides LongTermValidationCertificateRevocationSelectorOverrides
 
 	// diagnosticData is the diagnostic data.
 	diagnosticData *diagnostic.DiagnosticData
@@ -43,16 +64,47 @@ func NewLongTermValidationCertificateRevocationSelector(i18nProvider *i18n.I18nP
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, diagnosticData *diagnostic.DiagnosticData,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
 	validationPolicy policy.ValidationPolicy) *LongTermValidationCertificateRevocationSelector {
+	c := &LongTermValidationCertificateRevocationSelector{}
+	c.InitLongTermValidationCertificateRevocationSelectorState(i18nProvider, certificate, currentTime,
+		diagnosticData, bbbs, tokenId, validationPolicy)
+	c.InitLongTermValidationCertificateRevocationSelector(c)
+	return c
+}
+
+// InitLongTermValidationCertificateRevocationSelectorState wires the shared
+// state, the way the Java constructor body does. A subclass calls it before
+// InitLongTermValidationCertificateRevocationSelector, in place of the Java
+// super(...) call.
+func (c *LongTermValidationCertificateRevocationSelector) InitLongTermValidationCertificateRevocationSelectorState(
+	i18nProvider *i18n.I18nProvider, certificate *diagnostic.CertificateWrapper, currentTime time.Time,
+	diagnosticData *diagnostic.DiagnosticData, bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
+	validationPolicy policy.ValidationPolicy) {
 	base := &xcv.CertificateRevocationSelector{}
 	base.InitCertificateRevocationSelectorState(i18nProvider, certificate, currentTime, validationPolicy, make(map[string]struct{}))
-	c := &LongTermValidationCertificateRevocationSelector{
-		CertificateRevocationSelector: base,
-		diagnosticData:                diagnosticData,
-		BBBs:                          bbbs,
-		TokenId:                       tokenId,
+	c.CertificateRevocationSelector = base
+	c.diagnosticData = diagnosticData
+	c.BBBs = bbbs
+	c.TokenId = tokenId
+}
+
+// InitLongTermValidationCertificateRevocationSelector registers the concrete
+// selector with its base so that the base can dispatch to the overridden
+// methods, CertificateRevocationSelector's and Chain's included. It must be
+// called exactly once, by the concrete selector's constructor, before Execute.
+func (c *LongTermValidationCertificateRevocationSelector) InitLongTermValidationCertificateRevocationSelector(
+	overrides LongTermValidationCertificateRevocationSelectorOverrides) {
+	c.ltvOverrides = overrides
+	c.InitCertificateRevocationSelector(overrides)
+}
+
+// ltvSelectorOverrides returns the registered overrides, panicking when the
+// concrete selector forgot to call
+// InitLongTermValidationCertificateRevocationSelector.
+func (c *LongTermValidationCertificateRevocationSelector) ltvSelectorOverrides() LongTermValidationCertificateRevocationSelectorOverrides {
+	if c.ltvOverrides == nil {
+		panic("LongTermValidationCertificateRevocationSelector was not initialised: the concrete selector must call InitLongTermValidationCertificateRevocationSelector in its constructor")
 	}
-	c.InitCertificateRevocationSelector(c)
-	return c
+	return c.ltvOverrides
 }
 
 // NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData is
@@ -69,7 +121,7 @@ func NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData(i18
 // verifyRevocationData(ChainItem, CertificateRevocationWrapper).
 func (c *LongTermValidationCertificateRevocationSelector) VerifyRevocationData(item process.ChainItem[*jaxb.XmlCRS],
 	revocationWrapper *diagnostic.CertificateRevocationWrapper) process.ChainItem[*jaxb.XmlCRS] {
-	revocationBBBConclusion := c.getRevocationBBBConclusion(revocationWrapper)
+	revocationBBBConclusion := c.ltvSelectorOverrides().RevocationBBBConclusion(revocationWrapper)
 
 	if revocationBBBConclusion != nil {
 		if item == nil {
@@ -96,10 +148,10 @@ func (c *LongTermValidationCertificateRevocationSelector) VerifyRevocationData(i
 	return item
 }
 
-// getRevocationBBBConclusion returns a conclusion of the revocation basic
+// RevocationBBBConclusion returns a conclusion of the revocation basic
 // building block execution process. Port of
 // getRevocationBBBConclusion(CertificateRevocationWrapper).
-func (c *LongTermValidationCertificateRevocationSelector) getRevocationBBBConclusion(
+func (c *LongTermValidationCertificateRevocationSelector) RevocationBBBConclusion(
 	revocationWrapper *diagnostic.CertificateRevocationWrapper) *jaxb.XmlConclusion {
 	rbvp := NewRevocationBasicValidationProcess(c.I18nProvider, c.diagnosticData, &revocationWrapper.RevocationWrapper, c.BBBs)
 	revocationBasicValidationResult := rbvp.Execute()
@@ -182,7 +234,7 @@ func (c *longTermAcceptableRevocationDataAvailableCheck) FailedSubIndicationForC
 // isTryLater ports the private isTryLater().
 func (c *LongTermValidationCertificateRevocationSelector) isTryLater() bool {
 	for _, revocationWrapper := range c.CertificateRevocationData() {
-		conclusion := c.getRevocationBBBConclusion(revocationWrapper)
+		conclusion := c.ltvSelectorOverrides().RevocationBBBConclusion(revocationWrapper)
 		if conclusion == nil {
 			continue
 		}

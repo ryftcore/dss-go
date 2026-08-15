@@ -2,33 +2,16 @@
 //
 // See poe.go for the package-flattening note.
 //
-// CROSS-CHUNK DEPENDENCY (phase 8e): the Java base class
+// CROSS-CHUNK NOTE (phase 8e): the Java base class
 // eu.europa.esig.dss.validation.process.vpfltvd.LongTermValidationCertificateRevocationSelector
-// belongs to the vpfltvd chunk, ported in parallel. This file is written
-// against the Go shape that chunk's other classes dictate, which is the one
-// bbb/xcv's CertificateRevocationSelector already established for a
-// Chain-derived, extension-designed class:
-//
-//	type LongTermValidationCertificateRevocationSelectorOverrides interface {
-//	    xcv.CertificateRevocationSelectorOverrides
-//	    RevocationBBBConclusion(*diagnostic.CertificateRevocationWrapper) *jaxb.XmlConclusion
-//	}
-//	type LongTermValidationCertificateRevocationSelector struct {
-//	    *xcv.CertificateRevocationSelector
-//	    Bbbs    map[string]*jaxb.XmlBasicBuildingBlocks // Java: protected bbbs
-//	    TokenId string                                  // Java: protected tokenId
-//	}
-//	func (s *LongTermValidationCertificateRevocationSelector) InitLongTermValidationCertificateRevocationSelectorState(
-//	    i18nProvider *i18n.I18nProvider, certificate *diagnostic.CertificateWrapper, currentTime time.Time,
-//	    diagnosticData *diagnostic.DiagnosticData, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
-//	    tokenId string, validationPolicy policy.ValidationPolicy)
-//	func (s *LongTermValidationCertificateRevocationSelector) InitLongTermValidationCertificateRevocationSelector(
-//	    overrides LongTermValidationCertificateRevocationSelectorOverrides)
-//	func (s *LongTermValidationCertificateRevocationSelector) VerifyRevocationData(
-//	    item process.ChainItem[*jaxb.XmlCRS], revocationWrapper *diagnostic.CertificateRevocationWrapper) process.ChainItem[*jaxb.XmlCRS]
-//
-// The protected Java constructor that passes a null DiagnosticData is the state
-// initializer called with a nil one below.
+// belongs to the vpfltvd chunk. Its Go form is subclassed here through the
+// InitLongTermValidationCertificateRevocationSelectorState /
+// InitLongTermValidationCertificateRevocationSelector pair, the same
+// state-then-register shape bbb/xcv's CertificateRevocationSelector defines;
+// the protected Java constructor that passes a null DiagnosticData is the state
+// initializer called with a nil one below. The overrides interface that routes
+// getRevocationBBBConclusion (overridden here) back to this type was added to
+// that file as part of this batch - see the notes.
 package vpfswatsp
 
 import (
@@ -145,7 +128,7 @@ func (c *PastSignatureValidationCertificateRevocationSelector) addAcceptableRevo
 // getRevocationBBBConclusion(CertificateRevocationWrapper).
 func (c *PastSignatureValidationCertificateRevocationSelector) RevocationBBBConclusion(
 	revocationWrapper *diagnostic.CertificateRevocationWrapper) *jaxb.XmlConclusion {
-	revocationBBB, ok := c.Bbbs[revocationWrapper.Id()]
+	revocationBBB, ok := c.BBBs[revocationWrapper.Id()]
 	if ok && revocationBBB != nil {
 		return revocationBBB.Conclusion
 	}

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>poe-evidence-record</DocumentName>
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="SIG-1">
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-SIGNER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-SIGNER"/>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+        </Signature>
+    </Signatures>
+    <EvidenceRecords>
+        <EvidenceRecord Id="ER-1">
+            <DocumentName>er.ers</DocumentName>
+            <Type>ASN.1 Evidence Record</Type>
+            <Origin>EXTERNAL</Origin>
+            <DigestMatchers>
+                <DigestMatcher type="EVIDENCE_RECORD_ARCHIVE_OBJECT" documentName="doc.bin">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>AQID</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <EvidenceRecordTimestamps>
+                <FoundTimestamp Timestamp="ER-T-1"/>
+                <FoundTimestamp Timestamp="ER-T-2"/>
+            </EvidenceRecordTimestamps>
+            <TimestampedObjects>
+                <TimestampedObject Token="SIG-1" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-SIGNER" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-1" Category="REVOCATION"/>
+            </TimestampedObjects>
+        </EvidenceRecord>
+    </EvidenceRecords>
+    <UsedCertificates>
+        <Certificate Id="C-SIGNER">
+            <NotAfter>2019-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2015-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+            <Revocations>
+                <CertificateRevocation Revocation="R-1">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+        </Certificate>
+        <Certificate Id="C-ROOT">
+            <NotAfter>2035-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2010-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>0</PublicKeySize>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <Trusted>true</Trusted>
+            <SelfSigned>true</SelfSigned>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-1">
+            <Origin>EXTERNAL</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2016-01-01T00:00:00Z</ProductionDate>
+            <ThisUpdate>2016-01-01T00:00:00Z</ThisUpdate>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="EVIDENCE_RECORD_TIMESTAMP" Id="ER-T-1">
+            <ProductionTime>2016-03-01T00:00:00Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BAUG</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+        </Timestamp>
+        <Timestamp Type="EVIDENCE_RECORD_TIMESTAMP" Id="ER-T-2">
+            <ProductionTime>2019-03-01T00:00:00Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BAUG</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+        </Timestamp>
+    </UsedTimestamps>
+</DiagnosticData>

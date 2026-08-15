@@ -30,7 +30,7 @@ func NewEvidenceRecordValidationCheck[T any](i18nProvider *i18n.I18nProvider, re
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, erValidationResult *jaxb.XmlValidationProcessEvidenceRecord,
 	constraint policy.LevelRule) *EvidenceRecordValidationCheck[T] {
 	c := &EvidenceRecordValidationCheck[T]{
-		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, evidenceRecord.Id()),
+		ChainItemBase:      process.NewChainItemBaseWithId(i18nProvider, result, constraint, evidenceRecord.Id()),
 		evidenceRecord:     evidenceRecord,
 		erValidationResult: erValidationResult,
 	}

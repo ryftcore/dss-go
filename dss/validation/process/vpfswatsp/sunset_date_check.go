@@ -26,7 +26,7 @@ type SunsetDateCheck struct {
 func NewSunsetDateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVTS],
 	trustedCertificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *SunsetDateCheck {
 	c := &SunsetDateCheck{
-		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, trustedCertificate.Id()),
+		ChainItemBase:      process.NewChainItemBaseWithId(i18nProvider, result, constraint, trustedCertificate.Id()),
 		trustedCertificate: trustedCertificate,
 	}
 	c.InitChainItem(c)
