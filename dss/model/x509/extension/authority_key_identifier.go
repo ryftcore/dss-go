@@ -25,7 +25,11 @@ type AuthorityKeyIdentifier struct {
 // NewAuthorityKeyIdentifier builds an AuthorityKeyIdentifier extension.
 func NewAuthorityKeyIdentifier() *AuthorityKeyIdentifier {
 	return &AuthorityKeyIdentifier{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER.OID()),
 	}
 }
 

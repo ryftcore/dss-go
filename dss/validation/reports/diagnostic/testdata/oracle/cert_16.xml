@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-2D118BBC9E0B98D6AD07BB9D44CFC424467B8E2D83A2E04661E9A620DAA062FC">
+            <SubjectDistinguishedName Format="CANONICAL">cn=john doe,ou=test pki,o=test organization,st=midlands,c=tc</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=John Doe,OU=TEST PKI,O=Test organization,ST=Midlands,C=TC</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=tc etrust qc for esignatures ca,o=third country qtsp company,c=tc</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=TC eTrust QC for eSignatures CA,O=Third Country QTSP Company,C=TC</IssuerDistinguishedName>
+            <SerialNumber>4790640315483750677771987618222800710</SerialNumber>
+            <CommonName>John Doe</CommonName>
+            <State>Midlands</State>
+            <CountryName>TC</CountryName>
+            <OrganizationName>Test organization</OrganizationName>
+            <OrganizationalUnit>TEST PKI</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2025-06-02T16:23:31Z</NotAfter>
+            <NotBefore>2020-06-03T16:23:31Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-E7159F2B1CD5F70C3F7734118635A32619832C1AB388E25296522DD59F0AA712</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>EtAwlCrrc8nenVEfdgYGQYbZ5uw=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>4KF+GukRSWeWD6jpCNGyF9P5kP8=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://nt-qwac.nowina.solutions/res/caqctsp/sub-ca_tc.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://nt-qwac.nowina.solutions/res/caqctsp/sub-ca_tc.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                    <QcCClegislation>
+                        <CountryName>TC</CountryName>
+                    </QcCClegislation>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>LRGLvJ4LmNatB7udRM/EJEZ7ji2DouBGYemmINqgYvw=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

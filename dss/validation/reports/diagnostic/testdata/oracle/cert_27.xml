@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-945B0901B8E5B44774A0F0D88CE282B14C7F63DDA1A14F1FAF9997491DB10137">
+            <SubjectDistinguishedName Format="CANONICAL">cn=4.2.1.10_11_ca11_ee,o=upc,l=barcelona,c=es</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=4.2.1.10_11_CA11_EE,O=UPC,L=Barcelona,C=ES</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=4.2.1.10_11_ca11,o=upc,l=barcelona,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=4.2.1.10_11_CA11,O=UPC,L=Barcelona,C=ES</IssuerDistinguishedName>
+            <SerialNumber>7064721308896726839</SerialNumber>
+            <CommonName>4.2.1.10_11_CA11_EE</CommonName>
+            <Locality>Barcelona</Locality>
+            <CountryName>ES</CountryName>
+            <OrganizationName>UPC</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2024-04-01T21:39:00Z</NotAfter>
+            <NotBefore>2023-04-01T21:39:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-E3D2DFC97D8479991574FD178B5B8C4418986409AACEC33FF6DCECDED789156D</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="true">
+                    <subjectAlternativeName type="uniformResourceIdentifier">www.upc2.es</subjectAlternativeName>
+                </SubjectAlternativeNames>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lFsJAbjltEd0oPDYjOKCsUx/Y92hoU8fr5mXSR2xATc=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-B8CCBB275AAE325DE5D4D9573FB463940879EA1644BAE0D91298D176629945FC">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ac dgp 001,ou=cnp,o=direccion general de la policia,c=es</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=AC DGP 001,OU=CNP,O=DIRECCION GENERAL DE LA POLICIA,C=ES</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ac raiz dgp,ou=cnp,o=direccion general de la policia,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=AC RAIZ DGP,OU=CNP,O=DIRECCION GENERAL DE LA POLICIA,C=ES</IssuerDistinguishedName>
+            <SerialNumber>34050057319958299971388440903555234820</SerialNumber>
+            <CommonName>AC DGP 001</CommonName>
+            <CountryName>ES</CountryName>
+            <OrganizationName>DIRECCION GENERAL DE LA POLICIA</OrganizationName>
+            <OrganizationalUnit>CNP</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2022-02-13T09:09:13Z</NotAfter>
+            <NotBefore>2007-02-13T09:09:13Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-96EF8F2F9A11ABACFCB372869E751457C33B5DAB8C7BEA25D844B5D11AD45F7F</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>Dpx24aIuiTNB8uM+bFsWRb29ho4=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>iun+Fa4Xk8niqV6R/Kw50k83MAw=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.policia.es/dpc">2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://ocsp.policia.es</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://www.policia.es/crls/ARL.crl</crlUrl>
+                    <crlUrl>ldap://ldap.policia.es/CN=CRL,CN=AC%20RAIZ%20DGP,OU=CNP,O=DIRECCION%20GENERAL%20DE%20LA%20POLICIA,C=ES?authorityRevocationList?base?objectclass=cRLDistributionPoint</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>uMy7J1quMl3l1NlXP7RjlAh56hZEuuDZEpjRdmKZRfw=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

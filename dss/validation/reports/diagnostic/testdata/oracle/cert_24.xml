@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-8B218A6C6034DBC8A9C8B1683F65CF526F56E1CED66FB011D82107AE0CDE536B">
+            <SubjectDistinguishedName Format="CANONICAL">cn=document from nowina solutions,ou=e-seal,o=nowina solutions,c=lu,l=kehlen,st=capellen,2.5.4.5=#130742313836353832,2.5.4.97=#0c0d4e54524c552d42313836353832</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Document from Nowina Solutions,OU=e-Seal,O=Nowina Solutions,C=LU,L=Kehlen,ST=Capellen,2.5.4.5=#130742313836353832,2.5.4.97=#0c0d4e54524c552d42313836353832</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=klass3-sk 2016,2.5.4.97=#0c0e4e545245452d3130373437303133,ou=sertifitseerimisteenused,o=as sertifitseerimiskeskus,c=ee</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=KLASS3-SK 2016,2.5.4.97=#0c0e4e545245452d3130373437303133,OU=Sertifitseerimisteenused,O=AS Sertifitseerimiskeskus,C=EE</IssuerDistinguishedName>
+            <SerialNumber>78274311067746842583269981205368419808</SerialNumber>
+            <SubjectSerialNumber>B186582</SubjectSerialNumber>
+            <CommonName>Document from Nowina Solutions</CommonName>
+            <Locality>Kehlen</Locality>
+            <State>Capellen</State>
+            <CountryName>LU</CountryName>
+            <OrganizationIdentifier>NTRLU-B186582</OrganizationIdentifier>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>e-Seal</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2019-12-23T15:06:40Z</NotAfter>
+            <NotBefore>2018-12-13T15:06:40Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-5C3B82DA7E9DCB75A6843015D3C2935A7A5A0CE5A1C9839071E6618C407C6882</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>rl5Y9fLy2cGO2e9OB9t1ylDihwA=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>MN+j7zJ4/n+k9L6fC2Q94897jJg=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://www.sk.ee/cps">1.3.6.1.4.1.10015.7.3</certificatePolicy>
+                    <certificatePolicy Description="qcp-legal-qscd">0.4.0.194112.1.3</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>https://c.sk.ee/KLASS3-SK_2016_EECCRCA_SHA384.der.crt</caIssuersUrl>
+                    <ocspUrl>http://aia.sk.ee/klass3-2016</ocspUrl>
+                </AuthorityInformationAccess>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="EN">https://sk.ee/en/repository/condititons-for-use-of-certificates/</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-eseal">0.4.0.1862.1.6.2</QcType>
+                    </QcTypes>
+                    <SemanticsIdentifier Description="Semantics identifier for legal person">0.4.0.194121.1.2</SemanticsIdentifier>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>iyGKbGA028ipyLFoP2XPUm9W4c7Wb7AR2CEHrgzeU2s=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

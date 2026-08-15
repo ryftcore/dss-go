@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-25341E11DF544B36E96300876E94F50AED8D017C0C73398C7645012BA3460782">
+            <SubjectDistinguishedName Format="CANONICAL">ou=it,o=demo ca,l=london,c=gb</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">OU=IT,O=Demo CA,L=London,C=GB</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">ou=it,o=demo ca,l=london,c=gb</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">OU=IT,O=Demo CA,L=London,C=GB</IssuerDistinguishedName>
+            <SerialNumber>16363458473687436991</SerialNumber>
+            <Locality>London</Locality>
+            <CountryName>GB</CountryName>
+            <OrganizationName>Demo CA</OrganizationName>
+            <OrganizationalUnit>IT</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2037-04-29T15:44:23Z</NotAfter>
+            <NotBefore>2017-05-04T15:44:23Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-9445BAEBB735AD9E49C1F82511C03E1A2333593C196464A8C77039E2C57E4F64</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-9445BAEBB735AD9E49C1F82511C03E1A2333593C196464A8C77039E2C57E4F64</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>ATF8Vj2BMVtZ/49ICT7ju4nRMEA=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ATF8Vj2BMVtZ/49ICT7ju4nRMEA=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <NameConstraints OID="2.5.29.30" critical="true">
+                    <ExcludedSubtree minimum="0" type="iPAddress">#0000000000000000</ExcludedSubtree>
+                    <ExcludedSubtree minimum="0" type="iPAddress">#0000000000000000000000000000000000000000000000000000000000000000</ExcludedSubtree>
+                </NameConstraints>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>JTQeEd9USzbpYwCHbpT1Cu2NAXwMczmMdkUBK6NGB4I=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

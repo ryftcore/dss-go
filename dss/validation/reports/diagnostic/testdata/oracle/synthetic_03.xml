@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-16D86F53D1CB49C8D92067FCCC196B741A193CD31EC10D3022CE50C9C0ABAACD">
+            <SubjectDistinguishedName Format="CANONICAL">cn=synthetic-d</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=synthetic-d</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=synthetic-d</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=synthetic-d</IssuerDistinguishedName>
+            <SerialNumber>1003</SerialNumber>
+            <CommonName>synthetic-d</CommonName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2034-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2024-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-5804235AF0BAD0F67BD3898C3751F5086174CAB9308FC7670EA29D1B43E2AE32</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-5804235AF0BAD0F67BD3898C3751F5086174CAB9308FC7670EA29D1B43E2AE32</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="true">
+                    <QcCompliance present="true"/>
+                    <QcEuLimitValue>
+                        <currency>USD</currency>
+                        <amount>1500</amount>
+                        <exponent>-2</exponent>
+                    </QcEuLimitValue>
+                    <QcEuRetentionPeriod>15</QcEuRetentionPeriod>
+                    <QcSSCD present="true"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://example.org/pds?lang\=en\,v\=1</PdsLocation>
+                        <PdsLocation lang="fr">\ \ spaced\ \</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                        <QcType Description="type-unknown">1.2.3.4.5.6</QcType>
+                    </QcTypes>
+                    <QcCClegislation>
+                        <CountryName>BE</CountryName>
+                        <CountryName>LU</CountryName>
+                    </QcCClegislation>
+                    <SemanticsIdentifier Description="Semantics identifier for eIDAS natural person">0.4.0.194121.1.3</SemanticsIdentifier>
+                    <QcQSCDlegislation>
+                        <QSCDCountryName>FR</QSCDCountryName>
+                    </QcQSCDlegislation>
+                    <QcIdentMethod Description="qc-ident-method-eIDAS2-acd">0.4.0.1862.1.8.3</QcIdentMethod>
+                    <OtherOIDs>
+                        <OtherOID>1.2.3.4.5.6.7</OtherOID>
+                        <OtherOID>1.2.3.4.5.6.8</OtherOID>
+                    </OtherOIDs>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>FthvU9HLScjZIGf8zBlrdBoZPNMewQ0wIs5QycCrqs0=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

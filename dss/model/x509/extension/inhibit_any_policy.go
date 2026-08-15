@@ -21,7 +21,11 @@ type InhibitAnyPolicy struct {
 // initializer of value = -1.
 func NewInhibitAnyPolicy() *InhibitAnyPolicy {
 	return &InhibitAnyPolicy{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY.OID()),
 		value:                -1,
 	}
 }

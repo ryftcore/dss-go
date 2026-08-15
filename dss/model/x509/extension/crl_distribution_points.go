@@ -18,7 +18,11 @@ type CRLDistributionPoints struct {
 // NewCRLDistributionPoints builds a CRLDistributionPoints extension.
 func NewCRLDistributionPoints() *CRLDistributionPoints {
 	return &CRLDistributionPoints{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS.OID()),
 	}
 }
 

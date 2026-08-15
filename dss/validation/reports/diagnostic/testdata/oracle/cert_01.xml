@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-039C1473089282FB36A4DBC23B1125AEC83219C6E624FD169B02E08E6409C3F2">
+            <SubjectDistinguishedName Format="CANONICAL">cn=federal bridge ca 2016,ou=fpki,o=u.s. government,c=us</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Federal Bridge CA 2016,OU=FPKI,O=U.S. Government,C=US</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=federal common policy ca,ou=fpki,o=u.s. government,c=us</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Federal Common Policy CA,OU=FPKI,O=U.S. Government,C=US</IssuerDistinguishedName>
+            <SerialNumber>16194</SerialNumber>
+            <CommonName>Federal Bridge CA 2016</CommonName>
+            <CountryName>US</CountryName>
+            <OrganizationName>U.S. Government</OrganizationName>
+            <OrganizationalUnit>FPKI</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2019-11-08T18:20:38Z</NotAfter>
+            <NotBefore>2016-11-08T18:20:38Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-D02E526C39CC5919006349E57A3F42BCCFFEC8D422964EDBA1EBDBB43B06A1CE</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>rQx6dVzl85jEeZgOrCj9l/TnAvw=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>I7CzfRZU1AJWdus6vqlrL0N7KBY=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.6</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.7</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.8</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.13</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.16</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.1</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.2</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.14</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.15</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.17</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.18</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.19</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.20</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.36</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.3</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.4</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.12</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.37</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.38</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.39</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.40</certificatePolicy>
+                    <certificatePolicy>2.16.840.1.101.3.2.1.3.41</certificatePolicy>
+                </CertificatePolicies>
+                <PolicyConstraints inhibitPolicyMapping="2" OID="2.5.29.36" critical="true"/>
+                <InhibitAnyPolicy value="0" OID="2.5.29.54" critical="true"/>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://http.fpki.gov/fcpca/caCertsIssuedTofcpca.p7c</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://http.fpki.gov/fcpca/fcpca.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.5.5.7.1.11" description="subjectInfoAccess" critical="false">
+                    <octets>BEcwRTBDBggrBgEFBQcwBYY3aHR0cDovL2h0dHAuZnBraS5nb3YvYnJpZGdlL2NhQ2VydHNJc3N1ZWRCeWZiY2EyMDE2LnA3Yw==</octets>
+                </OtherExtension>
+                <OtherExtension OID="2.5.29.33" description="policyMappings" critical="false">
+                    <octets>BIGFMIGCMBgGCmCGSAFlAwIBAwYGCmCGSAFlAwIBAwMwGAYKYIZIAWUDAgEDEAYKYIZIAWUDAgEDBDAYBgpghkgBZQMCAQMHBgpghkgBZQMCAQMMMBgGCmCGSAFlAwIBAwgGCmCGSAFlAwIBAyUwGAYKYIZIAWUDAgEDJAYKYIZIAWUDAgEDJg==</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>A5wUcwiSgvs2pNvCOxElrsgyGcbmJP0WmwLgjmQJw/I=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

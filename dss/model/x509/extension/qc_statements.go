@@ -109,7 +109,11 @@ type QcStatements struct {
 // constructor (which initializes otherOids to an empty list).
 func NewQcStatements() *QcStatements {
 	return &QcStatements{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_QC_STATEMENTS),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID()),
 		otherOids:            []string{},
 	}
 }

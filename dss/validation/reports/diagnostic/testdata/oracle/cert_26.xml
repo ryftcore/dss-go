@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-919EB3887BF96C6FCA2F62765236A94A11F8F54CF6B5662F8D53EBEBCE5BFA6B">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test qualified trust service provider 1 from zz,cn=cert for wallet</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test Qualified Trust Service Provider 1 from ZZ,CN=Cert for Wallet</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test qualified trust service provider 1 from zz,cn=test-qualified-ca1-from-zz</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test Qualified Trust Service Provider 1 from ZZ,CN=Test-Qualified-CA1-from-ZZ</IssuerDistinguishedName>
+            <SerialNumber>100117</SerialNumber>
+            <CommonName>Cert for Wallet</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test Qualified Trust Service Provider 1 from ZZ</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2027-01-09T08:10:35Z</NotAfter>
+            <NotBefore>2025-03-09T08:10:35Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-5951BC1376A19EE1F5BDF33220FC13B4CAFD8B0EE8C35805C549468D5392FEB3</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>1rCuDUzUt8vcQvdwHbau3TPpaKk=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>2cOhruXKd1lXiI0rUzc2lijTluc=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="dNSName">nowina.lu</subjectAlternativeName>
+                    <subjectAlternativeName type="dNSName">*.nowina.lu</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/Test-Qualified-CA1-from-ZZ.crt</caIssuersUrl>
+                    <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-Qualified-CA1-from-ZZ</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-Qualified-CA1-from-ZZ.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                    <QcTypes>
+                        <QcType Description="qc-type-wal">0.4.0.194126.1.2</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>kZ6ziHv5bG/KL2J2UjapShH49Uz2tWYvjVPr685b+ms=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-59A74ECDD9A67E3FD58EC74CBB6CD6F49E82D04D49A8CE401AEAEDE66B9F4212">
+            <SubjectDistinguishedName Format="CANONICAL">cn=synthetic-c</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=synthetic-c</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=synthetic-c</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=synthetic-c</IssuerDistinguishedName>
+            <SerialNumber>1002</SerialNumber>
+            <CommonName>synthetic-c</CommonName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2034-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2024-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-C5DB633598457B64215EBF8016C78BF2EB044775F254B73B62D42C7B4E760F63</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-C5DB633598457B64215EBF8016C78BF2EB044775F254B73B62D42C7B4E760F63</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>tXC7fatgkQhacs9HOJqYGqUs1/s=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="3" OID="2.5.29.19" critical="true"/>
+                <PolicyConstraints requireExplicitPolicy="3" inhibitPolicyMapping="7" OID="2.5.29.36" critical="true"/>
+                <NameConstraints OID="2.5.29.30" critical="true">
+                    <PermittedSubtree minimum="2" maximum="10" type="dNSName">example.org</PermittedSubtree>
+                    <PermittedSubtree minimum="0" type="directoryName">2.5.4.5=#0c053132333435,DC=example,CN=Ünïcode\, Inc.,1.2.3.4.5=#1307466f6f20426172,C=BE</PermittedSubtree>
+                    <PermittedSubtree minimum="0" type="registeredID">1.3.6.1.4.1.99999</PermittedSubtree>
+                    <ExcludedSubtree minimum="0" maximum="5" type="rfc822Name">.bad.example</ExcludedSubtree>
+                </NameConstraints>
+                <InhibitAnyPolicy value="5" OID="2.5.29.54" critical="true"/>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://example.org/delta.crl</crlUrl>
+                </CRLDistributionPoints>
+                <FreshestCRL OID="2.5.29.46" critical="false">
+                    <crlUrl>http://example.org/delta.crl</crlUrl>
+                </FreshestCRL>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+                <ValAssuredShortTermCertificate present="true" OID="0.4.0.194121.2.1" critical="false"/>
+                <NoRevAvail present="true" OID="2.5.29.56" critical="false"/>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>WadOzdmmfj/VjsdMu2zW9J6C0E1JqM5AGurt5mufQhI=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

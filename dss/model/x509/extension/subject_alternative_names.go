@@ -26,7 +26,11 @@ type SubjectAlternativeNames struct {
 // NewSubjectAlternativeNames builds a SubjectAlternativeNames extension.
 func NewSubjectAlternativeNames() *SubjectAlternativeNames {
 	return &SubjectAlternativeNames{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME.OID()),
 	}
 }
 

@@ -24,7 +24,11 @@ type AuthorityInformationAccess struct {
 // NewAuthorityInformationAccess builds an AuthorityInformationAccess extension.
 func NewAuthorityInformationAccess() *AuthorityInformationAccess {
 	return &AuthorityInformationAccess{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID()),
 	}
 }
 
