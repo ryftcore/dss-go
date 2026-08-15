@@ -1,0 +1,229 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfltvd/LongTermValidationCertificateRevocationSelector.java (DSS 6.5.RC1).
+//
+// Extends bbb/xcv's CertificateRevocationSelector, overriding
+// verifyRevocationData, getRevocationAcceptanceValidationResult,
+// acceptableRevocationDataAvailable and collectMessages - the same
+// embed-and-re-register technique the base package documents for its own
+// subclassing (see xcv.CertificateRevocationSelectorOverrides).
+package vpfltvd
+
+import (
+	"time"
+
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+	"github.com/utain/esig/dss/validation/process/bbb/xcv"
+)
+
+// LongTermValidationCertificateRevocationSelector verifies and returns the
+// latest acceptable revocation data for a long-term validation process.
+type LongTermValidationCertificateRevocationSelector struct {
+	*xcv.CertificateRevocationSelector
+
+	// diagnosticData is the diagnostic data.
+	diagnosticData *diagnostic.DiagnosticData
+
+	// BBBs is the map of BasicBuildingBlocks. Exported because Java declares
+	// the field protected.
+	BBBs map[string]*jaxb.XmlBasicBuildingBlocks
+
+	// TokenId is the Id of a token being validated (e.g. signature id,
+	// timestamp id). Exported because Java declares the field protected.
+	TokenId string
+}
+
+// NewLongTermValidationCertificateRevocationSelector is the default
+// constructor. Port of
+// LongTermValidationCertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, DiagnosticData, Map, String, ValidationPolicy).
+func NewLongTermValidationCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
+	certificate *diagnostic.CertificateWrapper, currentTime time.Time, diagnosticData *diagnostic.DiagnosticData,
+	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
+	validationPolicy policy.ValidationPolicy) *LongTermValidationCertificateRevocationSelector {
+	base := &xcv.CertificateRevocationSelector{}
+	base.InitCertificateRevocationSelectorState(i18nProvider, certificate, currentTime, validationPolicy, make(map[string]struct{}))
+	c := &LongTermValidationCertificateRevocationSelector{
+		CertificateRevocationSelector: base,
+		diagnosticData:                diagnosticData,
+		BBBs:                          bbbs,
+		TokenId:                       tokenId,
+	}
+	c.InitCertificateRevocationSelector(c)
+	return c
+}
+
+// NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData is
+// the protected constructor. Port of
+// LongTermValidationCertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, Map, String, ValidationPolicy).
+func NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData(i18nProvider *i18n.I18nProvider,
+	certificate *diagnostic.CertificateWrapper, currentTime time.Time, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
+	tokenId string, validationPolicy policy.ValidationPolicy) *LongTermValidationCertificateRevocationSelector {
+	return NewLongTermValidationCertificateRevocationSelector(i18nProvider, certificate, currentTime, nil, bbbs, tokenId, validationPolicy)
+}
+
+// VerifyRevocationData verifies the given revocation data and returns the
+// resulting ChainItem. Port of the overridden
+// verifyRevocationData(ChainItem, CertificateRevocationWrapper).
+func (c *LongTermValidationCertificateRevocationSelector) VerifyRevocationData(item process.ChainItem[*jaxb.XmlCRS],
+	revocationWrapper *diagnostic.CertificateRevocationWrapper) process.ChainItem[*jaxb.XmlCRS] {
+	revocationBBBConclusion := c.getRevocationBBBConclusion(revocationWrapper)
+
+	if revocationBBBConclusion != nil {
+		if item == nil {
+			item = c.revocationBasicValidationAcceptable(revocationWrapper.Id(), revocationBBBConclusion)
+			c.FirstItem = item
+		} else {
+			item = item.SetNextItem(c.revocationBasicValidationAcceptable(revocationWrapper.Id(), revocationBBBConclusion))
+		}
+		if process.IsAllowedBasicRevocationDataValidation(revocationBBBConclusion) {
+			item = c.CertificateRevocationSelector.VerifyRevocationData(item, revocationWrapper)
+		}
+	}
+
+	allowedBBB := process.IsAllowedBasicRevocationDataValidation(revocationBBBConclusion)
+
+	validity, ok := c.RevocationDataValidityMap[revocationWrapper.Id()]
+	if !ok {
+		validity = allowedBBB
+	} else {
+		validity = validity && allowedBBB
+	}
+	c.RevocationDataValidityMap[revocationWrapper.Id()] = validity
+
+	return item
+}
+
+// getRevocationBBBConclusion returns a conclusion of the revocation basic
+// building block execution process. Port of
+// getRevocationBBBConclusion(CertificateRevocationWrapper).
+func (c *LongTermValidationCertificateRevocationSelector) getRevocationBBBConclusion(
+	revocationWrapper *diagnostic.CertificateRevocationWrapper) *jaxb.XmlConclusion {
+	rbvp := NewRevocationBasicValidationProcess(c.I18nProvider, c.diagnosticData, &revocationWrapper.RevocationWrapper, c.BBBs)
+	revocationBasicValidationResult := rbvp.Execute()
+	return revocationBasicValidationResult.Conclusion
+}
+
+// RevocationAcceptanceValidationResult returns a RevocationAcceptanceValidation
+// result for the given revocation token. Port of the overridden
+// getRevocationAcceptanceValidationResult(CertificateRevocationWrapper).
+func (c *LongTermValidationCertificateRevocationSelector) RevocationAcceptanceValidationResult(
+	revocationWrapper *diagnostic.CertificateRevocationWrapper) *jaxb.XmlRAC {
+	return c.getRevocationAcceptanceValidationResultById(revocationWrapper.Id())
+}
+
+// getRevocationAcceptanceValidationResultById ports the private
+// getRevocationAcceptanceValidationResult(String).
+func (c *LongTermValidationCertificateRevocationSelector) getRevocationAcceptanceValidationResultById(revocationId string) *jaxb.XmlRAC {
+	tokenBBB := c.BBBs[c.TokenId]
+	return process.GetRevocationAcceptanceCheckerResult(tokenBBB, c.Certificate.Id(), revocationId)
+}
+
+// revocationBasicValidationAcceptable ports the private
+// revocationBasicValidationAcceptable(String, XmlConclusion).
+func (c *LongTermValidationCertificateRevocationSelector) revocationBasicValidationAcceptable(revocationId string,
+	revocationBBBConclusion *jaxb.XmlConclusion) process.ChainItem[*jaxb.XmlCRS] {
+	return NewRevocationDataAcceptableCheck(c.I18nProvider, c.Result, revocationId, revocationBBBConclusion, c.WarnLevelRule())
+}
+
+// AcceptableRevocationDataAvailable checks whether the acceptable revocation
+// data is available. Port of the overridden acceptableRevocationDataAvailable().
+func (c *LongTermValidationCertificateRevocationSelector) AcceptableRevocationDataAvailable() process.ChainItem[*jaxb.XmlCRS] {
+	var acceptableRevocationData *diagnostic.RevocationWrapper
+	if latest := c.LatestAcceptableCertificateRevocation(); latest != nil {
+		acceptableRevocationData = &latest.RevocationWrapper
+	}
+	return newLongTermAcceptableRevocationDataAvailableCheck(c.I18nProvider, c.Result, acceptableRevocationData, c.FailLevelRule(), c)
+}
+
+// longTermAcceptableRevocationDataAvailableCheck is the Go form of the
+// anonymous AcceptableRevocationDataAvailableCheck subclass returned by
+// acceptableRevocationDataAvailable(): the same check, but reporting
+// INDETERMINATE/TRY_LATER instead of the base's failure indication when any
+// revocation basic validation for the certificate concluded TRY_LATER.
+type longTermAcceptableRevocationDataAvailableCheck struct {
+	*xcv.AcceptableRevocationDataAvailableCheck[*jaxb.XmlCRS]
+
+	selector *LongTermValidationCertificateRevocationSelector
+}
+
+// newLongTermAcceptableRevocationDataAvailableCheck builds the anonymous
+// subclass and re-registers the overrides with the outer type, so that the
+// base's self-calls reach the overridden method here rather than
+// AcceptableRevocationDataAvailableCheck's.
+func newLongTermAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCRS],
+	acceptableRevocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule,
+	selector *LongTermValidationCertificateRevocationSelector) *longTermAcceptableRevocationDataAvailableCheck {
+	c := &longTermAcceptableRevocationDataAvailableCheck{
+		AcceptableRevocationDataAvailableCheck: xcv.NewAcceptableRevocationDataAvailableCheck(i18nProvider, result, acceptableRevocationData, constraint),
+		selector:                               selector,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port
+// of the overridden getFailedIndicationForConclusion().
+func (c *longTermAcceptableRevocationDataAvailableCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_INDETERMINATE
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of the overridden getFailedSubIndicationForConclusion().
+func (c *longTermAcceptableRevocationDataAvailableCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	if c.selector.isTryLater() {
+		return enumerations.SubIndication_TRY_LATER
+	}
+	return c.AcceptableRevocationDataAvailableCheck.FailedSubIndicationForConclusion()
+}
+
+// isTryLater ports the private isTryLater().
+func (c *LongTermValidationCertificateRevocationSelector) isTryLater() bool {
+	for _, revocationWrapper := range c.CertificateRevocationData() {
+		conclusion := c.getRevocationBBBConclusion(revocationWrapper)
+		if conclusion == nil {
+			continue
+		}
+		var subIndication enumerations.SubIndication
+		if conclusion.SubIndication != nil {
+			subIndication = conclusion.SubIndication.SubIndication()
+		}
+		if enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
+			enumerations.SubIndication_TRY_LATER == subIndication {
+			return true
+		}
+	}
+	return false
+}
+
+// CollectMessages collects required messages from the given constraint to the
+// given conclusion. Port of the overridden
+// collectMessages(XmlConclusion, XmlConstraint).
+func (c *LongTermValidationCertificateRevocationSelector) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
+	if constraint.BlockType != nil && jaxb.XmlBlockType_REV_BBB == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
+		c.collectMessagesForBBB(conclusion, constraint)
+	}
+	if constraint.BlockType != nil && jaxb.XmlBlockType_RAC == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
+		if constraint.Id != nil {
+			xmlRAC := c.getRevocationAcceptanceValidationResultById(*constraint.Id)
+			if xmlRAC != nil {
+				c.CollectAllMessages(conclusion, xmlRAC.Conclusion)
+			}
+		}
+	}
+	c.CertificateRevocationSelector.CollectMessages(conclusion, constraint)
+}
+
+// collectMessagesForBBB ports the private
+// collectMessagesForBBB(XmlConclusion, XmlConstraint).
+func (c *LongTermValidationCertificateRevocationSelector) collectMessagesForBBB(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
+	c.CertificateRevocationSelector.CollectMessages(conclusion, constraint)
+	if constraint.Id != nil {
+		xmlBasicBuildingBlocks := c.BBBs[*constraint.Id]
+		if xmlBasicBuildingBlocks != nil {
+			c.CollectAllMessages(conclusion, xmlBasicBuildingBlocks.Conclusion)
+		}
+	}
+}
