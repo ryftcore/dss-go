@@ -249,3 +249,38 @@ func TestClaimWrapper_NumberAndBoolean(t *testing.T) {
 		t.Fatalf("expected display value true, got %q", b.DisplayValue())
 	}
 }
+
+// TestClaimMapKeyOrderIsSorted pins the stable order claimMapDisplayValue renders a map-valued
+// claim in; see claimMapKeyOrder for why Java's own HashMap order cannot be reproduced.
+func TestClaimMapKeyOrderIsSorted(t *testing.T) {
+	keys := []string{"formatted", "street_address", "locality", "region", "postal_code"}
+	want := []string{"formatted", "locality", "postal_code", "region", "street_address"}
+	entries := make(map[string]*ClaimWrapper, len(keys))
+	for _, key := range keys {
+		entries[key] = NewClaimWrapper(&jaxb.XmlClaim{})
+	}
+	got := claimMapKeyOrder(entries)
+	if len(got) != len(want) {
+		t.Fatalf("claimMapKeyOrder() = %v, want %v", got, want)
+	}
+	for i := range got {
+		if got[i] != want[i] {
+			t.Fatalf("claimMapKeyOrder() = %v, want %v", got, want)
+		}
+	}
+}
+
+// TestClaimMapDisplayValueIsStable guards the determinism the order function buys: the same map
+// must render the same string on every call, which ranging over a Go map would not give.
+func TestClaimMapDisplayValueIsStable(t *testing.T) {
+	entries := map[string]*ClaimWrapper{}
+	for _, key := range []string{"formatted", "street_address", "locality", "region", "postal_code"} {
+		entries[key] = NewClaimWrapper(&jaxb.XmlClaim{XmlClaimContent: jaxb.XmlClaimContent{Text: strp(key)}})
+	}
+	first := claimMapDisplayValue(entries)
+	for i := 0; i < 64; i++ {
+		if got := claimMapDisplayValue(entries); got != first {
+			t.Fatalf("claimMapDisplayValue is not stable:\n %s\n %s", first, got)
+		}
+	}
+}

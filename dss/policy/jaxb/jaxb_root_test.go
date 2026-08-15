@@ -100,3 +100,57 @@ func reportXMLDiff(t *testing.T, got, want []byte) {
 	}
 	t.Fatalf("byte mismatch: got %d lines, want %d lines", len(gotLines), len(wantLines))
 }
+
+// TestDocumentElementNamespaceIsWrittenLast pins the JAXB RI's attribute order
+// on the document element: the RI writes an element's attributes first and its
+// namespace declarations last, while encoding/xml writes the declaration it
+// derives from XMLName before the struct's attribute fields. Marshal restores
+// the RI's order (see xml.go's jaxbRootNamespaceLast); the four oracle-backed
+// KATs above only exercise the case where Name is set, so this also covers the
+// document element that declares no attribute at all.
+func TestDocumentElementNamespaceIsWrittenLast(t *testing.T) {
+	const ns = ` xmlns="http://dss.esig.europa.eu/validation/policy"`
+
+	cp := &ConstraintsParameters{Description: "d"}
+	got, err := Marshal(cp)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	if want := "<ConstraintsParameters" + ns + ">"; documentElement(t, got) != want {
+		t.Errorf("document element = %q, want %q", documentElement(t, got), want)
+	}
+
+	name := "QES AES/QC AES TL based"
+	cp.Name = &name
+	got, err = Marshal(cp)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	if want := `<ConstraintsParameters Name="` + name + `"` + ns + ">"; documentElement(t, got) != want {
+		t.Errorf("document element = %q, want %q", documentElement(t, got), want)
+	}
+
+	// The reordering must survive a round trip unchanged.
+	back, err := Unmarshal(got)
+	if err != nil {
+		t.Fatalf("Unmarshal: %v", err)
+	}
+	again, err := Marshal(back)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	if !bytes.Equal(again, got) {
+		t.Error("re-marshalling the reordered document element changed it")
+	}
+}
+
+// documentElement returns the start tag of the document element, i.e. the line
+// after the XML declaration.
+func documentElement(t *testing.T, doc []byte) string {
+	t.Helper()
+	lines := bytes.Split(doc, []byte("\n"))
+	if len(lines) < 2 {
+		t.Fatalf("no document element in %q", doc)
+	}
+	return string(lines[1])
+}

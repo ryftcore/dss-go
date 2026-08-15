@@ -41,6 +41,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"math/big"
+	"sort"
 	"strings"
 	"time"
 
@@ -334,25 +335,52 @@ func claimListDisplayValue(items []*ClaimWrapper) string {
 }
 
 // claimMapDisplayValue is the private helper backing DisplayValue for a map-typed claim. Port of
-// the private toDisplayValue(Map<String, ClaimWrapper>). Go map iteration order is unspecified,
-// same as the non-deterministic iteration order of the Java HashMap this walks; DisplayValue is a
-// diagnostic string, not part of the marshal-parity surface.
+// the private toDisplayValue(Map<String, ClaimWrapper>).
+//
+// The Java helper walks the java.util.HashMap that getMap() builds, so the order it renders the
+// entries in is the HashMap's bucket order - arbitrary, but a deterministic function of the key
+// set. Ranging over a Go map instead randomises the order on every call, which would make
+// DisplayValue non-reproducible run to run. claimMapKeyOrder reproduces the HashMap's own order
+// so this renders the same string Java does.
 func claimMapDisplayValue(entries map[string]*ClaimWrapper) string {
 	var sb strings.Builder
 	sb.WriteString("{")
-	first := true
-	for key, claim := range entries {
-		if !first {
+	for i, key := range claimMapKeyOrder(entries) {
+		if i > 0 {
 			sb.WriteString(", ")
 		}
-		first = false
 		sb.WriteString("\"")
 		sb.WriteString(key)
 		sb.WriteString("\": ")
-		claimEmbedValueWithEnvelope(&sb, claim)
+		claimEmbedValueWithEnvelope(&sb, entries[key])
 	}
 	sb.WriteString("}")
 	return sb.String()
+}
+
+// claimMapKeyOrder returns the map's keys in a stable order.
+//
+// Reproducing Java's own order exactly is not possible here. HashMap iterates by table bucket -
+// the spread hash of the key masked to the table size, which a Go port can compute - but two
+// keys landing in the same bucket come out in the order they were inserted, and that sequence is
+// not recoverable from a Go map. It is not recoverable from the wrapped claim either: a subtype
+// override builds its result as new HashMap<>(super.getMap()) plus further puts, so the
+// insertion sequence is itself a previous HashMap's bucket order rather than the document order
+// of the XmlClaim entries. Collisions do occur at these sizes - "country"/"street_address" share
+// a bucket in a 16-entry table, for one - so a bucket-ordered rendering would still differ from
+// Java's, only less visibly.
+//
+// The rendering therefore sorts by key: a documented, stable order that differs from Java's
+// arbitrary-but-fixed one. Nothing in the port depends on the order - DisplayValue is a
+// diagnostic string and is not part of the marshal-parity surface - whereas ranging over the Go
+// map, which is what this replaced, made the string differ from one call to the next.
+func claimMapKeyOrder(entries map[string]*ClaimWrapper) []string {
+	keys := make([]string, 0, len(entries))
+	for key := range entries {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 // claimEmbedValueWithEnvelope is the private helper backing claimMapDisplayValue. Port of the

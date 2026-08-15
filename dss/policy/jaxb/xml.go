@@ -6,17 +6,27 @@
 // # JAXB quirks encoding/xml cannot reproduce
 //
 // As in dss/diagnostic/jaxb (see that package's xml.go for the fuller
-// rationale), two behaviours of the JAXB reference implementation are outside
-// what encoding/xml can express, so Marshal post-processes the encoder output
-// with jaxbCanonical. Both are pure XML-syntax normalisations - no
-// information is added or dropped - and are applied to the Go output only, so
-// the Java bytes stay the untouched reference in the marshal-parity KAT:
+// rationale), three behaviours of the JAXB reference implementation are outside
+// what encoding/xml can express, so Marshal post-processes the encoder output.
+// All three are pure XML-syntax normalisations - no information is added or
+// dropped - and are applied to the Go output only, so the Java bytes stay the
+// untouched reference in the marshal-parity KAT:
 //
 //  1. Self-closing tags: see jaxb_content_model.go.
 //  2. Character escaping: encoding/xml escapes " and ' as &#34;/&#39;
 //     everywhere and writes \t \n \r as numeric references; the RI leaves "
 //     and ' alone in character data, writes " as &quot; in attribute values,
 //     and uses lowercase hexadecimal references.
+//  3. Namespace-declaration position on the document element. encoding/xml
+//     writes the declaration it derives from XMLName before the struct's own
+//     attribute fields, so it emits
+//     `<ConstraintsParameters xmlns="..." Name="...">`; the RI writes an
+//     element's attributes first and its namespace declarations last, i.e.
+//     `<ConstraintsParameters Name="..." xmlns="...">`. Unlike
+//     DiagnosticData - whose document element declares no attributes at all,
+//     which is why dss/diagnostic/jaxb needs no counterpart - the policy
+//     document element carries the optional Name attribute, so the difference
+//     is observable. jaxbRootNamespaceLast moves the declaration back.
 package jaxb
 
 import (
@@ -53,7 +63,7 @@ func Marshal(cp *ConstraintsParameters) ([]byte, error) {
 	if err := enc.Close(); err != nil {
 		return nil, err
 	}
-	body := jaxbCanonical(buf.Bytes())
+	body := jaxbRootNamespaceLast(jaxbCanonical(buf.Bytes()))
 	out := make([]byte, 0, len(xmlDeclaration)+len(body)+1)
 	out = append(out, xmlDeclaration...)
 	out = append(out, body...)
@@ -62,6 +72,53 @@ func Marshal(cp *ConstraintsParameters) ([]byte, error) {
 }
 
 // ------------------------------------------------------------- canonicalising
+
+// xmlnsDecl is the start of the default-namespace declaration encoding/xml
+// writes for a struct whose XMLName carries a namespace.
+const xmlnsDecl = ` xmlns="`
+
+// jaxbRootNamespaceLast moves the document element's xmlns declaration behind
+// its attributes, reproducing the order the JAXB RI writes them in; see quirk
+// 3 in this file's header. Only the document element carries a declaration
+// (policy.xsd binds its target namespace to the default prefix), so rewriting
+// the first start tag is enough. It is a no-op for a document element that
+// declares no attributes.
+func jaxbRootNamespaceLast(in []byte) []byte {
+	open := bytes.IndexByte(in, '<')
+	if open < 0 {
+		return in
+	}
+	end := tagEnd(in, open)
+	tag := in[open:end]
+	declStart := bytes.Index(tag, []byte(xmlnsDecl))
+	if declStart < 0 {
+		return in
+	}
+	valueEnd := bytes.IndexByte(tag[declStart+len(xmlnsDecl):], '"')
+	if valueEnd < 0 {
+		return in
+	}
+	declEnd := declStart + len(xmlnsDecl) + valueEnd + 1
+	decl := tag[declStart:declEnd]
+
+	rest := make([]byte, 0, len(tag))
+	rest = append(rest, tag[:declStart]...)
+	rest = append(rest, tag[declEnd:]...)
+	// Re-insert just before the tag's closing '>', or '/>' when the document
+	// element is empty.
+	at := len(rest) - 1
+	if at > 0 && rest[at-1] == '/' {
+		at--
+	}
+
+	out := make([]byte, 0, len(in))
+	out = append(out, in[:open]...)
+	out = append(out, rest[:at]...)
+	out = append(out, decl...)
+	out = append(out, rest[at:]...)
+	out = append(out, in[end:]...)
+	return out
+}
 
 // jaxbCanonical rewrites encoding/xml output into the spelling the JAXB RI
 // produces; see the package-level notes at the top of this file. This is a
