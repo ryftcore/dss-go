@@ -1,11 +1,12 @@
-# xcv (X.509 certificate validation) XCVA oracle corpora
+# xcv (X.509 certificate validation) XCVA + XCVB oracle corpora
 
-Both `oracle/*.jsonl` files are pure Java dumps, produced by the drivers in `gen/`.
+All `oracle/*.jsonl` files are pure Java dumps, produced by the drivers in `gen/`.
 
 | file | rows | driver | input |
 | --- | --- | --- | --- |
 | `oracle/xcva_blocks.jsonl` | 916 | `XcvaOracle.java` | `X509CertificateValidation` / `CertificateRevocationSelector` / `RevocationAcceptanceChecker` over every signature, time-stamp, revocation and used certificate of the marshal-parity diagnostic-data corpus and of the nine synthetic dumps in `dd/`, validation time 2024-01-01T00:00:00Z |
 | `oracle/xcva_direct.jsonl` | 1279 | `XcvaDirectOracle.java` | all 12 `rac/checks` classes driven alone at `Level.FAIL` over every (certificate, certificate revocation data) pair of the same dumps |
+| `oracle/xcv_direct.jsonl` | ~33000 | `XcvOracle.java` | all 75 instantiable `checks` / `sub/checks` / `sub/checks/pseudo` / `rfc/checks` classes (the phase 8d XCVB manifest) driven alone at `Level.FAIL`, over every used certificate (and, for the revocation-facing checks, every certificate-revocation pair) of the marshal-parity corpus plus `dd/`, plus a handful of hand-built certificates/revocations (see "XCVB direct corpus" below) |
 
 The real inputs are the marshal-parity corpus in `dss/diagnostic/jaxb/testdata/oracle`
 plus `dd/`; the Go tests (`../xcva_blocks_oracle_test.go`,
@@ -80,3 +81,92 @@ From a `dss-upstream` checkout with the modules built:
   `null`. A revocation without a production date is therefore marshalled by the Go
   detailed report as `0001-01-01T00:00:00Z` where Java omits the element - a
   deviation of the frozen `detailedreport/jaxb` package, not of this one.
+
+## XCVB direct corpus (`xcv_direct.jsonl`)
+
+`gen/XcvOracle.java` is the phase 8d XCVB porter's oracle, covering the 83-file
+manifest ported into this package's `checks` / `sub.checks` / `sub.checks.pseudo`
+/ `rfc.checks` half (everything **except** the `X509CertificateValidation` /
+`crs` / `rac` root that XCVA owns and that `XcvaOracle`/`XcvaDirectOracle`
+already cover above). It follows the same "drive every check alone through a
+one-item chain at `Level.FAIL`" pattern as `FcSavDirectOracle` (phase 8c) and
+`XcvaDirectOracle`.
+
+Of the 83 ported files, 75 are directly instantiable `ChainItem`s and get a row
+here; the other 8 are exercised only indirectly:
+
+- `SubX509CertificateValidation` (the per-certificate `Chain` that wires most of
+  these checks together) and `RevocationFreshnessChecker` (the `Chain` wiring
+  `NextUpdateCheck`/`RevocationDataFreshCheck`/`RevocationDataFreshCheckWithNullConstraint`)
+  are `Chain`s, not `ChainItem`s; their own constituent checks are all driven
+  directly here, and `SubX509CertificateValidation` itself is exercised at block
+  level by XCVA's `xcva_blocks.jsonl` (`X509CertificateValidation` calls it for
+  every certificate of the chain).
+- `PolicyTreeNode` is a plain RFC 5280 policy-tree data structure with no
+  `ChainItem` surface of its own; it is exercised through
+  `CertificatePolicyTreeCheck`, which is driven directly (including a
+  synthetic anyPolicy/qualifier scenario reaching its node-deletion branch via
+  the real corpus's varied certificate-policy chains).
+- `PseudoStrategy` (interface), `PseudoAttributeStrategy`, `PseudoGermanyStrategy`
+  and `JoinedPseudoStrategy` are exercised through `PseudoUsageCheck`, driven
+  directly over the real corpus (which contains no `:PN`-suffixed German common
+  names, so `PseudoGermanyStrategy`'s own branch is a Go-side unit-test
+  responsibility, not this oracle's).
+- `AbstractRevocationFreshCheck` is `abstract`; both of its concrete
+  subclasses (`RevocationDataFreshCheck`, `RevocationDataFreshCheckWithNullConstraint`)
+  are driven directly.
+
+### Why some rows are synthetic
+
+The real corpus - even widened with XCVA's `dd/*.xml` dumps, which this
+generator also replays (as `dd/<name>` file entries) since several of them
+(trust anchors, sunset dates) exercise the same "no corpus certificate is
+trusted" gap XCVB's checks hit too - still cannot reach every branch:
+
+- **No corpus certificate carries a QC/PSD2 statement or a pseudonym**, so the
+  nine `CertificateQc*`/`CertificatePS2DQc*` checks and `PseudonymCheck` only
+  ever see the "absent" `NOT OK` branch under an `ANY` (`"*"`) rule. A single
+  hand-built `XmlCertificate` (`C-SYNTH-QC`) carrying every one of those
+  statements at once supplies the missing `OK` row for all of them.
+- **No corpus certificate's DN falls outside a name constraint its issuer
+  actually declares** (`CertificateNameConstraintsCheck`'s only failure
+  branch): a two-certificate synthetic chain (`C-SYNTH-NC-CA` restricting
+  `directoryName` to `O=Allowed`, `C-SYNTH-NC-LEAF` with DN `O=Excluded`)
+  supplies it.
+- **No corpus certificate declares `noRevAvail` while still publishing a
+  conflicting OCSP access point** (`NoRevAvailCheck`'s only failure branch,
+  RFC 9608 §3): `C-SYNTH-NORA-VIOLATION` supplies it.
+- **Every corpus certificate carries a serial number**
+  (`SerialNumberCheck`'s only failure branch): `C-SYNTH-NO-SERIAL` (serial
+  number left unset) supplies it.
+- **No corpus certificate is associated with a `TrustServiceProvider`**
+  (`TrustServiceStatusCheck`/`TrustServiceTypeIdentifierCheck`'s only "match"
+  branch): `C-SYNTH-TRUST-SERVICE` (one `TrustService` with a status/type an
+  `ANY` rule matches, `StartDate` before the fixed usage time) supplies it.
+- **No corpus revocation carries reason `CERTIFICATE_HOLD`**
+  (`CertificateNotOnHoldCheck`'s only failure branch): `R-SYNTH-ON-HOLD`
+  supplies it.
+- The `XmlAOV`/`XmlCRS`/`XmlRFC`/`XmlSubXCV` "result wrapper" checks
+  (`CertificateAlgorithmObsolescenceValidationCheck`,
+  `CertificateRevocationSelectorResultCheck`,
+  `RevocationFreshnessCheckerResultCheck`, `CheckSubXCVResult`) read an
+  already-built result object rather than a diagnostic-data token; each is
+  driven over hand-built result shapes keyed to a real certificate id, at
+  every `Indication` the check branches on (`PASSED` / `INDETERMINATE`, plus
+  `passed-with-algo`/`error`/`warning` for the AOV shape, mirroring
+  `FcSavDirectOracle`'s `aovOfShape`).
+
+Every one of the 75 checks has both an `OK` and a `NOT OK` row; the Go test
+fails if either property is lost for any of them (same rule as XCVA's corpus
+above and phase 8c's `sav`/`fc` corpora).
+
+### Regenerating `xcv_direct.jsonl`
+
+    cd dss-upstream
+    mvn -o dependency:build-classpath -pl dss-validation -Dmdep.outputFile=/tmp/cp.txt
+    CP="dss-validation/target/classes:$(cat /tmp/cp.txt)"
+    javac -cp "$CP" -d /tmp/oracle <dss-repo>/validation/process/bbb/xcv/testdata/gen/XcvOracle.java
+    java  -cp "$CP:/tmp/oracle" XcvOracle <dss-repo>/diagnostic/jaxb/testdata/oracle <dss-repo>
+
+`XcvOracle` reads XCVA's `dd/*.xml` (already committed; no `XcvaSyntheticDumps`
+run needed) alongside the marshal-parity corpus.
