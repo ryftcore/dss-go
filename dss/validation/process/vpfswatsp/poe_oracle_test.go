@@ -83,14 +83,25 @@ func TestPOEOracle(t *testing.T) {
 		t.Run(row.Dump, func(t *testing.T) {
 			dd := loadPOEDump(t, row.Dump)
 
-			// The seeded token ids, and their order, are Init's own walk order.
+			// The SET of token ids Init seeds. It is compared unordered on
+			// purpose: two of the eleven lists Init walks - getAllSignatures()
+			// and getAllRevocationData() - are java.util.HashSets upstream, so
+			// their Java iteration order is String-hash order, which the Go
+			// wrappers' deterministic slices neither can nor should reproduce.
+			// Nothing downstream of init() depends on that order (it only seeds
+			// a map keyed by token id), so the difference is invisible; see the
+			// batch notes.
 			seeded := poeSeededTokenIds(dd)
 			if len(seeded) != len(row.Tokens) {
 				t.Fatalf("seeded token count = %d, want %d", len(seeded), len(row.Tokens))
 			}
-			for i, token := range row.Tokens {
-				if seeded[i] != token.Id {
-					t.Fatalf("seeded token[%d] = %q, want %q", i, seeded[i], token.Id)
+			seededSet := make(map[string]struct{}, len(seeded))
+			for _, id := range seeded {
+				seededSet[id] = struct{}{}
+			}
+			for _, token := range row.Tokens {
+				if _, ok := seededSet[token.Id]; !ok {
+					t.Fatalf("token %q not seeded by Init", token.Id)
 				}
 			}
 
@@ -172,13 +183,14 @@ func TestPOEOracle(t *testing.T) {
 			if len(signatures) != len(row.SignaturePOE) {
 				t.Fatalf("signature count = %d, want %d", len(signatures), len(row.SignaturePOE))
 			}
-			for i, signature := range signatures {
+			// Matched by id, not by position: getAllSignatures() is a HashSet
+			// upstream (see the seeded-token note above). Each signature's POE
+			// is independent of the order they are added in.
+			for _, signature := range signatures {
 				sigPoe.AddSignaturePOE(signature, NewPOE(poeProbes[1]))
-				want := row.SignaturePOE[i]
-				if signature.Id() != want.Id {
-					t.Fatalf("signature[%d] = %q, want %q", i, signature.Id(), want.Id)
-				}
-				assertPOESnapshot(t, "signaturePOE:"+want.Id, sigPoe.GetLowestPOE(signature.Id()), want.Lowest)
+			}
+			for _, want := range row.SignaturePOE {
+				assertPOESnapshot(t, "signaturePOE:"+want.Id, sigPoe.GetLowestPOE(want.Id), want.Lowest)
 			}
 		})
 	}

@@ -1,0 +1,37 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/signature/checks/AcceptableTrustedListCheck.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// AcceptableTrustedListCheck verifies whether the validation of a Trusted
+// List is conclusive.
+type AcceptableTrustedListCheck[T any] struct {
+	*AbstractTrustedListCheck[T]
+}
+
+// NewAcceptableTrustedListCheck is the default constructor. Port of
+// AcceptableTrustedListCheck(I18nProvider, T, XmlTLAnalysis, LevelRule).
+func NewAcceptableTrustedListCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+	tlAnalysis *jaxb.XmlTLAnalysis, constraint policy.LevelRule) *AcceptableTrustedListCheck[T] {
+	c := &AcceptableTrustedListCheck[T]{
+		AbstractTrustedListCheck: NewAbstractTrustedListCheck(i18nProvider, result, tlAnalysis, constraint),
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// MessageTag returns the check's message tag. Port of the overridden getMessageTag().
+func (c *AcceptableTrustedListCheck[T]) MessageTag() i18n.MessageTag {
+	return i18n.MessageTag_QUAL_TRUSTED_LIST_ACCEPT
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of the
+// overridden getErrorMessageTag().
+func (c *AcceptableTrustedListCheck[T]) ErrorMessageTag() i18n.MessageTag {
+	return i18n.MessageTag_QUAL_TRUSTED_LIST_ACCEPT_ANS
+}

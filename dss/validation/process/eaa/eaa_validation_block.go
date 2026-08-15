@@ -168,8 +168,21 @@ func (b *EAAValidationBlock) getXmlValidationSignatureQualification(signature *d
 		panic(fmt.Sprintf("Signature validation is not found for Id '%s'", signature.Id()))
 	}
 
+	// Java's XmlValidationProcessBasicSignature extends
+	// XmlConstraintsConclusionWithProofOfExistence, so the upstream call
+	// passes xmlSignature.getValidationProcessBasicSignature() straight
+	// through. The Go port models that "extends" relationship as two
+	// distinct named types embedding the same content struct rather than
+	// one embedding the other (see detailedreport/jaxb/jaxb_process.go), so
+	// the upcast needs an explicit copy of the shared content; the
+	// Title-only Attrs half is never read by SignatureQualificationBlock
+	// (only .Conclusion, which lives in the content struct), so it is left
+	// zero-valued here.
+	etsi319102validation := &jaxb.XmlConstraintsConclusionWithProofOfExistence{
+		XmlConstraintsConclusionWithProofOfExistenceContent: xmlSignature.ValidationProcessBasicSignature.XmlConstraintsConclusionWithProofOfExistenceContent,
+	}
 	signatureQualificationBlock := qualification.NewSignatureQualificationBlock(
-		b.i18nProvider, &xmlSignature.ValidationProcessBasicSignature.XmlConstraintsConclusionWithProofOfExistenceContent,
+		b.i18nProvider, etsi319102validation,
 		signature.SigningCertificate(), b.tlAnalysis)
 	return signatureQualificationBlock.Execute()
 }

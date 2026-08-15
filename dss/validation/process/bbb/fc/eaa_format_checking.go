@@ -13,19 +13,14 @@
 // (the only caller of NewEAAFormatChecking) carries the same eaa tag, so
 // no untagged code path references this file.
 //
-// UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the four
-// checks this class wires (EAASignatureUnicityCheck, DisclosurePresentCheck,
-// DisclosureListExhaustiveCheck, KeyBindingSignaturePresentCheck) live in the
-// Java package eu.europa.esig.dss.validation.process.eaa.checks, which is
-// NOT part of the phase 8c package layout (bbb/{isc,vci,cv,fc,sav} only) and
-// was not present anywhere in the repository at port time. This file assumes
-// they will land in a sibling package "github.com/utain/esig/dss/validation/process/eaa"
-// with constructors NewEAASignatureUnicityCheck/NewDisclosurePresentCheck/
-// NewDisclosureListExhaustiveCheck/NewKeyBindingSignaturePresentCheck taking
-// (i18nProvider, result *process.Result[*drjaxb.XmlFC], token *diagnostic.EAAWrapper, constraint policy.LevelRule)
-// and returning process.ChainItem[*drjaxb.XmlFC], mirroring every other check
-// constructor in this package. See porter notes: this file does not build
-// until that package exists.
+// INTEGRATION UPDATE (phase 8e integration pass): the forward dependency is
+// now real and confirmed matching (constructors exactly as predicted above),
+// landing in github.com/utain/esig/dss/validation/process/eaa/checks - a
+// dedicated package split out from the eaa root package (which holds
+// EAAValidationBlock/EAAValidationProcess and imports qualification), so that
+// this file's eaa-tagged import doesn't re-close a
+// bbb/fc -> eaa -> qualification -> vpfswatsp -> bbb/sav -> eaa cycle. See
+// bbb/sav/eaa_acceptance_validation.go for the full rationale.
 package fc
 
 import (
@@ -35,7 +30,7 @@ import (
 	"github.com/utain/esig/dss/i18n"
 	policy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/eaa"
+	"github.com/utain/esig/dss/validation/process/eaa/checks"
 )
 
 // EAAFormatChecking verifies the format of an Electronic Attestation of Attributes (EAA).
@@ -64,20 +59,20 @@ func (c *EAAFormatChecking) InitChain() {
 
 func (c *EAAFormatChecking) signatureUnicity() process.ChainItem[*drjaxb.XmlFC] {
 	constraint := c.Policy.EAASignatureUnicityConstraint()
-	return eaa.NewEAASignatureUnicityCheck(c.I18nProvider, c.Result, c.Token, constraint)
+	return checks.NewEAASignatureUnicityCheck(c.I18nProvider, c.Result, c.Token, constraint)
 }
 
 func (c *EAAFormatChecking) disclosurePresent() process.ChainItem[*drjaxb.XmlFC] {
 	constraint := c.Policy.EAADisclosurePresentConstraint()
-	return eaa.NewDisclosurePresentCheck(c.I18nProvider, c.Result, c.Token, constraint)
+	return checks.NewDisclosurePresentCheck(c.I18nProvider, c.Result, c.Token, constraint)
 }
 
 func (c *EAAFormatChecking) disclosureListExhaustive() process.ChainItem[*drjaxb.XmlFC] {
 	constraint := c.Policy.EAADisclosureListExhaustiveConstraint()
-	return eaa.NewDisclosureListExhaustiveCheck(c.I18nProvider, c.Result, c.Token, constraint)
+	return checks.NewDisclosureListExhaustiveCheck(c.I18nProvider, c.Result, c.Token, constraint)
 }
 
 func (c *EAAFormatChecking) keyBindingSignaturePresent() process.ChainItem[*drjaxb.XmlFC] {
 	constraint := c.Policy.EAAKeyBindingSignaturePresentConstraint()
-	return eaa.NewKeyBindingSignaturePresentCheck(c.I18nProvider, c.Result, c.Token, constraint)
+	return checks.NewKeyBindingSignaturePresentCheck(c.I18nProvider, c.Result, c.Token, constraint)
 }

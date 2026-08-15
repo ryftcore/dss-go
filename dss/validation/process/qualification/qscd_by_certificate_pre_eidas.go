@@ -1,0 +1,35 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/qscd/QSCDByCertificatePreEIDAS.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// qscdByCertificatePreEIDAS returns QSCD status for a certificate before
+// eIDAS.
+type qscdByCertificatePreEIDAS struct {
+	// certificate is the certificate to get QSCD status for.
+	certificate *diagnostic.CertificateWrapper
+}
+
+// newQSCDByCertificatePreEIDAS is the default constructor. Port of
+// QSCDByCertificatePreEIDAS(CertificateWrapper).
+func newQSCDByCertificatePreEIDAS(certificate *diagnostic.CertificateWrapper) *qscdByCertificatePreEIDAS {
+	return &qscdByCertificatePreEIDAS{certificate: certificate}
+}
+
+// QSCDStatus is the port of the overridden getQSCDStatus().
+func (q *qscdByCertificatePreEIDAS) QSCDStatus() enumerations.QSCDStatus {
+	// checks in policy id extension
+	policyIdSupportedByQSCD := process.IsQCPPlus(q.certificate)
+
+	// checks in QC statement extension
+	qcStatementSupportedByQSCD := q.certificate.IsSupportedByQSCD()
+
+	if policyIdSupportedByQSCD || qcStatementSupportedByQSCD {
+		return enumerations.QSCDStatus_QSCD
+	}
+	return enumerations.QSCDStatus_NOT_QSCD
+}

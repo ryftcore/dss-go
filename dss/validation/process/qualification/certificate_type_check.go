@@ -1,0 +1,92 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/CertificateTypeCheck.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"fmt"
+
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// CertificateTypeCheck checks if the certificate type has been identified at
+// the given time.
+type CertificateTypeCheck struct {
+	*process.ChainItemBase[*jaxb.XmlValidationCertificateQualification]
+
+	// certType is the CertificateType in question.
+	certType enumerations.CertificateType
+
+	// validationTime is the used validation time.
+	validationTime enumerations.ValidationTime
+}
+
+// NewCertificateTypeCheck is the default constructor. Port of
+// CertificateTypeCheck(I18nProvider, XmlValidationCertificateQualification, CertificateType, ValidationTime, LevelRule).
+func NewCertificateTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+	certType enumerations.CertificateType, validationTime enumerations.ValidationTime,
+	constraint policy.LevelRule) *CertificateTypeCheck {
+	c := &CertificateTypeCheck{
+		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),
+		certType:       certType,
+		validationTime: validationTime,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *CertificateTypeCheck) Process() bool {
+	return enumerations.CertificateType_UNKNOWN != c.certType
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *CertificateTypeCheck) MessageTag() i18n.MessageTag {
+	switch c.validationTime {
+	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST
+	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC
+	case enumerations.ValidationTime_VALIDATION_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT
+	default:
+		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
+	}
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
+func (c *CertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
+	switch c.validationTime {
+	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST_ANS
+	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC_ANS
+	case enumerations.ValidationTime_VALIDATION_TIME:
+		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT_ANS
+	default:
+		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
+	}
+}
+
+// BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
+func (c *CertificateTypeCheck) BuildAdditionalInfo() *string {
+	if enumerations.CertificateType_UNKNOWN != c.certType {
+		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_TYPE, c.certType.Label())
+		return &message
+	}
+	return nil
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *CertificateTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_FAILED
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of getFailedSubIndicationForConclusion(), whose default is null.
+func (c *CertificateTypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return ""
+}

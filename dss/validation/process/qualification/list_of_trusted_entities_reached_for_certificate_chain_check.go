@@ -1,0 +1,62 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/eaa/pid/checks/ListOfTrustedEntitiesReachedForCertificateChainCheck.java (DSS 6.5.RC1).
+package qualification
+
+import (
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// ListOfTrustedEntitiesReachedForCertificateChainCheck checks whether a
+// List of Trusted Entities has been reached for the given certificate
+// chain.
+type ListOfTrustedEntitiesReachedForCertificateChainCheck struct {
+	*process.ChainItemBase[*jaxb.XmlValidationPIDQualificationProcess]
+
+	// signingCertificate is the end-entity certificate.
+	signingCertificate *diagnostic.CertificateWrapper
+}
+
+// NewListOfTrustedEntitiesReachedForCertificateChainCheck is the default
+// constructor. Port of
+// ListOfTrustedEntitiesReachedForCertificateChainCheck(I18nProvider, XmlValidationPIDQualificationProcess, CertificateWrapper, LevelRule).
+func NewListOfTrustedEntitiesReachedForCertificateChainCheck(i18nProvider *i18n.I18nProvider,
+	result *process.Result[*jaxb.XmlValidationPIDQualificationProcess], signingCertificate *diagnostic.CertificateWrapper,
+	constraint policy.LevelRule) *ListOfTrustedEntitiesReachedForCertificateChainCheck {
+	c := &ListOfTrustedEntitiesReachedForCertificateChainCheck{
+		ChainItemBase:      process.NewChainItemBase(i18nProvider, result, constraint),
+		signingCertificate: signingCertificate,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) Process() bool {
+	return c.signingCertificate != nil && c.signingCertificate.IsListOfTrustedEntitiesReached()
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) MessageTag() i18n.MessageTag {
+	return i18n.MessageTag_EAA_CERT_LOTE_REACHED
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
+func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) ErrorMessageTag() i18n.MessageTag {
+	return i18n.MessageTag_EAA_CERT_LOTE_REACHED_ANS
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_FAILED
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure.
+// Port of getFailedSubIndicationForConclusion(), whose default is null.
+func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return ""
+}
