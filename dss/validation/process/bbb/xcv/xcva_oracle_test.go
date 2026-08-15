@@ -143,19 +143,24 @@ func loadXcvaDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticDat
 	return diagnostic.NewDiagnosticData(jaxbData)
 }
 
-// xcvaPolicies returns the two validation policies the block oracle used, keyed
-// by the name its rows carry: the default ETSI one and the CHAIN-model variant
-// committed in testdata/policy.
+// xcvaPolicies returns the three validation policies the block oracle used, keyed
+// by the name its rows carry: the default ETSI one, the CHAIN-model variant and the
+// OCSP-certHash variant, both committed in testdata/policy.
 func xcvaPolicies(t *testing.T) map[string]modelpolicy.ValidationPolicy {
 	t.Helper()
 	variant, err := os.ReadFile("testdata/policy/constraint-chain.xml")
 	if err != nil {
 		t.Fatalf("read chain policy: %v", err)
 	}
+	certHash, err := os.ReadFile("testdata/policy/constraint-certhash.xml")
+	if err != nil {
+		t.Fatalf("read certhash policy: %v", err)
+	}
 	factory := policy.NewEtsiValidationPolicyFactory()
 	return map[string]modelpolicy.ValidationPolicy{
-		"default": xcvaDefaultPolicy(t),
-		"chain":   factory.LoadValidationPolicy(model.NewInMemoryDocument(variant)),
+		"default":  xcvaDefaultPolicy(t),
+		"chain":    factory.LoadValidationPolicy(model.NewInMemoryDocument(variant)),
+		"certhash": factory.LoadValidationPolicy(model.NewInMemoryDocument(certHash)),
 	}
 }
 

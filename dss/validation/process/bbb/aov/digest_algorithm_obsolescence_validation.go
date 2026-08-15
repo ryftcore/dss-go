@@ -156,7 +156,9 @@ func getDigestMatchersByAlgorithmAndPosition(digestMatchers []*diagnosticjaxb.Xm
 // digestAlgorithmCheckResult ports the private digestAlgorithmCheckResult(List, XmlCC, CryptographicSuite).
 func (c *DigestAlgorithmObsolescenceValidation[T]) digestAlgorithmCheckResult(digestMatchers []*diagnosticjaxb.XmlDigestMatcher,
 	ccResult *jaxb.XmlCC, constraint policy.CryptographicSuite) process.ChainItem[*jaxb.XmlAOV] {
-	position, err := process.GetDigestMatcherCryptoPosition(digestMatchers[0]) // same position shall be provided
+	// Java calls the getDigestMatcherCryptoPosition(Collection) overload, which
+	// resolves the PLURAL MessageTag when the group holds more than one matcher.
+	position, err := process.GetDigestMatchersCryptoPosition(digestMatchers)
 	if err != nil {
 		panic(err)
 	}

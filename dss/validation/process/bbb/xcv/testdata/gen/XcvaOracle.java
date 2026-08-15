@@ -97,6 +97,18 @@ public class XcvaOracle {
             chainPolicy = new EtsiValidationPolicyFactory().loadValidationPolicy(is);
         }
 
+        // A third policy, also committed next to the dumps: the default one with the
+        // two OCSP certHash constraints raised to FAIL. The default ETSI policy leaves
+        // them undefined, so RevocationAcceptanceChecker's certHash items are level-less
+        // and record no constraint at all - which leaves the "wire the match check only
+        // when the extension is present" gate in initChain() unobservable (an audit
+        // mutation inverting it survived the corpus).
+        ValidationPolicy certHashPolicy;
+        try (InputStream is = new FileInputStream(new File(repoRoot,
+                "validation/process/bbb/xcv/testdata/policy/constraint-certhash.xml"))) {
+            certHashPolicy = new EtsiValidationPolicyFactory().loadValidationPolicy(is);
+        }
+
         // The synthetic dumps of XcvaSyntheticDumps, which carry the trust anchors
         // the marshal-parity corpus has none of.
         File[] synthetic = new File(repoRoot, "validation/process/bbb/xcv/testdata/dd")
@@ -111,6 +123,7 @@ public class XcvaOracle {
                         DiagnosticDataFacade.newFacade().unmarshall(synth, false));
                 emit(out, i18n, defaultPolicy, "dd/" + synth.getName(), "default", dd);
                 emit(out, i18n, chainPolicy, "dd/" + synth.getName(), "chain", dd);
+                emit(out, i18n, certHashPolicy, "dd/" + synth.getName(), "certhash", dd);
             }
 
             for (File file : files) {

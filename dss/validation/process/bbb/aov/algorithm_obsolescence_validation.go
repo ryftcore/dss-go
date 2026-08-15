@@ -108,7 +108,12 @@ func (c *AlgorithmObsolescenceValidation[T]) InitChain() {
 	c.position = c.overrides.Position()
 	c.cryptographicSuite = c.overrides.CryptographicSuite()
 
-	c.FirstItem = c.overrides.BuildChain()
+	// Java discards buildChain()'s return value: the builders it calls set
+	// firstItem themselves, on the first item they append, and return the LAST
+	// item of the chain so that a caller can keep appending to it. Assigning
+	// the return value to FirstItem here would leave only the final check
+	// reachable.
+	c.overrides.BuildChain()
 }
 
 // Position is the default implementation of getPosition(). Port of protected

@@ -49,7 +49,11 @@ func NewAlgorithmObsolescenceValidationCheckWithId[T any](i18nProvider *i18n.I18
 // buildAdditionalInfo() with the token id.
 func (c *AlgorithmObsolescenceValidationCheckWithId[T]) BuildAdditionalInfo() *string {
 	base := c.AlgorithmObsolescenceValidationCheck.BuildAdditionalInfo()
-	var baseStr string
+	// Java hands super.buildAdditionalInfo()'s result straight to
+	// MessageFormat, which renders a null argument as the literal text "null"
+	// (the reachable case: a passing check whose XmlAOV carries no primary
+	// cryptographic validation). Substituting "" here would drop that word.
+	baseStr := ""
 	if base != nil {
 		baseStr = *base
 	}

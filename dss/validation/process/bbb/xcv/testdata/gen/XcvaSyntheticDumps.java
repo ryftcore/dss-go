@@ -65,6 +65,9 @@ public class XcvaSyntheticDumps {
         write(outDir, "trusted-root-revocation.xml", trustedRootWithRevocation());
         write(outDir, "rac-inputs.xml", racInputs());
         write(outDir, "rac-passed.xml", racPassed());
+        write(outDir, "crs-two-acceptable.xml", crsTwoAcceptable());
+        write(outDir, "crs-mixed-acceptance.xml", crsMixedAcceptance());
+        write(outDir, "rac-anchor-mid-chain.xml", racAnchorMidChain());
     }
 
     private static void write(File dir, String name, XmlDiagnosticData data) throws Exception {
@@ -191,6 +194,127 @@ public class XcvaSyntheticDumps {
      * signed by the trust anchor itself, so the revocation-chain loop breaks on its
      * first certificate, with every preceding check satisfied.
      */
+    /**
+     * A signing certificate carrying TWO acceptable (PASSED-RAC) OCSP responses with
+     * different production dates, so that CertificateRevocationSelector's
+     * "keep the latest acceptable one" comparison actually has to choose between two
+     * candidates. Not one certificate of the marshal-parity corpus, nor of the other
+     * dumps here, has more than one revocation whose RAC passes, so without this
+     * fixture that comparison is never exercised (an audit mutation reversing it
+     * survived the corpus).
+     *
+     * The two responses are listed newest-first, so a selector that simply kept the
+     * last acceptable one - or that reversed the comparison - would pick the older.
+     */
+    private static XmlDiagnosticData crsTwoAcceptable() {
+        XmlCertificate root = certificate("C-ROOT", "2010-01-01T00:00:00Z", "2035-01-01T00:00:00Z");
+        trust(root, null, null);
+        XmlCertificate signer = certificate("C-SIGNER", "2020-01-01T00:00:00Z", "2028-01-01T00:00:00Z");
+        chain(signer, root);
+        issuedBy(signer, root);
+
+        XmlRevocation newer = ocsp("R-OCSP-NEWER", root, "2023-06-01T00:00:00Z", "2023-06-01T00:00:00Z");
+        newer.setCertHashExtensionPresent(true);
+        newer.setCertHashExtensionMatch(true);
+        responderIdRef(newer, root);
+        revoke(signer, newer, CertificateStatus.GOOD);
+
+        XmlRevocation older = ocsp("R-OCSP-OLDER", root, "2023-01-01T00:00:00Z", "2023-01-01T00:00:00Z");
+        older.setCertHashExtensionPresent(true);
+        older.setCertHashExtensionMatch(true);
+        responderIdRef(older, root);
+        revoke(signer, older, CertificateStatus.GOOD);
+
+        XmlDiagnosticData data = data("crs-two-acceptable", signer, Arrays.asList(signer, root));
+        data.getUsedRevocations().add(newer);
+        data.getUsedRevocations().add(older);
+        return data;
+    }
+
+    /**
+     * A signing certificate with one acceptable and one UNACCEPTABLE revocation, so
+     * that CertificateRevocationSelector reaches its "the CRS itself is valid but one
+     * of its RACs is not" state - the only state in which its two overridden message
+     * collectors branch: collectMessages() then drops the RAC-blockType constraint's
+     * messages, and collectAdditionalMessages() takes its else branch and collects
+     * only the valid RAC's messages.
+     *
+     * Neither the marshal-parity corpus nor the other dumps here reach it: every
+     * certificate of theirs has either only-failing revocations (CRS invalid) or
+     * only-passing ones (no RAC warning to filter). Audit mutations removing either
+     * filter survived until this fixture existed.
+     *
+     * The unacceptable one is a CRL published before the certificate was issued
+     * (RevocationAfterCertificateIssuanceCheck fails at FAIL level inside the RAC),
+     * and it is the newer of the two, so a selector that ignored acceptability would
+     * also pick the wrong latest revocation.
+     */
+    private static XmlDiagnosticData crsMixedAcceptance() {
+        XmlCertificate root = certificate("C-ROOT", "2010-01-01T00:00:00Z", "2035-01-01T00:00:00Z");
+        trust(root, null, null);
+        XmlCertificate signer = certificate("C-SIGNER", "2020-01-01T00:00:00Z", "2028-01-01T00:00:00Z");
+        chain(signer, root);
+        issuedBy(signer, root);
+
+        XmlRevocation good = ocsp("R-OCSP-GOOD", root, "2023-01-01T00:00:00Z", "2023-01-01T00:00:00Z");
+        good.setCertHashExtensionPresent(true);
+        good.setCertHashExtensionMatch(true);
+        responderIdRef(good, root);
+        revoke(signer, good, CertificateStatus.GOOD);
+
+        // thisUpdate before the signing certificate's notBefore: the revocation
+        // cannot carry information about a certificate that did not exist yet.
+        XmlRevocation stale = crl("R-CRL-BEFORE-ISSUANCE", root, "2015-01-01T00:00:00Z", "2023-06-01T00:00:00Z");
+        revoke(signer, stale, CertificateStatus.GOOD);
+
+        XmlDiagnosticData data = data("crs-mixed-acceptance", signer, Arrays.asList(signer, root));
+        data.getUsedRevocations().add(good);
+        data.getUsedRevocations().add(stale);
+        return data;
+    }
+
+    /**
+     * A revocation whose own certificate chain carries a certificate BEHIND its trust
+     * anchor: it is signed by a trusted intermediate CA that is itself issued by an
+     * untrusted root, so the chain reads [C-CA (trusted), C-ROOT (untrusted)].
+     *
+     * RevocationAcceptanceChecker#initChain() breaks out of its certificate-chain walk
+     * at the first trust anchor. Every other dump here (and the whole marshal-parity
+     * corpus) has the trust anchor last in the chain, where breaking and merely
+     * skipping the entry are indistinguishable - an audit mutation turning that
+     * break into a continue survived the corpus until this fixture existed.
+     */
+    private static XmlDiagnosticData racAnchorMidChain() {
+        XmlCertificate root = certificate("C-ROOT", "2010-01-01T00:00:00Z", "2035-01-01T00:00:00Z");
+        XmlCertificate ca = certificate("C-CA", "2015-01-01T00:00:00Z", "2032-01-01T00:00:00Z");
+        chain(ca, root);
+        issuedBy(ca, root);
+        // trust() marks the certificate self-signed; the CA is not, and its issuer
+        // must stay visible behind it, so the trust flag is set on its own here.
+        XmlTrusted trusted = new XmlTrusted();
+        trusted.setValue(true);
+        ca.setTrusted(trusted);
+
+        XmlCertificate signer = certificate("C-SIGNER", "2020-01-01T00:00:00Z", "2028-01-01T00:00:00Z");
+        chain(signer, ca, root);
+        issuedBy(signer, ca);
+
+        XmlRevocation ocsp = ocsp("R-OCSP-MIDANCHOR", ca, "2023-01-01T00:00:00Z", "2023-01-01T00:00:00Z");
+        ocsp.getCertificateChain().clear();
+        XmlChainItem caItem = new XmlChainItem();
+        caItem.setCertificate(ca);
+        ocsp.getCertificateChain().add(caItem);
+        XmlChainItem rootItem = new XmlChainItem();
+        rootItem.setCertificate(root);
+        ocsp.getCertificateChain().add(rootItem);
+        responderIdRef(ocsp, ca);
+        revoke(signer, ocsp, CertificateStatus.GOOD);
+
+        XmlDiagnosticData data = data("rac-anchor-mid-chain", signer, Arrays.asList(signer, ca, root));
+        data.getUsedRevocations().add(ocsp);
+        return data;
+    }
+
     private static XmlDiagnosticData racPassed() {
         XmlCertificate root = certificate("C-ROOT", "2010-01-01T00:00:00Z", "2035-01-01T00:00:00Z");
         trust(root, null, null);
