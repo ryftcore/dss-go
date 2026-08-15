@@ -31,8 +31,9 @@ import (
 // addAdditionalInfo() hung off each XmlSubXCV.
 
 const (
-	blocksCorpusDir = "../../../diagnostic/jaxb/testdata/oracle"
-	blocksDumpDir   = "../bbb/xcv/testdata/dd"
+	blocksCorpusDir  = "../../../diagnostic/jaxb/testdata/oracle"
+	blocksDumpDir    = "../bbb/xcv/testdata/dd"
+	blocksOwnDumpDir = "testdata/dd"
 )
 
 var blocksCurrentTime = time.Unix(1704067200, 0).UTC()
@@ -203,6 +204,8 @@ func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticD
 	path := filepath.Join(blocksCorpusDir, name)
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
 		path = filepath.Join(blocksDumpDir, rest)
+	} else if rest, ok := strings.CutPrefix(name, "own/"); ok {
+		path = filepath.Join(blocksOwnDumpDir, rest)
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

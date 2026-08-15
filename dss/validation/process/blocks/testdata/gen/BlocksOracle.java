@@ -76,12 +76,22 @@ public class BlocksOracle {
                 .listFiles((dir, name) -> name.endsWith(".xml"));
         Arrays.sort(synthetic, Comparator.comparing(File::getName));
 
+        // This package's own dumps (BlocksSyntheticDumps), for the shapes neither the
+        // corpus nor XCVA's dd/ carries.
+        File[] own = new File(repoRoot, "validation/process/blocks/testdata/dd")
+                .listFiles((dir, name) -> name.endsWith(".xml"));
+        Arrays.sort(own, Comparator.comparing(File::getName));
+
         I18nProvider i18n = new I18nProvider();
         ValidationPolicy policy = new EtsiValidationPolicyFactory().loadDefaultValidationPolicy();
 
         try (PrintWriter out = writer(repoRoot, "validation/process/blocks/testdata/oracle/blocks.jsonl")) {
             for (File synth : synthetic) {
                 emit(out, i18n, policy, "dd/" + synth.getName(), new DiagnosticData(
+                        DiagnosticDataFacade.newFacade().unmarshall(synth, false)));
+            }
+            for (File synth : own) {
+                emit(out, i18n, policy, "own/" + synth.getName(), new DiagnosticData(
                         DiagnosticDataFacade.newFacade().unmarshall(synth, false)));
             }
             for (File file : files) {

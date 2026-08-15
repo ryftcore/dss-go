@@ -4,9 +4,9 @@ All `oracle/*.jsonl` files are pure Java dumps, produced by the drivers in `gen/
 
 | file | rows | driver | input |
 | --- | --- | --- | --- |
-| `oracle/xcva_blocks.jsonl` | 916 | `XcvaOracle.java` | `X509CertificateValidation` / `CertificateRevocationSelector` / `RevocationAcceptanceChecker` over every signature, time-stamp, revocation and used certificate of the marshal-parity diagnostic-data corpus and of the nine synthetic dumps in `dd/`, validation time 2024-01-01T00:00:00Z |
-| `oracle/xcva_direct.jsonl` | 1279 | `XcvaDirectOracle.java` | all 12 `rac/checks` classes driven alone at `Level.FAIL` over every (certificate, certificate revocation data) pair of the same dumps |
-| `oracle/xcv_direct.jsonl` | ~33000 | `XcvOracle.java` | all 75 instantiable `checks` / `sub/checks` / `sub/checks/pseudo` / `rfc/checks` classes (the phase 8d XCVB manifest) driven alone at `Level.FAIL`, over every used certificate (and, for the revocation-facing checks, every certificate-revocation pair) of the marshal-parity corpus plus `dd/`, plus a handful of hand-built certificates/revocations (see "XCVB direct corpus" below) |
+| `oracle/xcva_blocks.jsonl` | 1067 | `XcvaOracle.java` | `X509CertificateValidation` / `CertificateRevocationSelector` / `RevocationAcceptanceChecker` over every signature, time-stamp, revocation and used certificate of the marshal-parity diagnostic-data corpus and of the twelve synthetic dumps in `dd/`, validation time 2024-01-01T00:00:00Z |
+| `oracle/xcva_direct.jsonl` | 1341 | `XcvaDirectOracle.java` | all 12 `rac/checks` classes driven alone at `Level.FAIL` over every (certificate, certificate revocation data) pair of the same dumps |
+| `oracle/xcv_direct.jsonl` | ~33800 | `XcvOracle.java` | all 75 instantiable `checks` / `sub/checks` / `sub/checks/pseudo` / `rfc/checks` classes (the phase 8d XCVB manifest) driven alone at `Level.FAIL`, over every used certificate (and, for the revocation-facing checks, every certificate-revocation pair) of the marshal-parity corpus plus `dd/`, plus a handful of hand-built certificates/revocations (see "XCVB direct corpus" below) |
 
 The real inputs are the marshal-parity corpus in `dss/diagnostic/jaxb/testdata/oracle`
 plus `dd/`; the Go tests (`../xcva_blocks_oracle_test.go`,
@@ -35,7 +35,7 @@ every token, and none of
 - the `ValidationModel` lastDate progression,
 - an `XmlRAC` that concludes PASSED
 
-is ever reached. `gen/XcvaSyntheticDumps.java` writes the nine dumps in `dd/` -
+is ever reached. `gen/XcvaSyntheticDumps.java` writes the twelve dumps in `dd/` -
 trusted root, trusted signing certificate, past and future sunset dates, a trust
 start date, a fully untrusted chain, a trusted root with an OCSP response, a
 PASSED-RAC shape, and the revocation shapes (`certHash` present and matching or
@@ -49,6 +49,33 @@ and committed, so the Go replay reads them unchanged.
 runs the `dd/` dumps under it as well as under the default policy, which is what
 exercises the CA-certificate loop without an early return and the per-model
 `lastDate` progression. Each row names the policy it was produced under.
+
+`policy/constraint-certhash.xml` is the default policy with the two OCSP certHash
+constraints (`OCSPCertHashPresent`, `OCSPCertHashMatch`) raised to `FAIL`; the
+block corpus runs the `dd/` dumps under it too. The default ETSI policy leaves
+both undefined, so `RevocationAcceptanceChecker`'s certHash items are level-less
+and record no constraint at all - which leaves the "wire the match check only when
+the extension is present" gate in its `initChain()` unobservable (an audit
+mutation inverting that gate survived the corpus until this variant existed).
+
+Four of the `dd/` dumps exist for the same reason - a branch of the crs/rac
+selection logic that no other input reaches, each one found by an audit mutation
+that survived without it:
+
+- `crs-two-acceptable.xml`: a certificate with TWO acceptable revocations at
+  different production dates, so `CertificateRevocationSelector`'s "keep the
+  latest acceptable one" comparison has to choose between candidates (reversing
+  it, or dropping its null seed, changes the outcome).
+- `crs-mixed-acceptance.xml`: a certificate with one acceptable and one
+  unacceptable revocation, the only state in which the selector's two overridden
+  message collectors branch (`collectMessages` drops the RAC constraint's
+  messages, `collectAdditionalMessages` collects only the valid RAC's).
+- `rac-anchor-mid-chain.xml`: a revocation whose own certificate chain carries a
+  certificate behind its trust anchor, so that
+  `RevocationAcceptanceChecker#initChain()`'s `break` at the first trust anchor
+  differs from merely skipping the entry.
+- `rac-passed.xml` (pre-existing) supplies the certHash-present shape the
+  `certhash` policy needs.
 
 The four `model-*.xml` schema-coverage fixtures are excluded from both corpora, for
 the reason given in `../../fc/testdata/README.md`.

@@ -53,7 +53,7 @@ func (c *AlgorithmObsolescenceValidationCheckWithId[T]) BuildAdditionalInfo() *s
 	// MessageFormat, which renders a null argument as the literal text "null"
 	// (the reachable case: a passing check whose XmlAOV carries no primary
 	// cryptographic validation). Substituting "" here would drop that word.
-	baseStr := ""
+	baseStr := "null"
 	if base != nil {
 		baseStr = *base
 	}

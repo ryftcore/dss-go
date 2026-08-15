@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>cross-equivalent</DocumentName>
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-1">
+            <SignatureFilename>cross-equivalent</SignatureFilename>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-SIGNER"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-SIGNER">
+            <SubjectDistinguishedName Format="RFC2253">CN=Signer</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Root</IssuerDistinguishedName>
+            <NotAfter>2028-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2020-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-SHARED-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-ROOT"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-ROOT"/>
+            </CertificateChain>
+            <SelfSigned>false</SelfSigned>
+        </Certificate>
+        <Certificate Id="C-CROSS">
+            <SubjectDistinguishedName Format="RFC2253">CN=Signer Cross</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Other Root</IssuerDistinguishedName>
+            <NotAfter>2028-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2020-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-SHARED-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SelfSigned>false</SelfSigned>
+        </Certificate>
+        <Certificate Id="C-EQUIV">
+            <SubjectDistinguishedName Format="RFC2253">CN=Signer</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Root</IssuerDistinguishedName>
+            <NotAfter>2028-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2020-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-SHARED-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SelfSigned>false</SelfSigned>
+        </Certificate>
+        <Certificate Id="C-ROOT">
+            <SubjectDistinguishedName Format="RFC2253">CN=Root</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Root</IssuerDistinguishedName>
+            <NotAfter>2028-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2020-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>C-ROOT-KEY</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <Trusted>true</Trusted>
+            <SelfSigned>true</SelfSigned>
+        </Certificate>
+    </UsedCertificates>
+</DiagnosticData>
