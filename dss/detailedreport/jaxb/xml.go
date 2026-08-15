@@ -8,8 +8,17 @@
 // dss/diagnostic/jaxb/xml.go (phase 8a) exactly - see that file's header for
 // the full account of the two JAXB-RI quirks encoding/xml cannot reproduce on
 // its own (self-closing tags, character-escaping spelling) that jaxbCanonical
-// below normalises. Both quirks are pure XML-syntax normalisations applied to
-// the Go output only; the Java oracle bytes in testdata/oracle are untouched.
+// below normalises, plus quirk 3: the RI writes the document element's xmlns
+// declaration behind its attributes, which jaxbRootNamespaceLast restores.
+// All three are pure XML-syntax normalisations applied to the Go output only;
+// the Java oracle bytes in testdata/oracle are untouched.
+//
+// The oracle corpus is dumped through DetailedReportFacade (see
+// testdata/ReserializeDetailedReport.java), i.e. the exact call
+// AbstractReports.getXmlDetailedReport() makes. That matters: marshalling the
+// same tree into an OutputStream instead selects the RI's
+// IndentingUTF8XmlOutput, whose indentation wraps every 8 levels and whose
+// root element carries xmlns first - bytes DSS itself never produces.
 //
 // DetailedReport.xsd has no xs:ID/IDREF graph (every "Id" attribute is a plain
 // xs:string, not xs:ID), so this package has no counterpart to xml.go's
@@ -128,16 +137,6 @@ func Marshal(dr *XmlDetailedReport) ([]byte, error) {
 // produces; see the package-level notes at the top of this file and
 // dss/diagnostic/jaxb/xml.go's header for the self-closing-tag and
 // character-escaping quirks it shares with that file.
-//
-// A third quirk is specific to this schema: DetailedReport.xsd recurses
-// (CRS -> RAC -> CRS, SubXCV -> RFC -> ..., etc.) deeply enough to exceed the
-// JAXB RI's formatted-output indentation cache, which only holds eight levels.
-// Past depth 8 the RI does not fall back to computing the indent directly; it
-// wraps, indenting element N the way it would indent element N-8 (e.g. depth 8
-// prints at the same 0-space indent as the root, depth 9 at the same 4-space
-// indent as depth 1). indentSpaces below reproduces the wrap; see
-// TestMarshalParity/dr-eaa-status.xml, whose SubXCV/CRS/RAC/CRS chain is the
-// corpus's one dump deep enough to exercise it.
 func jaxbCanonical(in []byte) []byte {
 	var out bytes.Buffer
 	out.Grow(len(in))
@@ -148,19 +147,15 @@ func jaxbCanonical(in []byte) []byte {
 			if j < 0 {
 				j = len(in) - i
 			}
-			chunk := in[i : i+j]
-			if n, ok := indentWhitespace(chunk); ok {
-				out.WriteByte('\n')
-				out.WriteString(indentSpaces(peekDepth(in, i+j, stack)))
-				_ = n
-			} else {
-				writeCharData(&out, chunk)
-			}
+			writeCharData(&out, in[i:i+j])
 			i += j
 			continue
 		}
 		end := tagEnd(in, i)
 		tag := in[i:end]
+		if len(tag) > 1 && tag[1] != '/' && tag[1] != '?' && tag[1] != '!' {
+			tag = namespaceDeclsLast(tag)
+		}
 		if len(tag) > 1 && tag[1] == '/' {
 			if len(stack) > 0 {
 				stack = stack[:len(stack)-1]
@@ -184,39 +179,68 @@ func jaxbCanonical(in []byte) []byte {
 	return out.Bytes()
 }
 
-// indentWhitespace reports whether b is exactly the whitespace
-// encoding/xml's Indent inserts between sibling tags: one newline followed
-// only by spaces. Real character data never matches this shape byte for byte
-// because Indent only ever emits it between tags, never alongside text
-// content.
-func indentWhitespace(b []byte) (spaces int, ok bool) {
-	if len(b) == 0 || b[0] != '\n' {
-		return 0, false
+// namespaceDeclsLast moves every namespace declaration in a start tag behind
+// that tag's ordinary attributes, reproducing the order the JAXB RI writes
+// them in; see quirk 3 in this file's header. encoding/xml emits a
+// declaration in front of the attributes instead.
+//
+// Unlike the sibling report packages, this schema needs the rule on more than
+// the document element: DetailedReport.xsd's xsi:type-substituted elements
+// (XmlLoTEAnalysis and friends, see jaxb_report.go) carry an inline
+// xmlns:xsi declaration alongside their own attributes.
+//
+// tag is a complete start tag, "<Name...>" - the caller has not yet stripped
+// the closing '>' for the self-closing rewrite.
+func namespaceDeclsLast(tag []byte) []byte {
+	// Split off "<Name" and the closing ">" (or "/>"), leaving the attributes.
+	nameEnd := 1
+	for nameEnd < len(tag) && tag[nameEnd] != ' ' && tag[nameEnd] != '>' && tag[nameEnd] != '/' {
+		nameEnd++
 	}
-	for _, c := range b[1:] {
-		if c != ' ' {
-			return 0, false
+	tail := len(tag) - 1 // index of '>'
+	if tail > nameEnd && tag[tail-1] == '/' {
+		tail--
+	}
+	attrs := tag[nameEnd:tail]
+	if !bytes.Contains(attrs, []byte(" xmlns")) {
+		return tag
+	}
+
+	var decls, others []byte
+	for i := 0; i < len(attrs); {
+		if attrs[i] != ' ' {
+			i++
+			continue
 		}
+		// One attribute runs from this space through the end of its quoted value.
+		eq := bytes.IndexByte(attrs[i:], '=')
+		if eq < 0 {
+			break
+		}
+		q1 := bytes.IndexByte(attrs[i+eq:], '"')
+		if q1 < 0 {
+			break
+		}
+		q2 := bytes.IndexByte(attrs[i+eq+q1+1:], '"')
+		if q2 < 0 {
+			break
+		}
+		end := i + eq + q1 + 1 + q2 + 1
+		attr := attrs[i:end]
+		if bytes.HasPrefix(attr, []byte(" xmlns")) {
+			decls = append(decls, attr...)
+		} else {
+			others = append(others, attr...)
+		}
+		i = end
 	}
-	return len(b) - 1, true
-}
 
-// peekDepth returns the nesting depth of the tag starting at in[pos] (a '<'),
-// given stack, the ancestor names currently open. A start tag's depth is
-// len(stack) (the ancestor count, not yet including itself); an end tag's
-// depth is len(stack)-1 (the ancestor count after the pop it is about to
-// cause) - both equal the depth of the element itself.
-func peekDepth(in []byte, pos int, stack []string) int {
-	if pos+1 < len(in) && in[pos+1] == '/' {
-		return len(stack) - 1
-	}
-	return len(stack)
-}
-
-// indentSpaces returns the indentation the JAXB RI prints for an element at
-// the given depth: depth%8 four-space steps (see jaxbCanonical's header).
-func indentSpaces(depth int) string {
-	return strings.Repeat("    ", depth%8)
+	out := make([]byte, 0, len(tag))
+	out = append(out, tag[:nameEnd]...)
+	out = append(out, others...)
+	out = append(out, decls...)
+	out = append(out, tag[tail:]...)
+	return out
 }
 
 // tagEnd returns the index just past the '>' closing the tag starting at i.

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DetailedReport xmlns="http://dss.esig.europa.eu/validation/detailed-report" ValidationTime="2025-11-03T14:28:34Z">
+<DetailedReport ValidationTime="2025-11-03T14:28:34Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
     <Certificate Id="C-8ECE05699B2196B46CBB3078FB2F2213C9C04EAF717FD1EBD2F853FA40656009">
         <CertificateQualificationProcess Id="C-8ECE05699B2196B46CBB3078FB2F2213C9C04EAF717FD1EBD2F853FA40656009" Title="Certificate Qualification">
             <Constraint>

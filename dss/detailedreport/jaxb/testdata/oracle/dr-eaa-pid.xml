@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DetailedReport xmlns="http://dss.esig.europa.eu/validation/detailed-report" ValidationTime="2026-04-03T09:58:12Z">
+<DetailedReport ValidationTime="2026-04-03T09:58:12Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
     <EAA Id="EAA-B011F0930552AB7B89D941C51FFDE7A769EA630B8DD5C926512C0870F637FE22">
         <ValidationProcessEAA Title="Validation Process for EAA Presentations">
             <Constraint>
@@ -586,7 +586,7 @@
             <Indication>PASSED</Indication>
         </Conclusion>
     </BasicBuildingBlocks>
-    <LoTEAnalysis xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TLAnalysis" CountryCode="EU" URL="https://test.test/pid-providers-list" Id="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE" Title="List Of Trusted Entities EU">
+    <LoTEAnalysis xsi:type="TLAnalysis" CountryCode="EU" URL="https://test.test/pid-providers-list" Id="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE" Title="List Of Trusted Entities EU" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <Constraint>
             <Name Key="QUAL_TL_FRESH">Is the trusted list fresh?</Name>
             <Status>OK</Status>

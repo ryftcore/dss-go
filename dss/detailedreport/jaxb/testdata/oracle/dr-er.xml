@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DetailedReport xmlns="http://dss.esig.europa.eu/validation/detailed-report" ValidationTime="2023-09-19T09:36:09Z">
+<DetailedReport ValidationTime="2023-09-19T09:36:09Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
     <EvidenceRecord Id="EVIDENCE-RECORD_er-tst-renewal.xml">
         <ValidationProcessEvidenceRecord Title="Validation Process for Evidence Records">
             <Constraint>

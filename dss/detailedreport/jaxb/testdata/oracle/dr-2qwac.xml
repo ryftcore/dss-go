@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DetailedReport xmlns="http://dss.esig.europa.eu/validation/detailed-report" ValidationTime="2025-11-10T12:52:09Z">
+<DetailedReport ValidationTime="2025-11-10T12:52:09Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
     <Signature Id="S-55AAE38E009EA29EB96DF6F9E268D524838974AE910CB7CF03CE387BE1B389E3">
         <ValidationProcessBasicSignature Title="Validation Process for Basic Signatures">
             <Constraint Id="S-55AAE38E009EA29EB96DF6F9E268D524838974AE910CB7CF03CE387BE1B389E3-FC">
