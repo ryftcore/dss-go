@@ -28,9 +28,9 @@ func NewContentTimestampBasicValidationCheck(i18nProvider *i18n.I18nProvider, re
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *ContentTimestampBasicValidationCheck {
 	c := &ContentTimestampBasicValidationCheck{
-		ChainItemBase:              process.NewChainItemBaseWithId(i18nProvider, result, constraint, timestamp.Id()),
-		timestamp:                  timestamp,
-		timestampValidationResult:  timestampValidationResult,
+		ChainItemBase:             process.NewChainItemBaseWithId(i18nProvider, result, constraint, timestamp.Id()),
+		timestamp:                 timestamp,
+		timestampValidationResult: timestampValidationResult,
 	}
 	c.InitChainItem(c)
 	return c

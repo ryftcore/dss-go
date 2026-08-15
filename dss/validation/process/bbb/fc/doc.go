@@ -67,8 +67,12 @@
 // NewEAARevocationTokenTypeCheck) that package must eventually provide, each
 // shaped like every other check constructor in this file
 // (i18nProvider, result *process.Result[*drjaxb.XmlFC], token, constraint) -> process.ChainItem[*drjaxb.XmlFC].
-// Until that package lands, `go build ./validation/process/bbb/fc/...`
-// fails on those two files alone - every other file in this package
-// (42 of 44 manifest files, plus this doc.go) builds, vets and tests clean
-// today. See porter notes for how this was verified.
+// Integration pass (8c): both files are now gated `//go:build eaa` (see
+// eaa_format_checking.go's header for the rationale), so the default,
+// untagged `go build ./...`/`go vet ./...`/`go test ./...` for the whole
+// module is green without needing that package - the tag simply carries the
+// gap forward instead of leaving the package broken. Building with `-tags
+// eaa` still fails on those two files alone until validation/process/eaa
+// lands; every other file in this package (42 of 44 manifest files, plus
+// this doc.go) builds, vets and tests clean either way.
 package fc

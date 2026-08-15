@@ -1,4 +1,17 @@
+//go:build eaa
+
 // Ported from dss-validation/.../validation/process/bbb/fc/EAAFormatChecking.java (DSS 6.5.RC1).
+//
+// Integration note (phase 8c pass): gated behind the "eaa" build tag, the
+// same technique already used for phase8/phase8d/phase8e forward
+// dependencies elsewhere in this tree. eu.europa.esig.dss.validation.process.eaa
+// is explicitly listed as deferred past phase 9 in PORTING_PLAN.md ("EAA/mdoc
+// modules ... revisit after Phase 9"), not merely a later numbered phase, so
+// it gets its own feature tag rather than a phaseNN one. Only this file and
+// eaa_revocation_format_checking.go in this package need the tag - every
+// other fc file is untagged and builds today. basic_building_blocks.go (the
+// only caller of NewEAAFormatChecking) is itself gated //go:build phase8d, so
+// no untagged code path references this file.
 //
 // UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the four
 // checks this class wires (EAASignatureUnicityCheck, DisclosurePresentCheck,

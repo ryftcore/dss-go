@@ -2,7 +2,6 @@
 package sav
 
 import (
-	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"

@@ -1,4 +1,9 @@
+//go:build eaa
+
 // Ported from dss-validation/.../validation/process/bbb/fc/EAARevocationFormatChecking.java (DSS 6.5.RC1).
+//
+// Integration note (phase 8c pass): gated behind the "eaa" build tag - see
+// eaa_format_checking.go's header in this same package for the rationale.
 //
 // UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the check
 // this class wires (EAARevocationTokenTypeCheck) lives in the Java package
