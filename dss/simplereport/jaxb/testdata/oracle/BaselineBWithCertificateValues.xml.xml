@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>BaselineBWithCertificateValues.xml</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="XAdES-BASELINE-B" Id="S-3E8D32C2EBA59AB112F13F06297417D5F65D06E93090F4F6987D7B6949D365EB">
+        <CertificateChain>
+            <Certificate Id="C-81CFDAFEA068F7A3CA050AE0EE7E2FB8F6153EF7F4D5F94E338D9B010EF9DB6A">
+                <QualifiedName>Balazs Czekmany</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A08728B85D729A3D021E1066437872674E5210B163C7F51E7DE783CA609E00E1">
+                <QualifiedName>LevelBCAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A4A7183ED653953127135411C4374C72504511ED99D7CA56DEC5232E03B6C1EC">
+                <QualifiedName>LevelACAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-7B1DE0306F3F762A4224C4AB0D4F684F3FB6FDDD8D412AB9F608CE9981940EBD">
+                <QualifiedName>RootCAOK</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>SIGNED_DATA_NOT_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="BBB_CV_IRDOF_ANS">The reference data object has not been found!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2015-10-08T07:38:50Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Balazs Czekmany</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-444647B971066FA11977AA34BC49734E3AE8D0D78E9B91182B2EC6A69D6417F7" name="../../Data/ts_101903v010302p.txt" scope="FULL">Full document</SignatureScope>
+    </Signature>
+</SimpleReport>

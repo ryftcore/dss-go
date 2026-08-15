@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>Signature-C-DE_CRY-3.p7m</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="CAdES-BASELINE-B" Id="S-C8F2F68502636C586AADB8D5890675EA5177F4D2855DD1CCB5F91CA3AC425498">
+        <CertificateChain>
+            <Certificate Id="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF">
+                <QualifiedName>Matthias Schlede</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9">
+                <QualifiedName>D-TRUST Qualified CA 1 2008:PN</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F">
+                <QualifiedName>D-TRUST Qualified Root CA 1 2008:PN</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2014-11-13T10:34:20Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Matthias Schlede</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-3852C3436E4E198DE4722FEC575E5AC4C2E728ADBC910505F8B18B4B60F9FE05" scope="FULL">Full document</SignatureScope>
+    </Signature>
+</SimpleReport>

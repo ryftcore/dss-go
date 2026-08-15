@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>dss1421.asice</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <ContainerType>ASiC-E</ContainerType>
+    <Signature SignatureFormat="CAdES-BASELINE-T" Id="S-3474DAF66FFD8014ABA0E92B51CABE3B82CEF89251B98CB31ACA10EA3A08C3FC">
+        <Filename>META-INF/signature001.p7s</Filename>
+        <CertificateChain>
+            <Certificate Id="C-518C77691A42B537AD74787FC6232389E95AAA1410EE1905721B971BBBD19FD4">
+                <QualifiedName>CIUDADANO FICTICIO ACTIVO</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-2626B19563BC78D9B1442B93CE98D14A1E4B74264ACC90222F1F3C2385C27337">
+                <QualifiedName>Herritar eta Erakundeen CA - CA de Ciudadanos y Entidades (4)</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="ASCCM_PKSK_ANS">The key size is unknown for CA certificate!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2018-04-22T15:02:36Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>CIUDADANO FICTICIO ACTIVO</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-3039F9944D0785C68AD7779D1D50854F0FB3243661C8E9F46EF08FB0BEBC0FA8" name="META-INF/ASiCManifest.xml" scope="FULL">Manifest document</SignatureScope>
+        <SignatureScope Id="D-D0F95837AE28F3360BE0E06AD05DA3FD3FBB38AFBDF569B12842107360F15764" name="TEST-DOC.txt" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-A47A0795FF017629E2B17D867F1B96E13CE506F043A5980065526E0BB677A56E">
+                <CertificateChain>
+                    <Certificate Id="C-CD770A3BA5005BAC3F6EF29E7FA4C7BEA1EF41BE52125356DA0DD18F045C9219">
+                        <QualifiedName>tsa.izenpe.com</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_PKSK_ANS">The key size is unknown for timestamp's issuer certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2018-04-22T15:02:36Z</ProductionTime>
+                <ProducedBy>tsa.izenpe.com</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-C1E6654BC5520FC4BC8C70AF03C25698FACAB045521356D790D305FC2943E284">
+                <Filename>META-INF/timestamp001.tst</Filename>
+                <CertificateChain>
+                    <Certificate Id="C-EE3C22E06087BFEC213709AD3E7F2DDA9CE9D19CE238DCA81A6433E9070A9FBE">
+                        <QualifiedName>Time Stamping Authority</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-8460CCAEA91B0E805AB51C7CD46DDF2E8C1C494806D88B1FE2ED313D1D487E2E">
+                        <QualifiedName>Belgium Root CA4</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38">
+                        <QualifiedName>Cybertrust Global Root</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB">
+                        <QualifiedName>Baltimore CyberTrust Root</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for time-stamp signature!</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2018-04-22T20:45:21Z</ProductionTime>
+                <ProducedBy>Time Stamping Authority</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+                <TimestampScope Id="D-B7BD4F27A7EDE7521B9E9C2285ED593EB0AAA52049D12F109EAAB14AC3985294" name="META-INF/ASiCArchiveManifest.xml" scope="FULL">Manifest document</TimestampScope>
+                <TimestampScope Id="D-98616A779446C5AA493AD1D4BA1F3FD88AC23F038C9E9279F97F7E2F1AE35666" name="META-INF/signature001.p7s" scope="FULL">Full document</TimestampScope>
+                <TimestampScope Id="D-D0F95837AE28F3360BE0E06AD05DA3FD3FBB38AFBDF569B12842107360F15764" name="TEST-DOC.txt" scope="FULL">Full document</TimestampScope>
+                <TimestampScope Id="D-3039F9944D0785C68AD7779D1D50854F0FB3243661C8E9F46EF08FB0BEBC0FA8" name="META-INF/ASiCManifest.xml" scope="FULL">Full document</TimestampScope>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

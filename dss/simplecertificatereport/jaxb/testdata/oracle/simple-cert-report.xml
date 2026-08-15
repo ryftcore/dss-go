@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>QES AdESQC TL based</PolicyName>
+        <PolicyDescription>Validate electronic signatures and indicates whether they are Advanced electronic Signatures (AdES), AdES supported by a Qualified Certificate (AdES/QC) or a
+            Qualified electronic Signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+            signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+        </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF">
+        <subject>
+            <commonName>Matthias Schlede</commonName>
+            <surname>Schlede</surname>
+            <givenName>Matthias Johann Stefan</givenName>
+            <organizationName>secrypt GmbH</organizationName>
+            <country>DE</country>
+        </subject>
+        <issuerId>C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9</issuerId>
+        <notBefore>2011-11-17T13:17:27Z</notBefore>
+        <notAfter>2015-11-27T13:17:27Z</notAfter>
+        <keyUsages>
+            <keyUsage>nonRepudiation</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls>
+            <ocspUrl>http://qual.ocsp.d-trust.net</ocspUrl>
+        </ocspUrls>
+        <crlUrls>
+            <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Qualified%20CA%201%202008%3APN,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+            <crlUrl>http://www.d-trust.net/crl/d-trust_qualified_ca_1_2008.crl</crlUrl>
+        </crlUrls>
+        <aiaUrls/>
+        <cpsUrls/>
+        <pdsUrls/>
+        <qualificationAtIssuance>QC for eSig with QSCD</qualificationAtIssuance>
+        <qualificationAtValidation>QC for eSig with QSCD</qualificationAtValidation>
+        <revocation>
+            <thisUpdate>2018-02-09T07:03:45Z</thisUpdate>
+            <revocationDate>2014-12-30T13:28:24Z</revocationDate>
+            <revocationReason>unspecified</revocationReason>
+        </revocation>
+        <trustAnchors/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>OUT_OF_BOUNDS_NO_POE</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_ICTIVRSC_ANS">The current time is not in the validity range of the signer''s certificate!</Error>
+        </X509ValidationDetails>
+        <Chain>
+            <ChainItem Id="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9">
+                <subject>
+                    <commonName>D-TRUST Qualified CA 1 2008:PN</commonName>
+                    <organizationName>D-Trust GmbH</organizationName>
+                    <country>DE</country>
+                </subject>
+                <notBefore>2008-07-24T16:54:11Z</notBefore>
+                <notAfter>2013-07-24T15:30:00Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls>
+                    <ocspUrl>http://qual.ocsp.d-trust.net</ocspUrl>
+                </ocspUrls>
+                <crlUrls>
+                    <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Qualified%20Root%20CA%201%202008%3APN,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+                    <crlUrl>http://www.d-trust.net/crl/d-trust_qualified_root_ca_1_2008.crl</crlUrl>
+                </crlUrls>
+                <aiaUrls/>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors>
+                    <trustAnchor>
+                        <countryCode>DE</countryCode>
+                        <tslType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</tslType>
+                        <trustServiceProvider>D-Trust GmbH</trustServiceProvider>
+                        <trustServiceProviderRegistrationId>VATDE-202620438 </trustServiceProviderRegistrationId>
+                        <trustServiceName>D-TRUST Qualified CA 1 2008:PN</trustServiceName>
+                    </trustAnchor>
+                </trustAnchors>
+                <trustStartDate>2008-07-24T16:54:11Z</trustStartDate>
+                <trustSunsetDate>2018-01-01T15:30:00Z</trustSunsetDate>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+        </Chain>
+    </Certificate>
+</SimpleCertificateReport>

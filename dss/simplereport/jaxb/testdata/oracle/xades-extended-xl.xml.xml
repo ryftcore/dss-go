@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>xades-extended-xl.xml</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="XAdES-XL" Id="S-1EA31E48B009B594A19D2D7F6A05927062D1F2916B4B1CAF36C960C8805FEA8F">
+        <CertificateChain>
+            <Certificate Id="C-D9A572B22DD1551C8D05EDD9C8587688CCC28689C6365FAA49E18F23DEC264AF">
+                <QualifiedName>Henk Wiersema</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-15073C6BBDC74699A88518C27A57C956E5E23D6CA9619E521A468C7873DE4F8A">
+                <QualifiedName>QuoVadis PKIoverheid Organisatie Persoon CA - G3</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-8222BC4FE7A3DDCA9EF0BF0D682AC888799F87822D15332A54C0BFDFC6854F7B">
+                <QualifiedName>Staat der Nederlanden Organisatie Persoon CA - G3</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-3C4FB0B95AB8B30032F432B86F535FE172C185D0FD39865837CF36187FA6F428">
+                <QualifiedName>Staat der Nederlanden Root CA - G3</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2021-11-30T09:13:36Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Henk Wiersema</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-29EEA4E0C3EC6AAB3501F4F92163AE3D082FEBCA651345D3C4517B4A26F8A47F" name="Full XML File" scope="FULL">The full XML file with transformations.</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-0C70610F898B3BEE87BBE5596C3D5C34A3632B274A966F199C469E64FB438B43">
+                <CertificateChain>
+                    <Certificate Id="C-BAAB494EBD06B343C43F34874069F6D5D661D97B63B4326FBF2CD86502492C31">
+                        <QualifiedName>DigitalSign Qualified TSA G1</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-2BB402D903E1C15743E99806D1D046CFBF45E37DDD312607566F464996E20750">
+                        <QualifiedName>DIGITALSIGN QUALIFIED TSA CA G1</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-82BD5D851ACF7F6E1BA7BFCBC53030D0E7BC3C21DF772D858CAB41D199BDF595">
+                        <QualifiedName>DIGITALSIGN GLOBAL ROOT RSA CA</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2021-11-30T09:13:46Z</ProductionTime>
+                <ProducedBy>DigitalSign Qualified TSA G1</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-1CDAB5E86B57B1DB9F7075F99D3DC0E18C9B1F663F679B36D5F86589D09F6244">
+                <CertificateChain>
+                    <Certificate Id="C-BAAB494EBD06B343C43F34874069F6D5D661D97B63B4326FBF2CD86502492C31">
+                        <QualifiedName>DigitalSign Qualified TSA G1</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-2BB402D903E1C15743E99806D1D046CFBF45E37DDD312607566F464996E20750">
+                        <QualifiedName>DIGITALSIGN QUALIFIED TSA CA G1</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-82BD5D851ACF7F6E1BA7BFCBC53030D0E7BC3C21DF772D858CAB41D199BDF595">
+                        <QualifiedName>DIGITALSIGN GLOBAL ROOT RSA CA</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2021-11-30T09:13:48Z</ProductionTime>
+                <ProducedBy>DigitalSign Qualified TSA G1</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>counterSig.p7m</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>2</SignaturesCount>
+    <Signature SignatureFormat="CAdES-T" Id="S-939C8E0C24EC70765AF7D6D0742A28A03E37980A27D383E4888E876AB0504361">
+        <CertificateChain>
+            <Certificate Id="C-5F683B8A8291947336624099355C3F3995F74604F64643379192C57458558B95">
+                <QualifiedName>EST-COUNTER-SIGNATURE1-OK-EE</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="BBB_SAV_ISQPSTP_ANS">The signed qualifying property: 'signing-time' is not present!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>EST-COUNTER-SIGNATURE1-OK-EE</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-2DA088F23B65EAC349084E13BEC32E82804801B5C4C3B6BAEDB8811EA517334D" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-989D00AC9FE4D2BA6F524388871D688BCD6529EC5EFEA8822843568DF0404F8D">
+                <CertificateChain>
+                    <Certificate Id="C-4581DD1A85F6D178CD64CD7B3CD3DF2108481BEAF056F0E3326DC6C9C3C892EC">
+                        <QualifiedName>EST-COUNTER-SIGNATURE1-OK-EE</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA256 with key size 1024 is no longer considered reliable for time-stamp signature!</Error>
+                    <Error Key="ASCCM_PKSK_ANS">The key size is unknown for timestamp's issuer certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2001-01-01T12:00:00Z</ProductionTime>
+                <ProducedBy>EST-COUNTER-SIGNATURE1-OK-EE</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+    <Signature CounterSignature="true" ParentId="S-939C8E0C24EC70765AF7D6D0742A28A03E37980A27D383E4888E876AB0504361" SignatureFormat="CAdES-T" Id="S-5FFD54A32EBD2F81E9FB488BBFBFC1A22C2974A65878B210D3B4215DAC2D3A3F">
+        <CertificateChain>
+            <Certificate Id="C-FAB0469BB40452F661BE079FD6FBEFB0799949EB1CE5383FEC2BD4F84CF222AC">
+                <QualifiedName>EST-COUNTER-SIGNATURE1-OK-EE2</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="BBB_SAV_ISQPSTP_ANS">The signed qualifying property: 'signing-time' is not present!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>EST-COUNTER-SIGNATURE1-OK-EE2</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-E34DA1289FFC49DFABE8B2C2E75DBFE25ECD9B341911760BDEB7644D9A4CDB7B" name="S-939C8E0C24EC70765AF7D6D0742A28A03E37980A27D383E4888E876AB0504361" scope="COUNTER_SIGNATURE">Master signature with Id : S-939C8E0C24EC70765AF7D6D0742A28A03E37980A27D383E4888E876AB0504361</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-A836C34F217A954282168513602C057BE8B7B591248CA0DB7CB0CEE2199ABC74">
+                <CertificateChain>
+                    <Certificate Id="C-4581DD1A85F6D178CD64CD7B3CD3DF2108481BEAF056F0E3326DC6C9C3C892EC">
+                        <QualifiedName>EST-COUNTER-SIGNATURE1-OK-EE</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA256 with key size 1024 is no longer considered reliable for time-stamp signature!</Error>
+                    <Error Key="ASCCM_PKSK_ANS">The key size is unknown for timestamp's issuer certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2001-01-01T13:00:00Z</ProductionTime>
+                <ProducedBy>EST-COUNTER-SIGNATURE1-OK-EE</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

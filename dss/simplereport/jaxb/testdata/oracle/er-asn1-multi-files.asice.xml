@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>er-asn1-multi-files.asice</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>0</SignaturesCount>
+    <ContainerType>ASiC-E</ContainerType>
+    <EvidenceRecord Id="ER-B691BAE4A68E2B4CD9A1E15DFDAD88BB6C7EE692446F0772CF09E18A2497F27B">
+        <Filename>META-INF/evidencerecord.ers</Filename>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="ADEST_IBSVPTADC_ANS">The result of time-stamp validation is not conclusive!</Error>
+        </AdESValidationDetails>
+        <POETime>2025-06-15T12:00:00Z</POETime>
+        <EvidenceRecordScope Id="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85" name="test2.txt" scope="FULL">Full document</EvidenceRecordScope>
+        <EvidenceRecordScope Id="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6" name="test.txt" scope="FULL">Full document</EvidenceRecordScope>
+        <Timestamps>
+            <Timestamp Id="T-AE0E69172AD6CC3040917F2018FB52591414DDC9D523819FEEA2336B2DB2F8F9">
+                <CertificateChain>
+                    <Certificate Id="C-BAC55ECC36D21ADB531E6AA82DED394B83AAFFF2FEDE5D97FE902042316B71EC">
+                        <QualifiedName>BalTstamp QTSA TSU1</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-8027F453DF0D4D7D521B1F57F06D4773DCE7CCBA63EE96C627656BFC11A20790">
+                        <QualifiedName>GLOBALTRUST 2015 ADVANCED SEAL 1</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_PKSK_ANS">The key size is unknown for timestamp's CA certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2023-12-07T16:10:23Z</ProductionTime>
+                <ProducedBy>BalTstamp QTSA TSU1</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+                <TimestampScope Id="D-508CC33C4A6569824AF8F9C27055386C1659316A5C2377501ED4887DF78A6E85" name="test2.txt" scope="FULL">Full document</TimestampScope>
+                <TimestampScope Id="D-E6AA415894FBF70B5040C24FED352D1A163C2EEF4D05E991E0BDE3782F0960D6" name="test.txt" scope="FULL">Full document</TimestampScope>
+            </Timestamp>
+        </Timestamps>
+    </EvidenceRecord>
+</SimpleReport>

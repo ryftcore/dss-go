@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>cades-e-lt.p7m</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="CAdES-C" Id="S-3CDB6A02EEB4F6E4E41942FBA1AD19B8E66C6166EDB961BDF522DB3C47E80E16">
+        <CertificateChain>
+            <Certificate Id="C-47287703AE54EE756A9F4DF3797F6006ABDD3B46614B420391A1F59604C241AC">
+                <QualifiedName>Michal Pavlik</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-98BB0A1E23FE643F2313E5010A7A1C9EFF3DD41876DB412197FF0BA32A54755C">
+                <QualifiedName>LevelBCAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-463D035BF5A7A92DD4A087CFC3CBFF0ECC4CECDCB72F4EAE6522747684EA937C">
+                <QualifiedName>LevelACAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-D9AF6CB2E1E8B98D6A232932F949512DBF8BD60DCB847665391840B63D1591EA">
+                <QualifiedName>RootCAOK</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2013-12-03T08:14:22Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Michal Pavlik</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-4832AC08B7FAAC214C8201A3CBFA16075DA6E0135BEE96C29BC26741903657FA">
+                <CertificateChain>
+                    <Certificate Id="C-C1FE7A79531BE170F9D2C43D8A99EF82F3CB971823162C0BC53C736F4C0A5358">
+                        <QualifiedName>TSA</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-D9AF6CB2E1E8B98D6A232932F949512DBF8BD60DCB847665391840B63D1591EA">
+                        <QualifiedName>RootCAOK</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2013-12-03T08:21:17Z</ProductionTime>
+                <ProducedBy>TSA</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

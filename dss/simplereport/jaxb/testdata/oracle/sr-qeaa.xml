@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2026-02-26T09:28:49Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic attestation of attributes presentations and indicates its qualification status
+            at issuance and validation time. All certificates and their related chains are validated against
+            the EU Member State Trusted Lists (this includes target certificate and certificates used to validate
+            certificate validity status services - CRLs, OCSP).
+        </PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>simple-sd-jwt.jwt</DocumentName>
+    <ValidSignaturesCount>1</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <EAA Id="EAA-76E2213B89C691030DDA6D366ED62DA76D62FC5DA891BA93C6D60897A44D260F">
+        <Filename>simple-sd-jwt.jwt</Filename>
+        <Indication>PASSED</Indication>
+        <EAALevel description="Qualified Electronic Attestation of Attributes">QEAA</EAALevel>
+        <EAASignature SignatureFormat="JAdES-BASELINE-B" Id="S-9021C6A1186A0999165C1AFFA109EB76C2B9240609CFF104B73A4999FB1B0650">
+            <CertificateChain>
+                <Certificate Id="C-3ED3C3B0ABBDF15247DB7AF2152E436E8E4F96D40CBD6A9CAC77CF79A7CA0A98">
+                    <QualifiedName>Test-QEAA-CERT</QualifiedName>
+                </Certificate>
+                <Certificate Id="C-3AA68B4E5919756D754C9FE5D98128AA4B4B1DB6D304A30C181BE5CC6B643708" trusted="true">
+                    <QualifiedName>Test-CA-QEAA</QualifiedName>
+                    <TrustAnchors>
+                        <TrustAnchor countryCode="ZZ">
+                            <TSLType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</TSLType>
+                            <TrustServiceProvider>Agence Nationale des Titres Sécurisés</TrustServiceProvider>
+                            <TrustServiceProviderRegistrationId>VATZZ-12345</TrustServiceProviderRegistrationId>
+                            <TrustServiceName>Test Trusted Entity 1</TrustServiceName>
+                        </TrustAnchor>
+                    </TrustAnchors>
+                </Certificate>
+                <Certificate Id="C-1161305949AA42E0127A7411493CA3D528A939565F64898BD576FDA7AADAE7CB" trusted="true">
+                    <QualifiedName>Test-CAQC</QualifiedName>
+                    <TrustAnchors>
+                        <TrustAnchor countryCode="ZZ">
+                            <TSLType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</TSLType>
+                            <TrustServiceProvider>Agence Nationale des Titres Sécurisés</TrustServiceProvider>
+                            <TrustServiceProviderRegistrationId>VATZZ-12345</TrustServiceProviderRegistrationId>
+                            <TrustServiceName>Test Trusted Entity 1</TrustServiceName>
+                        </TrustAnchor>
+                    </TrustAnchors>
+                </Certificate>
+                <Certificate Id="C-0A8F4E361E7A341C51D352B2A44763829C8824E4A533E1FA3750227BECB58696">
+                    <QualifiedName>Test-RootCA</QualifiedName>
+                </Certificate>
+            </CertificateChain>
+            <Indication>TOTAL_PASSED</Indication>
+            <ExtensionPeriodMin>2026-02-26T09:28:50Z</ExtensionPeriodMin>
+            <ExtensionPeriodMax>2029-02-26T09:28:46Z</ExtensionPeriodMax>
+            <SigningTime>2026-02-26T09:28:46Z</SigningTime>
+            <BestSignatureTime>2026-02-26T09:28:49Z</BestSignatureTime>
+            <SignedBy>Test-QEAA-CERT</SignedBy>
+            <SignatureLevel description="Qualified Electronic Signature">QESig</SignatureLevel>
+            <SignatureScope Id="D-C227DD915CBE4553F6E2318F2B62E34E02896BA74DC8D3733F8CBEAA7ADB9A19" scope="FULL">Full document</SignatureScope>
+        </EAASignature>
+        <EAAPayload>
+            <Issuer name="iss">https://issuer.example.com</Issuer>
+            <Subject name="sub">user_42</Subject>
+            <IssuedAt name="iat">2023-05-02T04:00:00Z</IssuedAt>
+            <Expiration name="exp">2029-09-01T23:33:20Z</Expiration>
+            <Category name="category">urn:etsi:esi:eaa:eu:qualified</Category>
+            <StatusUri name="status/uri">https://nowina.lu/pki-factory/status</StatusUri>
+            <StatusType name="status/type">TokenStatusList</StatusType>
+            <StatusPurpose name="status/purpose">revocation</StatusPurpose>
+            <OneTimeUse name="oneTime">null</OneTimeUse>
+            <AttestedAttributesSubjectId name="subAttrs/sub_id">good-user</AttestedAttributesSubjectId>
+            <AttestedAttributes name="subAttrs/attrs">given_name, family_name</AttestedAttributes>
+            <GivenName name="given_name" disclosure="true">John</GivenName>
+            <FamilyName name="family_name" disclosure="true">Doe</FamilyName>
+            <AddressCity name="locality">Anytown</AddressCity>
+            <AddressStateOrProvince name="region">Anystate</AddressStateOrProvince>
+            <AddressCountryName name="country">US</AddressCountryName>
+            <AddressStreetAddress name="street_address">123 Main St</AddressStreetAddress>
+            <PlaceOfBirthCountry name="place_of_birth/country">LU</PlaceOfBirthCountry>
+            <IssuingAuthority name="issuing_authority">Public body</IssuingAuthority>
+            <OtherClaim name="nationalities">US</OtherClaim>
+            <OtherClaim name="cnf">{"jwk": {"kty": "EC", "crv": "P-256", "x": "TCAER19Zvu3OHF4j4W4vfSVoHIP1ILilDls7vCeGemc", "y": "ZxjiWWbZMQGHVWKVQ4hbSIirsVfuecCE6t4jT9F2HZQ"}}</OtherClaim>
+        </EAAPayload>
+    </EAA>
+</SimpleReport>
