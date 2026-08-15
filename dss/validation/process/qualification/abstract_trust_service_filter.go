@@ -32,7 +32,10 @@ func (f *AbstractTrustServiceFilter) InitAbstractTrustServiceFilter(overrides Ab
 
 // Filter filters a list of TrustServiceWrappers. Port of filter(List).
 func (f *AbstractTrustServiceFilter) Filter(originServices []*diagnostic.TrustServiceWrapper) []*diagnostic.TrustServiceWrapper {
-	var result []*diagnostic.TrustServiceWrapper
+	// Java's AbstractTrustServiceFilter#filter starts from `new ArrayList<>()`,
+	// so it never returns null; callers (CertQualificationAtTimeBlock's
+	// filteredServices in particular) distinguish "empty" from "never computed".
+	result := []*diagnostic.TrustServiceWrapper{}
 	for _, service := range originServices {
 		if f.overrides.IsAcceptable(service) {
 			result = append(result, service)

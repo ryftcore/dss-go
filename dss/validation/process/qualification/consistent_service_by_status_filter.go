@@ -13,7 +13,7 @@ func NewConsistentServiceByStatusFilter() *ConsistentServiceByStatusFilter {
 
 // Filter filters a list of TrustServiceWrappers. Port of filter(List).
 func (f *ConsistentServiceByStatusFilter) Filter(trustServices []*diagnostic.TrustServiceWrapper) []*diagnostic.TrustServiceWrapper {
-	var result []*diagnostic.TrustServiceWrapper
+	result := []*diagnostic.TrustServiceWrapper{}
 	for _, service := range trustServices {
 		if IsPostEIDAS(service.StartDate) || TrustServiceCheckerIsPreEIDASStatusConsistent(service) {
 			result = append(result, service)

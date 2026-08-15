@@ -13,7 +13,7 @@ func NewConsistentServiceByQSCDFilter() *ConsistentServiceByQSCDFilter {
 
 // Filter filters a list of TrustServiceWrappers. Port of filter(List).
 func (f *ConsistentServiceByQSCDFilter) Filter(trustServices []*diagnostic.TrustServiceWrapper) []*diagnostic.TrustServiceWrapper {
-	var result []*diagnostic.TrustServiceWrapper
+	result := []*diagnostic.TrustServiceWrapper{}
 	for _, service := range trustServices {
 		if TrustServiceCheckerIsQSCDConsistent(service) &&
 			TrustServiceCheckerIsQSCDStatusAsInCertConsistent(service) &&

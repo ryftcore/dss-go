@@ -242,7 +242,10 @@ func (c *CertQualificationAtTimeBlock) InitChain() {
 
 	// Keep only CA/QC and granted for further status determination
 	if !containsTrustService(caqcServices, selectedTrustService) || !containsTrustService(grantedServices, selectedTrustService) {
-		c.filteredServices = nil
+		// Java assigns Collections.emptyList() here, NOT null: getFilteredServices()
+		// must keep returning a list, since SignatureQualificationBlock calls it
+		// unconditionally and only asks whether it is empty.
+		c.filteredServices = []*diagnostic.TrustServiceWrapper{}
 		selectedTrustService = nil
 	}
 

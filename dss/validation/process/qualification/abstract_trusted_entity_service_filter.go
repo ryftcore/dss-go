@@ -35,7 +35,8 @@ func (f *AbstractTrustedEntityServiceFilter) InitAbstractTrustedEntityServiceFil
 // Filter filters a list of TrustedEntityServiceWrappers. Port of filter(List).
 func (f *AbstractTrustedEntityServiceFilter) Filter(
 	trustedServices []*diagnostic.TrustedEntityServiceWrapper) []*diagnostic.TrustedEntityServiceWrapper {
-	var result []*diagnostic.TrustedEntityServiceWrapper
+	// see AbstractTrustServiceFilter.Filter: upstream's filter() never returns null.
+	result := []*diagnostic.TrustedEntityServiceWrapper{}
 	for _, service := range trustedServices {
 		if f.overrides.IsAcceptable(service) {
 			result = append(result, service)

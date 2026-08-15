@@ -14,7 +14,7 @@ func NewConsistentServiceByCertificateTypeFilter() *ConsistentServiceByCertifica
 
 // Filter filters a list of TrustServiceWrappers. Port of filter(List).
 func (f *ConsistentServiceByCertificateTypeFilter) Filter(trustServices []*diagnostic.TrustServiceWrapper) []*diagnostic.TrustServiceWrapper {
-	var result []*diagnostic.TrustServiceWrapper
+	result := []*diagnostic.TrustServiceWrapper{}
 	for _, service := range trustServices {
 		if TrustServiceCheckerIsLegalPersonConsistent(service) && TrustServiceCheckerIsUsageConsistent(service) &&
 			TrustServiceCheckerIsQualifierAndAdditionalServiceInfoConsistent(service) &&
