@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-11-10T13:20:04Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+            All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+            target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+        </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-5C367D97C8F1A467D547A9502137AD6CD3DC3BCDDE2F8BAB5856037FF373F00E">
+        <subject>
+            <commonName>TLS Certificate</commonName>
+            <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+            <organizationUnit>PKI-TEST</organizationUnit>
+            <country>ZZ</country>
+        </subject>
+        <issuerId>C-8DC0B5A5D6F4B7774437CC727AFD6AA9B9748E51895868CBAF68581049F106DE</issuerId>
+        <notBefore>2024-12-10T13:20:01Z</notBefore>
+        <notAfter>2026-10-10T12:20:01Z</notAfter>
+        <keyUsages>
+            <keyUsage>digitalSignature</keyUsage>
+            <keyUsage>keyEncipherment</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages>
+            <extendedKeyUsage>serverAuth</extendedKeyUsage>
+            <extendedKeyUsage>clientAuth</extendedKeyUsage>
+        </extendedKeyUsages>
+        <ocspUrls>
+            <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-Non-Qualified-CA-from-ZZ</ocspUrl>
+        </ocspUrls>
+        <crlUrls>
+            <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-Non-Qualified-CA-from-ZZ.crl</crlUrl>
+        </crlUrls>
+        <aiaUrls>
+            <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-Non-Qualified-CA-from-ZZ.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls/>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <qwacProfile>TLS certificate supported by 2-QWAC</qwacProfile>
+        <revocation>
+            <thisUpdate>2025-11-10T13:20:04Z</thisUpdate>
+        </revocation>
+        <trustAnchors/>
+        <Indication>PASSED</Indication>
+        <Chain>
+            <ChainItem Id="C-8DC0B5A5D6F4B7774437CC727AFD6AA9B9748E51895868CBAF68581049F106DE">
+                <subject>
+                    <commonName>Test-Non-Qualified-CA-from-ZZ</commonName>
+                    <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+                    <organizationUnit>PKI-TEST</organizationUnit>
+                    <country>ZZ</country>
+                </subject>
+                <issuerId>C-111B51DB71FC9ACF77602C8A6F6C11674E8E00FA934FA4F1F065DD4EA1384AB3</issuerId>
+                <notBefore>2024-12-10T13:20:01Z</notBefore>
+                <notAfter>2026-10-10T12:20:01Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls/>
+                <crlUrls>
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-QTSP-1-RootCA-from-ZZ.crl</crlUrl>
+                </crlUrls>
+                <aiaUrls>
+                    <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-QTSP-1-RootCA-from-ZZ.crt</aiaUrl>
+                </aiaUrls>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors/>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+            <ChainItem Id="C-111B51DB71FC9ACF77602C8A6F6C11674E8E00FA934FA4F1F065DD4EA1384AB3">
+                <subject>
+                    <commonName>Test-QTSP-1-RootCA-from-ZZ</commonName>
+                    <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+                    <organizationUnit>PKI-TEST</organizationUnit>
+                    <country>ZZ</country>
+                </subject>
+                <issuerId>C-BE354C9D9BD078E33D415B4CEFB4AF9180A908C1A5D12B8C32F659FFA79B37CC</issuerId>
+                <notBefore>2024-12-10T13:20:01Z</notBefore>
+                <notAfter>2026-10-10T12:20:01Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls/>
+                <crlUrls>
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-National-RootCA-from-ZZ.crl</crlUrl>
+                </crlUrls>
+                <aiaUrls>
+                    <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-National-RootCA-from-ZZ.crt</aiaUrl>
+                </aiaUrls>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors/>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+            <ChainItem Id="C-BE354C9D9BD078E33D415B4CEFB4AF9180A908C1A5D12B8C32F659FFA79B37CC">
+                <subject>
+                    <commonName>Test-National-RootCA-from-ZZ</commonName>
+                    <organizationName>Nowina Solutions</organizationName>
+                    <organizationUnit>PKI-TEST</organizationUnit>
+                    <country>ZZ</country>
+                </subject>
+                <notBefore>2024-11-10T13:20:00Z</notBefore>
+                <notAfter>2026-11-10T13:20:00Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls/>
+                <crlUrls/>
+                <aiaUrls/>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors/>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+        </Chain>
+        <TLSBindingSignature Id="S-5647412FD60706227953701F24EFE0601064DE0826A0B9DC59977E7B1E89AF89" SignatureFormat="JAdES-BASELINE-B">
+            <Url>https://nowina.lu/tls-binding-signature</Url>
+            <Indication>TOTAL_PASSED</Indication>
+            <SigningTime>2025-11-10T13:20:03Z</SigningTime>
+            <SignatureScope Id="D-6415A3DBE9CEB0AB990BBF7ED30100113003D0B96E58B222FBB61A4C50391487" name="C-5C367D97C8F1A467D547A9502137AD6CD3DC3BCDDE2F8BAB5856037FF373F00E" scope="FULL">Full document</SignatureScope>
+            <Chain>
+                <ChainItem Id="C-0C9AB0710D1D64250842F5E0C3F2083E7C95DCAD6F00204C0C94679D71D693D6">
+                    <subject>
+                        <commonName>2-QWAC</commonName>
+                        <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+                        <organizationUnit>PKI-TEST</organizationUnit>
+                        <country>ZZ</country>
+                    </subject>
+                    <issuerId>C-FAFB05BF1337363556306751A0B2175C0964747E1312E0D3C304E9E1667164B6</issuerId>
+                    <notBefore>2024-12-10T13:20:01Z</notBefore>
+                    <notAfter>2026-10-10T12:20:01Z</notAfter>
+                    <keyUsages>
+                        <keyUsage>digitalSignature</keyUsage>
+                        <keyUsage>keyEncipherment</keyUsage>
+                    </keyUsages>
+                    <extendedKeyUsages>
+                        <extendedKeyUsage>tslBinding</extendedKeyUsage>
+                    </extendedKeyUsages>
+                    <ocspUrls>
+                        <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-Qualified-CA1-from-ZZ</ocspUrl>
+                    </ocspUrls>
+                    <crlUrls>
+                        <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-Qualified-CA1-from-ZZ.crl</crlUrl>
+                    </crlUrls>
+                    <aiaUrls>
+                        <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-Qualified-CA1-from-ZZ.crt</aiaUrl>
+                    </aiaUrls>
+                    <cpsUrls/>
+                    <pdsUrls/>
+                    <qualificationAtIssuance>QC for WSA</qualificationAtIssuance>
+                    <qualificationDetailsAtIssuance>
+                        <Warning Key="QUAL_QSCD_AT_CC_ANS">The private key does not reside in a QSCD at issuance time!</Warning>
+                    </qualificationDetailsAtIssuance>
+                    <qualificationAtValidation>QC for WSA</qualificationAtValidation>
+                    <qualificationDetailsAtValidation>
+                        <Warning Key="QUAL_QSCD_AT_VT_ANS">The private key does not reside in a QSCD at validation time!</Warning>
+                    </qualificationDetailsAtValidation>
+                    <qwacProfile>2-QWAC</qwacProfile>
+                    <revocation>
+                        <thisUpdate>2025-11-10T13:20:04Z</thisUpdate>
+                    </revocation>
+                    <trustAnchors/>
+                    <Indication>PASSED</Indication>
+                    <Chain/>
+                </ChainItem>
+                <ChainItem Id="C-FAFB05BF1337363556306751A0B2175C0964747E1312E0D3C304E9E1667164B6">
+                    <subject>
+                        <commonName>Test-Qualified-CA1-from-ZZ</commonName>
+                        <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+                        <organizationUnit>PKI-TEST</organizationUnit>
+                        <country>ZZ</country>
+                    </subject>
+                    <issuerId>C-111B51DB71FC9ACF77602C8A6F6C11674E8E00FA934FA4F1F065DD4EA1384AB3</issuerId>
+                    <notBefore>2024-12-10T13:20:01Z</notBefore>
+                    <notAfter>2026-10-10T12:20:01Z</notAfter>
+                    <keyUsages>
+                        <keyUsage>keyCertSign</keyUsage>
+                        <keyUsage>crlSign</keyUsage>
+                    </keyUsages>
+                    <extendedKeyUsages/>
+                    <ocspUrls/>
+                    <crlUrls>
+                        <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-QTSP-1-RootCA-from-ZZ.crl</crlUrl>
+                    </crlUrls>
+                    <aiaUrls>
+                        <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-QTSP-1-RootCA-from-ZZ.crt</aiaUrl>
+                    </aiaUrls>
+                    <cpsUrls/>
+                    <pdsUrls/>
+                    <revocation/>
+                    <trustAnchors>
+                        <trustAnchor>
+                            <countryCode>ZZ</countryCode>
+                            <tslType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</tslType>
+                            <trustServiceProvider>C=ZZ,OU=PKI-TEST,O=Test Qualified Trust Service Provider 1 from ZZ,CN=Test-Qualified-CA1-from-ZZ</trustServiceProvider>
+                            <trustServiceProviderRegistrationId>VATZZ-00112233</trustServiceProviderRegistrationId>
+                            <trustServiceName>ZZ Service</trustServiceName>
+                        </trustAnchor>
+                    </trustAnchors>
+                    <Indication>PASSED</Indication>
+                    <Chain/>
+                </ChainItem>
+                <ChainItem Id="C-111B51DB71FC9ACF77602C8A6F6C11674E8E00FA934FA4F1F065DD4EA1384AB3">
+                    <subject>
+                        <commonName>Test-QTSP-1-RootCA-from-ZZ</commonName>
+                        <organizationName>Test Qualified Trust Service Provider 1 from ZZ</organizationName>
+                        <organizationUnit>PKI-TEST</organizationUnit>
+                        <country>ZZ</country>
+                    </subject>
+                    <issuerId>C-BE354C9D9BD078E33D415B4CEFB4AF9180A908C1A5D12B8C32F659FFA79B37CC</issuerId>
+                    <notBefore>2024-12-10T13:20:01Z</notBefore>
+                    <notAfter>2026-10-10T12:20:01Z</notAfter>
+                    <keyUsages>
+                        <keyUsage>keyCertSign</keyUsage>
+                        <keyUsage>crlSign</keyUsage>
+                    </keyUsages>
+                    <extendedKeyUsages/>
+                    <ocspUrls/>
+                    <crlUrls>
+                        <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-National-RootCA-from-ZZ.crl</crlUrl>
+                    </crlUrls>
+                    <aiaUrls>
+                        <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-National-RootCA-from-ZZ.crt</aiaUrl>
+                    </aiaUrls>
+                    <cpsUrls/>
+                    <pdsUrls/>
+                    <revocation/>
+                    <trustAnchors/>
+                    <Indication>PASSED</Indication>
+                    <Chain/>
+                </ChainItem>
+                <ChainItem Id="C-BE354C9D9BD078E33D415B4CEFB4AF9180A908C1A5D12B8C32F659FFA79B37CC">
+                    <subject>
+                        <commonName>Test-National-RootCA-from-ZZ</commonName>
+                        <organizationName>Nowina Solutions</organizationName>
+                        <organizationUnit>PKI-TEST</organizationUnit>
+                        <country>ZZ</country>
+                    </subject>
+                    <notBefore>2024-11-10T13:20:00Z</notBefore>
+                    <notAfter>2026-11-10T13:20:00Z</notAfter>
+                    <keyUsages>
+                        <keyUsage>keyCertSign</keyUsage>
+                        <keyUsage>crlSign</keyUsage>
+                    </keyUsages>
+                    <extendedKeyUsages/>
+                    <ocspUrls/>
+                    <crlUrls/>
+                    <aiaUrls/>
+                    <cpsUrls/>
+                    <pdsUrls/>
+                    <revocation/>
+                    <trustAnchors/>
+                    <Indication>PASSED</Indication>
+                    <Chain/>
+                </ChainItem>
+            </Chain>
+        </TLSBindingSignature>
+    </Certificate>
+    <ConnectionDetails>
+        <Url>https://nowina.lu</Url>
+        <TLSCertificateBindingLink>https://nowina.lu/tls-binding-signature</TLSCertificateBindingLink>
+    </ConnectionDetails>
+</SimpleCertificateReport>

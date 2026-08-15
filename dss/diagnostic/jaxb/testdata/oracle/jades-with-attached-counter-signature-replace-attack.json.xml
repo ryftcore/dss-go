@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>jades-with-attached-counter-signature-replace-attack.json</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-DDDD913C4176056E6EDA00CDC5826FC46CA3E2325751C644AF789790ADBBD85C">
+            <SignatureFilename>jades-with-attached-counter-signature-replace-attack.json</SignatureFilename>
+            <ClaimedSigningTime>2021-01-29T14:21:31Z</ClaimedSigningTime>
+            <SignatureFormat>JAdES-BASELINE-B</SignatureFormat>
+            <JWSSerializationType>JSON_SERIALIZATION</JWSSerializationType>
+            <SignatureType>application/jose+json</SignatureType>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="JWS_SIGNING_INPUT">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>GqTwGxUmyULDzzDQMm4YiC2FZkxNII5YLBxQXpVYD0E=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>3072</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B9A841187874EAF71D727BBC4DAFAA178C1C70C711A3FED056602D0E76AB7CA7"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B9A841187874EAF71D727BBC4DAFAA178C1C70C711A3FED056602D0E76AB7CA7"/>
+            </CertificateChain>
+            <MimeType>application/json</MimeType>
+            <CommitmentTypeIndications/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-B9A841187874EAF71D727BBC4DAFAA178C1C70C711A3FED056602D0E76AB7CA7">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>uahBGHh06vcdcnu8Ta+qF4wccMcRo/7QVmAtDnarfKc=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                    <CertificateRef>
+                        <Origin>KEY_IDENTIFIER</Origin>
+                        <IssuerSerial match="true">MHUwbaRrMGkxGjAYBgNVBAUTEVNFUE5SLTAxMjM0NTY3ODkwMRIwEAYDVQQEDAlTYW50ZXNzb24xDzANBgNVBCoMBlN0ZWZhbjELMAkGA1UEBhMCU0UxGTAXBgNVBAMMEFN0ZWZhbiBTYW50ZXNzb24CBF8yjdQ=</IssuerSerial>
+                        <SerialInfo>
+                            <IssuerName>CN=Stefan Santesson, C=SE, GIVENNAME=Stefan, SURNAME=Santesson, SERIALNUMBER=SEPNR-01234567890</IssuerName>
+                            <SerialNumber>1597148628</SerialNumber>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-6ED2979B42B7F42F29D3688C2EF5544B36EF5C577055CF253E3A0A8A63561264">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>hWV0MZfmUXUzosP3fbQVs4Ryx0n74FJriUIxx4GPp+s=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>GqTwGxUmyULDzzDQMm4YiC2FZkxNII5YLBxQXpVYD0E=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>GX3foM49y+OQiaUwM6mKV7hEoYqMlcSSdbvYsZIFm6f2AtmIPgDr4exMzU+/dsKYtmNKlSIKmJXnmBm1GPxbhq8mEAHVoS0nolqSHayoqpz0EwFAhJ8j4Z+S/+qc0ssbd8IGRjh9SmzZZE0VXUrmv+7xEtK4f1kS/4cP53RAhSEFuEVfV182ilItV4ZBUPijJ4J9oybuJpEPsXCpQhs7aZ4B5KY8s4FcUq6yJsb0MY0xCMaE8ydow/JJ1U7I8oBddUTmEDCpaY+DeGaO9h1uUmgcnrn+q0SEgpgghkNjyx1Pb+Ga4Q76h/Gpj0k6+y6Uw8kRu8pN1tmoXaCGU95oXun11zLHkraP8t9IUZ2uX0KTLzeDVCjsdg02NQogoTQ3FB9jNGUiKMmnGpvrCIciok8Z0kdg/7J6kKRDEH6xnUQCh9h05rknT5DKaBSoE/Wn59SdgLEWR/E7w7RFhJdIdlNLAE70yHrlHygV5mlhz7njtIIYrEVOx9s3QD6Y4d/U</SignatureValue>
+        </Signature>
+        <Signature CounterSignature="true" Parent="S-DDDD913C4176056E6EDA00CDC5826FC46CA3E2325751C644AF789790ADBBD85C" Id="S-610BCE7CF6BE153F5B9C1BDB8EB054200CD2660298C6EABCC35037A5F3EC01A8">
+            <SignatureFilename>jades-with-attached-counter-signature-replace-attack.json</SignatureFilename>
+            <ClaimedSigningTime>2021-02-02T14:10:52Z</ClaimedSigningTime>
+            <SignatureFormat>JAdES-BASELINE-B</SignatureFormat>
+            <JWSSerializationType>COMPACT_SERIALIZATION</JWSSerializationType>
+            <SignatureType>application/jose</SignatureType>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="JWS_SIGNING_INPUT">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>U+mHUyLd+oRQAiaxrodx+fKYZLPdRP6ZLNNHncDlbac=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="COUNTER_SIGNED_SIGNATURE_VALUE">
+                    <DataFound>true</DataFound>
+                    <DataIntact>false</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873"/>
+                <ChainItem Certificate="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625"/>
+            </CertificateChain>
+            <SignatureProductionPlace>
+                <City>Kehlen</City>
+            </SignatureProductionPlace>
+            <CommitmentTypeIndications>
+                <CommitmentTypeIndication>
+                    <Identifier>http://uri.etsi.org/01903/v1.2.2#ProofOfCreation</Identifier>
+                    <Description>ProofOfCreation</Description>
+                    <DocumentationReferences/>
+                </CommitmentTypeIndication>
+            </CommitmentTypeIndications>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>u1UOpQo83E39Ozrbzpq93ugRpWiq+C4nWYaPBKVh+HM=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                    <CertificateRef>
+                        <Origin>KEY_IDENTIFIER</Origin>
+                        <IssuerSerial match="true">MFYwUaRPME0xEDAOBgNVBAMMB2dvb2QtY2ExGTAXBgNVBAoMEE5vd2luYSBTb2x1dGlvbnMxETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJMVQIBCg==</IssuerSerial>
+                        <SerialInfo>
+                            <IssuerName>C=LU, OU=PKI-TEST, O=Nowina Solutions, CN=good-ca</IssuerName>
+                            <SerialNumber>10</SerialNumber>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625">
+                    <Origin>KEY_INFO</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-DB3C401F3801FE2D51DAB8E1A0D1C3B5F4DE81A845FD9CA276CE99D2B871213A">
+                    <Scope>COUNTER_SIGNATURE</Scope>
+                    <Name>S-DDDD913C4176056E6EDA00CDC5826FC46CA3E2325751C644AF789790ADBBD85C</Name>
+                    <Description>Master signature with Id : S-DDDD913C4176056E6EDA00CDC5826FC46CA3E2325751C644AF789790ADBBD85C</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>uf6Mie7ZFUxuptIgxDK+knkYTpZMiGJmH2L1UGd5qHU=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>U+mHUyLd+oRQAiaxrodx+fKYZLPdRP6ZLNNHncDlbac=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>epsZndAcTwADK5hZSB1uf2uUxln0oOF7fe8cXzefvdQJoN3cpHj8iF1eECAzUXf+Yh9wtzrsQe+zOGMWPRKBPtNL8CEc0uj/E6feo98vDfunuPmaCDxJUi7n2/EDkYjocLlmYhGnjxziZE7wdB6no1xww6RSCwAun3v+3/pRh8lacvd8lqW5m+z/y473nH5PXzlpfLnAyZalXZrbVUGyQxkZYkAQRaCiMBa7wiIyCgaFMGlBN4PJtP29vQVY71umq/457HJvGclOjBjKuQRdQzroJUKIv/dZ+I2SWkab8wUeUrfV6Wz3v+9FTsYk7XcvEqAmX8UfDPITito6pAt9qQ==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=good-ca</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=good-ca</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=root-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=root-ca</IssuerDistinguishedName>
+            <SerialNumber>4</SerialNumber>
+            <CommonName>good-ca</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2021-09-14T05:38:45Z</NotAfter>
+            <NotBefore>2019-11-14T06:38:45Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-BD705EFDD50B82D2BB10B7E9AE87066A9CA3CB301D918501D95D3E23EDBAF19D</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>UJgeorbWtlMxhjEeCfvXNGVBGrw=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/root-ca.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/root-ca.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIID6jCCAtKgAwIBAgIBBDANBgkqhkiG9w0BAQsFADBNMRAwDgYDVQQDDAdyb290LWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwHhcNMTkxMTE0MDYzODQ1WhcNMjEwOTE0MDUzODQ1WjBNMRAwDgYDVQQDDAdnb29kLWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDD2NMLQPuhRBT4Sbx49zppVTMGL/8mL3iiF0+6vibi74XqONpfI9ekRj26e0rtBzoMa9tP9wzUyCNkTZ6Vb+8AA7NQ7Zh/H4fEykXI1t5je7KIZ65BLU4+AahyK4bJh5WPrGj+kmMtMXvD8qktexDAPF81p/V/ixBRlH3EEkDTaeWUsFlL2Rb+wujqdFJgaYLGI/aopIjR75cFZPOlUrKl7dWkecMAaWZGyHv1P6Bdy6EM7K3aGwYdTU1rqzpYh2AR5MFQTII7qmSVTn3UnMcswxo68ObxfwBeIDBsAOJA+J7IwuA0qOSsquOt05dJZpWPomhLpxCEAO/xBbs8tTFLAgMBAAGjgdQwgdEwDgYDVR0PAQH/BAQDAgEGMEEGA1UdHwQ6MDgwNqA0oDKGMGh0dHA6Ly9kc3Mubm93aW5hLmx1L3BraS1mYWN0b3J5L2NybC9yb290LWNhLmNybDBMBggrBgEFBQcBAQRAMD4wPAYIKwYBBQUHMAKGMGh0dHA6Ly9kc3Mubm93aW5hLmx1L3BraS1mYWN0b3J5L2NydC9yb290LWNhLmNydDAdBgNVHQ4EFgQUUJgeorbWtlMxhjEeCfvXNGVBGrwwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAMAmtVK3qOZI5Vsp2dU6t1i5hvsrK2AO/uH1F/xhbXOaq40RK24WW5P7kdh0s6oIu7HoMLCxNG0pqjLx0pyXp678Cg9NPNl0qe1feUxNzV48n9uEaDieMiMr33XPad1a4zVhn0dC8hnVLjBUVVKTcIzzzWT0a4o11+kk0+n2CZgqglsQN6zhKhG45xZoIwu7113kEBdg1r2OuigAIOPIPyGGyBEjWsoS2uR1Xt1xefjXBv9Fry2kIhlhlc8uCSRc8HkPZjakdbEL2G+ZWWu5jLjMe8IsCzQ+7C5xdgEwgATznq+/80p/U40AI5JM+5lrPHMlS890amOz8tXDwajz4GA==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-B9A841187874EAF71D727BBC4DAFAA178C1C70C711A3FED056602D0E76AB7CA7">
+            <SubjectDistinguishedName Format="CANONICAL">cn=stefan santesson,c=se,2.5.4.42=#0c0653746566616e,2.5.4.4=#0c0953616e746573736f6e,2.5.4.5=#13115345504e522d3031323334353637383930</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Stefan Santesson,C=SE,2.5.4.42=#0c0653746566616e,2.5.4.4=#0c0953616e746573736f6e,2.5.4.5=#13115345504e522d3031323334353637383930</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=stefan santesson,c=se,2.5.4.42=#0c0653746566616e,2.5.4.4=#0c0953616e746573736f6e,2.5.4.5=#13115345504e522d3031323334353637383930</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Stefan Santesson,C=SE,2.5.4.42=#0c0653746566616e,2.5.4.4=#0c0953616e746573736f6e,2.5.4.5=#13115345504e522d3031323334353637383930</IssuerDistinguishedName>
+            <SerialNumber>1597148628</SerialNumber>
+            <SubjectSerialNumber>SEPNR-01234567890</SubjectSerialNumber>
+            <CommonName>Stefan Santesson</CommonName>
+            <CountryName>SE</CountryName>
+            <GivenName>Stefan</GivenName>
+            <Surname>Santesson</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2021-08-11T12:23:48Z</NotAfter>
+            <NotBefore>2020-08-11T12:23:48Z</NotBefore>
+            <PublicKeySize>3072</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-297ADB2652F27B0496522A193E4905A13D1BFB9A33BA4E4F43C79F11874120C6</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-297ADB2652F27B0496522A193E4905A13D1BFB9A33BA4E4F43C79F11874120C6</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>3072</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEajCCAtKgAwIBAgIEXzKN1DANBgkqhkiG9w0BAQsFADBpMRowGAYDVQQFExFTRVBOUi0wMTIzNDU2Nzg5MDESMBAGA1UEBAwJU2FudGVzc29uMQ8wDQYDVQQqDAZTdGVmYW4xCzAJBgNVBAYTAlNFMRkwFwYDVQQDDBBTdGVmYW4gU2FudGVzc29uMB4XDTIwMDgxMTEyMjM0OFoXDTIxMDgxMTEyMjM0OFowaTEaMBgGA1UEBRMRU0VQTlItMDEyMzQ1Njc4OTAxEjAQBgNVBAQMCVNhbnRlc3NvbjEPMA0GA1UEKgwGU3RlZmFuMQswCQYDVQQGEwJTRTEZMBcGA1UEAwwQU3RlZmFuIFNhbnRlc3NvbjCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBALDEstoj96S27LWn6OqPIOTGEyrFyowvpuZ/q7puIBNXDaFYyl9cfTRWB3L0umSSW84ckKh73gHZa4ZwM7ya6RoCE19qd49CDbblf7vS3fwqsAcRdrFzjF+V+4i7qerkuMOKk0F5B/eTuefK77YbS51YU0F7+ATb63l0AY8qa+7KBvRDo+aEloT8fVWEvFvfrqv5rJWzcVv6xG1oO4yyvd4c7vr6pzmYrpy2qYycM4ncJLGnDuv+c+HV3c9iXdf4sgCVWYUtp4JF4vR9EgP7k10U4lR6y5WA9qnX/amGjtFSQVD5WSpy9Rfqa1e3A85XAmqNfMRTBlwyt1wK5YEeaGIKhmBH60i4G2gGTpI8T8/KlVbuLj14ekyaFlCc/sUnKea44WBuU4WXvRIkMpn+dj1mvxAlMmfuabT3ceBfHyC6zZSLIaniqXgbadYtTXcKA1FJ5Aap3TwpJSrUDQXf31VYp/vaCsUI6bMhUixhjdRwnWCWMThRmU77qFAD2isPuQIDAQABoxowGDAJBgNVHRMEAjAAMAsGA1UdDwQEAwIGQDANBgkqhkiG9w0BAQsFAAOCAYEAa+Vql2XuRukQr83i3LyRxWeolwQAsBqc4/86SoiOM3+ttK9d3DYM/y5OasZq6Cvxa4DKDUsadrRcMChul0P9bT/gkIRp56dYmd2v2PE2nXoYSusM/aNIhBAU5f7Xp4bw/P7/u0XXwRaq2hjLT/nBCFqh9MlWSgEayhZpSqmjK/ReTt8W+iEv2szFLvVRCKtAoQ0diU1iRfhWPrr89sAyuppL47Ktyjs+wJSxmA2QzHmfFohbVL/J97qArkZXaHsrJjILRyA1ZObhw0AiuXhAaSHwWyIcP2z2sQU64LX6TNfHK78bOEEWV6fKIk+LmFPaaJ34D5f1M7uY/zQrOD8ZAb+OROlbP3XXd5K2zlKxc7wbYl6NAWUi5yHj9IaAdeg5ps5PgX2Tljd/ow0djXl3x3kugMQVb3Bx7H6fxzlSDrtbMuk69bh72rIIvZl0NYFf0aYRYAwXbyRpmAreZUKBNjKnEWzH5LGcv3RbJgohZ5e6wGc+rz834ILFyvdkPnN3</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=good-user</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=good-user</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,ou=pki-test,o=nowina solutions,cn=good-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,OU=PKI-TEST,O=Nowina Solutions,CN=good-ca</IssuerDistinguishedName>
+            <SerialNumber>10</SerialNumber>
+            <CommonName>good-user</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2021-09-14T05:38:47Z</NotAfter>
+            <NotBefore>2019-11-14T06:38:47Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-D122D24C8078656DCA3EED98661B51372FD8A4CB6F105F137C510443543AB4A0</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-BD705EFDD50B82D2BB10B7E9AE87066A9CA3CB301D918501D95D3E23EDBAF19D</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>usmM1nYJ0iH5zQKUZzzaeKmYKpA=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/good-ca.crt</caIssuersUrl>
+                    <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/good-ca</ocspUrl>
+                </AuthorityInformationAccess>
+            </CertificateExtensions>
+            <Base64Encoded>MIID1DCCArygAwIBAgIBCjANBgkqhkiG9w0BAQsFADBNMRAwDgYDVQQDDAdnb29kLWNhMRkwFwYDVQQKDBBOb3dpbmEgU29sdXRpb25zMREwDwYDVQQLDAhQS0ktVEVTVDELMAkGA1UEBhMCTFUwHhcNMTkxMTE0MDYzODQ3WhcNMjEwOTE0MDUzODQ3WjBPMRIwEAYDVQQDDAlnb29kLXVzZXIxGTAXBgNVBAoMEE5vd2luYSBTb2x1dGlvbnMxETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJMVTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMz7K6h5u4SrlxlYbzwp1iEyFCbOaPvIME7Z8gNYJMZdCV2Ffx+A2wnsjfvoqA9NunDh0X1w7jWycHnapv43BsMMsynvREXBVnpCCC0C3+olxVpAv8C2S7tk8DNTY2FvcTkzPtzIr9zRIlFC8fPaiVkAYyNzL2kJcr9ZHEAmqg14mhXLEv79HLUojyDKJ+C3Weutk4ZCHdEjp2Tf8ihh7p28u+anKP4fnJYGvznfLk/asVEexS9yP6tnEH41QG52RNDMitbfWngCRAN4VWE3DjUfr6DkVAsby88xtSaPx3hwUhDXyAvEocZ2h0lRTbVDoQFrIFly4BQISU7mxxY+AecCAwEAAaOBvDCBuTAOBgNVHQ8BAf8EBAMCBkAwgYcGCCsGAQUFBwEBBHsweTA5BggrBgEFBQcwAYYtaHR0cDovL2Rzcy5ub3dpbmEubHUvcGtpLWZhY3Rvcnkvb2NzcC9nb29kLWNhMDwGCCsGAQUFBzAChjBodHRwOi8vZHNzLm5vd2luYS5sdS9wa2ktZmFjdG9yeS9jcnQvZ29vZC1jYS5jcnQwHQYDVR0OBBYEFLrJjNZ2CdIh+c0ClGc82nipmCqQMA0GCSqGSIb3DQEBCwUAA4IBAQAX8RouFOTWUtT1/LxVDQHflzWY72Y/BfONDAWGXFHSR9PrIDP1alo2jhop5wP8DAlxuBzIvNiCIQb6c9WoBrkani8SseN3mowQdlN9zVTsQeFUwloj7oMwziKn080hvbYeP5fRCSrr+v4yTWg3U2Q6blB7nzHKzNYOQA/zKlMsAcXizIuToblJqiOhqtc6LDneKpx7pQPSVZBrzlo6ivxHzda4MxKJCRNQ3TmBt3uU8khQ+TEijlnCQoTZ2ablZ+UJnBFdMmvf7aqvZlioUUXhizTh66NS+MgBvgjfdDmIznQI629EpL/Y1Tiuilzr+6ocO1ziejoMF3aDg+5mIE0M</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-6ED2979B42B7F42F29D3688C2EF5544B36EF5C577055CF253E3A0A8A63561264">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>4zxbOrHgcT7qnz/zOxYhbAdIYH3T2jiyGrhRqcRE3js=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-DB3C401F3801FE2D51DAB8E1A0D1C3B5F4DE81A845FD9CA276CE99D2B871213A">
+            <ReferencedName>S-DDDD913C4176056E6EDA00CDC5826FC46CA3E2325751C644AF789790ADBBD85C</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>EHWmOMhwEU275xn10DPtJfbTW4iIFEQXbL1xiDvmsA8=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

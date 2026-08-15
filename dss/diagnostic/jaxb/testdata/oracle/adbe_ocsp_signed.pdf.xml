@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>adbe_ocsp_signed.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-863CE0E45BDB90B383C20DEA302DC55D09F65A3229CBE2EE03123EAB8DD53816">
+            <SignatureFilename>adbe_ocsp_signed.pdf</SignatureFilename>
+            <ClaimedSigningTime>2018-11-13T15:05:15Z</ClaimedSigningTime>
+            <SignatureFormat>PKCS7-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>b9bLUfnGClGT8WVPythJebaXnzIpjo9abNqzz+Fa1ok=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-6F42FADFF4188D66063DA52F5B474E5A9F4969447BD52CB7AC8010505B87F5F2"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-6F42FADFF4188D66063DA52F5B474E5A9F4969447BD52CB7AC8010505B87F5F2"/>
+                <ChainItem Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=InfoCert Firma Qualificata 2, SERIALNUMBER=07945211006, OU=Certificatore Accreditato, O=INFOCERT SPA, C=IT</IssuerName>
+                    <SerialNumber>8493935</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="Signature2"/>
+                <PDFSignatureDictionary consistent="true">
+                    <SignerName>Luigi Di Maio</SignerName>
+                    <Type>Sig</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>adbe.pkcs7.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 950794 966200 128661</SignatureByteRange>
+                </PDFSignatureDictionary>
+            </PDFRevision>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-0C19EB309F8E4ED6036798AB7E5BDD48D4E00FE4B5D7F9EAB107AC09B50AE4BC">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-6F42FADFF4188D66063DA52F5B474E5A9F4969447BD52CB7AC8010505B87F5F2">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-301A105AE5D8BFC7261AE4842E09AD4D68ED026336E15522424B804A0AFFD039">
+                    <Type>OCSP</Type>
+                    <Origin>ADBE_REVOCATION_INFO_ARCHIVAL</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-8A5B98CCA3D1A763EA858256D019983906C8C0CFDFCBD2240C120701A8654E58">
+                    <Scope>FULL</Scope>
+                    <Name>Full PDF</Name>
+                    <Description>The document ByteRange : [0, 950794, 966200, 128661]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>oiEnwAsqJDh7EvUcAUv7+HjEIv0O3HcBDgYzEIKCop8=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lv3BaOFtcd7wA+RquBTV0sHSVwE8tzl3q7dVcWUiLH8=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>Dzqm9qajkFKl/dISkGxZeGgvWHtv2hWSfXg6zK99duqIhU4NiyaXindGSInFcNjoYsvVcjpK6tbQvrjIZGLOB0R37lzUw1oPvjJYWfPPKn3wAmmoqHxqc92IxPfXU4H0gCpEbJCXOpCp02kT1r6uicrz943f9MW8CHh+OJmF8cqk15yowvWpE+HrsODUKPEDa7JiyRW+fgTAFO2fvWhZ0/3n11N89D0ddG85VKqQotlT0H0HF2T+birW1tYbeC3Nu7l2T1LwPhp4QZXunxDUOKe/TiBUfFaPdVFW8v+LWJ3lgo/SA8TCso4M0veVzpzjlKDT4I6F7CBY0FJNFt53eQ==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-0C19EB309F8E4ED6036798AB7E5BDD48D4E00FE4B5D7F9EAB107AC09B50AE4BC">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ocsp responder fq02 2017,ou=certificatore accreditato,o=infocert spa,c=it</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=OCSP Responder FQ02 2017,OU=Certificatore Accreditato,O=InfoCert SpA,C=IT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=infocert firma qualificata 2,2.5.4.5=#130b3037393435323131303036,ou=certificatore accreditato,o=infocert spa,c=it</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=InfoCert Firma Qualificata 2,2.5.4.5=#130b3037393435323131303036,OU=Certificatore Accreditato,O=INFOCERT SPA,C=IT</IssuerDistinguishedName>
+            <SerialNumber>5432357</SerialNumber>
+            <CommonName>OCSP Responder FQ02 2017</CommonName>
+            <CountryName>IT</CountryName>
+            <OrganizationName>InfoCert SpA</OrganizationName>
+            <OrganizationalUnit>Certificatore Accreditato</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2019-09-28T10:00:00Z</NotAfter>
+            <NotBefore>2017-09-28T09:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-3E378EAE6E6D85859574A58BA15BF792C895CBAC568F268577508EED281C92C8</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7294BE9452F01F26ED7EFBB16C13069CD1D4DA94A64E6B10743885EF5812AF20</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>k90h/APQFQpyraPM1ZoJnTiLnek=</keyIdentifier>
+                    <authorityCertIssuerSerial>MIGRMIGLpIGIMIGFMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSU5GT0NFUlQgU1BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMRQwEgYDVQQFEwswNzk0NTIxMTAwNjElMCMGA1UEAwwcSW5mb0NlcnQgRmlybWEgUXVhbGlmaWNhdGEgMgIBAQ==</authorityCertIssuerSerial>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>zEEZ33NzkoZgzBoNJMpwHeYIw8U=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+                <OtherExtension OID="2.5.29.18" description="issuerAlternativeName" critical="false">
+                    <octets>BB4wHIEaZmlybWEuZGlnaXRhbGVAaW5mb2NlcnQuaXQ=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEsDCCA5igAwIBAgIDUuQlMA0GCSqGSIb3DQEBCwUAMIGFMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSU5GT0NFUlQgU1BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMRQwEgYDVQQFEwswNzk0NTIxMTAwNjElMCMGA1UEAwwcSW5mb0NlcnQgRmlybWEgUXVhbGlmaWNhdGEgMjAeFw0xNzA5MjgwOTAwMDBaFw0xOTA5MjgxMDAwMDBaMGsxCzAJBgNVBAYTAklUMRUwEwYDVQQKDAxJbmZvQ2VydCBTcEExIjAgBgNVBAsMGUNlcnRpZmljYXRvcmUgQWNjcmVkaXRhdG8xITAfBgNVBAMMGE9DU1AgUmVzcG9uZGVyIEZRMDIgMjAxNzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALK2nvZRwO6uRiYcmVdPnmrq69Eb1deBoK2ypS1xRbeC+3ClTsW/XgzuIBf3JSF2l9o/kLJCebt3FFqBJhn/PxRk7LtY2/6cPLVK7oW1ismiFmGxwfLVi2D3pu+mC6Cav+uLiQQNeNQHGrwXKLignqR+96YCok1h/CIsBryXS8vIZDI9UyIdndYhcIteyZ4pR4OoG/0FvKAtTE3FlLgDk4ZuKPz+rIRTUeldyI2ZoAvnFreM3YpmfFqfQy9fe9mPpNhDsdS4DBpkV/tBXksUcqIEuAeG3O5FwwB2mv+69xmGUdzw7dCS+Il6XS9WZhSYWjRmNrxIgY5kjVjboN2Wj/cCAwEAAaOCAUAwggE8MAkGA1UdEwQCMAAwDwYJKwYBBQUHMAEFBAIFADATBgNVHSUEDDAKBggrBgEFBQcDCTAlBgNVHRIEHjAcgRpmaXJtYS5kaWdpdGFsZUBpbmZvY2VydC5pdDAOBgNVHQ8BAf8EBAMCB4AwgbIGA1UdIwSBqjCBp4AUk90h/APQFQpyraPM1ZoJnTiLnemhgYukgYgwgYUxCzAJBgNVBAYTAklUMRUwEwYDVQQKDAxJTkZPQ0VSVCBTUEExIjAgBgNVBAsMGUNlcnRpZmljYXRvcmUgQWNjcmVkaXRhdG8xFDASBgNVBAUTCzA3OTQ1MjExMDA2MSUwIwYDVQQDDBxJbmZvQ2VydCBGaXJtYSBRdWFsaWZpY2F0YSAyggEBMB0GA1UdDgQWBBTMQRnfc3OShmDMGg0kynAd5gjDxTANBgkqhkiG9w0BAQsFAAOCAQEAItgvp3YWPvd4/mVPDXDLFMBwcgrjPziEa+sF6zvASosdKI/pD3Hm47gEWGnIe82u/5lAzUYllap6PwFsIKvpN5aeOoC4miaJHdAu1kzgsBhXkoEbMZlyiFpB0/Z4zDLJcR0y6cisfcQ/PIU9tUywWi0zyd+pUSaI3NwghcM6pFxv1aDiUq946Xn5r54TszABFdMfi3/QqZfW3YWARuNUCgoOCCcXfgO1ApL8olSaXfhqjppqQN3RoZApNgdBRlv9wyDXZpR3QUxV2/BJp3RAjdqn9tQWM+LqlxlXUlLkbZwD/NromunKQtP7NgGjeJvkKAjGkh/VDKlmFNm+df95jA==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-6F42FADFF4188D66063DA52F5B474E5A9F4969447BD52CB7AC8010505B87F5F2">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.42=#0c044c554749,2.5.4.4=#0c074449204d41494f,2.5.4.5=#131349543a444d494c475538364c30364135303947,2.5.4.46=#130c323031383134363531353534,cn=luigi di maio,o=mise/80230390587,c=it</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.42=#0c044c554749,2.5.4.4=#0c074449204d41494f,2.5.4.5=#131349543a444d494c475538364c30364135303947,2.5.4.46=#130c323031383134363531353534,CN=Luigi Di Maio,O=MISE/80230390587,C=IT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=infocert firma qualificata 2,2.5.4.5=#130b3037393435323131303036,ou=certificatore accreditato,o=infocert spa,c=it</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=InfoCert Firma Qualificata 2,2.5.4.5=#130b3037393435323131303036,OU=Certificatore Accreditato,O=INFOCERT SPA,C=IT</IssuerDistinguishedName>
+            <SerialNumber>8493935</SerialNumber>
+            <SubjectSerialNumber>IT:DMILGU86L06A509G</SubjectSerialNumber>
+            <CommonName>Luigi Di Maio</CommonName>
+            <CountryName>IT</CountryName>
+            <OrganizationName>MISE/80230390587</OrganizationName>
+            <GivenName>LUGI</GivenName>
+            <Surname>DI MAIO</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2021-06-15T00:00:00Z</NotAfter>
+            <NotBefore>2018-06-15T12:40:53Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-67E054208500B1254406FE30781595FE35103C58A6366C869126728DC41B4EFB</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7294BE9452F01F26ED7EFBB16C13069CD1D4DA94A64E6B10743885EF5812AF20</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>k90h/APQFQpyraPM1ZoJnTiLnek=</keyIdentifier>
+                    <authorityCertIssuerSerial>MIGRMIGLpIGIMIGFMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSU5GT0NFUlQgU1BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMRQwEgYDVQQFEwswNzk0NTIxMTAwNjElMCMGA1UEAwwcSW5mb0NlcnQgRmlybWEgUXVhbGlmaWNhdGEgMgIBAQ==</authorityCertIssuerSerial>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>uFrqxk0z2eugTvp3r5bjLrxClNo=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.firma.infocert.it/documentazione/manuali.php">1.3.76.36.1.1.1</certificatePolicy>
+                    <certificatePolicy>1.3.76.24.1.1.2</certificatePolicy>
+                    <certificatePolicy Description="qcp-natural-qscd">0.4.0.194112.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">luigi.dimaio@mise.gov.it</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://cert.infocert.it/ca2/firma2/CA.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.sc.infocert.it/</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.infocert.it/crls/firma2/CRL20.crl</crlUrl>
+                    <crlUrl>ldap://ldap.infocert.it/cn%3DInfoCert%20Firma%20Qualificata%202%20CRL20,ou%3DCertificatore%20Accreditato,o%3DINFOCERT%20SPA,c%3DIT?certificateRevocationList</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuRetentionPeriod>20</QcEuRetentionPeriod>
+                    <QcSSCD present="true"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="EN">https://www.firma.infocert.it/pdf/PKI-DS.pdf</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+                <OtherExtension OID="2.5.29.18" description="issuerAlternativeName" critical="false">
+                    <octets>BB4wHIEaZmlybWEuZGlnaXRhbGVAaW5mb2NlcnQuaXQ=</octets>
+                </OtherExtension>
+                <OtherExtension OID="2.5.29.9" description="subjectDirectoryAttributes" critical="false">
+                    <octets>BCEwHzAdBggrBgEFBQcJATERGA8xOTg2MDcwNjAwMDAwMFo=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-301A105AE5D8BFC7261AE4842E09AD4D68ED026336E15522424B804A0AFFD039">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5">
+            <SubjectDistinguishedName Format="CANONICAL">cn=infocert firma qualificata 2,2.5.4.5=#130b3037393435323131303036,ou=certificatore accreditato,o=infocert spa,c=it</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=InfoCert Firma Qualificata 2,2.5.4.5=#130b3037393435323131303036,OU=Certificatore Accreditato,O=INFOCERT SPA,C=IT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=infocert firma qualificata 2,2.5.4.5=#130b3037393435323131303036,ou=certificatore accreditato,o=infocert spa,c=it</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=InfoCert Firma Qualificata 2,2.5.4.5=#130b3037393435323131303036,OU=Certificatore Accreditato,O=INFOCERT SPA,C=IT</IssuerDistinguishedName>
+            <SerialNumber>1</SerialNumber>
+            <SubjectSerialNumber>07945211006</SubjectSerialNumber>
+            <CommonName>InfoCert Firma Qualificata 2</CommonName>
+            <CountryName>IT</CountryName>
+            <OrganizationName>INFOCERT SPA</OrganizationName>
+            <OrganizationalUnit>Certificatore Accreditato</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2029-04-19T15:26:15Z</NotAfter>
+            <NotBefore>2013-04-19T14:26:15Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-7294BE9452F01F26ED7EFBB16C13069CD1D4DA94A64E6B10743885EF5812AF20</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7294BE9452F01F26ED7EFBB16C13069CD1D4DA94A64E6B10743885EF5812AF20</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>k90h/APQFQpyraPM1ZoJnTiLnek=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.firma.infocert.it/documentazione/manuali.php">2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.infocert.it/crls/firma2/ARL.crl</crlUrl>
+                    <crlUrl>ldap://ldap.infocert.it/cn%3DInfoCert%20Firma%20Qualificata%202,ou%3DCertificatore%20Accreditato,o%3DINFOCERT%20SPA,c%3DIT?authorityRevocationList</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="2.5.29.18" description="issuerAlternativeName" critical="false">
+                    <octets>BB4wHIEaZmlybWEuZGlnaXRhbGVAaW5mb2NlcnQuaXQ=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFJjCCBA6gAwIBAgIBATANBgkqhkiG9w0BAQsFADCBhTELMAkGA1UEBhMCSVQxFTATBgNVBAoMDElORk9DRVJUIFNQQTEiMCAGA1UECwwZQ2VydGlmaWNhdG9yZSBBY2NyZWRpdGF0bzEUMBIGA1UEBRMLMDc5NDUyMTEwMDYxJTAjBgNVBAMMHEluZm9DZXJ0IEZpcm1hIFF1YWxpZmljYXRhIDIwHhcNMTMwNDE5MTQyNjE1WhcNMjkwNDE5MTUyNjE1WjCBhTELMAkGA1UEBhMCSVQxFTATBgNVBAoMDElORk9DRVJUIFNQQTEiMCAGA1UECwwZQ2VydGlmaWNhdG9yZSBBY2NyZWRpdGF0bzEUMBIGA1UEBRMLMDc5NDUyMTEwMDYxJTAjBgNVBAMMHEluZm9DZXJ0IEZpcm1hIFF1YWxpZmljYXRhIDIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDFoW5eA0k3AcU+/v2uKclEhGrxXlqOUptAQJLSjysP7IaKKtGxIeX8HNavxRaDkLkQNElql+t4GgIPyJk4lzHbH72c1Ls2SH06X7uCo5iGRH3+FU1ScbcrzviAPB+yeqUZ1cKkGyyGQ1wBsorxpREUeajkW2wsDiY/DYyeTG1I3ECOk/2sZW1U/xGWeVIlNCg9lkqrjvwu6swKVg3LPRiDL4Cqzsh4w9VZzJeDvKfer6lp/fRRduY5fSajtttgCoERrw0hZH/PkkmDCcnbLSjx59Knu3jHip5prgGVU29MKANf573VZAAZfau/lAxf1K91DEXxtPWknEUULt3beGefAgMBAAGjggGdMIIBmTAPBgNVHRMBAf8EBTADAQH/MFgGA1UdIARRME8wTQYEVR0gADBFMEMGCCsGAQUFBwIBFjdodHRwOi8vd3d3LmZpcm1hLmluZm9jZXJ0Lml0L2RvY3VtZW50YXppb25lL21hbnVhbGkucGhwMCUGA1UdEgQeMByBGmZpcm1hLmRpZ2l0YWxlQGluZm9jZXJ0Lml0MIHVBgNVHR8Egc0wgcowgceggcSggcGGKmh0dHA6Ly9jcmwuaW5mb2NlcnQuaXQvY3Jscy9maXJtYTIvQVJMLmNybIaBkmxkYXA6Ly9sZGFwLmluZm9jZXJ0Lml0L2NuJTNESW5mb0NlcnQlMjBGaXJtYSUyMFF1YWxpZmljYXRhJTIwMixvdSUzRENlcnRpZmljYXRvcmUlMjBBY2NyZWRpdGF0byxvJTNESU5GT0NFUlQlMjBTUEEsYyUzRElUP2F1dGhvcml0eVJldm9jYXRpb25MaXN0MA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUk90h/APQFQpyraPM1ZoJnTiLnekwDQYJKoZIhvcNAQELBQADggEBAJYdIAO8JCHr9dTT/kpy5AZpgo8XoIQW/q9tNQPwZkdd/bAfgLibolvbk7ZTsiVlVv35Bb9rhM58SKP1Xa9c26Cf8y4zhoplVbhfKRGVCLj1u1EXdPhCUQb8WWcM0AyLOXj3qhbMh77UL0K9eaRrwTAENbl43Jy65HPHubNnk9U9wIUUtLgRHl5Oog1ZUSV5oLEkeSwzHyk5ZQnv24BzU9UXJ/amAt2ff1Krr3/PsY4Juwgtpg1Nqq8tid5L+lN7qJ8xXfxMuUX2aWkWftCBL8H75U7NnYm/Zx6XyRaULFzCDw0RBSHaWGPH+t5X7ZMMERXn8Z/2LTYWuj9w1+WeieY=</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-301A105AE5D8BFC7261AE4842E09AD4D68ED026336E15522424B804A0AFFD039">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2018-11-13T15:05:07Z</ProductionDate>
+            <ThisUpdate>2018-11-13T14:30:00Z</ThisUpdate>
+            <NextUpdate>2018-11-13T21:05:07Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-0C19EB309F8E4ED6036798AB7E5BDD48D4E00FE4B5D7F9EAB107AC09B50AE4BC"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-0C19EB309F8E4ED6036798AB7E5BDD48D4E00FE4B5D7F9EAB107AC09B50AE4BC"/>
+                <ChainItem Certificate="C-B689BFCFDAEE078405383971E848C3D077457CD0EC6B685550F10ED250F8FDC5"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-0C19EB309F8E4ED6036798AB7E5BDD48D4E00FE4B5D7F9EAB107AC09B50AE4BC">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <IssuerName>CN=OCSP Responder FQ02 2017, OU=Certificatore Accreditato, O=InfoCert SpA, C=IT</IssuerName>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <Base64Encoded>MIIHAAoBAKCCBvkwggb1BgkrBgEFBQcwAQEEggbmMIIG4jCCAQ6hbTBrMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSW5mb0NlcnQgU3BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMSEwHwYDVQQDDBhPQ1NQIFJlc3BvbmRlciBGUTAyIDIwMTcYDzIwMTgxMTEzMTUwNTA3WjBnMGUwPTAJBgUrDgMCGgUABBQowM2Q6YcsoM0PgCaik0Sei1opegQUWKtCWC8k63kOQA2R0eq/+SemsrMCBACBm2+AABgPMjAxODExMTMxNDMwMDBaoBEYDzIwMTgxMTEzMjEwNTA3WqEjMCEwHwYJKwYBBQUHMAECBBIEEByGKCVXv6YFx5Uy7uTs72UwDQYJKoZIhvcNAQELBQADggEBAKsbPKxJurWEi7F7AahJilz2XLJWlnDnx6s9BZF0MePBKjbD/5yhmraNEOBqmwJoD2W/vRRqUBjqIRd+W/Q+RIdotI1/GWzmag69d4FkJIaXGbNQYTIXgWZsSher50ICxjFh1HuYKux7her7JaQDTs69cM39mFicvwDnDGpE6v6ilmOWFc6NAmmP8rf6GAnXqhTSK43INtGQXZdtPEjEwG1dlU2IR4fNbggQW1rR1uqojDylbTB7gYDN+SJeqbbLoHcMKWTrZ0nCZHjPJqQSP9j9boFRtEeQ7yaqmgBaadnsUBPRVYCRp5pzWnWw5+lCnywaldTxyaagbVy0X+hLhSygggS4MIIEtDCCBLAwggOYoAMCAQICA1LkJTANBgkqhkiG9w0BAQsFADCBhTELMAkGA1UEBhMCSVQxFTATBgNVBAoMDElORk9DRVJUIFNQQTEiMCAGA1UECwwZQ2VydGlmaWNhdG9yZSBBY2NyZWRpdGF0bzEUMBIGA1UEBRMLMDc5NDUyMTEwMDYxJTAjBgNVBAMMHEluZm9DZXJ0IEZpcm1hIFF1YWxpZmljYXRhIDIwHhcNMTcwOTI4MDkwMDAwWhcNMTkwOTI4MTAwMDAwWjBrMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSW5mb0NlcnQgU3BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMSEwHwYDVQQDDBhPQ1NQIFJlc3BvbmRlciBGUTAyIDIwMTcwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCytp72UcDurkYmHJlXT55q6uvRG9XXgaCtsqUtcUW3gvtwpU7Fv14M7iAX9yUhdpfaP5CyQnm7dxRagSYZ/z8UZOy7WNv+nDy1Su6FtYrJohZhscHy1Ytg96bvpgugmr/ri4kEDXjUBxq8Fyi4oJ6kfvemAqJNYfwiLAa8l0vLyGQyPVMiHZ3WIXCLXsmeKUeDqBv9BbygLUxNxZS4A5OGbij8/qyEU1HpXciNmaAL5xa3jN2KZnxan0MvX3vZj6TYQ7HUuAwaZFf7QV5LFHKiBLgHhtzuRcMAdpr/uvcZhlHc8O3QkviJel0vVmYUmFo0Zja8SIGOZI1Y26Ddlo/3AgMBAAGjggFAMIIBPDAJBgNVHRMEAjAAMA8GCSsGAQUFBzABBQQCBQAwEwYDVR0lBAwwCgYIKwYBBQUHAwkwJQYDVR0SBB4wHIEaZmlybWEuZGlnaXRhbGVAaW5mb2NlcnQuaXQwDgYDVR0PAQH/BAQDAgeAMIGyBgNVHSMEgaowgaeAFJPdIfwD0BUKcq2jzNWaCZ04i53poYGLpIGIMIGFMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSU5GT0NFUlQgU1BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMRQwEgYDVQQFEwswNzk0NTIxMTAwNjElMCMGA1UEAwwcSW5mb0NlcnQgRmlybWEgUXVhbGlmaWNhdGEgMoIBATAdBgNVHQ4EFgQUzEEZ33NzkoZgzBoNJMpwHeYIw8UwDQYJKoZIhvcNAQELBQADggEBACLYL6d2Fj73eP5lTw1wyxTAcHIK4z84hGvrBes7wEqLHSiP6Q9x5uO4BFhpyHvNrv+ZQM1GJZWqej8BbCCr6TeWnjqAuJomiR3QLtZM4LAYV5KBGzGZcohaQdP2eMwyyXEdMunIrH3EPzyFPbVMsFotM8nfqVEmiNzcIIXDOqRcb9Wg4lKveOl5+a+eE7MwARXTH4t/0KmX1t2FgEbjVAoKDggnF34DtQKS/KJUml34ao6aakDd0aGQKTYHQUZb/cMg12aUd0FMVdvwSad0QI3ap/bUFjPi6pcZV1JS5G2cA/za6JrpykLT+zYBo3ib5CgIxpIf1QypZhTZvnX/eYw=</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <OriginalDocuments>
+        <SignerData Id="D-8A5B98CCA3D1A763EA858256D019983906C8C0CFDFCBD2240C120701A8654E58">
+            <ReferencedName>Full PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>+x6AeCWGYyFWsLagMbaQiJIxZ3KYomHdcLsoVgyCVrs=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

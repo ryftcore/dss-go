@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+        All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+        target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+    </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-454A164B9236CF9C380DF9959F751DED503F91BE3EC646C7042CBB0E1E17A7D5">
+        <subject>
+            <commonName>D-TRUST CA 3-1 2016</commonName>
+            <organizationName>D-Trust GmbH</organizationName>
+            <country>DE</country>
+        </subject>
+        <notBefore>2016-10-26T08:36:38Z</notBefore>
+        <notAfter>2031-10-26T08:36:50Z</notAfter>
+        <keyUsages>
+            <keyUsage>keyCertSign</keyUsage>
+            <keyUsage>crlSign</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls>
+            <ocspUrl>http://root-ca-3-2016.ocsp.d-trust.net</ocspUrl>
+        </ocspUrls>
+        <crlUrls>
+            <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Root%20CA%203%202016,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+            <crlUrl>http://crl.d-trust.net/crl/d-trust_root_ca_3_2016.crl</crlUrl>
+        </crlUrls>
+        <aiaUrls>
+            <aiaUrl>http://www.d-trust.net/cgi-bin/D-TRUST_Root_CA_3_2016.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls>
+            <cpsUrl>http://www.d-trust.net/internet/files/D-TRUST_Root_PKI_CPS.pdf</cpsUrl>
+        </cpsUrls>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <revocation/>
+        <trustAnchors/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+        </X509ValidationDetails>
+        <Chain/>
+    </Certificate>
+</SimpleCertificateReport>

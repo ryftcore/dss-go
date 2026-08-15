@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+        All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+        target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+    </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-C5F8B3AF60EB6CD3DE07FD27593FBA30F45C13FA6E9D2A914E7A557D48493F26">
+        <subject>
+            <commonName>Neelie Kroes</commonName>
+            <surname>Kroes</surname>
+            <givenName>Neelie</givenName>
+            <country>AT</country>
+        </subject>
+        <notBefore>2014-10-01T10:22:21Z</notBefore>
+        <notAfter>2019-10-01T10:22:21Z</notAfter>
+        <keyUsages>
+            <keyUsage>digitalSignature</keyUsage>
+            <keyUsage>nonRepudiation</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls>
+            <ocspUrl>http://ocsp.a-trust.at/ocsp</ocspUrl>
+        </ocspUrls>
+        <crlUrls>
+            <crlUrl>ldap://ldap.a-trust.at/ou=a-sign-premium-mobile-03,o=A-Trust,c=AT?certificaterevocationlist?base?objectclass=eidCertificationAuthority</crlUrl>
+        </crlUrls>
+        <aiaUrls>
+            <aiaUrl>http://www.a-trust.at/certs/a-sign-premium-mobile-03a.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls>
+            <cpsUrl>http://www.a-trust.at/docs/cp/a-sign-premium-mobile</cpsUrl>
+        </cpsUrls>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <revocation/>
+        <trustAnchors/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+        </X509ValidationDetails>
+        <Chain/>
+    </Certificate>
+</SimpleCertificateReport>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>xades-with-multiple-signaturetimestamps.xml</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="XAdES-T" Id="S-89AD1ACDEC6D7ACCA9C237AF9F279BCAE9435B7F60CFC0E166C543AA189F917D">
+        <CertificateChain>
+            <Certificate Id="C-BB550EA50A3CDC4DFD3B3ADBCE9ABDDEE811A568AAF82E2759868F04A561F873">
+                <QualifiedName>good-user</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-21129001586C85DAC7AF9519159798220C130D79866F9F2FFE40E4537ADFF625">
+                <QualifiedName>good-ca</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA">
+                <QualifiedName>root-ca</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2020-11-12T09:31:59Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>good-user</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-D0F21865C825711C49AF235CD54E291AC06FC829D6F369A21667C724C941DA62" name="o-id-afd94661e19fdf183b44c10764ba0ddf-1" scope="PARTIAL">The XML element with ID 'o-id-afd94661e19fdf183b44c10764ba0ddf-1' with transformations.</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-5AD1AA1C0E3C69FD165658BB38B468312AD7BE4AA35D2E50D202B0F6E2605EE2">
+                <CertificateChain>
+                    <Certificate Id="C-F4D8CAEE1EEC4483396FAC746CBE176741ED57AF2B30DC6D78E7809039A59010">
+                        <QualifiedName>ee-good-tsa</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-5F323C19DA8D1B96BEC458E9614847352F7D825E046BE2945DE0A320DE6AD3C0">
+                        <QualifiedName>ee-root-ca</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2020-11-12T09:32:01Z</ProductionTime>
+                <ProducedBy>ee-good-tsa</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-CB2F4E3D493273602B3E50EC9A4931E7F9D3BF1A02D18B5F76DC245D470D580F">
+                <CertificateChain>
+                    <Certificate Id="C-F87DD70F44AF9B18D1BE1976A56A240E22346A57C4BE9083098E08B3E378B134">
+                        <QualifiedName>good-tsa</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-AA26499665C23E68A821027DE13AABAC56454728027F75145F91FDE2B11D4CCA">
+                        <QualifiedName>root-ca</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2020-11-12T09:33:23Z</ProductionTime>
+                <ProducedBy>good-tsa</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-ACE7EA25EB532725024302214218474DA3A546D98BC9F99F1CA8B0E1780D0991">
+                <CertificateChain>
+                    <Certificate Id="C-D8A6F143238A6EA0C4C49FD7370EA583E2C219E1FEBDF0FB02BD204F423FF876">
+                        <QualifiedName>self-signed-tsa</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2020-11-12T09:33:53Z</ProductionTime>
+                <ProducedBy>self-signed-tsa</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

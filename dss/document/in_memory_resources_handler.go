@@ -45,7 +45,17 @@ func (h *InMemoryResourcesHandler) WriteToDSSDocument() (model.DSSDocument, erro
 	if h.buffer == nil {
 		panic("The OutputStream shall be an implementation of ByteArrayOutputStream class!")
 	}
-	return model.NewInMemoryDocument(h.buffer.Bytes()), nil
+	// java.io.ByteArrayOutputStream#toByteArray() returns an EMPTY array for an unwritten
+	// stream, which InMemoryDocument's Objects.requireNonNull(bytes) accepts;
+	// bytes.Buffer#Bytes() returns nil in that case, which NewInMemoryDocument panics on. Any
+	// flow that legitimately produces zero bytes - e.g. extracting an empty or directory entry
+	// from an ASiC container (dss/asic SecureContainerHandler.getCurrentEntryDocument) - hits
+	// it, so the empty case is normalized here.
+	data := h.buffer.Bytes()
+	if data == nil {
+		data = []byte{}
+	}
+	return model.NewInMemoryDocument(data), nil
 }
 
 // compile-time interface assertion.

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+        All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+        target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+    </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352">
+        <subject>
+            <commonName>good-user</commonName>
+            <organizationName>Nowina Solutions</organizationName>
+            <organizationUnit>PKI-TEST</organizationUnit>
+            <country>LU</country>
+        </subject>
+        <notBefore>2018-05-05T08:20:36Z</notBefore>
+        <notAfter>2020-03-05T09:20:36Z</notAfter>
+        <keyUsages>
+            <keyUsage>nonRepudiation</keyUsage>
+        </keyUsages>
+        <ocspUrls>
+            <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/good-ca</ocspUrl>
+        </ocspUrls>
+        <aiaUrls>
+            <aiaUrl>http://dss.nowina.lu/pki-factory/crt/good-ca.crt</aiaUrl>
+        </aiaUrls>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <revocation/>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <X509ValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+        </X509ValidationDetails>
+        <Chain/>
+    </Certificate>
+</SimpleCertificateReport>

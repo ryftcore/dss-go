@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>Signature-X-BE_ECON-3.xml</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="XAdES-BASELINE-LT" Id="S-639D3D318419109713B79B7CA3E3348B8F5FAC0FC6F6F696B6304EB0D3ADE3B2">
+        <CertificateChain>
+            <Certificate Id="C-75F5216C135CA7D30473723247E8AD6104F843A598ACEBF82764F556E378D62D">
+                <QualifiedName>Frank Cornelis (Signature)</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A2BCB1E8523FBB23B9A277AFA0B67DA2E61E9AD8BAC1B926A733A1AE07C67CDE">
+                <QualifiedName>Citizen CA</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A8D14E945E3E5156BCAE5E39737CF6A1B1F51028BBBF982F50CE5F4C05568B4D">
+                <QualifiedName>Belgium Root CA3</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for signing certificate!</Error>
+            <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 4096 is no longer considered reliable for CA certificate!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2014-11-12T07:03:11Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Frank Cornelis (Signature)</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-348220900DC56F542B7EDE9E45D51F0814B16EE7DBE35CEA2413D05D4EC1ECA1" name="Full XML File" scope="FULL">The full XML file with transformations.</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-207B029C45E49BB51CDCFF525E8EB6EA9D59962D4AB49404ABE85D5E629C0256">
+                <CertificateChain>
+                    <Certificate Id="C-D74AF393CF3B506DA33B46BC52B49CD6FAC12B2BDAA9CE1FBA25C0C1E4EBBE19">
+                        <QualifiedName>Time Stamping Authority</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-CFFA9C01EC59C29E718D0DD0EF5479F09B51C95780AFB7BD69D3C8054AFE4D28">
+                        <QualifiedName>Belgium Root CA2</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-9BB5CC8427AF276BF216A748AD25785D17ACBABDDE4282E606DA5262CD940F38">
+                        <QualifiedName>Cybertrust Global Root</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-16AF57A9F676B0AB126095AA5EBADEF22AB31119D644AC95CD4B93DBF3F26AEB">
+                        <QualifiedName>Baltimore CyberTrust Root</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for time-stamp signature!</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's issuer certificate!</Error>
+                    <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA1 with key size 2048 is no longer considered reliable for timestamp's CA certificate!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2014-11-12T07:03:15Z</ProductionTime>
+                <ProducedBy>Time Stamping Authority</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

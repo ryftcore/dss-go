@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>containerWithCounterSig.asics</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>2</SignaturesCount>
+    <ContainerType>ASiC-S</ContainerType>
+    <Signature SignatureFormat="CAdES-BASELINE-B" Id="S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F">
+        <Filename>META-INF/signature.p7s</Filename>
+        <CertificateChain>
+            <Certificate Id="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5">
+                <QualifiedName>Samples Document Signing Certificate</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D">
+                <QualifiedName>ADSS Samples Test CA</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027">
+                <QualifiedName>ADSS Default Root CA</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>TOTAL_FAILED</Indication>
+        <SubIndication>HASH_FAILURE</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="BBB_CV_IRDOI_ANS">The reference data object is not intact!</Error>
+            <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA256 with key size 1024 is no longer considered reliable for signature creation!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_INV">The signature/seal is not a valid AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2016-11-17T11:12:57Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Samples Document Signing Certificate</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-855087252BA1F03AB89CEEDD1E497946143CF275BDCA2830C73B6F8AC2ACC6DB" name="test_input_unsigned.txt" scope="FULL">Full document</SignatureScope>
+    </Signature>
+    <Signature CounterSignature="true" ParentId="S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F" SignatureFormat="CAdES-BASELINE-B" Id="S-88956933039E05B11B244A70B3931FC56D0FE11770B5C7DEC2A4F528F7D94268">
+        <Filename>META-INF/signature.p7s</Filename>
+        <CertificateChain>
+            <Certificate Id="C-A8666E236E05688AEC37B83A0E7C764F266E549EBB26B0F07E2B7E9806ACB9C5">
+                <QualifiedName>Samples Document Signing Certificate</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-FA7DC3AFD4D2670D411D030EA54A85E03317FF3962185F7CDBF43EAB40EB761D">
+                <QualifiedName>ADSS Samples Test CA</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-207071AB1139A7735DB09D9481F4B9EF8905FC2A47E9C253C6F0F12FFB6A7027">
+                <QualifiedName>ADSS Default Root CA</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="ASCCM_AR_ANS_AKSNR">The algorithm RSA with SHA256 with key size 1024 is no longer considered reliable for signature creation!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2016-11-17T11:43:58Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Samples Document Signing Certificate</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-0F7D08D7F85D6E1D3E0267C1E6AD3E30B2F47E2695B2C872FF65DCA8845FCAEF" name="S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F" scope="COUNTER_SIGNATURE">Master signature with Id : S-DBAA953B2CB2BA60244E06369F92BA746E0ABC05C7FE2BCCCEA168D90E11320F</SignatureScope>
+    </Signature>
+</SimpleReport>

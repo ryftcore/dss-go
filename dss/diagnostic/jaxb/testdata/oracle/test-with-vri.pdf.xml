@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>test-with-vri.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-0A76006BE50E81C36958EB2B3A53427807E6B055FF1AA2F1116C09224609AD57">
+            <SignatureFilename>test-with-vri.pdf</SignatureFilename>
+            <ClaimedSigningTime>2021-07-27T08:22:28Z</ClaimedSigningTime>
+            <SignatureFormat>PAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>5Cyc92ooHuPvXiolBSZL7hEzHvefRLZluMM0Q7TaV9Q=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-D1A0F8F254F85F64D21F0F6816EB7A37AC0A3A18127328E740878DF3D1BEEA44"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-D1A0F8F254F85F64D21F0F6816EB7A37AC0A3A18127328E740878DF3D1BEEA44"/>
+                <ChainItem Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E"/>
+                <ChainItem Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>OID.2.5.4.97=4267230, CN=STS Qualified CA, O=STS, C=RO</IssuerName>
+                    <SerialNumber>174475105511310130550840877</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="TestSignature">
+                    <SigFieldLock>
+                        <Action>ALL</Action>
+                    </SigFieldLock>
+                </SignatureField>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>Sig</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.CAdES.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 530633 555403 7198</SignatureByteRange>
+                    <FieldMDP>
+                        <Action>ALL</Action>
+                    </FieldMDP>
+                </PDFSignatureDictionary>
+                <ModificationDetection>
+                    <VisualDifference Page="1"/>
+                    <ObjectModifications>
+                        <ExtensionChange action="MODIFICATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 48 0 R /V 60 0 R /Reference /Data 27 0 R /Metadata 4 0 R /Length</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION" type="Metadata">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 48 0 R /V 60 0 R /Reference /Data 27 0 R /Metadata 4 0 R stream</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 48 0 R /V 60 0 R /Reference /Data 27 0 R /Version</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 48 0 R /V 60 0 R /Reference /Data 27 0 R /Extensions /ADBE</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 48 0 R /V 60 0 R /Reference /Data 27 0 R /DSS 77 0 R</ExtensionChange>
+                        <ExtensionChange action="MODIFICATION">/Catalog /Version</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /Extensions /ADBE</ExtensionChange>
+                        <ExtensionChange action="CREATION">/Catalog /DSS 77 0 R</ExtensionChange>
+                        <SignatureOrFormFill action="MODIFICATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 46 0 R /AP /N 30 0 R /Length</SignatureOrFormFill>
+                        <SignatureOrFormFill action="MODIFICATION" type="XObject">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 46 0 R /AP /N 30 0 R stream</SignatureOrFormFill>
+                        <SignatureOrFormFill action="MODIFICATION">/Catalog /AcroForm 40 0 R /Fields 43 0 R /P 28 0 R /Annots 42 0 R 46 0 R /V</SignatureOrFormFill>
+                        <SignatureOrFormFill action="MODIFICATION">/Catalog /AcroForm 40 0 R /Fields 46 0 R /V</SignatureOrFormFill>
+                    </ObjectModifications>
+                </ModificationDetection>
+            </PDFRevision>
+            <VRIDictionaryCreationTime>2021-07-27T08:22:28Z</VRIDictionaryCreationTime>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-D1A0F8F254F85F64D21F0F6816EB7A37AC0A3A18127328E740878DF3D1BEEA44">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>0aD48lT4X2TSHw9oFut6N6wKOhgScyjnQIeN89G+6kQ=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-498323C18F43B63122C845FCA55595B47883FC185A3E103E9A01BED0F24CB6A4">
+                    <Type>CRL</Type>
+                    <Origin>VRI_DICTIONARY</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-1CE9EEBE7B16E706132A65FC8242661FA98C5C86D03974BDCA70853F2A7DF07A">
+                    <Type>CRL</Type>
+                    <Origin>VRI_DICTIONARY</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-25707262CD2C79BF51C2175CD360B1BE40D1F8941E9FDE8F6233B24998710A24">
+                    <Scope>PARTIAL</Scope>
+                    <Name>Partial PDF</Name>
+                    <Description>The document ByteRange : [0, 530633, 555403, 7198]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>dVCvZrNwF9hDGYmGdUdn+xBn1dtFow67CgegZ8ikKFY=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>P4QkrWU2co69XyWcJdkayfk/qo4AGpvcy0lEKIpmZj4=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>qZ9px1oHWh+9BMXwJ3U3ttl2RH+5AGVwVZxuBIMRtILJxbO4v0mYO2KN7zmYq1U6H1dQjm9//KCQF/fNO0jioGCwGHvlN+m0h3jzZUU/a6fuH7vsq+gI2VP0KEaj8FoBFCixQCNOGSQZurLw9ZBXMPd1G/yUD8q5kSzYhlZppECeIx5Q+TAMQKTYV6axJdJNFUCUhl2mU8dpJ1PRXEt4aDyN/EyBYEoWJ2VQqK9n1cOMwSvxCu6tsd7FCyQTYK3rE/ypZDgy+FfsTZ74Y868ZbZ+31k6KjYIhJKilY0PuhPHys0S4nvNvik5K67mABfh8dTWV4eVqDWIKguRHQsE/A==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24">
+            <SubjectDistinguishedName Format="CANONICAL">ou=autoritatea de certificare sts root g2,o=sts,c=ro</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">OU=Autoritatea de Certificare STS ROOT G2,O=STS,C=RO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">ou=autoritatea de certificare sts root g2,o=sts,c=ro</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">OU=Autoritatea de Certificare STS ROOT G2,O=STS,C=RO</IssuerDistinguishedName>
+            <SerialNumber>323569382368306783626</SerialNumber>
+            <CountryName>RO</CountryName>
+            <OrganizationName>STS</OrganizationName>
+            <OrganizationalUnit>Autoritatea de Certificare STS ROOT G2</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2042-05-05T11:09:35Z</NotAfter>
+            <NotBefore>2017-05-04T11:09:35Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-3D5CBCC6A8C21FF3D23C03243B98C9B8C14205C3C58A2CBB93D4A0AAEFC89348</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-3D5CBCC6A8C21FF3D23C03243B98C9B8C14205C3C58A2CBB93D4A0AAEFC89348</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>Fh4HOeG7MT/ugThqcLbBhVKVF98=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFXTCCA0WgAwIBAgIJEYptXut/d+WKMA0GCSqGSIb3DQEBCwUAMEwxCzAJBgNVBAYTAlJPMQwwCgYDVQQKEwNTVFMxLzAtBgNVBAsTJkF1dG9yaXRhdGVhIGRlIENlcnRpZmljYXJlIFNUUyBST09UIEcyMB4XDTE3MDUwNDExMDkzNVoXDTQyMDUwNTExMDkzNVowTDELMAkGA1UEBhMCUk8xDDAKBgNVBAoTA1NUUzEvMC0GA1UECxMmQXV0b3JpdGF0ZWEgZGUgQ2VydGlmaWNhcmUgU1RTIFJPT1QgRzIwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDT6xFIYk4dDqpeACXgGKjrEhk8A3VjmJVJYvpgpNESZ6wh2zqG97Abm3uZUZHtiQXM8R1PfRDTjMObLAe8X7zgVEUw0yUu6oUZPL0EM5nkfAhGNXUzdPHa81Y+SJFX7OgenCGbveYDGJRyOqRG3VKn+S+Vj28hJ+UQts/uIdZDoiMcrzlnIQmMo2yQ5ww+0kWS9LygufpMUdZR5RzoCKacyK6J8+FBdpy1khFNSOhdExkilmeBEnVyPpo53ps+xGYXhj/U4zIt5cJf5MFuEmi4m7sol//E2cgFTiC1ANBtS6m0iTap5RQKGGJNksyFw3/TySBHcRM1NqczzUB5IHMYmOgr4nhHfLv8JAkpFDgCKCEzvX/QeGrLFZoc8M22ieznXN1Sht7wGv1dSpMJK+nBRBb7adC1/pMjyCMuJoq4Cqab5a0pG0mdMWanCCWJZJJIctuqqC/7pIKimZItHaIXAtgncKwfIGpSgn56reIJ6FsgGIA4uci90qq51OKlZfHd27RiMZuRXae+nJJDj5RyWpr2oeHYSZdvP7IBL7XscgKNKUM+p8sk8wAPmkSTJnk0DwvLYrZ4tlL78ZrZ/mQ88cnRIYQZJK4rxoFgQ47TIHL8JrBCOI9O/5iQIxVwlUBNAHCugO2ill2ZQPcoDT3ME5s0MNliSO4Dt/5mNabrnwIDAQABo0IwQDAPBgNVHRMBAf8EBTADAQH/MA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQUFh4HOeG7MT/ugThqcLbBhVKVF98wDQYJKoZIhvcNAQELBQADggIBAEYz1cpzSj14PbSpJHD9JToiaJm+C7LVknbDGlz7LDq/RLdXJ6QcTXeMAOK6Cc6It7pnoYZTzhFXzb3aO85prqhiy5RSaSFnyjAE1+zVm1vD5Z/y//TyR/HDANKxqAciP/wmUOT4SbWltzY1ajMJlE9J3giuCoHO7Aki8tcPnVyemkqL5jQ1+lHM5sELFE7nj3h/MsDn5n8/tUsqv98JOyksjOJ4tolzDNmoAfOad7GfeTwtA77mHYNkL8sd3vly2VXb84f6yFiTS42RX9KmD+To3VTFiHfNVGOysy+K2Xpwug64v4nwH4jQaBBCIZVsILk8+BlX93Geh/2d7baozR0Q0Eoxhv5qBJ4S5nevVJCzY7e6EcrZmQryogQqRqgmE1lZFxGKdSds1nN9UlVLvScP6wc2sXKYcoasl/Em9fmjvG/+W2JLsHme/ODBWy/ewTrnm2tyER0GOgFbtjuT1sbeTtEvba6FzbvSAEcwcrPNE14q4oGckNp7UKOKpINO6vG4TL77K334HhJe8WB+yZDWxY/y/LjT6OadsmNqHq5+5xsd+/cfmYq019GqfZePbRgvWdoXTpIHA7ZwnVjVEOzj2BsZ+MqMJ5oexgNi1n/GntziiXacOZDfvWwwdd1D384MhIoGG8TLQ2PM1P09yQXwKZKaqM130WbJ/QT5M9c5</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.97=#130734323637323330,cn=sts qualified ca,o=sts,c=ro</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.97=#130734323637323330,CN=STS Qualified CA,O=STS,C=RO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">ou=autoritatea de certificare sts root g2,o=sts,c=ro</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">OU=Autoritatea de Certificare STS ROOT G2,O=STS,C=RO</IssuerDistinguishedName>
+            <SerialNumber>75879127257443672154339</SerialNumber>
+            <CommonName>STS Qualified CA</CommonName>
+            <CountryName>RO</CountryName>
+            <OrganizationIdentifier>4267230</OrganizationIdentifier>
+            <OrganizationName>STS</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2035-06-13T09:43:48Z</NotAfter>
+            <NotBefore>2020-06-15T09:43:48Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-44AB1B8F6F1E8197AD491E32D5DAB78C227C07933C7B6C9706931ABD1A71744B</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-3D5CBCC6A8C21FF3D23C03243B98C9B8C14205C3C58A2CBB93D4A0AAEFC89348</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>Fh4HOeG7MT/ugThqcLbBhVKVF98=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ZDTx1mEW/4cH0guZRht1hYJM2ls=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://ca.stsisp.ro/politici">2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://ca.stsisp.ro/certificate/rootg2.crt</caIssuersUrl>
+                    <ocspUrl>http://ca.stsisp.ro:2560</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://ca.stsisp.ro/crl/rootg2.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-498323C18F43B63122C845FCA55595B47883FC185A3E103E9A01BED0F24CB6A4">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-D1A0F8F254F85F64D21F0F6816EB7A37AC0A3A18127328E740878DF3D1BEEA44">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.4=#0c0454657374,2.5.4.42=#0c0d557365722d436f732d342e3332,st=sector6,2.5.4.5=#13055455433431,cn=user-cos-4.32 test,o=sts,l=bucuresti,c=ro</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.4=#0c0454657374,2.5.4.42=#0c0d557365722d436f732d342e3332,ST=Sector6,2.5.4.5=#13055455433431,CN=User-Cos-4.32 Test,O=STS,L=Bucuresti,C=RO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">2.5.4.97=#130734323637323330,cn=sts qualified ca,o=sts,c=ro</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">2.5.4.97=#130734323637323330,CN=STS Qualified CA,O=STS,C=RO</IssuerDistinguishedName>
+            <SerialNumber>174475105511310130550840877</SerialNumber>
+            <SubjectSerialNumber>TUC41</SubjectSerialNumber>
+            <CommonName>User-Cos-4.32 Test</CommonName>
+            <Locality>Bucuresti</Locality>
+            <State>Sector6</State>
+            <CountryName>RO</CountryName>
+            <OrganizationName>STS</OrganizationName>
+            <GivenName>User-Cos-4.32</GivenName>
+            <Surname>Test</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2024-07-02T08:40:54Z</NotAfter>
+            <NotBefore>2021-07-02T08:40:54Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-BF7226548338F15A60F82E10C028BEC714D5AE540FEC3370DBC9E8E599FA0D6E</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-44AB1B8F6F1E8197AD491E32D5DAB78C227C07933C7B6C9706931ABD1A71744B</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E"/>
+                <ChainItem Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>ZDTx1mEW/4cH0guZRht1hYJM2ls=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>p/cJCFEFBtw8iMn0w9A5Jl0tbs8=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                    <keyUsageBit>keyEncipherment</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://ca.stsisp.ro/politici">1.3.6.1.4.1.20625.1.1.9.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://ca.stsisp.ro/politici" Description="qcp-natural-qscd">0.4.0.194112.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="otherName">#a022060a2b060104018237140203a0140c12706b6961646d696e407374736e65742e726f</subjectAlternativeName>
+                    <subjectAlternativeName type="rfc822Name">pkiadmin@stsnet.ro</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid>1.3.6.1.4.1.311.20.2.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid>1.3.6.1.4.1.311.10.3.12</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://ca.stsisp.ro/certificate/STSQualified.crt</caIssuersUrl>
+                    <ocspUrl>http://ca.stsisp.ro:2560</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://ca.stsisp.ro/crl/STSQualified.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="EN">http://ca.stsisp.ro/politici</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-1CE9EEBE7B16E706132A65FC8242661FA98C5C86D03974BDCA70853F2A7DF07A">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-1CE9EEBE7B16E706132A65FC8242661FA98C5C86D03974BDCA70853F2A7DF07A">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2021-07-27T07:00:03Z</ProductionDate>
+            <ThisUpdate>2021-07-27T07:00:03Z</ThisUpdate>
+            <NextUpdate>2021-08-01T07:00:03Z</NextUpdate>
+            <CRLNumber>49341</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B819D0F526851B6A1A8583614FBE8AAEBC30A8AB93B9A0FFDA10DD6A9E79410E"/>
+                <ChainItem Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            </CertificateChain>
+            <Base64Encoded>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</Base64Encoded>
+        </Revocation>
+        <Revocation Id="R-498323C18F43B63122C845FCA55595B47883FC185A3E103E9A01BED0F24CB6A4">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2020-08-11T11:24:22Z</ProductionDate>
+            <ThisUpdate>2020-08-11T11:24:22Z</ThisUpdate>
+            <NextUpdate>2021-08-11T11:22:09Z</NextUpdate>
+            <CRLNumber>15</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-AA53228264E1DD6ADB08194FE4C931BD7FD1C54C59B26445409058A8846D4C24"/>
+            </CertificateChain>
+            <Base64Encoded>MIIC5TCBzgIBATANBgkqhkiG9w0BAQsFADBMMQswCQYDVQQGEwJSTzEMMAoGA1UEChMDU1RTMS8wLQYDVQQLEyZBdXRvcml0YXRlYSBkZSBDZXJ0aWZpY2FyZSBTVFMgUk9PVCBHMhcNMjAwODExMTEyNDIyWhcNMjEwODExMTEyMjA5WjAdMBsCChALfcLo+oU8ifMXDTE5MDIxMTEzMzUwN1qgLzAtMB8GA1UdIwQYMBaAFBYeBznhuzE/7oE4anC2wYVSlRffMAoGA1UdFAQDAgEPMA0GCSqGSIb3DQEBCwUAA4ICAQCqFKFS0XPDIGZrfVv8cR+XToXN1B2O2VdSoUCCpdj+PKx69N3IT7o2g7i5O4XUU47sHT6rxnH+94snbJGqbEQSlR5wudna2tOCh4pBGPYrIv6I0kZIgH/i8O+yoMKT5rfBqYHslI5egtBvQZP1X/8CM0itR2ghrr93ZDBNTzjP7e20vWTIKSLnBZvwGziA1tqaLLMgEaWqu+hYCea6dxxjeauWY7gvFh6u2CL8JI9HdB2iqf4xCS++Wo61Ge8ssu7EOtCzh6xetFEAYU/AOGOQYalfvadT3j1zW/th5NFKC+Tb4pkhXOw4p40i4VzTKir85sklKPmDqQykktP+o8RvmQDgWkrKq7MSyGBnX58JhRzK9+8X9qsgDYEL6Hs0PMsDMsO1rMA3wzzrvTJq9xvmYk0O8cNGk5X7opgoLCWYdHk3GhP2c+jcKja+AaZyf4BHAWL60yG1gN66ro/EeR+/3CgTiwxXFQQ+FErgPZtmb/Ofj45wdievjvWFWcqHB0h2jVnx7kxZbTRVFwMaQP65TwQYQhkdiNbSsZBijmd7lwIPUNgMjp6z5l/okK3UUjCGOJ5ix4uwhsj2j+FZ2uIPrAd4JBt2cJJPuQ88bXNeNOqKN60xOz21Z0dxohv9dGiO4gvocqstZe5BKmaV7icZn5QqvgxWewoEON7VxHmpOg==</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <OriginalDocuments>
+        <SignerData Id="D-25707262CD2C79BF51C2175CD360B1BE40D1F8941E9FDE8F6233B24998710A24">
+            <ReferencedName>Partial PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lmIBNVGGPUdoBoH6pxsMS9Qoi3qBYQhBKVJgH1XaNm4=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

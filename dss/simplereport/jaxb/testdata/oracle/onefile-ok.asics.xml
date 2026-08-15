@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>onefile-ok.asics</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <ContainerType>ASiC-S</ContainerType>
+    <Signature SignatureFormat="CAdES-BASELINE-B" Id="S-C095B57830FE86DB5522BA46AB6DB749CA11B170609FD0D548F88B51DDBF962B">
+        <Filename>META-INF/signature.p7s</Filename>
+        <CertificateChain>
+            <Certificate Id="C-B9B8051A58645938F660EC1261B7534E2DC7422882D873B2876204BBA1078352">
+                <QualifiedName>good-user</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-FE7DFD7173311743BAFD5D919292663470D94A18FCF4300BE49C80AF0C4180F3">
+                <QualifiedName>good-ca</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Error Key="ASCCM_PKSK_ANS">The key size is unknown for CA certificate!</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2019-07-30T06:41:53Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>good-user</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-ED3F26CE168D423B24FC3F809BD185172C31B0EAB36A3AA0BEEB877B37885097" name="test.text" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-C0A346448455CA9F33A239BFE64AECDE7A43323A4EAB7ED899C08CF9C0D74A90">
+                <CertificateChain>
+                    <Certificate Id="C-2AAE673BE5DBD0C72C6DAB0E065B4410E2855589BAD8AB198391C51FA182B407">
+                        <QualifiedName>ee-good-tsa</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-0D80F79DB9C5FD8C9DB11E3B9FBC8B1E85303D48211BB39946E5C68DF0B2411E">
+                        <QualifiedName>ee-root-ca</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2019-07-30T06:41:54Z</ProductionTime>
+                <ProducedBy>ee-good-tsa</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+                <TimestampScope Id="D-ED3F26CE168D423B24FC3F809BD185172C31B0EAB36A3AA0BEEB877B37885097" name="test.text" scope="FULL">Full document</TimestampScope>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

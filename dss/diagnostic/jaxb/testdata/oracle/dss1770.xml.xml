@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>dss1770.xml</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-09D7103DEA31EDF4B40FF305FD90D7131D5193150B04F79C9C341D323F1B6D58">
+            <DAIdentifier>Signature-b437f4e1-4ee9-4c9f-bae4-d0c599535078</DAIdentifier>
+            <SignatureFilename>dss1770.xml</SignatureFilename>
+            <ClaimedSigningTime>2019-09-11T11:40:51Z</ClaimedSigningTime>
+            <SignatureFormat>XAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="REFERENCE" id="Reference-49838462-cc10-4f08-a331-249bffa335fb" uri="">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>lxIMPqQ9m4hZOKNQclR788zb0bMfyuMonKo0pv98uHI=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="KEY_INFO" id="ReferenceKeyInfo" uri="#KeyInfoId-Signature-b437f4e1-4ee9-4c9f-bae4-d0c599535078">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>qwWOpEnkq53lXVc8Vu4+CG4c+1DoH0+kBCSrI4mGjbE=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="SIGNED_PROPERTIES" uri="#SignedProperties-Signature-b437f4e1-4ee9-4c9f-bae4-d0c599535078">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>BDyOt4pyUCQNlQYhIP0jNj+xNzd0QYx93IP8ZVthArU=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-144A930F761C55152D563F9D456753A5A52750D68A17031A84AE63720DFBA61B"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-144A930F761C55152D563F9D456753A5A52750D68A17031A84AE63720DFBA61B"/>
+            </CertificateChain>
+            <MimeType>text/xml</MimeType>
+            <CommitmentTypeIndications>
+                <CommitmentTypeIndication>
+                    <Identifier>http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin</Identifier>
+                    <Description></Description>
+                    <AllDataSignedObjects>true</AllDataSignedObjects>
+                </CommitmentTypeIndication>
+            </CommitmentTypeIndications>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-144A930F761C55152D563F9D456753A5A52750D68A17031A84AE63720DFBA61B">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIG0MIGcpIGZMIGWMQswCQYDVQQGEwJCRzEYMBYGA1UEYRMPTlRSQkctMjAzMzk3MzU2MSMwIQYDVQQKExpFdnJvdHJ1c3QgVGVjaG5vbG9naWVzIEpTQzEhMB8GA1UECxMYUXVhbGlmaWVkIE9wZXJhdGlvbmFsIENBMSUwIwYDVQQDExxFdnJvdHJ1c3QgUlNBIE9wZXJhdGlvbmFsIENBAhMrAAAa4FWYxWGR/97qAAAAABrg</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>FEqTD3YcVRUtVj+dRWdTpaUnUNaKFwMahK5jcg37phs=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-22517BE319A472233D8ADAD8103ABF7F6C39B3F41A16A912F4AE7D98D591EFD3">
+                    <Scope>FULL</Scope>
+                    <Name>Full XML File</Name>
+                    <Description>The full XML file with transformations.</Description>
+                    <Transformations>
+                        <Transformation>Enveloped Signature Transform</Transformation>
+                    </Transformations>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <CanonicalizationMethod>http://www.w3.org/2001/10/xml-exc-c14n#</CanonicalizationMethod>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lbKBle/ZuDWbIQNygbaiDu5U9x9EJJGZGqxE07DSVxA=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA512</DigestMethod>
+                <DigestValue>AICwBqLsn1vGmfR4kfA8X7Td0iMDzca2k8w7NUehqa//vMMQiTP0YLYGVFJ0DyXRzSC3ryECfoUDTkHZtQ8G7g==</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>iQpyK9418UOQFFbQ9ms9sp4+Y/MjEUpuo0bmZh/bCp+JXs1Z8tihNi2f30P65xn69NigTTut9wR4TOtKh4lBzHoZNff/iucxvMLE9XbR46cEQr+W8sCgixRU0lLA1KNtsfi5P4hoUxVr/TMe0eQeehX97Q8G92cjflDb8S75RASRj8acd8kcMUDInHaYOA3TPSJSuL2m4lkZfbvASLz9CxcMhUuYonsLBJdh0YHcq+c2wnd1o/Vuw35++R2S293MK+0WkbvxgIqpSas+0A5AuWve7dwCKSfEXEzd6MI8fb25d9EnxL7W43A4x3HDd9EiRiSourijIQv471KprTIeHA==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-144A930F761C55152D563F9D456753A5A52750D68A17031A84AE63720DFBA61B">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.97=#0c0f4e545242472d323033333937333536,o=evrotrust technologies ad,cn=evrotrust technologies aeseal,c=bg</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.97=#0c0f4e545242472d323033333937333536,O=Evrotrust Technologies AD,CN=Evrotrust Technologies AESeal,C=BG</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=evrotrust rsa operational ca,ou=qualified operational ca,o=evrotrust technologies jsc,2.5.4.97=#130f4e545242472d323033333937333536,c=bg</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Evrotrust RSA Operational CA,OU=Qualified Operational CA,O=Evrotrust Technologies JSC,2.5.4.97=#130f4e545242472d323033333937333536,C=BG</IssuerDistinguishedName>
+            <SerialNumber>958932079261555290389164732609047509021498080</SerialNumber>
+            <CommonName>Evrotrust Technologies AESeal</CommonName>
+            <CountryName>BG</CountryName>
+            <OrganizationIdentifier>NTRBG-203397356</OrganizationIdentifier>
+            <OrganizationName>Evrotrust Technologies AD</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2020-10-22T08:39:59Z</NotAfter>
+            <NotBefore>2018-10-23T08:39:59Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-3D06592F7B8A5D95C33BC3F3621B38A230480DCE4DE4C91E3A5B13C0915C64A7</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>fz5kWYUr3SMpwgHny8NpwIeTKwg=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ew7ydDjjgK9TD9JQzp4yiDlzjE8=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                    <keyUsageBit>keyEncipherment</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy Description="qcp-public">0.4.0.1456.1.2</certificatePolicy>
+                    <certificatePolicy Description="qcp-legal">0.4.0.194112.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.evrotrust.com/cps">1.3.6.1.4.1.47272.2.8</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://ca.evrotrust.com/aia/EvrotrustRSAOperationalCA.crt</caIssuersUrl>
+                    <ocspUrl>http://ca.evrotrust.com/ocsp</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://ca.evrotrust.com/crl/EvrotrustRSAOperationalCA.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuLimitValue>
+                        <currency>BGN</currency>
+                        <amount>4</amount>
+                        <exponent>2</exponent>
+                    </QcEuLimitValue>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://www.evrotrust.com/pds/pds_en.pdf</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-eseal">0.4.0.1862.1.6.2</QcType>
+                    </QcTypes>
+                    <SemanticsIdentifier Description="Semantics identifier for legal person">0.4.0.194121.1.2</SemanticsIdentifier>
+                </QcStatements>
+            </CertificateExtensions>
+            <Base64Encoded>MIIF0DCCBLigAwIBAgITKwAAGuBVmMVhkf/e6gAAAAAa4DANBgkqhkiG9w0BAQsFADCBljELMAkGA1UEBhMCQkcxGDAWBgNVBGETD05UUkJHLTIwMzM5NzM1NjEjMCEGA1UEChMaRXZyb3RydXN0IFRlY2hub2xvZ2llcyBKU0MxITAfBgNVBAsTGFF1YWxpZmllZCBPcGVyYXRpb25hbCBDQTElMCMGA1UEAxMcRXZyb3RydXN0IFJTQSBPcGVyYXRpb25hbCBDQTAeFw0xODEwMjMwODM5NTlaFw0yMDEwMjIwODM5NTlaMHMxCzAJBgNVBAYTAkJHMSYwJAYDVQQDDB1FdnJvdHJ1c3QgVGVjaG5vbG9naWVzIEFFU2VhbDEiMCAGA1UECgwZRXZyb3RydXN0IFRlY2hub2xvZ2llcyBBRDEYMBYGA1UEYQwPTlRSQkctMjAzMzk3MzU2MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA778Gb3nw7DtfreisoO3feFe3H6GOfjWExdtt25we8NN10ANXJpPWGzbtnDIbrXKe5qK0TxUbwFkpEeOBPHXgBEO5iX7kQCEwKCjPrjJEoilX2ZS+TlFfeelwC2lbZoRiQfKeHvQaPeVXXu/VujMsLnIBnAcSk2kbb1m2e4sy+urvrQ0s91pNgfMW4dFeKZ4OVB2+eofVbcq8RdH8syFvbqFV6Fqf0JBEHABmBmSq6d67MXqNVP0ngi6XXoHvZJXxxuB7o2pVd2nPQYdV/fiH7RZMJ4Z8IGJTub52ci8zKCzxYhy2hs+ZJXw/aQbkkMxYHC4seXjsyr5ya4VrtY+HZQIDAQABo4ICNzCCAjMwgZkGCCsGAQUFBwEDBIGMMIGJMBUGCCsGAQUFBwsCMAkGBwQAi+xJAQIwCAYGBACORgEBMBUGBgQAjkYBAjALEwNCR04CAQQCAQIwOgYGBACORgEFMDAwLhYoaHR0cHM6Ly93d3cuZXZyb3RydXN0LmNvbS9wZHMvcGRzX2VuLnBkZhMCZW4wEwYGBACORgEGMAkGBwQAjkYBBgIwHQYDVR0OBBYEFHsO8nQ444CvUw/SUM6eMog5c4xPMB8GA1UdIwQYMBaAFH8+ZFmFK90jKcIB58vDacCHkysIMEoGA1UdHwRDMEEwP6A9oDuGOWh0dHA6Ly9jYS5ldnJvdHJ1c3QuY29tL2NybC9FdnJvdHJ1c3RSU0FPcGVyYXRpb25hbENBLmNybDB/BggrBgEFBQcBAQRzMHEwKAYIKwYBBQUHMAGGHGh0dHA6Ly9jYS5ldnJvdHJ1c3QuY29tL29jc3AwRQYIKwYBBQUHMAKGOWh0dHA6Ly9jYS5ldnJvdHJ1c3QuY29tL2FpYS9FdnJvdHJ1c3RSU0FPcGVyYXRpb25hbENBLmNydDAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMCMFkGA1UdIARSMFAwCAYGBACLMAECMAkGBwQAi+xAAQEwOQYKKwYBBAGC8SgCCDArMCkGCCsGAQUFBwIBFh1odHRwOi8vd3d3LmV2cm90cnVzdC5jb20vY3BzADANBgkqhkiG9w0BAQsFAAOCAQEAAC8sfhApwLz+QdVXnmC2gXXZ0464bEIgae0crZ3lb1RG2lNWpDn67BJH2zEfbbhIUuMmmu+DujX6FLHHWU31gtJngIsUwwO0V4qXuq/ecd/bkMd16Fr0gvBiqBKCzcs1w0t7JTLtrogKDf+lfKlvtLgo9LxW8KXnPe8Tuvrd9FRuknOvsmgTL7PM9n8RfPmWjdLvj1XRiIGPg4A4N3pPHcdyvgT0KEbFhf8+jIA0lu9dV6HIlZUjiJaJctgM7uHyEsJCFK0Vl0irkfjmS7G6a6Tbz4fwpBHvkMwVgXsK1OiRNaoUSG2I3SN+fvrsRdVHjqwIuBC5jvRHk79s3j6uIQ==</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-22517BE319A472233D8ADAD8103ABF7F6C39B3F41A16A912F4AE7D98D591EFD3">
+            <ReferencedName>Full XML File</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>lxIMPqQ9m4hZOKNQclR788zb0bMfyuMonKo0pv98uHI=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

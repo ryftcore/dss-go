@@ -1,0 +1,5 @@
+# `go run .` inside a crossgen directory leaves its compiled binary behind when the working
+# directory is the package directory; the harness rebuilds it on every run, so it is never an
+# input. Two such binaries (~31 MB together) were committed by accident in Phase 7.
+cades/testdata/crossgen/crossgen
+xades/testdata/crossgen/crossgen

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>Signature-CBp-B-1.p7m</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-D7CBFE560156BF0A557ACC1B49824359F30A19AD4307D3DB4088C798076E14AF">
+            <SignatureFilename>Signature-CBp-B-1.p7m</SignatureFilename>
+            <SignatureFormat>CAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA1</DigestMethod>
+                    <DigestValue>NZD5SeVqggQVm82LnxUQ0AidwRc=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-F2BEE25B48FAA9BA0034973841B83A640AEEDD749EB740400CC4BA9AAE219E81"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-F2BEE25B48FAA9BA0034973841B83A640AEEDD749EB740400CC4BA9AAE219E81"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=LevelBCAOK, OU=Plugtests_2013-2014, O=ETSI, C=FR</IssuerName>
+                    <SerialNumber>942214697150060</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-F2BEE25B48FAA9BA0034973841B83A640AEEDD749EB740400CC4BA9AAE219E81">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MF4wU6RRME8xCzAJBgNVBAYTAkZSMQ0wCwYDVQQKEwRFVFNJMRwwGgYDVQQLDBNQbHVndGVzdHNfMjAxMy0yMDE0MRMwEQYDVQQDEwpMZXZlbEJDQU9LAgcDWPB0U2Zs</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>8r7iW0j6qboANJc4Qbg6ZAru3XSet0BADMS6mq4hnoE=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>LK1EXw+afRzP9tSNWOvCK3mKIw6DTJ0JWmBU/0mnbzY=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA1</DigestMethod>
+                <DigestValue>/pNMTWKnQ2kTXh4pFm7cn9BrFxg=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>bUFtfzqAZnPnyKP76e5sMHZ9HpzvcCzc7gjjyaeH3rKjMDs4unqBHsT092vtNEmKUIsS5JBDqz22OLSHEdN0jngat6hZIC4uhcQryKUWbV4RRTHyvUioEOKUfWMGQdByNc5IaAPPCFHMCgsj1tFV6OQOBqIpBIXQvlSeRVVt7xvFsJyfbSd/2vSWNJNGbZcW7eT2gQyQ6lpf8cFaDGRFsQQeflfVCgui5cxD6Kq8R2YHzAK3VjK37zp98l/iSX15DgAgLkeemnrMPzBuFfXVoicIJx0Spgy8kdeJhn2/iWh96yHWnmIh2/pLj3kUnJlGn6SCrZIMxnKmt6+weKCg9g==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-F2BEE25B48FAA9BA0034973841B83A640AEEDD749EB740400CC4BA9AAE219E81">
+            <SubjectDistinguishedName Format="CANONICAL">cn=mr. adrian aneci,ou=it,o=transsped,c=ro</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Mr. Adrian Aneci,OU=IT,O=TransSped,C=RO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=levelbcaok,ou=plugtests_2013-2014,o=etsi,c=fr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LevelBCAOK,OU=Plugtests_2013-2014,O=ETSI,C=FR</IssuerDistinguishedName>
+            <SerialNumber>942214697150060</SerialNumber>
+            <CommonName>Mr. Adrian Aneci</CommonName>
+            <CountryName>RO</CountryName>
+            <OrganizationName>TransSped</OrganizationName>
+            <OrganizationalUnit>IT</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2014-12-02T08:38:01Z</NotAfter>
+            <NotBefore>2013-12-02T08:38:01Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-D361DB53FF8CFB69023B6B22C094CD649D1B3F2EF91E7886D8E9B93AEAD65908</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>7+k/XTSHVYVISel7ycoHyJ8EowM=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>NOLwCtMco6bCdDLvFS/ThdSm43Y=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">laurent.velez@etsi.org</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://xadessrv.plugtests.net/protected/capso/certs/SCOK/LevelBCAOK.cer</caIssuersUrl>
+                    <caIssuersUrl>ldap://xadessrv.plugtests.net/CN=LevelBCAOK,OU=Plugtests_2013-2014,O=ETSI,C=FR?cACertificate;binary</caIssuersUrl>
+                    <ocspUrl>http://xadessrv.plugtests.net/protected/capso/OCSP?ca=LevelBCAOK</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://xadessrv.plugtests.net/CN=LevelBCAOK,OU=Plugtests_2013-2014,O=ETSI,C=FR?certificateRevocationList;binary</crlUrl>
+                    <crlUrl>http://xadessrv.plugtests.net/protected/capso/crls/SCOK/LevelBCAOK.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFjDCCBHSgAwIBAgIHA1jwdFNmbDANBgkqhkiG9w0BAQsFADBPMQswCQYDVQQGEwJGUjENMAsGA1UEChMERVRTSTEcMBoGA1UECwwTUGx1Z3Rlc3RzXzIwMTMtMjAxNDETMBEGA1UEAxMKTGV2ZWxCQ0FPSzAeFw0xMzEyMDIwODM4MDFaFw0xNDEyMDIwODM4MDFaMEkxCzAJBgNVBAYTAlJPMRIwEAYDVQQKEwlUcmFuc1NwZWQxCzAJBgNVBAsTAklUMRkwFwYDVQQDExBNci4gQWRyaWFuIEFuZWNpMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsn6TUMlMH/QsHUHdmj6PIUtHkslk8gO7Nglv5HXrpxhLs5PQO04vtBc1rymKX+MF+LATPU6+1K71gBq2Y3VL8mj7ZIbZR+bgWvSCeS3Of5UZLPUxmRX1ROOep0/F63H6M7N9IRd6xUMbIDA9TgnSym256TbIBKMKpQd1Lgf+Lv+Ok918bJtmiNkdmhofdE9cledvoj+1uTh1sO1BrKSb/LBSa07YeeI7ZDI1rqm5v7vEu6omri/QmcjW3X652xcuu/HbO/PCIAoobZAs3xJ5SPxI0aY/xXQjRTQ2Tmc+W3SrE4a0lsKUtfhHalZSeTHusdax8fq11pcys5POZ5UqEwIDAQABo4ICcTCCAm0wDgYDVR0PAQH/BAQDAgeAMB0GA1UdDgQWBBQ04vAK0xyjpsJ0Mu8VL9OF1KbjdjCBzQYDVR0fBIHFMIHCMIG/oIG8oIG5hm9sZGFwOi8veGFkZXNzcnYucGx1Z3Rlc3RzLm5ldC9DTj1MZXZlbEJDQU9LLE9VPVBsdWd0ZXN0c18yMDEzLTIwMTQsTz1FVFNJLEM9RlI/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdDtiaW5hcnmGRmh0dHA6Ly94YWRlc3Nydi5wbHVndGVzdHMubmV0L3Byb3RlY3RlZC9jYXBzby9jcmxzL1NDT0svTGV2ZWxCQ0FPSy5jcmwwggEmBggrBgEFBQcBAQSCARgwggEUMFMGCCsGAQUFBzAChkdodHRwOi8veGFkZXNzcnYucGx1Z3Rlc3RzLm5ldC9wcm90ZWN0ZWQvY2Fwc28vY2VydHMvU0NPSy9MZXZlbEJDQU9LLmNlcjBvBggrBgEFBQcwAoZjbGRhcDovL3hhZGVzc3J2LnBsdWd0ZXN0cy5uZXQvQ049TGV2ZWxCQ0FPSyxPVT1QbHVndGVzdHNfMjAxMy0yMDE0LE89RVRTSSxDPUZSP2NBQ2VydGlmaWNhdGU7YmluYXJ5MEwGCCsGAQUFBzABhkBodHRwOi8veGFkZXNzcnYucGx1Z3Rlc3RzLm5ldC9wcm90ZWN0ZWQvY2Fwc28vT0NTUD9jYT1MZXZlbEJDQU9LMCEGA1UdEQQaMBiBFmxhdXJlbnQudmVsZXpAZXRzaS5vcmcwHwYDVR0jBBgwFoAU7+k/XTSHVYVISel7ycoHyJ8EowMwDQYJKoZIhvcNAQELBQADggEBABG6YdYFKl85fkBCHTkBdM5g6gn1ktFiNM9rEfKZ7dl3xJRkriGLcXxqIr26CtGhxU+GIdWOwFSg5PgWZ/ihgHTlgA2AWmOq78v7Tnm+1V7WaG5fstpR19Y9Qd82ro5NpXs8hnfOzQS0089rnCwVs/XuOu2k9BASoyYRTck2UP/hyKGL57MYtWK9XJ3YAumn3TY6Qiv8lnO9Q+p96DPI8sQ+n5DuDFNOrHtemnsT31WCkZCSHBF7A7sgo8Hr91QpTuThccSYUlTQ1T6FsXnUmG2bmTrsvJ4wy5f1iG5Eku8U5C4RBeT/6YgqQlmi6QK6tkCj0eV/H/ZzgQk/WkqQ7C0=</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-5D4448DE091E233E2B12A12A70561557650B758B54926EA4A1E242E1E4B21789">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>JJZt41Nt8VsYahP+Xti4rR3vBDkUfRd6gquItl6R5Os=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

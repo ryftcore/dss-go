@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleCertificateReport ValidationTime="2026-02-25T13:32:38Z" xmlns="http://dss.esig.europa.eu/validation/simple-certificate-report">
+    <ValidationPolicy>
+        <PolicyName>Certificate policy TL based</PolicyName>
+        <PolicyDescription>Validates electronic certificates and indicates its qualification status at issuance and validation time.
+            All certificates and their related chains are validated against the EU Member State Trusted Lists (this includes
+            target certificate and certificates used to validate certificate validity status services - CRLs, OCSP).
+        </PolicyDescription>
+    </ValidationPolicy>
+    <Certificate Id="C-46B359491D6ACD580FD68D6EDF7F33A163030193653F1D95BFE8A6C18AEB022F">
+        <subject>
+            <commonName>Test-PID</commonName>
+            <organizationName>Test PID Trusted Entity 1</organizationName>
+            <organizationUnit>PKI-TEST</organizationUnit>
+            <country>ZZ</country>
+        </subject>
+        <issuerId>C-6BF072D8B5F27EDD927D6577D33083018A879BA2D194ADD329F1A0CA19DCB7C4</issuerId>
+        <notBefore>2023-02-25T13:32:36Z</notBefore>
+        <notAfter>2029-02-25T13:32:36Z</notAfter>
+        <keyUsages>
+            <keyUsage>digitalSignature</keyUsage>
+            <keyUsage>nonRepudiation</keyUsage>
+        </keyUsages>
+        <extendedKeyUsages/>
+        <ocspUrls>
+            <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-CA</ocspUrl>
+        </ocspUrls>
+        <crlUrls>
+            <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-CA.crl</crlUrl>
+        </crlUrls>
+        <aiaUrls>
+            <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-CA.crt</aiaUrl>
+        </aiaUrls>
+        <cpsUrls/>
+        <pdsUrls/>
+        <qualificationAtIssuance>N/A</qualificationAtIssuance>
+        <qualificationAtValidation>N/A</qualificationAtValidation>
+        <certificateApprovalStatusAtIssuanceTime>
+            <certificateApprovalStatus label="PID Provider">
+                <ListType>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</ListType>
+                <ServiceTypeIdentifier>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceTypeIdentifier>
+                <Details/>
+            </certificateApprovalStatus>
+        </certificateApprovalStatusAtIssuanceTime>
+        <certificateApprovalStatusAtValidationTime>
+            <certificateApprovalStatus label="PID Provider">
+                <ListType>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</ListType>
+                <ServiceTypeIdentifier>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceTypeIdentifier>
+                <Details/>
+            </certificateApprovalStatus>
+        </certificateApprovalStatusAtValidationTime>
+        <revocation>
+            <thisUpdate>2026-02-25T13:32:38Z</thisUpdate>
+        </revocation>
+        <trustAnchors/>
+        <Indication>PASSED</Indication>
+        <Chain>
+            <ChainItem Id="C-6BF072D8B5F27EDD927D6577D33083018A879BA2D194ADD329F1A0CA19DCB7C4">
+                <subject>
+                    <commonName>Test-CA</commonName>
+                    <organizationName>Test PID Trusted Entity 1</organizationName>
+                    <organizationUnit>PKI-TEST</organizationUnit>
+                    <country>ZZ</country>
+                </subject>
+                <issuerId>C-AD80C1D65C8CE3FD98AA24C385ABC82A28DF1C8FD999B56987AFFE24CEC4CC54</issuerId>
+                <notBefore>2023-02-25T13:32:36Z</notBefore>
+                <notAfter>2029-02-25T13:32:36Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls/>
+                <crlUrls>
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-RootCA.crl</crlUrl>
+                </crlUrls>
+                <aiaUrls>
+                    <aiaUrl>http://dss.nowina.lu/pki-factory/crt/Test-RootCA.crt</aiaUrl>
+                </aiaUrls>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors>
+                    <trustAnchor>
+                        <countryCode>EU</countryCode>
+                        <tslType>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</tslType>
+                        <trustServiceProvider>Agence Nationale des Titres Securises</trustServiceProvider>
+                        <trustServiceName>Test PID Trusted Entity 1</trustServiceName>
+                    </trustAnchor>
+                </trustAnchors>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+            <ChainItem Id="C-AD80C1D65C8CE3FD98AA24C385ABC82A28DF1C8FD999B56987AFFE24CEC4CC54">
+                <subject>
+                    <commonName>Test-RootCA</commonName>
+                    <organizationName>Test PID Trusted Entity 1</organizationName>
+                    <organizationUnit>PKI-TEST</organizationUnit>
+                    <country>ZZ</country>
+                </subject>
+                <notBefore>2016-02-25T13:32:36Z</notBefore>
+                <notAfter>2036-02-25T13:32:36Z</notAfter>
+                <keyUsages>
+                    <keyUsage>keyCertSign</keyUsage>
+                    <keyUsage>crlSign</keyUsage>
+                </keyUsages>
+                <extendedKeyUsages/>
+                <ocspUrls/>
+                <crlUrls/>
+                <aiaUrls/>
+                <cpsUrls/>
+                <pdsUrls/>
+                <revocation/>
+                <trustAnchors/>
+                <Indication>PASSED</Indication>
+                <Chain/>
+            </ChainItem>
+        </Chain>
+    </Certificate>
+</SimpleCertificateReport>

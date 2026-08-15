@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>Signature-C-DE_CRY-3.p7m</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-C8F2F68502636C586AADB8D5890675EA5177F4D2855DD1CCB5F91CA3AC425498">
+            <SignatureFilename>Signature-C-DE_CRY-3.p7m</SignatureFilename>
+            <ClaimedSigningTime>2014-11-13T10:34:20Z</ClaimedSigningTime>
+            <SignatureFormat>CAdES-BASELINE-B</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>7wpSTgdmTY+fTrQmrj9N+MSaPj43hpofvBogV9Cu8do=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF"/>
+                <ChainItem Certificate="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9"/>
+                <ChainItem Certificate="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=D-TRUST Qualified CA 1 2008:PN, O=D-Trust GmbH, C=DE</IssuerName>
+                    <SerialNumber>930486</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MFgwUaRPME0xCzAJBgNVBAYTAkRFMRUwEwYDVQQKDAxELVRydXN0IEdtYkgxJzAlBgNVBAMMHkQtVFJVU1QgUXVhbGlmaWVkIENBIDEgMjAwODpQTgIDDjK2</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>DptcNzr+wc7Vcj/NkjH3k7szD/vyuUu4aYMByQQFub8=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-3852C3436E4E198DE4722FEC575E5AC4C2E728ADBC910505F8B18B4B60F9FE05">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>VV2tVSus7JWx4PXkK3b+yHcyEqbtnKxNow/Y3SPxEac=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>LTpy/NIeIa7TvB69LTB6T9V5ZMTWpweq6B8Wuc3xRR4=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>dLGmjvTP/E7gENoyj8Jilr71VPTXguYcWjG8rpbff8cZpT+VsWWFgt6yryAxrCOHNpWdEgNhnaKdy0OkA6UqX3/rrNqlmGovqtu6RfwERRY6vEH0/1vOcPccqwvCBiWJLiEMZMli9W9N27ZKsmWreBRe1j13Co8PyCoiAxXRPVtwZ1xhI2sKyKjJGAzxW4lOH6Z3lypXi+lf3MruNl2Bq0ZBXpU2A/g/y3sQPM8mE3Nu8Sgj/2q1J3VCTog8JrnQpRdE/se9IJ6y+2XsI+U5JuwRktSVrxLqnufY5p4Esaz6TujQF9MpsK7Gs0ifrHk/I04dCHjafvQAw0GqrzDR/g==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-0E9B5C373AFEC1CED5723FCD9231F793BB330FFBF2B94BB8698301C90405B9BF">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.5=#13144454525745333231353330323439353630323435,2.5.4.4=#0c075363686c656465,2.5.4.42=#0c164d61747468696173204a6f68616e6e2053746566616e,cn=matthias schlede,o=secrypt gmbh,c=de</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.5=#13144454525745333231353330323439353630323435,2.5.4.4=#0c075363686c656465,2.5.4.42=#0c164d61747468696173204a6f68616e6e2053746566616e,CN=Matthias Schlede,O=secrypt GmbH,C=DE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=d-trust qualified ca 1 2008:pn,o=d-trust gmbh,c=de</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=D-TRUST Qualified CA 1 2008:PN,O=D-Trust GmbH,C=DE</IssuerDistinguishedName>
+            <SerialNumber>930486</SerialNumber>
+            <SubjectSerialNumber>DTRWE321530249560245</SubjectSerialNumber>
+            <CommonName>Matthias Schlede</CommonName>
+            <CountryName>DE</CountryName>
+            <OrganizationName>secrypt GmbH</OrganizationName>
+            <GivenName>Matthias Johann Stefan</GivenName>
+            <Surname>Schlede</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2015-11-27T13:17:27Z</NotAfter>
+            <NotBefore>2011-11-17T13:17:27Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-0D262D23B78A4AF4CCBFCEE6E84A2D3ED3E6702DAC40C3C957847DA1994DA761</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-DFB02C1D46AA433DB121164AE33B68FC998CC396B038E4511D04B13E1D4B9ED2</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9"/>
+                <ChainItem Certificate="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>d7FjxWNlpSxz6fWkjx1KdUyB+30=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>FK5WR9qtTwq5qF73ZyVhoqF/ves=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.4788.2.31.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://qual.ocsp.d-trust.net</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Qualified%20CA%201%202008%3APN,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+                    <crlUrl>http://www.d-trust.net/crl/d-trust_qualified_ca_1_2008.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuRetentionPeriod>30</QcEuRetentionPeriod>
+                    <QcSSCD present="false"/>
+                </QcStatements>
+                <OtherExtension OID="2.5.29.18" description="issuerAlternativeName" critical="false">
+                    <octets>BCwwKoEQaW5mb0BkLXRydXN0Lm5ldIYWaHR0cDovL3d3dy5kLXRydXN0Lm5ldA==</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFLjCCBBagAwIBAgIDDjK2MA0GCSqGSIb3DQEBCwUAME0xCzAJBgNVBAYTAkRFMRUwEwYDVQQKDAxELVRydXN0IEdtYkgxJzAlBgNVBAMMHkQtVFJVU1QgUXVhbGlmaWVkIENBIDEgMjAwODpQTjAeFw0xMTExMTcxMzE3MjdaFw0xNTExMjcxMzE3MjdaMIGRMQswCQYDVQQGEwJERTEVMBMGA1UECgwMc2VjcnlwdCBHbWJIMRkwFwYDVQQDDBBNYXR0aGlhcyBTY2hsZWRlMR8wHQYDVQQqDBZNYXR0aGlhcyBKb2hhbm4gU3RlZmFuMRAwDgYDVQQEDAdTY2hsZWRlMR0wGwYDVQQFExREVFJXRTMyMTUzMDI0OTU2MDI0NTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIETmF3TMfrg0thKrLWHQTHQzgIjdShFz6ti7D0WP2sLQlbyhpYGNECGRDmfiKTeFBSpkAbQQROuwFCAJ3wuGq3gaTHg0NtGHotco8RzB3njjOuEO1ZfjJeoYP4rBuqhtGejz5fo0Xyqv8Oyoc5ZUGd4wohRCRjfeN5cEKENU0KpTDMqlS5KYeHlMMlNkjO2+96G9YJiUBTLqBQSlL/1SR0GUGlw19vLw25xDy68t1aVtWzPtQ08U/AmvBdYWRwSGb/vb+wox4PXIfxHW+eRNr/Rsh25FhUW1B9TYX4AyWoE8DFz/OJjYlTHtgK4u+vP21NBuF/pqA9WBD1ekS2v/NsCAwC5BaOCAdAwggHMMB8GA1UdIwQYMBaAFHexY8VjZaUsc+n1pI8dSnVMgft9MCUGCCsGAQUFBwEDBBkwFzAIBgYEAI5GAQEwCwYGBACORgEDAgEeMDgGCCsGAQUFBwEBBCwwKjAoBggrBgEFBQcwAYYcaHR0cDovL3F1YWwub2NzcC5kLXRydXN0Lm5ldDAXBgNVHSAEEDAOMAwGCisGAQQBpTQCHwEwgcoGA1UdHwSBwjCBvzCBvKCBuaCBtoZ4bGRhcDovL2RpcmVjdG9yeS5kLXRydXN0Lm5ldC9DTj1ELVRSVVNUJTIwUXVhbGlmaWVkJTIwQ0ElMjAxJTIwMjAwOCUzQVBOLE89RC1UcnVzdCUyMEdtYkgsQz1ERT9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0hjpodHRwOi8vd3d3LmQtdHJ1c3QubmV0L2NybC9kLXRydXN0X3F1YWxpZmllZF9jYV8xXzIwMDguY3JsMDMGA1UdEgQsMCqBEGluZm9AZC10cnVzdC5uZXSGFmh0dHA6Ly93d3cuZC10cnVzdC5uZXQwHQYDVR0OBBYEFBSuVkfarU8Kuahe92clYaKhf73rMA4GA1UdDwEB/wQEAwIGQDANBgkqhkiG9w0BAQsFAAOCAQEAFYsQ4qAP/Ki0wp5vGP0GIDp0qCcJC9J0y9sZdVveneJ7TOp/mpsjrQaXaW9ES1oYPUS0JR6k/7Fyoyk90doc0wt1wbNKdD7V0xU7RXt0WsiLDSf3VLv4s6Z5spd4Yr4Gn52DEcT8xnBnUGR/GvOjnLQxxNv7PA3RpPKBkP2czH0SS3chEg3yyjkgEaoAYizasR/tkSrelGr6h+/5L8plMtM/o0P3eHU0j7oQt+7tdxMkCG2Xw23mnUwTBkRF6753GlgBfKlYcLjdGRWv9+T4BUeV8JUiu4z8EUOPL5Cu1A26+APDpOMxRsVi83gwxnahL+yVJiu7P2gEfMnLDUlJFQ==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F">
+            <SubjectDistinguishedName Format="CANONICAL">cn=d-trust qualified root ca 1 2008:pn,o=d-trust gmbh,c=de</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=D-TRUST Qualified Root CA 1 2008:PN,O=D-Trust GmbH,C=DE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=d-trust qualified root ca 1 2008:pn,o=d-trust gmbh,c=de</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=D-TRUST Qualified Root CA 1 2008:PN,O=D-Trust GmbH,C=DE</IssuerDistinguishedName>
+            <SerialNumber>515120</SerialNumber>
+            <CommonName>D-TRUST Qualified Root CA 1 2008:PN</CommonName>
+            <CountryName>DE</CountryName>
+            <OrganizationName>D-Trust GmbH</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2013-07-24T16:36:17Z</NotAfter>
+            <NotBefore>2008-07-24T16:36:17Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-F5F5946CAED6519376320F9AAF3A81987CAFEB1D27EF196AE834B0D9DC18A763</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-F5F5946CAED6519376320F9AAF3A81987CAFEB1D27EF196AE834B0D9DC18A763</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>Z+BlVvx9JTfFv+14iCrw+vJHwDo=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.4788.2.31.1</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">info@d-trust.net</subjectAlternativeName>
+                    <subjectAlternativeName type="uniformResourceIdentifier">http://www.d-trust.net</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://qual.ocsp.d-trust.net</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Qualified%20Root%20CA%201%202008%3APN,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+                    <crlUrl>http://www.d-trust.net/crl/d-trust_qualified_root_ca_1_2008.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                </QcStatements>
+            </CertificateExtensions>
+            <Base64Encoded>MIIE5DCCA8ygAwIBAgIDB9wwMA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkRFMRUwEwYDVQQKDAxELVRydXN0IEdtYkgxLDAqBgNVBAMMI0QtVFJVU1QgUXVhbGlmaWVkIFJvb3QgQ0EgMSAyMDA4OlBOMB4XDTA4MDcyNDE2MzYxN1oXDTEzMDcyNDE2MzYxN1owUjELMAkGA1UEBhMCREUxFTATBgNVBAoMDEQtVHJ1c3QgR21iSDEsMCoGA1UEAwwjRC1UUlVTVCBRdWFsaWZpZWQgUm9vdCBDQSAxIDIwMDg6UE4wggEkMA0GCSqGSIb3DQEBAQUAA4IBEQAwggEMAoIBAQCmh+2QpXORlcIZN7UpxKRfnQspkCinB34/Ykm2JS9Z2zMtJdbXof+HCPC1BN1FyiWl4ymMSI0Geacmn8ggLQnevISUbSOKipgaqZ5e3o73yrWS3ApZ7wPmtJyDn4q1DuUsKtXHYPoArkHbduiLvbEWBjeF01BtbFavQm0ZKCWKp8Xe4QuzMkTigZY7wwj4waDQAmrGgfK67XKdSrfEzXiLyFPIy03+RuS0gEP0n1/z1QCSHjZPtwJ8ueC8G5fr4CFCOxTwZxV7v4t0OrInjxdOfq9uDI3j4EY1Mv9/M5QYzuzdkSZ2Lgw4vCGAne4CS5noBxWaTQesI+TNLifp0dQBAgUArAvuw6OCAb8wggG7MBgGCCsGAQUFBwEDBAwwCjAIBgYEAI5GAQEwOAYIKwYBBQUHAQEELDAqMCgGCCsGAQUFBzABhhxodHRwOi8vcXVhbC5vY3NwLmQtdHJ1c3QubmV0MBcGA1UdIAQQMA4wDAYKKwYBBAGlNAIfATAzBgNVHREELDAqgRBpbmZvQGQtdHJ1c3QubmV0hhZodHRwOi8vd3d3LmQtdHJ1c3QubmV0MIHWBgNVHR8Egc4wgcswgciggcWggcKGf2xkYXA6Ly9kaXJlY3RvcnkuZC10cnVzdC5uZXQvQ049RC1UUlVTVCUyMFF1YWxpZmllZCUyMFJvb3QlMjBDQSUyMDElMjAyMDA4JTNBUE4sTz1ELVRydXN0JTIwR21iSCxDPURFP2NlcnRpZmljYXRlcmV2b2NhdGlvbmxpc3SGP2h0dHA6Ly93d3cuZC10cnVzdC5uZXQvY3JsL2QtdHJ1c3RfcXVhbGlmaWVkX3Jvb3RfY2FfMV8yMDA4LmNybDAdBgNVHQ4EFgQUZ+BlVvx9JTfFv+14iCrw+vJHwDowDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAEJhdk++Ynuf61Lb7dbVnWYhY6eySUkzGKpFI7X91Z042SJnqdyG7oFngdF57b1LwceGRL2AbkumbTTc4tS9qLJDvu8Ixr1iDCoBP06y+tksYQuqT+EQseVXObLBRss5zPvKRmYbFzvOUTG41j2bqvpsyAYkLARo7gErz1A3nCc6Wwzl/zYaX071LXmKG332WhZb6l7AnIl5O6GK0V16zxZ8WHuArkDv3SWO3B56eo4gZdS7WgZ7BTGFM0c6ZVMvnd95XAzPHUoXTmL3wXKxYqvAp5ssuCfaWB6xfq0nWu3W2n6C9uk0qTmKu+dkHx2DnJpdhPlO9ZnecL30LeNikSQ=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-A3EDFADFCBE288E5688051D3AD081A0CA09633E52E3E9C9A6E2C436657B2D1A9">
+            <SubjectDistinguishedName Format="CANONICAL">cn=d-trust qualified ca 1 2008:pn,o=d-trust gmbh,c=de</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=D-TRUST Qualified CA 1 2008:PN,O=D-Trust GmbH,C=DE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=d-trust qualified root ca 1 2008:pn,o=d-trust gmbh,c=de</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=D-TRUST Qualified Root CA 1 2008:PN,O=D-Trust GmbH,C=DE</IssuerDistinguishedName>
+            <SerialNumber>515121</SerialNumber>
+            <CommonName>D-TRUST Qualified CA 1 2008:PN</CommonName>
+            <CountryName>DE</CountryName>
+            <OrganizationName>D-Trust GmbH</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2013-07-24T15:30:00Z</NotAfter>
+            <NotBefore>2008-07-24T16:54:11Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-DFB02C1D46AA433DB121164AE33B68FC998CC396B038E4511D04B13E1D4B9ED2</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-F5F5946CAED6519376320F9AAF3A81987CAFEB1D27EF196AE834B0D9DC18A763</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-36F6D9E53AF765940DDF469560DF906E39DD886EF14FE41AAD1A87E25A81BC2F"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>Z+BlVvx9JTfFv+14iCrw+vJHwDo=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>d7FjxWNlpSxz6fWkjx1KdUyB+30=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.4788.2.31.1</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">info@d-trust.net</subjectAlternativeName>
+                    <subjectAlternativeName type="uniformResourceIdentifier">http://www.d-trust.net</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://qual.ocsp.d-trust.net</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://directory.d-trust.net/CN=D-TRUST%20Qualified%20Root%20CA%201%202008%3APN,O=D-Trust%20GmbH,C=DE?certificaterevocationlist</crlUrl>
+                    <crlUrl>http://www.d-trust.net/crl/d-trust_qualified_root_ca_1_2008.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                </QcStatements>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFAzCCA+ugAwIBAgIDB9wxMA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkRFMRUwEwYDVQQKDAxELVRydXN0IEdtYkgxLDAqBgNVBAMMI0QtVFJVU1QgUXVhbGlmaWVkIFJvb3QgQ0EgMSAyMDA4OlBOMB4XDTA4MDcyNDE2NTQxMVoXDTEzMDcyNDE1MzAwMFowTTELMAkGA1UEBhMCREUxFTATBgNVBAoMDEQtVHJ1c3QgR21iSDEnMCUGA1UEAwweRC1UUlVTVCBRdWFsaWZpZWQgQ0EgMSAyMDA4OlBOMIIBJDANBgkqhkiG9w0BAQEFAAOCAREAMIIBDAKCAQEA75dOYYcc+7whvO9TghzZxvpu1jKDybqleE91IBzfM9uwaM9uMNDbOaefPK5NvibSgzp0ASns94o9Y1geUVJLp5dP11tjx+up4etREfrsyjeqMdfLR4+UT149/mTjHZPSFnbOgtT3CP1czzKWsZ/yDsCePhQ8bGXLttyxPSkJTSfhmIGvBHdYtlxj3xq6EW3SjLQQLn1UbDBZBCpP9Uyx3jWD6Z4YUfOPX4DrQn6h0X2BhV7AvrotpfuIXDOoOiX662CVvwqISWmIUwSJ6tJJKEB4uS1WHXPdnrnk85SePfnFpipnwJ7/Php+wf4KNg1V1xr8c6QHpGVJoUu/qiDgVQIFALsUjUmjggHjMIIB3zAfBgNVHSMEGDAWgBRn4GVW/H0lN8W/7XiIKvD68kfAOjAYBggrBgEFBQcBAwQMMAowCAYGBACORgEBMDgGCCsGAQUFBwEBBCwwKjAoBggrBgEFBQcwAYYcaHR0cDovL3F1YWwub2NzcC5kLXRydXN0Lm5ldDAXBgNVHSAEEDAOMAwGCisGAQQBpTQCHwEwMwYDVR0RBCwwKoEQaW5mb0BkLXRydXN0Lm5ldIYWaHR0cDovL3d3dy5kLXRydXN0Lm5ldDCB1gYDVR0fBIHOMIHLMIHIoIHFoIHChn9sZGFwOi8vZGlyZWN0b3J5LmQtdHJ1c3QubmV0L0NOPUQtVFJVU1QlMjBRdWFsaWZpZWQlMjBSb290JTIwQ0ElMjAxJTIwMjAwOCUzQVBOLE89RC1UcnVzdCUyMEdtYkgsQz1ERT9jZXJ0aWZpY2F0ZXJldm9jYXRpb25saXN0hj9odHRwOi8vd3d3LmQtdHJ1c3QubmV0L2NybC9kLXRydXN0X3F1YWxpZmllZF9yb290X2NhXzFfMjAwOC5jcmwwHQYDVR0OBBYEFHexY8VjZaUsc+n1pI8dSnVMgft9MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMA0GCSqGSIb3DQEBCwUAA4IBAQBfonGItG9cFyWQfd1mbDeTEPHulMUqi8YEufpIG3gysIcKXgn8FLaqlPqD22gL+Z6BgWRELhIKYCne024wbnpF5UgHHhCkt+iVjl65mH8BPgUcPseOQN8mnYR8BmvkTGBvUBjy2hhObwUHuj9LAWz3qG2w9f6zojA6EqxDu6VQEpq5EIrTLuvFbPI9gMMr15Zc6H9G+6uNct3XWglcTQ60h4Tt6Qf1a0aHK75zLmCZGV4+pKUkReL8nG8TIVqJ7/pF5nf2M+DBjPs9dTYA3rUIDdzy3HyeM/YWascJ42KjgeIUZhENXLQmJq3YBDpW0Vm4xQf15p2webrX81opBATC</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+    <OriginalDocuments>
+        <SignerData Id="D-3852C3436E4E198DE4722FEC575E5AC4C2E728ADBC910505F8B18B4B60F9FE05">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>7wpSTgdmTY+fTrQmrj9N+MSaPj43hpofvBogV9Cu8do=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>

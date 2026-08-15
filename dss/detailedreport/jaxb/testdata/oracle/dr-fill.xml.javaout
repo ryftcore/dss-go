@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DetailedReport ValidationTime="2026-08-15T01:47:17Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
+    <Signature Id="S-FILL" CounterSignature="true">
+        <ValidationProcessBasicSignature Title="Validation Process for Basic Signatures">
+            <Constraint>
+                <Name Key="KEY">basic ok</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+        </ValidationProcessBasicSignature>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+            <Infos Key="INFO_KEY">an informational message</Infos>
+        </Conclusion>
+    </Signature>
+    <Timestamp Id="T-FILL">
+        <ValidationProcessBasicTimestamp Type="SIGNATURE_TIMESTAMP" ProductionTime="2026-08-15T01:47:17Z" Title="Validation Process for Timestamps">
+            <Constraint>
+                <Name Key="KEY">tst ok</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+        </ValidationProcessBasicTimestamp>
+        <ValidationTimestampQualification TimestampQualification="QTSA" Title="Timestamp Qualification">
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+            <ValidationTimestampQualificationAtTime DateTime="2026-08-15T01:47:17Z" ValidationTime="TIMESTAMP_GENERATION_TIME" TimestampQualification="QTSA" Title="Timestamp Qualification at generation time">
+                <Constraint>
+                    <Name Key="KEY">at-time ok</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                    <Infos Key="INFO_KEY">an informational message</Infos>
+                </Conclusion>
+            </ValidationTimestampQualificationAtTime>
+        </ValidationTimestampQualification>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+            <Infos Key="INFO_KEY">an informational message</Infos>
+        </Conclusion>
+    </Timestamp>
+    <Certificate Id="C-FILL-2">
+        <CertificateQualificationProcess Title="Certificate Qualification">
+            <Constraint>
+                <Name Key="KEY">cqp ok</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+        </CertificateQualificationProcess>
+        <CertificateApprovalStatusProcess Title="Certificate Approval Status">
+            <Constraint>
+                <Name Key="KEY">casp ok</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+            <ValidationCertificateApprovalStatus Id="C-FILL-2" ValidationTime="CERTIFICATE_ISSUANCE_TIME" Title="Certificate Approval Status at issuance time">
+                <Constraint>
+                    <Name Key="KEY">vcas ok</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                    <Infos Key="INFO_KEY">an informational message</Infos>
+                </Conclusion>
+                <CertificateApprovalStatus label="a label">
+                    <ListType>https://uri.etsi.org/TrstSvc/TrustedList/schemes/EUlistofthelists</ListType>
+                    <ServiceTypeIdentifier>http://uri.etsi.org/TrstSvc/Svctype/CA/QC</ServiceTypeIdentifier>
+                    <ServiceStatus>http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/granted</ServiceStatus>
+                </CertificateApprovalStatus>
+            </ValidationCertificateApprovalStatus>
+        </CertificateApprovalStatusProcess>
+    </Certificate>
+    <BasicBuildingBlocks Id="S-FILL" Type="SIGNATURE">
+        <XCV Title="X.509 Certificate Validation">
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+            <SubXCV Id="C-FILL" Title="Certificate">
+                <Constraint>
+                    <Name Key="KEY">subxcv ok</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                    <Infos Key="INFO_KEY">an informational message</Infos>
+                </Conclusion>
+                <CrossCertificate>C-CROSS-1 C-CROSS-2</CrossCertificate>
+                <EquivalentCertificate>C-EQUIV-1</EquivalentCertificate>
+            </SubXCV>
+        </XCV>
+        <VTS Title="Validation Time Sliding">
+            <Constraint>
+                <Name Key="KEY">vts ok</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Infos Key="INFO_KEY">an informational message</Infos>
+            </Conclusion>
+            <TrustAnchor>C-ANCHOR</TrustAnchor>
+        </VTS>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+            <Infos Key="INFO_KEY">an informational message</Infos>
+        </Conclusion>
+    </BasicBuildingBlocks>
+</DetailedReport>

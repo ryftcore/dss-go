@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DetailedReport ValidationTime="2026-02-25T14:20:19Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
+    <Certificate Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669">
+        <CertificateQualificationProcess Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" Title="Certificate Qualification">
+            <Constraint>
+                <Name Key="BBB_ACCEPT">Is the result of the Basic Building Block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="QUAL_VALID_TRUSTED_LIST_PRESENT">Has been an acceptable trusted list found?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="QUAL_VALID_TRUSTED_LIST_PRESENT_ANS">No acceptable trusted lists has been found!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <Errors Key="QUAL_VALID_TRUSTED_LIST_PRESENT_ANS">No acceptable trusted lists has been found!</Errors>
+            </Conclusion>
+        </CertificateQualificationProcess>
+        <CertificateApprovalStatusProcess Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" Title="Certificate Usages">
+            <Constraint>
+                <Name Key="BBB_ACCEPT">Is the result of the Basic Building Block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="LoTE-140E43F709B1479B49D014EF8683547063B5EC39A9BD88FA4C511DCD4B60836F">
+                <Name Key="CERT_USAGE_LOLOTE_ACCEPT">Is the list of lists of trusted entities acceptable?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Trusted List : https://test.test/lolote</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="LoTE-7E4629CADCE9BAF2DBE323148D32A539CE15989484B1FBFA96089F5C309754A2">
+                <Name Key="CERT_USAGE_LOTE_ACCEPT">Is the list of trusted entities acceptable?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Trusted List : https://test.test/lote-pid</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="CERT_USAGE_LIST_TYPE_KNOWN">Is the certificate related to a LoTE of known type?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>LoTE Type : http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="CERT_USAGE_VALID_LOTE_PRESENT">Has been an acceptable list of trusted entities found?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <ValidationCertificateApprovalStatus Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" DateTime="2023-02-25T14:20:16Z" ValidationTime="CERTIFICATE_ISSUANCE_TIME" Title="Certificate Usage 'PID Issuance' at certificate issuance time">
+                <Constraint>
+                    <Name Key="CERT_USAGE_HAS_ATTIME">Is the certificate related to a trusted entity service at certificate issuance time?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="CERT_USAGE_STI_KNOWN">Is the certificate related to a trusted entity service with a known service type identifier?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Service Type Identifier : http://uri.etsi.org/19602/SvcType/PID/Issuance</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="CERT_USAGE_STATUS_CONS">Are related trusted entity service statuses consistent?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Service status : null</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CertificateApprovalStatus label="PID Provider">
+                    <ListType>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</ListType>
+                    <ServiceTypeIdentifier>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceTypeIdentifier>
+                </CertificateApprovalStatus>
+            </ValidationCertificateApprovalStatus>
+            <ValidationCertificateApprovalStatus Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" DateTime="2026-02-25T14:20:19Z" ValidationTime="VALIDATION_TIME" Title="Certificate Usage 'PID Issuance' at validation time">
+                <Constraint>
+                    <Name Key="CERT_USAGE_HAS_ATTIME">Is the certificate related to a trusted entity service at validation time?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="CERT_USAGE_STI_KNOWN">Is the certificate related to a trusted entity service with a known service type identifier?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Service Type Identifier : http://uri.etsi.org/19602/SvcType/PID/Issuance</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="CERT_USAGE_STATUS_CONS">Are related trusted entity service statuses consistent?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Service status : null</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CertificateApprovalStatus label="PID Provider">
+                    <ListType>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</ListType>
+                    <ServiceTypeIdentifier>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceTypeIdentifier>
+                </CertificateApprovalStatus>
+            </ValidationCertificateApprovalStatus>
+        </CertificateApprovalStatusProcess>
+    </Certificate>
+    <BasicBuildingBlocks Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" Type="CERTIFICATE">
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_XCV_HPCCVVT">Has a prospective certificate chain valid at validation time been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Validation time : 2026-02-25 14:20</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="C-E65833E9090680D4C3BED6C2A904B28976084E6DCDB8E43D8600BF373E548610" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SubXCV Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" TrustAnchor="false" SelfSigned="false" Title="Certificate">
+                <Constraint>
+                    <Name Key="QUAL_UNIQUE_CERT">Is the certificate unique?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_PSEUDO_USE">Is a pseudonym used?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISNSSC">Is certificate not self-signed?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICSI">Is the certificate signature intact?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCIDNMSDNIC">Does the certificate's issuer DN match the subject DN of the issuer certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCGKU">Does the certificate have an expected key-usage?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Key usage : [DIGITAL_SIGNATURE, NON_REPUDIATION]</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICPTV">Is the certificate's policy tree valid?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCSBSINC">Do certificate's subject names satisfy the imposed name constraints?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_IAKIP">Does the certificate contain the authority key identifier certificate extension?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCUCE">Are all found critical certificate extensions supported?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint BlockType="LTV_SUB_XCV">
+                    <Name Key="BBB_XCV_IRDPFC">Is the revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" BlockType="CRS">
+                    <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Latest acceptable revocation : R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCR">Is the certificate not revoked?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCOH">Is the certificate not on hold?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" BlockType="RFC">
+                    <Name Key="BBB_XCV_RFC">Is the revocation freshness check conclusive?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Id = R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" BlockType="AOV_XCV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 4096 at validation time : 2026-02-25 14:20 (Id : C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669)</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" BlockType="AOV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-02-25 14:20</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICTIVRSC">Is the current time in the validity range of the signer's certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Validation time : 2026-02-25 14:20, certificate validity : 2023-02-25 14:20 - 2029-02-25 14:20</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICTIVRCIRI">Is the current time in the validity range of the certificate of the issuer of the revocation information?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Issuer certificate C-6FE5184A4F7A45026314C9BB97C20FD42B5EDACA57D3BF4C3F70D1A200F12A7F of revocation data R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94 with validity range : 2025-08-25 13:20 - 2026-08-25 13:20 and validation time 2026-02-25 14:20</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CRS Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" LatestAcceptableRevocationId="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" Title="Certificate Revocation Data Selector">
+                    <Constraint Id="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" BlockType="RAC">
+                        <Name Key="BBB_XCV_RAC">Is the revocation acceptance check conclusive?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Id = R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94, thisUpdate = 2026-02-25 14:20, production time = 2026-02-25 14:20</AdditionalInfo>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Latest acceptable revocation : R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94</AdditionalInfo>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                    <RAC Id="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" Title="Revocation Acceptance Checker">
+                        <Constraint>
+                            <Name Key="BBB_XCV_ISCUKN">Is the revocation status known?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_KNOWN">Has signing certificate been found for the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_THIS_UPDATE_PRESENT">Is there a 'thisUpdate' field in the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_VALID_AT_PROD">Has the revocation data been produced during the issuer certificate validity range?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation data has been produced at 2026-02-25 14:20 which is in the certificate validity range : 2025-08-25 13:20 - 2026-08-25 13:20</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_SELF_ISSUED_OCSP">Is it not self issued OCSP Response?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE">Has the revocation data been issued after certificate's issuance time?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-02-25 14:20, certificate validity range : 2023-02-25 14:20 - 2029-02-25 14:20</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_HAS_CERT_INFO">Is the revocation data known to contain information about the certificate?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-02-25 14:20 is in the certificate validity range : 2023-02-25 14:20 - 2029-02-25 14:20</AdditionalInfo>
+                        </Constraint>
+                        <Constraint Id="C-6FE5184A4F7A45026314C9BB97C20FD42B5EDACA57D3BF4C3F70D1A200F12A7F" BlockType="RAC_SUB_XCV">
+                            <Name Key="BBB_XCV_IRDCSFC">Is the revocation data check required for the certificate?</Name>
+                            <Status>IGNORED</Status>
+                        </Constraint>
+                        <Conclusion>
+                            <Indication>PASSED</Indication>
+                        </Conclusion>
+                        <RevocationThisUpdate>2026-02-25T14:20:19Z</RevocationThisUpdate>
+                        <RevocationProductionDate>2026-02-25T14:20:19Z</RevocationProductionDate>
+                    </RAC>
+                </CRS>
+                <RFC Id="R-7DAC2C868FEF0B06445B79B71FA3F9AD72BE23D9CAFF3055BA585B85C8DC9B94" Title="Revocation Freshness Checker">
+                    <Constraint>
+                        <Name Key="BBB_RFC_IRIF">Is the revocation information fresh for the certificate?</Name>
+                        <Status>IGNORED</Status>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </RFC>
+            </SubXCV>
+            <SubXCV Id="C-E65833E9090680D4C3BED6C2A904B28976084E6DCDB8E43D8600BF373E548610" TrustAnchor="true" SelfSigned="false" Title="Certificate">
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SubXCV>
+        </XCV>
+        <AOV ValidationTime="2026-02-25T14:20:19Z" Title="Algorithm Obsolescence Validation">
+            <Constraint Id="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 4096 at validation time : 2026-02-25 14:20</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-78F2C78FF7B3E5826B3E9C84518761A787FECAC072200427CD2A3A52CF5C3669">
+                    <Algorithm>
+                        <Name>RSA with SHA256</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                        <KeyLength>4096</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <LoTEAnalysis CountryCode="EU" URL="https://test.test/lote-pid" Id="LoTE-7E4629CADCE9BAF2DBE323148D32A539CE15989484B1FBFA96089F5C309754A2" Title="List Of Trusted Entities EU">
+        <Constraint>
+            <Name Key="QUAL_TL_FRESH">Is the trusted list fresh?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_EXP">Is the trusted list not expired?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_SV">Is the structure of the trusted list valid?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_WS">Is the trusted list well signed?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </LoTEAnalysis>
+    <LoTEAnalysis CountryCode="EU" URL="https://test.test/lolote" Id="LoTE-140E43F709B1479B49D014EF8683547063B5EC39A9BD88FA4C511DCD4B60836F" Title="List Of Trusted Entities EU">
+        <Constraint>
+            <Name Key="QUAL_TL_FRESH">Is the trusted list fresh?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_EXP">Is the trusted list not expired?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_SV">Is the structure of the trusted list valid?</Name>
+            <Status>WARNING</Status>
+            <Warning Key="QUAL_TL_SV_ANS">The structure of the trusted list is not valid!</Warning>
+        </Constraint>
+        <Constraint>
+            <Name Key="QUAL_TL_WS">Is the trusted list well signed?</Name>
+            <Status>OK</Status>
+        </Constraint>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+            <Warnings Key="QUAL_TL_SV_ANS">The structure of the trusted list is not valid!</Warnings>
+        </Conclusion>
+    </LoTEAnalysis>
+</DetailedReport>

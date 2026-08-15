@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2025-06-15T12:00:00Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>Signature-C-B-LTA-10.p7m</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="CAdES-A" Id="S-2FDDA15F8324523F8CA5013F2966EEB821B889B1A362CA2357FA6ECC08C8F65C">
+        <CertificateChain>
+            <Certificate Id="C-21C69A32DC857A0A0BA807126C048009A40A348546CB4E0AE85143D59CD1DAE0">
+                <QualifiedName>Andrea Röck</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A08728B85D729A3D021E1066437872674E5210B163C7F51E7DE783CA609E00E1">
+                <QualifiedName>LevelBCAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-A4A7183ED653953127135411C4374C72504511ED99D7CA56DEC5232E03B6C1EC">
+                <QualifiedName>LevelACAOK</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-7B1DE0306F3F762A4224C4AB0D4F684F3FB6FDDD8D412AB9F608CE9981940EBD">
+                <QualifiedName>RootCAOK</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            <Warning Key="BBB_ICS_ISASCPU_ANS">The signed attribute: 'signing-certificate' is present more than once!</Warning>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2015-07-01T15:43:23Z</SigningTime>
+        <BestSignatureTime>2025-06-15T12:00:00Z</BestSignatureTime>
+        <SignedBy>Andrea Röck</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-5CEB4ED69295443A032763653A1EFCB1129E6AE30B7C90D475AC7D5867C6D8F2" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-42A331F715AF49E7B879C22AF0E5C0E9DF2E7CC0C24BDB9FB7CACFE896B45471">
+                <CertificateChain>
+                    <Certificate Id="C-18D6051732E476A89AABB2B76F57BC3894BD032C73B7BD93EC64979C641E806D">
+                        <QualifiedName>TSA</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-7B1DE0306F3F762A4224C4AB0D4F684F3FB6FDDD8D412AB9F608CE9981940EBD">
+                        <QualifiedName>RootCAOK</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2015-07-01T15:43:53Z</ProductionTime>
+                <ProducedBy>TSA</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-881FE57B7C27A6D6FAA4C5591E5F1FE875FAABD41C52D58BEAE0E0B81F5BB22B">
+                <CertificateChain>
+                    <Certificate Id="C-18D6051732E476A89AABB2B76F57BC3894BD032C73B7BD93EC64979C641E806D">
+                        <QualifiedName>TSA</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-7B1DE0306F3F762A4224C4AB0D4F684F3FB6FDDD8D412AB9F608CE9981940EBD">
+                        <QualifiedName>RootCAOK</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2015-07-01T15:44:04Z</ProductionTime>
+                <ProducedBy>TSA</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+                <TimestampScope Id="D-5CEB4ED69295443A032763653A1EFCB1129E6AE30B7C90D475AC7D5867C6D8F2" scope="FULL">Full document</TimestampScope>
+            </Timestamp>
+            <Timestamp Id="T-E7EF3989EEC687ED2717D39FE7ED64A7D45B823ED05E6846F3BEDB5C2B506C16">
+                <CertificateChain>
+                    <Certificate Id="C-18D6051732E476A89AABB2B76F57BC3894BD032C73B7BD93EC64979C641E806D">
+                        <QualifiedName>TSA</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-7B1DE0306F3F762A4224C4AB0D4F684F3FB6FDDD8D412AB9F608CE9981940EBD">
+                        <QualifiedName>RootCAOK</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2015-07-01T15:44:04Z</ProductionTime>
+                <ProducedBy>TSA</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+                <TimestampScope Id="D-5CEB4ED69295443A032763653A1EFCB1129E6AE30B7C90D475AC7D5867C6D8F2" scope="FULL">Full document</TimestampScope>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

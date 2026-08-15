@@ -1,0 +1,1446 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DetailedReport ValidationTime="2026-04-23T09:29:00Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
+    <EAA Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C">
+        <ValidationProcessEAA Title="Validation Process for Electronic Attestations of Attributes">
+            <Constraint Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C-FC">
+                <Name Key="BSV_IFCRC">Is the result of the 'Format Checking' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="ADEST_IBSVPSC">Is the result of basic signature validation process conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_KBRC">Is the result of basic signature validation process for key binding signature conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C-CV">
+                <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C-SAV">
+                <Name Key="BSV_IEAAAVRC">Is the result of the 'EAA Acceptance Validation' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </ValidationProcessEAA>
+        <Signature Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C">
+            <ValidationProcessBasicSignature Title="Validation Process for Basic Signatures">
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-FC">
+                    <Name Key="BSV_IFCRC">Is the result of the 'Format Checking' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-ISC">
+                    <Name Key="BSV_IISCRC">Is the result of the 'Identification of Signing Certificate' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-VCI">
+                    <Name Key="BSV_IVCIRC">Is the result of the 'Validation Context Initialization' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-XCV">
+                    <Name Key="BSV_IXCVRC">Is the result of the 'X.509 Certificate Validation' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-CV">
+                    <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C-SAV">
+                    <Name Key="BSV_ISAVRC">Is the result of the 'Signature Acceptance Validation' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Conclusion>
+                    <Indication>TOTAL_PASSED</Indication>
+                </Conclusion>
+                <ProofOfExistence>
+                    <Time>2026-04-23T09:29:00Z</Time>
+                </ProofOfExistence>
+            </ValidationProcessBasicSignature>
+            <ValidationSignatureQualification SignatureQualification="N/A" Title="Signature Qualification">
+                <Constraint>
+                    <Name Key="QUAL_IS_ADES">Is the signature/seal an acceptable AdES digital signature (ETSI EN 319 102-1)?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="QUAL_CERT_TRUSTED_LIST_REACHED">Has a trusted list been reached for the certificate chain?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <Errors Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Errors>
+                </Conclusion>
+            </ValidationSignatureQualification>
+            <Conclusion>
+                <Indication>TOTAL_PASSED</Indication>
+            </Conclusion>
+        </Signature>
+        <KeyBindingSignature Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9">
+            <ValidationProcessBasicSignature Title="Validation Process for Basic Signatures">
+                <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9-FC">
+                    <Name Key="BSV_IFCRC">Is the result of the 'Format Checking' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9-ISC">
+                    <Name Key="BSV_IISCRC">Is the result of the 'Identification of Signing Certificate' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9-VCI">
+                    <Name Key="BSV_IVCIRC">Is the result of the 'Validation Context Initialization' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9-CV">
+                    <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9-SAV">
+                    <Name Key="BSV_ISAVRC">Is the result of the 'Signature Acceptance Validation' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Conclusion>
+                    <Indication>TOTAL_PASSED</Indication>
+                    <Warnings Key="BBB_ICS_ISCI_ANS">There is no candidate for the signing certificate!</Warnings>
+                </Conclusion>
+                <ProofOfExistence>
+                    <Time>2026-04-23T09:29:00Z</Time>
+                </ProofOfExistence>
+            </ValidationProcessBasicSignature>
+            <Conclusion>
+                <Indication>TOTAL_PASSED</Indication>
+                <Warnings Key="BBB_ICS_ISCI_ANS">There is no candidate for the signing certificate!</Warnings>
+            </Conclusion>
+        </KeyBindingSignature>
+        <ValidationEAAQualification Title="EAA Qualification">
+            <Constraint>
+                <Name Key="EAA_CERT_TRUST_ANCHOR_LIST_REACHED">Has a trust anchor list been reached for the certificate chain?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="EAA_CERT_TRUST_ANCHOR_LIST_REACHED_ANS">Unable to build a certificate chain up to a trust anchor list!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <Errors Key="EAA_CERT_TRUST_ANCHOR_LIST_REACHED_ANS">Unable to build a certificate chain up to a trust anchor list!</Errors>
+            </Conclusion>
+            <ValidationEAAQualificationProcess EAAQualification="N/A" Title="EAA Qualification Process">
+                <Constraint>
+                    <Name Key="QUAL_CERT_TRUSTED_LIST_REACHED">Has a trusted list been reached for the certificate chain?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <Errors Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Errors>
+                </Conclusion>
+            </ValidationEAAQualificationProcess>
+            <ValidationPIDQualificationProcess EAAQualification="N/A" Title="PID Qualification Process">
+                <Constraint>
+                    <Name Key="EAA_CERT_LOTE_REACHED">Has a list of trusted entities been reached for the certificate chain?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="EAA_CERT_LOTE_REACHED_ANS">Unable to build a certificate chain up to a list of trusted entities!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <Errors Key="EAA_CERT_LOTE_REACHED_ANS">Unable to build a certificate chain up to a list of trusted entities!</Errors>
+                </Conclusion>
+            </ValidationPIDQualificationProcess>
+            <EAAQualification>N/A</EAAQualification>
+        </ValidationEAAQualification>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </EAA>
+    <BasicBuildingBlocks Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C" Type="SIGNATURE">
+        <FC Title="Format Checking">
+            <Constraint>
+                <Name Key="BBB_FC_IEFF">Does the signature format correspond to an expected format?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISD">Is the signature identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISRIA">Is the signed references identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </FC>
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISACDP">Is the signed attribute: 'cert-digest' of the certificate present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ICDVV">Does the certificate digest value match a digest value found in the certificate reference(s)?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+                <ChainItem Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                    <Source>OCSP_RESPONSE</Source>
+                </ChainItem>
+                <ChainItem Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361">
+                    <Source>TRUSTED_STORE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <VCI Title="Validation Context Initialization">
+            <Constraint>
+                <Name Key="BBB_VCI_ISPK">Is the signature policy known?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </VCI>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_XCV_HPCCVVT">Has a prospective certificate chain valid at validation time been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Certificate Id = C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Certificate Id = C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Certificate Id = C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SubXCV Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" TrustAnchor="false" SelfSigned="false" Title="Certificate">
+                <Constraint>
+                    <Name Key="QUAL_UNIQUE_CERT">Is the certificate unique?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_PSEUDO_USE">Is a pseudonym used?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISNSSC">Is certificate not self-signed?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICSI">Is the certificate signature intact?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCIDNMSDNIC">Does the certificate's issuer DN match the subject DN of the issuer certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCGKU">Does the certificate have an expected key-usage?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Key usage : [NON_REPUDIATION]</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_AIA_PRES">Is the authority info access present?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICPTV">Is the certificate's policy tree valid?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCSBSINC">Do certificate's subject names satisfy the imposed name constraints?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_IAKIP">Does the certificate contain the authority key identifier certificate extension?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCUCE">Are all found critical certificate extensions supported?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCFCE">Are all found certificate extensions allowed for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_REVOC_PRES">Is the revocation info access present?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint BlockType="LTV_SUB_XCV">
+                    <Name Key="BBB_XCV_IRDPFC">Is the revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" BlockType="CRS">
+                    <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Latest acceptable revocation : R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCR">Is the certificate not revoked?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCOH">Is the certificate not on hold?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" BlockType="RFC">
+                    <Name Key="BBB_XCV_RFC">Is the revocation freshness check conclusive?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Id = R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" BlockType="AOV_XCV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2026-04-23 09:29 (Id : C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84)</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" BlockType="AOV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICTIVRSC">Is the current time in the validity range of the signer's certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Validation time : 2026-04-23 09:29, certificate validity : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICTIVRCIRI">Is the current time in the validity range of the certificate of the issuer of the revocation information?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Issuer certificate C-57C7CD0B7050F689603B33CD37F86817F53EEE1F81181184FB09DAE40D2007AC of revocation data R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622 with validity range : 2025-04-23 09:28 - 2027-04-23 09:28 and validation time 2026-04-23 09:29</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CRS Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" LatestAcceptableRevocationId="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" Title="Certificate Revocation Data Selector">
+                    <Constraint Id="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" BlockType="RAC">
+                        <Name Key="BBB_XCV_RAC">Is the revocation acceptance check conclusive?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Id = R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622, thisUpdate = 2026-04-23 09:29, production time = 2026-04-23 09:29</AdditionalInfo>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Latest acceptable revocation : R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622</AdditionalInfo>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                    <RAC Id="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" Title="Revocation Acceptance Checker">
+                        <Constraint>
+                            <Name Key="BBB_XCV_ISCUKN">Is the revocation status known?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_KNOWN">Has signing certificate been found for the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_THIS_UPDATE_PRESENT">Is there a 'thisUpdate' field in the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_VALID_AT_PROD">Has the revocation data been produced during the issuer certificate validity range?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation data has been produced at 2026-04-23 09:29 which is in the certificate validity range : 2025-04-23 09:28 - 2027-04-23 09:28</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_SELF_ISSUED_OCSP">Is it not self issued OCSP Response?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE">Has the revocation data been issued after certificate's issuance time?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29, certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_HAS_CERT_INFO">Is the revocation data known to contain information about the certificate?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29 is in the certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIC">Is certificate's signature intact?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Id = C-57C7CD0B7050F689603B33CD37F86817F53EEE1F81181184FB09DAE40D2007AC</AdditionalInfo>
+                        </Constraint>
+                        <Constraint Id="C-57C7CD0B7050F689603B33CD37F86817F53EEE1F81181184FB09DAE40D2007AC" BlockType="RAC_SUB_XCV">
+                            <Name Key="BBB_XCV_IRDCSFC">Is the revocation data check required for the certificate?</Name>
+                            <Status>IGNORED</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIC">Is certificate's signature intact?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Id = C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE</AdditionalInfo>
+                        </Constraint>
+                        <Constraint BlockType="LTV_SUB_XCV">
+                            <Name Key="BBB_XCV_IRDPFRC">Is the revocation data present for the revocation issuer?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="CRS">
+                            <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                        </Constraint>
+                        <Conclusion>
+                            <Indication>PASSED</Indication>
+                        </Conclusion>
+                        <RevocationThisUpdate>2026-04-23T09:29:00Z</RevocationThisUpdate>
+                        <RevocationProductionDate>2026-04-23T09:29:00Z</RevocationProductionDate>
+                        <CRS Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" LatestAcceptableRevocationId="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Certificate Revocation Data Selector">
+                            <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="RAC">
+                                <Name Key="BBB_XCV_RAC">Is the revocation acceptance check conclusive?</Name>
+                                <Status>OK</Status>
+                                <AdditionalInfo>Id = R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0, thisUpdate = 2026-04-23 09:29, production time = 2026-04-23 09:29</AdditionalInfo>
+                            </Constraint>
+                            <Constraint>
+                                <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                                <Status>OK</Status>
+                                <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                            </Constraint>
+                            <Conclusion>
+                                <Indication>PASSED</Indication>
+                            </Conclusion>
+                            <RAC Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Revocation Acceptance Checker">
+                                <Constraint>
+                                    <Name Key="BBB_XCV_ISCUKN">Is the revocation status known?</Name>
+                                    <Status>OK</Status>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_XCV_REVOC_ISSUER_KNOWN">Has signing certificate been found for the revocation data?</Name>
+                                    <Status>OK</Status>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                                    <Status>OK</Status>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                                    <Status>OK</Status>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_XCV_REVOC_THIS_UPDATE_PRESENT">Is there a 'thisUpdate' field in the revocation data?</Name>
+                                    <Status>OK</Status>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE">Has the revocation data been issued after certificate's issuance time?</Name>
+                                    <Status>OK</Status>
+                                    <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29, certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                                </Constraint>
+                                <Constraint>
+                                    <Name Key="BBB_XCV_REVOC_HAS_CERT_INFO">Is the revocation data known to contain information about the certificate?</Name>
+                                    <Status>OK</Status>
+                                    <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29 is in the certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                                </Constraint>
+                                <Conclusion>
+                                    <Indication>PASSED</Indication>
+                                </Conclusion>
+                                <RevocationThisUpdate>2026-04-23T09:29:00Z</RevocationThisUpdate>
+                                <RevocationProductionDate>2026-04-23T09:29:00Z</RevocationProductionDate>
+                            </RAC>
+                        </CRS>
+                    </RAC>
+                </CRS>
+                <RFC Id="R-9ACEAC904B1E51FF329C3BCF76214897EBC3BEFDA287A3456B3212ABED747622" Title="Revocation Freshness Checker">
+                    <Constraint>
+                        <Name Key="BBB_RFC_IRIF">Is the revocation information fresh for the certificate?</Name>
+                        <Status>IGNORED</Status>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </RFC>
+            </SubXCV>
+            <SubXCV Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" TrustAnchor="false" SelfSigned="false" Title="Certificate">
+                <Constraint>
+                    <Name Key="BBB_XCV_ICSI">Is the certificate signature intact?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICAC">Is the certificate a CA certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCIDNMSDNIC">Does the certificate's issuer DN match the subject DN of the issuer certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICPDV">Is the certificate's path depth valid?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCGKU">Does the certificate have an expected key-usage?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Key usage : [KEY_CERT_SIGN, CRL_SIGN]</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICPTV">Is the certificate's policy tree valid?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCSBSINC">Do certificate's subject names satisfy the imposed name constraints?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_IAKIP">Does the certificate contain the authority key identifier certificate extension?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISKIP">Does the certificate contain the subject key identifier certificate extension?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCUCE">Are all found critical certificate extensions supported?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCFCE">Are all found certificate extensions allowed for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint BlockType="LTV_SUB_XCV">
+                    <Name Key="BBB_XCV_IRDPFC">Is the revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="CRS">
+                    <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCR">Is the certificate not revoked?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCOH">Is the certificate not on hold?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="RFC">
+                    <Name Key="BBB_XCV_RFC">Is the revocation freshness check conclusive?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Id = R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="AOV_XCV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2026-04-23 09:29 (Id : C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE)</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="AOV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CRS Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" LatestAcceptableRevocationId="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Certificate Revocation Data Selector">
+                    <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="RAC">
+                        <Name Key="BBB_XCV_RAC">Is the revocation acceptance check conclusive?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Id = R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0, thisUpdate = 2026-04-23 09:29, production time = 2026-04-23 09:29</AdditionalInfo>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                    <RAC Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Revocation Acceptance Checker">
+                        <Constraint>
+                            <Name Key="BBB_XCV_ISCUKN">Is the revocation status known?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_KNOWN">Has signing certificate been found for the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_THIS_UPDATE_PRESENT">Is there a 'thisUpdate' field in the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE">Has the revocation data been issued after certificate's issuance time?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29, certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_HAS_CERT_INFO">Is the revocation data known to contain information about the certificate?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29 is in the certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Conclusion>
+                            <Indication>PASSED</Indication>
+                        </Conclusion>
+                        <RevocationThisUpdate>2026-04-23T09:29:00Z</RevocationThisUpdate>
+                        <RevocationProductionDate>2026-04-23T09:29:00Z</RevocationProductionDate>
+                    </RAC>
+                </CRS>
+                <RFC Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Revocation Freshness Checker">
+                    <Constraint>
+                        <Name Key="BBB_RFC_NUP">Is there a Next Update defined for the revocation data?</Name>
+                        <Status>OK</Status>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_RFC_IRIF">Is the revocation information fresh for the certificate?</Name>
+                        <Status>IGNORED</Status>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </RFC>
+            </SubXCV>
+            <SubXCV Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361" TrustAnchor="true" SelfSigned="true" Title="Certificate">
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SubXCV>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_IRDOF">Has the reference data object been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_IRDOI">Is the reference data object intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_ISI">Is the signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="BBB_SAV_ISSV">Is the structure of the signature valid?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCP">Is the signed attribute: 'signing-certificate' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCPU">Is the signed attribute: 'signing-certificate' present only once?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_DSCACRCC">Does the 'Signing Certificate' attribute contain references only to the certificate chain?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_DKIDVM">Does the value of signed attribute 'kid' (key identifier) match the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTP">Is the signed qualifying property: 'signing-time' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTWSCVR">Is the signed qualifying property: 'signing-time' within the signing-certificate's validity range?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTYPP">Does the signed qualifying property 'signature-type' contain an expected value?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2026-04-23T09:29:00Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signing certificate reference?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA512 at validation time : 2026-04-23 09:29 for signing certificate reference with Id : C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the jws signing input?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2026-04-23 09:29 for jws signing input</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signing certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C">
+                <Algorithm>
+                    <Name>RSA with SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <SignedAttributesValidation TokenId="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C">
+                <Algorithm>
+                    <Name>SHA512</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha512</Uri>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignedAttributesValidation>
+            <DigestMatchersValidation TokenId="S-61D369A7F2D4DD3A70C24A844C4C8E693ECF3BAECFBB558A2B4D3FEF8827A09C">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>signature creation</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84">
+                    <Algorithm>
+                        <Name>RSA with SHA256</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-F6A97FDF3BEDEF6397BF00A0599904317D8E02B7770C806E115802D19F2E9C84">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+            <ChainItem Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                <Source>OCSP_RESPONSE</Source>
+            </ChainItem>
+            <ChainItem Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361">
+                <Source>TRUSTED_STORE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9" Type="KEY_BINDING_SIGNATURE">
+        <FC Title="Format Checking">
+            <Constraint>
+                <Name Key="BBB_FC_IEFF">Does the signature format correspond to an expected format?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISD">Is the signature identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISRIA">Is the signed references identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_IECKSCDA">Is the used elliptic curve key size corresponds to the defined signature algorithm?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature Algorithm : ECDSA with SHA256, key size : 256</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </FC>
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>WARNING</Status>
+                <Warning Key="BBB_ICS_ISCI_ANS">There is no candidate for the signing certificate!</Warning>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+                <Warnings Key="BBB_ICS_ISCI_ANS">There is no candidate for the signing certificate!</Warnings>
+            </Conclusion>
+            <CertificateChain/>
+        </ISC>
+        <VCI Title="Validation Context Initialization">
+            <Constraint>
+                <Name Key="BBB_VCI_ISPK">Is the signature policy known?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </VCI>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_IRDOF">Has the reference data object been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_IRDOI">Is the reference data object intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_IRDOF">Has the reference data object been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_KEY_BINDING</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_IRDOI">Is the reference data object intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_KEY_BINDING</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_ISI">Is the signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTP">Is the signed qualifying property: 'signing-time' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm ECDSA with SHA256 with key size 256 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2026-04-23T09:29:00Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm ECDSA with SHA256 with key size 256 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-04D6030F59C93E208160B23D44788053B07CC221651491AAE63C96928FCAD4ECB984F29F1B9D0A7FC20083AB9597BD9C7B3862ADC87C6FF6A68E3B56D43D0CA9" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signing certificate reference?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA512 at validation time : 2026-04-23 09:29 for signing certificate reference with Id : C-04D6030F59C93E208160B23D44788053B07CC221651491AAE63C96928FCAD4ECB984F29F1B9D0A7FC20083AB9597BD9C7B3862ADC87C6FF6A68E3B56D43D0CA9</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the jws signing input?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2026-04-23 09:29 for jws signing input</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the key binding?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2026-04-23 09:29 for key binding</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9">
+                <Algorithm>
+                    <Name>ECDSA with SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256</Uri>
+                    <KeyLength>256</KeyLength>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <SignedAttributesValidation TokenId="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9">
+                <Algorithm>
+                    <Name>SHA512</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha512</Uri>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignedAttributesValidation>
+            <DigestMatchersValidation TokenId="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>signature creation</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+        </AOV>
+        <CertificateChain/>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+            <Warnings Key="BBB_ICS_ISCI_ANS">There is no candidate for the signing certificate!</Warnings>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF" Type="EAA_REVOCATION">
+        <FC Title="Format Checking">
+            <Constraint>
+                <Name Key="EAA_STATUS_TYPE">Is the type of the EAA Status Token within a list of expected value(s)?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </FC>
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                    <Source>OCSP_RESPONSE</Source>
+                </ChainItem>
+                <ChainItem Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361">
+                    <Source>TRUSTED_STORE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_XCV_HPCCVVT">Has a prospective certificate chain valid at validation time been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Certificate Id = C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361" BlockType="SUB_XCV">
+                <Name Key="BBB_XCV_SUB">Is the certificate validation conclusive?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Certificate Id = C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SubXCV Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" TrustAnchor="false" SelfSigned="false" Title="Certificate">
+                <Constraint>
+                    <Name Key="BBB_XCV_ICSI">Is the certificate signature intact?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCIDNMSDNIC">Does the certificate's issuer DN match the subject DN of the issuer certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICPTV">Is the certificate's policy tree valid?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCSBSINC">Do certificate's subject names satisfy the imposed name constraints?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_IAKIP">Does the certificate contain the authority key identifier certificate extension?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCUCE">Are all found critical certificate extensions supported?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_DCCFCE">Are all found certificate extensions allowed for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint BlockType="LTV_SUB_XCV">
+                    <Name Key="BBB_XCV_IRDPFC">Is the revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="CRS">
+                    <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCR">Is the certificate not revoked?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ISCOH">Is the certificate not on hold?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="RFC">
+                    <Name Key="BBB_XCV_RFC">Is the revocation freshness check conclusive?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Id = R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="AOV_XCV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29 (Id : C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE)</AdditionalInfo>
+                </Constraint>
+                <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="AOV">
+                    <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="BBB_XCV_ICTIVRSC">Is the current time in the validity range of the signer's certificate?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Validation time : 2026-04-23 09:29, certificate validity : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                </Constraint>
+                <Constraint>
+                    <Name Key="PSV_ICRDIT">Is the certificate of revocation data issuer trusted?</Name>
+                    <Status>OK</Status>
+                    <AdditionalInfo>Certificate Id = C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361</AdditionalInfo>
+                </Constraint>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+                <CRS Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" LatestAcceptableRevocationId="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Certificate Revocation Data Selector">
+                    <Constraint Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" BlockType="RAC">
+                        <Name Key="BBB_XCV_RAC">Is the revocation acceptance check conclusive?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Id = R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0, thisUpdate = 2026-04-23 09:29, production time = 2026-04-23 09:29</AdditionalInfo>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_XCV_IARDPFC">Is an acceptable revocation data present for the certificate?</Name>
+                        <Status>OK</Status>
+                        <AdditionalInfo>Latest acceptable revocation : R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0</AdditionalInfo>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                    <RAC Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Revocation Acceptance Checker">
+                        <Constraint>
+                            <Name Key="BBB_XCV_ISCUKN">Is the revocation status known?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_ISSUER_KNOWN">Has signing certificate been found for the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_THIS_UPDATE_PRESENT">Is there a 'thisUpdate' field in the revocation data?</Name>
+                            <Status>OK</Status>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE">Has the revocation data been issued after certificate's issuance time?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29, certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Constraint>
+                            <Name Key="BBB_XCV_REVOC_HAS_CERT_INFO">Is the revocation data known to contain information about the certificate?</Name>
+                            <Status>OK</Status>
+                            <AdditionalInfo>Revocation thisUpdate 2026-04-23 09:29 is in the certificate validity range : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+                        </Constraint>
+                        <Conclusion>
+                            <Indication>PASSED</Indication>
+                        </Conclusion>
+                        <RevocationThisUpdate>2026-04-23T09:29:00Z</RevocationThisUpdate>
+                        <RevocationProductionDate>2026-04-23T09:29:00Z</RevocationProductionDate>
+                    </RAC>
+                </CRS>
+                <RFC Id="R-79EE65500AB9C264F057946E3D381C33EBB2A9AD8D333655E3F50ED692780FB0" Title="Revocation Freshness Checker">
+                    <Constraint>
+                        <Name Key="BBB_RFC_NUP">Is there a Next Update defined for the revocation data?</Name>
+                        <Status>OK</Status>
+                    </Constraint>
+                    <Constraint>
+                        <Name Key="BBB_RFC_IRIF">Is the revocation information fresh for the certificate?</Name>
+                        <Status>IGNORED</Status>
+                    </Constraint>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </RFC>
+            </SubXCV>
+            <SubXCV Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361" TrustAnchor="true" SelfSigned="true" Title="Certificate">
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SubXCV>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_ISI">Is the signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="EAA_STATUS_ISS">Is an issuance time present within the EAA revocation token?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_EXP">Is an expiration time present within the EAA revocation token?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_NOT_EXP">Is the EAA revocation valid at the validation time?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Validation time : 2026-04-23 09:29, Issuance time : 2026-04-23 09:29, Expiration time 2027-05-10 14:11</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_SUB">Is a subject of the EAA revocation token known?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_SUB_MATCH">Does the subject of the EAA revocation token match the subject of the related EAA?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_ISS_VALID">Is the EAA revocation token's issuer certificate valid at the EAA revocation token's issuance time?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Issuance time : 2026-04-23 09:29, Certificate validity : 2025-05-23 09:28 - 2027-03-23 10:28</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the EAA?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2026-04-23T09:29:00Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the EAA?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the EAA revocation's issuer certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+                <Algorithm>
+                    <Name>RSA with SHA512</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-95B95869B1259A15CE92AA869BB50F71D39190092FA4C2DBE265BC6CA2B6A0EE">
+                <Source>OCSP_RESPONSE</Source>
+            </ChainItem>
+            <ChainItem Id="C-E1DC8511516F8954665647902D31509CC2F563958EFB55A65BEB5B640040B361">
+                <Source>TRUSTED_STORE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C" Type="EAA">
+        <FC Title="Format Checking">
+            <Constraint>
+                <Name Key="EAA_SIG_PRESENT">Does the EAA contain an EAA creation signature?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_DPEAAP">Have disclosures been provided together with the EAA Presentation?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_KBSP">Is a key binding signature present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </FC>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : updated_at</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : updated_at</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : email</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : email</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : phone_number</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : phone_number</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : family_name</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : family_name</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : phone_number_verified</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : phone_number_verified</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : address</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : address</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : birthdate</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : birthdate</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : given_name</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : given_name</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_DISCLOSURE</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_DISCLOSURE</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBF">Has a corresponding selectively disclosable claim been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_DISCLOSURE</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_EAA_SDCBI">Is the selectively disclosable claim intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : EAA_DISCLOSURE</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="EAA_ETSI194721">Is the EAA conformant to the ETSI standard TS 119 472-1?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo></AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_ACCEPTABLE_TYPE">Is the EAA type part of the acceptable value list?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="SDJWT_EAA_VCT_INT_PRESENT">Does the SDJWT EAA contain the claim 'vct#integrity'?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_NBF_PRESENT">Is the EAA claim for the start of the EAA technical validity period present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_EXP_PRESENT">Is the EAA claim for the end of the EAA technical validity period present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_VT_ITVR">Is the validation time within the technical validity range of the EAA?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_PR">Does the EAA contain a status claim?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_AV">Is status token available for the EAA?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+                <Name Key="EAA_STATUS_KNOWN">Is the type EAA revocation known?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+                <Name Key="EAA_STATUS_ACC">Is the EAA revocation token acceptable?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Id = ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+                <Name Key="EAA_STATUS_ACC_FND">Is an acceptable status token found for the EAA?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Id = ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_NOT_REV">Is the EAA not revoked?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="EAA_STATUS_NOT_ON_HOLD">Is the EAA not on hold?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the EAA?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2026-04-23 09:29</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2026-04-23T09:29:00Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the selective disclosures?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2026-04-23 09:29 for selective disclosures</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <DigestMatchersValidation TokenId="EAA-142BE84DAB5CA7AC88CCAC3DC9E7F4A3C2372EEA97B822978540C31CE18CC20C">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>EAA</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+        </AOV>
+        <Conclusion>
+            <Indication>PASSED</Indication>
+        </Conclusion>
+    </BasicBuildingBlocks>
+</DetailedReport>

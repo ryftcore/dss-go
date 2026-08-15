@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>doc-firmado-LT.pdf</DocumentName>
+    <ValidationDate>2025-06-15T12:00:00Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-86772624E4E5ED960830E28A0C6F34F4A40E26CD1C93E7BCD1181DF3CC5BE33C">
+            <SignatureFilename>doc-firmado-LT.pdf</SignatureFilename>
+            <ClaimedSigningTime>2018-09-15T22:10:35Z</ClaimedSigningTime>
+            <SignatureFormat>PAdES-BASELINE-LT</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>rIoeFx88zUzmPLUoNGluNMvZRRhk0SjZSWy6eC9+048=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-D8363BD6BD2FE30C4191CD5BB05A97E7556EFE01F207C459D81DEC58186BF665"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-D8363BD6BD2FE30C4191CD5BB05A97E7556EFE01F207C459D81DEC58186BF665"/>
+                <ChainItem Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=CA SINPE - PERSONA FISICA v2, OU=DIVISION SISTEMAS DE PAGO, O=BANCO CENTRAL DE COSTA RICA, C=CR, SERIALNUMBER=CPJ-4-000-004017</IssuerName>
+                    <SerialNumber>446015286740114793238795057540663224406450166</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="Signature1"/>
+                <PDFSignatureDictionary consistent="true">
+                    <SignerName>FRANCISCO DE LA PEÑA FERNANDEZ (FIRMA) 682c12c19c2a0953ca98f39f602d5289208627a0</SignerName>
+                    <Type>Sig</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.CAdES.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 1383 28009 307</SignatureByteRange>
+                </PDFSignatureDictionary>
+                <ModificationDetection>
+                    <ObjectModifications>
+                        <ExtensionChange action="CREATION">/Catalog /DSS 10 0 R</ExtensionChange>
+                    </ObjectModifications>
+                </ModificationDetection>
+            </PDFRevision>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-D8363BD6BD2FE30C4191CD5BB05A97E7556EFE01F207C459D81DEC58186BF665">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MIG3MIGfpIGcMIGZMRkwFwYDVQQFExBDUEotNC0wMDAtMDA0MDE3MQswCQYDVQQGEwJDUjEkMCIGA1UEChMbQkFOQ08gQ0VOVFJBTCBERSBDT1NUQSBSSUNBMSIwIAYDVQQLExlESVZJU0lPTiBTSVNURU1BUyBERSBQQUdPMSUwIwYDVQQDExxDQSBTSU5QRSAtIFBFUlNPTkEgRklTSUNBIHYyAhMUAAEf9rmBlvyCodj8AAAAAR/2</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>2DY71r0v4wxBkc1bsFqX51Vu/gHyB8RZ2B3sWBhr9mU=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-FD6E1E1E08C354CB87688DD4BA0EEC1F51DFB9334B3B2414F92FC1FDBE9AD5B5">
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-7E959F45B4CE5739DD1DF697168186CA62A7F4C46BCCDE47E6FEEED7EE568AA4">
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42">
+                    <Origin>SIGNED_DATA</Origin>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0">
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-13CFC124E4C0E362E64E6E4B8A3563DCFB87924F0D428278BFE5B2F45E24F3B8">
+                    <Type>CRL</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-D02C0F0755753C3361CDC4F2F4CB52D3B722D9BEB616F309A68E491A1F0198D6">
+                    <Type>CRL</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-3601212A7F99D5F39D1371B919229EB80683E62B61786473BC5678443850FB5C">
+                    <Type>CRL</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+                <RelatedRevocation Revocation="R-B2DA46DCB1A848A6A204511015F5A692AD5049927ECA88841CA47423D8ED00CC">
+                    <Type>OCSP</Type>
+                    <Origin>DSS_DICTIONARY</Origin>
+                </RelatedRevocation>
+            </FoundRevocations>
+            <FoundTimestamps>
+                <FoundTimestamp Timestamp="T-5AA0B6D7876BAAB40E1726F31B805C5871E5226A62028841668F425477E330E1"/>
+            </FoundTimestamps>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-EF2FB8640CF4F3E9D03F91659BC5F8CECD94747349769CD6CBAB62A5578551C2">
+                    <Scope>PARTIAL</Scope>
+                    <Name>Partial PDF</Name>
+                    <Description>The document ByteRange : [0, 1383, 28009, 307]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>s3S7SYLEaV9i3sBeOQi9NNiwzE2W+8o63QttqWxIU1E=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>iU+iHi9uVRtZYQQJFthuiCy7+jIkwH8ihZ+SRJDL3mo=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>YszR6bpkN2CgHMbOiadsM7ibHQHdqGsJVktNPrljPs5m2CZKZZoVVcYq9Ir3qE1VbRw4m0Vp60CTdcULjfHiNraO5Wr+v+FVx4detVDBBKBe/pxNYOpYmgDKiTf/HdYBQUjN9jTxaGHM8cuTfnrRb1Jeyb9aZQN+EOhmKDprWt4gWz0kyuBSUqS0UNvkKPdIG6iUP6roX9Z08dFwUKPY2dGrlIdHVC1npiixXrTDfHoJ9OPzYTNFvVHWxRsjwTQBz4D+gpBmIyugOI25+Tz5vCelC3j3hfXhCUGyIb069LDX6xJGqwhLnykt+Lgenhq7tZ4favK6v5jEw0jT2d7krw==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <UsedCertificates>
+        <Certificate Id="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ca politica persona fisica - costa rica v2,ou=dcfd,o=micitt,c=cr,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=CA POLITICA PERSONA FISICA - COSTA RICA v2,OU=DCFD,O=MICITT,C=CR,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca raiz nacional - costa rica v2,c=cr,o=micitt,ou=dcfd,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA RAIZ NACIONAL - COSTA RICA v2,C=CR,O=MICITT,OU=DCFD,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <SerialNumber>1739458125498116918358806673373806027304075266</SerialNumber>
+            <SubjectSerialNumber>CPJ-2-100-098311</SubjectSerialNumber>
+            <CommonName>CA POLITICA PERSONA FISICA - COSTA RICA v2</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>MICITT</OrganizationName>
+            <OrganizationalUnit>DCFD</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2031-02-25T18:18:38Z</NotAfter>
+            <NotBefore>2015-02-25T18:08:38Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-F64BF0300F9D08EDE8EC4C19D12A5410FFBB48462CCA5796E7B427434AE2FDAD</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-CB445EC0D8906149E40EDCF3A89C9C71083741687359E2CE305B44CAB3D473CB</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>4PL+fcRETlDkNf0IiY9OhBlEM0A=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>aJ1pNsuEbnvqk2EZ/1gwHdX/XMs=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.2</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.3</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.firmadigital.go.cr/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                    <caIssuersUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://www.firmadigital.go.cr/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                    <crlUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.1" critical="false">
+                    <octets>BAMCAQA=</octets>
+                </OtherExtension>
+                <OtherExtension OID="1.3.6.1.4.1.311.20.2" critical="false">
+                    <octets>BAweCgBTAHUAYgBDAEE=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-D02C0F0755753C3361CDC4F2F4CB52D3B722D9BEB616F309A68E491A1F0198D6">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIIMrDCCCpSgAwIBAgITTgAAAAJzjeZ3/o5oQAAAAAAAAjANBgkqhkiG9w0BAQ0FADBzMRkwFwYDVQQFExBDUEotMi0xMDAtMDk4MzExMQ0wCwYDVQQLEwREQ0ZEMQ8wDQYDVQQKEwZNSUNJVFQxCzAJBgNVBAYTAkNSMSkwJwYDVQQDEyBDQSBSQUlaIE5BQ0lPTkFMIC0gQ09TVEEgUklDQSB2MjAeFw0xNTAyMjUxODA4MzhaFw0zMTAyMjUxODE4MzhaMH0xGTAXBgNVBAUTEENQSi0yLTEwMC0wOTgzMTExCzAJBgNVBAYTAkNSMQ8wDQYDVQQKEwZNSUNJVFQxDTALBgNVBAsTBERDRkQxMzAxBgNVBAMTKkNBIFBPTElUSUNBIFBFUlNPTkEgRklTSUNBIC0gQ09TVEEgUklDQSB2MjCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBANkkXhbXpjPWMmmjmKLZBpk+EsM/nBp0JgPBtQFmnmA0d4fPlKXy8/sD0buS1QRDZZAerSvprfyaiKPAEpZpOWCl2fu46MQyyTa1DjH/ellvjADlOueC3p3O9qG5JIUrhuLTcx5G+eYyoJIURNob9O4Ur52+eTOYYqvJIYomKLc+/2pbJ0SApv+2m3p3oAp2SjTeWTMKVH6sPgqMD2izWJ3xChCefu2yec7NYaGjS1aMefYDIN2uklX7IhBTf9ErGGIPQ6Jmgoe5GvYfLB7O1BgaTcC3ZIwvGfoAowfiRYOzLfnuxuuTkUWFfafcYJTUYEkZimHeyEWh41M+kOkZE/q5jwQkfgTLGV+UQpVGMKSkzsW5EdgcI51ynZBkunnJsglTys66EEfAnoLr3uhiS67AE2Qqvvp7NOUUG1YCm7WOyEvVt1QbZUlkLZRxhlF5SKjmzhqruisBfmUz6tX6WO3EJyNT5N62YwQxSULOatx90ztuxzCHHhCcoh3xOWhWYtTwx4F2QDiRqfXfyTw9Te4CGlzmOYSQIdnOeTUTkDZ3WOxs2bAGgmGQQL+WtzIW3qj2xtspV4F7owwjlG+jhNHJzbjVxoYJoUJmyR8NCBYkdl/iNxewSUcOseZz+VVvlYJrcI1pRuJ1cnhyvWF/ymc8N1ZGtUMauSelr1tBGakNAgMBAAGjggctMIIHKTAQBgkrBgEEAYI3FQEEAwIBADAdBgNVHQ4EFgQUaJ1pNsuEbnvqk2EZ/1gwHdX/XMswggTcBgNVHSAEggTTMIIEzzCCARQGB2CBPAEBAQEwggEHMIGmBggrBgEFBQcCAjCBmR6BlgBJAG0AcABsAGUAbQBlAG4AdABhACAAbABhACAAUABvAGwAaQB0AGkAYwBhACAAZABlACAAbABhACAAUgBhAGkAegAgAEMAbwBzAHQAYQByAHIAaQBjAGUAbgBzAGUAIABkAGUAIABDAGUAcgB0AGkAZgBpAGMAYQBjAGkAbwBuACAARABpAGcAaQB0AGEAbAAgAHYAMjAqBggrBgEFBQcCARYeaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IAMDAGCCsGAQUFBwIBFiRodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbAAwggFVBghggTwBAQEBATCCAUcwgeYGCCsGAQUFBwICMIHZHoHWAEkAbQBwAGwAZQBtAGUAbgB0AGEAIABsAGEAIABwAG8AbABpAHQAaQBjAGEAIABkAGUAIABDAEEAIABFAG0AaQBzAG8AcgBhACAAcABhAHIAYQAgAFAAZQByAHMAbwBuAGEAcwAgAEYAaQBzAGkAYwBhAHMAIABwAGUAcgB0AGUAbgBlAGMAaQBlAG4AdABlACAAYQAgAGwAYQAgAFAASwBJACAATgBhAGMAaQBvAG4AYQBsACAAZABlACAAQwBvAHMAdABhACAAUgBpAGMAYQAgAHYAMjAqBggrBgEFBQcCARYeaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IAMDAGCCsGAQUFBwIBFiRodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbAAwggErBghggTwBAQEBAjCCAR0wgbwGCCsGAQUFBwICMIGvHoGsAEkAbQBwAGwAZQBtAGUAbgB0AGEAIABsAGEAIABwAG8AbABpAHQAaQBjAGEAIABwAGEAcgBhACAAZgBpAHIAbQBhACAAZABpAGcAaQB0AGEAbAAgAGQAZQAgAHAAZQByAHMAbwBuAGEAcwAgAGYAaQBzAGkAYwBhAHMAIAAoAGMAaQB1AGQAYQBkAGEAbgBvAC8AcgBlAHMAaQBkAGUAbgB0AGUAKQAgAHYAMjAqBggrBgEFBQcCARYeaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IAMDAGCCsGAQUFBwIBFiRodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbAAwggErBghggTwBAQEBAzCCAR0wgbwGCCsGAQUFBwICMIGvHoGsAEkAbQBwAGwAZQBtAGUAbgB0AGEAIABsAGEAIABwAG8AbABpAHQAaQBjAGEAIABwAGEAcgBhACAAYQB1AHQAZQBuAHQAaQBjAGEAYwBpAG8AbgAgAGQAZQAgAHAAZQByAHMAbwBuAGEAcwAgAGYAaQBzAGkAYwBhAHMAIAAoAGMAaQB1AGQAYQBkAGEAbgBvAC8AcgBlAHMAaQBkAGUAbgB0AGUAKQAgAHYAMjAqBggrBgEFBQcCARYeaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IAMDAGCCsGAQUFBwIBFiRodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbAAwGQYJKwYBBAGCNxQCBAweCgBTAHUAYgBDAEEwCwYDVR0PBAQDAgGGMA8GA1UdEwEB/wQFMAMBAf8wHwYDVR0jBBgwFoAU4PL+fcRETlDkNf0IiY9OhBlEM0AwgdIGA1UdHwSByjCBxzCBxKCBwaCBvoZaaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IvcmVwb3NpdG9yaW8vQ0ElMjBSQUlaJTIwTkFDSU9OQUwlMjAtJTIwQ09TVEElMjBSSUNBJTIwdjIuY3JshmBodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbC9yZXBvc2l0b3Jpby9DQSUyMFJBSVolMjBOQUNJT05BTCUyMC0lMjBDT1NUQSUyMFJJQ0ElMjB2Mi5jcmwwgeYGCCsGAQUFBwEBBIHZMIHWMGYGCCsGAQUFBzAChlpodHRwOi8vd3d3LmZpcm1hZGlnaXRhbC5nby5jci9yZXBvc2l0b3Jpby9DQSUyMFJBSVolMjBOQUNJT05BTCUyMC0lMjBDT1NUQSUyMFJJQ0ElMjB2Mi5jcnQwbAYIKwYBBQUHMAKGYGh0dHA6Ly93d3cubWljaXQuZ28uY3IvZmlybWFkaWdpdGFsL3JlcG9zaXRvcmlvL0NBJTIwUkFJWiUyME5BQ0lPTkFMJTIwLSUyMENPU1RBJTIwUklDQSUyMHYyLmNydDANBgkqhkiG9w0BAQ0FAAOCAgEAv5rU86FMttoAqCsAJGUQl7DboiQosF/FAvhX0YhsfYWRyUL5BOmuWjIMNuljuU5Lc6BR5eWePSUkOe3acDzslBkUjKzyNRZNQA7IXkuVs1arFT5djjhGiCdzwH7+rFekbNxicdhWJSJ7Fge5dMTkErgDJDERAWfePgzg55hacoTCgX0RkBQDZ08UJMVNgNuogfGGfXYgliwoFj4SnwktHjJHmAptQyLi+tCrt4VWr8+G34FFL51bAvio+RABqD7nu26cnnyNvZ5Ce4oMIcPxUkMX/LINqOFUjY75CcBhovqUJYEobbR9cvMcu3EC2su5asHDWjZxiUQrvSRHvH+7jNYuSk84THfiNcZq99o9ra/pG3ufO07ox1IHDDlX6LX6lTt6DbKw+5Z5L9I4GphhcxWxIdeNmg7xq60Cfy02sqLHeelOoweJLr97rliieeZkXXkGRN62z+1/ZcdS4gj1v+JKHiYLquTkxZFVCo/GmjC5IfUV5SrwtF7vfsJF9HkdaEcsQ9iuKOS28OR4vR0baEsCvlMotJn3jMFbFYO/v/e9P/79T3e+cVi/Va//avW1jxgCQGvTkca6RfqTr3WkMrnwZhHBvTvu0utoIRruw4vpbboFbrm6kkRbMYlA7YopUEBsMW+iqjp6jzifnlluqriqPuBAfmTv8ASr8JE8Ytw=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-7E959F45B4CE5739DD1DF697168186CA62A7F4C46BCCDE47E6FEEED7EE568AA4">
+            <SubjectDistinguishedName Format="CANONICAL">cn=platanar.fdi.cr</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=PLATANAR.fdi.cr</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca sinpe - persona fisica v2,ou=division sistemas de pago,o=banco central de costa rica,c=cr,2.5.4.5=#131043504a2d342d3030302d303034303137</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA SINPE - PERSONA FISICA v2,OU=DIVISION SISTEMAS DE PAGO,O=BANCO CENTRAL DE COSTA RICA,C=CR,2.5.4.5=#131043504a2d342d3030302d303034303137</IssuerDistinguishedName>
+            <SerialNumber>446016287925796347255770404625263269035381036</SerialNumber>
+            <CommonName>PLATANAR.fdi.cr</CommonName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OCSP_RESPONSE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2018-09-30T05:05:26Z</NotAfter>
+            <NotBefore>2018-09-16T05:05:26Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-F87C29D4D57A6052D8CBDD7D45857B335C6B13DC5199DA28AEB0569CCA1D3323</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7B2E6C7133435D2557D8C95A6653CCD4161147F1D7469AA36FCC3B0CA8C7E38C</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>tHSLq57bdvB/pSjjlK0xzHLwsyk=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>MF8hB0IrTv9n05X3oOrv702zF3s=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="dNSName">PLATANAR.fdi.cr</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.10" critical="false">
+                    <octets>BA4wDDAKBggrBgEFBQcDCQ==</octets>
+                </OtherExtension>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.7" critical="false">
+                    <octets>BDAwLgYmKwYBBAGCNxUIhcTqW4LR4zWVkRuC+ZcYhqXLa4F/g/b8d4G48TMCAWQCAQE=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIEMzCCAxugAwIBAgITFAAEESwSsk9gxcieeAAAAAQRLDANBgkqhkiG9w0BAQsFADCBmTEZMBcGA1UEBRMQQ1BKLTQtMDAwLTAwNDAxNzELMAkGA1UEBhMCQ1IxJDAiBgNVBAoTG0JBTkNPIENFTlRSQUwgREUgQ09TVEEgUklDQTEiMCAGA1UECxMZRElWSVNJT04gU0lTVEVNQVMgREUgUEFHTzElMCMGA1UEAxMcQ0EgU0lOUEUgLSBQRVJTT05BIEZJU0lDQSB2MjAeFw0xODA5MTYwNTA1MjZaFw0xODA5MzAwNTA1MjZaMBoxGDAWBgNVBAMTD1BMQVRBTkFSLmZkaS5jcjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKURCNUsbzyV06HEzZg0UhgwW9fA2UabUQnKABLB4clamTsxQUVrlHltWVs70oCR+AT5JKyRxrYS1OcMs3i5ZElQ7gRWx0Ec7ujcX1h6VxJqpP6CV5kpdAYhm0HvopIbRSi/g7MfhS69ignHqAsTcdlYj1BHPI4Mx1izus39YQ9xcn3Sc/trqXrZGFjuaALSkhDRcjtScUf+fOJtYzcF1qPiIaVR5iB6sgmL81lVS+d5nuFx3qjaiLDRSjMNarS3fn8UUW852Q8pMYzoTGwNVaYTbvknflVVvFERWQr57mOcQaX9Ss+lNyHJqPEAY5yV36SUWtV2xffO6FN66bHe2A0CAwEAAaOB8TCB7jA9BgkrBgEEAYI3FQcEMDAuBiYrBgEEAYI3FQiFxOpbgtHjNZWRG4L5lxiGpctrgX+D9vx3gbjxMwIBZAIBATATBgNVHSUEDDAKBggrBgEFBQcDCTAOBgNVHQ8BAf8EBAMCB4AwGwYJKwYBBAGCNxUKBA4wDDAKBggrBgEFBQcDCTAPBgkrBgEFBQcwAQUEAgUAMB8GA1UdIwQYMBaAFLR0i6ue23bwf6Uo45StMcxy8LMpMB0GA1UdDgQWBBQwXyEHQitO/2fTlfeg6u/vTbMXezAaBgNVHREEEzARgg9QTEFUQU5BUi5mZGkuY3IwDQYJKoZIhvcNAQELBQADggEBAAVscqZajGW4jr1TrpQLrA7qZtdqP1xVgpiqlS0wgtwOzOOOdzBRch/udx6v+oFhgtEMhhtRy7d/cxXDz/l/zH713kNXH0sK5pwD7Yh6VKQkoLyZOkl+12kTPeZgGc3wy6JY61k0PPV1nu/5oshMfsARewWBtMbpNRUQxI0qoOiKNiKWgpnNmlFWjjIJjAqip6pbtDkTWWB+dHfonEkPCWiSCDtMHQ+5crWjh4dpzOTGEVWxMMurU6+wfmpHEst3hGmA4qlWB6fgj4pC96qM0eqTajw+hfr/gnIgIuy8gzugc6rx6jPKu8ZeyNkVmTYTlgg4dl2bVLxUezsc5HuYKZQ=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-D8363BD6BD2FE30C4191CD5BB05A97E7556EFE01F207C459D81DEC58186BF665">
+            <SubjectDistinguishedName Format="CANONICAL">cn=francisco de la peña fernandez (firma),ou=ciudadano,o=persona fisica,c=cr,2.5.4.42=#13094652414e434953434f,2.5.4.4=#0c154445204c41205045c39141204645524e414e44455a,2.5.4.5=#13104350462d30382d303131392d30353932</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=FRANCISCO DE LA PEÑA FERNANDEZ (FIRMA),OU=CIUDADANO,O=PERSONA FISICA,C=CR,2.5.4.42=#13094652414e434953434f,2.5.4.4=#0c154445204c41205045c39141204645524e414e44455a,2.5.4.5=#13104350462d30382d303131392d30353932</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca sinpe - persona fisica v2,ou=division sistemas de pago,o=banco central de costa rica,c=cr,2.5.4.5=#131043504a2d342d3030302d303034303137</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA SINPE - PERSONA FISICA v2,OU=DIVISION SISTEMAS DE PAGO,O=BANCO CENTRAL DE COSTA RICA,C=CR,2.5.4.5=#131043504a2d342d3030302d303034303137</IssuerDistinguishedName>
+            <SerialNumber>446015286740114793238795057540663224406450166</SerialNumber>
+            <SubjectSerialNumber>CPF-08-0119-0592</SubjectSerialNumber>
+            <CommonName>FRANCISCO DE LA PEÑA FERNANDEZ (FIRMA)</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>PERSONA FISICA</OrganizationName>
+            <OrganizationalUnit>CIUDADANO</OrganizationalUnit>
+            <GivenName>FRANCISCO</GivenName>
+            <Surname>DE LA PEÑA FERNANDEZ</Surname>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2021-02-16T19:52:16Z</NotAfter>
+            <NotBefore>2017-02-17T19:52:16Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-095B4C11306EB4690DCBBA4EB3D2F4C4BC15D134AC066C088AD44150932B1D40</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-7B2E6C7133435D2557D8C95A6653CCD4161147F1D7469AA36FCC3B0CA8C7E38C</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>tHSLq57bdvB/pSjjlK0xzHLwsyk=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>bBFU6VPaQ0RCkA5/3xdPFZs1l2w=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.16.188.1.1.1.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://fdi.sinpe.fi.cr/repositorio/CA%20SINPE%20-%20PERSONA%20FISICA%20v2.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.sinpe.fi.cr/ocsp</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://fdi.sinpe.fi.cr/repositorio/CA%20SINPE%20-%20PERSONA%20FISICA%20v2.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.10" critical="false">
+                    <octets>BA4wDDAKBggrBgEFBQcDBA==</octets>
+                </OtherExtension>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.7" critical="false">
+                    <octets>BDAwLgYmKwYBBAGCNxUIhcTqW4LR4zWVkRuC+ZcYhqXLa4F/gbnScoGev3gCAWQCAQc=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-B2DA46DCB1A848A6A204511015F5A692AD5049927ECA88841CA47423D8ED00CC">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIIFuTCCBKGgAwIBAgITFAABH/a5gZb8gqHY/AAAAAEf9jANBgkqhkiG9w0BAQsFADCBmTEZMBcGA1UEBRMQQ1BKLTQtMDAwLTAwNDAxNzELMAkGA1UEBhMCQ1IxJDAiBgNVBAoTG0JBTkNPIENFTlRSQUwgREUgQ09TVEEgUklDQTEiMCAGA1UECxMZRElWSVNJT04gU0lTVEVNQVMgREUgUEFHTzElMCMGA1UEAxMcQ0EgU0lOUEUgLSBQRVJTT05BIEZJU0lDQSB2MjAeFw0xNzAyMTcxOTUyMTZaFw0yMTAyMTYxOTUyMTZaMIG7MRkwFwYDVQQFExBDUEYtMDgtMDExOS0wNTkyMR4wHAYDVQQEDBVERSBMQSBQRcORQSBGRVJOQU5ERVoxEjAQBgNVBCoTCUZSQU5DSVNDTzELMAkGA1UEBhMCQ1IxFzAVBgNVBAoTDlBFUlNPTkEgRklTSUNBMRIwEAYDVQQLEwlDSVVEQURBTk8xMDAuBgNVBAMMJ0ZSQU5DSVNDTyBERSBMQSBQRcORQSBGRVJOQU5ERVogKEZJUk1BKTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANEwGLI0tTAuRSamUFtO69dvREWZmZ05WivpREENs1sYlRcdlVLN3V7gXgGZLGd0EorgQFh1SsIf5wRXdi+W2tlxqwelQQVqOPL6dIeY9SHjtlBqzYizLBf4nO2NtEpb9D40fUiNWM5XbScPt1MdWQjxqiTwwzzKiYMzRRudfiYp11tfRfQ0o3YhiYGMny92zaEnTKGwIyBn3+467fyhLpyuDUv5bY/0AJkxJshdcfTL6Wk04RUQLJoK1X6/f45fXqGYJr9foJlL2TTjsA3Z/BE9manOI4JNdPgmT+exDIsNmrHf8iNvvclNo7F5CHQo2ZQwFL3Cvn8A8rG5Iu7wxAECAwEAAaOCAdQwggHQMB0GA1UdDgQWBBRsEVTpU9pDREKQDn/fF08VmzWXbDAfBgNVHSMEGDAWgBS0dIurntt28H+lKOOUrTHMcvCzKTBeBgNVHR8EVzBVMFOgUaBPhk1odHRwOi8vZmRpLnNpbnBlLmZpLmNyL3JlcG9zaXRvcmlvL0NBJTIwU0lOUEUlMjAtJTIwUEVSU09OQSUyMEZJU0lDQSUyMHYyLmNybDCBlQYIKwYBBQUHAQEEgYgwgYUwWQYIKwYBBQUHMAKGTWh0dHA6Ly9mZGkuc2lucGUuZmkuY3IvcmVwb3NpdG9yaW8vQ0ElMjBTSU5QRSUyMC0lMjBQRVJTT05BJTIwRklTSUNBJTIwdjIuY3J0MCgGCCsGAQUFBzABhhxodHRwOi8vb2NzcC5zaW5wZS5maS5jci9vY3NwMA4GA1UdDwEB/wQEAwIGwDA9BgkrBgEEAYI3FQcEMDAuBiYrBgEEAYI3FQiFxOpbgtHjNZWRG4L5lxiGpctrgX+BudJygZ6/eAIBZAIBBzATBgNVHSUEDDAKBggrBgEFBQcDBDAbBgkrBgEEAYI3FQoEDjAMMAoGCCsGAQUFBwMEMBUGA1UdIAQOMAwwCgYIYIE8AQEBAQIwDQYJKoZIhvcNAQELBQADggEBANRbQKYeFjiqnLMCiE7B+deWmGqtskuQMRMrj0OrsN+LFlHdAJ/Zia43gsvf/rzrFYJm9uPRZGGLtUV853yazekWUcbPLLLCX33F/aY6h4h4WkARKM33WWqC6n5DEp1HnFbsqNJ597VPniO4BCpA8+qRRsfUPWJgLXOll2B4tCZ0mcUgDHZELukTdE06Xocu9X0MgxdbqIU0CIdy7h0RpkAnyut8Hcdklkd4RkN/Y15/aSIaxt35Tz7hJWWDdHON+/JLqlnTDze0EvIeiHsPN5jhAxNbLZT0rrhtcb2Q3Z11SjbPAwzv9VKU1c7OJsHer1mFZbxfp0nXmxb66fbvUsw=</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ca sinpe - persona fisica v2,ou=division sistemas de pago,o=banco central de costa rica,c=cr,2.5.4.5=#131043504a2d342d3030302d303034303137</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=CA SINPE - PERSONA FISICA v2,OU=DIVISION SISTEMAS DE PAGO,O=BANCO CENTRAL DE COSTA RICA,C=CR,2.5.4.5=#131043504a2d342d3030302d303034303137</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca politica persona fisica - costa rica v2,ou=dcfd,o=micitt,c=cr,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA POLITICA PERSONA FISICA - COSTA RICA v2,OU=DCFD,O=MICITT,C=CR,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <SerialNumber>1672555889905774989374701447987177132319047683</SerialNumber>
+            <SubjectSerialNumber>CPJ-4-000-004017</SubjectSerialNumber>
+            <CommonName>CA SINPE - PERSONA FISICA v2</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>BANCO CENTRAL DE COSTA RICA</OrganizationName>
+            <OrganizationalUnit>DIVISION SISTEMAS DE PAGO</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2024-01-21T18:26:08Z</NotAfter>
+            <NotBefore>2016-01-21T18:16:08Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-7B2E6C7133435D2557D8C95A6653CCD4161147F1D7469AA36FCC3B0CA8C7E38C</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-F64BF0300F9D08EDE8EC4C19D12A5410FFBB48462CCA5796E7B427434AE2FDAD</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>aJ1pNsuEbnvqk2EZ/1gwHdX/XMs=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>tHSLq57bdvB/pSjjlK0xzHLwsyk=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.2</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.3</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.firmadigital.go.cr/repositorio/CA%20POLITICA%20PERSONA%20FISICA%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                    <caIssuersUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20POLITICA%20PERSONA%20FISICA%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://www.firmadigital.go.cr/repositorio/CA%20POLITICA%20PERSONA%20FISICA%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                    <crlUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20POLITICA%20PERSONA%20FISICA%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.1" critical="false">
+                    <octets>BAMCAQA=</octets>
+                </OtherExtension>
+                <OtherExtension OID="1.3.6.1.4.1.311.20.2" critical="false">
+                    <octets>BAweCgBTAHUAYgBDAEE=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-13CFC124E4C0E362E64E6E4B8A3563DCFB87924F0D428278BFE5B2F45E24F3B8">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIINADCCCuigAwIBAgITSwAAAAMTyepkVGDdawAAAAAAAzANBgkqhkiG9w0BAQ0FADB9MRkwFwYDVQQFExBDUEotMi0xMDAtMDk4MzExMQswCQYDVQQGEwJDUjEPMA0GA1UEChMGTUlDSVRUMQ0wCwYDVQQLEwREQ0ZEMTMwMQYDVQQDEypDQSBQT0xJVElDQSBQRVJTT05BIEZJU0lDQSAtIENPU1RBIFJJQ0EgdjIwHhcNMTYwMTIxMTgxNjA4WhcNMjQwMTIxMTgyNjA4WjCBmTEZMBcGA1UEBRMQQ1BKLTQtMDAwLTAwNDAxNzELMAkGA1UEBhMCQ1IxJDAiBgNVBAoTG0JBTkNPIENFTlRSQUwgREUgQ09TVEEgUklDQTEiMCAGA1UECxMZRElWSVNJT04gU0lTVEVNQVMgREUgUEFHTzElMCMGA1UEAxMcQ0EgU0lOUEUgLSBQRVJTT05BIEZJU0lDQSB2MjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOa9ooS00UHFT099PwJl/OLq8TVJD9STp1Kcqhjl234reztc/NNzMgvwcRJiLKWY5RaKWwxbEDOsgIcIp32gmNH057NqgAQcRAVfWLIVjqqTtQCkj3ZgTFUZeYwXe2qKgV/jRAfwy9ZQAO/la9ccWh7Upwf3y6Z9MAqA+er/o6FUfIBDnzSxBJvLlN5VuVXmp0bm5KT/wCYm/SIktDCIGAzIDo1ndowbhfTs6D/cMRzlMQgFQz6cwutaOGg13ojo0OLeqbNR/c8ERom5xcaMiGkJ4EPv30v4fb6lCtX+M3Soz+uha+tr9s0gWXPSrpyXWAWWrLl4yugXT5RxvLx7kWsCAwEAAaOCCFowgghWMBAGCSsGAQQBgjcVAQQDAgEAMB0GA1UdDgQWBBS0dIurntt28H+lKOOUrTHMcvCzKTCCBdYGA1UdIASCBc0wggXJMIIBFAYHYIE8AQEBATCCAQcwgaYGCCsGAQUFBwICMIGZHoGWAEkAbQBwAGwAZQBtAGUAbgB0AGEAIABsAGEAIABQAG8AbABpAHQAaQBjAGEAIABkAGUAIABsAGEAIABSAGEAaQB6ACAAQwBvAHMAdABhAHIAcgBpAGMAZQBuAHMAZQAgAGQAZQAgAEMAZQByAHQAaQBmAGkAYwBhAGMAaQBvAG4AIABEAGkAZwBpAHQAYQBsACAAdgAyMCoGCCsGAQUFBwIBFh5odHRwOi8vd3d3LmZpcm1hZGlnaXRhbC5nby5jcgAwMAYIKwYBBQUHAgEWJGh0dHA6Ly93d3cubWljaXQuZ28uY3IvZmlybWFkaWdpdGFsADCCAVUGCGCBPAEBAQEBMIIBRzCB5gYIKwYBBQUHAgIwgdkegdYASQBtAHAAbABlAG0AZQBuAHQAYQAgAGwAYQAgAFAAbwBsAGkAdABpAGMAYQAgAGQAZQAgAEMAQQAgAEUAbQBpAHMAbwByAGEAIABwAGEAcgBhACAAUABlAHIAcwBvAG4AYQBzACAARgBpAHMAaQBjAGEAcwAgAHAAZQByAHQAZQBuAGUAYwBpAGUAbgB0AGUAIABhACAAbABhACAAUABLAEkAIABOAGEAYwBpAG8AbgBhAGwAIABkAGUAIABDAG8AcwB0AGEAIABSAGkAYwBhACAAdgAyMCoGCCsGAQUFBwIBFh5odHRwOi8vd3d3LmZpcm1hZGlnaXRhbC5nby5jcgAwMAYIKwYBBQUHAgEWJGh0dHA6Ly93d3cubWljaXQuZ28uY3IvZmlybWFkaWdpdGFsADCCAagGCGCBPAEBAQECMIIBmjCCATgGCCsGAQUFBwICMIIBKh6CASYASQBtAHAAbABlAG0AZQBuAHQAYQAgAGwAYQAgAFAAbwBsAGkAdABpAGMAYQAgAHAAYQByAGEAIABjAGUAcgB0AGkAZgBpAGMAYQBkAG8AIABkAGUAIABmAGkAcgBtAGEAIABkAGkAZwBpAHQAYQBsACAAZABlACAAcABlAHIAcwBvAG4AYQBzACAAZgBpAHMAaQBjAGEAcwAgACgAYwBpAHUAZABhAGQAYQBuAG8ALwByAGUAcwBpAGQAZQBuAHQAZQApACAAcABlAHIAdABlAG4AZQBjAGkAZQBuAHQAZQAgAGEAIABsAGEAIABQAEsASQAgAE4AYQBjAGkAbwBuAGEAbAAgAGQAZQAgAEMAbwBzAHQAYQAgAFIAaQBjAGEAIAB2ADIwKgYIKwYBBQUHAgEWHmh0dHA6Ly93d3cuZmlybWFkaWdpdGFsLmdvLmNyADAwBggrBgEFBQcCARYkaHR0cDovL3d3dy5taWNpdC5nby5jci9maXJtYWRpZ2l0YWwAMIIBqAYIYIE8AQEBAQMw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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-FD6E1E1E08C354CB87688DD4BA0EEC1F51DFB9334B3B2414F92FC1FDBE9AD5B5">
+            <SubjectDistinguishedName Format="CANONICAL">cn=tsa sinpe v2,ou=0001,o=banco central de costa rica,c=cr,2.5.4.5=#131043504a2d342d3030302d303034303137</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=TSA SINPE v2,OU=0001,O=BANCO CENTRAL DE COSTA RICA,C=CR,2.5.4.5=#131043504a2d342d3030302d303034303137</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca politica sellado de tiempo - costa rica v2,ou=dcfd,o=micitt,c=cr,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA POLITICA SELLADO DE TIEMPO - COSTA RICA v2,OU=DCFD,O=MICITT,C=CR,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <SerialNumber>2341578245868091174413192910911900570741637124</SerialNumber>
+            <SubjectSerialNumber>CPJ-4-000-004017</SubjectSerialNumber>
+            <CommonName>TSA SINPE v2</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>BANCO CENTRAL DE COSTA RICA</OrganizationName>
+            <OrganizationalUnit>0001</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>TIMESTAMP</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2024-03-08T21:00:34Z</NotAfter>
+            <NotBefore>2016-03-08T20:50:34Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-C6E0CBB6FFCD01AD4B6E73C679521A1353BADE1EE141B7F10972B667FF024D07</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-D6AF2A8DF0031E9C302B37517F3908F81C470BE2120708FFBBEE41EDBCC4A5C3</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>sLvgCC5LE2jw0IBEA2ekP/8lY/Y=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>Ho8FYe9cFVpSrfIh6uY/BXrHefg=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://tsa.sinpe.fi.cr/">2.16.188.1.1.1.1.5</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.firmadigital.go.cr/repositorio/CA%20POLITICA%20SELLADO%20DE%20TIEMPO%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                    <caIssuersUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20POLITICA%20SELLADO%20DE%20TIEMPO%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://www.firmadigital.go.cr/repositorio/CA%20POLITICA%20SELLADO%20DE%20TIEMPO%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                    <crlUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20POLITICA%20SELLADO%20DE%20TIEMPO%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-3601212A7F99D5F39D1371B919229EB80683E62B61786473BC5678443850FB5C">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>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</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ca raiz nacional - costa rica v2,c=cr,o=micitt,ou=dcfd,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=CA RAIZ NACIONAL - COSTA RICA v2,C=CR,O=MICITT,OU=DCFD,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca raiz nacional - costa rica v2,c=cr,o=micitt,ou=dcfd,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA RAIZ NACIONAL - COSTA RICA v2,C=CR,O=MICITT,OU=DCFD,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <SerialNumber>155150036479860318890910376525337462028</SerialNumber>
+            <SubjectSerialNumber>CPJ-2-100-098311</SubjectSerialNumber>
+            <CommonName>CA RAIZ NACIONAL - COSTA RICA v2</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>MICITT</OrganizationName>
+            <OrganizationalUnit>DCFD</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2039-02-24T22:28:44Z</NotAfter>
+            <NotBefore>2015-02-24T22:19:55Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-CB445EC0D8906149E40EDCF3A89C9C71083741687359E2CE305B44CAB3D473CB</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-CB445EC0D8906149E40EDCF3A89C9C71083741687359E2CE305B44CAB3D473CB</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>4PL+fcRETlDkNf0IiY9OhBlEM0A=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.1" critical="false">
+                    <octets>BAMCAQA=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Base64Encoded>MIIFwTCCA6mgAwIBAgIQdLjPY4+rcrxGwdK6zQAFDDANBgkqhkiG9w0BAQ0FADBzMRkwFwYDVQQFExBDUEotMi0xMDAtMDk4MzExMQ0wCwYDVQQLEwREQ0ZEMQ8wDQYDVQQKEwZNSUNJVFQxCzAJBgNVBAYTAkNSMSkwJwYDVQQDEyBDQSBSQUlaIE5BQ0lPTkFMIC0gQ09TVEEgUklDQSB2MjAeFw0xNTAyMjQyMjE5NTVaFw0zOTAyMjQyMjI4NDRaMHMxGTAXBgNVBAUTEENQSi0yLTEwMC0wOTgzMTExDTALBgNVBAsTBERDRkQxDzANBgNVBAoTBk1JQ0lUVDELMAkGA1UEBhMCQ1IxKTAnBgNVBAMTIENBIFJBSVogTkFDSU9OQUwgLSBDT1NUQSBSSUNBIHYyMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAwnQxZdkRRU4vV9xiuV3HStB/7o3GB95pZL/NgdVXrSc+X1hxGtwgwPyrc/SrLodUpXBYWD0zQNSQWkPpXkRoSa7guAjyHDpmfDkbRk2Oj414OpN3Etoehrw9pBWgHrFK1e5+oj2iHj1QRBUPlcyKJTz+DyOgvY2wC5Tgyxj4Fn2Tqy79Ck6UlerJgp8xRbPJwuF/2apBlzXu+/zvV3Pv2MMrPvSMpVK0oAw47TLpSzNRG3Z88V9PhPdkEyvqstdWQHiuFp49ulRvsr1cRdmkNptO0q6udPyej3k50Dl8IzhW1Uv5yPCKpxpDpoyy3X6HnfmZ470lbhzTZ12AQ392ansLLnO/ZOT4E9JB1M2UiZox8TdGe5RKDNQGK2GWJIQKDsIZqcVCmbGrCRPxCOtC/NwILxQCu8k1TkeH8SlrkwiBMsoCu5qeNrkarQxEYcVNXyw0rAaofaNL/42a5x7ulg78bNFBMj3vXM81WyFt+K3Ef+Zzd94ib/iOuzajKCIxiI+lp0PaNiVgj4a3h5BJM74umhCv0U+TAqIljp5QqPJvikcT4PgU4OS9/kCNxpKYqHJzRoijHWeA+EOSlAnuztya9KQLzmzoC/gQ4hqVfk2UNQ57DKdkuPbBTFvCSTjzRV+J7lfpci+WhT1BCRgUKSIwGEHYOm1dvjWOydRQBzcCAwEAAaNRME8wCwYDVR0PBAQDAgGGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFODy/n3ERE5Q5DX9CImPToQZRDNAMBAGCSsGAQQBgjcVAQQDAgEAMA0GCSqGSIb3DQEBDQUAA4ICAQBJ5nSJMjsLLttbQWOESI3JjGtP7LIEIQCMAjM7WJTmUDMK1Xd+LKGq/vMzv0OnlCVsM4D7pnpWyEU30n9BvwCk4/bcp/ka/NBbE0fXNVF2px0T369RmfSBR32+y67kwfV9wT2lsm1M6faOCtLXgOe0UaCD5shbegU8RQhk2owSQTj6ZeXKQSnr5dv6z4nE5hFUFCMWYvbO9Lq9EyzzzMOEbV4fOu9PVgPQ5wARzJ0pf0evH9SnId5Y1nvSAYkHPgoiqiaSlcy9nN2C+QHwvt89nIH4krkSp0bLjX7ww8UgSzJnmrwWrjqt0c+OpOEkBlkmz2WeRK6G7fvov8SFSjZkMaiAKRHbxAuDSs+HAG9xzrI7OjvaLuVq5w0r3p77XT70Hiv6M/8ysMP3FpjNcK8xHjtOupjqVhK+KqBAhC8Z7fIyPH8U2vXPexCO449G930dnK4S8S6CpCh4bdRuZg/n+vRa9Cf/GheO56aANt+unoPf1tfYhKcFGx40lSBxoQtx6eR8TMhuQBJBwd4IRG/cy6ysE0vF2WKikc+m7a8vJYk+Did3n3nHKFKABh0Fdf6Id1/KiyXO0ivm1xR7uK0mreiETRcWa7Pw2D1NllnuoIyx1gsc0eYmZnZC5lV7VBt1xfpCyaRtmcqU7Jzvk/rl9U8rMSpaOcySGf15dGPVtQ==</Base64Encoded>
+        </Certificate>
+        <Certificate Id="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0">
+            <SubjectDistinguishedName Format="CANONICAL">cn=ca politica sellado de tiempo - costa rica v2,ou=dcfd,o=micitt,c=cr,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=CA POLITICA SELLADO DE TIEMPO - COSTA RICA v2,OU=DCFD,O=MICITT,C=CR,2.5.4.5=#131043504a2d322d3130302d303938333131</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ca raiz nacional - costa rica v2,c=cr,o=micitt,ou=dcfd,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=CA RAIZ NACIONAL - COSTA RICA v2,C=CR,O=MICITT,OU=DCFD,2.5.4.5=#131043504a2d322d3130302d303938333131</IssuerDistinguishedName>
+            <SerialNumber>1739458125509245244632810178398025886600265732</SerialNumber>
+            <SubjectSerialNumber>CPJ-2-100-098311</SubjectSerialNumber>
+            <CommonName>CA POLITICA SELLADO DE TIEMPO - COSTA RICA v2</CommonName>
+            <CountryName>CR</CountryName>
+            <OrganizationName>MICITT</OrganizationName>
+            <OrganizationalUnit>DCFD</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2031-02-25T21:57:43Z</NotAfter>
+            <NotBefore>2015-02-25T21:47:43Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-D6AF2A8DF0031E9C302B37517F3908F81C470BE2120708FFBBEE41EDBCC4A5C3</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-CB445EC0D8906149E40EDCF3A89C9C71083741687359E2CE305B44CAB3D473CB</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>4PL+fcRETlDkNf0IiY9OhBlEM0A=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>sLvgCC5LE2jw0IBEA2ekP/8lY/Y=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.micit.go.cr/firmadigital">2.16.188.1.1.1.1.5</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.firmadigital.go.cr/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                    <caIssuersUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://www.firmadigital.go.cr/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                    <crlUrl>http://www.micit.go.cr/firmadigital/repositorio/CA%20RAIZ%20NACIONAL%20-%20COSTA%20RICA%20v2.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.4.1.311.21.1" critical="false">
+                    <octets>BAMCAQA=</octets>
+                </OtherExtension>
+                <OtherExtension OID="1.3.6.1.4.1.311.20.2" critical="false">
+                    <octets>BAweCgBTAHUAYgBDAEE=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <Revocations>
+                <CertificateRevocation Revocation="R-D02C0F0755753C3361CDC4F2F4CB52D3B722D9BEB616F309A68E491A1F0198D6">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <Base64Encoded>MIILkzCCCXugAwIBAgITTgAAAASYOR/4A7hb3AAAAAAABDANBgkqhkiG9w0BAQ0FADBzMRkwFwYDVQQFExBDUEotMi0xMDAtMDk4MzExMQ0wCwYDVQQLEwREQ0ZEMQ8wDQYDVQQKEwZNSUNJVFQxCzAJBgNVBAYTAkNSMSkwJwYDVQQDEyBDQSBSQUlaIE5BQ0lPTkFMIC0gQ09TVEEgUklDQSB2MjAeFw0xNTAyMjUyMTQ3NDNaFw0zMTAyMjUyMTU3NDNaMIGAMRkwFwYDVQQFExBDUEotMi0xMDAtMDk4MzExMQswCQYDVQQGEwJDUjEPMA0GA1UEChMGTUlDSVRUMQ0wCwYDVQQLEwREQ0ZEMTYwNAYDVQQDEy1DQSBQT0xJVElDQSBTRUxMQURPIERFIFRJRU1QTyAtIENPU1RBIFJJQ0EgdjIwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQC2m5S5sYbQiWTklYT8+i9PCNAXS/Mw/TByDhY7zNP7WyJtPSUnSbQRLdQ3hMPuJ6iVgoZWNKx1TJ7MzNVPOv713eEcqqDm69XWSSaQJEz3HbTAVC23V3PJcEuuQfJuKZ+7YP2VMMhBj73UoJdQqMx3nJpECJDjzCrCZHEPtusDRa1+CEmm61ghSDKwUvjow98rkuBvu837MWb3iDj9y8KbbKvme4CPRiAnmZv9N8H5q1zrO6EmWX46+z4ofkUji7flDLzVxCG9b3irrGf7ig+IzfXBBqyr/OLNg32xKZNdezbSKDRsjHxQMpeS6vHu+spOPK65ujLhjTLNHF5v31x+fFPiz++Iz1DoUfTpEz/GlB3Z6HceP2eKgghwOrEgzZ9sT+l0aGxolASLeiiyW73TWyuL1ubRPaJV41ZfFzgZcb7b/LDei31claIEm+OMPEF1s5dfjsAByXqQCl0UUuTYqaBT8N8OC7qh/KZYQx4jbdgl2vvgR/bnaD1VO6AEbySBHW7sG1XgDkjKsPZr2EtnacZ6pdAlAI69pYPabwOo5wvJhKhFXh3ymhV5JNThCpbqGX+7x1eL8eTfelvsbmmnZtS5+Rtol9bsSLG/BAwhNHJmFHvnbper5cHJ4TPmz+k0aveKM2i+yGeRcp/0N5ZOKoWCia4apU7RcBZnTFVFfQIDAQABo4IGEDCCBgwwEAYJKwYBBAGCNxUBBAMCAQAwHQYDVR0OBBYEFLC74AguSxNo8NCARANnpD//JWP2MIIDvwYDVR0gBIIDtjCCA7IwggEUBgdggTwBAQEBMIIBBzCBpgYIKwYBBQUHAgIwgZkegZYASQBtAHAAbABlAG0AZQBuAHQAYQAgAGwAYQAgAFAAbwBsAGkAdABpAGMAYQAgAGQAZQAgAGwAYQAgAFIAYQBpAHoAIABDAG8AcwB0AGEAcgByAGkAYwBlAG4AcwBlACAAZABlACAAQwBlAHIAdABpAGYAaQBjAGEAYwBpAG8AbgAgAEQAaQBnAGkAdABhAGwAIAB2ADIwKgYIKwYBBQUHAgEWHmh0dHA6Ly93d3cuZmlybWFkaWdpdGFsLmdvLmNyADAwBggrBgEFBQcCARYkaHR0cDovL3d3dy5taWNpdC5nby5jci9maXJtYWRpZ2l0YWwAMIIBWwYIYIE8AQEBAQEwggFNMIHsBggrBgEFBQcCAjCB3x6B3ABJAG0AcABsAGUAbQBlAG4AdABhACAAbABhACAAUABvAGwAaQB0AGkAYwBhACAAYwBvAG0AbwAgAEMAQQAgAEUAbQBpAHMAbwByAGEAIABwAGEAcgBhACAAUwBlAGwAbABhAGQAbwAgAGQAZQAgAFQAaQBlAG0AcABvACAAcABlAHIAdABlAG4AZQBjAGkAZQBuAHQAZQAgAGEAIABsAGEAIABQAEsASQAgAE4AYQBjAGkAbwBuAGEAbAAgAGQAZQAgAEMAbwBzAHQAYQAgAFIAaQBjAGEAIAB2ADIwKgYIKwYBBQUHAgEWHmh0dHA6Ly93d3cuZmlybWFkaWdpdGFsLmdvLmNyADAwBggrBgEFBQcCARYkaHR0cDovL3d3dy5taWNpdC5nby5jci9maXJtYWRpZ2l0YWwAMIIBNwYIYIE8AQEBAQUwggEpMIHIBggrBgEFBQcCAjCBux6BuABJAG0AcABsAGUAbQBlAG4AdABhACAAbABhACAAUABvAGwAaQB0AGkAYwBhACAAZABlACAAUwBlAGwAbABhAGQAbwAgAGQAZQAgAFQAaQBlAG0AcABvACAAZABlAGwAIABTAGkAcwB0AGUAbQBhACAATgBhAGMAaQBvAG4AYQBsACAAZABlACAAQwBlAHIAdABpAGYAaQBjAGEAYwBpAG8AbgAgAEQAaQBnAGkAdABhAGwAIAB2ADIwKgYIKwYBBQUHAgEWHmh0dHA6Ly93d3cuZmlybWFkaWdpdGFsLmdvLmNyADAwBggrBgEFBQcCARYkaHR0cDovL3d3dy5taWNpdC5nby5jci9maXJtYWRpZ2l0YWwAMBkGCSsGAQQBgjcUAgQMHgoAUwB1AGIAQwBBMAsGA1UdDwQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MB8GA1UdIwQYMBaAFODy/n3ERE5Q5DX9CImPToQZRDNAMIHSBgNVHR8EgcowgccwgcSggcGggb6GWmh0dHA6Ly93d3cuZmlybWFkaWdpdGFsLmdvLmNyL3JlcG9zaXRvcmlvL0NBJTIwUkFJWiUyME5BQ0lPTkFMJTIwLSUyMENPU1RBJTIwUklDQSUyMHYyLmNybIZgaHR0cDovL3d3dy5taWNpdC5nby5jci9maXJtYWRpZ2l0YWwvcmVwb3NpdG9yaW8vQ0ElMjBSQUlaJTIwTkFDSU9OQUwlMjAtJTIwQ09TVEElMjBSSUNBJTIwdjIuY3JsMIHmBggrBgEFBQcBAQSB2TCB1jBmBggrBgEFBQcwAoZaaHR0cDovL3d3dy5maXJtYWRpZ2l0YWwuZ28uY3IvcmVwb3NpdG9yaW8vQ0ElMjBSQUlaJTIwTkFDSU9OQUwlMjAtJTIwQ09TVEElMjBSSUNBJTIwdjIuY3J0MGwGCCsGAQUFBzAChmBodHRwOi8vd3d3Lm1pY2l0LmdvLmNyL2Zpcm1hZGlnaXRhbC9yZXBvc2l0b3Jpby9DQSUyMFJBSVolMjBOQUNJT05BTCUyMC0lMjBDT1NUQSUyMFJJQ0ElMjB2Mi5jcnQwDQYJKoZIhvcNAQENBQADggIBADnF0LdoBRhNynIHrWcNmRTmX3HqQBdO7rIIqhZvDdfVj/Ew2Io73K/eW3DRI28HmV545pRKxU5lKeZy7szI+W8+ZTApBGZgQErw5Klfk20b2bul15OEYphIz3d1NC2lQG5PggpO9KQtHEMeGCDx569UKsYekBaWfz7q7V7a+k4xFGKJFNyKQP0HAsmpfLSuJvqRrEORuQpNRxGzljIF3N1VTwzFTnW2sH7DBVoH3a/Viggs8BXqBpp2bqdfUJKiwgCmY//9fBP1zLiyEKthG1lKmzs06OdjmWeqL/6QBlfBbQtecqrfHIfJAnkwsIGXGLd39cM0jAZFnENl2z5unJnHdCLnxro/ct06E7bYJ4MJcWA9s4IrDREHjSAO4PczDzE0W/a0cpGDdYGvXIuH3qRV1LutTmecxC5+mALhBEWV1JAAr0W7LAWTRBtwjHNas9AVxb4SOGbtEV9jabics2QqNU08PiMROjuM/qnKACR5euRZG6k8eP7ft1n3ufHmP9FpPz5jWF37m4ciVm/3VJTA/RvBkzwGFdISOyOUx0Ei4wx8z2MeGaa0ZEhY7kwOugT6Jsi/npc/tVcDxCo35g4cz47tFkY4r2hoUTPqvrlStanbwdI5xD3P3j2Z7rVwal+R/Nx3Ma6EP+mf73m8w+KdZHrQbL/oXIB9A/GW+roN</Base64Encoded>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-13CFC124E4C0E362E64E6E4B8A3563DCFB87924F0D428278BFE5B2F45E24F3B8">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2018-07-23T16:27:42Z</ProductionDate>
+            <ThisUpdate>2018-07-23T16:27:42Z</ThisUpdate>
+            <NextUpdate>2018-09-24T04:47:42Z</NextUpdate>
+            <CRLNumber>24</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Base64Encoded>MIIDKDCCARACAQEwDQYJKoZIhvcNAQENBQAwfTEZMBcGA1UEBRMQQ1BKLTItMTAwLTA5ODMxMTELMAkGA1UEBhMCQ1IxDzANBgNVBAoTBk1JQ0lUVDENMAsGA1UECxMERENGRDEzMDEGA1UEAxMqQ0EgUE9MSVRJQ0EgUEVSU09OQSBGSVNJQ0EgLSBDT1NUQSBSSUNBIHYyFw0xODA3MjMxNjI3NDJaFw0xODA5MjQwNDQ3NDJaoF8wXTAfBgNVHSMEGDAWgBRonWk2y4Rue+qTYRn/WDAd1f9cyzAQBgkrBgEEAYI3FQEEAwIBADAKBgNVHRQEAwIBGDAcBgkrBgEEAYI3FQQEDxcNMTgwOTIzMTYzNzQyWjANBgkqhkiG9w0BAQ0FAAOCAgEAKh+lQVnCQf8r4IvrEIqivbCaJSHsth2zUxclOt/OHWw9AwORJKMPQ+TBjH5KSelWoShGS0xaC47amV6qdXT4h3YgvLq2+MY05/4h1ElDugHbsY6nMPZX1u5e0Y5sVTCXPhg574l9iBB7d4ztMqqea3bDTCVH08h2Q4Q+cn7lBQnmFae8RRtQ2Yhevl9P5i/Mr6J71qnv+QHzNrpSAeZutYFWiKGIqmVj5lXRhRL3lJakP5rhyxJrQpuTmZrVMtFFjAgutGPH8IPrxMOQPpB4HFmn2UGAxBen6Rc1jjvLcyi9km3ptZpgw6D/YYWRpneIdOXrURXtz+N5/nGIk3RXWIXUwucUSX3ytphlWFlAuLHGiDvTuo+dEPYa6svb8S1QDxc1uDudesRTfyYrmh6SEd7eP2oGGoTJeFjZYVbqtU3lgC4yrE8+lmoqeiTsc/OetVyMbq6Rw6yw4E13LrLQyXrXq87ks/aFeXmRucy5/OOGDAbe01rrmwZDXP3tYGVywnbsTeCSch1bfKIM5OJnPbRkz3conSn0EbBhuBffSmmxyQXD7LWXPdnfHNofJqiePP3/pZzYgk91YEwJkZln+pFCrXmWIfR0QG+SmMipwvpl5UywajJNdlp7UiWMfywaTPvXgOq6s4tUAjqs445jH4uUQQKL+QL8Z6o6umq6xwM=</Base64Encoded>
+        </Revocation>
+        <Revocation Id="R-3601212A7F99D5F39D1371B919229EB80683E62B61786473BC5678443850FB5C">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2018-07-23T16:47:21Z</ProductionDate>
+            <ThisUpdate>2018-07-23T16:47:21Z</ThisUpdate>
+            <NextUpdate>2018-09-24T05:07:21Z</NextUpdate>
+            <CRLNumber>24</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Base64Encoded>MIIDLDCCARQCAQEwDQYJKoZIhvcNAQENBQAwgYAxGTAXBgNVBAUTEENQSi0yLTEwMC0wOTgzMTExCzAJBgNVBAYTAkNSMQ8wDQYDVQQKEwZNSUNJVFQxDTALBgNVBAsTBERDRkQxNjA0BgNVBAMTLUNBIFBPTElUSUNBIFNFTExBRE8gREUgVElFTVBPIC0gQ09TVEEgUklDQSB2MhcNMTgwNzIzMTY0NzIxWhcNMTgwOTI0MDUwNzIxWqBfMF0wHwYDVR0jBBgwFoAUsLvgCC5LE2jw0IBEA2ekP/8lY/YwEAYJKwYBBAGCNxUBBAMCAQAwCgYDVR0UBAMCARgwHAYJKwYBBAGCNxUEBA8XDTE4MDkyMzE2NTcyMVowDQYJKoZIhvcNAQENBQADggIBALO/iMQkQsbfa0dLV5lMElgi85UXz3nH2ES8wZi+kpmTS6F4cYJ91IchDW2BpqJXxRaKqaNR0qXWgmK2RpDn0wYt+YVaNyzoyN0sHUxDwBXfjuUIJrgKLeqheD/HiC0ZfLkgiRNS1sgVE2n/TY6Kz5emMyTEGpL1BQ1eOcb7rhh2Q1u/smbpoIEamn3UZOIXNSfPxL/2l5HRSPa5xcIYPBJz5OZDd2FmEvw9A15EtTAuV1WNuiKq+P9Ka8UtowXfYYc9+N7qTjFzBPJ8e6N+XaarzKhxcppYt4EUKKWijwt9Y2aZtoOTEjBKfGH7CExu40UBtdXMd5/9ckhMN/Z7svDuXGOWJenStJ/IIww/ncuqaPnqROt+rZ1EwuvaxSXnHQftt0I8JUu/I2NijeKb2GcFXNk0rHTx5/+opk515pWmb+0NBdToIcN1BJxQnhfmtgfN/cAgISZF7szkI2suzmmSAlUvk7hkvV56L4DYIYIriC7TwlQOoJW3zqRwjGG530TRJxzStgX36XiOMy53goHqW/j+3lmk7LkGb/El3sIHLAcgq7n0wTl5DYg5Zy/+UV2lF5I7T1yE49KMWL3kEtVUnU8NBbfA5SCVJvFBb5cGcPAPzss0B+/+Z/KGRjP5XfIac+AOHiSIBJaaOUkucW78AXMPLJLbja55bG2EUczs</Base64Encoded>
+        </Revocation>
+        <Revocation Id="R-B2DA46DCB1A848A6A204511015F5A692AD5049927ECA88841CA47423D8ED00CC">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2018-09-17T06:56:35Z</ProductionDate>
+            <ThisUpdate>2018-09-17T00:00:44Z</ThisUpdate>
+            <NextUpdate>2018-09-18T12:20:44Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-7E959F45B4CE5739DD1DF697168186CA62A7F4C46BCCDE47E6FEEED7EE568AA4"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-7E959F45B4CE5739DD1DF697168186CA62A7F4C46BCCDE47E6FEEED7EE568AA4"/>
+                <ChainItem Certificate="C-F4C3A6079428EFA4DE5E0BEBD8770E05826F99BAF303D5130D1C49737051F809"/>
+                <ChainItem Certificate="C-32C28E684A283DF15DA761B8B8E79A9ED72D81DDB557824A823A3F069A7E77DD"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-7E959F45B4CE5739DD1DF697168186CA62A7F4C46BCCDE47E6FEEED7EE568AA4">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <Ski>MF8hB0IrTv9n05X3oOrv702zF3s=</Ski>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <Base64Encoded>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</Base64Encoded>
+        </Revocation>
+        <Revocation Id="R-D02C0F0755753C3361CDC4F2F4CB52D3B722D9BEB616F309A68E491A1F0198D6">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2018-07-23T16:14:02Z</ProductionDate>
+            <ThisUpdate>2018-07-23T16:14:02Z</ThisUpdate>
+            <NextUpdate>2018-11-24T04:34:02Z</NextUpdate>
+            <CRLNumber>13</CRLNumber>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <Base64Encoded>MIIDHjCCAQYCAQEwDQYJKoZIhvcNAQENBQAwczEZMBcGA1UEBRMQQ1BKLTItMTAwLTA5ODMxMTENMAsGA1UECxMERENGRDEPMA0GA1UEChMGTUlDSVRUMQswCQYDVQQGEwJDUjEpMCcGA1UEAxMgQ0EgUkFJWiBOQUNJT05BTCAtIENPU1RBIFJJQ0EgdjIXDTE4MDcyMzE2MTQwMloXDTE4MTEyNDA0MzQwMlqgXzBdMB8GA1UdIwQYMBaAFODy/n3ERE5Q5DX9CImPToQZRDNAMBAGCSsGAQQBgjcVAQQDAgEAMAoGA1UdFAQDAgENMBwGCSsGAQQBgjcVBAQPFw0xODExMjMxNjI0MDJaMA0GCSqGSIb3DQEBDQUAA4ICAQCgAO9lWJCNgvmCv7xqryaDBvUJZIj0B51mivYVVRRVDaHrkqpk7zkR/y5wbBY2onvF8fxubY8N1G/JzH2ND7pldW6np4Kh89+szhd+TtCpD/P1rTYWB7TMwe1CD3X68eCSW/AOXhZn5EpFcZbA70/czOll6GfIN+cdinRWHmrG1dJGOB2n0ZpU/Oyqa/kG8bbeat/CkGj7TRiCH9LZyHVsIWlMDwTSOm2uD+G9o+LnY5YTuHJBJ3qk8qsdo0DNxCqgIWAKOWamDN182iwvZXyOqX0gYGFcWONnuzWsRjkE77RRie493lQFEUp1jJsju9gPRFqN7Lrj4+GzJcDZClxA0AXqL2hfH2obhxFPDgmVlXxAmm3c0cs2XaQq89pIt6DC2hC+aldZFPz9cSN/7qGONuKKLf671ZLWeW7izP8VkPNikBUjZBlYOM8ND856CoaYMmb+dYLlkUv4y53d40tI6U+UcaJlTcnn/c+los3PLC5MjZ+D4WCoC9FMkPUT23vBWmaCUPNGqwAnrgw4T7B1dnviXf9TBdlzazdjxP+21ku4pTNE1FeRX9uDP2M/QrV6UeuMXiaWvyLGQtAAlorShjj8NIvGAFqKi74GNv1LMWw8qtoRQNvx4Pub523ebH020Nn/SieKu1LOqIvy4sTn75whmxyjbBSnwLKtV+2YtA==</Base64Encoded>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="SIGNATURE_TIMESTAMP" Id="T-5AA0B6D7876BAAB40E1726F31B805C5871E5226A62028841668F425477E330E1">
+            <ProductionTime>2018-09-15T22:10:37Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>D7Wa3uKDpu3ClnY0Eh3oWzOWjg5sUmy6ao3G1ADshac=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-FD6E1E1E08C354CB87688DD4BA0EEC1F51DFB9334B3B2414F92FC1FDBE9AD5B5"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-FD6E1E1E08C354CB87688DD4BA0EEC1F51DFB9334B3B2414F92FC1FDBE9AD5B5"/>
+                <ChainItem Certificate="C-FDCFE11315FC9F4B059934346243549486DB9DF06772B09562CA666C9B8B8EA0"/>
+                <ChainItem Certificate="C-FD9EA730948EC25875FD3C4A778815F57F2261F739BE898DD720FA2E07EF7C42"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=CA POLITICA SELLADO DE TIEMPO - COSTA RICA v2, OU=DCFD, O=MICITT, C=CR, SERIALNUMBER=CPJ-2-100-098311</IssuerName>
+                    <SerialNumber>2341578245868091174413192910911900570741637124</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-FD6E1E1E08C354CB87688DD4BA0EEC1F51DFB9334B3B2414F92FC1FDBE9AD5B5">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>/W4eHgjDVMuHaI3Uug7sH1HfuTNLOyQU+S/B/b6a1bU=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-EF2FB8640CF4F3E9D03F91659BC5F8CECD94747349769CD6CBAB62A5578551C2" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-86772624E4E5ED960830E28A0C6F34F4A40E26CD1C93E7BCD1181DF3CC5BE33C" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-D8363BD6BD2FE30C4191CD5BB05A97E7556EFE01F207C459D81DEC58186BF665" Category="CERTIFICATE"/>
+            </TimestampedObjects>
+            <Base64Encoded>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</Base64Encoded>
+        </Timestamp>
+    </UsedTimestamps>
+    <OriginalDocuments>
+        <SignerData Id="D-EF2FB8640CF4F3E9D03F91659BC5F8CECD94747349769CD6CBAB62A5578551C2">
+            <ReferencedName>Partial PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>f8Mpbtf6KxWxYOjeaHYHxJGlupv89z+qsg8E0TsyQgs=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+</DiagnosticData>
