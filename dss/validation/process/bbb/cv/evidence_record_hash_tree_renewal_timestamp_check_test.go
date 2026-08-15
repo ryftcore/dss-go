@@ -1,0 +1,80 @@
+package cv
+
+import (
+	"testing"
+
+	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// EvidenceRecordHashTreeRenewalTimestampCheck: happy and failure path against
+// the Java oracle (testdata/oracle/cv_direct.jsonl). The corpus KAT only reaches
+// the failure path, so the covering case is driven over the same synthetic
+// diagnostic data the oracle builds.
+func TestEvidenceRecordHashTreeRenewalTimestampCheckAgainstJavaOracle(t *testing.T) {
+	for _, tc := range []struct {
+		scenario string
+		covered  bool
+	}{
+		{"er-hash-tree-renewal-ok", true},
+		{"er-hash-tree-renewal-ko", false},
+	} {
+		diagnosticData := evidenceRecordDiagnosticData(tc.covered)
+		renewal := diagnosticData.TimestampList()[0]
+		assertDirectRow(t, tc.scenario,
+			func(result *process.Result[*jaxb.XmlCV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlCV] {
+				return NewEvidenceRecordHashTreeRenewalTimestampCheck(i18nProviderForTests, result,
+					diagnosticData, renewal, rule)
+			})
+	}
+}
+
+// evidenceRecordDiagnosticData builds the diagnostic data the oracle drives the
+// check with: one evidence record covering "doc.xml" and one HashTree-renewal
+// archive time-stamp which does, or does not, cover it too.
+func evidenceRecordDiagnosticData(covered bool) *diagnostic.DiagnosticData {
+	erMatcher := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
+	setDigestMatcherType(erMatcher, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	erMatcher.DocumentName = ptr("doc.xml")
+
+	tstMatcher := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
+	setDigestMatcherType(tstMatcher, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	if covered {
+		tstMatcher.DocumentName = ptr("doc.xml")
+	} else {
+		tstMatcher.DocumentName = ptr("other.xml")
+	}
+
+	timestampType := diagnosticjaxb.TimestampTypeValue(enumerations.TimestampType_EVIDENCE_RECORD_TIMESTAMP)
+	erTimestampType := diagnosticjaxb.EvidenceRecordTimestampTypeValue(
+		enumerations.EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP)
+	timestamp := &diagnosticjaxb.XmlTimestamp{
+		Type:                        &timestampType,
+		EvidenceRecordTimestampType: &erTimestampType,
+		DigestMatcher:               []*diagnosticjaxb.XmlDigestMatcher{tstMatcher},
+	}
+	timestamp.Id = diagnosticjaxb.NewCollapsedString("T-SYNTHETIC")
+
+	evidenceRecord := &diagnosticjaxb.XmlEvidenceRecord{
+		DigestMatchers: &diagnosticjaxb.DigestMatchersWrapper{
+			Items: []*diagnosticjaxb.XmlDigestMatcher{erMatcher},
+		},
+		EvidenceRecordTimestamps: &diagnosticjaxb.EvidenceRecordTimestampsWrapper{
+			Items: []*diagnosticjaxb.XmlFoundTimestamp{{Timestamp: timestamp}},
+		},
+	}
+	evidenceRecord.Id = diagnosticjaxb.NewCollapsedString("ER-SYNTHETIC")
+
+	return diagnostic.NewDiagnosticData(&diagnosticjaxb.XmlDiagnosticData{
+		EvidenceRecords: &diagnosticjaxb.EvidenceRecordsWrapper{
+			Items: []*diagnosticjaxb.XmlEvidenceRecord{evidenceRecord},
+		},
+		UsedTimestamps: &diagnosticjaxb.UsedTimestampsWrapper{
+			Items: []*diagnosticjaxb.XmlTimestamp{timestamp},
+		},
+	})
+}

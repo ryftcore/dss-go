@@ -1,0 +1,132 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/cv/checks/ReferenceDataIntactCheck.java (DSS 6.5.RC1).
+package cv
+
+import (
+	"fmt"
+
+	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/utils"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// ReferenceDataIntactCheck checks if the referenced data is intact.
+type ReferenceDataIntactCheck[T any] struct {
+	*process.ChainItemBase[T]
+
+	// digestMatcher is the reference DigestMatcher.
+	digestMatcher *diagnosticjaxb.XmlDigestMatcher
+}
+
+// NewReferenceDataIntactCheck is the default constructor. Port of
+// ReferenceDataIntactCheck(I18nProvider, T, XmlDigestMatcher, LevelRule).
+func NewReferenceDataIntactCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+	digestMatcher *diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ReferenceDataIntactCheck[T] {
+	c := &ReferenceDataIntactCheck[T]{
+		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
+		digestMatcher: digestMatcher,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *ReferenceDataIntactCheck[T]) Process() bool {
+	return c.digestMatcher.DataIntact
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *ReferenceDataIntactCheck[T]) MessageTag() i18n.MessageTag {
+	switch digestMatcherType(c.digestMatcher) {
+	case enumerations.DigestMatcherType_MESSAGE_IMPRINT:
+		return i18n.MessageTag_BBB_CV_TSP_IRDOI
+	case enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+		return i18n.MessageTag_BBB_CV_CS_CSPS
+	case enumerations.DigestMatcherType_MANIFEST_ENTRY:
+		return i18n.MessageTag_BBB_CV_IMEDOI
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+		return i18n.MessageTag_BBB_CV_ER_ATSRI
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+		return i18n.MessageTag_BBB_CV_ER_ATSSRI
+	case enumerations.DigestMatcherType_EAA_DISCLOSURE:
+		return i18n.MessageTag_BBB_CV_EAA_SDCBI
+	case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
+		return i18n.MessageTag_BBB_CV_EAA_NSDCBI
+	default:
+		return i18n.MessageTag_BBB_CV_IRDOI
+	}
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of
+// getErrorMessageTag().
+func (c *ReferenceDataIntactCheck[T]) ErrorMessageTag() i18n.MessageTag {
+	switch digestMatcherType(c.digestMatcher) {
+	case enumerations.DigestMatcherType_MESSAGE_IMPRINT:
+		return i18n.MessageTag_BBB_CV_TSP_IRDOI_ANS
+	case enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+		return i18n.MessageTag_BBB_CV_CS_CSPS_ANS
+	case enumerations.DigestMatcherType_MANIFEST_ENTRY:
+		return i18n.MessageTag_BBB_CV_IMEDOI_ANS
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+		return i18n.MessageTag_BBB_CV_ER_ATSRI_ANS
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+		return i18n.MessageTag_BBB_CV_ER_ATSSRI_ANS
+	case enumerations.DigestMatcherType_EAA_DISCLOSURE:
+		return i18n.MessageTag_BBB_CV_EAA_SDCBI_ANS
+	case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
+		return i18n.MessageTag_BBB_CV_EAA_NSDCBI_ANS
+	default:
+		return i18n.MessageTag_BBB_CV_IRDOI_ANS
+	}
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *ReferenceDataIntactCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_FAILED
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
+// of getFailedSubIndicationForConclusion().
+func (c *ReferenceDataIntactCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return enumerations.SubIndication_HASH_FAILURE
+}
+
+// BuildAdditionalInfo builds an additional information. Port of the overridden
+// buildAdditionalInfo().
+func (c *ReferenceDataIntactCheck[T]) BuildAdditionalInfo() *string {
+	var referenceName interface{}
+	switch digestMatcherType(c.digestMatcher) {
+	case enumerations.DigestMatcherType_MESSAGE_IMPRINT,
+		enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+		return nil
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST
+	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST_SEQ
+	default:
+		referenceName = c.getReferenceName(c.digestMatcher)
+	}
+	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE, referenceName)
+	return &message
+}
+
+// getReferenceName ports the private getReferenceName(XmlDigestMatcher).
+func (c *ReferenceDataIntactCheck[T]) getReferenceName(digestMatcher *diagnosticjaxb.XmlDigestMatcher) string {
+	if utils.IsStringNotBlank(digestMatcherId(digestMatcher)) {
+		return digestMatcherId(digestMatcher)
+	} else if utils.IsStringNotBlank(digestMatcherUri(digestMatcher)) {
+		return digestMatcherUri(digestMatcher)
+	} else if digestMatcher.DisclosableClaim != nil && digestMatcher.DisclosableClaim.Name != nil {
+		claimName := *digestMatcher.DisclosableClaim.Name
+		if enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE == digestMatcherType(digestMatcher) &&
+			digestMatcher.DisclosableClaim.Value != "" {
+			claimName += fmt.Sprintf(" '%s'", digestMatcher.DisclosableClaim.Value)
+		}
+		return claimName
+	} else {
+		return string(digestMatcherType(digestMatcher))
+	}
+}

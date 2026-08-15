@@ -1,0 +1,65 @@
+// Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/checks/KeyIdentifierMatchCheck.java (DSS 6.5.RC1).
+package sav
+
+import (
+	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/utain/esig/dss/diagnostic"
+	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/validation/process"
+)
+
+// KeyIdentifierMatchCheck verifies whether a value of the signed attribute
+// 'kid' (key identifier), when present, matches the signing-certificate used to
+// create the signature.
+type KeyIdentifierMatchCheck struct {
+	*process.ChainItemBase[*jaxb.XmlSAV]
+
+	// signature is the signature to verify.
+	signature *diagnostic.SignatureWrapper
+}
+
+// NewKeyIdentifierMatchCheck is the default constructor. Port of
+// KeyIdentifierMatchCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
+func NewKeyIdentifierMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *KeyIdentifierMatchCheck {
+	c := &KeyIdentifierMatchCheck{
+		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
+		signature:     signature,
+	}
+	c.InitChainItem(c)
+	return c
+}
+
+// Process performs the check. Port of process().
+func (c *KeyIdentifierMatchCheck) Process() bool {
+	keyIdentifierReference := c.signature.KeyIdentifierReference()
+	if keyIdentifierReference != nil {
+		return keyIdentifierReference.IsIssuerSerialMatch()
+	}
+	return true
+}
+
+// MessageTag returns the check's message tag. Port of getMessageTag().
+func (c *KeyIdentifierMatchCheck) MessageTag() i18n.MessageTag {
+	return i18n.MessageTag_BBB_ICS_DKIDVM
+}
+
+// ErrorMessageTag returns the check's error message tag. Port of
+// getErrorMessageTag().
+func (c *KeyIdentifierMatchCheck) ErrorMessageTag() i18n.MessageTag {
+	return i18n.MessageTag_BBB_ICS_DKIDVM_ANS
+}
+
+// FailedIndicationForConclusion gets an Indication in case of failure. Port of
+// getFailedIndicationForConclusion().
+func (c *KeyIdentifierMatchCheck) FailedIndicationForConclusion() enumerations.Indication {
+	return enumerations.Indication_INDETERMINATE
+}
+
+// FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
+// of getFailedSubIndicationForConclusion().
+func (c *KeyIdentifierMatchCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+}
