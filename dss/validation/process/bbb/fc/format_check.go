@@ -29,7 +29,11 @@ func NewFormatCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drj
 
 // Process performs the check.
 func (c *FormatCheck) Process() bool {
-	return c.ProcessValueCheck(string(c.signature.SignatureFormat()))
+	// Java calls SignatureLevel#toString(), which is overridden to replace '_'
+	// with '-' ("XAdES-BASELINE-B"); the policy's AcceptableFormats ids carry
+	// that dashed spelling. A plain string(...) conversion would yield the enum
+	// name and only ever match the "*" wildcard.
+	return c.ProcessValueCheck(c.signature.SignatureFormat().String())
 }
 
 // MessageTag returns the constraint message i18n key.

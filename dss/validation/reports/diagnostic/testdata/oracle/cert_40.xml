@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-D54951FEBBC59D2C2EC01ACCD92CCD8C9D2C7444C2E551BA7EC0DE622C74148C">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.12=#131350726f66657373696f6e616c20506572736f6e,1.2.840.113549.1.9.1=#161d4b6172656c2e44652d567269656e64744065632e6575726f70612e6575,2.5.4.5=#13143130313030333332313130303034373439333738,2.5.4.42=#13104b6172656c204c6f646577696a6b204d,2.5.4.4=#130a446520567269656e6474,cn=karel lodewijk m de vriendt,ou=na,o=european commission,l=be,c=be</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.12=#131350726f66657373696f6e616c20506572736f6e,1.2.840.113549.1.9.1=#161d4b6172656c2e44652d567269656e64744065632e6575726f70612e6575,2.5.4.5=#13143130313030333332313130303034373439333738,2.5.4.42=#13104b6172656c204c6f646577696a6b204d,2.5.4.4=#130a446520567269656e6474,CN=Karel Lodewijk M De Vriendt,OU=NA,O=European Commission,L=BE,C=BE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=luxtrust qualified ca,o=luxtrust s.a.,c=lu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=LuxTrust Qualified CA,O=LuxTrust S.A.,C=LU</IssuerDistinguishedName>
+            <SerialNumber>87649</SerialNumber>
+            <SubjectSerialNumber>10100332110004749378</SubjectSerialNumber>
+            <CommonName>Karel Lodewijk M De Vriendt</CommonName>
+            <Locality>BE</Locality>
+            <CountryName>BE</CountryName>
+            <OrganizationName>European Commission</OrganizationName>
+            <OrganizationalUnit>NA</OrganizationalUnit>
+            <Title>Professional Person</Title>
+            <GivenName>Karel Lodewijk M</GivenName>
+            <Surname>De Vriendt</Surname>
+            <Email>Karel.De-Vriendt@ec.europa.eu</Email>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2012-12-23T10:35:56Z</NotAfter>
+            <NotBefore>2009-12-23T10:35:56Z</NotBefore>
+            <PublicKeySize>1024</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-5BB1CAE698A41A9F8316B34AEB5D41B75E9AB5AE7BE65C90AA5386B143E7E4D3</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>jZCjB90aE3eZTJKrTUPeP80pZAU=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>TAM7JV7chXk=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://repository.luxtrust.lu">1.3.171.1.1.2.4.1</certificatePolicy>
+                    <certificatePolicy Description="qcp-public-with-sscd">0.4.0.1456.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://ca.luxtrust.lu/LTQCA.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.luxtrust.lu</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.luxtrust.lu/LTQCA.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuLimitValue>
+                        <currency></currency>
+                        <amount>0</amount>
+                        <exponent>0</exponent>
+                    </QcEuLimitValue>
+                    <QcSSCD present="true"/>
+                </QcStatements>
+                <OtherExtension OID="2.16.840.1.113730.1.1" critical="false">
+                    <octets>BAQDAgUg</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>1UlR/rvFnSwuwBrM2SzNjJ0sdETC5VG6fsDeYix0FIw=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-3CBAFCA22E27EF15A74EEF3D272CB33C7B392C5D59BD6082D226BEF6DAF7498C">
+            <SubjectDistinguishedName Format="CANONICAL">c=lu,o=nowina solutions,cn=a a</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=LU,O=Nowina Solutions,CN=A a</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=lu,o=nowina solutions</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=LU,O=Nowina Solutions</IssuerDistinguishedName>
+            <SerialNumber>3514095345498537748</SerialNumber>
+            <CommonName>A a</CommonName>
+            <CountryName>LU</CountryName>
+            <OrganizationName>Nowina Solutions</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2021-07-01T10:06:29Z</NotAfter>
+            <NotBefore>2021-07-01T10:01:29Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-0F81810B86CBDDB1DC155925CC7F3FC026986EEE9421CF4F7386B0248875BE80</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <ValAssuredShortTermCertificate present="true" OID="0.4.0.194121.2.1" critical="false"/>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="false"/>
+                    <QcSSCD present="false"/>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>PLr8oi4n7xWnTu89JyyzPHs5LF1ZvWCC0ia+9tr3SYw=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

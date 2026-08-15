@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-2A17E6E4A1C6A9B569CAAABAE5CA6C587CD91FD7D49392708EE0E1DE3BD4173B">
+            <SubjectDistinguishedName Format="CANONICAL">cn=#140a35522d434120313a504e+0.2.262.1.10.7.20=#130131,o=#1434526567756c696572756e6773626568c86f7264652066c875722054656c656b6f6d6d756e696b6174696f6e20756e6420506f7374,c=de</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">0.2.262.1.10.7.20=#130131+CN=5R-CA 1:PN,O=RegulierungsbehÈorde fÈur Telekommunikation und Post,C=DE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=#140a35522d434120313a504e+0.2.262.1.10.7.20=#130131,o=#1434526567756c696572756e6773626568c86f7264652066c875722054656c656b6f6d6d756e696b6174696f6e20756e6420506f7374,c=de</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">0.2.262.1.10.7.20=#130131+CN=5R-CA 1:PN,O=RegulierungsbehÈorde fÈur Telekommunikation und Post,C=DE</IssuerDistinguishedName>
+            <SerialNumber>820138</SerialNumber>
+            <CommonName>5R-CA 1:PN</CommonName>
+            <CountryName>DE</CountryName>
+            <OrganizationName>RegulierungsbehÈorde fÈur Telekommunikation und Post</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2005-03-22T08:55:51Z</NotAfter>
+            <NotBefore>2000-03-22T08:55:51Z</NotBefore>
+            <PublicKeySize>1024</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-5FDB63D5A9EA65D4037E4BE75A46E86D95114A4DCE142C7330150D59D0C92CBB</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-5FDB63D5A9EA65D4037E4BE75A46E86D95114A4DCE142C7330150D59D0C92CBB</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>1024</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>RIPEMD160</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Khfm5KHGqbVpyqq65cpsWHzZH9fUk5JwjuDh3jvUFzs=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

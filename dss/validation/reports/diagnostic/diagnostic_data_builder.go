@@ -2301,8 +2301,14 @@ type certificateExtensionLike interface {
 func (b *DiagnosticDataBuilder) fillXmlCertificateExtension(content *jaxb.XmlCertificateExtensionContent, attrs *jaxb.XmlCertificateExtensionAttrs, certificateExtension certificateExtensionLike) {
 	oid := certificateExtension.OID()
 	attrs.OID = &oid
-	description := certificateExtension.Description()
-	attrs.Description = &description
+	// Java: xmlCertificateExtension.setDescription(certificateExtension.getDescription()),
+	// whose null leaves the attribute absent. The generated member is a pointer, so an
+	// empty description must map to nil - assigning &"" would emit description="".
+	if description := certificateExtension.Description(); description != "" {
+		attrs.Description = &description
+	} else {
+		attrs.Description = nil
+	}
 	critical := certificateExtension.IsCritical()
 	attrs.Critical = &critical
 }

@@ -18,7 +18,11 @@ type FreshestCRL struct {
 // NewFreshestCRL builds a FreshestCRL extension.
 func NewFreshestCRL() *FreshestCRL {
 	return &FreshestCRL{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_FRESHEST_CRL),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_FRESHEST_CRL.OID()),
 	}
 }
 

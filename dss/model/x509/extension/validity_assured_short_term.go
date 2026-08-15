@@ -20,7 +20,11 @@ type ValidityAssuredShortTerm struct {
 // NewValidityAssuredShortTerm builds a ValidityAssuredShortTerm extension.
 func NewValidityAssuredShortTerm() *ValidityAssuredShortTerm {
 	return &ValidityAssuredShortTerm{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM.OID()),
 	}
 }
 

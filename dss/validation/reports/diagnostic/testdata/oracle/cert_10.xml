@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-38B473403D6C1CB5BBED2DEA1AB26298E179DDC19BFD3B0BB283D5EFE8D768CE">
+            <SubjectDistinguishedName Format="CANONICAL">cn=4.2.1.10_12_ca11,o=upc,l=barcelona,c=es</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=4.2.1.10_12_CA11,O=UPC,L=Barcelona,C=ES</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=4.2.1.10_12_ca,o=upc,l=barcelona,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=4.2.1.10_12_CA,O=UPC,L=Barcelona,C=ES</IssuerDistinguishedName>
+            <SerialNumber>8630774402245405457</SerialNumber>
+            <CommonName>4.2.1.10_12_CA11</CommonName>
+            <Locality>Barcelona</Locality>
+            <CountryName>ES</CountryName>
+            <OrganizationName>UPC</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2033-03-30T23:05:00Z</NotAfter>
+            <NotBefore>2023-04-01T21:46:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-C6A887BA3B99CA08113DDC9C7B2FFD1FBE7448FD7EA392B4CD3F86BF7B3BE5AF</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>To5IYuq9ZDFeRix5XVs30YnYd4k=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="false">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <NameConstraints OID="2.5.29.30" critical="true">
+                    <ExcludedSubtree minimum="0" type="uniformResourceIdentifier">www.upc.edu</ExcludedSubtree>
+                </NameConstraints>
+                <OtherExtension OID="2.16.840.1.113730.1.1" critical="false">
+                    <octets>BAQDAgAH</octets>
+                </OtherExtension>
+                <OtherExtension OID="2.16.840.1.113730.1.13" critical="false">
+                    <octets>BBEWD3hjYSBjZXJ0aWZpY2F0ZQ==</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>OLRzQD1sHLW77S3qGrJimOF53cGb/TsLsoPV7+jXaM4=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

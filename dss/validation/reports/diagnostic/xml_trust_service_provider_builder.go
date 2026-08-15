@@ -50,9 +50,15 @@ func NewXmlTrustServiceProviderBuilder(xmlCertsMap map[string]*jaxb.XmlCertifica
 func (b *XmlTrustServiceProviderBuilder) Build(certificateToken *model.CertificateToken,
 	relatedTrustServices map[*model.CertificateToken][]*tsl.TrustProperties) []*jaxb.XmlTrustServiceProvider {
 	result := make([]*jaxb.XmlTrustServiceProvider, 0)
-	for trustedCert, services := range relatedTrustServices {
-		servicesByProviders := b.classifyByServiceProvider(services)
-		for _, trustServices := range servicesByProviders {
+	// Java iterates relatedTrustServices.entrySet() and servicesByProviders.entrySet(),
+	// both HashMaps; ranging the Go maps here would order the produced
+	// XmlTrustServiceProvider list by Go's randomised map iteration, i.e. differently on
+	// every run. Java's exact bucket order is not reproducible in Go (see
+	// diagnostic_data_builder.go's header), so - as everywhere else in this package - the
+	// port substitutes a deterministic order: trust anchors by their DSS id, and, within
+	// one anchor, service providers in first-encounter order of the services list.
+	for _, trustedCert := range sortedTrustAnchors(relatedTrustServices) {
+		for _, trustServices := range b.classifyByServiceProvider(relatedTrustServices[trustedCert]) {
 			if utils.IsCollectionNotEmpty(trustServices) {
 				result = append(result, b.getXmlTrustServiceProvider(certificateToken, trustServices, trustedCert))
 			}
@@ -61,15 +67,40 @@ func (b *XmlTrustServiceProviderBuilder) Build(certificateToken *model.Certifica
 	return result
 }
 
-func (b *XmlTrustServiceProviderBuilder) classifyByServiceProvider(trustPropertiesList []*tsl.TrustProperties) map[*tsl.TrustServiceProvider][]*tsl.TrustProperties {
+// sortedTrustAnchors returns the map's certificate keys ordered by their DSS id, so that
+// the produced list does not depend on Go's map iteration order.
+func sortedTrustAnchors[V any](m map[*model.CertificateToken]V) []*model.CertificateToken {
+	keys := make([]*model.CertificateToken, 0, len(m))
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.SliceStable(keys, func(i, j int) bool {
+		return keys[i].DSSIDAsString() < keys[j].DSSIDAsString()
+	})
+	return keys
+}
+
+// classifyByServiceProvider groups the trust properties by their trust service provider,
+// returning the groups in first-encounter order. Port of
+// classifyByServiceProvider(List): Java returns the HashMap itself and the caller drains
+// its entrySet(), which this port replaces by the ordered group list (see Build).
+func (b *XmlTrustServiceProviderBuilder) classifyByServiceProvider(trustPropertiesList []*tsl.TrustProperties) [][]*tsl.TrustProperties {
 	servicesByProviders := make(map[*tsl.TrustServiceProvider][]*tsl.TrustProperties)
+	var order []*tsl.TrustServiceProvider
 	if utils.IsCollectionNotEmpty(trustPropertiesList) {
 		for _, trustProperties := range trustPropertiesList {
 			currentTrustServiceProvider := trustProperties.TrustServiceProvider()
+			if _, seen := servicesByProviders[currentTrustServiceProvider]; !seen {
+				order = append(order, currentTrustServiceProvider)
+			}
 			servicesByProviders[currentTrustServiceProvider] = append(servicesByProviders[currentTrustServiceProvider], trustProperties)
 		}
 	}
-	return servicesByProviders
+	groups := make([][]*tsl.TrustProperties, 0, len(order))
+	for _, provider := range order {
+		groups = append(groups, servicesByProviders[provider])
+	}
+	return groups
 }
 
 func (b *XmlTrustServiceProviderBuilder) getXmlTrustServiceProvider(certificateToken *model.CertificateToken,

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-D111C513F20EA1D0134836C7AB7C5944CE23A05EFD7CA08A281D960D54F2AD76">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test qualified trust service provider 1 from zz,cn=john doe</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test Qualified Trust Service Provider 1 from ZZ,CN=John Doe</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test qualified trust service provider 1 from zz,cn=test-qualified-ca1-from-zz</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test Qualified Trust Service Provider 1 from ZZ,CN=Test-Qualified-CA1-from-ZZ</IssuerDistinguishedName>
+            <SerialNumber>100111</SerialNumber>
+            <CommonName>John Doe</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test Qualified Trust Service Provider 1 from ZZ</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2026-09-06T12:36:24Z</NotAfter>
+            <NotBefore>2024-11-06T13:36:24Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-EB51F687B1002928323E1A364E52C1EC4DFBC97EE0565C622D01EC76FFB04319</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>1b4tourfBwdaRdxdgFSoS+mvtxs=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="true">
+                    <certificatePolicy>1.3.6.1.4.1.314159.1.2</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/Test-Qualified-CA1-from-ZZ.crt</caIssuersUrl>
+                    <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-Qualified-CA1-from-ZZ</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-Qualified-CA1-from-ZZ.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                    <QcCClegislation>
+                        <CountryName>ZZ</CountryName>
+                    </QcCClegislation>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>0RHFE/IOodATSDbHq3xZRM4joF79fKCKKB2WDVTyrXY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

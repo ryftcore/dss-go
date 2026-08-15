@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-571F5707913AA4B8B47393FF16D7562B71A499803AE84EDDD72B716569DCA47F">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.46=#131349543a434f4449434546495343414c45313233,cn=demo user 1911522,2.5.4.5=#130731393131353232,2.5.4.42=#0c0c557365722031393131353232,2.5.4.4=#0c0444656d6f,o=actalis s.p.a.,c=it</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.46=#131349543a434f4449434546495343414c45313233,CN=Demo User 1911522,2.5.4.5=#130731393131353232,2.5.4.42=#0c0c557365722031393131353232,2.5.4.4=#0c0444656d6f,O=Actalis S.p.A.,C=IT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=actalis qualified certificates ca g1,ou=qualified certification service provider,o=actalis s.p.a./03358520967,c=it</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Actalis Qualified Certificates CA G1,OU=Qualified Certification Service Provider,O=Actalis S.p.A./03358520967,C=IT</IssuerDistinguishedName>
+            <SerialNumber>4926701223287332243</SerialNumber>
+            <SubjectSerialNumber>1911522</SubjectSerialNumber>
+            <CommonName>Demo User 1911522</CommonName>
+            <CountryName>IT</CountryName>
+            <OrganizationName>Actalis S.p.A.</OrganizationName>
+            <GivenName>User 1911522</GivenName>
+            <Surname>Demo</Surname>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2011-01-02T09:11:43Z</NotAfter>
+            <NotBefore>2010-12-02T09:11:43Z</NotBefore>
+            <PublicKeySize>1024</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-3F907E02F068A4E163536443F5B874D99473B79314EAA6DC99CE12C21DDABAB9</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>a85kPSv4T4tD7/Ayve+RVA2tvvg=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>78oquvTCJW1n6Bzu9vmZkL9GCu4=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="https://portal.actalis.it/Repository/Policy/Qualified/CPS">1.3.159.1.15.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <ocspUrl>http://portal.actalis.it/VA/Qualified-CA-G1</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://ldap.actalis.it/cn%3dActalis%20Qualified%20Certificates%20CA%20G1,ou%3dQualified%20Certification%20Service%20Provider,o%3dActalis%20S.p.A.%2f03358520967,c%3dIT?certificateRevocationList;binary</crlUrl>
+                    <crlUrl>http://portal.actalis.it/Repository/QLFG1/getCRL</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuLimitValue>
+                        <currency>EUR</currency>
+                        <amount>0</amount>
+                        <exponent>0</exponent>
+                    </QcEuLimitValue>
+                    <QcEuRetentionPeriod>20</QcEuRetentionPeriod>
+                    <QcSSCD present="true"/>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Vx9XB5E6pLi0c5P/FtdWK3GkmYA66E7d1ytxZWncpH8=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

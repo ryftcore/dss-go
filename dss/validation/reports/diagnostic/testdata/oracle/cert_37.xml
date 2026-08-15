@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-C5F8B3AF60EB6CD3DE07FD27593FBA30F45C13FA6E9D2A914E7A557D48493F26">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.5=#130c373530323330313030333037,2.5.4.42=#0c064e65656c6965,2.5.4.4=#0c054b726f6573,cn=neelie kroes,c=at</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.5=#130c373530323330313030333037,2.5.4.42=#0c064e65656c6965,2.5.4.4=#0c054b726f6573,CN=Neelie Kroes,C=AT</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=a-sign-premium-mobile-03,ou=a-sign-premium-mobile-03,o=a-trust ges. f. sicherheitssysteme im elektr. datenverkehr gmbh,c=at</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=a-sign-premium-mobile-03,OU=a-sign-premium-mobile-03,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</IssuerDistinguishedName>
+            <SerialNumber>1411502</SerialNumber>
+            <SubjectSerialNumber>750230100307</SubjectSerialNumber>
+            <CommonName>Neelie Kroes</CommonName>
+            <CountryName>AT</CountryName>
+            <GivenName>Neelie</GivenName>
+            <Surname>Kroes</Surname>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2019-10-01T10:22:21Z</NotAfter>
+            <NotBefore>2014-10-01T10:22:21Z</NotBefore>
+            <PublicKeySize>256</PublicKeySize>
+            <PublicKeyEncryptionAlgo>ECDSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-D4DA1BB7C3E784A4DDF828A30C724B1E744E7277276731343575AE72B38B60C3</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>S7hh11/WSGM=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>TB8Ch/4k99E=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.a-trust.at/docs/cp/a-sign-premium-mobile">1.2.40.0.17.1.20</certificatePolicy>
+                    <certificatePolicy Description="qcp-public-with-sscd">0.4.0.1456.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.a-trust.at/certs/a-sign-premium-mobile-03a.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.a-trust.at/ocsp</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://ldap.a-trust.at/ou=a-sign-premium-mobile-03,o=A-Trust,c=AT?certificaterevocationlist?base?objectclass=eidCertificationAuthority</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="true">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <OtherOIDs>
+                        <OtherOID>1.3.6.1.5.5.7.11.1</OtherOID>
+                    </OtherOIDs>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>xfizr2DrbNPeB/0nWT+6MPRcE/punSqRTnpVfUhJPyY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

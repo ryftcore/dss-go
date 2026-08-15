@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-9F9744463BE13714754E1A3BECF98C08CC205E4AB32028F4E2830C4A1B2775B8">
+            <SubjectDistinguishedName Format="CANONICAL">cn=belgium root ca2,c=be</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Belgium Root CA2,C=BE</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=belgium root ca2,c=be</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Belgium Root CA2,C=BE</IssuerDistinguishedName>
+            <SerialNumber>3098404661496965511</SerialNumber>
+            <CommonName>Belgium Root CA2</CommonName>
+            <CountryName>BE</CountryName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2021-12-15T08:00:00Z</NotAfter>
+            <NotBefore>2007-10-04T10:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-C23714EC644068E1666F829B3A6768EA4F9BBC92584228AD843DA81EC2715364</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-C23714EC644068E1666F829B3A6768EA4F9BBC92584228AD843DA81EC2715364</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>hYrr9MW7vg5ZA5Te1oABFeMQnDk=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>hYrr9MW7vg5ZA5Te1oABFeMQnDk=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://repository.eid.belgium.be">2.16.56.9.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <OtherExtension OID="2.16.840.1.113730.1.1" critical="false">
+                    <octets>BAQDAgAH</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>n5dERjvhNxR1Tho77PmMCMwgXkqzICj04oMMShsndbg=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

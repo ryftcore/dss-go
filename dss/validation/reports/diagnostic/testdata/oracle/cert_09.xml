@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-37A1C8201594047E3274452426ACBA31F5A4AE40CA123495D8DA0D9B3FAB5DD6">
+            <SubjectDistinguishedName Format="CANONICAL">cn=inhibitanypolicy0 ca,o=test certificates,c=us</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=inhibitAnyPolicy0 CA,O=Test Certificates,C=US</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=trust anchor,o=test certificates,c=us</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Trust Anchor,O=Test Certificates,C=US</IssuerDistinguishedName>
+            <SerialNumber>59</SerialNumber>
+            <CommonName>inhibitAnyPolicy0 CA</CommonName>
+            <CountryName>US</CountryName>
+            <OrganizationName>Test Certificates</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2011-04-19T14:57:20Z</NotAfter>
+            <NotBefore>2001-04-19T14:57:20Z</NotBefore>
+            <PublicKeySize>1024</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-A9A9ED003572A43245B7B2547EE075B03C2694DAEA357C3FA10E365F29288395</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>+2zULYGeyid6ng2wPOqavIf/Seo=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>nUCYYAjmyP1c0dgvC+oA7BpFBs8=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.16.840.1.101.3.2.1.48.1</certificatePolicy>
+                </CertificatePolicies>
+                <PolicyConstraints requireExplicitPolicy="0" OID="2.5.29.36" critical="false"/>
+                <InhibitAnyPolicy value="0" OID="2.5.29.54" critical="true"/>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>N6HIIBWUBH4ydEUkJqy6MfWkrkDKEjSV2NoNmz+rXdY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

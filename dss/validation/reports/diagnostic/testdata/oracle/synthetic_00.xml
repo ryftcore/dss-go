@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-E99BB8D943E8D3A62082FA3B9A3118DD82F3A22B88B7E8F08B5FDE157FEE5E4E">
+            <SubjectDistinguishedName Format="CANONICAL">cn=synthetic-a</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=synthetic-a</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=synthetic-a</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=synthetic-a</IssuerDistinguishedName>
+            <SerialNumber>1000</SerialNumber>
+            <CommonName>synthetic-a</CommonName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2034-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2024-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-23C02DDECB7656741F58E5D1923617E0D823596675F4BCB6A67A002C1294490B</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-23C02DDECB7656741F58E5D1923617E0D823596675F4BCB6A67A002C1294490B</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="otherName">#a00e06032a0304a0070c056f74686572</subjectAlternativeName>
+                    <subjectAlternativeName type="rfc822Name">a@b.example</subjectAlternativeName>
+                    <subjectAlternativeName type="dNSName">example.org</subjectAlternativeName>
+                    <subjectAlternativeName type="x400Address">#a300</subjectAlternativeName>
+                    <subjectAlternativeName type="directoryName">2.5.4.5=#13053132333435,DC=example,CN=Ünïcode\, Inc.,1.2.3.4.5=#0c07466f6f20426172,C=BE</subjectAlternativeName>
+                    <subjectAlternativeName type="ediPartyName">#a500</subjectAlternativeName>
+                    <subjectAlternativeName type="uniformResourceIdentifier">http://example.org/x?a=b</subjectAlternativeName>
+                    <subjectAlternativeName type="iPAddress">192.0.2.1</subjectAlternativeName>
+                    <subjectAlternativeName type="iPAddress">2001:db8:0:0:0:0:0:1</subjectAlternativeName>
+                    <subjectAlternativeName type="iPAddress">10.1.2.3</subjectAlternativeName>
+                    <subjectAlternativeName type="registeredID">1.3.6.1.4.1.99999</subjectAlternativeName>
+                </SubjectAlternativeNames>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>6Zu42UPo06Yggvo7mjEY3YLzoiuIt+jwi1/eFX/uXk4=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

@@ -22,7 +22,11 @@ type OCSPNoCheck struct {
 // NewOCSPNoCheck builds an OCSPNoCheck extension.
 func NewOCSPNoCheck() *OCSPNoCheck {
 	return &OCSPNoCheck{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_OCSP_NOCHECK),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID()),
 	}
 }
 

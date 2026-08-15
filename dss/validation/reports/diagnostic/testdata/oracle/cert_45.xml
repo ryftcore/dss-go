@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-FF3CFCB21AC5F74463459350A3228E1AC788DCC52C6F4C01167907DAAB4069E2">
+            <SubjectDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1619686974656c6573406d6176696e666f726d6174696b612e6875,street=krisztina krt. 37/a,2.5.4.17=#0c0431303132,ou=pki uzleti egyseg,o=mav informatika kft.,l=budapest,c=hu,cn=trust&amp;sign tsa v2.0</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1619686974656c6573406d6176696e666f726d6174696b612e6875,STREET=Krisztina krt. 37/a,2.5.4.17=#0c0431303132,OU=PKI Uzleti egyseg,O=MAV INFORMATIKA Kft.,L=Budapest,C=HU,CN=Trust&amp;Sign TSA v2.0</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">1.2.840.113549.1.9.1=#1615696361406d6176696e666f726d6174696b612e6875,2.5.4.17=#130431303132,street=krisztina krt. 37/a,cn=trust&amp;sign root ca v1.0,ou=pki services bu,o=mav informatika kft.,l=budapest,c=hu</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">1.2.840.113549.1.9.1=#1615696361406d6176696e666f726d6174696b612e6875,2.5.4.17=#130431303132,STREET=Krisztina krt. 37/A,CN=Trust&amp;Sign Root CA v1.0,OU=PKI Services BU,O=MAV INFORMATIKA Kft.,L=Budapest,C=HU</IssuerDistinguishedName>
+            <SerialNumber>15</SerialNumber>
+            <CommonName>Trust&amp;Sign TSA v2.0</CommonName>
+            <Locality>Budapest</Locality>
+            <CountryName>HU</CountryName>
+            <OrganizationName>MAV INFORMATIKA Kft.</OrganizationName>
+            <OrganizationalUnit>PKI Uzleti egyseg</OrganizationalUnit>
+            <Email>hiteles@mavinformatika.hu</Email>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2012-09-05T00:00:00Z</NotAfter>
+            <NotBefore>2006-06-13T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-2DF6E71F696AB9CABB4164A6684E456AEBC89A96048126D38D8B5EE64E54B81A</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>XjYgCE+vAqRxzuvk8Ap9OhKW9UI=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>g82h+RMQhoEBG+FcRKBN9FxhNss=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.mavinformatika.hu/ca/dox_1.htm">1.3.6.1.4.1.14868.3</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.trust-sign.hu/CA/qRoot.cert</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.trust-sign.hu/RootCA.crl</crlUrl>
+                </CRLDistributionPoints>
+                <OtherExtension OID="1.3.6.1.5.5.7.1.11" description="subjectInfoAccess" critical="false">
+                    <octets>BC4wLDAqBggrBgEFBQcwA4YeaHR0cHM6Ly90c2EudHJ1c3Qtc2lnbi5odToxMzE4</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>/zz8shrF90RjRZNQoyKOGseI3MUsb0wBFnkH2qtAaeI=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

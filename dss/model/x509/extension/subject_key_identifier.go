@@ -17,7 +17,11 @@ type SubjectKeyIdentifier struct {
 // NewSubjectKeyIdentifier builds a SubjectKeyIdentifier extension.
 func NewSubjectKeyIdentifier() *SubjectKeyIdentifier {
 	return &SubjectKeyIdentifier{
-		CertificateExtension: NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER.OID()),
 	}
 }
 

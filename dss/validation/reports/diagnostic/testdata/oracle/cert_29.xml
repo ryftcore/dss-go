@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-9B775B8B8176854025B64A3A4EEA595E8CB7FED2E4F29E10054CF2506F1CE8ED">
+            <SubjectDistinguishedName Format="CANONICAL">1.3.6.1.4.1.311.60.2.1.3=#1302435a,2.5.4.15=#0c1450726976617465204f7267616e697a6174696f6e,2.5.4.97=#0c12505344435a2d434e422d3633343932353535,2.5.4.17=#0c053138363030,street=sokolovská,o=banka creditas a.s.,c=cz,st=hlavní město praha,l=praha 8\, karlín,2.5.4.5=#13083633343932353535,cn=creditas.cz</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.3.6.1.4.1.311.60.2.1.3=#1302435a,2.5.4.15=#0c1450726976617465204f7267616e697a6174696f6e,2.5.4.97=#0c12505344435a2d434e422d3633343932353535,2.5.4.17=#0c053138363030,STREET=Sokolovská,O=Banka CREDITAS a.s.,C=CZ,ST=Hlavní město Praha,L=Praha 8\, Karlín,2.5.4.5=#13083633343932353535,CN=creditas.cz</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">2.5.4.97=#0c0e4e5452435a2d3236343339333935,o=první certifikační autorita\, a.s.,cn=i.ca ssl ev ca/rsa 10/2017,c=cz</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">2.5.4.97=#0c0e4e5452435a2d3236343339333935,O=První certifikační autorita\, a.s.,CN=I.CA SSL EV CA/RSA 10/2017,C=CZ</IssuerDistinguishedName>
+            <SerialNumber>49152532553723912308</SerialNumber>
+            <SubjectSerialNumber>63492555</SubjectSerialNumber>
+            <CommonName>creditas.cz</CommonName>
+            <Locality>Praha 8, Karlín</Locality>
+            <State>Hlavní město Praha</State>
+            <CountryName>CZ</CountryName>
+            <OrganizationIdentifier>PSDCZ-CNB-63492555</OrganizationIdentifier>
+            <OrganizationName>Banka CREDITAS a.s.</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2020-12-16T14:04:03Z</NotAfter>
+            <NotBefore>2019-12-17T14:04:03Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-AFAFBB3E2A3F97F45EFB50865DD602D7120A29F903CD212A68D1098C7B813779</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>Pa8ZCJd6EIy8KMFGbZdIWkj8Aso=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>4M+CIV/BI25jaMlaYuJPE0VRHUQ=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyEncipherment</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.ica.cz">1.3.6.1.4.1.23624.10.1.40.1.1</certificatePolicy>
+                    <certificatePolicy Description="qcp-web">0.4.0.194112.1.4</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="dNSName">creditas.cz</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="serverAuth">1.3.6.1.5.5.7.3.1</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://q.ica.cz/qcw17_rsa.cer</caIssuersUrl>
+                    <ocspUrl>http://ocsp.ica.cz/qcw17_rsa</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://qcrldp1.ica.cz/qcw17_rsa.crl</crlUrl>
+                    <crlUrl>http://qcrldp2.ica.cz/qcw17_rsa.crl</crlUrl>
+                    <crlUrl>http://qcrldp3.ica.cz/qcw17_rsa.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="cs">https://www.ica.cz/Zpravy-pro-uzivatele</PdsLocation>
+                        <PdsLocation lang="en">https://www.ica.cz/PDS</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-web">0.4.0.1862.1.6.3</QcType>
+                    </QcTypes>
+                    <PSD2QcInfo>
+                        <RolesOfPSP>
+                            <RoleOfPSP>
+                                <oid Description="psp-as">0.4.0.19495.1.1</oid>
+                                <name>PSP_AS</name>
+                            </RoleOfPSP>
+                            <RoleOfPSP>
+                                <oid Description="psp-pi">0.4.0.19495.1.2</oid>
+                                <name>PSP_PI</name>
+                            </RoleOfPSP>
+                            <RoleOfPSP>
+                                <oid Description="psp-ai">0.4.0.19495.1.3</oid>
+                                <name>PSP_AI</name>
+                            </RoleOfPSP>
+                            <RoleOfPSP>
+                                <oid Description="psp-ic">0.4.0.19495.1.4</oid>
+                                <name>PSP_IC</name>
+                            </RoleOfPSP>
+                        </RolesOfPSP>
+                        <ncaName>Czech National Bank</ncaName>
+                        <ncaId>CZ-CNB</ncaId>
+                    </PSD2QcInfo>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>m3dbi4F2hUAltko6TupZXoy3/tLk8p4QBUzyUG8c6O0=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

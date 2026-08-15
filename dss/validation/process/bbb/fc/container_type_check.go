@@ -28,7 +28,11 @@ func NewContainerTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Resu
 
 // Process performs the check.
 func (c *ContainerTypeCheck) Process() bool {
-	return c.ProcessValueCheck(string(c.containerType))
+	// Java calls containerType.toString(), and ASiCContainerType overrides
+	// toString() to replace '_' with '-' ("ASiC-E"), which is what the policy's
+	// AcceptableContainerTypes ids carry. A plain string(...) conversion would
+	// yield the enum name ("ASiC_E") and never match.
+	return c.ProcessValueCheck(c.containerType.String())
 }
 
 // MessageTag returns the constraint message i18n key.

@@ -39,9 +39,12 @@ func NewXmlTrustedEntityBuilder(xmlCertsMap map[string]*jaxb.XmlCertificate,
 func (b *XmlTrustedEntityBuilder) Build(certificateToken *model.CertificateToken,
 	relatedTrustedProperties map[*model.CertificateToken][]*lote.TrustedProperties) []*jaxb.XmlTrustedEntity {
 	result := make([]*jaxb.XmlTrustedEntity, 0)
-	for trustedCert, services := range relatedTrustedProperties {
-		servicesByProviders := b.classifyByServiceProvider(services)
-		for _, trustServices := range servicesByProviders {
+	// See XmlTrustServiceProviderBuilder.Build: Java drains two HashMap entrySets here,
+	// and ranging the Go maps would make the produced XmlTrustedEntity list order vary
+	// between runs. The port substitutes the same deterministic order - trust anchors by
+	// DSS id, trusted entities in first-encounter order.
+	for _, trustedCert := range sortedTrustAnchors(relatedTrustedProperties) {
+		for _, trustServices := range b.classifyByServiceProvider(relatedTrustedProperties[trustedCert]) {
 			if utils.IsCollectionNotEmpty(trustServices) {
 				result = append(result, b.getXmlTrustedEntity(certificateToken, trustServices, trustedCert))
 			}
@@ -50,16 +53,27 @@ func (b *XmlTrustedEntityBuilder) Build(certificateToken *model.CertificateToken
 	return result
 }
 
+// classifyByServiceProvider groups the trusted properties by their trusted entity,
+// returning the groups in first-encounter order. Port of
+// classifyByServiceProvider(List), whose HashMap entrySet the caller drains.
 func (b *XmlTrustedEntityBuilder) classifyByServiceProvider(
-	trustPropertiesList []*lote.TrustedProperties) map[*lote.TrustedEntity][]*lote.TrustedProperties {
+	trustPropertiesList []*lote.TrustedProperties) [][]*lote.TrustedProperties {
 	servicesByProviders := make(map[*lote.TrustedEntity][]*lote.TrustedProperties)
+	var order []*lote.TrustedEntity
 	if utils.IsCollectionNotEmpty(trustPropertiesList) {
 		for _, trustProperties := range trustPropertiesList {
 			currentTrustedEntity := trustProperties.TrustedEntity()
+			if _, seen := servicesByProviders[currentTrustedEntity]; !seen {
+				order = append(order, currentTrustedEntity)
+			}
 			servicesByProviders[currentTrustedEntity] = append(servicesByProviders[currentTrustedEntity], trustProperties)
 		}
 	}
-	return servicesByProviders
+	groups := make([][]*lote.TrustedProperties, 0, len(order))
+	for _, entity := range order {
+		groups = append(groups, servicesByProviders[entity])
+	}
+	return groups
 }
 
 func (b *XmlTrustedEntityBuilder) getXmlTrustedEntity(certificateToken *model.CertificateToken,

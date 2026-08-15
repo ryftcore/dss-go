@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-4376DB38A321DF1B1A21B702C180BE58F548A4E1A6474EFFFB67C32FD68A9F8E">
+            <SubjectDistinguishedName Format="CANONICAL">cn=nafria las heras miguel angel - 72874268x,2.5.4.4=#0c104e4146524941204c4153204845524153,2.5.4.42=#0c0c4d494755454c20414e47454c,2.5.4.5=#130f49444345532d373238373432363858,c=es</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=NAFRIA LAS HERAS MIGUEL ANGEL - 72874268X,2.5.4.4=#0c104e4146524941204c4153204845524153,2.5.4.42=#0c0c4d494755454c20414e47454c,2.5.4.5=#130f49444345532d373238373432363858,C=ES</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=ac fnmt usuarios,ou=ceres,o=fnmt-rcm,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=AC FNMT Usuarios,OU=Ceres,O=FNMT-RCM,C=ES</IssuerDistinguishedName>
+            <SerialNumber>75027188520745764738265624544335259422</SerialNumber>
+            <SubjectSerialNumber>IDCES-72874268X</SubjectSerialNumber>
+            <CommonName>NAFRIA LAS HERAS MIGUEL ANGEL - 72874268X</CommonName>
+            <CountryName>ES</CountryName>
+            <GivenName>MIGUEL ANGEL</GivenName>
+            <Surname>NAFRIA LAS HERAS</Surname>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2021-05-22T10:55:12Z</NotAfter>
+            <NotBefore>2017-05-22T10:55:12Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-676409E1FC0706F60660CBF4B68DC428A07FACEEFC070EB5339707C1E2174D97</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>sdRPxCN5+kQFCcbrOc/oNbC4IGQ=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>n7kzf2BVFYe4r8y4A6AthUm91jo=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                    <keyUsageBit>keyEncipherment</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.cert.fnmt.es/dpcs/">1.3.6.1.4.1.5734.3.10.1</certificatePolicy>
+                    <certificatePolicy Description="qcp-natural">0.4.0.194112.1.0</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">miguelangel.nafria@seap.minhap.es</subjectAlternativeName>
+                    <subjectAlternativeName type="directoryName">1.3.6.1.4.1.5734.1.1=#0c0c4d494755454c20414e47454c,1.3.6.1.4.1.5734.1.2=#0c064e4146524941,1.3.6.1.4.1.5734.1.3=#0c094c4153204845524153,1.3.6.1.4.1.5734.1.4=#0c09373238373432363858</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.cert.fnmt.es/certs/ACUSU.crt</caIssuersUrl>
+                    <ocspUrl>http://ocspusu.cert.fnmt.es/ocspusu/OcspResponder</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>ldap://ldapusu.cert.fnmt.es/cn=CRL1240,cn=AC%20FNMT%20Usuarios,ou=CERES,o=FNMT-RCM,c=ES?certificateRevocationList;binary?base?objectclass=cRLDistributionPoint</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcEuRetentionPeriod>15</QcEuRetentionPeriod>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="es">https://www.cert.fnmt.es/pds/PDSACUsuarios_es.pdf</PdsLocation>
+                        <PdsLocation lang="en">https://www.cert.fnmt.es/pds/PDSACUsuarios_en.pdf</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-esign">0.4.0.1862.1.6.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Q3bbOKMh3xsaIbcCwYC+WPVIpOGmR07/+2fDL9aKn44=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

@@ -25,7 +25,11 @@ type PolicyConstraints struct {
 // initializers of requireExplicitPolicy = -1 and inhibitPolicyMapping = -1.
 func NewPolicyConstraints() *PolicyConstraints {
 	return &PolicyConstraints{
-		CertificateExtension:  NewCertificateExtensionFromEnum(enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS),
+		// Java's no-arg constructor calls super(CertificateExtensionEnum.X.getOid()), the
+		// OID-only CertificateExtension(String) constructor - NOT
+		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
+		// null, and the diagnostic-data builder emits no description attribute for it.
+		CertificateExtension:  NewCertificateExtension(enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS.OID()),
 		requireExplicitPolicy: -1,
 		inhibitPolicyMapping:  -1,
 	}

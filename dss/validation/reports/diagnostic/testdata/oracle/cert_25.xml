@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-8EF8F2565BE30E7CE7BA6302BB18B42A3ACD148A0DDB4779E4C03E862F39589B">
+            <SubjectDistinguishedName Format="CANONICAL">cn=comodo code signing ca 2,o=comodo ca limited,l=salford,st=greater manchester,c=gb</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=COMODO Code Signing CA 2,O=COMODO CA Limited,L=Salford,ST=Greater Manchester,C=GB</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=utn-userfirst-object,ou=http://www.usertrust.com,o=the usertrust network,l=salt lake city,st=ut,c=us</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=UTN-USERFirst-Object,OU=http://www.usertrust.com,O=The USERTRUST Network,L=Salt Lake City,ST=UT,C=US</IssuerDistinguishedName>
+            <SerialNumber>21852375853972585523540355797488858555</SerialNumber>
+            <CommonName>COMODO Code Signing CA 2</CommonName>
+            <Locality>Salford</Locality>
+            <State>Greater Manchester</State>
+            <CountryName>GB</CountryName>
+            <OrganizationName>COMODO CA Limited</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2020-05-30T10:48:38Z</NotAfter>
+            <NotBefore>2011-08-24T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-496C7268729B3EBBDB8C43841BD8111F35378728687628E8E7D9E327082766B8</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA1</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>2u1kdBScFDyr3ZmpvVsoTYs8ydg=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>HsWxLH2H2gJofCW8DAeEP7bP3vE=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="codeSigning">1.3.6.1.5.5.7.3.3</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://crt.usertrust.com/UTNAddTrustObject_CA.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.usertrust.com</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.usertrust.com/UTN-USERFirst-Object.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>jvjyVlvjDnznumMCuxi0KjrNFIoN20d55MA+hi85WJs=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

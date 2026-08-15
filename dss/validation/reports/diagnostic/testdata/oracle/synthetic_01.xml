@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-2AE014656CC031212065092873542B7E29866D45F9DD4DD92CE5043AE7CECAEE">
+            <SubjectDistinguishedName Format="CANONICAL">cn=synthetic-b</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=synthetic-b</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=synthetic-b</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=synthetic-b</IssuerDistinguishedName>
+            <SerialNumber>1001</SerialNumber>
+            <CommonName>synthetic-b</CommonName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2034-01-01T00:00:00Z</NotAfter>
+            <NotBefore>2024-01-01T00:00:00Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-56529236E9916D8C7AD74A7631517841AD09BED420A41C800A720DFA0E288DB1</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-56529236E9916D8C7AD74A7631517841AD09BED420A41C800A720DFA0E288DB1</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions/>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>KuAUZWzAMSEgZQkoc1QrfimGbUX53U3ZLOUEOufOyu4=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

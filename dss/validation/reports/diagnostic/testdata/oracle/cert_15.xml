@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-4AE84856DAD3520D875D28EDF71D513AA08EF813C96B22A9B6C3A562956FF4B1">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.5=#130f494443435a20313034373434363334,2.5.4.5=#130e494341202d203130313733373037,1.2.840.113549.1.9.1=#160c73616c6572406963612e637a,cn=rostislav šaler,c=cz</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.5=#130f494443435a20313034373434363334,2.5.4.5=#130e494341202d203130313733373037,1.2.840.113549.1.9.1=#160c73616c6572406963612e637a,CN=Rostislav Šaler,C=CZ</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">ou=i.ca - accredited provider of certification services,o=první certifikační autorita\, a.s.,cn=i.ca - qualified certification authority\, 09/2009,c=cz</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">OU=I.CA - Accredited Provider of Certification Services,O=První certifikační autorita\, a.s.,CN=I.CA - Qualified Certification Authority\, 09/2009,C=CZ</IssuerDistinguishedName>
+            <SerialNumber>11048597</SerialNumber>
+            <SubjectSerialNumber>ICA - 10173707</SubjectSerialNumber>
+            <CommonName>Rostislav Šaler</CommonName>
+            <CountryName>CZ</CountryName>
+            <Email>saler@ica.cz</Email>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2016-08-09T14:22:53Z</NotAfter>
+            <NotBefore>2015-08-10T14:22:53Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-B2FD6ACF6F779C654672DF75D3CC0321919AA70AE89A1F35EB74BD820509D512</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>ecvQI+k6Z3CRdE/TUeLgIP3hKPs=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>RjVU6BUL51qcclvo50bnlRcCmAM=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>1.3.6.1.4.1.23624.1.1.30.3.1</certificatePolicy>
+                    <certificatePolicy>1.3.158.36061701.0.0.0.1.2.2</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="rfc822Name">saler@ica.cz</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://q.ica.cz/ca_nbusr09.p7c</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://qcrldp1.ica.cz/qica09.crl</crlUrl>
+                    <crlUrl>http://qcrldp2.ica.cz/qica09.crl</crlUrl>
+                    <crlUrl>http://qcrldp3.ica.cz/qica09.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="true"/>
+                </QcStatements>
+                <OtherExtension OID="2.16.840.1.113730.1.13" critical="false">
+                    <octets>BBIWEDkyMDMwMzAwMDAwMTY4NTE=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>SuhIVtrTUg2HXSjt9x1ROqCO+BPJayKptsOlYpVv9LE=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

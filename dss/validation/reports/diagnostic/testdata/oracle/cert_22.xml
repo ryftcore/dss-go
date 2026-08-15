@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-8637433E0BE96E62C38EE36216F36D61D11CAD746ED57433C99DDD25E44A2788">
+            <SubjectDistinguishedName Format="CANONICAL">cn=4.2.1.10_04_ee2,o=upc,l=barcelona,c=es</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=4.2.1.10_04_EE2,O=UPC,L=Barcelona,C=ES</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=4.2.1.10_04_ca,o=upc,l=barcelona,c=es</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=4.2.1.10_04_CA,O=UPC,L=Barcelona,C=ES</IssuerDistinguishedName>
+            <SerialNumber>7413259001875166652</SerialNumber>
+            <CommonName>4.2.1.10_04_EE2</CommonName>
+            <Locality>Barcelona</Locality>
+            <CountryName>ES</CountryName>
+            <OrganizationName>UPC</OrganizationName>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2024-03-29T22:52:00Z</NotAfter>
+            <NotBefore>2023-03-29T22:52:00Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-66F2E774DB681D230A4EEC19CD514B1004D450AE4FE3CB64FEE904420915A685</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="directoryName">CN=4.2.1.10_04_EE2,O=UPC,L=Barcelona,C=ES</subjectAlternativeName>
+                </SubjectAlternativeNames>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>hjdDPgvpbmLDjuNiFvNtYdEcrXRu1XQzyZ3dJeRKJ4g=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>

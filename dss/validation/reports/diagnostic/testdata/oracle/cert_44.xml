@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2024-01-01T00:00:00Z</ValidationDate>
+    <UsedCertificates>
+        <Certificate Id="C-F6B2233FA79E0CD3D9C7BC274CA4ED977F3B1A99414237A81EF35A52BED51D84">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.97=#0c0a524f3432323833373335,st=sector 5,street=str.bld. libertatii,2.5.4.20=#0c0a30333734353431313739,cn=autoritatea pentru digitalizarea romaniei,ou=conducere,o=autoritatea pentru digitalizarea romaniei,c=ro</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.97=#0c0a524f3432323833373335,ST=Sector 5,STREET=Str.Bld. Libertatii,2.5.4.20=#0c0a30333734353431313739,CN=AUTORITATEA PENTRU DIGITALIZAREA ROMANIEI,OU=CONDUCERE,O=AUTORITATEA PENTRU DIGITALIZAREA ROMANIEI,C=RO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">2.5.4.97=#130e564154524f2d3138323838323530,cn=certsign qualified ca,o=certsign sa,c=ro</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">2.5.4.97=#130e564154524f2d3138323838323530,CN=certSIGN Qualified CA,O=CERTSIGN SA,C=RO</IssuerDistinguishedName>
+            <SerialNumber>10533768322357466780348169041</SerialNumber>
+            <CommonName>AUTORITATEA PENTRU DIGITALIZAREA ROMANIEI</CommonName>
+            <State>Sector 5</State>
+            <CountryName>RO</CountryName>
+            <OrganizationIdentifier>RO42283735</OrganizationIdentifier>
+            <OrganizationName>AUTORITATEA PENTRU DIGITALIZAREA ROMANIEI</OrganizationName>
+            <OrganizationalUnit>CONDUCERE</OrganizationalUnit>
+            <Sources>
+                <Source>UNKNOWN</Source>
+            </Sources>
+            <NotAfter>2023-08-19T12:12:26Z</NotAfter>
+            <NotBefore>2022-08-19T12:12:26Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-2C23AFED883BF8B7BAC31369E89D0040EC5F4DA4653D3B03F76DB1CBFF599F98</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>j02HUV4Rf+GZw5HxaEw/rFkEsYs=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>15+rsuRxnt/HRvwfSBLgqxF75aM=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://www.certsign.ro/repository" Description="qcp-legal">0.4.0.194112.1.1</certificatePolicy>
+                    <certificatePolicy cpsUrl="http://www.certsign.ro/repository">1.3.6.1.4.1.25017.3.1.3.12</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="otherName">#a022060a2b060104018237140203a0140c12636f6e74616374406164722e676f762e726f</subjectAlternativeName>
+                    <subjectAlternativeName type="rfc822Name">contact@adr.gov.ro</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid>1.3.6.1.4.1.311.10.3.12</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://www.certsign.ro/certcrl/certsign-qualifiedca.crt</caIssuersUrl>
+                    <ocspUrl>http://ocsp.certsign.ro</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.certsign.ro/certsign-qualifiedca.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://www.certsign.ro/repository</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-eseal">0.4.0.1862.1.6.2</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>9rIjP6eeDNPZx7wnTKTtl387GplBQjeoHvNaUr7VHYQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations/>
+</DiagnosticData>
