@@ -2,6 +2,8 @@
 package xcv
 
 import (
+	"strings"
+
 	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
@@ -49,9 +51,12 @@ func (c *CertificateSupportedCriticalExtensionsCheck) ErrorMessageTag() i18n.Mes
 	return i18n.MessageTag_BBB_XCV_DCCUCE_ANS
 }
 
-// BuildErrorMessage builds an error message. Port of buildErrorMessage().
+// BuildErrorMessage builds an error message. Port of buildErrorMessage(): the
+// arg is pre-rendered as Java's List#toString() would ("[a, b, c]") - see the
+// identical note in certificate_forbidden_extensions_check.go.
 func (c *CertificateSupportedCriticalExtensionsCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(c.ErrorMessageTag(), c.unsupportedCertificateExtensionsOids())
+	oids := c.unsupportedCertificateExtensionsOids()
+	return c.BuildXmlMessage(c.ErrorMessageTag(), "["+strings.Join(oids, ", ")+"]")
 }
 
 // unsupportedCertificateExtensionsOids ports the private

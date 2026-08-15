@@ -61,16 +61,24 @@ func (c *ExtendedKeyUsageCheck) extendedKeyUsageDescriptions() []string {
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
-// buildAdditionalInfo().
+// buildAdditionalInfo(): Arrays.toString(Object[]) prints a null XmlOID
+// description as the literal text "null" (not empty), which the []string
+// extendedKeyUsageDescriptions() feeds to Process()/ProcessValuesCheck
+// cannot represent, so this walks the certificate's ExtendedKeyUsages() again
+// to render each entry the way Java's Object[] would.
 func (c *ExtendedKeyUsageCheck) BuildAdditionalInfo() *string {
+	ekus := c.certificate.ExtendedKeyUsages()
+	rendered := make([]string, 0, len(ekus))
+	for _, eku := range ekus {
+		if eku.Description != nil {
+			rendered = append(rendered, *eku.Description)
+		} else {
+			rendered = append(rendered, "null")
+		}
+	}
 	message := c.I18nProvider.GetMessage(i18n.MessageTag_EXTENDED_KEY_USAGE,
-		javaArrayToString(c.extendedKeyUsageDescriptions()))
+		"["+strings.Join(rendered, ", ")+"]")
 	return &message
-}
-
-// javaArrayToString ports java.util.Arrays#toString(Object[]).
-func javaArrayToString(values []string) string {
-	return "[" + strings.Join(values, ", ") + "]"
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

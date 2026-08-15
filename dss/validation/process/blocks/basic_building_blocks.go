@@ -1,39 +1,22 @@
-//go:build phase8d
-
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/BasicBuildingBlocks.java (DSS 6.5.RC1).
 //
-// This dispatcher instantiates every one of the 5.2.x building blocks, two of
-// which - eu.europa.esig.dss.validation.process.bbb.aov (Algorithm Obsolescence
-// Validation) and .bbb.xcv (X.509 certificate validation) - are outside the
-// phase 8c manifest, and two more (.bbb.fc and .bbb.sav) are ported by sibling
-// chunks of phase 8c. It is therefore gated behind the "phase8d" build tag,
-// following the tag-split precedent of the ASiC phase8 files, and switched on
-// once those packages exist. The isc/vci/cv calls are against the chains ported
-// here and are final; the fc/sav/aov/xcv calls are written against the
-// constructor shapes their Java counterparts have, which the owning chunks are
-// expected to keep:
-//
-//	fc.NewSignatureFormatChecking(i18nProvider, diagnosticData, signature, context, policy).Execute() *jaxb.XmlFC
-//	fc.NewTimestampFormatChecking(i18nProvider, diagnosticData, timestamp, context, policy)
-//	fc.NewEAAFormatChecking(i18nProvider, diagnosticData, eaa, context, policy)
-//	fc.NewEAARevocationFormatChecking(i18nProvider, diagnosticData, eaaRevocation, context, policy)
-//	aov.NewSignatureAlgorithmObsolescenceValidation(i18nProvider, signature, context, currentTime, policy).Execute() *jaxb.XmlAOV
-//	aov.NewTimestampAlgorithmObsolescenceValidation(i18nProvider, timestamp, currentTime, policy)
-//	aov.NewRevocationDataAlgorithmObsolescenceValidation(i18nProvider, revocation, currentTime, policy)
-//	aov.NewCertificateAndChainAlgorithmObsolescenceValidation(i18nProvider, certificate, context, currentTime, policy)
-//	aov.NewEAAAlgorithmObsolescenceValidation(i18nProvider, eaa, currentTime, policy)
-//	aov.NewEAARevocationAlgorithmObsolescenceValidation(i18nProvider, eaaRevocation, currentTime, policy)
-//	xcv.NewX509CertificateValidation(i18nProvider, certificate, currentTime, validationTime, context, aov, policy).Execute() *jaxb.XmlXCV
-//	sav.NewSignatureAcceptanceValidation(i18nProvider, diagnosticData, currentTime, signature, context, bbbs, aov, policy).Execute() *jaxb.XmlSAV
-//	sav.NewTimestampAcceptanceValidation(i18nProvider, currentTime, timestamp, aov, policy)
-//	sav.NewRevocationAcceptanceValidation(i18nProvider, currentTime, revocation, aov, policy)
-//	sav.NewEAAAcceptanceValidation(i18nProvider, currentTime, eaa, bbbs, aov, policy)
-//	sav.NewEAARevocationTokenAcceptanceValidation(i18nProvider, currentTime, eaaRevocation, aov, policy)
-//
-// Java's wildcard-typed locals (AlgorithmObsolescenceValidation<?> and
-// AbstractAcceptanceValidation<?>) become the anonymous Execute-only interfaces
-// aovBlock and savBlock below, which every concrete block satisfies.
-package bbb
+// STRUCTURAL FIX A (phase 8d AOV porter, per S8D_BRIEF.md): this dispatcher
+// instantiates every one of the 5.2.x building blocks - isc, vci, cv (siblings
+// under bbb, ported in phase 8c), fc, sav (also bbb siblings), and aov, xcv
+// (ported in phase 8d). Every one of fc/sav/isc/vci/cv/aov/xcv itself imports
+// package bbb for the shared AbstractValueCheckItem/AbstractMultiValuesCheckItem/
+// AbstractCertificateCheckItem base types (bbb/abstract_*_check_item.go), so a
+// dispatcher importing all of them cannot itself live in package bbb - Go
+// (unlike Java, which resolves per-class) rejects the resulting import cycle:
+// bbb -> {fc,sav,...} -> bbb. This file therefore moves out of
+// dss/validation/process/bbb into this new, sibling package
+// dss/validation/process/blocks, breaking the cycle. It was previously gated
+// behind a //go:build phase8d tag for the same reason (before the aov/xcv
+// packages existed to import); now that they do, this file is un-tagged and
+// builds for real. See basic_building_blocks_eaa.go / _noeaa.go for the
+// companion STRUCTURAL FIX B (tag composition for the EAA-dependent calls
+// still gated behind fc/sav's own "eaa" build tag).
+package blocks
 
 import (
 	"time"
@@ -213,14 +196,8 @@ func (b *BasicBuildingBlocks) executeFormatChecking() *jaxb.XmlFC {
 		if utils.IsCollectionNotEmpty(xmlFC.Constraint) {
 			return xmlFC
 		}
-	} else if enumerations.Context_EAA == b.context {
-		block := fc.NewEAAFormatChecking(b.i18nProvider, b.diagnosticData,
-			b.token.(*diagnostic.EAAWrapper), b.context, b.policy)
-		return block.Execute()
-	} else if enumerations.Context_EAA_REVOCATION == b.context {
-		block := fc.NewEAARevocationFormatChecking(b.i18nProvider, b.diagnosticData,
-			b.token.(*diagnostic.EAARevocationTokenWrapper), b.context, b.policy)
-		return block.Execute()
+	} else if enumerations.Context_EAA == b.context || enumerations.Context_EAA_REVOCATION == b.context {
+		return b.executeEAAFormatChecking()
 	}
 	return nil
 }
@@ -446,12 +423,8 @@ func (b *BasicBuildingBlocks) executeSignatureAcceptanceValidation(xmlAOV *jaxb.
 	} else if enumerations.Context_REVOCATION == b.context {
 		block = sav.NewRevocationAcceptanceValidation(b.i18nProvider, b.currentTime,
 			b.token.(*diagnostic.RevocationWrapper), xmlAOV, b.policy)
-	} else if enumerations.Context_EAA == b.context {
-		block = sav.NewEAAAcceptanceValidation(b.i18nProvider, b.currentTime,
-			b.token.(*diagnostic.EAAWrapper), b.bbbs, xmlAOV, b.policy)
-	} else if enumerations.Context_EAA_REVOCATION == b.context {
-		block = sav.NewEAARevocationTokenAcceptanceValidation(b.i18nProvider, b.currentTime,
-			b.token.(*diagnostic.EAARevocationTokenWrapper), xmlAOV, b.policy)
+	} else if enumerations.Context_EAA == b.context || enumerations.Context_EAA_REVOCATION == b.context {
+		block = b.eaaAcceptanceValidationBlock(xmlAOV)
 	}
 	if block != nil {
 		return block.Execute()

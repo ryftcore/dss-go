@@ -10,8 +10,11 @@ All `oracle/*.jsonl` files are pure Java dumps, produced by the drivers in `gen/
 
 The real inputs are the marshal-parity corpus in `dss/diagnostic/jaxb/testdata/oracle`
 plus `dd/`; the Go tests (`../xcva_blocks_oracle_test.go`,
-`../xcva_direct_oracle_test.go`, sharing `../xcva_oracle_test.go`) read the very same
-files, so neither side gets a private fixture.
+`../xcva_direct_oracle_test.go`, sharing `../xcva_oracle_test.go`; and
+`../xcv_direct_oracle_test.go` for the `xcv_direct.jsonl` row above, reusing
+`xcvaConclusion`/`xcvaConstraint`/`xcvaMessage` and the corpus/policy loaders
+from `xcva_oracle_test.go`) read the very same files, so neither side gets a
+private fixture.
 
 The `XmlAOV` the blocks consume is a phase 8d product; the block corpus feeds them a
 PASSED one, the way the phase 8c sav corpus does.
@@ -115,6 +118,39 @@ here; the other 8 are exercised only indirectly:
 - `AbstractRevocationFreshCheck` is `abstract`; both of its concrete
   subclasses (`RevocationDataFreshCheck`, `RevocationDataFreshCheckWithNullConstraint`)
   are driven directly.
+
+`RevocationDataFreshCheck` is driven twice per (certificate, revocation) pair -
+a loose `DurationRule` then a tight one, to reach both its OK and NOT OK branch
+over the very same revocation - so it is the one check for which
+`(file, token, check)` is not a unique key in this file: two consecutive lines
+share it. `../xcv_direct_oracle_test.go` queues rows per key instead of
+keying on the last one written, and replays them in the same loose-then-tight
+order, so both survive the KAT.
+
+`../xcv_direct_oracle_test.go` buckets the "every check has an OK and a NOT OK
+row" invariant by check *class*, stripping the `-any`/`-none`/`-low`/`-high`/
+`-SIGNING_CERT`/`-CA_CERTIFICATE` variant suffixes `check()` carries in this
+file (e.g. `CommonNameCheck-any` and `CommonNameCheck-none` both count toward
+`CommonNameCheck`) - a variant is deliberately one-sided (`-any` always OK,
+`-none` always NOT OK), only the class as a whole is guaranteed both.
+
+Writing this replay surfaced two genuine bugs in the ported checks (both
+fixed, not just worked around in the test): `CertificateForbiddenExtensionsCheck`
+and `CertificateSupportedCriticalExtensionsCheck` passed a raw `[]string` to
+`BuildXmlMessage`, which the frozen `i18n` package's `messageFormatArgString`
+falls back to `fmt.Sprint` for (rendering `[a b c]`, space-separated) where
+Java's `MessageFormat` calls the `List`'s own `toString()` (`[a, b, c]`,
+comma-separated) - both now pre-render the list themselves before the call.
+`ExtendedKeyUsageCheck.BuildAdditionalInfo` substituted `""` for a `null`
+`XmlOID` description, where Java's `Arrays.toString` prints the literal text
+`"null"` for a null element; the `[]string` `Process()` feeds
+`ProcessValuesCheck` is unchanged (an empty string is not a value any real
+policy constraint accepts, so this could not affect a verdict), only the
+message rendering was fixed. The `i18n.messageFormatArgString` gap itself is
+in a frozen package (phase 1a) and is not fixed here - any other call site
+anywhere in the tree that passes a raw `[]string`/`[]T` to
+`GetMessage`/`BuildXmlMessage` has the same latent bug; flagged for a later
+phase's audit, not chased down beyond this package in this one.
 
 ### Why some rows are synthetic
 

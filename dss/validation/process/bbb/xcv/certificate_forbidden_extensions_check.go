@@ -2,6 +2,8 @@
 package xcv
 
 import (
+	"strings"
+
 	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
@@ -48,9 +50,15 @@ func (c *CertificateForbiddenExtensionsCheck) ErrorMessageTag() i18n.MessageTag 
 	return i18n.MessageTag_BBB_XCV_DCCFCE_ANS
 }
 
-// BuildErrorMessage builds an error message. Port of buildErrorMessage().
+// BuildErrorMessage builds an error message. Port of buildErrorMessage(): the
+// arg is pre-rendered as Java's List#toString() would ("[a, b, c]") since the
+// shared i18n.messageFormatArgString falls back to fmt.Sprint for a non-string
+// arg, which renders a []string as "[a b c]" (no commas) - a frozen-package
+// (i18n) formatting gap flagged for a later phase, worked around here at the
+// call site rather than by editing that frozen package.
 func (c *CertificateForbiddenExtensionsCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(c.ErrorMessageTag(), c.usedForbiddenCertificateExtensionsOids())
+	oids := c.usedForbiddenCertificateExtensionsOids()
+	return c.BuildXmlMessage(c.ErrorMessageTag(), "["+strings.Join(oids, ", ")+"]")
 }
 
 // usedForbiddenCertificateExtensionsOids ports the private
