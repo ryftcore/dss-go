@@ -530,7 +530,7 @@ func failingPdfRevision() *diagnostic.PDFRevisionWrapper {
 			Consistent: false,
 		},
 		ModificationDetection: &diagjaxb.XmlModificationDetection{
-			AnnotationOverlap: []*diagjaxb.XmlModification{{Page: big.NewInt(1)}},
+			AnnotationOverlap: []*diagjaxb.XmlModification{{Page: diagjaxb.NewBigIntegerFromInt64(1)}},
 			ObjectModifications: &diagjaxb.XmlObjectModifications{
 				Undefined: []*diagjaxb.XmlObjectModification{{FieldName: &fieldName}},
 			},

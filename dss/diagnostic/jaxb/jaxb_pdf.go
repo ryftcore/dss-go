@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlByteRange is the Go form of the generated JAXB class XmlByteRange
 // (complexType ByteRange).
@@ -26,7 +24,7 @@ type XmlDocMDP struct {
 // XmlModification is the Go form of the generated JAXB class XmlModification
 // (complexType Modification).
 type XmlModification struct {
-	Page *big.Int `xml:"Page,attr,omitempty"`
+	Page *BigInteger `xml:"Page,attr,omitempty"`
 }
 
 // XmlModificationDetection is the Go form of the generated JAXB class XmlModificationDetection

@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlAbstractTokenAttrs carries the attributes of the XmlAbstractToken base type. The JAXB RI writes
 // extension attributes before base attributes, so derived types embed it last.
@@ -58,7 +56,7 @@ type XmlIssuerSerial struct {
 // (complexType SignerInfo).
 type XmlSignerInfo struct {
 	IssuerName   *string       `xml:"IssuerName,omitempty"`
-	SerialNumber *big.Int      `xml:"SerialNumber,omitempty"`
+	SerialNumber *BigInteger   `xml:"SerialNumber,omitempty"`
 	Ski          *Base64Binary `xml:"Ski,omitempty"`
 	Current      *bool         `xml:"Current,attr,omitempty"`
 }
@@ -132,7 +130,7 @@ type XmlSignerData struct {
 type XmlOrphanCertificateToken struct {
 	SubjectDistinguishedName []*XmlDistinguishedName `xml:"SubjectDistinguishedName"`
 	IssuerDistinguishedName  []*XmlDistinguishedName `xml:"IssuerDistinguishedName"`
-	SerialNumber             *big.Int                `xml:"SerialNumber,omitempty"`
+	SerialNumber             *BigInteger             `xml:"SerialNumber,omitempty"`
 	NotAfter                 *XSDateTime             `xml:"NotAfter,omitempty"`
 	NotBefore                *XSDateTime             `xml:"NotBefore,omitempty"`
 	EntityKey                *string                 `xml:"EntityKey,omitempty"`

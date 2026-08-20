@@ -100,7 +100,7 @@ func (w *RevocationWrapper) NextUpdate() *time.Time {
 // CRLNumber returns the value of CRLNumber extension, when present. NOTE: CRL only. Port of
 // getCRLNumber().
 func (w *RevocationWrapper) CRLNumber() *big.Int {
-	return w.revocation.CRLNumber
+	return w.revocation.CRLNumber.BigInt()
 }
 
 // ExpiredCertsOnCRL returns the expired-certs-on-crl attribute time, when present. Port of

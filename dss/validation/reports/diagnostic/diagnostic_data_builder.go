@@ -955,7 +955,7 @@ func (b *DiagnosticDataBuilder) GetXmlSignerInfo(signerIdentifier *spi.SignerIde
 		issuerName := signerIdentifier.IssuerName().String()
 		xmlSignerInfo.IssuerName = &issuerName
 	}
-	xmlSignerInfo.SerialNumber = signerIdentifier.SerialNumber()
+	xmlSignerInfo.SerialNumber = jaxb.NewBigInteger(signerIdentifier.SerialNumber())
 	if signerIdentifier.Ski() != nil {
 		ski := jaxb.Base64Binary(signerIdentifier.Ski())
 		xmlSignerInfo.Ski = &ski
@@ -1006,7 +1006,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 	if !revocationToken.NextUpdate().IsZero() {
 		xmlRevocation.NextUpdate = jaxb.NewXSDateTime(revocationToken.NextUpdate())
 	}
-	xmlRevocation.CRLNumber = revocationToken.CRLNumber()
+	xmlRevocation.CRLNumber = jaxb.NewBigInteger(revocationToken.CRLNumber())
 	if !revocationToken.ExpiredCertsOnCRL().IsZero() {
 		xmlRevocation.ExpiredCertsOnCRL = jaxb.NewXSDateTime(revocationToken.ExpiredCertsOnCRL())
 	}
@@ -1085,10 +1085,10 @@ func (b *DiagnosticDataBuilder) GetXmlCRLRevocationRef(crlRef *spi.CRLRef, origi
 			xmlRevocationRef.IssueTime = jaxb.NewXSDateTime(crlRef.CRLIssueTime())
 		}
 		if crlRef.CRLNumber() != nil {
-			xmlRevocationRef.CRLNumber = crlRef.CRLNumber()
+			xmlRevocationRef.CRLNumber = jaxb.NewBigInteger(crlRef.CRLNumber())
 		}
 	}
-	xmlRevocationRef.CRLNumber = crlRef.CRLNumber()
+	xmlRevocationRef.CRLNumber = jaxb.NewBigInteger(crlRef.CRLNumber())
 	if crlRef.CRLURI() != "" {
 		uri := crlRef.CRLURI()
 		xmlRevocationRef.Uri = &uri
@@ -1781,7 +1781,7 @@ func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken 
 		orphanToken.IssuerDistinguishedName = append(orphanToken.IssuerDistinguishedName,
 			b.getXmlDistinguishedName(x500PrincipalRFC2253, issuer.RFC2253()))
 
-		orphanToken.SerialNumber = certificateToken.SerialNumber()
+		orphanToken.SerialNumber = jaxb.NewBigInteger(certificateToken.SerialNumber())
 
 		orphanToken.NotAfter = jaxb.NewXSDateTime(certificateToken.NotAfter())
 		orphanToken.NotBefore = jaxb.NewXSDateTime(certificateToken.NotBefore())
@@ -1992,7 +1992,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlCertificate(certToken *model.Cer
 	xmlCert.IssuerDistinguishedName = append(xmlCert.IssuerDistinguishedName,
 		b.getXmlDistinguishedName(x500PrincipalRFC2253, issuer.RFC2253()))
 
-	xmlCert.SerialNumber = certToken.SerialNumber()
+	xmlCert.SerialNumber = jaxb.NewBigInteger(certToken.SerialNumber())
 
 	if v := spi.DSSASN1UtilsExtractAttributeFromX500Principal(oidSubjectSerialNumber, subject); v != "" {
 		xmlCert.SubjectSerialNumber = &v
@@ -2255,8 +2255,8 @@ func (b *DiagnosticDataBuilder) getXmlGeneralSubtree(generalSubtree *extension.G
 	t := jaxb.GeneralNameTypeValue(generalSubtree.GeneralNameType())
 	xmlGeneralSubtree.Type = &t
 	xmlGeneralSubtree.Value = generalSubtree.Value()
-	xmlGeneralSubtree.Minimum = generalSubtree.Minimum()
-	xmlGeneralSubtree.Maximum = generalSubtree.Maximum()
+	xmlGeneralSubtree.Minimum = jaxb.NewBigInteger(generalSubtree.Minimum())
+	xmlGeneralSubtree.Maximum = jaxb.NewBigInteger(generalSubtree.Maximum())
 	return xmlGeneralSubtree
 }
 

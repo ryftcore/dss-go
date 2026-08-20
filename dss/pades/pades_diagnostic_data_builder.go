@@ -13,7 +13,6 @@
 package pades
 
 import (
-	"math/big"
 	"time"
 
 	"github.com/utain/esig/dss/cades"
@@ -203,7 +202,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlModifications(modifications []PdfModific
 
 // xmlModification ports the private getXmlModification(PdfModification).
 func (b *PAdESDiagnosticDataBuilder) xmlModification(pdfModification PdfModification) *jaxb.XmlModification {
-	return &jaxb.XmlModification{Page: big.NewInt(int64(pdfModification.Page()))}
+	return &jaxb.XmlModification{Page: jaxb.NewBigIntegerFromInt64(int64(pdfModification.Page()))}
 }
 
 // xmlObjectModifications ports the private getXmlObjectModifications(PdfObjectModifications).

@@ -59,7 +59,7 @@ func (w *RevocationRefWrapper) IssueTime() *time.Time {
 // CRLNumber gets the number of the CRL. NOTE: applicable only for CRL references. Port of
 // getCRLNumber().
 func (w *RevocationRefWrapper) CRLNumber() *big.Int {
-	return w.revocationRef.CRLNumber
+	return w.revocationRef.CRLNumber.BigInt()
 }
 
 // ProductionTime returns revocation ref production time if present. NOTE: applicable only

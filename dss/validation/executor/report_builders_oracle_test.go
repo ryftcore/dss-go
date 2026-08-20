@@ -155,16 +155,14 @@ func TestReportBuildersOracle(t *testing.T) {
 // Each entry names the deviation; a row that starts matching is reported as an
 // error so the entry gets removed rather than silently rotting.
 //
-// Both are the same class of difference the report builders themselves handle
-// with JavaHashSetOrder (see abstract_detailed_report_builder.go): a Java
-// hash-ordered collection whose iteration order reaches the marshalled report,
-// which the package concerned deliberately replaced with insertion order.
-var knownOrderingDeviations = map[string]string{
-	"er-asn1-incorrect-hash.asice/DetailedReport": "order of the <Timestamp> children of <EvidenceRecord>, " +
-		"decided by dss/validation/process/vpfswatsp/evidencerecord (phase 8e)",
-	"pades-5-signatures-and-1-document-timestamp.pdf/DetailedReport": "order of the AOV_XCV <Constraint> elements, decided by " +
-		"dss/validation/process/bbb/aov's signCertRefsMap, which replaces Java's HashMap order with first-seen order (phase 8d)",
-}
+// It is EMPTY: the phase-8f audit closed both entries it used to hold, by
+// reproducing the real java.util.HashMap iteration order (see
+// utils.JavaHashMapStringKeyOrder / JavaHashMapComputeIfAbsentKeyOrder) at the
+// two sites concerned - dss/validation/process/vpfswatsp/evidencerecord's
+// <Timestamp> children of <EvidenceRecord>, and dss/validation/process/bbb/aov's
+// signCertRefsMap behind the AOV_XCV <Constraint> elements. Every one of this
+// corpus' reports is now byte-identical to the Java oracle's.
+var knownOrderingDeviations = map[string]string{}
 
 // assertOracleDigest compares the marshalled report against the Java digest,
 // falling back to a full diff hint when the row is one of those whose complete

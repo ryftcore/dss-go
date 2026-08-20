@@ -8,6 +8,7 @@ classpath).
 | --- | --- | --- | --- |
 | `oracle/reports.jsonl` | 50 | `oracle/gen/ReportsOracle.java` | every diagnostic-data document of the marshal-parity corpus at `dss/diagnostic/jaxb/testdata/oracle`, minus the four `model-*.xml` schema-coverage fixtures |
 | `oracle/full_corpus.jsonl` | 273 | `oracle/gen/FullCorpusOracle.java` | EVERY file under upstream's `dss-validation/src/test/resources/diag-data/**`, vendored at `oracle/full-corpus/` - see below |
+| `oracle/full_corpus_reports.jsonl` | 252 | `oracle/gen/FullCorpusReportsOracle.java` | the same corpus, digests of every marshalled report - see below |
 | `oracle/hash_order.tsv` | 8 | `oracle/gen/HashOrder.java` | four hand-written id/name sequences |
 
 ## `oracle/full_corpus.jsonl` and `oracle/full-corpus/`
@@ -49,6 +50,22 @@ Each row records, for both executor runs: every `BasicBuildingBlocks`
 conclusion (Id/Type/Indication/SubIndication), the final Indication/
 SubIndication of every top-level Signature/Timestamp/EvidenceRecord, and every
 signature's SimpleReport qualification.
+
+## `oracle/full_corpus_reports.jsonl`
+
+Report BYTE parity beyond `oracle/reports.jsonl`'s 50-document subset:
+`full_corpus_reports_oracle_test.go`'s `TestFullCorpusReportsByteParity` runs
+BOTH executors over every diagnostic-data document of `oracle/full-corpus/`
+that unmarshals (252 of the 273 files - the 21 policy/crypto-suite constraint
+fixtures misfiled into the tree carry no row) and compares the SHA-256 of all
+five marshalled reports: 1255 report comparisons, no tolerances. Same
+configuration as `oracle/reports.jsonl` (validation time `1700000000000`,
+`ValidationLevel.ARCHIVAL_DATA`, locale `en`, ETSI validation report ENABLED,
+`/policy/certificate-constraint.xml` for the certificate executor).
+
+Three documents' signature `DetailedReport` carries EAA validation blocks the
+`eaa` build tag gates in; the test compares their digest only under that tag,
+and asserts they still DIFFER without it (`eaaOnlyDetailedReports`).
 
 ## `oracle/reports.jsonl`
 
@@ -107,4 +124,9 @@ javac -cp "$CP" -d /tmp/oracle oracle/gen/FullCorpusOracle.java
 java  -cp "$CP:/tmp/oracle" FullCorpusOracle \
       <dss-upstream>/dss-validation/src/test/resources/diag-data \
       oracle/full_corpus.jsonl
+
+javac -cp "$CP" -d /tmp/oracle oracle/gen/FullCorpusReportsOracle.java
+java  -cp "$CP:/tmp/oracle" FullCorpusReportsOracle \
+      <dss-upstream>/dss-validation/src/test/resources/diag-data \
+      oracle/full_corpus_reports.jsonl
 ```

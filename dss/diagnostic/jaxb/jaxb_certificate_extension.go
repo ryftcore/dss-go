@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlCertificateExtensionContent carries the element content of the XmlCertificateExtension base type. JAXB emits base
 // content before extension content, so derived types embed it first.
@@ -138,8 +136,8 @@ type XmlExtendedKeyUsages struct {
 // (complexType GeneralSubtree).
 type XmlGeneralSubtree struct {
 	XmlGeneralNameContent
-	Minimum *big.Int `xml:"minimum,attr,omitempty"`
-	Maximum *big.Int `xml:"maximum,attr,omitempty"`
+	Minimum *BigInteger `xml:"minimum,attr,omitempty"`
+	Maximum *BigInteger `xml:"maximum,attr,omitempty"`
 	XmlGeneralNameAttrs
 }
 

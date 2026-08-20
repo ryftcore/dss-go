@@ -13,7 +13,7 @@ package jaxb
 // (complexType Signature).
 type XmlSignature struct {
 	Url                   *string              `xml:"Url,omitempty"`
-	Indication            IndicationValue      `xml:"Indication"`
+	Indication            IndicationValue      `xml:"Indication,omitempty"`
 	SubIndication         *SubIndicationValue  `xml:"SubIndication,omitempty"`
 	AdESValidationDetails *XmlDetails          `xml:"AdESValidationDetails,omitempty"`
 	SigningTime           *XSDateTime          `xml:"SigningTime,omitempty"`

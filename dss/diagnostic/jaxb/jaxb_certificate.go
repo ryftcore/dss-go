@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlCertificateContentEquivalence is the Go form of the generated JAXB class XmlCertificateContentEquivalence
 // (complexType CertificateContentEquivalence).
@@ -55,7 +53,7 @@ type XmlX509Certificate struct {
 type XmlCertificate struct {
 	SubjectDistinguishedName []*XmlDistinguishedName       `xml:"SubjectDistinguishedName"`
 	IssuerDistinguishedName  []*XmlDistinguishedName       `xml:"IssuerDistinguishedName"`
-	SerialNumber             *big.Int                      `xml:"SerialNumber,omitempty"`
+	SerialNumber             *BigInteger                   `xml:"SerialNumber,omitempty"`
 	SubjectSerialNumber      *string                       `xml:"SubjectSerialNumber,omitempty"`
 	CommonName               *string                       `xml:"CommonName,omitempty"`
 	Locality                 *string                       `xml:"Locality,omitempty"`

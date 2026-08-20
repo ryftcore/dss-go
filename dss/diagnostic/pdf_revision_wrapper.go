@@ -269,7 +269,7 @@ func (w *PDFRevisionWrapper) SigFieldLock() *jaxb.XmlPDFLockDictionary {
 func getConcernedPages(xmlModifications []*jaxb.XmlModification) []*big.Int {
 	var pages []*big.Int
 	for _, modification := range xmlModifications {
-		pages = append(pages, modification.Page)
+		pages = append(pages, modification.Page.BigInt())
 	}
 	return pages
 }

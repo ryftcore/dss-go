@@ -67,7 +67,7 @@ func (c *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]) bu
 	// of the detailed report reports. Substituting first-seen order (this
 	// port's earlier reading, and PORTING.md's default) therefore broke byte
 	// parity AND reported a different algorithm than upstream on multi-
-	// reference signatures; utils.JavaHashMapStringKeyOrder reproduces the real
+	// reference signatures; utils.JavaHashMapComputeIfAbsentKeyOrder reproduces the real
 	// HashMap key order instead. Found by the phase-8f full-corpus report
 	// byte-parity run on DSS-2115/dss-2115-valid.xml and -additional-ref.xml.
 	signCertRefsMap := make(map[string][]*diagnostic.CertificateRefWrapper)
@@ -79,7 +79,7 @@ func (c *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]) bu
 		}
 		signCertRefsMap[id] = append(signCertRefsMap[id], r)
 	}
-	certificateIds := utils.JavaHashMapStringKeyOrder(insertionOrder)
+	certificateIds := utils.JavaHashMapComputeIfAbsentKeyOrder(insertionOrder)
 
 	for _, certificateId := range certificateIds {
 		certificateRefWrappers := signCertRefsMap[certificateId]

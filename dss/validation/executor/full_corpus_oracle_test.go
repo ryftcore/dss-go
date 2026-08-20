@@ -407,41 +407,17 @@ func compareBBB(t *testing.T, label string, want []fcBBB, got []*detailedreportj
 // specific already-understood failure mode; if the file starts unmarshalling
 // like Java (or starts failing on both sides), the assertions above turn
 // into a hard failure so the entry cannot silently rot.
-var knownFileLevelDivergences = map[string]string{
-	// F1 (flagged by the phase-8f integration gate, out of gate scope,
-	// "too wide" to fix in-phase): diagnostic/jaxb's *big.Int fields
-	// (SerialNumber and friends) go through the stdlib math/big.Int.
-	// UnmarshalText, which calls SetString(text, 0) - base 0 auto-detects
-	// a leading "0" digit as an OCTAL prefix, so any decimal serial number
-	// with a leading zero and an 8/9 digit fails to parse. Java's
-	// BigInteger(String) constructor is decimal-only and has no such
-	// sniffing, so the same text parses fine upstream. Fixing this without
-	// widening every *big.Int-typed field across diagnostic/jaxb into a new
-	// wrapper type (~10 fields, ~190 read call sites through the token
-	// wrappers) was already correctly judged too wide for a single pass;
-	// this full-corpus run additionally confirms it hits these four files
-	// (previously only 4 DIFFERENT files in the diagnostic/jaxb marshal-
-	// parity corpus were known to be affected).
-	"diag_data_cert_on_hold_with_tst_after.xml":  "F1: leading-zero decimal SerialNumber octal-sniffed by math/big.Int.UnmarshalText",
-	"diag_data_cert_on_hold_with_tst_before.xml": "F1: leading-zero decimal SerialNumber octal-sniffed by math/big.Int.UnmarshalText",
-	"valid-diag-data-crl-lt.xml":                 "F1: leading-zero decimal SerialNumber octal-sniffed by math/big.Int.UnmarshalText",
-	"valid-diag-data-crl-lta.xml":                "F1: leading-zero decimal SerialNumber octal-sniffed by math/big.Int.UnmarshalText",
-	// NEW (found by this harness): jakarta.xml.bind's unmarshaller applies
-	// XmlAdapter failures per FIELD, not per DOCUMENT - by default, an
-	// XmlAdapter.unmarshal() throwing (here DateParser rejecting
-	// TrustedList/LastLoading's "2025-11-12T14:40:00", which lacks the
-	// literal trailing 'Z' the DateParser pattern requires) is reported to
-	// the (default, tolerant) ValidationEventHandler as a non-fatal ERROR
-	// event and the field is simply left null; the REST of the document
-	// still unmarshals. Go's encoding/xml has no per-field-tolerant mode:
-	// any encoding.TextUnmarshaler error aborts the whole Unmarshal call.
-	// Reproducing JAXB's event-handler-driven continue-on-error semantics
-	// generally (not just for dates - the same gap applies to any adapter-
-	// backed simple type anywhere in the schema) is a diagnostic/jaxb
-	// decoder redesign, correctly out of scope for this harness pass; flagged
-	// here as a new, distinct defect (not to be conflated with F1 above).
-	"qwac-validation/2-qwac-valid-diag-data.xml": "NEW: Go aborts the whole document on TrustedList.LastLoading's malformed dateTime; Java's JAXB nulls just that field and continues",
-}
+//
+// It is EMPTY. The phase-8f audit closed both entries it used to hold:
+//
+//   - F1, diagnostic/jaxb binding java.math.BigInteger properties to a bare
+//     *big.Int, whose stdlib UnmarshalText parses with base 0 and so read a
+//     leading "0" as an octal prefix - fixed by diagnostic/jaxb.BigInteger,
+//     which parses decimal like Java's BigInteger(String);
+//   - the JAXB per-field adapter tolerance behind
+//     qwac-validation/2-qwac-valid-diag-data.xml's malformed
+//     TrustedList/LastLoading - fixed in diagnostic/jaxb.XSDateTime.UnmarshalText.
+var knownFileLevelDivergences = map[string]string{}
 
 // readFullCorpusOracle loads testdata/oracle/full_corpus.jsonl, sorted by
 // file name so the subtest order is stable across runs.

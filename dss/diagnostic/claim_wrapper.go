@@ -180,7 +180,7 @@ func (c *ClaimWrapper) IsText() bool { return c.wrapped.Text != nil }
 
 // Number gets the value as a number. If the value is not of a number type, returns nil. Port
 // of getNumber().
-func (c *ClaimWrapper) Number() *big.Int { return c.wrapped.Number }
+func (c *ClaimWrapper) Number() *big.Int { return c.wrapped.Number.BigInt() }
 
 // IsNumber gets whether the claim value is of Number type. Port of isNumber().
 func (c *ClaimWrapper) IsNumber() bool { return c.wrapped.Number != nil }
