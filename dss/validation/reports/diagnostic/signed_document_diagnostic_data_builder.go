@@ -993,7 +993,12 @@ func createOrphanTokenFromRevocationIdentifier[R revocation.Revocation](b *Signe
 		if err != nil {
 			panic(err)
 		}
-		b.GetXmlFoundCertificatesForSource(&ocspCertificateSource.TokenCertificateSource) // create from OCSP Certificate Source
+		// Pass ocspCertificateSource itself, not &ocspCertificateSource.TokenCertificateSource:
+		// GetXmlFoundCertificatesForSource dispatches on CertificateSourceType(), which
+		// OCSPCertificateSource overrides (OCSP_RESPONSE) - the embedded field's own
+		// CertificateSourceType() knows nothing of that override and answers OTHER, routing
+		// into the wrong branch. See GetXmlFoundCertificatesForSource's doc comment.
+		b.GetXmlFoundCertificatesForSource(ocspCertificateSource) // create from OCSP Certificate Source
 	}
 	b.xmlOrphanRevocationTokensMap[id] = orphanToken
 	b.xmlOrphanRevocationTokensOrder = append(b.xmlOrphanRevocationTokensOrder, id)

@@ -214,7 +214,7 @@ public class FullCorpusOracle {
             }
             first = false;
             String q = sig.getSignatureLevel() == null || sig.getSignatureLevel().getValue() == null
-                    ? "" : sig.getSignatureLevel().getValue().toString();
+                    ? "" : sig.getSignatureLevel().getValue().name();
             out.append("{\"id\":").append(json(sig.getId()));
             out.append(",\"qualification\":").append(json(q));
             out.append("}");

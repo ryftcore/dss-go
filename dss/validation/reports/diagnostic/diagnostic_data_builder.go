@@ -1428,7 +1428,22 @@ func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
 
 // GetXmlFoundCertificatesForSource returns found certificates from the source. Port of the
 // protected getXmlFoundCertificates(TokenCertificateSource).
-func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSource *spi.TokenCertificateSource) *jaxb.XmlFoundCertificates {
+//
+// The parameter is the foundCertificatesSource interface, not the concrete *spi.
+// TokenCertificateSource: Java's parameter type is the ABSTRACT class TokenCertificateSource,
+// so a call like getXmlFoundCertificates(ocspCertificateSource) dispatches
+// ocspCertificateSource.getCertificateSourceType() virtually, reaching OCSPCertificateSource's
+// override (OCSP_RESPONSE). A concrete Go struct parameter cannot reproduce that: a caller
+// holding an *OCSPCertificateSource has no implicit conversion to *spi.TokenCertificateSource,
+// so it would have to pass the ADDRESS OF THE EMBEDDED FIELD instead - which is a plain
+// *spi.TokenCertificateSource value that has never heard of OCSPCertificateSource's override,
+// so CertificateSourceType() resolves to the base's CertificateSourceType_OTHER and
+// getXmlFoundCertificates's default/else branch's cast to signatureCertificateSourceRefs panics
+// (found live via the phase 8f document-level harness on PAdES-LT.pdf: an orphan OCSP
+// revocation identifier's certificate source hit exactly this). The interface parameter lets
+// every caller pass the OUTER value it actually has (here, ocspCertificateSource itself),
+// which correctly dispatches the override, matching Java.
+func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
 	return b.getXmlFoundCertificates(nil, certificateSource)
 }
 
