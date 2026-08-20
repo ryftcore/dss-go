@@ -31,9 +31,10 @@ func NewTLAnalysis(source *TLSource, cacheAccess job.CacheAccessByKey, dssFileLo
 	return a
 }
 
-// GetParsingTask ports the protected getParsingTask(DSSDocument) override.
+// GetParsingTask ports the protected getParsingTask(DSSDocument) override. Wrapped in
+// parsingTaskAdapter (abstract_runnable_tl_analysis.go) - see that type's header.
 func (a *TLAnalysis) GetParsingTask(document model.DSSDocument) job.ParsingTask {
-	return NewTLParsingTask(document, a.source)
+	return parsingTaskAdapter[*TLParsingResult]{get: NewTLParsingTask(document, a.source).Get}
 }
 
 // GetCurrentCertificateSource satisfies job.AbstractRunnableAnalysisOverrides with the base

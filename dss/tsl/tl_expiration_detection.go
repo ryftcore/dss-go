@@ -11,7 +11,7 @@ import (
 // TLExpirationDetection detects an expiration of a TrustedList.
 type TLExpirationDetection struct{}
 
-var _ alert.AlertDetector[tslmodel.TLInfo] = (*TLExpirationDetection)(nil)
+var _ alert.AlertDetector[*tslmodel.TLInfo] = (*TLExpirationDetection)(nil)
 
 // NewTLExpirationDetection is the default constructor.
 func NewTLExpirationDetection() *TLExpirationDetection {
@@ -19,9 +19,8 @@ func NewTLExpirationDetection() *TLExpirationDetection {
 }
 
 // Detect ports detect(TLInfo).
-func (d *TLExpirationDetection) Detect(info tslmodel.TLInfo) bool {
-	parsingCacheInfo := info.ParsingCacheInfo()
-	if parsingCacheInfo != nil {
+func (d *TLExpirationDetection) Detect(info *tslmodel.TLInfo) bool {
+	if parsingCacheInfo, ok := info.TLParsingCacheInfo(); ok {
 		nextUpdateDate := parsingCacheInfo.NextUpdateDate()
 		currentDate := time.Now()
 		return !nextUpdateDate.IsZero() && nextUpdateDate.Before(currentDate)

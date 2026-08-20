@@ -11,7 +11,7 @@ import (
 // LogTLSignatureErrorAlertHandler warns on TL validation error.
 type LogTLSignatureErrorAlertHandler struct{}
 
-var _ alert.AlertHandler[tslmodel.TLInfo] = (*LogTLSignatureErrorAlertHandler)(nil)
+var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLSignatureErrorAlertHandler)(nil)
 
 // NewLogTLSignatureErrorAlertHandler is the default constructor.
 func NewLogTLSignatureErrorAlertHandler() *LogTLSignatureErrorAlertHandler {
@@ -19,7 +19,7 @@ func NewLogTLSignatureErrorAlertHandler() *LogTLSignatureErrorAlertHandler {
 }
 
 // Process ports process(TLInfo).
-func (h *LogTLSignatureErrorAlertHandler) Process(currentInfo tslmodel.TLInfo) error {
+func (h *LogTLSignatureErrorAlertHandler) Process(currentInfo *tslmodel.TLInfo) error {
 	slog.Warn("There is a problem in the TL signature", "url", currentInfo.Url())
 	return nil
 }

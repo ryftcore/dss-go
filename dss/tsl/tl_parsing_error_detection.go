@@ -10,7 +10,7 @@ import (
 // TLParsingErrorDetection detects an error on TL parsing or structure validation.
 type TLParsingErrorDetection struct{}
 
-var _ alert.AlertDetector[tslmodel.TLInfo] = (*TLParsingErrorDetection)(nil)
+var _ alert.AlertDetector[*tslmodel.TLInfo] = (*TLParsingErrorDetection)(nil)
 
 // NewTLParsingErrorDetection is the default constructor.
 func NewTLParsingErrorDetection() *TLParsingErrorDetection {
@@ -18,7 +18,7 @@ func NewTLParsingErrorDetection() *TLParsingErrorDetection {
 }
 
 // Detect ports detect(TLInfo).
-func (d *TLParsingErrorDetection) Detect(info tslmodel.TLInfo) bool {
+func (d *TLParsingErrorDetection) Detect(info *tslmodel.TLInfo) bool {
 	parsingCacheInfo := info.ParsingCacheInfo()
 	return parsingCacheInfo != nil && (parsingCacheInfo.IsError() || utils.IsCollectionNotEmpty(parsingCacheInfo.StructureValidationMessages()))
 }

@@ -12,7 +12,7 @@ type OJUrlChangeDetection struct {
 	lotlSource *LOTLSource
 }
 
-var _ alert.AlertDetector[tslmodel.LOTLInfo] = (*OJUrlChangeDetection)(nil)
+var _ alert.AlertDetector[*tslmodel.LOTLInfo] = (*OJUrlChangeDetection)(nil)
 
 // NewOJUrlChangeDetection is the default constructor.
 func NewOJUrlChangeDetection(lotlSource *LOTLSource) *OJUrlChangeDetection {
@@ -20,13 +20,13 @@ func NewOJUrlChangeDetection(lotlSource *LOTLSource) *OJUrlChangeDetection {
 }
 
 // Detect ports detect(LOTLInfo).
-func (d *OJUrlChangeDetection) Detect(info tslmodel.LOTLInfo) bool {
+func (d *OJUrlChangeDetection) Detect(info *tslmodel.LOTLInfo) bool {
 	if d.lotlSource.Url() != info.Url() {
 		return false
 	}
 
-	parsingCacheInfo := info.ParsingCacheInfo()
-	if parsingCacheInfo != nil && parsingCacheInfo.IsDesynchronized() {
+	parsingCacheInfo, ok := info.TLParsingCacheInfo()
+	if ok && parsingCacheInfo.IsDesynchronized() {
 		signingCertificatesAnnouncementPredicate := d.lotlSource.SigningCertificatesAnnouncementPredicate()
 		// JUDGMENT CALL: Java's instanceof OfficialJournalSchemeInformationURI check always
 		// holds here - see lotl_signing_certificates_announcement_scheme_information_uri.go's

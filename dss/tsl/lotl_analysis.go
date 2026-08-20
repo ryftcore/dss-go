@@ -31,9 +31,10 @@ func NewLOTLAnalysis(source *LOTLSource, cacheAccess job.CacheAccessByKey, dssFi
 	return a
 }
 
-// GetParsingTask ports the protected getParsingTask(DSSDocument) override.
+// GetParsingTask ports the protected getParsingTask(DSSDocument) override. Wrapped in
+// parsingTaskAdapter (abstract_runnable_tl_analysis.go) - see that type's header.
 func (a *LOTLAnalysis) GetParsingTask(document model.DSSDocument) job.ParsingTask {
-	return NewLOTLParsingTask(document, a.source)
+	return parsingTaskAdapter[*LOTLParsingResult]{get: NewLOTLParsingTask(document, a.source).Get}
 }
 
 // GetCurrentCertificateSource satisfies job.AbstractRunnableAnalysisOverrides with the base

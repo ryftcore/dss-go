@@ -24,14 +24,22 @@ type OtherTSLPointerConverter struct {
 	mraSupport bool
 }
 
-// NewOtherTSLPointerConverter instantiates an empty object. Port of OtherTSLPointerConverter().
-func NewOtherTSLPointerConverter() *OtherTSLPointerConverter {
+// NewOtherTSLPointerConverterDefault instantiates an empty object. Port of
+// OtherTSLPointerConverter().
+//
+// Named ...Default (rather than the bare NewOtherTSLPointerConverter PORTING.md's overload
+// convention would otherwise give this zero-arg constructor) because tsl/lotl_parsing_task.go
+// (TSLCORE, frozen, out of this manifest) already calls NewOtherTSLPointerConverter(bool) for the
+// single-arg constructor below - this file conforms to that frozen call site instead of the
+// reverse, since the zero-arg constructor has no callers anywhere in this module.
+func NewOtherTSLPointerConverterDefault() *OtherTSLPointerConverter {
 	return &OtherTSLPointerConverter{}
 }
 
-// NewOtherTSLPointerConverterWithMRASupport is the constructor with a parameter to define the
-// MRA support. Port of OtherTSLPointerConverter(boolean).
-func NewOtherTSLPointerConverterWithMRASupport(mraSupport bool) *OtherTSLPointerConverter {
+// NewOtherTSLPointerConverter is the constructor with a parameter to define the MRA support.
+// Port of OtherTSLPointerConverter(boolean). See NewOtherTSLPointerConverterDefault's comment for
+// why this (not that) is the bare name.
+func NewOtherTSLPointerConverter(mraSupport bool) *OtherTSLPointerConverter {
 	return &OtherTSLPointerConverter{mraSupport: mraSupport}
 }
 

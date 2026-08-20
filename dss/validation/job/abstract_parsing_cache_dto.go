@@ -36,3 +36,23 @@ func (d *AbstractParsingCacheDTO) SetStructureValidationMessages(structureValida
 }
 
 var _ modeljob.ParsingInfoRecord = (*AbstractParsingCacheDTO)(nil)
+
+// ParsingCacheDTO is the polymorphic view of AbstractParsingCacheDTO that
+// AbstractParsingCacheDTOBuilder exchanges with a concrete builder's Init/BuildParsingCacheDTO
+// overrides, standing in for Java's covariant return types: Java's
+// AbstractParsingCacheDTOBuilder<R>#init/#build are declared to return/accept
+// AbstractParsingCacheDTO but a concrete subclass builder (e.g. dss/tsl's
+// TLParsingCacheDTOBuilder) actually constructs/consumes a narrower DTO type (e.g.
+// TLParsingCacheDTO) that embeds *AbstractParsingCacheDTO by pointer. Go has no covariant
+// interface-method return types, so the Overrides interface and Build() are typed against this
+// interface instead of the concrete *AbstractParsingCacheDTO; *AbstractParsingCacheDTO itself,
+// and any wrapper embedding it by pointer, satisfy it through promotion.
+type ParsingCacheDTO interface {
+	modeljob.ParsingInfoRecord
+
+	// SetStructureValidationMessages sets the structure validation error messages. Port of
+	// setStructureValidationMessages(List).
+	SetStructureValidationMessages(structureValidationMessages []string)
+}
+
+var _ ParsingCacheDTO = (*AbstractParsingCacheDTO)(nil)

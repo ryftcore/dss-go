@@ -29,7 +29,7 @@ import (
 //
 // java.io.Serializable has no Go counterpart and is dropped.
 type TLParsingCacheDTO struct {
-	job.AbstractParsingCacheDTO
+	*job.AbstractParsingCacheDTO
 
 	// tslType is the LOTL/TL TSLType.
 	tslType enumerations.TSLType
@@ -80,7 +80,7 @@ func NewTLParsingCacheDTO() *TLParsingCacheDTO {
 // NewTLParsingCacheDTOFromCacheDTO copies the cache DTO. Port of
 // TLParsingCacheDTO(AbstractCacheDTO).
 func NewTLParsingCacheDTOFromCacheDTO(cacheDTO *job.AbstractCacheDTO) *TLParsingCacheDTO {
-	return &TLParsingCacheDTO{AbstractParsingCacheDTO: job.NewAbstractParsingCacheDTOFromCacheDTO(cacheDTO)}
+	return &TLParsingCacheDTO{AbstractParsingCacheDTO: job.NewAbstractParsingCacheDTOFrom(cacheDTO)}
 }
 
 // TSLType gets the TSLType. Port of getTSLType().

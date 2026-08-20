@@ -8,15 +8,17 @@ package job
 // AbstractParsingCacheDTOBuilder.InitAbstractParsingCacheDTOBuilder.
 type AbstractParsingCacheDTOBuilderOverrides interface {
 	// Init instantiates the concrete AbstractParsingCacheDTO from the base AbstractCacheDTO.
-	// Port of the abstract protected init(AbstractCacheDTO).
-	Init(abstractCacheDTO *AbstractCacheDTO) *AbstractParsingCacheDTO
+	// Port of the abstract protected init(AbstractCacheDTO). Returns the ParsingCacheDTO
+	// interface, not the concrete *AbstractParsingCacheDTO, so a concrete builder can hand
+	// back a narrower wrapper type (Java's covariant return) - see ParsingCacheDTO's doc.
+	Init(abstractCacheDTO *AbstractCacheDTO) ParsingCacheDTO
 
 	// BuildParsingCacheDTO fills parsingCacheDTO. Port of the (overridable, non-abstract)
 	// protected build(AbstractParsingCacheDTO); a concrete builder wanting the base
 	// behaviour first should call
 	// AbstractParsingCacheDTOBuilder.BuildParsingCacheDTODefault explicitly, mirroring
 	// Java's super.build(dto).
-	BuildParsingCacheDTO(parsingCacheDTO *AbstractParsingCacheDTO)
+	BuildParsingCacheDTO(parsingCacheDTO ParsingCacheDTO)
 }
 
 // AbstractParsingCacheDTOBuilder builds an AbstractParsingCacheDTO.
@@ -48,7 +50,7 @@ func (b *AbstractParsingCacheDTOBuilder) abstractParsingCacheDTOBuilderOverrides
 }
 
 // Build builds the AbstractParsingCacheDTO. Port of build().
-func (b *AbstractParsingCacheDTOBuilder) Build() *AbstractParsingCacheDTO {
+func (b *AbstractParsingCacheDTOBuilder) Build() ParsingCacheDTO {
 	parsingCacheDTO := b.abstractParsingCacheDTOBuilderOverrides().Init(b.AbstractCacheDTOBuilder.Build())
 	if b.IsResultExist() {
 		b.abstractParsingCacheDTOBuilderOverrides().BuildParsingCacheDTO(parsingCacheDTO)
@@ -60,6 +62,6 @@ func (b *AbstractParsingCacheDTOBuilder) Build() *AbstractParsingCacheDTO {
 // BuildParsingCacheDTO hook. Port of the protected build(AbstractParsingCacheDTO) default
 // body; an overriding concrete builder calls this explicitly to get the base behaviour,
 // mirroring Java's super.build(dto).
-func (b *AbstractParsingCacheDTOBuilder) BuildParsingCacheDTODefault(parsingCacheDTO *AbstractParsingCacheDTO) {
+func (b *AbstractParsingCacheDTOBuilder) BuildParsingCacheDTODefault(parsingCacheDTO ParsingCacheDTO) {
 	parsingCacheDTO.SetStructureValidationMessages(b.Result().StructureValidationMessages())
 }

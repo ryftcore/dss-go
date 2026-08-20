@@ -93,7 +93,7 @@ func (s *TrustedListCertificateSourceSynchronizer) synchronizeCertificates(summa
 	trustPropertiesByCerts := make(map[*model.CertificateToken][]*tslmodel.TrustProperties)
 	trustTimeByCerts := make(map[*model.CertificateToken][]*tslmodel.CertificateTrustTime)
 	for _, lotlInfo := range summary.LOTLInfos() {
-		if s.synchronizationStrategy.CanBeSynchronizedDocumentList(*lotlInfo) {
+		if s.synchronizationStrategy.CanBeSynchronizedDocumentList(lotlInfo) {
 			s.addCertificatesFromTLs(trustPropertiesByCerts, trustTimeByCerts, lotlInfo.TLInfos(), lotlInfo)
 		}
 	}
@@ -106,11 +106,11 @@ func (s *TrustedListCertificateSourceSynchronizer) addCertificatesFromTLs(trustP
 	trustTimeByCerts map[*model.CertificateToken][]*tslmodel.CertificateTrustTime, tlInfos []*tslmodel.TLInfo, relatedLOTL *tslmodel.LOTLInfo) {
 
 	for _, tlInfo := range tlInfos {
-		if !s.synchronizationStrategy.CanBeSynchronizedDocument(*tlInfo) {
+		if !s.synchronizationStrategy.CanBeSynchronizedDocument(tlInfo) {
 			continue
 		}
-		parsingCacheInfo := tlInfo.ParsingCacheInfo()
-		if parsingCacheInfo == nil || !parsingCacheInfo.IsResultExist() {
+		parsingCacheInfo, ok := tlInfo.TLParsingCacheInfo()
+		if !ok || !parsingCacheInfo.IsResultExist() {
 			continue
 		}
 		trustServiceProviders := parsingCacheInfo.TrustServiceProviders()

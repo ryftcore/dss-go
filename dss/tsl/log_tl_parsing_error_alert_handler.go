@@ -11,7 +11,7 @@ import (
 // LogTLParsingErrorAlertHandler warns on TL parsing error.
 type LogTLParsingErrorAlertHandler struct{}
 
-var _ alert.AlertHandler[tslmodel.TLInfo] = (*LogTLParsingErrorAlertHandler)(nil)
+var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLParsingErrorAlertHandler)(nil)
 
 // NewLogTLParsingErrorAlertHandler is the default constructor.
 func NewLogTLParsingErrorAlertHandler() *LogTLParsingErrorAlertHandler {
@@ -19,7 +19,7 @@ func NewLogTLParsingErrorAlertHandler() *LogTLParsingErrorAlertHandler {
 }
 
 // Process ports process(TLInfo).
-func (h *LogTLParsingErrorAlertHandler) Process(currentInfo tslmodel.TLInfo) error {
+func (h *LogTLParsingErrorAlertHandler) Process(currentInfo *tslmodel.TLInfo) error {
 	slog.Warn("There was an error while parsing a TL", "url", currentInfo.Url())
 	return nil
 }

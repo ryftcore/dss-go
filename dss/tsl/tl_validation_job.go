@@ -75,7 +75,7 @@ func (j *TLValidationJob) SetTrustedListSources(trustedListSources ...*TLSource)
 	refs := make([]*job.DocumentSource, 0, len(trustedListSources))
 	for _, s := range trustedListSources {
 		j.tlSourcesByCacheKey[s.CacheKey()] = s
-		refs = append(refs, &s.DocumentSource)
+		refs = append(refs, s.DocumentSource)
 	}
 	j.SetDocumentSources(refs...)
 }
@@ -97,7 +97,7 @@ func (j *TLValidationJob) SetListOfTrustedListSources(listOfTrustedListSources .
 	refs := make([]*job.DocumentSource, 0, len(listOfTrustedListSources))
 	for _, s := range listOfTrustedListSources {
 		j.lotlSourcesByCacheKey[s.CacheKey()] = s
-		refs = append(refs, &s.DocumentSource)
+		refs = append(refs, s.DocumentSource)
 	}
 	j.SetDocumentListSources(refs...)
 }
@@ -110,7 +110,7 @@ func (j *TLValidationJob) SetTrustedListCertificateSource(trustPropertiesCertifi
 
 // SetLOTLAlerts sets the LOTL alerts to be processed. Port of setLOTLAlerts(List).
 func (j *TLValidationJob) SetLOTLAlerts(lotlAlerts []*LOTLAlert) {
-	converted := make([]alert.Alert[tslmodel.LOTLInfo], len(lotlAlerts))
+	converted := make([]alert.Alert[*tslmodel.LOTLInfo], len(lotlAlerts))
 	for i, a := range lotlAlerts {
 		converted[i] = a
 	}
@@ -119,7 +119,7 @@ func (j *TLValidationJob) SetLOTLAlerts(lotlAlerts []*LOTLAlert) {
 
 // SetTLAlerts sets the TL alerts to be processed. Port of setTLAlerts(List).
 func (j *TLValidationJob) SetTLAlerts(tlAlerts []*TLAlert) {
-	converted := make([]alert.Alert[tslmodel.TLInfo], len(tlAlerts))
+	converted := make([]alert.Alert[*tslmodel.TLInfo], len(tlAlerts))
 	for i, a := range tlAlerts {
 		converted[i] = a
 	}
@@ -178,7 +178,7 @@ func (j *TLValidationJob) ExtractOtherDocumentSources() []*job.DocumentSource {
 	refs := make([]*job.DocumentSource, 0, len(built))
 	for _, s := range built {
 		j.tlSourcesByCacheKey[s.CacheKey()] = s
-		refs = append(refs, &s.DocumentSource)
+		refs = append(refs, s.DocumentSource)
 	}
 	return refs
 }

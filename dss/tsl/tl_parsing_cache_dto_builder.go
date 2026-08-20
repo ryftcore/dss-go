@@ -78,7 +78,7 @@ func (b *TLParsingCacheDTOBuilder) Init(abstractCacheDTO *job.AbstractCacheDTO) 
 // BuildParsingCacheDTO fills the parsing cache DTO. Port of the protected
 // build(AbstractParsingCacheDTO) override, which first delegates to super.build(...).
 func (b *TLParsingCacheDTOBuilder) BuildParsingCacheDTO(parsingCacheDTO job.ParsingCacheDTO) {
-	b.AbstractParsingCacheDTOBuilder.BuildParsingCacheDTO(parsingCacheDTO)
+	b.AbstractParsingCacheDTOBuilder.BuildParsingCacheDTODefault(parsingCacheDTO)
 
 	tlParsingCacheDTO := parsingCacheDTO.(*TLParsingCacheDTO)
 	tlParsingCacheDTO.SetTSLType(b.tslType())

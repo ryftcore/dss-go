@@ -13,12 +13,12 @@ import (
 
 // LOTLAlert processes events on LOTL.
 type LOTLAlert struct {
-	job.DocumentAlert[*tslmodel.LOTLInfo, *tslmodel.LOTLInfo]
+	*job.DocumentAlert[*tslmodel.LOTLInfo, *tslmodel.LOTLInfo]
 }
 
-var _ alert.Alert[tslmodel.LOTLInfo] = (*LOTLAlert)(nil)
+var _ alert.Alert[*tslmodel.LOTLInfo] = (*LOTLAlert)(nil)
 
 // NewLOTLAlert is the default constructor.
-func NewLOTLAlert(detection alert.AlertDetector[tslmodel.LOTLInfo], handler alert.AlertHandler[tslmodel.LOTLInfo]) *LOTLAlert {
+func NewLOTLAlert(detection alert.AlertDetector[*tslmodel.LOTLInfo], handler alert.AlertHandler[*tslmodel.LOTLInfo]) *LOTLAlert {
 	return &LOTLAlert{DocumentAlert: job.NewDocumentAlert(detection, handler)}
 }

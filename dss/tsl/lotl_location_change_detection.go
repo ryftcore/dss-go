@@ -12,7 +12,7 @@ type LOTLLocationChangeDetection struct {
 	lotlSource *LOTLSource
 }
 
-var _ alert.AlertDetector[tslmodel.LOTLInfo] = (*LOTLLocationChangeDetection)(nil)
+var _ alert.AlertDetector[*tslmodel.LOTLInfo] = (*LOTLLocationChangeDetection)(nil)
 
 // NewLOTLLocationChangeDetection is the default constructor.
 func NewLOTLLocationChangeDetection(lotlSource *LOTLSource) *LOTLLocationChangeDetection {
@@ -20,7 +20,7 @@ func NewLOTLLocationChangeDetection(lotlSource *LOTLSource) *LOTLLocationChangeD
 }
 
 // Detect ports detect(LOTLInfo).
-func (d *LOTLLocationChangeDetection) Detect(info tslmodel.LOTLInfo) bool {
+func (d *LOTLLocationChangeDetection) Detect(info *tslmodel.LOTLInfo) bool {
 	if d.lotlSource.Url() == info.Url() && d.lotlSource.IsPivotSupport() {
 		pivotInfos := info.PivotInfos()
 		if len(pivotInfos) > 0 {

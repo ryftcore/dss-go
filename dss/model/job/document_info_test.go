@@ -28,7 +28,7 @@ func (f *fakeDocumentInfo) DSSID() model.Identifier                   { return f
 func (f *fakeDocumentInfo) DownloadCacheInfo() DownloadInfoRecord     { return f.download }
 func (f *fakeDocumentInfo) ParsingCacheInfo() ParsingInfoRecord       { return f.parsing }
 func (f *fakeDocumentInfo) ValidationCacheInfo() ValidationInfoRecord { return f.validation }
-func (f *fakeDocumentInfo) URL() string                               { return f.url }
+func (f *fakeDocumentInfo) Url() string                               { return f.url }
 func (f *fakeDocumentInfo) Parent() *fakeDocumentInfo                 { return f.parent }
 func (f *fakeDocumentInfo) DSSIDAsString() string                     { return f.id.AsXmlID() }
 
@@ -39,8 +39,8 @@ func TestDocumentInfo_RoundTrip(t *testing.T) {
 	child := &fakeDocumentInfo{id: newFakeDocumentInfoIdentifier("child"), url: "http://child", parent: parent}
 
 	var di DocumentInfo[*fakeDocumentInfo] = child
-	if di.URL() != "http://child" {
-		t.Fatalf("URL() = %q", di.URL())
+	if di.Url() != "http://child" {
+		t.Fatalf("Url() = %q", di.Url())
 	}
 	if di.Parent() != parent {
 		t.Fatalf("Parent() did not round-trip")

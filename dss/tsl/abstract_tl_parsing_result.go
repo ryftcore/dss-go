@@ -19,7 +19,7 @@ import (
 // AbstractTLParsingResult is the abstract base for a Trusted Lists parsing analysis result.
 // Concrete results (TLParsingResult, LOTLParsingResult) embed it.
 type AbstractTLParsingResult struct {
-	job.AbstractParsingResult
+	*job.AbstractParsingResult
 
 	// tslType is the LOTL/TL TSLType.
 	tslType enumerations.TSLType

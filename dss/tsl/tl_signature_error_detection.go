@@ -9,7 +9,7 @@ import (
 // TLSignatureErrorDetection detects if an error in a TL validation occurred.
 type TLSignatureErrorDetection struct{}
 
-var _ alert.AlertDetector[tslmodel.TLInfo] = (*TLSignatureErrorDetection)(nil)
+var _ alert.AlertDetector[*tslmodel.TLInfo] = (*TLSignatureErrorDetection)(nil)
 
 // NewTLSignatureErrorDetection is the default constructor.
 func NewTLSignatureErrorDetection() *TLSignatureErrorDetection {
@@ -17,7 +17,7 @@ func NewTLSignatureErrorDetection() *TLSignatureErrorDetection {
 }
 
 // Detect ports detect(TLInfo).
-func (d *TLSignatureErrorDetection) Detect(info tslmodel.TLInfo) bool {
+func (d *TLSignatureErrorDetection) Detect(info *tslmodel.TLInfo) bool {
 	downloadCacheInfo := info.DownloadCacheInfo()
 	if downloadCacheInfo != nil && downloadCacheInfo.IsDesynchronized() {
 		validationCacheInfo := info.ValidationCacheInfo()

@@ -64,20 +64,19 @@ func (s *ExpirationAndSignatureCheckStrategy) SetAcceptInvalidListOfTrustedLists
 }
 
 // CanBeSynchronizedDocument ports canBeSynchronized(TLInfo).
-func (s *ExpirationAndSignatureCheckStrategy) CanBeSynchronizedDocument(trustedList tslmodel.TLInfo) bool {
+func (s *ExpirationAndSignatureCheckStrategy) CanBeSynchronizedDocument(trustedList *tslmodel.TLInfo) bool {
 	return s.isSyncSupported(trustedList, s.acceptExpiredTrustedList, s.acceptInvalidTrustedList)
 }
 
 // CanBeSynchronizedDocumentList ports canBeSynchronized(LOTLInfo).
-func (s *ExpirationAndSignatureCheckStrategy) CanBeSynchronizedDocumentList(listOfTrustedList tslmodel.LOTLInfo) bool {
-	return s.isSyncSupported(listOfTrustedList.TLInfo, s.acceptExpiredListOfTrustedLists, s.acceptInvalidListOfTrustedLists)
+func (s *ExpirationAndSignatureCheckStrategy) CanBeSynchronizedDocumentList(listOfTrustedList *tslmodel.LOTLInfo) bool {
+	return s.isSyncSupported(&listOfTrustedList.TLInfo, s.acceptExpiredListOfTrustedLists, s.acceptInvalidListOfTrustedLists)
 }
 
 // isSyncSupported ports the private isSyncSupported(TLInfo, boolean, boolean).
-func (s *ExpirationAndSignatureCheckStrategy) isSyncSupported(tlInfo tslmodel.TLInfo, syncExpired, syncInvalid bool) bool {
+func (s *ExpirationAndSignatureCheckStrategy) isSyncSupported(tlInfo *tslmodel.TLInfo, syncExpired, syncInvalid bool) bool {
 	if !syncExpired {
-		parsingCacheInfo := tlInfo.ParsingCacheInfo()
-		if parsingCacheInfo != nil && parsingCacheInfo.IsResultExist() {
+		if parsingCacheInfo, ok := tlInfo.TLParsingCacheInfo(); ok && parsingCacheInfo.IsResultExist() {
 			currentDate := time.Now()
 			nextUpdateDate := parsingCacheInfo.NextUpdateDate()
 			if nextUpdateDate.IsZero() || currentDate.After(nextUpdateDate) {

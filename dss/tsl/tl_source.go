@@ -29,7 +29,7 @@ var tlSourceDefaultSupportedTLVersions = []int{5, 6}
 
 // TLSource represents a Trusted List source.
 type TLSource struct {
-	job.DocumentSource
+	*job.DocumentSource
 
 	// trustServiceProviderPredicate allows filtering the collected trust service provider(s)
 	// with a predicate.

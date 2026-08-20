@@ -11,7 +11,7 @@ import (
 // LogLOTLLocationChangeAlertHandler warns on the LOTL location change.
 type LogLOTLLocationChangeAlertHandler struct{}
 
-var _ alert.AlertHandler[tslmodel.LOTLInfo] = (*LogLOTLLocationChangeAlertHandler)(nil)
+var _ alert.AlertHandler[*tslmodel.LOTLInfo] = (*LogLOTLLocationChangeAlertHandler)(nil)
 
 // NewLogLOTLLocationChangeAlertHandler is the default constructor.
 func NewLogLOTLLocationChangeAlertHandler() *LogLOTLLocationChangeAlertHandler {
@@ -19,7 +19,7 @@ func NewLogLOTLLocationChangeAlertHandler() *LogLOTLLocationChangeAlertHandler {
 }
 
 // Process ports process(LOTLInfo).
-func (h *LogLOTLLocationChangeAlertHandler) Process(currentInfo tslmodel.LOTLInfo) error {
+func (h *LogLOTLLocationChangeAlertHandler) Process(currentInfo *tslmodel.LOTLInfo) error {
 	pivotInfos := currentInfo.PivotInfos()
 	if len(pivotInfos) > 0 {
 		lastPivotInfo := pivotInfos[len(pivotInfos)-1]

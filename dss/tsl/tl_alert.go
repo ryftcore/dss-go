@@ -12,12 +12,12 @@ import (
 
 // TLAlert processes events on TL.
 type TLAlert struct {
-	job.DocumentAlert[*tslmodel.TLInfo, *tslmodel.LOTLInfo]
+	*job.DocumentAlert[*tslmodel.TLInfo, *tslmodel.LOTLInfo]
 }
 
-var _ alert.Alert[tslmodel.TLInfo] = (*TLAlert)(nil)
+var _ alert.Alert[*tslmodel.TLInfo] = (*TLAlert)(nil)
 
 // NewTLAlert is the default constructor.
-func NewTLAlert(detection alert.AlertDetector[tslmodel.TLInfo], handler alert.AlertHandler[tslmodel.TLInfo]) *TLAlert {
+func NewTLAlert(detection alert.AlertDetector[*tslmodel.TLInfo], handler alert.AlertHandler[*tslmodel.TLInfo]) *TLAlert {
 	return &TLAlert{DocumentAlert: job.NewDocumentAlert(detection, handler)}
 }

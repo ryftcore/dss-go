@@ -11,7 +11,7 @@ import (
 // LogTLExpirationAlertHandler warns on the TL expiration.
 type LogTLExpirationAlertHandler struct{}
 
-var _ alert.AlertHandler[tslmodel.TLInfo] = (*LogTLExpirationAlertHandler)(nil)
+var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLExpirationAlertHandler)(nil)
 
 // NewLogTLExpirationAlertHandler is the default constructor.
 func NewLogTLExpirationAlertHandler() *LogTLExpirationAlertHandler {
@@ -19,9 +19,9 @@ func NewLogTLExpirationAlertHandler() *LogTLExpirationAlertHandler {
 }
 
 // Process ports process(TLInfo).
-func (h *LogTLExpirationAlertHandler) Process(currentInfo tslmodel.TLInfo) error {
-	if currentInfo.ParsingCacheInfo() != nil {
-		slog.Warn("The TL has expired", "url", currentInfo.Url(), "lastUpdate", currentInfo.ParsingCacheInfo().NextUpdateDate())
+func (h *LogTLExpirationAlertHandler) Process(currentInfo *tslmodel.TLInfo) error {
+	if parsingCacheInfo, ok := currentInfo.TLParsingCacheInfo(); ok {
+		slog.Warn("The TL has expired", "url", currentInfo.Url(), "lastUpdate", parsingCacheInfo.NextUpdateDate())
 	} else {
 		slog.Warn("No parsing result found for a LOTL", "url", currentInfo.Url())
 	}

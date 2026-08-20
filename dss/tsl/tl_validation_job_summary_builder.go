@@ -101,7 +101,7 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 	var lotlList []*tslmodel.LOTLInfo
 	if utils.IsArrayNotEmpty(b.lotlSources) {
 		for _, lotlSource := range b.lotlSources {
-			lotlParsingResult := b.readOnlyCacheAccess.ParsingInfoRecord(lotlSource.CacheKey())
+			lotlParsingResult := b.readOnlyCacheAccess.GetParsingInfoRecordTyped(lotlSource.CacheKey())
 
 			lotlInfo := b.buildLOTLInfo(lotlSource)
 
@@ -120,7 +120,7 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 
 				pivotSources := b.extractPivotSources(lotlParsingResult)
 				for _, pivotSource := range pivotSources {
-					pivotParsingCacheDTO := b.readOnlyCacheAccess.ParsingInfoRecord(pivotSource.CacheKey())
+					pivotParsingCacheDTO := b.readOnlyCacheAccess.GetParsingInfoRecordTyped(pivotSource.CacheKey())
 					pivotCertificateTokens := b.getPivotCertificateTokens(pivotParsingCacheDTO)
 					certificateChangesMap := b.getCertificateChangesMap(pivotCertificateTokens, currentCertificates)
 					associatedLOTLLocation := b.getAssociatedLOTLLocation(pivotParsingCacheDTO)
@@ -148,34 +148,34 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 func (b *TLValidationJobSummaryBuilder) buildLOTLInfo(lotlSource *LOTLSource) tslmodel.LOTLInfo {
 	cacheKey := lotlSource.CacheKey()
 	return tslmodel.NewLOTLInfo(
-		b.readOnlyCacheAccess.DownloadInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ParsingInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ValidationInfoRecord(cacheKey), lotlSource.Url())
+		b.readOnlyCacheAccess.GetDownloadInfoRecord(cacheKey),
+		b.readOnlyCacheAccess.GetParsingInfoRecordTyped(cacheKey),
+		b.readOnlyCacheAccess.GetValidationInfoRecord(cacheKey), lotlSource.Url())
 }
 
 func (b *TLValidationJobSummaryBuilder) buildTLInfo(tlSource *TLSource) *tslmodel.TLInfo {
 	cacheKey := tlSource.CacheKey()
 	return tslmodel.NewTLInfo(
-		b.readOnlyCacheAccess.DownloadInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ParsingInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ValidationInfoRecord(cacheKey), tlSource.Url())
+		b.readOnlyCacheAccess.GetDownloadInfoRecord(cacheKey),
+		b.readOnlyCacheAccess.GetParsingInfoRecordTyped(cacheKey),
+		b.readOnlyCacheAccess.GetValidationInfoRecord(cacheKey), tlSource.Url())
 }
 
 func (b *TLValidationJobSummaryBuilder) buildTLInfoWithParent(tlSource *TLSource, lotlInfo *tslmodel.LOTLInfo, otherTSLPointer *tslmodel.OtherTSLPointer) *tslmodel.TLInfo {
 	cacheKey := tlSource.CacheKey()
 	return tslmodel.NewTLInfoFull(
-		b.readOnlyCacheAccess.DownloadInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ParsingInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ValidationInfoRecord(cacheKey), tlSource.Url(), lotlInfo, otherTSLPointer)
+		b.readOnlyCacheAccess.GetDownloadInfoRecord(cacheKey),
+		b.readOnlyCacheAccess.GetParsingInfoRecordTyped(cacheKey),
+		b.readOnlyCacheAccess.GetValidationInfoRecord(cacheKey), tlSource.Url(), lotlInfo, otherTSLPointer)
 }
 
 func (b *TLValidationJobSummaryBuilder) buildPivotInfo(pivotSource *LOTLSource, certificateChangesMap map[*model.CertificateToken]tslmodel.CertificatePivotStatus,
 	associatedLOTLLocation string) *tslmodel.PivotInfo {
 	cacheKey := pivotSource.CacheKey()
 	return tslmodel.NewPivotInfo(
-		b.readOnlyCacheAccess.DownloadInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ParsingInfoRecord(cacheKey),
-		b.readOnlyCacheAccess.ValidationInfoRecord(cacheKey), pivotSource.Url(),
+		b.readOnlyCacheAccess.GetDownloadInfoRecord(cacheKey),
+		b.readOnlyCacheAccess.GetParsingInfoRecordTyped(cacheKey),
+		b.readOnlyCacheAccess.GetValidationInfoRecord(cacheKey), pivotSource.Url(),
 		certificateChangesMap, associatedLOTLLocation)
 }
 

@@ -73,9 +73,30 @@ func (t *TLInfo) DownloadCacheInfo() job.DownloadInfoRecord {
 }
 
 // ParsingCacheInfo returns the parsing cache info. Port of the covariant
-// TLInfo#getParsingCacheInfo() override, narrowed to TLParsingInfoRecord.
-func (t *TLInfo) ParsingCacheInfo() TLParsingInfoRecord {
+// TLInfo#getParsingCacheInfo() override.
+//
+// INTEGRATION FIX: Java's override narrows the return type to TLParsingInfoRecord
+// (covariant return). Go has no covariant interface-method return types, and this method
+// must satisfy job.DocumentInfo[P]'s ParsingCacheInfo() job.ParsingInfoRecord exactly for
+// *TLInfo/*LOTLInfo to be usable as the D/P type arguments of job.ValidationJob and friends -
+// so it answers the base job.ParsingInfoRecord interface here. The underlying value's dynamic
+// type is always a TLParsingInfoRecord (e.g. *tsl.TLParsingCacheDTO from package tsl), so a
+// caller needing the TL-specific accessors (TSLType, SequenceNumber, NextUpdateDate, ...)
+// recovers them with a type assertion: `tlParsingCacheInfo, ok :=
+// tlInfo.ParsingCacheInfo().(TLParsingInfoRecord)`.
+func (t *TLInfo) ParsingCacheInfo() job.ParsingInfoRecord {
 	return t.parsingCacheInfo
+}
+
+// TLParsingCacheInfo returns the parsing cache info narrowed to TLParsingInfoRecord, when the
+// stored record actually carries the TL-specific accessors (it always does in practice - the
+// only two- implementations produced anywhere in this tree are tsl.TLParsingCacheDTO and a nil
+// interface). ok is false when parsingCacheInfo is nil or does not implement
+// TLParsingInfoRecord. Convenience wrapper over the type assertion documented on
+// ParsingCacheInfo, so callers do not need to repeat it inline.
+func (t *TLInfo) TLParsingCacheInfo() (TLParsingInfoRecord, bool) {
+	tlParsingCacheInfo, ok := t.parsingCacheInfo.(TLParsingInfoRecord)
+	return tlParsingCacheInfo, ok
 }
 
 // ValidationCacheInfo returns the validation cache info.

@@ -1,0 +1,12 @@
+LOTL	eu-lotl-250	testdata/oracle/tsl/eu-lotl-250.xml
+LOTL	eu-lotl	testdata/oracle/tsl/eu-lotl.xml
+LOTL	eu-lotl-pivot	testdata/oracle/tsl/eu-lotl-pivot.xml
+LOTL	eu-lotl-broken-sig	testdata/oracle/tsl/eu-lotl-broken-sig.xml
+LOTL	eu-lotl-not-parseable	testdata/oracle/tsl/eu-lotl-not-parseable.xml
+LOTL	eu-lotl-no-sig	testdata/oracle/tsl/eu-lotl-no-sig.xml
+LOTL	mra-lotl	testdata/oracle/tsl/mra-lotl.xml
+TL	de-tl	testdata/oracle/tsl/de-tl.xml
+TL	fr	testdata/oracle/tsl/fr.xml
+TL	sk-tl	testdata/oracle/tsl/sk-tl.xml
+TL	dk_tl-sn21	testdata/oracle/tsl/dk_tl-sn21.xml
+TL	mra-zz-tl	testdata/oracle/tsl/mra-zz-tl.xml
