@@ -1,11 +1,4 @@
-//go:build phase8
-
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/ASiCContainerWithCAdESAnalyzer.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag because it
-// constructs ASiCWithCAdESTimestampAnalyzer, itself gated (see that file's header) since its
-// Java base belongs to the not-yet-ported dss-validation module. Drop the tag on both files
-// together once Phase 8 lands the package.
 //
 // AttachExternalTimestamps below is reached virtually: asic.AbstractASiCContainerAnalyzer's
 // GetAllSignatures self-calls it through AbstractASiCContainerAnalyzerOverrides, which the

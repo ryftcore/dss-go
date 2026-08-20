@@ -241,6 +241,24 @@ func (b *DiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model
 	return b
 }
 
+// GetTokenExtractionStrategy returns the TokenExtractionStrategy set via TokenExtractionStrategy.
+// Cross-package accessor added during phase 8f un-gating for
+// ASiCWithCAdESDiagnosticDataBuilder.buildDetachedXmlSignature() (out of this manifest), which
+// needs to propagate this field into a freshly-built nested CAdESDiagnosticDataBuilder the way
+// Java reads the protected tokenExtractionStrategy field directly - see
+// SignedDocumentDiagnosticDataBuilder.GetDocumentCertificateSource's doc comment for the same
+// cross-package-getter rationale. Purely additive; does not change TokenExtractionStrategy's
+// existing fluent-setter behavior.
+func (b *DiagnosticDataBuilder) GetTokenExtractionStrategy() enumerations.TokenExtractionStrategy {
+	return b.tokenExtractionStrategy
+}
+
+// GetTokenIdentifierProvider returns the TokenIdentifierProvider set via TokenIdentifierProvider.
+// See GetTokenExtractionStrategy's doc comment.
+func (b *DiagnosticDataBuilder) GetTokenIdentifierProvider() model.TokenIdentifierProvider {
+	return b.identifierProvider
+}
+
 // DefaultDigestAlgorithm sets the default DigestAlgorithm which will be used for tokens'
 // DigestAlgoAndValue calculation. Port of defaultDigestAlgorithm(DigestAlgorithm).
 func (b *DiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *DiagnosticDataBuilder {

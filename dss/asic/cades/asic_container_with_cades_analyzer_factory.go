@@ -1,9 +1,4 @@
-//go:build phase8
-
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/ASiCContainerWithCAdESAnalyzerFactory.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag; see
-// asic_container_with_cades_analyzer.go's header for why.
 package cades
 
 import (

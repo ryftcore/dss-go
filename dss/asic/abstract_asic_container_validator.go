@@ -1,45 +1,82 @@
-//go:build phase8
-
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/validation/AbstractASiCContainerValidator.java (DSS 6.5.RC1).
 //
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag so that
-// `go build ./...` / `go vet ./...` / `go test ./...` are green for the rest of the module while
-// dss/validation does not exist yet. Drop the tag once Phase 8 lands the package; the file needs
-// no other change (see the cades/cms_document_validator.go precedent this file follows).
-//
-// BLOCKED FORWARD DEPENDENCY (flagged per S7_BRIEF.md's "flag needs in notes" rule): this
-// class's Java base, eu.europa.esig.dss.validation.SignedDocumentValidator, belongs to
-// dss-validation, assigned to the not-yet-ported `validation` package (Phase 8). The assumed
-// shape (per the cades/cms_document_validator.go precedent) is an interface
-// `validation.SignedDocumentValidator` plus an embeddable `validation.SignedDocumentValidatorBase`
-// providing NewSignedDocumentValidatorBase(analyzer.DocumentAnalyzer) and DocumentAnalyzer()
-// (returning analyzer.DocumentAnalyzer) plus InitializeDiagnosticDataBuilder() returning
-// dssdiagnostic.SignedDocumentDiagnosticDataBuilder.
+// Two-tier virtual dispatch, mirroring abstract_asic_container_analyzer.go's own note: this
+// base overrides validation.SignedDocumentValidatorOverrides.InitializeDiagnosticDataBuilder
+// (registered at the leaf validator via InitSignedDocumentValidator, per the
+// cades/cms_document_validator.go precedent) while itself declaring ONE further-overridable
+// member, instantiateASiCDiagnosticDataBuilder() - overridden by ASiCContainerWithCAdESValidator
+// (out of this manifest) to swap in ASiCWithCAdESDiagnosticDataBuilder, left at the default by
+// ASiCContainerWithXAdESValidator. That second override cannot be reached by embedding alone -
+// InitializeDiagnosticDataBuilder below self-calls it, and Go has no virtual dispatch across an
+// embedded value - so it gets its own AbstractASiCContainerValidatorOverrides interface and
+// InitAbstractASiCContainerValidator registration, which every concrete leaf validator's
+// constructor must call once (in addition to InitSignedDocumentValidator), exactly as
+// AbstractASiCContainerAnalyzer's own AttachExternalTimestamps optional-override works.
 package asic
 
 import (
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/spi/validation/analyzer"
 	dssvalidation "github.com/utain/esig/dss/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/diagnostic"
+	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
 )
 
+// abstractASiCContainerAnalyzerBase is implemented by every concrete leaf ASiC analyzer
+// (asic/cades.ASiCContainerWithCAdESAnalyzer, asic/xades.ASiCContainerWithXAdESAnalyzer, each
+// embedding *AbstractASiCContainerAnalyzer by pointer, which promotes the method automatically).
+// See AbstractASiCContainerAnalyzer.AbstractASiCContainerAnalyzerBase's doc comment.
+type abstractASiCContainerAnalyzerBase interface {
+	analyzer.DocumentAnalyzer
+	AbstractASiCContainerAnalyzerBase() *AbstractASiCContainerAnalyzer
+}
+
 // AbstractASiCContainerValidatorOverrides declares the operation this base's
-// InstantiateASiCDiagnosticDataBuilder default relies on being overridable. Following
-// PORTING.md's virtual-dispatch precedent (see AbstractASiCContainerAnalyzer's two-tier
-// composition note), a concrete validator that wants a different diagnostic-data builder
-// shadows InstantiateASiCDiagnosticDataBuilder directly rather than through an overrides field,
-// since InitializeDiagnosticDataBuilder below is the only caller and lives on this same type.
+// InitializeDiagnosticDataBuilder self-calls virtually. See the file header.
+type AbstractASiCContainerValidatorOverrides interface {
+	// InstantiateASiCDiagnosticDataBuilder creates a new SignedDocumentDiagnosticDataBuilder.
+	// Port of the protected instantiateASiCDiagnosticDataBuilder().
+	InstantiateASiCDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder
+}
+
+// AbstractASiCContainerValidator is the abstract class for an ASiC container validation. Port
+// of the class AbstractASiCContainerValidator, extending validation.SignedDocumentValidator.
 type AbstractASiCContainerValidator struct {
 	dssvalidation.SignedDocumentValidatorBase
+
+	// overrides points back at the concrete leaf validator; see InitAbstractASiCContainerValidator.
+	overrides AbstractASiCContainerValidatorOverrides
 }
 
 // NewAbstractASiCContainerValidator is the constructor with an analyzer. Ports
 // AbstractASiCContainerValidator(AbstractASiCContainerAnalyzer).
-func NewAbstractASiCContainerValidator(asicContainerAnalyzer *AbstractASiCContainerAnalyzer) AbstractASiCContainerValidator {
+//
+// Takes the concrete leaf analyzer (e.g. *ASiCContainerWithCAdESAnalyzer) rather than the
+// *AbstractASiCContainerAnalyzer it embeds: the latter never itself satisfies
+// analyzer.DocumentAnalyzer (IsSupported is left abstract, exactly as
+// analyzer.DefaultDocumentAnalyzer's own precedent - see validation.SignedDocumentValidator's
+// signatureByIDAnalyzer doc comment), so passing it directly would not compile; passing the
+// outer leaf value instead also matches Java's `super(new ASiCContainerWithCAdESAnalyzer())` more
+// directly than unwrapping to the base field would.
+func NewAbstractASiCContainerValidator(asicContainerAnalyzer abstractASiCContainerAnalyzerBase) AbstractASiCContainerValidator {
 	return AbstractASiCContainerValidator{
 		SignedDocumentValidatorBase: dssvalidation.NewSignedDocumentValidatorBase(asicContainerAnalyzer),
 	}
+}
+
+// InitAbstractASiCContainerValidator registers the concrete leaf validator so
+// InitializeDiagnosticDataBuilder can dispatch instantiateASiCDiagnosticDataBuilder() onto it.
+// Every concrete leaf validator's constructor must call this once, in addition to
+// InitSignedDocumentValidator - see the file header.
+func (v *AbstractASiCContainerValidator) InitAbstractASiCContainerValidator(overrides AbstractASiCContainerValidatorOverrides) {
+	v.overrides = overrides
+}
+
+func (v *AbstractASiCContainerValidator) requireOverrides() AbstractASiCContainerValidatorOverrides {
+	if v.overrides == nil {
+		panic("AbstractASiCContainerValidator was not initialised: the concrete validator must call InitAbstractASiCContainerValidator in its constructor")
+	}
+	return v.overrides
 }
 
 // GetDocumentAnalyzer ports the @Override covariant-return getDocumentAnalyzer(), narrowing
@@ -49,7 +86,7 @@ func NewAbstractASiCContainerValidator(asicContainerAnalyzer *AbstractASiCContai
 // Panics if the wrapped analyzer isn't an *AbstractASiCContainerAnalyzer, which cannot happen
 // for a validator built through NewAbstractASiCContainerValidator.
 func (v *AbstractASiCContainerValidator) GetDocumentAnalyzer() *AbstractASiCContainerAnalyzer {
-	return v.SignedDocumentValidatorBase.DocumentAnalyzer().(*AbstractASiCContainerAnalyzer)
+	return v.SignedDocumentValidatorBase.DocumentAnalyzer().(abstractASiCContainerAnalyzerBase).AbstractASiCContainerAnalyzerBase()
 }
 
 // IsSupported checks if the ASiCContent is supported by the current validator. Ports
@@ -138,18 +175,16 @@ func (v *AbstractASiCContainerValidator) GetManifestFiles() []*model.ManifestFil
 }
 
 // InitializeDiagnosticDataBuilder ports the @Override initializeDiagnosticDataBuilder().
-// Shadows the embedded base's method of the same name; see the file header's forward-
-// dependency note and PORTING.md's "Virtual dispatch" precedent on why the override has to be
-// reproduced this way rather than relying on embedding alone.
-func (v *AbstractASiCContainerValidator) InitializeDiagnosticDataBuilder() dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := v.InstantiateASiCDiagnosticDataBuilder()
+func (v *AbstractASiCContainerValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
+	builder := v.requireOverrides().InstantiateASiCDiagnosticDataBuilder()
 	builder.ContainerInfo(v.GetDocumentAnalyzer().GetContainerInfo())
-	return builder
+	return &builder.SignedDocumentDiagnosticDataBuilder
 }
 
 // InstantiateASiCDiagnosticDataBuilder creates a new SignedDocumentDiagnosticDataBuilder. Ports
-// the protected instantiateASiCDiagnosticDataBuilder(). A concrete validator wanting a
-// different diagnostic-data builder shadows this method directly (see this type's doc comment).
+// the protected instantiateASiCDiagnosticDataBuilder(). The default implementation - promoted
+// to any concrete leaf validator that does not shadow it, exactly as
+// ASiCContainerWithXAdESValidator relies on in Java by not overriding this method either.
 func (v *AbstractASiCContainerValidator) InstantiateASiCDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder {
 	return NewASiCContainerDiagnosticDataBuilder()
 }

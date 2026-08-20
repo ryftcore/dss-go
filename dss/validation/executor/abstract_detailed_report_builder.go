@@ -168,6 +168,14 @@ func (b *AbstractDetailedReportBuilder) BasicBuildingBlocksInOrder(
 	return result
 }
 
+// IdentifiedToken is the part of diagnostic.TokenProxy JavaHashSetOrder needs:
+// Java's AbstractTokenProxy derives both equals() and hashCode() from getId()
+// alone.
+type IdentifiedToken interface {
+	// Id returns the unique identifier of the object. Port of getId().
+	Id() string
+}
+
 // JavaHashSetOrder reorders tokens into the iteration order
 // java.util.HashSet yields for the same elements.
 //
@@ -193,7 +201,7 @@ func (b *AbstractDetailedReportBuilder) BasicBuildingBlocksInOrder(
 // This is the one place in the port that reproduces a Java hash order rather
 // than substituting insertion order (the convention documented in
 // utils/ordered_map.go): here the order reaches the marshalled report.
-func JavaHashSetOrder[T diagnostic.TokenProxy](tokens []T) []T {
+func JavaHashSetOrder[T IdentifiedToken](tokens []T) []T {
 	if len(tokens) < 2 {
 		return tokens
 	}

@@ -65,6 +65,23 @@ type SignedDocumentValidator interface {
 	SetLocale(locale string)
 }
 
+// DiagnosticDataBuilderInitializer is the view of a SignedDocumentValidator
+// that Java reaches through the class's own public
+// initializeDiagnosticDataBuilder(): QWACValidator, for one, calls it on the
+// validator fromDocument() handed it. It is a separate interface rather than a
+// member of SignedDocumentValidator because Java's format-specific validators
+// override the method with COVARIANT return types (CAdESDiagnosticDataBuilder,
+// PAdESDiagnosticDataBuilder, ...) - the ported ones all narrow back to
+// *SignedDocumentDiagnosticDataBuilder, but a future one need not, and would
+// then silently drop out of SignedDocumentValidator's method set. Callers
+// assert to this interface instead.
+type DiagnosticDataBuilderInitializer interface {
+	// InitializeDiagnosticDataBuilder creates a format-specific
+	// implementation of the SignedDocumentDiagnosticDataBuilder. Port of
+	// initializeDiagnosticDataBuilder().
+	InitializeDiagnosticDataBuilder() *reportsdiagnostic.SignedDocumentDiagnosticDataBuilder
+}
+
 // SignedDocumentValidatorOverrides captures the member Java's format-specific
 // validators override and that SignedDocumentValidator self-calls from
 // getDiagnosticData().

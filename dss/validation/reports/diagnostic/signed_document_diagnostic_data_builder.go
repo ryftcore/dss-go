@@ -76,6 +76,15 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// keeps its current behavior unchanged: none define their own BuildXmlOrphanTokens, so Go
 	// embedding promotes DiagnosticDataBuilder's concrete implementation for them automatically.
 	BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens
+	// Build builds the XmlDiagnosticData. Port of the public @Override build(), overridden by
+	// ASiCContainerDiagnosticDataBuilder (out of this manifest) to add the container's
+	// XmlContainerInfo. Added to this interface during phase 8f un-gating so
+	// XmlDiagnosticDataFactory.Create() (this package, statically typed against the base
+	// *SignedDocumentDiagnosticDataBuilder) can reach the override - see BuildXmlOrphanTokens's
+	// doc comment for the same rationale. Every existing implementer keeps its current behavior:
+	// none besides QWACCertificateDiagnosticDataBuilder (which is never reached through
+	// XmlDiagnosticDataFactory - see its own Build's call sites) define their own Build.
+	Build() *jaxb.XmlDiagnosticData
 }
 
 // SignedDocumentDiagnosticDataBuilder is the common builder for DiagnosticData creation from a

@@ -1,16 +1,8 @@
-//go:build phase8
-
 // Extracted from ASiCWithCAdESLevelBaselineLTA.extend(ASiCContent, DigestAlgorithm,
 // DigestAlgorithm) (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
-// ASiCWithCAdESLevelBaselineLTA.java, DSS 6.5.RC1) during Phase 7/8 integration.
-//
-// INTEGRATOR NOTE: re-validating the container's existing signatures and detached timestamps
-// to gather fresh validation data for an archive-timestamp renewal requires the dss/validation
-// engine (Phase 8, not yet ported at the time this Phase 7 chunk landed). This file carries
-// that one analyzer-dependent step, gated the same way as the other analyzer/validator files in
-// this tree (see asic_container_with_cades_analyzer.go); asic_with_cades_lta_validation_nophase8.go
-// carries the same method's signature for the default (non-phase8) build. Once Phase 8 lands,
-// this split can be folded back into asic_with_cades_level_baseline_lta.go.
+// ASiCWithCAdESLevelBaselineLTA.java, DSS 6.5.RC1) during Phase 7/8 integration; un-gated in
+// phase 8f now that dss/validation has landed. Could be folded back into
+// asic_with_cades_level_baseline_lta.go as a follow-up cleanup.
 package cades
 
 import (

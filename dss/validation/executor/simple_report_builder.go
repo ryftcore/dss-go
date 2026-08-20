@@ -10,9 +10,17 @@
 //     by default (includeSemantics=false).
 //
 //   - getUniqueServiceNames() returns a HashSet<String> whose iteration order
-//     reaches the marshalled <TrustServiceName> elements. This port keeps
-//     first-seen insertion order of the deduplicated names, matching the
-//     precedent set by qualification/granted_status_check.go.
+//     reaches the marshalled <TrustServiceName> elements, so - unlike the
+//     enum sets above, whose order is not reproducible at all - it is
+//     reproduced exactly, by JavaHashSetStringOrder (see
+//     abstract_detailed_report_builder.go).
+//
+//   - Java's nullable String getters become the Go zero string in the ported
+//     diagnostic wrappers, and the null-versus-empty distinction is
+//     byte-visible (an omitted element versus an empty one). nullableString
+//     restores it wherever the report shows the difference; addDocumentName
+//     goes one step further and reads the JAXB field itself, because BOTH
+//     spellings occur in the corpus (see that method).
 //
 //   - Java has three getXmlDisclosableClaim overloads; Go has none, so they
 //     become xmlDisclosableClaim / xmlDisclosableClaimWithDisclosure /

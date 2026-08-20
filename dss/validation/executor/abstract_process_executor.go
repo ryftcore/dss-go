@@ -75,10 +75,14 @@ func (e *AbstractProcessExecutor) SetValidationPolicy(validationPolicy policy.Va
 
 // SetLocale sets the locale to use to generate messages. Port of
 // setLocale(Locale).
+//
+// Java's Objects.requireNonNull("Locale cannot be null!") has no Go
+// counterpart here: a Locale becomes a language tag string, and the empty
+// string is NOT its null - i18n.NewI18nProviderForLocale documents "" as
+// exactly Java's Locale.getDefault(), which is what both
+// SignedDocumentValidator and AbstractCertificateValidator initialise their
+// locale field to and pass straight through to this setter.
 func (e *AbstractProcessExecutor) SetLocale(locale string) {
-	if locale == "" {
-		panic("Locale cannot be null!")
-	}
 	e.i18nProvider = i18n.NewI18nProviderForLocale(locale)
 }
 

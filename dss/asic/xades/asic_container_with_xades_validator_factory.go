@@ -1,12 +1,7 @@
-//go:build phase8
-
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCContainerWithXAdESValidatorFactory.java (DSS 6.5.RC1).
 //
 // Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
 // same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag; see
-// asic_container_with_xades_validator.go's header for why.
 package xades
 
 import (

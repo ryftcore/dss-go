@@ -85,8 +85,22 @@ func (f *XmlDiagnosticDataFactory) SetTokenIdentifierProvider(tokenIdentifierPro
 }
 
 // Create creates an XmlDiagnosticData. Port of create().
+//
+// Dispatches through the registered SignedDocumentDiagnosticDataBuilderOverrides rather than
+// calling Build() directly on the base-typed f.diagnosticDataBuilder: Java's virtual dispatch
+// reaches ASiCContainerDiagnosticDataBuilder.build()'s ContainerInfo-adding @Override through
+// this same call in XmlDiagnosticDataFactory.create(), but f.diagnosticDataBuilder is statically
+// typed *SignedDocumentDiagnosticDataBuilder (SignedDocumentValidatorOverrides.
+// InitializeDiagnosticDataBuilder's declared return type - see validation/signed_document_validator.go),
+// so a direct .Build() call always resolves to this package's own base implementation and never
+// reaches an embedding package's override. Added to SignedDocumentDiagnosticDataBuilderOverrides
+// during phase 8f un-gating for the same reason as BuildXmlOrphanTokens - see that method's doc
+// comment. Every existing implementer (CAdES, XAdES, JAdES, QWAC's signature-diagnostic-data use)
+// keeps its current behavior: none define their own Build, so embedding promotes this package's
+// concrete implementation for them unchanged.
 func (f *XmlDiagnosticDataFactory) Create() *jaxb.XmlDiagnosticData {
-	return f.InitBuilder().Build()
+	builder := f.InitBuilder()
+	return builder.signedDocumentDiagnosticDataBuilderOverrides().Build()
 }
 
 // InitBuilder instantiates the Diagnostic Data builder with the validation context. Port of the

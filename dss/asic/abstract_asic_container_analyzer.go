@@ -119,6 +119,19 @@ func (a *AbstractASiCContainerAnalyzer) requireOverrides() AbstractASiCContainer
 	return a.overrides
 }
 
+// AbstractASiCContainerAnalyzerBase returns the receiver itself. Cross-package accessor added
+// during phase 8f un-gating: AbstractASiCContainerValidator (abstract_asic_container_validator.go,
+// same package) needs to recover this base pointer from the analyzer.DocumentAnalyzer interface
+// value SignedDocumentValidatorBase.DocumentAnalyzer() returns, whose dynamic type is a concrete
+// leaf analyzer (e.g. asic/cades.ASiCContainerWithCAdESAnalyzer) embedding
+// *AbstractASiCContainerAnalyzer by pointer - a type assertion straight to
+// *AbstractASiCContainerAnalyzer fails for that dynamic type (different concrete struct), so an
+// exported method every embedder promotes automatically is needed instead, following the same
+// pattern as jades.jwsDocumentAnalyzerBase. Purely additive.
+func (a *AbstractASiCContainerAnalyzer) AbstractASiCContainerAnalyzerBase() *AbstractASiCContainerAnalyzer {
+	return a
+}
+
 // InitFromDocument ports the protected AbstractASiCContainerAnalyzer(DSSDocument) constructor,
 // split out because it calls back into GetContainerExtractor (an overrides method).
 func (a *AbstractASiCContainerAnalyzer) InitFromDocument(document model.DSSDocument) {
