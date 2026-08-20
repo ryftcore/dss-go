@@ -241,6 +241,24 @@ func (b *DiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model
 	return b
 }
 
+// GetTokenExtractionStrategy returns the TokenExtractionStrategy set via TokenExtractionStrategy.
+// Cross-package accessor added during phase 8f un-gating for
+// ASiCWithCAdESDiagnosticDataBuilder.buildDetachedXmlSignature() (out of this manifest), which
+// needs to propagate this field into a freshly-built nested CAdESDiagnosticDataBuilder the way
+// Java reads the protected tokenExtractionStrategy field directly - see
+// SignedDocumentDiagnosticDataBuilder.GetDocumentCertificateSource's doc comment for the same
+// cross-package-getter rationale. Purely additive; does not change TokenExtractionStrategy's
+// existing fluent-setter behavior.
+func (b *DiagnosticDataBuilder) GetTokenExtractionStrategy() enumerations.TokenExtractionStrategy {
+	return b.tokenExtractionStrategy
+}
+
+// GetTokenIdentifierProvider returns the TokenIdentifierProvider set via TokenIdentifierProvider.
+// See GetTokenExtractionStrategy's doc comment.
+func (b *DiagnosticDataBuilder) GetTokenIdentifierProvider() model.TokenIdentifierProvider {
+	return b.identifierProvider
+}
+
 // DefaultDigestAlgorithm sets the default DigestAlgorithm which will be used for tokens'
 // DigestAlgoAndValue calculation. Port of defaultDigestAlgorithm(DigestAlgorithm).
 func (b *DiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *DiagnosticDataBuilder {
@@ -937,7 +955,7 @@ func (b *DiagnosticDataBuilder) GetXmlSignerInfo(signerIdentifier *spi.SignerIde
 		issuerName := signerIdentifier.IssuerName().String()
 		xmlSignerInfo.IssuerName = &issuerName
 	}
-	xmlSignerInfo.SerialNumber = signerIdentifier.SerialNumber()
+	xmlSignerInfo.SerialNumber = jaxb.NewBigInteger(signerIdentifier.SerialNumber())
 	if signerIdentifier.Ski() != nil {
 		ski := jaxb.Base64Binary(signerIdentifier.Ski())
 		xmlSignerInfo.Ski = &ski
@@ -988,7 +1006,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 	if !revocationToken.NextUpdate().IsZero() {
 		xmlRevocation.NextUpdate = jaxb.NewXSDateTime(revocationToken.NextUpdate())
 	}
-	xmlRevocation.CRLNumber = revocationToken.CRLNumber()
+	xmlRevocation.CRLNumber = jaxb.NewBigInteger(revocationToken.CRLNumber())
 	if !revocationToken.ExpiredCertsOnCRL().IsZero() {
 		xmlRevocation.ExpiredCertsOnCRL = jaxb.NewXSDateTime(revocationToken.ExpiredCertsOnCRL())
 	}
@@ -1067,10 +1085,10 @@ func (b *DiagnosticDataBuilder) GetXmlCRLRevocationRef(crlRef *spi.CRLRef, origi
 			xmlRevocationRef.IssueTime = jaxb.NewXSDateTime(crlRef.CRLIssueTime())
 		}
 		if crlRef.CRLNumber() != nil {
-			xmlRevocationRef.CRLNumber = crlRef.CRLNumber()
+			xmlRevocationRef.CRLNumber = jaxb.NewBigInteger(crlRef.CRLNumber())
 		}
 	}
-	xmlRevocationRef.CRLNumber = crlRef.CRLNumber()
+	xmlRevocationRef.CRLNumber = jaxb.NewBigInteger(crlRef.CRLNumber())
 	if crlRef.CRLURI() != "" {
 		uri := crlRef.CRLURI()
 		xmlRevocationRef.Uri = &uri
@@ -1410,7 +1428,22 @@ func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
 
 // GetXmlFoundCertificatesForSource returns found certificates from the source. Port of the
 // protected getXmlFoundCertificates(TokenCertificateSource).
-func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSource *spi.TokenCertificateSource) *jaxb.XmlFoundCertificates {
+//
+// The parameter is the foundCertificatesSource interface, not the concrete *spi.
+// TokenCertificateSource: Java's parameter type is the ABSTRACT class TokenCertificateSource,
+// so a call like getXmlFoundCertificates(ocspCertificateSource) dispatches
+// ocspCertificateSource.getCertificateSourceType() virtually, reaching OCSPCertificateSource's
+// override (OCSP_RESPONSE). A concrete Go struct parameter cannot reproduce that: a caller
+// holding an *OCSPCertificateSource has no implicit conversion to *spi.TokenCertificateSource,
+// so it would have to pass the ADDRESS OF THE EMBEDDED FIELD instead - which is a plain
+// *spi.TokenCertificateSource value that has never heard of OCSPCertificateSource's override,
+// so CertificateSourceType() resolves to the base's CertificateSourceType_OTHER and
+// getXmlFoundCertificates's default/else branch's cast to signatureCertificateSourceRefs panics
+// (found live via the phase 8f document-level harness on PAdES-LT.pdf: an orphan OCSP
+// revocation identifier's certificate source hit exactly this). The interface parameter lets
+// every caller pass the OUTER value it actually has (here, ocspCertificateSource itself),
+// which correctly dispatches the override, matching Java.
+func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
 	return b.getXmlFoundCertificates(nil, certificateSource)
 }
 
@@ -1703,6 +1736,27 @@ func (b *DiagnosticDataBuilder) GetXmlOrphanCertificate(origin enumerations.Cert
 	return xoc
 }
 
+// IsKnownCertificate reports whether id (a CertificateToken.DSSIDAsString()) has already been
+// recorded as a non-orphan XmlCertificate (i.e. is a key of the private xmlCertsMap cache).
+// Cross-package accessor added during phase 8f un-gating: Java's PAdESDiagnosticDataBuilder.
+// buildOrphanTokensFromDocumentSources() reads the protected xmlCertsMap field directly (Java
+// `protected` grants cross-package subclass access DSS relies on here); Go embedding does not
+// expose unexported fields to an embedding type in another package, so this getter is the
+// narrowest surface that reproduces the same check. No existing behavior changes - purely
+// additive.
+func (b *DiagnosticDataBuilder) IsKnownCertificate(id string) bool {
+	_, ok := b.xmlCertsMap[id]
+	return ok
+}
+
+// IsKnownRevocation reports whether id (a revocation identifier's AsXmlID()) has already been
+// recorded as a non-orphan XmlRevocation (i.e. is a key of the private xmlRevocationsMap cache).
+// See IsKnownCertificate's doc comment for why this accessor exists.
+func (b *DiagnosticDataBuilder) IsKnownRevocation(id string) bool {
+	_, ok := b.xmlRevocationsMap[id]
+	return ok
+}
+
 // BuildXmlOrphanCertificateToken builds an XmlOrphanCertificateToken from the given
 // CertificateToken. Port of the protected buildXmlOrphanCertificateToken(CertificateToken).
 func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken *model.CertificateToken) *jaxb.XmlOrphanCertificateToken {
@@ -1727,7 +1781,7 @@ func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken 
 		orphanToken.IssuerDistinguishedName = append(orphanToken.IssuerDistinguishedName,
 			b.getXmlDistinguishedName(x500PrincipalRFC2253, issuer.RFC2253()))
 
-		orphanToken.SerialNumber = certificateToken.SerialNumber()
+		orphanToken.SerialNumber = jaxb.NewBigInteger(certificateToken.SerialNumber())
 
 		orphanToken.NotAfter = jaxb.NewXSDateTime(certificateToken.NotAfter())
 		orphanToken.NotBefore = jaxb.NewXSDateTime(certificateToken.NotBefore())
@@ -1938,7 +1992,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlCertificate(certToken *model.Cer
 	xmlCert.IssuerDistinguishedName = append(xmlCert.IssuerDistinguishedName,
 		b.getXmlDistinguishedName(x500PrincipalRFC2253, issuer.RFC2253()))
 
-	xmlCert.SerialNumber = certToken.SerialNumber()
+	xmlCert.SerialNumber = jaxb.NewBigInteger(certToken.SerialNumber())
 
 	if v := spi.DSSASN1UtilsExtractAttributeFromX500Principal(oidSubjectSerialNumber, subject); v != "" {
 		xmlCert.SubjectSerialNumber = &v
@@ -2201,8 +2255,8 @@ func (b *DiagnosticDataBuilder) getXmlGeneralSubtree(generalSubtree *extension.G
 	t := jaxb.GeneralNameTypeValue(generalSubtree.GeneralNameType())
 	xmlGeneralSubtree.Type = &t
 	xmlGeneralSubtree.Value = generalSubtree.Value()
-	xmlGeneralSubtree.Minimum = generalSubtree.Minimum()
-	xmlGeneralSubtree.Maximum = generalSubtree.Maximum()
+	xmlGeneralSubtree.Minimum = jaxb.NewBigInteger(generalSubtree.Minimum())
+	xmlGeneralSubtree.Maximum = jaxb.NewBigInteger(generalSubtree.Maximum())
 	return xmlGeneralSubtree
 }
 

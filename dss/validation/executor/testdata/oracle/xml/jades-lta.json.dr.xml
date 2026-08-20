@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DetailedReport ValidationTime="2023-11-14T22:13:20Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
+    <Signature Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+        <ValidationProcessBasicSignature Title="Validation Process for Basic Signatures">
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-FC">
+                <Name Key="BSV_IFCRC">Is the result of the 'Format Checking' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-ISC">
+                <Name Key="BSV_IISCRC">Is the result of the 'Identification of Signing Certificate' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-VCI">
+                <Name Key="BSV_IVCIRC">Is the result of the 'Validation Context Initialization' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-XCV">
+                <Name Key="BSV_IXCVRC">Is the result of the 'X.509 Certificate Validation' building block conclusive?</Name>
+                <Status>WARNING</Status>
+                <Warning Key="BSV_IXCVRC_ANS">The result of the 'X.509 Certificate Validation' building block is not conclusive!</Warning>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-XCV">
+                <Name Key="BSV_ISCRAVTC">Is the signing certificate not revoked at validation time?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-XCV">
+                <Name Key="BSV_IVTAVRSC">Is the validation time in the validity range of the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B-CV">
+                <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+                <Name Key="ADEST_ROBVPIIC">Is the result of the Basic Validation Process conclusive?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="ADEST_ROBVPIIC_ANS">The result of the Basic validation process is not conclusive!</Error>
+                <AdditionalInfo>Basic Signature Validation process failed with INDETERMINATE/NO_CERTIFICATE_CHAIN_FOUND indication</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+            <ProofOfExistence>
+                <Time>2025-06-15T12:00:00Z</Time>
+            </ProofOfExistence>
+        </ValidationProcessBasicSignature>
+        <Timestamp Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD">
+            <ValidationProcessBasicTimestamp Type="SIGNATURE_TIMESTAMP" ProductionTime="2020-07-14T13:03:45Z" Title="Validation Process for Basic Time-stamps">
+                <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD-ISC">
+                    <Name Key="BSV_IISCRC">Is the result of the 'Identification of Signing Certificate' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD-XCV">
+                    <Name Key="BSV_IXCVRC">Is the result of the 'X.509 Certificate Validation' building block conclusive?</Name>
+                    <Status>WARNING</Status>
+                    <Warning Key="BSV_IXCVRC_ANS">The result of the 'X.509 Certificate Validation' building block is not conclusive!</Warning>
+                </Constraint>
+                <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD-XCV">
+                    <Name Key="BSV_ISCRAVTC">Is the signing certificate not revoked at validation time?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD-XCV">
+                    <Name Key="BSV_IVTAVRSC">Is the validation time in the validity range of the signing certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD-CV">
+                    <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="BSV_ICVRC_ANS">The result of the 'Cryptographic Verification' building block is not conclusive!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <SubIndication>HASH_FAILURE</SubIndication>
+                    <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                    <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+                </Conclusion>
+            </ValidationProcessBasicTimestamp>
+            <ValidationProcessArchivalDataTimestamp Title="Validation Process for Time-stamps with Archival Data">
+                <Constraint BlockType="TST_BBB">
+                    <Name Key="ARCH_IRTVBBA">Is the result of the Time-stamp Validation Building Block acceptable?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="ARCH_IRTVBBA_ANS">The result of the Time-stamp Validation Building Block is not acceptable to continue the process!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <SubIndication>HASH_FAILURE</SubIndication>
+                    <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                    <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+                </Conclusion>
+                <ProofOfExistence>
+                    <Time>2023-11-14T22:13:20Z</Time>
+                </ProofOfExistence>
+            </ValidationProcessArchivalDataTimestamp>
+            <ValidationTimestampQualification TimestampQualification="N/A" Title="Time-stamp Qualification">
+                <Constraint>
+                    <Name Key="QUAL_CERT_TRUSTED_LIST_REACHED">Has a trusted list been reached for the certificate chain?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <Errors Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Errors>
+                </Conclusion>
+            </ValidationTimestampQualification>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+            </Conclusion>
+        </Timestamp>
+        <Timestamp Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0">
+            <ValidationProcessBasicTimestamp Type="ARCHIVE_TIMESTAMP" ProductionTime="2020-07-14T13:03:45Z" Title="Validation Process for Basic Time-stamps">
+                <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0-ISC">
+                    <Name Key="BSV_IISCRC">Is the result of the 'Identification of Signing Certificate' building block conclusive?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0-XCV">
+                    <Name Key="BSV_IXCVRC">Is the result of the 'X.509 Certificate Validation' building block conclusive?</Name>
+                    <Status>WARNING</Status>
+                    <Warning Key="BSV_IXCVRC_ANS">The result of the 'X.509 Certificate Validation' building block is not conclusive!</Warning>
+                </Constraint>
+                <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0-XCV">
+                    <Name Key="BSV_ISCRAVTC">Is the signing certificate not revoked at validation time?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0-XCV">
+                    <Name Key="BSV_IVTAVRSC">Is the validation time in the validity range of the signing certificate?</Name>
+                    <Status>OK</Status>
+                </Constraint>
+                <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0-CV">
+                    <Name Key="BSV_ICVRC">Is the result of the 'Cryptographic Verification' building block conclusive?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="BSV_ICVRC_ANS">The result of the 'Cryptographic Verification' building block is not conclusive!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <SubIndication>HASH_FAILURE</SubIndication>
+                    <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                    <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+                </Conclusion>
+            </ValidationProcessBasicTimestamp>
+            <ValidationProcessArchivalDataTimestamp Title="Validation Process for Time-stamps with Archival Data">
+                <Constraint BlockType="TST_BBB">
+                    <Name Key="ARCH_IRTVBBA">Is the result of the Time-stamp Validation Building Block acceptable?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="ARCH_IRTVBBA_ANS">The result of the Time-stamp Validation Building Block is not acceptable to continue the process!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <SubIndication>HASH_FAILURE</SubIndication>
+                    <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                    <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+                </Conclusion>
+                <ProofOfExistence>
+                    <Time>2023-11-14T22:13:20Z</Time>
+                </ProofOfExistence>
+            </ValidationProcessArchivalDataTimestamp>
+            <ValidationTimestampQualification TimestampQualification="N/A" Title="Time-stamp Qualification">
+                <Constraint>
+                    <Name Key="QUAL_CERT_TRUSTED_LIST_REACHED">Has a trusted list been reached for the certificate chain?</Name>
+                    <Status>NOT OK</Status>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </Constraint>
+                <Conclusion>
+                    <Indication>FAILED</Indication>
+                    <Errors Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Errors>
+                </Conclusion>
+            </ValidationTimestampQualification>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+                <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+            </Conclusion>
+        </Timestamp>
+        <ValidationProcessLongTermData Title="Validation Process for Signatures with Time and Signatures with Long-Term Validation Data">
+            <Constraint>
+                <Name Key="LTV_ABSV">Is the result of the Basic Validation Process acceptable?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="LTV_ABSV_ANS">The result of the Basic validation process is not acceptable to continue the process!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+            <ProofOfExistence>
+                <Time>2023-11-14T22:13:20Z</Time>
+            </ProofOfExistence>
+        </ValidationProcessLongTermData>
+        <ValidationProcessArchivalData Title="Validation Process for Signatures with Archival Data">
+            <Constraint BlockType="LTV">
+                <Name Key="ARCH_LTVV">Is the result of the LTV validation process acceptable?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="ARCH_LTVV_ANS">The result of the LTV validation process is not acceptable to continue the process!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+            <ProofOfExistence>
+                <Time>2023-11-14T22:13:20Z</Time>
+            </ProofOfExistence>
+        </ValidationProcessArchivalData>
+        <ValidationSignatureQualification SignatureQualification="N/A" Title="Signature Qualification">
+            <Constraint>
+                <Name Key="QUAL_IS_ADES">Is the signature/seal an acceptable AdES digital signature (ETSI EN 319 102-1)?</Name>
+                <Status>WARNING</Status>
+                <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+            </Constraint>
+            <Constraint>
+                <Name Key="QUAL_CERT_TRUSTED_LIST_REACHED">Has a trusted list been reached for the certificate chain?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <Errors Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Errors>
+                <Warnings Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warnings>
+            </Conclusion>
+        </ValidationSignatureQualification>
+        <Conclusion>
+            <Indication>INDETERMINATE</Indication>
+            <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        </Conclusion>
+    </Signature>
+    <BasicBuildingBlocks Id="R-B27DECC86A229F2344678C50C82C76ECFC89A1A5029F6DF99511A3DE92B92D4D" Type="REVOCATION">
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint Id="R-B27DECC86A229F2344678C50C82C76ECFC89A1A5029F6DF99511A3DE92B92D4D" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data's issuer certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="R-B27DECC86A229F2344678C50C82C76ECFC89A1A5029F6DF99511A3DE92B92D4D">
+                <Algorithm>
+                    <Name>RSA with SHA512</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>INDETERMINATE</Indication>
+            <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="R-5750CF433E9AAF5E73476D06409F50B30D75A2B4744B8A0CC9228D623578F1C6" Type="REVOCATION">
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-B115FE3D69ECD6A4CEDABE8BA6B6BAF2211EAD3938B92DA8A89468A70FEDFD3D">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+                <ChainItem Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_ISIR">Is revocation's signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint Id="R-5750CF433E9AAF5E73476D06409F50B30D75A2B4744B8A0CC9228D623578F1C6" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-B115FE3D69ECD6A4CEDABE8BA6B6BAF2211EAD3938B92DA8A89468A70FEDFD3D" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data's issuer certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the revocation data's CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="R-5750CF433E9AAF5E73476D06409F50B30D75A2B4744B8A0CC9228D623578F1C6">
+                <Algorithm>
+                    <Name>RSA with SHA3-256</Name>
+                    <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-B115FE3D69ECD6A4CEDABE8BA6B6BAF2211EAD3938B92DA8A89468A70FEDFD3D">
+                    <Algorithm>
+                        <Name>RSA with SHA3-256</Name>
+                        <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                    <Algorithm>
+                        <Name>RSA with SHA3-256</Name>
+                        <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-B115FE3D69ECD6A4CEDABE8BA6B6BAF2211EAD3938B92DA8A89468A70FEDFD3D">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+            <ChainItem Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>INDETERMINATE</Indication>
+            <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_REV_ANS">The certificate chain for revocation data is not trusted, it does not contain a trust anchor.</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD" Type="TIMESTAMP">
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISACDP">Is the signed attribute: 'cert-digest' of the certificate present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-7964FA9EDFA4FDE9A80AEE7439B74F399771106C897C8D66CEBADBD1D3775D54">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+                <ChainItem Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_TSP_IRDOF">Has the message imprint data been found?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_TSP_IRDOI">Is the message imprint data intact?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCP">Is the signed attribute: 'signing-certificate' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_DSCACRCC">Does the 'Signing Certificate' attribute contain references only to the certificate chain?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp message imprint?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2023-11-14 22:13 for time-stamp message imprint</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-7964FA9EDFA4FDE9A80AEE7439B74F399771106C897C8D66CEBADBD1D3775D54" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's issuer certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD">
+                <Algorithm>
+                    <Name>RSA with SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <SignedAttributesValidation TokenId="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignedAttributesValidation>
+            <DigestMatchersValidation TokenId="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>time-stamp signature</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-7964FA9EDFA4FDE9A80AEE7439B74F399771106C897C8D66CEBADBD1D3775D54">
+                    <Algorithm>
+                        <Name>RSA with SHA256</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-7964FA9EDFA4FDE9A80AEE7439B74F399771106C897C8D66CEBADBD1D3775D54">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+            <ChainItem Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>FAILED</Indication>
+            <SubIndication>HASH_FAILURE</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+            <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0" Type="TIMESTAMP">
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISACDP">Is the signed attribute: 'cert-digest' of the certificate present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-F987265F180683D2ACDB419818B639835EC880CDD06909CA4A5CDE3456B0FD21">
+                    <Source>TIMESTAMP</Source>
+                </ChainItem>
+                <ChainItem Id="C-A0392CEA93DBAE1C6D05BB542E4383754CC1826ABB0870BB681F37162517DB99">
+                    <Source>TIMESTAMP</Source>
+                </ChainItem>
+                <ChainItem Id="C-44BAC8B92D27CE380AD4173574223A59BDB6DB58AB0AEC06179B4839999A641E">
+                    <Source>TIMESTAMP</Source>
+                </ChainItem>
+                <ChainItem Id="C-C0F6850F9550AB6E2E75DE436B4EA031EC789BD033D09BEDB43A5F3F008C5240">
+                    <Source>TIMESTAMP</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_TSP_IRDOF">Has the message imprint data been found?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_TSP_IRDOI">Is the message imprint data intact?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCP">Is the signed attribute: 'signing-certificate' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_DSCACRCC">Does the 'Signing Certificate' attribute contain references only to the certificate chain?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp signature?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the time-stamp message imprint?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2023-11-14 22:13 for time-stamp message imprint</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-F987265F180683D2ACDB419818B639835EC880CDD06909CA4A5CDE3456B0FD21" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's issuer certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-A0392CEA93DBAE1C6D05BB542E4383754CC1826ABB0870BB681F37162517DB99" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-44BAC8B92D27CE380AD4173574223A59BDB6DB58AB0AEC06179B4839999A641E" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-C0F6850F9550AB6E2E75DE436B4EA031EC789BD033D09BEDB43A5F3F008C5240" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the timestamp's CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA512 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0">
+                <Algorithm>
+                    <Name>RSA with SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <SignedAttributesValidation TokenId="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignedAttributesValidation>
+            <DigestMatchersValidation TokenId="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>time-stamp signature</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-F987265F180683D2ACDB419818B639835EC880CDD06909CA4A5CDE3456B0FD21">
+                    <Algorithm>
+                        <Name>RSA with SHA256</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-A0392CEA93DBAE1C6D05BB542E4383754CC1826ABB0870BB681F37162517DB99">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-44BAC8B92D27CE380AD4173574223A59BDB6DB58AB0AEC06179B4839999A641E">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-C0F6850F9550AB6E2E75DE436B4EA031EC789BD033D09BEDB43A5F3F008C5240">
+                    <Algorithm>
+                        <Name>RSA with SHA512</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha512</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-F987265F180683D2ACDB419818B639835EC880CDD06909CA4A5CDE3456B0FD21">
+                <Source>TIMESTAMP</Source>
+            </ChainItem>
+            <ChainItem Id="C-A0392CEA93DBAE1C6D05BB542E4383754CC1826ABB0870BB681F37162517DB99">
+                <Source>TIMESTAMP</Source>
+            </ChainItem>
+            <ChainItem Id="C-44BAC8B92D27CE380AD4173574223A59BDB6DB58AB0AEC06179B4839999A641E">
+                <Source>TIMESTAMP</Source>
+            </ChainItem>
+            <ChainItem Id="C-C0F6850F9550AB6E2E75DE436B4EA031EC789BD033D09BEDB43A5F3F008C5240">
+                <Source>TIMESTAMP</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>FAILED</Indication>
+            <SubIndication>HASH_FAILURE</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Errors>
+            <Errors Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+    <BasicBuildingBlocks Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B" Type="SIGNATURE">
+        <FC Title="Format Checking">
+            <Constraint>
+                <Name Key="BBB_FC_IEFF">Does the signature format correspond to an expected format?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISD">Is the signature identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_FC_ISRIA">Is the signed references identification not ambiguous?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </FC>
+        <ISC Title="Identification of the Signing Certificate">
+            <Constraint>
+                <Name Key="BBB_ICS_ISCI">Is there an identified candidate for the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISACDP">Is the signed attribute: 'cert-digest' of the certificate present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ICDVV">Does the certificate digest value match a digest value found in the certificate reference(s)?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChain>
+                <ChainItem Id="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+                <ChainItem Id="C-84942C79204C4DE8CBB92ED9B39C16C1F09C904767AF36EF504AF2062C00F9A3">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+                <ChainItem Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                    <Source>SIGNATURE</Source>
+                </ChainItem>
+            </CertificateChain>
+        </ISC>
+        <VCI Title="Validation Context Initialization">
+            <Constraint>
+                <Name Key="BBB_VCI_ISPK">Is the signature policy known?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </VCI>
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <CV Title="Cryptographic Verification">
+            <Constraint>
+                <Name Key="BBB_CV_IRDOF">Has the reference data object been found?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_IRDOI">Is the reference data object intact?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Reference : JWS_SIGNING_INPUT</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_CV_ISI">Is the signature intact?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </CV>
+        <SAV Title="Signature Acceptance Validation">
+            <Constraint>
+                <Name Key="BBB_SAV_ISSV">Is the structure of the signature valid?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCP">Is the signed attribute: 'signing-certificate' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_ISASCPU">Is the signed attribute: 'signing-certificate' present only once?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_DSCACRCC">Does the 'Signing Certificate' attribute contain references only to the certificate chain?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_ICS_DKIDVM">Does the value of signed attribute 'kid' (key identifier) match the signing certificate?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTP">Is the signed qualifying property: 'signing-time' present?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint>
+                <Name Key="BBB_SAV_ISQPSTWSCVR">Is the signed qualifying property: 'signing-time' within the signing-certificate's validity range?</Name>
+                <Status>OK</Status>
+            </Constraint>
+            <Constraint Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B" BlockType="AOV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+        </SAV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the signature creation?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signing certificate reference?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2023-11-14 22:13 for signing certificate reference with Id : C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89</AdditionalInfo>
+            </Constraint>
+            <Constraint>
+                <Name Key="ACCM">Are cryptographic constraints met for the jws signing input?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Digest algorithm SHA256 at validation time : 2023-11-14 22:13 for jws signing input</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the signing certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-84942C79204C4DE8CBB92ED9B39C16C1F09C904767AF36EF504AF2062C00F9A3" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Constraint Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the CA certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA3-256 with key size 2048 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <SignatureCryptographicValidation TokenId="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+                <Algorithm>
+                    <Name>RSA with SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                    <KeyLength>2048</KeyLength>
+                </Algorithm>
+                <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignatureCryptographicValidation>
+            <SignedAttributesValidation TokenId="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </SignedAttributesValidation>
+            <DigestMatchersValidation TokenId="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+                <Algorithm>
+                    <Name>SHA256</Name>
+                    <Uri>http://www.w3.org/2001/04/xmlenc#sha256</Uri>
+                </Algorithm>
+                <ConcernedMaterialDescription>signature creation</ConcernedMaterialDescription>
+                <Conclusion>
+                    <Indication>PASSED</Indication>
+                </Conclusion>
+            </DigestMatchersValidation>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89">
+                    <Algorithm>
+                        <Name>RSA with SHA3-256</Name>
+                        <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-84942C79204C4DE8CBB92ED9B39C16C1F09C904767AF36EF504AF2062C00F9A3">
+                    <Algorithm>
+                        <Name>RSA with SHA3-256</Name>
+                        <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                    <Algorithm>
+                        <Name>RSA with SHA3-256</Name>
+                        <Uri>urn:oid:2.16.840.1.101.3.4.3.14</Uri>
+                        <KeyLength>2048</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <CertificateChain>
+            <ChainItem Id="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+            <ChainItem Id="C-84942C79204C4DE8CBB92ED9B39C16C1F09C904767AF36EF504AF2062C00F9A3">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+            <ChainItem Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                <Source>SIGNATURE</Source>
+            </ChainItem>
+        </CertificateChain>
+        <Conclusion>
+            <Indication>INDETERMINATE</Indication>
+            <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+</DetailedReport>

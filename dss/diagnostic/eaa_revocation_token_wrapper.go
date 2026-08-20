@@ -127,7 +127,7 @@ func (w *EAARevocationTokenWrapper) ExpirationTime() *time.Time {
 // TimeToLive gets number of seconds after which a new EAA Status token should be requested.
 // Port of getTimeToLive().
 func (w *EAARevocationTokenWrapper) TimeToLive() *big.Int {
-	return w.eaaStatusToken.TimeToLive
+	return w.eaaStatusToken.TimeToLive.BigInt()
 }
 
 // Binaries is the AbstractTokenProxy override. Port of getBinaries().

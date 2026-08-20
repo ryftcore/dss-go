@@ -257,8 +257,33 @@ func CMSUtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error
 // Port of #writeContentInfoEncoded.
 //
 // NOTE: used for archive-time-stamp-v2 message-imprint computation.
+//
+// The "ContentInfo" of upstream's method name is SignedData.encapContentInfo - the eContentType
+// and eContent of the SIGNED content (CMSObjectUtils#writeContentInfoEncoded:
+// `signedData.getEncapContentInfo()`) - NOT the outer CMS ContentInfo that wraps the whole
+// SignedData. Writing the outer one instead (this port's first reading of the name) fed the
+// entire signature - certificates, SignerInfos and all - into the archive-timestamp-v2 message
+// imprint, so every CAdES archive-timestamp-v2 verified as FAILED/HASH_FAILURE; found by the
+// phase-8f document-level harness on Signature-C-B-LTA-10.p7m.
+//
+// Upstream picks the encoding from the eContent's own form - BER when the OCTET STRING is
+// constructed (BouncyCastle hands such an eContent back as a BEROctetString), DER otherwise -
+// which is what the two branches below reproduce.
 func CMSUtilsWriteContentInfoEncoded(cms *CMS, w io.Writer) error {
-	_, err := w.Write(cms.core.ContentInfo().Encoded())
+	encapsulatedContentInfo := cms.core.SignedData().EncapContentInfo
+	contentElement := encapsulatedContentInfo.ContentElement()
+	var encoded []byte
+	if contentElement != nil && contentElement.IsConstructed() {
+		// DSSASN1Utils.getBEREncoded(ContentInfo): ContentInfo#toASN1Primitive builds a
+		// BERSequence holding the eContentType and a BERTaggedObject(0, eContent), and a BER
+		// ASN1OutputStream writes every one of those with the indefinite-length form.
+		encoded = asn1ber.WriteIndefiniteTLV([]byte{asn1ber.ClassUniversal | asn1ber.Constructed | asn1ber.TagSequence},
+			append(asn1ber.EncodeOID(encapsulatedContentInfo.EContentType),
+				asn1ber.WriteIndefiniteTLV([]byte{asn1ber.ClassContextSpecific | asn1ber.Constructed}, contentElement.BEREncoded())...))
+	} else {
+		encoded = encapsulatedContentInfo.DER()
+	}
+	_, err := w.Write(encoded)
 	return err
 }
 

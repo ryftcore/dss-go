@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlFoundRevocationContent carries the element content of the XmlFoundRevocation base type. JAXB emits base
 // content before extension content, so derived types embed it first.
@@ -40,7 +38,7 @@ type XmlRevocationRef struct {
 	ResponderId        *XmlSignerInfo             `xml:"ResponderId,omitempty"`
 	Issuer             *string                    `xml:"Issuer,omitempty"`
 	IssueTime          *XSDateTime                `xml:"IssueTime,omitempty"`
-	CRLNumber          *big.Int                   `xml:"CRLNumber,omitempty"`
+	CRLNumber          *BigInteger                `xml:"CRLNumber,omitempty"`
 	Uri                *string                    `xml:"Uri,omitempty"`
 }
 
@@ -67,7 +65,7 @@ type XmlRevocation struct {
 	ProductionDate           *XSDateTime              `xml:"ProductionDate,omitempty"`
 	ThisUpdate               *XSDateTime              `xml:"ThisUpdate,omitempty"`
 	NextUpdate               *XSDateTime              `xml:"NextUpdate,omitempty"`
-	CRLNumber                *big.Int                 `xml:"CRLNumber,omitempty"`
+	CRLNumber                *BigInteger              `xml:"CRLNumber,omitempty"`
 	ExpiredCertsOnCRL        *XSDateTime              `xml:"ExpiredCertsOnCRL,omitempty"`
 	ArchiveCutOff            *XSDateTime              `xml:"ArchiveCutOff,omitempty"`
 	CertHashExtensionPresent *bool                    `xml:"CertHashExtensionPresent,omitempty"`

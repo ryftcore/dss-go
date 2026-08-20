@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>trust_anchor_tst_expired.pdf</DocumentName>
+    <ValidationDate>2025-07-08T12:09:43Z</ValidationDate>
+    <Signatures>
+        <Signature Id="S-A5BF1031621AFADF32FE264D92D5B8E32B034F1A3B5152B39C4E477FD67D8C72">
+            <SignatureFilename>trust_anchor_tst_expired.pdf</SignatureFilename>
+            <ClaimedSigningTime>2021-05-06T15:24:42Z</ClaimedSigningTime>
+            <SignatureFormat>PAdES-BASELINE-T</SignatureFormat>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="MESSAGE_DIGEST">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>hvkOlaH/zwSEGTuhaFDdzpgCTyi2Tcgkb8y20OR0fv4=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-328BB69CCEBE2D1461EA0558511EE8CE85E46FE1BE2FB3109B1282BD92536E50"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-328BB69CCEBE2D1461EA0558511EE8CE85E46FE1BE2FB3109B1282BD92536E50"/>
+                <ChainItem Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            </CertificateChain>
+            <ContentType>1.2.840.113549.1.7.1</ContentType>
+            <CommitmentTypeIndications/>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=PassCo Class 3 CA 3, O=PassCo AS-332798316, C=NO</IssuerName>
+                    <SerialNumber>16733797535121430046234885</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <PDFRevision>
+                <SignatureField name="Signature1"/>
+                <PDFSignatureDictionary consistent="true">
+                    <Type>Sig</Type>
+                    <Filter>Adobe.PPKLite</Filter>
+                    <SubFilter>ETSI.CAdES.detached</SubFilter>
+                    <SignatureByteRange valid="true">0 475 2397805 98796</SignatureByteRange>
+                    <DocMDP>
+                        <Permissions>NO_CHANGE_PERMITTED</Permissions>
+                    </DocMDP>
+                </PDFSignatureDictionary>
+            </PDFRevision>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D">
+                    <Origin>SIGNED_DATA</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-328BB69CCEBE2D1461EA0558511EE8CE85E46FE1BE2FB3109B1282BD92536E50">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>Mou2nM6+LRRh6gVYUR7ozoXkb+G+L7MQmxKCvZJTblA=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations>
+                <RelatedRevocation Revocation="R-7D05A983367972B72045AA2724B3F1D489CE6A8FF7DAA5CED0431D8B7E0CA590">
+                    <Type>CRL</Type>
+                    <Origin>ADBE_REVOCATION_INFO_ARCHIVAL</Origin>
+                </RelatedRevocation>
+                <OrphanRevocation Token="R-87601335F9B5B69DEED45A44830831F48A1BAD032BB9E3470D5D9BEB42EF21E3">
+                    <Type>CRL</Type>
+                    <Origin>ADBE_REVOCATION_INFO_ARCHIVAL</Origin>
+                </OrphanRevocation>
+            </FoundRevocations>
+            <FoundTimestamps>
+                <FoundTimestamp Timestamp="T-DFDA17752CF6E9AA8FD3C29BC5FBD2E322593276ECD3134FC313B10610E39DC7"/>
+            </FoundTimestamps>
+            <FoundEvidenceRecords/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-1A04DA2E9CEA6DDAFC833913727FB4977739806B562C9603B0315E8629F801B0">
+                    <Scope>FULL</Scope>
+                    <Name>Full PDF</Name>
+                    <Description>The document ByteRange : [0, 475, 2397805, 98796]</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>68TUv/kW7tGzSFcSjfMIOd2R+/nU7lD8GBB7PHqXbdY=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>XgZc14g8M56d+BC+fUQnDh7a6iPivJUIVisJrW0vtDg=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>gvcNvziBQq1pNmKY7kCeLFKT9YzT/BWL6fspRHx2DTevrfbJPLa+H8zhlLA8y64X5yQx8awYf8V458TekCzx0v0v1udHxW7tF9j4J+fLwBqIatAGP5F+BG1W+tu4DdKrLv6cxPqSv066PQYjK+p3UGSFbJXx/npIRlxqRQ4HZ8Tp+/I2gsRc5glEVNVVykCWhfBBWP4TCpwP2hhiYFKzFFrzYVEZYD3ox8sO+MdOq2ZbA2t5/DAXX4vhWGf1HWd0FvPknj889FNz1DaAMzO0yRjx6o/CUYWBqqKqmC9uh9jxQKCLjRkRcRf/sCTxRh3Opx1KH8jdptgyWwufteBsXQ==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <EvidenceRecords/>
+    <UsedCertificates>
+        <Certificate Id="C-0546BD419459F8E51373850B72B7EE6A857800CBDBD3128F1EE145691BEB5737">
+            <SubjectDistinguishedName Format="CANONICAL">cn=PassCo ocsp ec,o=PassCo as-332798316,c=no</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=PassCo OCSP EC,O=PassCo AS-332798316,C=NO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=PassCo class 3 ca 3,o=PassCo as-332798316,c=no</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=PassCo Class 3 CA 3,O=PassCo AS-332798316,C=NO</IssuerDistinguishedName>
+            <SerialNumber>20075926193373092398565</SerialNumber>
+            <CommonName>PassCo OCSP EC</CommonName>
+            <CountryName>NO</CountryName>
+            <OrganizationName>PassCo AS-332798316</OrganizationName>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2025-08-23T10:00:00Z</NotAfter>
+            <NotBefore>2025-05-26T10:21:01Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-1D7C58D86A623D247690734231439638D8832BCDAA4A96CC6A24AD752A24BB89</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-970634DA9C93C530BEB0AE84108BAFAECA5700969F9A0B0A984837553B09C1A0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>zMP4B7ecbXpO9acrHQX5s0cckdE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>cW51PsRVKNwZOZOGC5w0a/AUxS4=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>BUa9QZRZ+OUTc4ULcrfuaoV4AMvb0xKPHuFFaRvrVzc=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-0C97A9F0E0093A72FB00138DDCFC5A9AFF288A5838856593BB89CACF5BD5DE67">
+            <SubjectDistinguishedName Format="CANONICAL">cn=sindicat-p-tsa,o=sindicat as,c=no</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=sindicat-p-tsa,O=sindicat AS,C=NO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=sindicat-p-tsa,o=sindicat as,c=no</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=sindicat-p-tsa,O=sindicat AS,C=NO</IssuerDistinguishedName>
+            <SerialNumber>1636208516</SerialNumber>
+            <CommonName>sindicat-p-tsa</CommonName>
+            <CountryName>NO</CountryName>
+            <OrganizationName>sindicat AS</OrganizationName>
+            <Sources>
+                <Source>TRUSTED_LIST</Source>
+                <Source>TIMESTAMP</Source>
+            </Sources>
+            <NotAfter>2025-04-07T13:45:21Z</NotAfter>
+            <NotBefore>2021-04-08T13:45:21Z</NotBefore>
+            <PublicKeySize>256</PublicKeySize>
+            <PublicKeyEncryptionAlgo>ECDSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-558CBEDC874D8F09A53F1E1F88B5CF6E1DBB7A693BB88ADAB24B1E5FBA444852</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-558CBEDC874D8F09A53F1E1F88B5CF6E1DBB7A693BB88ADAB24B1E5FBA444852</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>ECDSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>256</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted startDate="2021-04-15T22:00:00Z">true</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>YP38Y+JXBiQp2a16Zxnxl4XV8A0=</ski>
+                </SubjectKeyIdentifier>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="timeStamping">1.3.6.1.5.5.7.3.8</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <OtherExtension OID="2.5.29.16" description="privateKeyUsagePeriod" critical="false">
+                    <octets>BCQwIoAPMjAyMTA0MDgwMDAwMDBagQ8yMDIyMDQyMjIzNTk1OVo=</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>DJep8OAJOnL7ABON3Pxamv8oilg4hWWTu4nKz1vV3mc=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-328BB69CCEBE2D1461EA0558511EE8CE85E46FE1BE2FB3109B1282BD92536E50">
+            <SubjectDistinguishedName Format="CANONICAL">2.5.4.97=#0c03032329393839353834,cn=sindicat as,ou=town,o=sindicat as,c=no</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">2.5.4.97=#0c03032329393839353834,CN=sindicat AS,OU=town,O=sindicat AS,C=NO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=PassCo class 3 ca 3,o=PassCo as-332798316,c=no</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=PassCo Class 3 CA 3,O=PassCo AS-332798316,C=NO</IssuerDistinguishedName>
+            <SerialNumber>16733797535121430046234885</SerialNumber>
+            <CommonName>sindicat AS</CommonName>
+            <CountryName>NO</CountryName>
+            <OrganizationIdentifier>40224022</OrganizationIdentifier>
+            <OrganizationName>sindicat AS</OrganizationName>
+            <OrganizationalUnit>town</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2023-12-22T22:59:00Z</NotAfter>
+            <NotBefore>2020-12-22T12:43:46Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-1A8D18884BC0BA3E54D937D852169C40E67AC542B804629BC7AC3CD0FA0E6F74</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-970634DA9C93C530BEB0AE84108BAFAECA5700969F9A0B0A984837553B09C1A0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>zMP4B7ecbXpO9acrHQX5s0cckdE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>TEoB5GtXQvq7jvMYWiPARBkQVqA=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="false" OID="2.5.29.19" critical="false"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.16.578.1.26.1.3.5</certificatePolicy>
+                    <certificatePolicy Description="qcp-legal">0.4.0.194112.1.1</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="serverAuth">1.3.6.1.5.5.7.3.1</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="emailProtection">1.3.6.1.5.5.7.3.4</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://crt.PassCo.no/crt/BPClass3CA3.cer</caIssuersUrl>
+                    <ocspUrl>http://ocspec.PassCo.com</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.PassCo.no/crl/BPClass3CA3.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://www.PassCo.no/pds/pds_en.pdf</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-eseal">0.4.0.1862.1.6.2</QcType>
+                    </QcTypes>
+                    <QcCClegislation/>
+                </QcStatements>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <Revocations>
+                <CertificateRevocation Revocation="R-63CEA26E790BCB643F5F6B0F9BEEA063E6B2984FA87DDBEFB405111790618C10">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+                <CertificateRevocation Revocation="R-7D05A983367972B72045AA2724B3F1D489CE6A8FF7DAA5CED0431D8B7E0CA590">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Mou2nM6+LRRh6gVYUR7ozoXkb+G+L7MQmxKCvZJTblA=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D">
+            <SubjectDistinguishedName Format="CANONICAL">cn=PassCo class 3 ca 3,o=PassCo as-332798316,c=no</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=PassCo Class 3 CA 3,O=PassCo AS-332798316,C=NO</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=PassCo class 3 root ca,o=PassCo as-332798316,c=no</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=PassCo Class 3 Root CA,O=PassCo AS-332798316,C=NO</IssuerDistinguishedName>
+            <SerialNumber>30</SerialNumber>
+            <CommonName>PassCo Class 3 CA 3</CommonName>
+            <CountryName>NO</CountryName>
+            <OrganizationName>PassCo AS-332798316</OrganizationName>
+            <Sources>
+                <Source>SIGNATURE</Source>
+                <Source>TRUSTED_LIST</Source>
+            </Sources>
+            <NotAfter>2032-09-25T08:05:19Z</NotAfter>
+            <NotBefore>2012-09-25T08:05:19Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-970634DA9C93C530BEB0AE84108BAFAECA5700969F9A0B0A984837553B09C1A0</EntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>?</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>false</SignatureIntact>
+                <SignatureValid>false</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted startDate="2013-01-04T23:00:00Z">true</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>R7jN/+Vv7viy7C9ODvklsI48a8M=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>zMP4B7ecbXpO9acrHQX5s0cckdE=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.PassCo.no/crl/BPClass3RootCA.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>xJw1DlqCBeBj50xVSplDNbhDXJllJ9TvGisMe1FYSy0=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-63CEA26E790BCB643F5F6B0F9BEEA063E6B2984FA87DDBEFB405111790618C10">
+            <Origin>CACHED</Origin>
+            <Type>OCSP</Type>
+            <SourceAddress>http://ocspec.PassCo.com</SourceAddress>
+            <ProductionDate>2025-07-08T11:41:39Z</ProductionDate>
+            <ThisUpdate>2025-07-08T11:41:39Z</ThisUpdate>
+            <NextUpdate>2025-07-08T19:41:39Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-0546BD419459F8E51373850B72B7EE6A857800CBDBD3128F1EE145691BEB5737"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-0546BD419459F8E51373850B72B7EE6A857800CBDBD3128F1EE145691BEB5737"/>
+                <ChainItem Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-0546BD419459F8E51373850B72B7EE6A857800CBDBD3128F1EE145691BEB5737">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <IssuerName>CN=PassCo OCSP EC, O=PassCo AS-332798316, C=NO</IssuerName>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Y86ibnkLy2Q/X2sPm+6gY+aymE+ofdvvtAURF5BhjBA=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+        <Revocation Id="R-7D05A983367972B72045AA2724B3F1D489CE6A8FF7DAA5CED0431D8B7E0CA590">
+            <Origin>INPUT_DOCUMENT</Origin>
+            <Type>CRL</Type>
+            <ProductionDate>2021-05-06T04:00:11Z</ProductionDate>
+            <ThisUpdate>2021-05-06T04:00:11Z</ThisUpdate>
+            <NextUpdate>2021-05-07T05:00:11Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-C49C350E5A8205E063E74C554A994335B8435C996527D4EF1A2B0C7B51584B2D"/>
+            </CertificateChain>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>fQWpgzZ5crcgRaonJLPx1InOao/32qXO0EMdi34MpZA=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps>
+        <Timestamp Type="SIGNATURE_TIMESTAMP" Id="T-DFDA17752CF6E9AA8FD3C29BC5FBD2E322593276ECD3134FC313B10610E39DC7">
+            <ProductionTime>2021-05-06T15:24:42Z</ProductionTime>
+            <DigestMatcher type="MESSAGE_IMPRINT">
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>cCF/yX1PAknSO9f7bEgelXx5fNVPSmybtEq4q7+oYoY=</DigestValue>
+                <DataFound>true</DataFound>
+                <DataIntact>true</DataIntact>
+            </DigestMatcher>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>ECDSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>256</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-0C97A9F0E0093A72FB00138DDCFC5A9AFF288A5838856593BB89CACF5BD5DE67"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-0C97A9F0E0093A72FB00138DDCFC5A9AFF288A5838856593BB89CACF5BD5DE67"/>
+            </CertificateChain>
+            <SignerInformationStore>
+                <SignerInfo Current="true">
+                    <IssuerName>CN=sindicat-p-tsa, O=sindicat AS, C=NO</IssuerName>
+                    <SerialNumber>1636208516</SerialNumber>
+                </SignerInfo>
+            </SignerInformationStore>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-0C97A9F0E0093A72FB00138DDCFC5A9AFF288A5838856593BB89CACF5BD5DE67">
+                    <Origin>SIGNED_DATA</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <IssuerSerial match="true">MEgwQKQ+MDwxCzAJBgNVBAYTAk5PMRQwEgYDVQQKEwtTaWduaWNhdCBBUzEXMBUGA1UEAxMOc2lnbmljYXQtcC10c2ECBHxJCqQ=</IssuerSerial>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA256</DigestMethod>
+                            <DigestValue>DJep8OAJOnL7ABON3Pxamv8oilg4hWWTu4nKz1vV3mc=</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <FoundEvidenceRecords/>
+            <TimestampedObjects>
+                <TimestampedObject Token="D-1A04DA2E9CEA6DDAFC833913727FB4977739806B562C9603B0315E8629F801B0" Category="SIGNED_DATA"/>
+                <TimestampedObject Token="S-A5BF1031621AFADF32FE264D92D5B8E32B034F1A3B5152B39C4E477FD67D8C72" Category="SIGNATURE"/>
+                <TimestampedObject Token="C-328BB69CCEBE2D1461EA0558511EE8CE85E46FE1BE2FB3109B1282BD92536E50" Category="CERTIFICATE"/>
+                <TimestampedObject Token="R-7D05A983367972B72045AA2724B3F1D489CE6A8FF7DAA5CED0431D8B7E0CA590" Category="REVOCATION"/>
+                <TimestampedObject Token="R-87601335F9B5B69DEED45A44830831F48A1BAD032BB9E3470D5D9BEB42EF21E3" Category="ORPHAN_REVOCATION"/>
+            </TimestampedObjects>
+            <TimestampScopes/>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>oh6qADwkr8dk1mEtNXLg5iwkzGPd1UJ/DFkPM649cL0=</DigestValue>
+            </DigestAlgoAndValue>
+        </Timestamp>
+    </UsedTimestamps>
+    <OrphanTokens>
+        <OrphanRevocation EncapsulationType="BINARIES" Id="R-87601335F9B5B69DEED45A44830831F48A1BAD032BB9E3470D5D9BEB42EF21E3">
+            <RevocationType>CRL</RevocationType>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>h2ATNfm1tp3u1FpEgwgx9IobrQMrueNHDV2b60LvIeM=</DigestValue>
+            </DigestAlgoAndValue>
+        </OrphanRevocation>
+    </OrphanTokens>
+    <OriginalDocuments>
+        <SignerData Id="D-1A04DA2E9CEA6DDAFC833913727FB4977739806B562C9603B0315E8629F801B0">
+            <ReferencedName>Full PDF</ReferencedName>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+    <TrustedLists />
+</DiagnosticData>

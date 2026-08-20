@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <DocumentName>simple-pid.jwt</DocumentName>
+    <ValidationDate>2026-04-03T09:58:12Z</ValidationDate>
+    <EAAs>
+        <EAA Id="EAA-B011F0930552AB7B89D941C51FFDE7A769EA630B8DD5C926512C0870F637FE22">
+            <DocumentName>simple-pid.jwt</DocumentName>
+            <EAAType>SD_JWT_VC</EAAType>
+            <DigestMatchers>
+                <DigestMatcher type="EAA_DISCLOSURE">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>TGf4oLbgwd5JQaHyKVQZU9UdGE0w5rtDsrZzfUaomLo=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                    <DisclosableClaim name="family_name">Doe</DisclosableClaim>
+                </DigestMatcher>
+                <DigestMatcher type="EAA_DISCLOSURE">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>gbOsI4Edq2x2Kw+w5wPEzakob9hV1cRD0ATN3oQL9JM=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                    <DisclosableClaim name="birthdate">1940-01-01</DisclosableClaim>
+                </DigestMatcher>
+                <DigestMatcher type="EAA_DISCLOSURE">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>jsu9yVulwQQlhFlM/3JlzMaSFzglhQG0DpfayQwLUK4=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                    <DisclosableClaim name="given_name">John</DisclosableClaim>
+                </DigestMatcher>
+            </DigestMatchers>
+            <EAASignature Signature="S-59A46D40714D80AB3B6D087B938BE6358130244BAE1D9ACECBB28959F48D06F4"/>
+            <EAAPayload>
+                <Issuer name="iss">
+                    <Text>https://issuer.example.com</Text>
+                </Issuer>
+                <Subject name="sub">
+                    <Text>user_42</Text>
+                </Subject>
+                <IssuedAt name="iat">
+                    <DateTime>2023-05-02T04:00:00Z</DateTime>
+                </IssuedAt>
+                <NotBefore name="nbf">
+                    <DateTime>2023-05-02T04:00:00Z</DateTime>
+                </NotBefore>
+                <Expiration name="exp">
+                    <DateTime>2029-09-01T23:33:20Z</DateTime>
+                </Expiration>
+                <VerifiableCredentialsType name="vct">
+                    <Text>urn:eudi:pid:1</Text>
+                </VerifiableCredentialsType>
+                <DeviceKey name="cnf">
+                    <Entry name="jwk">
+                        <Entry name="kty">
+                            <Text>EC</Text>
+                        </Entry>
+                        <Entry name="crv">
+                            <Text>P-256</Text>
+                        </Entry>
+                        <Entry name="x">
+                            <Text>TCAER19Zvu3OHF4j4W4vfSVoHIP1ILilDls7vCeGemc</Text>
+                        </Entry>
+                        <Entry name="y">
+                            <Text>ZxjiWWbZMQGHVWKVQ4hbSIirsVfuecCE6t4jT9F2HZQ</Text>
+                        </Entry>
+                    </Entry>
+                </DeviceKey>
+                <GivenName name="given_name">
+                    <Text>John</Text>
+                </GivenName>
+                <FamilyName name="family_name">
+                    <Text>Doe</Text>
+                </FamilyName>
+                <Address name="address">
+                    <City name="locality">
+                        <Text>Anytown</Text>
+                    </City>
+                    <StateOrProvince name="region">
+                        <Text>Anystate</Text>
+                    </StateOrProvince>
+                    <CountryName name="country">
+                        <Text>US</Text>
+                    </CountryName>
+                    <StreetAddress name="street_address">
+                        <Text>123 Main St</Text>
+                    </StreetAddress>
+                </Address>
+                <Nationalities name="nationalities">
+                    <Item>
+                        <Text>US</Text>
+                    </Item>
+                </Nationalities>
+            </EAAPayload>
+            <KeyBindingSignature Signature="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9"/>
+            <EAARevocations>
+                <EAARevocationStatus EAARevocationToken="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+                    <Status>VALID</Status>
+                </EAARevocationStatus>
+            </EAARevocations>
+        </EAA>
+    </EAAs>
+    <Signatures>
+        <Signature Id="S-59A46D40714D80AB3B6D087B938BE6358130244BAE1D9ACECBB28959F48D06F4">
+            <SignatureFilename>simple-pid.jwt</SignatureFilename>
+            <ClaimedSigningTime>2026-04-03T09:58:09Z</ClaimedSigningTime>
+            <SignatureFormat>JAdES-BASELINE-B</SignatureFormat>
+            <JWSSerializationType>COMPACT_SERIALIZATION</JWSSerializationType>
+            <SignatureType>application/dc+sd-jwt</SignatureType>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="JWS_SIGNING_INPUT">
+                    <DigestMethod>SHA512</DigestMethod>
+                    <DigestValue>XOzaoqLpIxvkuv4WNaycqOs/WXrPQiu690RhG9fPg0pXsYpP761jJLVQ9HCVBRN654PSofAqrgLFN058F5mw6w==</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-6EB85705071828887CACAEF723BD95952C862F7FC1CFB1026706CAFD80616BD7"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-6EB85705071828887CACAEF723BD95952C862F7FC1CFB1026706CAFD80616BD7"/>
+                <ChainItem Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <CommitmentTypeIndications/>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-6EB85705071828887CACAEF723BD95952C862F7FC1CFB1026706CAFD80616BD7">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA512</DigestMethod>
+                            <DigestValue>XUmMcItNWpwsiuYcdOI5icCwtANgFvHDony5SSQz+npqlW91ySFj5iHDofrYFZr6ilYM9gGOQhCt9uBH/cezSA==</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                    <CertificateRef>
+                        <Origin>KEY_IDENTIFIER</Origin>
+                        <IssuerSerial match="true">MGEwWqRYMFYxEDAOBgNVBAMMB1Rlc3QtQ0ExIjAgBgNVBAoMGVRlc3QgUElEIFRydXN0ZWQgRW50aXR5IDExETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJaWgIDAYcF</IssuerSerial>
+                        <SerialInfo>
+                            <IssuerName>C=ZZ, OU=PKI-TEST, O=Test PID Trusted Entity 1, CN=Test-CA</IssuerName>
+                            <SerialNumber>100101</SerialNumber>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <OrphanCertificate Token="C-9A94AFB2D6BA65F53908A170F9CEB2CF3F4BFEF22BD20235B32724B0136E7097">
+                    <CertificateRef>
+                        <Origin>X509_URL</Origin>
+                        <X509Url>http://nowina.lu/pki-factory/Test-PID</X509Url>
+                    </CertificateRef>
+                </OrphanCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <FoundTimestamps/>
+            <FoundEvidenceRecords/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-B591F5834847E86E222B306C0C658C74A018556CE17DA91964EAE9037BF7C1CF">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>8GoHzfTYMNrcvdCpPiUDDcUE876n6E513c+2NnTKVHw=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA512</DigestMethod>
+                <DigestValue>XOzaoqLpIxvkuv4WNaycqOs/WXrPQiu690RhG9fPg0pXsYpP761jJLVQ9HCVBRN654PSofAqrgLFN058F5mw6w==</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>Avrpk9AUP54ZfgsmETCLqT3Piy/TFtfrYnG7lnahrLveRwcP9BzBOyGQS6BDHTOnwUHESN4QYuH3/GQfHCa3g6stir5hnP4+DDkNnPOrqxS4FJUzOsbBRJP9qmv5JUXN1G7MRMA0cSAmpr7+lGnEZ2ESF49zKvGMtCQqXptA0826zd3kgw4Rhu7PGJCYOQ6U5Im0P927FGRzSkccZXjW/jh53IgXOlxh3DbA4mXor+q9RavaHUVoapZNxS7prmz3tcQUG8seZkT5HEIkpcJLqxYigROiOuT+c/I2pjQYlNbfr5cbKhcH8fhck8FieW4czQV6G5W/++6Fc66UCkeTog==</SignatureValue>
+        </Signature>
+        <Signature KeyBindingSignature="true" Id="S-B76CB61A45DDB0E0CA3970C6F40C5FBF329A5546A6A4320EBC331A7498F17FC9">
+            <SignatureFilename>sample-jwt.jwt</SignatureFilename>
+            <ClaimedSigningTime>2026-04-23T09:28:59Z</ClaimedSigningTime>
+            <SignatureFormat>JAdES-BASELINE-B</SignatureFormat>
+            <JWSSerializationType>COMPACT_SERIALIZATION</JWSSerializationType>
+            <SignatureType>application/kb+jwt</SignatureType>
+            <StructuralValidation valid="true"/>
+            <DigestMatchers>
+                <DigestMatcher type="JWS_SIGNING_INPUT">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>DwKYVjWJea/JpFFIJ04CVw8/eKF7f/SxXY1E5QHkT2Y=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+                <DigestMatcher type="EAA_KEY_BINDING">
+                    <DigestMethod>SHA256</DigestMethod>
+                    <DigestValue>q8jTTKJJCo5gBLrdgeYz4SzUKuUb27tISQjmKS6gXxc=</DigestValue>
+                    <DataFound>true</DataFound>
+                    <DataIntact>true</DataIntact>
+                </DigestMatcher>
+            </DigestMatchers>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>ECDSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>256</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate>
+                <PublicKey>MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1xBLRNWo4SbwDpY2Hd841AB4NlbtGyk4MOuaByhV805KCIsPkc+zs8m20TqmP/IY56rbVpAt0EYCnzFBYvl9DA==</PublicKey>
+            </SigningCertificate>
+            <CertificateChain/>
+            <MimeType>application/json</MimeType>
+            <CommitmentTypeIndications/>
+            <SignerDocumentRepresentations HashOnly="false" DocHashOnly="false"/>
+            <FoundCertificates>
+                <OrphanCertificate Token="C-04D6030F59C93E208160B23D44788053B07CC221651491AAE63C96928FCAD4ECB984F29F1B9D0A7FC20083AB9597BD9C7B3862ADC87C6FF6A68E3B56D43D0CA9">
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="false">
+                            <DigestMethod>SHA512</DigestMethod>
+                            <DigestValue>BNYDD1nJPiCBYLI9RHiAU7B8wiFlFJGq5jyWko/K1Oy5hPKfG50Kf8IAg6uVl72cezhirch8b/amjjtW1D0MqQ==</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                </OrphanCertificate>
+            </FoundCertificates>
+            <FoundRevocations/>
+            <FoundTimestamps/>
+            <FoundEvidenceRecords/>
+            <SignatureScopes>
+                <SignatureScope SignerData="D-4B4F816C912C75121F3428899E74F258775B15DC217C26154F5C78923573AD58">
+                    <Scope>FULL</Scope>
+                    <Description>Full document</Description>
+                </SignatureScope>
+            </SignatureScopes>
+            <SignatureDigestReference>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>cqsvTUcJs9I0fSWRXb3WflSoVfHTtmg5fFxvZ4BLTGQ=</DigestValue>
+            </SignatureDigestReference>
+            <DataToBeSignedRepresentation>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>DwKYVjWJea/JpFFIJ04CVw8/eKF7f/SxXY1E5QHkT2Y=</DigestValue>
+            </DataToBeSignedRepresentation>
+            <SignatureValue>1dUVJOz4e4RrA60bC8EZlebSO1cDBYC8FV0mfsBhq8l4lU/QUwwDc15+/UNwTeTqLmMeACSD814PFFNExC7+FA==</SignatureValue>
+        </Signature>
+    </Signatures>
+    <EvidenceRecords/>
+    <UsedEAARevocationTokens>
+        <EAARevocationToken Id="ST-A9144C67449944517D4481B366337C02488BA6CBD42F89E1C2C8225E507518EF">
+            <Origin>EXTERNAL</Origin>
+            <Type>statuslist+cwt</Type>
+            <SourceAddress>https://dss.nowina.lu/pki-factory/eaa/status_list</SourceAddress>
+            <Subject match="true">https://dss.nowina.lu/pki-factory/eaa/status_list</Subject>
+            <IssuedAt>2026-04-23T09:29:00Z</IssuedAt>
+            <ExpirationTime>2027-05-10T14:11:28Z</ExpirationTime>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+                    <Origin>KEY_INFO</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <DigestAlgoAndValue match="true">
+                            <DigestMethod>SHA512</DigestMethod>
+                            <DigestValue>gA76C1xhQXUknPQK2SEGsGq29KDHN/Ppw+e4WGMwvfVH55woVe4V2zmR4JRqYSiTbbbYe5uzzwWy7hleMVttzA==</DigestValue>
+                        </DigestAlgoAndValue>
+                    </CertificateRef>
+                    <CertificateRef>
+                        <Origin>KEY_IDENTIFIER</Origin>
+                        <IssuerSerial match="true">MFYwUaRPME0xEDAOBgNVBAMMB3Jvb3QtY2ExGTAXBgNVBAoMEE5vd2luYSBTb2x1dGlvbnMxETAPBgNVBAsMCFBLSS1URVNUMQswCQYDVQQGEwJMVQIBBA==</IssuerSerial>
+                        <SerialInfo>
+                            <IssuerName>C=LU, OU=PKI-TEST, O=Nowina Solutions, CN=root-ca</IssuerName>
+                            <SerialNumber>4</SerialNumber>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>qRRMZ0SZRFF9RIGzZjN8AkiLpsvUL4nhwsgiXlB1GO8=</DigestValue>
+            </DigestAlgoAndValue>
+        </EAARevocationToken>
+    </UsedEAARevocationTokens>
+    <UsedCertificates>
+        <Certificate Id="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-ca</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-CA</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-rootca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-RootCA</IssuerDistinguishedName>
+            <SerialNumber>100100</SerialNumber>
+            <CommonName>Test-CA</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test PID Trusted Entity 1</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+                <Source>TRUSTED_ENTITIES</Source>
+            </Sources>
+            <NotAfter>2029-04-03T09:58:09Z</NotAfter>
+            <NotBefore>2023-04-03T09:58:09Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-863CE3693E2E249FF965A8C48748E13CC19F8A7EBDB8D43BFBFE39573CBF27D4</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-22153A4FE5C39FE6AACD5C0A9D205A64AC8028C79C8D6BE54039B2741665B0E0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <Trusted>true</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>hzhIh/iMIsG242zH6ekACtDrATE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>dE86Zt3CqSF38aQtmelOUN840Cw=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/Test-RootCA.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-RootCA.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <TrustServiceProviders/>
+            <TrustedEntities>
+                <TrustedEntity LoTE="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE">
+                    <Names>
+                        <Name lang="en">Agence Nationale des Titres Sécurisés</Name>
+                    </Names>
+                    <TradeNames>
+                        <TradeName lang="en">VATZZ-12345</TradeName>
+                    </TradeNames>
+                    <RegistrationIdentifiers/>
+                    <TrustedEntityServices>
+                        <TrustedEntityService ServiceDigitalIdentifier="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+                            <ServiceNames>
+                                <ServiceName lang="en">Test PID Trusted Entity 1</ServiceName>
+                            </ServiceNames>
+                            <ServiceType>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceType>
+                        </TrustedEntityService>
+                    </TrustedEntityServices>
+                </TrustedEntity>
+            </TrustedEntities>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>LWfHPB2dejZi0GYjDHQuUIZsv2IxziVc5pYHMnl7gvo=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-396E9B734FAFA1DD68AB1FF66775D16C14E9786BEC80C7AF4FB0ADA0D09D9E31">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-ca-ocsp-responder</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-CA-ocsp-responder</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-CA</IssuerDistinguishedName>
+            <SerialNumber>100110</SerialNumber>
+            <CommonName>Test-CA-ocsp-responder</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test PID Trusted Entity 1</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+            </Sources>
+            <NotAfter>2026-10-03T09:58:09Z</NotAfter>
+            <NotBefore>2025-10-03T09:58:09Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-0C6CF7710AB74495CF0901115F8AA76E50B27E32EA7EFAD524106C4FF2411FE0</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-863CE3693E2E249FF965A8C48748E13CC19F8A7EBDB8D43BFBFE39573CBF27D4</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>dE86Zt3CqSF38aQtmelOUN840Cw=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>g7oXGbeNLQEhPP6Gitd/pjRLym4=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                </KeyUsages>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="true">
+                    <extendedKeyUsageOid Description="ocspSigning">1.3.6.1.5.5.7.3.9</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <IdPkixOcspNoCheck present="true" OID="1.3.6.1.5.5.7.48.1.5" critical="false"/>
+            </CertificateExtensions>
+            <TrustServiceProviders/>
+            <TrustedEntities>
+                <TrustedEntity LoTE="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE">
+                    <Names>
+                        <Name lang="en">Agence Nationale des Titres Sécurisés</Name>
+                    </Names>
+                    <TradeNames>
+                        <TradeName lang="en">VATZZ-12345</TradeName>
+                    </TradeNames>
+                    <RegistrationIdentifiers/>
+                    <TrustedEntityServices>
+                        <TrustedEntityService ServiceDigitalIdentifier="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+                            <ServiceNames>
+                                <ServiceName lang="en">Test PID Trusted Entity 1</ServiceName>
+                            </ServiceNames>
+                            <ServiceType>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceType>
+                        </TrustedEntityService>
+                    </TrustedEntityServices>
+                </TrustedEntity>
+            </TrustedEntities>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>OW6bc0+vod1oqx/2Z3XRbBTpeGvsgMevT7CtoNCdnjE=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-6EB85705071828887CACAEF723BD95952C862F7FC1CFB1026706CAFD80616BD7">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-pid</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-PID</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-ca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-CA</IssuerDistinguishedName>
+            <SerialNumber>100101</SerialNumber>
+            <CommonName>Test-PID</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test PID Trusted Entity 1</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>SIGNATURE</Source>
+            </Sources>
+            <NotAfter>2029-04-03T09:58:09Z</NotAfter>
+            <NotBefore>2023-04-03T09:58:09Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-8412AF61922A26F455AE8C9E3889716A8C955A278355411D2581A46C2ED005E2</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-863CE3693E2E249FF965A8C48748E13CC19F8A7EBDB8D43BFBFE39573CBF27D4</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>dE86Zt3CqSF38aQtmelOUN840Cw=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>ZPVL1cc/ntoxaHYWHDLpdpAo3hY=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>nonRepudiation</keyUsageBit>
+                </KeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://dss.nowina.lu/pki-factory/crt/Test-CA.crt</caIssuersUrl>
+                    <ocspUrl>http://dss.nowina.lu/pki-factory/ocsp/Test-CA</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://dss.nowina.lu/pki-factory/crl/Test-CA.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="false"/>
+                    <QcSSCD present="false"/>
+                    <QcTypes>
+                        <QcType Description="qc-type-pid">0.4.0.194126.1.1</QcType>
+                    </QcTypes>
+                </QcStatements>
+            </CertificateExtensions>
+            <TrustServiceProviders/>
+            <TrustedEntities>
+                <TrustedEntity LoTE="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE">
+                    <Names>
+                        <Name lang="en">Agence Nationale des Titres Sécurisés</Name>
+                    </Names>
+                    <TradeNames>
+                        <TradeName lang="en">VATZZ-12345</TradeName>
+                    </TradeNames>
+                    <RegistrationIdentifiers/>
+                    <TrustedEntityServices>
+                        <TrustedEntityService ServiceDigitalIdentifier="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+                            <ServiceNames>
+                                <ServiceName lang="en">Test PID Trusted Entity 1</ServiceName>
+                            </ServiceNames>
+                            <ServiceType>http://uri.etsi.org/19602/SvcType/PID/Issuance</ServiceType>
+                            <CapturedQualifiers/>
+                            <AdditionalServiceInfoUris/>
+                        </TrustedEntityService>
+                    </TrustedEntityServices>
+                </TrustedEntity>
+            </TrustedEntities>
+            <Revocations>
+                <CertificateRevocation Revocation="R-8C270E73A9C98440F22D818D9A75C7B8C0F9B27DBFB7DEF585BA6714F70B4706">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>brhXBQcYKIh8rK73I72VlSyGL3/Bz7ECZwbK/YBha9c=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE">
+            <SubjectDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-rootca</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-RootCA</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">c=zz,ou=pki-test,o=test pid trusted entity 1,cn=test-rootca</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">C=ZZ,OU=PKI-TEST,O=Test PID Trusted Entity 1,CN=Test-RootCA</IssuerDistinguishedName>
+            <SerialNumber>100000</SerialNumber>
+            <CommonName>Test-RootCA</CommonName>
+            <CountryName>ZZ</CountryName>
+            <OrganizationName>Test PID Trusted Entity 1</OrganizationName>
+            <OrganizationalUnit>PKI-TEST</OrganizationalUnit>
+            <Sources>
+                <Source>OCSP_RESPONSE</Source>
+                <Source>AIA</Source>
+            </Sources>
+            <NotAfter>2036-04-03T09:58:09Z</NotAfter>
+            <NotBefore>2016-04-03T09:58:09Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-22153A4FE5C39FE6AACD5C0A9D205A64AC8028C79C8D6BE54039B2741665B0E0</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-22153A4FE5C39FE6AACD5C0A9D205A64AC8028C79C8D6BE54039B2741665B0E0</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>hzhIh/iMIsG242zH6ekACtDrATE=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>hzhIh/iMIsG242zH6ekACtDrATE=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>uLaqBHWX08yDMVPGchoavyXpPkrygKCsfUDapvpt0M4=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-8C270E73A9C98440F22D818D9A75C7B8C0F9B27DBFB7DEF585BA6714F70B4706">
+            <Origin>EXTERNAL</Origin>
+            <Type>OCSP</Type>
+            <ProductionDate>2026-04-03T09:58:12Z</ProductionDate>
+            <ThisUpdate>2026-04-03T09:58:12Z</ThisUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>2048</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA512</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-396E9B734FAFA1DD68AB1FF66775D16C14E9786BEC80C7AF4FB0ADA0D09D9E31"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-396E9B734FAFA1DD68AB1FF66775D16C14E9786BEC80C7AF4FB0ADA0D09D9E31"/>
+                <ChainItem Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA"/>
+                <ChainItem Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-396E9B734FAFA1DD68AB1FF66775D16C14E9786BEC80C7AF4FB0ADA0D09D9E31">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <Ski>g7oXGbeNLQEhPP6Gitd/pjRLym4=</Ski>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-B8B6AA047597D3CC833153C6721A1ABF25E93E4AF280A0AC7D40DAA6FA6DD0CE">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                </RelatedCertificate>
+                <RelatedCertificate Certificate="C-2D67C73C1D9D7A3662D066230C742E50866CBF6231CE255CE6960732797B82FA">
+                    <Origin>BASIC_OCSP_RESP</Origin>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>jCcOc6nJhEDyLYGNmnXHuMD5sn2/t971hbpnFPcLRwY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+    </UsedRevocations>
+    <UsedTimestamps/>
+    <OrphanTokens>
+        <OrphanCertificate EncapsulationType="REFERENCE" Id="C-9A94AFB2D6BA65F53908A170F9CEB2CF3F4BFEF22BD20235B32724B0136E7097"/>
+        <OrphanCertificate EncapsulationType="REFERENCE" Id="C-04D6030F59C93E208160B23D44788053B07CC221651491AAE63C96928FCAD4ECB984F29F1B9D0A7FC20083AB9597BD9C7B3862ADC87C6FF6A68E3B56D43D0CA9">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA512</DigestMethod>
+                <DigestValue>BNYDD1nJPiCBYLI9RHiAU7B8wiFlFJGq5jyWko/K1Oy5hPKfG50Kf8IAg6uVl72cezhirch8b/amjjtW1D0MqQ==</DigestValue>
+            </DigestAlgoAndValue>
+        </OrphanCertificate>
+    </OrphanTokens>
+    <OriginalDocuments>
+        <SignerData Id="D-B591F5834847E86E222B306C0C658C74A018556CE17DA91964EAE9037BF7C1CF">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>HDlCa3EjtifKNG5kRv/AUred8ZDgVI6imwNEzKu5pQY=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+        <SignerData Id="D-4B4F816C912C75121F3428899E74F258775B15DC217C26154F5C78923573AD58">
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>e2iVKaVrkGKoIM2646i0uRJXF98JEpmLwfOxfz3bawM=</DigestValue>
+            </DigestAlgoAndValue>
+        </SignerData>
+    </OriginalDocuments>
+    <TrustedLists/>
+    <ListsOfTrustedEntities>
+        <ListOfTrustedEntities Id="LoTE-23443A5FC5AF13E9DA64092E8197D167CF073722990E53D0CBB9BA91F3D9C1DE">
+            <CountryCode>EU</CountryCode>
+            <Url>https://test.test/pid-providers-list</Url>
+            <Type>http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList</Type>
+            <SequenceNumber>1</SequenceNumber>
+            <Version>1</Version>
+            <LastLoading>2026-04-03T09:58:12Z</LastLoading>
+            <IssueDate>2026-04-03T09:58:10Z</IssueDate>
+            <NextUpdate>2026-10-03T09:58:10Z</NextUpdate>
+            <WellSigned>true</WellSigned>
+            <StructuralValidation valid="false">
+                <Message>instance does not match format 'uri', location: #/LoTE/ListAndSchemeInformation/SchemeOperatorAddress/SchemeOperatorElectronicAddress/0/uriValue (Line 1, character 726)</Message>
+            </StructuralValidation>
+        </ListOfTrustedEntities>
+    </ListsOfTrustedEntities>
+</DiagnosticData>

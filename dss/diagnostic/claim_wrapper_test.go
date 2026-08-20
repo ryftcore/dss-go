@@ -1,7 +1,6 @@
 package diagnostic
 
 import (
-	"math/big"
 	"testing"
 	"time"
 
@@ -233,7 +232,7 @@ func TestClaimWrapper_DateTimeDisplayValue(t *testing.T) {
 }
 
 func TestClaimWrapper_NumberAndBoolean(t *testing.T) {
-	n := NewClaimWrapper(&jaxb.XmlClaim{XmlClaimContent: jaxb.XmlClaimContent{Number: big.NewInt(42)}})
+	n := NewClaimWrapper(&jaxb.XmlClaim{XmlClaimContent: jaxb.XmlClaimContent{Number: jaxb.NewBigIntegerFromInt64(42)}})
 	if !n.IsNumber() || n.Number().Int64() != 42 {
 		t.Fatalf("unexpected number claim: %+v", n.Number())
 	}

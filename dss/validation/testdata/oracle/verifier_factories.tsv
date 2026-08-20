@@ -1,0 +1,8 @@
+default	tav.acceptRevocationUntrusted=false	tav.acceptTimestampUntrusted=false	tav.useSunsetDate=true
+default	rdv.digestAlgs=[SHA224, SHA256, SHA384, SHA3_256, SHA3_384, SHA3_512, SHA512]	rdv.sigAlgs=35	rdv.skipExt=[0.4.0.194121.2.1, 1.3.6.1.5.5.7.48.1.5, 2.5.29.56]	rdv.skipPol=[]	rdv.sigFresh=0	rdv.tstFresh=0	rdv.revFresh=0	rdv.nextUpdate=false	rdv.acceptRevWithout=false	rdv.acceptTstWithout=false
+/policy/certificate-constraint.xml	tav.acceptRevocationUntrusted=false	tav.acceptTimestampUntrusted=true	tav.useSunsetDate=true
+/policy/certificate-constraint.xml	rdv.digestAlgs=[SHA224, SHA256, SHA384, SHA3_256, SHA3_384, SHA3_512, SHA512]	rdv.sigAlgs=35	rdv.skipExt=[0.4.0.194121.2.1, 1.3.6.1.5.5.7.48.1.5, 2.5.29.56]	rdv.skipPol=[]	rdv.sigFresh=0	rdv.tstFresh=null	rdv.revFresh=0	rdv.nextUpdate=false	rdv.acceptRevWithout=false	rdv.acceptTstWithout=true
+/policy/qwac-constraint.xml	tav.acceptRevocationUntrusted=false	tav.acceptTimestampUntrusted=true	tav.useSunsetDate=true
+/policy/qwac-constraint.xml	rdv.digestAlgs=[SHA224, SHA256, SHA384, SHA3_256, SHA3_384, SHA3_512, SHA512]	rdv.sigAlgs=35	rdv.skipExt=[0.4.0.194121.2.1, 1.3.6.1.5.5.7.48.1.5, 2.5.29.56]	rdv.skipPol=[]	rdv.sigFresh=0	rdv.tstFresh=null	rdv.revFresh=0	rdv.nextUpdate=false	rdv.acceptRevWithout=false	rdv.acceptTstWithout=true
+/policy/eaa-constraint.xml	tav.acceptRevocationUntrusted=false	tav.acceptTimestampUntrusted=true	tav.useSunsetDate=true
+/policy/eaa-constraint.xml	rdv.digestAlgs=[SHA224, SHA256, SHA384, SHA3_256, SHA3_384, SHA3_512, SHA512]	rdv.sigAlgs=35	rdv.skipExt=[0.4.0.194121.2.1, 1.3.6.1.5.5.7.48.1.5, 2.5.29.56]	rdv.skipPol=[]	rdv.sigFresh=0	rdv.tstFresh=null	rdv.revFresh=0	rdv.nextUpdate=false	rdv.acceptRevWithout=false	rdv.acceptTstWithout=true

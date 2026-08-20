@@ -213,6 +213,20 @@ func distinctSingleValue(services []*diagnostic.TrustedEntityServiceWrapper, fie
 		return nil
 	case 1:
 		for v := range seen {
+			if v == "" {
+				// Java's set here holds the single element null (an absent
+				// <ServiceType>/<Status> leaves the wrapper field null), and the
+				// method hands that null straight back; this port carries an
+				// absent value as the empty string, so it has to answer nil
+				// rather than a pointer to "". The caller's
+				// `if serviceStatusUri != nil` guard around
+				// TrustedEntityServiceStatusKnownCheck depends on the
+				// difference: with a non-nil "" it appended a
+				// CERT_USAGE_STATUS_KNOWN WARNING constraint upstream never
+				// emits. Found by the phase-8f full-corpus report byte-parity
+				// run on eaa-validation/diag_data_pid.xml.
+				return nil
+			}
 			return &v
 		}
 	}

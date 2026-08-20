@@ -322,6 +322,24 @@ type choiceItem struct {
 	Value any
 }
 
+// ChoiceItem exposes choiceItem to the report builders that populate these
+// models (dss/validation/executor's ETSIValidationReportBuilder, the Go
+// counterpart of Java's ETSIValidationReportBuilder). Java's generated classes
+// expose the choice as a plain List<Object> the builder fills directly; this
+// port needs the element name recorded alongside the value, so the builder
+// constructs items through NewChoiceItem instead.
+//
+// Added in phase 8f (flagged for the integrator): the phase-8b models kept the
+// type unexported because nothing outside the package built these lists yet.
+// Marshalling behaviour is unchanged - this is an alias plus a constructor.
+type ChoiceItem = choiceItem
+
+// NewChoiceItem records value as the choice member selected under the schema
+// element name.
+func NewChoiceItem(name string, value any) ChoiceItem {
+	return choiceItem{Name: name, Value: value}
+}
+
 // choiceElement is one name->type binding of an xs:choice's name table.
 type choiceElement struct {
 	name string

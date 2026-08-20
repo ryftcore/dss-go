@@ -69,7 +69,7 @@ func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
 
 // InitChain initializes the chain. Port of initChain().
 //
-// FLAGGED HASH-ORDER SITE: Java builds listsOfLists/lotes as
+// HASH-ORDER (closed in phase 8f): Java builds listsOfLists/lotes as
 // HashSet<XmlTrustSourceList> (identity hashCode/equals) and listsBYType as
 // a HashMap<String, List<XmlTrustSourceList>>, iterating both directly to
 // append checks to the report / to decide the order sub-blocks execute in -

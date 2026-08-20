@@ -1,9 +1,7 @@
-//go:build phase8
-
 // Extracted from ASiCWithCAdESService.isLtaExtensionPossible(ASiCContent)
 // (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
-// ASiCWithCAdESService.java, DSS 6.5.RC1) during Phase 7/8 integration - see
-// asic_with_cades_lta_validation_phase8.go's header for why this method is build-tag split.
+// ASiCWithCAdESService.java, DSS 6.5.RC1) during Phase 7/8 integration; un-gated in phase 8f now
+// that dss/validation has landed.
 package cades
 
 import (

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DiagnosticData xmlns="http://dss.esig.europa.eu/validation/diagnostic">
+    <ValidationDate>2025-11-11T16:12:29Z</ValidationDate>
+    <ConnectionInfo url="https://harica.gr">
+        <TLSCertificate Certificate="C-8ECE05699B2196B46CBB3078FB2F2213C9C04EAF717FD1EBD2F853FA40656009" />
+    </ConnectionInfo>
+    <Signatures/>
+    <UsedCertificates>
+        <Certificate Id="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4">
+            <SubjectDistinguishedName Format="CANONICAL">cn=harica qualified web authentication certificates rsa,ou=hellenic academic and research institutions ca,2.5.4.97=#0c0f56415447522d303939303238323230,o=greek universities network (gunet),c=gr</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=HARICA Qualified Web Authentication Certificates RSA,OU=Hellenic Academic and Research Institutions CA,2.5.4.97=#0c0f56415447522d303939303238323230,O=Greek Universities Network (GUnet),C=GR</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=harica tls rsa root ca 2021,o=hellenic academic and research institutions ca,c=gr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=HARICA TLS RSA Root CA 2021,O=Hellenic Academic and Research Institutions CA,C=GR</IssuerDistinguishedName>
+            <SerialNumber>112451172410235572032570610940782199309</SerialNumber>
+            <CommonName>HARICA Qualified Web Authentication Certificates RSA</CommonName>
+            <CountryName>GR</CountryName>
+            <OrganizationIdentifier>VATGR-099028220</OrganizationIdentifier>
+            <OrganizationName>Greek Universities Network (GUnet)</OrganizationName>
+            <OrganizationalUnit>Hellenic Academic and Research Institutions CA</OrganizationalUnit>
+            <Sources>
+                <Source>TRUSTED_LIST</Source>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2038-07-14T09:30:45Z</NotAfter>
+            <NotBefore>2023-07-18T09:30:46Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-1C2FB633D012A59CBC2B60F99F2A6C0EA03C2E552447D35C35717A8C5A47CC45</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-4652BD095D668E7343D568A7A00F5678601DF8BFE5E9C11C6BAC2A021605339F</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-4ACD8DC6020A545A858943A553B5E0F3FC5B859AEA1746650D69CF1210F956D8"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-4ACD8DC6020A545A858943A553B5E0F3FC5B859AEA1746650D69CF1210F956D8"/>
+                <ChainItem Certificate="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36"/>
+            </CertificateChain>
+            <Trusted startDate="2022-03-31T10:00:45Z">true</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>CkgjpmCkkgoz6pNbxVfqJU29Eu4=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>tezmmxZ4aa2x6ElWR1gT949NpsM=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="0" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy cpsUrl="http://repo.harica.gr/documents/CPS">2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="serverAuth">1.3.6.1.5.5.7.3.1</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://crt.harica.gr/HARICA-TLS-Root-2021-RSA.cer</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.harica.gr/HARICA-TLS-Root-2021-RSA.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <Revocations/>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>NIXD3+mMXVQoZTR5u5BidYDuiSiQpi2g2avOOiAC6OQ=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-4ACD8DC6020A545A858943A553B5E0F3FC5B859AEA1746650D69CF1210F956D8">
+            <SubjectDistinguishedName Format="CANONICAL">cn=harica tls rsa root ca 2021,o=hellenic academic and research institutions ca,c=gr</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=HARICA TLS RSA Root CA 2021,O=Hellenic Academic and Research Institutions CA,C=GR</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=hellenic academic and research institutions rootca 2015,o=hellenic academic and research institutions cert. authority,l=athens,c=gr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Hellenic Academic and Research Institutions RootCA 2015,O=Hellenic Academic and Research Institutions Cert. Authority,L=Athens,C=GR</IssuerDistinguishedName>
+            <SerialNumber>56328771026522685634132374679777689382</SerialNumber>
+            <CommonName>HARICA TLS RSA Root CA 2021</CommonName>
+            <CountryName>GR</CountryName>
+            <OrganizationName>Hellenic Academic and Research Institutions CA</OrganizationName>
+            <Sources>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2029-08-31T07:41:54Z</NotAfter>
+            <NotBefore>2021-09-02T07:41:55Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-4652BD095D668E7343D568A7A00F5678601DF8BFE5E9C11C6BAC2A021605339F</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-EE4D44BBFAA9A611217B8A860F478CAE2A9C8D3624706CA2BBCAF0A22FE2EE43</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>cRVnyMjJvXVdctA4GGqd83EkVAs=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>CkgjpmCkkgoz6pNbxVfqJU29Eu4=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.5.29.32.0</certificatePolicy>
+                </CertificatePolicies>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="serverAuth">1.3.6.1.5.5.7.3.1</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://repo.harica.gr/certs/HaricaRootCA2015.crt</caIssuersUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.harica.gr/HaricaRootCA2015.crl</crlUrl>
+                </CRLDistributionPoints>
+            </CertificateExtensions>
+            <Revocations/>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>Ss2NxgIKVFqFiUOlU7Xg8/xbhZrqF0ZlDWnPEhD5Vtg=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-8ECE05699B2196B46CBB3078FB2F2213C9C04EAF717FD1EBD2F853FA40656009">
+            <SubjectDistinguishedName Format="CANONICAL">1.3.6.1.4.1.311.60.2.1.3=#13024752,1.3.6.1.4.1.311.60.2.1.2=#0c06417474696361,1.3.6.1.4.1.311.60.2.1.1=#0c06417468656e73,2.5.4.15=#0c1450726976617465204f7267616e697a6174696f6e,cn=www.harica.gr,2.5.4.5=#130f31333339322f32382d392d32303030,2.5.4.97=#0c0f56415447522d303939303238323230,o=greek universities network,l=athens,c=gr</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">1.3.6.1.4.1.311.60.2.1.3=#13024752,1.3.6.1.4.1.311.60.2.1.2=#0c06417474696361,1.3.6.1.4.1.311.60.2.1.1=#0c06417468656e73,2.5.4.15=#0c1450726976617465204f7267616e697a6174696f6e,CN=www.harica.gr,2.5.4.5=#130f31333339322f32382d392d32303030,2.5.4.97=#0c0f56415447522d303939303238323230,O=Greek Universities Network,L=Athens,C=GR</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=harica qualified web authentication certificates rsa,ou=hellenic academic and research institutions ca,2.5.4.97=#0c0f56415447522d303939303238323230,o=greek universities network (gunet),c=gr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=HARICA Qualified Web Authentication Certificates RSA,OU=Hellenic Academic and Research Institutions CA,2.5.4.97=#0c0f56415447522d303939303238323230,O=Greek Universities Network (GUnet),C=GR</IssuerDistinguishedName>
+            <SerialNumber>48483914102335211118701158298117480944</SerialNumber>
+            <SubjectSerialNumber>13392/28-9-2000</SubjectSerialNumber>
+            <CommonName>www.harica.gr</CommonName>
+            <Locality>Athens</Locality>
+            <CountryName>GR</CountryName>
+            <OrganizationIdentifier>VATGR-099028220</OrganizationIdentifier>
+            <OrganizationName>Greek Universities Network</OrganizationName>
+            <Sources>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2026-12-01T18:14:29Z</NotAfter>
+            <NotBefore>2025-10-30T18:14:43Z</NotBefore>
+            <PublicKeySize>2048</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-C68156E831E3C689748927202269F7FD5977B89F0D9DC59B8E2294AF1408491F</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-1C2FB633D012A59CBC2B60F99F2A6C0EA03C2E552447D35C35717A8C5A47CC45</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4"/>
+                <ChainItem Certificate="C-4ACD8DC6020A545A858943A553B5E0F3FC5B859AEA1746650D69CF1210F956D8"/>
+                <ChainItem Certificate="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36"/>
+            </CertificateChain>
+            <Trusted>false</Trusted>
+            <SelfSigned>false</SelfSigned>
+            <CertificateExtensions>
+                <AuthorityKeyIdentifier OID="2.5.29.35" critical="false">
+                    <keyIdentifier>tezmmxZ4aa2x6ElWR1gT949NpsM=</keyIdentifier>
+                </AuthorityKeyIdentifier>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>+/1ZUAHAPVU9oy3h/GPOEFjg4zQ=</ski>
+                </SubjectKeyIdentifier>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>digitalSignature</keyUsageBit>
+                    <keyUsageBit>keyEncipherment</keyUsageBit>
+                </KeyUsages>
+                <CertificatePolicies OID="2.5.29.32" critical="false">
+                    <certificatePolicy>2.23.140.1.1</certificatePolicy>
+                    <certificatePolicy Description="qcp-web">0.4.0.194112.1.4</certificatePolicy>
+                    <certificatePolicy cpsUrl="https://repo.harica.gr/documents/CPS">1.3.6.1.4.1.26513.1.1.1.5</certificatePolicy>
+                </CertificatePolicies>
+                <SubjectAlternativeNames OID="2.5.29.17" critical="false">
+                    <subjectAlternativeName type="dNSName">www.harica.gr</subjectAlternativeName>
+                    <subjectAlternativeName type="dNSName">harica.gr</subjectAlternativeName>
+                    <subjectAlternativeName type="dNSName">www.harica.eu</subjectAlternativeName>
+                    <subjectAlternativeName type="dNSName">harica.eu</subjectAlternativeName>
+                </SubjectAlternativeNames>
+                <ExtendedKeyUsages OID="2.5.29.37" critical="false">
+                    <extendedKeyUsageOid Description="clientAuth">1.3.6.1.5.5.7.3.2</extendedKeyUsageOid>
+                    <extendedKeyUsageOid Description="serverAuth">1.3.6.1.5.5.7.3.1</extendedKeyUsageOid>
+                </ExtendedKeyUsages>
+                <AuthorityInformationAccess OID="1.3.6.1.5.5.7.1.1" critical="false">
+                    <caIssuersUrl>http://crt.harica.gr/HARICA-QWAC-Sub-R1.cer</caIssuersUrl>
+                    <ocspUrl>http://ocsp.harica.gr</ocspUrl>
+                </AuthorityInformationAccess>
+                <CRLDistributionPoints OID="2.5.29.31" critical="false">
+                    <crlUrl>http://crl.harica.gr/HARICA-QWAC-Sub-R1.crl</crlUrl>
+                </CRLDistributionPoints>
+                <QcStatements OID="1.3.6.1.5.5.7.1.3" critical="false">
+                    <QcCompliance present="true"/>
+                    <QcSSCD present="false"/>
+                    <QcEuPDS>
+                        <PdsLocation lang="en">https://repo.harica.gr/documents/QualifiedLegalPDS-EN.pdf</PdsLocation>
+                        <PdsLocation lang="el">https://repo.harica.gr/documents/QualifiedLegalPDS-EL.pdf</PdsLocation>
+                    </QcEuPDS>
+                    <QcTypes>
+                        <QcType Description="qc-type-web">0.4.0.1862.1.6.3</QcType>
+                    </QcTypes>
+                    <QcCClegislation/>
+                    <SemanticsIdentifier Description="Semantics identifier for legal person">0.4.0.194121.1.2</SemanticsIdentifier>
+                </QcStatements>
+                <OtherExtension OID="1.3.6.1.4.1.11129.2.4.2" critical="false">
+                    <octets>BIIBcQSCAW0BawB3AJROQ4f67MHvgfMZJCaoGGUBx9NfOAIBP3JnfVU3LhnYAAABmjZdc1EAAAQDAEgwRgIhALmIQQNNx53N3zzvNNSkS6cgQDiFWn0nyYmfIKlA6Y3gAiEAgjQpv14oTjVOimjOcoBGwsOBh7tAKnJ48w2cV24F2usAdwDYCVU7lE96/8gWGW+UT4WrsPj8XodVJg8V0S5yu0VLFAAAAZo2XXMgAAAEAwBIMEYCIQC3HEPhrgMFM99yqw9+k+bcNMGEhrCTOCBWQbtYLu0KBAIhAMNYh+GTMT6vbays5rwc7lWpoKg8wPC+QpYs1sulcgtqAHcArKswcGzr7IQx9BPS9JFfER5CJEOx8qaMTzwrO6ceAsMAAAGaNl1zUAAABAMASDBGAiEAjUnsdVKKqaAczAdET+5sMyffRxhlkKo38Aqui0ghJwYCIQCUvqdPvjYHOg2bSb7/Ko9VcCBD3asd1B6Yg5cWngKFCw==</octets>
+                </OtherExtension>
+                <OtherExtension OID="2.23.140.3.1" critical="false">
+                    <octets>BBYwFBMDVkFUEwJHUgwJMDk5MDI4MjIw</octets>
+                </OtherExtension>
+            </CertificateExtensions>
+            <TrustServiceProviders />
+            <Revocations>
+                <CertificateRevocation Revocation="R-F49FB8BCFF0188F45FAEEB1A430FDF8E6CCEC4CCF93CD2CB190403588B4DA836">
+                    <Status>GOOD</Status>
+                </CertificateRevocation>
+            </Revocations>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>js4FaZshlrRsuzB4+y8iE8nATq9xf9Hr0vhT+kBlYAk=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+        <Certificate Id="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36">
+            <SubjectDistinguishedName Format="CANONICAL">cn=hellenic academic and research institutions rootca 2015,o=hellenic academic and research institutions cert. authority,l=athens,c=gr</SubjectDistinguishedName>
+            <SubjectDistinguishedName Format="RFC2253">CN=Hellenic Academic and Research Institutions RootCA 2015,O=Hellenic Academic and Research Institutions Cert. Authority,L=Athens,C=GR</SubjectDistinguishedName>
+            <IssuerDistinguishedName Format="CANONICAL">cn=hellenic academic and research institutions rootca 2015,o=hellenic academic and research institutions cert. authority,l=athens,c=gr</IssuerDistinguishedName>
+            <IssuerDistinguishedName Format="RFC2253">CN=Hellenic Academic and Research Institutions RootCA 2015,O=Hellenic Academic and Research Institutions Cert. Authority,L=Athens,C=GR</IssuerDistinguishedName>
+            <SerialNumber>0</SerialNumber>
+            <CommonName>Hellenic Academic and Research Institutions RootCA 2015</CommonName>
+            <Locality>Athens</Locality>
+            <CountryName>GR</CountryName>
+            <OrganizationName>Hellenic Academic and Research Institutions Cert. Authority</OrganizationName>
+            <Sources>
+                <Source>OTHER</Source>
+            </Sources>
+            <NotAfter>2040-06-30T10:11:21Z</NotAfter>
+            <NotBefore>2015-07-07T10:11:21Z</NotBefore>
+            <PublicKeySize>4096</PublicKeySize>
+            <PublicKeyEncryptionAlgo>RSA</PublicKeyEncryptionAlgo>
+            <EntityKey>EK-EE4D44BBFAA9A611217B8A860F478CAE2A9C8D3624706CA2BBCAF0A22FE2EE43</EntityKey>
+            <IssuerEntityKey key="true" subjectName="true">EK-EE4D44BBFAA9A611217B8A860F478CAE2A9C8D3624706CA2BBCAF0A22FE2EE43</IssuerEntityKey>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <CertificateChain/>
+            <Trusted>false</Trusted>
+            <SelfSigned>true</SelfSigned>
+            <CertificateExtensions>
+                <SubjectKeyIdentifier OID="2.5.29.14" critical="false">
+                    <ski>cRVnyMjJvXVdctA4GGqd83EkVAs=</ski>
+                </SubjectKeyIdentifier>
+                <BasicConstraints CA="true" pathLenConstraint="2147483647" OID="2.5.29.19" critical="true"/>
+                <KeyUsages OID="2.5.29.15" critical="true">
+                    <keyUsageBit>keyCertSign</keyUsageBit>
+                    <keyUsageBit>crlSign</keyUsageBit>
+                </KeyUsages>
+            </CertificateExtensions>
+            <Revocations/>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>oECSmgLOU7Ss9PL/xpgc5ElvdV5tRf4LKmkrzVJSPzY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Certificate>
+    </UsedCertificates>
+    <UsedRevocations>
+        <Revocation Id="R-F49FB8BCFF0188F45FAEEB1A430FDF8E6CCEC4CCF93CD2CB190403588B4DA836">
+            <Origin>EXTERNAL</Origin>
+            <Type>OCSP</Type>
+            <SourceAddress>http://ocsp.harica.gr</SourceAddress>
+            <ProductionDate>2025-11-11T06:02:33Z</ProductionDate>
+            <ThisUpdate>2025-11-11T06:02:33Z</ThisUpdate>
+            <NextUpdate>2025-11-14T06:02:32Z</NextUpdate>
+            <CertHashExtensionPresent>false</CertHashExtensionPresent>
+            <CertHashExtensionMatch>false</CertHashExtensionMatch>
+            <BasicSignature>
+                <EncryptionAlgoUsedToSignThisToken>RSA</EncryptionAlgoUsedToSignThisToken>
+                <KeyLengthUsedToSignThisToken>4096</KeyLengthUsedToSignThisToken>
+                <DigestAlgoUsedToSignThisToken>SHA256</DigestAlgoUsedToSignThisToken>
+                <SignatureIntact>true</SignatureIntact>
+                <SignatureValid>true</SignatureValid>
+            </BasicSignature>
+            <SigningCertificate Certificate="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4"/>
+            <CertificateChain>
+                <ChainItem Certificate="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4"/>
+                <ChainItem Certificate="C-4ACD8DC6020A545A858943A553B5E0F3FC5B859AEA1746650D69CF1210F956D8"/>
+                <ChainItem Certificate="C-A040929A02CE53B4ACF4F2FFC6981CE4496F755E6D45FE0B2A692BCD52523F36"/>
+            </CertificateChain>
+            <FoundCertificates>
+                <RelatedCertificate Certificate="C-3485C3DFE98C5D5428653479BB90627580EE892890A62DA0D9ABCE3A2002E8E4">
+                    <CertificateRef>
+                        <Origin>SIGNING_CERTIFICATE</Origin>
+                        <SerialInfo>
+                            <Ski>tezmmxZ4aa2x6ElWR1gT949NpsM=</Ski>
+                        </SerialInfo>
+                    </CertificateRef>
+                </RelatedCertificate>
+            </FoundCertificates>
+            <DigestAlgoAndValue>
+                <DigestMethod>SHA256</DigestMethod>
+                <DigestValue>9J+4vP8BiPRfrusaQw/fjmzOxMz5PNLLGQQDWItNqDY=</DigestValue>
+            </DigestAlgoAndValue>
+        </Revocation>
+    </UsedRevocations>
+    <OriginalDocuments/>
+    <TrustedLists />
+</DiagnosticData>

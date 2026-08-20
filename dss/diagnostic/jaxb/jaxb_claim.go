@@ -6,15 +6,13 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlClaimContent carries the element content of the XmlClaim base type. JAXB emits base
 // content before extension content, so derived types embed it first.
 type XmlClaimContent struct {
 	Text     *string       `xml:"Text,omitempty"`
-	Number   *big.Int      `xml:"Number,omitempty"`
+	Number   *BigInteger   `xml:"Number,omitempty"`
 	Boolean  *bool         `xml:"Boolean,omitempty"`
 	Binary   *Base64Binary `xml:"Binary,omitempty"`
 	DateTime *XSDateTime   `xml:"DateTime,omitempty"`
@@ -40,10 +38,10 @@ type XmlClaim struct {
 // XmlDisclosableClaim is the Go form of the generated JAXB class XmlDisclosableClaim
 // (complexType DisclosableClaim).
 type XmlDisclosableClaim struct {
-	Value     string   `xml:",chardata"`
-	Id        *big.Int `xml:"id,attr,omitempty"`
-	Name      *string  `xml:"name,attr,omitempty"`
-	Namespace *string  `xml:"namespace,attr,omitempty"`
+	Value     string      `xml:",chardata"`
+	Id        *BigInteger `xml:"id,attr,omitempty"`
+	Name      *string     `xml:"name,attr,omitempty"`
+	Namespace *string     `xml:"namespace,attr,omitempty"`
 }
 
 // XmlAddressClaim is the Go form of the generated JAXB class XmlAddressClaim

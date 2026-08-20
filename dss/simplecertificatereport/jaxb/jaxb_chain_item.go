@@ -55,7 +55,7 @@ type XmlChainItem struct {
 	TrustAnchors                              *XmlTrustAnchors                              `xml:"trustAnchors,omitempty"`
 	TrustStartDate                            *XSDateTime                                   `xml:"trustStartDate,omitempty"`
 	TrustSunsetDate                           *XSDateTime                                   `xml:"trustSunsetDate,omitempty"`
-	Indication                                IndicationValue                               `xml:"Indication"`
+	Indication                                IndicationValue                               `xml:"Indication,omitempty"`
 	SubIndication                             *SubIndicationValue                           `xml:"SubIndication,omitempty"`
 	X509ValidationDetails                     *XmlDetails                                   `xml:"X509ValidationDetails,omitempty"`
 	Chain                                     []*XmlChainItem                               `xml:"Chain>ChainItem"`

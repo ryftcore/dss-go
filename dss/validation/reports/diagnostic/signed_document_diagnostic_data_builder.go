@@ -66,6 +66,25 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// AssertConfigurationValid verifies the configuration is valid to build a DiagnosticData.
 	// Port of the protected assertConfigurationValid().
 	AssertConfigurationValid()
+	// BuildXmlOrphanTokens builds a list of XmlOrphanTokens. Port of the protected
+	// buildXmlOrphanTokens(), overridden by PAdESDiagnosticDataBuilder (out of this manifest) to
+	// collect orphan tokens from the PDF document's own DSS dictionaries first. Added to this
+	// interface, rather than left a direct call to the embedded DiagnosticDataBuilder's method
+	// (as CertificateDiagnosticDataBuilder.Build() still does, which has no such override), during
+	// phase 8f un-gating - see DiagnosticDataBuilder.IsKnownCertificate's doc comment for the same
+	// cross-package-virtual-dispatch rationale. Every existing implementer (CAdES, JAdES, QWAC)
+	// keeps its current behavior unchanged: none define their own BuildXmlOrphanTokens, so Go
+	// embedding promotes DiagnosticDataBuilder's concrete implementation for them automatically.
+	BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens
+	// Build builds the XmlDiagnosticData. Port of the public @Override build(), overridden by
+	// ASiCContainerDiagnosticDataBuilder (out of this manifest) to add the container's
+	// XmlContainerInfo. Added to this interface during phase 8f un-gating so
+	// XmlDiagnosticDataFactory.Create() (this package, statically typed against the base
+	// *SignedDocumentDiagnosticDataBuilder) can reach the override - see BuildXmlOrphanTokens's
+	// doc comment for the same rationale. Every existing implementer keeps its current behavior:
+	// none besides QWACCertificateDiagnosticDataBuilder (which is never reached through
+	// XmlDiagnosticDataFactory - see its own Build's call sites) define their own Build.
+	Build() *jaxb.XmlDiagnosticData
 }
 
 // SignedDocumentDiagnosticDataBuilder is the common builder for DiagnosticData creation from a
@@ -252,6 +271,27 @@ func (b *SignedDocumentDiagnosticDataBuilder) DocumentOCSPSource(documentOCSPSou
 	return b
 }
 
+// GetDocumentCertificateSource returns the document Certificate Source set via
+// DocumentCertificateSource. Cross-package accessor added during phase 8f un-gating for
+// PAdESDiagnosticDataBuilder.buildOrphanTokensFromDocumentSources() - see
+// DiagnosticDataBuilder.IsKnownCertificate's doc comment for why it is needed. Purely additive;
+// does not change DocumentCertificateSource's existing fluent-setter behavior.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentCertificateSource() *spi.ListCertificateSource {
+	return b.documentCertificateSource
+}
+
+// GetDocumentCRLSource returns the document CRL Source set via DocumentCRLSource. See
+// GetDocumentCertificateSource's doc comment.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentCRLSource() *spi.ListRevocationSource[revocation.CRL] {
+	return b.documentCRLSource
+}
+
+// GetDocumentOCSPSource returns the document OCSP Source set via DocumentOCSPSource. See
+// GetDocumentCertificateSource's doc comment.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentOCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
+	return b.documentOCSPSource
+}
+
 // Build builds the XmlDiagnosticData. Port of the public @Override build().
 func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	overrides := b.signedDocumentDiagnosticDataBuilderOverrides()
@@ -290,7 +330,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	// link the rest certificates
 	b.DiagnosticDataBuilder.LinkSigningCertificateAndChains(b.usedCertificates)
 
-	diagnosticData.OrphanTokens = b.BuildXmlOrphanTokens()
+	diagnosticData.OrphanTokens = overrides.BuildXmlOrphanTokens()
 
 	// timestamped objects must be linked after building of orphan tokens
 	if utils.IsCollectionNotEmpty(b.usedTimestamps) {
@@ -953,7 +993,12 @@ func createOrphanTokenFromRevocationIdentifier[R revocation.Revocation](b *Signe
 		if err != nil {
 			panic(err)
 		}
-		b.GetXmlFoundCertificatesForSource(&ocspCertificateSource.TokenCertificateSource) // create from OCSP Certificate Source
+		// Pass ocspCertificateSource itself, not &ocspCertificateSource.TokenCertificateSource:
+		// GetXmlFoundCertificatesForSource dispatches on CertificateSourceType(), which
+		// OCSPCertificateSource overrides (OCSP_RESPONSE) - the embedded field's own
+		// CertificateSourceType() knows nothing of that override and answers OTHER, routing
+		// into the wrong branch. See GetXmlFoundCertificatesForSource's doc comment.
+		b.GetXmlFoundCertificatesForSource(ocspCertificateSource) // create from OCSP Certificate Source
 	}
 	b.xmlOrphanRevocationTokensMap[id] = orphanToken
 	b.xmlOrphanRevocationTokensOrder = append(b.xmlOrphanRevocationTokensOrder, id)

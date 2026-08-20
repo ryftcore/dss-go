@@ -1,11 +1,4 @@
-//go:build phase8
-
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/ASiCContainerWithCAdESValidator.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag so that
-// `go build ./...` / `go vet ./...` / `go test ./...` are green for the rest of the module while
-// dss/validation does not exist yet. Drop the tag once Phase 8 lands the package; the file needs
-// no other change (see the cades/cms_document_validator.go precedent this file follows).
 //
 // NAMING (judgment call): the frozen asic.AbstractASiCContainerValidator names its ASiCContent
 // overload `IsSupported(asicContent *ASiCContent) bool`, which in Java is a same-name overload
@@ -21,12 +14,13 @@ package cades
 import (
 	"github.com/utain/esig/dss/asic"
 	"github.com/utain/esig/dss/model"
+	"github.com/utain/esig/dss/spi/validation/analyzer"
 	dssvalidation "github.com/utain/esig/dss/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/diagnostic"
 )
 
 // ASiCContainerWithCAdESValidator is an implementation to validate ASiC containers with CAdES
-// signature(s).
+// signature(s). Port of the class ASiCContainerWithCAdESValidator, extending
+// asic.AbstractASiCContainerValidator.
 //
 // NOTE: in order to perform the validation process, please ensure the dss/validation package is
 // available within the dependencies list of your project (see the file header).
@@ -34,33 +28,55 @@ type ASiCContainerWithCAdESValidator struct {
 	asic.AbstractASiCContainerValidator
 }
 
+// compile-time interface assertions.
+var (
+	_ dssvalidation.SignedDocumentValidator          = (*ASiCContainerWithCAdESValidator)(nil)
+	_ dssvalidation.SignedDocumentValidatorOverrides = (*ASiCContainerWithCAdESValidator)(nil)
+	_ asic.AbstractASiCContainerValidatorOverrides   = (*ASiCContainerWithCAdESValidator)(nil)
+)
+
 // newASiCContainerWithCAdESValidator is the empty constructor. Port of the package-private empty
 // constructor.
 func newASiCContainerWithCAdESValidator() *ASiCContainerWithCAdESValidator {
-	return &ASiCContainerWithCAdESValidator{
-		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(newASiCContainerWithCAdESAnalyzer().AbstractASiCContainerAnalyzer),
+	v := &ASiCContainerWithCAdESValidator{
+		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(newASiCContainerWithCAdESAnalyzer()),
 	}
+	v.InitAbstractASiCContainerValidator(v)
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // NewASiCContainerWithCAdESValidator is the default constructor. Ports
 // ASiCContainerWithCAdESValidator(DSSDocument).
 func NewASiCContainerWithCAdESValidator(asicContainer model.DSSDocument) *ASiCContainerWithCAdESValidator {
-	return &ASiCContainerWithCAdESValidator{
-		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithCAdESAnalyzer(asicContainer).AbstractASiCContainerAnalyzer),
+	v := &ASiCContainerWithCAdESValidator{
+		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithCAdESAnalyzer(asicContainer)),
 	}
+	v.InitAbstractASiCContainerValidator(v)
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // NewASiCContainerWithCAdESValidatorFromContent is the constructor with ASiCContent. Ports
 // ASiCContainerWithCAdESValidator(ASiCContent).
 func NewASiCContainerWithCAdESValidatorFromContent(asicContent *asic.ASiCContent) *ASiCContainerWithCAdESValidator {
-	return &ASiCContainerWithCAdESValidator{
-		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithCAdESAnalyzerFromContent(asicContent).AbstractASiCContainerAnalyzer),
+	v := &ASiCContainerWithCAdESValidator{
+		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithCAdESAnalyzerFromContent(asicContent)),
 	}
+	v.InitAbstractASiCContainerValidator(v)
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
-// GetDocumentAnalyzer ports the @Override covariant-return getDocumentAnalyzer().
+// GetDocumentAnalyzer ports the @Override covariant-return getDocumentAnalyzer(). Asserts
+// directly against the analyzer.DocumentAnalyzer interface value the embedded
+// SignedDocumentValidatorBase holds (rather than against
+// AbstractASiCContainerValidator.GetDocumentAnalyzer()'s own *AbstractASiCContainerAnalyzer-typed
+// return, which has already narrowed away the concrete *ASiCContainerWithCAdESAnalyzer type Go
+// assertions need), matching the cades/cms_document_validator.go precedent.
 func (v *ASiCContainerWithCAdESValidator) GetDocumentAnalyzer() *ASiCContainerWithCAdESAnalyzer {
-	return &ASiCContainerWithCAdESAnalyzer{AbstractASiCContainerAnalyzer: v.AbstractASiCContainerValidator.GetDocumentAnalyzer()}
+	var da analyzer.DocumentAnalyzer = v.AbstractASiCContainerValidator.SignedDocumentValidatorBase.DocumentAnalyzer()
+	return da.(*ASiCContainerWithCAdESAnalyzer)
 }
 
 // IsSupported implements dssvalidation.SignedDocumentValidator's isSupported(DSSDocument). See
@@ -76,22 +92,9 @@ func (v *ASiCContainerWithCAdESValidator) IsSupportedContent(asicContent *asic.A
 }
 
 // InstantiateASiCDiagnosticDataBuilder ports the @Override protected
-// instantiateASiCDiagnosticDataBuilder().
+// instantiateASiCDiagnosticDataBuilder(), implementing
+// asic.AbstractASiCContainerValidatorOverrides - see that interface's doc comment.
 func (v *ASiCContainerWithCAdESValidator) InstantiateASiCDiagnosticDataBuilder() *asic.ASiCContainerDiagnosticDataBuilder {
-	return &NewASiCWithCAdESDiagnosticDataBuilder().ASiCContainerDiagnosticDataBuilder
+	builder := NewASiCWithCAdESDiagnosticDataBuilder()
+	return &builder.ASiCContainerDiagnosticDataBuilder
 }
-
-// InitializeDiagnosticDataBuilder re-implements the embedded base's method of the same name so
-// that it reaches THIS type's InstantiateASiCDiagnosticDataBuilder override above (per
-// PORTING.md's "Virtual dispatch" precedent - the base's own InitializeDiagnosticDataBuilder
-// self-calls InstantiateASiCDiagnosticDataBuilder through a statically-typed receiver, which
-// would otherwise miss this override; see AbstractASiCContainerValidator's own doc comment on
-// this same tension).
-func (v *ASiCContainerWithCAdESValidator) InitializeDiagnosticDataBuilder() dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := v.InstantiateASiCDiagnosticDataBuilder()
-	builder.ContainerInfo(v.GetDocumentAnalyzer().GetContainerInfo())
-	return builder
-}
-
-// compile-time interface assertion.
-var _ dssvalidation.SignedDocumentValidator = (*ASiCContainerWithCAdESValidator)(nil)

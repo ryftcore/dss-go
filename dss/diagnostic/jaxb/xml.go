@@ -108,12 +108,29 @@ func (d XSDateTime) MarshalText() ([]byte, error) {
 	return []byte(time.Time(d).UTC().Format(dateTimeFormat)), nil
 }
 
-// UnmarshalText parses DateParser's pattern; any other lexical form is an error,
-// mirroring the IllegalArgumentException the parser throws.
+// UnmarshalText parses DateParser's pattern.
+//
+// A lexical form the pattern rejects leaves the value at its zero instant and
+// does NOT fail the document, which is what jakarta.xml.bind does: DateParser
+// is an XmlAdapter, and an adapter whose unmarshal() throws is reported to the
+// unmarshaller's (default, tolerant) ValidationEventHandler as a non-fatal
+// ERROR event - the offending FIELD is left unset and the rest of the document
+// unmarshals normally. Go's encoding/xml has no per-field-tolerant mode: any
+// error an encoding.TextUnmarshaler returns aborts the whole Unmarshal call,
+// so the tolerance has to live here. Returning an error instead made
+// diagnostic/jaxb reject documents upstream accepts - found by the phase-8f
+// full-corpus oracle on qwac-validation/2-qwac-valid-diag-data.xml, whose
+// <TrustedList><LastLoading>2025-11-12T14:40:00</LastLoading> lacks the literal
+// trailing 'Z' the pattern requires.
+//
+// The zero instant stands in for Java's null: XSDateTime#Time() already answers
+// the zero time for a nil receiver, so every reader that goes through it cannot
+// tell the two apart.
 func (d *XSDateTime) UnmarshalText(text []byte) error {
 	t, err := time.ParseInLocation(dateTimeFormat, string(text), time.UTC)
 	if err != nil {
-		return fmt.Errorf("string '%s' doesn't follow the pattern 'yyyy-MM-dd'T'HH:mm:ss'Z''", text)
+		*d = XSDateTime(time.Time{})
+		return nil
 	}
 	*d = XSDateTime(t)
 	return nil
@@ -163,6 +180,60 @@ func NewCollapsedString(v string) *CollapsedString {
 
 func collapseWhitespace(s string) string {
 	return strings.Join(strings.Fields(s), " ")
+}
+
+// BigInteger is the Go form of a java.math.BigInteger-typed property (xs:integer).
+//
+// It exists because the obvious Go binding - a bare *big.Int, which already
+// implements encoding.TextUnmarshaler - is WRONG for this schema:
+// math/big.Int.UnmarshalText parses with base 0, so it reads a leading "0" as
+// an OCTAL prefix and rejects (or would, for 0-7 digits, silently re-base) a
+// decimal integer written with leading zeros. Java's BigInteger(String)
+// constructor, which is what JAXB's built-in xs:integer binding calls, is
+// decimal-only and has no such prefix sniffing, so upstream parses those
+// documents fine - the four diag-data fixtures the phase-8f full-corpus oracle
+// flagged as F1 (valid-diag-data-crl-{lt,lta}.xml and
+// diag_data_cert_on_hold_with_tst_{after,before}.xml, whose <SerialNumber> is
+// "001122445566778899" / "0782723948319656423178326307535116") among them.
+//
+// big.Int is EMBEDDED, not wrapped in a named field, so every big.Int method a
+// reader needs (String, Cmp, Int64, Sign, Bytes, ...) stays promoted and the
+// call sites read exactly as they did against *big.Int; only UnmarshalText is
+// overridden, and BigInt() hands out the embedded value where a *big.Int is
+// what a callee declares.
+type BigInteger struct {
+	big.Int
+}
+
+// NewBigInteger wraps a *big.Int, answering nil for a nil input.
+func NewBigInteger(value *big.Int) *BigInteger {
+	if value == nil {
+		return nil
+	}
+	return &BigInteger{Int: *value}
+}
+
+// NewBigIntegerFromInt64 wraps an int64.
+func NewBigIntegerFromInt64(value int64) *BigInteger {
+	return &BigInteger{Int: *big.NewInt(value)}
+}
+
+// BigInt answers the wrapped value, nil for a nil receiver.
+func (b *BigInteger) BigInt() *big.Int {
+	if b == nil {
+		return nil
+	}
+	return &b.Int
+}
+
+// UnmarshalText parses the DECIMAL lexical form, shadowing the promoted
+// big.Int.UnmarshalText and its base-0 prefix sniffing.
+func (b *BigInteger) UnmarshalText(text []byte) error {
+	s := strings.TrimSpace(string(text))
+	if _, ok := b.Int.SetString(s, 10); !ok {
+		return fmt.Errorf("invalid xs:integer: %q", s)
+	}
+	return nil
 }
 
 // BigIntegerList is the Go form of a List<BigInteger> property bound to an
@@ -476,8 +547,10 @@ func (x *XmlTrustSourceList) UnmarshalXMLAttr(attr xml.Attr) error {
 }
 
 var (
-	tokenRefType    = reflect.TypeOf((*XmlTokenRef)(nil))
-	identifiableTyp = reflect.TypeOf((*identifiable)(nil)).Elem()
+	tokenRefType         = reflect.TypeOf((*XmlTokenRef)(nil))
+	identifiableTyp      = reflect.TypeOf((*identifiable)(nil)).Elem()
+	trustSourceListType  = reflect.TypeOf((*XmlTrustSourceList)(nil))
+	listOfTrustedEntType = reflect.TypeOf((*XmlListOfTrustedEntities)(nil))
 )
 
 // Link resolves every IDREF attribute in the tree to the object carrying the
@@ -501,7 +574,8 @@ func Link(root any) {
 			}
 		}
 	})
-	walk(v, map[uintptr]bool{}, func(sv reflect.Value) { resolveRefs(sv, ids) })
+	baseViews := map[uintptr]reflect.Value{}
+	walk(v, map[uintptr]bool{}, func(sv reflect.Value) { resolveRefs(sv, ids, baseViews) })
 }
 
 // walk visits every owned struct in the tree. IDREF attributes are not followed:
@@ -550,7 +624,7 @@ func isAttrField(f reflect.StructField) bool {
 	return false
 }
 
-func resolveRefs(sv reflect.Value, ids map[string]reflect.Value) {
+func resolveRefs(sv reflect.Value, ids map[string]reflect.Value, baseViews map[uintptr]reflect.Value) {
 	t := sv.Type()
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
@@ -574,10 +648,54 @@ func resolveRefs(sv reflect.Value, ids map[string]reflect.Value) {
 			continue
 		}
 		id := fv.Interface().(identifiable).TokenID()
-		if target, ok := ids[id]; ok && target.Type() == f.Type && target.Pointer() != fv.Pointer() {
-			fv.Set(target)
+		target, ok := ids[id]
+		if !ok {
+			continue
+		}
+		if target.Type() == f.Type {
+			if target.Pointer() != fv.Pointer() {
+				fv.Set(target)
+			}
+			continue
+		}
+		if view, ok := baseTypeView(target, f.Type, baseViews); ok {
+			fv.Set(view)
 		}
 	}
+}
+
+// baseTypeView answers a field-typed view of an IDREF target whose Go type is
+// the port of a Java SUBCLASS of the field's declared type, which the exact
+// type match above cannot see: Java resolves @XmlIDREF by assignability, so
+// XmlTrustedEntity#getLoTE() (declared XmlTrustSourceList) legitimately points
+// at an XmlListOfTrustedEntities, which "extends XmlTrustSourceList" - the one
+// such pair in this schema. Without this, every <TrustedEntity LoTE="LoTE-..."/>
+// reference stayed an unresolved stub carrying only the raw id, so the
+// certificate-approval-status (ETSI TS 119 602 "certificate usage") process
+// found no acceptable List of Trusted Entities and concluded
+// FAILED/CERT_USAGE_VALID_LOTE_PRESENT_ANS where upstream concludes PASSED.
+// Found by the phase-8f full-corpus report byte-parity run on
+// eaa-validation/diag_data_pid.xml.
+//
+// The view is CACHED per target, so every reference to the same id resolves to
+// the SAME pointer - the port's stand-in for Java's object identity, which
+// CertificateApprovalStatusBlock relies on when it collects the acceptable
+// lists into a set and tests membership.
+func baseTypeView(target reflect.Value, want reflect.Type, cache map[uintptr]reflect.Value) (reflect.Value, bool) {
+	if want != trustSourceListType || target.Type() != listOfTrustedEntType {
+		return reflect.Value{}, false
+	}
+	key := target.Pointer()
+	if view, ok := cache[key]; ok {
+		return view, true
+	}
+	listOfTrustedEntities := target.Interface().(*XmlListOfTrustedEntities)
+	view := reflect.ValueOf(&XmlTrustSourceList{
+		XmlTrustSourceListContent: listOfTrustedEntities.XmlTrustSourceListContent,
+		XmlTrustSourceListAttrs:   listOfTrustedEntities.XmlTrustSourceListAttrs,
+	})
+	cache[key] = view
+	return view, true
 }
 
 // ---------------------------------------------------------- certificate extensions

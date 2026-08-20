@@ -1,9 +1,4 @@
-//go:build phase8
-
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWSSerializationDocumentValidator.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (phase 6 integration): gated behind the `phase8` build tag; see
-// abstract_jws_document_validator.go's file header.
 //
 // This class performs validation of a JWS Serialization or Flattened signature format.
 //
@@ -41,16 +36,20 @@ type JWSSerializationDocumentValidator struct {
 
 // NewJWSSerializationDocumentValidator is the port of the empty constructor.
 func NewJWSSerializationDocumentValidator() *JWSSerializationDocumentValidator {
-	return &JWSSerializationDocumentValidator{
+	v := &JWSSerializationDocumentValidator{
 		AbstractJWSDocumentValidator: newAbstractJWSDocumentValidator(NewJWSSerializationAnalyzerValidator()),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // NewJWSSerializationDocumentValidatorFromDocument is the port of the (DSSDocument) constructor.
 func NewJWSSerializationDocumentValidatorFromDocument(document model.DSSDocument) *JWSSerializationDocumentValidator {
-	return &JWSSerializationDocumentValidator{
+	v := &JWSSerializationDocumentValidator{
 		AbstractJWSDocumentValidator: newAbstractJWSDocumentValidator(NewJWSSerializationAnalyzerValidatorFromDocument(document)),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // DocumentAnalyzer returns the JWSSerializationAnalyzerValidator of this validator. Port of the

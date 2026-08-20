@@ -52,7 +52,14 @@ func (c *CertificateNotOnHoldCheck) Process() bool {
 func (c *CertificateNotOnHoldCheck) BuildAdditionalInfo() *string {
 	if c.certificateRevocation != nil && c.certificateRevocation.RevocationDate() != nil {
 		revocationDateStr := process.GetFormattedDate(c.certificateRevocation.RevocationDate())
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_REASON, c.certificateRevocation.Reason(), revocationDateStr)
+		// Java hands MessageFormat the RevocationReason ENUM, so a NULL reason
+		// renders as the literal text "null"; the ported wrapper returns the
+		// empty string for that null, which would render as nothing.
+		reason := "null"
+		if r := c.certificateRevocation.Reason(); r != "" {
+			reason = string(r)
+		}
+		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_REASON, reason, revocationDateStr)
 		return &message
 	}
 	return nil

@@ -68,7 +68,12 @@ func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BuildA
 // would have created.
 func acceptableRevocationIds(crsResult *jaxb.XmlCRS) []string {
 	if crsResult.AcceptableRevocationId == nil {
-		return nil
+		// JAXB's generated getter CREATES the list on first access, and a
+		// materialised - even empty - xs:list property then marshals as an empty
+		// <AcceptableRevocationId></AcceptableRevocationId> element, which the
+		// upstream detailed reports carry. Reproduce that side effect rather
+		// than only reading through it.
+		crsResult.AcceptableRevocationId = &jaxb.StringList{}
 	}
 	return *crsResult.AcceptableRevocationId
 }

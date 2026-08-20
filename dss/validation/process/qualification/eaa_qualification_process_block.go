@@ -1,10 +1,10 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/eaa/EAAQualificationProcessBlock.java (DSS 6.5.RC1).
 //
-// FLAGGED HASH-ORDER SITE: as in CertificateQualificationBlock/
+// HASH-ORDER (closed in phase 8f): as in CertificateQualificationBlock/
 // SignatureQualificationBlock/TimestampQualificationBlock, Java iterates
 // HashSet<String> listOfTrustedListUrls/trustedListUrls directly, feeding
 // report Constraint order. This port sorts the equivalent Go
-// map[string]struct{} sets by URL via sortedKeys for a deterministic (if not
+// orderedURLSet, whose iterate() reproduces java.util.HashSet's own
 // necessarily Java-bucket-identical) result. See the porter brief's hard
 // rule.
 package qualification
@@ -100,15 +100,15 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 
 			originalTSPs := signingCertificate.TrustServices()
 
-			listOfTrustedListUrls := map[string]struct{}{}
+			listOfTrustedListUrls := newOrderedURLSet()
 			for _, t := range originalTSPs {
 				if t.ListOfTrustedLists != nil && t.ListOfTrustedLists.Url != nil {
-					listOfTrustedListUrls[*t.ListOfTrustedLists.Url] = struct{}{}
+					listOfTrustedListUrls.add(*t.ListOfTrustedLists.Url)
 				}
 			}
 
 			acceptableLOTLUrls := map[string]struct{}{}
-			for _, lotlURL := range sortedKeys(listOfTrustedListUrls) {
+			for _, lotlURL := range listOfTrustedListUrls.iterate() {
 				lotlAnalysis := c.getTLAnalysis(lotlURL)
 				if lotlAnalysis != nil {
 					acceptableLOTL := c.isAcceptableLOTL(lotlAnalysis)
@@ -120,7 +120,7 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 			}
 
 			// filter TLs with a found valid set of LOTLs (if assigned)
-			trustedListUrls := map[string]struct{}{}
+			trustedListUrls := newOrderedURLSet()
 			for _, t := range originalTSPs {
 				if t.TrustedList == nil || t.TrustedList.Url == nil {
 					continue
@@ -133,11 +133,11 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 						continue
 					}
 				}
-				trustedListUrls[*t.TrustedList.Url] = struct{}{}
+				trustedListUrls.add(*t.TrustedList.Url)
 			}
 
-			if len(trustedListUrls) > 0 {
-				for _, tlURL := range sortedKeys(trustedListUrls) {
+			if trustedListUrls.len() > 0 {
+				for _, tlURL := range trustedListUrls.iterate() {
 					currentTL := c.getTLAnalysis(tlURL)
 					if currentTL != nil {
 						acceptableTL := c.isAcceptableTL(currentTL)

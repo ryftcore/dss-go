@@ -84,7 +84,13 @@ type ValidationProcessForSignaturesWithLongTermValidationData struct {
 
 	// certificateRevocationMap defines the map between certificates in the
 	// chain and their latest valid revocation data.
-	certificateRevocationMap map[*diagnostic.CertificateWrapper]*diagnostic.CertificateRevocationWrapper
+	// Keyed by the certificate's ID, not by wrapper pointer: Java's
+	// CertificateWrapper (AbstractTokenProxy) overrides equals/hashCode by
+	// getId(), and every CertificateWrapper this class hands to the map -
+	// currentSignature.getCertificateChain(), getSigningCertificate() - is a
+	// FRESH wrapper object in the ported diagnostic package, so a
+	// pointer-identity key would never match on lookup.
+	certificateRevocationMap map[string]*diagnostic.CertificateRevocationWrapper
 
 	// certificateRevocationOrder is the insertion order of
 	// certificateRevocationMap's keys (see the package/file header).
@@ -162,7 +168,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	}
 
 	/* Revocation BBBs analysis */
-	c.certificateRevocationMap = make(map[*diagnostic.CertificateWrapper]*diagnostic.CertificateRevocationWrapper)
+	c.certificateRevocationMap = make(map[string]*diagnostic.CertificateRevocationWrapper)
 
 	for _, certificateWrapper := range c.currentSignature.CertificateChain() {
 		subContext := enumerations.SubContext_CA_CERTIFICATE
@@ -196,10 +202,10 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 		latestCertificateRevocation := certificateRevocationSelector.LatestAcceptableCertificateRevocation()
 
 		if latestCertificateRevocation != nil {
-			if _, ok := c.certificateRevocationMap[certificateWrapper]; !ok {
+			if _, ok := c.certificateRevocationMap[certificateWrapper.Id()]; !ok {
 				c.certificateRevocationOrder = append(c.certificateRevocationOrder, certificateWrapper)
 			}
-			c.certificateRevocationMap[certificateWrapper] = latestCertificateRevocation
+			c.certificateRevocationMap[certificateWrapper.Id()] = latestCertificateRevocation
 		}
 	}
 
@@ -533,7 +539,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) revocationIsF
 	item process.ChainItem[*jaxb.XmlValidationProcessLongTermData], bestSignatureTime *time.Time,
 	currentContext enumerations.Context) process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {
 	for _, certificate := range c.currentSignature.CertificateChain() {
-		revocationData, ok := c.certificateRevocationMap[certificate]
+		revocationData, ok := c.certificateRevocationMap[certificate.Id()]
 		if !ok {
 			continue
 		}
@@ -605,7 +611,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) revocationDat
 	constraint := c.policy.RevocationTimeAgainstBestSignatureTimeConstraint()
 
 	for _, certificate := range c.certificateRevocationOrder {
-		revocationData := c.certificateRevocationMap[certificate]
+		revocationData := c.certificateRevocationMap[certificate.Id()]
 		subContext := c.getSubContext(certificate)
 
 		// separate cases to check based on the returned subIndication
@@ -630,7 +636,10 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) bestSignature
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) certificateKnownToBeNotRevokedFail(
 	bsConclusion *jaxb.XmlConclusion, bestSignatureTime *time.Time) process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {
 	signingCertificate := c.currentSignature.SigningCertificate()
-	revocationWrapper := c.certificateRevocationMap[signingCertificate]
+	var revocationWrapper *diagnostic.CertificateRevocationWrapper
+	if signingCertificate != nil {
+		revocationWrapper = c.certificateRevocationMap[signingCertificate.Id()]
+	}
 	isRevocationIssuerTrusted := c.isRevocationIssuerTrusted(revocationWrapper, bestSignatureTime)
 	return vpfltvd.NewCertificateKnownToBeNotRevokedEnforceFailCheck(c.I18nProvider, c.Result, signingCertificate, revocationWrapper,
 		isRevocationIssuerTrusted, &c.currentDate, bsConclusion, c.FailLevelRule())
@@ -647,7 +656,10 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) certificateKn
 	bsConclusion *jaxb.XmlConclusion, bestSignatureTime *time.Time,
 	context enumerations.Context) process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {
 	signingCertificate := c.currentSignature.SigningCertificate()
-	revocationWrapper := c.certificateRevocationMap[signingCertificate]
+	var revocationWrapper *diagnostic.CertificateRevocationWrapper
+	if signingCertificate != nil {
+		revocationWrapper = c.certificateRevocationMap[signingCertificate.Id()]
+	}
 	isRevocationIssuerTrusted := c.isRevocationIssuerTrusted(revocationWrapper, bestSignatureTime)
 	constraint, err := process.GetConstraintOrMaxLevel(c.policy.RevocationIssuerNotExpiredConstraint(context, enumerations.SubContext_SIGNING_CERT), enumerations.Level_WARN)
 	if err != nil {
@@ -743,7 +755,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) revocationDat
 	validationTime time.Time) process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {
 	checkedTokenIds := make(map[string]struct{})
 	for _, certificate := range c.certificateRevocationOrder {
-		revocationData := c.certificateRevocationMap[certificate]
+		revocationData := c.certificateRevocationMap[certificate.Id()]
 		item = c.checkRevocationAgainstBestSignatureTime(item, &revocationData.RevocationWrapper, validationTime, checkedTokenIds)
 	}
 	return item

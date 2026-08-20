@@ -207,6 +207,16 @@ func buildContentModel() {
 // never carry one, so both are stripped before lookup.
 func carriesCharData(name string, stack []string) bool {
 	local := localName(name)
+	// ds:SignatureValue is bound to a byte[]; when the signature value is
+	// absent the JAXB RI writes <ns2:SignatureValue/>, not the <x></x> an
+	// empty text element would otherwise get here. Verified against the
+	// upstream ETSI-VR oracle corpus, in which every empty element - this one
+	// included - is self-closed. Phase 8f addition, flagged for the
+	// integrator: the phase-8b corpus never produced an empty signature value,
+	// so the case was not covered by the original heuristic.
+	if local == "SignatureValue" {
+		return false
+	}
 	if len(stack) > 0 {
 		if k, ok := contentKindByParent[localName(stack[len(stack)-1])][local]; ok {
 			return k == kindText

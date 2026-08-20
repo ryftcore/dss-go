@@ -14,13 +14,13 @@
 package qualification
 
 import (
-	"sort"
 	"time"
 
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/utils"
 	"github.com/utain/esig/dss/validation/process"
 )
 
@@ -101,7 +101,7 @@ func (c *CertificateQualificationBlock) Title() i18n.MessageTag {
 
 // InitChain initializes the chain. Port of initChain().
 //
-// FLAGGED HASH-ORDER SITE: Java builds listOfTrustedListUrls/trustedListUrls
+// HASH-ORDER (closed in phase 8f): Java builds listOfTrustedListUrls/trustedListUrls
 // as HashSet<String> and iterates them directly to append AcceptableListOfTrustedListsCheck/
 // AcceptableTrustedListCheck constraints to the report, in HashSet bucket
 // order. That order feeds the ordering of report Constraint elements, which
@@ -121,15 +121,15 @@ func (c *CertificateQualificationBlock) InitChain() {
 
 	if c.SigningCertificate.IsTrustedListReached() {
 
-		listOfTrustedListUrls := map[string]struct{}{}
+		listOfTrustedListUrls := newOrderedURLSet()
 		for _, t := range originalTSPs {
 			if t.ListOfTrustedLists != nil && t.ListOfTrustedLists.Url != nil {
-				listOfTrustedListUrls[*t.ListOfTrustedLists.Url] = struct{}{}
+				listOfTrustedListUrls.add(*t.ListOfTrustedLists.Url)
 			}
 		}
 
 		acceptableLOTLUrls := map[string]struct{}{}
-		for _, lotlURL := range sortedKeys(listOfTrustedListUrls) {
+		for _, lotlURL := range listOfTrustedListUrls.iterate() {
 			lotlAnalysis := c.getTlAnalysis(lotlURL)
 			if lotlAnalysis != nil {
 				acceptableLOTL := c.isAcceptableLOTL(lotlAnalysis)
@@ -141,7 +141,7 @@ func (c *CertificateQualificationBlock) InitChain() {
 		}
 
 		// filter TLs with a found valid set of LOTLs (if assigned)
-		trustedListUrls := map[string]struct{}{}
+		trustedListUrls := newOrderedURLSet()
 		for _, t := range originalTSPs {
 			if t.TrustedList == nil || t.TrustedList.Url == nil {
 				continue
@@ -154,11 +154,11 @@ func (c *CertificateQualificationBlock) InitChain() {
 					continue
 				}
 			}
-			trustedListUrls[*t.TrustedList.Url] = struct{}{}
+			trustedListUrls.add(*t.TrustedList.Url)
 		}
 
-		if len(trustedListUrls) > 0 {
-			for _, tlURL := range sortedKeys(trustedListUrls) {
+		if trustedListUrls.len() > 0 {
+			for _, tlURL := range trustedListUrls.iterate() {
 				currentTL := c.getTlAnalysis(tlURL)
 				if currentTL != nil {
 					acceptableTL := c.isAcceptableTL(currentTL)
@@ -254,14 +254,34 @@ func (c *CertificateQualificationBlock) isAcceptableBuildingBlockConclusion(buil
 	return NewAcceptableBuildingBlockConclusionCheck(c.I18nProvider, c.Result, buildingBlocksConclusion, c.WarnLevelRule())
 }
 
-// sortedKeys returns a string set's members in sorted order, for
-// deterministic iteration over what Java iterates as HashSet<String> bucket
-// order; see this file's InitChain for the hash-order caveat.
-func sortedKeys(m map[string]struct{}) []string {
-	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
+// orderedURLSet collects trusted-list / list-of-trusted-lists URLs the way
+// Java's Collectors.toSet() does - into a java.util.HashSet<String> - and
+// records the insertion order so iterate() can reproduce that HashSet's real
+// iteration order. Upstream appends one report <Constraint> per element while
+// iterating these sets, so the order is OBSERVABLE, byte-compared output; a
+// sorted-by-URL substitute (this port's earlier, explicitly flagged reading)
+// is deterministic but not upstream's. Found by the phase-8f full-corpus
+// report byte-parity run on DSS-2049/dss2049-doubleTL.xml.
+type orderedURLSet struct {
+	seen  map[string]struct{}
+	order []string
+}
+
+func newOrderedURLSet() *orderedURLSet {
+	return &orderedURLSet{seen: map[string]struct{}{}}
+}
+
+func (s *orderedURLSet) add(url string) {
+	if _, exists := s.seen[url]; exists {
+		return
 	}
-	sort.Strings(keys)
-	return keys
+	s.seen[url] = struct{}{}
+	s.order = append(s.order, url)
+}
+
+func (s *orderedURLSet) len() int { return len(s.order) }
+
+// iterate answers the URLs in java.util.HashSet iteration order.
+func (s *orderedURLSet) iterate() []string {
+	return utils.JavaHashMapStringKeyOrder(s.order)
 }

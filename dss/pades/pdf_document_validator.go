@@ -1,28 +1,11 @@
-//go:build phase8
-
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PDFDocumentValidator.java
 // (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (Phase 3 integration precedent, cades/cms_document_validator.go): gated behind
-// the `phase8` build tag so that `go build ./...` / `go vet ./...` / `go test ./...` stay green
-// for the rest of the module while dss/validation does not exist yet. Drop the tag once Phase 8
-// lands the package; the file needs no other change.
-//
-// BLOCKED FORWARD DEPENDENCY: this class's Java base, eu.europa.esig.dss.validation.
-// SignedDocumentValidator, belongs to dss-validation (Phase 8, unstarted). Following
-// cades/cms_document_validator.go's precedent, the assumed Phase 8 shape is an interface
-// `validation.SignedDocumentValidator` plus an embeddable `validation.SignedDocumentValidatorBase`
-// providing NewSignedDocumentValidatorBase(analyzer.DocumentAnalyzer) and DocumentAnalyzer().
-//
-// FORWARD DEPENDENCY (not in this chunk's manifest): PAdESDiagnosticDataBuilder
-// (eu.europa.esig.dss.pades.validation.PAdESDiagnosticDataBuilder), the PAdES-specific
-// diagnostic-data builder, following the CAdESDiagnosticDataBuilder precedent in
-// cades_diagnostic_data_builder.go (also phase8-gated, same sibling situation).
 package pades
 
 import (
 	"github.com/utain/esig/dss/model"
 	dssvalidation "github.com/utain/esig/dss/validation"
+	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
 )
 
 // PDFDocumentValidator is the validation of a PDF document. Port of the class
@@ -34,19 +17,29 @@ type PDFDocumentValidator struct {
 	dssvalidation.SignedDocumentValidatorBase
 }
 
+// compile-time interface assertion.
+var (
+	_ dssvalidation.SignedDocumentValidator          = (*PDFDocumentValidator)(nil)
+	_ dssvalidation.SignedDocumentValidatorOverrides = (*PDFDocumentValidator)(nil)
+)
+
 // newPDFDocumentValidator is the port of the protected empty constructor.
 func newPDFDocumentValidator() *PDFDocumentValidator {
-	return &PDFDocumentValidator{
+	v := &PDFDocumentValidator{
 		SignedDocumentValidatorBase: dssvalidation.NewSignedDocumentValidatorBase(newPDFDocumentAnalyzer()),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // newPDFDocumentValidatorWithAnalyzer is the port of the protected
 // PDFDocumentValidator(PDFDocumentAnalyzer) constructor.
 func newPDFDocumentValidatorWithAnalyzer(pdfDocumentAnalyzer *PDFDocumentAnalyzer) *PDFDocumentValidator {
-	return &PDFDocumentValidator{
+	v := &PDFDocumentValidator{
 		SignedDocumentValidatorBase: dssvalidation.NewSignedDocumentValidatorBase(pdfDocumentAnalyzer),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // NewPDFDocumentValidator creates a PDFDocumentValidator from a DSSDocument. Port of the
@@ -74,8 +67,9 @@ func (v *PDFDocumentValidator) SetPasswordProtection(passwordProtection []byte) 
 }
 
 // InitializeDiagnosticDataBuilder is the port of the initializeDiagnosticDataBuilder() override.
-func (v *PDFDocumentValidator) InitializeDiagnosticDataBuilder() *PAdESDiagnosticDataBuilder {
-	return NewPAdESDiagnosticDataBuilder()
+func (v *PDFDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
+	builder := NewPAdESDiagnosticDataBuilder()
+	return &builder.SignedDocumentDiagnosticDataBuilder
 }
 
 // DssDictionaries returns a list of found DSS Dictionaries across different revisions.

@@ -1,9 +1,4 @@
-//go:build phase8
-
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/ASiCContainerWithCAdESValidatorFactory.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag; see
-// asic_container_with_cades_validator.go's header for why.
 package cades
 
 import (
@@ -13,7 +8,8 @@ import (
 )
 
 // ASiCContainerWithCAdESValidatorFactory returns a relevant validator for an ASiC with CAdES
-// container validation.
+// container validation. Port of the class ASiCContainerWithCAdESValidatorFactory, implementing
+// validation.DocumentValidatorFactory.
 type ASiCContainerWithCAdESValidatorFactory struct{}
 
 var _ dssvalidation.DocumentValidatorFactory = (*ASiCContainerWithCAdESValidatorFactory)(nil)

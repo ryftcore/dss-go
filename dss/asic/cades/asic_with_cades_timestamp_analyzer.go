@@ -1,42 +1,7 @@
-//go:build phase8
-
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/timestamp/ASiCWithCAdESTimestampAnalyzer.java (DSS 6.5.RC1).
 //
 // The Java `validation.timestamp` sub-package flattens into this Go package per the phase-7
 // package layout (S7_BRIEF.md).
-//
-// INTEGRATOR NOTE (Phase 7 integration): gated behind the `phase8` build tag so that
-// `go build ./...` / `go vet ./...` / `go test ./...` are green for the rest of the module while
-// dss/validation does not exist yet. Drop the tag once Phase 8 lands the package; the file may
-// need adjusting to the real shape (see the BLOCKED FORWARD DEPENDENCY note below).
-//
-// BLOCKED FORWARD DEPENDENCY (flagged per S7_BRIEF.md's "flag needs in notes" rule): this
-// class's Java base, eu.europa.esig.dss.validation.timestamp.DetachedTimestampAnalyzer, belongs
-// to dss-validation, assigned to the not-yet-ported `validation` package (Phase 8). Following
-// the Overrides+Init virtual-dispatch convention this porting effort uses pervasively (see
-// AbstractASiCContainerAnalyzer, DefaultContainerMerger), this file assumes:
-//
-//	type DetachedTimestampAnalyzerOverrides interface {
-//	    CreateTimestampToken() *validation.TimestampToken
-//	    IsTimestampCoveredByEvidenceRecord(timestampToken *validation.TimestampToken, evidenceRecord validation.EvidenceRecord) bool
-//	    GetTimestampScopes(timestampToken *validation.TimestampToken) []modelscope.SignatureScope
-//	    AddReference(signatureScope modelscope.SignatureScope) bool
-//	}
-//	type DetachedTimestampAnalyzer struct { ... }
-//	func NewDetachedTimestampAnalyzerBase() DetachedTimestampAnalyzer
-//	func (a *DetachedTimestampAnalyzer) InitDetachedTimestampAnalyzer(overrides DetachedTimestampAnalyzerOverrides)
-//	func (a *DetachedTimestampAnalyzer) InitFromDocument(timestamp model.DSSDocument)
-//	func (a *DetachedTimestampAnalyzer) InitFromDocumentWithType(timestamp model.DSSDocument, timestampType enumerations.TimestampType)
-//	func (a *DetachedTimestampAnalyzer) TimestampedData() model.DSSDocument
-//	func (a *DetachedTimestampAnalyzer) SetTimestampedData(timestampedData model.DSSDocument)
-//	func (a *DetachedTimestampAnalyzer) ManifestFile() *model.ManifestFile // protected field manifestFile, exported for cross-package embedding
-//	func (a *DetachedTimestampAnalyzer) SetManifestFile(manifestFile *model.ManifestFile)
-//	func (a *DetachedTimestampAnalyzer) SetDocument(document model.DSSDocument)
-//	func (a *DetachedTimestampAnalyzer) SetCertificateVerifier(certificateVerifier validation.CertificateVerifier)
-//	func (a *DetachedTimestampAnalyzer) SetDetachedEvidenceRecords(evidenceRecords []validation.EvidenceRecord)
-//	func (a *DetachedTimestampAnalyzer) CreateTimestampToken() *validation.TimestampToken
-//
-// Revisit once Phase 8 lands the real package - only the imports/shape above need to resolve.
 package cades
 
 import (
@@ -45,12 +10,12 @@ import (
 	"github.com/utain/esig/dss/model"
 	mscope "github.com/utain/esig/dss/model/scope"
 	"github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	dsstimestamp "github.com/utain/esig/dss/validation/timestamp"
 )
 
 // ASiCWithCAdESTimestampAnalyzer is the abstract validator for an ASiC with CAdES timestamp.
 type ASiCWithCAdESTimestampAnalyzer struct {
-	dssvalidation.DetachedTimestampAnalyzer
+	dsstimestamp.DetachedTimestampAnalyzer
 
 	// originalDocuments is a list of original documents present in the container.
 	originalDocuments []model.DSSDocument
@@ -63,31 +28,32 @@ type ASiCWithCAdESTimestampAnalyzer struct {
 	archiveTimestampTypeSet bool
 }
 
-var _ dssvalidation.DetachedTimestampAnalyzerOverrides = (*ASiCWithCAdESTimestampAnalyzer)(nil)
+var _ dsstimestamp.DetachedTimestampAnalyzerOverrides = (*ASiCWithCAdESTimestampAnalyzer)(nil)
 
 // newASiCWithCAdESTimestampAnalyzer wires the overrides registration shared by both
 // constructors.
 func newASiCWithCAdESTimestampAnalyzer() *ASiCWithCAdESTimestampAnalyzer {
 	a := &ASiCWithCAdESTimestampAnalyzer{
-		DetachedTimestampAnalyzer: dssvalidation.NewDetachedTimestampAnalyzerBase(),
+		DetachedTimestampAnalyzer: dsstimestamp.NewDetachedTimestampAnalyzerBase(),
 	}
 	a.InitDetachedTimestampAnalyzer(a)
 	return a
 }
 
 // NewASiCWithCAdESTimestampAnalyzer is the default constructor. Ports
-// ASiCWithCAdESTimestampAnalyzer(DSSDocument).
+// ASiCWithCAdESTimestampAnalyzer(DSSDocument), which delegates to the single-argument
+// DetachedTimestampAnalyzer(DSSDocument) constructor and so keeps its
+// TimestampType_CONTENT_TIMESTAMP default.
 func NewASiCWithCAdESTimestampAnalyzer(timestamp model.DSSDocument) *ASiCWithCAdESTimestampAnalyzer {
-	a := newASiCWithCAdESTimestampAnalyzer()
-	a.InitFromDocument(timestamp)
-	return a
+	return NewASiCWithCAdESTimestampAnalyzerWithType(timestamp, enumerations.TimestampType_CONTENT_TIMESTAMP)
 }
 
 // NewASiCWithCAdESTimestampAnalyzerWithType is the default constructor with a timestamp type.
 // Ports ASiCWithCAdESTimestampAnalyzer(DSSDocument, TimestampType).
 func NewASiCWithCAdESTimestampAnalyzerWithType(timestamp model.DSSDocument, tstType enumerations.TimestampType) *ASiCWithCAdESTimestampAnalyzer {
 	a := newASiCWithCAdESTimestampAnalyzer()
-	a.InitFromDocumentWithType(timestamp, tstType)
+	a.SetDocument(timestamp)
+	a.SetTimestampType(tstType)
 	return a
 }
 
@@ -116,15 +82,18 @@ func (a *ASiCWithCAdESTimestampAnalyzer) SetArchiveTimestampType(archiveTimestam
 }
 
 // CreateTimestampToken ports the @Override protected createTimestampToken().
-func (a *ASiCWithCAdESTimestampAnalyzer) CreateTimestampToken() *validation.TimestampToken {
-	timestamp := a.DetachedTimestampAnalyzer.CreateTimestampToken()
+func (a *ASiCWithCAdESTimestampAnalyzer) CreateTimestampToken() (*validation.TimestampToken, error) {
+	timestamp, err := a.DetachedTimestampAnalyzer.CreateTimestampToken()
+	if err != nil {
+		return nil, err
+	}
 	if a.ManifestFile() != nil {
 		timestamp.SetManifestFile(a.ManifestFile())
 	}
 	if a.archiveTimestampTypeSet {
 		timestamp.SetArchiveTimestampType(a.archiveTimestampType)
 	}
-	return timestamp
+	return timestamp, nil
 }
 
 // IsTimestampCoveredByEvidenceRecord ports the @Override protected

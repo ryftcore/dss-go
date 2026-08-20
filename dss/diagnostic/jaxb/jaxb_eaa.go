@@ -6,9 +6,7 @@
 
 package jaxb
 
-import (
-	"math/big"
-)
+import ()
 
 // XmlAuthorizedDataElements is the Go form of the generated JAXB class XmlAuthorizedDataElements
 // (complexType AuthorizedDataElements).
@@ -140,7 +138,7 @@ type XmlEAAPresentationInfo struct {
 	Version             *string                   `xml:"Version,omitempty"`
 	Documents           *DocumentsWrapper         `xml:"Documents"`
 	Errors              *XmlErrors                `xml:"Errors,omitempty"`
-	Status              *big.Int                  `xml:"Status,omitempty"`
+	Status              *BigInteger               `xml:"Status,omitempty"`
 }
 
 // XmlEAARevocationStatus is the Go form of the generated JAXB class XmlEAARevocationStatus
@@ -166,8 +164,8 @@ type XmlEAASubject struct {
 // XmlError is the Go form of the generated JAXB class XmlError
 // (complexType Error).
 type XmlError struct {
-	Label *string  `xml:"label,attr,omitempty"`
-	Code  *big.Int `xml:"code,attr,omitempty"`
+	Label *string     `xml:"label,attr,omitempty"`
+	Code  *BigInteger `xml:"code,attr,omitempty"`
 }
 
 // XmlErrors is the Go form of the generated JAXB class XmlErrors
@@ -225,7 +223,7 @@ type XmlEAARevocationToken struct {
 	Subject            *XmlEAASubject            `xml:"Subject,omitempty"`
 	IssuedAt           *XSDateTime               `xml:"IssuedAt,omitempty"`
 	ExpirationTime     *XSDateTime               `xml:"ExpirationTime,omitempty"`
-	TimeToLive         *big.Int                  `xml:"TimeToLive,omitempty"`
+	TimeToLive         *BigInteger               `xml:"TimeToLive,omitempty"`
 	BasicSignature     *XmlBasicSignature        `xml:"BasicSignature,omitempty"`
 	SigningCertificate *XmlSigningCertificate    `xml:"SigningCertificate,omitempty"`
 	CertificateChain   *CertificateChainWrapper  `xml:"CertificateChain"`

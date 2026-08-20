@@ -170,20 +170,16 @@ func TestAovBlocksAgainstJavaOracle(t *testing.T) {
 // aovKnownSignCertRefOrderDeviation lists the "<file> <token> <block>" rows whose
 // constraint sequence deviates from Java's, and only in its order.
 //
+// It is EMPTY. It used to hold the one corpus signature carrying more than one
+// distinct signing-certificate reference, because
 // SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation#buildSignedAttributesValidationChain
-// groups the signing-certificate references into a java.util.HashMap keyed by
-// certificate id and iterates it; the resulting order is the JDK's bucket order,
-// which is deterministic but is not the references' document order. The Go port
-// iterates in first-seen (document) order instead - PORTING.md's rule for an
-// order-sensitive upstream map. The one corpus signature carrying more than one
-// distinct signing-certificate reference therefore emits the same constraints in
-// a different order (and thus a different XmlConstraint/@Id sequence); the
-// conclusion, the messages and the four XmlCryptographicValidation members are
-// unaffected, which aovSameConstraintMultiset asserts.
-var aovKnownSignCertRefOrderDeviation = map[string]bool{
-	"pades-5-signatures-and-1-document-timestamp.pdf.xml SIG|S-583253AFD4A055E3565B183ED502A91803E897BAF6DAD9C0CDBB52F15D886D91 SignatureAlgorithmObsolescenceValidation":                         true,
-	"pades-5-signatures-and-1-document-timestamp.pdf.xml SIG|S-583253AFD4A055E3565B183ED502A91803E897BAF6DAD9C0CDBB52F15D886D91 SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation": true,
-}
+// groups those references into a java.util.HashMap keyed by certificate id and
+// iterates it, while the Go port substituted first-seen order. Phase 8f closed
+// that: utils.JavaHashMapComputeIfAbsentKeyOrder reproduces the real HashMap key
+// order (computeIfAbsent PREPENDS colliding keys, unlike put), so the constraint
+// sequence - and the reported signed-attributes digest algorithm, which the
+// loop's "first result wins" rule ties to the same order - now match exactly.
+var aovKnownSignCertRefOrderDeviation = map[string]bool{}
 
 // aovSameConstraintMultiset reports whether two rows differ only in the order of
 // their constraint list: everything outside the list must be equal, and the list

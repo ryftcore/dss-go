@@ -4,17 +4,16 @@
 // evidence_record_timestamps_validation_block.go for the cross-chunk vpftsp
 // dependency and the import cycle it exposes.
 //
-// HASH-ORDER LEAK (flagged, see the batch notes). Java fills
+// HASH-ORDER (closed in phase 8f, see Execute()). Java fills
 // XmlEvidenceRecord#getTimestamps() from currentTimestampValidations.values(),
 // where currentTimestampValidations is the java.util.HashMap that
 // TimestampsValidationBlock#execute() returns. That iteration order is the
 // String-key hash order of the time-stamp ids - unspecified, yet it decides the
 // order of the <Timestamp> elements of the detailed report, which is
-// order-sensitive output. The Go port emits the map's INSERTION order instead
-// (i.e. the order EvidenceRecordTimestampsValidationBlock#getTimestamps()
-// validated them in: by production time, ascending), by walking that same list
-// and indexing the map. It is deterministic and spec-meaningful, but it is a
-// deliberate deviation from Java's arbitrary order, not a reproduction of it.
+// order-sensitive output. The Go port reproduces that order exactly, by
+// walking the same insertion order (EvidenceRecordTimestampsValidationBlock#
+// getTimestamps(), production time descending) through
+// utils.JavaHashMapStringKeyOrder.
 //
 // The other two maps (timestampValidations, evidenceRecordValidations) are read
 // by DetailedReportBuilder through get(id) and keySet() only, so their iteration
@@ -37,6 +36,7 @@ import (
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
 	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/utils"
 	"github.com/utain/esig/dss/validation/process/vpfswatsp"
 )
 
@@ -112,10 +112,22 @@ func (b *EvidenceRecordsValidationBlock) Execute() {
 			b.timestampValidations[timestampId] = xmlTimestamp
 		}
 
-		// See the file header: Java appends currentTimestampValidations.values()
-		// in HashMap order; the insertion order is used here instead.
+		// Java appends currentTimestampValidations.values(), i.e. the values of
+		// the HashMap<String, XmlTimestamp> TimestampsValidationBlock#execute()
+		// filled with put() while walking getTimestamps() (production time,
+		// descending). That iteration order reaches the <Timestamp> element
+		// sequence of the marshalled detailed report, so it is byte-compared
+		// output and has to be REPRODUCED, not substituted: walk the same
+		// insertion order and reorder it the way a java.util.HashMap keyed by
+		// those ids iterates. Found by the phase-8f full-corpus report
+		// byte-parity run on er-validation/er-valid.xml and
+		// er-validation/sig-with-er-valid.xml.
+		var timestampInsertionOrder []string
 		for _, timestamp := range allTimestampValidationBlock.Timestamps() {
-			if xmlTimestamp, ok := currentTimestampValidations[timestamp.Id()]; ok {
+			timestampInsertionOrder = append(timestampInsertionOrder, timestamp.Id())
+		}
+		for _, timestampId := range utils.JavaHashMapStringKeyOrder(timestampInsertionOrder) {
+			if xmlTimestamp, ok := currentTimestampValidations[timestampId]; ok {
 				evidenceRecordAnalysis.Timestamp = append(evidenceRecordAnalysis.Timestamp, xmlTimestamp)
 			}
 		}

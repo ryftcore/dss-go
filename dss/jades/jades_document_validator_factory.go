@@ -1,10 +1,4 @@
-//go:build phase8
-
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESDocumentValidatorFactory.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (phase 6 integration): gated behind the `phase8` build tag; see
-// abstract_jws_document_validator.go's file header for the assumed dss/validation shape
-// (DocumentValidatorFactory).
 package jades
 
 import (
