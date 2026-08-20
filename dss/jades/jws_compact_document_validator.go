@@ -1,9 +1,4 @@
-//go:build phase8
-
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWSCompactDocumentValidator.java (DSS 6.5.RC1).
-//
-// INTEGRATOR NOTE (phase 6 integration): gated behind the `phase8` build tag; see
-// abstract_jws_document_validator.go's file header.
 package jades
 
 import "github.com/utain/esig/dss/model"
@@ -19,16 +14,20 @@ type JWSCompactDocumentValidator struct {
 
 // NewJWSCompactDocumentValidator is the port of the empty constructor.
 func NewJWSCompactDocumentValidator() *JWSCompactDocumentValidator {
-	return &JWSCompactDocumentValidator{
+	v := &JWSCompactDocumentValidator{
 		AbstractJWSDocumentValidator: newAbstractJWSDocumentValidator(NewJWSCompactDocumentAnalyzer()),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // NewJWSCompactDocumentValidatorFromDocument is the port of the (DSSDocument) constructor.
 func NewJWSCompactDocumentValidatorFromDocument(document model.DSSDocument) *JWSCompactDocumentValidator {
-	return &JWSCompactDocumentValidator{
+	v := &JWSCompactDocumentValidator{
 		AbstractJWSDocumentValidator: newAbstractJWSDocumentValidator(NewJWSCompactDocumentAnalyzerFromDocument(document)),
 	}
+	v.InitSignedDocumentValidator(v)
+	return v
 }
 
 // DocumentAnalyzer returns the JWSCompactDocumentAnalyzer of this validator. Port of the

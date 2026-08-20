@@ -275,11 +275,14 @@ func (a *DetachedTimestampAnalyzer) GetTimestampScopes(timestampToken *validatio
 }
 
 // OriginalDocuments returns the signed document(s) without their signature(s), given a
-// signature's DSS ID. Port of the getOriginalDocuments(String) override, which always throws.
-// Shadows the promoted analyzer.DefaultDocumentAnalyzer.OriginalDocuments (see that type's file
-// header on shadowing a top-level DocumentAnalyzer method this way).
+// signature's DSS ID. Port of the getOriginalDocuments(String) override, which always throws -
+// an incomplete stub in Java itself (a bare, message-less `throw new
+// UnsupportedOperationException();` behind a "TODO : add extraction of original documents"
+// comment, unlike the descriptive-message override two lines below it). Shadows the promoted
+// analyzer.DefaultDocumentAnalyzer.OriginalDocuments (see that type's file header on shadowing
+// a top-level DocumentAnalyzer method this way).
 func (a *DetachedTimestampAnalyzer) OriginalDocuments(signatureId string) []model.DSSDocument {
-	panic("getOriginalDocuments(signatureId) is not supported for DetachedTimestampValidator!")
+	panic("unsupported operation")
 }
 
 // OriginalDocumentsForSignature is DetachedTimestampAnalyzerOverrides' (inherited from

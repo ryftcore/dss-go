@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SimpleReport ValidationTime="2023-11-14T22:13:20Z" xmlns="http://dss.esig.europa.eu/validation/simple-report">
+    <ValidationPolicy>
+        <PolicyName>QES AES/QC AES TL based</PolicyName>
+        <PolicyDescription>Validates electronic signatures and indicates whether they are advanced electronic signatures (AES), AES supported by a qualified certificate (AES/QC) or a
+		qualified electronic signature (QES). All certificates and their related chains supporting the signatures are validated against the EU Member State Trusted Lists (this includes
+		signer's certificate and certificates used to validate certificate validity status services - CRLs, OCSP, and time-stamps).
+	</PolicyDescription>
+    </ValidationPolicy>
+    <DocumentName>jades-lta.json</DocumentName>
+    <ValidSignaturesCount>0</ValidSignaturesCount>
+    <SignaturesCount>1</SignaturesCount>
+    <Signature SignatureFormat="JAdES-BASELINE-T" Id="S-837000466006C54D4359EF0ED8448E7A3A6002EEAD2D6DB8567D486974CA195B">
+        <CertificateChain>
+            <Certificate Id="C-A4277E46D79271401ED75B2598A8140F67D76C986AA1D0832D3E0680C4864E89">
+                <QualifiedName>sha3-good-user</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-84942C79204C4DE8CBB92ED9B39C16C1F09C904767AF36EF504AF2062C00F9A3">
+                <QualifiedName>sha3-good-ca</QualifiedName>
+            </Certificate>
+            <Certificate Id="C-AD88FDFA646204FE5E9E993711F50F54BA80EC597365A42DC05590956C37CDBF">
+                <QualifiedName>sha3-root-ca</QualifiedName>
+            </Certificate>
+        </CertificateChain>
+        <Indication>INDETERMINATE</Indication>
+        <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+        <AdESValidationDetails>
+            <Error Key="BBB_XCV_CCCBB_SIG_ANS">The certificate chain for signature is not trusted, it does not contain a trust anchor.</Error>
+        </AdESValidationDetails>
+        <QualificationDetails>
+            <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+            <Warning Key="QUAL_IS_ADES_IND">The signature/seal is an INDETERMINATE AdES digital signature!</Warning>
+        </QualificationDetails>
+        <SigningTime>2020-07-14T13:03:42Z</SigningTime>
+        <BestSignatureTime>2023-11-14T22:13:20Z</BestSignatureTime>
+        <SignedBy>sha3-good-user</SignedBy>
+        <SignatureLevel description="Not applicable">N/A</SignatureLevel>
+        <SignatureScope Id="D-961BCF41347E4271CDAED5EA2E7B841B39906E85C6AACBB51258F46702D7BE90" scope="FULL">Full document</SignatureScope>
+        <Timestamps>
+            <Timestamp Id="T-09AC676243A2564CD098E6B631984F2538C9AC52C286BA3E364A3F84073AFBCD">
+                <CertificateChain>
+                    <Certificate Id="C-7964FA9EDFA4FDE9A80AEE7439B74F399771106C897C8D66CEBADBD1D3775D54">
+                        <QualifiedName>good-tsa</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-69CC25559D7011CE7564681E3F375D7E115EE66B2BD15950546CE10677CFDED7">
+                        <QualifiedName>root-ca</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2020-07-14T13:03:45Z</ProductionTime>
+                <ProducedBy>good-tsa</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+            <Timestamp Id="T-EFF2EA79C9546835736BF32762523B7EF68EC16915014B31679FC185A14C3EE0">
+                <CertificateChain>
+                    <Certificate Id="C-F987265F180683D2ACDB419818B639835EC880CDD06909CA4A5CDE3456B0FD21">
+                        <QualifiedName>cc-good-tsa-crossed</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-A0392CEA93DBAE1C6D05BB542E4383754CC1826ABB0870BB681F37162517DB99">
+                        <QualifiedName>cc-root-ca</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-44BAC8B92D27CE380AD4173574223A59BDB6DB58AB0AEC06179B4839999A641E">
+                        <QualifiedName>external-ca</QualifiedName>
+                    </Certificate>
+                    <Certificate Id="C-C0F6850F9550AB6E2E75DE436B4EA031EC789BD033D09BEDB43A5F3F008C5240">
+                        <QualifiedName>external-root-ca</QualifiedName>
+                    </Certificate>
+                </CertificateChain>
+                <Indication>FAILED</Indication>
+                <SubIndication>HASH_FAILURE</SubIndication>
+                <AdESValidationDetails>
+                    <Error Key="BBB_XCV_CCCBB_TSP_ANS">The certificate chain for time-stamp is not trusted, it does not contain a trust anchor.</Error>
+                    <Error Key="BBB_CV_TSP_IRDOI_ANS">The time-stamp message imprint is not intact!</Error>
+                </AdESValidationDetails>
+                <QualificationDetails>
+                    <Error Key="QUAL_CERT_TRUSTED_LIST_REACHED_ANS">Unable to build a certificate chain up to a trusted list!</Error>
+                </QualificationDetails>
+                <ProductionTime>2020-07-14T13:03:45Z</ProductionTime>
+                <ProducedBy>cc-good-tsa-crossed</ProducedBy>
+                <TimestampLevel description="Not applicable">N/A</TimestampLevel>
+            </Timestamp>
+        </Timestamps>
+    </Signature>
+</SimpleReport>

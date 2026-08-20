@@ -63,7 +63,18 @@ func (v *ValidationReportType) MarshalXML(e *xml.Encoder, start xml.StartElement
 	start.Name = xml.Name{Local: "ValidationReport"}
 	start.Attr = make([]xml.Attr, 0, 1+len(v.extraNamespaces))
 	start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "xmlns"}, Value: Namespace})
-	for _, a := range v.extraNamespaces {
+	extraNamespaces := v.extraNamespaces
+	if len(extraNamespaces) == 0 {
+		// A report BUILT from scratch (dss/validation/executor's
+		// ETSIValidationReportBuilder, the Go counterpart of Java's) has no
+		// captured declarations. The JAXB RI still pre-declares every namespace
+		// of the bound packages at the document element, in a fixed order, for
+		// exactly such a marshal - so reproduce that set here. Phase 8f
+		// addition, flagged for the integrator: it only applies when nothing was
+		// captured, so round-tripping an unmarshalled report is unaffected.
+		extraNamespaces = jaxbRootNamespaces
+	}
+	for _, a := range extraNamespaces {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "xmlns:" + a.Name.Local}, Value: a.Value})
 	}
 	if err := e.EncodeToken(start); err != nil {
@@ -92,6 +103,16 @@ func (v *ValidationReportType) MarshalXML(e *xml.Encoder, start xml.StartElement
 		}
 	}
 	return e.EncodeToken(start.End())
+}
+
+// jaxbRootNamespaces is the prefix set the JAXB RI declares on the document
+// element of every marshalled validation report, in the order it writes them
+// (verified against the 144-file upstream oracle corpus: every
+// <ValidationReport> start tag carries exactly these, ns2 then ns4 then ns3).
+var jaxbRootNamespaces = []xml.Attr{
+	{Name: xml.Name{Local: "ns2"}, Value: "http://www.w3.org/2000/09/xmldsig#"},
+	{Name: xml.Name{Local: "ns4"}, Value: "http://uri.etsi.org/02231/v2#"},
+	{Name: xml.Name{Local: "ns3"}, Value: "http://uri.etsi.org/01903/v1.3.2#"},
 }
 
 // SignatureValidationReportType is the Go form of the generated JAXB class

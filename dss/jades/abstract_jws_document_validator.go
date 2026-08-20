@@ -1,21 +1,23 @@
-//go:build phase8
-
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/AbstractJWSDocumentValidator.java (DSS 6.5.RC1).
 //
-// INTEGRATOR NOTE (phase 6 integration): gated behind the `phase8` build tag so that
-// `go build ./...` / `go vet ./...` / `go test ./...` are green for the rest of the module while
-// dss/validation does not exist yet. Drop the tag once Phase 8 lands the package; the file needs
-// no other change (see cades/cms_document_validator.go's identical, already-landed precedent for
-// the assumed dss/validation shape this file relies on:
-// validation.SignedDocumentValidator/SignedDocumentValidatorBase/NewSignedDocumentValidatorBase).
+// NOTE: in order to perform the validation process, please ensure the dss/validation package is
+// available within the dependencies list of your project (see the Java Javadoc precedent).
 //
-// FORWARD DEPENDENCY: JAdESDiagnosticDataBuilder is this same manifest's own
-// jades_diagnostic_data_builder.go (also phase8-tagged).
+// Registration deviation: Java's initializeDiagnosticDataBuilder() override lives on
+// AbstractJWSDocumentValidator itself, one level above the two concrete leaf validators. A Go
+// value embedded in a not-yet-final struct cannot safely register its own address with
+// InitSignedDocumentValidator (the pointer would target the temporary, not the copy that ends up
+// embedded in the leaf) - see PORTING.md's Init<Base> registration lesson - so registration is
+// deferred to the two leaf constructors (jws_compact_document_validator.go,
+// jws_serialization_document_validator.go), each passing its own outer *JWSCompactDocumentValidator /
+// *JWSSerializationDocumentValidator (which promotes AbstractJWSDocumentValidator's
+// InitializeDiagnosticDataBuilder) as the SignedDocumentValidatorOverrides.
 package jades
 
 import (
 	"github.com/utain/esig/dss/spi/validation/analyzer"
 	dssvalidation "github.com/utain/esig/dss/validation"
+	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
 )
 
 // jwsDocumentAnalyzer is the minimal surface AbstractJWSDocumentValidator needs from a JWS
@@ -41,7 +43,7 @@ type AbstractJWSDocumentValidator struct {
 }
 
 // newAbstractJWSDocumentValidator is the port of the protected (AbstractJWSDocumentAnalyzer)
-// constructor.
+// constructor. Does not call InitSignedDocumentValidator - see the file header.
 func newAbstractJWSDocumentValidator(analyzer jwsDocumentAnalyzer) AbstractJWSDocumentValidator {
 	return AbstractJWSDocumentValidator{
 		SignedDocumentValidatorBase: dssvalidation.NewSignedDocumentValidatorBase(analyzer),
@@ -49,13 +51,9 @@ func newAbstractJWSDocumentValidator(analyzer jwsDocumentAnalyzer) AbstractJWSDo
 }
 
 // InitializeDiagnosticDataBuilder is the port of the initializeDiagnosticDataBuilder() override.
-// Returns the concrete *JAdESDiagnosticDataBuilder (rather than the declared Java return type
-// SignedDocumentDiagnosticDataBuilder) following the cades/cms_document_validator.go precedent's
-// covariant-return convention, since Go has no virtual dispatch to reach
-// JAdESDiagnosticDataBuilder.BuildDetachedXmlSignature's override through a base-typed return
-// value otherwise.
-func (v *AbstractJWSDocumentValidator) InitializeDiagnosticDataBuilder() *JAdESDiagnosticDataBuilder {
-	return NewJAdESDiagnosticDataBuilder()
+func (v *AbstractJWSDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
+	builder := NewJAdESDiagnosticDataBuilder()
+	return &builder.SignedDocumentDiagnosticDataBuilder
 }
 
 // DocumentAnalyzer returns the JWS analyzer of this validator. Port of the getDocumentAnalyzer()

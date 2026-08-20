@@ -66,6 +66,16 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// AssertConfigurationValid verifies the configuration is valid to build a DiagnosticData.
 	// Port of the protected assertConfigurationValid().
 	AssertConfigurationValid()
+	// BuildXmlOrphanTokens builds a list of XmlOrphanTokens. Port of the protected
+	// buildXmlOrphanTokens(), overridden by PAdESDiagnosticDataBuilder (out of this manifest) to
+	// collect orphan tokens from the PDF document's own DSS dictionaries first. Added to this
+	// interface, rather than left a direct call to the embedded DiagnosticDataBuilder's method
+	// (as CertificateDiagnosticDataBuilder.Build() still does, which has no such override), during
+	// phase 8f un-gating - see DiagnosticDataBuilder.IsKnownCertificate's doc comment for the same
+	// cross-package-virtual-dispatch rationale. Every existing implementer (CAdES, JAdES, QWAC)
+	// keeps its current behavior unchanged: none define their own BuildXmlOrphanTokens, so Go
+	// embedding promotes DiagnosticDataBuilder's concrete implementation for them automatically.
+	BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens
 }
 
 // SignedDocumentDiagnosticDataBuilder is the common builder for DiagnosticData creation from a
@@ -252,6 +262,27 @@ func (b *SignedDocumentDiagnosticDataBuilder) DocumentOCSPSource(documentOCSPSou
 	return b
 }
 
+// GetDocumentCertificateSource returns the document Certificate Source set via
+// DocumentCertificateSource. Cross-package accessor added during phase 8f un-gating for
+// PAdESDiagnosticDataBuilder.buildOrphanTokensFromDocumentSources() - see
+// DiagnosticDataBuilder.IsKnownCertificate's doc comment for why it is needed. Purely additive;
+// does not change DocumentCertificateSource's existing fluent-setter behavior.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentCertificateSource() *spi.ListCertificateSource {
+	return b.documentCertificateSource
+}
+
+// GetDocumentCRLSource returns the document CRL Source set via DocumentCRLSource. See
+// GetDocumentCertificateSource's doc comment.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentCRLSource() *spi.ListRevocationSource[revocation.CRL] {
+	return b.documentCRLSource
+}
+
+// GetDocumentOCSPSource returns the document OCSP Source set via DocumentOCSPSource. See
+// GetDocumentCertificateSource's doc comment.
+func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentOCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
+	return b.documentOCSPSource
+}
+
 // Build builds the XmlDiagnosticData. Port of the public @Override build().
 func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	overrides := b.signedDocumentDiagnosticDataBuilderOverrides()
@@ -290,7 +321,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	// link the rest certificates
 	b.DiagnosticDataBuilder.LinkSigningCertificateAndChains(b.usedCertificates)
 
-	diagnosticData.OrphanTokens = b.BuildXmlOrphanTokens()
+	diagnosticData.OrphanTokens = overrides.BuildXmlOrphanTokens()
 
 	// timestamped objects must be linked after building of orphan tokens
 	if utils.IsCollectionNotEmpty(b.usedTimestamps) {

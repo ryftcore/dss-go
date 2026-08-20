@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DetailedReport ValidationTime="2023-11-14T22:13:20Z" xmlns="http://dss.esig.europa.eu/validation/detailed-report">
+    <Certificate Id="C-10B5F9C23B5A8DA99E73B663147DA71E4DB1751272068833DAF312CE686AC32F">
+        <CertificateQualificationProcess Id="C-10B5F9C23B5A8DA99E73B663147DA71E4DB1751272068833DAF312CE686AC32F" Title="Certificate Qualification">
+            <Constraint>
+                <Name Key="BBB_ACCEPT">Is the result of the Basic Building Block conclusive?</Name>
+                <Status>WARNING</Status>
+                <Warning Key="BBB_ACCEPT_ANS">The result of the Basic Building Block is not conclusive!</Warning>
+            </Constraint>
+            <Constraint>
+                <Name Key="QUAL_VALID_TRUSTED_LIST_PRESENT">Has an acceptable trusted list been found?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="QUAL_VALID_TRUSTED_LIST_PRESENT_ANS">No acceptable trusted lists has been found!</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>FAILED</Indication>
+                <Errors Key="QUAL_VALID_TRUSTED_LIST_PRESENT_ANS">No acceptable trusted lists has been found!</Errors>
+                <Warnings Key="BBB_ACCEPT_ANS">The result of the Basic Building Block is not conclusive!</Warnings>
+            </Conclusion>
+        </CertificateQualificationProcess>
+    </Certificate>
+    <BasicBuildingBlocks Id="C-10B5F9C23B5A8DA99E73B663147DA71E4DB1751272068833DAF312CE686AC32F" Type="CERTIFICATE">
+        <XCV Title="X509 Certificate Validation">
+            <Constraint>
+                <Name Key="BBB_XCV_CCCBB">Can the certificate chain be built till a trust anchor?</Name>
+                <Status>NOT OK</Status>
+                <Error Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Error>
+            </Constraint>
+            <Conclusion>
+                <Indication>INDETERMINATE</Indication>
+                <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+                <Errors Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Errors>
+            </Conclusion>
+        </XCV>
+        <AOV ValidationTime="2023-11-14T22:13:20Z" Title="Algorithm Obsolescence Validation">
+            <Constraint Id="C-10B5F9C23B5A8DA99E73B663147DA71E4DB1751272068833DAF312CE686AC32F" BlockType="AOV_XCV">
+                <Name Key="ACCM">Are cryptographic constraints met for the certificate?</Name>
+                <Status>OK</Status>
+                <AdditionalInfo>Signature algorithm RSA with SHA256 with key size 4096 at validation time : 2023-11-14 22:13</AdditionalInfo>
+            </Constraint>
+            <Conclusion>
+                <Indication>PASSED</Indication>
+            </Conclusion>
+            <CertificateChainCryptographicValidation>
+                <CertificateCryptographicValidation TokenId="C-10B5F9C23B5A8DA99E73B663147DA71E4DB1751272068833DAF312CE686AC32F">
+                    <Algorithm>
+                        <Name>RSA with SHA256</Name>
+                        <Uri>http://www.w3.org/2001/04/xmldsig-more#rsa-sha256</Uri>
+                        <KeyLength>4096</KeyLength>
+                    </Algorithm>
+                    <NotAfter>2029-01-01T00:00:00Z</NotAfter>
+                    <Conclusion>
+                        <Indication>PASSED</Indication>
+                    </Conclusion>
+                </CertificateCryptographicValidation>
+            </CertificateChainCryptographicValidation>
+        </AOV>
+        <Conclusion>
+            <Indication>INDETERMINATE</Indication>
+            <SubIndication>NO_CERTIFICATE_CHAIN_FOUND</SubIndication>
+            <Errors Key="BBB_XCV_CCCBB_ANS">The certificate chain is not trusted, it does not contain a trust anchor.</Errors>
+        </Conclusion>
+    </BasicBuildingBlocks>
+</DetailedReport>

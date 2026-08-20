@@ -232,8 +232,12 @@ func (b *SimpleReportBuilder) addValidationTime(report *jaxb.XmlSimpleReport) {
 // addDocumentName is the port of the private
 // addDocumentName(XmlSimpleReport).
 func (b *SimpleReportBuilder) addDocumentName(report *jaxb.XmlSimpleReport) {
-	documentName := b.diagnosticData.DocumentName()
-	report.DocumentName = &documentName
+	// Java reads the raw String off the JAXB model, which distinguishes an
+	// ABSENT <DocumentName> (null - element omitted) from a PRESENT EMPTY one
+	// (written back as <DocumentName></DocumentName>); the ported
+	// DiagnosticData.DocumentName() flattens both to "". Both spellings occur
+	// in the upstream corpus, so the JAXB field is read directly here.
+	report.DocumentName = b.diagnosticData.JaxbModel().DocumentName
 }
 
 // addContainerType is the port of the private
@@ -334,8 +338,7 @@ func (b *SimpleReportBuilder) signature(signature *diagnostic.SignatureWrapper, 
 	}
 
 	if container {
-		filename := signature.Filename()
-		xmlSignature.Filename = &filename
+		xmlSignature.Filename = nullableString(signature.Filename())
 	}
 
 	indication := b.detailedReport.FinalIndication(signatureId)
@@ -509,7 +512,9 @@ func (b *SimpleReportBuilder) uniqueServiceNames(trustServiceProvider *diagnosti
 		seen[name] = struct{}{}
 		result = append(result, name)
 	}
-	return result
+	// Java returns a HashSet<String>, whose iteration order reaches the
+	// marshalled <trustServiceName> sequence; see JavaHashSetStringOrder.
+	return JavaHashSetStringOrder(result)
 }
 
 // enOrFirst is the port of the private getEnOrFirst(List<XmlLangAndValue>).
@@ -652,8 +657,7 @@ func (b *SimpleReportBuilder) xmlTimestamp(timestampWrapper *diagnostic.Timestam
 	producedBy := b.producedByName(timestampWrapper)
 	xmlTimestamp.ProducedBy = &producedBy
 	xmlTimestamp.CertificateChain = b.certChain(timestampId)
-	filename := timestampWrapper.Filename()
-	xmlTimestamp.Filename = &filename
+	xmlTimestamp.Filename = nullableString(timestampWrapper.Filename())
 
 	indication := b.detailedReport.FinalIndication(timestampId)
 	xmlTimestamp.Indication = jaxb.IndicationValue(indication)
@@ -714,8 +718,7 @@ func (b *SimpleReportBuilder) xmlEvidenceRecord(evidenceRecordWrapper *diagnosti
 
 	evidenceRecordId := evidenceRecordWrapper.Id()
 	xmlEvidenceRecord.Id = evidenceRecordId
-	filename := evidenceRecordWrapper.Filename()
-	xmlEvidenceRecord.Filename = &filename
+	xmlEvidenceRecord.Filename = nullableString(evidenceRecordWrapper.Filename())
 
 	if poeTime := b.detailedReport.EvidenceRecordLowestPOETime(evidenceRecordId); poeTime != nil {
 		xmlEvidenceRecord.POETime = jaxb.NewXSDateTime(*poeTime)
@@ -879,8 +882,7 @@ func (b *SimpleReportBuilder) eaa(eaaWrapper *diagnostic.EAAWrapper) *jaxb.XmlEA
 
 	eaaId := eaaWrapper.Id()
 	xmlEAA.Id = eaaId
-	filename := eaaWrapper.Filename()
-	xmlEAA.Filename = &filename
+	xmlEAA.Filename = nullableString(eaaWrapper.Filename())
 
 	indication := b.detailedReport.FinalIndication(eaaId)
 	xmlEAA.Indication = jaxb.IndicationValue(indication)
@@ -1457,4 +1459,14 @@ func indexOfClaim(entries []*diagnosticjaxb.XmlClaim, claim *diagnosticjaxb.XmlC
 		}
 	}
 	return -1
+}
+
+// nullableString maps the Go zero string - what the diagnostic wrappers return
+// where the Java getter returns null - back onto a null (omitted) element,
+// preserving the null-versus-empty distinction the marshalled report shows.
+func nullableString(value string) *string {
+	if value == "" {
+		return nil
+	}
+	return &value
 }

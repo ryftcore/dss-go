@@ -1,36 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/timestamp/DetachedTimestampValidator.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY (flagged per this batch's porter brief - "cross-chunk assumptions"):
-// dss-validation's SignedDocumentValidator (the Java superclass) belongs to the "validation root
-// files" the EXEC chunk of this same phase 8f batch is porting concurrently
-// (/home/user/esig/dss/validation/*.go did not exist at the time this file was written). This
-// file assumes the following shape, inferred from every call DetachedTimestampValidator.java
-// makes to its superclass, and from the SignedDocumentValidatorBase/Init<Base> pattern this
-// porting effort uses pervasively elsewhere (e.g. analyzer.DefaultDocumentAnalyzer):
-//
-//	package validation // github.com/utain/esig/dss/validation
-//
-//	type SignedDocumentValidator interface {
-//	    IsSupported(document model.DSSDocument) bool
-//	    SetCertificateVerifier(certificateVerifier spivalidation.CertificateVerifier)
-//	    SetDetachedContents(detachedContents []model.DSSDocument)
-//	    Signatures() []spivalidation.AdvancedSignature
-//	    DocumentAnalyzer() analyzer.DocumentAnalyzer
-//	}
-//
-//	type SignedDocumentValidatorBase struct { /* embeds/wraps an analyzer.DocumentAnalyzer */ }
-//	func NewSignedDocumentValidatorBase(documentAnalyzer analyzer.DocumentAnalyzer) SignedDocumentValidatorBase
-//	func (v *SignedDocumentValidatorBase) DocumentAnalyzer() analyzer.DocumentAnalyzer
-//	func (v *SignedDocumentValidatorBase) IsSupported(document model.DSSDocument) bool
-//	func (v *SignedDocumentValidatorBase) SetCertificateVerifier(certificateVerifier spivalidation.CertificateVerifier)
-//	func (v *SignedDocumentValidatorBase) SetDetachedContents(detachedContents []model.DSSDocument)
-//	func (v *SignedDocumentValidatorBase) Signatures() []spivalidation.AdvancedSignature
-//	func (v *SignedDocumentValidatorBase) OriginalDocuments(signatureId string) []model.DSSDocument
-//	func (v *SignedDocumentValidatorBase) OriginalDocumentsForSignature(advancedSignature spivalidation.AdvancedSignature) []model.DSSDocument
-//
-// Revisit once EXEC lands the real package - only the shape above needs to resolve; this file's
-// own logic (delegating to the embedded DetachedTimestampAnalyzer) does not otherwise depend on
-// SignedDocumentValidator's exact internals.
+// dss-validation's SignedDocumentValidator (the Java superclass) lives in
+// /home/user/esig/dss/validation (SignedDocumentValidatorBase); this file embeds it exactly as
+// DetachedTimestampAnalyzer embeds analyzer.AbstractDocumentAnalyzer.
 package timestamp
 
 import (

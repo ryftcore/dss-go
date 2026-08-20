@@ -1,15 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/timestamp/DetachedTimestampValidatorFactory.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: see detached_timestamp_validator.go's file header - this file additionally
-// assumes dss/validation exposes:
-//
-//	type DocumentValidatorFactory interface {
-//	    IsSupported(document model.DSSDocument) bool
-//	    Create(document model.DSSDocument) SignedDocumentValidator
-//	}
-//
-// mirroring analyzer.DocumentAnalyzerFactory exactly (see that interface's own doc comment) -
-// the same ServiceLoader-registry stand-in pattern this porting effort uses throughout.
+// Implements dss/validation.DocumentValidatorFactory, mirroring
+// analyzer.DocumentAnalyzerFactory - the same ServiceLoader-registry stand-in pattern this
+// porting effort uses throughout (see validation.RegisterDocumentValidatorFactory).
 package timestamp
 
 import (
@@ -39,4 +32,12 @@ func (f *DetachedTimestampValidatorFactory) IsSupported(document model.DSSDocume
 // create(DSSDocument).
 func (f *DetachedTimestampValidatorFactory) Create(document model.DSSDocument) dssvalidation.SignedDocumentValidator {
 	return NewDetachedTimestampValidator(document)
+}
+
+// init registers this factory with the document validator registry, replacing upstream's
+// META-INF/services/eu.europa.esig.dss.validation.DocumentValidatorFactory entry (matching the
+// self-registration convention already used by, e.g., cades.CMSDocumentAnalyzerFactory for the
+// sibling analyzer registry).
+func init() {
+	dssvalidation.RegisterDocumentValidatorFactory(NewDetachedTimestampValidatorFactory())
 }

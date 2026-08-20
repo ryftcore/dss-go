@@ -31,3 +31,11 @@ func (f *DetachedTimestampAnalyzerFactory) IsSupported(document model.DSSDocumen
 func (f *DetachedTimestampAnalyzerFactory) Create(document model.DSSDocument) analyzer.DocumentAnalyzer {
 	return NewDetachedTimestampAnalyzer(document)
 }
+
+// init registers this factory with the analyzer registry, replacing upstream's
+// META-INF/services/eu.europa.esig.dss.spi.validation.analyzer.DocumentAnalyzerFactory entry
+// (matching the self-registration convention already used by, e.g.,
+// cades.CMSDocumentAnalyzerFactory).
+func init() {
+	analyzer.RegisterDocumentAnalyzerFactory(NewDetachedTimestampAnalyzerFactory())
+}

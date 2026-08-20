@@ -1703,6 +1703,27 @@ func (b *DiagnosticDataBuilder) GetXmlOrphanCertificate(origin enumerations.Cert
 	return xoc
 }
 
+// IsKnownCertificate reports whether id (a CertificateToken.DSSIDAsString()) has already been
+// recorded as a non-orphan XmlCertificate (i.e. is a key of the private xmlCertsMap cache).
+// Cross-package accessor added during phase 8f un-gating: Java's PAdESDiagnosticDataBuilder.
+// buildOrphanTokensFromDocumentSources() reads the protected xmlCertsMap field directly (Java
+// `protected` grants cross-package subclass access DSS relies on here); Go embedding does not
+// expose unexported fields to an embedding type in another package, so this getter is the
+// narrowest surface that reproduces the same check. No existing behavior changes - purely
+// additive.
+func (b *DiagnosticDataBuilder) IsKnownCertificate(id string) bool {
+	_, ok := b.xmlCertsMap[id]
+	return ok
+}
+
+// IsKnownRevocation reports whether id (a revocation identifier's AsXmlID()) has already been
+// recorded as a non-orphan XmlRevocation (i.e. is a key of the private xmlRevocationsMap cache).
+// See IsKnownCertificate's doc comment for why this accessor exists.
+func (b *DiagnosticDataBuilder) IsKnownRevocation(id string) bool {
+	_, ok := b.xmlRevocationsMap[id]
+	return ok
+}
+
 // BuildXmlOrphanCertificateToken builds an XmlOrphanCertificateToken from the given
 // CertificateToken. Port of the protected buildXmlOrphanCertificateToken(CertificateToken).
 func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken *model.CertificateToken) *jaxb.XmlOrphanCertificateToken {

@@ -18,6 +18,12 @@
 //     indication. build() has no error return in Java either, so the port
 //     panics with the same *reports.DSSReportException value, matching the
 //     convention used across the ported process tree.
+//
+//   - DetailedReportForEAAPresentationBuilder overrides the protected
+//     executeValidation(...), which build() self-calls. Go has no virtual
+//     dispatch, so the call is routed through DetailedReportBuilderOverrides,
+//     registered by every constructor via InitDetailedReportBuilder - the same
+//     arrangement as process/chain_item.go's InitChainItem.
 
 package executor
 
@@ -39,10 +45,24 @@ import (
 	"github.com/utain/esig/dss/validation/reports"
 )
 
+// DetailedReportBuilderOverrides captures the member Java's
+// DetailedReportForEAAPresentationBuilder overrides and that build()
+// self-calls.
+type DetailedReportBuilderOverrides interface {
+	// ExecuteValidation performs validation for the given tokens. Port of the
+	// protected executeValidation(XmlDetailedReport, Map, POEExtraction).
+	ExecuteValidation(detailedReport *jaxb.XmlDetailedReport,
+		bbbs map[string]*jaxb.XmlBasicBuildingBlocks, poe *vpfswatsp.POEExtraction)
+}
+
 // DetailedReportBuilder builds a DetailedReport for a signature validation.
 // Port of DetailedReportBuilder.
 type DetailedReportBuilder struct {
 	AbstractDetailedReportBuilder
+
+	// overrides points back at the concrete builder; see
+	// InitDetailedReportBuilder.
+	overrides DetailedReportBuilderOverrides
 
 	// validationLevel is the target highest validation level.
 	validationLevel enumerations.ValidationLevel
@@ -66,13 +86,31 @@ type DetailedReportBuilder struct {
 func NewDetailedReportBuilder(i18nProvider *i18n.I18nProvider, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy, validationLevel enumerations.ValidationLevel,
 	diagnosticData *diagnostic.DiagnosticData, includeSemantics bool) *DetailedReportBuilder {
-	return &DetailedReportBuilder{
+	b := &DetailedReportBuilder{
 		AbstractDetailedReportBuilder: NewAbstractDetailedReportBuilder(i18nProvider, currentTime, validationPolicy, diagnosticData),
-		validationLevel:              validationLevel,
-		includeSemantics:             includeSemantics,
-		allIndications:               make(map[enumerations.Indication]struct{}),
-		allSubIndications:            make(map[enumerations.SubIndication]struct{}),
+		validationLevel:               validationLevel,
+		includeSemantics:              includeSemantics,
+		allIndications:                make(map[enumerations.Indication]struct{}),
+		allSubIndications:             make(map[enumerations.SubIndication]struct{}),
 	}
+	b.InitDetailedReportBuilder(b)
+	return b
+}
+
+// InitDetailedReportBuilder registers the concrete builder so that Build()
+// dispatches executeValidation() onto it. Every concrete constructor must call
+// this before use.
+func (b *DetailedReportBuilder) InitDetailedReportBuilder(overrides DetailedReportBuilderOverrides) {
+	b.overrides = overrides
+}
+
+// detailedReportBuilderOverrides returns the registered overrides, panicking
+// when the concrete builder failed to call InitDetailedReportBuilder.
+func (b *DetailedReportBuilder) detailedReportBuilderOverrides() DetailedReportBuilderOverrides {
+	if b.overrides == nil {
+		panic("executor: DetailedReportBuilder used without InitDetailedReportBuilder")
+	}
+	return b.overrides
 }
 
 // Build builds the XmlDetailedReport. Port of build().
@@ -86,7 +124,7 @@ func (b *DetailedReportBuilder) Build() *jaxb.XmlDetailedReport {
 	poe := vpfswatsp.NewPOEExtraction()
 	poe.Init(b.DiagnosticData, b.CurrentTime)
 
-	b.ExecuteValidation(detailedReport, bbbs, poe)
+	b.detailedReportBuilderOverrides().ExecuteValidation(detailedReport, bbbs, poe)
 
 	if b.includeSemantics {
 		b.collectReportIndications(detailedReport)
@@ -290,34 +328,34 @@ func (b *DetailedReportBuilder) executeAllBasicBuildingBlocks() map[string]*jaxb
 	bbbs := make(map[string]*jaxb.XmlBasicBuildingBlocks)
 	switch b.validationLevel {
 	case enumerations.ValidationLevel_ARCHIVAL_DATA:
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllRevocationData(), enumerations.Context_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.Context_REVOCATION, bbbs)
 		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.TimestampList(), enumerations.Context_TIMESTAMP, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllSignatures(), enumerations.Context_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllCounterSignatures(), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllKeyBindingSignatures(), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAARevocationTokens(), enumerations.Context_EAA_REVOCATION, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAA(), enumerations.Context_EAA, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
 	case enumerations.ValidationLevel_LONG_TERM_DATA:
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllRevocationData(), enumerations.Context_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.Context_REVOCATION, bbbs)
 		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.Context_TIMESTAMP, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllSignatures(), enumerations.Context_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllCounterSignatures(), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllKeyBindingSignatures(), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAARevocationTokens(), enumerations.Context_EAA_REVOCATION, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAA(), enumerations.Context_EAA, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
 	case enumerations.ValidationLevel_TIMESTAMPS:
 		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.Context_TIMESTAMP, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllSignatures(), enumerations.Context_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllCounterSignatures(), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllKeyBindingSignatures(), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAARevocationTokens(), enumerations.Context_EAA_REVOCATION, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAA(), enumerations.Context_EAA, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
 	case enumerations.ValidationLevel_BASIC_SIGNATURES:
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllSignatures(), enumerations.Context_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllCounterSignatures(), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllKeyBindingSignatures(), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAARevocationTokens(), enumerations.Context_EAA_REVOCATION, bbbs)
-		Process(&b.AbstractDetailedReportBuilder, b.DiagnosticData.AllEAA(), enumerations.Context_EAA, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
+		Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
 	default:
 		panic(fmt.Sprintf("Unsupported validation level %s", b.validationLevel))
 	}

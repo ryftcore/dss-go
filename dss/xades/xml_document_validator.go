@@ -1,25 +1,14 @@
-//go:build phase8
-
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XMLDocumentValidator.java
 // (DSS 6.5.RC1).
 //
-// INTEGRATOR NOTE (Phase 4d integration): gated behind the `phase8` build tag so that
-// `go build ./...` / `go vet ./...` / `go test ./...` are green for the rest of the module while
-// dss/validation does not exist yet. Drop the tag once Phase 8 lands the package; the file needs
-// no other change (see below). Mirrors the cades.CMSDocumentValidator precedent
-// (cades/cms_document_validator.go) exactly, including its assumed dss/validation shape.
+// NOTE: in order to perform the validation process, please ensure the dss/validation package is
+// available within the dependencies list of your project (see the Java Javadoc precedent).
 //
-// BLOCKED FORWARD DEPENDENCY (flagged per S4D_BRIEF.md's "flag needs in notes" rule): this
-// class's Java base, eu.europa.esig.dss.validation.SignedDocumentValidator, belongs to
-// dss-validation, which PORTING_PLAN.md assigns to the not-yet-ported `validation` package
-// (Phase 8: "validation engine + reports" - unstarted). There is no Go type to embed here yet,
-// and the upstream Javadoc itself flags the same optionality ("In order to perform
-// validation-process, please ensure the `dss-validation` module is loaded").
-//
-// The method bodies below are ported 1:1 against the package path and shape
-// cades/cms_document_validator.go already established (github.com/utain/esig/dss/validation,
-// holding SignedDocumentValidator/SignedDocumentValidatorBase), so that this file needs no
-// further changes once Phase 8 lands the package - only its imports need to resolve.
+// Java's XMLDocumentValidator overrides no other SignedDocumentValidator member besides the
+// covariant getDocumentAnalyzer() - unlike dss-cades, dss-xades ships no
+// XAdES-specific DiagnosticDataBuilder subclass, so this validator relies entirely on the base's
+// default initializeDiagnosticDataBuilder() and never registers itself via
+// InitSignedDocumentValidator.
 package xades
 
 import (
@@ -29,14 +18,14 @@ import (
 	"github.com/utain/esig/dss/xades/definition"
 )
 
-// XMLDocumentValidator is the validator of an XML Signed document.
-//
-// NOTE: in order to perform the validation process, please ensure the dss/validation package is
-// available within the dependencies list of your project (see the file header). Port of the
-// class XMLDocumentValidator, extending validation.SignedDocumentValidator.
+// XMLDocumentValidator is the validator of an XML Signed document. Port of the class
+// XMLDocumentValidator, extending validation.SignedDocumentValidator.
 type XMLDocumentValidator struct {
 	dssvalidation.SignedDocumentValidatorBase
 }
+
+// compile-time interface assertion.
+var _ dssvalidation.SignedDocumentValidator = (*XMLDocumentValidator)(nil)
 
 // newXMLDocumentValidator is the port of the package-private default constructor.
 func newXMLDocumentValidator() *XMLDocumentValidator {

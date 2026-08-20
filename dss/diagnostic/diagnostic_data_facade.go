@@ -68,6 +68,14 @@ func (f *DiagnosticDataFacade) Unmarshal(r io.Reader) (*jaxb.XmlDiagnosticData, 
 	if err := decoder.Decode(&result); err != nil {
 		return nil, err
 	}
+	// The JAXB unmarshaller resolves the document's IDREF attributes natively;
+	// encoding/xml does not, so the ported model exposes jaxb.Link for it (and
+	// jaxb.Unmarshal, which every in-tree caller uses, already calls it). Doing
+	// it here too keeps this facade - the public entry point Java callers use -
+	// behaviourally identical: without it every ChainItem/SigningCertificate
+	// reference stays an unresolved stub carrying only the raw id, and the whole
+	// validation engine reads empty certificate data off it.
+	jaxb.Link(&result)
 	return &result, nil
 }
 

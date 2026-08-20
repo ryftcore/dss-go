@@ -17,6 +17,7 @@
 package executor
 
 import (
+	"sort"
 	"time"
 
 	"github.com/utain/esig/dss/detailedreport/jaxb"
@@ -165,6 +166,104 @@ func (b *AbstractDetailedReportBuilder) BasicBuildingBlocksInOrder(
 		}
 	}
 	return result
+}
+
+// JavaHashSetOrder reorders tokens into the iteration order
+// java.util.HashSet yields for the same elements.
+//
+// Several of the collections the report builders feed to Process are
+// Set<...TokenProxy> upstream (DiagnosticData.getAllRevocationData(),
+// getAllSignatures(), getAllCounterSignatures(), getAllKeyBindingSignatures(),
+// getAllEAA(), getAllEAARevocationTokens()), while the ported diagnostic
+// wrappers return slices in document order. That difference is BYTE-VISIBLE:
+// Process fills a LinkedHashMap whose values() the detailed report marshals in
+// insertion order, so the <BasicBuildingBlocks> elements come out in the
+// HashSet's order upstream.
+//
+// The order is fully determined, not JVM-dependent: AbstractTokenProxy
+// overrides hashCode() as `31 + getId().hashCode()`, so a HashSet of these
+// wrappers iterates its table in a pure function of the token ids -
+// HashMap.hash(key) = h ^ (h >>> 16), bucket index (n-1) & hash, buckets walked
+// in ascending index and, inside a bucket, in insertion order (the split a
+// resize performs preserves relative order, and treeification needs 8 entries
+// in one bucket, which these corpora never reach). n is the table size the map
+// has grown to for the element count, with HashMap's default capacity 16 and
+// load factor 0.75.
+//
+// This is the one place in the port that reproduces a Java hash order rather
+// than substituting insertion order (the convention documented in
+// utils/ordered_map.go): here the order reaches the marshalled report.
+func JavaHashSetOrder[T diagnostic.TokenProxy](tokens []T) []T {
+	if len(tokens) < 2 {
+		return tokens
+	}
+	// HashMap's table size: capacity 16, doubled while size exceeds
+	// 0.75 * capacity.
+	n := 16
+	for len(tokens) > n*3/4 {
+		n *= 2
+	}
+	indexed := make([]struct {
+		token  T
+		bucket int
+		order  int
+	}, len(tokens))
+	for i, token := range tokens {
+		h := int32(31) + javaStringHashCode(token.Id())
+		spread := h ^ int32(uint32(h)>>16)
+		indexed[i].token = token
+		indexed[i].bucket = int(uint32(spread) & uint32(n-1))
+		indexed[i].order = i
+	}
+	sort.SliceStable(indexed, func(i, j int) bool { return indexed[i].bucket < indexed[j].bucket })
+	result := make([]T, len(tokens))
+	for i := range indexed {
+		result[i] = indexed[i].token
+	}
+	return result
+}
+
+// JavaHashSetStringOrder reorders strings into the iteration order
+// java.util.HashSet<String> yields for the same elements - the string-keyed
+// sibling of JavaHashSetOrder, whose doc comment explains the table walk. It
+// is needed where a report builder marshals the members of a HashSet<String>
+// in iteration order: SimpleReportBuilder/SimpleReportForCertificateBuilder's
+// getUniqueServiceNames(), whose result becomes the <trustServiceName>
+// sequence of a <trustAnchor>.
+func JavaHashSetStringOrder(values []string) []string {
+	if len(values) < 2 {
+		return values
+	}
+	n := 16
+	for len(values) > n*3/4 {
+		n *= 2
+	}
+	indexed := make([]struct {
+		value  string
+		bucket int
+	}, len(values))
+	for i, value := range values {
+		h := javaStringHashCode(value)
+		spread := h ^ int32(uint32(h)>>16)
+		indexed[i].value = value
+		indexed[i].bucket = int(uint32(spread) & uint32(n-1))
+	}
+	sort.SliceStable(indexed, func(i, j int) bool { return indexed[i].bucket < indexed[j].bucket })
+	result := make([]string, len(values))
+	for i := range indexed {
+		result[i] = indexed[i].value
+	}
+	return result
+}
+
+// javaStringHashCode reproduces java.lang.String#hashCode: the ids this port
+// hashes are ASCII, so each byte is one UTF-16 code unit.
+func javaStringHashCode(s string) int32 {
+	var h int32
+	for i := 0; i < len(s); i++ {
+		h = 31*h + int32(s[i])
+	}
+	return h
 }
 
 // Process performs the tokens validation. Port of the protected
