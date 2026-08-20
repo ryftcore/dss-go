@@ -1249,22 +1249,45 @@ func (s *SignatureTimestampSource[AS, SA]) isTimestamped(signature validation.Ad
 // getAttributeOrder gets the position of signatureAttribute either within signed or unsigned
 // properties. Port of the protected getAttributeOrder(SA); returns nil, matching Java's null
 // Integer, when not found.
+//
+// Java writes `signatureAttribute.equals(property)`, which dispatches to the CONCRETE
+// attribute class's equals() override - CAdESAttribute, XAdESAttribute, JAdESAttribute and
+// CBAdESAttribute all override it as `Objects.equals(getIdentifier(), that.getIdentifier())`,
+// i.e. value equality on the SA-... identifier - not to Object's reference identity. Comparing
+// the Go pointers instead (the file header's original assumption) can never match: every
+// SignatureProperties.Attributes() implementation REBUILDS a fresh attribute list on each call
+// (see cades/cades_sig_properties.go, xades/xades_sig_properties.go), so the SA handed in here
+// - produced by an earlier Attributes() call inside populateTimestampTokens - is never the same
+// pointer as any element of the list re-read below. The result was a silent, always-nil order,
+// dropping the "-OOA-<n>" component from every embedded timestamp's position string and so from
+// every encapsulated TimestampToken's T-... identifier (found by the phase-8f document-level
+// harness: 30 of its 60 CAdES/XAdES/PAdES/ASiC fixtures).
 func (s *SignatureTimestampSource[AS, SA]) getAttributeOrder(signatureAttribute SA) *int {
+	target := signatureAttribute.Identifier()
 	signedAttributes := s.getSignedSignatureProperties().Attributes()
 	for i := 0; i < len(signedAttributes); i++ {
-		if signatureAttribute == signedAttributes[i] {
+		if signatureAttributeEquals(target, signedAttributes[i]) {
 			position := i
 			return &position
 		}
 	}
 	unsignedAttributes := s.getUnsignedSignatureProperties().Attributes()
 	for i := 0; i < len(unsignedAttributes); i++ {
-		if signatureAttribute == unsignedAttributes[i] {
+		if signatureAttributeEquals(target, unsignedAttributes[i]) {
 			position := i
 			return &position
 		}
 	}
 	return nil
+}
+
+// signatureAttributeEquals reports whether candidate carries the identifier target, reproducing
+// the concrete attribute classes' equals(Object) override. model.IdentifierBase.Equals already
+// carries Java Identifier#equals's getClass() check (the ported Java simple class name), so two
+// attributes of different formats never compare equal even on an identical digest.
+func signatureAttributeEquals[SA validation.SignatureAttribute](target identifier.SignatureAttributeIdentifier, candidate SA) bool {
+	candidateIdentifier := candidate.Identifier()
+	return target.Equals(&candidateIdentifier)
 }
 
 // compile-time assertion: a SignatureTimestampSource embeds AbstractTimestampSource and

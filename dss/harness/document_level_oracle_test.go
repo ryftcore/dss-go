@@ -31,46 +31,30 @@
 // diag-data-corpus oracle cannot reach, since that one starts from
 // already-built diagnostic data.
 //
-// # F2 (found live by this harness): timestamp/attribute identifier construction
+// # F2 and F3, found live by this harness and FIXED in this pass
 //
 // Building fresh from a real document (as this test does, and item (A)'s
-// oracle never does) surfaces a defect item (A) cannot see: for 30 of the 60
-// fixtures - every CAdES/XAdES/ASiC-CAdES/ASiC-XAdES/PAdES(DSS-dict) format
-// carrying an embedded signature- or archive-timestamp - the Go-built
-// DetailedReport has the CORRECT set of BasicBuildingBlocks with the CORRECT
-// Type/Indication/SubIndication, but under a DIFFERENT "T-..." Id than Java's.
+// oracle never does) surfaced two real defects item (A) cannot see. Both are
+// now fixed, so this test compares every fixture with NO tolerance at all -
+// exact BasicBuildingBlocks Ids included:
 //
-// Root cause, confirmed down to the byte: TimestampToken's own identifier is
-// sha256(DER-encoded timestamp binaries + UTF-16BE(position string)), per
-// spi/validation/timestamp_identifier_builder.go. The DER-encoded-binaries
-// half is BYTE-IDENTICAL between engines (verified directly against
-// BouncyCastle's DSSASN1Utils.getDEREncoded(TimeStampToken) on the same raw
-// bytes - both a no-op re-encoding here, since the input was already valid
-// DER). The POSITION half embeds a "SA-..." SignatureAttributeIdentifier
-// (spi/validation/identifier/signature_attribute_identifier.go), which is
-// itself sha256 of the CARRYING ATTRIBUTE's own serialized bytes - the DOM
-// serialization of the <xades:SignatureTimeStamp>/<xades:ArchiveTimeStamp>
-// element for XAdES (xml/utils.DomUtilsSerializeNode, ultimately
-// internal/xmldom's own re-serializer) or the DER re-encoding of the CMS
-// unsigned Attribute for CAdES/ASiC-CAdES/PAdES - one of those two
-// re-serializations diverges from Java's (javax.xml.transform's default
-// Transformer for XAdES; BouncyCastle's Attribute.getEncoded(DER) for CAdES),
-// in some byte-level way this harness pass did not have the budget to
-// isolate further, most likely fragment-serialization namespace/whitespace
-// handling on the XAdES side.
+//   - F2, in spi/validation/timestamp/signature_timestamp_source.go's
+//     getAttributeOrder: it compared the carrying SignatureAttribute by Go
+//     POINTER identity, where Java calls signatureAttribute.equals(property),
+//     which every concrete attribute class (CAdESAttribute, XAdESAttribute,
+//     JAdESAttribute, CBAdESAttribute) overrides as identifier equality. Since
+//     SignatureProperties.Attributes() rebuilds its list on every call, the
+//     pointer never matched, the order silently came back nil, and the
+//     "-OOA-<n>" component vanished from the position string every encapsulated
+//     TimestampToken's T-... identifier hashes - wrong ids on 30 of these 60
+//     fixtures (every CAdES/XAdES/PAdES/ASiC format carrying an embedded
+//     signature- or archive-timestamp).
 //
-// This is NOT a verdict-correctness defect: every Indication/SubIndication
-// this harness checks matches exactly; only the derived identifier string
-// does not, and it is internal machinery (never asserted against a fixed
-// oracle string outside this new harness, since item (A) always supplies
-// pre-built diagnostic data with the ids already baked in). It is real
-// nonetheless - a "T-..." id feeds into POE bookkeeping, revocation-freshness
-// keying and cross-report Id references - so it is tracked here, by name,
-// rather than silently absorbed: knownIdentifierDivergences below still
-// requires every Indication/SubIndication in the SET of BasicBuildingBlocks
-// to match; it only stops requiring the Id strings themselves to match for
-// the listed fixtures. A fixture whose ids start matching, or whose content
-// stops matching, turns this from a t.Logf into a t.Errorf.
+//   - F3, in cms/cms_utils.go's CMSUtilsWriteContentInfoEncoded: it wrote the
+//     OUTER CMS ContentInfo instead of SignedData.encapContentInfo, feeding the
+//     whole signature into every CAdES archive-timestamp-v2 message imprint, so
+//     such timestamps verified FAILED/HASH_FAILURE where Java found them intact
+//     (cades/baseline-lta, Signature-C-B-LTA-10.p7m).
 package harness
 
 import (
@@ -232,24 +216,7 @@ func TestDocumentLevelOracle(t *testing.T) {
 			}
 
 			mismatches := compareDocumentLevelTokens(t, key, row.Tokens, gotReports.GetDetailedReportJaxb())
-			switch {
-			case knownContentDivergences[key] != "":
-				// F3: a genuine, narrower, still-open defect (see the map's doc
-				// comment) - accepted and logged rather than quarantined, exactly
-				// like TestReportBuildersOracle's knownOrderingDeviations.
-				diffs := compareDocumentLevelBBBSilent(row.BBB, gotReports.GetDetailedReportJaxb().BasicBuildingBlocks)
-				if len(diffs) == 0 {
-					t.Errorf("%s: BasicBuildingBlocks now match exactly - remove the knownContentDivergences entry (%s)",
-						key, knownContentDivergences[key])
-					mismatches++
-				} else {
-					t.Logf("%s: BasicBuildingBlocks differ as documented (%s): %s", key, knownContentDivergences[key], strings.Join(diffs, "; "))
-				}
-			case knownIdentifierDivergences[key] != "":
-				mismatches += compareDocumentLevelBBBContentOnly(t, key, knownIdentifierDivergences[key], row.BBB, gotReports.GetDetailedReportJaxb().BasicBuildingBlocks)
-			default:
-				mismatches += compareDocumentLevelBBB(t, key, row.BBB, gotReports.GetDetailedReportJaxb().BasicBuildingBlocks)
-			}
+			mismatches += compareDocumentLevelBBB(t, key, row.BBB, gotReports.GetDetailedReportJaxb().BasicBuildingBlocks)
 			mismatches += compareDocumentLevelQualification(t, key, row.Qualification, gotReports.GetSimpleReportJaxb())
 			totalMismatches += mismatches
 			perFormat[entry.Format] += mismatches
@@ -366,139 +333,6 @@ func compareDocumentLevelTokens(t *testing.T, key string, want []dlToken, detail
 	return mismatches
 }
 
-// knownIdentifierDivergences lists the (format/name) fixtures where F2 (see
-// the package doc comment) is expected to make BasicBuildingBlocks Id strings
-// disagree even though their Type/Indication/SubIndication content is
-// identical. Every entry still requires full content parity - only Id
-// equality is relaxed, via compareDocumentLevelBBBContentOnly below.
-var knownIdentifierDivergences = map[string]string{
-	// cades/baseline-lta is NOT listed here even though F2 also applies to it:
-	// it is listed in knownContentDivergences instead (F3 there takes
-	// precedence in the dispatch below, and covers strictly more - a content
-	// difference, not just an Id one).
-	"cades/cbp-lt":                              "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"cades/counter-signature":                   "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"cades/counter-signed-lta":                  "F2: SignatureAttributeIdentifier for the embedded archive-timestamp attribute",
-	"cades/e-lt":                                "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"xades/500-references":                      "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"xades/extended-t":                          "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"xades/extended-xl":                         "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp/archive-timestamp elements",
-	"xades/lta-valid":                           "F2: XAdESAttributeIdentifier DOM-serialization of the archive-timestamp elements",
-	"xades/multiple-archivetimestamps":          "F2: XAdESAttributeIdentifier DOM-serialization of the archive-timestamp elements",
-	"xades/multiple-signaturetimestamps":        "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp elements",
-	"xades/xades-lta":                           "F2: XAdESAttributeIdentifier DOM-serialization of the archive-timestamp elements",
-	"pades/doc-firmado-lt":                      "F2: SignatureAttributeIdentifier for the PDF DSS-dictionary-carried timestamp attribute",
-	"pades/pades-lt":                            "F2: SignatureAttributeIdentifier for the PDF DSS-dictionary-carried timestamp attribute",
-	"pades/pades-lt-extended-dss":               "F2: SignatureAttributeIdentifier for the PDF DSS-dictionary-carried timestamp attribute",
-	"asic-cades/asice-bplta":                    "F2: SignatureAttributeIdentifier for the embedded archive-timestamp attribute",
-	"asic-cades/asice-lta":                      "F2: SignatureAttributeIdentifier for the embedded archive-timestamp attribute",
-	"asic-cades/asice-lta-atst-v3":              "F2: SignatureAttributeIdentifier for the embedded archive-timestamp attribute",
-	"asic-cades/asics-onefile":                  "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-cades/dss1421":                        "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-cades/multifiles-ok-asice":            "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-cades/multifiles-ok-asics":            "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-cades/onefile-ok-asice":               "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-cades/two-sigs-one-time-one-signer":   "F2: SignatureAttributeIdentifier for the embedded timestamp attribute",
-	"asic-xades/asic-xades-lta-signed-manifest": "F2: XAdESAttributeIdentifier DOM-serialization of the archive-timestamp elements",
-	"asic-xades/asics-onefile":                  "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"asic-xades/dss-2123":                       "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"asic-xades/onefile-ok-asice":               "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"asic-xades/signature-a-ee-as-19":           "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-	"asic-xades/xades-lt":                       "F2: XAdESAttributeIdentifier DOM-serialization of the SignatureTimeStamp element",
-}
-
-// compareDocumentLevelBBBContentOnly is compareDocumentLevelBBB for a fixture
-// listed in knownIdentifierDivergences: it still requires the exact SET of
-// (Type, Indication, SubIndication) triples to match (as a multiset, so a
-// genuine missing/extra/wrong-verdict entry still fails), but does not
-// require the Id strings themselves to agree, per F2.
-func compareDocumentLevelBBBContentOnly(t *testing.T, key, reason string, want []dlBBB, got []*detailedreportjaxb.XmlBasicBuildingBlocks) int {
-	t.Helper()
-	type triple struct{ typ, indication, subIndication string }
-	toTriple := func(typ, indication, subIndication string) triple {
-		return triple{typ, indication, subIndication}
-	}
-
-	gotCounts := make(map[triple]int)
-	for _, bbb := range got {
-		entry := triple{typ: string(bbb.Type)}
-		if bbb.Conclusion != nil {
-			entry.indication = string(bbb.Conclusion.Indication)
-			if bbb.Conclusion.SubIndication != nil {
-				entry.subIndication = string(*bbb.Conclusion.SubIndication)
-			}
-		}
-		gotCounts[entry]++
-	}
-	wantCounts := make(map[triple]int)
-	for _, w := range want {
-		wantCounts[toTriple(w.Type, w.Indication, w.SubIndication)]++
-	}
-
-	mismatches := 0
-	for tr, wantN := range wantCounts {
-		if gotCounts[tr] != wantN {
-			t.Errorf("%s: BasicBuildingBlocks content (type=%s indication=%s subIndication=%s) count go=%d java=%d",
-				key, tr.typ, tr.indication, tr.subIndication, gotCounts[tr], wantN)
-			mismatches++
-		}
-	}
-	for tr, gotN := range gotCounts {
-		if wantCounts[tr] != gotN {
-			// Already reported above via the want-side loop when both sides disagree;
-			// only report here for a triple absent from want entirely.
-			if _, inWant := wantCounts[tr]; !inWant {
-				t.Errorf("%s: unexpected BasicBuildingBlocks content (type=%s indication=%s subIndication=%s) x%d in the Go report",
-					key, tr.typ, tr.indication, tr.subIndication, gotN)
-				mismatches++
-			}
-		}
-	}
-	if mismatches == 0 {
-		t.Logf("%s: BasicBuildingBlocks content matches (Ids differ as documented: %s)", key, reason)
-	}
-	return mismatches
-}
-
-// knownContentDivergences lists the (format/name) fixtures with an F3 defect:
-// a genuine, still-open, narrower verdict divergence this harness pass found
-// but did not have the budget to root-cause and fix (see PORTING.md's
-// "no edits to frozen packages beyond the assigned manifest" rule - this file
-// only ever touches dss/validation/reports/diagnostic per the s8f UNGATE
-// manifests, and the CAdES archive-timestamp message-imprint computation this
-// defect lives in is outside that scope). Every listed key is checked here,
-// not skipped: compareDocumentLevelBBBSilent still runs the full comparison,
-// and if it ever starts matching, the test turns the entry into a failure so
-// it cannot rot.
-var knownContentDivergences = map[string]string{
-	// F3: Signature-C-B-LTA-10.p7m carries several nested CAdES archive
-	// timestamps; Java's oracle assigns THREE of the four total TIMESTAMP
-	// BasicBuildingBlocks the verdict INDETERMINATE/NO_CERTIFICATE_CHAIN_FOUND
-	// (an untrusted-chain result, i.e. its message-imprint verified and
-	// signature-cryptography checked out), where Go assigns one of those
-	// three FAILED/HASH_FAILURE instead - meaning Go computed a different
-	// message-imprint digest for that one nested archive-timestamp than Java
-	// did. The message-imprint content of a CAdES archive-timestamp (RFC 5126
-	// archive-time-stamp-v2/v3, including which prior unsigned attributes -
-	// and in what encoded form - fall inside versus outside the hash) is
-	// exactly the kind of narrow, delicate CAdES-specific algorithm this
-	// harness pass could isolate (down to "one specific nested archive
-	// timestamp's digest, in one 10-step LTA conformance fixture") but not
-	// safely fix without a dedicated pass through
-	// cades_timestamp_message_digest_builder.go against the RFC section by
-	// section.
-	"cades/baseline-lta": "F3: CAdES archive-timestamp message-imprint mismatch on one nested archive timestamp",
-}
-
-// compareDocumentLevelBBBSilent is compareDocumentLevelBBB without the
-// t.Errorf calls, for a fixture in knownContentDivergences: it still runs the
-// exact same comparison and returns the same diff lines, so the caller can
-// log full context once instead of drowning it in per-field errors, and
-// still notice the moment the divergence disappears.
-func compareDocumentLevelBBBSilent(want []dlBBB, got []*detailedreportjaxb.XmlBasicBuildingBlocks) []string {
-	return diffDocumentLevelBBB(want, got)
-}
-
 // compareDocumentLevelBBB compares a Java-dumped BasicBuildingBlocks list
 // against the Go one, keyed by Id, reporting every difference via t.Errorf.
 func compareDocumentLevelBBB(t *testing.T, key string, want []dlBBB, got []*detailedreportjaxb.XmlBasicBuildingBlocks) int {
@@ -510,9 +344,8 @@ func compareDocumentLevelBBB(t *testing.T, key string, want []dlBBB, got []*deta
 	return len(diffs)
 }
 
-// diffDocumentLevelBBB is the comparison compareDocumentLevelBBB and
-// compareDocumentLevelBBBSilent share, returning one human-readable line per
-// difference found.
+// diffDocumentLevelBBB is the comparison compareDocumentLevelBBB runs,
+// returning one human-readable line per difference found.
 func diffDocumentLevelBBB(want []dlBBB, got []*detailedreportjaxb.XmlBasicBuildingBlocks) []string {
 	var diffs []string
 	gotByID := make(map[string]dlBBB)

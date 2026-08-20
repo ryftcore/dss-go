@@ -13,6 +13,7 @@ import (
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
 	"github.com/utain/esig/dss/model/policy"
+	"github.com/utain/esig/dss/utils"
 	"github.com/utain/esig/dss/validation/process"
 )
 
@@ -57,19 +58,28 @@ func (c *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]) bu
 	var cryptographicValidation *jaxb.XmlCryptographicValidation
 
 	// This code ensures that at least one good digest algorithm is found for
-	// every defined signing certificate reference. Java iterates a HashMap
-	// keyed by certificate id, whose order is unspecified; this port groups
-	// by first-seen certificate id instead, for deterministic output (see
-	// PORTING.md).
-	var certificateIds []string
+	// every defined signing certificate reference. Java iterates a
+	// HashMap<String, List<CertificateRefWrapper>> keyed by certificate id.
+	// That order is OBSERVABLE here, twice over: it is the order the AOV_XCV
+	// <Constraint> elements are marshalled in, and - because the loop keeps the
+	// FIRST invalid (else the first) cryptographic validation result - it also
+	// decides which digest algorithm the <SignedAttributesValidation><Algorithm>
+	// of the detailed report reports. Substituting first-seen order (this
+	// port's earlier reading, and PORTING.md's default) therefore broke byte
+	// parity AND reported a different algorithm than upstream on multi-
+	// reference signatures; utils.JavaHashMapStringKeyOrder reproduces the real
+	// HashMap key order instead. Found by the phase-8f full-corpus report
+	// byte-parity run on DSS-2115/dss-2115-valid.xml and -additional-ref.xml.
 	signCertRefsMap := make(map[string][]*diagnostic.CertificateRefWrapper)
+	var insertionOrder []string
 	for _, r := range signingCertificateReferences {
 		id := r.CertificateId()
 		if _, ok := signCertRefsMap[id]; !ok {
-			certificateIds = append(certificateIds, id)
+			insertionOrder = append(insertionOrder, id)
 		}
 		signCertRefsMap[id] = append(signCertRefsMap[id], r)
 	}
+	certificateIds := utils.JavaHashMapStringKeyOrder(insertionOrder)
 
 	for _, certificateId := range certificateIds {
 		certificateRefWrappers := signCertRefsMap[certificateId]
