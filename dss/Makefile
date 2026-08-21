@@ -1,4 +1,4 @@
-.PHONY: build vet test race check
+.PHONY: build vet test race check cli-build
 
 build:
 	go build ./...
@@ -14,3 +14,9 @@ race:
 	go test ./... -race -timeout 60m
 
 check: build vet test
+
+# cli-build builds the esig binary into bin/, named for the host OS/arch so
+# repeat builds on different platforms do not clobber each other.
+cli-build:
+	mkdir -p bin
+	go build -o bin/esig$(shell go env GOEXE) ./cmd/esig
