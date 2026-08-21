@@ -24,7 +24,10 @@ import (
 // abstractSignatureTokenConnectionPrepareMessage).
 type AbstractSignatureTokenConnection struct{}
 
-// abstractSignatureTokenConnectionPSSHashes maps the digest algorithms usable as an RSASSA-PSS
+// abstractSignatureTokenConnectionPSSHashes maps DigestAlgorithm to crypto.Hash for the two
+// callers that must NAME a hash in SignerOpts: RSASSA-PSS parameters, and (since Go 1.27
+// requires a non-zero hash for pre-hashed ECDSA input) the ECDSA branch of
+// abstractSignatureTokenConnectionSign. Originally scoped to the digest algorithms usable as an RSASSA-PSS
 // hash (and, per PSSParameterSpec(digestJavaName, "MGF1", MGF1ParameterSpec(digestJavaName), ...),
 // as its MGF1 hash too) onto their crypto.Hash counterparts.
 var abstractSignatureTokenConnectionPSSHashes = map[enumerations.DigestAlgorithm]crypto.Hash{
@@ -180,6 +183,23 @@ func abstractSignatureTokenConnectionSign(preparedInput []byte, encryptionAlgori
 		}
 		opts := &rsa.PSSOptions{Hash: hash, SaltLength: pssDigestAlgorithm.SaltLength()}
 		return signer.Sign(rand.Reader, preparedInput, opts)
+	}
+
+	// crypto/ecdsa in Go 1.27+ refuses SignerOpts whose HashFunc() is 0 for
+	// pre-hashed input. The named hash never enters the ECDSA computation —
+	// preparedInput is signed as-is, exactly as JCA NONEwithECDSA does — so
+	// naming the digest that produced preparedInput keeps the emitted bytes
+	// identical on every toolchain while satisfying the new check. Digests
+	// outside the map (none of the ECDSA SignatureAlgorithm pairings today)
+	// keep the legacy raw call. EdDSA never reaches here with a hash
+	// (ed25519 requires HashFunc()==0 for pure mode), and the plain-RSA
+	// path below must stay raw: preparedInput is already DigestInfo-wrapped
+	// and a named hash would make crypto/rsa wrap it a second time.
+	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_ECDSA ||
+		encryptionAlgorithm == enumerations.EncryptionAlgorithm_PLAIN_ECDSA {
+		if hash, ok := abstractSignatureTokenConnectionPSSHashes[pssDigestAlgorithm]; ok {
+			return signer.Sign(rand.Reader, preparedInput, hash)
+		}
 	}
 
 	return signer.Sign(rand.Reader, preparedInput, crypto.Hash(0))
