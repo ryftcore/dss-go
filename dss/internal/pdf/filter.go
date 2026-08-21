@@ -151,8 +151,11 @@ func FlateDecode(raw []byte, warn *[]Warning) []byte {
 	return buf.Bytes()
 }
 
-// FlateEncode produces zlib-wrapped DEFLATE at the fixed compression level 6, so
-// output is byte-stable across Go versions that keep the flate algorithm stable.
+// FlateEncode produces zlib-wrapped DEFLATE at the fixed compression level 6.
+// Output is byte-stable for a given toolchain but NOT across Go releases —
+// Go 1.27 changed compress/flate's encoder output — which is fine: nothing
+// signs or pins these compressed bytes (signatures cover ByteRanges and
+// decompressed content), only self-consistency within one produced revision.
 // The zlib wrapper is written by hand rather than taken from compress/zlib so the
 // header bytes are pinned here and cannot drift.
 func FlateEncode(data []byte) []byte {
