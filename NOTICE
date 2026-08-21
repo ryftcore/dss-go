@@ -1,0 +1,41 @@
+esig — Go port of EU DSS (Digital Signature Services)
+Copyright and license notices
+
+This project (github.com/utain/esig) is a derivative work: a Go language
+port of the Java "DSS - Digital Signature Services" library published by
+the European Commission at:
+
+    https://github.com/esig/dss
+
+Upstream baseline: version 6.5.RC1, commit
+4c2129862948bfd53ca1455832260aa17e183cf8.
+
+Upstream copyright:
+
+    Copyright (C) 2015 - European Commission and DSS contributors
+
+This project is licensed under the GNU Lesser General Public License,
+version 2.1 (LGPL-2.1), the same license used by the upstream project.
+See the LICENSE file at the root of this repository for the full license
+text.
+
+Attribution granularity
+------------------------
+Attribution for this port is carried at two levels:
+
+  - This NOTICE file records the project-level relationship to upstream:
+    what was ported, from where, and under what license.
+  - Individual Go source files that port a specific Java class or file
+    carry a `// Ported from <upstream-path> (DSS 6.5.RC1).` header comment
+    identifying the exact upstream source file that code was derived
+    from. Those per-file headers are the authoritative, file-level
+    attribution record and must not be removed.
+
+For the full mapping of upstream Maven modules to Go packages, and the
+porting conventions applied throughout, see PORTING_PLAN.md and
+dss/PORTING.md in this repository.
+
+Disclaimer
+----------
+This project is not affiliated with or endorsed by the European
+Commission or the DSS project.

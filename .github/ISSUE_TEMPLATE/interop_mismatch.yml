@@ -1,0 +1,55 @@
+name: Interop mismatch (vs Java DSS)
+description: A document signed or validated by this library disagrees with Java DSS (esig/dss) on the same input.
+title: "[interop] "
+labels: ["interop-mismatch"]
+body:
+  - type: input
+    id: java-dss-version
+    attributes:
+      label: Java DSS version
+      description: The esig/dss release tag or commit you compared against.
+    validations:
+      required: true
+
+  - type: input
+    id: go-version-esig
+    attributes:
+      label: github.com/utain/esig/dss version or commit
+    validations:
+      required: true
+
+  - type: textarea
+    id: input-doc
+    attributes:
+      label: Input document
+      description: >-
+        Attach, link, or describe the signed document/fixture that
+        triggers the mismatch (redact anything sensitive first).
+    validations:
+      required: true
+
+  - type: textarea
+    id: go-report
+    attributes:
+      label: Go SimpleReport / DetailedReport output
+      render: xml
+    validations:
+      required: true
+
+  - type: textarea
+    id: java-report
+    attributes:
+      label: Java DSS SimpleReport / DetailedReport output
+      render: xml
+    validations:
+      required: true
+
+  - type: textarea
+    id: diff
+    attributes:
+      label: What differs
+      description: >-
+        Indication/SubIndication, qualification, or field-level diff
+        between the two reports.
+    validations:
+      required: true

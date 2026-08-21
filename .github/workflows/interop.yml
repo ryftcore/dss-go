@@ -1,0 +1,48 @@
+# Manual-only cross-validation against the live Java DSS oracle output that
+# already lives in the repo (dss/harness's *_oracle_test.go files, reading
+# corpus/harness/testdata/oracle/*.jsonl after the CORPUS restructuring).
+#
+# This does NOT regenerate that oracle output. There is currently no
+# automated "regenerate the oracle" make target anywhere in dss/Makefile or
+# dss/harness/ — dss/harness/README.md documents a manual recipe (see its
+# "Regenerating document_level.jsonl" section) that a human runs locally
+# against a merged DSS 6.5.RC1 Java classpath (javac/java, no Maven/Gradle
+# wrapper committed here) to produce the committed oracle fixtures. Doing
+# that from a hosted GitHub runner is not economical (no JDK, no DSS build,
+# no cached Maven repo), so this workflow is workflow_dispatch-only and is
+# meant to run on a self-hosted or otherwise long-lived runner that already
+# has corpus/ checked out. On a runner without a matching self-hosted label
+# this job will simply fail to pick up a runner.
+#
+# What this workflow DOES do: re-run the Go-side harness comparisons
+# (dss/harness/*_oracle_test.go) against the oracle fixtures already
+# committed in corpus/harness/, as a periodic manual check that nothing in
+# the Go implementation has drifted from the last-generated oracle.
+name: Interop (Java DSS oracle comparison)
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_label:
+        description: >-
+          Self-hosted runner label with corpus/ available. Hosted
+          GitHub-provided runners cannot run this job economically; see the
+          comment at the top of this file.
+        required: false
+        default: "self-hosted"
+
+jobs:
+  harness-oracle:
+    name: harness oracle comparison
+    runs-on: ${{ github.event.inputs.runner_label }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - name: go test ./harness/...
+        working-directory: dss
+        run: go test ./harness/... -count=1 -v -timeout 40m
