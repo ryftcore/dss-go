@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // XAdES111Element defines elements for a XAdES 1.1.1 schema.
 type XAdES111Element string
 
+// XAdES111Element constants, one per XAdES 1.1.1 schema element name.
 const (
 	XAdES111Element_ALL_DATA_OBJECTS_TIMESTAMP        XAdES111Element = "ALL_DATA_OBJECTS_TIMESTAMP"
 	XAdES111Element_ALL_SIGNED_DATA_OBJECTS           XAdES111Element = "ALL_SIGNED_DATA_OBJECTS"

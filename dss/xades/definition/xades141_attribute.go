@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // XAdES141Attribute defines attributes for a XAdES 1.4.1 schema.
 type XAdES141Attribute string
 
+// XAdES141Attribute constants, one per XAdES 1.4.1 schema attribute name.
 const (
 	XAdES141Attribute_ID    XAdES141Attribute = "ID"
 	XAdES141Attribute_ORDER XAdES141Attribute = "ORDER"

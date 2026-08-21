@@ -12,9 +12,9 @@ Sources read for this design (all verified, not recalled):
 
 | What | Where |
 |---|---|
-| `XMLCanonicalizer`, `DomUtils`, `SantuarioInitializer`, `DocumentBuilderFactoryBuilder` | `/home/user/dss-upstream/dss-xml-utils`, `/home/user/dss-upstream/dss-xml-common` |
+| `XMLCanonicalizer`, `DomUtils`, `SantuarioInitializer`, `DocumentBuilderFactoryBuilder` | upstream `dss-xml-utils`, `dss-xml-common` |
 | `CanonicalizerBase`, `Canonicalizer20010315`, `Canonicalizer20010315Excl`, `CanonicalizerPhysical`, `NameSpaceSymbTable`, `XmlAttrStack`, `AttrCompare`, `C14nHelper`, `UtfHelpper`, `InclusiveNamespaces` | `xmlsec-3.0.6-sources.jar` (fetched to the maven cache; extracted at `scratchpad/xmlsec-src/`) |
-| XAdES c14n call sites, ID registration, transform pipeline | `/home/user/dss-upstream/dss-xades` (`DSSXMLUtils`, `XAdESDOMDocument`, `reference/*`) |
+| XAdES c14n call sites, ID registration, transform pipeline | upstream `dss-xades` (`DSSXMLUtils`, `XAdESDOMDocument`, `reference/*`) |
 | Live behaviour | `scratchpad/Probe.java`, `Probe2.java`, `Probe3.java`, `Probe4.java` (Santuario 3.0.6 oracle runs) and `scratchpad/xmlprobe/` (Go `encoding/xml` probes) |
 
 Every "Santuario does X" claim below is backed by an executed probe, quoted inline.
@@ -1103,7 +1103,7 @@ duplicate attribute, `<r></s>`, two root elements, trailing text, `&#0;`, `&foo;
 `internal/xmlc14n/testdata/gen/C14nOracle.java`, header comment carrying the exact command:
 
 ```
-DSS=/home/user/dss-upstream
+DSS=<path to your upstream DSS checkout>
 M2=$HOME/.m2/repository
 CP=$DSS/dss-xml-utils/target/dss-xml-utils-6.5.RC1.jar\
 :$M2/org/apache/santuario/xmlsec/3.0.6/xmlsec-3.0.6.jar\

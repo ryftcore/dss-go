@@ -7,6 +7,7 @@ package common
 // MIME_TYPE) held in a lookup table.
 type XMLDSigAttribute string
 
+// XMLDSigAttribute constants, one per XMLDSig schema attribute name.
 const (
 	XMLDSigAttribute_ALGORITHM XMLDSigAttribute = "ALGORITHM"
 	XMLDSigAttribute_ENCODING  XMLDSigAttribute = "ENCODING"

@@ -274,6 +274,10 @@ func (s *JAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *EtsiUComponen
 	return false
 }
 
+// IncorporateArchiveTimestampReferences adds the archive-timestamp's
+// timestamped references, reimplementing (rather than overriding) the base
+// signature-timestamp-reference computation - see the GAP note below.
+//
 // # GAP flagged for integrator: getSignatureTimestampReferences is a concrete-but-overridable
 // # base method with no override hook
 //

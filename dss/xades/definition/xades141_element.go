@@ -8,6 +8,7 @@ import "github.com/utain/esig/dss/xml/common"
 // upstream's XAdES141Element implements plain DSSElement).
 type XAdES141Element string
 
+// XAdES141Element constants, one per XAdES 1.4.1 schema element name.
 const (
 	XAdES141Element_ANY_VALIDATION_DATA           XAdES141Element = "ANY_VALIDATION_DATA"
 	XAdES141Element_ARCHIVE_TIMESTAMP             XAdES141Element = "ARCHIVE_TIMESTAMP"

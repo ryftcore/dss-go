@@ -738,6 +738,8 @@ var x520AttributesData = map[X520Attributes]x520AttributesFields{
 	X520Attributes_EMAIL_ADDRESS:                                 {"emailAddress", "1.2.840.113549.1.9.1"},
 }
 
+// X520AttributesValues returns all X520Attributes constants in declaration
+// order.
 func X520AttributesValues() []X520Attributes {
 	return []X520Attributes{
 		X520Attributes_OBJECTCLASS,
