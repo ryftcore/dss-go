@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       - name: gofmt
@@ -66,25 +66,20 @@ jobs:
           args: --config=../.github/.golangci.yml --default=none --enable=revive
 
   build:
-    name: build (go ${{ matrix.go }}, ${{ matrix.os }})
+    name: build (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        # Only "stable": the module's go directive is 1.27.0, so "oldstable"
-        # (Go 1.26) cannot build it.
-        go: ["stable"]
-        include:
-          # Windows: single smoke-build combination, not the full matrix.
-          - os: windows-latest
-            go: "stable"
+        # The Go version comes from dss/go.mod (go-version-file below), so the
+        # matrix varies only the OS; windows is a smoke-build leg.
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-go@v7
         with:
-          go-version: ${{ matrix.go }}
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       - name: go build
@@ -110,7 +105,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       - name: go test (group ${{ matrix.group }})
@@ -185,7 +180,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       - name: make cli-build

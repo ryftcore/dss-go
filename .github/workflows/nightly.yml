@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       # dss/Makefile's race target already accounts for asic's merge
@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       - name: install govulncheck
@@ -54,7 +54,7 @@ jobs:
 
       - uses: actions/setup-go@v7
         with:
-          go-version: "stable"
+          go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
       # corpustest finds corpus/ by walking up from the dss module root to
