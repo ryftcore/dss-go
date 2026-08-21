@@ -1,12 +1,15 @@
 package eccurve
 
 import (
+	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
+	"crypto/rsa"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"errors"
+	"math/big"
 	"os"
 	"strings"
 
@@ -17,6 +20,10 @@ import (
 // oidPublicKeyECDSA is id-ecPublicKey, the only algorithm whose ECParameters can name one of
 // this package's curves.
 var oidPublicKeyECDSA = asn1.ObjectIdentifier{1, 2, 840, 10045, 2, 1}
+
+// oidPublicKeyRSA is rsaEncryption (PKCS#1), the algorithm identifier
+// parseNonPositiveRSAModulusPublicKey applies its own accommodation to.
+var oidPublicKeyRSA = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 1}
 
 // init restores crypto/x509's pre-Go-1.23 tolerance for a CertificateSerialNumber whose DER
 // encoding is technically a negative INTEGER (a leading content byte >= 0x80 with no 0x00 pad -
@@ -59,22 +66,28 @@ func init() {
 	os.Setenv("GODEBUG", godebug+"x509negativeserial=1")
 }
 
-// ParseCertificate decodes an X.509 certificate, accepting the elliptic curves crypto/x509 does
-// not know about in addition to the four it does.
+// ParseCertificate decodes an X.509 certificate, accepting two categories of otherwise-valid
+// real-world certificates crypto/x509 refuses outright: SubjectPublicKeyInfos naming an elliptic
+// curve crypto/x509 does not know about, and RSA SubjectPublicKeyInfos whose modulus INTEGER's
+// DER content octets have the high bit of the leading byte set with no 0x00 pad (a valid unsigned
+// magnitude the encoder simply didn't zero-pad; crypto/x509's parsePublicKey decodes it as a
+// negative two's-complement INTEGER and rejects it with "x509: RSA modulus is not a positive
+// number", with no GODEBUG escape hatch the way the negative-serial-number case above has one).
 //
 // It always tries crypto/x509.ParseCertificate first and returns its result unchanged whenever
 // that succeeds, so nothing about the common path changes. Only when stdlib fails does it look
-// for the one cause it can repair - a SubjectPublicKeyInfo naming a curve from CurveForOID - and
-// even then stdlib remains the only decoder of the certificate's structure: this hands it a
-// THROWAWAY copy in which the SubjectPublicKeyInfo has been swapped for a well-formed P-256 one
-// purely so the parse completes, then puts the caller's own bytes back on the result and
-// replaces PublicKey with the real key on the real curve.
+// for one of the two causes it can repair - and even then stdlib remains the only decoder of the
+// certificate's structure: this hands it a THROWAWAY copy in which the SubjectPublicKeyInfo has
+// been swapped for a well-formed P-256 one purely so the parse completes, then puts the caller's
+// own bytes back on the result and replaces PublicKey with the real key.
 //
-// The substitution is required, rather than a mere OID swap, because crypto/x509 rejects the
-// public key twice over: once for the unrecognised curve OID, and again because the encoded
-// point is not on P-256. Since Raw, RawTBSCertificate and RawSubjectPublicKeyInfo are all
-// restored before returning, no re-encoded byte is ever visible to a caller, and in particular
-// signature verification still runs over the original RawTBSCertificate.
+// The substitution is required, rather than a mere OID swap, because crypto/x509 rejects an
+// unsupported-curve public key twice over: once for the unrecognised curve OID, and again because
+// the encoded point is not on P-256; an out-of-range RSA modulus fails the same
+// parsePublicKey call the placeholder is built to sail through instead. Since Raw,
+// RawTBSCertificate and RawSubjectPublicKeyInfo are all restored before returning, no re-encoded
+// byte is ever visible to a caller, and in particular signature verification still runs over the
+// original RawTBSCertificate.
 func ParseCertificate(der []byte) (*x509.Certificate, error) {
 	certificate, err := x509.ParseCertificate(der)
 	if err == nil {
@@ -85,13 +98,19 @@ func ParseCertificate(der []byte) (*x509.Certificate, error) {
 	if !ok {
 		return nil, err
 	}
-	publicKey, keyErr := parseUnsupportedCurvePublicKey(originalSPKI)
-	if keyErr != nil {
+	var publicKey crypto.PublicKey
+	publicKeyAlgorithm := x509.ECDSA
+	if ecKey, keyErr := parseUnsupportedCurvePublicKey(originalSPKI); keyErr == nil {
+		publicKey = ecKey
+	} else if rsaKey, rsaErr := parseNonPositiveRSAModulusPublicKey(originalSPKI); rsaErr == nil {
+		publicKey = rsaKey
+		publicKeyAlgorithm = x509.RSA
+	} else {
 		return nil, err
 	}
 	certificate, patchedErr := x509.ParseCertificate(patched)
 	if patchedErr != nil {
-		// The unknown curve was not the only thing wrong with this certificate; the caller
+		// The repaired field was not the only thing wrong with this certificate; the caller
 		// should see the failure stdlib reported for the bytes it actually supplied.
 		return nil, err
 	}
@@ -100,6 +119,10 @@ func ParseCertificate(der []byte) (*x509.Certificate, error) {
 	certificate.RawTBSCertificate = originalTBS
 	certificate.RawSubjectPublicKeyInfo = originalSPKI
 	certificate.PublicKey = publicKey
+	// The placeholder SPKI splice() always used is an EC one (P-256), so PublicKeyAlgorithm -
+	// derived by stdlib from the PATCHED bytes, not restored alongside Raw/RawTBSCertificate/
+	// RawSubjectPublicKeyInfo above - is wrong for the RSA accommodation unless corrected here.
+	certificate.PublicKeyAlgorithm = publicKeyAlgorithm
 	return certificate, nil
 }
 
@@ -230,4 +253,64 @@ func parseUnsupportedCurvePublicKey(spkiDER []byte) (*ecdsa.PublicKey, error) {
 		return nil, errors.New("eccurve: failed to unmarshal elliptic curve point")
 	}
 	return &ecdsa.PublicKey{Curve: curve, X: x, Y: y}, nil
+}
+
+// parseNonPositiveRSAModulusPublicKey decodes an RSA SubjectPublicKeyInfo whose modulus INTEGER
+// crypto/x509 rejected as non-positive, answering an error for anything else - including a
+// well-formed RSA key with a genuinely positive modulus, which cannot be the reason stdlib
+// failed.
+//
+// The RSAPublicKey ::= SEQUENCE { modulus INTEGER, publicExponent INTEGER } content octets for
+// both fields are read as raw bytes (cryptobyte's ReadASN1 for the INTEGER tag hands back the
+// content octets verbatim, sign untouched) and reinterpreted as an unsigned big-endian magnitude
+// via big.Int.SetBytes, which ignores the two's-complement sign bit entirely. That recovers each
+// value exactly as BouncyCastle's lenient ASN.1 INTEGER decoding does: a CA that DER-encoded a
+// naturally MSB-set magnitude without the 0x00 pad byte X.690 requires still meant a positive
+// number, it merely never added the byte that would have kept encoding/asn1's signed decode from
+// seeing one.
+func parseNonPositiveRSAModulusPublicKey(spkiDER []byte) (*rsa.PublicKey, error) {
+	var info struct {
+		Algorithm pkix.AlgorithmIdentifier
+		PublicKey asn1.BitString
+	}
+	if _, err := asn1.Unmarshal(spkiDER, &info); err != nil {
+		return nil, err
+	}
+	if !info.Algorithm.Algorithm.Equal(oidPublicKeyRSA) {
+		return nil, errors.New("eccurve: SubjectPublicKeyInfo does not carry an RSA public key")
+	}
+
+	body := cryptobyte.String(info.PublicKey.RightAlign())
+	var pkcs1 cryptobyte.String
+	if !body.ReadASN1(&pkcs1, cryptobyte_asn1.SEQUENCE) {
+		return nil, errors.New("eccurve: malformed RSAPublicKey")
+	}
+	var modulusBytes cryptobyte.String
+	if !pkcs1.ReadASN1(&modulusBytes, cryptobyte_asn1.INTEGER) {
+		return nil, errors.New("eccurve: malformed RSA modulus")
+	}
+	modulus := new(big.Int).SetBytes(modulusBytes)
+	if modulus.Sign() <= 0 {
+		// The sign issue was not the (fully) recoverable padding omission this function exists
+		// for; let the caller keep stdlib's own diagnosis.
+		return nil, errors.New("eccurve: RSA modulus is not recoverable as a positive number")
+	}
+
+	// The publicExponent is read the same unsigned way, not through ReadASN1Integer's ordinary
+	// signed decode: the same CA encoders that omit the pad byte on the modulus omit it on
+	// whichever other INTEGER field happens to land with its leading content byte >= 0x80 - a
+	// vintage German qualified-CA fixture in this port's cross-validation corpus has exactly this
+	// on its publicExponent, and Java's X.509 CertificateFactory (which never numerically
+	// validates the SubjectPublicKeyInfo it hands back inside a still-loadable
+	// java.security.cert.Certificate) reads it the same lenient way.
+	var exponentBytes cryptobyte.String
+	if !pkcs1.ReadASN1(&exponentBytes, cryptobyte_asn1.INTEGER) {
+		return nil, errors.New("eccurve: malformed RSA public exponent")
+	}
+	exponentValue := new(big.Int).SetBytes(exponentBytes)
+	if exponentValue.Sign() <= 0 || !exponentValue.IsInt64() {
+		return nil, errors.New("eccurve: RSA public exponent is not a positive number")
+	}
+
+	return &rsa.PublicKey{N: modulus, E: int(exponentValue.Int64())}, nil
 }

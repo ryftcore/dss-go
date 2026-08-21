@@ -79,7 +79,7 @@ type revocationTokenIdentifierLike interface {
 // tlInfoLike is satisfied by *tsl.TLInfo, *tsl.LOTLInfo and *tsl.PivotInfo, matching Java's
 // `object instanceof TLInfo` catching all three (LOTLInfo/PivotInfo extend TLInfo upstream).
 type tlInfoLike interface {
-	ParsingCacheInfo() tsl.TLParsingInfoRecord
+	TLParsingCacheInfo() (tsl.TLParsingInfoRecord, bool)
 	DSSIDAsString() string
 }
 
@@ -376,7 +376,7 @@ func (p *UserFriendlyIdentifierProvider) idAsStringForSignatureScope(signatureSc
 func (p *UserFriendlyIdentifierProvider) idAsStringForTL(tlInfo tlInfoLike) string {
 	var sb strings.Builder
 	sb.WriteString(p.tlInfoPrefix(tlInfo))
-	if parsingCacheInfo := tlInfo.ParsingCacheInfo(); parsingCacheInfo != nil {
+	if parsingCacheInfo, ok := tlInfo.TLParsingCacheInfo(); ok {
 		if utils.IsStringNotBlank(parsingCacheInfo.Territory()) {
 			sb.WriteString(stringDelimiter)
 			sb.WriteString(p.userFriendlyString(parsingCacheInfo.Territory()))

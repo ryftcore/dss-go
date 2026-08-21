@@ -15,8 +15,12 @@ type DocumentInfo[P any] interface {
 	ParsingCacheInfo() ParsingInfoRecord
 	// ValidationCacheInfo returns Validation Cache Info. Port of getValidationCacheInfo().
 	ValidationCacheInfo() ValidationInfoRecord
-	// URL returns a URL that was used to download the remote file. Port of getUrl().
-	URL() string
+	// Url returns a URL that was used to download the remote file. Port of getUrl().
+	//
+	// INTEGRATION FIX: named Url (not the more Go-idiomatic URL) to match the naming this
+	// codebase's sole real implementer (model/tsl.TLInfo, and every one of its ~28 callers
+	// across dss/tsl and dss/validation) already uses throughout.
+	Url() string
 	// Parent returns the DocumentInfo referencing the current Trusted List. Port of
 	// getParent().
 	Parent() P

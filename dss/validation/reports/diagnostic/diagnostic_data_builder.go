@@ -575,8 +575,8 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForTL(tlInfo *tsl.TLInfo) *
 	if tlInfo.Parent() != nil {
 		result.Parent = b.getXmlTrustSourceListForLOTL(tlInfo.Parent())
 	}
-	parsingCacheInfo := tlInfo.ParsingCacheInfo()
-	if parsingCacheInfo != nil {
+	parsingCacheInfo, parsingCacheInfoOK := tlInfo.TLParsingCacheInfo()
+	if parsingCacheInfoOK {
 		if parsingCacheInfo.TSLType() != nil {
 			tp := parsingCacheInfo.TSLType().URI()
 			result.Type = &tp
@@ -631,8 +631,8 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLOTL(lotlInfo *tsl.LOTLI
 	result.Id = jaxb.NewCollapsedString(idStr)
 	url := lotlInfo.Url()
 	result.Url = &url
-	parsingCacheInfo := lotlInfo.ParsingCacheInfo()
-	if parsingCacheInfo != nil {
+	parsingCacheInfo, parsingCacheInfoOK := lotlInfo.TLParsingCacheInfo()
+	if parsingCacheInfoOK {
 		if parsingCacheInfo.TSLType() != nil {
 			tp := parsingCacheInfo.TSLType().URI()
 			result.Type = &tp

@@ -1,0 +1,37 @@
+LOTL	eu-lotl-250	testdata/oracle/tsl/eu-lotl-250.xml	
+LOTL	eu-lotl	testdata/oracle/tsl/eu-lotl.xml	
+LOTL	eu-lotl-pivot	testdata/oracle/tsl/eu-lotl-pivot.xml	
+LOTL	eu-lotl-broken-sig	testdata/oracle/tsl/eu-lotl-broken-sig.xml	
+LOTL	eu-lotl-not-parseable	testdata/oracle/tsl/eu-lotl-not-parseable.xml	
+LOTL	eu-lotl-no-sig	testdata/oracle/tsl/eu-lotl-no-sig.xml	
+LOTL	mra-lotl	testdata/oracle/tsl/mra-lotl.xml	mra
+TL	de-tl	testdata/oracle/tsl/de-tl.xml	
+TL	fr	testdata/oracle/tsl/fr.xml	
+TL	sk-tl	testdata/oracle/tsl/sk-tl.xml	
+TL	dk_tl-sn21	testdata/oracle/tsl/dk_tl-sn21.xml	
+TL	mra-zz-tl	testdata/oracle/tsl/mra-zz-tl.xml	
+LOTL	eu-lotl-pivot-support	testdata/oracle/tsl/eu-lotl-pivot.xml	pivot
+LOTL	eu-lotl-pivot-support-oj	testdata/oracle/tsl/eu-lotl.xml	pivot;oj=https://eur-lex.europa.eu/legal-content/blabla
+LOTL	eu-lotl-cc-be-pt	testdata/oracle/tsl/eu-lotl.xml	cc=BE,PT
+LOTL	eu-lotl-pdfpred	testdata/oracle/tsl/eu-lotl.xml	pdfpred
+LOTL	mra-lotl-xmlpred	testdata/oracle/tsl/mra-lotl.xml	mra;xmlpred
+LOTL	mra-lotl-xmlpred-nomra	testdata/oracle/tsl/mra-lotl.xml	xmlpred
+LOTL	mra-zz-lotl-history	testdata/oracle/tsl/mra-zz-lotl-history.xml	mra;xmlpred
+LOTL	mra-zz-lotl-custom-equivalence-context	testdata/oracle/tsl/mra-zz-lotl-custom-equivalence-context.xml	mra;xmlpred
+LOTL	mra-zz-lotl-duplicated-equivalence-context	testdata/oracle/tsl/mra-zz-lotl-duplicated-equivalence-context.xml	mra;xmlpred
+LOTL	pivot-oj1-03	testdata/oracle/tsl/pivot-oj1-03.xml	pivot
+LOTL	pivot-oj2-reset	testdata/oracle/tsl/pivot-oj2-reset.xml	pivot
+LOTL	peru-lotl	testdata/oracle/tsl/peru-lotl.xml	
+LOTL	eu-lotl-no-tl-version	testdata/oracle/tsl/eu-lotl-no-tl-version.xml	
+LOTL	ie-tl-as-lotl	testdata/oracle/tsl/ie-tl.xml	
+TL	ie-tl	testdata/oracle/tsl/ie-tl.xml	
+TL	fi-v6	testdata/oracle/tsl/fi-v6.xml	
+TL	fi-v6-no-service-information	testdata/oracle/tsl/fi-v6-no-service-information.xml	
+TL	fi-v6-no-tsp-information	testdata/oracle/tsl/fi-v6-no-tsp-information.xml	
+TL	fi-v5	testdata/oracle/tsl/fi-v5.xml	
+TL	tl-ecdsa-brainpool	testdata/oracle/tsl/tl-ecdsa-brainpool.xml	
+TL	tl-empty	testdata/oracle/tsl/tl-empty.xml	
+TL	tl-empty-with-identifier	testdata/oracle/tsl/tl-empty-with-identifier.xml	
+TL	tsl-sk-minimal-dss-1911	testdata/oracle/tsl/tsl-sk-minimal-dss-1911.xml	
+TL	fr-65-docusign	testdata/oracle/tsl/fr-65-docusign.xml	
+TL	peru-lotl-as-tl	testdata/oracle/tsl/peru-lotl.xml	

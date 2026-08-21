@@ -3,6 +3,7 @@ package eccurve
 import (
 	"bytes"
 	"crypto/ecdsa"
+	"crypto/rsa"
 	"crypto/sha256"
 	"crypto/x509"
 	"encoding/hex"
@@ -161,6 +162,99 @@ func TestParseCertificateKeepsStdlibErrors(t *testing.T) {
 				t.Errorf("error = %q, want crypto/x509's own %q", err, stdlibErr)
 			}
 		})
+	}
+}
+
+// TestParseCertificateRSANegativeModulus covers the RSA counterpart to the Brainpool regression
+// above: a certificate out of the same eu-lotl-250.xml Phase 9 cross-validation fixture (a German
+// PointerToOtherTSL's second ServiceDigitalIdentity) whose SubjectPublicKeyInfo modulus INTEGER
+// has its leading content byte's high bit set with no 0x00 DER pad, which crypto/x509 refuses
+// with "x509: RSA modulus is not a positive number".
+func TestParseCertificateRSANegativeModulus(t *testing.T) {
+	der := eccurveReadFixture(t, "rsa_negative_modulus_cert.der")
+
+	if _, err := x509.ParseCertificate(der); err == nil {
+		t.Fatal("crypto/x509 now parses this certificate on its own; the fixture no longer covers the accommodation")
+	}
+
+	certificate, err := ParseCertificate(der)
+	if err != nil {
+		t.Fatalf("ParseCertificate: %v", err)
+	}
+
+	if !bytes.Equal(certificate.Raw, der) {
+		t.Error("Raw is not the original DER")
+	}
+	if !bytes.Contains(der, certificate.RawTBSCertificate) {
+		t.Error("RawTBSCertificate is not a slice of the original DER")
+	}
+	if !bytes.Contains(der, certificate.RawSubjectPublicKeyInfo) {
+		t.Error("RawSubjectPublicKeyInfo is not a slice of the original DER")
+	}
+
+	if certificate.PublicKeyAlgorithm != x509.RSA {
+		t.Errorf("PublicKeyAlgorithm = %v, want RSA", certificate.PublicKeyAlgorithm)
+	}
+	publicKey, ok := certificate.PublicKey.(*rsa.PublicKey)
+	if !ok {
+		t.Fatalf("PublicKey is %T, want *rsa.PublicKey", certificate.PublicKey)
+	}
+	if publicKey.N.Sign() != 1 {
+		t.Errorf("recovered modulus is not positive: sign = %d", publicKey.N.Sign())
+	}
+	if publicKey.N.BitLen() != 4096 {
+		t.Errorf("recovered modulus bit length = %d, want 4096", publicKey.N.BitLen())
+	}
+	if publicKey.E != 65537 {
+		t.Errorf("recovered exponent = %d, want 65537", publicKey.E)
+	}
+
+	if got, want := certificate.Subject.CommonName, "German Trusted List Signer 1"; got != want {
+		t.Errorf("Subject.CommonName = %q, want %q", got, want)
+	}
+}
+
+// TestParseCertificateRSANegativeModulusAndExponent covers a fixture out of de-tl.xml (the same
+// harness's German trusted list) where BOTH RSA public key INTEGERs - not just the modulus - have
+// this encoding: a self-signed 1999-vintage German root CA certificate whose publicExponent
+// content octets, read as an ordinary signed ASN.1 INTEGER, are also negative. Both must be
+// recovered by the same unsigned-magnitude re-read, or ParseCertificate falls back to stdlib's
+// error the same way it would for a certificate this package cannot repair at all.
+func TestParseCertificateRSANegativeModulusAndExponent(t *testing.T) {
+	der := eccurveReadFixture(t, "rsa_negative_modulus_and_exponent_cert.der")
+
+	if _, err := x509.ParseCertificate(der); err == nil {
+		t.Fatal("crypto/x509 now parses this certificate on its own; the fixture no longer covers the accommodation")
+	}
+
+	certificate, err := ParseCertificate(der)
+	if err != nil {
+		t.Fatalf("ParseCertificate: %v", err)
+	}
+
+	if !bytes.Equal(certificate.Raw, der) {
+		t.Error("Raw is not the original DER")
+	}
+
+	publicKey, ok := certificate.PublicKey.(*rsa.PublicKey)
+	if !ok {
+		t.Fatalf("PublicKey is %T, want *rsa.PublicKey", certificate.PublicKey)
+	}
+	if publicKey.N.Sign() != 1 {
+		t.Errorf("recovered modulus is not positive: sign = %d", publicKey.N.Sign())
+	}
+	// The exponent's raw content octets are C0 00 00 01; encoding/asn1's ordinary signed decode
+	// reads that as -0x3FFFFFFF, and the unsigned re-read this package performs instead must
+	// recover the same bytes read as an unsigned magnitude: 0xC0000001.
+	if publicKey.E != 0xC0000001 {
+		t.Errorf("recovered exponent = %#x, want 0xc0000001", publicKey.E)
+	}
+
+	if got, want := certificate.Subject.CommonName, "3R-CA 1:PN"; got != want {
+		t.Errorf("Subject.CommonName = %q, want %q", got, want)
+	}
+	if got, want := certificate.Issuer.CommonName, "3R-CA 1:PN"; got != want {
+		t.Errorf("Issuer.CommonName = %q, want %q (this fixture is self-signed)", got, want)
 	}
 }
 
