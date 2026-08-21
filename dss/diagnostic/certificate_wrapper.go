@@ -1,12 +1,10 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/CertificateWrapper.java (DSS 6.5.RC1).
 //
-// getCertificateExtensionForOid(String, Class<T>) is a generic instance method in Java; the
-// module requires Go 1.27, so it is ported as the generic method
-// (*CertificateWrapper).CertificateExtensionForOid[T]. The xsi:type polymorphism of the schema's
-// List<XmlCertificateExtension> is represented on the Go side (see jaxb/xml.go) by the
-// jaxb.XmlCertificateExtensionItem interface, satisfied by every concrete extension struct (e.g.
-// *jaxb.XmlSubjectAlternativeNames) via its embedded XmlCertificateExtensionContent/Attrs; that
-// interface's OID accessor is ExtensionOID() *string (not OID() string).
+// The xsi:type polymorphism of the schema's List<XmlCertificateExtension> is represented on the
+// Go side (see jaxb/xml.go) by the jaxb.XmlCertificateExtensionItem interface, satisfied by every
+// concrete extension struct (e.g. *jaxb.XmlSubjectAlternativeNames) via its embedded
+// XmlCertificateExtensionContent/Attrs; that interface's OID accessor is ExtensionOID() *string
+// (not OID() string).
 package diagnostic
 
 import (

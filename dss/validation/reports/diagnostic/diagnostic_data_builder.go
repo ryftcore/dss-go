@@ -1049,9 +1049,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 }
 
 // getXmlRevocationRefs returns a list of XmlRevocationRef for a token with tokenId. Port of the
-// protected getXmlRevocationRefs(String, Map<RevocationRef<R>, Set<RevocationRefOrigin>>);
-// unexported because every caller lives in this package, as Java's protected access allows.
-// R is inferred from the entries slice at every call site (revocation.CRL or revocation.OCSP).
+// protected getXmlRevocationRefs(String, Map<RevocationRef<R>, Set<RevocationRefOrigin>>).
 func (b *DiagnosticDataBuilder) getXmlRevocationRefs[R revocation.Revocation](tokenId string, refs []spi.RevocationRefOriginsEntry[R]) []*jaxb.XmlRevocationRef {
 	xmlRevocationRefs := make([]*jaxb.XmlRevocationRef, 0)
 	for _, entry := range refs {

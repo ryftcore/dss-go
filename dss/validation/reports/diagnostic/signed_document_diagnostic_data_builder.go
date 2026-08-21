@@ -952,9 +952,7 @@ func getXmlOrphanRevocation[R revocation.Revocation](b *SignedDocumentDiagnostic
 
 // CreateOrphanTokenFromRevocationIdentifier creates an orphan revocation token from an
 // EncapsulatedRevocationTokenIdentifier. Port of the protected
-// createOrphanTokenFromRevocationIdentifier(EncapsulatedRevocationTokenIdentifier); Go has no
-// protected access and callers exist outside this package, so it stays exported. R is inferred
-// from the identifier at every call site.
+// createOrphanTokenFromRevocationIdentifier(EncapsulatedRevocationTokenIdentifier).
 func (b *SignedDocumentDiagnosticDataBuilder) CreateOrphanTokenFromRevocationIdentifier[R revocation.Revocation](revocationIdentifier spi.EncapsulatedRevocationTokenIdentifier[R]) *jaxb.XmlOrphanRevocationToken {
 	return createOrphanTokenFromRevocationIdentifier[R](b, revocationIdentifier)
 }

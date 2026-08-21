@@ -312,15 +312,8 @@ func CreateReferenceForCertificate(certificateToken *model.CertificateToken) *va
 }
 
 // CreateReferencesForIdentifiers creates a list of TimestampedReferences from the identifiers of
-// a given type. Port of createReferencesForIdentifiers(Collection, TimestampedObjectType).
-//
-// T mirrors Java's Collection<? extends Identifier>: Go generics have no slice covariance, so
-// the caller's concrete element type (model.Identifier, spi.EncapsulatedRevocationTokenIdentifier[R],
-// *crlparser.CRLBinary, *spi.OCSPResponseBinary, ...) is inferred here instead. Declared as a
-// package-level function rather than a method for the same reason as every other helper in this
-// file - AbstractTimestampSource is stateless, so its protected helpers port to package-level
-// functions (see "Methods became package-level functions" in the file header) - a form its
-// non-generic siblings here share.
+// a given type. Port of createReferencesForIdentifiers(Collection, TimestampedObjectType);
+// T mirrors Java's Collection<? extends Identifier>.
 func CreateReferencesForIdentifiers[T xmlIdentifiable](identifiers []T,
 	timestampedObjectType enumerations.TimestampedObjectType) []*validation.TimestampedReference {
 	timestampedReferences := []*validation.TimestampedReference{}
@@ -429,8 +422,7 @@ func certificateTokenMapValues(tokens map[string]*model.CertificateToken) []*mod
 // T mirrors Java's Collection<? extends RevocationRef<CRL>>: one call site in this file passes
 // the merged-source shape spi.RevocationRef[revocation.CRL] (OfflineRevocationSourceBase.
 // AllRevocationReferences()'s element type), the other (signature_timestamp_source.go, via the
-// abstract GetCRLRefs) the concrete []*spi.CRLRef; see xmlIdentifiable above for why this must
-// be a package-level function rather than a method.
+// abstract GetCRLRefs) the concrete []*spi.CRLRef.
 func CreateReferencesForCRLRefs[T spi.RevocationRef[revocation.CRL]](crlRefs []T, currentCRLSource revocationBinaryLookup[revocation.CRL],
 	listCRLSource *spi.ListRevocationSource[revocation.CRL]) []*validation.TimestampedReference {
 	timestampedReferences := []*validation.TimestampedReference{}

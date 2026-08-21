@@ -1,18 +1,11 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/executor/AbstractDetailedReportBuilder.java
 // (DSS 6.5.RC1).
 //
-// Two shape differences against Java:
-//
-//   - Java's process(Collection<? extends AbstractTokenProxy>, ...) is an
-//     inherited protected method taking a wildcard-typed collection. It ports
-//     to the generic method process, unexported because every caller lives in
-//     this package, as Java's protected access allows.
-//
-//   - Java's callers hand process() a LinkedHashMap, and DetailedReportBuilder
-//     later marshals bbbs.values() straight into the report - so the map's
-//     insertion order is byte-visible. A Go map has no order, so the builder
-//     records the first-insertion order of the ids in BBBOrder and the report
-//     is filled from that (see BasicBuildingBlocksInOrder).
+// Java's callers hand process() a LinkedHashMap, and DetailedReportBuilder
+// later marshals bbbs.values() straight into the report - so the map's
+// insertion order is byte-visible. A Go map has no order, so the builder
+// records the first-insertion order of the ids in BBBOrder and the report
+// is filled from that (see BasicBuildingBlocksInOrder).
 
 package executor
 

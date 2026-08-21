@@ -103,14 +103,12 @@ type DocumentAnalyzer interface {
 	OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument
 
 	// GetValidationData extracts a validation data for the provided collection of signatures.
-	// Port of the getValidationData(Collection) overload. Java's <T extends AdvancedSignature>
-	// erases to the base type: Go forbids type parameters on interface methods, Go 1.27
-	// included, so the erasure is permanent.
+	// Port of the getValidationData(Collection) overload.
 	GetValidationData(signatures []validation.AdvancedSignature) (*validation.ValidationDataContainer, error)
 
 	// GetValidationDataWithTimestamps extracts a validation data for the provided collection of
 	// signatures and/or timestamps. Port of the getValidationData(Collection, Collection)
-	// overload; Java's <T extends AdvancedSignature> erases as for GetValidationData.
+	// overload.
 	GetValidationDataWithTimestamps(signatures []validation.AdvancedSignature,
 		detachedTimestamps []*validation.TimestampToken) (*validation.ValidationDataContainer, error)
 
