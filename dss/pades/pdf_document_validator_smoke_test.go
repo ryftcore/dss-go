@@ -14,10 +14,13 @@
 package pades
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/alert"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -25,6 +28,18 @@ import (
 	dssvalidation "github.com/utain/esig/dss/validation"
 	validationpolicy "github.com/utain/esig/dss/validation/policy"
 )
+
+// padesFixturePath resolves rel (relative to this package's testdata/) to a
+// real file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func padesFixturePath(t *testing.T, rel string) string {
+	t.Helper()
+	local := filepath.Join("testdata", rel)
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, rel)
+}
 
 func init() {
 	validationpolicy.RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
@@ -52,14 +67,14 @@ func TestPDFDocumentValidator_Smoke(t *testing.T) {
 		file           string
 		wantSignatures int
 	}{
-		{"pades-bes", "testdata/upstream/validation/pades-bes.pdf", 1},
-		{"pades-epes", "testdata/upstream/validation/pades-epes.pdf", 1},
-		{"pades-lta", "testdata/upstream/validation/PAdES-LTA.pdf", 1},
+		{"pades-bes", "upstream/validation/pades-bes.pdf", 1},
+		{"pades-epes", "upstream/validation/pades-epes.pdf", 1},
+		{"pades-lta", "upstream/validation/PAdES-LTA.pdf", 1},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doc, err := model.NewFileDocument(tt.file)
+			doc, err := model.NewFileDocument(padesFixturePath(t, tt.file))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
@@ -116,7 +131,7 @@ func TestPDFDocumentValidator_Smoke(t *testing.T) {
 }
 
 func TestPDFDocumentValidator_Revisions(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/pades-bes.pdf")
+	doc, err := model.NewFileDocument(padesFixturePath(t, "upstream/validation/pades-bes.pdf"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}
@@ -127,7 +142,7 @@ func TestPDFDocumentValidator_Revisions(t *testing.T) {
 }
 
 func TestPDFDocumentValidatorFactory_RegistersItself(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/pades-bes.pdf")
+	doc, err := model.NewFileDocument(padesFixturePath(t, "upstream/validation/pades-bes.pdf"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}

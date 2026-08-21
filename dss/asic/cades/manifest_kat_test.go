@@ -8,6 +8,7 @@ import (
 
 	"github.com/utain/esig/dss/asic"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -25,7 +26,7 @@ type manifestKATFixture struct {
 
 func loadManifestKATFixtures(t *testing.T) map[string]manifestKATFixture {
 	t.Helper()
-	raw, err := os.ReadFile("testdata/manifest-oracle.json")
+	raw, err := os.ReadFile(corpustest.Path(t, "manifest-oracle.json"))
 	if err != nil {
 		t.Fatalf("read manifest oracle: %v", err)
 	}

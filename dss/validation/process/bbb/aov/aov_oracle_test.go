@@ -13,6 +13,7 @@ import (
 	"github.com/utain/esig/dss/diagnostic"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/policy"
 )
@@ -24,12 +25,13 @@ import (
 //
 // See testdata/README.md for what the corpora are and how to regenerate them.
 
-const (
-	// aovCorpusDir is the marshal-parity diagnostic-data corpus the oracle ran over.
-	aovCorpusDir = "../../../../diagnostic/jaxb/testdata/oracle"
-	// aovDumpDir holds XCVA's synthetic dumps, which this oracle replays too.
-	aovDumpDir = "../xcv/testdata/dd"
-)
+// aovCorpusRoot is the module-root-relative path of the marshal-parity
+// diagnostic-data corpus the oracle ran over; it lives in the external
+// corpus/ tree (see internal/corpustest).
+const aovCorpusRoot = "diagnostic/jaxb/testdata/oracle"
+
+// aovDumpDir holds XCVA's synthetic dumps, which this oracle replays too.
+const aovDumpDir = "../xcv/testdata/dd"
 
 // aovCurrentTime is the fixed validation time the oracle ran with,
 // 2024-01-01T00:00:00Z.
@@ -129,9 +131,11 @@ func loadAovRows(t *testing.T, path string) []*aovRow {
 // synthetic dumps, anything else a member of the marshal-parity corpus.
 func loadAovDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	path := filepath.Join(aovCorpusDir, name)
+	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
 		path = filepath.Join(aovDumpDir, rest)
+	} else {
+		path = corpustest.RootPath(t, filepath.Join(aovCorpusRoot, name))
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

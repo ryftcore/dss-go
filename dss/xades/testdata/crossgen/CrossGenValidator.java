@@ -17,7 +17,7 @@
 // SignedDocumentValidator.fromDocument's ServiceLoader providers for XML signatures - without it
 // on the classpath, fromDocument() throws "Document format not recognized/handled"):
 //
-//   cd /home/user/dss-upstream
+//   cd $DSS_UPSTREAM_HOME  (your built upstream DSS 6.5.RC1 checkout)
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
 //   CP="dss-validation/target/classes:dss-xades/target/classes:dss-xml-utils/target/classes:dss-xml-common/target/classes:specs-trusted-list/target/classes:specs-xades/target/classes:specs-xmldsig/target/classes:$(cat /tmp/valcp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java

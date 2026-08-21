@@ -13,6 +13,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The top-level KAT for SignatureQualificationBlock. Every row of
@@ -249,7 +250,7 @@ func qualSigEtsiResult(label string, bestSignatureTime int64) *jaxb.XmlConstrain
 
 func readQualSigBlockOracle(t *testing.T) []*qualSigBlockRow {
 	t.Helper()
-	f, err := os.Open(qualSigBlockOracleLog)
+	f, err := os.Open(corpustest.Path(t, "oracle/qual_sig_block.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

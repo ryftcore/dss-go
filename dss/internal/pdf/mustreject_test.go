@@ -31,7 +31,7 @@ var hardFailures = []string{
 func TestMustReject_BrokenCatalog(t *testing.T) {
 	for _, name := range hardFailures {
 		t.Run(name, func(t *testing.T) {
-			data, err := os.ReadFile(filepath.Join(defaultCorpusDir, name))
+			data, err := os.ReadFile(filepath.Join(corpusDir(t), name))
 			if err != nil {
 				t.Skipf("not vendored: %v", err)
 			}
@@ -67,7 +67,7 @@ var encryptedCorpus = []struct {
 func TestMustReject_WrongPassword(t *testing.T) {
 	for _, tc := range encryptedCorpus {
 		t.Run(tc.path, func(t *testing.T) {
-			data, err := os.ReadFile(filepath.Join(defaultCorpusDir, filepath.FromSlash(tc.path)))
+			data, err := os.ReadFile(filepath.Join(corpusDir(t), filepath.FromSlash(tc.path)))
 			if err != nil {
 				t.Skipf("not vendored: %v", err)
 			}
@@ -106,7 +106,7 @@ func TestMustReject_WrongPassword(t *testing.T) {
 // password at all, so accepting one would mean handing the caller a document
 // whose every string is ciphertext.
 func TestMustReject_UnsupportedSecurityHandler(t *testing.T) {
-	base, err := os.ReadFile(filepath.Join(defaultCorpusDir, "protected", "open_protected.pdf"))
+	base, err := os.ReadFile(filepath.Join(corpusDir(t), "protected", "open_protected.pdf"))
 	if err != nil {
 		t.Skipf("not vendored: %v", err)
 	}

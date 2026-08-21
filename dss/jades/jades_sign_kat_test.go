@@ -33,6 +33,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	"github.com/utain/esig/dss/spi/validation"
@@ -73,7 +74,7 @@ type jadesSignKATFixture struct {
 func jadesSignKATLoad(t *testing.T) *jadesSignKATFixture {
 	t.Helper()
 
-	raw, err := os.ReadFile("testdata/jades-sign-oracle.json")
+	raw, err := os.ReadFile(corpustest.Path(t, "jades-sign-oracle.json"))
 	if err != nil {
 		t.Fatalf("cannot read the oracle: %v", err)
 	}

@@ -5,27 +5,30 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // oracleDir returns the directory holding the Java-produced diagnostic-data
 // dumps. The checked-in corpus lives in testdata/oracle; set
 // DSS_DIAGNOSTIC_ORACLE_DIR to replay the KAT over a larger local corpus.
-func oracleDir() string {
+func oracleDir(t *testing.T) string {
+	t.Helper()
 	if dir := os.Getenv("DSS_DIAGNOSTIC_ORACLE_DIR"); dir != "" {
 		return dir
 	}
-	return filepath.Join("testdata", "oracle")
+	return corpustest.Path(t, "oracle")
 }
 
 // TestMarshalParity is the marshal-parity KAT: every Java-produced dump must
 // unmarshal into the Go model and marshal back byte for byte.
 func TestMarshalParity(t *testing.T) {
-	files, err := filepath.Glob(filepath.Join(oracleDir(), "*.xml"))
+	files, err := filepath.Glob(filepath.Join(oracleDir(t), "*.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(files) == 0 {
-		t.Fatalf("no oracle dumps under %s", oracleDir())
+		t.Fatalf("no oracle dumps under %s", oracleDir(t))
 	}
 	for _, file := range files {
 		t.Run(filepath.Base(file), func(t *testing.T) {

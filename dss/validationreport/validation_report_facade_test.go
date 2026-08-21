@@ -2,9 +2,10 @@ package validationreport
 
 import (
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // TestFacadeRoundTrip exercises ValidationReportFacade.Marshal/Unmarshal
@@ -15,7 +16,7 @@ import (
 // byte-for-byte against the Java oracle; jaxb.Marshal is - see that
 // package's xml_kat_test.go).
 func TestFacadeRoundTrip(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("jaxb", "testdata", "oracle", "dss1770.xml.xml"))
+	data, err := os.ReadFile(corpustest.RootPath(t, "validationreport/jaxb/testdata/oracle/dss1770.xml.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}

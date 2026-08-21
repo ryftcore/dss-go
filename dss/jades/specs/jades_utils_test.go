@@ -12,11 +12,13 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 func readTestdata(t *testing.T, name string) string {
 	t.Helper()
-	data, err := os.ReadFile("testdata/" + name)
+	data, err := os.ReadFile(corpustest.Path(t, name))
 	if err != nil {
 		t.Fatalf("reading testdata/%s: %v", name, err)
 	}

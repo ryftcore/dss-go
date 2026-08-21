@@ -15,6 +15,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/policy"
 )
 
@@ -26,7 +27,7 @@ import (
 // same tokens and compares the XmlConstraint sequence and the XmlConclusion.
 
 // savCorpusDir is the marshal-parity diagnostic-data corpus the oracle was run over.
-const savCorpusDir = "../../../../diagnostic/jaxb/testdata/oracle"
+const savCorpusDir = "diagnostic/jaxb/testdata/oracle" // corpus/-relative (internal/corpustest)
 
 // savCurrentTime is the fixed validation time the oracle ran with,
 // 2024-01-01T00:00:00Z.
@@ -95,7 +96,7 @@ func loadSAVRows(t *testing.T, path string) []*savOracleRow {
 
 func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join(savCorpusDir, name))
+	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(savCorpusDir, name)))
 	if err != nil {
 		t.Fatalf("read %s: %v", name, err)
 	}
@@ -195,7 +196,7 @@ func savSafeExecute(fn func()) (panicked bool) {
 }
 
 func TestAcceptanceValidationAgainstJavaOracle(t *testing.T) {
-	rows := loadSAVRows(t, "testdata/oracle/sav_blocks.jsonl")
+	rows := loadSAVRows(t, corpustest.Path(t, "oracle/sav_blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

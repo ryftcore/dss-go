@@ -35,6 +35,7 @@ import (
 	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	simplecertjaxb "github.com/utain/esig/dss/simplecertificatereport/jaxb"
@@ -43,8 +44,10 @@ import (
 	validationreportjaxb "github.com/utain/esig/dss/validationreport/jaxb"
 )
 
-// oracleCorpusDir is the shipped diagnostic-data corpus used as input.
-const oracleCorpusDir = "../../diagnostic/jaxb/testdata/oracle"
+// oracleCorpusRoot is the module-root-relative path (inside the external
+// corpus/ tree, see internal/corpustest) of the shipped diagnostic-data
+// corpus used as input.
+const oracleCorpusRoot = "diagnostic/jaxb/testdata/oracle"
 
 // oracleValidationTime is the validation time the Java dump was produced with
 // (1700000000000 ms since the epoch = 2023-11-14T22:13:20Z).
@@ -76,7 +79,7 @@ func TestReportBuildersOracle(t *testing.T) {
 
 	for _, row := range rows {
 		t.Run(row.File, func(t *testing.T) {
-			data, err := os.ReadFile(filepath.Join(oracleCorpusDir, row.File+".xml"))
+			data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(oracleCorpusRoot, row.File+".xml")))
 			if err != nil {
 				t.Fatalf("reading the diagnostic data: %v", err)
 			}
@@ -182,7 +185,7 @@ func assertOracleDigest(t *testing.T, file, suffix, label string, got []byte, wa
 	if matched {
 		return
 	}
-	reference, err := os.ReadFile(filepath.Join("testdata", "oracle", "xml", file+suffix))
+	reference, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "xml", file+suffix)))
 	if err != nil {
 		t.Errorf("%s differs from the Java oracle (sha256 %s, want %s)",
 			label, hex.EncodeToString(sum[:]), want)
@@ -225,7 +228,7 @@ func itoa(v int) string {
 // readReportsOracle loads testdata/oracle/reports.jsonl, sorted by file name.
 func readReportsOracle(t *testing.T) []reportsOracleRow {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "reports.jsonl"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "reports.jsonl")))
 	if err != nil {
 		t.Fatalf("reading the oracle dump: %v", err)
 	}

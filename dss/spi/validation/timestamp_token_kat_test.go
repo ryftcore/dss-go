@@ -13,6 +13,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -26,7 +27,7 @@ import (
 // timestampTokenKATOracle reads testdata/bc-oracle.txt into a map of its key=value lines.
 func timestampTokenKATOracle(t *testing.T) map[string]string {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "bc-oracle.txt"))
+	file, err := os.Open(corpustest.Path(t, "bc-oracle.txt"))
 	if err != nil {
 		t.Fatalf("unable to read the BouncyCastle oracle: %v", err)
 	}

@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/xmldom"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
@@ -87,7 +88,7 @@ func xadesBuilderKATNamespace(t *testing.T, uri string) *common.DSSNamespace {
 
 func xadesBuilderKATCases(t *testing.T) []xadesBuilderKATCase {
 	t.Helper()
-	raw, err := os.ReadFile("testdata/xades-builder-oracle.json")
+	raw, err := os.ReadFile(corpustest.Path(t, "xades-builder-oracle.json"))
 	if err != nil {
 		t.Fatalf("read oracle: %v", err)
 	}

@@ -11,6 +11,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
+
 	"github.com/utain/esig/dss/internal/xmldom"
 )
 
@@ -36,7 +38,7 @@ func TestKnownAnswers(t *testing.T) {
 		}
 		t.Run(name, func(t *testing.T) {
 			exprFile, fixtureDir, katFile := setFiles(set)
-			want, err := os.ReadFile(filepath.Join("testdata", katFile))
+			want, err := os.ReadFile(filepath.Join(corpustest.Path(t, "."), katFile))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -46,7 +48,7 @@ func TestKnownAnswers(t *testing.T) {
 			}
 			t.Errorf("regenerated vectors differ from the Java oracle:\n%s", firstDiff(got, want))
 			if os.Getenv("XPATH10_WRITE_KAT") != "" {
-				if err := os.WriteFile(filepath.Join("testdata", katFile+".got"), got, 0o644); err != nil {
+				if err := os.WriteFile(filepath.Join(corpustest.Path(t, "."), katFile+".got"), got, 0o644); err != nil {
 					t.Fatal(err)
 				}
 			}
@@ -110,7 +112,7 @@ func buildKAT(t *testing.T, exprFile, fixtureDir, katFile string) []byte {
 			}
 		}
 
-		rel, err := filepath.Rel(filepath.Join("testdata", fixtureDir), fixture)
+		rel, err := filepath.Rel(filepath.Join(corpustest.Path(t, "."), fixtureDir), fixture)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -196,7 +198,7 @@ func katLabel(n *xmldom.Node) string {
 func loadExpressions(t *testing.T, file string) []string {
 	t.Helper()
 	var out []string
-	for _, line := range readLines(t, filepath.Join("testdata", file)) {
+	for _, line := range readLines(t, filepath.Join(corpustest.Path(t, "."), file)) {
 		if strings.TrimSpace(line) == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
@@ -211,7 +213,7 @@ func loadExpressions(t *testing.T, file string) []string {
 func loadNamespaces(t *testing.T) NamespaceContext {
 	t.Helper()
 	ns := NamespaceContext{}
-	for _, line := range readLines(t, filepath.Join("testdata", "namespaces.txt")) {
+	for _, line := range readLines(t, filepath.Join(corpustest.Path(t, "."), "namespaces.txt")) {
 		if strings.TrimSpace(line) == "" || strings.HasPrefix(line, "#") {
 			continue
 		}
@@ -229,7 +231,7 @@ func loadNamespaces(t *testing.T) NamespaceContext {
 func fixtureFiles(t *testing.T, dir string) []string {
 	t.Helper()
 	var out []string
-	err := filepath.Walk(filepath.Join("testdata", dir),
+	err := filepath.Walk(filepath.Join(corpustest.Path(t, "."), dir),
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
@@ -254,7 +256,7 @@ func fixtureFiles(t *testing.T, dir string) []string {
 func katHeader(t *testing.T, katFile string) []string {
 	t.Helper()
 	var out []string
-	for _, line := range readLines(t, filepath.Join("testdata", katFile)) {
+	for _, line := range readLines(t, filepath.Join(corpustest.Path(t, "."), katFile)) {
 		if !strings.HasPrefix(line, "#") {
 			break
 		}

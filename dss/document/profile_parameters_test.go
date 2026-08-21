@@ -1,6 +1,6 @@
 // Tests for ProfileParameters, matching
-// dss-document/src/main/java/eu/europa/esig/dss/signature/ProfileParameters.java at
-// /home/user/dss-upstream.
+// dss-document/src/main/java/eu/europa/esig/dss/signature/ProfileParameters.java
+// upstream.
 package document
 
 import (

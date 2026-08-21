@@ -8,6 +8,7 @@ import (
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 )
@@ -45,7 +46,7 @@ func (c *singleAovSAVChain) InitChain() {
 }
 
 func TestAovDirectChecksAgainstJavaOracle(t *testing.T) {
-	rows := loadAovRows(t, "testdata/oracle/aov_direct.jsonl")
+	rows := loadAovRows(t, corpustest.Path(t, "oracle/aov_direct.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

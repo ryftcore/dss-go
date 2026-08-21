@@ -40,6 +40,7 @@ import (
 
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	spitsl "github.com/utain/esig/dss/spi/tsl"
@@ -58,14 +59,25 @@ const cqCertificate = "MIIJGjCCBwKgAwIBAgICB44wDQYJKoZIhvcNAQELBQAwbTELMAkGA1UEB
 
 // cqFileLoader is the offline http.DSSFileLoader mapping the logical "sk-tl.xml" url to the
 // vendored fixture's real bytes - mirroring SKCertificateTest's MemoryDataLoader over
-// DSSUtils.toByteArray(TL_DOC).
-type cqFileLoader struct{}
+// DSSUtils.toByteArray(TL_DOC). path is resolved once, synchronously, by the calling test
+// (newCqFileLoader) before OfflineRefresh hands GetDocument to worker goroutines: corpustest's
+// t.Skip/t.Fatal are only safe to call from the goroutine running the test, not from those
+// workers.
+type cqFileLoader struct {
+	path string
+}
 
-func (cqFileLoader) GetDocument(url string) (model.DSSDocument, error) {
+// newCqFileLoader resolves the loader's fixture path up front, in the caller's own goroutine.
+func newCqFileLoader(t *testing.T) cqFileLoader {
+	t.Helper()
+	return cqFileLoader{path: resolveManifestFixture(t, "../tsl/testdata/sk-tl-sn-95.xml")}
+}
+
+func (l cqFileLoader) GetDocument(url string) (model.DSSDocument, error) {
 	if url != "sk-tl.xml" {
 		return nil, model.NewDSSError("no fixture mapped for url " + url)
 	}
-	return model.NewFileDocument("../tsl/testdata/sk-tl-sn-95.xml")
+	return model.NewFileDocument(l.path)
 }
 
 type cqDump struct {
@@ -187,7 +199,7 @@ func TestCertificateQualificationOracle(t *testing.T) {
 
 	tlValidationJob := tsl.NewTLValidationJob()
 	tlValidationJob.SetTrustedListSources(tlSource)
-	tlValidationJob.SetOfflineDataLoader(cqFileLoader{})
+	tlValidationJob.SetOfflineDataLoader(newCqFileLoader(t))
 	trustedCertificateSource := spitsl.NewTrustedListsCertificateSource()
 	tlValidationJob.SetTrustedListCertificateSource(trustedCertificateSource)
 
@@ -275,7 +287,7 @@ func TestCertificateQualificationOracle(t *testing.T) {
 		got.TrustedLists = append(got.TrustedLists, dumped)
 	}
 
-	f, err := os.Open("testdata/oracle/tsl/certificate_qualification.json")
+	f, err := os.Open(corpustest.Path(t, "oracle/tsl/certificate_qualification.json"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

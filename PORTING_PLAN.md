@@ -4,7 +4,7 @@
 
 - **Source**: [esig/dss](https://github.com/esig/dss), version **6.5.RC1**, commit `4c2129862948bfd53ca1455832260aa17e183cf8`
 - **Scale**: 117 Maven modules, ~420K lines of main-source Java (2,683 files), ~3,800 test files
-- A read-only reference clone lives outside this repo during development sessions (`/home/user/dss-upstream`); it is never committed here.
+- A read-only reference clone lives outside this repo during development sessions; it is never committed here.
 
 ## What "100% compatibility" means
 
@@ -13,7 +13,7 @@ API-identical Java-in-Go is an anti-goal. The compatibility contract is **intero
 1. **Byte/spec-level outputs** — signatures produced by the Go port validate in Java DSS and vice versa; canonicalization, digests, ASN.1 structures, and serialized enum values (names, OIDs, URIs) are exact.
 2. **Verdict parity** — validation of the same document with the same policy yields the same conclusion (indication/sub-indication) as Java DSS.
 3. **Schema parity** — diagnostic data, simple/detailed/ETSI validation reports conform to the same upstream XSD/JSON schemas.
-4. **Test-vector parity** — upstream `src/test/resources` signed files, certificates, and policies are reused as golden vectors in `dss/testdata/`.
+4. **Test-vector parity** — upstream `src/test/resources` signed files, certificates, and policies are reused as golden vectors. Small per-package fixtures live in-module under `dss/<package>/testdata/`; heavier oracle corpora live in the repo-root `corpus/` tree (outside the module, so `go get` stays lean) and are located at test time via `dss/internal/corpustest`, which skips the affected tests gracefully when `corpus/` is absent (e.g. a bare module checkout).
 
 ## Module mapping (Maven → Go package under `dss/`)
 
@@ -54,17 +54,10 @@ API-identical Java-in-Go is an anti-goal. The compatibility contract is **intero
 | 9 | tsl + validation job | ~12K | Parse production EU LOTL; equivalence tests |
 | — | Compatibility harness | continuous | CI job cross-validating both directions |
 
-## Delegation matrix (sub-agent model assignment)
+## Working rules
 
-| Work type | Model | Rationale |
-|---|---|---|
-| Mechanical porting: enums, DTOs, JAXB models, builders, utils | Sonnet | High-volume, pattern-following; cheapest adequate tier |
-| Crypto-sensitive core: ASN.1/CMS, C14N, XML-DSig, PDF ByteRange, signature builders | Opus | Correctness under adversarial subtlety |
-| Architecture/API design, integration, plan revisions, final reviews | Fable (tech lead) | Session driver |
-| Fidelity reviews (OID tables, enum values, verdict mapping) | Opus | Adversarial verification pass |
-| Large-scale grep/inventory/reporting chores | Haiku/Sonnet | Trivial mechanical work |
-
-Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, an adversarial fidelity review, then commit + push.
+- Mechanical porting (enums, DTOs, JAXB models, builders, utils) is high-volume, pattern-following work; the crypto-sensitive core (ASN.1/CMS, C14N, XML-DSig, PDF ByteRange, signature builders) gets the most scrutiny, as do fidelity reviews of OID tables, enum values and verdict mapping.
+- Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, an adversarial fidelity review, then commit + push.
 
 ## Progress (actuals)
 
@@ -88,12 +81,11 @@ Every batch ends with: `go build ./... && go vet ./... && go test ./...` green, 
 | 8e | ✅ done | LTV/archival processes + qualification (240 files): vpfbs/vpftsp/vpfltvd/vpfswatsp (POE machinery: 61-row oracle incl. all comparator tie-breaker pairs + revoked-revived/timestamp-chain synthetics)/vpftspwatsp, EAA validation blocks, and the full qualification tree (trust-service filters, QSCD/type strategies, MRA, QWAC) with a 9,946-row oracle built by the audit. Audit Critical fix: nil-vs-empty sentinel made qualification PANIC on ordinary input (all trust services filtered out). Package splits for Go import cycles documented (eaa/checks, vpfswatsp/evidencerecord, vpfltvdsig). Three documented hash-order carve-outs (multiset-compared). Open test gaps (vpftsp/vpftspwatsp/vpfltvdsig/eaa blocks/evidencerecord + 2 self-asserting tests) BOUND to the 8f end-to-end harness |
 | 8f | ✅ done | **PHASE 8 COMPLETE.** Executor + report builders + validation root/leaves; all 27 phase8-gated files un-gated (zero build tags remain); **end-to-end verdict parity GREEN with zero tolerances**: 273/273 executor-corpus rows (every BBB indication/sub-indication/qualification), 60/60 documents across six formats under the strict Id-inclusive comparator (all divergence allowlists deleted), **1,258/1,258 report hashes byte-identical** (simple/detailed/ETSI VR/cert flavors over the full corpus). Audit fixed 10 defects incl. pointer-identity attribute order (the tracked latent bug — at its spi source), CMS encapContentInfo in archive-timestamp-v2 imprints (intact LTA failed as HASH_FAILURE), three java.util.HashMap order emulations, IDREF subclass resolution, BigInteger octal parsing, JAXB error tolerance. Booked follow-ups: X500 toString rendering (D11), diagnostic-data cosmetic drift (D12–D14), QWAC-cert + EAA-presentation executor coverage |
 
-Known accepted gaps (tracked): PKCS#12 Ed25519/DSA keystores unloadable (x/crypto limitation; native PFX parser planned), JKS/PKCS#11 unsupported, MD2/WHIRLPOOL digests, streaming CMS in-memory-only, visible-signature rasterization (pdf/visible drawers) returns not-supported, 6 CMS/CAdES-layer parity gaps surfaced by the 248-PDF PAdES differential run (booked against Phase 3: BadEncodedCMS signature-count, pdf-eof cert extraction, 4 legacy PKCS#7 reference-data cases, PLAIN-ECDSA BSI TR-03111, wrong-digest-algo, empty-vs-absent /Reason optionality — none is a false-accept; see dss/pades/testdata/broadgen/README.md), AOV signing-cert-ref grouping iterates first-seen order where Java uses java.util.HashMap bucket order (deterministic-order sanction; pinned by permutation-allowlist test; 2/1328 oracle rows, conclusions unaffected — revisit if 8f end-to-end parity trips), and process/eaa awaits a behavioral corpus (mechanical 1:1 verified; EAA phase post-9).
+Known accepted gaps (tracked): JKS/PKCS#11/Windows-MY/macOS-Keychain key stores unsupported (no Go counterpart under the dependency policy; PKCS#12 itself is fully supported for RSA/EC/Ed25519/DSA since the native `internal/pfx` RFC 7292 reader landed — the earlier "Ed25519/DSA unloadable" x/crypto limitation is closed, pinned by `token.TestKeyStoreLegacyKeyTypeFixtures`), no concrete evidence-record (RFC 4998 ERS / RFC 6283 XMLERS) analyzer — the framework and report plumbing are ported but nothing registers an `EvidenceRecordAnalyzerFactory`, no online CRL/OCSP/TSP HTTP sources (dss-service is out of scope; AIA fetching and the TSL downloader do use the native HTTP data loader), MD2/WHIRLPOOL digests, streaming CMS in-memory-only, visible-signature rasterization (pdf/visible drawers) returns not-supported, 6 CMS/CAdES-layer parity gaps surfaced by the 248-PDF PAdES differential run (booked against Phase 3: BadEncodedCMS signature-count, pdf-eof cert extraction, 4 legacy PKCS#7 reference-data cases, PLAIN-ECDSA BSI TR-03111, wrong-digest-algo, empty-vs-absent /Reason optionality — none is a false-accept; see dss/pades/testdata/broadgen/README.md), AOV signing-cert-ref grouping iterates first-seen order where Java uses java.util.HashMap bucket order (deterministic-order sanction; pinned by permutation-allowlist test; 2/1328 oracle rows, conclusions unaffected — revisit if 8f end-to-end parity trips), and process/eaa awaits a behavioral corpus (mechanical 1:1 verified; EAA phase post-9).
 
 | 9 | ✅ done | **CORE PORT COMPLETE.** dss-tsl-validation + dss-validation-job + specs-trusted-list (227 manifest entries): TL/LOTL/pivot/MRA parsing, conditions, TL signature validation, the full validation-job framework with its cache state machine. **EU LOTL cross-validation GREEN A–D**: parse parity over 37 fixtures byte-exact (incl. pivot chains, 4 real-MRA LOTLs, v5/v6 TLs, Brainpool TL); TL signature verdicts 8/8; offline TLValidationJob parity (cache states, alert firings, full TrustedListsCertificateSource content); end-to-end trust hand-off into the Phase 8 engine incl. complete XmlTrustedList diagnostic blocks. Audit Critical: an XML subtree-decode bug silently discarded ALL otherCriteriaList conditions — empty ALL-composites matched unconditionally, granting TL qualifiers certificates must not receive; plus trust-source determinism (frozen spi/tsl), pointer-identity cert-token map keys, untested sync strategies (now a 16-row truth table). Mutation: 41/41 real mutants killed |
 
-## Budget pacing (Claude Max 5-hour windows)
+## Pacing
 
-- One bounded batch per usage window (≈8–12 Sonnet agents + 1–2 Opus reviewers), then commit, push, and schedule a self check-in into the next window via `send_later`.
-- Bulk porting always goes to Sonnet; Opus is reserved for the crypto-critical few percent and reviews.
-- Progress is durable: every window ends pushed to `claude/dss-java-go-port-bte1eb`, so an interrupted window loses nothing.
+- One bounded batch at a time, each ending green, committed and pushed, so that an interrupted stretch of work loses nothing.
+- Scrutiny is spent where it pays: the crypto-critical few percent and the review passes.

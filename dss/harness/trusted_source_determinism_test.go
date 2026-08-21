@@ -43,7 +43,7 @@ func tsdBuildCertificateSource(t *testing.T) *spitsl.TrustedListsCertificateSour
 
 	tlValidationJob := tsl.NewTLValidationJob()
 	tlValidationJob.SetTrustedListSources(tlSource)
-	tlValidationJob.SetOfflineDataLoader(cqFileLoader{})
+	tlValidationJob.SetOfflineDataLoader(newCqFileLoader(t))
 	certificateSource := spitsl.NewTrustedListsCertificateSource()
 	tlValidationJob.SetTrustedListCertificateSource(certificateSource)
 

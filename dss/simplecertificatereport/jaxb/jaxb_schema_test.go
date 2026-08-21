@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // TestSchemaElementsAndAttributesAreBound is the XSD-completeness sweep:
@@ -19,7 +21,7 @@ import (
 // SimpleCertificateReport.xsd changes upstream. Names bound through a
 // nested-path tag ("keyUsages>keyUsage") are matched by either half.
 func TestSchemaElementsAndAttributesAreBound(t *testing.T) {
-	xsd, err := os.ReadFile(filepath.Join("testdata", "xsd", "SimpleCertificateReport.xsd"))
+	xsd, err := os.ReadFile(corpustest.Path(t, filepath.Join("xsd", "SimpleCertificateReport.xsd")))
 	if err != nil {
 		t.Fatal(err)
 	}

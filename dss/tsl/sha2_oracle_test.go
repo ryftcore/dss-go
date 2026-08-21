@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi/client/http"
 )
@@ -33,7 +34,7 @@ const (
 // sha2TestFileDocument loads one of the two Trusted List fixtures.
 func sha2TestFileDocument(t *testing.T, name string) *model.FileDocument {
 	t.Helper()
-	document, err := model.NewFileDocument("testdata/" + name)
+	document, err := model.NewFileDocument(corpustest.Path(t, name))
 	if err != nil {
 		t.Fatalf("unable to load %s: %v", name, err)
 	}

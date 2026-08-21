@@ -17,6 +17,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // oracleCases pairs each source policy resource with its oracle remarshal.
@@ -33,11 +35,11 @@ var oracleCases = []string{
 func TestUnmarshalMarshalMatchesOracle(t *testing.T) {
 	for _, name := range oracleCases {
 		t.Run(name, func(t *testing.T) {
-			source, err := os.ReadFile(filepath.Join("testdata", "policy", name+".xml"))
+			source, err := os.ReadFile(corpustest.Path(t, filepath.Join("policy", name+".xml")))
 			if err != nil {
 				t.Fatalf("read source: %v", err)
 			}
-			want, err := os.ReadFile(filepath.Join("testdata", "oracle", name+".remarshal.xml"))
+			want, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", name+".remarshal.xml")))
 			if err != nil {
 				t.Fatalf("read oracle: %v", err)
 			}
@@ -68,7 +70,7 @@ func TestUnmarshalMarshalMatchesOracle(t *testing.T) {
 func TestUnmarshalMarshalUnmarshalRoundTrip(t *testing.T) {
 	for _, name := range oracleCases {
 		t.Run(name, func(t *testing.T) {
-			want, err := os.ReadFile(filepath.Join("testdata", "oracle", name+".remarshal.xml"))
+			want, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", name+".remarshal.xml")))
 			if err != nil {
 				t.Fatalf("read oracle: %v", err)
 			}

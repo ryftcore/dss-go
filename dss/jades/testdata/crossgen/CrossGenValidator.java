@@ -17,7 +17,7 @@
 // SignedDocumentValidator.fromDocument's ServiceLoader providers for JWS/JAdES documents -
 // without it on the classpath, fromDocument() throws "Document format not recognized/handled"):
 //
-//   cd /home/user/dss-upstream
+//   cd $DSS_UPSTREAM_HOME  (your built upstream DSS 6.5.RC1 checkout)
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
 //   CP="dss-validation/target/classes:dss-jades/target/classes:specs-jades/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java

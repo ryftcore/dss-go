@@ -17,6 +17,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	"github.com/utain/esig/dss/spi"
@@ -58,7 +59,7 @@ func tlValidatorTaskCertificateSource(t *testing.T, base64Certificates ...string
 
 func tlValidatorTaskDocument(t *testing.T, name string) model.DSSDocument {
 	t.Helper()
-	document, err := model.NewFileDocument("testdata/" + name)
+	document, err := model.NewFileDocument(corpustest.Path(t, name))
 	if err != nil {
 		t.Fatalf("unable to load %s: %v", name, err)
 	}

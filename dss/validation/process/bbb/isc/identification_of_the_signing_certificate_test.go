@@ -14,6 +14,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/policy"
 )
 
@@ -24,7 +25,7 @@ import (
 // the same tokens in the same order and compares.
 
 // corpusDir is the marshal-parity diagnostic-data corpus the oracle was run over.
-const corpusDir = "../../../../diagnostic/jaxb/testdata/oracle"
+const corpusDir = "diagnostic/jaxb/testdata/oracle" // corpus/-relative (internal/corpustest)
 
 // i18nProviderForTests is the provider both KATs run with, as the oracle does.
 var i18nProviderForTests = i18n.NewI18nProvider()
@@ -101,7 +102,7 @@ func loadRows(t *testing.T, path string) []*oracleRow {
 // without that link the chain items carry no certificate (see notes).
 func loadDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join(corpusDir, name))
+	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(corpusDir, name)))
 	if err != nil {
 		t.Fatalf("read %s: %v", name, err)
 	}
@@ -178,7 +179,7 @@ func mustJSON(t *testing.T, value interface{}) string {
 }
 
 func TestIdentificationOfTheSigningCertificateAgainstJavaOracle(t *testing.T) {
-	rows := loadRows(t, "testdata/oracle/isc_blocks.jsonl")
+	rows := loadRows(t, corpustest.Path(t, "oracle/isc_blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

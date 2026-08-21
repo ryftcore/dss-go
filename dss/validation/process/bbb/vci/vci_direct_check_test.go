@@ -8,6 +8,7 @@ import (
 	"github.com/utain/esig/dss/diagnostic"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 )
@@ -47,7 +48,7 @@ func (c *singleCheckChain) InitChain() {
 func assertDirectRow(t *testing.T, name string,
 	factory func(result *process.Result[*jaxb.XmlVCI], rule policy.LevelRule) process.ChainItem[*jaxb.XmlVCI]) {
 	t.Helper()
-	rows := loadRows(t, "testdata/oracle/vci_direct.jsonl")
+	rows := loadRows(t, corpustest.Path(t, "oracle/vci_direct.jsonl"))
 	var expected *oracleRow
 	for _, row := range rows {
 		if row.Token == name {

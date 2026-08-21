@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	"github.com/utain/esig/dss/spi/validation"
@@ -45,7 +46,7 @@ type xadesSignABuilderOracle map[string]map[string][]byte
 // loadXAdESSignABuilderOracle parses the oracle dump.
 func loadXAdESSignABuilderOracle(t *testing.T) xadesSignABuilderOracle {
 	t.Helper()
-	raw, err := os.ReadFile("testdata/sign-a-builder.txt")
+	raw, err := os.ReadFile(corpustest.Path(t, "sign-a-builder.txt"))
 	if err != nil {
 		t.Fatalf("reading the oracle: %v", err)
 	}

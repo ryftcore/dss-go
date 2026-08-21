@@ -43,6 +43,7 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	tslmodel "github.com/utain/esig/dss/model/tsl"
 	dsspolicy "github.com/utain/esig/dss/policy"
@@ -259,10 +260,10 @@ func tvjRunJob(t *testing.T) tvjDump {
 	t.Helper()
 
 	loader := &tvjFileLoader{files: map[string]string{
-		"LOTL_URL":      "testdata/oracle/tsl/eu-lotl.xml",
-		"DE_TL_URL":     "testdata/oracle/tsl/de-tl.xml",
-		"BROKEN_TL_URL": "testdata/oracle/tsl/eu-lotl-broken-sig.xml",
-		"BAD_TL_URL":    "testdata/oracle/tsl/eu-lotl-not-parseable.xml",
+		"LOTL_URL":      corpustest.Path(t, "oracle/tsl/eu-lotl.xml"),
+		"DE_TL_URL":     corpustest.Path(t, "oracle/tsl/de-tl.xml"),
+		"BROKEN_TL_URL": corpustest.Path(t, "oracle/tsl/eu-lotl-broken-sig.xml"),
+		"BAD_TL_URL":    corpustest.Path(t, "oracle/tsl/eu-lotl-not-parseable.xml"),
 	}}
 
 	lotlSource := tsl.NewLOTLSource()
@@ -348,7 +349,7 @@ func tvjRunJob(t *testing.T) tvjDump {
 func TestTLValidationJobOracle(t *testing.T) {
 	got := tvjRunJob(t)
 
-	f, err := os.Open("testdata/oracle/tsl/tl_validation_job.json")
+	f, err := os.Open(corpustest.Path(t, "oracle/tsl/tl_validation_job.json"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

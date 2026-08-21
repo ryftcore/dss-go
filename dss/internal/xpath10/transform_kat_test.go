@@ -10,6 +10,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
+
 	"github.com/utain/esig/dss/internal/xmldom"
 	"github.com/utain/esig/dss/internal/xpath10"
 )
@@ -23,7 +25,9 @@ import (
 // internal/xmldsig/testdata/corpus, shared rather than duplicated, because these are the same
 // documents whose reference digests that package pins.
 
-const transformCorpus = "../xmldsig/testdata/corpus"
+// transformCorpusRoot is the module-root-relative path (inside the external
+// corpus/ tree, see internal/corpustest) of internal/xmldsig's corpus.
+const transformCorpusRoot = "internal/xmldsig/testdata/corpus"
 
 type transformRow struct {
 	fixture string
@@ -35,7 +39,7 @@ type transformRow struct {
 
 func loadTransformKAT(t *testing.T, katFile string) []transformRow {
 	t.Helper()
-	f, err := os.Open(filepath.Join("testdata", katFile))
+	f, err := os.Open(filepath.Join(corpustest.Path(t, "."), katFile))
 	if err != nil {
 		t.Fatalf("open %s: %v", katFile, err)
 	}
@@ -69,7 +73,7 @@ func loadTransformKAT(t *testing.T, katFile string) []transformRow {
 }
 
 func TestTransformKnownAnswers(t *testing.T) {
-	runTransformKAT(t, "transform-kat.txt", transformCorpus)
+	runTransformKAT(t, "transform-kat.txt", corpustest.RootPath(t, transformCorpusRoot))
 }
 
 // TestTransformAdversarialKnownAnswers runs the same comparison over testdata/adversarial,
@@ -80,14 +84,14 @@ func TestTransformKnownAnswers(t *testing.T) {
 // answers still come only from the JDK XPath - see gen/make-adversarial.py and
 // gen/TransformXPathOracle.java.
 func TestTransformAdversarialKnownAnswers(t *testing.T) {
-	runTransformKAT(t, "transform-adversarial-kat.txt", filepath.Join("testdata", "adversarial"))
+	runTransformKAT(t, "transform-adversarial-kat.txt", filepath.Join(corpustest.Path(t, "."), "adversarial"))
 }
 
 // loadUnsupported reads testdata/transform-adversarial-unsupported.txt: the expressions the
 // JDK answers and this package deliberately refuses. See the file's own header.
 func loadUnsupported(t *testing.T) map[string]bool {
 	t.Helper()
-	b, err := os.ReadFile(filepath.Join("testdata", "transform-adversarial-unsupported.txt"))
+	b, err := os.ReadFile(filepath.Join(corpustest.Path(t, "."), "transform-adversarial-unsupported.txt"))
 	if err != nil {
 		t.Fatalf("open the unsupported list: %v", err)
 	}

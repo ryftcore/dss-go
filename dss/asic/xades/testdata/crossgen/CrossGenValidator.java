@@ -19,7 +19,7 @@
 // SignedDocumentValidator.fromDocument ServiceLoader provider - without it on the classpath,
 // fromDocument() throws "Document format not recognized/handled" for a .scs/.sce file):
 //
-//   cd /home/user/dss-upstream
+//   cd $DSS_UPSTREAM_HOME  (your built upstream DSS 6.5.RC1 checkout)
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
 //   mvn -q -o -pl dss-asic-xades dependency:build-classpath -Dmdep.outputFile=/tmp/asiccp.txt -Dmdep.includeScope=runtime
 //   CP="dss-validation/target/classes:dss-asic-xades/target/classes:dss-asic-common/target/classes:dss-xades/target/classes:dss-xml-utils/target/classes:dss-xml-common/target/classes:specs-trusted-list/target/classes:specs-xades/target/classes:specs-xmldsig/target/classes:dss-cades/target/classes:dss-cms/target/classes:dss-cms-object/target/classes:dss-document/target/classes:$(cat /tmp/valcp.txt):$(cat /tmp/asiccp.txt)"

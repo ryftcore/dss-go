@@ -22,6 +22,7 @@ import (
 	cbasn1 "golang.org/x/crypto/cryptobyte/asn1"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/xmldom"
 	"github.com/utain/esig/dss/internal/xmldsig"
 	"github.com/utain/esig/dss/model"
@@ -59,7 +60,7 @@ type katRow struct {
 
 func loadManifest(t *testing.T) []katRow {
 	t.Helper()
-	f, err := os.Open(filepath.Join("testdata", "manifest.txt"))
+	f, err := os.Open(corpustest.Path(t, "manifest.txt"))
 	if err != nil {
 		t.Fatalf("open manifest: %v", err)
 	}
@@ -91,7 +92,7 @@ func loadManifest(t *testing.T) []katRow {
 // detachedFor reads gen/cases.txt for the detached documents a fixture must be given.
 func detachedFor(t *testing.T) map[string][]string {
 	t.Helper()
-	b, err := os.ReadFile(filepath.Join("testdata", "gen", "cases.txt"))
+	b, err := os.ReadFile(corpustest.Path(t, filepath.Join("gen", "cases.txt")))
 	if err != nil {
 		t.Fatalf("open cases: %v", err)
 	}
@@ -117,7 +118,7 @@ type fixtureState struct {
 
 func loadFixture(t *testing.T, name string, detachedNames []string) *fixtureState {
 	t.Helper()
-	src, err := os.ReadFile(filepath.Join("testdata", "corpus", filepath.FromSlash(name)))
+	src, err := os.ReadFile(corpustest.Path(t, filepath.Join("corpus", filepath.FromSlash(name))))
 	if err != nil {
 		t.Fatalf("read fixture %s: %v", name, err)
 	}
@@ -139,7 +140,7 @@ func loadFixture(t *testing.T, name string, detachedNames []string) *fixtureStat
 
 	st := &fixtureState{doc: doc, signatures: sigs}
 	for _, dn := range detachedNames {
-		b, err := os.ReadFile(filepath.Join("testdata", "corpus", filepath.FromSlash(dn)))
+		b, err := os.ReadFile(corpustest.Path(t, filepath.Join("corpus", filepath.FromSlash(dn))))
 		if err != nil {
 			t.Fatalf("read detached %s: %v", dn, err)
 		}
@@ -371,7 +372,7 @@ func checkBytes(t *testing.T, row katRow, got []byte, err error) {
 	if err != nil {
 		t.Fatalf("Java produced %s bytes, Go failed: %v", row.sha256[:12], err)
 	}
-	want, rerr := os.ReadFile(filepath.Join("testdata", "golden", row.golden))
+	want, rerr := os.ReadFile(corpustest.Path(t, filepath.Join("golden", row.golden)))
 	if rerr != nil {
 		t.Fatalf("read golden %s: %v", row.golden, rerr)
 	}

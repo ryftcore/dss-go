@@ -7,7 +7,7 @@
 //
 // Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1, dss-validation included:
 //
-//   cd /home/user/dss-upstream
+//   cd $DSS_UPSTREAM_HOME  (your built upstream DSS 6.5.RC1 checkout)
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
 //   CP="dss-validation/target/classes:dss-cades/target/classes:dss-cms-object/target/classes:$(cat /tmp/valcp.txt)"
 //   javac -cp "$CP" -d /tmp/crossgenval CrossGenValidator.java

@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // node is a generic XML element, enough to walk 1910202xmlSchema.xsd.
@@ -28,7 +30,7 @@ func (n node) attr(name string) string {
 
 func loadValidationReportSchema(t *testing.T) node {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "xsd", "1910202xmlSchema.xsd"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("xsd", "1910202xmlSchema.xsd")))
 	if err != nil {
 		t.Fatal(err)
 	}

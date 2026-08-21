@@ -42,6 +42,7 @@ import (
 	"github.com/utain/esig/dss/asic"
 	asiccades "github.com/utain/esig/dss/asic/cades"
 	asicxades "github.com/utain/esig/dss/asic/xades"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi/validation"
 )
@@ -133,7 +134,7 @@ type broadFixture struct {
 
 func loadBroadOracle(t *testing.T) []broadFixture {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "broad-asic-oracle.json.gz"))
+	file, err := os.Open(corpustest.Path(t, "broad-asic-oracle.json.gz"))
 	if err != nil {
 		t.Fatalf("open broad oracle: %v", err)
 	}
@@ -433,11 +434,23 @@ func broadAnalyzeXAdES(document model.DSSDocument) (result broadAnalysis, errMes
 	return result, ""
 }
 
+// broadFixturePath resolves rel (relative to testdata/upstream/) to a real
+// file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func broadFixturePath(t *testing.T, rel string) string {
+	t.Helper()
+	local := filepath.Join("testdata", "upstream", rel)
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, filepath.Join("upstream", rel))
+}
+
 // broadLoadFixture opens a corpus fixture as a FileDocument, matching what BroadASiCOracle.java
 // hands upstream (SecureContainerHandler takes a different code path for a file-backed archive).
 func broadLoadFixture(t *testing.T, rel string) model.DSSDocument {
 	t.Helper()
-	document, err := model.NewFileDocument(filepath.Join("testdata", "upstream", rel))
+	document, err := model.NewFileDocument(broadFixturePath(t, rel))
 	if err != nil {
 		t.Fatalf("open fixture %s: %v", rel, err)
 	}

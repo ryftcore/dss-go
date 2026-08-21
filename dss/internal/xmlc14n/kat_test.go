@@ -15,6 +15,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/xmldom"
 )
 
@@ -44,7 +45,7 @@ type kat struct {
 
 func loadManifest(t *testing.T) []kat {
 	t.Helper()
-	raw, err := os.ReadFile(filepath.Join("testdata", "manifest.txt"))
+	raw, err := os.ReadFile(corpustest.Path(t, "manifest.txt"))
 	if err != nil {
 		t.Fatalf("read manifest: %v", err)
 	}
@@ -103,13 +104,13 @@ func TestC14nGolden(t *testing.T) {
 			src, ok := sources[k.doc]
 			if !ok {
 				var err error
-				src, err = os.ReadFile(filepath.Join("testdata", "corpus", k.doc))
+				src, err = os.ReadFile(corpustest.Path(t, filepath.Join("corpus", k.doc)))
 				if err != nil {
 					t.Fatalf("read corpus: %v", err)
 				}
 				sources[k.doc] = src
 			}
-			want, err := os.ReadFile(filepath.Join("testdata", "golden", k.golden))
+			want, err := os.ReadFile(corpustest.Path(t, filepath.Join("golden", k.golden)))
 			if err != nil {
 				t.Fatalf("read golden: %v", err)
 			}
@@ -190,11 +191,11 @@ func TestC14nAgainstXMLCanonicalizerCallPath(t *testing.T) {
 			continue
 		}
 		t.Run(k.golden, func(t *testing.T) {
-			src, err := os.ReadFile(filepath.Join("testdata", "corpus", k.doc))
+			src, err := os.ReadFile(corpustest.Path(t, filepath.Join("corpus", k.doc)))
 			if err != nil {
 				t.Fatalf("read corpus: %v", err)
 			}
-			want, err := os.ReadFile(filepath.Join("testdata", "golden", k.golden))
+			want, err := os.ReadFile(corpustest.Path(t, filepath.Join("golden", k.golden)))
 			if err != nil {
 				t.Fatalf("read golden: %v", err)
 			}
@@ -212,7 +213,7 @@ func TestC14nAgainstXMLCanonicalizerCallPath(t *testing.T) {
 // TestDOMRoundTrip catches serializer bugs without demanding byte-parity with Java's
 // Transformer: whatever Serialize writes must canonicalize to what the original does.
 func TestDOMRoundTrip(t *testing.T) {
-	entries, err := os.ReadDir(filepath.Join("testdata", "corpus"))
+	entries, err := os.ReadDir(corpustest.Path(t, "corpus"))
 	if err != nil {
 		t.Fatalf("read corpus dir: %v", err)
 	}
@@ -221,7 +222,7 @@ func TestDOMRoundTrip(t *testing.T) {
 			continue
 		}
 		t.Run(entry.Name(), func(t *testing.T) {
-			src, err := os.ReadFile(filepath.Join("testdata", "corpus", entry.Name()))
+			src, err := os.ReadFile(filepath.Join(corpustest.Path(t, "corpus"), entry.Name()))
 			if err != nil {
 				t.Fatalf("read: %v", err)
 			}
@@ -260,7 +261,7 @@ func TestDOMRoundTrip(t *testing.T) {
 // normalization, which would silently change canonical bytes, so xmldom rejects it (design
 // decision D4, recorded as an accepted gap in PORTING_PLAN.md).
 func TestParseRejectsNegativeCorpus(t *testing.T) {
-	dir := filepath.Join("testdata", "corpus", "negative")
+	dir := corpustest.Path(t, filepath.Join("corpus", "negative"))
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		t.Fatalf("read negative dir: %v", err)
@@ -287,7 +288,7 @@ func sha256Sum(b []byte) []byte {
 }
 
 func FuzzCanonicalize(f *testing.F) {
-	entries, err := os.ReadDir(filepath.Join("testdata", "corpus"))
+	entries, err := os.ReadDir(corpustest.Path(f, "corpus"))
 	if err != nil {
 		f.Fatalf("read corpus dir: %v", err)
 	}
@@ -295,7 +296,7 @@ func FuzzCanonicalize(f *testing.F) {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".xml") {
 			continue
 		}
-		src, err := os.ReadFile(filepath.Join("testdata", "corpus", entry.Name()))
+		src, err := os.ReadFile(filepath.Join(corpustest.Path(f, "corpus"), entry.Name()))
 		if err != nil {
 			f.Fatalf("read: %v", err)
 		}

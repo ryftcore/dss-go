@@ -1,6 +1,6 @@
 // Tests for SignatureRequirementsChecker, matching
-// dss-document/src/main/java/eu/europa/esig/dss/signature/SignatureRequirementsChecker.java at
-// /home/user/dss-upstream.
+// dss-document/src/main/java/eu/europa/esig/dss/signature/SignatureRequirementsChecker.java
+// upstream.
 package document
 
 import (

@@ -1,6 +1,6 @@
 // Tests for SignatureValueChecker, matching
-// dss-document/src/main/java/eu/europa/esig/dss/signature/SignatureValueChecker.java at
-// /home/user/dss-upstream.
+// dss-document/src/main/java/eu/europa/esig/dss/signature/SignatureValueChecker.java
+// upstream.
 package document
 
 import (

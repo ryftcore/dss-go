@@ -3,10 +3,10 @@ package trustedlist
 import (
 	"bytes"
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/trustedlist/jaxb"
 )
 
@@ -16,7 +16,7 @@ import (
 // proven - see that package's TestMarshalParity), over the same real,
 // plain (non-MRA) fixture.
 func TestTrustedListFacadeDelegates(t *testing.T) {
-	in, err := os.ReadFile(filepath.Join("jaxb", "testdata", "tl", "dk_tl-sn21.xml"))
+	in, err := os.ReadFile(corpustest.RootPath(t, "trustedlist/jaxb/testdata/tl/dk_tl-sn21.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func TestTrustedListFacadeDelegates(t *testing.T) {
 // counterpart, checking NewMRAFacade delegates to jaxb.Unmarshal/
 // jaxb.MarshalMRA.
 func TestMRAFacadeDelegates(t *testing.T) {
-	in, err := os.ReadFile(filepath.Join("jaxb", "testdata", "tl", "mra-lotl.xml"))
+	in, err := os.ReadFile(corpustest.RootPath(t, "trustedlist/jaxb/testdata/tl/mra-lotl.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}

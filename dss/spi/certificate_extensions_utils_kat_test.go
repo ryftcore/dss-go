@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/extension"
 	"github.com/utain/esig/dss/utils"
@@ -99,7 +100,7 @@ func (k certificateExtensionsKAT) list(t *testing.T, prefix string) []string {
 
 func certificateExtensionsKATLoad(t *testing.T) []certificateExtensionsKAT {
 	t.Helper()
-	raw, err := os.ReadFile(filepath.Join("testdata", "certificate_extensions", "kat.tsv"))
+	raw, err := os.ReadFile(corpustest.Path(t, filepath.Join("certificate_extensions", "kat.tsv")))
 	if err != nil {
 		t.Fatalf("unable to read the known answers: %v", err)
 	}

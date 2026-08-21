@@ -14,6 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // tokenID is a minimal diagnostic.TokenProxy stand-in: JavaHashSetOrder only
@@ -24,7 +26,7 @@ type tokenID string
 func (t tokenID) Id() string { return string(t) }
 
 func TestJavaHashSetOrderOracle(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "hash_order.tsv"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "hash_order.tsv")))
 	if err != nil {
 		t.Fatalf("reading the oracle dump: %v", err)
 	}

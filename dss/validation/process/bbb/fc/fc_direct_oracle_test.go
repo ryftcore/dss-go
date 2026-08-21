@@ -14,6 +14,7 @@ import (
 	diagjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 )
@@ -128,7 +129,7 @@ func corpusFileNames(rows []*fcDirectRow) []string {
 var fcKnownDeviation = map[string]string{}
 
 func TestFCDirectChecksAgainstJavaOracle(t *testing.T) {
-	rows := loadFCDirectRowsWithCheck(t, "testdata/oracle/fc_direct.jsonl")
+	rows := loadFCDirectRowsWithCheck(t, corpustest.Path(t, "oracle/fc_direct.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty direct oracle")
 	}

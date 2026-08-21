@@ -24,6 +24,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 )
@@ -57,7 +58,7 @@ func readGolden(t *testing.T, path string) map[string]string {
 }
 
 func TestCryptographicSuiteJsonCatalogueMatchesOracle(t *testing.T) {
-	data, err := os.ReadFile("testdata/dss-crypto-suite.json")
+	data, err := os.ReadFile(corpustest.Path(t, "dss-crypto-suite.json"))
 	if err != nil {
 		t.Fatalf("read testdata: %v", err)
 	}
@@ -65,7 +66,7 @@ func TestCryptographicSuiteJsonCatalogueMatchesOracle(t *testing.T) {
 	doc := model.NewInMemoryDocument(data)
 	catalogue := factory.LoadCryptographicSuite(doc)
 
-	golden := readGolden(t, "testdata/oracle/dss-crypto-suite.accessors.txt")
+	golden := readGolden(t, corpustest.Path(t, "oracle/dss-crypto-suite.accessors.txt"))
 	seen := make(map[string]bool, len(golden))
 
 	checkSuite(t, golden, seen, "CryptographicSuite", catalogue.CryptographicSuite())
@@ -162,7 +163,7 @@ func evaluationsCanonical(evaluations []*modelpolicy.CryptographicSuiteEvaluatio
 }
 
 func TestCryptographicSuiteJsonFactoryIsSupported(t *testing.T) {
-	data, err := os.ReadFile("testdata/dss-crypto-suite.json")
+	data, err := os.ReadFile(corpustest.Path(t, "dss-crypto-suite.json"))
 	if err != nil {
 		t.Fatalf("read testdata: %v", err)
 	}

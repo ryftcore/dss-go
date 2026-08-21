@@ -11,11 +11,12 @@ import (
 
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 func loadOracle(t *testing.T, name string) *DetailedReport {
 	t.Helper()
-	data, err := os.ReadFile("jaxb/testdata/oracle/" + name)
+	data, err := os.ReadFile(corpustest.RootPath(t, "detailedreport/jaxb/testdata/oracle/"+name))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -191,7 +192,7 @@ func TestDetailedReport_Fill(t *testing.T) {
 // (the brief requires this "per module"; jaxb.TestMarshalParity is the
 // exhaustive corpus version at the model layer this delegates to).
 func TestDetailedReportFacade_RoundTrip(t *testing.T) {
-	data, err := os.ReadFile("jaxb/testdata/oracle/dr1.xml")
+	data, err := os.ReadFile(corpustest.RootPath(t, "detailedreport/jaxb/testdata/oracle/dr1.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}

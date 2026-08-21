@@ -33,6 +33,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/policy/jaxb"
 )
@@ -41,7 +42,7 @@ import (
 // an EtsiValidationPolicy, mirroring ValidationPolicyFacade.getValidationPolicy.
 func loadOraclePolicy(t *testing.T, name string) *EtsiValidationPolicy {
 	t.Helper()
-	data, err := os.ReadFile("jaxb/testdata/policy/" + name + ".xml")
+	data, err := os.ReadFile(corpustest.RootPath(t, "policy/jaxb/testdata/policy/"+name+".xml"))
 	if err != nil {
 		t.Fatalf("read %s: %v", name, err)
 	}
@@ -115,7 +116,7 @@ func unescapeOracleValue(s string) string {
 // accessor sequence against the Go port and asserts each answer matches.
 func TestEtsiValidationPolicyAccessorsMatchOracle(t *testing.T) {
 	policy := loadOraclePolicy(t, "constraint")
-	golden := readGolden(t, "testdata/oracle/constraint.accessors.txt")
+	golden := readGolden(t, corpustest.Path(t, "oracle/constraint.accessors.txt"))
 	seen := make(map[string]bool, len(golden))
 
 	check(t, golden, seen, "PolicyName", policy.PolicyName())

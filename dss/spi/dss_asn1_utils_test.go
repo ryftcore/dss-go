@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -22,7 +23,7 @@ import (
 // OpenJDK 21 (testdata/asn1/kat.txt): one "key|value" pair per line.
 func dssASN1UtilsTestKAT(t *testing.T) map[string]string {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "asn1", "kat.txt"))
+	file, err := os.Open(corpustest.Path(t, filepath.Join("asn1", "kat.txt")))
 	if err != nil {
 		t.Fatalf("unable to open the known-answer file: %v", err)
 	}

@@ -119,7 +119,7 @@ func fuzzSeeds(t testing.TB) [][]byte {
 		"pdf-2.0.pdf",
 		"validation/DSS-3226.pdf",
 	} {
-		b, err := os.ReadFile(filepath.Join(corpusDir(), filepath.FromSlash(name)))
+		b, err := os.ReadFile(filepath.Join(corpusDir(t), filepath.FromSlash(name)))
 		if err == nil {
 			seeds = append(seeds, b)
 		}

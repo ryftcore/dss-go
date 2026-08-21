@@ -5,7 +5,7 @@
 // testdata/oracle/gen/FullCorpusOracle.java, over EVERY file (273, no
 // exclusions - "no quarantines: every row") under the upstream
 // dss-validation diag-data corpus
-// (/home/user/dss-upstream/dss-validation/src/test/resources/diag-data/**),
+// (dss-validation/src/test/resources/diag-data/** upstream),
 // vendored byte-identically under testdata/oracle/full-corpus/ (relative
 // paths preserved, forward-slash keyed).
 //
@@ -65,14 +65,13 @@ import (
 	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	simplereportjaxb "github.com/utain/esig/dss/simplereport/jaxb"
 	validationpolicy "github.com/utain/esig/dss/validation/policy"
 )
-
-const fullCorpusDir = "testdata/oracle/full-corpus"
 
 var fullCorpusValidationTime = time.UnixMilli(1700000000000).UTC()
 
@@ -132,7 +131,7 @@ func TestFullCorpusExecutorOracle(t *testing.T) {
 		row := row
 		t.Run(row.File, func(t *testing.T) {
 			totalRows++
-			data, err := os.ReadFile(filepath.Join(fullCorpusDir, row.File))
+			data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "full-corpus", row.File)))
 			if err != nil {
 				t.Fatalf("reading %s: %v", row.File, err)
 			}
@@ -423,7 +422,7 @@ var knownFileLevelDivergences = map[string]string{}
 // file name so the subtest order is stable across runs.
 func readFullCorpusOracle(t *testing.T) []fullCorpusRow {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "full_corpus.jsonl"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "full_corpus.jsonl")))
 	if err != nil {
 		t.Fatalf("reading the full-corpus oracle dump: %v", err)
 	}

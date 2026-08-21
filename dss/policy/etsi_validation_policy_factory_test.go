@@ -9,6 +9,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -25,7 +26,7 @@ func TestEtsiValidationPolicyFactoryLoadDefaultValidationPolicy(t *testing.T) {
 	// The embedded default policy must be byte-identical to upstream's
 	// src/main/resources/policy/constraint.xml (also mirrored at
 	// jaxb/testdata/policy/constraint.xml).
-	onDisk, err := os.ReadFile("jaxb/testdata/policy/constraint.xml")
+	onDisk, err := os.ReadFile(corpustest.RootPath(t, "policy/jaxb/testdata/policy/constraint.xml"))
 	if err != nil {
 		t.Fatalf("read jaxb/testdata/policy/constraint.xml: %v", err)
 	}

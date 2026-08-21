@@ -14,6 +14,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The block KAT for the qualification package. Every row of
@@ -207,7 +208,7 @@ var javaStatusToGo = map[string]jaxb.XmlStatus{
 
 func readQualBlockOracle(t *testing.T) []*qualBlockRow {
 	t.Helper()
-	f, err := os.Open(qualBlockOracleLog)
+	f, err := os.Open(corpustest.Path(t, "oracle/qual_block.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

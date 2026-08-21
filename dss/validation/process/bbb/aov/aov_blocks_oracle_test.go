@@ -8,6 +8,7 @@ import (
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The AOV block KAT: every row of testdata/oracle/aov_blocks.jsonl is the XmlAOV
@@ -19,7 +20,7 @@ import (
 // XmlCryptographicValidation members.
 
 func TestAovBlocksAgainstJavaOracle(t *testing.T) {
-	rows := loadAovRows(t, "testdata/oracle/aov_blocks.jsonl")
+	rows := loadAovRows(t, corpustest.Path(t, "oracle/aov_blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

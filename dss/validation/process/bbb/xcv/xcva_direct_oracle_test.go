@@ -7,6 +7,7 @@ import (
 
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 )
@@ -45,7 +46,7 @@ func (c *singleRACChain) InitChain() {
 }
 
 func TestRacChecksAgainstJavaOracle(t *testing.T) {
-	rows := loadXcvaRows(t, "testdata/oracle/xcva_direct.jsonl")
+	rows := loadXcvaRows(t, corpustest.Path(t, "oracle/xcva_direct.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

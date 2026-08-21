@@ -1,8 +1,7 @@
 // KAT test for asice_with_xades_manifest_builder.go: the expected XML below is dumped verbatim
 // from a Java oracle run over dss-asic-xades 6.5.RC1 (+ dependencies, all installed from the
-// upstream source tree at /home/user/dss-upstream via `mvn -o install`) against
-// ASiCEWithXAdESManifestBuilder#build() for the fixture built below - see
-// /home/user/esig/dss/asic/xades's S7_BRIEF.md task note and the CADSIGN chunk's
+// upstream source tree via `mvn -o install`) against
+// ASiCEWithXAdESManifestBuilder#build() for the fixture built below - see the CADSIGN chunk's
 // manifest_kat_test.go for the established pattern. The manifest.xml this builder produces is
 // signed by the XAdES signature, so the comparison is on exact bytes: element order, namespace
 // declaration, attribute order, MimeType strings and the default-MimeType fallback all included.

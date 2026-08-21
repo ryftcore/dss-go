@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // TestSchemaElementsAndAttributesAreBound is the XSD-completeness sweep:
@@ -17,7 +19,7 @@ import (
 // but it does catch a name the model never mentions at all - the class of
 // drift most likely to happen when SimpleReport.xsd changes upstream.
 func TestSchemaElementsAndAttributesAreBound(t *testing.T) {
-	xsd, err := os.ReadFile(filepath.Join("testdata", "xsd", "SimpleReport.xsd"))
+	xsd, err := os.ReadFile(corpustest.Path(t, filepath.Join("xsd", "SimpleReport.xsd")))
 	if err != nil {
 		t.Fatal(err)
 	}

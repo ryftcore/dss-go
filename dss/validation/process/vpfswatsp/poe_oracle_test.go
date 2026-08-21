@@ -10,6 +10,7 @@ import (
 
 	"github.com/utain/esig/dss/diagnostic"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The POE KAT: every row of testdata/oracle/poe.jsonl is what upstream's
@@ -22,9 +23,11 @@ import (
 // sharing a production time, broken message imprints, orphan tokens.
 
 const (
-	poeCorpusDir = "../../../diagnostic/jaxb/testdata/oracle"
-	poeDumpDir   = "testdata/dd"
-	poeOracleLog = "testdata/oracle/poe.jsonl"
+	// poeCorpusRoot is the module-root-relative path (inside the external
+	// corpus/ tree, see internal/corpustest) of the marshal-parity
+	// diagnostic-data corpus.
+	poeCorpusRoot = "diagnostic/jaxb/testdata/oracle"
+	poeDumpDir    = "testdata/dd"
 )
 
 var poeControlTime = time.Unix(1704067200, 0).UTC()
@@ -352,7 +355,7 @@ func poeSign(value int) int {
 
 func readPOEOracle(t *testing.T) []*poeRow {
 	t.Helper()
-	file, err := os.Open(poeOracleLog)
+	file, err := os.Open(corpustest.Path(t, "oracle/poe.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}
@@ -380,18 +383,21 @@ func readPOEOracle(t *testing.T) []*poeRow {
 
 func loadPOEDump(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	for _, dir := range []string{poeCorpusDir, poeDumpDir} {
-		path := filepath.Join(dir, name)
-		data, err := os.ReadFile(path)
-		if err != nil {
-			continue
-		}
-		jaxbData, err := diagnosticjaxb.Unmarshal(data)
-		if err != nil {
-			t.Fatalf("unmarshal %s: %v", path, err)
-		}
-		return diagnostic.NewDiagnosticData(jaxbData)
+	// poeDumpDir (this package's own synthetic dumps) is checked first and
+	// stays in-package; anything else is a member of the marshal-parity
+	// corpus, which lives in the external corpus/ tree.
+	path := filepath.Join(poeDumpDir, name)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		path = corpustest.RootPath(t, filepath.Join(poeCorpusRoot, name))
+		data, err = os.ReadFile(path)
 	}
-	t.Fatalf("dump %s not found", name)
-	return nil
+	if err != nil {
+		t.Fatalf("read %s: %v", name, err)
+	}
+	jaxbData, err := diagnosticjaxb.Unmarshal(data)
+	if err != nil {
+		t.Fatalf("unmarshal %s: %v", path, err)
+	}
+	return diagnostic.NewDiagnosticData(jaxbData)
 }

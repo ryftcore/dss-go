@@ -14,6 +14,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/policy"
@@ -26,13 +27,15 @@ import (
 //
 // See testdata/README.md for what the corpora are and how to regenerate them.
 
-// xcvaCorpusDir is the marshal-parity diagnostic-data corpus the oracles were run
-// over; xcvaDumpDir holds the synthetic dumps XcvaSyntheticDumps wrote next to
-// them. A row's "file" is the plain dump name for the first and "dd/<name>" for
+// xcvaCorpusRoot is the module-root-relative path (inside the external
+// corpus/ tree, see internal/corpustest) of the marshal-parity
+// diagnostic-data corpus the oracles were run over; xcvaDumpDir holds the
+// synthetic dumps XcvaSyntheticDumps wrote next to them, checked in locally.
+// A row's "file" is the plain dump name for the first and "dd/<name>" for
 // the second.
 const (
-	xcvaCorpusDir = "../../../../diagnostic/jaxb/testdata/oracle"
-	xcvaDumpDir   = "testdata/dd"
+	xcvaCorpusRoot = "diagnostic/jaxb/testdata/oracle"
+	xcvaDumpDir    = "testdata/dd"
 )
 
 // xcvaCurrentTime is the fixed validation time the oracles ran with,
@@ -128,9 +131,11 @@ func loadXcvaRows(t *testing.T, path string) []*xcvaRow {
 // corpus.
 func loadXcvaDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	path := filepath.Join(xcvaCorpusDir, name)
+	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
 		path = filepath.Join(xcvaDumpDir, rest)
+	} else {
+		path = corpustest.RootPath(t, filepath.Join(xcvaCorpusRoot, name))
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

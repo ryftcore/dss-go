@@ -11,6 +11,7 @@ import (
 	"github.com/utain/esig/dss/diagnostic"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The trust-service KAT for the qualification package: every row of
@@ -140,7 +141,7 @@ func str(p *string) string {
 
 func readQualTrustOracle(t *testing.T) []*qualTrustRow {
 	t.Helper()
-	f, err := os.Open(qualTrustOracleLog)
+	f, err := os.Open(corpustest.Path(t, "oracle/qual_trust.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

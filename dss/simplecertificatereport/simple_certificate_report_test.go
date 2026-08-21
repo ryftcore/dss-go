@@ -1,17 +1,27 @@
 package simplecertificatereport
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/simplecertificatereport/jaxb"
 )
 
+// loadOracle reads a Java-produced oracle dump from the sibling jaxb
+// package's testdata/oracle. Most of these fixtures ship in-package; a few
+// larger ones live in the external corpus/ instead, so a local miss falls
+// through to corpustest.
 func loadOracle(t *testing.T, name string) *SimpleCertificateReport {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("jaxb", "testdata", "oracle", name))
+	local := filepath.Join("jaxb", "testdata", "oracle", name)
+	data, err := os.ReadFile(local)
+	if errors.Is(err, os.ErrNotExist) {
+		data, err = os.ReadFile(corpustest.RootPath(t, "simplecertificatereport/jaxb/testdata/oracle/"+name))
+	}
 	if err != nil {
 		t.Fatal(err)
 	}

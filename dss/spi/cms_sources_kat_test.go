@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/internal/cmscore"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 )
@@ -23,7 +24,7 @@ import (
 // cmsSourcesKatFixture parses the fixture and returns the CMS plus its single signer.
 func cmsSourcesKatFixture(t *testing.T) (*cmscore.CMS, *cmscore.SignerInfo) {
 	t.Helper()
-	encoded, err := os.ReadFile("testdata/cmssrc/cades-full.p7s")
+	encoded, err := os.ReadFile(corpustest.Path(t, "cmssrc/cades-full.p7s"))
 	if err != nil {
 		t.Fatalf("reading the fixture: %v", err)
 	}

@@ -18,10 +18,13 @@
 package cades
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/alert"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -33,6 +36,18 @@ import (
 func init() {
 	validationpolicy.RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
 	validationpolicy.RegisterCryptographicSuiteFactory(cryptoxml.NewCryptographicSuiteXmlFactory())
+}
+
+// cadesFixturePath resolves rel (relative to this package's testdata/) to a
+// real file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func cadesFixturePath(t *testing.T, rel string) string {
+	t.Helper()
+	local := filepath.Join("testdata", rel)
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, rel)
 }
 
 // permissiveCertificateVerifier builds a CertificateVerifier that silently tolerates the missing
@@ -56,15 +71,15 @@ func TestCMSDocumentValidator_Smoke(t *testing.T) {
 		file           string
 		wantSignatures int
 	}{
-		{"enveloping-single", "testdata/upstream/validation/cades-bes-signeddata-enveloping.p7m", 1},
-		{"detached-single", "testdata/upstream/validation/cades-bes-signeddata-detached.p7s", 1},
-		{"baseline-b", "testdata/upstream/validation/Signature-C-B-B-8.p7m", 1},
-		{"counter-signature", "testdata/upstream/validation/counterSig.p7m", 2},
+		{"enveloping-single", "upstream/validation/cades-bes-signeddata-enveloping.p7m", 1},
+		{"detached-single", "upstream/validation/cades-bes-signeddata-detached.p7s", 1},
+		{"baseline-b", "upstream/validation/Signature-C-B-B-8.p7m", 1},
+		{"counter-signature", "upstream/validation/counterSig.p7m", 2},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doc, err := model.NewFileDocument(tt.file)
+			doc, err := model.NewFileDocument(cadesFixturePath(t, tt.file))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
@@ -119,7 +134,7 @@ func TestCMSDocumentValidator_Smoke(t *testing.T) {
 }
 
 func TestCMSDocumentValidatorFactory_RegistersItself(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/cades-bes-signeddata-enveloping.p7m")
+	doc, err := model.NewFileDocument(cadesFixturePath(t, "upstream/validation/cades-bes-signeddata-enveloping.p7m"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}

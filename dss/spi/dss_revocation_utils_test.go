@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/utils"
 )
@@ -23,7 +24,7 @@ import (
 // from BouncyCastle 1.78.1 for the OCSP responses OpenSSL 3.0.13 produced.
 func dssRevocationUtilsTestKAT(t *testing.T) map[string]string {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "asn1", "kat_ocsp.txt"))
+	file, err := os.Open(corpustest.Path(t, filepath.Join("asn1", "kat_ocsp.txt")))
 	if err != nil {
 		t.Fatalf("unable to open the known-answer file: %v", err)
 	}

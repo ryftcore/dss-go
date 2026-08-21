@@ -10,6 +10,7 @@ import (
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 )
 
@@ -422,7 +423,7 @@ func toOracleMessage(message *jaxb.XmlMessage) *oracleMessage {
 }
 
 func TestChainSemanticsAgainstJavaOracle(t *testing.T) {
-	rows := loadOracleRows(t, "testdata/oracle/chain_semantics.jsonl")
+	rows := loadOracleRows(t, corpustest.Path(t, "oracle/chain_semantics.jsonl"))
 	i18nProvider := i18n.NewI18nProvider()
 
 	for _, sc := range chainScenarios() {

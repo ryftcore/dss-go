@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // oracleCase is one row of testdata/jose4j_oracle.tsv.
@@ -25,7 +27,7 @@ type oracleCase struct {
 // silently skips when its vectors are missing is not a KAT.
 func loadOracle(t *testing.T) []oracleCase {
 	t.Helper()
-	f, err := os.Open("testdata/jose4j_oracle.tsv")
+	f, err := os.Open(corpustest.Path(t, "jose4j_oracle.tsv"))
 	if err != nil {
 		t.Fatalf("cannot open the jose4j oracle: %v", err)
 	}
