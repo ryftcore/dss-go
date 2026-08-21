@@ -8,6 +8,14 @@ import "fmt"
 // NOTE: all message tags shall be listed in the dss-messages.properties file.
 type MessageTag string
 
+// MessageTag constants, one per message key in dss-messages.properties.
+// Each corresponds to a single ETSI EN 319 102-1 validation building-block
+// check (e.g. "BBB_FC_IEFF" is a format-checking sub-check); the "_ANS"
+// suffix (and numbered "_ANS1", "_ANS2", ...) marks the negative-answer
+// variant of the message immediately preceding it. Individual constants are
+// intentionally undocumented beyond their name — see dss-messages.properties
+// (embedded via I18nProvider) for the exact human-readable text each
+// resolves to.
 const (
 	MessageTag_BBB_FC_IEFF                                     MessageTag = "BBB_FC_IEFF"
 	MessageTag_BBB_FC_IEFF_ANS                                 MessageTag = "BBB_FC_IEFF_ANS"

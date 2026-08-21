@@ -15,6 +15,14 @@ import (
 // SD-DSS framework.
 type SignatureLevel string
 
+// SignatureLevel constants, grouped by underlying signature format (XAdES,
+// CAdES, PAdES/PKCS7, JAdES, CB_AdES/CBOR). Baseline profiles
+// (BASELINE_B/T/LT/LTA) are the ETSI EN 319 122/132/142 recommended
+// profiles; the non-baseline levels (e.g. XAdES_C, XAdES_X) are the legacy
+// ETSI TS 101 903/CAdES-equivalent extended forms. The _NOT_ETSI values mark
+// a signature container whose content is not recognized as any supported
+// AdES form, and SignatureLevel_UNKNOWN marks a level DSS could not
+// determine.
 const (
 	SignatureLevel_XML_NOT_ETSI       SignatureLevel = "XML_NOT_ETSI"
 	SignatureLevel_XAdES_BES          SignatureLevel = "XAdES_BES"

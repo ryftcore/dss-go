@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // XAdES122Element defines elements for a XAdES 1.2.2 schema.
 type XAdES122Element string
 
+// XAdES122Element constants, one per XAdES 1.2.2 schema element name.
 const (
 	XAdES122Element_ALL_DATA_OBJECTS_TIMESTAMP        XAdES122Element = "ALL_DATA_OBJECTS_TIMESTAMP"
 	XAdES122Element_ALL_SIGNED_DATA_OBJECTS           XAdES122Element = "ALL_SIGNED_DATA_OBJECTS"

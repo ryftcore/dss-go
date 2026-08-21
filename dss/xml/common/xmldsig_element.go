@@ -7,6 +7,7 @@ package common
 // lookup table.
 type XMLDSigElement string
 
+// XMLDSigElement constants, one per XMLDSig schema element name.
 const (
 	XMLDSigElement_CANONICALIZATION_METHOD XMLDSigElement = "CANONICALIZATION_METHOD"
 	XMLDSigElement_DIGEST_METHOD           XMLDSigElement = "DIGEST_METHOD"

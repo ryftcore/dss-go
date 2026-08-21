@@ -1,8 +1,9 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/timestamp/DetachedTimestampValidator.java (DSS 6.5.RC1).
 //
-// dss-validation's SignedDocumentValidator (the Java superclass) lives in
-// /home/user/esig/dss/validation (SignedDocumentValidatorBase); this file embeds it exactly as
-// DetachedTimestampAnalyzer embeds analyzer.AbstractDocumentAnalyzer.
+// dss-validation's SignedDocumentValidator (the Java superclass) has its Go
+// counterpart in this module's validation package (SignedDocumentValidatorBase);
+// this file embeds it exactly as DetachedTimestampAnalyzer embeds
+// analyzer.AbstractDocumentAnalyzer.
 package timestamp
 
 import (

@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // TrustedListElement is a list of TS 119 612 XSD Trusted List elements.
 type TrustedListElement string
 
+// TrustedListElement constants, one per TS 119 612 Trusted List XSD element name.
 const (
 	TrustedListElement_ADDITIONAL_INFORMATION         TrustedListElement = "ADDITIONAL_INFORMATION"
 	TrustedListElement_ADDITIONAL_SERVICE_INFORMATION TrustedListElement = "ADDITIONAL_SERVICE_INFORMATION"

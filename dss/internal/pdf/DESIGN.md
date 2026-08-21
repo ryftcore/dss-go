@@ -1256,7 +1256,7 @@ CP=$M2/org/apache/pdfbox/pdfbox/3.0.7/pdfbox-3.0.7.jar\
 :$M2/commons-logging/commons-logging/1.3.5/commons-logging-1.3.5.jar
 javac -nowarn -cp "$CP" -d /tmp/pdforacle PdfOracle.java
 java -Dorg.slf4j.simpleLogger.defaultLogLevel=off -cp "$CP:/tmp/pdforacle" \
-     PdfOracle /home/user/dss-upstream/dss-pades/src/test/resources <golden dir> <manifest>
+     PdfOracle <path to your upstream DSS checkout>/dss-pades/src/test/resources <golden dir> <manifest>
 ```
 
 The pdfbox 3.0.7 jars are fetched once with a two-dependency `pom.xml` and

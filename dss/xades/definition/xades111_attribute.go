@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // XAdES111Attribute defines attributes for a XAdES 1.1.1 schema.
 type XAdES111Attribute string
 
+// XAdES111Attribute constants, one per XAdES 1.1.1 schema attribute name.
 const (
 	XAdES111Attribute_ID               XAdES111Attribute = "ID"
 	XAdES111Attribute_OBJECT_REFERENCE XAdES111Attribute = "OBJECT_REFERENCE"

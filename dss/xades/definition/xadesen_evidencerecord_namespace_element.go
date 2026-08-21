@@ -7,6 +7,8 @@ import "github.com/utain/esig/dss/xml/common"
 // "http://uri.etsi.org/19132/v1.1.1#" XAdES Evidence Record container namespace (ETSI TS 119 132-3).
 type XAdESEvidencerecordNamespaceElement string
 
+// XAdESEvidencerecordNamespaceElement constants, one per element name in the
+// XAdES Evidence Record container namespace.
 const (
 	XAdESEvidencerecordNamespaceElement_ASN1_EVIDENCE_RECORD     XAdESEvidencerecordNamespaceElement = "ASN1_EVIDENCE_RECORD"
 	XAdESEvidencerecordNamespaceElement_EVIDENCE_RECORD          XAdESEvidencerecordNamespaceElement = "EVIDENCE_RECORD"

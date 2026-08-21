@@ -6,6 +6,7 @@ import "github.com/utain/esig/dss/xml/common"
 // XAdES132Attribute defines attributes for a XAdES 1.3.2 schema.
 type XAdES132Attribute string
 
+// XAdES132Attribute constants, one per XAdES 1.3.2 schema attribute name.
 const (
 	XAdES132Attribute_ENCODING         XAdES132Attribute = "ENCODING"
 	XAdES132Attribute_ID               XAdES132Attribute = "ID"

@@ -23,6 +23,8 @@ func NewLoTEEnumLoader() *LoTEEnumLoader {
 	return &LoTEEnumLoader{}
 }
 
+// ListTypeFromURI implements LoTELoader by matching uri (case-insensitively)
+// against the built-in LoTETypeEnum values.
 func (l *LoTEEnumLoader) ListTypeFromURI(uri string) ListType {
 	for _, t := range LoTETypeEnumValues() {
 		if strings.EqualFold(uri, t.URI()) {
@@ -32,6 +34,9 @@ func (l *LoTEEnumLoader) ListTypeFromURI(uri string) ListType {
 	return nil
 }
 
+// ServiceTypeIdentifierFromURI implements LoTELoader by matching uri
+// (case-insensitively) against the built-in LoTEServiceTypeIdentifierEnum
+// values.
 func (l *LoTEEnumLoader) ServiceTypeIdentifierFromURI(uri string) LoTEServiceTypeIdentifier {
 	for _, sti := range LoTEServiceTypeIdentifierEnumValues() {
 		if strings.EqualFold(uri, sti.URI()) {
@@ -41,6 +46,8 @@ func (l *LoTEEnumLoader) ServiceTypeIdentifierFromURI(uri string) LoTEServiceTyp
 	return nil
 }
 
+// ServiceStatusFromURI implements LoTELoader by matching uri
+// (case-insensitively) against the built-in LoTEServiceStatusEnum values.
 func (l *LoTEEnumLoader) ServiceStatusFromURI(uri string) LoTEServiceStatus {
 	for _, status := range LoTEServiceStatusEnumValues() {
 		if strings.EqualFold(uri, status.URI()) {
@@ -50,6 +57,9 @@ func (l *LoTEEnumLoader) ServiceStatusFromURI(uri string) LoTEServiceStatus {
 	return nil
 }
 
+// CertificateApprovalStatusFromLabel implements LoTELoader by matching label
+// (case-insensitively) against the built-in CertificateApprovalStatusEnum
+// values.
 func (l *LoTEEnumLoader) CertificateApprovalStatusFromLabel(label string) CertificateApprovalStatus {
 	for _, certApprovalStatus := range CertificateApprovalStatusEnumValues() {
 		if strings.EqualFold(label, certApprovalStatus.Label()) {

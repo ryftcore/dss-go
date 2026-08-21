@@ -1,18 +1,12 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/reports/Reports.java
 // (DSS 6.5.RC1).
 //
-// NOTE (flagged for the integrator - see S8B_BRIEF.md's Package layout
-// section): this file depends on the specs-validation-report module's Go
-// port (dss/validationreport + dss/validationreport/jaxb, exposing
-// ValidationReportFacade and jaxb.ValidationReportType), which is a
-// separate manifest entry in this same phase and had not landed in the
-// repository at the time this file was written. The import path and API
-// shape below follow the brief's binding package-layout spec exactly
-// (mirroring ValidationReportFacade.newFacade().marshall(T,boolean) as a
-// Marshal(T) (string, error) method, same as every other report facade in
-// this package). This package will not build until that dependency lands;
-// do not silently stub it out - confirm the real package/API name matches
-// before relying on this file.
+// This file depends on the specs-validation-report module's Go port
+// (dss/validationreport + dss/validationreport/jaxb, exposing
+// ValidationReportFacade and jaxb.ValidationReportType). The import path and
+// API shape below mirror ValidationReportFacade.newFacade().marshall(T,
+// boolean) as a Marshal(T) (string, error) method, the same shape every
+// other report facade in this package uses.
 
 package reports
 
