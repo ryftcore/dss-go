@@ -79,7 +79,7 @@ func (s *ExpirationAndSignatureCheckStrategy) isSyncSupported(tlInfo *tslmodel.T
 		if parsingCacheInfo, ok := tlInfo.TLParsingCacheInfo(); ok && parsingCacheInfo.IsResultExist() {
 			currentDate := time.Now()
 			nextUpdateDate := parsingCacheInfo.NextUpdateDate()
-			if currentDate.After(nextUpdateDate) {
+			if nextUpdateDate.IsZero() || currentDate.After(nextUpdateDate) {
 				return false
 			}
 		}
