@@ -131,7 +131,7 @@ func (s *JAdESCertificateSource) jadesCertificateSourceFindTokensFromRefs(certif
 
 func (s *JAdESCertificateSource) extractX5T() {
 	base64UrlSHA1Certificate := s.jws.ProtectedHeaderValueAsString(jose.HeaderX509CertificateThumbprint)
-	if utils.IsStringNotEmpty(base64UrlSHA1Certificate) {
+	if utils.IsStringNotEmpty(base64UrlSHA1Certificate) { //nolint:staticcheck // mirrors upstream JAdESCertificateSource#extractX5T: the guard is kept because Java's body is `LOG.warn("Found {} with value {} but not supported by the JAdES standard", ...)` only.
 		// Upstream builds a Digest(SHA1, ...) purely to log "Found {} with value {} but not
 		// supported by the JAdES standard"; with slf4j dropped per PORTING.md there is nothing
 		// left for this branch to do.

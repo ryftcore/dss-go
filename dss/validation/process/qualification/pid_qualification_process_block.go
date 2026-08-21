@@ -182,7 +182,7 @@ func (c *PIDQualificationProcessBlock) InitChain() {
 						item = item.SetNextItem(c.pidProviderAtIssuanceTime(certificateApprovalStatusAtIssuanceTime))
 
 						certificateApprovalStatusAtValidationTime = c.getCertificateApprovalStatus(certApprovalStatusAtValidationTimeResult)
-						item = item.SetNextItem(c.pidProviderAtValidationTime(certificateApprovalStatusAtValidationTime))
+						item = item.SetNextItem(c.pidProviderAtValidationTime(certificateApprovalStatusAtValidationTime)) //nolint:staticcheck // mirrors upstream PIDQualificationProcessBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 					}
 				}
 			}

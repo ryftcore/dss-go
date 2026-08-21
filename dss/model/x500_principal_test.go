@@ -274,10 +274,12 @@ func TestX500PrincipalCachesAndKeepsTheEncoding(t *testing.T) {
 		t.Errorf("Encoded() must return the DER unchanged, got %x", got)
 	}
 	// The second call must come from the cache and produce the same string.
-	if principal.RFC2253Name() != principal.RFC2253Name() {
+	firstRFC2253Name, secondRFC2253Name := principal.RFC2253Name(), principal.RFC2253Name()
+	if firstRFC2253Name != secondRFC2253Name {
 		t.Error("RFC2253Name() is not stable")
 	}
-	if principal.Canonical() != principal.Canonical() {
+	firstCanonical, secondCanonical := principal.Canonical(), principal.Canonical()
+	if firstCanonical != secondCanonical {
 		t.Error("Canonical() is not stable")
 	}
 	if principal.String() != principal.RFC2253Name() {

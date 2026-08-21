@@ -80,7 +80,7 @@ func (c *CertifiedAttributesV2) AttributeCertificates() [][]byte { return c.attr
 func (c *CertifiedAttributesV2) DER() []byte {
 	var body []byte
 	for _, attributeCertificate := range c.attributeCertificates {
-		body = append(body, asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, attributeCertificate)...)
+		body = append(body, asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, attributeCertificate)...) //nolint:staticcheck // mirrors upstream CertifiedAttributesV2#toASN1Primitive: `new DERTaggedObject(0, (AttributeCertificate) values[i])` - the `0` is the ASN.1 context tag number, kept explicit.
 	}
 	return asn1ber.WriteSequence(body)
 }

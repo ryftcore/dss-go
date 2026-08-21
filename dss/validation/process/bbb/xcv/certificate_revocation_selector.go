@@ -180,7 +180,7 @@ func (c *CertificateRevocationSelector) InitChain() {
 		item = overrides.AcceptableRevocationDataAvailable()
 		c.FirstItem = item
 	} else {
-		item = item.SetNextItem(overrides.AcceptableRevocationDataAvailable())
+		item = item.SetNextItem(overrides.AcceptableRevocationDataAvailable()) //nolint:staticcheck // mirrors upstream CertificateRevocationSelector#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 }
 

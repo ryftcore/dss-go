@@ -153,7 +153,10 @@ func TestFindXRefNearPicksTheClosestCandidate(t *testing.T) {
 
 func TestBruteForceGenerationIsBounded(t *testing.T) {
 	// A generation number above 65535 cannot be one, so the scan must not record
-	// it (and must not panic converting it).
+	// it (and must not panic converting it). ObjectKey.Gen is a uint16, so a
+	// recorded out-of-range generation could only ever show up folded down into
+	// range - 999999 truncated to a uint16 is 16959 - which is what this asserts
+	// against: object 1 must appear under its real generation, 0, and no other.
 	var buf bytes.Buffer
 	buf.WriteString("%PDF-1.4\n")
 	buf.WriteString("1 999999 obj\n<< >>\nendobj\n")
@@ -162,7 +165,7 @@ func TestBruteForceGenerationIsBounded(t *testing.T) {
 	buf.WriteString("%%EOF\n")
 	d := mustOpen(t, buf.Bytes())
 	for _, k := range d.ObjectKeys() {
-		if k.Gen > 65535 {
+		if k.Num == 1 && k.Gen != 0 {
 			t.Errorf("recorded an impossible generation: %v", k)
 		}
 	}

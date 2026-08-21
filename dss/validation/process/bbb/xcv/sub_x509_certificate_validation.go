@@ -289,9 +289,9 @@ func (c *SubX509CertificateValidation) InitChain() {
 			revocationIssuerCertificate := latestCertificateRevocation.SigningCertificate()
 			if revocationIssuerCertificate != nil {
 				if c.isTrustAnchor(revocationIssuerCertificate, enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT) {
-					item = item.SetNextItem(c.revocationDataIssuerTrusted(revocationIssuerCertificate))
+					item = item.SetNextItem(c.revocationDataIssuerTrusted(revocationIssuerCertificate)) //nolint:staticcheck // mirrors upstream SubX509CertificateValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 				} else {
-					item = item.SetNextItem(c.revocationIssuerValidityRange(latestCertificateRevocation, c.subContext, c.currentTime))
+					item = item.SetNextItem(c.revocationIssuerValidityRange(latestCertificateRevocation, c.subContext, c.currentTime)) //nolint:staticcheck // mirrors upstream SubX509CertificateValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 				}
 			}
 		}

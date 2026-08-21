@@ -313,7 +313,7 @@ func (c *PastSignatureValidation) InitChain() {
 	 * 7) The building block shall return the indication and sub-indication contained
 	 * in sig_cert_revocation_poe-status.
 	 */
-	item = item.SetNextItem(c.pastRevocationDataValidationConclusive(sigCertRevocationPoeStatus))
+	item = item.SetNextItem(c.pastRevocationDataValidationConclusive(sigCertRevocationPoeStatus)) //nolint:staticcheck // mirrors upstream PastSignatureValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 }
 

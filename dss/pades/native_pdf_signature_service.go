@@ -598,7 +598,7 @@ func nativePDFSignatureServiceMatch(document *pdf.Document, candidate, expected 
 	for _, key := range expected.Keys() {
 		targetObject := document.Resolve(expected.GetRaw(key))
 		currentObject := document.Resolve(candidate.GetRaw(key))
-		if targetObject != nil && !nativePdfObjectEquals(targetObject, currentObject) {
+		if !nativePdfIsNull(targetObject) && !nativePdfObjectEquals(targetObject, currentObject) {
 			return false
 		}
 	}
@@ -731,14 +731,15 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 			revisions = append(revisions, newRevision)
 		}
 
-		if previousRevision != nil {
-			if revisionReader, err := NewNativePdfDocumentReader(previousRevision, pwd); err == nil {
-				// check whether there is a previous update of the DSS dictionary and create a new
-				// revision if needed
-				revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
-					revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
-				_ = revisionReader.Close()
-			}
+		// No nil guard on previousRevision: upstream has none either, and
+		// PAdESUtilsGetPreviousRevision, like PAdESUtils#getPreviousRevision, falls back to an
+		// empty document rather than returning nil.
+		if revisionReader, err := NewNativePdfDocumentReader(previousRevision, pwd); err == nil {
+			// check whether there is a previous update of the DSS dictionary and create a new
+			// revision if needed
+			revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
+				revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
+			_ = revisionReader.Close()
 		}
 	}
 

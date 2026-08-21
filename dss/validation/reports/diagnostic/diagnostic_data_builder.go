@@ -398,8 +398,8 @@ func (b *DiagnosticDataBuilder) buildXmlRevocations(revocations []validation.Any
 			if uniqueIds[id] {
 				continue
 			}
-			xmlRevocation, ok := b.xmlRevocationsMap[id]
-			if !ok {
+			xmlRevocation := b.xmlRevocationsMap[id]
+			if xmlRevocation == nil {
 				xmlRevocation = b.BuildDetachedXmlRevocation(revocationToken)
 				b.xmlRevocationsMap[id] = xmlRevocation
 				builtRevocations = append(builtRevocations, xmlRevocation)

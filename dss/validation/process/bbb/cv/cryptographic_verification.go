@@ -209,7 +209,7 @@ func (c *CryptographicVerification) InitChain() {
 		item = signatureIntact
 		c.FirstItem = item
 	} else {
-		item = item.SetNextItem(signatureIntact)
+		item = item.SetNextItem(signatureIntact) //nolint:staticcheck // mirrors upstream CryptographicVerification#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 
 }

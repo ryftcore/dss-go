@@ -124,7 +124,7 @@ func (c *CertificateApprovalStatusAtTimeBlock) InitChain() {
 
 	serviceStatusUri := c.getServiceStatusUri(c.filteredServices)
 	if serviceStatusUri != nil {
-		item = item.SetNextItem(c.trustedServiceStatusKnown(*serviceStatusUri))
+		item = item.SetNextItem(c.trustedServiceStatusKnown(*serviceStatusUri)) //nolint:staticcheck // mirrors upstream CertificateApprovalStatusAtTimeBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 	// NOTE: status can be null, validate successfully in this case
 }

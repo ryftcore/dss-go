@@ -171,7 +171,7 @@ func (c *CertificateQualificationBlock) InitChain() {
 		}
 	}
 
-	item = item.SetNextItem(c.isAcceptableTLPresent(acceptableTLUrls))
+	item = item.SetNextItem(c.isAcceptableTLPresent(acceptableTLUrls)) //nolint:staticcheck // mirrors upstream CertificateQualificationBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	if len(acceptableTLUrls) > 0 {
 

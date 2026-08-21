@@ -137,7 +137,7 @@ func (c *AbstractQWACValidationProcessBlock) InitChain() {
 	// The web browser may also perform further checks on the security and
 	// authenticity of the QWAC as appropriate (e.g. for checking revocation
 	// status).
-	item = item.SetNextItem(c.isAcceptableBuildingBlockConclusion())
+	item = item.SetNextItem(c.isAcceptableBuildingBlockConclusion()) //nolint:staticcheck // mirrors upstream AbstractQWACValidationProcessBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 }
 
 func (c *AbstractQWACValidationProcessBlock) certificateQualificationConclusive() process.ChainItem[*jaxb.XmlValidationQWACProcess] {

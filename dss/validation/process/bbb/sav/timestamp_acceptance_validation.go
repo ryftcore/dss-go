@@ -65,7 +65,7 @@ func (c *TimestampAcceptanceValidation) InitChain() {
 
 	}
 
-	item = c.cryptographic(item)
+	item = c.cryptographic(item) //nolint:staticcheck // mirrors upstream TimestampAcceptanceValidation#initChain: Java closes the chain with the same dead store `item = cryptographic(item);` - the helper links and returns the new tail, which nothing reads.
 }
 
 // tsaGeneralNamePresent ports the private tsaGeneralNamePresent().

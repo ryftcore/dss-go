@@ -45,7 +45,7 @@ func TestFormatReal_R8(t *testing.T) {
 		{1e20, "100000000000000000000"},
 		{595.276, "595.276"},
 		{841.89, "841.89"},
-		{-0.0, "0.0"}, // Go's untyped -0.0 constant is +0
+		{-0.0, "0.0"}, //nolint:staticcheck // deliberate: the case pins that Go's untyped -0.0 constant is +0, which is why the real negative zero is exercised below through math.Copysign.
 		{math.NaN(), "0.0"},
 		{math.Inf(1), "0.0"},
 		{math.Inf(-1), "0.0"},

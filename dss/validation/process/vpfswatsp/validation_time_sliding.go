@@ -283,7 +283,7 @@ func (c *ValidationTimeSliding) InitChain() {
 		item = controlTimeConclusiveCheck
 		c.FirstItem = item
 	} else {
-		item = item.SetNextItem(controlTimeConclusiveCheck)
+		item = item.SetNextItem(controlTimeConclusiveCheck) //nolint:staticcheck // mirrors upstream ValidationTimeSliding#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 }
 

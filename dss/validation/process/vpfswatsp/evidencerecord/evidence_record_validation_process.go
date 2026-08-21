@@ -222,7 +222,7 @@ func (c *EvidenceRecordValidationProcess) InitChain() {
 			c.I18nProvider, c.evidenceRecord, lowestPOETime, c.policy)
 		erAOV := algorithmObsolescenceValidation.Execute()
 
-		item = item.SetNextItem(c.algorithmsObsolescenceValidation(erAOV, lowestPOETime))
+		item = item.SetNextItem(c.algorithmsObsolescenceValidation(erAOV, lowestPOETime)) //nolint:staticcheck // mirrors upstream EvidenceRecordValidationProcess#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 		if xmlAOV == nil || (c.IsValid(&xmlAOV.XmlConstraintsConclusionContent) && erAOV != nil &&
 			!c.IsValid(&erAOV.XmlConstraintsConclusionContent)) {

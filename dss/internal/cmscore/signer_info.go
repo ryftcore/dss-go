@@ -69,7 +69,7 @@ func (s *SignerIdentifier) DER() []byte {
 	if s.IssuerAndSerialNumber != nil {
 		return s.IssuerAndSerialNumber.DER()
 	}
-	return asn1ber.WriteTLV(asn1ber.ClassContextSpecific|0, s.SubjectKeyIdentifier)
+	return asn1ber.WriteTLV(asn1ber.ClassContextSpecific|0, s.SubjectKeyIdentifier) //nolint:staticcheck // mirrors org.bouncycastle.asn1.cms.SignerIdentifier#toASN1Primitive: `new DERTaggedObject(false, 0, id)` - the `0` is the ASN.1 context tag number of subjectKeyIdentifier [0].
 }
 
 // signerIdentifierFromElement decodes the SignerIdentifier CHOICE.

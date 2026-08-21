@@ -344,7 +344,9 @@ func (d *Document) checkPagesDictionary(node *Dict, seen map[*Dict]bool, depth i
 	kept := make(Array, 0, len(kids))
 	for _, kid := range kids {
 		resolved := d.Resolve(kid)
-		if _, isNull := resolved.(Null); isNull || resolved == nil {
+		// Resolve maps a missing object and a dangling reference to Null{}, so testing for
+		// Null covers every "no such kid" case; it never returns a nil interface.
+		if _, isNull := resolved.(Null); isNull {
 			d.addWarning(WarnKidRemoved, -1, "removed null object from the pages dictionary")
 			continue
 		}

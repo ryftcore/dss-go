@@ -324,7 +324,7 @@ func (c *ValidationProcessForSignaturesWithArchivalData) InitChain() {
 	 * the SVA shall return the indication and sub-indication returned by the Signature Acceptance Validation
 	 * Process.
 	 */
-	item = item.SetNextItem(c.signatureIsAcceptable(bestSignatureTime.Time(), c.context))
+	item = item.SetNextItem(c.signatureIsAcceptable(bestSignatureTime.Time(), c.context)) //nolint:staticcheck // mirrors upstream ValidationProcessForSignaturesWithArchivalData#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	/*
 	 * 10) Data extraction: the SVA shall return the success indication PASSED. In addition, the SVA should return

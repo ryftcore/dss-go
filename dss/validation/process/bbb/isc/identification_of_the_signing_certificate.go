@@ -106,7 +106,7 @@ func (c *IdentificationOfTheSigningCertificate) InitChain() {
 		 */
 		signingCertificateRef := c.token.SigningCertificateReference()
 		if signingCertificateRef != nil && signingCertificateRef.IsIssuerSerialPresent() {
-			item = item.SetNextItem(c.issuerSerialMatch())
+			item = item.SetNextItem(c.issuerSerialMatch()) //nolint:staticcheck // mirrors upstream IdentificationOfTheSigningCertificate#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 		}
 	}
 }

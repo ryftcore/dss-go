@@ -61,7 +61,7 @@ func (c *TimestampFormatChecking) InitChain() {
 				item = c.signedAndTimestampedFilesCovered()
 				c.FirstItem = item
 			} else {
-				item = item.SetNextItem(c.signedAndTimestampedFilesCovered())
+				item = item.SetNextItem(c.signedAndTimestampedFilesCovered()) //nolint:staticcheck // mirrors upstream TimestampFormatChecking#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 			}
 		}
 	}

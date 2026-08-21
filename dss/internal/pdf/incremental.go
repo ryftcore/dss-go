@@ -433,7 +433,10 @@ func (u *Updater) buildTrailer(highest int64, table bool) *Dict {
 // every producer emits and what keeps the increment printable.
 func (u *Updater) trailerID() (Array, bool) {
 	id := u.doc.ID()
-	first, second := id[0], id[1]
+	// The source's id[1] is deliberately not carried over: per R21 the second
+	// element is the caller-supplied DocumentID, or the first element repeated.
+	first := id[0]
+	var second []byte
 	if u.documentID != nil {
 		second = u.documentID
 		if first == nil {

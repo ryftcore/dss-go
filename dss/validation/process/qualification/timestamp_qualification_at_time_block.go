@@ -115,7 +115,7 @@ func (c *TimestampQualificationAtTimeBlock) InitChain() {
 	filter = TrustServicesFilterFactoryCreateFilterByDate(c.date)
 	grantedAtDateServices := filter.Filter(grantedServices)
 
-	item = item.SetNextItem(c.hasGrantedStatusAtDate(grantedAtDateServices))
+	item = item.SetNextItem(c.hasGrantedStatusAtDate(grantedAtDateServices)) //nolint:staticcheck // mirrors upstream TimestampQualificationAtTimeBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	// Determine qualification status
 	if utils.IsCollectionNotEmpty(grantedAtDateServices) {

@@ -203,7 +203,7 @@ func (c *SignatureAcceptanceValidation) InitChain() {
 	}
 
 	// cryptographic check
-	item = c.cryptographic(item)
+	item = c.cryptographic(item) //nolint:staticcheck // mirrors upstream SignatureAcceptanceValidation#initChain: Java closes the chain with the same dead store `item = cryptographic(item);` - the helper links and returns the new tail, which nothing reads.
 }
 
 func (c *SignatureAcceptanceValidation) structuralValidation() process.ChainItem[*jaxb.XmlSAV] {
