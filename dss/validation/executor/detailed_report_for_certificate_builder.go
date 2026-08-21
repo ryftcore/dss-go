@@ -132,7 +132,7 @@ func (b *DetailedReportForCertificateBuilder) Certificate() *diagnostic.Certific
 // validation. Port of the protected executeAllBasicBuildingBlocks().
 func (b *DetailedReportForCertificateBuilder) ExecuteAllBasicBuildingBlocks() map[string]*jaxb.XmlBasicBuildingBlocks {
 	bbbs := make(map[string]*jaxb.XmlBasicBuildingBlocks)
-	Process(&b.AbstractDetailedReportBuilder, []*diagnostic.CertificateWrapper{b.Certificate()},
+	b.process([]*diagnostic.CertificateWrapper{b.Certificate()},
 		enumerations.Context_CERTIFICATE, bbbs)
 	return bbbs
 }

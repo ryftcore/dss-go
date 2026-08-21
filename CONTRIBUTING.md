@@ -9,9 +9,10 @@ sending non-trivial changes.
 
 ## Development setup
 
-- **Go 1.24 or later** (the module currently pins `go 1.24.7` in
+- **Go 1.27 or later** (the module currently pins `go 1.27.0` in
   `dss/go.mod`; keep the module's `go` directive and this requirement in
-  sync if you bump it).
+  sync if you bump it). The public API uses generic methods, which Go 1.27
+  is the first release to allow.
 - No other tooling is required to build and test the library itself.
   Docs-site and CI tooling (MkDocs, golangci-lint, goreleaser, etc.) are
   only needed if you're touching `docs/` or `.github/`.

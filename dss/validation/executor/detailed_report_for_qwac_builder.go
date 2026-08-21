@@ -60,7 +60,7 @@ func NewDetailedReportForQWACBuilder(i18nProvider *i18n.I18nProvider,
 // executeAllBasicBuildingBlocks().
 func (b *DetailedReportForQWACBuilder) ExecuteAllBasicBuildingBlocks() map[string]*jaxb.XmlBasicBuildingBlocks {
 	bbbs := b.DetailedReportForCertificateBuilder.ExecuteAllBasicBuildingBlocks()
-	Process(&b.AbstractDetailedReportBuilder, JavaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+	b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
 	return bbbs
 }
 

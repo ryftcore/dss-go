@@ -1,4 +1,4 @@
-// Oracle test for JavaHashSetOrder / JavaHashSetStringOrder
+// Oracle test for javaHashSetOrder / JavaHashSetStringOrder
 // (abstract_detailed_report_builder.go).
 //
 // testdata/oracle/hash_order.tsv is a pure Java dump, produced by
@@ -18,7 +18,7 @@ import (
 	"github.com/utain/esig/dss/internal/corpustest"
 )
 
-// tokenID is a minimal diagnostic.TokenProxy stand-in: JavaHashSetOrder only
+// tokenID is a minimal diagnostic.TokenProxy stand-in: javaHashSetOrder only
 // reads Id().
 type tokenID string
 
@@ -44,7 +44,7 @@ func TestJavaHashSetOrderOracle(t *testing.T) {
 				for _, id := range input {
 					tokens = append(tokens, tokenID(id))
 				}
-				ordered := JavaHashSetOrder(tokens)
+				ordered := javaHashSetOrder(tokens)
 				parts := make([]string, 0, len(ordered))
 				for _, token := range ordered {
 					parts = append(parts, string(token))

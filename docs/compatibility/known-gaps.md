@@ -130,6 +130,20 @@ If you are diffing report XML against Java's output and see identical content
 in a different order within one list, that is this. It never changes a
 conclusion.
 
+### Go toolchain sensitivity
+
+Two behaviors follow the Go release you build with, not this port's own code.
+
+- **Container framing bytes.** ASiC containers and PAdES incremental updates are
+  byte-stable for a given Go toolchain, but the same input can produce different
+  bytes across Go releases, because `compress/flate`'s encoder changes between
+  them (Go 1.27 is such a release). Signatures stay valid: they cover entry
+  contents and `ByteRange`s, never the container framing.
+- **Unicode-category-dependent behavior.** The DN `CANONICAL` form (`x/text`
+  casing plus NFKD), `IsStringDigits`, and the XPath 1.0 name lexer read the
+  building toolchain's Unicode tables — Unicode 17 on Go 1.27 — while Java
+  follows the JDK's, Unicode 15 on JDK 21. No corpus fixture is affected today.
+
 ## Not gaps, but frequently mistaken for them
 
 - **`qualification=NA`.** Not "unqualified" — *not determined*. You did not

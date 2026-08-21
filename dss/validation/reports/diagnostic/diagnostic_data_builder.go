@@ -1048,12 +1048,9 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 	return xmlRevocation
 }
 
-// GetXmlRevocationRefs returns a list of XmlRevocationRef for a token with tokenId. Port of the
+// getXmlRevocationRefs returns a list of XmlRevocationRef for a token with tokenId. Port of the
 // protected getXmlRevocationRefs(String, Map<RevocationRef<R>, Set<RevocationRefOrigin>>).
-//
-// Go has no generic methods, only generic free functions, so this is one (see PORTING.md);
-// R is inferred from the entries slice at every call site (revocation.CRL or revocation.OCSP).
-func GetXmlRevocationRefs[R revocation.Revocation](b *DiagnosticDataBuilder, tokenId string, refs []spi.RevocationRefOriginsEntry[R]) []*jaxb.XmlRevocationRef {
+func (b *DiagnosticDataBuilder) getXmlRevocationRefs[R revocation.Revocation](tokenId string, refs []spi.RevocationRefOriginsEntry[R]) []*jaxb.XmlRevocationRef {
 	xmlRevocationRefs := make([]*jaxb.XmlRevocationRef, 0)
 	for _, entry := range refs {
 		ref := entry.Reference

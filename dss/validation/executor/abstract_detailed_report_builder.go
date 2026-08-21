@@ -1,18 +1,11 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/executor/AbstractDetailedReportBuilder.java
 // (DSS 6.5.RC1).
 //
-// Two shape differences against Java, both forced by the target language:
-//
-//   - Java's process(Collection<? extends AbstractTokenProxy>, ...) is an
-//     inherited protected method taking a wildcard-typed collection. Go methods
-//     cannot declare type parameters, so the port is the package-level generic
-//     function Process, whose first argument is the builder.
-//
-//   - Java's callers hand process() a LinkedHashMap, and DetailedReportBuilder
-//     later marshals bbbs.values() straight into the report - so the map's
-//     insertion order is byte-visible. A Go map has no order, so the builder
-//     records the first-insertion order of the ids in BBBOrder and the report
-//     is filled from that (see BasicBuildingBlocksInOrder).
+// Java's callers hand process() a LinkedHashMap, and DetailedReportBuilder
+// later marshals bbbs.values() straight into the report - so the map's
+// insertion order is byte-visible. A Go map has no order, so the builder
+// records the first-insertion order of the ids in BBBOrder and the report
+// is filled from that (see BasicBuildingBlocksInOrder).
 
 package executor
 
@@ -52,7 +45,7 @@ type AbstractDetailedReportBuilder struct {
 	CurrentTime time.Time
 
 	// BBBOrder records the ids of the basic building blocks in the order
-	// Process first inserted them, standing in for the insertion order of
+	// process first inserted them, standing in for the insertion order of
 	// Java's LinkedHashMap. See the file header.
 	BBBOrder []string
 }
@@ -155,7 +148,7 @@ func (b *AbstractDetailedReportBuilder) validateLoTE(validationPolicy policy.Val
 }
 
 // BasicBuildingBlocksInOrder returns the values of the basic building
-// blocks map in the order Process inserted them, the Go stand-in for Java's
+// blocks map in the order process inserted them, the Go stand-in for Java's
 // LinkedHashMap.values(). See the file header.
 func (b *AbstractDetailedReportBuilder) BasicBuildingBlocksInOrder(
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks) []*jaxb.XmlBasicBuildingBlocks {
@@ -168,7 +161,7 @@ func (b *AbstractDetailedReportBuilder) BasicBuildingBlocksInOrder(
 	return result
 }
 
-// IdentifiedToken is the part of diagnostic.TokenProxy JavaHashSetOrder needs:
+// IdentifiedToken is the part of diagnostic.TokenProxy javaHashSetOrder needs:
 // Java's AbstractTokenProxy derives both equals() and hashCode() from getId()
 // alone.
 type IdentifiedToken interface {
@@ -176,15 +169,15 @@ type IdentifiedToken interface {
 	Id() string
 }
 
-// JavaHashSetOrder reorders tokens into the iteration order
+// javaHashSetOrder reorders tokens into the iteration order
 // java.util.HashSet yields for the same elements.
 //
-// Several of the collections the report builders feed to Process are
+// Several of the collections the report builders feed to process are
 // Set<...TokenProxy> upstream (DiagnosticData.getAllRevocationData(),
 // getAllSignatures(), getAllCounterSignatures(), getAllKeyBindingSignatures(),
 // getAllEAA(), getAllEAARevocationTokens()), while the ported diagnostic
 // wrappers return slices in document order. That difference is BYTE-VISIBLE:
-// Process fills a LinkedHashMap whose values() the detailed report marshals in
+// process fills a LinkedHashMap whose values() the detailed report marshals in
 // insertion order, so the <BasicBuildingBlocks> elements come out in the
 // HashSet's order upstream.
 //
@@ -201,7 +194,7 @@ type IdentifiedToken interface {
 // This is the one place in the port that reproduces a Java hash order rather
 // than substituting insertion order (the convention documented in
 // utils/ordered_map.go): here the order reaches the marshalled report.
-func JavaHashSetOrder[T IdentifiedToken](tokens []T) []T {
+func javaHashSetOrder[T IdentifiedToken](tokens []T) []T {
 	if len(tokens) < 2 {
 		return tokens
 	}
@@ -233,7 +226,7 @@ func JavaHashSetOrder[T IdentifiedToken](tokens []T) []T {
 
 // JavaHashSetStringOrder reorders strings into the iteration order
 // java.util.HashSet<String> yields for the same elements - the string-keyed
-// sibling of JavaHashSetOrder, whose doc comment explains the table walk. It
+// sibling of javaHashSetOrder, whose doc comment explains the table walk. It
 // is needed where a report builder marshals the members of a HashSet<String>
 // in iteration order: SimpleReportBuilder/SimpleReportForCertificateBuilder's
 // getUniqueServiceNames(), whose result becomes the <trustServiceName>
@@ -274,11 +267,10 @@ func javaStringHashCode(s string) int32 {
 	return h
 }
 
-// Process performs the tokens validation. Port of the protected
+// process performs the tokens validation. Port of the protected
 // process(Collection<? extends AbstractTokenProxy>, Context,
-// Map<String, XmlBasicBuildingBlocks>); see the file header for why it is a
-// function rather than a method.
-func Process[T diagnostic.TokenProxy](b *AbstractDetailedReportBuilder, tokensToProcess []T,
+// Map<String, XmlBasicBuildingBlocks>).
+func (b *AbstractDetailedReportBuilder) process[T diagnostic.TokenProxy](tokensToProcess []T,
 	context enumerations.Context, bbbs map[string]*jaxb.XmlBasicBuildingBlocks) {
 	for _, token := range tokensToProcess {
 		bbb := blocks.NewBasicBuildingBlocks(

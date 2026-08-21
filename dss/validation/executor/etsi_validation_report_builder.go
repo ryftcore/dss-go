@@ -443,7 +443,7 @@ func (b *ETSIValidationReportBuilder) signatureValidationObjects() *jaxb.Validat
 		validationObjectListType.ValidationObject = append(validationObjectListType.ValidationObject, orphanCertificateValidationObject)
 	}
 
-	for _, revocationData := range JavaHashSetOrder(b.diagnosticData.AllRevocationData()) {
+	for _, revocationData := range javaHashSetOrder(b.diagnosticData.AllRevocationData()) {
 		revocationValidationObject := b.revocationValidationObject(revocationData)
 		revocationValidationObject.POE = b.poe(revocationData.Id(), poeExtraction)
 		validationObjectListType.ValidationObject = append(validationObjectListType.ValidationObject, revocationValidationObject)
@@ -1764,7 +1764,7 @@ func (b *ETSIValidationReportBuilder) addSignerRoles(sigAttributes *jaxb.Signatu
 // addCounterSignatures(SignatureAttributesType, SignatureWrapper).
 func (b *ETSIValidationReportBuilder) addCounterSignatures(sigAttributes *jaxb.SignatureAttributesType,
 	sigWrapper *diagnostic.SignatureWrapper) {
-	counterSignatures := JavaHashSetOrder(b.diagnosticData.AllCounterSignaturesForMasterSignature(sigWrapper))
+	counterSignatures := javaHashSetOrder(b.diagnosticData.AllCounterSignaturesForMasterSignature(sigWrapper))
 	for _, counterSignature := range counterSignatures {
 		saCounterSignatureType := &jaxb.SACounterSignatureType{}
 		saCounterSignatureType.AttributeObject = append(saCounterSignatureType.AttributeObject,

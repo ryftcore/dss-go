@@ -5,7 +5,7 @@ then from the command line.
 
 ## What you need
 
-- **Go 1.24 or later.** The module pins `go 1.24.7` in its `go.mod`.
+- **Go 1.27 or later.** The module pins `go 1.27.0` in its `go.mod`.
 - **A signing key in a PKCS#12 file** (`.p12` or `.pfx`) with its password.
   For a first experiment a self-signed one is fine — the repository ships one
   under `dss/testdata/` that all the examples use. For anything real you want a
