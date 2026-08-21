@@ -317,8 +317,10 @@ func CreateReferenceForCertificate(certificateToken *model.CertificateToken) *va
 // T mirrors Java's Collection<? extends Identifier>: Go generics have no slice covariance, so
 // the caller's concrete element type (model.Identifier, spi.EncapsulatedRevocationTokenIdentifier[R],
 // *crlparser.CRLBinary, *spi.OCSPResponseBinary, ...) is inferred here instead. Declared as a
-// package-level function rather than a method for the same reason as every other T-parameterized
-// helper in this file: Go methods cannot introduce type parameters beyond the receiver's.
+// package-level function rather than a method for the same reason as every other helper in this
+// file - AbstractTimestampSource is stateless, so its protected helpers port to package-level
+// functions (see "Methods became package-level functions" in the file header) - a form its
+// non-generic siblings here share.
 func CreateReferencesForIdentifiers[T xmlIdentifiable](identifiers []T,
 	timestampedObjectType enumerations.TimestampedObjectType) []*validation.TimestampedReference {
 	timestampedReferences := []*validation.TimestampedReference{}

@@ -1,6 +1,6 @@
 module github.com/utain/esig/dss
 
-go 1.25.0
+go 1.27.0
 
 require (
 	golang.org/x/crypto v0.55.0

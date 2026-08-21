@@ -185,11 +185,15 @@ type DocumentValidator interface {
 
 	// GetValidationData extracts the validation data for the provided
 	// signatures. Port of the getValidationData(Collection) overload.
+	// Java's <T extends AdvancedSignature> erases to the base type: Go
+	// forbids type parameters on interface methods, Go 1.27 included, so
+	// the erasure is permanent.
 	GetValidationData(signatures []spivalidation.AdvancedSignature) (*spivalidation.ValidationDataContainer, error)
 
 	// GetValidationDataWithTimestamps extracts the validation data for the
 	// provided signatures and detached timestamps. Port of the
-	// getValidationData(Collection, Collection) overload.
+	// getValidationData(Collection, Collection) overload; Java's
+	// <T extends AdvancedSignature> erases as for GetValidationData.
 	GetValidationDataWithTimestamps(signatures []spivalidation.AdvancedSignature,
 		detachedTimestamps []*spivalidation.TimestampToken) (*spivalidation.ValidationDataContainer, error)
 }

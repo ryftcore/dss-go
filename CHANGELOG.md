@@ -74,6 +74,21 @@ conventions applied throughout.
   and scale verified in each phase (fixture counts, corpus sizes, and
   parity results are recorded there per phase; this file does not
   restate per-phase numbers to avoid the two drifting apart).
+- **Go 1.27 is the minimum supported release** (`go 1.27.0` in
+  `dss/go.mod`). Earlier toolchains cannot build the module: the public
+  API relies on generic methods, which Go 1.27 is the first release to
+  allow.
+- **Generic-method API finalization.** Java generic instance methods that
+  the port had been carrying as package-level generic functions — a
+  pre-1.27 language limitation, not a design choice — are now methods on
+  their receiver, matching the Java shape: `CertificateWrapper`'s
+  `CertificateExtensionForOid[T]` and
+  `SignedDocumentDiagnosticDataBuilder`'s
+  `CreateOrphanTokenFromRevocationIdentifier[R]` stay exported, while the
+  ports of Java `protected` helpers whose callers are all in-package
+  became unexported methods. Generic methods declared on Java
+  *interfaces* still erase to the constraint's base type: Go forbids type
+  parameters on interface methods. See `dss/PORTING.md`.
 
 ### Known limitations
 

@@ -71,7 +71,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        go: ["stable", "oldstable"]
+        # Only "stable": the module's go directive is 1.27.0, so "oldstable"
+        # (Go 1.26) cannot build it.
+        go: ["stable"]
         include:
           # Windows: single smoke-build combination, not the full matrix.
           - os: windows-latest

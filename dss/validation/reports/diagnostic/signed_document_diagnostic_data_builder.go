@@ -828,7 +828,7 @@ func addRelatedRevocations[R revocation.Revocation](b *SignedDocumentDiagnosticD
 		t := jaxb.RevocationTypeValue(token.RevocationType())
 		xmlRelatedRevocation.Type = &t
 		xmlRelatedRevocation.Origin = revocationOriginValues(entry.Origins)
-		xmlRelatedRevocation.RevocationRef = GetXmlRevocationRefs(&b.DiagnosticDataBuilder, xmlRevocation.Id.String(), source.FindRefsAndOriginsForRevocationToken(token))
+		xmlRelatedRevocation.RevocationRef = b.getXmlRevocationRefs(xmlRevocation.Id.String(), source.FindRefsAndOriginsForRevocationToken(token))
 		result = append(result, xmlRelatedRevocation)
 	}
 	return result
@@ -859,7 +859,7 @@ func addOrphanRevocations[R revocation.Revocation](b *SignedDocumentDiagnosticDa
 			continue
 		}
 		xmlOrphanRevocation := getXmlOrphanRevocation[R](b, token, entry.origins)
-		xmlOrphanRevocation.RevocationRef = append(xmlOrphanRevocation.RevocationRef, GetXmlRevocationRefs(&b.DiagnosticDataBuilder, tokenID, source.FindRefsAndOriginsForBinary(token))...)
+		xmlOrphanRevocation.RevocationRef = append(xmlOrphanRevocation.RevocationRef, b.getXmlRevocationRefs(tokenID, source.FindRefsAndOriginsForBinary(token))...)
 		result = append(result, xmlOrphanRevocation)
 	}
 	return result
@@ -952,11 +952,10 @@ func getXmlOrphanRevocation[R revocation.Revocation](b *SignedDocumentDiagnostic
 
 // CreateOrphanTokenFromRevocationIdentifier creates an orphan revocation token from an
 // EncapsulatedRevocationTokenIdentifier. Port of the protected
-// createOrphanTokenFromRevocationIdentifier(EncapsulatedRevocationTokenIdentifier).
-//
-// Go has no generic methods, only generic free functions (see PORTING.md), so this is one; R is
-// inferred from the identifier at every call site.
-func CreateOrphanTokenFromRevocationIdentifier[R revocation.Revocation](b *SignedDocumentDiagnosticDataBuilder, revocationIdentifier spi.EncapsulatedRevocationTokenIdentifier[R]) *jaxb.XmlOrphanRevocationToken {
+// createOrphanTokenFromRevocationIdentifier(EncapsulatedRevocationTokenIdentifier); Go has no
+// protected access and callers exist outside this package, so it stays exported. R is inferred
+// from the identifier at every call site.
+func (b *SignedDocumentDiagnosticDataBuilder) CreateOrphanTokenFromRevocationIdentifier[R revocation.Revocation](revocationIdentifier spi.EncapsulatedRevocationTokenIdentifier[R]) *jaxb.XmlOrphanRevocationToken {
 	return createOrphanTokenFromRevocationIdentifier[R](b, revocationIdentifier)
 }
 

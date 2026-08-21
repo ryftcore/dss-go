@@ -251,13 +251,13 @@ func (b *PAdESDiagnosticDataBuilder) buildOrphanTokensFromDocumentSources() {
 	for _, revocationIdentifier := range b.GetDocumentCRLSource().AllRevocationBinaries() {
 		id := revocationIdentifier.AsXmlID()
 		if !b.IsKnownRevocation(id) {
-			dssdiagnostic.CreateOrphanTokenFromRevocationIdentifier[revocation.CRL](&b.SignedDocumentDiagnosticDataBuilder, revocationIdentifier)
+			b.CreateOrphanTokenFromRevocationIdentifier[revocation.CRL](revocationIdentifier)
 		}
 	}
 	for _, revocationIdentifier := range b.GetDocumentOCSPSource().AllRevocationBinaries() {
 		id := revocationIdentifier.AsXmlID()
 		if !b.IsKnownRevocation(id) {
-			dssdiagnostic.CreateOrphanTokenFromRevocationIdentifier[revocation.OCSP](&b.SignedDocumentDiagnosticDataBuilder, revocationIdentifier)
+			b.CreateOrphanTokenFromRevocationIdentifier[revocation.OCSP](revocationIdentifier)
 		}
 	}
 }

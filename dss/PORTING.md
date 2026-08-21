@@ -54,6 +54,9 @@ const (
 ## Collections & generics
 
 - `List<T>`→`[]T`, `Map<K,V>`→`map[K]V` (order-sensitive upstream iteration → slice of pairs or explicit sort), `Set<T>`→`map[T]struct{}` behind small helpers in `utils`.
+- The module requires Go 1.27, so a Java **generic instance method** ports to a Go generic method on the receiver (`func (w *CertificateWrapper) CertificateExtensionForOid[T …](oid string) T`); Java `protected` maps to an unexported method when every caller is in-package, otherwise it stays exported (Go has no `protected`).
+- A **generic method declared on an interface** cannot be ported: Go forbids type parameters on interface methods, Go 1.27 included. Such methods erase to the constraint's base type (`<T extends AdvancedSignature> … (Collection<T>)` → `([]AdvancedSignature)`) and the erasure is permanent.
+- A **stateless Java "protected helpers for subclasses" class** (no fields, every method pure w.r.t. `this`) ports to package-level functions, generic or not — not to methods on an empty receiver. `spi/validation/timestamp` is the reference case.
 
 ## Tests
 

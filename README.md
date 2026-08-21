@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/utain/esig/actions/workflows/ci.yml/badge.svg)](https://github.com/utain/esig/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/utain/esig/dss.svg)](https://pkg.go.dev/github.com/utain/esig/dss)
-[![Go 1.24+](https://img.shields.io/badge/Go-1.24%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/dl/)
+[![Go 1.27+](https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/dl/)
 [![License: LGPL-2.1](https://img.shields.io/badge/License-LGPL--2.1-blue.svg)](LICENSE)
 
 **esig** creates and validates AdES digital signatures — CAdES, XAdES, PAdES, JAdES
@@ -38,7 +38,7 @@ direction, at which levels.
 go get github.com/utain/esig/dss
 ```
 
-Go 1.24 or newer. The CLI, once a version is tagged:
+Go 1.27 or newer. The CLI, once a version is tagged:
 
 ```sh
 go install github.com/utain/esig/dss/cmd/esig@latest
