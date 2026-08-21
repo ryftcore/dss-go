@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // safeBag is one parsed, not-yet-decrypted SafeBag component (RFC 7292 section 4.2): its type

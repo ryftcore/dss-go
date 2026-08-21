@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/trust/filter/ConsistentServiceByQSCDFilter.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // ConsistentServiceByQSCDFilter filters TrustServices by QSCD consistency.
 type ConsistentServiceByQSCDFilter struct{}

@@ -7,7 +7,7 @@
 package exception
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // InvalidPasswordException is thrown if an invalid password has been provided.

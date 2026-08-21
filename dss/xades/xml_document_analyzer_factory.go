@@ -3,8 +3,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // XMLDocumentAnalyzerFactory loads the relevant class for an XML document validation. Port of

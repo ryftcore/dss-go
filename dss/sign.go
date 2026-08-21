@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"time"
 
-	asiccades "github.com/utain/esig/dss/asic/cades"
-	asicxades "github.com/utain/esig/dss/asic/xades"
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/jades"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/pades"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/xades"
+	asiccades "github.com/ryftcore/dss-go/dss/asic/cades"
+	asicxades "github.com/ryftcore/dss-go/dss/asic/xades"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/jades"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/pades"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/xades"
 )
 
 // SignOptions configures [Sign], [SignMultiple] and - for the fields it shares

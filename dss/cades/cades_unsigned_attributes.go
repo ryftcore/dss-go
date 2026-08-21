@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
 )
 
 // CAdESUnsignedAttributes represents the CAdES Unsigned attributes. Port of the class

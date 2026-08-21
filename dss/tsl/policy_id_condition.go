@@ -4,9 +4,9 @@ package tsl
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PolicyIdCondition checks if a certificate has a specific policy OID. Objects based on this

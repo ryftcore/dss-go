@@ -16,9 +16,9 @@ package tsl
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // BCStyle OID constants the upstream tests reach through org.bouncycastle.asn1.x500.style.BCStyle.

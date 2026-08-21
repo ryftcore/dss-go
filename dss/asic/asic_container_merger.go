@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/merge/ASiCContainerMerger.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // ASiCContainerMerger is used to verify a possibility to merge ASiC containers and merge them
 // in a single container, when possible.

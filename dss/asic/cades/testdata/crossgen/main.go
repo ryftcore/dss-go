@@ -23,23 +23,23 @@ import (
 	"os"
 	"path/filepath"
 
-	asiccades "github.com/utain/esig/dss/asic/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
+	asiccades "github.com/ryftcore/dss-go/dss/asic/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // sampleContent* are the fixed payloads every generated container covers. Their own text records
 // what generated them, so a file found on disk explains itself. ASiC-E carries two entries so the
 // container-level manifest this format needs is exercised for real, not degenerate to one entry.
 var (
-	sampleContentSingle = []byte("DSS Go port cross-validation sample content - github.com/utain/esig/dss " +
+	sampleContentSingle = []byte("DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss " +
 		"asic/cades/testdata/crossgen (ASiC-S). Signed by the Go port's own ASiCWithCAdESService, " +
 		"verified by upstream DSS 6.5.RC1's SignedDocumentValidator.")
-	sampleContentMultiA = []byte("DSS Go port cross-validation sample content - github.com/utain/esig/dss " +
+	sampleContentMultiA = []byte("DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss " +
 		"asic/cades/testdata/crossgen (ASiC-E, entry A).")
-	sampleContentMultiB = []byte("DSS Go port cross-validation sample content - github.com/utain/esig/dss " +
+	sampleContentMultiB = []byte("DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss " +
 		"asic/cades/testdata/crossgen (ASiC-E, entry B).")
 )
 

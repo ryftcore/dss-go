@@ -22,7 +22,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/utain/esig/dss/simplecertificatereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/simplecertificatereport/jaxb"
 )
 
 // SimpleCertificateReportFacade contains methods to generate a

@@ -12,7 +12,7 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // PKIStatus values of RFC 3161 clause 2.4.2 (imported from RFC 2510).

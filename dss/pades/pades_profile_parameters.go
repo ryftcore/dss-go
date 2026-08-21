@@ -10,7 +10,7 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/document"
+	"github.com/ryftcore/dss-go/dss/document"
 )
 
 // PAdESProfileParameters is used to accelerate the signature creation process for PAdES.

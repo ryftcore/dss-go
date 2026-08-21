@@ -11,11 +11,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/extension"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/extension"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // The known answers in testdata/certificate_extensions/kat.tsv were produced by a Java 21 program

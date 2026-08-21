@@ -11,7 +11,7 @@ package crlparser
 import (
 	"math/big"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CRLUtilsBuildCRLBinary takes binaries and returns the DER encoded CRLBinary.

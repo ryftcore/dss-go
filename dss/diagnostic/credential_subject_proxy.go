@@ -4,7 +4,7 @@
 // when applicable.
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // CredentialSubjectProxy provides an NPE-safe initialization and returns always the first
 // credential subject value, when applicable.

@@ -26,16 +26,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
-	dssxades "github.com/utain/esig/dss/xades"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
+	dssxades "github.com/ryftcore/dss-go/dss/xades"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // init ports the static initializer block of ASiCWithXAdESService.

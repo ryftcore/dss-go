@@ -2,8 +2,8 @@
 package asic
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ASiCContentDocumentFilter provides a configuration to filter the content of an ASiC

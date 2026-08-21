@@ -14,11 +14,11 @@
 package vpfltvd
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
-	vpftspwatspchecks "github.com/utain/esig/dss/validation/process/vpftspwatsp/checks"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	vpftspwatspchecks "github.com/ryftcore/dss-go/dss/validation/process/vpftspwatsp/checks"
 )
 
 // TimestampMessageImprintWithIdCheck checks a timestamp's message-imprint and

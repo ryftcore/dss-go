@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // MemoryDataLoader defines a map between URL and document to load the data

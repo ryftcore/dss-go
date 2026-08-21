@@ -1,7 +1,7 @@
 // Ported from dss-model/.../ContainerInfo.java (DSS 6.5.RC1).
 package model
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ContainerInfo contains information about an ASiC container.
 type ContainerInfo struct {

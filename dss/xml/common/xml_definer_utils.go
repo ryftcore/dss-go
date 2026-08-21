@@ -4,7 +4,7 @@ package common
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // XmlDefinerUtils builds the objects for dealing with XML: a *xmldom.ParseOptions in place

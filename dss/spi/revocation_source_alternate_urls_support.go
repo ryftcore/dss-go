@@ -6,8 +6,8 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // RevocationSourceAlternateUrlsSupport provides a method to retrieve revocation data with a

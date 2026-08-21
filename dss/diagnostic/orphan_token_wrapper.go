@@ -4,7 +4,7 @@ package diagnostic
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // OrphanTokenWrapperOverrides declares the operations Java's abstract generic class

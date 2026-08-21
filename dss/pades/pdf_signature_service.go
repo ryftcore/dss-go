@@ -22,9 +22,9 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/signature/resources"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PDFSignatureService lets the user choose the underlying PDF implementation used to create PDF

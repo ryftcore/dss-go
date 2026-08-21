@@ -7,17 +7,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/spi"
-	spipolicy "github.com/utain/esig/dss/spi/policy"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	spiexecutor "github.com/utain/esig/dss/spi/validation/executor"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
-	"github.com/utain/esig/dss/validation/reports"
-	"github.com/utain/esig/dss/xades"
-	xadesdefinition "github.com/utain/esig/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spipolicy "github.com/ryftcore/dss-go/dss/spi/policy"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	spiexecutor "github.com/ryftcore/dss-go/dss/spi/validation/executor"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/xades"
+	xadesdefinition "github.com/ryftcore/dss-go/dss/xades/definition"
 )
 
 // trustedListValidationPolicyLocation is the path for a LOTL/TL validation policy. Port of the

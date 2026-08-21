@@ -20,12 +20,12 @@ sending non-trivial changes.
 Clone and build:
 
 ```sh
-git clone https://github.com/utain/esig
-cd esig/dss
+git clone https://github.com/ryftcore/dss-go
+cd dss-go/dss
 go build ./...
 ```
 
-The Go module root is `dss/` (module path `github.com/utain/esig/dss`),
+The Go module root is `dss/` (module path `github.com/ryftcore/dss-go/dss`),
 not the repository root — run `go`/`make` commands from inside `dss/`.
 
 ### Make targets

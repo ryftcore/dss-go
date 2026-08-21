@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/evidencerecord/SerializableASiCContainerEvidenceRecordParameters.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // SerializableASiCContainerEvidenceRecordParameters defines parameters for an ASiC container
 // generation with an evidence record document. Ports the Java interface (Serializable has no

@@ -3,8 +3,8 @@ package dss
 import (
 	"time"
 
-	"github.com/utain/esig/dss/simplereport"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/simplereport"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // Reports is what [Validate] returns: the four DSS validation reports, plus a

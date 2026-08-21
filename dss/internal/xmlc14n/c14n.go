@@ -8,7 +8,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // The xmldom-independent files carry their own copies of these two constants so that they

@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/dss/VriDictionaryTimestampIdentifierBuilder.java (DSS 6.5.RC1).
 package pades
 
-import "github.com/utain/esig/dss/spi/validation"
+import "github.com/ryftcore/dss-go/dss/spi/validation"
 
 // VriDictionaryTimestampIdentifierBuilder builds a unique identifier for a time-stamp
 // encapsulated within a VRI dictionary.

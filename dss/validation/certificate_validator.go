@@ -6,10 +6,10 @@ package validation
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/validation/executor"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/model"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // certificateValidationPolicyLocation is the path for the default certificate

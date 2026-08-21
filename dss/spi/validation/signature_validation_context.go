@@ -55,12 +55,12 @@ import (
 
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/x509/aia"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/x509/aia"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // SignatureValidationContext is a "cache" for one validation request that contains every

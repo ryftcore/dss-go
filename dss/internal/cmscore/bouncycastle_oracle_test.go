@@ -17,8 +17,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // oracleGoldenFile is the file each corpus keeps its BouncyCastle answers in.

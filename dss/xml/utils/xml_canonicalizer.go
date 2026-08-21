@@ -20,10 +20,10 @@ import (
 	"io"
 	"sync"
 
-	"github.com/utain/esig/dss/internal/xmlc14n"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmlc14n"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XMLCanonicalizerDefaultDSSC14NMethod is the default canonicalization method used for

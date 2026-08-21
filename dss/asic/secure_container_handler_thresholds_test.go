@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // The existing threshold tests pin the DEFAULT values and exercise the guards at those defaults.

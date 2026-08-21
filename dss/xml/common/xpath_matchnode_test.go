@@ -6,7 +6,7 @@ package common
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 func parseMatchNodeTestDoc(t *testing.T) *xmldom.Node {

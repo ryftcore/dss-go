@@ -4,7 +4,7 @@ package job
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // CacheKey defines a key for a cache record.

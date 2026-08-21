@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/policy"
-	cryptojson "github.com/utain/esig/dss/policy/crypto/json"
-	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/x509/aia"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/policy"
+	cryptojson "github.com/ryftcore/dss-go/dss/policy/crypto/json"
+	cryptoxml "github.com/ryftcore/dss-go/dss/policy/crypto/xml"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/x509/aia"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // init performs the registration Java DSS gets from java.util.ServiceLoader:
@@ -50,7 +50,7 @@ type ValidateOptions struct {
 
 	// TrustedCertificateSources are whole trust stores. The trusted-list
 	// certificate source the TSL validation job produces
-	// ([github.com/utain/esig/dss/spi/tsl.TrustedListsCertificateSource]) goes
+	// ([github.com/ryftcore/dss-go/dss/spi/tsl.TrustedListsCertificateSource]) goes
 	// here; that is what makes eIDAS qualification determination possible,
 	// since the qualifiers come from the trusted lists.
 	TrustedCertificateSources []CertificateSource
@@ -185,14 +185,14 @@ func Validate(doc Document, opts ValidateOptions) (*Reports, error) {
 
 // LoadCertificate reads an X.509 certificate, DER or PEM encoded, from the
 // file at path. Delegates to
-// [github.com/utain/esig/dss/spi.DSSUtilsLoadCertificate].
+// [github.com/ryftcore/dss-go/dss/spi.DSSUtilsLoadCertificate].
 func LoadCertificate(path string) (*CertificateToken, error) {
 	return spi.DSSUtilsLoadCertificate(path)
 }
 
 // LoadCertificateBytes reads an X.509 certificate, DER or PEM encoded, from
 // memory. Delegates to
-// [github.com/utain/esig/dss/spi.DSSUtilsLoadCertificateFromBinary].
+// [github.com/ryftcore/dss-go/dss/spi.DSSUtilsLoadCertificateFromBinary].
 func LoadCertificateBytes(der []byte) (*CertificateToken, error) {
 	return spi.DSSUtilsLoadCertificateFromBinary(der)
 }
@@ -205,7 +205,7 @@ func LoadCertificateBytes(der []byte) (*CertificateToken, error) {
 // A trust store built this way carries no trusted-list information, so it
 // anchors chains but cannot make a signature qualified. For that, use the
 // trusted-list certificate source produced by the TSL validation job of
-// [github.com/utain/esig/dss/validation/job].
+// [github.com/ryftcore/dss-go/dss/validation/job].
 func TrustStore(certificates ...*CertificateToken) CertificateSource {
 	source := spi.NewCommonTrustedCertificateSource()
 	for _, certificate := range certificates {

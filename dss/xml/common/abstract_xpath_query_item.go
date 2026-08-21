@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/xpath/item/AbstractXPathQueryItem.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // AbstractXPathQueryItem is the shared implementation behind every non-parameter
 // XPathQueryItem: chain linkage and parameter storage. What Java calls process(Node) - the

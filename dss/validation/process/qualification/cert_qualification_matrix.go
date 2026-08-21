@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/CertQualificationMatrix.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // Indices into the certQualifications cube-array. Port of the private static
 // final int constants NOT_QC/QC/ESIG/ESEAL/WSA/UNKNOWN/NOT_QSCD/QSCD.

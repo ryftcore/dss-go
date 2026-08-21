@@ -18,10 +18,10 @@ import (
 	"golang.org/x/crypto/cryptobyte"
 	cbasn1 "golang.org/x/crypto/cryptobyte/asn1"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/extension"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/extension"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // qcStatementUtilsOIDIdQcsPkixQCSyntaxV2 is RFC3739QCObjectIdentifiers.id_qcs_pkixQCSyntax_v2.

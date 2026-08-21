@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // certificatesOrder renders a certificate collection's DSS Ids in the order returned, without

@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/reference/XPathEnvelopedSignatureTransform.java (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 const (
 	// xPathEnvelopedSignatureTransformNotAncestorOrSelfPrefix is the XPath filter that removes

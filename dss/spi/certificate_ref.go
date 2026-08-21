@@ -5,8 +5,8 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // CertificateRef represents a Certificate Reference entry extracted from a signature.

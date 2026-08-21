@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // testdataDir returns the directory holding the real trusted-list fixtures

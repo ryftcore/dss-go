@@ -4,9 +4,9 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // TrustAnchorVerifierFactory loads a TrustAnchorVerifier from a provided

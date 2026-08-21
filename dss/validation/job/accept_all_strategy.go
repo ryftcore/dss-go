@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/sync/AcceptAllStrategy.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // AcceptAllStrategy accepts all trusted lists. D, L mirror
 // SynchronizationStrategy's type parameters.

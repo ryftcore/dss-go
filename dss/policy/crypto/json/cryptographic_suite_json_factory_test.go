@@ -23,10 +23,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 func readGolden(t *testing.T, path string) map[string]string {

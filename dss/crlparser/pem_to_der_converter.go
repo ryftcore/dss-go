@@ -4,7 +4,7 @@ package crlparser
 import (
 	"encoding/pem"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // PemToDerConverterConvert converts PEM encoded binaries (CRL, Cert) to their DER encoded

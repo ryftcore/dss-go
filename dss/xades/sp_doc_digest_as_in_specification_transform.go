@@ -4,7 +4,7 @@ package xades
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // errSPDocDigestAsInSpecificationTransformNotForReferences is the IllegalArgumentException

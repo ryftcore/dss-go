@@ -4,7 +4,7 @@
 // header - CAdESUnsignedAttributes needs this sibling comparator too.
 package cades
 
-import "github.com/utain/esig/dss/internal/asn1ber"
+import "github.com/ryftcore/dss-go/dss/internal/asn1ber"
 
 // EvidenceRecordProductionComparator compares production time of RFC 4998 EvidenceRecords,
 // checking their generation time. Port of the class EvidenceRecordProductionComparator,

@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // CMSDocumentAnalyzerFactory checks if the document is supported and creates a relevant

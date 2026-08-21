@@ -4,8 +4,8 @@ package spi
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // OCSPTokenRefMatcher checks an OCSP token reference against a token or its binaries.

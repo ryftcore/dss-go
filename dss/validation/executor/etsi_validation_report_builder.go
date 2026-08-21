@@ -38,14 +38,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport"
-	drjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/vpfswatsp"
-	"github.com/utain/esig/dss/validationreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/detailedreport"
+	drjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp"
+	"github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 )
 
 // ETSIValidationReportBuilder builds the ETSI Validation report. Port of

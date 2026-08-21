@@ -6,7 +6,7 @@
 // WARN (in the private isStreamFill) is kept as a comment where it fired.
 package pades
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // PdfObjectModificationsFilter is used to categorize ObjectModifications into four different
 // categories. Port of the PdfObjectModificationsFilter class.

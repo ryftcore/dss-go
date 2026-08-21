@@ -35,9 +35,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // RevocationFreshnessStatus contains information about the performed revocation freshness

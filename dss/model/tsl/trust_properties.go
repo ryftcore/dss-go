@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/tsl/TrustProperties.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/model/timedependent"
+import "github.com/ryftcore/dss-go/dss/model/timedependent"
 
 // TrustProperties contains the Trust properties for certificates.
 //

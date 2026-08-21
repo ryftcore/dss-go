@@ -1,7 +1,7 @@
 // Ported from dss-document/src/main/java/eu/europa/esig/dss/extension/SignedDocumentExtenderFactory.java (DSS 6.5.RC1).
 package document
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SignedDocumentExtenderFactory is used to analyze the format of the given DSSDocument and
 // create a corresponding implementation of SignedDocumentExtender.

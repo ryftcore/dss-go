@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // defaultCryptographicSuite is a byte-identical copy of upstream's

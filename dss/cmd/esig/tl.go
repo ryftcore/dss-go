@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	dsshttp "github.com/utain/esig/dss/spi/client/http"
-	spitsl "github.com/utain/esig/dss/spi/tsl"
-	"github.com/utain/esig/dss/tsl"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	dsshttp "github.com/ryftcore/dss-go/dss/spi/client/http"
+	spitsl "github.com/ryftcore/dss-go/dss/spi/tsl"
+	"github.com/ryftcore/dss-go/dss/tsl"
 )
 
 // defaultLOTLURL is the European Commission's published List Of Trusted
@@ -39,7 +39,7 @@ func cmdTLRefresh(args []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, `Usage: esig tl refresh -cache <dir> [flags]
 
 Downloads and parses the EU List of Trusted Lists and every member state
-Trusted List it points to (github.com/utain/esig/dss/tsl,
+Trusted List it points to (github.com/ryftcore/dss-go/dss/tsl,
 TLValidationJob.OnlineRefresh), and writes the certificates it collects to
 <dir> for "esig validate -tl-cache" to use as trust anchors.
 

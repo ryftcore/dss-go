@@ -1,7 +1,7 @@
 // Ported from dss-token/src/main/java/eu/europa/esig/dss/token/AppleSignatureToken.java (DSS 6.5.RC1).
 package token
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // AppleSignatureToken provides an API for MacOS Keychain access.
 //

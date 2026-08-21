@@ -4,7 +4,7 @@ package tsl
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // pivotSchemeInformationURIPivotSuffix is the defined condition in (draft) ETSI TS 119 615.

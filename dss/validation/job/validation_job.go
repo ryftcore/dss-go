@@ -6,11 +6,11 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/model"
-	modeljob "github.com/utain/esig/dss/model/job"
-	"github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/model"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // Runnable is the Go stand-in for java.lang.Runnable, used by the (abstract)

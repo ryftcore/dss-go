@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // dssMessageDigestCalculatorTestVectors holds the digest of "abc" for every algorithm the Go

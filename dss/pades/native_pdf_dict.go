@@ -12,7 +12,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/utain/esig/dss/internal/pdf"
+	"github.com/ryftcore/dss-go/dss/internal/pdf"
 )
 
 // nativePdfDict wraps a pdf.Dict as a PdfDict.

@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"image/color"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // SignatureImageParametersNoScaling is the default zoom constraint. Port of NO_SCALING.

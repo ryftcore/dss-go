@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/job/DocumentInfo.java (DSS 6.5.RC1).
 package job
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DocumentInfo contains a validation result for a document. P is the parent DocumentInfo
 // type, mirroring the Java self-bound type parameter "P extends DocumentInfo<P>"; Go has no

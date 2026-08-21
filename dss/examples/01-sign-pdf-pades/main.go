@@ -16,9 +16,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/examples/internal/fixtures"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/examples/internal/fixtures"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 func main() {

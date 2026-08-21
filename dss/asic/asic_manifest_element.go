@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/definition/ASiCManifestElement.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // ASiCManifestElement is an ASiC XSD element. Ports the Java enum per PORTING.md's enum
 // convention: a typed string whose value is the Java name(), with the wire tag name held in a

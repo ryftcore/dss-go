@@ -4,7 +4,7 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/document"
+	"github.com/ryftcore/dss-go/dss/document"
 )
 
 // CAdESSignatureParameters defines SignatureParameters to deal with CAdES signature

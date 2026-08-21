@@ -12,7 +12,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // pbes2Params is RFC 8018 section A.4's PBES2-params.

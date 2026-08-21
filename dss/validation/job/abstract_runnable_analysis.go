@@ -4,8 +4,8 @@ package job
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
 )
 
 // AbstractRunnableAnalysisOverrides extends AbstractAnalysisOverrides with the operation

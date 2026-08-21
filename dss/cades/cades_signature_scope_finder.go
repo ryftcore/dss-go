@@ -7,12 +7,12 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // CAdESSignatureScopeFinder finds SignatureScopes for a CAdES signature. Port of the class

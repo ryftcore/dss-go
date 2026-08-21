@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESContainerExtractor is used to extract the content (documents) embedded into an

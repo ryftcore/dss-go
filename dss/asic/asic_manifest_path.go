@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/definition/ASiCManifestPath.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // Contains paths for an ASiC scheme. Ports the Java class ASiCManifestPath (a concrete
 // AbstractPath subclass with no other subclasses) as package-level vars, per the

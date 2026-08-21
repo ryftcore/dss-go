@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/definition/ASiCManifestAttribute.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // ASiCManifestAttribute represents a collection of attributes defined in ASiC XSD schema.
 // Ports the Java enum per PORTING.md's enum convention: a typed string whose value is the

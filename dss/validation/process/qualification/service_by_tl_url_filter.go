@@ -6,8 +6,8 @@
 package qualification
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ServiceByTLUrlFilter is used to filter trusted services by the TL Url.

@@ -32,10 +32,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // loadOraclePolicy unmarshals jaxb/testdata/policy/<name>.xml and wraps it as

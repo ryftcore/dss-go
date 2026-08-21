@@ -10,7 +10,7 @@
 // fixed, ordered registry directly.
 package policy
 
-import "github.com/utain/esig/dss/model/signature"
+import "github.com/ryftcore/dss-go/dss/model/signature"
 
 // defaultSignaturePolicyValidatorLoaderDefaultValidators are constructed
 // fresh per LoadValidator call (matching ServiceLoader semantics, which

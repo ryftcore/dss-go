@@ -23,9 +23,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/spi"
-	spitsl "github.com/utain/esig/dss/spi/tsl"
-	"github.com/utain/esig/dss/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spitsl "github.com/ryftcore/dss-go/dss/spi/tsl"
+	"github.com/ryftcore/dss-go/dss/tsl"
 )
 
 // tsdBuildCertificateSource runs contract item (D)'s offline TLValidationJob once and returns the

@@ -12,8 +12,8 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // AlternateUrlsSourceAdapter allows injecting alternative urls to collect revocation data.

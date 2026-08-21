@@ -39,12 +39,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/asic"
-	asiccades "github.com/utain/esig/dss/asic/cades"
-	asicxades "github.com/utain/esig/dss/asic/xades"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/asic"
+	asiccades "github.com/ryftcore/dss-go/dss/asic/cades"
+	asicxades "github.com/ryftcore/dss-go/dss/asic/xades"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // broadExtraction mirrors BroadASiCOracle.java's per-format extraction dump.

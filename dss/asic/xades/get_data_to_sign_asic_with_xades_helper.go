@@ -6,11 +6,11 @@
 // eu.europa.esig.dss.asic.xades.signature{,.asice,.asics}, .definition, .extract, .merge,
 // .evidencerecord and .validation all land in this single Go package (dss/asic/xades) per
 // S7_BRIEF.md's package layout table. Use sites outside it import it as
-// `asicxades "github.com/utain/esig/dss/asic/xades"` to avoid clashing with the top-level
+// `asicxades "github.com/ryftcore/dss-go/dss/asic/xades"` to avoid clashing with the top-level
 // dss/xades package; inside it, the top-level XAdES package is imported as `dssxades`.
 package xades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // GetDataToSignASiCWithXAdESHelper defines a helper to create a ToBeSigned data for an ASiC
 // with XAdES.

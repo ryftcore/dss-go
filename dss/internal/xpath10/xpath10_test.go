@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // testNS is the namespace context most tests compile against: the two prefixes that carry the

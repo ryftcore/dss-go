@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // stringPredicate is the Go form of java.util.function.Predicate<String>, used by

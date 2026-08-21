@@ -17,11 +17,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/pdf"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/pades/exception"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/pdf"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/pades/exception"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // ErrRasterisationNotSupported is returned by the page-screenshot methods. Upstream renders with

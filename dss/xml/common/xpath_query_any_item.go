@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/xpath/item/XPathQueryAnyItem.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // xPathQueryAnyPath is the "*" XPath any-element wildcard.
 const xPathQueryAnyPath = "*"

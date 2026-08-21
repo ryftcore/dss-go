@@ -11,8 +11,8 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // SignatureCertificateSourceOverrides is the contract a concrete signature certificate source

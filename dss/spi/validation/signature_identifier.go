@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/signature/identifier/SignatureIdentifier.java (DSS 6.5.RC1).
 package validation
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // signatureIdentifierPrefix is the identifier prefix for a signature identifier, passed to the
 // Java super(String, byte[]) constructor as the literal "S-".

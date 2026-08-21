@@ -9,8 +9,8 @@ package tsl
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // tlParsingCacheDTOTestProvider builds a TrustServiceProvider carrying certsPerService entries per

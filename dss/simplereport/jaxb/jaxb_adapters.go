@@ -11,7 +11,7 @@ package jaxb
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // ASiCContainerTypeValue is the ASiCContainerType adapter (Adapter1): the

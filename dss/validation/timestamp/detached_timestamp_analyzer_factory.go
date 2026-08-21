@@ -2,8 +2,8 @@
 package timestamp
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // DetachedTimestampAnalyzerFactory analyzes conformance of a document to a timestamp format and

@@ -4,8 +4,8 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // TLParsingInfoRecord represents a Trusted List parsing result record.

@@ -5,8 +5,8 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
 )
 
 // InMemoryResourcesHandler is an in-memory implementation of DSSResourcesHandler. Using this

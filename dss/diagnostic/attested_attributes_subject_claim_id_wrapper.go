@@ -11,7 +11,7 @@
 // condition, so isMap() is unconditionally true, matching AddressClaimWrapper's pattern).
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // AttestedAttributesSubjectClaimIdWrapper wraps a jaxb.XmlAttestedAttributesSubjectIdClaim.
 type AttestedAttributesSubjectClaimIdWrapper struct {

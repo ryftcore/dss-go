@@ -11,9 +11,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // PivotProcessing processes a pivot analysis.

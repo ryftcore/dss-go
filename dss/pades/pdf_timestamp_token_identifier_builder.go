@@ -16,7 +16,7 @@
 // its own enclosing-object constructor argument.
 package pades
 
-import "github.com/utain/esig/dss/spi/validation"
+import "github.com/ryftcore/dss-go/dss/spi/validation"
 
 // PdfTimestampTokenIdentifierBuilder builds a validation.TimestampTokenIdentifier for a
 // PdfTimestampToken.

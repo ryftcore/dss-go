@@ -1,7 +1,7 @@
 // Ported from dss-model/.../ReferenceValidation.java (DSS 6.5.RC1).
 package model
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ReferenceValidation stores individual reference validations.
 //

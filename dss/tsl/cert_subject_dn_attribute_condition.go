@@ -5,11 +5,11 @@ import (
 	"encoding/asn1"
 	"strings"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // CertSubjectDNAttributeCondition implements the CertSubjectDNAttribute criterion.

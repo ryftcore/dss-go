@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // PdfDocTimestampRevision is the signature timestamp representation. This class is only used in

@@ -4,21 +4,21 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 
 	// Blank-imported for their init()-registered document validator and
 	// document analyzer factories, which Validate's format auto-detection
 	// dispatches through. Java discovers the same set with
 	// java.util.ServiceLoader; see the package doc.
-	_ "github.com/utain/esig/dss/asic/cades"
-	_ "github.com/utain/esig/dss/asic/xades"
-	_ "github.com/utain/esig/dss/cades"
-	_ "github.com/utain/esig/dss/jades"
-	_ "github.com/utain/esig/dss/pades"
-	_ "github.com/utain/esig/dss/xades"
+	_ "github.com/ryftcore/dss-go/dss/asic/cades"
+	_ "github.com/ryftcore/dss-go/dss/asic/xades"
+	_ "github.com/ryftcore/dss-go/dss/cades"
+	_ "github.com/ryftcore/dss-go/dss/jades"
+	_ "github.com/ryftcore/dss-go/dss/pades"
+	_ "github.com/ryftcore/dss-go/dss/xades"
 )
 
 // Aliases of the ported types the facade takes and returns. They are aliases,
@@ -157,29 +157,29 @@ type Format string
 const (
 	// FormatCAdES is CMS Advanced Electronic Signatures (ETSI EN 319 122),
 	// the format for binary content; delegates to
-	// [github.com/utain/esig/dss/cades].
+	// [github.com/ryftcore/dss-go/dss/cades].
 	FormatCAdES Format = "CAdES"
 
 	// FormatXAdES is XML Advanced Electronic Signatures (ETSI EN 319 132);
-	// delegates to [github.com/utain/esig/dss/xades].
+	// delegates to [github.com/ryftcore/dss-go/dss/xades].
 	FormatXAdES Format = "XAdES"
 
 	// FormatPAdES is PDF Advanced Electronic Signatures (ETSI EN 319 142);
-	// delegates to [github.com/utain/esig/dss/pades].
+	// delegates to [github.com/ryftcore/dss-go/dss/pades].
 	FormatPAdES Format = "PAdES"
 
 	// FormatJAdES is JSON Advanced Electronic Signatures (ETSI TS 119 182);
-	// delegates to [github.com/utain/esig/dss/jades].
+	// delegates to [github.com/ryftcore/dss-go/dss/jades].
 	FormatJAdES Format = "JAdES"
 
 	// FormatASiCWithCAdES is an ASiC container (ETSI EN 319 162) holding
 	// CAdES signatures; delegates to
-	// [github.com/utain/esig/dss/asic/cades].
+	// [github.com/ryftcore/dss-go/dss/asic/cades].
 	FormatASiCWithCAdES Format = "ASiC-CAdES"
 
 	// FormatASiCWithXAdES is an ASiC container (ETSI EN 319 162) holding
 	// XAdES signatures; delegates to
-	// [github.com/utain/esig/dss/asic/xades].
+	// [github.com/ryftcore/dss-go/dss/asic/xades].
 	FormatASiCWithXAdES Format = "ASiC-XAdES"
 )
 

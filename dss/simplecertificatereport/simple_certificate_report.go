@@ -14,8 +14,8 @@ package simplecertificatereport
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/simplecertificatereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/simplecertificatereport/jaxb"
 )
 
 // SimpleCertificateReport is a SimpleCertificateReport holder to fetch

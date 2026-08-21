@@ -18,7 +18,7 @@
 package blocks
 
 import (
-	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 )
 
 // executeEAAFormatChecking is the !eaa stub of the eaa-tagged method of the

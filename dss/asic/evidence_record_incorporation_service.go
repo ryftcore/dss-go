@@ -9,7 +9,7 @@
 // type, and any type assertions against this local interface revisited.
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // EvidenceRecordIncorporationService provides common methods for incorporation of evidence
 // records within existing signatures, generic over the ERP implementation of format-related

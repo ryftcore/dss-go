@@ -34,14 +34,14 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/policy"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	"github.com/utain/esig/dss/xades/definition"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/policy"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XMLDocumentAnalyzer is the validator of an XML Signed document. Port of the class

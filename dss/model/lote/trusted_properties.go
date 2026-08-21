@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/lote/TrustedProperties.java (DSS 6.5.RC1).
 package lote
 
-import "github.com/utain/esig/dss/model/timedependent"
+import "github.com/ryftcore/dss-go/dss/model/timedependent"
 
 // TrustedProperties contains a list of trusted certificates and their properties.
 //

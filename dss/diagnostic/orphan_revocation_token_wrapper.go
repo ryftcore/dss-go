@@ -2,8 +2,8 @@
 package diagnostic
 
 import (
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // OrphanRevocationTokenWrapper wraps XML orphan revocation data. Port of

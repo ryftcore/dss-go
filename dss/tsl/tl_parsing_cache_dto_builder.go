@@ -27,9 +27,9 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // tlParsingResultAccessor is the Go form of `result instanceof AbstractTLParsingResult`:

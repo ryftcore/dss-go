@@ -1,7 +1,7 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/ASiCWithCAdESSignatureDataToSignHelperBuilder.java (DSS 6.5.RC1).
 package cades
 
-import "github.com/utain/esig/dss/asic"
+import "github.com/ryftcore/dss-go/dss/asic"
 
 // ASiCWithCAdESSignatureDataToSignHelperBuilder builds a GetDataToSignASiCWithCAdESHelper for a
 // signature creation.

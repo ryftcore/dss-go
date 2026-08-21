@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/xades141/XAdES141Element.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdES141Element defines the XAdES 1.4.1 elements (the elements XAdES 1.4.1 adds on
 // top of XAdES 1.3.2; this type implements only common.DSSElement, not XAdESElement, since

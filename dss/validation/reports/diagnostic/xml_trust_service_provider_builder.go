@@ -8,14 +8,14 @@ import (
 	"fmt"
 	"sort"
 
-	dssdiag "github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/timedependent"
-	"github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	dssdiag "github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XmlTrustServiceProviderBuilder is used to build an XmlTrustServiceProvider object instance.

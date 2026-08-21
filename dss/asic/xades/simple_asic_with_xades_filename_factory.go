@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // SimpleASiCWithXAdESFilenameFactory provides a simple way to define custom names for file

@@ -7,9 +7,9 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PAdESLevelBaselineLTA holds the PAdES Baseline LTA signature profile.

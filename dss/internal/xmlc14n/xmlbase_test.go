@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // The known-answer tests in testdata/ are the authority on what joinURI must produce: every

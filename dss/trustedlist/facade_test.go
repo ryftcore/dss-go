@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // TestTrustedListFacadeDelegates checks NewTrustedListFacade's Unmarshal/

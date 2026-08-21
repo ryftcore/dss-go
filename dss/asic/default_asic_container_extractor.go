@@ -16,9 +16,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DefaultASiCContainerExtractorOverrides captures the abstract methods of Java's

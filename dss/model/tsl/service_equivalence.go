@@ -6,8 +6,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 // StatusEquivalenceMapping is a single entry of the TrustServiceTSLStatusEquivalenceList

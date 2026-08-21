@@ -13,9 +13,9 @@
 package executor
 
 import (
-	"github.com/utain/esig/dss/detailedreport"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/detailedreport"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // DefaultCertificateProcessExecutorOverrides captures the members Java's

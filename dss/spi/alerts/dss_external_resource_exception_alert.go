@@ -2,8 +2,8 @@
 package alerts
 
 import (
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // dssExternalResourceExceptionAlertHandler reports a DSSExternalResourceException built from

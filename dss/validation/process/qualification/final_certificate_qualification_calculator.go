@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/FinalCertificateQualificationCalculator.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // FinalCertificateQualificationCalculator determines the final qualification
 // of a certificate given two qualifications at issuance and

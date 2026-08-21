@@ -9,11 +9,11 @@
 package extension
 
 import (
-	asicxades "github.com/utain/esig/dss/asic/xades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	dssxades "github.com/utain/esig/dss/xades"
+	asicxades "github.com/ryftcore/dss-go/dss/asic/xades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssxades "github.com/ryftcore/dss-go/dss/xades"
 )
 
 // ASiCWithXAdESDocumentExtender is the ASiC with XAdES container specific implementation of a

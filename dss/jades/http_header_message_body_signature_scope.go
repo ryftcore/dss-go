@@ -4,8 +4,8 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
 )
 
 // HTTPHeaderMessageBodySignatureScope extends HTTPHeaderSignatureScope (embedding, since Go has

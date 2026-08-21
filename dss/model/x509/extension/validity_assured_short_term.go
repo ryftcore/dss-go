@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/x509/extension/ValidityAssuredShortTerm.java (DSS 6.5.RC1).
 package extension
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ValidityAssuredShortTerm is ETSI EN 319 412-1 "5.2.2 Validity Assured - Short Term".
 //

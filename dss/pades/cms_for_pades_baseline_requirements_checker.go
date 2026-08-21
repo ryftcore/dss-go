@@ -35,8 +35,8 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // CMSForPAdESBaselineRequirementsChecker is used to verify conformance of a CMSSignedData to be

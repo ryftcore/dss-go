@@ -2,7 +2,7 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // timestampTokenIdentifierPrefix is the default identifier prefix for a time-stamp token.

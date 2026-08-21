@@ -38,16 +38,16 @@ import (
 	"path"
 	"time"
 
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	spiexception "github.com/utain/esig/dss/spi/exception"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	spiexecutor "github.com/utain/esig/dss/spi/validation/executor"
-	"github.com/utain/esig/dss/validation/executor"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
-	reportsdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	spiexception "github.com/ryftcore/dss-go/dss/spi/exception"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	spiexecutor "github.com/ryftcore/dss-go/dss/spi/validation/executor"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
+	reportsdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // defaultValidationPolicyResources holds byte-identical copies of the

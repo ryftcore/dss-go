@@ -15,9 +15,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // jwsDocumentAnalyzer is the minimal surface AbstractJWSDocumentValidator needs from a JWS

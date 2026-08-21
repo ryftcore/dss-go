@@ -4,7 +4,7 @@
 // this same Go package (dss/asic/cades) per S7_BRIEF.md's package layout table.
 package cades
 
-import "github.com/utain/esig/dss/asic"
+import "github.com/ryftcore/dss-go/dss/asic"
 
 // AbstractGetDataToSignASiCSWithCAdES generates a DataToSign with ASiC-S with CAdES.
 type AbstractGetDataToSignASiCSWithCAdES struct {

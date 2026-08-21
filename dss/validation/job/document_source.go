@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/source/DocumentSource.java (DSS 6.5.RC1).
 package job
 
-import "github.com/utain/esig/dss/spi"
+import "github.com/ryftcore/dss-go/dss/spi"
 
 // DocumentSource represents a Trusted List source.
 type DocumentSource struct {

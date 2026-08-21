@@ -2,9 +2,9 @@
 package job
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
 )
 
 // AbstractAnalysisOverrides declares the operations Java's abstract AbstractAnalysis class

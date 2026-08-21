@@ -8,7 +8,7 @@ package asic
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCContainerEvidenceRecordParameters defines the configuration for creation of an ASiC

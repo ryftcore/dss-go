@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/aia/AIASource.java (DSS 6.5.RC1).
 package aia
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // AIASource allows loading of issuing certificates by defined AIA URI within a
 // model.CertificateToken.

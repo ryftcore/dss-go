@@ -10,11 +10,11 @@ package cades
 import (
 	"encoding/asn1"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
 // CAdESAttribute represents a CAdES attribute, part of AttributeTable. Port of the class

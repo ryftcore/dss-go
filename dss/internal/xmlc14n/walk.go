@@ -7,7 +7,7 @@ import (
 	"bufio"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // Where the node being written sits relative to the document element. The values decide the

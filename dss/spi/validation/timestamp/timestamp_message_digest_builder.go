@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/TimestampMessageDigestBuilder.java (DSS 6.5.RC1).
 package timestamp
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // TimestampMessageDigestBuilder builds message-imprint digest to be timestamped.
 type TimestampMessageDigestBuilder interface {

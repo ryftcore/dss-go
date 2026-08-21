@@ -38,14 +38,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport"
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/simplereport/jaxb"
-	"github.com/utain/esig/dss/validation/process/vpfswatsp"
+	"github.com/ryftcore/dss-go/dss/detailedreport"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/simplereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp"
 )
 
 // SimpleReportBuilder builds a SimpleReport XmlDom from the diagnostic data

@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xpath10"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xpath10"
 )
 
 // The three Filter attribute values of XPath Filter 2.0 (W3C Note, 2002-11-08). Port of

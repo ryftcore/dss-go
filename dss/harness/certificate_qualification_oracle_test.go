@@ -38,15 +38,15 @@ import (
 	"strconv"
 	"testing"
 
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	spitsl "github.com/utain/esig/dss/spi/tsl"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/tsl"
-	"github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spitsl "github.com/ryftcore/dss-go/dss/spi/tsl"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/tsl"
+	"github.com/ryftcore/dss-go/dss/validation"
 )
 
 // cqTLIssuer is the certificate that signs sk-tl-sn-95.xml ("KCA NBU SR 3" -> "TL and Signature

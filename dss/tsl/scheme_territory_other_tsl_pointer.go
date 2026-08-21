@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/function/SchemeTerritoryOtherTSLPointer.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/trustedlist/jaxb"
+import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 
 // schemeTerritoryOtherTSLPointerExpectedTagName is the private static EXPECTED_TAG_NAME.
 const schemeTerritoryOtherTSLPointerExpectedTagName = "{http://uri.etsi.org/02231/v2#}SchemeTerritory"

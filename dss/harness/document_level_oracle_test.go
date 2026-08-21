@@ -66,30 +66,30 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/alert"
-	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
-	simplereportjaxb "github.com/utain/esig/dss/simplereport/jaxb"
-	"github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/alert"
+	detailedreportjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	cryptoxml "github.com/ryftcore/dss-go/dss/policy/crypto/xml"
+	simplereportjaxb "github.com/ryftcore/dss-go/dss/simplereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 
 	// Blank-imported purely for their init()-registered
 	// dssvalidation.RegisterDocumentValidatorFactory side effects, which
 	// SignedDocumentValidatorFromDocument's format-autodetection dispatch
 	// needs for all six format families this corpus exercises.
-	_ "github.com/utain/esig/dss/asic/cades"
-	_ "github.com/utain/esig/dss/asic/xades"
-	_ "github.com/utain/esig/dss/cades"
-	_ "github.com/utain/esig/dss/jades"
-	_ "github.com/utain/esig/dss/pades"
-	_ "github.com/utain/esig/dss/xades"
+	_ "github.com/ryftcore/dss-go/dss/asic/cades"
+	_ "github.com/ryftcore/dss-go/dss/asic/xades"
+	_ "github.com/ryftcore/dss-go/dss/cades"
+	_ "github.com/ryftcore/dss-go/dss/jades"
+	_ "github.com/ryftcore/dss-go/dss/pades"
+	_ "github.com/ryftcore/dss-go/dss/xades"
 )
 
 func init() {

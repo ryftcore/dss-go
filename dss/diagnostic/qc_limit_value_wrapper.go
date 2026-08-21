@@ -1,7 +1,7 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/QCLimitValueWrapper.java (DSS 6.5.RC1).
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // QCLimitValueWrapper provides a user-friendly API for dealing with jaxb.XmlQcEuLimitValue.
 type QCLimitValueWrapper struct {

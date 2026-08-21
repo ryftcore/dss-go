@@ -8,13 +8,13 @@
 package tsl
 
 import (
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/validation/job"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // AcceptAllStrategy accepts all trusted lists.
 //
-// Deprecated: since DSS 6.5. Use github.com/utain/esig/dss/validation/job.AcceptAllStrategy instead.
+// Deprecated: since DSS 6.5. Use github.com/ryftcore/dss-go/dss/validation/job.AcceptAllStrategy instead.
 type AcceptAllStrategy struct{}
 
 var _ job.SynchronizationStrategy[*tslmodel.TLInfo, *tslmodel.LOTLInfo] = (*AcceptAllStrategy)(nil)

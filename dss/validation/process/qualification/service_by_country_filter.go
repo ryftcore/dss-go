@@ -9,8 +9,8 @@
 package qualification
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ServiceByCountryFilter filters trusted services by country code(s).

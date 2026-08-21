@@ -2,7 +2,7 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // eaaStatusTokenIdentifierClassName is EAAStatusTokenIdentifier.class.getSimpleName().

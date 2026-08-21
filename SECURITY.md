@@ -11,7 +11,7 @@ any public disclosure.
 
 Please report security issues privately using GitHub Security Advisories:
 
-1. Go to https://github.com/utain/esig/security/advisories/new
+1. Go to https://github.com/ryftcore/dss-go/security/advisories/new
 2. Fill in as much detail as you can:
    - Affected package(s)/version(s) or commit
    - A description of the issue and its potential impact (e.g. signature

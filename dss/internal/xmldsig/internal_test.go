@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // decodeBase64 is java.util.Base64.getMimeDecoder().decode, and the corpus only exercises the

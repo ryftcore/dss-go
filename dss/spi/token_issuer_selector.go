@@ -2,7 +2,7 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // TokenIssuerSelector is used to select an issuer of the provided Token.

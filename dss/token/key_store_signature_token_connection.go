@@ -43,9 +43,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/utain/esig/dss/internal/eccurve"
-	"github.com/utain/esig/dss/internal/pfx"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/eccurve"
+	"github.com/ryftcore/dss-go/dss/internal/pfx"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // keyStoreSignatureTokenConnectionPKCS12Type is the only ksType this port can actually load.

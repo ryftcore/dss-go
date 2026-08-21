@@ -2,9 +2,9 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/crlparser"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/crlparser"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // OfflineCRLSourceBase is the skeleton able to retrieve the needed CRL data from a contained

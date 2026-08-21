@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/qscd/QSCDStrategy.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // QSCDStrategy is used to extract QSCD status.
 type QSCDStrategy interface {

@@ -1,7 +1,7 @@
 // Ported from dss-model/.../model/policy/ValidationPolicy.java (DSS 6.5.RC1).
 package policy
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ValidationPolicy encapsulates the constraint file that controls the policy
 // used during the validation process.

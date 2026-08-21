@@ -11,8 +11,8 @@ package random
 import (
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // DSSSecureRandomProvider is the default SecureRandomProvider used in DSS, returning a

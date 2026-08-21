@@ -6,21 +6,21 @@
 // eu.europa.esig.dss.validation.qwac, not
 // eu.europa.esig.dss.validation.process.qualification.*) and had not been
 // ported to Go on disk while this file was written. The call below assumes
-// a Go package qwac (github.com/utain/esig/dss/validation/qwac) exposing
+// a Go package qwac (github.com/ryftcore/dss-go/dss/validation/qwac) exposing
 // GetIdentifiedTLSCertificates(*diagnostic.SignatureWrapper, []*diagnostic.CertificateWrapper)
 // []*diagnostic.CertificateWrapper, matching this port's static-utility-class
 // flattening convention; must be reconciled once that package exists.
 package qualification
 
 import (
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/qwac"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/qwac"
 )
 
 // TLSCertificateBindingPresentInSignatureCheck verifies that the TLS

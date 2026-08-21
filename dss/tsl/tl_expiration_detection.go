@@ -4,8 +4,8 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/alert"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/alert"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // TLExpirationDetection detects an expiration of a TrustedList.

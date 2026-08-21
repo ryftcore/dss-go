@@ -5,8 +5,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // isLtaExtensionPossible reports whether an LTA extension is possible: it is not when a

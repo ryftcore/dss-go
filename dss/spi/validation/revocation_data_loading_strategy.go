@@ -24,9 +24,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // RevocationDataLoadingStrategyOverrides carries the operation Java declares abstract on

@@ -20,7 +20,7 @@ package pades
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/internal/pdf"
+	"github.com/ryftcore/dss-go/dss/internal/pdf"
 )
 
 func TestNativePdfDictMatchSkipsNullExpectedEntries(t *testing.T) {

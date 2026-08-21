@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // MaximumTransformCount is Reference.MAXIMUM_TRANSFORM_COUNT and MaximumReferenceCount is

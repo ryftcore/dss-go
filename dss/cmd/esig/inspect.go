@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
 )
 
 // cmdInspect implements "esig inspect".

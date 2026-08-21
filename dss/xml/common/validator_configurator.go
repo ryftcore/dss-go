@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/ValidatorConfigurator.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/alert"
+import "github.com/ryftcore/dss-go/dss/alert"
 
 // Validator is a documented stub standing in for javax.xml.validation.Validator. XSD schema
 // validation is out of scope for this phase (see SchemaFactory's doc comment in

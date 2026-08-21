@@ -11,7 +11,7 @@
 //     signature verification and archive-timestamp hashing.
 //
 // The BER/DER engine and the generic X.509 structures it produces (AlgorithmIdentifier,
-// IssuerSerial, GeneralName) were extracted into github.com/utain/esig/dss/internal/asn1ber so
+// IssuerSerial, GeneralName) were extracted into github.com/ryftcore/dss-go/dss/internal/asn1ber so
 // that the CMS, XAdES and PAdES phases can share them without depending on dss-spi. The types
 // stay reachable under their original names through the aliases below; only the DSSASN1Utils
 // methods themselves are defined here.
@@ -37,10 +37,10 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // X.520 attribute type OIDs the human-readable-name helpers look for; they mirror the

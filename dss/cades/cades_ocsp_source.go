@@ -2,9 +2,9 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // CAdESOCSPSource is the OCSP source for a CAdES signature. Port of the class CAdESOCSPSource,

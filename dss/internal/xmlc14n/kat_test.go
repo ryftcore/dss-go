@@ -15,8 +15,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // implemented maps every algorithm slug the oracle emits to its URI. All seven registered

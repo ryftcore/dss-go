@@ -2,8 +2,8 @@
 package policy
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // LevelConstraintWrapper wraps eu.europa.esig.dss.policy.jaxb.LevelConstraint

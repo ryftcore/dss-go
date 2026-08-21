@@ -12,8 +12,8 @@ import (
 	"crypto/rsa"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // legacyDigestInfoContent is the payload every case below signs or claims to have signed.

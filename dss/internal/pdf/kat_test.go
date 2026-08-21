@@ -35,7 +35,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // The checked-in corpus is the curated KAT set. The full 267-file upstream sweep

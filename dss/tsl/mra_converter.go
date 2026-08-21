@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model/timedependent"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // MRAConverter converts a JAXB MutualRecognitionAgreementInformationType to a Go MRA.

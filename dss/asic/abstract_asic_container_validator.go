@@ -15,11 +15,11 @@
 package asic
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // abstractASiCContainerAnalyzerBase is implemented by every concrete leaf ASiC analyzer

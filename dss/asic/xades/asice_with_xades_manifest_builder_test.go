@@ -11,8 +11,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 func TestASiCEWithXAdESManifestBuilder_KAT(t *testing.T) {

@@ -4,7 +4,7 @@
 package cmscore
 
 import (
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // Alternatives of the CertificateChoices CHOICE.

@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // AbstractASiCWithCAdESDataToSignHelperBuilder contains common methods for getDataToSign

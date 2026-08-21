@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/alert"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/alert"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TLParsingErrorDetection detects an error on TL parsing or structure validation.

@@ -2,8 +2,8 @@
 package qualification
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // CreateTypeFromCert creates a TypeStrategy from the certificate. Port of

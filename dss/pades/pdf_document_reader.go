@@ -12,8 +12,8 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // PdfSignatureDictionaryFields pairs a signature dictionary with the signature fields that refer

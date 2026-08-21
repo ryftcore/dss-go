@@ -12,10 +12,10 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	"github.com/utain/esig/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
 )
 
 // XMLDocumentValidator is the validator of an XML Signed document. Port of the class

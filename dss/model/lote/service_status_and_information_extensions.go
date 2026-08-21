@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/lote/ServiceStatusAndInformationExtensions.java (DSS 6.5.RC1).
 package lote
 
-import "github.com/utain/esig/dss/model/timedependent"
+import "github.com/ryftcore/dss-go/dss/model/timedependent"
 
 // ServiceStatusAndInformationExtensions contains information about service status and
 // extensions.

@@ -4,8 +4,8 @@ package tsl
 import (
 	"log/slog"
 
-	"github.com/utain/esig/dss/alert"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/alert"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // LogLOTLLocationChangeAlertHandler warns on the LOTL location change.

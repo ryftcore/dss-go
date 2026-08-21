@@ -11,7 +11,7 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // SignatureFieldParameters holds parameters which allow creating a new signature field in a PDF

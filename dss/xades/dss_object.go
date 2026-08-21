@@ -6,7 +6,7 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSObject allows creation of a custom ds:Object element.

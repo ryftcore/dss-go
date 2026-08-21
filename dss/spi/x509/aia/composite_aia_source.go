@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // CompositeAIASource allows retrieving an AIA with different sources. The composite tries all

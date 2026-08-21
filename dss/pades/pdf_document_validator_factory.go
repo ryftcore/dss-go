@@ -3,8 +3,8 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // PDFDocumentValidatorFactory loads a relevant validator for a PDF document.

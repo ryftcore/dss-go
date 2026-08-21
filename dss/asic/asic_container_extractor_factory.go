@@ -5,7 +5,7 @@
 // The Java extract sub-package flattens into this Go package per the phase-7 package layout.
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // ASiCContainerExtractorFactory is used to find and load a corresponding implementation of
 // ASiCContainerExtractor for the given DSSDocument ASiC archive.

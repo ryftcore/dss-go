@@ -6,8 +6,8 @@
 package timestamp
 
 import (
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // DetachedTimestampValidatorFactory returns a validator for a detached timestamp document.

@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/timedependent"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // TrustServiceProviderBuilder builds a TrustServiceProvider.

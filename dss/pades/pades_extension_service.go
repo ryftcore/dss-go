@@ -11,10 +11,10 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/executor"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/executor"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // PAdESExtensionService obtains the validation data for the signatures/timestamps within a PDF

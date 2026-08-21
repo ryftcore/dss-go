@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 // tlCacheCertsDir is the subdirectory of a -cache directory (both "tl
@@ -17,8 +17,8 @@ import (
 // trusted-list qualification data (which trusted list a certificate came
 // from, its declared service type and status, its territory): that data
 // lives in the in-memory
-// [github.com/utain/esig/dss/spi/tsl.TrustedListsCertificateSource] a
-// [github.com/utain/esig/dss/tsl.TLValidationJob] produces, and this CLI
+// [github.com/ryftcore/dss-go/dss/spi/tsl.TrustedListsCertificateSource] a
+// [github.com/ryftcore/dss-go/dss/tsl.TLValidationJob] produces, and this CLI
 // does not serialize it. A document validated with -tl-cache therefore gets
 // an accurate Indication/SubIndication - the chain is genuinely anchored -
 // but its SignatureQualification reads "NA": nothing here can tell the

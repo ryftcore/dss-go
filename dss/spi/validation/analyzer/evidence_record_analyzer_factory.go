@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/analyzer/evidencerecord/EvidenceRecordAnalyzerFactory.java (DSS 6.5.RC1).
 package analyzer
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // EvidenceRecordAnalyzerFactory is used to load a corresponding implementation of
 // EvidenceRecordAnalyzer for processing of an evidence record document.

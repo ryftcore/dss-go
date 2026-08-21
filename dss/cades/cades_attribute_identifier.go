@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
 // CAdESAttributeIdentifier represents a unique identifier for an attribute from a CAdES

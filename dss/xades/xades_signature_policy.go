@@ -5,8 +5,8 @@ package xades
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model/signature"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model/signature"
 )
 
 // xadesSignaturePolicyRegistry recovers the concrete *XAdESSignaturePolicy from the

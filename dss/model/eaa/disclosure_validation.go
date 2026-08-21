@@ -4,8 +4,8 @@ package eaa
 import (
 	"reflect"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/eaa/claim"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/eaa/claim"
 )
 
 // DisclosureValidation represents a validation result of a selectable

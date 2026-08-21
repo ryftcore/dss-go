@@ -6,8 +6,8 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // SignatureStatus contains signatures concerned by an occurred event and corresponding

@@ -18,8 +18,8 @@ package xades
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // xadesReferenceValidationRegistry recovers the concrete *XAdESReferenceValidation from the

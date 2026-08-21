@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // BLevelParameters is used to define common b-level parameters for a

@@ -1,7 +1,7 @@
 // Ported from dss-model/.../OidRepository.java (DSS 6.5.RC1).
 package model
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // oidRepository maps OIDs to their corresponding descriptions.
 var oidRepository = buildOidRepository()

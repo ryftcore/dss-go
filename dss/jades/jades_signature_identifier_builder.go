@@ -12,7 +12,7 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // JAdESSignatureIdentifierBuilder builds the DSS identifier for a JAdES signature. Port of the

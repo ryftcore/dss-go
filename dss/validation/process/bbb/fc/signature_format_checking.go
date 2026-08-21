@@ -6,12 +6,12 @@
 package fc
 
 import (
-	drjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	policy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
+	drjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	policy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 // SignatureFormatChecking performs "5.2.2 Format Checking" building block execution for a signature.

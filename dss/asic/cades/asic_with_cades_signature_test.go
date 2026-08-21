@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/asic"
-	dsscades "github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/asic"
+	dsscades "github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // noopTSPSource satisfies validation.TSPSource for the dispatch tests below, whose extensions are

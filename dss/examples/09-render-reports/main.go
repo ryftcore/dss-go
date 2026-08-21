@@ -15,8 +15,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/examples/internal/fixtures"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/examples/internal/fixtures"
 )
 
 func main() {

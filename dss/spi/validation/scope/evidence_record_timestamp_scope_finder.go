@@ -2,8 +2,8 @@
 package scope
 
 import (
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // EvidenceRecordTimestampScopeFinder finds timestamped scopes for evidence record

@@ -9,8 +9,8 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/pdf"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/pdf"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // nativePdfArray wraps a pdf.Array as a PdfArray.

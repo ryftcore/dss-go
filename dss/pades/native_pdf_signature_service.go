@@ -29,14 +29,14 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/pdf"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/pades/exception"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/signature/resources"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/pdf"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/pades/exception"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // NativePDFSignatureService signs, timestamps and extends PDF documents with the native

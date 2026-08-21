@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // Certificate is one certBag SafeBag extracted from a PFX PDU.

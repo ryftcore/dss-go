@@ -20,10 +20,10 @@ package jades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // jadesBaselineRequirementsCheckerSigTObsolescenceDate is the 2025-07-15T00:00:00Z date, see

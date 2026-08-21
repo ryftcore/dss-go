@@ -6,7 +6,7 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // DSSDataObjectFormat represents a <xades:DataObjectFormat> element as part of

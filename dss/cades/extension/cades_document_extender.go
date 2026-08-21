@@ -8,10 +8,10 @@
 package extension
 
 import (
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CAdESDocumentExtender is the CAdES specific implementation of a

@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/parsing/LOTLParsingResult.java (DSS 6.5.RC1).
 package tsl
 
-import tslmodel "github.com/utain/esig/dss/model/tsl"
+import tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 
 // LOTLParsingResult is a parsed LOTL result.
 type LOTLParsingResult struct {

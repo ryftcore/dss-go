@@ -2,9 +2,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // JWSDocumentAnalyzerFactory loads the relevant Analyzer to process a given JWS signature. Port

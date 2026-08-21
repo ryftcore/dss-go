@@ -56,8 +56,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // PAdESSignatureParametersDefaultSignatureSize is the default preserved space for a signature

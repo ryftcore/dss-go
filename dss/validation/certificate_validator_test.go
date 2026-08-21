@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/validation/executor"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // loadTestCertificate reads one certificate of the corpus the frozen spi

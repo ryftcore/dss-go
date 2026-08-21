@@ -21,11 +21,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // content is the fixed payload, byte-identical to ByteExactnessFixtures.java's.

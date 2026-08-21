@@ -9,11 +9,11 @@
 package executor
 
 import (
-	"github.com/utain/esig/dss/detailedreport"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/reports"
-	validationreportjaxb "github.com/utain/esig/dss/validationreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/detailedreport"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
+	validationreportjaxb "github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 )
 
 // DefaultSignatureProcessExecutorOverrides captures the member Java's

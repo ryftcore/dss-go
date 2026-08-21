@@ -2,8 +2,8 @@
 package lote
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // OtherListPointer contains information about a reference to another List, including URL and

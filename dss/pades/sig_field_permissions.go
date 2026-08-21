@@ -7,7 +7,7 @@
 // pades_diagnostic_data_builder.go).
 package pades
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // SigFieldPermissions defines a list of restrictions imposed to a PDF document's modifications
 // by the current signature/field. Port of the SigFieldPermissions class.

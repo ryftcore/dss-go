@@ -4,10 +4,10 @@ package asic
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/x509/evidencerecord/digest"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/x509/evidencerecord/digest"
 )
 
 // ASiCEvidenceRecordDigestBuilder is used to build hashes for data objects within an ASiC

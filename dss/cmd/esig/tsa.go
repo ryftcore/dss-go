@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // httpTSPSource is a minimal RFC 3161 time-stamping client over HTTP, for
@@ -25,7 +25,7 @@ import (
 // promise intact while still giving the CLI a real one.
 //
 // It implements [dss.TSPSource] (== spi/validation.TSPSource), the same
-// interface [github.com/utain/esig/dss/spi/validation.KeyEntityTSPSource]
+// interface [github.com/ryftcore/dss-go/dss/spi/validation.KeyEntityTSPSource]
 // implements for the offline, self-hosted TSA the library's own tests use.
 type httpTSPSource struct {
 	url    string

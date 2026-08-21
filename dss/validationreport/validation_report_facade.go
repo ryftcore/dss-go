@@ -25,7 +25,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/utain/esig/dss/validationreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 )
 
 // ValidationReportFacade performs marshalling/unmarshalling operations for

@@ -4,7 +4,7 @@ package common
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // XPathQueryAttributeParameter allows extraction of an element by a given attribute and

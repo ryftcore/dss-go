@@ -16,8 +16,8 @@ package spi
 import (
 	"io"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // dssPublicKeySecurityFactoryClassName is KeyFactory.class.getSimpleName().

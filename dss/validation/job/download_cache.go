@@ -4,7 +4,7 @@ package job
 import (
 	"slices"
 
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DownloadCache stores downloaded files.

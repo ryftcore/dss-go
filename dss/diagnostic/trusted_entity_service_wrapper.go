@@ -12,7 +12,7 @@ package diagnostic
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // TrustedEntityServiceWrapper provides a wrapper for a Trusted Entity Service.

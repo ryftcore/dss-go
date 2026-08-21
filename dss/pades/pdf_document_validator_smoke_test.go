@@ -18,15 +18,15 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
-	"github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	cryptoxml "github.com/ryftcore/dss-go/dss/policy/crypto/xml"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // padesFixturePath resolves rel (relative to this package's testdata/) to a

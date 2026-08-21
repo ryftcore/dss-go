@@ -2,8 +2,8 @@
 package policy
 
 import (
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // CertificateValuesConstraintWrapper wraps

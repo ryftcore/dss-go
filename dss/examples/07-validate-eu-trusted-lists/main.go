@@ -25,14 +25,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/client/http"
-	spitsl "github.com/utain/esig/dss/spi/tsl"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/tsl"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	spitsl "github.com/ryftcore/dss-go/dss/spi/tsl"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/tsl"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // init registers the ETSI validation policy factory the TL/LOTL signature

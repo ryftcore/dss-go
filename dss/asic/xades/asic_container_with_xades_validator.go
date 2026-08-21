@@ -14,10 +14,10 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // ASiCContainerWithXAdESValidator is an implementation to validate ASiC containers with XAdES

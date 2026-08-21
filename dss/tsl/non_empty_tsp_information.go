@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/function/NonEmptyTSPInformation.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/trustedlist/jaxb"
+import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 
 // NonEmptyTSPInformation filters non-empty TSPInformation element.
 type NonEmptyTSPInformation struct{}

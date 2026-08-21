@@ -3,7 +3,7 @@
 // (Apache Santuario xmlsec 3.0.6).
 package xmlc14n
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // NodeFilter decides node-set membership during a document-subset canonicalization. It is the
 // port of org.apache.xml.security.signature.NodeFilter, the interface the XML-DSig transform

@@ -8,9 +8,9 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/pades/alerts"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/pades/alerts"
 )
 
 // PdfPermissionsChecker is used to verify permissions of a PDF document and to check whether

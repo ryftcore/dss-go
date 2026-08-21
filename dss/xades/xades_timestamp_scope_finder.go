@@ -33,10 +33,10 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XAdESTimestampScopeFinder finds a timestamp scope for a XAdES encapsulated timestamp. Port of

@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ASiCEvidenceRecordFilenameFactory creates a new evidence record's filename for the current
 // container type and ASiCContent.

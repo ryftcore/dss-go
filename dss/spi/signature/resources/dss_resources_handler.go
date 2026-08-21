@@ -4,7 +4,7 @@ package resources
 import (
 	"io"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSResourcesHandler is used to create objects required for a document

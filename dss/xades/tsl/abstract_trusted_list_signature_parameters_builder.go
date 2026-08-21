@@ -12,13 +12,13 @@ package tsl
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/xades"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/xades"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // defaultCanonicalization is the EXCLUSIVE canonicalization method used for the enveloped

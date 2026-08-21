@@ -18,10 +18,10 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // TLParsingCacheDTO is the DTO for a Trusted List parsing cache. It implements

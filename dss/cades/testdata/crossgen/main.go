@@ -20,16 +20,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // sampleContent is the fixed payload every generated signature covers. Its own text records
 // what generated it, so a file found on disk explains itself.
-var sampleContent = []byte("DSS Go port cross-validation sample content - github.com/utain/esig/dss cades/testdata/crossgen. " +
+var sampleContent = []byte("DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss cades/testdata/crossgen. " +
 	"Signed by the Go port's own CAdESService, verified by upstream DSS 6.5.RC1's SignedDocumentValidator.")
 
 func main() {

@@ -4,7 +4,7 @@ package signature
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // SignaturePolicyValidationResult contains results of a SignaturePolicy validation.

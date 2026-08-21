@@ -25,7 +25,7 @@ package vpfswatsp
 import (
 	"time"
 
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // POE contains Proof Of Existence for validation objects. It is the Go form of

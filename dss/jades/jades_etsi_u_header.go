@@ -21,8 +21,8 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESEtsiUHeader represents the list of components present inside the unprotected 'etsiU'

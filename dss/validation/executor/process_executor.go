@@ -6,8 +6,8 @@ package executor
 import (
 	"time"
 
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/model/policy"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // ProcessExecutor allows to define how the validation process should be

@@ -3,7 +3,7 @@
 // java.io.Serializable is dropped (no Go counterpart), per PORTING.md.
 package tls
 
-import "github.com/utain/esig/dss/model/tls"
+import "github.com/ryftcore/dss-go/dss/model/tls"
 
 // TLSCertificateLoader is the data loader which includes server webpage certificates to the
 // response context. Use GetTLSCertificates(url) to extract the data.

@@ -7,8 +7,8 @@ package tsl
 import (
 	"time"
 
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/validation/job"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // ExpirationAndSignatureCheckStrategy allows skipping expired or invalid trusted lists.

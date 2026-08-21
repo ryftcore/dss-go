@@ -2,7 +2,7 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // ArchiveTimestampHashIndexStatus contains information on the validation status of the

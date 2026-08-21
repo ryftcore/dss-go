@@ -11,14 +11,14 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/signature/resources"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // ExternalCMSService generates a CMS signed data to be incorporated within a PDF document for a

@@ -6,7 +6,7 @@ package document
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 func TestNewProfileParametersDefaults(t *testing.T) {

@@ -55,10 +55,10 @@ default encodes a great deal of considered judgement.
 
 ```go
 import (
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // Load the library's own default policy.
@@ -86,7 +86,7 @@ reports, err := dss.Validate(doc, dss.ValidateOptions{
 The default document ships in the module at `policy/resources/constraint.xml`.
 A complete runnable version of the above — including printing the before and
 after verdicts side by side — is
-[`examples/08-custom-policy`](https://github.com/utain/esig/tree/main/dss/examples/08-custom-policy).
+[`examples/08-custom-policy`](https://github.com/ryftcore/dss-go/tree/main/dss/examples/08-custom-policy).
 
 From the CLI, a policy is just a file:
 

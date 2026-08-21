@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/validation/process/qualification"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/validation/process/qualification"
 )
 
 // GrantedTrustAnchorPeriodPredicate verifies whether a corresponding ServiceInformation or

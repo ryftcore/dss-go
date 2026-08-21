@@ -4,10 +4,10 @@ package tsl
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // LOTLAnalysis runs the job for a LOTL analysis.

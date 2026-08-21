@@ -5,7 +5,7 @@
 // registry-like constant sets, plus behavioural tests mirroring what upstream's getters/setters
 // guarantee.
 //
-// NOTE: at the time this file was written, github.com/utain/esig/dss/jades did not yet compile
+// NOTE: at the time this file was written, github.com/ryftcore/dss-go/dss/jades did not yet compile
 // as a whole, so this file could not be executed end-to-end - see the phase-6 integration pass
 // for the cross-chunk fixups (analyzer.DocumentAnalyzer.JwsJsonSerializationObject reached via a
 // new jwsDocumentAnalyzerBase helper, EtsiUComponentBuild -> EtsiUComponentBuildFromValue's
@@ -18,9 +18,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 func TestJAdESHeaderParameterNames_Values(t *testing.T) {

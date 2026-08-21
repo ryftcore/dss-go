@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // oracleCase is one row of testdata/jose4j_oracle.tsv.

@@ -2,7 +2,7 @@
 package model
 
 import (
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // EncapsulatedRevocationTokenIdentifier is a unique identifier for revocation data binaries.

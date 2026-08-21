@@ -5,7 +5,7 @@
 // job.ValidationJobSummary[TLInfo, LOTLInfo] interface (getDocumentListInfos/getOtherDocumentInfos,
 // ported as DocumentListInfos()/OtherDocumentInfos())", but the type's actual accessors are named
 // LOTLInfos()/OtherTLInfos() - they do NOT satisfy modeljob.ValidationJobSummary[TLInfo, LOTLInfo]
-// (github.com/utain/esig/dss/model/job, requiring exactly DocumentListInfos()/OtherDocumentInfos())
+// (github.com/ryftcore/dss-go/dss/model/job, requiring exactly DocumentListInfos()/OtherDocumentInfos())
 // by name, which the now-landed validation/job package's ValidationJobSummaryBuilder[D, L]
 // interface (Build() modeljob.ValidationJobSummary[D, L]) requires verbatim. Rather than editing
 // the frozen model/tsl file, tlValidationJobSummaryAdapter below (this file, package tsl) wraps a
@@ -17,11 +17,11 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	modeljob "github.com/utain/esig/dss/model/job"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/utils"
-	validationjob "github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/utils"
+	validationjob "github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // tlValidationJobSummaryAdapter adapts *tslmodel.TLValidationJobSummary to

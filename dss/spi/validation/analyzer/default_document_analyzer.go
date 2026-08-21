@@ -57,19 +57,19 @@ package analyzer
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/model/signature"
-	"github.com/utain/esig/dss/spi"
-	spihttp "github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/spi/policy"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer/timestamp"
-	"github.com/utain/esig/dss/spi/validation/executor"
-	"github.com/utain/esig/dss/spi/validation/scope"
-	timestampsrc "github.com/utain/esig/dss/spi/validation/timestamp"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/model/signature"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spihttp "github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/spi/policy"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer/timestamp"
+	"github.com/ryftcore/dss-go/dss/spi/validation/executor"
+	"github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	timestampsrc "github.com/ryftcore/dss-go/dss/spi/validation/timestamp"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 func init() {

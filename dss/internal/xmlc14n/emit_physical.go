@@ -2,7 +2,7 @@
 // (Apache Santuario xmlsec 3.0.6): attribute emission for the Santuario "physical" method.
 package xmlc14n
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // outputAttributesSubtreePhysical ports CanonicalizerPhysical.outputAttributesSubtree.
 //

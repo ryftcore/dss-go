@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/AbstractConfigurator.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/alert"
+import "github.com/ryftcore/dss-go/dss/alert"
 
 // SecurityFeatureSetter configures a single named security feature on a factory-like value
 // F. It stands in for the abstract method

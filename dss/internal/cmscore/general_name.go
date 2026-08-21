@@ -6,7 +6,7 @@ package cmscore
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // generalNameUniversalTag maps a GeneralName alternative onto the universal tag its value

@@ -4,12 +4,12 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
-	xadesdefinition "github.com/utain/esig/dss/xades/definition"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
+	xadesdefinition "github.com/ryftcore/dss-go/dss/xades/definition"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // TrustedListWithSha2Predicate is the Go form of Java's

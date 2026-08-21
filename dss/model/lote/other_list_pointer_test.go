@@ -3,7 +3,7 @@ package lote
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 func TestOtherListPointerBuilderRoundTrip(t *testing.T) {

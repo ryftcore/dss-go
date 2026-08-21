@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // tsaPolicy is the policy the fixture TSA was configured with, see testdata/generate.sh.

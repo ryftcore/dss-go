@@ -3,7 +3,7 @@ package jaxb
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TestAdaptersRoundTrip is the exhaustive table test PORTING.md requires for

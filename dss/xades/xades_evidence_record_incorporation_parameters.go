@@ -2,9 +2,9 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/xades/definition"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // XAdESEvidenceRecordIncorporationParameters holds parameters for an evidence record

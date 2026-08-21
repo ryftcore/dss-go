@@ -8,7 +8,7 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/alert"
+	"github.com/ryftcore/dss-go/dss/alert"
 )
 
 // PdfSignatureFieldPositionChecker is used to verify the correctness of a new signature field

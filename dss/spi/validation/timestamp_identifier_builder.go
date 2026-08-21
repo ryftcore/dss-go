@@ -6,8 +6,8 @@ import (
 	"encoding/binary"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TimestampIdentifierBuilderOverrides is the contract a subclass of TimestampIdentifierBuilder

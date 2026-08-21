@@ -32,17 +32,17 @@ package timestamp
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	modelscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	analyzertimestamp "github.com/utain/esig/dss/spi/validation/analyzer/timestamp"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	timestampsrc "github.com/utain/esig/dss/spi/validation/timestamp"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	analyzertimestamp "github.com/ryftcore/dss-go/dss/spi/validation/analyzer/timestamp"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	timestampsrc "github.com/ryftcore/dss-go/dss/spi/validation/timestamp"
 )
 
 // DetachedTimestampAnalyzerOverrides declares the two additional operations

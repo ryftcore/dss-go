@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ocspTokenTestBasicResponse loads one of the OCSP response fixtures and returns the basic

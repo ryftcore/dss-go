@@ -2,9 +2,9 @@
 package eaa
 
 import (
-	"github.com/utain/esig/dss/spi/eaa/status"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/spi/eaa/status"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // EAAPresentationValidator is used to validate an Electronic Attestation of Attributes

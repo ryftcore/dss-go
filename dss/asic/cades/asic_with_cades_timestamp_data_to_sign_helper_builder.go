@@ -4,7 +4,7 @@
 // same Go package (dss/asic/cades) per S7_BRIEF.md's package layout table.
 package cades
 
-import "github.com/utain/esig/dss/asic"
+import "github.com/ryftcore/dss-go/dss/asic"
 
 // ASiCWithCAdESTimestampDataToSignHelperBuilder creates a GetDataToSignASiCWithCAdESHelper for
 // timestamp creation.

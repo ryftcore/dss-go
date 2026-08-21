@@ -16,10 +16,10 @@ package validation
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // RevocationDataVerifierFactory loads a RevocationDataVerifier from a provided

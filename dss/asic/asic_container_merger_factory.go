@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/merge/ASiCContainerMergerFactory.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // ASiCContainerMergerFactory loads a relevant ASiCContainerMerger for given DSSDocument
 // containers or ASiCContents.

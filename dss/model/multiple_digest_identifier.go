@@ -4,7 +4,7 @@ package model
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // MultipleDigestIdentifier obtains a requested digest from a stored binary array, caching

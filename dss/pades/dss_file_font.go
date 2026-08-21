@@ -14,9 +14,9 @@ package pades
 import (
 	"io"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DSSFileFontDefaultFontName is the default font name. Port of DEFAULT_FONT_NAME.

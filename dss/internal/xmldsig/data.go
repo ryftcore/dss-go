@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmlc14n"
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmlc14n"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // Data is one value flowing through the reference-processing pipeline: the result of

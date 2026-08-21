@@ -37,7 +37,7 @@ func cmdVersion(args []string, stdout, stderr io.Writer) int {
 // moduleVersion returns the version of the dss module esig was built from:
 // "(devel)" for a build from a local checkout without a tagged release, or
 // the resolved pseudo-version/tag from a `go install
-// github.com/utain/esig/dss/cmd/esig@version` build. cmd/esig lives inside
+// github.com/ryftcore/dss-go/dss/cmd/esig@version` build. cmd/esig lives inside
 // the dss module itself, so it is always info.Main, never an info.Deps
 // entry.
 func moduleVersion(info *debug.BuildInfo) string {

@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/definition/ASiCManifestNamespace.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // ASiCManifestNS is the namespace for ASiC and its schema. Ports ASiCManifestNamespace.NS;
 // ASiCManifestNamespace itself was a namespace-only holder class with a private constructor,

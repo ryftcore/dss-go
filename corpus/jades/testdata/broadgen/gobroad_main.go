@@ -3,7 +3,7 @@
 // JAdESSignature. Diff the two files; every difference is a parity defect on one side.
 //
 // Kept under testdata/ so `go build ./...` ignores it. Run it with the repo module on the path,
-// e.g. from a scratch dir with a go.mod that `replace`s github.com/utain/esig => <path to your esig checkout>:
+// e.g. from a scratch dir with a go.mod that `replace`s github.com/ryftcore/dss-go => <path to your esig checkout>:
 //
 //	go run . <corpus root> <output json>
 package main
@@ -16,12 +16,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/jades"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/jades"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // detachedContent mirrors BroadOracle.java's DETACHED_CONTENT map 1:1 (transcribed from the

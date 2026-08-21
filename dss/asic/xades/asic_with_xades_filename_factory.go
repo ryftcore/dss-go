@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/asic"
+import "github.com/ryftcore/dss-go/dss/asic"
 
 // ASiCWithXAdESFilenameFactory is used to provide filenames for newly created ZIP-entries
 // during a signature creation or extension for ASiC with XAdES containers.

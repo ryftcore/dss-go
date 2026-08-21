@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/DocumentBuilderFactoryBuilder.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // The JAXP feature URIs DocumentBuilderFactoryBuilder's constructor toggles.
 const (

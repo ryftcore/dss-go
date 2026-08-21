@@ -7,8 +7,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // ManifestPath_FILE_ENTRY_PATH is the XPath expression to return manifest:file-entry entries

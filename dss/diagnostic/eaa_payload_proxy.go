@@ -19,7 +19,7 @@
 // BiometricTemplateXXClaimWrapper.
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // EAAPayloadProxy provides an interface for selectively disposable claims extraction.
 type EAAPayloadProxy struct {

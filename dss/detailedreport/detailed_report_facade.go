@@ -22,7 +22,7 @@ package detailedreport
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 )
 
 // DetailedReportFacade contains methods for DetailedReport generation.

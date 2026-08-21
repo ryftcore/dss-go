@@ -7,8 +7,8 @@ package jades
 import (
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // HTTPHeader implements model.DSSDocument to model an HTTP Header entry (name/value pair) as a

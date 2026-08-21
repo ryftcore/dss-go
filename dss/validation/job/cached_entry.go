@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // CachedEntry defines a cached entry. R is the type of the cached result, mirroring Java's

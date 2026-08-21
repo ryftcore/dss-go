@@ -10,7 +10,7 @@ package tsl
 import (
 	"encoding/xml"
 
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // extractAdditionalInformation extracts the additional information map from an

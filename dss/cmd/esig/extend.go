@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 // cmdExtend implements "esig extend".

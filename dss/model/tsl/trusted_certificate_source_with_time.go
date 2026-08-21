@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/tsl/TrustedCertificateSourceWithTime.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // TrustedCertificateSourceWithTime defines a collection of trusted certificates with a given
 // trusted validity range, during which a certificate is considered as a trust anchor.

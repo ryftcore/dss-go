@@ -10,9 +10,9 @@
 package cms
 
 import (
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // CMSBuilder builds a CMS. Port of the CMSBuilder class.

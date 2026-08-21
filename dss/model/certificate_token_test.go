@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // rootCertificate is a fixed RSA test certificate; the expectations below are computed from

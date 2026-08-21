@@ -3,7 +3,7 @@
 // re-exported here as an alias - see doc.go's "Enum and parser re-exports".
 package validationreport
 
-import "github.com/utain/esig/dss/validationreport/jaxb"
+import "github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 
 // SignatureValidationProcessID defines SignatureValidationProcessID.
 // Implements enumerations.UriBasedEnum.

@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // ASiCContainerTypeValue is the ASiCContainerType adapter: The parser prints toString(), which replaces '_' with '-'.

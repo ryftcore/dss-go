@@ -6,7 +6,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // TestSignedAttributeOrderMatchesTheProducer is the known-answer test for the DER SET OF

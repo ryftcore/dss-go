@@ -6,7 +6,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/utain/esig/dss/simplereport"
+	"github.com/ryftcore/dss-go/dss/simplereport"
 )
 
 // cmdReport implements "esig report".

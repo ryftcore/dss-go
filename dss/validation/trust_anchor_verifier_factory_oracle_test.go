@@ -28,10 +28,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // verifierFactoryOracleTime is the validation time the Java dump used.

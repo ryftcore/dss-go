@@ -5,7 +5,7 @@ package asic
 import (
 	"time"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ZipContainerHandler provides utilities for data extraction/creation of ZIP-archives.

@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/xpath/item/XPathQueryItem.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // XPathQueryItem represents a single XPath expression chain item. MatchNode evaluates one
 // chain link directly against an *xmldom.Node (the org.w3c.dom.Node counterpart), which is

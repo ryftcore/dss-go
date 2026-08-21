@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/XAdESSignatureProfile.java (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // XAdESSignatureProfile is a XAdES signature creation profile.
 //

@@ -32,9 +32,9 @@ package validation
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // SignatureValidationAlerter uses a SignatureValidationContext to perform validation and

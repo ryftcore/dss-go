@@ -11,7 +11,7 @@
 // established for job.AbstractParsingCacheDTO.
 package tsl
 
-import "github.com/utain/esig/dss/validation/job"
+import "github.com/ryftcore/dss-go/dss/validation/job"
 
 // TLCacheAccessByKey accesses cache information for a Trusted List by key.
 type TLCacheAccessByKey struct {

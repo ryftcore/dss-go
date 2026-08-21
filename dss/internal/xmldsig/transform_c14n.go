@@ -6,8 +6,8 @@ package xmldsig
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/internal/xmlc14n"
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmlc14n"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // c14nTransform is any of the canonicalization methods used as a ds:Transform. The six

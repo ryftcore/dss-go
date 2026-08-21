@@ -3,7 +3,7 @@ package model
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 func TestSpDocSpecificationRoundTripAndEquals(t *testing.T) {

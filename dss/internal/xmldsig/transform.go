@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // Transform algorithm URIs. Port of the TRANSFORM_* constants of

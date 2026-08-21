@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/JsonObject.java (DSS 6.5.RC1).
 package jades
 
-import "github.com/utain/esig/dss/internal/jose"
+import "github.com/ryftcore/dss-go/dss/internal/jose"
 
 // JsonObject is a wrapper of a map with JsonObject methods. Port of the class JsonObject, which
 // upstream implements java.util.Map<String, Object> and renders through

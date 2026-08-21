@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/evidencerecord/CAdESEvidenceRecordIncorporationParameters.java (DSS 6.5.RC1).
 package cades
 
-import "github.com/utain/esig/dss/document"
+import "github.com/ryftcore/dss-go/dss/document"
 
 // CAdESEvidenceRecordIncorporationParameters holds parameters for an existing evidence record
 // embedding into an existing CAdES signature.

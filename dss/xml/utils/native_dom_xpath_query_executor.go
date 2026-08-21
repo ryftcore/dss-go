@@ -22,8 +22,8 @@
 package utils
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // NativeDOMXPathQueryExecutor is DSS's "(Experimental)" implementation of XPathQueryExecutor

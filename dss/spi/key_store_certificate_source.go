@@ -43,9 +43,9 @@ import (
 
 	"golang.org/x/crypto/pkcs12"
 
-	"github.com/utain/esig/dss/internal/eccurve"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/eccurve"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // KeyStoreCertificateSourceType identifies the keystore format a KeyStoreCertificateSource

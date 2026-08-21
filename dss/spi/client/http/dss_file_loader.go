@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/client/http/DSSFileLoader.java (DSS 6.5.RC1).
 package http
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DSSFileLoader loads a model.DSSDocument instead of raw binaries.
 type DSSFileLoader interface {

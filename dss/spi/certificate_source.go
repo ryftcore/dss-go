@@ -15,8 +15,8 @@ package spi
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CertificateSource provides an abstraction for accessing a certificate, regardless of the

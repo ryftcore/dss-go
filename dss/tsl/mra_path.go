@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	xadesdefinition "github.com/utain/esig/dss/xades/definition"
-	"github.com/utain/esig/dss/xml/common"
+	xadesdefinition "github.com/ryftcore/dss-go/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // XPath expressions used within the implementation in relation to the MRA (Mutual Recognition

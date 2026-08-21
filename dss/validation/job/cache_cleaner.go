@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/cache/CacheCleaner.java (DSS 6.5.RC1).
 package job
 
-import "github.com/utain/esig/dss/spi/client/http"
+import "github.com/ryftcore/dss-go/dss/spi/client/http"
 
 // CacheCleaner is used to clean outdated cache entries.
 //

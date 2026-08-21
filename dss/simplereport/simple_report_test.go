@@ -4,9 +4,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/simplereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/simplereport/jaxb"
 )
 
 // TestSimpleReportWrapper checks the wrapper's method surface against

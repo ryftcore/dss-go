@@ -61,7 +61,7 @@
 // neither existed anywhere in the repository at port time - this is a
 // genuine unported dependency, flagged per the porter brief rather than
 // invented. eaa_format_checking.go and eaa_revocation_format_checking.go
-// import "github.com/utain/esig/dss/validation/process/eaa" and call
+// import "github.com/ryftcore/dss-go/dss/validation/process/eaa" and call
 // constructors (NewEAASignatureUnicityCheck, NewDisclosurePresentCheck,
 // NewDisclosureListExhaustiveCheck, NewKeyBindingSignaturePresentCheck,
 // NewEAARevocationTokenTypeCheck) that package must eventually provide, each
@@ -74,7 +74,7 @@
 // gap forward instead of leaving the package broken.
 //
 // Integration pass (8e): the dependency landed in
-// github.com/utain/esig/dss/validation/process/eaa/checks (not the eaa root
+// github.com/ryftcore/dss-go/dss/validation/process/eaa/checks (not the eaa root
 // package - see eaa_format_checking.go's header for why), constructors
 // exactly as predicted above. `go build -tags eaa ./...` is green for this
 // package.

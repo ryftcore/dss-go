@@ -1,7 +1,7 @@
 // Ported from dss-token/src/main/java/eu/europa/esig/dss/token/predicate/KeyUsageKeyEntryPredicate.java (DSS 6.5.RC1).
 package token
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // NewKeyUsageKeyEntryPredicate creates a predicate filtering private keys based on the
 // certificate KeyUsage attribute value, accepting the given KeyUsageBits.

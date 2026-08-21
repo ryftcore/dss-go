@@ -8,8 +8,8 @@ package spi
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // equivalentCertificatesEntity re-groups equivalent certificates by a given property (e.g. a

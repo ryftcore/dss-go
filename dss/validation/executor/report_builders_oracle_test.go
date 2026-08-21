@@ -32,16 +32,16 @@ import (
 	"testing"
 	"time"
 
-	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	simplecertjaxb "github.com/utain/esig/dss/simplecertificatereport/jaxb"
-	simplereportjaxb "github.com/utain/esig/dss/simplereport/jaxb"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
-	validationreportjaxb "github.com/utain/esig/dss/validationreport/jaxb"
+	detailedreportjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	simplecertjaxb "github.com/ryftcore/dss-go/dss/simplecertificatereport/jaxb"
+	simplereportjaxb "github.com/ryftcore/dss-go/dss/simplereport/jaxb"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
+	validationreportjaxb "github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 )
 
 // oracleCorpusRoot is the module-root-relative path (inside the external

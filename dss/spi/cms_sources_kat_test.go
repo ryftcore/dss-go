@@ -15,10 +15,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // cmsSourcesKatFixture parses the fixture and returns the CMS plus its single signer.

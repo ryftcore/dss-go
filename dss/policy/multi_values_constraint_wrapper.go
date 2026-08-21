@@ -1,7 +1,7 @@
 // Ported from dss-policy-jaxb/.../policy/MultiValuesConstraintWrapper.java (DSS 6.5.RC1).
 package policy
 
-import "github.com/utain/esig/dss/policy/jaxb"
+import "github.com/ryftcore/dss-go/dss/policy/jaxb"
 
 // MultiValuesConstraintWrapper wraps
 // eu.europa.esig.dss.policy.jaxb.MultiValuesConstraint into a

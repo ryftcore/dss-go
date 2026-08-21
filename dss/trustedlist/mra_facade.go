@@ -2,7 +2,7 @@
 
 package trustedlist
 
-import "github.com/utain/esig/dss/trustedlist/jaxb"
+import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 
 // MRAFacade performs marshalling/unmarshalling of a Trusted List XML with
 // applied MRA scheme, the way eu.europa.esig.trustedlist.mra.MRAFacade

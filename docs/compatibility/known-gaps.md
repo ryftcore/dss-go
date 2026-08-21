@@ -6,7 +6,7 @@ The other half of [The numbers](numbers.md). This page lists what the port does
 It is here because in a signature library an overclaim in the documentation is
 as much a defect as a bug in the code. If you find something missing from this
 list that should be on it, that is a bug worth
-[reporting](https://github.com/utain/esig/issues).
+[reporting](https://github.com/ryftcore/dss-go/issues).
 
 Every entry below was checked against the code in this repository, not copied
 forward from an earlier document.
@@ -159,10 +159,10 @@ Two behaviors follow the Go release you build with, not this port's own code.
 
 ## Where these are tracked
 
-- [`PORTING_PLAN.md`](https://github.com/utain/esig/blob/main/PORTING_PLAN.md) —
+- [`PORTING_PLAN.md`](https://github.com/ryftcore/dss-go/blob/main/PORTING_PLAN.md) —
   the historical record of the port, phase by phase, including the accepted-gaps
   list this page is derived from and verified against.
-- [`UPSTREAM.md`](https://github.com/utain/esig/blob/main/UPSTREAM.md) — the
+- [`UPSTREAM.md`](https://github.com/ryftcore/dss-go/blob/main/UPSTREAM.md) — the
   baseline pin and the procedure for moving to a newer DSS release.
 - The repository's issue tracker, which has a dedicated **interop mismatch**
   template.

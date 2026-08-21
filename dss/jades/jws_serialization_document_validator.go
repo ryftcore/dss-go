@@ -23,7 +23,7 @@
 // }
 package jades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // JWSSerializationDocumentValidator validates a JWS Serialization or Flattened signature. Port
 // of the class JWSSerializationDocumentValidator, extending AbstractJWSDocumentValidator.

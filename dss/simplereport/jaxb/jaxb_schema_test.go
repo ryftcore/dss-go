@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // TestSchemaElementsAndAttributesAreBound is the XSD-completeness sweep:

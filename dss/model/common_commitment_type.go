@@ -1,7 +1,7 @@
 // Ported from dss-model/.../CommonCommitmentType.java (DSS 6.5.RC1).
 package model
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // CommonCommitmentType provides a basic implementation of
 // enumerations.CommitmentType, allowing creation of a customized

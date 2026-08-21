@@ -1,7 +1,7 @@
 // Ported from dss-model/.../claim/ClaimIntegrity.java (DSS 6.5.RC1).
 package claim
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ClaimIntegrity represents a claim integrity definition, when
 // applicable. This definition is based on W3C Subresource Integrity

@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // ASiCFormatDetector contains methods for verification of a document on a conformance to a ZIP or
 // ASiC format.

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 func strp(s string) *string { return &s }

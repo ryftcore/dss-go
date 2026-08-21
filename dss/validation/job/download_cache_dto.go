@@ -4,8 +4,8 @@ package job
 import (
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	modeljob "github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // DownloadCacheDTO is the download record DTO. It implements modeljob.DownloadInfoRecord.

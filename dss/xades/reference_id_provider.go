@@ -4,7 +4,7 @@ package xades
 import (
 	"strconv"
 
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ReferenceIdProvider is used to generate a deterministic reference identifier.

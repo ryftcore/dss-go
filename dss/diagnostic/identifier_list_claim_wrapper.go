@@ -1,7 +1,7 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/claim/IdentifierListClaimWrapper.java (DSS 6.5.RC1).
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // IdentifierListClaimWrapper wraps a jaxb.XmlIdentifierListClaim.
 type IdentifierListClaimWrapper struct {

@@ -7,7 +7,7 @@ package spi
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CertificateTokenRefMatcher is used to verify if a given CertificateToken matches a

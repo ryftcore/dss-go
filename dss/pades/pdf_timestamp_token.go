@@ -18,8 +18,8 @@ package pades
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PdfTimestampToken is a specific TimestampToken for a PDF document time-stamp. Port of the

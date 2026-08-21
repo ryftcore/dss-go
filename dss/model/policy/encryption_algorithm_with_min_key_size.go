@@ -4,7 +4,7 @@ package policy
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // EncryptionAlgorithmWithMinKeySize is a DTO containing a pair of an

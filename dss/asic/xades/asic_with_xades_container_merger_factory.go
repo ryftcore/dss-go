@@ -7,8 +7,8 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithXAdESContainerMergerFactory is used to load a relevant merger for an ASiC with XAdES

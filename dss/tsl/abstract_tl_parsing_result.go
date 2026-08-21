@@ -12,8 +12,8 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // AbstractTLParsingResult is the abstract base for a Trusted Lists parsing analysis result.

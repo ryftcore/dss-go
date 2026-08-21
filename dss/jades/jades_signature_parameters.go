@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // JAdESSignatureParameters holds the parameters to create/extend a JAdES signature.

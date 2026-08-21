@@ -4,7 +4,7 @@ package tsl
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // mimetypeOtherTSLPointerExpectedTagName is the private static EXPECTED_TAG_NAME.

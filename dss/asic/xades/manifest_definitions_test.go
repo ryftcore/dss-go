@@ -10,7 +10,7 @@ package xades
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 func TestManifestNamespace_KAT(t *testing.T) {

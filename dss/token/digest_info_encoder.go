@@ -4,8 +4,8 @@ package token
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DigestInfoEncoderEncode encodes the algorithmOid and digest combination into its ASN.1

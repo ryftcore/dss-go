@@ -9,7 +9,7 @@ package validation
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // revocationIdentityStub implements just enough of AnyRevocationToken for

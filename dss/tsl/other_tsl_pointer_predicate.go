@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/function/OtherTSLPointerPredicate.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/trustedlist/jaxb"
+import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 
 // OtherTSLPointerPredicate is a predicate allowing to filter TSL pointers. Port of
 // java.util.function.Predicate<OtherTSLPointerType> (the marker sub-interface carries no members

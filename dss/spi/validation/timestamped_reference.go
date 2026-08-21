@@ -4,7 +4,7 @@ package validation
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TimestampedReference stocks the timestamped reference, which is composed of: the timestamp
