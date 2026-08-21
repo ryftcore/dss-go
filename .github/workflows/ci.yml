@@ -1,0 +1,177 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - name: gofmt
+        working-directory: dss
+        run: |
+          fmt_out="$(gofmt -l .)"
+          if [ -n "$fmt_out" ]; then
+            echo "The following files are not gofmt-formatted:"
+            echo "$fmt_out"
+            exit 1
+          fi
+
+      - name: go vet (default + eaa)
+        working-directory: dss
+        run: |
+          go vet ./...
+          go vet -tags eaa ./...
+
+      # Blocking: govet+staticcheck issues fail the job.
+      #
+      # The version is PINNED, not "latest", and pinned to a v1 release on
+      # purpose: .github/.golangci.yml is a v1-schema config, and
+      # golangci-lint v2 refuses to load one (it wants a `version: "2"` key
+      # and a restructured file) and has also dropped the --disable-all flag
+      # used below in favour of --default=none. "latest" would therefore
+      # resolve to v2.x and fail this job on the very first run. Moving to v2
+      # means migrating the config (`golangci-lint migrate`), switching the
+      # flags, and bumping this action to v7+ — do all four together.
+      - name: golangci-lint (blocking)
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.64.8
+          working-directory: dss
+          args: --config=../.github/.golangci.yml --disable-all --enable=govet --enable=staticcheck
+
+      # Advisory only: revive's exported-comment rule is useful signal but
+      # must not block merges (see .github/.golangci.yml for why this is a
+      # separate step rather than a config-level severity knob).
+      - name: "golangci-lint (advisory: revive exported-comment)"
+        continue-on-error: true
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.64.8
+          working-directory: dss
+          args: --config=../.github/.golangci.yml --disable-all --enable=revive
+
+  build:
+    name: build (go ${{ matrix.go }}, ${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        go: ["stable", "oldstable"]
+        include:
+          # Windows: single smoke-build combination, not the full matrix.
+          - os: windows-latest
+            go: "stable"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          cache-dependency-path: dss/go.sum
+
+      - name: go build
+        working-directory: dss
+        run: go build ./...
+
+      - name: go build -tags eaa
+        working-directory: dss
+        run: go build -tags eaa ./...
+
+  test:
+    name: test (${{ matrix.group }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Three roughly-balanced package groups so the suite runs in
+        # parallel. Keep in sync with dss/'s top-level package list if new
+        # top-level packages are added.
+        group: [core, formats, validation]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - name: go test (group ${{ matrix.group }})
+        working-directory: dss
+        run: |
+          set -o pipefail
+          case "${{ matrix.group }}" in
+            core)
+              PKGS="./alert/... ./enumerations/... ./i18n/... ./utils/... ./model/... ./document/... ./token/... ./spi/... ./crlparser/... ./cms/... ./cades/... ./internal/..."
+              ;;
+            formats)
+              PKGS="./xml/... ./xades/... ./jades/... ./pades/... ./asic/... ./policy/..."
+              ;;
+            validation)
+              PKGS="./validation/... ./diagnostic/... ./detailedreport/... ./simplereport/... ./simplecertificatereport/... ./validationreport/... ./trustedlist/... ./tsl/... ./harness/... ./examples/... ./cmd/... ."
+              ;;
+            *)
+              echo "unknown group: ${{ matrix.group }}" >&2
+              exit 2
+              ;;
+          esac
+          go test $PKGS -count=1 -v 2>&1 | tee "test-output-${{ matrix.group }}.log"
+
+          # A full checkout ships corpus/ alongside dss/, so no test should
+          # hit corpustest's "corpus/ not found" skip path. Assert that
+          # specifically, rather than a bare zero-skips count: two
+          # pre-existing, unrelated skips (internal/pdf's
+          # TestWriterOverCorpus / TestDumpWriterOutputs) are gated on their
+          # own PDF_CORPUS_DIR / PDFOUT env vars for an out-of-tree upstream
+          # checkout, not on corpus/ presence, and are expected here.
+          if grep -q 'corpustest: corpus/ not found' "test-output-${{ matrix.group }}.log"; then
+            echo "corpustest skipped a test even though corpus/ is present in this checkout:"
+            grep 'corpustest: corpus/ not found' "test-output-${{ matrix.group }}.log"
+            exit 1
+          fi
+
+      - name: upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log-${{ matrix.group }}
+          path: dss/test-output-${{ matrix.group }}.log
+
+  cli-and-examples:
+    name: cli build & examples vet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - name: make cli-build
+        working-directory: dss
+        run: make cli-build
+
+      - name: esig version smoke check
+        working-directory: dss
+        run: ./bin/esig version
+
+      - name: go vet examples + cmd
+        working-directory: dss
+        run: go vet ./examples/... ./cmd/...

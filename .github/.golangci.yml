@@ -1,0 +1,47 @@
+# golangci-lint config for the dss module.
+#
+# SCHEMA: this is a golangci-lint **v1** config. v2 changed the file format
+# (it requires a top-level `version: "2"`, moves `linters-settings` under
+# `linters.settings`, and drops `run.timeout`) and refuses to load a v1 file.
+# .github/workflows/ci.yml therefore pins golangci-lint to a v1 release
+# rather than tracking "latest". Migrating means running
+# `golangci-lint migrate`, replacing --disable-all with --default=none in the
+# workflow, and bumping golangci-lint-action to v7+ — all in one change.
+#
+# Not auto-discovered: golangci-lint's upward config search never looks
+# inside .github/, so CI passes this file explicitly via --config (see
+# .github/workflows/ci.yml). Run it locally the same way, from dss/:
+#
+#   golangci-lint run --config=../.github/.golangci.yml ./...
+#
+# govet and staticcheck are blocking (their issues fail the run). revive is
+# configured here too, but CI runs it as a SEPARATE, advisory step
+# (continue-on-error: true) rather than folding it into the blocking run:
+# golangci-lint's per-rule "severity" field only annotates output, it does
+# not change the process exit code, so a genuinely non-blocking "exported
+# comment" check has to be its own step rather than a config knob.
+run:
+  timeout: 10m
+
+linters:
+  disable-all: true
+  enable:
+    - govet
+    - staticcheck
+    - revive
+
+linters-settings:
+  revive:
+    confidence: 0.8
+    rules:
+      # Flags exported identifiers with missing or non-conforming doc
+      # comments. Advisory only (see above) — a large, actively-growing
+      # ported codebase will have gaps the DOCS_A/DOCS_B passes are still
+      # closing, and this should surface them for review, not block merges.
+      - name: exported
+        severity: warning
+        disabled: false
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0

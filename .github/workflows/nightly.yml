@@ -1,0 +1,95 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: nightly-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  race:
+    name: race
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      # dss/Makefile's race target already accounts for asic's merge
+      # cross-validation exceeding the default 10m timeout under -race
+      # (it runs with -timeout 60m).
+      - name: make race
+        working-directory: dss
+        run: make race
+
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - name: install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+
+      - name: govulncheck
+        working-directory: dss
+        run: govulncheck ./...
+
+  corpus-absent:
+    name: corpus-absent simulation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      # corpustest finds corpus/ by walking up from the dss module root to
+      # its parent (the repo root) and checking for a sibling corpus/
+      # directory. Renaming it away here reproduces exactly what a `go get`
+      # consumer sees: no corpus/ anywhere outside the module.
+      - name: hide corpus/
+        run: mv corpus corpus.hidden
+
+      - name: test suite with corpus/ absent
+        working-directory: dss
+        run: |
+          set -o pipefail
+          go test ./... -count=1 -v 2>&1 | tee test-output-corpus-absent.log
+
+          # Every corpus-gated test must skip gracefully (not fail) and the
+          # skip path must actually have fired at least once — a corpus/
+          # detection regression that silently stopped skipping (e.g. by
+          # finding a stray corpus/ elsewhere) would otherwise pass this
+          # job for the wrong reason. `go test`'s own exit status, captured
+          # via pipefail above, is what proves nothing FAILED.
+          skips=$(grep -c 'corpustest: corpus/ not found' test-output-corpus-absent.log || true)
+          echo "corpustest skip count: $skips"
+          if [ "$skips" -eq 0 ]; then
+            echo "Expected corpustest-gated tests to skip with corpus/ absent, but none did."
+            exit 1
+          fi
+
+      - name: restore corpus/
+        if: always()
+        run: mv corpus.hidden corpus
+
+      - name: upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log-corpus-absent
+          path: dss/test-output-corpus-absent.log

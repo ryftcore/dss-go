@@ -1,0 +1,20 @@
+version: 2
+
+updates:
+  # The Go module lives in dss/, not the repo root.
+  - package-ecosystem: "gomod"
+    directory: "/dss"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "go"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"

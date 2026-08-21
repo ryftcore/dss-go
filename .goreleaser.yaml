@@ -1,0 +1,47 @@
+# GoReleaser config for cmd/esig, invoked by .github/workflows/release.yml
+# on "v*" tag pushes. NOT executed or `goreleaser check`-validated in this
+# environment (no goreleaser binary / no network access here) — only
+# YAML-parsed. Run `goreleaser check` and a local `goreleaser release
+# --snapshot --clean` before the first real tag push to confirm the schema
+# still matches whatever GoReleaser version the release workflow resolves
+# at "version: latest".
+version: 2
+
+project_name: esig
+
+builds:
+  - id: esig
+    # The Go module (go.mod) lives in dss/, not the repo root; GoReleaser's
+    # per-build `dir` runs this build from there.
+    dir: dss
+    main: ./cmd/esig
+    binary: esig
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - id: esig
+    ids: [esig]
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+
+# CHANGELOG.md is maintained by hand (Keep a Changelog style); do not let
+# GoReleaser generate a second, competing one from commit messages.
+changelog:
+  disable: true
+
+# No homebrew/scoop publishers yet — GitHub release archives + checksums
+# only, for now.

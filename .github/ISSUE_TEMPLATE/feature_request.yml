@@ -1,0 +1,28 @@
+name: Feature request
+description: Propose a new capability (e.g. a signature format, level, or option not yet supported).
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: false
+
+  - type: textarea
+    id: upstream
+    attributes:
+      label: Upstream (Java DSS) equivalent, if any
+      description: >-
+        If this mirrors a Java DSS class or feature, name it — helps keep
+        the port aligned with UPSTREAM.md's tracking conventions.
+    validations:
+      required: false

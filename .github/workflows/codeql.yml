@@ -1,0 +1,40 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "30 4 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze (Go)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+          cache-dependency-path: dss/go.sum
+
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: go
+
+      # CodeQL's Go analysis works off the build; running it inside dss/
+      # keeps it scoped to the actual module rather than the repo root
+      # (which has no Go code of its own).
+      - name: build
+        working-directory: dss
+        run: go build ./...
+
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:go"
