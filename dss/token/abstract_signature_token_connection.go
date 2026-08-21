@@ -189,17 +189,25 @@ func abstractSignatureTokenConnectionSign(preparedInput []byte, encryptionAlgori
 	// pre-hashed input. The named hash never enters the ECDSA computation —
 	// preparedInput is signed as-is, exactly as JCA NONEwithECDSA does — so
 	// naming the digest that produced preparedInput keeps the emitted bytes
-	// identical on every toolchain while satisfying the new check. Digests
-	// outside the map (none of the ECDSA SignatureAlgorithm pairings today)
-	// keep the legacy raw call. EdDSA never reaches here with a hash
-	// (ed25519 requires HashFunc()==0 for pure mode), and the plain-RSA
-	// path below must stay raw: preparedInput is already DigestInfo-wrapped
-	// and a named hash would make crypto/rsa wrap it a second time.
+	// identical on every toolchain while satisfying the new check. RIPEMD160
+	// is nameable too (crypto/ecdsa reads only Size(), never New()) but is
+	// deliberately kept out of the shared map above, which doubles as the
+	// RSASSA-PSS whitelist: {RSASSA_PSS, RIPEMD160} is not a
+	// SignatureAlgorithm pairing. ECDSA_RAW carries no digest at all, so a
+	// nil SignerOpts skips the Go 1.27 checks, matching JCA NONEwithECDSA.
+	// EdDSA never reaches here with a hash (ed25519 requires HashFunc()==0
+	// for pure mode), and the plain-RSA path below must stay raw:
+	// preparedInput is already DigestInfo-wrapped and a named hash would
+	// make crypto/rsa wrap it a second time.
 	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_ECDSA ||
 		encryptionAlgorithm == enumerations.EncryptionAlgorithm_PLAIN_ECDSA {
 		if hash, ok := abstractSignatureTokenConnectionPSSHashes[pssDigestAlgorithm]; ok {
 			return signer.Sign(rand.Reader, preparedInput, hash)
 		}
+		if pssDigestAlgorithm == enumerations.DigestAlgorithm_RIPEMD160 {
+			return signer.Sign(rand.Reader, preparedInput, crypto.RIPEMD160)
+		}
+		return signer.Sign(rand.Reader, preparedInput, nil)
 	}
 
 	return signer.Sign(rand.Reader, preparedInput, crypto.Hash(0))
