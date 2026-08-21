@@ -15,9 +15,9 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "stable"
           cache-dependency-path: dss/go.sum
@@ -40,31 +40,30 @@ jobs:
 
       # Blocking: govet+staticcheck issues fail the job.
       #
-      # The version is PINNED, not "latest", and pinned to a v1 release on
-      # purpose: .github/.golangci.yml is a v1-schema config, and
-      # golangci-lint v2 refuses to load one (it wants a `version: "2"` key
-      # and a restructured file) and has also dropped the --disable-all flag
-      # used below in favour of --default=none. "latest" would therefore
-      # resolve to v2.x and fail this job on the very first run. Moving to v2
-      # means migrating the config (`golangci-lint migrate`), switching the
-      # flags, and bumping this action to v7+ — do all four together.
+      # Third-party action, so it is pinned to a commit SHA (v9.3.0), and
+      # the golangci-lint version is pinned exactly rather than "latest":
+      # the linter's type-checker must be built against a Go release at
+      # least as new as the toolchain compiling this module, or it emits
+      # mass spurious `typecheck` errors for code that compiles fine (v1.64.8
+      # + a Go 1.26 runner did exactly that on the first run of this job).
+      # .github/.golangci.yml is a v2-schema config to match.
       - name: golangci-lint (blocking)
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
-          version: v1.64.8
+          version: v2.13.1
           working-directory: dss
-          args: --config=../.github/.golangci.yml --disable-all --enable=govet --enable=staticcheck
+          args: --config=../.github/.golangci.yml --default=none --enable=govet --enable=staticcheck
 
       # Advisory only: revive's exported-comment rule is useful signal but
       # must not block merges (see .github/.golangci.yml for why this is a
       # separate step rather than a config-level severity knob).
       - name: "golangci-lint (advisory: revive exported-comment)"
         continue-on-error: true
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
-          version: v1.64.8
+          version: v2.13.1
           working-directory: dss
-          args: --config=../.github/.golangci.yml --disable-all --enable=revive
+          args: --config=../.github/.golangci.yml --default=none --enable=revive
 
   build:
     name: build (go ${{ matrix.go }}, ${{ matrix.os }})
@@ -79,9 +78,9 @@ jobs:
             go: "stable"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: ${{ matrix.go }}
           cache-dependency-path: dss/go.sum
@@ -105,9 +104,9 @@ jobs:
         # top-level packages are added.
         group: [core, formats, validation]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "stable"
           cache-dependency-path: dss/go.sum
@@ -146,9 +145,32 @@ jobs:
             exit 1
           fi
 
+      # On failure, restate the failures at the END of the job log: the
+      # Actions log API serves only the last few thousand lines, and a
+      # verbose multi-package run buries its FAIL lines mid-stream. Also
+      # dump memory state and any kernel OOM kills — runner-only failures
+      # that don't reproduce locally are frequently resource kills.
+      - name: failure summary
+        if: failure()
+        working-directory: dss
+        run: |
+          echo "===== FAILURE SUMMARY (group ${{ matrix.group }}) ====="
+          grep -En '^(--- )?FAIL|\[build failed\]|panic:|signal:|killed|out of memory|no space left' \
+            "test-output-${{ matrix.group }}.log" | head -80 || echo "(no FAIL/panic/signal lines found in the log)"
+          echo "===== first failure context ====="
+          first=$(grep -m1 -nE '^--- FAIL|\[build failed\]|panic:' "test-output-${{ matrix.group }}.log" | cut -d: -f1)
+          if [ -n "$first" ]; then
+            start=$((first > 40 ? first - 40 : 1))
+            sed -n "${start},$((first + 60))p" "test-output-${{ matrix.group }}.log"
+          fi
+          echo "===== resources ====="
+          free -h || true
+          df -h . || true
+          sudo dmesg 2>/dev/null | grep -iE 'oom|killed process' | tail -10 || true
+
       - name: upload test log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-log-${{ matrix.group }}
           path: dss/test-output-${{ matrix.group }}.log
@@ -157,9 +179,9 @@ jobs:
     name: cli build & examples vet
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "stable"
           cache-dependency-path: dss/go.sum
