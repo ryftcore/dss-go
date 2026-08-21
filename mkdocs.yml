@@ -1,0 +1,128 @@
+# MkDocs Material configuration for the esig documentation site.
+#
+# Built and deployed by .github/workflows/pages.yml, which installs
+# mkdocs-material only - so nothing here may require another package.
+# Build locally with:
+#
+#   pip install mkdocs-material
+#   mkdocs serve      # live preview on http://127.0.0.1:8000
+#   mkdocs build --strict
+
+site_name: esig
+site_description: >-
+  A pure Go port of the EU Digital Signature Services (DSS) library - create
+  and validate CAdES, XAdES, PAdES, JAdES and ASiC signatures, interoperably
+  with Java DSS.
+site_url: https://utain.github.io/esig/
+site_author: esig contributors
+
+repo_url: https://github.com/utain/esig
+repo_name: utain/esig
+edit_uri: edit/main/docs/
+
+copyright: >-
+  Licensed under the LGPL-2.1. A derivative work of
+  <a href="https://github.com/esig/dss">esig/dss</a>, &copy; European Commission
+  and DSS contributors. Not affiliated with or endorsed by the European
+  Commission or the DSS project.
+
+theme:
+  name: material
+  language: en
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+    - search.highlight
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Follow system theme
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/utain/esig
+      name: esig on GitHub
+    - icon: fontawesome/brands/golang
+      link: https://pkg.go.dev/github.com/utain/esig/dss
+      name: API reference on pkg.go.dev
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Concepts:
+      - Signature formats: concepts/signature-formats.md
+      - Signature levels: concepts/signature-levels.md
+      - How validation works: concepts/validation.md
+      - Trust, eIDAS and qualification: concepts/trust-and-eidas.md
+      - The four reports: concepts/reports.md
+  - Guides:
+      - Sign a PDF: guides/sign-a-pdf.md
+      - Timestamps and TSAs: guides/timestamps-and-tsas.md
+      - Validate against the EU trusted lists: guides/validate-against-eu-trusted-lists.md
+      - A custom validation policy: guides/custom-validation-policy.md
+      - ASiC containers: guides/containers-asic.md
+      - Verifying Java DSS interop: guides/verifying-java-dss-interop.md
+  - Compatibility:
+      - Methodology: compatibility/methodology.md
+      - The numbers: compatibility/numbers.md
+      - Known gaps: compatibility/known-gaps.md
+  - Migrating from Java DSS: migrating-from-java/index.md
+  - FAQ: faq.md
