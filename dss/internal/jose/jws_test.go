@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // jwsCase is one row of testdata/jws_oracle.tsv: a JWS that jose4j really signed, together with
@@ -21,7 +23,7 @@ type jwsCase struct {
 
 func loadJWSOracle(t *testing.T) []jwsCase {
 	t.Helper()
-	f, err := os.Open("testdata/jws_oracle.tsv")
+	f, err := os.Open(corpustest.Path(t, "jws_oracle.tsv"))
 	if err != nil {
 		t.Fatalf("cannot open the signed-JWS oracle: %v", err)
 	}

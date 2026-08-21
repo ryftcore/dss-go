@@ -2,11 +2,11 @@ package jaxb
 
 import (
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // adapterLexical maps the name of an enumeration bound by a generated adapter to
@@ -397,7 +397,7 @@ var adapterLexical = map[string]struct {
 // adapter must print the lexical form the Java adapter prints, and must read it
 // back to the same constant.
 func TestAdapterLexicalForms(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("testdata", "adapters.tsv"))
+	data, err := os.ReadFile(corpustest.Path(t, "adapters.tsv"))
 	if err != nil {
 		t.Fatal(err)
 	}

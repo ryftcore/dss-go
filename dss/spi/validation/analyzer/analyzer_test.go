@@ -3,7 +3,7 @@
 // DefaultDocumentAnalyzer's virtual-dispatch plumbing (InitDefaultDocumentAnalyzer /
 // DefaultDocumentAnalyzerOverrides), matched against
 // dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/analyzer/{DocumentAnalyzerFactory,
-// DefaultDocumentAnalyzer}.java and the evidencerecord/ counterparts at /home/user/dss-upstream.
+// DefaultDocumentAnalyzer}.java and the evidencerecord/ counterparts upstream.
 package analyzer
 
 import (

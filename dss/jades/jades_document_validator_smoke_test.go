@@ -15,10 +15,13 @@
 package jades
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/alert"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -26,6 +29,18 @@ import (
 	dssvalidation "github.com/utain/esig/dss/validation"
 	validationpolicy "github.com/utain/esig/dss/validation/policy"
 )
+
+// jadesFixturePath resolves rel (relative to this package's testdata/) to a
+// real file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func jadesFixturePath(t *testing.T, rel string) string {
+	t.Helper()
+	local := filepath.Join("testdata", rel)
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, rel)
+}
 
 func init() {
 	validationpolicy.RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
@@ -53,14 +68,14 @@ func TestJAdESDocumentValidator_Smoke(t *testing.T) {
 		file           string
 		wantSignatures int
 	}{
-		{"compact-with-certified", "testdata/upstream/validation/jades-with-certified.json", 1},
-		{"serialization-lta", "testdata/upstream/validation/jades-lta.json", 1},
-		{"serialization-with-xvals", "testdata/upstream/validation/jades-b-with-xvals.json", 1},
+		{"compact-with-certified", "upstream/validation/jades-with-certified.json", 1},
+		{"serialization-lta", "upstream/validation/jades-lta.json", 1},
+		{"serialization-with-xvals", "upstream/validation/jades-b-with-xvals.json", 1},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doc, err := model.NewFileDocument(tt.file)
+			doc, err := model.NewFileDocument(jadesFixturePath(t, tt.file))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
@@ -116,7 +131,7 @@ func TestJAdESDocumentValidator_Smoke(t *testing.T) {
 }
 
 func TestJAdESDocumentValidatorFactory_RegistersItself(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/jades-lta.json")
+	doc, err := model.NewFileDocument(jadesFixturePath(t, "upstream/validation/jades-lta.json"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}
@@ -136,7 +151,7 @@ func TestJAdESDocumentValidatorFactory_RegistersItself(t *testing.T) {
 }
 
 func TestJWSCompactDocumentValidator_DirectConstructor(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/jades-with-certified.json")
+	doc, err := model.NewFileDocument(jadesFixturePath(t, "upstream/validation/jades-with-certified.json"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}
@@ -148,7 +163,7 @@ func TestJWSCompactDocumentValidator_DirectConstructor(t *testing.T) {
 }
 
 func TestJWSSerializationDocumentValidator_DirectConstructor(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/validation/jades-lta.json")
+	doc, err := model.NewFileDocument(jadesFixturePath(t, "upstream/validation/jades-lta.json"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}

@@ -11,6 +11,7 @@ import (
 
 	"github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi/validation"
 )
@@ -55,7 +56,7 @@ var katKnownDeviation = map[string]string{
 }
 
 func TestCertificateDiagnosticDataBuilderKAT(t *testing.T) {
-	oracleDir := filepath.Join("testdata", "oracle")
+	oracleDir := corpustest.Path(t, "oracle")
 	entries, err := os.ReadDir(oracleDir)
 	if err != nil {
 		t.Fatalf("read oracle dir: %v", err)

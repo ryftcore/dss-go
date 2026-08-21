@@ -1,6 +1,6 @@
 // Tests for AbstractSignatureParameters, matching
-// dss-document/src/main/java/eu/europa/esig/dss/signature/AbstractSignatureParameters.java at
-// /home/user/dss-upstream.
+// dss-document/src/main/java/eu/europa/esig/dss/signature/AbstractSignatureParameters.java
+// upstream.
 package document
 
 import (

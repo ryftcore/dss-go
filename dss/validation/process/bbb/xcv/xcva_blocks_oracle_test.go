@@ -7,6 +7,7 @@ import (
 
 	"github.com/utain/esig/dss/diagnostic"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The XCVA block KAT: every row of testdata/oracle/xcva_blocks.jsonl is the
@@ -21,7 +22,7 @@ import (
 // the usage time that dispatcher passes for each kind of token.
 
 func TestXcvaBlocksAgainstJavaOracle(t *testing.T) {
-	rows := loadXcvaRows(t, "testdata/oracle/xcva_blocks.jsonl")
+	rows := loadXcvaRows(t, corpustest.Path(t, "oracle/xcva_blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

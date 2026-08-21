@@ -9,6 +9,7 @@ import (
 	"github.com/utain/esig/dss/detailedreport/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The cc KAT: every row of testdata/oracle/aov_cc.jsonl is the XmlCC upstream's
@@ -22,7 +23,7 @@ import (
 // inside a branch.
 
 func TestAovCryptographicCheckersAgainstJavaOracle(t *testing.T) {
-	rows := loadAovRows(t, "testdata/oracle/aov_cc.jsonl")
+	rows := loadAovRows(t, corpustest.Path(t, "oracle/aov_cc.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

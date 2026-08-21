@@ -1,6 +1,6 @@
 // Tests for DetachedTimestampSource, matching
 // dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/DetachedTimestampSource.java
-// at /home/user/dss-upstream.
+// upstream.
 package timestamp
 
 import (

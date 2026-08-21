@@ -15,7 +15,7 @@ import (
 // also exercises every real fixture in the corpus, MRA or not, without
 // needing a pre-computed oracle pair for it.
 func TestUnmarshalMarshalIdempotent(t *testing.T) {
-	dir := testdataDir()
+	dir := testdataDir(t)
 	files, err := filepath.Glob(filepath.Join(dir, "*.xml"))
 	if err != nil {
 		t.Fatal(err)

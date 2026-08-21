@@ -13,6 +13,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/policy"
 )
 
@@ -22,8 +23,10 @@ import (
 // validation policy - see ../testdata/gen/FcSavOracle.java. This test replays the
 // same tokens and compares the XmlConstraint sequence and the XmlConclusion.
 
-// fcCorpusDir is the marshal-parity diagnostic-data corpus the oracle was run over.
-const fcCorpusDir = "../../../../diagnostic/jaxb/testdata/oracle"
+// fcCorpusRoot is the module-root-relative path (inside the external
+// corpus/ tree, see internal/corpustest) of the marshal-parity
+// diagnostic-data corpus the oracle was run over.
+const fcCorpusRoot = "diagnostic/jaxb/testdata/oracle"
 
 type fcOracleMessage struct {
 	Key   *string `json:"key"`
@@ -90,7 +93,7 @@ func loadFCRows(t *testing.T, path string) []*fcOracleRow {
 // graph the wrappers navigate.
 func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join(fcCorpusDir, name))
+	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(fcCorpusRoot, name)))
 	if err != nil {
 		t.Fatalf("read %s: %v", name, err)
 	}
@@ -179,7 +182,7 @@ func safeExecute(fn func()) (panicked bool) {
 }
 
 func TestFormatCheckingAgainstJavaOracle(t *testing.T) {
-	rows := loadFCRows(t, "testdata/oracle/fc_blocks.jsonl")
+	rows := loadFCRows(t, corpustest.Path(t, "oracle/fc_blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

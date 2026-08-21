@@ -24,6 +24,7 @@ import (
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/internal/asn1ber"
 	"github.com/utain/esig/dss/internal/cmscore"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/model/x509/revocation"
 	"github.com/utain/esig/dss/spi"
@@ -32,7 +33,7 @@ import (
 
 // TestCadesLevelBaselineLTATimestampExtractorOracle replays testdata/ats-hash-index-oracle.txt.
 func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
-	file, err := os.Open(filepath.Join("testdata", "ats-hash-index-oracle.txt"))
+	file, err := os.Open(corpustest.Path(t, "ats-hash-index-oracle.txt"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -58,7 +59,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 		switch fields[0] {
 		case "FILE":
 			name = fields[1]
-			raw, err := os.ReadFile(filepath.Join("testdata", "upstream", name))
+			raw, err := os.ReadFile(cadesFixturePath(t, filepath.Join("upstream", name)))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -187,7 +188,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 // TestCadesLTAAttributeTableOrder replays testdata/attribute-table-order-oracle.txt, pinning the
 // AttributeTable#toASN1EncodableVector() ordering the unsignedAttrsHashIndex is built with.
 func TestCadesLTAAttributeTableOrder(t *testing.T) {
-	file, err := os.Open(filepath.Join("testdata", "attribute-table-order-oracle.txt"))
+	file, err := os.Open(cadesFixturePath(t, "attribute-table-order-oracle.txt"))
 	if err != nil {
 		t.Fatal(err)
 	}

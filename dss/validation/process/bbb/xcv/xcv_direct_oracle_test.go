@@ -16,6 +16,7 @@ import (
 	diagjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 )
@@ -193,7 +194,7 @@ var xcvDirectCurrentTime = xcvaCurrentTime
 // -------------------------------------------------------------- the test
 
 func TestXcvChecksAgainstJavaOracle(t *testing.T) {
-	rows := loadXcvDirectRows(t, "testdata/oracle/xcv_direct.jsonl")
+	rows := loadXcvDirectRows(t, corpustest.Path(t, "oracle/xcv_direct.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}

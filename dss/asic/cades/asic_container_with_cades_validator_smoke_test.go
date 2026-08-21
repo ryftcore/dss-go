@@ -18,10 +18,13 @@
 package cades
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/alert"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -33,6 +36,23 @@ import (
 func init() {
 	validationpolicy.RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
 	validationpolicy.RegisterCryptographicSuiteFactory(cryptoxml.NewCryptographicSuiteXmlFactory())
+}
+
+// asicCadesFixturePath resolves relFromPkg — a path relative to this
+// package's own directory (e.g. "../testdata/upstream/x") pointing at a
+// fixture vendored under the parent asic package's own testdata/upstream
+// tree. Most of those fixtures still ship in-package; the heavier ones moved
+// into the external corpus/ tree under that parent package's mirror, so a
+// local miss is retried there: "../testdata/x" becomes the module-root-
+// relative "asic/testdata/x" (this package's own module path, "asic/cades",
+// joined with the "../" climb).
+func asicCadesFixturePath(t *testing.T, relFromPkg string) string {
+	t.Helper()
+	if _, err := os.Stat(relFromPkg); err == nil {
+		return relFromPkg
+	}
+	moduleRel := filepath.Clean(filepath.Join("asic/cades", relFromPkg))
+	return corpustest.RootPath(t, moduleRel)
 }
 
 // permissiveCertificateVerifier builds a CertificateVerifier that silently tolerates the missing
@@ -66,7 +86,7 @@ func TestASiCContainerWithCAdESValidator_Smoke(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doc, err := model.NewFileDocument(tt.file)
+			doc, err := model.NewFileDocument(asicCadesFixturePath(t, tt.file))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
@@ -121,7 +141,7 @@ func TestASiCContainerWithCAdESValidator_Smoke(t *testing.T) {
 }
 
 func TestASiCContainerWithCAdESValidatorFactory_RegistersItself(t *testing.T) {
-	doc, err := model.NewFileDocument("../testdata/upstream/dss-asic-cades/src/test/resources/validation/onefile-ok.asics")
+	doc, err := model.NewFileDocument(asicCadesFixturePath(t, "../testdata/upstream/dss-asic-cades/src/test/resources/validation/onefile-ok.asics"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}

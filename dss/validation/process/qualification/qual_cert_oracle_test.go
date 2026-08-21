@@ -11,6 +11,7 @@ import (
 	"github.com/utain/esig/dss/diagnostic"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The certificate KAT for the qualification package: every row of
@@ -118,7 +119,7 @@ func msValue(v int64) *int64 { return &v }
 
 func readQualCertOracle(t *testing.T) []*qualCertRow {
 	t.Helper()
-	f, err := os.Open(qualCertOracleLog)
+	f, err := os.Open(corpustest.Path(t, "oracle/qual_cert.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

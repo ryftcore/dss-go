@@ -47,9 +47,6 @@ func TestDownstreamCrossValidation(t *testing.T) {
 	}
 
 	upstreamHome := os.Getenv("DSS_UPSTREAM_HOME")
-	if upstreamHome == "" {
-		upstreamHome = "/home/user/dss-upstream"
-	}
 	if skipReason := detectJavaAndUpstreamDSS(upstreamHome); skipReason != "" {
 		t.Skip(skipReason)
 	}
@@ -243,9 +240,6 @@ func TestRoundTripJavaBuiltExtendedByGo(t *testing.T) {
 	}
 
 	upstreamHome := os.Getenv("DSS_UPSTREAM_HOME")
-	if upstreamHome == "" {
-		upstreamHome = "/home/user/dss-upstream"
-	}
 	if skipReason := detectJavaAndUpstreamDSS(upstreamHome); skipReason != "" {
 		t.Skip(skipReason)
 	}

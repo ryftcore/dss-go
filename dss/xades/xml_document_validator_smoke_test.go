@@ -15,10 +15,13 @@
 package xades
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/alert"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -26,6 +29,18 @@ import (
 	dssvalidation "github.com/utain/esig/dss/validation"
 	validationpolicy "github.com/utain/esig/dss/validation/policy"
 )
+
+// xadesFixturePath resolves rel (relative to this package's testdata/) to a
+// real file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func xadesFixturePath(t *testing.T, rel string) string {
+	t.Helper()
+	local := filepath.Join("testdata", rel)
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, rel)
+}
 
 func init() {
 	validationpolicy.RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
@@ -53,14 +68,14 @@ func TestXMLDocumentValidator_Smoke(t *testing.T) {
 		file           string
 		wantSignatures int
 	}{
-		{"baseline-b-with-cert-values", "testdata/upstream/BaselineBWithCertificateValues.xml", 1},
-		{"signature-x-at-1", "testdata/upstream/Signature-X-AT-1.xml", 1},
-		{"xades-lta", "testdata/upstream/XAdESLTA.xml", 1},
+		{"baseline-b-with-cert-values", "upstream/BaselineBWithCertificateValues.xml", 1},
+		{"signature-x-at-1", "upstream/Signature-X-AT-1.xml", 1},
+		{"xades-lta", "upstream/XAdESLTA.xml", 1},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doc, err := model.NewFileDocument(tt.file)
+			doc, err := model.NewFileDocument(xadesFixturePath(t, tt.file))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
@@ -112,7 +127,7 @@ func TestXMLDocumentValidator_Smoke(t *testing.T) {
 }
 
 func TestXMLDocumentValidator_RootElement(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/Signature-X-AT-1.xml")
+	doc, err := model.NewFileDocument(xadesFixturePath(t, "upstream/Signature-X-AT-1.xml"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}
@@ -126,7 +141,7 @@ func TestXMLDocumentValidator_RootElement(t *testing.T) {
 }
 
 func TestXMLDocumentValidatorFactory_RegistersItself(t *testing.T) {
-	doc, err := model.NewFileDocument("testdata/upstream/Signature-X-AT-1.xml")
+	doc, err := model.NewFileDocument(xadesFixturePath(t, "upstream/Signature-X-AT-1.xml"))
 	if err != nil {
 		t.Fatalf("NewFileDocument: %v", err)
 	}

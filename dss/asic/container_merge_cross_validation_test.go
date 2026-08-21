@@ -25,12 +25,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/utain/esig/dss/asic"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 
 	// Imported for their init(): each registers its ASiCContainerMergerFactory with the
@@ -117,7 +117,7 @@ func TestContainerMergeMatchesUpstream(t *testing.T) {
 		// when the JDK's ZipFile rejects the central directory), and MergeOracle.java feeds
 		// upstream a java.io.File-backed FileDocument. Loading these in memory would compare
 		// two different upstream code paths.
-		doc, err := model.NewFileDocument(filepath.Join("testdata", "upstream", rel))
+		doc, err := model.NewFileDocument(broadFixturePath(t, rel))
 		if err != nil {
 			t.Fatalf("open fixture %s: %v", rel, err)
 		}
@@ -330,7 +330,7 @@ func entryNames(entries []mergeOracleEntry) string {
 
 func loadMergeOracle(t *testing.T) []mergeOraclePair {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "merge-oracle.ndjson.gz"))
+	file, err := os.Open(corpustest.Path(t, "merge-oracle.ndjson.gz"))
 	if err != nil {
 		t.Fatalf("open merge oracle: %v", err)
 	}

@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 )
 
@@ -77,7 +78,7 @@ func TestAbstractParsingTask_CommonParseSchemeInformationOracle(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.file, func(t *testing.T) {
-			document, err := model.NewFileDocument("testdata/" + c.file)
+			document, err := model.NewFileDocument(corpustest.Path(t, c.file))
 			if err != nil {
 				t.Fatalf("unable to load %s: %v", c.file, err)
 			}

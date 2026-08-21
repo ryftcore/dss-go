@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/xmldom"
 	"github.com/utain/esig/dss/internal/xmldsig"
 	"github.com/utain/esig/dss/model"
@@ -47,7 +48,7 @@ type xadesRefsOracle map[string]map[string][]byte
 
 func loadXAdESRefsOracle(t *testing.T) xadesRefsOracle {
 	t.Helper()
-	raw, err := os.ReadFile("testdata/refs.txt")
+	raw, err := os.ReadFile(corpustest.Path(t, "refs.txt"))
 	if err != nil {
 		t.Fatalf("reading the oracle: %v", err)
 	}

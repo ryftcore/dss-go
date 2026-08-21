@@ -2,7 +2,7 @@
 // TempFileResourcesHandler(Builder), matching
 // dss-document/src/main/java/eu/europa/esig/dss/signature/resources/{AbstractResourcesHandler,
 // InMemoryResourcesHandler,InMemoryResourcesHandlerBuilder,TempFileResourcesHandler,
-// TempFileResourcesHandlerBuilder}.java at /home/user/dss-upstream.
+// TempFileResourcesHandlerBuilder}.java upstream.
 package document
 
 import (

@@ -9,6 +9,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // node is a generic XML element, enough to walk DiagnosticData.xsd.
@@ -29,7 +31,7 @@ func (n node) attr(name string) string {
 
 func loadSchema(t *testing.T) node {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "xsd", "DiagnosticData.xsd"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("xsd", "DiagnosticData.xsd")))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -419,12 +421,12 @@ func TestSchemaTreeMatchesModel(t *testing.T) {
 // would ever reveal - the schema sweep only reads the struct tags, it never
 // marshals them.
 func TestOracleCorpusExercisesModel(t *testing.T) {
-	files, err := filepath.Glob(filepath.Join(oracleDir(), "*.xml"))
+	files, err := filepath.Glob(filepath.Join(oracleDir(t), "*.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(files) == 0 {
-		t.Fatalf("no oracle dumps under %s", oracleDir())
+		t.Fatalf("no oracle dumps under %s", oracleDir(t))
 	}
 	seenElements := map[string]bool{}
 	seenAttributes := map[string]bool{}

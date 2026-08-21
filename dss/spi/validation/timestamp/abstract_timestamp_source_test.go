@@ -1,7 +1,7 @@
 // Tests for the package-level helper functions AbstractTimestampSource's Java counterpart
 // exposes as protected instance methods, matching
 // dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/AbstractTimestampSource.java
-// at /home/user/dss-upstream. See that file's own header comment for why these landed as
+// upstream. See that file's own header comment for why these landed as
 // package-level functions rather than methods.
 package timestamp
 

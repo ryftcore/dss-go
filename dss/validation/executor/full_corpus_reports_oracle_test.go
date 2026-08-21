@@ -47,6 +47,7 @@ import (
 	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	simplecertjaxb "github.com/utain/esig/dss/simplecertificatereport/jaxb"
@@ -84,7 +85,7 @@ func TestFullCorpusReportsByteParity(t *testing.T) {
 		t.Fatalf("reading the certificate validation policy: %v", err)
 	}
 
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "full_corpus_reports.jsonl"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "full_corpus_reports.jsonl")))
 	if err != nil {
 		t.Fatalf("reading the full-corpus report oracle dump: %v", err)
 	}
@@ -108,7 +109,7 @@ func TestFullCorpusReportsByteParity(t *testing.T) {
 	for _, row := range rows {
 		row := row
 		t.Run(row.File, func(t *testing.T) {
-			raw, err := os.ReadFile(filepath.Join(fullCorpusDir, row.File))
+			raw, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "full-corpus", row.File)))
 			if err != nil {
 				t.Fatalf("reading %s: %v", row.File, err)
 			}

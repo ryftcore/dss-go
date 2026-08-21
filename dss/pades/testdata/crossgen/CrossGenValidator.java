@@ -9,7 +9,7 @@
 // Run it with OpenJDK 21 against the built upstream DSS 6.5.RC1, dss-validation and a PDF backend
 // (dss-pades-pdfbox) included:
 //
-//   cd /home/user/dss-upstream
+//   cd $DSS_UPSTREAM_HOME  (your built upstream DSS 6.5.RC1 checkout)
 //   mvn -q -o -pl dss-pades-pdfbox compile
 //   mvn -q -o -pl dss-validation dependency:build-classpath -Dmdep.outputFile=/tmp/valcp.txt -Dmdep.includeScope=runtime
 //   PDFJARS="$(find ~/.m2 -path '*pdfbox*3.0.7*.jar' ! -name '*sources*' ! -name '*javadoc*' | tr '\n' ':')"

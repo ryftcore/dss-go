@@ -2,7 +2,7 @@
 // helpers - timestampTokenSliceSortStable, containsTimestampsCoveringOtherTimestamps,
 // filterSignatureTimestamps and timestampTokenSliceContains - matching
 // dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/SignatureTimestampSource.java
-// at /home/user/dss-upstream (AllTimestampsExceptLastArchiveTimestamp,
+// upstream (AllTimestampsExceptLastArchiveTimestamp,
 // containsTimestampsCoveringOtherTimestamps, the filterSignatureTimestamps use in
 // makeTimestampTokensFromUnsignedAttributes, and getTimestampsCoveredByManifest respectively).
 // These are exactly the standalone functions the SIG-chunk generic machinery (the

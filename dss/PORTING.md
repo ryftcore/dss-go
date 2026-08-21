@@ -60,6 +60,7 @@ const (
 - Port test *vectors*, not JUnit code. Upstream resources are copied into `testdata/` mirroring their upstream path.
 - Every registry-like table (OIDs, URIs, algorithm mappings) gets an exhaustive table test.
 - Gate for every batch: `go build ./... && go vet ./... && go test ./...`.
+- Keep in-module `testdata/` small: a heavy fixture (an oracle dump, a large corpus, a bulky KAT) belongs in the repo-root `corpus/` tree instead, mirroring the package's path under `dss/`. Reach it at test time with `internal/corpustest.Path`/`RootPath`, which resolve into `corpus/` and skip the test gracefully when it is absent (a bare module checkout has no `corpus/`); keep a small representative subset directly under the package's own `testdata/` so `go test` still exercises real code from the module zip alone.
 
 ## Dependency policy
 

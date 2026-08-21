@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/jose"
 	"github.com/utain/esig/dss/model"
 )
@@ -28,7 +29,7 @@ type jadesJSONKATCase struct {
 
 func jadesJSONKATLoad(t *testing.T) []jadesJSONKATCase {
 	t.Helper()
-	f, err := os.Open("testdata/jades_json_oracle.tsv")
+	f, err := os.Open(corpustest.Path(t, "jades_json_oracle.tsv"))
 	if err != nil {
 		t.Fatalf("cannot open the dss-jades oracle: %v", err)
 	}

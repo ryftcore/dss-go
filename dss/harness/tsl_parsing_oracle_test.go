@@ -61,11 +61,13 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	tslmodel "github.com/utain/esig/dss/model/tsl"
 	"github.com/utain/esig/dss/tsl"
@@ -438,9 +440,22 @@ func tpApplyOptions(t *testing.T, source *tsl.LOTLSource, opts string) {
 
 // tpParse parses one fixture with the Go port, mirroring exactly what
 // testdata/oracle/tsl/gen/TSLParsingOracle.java does with TLParsingTask/LOTLParsingTask.
+// tpResolvePath resolves a manifest row's "testdata/oracle/tsl/<name>" path:
+// most of that corpus stayed in-package, but the heavier fixtures moved into
+// the external corpus/ tree, so a local miss retries there.
+func tpResolvePath(t *testing.T, path string) string {
+	t.Helper()
+	if _, err := os.Stat(path); err == nil {
+		return path
+	}
+	rel := strings.TrimPrefix(path, "testdata"+string(filepath.Separator))
+	rel = strings.TrimPrefix(rel, "testdata/")
+	return corpustest.Path(t, rel)
+}
+
 func tpParse(t *testing.T, kind, path, opts string) tpRecord {
 	t.Helper()
-	document, err := model.NewFileDocument(path)
+	document, err := model.NewFileDocument(tpResolvePath(t, path))
 	if err != nil {
 		t.Fatalf("NewFileDocument(%s): %v", path, err)
 	}
@@ -500,7 +515,7 @@ type tpManifestRow struct {
 
 func tpReadManifest(t *testing.T) []tpManifestRow {
 	t.Helper()
-	f, err := os.Open("testdata/oracle/tsl/tsl_parsing_manifest.tsv")
+	f, err := os.Open(corpustest.Path(t, "oracle/tsl/tsl_parsing_manifest.tsv"))
 	if err != nil {
 		t.Fatalf("open manifest: %v", err)
 	}
@@ -540,7 +555,7 @@ func tpSplitTab(s string) []string {
 
 func tpReadOracle(t *testing.T) map[string]tpRecord {
 	t.Helper()
-	f, err := os.Open("testdata/oracle/tsl/tsl_parsing.jsonl")
+	f, err := os.Open(corpustest.Path(t, "oracle/tsl/tsl_parsing.jsonl"))
 	if err != nil {
 		t.Fatalf("open oracle: %v", err)
 	}

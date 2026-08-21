@@ -34,34 +34,40 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-)
 
-const (
-	defaultOracleGolden   = "testdata/oracle/corpus.tsv"
-	defaultOracleManifest = "testdata/oracle/manifest.txt"
-	defaultCorpusDir      = "testdata/corpus"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // The checked-in corpus is the curated KAT set. The full 267-file upstream sweep
 // (DESIGN.md §6.3 KAT-A, second pass) is far too large to vendor, so it is run on
 // demand against an out-of-tree checkout:
 //
-//	PDF_CORPUS_DIR=/home/user/dss-upstream \
+//	PDF_CORPUS_DIR=/path/to/dss-upstream-checkout \
 //	PDF_ORACLE_GOLDEN=/tmp/full_corpus.tsv \
 //	PDF_ORACLE_MANIFEST=/tmp/full_manifest.txt \
 //	go test ./internal/pdf/ -run 'TestOracle' -count=1
 //
 // Unset, the tests run over the vendored corpus exactly as before, so CI is
 // unaffected and the goldens stay authoritative.
-func oracleGolden() string   { return envOr("PDF_ORACLE_GOLDEN", defaultOracleGolden) }
-func oracleManifest() string { return envOr("PDF_ORACLE_MANIFEST", defaultOracleManifest) }
-func corpusDir() string      { return envOr("PDF_CORPUS_DIR", defaultCorpusDir) }
-
-func envOr(key, def string) string {
-	if v := os.Getenv(key); v != "" {
+func oracleGolden(t testing.TB) string {
+	if v := os.Getenv("PDF_ORACLE_GOLDEN"); v != "" {
 		return v
 	}
-	return def
+	return corpustest.Path(t, filepath.Join("oracle", "corpus.tsv"))
+}
+
+func oracleManifest(t testing.TB) string {
+	if v := os.Getenv("PDF_ORACLE_MANIFEST"); v != "" {
+		return v
+	}
+	return corpustest.Path(t, filepath.Join("oracle", "manifest.txt"))
+}
+
+func corpusDir(t testing.TB) string {
+	if v := os.Getenv("PDF_CORPUS_DIR"); v != "" {
+		return v
+	}
+	return corpustest.Path(t, "corpus")
 }
 
 type oracleRecord struct {
@@ -75,7 +81,7 @@ func (r oracleRecord) failed() bool { return strings.HasPrefix(r.get("error"), "
 
 func loadOracle(t *testing.T) []oracleRecord {
 	t.Helper()
-	b, err := os.ReadFile(oracleGolden())
+	b, err := os.ReadFile(oracleGolden(t))
 	if err != nil {
 		t.Fatalf("read golden: %v", err)
 	}
@@ -100,7 +106,7 @@ func loadOracle(t *testing.T) []oracleRecord {
 // TestOracleManifest pins the corpus itself: a corpus file that changes makes
 // every golden meaningless, so it is checked before anything else.
 func TestOracleManifest(t *testing.T) {
-	b, err := os.ReadFile(oracleManifest())
+	b, err := os.ReadFile(oracleManifest(t))
 	if err != nil {
 		t.Fatalf("read manifest: %v", err)
 	}
@@ -113,7 +119,7 @@ func TestOracleManifest(t *testing.T) {
 		if !ok {
 			t.Fatalf("bad manifest line %q", line)
 		}
-		data, err := os.ReadFile(filepath.Join(corpusDir(), filepath.FromSlash(path)))
+		data, err := os.ReadFile(filepath.Join(corpusDir(t), filepath.FromSlash(path)))
 		if err != nil {
 			t.Errorf("%s: %v", path, err)
 			continue
@@ -138,7 +144,7 @@ func TestOracleCorpus(t *testing.T) {
 	for _, rec := range records {
 		path := rec.get("path")
 		t.Run(path, func(t *testing.T) {
-			data, err := os.ReadFile(filepath.Join(corpusDir(), filepath.FromSlash(path)))
+			data, err := os.ReadFile(filepath.Join(corpusDir(t), filepath.FromSlash(path)))
 			if err != nil {
 				t.Fatalf("read corpus file: %v", err)
 			}

@@ -1,6 +1,6 @@
 // Tests for the jdbc package. There is no upstream JUnit for
 // JdbcCacheConnector/SqlQuery/SqlSelectQuery to port test vectors from
-// (see /home/user/dss-upstream dss-spi client/jdbc), so behavior is
+// (see dss-spi client/jdbc upstream), so behavior is
 // verified against a lightweight in-process database/sql/driver fake
 // registered below, exercising the same success/rollback contracts the
 // Java implementation documents (see jdbc_cache_connector.go).

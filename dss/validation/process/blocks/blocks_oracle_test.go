@@ -16,6 +16,7 @@ import (
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	modelpolicy "github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/policy"
 )
@@ -31,7 +32,10 @@ import (
 // addAdditionalInfo() hung off each XmlSubXCV.
 
 const (
-	blocksCorpusDir  = "../../../diagnostic/jaxb/testdata/oracle"
+	// blocksCorpusRoot is the module-root-relative path (inside the
+	// external corpus/ tree, see internal/corpustest) of the
+	// marshal-parity diagnostic-data corpus.
+	blocksCorpusRoot = "diagnostic/jaxb/testdata/oracle"
 	blocksDumpDir    = "../bbb/xcv/testdata/dd"
 	blocksOwnDumpDir = "testdata/dd"
 )
@@ -82,7 +86,7 @@ type blocksRow struct {
 }
 
 func TestBasicBuildingBlocksAgainstJavaOracle(t *testing.T) {
-	rows := loadBlocksRows(t, "testdata/oracle/blocks.jsonl")
+	rows := loadBlocksRows(t, corpustest.Path(t, "oracle/blocks.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}
@@ -201,11 +205,13 @@ func loadBlocksRows(t *testing.T, path string) []*blocksRow {
 
 func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	t.Helper()
-	path := filepath.Join(blocksCorpusDir, name)
+	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
 		path = filepath.Join(blocksDumpDir, rest)
 	} else if rest, ok := strings.CutPrefix(name, "own/"); ok {
 		path = filepath.Join(blocksOwnDumpDir, rest)
+	} else {
+		path = corpustest.RootPath(t, filepath.Join(blocksCorpusRoot, name))
 	}
 	data, err := os.ReadFile(path)
 	if err != nil {

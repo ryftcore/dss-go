@@ -57,6 +57,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	"github.com/utain/esig/dss/spi/validation"
@@ -106,7 +107,7 @@ type xvalGolden struct {
 // TestUpstreamCrossValidation replays testdata/upstream-cross-validation.json against this
 // package's own parse of testdata/upstream/.
 func TestUpstreamCrossValidation(t *testing.T) {
-	goldenBytes, err := os.ReadFile(filepath.Join("testdata", "upstream-cross-validation.json"))
+	goldenBytes, err := os.ReadFile(corpustest.Path(t, "upstream-cross-validation.json"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,7 +122,7 @@ func TestUpstreamCrossValidation(t *testing.T) {
 	for _, gf := range golden.Files {
 		gf := gf
 		t.Run(gf.Path, func(t *testing.T) {
-			fullPath := filepath.Join("testdata", "upstream", filepath.FromSlash(gf.Path))
+			fullPath := xadesFixturePath(t, filepath.Join("upstream", filepath.FromSlash(gf.Path)))
 			document, err := model.NewFileDocument(fullPath)
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", fullPath, err)

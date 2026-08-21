@@ -16,6 +16,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi/exception"
 )
@@ -71,7 +72,7 @@ type dssOracleEntry struct {
 
 func loadDSSOracle(t *testing.T) *dssOracle {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "zipcore-dss-oracle.json"))
+	data, err := os.ReadFile(corpustest.Path(t, "zipcore-dss-oracle.json"))
 	if err != nil {
 		t.Fatalf("read oracle: %v", err)
 	}
@@ -85,13 +86,21 @@ func loadDSSOracle(t *testing.T) *dssOracle {
 	return &oracle
 }
 
-func zipCoreFixturePath(path string) string {
-	return filepath.Join("testdata", "upstream", filepath.FromSlash(path))
+// zipCoreFixturePath resolves path (relative to testdata/upstream/) to a real
+// file: most fixtures ship in-package, a few larger ones live in the
+// external corpus/ instead, so a local miss falls through to corpustest.
+func zipCoreFixturePath(t *testing.T, path string) string {
+	t.Helper()
+	local := filepath.Join("testdata", "upstream", filepath.FromSlash(path))
+	if _, err := os.Stat(local); err == nil {
+		return local
+	}
+	return corpustest.Path(t, filepath.Join("upstream", filepath.FromSlash(path)))
 }
 
 func zipCoreFileDocument(t *testing.T, path string) *model.FileDocument {
 	t.Helper()
-	doc, err := model.NewFileDocument(zipCoreFixturePath(path))
+	doc, err := model.NewFileDocument(zipCoreFixturePath(t, path))
 	if err != nil {
 		t.Fatalf("%s: open fixture: %v", path, err)
 	}
@@ -100,7 +109,7 @@ func zipCoreFileDocument(t *testing.T, path string) *model.FileDocument {
 
 func zipCoreInMemoryDocument(t *testing.T, path string) *model.InMemoryDocument {
 	t.Helper()
-	data, err := os.ReadFile(zipCoreFixturePath(path))
+	data, err := os.ReadFile(zipCoreFixturePath(t, path))
 	if err != nil {
 		t.Fatalf("%s: read fixture: %v", path, err)
 	}
@@ -281,7 +290,7 @@ func assertOracleTime(t *testing.T, label string, actual time.Time, expected *in
 // central-directory-based reimplementation would resurrect that metadata and write it back out on
 // the next createZipArchive.
 func TestSecureContainerHandlerReadsLocalHeaderExtraNotCentralDirectory(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("testdata", "zipcore-oracle.json"))
+	data, err := os.ReadFile(corpustest.Path(t, "zipcore-oracle.json"))
 	if err != nil {
 		t.Fatalf("read java.util.zip oracle: %v", err)
 	}
@@ -336,7 +345,7 @@ func TestSecureContainerHandlerReadsLocalHeaderExtraNotCentralDirectory(t *testi
 				container, doc.Name(), extra)
 		}
 	}
-	readCloser, err := zip.OpenReader(zipCoreFixturePath(container))
+	readCloser, err := zip.OpenReader(zipCoreFixturePath(t, container))
 	if err != nil {
 		t.Fatalf("open central directory: %v", err)
 	}

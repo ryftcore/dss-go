@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
 	"github.com/utain/esig/dss/spi/validation"
@@ -32,7 +33,7 @@ type baselineBFixture struct {
 // baselineBFixtures reads testdata/baseline-b-attributes.txt.
 func baselineBFixtures(t *testing.T) map[string]baselineBFixture {
 	t.Helper()
-	file, err := os.Open(filepath.Join("testdata", "baseline-b-attributes.txt"))
+	file, err := os.Open(corpustest.Path(t, "baseline-b-attributes.txt"))
 	if err != nil {
 		t.Fatalf("cannot open the fixtures: %v", err)
 	}

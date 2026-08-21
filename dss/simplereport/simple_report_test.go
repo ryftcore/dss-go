@@ -2,10 +2,10 @@ package simplereport
 
 import (
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/simplereport/jaxb"
 )
 
@@ -14,7 +14,7 @@ import (
 // (jaxb/testdata/oracle/counterSig.p7m.xml), a two-signature (one a
 // counter-signature) CAdES document with per-signature timestamps.
 func TestSimpleReportWrapper(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("jaxb", "testdata", "oracle", "counterSig.p7m.xml"))
+	data, err := os.ReadFile(corpustest.RootPath(t, "simplereport/jaxb/testdata/oracle/counterSig.p7m.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -108,7 +108,7 @@ func TestSimpleReportWrapper(t *testing.T) {
 // dss-simple-report-jaxb test fixture): an EAA token with a nested
 // EAASignature and an issuing certificate carrying a TrustAnchor.
 func TestSimpleReportWrapper_EAA(t *testing.T) {
-	data, err := os.ReadFile(filepath.Join("jaxb", "testdata", "oracle", "sr-qeaa.xml"))
+	data, err := os.ReadFile(corpustest.RootPath(t, "simplereport/jaxb/testdata/oracle/sr-qeaa.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}

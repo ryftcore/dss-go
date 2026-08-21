@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // oracleGoldenFile is the file each corpus keeps its BouncyCastle answers in.
@@ -29,10 +30,11 @@ const oracleGoldenFile = "bc-oracle.txt"
 // checking the result against a fresh run of testdata/gen/CmsOracle.java, since the point of
 // the files is that an independent implementation produced them.
 func TestBouncyCastleOracle(t *testing.T) {
-	for _, dir := range []string{"testdata", filepath.Join("testdata", "adversarial")} {
+	for _, rel := range []string{"", "adversarial"} {
+		dir := filepath.Join("testdata", rel)
 		t.Run(dir, func(t *testing.T) {
 			produced := dumpDirectory(t, dir)
-			golden := filepath.Join(dir, oracleGoldenFile)
+			golden := corpustest.Path(t, filepath.Join(rel, oracleGoldenFile))
 			if os.Getenv("CMSCORE_REGENERATE") != "" {
 				if err := os.WriteFile(golden, []byte(produced), 0o644); err != nil {
 					t.Fatal(err)

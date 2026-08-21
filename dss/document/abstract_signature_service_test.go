@@ -1,6 +1,6 @@
 // Tests for AbstractSignatureService, matching
-// dss-document/src/main/java/eu/europa/esig/dss/signature/AbstractSignatureService.java at
-// /home/user/dss-upstream.
+// dss-document/src/main/java/eu/europa/esig/dss/signature/AbstractSignatureService.java
+// upstream.
 package document
 
 import (

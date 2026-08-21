@@ -11,6 +11,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 // testdataDir returns the directory holding the real trusted-list fixtures
@@ -21,11 +23,12 @@ import (
 // the JAXB RI's own canonical remarshal - not the pristine download - is
 // the marshal-parity target, exactly as dss/diagnostic/jaxb's
 // TestMarshalParity treats its oracle corpus).
-func testdataDir() string {
+func testdataDir(t *testing.T) string {
+	t.Helper()
 	if dir := os.Getenv("DSS_TRUSTEDLIST_ORACLE_DIR"); dir != "" {
 		return dir
 	}
-	return filepath.Join("testdata", "tl")
+	return corpustest.Path(t, "tl")
 }
 
 // TestMarshalParity is the marshal-parity KAT: every real trusted-list
@@ -35,7 +38,7 @@ func testdataDir() string {
 // namespace set, MarshalMRA); every other fixture is round-tripped through
 // Marshal (TrustedListFacade's).
 func TestMarshalParity(t *testing.T) {
-	dir := testdataDir()
+	dir := testdataDir(t)
 	files, err := filepath.Glob(filepath.Join(dir, "*.xml"))
 	if err != nil {
 		t.Fatal(err)

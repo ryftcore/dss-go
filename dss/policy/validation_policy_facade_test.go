@@ -8,10 +8,12 @@ import (
 	"bytes"
 	"os"
 	"testing"
+
+	"github.com/utain/esig/dss/internal/corpustest"
 )
 
 func TestValidationPolicyFacadeGetValidationPolicy(t *testing.T) {
-	data, err := os.ReadFile("jaxb/testdata/policy/constraint.xml")
+	data, err := os.ReadFile(corpustest.RootPath(t, "policy/jaxb/testdata/policy/constraint.xml"))
 	if err != nil {
 		t.Fatalf("read testdata: %v", err)
 	}
@@ -34,7 +36,7 @@ func TestValidationPolicyFacadeGetValidationPolicyNilReader(t *testing.T) {
 }
 
 func TestValidationPolicyFacadeMarshalUnmarshalRoundTrip(t *testing.T) {
-	data, err := os.ReadFile("jaxb/testdata/oracle/constraint.remarshal.xml")
+	data, err := os.ReadFile(corpustest.RootPath(t, "policy/jaxb/testdata/oracle/constraint.remarshal.xml"))
 	if err != nil {
 		t.Fatalf("read oracle: %v", err)
 	}
@@ -55,7 +57,7 @@ func TestValidationPolicyFacadeMarshalUnmarshalRoundTrip(t *testing.T) {
 
 func TestValidationPolicyFacadeGetValidationPolicyFromFile(t *testing.T) {
 	facade := NewValidationPolicyFacade()
-	policy, err := facade.GetValidationPolicyFromFile("jaxb/testdata/policy/eaa-constraint.xml")
+	policy, err := facade.GetValidationPolicyFromFile(corpustest.RootPath(t, "policy/jaxb/testdata/policy/eaa-constraint.xml"))
 	if err != nil {
 		t.Fatalf("GetValidationPolicyFromFile: %v", err)
 	}

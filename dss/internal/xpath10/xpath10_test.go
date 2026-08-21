@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/utain/esig/dss/internal/corpustest"
+
 	"github.com/utain/esig/dss/internal/xmldom"
 )
 
@@ -337,7 +339,7 @@ func TestTranscribedFixtureMatchesUpstream(t *testing.T) {
 	const want = `<a><b><d>Hello</d><e><e pos="nested">Nested</e></e></b>` +
 		`<c><d>Bye</d><d Id="world">World</d></c></a>`
 
-	got, err := os.ReadFile(filepath.Join("testdata", "fixtures", filepath.FromSlash(path)))
+	got, err := os.ReadFile(filepath.Join(corpustest.Path(t, "."), "fixtures", filepath.FromSlash(path)))
 	if err != nil {
 		t.Fatal(err)
 	}

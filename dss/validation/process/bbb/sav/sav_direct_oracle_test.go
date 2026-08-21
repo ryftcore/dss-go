@@ -13,6 +13,7 @@ import (
 	diagjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
 	"github.com/utain/esig/dss/i18n"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model/policy"
 	"github.com/utain/esig/dss/validation/process"
 	"github.com/utain/esig/dss/validation/process/bbb/aov"
@@ -104,7 +105,7 @@ func savCheckBaseName(check string) string {
 }
 
 func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
-	rows := loadSAVDirectRows(t, "testdata/oracle/sav_direct.jsonl")
+	rows := loadSAVDirectRows(t, corpustest.Path(t, "oracle/sav_direct.jsonl"))
 	if len(rows) == 0 {
 		t.Fatal("empty direct oracle")
 	}

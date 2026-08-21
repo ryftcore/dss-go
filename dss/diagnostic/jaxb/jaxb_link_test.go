@@ -62,12 +62,12 @@ func tokenIDOf(pv reflect.Value) (string, bool) {
 // attribute whose target is present in the document must point at that very
 // object, so the wrappers can navigate the graph the way the Java model does.
 func TestLinkResolvesIDREFs(t *testing.T) {
-	files, err := filepath.Glob(filepath.Join(oracleDir(), "*.xml"))
+	files, err := filepath.Glob(filepath.Join(oracleDir(t), "*.xml"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(files) == 0 {
-		t.Fatalf("no oracle dumps under %s", oracleDir())
+		t.Fatalf("no oracle dumps under %s", oracleDir(t))
 	}
 	total := 0
 	for _, file := range files {

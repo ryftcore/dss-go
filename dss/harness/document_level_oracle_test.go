@@ -70,6 +70,7 @@ import (
 	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
 	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 	"github.com/utain/esig/dss/enumerations"
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/model"
 	dsspolicy "github.com/utain/esig/dss/policy"
 	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
@@ -173,7 +174,7 @@ func TestDocumentLevelOracle(t *testing.T) {
 			t.Fatalf("no oracle row for manifest entry %s", key)
 		}
 		t.Run(key, func(t *testing.T) {
-			doc, err := model.NewFileDocument(entry.Path)
+			doc, err := model.NewFileDocument(resolveManifestFixture(t, entry.Path))
 			if err != nil {
 				t.Fatalf("NewFileDocument(%s): %v", entry.Path, err)
 			}
@@ -423,10 +424,27 @@ func compareDocumentLevelQualification(t *testing.T, key string, want []dlQualif
 	return mismatches
 }
 
+// resolveManifestFixture resolves a manifest entry's Path, a path relative to
+// this package's own directory (e.g. "../asic/testdata/upstream/.../x.sce")
+// pointing at a fixture vendored under a sibling format package's own
+// testdata/upstream tree. Most of those fixtures still ship in-package; the
+// heavier ones moved into the external corpus/ tree under that sibling
+// package's mirror, so a local miss is retried there: "../asic/testdata/x"
+// becomes the module-root-relative "asic/testdata/x" (this package's own
+// module path, "harness", joined with the manifest's "../" climb).
+func resolveManifestFixture(t *testing.T, relFromHarness string) string {
+	t.Helper()
+	if _, err := os.Stat(relFromHarness); err == nil {
+		return relFromHarness
+	}
+	moduleRel := filepath.Clean(filepath.Join("harness", relFromHarness))
+	return corpustest.RootPath(t, moduleRel)
+}
+
 // readDocumentLevelOracle loads testdata/oracle/document_level.jsonl.
 func readDocumentLevelOracle(t *testing.T) []documentLevelRow {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "document_level.jsonl"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "document_level.jsonl")))
 	if err != nil {
 		t.Fatalf("reading the document-level oracle dump: %v", err)
 	}
@@ -448,7 +466,7 @@ func readDocumentLevelOracle(t *testing.T) []documentLevelRow {
 // sorted by format then name so the subtest order is stable.
 func readDocumentLevelManifest(t *testing.T) []manifestEntry {
 	t.Helper()
-	data, err := os.ReadFile(filepath.Join("testdata", "oracle", "document_level_manifest.tsv"))
+	data, err := os.ReadFile(corpustest.Path(t, filepath.Join("oracle", "document_level_manifest.tsv")))
 	if err != nil {
 		t.Fatalf("reading the document-level manifest: %v", err)
 	}

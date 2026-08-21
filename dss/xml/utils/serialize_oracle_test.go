@@ -12,6 +12,7 @@ import (
 	"testing"
 	"unicode/utf16"
 
+	"github.com/utain/esig/dss/internal/corpustest"
 	"github.com/utain/esig/dss/internal/xmldom"
 )
 
@@ -35,8 +36,8 @@ import (
 //	cd testdata/gen && javac -cp "$CC" -d /tmp/serOracle SerializeOracle.java &&
 //	  java -cp "$CC:/tmp/serOracle" SerializeOracle ../serialize/corpus.txt ../serialize/goldens.txt
 func TestSerializeAgainstJavaTransformerOracle(t *testing.T) {
-	corpus := readCorpus(t, "testdata/serialize/corpus.txt")
-	goldens := readGoldens(t, "testdata/serialize/goldens.txt")
+	corpus := readCorpus(t, corpustest.Path(t, "serialize/corpus.txt"))
+	goldens := readGoldens(t, corpustest.Path(t, "serialize/goldens.txt"))
 
 	if len(corpus) == 0 || len(corpus) != len(goldens) {
 		t.Fatalf("corpus has %d cases, goldens %d", len(corpus), len(goldens))
