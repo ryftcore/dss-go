@@ -29,14 +29,10 @@ import (
 // "b" followed by the base64 of its UTF-8 encoding.
 
 // certificateExtensionsKATUnparseable lists the fixtures crypto/x509 rejects but BouncyCastle
-// accepts. They are skipped, and the test fails if the set ever changes.
-//
-//	cert_16.der: "x509: malformed certificate"
-//	cert_19.der: "x509: RSA key missing NULL parameters"
-var certificateExtensionsKATUnparseable = map[string]bool{
-	"cert_16.der": true,
-	"cert_19.der": true,
-}
+// accepts. They are skipped, and the test fails if the set ever changes. The set depends on the
+// Go toolchain — newer releases tighten the parser — so it is defined in build-tagged files:
+// certificate_extensions_kat_unparseable_legacy_test.go (pre-1.27) and
+// certificate_extensions_kat_unparseable_go127_test.go (1.27+).
 
 type certificateExtensionsKAT map[string]*string
 

@@ -140,7 +140,7 @@ func (c *CertificateApprovalStatusBlock) InitChain() {
 		}
 	}
 
-	item = item.SetNextItem(c.isAcceptableLoTEPresent(acceptableLoTEs))
+	item = item.SetNextItem(c.isAcceptableLoTEPresent(acceptableLoTEs)) //nolint:staticcheck // mirrors upstream CertificateApprovalStatusBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	if len(acceptableLoTEs) > 0 {
 

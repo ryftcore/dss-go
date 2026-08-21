@@ -167,7 +167,7 @@ func (c *PastCertificateValidation) InitChain() {
 	 */
 	if c.controlTime != nil {
 
-		item = item.SetNextItem(c.cryptographicCheck(*c.controlTime))
+		item = item.SetNextItem(c.cryptographicCheck(*c.controlTime)) //nolint:staticcheck // mirrors upstream PastCertificateValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	}
 

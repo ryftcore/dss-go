@@ -137,7 +137,7 @@ func (s *SignerAttributeV2) DER() []byte {
 		for _, attribute := range s.claimedAttributes {
 			claimedBody = append(claimedBody, attribute...)
 		}
-		body = append(body, asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, asn1ber.WriteSequence(claimedBody))...)
+		body = append(body, asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, asn1ber.WriteSequence(claimedBody))...) //nolint:staticcheck // mirrors upstream SignerAttributeV2#toASN1Primitive: `new DERTaggedObject(0, new DERSequence(...))` - the `0` is the ASN.1 context tag number, kept explicit next to its [1] and [2] siblings.
 	}
 	if s.certifiedAttributes != nil {
 		body = append(body, asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|1, s.certifiedAttributes.DER())...)

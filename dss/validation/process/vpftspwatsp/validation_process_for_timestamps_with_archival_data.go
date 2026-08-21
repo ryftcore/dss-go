@@ -138,7 +138,7 @@ func (c *ValidationProcessForTimestampsWithArchivalData) InitChain() {
 			aovResult := c.basicTimestampAlgorithmObsolescenceValidation(c.timestamp)
 
 			digestMatchersValidation := aovResult.DigestMatchersValidation
-			item = item.SetNextItem(c.timestampDigestAlgorithm(c.timestamp, digestMatchersValidation, lowestPOETime))
+			item = item.SetNextItem(c.timestampDigestAlgorithm(c.timestamp, digestMatchersValidation, lowestPOETime)) //nolint:staticcheck // mirrors upstream ValidationProcessForTimestampsWithArchivalData#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 			// NOTE: POE is extracted outside the class
 
@@ -196,7 +196,7 @@ func (c *ValidationProcessForTimestampsWithArchivalData) InitChain() {
 				item = item.SetNextItem(c.timestampIsAcceptable(aovResult, lowestPOETime))
 
 				digestMatchersValidation := aovResult.DigestMatchersValidation
-				item = item.SetNextItem(c.timestampDigestAlgorithm(c.timestamp, digestMatchersValidation,
+				item = item.SetNextItem(c.timestampDigestAlgorithm(c.timestamp, digestMatchersValidation, //nolint:staticcheck // mirrors upstream ValidationProcessForTimestampsWithArchivalData#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 					lowestPOETime))
 
 				// NOTE: POE is extracted outside the class

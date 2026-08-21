@@ -629,7 +629,7 @@ func DSSXMLUtilsIsCounterSignatureReference(reference *xmldsig.Reference, sig *X
 	if masterSignature != nil {
 		return DSSXMLUtilsIsCounterSignatureReferenceType(reference.Type()) ||
 			dssXMLUtilsIsSignatureValueReferenced(masterSignature, reference)
-	} else if DSSXMLUtilsIsCounterSignatureReferenceType(reference.Type()) {
+	} else if DSSXMLUtilsIsCounterSignatureReferenceType(reference.Type()) { //nolint:staticcheck // mirrors upstream DSSXMLUtils#isCounterSignatureReference: the branch is kept because Java's body is `LOG.warn("Master signature is not found! ...")` only.
 		// Upstream logs "Master signature is not found! Unable to verify counter signed
 		// SignatureValue for detached signatures.".
 	}

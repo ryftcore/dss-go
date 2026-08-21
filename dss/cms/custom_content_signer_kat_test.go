@@ -152,7 +152,7 @@ func TestDERTaggedObjectDefaultExplicitness(t *testing.T) {
 	// The Go port's own explicit tagging must reproduce it: wrapping the same inner SEQUENCE the
 	// generator used ([0] over SEQUENCE { OID 1.2.3.4 }) has to give the oracle's bytes.
 	inner := asn1ber.WriteSequence(asn1ber.EncodeOID(asn1.ObjectIdentifier{1, 2, 3, 4}))
-	got := asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, inner)
+	got := asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, inner) //nolint:staticcheck // mirrors upstream SignerAttributeV2#toASN1Primitive: `new DERTaggedObject(0, ...)` - the `0` is the ASN.1 context tag number the oracle entry was generated with.
 	hexEqual(t, got, entries["two-arg"])
 }
 

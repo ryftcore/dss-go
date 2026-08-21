@@ -85,7 +85,7 @@ func (c *EAAQualificationBlock) InitChain() {
 		pidQualificationProcess = pidQualificationProcessBlock.Execute()
 		c.Result.Value.ValidationPIDQualificationProcess = pidQualificationProcess
 
-		item = item.SetNextItem(c.eaaQualificationProcessConclusiveCheck(eaaQualificationProcess, pidQualificationProcess))
+		item = item.SetNextItem(c.eaaQualificationProcessConclusiveCheck(eaaQualificationProcess, pidQualificationProcess)) //nolint:staticcheck // mirrors upstream EAAQualificationBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 
 	c.determineFinalQualification(eaaQualificationProcess, pidQualificationProcess)

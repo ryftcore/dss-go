@@ -214,7 +214,7 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 
 		if enumerations.EAAQualification_PUBEAA == claimedQualification {
 			psbEaa := c.psbEaa(signingCertificate)
-			item = item.SetNextItem(psbEaa)
+			item = item.SetNextItem(psbEaa) //nolint:staticcheck // mirrors upstream EAAQualificationProcessBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 			if !psbEaa.Process() {
 				claimedQualification = c.toNotQualifiedEAA(claimedQualification)

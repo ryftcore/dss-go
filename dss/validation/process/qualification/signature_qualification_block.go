@@ -226,7 +226,7 @@ func (c *SignatureQualificationBlock) InitChain() {
 				// covered in isAdES
 
 				// (f) the electronic signature was created by a qualified electronic signature creation device;
-				item = item.SetNextItem(c.qscdAtSigningTime(c.qualificationAtSigningTime))
+				item = item.SetNextItem(c.qscdAtSigningTime(c.qualificationAtSigningTime)) //nolint:staticcheck // mirrors upstream SignatureQualificationBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 				// (g) the integrity of the signed data has not been compromised;
 				// covered in isAdES

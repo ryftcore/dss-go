@@ -114,7 +114,7 @@ func (c *RevocationFreshnessChecker) InitChain() {
 			item = c.revocationDataFreshCheck(c.revocationData, revocationFreshnessConstraint)
 			c.FirstItem = item
 		} else {
-			item = item.SetNextItem(c.revocationDataFreshCheck(c.revocationData, revocationFreshnessConstraint))
+			item = item.SetNextItem(c.revocationDataFreshCheck(c.revocationData, revocationFreshnessConstraint)) //nolint:staticcheck // mirrors upstream RevocationFreshnessChecker#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 		}
 	}
 }

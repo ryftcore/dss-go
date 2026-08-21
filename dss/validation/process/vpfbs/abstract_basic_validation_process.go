@@ -394,7 +394,7 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 		}
 
 		if !c.IsValid(&xmlSAV.XmlConstraintsConclusionContent) {
-			item = item.SetNextItem(c.basicValidationProcess(xmlSAV.Conclusion))
+			item = item.SetNextItem(c.basicValidationProcess(xmlSAV.Conclusion)) //nolint:staticcheck // mirrors upstream AbstractBasicValidationProcess#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 		}
 
 	}

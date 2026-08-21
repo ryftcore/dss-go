@@ -209,7 +209,7 @@ func normaliseCertificatesSet(t *testing.T, document []byte) ([][]byte, []byte) 
 	for _, certificate := range sorted {
 		body = append(body, certificate...)
 	}
-	rebuilt := asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, body)
+	rebuilt := asn1ber.WriteTLV(asn1ber.ClassContextSpecific|asn1ber.Constructed|0, body) //nolint:staticcheck // mirrors upstream SignedData#certificates: the `0` is the ASN.1 context tag number of `certificates [0] IMPLICIT CertificateSet`, spelled out as BouncyCastle's DERTaggedObject(0, ...) does.
 
 	normalised := bytes.Replace(document, certificatesSet.Encoded(), rebuilt, 1)
 	if len(normalised) != len(document) {

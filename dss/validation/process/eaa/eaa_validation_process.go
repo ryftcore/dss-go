@@ -105,7 +105,7 @@ func (c *EAAValidationProcess) InitChain() {
 	// 5. EAA Acceptance Validation
 	xmlSAV := eaaBBBs.SAV
 	if xmlSAV != nil {
-		item = item.SetNextItem(c.signatureAcceptanceValidation(xmlSAV))
+		item = item.SetNextItem(c.signatureAcceptanceValidation(xmlSAV)) //nolint:staticcheck // mirrors upstream EAAValidationProcess#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 }
 

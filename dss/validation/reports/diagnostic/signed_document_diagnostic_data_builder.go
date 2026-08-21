@@ -440,8 +440,8 @@ func (b *SignedDocumentDiagnosticDataBuilder) buildXmlSignatures(signatures []va
 	builtSignatures := make([]*jaxb.XmlSignature, 0)
 	for _, advancedSignature := range signatures {
 		id := advancedSignature.ID()
-		xmlSignature, ok := b.xmlSignaturesMap[id]
-		if !ok {
+		xmlSignature := b.xmlSignaturesMap[id]
+		if xmlSignature == nil {
 			xmlSignature = b.getXmlSignature(advancedSignature)
 			builtSignatures = append(builtSignatures, xmlSignature)
 		}
@@ -1108,8 +1108,8 @@ func (b *SignedDocumentDiagnosticDataBuilder) buildXmlEvidenceRecords(evidenceRe
 	if utils.IsCollectionNotEmpty(evidenceRecords) {
 		for _, evidenceRecord := range evidenceRecords {
 			id := evidenceRecord.Id()
-			xmlEvidenceRecord, ok := b.xmlEvidenceRecordMap[id]
-			if !ok {
+			xmlEvidenceRecord := b.xmlEvidenceRecordMap[id]
+			if xmlEvidenceRecord == nil {
 				xmlEvidenceRecord = b.buildXmlEvidenceRecord(evidenceRecord)
 				xmlEvidenceRecords = append(xmlEvidenceRecords, xmlEvidenceRecord)
 			}
@@ -1250,8 +1250,8 @@ func (b *SignedDocumentDiagnosticDataBuilder) buildXmlTimestamps(timestamps []*v
 		sortTimestamps(tokens, comparator)
 		for _, timestampToken := range tokens {
 			id := timestampToken.DSSIDAsString()
-			xmlTimestamp, ok := b.xmlTimestampsMap[id]
-			if !ok {
+			xmlTimestamp := b.xmlTimestampsMap[id]
+			if xmlTimestamp == nil {
 				xmlTimestamp = b.signedDocumentDiagnosticDataBuilderOverrides().BuildDetachedXmlTimestamp(timestampToken)
 				xmlTimestampsList = append(xmlTimestampsList, xmlTimestamp)
 			}

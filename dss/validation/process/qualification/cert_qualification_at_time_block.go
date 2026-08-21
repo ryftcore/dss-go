@@ -297,7 +297,7 @@ func (c *CertQualificationAtTimeBlock) InitChain() {
 
 		item = item.SetNextItem(c.hasConsistentByQSCDTrustService(trustServicesByQSCD))
 
-		item = item.SetNextItem(c.isQscd(qscdStatus))
+		item = item.SetNextItem(c.isQscd(qscdStatus)) //nolint:staticcheck // mirrors upstream CertQualificationAtTimeBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 	}
 

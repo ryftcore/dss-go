@@ -251,7 +251,9 @@ func (s *PAdESTimestampSource) GetSignatureTimestampReferences() []*validation.T
 // getAdbeRevocationInfoArchivalReferences().
 func (s *PAdESTimestampSource) GetAdbeRevocationInfoArchivalReferences() []*validation.TimestampedReference {
 	signedSignatureProperties := s.BuildSignedSignatureProperties()
-	if signedSignatureProperties == nil || !signedSignatureProperties.IsExist() {
+	// Upstream tests isExist() alone; BuildSignedSignatureProperties, like
+	// CAdESTimestampSource#buildSignedSignatureProperties, always returns a value.
+	if !signedSignatureProperties.IsExist() {
 		return []*validation.TimestampedReference{}
 	}
 	references := []*validation.TimestampedReference{}

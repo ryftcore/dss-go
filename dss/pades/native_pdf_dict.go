@@ -282,11 +282,23 @@ func (d *nativePdfDict) Match(pdfDict PdfDict) bool {
 	for _, key := range other.wrapped.Keys() {
 		targetObject := other.document.Resolve(other.wrapped.GetRaw(key))
 		currentObject := d.document.Resolve(d.wrapped.GetRaw(key))
-		if targetObject != nil && !nativePdfObjectEquals(targetObject, currentObject) {
+		if !nativePdfIsNull(targetObject) && !nativePdfObjectEquals(targetObject, currentObject) {
 			return false
 		}
 	}
 	return true
+}
+
+// nativePdfIsNull is Java's `getDictionaryObject(key) == null`: COSDictionary#getDictionaryObject
+// folds an absent entry, a COSNull entry and an unresolvable indirect reference all into null,
+// whereas internal/pdf's Resolve returns pdf.Null{} for each of them and never a nil interface.
+// The same mapping is applied by #getObject above, which returns nil for pdf.Null.
+func nativePdfIsNull(object pdf.Object) bool {
+	if object == nil {
+		return true
+	}
+	_, isNull := object.(pdf.Null)
+	return isNull
 }
 
 // String ports #toString.

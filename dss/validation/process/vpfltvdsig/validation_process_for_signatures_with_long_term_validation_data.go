@@ -326,7 +326,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 
 			if enumerations.Indication_PASSED != bsConclusion.Indication.Indication() {
 
-				item = item.SetNextItem(c.certificateKnownToBeNotRevokedFail(bsConclusion, &bestSignatureTimeTime))
+				item = item.SetNextItem(c.certificateKnownToBeNotRevokedFail(bsConclusion, &bestSignatureTimeTime)) //nolint:staticcheck // mirrors upstream ValidationProcessForSignaturesWithLongTermValidationData#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
 				return
 			}
@@ -458,7 +458,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	item = c.certificateChainReliableAtTime(item, c.currentSignature, c.currentDate, currentContext)
 
 	// check validity of revocation data
-	item = c.revocationDataReliableAtTime(item, c.currentDate)
+	item = c.revocationDataReliableAtTime(item, c.currentDate) //nolint:staticcheck // mirrors upstream ValidationProcessForSignaturesWithLongTermValidationData#initChain: Java's `item = revocationDataReliableAtTime(item, currentDate);` is the same dead store - the helper links and returns the new tail, which nothing reads.
 
 	/*
 	 * 11) Data extraction: the process shall return the success indication PASSED,

@@ -58,7 +58,7 @@ func (c *SignatureFormatChecking) InitChain() {
 	// ASiC
 	if c.DiagnosticData.IsContainerInfoPresent() {
 		item = c.GetASiCContainerValidationChain(item)
-		item = item.SetNextItem(c.allFilesSignedCheck())
+		item = item.SetNextItem(c.allFilesSignedCheck()) //nolint:staticcheck // mirrors upstream SignatureFormatChecking#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 }
 

@@ -74,9 +74,9 @@ func (c *ValidationContextInitialization) InitChain() {
 		if c.signature.IsPolicyIdentified() {
 
 			if !c.signature.IsPolicyZeroHash() {
-				item = item.SetNextItem(c.signaturePolicyHashValid())
+				item = item.SetNextItem(c.signaturePolicyHashValid()) //nolint:staticcheck // mirrors upstream ValidationContextInitialization#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 			} else {
-				item = item.SetNextItem(c.signaturePolicyZeroHash())
+				item = item.SetNextItem(c.signaturePolicyZeroHash()) //nolint:staticcheck // mirrors upstream ValidationContextInitialization#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 			}
 
 		}

@@ -148,7 +148,7 @@ func (c *TLSCertificateSupportedByQWAC2ValidationProcessBlock) InitChain() {
 		// validated binding.
 		// - If this step fails or the list does not contain the
 		// certificate, the procedure finishes negatively.
-		item = item.SetNextItem(c.tlsCertificateBindingCertificateAppearInSignature())
+		item = item.SetNextItem(c.tlsCertificateBindingCertificateAppearInSignature()) //nolint:staticcheck // mirrors upstream TLSCertificateSupportedByQWAC2ValidationProcessBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
 }
 

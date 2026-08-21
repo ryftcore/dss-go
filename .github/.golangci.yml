@@ -1,12 +1,16 @@
 # golangci-lint config for the dss module.
 #
-# SCHEMA: this is a golangci-lint **v1** config. v2 changed the file format
-# (it requires a top-level `version: "2"`, moves `linters-settings` under
-# `linters.settings`, and drops `run.timeout`) and refuses to load a v1 file.
-# .github/workflows/ci.yml therefore pins golangci-lint to a v1 release
-# rather than tracking "latest". Migrating means running
-# `golangci-lint migrate`, replacing --disable-all with --default=none in the
-# workflow, and bumping golangci-lint-action to v7+ — all in one change.
+# SCHEMA: this is a golangci-lint **v2** config (`version: "2"`), consumed by
+# golangci-lint v2.x via golangci-lint-action v9+ (both pinned in
+# .github/workflows/ci.yml — the action by commit SHA, the linter by exact
+# version, because the linter's type-checker must be built against a Go
+# release at least as new as the toolchain that compiles this module; a
+# stale linter build produces mass spurious `typecheck` errors for code
+# that compiles fine).
+#
+# Migrated from the original v1 config with `golangci-lint migrate`; the
+# `exclusions` block reproduces v1's built-in default exclusions, so the
+# migrated run flags the same issue set the v1 run did.
 #
 # Not auto-discovered: golangci-lint's upward config search never looks
 # inside .github/, so CI passes this file explicitly via --config (see
@@ -20,28 +24,74 @@
 # golangci-lint's per-rule "severity" field only annotates output, it does
 # not change the process exit code, so a genuinely non-blocking "exported
 # comment" check has to be its own step rather than a config knob.
-run:
-  timeout: 10m
-
+version: "2"
 linters:
-  disable-all: true
+  default: none
+  # revive is deliberately NOT in this list: the CI's blocking step runs the
+  # config as-is, and in golangci-lint v2 a CLI --enable MERGES with this
+  # list rather than replacing it. The advisory CI step opts revive in with
+  # --enable=revive; its settings below apply whenever it runs.
   enable:
     - govet
     - staticcheck
-    - revive
-
-linters-settings:
-  revive:
-    confidence: 0.8
-    rules:
-      # Flags exported identifiers with missing or non-conforming doc
-      # comments. Advisory only (see above) — a large, actively-growing
-      # ported codebase will have gaps the DOCS_A/DOCS_B passes are still
-      # closing, and this should surface them for review, not block merges.
-      - name: exported
-        severity: warning
-        disabled: false
-
+  settings:
+    govet:
+      disable:
+        # "call should be inlined" migration hints (e.g. sha3.New224 →
+        # sha3.New224()): style advice, and the explicit call sites mirror
+        # the upstream Java structure on purpose.
+        - inline
+    staticcheck:
+      # Correctness-only blocking set. Style and simplification families
+      # are excluded as POLICY, not oversight: this codebase is a
+      # statement-by-statement port of Java DSS (see dss/PORTING.md), so
+      #   - ST*  (stylecheck: ST1005 error-string case/punctuation, etc.)
+      #     would restyle error messages ported verbatim from Java,
+      #   - S1*  (gosimple) and QF* (quickfixes) would "simplify" Go away
+      #     from its 1:1 mapping to the Java source,
+      #   - SA1019 (deprecated APIs) flags the legacy algorithms (SHA-1,
+      #     MD5, PKCS#1 v1.5 paths) a signature-VALIDATION library must
+      #     keep supporting to validate old signatures,
+      #   - SA9003 (empty branch) flags `if` bodies that are empty because
+      #     the mirrored Java branch is empty or comment-only.
+      # The SA* remainder (unused assignments, no-op operations,
+      # always-true comparisons, discarded pure results) is real
+      # correctness signal and stays blocking.
+      checks:
+        - all
+        - -ST*
+        - -S1*
+        - -QF*
+        - -SA1019
+        - -SA9003
+    revive:
+      confidence: 0.8
+      rules:
+        # Flags exported identifiers with missing or non-conforming doc
+        # comments. Advisory only (see above) — a large, actively-growing
+        # ported codebase will have gaps, and this should surface them for
+        # review, not block merges.
+        - name: exported
+          severity: warning
+          disabled: false
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
