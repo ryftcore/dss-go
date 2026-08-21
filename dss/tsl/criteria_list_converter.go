@@ -86,17 +86,17 @@ func (c *CriteriaListConverter) addOtherCriteriaListConditionsIfPresent(tokens [
 		switch start.start.Name.Local {
 		case "CertSubjectDNAttribute":
 			var v jaxb.CertSubjectDNAttributeType
-			if err := decodeTokenSubtree(tokens[start.index:], &start.start, &v); err == nil {
+			if err := decodeTokenSubtree(tokens[start.index:], &v); err == nil {
 				condition.AddChild(NewCertSubjectDNAttributeCondition(c.extractOids(v.AttributeOID)))
 			}
 		case "ExtendedKeyUsage":
 			var v jaxb.ExtendedKeyUsageType
-			if err := decodeTokenSubtree(tokens[start.index:], &start.start, &v); err == nil {
+			if err := decodeTokenSubtree(tokens[start.index:], &v); err == nil {
 				condition.AddChild(NewExtendedKeyUsageCondition(c.extractOids(v.KeyPurposeId)))
 			}
 		case "QcStatementSet":
 			var v jaxb.QcStatementListType
-			if err := decodeTokenSubtree(tokens[start.index:], &start.start, &v); err == nil {
+			if err := decodeTokenSubtree(tokens[start.index:], &v); err == nil {
 				composite := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
 				for _, qcStatementType := range v.QcStatement {
 					var oid, legislation, typ string
@@ -123,7 +123,11 @@ func (c *CriteriaListConverter) addOtherCriteriaListConditionsIfPresent(tokens [
 
 // extractOids ports the private extractOids(List<ObjectIdentifierType>).
 func (c *CriteriaListConverter) extractOids(oits []*jaxb.ObjectIdentifierType) []string {
-	var oids []string
+	// Java starts from `new ArrayList<>()` and never answers null, which the
+	// CertSubjectDNAttribute/ExtendedKeyUsage conditions built from it can observe:
+	// Objects.equals(List, List) treats null and empty as different, and
+	// StringBuilder#append(Object) renders a null list as the literal "null" rather than "[]".
+	oids := []string{}
 	if utils.IsCollectionNotEmpty(oits) {
 		for _, objectIdentifierType := range oits {
 			if id, ok := objectIdentifierTypeValue(objectIdentifierType); ok && utils.IsStringNotEmpty(id) {
@@ -233,9 +237,17 @@ func (r *tokenSliceReader) Token() (xml.Token, error) {
 	return t, nil
 }
 
-// decodeTokenSubtree decodes the subtree starting at start (already the first element of
-// tokensFromStart) into target.
-func decodeTokenSubtree(tokensFromStart []xml.Token, start *xml.StartElement, target any) error {
+// decodeTokenSubtree decodes into target the subtree that starts at tokensFromStart[0] (the
+// element's own StartElement).
+//
+// It uses Decoder.Decode, not Decoder.DecodeElement: DecodeElement treats the StartElement
+// handed to it as ALREADY consumed and never pushes it onto the decoder's element stack, so a
+// token-replay decoder either runs off the end of the captured stream (when the StartElement is
+// replayed too, nesting one level too deep) or rejects the subtree's own closing tag as an
+// "unexpected end element" (when it is not) - both leaving target zero-valued while returning
+// an error this converter used to discard. Decode reads the StartElement from the stream
+// itself, so the stack stays balanced and the subtree decodes.
+func decodeTokenSubtree(tokensFromStart []xml.Token, target any) error {
 	dec := xml.NewTokenDecoder(&tokenSliceReader{tokens: tokensFromStart})
-	return dec.DecodeElement(target, start)
+	return dec.Decode(target)
 }

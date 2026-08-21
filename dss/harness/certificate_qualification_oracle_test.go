@@ -34,7 +34,11 @@ import (
 	"bufio"
 	"encoding/json"
 	"os"
+	"sort"
+	"strconv"
 	"testing"
+
+	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
 
 	"github.com/utain/esig/dss/model"
 	"github.com/utain/esig/dss/spi"
@@ -65,11 +69,101 @@ func (cqFileLoader) GetDocument(url string) (model.DSSDocument, error) {
 }
 
 type cqDump struct {
-	NumberOfTrustedCertificates   int    `json:"numberOfTrustedCertificates"`
-	Indication                    string `json:"indication"`
-	SubIndication                 string `json:"subIndication"`
-	QualificationAtIssuance       string `json:"qualificationAtIssuance"`
-	NumberOfTrustServiceProviders int    `json:"numberOfTrustServiceProviders"`
+	NumberOfTrustedCertificates   int      `json:"numberOfTrustedCertificates"`
+	Indication                    string   `json:"indication"`
+	SubIndication                 string   `json:"subIndication"`
+	QualificationAtIssuance       string   `json:"qualificationAtIssuance"`
+	NumberOfTrustServiceProviders int      `json:"numberOfTrustServiceProviders"`
+	TrustServiceProviders         []cqTSP  `json:"trustServiceProviders"`
+	TrustedLists                  []cqList `json:"trustedLists"`
+}
+
+// cqTSP is one XmlTrustServiceProvider of the certificate's diagnostic data: the TL content
+// Phase 9 handed to Phase 8 for this certificate.
+type cqTSP struct {
+	TSPNames                   []string     `json:"tspNames"`
+	TSPTradeNames              []string     `json:"tspTradeNames"`
+	TSPRegistrationIdentifiers []string     `json:"tspRegistrationIdentifiers"`
+	TrustServices              []cqTrustSvc `json:"trustServices"`
+}
+
+type cqTrustSvc struct {
+	ServiceType         string   `json:"serviceType"`
+	Status              string   `json:"status"`
+	HasStartDate        bool     `json:"hasStartDate"`
+	HasEndDate          bool     `json:"hasEndDate"`
+	ServiceNames        []string `json:"serviceNames"`
+	ServiceSupplyPoints []string `json:"serviceSupplyPoints"`
+	CapturedQualifiers  []string `json:"capturedQualifiers"`
+}
+
+// cqList is one XmlTrustedList of the diagnostic data - the block upstream's own JUnit suite
+// asserts over (url/countryCode/sequenceNumber/version/dates/wellSigned/structural validation).
+type cqList struct {
+	URL                string   `json:"url"`
+	CountryCode        string   `json:"countryCode"`
+	SequenceNumber     int      `json:"sequenceNumber"`
+	Version            int      `json:"version"`
+	HasLastLoading     bool     `json:"hasLastLoading"`
+	HasIssueDate       bool     `json:"hasIssueDate"`
+	HasNextUpdate      bool     `json:"hasNextUpdate"`
+	WellSigned         bool     `json:"wellSigned"`
+	LOTL               bool     `json:"lotl"`
+	StructuralValid    bool     `json:"structuralValid"`
+	StructuralMessages []string `json:"structuralMessages"`
+}
+
+// cqNullInt is the sentinel the Java generator emits for a null Integer, matching
+// tsl_parsing_oracle_test.go's tpNullInt.
+const cqNullInt = -2147483648
+
+func cqSortedStrings(values []string) []string {
+	out := make([]string, 0, len(values))
+	out = append(out, values...)
+	sort.Strings(out)
+	return out
+}
+
+// cqLangValues flattens a list of XmlLangAndValue into "lang|value" strings, sorted, the way
+// CertificateQualificationOracle.java#dumpSortedLangValues does.
+func cqLangValues(values []*diagnosticjaxb.XmlLangAndValue) []string {
+	out := make([]string, 0, len(values))
+	for _, v := range values {
+		lang := ""
+		if v.Lang != nil {
+			lang = *v.Lang
+		}
+		out = append(out, lang+"|"+v.Value)
+	}
+	sort.Strings(out)
+	return out
+}
+
+func cqQualifiers(values []*diagnosticjaxb.XmlQualifier) []string {
+	out := make([]string, 0, len(values))
+	for _, v := range values {
+		critical := false
+		if v.Critical != nil {
+			critical = *v.Critical
+		}
+		out = append(out, v.Value+"|"+strconv.FormatBool(critical))
+	}
+	sort.Strings(out)
+	return out
+}
+
+func cqDeref(p *string) string {
+	if p == nil {
+		return ""
+	}
+	return *p
+}
+
+func cqDerefInt(p *int) int {
+	if p == nil {
+		return cqNullInt
+	}
+	return *p
 }
 
 func cqLoadCertificate(t *testing.T, base64Certificate string) *model.CertificateToken {
@@ -123,8 +217,62 @@ func TestCertificateQualificationOracle(t *testing.T) {
 	}
 
 	diagnosticData := certificateReports.GetDiagnosticData()
+	got.TrustServiceProviders = []cqTSP{}
 	if cw := diagnosticData.CertificateById(certID); cw != nil {
 		got.NumberOfTrustServiceProviders = len(cw.TrustServiceProviders())
+		for _, tsp := range cw.TrustServiceProviders() {
+			dumped := cqTSP{
+				TSPNames:                   cqLangValues(tsp.TSPNames.All()),
+				TSPTradeNames:              cqLangValues(tsp.TSPTradeNames.All()),
+				TSPRegistrationIdentifiers: cqSortedStrings(tsp.TSPRegistrationIdentifiers.All()),
+				TrustServices:              []cqTrustSvc{},
+			}
+			for _, ts := range tsp.TrustServices.All() {
+				dumped.TrustServices = append(dumped.TrustServices, cqTrustSvc{
+					ServiceType:         cqDeref(ts.ServiceType),
+					Status:              cqDeref(ts.Status),
+					HasStartDate:        ts.StartDate != nil,
+					HasEndDate:          ts.EndDate != nil,
+					ServiceNames:        cqLangValues(ts.ServiceNames.All()),
+					ServiceSupplyPoints: cqSortedStrings(ts.ServiceSupplyPoints.All()),
+					CapturedQualifiers:  cqQualifiers(ts.CapturedQualifiers.All()),
+				})
+			}
+			sort.Slice(dumped.TrustServices, func(i, j int) bool {
+				a, _ := json.Marshal(dumped.TrustServices[i])
+				b, _ := json.Marshal(dumped.TrustServices[j])
+				return string(a) < string(b)
+			})
+			got.TrustServiceProviders = append(got.TrustServiceProviders, dumped)
+		}
+		// See CertificateQualificationOracle.java: both the provider list and each provider's
+		// trust-service list come out of a Java HashMap's entrySet(), so neither order is a
+		// parity target; both sides emit them in a canonical (JSON-sorted) order.
+		sort.Slice(got.TrustServiceProviders, func(i, j int) bool {
+			a, _ := json.Marshal(got.TrustServiceProviders[i])
+			b, _ := json.Marshal(got.TrustServiceProviders[j])
+			return string(a) < string(b)
+		})
+	}
+	got.TrustedLists = []cqList{}
+	for _, tl := range diagnosticData.TrustedLists() {
+		dumped := cqList{
+			URL:                cqDeref(tl.Url),
+			CountryCode:        cqDeref(tl.CountryCode),
+			SequenceNumber:     cqDerefInt(tl.SequenceNumber),
+			Version:            cqDerefInt(tl.Version),
+			HasLastLoading:     tl.LastLoading != nil,
+			HasIssueDate:       tl.IssueDate != nil,
+			HasNextUpdate:      tl.NextUpdate != nil,
+			WellSigned:         tl.WellSigned,
+			LOTL:               tl.LOTL != nil && *tl.LOTL,
+			StructuralMessages: []string{},
+		}
+		if tl.StructuralValidation != nil {
+			dumped.StructuralValid = tl.StructuralValidation.Valid
+			dumped.StructuralMessages = cqSortedStrings(tl.StructuralValidation.Message)
+		}
+		got.TrustedLists = append(got.TrustedLists, dumped)
 	}
 
 	f, err := os.Open("testdata/oracle/tsl/certificate_qualification.json")

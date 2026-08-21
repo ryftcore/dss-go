@@ -1,5 +1,9 @@
 import eu.europa.esig.dss.diagnostic.CertificateWrapper;
 import eu.europa.esig.dss.diagnostic.DiagnosticData;
+import eu.europa.esig.dss.diagnostic.jaxb.XmlStructuralValidation;
+import eu.europa.esig.dss.diagnostic.jaxb.XmlTrustService;
+import eu.europa.esig.dss.diagnostic.jaxb.XmlTrustServiceProvider;
+import eu.europa.esig.dss.diagnostic.jaxb.XmlTrustedList;
 import eu.europa.esig.dss.enumerations.Indication;
 import eu.europa.esig.dss.enumerations.SubIndication;
 import eu.europa.esig.dss.enumerations.CertificateQualification;
@@ -23,7 +27,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -103,10 +109,128 @@ public class CertificateQualificationOracle {
 		out.append("\"subIndication\":").append(json(subIndication != null ? subIndication.name() : "")).append(",");
 		out.append("\"qualificationAtIssuance\":").append(json(qualification != null ? qualification.name() : "")).append(",");
 		out.append("\"numberOfTrustServiceProviders\":").append(numberOfTrustServiceProviders);
+		// The Phase 9 -> Phase 8 hand-off in full: everything the upstream JUnit test itself
+		// asserts about the TL content that reached diagnostic data. Lists are sorted where the
+		// Java side builds them from a Set (TSP names/trade names/registration identifiers,
+		// structural-validation messages), positional where they are document-ordered.
+		// DiagnosticDataBuilder#getRelatedTrustServices and
+		// XmlTrustServiceProviderBuilder#classifyByServiceProvider both accumulate into a
+		// java.util.HashMap and drain its entrySet(), so the ORDER of the provider list (and of
+		// the trust services inside one provider) is Java HashMap iteration order - unspecified,
+		// and something the Go port deliberately replaces with a deterministic order of its own.
+		// Both sides therefore emit these two lists sorted by the JSON each entry serialises to;
+		// the CONTENT is compared in full.
+		out.append(",\"trustServiceProviders\":");
+		List<String> tspEntries = new ArrayList<>();
+		if (certificateWrapper != null) {
+			for (XmlTrustServiceProvider tsp : certificateWrapper.getTrustServiceProviders()) {
+				StringBuilder e = new StringBuilder();
+				e.append("{\"tspNames\":");
+				dumpSortedLangValues(e, tsp.getTSPNames());
+				e.append(",\"tspTradeNames\":");
+				dumpSortedLangValues(e, tsp.getTSPTradeNames());
+				e.append(",\"tspRegistrationIdentifiers\":");
+				dumpSortedStrings(e, tsp.getTSPRegistrationIdentifiers());
+				e.append(",\"trustServices\":");
+				List<String> tsEntries = new ArrayList<>();
+				for (XmlTrustService ts : tsp.getTrustServices()) {
+					StringBuilder t = new StringBuilder();
+					t.append("{\"serviceType\":").append(json(nullToEmpty(ts.getServiceType())));
+					t.append(",\"status\":").append(json(nullToEmpty(ts.getStatus())));
+					t.append(",\"hasStartDate\":").append(ts.getStartDate() != null);
+					t.append(",\"hasEndDate\":").append(ts.getEndDate() != null);
+					t.append(",\"serviceNames\":");
+					dumpSortedLangValues(t, ts.getServiceNames());
+					t.append(",\"serviceSupplyPoints\":");
+					dumpSortedStrings(t, ts.getServiceSupplyPoints());
+					t.append(",\"capturedQualifiers\":");
+					dumpSortedQualifiers(t, ts.getCapturedQualifiers());
+					t.append("}");
+					tsEntries.add(t.toString());
+				}
+				dumpSortedJsonEntries(e, tsEntries);
+				e.append("}");
+				tspEntries.add(e.toString());
+			}
+		}
+		dumpSortedJsonEntries(out, tspEntries);
+		out.append(",\"trustedLists\":[");
+		boolean firstTl = true;
+		for (XmlTrustedList tl : diagnosticData.getTrustedLists()) {
+			if (!firstTl) out.append(",");
+			firstTl = false;
+			out.append("{\"url\":").append(json(nullToEmpty(tl.getUrl())));
+			out.append(",\"countryCode\":").append(json(nullToEmpty(tl.getCountryCode())));
+			out.append(",\"sequenceNumber\":").append(tl.getSequenceNumber() == null ? -2147483648 : tl.getSequenceNumber());
+			out.append(",\"version\":").append(tl.getVersion() == null ? -2147483648 : tl.getVersion());
+			out.append(",\"hasLastLoading\":").append(tl.getLastLoading() != null);
+			out.append(",\"hasIssueDate\":").append(tl.getIssueDate() != null);
+			out.append(",\"hasNextUpdate\":").append(tl.getNextUpdate() != null);
+			out.append(",\"wellSigned\":").append(tl.isWellSigned());
+			out.append(",\"lotl\":").append(tl.isLOTL());
+			XmlStructuralValidation structural = tl.getStructuralValidation();
+			out.append(",\"structuralValid\":").append(structural != null && structural.isValid());
+			out.append(",\"structuralMessages\":");
+			dumpSortedStrings(out, structural == null ? null : structural.getMessages());
+			out.append("}");
+		}
+		out.append("]");
 		out.append("}");
 
 		Files.write(outFile, (out.toString() + "\n").getBytes(StandardCharsets.UTF_8));
 		System.out.println("wrote " + outFile);
+	}
+
+	private static void dumpSortedLangValues(StringBuilder out,
+			java.util.List<eu.europa.esig.dss.diagnostic.jaxb.XmlLangAndValue> values) {
+		java.util.List<String> flat = new java.util.ArrayList<>();
+		if (values != null) {
+			for (eu.europa.esig.dss.diagnostic.jaxb.XmlLangAndValue v : values) {
+				flat.add(nullToEmpty(v.getLang()) + "|" + nullToEmpty(v.getValue()));
+			}
+		}
+		dumpSortedStrings(out, flat);
+	}
+
+	private static void dumpSortedQualifiers(StringBuilder out,
+			java.util.List<eu.europa.esig.dss.diagnostic.jaxb.XmlQualifier> values) {
+		java.util.List<String> flat = new java.util.ArrayList<>();
+		if (values != null) {
+			for (eu.europa.esig.dss.diagnostic.jaxb.XmlQualifier v : values) {
+				flat.add(nullToEmpty(v.getValue()) + "|" + v.isCritical());
+			}
+		}
+		dumpSortedStrings(out, flat);
+	}
+
+	private static void dumpSortedJsonEntries(StringBuilder out, List<String> entries) {
+		entries.sort(String::compareTo);
+		out.append("[");
+		boolean first = true;
+		for (String e : entries) {
+			if (!first) out.append(",");
+			first = false;
+			out.append(e);
+		}
+		out.append("]");
+	}
+
+	private static String nullToEmpty(String s) {
+		return s == null ? "" : s;
+	}
+
+	private static void dumpSortedStrings(StringBuilder out, java.util.Collection<String> values) {
+		java.util.List<String> sorted = values == null
+				? new java.util.ArrayList<>() : new java.util.ArrayList<>(values);
+		sorted.sort(String::compareTo);
+		out.append("[");
+		boolean first = true;
+		for (String v : sorted) {
+			if (!first) out.append(",");
+			first = false;
+			out.append(json(nullToEmpty(v)));
+		}
+		out.append("]");
 	}
 
 	private static String json(String s) {

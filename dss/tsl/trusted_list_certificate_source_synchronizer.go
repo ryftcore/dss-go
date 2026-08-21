@@ -90,20 +90,72 @@ func (s *TrustedListCertificateSourceSynchronizer) isTLParsingDesyncOrError(tlIn
 }
 
 func (s *TrustedListCertificateSourceSynchronizer) synchronizeCertificates(summary *tslmodel.TLValidationJobSummary) {
-	trustPropertiesByCerts := make(map[*model.CertificateToken][]*tslmodel.TrustProperties)
-	trustTimeByCerts := make(map[*model.CertificateToken][]*tslmodel.CertificateTrustTime)
+	trustPropertiesByCerts := newSynchronizerCertificateMap[[]*tslmodel.TrustProperties]()
+	trustTimeByCerts := newSynchronizerCertificateMap[[]*tslmodel.CertificateTrustTime]()
 	for _, lotlInfo := range summary.LOTLInfos() {
 		if s.synchronizationStrategy.CanBeSynchronizedDocumentList(lotlInfo) {
 			s.addCertificatesFromTLs(trustPropertiesByCerts, trustTimeByCerts, lotlInfo.TLInfos(), lotlInfo)
 		}
 	}
 	s.addCertificatesFromTLs(trustPropertiesByCerts, trustTimeByCerts, summary.OtherTLInfos(), nil)
-	s.certificateSource.SetTrustPropertiesByCertificates(trustPropertiesByCerts)
-	s.certificateSource.SetTrustTimeByCertificates(trustTimeByCerts)
+	s.certificateSource.SetTrustPropertiesByCertificates(trustPropertiesByCerts.asMap())
+	s.certificateSource.SetTrustTimeByCertificates(trustTimeByCerts.asMap())
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) addCertificatesFromTLs(trustPropertiesByCerts map[*model.CertificateToken][]*tslmodel.TrustProperties,
-	trustTimeByCerts map[*model.CertificateToken][]*tslmodel.CertificateTrustTime, tlInfos []*tslmodel.TLInfo, relatedLOTL *tslmodel.LOTLInfo) {
+// synchronizerCertificateMap stands in for the two java.util.HashMap<CertificateToken, List<?>>
+// accumulators synchronizeCertificates() builds.
+//
+// A plain Go map[*model.CertificateToken]V would NOT be that map: CertificateToken#equals (and
+// hashCode) is the certificate's DSS id, i.e. a digest of its bytes, so Java merges the same CA
+// certificate reached through two different trusted lists - parsed into two distinct
+// CertificateToken instances - into ONE entry, where a pointer-keyed Go map keeps two. Keying by
+// DSS id reproduces Java's merge, and remembering the first-seen token per id keeps a single,
+// stable representative for the map handed to the certificate source.
+type synchronizerCertificateMap[V any] struct {
+	// order lists the ids in first-encounter order, so nothing here depends on Go map
+	// iteration order.
+	order []string
+	// tokens maps a DSS id to the first CertificateToken instance seen for it.
+	tokens map[string]*model.CertificateToken
+	// values maps a DSS id to its accumulated value.
+	values map[string]V
+}
+
+func newSynchronizerCertificateMap[V any]() *synchronizerCertificateMap[V] {
+	return &synchronizerCertificateMap[V]{
+		tokens: make(map[string]*model.CertificateToken),
+		values: make(map[string]V),
+	}
+}
+
+// get answers the value accumulated for the given certificate (the zero value when absent),
+// standing in for Map#get.
+func (m *synchronizerCertificateMap[V]) get(certificate *model.CertificateToken) V {
+	return m.values[certificate.DSSIDAsString()]
+}
+
+// put stores the value for the given certificate, standing in for Map#put.
+func (m *synchronizerCertificateMap[V]) put(certificate *model.CertificateToken, value V) {
+	id := certificate.DSSIDAsString()
+	if _, seen := m.tokens[id]; !seen {
+		m.tokens[id] = certificate
+		m.order = append(m.order, id)
+	}
+	m.values[id] = value
+}
+
+// asMap materialises the accumulator as the map the TrustPropertiesCertificateSource setters
+// take, one entry per distinct certificate.
+func (m *synchronizerCertificateMap[V]) asMap() map[*model.CertificateToken]V {
+	out := make(map[*model.CertificateToken]V, len(m.order))
+	for _, id := range m.order {
+		out[m.tokens[id]] = m.values[id]
+	}
+	return out
+}
+
+func (s *TrustedListCertificateSourceSynchronizer) addCertificatesFromTLs(trustPropertiesByCerts *synchronizerCertificateMap[[]*tslmodel.TrustProperties],
+	trustTimeByCerts *synchronizerCertificateMap[[]*tslmodel.CertificateTrustTime], tlInfos []*tslmodel.TLInfo, relatedLOTL *tslmodel.LOTLInfo) {
 
 	for _, tlInfo := range tlInfos {
 		if !s.synchronizationStrategy.CanBeSynchronizedDocument(tlInfo) {
@@ -132,21 +184,22 @@ func (s *TrustedListCertificateSourceSynchronizer) addCertificatesFromTLs(trustP
 	}
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) addCertificate(trustPropertiesByCerts map[*model.CertificateToken][]*tslmodel.TrustProperties,
-	trustTimeByCerts map[*model.CertificateToken][]*tslmodel.CertificateTrustTime, certificate *model.CertificateToken,
+func (s *TrustedListCertificateSourceSynchronizer) addCertificate(trustPropertiesByCerts *synchronizerCertificateMap[[]*tslmodel.TrustProperties],
+	trustTimeByCerts *synchronizerCertificateMap[[]*tslmodel.CertificateTrustTime], certificate *model.CertificateToken,
 	trustProperties *tslmodel.TrustProperties, certificateTrustTimes []*tslmodel.CertificateTrustTime) {
 
-	trustPropertiesList := trustPropertiesByCerts[certificate]
+	trustPropertiesList := trustPropertiesByCerts.get(certificate)
 	if !trustPropertiesListContains(trustPropertiesList, trustProperties) {
-		trustPropertiesByCerts[certificate] = append(trustPropertiesList, trustProperties)
+		trustPropertiesList = append(trustPropertiesList, trustProperties)
 	}
-	certificateTrustTimeList := trustTimeByCerts[certificate]
+	trustPropertiesByCerts.put(certificate, trustPropertiesList)
+	certificateTrustTimeList := trustTimeByCerts.get(certificate)
 	for _, certificateTrustTime := range certificateTrustTimes {
 		if !certificateTrustTimeListContains(certificateTrustTimeList, certificateTrustTime) {
 			certificateTrustTimeList = append(certificateTrustTimeList, certificateTrustTime)
 		}
 	}
-	trustTimeByCerts[certificate] = certificateTrustTimeList
+	trustTimeByCerts.put(certificate, certificateTrustTimeList)
 }
 
 func (s *TrustedListCertificateSourceSynchronizer) getDetached(original *tslmodel.TrustServiceProvider) *tslmodel.TrustServiceProvider {

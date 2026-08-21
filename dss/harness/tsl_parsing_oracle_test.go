@@ -3,13 +3,27 @@
 // testdata/oracle/tsl/tsl_parsing.jsonl is a pure Java dump, produced by
 // testdata/oracle/tsl/gen/TSLParsingOracle.java against DSS 6.5.RC1's
 // dss-tsl-validation TLParsingTask/LOTLParsingTask, for every fixture listed in
-// testdata/oracle/tsl/tsl_parsing_manifest.tsv (kind<TAB>name<TAB>path). The fixtures are the
-// upstream dss-tsl-validation src/test/resources files of the same names, copied unchanged into
-// testdata/oracle/tsl/: two real country TLs (de-tl.xml, fr.xml) plus dk_tl-sn21.xml, sk-tl.xml,
-// four LOTL variants (eu-lotl-250.xml the full real LOTL, eu-lotl.xml, eu-lotl-pivot.xml,
-// eu-lotl-no-sig.xml), the two error-classification fixtures (eu-lotl-broken-sig.xml - parses
-// fine, signature is what's broken; eu-lotl-not-parseable.xml - must fail to parse on both
-// sides), and the MRA pair (mra-lotl.xml, mra-zz-tl.xml).
+// testdata/oracle/tsl/tsl_parsing_manifest.tsv (kind<TAB>name<TAB>path<TAB>opts). The fixtures
+// are upstream dss-tsl-validation src/test/resources files, copied unchanged into
+// testdata/oracle/tsl/ (the two pivot-* ones renamed from resources/pivots/): real country TLs
+// (de-tl.xml, fr.xml, sk-tl.xml, dk_tl-sn21.xml, ie-tl.xml, fi-v5/fi-v6*.xml, fr-65-docusign.xml,
+// tsl-sk-minimal-dss-1911.xml, tl-ecdsa-brainpool.xml), degenerate TLs (tl-empty.xml,
+// tl-empty-with-identifier.xml), LOTL variants (eu-lotl-250.xml the full real LOTL, eu-lotl.xml,
+// eu-lotl-pivot.xml, eu-lotl-no-sig.xml, eu-lotl-no-tl-version.xml, the non-EU peru-lotl.xml),
+// the two error-classification fixtures (eu-lotl-broken-sig.xml - parses fine, signature is what's
+// broken; eu-lotl-not-parseable.xml - must fail to parse on both sides), the pivot chains
+// (pivot-oj1-03.xml, pivot-oj2-reset.xml) and the MRA family (mra-lotl.xml, mra-zz-tl.xml,
+// mra-zz-lotl-history.xml with a two-entry equivalence history, and the
+// custom-/duplicated-equivalence-context variants).
+//
+// The opts column drives the same LOTLSource knobs on both sides (see
+// TSLParsingOracle.java#applyOptions and tpApplyOptions below): "pivot" for pivot-chain URL
+// extraction, "oj=<url>" for the signing-certificate-announcement URL, "mra" for MRA support,
+// "xmlpred"/"pdfpred"/"cc=XX,YY" for the TL-pointer predicate. Several fixtures appear under more
+// than one option set on purpose: a DEFAULT LOTLSource reaches NEITHER the pivot URLs (they need
+// setPivotSupport) NOR any MRA block (the MRA pointer carries a non-EUgeneric TSLType, which the
+// default EUTLOtherTSLPointer predicate filters out), so the default-only rows exercise none of
+// that machinery - the mra-*/pivot-* rows are what actually cover it.
 //
 // This test parses the SAME bytes with NewTLParsingTask/NewLOTLParsingTask over a default
 // TLSource/LOTLSource (LOTLSource additionally gets SetMraSupport(true) for the two mra-*
@@ -30,10 +44,14 @@
 // and the two MRA equivalence maps) are dumped through Go's encoding/json, which sorts map
 // string keys, and the Java generator dumps them through a TreeMap for the same reason: Java
 // HashMap iteration order is unspecified and unrelated to any real defect, so comparing it would
-// manufacture false positives rather than catch anything. Every list-shaped field (TSP order,
-// service history order, distribution points, pivot URLs, positional certificate lists) is left
-// in encounter order on both sides and compared positionally - both engines unmarshal the same
-// XML bytes in document order, so a positional mismatch there IS a real defect (e.g. the kind
+// manufacture false positives rather than catch anything. The same applies to the ENTRIES of
+// ServiceEquivalence#getStatusEquivalence (a HashMap keyed by a List), which both sides emit in
+// a canonical sorted order. EVERY list-shaped field - TSP order, service history order,
+// distribution points, pivot URLs, positional certificate lists, and also the document-order
+// lists inside a service (registration identifiers, additional-service-info URIs, service supply
+// points, qualifiers, and the six QCStatementOids lists) - is left in encounter order on both
+// sides and compared positionally: both engines unmarshal the same XML bytes in document order,
+// so a positional mismatch there IS a real defect (e.g. the kind
 // abstract_parsing_task_oracle_test.go's map-iteration-order lessons warn about).
 package harness
 
@@ -43,8 +61,8 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"os"
-	"path/filepath"
 	"sort"
+	"strings"
 	"testing"
 	"time"
 
@@ -227,7 +245,7 @@ func tpConditionsForQualifiers(cfqs []*tslmodel.ConditionForQualifiers) []tpCond
 			condStr = c.Condition().ToString("")
 		}
 		out[i] = tpCondition{
-			Qualifiers: tpSorted(c.Qualifiers()),
+			Qualifiers: tpNonNilStrings(c.Qualifiers()),
 			Critical:   c.IsCritical(),
 			Condition:  condStr,
 		}
@@ -245,8 +263,8 @@ func tpServices(services []*tslmodel.TrustService) []tpService {
 				Names:                      tpSortedMapLists(entry.Names()),
 				Type:                       entry.Type(),
 				Status:                     entry.Status(),
-				AdditionalServiceInfoUris:  tpSorted(entry.AdditionalServiceInfoUris()),
-				ServiceSupplyPoints:        tpSorted(entry.ServiceSupplyPoints()),
+				AdditionalServiceInfoUris:  tpNonNilStrings(entry.AdditionalServiceInfoUris()),
+				ServiceSupplyPoints:        tpNonNilStrings(entry.ServiceSupplyPoints()),
 				ExpiredCertsRevocationInfo: tpEpochMillis(entry.ExpiredCertsRevocationInfo()),
 				CertificatesSha256:         tpCertSha256(svc.Certificates()),
 				Conditions:                 tpConditionsForQualifiers(entry.ConditionsForQualifiers()),
@@ -265,7 +283,7 @@ func tpTSPs(tsps []*tslmodel.TrustServiceProvider) []tpTSP {
 		out[i] = tpTSP{
 			Names:                   tpSortedMapLists(t.Names()),
 			TradeNames:              tpSortedMapLists(t.TradeNames()),
-			RegistrationIdentifiers: tpSorted(t.RegistrationIdentifiers()),
+			RegistrationIdentifiers: tpNonNilStrings(t.RegistrationIdentifiers()),
 			PostalAddresses:         t.PostalAddresses(),
 			ElectronicAddresses:     tpSortedMapLists(t.ElectronicAddresses()),
 			Information:             t.Information(),
@@ -281,12 +299,12 @@ func tpQCStatementOidsFrom(q *tslmodel.QCStatementOids) *tpQCStatementOids {
 		return nil
 	}
 	return &tpQCStatementOids{
-		QcStatementIds:           tpSorted(q.QcStatementIds()),
-		QcTypeIds:                tpSorted(q.QcTypeIds()),
-		QcCClegislations:         tpSorted(q.QcCClegislations()),
-		QcStatementIdsToRemove:   tpSorted(q.QcStatementIdsToRemove()),
-		QcTypeIdsToRemove:        tpSorted(q.QcTypeIdsToRemove()),
-		QcCClegislationsToRemove: tpSorted(q.QcCClegislationsToRemove()),
+		QcStatementIds:           tpNonNilStrings(q.QcStatementIds()),
+		QcTypeIds:                tpNonNilStrings(q.QcTypeIds()),
+		QcCClegislations:         tpNonNilStrings(q.QcCClegislations()),
+		QcStatementIdsToRemove:   tpNonNilStrings(q.QcStatementIdsToRemove()),
+		QcTypeIdsToRemove:        tpNonNilStrings(q.QcTypeIdsToRemove()),
+		QcCClegislationsToRemove: tpNonNilStrings(q.QcCClegislationsToRemove()),
 	}
 }
 
@@ -306,6 +324,10 @@ func tpCertContentEquivalences(ccs []*tslmodel.CertificateContentEquivalence) []
 	return out
 }
 
+// tpStatusEquivalence renders ServiceEquivalence#getStatusEquivalence(). Java holds it in a
+// HashMap whose ENTRY iteration order is unspecified, so both sides emit the entries in a
+// canonical order (by the JSON they serialise to) - see the matching comment in
+// TSLParsingOracle.java#dumpServiceEquivalence.
 func tpStatusEquivalence(ms []tslmodel.StatusEquivalenceMapping) []tpStatusEquivalenceMapping {
 	out := make([]tpStatusEquivalenceMapping, len(ms))
 	for i, m := range ms {
@@ -314,6 +336,11 @@ func tpStatusEquivalence(ms []tslmodel.StatusEquivalenceMapping) []tpStatusEquiv
 			PointingStatuses: tpSorted(m.PointingStatuses),
 		}
 	}
+	sort.Slice(out, func(i, j int) bool {
+		a, _ := json.Marshal(out[i])
+		b, _ := json.Marshal(out[j])
+		return string(a) < string(b)
+	})
 	return out
 }
 
@@ -377,9 +404,41 @@ func tpPointers(ptrs []*tslmodel.OtherTSLPointer) []tpPointer {
 	return out
 }
 
+// tpApplyOptions applies a manifest row's option column to a LOTLSource, mirroring
+// TSLParsingOracle.java's applyOptions(LOTLSource, String) key for key. See that method's
+// javadoc for why "xmlpred" is what makes the MRA fixtures' MRA tree reachable at all.
+func tpApplyOptions(t *testing.T, source *tsl.LOTLSource, opts string) {
+	t.Helper()
+	if opts == "" {
+		return
+	}
+	for _, opt := range strings.Split(opts, ";") {
+		opt = strings.TrimSpace(opt)
+		switch {
+		case opt == "":
+		case opt == "mra":
+			source.SetMraSupport(true)
+		case opt == "pivot":
+			source.SetPivotSupport(true)
+		case opt == "xmlpred":
+			source.SetTlPredicate(tsl.NewXMLOtherTSLPointer())
+		case opt == "pdfpred":
+			source.SetTlPredicate(tsl.NewPDFOtherTSLPointer())
+		case strings.HasPrefix(opt, "cc="):
+			source.SetTlPredicate(tsl.TLPredicateFactoryCreateEUTLCountryCodePredicate(
+				strings.Split(strings.TrimPrefix(opt, "cc="), ",")...))
+		case strings.HasPrefix(opt, "oj="):
+			source.SetSigningCertificatesAnnouncementPredicate(
+				tsl.NewOfficialJournalSchemeInformationURI(strings.TrimPrefix(opt, "oj=")))
+		default:
+			t.Fatalf("unknown manifest option %q", opt)
+		}
+	}
+}
+
 // tpParse parses one fixture with the Go port, mirroring exactly what
 // testdata/oracle/tsl/gen/TSLParsingOracle.java does with TLParsingTask/LOTLParsingTask.
-func tpParse(t *testing.T, kind, path string) tpRecord {
+func tpParse(t *testing.T, kind, path, opts string) tpRecord {
 	t.Helper()
 	document, err := model.NewFileDocument(path)
 	if err != nil {
@@ -390,9 +449,7 @@ func tpParse(t *testing.T, kind, path string) tpRecord {
 
 	if kind == "LOTL" {
 		source := tsl.NewLOTLSource()
-		if filepath.Base(path) == "mra-lotl.xml" {
-			source.SetMraSupport(true)
-		}
+		tpApplyOptions(t, source, opts)
 		result, err := tsl.NewLOTLParsingTask(document, source).Get()
 		if err != nil {
 			rec.ParseError = true
@@ -438,6 +495,7 @@ type tpManifestRow struct {
 	Kind string
 	Name string
 	Path string
+	Opts string
 }
 
 func tpReadManifest(t *testing.T) []tpManifestRow {
@@ -456,10 +514,10 @@ func tpReadManifest(t *testing.T) []tpManifestRow {
 			continue
 		}
 		parts := tpSplitTab(line)
-		if len(parts) != 3 {
+		if len(parts) != 4 {
 			t.Fatalf("malformed manifest line: %q", line)
 		}
-		rows = append(rows, tpManifestRow{Kind: parts[0], Name: parts[1], Path: parts[2]})
+		rows = append(rows, tpManifestRow{Kind: parts[0], Name: parts[1], Path: parts[2], Opts: parts[3]})
 	}
 	if err := scanner.Err(); err != nil {
 		t.Fatalf("scan manifest: %v", err)
@@ -524,7 +582,7 @@ func TestTSLParsingOracle(t *testing.T) {
 			if !ok {
 				t.Fatalf("no oracle record for %s", row.Name)
 			}
-			got := tpParse(t, row.Kind, row.Path)
+			got := tpParse(t, row.Kind, row.Path, row.Opts)
 			got.Name = row.Name
 
 			gotJSON, err := json.Marshal(got)

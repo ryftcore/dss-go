@@ -19,6 +19,10 @@ import eu.europa.esig.dss.tsl.parsing.TLParsingResult;
 import eu.europa.esig.dss.tsl.parsing.TLParsingTask;
 import eu.europa.esig.dss.tsl.source.LOTLSource;
 import eu.europa.esig.dss.tsl.source.TLSource;
+import eu.europa.esig.dss.tsl.function.XMLOtherTSLPointer;
+import eu.europa.esig.dss.tsl.function.PDFOtherTSLPointer;
+import eu.europa.esig.dss.tsl.function.OfficialJournalSchemeInformationURI;
+import eu.europa.esig.dss.tsl.function.TLPredicateFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,6 +71,7 @@ public class TSLParsingOracle {
                 String kind = parts[0];
                 String name = parts[1];
                 String path = parts[2];
+                String opts = parts.length > 3 ? parts[3] : "";
 
                 out.append("{\"name\":").append(json(name));
                 out.append(",\"kind\":").append(json(kind));
@@ -75,9 +80,7 @@ public class TSLParsingOracle {
                 try {
                     if ("LOTL".equals(kind)) {
                         LOTLSource source = new LOTLSource();
-                        if (path.endsWith("mra-lotl.xml")) {
-                            source.setMraSupport(true);
-                        }
+                        applyOptions(source, opts);
                         LOTLParsingResult result;
                         try {
                             result = new LOTLParsingTask(doc, source).get();
@@ -130,6 +133,45 @@ public class TSLParsingOracle {
         System.out.println("rows=" + rows);
     }
 
+    /**
+     * Applies the manifest's option column to a LOTLSource. Options are separated by ';';
+     * recognised keys mirror the knobs upstream's own LOTLParsingTaskTest exercises:
+     * "mra" (setMraSupport), "pivot" (setPivotSupport), "xmlpred"/"pdfpred"
+     * (setTlPredicate with the XML/PDF OtherTSLPointer predicate - the MRA pointer of the
+     * mra-* fixtures is a non-EUgeneric TSLType and is filtered out by the DEFAULT
+     * EUTLOtherTSLPointer predicate, so without this the whole MRA tree parses as null),
+     * "cc=XX,YY" (TLPredicateFactory.createEUTLCountryCodePredicate) and "oj=&lt;url&gt;"
+     * (setSigningCertificatesAnnouncementPredicate with OfficialJournalSchemeInformationURI).
+     */
+    private static void applyOptions(LOTLSource source, String opts) {
+        if (opts == null || opts.isBlank()) {
+            return;
+        }
+        for (String opt : opts.split(";")) {
+            opt = opt.trim();
+            if (opt.isEmpty()) {
+                continue;
+            }
+            if ("mra".equals(opt)) {
+                source.setMraSupport(true);
+            } else if ("pivot".equals(opt)) {
+                source.setPivotSupport(true);
+            } else if ("xmlpred".equals(opt)) {
+                source.setTlPredicate(new XMLOtherTSLPointer());
+            } else if ("pdfpred".equals(opt)) {
+                source.setTlPredicate(new PDFOtherTSLPointer());
+            } else if (opt.startsWith("cc=")) {
+                source.setTlPredicate(TLPredicateFactory.createEUTLCountryCodePredicate(
+                        opt.substring(3).split(",")));
+            } else if (opt.startsWith("oj=")) {
+                source.setSigningCertificatesAnnouncementPredicate(
+                        new OfficialJournalSchemeInformationURI(opt.substring(3)));
+            } else {
+                throw new IllegalArgumentException("Unknown option: " + opt);
+            }
+        }
+    }
+
     private static void dumpCommon(StringBuilder out, TSLType tslType, Integer sequenceNumber, Integer version,
                                     String territory, Date issueDate, Date nextUpdateDate, List<String> distributionPoints) {
         out.append(",\"tslType\":").append(json(tslType == null ? "" : tslType.getUri()));
@@ -154,7 +196,7 @@ public class TSLParsingOracle {
                 out.append(",\"tradeNames\":");
                 dumpSortedMultiMap(out, tsp.getTradeNames());
                 out.append(",\"registrationIdentifiers\":");
-                dumpSortedStrList(out, tsp.getRegistrationIdentifiers());
+                dumpStrList(out, tsp.getRegistrationIdentifiers());
                 out.append(",\"postalAddresses\":");
                 dumpSortedStrMap(out, tsp.getPostalAddresses());
                 out.append(",\"electronicAddresses\":");
@@ -186,9 +228,9 @@ public class TSLParsingOracle {
                     out.append(",\"type\":").append(json(e.getType()));
                     out.append(",\"status\":").append(json(e.getStatus()));
                     out.append(",\"additionalServiceInfoUris\":");
-                    dumpSortedStrList(out, e.getAdditionalServiceInfoUris());
+                    dumpStrList(out, e.getAdditionalServiceInfoUris());
                     out.append(",\"serviceSupplyPoints\":");
-                    dumpSortedStrList(out, e.getServiceSupplyPoints());
+                    dumpStrList(out, e.getServiceSupplyPoints());
                     out.append(",\"expiredCertsRevocationInfo\":").append(epochMillis(e.getExpiredCertsRevocationInfo()));
                     out.append(",\"certificatesSha256\":");
                     dumpStrList(out, certDigests);
@@ -209,13 +251,31 @@ public class TSLParsingOracle {
                 if (!first) out.append(",");
                 first = false;
                 out.append("{\"qualifiers\":");
-                dumpSortedStrList(out, c.getQualifiers());
+                dumpStrList(out, c.getQualifiers());
                 out.append(",\"critical\":").append(c.isCritical());
-                out.append(",\"condition\":").append(json(c.getCondition() == null ? "" : c.getCondition().toString("")));
+                out.append(",\"condition\":").append(json(conditionString(c.getCondition())));
                 out.append("}");
             }
         }
         out.append("]");
+    }
+
+    /**
+     * Renders a Condition through Condition#toString(String) and normalises the two places that
+     * tree can print a Java null: QCStatementCondition#toString writes "type: null" /
+     * "legislation: null" for an absent QcType / QcCClegislation. Go has no null String, so the
+     * port's QCStatementCondition holds "" there and prints "type: " - the values are equivalent
+     * everywhere either engine READS them (both are the "absent" case Utils.isStringNotEmpty
+     * rejects in check()), and this rendering is debug-only. Nothing else in the condition tree
+     * can produce the token "null" at the start of a line: CompositeCondition prints an enum
+     * name, KeyUsageCondition a name plus true/false, PolicyIdCondition a non-null OID, and the
+     * two list conditions are built from lists this port keeps non-null on both sides.
+     */
+    private static String conditionString(eu.europa.esig.dss.model.tsl.Condition condition) {
+        if (condition == null) {
+            return "";
+        }
+        return condition.toString("").replace(": null\n", ": \n");
     }
 
     private static void dumpPointers(StringBuilder out, List<OtherTSLPointer> pointers) {
@@ -277,23 +337,34 @@ public class TSLParsingOracle {
         Map<String, String> typeAsi = new TreeMap<>();
         if (se.getTypeAsiEquivalence() != null) {
             for (Map.Entry<ServiceTypeASi, ServiceTypeASi> en : se.getTypeAsiEquivalence().entrySet()) {
-                typeAsi.put(en.getKey().getType() + "|" + en.getKey().getAsi(),
-                        en.getValue().getType() + "|" + en.getValue().getAsi());
+                // A null ServiceTypeASi type/asi is "" on the Go side, which has no null String.
+                typeAsi.put(nullToEmpty(en.getKey().getType()) + "|" + nullToEmpty(en.getKey().getAsi()),
+                        nullToEmpty(en.getValue().getType()) + "|" + nullToEmpty(en.getValue().getAsi()));
             }
         }
         dumpSortedStrMap(out, typeAsi);
+        // getStatusEquivalence() is a HashMap; its ENTRY iteration order is unspecified and
+        // cannot be a parity target, so the entries are emitted in a canonical order (sorted by
+        // their sorted key list). The Go side sorts its own slice with the identical key.
         out.append(",\"statusEquivalence\":[");
-        boolean first = true;
+        List<String> statusEntries = new ArrayList<>();
         if (se.getStatusEquivalence() != null) {
             for (Map.Entry<List<String>, List<String>> en : se.getStatusEquivalence().entrySet()) {
-                if (!first) out.append(",");
-                first = false;
-                out.append("{\"pointedStatuses\":");
-                dumpSortedStrList(out, en.getKey());
-                out.append(",\"pointingStatuses\":");
-                dumpSortedStrList(out, en.getValue());
-                out.append("}");
+                StringBuilder entry = new StringBuilder();
+                entry.append("{\"pointedStatuses\":");
+                dumpSortedStrList(entry, en.getKey());
+                entry.append(",\"pointingStatuses\":");
+                dumpSortedStrList(entry, en.getValue());
+                entry.append("}");
+                statusEntries.add(entry.toString());
             }
+        }
+        statusEntries.sort(String::compareTo);
+        boolean first = true;
+        for (String entry : statusEntries) {
+            if (!first) out.append(",");
+            first = false;
+            out.append(entry);
         }
         out.append("]");
         out.append(",\"certificateContentEquivalences\":[");
@@ -303,7 +374,7 @@ public class TSLParsingOracle {
                 if (!first) out.append(",");
                 first = false;
                 out.append("{\"context\":").append(json(cce.getContext() == null ? "" : cce.getContext().name()));
-                out.append(",\"condition\":").append(json(cce.getCondition() == null ? "" : cce.getCondition().toString("")));
+                out.append(",\"condition\":").append(json(conditionString(cce.getCondition())));
                 out.append(",\"contentReplacement\":");
                 dumpQcStatementOids(out, cce.getContentReplacement());
                 out.append("}");
@@ -321,17 +392,17 @@ public class TSLParsingOracle {
             return;
         }
         out.append("{\"qcStatementIds\":");
-        dumpSortedStrList(out, q.getQcStatementIds());
+        dumpStrList(out, q.getQcStatementIds());
         out.append(",\"qcTypeIds\":");
-        dumpSortedStrList(out, q.getQcTypeIds());
+        dumpStrList(out, q.getQcTypeIds());
         out.append(",\"qcCClegislations\":");
-        dumpSortedStrList(out, q.getQcCClegislations());
+        dumpStrList(out, q.getQcCClegislations());
         out.append(",\"qcStatementIdsToRemove\":");
-        dumpSortedStrList(out, q.getQcStatementIdsToRemove());
+        dumpStrList(out, q.getQcStatementIdsToRemove());
         out.append(",\"qcTypeIdsToRemove\":");
-        dumpSortedStrList(out, q.getQcTypeIdsToRemove());
+        dumpStrList(out, q.getQcTypeIdsToRemove());
         out.append(",\"qcCClegislationsToRemove\":");
-        dumpSortedStrList(out, q.getQcCClegislationsToRemove());
+        dumpStrList(out, q.getQcCClegislationsToRemove());
         out.append("}");
     }
 
@@ -354,6 +425,10 @@ public class TSLParsingOracle {
             throw new RuntimeException(e);
         }
         return out;
+    }
+
+    private static String nullToEmpty(String s) {
+        return s == null ? "" : s;
     }
 
     private static long epochMillis(Date d) {
@@ -382,7 +457,11 @@ public class TSLParsingOracle {
     private static void dumpSortedStrMap(StringBuilder out, Map<String, String> map) {
         Map<String, String> sorted = new TreeMap<>();
         if (map != null) {
-            sorted.putAll(map);
+            for (Map.Entry<String, String> en : map.entrySet()) {
+                // A null xml:lang key (a TL that omits the attribute - tl-ecdsa-brainpool.xml
+                // has one) is the empty string on the Go side, which has no null String.
+                sorted.put(en.getKey() == null ? "" : en.getKey(), en.getValue());
+            }
         }
         out.append("{");
         boolean first = true;
@@ -397,7 +476,10 @@ public class TSLParsingOracle {
     private static void dumpSortedMultiMap(StringBuilder out, Map<String, List<String>> map) {
         Map<String, List<String>> sorted = new TreeMap<>();
         if (map != null) {
-            sorted.putAll(map);
+            for (Map.Entry<String, List<String>> en : map.entrySet()) {
+                // See dumpSortedStrMap: a null xml:lang key is "" on the Go side.
+                sorted.put(en.getKey() == null ? "" : en.getKey(), en.getValue());
+            }
         }
         out.append("{");
         boolean first = true;
