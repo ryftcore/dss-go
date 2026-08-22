@@ -6,9 +6,28 @@ validation process, the same reports. This page is the translation layer.
 
 ## The five rules that cover most of it
 
-**1. Class names survive.** `CAdESService` is `cades.CAdESService`.
-`XAdESSignatureParameters` is `xades.XAdESSignatureParameters`. Java packages
-become Go packages by the mapping in the table below.
+**1. Class names survive, minus the package prefix.** A Go identifier never
+repeats its own package name, because the qualifier at the call site already
+carries it. So `CAdESService` is `cades.Service`, `XAdESSignatureParameters` is
+`xades.SignatureParameters`, `ASiCContent` is `asic.Content`, and `AlertHandler`
+is `alert.Handler`. Everything else about the name is untouched — **put the
+package name back and you have the Java class name**:
+
+```java
+ASiCContainerExtractor    // Java
+```
+```go
+asic.ContainerExtractor   // Go — "asic" + the rest
+```
+
+Constructors follow their type (`new CAdESService(...)` → `cades.NewService(...)`),
+and so do the `Abstract...` bases. Java packages become Go packages by the
+mapping in the table below.
+
+Two deliberate exceptions, so you are not surprised: a name identical to its
+package name keeps it, and a name whose next character is a digit keeps it too,
+which is why the XAdES version helpers are still `xades.XAdES111XSDUtils`,
+`xades.XAdES122XSDUtils` and `xades.XAdES319132XSDUtils`.
 
 **2. Getters and setters lose their prefix — sometimes.** Java's
 `getSignatureAlgorithm()` becomes `SignatureAlgorithm()` where the `get` reads
@@ -120,16 +139,16 @@ relative to `github.com/ryftcore/dss-go/dss`.
 
 | Java class | Go package | Go symbol |
 |---|---|---|
-| `CAdESService` | `cades` | `CAdESService`, `NewCAdESService` |
-| `XAdESService` | `xades` | `XAdESService`, `NewXAdESService` |
-| `PAdESService` | `pades` | `PAdESService`, `NewPAdESService` |
-| `JAdESService` | `jades` | `JAdESService`, `NewJAdESService` |
+| `CAdESService` | `cades` | `Service`, `NewService` |
+| `XAdESService` | `xades` | `Service`, `NewService` |
+| `PAdESService` | `pades` | `Service`, `NewService` |
+| `JAdESService` | `jades` | `Service`, `NewService` |
 | `ASiCWithCAdESService` | `asic/cades` | `ASiCWithCAdESService`, `NewASiCWithCAdESService` |
 | `ASiCWithXAdESService` | `asic/xades` | `ASiCWithXAdESService`, `NewASiCWithXAdESService` |
-| `CAdESSignatureParameters` | `cades` | `CAdESSignatureParameters` |
-| `XAdESSignatureParameters` | `xades` | `XAdESSignatureParameters` |
-| `PAdESSignatureParameters` | `pades` | `PAdESSignatureParameters` |
-| `JAdESSignatureParameters` | `jades` | `JAdESSignatureParameters` |
+| `CAdESSignatureParameters` | `cades` | `SignatureParameters` |
+| `XAdESSignatureParameters` | `xades` | `SignatureParameters` |
+| `PAdESSignatureParameters` | `pades` | `SignatureParameters` |
+| `JAdESSignatureParameters` | `jades` | `SignatureParameters` |
 | `ASiCWithCAdESSignatureParameters` | `asic/cades` | `ASiCWithCAdESSignatureParameters` |
 | `ASiCWithXAdESSignatureParameters` | `asic/xades` | `ASiCWithXAdESSignatureParameters` |
 
@@ -185,7 +204,7 @@ relative to `github.com/ryftcore/dss-go/dss`.
 | `CertificateReports` | `validation/reports` | `CertificateReports` |
 | `SimpleReport` | `simplereport` | `SimpleReport` |
 | `DetailedReport` | `detailedreport` | `DetailedReport` |
-| `DiagnosticData` | `diagnostic` | `DiagnosticData` |
+| `DiagnosticData` | `diagnostic` | `Data` |
 
 ### Trusted lists
 
@@ -200,7 +219,7 @@ relative to `github.com/ryftcore/dss-go/dss`.
 
 | Java class | Go package | Go symbol |
 |---|---|---|
-| `ASiCContainerExtractor` | `asic` | `ASiCContainerExtractor` |
+| `ASiCContainerExtractor` | `asic` | `ContainerExtractor`, `DefaultContainerExtractor` |
 | `SignatureLevel` | `enumerations` | `SignatureLevel` |
 | `SignaturePackaging` | `enumerations` | `SignaturePackaging` |
 | `DigestAlgorithm` | `enumerations` | `DigestAlgorithm` |
