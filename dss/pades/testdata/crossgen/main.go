@@ -119,7 +119,7 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 // generated signature is invisible (no visible signature appearance is drawn on the page) - the
 // native engine has no rasteriser to draw one with anyway (internal/pdf/DESIGN.md §0.2).
 func newParameters(level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry) *pades.SignatureParameters {
-	parameters := pades.NewPAdESSignatureParameters()
+	parameters := pades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
@@ -133,7 +133,7 @@ func generate(inputPath, outputPath string, level enumerations.SignatureLevel,
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, signerEntry)
 
-	service := pades.NewPAdESService(validation.NewCommonCertificateVerifier())
+	service := pades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.SetTspSource(tspSource)
 	}

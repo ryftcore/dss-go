@@ -32,25 +32,25 @@ type DOMDocument struct {
 	signatureNodesSet bool
 }
 
-// NewXAdESDOMDocumentDefault is the default constructor instantiating a XAdES DOM document
+// NewDOMDocumentDefault is the default constructor instantiating a XAdES DOM document
 // using XAdES 1.3.2 namespace paths. Ports the single-argument XAdESDOMDocument(Document)
 // constructor.
-func NewXAdESDOMDocumentDefault(document *xmldom.Node) *DOMDocument {
-	return NewXAdESDOMDocument(document, []definition.XAdESPath{&definition.XAdES132Path{}})
+func NewDOMDocumentDefault(document *xmldom.Node) *DOMDocument {
+	return NewDOMDocument(document, []definition.XAdESPath{&definition.XAdES132Path{}})
 }
 
-// NewXAdESDOMDocument is the constructor with provided XAdES Path holders. The method
+// NewDOMDocument is the constructor with provided XAdES Path holders. The method
 // instantiates a new XAdES Path list based on the provided one. Ports the two-argument
 // DOMDocument(Document, List<XAdESPath>) constructor.
-func NewXAdESDOMDocument(document *xmldom.Node, xadesPathsHolders []definition.XAdESPath) *DOMDocument {
-	return NewXAdESDOMDocumentWithName(document, "", xadesPathsHolders)
+func NewDOMDocument(document *xmldom.Node, xadesPathsHolders []definition.XAdESPath) *DOMDocument {
+	return NewDOMDocumentWithName(document, "", xadesPathsHolders)
 }
 
-// NewXAdESDOMDocumentWithName is the constructor with provided XAdES Path holders and document
+// NewDOMDocumentWithName is the constructor with provided XAdES Path holders and document
 // name. The method instantiates a new XAdES Path list based on the provided one. Panics with the
 // Java message when xadesPathsHolders is nil (Objects.requireNonNull upstream). Ports the
 // three-argument DOMDocument(Document, String, List<XAdESPath>) constructor.
-func NewXAdESDOMDocumentWithName(document *xmldom.Node, name string, xadesPathsHolders []definition.XAdESPath) *DOMDocument {
+func NewDOMDocumentWithName(document *xmldom.Node, name string, xadesPathsHolders []definition.XAdESPath) *DOMDocument {
 	if xadesPathsHolders == nil {
 		panic("XAdES Path holders cannot be null!")
 	}

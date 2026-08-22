@@ -28,15 +28,15 @@ type ExtensionService struct {
 	pdfObjectFactory IPdfObjFactory
 }
 
-// NewPAdESExtensionService instantiates the service with the default IPdfObjFactory.
+// NewExtensionService instantiates the service with the default IPdfObjFactory.
 // Port of PAdESExtensionService(CertificateVerifier).
-func NewPAdESExtensionService(certificateVerifier validation.CertificateVerifier) *ExtensionService {
-	return NewPAdESExtensionServiceWithFactory(certificateVerifier, NewDefaultPdfObjFactory())
+func NewExtensionService(certificateVerifier validation.CertificateVerifier) *ExtensionService {
+	return NewExtensionServiceWithFactory(certificateVerifier, NewDefaultPdfObjFactory())
 }
 
-// NewPAdESExtensionServiceWithFactory is the default constructor.
+// NewExtensionServiceWithFactory is the default constructor.
 // Port of PAdESExtensionService(CertificateVerifier, IPdfObjFactory).
-func NewPAdESExtensionServiceWithFactory(certificateVerifier validation.CertificateVerifier,
+func NewExtensionServiceWithFactory(certificateVerifier validation.CertificateVerifier,
 	pdfObjectFactory IPdfObjFactory) *ExtensionService {
 	if certificateVerifier == nil {
 		panic("CertificateVerifier cannot be null!")

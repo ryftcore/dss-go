@@ -49,7 +49,7 @@ func (e *JAdESDocumentExtender) CreateSignatureService() document.SignatureServi
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding JAdESService!")
 	}
-	service := jades.NewJAdESService(e.CertificateVerifier)
+	service := jades.NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -64,7 +64,7 @@ func (e *JAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 // logging the fallback at INFO level; the log statement carried no other behaviour and is
 // dropped per PORTING.md.
 func (e *JAdESDocumentExtender) EmptySignatureParameters() *jades.SignatureParameters {
-	emptyParameters := jades.NewJAdESSignatureParameters()
+	emptyParameters := jades.NewSignatureParameters()
 	emptyParameters.SetJwsSerializationType(enumerations.JWSSerializationTypeJSONSerialization)
 	return emptyParameters
 }

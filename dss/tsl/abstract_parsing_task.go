@@ -132,7 +132,7 @@ func (t *AbstractParsingTaskBase) readDocument() ([]byte, error) {
 // CreateTrustedListFacade loads a TrustedListFacade. Port of the protected
 // createTrustedListFacade(), whose body is `return Facade.newFacade();`.
 func (t *AbstractParsingTaskBase) CreateTrustedListFacade() trustedListFacade {
-	return trustedlist.NewTrustedListFacade()
+	return trustedlist.NewFacade()
 }
 
 // CommonParseSchemeInformation extracts the common values. Port of the protected

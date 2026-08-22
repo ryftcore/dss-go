@@ -46,7 +46,7 @@ func (e *XAdESDocumentExtender) CreateSignatureService() document.SignatureServi
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding XAdESService!")
 	}
-	service := xades.NewXAdESService(e.CertificateVerifier)
+	service := xades.NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -58,7 +58,7 @@ func (e *XAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 
 // EmptySignatureParameters ports the overridden protected emptySignatureParameters().
 func (e *XAdESDocumentExtender) EmptySignatureParameters() *xades.SignatureParameters {
-	return xades.NewXAdESSignatureParameters()
+	return xades.NewSignatureParameters()
 }
 
 // IsSupportedParameters ports the overridden protected

@@ -65,7 +65,7 @@ type Signature struct {
 
 // NewJAdESSignature is the default constructor. Port of the public JAdESSignature(JWS)
 // constructor.
-func NewJAdESSignature(jws *JWS) *Signature {
+func NewSignature(jws *JWS) *Signature {
 	s := &Signature{
 		DefaultAdvancedSignature: validation.NewDefaultAdvancedSignatureBase(),
 		jws:                      jws,
@@ -155,7 +155,7 @@ func (s *Signature) SetMasterCSigComponent(masterCSigComponent *EtsiUComponent) 
 // signature. Port of getCertificateSource().
 func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
-		jadesCertificateSource := NewJAdESCertificateSource(s.jws, s.EtsiUHeader())
+		jadesCertificateSource := NewCertificateSource(s.jws, s.EtsiUHeader())
 		s.SetOfflineCertificateSource(&jadesCertificateSource.SignatureCertificateSource)
 	}
 	return s.OfflineCertificateSource()
@@ -165,7 +165,7 @@ func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 // getCRLSource().
 func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
-		s.SetSignatureCRLSource(NewJAdESCRLSource(s.EtsiUHeader()))
+		s.SetSignatureCRLSource(NewCRLSource(s.EtsiUHeader()))
 	}
 	return s.SignatureCRLSource()
 }
@@ -174,7 +174,7 @@ func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 // Port of getOCSPSource().
 func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
-		s.SetSignatureOCSPSource(NewJAdESOCSPSource(s.EtsiUHeader()))
+		s.SetSignatureOCSPSource(NewOCSPSource(s.EtsiUHeader()))
 	}
 	return s.SignatureOCSPSource()
 }
@@ -185,7 +185,7 @@ func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 // callers needing the concrete type assert on the result.
 func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
-		s.SetSignatureTimestampSource(NewJAdESTimestampSource(s))
+		s.SetSignatureTimestampSource(NewTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
@@ -195,7 +195,7 @@ func (s *Signature) TimestampSource() validation.TimestampSource {
 func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
 	signaturePlace := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigPl)
 	if signaturePlace.Size() != 0 {
-		result := signature.NewSignatureProductionPlace()
+		result := signature.NewProductionPlace()
 		result.SetCity(DSSJsonUtilsGetAsString(signaturePlace, JAdESHeaderParameterNamesAddressLocality))
 		result.SetStreetAddress(DSSJsonUtilsGetAsString(signaturePlace, JAdESHeaderParameterNamesStreetAddress))
 		result.SetPostOfficeBoxNumber(DSSJsonUtilsGetAsString(signaturePlace, JAdESHeaderParameterNamesPostOfficeBoxNumber))
@@ -453,7 +453,7 @@ func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	}
 
 	id := DSSJsonUtilsGetAsString(policyId, JAdESHeaderParameterNamesId)
-	signaturePolicy := signature.NewSignaturePolicyWithIdentifier(spi.DSSUtilsObjectIdentifierValue(id))
+	signaturePolicy := signature.NewPolicyWithIdentifier(spi.DSSUtilsObjectIdentifierValue(id))
 	desc := DSSJsonUtilsGetAsString(policyId, JAdESHeaderParameterNamesDesc)
 	signaturePolicy.SetDescription(desc)
 	docRefs := DSSJsonUtilsGetAsList(policyId, JAdESHeaderParameterNamesDocRefs)
@@ -556,7 +556,7 @@ func (s *Signature) SignatureValue() []byte {
 // EtsiUHeader getEtsiUHeader().
 func (s *Signature) EtsiUHeader() *EtsiUHeader {
 	if s.etsiUHeader == nil {
-		s.etsiUHeader = NewJAdESEtsiUHeader(s.jws)
+		s.etsiUHeader = NewEtsiUHeader(s.jws)
 	}
 	return s.etsiUHeader
 }
@@ -579,7 +579,7 @@ func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.D
 	if err != nil {
 		panic(err)
 	}
-	return signature.NewSignatureDigestReference(model.NewDigest(digestAlgorithm, digestValue))
+	return signature.NewDigestReference(model.NewDigest(digestAlgorithm, digestValue))
 }
 
 // DataToBeSignedRepresentation returns the DTBSR. Port of getDataToBeSignedRepresentation().
@@ -600,7 +600,7 @@ func (s *Signature) DataToBeSignedRepresentation() model.Digest {
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id. Port of the
 // protected getSignatureIdentifierBuilder().
 func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
-	return NewJAdESSignatureIdentifierBuilder(s)
+	return NewSignatureIdentifierBuilder(s)
 }
 
 // CheckSignatureIntegrity verifies the signature integrity; checks if the signed content has not
@@ -610,7 +610,7 @@ func (s *Signature) CheckSignatureIntegrity() {
 		return
 	}
 
-	verification := signature.NewSignatureCryptographicVerification()
+	verification := signature.NewCryptographicVerification()
 	s.jadesCachedCryptoVerification = verification
 	s.SetSignatureCryptographicVerification(verification)
 
@@ -704,7 +704,7 @@ func (s *Signature) signingInputReferenceValidation() *model.ReferenceValidation
 
 		candidatesForSigningCertificate := s.CandidatesForSigningCertificate()
 
-		signingCertificateValidator := NewJAdESSignatureIntegrityValidator(s.jws)
+		signingCertificateValidator := NewSignatureIntegrityValidator(s.jws)
 		certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 		if certificateValidity != nil {
 			_ = candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity)
@@ -1325,7 +1325,7 @@ func (s *Signature) DataFoundUpToLevel() enumerations.SignatureLevel {
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
 func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
-	return NewJAdESBaselineRequirementsChecker(s, certificateVerifier)
+	return NewBaselineRequirementsChecker(s, certificateVerifier)
 }
 
 // ValidateStructure processes the structure validation of the signature. Port of the protected
@@ -1340,7 +1340,7 @@ func (s *Signature) ValidateStructure() []string {
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
 func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
-	return NewJAdESSignatureScopeFinder().FindSignatureScope(s)
+	return NewSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // AddExternalTimestamp is not supported for JAdES. Port of addExternalTimestamp(TimestampToken).

@@ -27,7 +27,7 @@ type AttributeIdentifier struct {
 
 // newXAdESAttributeIdentifier is the port of the package-private XAdESAttributeIdentifier(byte[])
 // constructor.
-func newXAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+func newAttributeIdentifier(data []byte) *AttributeIdentifier {
 	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("XAdESAttributeIdentifier", data),
 	}
@@ -53,7 +53,7 @@ func AttributeIdentifierBuild(node *xmldom.Node) *AttributeIdentifier {
 	binary.BigEndian.PutUint32(orderBytes[:], uint32(order))
 	buf.Write(orderBytes[:])
 
-	return newXAdESAttributeIdentifier(buf.Bytes())
+	return newAttributeIdentifier(buf.Bytes())
 }
 
 // xadesAttributeIdentifierGetBinaries ports the private static getBinaries(Node).

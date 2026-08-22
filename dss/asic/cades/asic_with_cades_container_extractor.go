@@ -9,11 +9,11 @@ import (
 // ASiCWithCAdESContainerExtractor is used to extract the content (documents) embedded into an
 // ASiC with CAdES container.
 type ASiCWithCAdESContainerExtractor struct {
-	asic.DefaultASiCContainerExtractor
+	asic.DefaultContainerExtractor
 }
 
 var _ asic.ContainerExtractor = (*ASiCWithCAdESContainerExtractor)(nil)
-var _ asic.DefaultASiCContainerExtractorOverrides = (*ASiCWithCAdESContainerExtractor)(nil)
+var _ asic.DefaultContainerExtractorOverrides = (*ASiCWithCAdESContainerExtractor)(nil)
 
 // NewASiCWithCAdESContainerExtractor is the default constructor. Ports
 // ASiCWithCAdESContainerExtractor(DSSDocument).

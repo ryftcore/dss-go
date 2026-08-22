@@ -25,7 +25,7 @@ type AbstractASiCContainerAnalyzerOverrides interface {
 
 	// GetContainerExtractor returns the relevant container extractor. Port of the protected
 	// abstract getContainerExtractor().
-	GetContainerExtractor() *DefaultASiCContainerExtractor
+	GetContainerExtractor() *DefaultContainerExtractor
 
 	// GetManifestFilesDescriptions returns a list of parser ManifestFiles. Port of the
 	// protected abstract getManifestFilesDescriptions().

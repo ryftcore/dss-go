@@ -58,7 +58,7 @@ type CertificateSource struct {
 // during instantiation.
 //
 // Panics with the Java messages when jws or etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESCertificateSource(jws *JWS, etsiUHeader *EtsiUHeader) *CertificateSource {
+func NewCertificateSource(jws *JWS, etsiUHeader *EtsiUHeader) *CertificateSource {
 	if jws == nil {
 		panic("JSON Web signature cannot be null")
 	}

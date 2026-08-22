@@ -13,18 +13,18 @@ import (
 // Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
 // InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
 // embedding, so the base dispatches getContainerExtractor through
-// asic.AbstractASiCContentBuilderOverrides.
+// asic.AbstractContentBuilderOverrides.
 type ASiCWithXAdESASiCContentBuilder struct {
-	*asic.AbstractASiCContentBuilder
+	*asic.AbstractContentBuilder
 }
 
-var _ asic.AbstractASiCContentBuilderOverrides = (*ASiCWithXAdESASiCContentBuilder)(nil)
+var _ asic.AbstractContentBuilderOverrides = (*ASiCWithXAdESASiCContentBuilder)(nil)
 
 // NewASiCWithXAdESASiCContentBuilder is the default constructor. Ports the empty
 // ASiCWithXAdESASiCContentBuilder().
 func NewASiCWithXAdESASiCContentBuilder() *ASiCWithXAdESASiCContentBuilder {
 	builder := &ASiCWithXAdESASiCContentBuilder{
-		AbstractASiCContentBuilder: asic.NewAbstractASiCContentBuilderBase(),
+		AbstractContentBuilder: asic.NewAbstractASiCContentBuilderBase(),
 	}
 	builder.InitAbstractASiCContentBuilder(builder)
 	return builder

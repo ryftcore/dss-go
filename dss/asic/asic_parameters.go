@@ -30,7 +30,7 @@ type Parameters struct {
 }
 
 // NewASiCParameters instantiates an object with null values. Port of the default constructor.
-func NewASiCParameters() *Parameters {
+func NewParameters() *Parameters {
 	return &Parameters{}
 }
 

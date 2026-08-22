@@ -78,19 +78,19 @@ func (e *AbstractProcessExecutor) SetValidationPolicy(validationPolicy policy.Va
 //
 // Java's Objects.requireNonNull("Locale cannot be null!") has no Go
 // counterpart here: a Locale becomes a language tag string, and the empty
-// string is NOT its null - i18n.NewI18nProviderForLocale documents "" as
+// string is NOT its null - i18n.NewProviderForLocale documents "" as
 // exactly Java's Locale.getDefault(), which is what both
 // SignedDocumentValidator and AbstractCertificateValidator initialise their
 // locale field to and pass straight through to this setter.
 func (e *AbstractProcessExecutor) SetLocale(locale string) {
-	e.i18nProvider = i18n.NewI18nProviderForLocale(locale)
+	e.i18nProvider = i18n.NewProviderForLocale(locale)
 }
 
 // Provider gets the i18nProvider, instantiating it with the default
 // locale on first use. Port of the protected getI18nProvider().
 func (e *AbstractProcessExecutor) I18nProvider() *i18n.Provider {
 	if e.i18nProvider == nil {
-		e.i18nProvider = i18n.NewI18nProvider()
+		e.i18nProvider = i18n.NewProvider()
 	}
 	return e.i18nProvider
 }

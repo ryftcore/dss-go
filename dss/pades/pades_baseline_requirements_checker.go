@@ -48,9 +48,9 @@ type BaselineRequirementsChecker struct {
 	offlineCertificateVerifier validation.CertificateVerifier
 }
 
-// NewPAdESBaselineRequirementsChecker is the default constructor.
+// NewBaselineRequirementsChecker is the default constructor.
 // Port of the constructor PAdESBaselineRequirementsChecker(PAdESSignature, CertificateVerifier).
-func NewPAdESBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+func NewBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
 	checker := &BaselineRequirementsChecker{
 		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](signature, offlineCertificateVerifier),
 		offlineCertificateVerifier:  offlineCertificateVerifier,
@@ -62,7 +62,7 @@ func NewPAdESBaselineRequirementsChecker(signature *Signature, offlineCertificat
 // cadesChecker builds a CAdES-level requirements checker over this signature's embedded CAdES
 // CMS handling; see this file's header ("STRUCTURE DEVIATION") for why and its limits.
 func (b *BaselineRequirementsChecker) cadesChecker() *cades.BaselineRequirementsChecker {
-	return cades.NewCAdESBaselineRequirementsChecker(b.Signature().Signature, b.offlineCertificateVerifier)
+	return cades.NewBaselineRequirementsChecker(b.Signature().Signature, b.offlineCertificateVerifier)
 }
 
 // GetBaselineSignatureForm returns the signature form corresponding to the signature: PAdES.

@@ -31,8 +31,8 @@ type SignaturePolicyStoreBuilder struct {
 	ExtensionBuilder
 }
 
-// NewJAdESSignaturePolicyStoreBuilder is the default constructor.
-func NewJAdESSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
+// NewSignaturePolicyStoreBuilder is the default constructor.
+func NewSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
 	return &SignaturePolicyStoreBuilder{}
 }
 

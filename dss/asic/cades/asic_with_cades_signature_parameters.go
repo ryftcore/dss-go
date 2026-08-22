@@ -27,8 +27,8 @@ var _ ASiCWithCAdESCommonParameters = (*ASiCWithCAdESSignatureParameters)(nil)
 // the default constructor.
 func NewASiCWithCAdESSignatureParameters() *ASiCWithCAdESSignatureParameters {
 	return &ASiCWithCAdESSignatureParameters{
-		SignatureParameters: *dsscades.NewCAdESSignatureParameters(),
-		asicParams:          asic.NewASiCParameters(),
+		SignatureParameters: *dsscades.NewSignatureParameters(),
+		asicParams:          asic.NewParameters(),
 	}
 }
 

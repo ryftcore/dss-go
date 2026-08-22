@@ -17,7 +17,7 @@ import (
 // ASiCWithCAdESFilenameFactory used within basic configuration of DSS for creation of filenames
 // for new container entries.
 type DefaultASiCWithCAdESFilenameFactory struct {
-	asic.AbstractASiCFilenameFactory
+	asic.AbstractFilenameFactory
 }
 
 var _ ASiCWithCAdESFilenameFactory = (*DefaultASiCWithCAdESFilenameFactory)(nil)

@@ -21,9 +21,9 @@ import (
 // SimpleCertificateReport.
 type Facade struct{}
 
-// NewSimpleCertificateReportFacade instantiates a new
+// NewFacade instantiates a new
 // SimpleCertificateReportFacade. Port of newFacade().
-func NewSimpleCertificateReportFacade() *Facade {
+func NewFacade() *Facade {
 	return &Facade{}
 }
 

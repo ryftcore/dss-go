@@ -42,7 +42,7 @@ type TimestampScopeFinder struct {
 }
 
 // NewXAdESTimestampScopeFinder is the port of the default constructor.
-func NewXAdESTimestampScopeFinder() *TimestampScopeFinder {
+func NewTimestampScopeFinder() *TimestampScopeFinder {
 	return &TimestampScopeFinder{EncapsulatedTimestampScopeFinder: spiscope.NewEncapsulatedTimestampScopeFinder()}
 }
 

@@ -19,7 +19,7 @@ type Facade struct{}
 
 // NewDetailedReportFacade creates a new DetailedReportFacade. Port of
 // newFacade().
-func NewDetailedReportFacade() *Facade {
+func NewFacade() *Facade {
 	return &Facade{}
 }
 

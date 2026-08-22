@@ -140,14 +140,14 @@ func (h *CMSForPAdESBuilderHelper) PAdESProfile() *LevelBaselineB {
 // InitCAdESProfile instantiates the PAdES Baseline B profile carrying the revision's
 // message-digest. Port of the protected #initCAdESProfile override.
 func (h *CMSForPAdESBuilderHelper) InitCAdESProfile() *LevelBaselineB {
-	return NewPAdESLevelBaselineB(h.messageDigest)
+	return NewLevelBaselineB(h.messageDigest)
 }
 
 // InitCMSBuilder instantiates a Builder for the CMS creation.
 // Port of the inherited protected #initCMSBuilder; re-declared so that IsEncapsulateSignerData
 // resolves to this type's override.
 func (h *CMSForPAdESBuilderHelper) InitCMSBuilder() *cms.Builder {
-	return cms.NewCMSBuilder().
+	return cms.NewBuilder().
 		SetSigningCertificate(h.SignatureParameters.SigningCertificate()).
 		SetCertificateChain(h.SignatureParameters.CertificateChain()).
 		SetGenerateWithoutCertificates(h.SignatureParameters.GenerateTBSWithoutCertificate()).

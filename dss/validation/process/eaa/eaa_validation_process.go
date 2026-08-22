@@ -41,7 +41,7 @@ type ValidationProcess struct {
 
 // NewEAAValidationProcess is the common constructor. Port of
 // ValidationProcess(Provider, EAAWrapper, Map, Map, ValidationPolicy).
-func NewEAAValidationProcess(i18nProvider *i18n.Provider, eaaWrapper *diagnostic.EAAWrapper,
+func NewValidationProcess(i18nProvider *i18n.Provider, eaaWrapper *diagnostic.EAAWrapper,
 	xmlSignatures map[string]*jaxb.XmlSignature, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	validationPolicy policy.ValidationPolicy) *ValidationProcess {
 	xmlResult := &jaxb.XmlValidationProcessEAA{}

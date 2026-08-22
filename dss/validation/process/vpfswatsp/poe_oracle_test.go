@@ -399,5 +399,5 @@ func loadPOEDump(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", path, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }

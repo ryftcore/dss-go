@@ -124,7 +124,7 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 // a XAdES-T needs to request its signature-timestamp.
 func newParameters(level enumerations.SignatureLevel, packaging enumerations.SignaturePackaging,
 	signerEntry token.DSSPrivateKeyEntry) *xades.SignatureParameters {
-	parameters := xades.NewXAdESSignatureParameters()
+	parameters := xades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(packaging)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
@@ -138,7 +138,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, packaging, signerEntry)
 
-	service := xades.NewXAdESService(validation.NewCommonCertificateVerifier())
+	service := xades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.TspSource = tspSource
 	}
@@ -164,7 +164,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
 	parameters := newParameters(enumerations.SignatureLevelXAdESBaselineB, enumerations.SignaturePackagingDetached, signerEntry)
 
-	service := xades.NewXAdESService(validation.NewCommonCertificateVerifier())
+	service := xades.NewService(validation.NewCommonCertificateVerifier())
 	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample-detached.xml", enumerations.MimeTypeEnumXML)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)

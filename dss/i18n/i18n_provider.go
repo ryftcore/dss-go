@@ -34,18 +34,18 @@ type Provider struct {
 // java.util.Locale.getDefault(); Go has no equivalent implicit JVM
 // default Locale, and - per the defaultBundle doc comment - the locale
 // makes no difference to bundle resolution in this port, so this is
-// exactly NewI18nProviderForLocale("").
-func NewI18nProvider() *Provider {
-	return NewI18nProviderForLocale("")
+// exactly NewProviderForLocale("").
+func NewProvider() *Provider {
+	return NewProviderForLocale("")
 }
 
-// NewI18nProviderForLocale returns an instance of Provider for the
+// NewProviderForLocale returns an instance of Provider for the
 // given locale (e.g. "fr", "fr_FR", "de"). Ports I18nProvider(Locale).
 //
 // The locale argument is accepted for API parity with the Java
 // constructor but does not currently affect resolution: see the
 // defaultBundle doc comment.
-func NewI18nProviderForLocale(locale string) *Provider {
+func NewProviderForLocale(locale string) *Provider {
 	return &Provider{bundle: defaultBundle}
 }
 

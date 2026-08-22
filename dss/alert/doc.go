@@ -7,5 +7,5 @@
 // The main entry types are the generic Alert[T] interface, AbstractAlert[T]
 // (detector + handler composition), the Detector[T]/Handler[T]
 // interfaces, and the ready-made handlers (LogHandler, ExceptionOnStatusAlert,
-// SilentOnStatusAlert, CompositeAlertHandler).
+// SilentOnStatusAlert, CompositeHandler).
 package alert

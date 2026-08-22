@@ -37,28 +37,28 @@ type EvidenceRecordDigestBuilder struct {
 	signatureId string
 }
 
-// NewXAdESEvidenceRecordDigestBuilder instantiates EvidenceRecordDigestBuilder with a
+// NewEvidenceRecordDigestBuilder instantiates EvidenceRecordDigestBuilder with a
 // SHA-256 digest algorithm. Port of XAdESEvidenceRecordDigestBuilder(DSSDocument).
-func NewXAdESEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *EvidenceRecordDigestBuilder {
+func NewEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *EvidenceRecordDigestBuilder {
 	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilder(signatureDocument),
 	}
 }
 
-// NewXAdESEvidenceRecordDigestBuilderWithAlgorithm instantiates EvidenceRecordDigestBuilder
+// NewEvidenceRecordDigestBuilderWithAlgorithm instantiates EvidenceRecordDigestBuilder
 // with a custom digest algorithm. Port of XAdESEvidenceRecordDigestBuilder(DSSDocument,
 // DigestAlgorithm).
-func NewXAdESEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+func NewEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
 	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument, digestAlgorithm),
 	}
 }
 
-// newXAdESEvidenceRecordDigestBuilderFromSignature instantiates EvidenceRecordDigestBuilder
+// newEvidenceRecordDigestBuilderFromSignature instantiates EvidenceRecordDigestBuilder
 // from a signature for the given evidenceRecordAttribute. Used on validation of an existing
 // evidence record. Port of the protected XAdESEvidenceRecordDigestBuilder(AdvancedSignature,
 // SignatureAttribute, DigestAlgorithm) constructor.
-func newXAdESEvidenceRecordDigestBuilderFromSignature(signature validation.AdvancedSignature,
+func newEvidenceRecordDigestBuilderFromSignature(signature validation.AdvancedSignature,
 	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
 	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderFromSignature(

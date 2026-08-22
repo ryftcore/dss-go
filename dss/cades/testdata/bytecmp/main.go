@@ -62,7 +62,7 @@ func main() {
 	// attribute is part of the signed attributes, so it has to match Java's exactly.
 	signingDate := time.Date(year, 1, 15, 10, 30, 45, 0, time.UTC)
 
-	parameters := cades.NewCAdESSignatureParameters()
+	parameters := cades.NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
@@ -70,7 +70,7 @@ func main() {
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	parameters.BLevel().SetSigningDate(&signingDate)
 
-	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
+	service := cades.NewService(validation.NewCommonCertificateVerifier())
 	document := model.NewInMemoryDocumentWithName(content, "probe.bin")
 
 	dataToSign := service.GetDataToSign(document, parameters)

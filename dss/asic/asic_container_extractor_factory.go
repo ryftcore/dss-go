@@ -20,16 +20,16 @@ type ContainerExtractorFactory interface {
 }
 
 // asicContainerExtractorFactoryRegistry holds the ContainerExtractorFactory implementations
-// registered via RegisterASiCContainerExtractorFactory, consulted in registration order - the Go
+// registered via RegisterContainerExtractorFactory, consulted in registration order - the Go
 // equivalent of Java's ServiceLoader.load(ASiCContainerExtractorFactory.class) iteration (Go has no
 // runtime service-provider discovery). The precedent is
 // spi/validation/analyzer/document_analyzer_factory.go. The format-specific implementations
 // (dss/asic/cades, dss/asic/xades) register themselves here.
 var asicContainerExtractorFactoryRegistry []ContainerExtractorFactory
 
-// RegisterASiCContainerExtractorFactory registers an ContainerExtractorFactory to be consulted
+// RegisterContainerExtractorFactory registers an ContainerExtractorFactory to be consulted
 // by DefaultASiCContainerExtractorFromDocument. It has no Java counterpart: it replaces the
 // META-INF/services provider file each dss-asic-* module ships.
-func RegisterASiCContainerExtractorFactory(factory ContainerExtractorFactory) {
+func RegisterContainerExtractorFactory(factory ContainerExtractorFactory) {
 	asicContainerExtractorFactoryRegistry = append(asicContainerExtractorFactoryRegistry, factory)
 }

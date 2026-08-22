@@ -34,7 +34,7 @@ type SignatureParameters struct {
 
 // NewCAdESSignatureParameters instantiates object with null values. Port of the default
 // constructor.
-func NewCAdESSignatureParameters() *SignatureParameters {
+func NewSignatureParameters() *SignatureParameters {
 	return &SignatureParameters{
 		AbstractSignatureParameters: document.NewAbstractSignatureParameters[*TimestampParameters](),
 		en319122:                    true,
@@ -143,7 +143,7 @@ func (p *SignatureParameters) SetParallelSignature(parallelSignature bool) {
 // instantiating CAdESTimestampParameters. Port of #getContentTimestampParameters.
 func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
-		p.ContentTimestampParameters = NewCAdESTimestampParameters()
+		p.ContentTimestampParameters = NewTimestampParameters()
 	}
 	return p.ContentTimestampParameters
 }
@@ -152,7 +152,7 @@ func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParamete
 // instantiating CAdESTimestampParameters. Port of #getSignatureTimestampParameters.
 func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
-		p.SignatureTimestampParameters = NewCAdESTimestampParameters()
+		p.SignatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.SignatureTimestampParameters
 }
@@ -161,7 +161,7 @@ func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParame
 // instantiating CAdESTimestampParameters. Port of #getArchiveTimestampParameters.
 func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
-		p.ArchiveTimestampParameters = NewCAdESTimestampParameters()
+		p.ArchiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.ArchiveTimestampParameters
 }

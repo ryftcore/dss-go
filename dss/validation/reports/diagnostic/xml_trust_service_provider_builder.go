@@ -310,8 +310,8 @@ func (b *XmlTrustServiceProviderBuilder) getXmlTrustServicesForMRA(serviceInfoSt
 }
 
 func (b *XmlTrustServiceProviderBuilder) getMRAServiceEquivalences(serviceInfoStatus *tsl.TrustServiceStatusAndInformationExtensions,
-	certToken *model.CertificateToken, mra *tsl.MRA) []*timedependent.MutableTimeDependentValues[*tsl.ServiceEquivalence] {
-	equivalences := make([]*timedependent.MutableTimeDependentValues[*tsl.ServiceEquivalence], 0)
+	certToken *model.CertificateToken, mra *tsl.MRA) []*timedependent.MutableValues[*tsl.ServiceEquivalence] {
+	equivalences := make([]*timedependent.MutableValues[*tsl.ServiceEquivalence], 0)
 	for _, serviceEquivalenceList := range mra.ServiceEquivalence() {
 		// filter TrustServices that can be potentially applied to the validation
 		for _, serviceEquivalence := range serviceEquivalenceList.After(certToken.NotBefore()) {

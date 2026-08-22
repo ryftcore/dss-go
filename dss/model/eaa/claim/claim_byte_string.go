@@ -15,31 +15,31 @@ type ByteString struct {
 }
 
 // NewClaimByteString ports the default constructor.
-func NewClaimByteString(value []byte) *ByteString {
-	return NewClaimByteStringWithName("", value)
+func NewByteString(value []byte) *ByteString {
+	return NewByteStringWithName("", value)
 }
 
 // NewClaimByteStringWithName ports the constructor with claim name
 // provided.
-func NewClaimByteStringWithName(name string, value []byte) *ByteString {
-	return NewClaimByteStringWithDisclosable(name, value, false)
+func NewByteStringWithName(name string, value []byte) *ByteString {
+	return NewByteStringWithDisclosable(name, value, false)
 }
 
 // NewClaimByteStringWithDisclosable ports the constructor with claim name
 // and selectively disclosable status provided.
-func NewClaimByteStringWithDisclosable(name string, value []byte, selectivelyDisclosable bool) *ByteString {
-	return NewClaimByteStringWithParent(name, value, selectivelyDisclosable, nil)
+func NewByteStringWithDisclosable(name string, value []byte, selectivelyDisclosable bool) *ByteString {
+	return NewByteStringWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimByteStringWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimByteStringWithParent(name string, value []byte, selectivelyDisclosable bool, parent Claim) *ByteString {
-	return NewClaimByteStringFull(name, "", value, selectivelyDisclosable, parent)
+func NewByteStringWithParent(name string, value []byte, selectivelyDisclosable bool, parent Claim) *ByteString {
+	return NewByteStringFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimByteStringFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimByteStringFull(name, namespace string, value []byte, selectivelyDisclosable bool, parent Claim) *ByteString {
+func NewByteStringFull(name, namespace string, value []byte, selectivelyDisclosable bool, parent Claim) *ByteString {
 	return &ByteString{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -80,4 +80,4 @@ func (c *ByteString) Equals(other *ByteString) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *ByteString) String() string { return AbstractClaimString(c) }
+func (c *ByteString) String() string { return AbstractString(c) }

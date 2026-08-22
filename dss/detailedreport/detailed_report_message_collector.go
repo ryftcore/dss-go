@@ -21,8 +21,8 @@ type MessageCollector struct {
 	detailedReport *DetailedReport
 }
 
-// newDetailedReportMessageCollector is the default constructor.
-func newDetailedReportMessageCollector(detailedReport *DetailedReport) *MessageCollector {
+// newMessageCollector is the default constructor.
+func newMessageCollector(detailedReport *DetailedReport) *MessageCollector {
 	if detailedReport == nil {
 		panic("DetailedReport cannot be nil!")
 	}

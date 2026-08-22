@@ -87,7 +87,7 @@ func asicManifestParserGetLinkedSignatureName(root *xmldom.Node) string {
 // mimetype string in some MimeType loader implementations that choose to throw; the Go port's
 // registered loaders do not).
 func asicManifestParserGetMimeType(element *xmldom.Node) enumerations.MimeType {
-	mimeTypeString := element.AttrValue("", ASiCManifestAttributeMIMEType.AttributeName())
+	mimeTypeString := element.AttrValue("", ManifestAttributeMIMEType.AttributeName())
 	if utils.IsStringNotBlank(mimeTypeString) {
 		return enumerations.MimeTypeFromMimeTypeString(mimeTypeString)
 	}
@@ -153,7 +153,7 @@ func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.Manifest
 	}
 	for _, dataObjectReference := range dataObjectReferences {
 		entry := model.NewManifestEntry()
-		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ASiCManifestAttributeURI.AttributeName())))
+		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ManifestAttributeURI.AttributeName())))
 		entry.SetMimeType(asicManifestParserGetMimeType(dataObjectReference))
 
 		digestAlgorithm := asicManifestParserGetDigestAlgorithm(dataObjectReference)
@@ -162,7 +162,7 @@ func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.Manifest
 			entry.SetDigest(model.NewDigest(digestAlgorithm, digestValueBinary))
 		}
 
-		attribute := dataObjectReference.AttrValue("", ASiCManifestAttributeRootFile.AttributeName())
+		attribute := dataObjectReference.AttrValue("", ManifestAttributeRootFile.AttributeName())
 		if utils.AreStringsEqualIgnoreCase("true", attribute) {
 			entry.SetRootfile(true)
 		}

@@ -116,7 +116,7 @@ func baselineBDefaultSigningDate() *time.Time { return baselineBDate(2021, 1, 15
 
 // baselineBEmptyParameters ports the generator's empty().
 func baselineBEmptyParameters() *SignatureParameters {
-	parameters := NewCAdESSignatureParameters()
+	parameters := NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.BLevel().SetSigningDate(baselineBDefaultSigningDate())
@@ -195,13 +195,13 @@ type baselineBCase struct {
 func baselineBCases() []baselineBCase {
 	withoutDocument := func(build func(t *testing.T) *SignatureParameters) func(*testing.T) (*LevelBaselineB, *SignatureParameters) {
 		return func(t *testing.T) (*LevelBaselineB, *SignatureParameters) {
-			return NewCAdESLevelBaselineB(), build(t)
+			return NewLevelBaselineB(), build(t)
 		}
 	}
 	withDocument := func(document func() model.DSSDocument,
 		build func(t *testing.T) *SignatureParameters) func(*testing.T) (*LevelBaselineB, *SignatureParameters) {
 		return func(t *testing.T) (*LevelBaselineB, *SignatureParameters) {
-			return NewCAdESLevelBaselineBWithDocument(document()), build(t)
+			return NewLevelBaselineBWithDocument(document()), build(t)
 		}
 	}
 	base := func(digestAlgorithm enumerations.DigestAlgorithm, signingDate *time.Time) func(t *testing.T) *SignatureParameters {
@@ -441,7 +441,7 @@ func TestCAdESLevelBaselineBUserNoticeWithoutExplicitText(t *testing.T) {
 	policy.SetUserNotice(notice)
 	parameters.BLevel().SetSignaturePolicy(policy)
 
-	if _, err := NewCAdESLevelBaselineB().SignedAttributes(parameters); err == nil {
+	if _, err := NewLevelBaselineB().SignedAttributes(parameters); err == nil {
 		t.Fatal("expected an error for a UserNotice without an explicit text")
 	}
 }
@@ -455,7 +455,7 @@ func TestCAdESLevelBaselineBExplicitSignedData(t *testing.T) {
 	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 	parameters.SetSignedData(fixture.set)
 
-	attributes, err := NewCAdESLevelBaselineB().SignedAttributes(parameters)
+	attributes, err := NewLevelBaselineB().SignedAttributes(parameters)
 	if err != nil {
 		t.Fatalf("SignedAttributes: %v", err)
 	}
@@ -467,7 +467,7 @@ func TestCAdESLevelBaselineBExplicitSignedData(t *testing.T) {
 
 // TestCAdESLevelBaselineBUnsignedAttributes checks that level B produces no unsigned attribute.
 func TestCAdESLevelBaselineBUnsignedAttributes(t *testing.T) {
-	if unsigned := NewCAdESLevelBaselineB().UnsignedAttributes(); len(unsigned) != 0 {
+	if unsigned := NewLevelBaselineB().UnsignedAttributes(); len(unsigned) != 0 {
 		t.Errorf("UnsignedAttributes() = %v, want empty", unsigned)
 	}
 }
@@ -477,7 +477,7 @@ func TestCAdESLevelBaselineBUnsignedAttributes(t *testing.T) {
 func TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType(t *testing.T) {
 	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 
-	profile := NewCAdESLevelBaselineBWithDocument(baselineBPDFDocument())
+	profile := NewLevelBaselineBWithDocument(baselineBPDFDocument())
 	profile.SetCounterSignature(true)
 	attributes, err := profile.SignedAttributes(parameters)
 	if err != nil {

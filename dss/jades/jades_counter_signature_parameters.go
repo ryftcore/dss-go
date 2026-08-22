@@ -20,11 +20,11 @@ type CounterSignatureParameters struct {
 	signatureIdToCounterSign string
 }
 
-// NewJAdESCounterSignatureParameters instantiates the object with a null signature id to be
+// NewCounterSignatureParameters instantiates the object with a null signature id to be
 // counter-signed. Port of the default constructor.
-func NewJAdESCounterSignatureParameters() *CounterSignatureParameters {
+func NewCounterSignatureParameters() *CounterSignatureParameters {
 	return &CounterSignatureParameters{
-		SignatureParameters: *NewJAdESSignatureParameters(),
+		SignatureParameters: *NewSignatureParameters(),
 	}
 }
 

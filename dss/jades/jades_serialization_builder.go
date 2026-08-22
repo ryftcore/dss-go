@@ -2,8 +2,8 @@
 //
 // Java offers two constructors, the second of which computes its super() argument from an
 // existing JWSJsonSerializationObject through the static extractDocumentToBeSigned. Go has no
-// constructor chaining, so the two become NewJAdESSerializationBuilder and
-// NewJAdESSerializationBuilderFromSignature, both funnelling into InitAbstractJAdESBuilder;
+// constructor chaining, so the two become NewSerializationBuilder and
+// NewSerializationBuilderFromSignature, both funnelling into InitAbstractJAdESBuilder;
 // extractDocumentToBeSigned stays a package-level function.
 //
 // Every IllegalArgumentException becomes a returned error.
@@ -22,16 +22,16 @@ import (
 
 // SerializationBuilder builds a JWS JSON Serialization signature.
 type SerializationBuilder struct {
-	AbstractJAdESBuilder
+	AbstractBuilder
 
 	// jwsJsonSerializationObject is the JWS signature container.
 	jwsJsonSerializationObject *JWSJsonSerializationObject
 }
 
-// NewJAdESSerializationBuilder is the default constructor.
+// NewSerializationBuilder is the default constructor.
 // Port of JAdESSerializationBuilder(CertificateVerifier, JAdESSignatureParameters,
 // List<DSSDocument>).
-func NewJAdESSerializationBuilder(certificateVerifier validation.CertificateVerifier,
+func NewSerializationBuilder(certificateVerifier validation.CertificateVerifier,
 	parameters *SignatureParameters,
 	documentsToSign []model.DSSDocument) (*SerializationBuilder, error) {
 	builder := &SerializationBuilder{}
@@ -42,10 +42,10 @@ func NewJAdESSerializationBuilder(certificateVerifier validation.CertificateVeri
 	return builder, nil
 }
 
-// NewJAdESSerializationBuilderFromSignature is the constructor from an existing signature.
+// NewSerializationBuilderFromSignature is the constructor from an existing signature.
 // Port of JAdESSerializationBuilder(CertificateVerifier, JAdESSignatureParameters,
 // JWSJsonSerializationObject).
-func NewJAdESSerializationBuilderFromSignature(certificateVerifier validation.CertificateVerifier,
+func NewSerializationBuilderFromSignature(certificateVerifier validation.CertificateVerifier,
 	parameters *SignatureParameters,
 	jwsJsonSerializationObject *JWSJsonSerializationObject) (*SerializationBuilder, error) {
 	documentsToSign, err := jadesSerializationBuilderExtractDocumentToBeSigned(parameters,

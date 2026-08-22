@@ -72,7 +72,7 @@ func (b *AbstractASiCDataToSignHelperBuilder) CreatePackageZip(documents []model
 		panic(err)
 	}
 
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetContainerDocuments(documents)
 	packageZip.SetName(b.requireOverrides().GetDataPackageName(asicContent))
 

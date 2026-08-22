@@ -38,12 +38,12 @@ type CounterSignatureParameters struct {
 	counterSignatureCanonicalizationMethod string
 }
 
-// NewXAdESCounterSignatureParameters instantiates the object with null values.
+// NewCounterSignatureParameters instantiates the object with null values.
 // Port of the default constructor, including its counterSignatureCanonicalizationMethod field
 // initializer.
-func NewXAdESCounterSignatureParameters() *CounterSignatureParameters {
+func NewCounterSignatureParameters() *CounterSignatureParameters {
 	return &CounterSignatureParameters{
-		SignatureParameters:                    *NewXAdESSignatureParameters(),
+		SignatureParameters:                    *NewSignatureParameters(),
 		counterSignatureCanonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 	}
 }

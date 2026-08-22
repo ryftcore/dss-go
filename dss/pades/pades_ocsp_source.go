@@ -32,7 +32,7 @@ type OCSPSource struct {
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
-func NewPAdESOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+func NewOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signedAttributes cmscore.Attributes) *OCSPSource {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")

@@ -200,7 +200,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(parameters *
 // getLastSealingEvidenceRecordAttribute ports the private
 // getLastSealingEvidenceRecordAttribute().
 func (b *EmbeddedEvidenceRecordBuilder) getLastSealingEvidenceRecordAttribute() *Attribute {
-	unsignedSigProperties := NewXAdESUnsignedSigProperties(b.UnsignedSignaturePropertiesDom, b.XadesPath)
+	unsignedSigProperties := NewUnsignedSigProperties(b.UnsignedSignaturePropertiesDom, b.XadesPath)
 	return SignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties)
 }
 
@@ -214,7 +214,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument
 			fmt.Sprintf("Unable to build an evidence record from the provided document. Reason : %s", err.Error()), err)
 	}
 
-	embeddedEvidenceRecordHelper := NewXAdESEmbeddedEvidenceRecordHelper(signature, unsignedAttribute)
+	embeddedEvidenceRecordHelper := NewEmbeddedEvidenceRecordHelper(signature, unsignedAttribute)
 	embeddedEvidenceRecordHelper.SetDetachedContents(parameters.DetachedContents())
 	evidenceRecordAnalyzer.SetEmbeddedEvidenceRecordHelper(embeddedEvidenceRecordHelper)
 

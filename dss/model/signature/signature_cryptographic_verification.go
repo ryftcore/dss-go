@@ -25,9 +25,9 @@ type CryptographicVerification struct {
 	signatureIntact bool
 }
 
-// NewSignatureCryptographicVerification is the default constructor instantiating the object
+// NewCryptographicVerification is the default constructor instantiating the object
 // with null (zero) values.
-func NewSignatureCryptographicVerification() *CryptographicVerification {
+func NewCryptographicVerification() *CryptographicVerification {
 	return &CryptographicVerification{}
 }
 

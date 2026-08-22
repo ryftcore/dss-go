@@ -15,8 +15,8 @@ type SignatureScopeFinder struct {
 	PdfRevisionScopeFinder
 }
 
-// NewPAdESSignatureScopeFinder is the default constructor.
-func NewPAdESSignatureScopeFinder() *SignatureScopeFinder {
+// NewSignatureScopeFinder is the default constructor.
+func NewSignatureScopeFinder() *SignatureScopeFinder {
 	return &SignatureScopeFinder{PdfRevisionScopeFinder: newPdfRevisionScopeFinder()}
 }
 

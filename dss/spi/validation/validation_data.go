@@ -39,8 +39,8 @@ type Data struct {
 	storedPublicKeys map[string]*model.EntityIdentifier
 }
 
-// NewValidationData is the default constructor instantiating empty maps of tokens.
-func NewValidationData() *Data {
+// NewData is the default constructor instantiating empty maps of tokens.
+func NewData() *Data {
 	return &Data{
 		certificateTokens: utils.NewOrderedMap[string, *model.CertificateToken](),
 		crlTokens:         utils.NewOrderedMap[string, *spi.CRLToken](),

@@ -107,7 +107,7 @@ type TimestampSource struct {
 }
 
 // NewCAdESTimestampSource is the default constructor. Port of the (CAdESSignature) constructor.
-func NewCAdESTimestampSource(signature *Signature) *TimestampSource {
+func NewTimestampSource(signature *Signature) *TimestampSource {
 	source := &TimestampSource{
 		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*Signature, *Attribute](signature),
 		signature:                signature,
@@ -121,7 +121,7 @@ func NewCAdESTimestampSource(signature *Signature) *TimestampSource {
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm) override.
 func (c *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
 	digestAlgorithm enumerations.DigestAlgorithm) timestamp.MessageDigestBuilder {
-	return NewCAdESTimestampMessageDigestBuilder(c.signature, digestAlgorithm)
+	return NewTimestampMessageDigestBuilder(c.signature, digestAlgorithm)
 }
 
 // GetTimestampMessageImprintDigestBuilderForToken implements
@@ -129,7 +129,7 @@ func (c *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
 // getTimestampMessageImprintDigestBuilder(TimestampToken) override.
 func (c *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
 	timestampToken *validation.TimestampToken) timestamp.MessageDigestBuilder {
-	return NewCAdESTimestampMessageDigestBuilderForToken(c.signature, c.CertificateSource(), timestampToken)
+	return NewTimestampMessageDigestBuilderForToken(c.signature, c.CertificateSource(), timestampToken)
 }
 
 // BuildSignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides.
@@ -343,7 +343,7 @@ func (c *TimestampSource) createEvidenceRecord(unsignedAttribute *Attribute,
 	incorporationType := UtilsEvidenceRecordIncorporationType(unsignedAttribute.ASN1Oid())
 	evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(incorporationType)
 
-	embeddedEvidenceRecordHelper := NewCAdESEmbeddedEvidenceRecordHelper(c.signature, unsignedAttribute)
+	embeddedEvidenceRecordHelper := NewEmbeddedEvidenceRecordHelper(c.signature, unsignedAttribute)
 	if enumerations.EvidenceRecordIncorporationTypeExternalEvidenceRecord == incorporationType {
 		if utils.CollectionSize(c.signature.DetachedContents()) == 1 {
 			embeddedEvidenceRecordHelper.SetDetachedContents(c.signature.DetachedContents())

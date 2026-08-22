@@ -25,10 +25,10 @@ type LevelBaselineLTA struct {
 	LevelBaselineLT
 }
 
-// NewCAdESLevelBaselineLTA is the default constructor, taking the TSPSource to request a
+// NewLevelBaselineLTA is the default constructor, taking the TSPSource to request a
 // timestamp and the CertificateVerifier. Port of
 // LevelBaselineLTA(TSPSource, CertificateVerifier).
-func NewCAdESLevelBaselineLTA(tspSource validation.TSPSource,
+func NewLevelBaselineLTA(tspSource validation.TSPSource,
 	certificateVerifier validation.CertificateVerifier) *LevelBaselineLTA {
 	extension := &LevelBaselineLTA{}
 	extension.InitCAdESSignatureExtension(extension, tspSource, certificateVerifier)
@@ -126,7 +126,7 @@ func (e *LevelBaselineLTA) addArchiveTimestampV3Attribute(cadesSignature *Signat
 	signerInformation *cmscore.SignerInfo, parameters *SignatureParameters,
 	unsignedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 
-	timestampExtractor := NewCadesLevelBaselineLTATimestampExtractor(cadesSignature)
+	timestampExtractor := NewLevelBaselineLTATimestampExtractor(cadesSignature)
 	timestampDigestAlgorithm := parameters.GetArchiveTimestampParameters().DigestAlgorithm()
 	originalDocument, err := cadesSignature.OriginalDocument()
 	if err != nil {

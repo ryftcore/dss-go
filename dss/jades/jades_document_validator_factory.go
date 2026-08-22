@@ -12,7 +12,7 @@ import (
 type DocumentValidatorFactory struct{}
 
 // NewJAdESDocumentValidatorFactory is the port of the default constructor.
-func NewJAdESDocumentValidatorFactory() *DocumentValidatorFactory {
+func NewDocumentValidatorFactory() *DocumentValidatorFactory {
 	return &DocumentValidatorFactory{}
 }
 
@@ -49,5 +49,5 @@ func (f *DocumentValidatorFactory) Create(document model.DSSDocument) dssvalidat
 var _ dssvalidation.DocumentValidatorFactory = (*DocumentValidatorFactory)(nil)
 
 func init() {
-	dssvalidation.RegisterDocumentValidatorFactory(NewJAdESDocumentValidatorFactory())
+	dssvalidation.RegisterDocumentValidatorFactory(NewDocumentValidatorFactory())
 }

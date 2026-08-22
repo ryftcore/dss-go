@@ -237,7 +237,7 @@ func TestQualBlockOracle(t *testing.T) {
 	if len(rows) == 0 {
 		t.Fatal("empty qualification block oracle corpus")
 	}
-	provider := i18n.NewI18nProvider()
+	provider := i18n.NewProvider()
 	for _, row := range rows {
 		row := row
 		if row.Kind != "certQualAtTime" {

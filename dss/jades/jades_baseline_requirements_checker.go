@@ -39,7 +39,7 @@ type BaselineRequirementsChecker struct {
 
 // NewJAdESBaselineRequirementsChecker is the default constructor. Port of the public
 // BaselineRequirementsChecker(Signature, CertificateVerifier) constructor.
-func NewJAdESBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+func NewBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
 	checker := &BaselineRequirementsChecker{
 		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](signature, offlineCertificateVerifier),
 	}

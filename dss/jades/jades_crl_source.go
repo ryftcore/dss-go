@@ -25,7 +25,7 @@ type CRLSource struct {
 // constructor.
 //
 // Panics with the Java message when etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESCRLSource(etsiUHeader *EtsiUHeader) *CRLSource {
+func NewCRLSource(etsiUHeader *EtsiUHeader) *CRLSource {
 	if etsiUHeader == nil {
 		panic("etsiUComponents cannot be null")
 	}

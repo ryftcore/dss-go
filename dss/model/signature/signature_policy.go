@@ -51,15 +51,15 @@ type Policy struct {
 	validationResult *PolicyValidationResult
 }
 
-// NewSignaturePolicy is the default constructor for Policy: it represents the
+// NewPolicy is the default constructor for Policy: it represents the
 // implied policy.
-func NewSignaturePolicy() *Policy {
+func NewPolicy() *Policy {
 	return &Policy{identifier: string(enumerations.SignaturePolicyTypeImplicitPolicy)}
 }
 
-// NewSignaturePolicyWithIdentifier is the default constructor for Policy with the
+// NewPolicyWithIdentifier is the default constructor for Policy with the
 // policy identifier.
-func NewSignaturePolicyWithIdentifier(identifier string) *Policy {
+func NewPolicyWithIdentifier(identifier string) *Policy {
 	return &Policy{identifier: identifier}
 }
 

@@ -28,9 +28,9 @@ type LevelBaselineT struct {
 	SignatureExtension
 }
 
-// NewCAdESLevelBaselineT is the default constructor with a CertificateVerifier.
+// NewLevelBaselineT is the default constructor with a CertificateVerifier.
 // Port of CAdESLevelBaselineT(TSPSource, CertificateVerifier).
-func NewCAdESLevelBaselineT(tspSource validation.TSPSource,
+func NewLevelBaselineT(tspSource validation.TSPSource,
 	certificateVerifier validation.CertificateVerifier) *LevelBaselineT {
 	extension := &LevelBaselineT{}
 	extension.InitCAdESSignatureExtension(extension, tspSource, certificateVerifier)

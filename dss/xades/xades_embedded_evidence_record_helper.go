@@ -12,10 +12,10 @@ type EmbeddedEvidenceRecordHelper struct {
 	validation.AbstractEmbeddedEvidenceRecordHelper
 }
 
-// NewXAdESEmbeddedEvidenceRecordHelperForSignature instantiates a helper for an evidence record
+// NewEmbeddedEvidenceRecordHelperForSignature instantiates a helper for an evidence record
 // applied for the whole signature content (not yet embedded). Port of the constructor
 // EmbeddedEvidenceRecordHelper(Signature).
-func NewXAdESEmbeddedEvidenceRecordHelperForSignature(signature *Signature) *EmbeddedEvidenceRecordHelper {
+func NewEmbeddedEvidenceRecordHelperForSignature(signature *Signature) *EmbeddedEvidenceRecordHelper {
 	h := &EmbeddedEvidenceRecordHelper{}
 	h.InitAbstractEmbeddedEvidenceRecordHelper(h, signature)
 	return h
@@ -24,9 +24,9 @@ func NewXAdESEmbeddedEvidenceRecordHelperForSignature(signature *Signature) *Emb
 // NewXAdESEmbeddedEvidenceRecordHelper is the default constructor. Port of the constructor
 // EmbeddedEvidenceRecordHelper(Signature, Attribute); evidenceRecordAttribute may
 // be nil, matching this port's use as the (Signature) overload too (see
-// NewXAdESEmbeddedEvidenceRecordHelperForSignature, which forwards to the same Init entry point
+// NewEmbeddedEvidenceRecordHelperForSignature, which forwards to the same Init entry point
 // with a nil attribute already).
-func NewXAdESEmbeddedEvidenceRecordHelper(signature *Signature, evidenceRecordAttribute *Attribute) *EmbeddedEvidenceRecordHelper {
+func NewEmbeddedEvidenceRecordHelper(signature *Signature, evidenceRecordAttribute *Attribute) *EmbeddedEvidenceRecordHelper {
 	h := &EmbeddedEvidenceRecordHelper{}
 	if evidenceRecordAttribute == nil {
 		h.InitAbstractEmbeddedEvidenceRecordHelper(h, signature)
@@ -41,7 +41,7 @@ func NewXAdESEmbeddedEvidenceRecordHelper(signature *Signature, evidenceRecordAt
 // #getDigestBuilder(AdvancedSignature, SignatureAttribute, DigestAlgorithm) override.
 func (h *EmbeddedEvidenceRecordHelper) DigestBuilder(signature validation.AdvancedSignature,
 	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) validation.SignatureEvidenceRecordDigestBuilder {
-	digestBuilder := newXAdESEvidenceRecordDigestBuilderFromSignature(signature, evidenceRecordAttribute, digestAlgorithm)
+	digestBuilder := newEvidenceRecordDigestBuilderFromSignature(signature, evidenceRecordAttribute, digestAlgorithm)
 	digestBuilder.SetDetachedContent(h.DetachedContents())
 	return digestBuilder
 }

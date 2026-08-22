@@ -26,7 +26,7 @@ import (
 //
 //   - testdata/zipcore-dss-oracle.json (testdata/gen/ZipCoreDssOracle.java) runs the REAL upstream
 //     DSS 6.5.RC1 classes - ASiCUtils, ZipUtils, SecureContainerHandler, DSSZipEntry,
-//     AbstractASiCFilenameFactory - and is the authority on behaviour.
+//     AbstractFilenameFactory - and is the authority on behaviour.
 //   - testdata/zipcore-oracle.json (testdata/gen/ZipCoreOracle.java) is a pure-JDK dump of what
 //     java.util.zip.ZipInputStream (local headers) and java.util.zip.ZipFile (central directory)
 //     each see, and is what proves the two views differ and which one this port must reproduce.
@@ -685,7 +685,7 @@ func zipCoreParseFirstLocalHeader(t *testing.T, archive []byte) zipCoreLocalHead
 // no extra field, so that a reader can find the mimetype payload at a fixed offset.
 func TestSecureContainerHandlerMimetypeIsFirstStoredAndUndeferred(t *testing.T) {
 	mimetypeValue := "application/vnd.etsi.asic-e+zip"
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetMimeTypeDocument(asicUtilsCreateMimetypeDocument(zipCoreMimeType(mimetypeValue)))
 	asicContent.SetSignedDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithName([]byte("hello world, compress me please, please, please"), "test.txt"),

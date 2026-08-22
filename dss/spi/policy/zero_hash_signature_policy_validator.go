@@ -28,7 +28,7 @@ func (v *ZeroHashSignaturePolicyValidator) CanValidate(signaturePolicy *signatur
 
 // Validate always reports the policy as identified with a valid digest.
 func (v *ZeroHashSignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
-	validationResult := signature.NewSignaturePolicyValidationResult()
+	validationResult := signature.NewPolicyValidationResult()
 	validationResult.SetIdentified(true)
 	validationResult.SetDigestValid(true)
 	return validationResult

@@ -136,7 +136,7 @@ type AbstractCertificateValidator[R any, PE executor.ProcessExecutor[R]] struct 
 
 	// Locale is the locale to use for reports generation. Port of the
 	// protected locale field; "" is the ported equivalent of Java's
-	// Locale.getDefault() (see i18n.NewI18nProviderForLocale).
+	// Locale.getDefault() (see i18n.NewProviderForLocale).
 	Locale string
 
 	// ProcessExecutor is the certificate process executor. Port of the

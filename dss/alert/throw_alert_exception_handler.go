@@ -15,5 +15,5 @@ func NewThrowAlertExceptionHandler[T any]() *ThrowAlertExceptionHandler[T] {
 // Process returns an AlertError whose message is fmt.Sprint(object) (mirroring Java's
 // object.toString()).
 func (h *ThrowAlertExceptionHandler[T]) Process(object T) error {
-	return NewAlertErrorWithMessage(fmt.Sprint(object))
+	return NewErrorWithMessage(fmt.Sprint(object))
 }

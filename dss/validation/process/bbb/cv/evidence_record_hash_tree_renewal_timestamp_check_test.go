@@ -69,7 +69,7 @@ func evidenceRecordDiagnosticData(covered bool) *diagnostic.Data {
 	}
 	evidenceRecord.Id = diagnosticjaxb.NewCollapsedString("ER-SYNTHETIC")
 
-	return diagnostic.NewDiagnosticData(&diagnosticjaxb.XmlDiagnosticData{
+	return diagnostic.NewData(&diagnosticjaxb.XmlDiagnosticData{
 		EvidenceRecords: &diagnosticjaxb.EvidenceRecordsWrapper{
 			Items: []*diagnosticjaxb.XmlEvidenceRecord{evidenceRecord},
 		},

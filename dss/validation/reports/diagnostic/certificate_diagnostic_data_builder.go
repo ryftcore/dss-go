@@ -19,7 +19,7 @@ type CertificateDiagnosticDataBuilder struct {
 // NewCertificateDiagnosticDataBuilder is the port of the default constructor.
 func NewCertificateDiagnosticDataBuilder() *CertificateDiagnosticDataBuilder {
 	b := &CertificateDiagnosticDataBuilder{
-		DataBuilder: *NewDiagnosticDataBuilder(),
+		DataBuilder: *NewDataBuilder(),
 	}
 	b.InitDiagnosticDataBuilder(b)
 	return b

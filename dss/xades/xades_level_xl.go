@@ -18,9 +18,9 @@ type LevelXL struct {
 	LevelX
 }
 
-// NewXAdESLevelXL is the default constructor for LevelXL.
+// NewLevelXL is the default constructor for LevelXL.
 // Port of XAdESLevelXL(CertificateVerifier).
-func NewXAdESLevelXL(certificateVerifier validation.CertificateVerifier) *LevelXL {
+func NewLevelXL(certificateVerifier validation.CertificateVerifier) *LevelXL {
 	extension := &LevelXL{}
 	extension.InitXAdESLevelXL(extension, certificateVerifier)
 	return extension

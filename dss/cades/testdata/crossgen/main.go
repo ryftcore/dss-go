@@ -107,7 +107,7 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 // source a CAdES-T needs to request its signature-timestamp.
 func newParameters(level enumerations.SignatureLevel, packaging enumerations.SignaturePackaging,
 	signerEntry token.DSSPrivateKeyEntry) *cades.SignatureParameters {
-	parameters := cades.NewCAdESSignatureParameters()
+	parameters := cades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(packaging)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
@@ -122,7 +122,7 @@ func generateEnveloping(outDir, name string, level enumerations.SignatureLevel,
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, enumerations.SignaturePackagingEnveloping, signerEntry)
 
-	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
+	service := cades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.TspSource = tspSource
 	}
@@ -150,7 +150,7 @@ func generateEnveloping(outDir, name string, level enumerations.SignatureLevel,
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
 	parameters := newParameters(enumerations.SignatureLevelCAdESBaselineB, enumerations.SignaturePackagingDetached, signerEntry)
 
-	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
+	service := cades.NewService(validation.NewCommonCertificateVerifier())
 	toSignDocument := model.NewInMemoryDocumentWithName(sampleContent, "sample-detached.bin")
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)

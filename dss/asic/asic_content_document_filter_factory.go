@@ -7,14 +7,14 @@ import "github.com/ryftcore/dss-go/dss/utils"
 // static factory emptyFilter(). Java's private no-arg constructor has no Go analogue: this
 // file's factory functions are free package functions, not methods on a value type.
 func EmptyFilter() *ContentDocumentFilter {
-	return NewASiCContentDocumentFilter()
+	return NewContentDocumentFilter()
 }
 
 // SignedDocumentsOnlyFilter creates an ContentDocumentFilter with a configuration to
 // return only original signed documents. Note: this is a default configuration for an
 // ASiCManifest (signed or time-stamped). Ports signedDocumentsOnlyFilter(String...).
 func SignedDocumentsOnlyFilter(excludedFilenames ...string) *ContentDocumentFilter {
-	f := NewASiCContentDocumentFilter()
+	f := NewContentDocumentFilter()
 	f.SetSignedDocuments(true)
 	if utils.IsArrayNotEmpty(excludedFilenames) {
 		f.SetExcludedFilenames(excludedFilenames)
@@ -27,7 +27,7 @@ func SignedDocumentsOnlyFilter(excludedFilenames ...string) *ContentDocumentFilt
 // manifest files. Note: this is a default configuration for an ASiCArchiveManifest. Ports
 // archiveDocumentsFilter(String...).
 func ArchiveDocumentsFilter(excludedFilenames ...string) *ContentDocumentFilter {
-	f := NewASiCContentDocumentFilter()
+	f := NewContentDocumentFilter()
 	f.SetSignedDocuments(true)
 	f.SetSignatureDocuments(true)
 	f.SetTimestampDocuments(true)
@@ -43,7 +43,7 @@ func ArchiveDocumentsFilter(excludedFilenames ...string) *ContentDocumentFilter 
 // type documents available (without mimetype), within an Content, excluding the documents
 // with filenames defined in excludedFilenames. Ports allSupportedDocumentsFilter(String...).
 func AllSupportedDocumentsFilter(excludedFilenames ...string) *ContentDocumentFilter {
-	f := NewASiCContentDocumentFilter()
+	f := NewContentDocumentFilter()
 	f.SetSignedDocuments(true)
 	f.SetSignatureDocuments(true)
 	f.SetTimestampDocuments(true)
@@ -61,7 +61,7 @@ func AllSupportedDocumentsFilter(excludedFilenames ...string) *ContentDocumentFi
 // including unrecognized documents and mimetype document, within an Content, excluding the
 // documents with filenames defined in excludedFilenames. Ports allDocumentsFilter(String...).
 func AllDocumentsFilter(excludedFilenames ...string) *ContentDocumentFilter {
-	f := NewASiCContentDocumentFilter()
+	f := NewContentDocumentFilter()
 	f.SetMimetypeDocument(true)
 	f.SetSignedDocuments(true)
 	f.SetSignatureDocuments(true)
@@ -81,7 +81,7 @@ func AllDocumentsFilter(excludedFilenames ...string) *ContentDocumentFilter {
 // available, matching the array of allowedFilenames. Ignores all other documents. Ports
 // allowedFilenamesFilter(String...).
 func AllowedFilenamesFilter(allowedFilenames ...string) *ContentDocumentFilter {
-	f := NewASiCContentDocumentFilter()
+	f := NewContentDocumentFilter()
 	if utils.IsArrayNotEmpty(allowedFilenames) {
 		f.SetIncludedFilenames(allowedFilenames)
 	}

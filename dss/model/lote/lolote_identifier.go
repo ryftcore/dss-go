@@ -6,12 +6,12 @@ package lote
 import "github.com/ryftcore/dss-go/dss/model"
 
 // loloteIdentifierPrefix is the "LoLoTE-" prefix LoLoTEIdentifier passes to
-// AbstractLoTEIdentifier.
+// AbstractIdentifier.
 const loloteIdentifierPrefix = "LoLoTE-"
 
 // LoLoTEIdentifier is the identifier for a List of Lists of Trusted Entities.
 type LoLoTEIdentifier struct {
-	AbstractLoTEIdentifier
+	AbstractIdentifier
 }
 
 // NewLoLoTEIdentifier is the default constructor. Port of the LoLoTEIdentifier(LoTEInfo)
@@ -21,7 +21,7 @@ type LoLoTEIdentifier struct {
 // field explicitly (e.g. &loloteInfo.Info).
 func NewLoLoTEIdentifier(listInfo *Info) *LoLoTEIdentifier {
 	return &LoLoTEIdentifier{
-		AbstractLoTEIdentifier: NewAbstractLoTEIdentifier("LoLoTEIdentifier", loloteIdentifierPrefix, listInfo),
+		AbstractIdentifier: NewAbstractLoTEIdentifier("LoLoTEIdentifier", loloteIdentifierPrefix, listInfo),
 	}
 }
 

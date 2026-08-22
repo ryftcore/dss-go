@@ -53,7 +53,7 @@ func (v *BasicASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signatu
 // digest algorithm and digest value against the ones carried by
 // signaturePolicy.
 func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
-	validationResult := signature.NewSignaturePolicyValidationResult()
+	validationResult := signature.NewPolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent == nil {

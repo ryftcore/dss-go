@@ -10,8 +10,8 @@ type CacheConnector struct {
 	dataSource *sql.DB
 }
 
-// NewJdbcCacheConnector is the default constructor.
-func NewJdbcCacheConnector(dataSource *sql.DB) *CacheConnector {
+// NewCacheConnector is the default constructor.
+func NewCacheConnector(dataSource *sql.DB) *CacheConnector {
 	return &CacheConnector{dataSource: dataSource}
 }
 

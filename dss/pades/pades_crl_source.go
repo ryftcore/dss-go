@@ -35,7 +35,7 @@ type CRLSource struct {
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
-func NewPAdESCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+func NewCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signedAttributes cmscore.Attributes) *CRLSource {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")

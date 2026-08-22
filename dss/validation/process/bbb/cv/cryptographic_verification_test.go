@@ -30,7 +30,7 @@ import (
 const corpusRoot = "diagnostic/jaxb/testdata/oracle"
 
 // i18nProviderForTests is the provider both KATs run with, as the oracle does.
-var i18nProviderForTests = i18n.NewI18nProvider()
+var i18nProviderForTests = i18n.NewProvider()
 
 type oracleMessage struct {
 	Key   *string `json:"key"`
@@ -106,7 +106,7 @@ func loadDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 func toRow(file, token string, context enumerations.Context, block string,

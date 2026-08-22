@@ -75,10 +75,10 @@ type Service struct {
 	document.AbstractSignatureService[*SignatureParameters, *TimestampParameters]
 }
 
-// NewXAdESService creates an instance of the Service. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided; it supplies information on the sources to be used in the validation process in the
 // context of a signature. Port of XAdESService(CertificateVerifier).
-func NewXAdESService(certificateVerifier validation.CertificateVerifier) *Service {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ XAdESService created".
 	return &Service{
 		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters,
@@ -133,7 +133,7 @@ func (s *Service) GetDataToSignForDocuments(toSignDocuments []model.DSSDocument,
 	xadesServiceAssertMultiDocumentsAllowed(toSignDocuments, parameters)
 	xadesServiceAssertDocumentsValid(toSignDocuments)
 
-	levelBaselineB := NewXAdESLevelBaselineB(s.CertificateVerifier)
+	levelBaselineB := NewLevelBaselineB(s.CertificateVerifier)
 	dataToSign, err := levelBaselineB.GetDataToSignForDocuments(toSignDocuments, parameters)
 	if err != nil {
 		panic(err)
@@ -180,7 +180,7 @@ func (s *Service) SignDocuments(toSignDocuments []model.DSSDocument,
 	if context.Profile() != nil {
 		profile = context.Profile()
 	} else {
-		profile = NewXAdESLevelBaselineB(s.CertificateVerifier)
+		profile = NewLevelBaselineB(s.CertificateVerifier)
 	}
 
 	result, err := profile.SignDocuments(toSignDocuments, parameters, signatureValue.Value())
@@ -255,19 +255,19 @@ func (s *Service) extensionProfile(parameters *SignatureParameters) SignatureExt
 	case enumerations.SignatureLevelXAdESBaselineB:
 		return nil
 	case enumerations.SignatureLevelXAdESBaselineT:
-		extension = NewXAdESLevelBaselineT(s.CertificateVerifier)
+		extension = NewLevelBaselineT(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESC:
-		extension = NewXAdESLevelC(s.CertificateVerifier)
+		extension = NewLevelC(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESX:
-		extension = NewXAdESLevelX(s.CertificateVerifier)
+		extension = NewLevelX(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESXL:
-		extension = NewXAdESLevelXL(s.CertificateVerifier)
+		extension = NewLevelXL(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESA:
-		extension = NewXAdESLevelA(s.CertificateVerifier)
+		extension = NewLevelA(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESBaselineLT:
-		extension = NewXAdESLevelBaselineLT(s.CertificateVerifier)
+		extension = NewLevelBaselineLT(s.CertificateVerifier)
 	case enumerations.SignatureLevelXAdESBaselineLTA:
-		extension = NewXAdESLevelBaselineLTA(s.CertificateVerifier)
+		extension = NewLevelBaselineLTA(s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
 	}

@@ -79,15 +79,15 @@ type TimestampMessageDigestBuilder struct {
 	timestampAttribute *Attribute
 }
 
-// NewXAdESTimestampMessageDigestBuilder is the default constructor to be used for a new
+// NewTimestampMessageDigestBuilder is the default constructor to be used for a new
 // timestamp creation. This constructor requires certain properties to be provided for
 // message-digest computation (see available setters). Port of the (XAdESSignature,
 // DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewXAdESTimestampMessageDigestBuilder(signature *Signature,
+func NewTimestampMessageDigestBuilder(signature *Signature,
 	digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
-	b := newXAdESTimestampMessageDigestBuilderBase(signature)
+	b := newTimestampMessageDigestBuilderBase(signature)
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
 	}
@@ -95,14 +95,14 @@ func NewXAdESTimestampMessageDigestBuilder(signature *Signature,
 	return b
 }
 
-// NewXAdESTimestampMessageDigestBuilderForToken is the constructor to be used for existing
+// NewTimestampMessageDigestBuilderForToken is the constructor to be used for existing
 // timestamp message-imprint computation. Port of the (XAdESSignature, TimestampToken)
 // constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewXAdESTimestampMessageDigestBuilderForToken(signature *Signature,
+func NewTimestampMessageDigestBuilderForToken(signature *Signature,
 	timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
-	b := newXAdESTimestampMessageDigestBuilderBase(signature)
+	b := newTimestampMessageDigestBuilderBase(signature)
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
 	}
@@ -112,11 +112,11 @@ func NewXAdESTimestampMessageDigestBuilderForToken(signature *Signature,
 	return b
 }
 
-// newXAdESTimestampMessageDigestBuilderBase is the internal constructor to instantiate required
+// newTimestampMessageDigestBuilderBase is the internal constructor to instantiate required
 // values from a signature object. Port of the private (XAdESSignature) constructor.
 //
 // Panics with the Java message when signature is nil (Objects.requireNonNull).
-func newXAdESTimestampMessageDigestBuilderBase(signature *Signature) *TimestampMessageDigestBuilder {
+func newTimestampMessageDigestBuilderBase(signature *Signature) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
 	}
@@ -333,7 +333,7 @@ func (b *TimestampMessageDigestBuilder) TimestampX1MessageDigest() (result model
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
 
-	xadesUnsignedSigProperties := NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	xadesUnsignedSigProperties := NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 	for _, xadesAttribute := range xadesUnsignedSigProperties.Attributes() {
 		if b.timestampAttribute != nil && b.timestampAttribute.Equals(xadesAttribute) {
 			break
@@ -406,7 +406,7 @@ func (b *TimestampMessageDigestBuilder) TimestampX2MessageDigest() (result model
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
 
-	xadesUnsignedSigProperties := NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	xadesUnsignedSigProperties := NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 	for _, xadesAttribute := range xadesUnsignedSigProperties.Attributes() {
 		if b.timestampAttribute != nil && b.timestampAttribute.Equals(xadesAttribute) {
 			break
@@ -634,7 +634,7 @@ func (b *TimestampMessageDigestBuilder) xadesUnsignedSignatureProperties(timesta
 	if unsignedProperties == nil {
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
-	return NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	return NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 }
 
 // xadesTimestampMessageDigestBuilderIsEn319132TimestampToken ports the private

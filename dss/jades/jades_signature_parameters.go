@@ -108,7 +108,7 @@ type SignatureParameters struct {
 
 // NewJAdESSignatureParameters instantiates the object with default parameters. Port of the
 // default constructor.
-func NewJAdESSignatureParameters() *SignatureParameters {
+func NewSignatureParameters() *SignatureParameters {
 	return &SignatureParameters{
 		AbstractSignatureParameters:    document.NewAbstractSignatureParameters[*TimestampParameters](),
 		includeCertificateChain:        true,
@@ -117,7 +117,7 @@ func NewJAdESSignatureParameters() *SignatureParameters {
 		base64UrlEncodedPayload:        true,
 		signingCertificateDigestMethod: enumerations.DigestAlgorithmSHA512,
 		jwsSerializationType:           enumerations.JWSSerializationTypeCompactSerialization,
-		jadesSigningTimeType:           JAdESSigningTimeTypeIAT,
+		jadesSigningTimeType:           SigningTimeTypeIAT,
 	}
 }
 
@@ -136,7 +136,7 @@ func (p *SignatureParameters) SetSignatureLevel(signatureLevel enumerations.Sign
 // instantiating JAdESTimestampParameters. Port of #getContentTimestampParameters.
 func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
-		p.ContentTimestampParameters = NewJAdESTimestampParameters()
+		p.ContentTimestampParameters = NewTimestampParameters()
 	}
 	return p.ContentTimestampParameters
 }
@@ -145,7 +145,7 @@ func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParamete
 // instantiating JAdESTimestampParameters. Port of #getSignatureTimestampParameters.
 func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
-		p.SignatureTimestampParameters = NewJAdESTimestampParameters()
+		p.SignatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.SignatureTimestampParameters
 }
@@ -154,7 +154,7 @@ func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParame
 // instantiating JAdESTimestampParameters. Port of #getArchiveTimestampParameters.
 func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
-		p.ArchiveTimestampParameters = NewJAdESTimestampParameters()
+		p.ArchiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.ArchiveTimestampParameters
 }

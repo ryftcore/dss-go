@@ -71,8 +71,8 @@ func (m *AbstractASiCWithCAdESContainerMerger) IsSupportedContent(asicContent *a
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (m *AbstractASiCWithCAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithCAdESContainerExtractor(container).DefaultASiCContainerExtractor
+func (m *AbstractASiCWithCAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultContainerExtractor {
+	return &NewASiCWithCAdESContainerExtractor(container).DefaultContainerExtractor
 }
 
 // MergeCmsSignatures merges signature documents representing CMS signatures into a single CMS

@@ -105,7 +105,7 @@ func (b *EvidenceRecordsValidationBlock) Execute() {
 		id := evidenceRecord.Id()
 		evidenceRecordAnalysis.Id = &id
 
-		allTimestampValidationBlock := NewEvidenceRecordTimestampsValidationBlock(
+		allTimestampValidationBlock := NewTimestampsValidationBlock(
 			b.i18nProvider, evidenceRecord, b.diagnosticData, b.Policy, b.CurrentTime, b.bbbs, b.tlAnalysis,
 			b.validationLevel)
 		currentTimestampValidations := allTimestampValidationBlock.Execute()
@@ -138,7 +138,7 @@ func (b *EvidenceRecordsValidationBlock) Execute() {
 		xmlTimestamps := make([]*jaxb.XmlTimestamp, len(evidenceRecordAnalysis.Timestamp))
 		copy(xmlTimestamps, evidenceRecordAnalysis.Timestamp)
 
-		ervp := NewEvidenceRecordValidationProcess(b.i18nProvider, b.diagnosticData, evidenceRecord, xmlTimestamps,
+		ervp := NewValidationProcess(b.i18nProvider, b.diagnosticData, evidenceRecord, xmlTimestamps,
 			b.bbbs, b.Policy, b.CurrentTime)
 		validationProcessEvidenceRecord := ervp.Execute()
 		evidenceRecordAnalysis.ValidationProcessEvidenceRecord = validationProcessEvidenceRecord

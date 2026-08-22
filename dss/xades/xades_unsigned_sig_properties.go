@@ -16,9 +16,9 @@ type UnsignedSigProperties struct {
 
 // NewXAdESUnsignedSigProperties is the port of the public
 // UnsignedSigProperties(Element, XAdESPath) constructor.
-func NewXAdESUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *UnsignedSigProperties {
+func NewUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *UnsignedSigProperties {
 	return &UnsignedSigProperties{
-		SigProperties: newXAdESSigProperties(unsignedSignatureProperties, xadesPaths),
+		SigProperties: newSigProperties(unsignedSignatureProperties, xadesPaths),
 	}
 }
 
@@ -26,7 +26,7 @@ func NewXAdESUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xad
 // build(Element, XAdESPath).
 func UnsignedSigPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *UnsignedSigProperties {
 	unsignedSignatureProperties := xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom(signatureElement, xadesPaths)
-	return NewXAdESUnsignedSigProperties(unsignedSignatureProperties, xadesPaths)
+	return NewUnsignedSigProperties(unsignedSignatureProperties, xadesPaths)
 }
 
 // xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom gets the

@@ -12,19 +12,19 @@ import (
 //
 // java.io.Serializable is dropped silently (no Go counterpart). The "protected final List<T>
 // list" field Java subclasses (MutableTimeDependentValues) mutate directly is kept unexported
-// here: MutableTimeDependentValues lives in this same package and reaches it directly, which
+// here: MutableValues lives in this same package and reaches it directly, which
 // is the Go counterpart of a protected field accessed from a subclass.
 type Values[T TimeDependent] struct {
 	list []T
 }
 
-// NewTimeDependentValues is the empty list of values.
-func NewTimeDependentValues[T TimeDependent]() *Values[T] {
+// NewValues is the empty list of values.
+func NewValues[T TimeDependent]() *Values[T] {
 	return &Values[T]{}
 }
 
-// NewTimeDependentValuesFrom is the copy constructor.
-func NewTimeDependentValuesFrom[T TimeDependent](srcList []T) *Values[T] {
+// NewValuesFrom is the copy constructor.
+func NewValuesFrom[T TimeDependent](srcList []T) *Values[T] {
 	v := &Values[T]{list: make([]T, 0, len(srcList))}
 	v.list = append(v.list, srcList...)
 	return v

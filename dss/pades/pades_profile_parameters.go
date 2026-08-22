@@ -22,8 +22,8 @@ type ProfileParameters struct {
 	pdfToBeSignedCache *PdfSignatureCache
 }
 
-// NewPAdESProfileParameters is the default constructor.
-func NewPAdESProfileParameters() *ProfileParameters {
+// NewProfileParameters is the default constructor.
+func NewProfileParameters() *ProfileParameters {
 	return &ProfileParameters{ProfileParameters: *document.NewProfileParameters()}
 }
 

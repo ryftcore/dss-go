@@ -11,12 +11,12 @@ type SignedAttributes struct {
 
 // newCAdESSignedAttributes is the port of the package-private CAdESSignedAttributes(ASN1Set)
 // constructor.
-func newCAdESSignedAttributes(attributeTable cmscore.Attributes, exists bool) *SignedAttributes {
-	return &SignedAttributes{SigProperties: newCAdESSigProperties(attributeTable, exists)}
+func newSignedAttributes(attributeTable cmscore.Attributes, exists bool) *SignedAttributes {
+	return &SignedAttributes{SigProperties: newSigProperties(attributeTable, exists)}
 }
 
 // CAdESSignedAttributesBuild builds the CAdESSignedAttributes from a SignerInfo. Port of the
 // static build(SignerInformation).
 func SignedAttributesBuild(signerInformation *cmscore.SignerInfo) *SignedAttributes {
-	return newCAdESSignedAttributes(signerInformation.SignedAttributes, signerInformation.HasSignedAttributes())
+	return newSignedAttributes(signerInformation.SignedAttributes, signerInformation.HasSignedAttributes())
 }

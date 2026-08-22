@@ -284,7 +284,7 @@ func (b *ExtensionBuilder) AssertUnsignedPropertiesExtensionPossible(
 // InitDocumentAnalyzer initializes the document analyzer and other signature properties.
 // Port of the protected #initDocumentAnalyzer.
 func (b *ExtensionBuilder) InitDocumentAnalyzer(document model.DSSDocument) (*XMLDocumentAnalyzer, error) {
-	b.Params = NewXAdESSignatureParameters()
+	b.Params = NewSignatureParameters()
 
 	documentAnalyzer, err := NewXMLDocumentAnalyzer(document)
 	if err != nil {

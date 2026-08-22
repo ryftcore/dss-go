@@ -424,7 +424,7 @@ func toOracleMessage(message *jaxb.XmlMessage) *oracleMessage {
 
 func TestChainSemanticsAgainstJavaOracle(t *testing.T) {
 	rows := loadOracleRows(t, corpustest.Path(t, "oracle/chain_semantics.jsonl"))
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	for _, sc := range chainScenarios() {
 		t.Run(sc.name, func(t *testing.T) {

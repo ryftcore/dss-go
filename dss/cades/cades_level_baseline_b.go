@@ -108,15 +108,15 @@ type LevelBaselineB struct {
 	counterSignature bool
 }
 
-// NewCAdESLevelBaselineB is the default constructor for LevelBaselineB.
+// NewLevelBaselineB is the default constructor for LevelBaselineB.
 // Port of the no-arg constructor, i.e. of CAdESLevelBaselineB(null).
-func NewCAdESLevelBaselineB() *LevelBaselineB {
-	return NewCAdESLevelBaselineBWithDocument(nil)
+func NewLevelBaselineB() *LevelBaselineB {
+	return NewLevelBaselineBWithDocument(nil)
 }
 
-// NewCAdESLevelBaselineBWithDocument is the constructor for LevelBaselineB with a
+// NewLevelBaselineBWithDocument is the constructor for LevelBaselineB with a
 // documentToSign. Port of CAdESLevelBaselineB(DSSDocument).
-func NewCAdESLevelBaselineBWithDocument(documentToSign model.DSSDocument) *LevelBaselineB {
+func NewLevelBaselineBWithDocument(documentToSign model.DSSDocument) *LevelBaselineB {
 	return &LevelBaselineB{documentToSign: documentToSign}
 }
 

@@ -23,22 +23,22 @@ type DocumentExtender struct {
 	document.AbstractDocumentExtender[*SignatureParameters, *TimestampParameters]
 }
 
-// newPAdESDocumentExtender is the package-private empty constructor, used by
+// newDocumentExtender is the package-private empty constructor, used by
 // PAdESDocumentExtenderFactory#isSupported.
-func newPAdESDocumentExtender() *DocumentExtender {
+func newDocumentExtender() *DocumentExtender {
 	extender := &DocumentExtender{}
 	extender.InitAbstractDocumentExtender(extender)
 	return extender
 }
 
-// NewPAdESDocumentExtender is the default constructor, taking the document to be extended. Port
+// NewDocumentExtender is the default constructor, taking the document to be extended. Port
 // of PAdESDocumentExtender(DSSDocument); panics with the Java message when the document is nil
 // (Objects.requireNonNull).
-func NewPAdESDocumentExtender(doc model.DSSDocument) *DocumentExtender {
+func NewDocumentExtender(doc model.DSSDocument) *DocumentExtender {
 	if doc == nil {
 		panic("Document to be extended cannot be null!")
 	}
-	extender := newPAdESDocumentExtender()
+	extender := newDocumentExtender()
 	extender.Document = doc
 	return extender
 }
@@ -49,7 +49,7 @@ func (e *DocumentExtender) CreateSignatureService() document.SignatureService[*S
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding PAdESService!")
 	}
-	service := NewPAdESService(e.CertificateVerifier)
+	service := NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -61,7 +61,7 @@ func (e *DocumentExtender) IsSupported(dssDocument model.DSSDocument) bool {
 
 // EmptySignatureParameters ports the overridden protected emptySignatureParameters().
 func (e *DocumentExtender) EmptySignatureParameters() *SignatureParameters {
-	return NewPAdESSignatureParameters()
+	return NewSignatureParameters()
 }
 
 // IsSupportedParameters ports the overridden protected

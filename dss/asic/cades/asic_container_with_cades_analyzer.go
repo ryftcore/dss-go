@@ -83,8 +83,8 @@ func (a *ASiCContainerWithCAdESAnalyzer) IsSupportedASiCContent(asicContent *asi
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
-func (a *ASiCContainerWithCAdESAnalyzer) GetContainerExtractor() *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithCAdESContainerExtractor(a.Document()).DefaultASiCContainerExtractor
+func (a *ASiCContainerWithCAdESAnalyzer) GetContainerExtractor() *asic.DefaultContainerExtractor {
+	return &NewASiCWithCAdESContainerExtractor(a.Document()).DefaultContainerExtractor
 }
 
 // GetSignatureAnalyzers ports the @Override protected getSignatureAnalyzers(), implementing
@@ -129,7 +129,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetTimestampAnalyzers() []analyzertimes
 				a.TimestampAnalyzers = append(a.TimestampAnalyzers, timestampValidator)
 			}
 		}
-		comparator := analyzertimestamp.NewTimestampAnalyzerComparator()
+		comparator := analyzertimestamp.NewAnalyzerComparator()
 		sortTimestampAnalyzers(a.TimestampAnalyzers, comparator)
 	}
 	return a.TimestampAnalyzers
@@ -274,7 +274,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	for _, manifestDocument := range a.GetManifestDocuments() {
 		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
-			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
+			asiceWithCAdESManifestValidator := asic.NewManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
 		}
@@ -284,7 +284,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumArchiveManifest)
-			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
+			asiceWithCAdESManifestValidator := asic.NewManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
 		}
@@ -294,7 +294,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
-			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
+			asiceWithCAdESManifestValidator := asic.NewManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
 		}

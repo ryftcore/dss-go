@@ -14,8 +14,8 @@ type UnsignedAttributes struct {
 
 // newCAdESUnsignedAttributes is the port of the package-private
 // UnsignedAttributes(ASN1Set) constructor.
-func newCAdESUnsignedAttributes(attributeTable cmscore.Attributes, exists bool) *UnsignedAttributes {
-	return &UnsignedAttributes{SigProperties: newCAdESSigProperties(attributeTable, exists)}
+func newUnsignedAttributes(attributeTable cmscore.Attributes, exists bool) *UnsignedAttributes {
+	return &UnsignedAttributes{SigProperties: newSigProperties(attributeTable, exists)}
 }
 
 // UnsignedAttributesBuild builds the UnsignedAttributes from a SignerInfo.
@@ -23,7 +23,7 @@ func newCAdESUnsignedAttributes(attributeTable cmscore.Attributes, exists bool) 
 // build(SignerInformation).
 func UnsignedAttributesBuild(signerInformation *cmscore.SignerInfo) *UnsignedAttributes {
 	// Extraction from SignerInfo allows to keep actual order
-	return newCAdESUnsignedAttributes(signerInformation.UnsignedAttributes, signerInformation.HasUnsignedAttributes())
+	return newUnsignedAttributes(signerInformation.UnsignedAttributes, signerInformation.HasUnsignedAttributes())
 }
 
 // Attributes overrides SigProperties.Attributes(): multiple timestamps need to be sorted

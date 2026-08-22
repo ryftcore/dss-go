@@ -17,8 +17,8 @@ type EvidenceRecordIncorporationParameters struct {
 	xadesERNamespace *common.DSSNamespace
 }
 
-// NewXAdESEvidenceRecordIncorporationParameters is the default constructor.
-func NewXAdESEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
+// NewEvidenceRecordIncorporationParameters is the default constructor.
+func NewEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
 	return &EvidenceRecordIncorporationParameters{
 		AbstractEvidenceRecordIncorporationParameters: document.NewAbstractEvidenceRecordIncorporationParameters(),
 		xadesERNamespace: definition.XAdESNamespaceXAdESEvidencerecordNamespace,

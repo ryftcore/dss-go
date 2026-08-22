@@ -18,14 +18,14 @@ type DigestReference struct {
 	digest model.Digest
 }
 
-// NewSignatureDigestReference is the default constructor.
-func NewSignatureDigestReference(digest model.Digest) *DigestReference {
+// NewDigestReference is the default constructor.
+func NewDigestReference(digest model.Digest) *DigestReference {
 	return &DigestReference{digest: digest}
 }
 
-// NewSignatureDigestReferenceWithCanonicalization is the constructor for the XAdES Signature
+// NewDigestReferenceWithCanonicalization is the constructor for the XAdES Signature
 // Digest Reference.
-func NewSignatureDigestReferenceWithCanonicalization(canonicalizationMethod string, digest model.Digest) *DigestReference {
+func NewDigestReferenceWithCanonicalization(canonicalizationMethod string, digest model.Digest) *DigestReference {
 	return &DigestReference{canonicalizationMethod: canonicalizationMethod, digest: digest}
 }
 

@@ -25,7 +25,7 @@ var _ asic.SignatureExtensionHelperOverrides = (*ASiCWithCAdESSignatureExtension
 // ASiCWithCAdESSignatureExtensionHelper(DSSDocument).
 func NewASiCWithCAdESSignatureExtensionHelper(asicContainer model.DSSDocument) *ASiCWithCAdESSignatureExtensionHelper {
 	helper := &ASiCWithCAdESSignatureExtensionHelper{
-		SignatureExtensionHelper: asic.NewASiCSignatureExtensionHelperBase(),
+		SignatureExtensionHelper: asic.NewSignatureExtensionHelperBase(),
 	}
 	helper.InitASiCSignatureExtensionHelper(helper)
 	helper.InitFromDocument(asicContainer)
@@ -36,7 +36,7 @@ func NewASiCWithCAdESSignatureExtensionHelper(asicContainer model.DSSDocument) *
 // Ports the protected ASiCWithCAdESSignatureExtensionHelper(ASiCContent).
 func NewASiCWithCAdESSignatureExtensionHelperFromContent(asicContent *asic.Content) *ASiCWithCAdESSignatureExtensionHelper {
 	helper := &ASiCWithCAdESSignatureExtensionHelper{
-		SignatureExtensionHelper: asic.NewASiCSignatureExtensionHelperBase(),
+		SignatureExtensionHelper: asic.NewSignatureExtensionHelperBase(),
 	}
 	helper.InitASiCSignatureExtensionHelper(helper)
 	helper.InitFromContent(asicContent)

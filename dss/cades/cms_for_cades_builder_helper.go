@@ -161,7 +161,7 @@ func (h *CMSForCAdESBuilderHelper) CAdESProfile() *LevelBaselineB {
 // InitCAdESProfile instantiates a new LevelBaselineB.
 // Port of the protected #initCAdESProfile.
 func (h *CMSForCAdESBuilderHelper) InitCAdESProfile() *LevelBaselineB {
-	profile := NewCAdESLevelBaselineBWithDocument(h.DocumentToSign)
+	profile := NewLevelBaselineBWithDocument(h.DocumentToSign)
 	profile.SetCounterSignature(h.counterSignature)
 	return profile
 }
@@ -181,7 +181,7 @@ func (h *CMSForCAdESBuilderHelper) CreateCMSSignerInfoGeneratorBuilder(signedAtt
 // InitCMSSignerInfoGeneratorBuilder creates a new instance of SignerInfoGeneratorBuilder.
 // Port of the protected #initCMSSignerInfoGeneratorBuilder.
 func (h *CMSForCAdESBuilderHelper) InitCMSSignerInfoGeneratorBuilder() *cms.SignerInfoGeneratorBuilder {
-	return cms.NewCMSSignerInfoGeneratorBuilder()
+	return cms.NewSignerInfoGeneratorBuilder()
 }
 
 // AssertSignatureParametersValid verifies the validity of the signature parameters
@@ -199,7 +199,7 @@ func (h *CMSForCAdESBuilderHelper) AssertSignatureParametersValid() error {
 // InitCMSBuilder instantiates a Builder for the CMS creation.
 // Port of the protected #initCMSBuilder.
 func (h *CMSForCAdESBuilderHelper) InitCMSBuilder() *cms.Builder {
-	return cms.NewCMSBuilder().
+	return cms.NewBuilder().
 		SetSigningCertificate(h.SignatureParameters.SigningCertificate()).
 		SetCertificateChain(h.SignatureParameters.CertificateChain()).
 		SetGenerateWithoutCertificates(h.SignatureParameters.GenerateTBSWithoutCertificate()).

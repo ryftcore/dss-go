@@ -50,7 +50,7 @@ func (r *CertificateReports) GetSimpleReportJaxb() *simplecertificatereportjaxb.
 // XmlSimpleCertificateReport string. Port of getXmlSimpleReport().
 func (r *CertificateReports) GetXmlSimpleReport() (string, error) {
 	if r.xmlSimpleReport == "" {
-		xml, err := simplecertificatereport.NewSimpleCertificateReportFacade().Marshal(r.GetSimpleReportJaxb())
+		xml, err := simplecertificatereport.NewFacade().Marshal(r.GetSimpleReportJaxb())
 		if err != nil {
 			return "", NewDSSReportExceptionMessageCause("An error occurred during marshalling of JAXB Simple Report", err)
 		}

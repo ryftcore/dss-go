@@ -63,8 +63,8 @@ func (a *ASiCContainerWithXAdESAnalyzer) IsSupportedASiCContent(asicContent *asi
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
-func (a *ASiCContainerWithXAdESAnalyzer) GetContainerExtractor() *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithXAdESContainerExtractor(a.Document()).DefaultASiCContainerExtractor
+func (a *ASiCContainerWithXAdESAnalyzer) GetContainerExtractor() *asic.DefaultContainerExtractor {
+	return &NewASiCWithXAdESContainerExtractor(a.Document()).DefaultContainerExtractor
 }
 
 // GetSignatureAnalyzers ports the @Override protected getSignatureAnalyzers(), implementing
@@ -125,7 +125,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetManifestFilesDescriptions() []*model
 		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
-			manifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
+			manifestValidator := asic.NewManifestValidator(manifestFile, a.GetAllDocuments())
 			manifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
 		}

@@ -24,7 +24,7 @@ import (
 type Facade struct{}
 
 // NewValidationReportFacade creates a new facade. Port of newFacade().
-func NewValidationReportFacade() *Facade {
+func NewFacade() *Facade {
 	return &Facade{}
 }
 

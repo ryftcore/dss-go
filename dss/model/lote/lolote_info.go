@@ -27,7 +27,7 @@ type LoLoTEInfo struct {
 func NewLoLoTEInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string) *LoLoTEInfo {
 	return &LoLoTEInfo{
-		Info: *NewLoTEInfo(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url),
+		Info: *NewInfo(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url),
 	}
 }
 

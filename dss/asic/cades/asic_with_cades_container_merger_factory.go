@@ -136,5 +136,5 @@ func (f *ASiCWithCAdESContainerMergerFactory) CreateFromContents(asicContents ..
 }
 
 func init() {
-	asic.RegisterASiCContainerMergerFactory(NewASiCWithCAdESContainerMergerFactory())
+	asic.RegisterContainerMergerFactory(NewASiCWithCAdESContainerMergerFactory())
 }

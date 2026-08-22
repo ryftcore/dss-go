@@ -15,7 +15,7 @@ import (
 type analyzerLeafWithoutOverride struct{ *AbstractASiCContainerAnalyzer }
 
 func (l *analyzerLeafWithoutOverride) IsSupportedASiCContent(*Content) bool { return true }
-func (l *analyzerLeafWithoutOverride) GetContainerExtractor() *DefaultASiCContainerExtractor {
+func (l *analyzerLeafWithoutOverride) GetContainerExtractor() *DefaultContainerExtractor {
 	return nil
 }
 func (l *analyzerLeafWithoutOverride) GetManifestFilesDescriptions() []*model.ManifestFile {

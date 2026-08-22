@@ -5,5 +5,5 @@
 //
 // The main entry types are Identifier/Info and
 // LoLoTEIdentifier/LoLoTEInfo (a List of Lists of Trusted Entities entry),
-// built on AbstractLoTEIdentifier.
+// built on AbstractIdentifier.
 package lote

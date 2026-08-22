@@ -42,16 +42,16 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESBuilderReferencedData is the attribute used for timestamp includes.
+// BuilderReferencedData is the attribute used for timestamp includes.
 // Port of the public constant REFERENCED_DATA.
-const XAdESBuilderReferencedData = "referencedData"
+const BuilderReferencedData = "referencedData"
 
-// XAdESBuilderTarget is the qualifying properties target.
+// BuilderTarget is the qualifying properties target.
 // Port of the public constant TARGET.
-const XAdESBuilderTarget = "Target"
+const BuilderTarget = "Target"
 
 // XAdESBuilderURI is the URI attribute. Port of the public constant URI.
-const XAdESBuilderURI = "URI"
+const BuilderURI = "URI"
 
 const (
 	// xadesBuilderIDPrefix is the Xml Id prefix. Port of the protected ID_PREFIX.

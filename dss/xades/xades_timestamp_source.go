@@ -103,7 +103,7 @@ type TimestampSource struct {
 }
 
 // NewXAdESTimestampSource is the default constructor. Port of the (XAdESSignature) constructor.
-func NewXAdESTimestampSource(signature *Signature) *TimestampSource {
+func NewTimestampSource(signature *Signature) *TimestampSource {
 	source := &TimestampSource{
 		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*Signature, *Attribute](signature),
 		signatureElement:         signature.SignatureElement(),
@@ -132,7 +132,7 @@ func (s *TimestampSource) BuildUnsignedSignatureProperties() validation.Signatur
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm) override.
 func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
 	digestAlgorithm enumerations.DigestAlgorithm) timestamp.MessageDigestBuilder {
-	return NewXAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
+	return NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
 }
 
 // GetTimestampMessageImprintDigestBuilderForToken implements
@@ -140,7 +140,7 @@ func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
 // getTimestampMessageImprintDigestBuilder(TimestampToken) override.
 func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
 	timestampToken *validation.TimestampToken) timestamp.MessageDigestBuilder {
-	return NewXAdESTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
+	return NewTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
 		SetTimestampAttribute(s.timestampAttributeMap[timestampToken])
 }
 
@@ -148,7 +148,7 @@ func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
 // Port of the public getSignatureTimestampMessageDigest(DigestAlgorithm, String).
 func (s *TimestampSource) GetSignatureTimestampMessageDigest(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string) model.DSSMessageDigest {
-	builder := NewXAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod)
 	return builder.SignatureTimestampMessageDigest()
 }
@@ -158,7 +158,7 @@ func (s *TimestampSource) GetSignatureTimestampMessageDigest(digestAlgorithm enu
 // the timestamp shall be created accordingly to ETSI EN 319 132-1 (SigAndRefsTimestampV2).
 func (s *TimestampSource) GetTimestampX1MessageDigest(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string, en319132 bool) model.DSSMessageDigest {
-	builder := NewXAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod).
 		SetEn319132(en319132)
 	return builder.TimestampX1MessageDigest()
@@ -169,7 +169,7 @@ func (s *TimestampSource) GetTimestampX1MessageDigest(digestAlgorithm enumeratio
 // timestamp shall be created accordingly to ETSI EN 319 132-1 (RefsOnlyTimestampV2).
 func (s *TimestampSource) GetTimestampX2MessageDigest(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string, en319132 bool) model.DSSMessageDigest {
-	builder := NewXAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod).
 		SetEn319132(en319132)
 	return builder.TimestampX2MessageDigest()
@@ -179,7 +179,7 @@ func (s *TimestampSource) GetTimestampX2MessageDigest(digestAlgorithm enumeratio
 // public getArchiveTimestampData(DigestAlgorithm, String).
 func (s *TimestampSource) GetArchiveTimestampData(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string) model.DSSMessageDigest {
-	builder := NewXAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod)
 	return builder.ArchiveTimestampMessageDigest()
 }
@@ -443,7 +443,7 @@ func (s *TimestampSource) createEvidenceRecord(signatureAttribute *Attribute,
 	}
 	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOriginSignature)
 
-	embeddedEvidenceRecordHelper := NewXAdESEmbeddedEvidenceRecordHelper(s.signature, signatureAttribute)
+	embeddedEvidenceRecordHelper := NewEmbeddedEvidenceRecordHelper(s.signature, signatureAttribute)
 	embeddedEvidenceRecordHelper.SetDetachedContents(s.signature.DetachedContents())
 	embeddedEvidenceRecordHelper.SetOrderOfAttribute(s.GetAttributeOrder(signatureAttribute))
 	orderWithin := orderWithinAttribute
@@ -480,7 +480,7 @@ func xadesTimestampSourceEvidenceRecordDocument(encapsulatedEvidenceRecord *xmld
 // See the file header GAP note: not yet reachable from the base's own internal validateTimestamps()
 // calls until SignatureTimestampSourceOverrides gains this method.
 func (s *TimestampSource) GetTimestampScopes(timestampToken *validation.TimestampToken) []mscope.SignatureScope {
-	timestampScopeFinder := NewXAdESTimestampScopeFinder()
+	timestampScopeFinder := NewTimestampScopeFinder()
 	timestampScopeFinder.SetSignature(s.signature)
 	return timestampScopeFinder.FindTimestampScope(timestampToken)
 }

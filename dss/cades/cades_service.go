@@ -67,9 +67,9 @@ type Service struct {
 	ResourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESService creates an instance of the Service. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided. Port of CAdESService(CertificateVerifier).
-func NewCAdESService(certificateVerifier validation.CertificateVerifier) *Service {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ CAdESService created".
 	return &Service{
 		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters, *TimestampParameters](certificateVerifier),
@@ -296,11 +296,11 @@ func (s *Service) extensionProfile(parameters *SignatureParameters) SignatureExt
 	var cadesSignatureExtension SignatureExtender
 	switch signatureLevel {
 	case enumerations.SignatureLevelCAdESBaselineT:
-		cadesSignatureExtension = NewCAdESLevelBaselineT(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineT(s.TspSource, s.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLT:
-		cadesSignatureExtension = NewCAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineLT(s.TspSource, s.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLTA:
-		cadesSignatureExtension = NewCAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineLTA(s.TspSource, s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
 	}
@@ -393,7 +393,7 @@ func (s *Service) AddSignaturePolicyStore(doc model.DSSDocument,
 // SignaturePolicyStoreBuilder loads the relevant SignaturePolicyStoreBuilder.
 // Port of the protected #getCAdESSignaturePolicyStoreBuilder.
 func (s *Service) CAdESSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
-	builder := NewCAdESSignaturePolicyStoreBuilder()
+	builder := NewSignaturePolicyStoreBuilder()
 	builder.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
 	return builder
 }
@@ -491,7 +491,7 @@ func (s *Service) CounterSignSignature(signatureDocument model.DSSDocument,
 // CounterSignatureBuilder loads the relevant CounterSignatureBuilder.
 // Port of the protected #getCAdESCounterSignatureBuilder.
 func (s *Service) CAdESCounterSignatureBuilder() *CounterSignatureBuilder {
-	counterSignatureBuilder := NewCAdESCounterSignatureBuilder(s.CertificateVerifier)
+	counterSignatureBuilder := NewCounterSignatureBuilder(s.CertificateVerifier)
 	counterSignatureBuilder.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
 	return counterSignatureBuilder
 }
@@ -507,7 +507,7 @@ func (s *Service) AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDo
 		panic("The evidence record document cannot be null")
 	}
 
-	builder := NewCAdESEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
+	builder := NewEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
 	signatureWithEvidenceRecord, err := builder.AddEvidenceRecord(signatureDocument, evidenceRecordDocument, parameters)
 	if err != nil {
 		panic(err)

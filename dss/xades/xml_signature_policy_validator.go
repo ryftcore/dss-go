@@ -70,7 +70,7 @@ func (v *XMLSignaturePolicyValidator) CanValidate(signaturePolicy *signature.Pol
 
 // Validate is the port of validate(SignaturePolicy).
 func (v *XMLSignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
-	validationResult := signature.NewSignaturePolicyValidationResult()
+	validationResult := signature.NewPolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent == nil {

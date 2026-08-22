@@ -139,7 +139,7 @@ func (a *AbstractClaim) IsNullValueType() bool { return false }
 // getValueAsString() dispatch to the concrete subclass. Go has neither
 // inheritance nor virtual dispatch from an embedded struct, so every
 // concrete claim's String() method forwards here, passing itself.
-func AbstractClaimString(c Claim) string {
+func AbstractString(c Claim) string {
 	disclosure := ""
 	if c.IsSelectivelyDisclosable() {
 		disclosure = " (disclosure)"

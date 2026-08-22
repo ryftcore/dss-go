@@ -49,7 +49,7 @@ type SignatureExtensionHelper struct {
 // NewASiCSignatureExtensionHelperBase builds the empty base state a subclass embeds. Port of
 // the shared construction logic; the subclass constructor must follow it with
 // InitASiCSignatureExtensionHelper and then InitFromDocument or InitFromContent.
-func NewASiCSignatureExtensionHelperBase() *SignatureExtensionHelper {
+func NewSignatureExtensionHelperBase() *SignatureExtensionHelper {
 	return &SignatureExtensionHelper{}
 }
 

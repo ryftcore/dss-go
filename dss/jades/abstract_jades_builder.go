@@ -34,8 +34,8 @@ type BuilderOverrides interface {
 	AssertConfigurationValidity(signatureParameters *SignatureParameters) error
 }
 
-// AbstractJAdESBuilder is the abstract JAdES signature builder.
-type AbstractJAdESBuilder struct {
+// AbstractBuilder is the abstract JAdES signature builder.
+type AbstractBuilder struct {
 	// Parameters holds the signature parameters. Port of the protected final `parameters`.
 	Parameters *SignatureParameters
 
@@ -50,7 +50,7 @@ type AbstractJAdESBuilder struct {
 // InitAbstractJAdESBuilder registers the concrete builder with this base and builds the B-level
 // generator. Port of the protected AbstractJAdESBuilder(CertificateVerifier,
 // SignatureParameters, List<DSSDocument>) constructor.
-func (b *AbstractJAdESBuilder) InitAbstractJAdESBuilder(self BuilderOverrides,
+func (b *AbstractBuilder) InitAbstractJAdESBuilder(self BuilderOverrides,
 	certificateVerifier validation.CertificateVerifier, parameters *SignatureParameters,
 	documentsToSign []model.DSSDocument) error {
 	if certificateVerifier == nil {
@@ -64,7 +64,7 @@ func (b *AbstractJAdESBuilder) InitAbstractJAdESBuilder(self BuilderOverrides,
 	}
 	b.overrides = self
 	b.Parameters = parameters
-	levelBaselineB, err := NewJAdESLevelBaselineB(certificateVerifier, parameters, documentsToSign)
+	levelBaselineB, err := NewLevelBaselineB(certificateVerifier, parameters, documentsToSign)
 	if err != nil {
 		return err
 	}
@@ -73,7 +73,7 @@ func (b *AbstractJAdESBuilder) InitAbstractJAdESBuilder(self BuilderOverrides,
 }
 
 // BuildDataToBeSigned builds the data to be signed. Port of #buildDataToBeSigned.
-func (b *AbstractJAdESBuilder) BuildDataToBeSigned() (*model.ToBeSigned, error) {
+func (b *AbstractBuilder) BuildDataToBeSigned() (*model.ToBeSigned, error) {
 	if err := b.overrides.AssertConfigurationValidity(b.Parameters); err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (b *AbstractJAdESBuilder) BuildDataToBeSigned() (*model.ToBeSigned, error) 
 // the LevelBaselineB properties - which is what the serialized protected header, and hence
 // the signature, depends on - is preserved by the jose.Object the B-level generator builds, the
 // Go counterpart of Java's LinkedHashMap. Port of the protected #incorporateHeader.
-func (b *AbstractJAdESBuilder) IncorporateHeader(jws *JWS) error {
+func (b *AbstractBuilder) IncorporateHeader(jws *JWS) error {
 	signedProperties, err := b.JadesLevelBaselineB.SignedProperties()
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func (b *AbstractJAdESBuilder) IncorporateHeader(jws *JWS) error {
 
 // IncorporatePayload incorporates the payload into the given JWS.
 // Port of the protected #incorporatePayload.
-func (b *AbstractJAdESBuilder) IncorporatePayload(jws *JWS) error {
+func (b *AbstractBuilder) IncorporatePayload(jws *JWS) error {
 	payloadBytes, err := b.JadesLevelBaselineB.PayloadBytes()
 	if err != nil {
 		return err

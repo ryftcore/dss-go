@@ -20,31 +20,31 @@ type String struct {
 }
 
 // NewClaimString ports the default constructor.
-func NewClaimString(value string) *String {
-	return NewClaimStringWithName("", value)
+func NewString(value string) *String {
+	return NewStringWithName("", value)
 }
 
 // NewClaimStringWithName ports the constructor with claim header name
 // provided.
-func NewClaimStringWithName(name, value string) *String {
-	return NewClaimStringWithDisclosable(name, value, false)
+func NewStringWithName(name, value string) *String {
+	return NewStringWithDisclosable(name, value, false)
 }
 
 // NewClaimStringWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimStringWithDisclosable(name, value string, selectivelyDisclosable bool) *String {
-	return NewClaimStringWithParent(name, value, selectivelyDisclosable, nil)
+func NewStringWithDisclosable(name, value string, selectivelyDisclosable bool) *String {
+	return NewStringWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimStringWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimStringWithParent(name, value string, selectivelyDisclosable bool, parent Claim) *String {
-	return NewClaimStringFull(name, "", value, selectivelyDisclosable, parent)
+func NewStringWithParent(name, value string, selectivelyDisclosable bool, parent Claim) *String {
+	return NewStringFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimStringFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimStringFull(name, namespace, value string, selectivelyDisclosable bool, parent Claim) *String {
+func NewStringFull(name, namespace, value string, selectivelyDisclosable bool, parent Claim) *String {
 	return &String{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -81,4 +81,4 @@ func (c *String) Equals(other *String) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *String) String() string { return AbstractClaimString(c) }
+func (c *String) String() string { return AbstractString(c) }

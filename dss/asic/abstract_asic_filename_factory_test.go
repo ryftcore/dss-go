@@ -8,14 +8,14 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
-// abstractASiCFilenameFactoryProbe is the Go stand-in for the anonymous
-// `new AbstractASiCFilenameFactory() { }` the oracle drives.
-type abstractASiCFilenameFactoryProbe struct {
-	AbstractASiCFilenameFactory
+// abstractFilenameFactoryProbe is the Go stand-in for the anonymous
+// `new AbstractFilenameFactory() { }` the oracle drives.
+type abstractFilenameFactoryProbe struct {
+	AbstractFilenameFactory
 }
 
-func newAbstractASiCFilenameFactoryProbe() *abstractASiCFilenameFactoryProbe {
-	probe := &abstractASiCFilenameFactoryProbe{}
+func newAbstractASiCFilenameFactoryProbe() *abstractFilenameFactoryProbe {
+	probe := &abstractFilenameFactoryProbe{}
 	probe.InitAbstractASiCFilenameFactory(probe)
 	return probe
 }
@@ -79,7 +79,7 @@ func TestAbstractASiCFilenameFactoryWithMetaInfFolder(t *testing.T) {
 func TestAbstractASiCFilenameFactoryAssertASiCContentIsValid(t *testing.T) {
 	factory := newAbstractASiCFilenameFactoryProbe()
 
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	if err := factory.AssertASiCContentIsValid(asicContent); err != nil {
 		t.Errorf("ASiC-S must be accepted: %v", err)
@@ -95,7 +95,7 @@ func TestAbstractASiCFilenameFactoryAssertASiCContentIsValid(t *testing.T) {
 				t.Fatalf("panic = %v, want the Java message", recovered)
 			}
 		}()
-		_ = factory.AssertASiCContentIsValid(NewASiCContent())
+		_ = factory.AssertASiCContentIsValid(NewContent())
 	}()
 
 	func() {
@@ -131,7 +131,7 @@ func TestAbstractASiCFilenameFactoryAssertFilenameValid(t *testing.T) {
 // filename must satisfy.
 func TestAbstractASiCFilenameFactoryValidDataPackageFilename(t *testing.T) {
 	factory := newAbstractASiCFilenameFactoryProbe()
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 
 	if got, err := factory.ValidDataPackageFilename("package.zip", asicContent); err != nil || got != "package.zip" {
 		t.Errorf("validDataPackageFilename = %q (err %v)", got, err)
@@ -156,7 +156,7 @@ func TestAbstractASiCFilenameFactoryValidDataPackageFilename(t *testing.T) {
 // "META-INF/ASiCEvidenceRecordManifest*.xml" template, whose "META-INF/" prefix is optional.
 func TestAbstractASiCFilenameFactoryValidEvidenceRecordManifestFilename(t *testing.T) {
 	factory := newAbstractASiCFilenameFactoryProbe()
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 
 	for _, input := range []string{
 		"ASiCEvidenceRecordManifest001.xml",
@@ -178,15 +178,15 @@ func TestAbstractASiCFilenameFactoryValidEvidenceRecordManifestFilename(t *testi
 	}
 }
 
-// abstractASiCFilenameFactoryOverridingProbe overrides isAvailableName, the protected method
+// abstractFilenameFactoryOverridingProbe overrides isAvailableName, the protected method
 // getDocumentNameRecursively and assertFilenameValid call on themselves. Static Go dispatch would
 // drop the override; the Overrides interface is what keeps it in play.
-type abstractASiCFilenameFactoryOverridingProbe struct {
-	AbstractASiCFilenameFactory
+type abstractFilenameFactoryOverridingProbe struct {
+	AbstractFilenameFactory
 	calls int
 }
 
-func (p *abstractASiCFilenameFactoryOverridingProbe) IsAvailableName(filename string, restrictedNames []string) bool {
+func (p *abstractFilenameFactoryOverridingProbe) IsAvailableName(filename string, restrictedNames []string) bool {
 	p.calls++
 	// Pretend every name is taken until the fourth candidate.
 	return p.calls > 3
@@ -195,7 +195,7 @@ func (p *abstractASiCFilenameFactoryOverridingProbe) IsAvailableName(filename st
 // TestAbstractASiCFilenameFactoryRoutesSelfCallsThroughOverrides guards the virtual-dispatch bug
 // class: a subclass override of isAvailableName must be honoured by getNextAvailableDocumentName.
 func TestAbstractASiCFilenameFactoryRoutesSelfCallsThroughOverrides(t *testing.T) {
-	probe := &abstractASiCFilenameFactoryOverridingProbe{}
+	probe := &abstractFilenameFactoryOverridingProbe{}
 	probe.InitAbstractASiCFilenameFactory(probe)
 
 	got := probe.NextAvailableDocumentName("META-INF/signature001.p7s", nil)

@@ -13,9 +13,9 @@ type CRLSource struct {
 	*spi.CMSCRLSource
 }
 
-// NewCAdESCRLSource creates a CAdES CRL source from a CMS and the related unsignedAttributes
+// NewCRLSource creates a CAdES CRL source from a CMS and the related unsignedAttributes
 // of the signer. Port of the constructor CAdESCRLSource(CMS, AttributeTable).
-func NewCAdESCRLSource(cmsObj *cms.CMS, unsignedAttributes cmscore.Attributes) (*CRLSource, error) {
+func NewCRLSource(cmsObj *cms.CMS, unsignedAttributes cmscore.Attributes) (*CRLSource, error) {
 	base, err := spi.NewCMSCRLSource(cmsObj.CRLs(), unsignedAttributes)
 	if err != nil {
 		return nil, err

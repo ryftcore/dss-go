@@ -73,7 +73,7 @@ type Content struct {
 
 // NewASiCContent instantiates an object with null values and empty lists of documents. Port of the
 // default constructor (Java's field initializers included).
-func NewASiCContent() *Content {
+func NewContent() *Content {
 	return &Content{
 		signedDocuments:                 []model.DSSDocument{},
 		signatureDocuments:              []model.DSSDocument{},

@@ -43,20 +43,20 @@ type TimestampMessageDigestBuilder struct {
 // newJAdESTimestampMessageDigestBuilder is the port of the private (JAdESSignature) constructor.
 //
 // Panics with the Java message when signature is nil (Objects.requireNonNull).
-func newJAdESTimestampMessageDigestBuilder(signature *Signature) *TimestampMessageDigestBuilder {
+func newTimestampMessageDigestBuilder(signature *Signature) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
 	}
 	return &TimestampMessageDigestBuilder{signature: signature}
 }
 
-// NewJAdESTimestampMessageDigestBuilder is the constructor to compute message-imprint for
+// NewTimestampMessageDigestBuilder is the constructor to compute message-imprint for
 // timestamps related to signature, to be used on timestamp creation. Port of the (JAdESSignature,
 // DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewJAdESTimestampMessageDigestBuilder(signature *Signature, digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
-	b := newJAdESTimestampMessageDigestBuilder(signature)
+func NewTimestampMessageDigestBuilder(signature *Signature, digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
+	b := newTimestampMessageDigestBuilder(signature)
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
 	}
@@ -64,13 +64,13 @@ func NewJAdESTimestampMessageDigestBuilder(signature *Signature, digestAlgorithm
 	return b
 }
 
-// NewJAdESTimestampMessageDigestBuilderForToken is the constructor to compute message-imprint for
+// NewTimestampMessageDigestBuilderForToken is the constructor to compute message-imprint for
 // timestamps related to signature, containing timestamps. Port of the (JAdESSignature,
 // TimestampToken) constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewJAdESTimestampMessageDigestBuilderForToken(signature *Signature, timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
-	b := newJAdESTimestampMessageDigestBuilder(signature)
+func NewTimestampMessageDigestBuilderForToken(signature *Signature, timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
+	b := newTimestampMessageDigestBuilder(signature)
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
 	}

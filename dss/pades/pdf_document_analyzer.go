@@ -161,7 +161,7 @@ func (a *PDFDocumentAnalyzer) BuildSignatures() []validation.AdvancedSignature {
 			dssOCSPSource.Add(typedRevision.OCSPSource())
 
 		case *PdfSignatureRevision:
-			padesSignature := NewPAdESSignature(typedRevision, a.documentRevisions)
+			padesSignature := NewSignature(typedRevision, a.documentRevisions)
 			padesSignature.SetFilename(a.Document().Name())
 			padesSignature.SetSigningCertificateSource(a.SigningCertificateSource())
 
@@ -281,7 +281,7 @@ func (a *PDFDocumentAnalyzer) appendExternalEvidenceRecordsToTimestamp(timestamp
 // TimestampScopeFinder returns a PDF timestamp scope finder.
 // Port of the protected getPAdESTimestampScopeFinder().
 func (a *PDFDocumentAnalyzer) PAdESTimestampScopeFinder() *TimestampScopeFinder {
-	return NewPAdESTimestampScopeFinder()
+	return NewTimestampScopeFinder()
 }
 
 // DssDictionaries returns a list of found DSS Dictionaries across different revisions.

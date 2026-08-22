@@ -58,9 +58,9 @@ type ContentDocumentFilter struct {
 	includedFilenames []string
 }
 
-// NewASiCContentDocumentFilter instantiates an ContentDocumentFilter object with an empty
+// NewContentDocumentFilter instantiates an ContentDocumentFilter object with an empty
 // configuration. Ports the default constructor.
-func NewASiCContentDocumentFilter() *ContentDocumentFilter {
+func NewContentDocumentFilter() *ContentDocumentFilter {
 	return &ContentDocumentFilter{}
 }
 

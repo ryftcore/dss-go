@@ -76,6 +76,6 @@ func (v *CMSDocumentValidator) CmsSignedData() *cms.CMS {
 // InitSignedDocumentDiagnosticDataBuilder virtual-dispatch registration (see
 // cades_diagnostic_data_builder.go).
 func (v *CMSDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := NewCAdESDiagnosticDataBuilder()
+	builder := NewDiagnosticDataBuilder()
 	return &builder.SignedDocumentDiagnosticDataBuilder
 }

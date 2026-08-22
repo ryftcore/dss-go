@@ -29,13 +29,13 @@ type Map struct {
 }
 
 // NewClaimMap ports the protected default constructor.
-func NewClaimMap(value map[any]any, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
-	return NewClaimMapWithParent("", value, false, nil, getKeyAsString, createClaim)
+func NewMap(value map[any]any, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+	return NewMapWithParent("", value, false, nil, getKeyAsString, createClaim)
 }
 
 // NewClaimMapWithParent ports the constructor with claim name, value,
 // selectively disclosable status and parent claim provided.
-func NewClaimMapWithParent(name string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+func NewMapWithParent(name string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
 	return &Map{
 		AbstractClaim:  NewAbstractClaimWithParent(name, selectivelyDisclosable, parent),
 		value:          value,
@@ -46,7 +46,7 @@ func NewClaimMapWithParent(name string, value map[any]any, selectivelyDisclosabl
 
 // NewClaimMapFull ports the constructor with claim name, namespace, value,
 // selectively disclosable status and parent claim provided.
-func NewClaimMapFull(name, namespace string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+func NewMapFull(name, namespace string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
 	return &Map{
 		AbstractClaim:  NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:          value,
@@ -254,4 +254,4 @@ func (c *Map) Equals(other *Map) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *Map) String() string { return AbstractClaimString(c) }
+func (c *Map) String() string { return AbstractString(c) }

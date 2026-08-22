@@ -173,31 +173,31 @@ func SignMultiple(docs []Document, signer *Signer, opts SignOptions) (Document, 
 		var runErr error
 		switch opts.Format {
 		case FormatCAdES:
-			parameters := cades.NewCAdESSignatureParameters()
+			parameters := cades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := cades.NewCAdESService(opts.certificateVerifier())
+			service := cades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatXAdES:
-			parameters := xades.NewXAdESSignatureParameters()
+			parameters := xades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := xades.NewXAdESService(opts.certificateVerifier())
+			service := xades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatPAdES:
-			parameters := pades.NewPAdESSignatureParameters()
+			parameters := pades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := pades.NewPAdESService(opts.certificateVerifier())
+			service := pades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatJAdES:
-			parameters := jades.NewJAdESSignatureParameters()
+			parameters := jades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
 			parameters.SetJwsSerializationType(opts.jwsSerialization())
-			service := jades.NewJAdESService(opts.certificateVerifier())
+			service := jades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
@@ -284,30 +284,30 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 	err = recovered("extend", func() error {
 		switch opts.Format {
 		case FormatCAdES:
-			parameters := cades.NewCAdESSignatureParameters()
+			parameters := cades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := cades.NewCAdESService(opts.certificateVerifier())
+			service := cades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatXAdES:
-			parameters := xades.NewXAdESSignatureParameters()
+			parameters := xades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := xades.NewXAdESService(opts.certificateVerifier())
+			service := xades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatPAdES:
-			parameters := pades.NewPAdESSignatureParameters()
+			parameters := pades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := pades.NewPAdESService(opts.certificateVerifier())
+			service := pades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatJAdES:
-			parameters := jades.NewJAdESSignatureParameters()
+			parameters := jades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := jades.NewJAdESService(opts.certificateVerifier())
+			service := jades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 

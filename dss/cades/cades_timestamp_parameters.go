@@ -17,13 +17,13 @@ var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
 // NewCAdESTimestampParameters instantiates the object with the default digest algorithm. Port of
 // the empty constructor.
-func NewCAdESTimestampParameters() *TimestampParameters {
+func NewTimestampParameters() *TimestampParameters {
 	return &TimestampParameters{TimestampParameters: model.NewTimestampParameters()}
 }
 
-// NewCAdESTimestampParametersWithDigestAlgorithm instantiates the object with the given digest
+// NewTimestampParametersWithDigestAlgorithm instantiates the object with the given digest
 // algorithm to use for timestamping data. Port of CAdESTimestampParameters(DigestAlgorithm).
-func NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+func NewTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
 	return &TimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
 }
 

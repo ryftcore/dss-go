@@ -28,7 +28,7 @@ type PdfValidationDataContainer struct {
 // Port of the constructor PdfValidationDataContainer(Collection<PdfDocDssRevision>).
 func NewPdfValidationDataContainer(pdfDssRevisions []*PdfDocDssRevision) *PdfValidationDataContainer {
 	return &PdfValidationDataContainer{
-		DataContainer:   *validation.NewValidationDataContainer(),
+		DataContainer:   *validation.NewDataContainer(),
 		pdfDssRevisions: pdfDssRevisions,
 	}
 }

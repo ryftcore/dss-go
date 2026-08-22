@@ -56,7 +56,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	document := model.NewInMemoryDocument([]byte("hello CMS"))
 
 	buildSignerInfoGenerator := func(contentSigner *CustomContentSigner) *SignerInfoGenerator {
-		generator, err := NewCMSSignerInfoGeneratorBuilder().
+		generator, err := NewSignerInfoGeneratorBuilder().
 			SetSigningCertificate(signingCertificate).
 			SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 			Build(document, contentSigner)
@@ -73,7 +73,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	}
 	generator1 := buildSignerInfoGenerator(dataToSignSigner)
 
-	builder := NewCMSBuilder().
+	builder := NewBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetTrustAnchorBPPolicy(false)
 	if _, err := builder.CreateCMS(generator1, document); err != nil {
@@ -164,7 +164,7 @@ func TestCMSBuilderDetached(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build content signer: %s", err)
 	}
-	generator, err := NewCMSSignerInfoGeneratorBuilder().
+	generator, err := NewSignerInfoGeneratorBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 		Build(document, contentSigner)
@@ -172,7 +172,7 @@ func TestCMSBuilderDetached(t *testing.T) {
 		t.Fatalf("Build: %s", err)
 	}
 
-	cms, err := NewCMSBuilder().
+	cms, err := NewBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetTrustAnchorBPPolicy(false).
 		SetEncapsulate(false).

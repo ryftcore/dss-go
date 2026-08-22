@@ -47,7 +47,7 @@ type StructureValidator struct {
 
 // newXAdESStructureValidator is the port of the protected constructor
 // StructureValidator(Element, XAdESPath).
-func newXAdESStructureValidator(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *StructureValidator {
+func newStructureValidator(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *StructureValidator {
 	return &StructureValidator{signatureElement: signatureElement, xadesPath: xadesPath}
 }
 

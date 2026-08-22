@@ -33,7 +33,7 @@ type CertificateSource struct {
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CertificateSource {
+func NewCertificateSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CertificateSource {
 	if signatureElement == nil {
 		panic("Element signature must not be null")
 	}

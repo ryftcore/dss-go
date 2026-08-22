@@ -15,11 +15,11 @@ const asicWithXAdESContainerExtractorMetainfManifestFilename = asic.ASiCUtilsMet
 // ASiCWithXAdESContainerExtractor is used to extract the content (documents) embedded into an
 // ASiC with XAdES container.
 type ASiCWithXAdESContainerExtractor struct {
-	asic.DefaultASiCContainerExtractor
+	asic.DefaultContainerExtractor
 }
 
 var _ asic.ContainerExtractor = (*ASiCWithXAdESContainerExtractor)(nil)
-var _ asic.DefaultASiCContainerExtractorOverrides = (*ASiCWithXAdESContainerExtractor)(nil)
+var _ asic.DefaultContainerExtractorOverrides = (*ASiCWithXAdESContainerExtractor)(nil)
 
 // NewASiCWithXAdESContainerExtractor is the default constructor. Ports
 // ASiCWithXAdESContainerExtractor(DSSDocument).

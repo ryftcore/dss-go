@@ -56,7 +56,7 @@ type ValidationProcess struct {
 
 // NewEvidenceRecordValidationProcess is the common constructor. Port of
 // ValidationProcess(Provider, Data, EvidenceRecordWrapper, Collection, Map, ValidationPolicy, Date).
-func NewEvidenceRecordValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
+func NewValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, xmlTimestamps []*jaxb.XmlTimestamp,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, validationPolicy policy.ValidationPolicy,
 	currentTime time.Time) *ValidationProcess {
@@ -284,14 +284,14 @@ func (c *ValidationProcess) referenceDataGroup(
 // signedFilesCoveredCheck ports the private signedFilesCoveredCheck().
 func (c *ValidationProcess) signedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordSignedFilesCoveredConstraint()
-	return NewEvidenceRecordSignedFilesCoveredCheck(c.I18nProvider, c.Result, c.evidenceRecord, constraint)
+	return NewSignedFilesCoveredCheck(c.I18nProvider, c.Result, c.evidenceRecord, constraint)
 }
 
 // signedAndTimestampedFilesCoveredCheck ports the private
 // signedAndTimestampedFilesCoveredCheck().
 func (c *ValidationProcess) signedAndTimestampedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordContainerSignedAndTimestampedFilesCoveredConstraint()
-	return NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck(c.I18nProvider, c.Result, c.diagnosticData,
+	return NewSignedAndTimestampedFilesCoveredCheck(c.I18nProvider, c.Result, c.diagnosticData,
 		c.evidenceRecord, constraint)
 }
 

@@ -20,7 +20,7 @@ type SignatureScopeFinder struct {
 }
 
 // NewXAdESSignatureScopeFinder is the port of the default constructor.
-func NewXAdESSignatureScopeFinder() *SignatureScopeFinder {
+func NewSignatureScopeFinder() *SignatureScopeFinder {
 	return &SignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
 }
 

@@ -93,7 +93,7 @@ func (a *CMSDocumentAnalyzer) BuildSignatures() []validation.AdvancedSignature {
 	signatures := make([]validation.AdvancedSignature, 0)
 	if a.cms != nil {
 		for _, signerInformation := range a.cms.SignerInfos() {
-			cadesSignature := NewCAdESSignature(a.cms, signerInformation)
+			cadesSignature := NewSignature(a.cms, signerInformation)
 			if a.HasDocument() {
 				cadesSignature.SetFilename(a.Document().Name())
 			}
@@ -146,7 +146,7 @@ func cmsDocumentAnalyzerSameCMS(signatureOne, signatureTwo validation.AdvancedSi
 
 // addSignatureScope ports the private addSignatureScope(EvidenceRecord, AdvancedSignature).
 func (a *CMSDocumentAnalyzer) addSignatureScope(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) {
-	evidenceRecordScopeFinder := NewCAdESEvidenceRecordScopeFinder(evidenceRecord, signature)
+	evidenceRecordScopeFinder := NewEvidenceRecordScopeFinder(evidenceRecord, signature)
 	evidenceRecordScopes := evidenceRecordScopeFinder.FindEvidenceRecordScope()
 	evidenceRecord.SetEvidenceRecordScopes(evidenceRecordScopes)
 	evidenceRecord.SetTimestampedReferences(

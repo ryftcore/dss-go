@@ -196,7 +196,7 @@ func TestDetailedReportFacade_RoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	f := NewDetailedReportFacade()
+	f := NewFacade()
 	dr, err := f.Unmarshal(string(data))
 	if err != nil {
 		t.Fatalf("Unmarshal: %v", err)
@@ -213,7 +213,7 @@ func TestDetailedReportFacade_RoundTrip(t *testing.T) {
 // TestDetailedReportFacade_NilGuards ports the Java facade's null-argument
 // IllegalArgumentException-style guards.
 func TestDetailedReportFacade_NilGuards(t *testing.T) {
-	f := NewDetailedReportFacade()
+	f := NewFacade()
 	if _, err := f.Marshal(nil); err == nil {
 		t.Error("Marshal(nil) succeeded, want an error")
 	}

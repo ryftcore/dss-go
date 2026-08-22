@@ -16,10 +16,10 @@ type CertificateSource struct {
 	certificate *model.CertificateToken
 }
 
-// newAIACertificateSource is the constructor creating an AIA certificate source for
+// newCertificateSource is the constructor creating an AIA certificate source for
 // certificate. Ports the protected AIACertificateSource(CertificateToken) constructor. Panics
 // if certificate is nil (Java Objects.requireNonNull).
-func newAIACertificateSource(certificate *model.CertificateToken) *CertificateSource {
+func newCertificateSource(certificate *model.CertificateToken) *CertificateSource {
 	if certificate == nil {
 		panic("The certificate cannot be null")
 	}
@@ -32,7 +32,7 @@ func newAIACertificateSource(certificate *model.CertificateToken) *CertificateSo
 // CertificateSourceForCertificateToken retrieves an AIA.caIssuers for the given certificate
 // using aiaSource. NOTE: this function performs an AIA URI request on instantiation.
 func CertificateSourceForCertificateToken(certificate *model.CertificateToken, aiaSource Source) *CertificateSource {
-	aiaCertificateSource := newAIACertificateSource(certificate)
+	aiaCertificateSource := newCertificateSource(certificate)
 
 	func() {
 		// Java catches any Exception raised while retrieving/walking the AIA chain and

@@ -4,7 +4,7 @@
 // CMSSignedData's encapsulated (or detached) content, which SignerInformation#verify uses
 // directly when the SignerInfo carries no signedAttrs - the signature then covers the content
 // itself rather than the DER SET OF the signed attributes. cmscore.SignerInfo, unlike BC's
-// type, holds no such back-reference, so NewCAdESSignatureIntegrityValidator takes the bytes to
+// type, holds no such back-reference, so NewSignatureIntegrityValidator takes the bytes to
 // verify against explicitly (signedContent): internal/cmscore.Attributes#DERSetEncoded() - "the
 // message digest is computed on the DER encoding of the SignedAttrs value, with the tag of SET
 // OF" (RFC 5652 clause 5.4) - when signed attributes are present (every CAdES baseline profile
@@ -49,7 +49,7 @@ type SignatureIntegrityValidator struct {
 // NewCAdESSignatureIntegrityValidator is the port of the constructor
 // SignatureIntegrityValidator(SignerInformation); see the file header on signedContent and
 // the contentDigestMismatch field doc on the extra parameter.
-func NewCAdESSignatureIntegrityValidator(signerInformation *cmscore.SignerInfo, signedContent []byte, contentDigestMismatch bool) *SignatureIntegrityValidator {
+func NewSignatureIntegrityValidator(signerInformation *cmscore.SignerInfo, signedContent []byte, contentDigestMismatch bool) *SignatureIntegrityValidator {
 	v := &SignatureIntegrityValidator{
 		signerInformation:     signerInformation,
 		signedContent:         signedContent,

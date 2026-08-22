@@ -30,7 +30,7 @@ func NewASiCWithCAdESDiagnosticDataBuilder() *ASiCWithCAdESDiagnosticDataBuilder
 
 // BuildDetachedXmlSignature ports the @Override buildDetachedXmlSignature(AdvancedSignature).
 func (b *ASiCWithCAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
-	cadesDiagnosticDataBuilder := dsscades.NewCAdESDiagnosticDataBuilder()
+	cadesDiagnosticDataBuilder := dsscades.NewDiagnosticDataBuilder()
 	cadesDiagnosticDataBuilder.TokenExtractionStrategy(b.GetTokenExtractionStrategy())
 	cadesDiagnosticDataBuilder.TokenIdentifierProvider(b.GetTokenIdentifierProvider())
 	return cadesDiagnosticDataBuilder.BuildDetachedXmlSignature(signature)

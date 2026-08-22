@@ -821,10 +821,10 @@ func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, mas
 	if err != nil || counterSignatureNode == nil {
 		return nil
 	}
-	counterSigDOMElement := NewXAdESDOMElement(counterSignatureNode, masterSignature.OwnerDocument())
+	counterSigDOMElement := NewDOMElement(counterSignatureNode, masterSignature.OwnerDocument())
 
 	// Verify that the element is a proper signature by trying to build a Signature out of it
-	xadesCounterSignature := NewXAdESSignatureFromDOMElement(counterSigDOMElement)
+	xadesCounterSignature := NewSignatureFromDOMElement(counterSigDOMElement)
 	xadesCounterSignature.SetFilename(masterSignature.Filename())
 	xadesCounterSignature.SetDetachedContents(masterSignature.DetachedContents())
 	xadesCounterSignature.SetMasterSignature(masterSignature)

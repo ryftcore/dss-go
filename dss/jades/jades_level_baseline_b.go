@@ -62,9 +62,9 @@ type LevelBaselineB struct {
 	signedProperties *jose.Object
 }
 
-// NewJAdESLevelBaselineB is the default constructor.
+// NewLevelBaselineB is the default constructor.
 // Port of JAdESLevelBaselineB(CertificateVerifier, JAdESSignatureParameters, List<DSSDocument>).
-func NewJAdESLevelBaselineB(certificateVerifier validation.CertificateVerifier,
+func NewLevelBaselineB(certificateVerifier validation.CertificateVerifier,
 	parameters *SignatureParameters, documentsToSign []model.DSSDocument) (*LevelBaselineB, error) {
 	if certificateVerifier == nil {
 		panic("certificateVerifier must not be null!")
@@ -399,13 +399,13 @@ func (b *LevelBaselineB) assertPayloadEncodingValid() error {
 func (b *LevelBaselineB) IncorporateSigningTime() error {
 	signingDate := b.parameters.BLevel().SigningDate()
 	switch b.parameters.JadesSigningTimeType() {
-	case JAdESSigningTimeTypeIAT:
+	case SigningTimeTypeIAT:
 		signedTimeInSeconds := spi.DSSUtilsTimeValueInSeconds(signingDate.UnixMilli())
 		b.AddHeader(JWTClaimNamesIat, signedTimeInSeconds)
-	case JAdESSigningTimeTypeSigT:
+	case SigningTimeTypeSigT:
 		stringSigningTime := spi.DSSUtilsFormatDateToRFC(*signingDate)
 		b.AddHeader(JAdESHeaderParameterNamesSigT, stringSigningTime)
-	case JAdESSigningTimeTypeNone:
+	case SigningTimeTypeNone:
 		// No signing time header to incorporate
 	default:
 		return fmt.Errorf("The JAdESSigningTimeType '%s' is not supported!",

@@ -13,10 +13,10 @@ type EmbeddedEvidenceRecordHelper struct {
 	validation.AbstractEmbeddedEvidenceRecordHelper
 }
 
-// NewCAdESEmbeddedEvidenceRecordHelperForSignature instantiates a helper for an evidence record
+// NewEmbeddedEvidenceRecordHelperForSignature instantiates a helper for an evidence record
 // applied for the whole signature content (not yet embedded). Port of the constructor
 // EmbeddedEvidenceRecordHelper(Signature).
-func NewCAdESEmbeddedEvidenceRecordHelperForSignature(sig *Signature) *EmbeddedEvidenceRecordHelper {
+func NewEmbeddedEvidenceRecordHelperForSignature(sig *Signature) *EmbeddedEvidenceRecordHelper {
 	h := &EmbeddedEvidenceRecordHelper{}
 	h.InitAbstractEmbeddedEvidenceRecordHelper(h, sig)
 	return h
@@ -25,9 +25,9 @@ func NewCAdESEmbeddedEvidenceRecordHelperForSignature(sig *Signature) *EmbeddedE
 // NewCAdESEmbeddedEvidenceRecordHelper is the default constructor. Port of the constructor
 // EmbeddedEvidenceRecordHelper(Signature, Attribute); evidenceRecordAttribute may
 // be nil, matching this port's use as the (Signature) overload too (see
-// NewCAdESEmbeddedEvidenceRecordHelperForSignature, which forwards to the same Init entry point
+// NewEmbeddedEvidenceRecordHelperForSignature, which forwards to the same Init entry point
 // with a nil attribute already).
-func NewCAdESEmbeddedEvidenceRecordHelper(sig *Signature, evidenceRecordAttribute *Attribute) *EmbeddedEvidenceRecordHelper {
+func NewEmbeddedEvidenceRecordHelper(sig *Signature, evidenceRecordAttribute *Attribute) *EmbeddedEvidenceRecordHelper {
 	h := &EmbeddedEvidenceRecordHelper{}
 	h.InitAbstractEmbeddedEvidenceRecordHelperWithAttribute(h, sig, evidenceRecordAttribute)
 	return h
@@ -50,7 +50,7 @@ func (h *EmbeddedEvidenceRecordHelper) SetDetachedContents(detachedContents []mo
 // #getDigestBuilder(AdvancedSignature, SignatureAttribute, DigestAlgorithm) override.
 func (h *EmbeddedEvidenceRecordHelper) DigestBuilder(sig validation.AdvancedSignature,
 	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) validation.SignatureEvidenceRecordDigestBuilder {
-	digestBuilder := newCAdESEvidenceRecordDigestBuilderFromSignature(sig, evidenceRecordAttribute, digestAlgorithm)
+	digestBuilder := newEvidenceRecordDigestBuilderFromSignature(sig, evidenceRecordAttribute, digestAlgorithm)
 	if isDetached, err := h.isDetached(sig); err == nil && isDetached {
 		digestBuilder.SetDetachedContent(h.detachedDocument())
 	}

@@ -110,7 +110,7 @@ func xadesSignABuilderSigner(t *testing.T) *model.CertificateToken {
 // xadesSignABuilderBaseParams mirrors SignABuilderOracle.baseParams().
 func xadesSignABuilderBaseParams(t *testing.T) *SignatureParameters {
 	t.Helper()
-	params := NewXAdESSignatureParameters()
+	params := NewSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
 	params.SetSigningCertificate(signer)
 	params.SetCertificateChain([]*model.CertificateToken{signer})
@@ -424,7 +424,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleKeyInfo(t *testing.T) {
 	})
 
 	t.Run("enveloping-no-signing-certificate", func(t *testing.T) {
-		params := NewXAdESSignatureParameters()
+		params := NewSignatureParameters()
 		signingDate := xadesSignABuilderSigningDate
 		params.BLevel().SetSigningDate(&signingDate)
 		params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)

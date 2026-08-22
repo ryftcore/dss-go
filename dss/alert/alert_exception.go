@@ -7,25 +7,25 @@ package alert
 //
 // Judgment call: Java's cause-only constructor sets the exception's message to
 // cause.toString() (i.e. "java.lang.SomeException: cause message"). Go errors have no
-// class-qualified toString(), so NewAlertErrorWithCause uses cause.Error() as the message
+// class-qualified toString(), so NewErrorWithCause uses cause.Error() as the message
 // instead — the idiomatic Go equivalent, not a byte-exact reproduction of the Java string.
 type Error struct {
 	message string
 	cause   error
 }
 
-// NewAlertError creates an empty Error.
-func NewAlertError() *Error {
+// NewError creates an empty Error.
+func NewError() *Error {
 	return &Error{}
 }
 
-// NewAlertErrorWithMessage creates an Error with the given message.
-func NewAlertErrorWithMessage(message string) *Error {
+// NewErrorWithMessage creates an Error with the given message.
+func NewErrorWithMessage(message string) *Error {
 	return &Error{message: message}
 }
 
-// NewAlertErrorWithCause creates a re-throwable Error wrapping cause.
-func NewAlertErrorWithCause(cause error) *Error {
+// NewErrorWithCause creates a re-throwable Error wrapping cause.
+func NewErrorWithCause(cause error) *Error {
 	message := ""
 	if cause != nil {
 		message = cause.Error()
@@ -33,8 +33,8 @@ func NewAlertErrorWithCause(cause error) *Error {
 	return &Error{message: message, cause: cause}
 }
 
-// NewAlertErrorWithMessageAndCause creates a re-throwable Error with a custom message.
-func NewAlertErrorWithMessageAndCause(message string, cause error) *Error {
+// NewErrorWithMessageAndCause creates a re-throwable Error with a custom message.
+func NewErrorWithMessageAndCause(message string, cause error) *Error {
 	return &Error{message: message, cause: cause}
 }
 

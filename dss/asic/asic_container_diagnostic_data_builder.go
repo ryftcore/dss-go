@@ -20,7 +20,7 @@ type ContainerDiagnosticDataBuilder struct {
 
 // NewASiCContainerDiagnosticDataBuilder instantiates a builder with nil/zero values. Port of
 // the default constructor.
-func NewASiCContainerDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder {
+func NewContainerDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder {
 	b := &ContainerDiagnosticDataBuilder{
 		SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 	}

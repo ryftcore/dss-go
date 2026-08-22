@@ -60,9 +60,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// PAdESSignatureParametersDefaultSignatureSize is the default preserved space for a signature
+// SignatureParametersDefaultSignatureSize is the default preserved space for a signature
 // context (9472 - default value in pdfbox). Port of the default signatureSize field value.
-const PAdESSignatureParametersDefaultSignatureSize = 9472
+const SignatureParametersDefaultSignatureSize = 9472
 
 // SignatureParameters holds parameters to create/extend a PAdES signature.
 type SignatureParameters struct {
@@ -139,12 +139,12 @@ type SignatureParameters struct {
 	archiveTimestampParameters *TimestampParameters
 }
 
-// NewPAdESSignatureParameters is the default constructor instantiating object with default
+// NewSignatureParameters is the default constructor instantiating object with default
 // parameters.
-func NewPAdESSignatureParameters() *SignatureParameters {
+func NewSignatureParameters() *SignatureParameters {
 	return &SignatureParameters{
-		SignatureParameters: *cades.NewCAdESSignatureParameters(),
-		signatureSize:       PAdESSignatureParametersDefaultSignatureSize,
+		SignatureParameters: *cades.NewSignatureParameters(),
+		signatureSize:       SignatureParametersDefaultSignatureSize,
 		signatureFilter:     PAdESConstantsSignatureDefaultFilter,
 		signatureSubFilter:  PAdESConstantsSignatureDefaultSubFilter,
 		signingTimeZone:     time.Local,
@@ -331,7 +331,7 @@ func (p *SignatureParameters) SetIncludeVRIDictionary(includeVRIDictionary bool)
 // getPAdESContext lazily creates the PAdES-only signature creation context; see the file header.
 func (p *SignatureParameters) getPAdESContext() *ProfileParameters {
 	if p.padesContext == nil {
-		p.padesContext = NewPAdESProfileParameters()
+		p.padesContext = NewProfileParameters()
 	}
 	return p.padesContext
 }
@@ -339,7 +339,7 @@ func (p *SignatureParameters) getPAdESContext() *ProfileParameters {
 // ContentTimestampParameters shadows the promoted field of the same name; see the file header.
 func (p *SignatureParameters) ContentTimestampParameters() *TimestampParameters {
 	if p.contentTimestampParameters == nil {
-		p.contentTimestampParameters = NewPAdESTimestampParameters()
+		p.contentTimestampParameters = NewTimestampParameters()
 	}
 	return p.contentTimestampParameters
 }
@@ -349,13 +349,13 @@ func (p *SignatureParameters) ContentTimestampParameters() *TimestampParameters 
 // *PAdESTimestampParameters in Go (no runtime subtyping the way Java's instanceof check relies
 // on), this always wraps, unlike Java's conditional cast.
 func (p *SignatureParameters) SetContentTimestampParameters(contentTimestampParameters *cades.TimestampParameters) {
-	p.contentTimestampParameters = newPAdESTimestampParametersFromCAdES(contentTimestampParameters)
+	p.contentTimestampParameters = newTimestampParametersFromCAdES(contentTimestampParameters)
 }
 
 // SignatureTimestampParameters shadows the promoted field of the same name; see the file header.
 func (p *SignatureParameters) SignatureTimestampParameters() *TimestampParameters {
 	if p.signatureTimestampParameters == nil {
-		p.signatureTimestampParameters = NewPAdESTimestampParameters()
+		p.signatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.signatureTimestampParameters
 }
@@ -363,13 +363,13 @@ func (p *SignatureParameters) SignatureTimestampParameters() *TimestampParameter
 // SetSignatureTimestampParameters ports the overridden #setSignatureTimestampParameters. See
 // SetContentTimestampParameters's doc for why this always wraps.
 func (p *SignatureParameters) SetSignatureTimestampParameters(signatureTimestampParameters *cades.TimestampParameters) {
-	p.signatureTimestampParameters = newPAdESTimestampParametersFromCAdES(signatureTimestampParameters)
+	p.signatureTimestampParameters = newTimestampParametersFromCAdES(signatureTimestampParameters)
 }
 
 // ArchiveTimestampParameters shadows the promoted field of the same name; see the file header.
 func (p *SignatureParameters) ArchiveTimestampParameters() *TimestampParameters {
 	if p.archiveTimestampParameters == nil {
-		p.archiveTimestampParameters = NewPAdESTimestampParameters()
+		p.archiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.archiveTimestampParameters
 }
@@ -377,7 +377,7 @@ func (p *SignatureParameters) ArchiveTimestampParameters() *TimestampParameters 
 // SetArchiveTimestampParameters ports the overridden #setArchiveTimestampParameters. See
 // SetContentTimestampParameters's doc for why this always wraps.
 func (p *SignatureParameters) SetArchiveTimestampParameters(archiveTimestampParameters *cades.TimestampParameters) {
-	p.archiveTimestampParameters = newPAdESTimestampParametersFromCAdES(archiveTimestampParameters)
+	p.archiveTimestampParameters = newTimestampParametersFromCAdES(archiveTimestampParameters)
 }
 
 // PdfSignatureCache ports the overridden #getPdfSignatureCache.

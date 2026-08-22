@@ -16,10 +16,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// PAdESTimestampParametersDefaultContentSize is the default length of a reserved space for the
+// TimestampParametersDefaultContentSize is the default length of a reserved space for the
 // timestamp inside a /Contents attribute (9472, from PDFBox). Port of the default timestampSize
 // field value.
-const PAdESTimestampParametersDefaultContentSize = 9472
+const TimestampParametersDefaultContentSize = 9472
 
 // TimestampParameters holds parameters for a PAdES timestamp creation.
 type TimestampParameters struct {
@@ -57,13 +57,13 @@ type TimestampParameters struct {
 	passwordProtection []byte
 }
 
-// NewPAdESTimestampParameters is the empty constructor.
-func NewPAdESTimestampParameters() *TimestampParameters {
+// NewTimestampParameters is the empty constructor.
+func NewTimestampParameters() *TimestampParameters {
 	now := time.Now()
 	return &TimestampParameters{
-		TimestampParameters: *cades.NewCAdESTimestampParameters(),
+		TimestampParameters: *cades.NewTimestampParameters(),
 		timestampDate:       &now,
-		timestampSize:       PAdESTimestampParametersDefaultContentSize,
+		timestampSize:       TimestampParametersDefaultContentSize,
 		timestampFilter:     PAdESConstantsTimestampDefaultFilter,
 		timestampSubFilter:  PAdESConstantsTimestampDefaultSubFilter,
 	}
@@ -71,17 +71,17 @@ func NewPAdESTimestampParameters() *TimestampParameters {
 
 // NewPAdESTimestampParametersWithDigestAlgorithm is the default constructor. Port of
 // TimestampParameters(DigestAlgorithm).
-func NewPAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
-	p := NewPAdESTimestampParameters()
+func NewTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+	p := NewTimestampParameters()
 	p.SetDigestAlgorithm(digestAlgorithm)
 	return p
 }
 
-// newPAdESTimestampParametersFromCAdES is used internally to recreate parameters from CAdES
+// newTimestampParametersFromCAdES is used internally to recreate parameters from CAdES
 // Timestamp Parameters. Package-private port of the package-private constructor
 // TimestampParameters(TimestampParameters).
-func newPAdESTimestampParametersFromCAdES(cadesTimestampParameters *cades.TimestampParameters) *TimestampParameters {
-	return NewPAdESTimestampParametersWithDigestAlgorithm(cadesTimestampParameters.DigestAlgorithm())
+func newTimestampParametersFromCAdES(cadesTimestampParameters *cades.TimestampParameters) *TimestampParameters {
+	return NewTimestampParametersWithDigestAlgorithm(cadesTimestampParameters.DigestAlgorithm())
 }
 
 // Filter ports the overridden #getFilter.

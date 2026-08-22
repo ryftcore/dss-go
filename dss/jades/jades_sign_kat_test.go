@@ -121,7 +121,7 @@ func jadesSignKATLoad(t *testing.T) *jadesSignKATFixture {
 
 // baseParameters mirrors JAdESSignOracle#baseParameters.
 func (f *jadesSignKATFixture) baseParameters() *SignatureParameters {
-	parameters := NewJAdESSignatureParameters()
+	parameters := NewSignatureParameters()
 	parameters.SetSigningCertificate(f.signingCertificate)
 	parameters.SetCertificateChainFromTokens(f.signingCertificate)
 	parameters.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
@@ -302,12 +302,12 @@ func (f *jadesSignKATFixture) configure(t *testing.T,
 
 	case "compact-enveloping-sigt":
 		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeSigT)
+		parameters.SetJadesSigningTimeType(SigningTimeTypeSigT)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-no-signing-time":
 		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeNone)
+		parameters.SetJadesSigningTimeType(SigningTimeTypeNone)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-x5to":
@@ -350,9 +350,9 @@ func jadesSignKATBuilder(t *testing.T, parameters *SignatureParameters,
 	var builder Builder
 	var err error
 	if parameters.JwsSerializationType() == enumerations.JWSSerializationTypeCompactSerialization {
-		builder, err = NewJAdESCompactBuilder(certificateVerifier, parameters, documents)
+		builder, err = NewCompactBuilder(certificateVerifier, parameters, documents)
 	} else {
-		builder, err = NewJAdESSerializationBuilder(certificateVerifier, parameters, documents)
+		builder, err = NewSerializationBuilder(certificateVerifier, parameters, documents)
 	}
 	if err != nil {
 		t.Fatalf("cannot build the JAdESBuilder: %v", err)
@@ -371,7 +371,7 @@ func TestJAdESSignKATProtectedHeaderAndPayload(t *testing.T) {
 			parameters, documents := fixture.configure(t, oracleCase.Name)
 			certificateVerifier := validation.NewCommonCertificateVerifier()
 
-			levelBaselineB, err := NewJAdESLevelBaselineB(certificateVerifier, parameters, documents)
+			levelBaselineB, err := NewLevelBaselineB(certificateVerifier, parameters, documents)
 			if err != nil {
 				t.Fatalf("cannot build JAdESLevelBaselineB: %v", err)
 			}

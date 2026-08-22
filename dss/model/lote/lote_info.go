@@ -38,20 +38,20 @@ type Info struct {
 	identifier model.Identifier
 }
 
-// NewLoTEInfo is the default constructor.
-func NewLoTEInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
+// NewInfo is the default constructor.
+func NewInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string) *Info {
-	return NewLoTEInfoWithParent(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url, nil)
+	return NewInfoWithParent(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url, nil)
 }
 
-// NewLoTEInfoWithParent is the constructor with a parent LoLoTEInfo.
-func NewLoTEInfoWithParent(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
+// NewInfoWithParent is the constructor with a parent LoLoTEInfo.
+func NewInfoWithParent(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string, parent *LoLoTEInfo) *Info {
-	return NewLoTEInfoFull(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url, parent, nil)
+	return NewInfoFull(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url, parent, nil)
 }
 
-// NewLoTEInfoFull is the constructor with a parent LoLoTEInfo and OtherListPointer.
-func NewLoTEInfoFull(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
+// NewInfoFull is the constructor with a parent LoLoTEInfo and OtherListPointer.
+func NewInfoFull(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string, parent *LoLoTEInfo,
 	otherListPointer *OtherListPointer) *Info {
 	return &Info{
@@ -99,7 +99,7 @@ func (l *Info) ListPointer() *OtherListPointer {
 // buildIdentifier(). Exported so LoLoTEInfo can shadow it - see the JUDGMENT CALL note above
 // about the resulting virtual-dispatch limitation.
 func (l *Info) BuildIdentifier() model.Identifier {
-	return NewLoTEIdentifier(l)
+	return NewIdentifier(l)
 }
 
 // DSSID returns the Identifier of the object, computing and caching it on first access. Port

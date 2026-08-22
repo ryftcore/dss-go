@@ -27,9 +27,9 @@ type LevelC struct {
 	LevelBaselineT
 }
 
-// NewXAdESLevelC is the default constructor for LevelC.
+// NewLevelC is the default constructor for LevelC.
 // Port of XAdESLevelC(CertificateVerifier).
-func NewXAdESLevelC(certificateVerifier validation.CertificateVerifier) *LevelC {
+func NewLevelC(certificateVerifier validation.CertificateVerifier) *LevelC {
 	extension := &LevelC{}
 	extension.InitXAdESLevelC(extension, certificateVerifier)
 	return extension

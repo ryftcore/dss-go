@@ -26,7 +26,7 @@ func AttributeCompare(attributeOne, attributeTwo *Attribute) int {
 type AttributeOrderComparator struct{}
 
 // NewCAdESAttributeOrderComparator is the port of the default constructor.
-func NewCAdESAttributeOrderComparator() AttributeOrderComparator {
+func NewAttributeOrderComparator() AttributeOrderComparator {
 	return AttributeOrderComparator{}
 }
 

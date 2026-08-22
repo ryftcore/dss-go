@@ -52,6 +52,6 @@ func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedContent(asicContent *a
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (m *AbstractASiCWithXAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithXAdESContainerExtractor(container).DefaultASiCContainerExtractor
+func (m *AbstractASiCWithXAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultContainerExtractor {
+	return &NewASiCWithXAdESContainerExtractor(container).DefaultContainerExtractor
 }

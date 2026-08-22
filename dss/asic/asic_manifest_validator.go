@@ -22,7 +22,7 @@ type ManifestValidator struct {
 // ManifestValidator(ManifestFile, List).
 //
 // Panics with the Java message when manifest is nil (Objects.requireNonNull).
-func NewASiCManifestValidator(manifest *model.ManifestFile, signedDocuments []model.DSSDocument) *ManifestValidator {
+func NewManifestValidator(manifest *model.ManifestFile, signedDocuments []model.DSSDocument) *ManifestValidator {
 	if manifest == nil {
 		panic("ManifestFile must be defined!")
 	}

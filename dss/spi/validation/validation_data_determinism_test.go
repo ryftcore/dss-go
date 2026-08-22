@@ -35,7 +35,7 @@ func validationDataDeterminismTestToken(t *testing.T, name string) *model.Certif
 // (arbitrary but stable within a JVM run) - and is now insertion-ordered instead.
 func TestValidationDataCertificateTokensDeterministic(t *testing.T) {
 	build := func() []string {
-		vd := NewValidationData()
+		vd := NewData()
 		for _, name := range []string{"issuer.der", "ocsp_ca.der", "ocsp_leaf.der", "ocsp_leaf2.der", "subject.der", "ocsp_multi_ca.der"} {
 			vd.AddToken(validationDataDeterminismTestToken(t, name))
 		}

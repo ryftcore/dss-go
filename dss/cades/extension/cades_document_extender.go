@@ -46,7 +46,7 @@ func (e *CAdESDocumentExtender) CreateSignatureService() document.SignatureServi
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding CAdESService!")
 	}
-	service := cades.NewCAdESService(e.CertificateVerifier)
+	service := cades.NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -58,7 +58,7 @@ func (e *CAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 
 // EmptySignatureParameters ports the overridden protected emptySignatureParameters().
 func (e *CAdESDocumentExtender) EmptySignatureParameters() *cades.SignatureParameters {
-	return cades.NewCAdESSignatureParameters()
+	return cades.NewSignatureParameters()
 }
 
 // IsSupportedParameters ports the overridden protected

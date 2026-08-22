@@ -38,9 +38,9 @@ type TimestampsValidationBlock struct {
 	evidenceRecord *diagnostic.EvidenceRecordWrapper
 }
 
-// NewEvidenceRecordTimestampsValidationBlock is the default constructor. Port
+// NewTimestampsValidationBlock is the default constructor. Port
 // of TimestampsValidationBlock(Provider, EvidenceRecordWrapper, Data, ValidationPolicy, Date, Map, List, ValidationLevel).
-func NewEvidenceRecordTimestampsValidationBlock(i18nProvider *i18n.Provider,
+func NewTimestampsValidationBlock(i18nProvider *i18n.Provider,
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tlAnalysis []*jaxb.XmlTLAnalysis,

@@ -28,7 +28,7 @@ type OCSPSource struct {
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *OCSPSource {
+func NewOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *OCSPSource {
 	if signatureElement == nil {
 		panic("Signature element cannot be null")
 	}

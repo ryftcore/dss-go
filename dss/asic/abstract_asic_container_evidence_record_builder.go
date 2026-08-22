@@ -21,7 +21,7 @@ import (
 type AbstractASiCContainerEvidenceRecordBuilderOverrides interface {
 	// GetASiCContentBuilder gets an instance of AbstractASiCContentBuilder. Port of the
 	// protected abstract getASiCContentBuilder().
-	GetASiCContentBuilder() *AbstractASiCContentBuilder
+	GetASiCContentBuilder() *AbstractContentBuilder
 
 	// AssertEvidenceRecordFilenameValid verifies validity of the evidence record filename to
 	// the ASiC container convention. Java declares this protected (not abstract) with a default
@@ -185,7 +185,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestFileValid(man
 		return
 	}
 
-	manifestValidator := NewASiCManifestValidator(manifestFile, asicContent.AllDocuments())
+	manifestValidator := NewManifestValidator(manifestFile, asicContent.AllDocuments())
 	manifestValidator.ValidateEntries()
 
 	for _, manifestEntry := range manifestFile.Entries() {
@@ -233,7 +233,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecordFilename(e
 func (b *AbstractASiCContainerEvidenceRecordBuilder) buildEvidenceRecordManifest(asicContent *Content, coveredDocuments []model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) model.DSSDocument {
 	if enumerations.ASiCContainerTypeASiCE == asicContent.ContainerType() {
 		names := spi.DSSUtilsDocumentNames(coveredDocuments)
-		manifestDocument, err := NewASiCEvidenceRecordManifestBuilder(asicContent, digestAlgorithm, evidenceRecordFilename).
+		manifestDocument, err := NewEvidenceRecordManifestBuilder(asicContent, digestAlgorithm, evidenceRecordFilename).
 			SetAsicContentDocumentFilter(AllowedFilenamesFilter(names...)).
 			SetEvidenceRecordFilenameFactory(b.AsicFilenameFactory).
 			Build()

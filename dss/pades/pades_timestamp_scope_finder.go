@@ -19,8 +19,8 @@ type TimestampScopeFinder struct {
 	signature validation.AdvancedSignature
 }
 
-// NewPAdESTimestampScopeFinder is the default constructor.
-func NewPAdESTimestampScopeFinder() *TimestampScopeFinder {
+// NewTimestampScopeFinder is the default constructor.
+func NewTimestampScopeFinder() *TimestampScopeFinder {
 	return &TimestampScopeFinder{PdfRevisionScopeFinder: newPdfRevisionScopeFinder()}
 }
 

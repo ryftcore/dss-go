@@ -26,8 +26,8 @@ type EmbeddedEvidenceRecordBuilder struct {
 	manifestFile *model.ManifestFile
 }
 
-// NewCAdESEmbeddedEvidenceRecordBuilder is the default constructor.
-func NewCAdESEmbeddedEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier) *EmbeddedEvidenceRecordBuilder {
+// NewEmbeddedEvidenceRecordBuilder is the default constructor.
+func NewEmbeddedEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier) *EmbeddedEvidenceRecordBuilder {
 	return &EmbeddedEvidenceRecordBuilder{
 		certificateVerifier: validation.NewCertificateVerifierBuilder(certificateVerifier).BuildOfflineCopy(),
 	}
@@ -166,7 +166,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument
 			fmt.Sprintf("Unable to build an evidence record from the provided document. Reason : %s", err.Error()), err)
 	}
 
-	embeddedEvidenceRecordHelper := NewCAdESEmbeddedEvidenceRecordHelper(sig, unsignedAttribute)
+	embeddedEvidenceRecordHelper := NewEmbeddedEvidenceRecordHelper(sig, unsignedAttribute)
 	if len(detachedContents) > 0 {
 		evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(enumerations.EvidenceRecordIncorporationTypeExternalEvidenceRecord)
 		embeddedEvidenceRecordHelper.SetDetachedContents(detachedContents)

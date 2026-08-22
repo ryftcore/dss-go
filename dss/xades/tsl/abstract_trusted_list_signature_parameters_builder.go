@@ -71,7 +71,7 @@ func (b *AbstractTrustedListSignatureParametersBuilder) InitAbstractTrustedListS
 		panic("XML Trusted List document cannot be null!")
 	}
 	b.AbstractSignatureParametersBuilder = *document.NewAbstractSignatureParametersBuilder[*xades.SignatureParameters](signingCertificate)
-	b.AbstractSignatureParametersBuilder.InitParameters = xades.NewXAdESSignatureParameters
+	b.AbstractSignatureParametersBuilder.InitParameters = xades.NewSignatureParameters
 	b.overrides = overrides
 	b.tlXmlDocument = tlXmlDocument
 	b.referenceDigestAlgorithm = enumerations.DigestAlgorithmSHA512

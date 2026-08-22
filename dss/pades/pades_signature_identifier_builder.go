@@ -21,7 +21,7 @@ type SignatureIdentifierBuilder struct {
 
 // NewPAdESSignatureIdentifierBuilder is the port of the constructor
 // SignatureIdentifierBuilder(Signature).
-func NewPAdESSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
+func NewSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
 	b := &SignatureIdentifierBuilder{
 		AbstractSignatureIdentifierBuilder: validation.NewAbstractSignatureIdentifierBuilderBase(signature),
 		padesSignature:                     signature,

@@ -70,9 +70,9 @@ type LevelBaselineT struct {
 	overrides SignatureExtensionOverrides
 }
 
-// NewXAdESLevelBaselineT is the default constructor for LevelBaselineT.
+// NewLevelBaselineT is the default constructor for LevelBaselineT.
 // Port of XAdESLevelBaselineT(CertificateVerifier).
-func NewXAdESLevelBaselineT(certificateVerifier validation.CertificateVerifier) *LevelBaselineT {
+func NewLevelBaselineT(certificateVerifier validation.CertificateVerifier) *LevelBaselineT {
 	extension := &LevelBaselineT{}
 	extension.InitXAdESLevelBaselineT(extension, certificateVerifier)
 	return extension

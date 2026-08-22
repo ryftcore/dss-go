@@ -3,19 +3,19 @@ package lote
 import "testing"
 
 func TestNewLoTEValidationJobSummaryErrorsWhenEmpty(t *testing.T) {
-	if _, err := NewLoTEValidationJobSummary(nil, nil); err == nil {
+	if _, err := NewValidationJobSummary(nil, nil); err == nil {
 		t.Fatal("expected an error when both loloteInfos and otherLoTEInfos are empty")
 	}
 }
 
 func TestLoTEValidationJobSummaryRoundTrip(t *testing.T) {
 	lolote := NewLoLoTEInfo(nil, nil, nil, "https://example.org/lolote.xml")
-	child := NewLoTEInfoWithParent(nil, nil, nil, "https://example.org/child.xml", lolote)
+	child := NewInfoWithParent(nil, nil, nil, "https://example.org/child.xml", lolote)
 	lolote.SetChildrenInfos([]*Info{child})
 
-	other := NewLoTEInfo(nil, nil, nil, "https://example.org/other.xml")
+	other := NewInfo(nil, nil, nil, "https://example.org/other.xml")
 
-	summary, err := NewLoTEValidationJobSummary([]*LoLoTEInfo{lolote}, []*Info{other})
+	summary, err := NewValidationJobSummary([]*LoLoTEInfo{lolote}, []*Info{other})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

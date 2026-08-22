@@ -9,8 +9,8 @@ type EvidenceRecordIncorporationParameters struct {
 	document.AbstractEvidenceRecordIncorporationParameters
 }
 
-// NewCAdESEvidenceRecordIncorporationParameters is the default constructor.
-func NewCAdESEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
+// NewEvidenceRecordIncorporationParameters is the default constructor.
+func NewEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
 	return &EvidenceRecordIncorporationParameters{
 		AbstractEvidenceRecordIncorporationParameters: document.NewAbstractEvidenceRecordIncorporationParameters(),
 	}

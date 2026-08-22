@@ -51,16 +51,16 @@ type CMSForPAdESBaselineRequirementsChecker struct {
 // Port of the constructor CMSForPAdESBaselineRequirementsChecker(CAdESSignature).
 //
 // Re-registers the override target as checker itself (not the embedded
-// *cades.BaselineRequirementsChecker cades.NewCAdESBaselineRequirementsChecker already
+// *cades.BaselineRequirementsChecker cades.NewBaselineRequirementsChecker already
 // self-registered) - exactly the same package-boundary re-registration
-// pades_baseline_requirements_checker.go's own NewPAdESBaselineRequirementsChecker performs and
+// pades_baseline_requirements_checker.go's own NewBaselineRequirementsChecker performs and
 // documents ("STRUCTURE DEVIATION"), needed here so GetBaselineSignatureForm() below (not
 // cades.BaselineRequirementsChecker's CAdES-returning one) is what
 // cmsBaselineBRequirements() resolves via BaselineSignatureForm() when it runs for a PDF's
 // embedded CMS - see spi/validation.BaselineRequirementsCheckerOverrides.GetBaselineSignatureForm.
 func NewCMSForPAdESBaselineRequirementsChecker(signature *cades.Signature) *CMSForPAdESBaselineRequirementsChecker {
 	checker := &CMSForPAdESBaselineRequirementsChecker{
-		BaselineRequirementsChecker: cades.NewCAdESBaselineRequirementsChecker(signature, nil),
+		BaselineRequirementsChecker: cades.NewBaselineRequirementsChecker(signature, nil),
 	}
 	checker.InitBaselineRequirementsChecker(checker)
 	return checker

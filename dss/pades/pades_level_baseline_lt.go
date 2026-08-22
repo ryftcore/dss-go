@@ -18,9 +18,9 @@ type LevelBaselineLT struct {
 	LevelBaselineT
 }
 
-// NewPAdESLevelBaselineLT is the default constructor.
+// NewLevelBaselineLT is the default constructor.
 // Port of PAdESLevelBaselineLT(TSPSource, CertificateVerifier, IPdfObjFactory).
-func NewPAdESLevelBaselineLT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
+func NewLevelBaselineLT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
 	pdfObjectFactory IPdfObjFactory) *LevelBaselineLT {
 	extension := &LevelBaselineLT{}
 	extension.InitPAdESLevelBaselineT(extension, tspSource, certificateVerifier, pdfObjectFactory)
@@ -41,7 +41,7 @@ func (lt *LevelBaselineLT) ExtendSignaturesWithAnalyzer(signedDocument model.DSS
 
 	signatures := pdfDocumentAnalyzer.Signatures()
 
-	signatureRequirementsChecker := NewPAdESSignatureRequirementsChecker(lt.CertificateVerifier, parameters)
+	signatureRequirementsChecker := NewSignatureRequirementsChecker(lt.CertificateVerifier, parameters)
 	if !tLevelAdded && enumerations.SignatureLevelPAdESBaselineLT == parameters.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToLTLevelPossible(signatures)
 	}

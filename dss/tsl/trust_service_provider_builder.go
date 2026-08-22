@@ -220,7 +220,7 @@ func (b *TrustServiceProviderBuilder) unmodifiableTimeDependentValues(
 		copyTSSAndIEs = append(copyTSSAndIEs, copyStatus)
 	}
 
-	return timedependent.NewTimeDependentValuesFrom(copyTSSAndIEs)
+	return timedependent.NewValuesFrom(copyTSSAndIEs)
 }
 
 // unmodifiableCertificateTokenList returns a defensive copy of a CertificateToken slice.

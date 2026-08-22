@@ -19,7 +19,7 @@ import (
 type DataFacade struct{}
 
 // NewDiagnosticDataFacade creates a new instance of DiagnosticDataFacade. Port of newFacade().
-func NewDiagnosticDataFacade() *DataFacade {
+func NewDataFacade() *DataFacade {
 	return &DataFacade{}
 }
 

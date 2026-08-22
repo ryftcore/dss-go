@@ -46,9 +46,9 @@ type WithExternalCMSService struct {
 	pdfObjFactory IPdfObjFactory
 }
 
-// NewPAdESWithExternalCMSService is the default constructor.
+// NewWithExternalCMSService is the default constructor.
 // Port of the no-arg PAdESWithExternalCMSService() constructor.
-func NewPAdESWithExternalCMSService() *WithExternalCMSService {
+func NewWithExternalCMSService() *WithExternalCMSService {
 	return &WithExternalCMSService{pdfObjFactory: NewDefaultPdfObjFactory()}
 }
 
@@ -152,7 +152,7 @@ func (s *WithExternalCMSService) PAdESService() *Service {
 		panic("TSPSource shall be provided for PAdES extension!")
 	}
 
-	padesService := NewPAdESService(s.certificateVerifier)
+	padesService := NewService(s.certificateVerifier)
 	padesService.SetTspSource(s.tspSource)
 	padesService.SetPdfObjFactory(s.pdfObjFactory)
 	return padesService
@@ -256,7 +256,7 @@ func (s *WithExternalCMSService) IsValidPAdESBaselineCMSSignedData(messageDigest
 // padesWithExternalCMSServiceToCAdESSignature ports the private #toCAdESSignature.
 func padesWithExternalCMSServiceToCAdESSignature(parsedCMS *cms.CMS,
 	messageDigest model.DSSMessageDigest) *cades.Signature {
-	signature := cades.NewCAdESSignature(parsedCMS,
+	signature := cades.NewSignature(parsedCMS,
 		spi.DSSASN1UtilsFirstSignerInformation(parsedCMS.SignerInfos()))
 	signature.SetDetachedContents([]model.DSSDocument{spi.DSSUtilsToDigestDocument(messageDigest.Digest)})
 	return signature

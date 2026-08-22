@@ -83,7 +83,7 @@ func TestZipUtilsSetZipContainerHandlerBuilderPanicsOnNil(t *testing.T) {
 // TestZipUtilsCreateZipArchiveFromASiCContent pins that the Content overload writes
 // getAllDocuments() in order and carries the content's zip comment over.
 func TestZipUtilsCreateZipArchiveFromASiCContent(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetMimeTypeDocument(asicUtilsCreateMimetypeDocument(zipCoreMimeType("application/vnd.etsi.asic-e+zip")))
 	asicContent.SetSignedDocuments([]model.DSSDocument{model.NewInMemoryDocumentWithName([]byte("hello"), "test.txt")})
 	asicContent.SetSignatureDocuments([]model.DSSDocument{

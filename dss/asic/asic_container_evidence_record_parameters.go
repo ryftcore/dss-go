@@ -23,7 +23,7 @@ type ContainerEvidenceRecordParameters struct {
 }
 
 // NewASiCContainerEvidenceRecordParameters is the port of the default constructor.
-func NewASiCContainerEvidenceRecordParameters() *ContainerEvidenceRecordParameters {
+func NewContainerEvidenceRecordParameters() *ContainerEvidenceRecordParameters {
 	return &ContainerEvidenceRecordParameters{}
 }
 

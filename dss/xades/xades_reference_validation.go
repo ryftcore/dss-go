@@ -30,7 +30,7 @@ import (
 // `(ReferenceValidation) referenceValidation` does. Same pattern as
 // xadesSignaturePolicyRegistry in xades_signature_policy.go and
 // SignatureBuilderRegisterPolicyTransforms in xades_signature_builder.go. Registered by
-// NewXAdESReferenceValidation; the key is the pointer identity of the embedded field, stable for
+// NewReferenceValidation; the key is the pointer identity of the embedded field, stable for
 // the lifetime of the enclosing *ReferenceValidation.
 var xadesReferenceValidationRegistry sync.Map // map[*model.ReferenceValidation]*ReferenceValidation
 
@@ -55,7 +55,7 @@ type ReferenceValidation struct {
 }
 
 // NewXAdESReferenceValidation ports XAdESReferenceValidation(Reference).
-func NewXAdESReferenceValidation(reference *xmldsig.Reference) *ReferenceValidation {
+func NewReferenceValidation(reference *xmldsig.Reference) *ReferenceValidation {
 	v := &ReferenceValidation{
 		ReferenceValidation: *model.NewReferenceValidation(),
 		reference:           reference,

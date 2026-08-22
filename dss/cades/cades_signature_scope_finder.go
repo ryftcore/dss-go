@@ -21,7 +21,7 @@ type SignatureScopeFinder struct {
 }
 
 // NewCAdESSignatureScopeFinder is the port of the default constructor.
-func NewCAdESSignatureScopeFinder() *SignatureScopeFinder {
+func NewSignatureScopeFinder() *SignatureScopeFinder {
 	return &SignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
 }
 

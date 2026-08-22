@@ -20,17 +20,17 @@ type PresentationAnalyzerFactory interface {
 }
 
 // eaaPresentationAnalyzerFactoryRegistry holds the PresentationAnalyzerFactory
-// implementations registered via RegisterEAAPresentationAnalyzerFactory, consulted in
+// implementations registered via RegisterPresentationAnalyzerFactory, consulted in
 // registration order — the Go equivalent of Java's
 // ServiceLoader.load(PresentationAnalyzerFactory.class) iteration (Go has no runtime
 // service-provider discovery). EAA-presentation-format-specific implementations register
 // themselves here in later phases.
 var eaaPresentationAnalyzerFactoryRegistry []PresentationAnalyzerFactory
 
-// RegisterEAAPresentationAnalyzerFactory registers an PresentationAnalyzerFactory to be
+// RegisterPresentationAnalyzerFactory registers an PresentationAnalyzerFactory to be
 // consulted by PresentationAnalyzerIsSupportedDocument and
 // PresentationAnalyzerFromDocument.
-func RegisterEAAPresentationAnalyzerFactory(f PresentationAnalyzerFactory) {
+func RegisterPresentationAnalyzerFactory(f PresentationAnalyzerFactory) {
 	eaaPresentationAnalyzerFactoryRegistry = append(eaaPresentationAnalyzerFactoryRegistry, f)
 }
 

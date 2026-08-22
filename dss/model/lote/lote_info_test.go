@@ -4,7 +4,7 @@ import "testing"
 
 func TestLoTEInfoRoundTrip(t *testing.T) {
 	pointer := NewOtherListPointer()
-	l := NewLoTEInfoFull(nil, nil, nil, "https://example.org/lote.xml", nil, pointer)
+	l := NewInfoFull(nil, nil, nil, "https://example.org/lote.xml", nil, pointer)
 
 	if l.Url() != "https://example.org/lote.xml" {
 		t.Fatalf("unexpected Url(): %s", l.Url())
@@ -18,7 +18,7 @@ func TestLoTEInfoRoundTrip(t *testing.T) {
 }
 
 func TestLoTEInfoDSSIDIsCachedAndUsesLoTEIdentifier(t *testing.T) {
-	l := NewLoTEInfo(nil, nil, nil, "https://example.org/lote.xml")
+	l := NewInfo(nil, nil, nil, "https://example.org/lote.xml")
 
 	id := l.DSSID()
 	if _, ok := id.(*Identifier); !ok {
@@ -42,7 +42,7 @@ func TestLoLoTEInfoDSSIDUsesLoLoTEIdentifier(t *testing.T) {
 		t.Fatalf("expected DSSID() to return a *LoLoTEIdentifier, got %T", id)
 	}
 
-	children := []*Info{NewLoTEInfoWithParent(nil, nil, nil, "https://example.org/child.xml", l)}
+	children := []*Info{NewInfoWithParent(nil, nil, nil, "https://example.org/child.xml", l)}
 	l.SetChildrenInfos(children)
 	if len(l.ChildrenInfos()) != 1 || l.ChildrenInfos()[0].Parent() != l {
 		t.Fatalf("unexpected ChildrenInfos(): %v", l.ChildrenInfos())

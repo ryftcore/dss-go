@@ -221,10 +221,10 @@ func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
-var blocksI18nProvider = i18n.NewI18nProvider()
+var blocksI18nProvider = i18n.NewProvider()
 
 func blocksI18n() *i18n.Provider { return blocksI18nProvider }
 

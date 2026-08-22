@@ -20,29 +20,29 @@ type TimestampParameters struct {
 
 var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
-// NewXAdESTimestampParameters instantiates the object with null values, including the
+// NewTimestampParameters instantiates the object with null values, including the
 // canonicalizationMethod field initializer. Port of the empty constructor.
-func NewXAdESTimestampParameters() *TimestampParameters {
+func NewTimestampParameters() *TimestampParameters {
 	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParameters(),
 		canonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 	}
 }
 
-// NewXAdESTimestampParametersWithDigestAlgorithm is a constructor with a digest algorithm to
+// NewTimestampParametersWithDigestAlgorithm is a constructor with a digest algorithm to
 // use for message-imprint digest calculation, including the canonicalizationMethod field
 // initializer. Port of XAdESTimestampParameters(DigestAlgorithm).
-func NewXAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+func NewTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
 	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),
 		canonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 	}
 }
 
-// NewXAdESTimestampParametersWithCanonicalization is the default constructor with a digest
+// NewTimestampParametersWithCanonicalization is the default constructor with a digest
 // algorithm and canonicalization method to use for the message-imprint. Port of
 // TimestampParameters(DigestAlgorithm, String).
-func NewXAdESTimestampParametersWithCanonicalization(digestAlgorithm enumerations.DigestAlgorithm,
+func NewTimestampParametersWithCanonicalization(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string) *TimestampParameters {
 	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),

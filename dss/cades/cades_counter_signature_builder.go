@@ -42,8 +42,8 @@ type CounterSignatureBuilder struct {
 	resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESCounterSignatureBuilder is the default constructor.
-func NewCAdESCounterSignatureBuilder(certificateVerifier validation.CertificateVerifier) *CounterSignatureBuilder {
+// NewCounterSignatureBuilder is the default constructor.
+func NewCounterSignatureBuilder(certificateVerifier validation.CertificateVerifier) *CounterSignatureBuilder {
 	return &CounterSignatureBuilder{certificateVerifier: certificateVerifier}
 }
 
@@ -92,7 +92,7 @@ func (b *CounterSignatureBuilder) getUpdatedSignerInformations(originalCMS *cms.
 
 	var result []*cmscore.SignerInfo
 	for _, signerInformation := range signerInformationStore {
-		cadesSignature := NewCAdESSignature(originalCMS, signerInformation)
+		cadesSignature := NewSignature(originalCMS, signerInformation)
 		cadesSignature.SetMasterSignature(cadesCounterSignatureBuilderAsAdvancedSignature(masterSignature))
 		cadesSignature.SetDetachedContents(parameters.DetachedContents())
 		cadesSignature.SetManifestFile(b.manifestFile)
@@ -214,7 +214,7 @@ func (b *CounterSignatureBuilder) addNewCertificates(updatedCMS *cms.CMS, parame
 		return nil, err
 	}
 
-	cmsBuilder := cms.NewCMSBuilder().SetOriginalCMS(updatedCMS)
+	cmsBuilder := cms.NewBuilder().SetOriginalCMS(updatedCMS)
 	return cmsBuilder.ExtendCMSSignedData(newCertificates, nil, nil)
 }
 

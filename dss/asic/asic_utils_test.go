@@ -117,7 +117,7 @@ func TestASiCUtilsZipCommentBuilders(t *testing.T) {
 		t.Errorf("zip comment from MimeType = %q", got)
 	}
 
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	if got := UtilsZipCommentFromParameters(parameters); got != "" {
 		t.Errorf("zip comment = %q with zipComment off, want \"\"", got)
@@ -270,7 +270,7 @@ func TestASiCUtilsRootLevelDocuments(t *testing.T) {
 		t.Fatalf("rootLevelDocuments = %v", modelNames(rootLevel))
 	}
 
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetSignedDocuments(documents)
 	if got := UtilsRootLevelSignedDocuments(asicContent); len(got) != 2 {
 		t.Fatalf("rootLevelSignedDocuments = %v", modelNames(got))
@@ -295,11 +295,11 @@ func modelNames(documents []model.DSSDocument) []string {
 // TestASiCUtilsEnsureMimeTypeAndZipComment pins the mimetype document ensureMimeTypeAndZipComment
 // synthesizes: named "mimetype", STORED, carrying the mimetype string as its content.
 func TestASiCUtilsEnsureMimeTypeAndZipComment(t *testing.T) {
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	parameters.SetZipComment(true)
 
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	if _, err := UtilsEnsureMimeTypeAndZipComment(asicContent, parameters); err != nil {
 		t.Fatalf("ensureMimeTypeAndZipComment: %v", err)
 	}

@@ -32,10 +32,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// AbstractCMSGenerator is this package's (only) Generator implementation, containing the set
+// AbstractGenerator is this package's (only) Generator implementation, containing the set
 // variable values. Port of the abstract AbstractCMSGenerator class plus - see the file header -
 // the native generation logic dss-cms-object's CMSObjectGenerator supplies upstream.
-type AbstractCMSGenerator struct {
+type AbstractGenerator struct {
 	// signerInfoGenerator is the new signer to be generated.
 	signerInfoGenerator *SignerInfoGenerator
 	// certificateStore is the collection of certificates to be encapsulated within
@@ -65,53 +65,53 @@ type AbstractCMSGenerator struct {
 
 // NewAbstractCMSGenerator is the default constructor. Port of the protected no-arg constructor;
 // exported since Go has no ServiceLoader to hide it behind (see doc.go).
-func NewAbstractCMSGenerator() *AbstractCMSGenerator {
-	return &AbstractCMSGenerator{}
+func NewAbstractCMSGenerator() *AbstractGenerator {
+	return &AbstractGenerator{}
 }
 
 // SetSignerInfoGenerator ports #setSignerInfoGenerator.
-func (g *AbstractCMSGenerator) SetSignerInfoGenerator(signerInfoGenerator *SignerInfoGenerator) {
+func (g *AbstractGenerator) SetSignerInfoGenerator(signerInfoGenerator *SignerInfoGenerator) {
 	g.signerInfoGenerator = signerInfoGenerator
 }
 
 // SetCertificates ports #setCertificates.
-func (g *AbstractCMSGenerator) SetCertificates(certificateStore [][]byte) {
+func (g *AbstractGenerator) SetCertificates(certificateStore [][]byte) {
 	g.certificateStore = certificateStore
 }
 
 // SetSigners ports #setSigners.
-func (g *AbstractCMSGenerator) SetSigners(signers []*cmscore.SignerInfo) { g.signers = signers }
+func (g *AbstractGenerator) SetSigners(signers []*cmscore.SignerInfo) { g.signers = signers }
 
 // SetAttributeCertificates ports #setAttributeCertificates.
-func (g *AbstractCMSGenerator) SetAttributeCertificates(attributeCertificates [][]byte) {
+func (g *AbstractGenerator) SetAttributeCertificates(attributeCertificates [][]byte) {
 	g.attributeCertificates = attributeCertificates
 }
 
 // SetCRLs ports #setCRLs.
-func (g *AbstractCMSGenerator) SetCRLs(crls [][]byte) { g.crls = crls }
+func (g *AbstractGenerator) SetCRLs(crls [][]byte) { g.crls = crls }
 
 // SetOcspBasicStore ports #setOcspBasicStore.
-func (g *AbstractCMSGenerator) SetOcspBasicStore(ocspBasicStore [][]byte) {
+func (g *AbstractGenerator) SetOcspBasicStore(ocspBasicStore [][]byte) {
 	g.ocspBasicStore = ocspBasicStore
 }
 
 // SetOcspResponsesStore ports #setOcspResponsesStore.
-func (g *AbstractCMSGenerator) SetOcspResponsesStore(ocspResponsesStore [][]byte) {
+func (g *AbstractGenerator) SetOcspResponsesStore(ocspResponsesStore [][]byte) {
 	g.ocspResponsesStore = ocspResponsesStore
 }
 
 // SetDigestAlgorithmIDs ports #setDigestAlgorithmIDs.
-func (g *AbstractCMSGenerator) SetDigestAlgorithmIDs(digestAlgorithmIDs []*asn1ber.AlgorithmIdentifier) {
+func (g *AbstractGenerator) SetDigestAlgorithmIDs(digestAlgorithmIDs []*asn1ber.AlgorithmIdentifier) {
 	g.digestAlgorithmIDs = digestAlgorithmIDs
 }
 
 // SetToBeSignedDocument ports #setToBeSignedDocument.
-func (g *AbstractCMSGenerator) SetToBeSignedDocument(document model.DSSDocument) {
+func (g *AbstractGenerator) SetToBeSignedDocument(document model.DSSDocument) {
 	g.toBeSignedDocument = document
 }
 
 // SetEncapsulate ports #setEncapsulate.
-func (g *AbstractCMSGenerator) SetEncapsulate(encapsulate bool) { g.encapsulate = encapsulate }
+func (g *AbstractGenerator) SetEncapsulate(encapsulate bool) { g.encapsulate = encapsulate }
 
 // Generate generates the CMS. See the file header for what this replaces.
 //
@@ -121,7 +121,7 @@ func (g *AbstractCMSGenerator) SetEncapsulate(encapsulate bool) { g.encapsulate 
 // CMSAbsentContent#write UnsupportedOperationException, which - unlike the requireNonNull
 // above - is a data-dependent condition (a caller-chosen SignaturePackaging combined with a
 // DigestDocument) rather than a programmer error.
-func (g *AbstractCMSGenerator) Generate() (*CMS, error) {
+func (g *AbstractGenerator) Generate() (*CMS, error) {
 	if g.toBeSignedDocument == nil {
 		panic("Document to be signed is missing")
 	}
@@ -167,7 +167,7 @@ func (g *AbstractCMSGenerator) Generate() (*CMS, error) {
 // the content-handling half of CMSUtils#toCMSEncapsulatedContent(DSSDocument) (the
 // DigestDocument/other split) together with CMSSignedDataGenerator#generate's own
 // "encapsulate ? full bytes : null" choice.
-func (g *AbstractCMSGenerator) encapsulatedContentBytes() ([]byte, error) {
+func (g *AbstractGenerator) encapsulatedContentBytes() ([]byte, error) {
 	if !g.encapsulate {
 		return nil, nil
 	}

@@ -61,7 +61,7 @@ func (b *DetailedReportForEAAPresentationBuilder) executeEAAValidations(
 	for _, entry := range loteAnalysis {
 		unwrappedLoteAnalysis = append(unwrappedLoteAnalysis, entry.XmlLoTEAnalysis)
 	}
-	eaaValidationBlock := eaa.NewEAAValidationBlock(
+	eaaValidationBlock := eaa.NewValidationBlock(
 		b.I18nProvider, b.DiagnosticData, b.Policy, b.CurrentTime, bbbs, tlAnalysis, unwrappedLoteAnalysis)
 	return eaaValidationBlock.Execute()
 }

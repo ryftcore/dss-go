@@ -37,8 +37,8 @@ type Builder struct {
 	encapsulate bool
 }
 
-// NewCMSBuilder is the default constructor for Builder.
-func NewCMSBuilder() *Builder {
+// NewBuilder is the default constructor for Builder.
+func NewBuilder() *Builder {
 	return &Builder{trustAnchorBPPolicy: true, encapsulate: true}
 }
 

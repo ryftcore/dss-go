@@ -63,10 +63,10 @@ type Service struct {
 	document.AbstractSignatureService[*SignatureParameters, *TimestampParameters]
 }
 
-// NewJAdESService creates an instance of the Service. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided; it supplies information on the sources to be used in the validation process in the
 // context of a signature. Port of JAdESService(CertificateVerifier).
-func NewJAdESService(certificateVerifier validation.CertificateVerifier) *Service {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ JAdESService created".
 	return &Service{
 		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters,
@@ -272,16 +272,16 @@ func (s *Service) JAdESBuilder(parameters *SignatureParameters,
 				jwsJsonSerializationObject.StructuralValidationErrors()))
 		}
 		// return a builder for parallel signing
-		return NewJAdESSerializationBuilderFromSignature(s.CertificateVerifier, parameters,
+		return NewSerializationBuilderFromSignature(s.CertificateVerifier, parameters,
 			jwsJsonSerializationObject)
 	}
 
 	switch parameters.JwsSerializationType() {
 	case enumerations.JWSSerializationTypeCompactSerialization:
-		return NewJAdESCompactBuilder(s.CertificateVerifier, parameters, documentsToSign)
+		return NewCompactBuilder(s.CertificateVerifier, parameters, documentsToSign)
 	case enumerations.JWSSerializationTypeJSONSerialization,
 		enumerations.JWSSerializationTypeFlattenedJSONSerialization:
-		return NewJAdESSerializationBuilder(s.CertificateVerifier, parameters, documentsToSign)
+		return NewSerializationBuilder(s.CertificateVerifier, parameters, documentsToSign)
 	default:
 		return nil, fmt.Errorf("The requested JWS Serialization Type '%s' is not supported!",
 			parameters.JwsSerializationType())
@@ -362,11 +362,11 @@ func (s *Service) extensionProfile(parameters *SignatureParameters) SignatureExt
 	case enumerations.SignatureLevelJAdESBaselineB:
 		return nil
 	case enumerations.SignatureLevelJAdESBaselineT:
-		extension = NewJAdESLevelBaselineT(s.CertificateVerifier)
+		extension = NewLevelBaselineT(s.CertificateVerifier)
 	case enumerations.SignatureLevelJAdESBaselineLT:
-		extension = NewJAdESLevelBaselineLT(s.CertificateVerifier)
+		extension = NewLevelBaselineLT(s.CertificateVerifier)
 	case enumerations.SignatureLevelJAdESBaselineLTA:
-		extension = NewJAdESLevelBaselineLTA(s.CertificateVerifier)
+		extension = NewLevelBaselineLTA(s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
 	}
@@ -403,7 +403,7 @@ func (s *Service) AddSignaturePolicyStoreWithEncoding(doc model.DSSDocument,
 		panic("The signaturePolicyStore cannot be null")
 	}
 
-	builder := NewJAdESSignaturePolicyStoreBuilder()
+	builder := NewSignaturePolicyStoreBuilder()
 	signatureWithPolicyStore, err := builder.AddSignaturePolicyStore(doc, signaturePolicyStore,
 		base64UrlInstance)
 	if err != nil {
@@ -430,7 +430,7 @@ func (s *Service) GetDataToBeCounterSigned(signatureDocument model.DSSDocument,
 	}
 	s.AssertSigningCertificateValid(&parameters.AbstractSignatureParameters)
 
-	counterSignatureBuilder := NewJAdESCounterSignatureBuilder()
+	counterSignatureBuilder := NewCounterSignatureBuilder()
 	signatureValueToSign, err := counterSignatureBuilder.GetSignatureValueToBeSigned(signatureDocument,
 		parameters)
 	if err != nil {
@@ -458,7 +458,7 @@ func (s *Service) CounterSignSignature(signatureDocument model.DSSDocument,
 	}
 	s.AssertSigningCertificateValid(&parameters.AbstractSignatureParameters)
 
-	counterSignatureBuilder := NewJAdESCounterSignatureBuilder()
+	counterSignatureBuilder := NewCounterSignatureBuilder()
 	signatureValueToSign, err := counterSignatureBuilder.GetSignatureValueToBeSigned(signatureDocument,
 		parameters)
 	if err != nil {

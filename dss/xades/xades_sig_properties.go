@@ -18,7 +18,7 @@ type SigProperties struct {
 
 // newXAdESSigProperties is the port of the package-private
 // SigProperties(Element, XAdESPath) constructor.
-func newXAdESSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) SigProperties {
+func newSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) SigProperties {
 	return SigProperties{signaturePropertiesDom: signatureProperties, xadesPaths: xadesPaths}
 }
 
@@ -33,7 +33,7 @@ func (p *SigProperties) Attributes() []*Attribute {
 	unsignedAttributes := make([]*Attribute, 0)
 	if p.signaturePropertiesDom != nil {
 		for _, node := range p.signaturePropertiesDom.Elements() {
-			unsignedAttributes = append(unsignedAttributes, newXAdESAttribute(node, p.xadesPaths))
+			unsignedAttributes = append(unsignedAttributes, newAttribute(node, p.xadesPaths))
 		}
 	}
 	return unsignedAttributes

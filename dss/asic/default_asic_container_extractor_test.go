@@ -9,50 +9,50 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
-// defaultASiCContainerExtractorProbe is a concrete subclass with the CAdES-shaped predicates, used
+// defaultContainerExtractorProbe is a concrete subclass with the CAdES-shaped predicates, used
 // to exercise the grouping logic and the Overrides dispatch.
-type defaultASiCContainerExtractorProbe struct {
-	DefaultASiCContainerExtractor
+type defaultContainerExtractorProbe struct {
+	DefaultContainerExtractor
 	calls map[string]int
 }
 
-func newDefaultASiCContainerExtractorProbe(asicContainer model.DSSDocument) *defaultASiCContainerExtractorProbe {
-	probe := &defaultASiCContainerExtractorProbe{calls: map[string]int{}}
+func newDefaultASiCContainerExtractorProbe(asicContainer model.DSSDocument) *defaultContainerExtractorProbe {
+	probe := &defaultContainerExtractorProbe{calls: map[string]int{}}
 	probe.InitDefaultASiCContainerExtractor(probe, asicContainer)
 	return probe
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedManifest(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedManifest(entryName string) bool {
 	p.calls["manifest"]++
 	return UtilsIsManifest(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedArchiveManifest(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedArchiveManifest(entryName string) bool {
 	p.calls["archiveManifest"]++
 	return UtilsIsArchiveManifest(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedEvidenceRecordManifest(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedEvidenceRecordManifest(entryName string) bool {
 	p.calls["evidenceRecordManifest"]++
 	return UtilsIsEvidenceRecordManifest(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedSignature(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedSignature(entryName string) bool {
 	p.calls["signature"]++
 	return UtilsIsCAdES(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedTimestamp(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedTimestamp(entryName string) bool {
 	p.calls["timestamp"]++
 	return UtilsIsTimestamp(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsAllowedEvidenceRecord(entryName string) bool {
+func (p *defaultContainerExtractorProbe) IsAllowedEvidenceRecord(entryName string) bool {
 	p.calls["evidenceRecord"]++
 	return UtilsIsEvidenceRecord(entryName)
 }
 
-func (p *defaultASiCContainerExtractorProbe) IsSupportedContainerFormat() bool { return true }
+func (p *defaultContainerExtractorProbe) IsSupportedContainerFormat() bool { return true }
 
 // TestDefaultASiCContainerExtractorGroupsEntries pins zipParsing's grouping, and with it the
 // virtual-dispatch contract: every isAllowed* decision must come from the subclass, not from this
@@ -116,16 +116,16 @@ func TestDefaultASiCContainerExtractorRejectsEmptyContainer(t *testing.T) {
 	}
 }
 
-// defaultASiCContainerExtractorFactoryProbe registers itself in the ServiceLoader stand-in.
-type defaultASiCContainerExtractorFactoryProbe struct {
+// defaultContainerExtractorFactoryProbe registers itself in the ServiceLoader stand-in.
+type defaultContainerExtractorFactoryProbe struct {
 	supported bool
 }
 
-func (f *defaultASiCContainerExtractorFactoryProbe) IsSupported(asicContainer model.DSSDocument) bool {
+func (f *defaultContainerExtractorFactoryProbe) IsSupported(asicContainer model.DSSDocument) bool {
 	return f.supported
 }
 
-func (f *defaultASiCContainerExtractorFactoryProbe) Create(asicContainer model.DSSDocument) ContainerExtractor {
+func (f *defaultContainerExtractorFactoryProbe) Create(asicContainer model.DSSDocument) ContainerExtractor {
 	return newDefaultASiCContainerExtractorProbe(asicContainer)
 }
 
@@ -138,15 +138,15 @@ func TestDefaultASiCContainerExtractorFromDocument(t *testing.T) {
 	asicContainerExtractorFactoryRegistry = nil
 
 	doc := model.NewInMemoryDocumentWithName([]byte("x"), "x.asice")
-	if _, err := DefaultASiCContainerExtractorFromDocument(doc); err == nil {
+	if _, err := DefaultContainerExtractorFromDocument(doc); err == nil {
 		t.Fatal("expected a failure with no registered factory")
 	} else if err.Error() != "Document format not recognized/handled" {
 		t.Fatalf("error = %q, want the Java message", err.Error())
 	}
 
-	RegisterASiCContainerExtractorFactory(&defaultASiCContainerExtractorFactoryProbe{supported: false})
-	RegisterASiCContainerExtractorFactory(&defaultASiCContainerExtractorFactoryProbe{supported: true})
-	extractor, err := DefaultASiCContainerExtractorFromDocument(doc)
+	RegisterContainerExtractorFactory(&defaultContainerExtractorFactoryProbe{supported: false})
+	RegisterContainerExtractorFactory(&defaultContainerExtractorFactoryProbe{supported: true})
+	extractor, err := DefaultContainerExtractorFromDocument(doc)
 	if err != nil {
 		t.Fatalf("fromDocument: %v", err)
 	}
@@ -159,7 +159,7 @@ func TestDefaultASiCContainerExtractorFromDocument(t *testing.T) {
 			t.Fatalf("panic = %v, want the Java message", recovered)
 		}
 	}()
-	_, _ = DefaultASiCContainerExtractorFromDocument(nil)
+	_, _ = DefaultContainerExtractorFromDocument(nil)
 }
 
 // TestDefaultASiCContainerExtractorCollectsFolders pins that folder entries are routed to

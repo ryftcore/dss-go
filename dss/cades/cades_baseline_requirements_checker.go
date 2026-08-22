@@ -25,17 +25,17 @@ type BaselineRequirementsChecker struct {
 	validation.BaselineRequirementsChecker[*Signature]
 }
 
-// newCAdESBaselineRequirementsChecker is used to verify conformance of a signature to
+// newBaselineRequirementsChecker is used to verify conformance of a signature to
 // Baseline-B level. Port of the protected CAdESBaselineRequirementsChecker(CAdESSignature)
 // constructor.
-func newCAdESBaselineRequirementsChecker(sig *Signature) *BaselineRequirementsChecker {
-	return NewCAdESBaselineRequirementsChecker(sig, nil)
+func newBaselineRequirementsChecker(sig *Signature) *BaselineRequirementsChecker {
+	return NewBaselineRequirementsChecker(sig, nil)
 }
 
-// NewCAdESBaselineRequirementsChecker is the default constructor.
+// NewBaselineRequirementsChecker is the default constructor.
 // Port of the public CAdESBaselineRequirementsChecker(CAdESSignature, CertificateVerifier)
 // constructor.
-func NewCAdESBaselineRequirementsChecker(sig *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+func NewBaselineRequirementsChecker(sig *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
 	checker := &BaselineRequirementsChecker{
 		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](sig, offlineCertificateVerifier),
 	}

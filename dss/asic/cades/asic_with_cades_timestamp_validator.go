@@ -3,7 +3,7 @@
 // The Java `validation.timestamp` sub-package flattens into this Go package.
 //
 // Java's ASiCWithCAdESTimestampValidator extends validation/timestamp.DetachedTimestampValidator,
-// overriding only its covariant getDocumentAnalyzer(). The Go DetachedTimestampValidator instead
+// overriding only its covariant getDocumentAnalyzer(). The Go DetachedValidator instead
 // asserts its wrapped analyzer to the concrete *timestamp.DetachedTimestampAnalyzer type inside
 // its own Timestamp()/TimestampedData() bodies (see that file's DocumentAnalyzer() method) - an
 // assertion that would panic for this type's *ASiCWithCAdESTimestampAnalyzer (a different
@@ -11,7 +11,7 @@
 // jwsDocumentAnalyzer-class problem PORTING.md documents). So this type embeds
 // validation.SignedDocumentValidatorBase directly - matching cades/cms_document_validator.go's
 // and pades/pdf_document_validator.go's own precedent for a leaf validator with a
-// non-promotable analyzer type - and reproduces DetachedTimestampValidator's small method set
+// non-promotable analyzer type - and reproduces DetachedValidator's small method set
 // itself rather than embedding it.
 package cades
 
@@ -25,7 +25,7 @@ import (
 
 // ASiCWithCAdESTimestampValidator is the abstract validator for an ASiC with CAdES timestamp.
 // Port of the class ASiCWithCAdESTimestampValidator, extending
-// validation/timestamp.DetachedTimestampValidator (see the file header on why this is not
+// validation/timestamp.DetachedValidator (see the file header on why this is not
 // reproduced through Go embedding of that type).
 //
 // NOTE: in order to perform the validation process, please ensure the dss/validation package is

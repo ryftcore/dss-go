@@ -39,9 +39,9 @@ type LevelBaselineLTA struct {
 	LevelBaselineLT
 }
 
-// NewJAdESLevelBaselineLTA is the default constructor.
+// NewLevelBaselineLTA is the default constructor.
 // Port of JAdESLevelBaselineLTA(CertificateVerifier).
-func NewJAdESLevelBaselineLTA(certificateVerifier validation.CertificateVerifier) *LevelBaselineLTA {
+func NewLevelBaselineLTA(certificateVerifier validation.CertificateVerifier) *LevelBaselineLTA {
 	extension := &LevelBaselineLTA{}
 	extension.InitJAdESLevelBaselineT(extension, certificateVerifier)
 	return extension
@@ -145,7 +145,7 @@ func (lta *LevelBaselineLTA) ltaIncorporateValidationDataForTimestamps(
 
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData,
 		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
-		validationData = validation.NewValidationData()
+		validationData = validation.NewData()
 
 	default:
 		return nil, fmt.Errorf("The ValidationDataEncapsulationStrategy '%s' is not supported!",

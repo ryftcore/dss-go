@@ -17,30 +17,30 @@ type Date struct {
 }
 
 // NewClaimDate ports the default constructor.
-func NewClaimDate(value *time.Time) *Date {
-	return NewClaimDateWithName("", value)
+func NewDate(value *time.Time) *Date {
+	return NewDateWithName("", value)
 }
 
 // NewClaimDateWithName ports the constructor with claim name provided.
-func NewClaimDateWithName(name string, value *time.Time) *Date {
-	return NewClaimDateWithDisclosable(name, value, false)
+func NewDateWithName(name string, value *time.Time) *Date {
+	return NewDateWithDisclosable(name, value, false)
 }
 
 // NewClaimDateWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimDateWithDisclosable(name string, value *time.Time, selectivelyDisclosable bool) *Date {
-	return NewClaimDateWithParent(name, value, selectivelyDisclosable, nil)
+func NewDateWithDisclosable(name string, value *time.Time, selectivelyDisclosable bool) *Date {
+	return NewDateWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimDateWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimDateWithParent(name string, value *time.Time, selectivelyDisclosable bool, parent Claim) *Date {
-	return NewClaimDateFull(name, "", value, selectivelyDisclosable, parent)
+func NewDateWithParent(name string, value *time.Time, selectivelyDisclosable bool, parent Claim) *Date {
+	return NewDateFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimDateFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimDateFull(name, namespace string, value *time.Time, selectivelyDisclosable bool, parent Claim) *Date {
+func NewDateFull(name, namespace string, value *time.Time, selectivelyDisclosable bool, parent Claim) *Date {
 	return &Date{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -84,4 +84,4 @@ func (c *Date) Equals(other *Date) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *Date) String() string { return AbstractClaimString(c) }
+func (c *Date) String() string { return AbstractString(c) }

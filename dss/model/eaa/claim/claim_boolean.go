@@ -14,30 +14,30 @@ type Boolean struct {
 }
 
 // NewClaimBoolean ports the default constructor.
-func NewClaimBoolean(value *bool) *Boolean {
-	return NewClaimBooleanWithName("", value)
+func NewBoolean(value *bool) *Boolean {
+	return NewBooleanWithName("", value)
 }
 
 // NewClaimBooleanWithName ports the constructor with claim name provided.
-func NewClaimBooleanWithName(name string, value *bool) *Boolean {
-	return NewClaimBooleanWithDisclosable(name, value, false)
+func NewBooleanWithName(name string, value *bool) *Boolean {
+	return NewBooleanWithDisclosable(name, value, false)
 }
 
 // NewClaimBooleanWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimBooleanWithDisclosable(name string, value *bool, selectivelyDisclosable bool) *Boolean {
-	return NewClaimBooleanWithParent(name, value, selectivelyDisclosable, nil)
+func NewBooleanWithDisclosable(name string, value *bool, selectivelyDisclosable bool) *Boolean {
+	return NewBooleanWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimBooleanWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimBooleanWithParent(name string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
-	return NewClaimBooleanFull(name, "", value, selectivelyDisclosable, parent)
+func NewBooleanWithParent(name string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
+	return NewBooleanFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimBooleanFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimBooleanFull(name, namespace string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
+func NewBooleanFull(name, namespace string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
 	return &Boolean{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -79,4 +79,4 @@ func (c *Boolean) Equals(other *Boolean) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *Boolean) String() string { return AbstractClaimString(c) }
+func (c *Boolean) String() string { return AbstractString(c) }

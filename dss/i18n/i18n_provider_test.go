@@ -9,7 +9,7 @@ package i18n
 import "testing"
 
 func TestI18nProviderGetMessage(t *testing.T) {
-	provider := NewI18nProviderForLocale("en")
+	provider := NewProviderForLocale("en")
 	got := provider.GetMessage(MessageTagBBBXCVCCCBB)
 	want := "Can the certificate chain be built till a trust anchor?"
 	if got != want {
@@ -18,7 +18,7 @@ func TestI18nProviderGetMessage(t *testing.T) {
 
 	// locale-invariance: see defaultBundle doc comment.
 	for _, locale := range []string{"", "en", "fr", "fr_FR", "de"} {
-		p := NewI18nProviderForLocale(locale)
+		p := NewProviderForLocale(locale)
 		if got := p.GetMessage(MessageTagBBBXCVCCCBB); got != want {
 			t.Errorf("locale %q: GetMessage(BBB_XCV_CCCBB) = %q, want %q", locale, got, want)
 		}
@@ -35,11 +35,11 @@ func TestI18nProviderGetMessageNullTag(t *testing.T) {
 			t.Fatalf("panic value = %v, want %q", r, "messageTag cannot be null!")
 		}
 	}()
-	NewI18nProvider().GetMessage(MessageTag(""))
+	NewProvider().GetMessage(MessageTag(""))
 }
 
 func TestI18nProviderParametrizedTest(t *testing.T) {
-	provider := NewI18nProvider()
+	provider := NewProvider()
 	message := provider.GetMessage(MessageTagTrustedServiceStatus, "granted")
 	want := "Status : granted"
 	if message != want {
@@ -48,7 +48,7 @@ func TestI18nProviderParametrizedTest(t *testing.T) {
 }
 
 func TestI18nProviderNestedMessageTagTest(t *testing.T) {
-	provider := NewI18nProvider()
+	provider := NewProvider()
 	message := provider.GetMessage(MessageTagCertQualificationAtTime, MessageTagVTValidationTime)
 	want := "Certificate Qualification at validation time"
 	if message != want {
@@ -60,7 +60,7 @@ func TestI18nProviderNestedMessageTagTest(t *testing.T) {
 // I18nProviderTest#apostropheTest: MessageFormat's quoting rules treat a
 // doubled single quote (”) in the pattern as an escaped literal quote.
 func TestI18nProviderApostropheTest(t *testing.T) {
-	provider := NewI18nProvider()
+	provider := NewProvider()
 
 	if got, want := provider.GetMessage(MessageTagBBBCVISIT), "Is time-stamp's signature intact?"; got != want {
 		t.Errorf("GetMessage(BBB_CV_ISIT) = %q, want %q", got, want)
@@ -81,7 +81,7 @@ func TestI18nProviderApostropheTest(t *testing.T) {
 // NOT "fixed" - see PORTING.md's marshal-parity contract and the porter
 // brief.
 func TestI18nProviderBareApostropheQuirk(t *testing.T) {
-	provider := NewI18nProvider()
+	provider := NewProvider()
 
 	got := provider.GetMessage(MessageTagBBBXCVRevocSelfIssuedOCSPANS)
 	want := "The checked certificate shall not appear in the OCSP Responders certificate path!"

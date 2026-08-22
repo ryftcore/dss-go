@@ -21,7 +21,7 @@ type Certificates struct {
 
 // NewTLSCertificates creates an empty TLSCertificates. Ports the empty
 // constructor.
-func NewTLSCertificates() *Certificates {
+func NewCertificates() *Certificates {
 	return &Certificates{}
 }
 

@@ -77,14 +77,14 @@ type TimestampMessageDigestBuilder struct {
 	timestampToken *validation.TimestampToken
 }
 
-// NewCAdESTimestampMessageDigestBuilder is the constructor to compute message-imprint for
+// NewTimestampMessageDigestBuilder is the constructor to compute message-imprint for
 // timestamps related to the signature, to be used on timestamp creation.
 // Port of the (CAdESSignature, DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewCAdESTimestampMessageDigestBuilder(signature *Signature,
+func NewTimestampMessageDigestBuilder(signature *Signature,
 	digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
-	builder := newCAdESTimestampMessageDigestBuilder(signature, signature.CertificateSource().SignedDataCertificates())
+	builder := newTimestampMessageDigestBuilder(signature, signature.CertificateSource().SignedDataCertificates())
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
 	}
@@ -92,15 +92,15 @@ func NewCAdESTimestampMessageDigestBuilder(signature *Signature,
 	return builder
 }
 
-// NewCAdESTimestampMessageDigestBuilderForToken is the constructor to compute message-imprint
+// NewTimestampMessageDigestBuilderForToken is the constructor to compute message-imprint
 // for timestamps related to the signature. This constructor uses the provided certificateSource
 // to validate the ats-v3-hash-table. Port of the (CAdESSignature, ListCertificateSource,
 // TimestampToken) constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewCAdESTimestampMessageDigestBuilderForToken(signature *Signature,
+func NewTimestampMessageDigestBuilderForToken(signature *Signature,
 	certificateSource *spi.ListCertificateSource, timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
-	builder := newCAdESTimestampMessageDigestBuilder(signature, certificateSource.Certificates())
+	builder := newTimestampMessageDigestBuilder(signature, certificateSource.Certificates())
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
 	}
@@ -109,7 +109,7 @@ func NewCAdESTimestampMessageDigestBuilderForToken(signature *Signature,
 	return builder
 }
 
-// newCAdESTimestampMessageDigestBuilder is the default (private) constructor.
+// newTimestampMessageDigestBuilder is the default (private) constructor.
 // Port of the (CAdESSignature, List<CertificateToken>) constructor.
 //
 // certificates is required non-nil (Objects.requireNonNull, like signature), matching Java,
@@ -117,7 +117,7 @@ func NewCAdESTimestampMessageDigestBuilderForToken(signature *Signature,
 // constructors above only ever pass it for the requireNonNull side effect.
 //
 // Panics with the Java messages when signature or certificates is nil.
-func newCAdESTimestampMessageDigestBuilder(signature *Signature,
+func newTimestampMessageDigestBuilder(signature *Signature,
 	certificates []*model.CertificateToken) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
@@ -129,7 +129,7 @@ func newCAdESTimestampMessageDigestBuilder(signature *Signature,
 		cms:                signature.CMS(),
 		signerInformation:  signature.SignerInformation(),
 		detachedDocuments:  signature.DetachedContents(),
-		timestampExtractor: NewCadesLevelBaselineLTATimestampExtractor(signature),
+		timestampExtractor: NewLevelBaselineLTATimestampExtractor(signature),
 	}
 }
 

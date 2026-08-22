@@ -34,7 +34,7 @@ type SignedFilesCoveredCheck struct {
 
 // NewEvidenceRecordSignedFilesCoveredCheck is the default constructor. Port of
 // SignedFilesCoveredCheck(Provider, XmlValidationProcessEvidenceRecord, EvidenceRecordWrapper, LevelRule).
-func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.Provider,
+func NewSignedFilesCoveredCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessEvidenceRecord],
 	evidenceRecord *diagnostic.EvidenceRecordWrapper,
 	constraint policy.LevelRule) *SignedFilesCoveredCheck {

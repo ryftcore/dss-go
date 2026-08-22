@@ -26,19 +26,19 @@ type CertificateSource struct {
 	dssDictionaryCertificateSource *PdfDssDictCertificateSource
 }
 
-// NewPAdESCertificateSource is the default constructor for CertificateSource.
+// NewCertificateSource is the default constructor for CertificateSource.
 // Port of the constructor PAdESCertificateSource(PdfSignatureRevision, String,
 // SignerInformation).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_certificate_source.go).
-func NewPAdESCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+func NewCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signerInformation *cmscore.SignerInfo) (*CertificateSource, error) {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")
 	}
 
-	base, err := cades.NewCAdESCertificateSource(pdfSignatureRevision.CMS(), signerInformation)
+	base, err := cades.NewCertificateSource(pdfSignatureRevision.CMS(), signerInformation)
 	if err != nil {
 		return nil, err
 	}

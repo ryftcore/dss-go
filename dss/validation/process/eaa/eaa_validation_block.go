@@ -43,7 +43,7 @@ type ValidationBlock struct {
 
 // NewEAAValidationBlock is the default constructor. Port of
 // ValidationBlock(Provider, Data, ValidationPolicy, Date, Map, List, List).
-func NewEAAValidationBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
+func NewValidationBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	tlAnalysis []*jaxb.XmlTLAnalysis, loteAnalysis []*jaxb.XmlLoTEAnalysis) *ValidationBlock {
 	return &ValidationBlock{
@@ -80,7 +80,7 @@ func (b *ValidationBlock) Execute() []*jaxb.XmlEAA {
 			signatureValidationMap[eaaWrapper.KeyBindingSignature().Id()] = signatureValidation
 		}
 
-		eaapvp := NewEAAValidationProcess(b.i18nProvider, eaaWrapper, signatureValidationMap, b.bbbs, b.Policy)
+		eaapvp := NewValidationProcess(b.i18nProvider, eaaWrapper, signatureValidationMap, b.bbbs, b.Policy)
 		validationProcessEAA := eaapvp.Execute()
 		eaaAnalysis.ValidationProcessEAA = validationProcessEAA
 

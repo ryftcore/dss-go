@@ -25,9 +25,9 @@ type LevelBaselineLT struct {
 	LevelBaselineT
 }
 
-// NewXAdESLevelBaselineLT is the default constructor for LevelBaselineLT.
+// NewLevelBaselineLT is the default constructor for LevelBaselineLT.
 // Port of XAdESLevelBaselineLT(CertificateVerifier).
-func NewXAdESLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
+func NewLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
 	extension := &LevelBaselineLT{}
 	extension.InitXAdESLevelBaselineLT(extension, certificateVerifier)
 	return extension

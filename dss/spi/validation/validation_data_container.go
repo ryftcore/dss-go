@@ -4,7 +4,7 @@
 // signature_validation_context.go. This file additionally needs the members below, inferred
 // from every ValidationData call this Java source makes:
 //
-//	func NewValidationData() *Data
+//	func NewData() *Data
 //	func (d *Data) AddValidationData(other *Data)
 //	func (d *Data) ExcludeCertificateTokens(certificateTokens []*model.CertificateToken)
 //	func (d *Data) ExcludeCRLTokens(crlIdentifiers []model.Identifier)
@@ -58,9 +58,9 @@ type DataContainer struct {
 	timestampValidationDataMap *utils.OrderedMap[*TimestampToken, *Data]
 }
 
-// NewValidationDataContainer instantiates empty maps of tokens and validation data
+// NewDataContainer instantiates empty maps of tokens and validation data
 // relationships. Ports the default constructor.
-func NewValidationDataContainer() *DataContainer {
+func NewDataContainer() *DataContainer {
 	return &DataContainer{
 		signatureValidationDataMap: utils.NewOrderedMap[AdvancedSignature, *Data](),
 		timestampValidationDataMap: utils.NewOrderedMap[*TimestampToken, *Data](),
@@ -97,7 +97,7 @@ func (c *DataContainer) ValidationDataForTimestamp(timestampToken *TimestampToke
 // AllValidationData returns a combined validation data for all tokens. Port of
 // getAllValidationData().
 func (c *DataContainer) AllValidationData() *Data {
-	result := NewValidationData()
+	result := NewData()
 	for _, validationData := range c.signatureValidationDataMap.Values() {
 		result.AddValidationData(validationData)
 	}
@@ -136,7 +136,7 @@ func (c *DataContainer) IsEmpty() bool {
 // the data for incorporated timestamps and/or counter-signatures. Port of
 // getAllValidationDataForSignature(AdvancedSignature).
 func (c *DataContainer) AllValidationDataForSignature(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	validationDataForInclusion.AddValidationData(c.validationDataForSignature(signature))
 	validationDataForInclusion.AddValidationData(c.validationDataForSignatureTimestamps(signature))
@@ -151,7 +151,7 @@ func (c *DataContainer) AllValidationDataForSignature(signature AdvancedSignatur
 // excluding the tokens already incorporated within the signature. Port of
 // getAllValidationDataForSignatureForInclusion(AdvancedSignature).
 func (c *DataContainer) AllValidationDataForSignatureForInclusion(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	validationDataForInclusion.AddValidationData(c.ValidationDataForSignatureForInclusion(signature))
 	validationDataForInclusion.AddValidationData(c.ValidationDataForSignatureTimestampsForInclusion(signature))
@@ -171,7 +171,7 @@ func excludePresentValidationData(validationData *Data, signature AdvancedSignat
 // validationDataForSignature returns all validation data for the signature. Port of the
 // protected getValidationDataForSignature(AdvancedSignature).
 func (c *DataContainer) validationDataForSignature(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	signatureValidationData := c.ValidationDataForSignature(signature)
 	validationDataForInclusion.AddValidationData(signatureValidationData)
@@ -191,7 +191,7 @@ func (c *DataContainer) ValidationDataForSignatureForInclusion(signature Advance
 // validationDataForCounterSignatures returns all validation data for the incorporated
 // counter-signatures. Port of the protected getValidationDataForCounterSignatures(AdvancedSignature).
 func (c *DataContainer) validationDataForCounterSignatures(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	for _, counterSignature := range signature.CounterSignatures() {
 		counterSignatureValidationData := c.ValidationDataForSignature(counterSignature)
@@ -217,7 +217,7 @@ func (c *DataContainer) ValidationDataForCounterSignaturesForInclusion(signature
 // incorporated within the signature. Port of the protected
 // getValidationDataForSignatureTimestamps(AdvancedSignature).
 func (c *DataContainer) validationDataForSignatureTimestamps(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	for _, timestampToken := range signature.AllTimestamps() {
 		timestampValidationData := c.ValidationDataForTimestamp(timestampToken)
@@ -240,7 +240,7 @@ func (c *DataContainer) ValidationDataForSignatureTimestampsForInclusion(signatu
 // incorporated within counter signatures of the current signature. Port of the protected
 // getValidationDataForCounterSignatureTimestamps(AdvancedSignature).
 func (c *DataContainer) validationDataForCounterSignatureTimestamps(signature AdvancedSignature) *Data {
-	validationDataForInclusion := NewValidationData()
+	validationDataForInclusion := NewData()
 
 	for _, counterSignature := range signature.CounterSignatures() {
 		for _, timestampToken := range counterSignature.AllTimestamps() {

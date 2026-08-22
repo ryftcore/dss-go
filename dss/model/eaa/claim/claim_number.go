@@ -19,30 +19,30 @@ type Number struct {
 }
 
 // NewClaimNumber ports the default constructor.
-func NewClaimNumber(value any) *Number {
-	return NewClaimNumberWithName("", value)
+func NewNumber(value any) *Number {
+	return NewNumberWithName("", value)
 }
 
 // NewClaimNumberWithName ports the constructor with claim name provided.
-func NewClaimNumberWithName(name string, value any) *Number {
-	return NewClaimNumberWithDisclosable(name, value, false)
+func NewNumberWithName(name string, value any) *Number {
+	return NewNumberWithDisclosable(name, value, false)
 }
 
 // NewClaimNumberWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimNumberWithDisclosable(name string, value any, selectivelyDisclosable bool) *Number {
-	return NewClaimNumberWithParent(name, value, selectivelyDisclosable, nil)
+func NewNumberWithDisclosable(name string, value any, selectivelyDisclosable bool) *Number {
+	return NewNumberWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimNumberWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimNumberWithParent(name string, value any, selectivelyDisclosable bool, parent Claim) *Number {
-	return NewClaimNumberFull(name, "", value, selectivelyDisclosable, parent)
+func NewNumberWithParent(name string, value any, selectivelyDisclosable bool, parent Claim) *Number {
+	return NewNumberFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimNumberFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimNumberFull(name, namespace string, value any, selectivelyDisclosable bool, parent Claim) *Number {
+func NewNumberFull(name, namespace string, value any, selectivelyDisclosable bool, parent Claim) *Number {
 	return &Number{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -82,4 +82,4 @@ func (c *Number) Equals(other *Number) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *Number) String() string { return AbstractClaimString(c) }
+func (c *Number) String() string { return AbstractString(c) }

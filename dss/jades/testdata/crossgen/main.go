@@ -137,7 +137,7 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 // baseline B) the TSP source a JAdES-T needs to request its signature-timestamp.
 func newParameters(level enumerations.SignatureLevel, serializationType enumerations.JWSSerializationType,
 	signerEntry token.DSSPrivateKeyEntry) *jades.SignatureParameters {
-	parameters := jades.NewJAdESSignatureParameters()
+	parameters := jades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetJwsSerializationType(serializationType)
@@ -153,7 +153,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, serializat
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, serializationType, signerEntry)
 
-	service := jades.NewJAdESService(validation.NewCommonCertificateVerifier())
+	service := jades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.TspSource = tspSource
 	}
@@ -179,7 +179,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, serializat
 // needs the latter, under the same document name, to resolve the sigD reference and validate
 // reference/message-digest intactness).
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
-	parameters := jades.NewJAdESSignatureParameters()
+	parameters := jades.NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	parameters.SetSigDMechanism(enumerations.SigDMechanismObjectIDByURIHash)
@@ -188,7 +188,7 @@ func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 
-	service := jades.NewJAdESService(validation.NewCommonCertificateVerifier())
+	service := jades.NewService(validation.NewCommonCertificateVerifier())
 	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleJSONContent), detachedContentName, enumerations.MimeTypeEnumJSON)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)

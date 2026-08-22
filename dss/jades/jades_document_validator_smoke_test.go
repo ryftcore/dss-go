@@ -78,7 +78,7 @@ func TestJAdESDocumentValidator_Smoke(t *testing.T) {
 				t.Fatalf("NewFileDocument(%s): %v", tt.file, err)
 			}
 
-			if !NewJAdESDocumentValidatorFactory().IsSupported(doc) {
+			if !NewDocumentValidatorFactory().IsSupported(doc) {
 				t.Fatalf("JAdESDocumentValidatorFactory.IsSupported() = false for %s, want true", tt.file)
 			}
 

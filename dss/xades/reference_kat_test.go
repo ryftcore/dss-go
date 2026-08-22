@@ -260,7 +260,7 @@ var xadesRefsSigningDate = time.Date(2021, time.January, 1, 0, 0, 0, 0, time.UTC
 
 func xadesRefsBaseParams(t *testing.T) *SignatureParameters {
 	t.Helper()
-	params := NewXAdESSignatureParameters()
+	params := NewSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
 	params.SetSigningCertificate(signer)
 	params.SetCertificateChain([]*model.CertificateToken{signer})

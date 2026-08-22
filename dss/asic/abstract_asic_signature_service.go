@@ -38,7 +38,7 @@ type AbstractASiCSignatureServiceOverrides[SP model.SerializableSignatureParamet
 
 	// GetArchiveExtractor returns a relevant ASiC container extractor for the given format.
 	// Port of the protected abstract getArchiveExtractor(DSSDocument).
-	GetArchiveExtractor(archive model.DSSDocument) *DefaultASiCContainerExtractor
+	GetArchiveExtractor(archive model.DSSDocument) *DefaultContainerExtractor
 
 	// AddContainerEvidenceRecordMultiple creates a new ASiC container with the
 	// evidenceRecordDocument applied to documents. Port of the public abstract

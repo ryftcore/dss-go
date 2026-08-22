@@ -17,9 +17,9 @@ type LevelBaselineLTA struct {
 	LevelBaselineLT
 }
 
-// NewPAdESLevelBaselineLTA is the default constructor.
+// NewLevelBaselineLTA is the default constructor.
 // Port of PAdESLevelBaselineLTA(TSPSource, CertificateVerifier, IPdfObjFactory).
-func NewPAdESLevelBaselineLTA(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
+func NewLevelBaselineLTA(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
 	pdfObjectFactory IPdfObjFactory) *LevelBaselineLTA {
 	extension := &LevelBaselineLTA{}
 	extension.InitPAdESLevelBaselineT(extension, tspSource, certificateVerifier, pdfObjectFactory)

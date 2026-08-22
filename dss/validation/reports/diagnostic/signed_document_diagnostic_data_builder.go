@@ -136,7 +136,7 @@ type SignedDocumentDiagnosticDataBuilder struct {
 // maps. Port of the public default constructor.
 func NewSignedDocumentDiagnosticDataBuilder() *SignedDocumentDiagnosticDataBuilder {
 	b := &SignedDocumentDiagnosticDataBuilder{
-		DataBuilder:               *NewDiagnosticDataBuilder(),
+		DataBuilder:               *NewDataBuilder(),
 		documentCertificateSource: spi.NewListCertificateSource(),
 		documentCRLSource:         spi.NewListRevocationSource[revocation.CRL](),
 		documentOCSPSource:        spi.NewListRevocationSource[revocation.OCSP](),

@@ -8,14 +8,14 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 // xmldsig_path.go precedent.
 var (
 	// ASiCManifestPathASiCManifestPath = "./asic:ASiCManifest"
-	ASiCManifestPathASiCManifestPath = common.FromCurrentPosition(ASiCManifestElementASiCManifest)
+	ASiCManifestPathASiCManifestPath = common.FromCurrentPosition(ManifestElementASiCManifest)
 
 	// ASiCManifestPathDataObjectReferencePath = "./asic:DataObjectReference"
-	ASiCManifestPathDataObjectReferencePath = common.FromCurrentPosition(ASiCManifestElementDataObjectReference)
+	ASiCManifestPathDataObjectReferencePath = common.FromCurrentPosition(ManifestElementDataObjectReference)
 
 	// ASiCManifestPathSigReferencePath = "./asic:SigReference"
-	ASiCManifestPathSigReferencePath = common.FromCurrentPosition(ASiCManifestElementSigReference)
+	ASiCManifestPathSigReferencePath = common.FromCurrentPosition(ManifestElementSigReference)
 
 	// ASiCManifestPathSigReferenceURIPath = "./asic:SigReference@URI"
-	ASiCManifestPathSigReferenceURIPath = common.FromCurrentPositionAttribute(ASiCManifestElementSigReference, ASiCManifestAttributeURI)
+	ASiCManifestPathSigReferenceURIPath = common.FromCurrentPositionAttribute(ManifestElementSigReference, ManifestAttributeURI)
 )

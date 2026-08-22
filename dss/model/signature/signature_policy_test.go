@@ -10,21 +10,21 @@ import (
 )
 
 func TestSignaturePolicy_DefaultConstructorIsImplicit(t *testing.T) {
-	p := NewSignaturePolicy()
+	p := NewPolicy()
 	if got, want := p.Identifier(), "IMPLICIT_POLICY"; got != want {
 		t.Fatalf("Identifier() = %q, want %q", got, want)
 	}
 }
 
 func TestSignaturePolicy_RoundTrip(t *testing.T) {
-	p := NewSignaturePolicyWithIdentifier("1.2.3.4")
+	p := NewPolicyWithIdentifier("1.2.3.4")
 	doc := model.NewInMemoryDocument([]byte("policy"))
 	digest := model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3})
 	userNotice := model.NewUserNotice()
 	userNotice.SetExplicitText("read me")
 	docSpec := model.NewSpDocSpecification()
 	docSpec.SetId("1.2.3.4.5")
-	validationResult := NewSignaturePolicyValidationResult()
+	validationResult := NewPolicyValidationResult()
 
 	p.SetDescription("a policy")
 	p.SetPolicyContent(doc)

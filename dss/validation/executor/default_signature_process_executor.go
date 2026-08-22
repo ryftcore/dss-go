@@ -116,7 +116,7 @@ func (e *DefaultSignatureProcessExecutor) Execute() *reports.Reports {
 // DiagnosticData gets the DiagnosticData. Port of the protected
 // getDiagnosticData().
 func (e *DefaultSignatureProcessExecutor) DiagnosticData() *diagnostic.Data {
-	return diagnostic.NewDiagnosticData(e.JaxbDiagnosticData)
+	return diagnostic.NewData(e.JaxbDiagnosticData)
 }
 
 // BuildReports builds the reports. Port of the protected

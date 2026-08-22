@@ -130,7 +130,7 @@ func NewSignedDocumentValidatorBase(documentAnalyzer analyzer.DocumentAnalyzer) 
 		includeSemantics:        false,
 		validationLevel:         enumerations.ValidationLevelArchivalData,
 		// Java's `private Locale locale = Locale.getDefault()`; the ported
-		// i18n.NewI18nProviderForLocale documents "" as exactly that default.
+		// i18n.NewProviderForLocale documents "" as exactly that default.
 		locale:                     "",
 		enableEtsiValidationReport: true,
 	}

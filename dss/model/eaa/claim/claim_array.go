@@ -26,13 +26,13 @@ type Array struct {
 
 // NewClaimArray ports the constructor with claim name, value, selectively
 // disclosable status and parent claim provided.
-func NewClaimArray(name string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
-	return NewClaimArrayFull(name, "", value, selectivelyDisclosable, parent, createClaim)
+func NewArray(name string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
+	return NewArrayFull(name, "", value, selectivelyDisclosable, parent, createClaim)
 }
 
 // NewClaimArrayFull ports the constructor with claim name, namespace,
 // value, selectively disclosable status and parent claim provided.
-func NewClaimArrayFull(name, namespace string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
+func NewArrayFull(name, namespace string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
 	return &Array{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
@@ -96,4 +96,4 @@ func (c *Array) Equals(other *Array) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *Array) String() string { return AbstractClaimString(c) }
+func (c *Array) String() string { return AbstractString(c) }

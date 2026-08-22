@@ -15,8 +15,8 @@ type DOMElement struct {
 	element *xmldom.Node
 }
 
-// NewXAdESDOMElement is the default constructor.
-func NewXAdESDOMElement(element *xmldom.Node, ownerDocument *DOMDocument) *DOMElement {
+// NewDOMElement is the default constructor.
+func NewDOMElement(element *xmldom.Node, ownerDocument *DOMDocument) *DOMElement {
 	return &DOMElement{element: element, ownerDocument: ownerDocument}
 }
 

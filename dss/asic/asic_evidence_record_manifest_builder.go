@@ -24,16 +24,16 @@ type EvidenceRecordManifestBuilder struct {
 	evidenceRecordFilenameFactory EvidenceRecordFilenameFactory
 }
 
-// NewASiCEvidenceRecordManifestBuilderFromDocument builds a manifest from a DSSDocument
+// NewEvidenceRecordManifestBuilderFromDocument builds a manifest from a DSSDocument
 // representing the ASiC container. Ports
 // EvidenceRecordManifestBuilder(DSSDocument, DigestAlgorithm, String).
-func NewASiCEvidenceRecordManifestBuilderFromDocument(asicContainer model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) *EvidenceRecordManifestBuilder {
-	return NewASiCEvidenceRecordManifestBuilder(asicEvidenceRecordManifestToASiCContent(asicContainer), digestAlgorithm, evidenceRecordFilename)
+func NewEvidenceRecordManifestBuilderFromDocument(asicContainer model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) *EvidenceRecordManifestBuilder {
+	return NewEvidenceRecordManifestBuilder(asicEvidenceRecordManifestToASiCContent(asicContainer), digestAlgorithm, evidenceRecordFilename)
 }
 
 // asicEvidenceRecordManifestToASiCContent ports the private static toASiCContent(DSSDocument).
 func asicEvidenceRecordManifestToASiCContent(asicContainer model.DSSDocument) *Content {
-	extractor, err := DefaultASiCContainerExtractorFromDocument(asicContainer)
+	extractor, err := DefaultContainerExtractorFromDocument(asicContainer)
 	if err == nil {
 		var content *Content
 		content, err = extractor.Extract()
@@ -45,10 +45,10 @@ func asicEvidenceRecordManifestToASiCContent(asicContainer model.DSSDocument) *C
 		fmt.Sprintf("Unsupported ASiC or document type! Returned error : %s", err.Error()), err))
 }
 
-// NewASiCEvidenceRecordManifestBuilder builds a manifest from Content representing the
+// NewEvidenceRecordManifestBuilder builds a manifest from Content representing the
 // ASiC container. Ports ASiCEvidenceRecordManifestBuilder(ASiCContent, DigestAlgorithm,
 // String).
-func NewASiCEvidenceRecordManifestBuilder(asicContent *Content, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) *EvidenceRecordManifestBuilder {
+func NewEvidenceRecordManifestBuilder(asicContent *Content, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) *EvidenceRecordManifestBuilder {
 	b := &EvidenceRecordManifestBuilder{}
 	b.InitAbstractASiCManifestBuilderWithDigestAlgorithm(b, asicContent, evidenceRecordFilename, digestAlgorithm)
 	return b

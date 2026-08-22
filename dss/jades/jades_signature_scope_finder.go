@@ -22,7 +22,7 @@ type SignatureScopeFinder struct {
 }
 
 // NewJAdESSignatureScopeFinder is the port of the default constructor.
-func NewJAdESSignatureScopeFinder() *SignatureScopeFinder {
+func NewSignatureScopeFinder() *SignatureScopeFinder {
 	return &SignatureScopeFinder{AbstractSignatureScopeFinder: scope.NewAbstractSignatureScopeFinder()}
 }
 

@@ -133,7 +133,7 @@ func TestFCDirectChecksAgainstJavaOracle(t *testing.T) {
 	if len(rows) == 0 {
 		t.Fatal("empty direct oracle")
 	}
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	// index by (file, token, check)
 	type key struct{ file, token, check string }
@@ -470,7 +470,7 @@ func collidingByteRangeDiagnosticData() *diagnostic.Data {
 		}
 		jaxbData.Signatures = &diagjaxb.SignaturesWrapper{Items: append(jaxbData.Signatures.All(), xml)}
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // failingByteRangeDiagnosticData mirrors the oracle's dump whose single PAdES signature
@@ -488,7 +488,7 @@ func failingByteRangeDiagnosticData() *diagnostic.Data {
 		PDFSignatureDictionary: &diagjaxb.XmlPDFSignatureDictionary{SignatureByteRange: byteRange},
 	}
 	jaxbData.Signatures = &diagjaxb.SignaturesWrapper{Items: []*diagjaxb.XmlSignature{xml}}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // signatureWithDuplicatedReference carries a duplicated digest-matcher reference.

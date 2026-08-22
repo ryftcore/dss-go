@@ -29,9 +29,9 @@ type DefaultContainerMergerOverrides interface {
 	// GetContainerExtractor returns a relevant ASiC container extractor. Port of the protected
 	// abstract getContainerExtractor(DSSDocument).
 	//
-	// Cross-chunk assumption (ZIPCORE): DefaultASiCContainerExtractor exposes an Extract()
+	// Cross-chunk assumption (ZIPCORE): DefaultContainerExtractor exposes an Extract()
 	// (*Content, error) method.
-	GetContainerExtractor(container model.DSSDocument) *DefaultASiCContainerExtractor
+	GetContainerExtractor(container model.DSSDocument) *DefaultContainerExtractor
 
 	// IsSupportedDocument verifies whether the provided container is supported by the current
 	// class. Port of the protected abstract isSupported(DSSDocument).
@@ -138,13 +138,13 @@ func (m *DefaultContainerMerger) SetCreationTime(creationTime time.Time) {
 }
 
 // defaultContainerMergerFactoryRegistry holds the ContainerMergerFactory implementations
-// registered via RegisterASiCContainerMergerFactory, consulted in registration order - the Go
+// registered via RegisterContainerMergerFactory, consulted in registration order - the Go
 // equivalent of Java's ServiceLoader.load(ASiCContainerMergerFactory.class) iteration.
 var defaultContainerMergerFactoryRegistry []ContainerMergerFactory
 
-// RegisterASiCContainerMergerFactory registers an ContainerMergerFactory to be consulted by
+// RegisterContainerMergerFactory registers an ContainerMergerFactory to be consulted by
 // DefaultContainerMergerFromDocuments and DefaultContainerMergerFromASiCContents.
-func RegisterASiCContainerMergerFactory(f ContainerMergerFactory) {
+func RegisterContainerMergerFactory(f ContainerMergerFactory) {
 	defaultContainerMergerFactoryRegistry = append(defaultContainerMergerFactoryRegistry, f)
 }
 
@@ -282,10 +282,10 @@ func collectDocumentLists(asicContents []*Content, getter func(*Content) []model
 // createEmptyContainer creates an empty container. Ports the protected
 // createEmptyContainer().
 //
-// Cross-chunk assumption (ZIPCORE): NewASiCContent() *Content and
+// Cross-chunk assumption (ZIPCORE): NewContent() *Content and
 // SetContainerType(enumerations.ASiCContainerType).
 func (m *DefaultContainerMerger) createEmptyContainer() *Content {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetContainerType(m.getContainerType())
 	return asicContent
 }

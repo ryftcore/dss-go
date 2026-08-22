@@ -24,9 +24,9 @@ type LevelX struct {
 	LevelC
 }
 
-// NewXAdESLevelX is the default constructor for LevelX.
+// NewLevelX is the default constructor for LevelX.
 // Port of XAdESLevelX(CertificateVerifier).
-func NewXAdESLevelX(certificateVerifier validation.CertificateVerifier) *LevelX {
+func NewLevelX(certificateVerifier validation.CertificateVerifier) *LevelX {
 	level := &LevelX{}
 	level.InitXAdESLevelX(level, certificateVerifier)
 	return level

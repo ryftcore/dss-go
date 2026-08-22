@@ -28,11 +28,11 @@ type LevelBaselineB struct {
 	messageDigest model.DSSMessageDigest
 }
 
-// NewPAdESLevelBaselineB is the default constructor.
+// NewLevelBaselineB is the default constructor.
 // Port of PAdESLevelBaselineB(DSSMessageDigest).
-func NewPAdESLevelBaselineB(messageDigest model.DSSMessageDigest) *LevelBaselineB {
+func NewLevelBaselineB(messageDigest model.DSSMessageDigest) *LevelBaselineB {
 	return &LevelBaselineB{
-		LevelBaselineB: *cades.NewCAdESLevelBaselineB(),
+		LevelBaselineB: *cades.NewLevelBaselineB(),
 		messageDigest:  messageDigest,
 	}
 }

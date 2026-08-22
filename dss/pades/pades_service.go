@@ -53,10 +53,10 @@ type Service struct {
 	pdfObjFactory IPdfObjFactory
 }
 
-// NewPAdESService creates an instance of the Service. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided: it gives information on the sources to be used in the validation process in the
 // context of a signature. Port of PAdESService(CertificateVerifier).
-func NewPAdESService(certificateVerifier validation.CertificateVerifier) *Service {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ PAdESService created".
 	return &Service{
 		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters,
@@ -92,11 +92,11 @@ func (s *Service) extensionProfile(signatureLevel enumerations.SignatureLevel) d
 	case enumerations.SignatureLevelPAdESBaselineB:
 		return nil
 	case enumerations.SignatureLevelPAdESBaselineT:
-		return NewPAdESLevelBaselineT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	case enumerations.SignatureLevelPAdESBaselineLT:
-		return NewPAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineLT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	case enumerations.SignatureLevelPAdESBaselineLTA:
-		return NewPAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineLTA(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
 	}
@@ -348,11 +348,11 @@ func (s *Service) Timestamp(toTimestampDocument model.DSSDocument,
 	}
 	UtilsAssertPdfDocument(toTimestampDocument)
 
-	extensionService := NewPAdESExtensionServiceWithFactory(s.CertificateVerifier, s.pdfObjFactory)
+	extensionService := NewExtensionServiceWithFactory(s.CertificateVerifier, s.pdfObjFactory)
 	extendedDocument := extensionService.IncorporateValidationDataWithPassword(toTimestampDocument,
 		parameters.PasswordProtection())
 
-	timestampService := NewPAdESTimestampServiceWithPDFService(s.TspSource, s.SignatureTimestampService())
+	timestampService := NewTimestampServiceWithPDFService(s.TspSource, s.SignatureTimestampService())
 	timestampedDocument := timestampService.TimestampDocument(extendedDocument, parameters)
 	name, err := s.GetFinalFileName(toTimestampDocument, enumerations.SigningOperationTimestamp)
 	if err != nil {

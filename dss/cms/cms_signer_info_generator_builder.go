@@ -3,7 +3,7 @@
 //
 // Java builds an org.bouncycastle.cms.SignerInfoGenerator, a "recipe" object BouncyCastle's
 // CMSSignedDataGenerator.generate(content, encapsulate) later calls generate(contentType) on,
-// once the real content-type and content bytes are known (see AbstractCMSGenerator's own
+// once the real content-type and content bytes are known (see AbstractGenerator's own
 // comment and CMSGenerator.java). SignerInfoGenerator below is this port's replacement: a
 // struct capturing the same recipe (SignerIdentifier, digest/signature algorithm identifiers,
 // the not-yet-content-type/message-digest/algorithm-protection-completed signed attributes,
@@ -49,7 +49,7 @@ import (
 )
 
 // SignerInfoGenerator is the not-yet-finalised recipe for a SignerInfo, replacing
-// org.bouncycastle.cms.SignerInfoGenerator. AbstractCMSGenerator's native Generate (see
+// org.bouncycastle.cms.SignerInfoGenerator. AbstractGenerator's native Generate (see
 // abstract_cms_generator.go) is the only caller of Generate for a top-level CMS signature; a
 // counter-signature builder (a later phase) calls it directly with a nil contentType.
 type SignerInfoGenerator struct {
@@ -94,7 +94,7 @@ func (g *SignerInfoGenerator) DigestAlgorithm() *asn1ber.AlgorithmIdentifier {
 // SignerInfo builder needs a signature"). Rather than construct a SignerInfo cmscore refuses to
 // build, Generate still writes the signed-attributes DER SET to the ContentSigner's
 // OutputStream (the only side effect getDataToSign needs) and returns (nil, nil) - "evaluated,
-// but no real SignerInfo exists yet" - which AbstractCMSGenerator.Generate propagates the same
+// but no real SignerInfo exists yet" - which AbstractGenerator.Generate propagates the same
 // way (a nil, no-error CMS), matching every known call site's actual usage: CAdES discards the
 // CMS this path produces and checks only that no error occurred.
 func (g *SignerInfoGenerator) Generate(contentType asn1.ObjectIdentifier) (*cmscore.SignerInfo, error) {
@@ -139,7 +139,7 @@ type SignerInfoGeneratorBuilder struct {
 }
 
 // NewCMSSignerInfoGeneratorBuilder is the default constructor. Port of the no-arg constructor.
-func NewCMSSignerInfoGeneratorBuilder() *SignerInfoGeneratorBuilder {
+func NewSignerInfoGeneratorBuilder() *SignerInfoGeneratorBuilder {
 	return &SignerInfoGeneratorBuilder{}
 }
 

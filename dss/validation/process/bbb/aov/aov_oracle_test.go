@@ -145,11 +145,11 @@ func loadAovDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // aovI18nProvider is the single Provider all three replays use.
-var aovI18nProvider = i18n.NewI18nProvider()
+var aovI18nProvider = i18n.NewProvider()
 
 func aovI18n() *i18n.Provider { return aovI18nProvider }
 

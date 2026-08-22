@@ -12,8 +12,8 @@ import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 // delegate to dss/trustedlist/jaxb directly.
 type Facade struct{}
 
-// NewTrustedListFacade creates a new facade, the way Facade.newFacade does.
-func NewTrustedListFacade() *Facade {
+// NewFacade creates a new facade, the way Facade.newFacade does.
+func NewFacade() *Facade {
 	return &Facade{}
 }
 

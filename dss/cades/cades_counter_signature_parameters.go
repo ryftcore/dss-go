@@ -17,10 +17,10 @@ type CounterSignatureParameters struct {
 
 var _ model.SerializableCounterSignatureParameters = (*CounterSignatureParameters)(nil)
 
-// NewCAdESCounterSignatureParameters instantiates the object with an empty signature id to be
+// NewCounterSignatureParameters instantiates the object with an empty signature id to be
 // counter-signed. Port of the default constructor.
-func NewCAdESCounterSignatureParameters() *CounterSignatureParameters {
-	return &CounterSignatureParameters{SignatureParameters: *NewCAdESSignatureParameters()}
+func NewCounterSignatureParameters() *CounterSignatureParameters {
+	return &CounterSignatureParameters{SignatureParameters: *NewSignatureParameters()}
 }
 
 // SignatureIdToCounterSign ports #getSignatureIdToCounterSign.

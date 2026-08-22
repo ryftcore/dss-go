@@ -23,7 +23,7 @@ type OCSPSource struct {
 // OCSPSource(EtsiUHeader) constructor.
 //
 // Panics with the Java message when etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESOCSPSource(etsiUHeader *EtsiUHeader) *OCSPSource {
+func NewOCSPSource(etsiUHeader *EtsiUHeader) *OCSPSource {
 	if etsiUHeader == nil {
 		panic("etsiUHeader cannot be null")
 	}

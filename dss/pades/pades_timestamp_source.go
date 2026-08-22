@@ -117,22 +117,22 @@ type TimestampSource struct {
 	vriTimestamps []*validation.TimestampToken
 }
 
-// NewPAdESTimestampSource is the default constructor to extract timestamps for a signature.
+// NewTimestampSource is the default constructor to extract timestamps for a signature.
 // Port of the PAdESTimestampSource(PAdESSignature, List<PdfRevision>) constructor.
 //
 // Panics with the Java message when documentRevisions is nil (Objects.requireNonNull).
-func NewPAdESTimestampSource(signature *Signature, documentRevisions []PdfRevision) *TimestampSource {
+func NewTimestampSource(signature *Signature, documentRevisions []PdfRevision) *TimestampSource {
 	if documentRevisions == nil {
 		panic("List of Document revisions must be provided!")
 	}
-	cadesBase := cades.NewCAdESTimestampSource(signature.Signature)
+	cadesBase := cades.NewTimestampSource(signature.Signature)
 	s := &TimestampSource{
 		TimestampSource:   *cadesBase,
 		signature:         signature,
 		documentRevisions: utils.ReverseList(documentRevisions),
 	}
 	// Re-targets the base's overrides registration at s (see this file's header): cadesBase's
-	// own InitSignatureTimestampSource(cadesBase) call, made inside cades.NewCAdESTimestampSource
+	// own InitSignatureTimestampSource(cadesBase) call, made inside cades.NewTimestampSource
 	// above, is superseded by this one.
 	s.InitSignatureTimestampSource(s)
 	return s
@@ -282,7 +282,7 @@ func (s *TimestampSource) isAdbeRevocationInfoArchival(signedAttribute *cades.At
 // override; named distinctly since it is this file's own driver, not part of
 // SignatureTimestampSourceOverrides (see this file's header GAP note).
 func (s *TimestampSource) getTimestampScopesForDocumentTimestamp(timestampToken *validation.TimestampToken) []scope.SignatureScope {
-	timestampScopeFinder := NewPAdESTimestampScopeFinder()
+	timestampScopeFinder := NewTimestampScopeFinder()
 	timestampScopeFinder.SetSignature(s.signature)
 	return timestampScopeFinder.FindTimestampScope(timestampToken)
 }

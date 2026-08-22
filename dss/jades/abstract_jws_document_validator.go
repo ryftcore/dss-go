@@ -52,7 +52,7 @@ func newAbstractJWSDocumentValidator(analyzer jwsDocumentAnalyzer) AbstractJWSDo
 
 // InitializeDiagnosticDataBuilder is the port of the initializeDiagnosticDataBuilder() override.
 func (v *AbstractJWSDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := NewJAdESDiagnosticDataBuilder()
+	builder := NewDiagnosticDataBuilder()
 	return &builder.SignedDocumentDiagnosticDataBuilder
 }
 

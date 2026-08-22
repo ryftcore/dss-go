@@ -29,32 +29,32 @@ type EvidenceRecordDigestBuilder struct {
 	asicContentDocumentFilter *ContentDocumentFilter
 }
 
-// NewASiCEvidenceRecordDigestBuilderFromDocument creates a EvidenceRecordDigestBuilder to
+// NewEvidenceRecordDigestBuilderFromDocument creates a EvidenceRecordDigestBuilder to
 // build hashes from a DSSDocument, represented by an ASiC container, using a default SHA-256
 // digest algorithm. Ports ASiCEvidenceRecordDigestBuilder(DSSDocument), which may panic with
 // an *exception.IllegalInputException-wrapping error surfaced via panic(error) if the document
 // is not a supported ASiC or document type - see toASiCContent.
-func NewASiCEvidenceRecordDigestBuilderFromDocument(asicContainer model.DSSDocument) *EvidenceRecordDigestBuilder {
-	return NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer, enumerations.DigestAlgorithmSHA256)
+func NewEvidenceRecordDigestBuilderFromDocument(asicContainer model.DSSDocument) *EvidenceRecordDigestBuilder {
+	return NewEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer, enumerations.DigestAlgorithmSHA256)
 }
 
-// NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm creates a
+// NewEvidenceRecordDigestBuilderFromDocumentWithAlgorithm creates a
 // EvidenceRecordDigestBuilder to build hashes with the provided DigestAlgorithm from a
 // DSSDocument, represented by an ASiC container. Ports
 // EvidenceRecordDigestBuilder(DSSDocument, DigestAlgorithm).
-func NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
-	return NewASiCEvidenceRecordDigestBuilderWithAlgorithm(asicEvidenceRecordToASiCContent(asicContainer), digestAlgorithm)
+func NewEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+	return NewEvidenceRecordDigestBuilderWithAlgorithm(asicEvidenceRecordToASiCContent(asicContainer), digestAlgorithm)
 }
 
 // asicEvidenceRecordToASiCContent ports the private static toASiCContent(DSSDocument).
 //
-// Cross-chunk assumption (ZIPCORE): DefaultASiCContainerExtractor is expected to expose a
-// package-level constructor DefaultASiCContainerExtractorFromDocument(model.DSSDocument)
-// (*DefaultASiCContainerExtractor, error), mirroring
-// DefaultASiCContainerExtractor.fromDocument(DSSDocument), and an Extract() (*Content,
+// Cross-chunk assumption (ZIPCORE): DefaultContainerExtractor is expected to expose a
+// package-level constructor DefaultContainerExtractorFromDocument(model.DSSDocument)
+// (*DefaultContainerExtractor, error), mirroring
+// DefaultContainerExtractor.fromDocument(DSSDocument), and an Extract() (*Content,
 // error) method on the ContainerExtractor interface.
 func asicEvidenceRecordToASiCContent(asicContainer model.DSSDocument) *Content {
-	extractor, err := DefaultASiCContainerExtractorFromDocument(asicContainer)
+	extractor, err := DefaultContainerExtractorFromDocument(asicContainer)
 	if err == nil {
 		var content *Content
 		content, err = extractor.Extract()
@@ -66,17 +66,17 @@ func asicEvidenceRecordToASiCContent(asicContainer model.DSSDocument) *Content {
 		fmt.Sprintf("Unsupported ASiC or document type! Returned error : %s", err.Error()), err))
 }
 
-// NewASiCEvidenceRecordDigestBuilder creates a EvidenceRecordDigestBuilder to build hashes
+// NewEvidenceRecordDigestBuilder creates a EvidenceRecordDigestBuilder to build hashes
 // from ASiCContent, using a default SHA-256 digest algorithm. Ports
 // EvidenceRecordDigestBuilder(Content).
-func NewASiCEvidenceRecordDigestBuilder(asicContent *Content) *EvidenceRecordDigestBuilder {
-	return NewASiCEvidenceRecordDigestBuilderWithAlgorithm(asicContent, enumerations.DigestAlgorithmSHA256)
+func NewEvidenceRecordDigestBuilder(asicContent *Content) *EvidenceRecordDigestBuilder {
+	return NewEvidenceRecordDigestBuilderWithAlgorithm(asicContent, enumerations.DigestAlgorithmSHA256)
 }
 
-// NewASiCEvidenceRecordDigestBuilderWithAlgorithm creates a EvidenceRecordDigestBuilder to
+// NewEvidenceRecordDigestBuilderWithAlgorithm creates a EvidenceRecordDigestBuilder to
 // build hashes with the provided DigestAlgorithm from ASiCContent. Ports
 // EvidenceRecordDigestBuilder(Content, DigestAlgorithm).
-func NewASiCEvidenceRecordDigestBuilderWithAlgorithm(asicContent *Content, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+func NewEvidenceRecordDigestBuilderWithAlgorithm(asicContent *Content, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
 	return &EvidenceRecordDigestBuilder{
 		ZipContentEvidenceRecordDigestBuilder: newZipContentEvidenceRecordDigestBuilderBase(digestAlgorithm),
 		asicContent:                           asicContent,

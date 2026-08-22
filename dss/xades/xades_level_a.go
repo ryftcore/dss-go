@@ -18,9 +18,9 @@ type LevelA struct {
 	LevelXL
 }
 
-// NewXAdESLevelA is the default constructor for LevelA.
+// NewLevelA is the default constructor for LevelA.
 // Port of XAdESLevelA(CertificateVerifier).
-func NewXAdESLevelA(certificateVerifier validation.CertificateVerifier) *LevelA {
+func NewLevelA(certificateVerifier validation.CertificateVerifier) *LevelA {
 	extension := &LevelA{}
 	extension.InitXAdESLevelA(extension, certificateVerifier)
 	return extension

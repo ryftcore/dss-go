@@ -33,9 +33,9 @@ type LevelBaselineLT struct {
 	LevelBaselineT
 }
 
-// NewJAdESLevelBaselineLT is the default constructor.
+// NewLevelBaselineLT is the default constructor.
 // Port of JAdESLevelBaselineLT(CertificateVerifier).
-func NewJAdESLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
+func NewLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
 	extension := &LevelBaselineLT{}
 	extension.InitJAdESLevelBaselineT(extension, certificateVerifier)
 	return extension

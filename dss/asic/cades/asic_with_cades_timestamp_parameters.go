@@ -34,9 +34,9 @@ func (p *ASiCWithCAdESTimestampParameters) ASiC() *asic.Parameters {
 // NewASiCWithCAdESTimestampParameters is the empty constructor. Port of the empty constructor.
 func NewASiCWithCAdESTimestampParameters() *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		TimestampParameters: *dsscades.NewCAdESTimestampParameters(),
+		TimestampParameters: *dsscades.NewTimestampParameters(),
 		zipCreationDate:     time.Now(),
-		asicParams:          asic.NewASiCParameters(),
+		asicParams:          asic.NewParameters(),
 	}
 }
 
@@ -44,9 +44,9 @@ func NewASiCWithCAdESTimestampParameters() *ASiCWithCAdESTimestampParameters {
 // DigestAlgorithm. Port of ASiCWithCAdESTimestampParameters(DigestAlgorithm).
 func NewASiCWithCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		TimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
+		TimestampParameters: *dsscades.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),
 		zipCreationDate:     time.Now(),
-		asicParams:          asic.NewASiCParameters(),
+		asicParams:          asic.NewParameters(),
 	}
 }
 
@@ -55,7 +55,7 @@ func NewASiCWithCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enum
 // Parameters).
 func NewASiCWithCAdESTimestampParametersWithDigestAlgorithmAndASiCParams(digestAlgorithm enumerations.DigestAlgorithm, asicParams *asic.Parameters) *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		TimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
+		TimestampParameters: *dsscades.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),
 		zipCreationDate:     time.Now(),
 		asicParams:          asicParams,
 	}

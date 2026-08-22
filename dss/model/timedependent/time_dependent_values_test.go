@@ -15,7 +15,7 @@ func TestTimeDependentValues_LatestAndCurrent(t *testing.T) {
 	latest := NewBaseTimeDependentWithDates(d2021, time.Time{})
 	oldest := NewBaseTimeDependentWithDates(d2020, d2021)
 
-	values := NewTimeDependentValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{latest, oldest})
+	values := NewValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{latest, oldest})
 
 	if got := values.Latest(); got != latest {
 		t.Fatalf("Latest() = %v, want %v", got, latest)
@@ -28,7 +28,7 @@ func TestTimeDependentValues_LatestAndCurrent(t *testing.T) {
 		t.Fatalf("Current(2022) = %v, want the open-ended latest entry", got)
 	}
 
-	empty := NewTimeDependentValues[*BaseTimeDependent]()
+	empty := NewValues[*BaseTimeDependent]()
 	if got := empty.Latest(); got != nil {
 		t.Fatalf("Latest() on an empty list = %v, want nil", got)
 	}
@@ -46,7 +46,7 @@ func TestTimeDependentValues_After(t *testing.T) {
 	closedBefore := NewBaseTimeDependentWithDates(d2020, d2020.AddDate(0, 6, 0))
 	closedAfter := NewBaseTimeDependentWithDates(d2020, d2022)
 
-	values := NewTimeDependentValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{openEnded, closedBefore, closedAfter})
+	values := NewValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{openEnded, closedBefore, closedAfter})
 
 	after := values.After(d2021)
 	if len(after) != 2 {
@@ -61,7 +61,7 @@ func TestTimeDependentValues_After(t *testing.T) {
 
 func TestTimeDependentValues_Iterator(t *testing.T) {
 	a := NewBaseTimeDependentWithDates(time.Now(), time.Time{})
-	values := NewTimeDependentValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{a})
+	values := NewValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{a})
 
 	var seen []*BaseTimeDependent
 	for x := range values.Iterator() {
@@ -73,12 +73,12 @@ func TestTimeDependentValues_Iterator(t *testing.T) {
 }
 
 func TestTimeDependentValues_String(t *testing.T) {
-	empty := NewTimeDependentValues[*BaseTimeDependent]()
+	empty := NewValues[*BaseTimeDependent]()
 	if got, want := empty.String(), "[]"; got != want {
 		t.Fatalf("String() = %q, want %q", got, want)
 	}
 
-	one := NewTimeDependentValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{NewBaseTimeDependent()})
+	one := NewValuesFrom[*BaseTimeDependent]([]*BaseTimeDependent{NewBaseTimeDependent()})
 	if got, want := one.String(), "[[startDate=null, endDate=null]]"; got != want {
 		t.Fatalf("String() = %q, want %q", got, want)
 	}

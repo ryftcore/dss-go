@@ -45,16 +45,16 @@ type SignaturePolicy struct {
 
 // NewXAdESSignaturePolicy is the port of the default constructor XAdESSignaturePolicy(), which
 // represents the implied policy.
-func NewXAdESSignaturePolicy() *SignaturePolicy {
-	p := &SignaturePolicy{Policy: *signature.NewSignaturePolicy()}
+func NewSignaturePolicy() *SignaturePolicy {
+	p := &SignaturePolicy{Policy: *signature.NewPolicy()}
 	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
 	return p
 }
 
 // NewXAdESSignaturePolicyWithIdentifier is the port of the constructor
 // SignaturePolicy(String).
-func NewXAdESSignaturePolicyWithIdentifier(identifier string) *SignaturePolicy {
-	p := &SignaturePolicy{Policy: *signature.NewSignaturePolicyWithIdentifier(identifier)}
+func NewSignaturePolicyWithIdentifier(identifier string) *SignaturePolicy {
+	p := &SignaturePolicy{Policy: *signature.NewPolicyWithIdentifier(identifier)}
 	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
 	return p
 }

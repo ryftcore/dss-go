@@ -410,10 +410,10 @@ func (m *ASiCEWithXAdESContainerMerger) ensureEvidenceRecordManifestNamesDiffer(
 
 // createEmptyContainer exposes the embedded DefaultContainerMerger's unexported
 // createEmptyContainer via its already-exported constructor path: DefaultContainerMerger has no
-// exported equivalent, so this file builds the same shape directly (NewASiCContent +
+// exported equivalent, so this file builds the same shape directly (NewContent +
 // SetContainerType(getContainerType())), mirroring the asic/cades precedent.
 func (m *ASiCEWithXAdESContainerMerger) createEmptyContainer() *asic.Content {
-	asicContent := asic.NewASiCContent()
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(m.GetTargetASiCContainerType())
 	for _, ac := range m.AsicContents {
 		if ac.ContainerType() != "" {

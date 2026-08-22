@@ -52,7 +52,7 @@ func xadesCounterSignatureMasterDocument(t *testing.T,
 func xadesCounterSignatureParams(t *testing.T,
 	signatureIdToCounterSign string) *CounterSignatureParameters {
 	t.Helper()
-	params := NewXAdESCounterSignatureParameters()
+	params := NewCounterSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
 	params.SetSigningCertificate(signer)
 	params.SetCertificateChain([]*model.CertificateToken{signer})
@@ -199,7 +199,7 @@ func TestCounterSignatureBuilderRequiresSignatureId(t *testing.T) {
 // TestXAdESCounterSignatureParametersDefaults pins the default canonicalization method and the
 // accessors the SerializableCounterSignatureParameters interface requires.
 func TestXAdESCounterSignatureParametersDefaults(t *testing.T) {
-	params := NewXAdESCounterSignatureParameters()
+	params := NewCounterSignatureParameters()
 	if got := params.CounterSignatureCanonicalizationMethod(); got !=
 		"http://www.w3.org/2001/10/xml-exc-c14n#" {
 		t.Errorf("default counter-signature canonicalization method = %q", got)

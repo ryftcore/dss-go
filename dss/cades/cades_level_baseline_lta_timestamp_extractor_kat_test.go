@@ -90,7 +90,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s: %v", name, err)
 			}
-			extractor = newCadesLevelBaselineLTATimestampExtractor(signature)
+			extractor = newLevelBaselineLTATimestampExtractor(signature)
 
 		case "ECONTENTTYPE":
 			if got := hex.EncodeToString(extractor.encodedContentType()); got != fields[1] {

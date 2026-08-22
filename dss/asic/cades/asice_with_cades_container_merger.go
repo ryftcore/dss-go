@@ -359,7 +359,7 @@ func (m *ASiCEWithCAdESContainerMerger) replaceSigReferenceDocumentName(evidence
 	if err != nil || sigReferenceElement == nil {
 		panic(fmt.Sprintf("Invalid structure of ASiCEvidenceRecordManifest with name '%s'.", evidenceRecordManifest.Name()))
 	}
-	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ASiCManifestAttributeURI.AttributeName()}, newEvidenceRecordName)
+	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ManifestAttributeURI.AttributeName()}, newEvidenceRecordName)
 	serializedBytes, err := xmlutils.DomUtilsSerializeNode(manifestDocumentDom)
 	if err != nil {
 		panic(err)
@@ -378,10 +378,10 @@ func digestEquals(a, b model.DSSDocument) bool {
 
 // createEmptyContainer exposes the embedded DefaultContainerMerger's unexported
 // createEmptyContainer via its already-exported constructor path: DefaultContainerMerger has no
-// exported equivalent, so this file builds the same shape directly (NewASiCContent +
+// exported equivalent, so this file builds the same shape directly (NewContent +
 // SetContainerType(getContainerType())), mirroring createMergedResult's own use of it.
 func (m *ASiCEWithCAdESContainerMerger) createEmptyContainer() *asic.Content {
-	asicContent := asic.NewASiCContent()
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(m.GetTargetASiCContainerType())
 	for _, ac := range m.AsicContents {
 		if ac.ContainerType() != "" {

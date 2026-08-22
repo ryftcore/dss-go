@@ -26,10 +26,10 @@ type LevelBaselineLT struct {
 	LevelBaselineT
 }
 
-// NewCAdESLevelBaselineLT is the default constructor, taking the TSPSource for a timestamp
+// NewLevelBaselineLT is the default constructor, taking the TSPSource for a timestamp
 // creation and the CertificateVerifier. Port of
 // LevelBaselineLT(TSPSource, CertificateVerifier).
-func NewCAdESLevelBaselineLT(tspSource validation.TSPSource,
+func NewLevelBaselineLT(tspSource validation.TSPSource,
 	certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
 	extension := &LevelBaselineLT{}
 	extension.InitCAdESSignatureExtension(extension, tspSource, certificateVerifier)
@@ -212,7 +212,7 @@ func (e *LevelBaselineLT) replaceTimeStampAttribute(attributeTable cmscore.Attri
 // Port of the private extendWithValidationData(CMS, ValidationData).
 func (e *LevelBaselineLT) extendWithValidationData(cmsToExtend *cms.CMS,
 	validationDataForInclusion *validation.Data) (*cms.CMS, error) {
-	cmsBuilder := cms.NewCMSBuilder().SetOriginalCMS(cmsToExtend)
+	cmsBuilder := cms.NewBuilder().SetOriginalCMS(cmsToExtend)
 	return cmsBuilder.ExtendCMSSignedData(validationDataForInclusion.CertificateTokens(),
 		validationDataForInclusion.CrlTokens(), validationDataForInclusion.OcspTokens())
 }

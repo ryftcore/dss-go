@@ -23,7 +23,7 @@ func (v *EmptySignaturePolicyValidator) CanValidate(signaturePolicy *signature.P
 // Validate reports the policy's digest as valid exactly when the policy
 // carries no identifier.
 func (v *EmptySignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
-	validationResult := signature.NewSignaturePolicyValidationResult()
+	validationResult := signature.NewPolicyValidationResult()
 	validationResult.SetDigestValid(signaturePolicy.Identifier() == "")
 	return validationResult
 }

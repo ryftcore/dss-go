@@ -27,7 +27,7 @@ type Attribute struct {
 
 // NewJAdESAttribute is the default constructor. Port of the public JAdESAttribute(String, Object)
 // constructor.
-func NewJAdESAttribute(name string, value any) *Attribute {
+func NewAttribute(name string, value any) *Attribute {
 	return &Attribute{name: name, value: value}
 }
 

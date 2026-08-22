@@ -52,7 +52,7 @@ func (a *JWSCompactDocumentAnalyzer) BuildSignatures() []validation.AdvancedSign
 	}
 	// only one signature is supported by compact serialization
 	jws := foundSignatures[0]
-	jadesSignature := NewJAdESSignature(jws)
+	jadesSignature := NewSignature(jws)
 	jadesSignature.SetFilename(a.Document().Name())
 	jadesSignature.SetSigningCertificateSource(a.SigningCertificateSource())
 	jadesSignature.SetDetachedContents(a.DetachedContents())

@@ -982,7 +982,7 @@ func (s *NativePDFSignatureService) BuildDSSDictionary(reader *NativePdfDocument
 		for _, signature := range signatures {
 			vriEntry := pdf.VRIEntry{}
 
-			validationDataToAdd := validation.NewValidationData()
+			validationDataToAdd := validation.NewData()
 			validationDataToAdd.AddValidationData(validationDataForInclusion.AllValidationDataForSignature(signature))
 
 			if !validationDataToAdd.IsEmpty() {

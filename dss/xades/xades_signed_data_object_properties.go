@@ -5,7 +5,7 @@
 // package xades) lives alongside this file as xades_sig_properties.go: abstract in Java,
 // implementing spi.validation.SignatureProperties[Attribute] over a signature-properties DOM
 // element and an XAdESPath. Its constructor is the package-private
-// newXAdESSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath)
+// newSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath)
 // SigProperties, called directly below - Go has no abstract-class dispatch to register back
 // into, and SigProperties calls nothing virtual on its embedder (IsExist/Attributes are
 // entirely self-contained), so no Init-style registration is needed.
@@ -25,9 +25,9 @@ type SignedDataObjectProperties struct {
 
 // newXAdESSignedDataObjectProperties is the port of the package-private
 // SignedDataObjectProperties(Element, XAdESPath) constructor.
-func newXAdESSignedDataObjectProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *SignedDataObjectProperties {
+func newSignedDataObjectProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *SignedDataObjectProperties {
 	return &SignedDataObjectProperties{
-		SigProperties: newXAdESSigProperties(signatureProperties, xadesPaths),
+		SigProperties: newSigProperties(signatureProperties, xadesPaths),
 	}
 }
 
@@ -35,7 +35,7 @@ func newXAdESSignedDataObjectProperties(signatureProperties *xmldom.Node, xadesP
 // static build(Element, XAdESPath).
 func SignedDataObjectPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *SignedDataObjectProperties {
 	signedSignatureProperties := xadesSignedDataObjectPropertiesGetSignedSignaturePropertiesDom(signatureElement, xadesPaths)
-	return newXAdESSignedDataObjectProperties(signedSignatureProperties, xadesPaths)
+	return newSignedDataObjectProperties(signedSignatureProperties, xadesPaths)
 }
 
 // xadesSignedDataObjectPropertiesGetSignedSignaturePropertiesDom gets the

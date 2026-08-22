@@ -104,7 +104,7 @@ func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // passedAOV is the PASSED Algorithm Obsolescence Validation result the oracle fed
@@ -201,7 +201,7 @@ func TestAcceptanceValidationAgainstJavaOracle(t *testing.T) {
 		t.Fatal("empty oracle")
 	}
 	validationPolicy := policy.NewEtsiValidationPolicyFactory().LoadDefaultValidationPolicy()
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	byFile := map[string]map[string]*savOracleRow{}
 	var files []string

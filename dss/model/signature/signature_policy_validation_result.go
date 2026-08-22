@@ -38,9 +38,9 @@ type signaturePolicyValidationError struct {
 	message string
 }
 
-// NewSignaturePolicyValidationResult is the default constructor instantiating the object
+// NewPolicyValidationResult is the default constructor instantiating the object
 // with null (zero) values.
-func NewSignaturePolicyValidationResult() *PolicyValidationResult {
+func NewPolicyValidationResult() *PolicyValidationResult {
 	return &PolicyValidationResult{}
 }
 

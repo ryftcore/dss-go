@@ -51,9 +51,9 @@ type LevelBaselineT struct {
 	overrides LevelBaselineTOverrides
 }
 
-// NewPAdESLevelBaselineT is the default constructor.
+// NewLevelBaselineT is the default constructor.
 // Port of PAdESLevelBaselineT(TSPSource, CertificateVerifier, IPdfObjFactory).
-func NewPAdESLevelBaselineT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
+func NewLevelBaselineT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
 	pdfObjectFactory IPdfObjFactory) *LevelBaselineT {
 	extension := &LevelBaselineT{}
 	extension.InitPAdESLevelBaselineT(extension, tspSource, certificateVerifier, pdfObjectFactory)
@@ -107,7 +107,7 @@ func (t *LevelBaselineT) ExtendSignaturesWithAnalyzer(signedDocument model.DSSDo
 	}
 
 	if padesLevelBaselineTIsTLevelExtensionRequired(parameters, signatures) {
-		signatureRequirementsChecker := NewPAdESSignatureRequirementsChecker(t.CertificateVerifier, parameters)
+		signatureRequirementsChecker := NewSignatureRequirementsChecker(t.CertificateVerifier, parameters)
 
 		signatureRequirementsChecker.AssertExtendToTLevelPossible(signatures)
 
@@ -133,7 +133,7 @@ func (t *LevelBaselineT) signatureTimestampService() PDFSignatureService {
 func (t *LevelBaselineT) TimestampDocument(signedDocument model.DSSDocument,
 	timestampParameters *TimestampParameters, pwd []byte,
 	pdfSignatureService PDFSignatureService) model.DSSDocument {
-	padesTimestampService := NewPAdESTimestampServiceWithPDFService(t.tspSource, pdfSignatureService)
+	padesTimestampService := NewTimestampServiceWithPDFService(t.tspSource, pdfSignatureService)
 	timestampParameters.SetPasswordProtection(pwd)
 	return padesTimestampService.TimestampDocument(signedDocument, timestampParameters)
 }

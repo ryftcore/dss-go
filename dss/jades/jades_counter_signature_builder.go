@@ -30,8 +30,8 @@ type CounterSignatureBuilder struct {
 	ExtensionBuilder
 }
 
-// NewJAdESCounterSignatureBuilder is the default constructor.
-func NewJAdESCounterSignatureBuilder() *CounterSignatureBuilder {
+// NewCounterSignatureBuilder is the default constructor.
+func NewCounterSignatureBuilder() *CounterSignatureBuilder {
 	return &CounterSignatureBuilder{}
 }
 

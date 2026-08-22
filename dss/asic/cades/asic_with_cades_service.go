@@ -334,15 +334,15 @@ func (s *ASiCWithCAdESService) assertValidSignaturesToExtendFound(signatureDocum
 // Java returns the DefaultASiCContainerExtractor supertype; the Go port hands back the base
 // embedded in ASiCWithCAdESContainerExtractor, which already carries the concrete extractor as
 // its registered overrides, so Extract() dispatches exactly as Java's does.
-func (s *ASiCWithCAdESService) GetArchiveExtractor(archive model.DSSDocument) *asic.DefaultASiCContainerExtractor {
+func (s *ASiCWithCAdESService) GetArchiveExtractor(archive model.DSSDocument) *asic.DefaultContainerExtractor {
 	extractor := NewASiCWithCAdESContainerExtractor(archive)
-	return &extractor.DefaultASiCContainerExtractor
+	return &extractor.DefaultContainerExtractor
 }
 
 // GetCAdESService returns the CAdESService to be used for signature/timestamp creation. Ports
 // the protected getCAdESService().
 func (s *ASiCWithCAdESService) GetCAdESService() *dsscades.Service {
-	cadesService := dsscades.NewCAdESService(s.CertificateVerifier)
+	cadesService := dsscades.NewService(s.CertificateVerifier)
 	cadesService.SetTspSource(s.TspSource)
 	if dsscades.CAdESUtilsDefaultResourcesHandlerBuilder != s.ResourcesHandlerBuilder {
 		cadesService.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
@@ -549,7 +549,7 @@ func (s *ASiCWithCAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 	signatureDocument := asicContainerHelper.ExtractSignatureDocument(parameters.SignatureId())
 	parameters.SetDetachedContents(asicContainerHelper.GetDetachedDocuments(signatureDocument.Name()))
 
-	builder := dsscades.NewCAdESEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
+	builder := dsscades.NewEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
 	builder.SetManifestFile(asicContainerHelper.GetManifestFile(signatureDocument.Name()))
 	signatureWithEvidenceRecord, err := builder.AddEvidenceRecord(signatureDocument, evidenceRecordDocument, parameters)
 	if err != nil {
@@ -648,7 +648,7 @@ func (s *ASiCWithCAdESService) GetLTALevelExtensionProfile() *ASiCWithCAdESLevel
 // GetCAdESCounterSignatureBuilder creates a new instance of CAdESCounterSignatureBuilder. Ports
 // the protected getCAdESCounterSignatureBuilder().
 func (s *ASiCWithCAdESService) GetCAdESCounterSignatureBuilder() *dsscades.CounterSignatureBuilder {
-	counterSignatureBuilder := dsscades.NewCAdESCounterSignatureBuilder(s.CertificateVerifier)
+	counterSignatureBuilder := dsscades.NewCounterSignatureBuilder(s.CertificateVerifier)
 	counterSignatureBuilder.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
 	return counterSignatureBuilder
 }

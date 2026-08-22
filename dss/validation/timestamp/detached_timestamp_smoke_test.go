@@ -43,10 +43,10 @@ func TestDetachedTimestampAnalyzer_IsSupported(t *testing.T) {
 func TestDetachedTimestampValidator_IsSupported(t *testing.T) {
 	doc := loadTestTimestampDocument(t)
 
-	if !NewDetachedTimestampValidator(doc).IsSupported(doc) {
+	if !NewDetachedValidator(doc).IsSupported(doc) {
 		t.Error("DetachedTimestampValidator.IsSupported() = false, want true for a raw CMS TimeStampToken")
 	}
-	if !NewDetachedTimestampValidatorFactory().IsSupported(doc) {
+	if !NewDetachedValidatorFactory().IsSupported(doc) {
 		t.Error("DetachedTimestampValidatorFactory.IsSupported() = false, want true")
 	}
 }
@@ -69,7 +69,7 @@ func TestDetachedTimestampAnalyzerFactory_RegistersItself(t *testing.T) {
 func TestDetachedTimestampValidator_Timestamp(t *testing.T) {
 	doc := loadTestTimestampDocument(t)
 
-	timestampValidator := NewDetachedTimestampValidator(doc)
+	timestampValidator := NewDetachedValidator(doc)
 	timestampValidator.SetCertificateVerifier(validation.NewCommonCertificateVerifier())
 
 	timestampToken := timestampValidator.Timestamp()
@@ -94,7 +94,7 @@ func TestDetachedTimestampValidator_Timestamp(t *testing.T) {
 
 func TestDetachedTimestampValidator_OriginalDocumentsUnsupported(t *testing.T) {
 	doc := loadTestTimestampDocument(t)
-	timestampValidator := NewDetachedTimestampValidator(doc)
+	timestampValidator := NewDetachedValidator(doc)
 
 	assertPanics(t, func() { timestampValidator.OriginalDocuments("sig-1") })
 	assertPanics(t, func() { timestampValidator.OriginalDocumentsForSignature(nil) })

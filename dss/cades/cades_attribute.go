@@ -29,7 +29,7 @@ type Attribute struct {
 
 // NewCAdESAttribute is the port of the package-private CAdESAttribute(Attribute, Integer)
 // constructor.
-func NewCAdESAttribute(attribute *cmscore.Attribute, order *int) *Attribute {
+func NewAttribute(attribute *cmscore.Attribute, order *int) *Attribute {
 	return &Attribute{attribute: attribute, order: order}
 }
 

@@ -28,9 +28,9 @@ type ProductionPlace struct {
 	postalAddress []string
 }
 
-// NewSignatureProductionPlace is the default constructor instantiating the object with null
+// NewProductionPlace is the default constructor instantiating the object with null
 // (zero) values.
-func NewSignatureProductionPlace() *ProductionPlace {
+func NewProductionPlace() *ProductionPlace {
 	return &ProductionPlace{}
 }
 

@@ -20,7 +20,7 @@ type SigProperties struct {
 
 // newCAdESSigProperties is the port of the package-private CAdESSigProperties(ASN1Set)
 // constructor.
-func newCAdESSigProperties(attributeTable cmscore.Attributes, exists bool) SigProperties {
+func newSigProperties(attributeTable cmscore.Attributes, exists bool) SigProperties {
 	return SigProperties{attributeTable: attributeTable, exists: exists}
 }
 
@@ -36,7 +36,7 @@ func (p *SigProperties) Attributes() []*Attribute {
 	if p.IsExist() {
 		for index, attribute := range p.attributeTable {
 			order := index
-			attributes = append(attributes, NewCAdESAttribute(attribute, &order))
+			attributes = append(attributes, NewAttribute(attribute, &order))
 		}
 	}
 	return attributes

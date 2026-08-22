@@ -276,7 +276,7 @@ func (s *ASiCWithXAdESService) GetDetachedContents(asicContent *asic.Content, is
 // GetXAdESService returns the XAdESService to be used for signing. Ports the protected
 // getXAdESService().
 func (s *ASiCWithXAdESService) GetXAdESService() *dssxades.Service {
-	xadesService := dssxades.NewXAdESService(s.CertificateVerifier)
+	xadesService := dssxades.NewService(s.CertificateVerifier)
 	xadesService.SetTspSource(s.TspSource)
 	return xadesService
 }
@@ -331,7 +331,7 @@ func (s *ASiCWithXAdESService) buildDomRoot(openDocument bool) *xmldom.Node {
 			Local: asic.ASiCManifestNamespaceLibreOfficeSignatures,
 		})
 	} else {
-		xadesSignatures = xmlutils.DomUtilsCreateElementNS(rootDocument, asic.ASiCManifestNS, asic.ASiCManifestElementXAdESSignatures)
+		xadesSignatures = xmlutils.DomUtilsCreateElementNS(rootDocument, asic.ASiCManifestNS, asic.ManifestElementXAdESSignatures)
 	}
 	rootDocument.AppendChild(xadesSignatures)
 	return rootDocument
@@ -343,12 +343,12 @@ func (s *ASiCWithXAdESService) buildDomRoot(openDocument bool) *xmldom.Node {
 // embedded (by value) in ASiCWithXAdESContainerExtractor, which already carries the concrete
 // extractor as its registered overrides, so Extract() dispatches exactly as Java's does. The
 // address-of is required here - unlike the CADSIGN chunk's analogous method, which returns the
-// embedded value directly and does not type-check against its own *asic.DefaultASiCContainerExtractor
+// embedded value directly and does not type-check against its own *asic.DefaultContainerExtractor
 // return type; not fixed here since asic/cades is a sibling chunk's file, flagged in notes
 // instead per PORTING.md.
-func (s *ASiCWithXAdESService) GetArchiveExtractor(archive model.DSSDocument) *asic.DefaultASiCContainerExtractor {
+func (s *ASiCWithXAdESService) GetArchiveExtractor(archive model.DSSDocument) *asic.DefaultContainerExtractor {
 	extractor := NewASiCWithXAdESContainerExtractor(archive)
-	return &extractor.DefaultASiCContainerExtractor
+	return &extractor.DefaultContainerExtractor
 }
 
 // AddSignaturePolicyStore incorporates a Signature Policy Store as an unsigned property into the

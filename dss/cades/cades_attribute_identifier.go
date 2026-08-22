@@ -14,7 +14,7 @@ type AttributeIdentifier struct {
 
 // newCAdESAttributeIdentifier is the port of the package-private
 // AttributeIdentifier(byte[]) constructor.
-func newCAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+func newAttributeIdentifier(data []byte) *AttributeIdentifier {
 	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("CAdESAttributeIdentifier", data),
 	}
@@ -37,5 +37,5 @@ func AttributeIdentifierBuild(attribute *cmscore.Attribute, order *int) *Attribu
 	if order != nil {
 		data = append(data, byte(*order))
 	}
-	return newCAdESAttributeIdentifier(data)
+	return newAttributeIdentifier(data)
 }

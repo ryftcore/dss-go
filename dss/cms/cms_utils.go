@@ -70,7 +70,7 @@ func UtilsParseToCMSBinaries(binaries []byte) (*CMS, error) {
 // #writeToDSSDocument(CMS, DSSResourcesHandlerBuilder); see the file header for
 // resourcesHandlerBuilder.
 func UtilsWriteToDSSDocument(cms *CMS, resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (model.DSSDocument, error) {
-	return NewCMSSignedDocument(cms), nil
+	return NewSignedDocument(cms), nil
 }
 
 // cmsUtilsCertificatesAndCRLs returns signedData's certificates/CRLs as the plain slices

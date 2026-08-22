@@ -174,7 +174,7 @@ func (s *ExternalCMSService) BuildCMS(messageDigest model.DSSMessageDigest,
 		digestDocument := spi.DSSUtilsToDigestDocument(messageDigest.Digest)
 		parameters.GetContext().SetDetachedContents([]model.DSSDocument{digestDocument})
 
-		cadesLevelBaselineT := cades.NewCAdESLevelBaselineT(s.tspSource, s.certificateVerifier)
+		cadesLevelBaselineT := cades.NewLevelBaselineT(s.tspSource, s.certificateVerifier)
 		if signedCMS, err = cadesLevelBaselineT.ExtendCMSSignatures(signedCMS,
 			&parameters.SignatureParameters); err != nil {
 			return nil, err

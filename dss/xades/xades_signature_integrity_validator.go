@@ -22,7 +22,7 @@ type SignatureIntegrityValidator struct {
 
 // NewXAdESSignatureIntegrityValidator is the default constructor. Port of the constructor
 // SignatureIntegrityValidator(XMLSignature).
-func NewXAdESSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignature) *SignatureIntegrityValidator {
+func NewSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignature) *SignatureIntegrityValidator {
 	v := &SignatureIntegrityValidator{santuarioSignature: santuarioSignature}
 	v.InitSignatureIntegrityValidator(v)
 	return v

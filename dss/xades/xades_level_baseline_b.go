@@ -44,9 +44,9 @@ type LevelBaselineB struct {
 	certificateVerifier validation.CertificateVerifier
 }
 
-// NewXAdESLevelBaselineB is the default constructor for LevelBaselineB.
+// NewLevelBaselineB is the default constructor for LevelBaselineB.
 // Port of XAdESLevelBaselineB(CertificateVerifier).
-func NewXAdESLevelBaselineB(certificateVerifier validation.CertificateVerifier) *LevelBaselineB {
+func NewLevelBaselineB(certificateVerifier validation.CertificateVerifier) *LevelBaselineB {
 	xmlutils.SantuarioInitializerInit()
 	return &LevelBaselineB{certificateVerifier: certificateVerifier}
 }

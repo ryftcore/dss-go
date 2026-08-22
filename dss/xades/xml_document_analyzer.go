@@ -85,7 +85,7 @@ func xmlDocumentAnalyzerToDomDocument(document model.DSSDocument, xadesPathsHold
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause(fmt.Sprintf("An XML file is expected : %s", err.Error()), err)
 	}
-	return NewXAdESDOMDocument(dom, xadesPathsHolders), nil
+	return NewDOMDocument(dom, xadesPathsHolders), nil
 }
 
 // IsSupported checks if the document is supported by the current validator. Port of
@@ -120,8 +120,8 @@ func (a *XMLDocumentAnalyzer) BuildSignatures() []validation.AdvancedSignature {
 			}
 		}
 
-		signatureDomElement := NewXAdESDOMElement(signatureEl, a.domDocument)
-		xadesSignature := NewXAdESSignatureFromDOMElement(signatureDomElement)
+		signatureDomElement := NewDOMElement(signatureEl, a.domDocument)
+		xadesSignature := NewSignatureFromDOMElement(signatureDomElement)
 		if a.HasDocument() {
 			xadesSignature.SetFilename(a.Document().Name())
 		}

@@ -103,19 +103,19 @@ type LevelBaselineLTATimestampExtractor struct {
 	signature cadesLTASignature
 }
 
-// NewCadesLevelBaselineLTATimestampExtractor is the default constructor for the
+// NewLevelBaselineLTATimestampExtractor is the default constructor for the
 // LevelBaselineLTATimestampExtractor, taking the Signature related to the archive
 // timestamp. Panics with the Java message when it is nil (Objects.requireNonNull upstream).
-func NewCadesLevelBaselineLTATimestampExtractor(cadesSignature *Signature) *LevelBaselineLTATimestampExtractor {
+func NewLevelBaselineLTATimestampExtractor(cadesSignature *Signature) *LevelBaselineLTATimestampExtractor {
 	if cadesSignature == nil {
 		panic("CAdESSignature cannot be null!")
 	}
-	return newCadesLevelBaselineLTATimestampExtractor(cadesSignature)
+	return newLevelBaselineLTATimestampExtractor(cadesSignature)
 }
 
-// newCadesLevelBaselineLTATimestampExtractor builds the extractor over the narrow view of the
+// newLevelBaselineLTATimestampExtractor builds the extractor over the narrow view of the
 // signature; see the DEVIATION note in the file header.
-func newCadesLevelBaselineLTATimestampExtractor(signature cadesLTASignature) *LevelBaselineLTATimestampExtractor {
+func newLevelBaselineLTATimestampExtractor(signature cadesLTASignature) *LevelBaselineLTATimestampExtractor {
 	return &LevelBaselineLTATimestampExtractor{signature: signature}
 }
 

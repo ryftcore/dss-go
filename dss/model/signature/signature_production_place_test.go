@@ -7,7 +7,7 @@ import (
 )
 
 func TestSignatureProductionPlace_RoundTrip(t *testing.T) {
-	p := NewSignatureProductionPlace()
+	p := NewProductionPlace()
 	if got := p.PostalAddress(); len(got) != 0 {
 		t.Fatalf("PostalAddress() on a fresh instance = %v, want empty slice", got)
 	}

@@ -46,7 +46,7 @@ type Attribute struct {
 
 // newXAdESAttribute is the port of the package-private XAdESAttribute(Element, XAdESPath)
 // constructor.
-func newXAdESAttribute(element *xmldom.Node, xadesPaths definition.XAdESPath) *Attribute {
+func newAttribute(element *xmldom.Node, xadesPaths definition.XAdESPath) *Attribute {
 	return &Attribute{element: element, xadesPaths: xadesPaths}
 }
 

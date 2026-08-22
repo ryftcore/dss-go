@@ -30,7 +30,7 @@ type CRLSource struct {
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CRLSource {
+func NewCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CRLSource {
 	if signatureElement == nil {
 		panic("Signature element cannot be null")
 	}

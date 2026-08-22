@@ -179,7 +179,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendTimestamp(archiveTimestamp model.D
 	if err != nil {
 		panic(err)
 	}
-	cmsBuilder := cms.NewCMSBuilder().SetOriginalCMS(timestampCMS)
+	cmsBuilder := cms.NewBuilder().SetOriginalCMS(timestampCMS)
 	extendedCMS, err := cmsBuilder.ExtendCMSSignedData(
 		validationDataForInclusion.CertificateTokens(), validationDataForInclusion.CrlTokens(),
 		validationDataForInclusion.OcspTokens())
@@ -191,7 +191,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendTimestamp(archiveTimestamp model.D
 
 // getEmptyLTLevelSignatureParameters ports the private getEmptyLTLevelSignatureParameters().
 func (e *ASiCWithCAdESLevelBaselineLTA) getEmptyLTLevelSignatureParameters() *dsscades.SignatureParameters {
-	parameters := dsscades.NewCAdESSignatureParameters()
+	parameters := dsscades.NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineLT)
 	return parameters
 }
@@ -207,7 +207,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) ExtensionRequired(parameters *dsscades.S
 // getLTAExtensionProfile(TSPSource, CertificateVerifier).
 func (e *ASiCWithCAdESLevelBaselineLTA) GetLTAExtensionProfile(tspSource validation.TSPSource,
 	certificateVerifier validation.CertificateVerifier) dsscades.SignatureExtender {
-	return dsscades.NewCAdESLevelBaselineLT(tspSource, certificateVerifier)
+	return dsscades.NewLevelBaselineLT(tspSource, certificateVerifier)
 }
 
 // AssertExtendSignaturePossible ports the @Override protected

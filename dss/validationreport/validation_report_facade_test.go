@@ -20,7 +20,7 @@ func TestFacadeRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	f := NewValidationReportFacade()
+	f := NewFacade()
 	vr, err := f.UnmarshalString(string(data))
 	if err != nil {
 		t.Fatalf("UnmarshalString: %v", err)
@@ -48,7 +48,7 @@ func TestFacadeRoundTrip(t *testing.T) {
 	if _, err := f.Marshal(nil); err == nil {
 		t.Error("Marshal(nil): expected error")
 	}
-	if _, err := NewValidationReportFacade().Unmarshal(nil); err == nil {
+	if _, err := NewFacade().Unmarshal(nil); err == nil {
 		t.Error("Unmarshal(nil reader): expected error")
 	}
 }

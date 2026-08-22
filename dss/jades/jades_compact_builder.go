@@ -20,12 +20,12 @@ import (
 
 // CompactBuilder builds a JWS Compact Signature.
 type CompactBuilder struct {
-	AbstractJAdESBuilder
+	AbstractBuilder
 }
 
-// NewJAdESCompactBuilder is the default constructor.
+// NewCompactBuilder is the default constructor.
 // Port of JAdESCompactBuilder(CertificateVerifier, JAdESSignatureParameters, List<DSSDocument>).
-func NewJAdESCompactBuilder(certificateVerifier validation.CertificateVerifier,
+func NewCompactBuilder(certificateVerifier validation.CertificateVerifier,
 	parameters *SignatureParameters, documentsToSign []model.DSSDocument) (*CompactBuilder, error) {
 	builder := &CompactBuilder{}
 	if err := builder.InitAbstractJAdESBuilder(builder, certificateVerifier, parameters,

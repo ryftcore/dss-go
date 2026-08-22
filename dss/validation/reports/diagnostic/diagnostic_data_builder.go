@@ -147,7 +147,7 @@ type DataBuilder struct {
 
 // NewDiagnosticDataBuilder instantiates the object with default values. Port of the protected
 // default constructor.
-func NewDiagnosticDataBuilder() *DataBuilder {
+func NewDataBuilder() *DataBuilder {
 	return &DataBuilder{
 		allCertificateSources:         spi.NewListCertificateSource(),
 		tokenExtractionStrategy:       enumerations.TokenExtractionStrategyNone,

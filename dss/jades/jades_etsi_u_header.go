@@ -39,7 +39,7 @@ type EtsiUHeader struct {
 }
 
 // NewJAdESEtsiUHeader is the default constructor. Port of the (JWS) constructor.
-func NewJAdESEtsiUHeader(jws *JWS) *EtsiUHeader {
+func NewEtsiUHeader(jws *JWS) *EtsiUHeader {
 	return &EtsiUHeader{jws: jws}
 }
 

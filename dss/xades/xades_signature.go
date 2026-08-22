@@ -135,10 +135,10 @@ type Signature struct {
 	cachedCryptoVerification *signature.CryptographicVerification
 }
 
-// NewXAdESSignature is used when creating the signature. The default XPathQueryHolder is set.
+// NewSignature is used when creating the signature. The default XPathQueryHolder is set.
 // Port of the public XAdESSignature(Element) constructor.
-func NewXAdESSignature(signatureElement *xmldom.Node) *Signature {
-	return NewXAdESSignatureWithPathHolders(signatureElement, []definition.XAdESPath{&definition.XAdES132Path{}})
+func NewSignature(signatureElement *xmldom.Node) *Signature {
+	return NewSignatureWithPathHolders(signatureElement, []definition.XAdESPath{&definition.XAdES132Path{}})
 }
 
 // NewXAdESSignatureWithPathHolders is the default constructor for XAdESSignature. Port of the
@@ -146,22 +146,22 @@ func NewXAdESSignature(signatureElement *xmldom.Node) *Signature {
 //
 // Panics with the Java messages when signatureElement or xadesPathHolders is missing
 // (Objects.requireNonNull).
-func NewXAdESSignatureWithPathHolders(signatureElement *xmldom.Node, xadesPathHolders []definition.XAdESPath) *Signature {
+func NewSignatureWithPathHolders(signatureElement *xmldom.Node, xadesPathHolders []definition.XAdESPath) *Signature {
 	if signatureElement == nil {
 		panic("Signature Element cannot be null")
 	}
 	if xadesPathHolders == nil {
 		panic("XAdES Path holders cannot be null")
 	}
-	ownerDocument := NewXAdESDOMDocument(signatureElement.OwnerDocument(), xadesPathHolders)
-	return NewXAdESSignatureFromDOMElement(NewXAdESDOMElement(signatureElement, ownerDocument))
+	ownerDocument := NewDOMDocument(signatureElement.OwnerDocument(), xadesPathHolders)
+	return NewSignatureFromDOMElement(NewDOMElement(signatureElement, ownerDocument))
 }
 
 // NewXAdESSignatureFromDOMElement is used when creating the signature. Port of the public
 // Signature(DOMElement) constructor.
 //
 // Panics with the Java message when signatureElement is missing (Objects.requireNonNull).
-func NewXAdESSignatureFromDOMElement(signatureElement *DOMElement) *Signature {
+func NewSignatureFromDOMElement(signatureElement *DOMElement) *Signature {
 	if signatureElement == nil {
 		panic("Signature Element cannot be null")
 	}
@@ -283,7 +283,7 @@ func (s *Signature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 // signature. Port of getCertificateSource().
 func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
-		xadesCertificateSource := NewXAdESCertificateSource(s.SignatureElement(), s.xadesPath)
+		xadesCertificateSource := NewCertificateSource(s.SignatureElement(), s.xadesPath)
 		s.SetOfflineCertificateSource(&xadesCertificateSource.SignatureCertificateSource)
 	}
 	return s.OfflineCertificateSource()
@@ -292,7 +292,7 @@ func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 // CRLSource gets a CRL source which contains ALL CRLs embedded in the signature. Port of getCRLSource().
 func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
-		s.SetSignatureCRLSource(NewXAdESCRLSource(s.SignatureElement(), s.xadesPath))
+		s.SetSignatureCRLSource(NewCRLSource(s.SignatureElement(), s.xadesPath))
 	}
 	return s.SignatureCRLSource()
 }
@@ -301,7 +301,7 @@ func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 // Port of getOCSPSource().
 func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
-		s.SetSignatureOCSPSource(NewXAdESOCSPSource(s.SignatureElement(), s.xadesPath))
+		s.SetSignatureOCSPSource(NewOCSPSource(s.SignatureElement(), s.xadesPath))
 	}
 	return s.SignatureOCSPSource()
 }
@@ -312,7 +312,7 @@ func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 // xades_level_x.go both do this).
 func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
-		s.SetSignatureTimestampSource(NewXAdESTimestampSource(s))
+		s.SetSignatureTimestampSource(NewTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
@@ -354,7 +354,7 @@ func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 			policyUrlString = policyIdString
 		}
 
-		xadesSignaturePolicy := NewXAdESSignaturePolicyWithIdentifier(policyIdString)
+		xadesSignaturePolicy := NewSignaturePolicyWithIdentifier(policyIdString)
 
 		digestElement, _ := xmlutils.XPathUtilsGetElement(policyIdentifier, s.xadesPath.CurrentSignaturePolicyDigestAlgAndValue())
 		xadesSignaturePolicy.SetDigest(DSSXMLUtilsGetDigestAndValue(digestElement))
@@ -401,7 +401,7 @@ func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	// Implicit policy.
 	signaturePolicyImplied, err := xmlutils.XPathUtilsGetElement(policyIdentifier, s.xadesPath.CurrentSignaturePolicyImplied())
 	if err == nil && signaturePolicyImplied != nil {
-		return &NewXAdESSignaturePolicy().Policy
+		return &NewSignaturePolicy().Policy
 	}
 	return nil
 }
@@ -508,7 +508,7 @@ func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
 		return nil
 	}
 
-	signatureProductionPlace := signature.NewSignatureProductionPlace()
+	signatureProductionPlace := signature.NewProductionPlace()
 	for item := nodeList[0].FirstChild; item != nil; item = item.NextSibling {
 		name := item.Name.Local
 		nodeValue := item.TextContent()
@@ -719,7 +719,7 @@ func (s *Signature) BaselineRequirementsChecker() *BaselineRequirementsChecker {
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
 func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
-	return NewXAdESBaselineRequirementsChecker(s, certificateVerifier)
+	return NewBaselineRequirementsChecker(s, certificateVerifier)
 }
 
 // CheckSignatureIntegrity verifies the signature integrity; checks if the signed content has not
@@ -732,7 +732,7 @@ func (s *Signature) CheckSignatureIntegrity() {
 	if s.cachedCryptoVerification != nil {
 		return
 	}
-	verification := signature.NewSignatureCryptographicVerification()
+	verification := signature.NewCryptographicVerification()
 	s.cachedCryptoVerification = verification
 	s.SetSignatureCryptographicVerification(verification)
 
@@ -764,7 +764,7 @@ func (s *Signature) checkSignatureIntegrityUnsafe(verification *signature.Crypto
 	}
 	candidatesForSigningCertificate := s.CandidatesForSigningCertificate()
 
-	signingCertificateValidator := NewXAdESSignatureIntegrityValidator(currentSantuarioSignature)
+	signingCertificateValidator := NewSignatureIntegrityValidator(currentSantuarioSignature)
 	certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 	if certificateValidity != nil {
 		if err := candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity); err != nil {
@@ -800,7 +800,7 @@ func (s *Signature) ReferenceValidations() []*model.ReferenceValidation {
 	for _, reference := range santuarioReferences {
 		// Named refValidation, not "validation": that identifier would shadow the imported
 		// spi/validation package for the rest of this loop body.
-		refValidation := NewXAdESReferenceValidation(reference)
+		refValidation := NewReferenceValidation(reference)
 		refValidation.SetType(enumerations.DigestMatcherTypeReference)
 		referenceValidations = append(referenceValidations, &refValidation.ReferenceValidation)
 
@@ -983,7 +983,7 @@ func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.D
 	if err != nil {
 		panic(err)
 	}
-	return signature.NewSignatureDigestReferenceWithCanonicalization(xadesSignatureDefaultCanonicalizationMethod, messageDigest.Digest)
+	return signature.NewDigestReferenceWithCanonicalization(xadesSignatureDefaultCanonicalizationMethod, messageDigest.Digest)
 }
 
 // DataToBeSignedRepresentation returns the DTBSR. Port of getDataToBeSignedRepresentation().
@@ -1203,7 +1203,7 @@ func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id. Port of the
 // protected getSignatureIdentifierBuilder().
 func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
-	return NewXAdESSignatureIdentifierBuilder(s)
+	return NewSignatureIdentifierBuilder(s)
 }
 
 // DAIdentifier returns an identifier provided by the Driving Application (DA). Port of getDAIdentifier().
@@ -1336,7 +1336,7 @@ func (s *Signature) ValidateStructure() []string {
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
 func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
-	return NewXAdESSignatureScopeFinder().FindSignatureScope(s)
+	return NewSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // CommitmentTypeIndications obtains the information concerning commitment type indication

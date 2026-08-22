@@ -5,9 +5,9 @@ package lote
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// AbstractLoTEIdentifier is the abstract base for DSS internal LoTE/LoLoTE identifiers,
+// AbstractIdentifier is the abstract base for DSS internal LoTE/LoLoTE identifiers,
 // designed for embedding.
-type AbstractLoTEIdentifier struct {
+type AbstractIdentifier struct {
 	model.MultipleDigestIdentifier
 }
 
@@ -19,8 +19,8 @@ type AbstractLoTEIdentifier struct {
 // Port of the protected AbstractLoTEIdentifier(String, LoTEInfo) constructor; listInfo is typed
 // *LoTEInfo exactly as in Java (LoLoTEInfo embeds LoTEInfo, so callers pass its embedded field,
 // e.g. &loloteInfo.LoTEInfo, mirroring Java's implicit upcast of "this").
-func NewAbstractLoTEIdentifier(className, prefix string, listInfo *Info) AbstractLoTEIdentifier {
-	return AbstractLoTEIdentifier{
+func NewAbstractLoTEIdentifier(className, prefix string, listInfo *Info) AbstractIdentifier {
+	return AbstractIdentifier{
 		MultipleDigestIdentifier: model.NewMultipleDigestIdentifier(className, prefix, []byte(listInfo.Url())),
 	}
 }

@@ -21,7 +21,7 @@ type SignatureIntegrityValidator struct {
 
 // NewJAdESSignatureIntegrityValidator is the default constructor. Port of the public
 // SignatureIntegrityValidator(JWS) constructor.
-func NewJAdESSignatureIntegrityValidator(jws *JWS) *SignatureIntegrityValidator {
+func NewSignatureIntegrityValidator(jws *JWS) *SignatureIntegrityValidator {
 	v := &SignatureIntegrityValidator{jws: jws}
 	v.InitSignatureIntegrityValidator(v)
 	return v

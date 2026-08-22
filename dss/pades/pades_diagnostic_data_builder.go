@@ -29,7 +29,7 @@ type DiagnosticDataBuilder struct {
 }
 
 // NewPAdESDiagnosticDataBuilder is the port of the default constructor.
-func NewPAdESDiagnosticDataBuilder() *DiagnosticDataBuilder {
+func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
 	b := &DiagnosticDataBuilder{
 		DiagnosticDataBuilder: cades.DiagnosticDataBuilder{
 			SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),

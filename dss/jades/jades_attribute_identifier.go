@@ -29,7 +29,7 @@ type AttributeIdentifier struct {
 
 // newJAdESAttributeIdentifier is the port of the package-private JAdESAttributeIdentifier(byte[])
 // constructor.
-func newJAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+func newAttributeIdentifier(data []byte) *AttributeIdentifier {
 	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("JAdESAttributeIdentifier", data),
 	}
@@ -58,7 +58,7 @@ func AttributeIdentifierBuildWithOrder(headerName string, value any, order *int)
 	if order != nil {
 		_ = binary.Write(&buf, binary.BigEndian, int32(*order))
 	}
-	return newJAdESAttributeIdentifier(buf.Bytes())
+	return newAttributeIdentifier(buf.Bytes())
 }
 
 // jadesAttributeIdentifierWriteChars ports DataOutputStream#writeChars(String): every UTF-16 code

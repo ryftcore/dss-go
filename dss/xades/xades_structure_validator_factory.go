@@ -29,5 +29,5 @@ func StructureValidatorFactoryGetInstance() *StructureValidatorFactory {
 // FromXAdESSignature creates a XAdESStructureValidator for the given XAdESSignature. Port of
 // fromXAdESSignature(Signature).
 func (f *StructureValidatorFactory) FromXAdESSignature(signature *Signature) *StructureValidator {
-	return newXAdESStructureValidator(signature.SignatureElement(), signature.XAdESPaths())
+	return newStructureValidator(signature.SignatureElement(), signature.XAdESPaths())
 }

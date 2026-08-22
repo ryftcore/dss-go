@@ -7,7 +7,7 @@ import (
 )
 
 func TestTLSCertificatesRoundTrip(t *testing.T) {
-	tc := NewTLSCertificates()
+	tc := NewCertificates()
 
 	certs := []*model.CertificateToken{nil, nil}
 	tc.SetCertificates(certs)

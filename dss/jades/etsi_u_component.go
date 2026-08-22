@@ -26,7 +26,7 @@ type EtsiUComponent struct {
 // EtsiUComponent(Object, String, Object, AttributeIdentifier).
 func newEtsiUComponent(component any, headerName string, value any, identifier *AttributeIdentifier) *EtsiUComponent {
 	c := &EtsiUComponent{
-		Attribute:        *NewJAdESAttribute(headerName, value),
+		Attribute:        *NewAttribute(headerName, value),
 		component:        component,
 		base64UrlEncoded: DSSJsonUtilsIsStringFormat(component),
 	}

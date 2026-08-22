@@ -109,7 +109,7 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 	if len(rows) == 0 {
 		t.Fatal("empty direct oracle")
 	}
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	type key struct{ file, token, check string }
 	index := map[key]*savDirectRow{}

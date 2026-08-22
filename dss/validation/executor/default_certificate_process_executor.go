@@ -101,7 +101,7 @@ func (e *DefaultCertificateProcessExecutor) Execute() *reports.CertificateReport
 // DiagnosticData gets the Diagnostic Data. Port of the protected
 // getDiagnosticData().
 func (e *DefaultCertificateProcessExecutor) DiagnosticData() *diagnostic.Data {
-	return diagnostic.NewDiagnosticData(e.JaxbDiagnosticData)
+	return diagnostic.NewData(e.JaxbDiagnosticData)
 }
 
 // DetailedReportBuilderFor gets the Detailed report builder. Port of the

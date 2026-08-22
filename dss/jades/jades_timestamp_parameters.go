@@ -19,15 +19,15 @@ type TimestampParameters struct {
 
 var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
-// NewJAdESTimestampParameters is the empty constructor.
-func NewJAdESTimestampParameters() *TimestampParameters {
+// NewTimestampParameters is the empty constructor.
+func NewTimestampParameters() *TimestampParameters {
 	return &TimestampParameters{TimestampParameters: model.NewTimestampParameters()}
 }
 
-// NewJAdESTimestampParametersWithDigestAlgorithm is the default constructor, taking the
+// NewTimestampParametersWithDigestAlgorithm is the default constructor, taking the
 // DigestAlgorithm to use for a message-imprint calculation. Port of
 // TimestampParameters(DigestAlgorithm).
-func NewJAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+func NewTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
 	return &TimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
 }
 

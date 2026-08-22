@@ -965,7 +965,7 @@ func (r *DetailedReport) SigningCertificate(bbbId string) *jaxb.XmlSubXCV {
 // MessageCollector gets the used MessageCollector.
 func (r *DetailedReport) MessageCollector() *MessageCollector {
 	if r.messageCollector == nil {
-		r.messageCollector = newDetailedReportMessageCollector(r)
+		r.messageCollector = newMessageCollector(r)
 	}
 	return r.messageCollector
 }

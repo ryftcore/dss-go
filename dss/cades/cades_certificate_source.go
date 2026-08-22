@@ -13,10 +13,10 @@ type CertificateSource struct {
 	*spi.CMSCertificateSource
 }
 
-// NewCAdESCertificateSource creates a CAdES certificate source from a CMS with an additional
+// NewCertificateSource creates a CAdES certificate source from a CMS with an additional
 // signer id parameter. All certificates are extracted during instantiation.
 // Port of the constructor CAdESCertificateSource(CMS, SignerInformation).
-func NewCAdESCertificateSource(cmsObj *cms.CMS, signerInformation *cmscore.SignerInfo) (*CertificateSource, error) {
+func NewCertificateSource(cmsObj *cms.CMS, signerInformation *cmscore.SignerInfo) (*CertificateSource, error) {
 	base, err := spi.NewCMSCertificateSource(cmsObj.SignerInfos(), cmsObj.Certificates(), signerInformation)
 	if err != nil {
 		return nil, err

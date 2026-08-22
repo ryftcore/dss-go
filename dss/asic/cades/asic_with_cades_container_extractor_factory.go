@@ -42,5 +42,5 @@ func (f *ASiCWithCAdESContainerExtractorFactory) Create(asicContainer model.DSSD
 }
 
 func init() {
-	asic.RegisterASiCContainerExtractorFactory(NewASiCWithCAdESContainerExtractorFactory())
+	asic.RegisterContainerExtractorFactory(NewASiCWithCAdESContainerExtractorFactory())
 }

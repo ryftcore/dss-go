@@ -145,7 +145,7 @@ func loadXcvaDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // xcvaPolicies returns the three validation policies the block oracle used, keyed
@@ -170,7 +170,7 @@ func xcvaPolicies(t *testing.T) map[string]modelpolicy.ValidationPolicy {
 }
 
 // xcvaI18nProvider is the single Provider both replays use, built once.
-var xcvaI18nProvider = i18n.NewI18nProvider()
+var xcvaI18nProvider = i18n.NewProvider()
 
 func xcvaI18n() *i18n.Provider { return xcvaI18nProvider }
 

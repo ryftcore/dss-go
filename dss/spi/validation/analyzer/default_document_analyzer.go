@@ -548,7 +548,7 @@ func (a *DefaultDocumentAnalyzer) GetValidationDataWithTimestamps(signatures []v
 // InstantiateValidationDataContainer is DefaultDocumentAnalyzerOverrides' default body. Port of
 // instantiateValidationDataContainer().
 func (a *DefaultDocumentAnalyzer) InstantiateValidationDataContainer() *validation.DataContainer {
-	return validation.NewValidationDataContainer()
+	return validation.NewDataContainer()
 }
 
 // getAllEvidenceRecords returns a list of all found evidence records (embedded and detached).

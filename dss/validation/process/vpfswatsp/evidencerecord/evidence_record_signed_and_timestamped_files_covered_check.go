@@ -31,10 +31,10 @@ type SignedAndTimestampedFilesCoveredCheck struct {
 	evidenceRecordWrapper *diagnostic.EvidenceRecordWrapper
 }
 
-// NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck is the default
+// NewSignedAndTimestampedFilesCoveredCheck is the default
 // constructor. Port of
 // SignedAndTimestampedFilesCoveredCheck(Provider, XmlValidationProcessEvidenceRecord, Data, EvidenceRecordWrapper, LevelRule).
-func NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.Provider,
+func NewSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessEvidenceRecord], diagnosticData *diagnostic.Data,
 	evidenceRecordWrapper *diagnostic.EvidenceRecordWrapper,
 	constraint policy.LevelRule) *SignedAndTimestampedFilesCoveredCheck {

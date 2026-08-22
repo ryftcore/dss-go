@@ -33,9 +33,9 @@ type SignatureRequirementsChecker struct {
 	certificateVerifier validation.CertificateVerifier
 }
 
-// NewPAdESSignatureRequirementsChecker is the default constructor.
+// NewSignatureRequirementsChecker is the default constructor.
 // Port of PAdESSignatureRequirementsChecker(CertificateVerifier, PAdESSignatureParameters).
-func NewPAdESSignatureRequirementsChecker(certificateVerifier validation.CertificateVerifier,
+func NewSignatureRequirementsChecker(certificateVerifier validation.CertificateVerifier,
 	signatureParameters *SignatureParameters) *SignatureRequirementsChecker {
 	return &SignatureRequirementsChecker{
 		SignatureRequirementsChecker: document.NewSignatureRequirementsChecker[*cades.TimestampParameters](

@@ -1795,7 +1795,7 @@ func (c *SignatureValidationContext) GetValidationDataForTimestamp(timestampToke
 }
 
 func (c *SignatureValidationContext) getValidationDataForCertificate(certificateToken *model.CertificateToken) *Data {
-	validationData := NewValidationData()
+	validationData := NewData()
 	if certificateToken != nil {
 		c.populateValidationDataRecursively(certificateToken, validationData)
 	}

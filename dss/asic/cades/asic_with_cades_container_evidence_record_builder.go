@@ -31,8 +31,8 @@ func NewASiCWithCAdESContainerEvidenceRecordBuilder(certificateVerifier validati
 }
 
 // GetASiCContentBuilder ports the @Override protected getASiCContentBuilder().
-func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *asic.AbstractASiCContentBuilder {
-	return NewASiCWithCAdESASiCContentBuilder().AbstractASiCContentBuilder
+func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *asic.AbstractContentBuilder {
+	return NewASiCWithCAdESASiCContentBuilder().AbstractContentBuilder
 }
 
 // AssertEvidenceRecordFilenameValid ports the @Override protected

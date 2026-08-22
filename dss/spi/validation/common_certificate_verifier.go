@@ -172,7 +172,7 @@ func newCommonCertificateVerifier(simpleCreationOnly bool) *CommonCertificateVer
 		checkRevocationForUntrustedChains:               false,
 	}
 	if !simpleCreationOnly {
-		v.aiaSource = aia.NewDefaultAIASource()
+		v.aiaSource = aia.NewDefaultSource()
 	}
 	return v
 }

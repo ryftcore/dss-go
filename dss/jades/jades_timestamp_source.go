@@ -97,7 +97,7 @@ type TimestampSource struct {
 }
 
 // NewJAdESTimestampSource is the default constructor. Port of the (JAdESSignature) constructor.
-func NewJAdESTimestampSource(signature *Signature) *TimestampSource {
+func NewTimestampSource(signature *Signature) *TimestampSource {
 	source := &TimestampSource{
 		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*Signature, *EtsiUComponent](signature),
 		signature:                signature,
@@ -110,7 +110,7 @@ func NewJAdESTimestampSource(signature *Signature) *TimestampSource {
 // BuildSignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides. Port of
 // buildSignedSignatureProperties(). See the file header's DEVIATION note.
 func (s *TimestampSource) BuildSignedSignatureProperties() validation.SignatureProperties[*EtsiUComponent] {
-	return &jadesSignedPropertiesAsEtsiUComponents{signedProperties: NewJAdESSignedProperties(s.signature.Jws().Headers())}
+	return &jadesSignedPropertiesAsEtsiUComponents{signedProperties: NewSignedProperties(s.signature.Jws().Headers())}
 }
 
 // BuildUnsignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides. Port
@@ -599,7 +599,7 @@ func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
 	if etsiUComponent := s.timestampAttributeMap[timestampToken]; etsiUComponent != nil {
 		timestampAttribute = &etsiUComponent.Attribute
 	}
-	return NewJAdESTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
+	return NewTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
 		SetTimestampAttribute(timestampAttribute)
 }
 
@@ -608,7 +608,7 @@ func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm) override.
 func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
 	digestAlgorithm enumerations.DigestAlgorithm) timestamp.MessageDigestBuilder {
-	return NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
+	return NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
 }
 
 // GetCounterSignatures implements timestamp.SignatureTimestampSourceOverrides.
@@ -632,7 +632,7 @@ func (s *TimestampSource) GetCounterSignatures(unsignedAttribute *EtsiUComponent
 // GetSignatureTimestampData returns the message-imprint digest for a SignatureTimestamp
 // (BASE64URL(JWS Signature Value)). Port of the public getSignatureTimestampData(DigestAlgorithm).
 func (s *TimestampSource) GetSignatureTimestampData(digestAlgorithm enumerations.DigestAlgorithm) model.DSSMessageDigest {
-	builder := NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
 	return builder.SignatureTimestampMessageDigest()
 }
 
@@ -640,7 +640,7 @@ func (s *TimestampSource) GetSignatureTimestampData(digestAlgorithm enumerations
 // public getArchiveTimestampData(DigestAlgorithm, String).
 func (s *TimestampSource) GetArchiveTimestampData(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string) model.DSSMessageDigest {
-	builder := NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod)
 	return builder.ArchiveTimestampMessageDigest()
 }

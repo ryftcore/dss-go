@@ -21,8 +21,8 @@ type SignaturePolicyStoreBuilder struct {
 	resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESSignaturePolicyStoreBuilder is the default constructor.
-func NewCAdESSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
+// NewSignaturePolicyStoreBuilder is the default constructor.
+func NewSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
 	return &SignaturePolicyStoreBuilder{}
 }
 

@@ -136,12 +136,12 @@ type Signature struct {
 	cachedCryptoVerification *signature.CryptographicVerification
 }
 
-// NewCAdESSignature is the default constructor for Signature.
+// NewSignature is the default constructor for Signature.
 // Port of the public CAdESSignature(CMS, SignerInformation) constructor.
 //
 // Panics with the Java message when cmsDocument or signerInformation is missing
 // (Objects.requireNonNull).
-func NewCAdESSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerInfo) *Signature {
+func NewSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerInfo) *Signature {
 	if cmsDocument == nil {
 		panic("CMS cannot be null!")
 	}
@@ -170,7 +170,7 @@ func (s *Signature) SignatureForm() enumerations.SignatureForm {
 // propagate out of the Java getter uncaught.
 func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
-		cadesCertificateSource, err := NewCAdESCertificateSource(s.cmsDocument, s.signerInformation)
+		cadesCertificateSource, err := NewCertificateSource(s.cmsDocument, s.signerInformation)
 		if err != nil {
 			panic(err)
 		}
@@ -183,7 +183,7 @@ func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 // Port of getCRLSource().
 func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
-		crlSource, err := NewCAdESCRLSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
+		crlSource, err := NewCRLSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
 		if err != nil {
 			// Upstream logs "Error in computing or in format of the algorithm: just
 			// continue..." and leaves signatureCRLSource null (will try to get online
@@ -203,7 +203,7 @@ func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 // propagate out of the Java getter uncaught.
 func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
-		ocspSource, err := NewCAdESOCSPSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
+		ocspSource, err := NewOCSPSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
 		if err != nil {
 			panic(err)
 		}
@@ -219,7 +219,7 @@ func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 // already does in cades_timestamp_source.go via the plain AdvancedSignature.TimestampSource()).
 func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
-		s.SetSignatureTimestampSource(NewCAdESTimestampSource(s))
+		s.SetSignatureTimestampSource(NewTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
@@ -232,7 +232,7 @@ func (s *Signature) SignerId() *cmscore.SignerIdentifier {
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
 func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
-	return NewCAdESSignatureScopeFinder().FindSignatureScope(s)
+	return NewSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // BuildSignaturePolicy extracts a signature policy from a signature and builds the object.
@@ -251,7 +251,7 @@ func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	}
 
 	if attrValue.IsUniversal(asn1ber.TagNull) {
-		return signature.NewSignaturePolicy()
+		return signature.NewPolicy()
 	}
 
 	// SignaturePolicyIdentifier ::= CHOICE {
@@ -270,7 +270,7 @@ func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	if err != nil {
 		return nil
 	}
-	sigPolicy := signature.NewSignaturePolicyWithIdentifier(policyIdOID.String())
+	sigPolicy := signature.NewPolicyWithIdentifier(policyIdOID.String())
 
 	// OtherHashAlgAndValue ::= SEQUENCE { hashAlgorithm AlgorithmIdentifier, hashValue OCTET STRING }
 	sigPolicyHash := children[1]
@@ -507,7 +507,7 @@ func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
 		}
 	}
 
-	signatureProductionPlace := signature.NewSignatureProductionPlace()
+	signatureProductionPlace := signature.NewProductionPlace()
 	if countryName != "" {
 		signatureProductionPlace.SetCountryName(countryName)
 	}
@@ -998,7 +998,7 @@ func (s *Signature) CheckSignatureIntegrity() {
 	if s.cachedCryptoVerification != nil {
 		return
 	}
-	verification := signature.NewSignatureCryptographicVerification()
+	verification := signature.NewCryptographicVerification()
 	s.cachedCryptoVerification = verification
 	s.SetSignatureCryptographicVerification(verification)
 
@@ -1043,7 +1043,7 @@ func (s *Signature) CheckSignatureIntegrity() {
 		}
 	}
 
-	signingCertificateValidator := NewCAdESSignatureIntegrityValidator(signerInformationToCheck, signedContent, contentDigestMismatch)
+	signingCertificateValidator := NewSignatureIntegrityValidator(signerInformationToCheck, signedContent, contentDigestMismatch)
 	certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 	if certificateValidity != nil {
 		if err := candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity); err != nil {
@@ -1275,7 +1275,7 @@ func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.D
 	if err != nil {
 		panic(err)
 	}
-	return signature.NewSignatureDigestReference(model.NewDigest(digestAlgorithm, digestValue))
+	return signature.NewDigestReference(model.NewDigest(digestAlgorithm, digestValue))
 }
 
 // DataToBeSignedRepresentation returns the DTBSR, which is then used to create the signature.
@@ -1483,7 +1483,7 @@ func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 
 	var counterSignatures []validation.AdvancedSignature
 	for _, counterSignerInformation := range s.CounterSignatureStore().SignerInfos() {
-		counterSignature := NewCAdESSignature(s.cmsDocument, counterSignerInformation)
+		counterSignature := NewSignature(s.cmsDocument, counterSignerInformation)
 		counterSignature.SetFilename(s.Filename())
 		counterSignature.SetMasterSignature(s)
 		counterSignatures = append(counterSignatures, counterSignature)
@@ -1552,7 +1552,7 @@ func (s *Signature) OriginalDocument() (model.DSSDocument, error) {
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id.
 // Port of the protected getSignatureIdentifierBuilder().
 func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
-	return NewCAdESSignatureIdentifierBuilder(s)
+	return NewSignatureIdentifierBuilder(s)
 }
 
 // DAIdentifier returns an identifier provided by the Driving Application (DA); not applicable
@@ -1651,5 +1651,5 @@ func (s *Signature) BaselineRequirementsChecker() *BaselineRequirementsChecker {
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
 func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
-	return NewCAdESBaselineRequirementsChecker(s, certificateVerifier)
+	return NewBaselineRequirementsChecker(s, certificateVerifier)
 }

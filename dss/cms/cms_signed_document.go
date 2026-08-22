@@ -33,19 +33,19 @@ type SignedDocument struct {
 
 var _ model.DSSDocument = (*SignedDocument)(nil)
 
-// NewCMSSignedDocument is the default constructor for SignedDocument.
+// NewSignedDocument is the default constructor for SignedDocument.
 // Port of CMSSignedDocument(CMS), i.e. CMSSignedDocument(data, null).
 //
 // Panics with the Java message when data is nil (Objects.requireNonNull).
-func NewCMSSignedDocument(data *CMS) *SignedDocument {
-	return NewCMSSignedDocumentWithName(data, "")
+func NewSignedDocument(data *CMS) *SignedDocument {
+	return NewSignedDocumentWithName(data, "")
 }
 
-// NewCMSSignedDocumentWithName is the constructor for SignedDocument with a custom document
+// NewSignedDocumentWithName is the constructor for SignedDocument with a custom document
 // name. Port of CMSSignedDocument(CMS, String).
 //
 // Panics with the Java message when data is nil (Objects.requireNonNull).
-func NewCMSSignedDocumentWithName(data *CMS, name string) *SignedDocument {
+func NewSignedDocumentWithName(data *CMS, name string) *SignedDocument {
 	if data == nil {
 		panic("The CMSSignedData cannot be null")
 	}

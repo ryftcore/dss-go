@@ -9,21 +9,21 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
-// CompositeAIASource allows retrieving an AIA with different sources. The composite tries all
+// CompositeSource allows retrieving an AIA with different sources. The composite tries all
 // sources until it gets a non-empty response.
-type CompositeAIASource struct {
+type CompositeSource struct {
 	// aiaSources is a map of source keys and corresponding AIA sources.
 	aiaSources map[string]Source
 }
 
-// NewCompositeAIASource is the default constructor, instantiating the object with a nil map.
-func NewCompositeAIASource() *CompositeAIASource {
-	return &CompositeAIASource{}
+// NewCompositeSource is the default constructor, instantiating the object with a nil map.
+func NewCompositeSource() *CompositeSource {
+	return &CompositeSource{}
 }
 
 // SetAIASources allows providing multiple AIA sources. Be careful: all given sources MUST
 // accept the same digest algorithm.
-func (c *CompositeAIASource) SetAIASources(aiaSources map[string]Source) {
+func (c *CompositeSource) SetAIASources(aiaSources map[string]Source) {
 	c.aiaSources = aiaSources
 }
 
@@ -31,10 +31,10 @@ func (c *CompositeAIASource) SetAIASources(aiaSources map[string]Source) {
 // response. Panics with a *exception.DSSExternalResourceException when none of the sources
 // yields one, mirroring Java's unchecked DSSExternalResourceException propagating out of a
 // method with no throws clause.
-func (c *CompositeAIASource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
-	for _, sourceKey := range compositeAIASourceOrderedKeys(c.aiaSources) {
+func (c *CompositeSource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
+	for _, sourceKey := range compositeSourceOrderedKeys(c.aiaSources) {
 		source := c.aiaSources[sourceKey]
-		certificateTokens := compositeAIASourceTryGet(source, certificateToken)
+		certificateTokens := compositeSourceTryGet(source, certificateToken)
 		if certificateTokens != nil {
 			return certificateTokens
 		}
@@ -50,7 +50,7 @@ func (c *CompositeAIASource) CertificatesByAIA(certificateToken *model.Certifica
 // when more than one source would answer - stable from one run to the next, rather than merely
 // "immaterial because every source is tried": two sources can both hold a (possibly
 // different) valid AIA response for the same certificate.
-func compositeAIASourceOrderedKeys(aiaSources map[string]Source) []string {
+func compositeSourceOrderedKeys(aiaSources map[string]Source) []string {
 	keys := make([]string, 0, len(aiaSources))
 	for key := range aiaSources {
 		keys = append(keys, key)
@@ -59,10 +59,10 @@ func compositeAIASourceOrderedKeys(aiaSources map[string]Source) []string {
 	return keys
 }
 
-// compositeAIASourceTryGet calls source.CertificatesByAIA, recovering from any panic it raises
+// compositeSourceTryGet calls source.CertificatesByAIA, recovering from any panic it raises
 // and returning nil in that case. Ports the try/catch(Exception) guarding
 // source.getCertificatesByAIA(certificateToken).
-func compositeAIASourceTryGet(source Source, certificateToken *model.CertificateToken) (certificateTokens []*model.CertificateToken) {
+func compositeSourceTryGet(source Source, certificateToken *model.CertificateToken) (certificateTokens []*model.CertificateToken) {
 	defer func() {
 		if recover() != nil {
 			certificateTokens = nil
@@ -71,4 +71,4 @@ func compositeAIASourceTryGet(source Source, certificateToken *model.Certificate
 	return source.CertificatesByAIA(certificateToken)
 }
 
-var _ Source = (*CompositeAIASource)(nil)
+var _ Source = (*CompositeSource)(nil)

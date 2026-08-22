@@ -13,7 +13,7 @@ var timestampAnalyzerComparatorTimestampComparator = validation.NewTimestampToke
 type AnalyzerComparator struct{}
 
 // NewTimestampAnalyzerComparator instantiates the comparator. Port of the default constructor.
-func NewTimestampAnalyzerComparator() AnalyzerComparator {
+func NewAnalyzerComparator() AnalyzerComparator {
 	return AnalyzerComparator{}
 }
 

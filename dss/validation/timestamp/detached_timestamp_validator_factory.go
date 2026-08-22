@@ -10,28 +10,28 @@ import (
 	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
-// DetachedTimestampValidatorFactory returns a validator for a detached timestamp document.
-type DetachedTimestampValidatorFactory struct{}
+// DetachedValidatorFactory returns a validator for a detached timestamp document.
+type DetachedValidatorFactory struct{}
 
 // compile-time interface assertion.
-var _ dssvalidation.DocumentValidatorFactory = (*DetachedTimestampValidatorFactory)(nil)
+var _ dssvalidation.DocumentValidatorFactory = (*DetachedValidatorFactory)(nil)
 
-// NewDetachedTimestampValidatorFactory is the default constructor.
-func NewDetachedTimestampValidatorFactory() *DetachedTimestampValidatorFactory {
-	return &DetachedTimestampValidatorFactory{}
+// NewDetachedValidatorFactory is the default constructor.
+func NewDetachedValidatorFactory() *DetachedValidatorFactory {
+	return &DetachedValidatorFactory{}
 }
 
 // IsSupported checks if the document is supported by the current implementation of
 // DetachedTimestampValidator. Port of isSupported(DSSDocument).
-func (f *DetachedTimestampValidatorFactory) IsSupported(document model.DSSDocument) bool {
-	validator := newDetachedTimestampValidator(newDetachedTimestampAnalyzer())
+func (f *DetachedValidatorFactory) IsSupported(document model.DSSDocument) bool {
+	validator := newDetachedValidator(newDetachedTimestampAnalyzer())
 	return validator.IsSupported(document)
 }
 
 // Create instantiates a DetachedTimestampValidator with the given document. Port of
 // create(DSSDocument).
-func (f *DetachedTimestampValidatorFactory) Create(document model.DSSDocument) dssvalidation.SignedDocumentValidator {
-	return NewDetachedTimestampValidator(document)
+func (f *DetachedValidatorFactory) Create(document model.DSSDocument) dssvalidation.SignedDocumentValidator {
+	return NewDetachedValidator(document)
 }
 
 // init registers this factory with the document validator registry, replacing upstream's
@@ -39,5 +39,5 @@ func (f *DetachedTimestampValidatorFactory) Create(document model.DSSDocument) d
 // self-registration convention already used by, e.g., cades.CMSDocumentAnalyzerFactory for the
 // sibling analyzer registry).
 func init() {
-	dssvalidation.RegisterDocumentValidatorFactory(NewDetachedTimestampValidatorFactory())
+	dssvalidation.RegisterDocumentValidatorFactory(NewDetachedValidatorFactory())
 }

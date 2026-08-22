@@ -186,5 +186,5 @@ func (v *AbstractASiCContainerValidator) InitializeDiagnosticDataBuilder() *dssd
 // to any concrete leaf validator that does not shadow it, exactly as
 // ASiCContainerWithXAdESValidator relies on in Java by not overriding this method either.
 func (v *AbstractASiCContainerValidator) InstantiateASiCDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder {
-	return NewASiCContainerDiagnosticDataBuilder()
+	return NewContainerDiagnosticDataBuilder()
 }

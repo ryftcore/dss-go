@@ -36,8 +36,8 @@ type ProfileParameters struct {
 	references []*DSSReference
 }
 
-// NewXAdESProfileParameters is the default constructor.
-func NewXAdESProfileParameters() *ProfileParameters {
+// NewProfileParameters is the default constructor.
+func NewProfileParameters() *ProfileParameters {
 	return &ProfileParameters{ProfileParameters: *document.NewProfileParameters()}
 }
 

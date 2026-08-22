@@ -18,7 +18,7 @@ type SignedProperties struct {
 
 // NewJAdESSignedProperties is the default constructor. Port of the public
 // SignedProperties(Headers) constructor.
-func NewJAdESSignedProperties(headers *jose.Headers) *SignedProperties {
+func NewSignedProperties(headers *jose.Headers) *SignedProperties {
 	return &SignedProperties{headers: headers}
 }
 
@@ -39,7 +39,7 @@ func (p *SignedProperties) Attributes() []*Attribute {
 
 	var attributes []*Attribute
 	for _, key := range headerMap.Keys() {
-		attributes = append(attributes, NewJAdESAttribute(key, headerMap.Value(key)))
+		attributes = append(attributes, NewAttribute(key, headerMap.Value(key)))
 	}
 	return attributes
 }

@@ -192,9 +192,9 @@ func (e *ASiCWithCAdESSignatureExtension) getExtensionProfile(
 	var cadesSignatureExtension dsscades.SignatureExtender
 	switch signatureLevel {
 	case enumerations.SignatureLevelCAdESBaselineT:
-		cadesSignatureExtension = dsscades.NewCAdESLevelBaselineT(e.TspSource, e.CertificateVerifier)
+		cadesSignatureExtension = dsscades.NewLevelBaselineT(e.TspSource, e.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLT:
-		cadesSignatureExtension = dsscades.NewCAdESLevelBaselineLT(e.TspSource, e.CertificateVerifier)
+		cadesSignatureExtension = dsscades.NewLevelBaselineLT(e.TspSource, e.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLTA:
 		cadesSignatureExtension = e.requireOverrides().GetLTAExtensionProfile(e.TspSource, e.CertificateVerifier)
 	default:
@@ -208,7 +208,7 @@ func (e *ASiCWithCAdESSignatureExtension) getExtensionProfile(
 // CertificateVerifier).
 func (e *ASiCWithCAdESSignatureExtension) GetLTAExtensionProfile(tspSource validation.TSPSource,
 	certificateVerifier validation.CertificateVerifier) dsscades.SignatureExtender {
-	return dsscades.NewCAdESLevelBaselineLTA(tspSource, certificateVerifier)
+	return dsscades.NewLevelBaselineLTA(tspSource, certificateVerifier)
 }
 
 // ExtensionRequired checks whether the signature extension is required for the particular

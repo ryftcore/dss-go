@@ -28,7 +28,7 @@ type SignatureIdentifierBuilder struct {
 
 // NewJAdESSignatureIdentifierBuilder is the default constructor. Port of the public
 // SignatureIdentifierBuilder(Signature) constructor.
-func NewJAdESSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
+func NewSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
 	b := &SignatureIdentifierBuilder{
 		AbstractSignatureIdentifierBuilder: validation.NewAbstractSignatureIdentifierBuilderBase(signature),
 		jadesSignature:                     signature,

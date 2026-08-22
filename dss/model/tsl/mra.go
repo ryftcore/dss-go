@@ -17,7 +17,7 @@ type MRA struct {
 	// pointedContractingPartyLegislation references the legal documentation of the pointed party.
 	pointedContractingPartyLegislation string
 	// serviceEquivalence contains a list of equivalence schemes defined for various Trust Services.
-	serviceEquivalence []*timedependent.MutableTimeDependentValues[*ServiceEquivalence]
+	serviceEquivalence []*timedependent.MutableValues[*ServiceEquivalence]
 }
 
 // NewMRA instantiates an MRA object with zero values. Port of the default constructor.
@@ -70,11 +70,11 @@ func (m *MRA) SetPointedContractingPartyLegislation(pointedContractingPartyLegis
 }
 
 // ServiceEquivalence gets the list of equivalence mapping between Trust Services.
-func (m *MRA) ServiceEquivalence() []*timedependent.MutableTimeDependentValues[*ServiceEquivalence] {
+func (m *MRA) ServiceEquivalence() []*timedependent.MutableValues[*ServiceEquivalence] {
 	return m.serviceEquivalence
 }
 
 // SetServiceEquivalence sets the list of equivalence mapping between Trust Services.
-func (m *MRA) SetServiceEquivalence(serviceEquivalence []*timedependent.MutableTimeDependentValues[*ServiceEquivalence]) {
+func (m *MRA) SetServiceEquivalence(serviceEquivalence []*timedependent.MutableValues[*ServiceEquivalence]) {
 	m.serviceEquivalence = serviceEquivalence
 }

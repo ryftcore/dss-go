@@ -63,21 +63,21 @@ import (
 )
 
 const (
-	// XAdESSignatureBuilderReferencePrefix is the Id-prefix for the ds:Reference element.
+	// SignatureBuilderReferencePrefix is the Id-prefix for the ds:Reference element.
 	// Port of the protected REFERENCE_PREFIX.
-	XAdESSignatureBuilderReferencePrefix = "r-"
+	SignatureBuilderReferencePrefix = "r-"
 
-	// XAdESSignatureBuilderKeyInfoPrefix is the Id-prefix for the ds:KeyInfo element.
+	// AbstractSignatureBuilderKeyInfoPrefix is the Id-prefix for the ds:KeyInfo element.
 	// Port of the protected KEYINFO_PREFIX.
-	XAdESSignatureBuilderKeyInfoPrefix = "keyInfo-"
+	AbstractSignatureBuilderKeyInfoPrefix = "keyInfo-"
 
-	// XAdESSignatureBuilderValuePrefix is the Id-prefix for the ds:SignatureValue element.
+	// AbstractSignatureBuilderValuePrefix is the Id-prefix for the ds:SignatureValue element.
 	// Port of the protected VALUE_PREFIX.
-	XAdESSignatureBuilderValuePrefix = "value-"
+	AbstractSignatureBuilderValuePrefix = "value-"
 
-	// XAdESSignatureBuilderXAdESPrefix is the Id-prefix for the xades:SignedProperties element.
+	// AbstractSignatureBuilderXAdESPrefix is the Id-prefix for the xades:SignedProperties element.
 	// Port of the protected XADES_PREFIX.
-	XAdESSignatureBuilderXAdESPrefix = "xades-"
+	AbstractSignatureBuilderXAdESPrefix = "xades-"
 )
 
 // XAdESSignatureBuilderOverrides declares the members Java's abstract XAdESSignatureBuilder lets
@@ -489,7 +489,7 @@ func (b *AbstractSignatureBuilder) IncorporateKeyInfo() error {
 	b.SignatureDom.AppendChild(keyInfoElement)
 	if b.Params.IsSignKeyInfo() {
 		keyInfoElement.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
-			XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId)
+			AbstractSignatureBuilderKeyInfoPrefix+b.DeterministicId)
 	}
 	certificates, err := spi.NewBaselineBCertificateSelector(b.Params.SigningCertificate(),
 		b.Params.CertificateChain()).
@@ -588,7 +588,7 @@ func (b *AbstractSignatureBuilder) IncorporateQualifyingProperties() error {
 	b.QualifyingPropertiesDom = xmlutils.DomUtilsAddElement(b.DocumentDom, objectDom,
 		b.overrides.XadesNamespace(), currentElements.ElementQualifyingProperties())
 	xmlutils.DomUtilsAddNamespaceAttribute(b.QualifyingPropertiesDom, b.overrides.XadesNamespace())
-	b.QualifyingPropertiesDom.SetAttr(xmldom.Name{Local: XAdESBuilderTarget},
+	b.QualifyingPropertiesDom.SetAttr(xmldom.Name{Local: BuilderTarget},
 		xmlutils.DomUtilsToElementReference(b.DeterministicId))
 
 	return b.IncorporateSignedProperties()
@@ -689,7 +689,7 @@ func (b *AbstractSignatureBuilder) IncorporateReferenceSignedProperties() error 
 	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeType.AttributeName()},
 		b.XadesPath.SignedPropertiesUri())
 	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeURI.AttributeName()},
-		xmlutils.DomUtilsToElementReference(XAdESSignatureBuilderXAdESPrefix+b.DeterministicId))
+		xmlutils.DomUtilsToElementReference(AbstractSignatureBuilderXAdESPrefix+b.DeterministicId))
 
 	transforms := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementTransforms)
@@ -749,9 +749,9 @@ func (b *AbstractSignatureBuilder) IncorporateReferenceKeyInfo() error {
 		common.XMLDSigElementReference)
 	b.SignedInfoDom.AppendChild(reference)
 	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
-		XAdESSignatureBuilderReferencePrefix+XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId)
+		SignatureBuilderReferencePrefix+AbstractSignatureBuilderKeyInfoPrefix+b.DeterministicId)
 	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeURI.AttributeName()},
-		xmlutils.DomUtilsToElementReference(XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId))
+		xmlutils.DomUtilsToElementReference(AbstractSignatureBuilderKeyInfoPrefix+b.DeterministicId))
 
 	transforms := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementTransforms)
@@ -799,7 +799,7 @@ func (b *AbstractSignatureBuilder) IncorporateSignatureValue() {
 		common.XMLDSigElementSignatureValue)
 	b.SignatureDom.AppendChild(b.SignatureValueDom)
 	b.SignatureValueDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
-		XAdESSignatureBuilderValuePrefix+b.DeterministicId)
+		AbstractSignatureBuilderValuePrefix+b.DeterministicId)
 }
 
 // IncorporateSignedProperties creates the xades:SignedProperties DOM element:
@@ -815,7 +815,7 @@ func (b *AbstractSignatureBuilder) IncorporateSignedProperties() error {
 	b.SignedPropertiesDom = xmlutils.DomUtilsAddElement(b.DocumentDom, b.QualifyingPropertiesDom,
 		b.overrides.XadesNamespace(), currentElements.ElementSignedProperties())
 	b.SignedPropertiesDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
-		XAdESSignatureBuilderXAdESPrefix+b.DeterministicId)
+		AbstractSignatureBuilderXAdESPrefix+b.DeterministicId)
 
 	if err := b.IncorporateSignedSignatureProperties(); err != nil {
 		return err
@@ -1182,7 +1182,7 @@ func (b *AbstractSignatureBuilder) incorporateDataObjectFormat() error {
 func (b *AbstractSignatureBuilder) keyInfoDataObjectFormat() *DSSDataObjectFormat {
 	keyInfoDataObjectFormat := NewDSSDataObjectFormat()
 	keyInfoDataObjectFormat.SetObjectReference(xmlutils.DomUtilsToElementReference(
-		XAdESSignatureBuilderReferencePrefix + XAdESSignatureBuilderKeyInfoPrefix + b.DeterministicId))
+		SignatureBuilderReferencePrefix + AbstractSignatureBuilderKeyInfoPrefix + b.DeterministicId))
 	keyInfoDataObjectFormat.SetMimeType(enumerations.MimeTypeEnumXML.MimeTypeString())
 	return keyInfoDataObjectFormat
 }
@@ -1639,8 +1639,8 @@ func (b *AbstractSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.
 			timestampIncludeElement := xmlutils.DomUtilsCreateElementNS(b.DocumentDom,
 				b.overrides.XadesNamespace(), currentElements.ElementInclude())
 			uri := xmlutils.DomUtilsToElementReference(include.URI())
-			timestampIncludeElement.SetAttr(xmldom.Name{Local: XAdESBuilderURI}, uri)
-			timestampIncludeElement.SetAttr(xmldom.Name{Local: XAdESBuilderReferencedData}, "true")
+			timestampIncludeElement.SetAttr(xmldom.Name{Local: BuilderURI}, uri)
+			timestampIncludeElement.SetAttr(xmldom.Name{Local: BuilderReferencedData}, "true")
 			timestampElement.AppendChild(timestampIncludeElement)
 		}
 	}

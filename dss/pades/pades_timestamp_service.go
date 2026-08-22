@@ -3,8 +3,8 @@
 // Java's timestamp package is flattened into the single pades package.
 // Java's two constructors become two constructor funcs, since Go has no overloading:
 //
-//	TimestampService(TSPSource)                       -> NewPAdESTimestampService
-//	TimestampService(TSPSource, PDFSignatureService)  -> NewPAdESTimestampServiceWithPDFService
+//	TimestampService(TSPSource)                       -> NewTimestampService
+//	TimestampService(TSPSource, PDFSignatureService)  -> NewTimestampServiceWithPDFService
 //
 // ServiceLoaderPdfObjFactory has no Go counterpart - there is exactly one native backend, so the
 // factory collapses to NewDefaultPdfObjFactory (internal/pdf/DESIGN.md §0.2).
@@ -25,15 +25,15 @@ type TimestampService struct {
 	pdfSignatureService PDFSignatureService
 }
 
-// NewPAdESTimestampService instantiates the service with a default PDFSignatureService for an
+// NewTimestampService instantiates the service with a default PDFSignatureService for an
 // archive (document) timestamp creation. Port of PAdESTimestampService(TSPSource).
-func NewPAdESTimestampService(tspSource validation.TSPSource) *TimestampService {
-	return NewPAdESTimestampServiceWithPDFService(tspSource, NewDefaultPdfObjFactory().NewArchiveTimestampService())
+func NewTimestampService(tspSource validation.TSPSource) *TimestampService {
+	return NewTimestampServiceWithPDFService(tspSource, NewDefaultPdfObjFactory().NewArchiveTimestampService())
 }
 
-// NewPAdESTimestampServiceWithPDFService is the default constructor.
+// NewTimestampServiceWithPDFService is the default constructor.
 // Port of PAdESTimestampService(TSPSource, PDFSignatureService).
-func NewPAdESTimestampServiceWithPDFService(tspSource validation.TSPSource,
+func NewTimestampServiceWithPDFService(tspSource validation.TSPSource,
 	pdfSignatureService PDFSignatureService) *TimestampService {
 	if tspSource == nil {
 		panic("TSPSource shall be provided!")

@@ -24,8 +24,8 @@ type ASiCWithXAdESSignatureParameters struct {
 // the default constructor.
 func NewASiCWithXAdESSignatureParameters() *ASiCWithXAdESSignatureParameters {
 	return &ASiCWithXAdESSignatureParameters{
-		SignatureParameters: *dssxades.NewXAdESSignatureParameters(),
-		asicParams:          asic.NewASiCParameters(),
+		SignatureParameters: *dssxades.NewSignatureParameters(),
+		asicParams:          asic.NewParameters(),
 	}
 }
 

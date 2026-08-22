@@ -16,12 +16,12 @@ type ValidationJobSummary struct {
 	otherLoTEInfos []*Info
 }
 
-// NewLoTEValidationJobSummary is the default constructor.
+// NewValidationJobSummary is the default constructor.
 //
 // Java's IllegalArgumentException("LoTE Info shall be provided!") when both loloteInfos and
 // otherLoTEInfos are empty is data-dependent, so it becomes a returned error rather than a
 // panic (mirrors tsl.NewTLValidationJobSummary).
-func NewLoTEValidationJobSummary(loloteInfos []*LoLoTEInfo, otherLoTEInfos []*Info) (*ValidationJobSummary, error) {
+func NewValidationJobSummary(loloteInfos []*LoLoTEInfo, otherLoTEInfos []*Info) (*ValidationJobSummary, error) {
 	if len(loloteInfos) == 0 && len(otherLoTEInfos) == 0 {
 		return nil, model.NewDSSError("LoTE Info shall be provided!")
 	}

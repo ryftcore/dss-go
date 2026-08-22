@@ -96,7 +96,7 @@ func (v *ManifestValidator) Validate() []*model.ReferenceValidation {
 
 	referenceValidations := make([]*model.ReferenceValidation, 0, len(references))
 	for _, reference := range references {
-		refValidation := NewXAdESReferenceValidation(reference)
+		refValidation := NewReferenceValidation(reference)
 		refValidation.SetType(enumerations.DigestMatcherTypeManifestEntry)
 
 		referenceValidations = append(referenceValidations, &refValidation.ReferenceValidation)

@@ -10,7 +10,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
-// TestTrustedListFacadeDelegates checks NewTrustedListFacade's Unmarshal/
+// TestTrustedListFacadeDelegates checks NewFacade's Unmarshal/
 // Marshal delegate to dss/trustedlist/jaxb's own Unmarshal/Marshal exactly
 // (which is where marshal-parity against the Java facade's oracle is
 // proven - see that package's TestMarshalParity), over the same real,
@@ -29,7 +29,7 @@ func TestTrustedListFacadeDelegates(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	f := NewTrustedListFacade()
+	f := NewFacade()
 	got, err := f.Unmarshal(in)
 	if err != nil {
 		t.Fatalf("Unmarshal: %v", err)

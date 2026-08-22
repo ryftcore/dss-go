@@ -35,8 +35,8 @@ type Data struct {
 	foundEAAs []*EAAWrapper
 }
 
-// NewDiagnosticData is the default constructor.
-func NewDiagnosticData(wrapped *jaxb.XmlDiagnosticData) *Data {
+// NewData is the default constructor.
+func NewData(wrapped *jaxb.XmlDiagnosticData) *Data {
 	return &Data{wrapped: wrapped}
 }
 

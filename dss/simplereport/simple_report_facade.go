@@ -23,7 +23,7 @@ type Facade struct{}
 
 // NewSimpleReportFacade instantiates a new SimpleReportFacade. Port of
 // newFacade().
-func NewSimpleReportFacade() *Facade {
+func NewFacade() *Facade {
 	return &Facade{}
 }
 

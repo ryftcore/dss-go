@@ -152,12 +152,12 @@ type SignatureParameters struct {
 	dataObjectFormatList []*DSSDataObjectFormat
 }
 
-// NewXAdESSignatureParameters instantiates the object with null values, including the
+// NewSignatureParameters instantiates the object with null values, including the
 // en319132, keyInfoCanonicalizationMethod, signedInfoCanonicalizationMethod,
 // signedPropertiesCanonicalizationMethod, signingCertificateDigestMethod, xmldsigNamespace,
 // xadesNamespace, xades141Namespace and tokenReferencesDigestAlgorithm field initializers. Port
 // of the default constructor.
-func NewXAdESSignatureParameters() *SignatureParameters {
+func NewSignatureParameters() *SignatureParameters {
 	return &SignatureParameters{
 		AbstractSignatureParameters:            document.NewAbstractSignatureParameters[*TimestampParameters](),
 		en319132:                               true,
@@ -346,7 +346,7 @@ func (p *SignatureParameters) SetRootDocumentFromDSSDocument(rootDocument model.
 // AbstractSignatureParameters.GetContext.
 func (p *SignatureParameters) GetContext() *ProfileParameters {
 	if p.context == nil {
-		p.context = NewXAdESProfileParameters()
+		p.context = NewProfileParameters()
 	}
 	return p.context
 }
@@ -571,7 +571,7 @@ func (p *SignatureParameters) SetDataObjectFormatList(dataObjectFormatList []*DS
 // instantiating XAdESTimestampParameters. Ports the overridden #getContentTimestampParameters.
 func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
-		p.ContentTimestampParameters = NewXAdESTimestampParameters()
+		p.ContentTimestampParameters = NewTimestampParameters()
 	}
 	return p.ContentTimestampParameters
 }
@@ -580,7 +580,7 @@ func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParamete
 // instantiating XAdESTimestampParameters. Ports the overridden #getSignatureTimestampParameters.
 func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
-		p.SignatureTimestampParameters = NewXAdESTimestampParameters()
+		p.SignatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.SignatureTimestampParameters
 }
@@ -589,7 +589,7 @@ func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParame
 // instantiating XAdESTimestampParameters. Ports the overridden #getArchiveTimestampParameters.
 func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
-		p.ArchiveTimestampParameters = NewXAdESTimestampParameters()
+		p.ArchiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.ArchiveTimestampParameters
 }

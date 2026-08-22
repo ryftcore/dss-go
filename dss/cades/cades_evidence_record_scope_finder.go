@@ -24,7 +24,7 @@ type EvidenceRecordScopeFinder struct {
 
 // NewCAdESEvidenceRecordScopeFinder is the port of the constructor
 // EvidenceRecordScopeFinder(EvidenceRecord, AdvancedSignature).
-func NewCAdESEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) *EvidenceRecordScopeFinder {
+func NewEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) *EvidenceRecordScopeFinder {
 	return &EvidenceRecordScopeFinder{
 		EvidenceRecordScopeFinder: *spiscope.NewEvidenceRecordScopeFinder(evidenceRecord),
 		signature:                 signature,

@@ -58,7 +58,7 @@ func nonASN1SignaturePolicyValidatorStartsWithXMLBOM(policyContent model.DSSDocu
 // Validate recomputes the digest of the policy content and compares it
 // against the declared digest.
 func (v *NonASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
-	validationResult := signature.NewSignaturePolicyValidationResult()
+	validationResult := signature.NewPolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent == nil {
