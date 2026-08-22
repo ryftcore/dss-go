@@ -71,9 +71,9 @@ type SignatureImageParameters struct {
 func NewSignatureImageParameters() *SignatureImageParameters {
 	return &SignatureImageParameters{
 		zoom:                SignatureImageParametersNoScaling,
-		alignmentHorizontal: enumerations.VisualSignatureAlignmentHorizontal_NONE,
-		alignmentVertical:   enumerations.VisualSignatureAlignmentVertical_NONE,
-		imageScaling:        enumerations.ImageScaling_STRETCH,
+		alignmentHorizontal: enumerations.VisualSignatureAlignmentHorizontalNone,
+		alignmentVertical:   enumerations.VisualSignatureAlignmentVerticalNone,
+		imageScaling:        enumerations.ImageScalingStretch,
 	}
 }
 

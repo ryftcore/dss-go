@@ -33,9 +33,9 @@ func (c *FinalCertificateQualificationCalculator) FinalQualification() enumerati
 	if c.certQualificationAtIssuanceTime == c.certQualificationAtBestSignatureTime {
 		return c.certQualificationAtIssuanceTime
 	}
-	if enumerations.CertificateQualification_NA == c.certQualificationAtIssuanceTime ||
-		enumerations.CertificateQualification_NA == c.certQualificationAtBestSignatureTime {
-		return enumerations.CertificateQualification_NA
+	if enumerations.CertificateQualificationNA == c.certQualificationAtIssuanceTime ||
+		enumerations.CertificateQualificationNA == c.certQualificationAtBestSignatureTime {
+		return enumerations.CertificateQualificationNA
 	}
 	qualStatus := c.getFinalCertQualStatus()
 	certType := c.getFinalCertificateType()
@@ -46,9 +46,9 @@ func (c *FinalCertificateQualificationCalculator) FinalQualification() enumerati
 // getFinalCertQualStatus ports the private getFinalCertQualStatus().
 func (c *FinalCertificateQualificationCalculator) getFinalCertQualStatus() enumerations.CertificateQualifiedStatus {
 	if c.certQualificationAtIssuanceTime.IsQc() && c.certQualificationAtBestSignatureTime.IsQc() {
-		return enumerations.CertificateQualifiedStatus_QC
+		return enumerations.CertificateQualifiedStatusQC
 	}
-	return enumerations.CertificateQualifiedStatus_NOT_QC
+	return enumerations.CertificateQualifiedStatusNotQC
 }
 
 // getFinalCertificateType ports the private getFinalCertificateType().
@@ -56,13 +56,13 @@ func (c *FinalCertificateQualificationCalculator) getFinalCertificateType() enum
 	if c.certQualificationAtIssuanceTime.Type() == c.certQualificationAtBestSignatureTime.Type() {
 		return c.certQualificationAtBestSignatureTime.Type()
 	}
-	return enumerations.CertificateType_UNKNOWN
+	return enumerations.CertificateTypeUnknown
 }
 
 // getFinalQSCDStatus ports the private getFinalQSCDStatus().
 func (c *FinalCertificateQualificationCalculator) getFinalQSCDStatus() enumerations.QSCDStatus {
 	if c.certQualificationAtBestSignatureTime.IsQscd() {
-		return enumerations.QSCDStatus_QSCD
+		return enumerations.QSCDStatusQSCD
 	}
-	return enumerations.QSCDStatus_NOT_QSCD
+	return enumerations.QSCDStatusNotQSCD
 }

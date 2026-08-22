@@ -43,7 +43,7 @@ func NewTimestampGenerationTimeNotAfterCertificateExpirationCheck[T any](i18nPro
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_CNT_TST_BBB
+	return jaxb.XmlBlockTypeCNTTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -55,13 +55,13 @@ func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) Process()
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EXPIRED
+	return enumerations.SubIndicationExpired
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

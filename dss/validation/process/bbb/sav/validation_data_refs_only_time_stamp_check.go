@@ -31,7 +31,7 @@ func NewValidationDataRefsOnlyTimeStampCheck(i18nProvider *i18n.I18nProvider, re
 // TimestampType returns the associated TimestampType. Port of
 // getTimestampType().
 func (c *ValidationDataRefsOnlyTimeStampCheck) TimestampType() enumerations.TimestampType {
-	return enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP
+	return enumerations.TimestampTypeValidationDataRefsOnlyTimestamp
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

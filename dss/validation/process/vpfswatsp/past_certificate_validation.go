@@ -263,7 +263,7 @@ func (c *PastCertificateValidation) AddAdditionalInfo() {
 // collectMessages(XmlConclusion, XmlConstraint): the generated BlockType member
 // is a *XmlBlockType, whose nil is Java's null.
 func (c *PastCertificateValidation) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType != nil && jaxb.XmlBlockType_VTS == *constraint.BlockType {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeVTS == *constraint.BlockType {
 		// skip validation for VTS
 	} else {
 		c.ChainBase.CollectMessages(conclusion, constraint)

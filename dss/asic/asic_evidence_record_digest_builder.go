@@ -35,7 +35,7 @@ type ASiCEvidenceRecordDigestBuilder struct {
 // an *exception.IllegalInputException-wrapping error surfaced via panic(error) if the document
 // is not a supported ASiC or document type - see toASiCContent.
 func NewASiCEvidenceRecordDigestBuilderFromDocument(asicContainer model.DSSDocument) *ASiCEvidenceRecordDigestBuilder {
-	return NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer, enumerations.DigestAlgorithm_SHA256)
+	return NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm(asicContainer, enumerations.DigestAlgorithmSHA256)
 }
 
 // NewASiCEvidenceRecordDigestBuilderFromDocumentWithAlgorithm creates a
@@ -70,7 +70,7 @@ func asicEvidenceRecordToASiCContent(asicContainer model.DSSDocument) *ASiCConte
 // from ASiCContent, using a default SHA-256 digest algorithm. Ports
 // ASiCEvidenceRecordDigestBuilder(ASiCContent).
 func NewASiCEvidenceRecordDigestBuilder(asicContent *ASiCContent) *ASiCEvidenceRecordDigestBuilder {
-	return NewASiCEvidenceRecordDigestBuilderWithAlgorithm(asicContent, enumerations.DigestAlgorithm_SHA256)
+	return NewASiCEvidenceRecordDigestBuilderWithAlgorithm(asicContent, enumerations.DigestAlgorithmSHA256)
 }
 
 // NewASiCEvidenceRecordDigestBuilderWithAlgorithm creates a ASiCEvidenceRecordDigestBuilder to

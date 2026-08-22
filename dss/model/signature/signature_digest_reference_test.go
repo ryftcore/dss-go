@@ -9,13 +9,13 @@ import (
 )
 
 func TestSignatureDigestReference_RoundTrip(t *testing.T) {
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte{1, 2, 3})
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3})
 	ref := NewSignatureDigestReferenceWithCanonicalization("http://www.w3.org/2006/12/xml-c14n11", digest)
 
 	if got, want := ref.CanonicalizationMethod(), "http://www.w3.org/2006/12/xml-c14n11"; got != want {
 		t.Fatalf("CanonicalizationMethod() = %q, want %q", got, want)
 	}
-	if got := ref.DigestAlgorithm(); got != enumerations.DigestAlgorithm_SHA256 {
+	if got := ref.DigestAlgorithm(); got != enumerations.DigestAlgorithmSHA256 {
 		t.Fatalf("DigestAlgorithm() = %v", got)
 	}
 	if string(ref.DigestValue()) != string([]byte{1, 2, 3}) {
@@ -24,7 +24,7 @@ func TestSignatureDigestReference_RoundTrip(t *testing.T) {
 }
 
 func TestSignatureDigestReference_Equals(t *testing.T) {
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte{1, 2, 3})
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3})
 	a := NewSignatureDigestReference(digest)
 	b := NewSignatureDigestReference(digest)
 	c := NewSignatureDigestReferenceWithCanonicalization("c14n", digest)

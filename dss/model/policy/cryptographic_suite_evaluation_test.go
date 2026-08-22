@@ -21,9 +21,9 @@ func TestCryptographicSuiteEvaluation_RoundTrip(t *testing.T) {
 	e.SetValidityStart(&start)
 	e.SetValidityEnd(&end)
 	e.SetAlgorithmUsage([]enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData,
 	})
-	e.SetRecommendation(enumerations.CryptographicSuiteRecommendation_RECOMMENDED)
+	e.SetRecommendation(enumerations.CryptographicSuiteRecommendationRecommended)
 
 	c := CryptographicSuiteEvaluationCopy(e)
 	if !e.Equals(c) {

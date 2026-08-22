@@ -238,7 +238,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) addSignaturePolicyStoreToSignerInform
 		return nil, err
 	}
 	unsignedAttributesWithPolicyStore := append(append(cmscore.Attributes{}, unsignedAttributes...),
-		cmscore.NewAttribute(spi.OID_id_aa_ets_sigPolicyStore, sigPolicyStore))
+		cmscore.NewAttribute(spi.OIDIdAaEtsSigPolicyStore, sigPolicyStore))
 	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesWithPolicyStore)
 }
 

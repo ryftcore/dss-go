@@ -31,15 +31,15 @@ func TestPolicyIsSPQualifierPresent(t *testing.T) {
 func TestPolicyRoundTripAndEquals(t *testing.T) {
 	a := NewPolicy()
 	a.SetId("urn:policy:1")
-	a.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
-	a.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	a.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
+	a.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	a.SetDigestValue([]byte{1, 2, 3})
 	a.SetDocumentationReferences("ref1", "ref2")
 
 	b := NewPolicy()
 	b.SetId("urn:policy:1")
-	b.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
-	b.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	b.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
+	b.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	b.SetDigestValue([]byte{1, 2, 3})
 	b.SetDocumentationReferences("ref1", "ref2")
 

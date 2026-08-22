@@ -129,7 +129,7 @@ func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *XAdESS
 
 	var evidenceRecordElement *xmldom.Node
 	switch evidenceRecord.EvidenceRecordType() {
-	case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 		erDom, err := xmlutils.DomUtilsBuildDOMFromDocument(evidenceRecordDocument)
 		if err != nil {
 			return nil, err
@@ -140,10 +140,10 @@ func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *XAdESS
 			return nil, err
 		}
 
-	case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 		base64EncodedER := utils.ToBase64(evidenceRecord.Encoded())
 		evidenceRecordElement = xmlutils.DomUtilsAddTextElement(b.DocumentDom, sealingEvidenceRecordElement,
-			parameters.XadesERNamespace(), definition.XAdESEvidencerecordNamespaceElement_ASN1_EVIDENCE_RECORD, base64EncodedER)
+			parameters.XadesERNamespace(), definition.XAdESEvidencerecordNamespaceElementASN1EvidenceRecord, base64EncodedER)
 
 	default:
 		return nil, fmt.Errorf("the Evidence Record type '%s' is not supported!", evidenceRecord.EvidenceRecordType())
@@ -154,7 +154,7 @@ func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *XAdESS
 	 * validation, to ensure correct namespace processing on canonicalization. The signature and
 	 * all the related data shall be re-initialized for a proper ER validation.
 	 */
-	if enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD == evidenceRecord.EvidenceRecordType() {
+	if enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord == evidenceRecord.EvidenceRecordType() {
 		signatureDocument := xmlutils.NewDOMDocument(evidenceRecordElement.OwnerDocument())
 		xadesSignature, err = b.getXAdESSignature(signatureDocument, parameters.SignatureId(), parameters.DetachedContents())
 		if err != nil {
@@ -187,7 +187,7 @@ func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *XAdESS
 // instead.
 func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecordElement(nodes []*xmldom.Node) (*xmldom.Node, error) {
 	for _, node := range nodes {
-		if xmldom.Element == node.Kind && definition.XAdESEvidencerecordNamespaceElement_EVIDENCE_RECORD.IsSameTagName(node.Name.Local) {
+		if xmldom.Element == node.Kind && definition.XAdESEvidencerecordNamespaceElementEvidenceRecord.IsSameTagName(node.Name.Local) {
 			return node, nil
 		}
 	}
@@ -238,7 +238,7 @@ func (b *EmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord
 		}
 	}
 	for _, referenceValidation := range evidenceRecord.ReferenceValidation() {
-		if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE != referenceValidation.Type() && !referenceValidation.IsIntact() {
+		if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference != referenceValidation.Type() && !referenceValidation.IsIntact() {
 			if utils.IsCollectionEmpty(parameters.DetachedContents()) {
 				return exception.NewIllegalInputException("The digest covered by the evidence record do not correspond to " +
 					"the digest computed on the signature and/or detached content! " +
@@ -263,16 +263,16 @@ func (b *EmbeddedEvidenceRecordBuilder) assertContainsOnlySameTypeEvidenceRecord
 			continue
 		}
 		switch evidenceRecordType {
-		case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
-			if !definition.XAdESEvidencerecordNamespaceElement_EVIDENCE_RECORD.IsSameTagName(childNode.Name.Local) {
+		case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
+			if !definition.XAdESEvidencerecordNamespaceElementEvidenceRecord.IsSameTagName(childNode.Name.Local) {
 				return exception.NewIllegalInputException(
 					"The latest signature unsigned property contains evidence records other " +
 						"than ers:EvidenceRecordType type specified in IETF RFC 6283. " +
 						"The incorporation of different evidence record types within " +
 						"the same unsigned property is not supported.")
 			}
-		case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
-			if !definition.XAdESEvidencerecordNamespaceElement_ASN1_EVIDENCE_RECORD.IsSameTagName(childNode.Name.Local) {
+		case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
+			if !definition.XAdESEvidencerecordNamespaceElementASN1EvidenceRecord.IsSameTagName(childNode.Name.Local) {
 				return exception.NewIllegalInputException(
 					"The latest signature unsigned property contains evidence records other " +
 						"than EvidenceRecord type specified in IETF RFC 4998. " +
@@ -299,7 +299,7 @@ func (b *EmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord valida
 	validationContext.Validate()
 
 	signatureValidationAlerter := validation.NewSignatureValidationAlerter(validationContext)
-	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperation_ADD_EVIDENCE_RECORD)
+	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperationAddEvidenceRecord)
 	signatureValidationAlerter.AssertAllTimestampsValid()
 }
 
@@ -313,7 +313,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getSealingEvidenceRecordElement(unsigned
 	}
 	// new evidence record unsigned property
 	return xmlutils.DomUtilsAddElement(b.DocumentDom, b.UnsignedSignaturePropertiesDom,
-		parameters.XadesERNamespace(), definition.XAdESEvidencerecordNamespaceElement_SEALING_EVIDENCE_RECORDS), nil
+		parameters.XadesERNamespace(), definition.XAdESEvidencerecordNamespaceElementSealingEvidenceRecords), nil
 }
 
 // initDocumentAnalyzer ports the private #initDocumentAnalyzer(DSSDocument, List<DSSDocument>).

@@ -76,7 +76,7 @@ func (c *TLSCertificateSupportedByQWAC2ValidationProcessBlock) BuildChainTitle()
 // QWACProfile gets the current QWAC profile. Port of the public
 // QWACProfile getQWACProfile().
 func (c *TLSCertificateSupportedByQWAC2ValidationProcessBlock) QWACProfile() enumerations.QWACProfile {
-	return enumerations.QWACProfile_TLS_BY_QWAC_2
+	return enumerations.QWACProfileTLSByQWAC2
 }
 
 // InitChain initializes the chain. Port of initChain().

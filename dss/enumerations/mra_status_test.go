@@ -9,8 +9,8 @@ func TestMRAStatus(t *testing.T) {
 		uri       string
 		isEnacted bool
 	}{
-		{MRAStatus_ENACTED, "http://ec.europa.eu/tools/lotl/mra/enacted", true},
-		{MRAStatus_REPEALED, "http://ec.europa.eu/tools/lotl/mra/repealed", false},
+		{MRAStatusEnacted, "http://ec.europa.eu/tools/lotl/mra/enacted", true},
+		{MRAStatusRepealed, "http://ec.europa.eu/tools/lotl/mra/repealed", false},
 	}
 	if len(MRAStatusValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(MRAStatusValues()))

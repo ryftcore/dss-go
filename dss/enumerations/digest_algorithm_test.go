@@ -19,22 +19,22 @@ type digestAlgorithmCase struct {
 
 func digestAlgorithmCases() []digestAlgorithmCase {
 	return []digestAlgorithmCase{
-		{DigestAlgorithm_SHA1, "SHA1", "SHA-1", "1.3.14.3.2.26", "http://www.w3.org/2000/09/xmldsig#sha1", "", "SHA", "", "", int64p(-14), "", 20},
-		{DigestAlgorithm_SHA224, "SHA224", "SHA-224", "2.16.840.1.101.3.4.2.4", "http://www.w3.org/2001/04/xmldsig-more#sha224", "S224", "", "", "", nil, "", 28},
-		{DigestAlgorithm_SHA256, "SHA256", "SHA-256", "2.16.840.1.101.3.4.2.1", "http://www.w3.org/2001/04/xmlenc#sha256", "S256", "SHA-256", "sha-256", "sha256", int64p(-16), "SHA-256", 32},
-		{DigestAlgorithm_SHA384, "SHA384", "SHA-384", "2.16.840.1.101.3.4.2.2", "http://www.w3.org/2001/04/xmldsig-more#sha384", "S384", "", "sha-384", "sha384", int64p(-43), "SHA-384", 48},
-		{DigestAlgorithm_SHA512, "SHA512", "SHA-512", "2.16.840.1.101.3.4.2.3", "http://www.w3.org/2001/04/xmlenc#sha512", "S512", "SHA-512", "sha-512", "sha512", int64p(-44), "SHA-512", 64},
-		{DigestAlgorithm_SHA3_224, "SHA3-224", "SHA3-224", "2.16.840.1.101.3.4.2.7", "http://www.w3.org/2007/05/xmldsig-more#sha3-224", "", "", "sha3-224", "", nil, "", 28},
-		{DigestAlgorithm_SHA3_256, "SHA3-256", "SHA3-256", "2.16.840.1.101.3.4.2.8", "http://www.w3.org/2007/05/xmldsig-more#sha3-256", "S3-256", "", "sha3-256", "", nil, "", 32},
-		{DigestAlgorithm_SHA3_384, "SHA3-384", "SHA3-384", "2.16.840.1.101.3.4.2.9", "http://www.w3.org/2007/05/xmldsig-more#sha3-384", "S3-384", "", "sha3-384", "", nil, "", 48},
-		{DigestAlgorithm_SHA3_512, "SHA3-512", "SHA3-512", "2.16.840.1.101.3.4.2.10", "http://www.w3.org/2007/05/xmldsig-more#sha3-512", "S3-512", "", "sha3-512", "", nil, "", 64},
-		{DigestAlgorithm_SHAKE128, "SHAKE-128", "SHAKE-128", "2.16.840.1.101.3.4.2.11", "", "", "", "", "", int64p(-18), "", 0},
-		{DigestAlgorithm_SHAKE256, "SHAKE-256", "SHAKE-256", "2.16.840.1.101.3.4.2.12", "", "", "", "", "", nil, "", 0},
-		{DigestAlgorithm_SHAKE256_512, "SHAKE256-512", "SHAKE256-512", "2.16.840.1.101.3.4.2.18", "", "", "", "", "", int64p(-45), "", 0},
-		{DigestAlgorithm_RIPEMD160, "RIPEMD160", "RIPEMD160", "1.3.36.3.2.1", "http://www.w3.org/2001/04/xmlenc#ripemd160", "", "", "", "", nil, "", 0},
-		{DigestAlgorithm_MD2, "MD2", "MD2", "1.2.840.113549.2.2", "http://www.w3.org/2001/04/xmldsig-more#md2", "", "", "", "", nil, "", 0},
-		{DigestAlgorithm_MD5, "MD5", "MD5", "1.2.840.113549.2.5", "http://www.w3.org/2001/04/xmldsig-more#md5", "", "MD5", "", "", nil, "", 0},
-		{DigestAlgorithm_WHIRLPOOL, "WHIRLPOOL", "WHIRLPOOL", "1.0.10118.3.0.55", "http://www.w3.org/2007/05/xmldsig-more#whirlpool", "", "", "", "", nil, "", 0},
+		{DigestAlgorithmSHA1, "SHA1", "SHA-1", "1.3.14.3.2.26", "http://www.w3.org/2000/09/xmldsig#sha1", "", "SHA", "", "", int64p(-14), "", 20},
+		{DigestAlgorithmSHA224, "SHA224", "SHA-224", "2.16.840.1.101.3.4.2.4", "http://www.w3.org/2001/04/xmldsig-more#sha224", "S224", "", "", "", nil, "", 28},
+		{DigestAlgorithmSHA256, "SHA256", "SHA-256", "2.16.840.1.101.3.4.2.1", "http://www.w3.org/2001/04/xmlenc#sha256", "S256", "SHA-256", "sha-256", "sha256", int64p(-16), "SHA-256", 32},
+		{DigestAlgorithmSHA384, "SHA384", "SHA-384", "2.16.840.1.101.3.4.2.2", "http://www.w3.org/2001/04/xmldsig-more#sha384", "S384", "", "sha-384", "sha384", int64p(-43), "SHA-384", 48},
+		{DigestAlgorithmSHA512, "SHA512", "SHA-512", "2.16.840.1.101.3.4.2.3", "http://www.w3.org/2001/04/xmlenc#sha512", "S512", "SHA-512", "sha-512", "sha512", int64p(-44), "SHA-512", 64},
+		{DigestAlgorithmSHA3224, "SHA3-224", "SHA3-224", "2.16.840.1.101.3.4.2.7", "http://www.w3.org/2007/05/xmldsig-more#sha3-224", "", "", "sha3-224", "", nil, "", 28},
+		{DigestAlgorithmSHA3256, "SHA3-256", "SHA3-256", "2.16.840.1.101.3.4.2.8", "http://www.w3.org/2007/05/xmldsig-more#sha3-256", "S3-256", "", "sha3-256", "", nil, "", 32},
+		{DigestAlgorithmSHA3384, "SHA3-384", "SHA3-384", "2.16.840.1.101.3.4.2.9", "http://www.w3.org/2007/05/xmldsig-more#sha3-384", "S3-384", "", "sha3-384", "", nil, "", 48},
+		{DigestAlgorithmSHA3512, "SHA3-512", "SHA3-512", "2.16.840.1.101.3.4.2.10", "http://www.w3.org/2007/05/xmldsig-more#sha3-512", "S3-512", "", "sha3-512", "", nil, "", 64},
+		{DigestAlgorithmSHAKE128, "SHAKE-128", "SHAKE-128", "2.16.840.1.101.3.4.2.11", "", "", "", "", "", int64p(-18), "", 0},
+		{DigestAlgorithmSHAKE256, "SHAKE-256", "SHAKE-256", "2.16.840.1.101.3.4.2.12", "", "", "", "", "", nil, "", 0},
+		{DigestAlgorithmSHAKE256512, "SHAKE256-512", "SHAKE256-512", "2.16.840.1.101.3.4.2.18", "", "", "", "", "", int64p(-45), "", 0},
+		{DigestAlgorithmRIPEMD160, "RIPEMD160", "RIPEMD160", "1.3.36.3.2.1", "http://www.w3.org/2001/04/xmlenc#ripemd160", "", "", "", "", nil, "", 0},
+		{DigestAlgorithmMD2, "MD2", "MD2", "1.2.840.113549.2.2", "http://www.w3.org/2001/04/xmldsig-more#md2", "", "", "", "", nil, "", 0},
+		{DigestAlgorithmMD5, "MD5", "MD5", "1.2.840.113549.2.5", "http://www.w3.org/2001/04/xmldsig-more#md5", "", "MD5", "", "", nil, "", 0},
+		{DigestAlgorithmWHIRLPOOL, "WHIRLPOOL", "WHIRLPOOL", "1.0.10118.3.0.55", "http://www.w3.org/2007/05/xmldsig-more#whirlpool", "", "", "", "", nil, "", 0},
 	}
 }
 
@@ -97,10 +97,10 @@ func TestDigestAlgorithmForName(t *testing.T) {
 	if DigestAlgorithmIsSupportedAlgorithm("NOPE") {
 		t.Error("expected NOPE to be unsupported")
 	}
-	if got := DigestAlgorithmForNameDefault("NOPE", DigestAlgorithm_SHA256); got != DigestAlgorithm_SHA256 {
+	if got := DigestAlgorithmForNameDefault("NOPE", DigestAlgorithmSHA256); got != DigestAlgorithmSHA256 {
 		t.Errorf("DigestAlgorithmForNameDefault(NOPE, SHA256) = %v, want SHA256", got)
 	}
-	if got := DigestAlgorithmForNameDefault("SHA512", DigestAlgorithm_SHA256); got != DigestAlgorithm_SHA512 {
+	if got := DigestAlgorithmForNameDefault("SHA512", DigestAlgorithmSHA256); got != DigestAlgorithmSHA512 {
 		t.Errorf("DigestAlgorithmForNameDefault(SHA512, SHA256) = %v, want SHA512", got)
 	}
 }

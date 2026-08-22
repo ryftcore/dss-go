@@ -69,10 +69,10 @@ func NewPAdESCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDi
 // extractFromDssDictSource ports the private extractFromDssDictSource().
 func (s *PAdESCertificateSource) extractFromDssDictSource() {
 	for _, certToken := range s.DSSDictionaryCertValues() {
-		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOrigin_DSS_DICTIONARY)
+		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOriginDSSDictionary)
 	}
 	for _, certToken := range s.VRIDictionaryCertValues() {
-		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOrigin_VRI_DICTIONARY)
+		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOriginVRIDictionary)
 	}
 }
 

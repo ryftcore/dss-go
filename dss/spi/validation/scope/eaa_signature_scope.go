@@ -48,7 +48,7 @@ func (s *EAASignatureScope) eaaPresentationID(tokenIdentifierProvider model.Toke
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *EAASignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_EAA_SIGNATURE
+	return enumerations.SignatureScopeTypeEAASignature
 }
 
 // compile-time interface assertion.

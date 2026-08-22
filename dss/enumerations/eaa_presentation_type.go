@@ -11,31 +11,31 @@ import "fmt"
 type EAAPresentationType string
 
 const (
-	// EAAPresentationType_SD_JWT represents an IETF RFC 9901 "Selective Disclosure for
+	// EAAPresentationTypeSDJWT represents an IETF RFC 9901 "Selective Disclosure for
 	// JSON Web Tokens" token.
-	EAAPresentationType_SD_JWT EAAPresentationType = "SD_JWT"
-	// EAAPresentationType_MDOC_DEVICE_RESPONSE represents a DeviceResponse mdoc
+	EAAPresentationTypeSDJWT EAAPresentationType = "SD_JWT"
+	// EAAPresentationTypeMDocDeviceResponse represents a DeviceResponse mdoc
 	// structure as per ISO/IEC 18013-5 "8.3.2.1.2.2 Device retrieval mdoc response".
-	EAAPresentationType_MDOC_DEVICE_RESPONSE EAAPresentationType = "MDOC_DEVICE_RESPONSE"
-	// EAAPresentationType_MDOC_ISSUER_SIGNED represents an IssuerSigned mdoc structure
+	EAAPresentationTypeMDocDeviceResponse EAAPresentationType = "MDOC_DEVICE_RESPONSE"
+	// EAAPresentationTypeMDocIssuerSigned represents an IssuerSigned mdoc structure
 	// as per ISO/IEC 18013-5 "8.3.2.1.2.2 Device retrieval mdoc response".
-	EAAPresentationType_MDOC_ISSUER_SIGNED EAAPresentationType = "MDOC_ISSUER_SIGNED"
-	// EAAPresentationType_JWS represents a JOSE token, as defined in IETF RFC 7515
+	EAAPresentationTypeMDocIssuerSigned EAAPresentationType = "MDOC_ISSUER_SIGNED"
+	// EAAPresentationTypeJWS represents a JOSE token, as defined in IETF RFC 7515
 	// "JSON Web Signature (JWS)".
-	EAAPresentationType_JWS EAAPresentationType = "JWS"
-	// EAAPresentationType_X509_AC is the realization of EAA based on X.509 Attribute
+	EAAPresentationTypeJWS EAAPresentationType = "JWS"
+	// EAAPresentationTypeX509AC is the realization of EAA based on X.509 Attribute
 	// certificates as specified in IETF RFC 5755.
-	EAAPresentationType_X509_AC EAAPresentationType = "X509_AC"
+	EAAPresentationTypeX509AC EAAPresentationType = "X509_AC"
 )
 
 // EAAPresentationTypeValues returns all EAAPresentationType constants in declaration order.
 func EAAPresentationTypeValues() []EAAPresentationType {
 	return []EAAPresentationType{
-		EAAPresentationType_SD_JWT,
-		EAAPresentationType_MDOC_DEVICE_RESPONSE,
-		EAAPresentationType_MDOC_ISSUER_SIGNED,
-		EAAPresentationType_JWS,
-		EAAPresentationType_X509_AC,
+		EAAPresentationTypeSDJWT,
+		EAAPresentationTypeMDocDeviceResponse,
+		EAAPresentationTypeMDocIssuerSigned,
+		EAAPresentationTypeJWS,
+		EAAPresentationTypeX509AC,
 	}
 }
 

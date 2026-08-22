@@ -188,11 +188,11 @@ func (s *ASiCWithCAdESService) SignDocumentMultiple(toSignDocuments []model.DSSD
 	// Archive Timestamp in case of ASiC-E is not embedded into the CAdES signature
 	addASiCArchiveManifest := s.isAddASiCEArchiveManifest(parameters.SignatureLevel(), parameters.ASiC().ContainerType())
 	if addASiCArchiveManifest {
-		cadesParameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_LT)
+		cadesParameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineLT)
 	}
 
 	toBeSigned := dataToSignHelper.ToBeSigned()
-	if enumerations.ASiCContainerType_ASiC_E == asicParameters.ContainerType() {
+	if enumerations.ASiCContainerTypeASiCE == asicParameters.ContainerType() {
 		// XML Document in case of ASiC-E container
 		asicContent.SetManifestDocuments(append(asicContent.ManifestDocuments(), toBeSigned))
 	}
@@ -205,14 +205,14 @@ func (s *ASiCWithCAdESService) SignDocumentMultiple(toSignDocuments []model.DSSD
 	if addASiCArchiveManifest {
 		// Java's try/finally restores the LTA level even when the extension fails.
 		func() {
-			defer cadesParameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_LTA)
+			defer cadesParameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineLTA)
 			extensionProfile := s.GetLTALevelExtensionProfile()
 			asicContent = extensionProfile.Extend(asicContent, cadesParameters)
 		}()
 	}
 
 	asicContainer := s.BuildASiCContainerAt(asicContent, parameters.ZipCreationDate())
-	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperationSign,
 		parameters.SignatureLevel(), asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -254,7 +254,7 @@ func (s *ASiCWithCAdESService) TimestampMultiple(toTimestampDocuments []model.DS
 
 		extensionResult := s.BuildASiCContainerAt(asicContent, parameters.ZipCreationDate())
 		name, err := s.GetFinalDocumentNameWithMimeType(toTimestampDocument,
-			enumerations.SigningOperation_TIMESTAMP, "", toTimestampDocument.MimeType())
+			enumerations.SigningOperationTimestamp, "", toTimestampDocument.MimeType())
 		if err != nil {
 			panic(err)
 		}
@@ -267,7 +267,7 @@ func (s *ASiCWithCAdESService) TimestampMultiple(toTimestampDocuments []model.DS
 
 	asicContainer := s.BuildASiCContainerAt(asicContent, parameters.ZipCreationDate())
 	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer,
-		enumerations.SigningOperation_TIMESTAMP, "", asicContainer.MimeType())
+		enumerations.SigningOperationTimestamp, "", asicContainer.MimeType())
 	if err != nil {
 		panic(err)
 	}
@@ -304,7 +304,7 @@ func (s *ASiCWithCAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 	asicContent = extensionProfile.Extend(asicContent, &parameters.CAdESSignatureParameters)
 
 	extensionResult := s.BuildASiCContainerAt(asicContent, parameters.ZipCreationDate())
-	name, err := s.GetFinalDocumentNameWithMimeType(toExtendDocument, enumerations.SigningOperation_EXTEND,
+	name, err := s.GetFinalDocumentNameWithMimeType(toExtendDocument, enumerations.SigningOperationExtend,
 		parameters.SignatureLevel(), toExtendDocument.MimeType())
 	if err != nil {
 		panic(err)
@@ -360,7 +360,7 @@ func (s *ASiCWithCAdESService) GetCAdESService() *dsscades.CAdESService {
 // the embedded CAdESSignatureParameters, preserving that aliasing.
 func (s *ASiCWithCAdESService) GetCAdESParameters(
 	parameters *ASiCWithCAdESSignatureParameters) *dsscades.CAdESSignatureParameters {
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	parameters.GetContext().SetDetachedContents(nil)
 	return &parameters.CAdESSignatureParameters
 }
@@ -381,8 +381,8 @@ func (s *ASiCWithCAdESService) GetCAdESParametersWithHelper(parameters *ASiCWith
 // isAddASiCEArchiveManifest(SignatureLevel, ASiCContainerType).
 func (s *ASiCWithCAdESService) isAddASiCEArchiveManifest(signatureLevel enumerations.SignatureLevel,
 	containerType enumerations.ASiCContainerType) bool {
-	return enumerations.SignatureLevel_CAdES_BASELINE_LTA == signatureLevel &&
-		enumerations.ASiCContainerType_ASiC_E == containerType
+	return enumerations.SignatureLevelCAdESBaselineLTA == signatureLevel &&
+		enumerations.ASiCContainerTypeASiCE == containerType
 }
 
 // AddSignaturePolicyStore incorporates a Signature Policy Store as an unsigned property into the
@@ -418,7 +418,7 @@ func (s *ASiCWithCAdESService) AddSignaturePolicyStore(asicContainer model.DSSDo
 	// Java passes a null Date here; the zero time is what the ZIP container handler treats as
 	// "not specified" (see ZipUtils#CreateZipArchiveFromEntriesAt).
 	resultArchive := s.BuildASiCContainerAt(asicContent, time.Time{})
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_SIG_POLICY_STORE,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddSigPolicyStore,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -519,7 +519,7 @@ func (s *ASiCWithCAdESService) CounterSignSignature(asicContainer model.DSSDocum
 		signingDate = *bLevelSigningDate
 	}
 	resultArchive := s.BuildASiCContainerAt(asicContent, signingDate)
-	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperation_COUNTER_SIGN,
+	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperationCounterSign,
 		parameters.SignatureLevel(), asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -561,7 +561,7 @@ func (s *ASiCWithCAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 	asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), signatureWithEvidenceRecord))
 
 	resultArchive := s.BuildASiCContainer(asicContent)
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_EVIDENCE_RECORD,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddEvidenceRecord,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -595,7 +595,7 @@ func (s *ASiCWithCAdESService) AddContainerEvidenceRecord(documents []model.DSSD
 		panic(err)
 	}
 	asicContainer := s.BuildASiCContainer(asicContent)
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_EVIDENCE_RECORD,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddEvidenceRecord,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -622,10 +622,10 @@ func (s *ASiCWithCAdESService) GetExtensionProfile(signatureLevel enumerations.S
 	}
 	var extensionProfile ASiCWithCAdESSignatureExtender
 	switch signatureLevel {
-	case enumerations.SignatureLevel_CAdES_BASELINE_T, enumerations.SignatureLevel_CAdES_BASELINE_LT:
+	case enumerations.SignatureLevelCAdESBaselineT, enumerations.SignatureLevelCAdESBaselineLT:
 		extensionProfile = NewASiCWithCAdESSignatureExtension(s.CertificateVerifier, s.TspSource)
-	case enumerations.SignatureLevel_CAdES_BASELINE_LTA:
-		if enumerations.ASiCContainerType_ASiC_E == containerType {
+	case enumerations.SignatureLevelCAdESBaselineLTA:
+		if enumerations.ASiCContainerTypeASiCE == containerType {
 			extensionProfile = NewASiCWithCAdESLevelBaselineLTAWithFilenameFactory(
 				s.CertificateVerifier, s.TspSource, s.asicFilenameFactory)
 		} else {
@@ -663,7 +663,7 @@ func (s *ASiCWithCAdESService) AssertCounterSignatureParametersValid(
 	parameters *dsscades.CAdESCounterSignatureParameters) {
 	s.AbstractASiCSignatureService.AssertCounterSignatureParametersValid(parameters)
 
-	if enumerations.SignatureLevel_CAdES_BASELINE_B != parameters.SignatureLevel() {
+	if enumerations.SignatureLevelCAdESBaselineB != parameters.SignatureLevel() {
 		panic(fmt.Sprintf("A counter signature with a level '%s' is not supported! "+
 			"Please, use CAdES-BASELINE-B", parameters.SignatureLevel()))
 	}

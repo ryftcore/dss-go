@@ -7,8 +7,8 @@ func TestEAACategoryURN(t *testing.T) {
 		v    EAACategory
 		want string
 	}{
-		{EAACategory_EU_QEAA, "urn:etsi:esi:eaa:eu:qualified"},
-		{EAACategory_EU_PUBEAA, "urn:etsi:esi:eaa:eu:pub"},
+		{EAACategoryEUQEAA, "urn:etsi:esi:eaa:eu:qualified"},
+		{EAACategoryEUPubEAA, "urn:etsi:esi:eaa:eu:pub"},
 	}
 	for _, c := range cases {
 		if got := c.v.URN(); got != c.want {
@@ -33,7 +33,7 @@ func TestEAACategoryValueOf(t *testing.T) {
 }
 
 func TestEAACategoryValues(t *testing.T) {
-	want := []EAACategory{EAACategory_EU_QEAA, EAACategory_EU_PUBEAA}
+	want := []EAACategory{EAACategoryEUQEAA, EAACategoryEUPubEAA}
 	got := EAACategoryValues()
 	if len(got) != len(want) {
 		t.Fatalf("EAACategoryValues() length = %d, want %d", len(got), len(want))

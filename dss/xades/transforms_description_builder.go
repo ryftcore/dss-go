@@ -74,7 +74,7 @@ func (b *TransformsDescriptionBuilder) Build() []string {
 // buildTransformationName returns a complete description string for the given transformation
 // node. Port of the private buildTransformationName(Element).
 func (b *TransformsDescriptionBuilder) buildTransformationName(transformation *xmldom.Node) string {
-	algorithmURI := transformation.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName())
+	algorithmURI := transformation.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName())
 	algorithm := algorithmURI
 	if presentable, ok := transformsDescriptionPresentableNames[algorithmURI]; ok {
 		algorithm = presentable

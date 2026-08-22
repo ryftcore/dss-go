@@ -51,7 +51,7 @@ func NewLongTermAvailabilityAndIntegrityValidationMaterialCheck(i18nProvider *i1
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_LTA
+	return jaxb.XmlBlockTypeLTA
 }
 
 // Process performs the check. Port of process().

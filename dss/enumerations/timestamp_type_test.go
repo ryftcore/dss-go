@@ -14,17 +14,17 @@ func TestTimestampTypeOrderPredicates(t *testing.T) {
 		evidence   bool
 		covers     bool
 	}{
-		{TimestampType_CONTENT_TIMESTAMP, true, false, false, false, false, false, false, false},
-		{TimestampType_ALL_DATA_OBJECTS_TIMESTAMP, true, false, false, false, false, false, false, false},
-		{TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP, true, false, false, false, false, false, false, false},
-		{TimestampType_SIGNATURE_TIMESTAMP, false, true, false, false, false, false, false, true},
-		{TimestampType_VRI_TIMESTAMP, false, true, false, false, false, false, false, true},
-		{TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP, false, false, true, false, false, false, false, false},
-		{TimestampType_VALIDATION_DATA_TIMESTAMP, false, false, true, false, false, false, false, true},
-		{TimestampType_CONTAINER_TIMESTAMP, false, false, false, true, false, false, false, true},
-		{TimestampType_DOCUMENT_TIMESTAMP, false, false, false, false, true, false, false, true},
-		{TimestampType_ARCHIVE_TIMESTAMP, false, false, false, false, false, true, false, true},
-		{TimestampType_EVIDENCE_RECORD_TIMESTAMP, false, false, false, false, false, false, true, true},
+		{TimestampTypeContentTimestamp, true, false, false, false, false, false, false, false},
+		{TimestampTypeAllDataObjectsTimestamp, true, false, false, false, false, false, false, false},
+		{TimestampTypeIndividualDataObjectsTimestamp, true, false, false, false, false, false, false, false},
+		{TimestampTypeSignatureTimestamp, false, true, false, false, false, false, false, true},
+		{TimestampTypeVRITimestamp, false, true, false, false, false, false, false, true},
+		{TimestampTypeValidationDataRefsOnlyTimestamp, false, false, true, false, false, false, false, false},
+		{TimestampTypeValidationDataTimestamp, false, false, true, false, false, false, false, true},
+		{TimestampTypeContainerTimestamp, false, false, false, true, false, false, false, true},
+		{TimestampTypeDocumentTimestamp, false, false, false, false, true, false, false, true},
+		{TimestampTypeArchiveTimestamp, false, false, false, false, false, true, false, true},
+		{TimestampTypeEvidenceRecordTimestamp, false, false, false, false, false, false, true, true},
 	}
 	for _, tt := range tests {
 		if got := tt.v.IsContentTimestamp(); got != tt.content {
@@ -55,13 +55,13 @@ func TestTimestampTypeOrderPredicates(t *testing.T) {
 }
 
 func TestTimestampTypeCompare(t *testing.T) {
-	if TimestampType_CONTENT_TIMESTAMP.Compare(TimestampType_SIGNATURE_TIMESTAMP) >= 0 {
+	if TimestampTypeContentTimestamp.Compare(TimestampTypeSignatureTimestamp) >= 0 {
 		t.Error("CONTENT_TIMESTAMP should compare before SIGNATURE_TIMESTAMP")
 	}
-	if TimestampType_ARCHIVE_TIMESTAMP.Compare(TimestampType_VALIDATION_DATA_TIMESTAMP) <= 0 {
+	if TimestampTypeArchiveTimestamp.Compare(TimestampTypeValidationDataTimestamp) <= 0 {
 		t.Error("ARCHIVE_TIMESTAMP should compare after VALIDATION_DATA_TIMESTAMP")
 	}
-	if TimestampType_SIGNATURE_TIMESTAMP.Compare(TimestampType_VRI_TIMESTAMP) != 0 {
+	if TimestampTypeSignatureTimestamp.Compare(TimestampTypeVRITimestamp) != 0 {
 		t.Error("SIGNATURE_TIMESTAMP and VRI_TIMESTAMP share the same order")
 	}
 }

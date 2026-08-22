@@ -7,25 +7,25 @@ import "fmt"
 type GeneralNameType string
 
 const (
-	// GeneralNameType_OTHER_NAME is the otherName GeneralName type.
-	GeneralNameType_OTHER_NAME GeneralNameType = "OTHER_NAME"
-	// GeneralNameType_RFC822_NAME is the rfc822Name GeneralName type.
-	GeneralNameType_RFC822_NAME GeneralNameType = "RFC822_NAME"
-	// GeneralNameType_DNS_NAME is the dNSName GeneralName type.
-	GeneralNameType_DNS_NAME GeneralNameType = "DNS_NAME"
-	// GeneralNameType_X400_ADDRESS is the x400Address GeneralName type.
-	GeneralNameType_X400_ADDRESS GeneralNameType = "X400_ADDRESS"
-	// GeneralNameType_DIRECTORY_NAME is the directoryName GeneralName type.
-	GeneralNameType_DIRECTORY_NAME GeneralNameType = "DIRECTORY_NAME"
-	// GeneralNameType_EDI_PARTY_NAME is the ediPartyName GeneralName type.
-	GeneralNameType_EDI_PARTY_NAME GeneralNameType = "EDI_PARTY_NAME"
-	// GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER is the
+	// GeneralNameTypeOtherName is the otherName GeneralName type.
+	GeneralNameTypeOtherName GeneralNameType = "OTHER_NAME"
+	// GeneralNameTypeRFC822Name is the rfc822Name GeneralName type.
+	GeneralNameTypeRFC822Name GeneralNameType = "RFC822_NAME"
+	// GeneralNameTypeDNSName is the dNSName GeneralName type.
+	GeneralNameTypeDNSName GeneralNameType = "DNS_NAME"
+	// GeneralNameTypeX400Address is the x400Address GeneralName type.
+	GeneralNameTypeX400Address GeneralNameType = "X400_ADDRESS"
+	// GeneralNameTypeDirectoryName is the directoryName GeneralName type.
+	GeneralNameTypeDirectoryName GeneralNameType = "DIRECTORY_NAME"
+	// GeneralNameTypeEDIPartyName is the ediPartyName GeneralName type.
+	GeneralNameTypeEDIPartyName GeneralNameType = "EDI_PARTY_NAME"
+	// GeneralNameTypeUniformResourceIdentifier is the
 	// uniformResourceIdentifier GeneralName type.
-	GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER GeneralNameType = "UNIFORM_RESOURCE_IDENTIFIER"
-	// GeneralNameType_IP_ADDRESS is the iPAddress GeneralName type.
-	GeneralNameType_IP_ADDRESS GeneralNameType = "IP_ADDRESS"
-	// GeneralNameType_REGISTERED_ID is the registeredID GeneralName type.
-	GeneralNameType_REGISTERED_ID GeneralNameType = "REGISTERED_ID"
+	GeneralNameTypeUniformResourceIdentifier GeneralNameType = "UNIFORM_RESOURCE_IDENTIFIER"
+	// GeneralNameTypeIPAddress is the iPAddress GeneralName type.
+	GeneralNameTypeIPAddress GeneralNameType = "IP_ADDRESS"
+	// GeneralNameTypeRegisteredID is the registeredID GeneralName type.
+	GeneralNameTypeRegisteredID GeneralNameType = "REGISTERED_ID"
 )
 
 // generalNameTypeFields holds the (index, label) pair for each constant.
@@ -37,29 +37,29 @@ type generalNameTypeFields struct {
 // generalNameTypeData holds the full field tuple for each constant, copied
 // verbatim from the Java enum constructors.
 var generalNameTypeData = map[GeneralNameType]generalNameTypeFields{
-	GeneralNameType_OTHER_NAME:                  {0, "otherName"},
-	GeneralNameType_RFC822_NAME:                 {1, "rfc822Name"},
-	GeneralNameType_DNS_NAME:                    {2, "dNSName"},
-	GeneralNameType_X400_ADDRESS:                {3, "x400Address"},
-	GeneralNameType_DIRECTORY_NAME:              {4, "directoryName"},
-	GeneralNameType_EDI_PARTY_NAME:              {5, "ediPartyName"},
-	GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER: {6, "uniformResourceIdentifier"},
-	GeneralNameType_IP_ADDRESS:                  {7, "iPAddress"},
-	GeneralNameType_REGISTERED_ID:               {8, "registeredID"},
+	GeneralNameTypeOtherName:                 {0, "otherName"},
+	GeneralNameTypeRFC822Name:                {1, "rfc822Name"},
+	GeneralNameTypeDNSName:                   {2, "dNSName"},
+	GeneralNameTypeX400Address:               {3, "x400Address"},
+	GeneralNameTypeDirectoryName:             {4, "directoryName"},
+	GeneralNameTypeEDIPartyName:              {5, "ediPartyName"},
+	GeneralNameTypeUniformResourceIdentifier: {6, "uniformResourceIdentifier"},
+	GeneralNameTypeIPAddress:                 {7, "iPAddress"},
+	GeneralNameTypeRegisteredID:              {8, "registeredID"},
 }
 
 // GeneralNameTypeValues returns all constants in declaration order.
 func GeneralNameTypeValues() []GeneralNameType {
 	return []GeneralNameType{
-		GeneralNameType_OTHER_NAME,
-		GeneralNameType_RFC822_NAME,
-		GeneralNameType_DNS_NAME,
-		GeneralNameType_X400_ADDRESS,
-		GeneralNameType_DIRECTORY_NAME,
-		GeneralNameType_EDI_PARTY_NAME,
-		GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER,
-		GeneralNameType_IP_ADDRESS,
-		GeneralNameType_REGISTERED_ID,
+		GeneralNameTypeOtherName,
+		GeneralNameTypeRFC822Name,
+		GeneralNameTypeDNSName,
+		GeneralNameTypeX400Address,
+		GeneralNameTypeDirectoryName,
+		GeneralNameTypeEDIPartyName,
+		GeneralNameTypeUniformResourceIdentifier,
+		GeneralNameTypeIPAddress,
+		GeneralNameTypeRegisteredID,
 	}
 }
 

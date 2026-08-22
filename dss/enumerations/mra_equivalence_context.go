@@ -14,15 +14,15 @@ import "fmt"
 type MRAEquivalenceContext string
 
 const (
-	// MRAEquivalenceContext_QC_COMPLIANCE indicates that the
+	// MRAEquivalenceContextQCCompliance indicates that the
 	// CertificateContentReferenceEquivalence element applies to the context of mapping
 	// the respective pointing party and pointed party reference machine processable
 	// statement(s) included in a certificate to declare (as a statement made by the
 	// issuing TSP) and to confirm (as a benchmark for establishing the content of the
 	// corresponding TL trust service entry) that it has been issued as a qualified
 	// certificate.
-	MRAEquivalenceContext_QC_COMPLIANCE MRAEquivalenceContext = "QC_COMPLIANCE"
-	// MRAEquivalenceContext_QC_TYPE indicates that the
+	MRAEquivalenceContextQCCompliance MRAEquivalenceContext = "QC_COMPLIANCE"
+	// MRAEquivalenceContextQCType indicates that the
 	// CertificateContentReferenceEquivalence element applies to the context of mapping
 	// the respective pointing party and pointed party reference machine processable
 	// statement(s) included in a certificate to declare (as a statement made by the
@@ -30,8 +30,8 @@ const (
 	// corresponding TL trust service entry) that it has been issued for a certain
 	// usage type (i.e. for electronic signatures, for electronic seals, or for
 	// website authentication).
-	MRAEquivalenceContext_QC_TYPE MRAEquivalenceContext = "QC_TYPE"
-	// MRAEquivalenceContext_QC_QSCD indicates that the
+	MRAEquivalenceContextQCType MRAEquivalenceContext = "QC_TYPE"
+	// MRAEquivalenceContextQCQSCD indicates that the
 	// CertificateContentReferenceEquivalence element applies to the context of mapping
 	// the respective pointing party and pointed party reference machine processable
 	// statement(s) included in a certificate to declare (as a statement made by the
@@ -39,22 +39,22 @@ const (
 	// corresponding TL trust service entry) that the private key, to which the
 	// certified public key corresponds, resides in an EU qualified electronic
 	// signature or seal creation device.
-	MRAEquivalenceContext_QC_QSCD MRAEquivalenceContext = "QC_QSCD"
+	MRAEquivalenceContextQCQSCD MRAEquivalenceContext = "QC_QSCD"
 )
 
 // mraEquivalenceContextURI maps each MRAEquivalenceContext to its defined URI.
 var mraEquivalenceContextURI = map[MRAEquivalenceContext]string{
-	MRAEquivalenceContext_QC_COMPLIANCE: "http://ec.europa.eu/tools/lotl/mra/QcCompliance",
-	MRAEquivalenceContext_QC_TYPE:       "http://ec.europa.eu/tools/lotl/mra/QcType",
-	MRAEquivalenceContext_QC_QSCD:       "http://ec.europa.eu/tools/lotl/mra/QcQSCD",
+	MRAEquivalenceContextQCCompliance: "http://ec.europa.eu/tools/lotl/mra/QcCompliance",
+	MRAEquivalenceContextQCType:       "http://ec.europa.eu/tools/lotl/mra/QcType",
+	MRAEquivalenceContextQCQSCD:       "http://ec.europa.eu/tools/lotl/mra/QcQSCD",
 }
 
 // MRAEquivalenceContextValues returns all MRAEquivalenceContext constants in declaration order.
 func MRAEquivalenceContextValues() []MRAEquivalenceContext {
 	return []MRAEquivalenceContext{
-		MRAEquivalenceContext_QC_COMPLIANCE,
-		MRAEquivalenceContext_QC_TYPE,
-		MRAEquivalenceContext_QC_QSCD,
+		MRAEquivalenceContextQCCompliance,
+		MRAEquivalenceContextQCType,
+		MRAEquivalenceContextQCQSCD,
 	}
 }
 

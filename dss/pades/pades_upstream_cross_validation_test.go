@@ -166,7 +166,7 @@ func checkPvalSignature(t *testing.T, sig *PAdESSignature, want pvalSignature, i
 		t.Errorf("signature[%d]: signing certificate found = %v, want %v", index, gotFound, want.SigningCertificateFound)
 	}
 	if want.SigningCertificateSHA256 != nil && certificateToken != nil {
-		gotDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, certificateToken.Encoded())
+		gotDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, certificateToken.Encoded())
 		if err != nil {
 			t.Fatalf("signature[%d]: digesting signing certificate: %v", index, err)
 		}

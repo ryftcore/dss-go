@@ -74,7 +74,7 @@ func NewCMSForPAdESBaselineRequirementsChecker(signature *cades.CAdESSignature) 
 // PAdESBaselineRequirementsChecker's own identical override, for exactly this reason: this
 // checker validates a PDF's embedded CMS on its own, without going through a PAdESSignature.
 func (c *CMSForPAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_PAdES
+	return enumerations.SignatureFormPAdES
 }
 
 // IsValidForPAdESBaselineBProfile verifies validity of a CMS signature for enveloping within a

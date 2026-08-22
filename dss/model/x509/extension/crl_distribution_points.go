@@ -22,7 +22,7 @@ func NewCRLDistributionPoints() *CRLDistributionPoints {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumCRLDistributionPoints.OID()),
 	}
 }
 

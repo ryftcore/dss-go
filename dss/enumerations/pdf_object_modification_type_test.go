@@ -4,9 +4,9 @@ import "testing"
 
 func TestPdfObjectModificationTypeValues(t *testing.T) {
 	want := []PdfObjectModificationType{
-		PdfObjectModificationType_CREATION,
-		PdfObjectModificationType_DELETION,
-		PdfObjectModificationType_MODIFICATION,
+		PdfObjectModificationTypeCreation,
+		PdfObjectModificationTypeDeletion,
+		PdfObjectModificationTypeModification,
 	}
 	got := PdfObjectModificationTypeValues()
 	if len(got) != len(want) {

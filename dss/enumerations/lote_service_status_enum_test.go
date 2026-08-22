@@ -8,8 +8,8 @@ func TestLoTEServiceStatusEnum(t *testing.T) {
 		uri   string
 		label string
 	}{
-		{LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED, "http://uri.etsi.org/19602/PubEAAProvidersList/SvcStatus/notified", "Notified Pub-EAA provider service"},
-		{LoTEServiceStatusEnum_PUB_EAA_PROVIDER_WITHDRAWN, "http://uri.etsi.org/19602/PubEAAProvidersList/SvcStatus/withdrawn", "Withdrawn Pub-EAA provider service"},
+		{LoTEServiceStatusEnumPubEAAProviderNotified, "http://uri.etsi.org/19602/PubEAAProvidersList/SvcStatus/notified", "Notified Pub-EAA provider service"},
+		{LoTEServiceStatusEnumPubEAAProviderWithdrawn, "http://uri.etsi.org/19602/PubEAAProvidersList/SvcStatus/withdrawn", "Withdrawn Pub-EAA provider service"},
 	}
 	if len(LoTEServiceStatusEnumValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(LoTEServiceStatusEnumValues()))

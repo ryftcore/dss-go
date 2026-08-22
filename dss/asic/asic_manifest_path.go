@@ -7,15 +7,15 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 // AbstractPath subclass with no other subclasses) as package-level vars, per the
 // xmldsig_path.go precedent.
 var (
-	// ASiCManifestPath_ASIC_MANIFEST_PATH = "./asic:ASiCManifest"
-	ASiCManifestPath_ASIC_MANIFEST_PATH = common.FromCurrentPosition(ASiCManifestElement_ASIC_MANIFEST)
+	// ASiCManifestPathASiCManifestPath = "./asic:ASiCManifest"
+	ASiCManifestPathASiCManifestPath = common.FromCurrentPosition(ASiCManifestElementASiCManifest)
 
-	// ASiCManifestPath_DATA_OBJECT_REFERENCE_PATH = "./asic:DataObjectReference"
-	ASiCManifestPath_DATA_OBJECT_REFERENCE_PATH = common.FromCurrentPosition(ASiCManifestElement_DATA_OBJECT_REFERENCE)
+	// ASiCManifestPathDataObjectReferencePath = "./asic:DataObjectReference"
+	ASiCManifestPathDataObjectReferencePath = common.FromCurrentPosition(ASiCManifestElementDataObjectReference)
 
-	// ASiCManifestPath_SIG_REFERENCE_PATH = "./asic:SigReference"
-	ASiCManifestPath_SIG_REFERENCE_PATH = common.FromCurrentPosition(ASiCManifestElement_SIG_REFERENCE)
+	// ASiCManifestPathSigReferencePath = "./asic:SigReference"
+	ASiCManifestPathSigReferencePath = common.FromCurrentPosition(ASiCManifestElementSigReference)
 
-	// ASiCManifestPath_SIG_REFERENCE_URI_PATH = "./asic:SigReference@URI"
-	ASiCManifestPath_SIG_REFERENCE_URI_PATH = common.FromCurrentPositionAttribute(ASiCManifestElement_SIG_REFERENCE, ASiCManifestAttribute_URI)
+	// ASiCManifestPathSigReferenceURIPath = "./asic:SigReference@URI"
+	ASiCManifestPathSigReferenceURIPath = common.FromCurrentPositionAttribute(ASiCManifestElementSigReference, ASiCManifestAttributeURI)
 )

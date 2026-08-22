@@ -10,9 +10,9 @@
 //
 //	var  ASiCManifestNS *common.DSSNamespace                        // ASiCManifestNamespace.NS
 //	type ASiCManifestElement string                                 // implements common.DSSElement
-//	     ASiCManifestElement_ASIC_MANIFEST, _SIG_REFERENCE, _DATA_OBJECT_REFERENCE
+//	     ASiCManifestElementASiCManifest, ASiCManifestElementSigReference, ASiCManifestElementDataObjectReference
 //	type ASiCManifestAttribute string                               // implements common.DSSAttribute
-//	     ASiCManifestAttribute_URI, _MIME_TYPE, _ROOTFILE
+//	     ASiCManifestAttributeURI, ASiCManifestAttributeMIMEType, ASiCManifestAttributeRootFile
 //	type ASiCContentDocumentFilter struct{ ... }                    // a class, not an interface
 //	func (*ASiCContentDocumentFilter) Filter(*ASiCContent) []model.DSSDocument
 //
@@ -113,7 +113,7 @@ type AbstractASiCManifestBuilder struct {
 // Port of the protected AbstractASiCManifestBuilder(ASiCContent, String) constructor.
 func (b *AbstractASiCManifestBuilder) InitAbstractASiCManifestBuilder(overrides AbstractASiCManifestBuilderOverrides,
 	asicContent *ASiCContent, sigReferenceUri string) {
-	b.InitAbstractASiCManifestBuilderWithDigestAlgorithm(overrides, asicContent, sigReferenceUri, enumerations.DigestAlgorithm_SHA256)
+	b.InitAbstractASiCManifestBuilderWithDigestAlgorithm(overrides, asicContent, sigReferenceUri, enumerations.DigestAlgorithmSHA256)
 }
 
 // InitAbstractASiCManifestBuilderWithDigestAlgorithm instantiates the builder with a provided digest
@@ -149,7 +149,7 @@ func (b *AbstractASiCManifestBuilder) BuildDom() *xmldom.Node {
 // {@code <asic:ASiCManifest xmlns:asic="http://uri.etsi.org/02918/v1.2.1#">}. Port of the protected
 // createRootElement(Document).
 func (b *AbstractASiCManifestBuilder) CreateRootElement(documentDom *xmldom.Node) *xmldom.Node {
-	asicManifestDom := xmlutils.DomUtilsCreateElementNS(documentDom, ASiCManifestNS, ASiCManifestElement_ASIC_MANIFEST)
+	asicManifestDom := xmlutils.DomUtilsCreateElementNS(documentDom, ASiCManifestNS, ASiCManifestElementASiCManifest)
 	documentDom.AppendChild(asicManifestDom)
 	return asicManifestDom
 }
@@ -157,11 +157,11 @@ func (b *AbstractASiCManifestBuilder) CreateRootElement(documentDom *xmldom.Node
 // AddSigReference adds a {@code <SigReference>} element. Port of the protected
 // addSigReference(Document, Element).
 func (b *AbstractASiCManifestBuilder) AddSigReference(documentDom, asicManifestDom *xmldom.Node) {
-	sigReferenceDom := xmlutils.DomUtilsAddElement(documentDom, asicManifestDom, ASiCManifestNS, ASiCManifestElement_SIG_REFERENCE)
-	sigReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttribute_URI.AttributeName()}, spi.DSSUtilsEncodeURI(b.SigReferenceUri))
+	sigReferenceDom := xmlutils.DomUtilsAddElement(documentDom, asicManifestDom, ASiCManifestNS, ASiCManifestElementSigReference)
+	sigReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttributeURI.AttributeName()}, spi.DSSUtilsEncodeURI(b.SigReferenceUri))
 	sigReferenceMimeType := b.overrides.SigReferenceMimeType()
 	if sigReferenceMimeType != nil {
-		sigReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttribute_MIME_TYPE.AttributeName()}, sigReferenceMimeType.MimeTypeString())
+		sigReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttributeMIMEType.AttributeName()}, sigReferenceMimeType.MimeTypeString())
 	}
 }
 
@@ -223,23 +223,23 @@ func (b *AbstractASiCManifestBuilder) SetAsicContentDocumentFilter(asicContentDo
 // addDataObjectReference(Document, Element, DSSDocument, DigestAlgorithm).
 func (b *AbstractASiCManifestBuilder) AddDataObjectReference(documentDom, asicManifestDom *xmldom.Node,
 	doc model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) (*xmldom.Node, error) {
-	dataObjectReferenceDom := xmlutils.DomUtilsAddElement(documentDom, asicManifestDom, ASiCManifestNS, ASiCManifestElement_DATA_OBJECT_REFERENCE)
+	dataObjectReferenceDom := xmlutils.DomUtilsAddElement(documentDom, asicManifestDom, ASiCManifestNS, ASiCManifestElementDataObjectReference)
 
-	dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttribute_URI.AttributeName()}, spi.DSSUtilsEncodeURI(doc.Name()))
+	dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttributeURI.AttributeName()}, spi.DSSUtilsEncodeURI(doc.Name()))
 
 	mimeType := doc.MimeType()
 	if mimeType != nil {
-		dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttribute_MIME_TYPE.AttributeName()}, mimeType.MimeTypeString())
+		dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttributeMIMEType.AttributeName()}, mimeType.MimeTypeString())
 	}
 
 	if b.overrides.IsRootfile(doc) {
-		dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttribute_ROOTFILE.AttributeName()}, "true")
+		dataObjectReferenceDom.SetAttr(xmldom.Name{Local: ASiCManifestAttributeRootFile.AttributeName()}, "true")
 	}
 
-	digestMethodDom := xmlutils.DomUtilsAddElement(documentDom, dataObjectReferenceDom, common.XMLDSigNS, common.XMLDSigElement_DIGEST_METHOD)
-	digestMethodDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, digestAlgorithm.URI())
+	digestMethodDom := xmlutils.DomUtilsAddElement(documentDom, dataObjectReferenceDom, common.XMLDSigNS, common.XMLDSigElementDigestMethod)
+	digestMethodDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, digestAlgorithm.URI())
 
-	digestValueDom := xmlutils.DomUtilsAddElement(documentDom, dataObjectReferenceDom, common.XMLDSigNS, common.XMLDSigElement_DIGEST_VALUE)
+	digestValueDom := xmlutils.DomUtilsAddElement(documentDom, dataObjectReferenceDom, common.XMLDSigNS, common.XMLDSigElementDigestValue)
 	digestValue, err := doc.DigestValue(digestAlgorithm)
 	if err != nil {
 		return nil, err

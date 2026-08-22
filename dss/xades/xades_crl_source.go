@@ -49,14 +49,14 @@ func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdE
 	s.InitOfflineRevocationSource(s)
 
 	// values
-	s.collectValues(xadesPaths.RevocationValuesPath(), enumerations.RevocationOrigin_REVOCATION_VALUES)
-	s.collectValues(xadesPaths.AttributeRevocationValuesPath(), enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES)
-	s.collectValues(xadesPaths.TimeStampValidationDataRevocationValuesPath(), enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA)
-	s.collectValues(xadesPaths.AnyValidationDataRevocationValuesPath(), enumerations.RevocationOrigin_ANY_VALIDATION_DATA)
+	s.collectValues(xadesPaths.RevocationValuesPath(), enumerations.RevocationOriginRevocationValues)
+	s.collectValues(xadesPaths.AttributeRevocationValuesPath(), enumerations.RevocationOriginAttributeRevocationValues)
+	s.collectValues(xadesPaths.TimeStampValidationDataRevocationValuesPath(), enumerations.RevocationOriginTimestampValidationData)
+	s.collectValues(xadesPaths.AnyValidationDataRevocationValuesPath(), enumerations.RevocationOriginAnyValidationData)
 
 	// references
-	s.collectRefs(xadesPaths.CompleteRevocationRefsPath(), enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
-	s.collectRefs(xadesPaths.AttributeRevocationRefsPath(), enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+	s.collectRefs(xadesPaths.CompleteRevocationRefsPath(), enumerations.RevocationRefOriginCompleteRevocationRefs)
+	s.collectRefs(xadesPaths.AttributeRevocationRefsPath(), enumerations.RevocationRefOriginAttributeRevocationRefs)
 
 	return s
 }

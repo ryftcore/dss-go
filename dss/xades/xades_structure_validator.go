@@ -80,11 +80,11 @@ func (v *XAdESStructureValidator) ValidationErrors() []string {
 func (v *XAdESStructureValidator) getUtils(xadesPath definition.XAdESPath) XAdESStructureXSDUtils {
 	namespace := xadesPath.Namespace()
 	switch namespace {
-	case definition.XAdESNamespace_XADES_111:
+	case definition.XAdESNamespaceXAdES111:
 		return XAdES111XSDUtils()
-	case definition.XAdESNamespace_XADES_122:
+	case definition.XAdESNamespaceXAdES122:
 		return XAdES122XSDUtils()
-	case definition.XAdESNamespace_XADES_132, definition.XAdESNamespace_XADES_141:
+	case definition.XAdESNamespaceXAdES132, definition.XAdESNamespaceXAdES141:
 		return XAdES319132XSDUtils()
 	default:
 		uri := ""

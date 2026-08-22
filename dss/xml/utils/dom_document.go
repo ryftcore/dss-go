@@ -40,7 +40,7 @@ type DOMDocument struct {
 
 var _ model.DSSDocument = (*DOMDocument)(nil)
 
-// NewDOMDocument creates a DOMDocument from node. NOTE: uses enumerations.MimeTypeEnum_XML by
+// NewDOMDocument creates a DOMDocument from node. NOTE: uses enumerations.MimeTypeEnumXML by
 // default. Panics if node is nil (Java Objects.requireNonNull("Element cannot be null")).
 // Ports DOMDocument(Node).
 func NewDOMDocument(node *xmldom.Node) *DOMDocument {
@@ -48,13 +48,13 @@ func NewDOMDocument(node *xmldom.Node) *DOMDocument {
 }
 
 // NewDOMDocumentWithName creates a DOMDocument from node with the given name. NOTE: uses
-// enumerations.MimeTypeEnum_XML by default. Panics if node is nil. Ports
+// enumerations.MimeTypeEnumXML by default. Panics if node is nil. Ports
 // DOMDocument(Node, String).
 func NewDOMDocumentWithName(node *xmldom.Node, name string) *DOMDocument {
 	if node == nil {
 		panic("Element cannot be null")
 	}
-	return &DOMDocument{node: node, name: name, mimeType: enumerations.MimeTypeEnum_XML}
+	return &DOMDocument{node: node, name: name, mimeType: enumerations.MimeTypeEnumXML}
 }
 
 // Node gets the Node used to define the document. Ports getNode().

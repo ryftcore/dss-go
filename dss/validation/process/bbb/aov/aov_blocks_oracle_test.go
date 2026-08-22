@@ -77,9 +77,9 @@ func TestAovBlocksAgainstJavaOracle(t *testing.T) {
 			}
 
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				sig, ctx := signature, context
 				id := "SIG|" + sig.Id()
@@ -103,7 +103,7 @@ func TestAovBlocksAgainstJavaOracle(t *testing.T) {
 					return NewTimestampAlgorithmObsolescenceValidation(aovI18n(), tst, aovCurrentTime, validationPolicy).Execute()
 				})
 				compare(id, "TokenCertificateChainAlgorithmObsolescenceValidation", func() *jaxb.XmlAOV {
-					return NewTokenCertificateChainAlgorithmObsolescenceValidation(aovI18n(), tst, enumerations.Context_TIMESTAMP, aovCurrentTime, validationPolicy).Execute()
+					return NewTokenCertificateChainAlgorithmObsolescenceValidation(aovI18n(), tst, enumerations.ContextTimestamp, aovCurrentTime, validationPolicy).Execute()
 				})
 			}
 			for _, revocation := range aovRevocationsSortedById(diagnosticData) {
@@ -121,16 +121,16 @@ func TestAovBlocksAgainstJavaOracle(t *testing.T) {
 			for _, certificate := range diagnosticData.UsedCertificates() {
 				cert := certificate
 				for _, subContext := range []enumerations.SubContext{
-					enumerations.SubContext_SIGNING_CERT, enumerations.SubContext_CA_CERTIFICATE} {
+					enumerations.SubContextSigningCert, enumerations.SubContextCACertificate} {
 					sub := subContext
 					compare("CERT|"+cert.Id()+"|"+string(sub), "CertificateAlgorithmObsolescenceValidation", func() *jaxb.XmlAOV {
 						return NewCertificateAlgorithmObsolescenceValidation(aovI18n(), cert,
-							enumerations.Context_CERTIFICATE, sub, aovCurrentTime, validationPolicy).Execute()
+							enumerations.ContextCertificate, sub, aovCurrentTime, validationPolicy).Execute()
 					})
 				}
 				compare("CERT|"+cert.Id(), "CertificateAndChainAlgorithmObsolescenceValidation", func() *jaxb.XmlAOV {
 					return NewCertificateAndChainAlgorithmObsolescenceValidation(aovI18n(), cert,
-						enumerations.Context_CERTIFICATE, aovCurrentTime, validationPolicy).Execute()
+						enumerations.ContextCertificate, aovCurrentTime, validationPolicy).Execute()
 				})
 			}
 		})

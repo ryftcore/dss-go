@@ -26,7 +26,7 @@ type RevocationDataAlgorithmObsolescenceValidation struct {
 func NewRevocationDataAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.RevocationWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *RevocationDataAlgorithmObsolescenceValidation {
 	c := &RevocationDataAlgorithmObsolescenceValidation{}
-	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.Context_REVOCATION, validationDate, validationPolicy, c)
+	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextRevocation, validationDate, validationPolicy, c)
 	c.InitChainBase(c)
 	return c
 }

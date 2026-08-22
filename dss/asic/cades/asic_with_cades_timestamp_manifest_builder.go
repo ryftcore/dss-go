@@ -36,7 +36,7 @@ func NewASiCWithCAdESTimestampManifestBuilderWithFilenameFactory(asicContent *as
 
 // SigReferenceMimeType ports the @Override protected getSigReferenceMimeType().
 func (b *ASiCWithCAdESTimestampManifestBuilder) SigReferenceMimeType() enumerations.MimeType {
-	return enumerations.MimeTypeEnum_TST
+	return enumerations.MimeTypeEnumTST
 }
 
 // SetAsicContentDocumentFilter ports the @Override covariant-return

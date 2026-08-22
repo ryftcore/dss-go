@@ -35,7 +35,7 @@ func (s *XmlRootSignatureScope) Description(tokenIdentifierProvider model.TokenI
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *XmlRootSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_FULL
+	return enumerations.SignatureScopeTypeFull
 }
 
 // compile-time interface assertion.

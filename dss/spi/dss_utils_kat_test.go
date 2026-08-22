@@ -21,16 +21,16 @@ func TestDSSUtilsDigestKAT(t *testing.T) {
 		algo enumerations.DigestAlgorithm
 		want string
 	}{
-		{enumerations.DigestAlgorithm_MD5, "900150983cd24fb0d6963f7d28e17f72"},
-		{enumerations.DigestAlgorithm_SHA1, "a9993e364706816aba3e25717850c26c9cd0d89d"},
-		{enumerations.DigestAlgorithm_SHA256, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"},
-		{enumerations.DigestAlgorithm_SHA3_256, "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532"},
+		{enumerations.DigestAlgorithmMD5, "900150983cd24fb0d6963f7d28e17f72"},
+		{enumerations.DigestAlgorithmSHA1, "a9993e364706816aba3e25717850c26c9cd0d89d"},
+		{enumerations.DigestAlgorithmSHA256, "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"},
+		{enumerations.DigestAlgorithmSHA3256, "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532"},
 		// BouncyCastle's SHAKEDigest#getDigestSize() is fixedOutputLength/4, so SHAKE-128
 		// squeezes 32 bytes and SHAKE-256 64 - twice the security strength, not once.
 		// Captured from upstream DSSUtils#digest on BouncyCastle 1.84.
-		{enumerations.DigestAlgorithm_SHAKE128, "5881092dd818bf5cf8a3ddb793fbcba74097d5c526a6d35f97b83351940f2cc8"},
-		{enumerations.DigestAlgorithm_SHAKE256, "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4"},
-		{enumerations.DigestAlgorithm_SHAKE256_512, "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4"},
+		{enumerations.DigestAlgorithmSHAKE128, "5881092dd818bf5cf8a3ddb793fbcba74097d5c526a6d35f97b83351940f2cc8"},
+		{enumerations.DigestAlgorithmSHAKE256, "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4"},
+		{enumerations.DigestAlgorithmSHAKE256512, "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4"},
 	}
 	for _, c := range cases {
 		got, err := DSSUtilsDigest(c.algo, data)

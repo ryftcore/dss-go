@@ -5,9 +5,9 @@ package xades
 type ReferenceOutputType string
 
 const (
-	// ReferenceOutputType_OCTET_STREAM is the octets output type.
-	ReferenceOutputType_OCTET_STREAM ReferenceOutputType = "OCTET_STREAM"
+	// ReferenceOutputTypeOctetStream is the octets output type.
+	ReferenceOutputTypeOctetStream ReferenceOutputType = "OCTET_STREAM"
 
-	// ReferenceOutputType_NODE_SET is the XML Node output type.
-	ReferenceOutputType_NODE_SET ReferenceOutputType = "NODE_SET"
+	// ReferenceOutputTypeNodeSet is the XML Node output type.
+	ReferenceOutputTypeNodeSet ReferenceOutputType = "NODE_SET"
 )

@@ -6,29 +6,29 @@ package enumerations
 type MessageType string
 
 const (
-	// MessageType_ERROR indicates a reason for validation process failure.
-	MessageType_ERROR MessageType = "ERROR"
-	// MessageType_WARN indicates a reason for an issue occurred during the
+	// MessageTypeError indicates a reason for validation process failure.
+	MessageTypeError MessageType = "ERROR"
+	// MessageTypeWarn indicates a reason for an issue occurred during the
 	// validation, not blocking the process.
-	MessageType_WARN MessageType = "WARN"
-	// MessageType_INFO is an additional informational message returned by
+	MessageTypeWarn MessageType = "WARN"
+	// MessageTypeInfo is an additional informational message returned by
 	// the validation process.
-	MessageType_INFO MessageType = "INFO"
+	MessageTypeInfo MessageType = "INFO"
 )
 
 // messageTypeURIs holds the VR URI of the constraint for each constant.
 var messageTypeURIs = map[MessageType]string{
-	MessageType_ERROR: "urn:cef:dss:message:error",
-	MessageType_WARN:  "urn:cef:dss:message:warning",
-	MessageType_INFO:  "urn:cef:dss:message:information",
+	MessageTypeError: "urn:cef:dss:message:error",
+	MessageTypeWarn:  "urn:cef:dss:message:warning",
+	MessageTypeInfo:  "urn:cef:dss:message:information",
 }
 
 // MessageTypeValues returns all constants in declaration order.
 func MessageTypeValues() []MessageType {
 	return []MessageType{
-		MessageType_ERROR,
-		MessageType_WARN,
-		MessageType_INFO,
+		MessageTypeError,
+		MessageTypeWarn,
+		MessageTypeInfo,
 	}
 }
 

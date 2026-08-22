@@ -205,7 +205,7 @@ func (b *CAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.D
 	// We don't include the outer SEQUENCE, only the attrType and attrValues as stated by the TS
 	// §6.3.5, NOTE 2.
 
-	attributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, OID_id_aa_signatureTimeStampToken)
+	attributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, OIDIdAaSignatureTimeStampToken)
 	if utils.IsArrayNotEmpty(attributes) {
 		for _, attribute := range attributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -251,7 +251,7 @@ func (b *CAdESTimestampMessageDigestBuilder) timestampX2MessageDigest() (model.D
 // revocation-refs unsigned attributes, common to Type 1 (X1) and Type 2 (X2) message-imprints.
 // Port of the private writeTimestampX2MessageDigest(DSSMessageDigestCalculator).
 func (b *CAdESTimestampMessageDigestBuilder) writeTimestampX2MessageDigest(digestCalculator *spi.DSSMessageDigestCalculator) error {
-	certAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OID_id_aa_ets_certificateRefs)
+	certAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsCertificateRefs)
 	if utils.IsArrayNotEmpty(certAttributes) {
 		for _, attribute := range certAttributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -262,7 +262,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeTimestampX2MessageDigest(diges
 			digestCalculator.Update(valuesDER)
 		}
 	}
-	revAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OID_id_aa_ets_revocationRefs)
+	revAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsRevocationRefs)
 	if utils.IsArrayNotEmpty(revAttributes) {
 		for _, attribute := range revAttributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -301,13 +301,13 @@ func cadesTMDBAttrTypeAndValuesDER(attribute *cmscore.Attribute) (typeDER, value
 // Port of getArchiveTimestampMessageDigest().
 func (b *CAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() model.DSSMessageDigest {
 	// V3 is used by default.
-	archiveTimestampType := enumerations.ArchiveTimestampType_CAdES_V3
+	archiveTimestampType := enumerations.ArchiveTimestampTypeCAdESV3
 	if b.timestampToken != nil {
 		archiveTimestampType = b.timestampToken.ArchiveTimestampType()
 	}
 
 	switch archiveTimestampType {
-	case enumerations.ArchiveTimestampType_CAdES_V2:
+	case enumerations.ArchiveTimestampTypeCAdESV2:
 		/*
 		 * There is a difference between message imprint calculation in ETSI TS 101 733 version
 		 * 1.8.3 and version 2.2.1. So we first check the message imprint according to 2.2.1
@@ -322,7 +322,7 @@ func (b *CAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() mod
 			messageDigest = b.archiveTimestampDataV2(false)
 		}
 		return messageDigest
-	case enumerations.ArchiveTimestampType_CAdES_V3:
+	case enumerations.ArchiveTimestampTypeCAdESV3:
 		return b.archiveTimestampDataV3()
 	default:
 		panic(model.NewDSSError(fmt.Sprintf("Unsupported ArchiveTimestampType %s", archiveTimestampType)))
@@ -556,7 +556,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeSignerInfoBytes(w io.Writer, i
 func (b *CAdESTimestampMessageDigestBuilder) filterUnauthenticatedAttributes() ([][]byte, error) {
 	var kept [][]byte
 	for _, attribute := range b.signerInformation.UnsignedAttributes {
-		if spi.OID_id_aa_ets_archiveTimestampV2.Equal(attribute.Type) || spi.OID_id_aa_ets_archiveTimestampV3.Equal(attribute.Type) {
+		if spi.OIDIdAaEtsArchiveTimestampV2.Equal(attribute.Type) || spi.OIDIdAaEtsArchiveTimestampV3.Equal(attribute.Type) {
 			token := CAdESUtilsTimeStampToken(attribute)
 			if token == nil || !token.TSTInfo().GenTime.Before(b.timestampToken.GenerationTime()) {
 				continue

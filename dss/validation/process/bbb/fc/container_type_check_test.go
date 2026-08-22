@@ -37,14 +37,14 @@ func TestContainerTypeCheck_Process(t *testing.T) {
 	}{
 		// The policy ids carry ASiCContainerType#toString(), which replaces '_' with '-'
 		// ("ASiC-E"), not the enum name - see ContainerTypeCheck.Process.
-		{"happy: accepted container type", enumerations.ASiCContainerType_ASiC_E, []string{"ASiC-E", "ASiC-S"}, true},
-		{"failure: not in accepted list", enumerations.ASiCContainerType_ASiC_S, []string{"ASiC-E"}, false},
-		{"failure: enum-name spelling is not accepted", enumerations.ASiCContainerType_ASiC_E, []string{"ASiC_E"}, false},
+		{"happy: accepted container type", enumerations.ASiCContainerTypeASiCE, []string{"ASiC-E", "ASiC-S"}, true},
+		{"failure: not in accepted list", enumerations.ASiCContainerTypeASiCS, []string{"ASiC-E"}, false},
+		{"failure: enum-name spelling is not accepted", enumerations.ASiCContainerTypeASiCE, []string{"ASiC_E"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := NewContainerTypeCheck(testI18nProvider(t), newTestFCResult(), tt.containerType,
-				testMultiValuesRule{level: enumerations.Level_FAIL, values: tt.accepted})
+				testMultiValuesRule{level: enumerations.LevelFail, values: tt.accepted})
 			if got := c.Process(); got != tt.want {
 				t.Errorf("Process() = %v, want %v", got, tt.want)
 			}

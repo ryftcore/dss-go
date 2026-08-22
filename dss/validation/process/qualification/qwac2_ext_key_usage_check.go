@@ -36,7 +36,7 @@ func NewQWAC2ExtKeyUsageCheck(i18nProvider *i18n.I18nProvider, result *process.R
 func (c *QWAC2ExtKeyUsageCheck) Process() bool {
 	extendedKeyUsages := c.certificate.ExtendedKeyUsages()
 	return utils.CollectionSize(extendedKeyUsages) == 1 &&
-		enumerations.ExtendedKeyUsage_TSL_BINDING.OID() == extendedKeyUsages[0].Value
+		enumerations.ExtendedKeyUsageTSLBinding.OID() == extendedKeyUsages[0].Value
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -52,7 +52,7 @@ func (c *QWAC2ExtKeyUsageCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QWAC2ExtKeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

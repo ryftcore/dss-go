@@ -38,17 +38,17 @@ func (c *DocMDPCheck) Process() bool {
 		return true
 	}
 	switch docMDPPermissions {
-	case enumerations.CertificationPermission_NO_CHANGE_PERMITTED:
+	case enumerations.CertificationPermissionNoChangePermitted:
 		if len(c.pdfRevision.PdfSignatureOrFormFillChanges()) > 0 ||
 			len(c.pdfRevision.PdfAnnotationChanges()) > 0 ||
 			len(c.pdfRevision.PdfUndefinedChanges()) > 0 {
 			return false
 		}
-	case enumerations.CertificationPermission_MINIMAL_CHANGES_PERMITTED:
+	case enumerations.CertificationPermissionMinimalChangesPermitted:
 		if len(c.pdfRevision.PdfAnnotationChanges()) > 0 || len(c.pdfRevision.PdfUndefinedChanges()) > 0 {
 			return false
 		}
-	case enumerations.CertificationPermission_CHANGES_PERMITTED:
+	case enumerations.CertificationPermissionChangesPermitted:
 		if len(c.pdfRevision.PdfUndefinedChanges()) > 0 {
 			return false
 		}
@@ -66,10 +66,10 @@ func (c *DocMDPCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *DocMDPCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *DocMDPCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

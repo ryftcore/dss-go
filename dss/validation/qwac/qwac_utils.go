@@ -69,7 +69,7 @@ func isTLSCertificateBindingRel(linkHeader *LinkHeader) bool {
 func GetIdentifiedTLSCertificates(signature *diagnostic.SignatureWrapper, certificates []*diagnostic.CertificateWrapper) []*diagnostic.CertificateWrapper {
 	var result []*diagnostic.CertificateWrapper
 	for _, digestMatcher := range signature.DigestMatchers() {
-		if digestMatcherType(digestMatcher) == enumerations.DigestMatcherType_SIG_D_ENTRY &&
+		if digestMatcherType(digestMatcher) == enumerations.DigestMatcherTypeSigDEntry &&
 			digestMatcher.DataFound && digestMatcher.DataIntact && digestMatcher.DocumentName != nil {
 			for _, certificate := range certificates {
 				if *digestMatcher.DocumentName == certificate.Id() {

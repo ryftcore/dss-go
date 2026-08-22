@@ -7,9 +7,9 @@ func TestAssertValue(t *testing.T) {
 		v    Assert
 		want string
 	}{
-		{Assert_ALL, "all"},
-		{Assert_AT_LEAST_ONE, "atLeastOne"},
-		{Assert_NONE, "none"},
+		{AssertAll, "all"},
+		{AssertAtLeastOne, "atLeastOne"},
+		{AssertNone, "none"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Value(); got != tt.want {

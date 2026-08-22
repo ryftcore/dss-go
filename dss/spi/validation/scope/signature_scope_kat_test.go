@@ -37,7 +37,7 @@ func TestSignatureScopeKnownAnswers(t *testing.T) {
 			scope:       NewFullSignatureScope("doc.txt", named),
 			name:        "doc.txt",
 			description: "Full document",
-			scopeType:   enumerations.SignatureScopeType_FULL,
+			scopeType:   enumerations.SignatureScopeTypeFull,
 		},
 		{
 			// The explicit filename wins over the document's own name.
@@ -45,21 +45,21 @@ func TestSignatureScopeKnownAnswers(t *testing.T) {
 			scope:       NewFullSignatureScope("other-name", named),
 			name:        "other-name",
 			description: "Full document",
-			scopeType:   enumerations.SignatureScopeType_FULL,
+			scopeType:   enumerations.SignatureScopeTypeFull,
 		},
 		{
 			key:         "full.unnamed",
 			scope:       NewFullSignatureScope("unnamed", unnamed),
 			name:        "unnamed",
 			description: "Full document",
-			scopeType:   enumerations.SignatureScopeType_FULL,
+			scopeType:   enumerations.SignatureScopeTypeFull,
 		},
 		{
 			key:         "container",
 			scope:       NewContainerSignatureScopeWithName("archive.asice", named),
 			name:        "archive.asice",
 			description: "ASiCS archive",
-			scopeType:   enumerations.SignatureScopeType_FULL,
+			scopeType:   enumerations.SignatureScopeTypeFull,
 		},
 		{
 			// ContainerContentSignatureScope takes its name from the document, not a parameter.
@@ -67,14 +67,14 @@ func TestSignatureScopeKnownAnswers(t *testing.T) {
 			scope:       NewContainerContentSignatureScope(named),
 			name:        "doc.txt",
 			description: "ASiCS archive content",
-			scopeType:   enumerations.SignatureScopeType_ARCHIVED,
+			scopeType:   enumerations.SignatureScopeTypeArchived,
 		},
 		{
 			key:         "digest",
 			scope:       NewDigestSignatureScope("digest-doc", named),
 			name:        "digest-doc",
 			description: "Digest of the document content",
-			scopeType:   enumerations.SignatureScopeType_DIGEST,
+			scopeType:   enumerations.SignatureScopeTypeDigest,
 		},
 	} {
 		t.Run(testCase.key, func(t *testing.T) {
@@ -87,14 +87,14 @@ func TestSignatureScopeKnownAnswers(t *testing.T) {
 			if got := testCase.scope.Type(); got != testCase.scopeType {
 				t.Errorf("Type() = %q, want %q", got, testCase.scopeType)
 			}
-			digest, err := testCase.scope.Digest(enumerations.DigestAlgorithm_SHA256)
+			digest, err := testCase.scope.Digest(enumerations.DigestAlgorithmSHA256)
 			if err != nil {
 				t.Fatalf("Digest(SHA256): %v", err)
 			}
 			if got := hex.EncodeToString(digest.Value()); got != scopeKatDigestSHA256 {
 				t.Errorf("Digest(SHA256) = %s, want %s", got, scopeKatDigestSHA256)
 			}
-			if got := digest.Algorithm(); got != enumerations.DigestAlgorithm_SHA256 {
+			if got := digest.Algorithm(); got != enumerations.DigestAlgorithmSHA256 {
 				t.Errorf("Digest(SHA256).Algorithm() = %q, want SHA256", got)
 			}
 		})

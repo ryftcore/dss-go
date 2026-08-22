@@ -48,7 +48,7 @@ func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.I18nProvider,
 // Process performs the check. Port of process(): the two nested Stream#allMatch
 // / Stream#anyMatch predicates become plain loops.
 func (c *EvidenceRecordSignedFilesCoveredCheck) Process() bool {
-	if enumerations.EvidenceRecordOrigin_SIGNATURE == c.evidenceRecord.Origin() {
+	if enumerations.EvidenceRecordOriginSignature == c.evidenceRecord.Origin() {
 		// embedded signature covers all original documents
 		return true
 	}
@@ -100,11 +100,11 @@ func (c *EvidenceRecordSignedFilesCoveredCheck) ErrorMessageTag() i18n.MessageTa
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EvidenceRecordSignedFilesCoveredCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EvidenceRecordSignedFilesCoveredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

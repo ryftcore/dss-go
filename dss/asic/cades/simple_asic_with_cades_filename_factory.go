@@ -255,12 +255,12 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidEvidenceRecordFilename(evid
 		panic(err)
 	}
 	switch evidenceRecordType {
-	case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 		if !strings.HasSuffix(evidenceRecordFilename, asic.ASiCUtilsXMLExtension) {
 			panic(exception.NewIllegalInputException("An XMLERS evidence record file within " +
 				"ASiC container shall end with '" + asic.ASiCUtilsXMLExtension + "' extension!"))
 		}
-	case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 		if !strings.HasSuffix(evidenceRecordFilename, asic.ASiCUtilsERASN1Extension) {
 			panic(exception.NewIllegalInputException("An ERS evidence record file within " +
 				"ASiC container shall end with '" + asic.ASiCUtilsERASN1Extension + "' extension!"))

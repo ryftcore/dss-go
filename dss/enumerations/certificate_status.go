@@ -5,34 +5,34 @@ package enumerations
 type CertificateStatus string
 
 const (
-	// CertificateStatus_GOOD means the certificate is not revoked.
-	CertificateStatus_GOOD CertificateStatus = "GOOD"
-	// CertificateStatus_REVOKED means the certificate is revoked.
-	CertificateStatus_REVOKED CertificateStatus = "REVOKED"
-	// CertificateStatus_UNKNOWN means the certificate status is not known.
-	CertificateStatus_UNKNOWN CertificateStatus = "UNKNOWN"
+	// CertificateStatusGood means the certificate is not revoked.
+	CertificateStatusGood CertificateStatus = "GOOD"
+	// CertificateStatusRevoked means the certificate is revoked.
+	CertificateStatusRevoked CertificateStatus = "REVOKED"
+	// CertificateStatusUnknown means the certificate status is not known.
+	CertificateStatusUnknown CertificateStatus = "UNKNOWN"
 )
 
 // CertificateStatusValues returns all constants in declaration order.
 func CertificateStatusValues() []CertificateStatus {
 	return []CertificateStatus{
-		CertificateStatus_GOOD,
-		CertificateStatus_REVOKED,
-		CertificateStatus_UNKNOWN,
+		CertificateStatusGood,
+		CertificateStatusRevoked,
+		CertificateStatusUnknown,
 	}
 }
 
 // IsGood checks if the certificate status is valid.
 func (c CertificateStatus) IsGood() bool {
-	return CertificateStatus_GOOD == c
+	return CertificateStatusGood == c
 }
 
 // IsRevoked checks if the certificate is revoked.
 func (c CertificateStatus) IsRevoked() bool {
-	return CertificateStatus_REVOKED == c
+	return CertificateStatusRevoked == c
 }
 
 // IsKnown checks if the certificate status is known.
 func (c CertificateStatus) IsKnown() bool {
-	return CertificateStatus_UNKNOWN != c
+	return CertificateStatusUnknown != c
 }

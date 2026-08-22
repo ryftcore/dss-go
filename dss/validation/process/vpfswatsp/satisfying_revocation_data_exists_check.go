@@ -84,11 +84,11 @@ func (c *SatisfyingRevocationDataExistsCheck[T]) ErrorMessageTag() i18n.MessageT
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the overridden getFailedIndicationForConclusion().
 func (c *SatisfyingRevocationDataExistsCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of the overridden getFailedSubIndicationForConclusion().
 func (c *SatisfyingRevocationDataExistsCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_POE
+	return enumerations.SubIndicationNoPOE
 }

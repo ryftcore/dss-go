@@ -101,7 +101,7 @@ func (c *PdfPermissionsChecker) CheckSignatureRestrictionDictionaries(documentRe
 // isDocumentChangeForbidden verifies and returns whether changes within a document are
 // forbidden according to the defined certificationPermission. Port of #isDocumentChangeForbidden.
 func (c *PdfPermissionsChecker) isDocumentChangeForbidden(certificationPermission enumerations.CertificationPermission) bool {
-	return certificationPermission == enumerations.CertificationPermission_NO_CHANGE_PERMITTED
+	return certificationPermission == enumerations.CertificationPermissionNoChangePermitted
 }
 
 // alertOnForbiddenSignatureCreationMessage executes alertOnForbiddenSignatureCreation with the
@@ -119,16 +119,16 @@ func (c *PdfPermissionsChecker) alertOnForbiddenSignatureCreationMessage(message
 // Port of #isSignatureFieldCreationForbidden.
 func (c *PdfPermissionsChecker) isSignatureFieldCreationForbidden(sigFieldPermissions *SigFieldPermissions, signatureFieldID string) bool {
 	switch sigFieldPermissions.Action() {
-	case enumerations.PdfLockAction_ALL:
+	case enumerations.PdfLockActionAll:
 		return true
-	case enumerations.PdfLockAction_INCLUDE:
+	case enumerations.PdfLockActionInclude:
 		if signatureFieldID == "" {
 			return false
 		}
 		if containsString(sigFieldPermissions.Fields(), signatureFieldID) {
 			return true
 		}
-	case enumerations.PdfLockAction_EXCLUDE:
+	case enumerations.PdfLockActionExclude:
 		if signatureFieldID == "" {
 			return true
 		}

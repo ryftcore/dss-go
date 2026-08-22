@@ -6,22 +6,22 @@ package enumerations
 type SignerTextVerticalAlignment string
 
 const (
-	// SignerTextVerticalAlignment_TOP aligns the text with the top of the
+	// SignerTextVerticalAlignmentTop aligns the text with the top of the
 	// picture.
-	SignerTextVerticalAlignment_TOP SignerTextVerticalAlignment = "TOP"
-	// SignerTextVerticalAlignment_MIDDLE aligns the text with the center
+	SignerTextVerticalAlignmentTop SignerTextVerticalAlignment = "TOP"
+	// SignerTextVerticalAlignmentMiddle aligns the text with the center
 	// of the picture.
-	SignerTextVerticalAlignment_MIDDLE SignerTextVerticalAlignment = "MIDDLE"
-	// SignerTextVerticalAlignment_BOTTOM aligns the text with the bottom
+	SignerTextVerticalAlignmentMiddle SignerTextVerticalAlignment = "MIDDLE"
+	// SignerTextVerticalAlignmentBottom aligns the text with the bottom
 	// of the picture.
-	SignerTextVerticalAlignment_BOTTOM SignerTextVerticalAlignment = "BOTTOM"
+	SignerTextVerticalAlignmentBottom SignerTextVerticalAlignment = "BOTTOM"
 )
 
 // SignerTextVerticalAlignmentValues returns all constants in declaration order.
 func SignerTextVerticalAlignmentValues() []SignerTextVerticalAlignment {
 	return []SignerTextVerticalAlignment{
-		SignerTextVerticalAlignment_TOP,
-		SignerTextVerticalAlignment_MIDDLE,
-		SignerTextVerticalAlignment_BOTTOM,
+		SignerTextVerticalAlignmentTop,
+		SignerTextVerticalAlignmentMiddle,
+		SignerTextVerticalAlignmentBottom,
 	}
 }

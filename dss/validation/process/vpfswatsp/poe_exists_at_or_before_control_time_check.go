@@ -64,9 +64,9 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
 // IllegalStateException becomes a panic - the method is called from the base
 // ChainItem, which cannot propagate an error.
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
-	if enumerations.TimestampedObjectType_CERTIFICATE == c.referenceCategory {
+	if enumerations.TimestampedObjectTypeCertificate == c.referenceCategory {
 		return i18n.MessageTag_PSV_ITPOCOBCT
-	} else if enumerations.TimestampedObjectType_REVOCATION == c.referenceCategory {
+	} else if enumerations.TimestampedObjectTypeRevocation == c.referenceCategory {
 		return i18n.MessageTag_PSV_ITPORDAOBCT
 	}
 	panic("Problem VTS")
@@ -81,11 +81,11 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) ErrorMessageTag() i18n.MessageT
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_POE
+	return enumerations.SubIndicationNoPOE
 }

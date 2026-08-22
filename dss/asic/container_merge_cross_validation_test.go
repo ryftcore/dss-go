@@ -195,7 +195,7 @@ func goMerge(a, b model.DSSDocument) (result goMergeResult) {
 	}
 	entries := make([]mergeOracleEntry, 0, len(entryDocuments))
 	for _, entry := range entryDocuments {
-		digest, err := entry.Digest(enumerations.DigestAlgorithm_SHA256)
+		digest, err := entry.Digest(enumerations.DigestAlgorithmSHA256)
 		if err != nil {
 			return goMergeResult{errorMessage: err.Error()}
 		}

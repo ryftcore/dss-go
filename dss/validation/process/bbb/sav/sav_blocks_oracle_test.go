@@ -113,7 +113,7 @@ func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData
 func passedAOV() *jaxb.XmlAOV {
 	aov := &jaxb.XmlAOV{}
 	aov.Conclusion = &jaxb.XmlConclusion{
-		Indication: jaxb.IndicationValue(enumerations.Indication_PASSED),
+		Indication: jaxb.IndicationValue(enumerations.IndicationPassed),
 	}
 	return aov
 }
@@ -250,9 +250,9 @@ func TestAcceptanceValidationAgainstJavaOracle(t *testing.T) {
 			}
 
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				sig := signature
 				compare(sig.Id(), context, func() *jaxb.XmlSAV {
@@ -262,7 +262,7 @@ func TestAcceptanceValidationAgainstJavaOracle(t *testing.T) {
 			}
 			for _, timestamp := range diagnosticData.TimestampList() {
 				tst := timestamp
-				compare(tst.Id(), enumerations.Context_TIMESTAMP, func() *jaxb.XmlSAV {
+				compare(tst.Id(), enumerations.ContextTimestamp, func() *jaxb.XmlSAV {
 					return NewTimestampAcceptanceValidation(i18nProvider, savCurrentTime, tst,
 						passedAOV(), validationPolicy).Execute()
 				})
@@ -271,7 +271,7 @@ func TestAcceptanceValidationAgainstJavaOracle(t *testing.T) {
 			sort.SliceStable(revocations, func(i, j int) bool { return revocations[i].Id() < revocations[j].Id() })
 			for _, revocation := range revocations {
 				rev := revocation
-				compare(rev.Id(), enumerations.Context_REVOCATION, func() *jaxb.XmlSAV {
+				compare(rev.Id(), enumerations.ContextRevocation, func() *jaxb.XmlSAV {
 					return NewRevocationAcceptanceValidation(i18nProvider, savCurrentTime, rev,
 						passedAOV(), validationPolicy).Execute()
 				})

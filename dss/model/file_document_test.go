@@ -48,7 +48,7 @@ func TestFileDocumentOpenStreamAndDigest(t *testing.T) {
 		t.Fatalf("got %q, want %q", got, content)
 	}
 
-	digestValue, err := doc.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	digestValue, err := doc.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}

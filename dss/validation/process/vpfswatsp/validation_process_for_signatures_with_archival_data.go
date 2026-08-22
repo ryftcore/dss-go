@@ -98,11 +98,11 @@ func (c *ValidationProcessForSignaturesWithArchivalData) Title() i18n.MessageTag
 // InitChain initializes the chain. Port of initChain().
 func (c *ValidationProcessForSignaturesWithArchivalData) InitChain() {
 
-	c.context = enumerations.Context_SIGNATURE
+	c.context = enumerations.ContextSignature
 	if c.signature.IsCounterSignature() {
-		c.context = enumerations.Context_COUNTER_SIGNATURE
+		c.context = enumerations.ContextCounterSignature
 	} else if c.signature.IsKeyBindingSignature() {
-		c.context = enumerations.Context_KEY_BINDING_SIGNATURE
+		c.context = enumerations.ContextKeyBindingSignature
 	}
 
 	var item process.ChainItem[*jaxb.XmlValidationProcessArchivalData]
@@ -203,8 +203,8 @@ func (c *ValidationProcessForSignaturesWithArchivalData) InitChain() {
 	}
 
 	// TODO : this is a workaround, as LTV is not able to recover from NO_CERTIFICATE_CHAIN_FOUND_NO_POE
-	if enumerations.Indication_INDETERMINATE != c.validationProcessLongTermData.Conclusion.Indication.Indication() ||
-		enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE !=
+	if enumerations.IndicationIndeterminate != c.validationProcessLongTermData.Conclusion.Indication.Indication() ||
+		enumerations.SubIndicationNoCertificateChainFoundNoPOE !=
 			subIndicationOfConclusion(c.validationProcessLongTermData.Conclusion) {
 
 		item = item.SetNextItem(c.longTermAvailabilityAndIntegrityValidationMaterial())
@@ -521,9 +521,9 @@ func (c *ValidationProcessForSignaturesWithArchivalData) CollectMessages(conclus
 	if constraint.BlockType != nil {
 		blockType = *constraint.BlockType
 	}
-	if jaxb.XmlBlockType_TST == blockType && c.policy.TimestampValidConstraint() == nil {
+	if jaxb.XmlBlockTypeTST == blockType && c.policy.TimestampValidConstraint() == nil {
 		// skip propagating of validation messages for TSTs in default processing
-	} else if jaxb.XmlBlockType_LTA == blockType {
+	} else if jaxb.XmlBlockTypeLTA == blockType {
 		// skip LTA data missing message
 	} else {
 		c.ChainBase.CollectMessages(conclusion, constraint)

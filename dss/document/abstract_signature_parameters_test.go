@@ -78,7 +78,7 @@ func TestAbstractSignatureParametersSetSigningCertificateDerivesEncryptionAlgori
 	if got := p.SigningCertificate(); got != cert {
 		t.Fatalf("SigningCertificate() = %v, want %v", got, cert)
 	}
-	if got := p.EncryptionAlgorithm(); got != enumerations.EncryptionAlgorithm_ECDSA {
+	if got := p.EncryptionAlgorithm(); got != enumerations.EncryptionAlgorithmECDSA {
 		t.Fatalf("EncryptionAlgorithm() = %v, want ECDSA (derived from the EC public key)", got)
 	}
 }

@@ -854,7 +854,7 @@ func (a *DefaultDocumentAnalyzer) getTimestampedReferences(signatureScopes []mod
 		for _, signatureScope := range signatureScopes {
 			if overrides.AddReference(signatureScope) {
 				timestampedReferences = append(timestampedReferences,
-					validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectType_SIGNED_DATA))
+					validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectTypeSignedData))
 			}
 		}
 	}

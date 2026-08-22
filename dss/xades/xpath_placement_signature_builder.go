@@ -114,7 +114,7 @@ func (b *XPathPlacementSignatureBuilder) isSignatureCoveredNodeAffected(referenc
 	// and distinguishes its null (attribute absent -> false) from "" (URI="" covers the whole
 	// document -> true). A Go string cannot carry that distinction, so the attribute node itself
 	// is read here; the value is the same one DSSXMLUtilsGetAttribute would return.
-	uriAttr := referenceNode.Attr("", common.XMLDSigAttribute_URI.AttributeName())
+	uriAttr := referenceNode.Attr("", common.XMLDSigAttributeURI.AttributeName())
 	if uriAttr == nil {
 		return false, nil
 	}
@@ -136,12 +136,12 @@ func (b *XPathPlacementSignatureBuilder) isSignatureCoveredNodeAffected(referenc
 // assertDoesNotContainEnvelopedTransform.
 func xpathPlacementSignatureBuilderAssertDoesNotContainEnvelopedTransform(referenceNode *xmldom.Node) error {
 	transformList, err := xmlutils.XPathUtilsGetNodeList(referenceNode,
-		common.XMLDSigPath_TRANSFORMS_TRANSFORM_PATH)
+		common.XMLDSigPathTransformsTransformPath)
 	if err != nil {
 		return err
 	}
 	for _, transformElement := range transformList {
-		transformAlgorithm := transformElement.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName())
+		transformAlgorithm := transformElement.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName())
 		if string(xmldsig.TransformEnvelopedSignature) == transformAlgorithm {
 			return exception.NewIllegalInputException(fmt.Sprintf(
 				"The parallel signature is not possible! The provided file contains a signature with an '%s' transform.",
@@ -182,7 +182,7 @@ func (b *XPathPlacementSignatureBuilder) IncorporateSignatureDomToParent(parentN
 	}
 
 	switch b.Params.XPathElementPlacement() {
-	case XPathElementPlacement_XPathAfter:
+	case XPathElementPlacementXPathAfter:
 		// root element referenced by XPath
 		// DEVIATION: Java compares with Node#isEqualNode, a deep structural comparison. The two
 		// operands always come from the same document here, and no descendant of the document
@@ -198,7 +198,7 @@ func (b *XPathPlacementSignatureBuilder) IncorporateSignatureDomToParent(parentN
 			parent.InsertBefore(b.SignatureDom, parentNodeOfSignature.NextSibling)
 		}
 
-	case XPathElementPlacement_XPathFirstChildOf:
+	case XPathElementPlacementXPathFirstChildOf:
 		parentNodeOfSignature.InsertBefore(b.SignatureDom, parentNodeOfSignature.FirstChild)
 
 	default:

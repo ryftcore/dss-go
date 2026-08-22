@@ -69,7 +69,7 @@ func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

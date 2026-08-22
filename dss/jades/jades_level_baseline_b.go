@@ -156,7 +156,7 @@ func (b *JAdESLevelBaselineB) IncorporateSignatureAlgorithm() error {
 // IncorporateContentType incorporates 5.1.3 the cty (content type) header parameter.
 // Port of the protected #incorporateContentType.
 func (b *JAdESLevelBaselineB) IncorporateContentType() error {
-	if enumerations.SignaturePackaging_DETACHED == b.parameters.SignaturePackaging() &&
+	if enumerations.SignaturePackagingDetached == b.parameters.SignaturePackaging() &&
 		b.parameters.ContentType() == "" {
 		// SHOULD NOT be used for detached signatures (see EN 119-182 ch.5.1.3)
 		return nil
@@ -233,7 +233,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificate() error {
 	}
 
 	signingCertificateDigestMethod := b.parameters.SigningCertificateDigestMethod()
-	if enumerations.DigestAlgorithm_SHA256 == signingCertificateDigestMethod {
+	if enumerations.DigestAlgorithmSHA256 == signingCertificateDigestMethod {
 		return b.IncorporateSigningCertificateSha256Thumbprint(signingCertificate)
 	}
 	return b.IncorporateSigningCertificateOtherDigestReference(signingCertificate,
@@ -251,7 +251,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificate() error {
 // version cannot express, so the signature carries an error.
 func (b *JAdESLevelBaselineB) IncorporateSigningCertificateSha256Thumbprint(
 	signingCertificate *model.CertificateToken) error {
-	thumbprint, err := signingCertificate.Digest(enumerations.DigestAlgorithm_SHA256)
+	thumbprint, err := signingCertificate.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		return err
 	}
@@ -326,11 +326,11 @@ func (b *JAdESLevelBaselineB) IncorporateType() error {
 
 		var signatureMimeType enumerations.MimeType
 		switch b.parameters.JwsSerializationType() {
-		case enumerations.JWSSerializationType_COMPACT_SERIALIZATION:
-			signatureMimeType = enumerations.MimeTypeEnum_JOSE
-		case enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION:
-			signatureMimeType = enumerations.MimeTypeEnum_JOSE_JSON
+		case enumerations.JWSSerializationTypeCompactSerialization:
+			signatureMimeType = enumerations.MimeTypeEnumJOSE
+		case enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.JWSSerializationTypeFlattenedJSONSerialization:
+			signatureMimeType = enumerations.MimeTypeEnumJOSEJSON
 		default:
 			return fmt.Errorf("The given JWS serialization type '%s' is not supported!",
 				b.parameters.JwsSerializationType())
@@ -367,21 +367,21 @@ func (b *JAdESLevelBaselineB) assertPayloadEncodingValid() error {
 	}
 	// see RFC 7797 (only for compact format not detached payload shall be uri-safe)
 	if !b.parameters.IsBase64UrlEncodedPayload() &&
-		enumerations.SignaturePackaging_DETACHED != b.parameters.SignaturePackaging() &&
+		enumerations.SignaturePackagingDetached != b.parameters.SignaturePackaging() &&
 		utils.IsArrayNotEmpty(payloadBytes) {
 
 		switch b.parameters.JwsSerializationType() {
 		/*
 		 * RFC 7797 ch. "5. Unencoded Payload Content Restrictions"
 		 */
-		case enumerations.JWSSerializationType_COMPACT_SERIALIZATION:
+		case enumerations.JWSSerializationTypeCompactSerialization:
 			if !DSSJsonUtilsIsUrlSafePayload(string(payloadBytes)) {
 				return exception.NewIllegalInputException("The payload contains not URL-safe characters! " +
 					"With Unencoded Payload ('b64' = false) only ASCII characters in ranges " +
 					"%x20-2D and %x2F-7E are allowed for a COMPACT_SERIALIZATION!")
 			}
-		case enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION,
-			enumerations.JWSSerializationType_JSON_SERIALIZATION:
+		case enumerations.JWSSerializationTypeFlattenedJSONSerialization,
+			enumerations.JWSSerializationTypeJSONSerialization:
 			if !DSSJsonUtilsIsUtf8(payloadBytes) {
 				return exception.NewIllegalInputException("The payload contains not valid content! " +
 					"With Unencoded Payload ('b64' = false) only UTF-8 characters are allowed!")
@@ -399,13 +399,13 @@ func (b *JAdESLevelBaselineB) assertPayloadEncodingValid() error {
 func (b *JAdESLevelBaselineB) IncorporateSigningTime() error {
 	signingDate := b.parameters.BLevel().SigningDate()
 	switch b.parameters.JadesSigningTimeType() {
-	case JAdESSigningTimeType_IAT:
+	case JAdESSigningTimeTypeIAT:
 		signedTimeInSeconds := spi.DSSUtilsTimeValueInSeconds(signingDate.UnixMilli())
 		b.AddHeader(JWTClaimNamesIat, signedTimeInSeconds)
-	case JAdESSigningTimeType_SIG_T:
+	case JAdESSigningTimeTypeSigT:
 		stringSigningTime := spi.DSSUtilsFormatDateToRFC(*signingDate)
 		b.AddHeader(JAdESHeaderParameterNamesSigT, stringSigningTime)
-	case JAdESSigningTimeType_NONE:
+	case JAdESSigningTimeTypeNone:
 		// No signing time header to incorporate
 	default:
 		return fmt.Errorf("The JAdESSigningTimeType '%s' is not supported!",
@@ -621,7 +621,7 @@ func (b *JAdESLevelBaselineB) qArray(qArrayVals []string) []any {
 	 * instructions, interpretation directives, or content markup should be
 	 * necessary for proper display.
 	 */
-	qArrayMap.Put(JAdESHeaderParameterNamesMediaType, enumerations.MimeTypeEnum_TEXT.MimeTypeString())
+	qArrayMap.Put(JAdESHeaderParameterNamesMediaType, enumerations.MimeTypeEnumText.MimeTypeString())
 
 	/*
 	 * b) The encoding member, which shall contain a string identifying the encoding
@@ -806,7 +806,7 @@ func jadesLevelBaselineBSignaturePolicyQualifiers(signaturePolicy *model.Policy)
 // IncorporateDetachedContents incorporates 5.2.8 the sigD header parameter.
 // Port of the protected #incorporateDetachedContents.
 func (b *JAdESLevelBaselineB) IncorporateDetachedContents() error {
-	if enumerations.SignaturePackaging_DETACHED != b.parameters.SignaturePackaging() {
+	if enumerations.SignaturePackagingDetached != b.parameters.SignaturePackaging() {
 		return nil
 	}
 	if err := b.assertDetachedContentValid(); err != nil {
@@ -816,19 +816,19 @@ func (b *JAdESLevelBaselineB) IncorporateDetachedContents() error {
 	var sigDParams *jose.Object
 	var err error
 	switch b.parameters.SigDMechanism() {
-	case enumerations.SigDMechanism_HTTP_HEADERS:
+	case enumerations.SigDMechanismHTTPHeaders:
 		// 5.2.8.2 Mechanism HttpHeaders
 		if err = b.assertHttpHeadersConfigurationValid(); err != nil {
 			return err
 		}
 		sigDParams = b.sigDForHttpHeadersMechanism(b.documentsToSign)
-	case enumerations.SigDMechanism_OBJECT_ID_BY_URI:
+	case enumerations.SigDMechanismObjectIDByURI:
 		// 5.2.8.3.2 Mechanism ObjectIdByURI
 		sigDParams, err = b.sigDForObjectIdByUriMechanism(b.documentsToSign)
-	case enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH:
+	case enumerations.SigDMechanismObjectIDByURIHash:
 		// 5.2.8.3.3 Mechanism ObjectIdByURIHash
 		sigDParams, err = b.sigDForObjectIdByUriHashMechanism(b.documentsToSign)
-	case enumerations.SigDMechanism_NO_SIG_D:
+	case enumerations.SigDMechanismNoSigD:
 		// do not incorporate the SigD
 		return nil
 	default:
@@ -849,10 +849,10 @@ func (b *JAdESLevelBaselineB) assertDetachedContentValid() error {
 		return errors.New("The SigDMechanism is not defined for a detached signature! " +
 			"Please use JAdESSignatureParameters.setSigDMechanism(sigDMechanism) method.")
 	}
-	if enumerations.SigDMechanism_NO_SIG_D == sigDMechanism {
+	if enumerations.SigDMechanismNoSigD == sigDMechanism {
 		if utils.CollectionSize(b.documentsToSign) > 1 {
 			return fmt.Errorf("Only one detached document is allowed with '%s' mechanism!",
-				enumerations.SigDMechanism_NO_SIG_D)
+				enumerations.SigDMechanismNoSigD)
 		}
 		return nil
 	}
@@ -862,7 +862,7 @@ func (b *JAdESLevelBaselineB) assertDetachedContentValid() error {
 		if utils.IsStringEmpty(document.Name()) {
 			return errors.New("The signed document must have names for a detached JAdES signature!")
 		}
-		if enumerations.SigDMechanism_HTTP_HEADERS != sigDMechanism {
+		if enumerations.SigDMechanismHTTPHeaders != sigDMechanism {
 			for _, name := range documentNames {
 				if name == document.Name() {
 					return fmt.Errorf("The documents to be signed shall have different names! "+
@@ -884,11 +884,11 @@ func (b *JAdESLevelBaselineB) assertHttpHeadersConfigurationValid() error {
 	 * "http://uri.etsi.org/19182/HttpHeaders" then the b64 header parameter shall
 	 * be present and set to "false".
 	 */
-	if enumerations.SigDMechanism_HTTP_HEADERS == b.parameters.SigDMechanism() &&
+	if enumerations.SigDMechanismHTTPHeaders == b.parameters.SigDMechanism() &&
 		b.parameters.IsBase64UrlEncodedPayload() {
 		return fmt.Errorf("'%s' SigD Mechanism can be used only with non-base64url encoded payload! "+
 			"Set JAdESSignatureParameters.setBase64UrlEncodedPayload(false).",
-			enumerations.SigDMechanism_HTTP_HEADERS.JAdESUri())
+			enumerations.SigDMechanismHTTPHeaders.JAdESUri())
 	}
 	return nil
 }
@@ -897,7 +897,7 @@ func (b *JAdESLevelBaselineB) assertHttpHeadersConfigurationValid() error {
 func (b *JAdESLevelBaselineB) sigDForHttpHeadersMechanism(detachedContents []model.DSSDocument) *jose.Object {
 	sigDParams := jose.NewObject()
 
-	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanism_HTTP_HEADERS.JAdESUri())
+	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanismHTTPHeaders.JAdESUri())
 	sigDParams.Put(JAdESHeaderParameterNamesPars, jadesLevelBaselineBHttpHeaderNames(detachedContents))
 
 	return sigDParams
@@ -908,7 +908,7 @@ func (b *JAdESLevelBaselineB) sigDForObjectIdByUriMechanism(
 	detachedContents []model.DSSDocument) (*jose.Object, error) {
 	sigDParams := jose.NewObject()
 
-	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanism_OBJECT_ID_BY_URI.JAdESUri())
+	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanismObjectIDByURI.JAdESUri())
 	sigDParams.Put(JAdESHeaderParameterNamesPars, jadesLevelBaselineBSignedDataReferences(detachedContents))
 
 	ctys, err := b.signedDataMimeTypesIfPresent(detachedContents)
@@ -925,7 +925,7 @@ func (b *JAdESLevelBaselineB) sigDForObjectIdByUriHashMechanism(
 	detachedContents []model.DSSDocument) (*jose.Object, error) {
 	sigDParams := jose.NewObject()
 
-	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH.JAdESUri())
+	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanismObjectIDByURIHash.JAdESUri())
 	sigDParams.Put(JAdESHeaderParameterNamesPars, jadesLevelBaselineBSignedDataReferences(detachedContents))
 
 	digestAlgorithm := b.referenceDigestAlgorithmOrDefault()
@@ -1012,7 +1012,7 @@ func (b *JAdESLevelBaselineB) signedDataMimeTypesIfPresent(
 	for _, document := range detachedContents {
 		mimeType := document.MimeType()
 		if mimeType == nil {
-			mimeType = enumerations.MimeTypeEnum_BINARY
+			mimeType = enumerations.MimeTypeEnumBinary
 		}
 		rfc7515MimeType, err := b.rfc7515ConformantMimeTypeString(mimeType.MimeTypeString())
 		if err != nil {
@@ -1079,17 +1079,17 @@ func (b *JAdESLevelBaselineB) AddHeader(headerName string, value any) {
 // PayloadBytes returns the JWS payload for the given signature parameters.
 // Port of #getPayloadBytes.
 func (b *JAdESLevelBaselineB) PayloadBytes() ([]byte, error) {
-	if enumerations.SignaturePackaging_DETACHED != b.parameters.SignaturePackaging() ||
-		enumerations.SigDMechanism_NO_SIG_D == b.parameters.SigDMechanism() {
+	if enumerations.SignaturePackagingDetached != b.parameters.SignaturePackaging() ||
+		enumerations.SigDMechanismNoSigD == b.parameters.SigDMechanism() {
 		return b.incorporatedPayload()
 
-	} else if enumerations.SigDMechanism_HTTP_HEADERS == b.parameters.SigDMechanism() {
+	} else if enumerations.SigDMechanismHTTPHeaders == b.parameters.SigDMechanism() {
 		return b.payloadForHttpHeadersMechanism()
 
-	} else if enumerations.SigDMechanism_OBJECT_ID_BY_URI == b.parameters.SigDMechanism() {
+	} else if enumerations.SigDMechanismObjectIDByURI == b.parameters.SigDMechanism() {
 		return b.payloadForObjectIdByUriMechanism()
 
-	} else if enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH == b.parameters.SigDMechanism() {
+	} else if enumerations.SigDMechanismObjectIDByURIHash == b.parameters.SigDMechanism() {
 		/*
 		 * 5.2.8.3.3 Mechanism ObjectIdByURIHash
 		 *

@@ -194,10 +194,10 @@ func (l *ValidationPolicyLoader) WithDefaultCryptographicSuiteForContext(context
 // the given Context and SubContext. The supported subContext are: SIGNING_CERT and
 // CA_CERTIFICATE. The cryptographic suite will be used only for the specific scope.
 //
-// Returns an error when context is Context_EVIDENCE_RECORD and subContext is not empty (Java's
+// Returns an error when context is ContextEvidenceRecord and subContext is not empty (Java's
 // thrown IllegalArgumentException).
 func (l *ValidationPolicyLoader) WithDefaultCryptographicSuiteForContextAndSubContext(context enumerations.Context, subContext enumerations.SubContext) (*ValidationPolicyLoaderWithCryptoSuite, error) {
-	if enumerations.Context_EVIDENCE_RECORD == context && subContext != "" {
+	if enumerations.ContextEvidenceRecord == context && subContext != "" {
 		return nil, errors.New("please use a NULL SubContext for the Context.EVIDENCE_RECORD or " +
 			"use #withDefaultCryptographicSuiteForContext(cryptographicSuite, context) method")
 	}
@@ -390,58 +390,58 @@ func (l *ValidationPolicyLoader) WithCryptographicSuiteCatalogueForContextAndSub
 
 	if context != "" {
 		switch context {
-		case enumerations.Context_SIGNATURE, enumerations.Context_CERTIFICATE:
+		case enumerations.ContextSignature, enumerations.ContextCertificate:
 			if subContext != "" {
 				add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), context, subContext)
 			} else {
 				add(cryptographicSuiteCatalogue.SignatureCryptographicSuite(), context, "")
-				add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_SIGNING_CERT)
-				add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_CA_CERTIFICATE)
+				add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), context, enumerations.SubContextSigningCert)
+				add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), context, enumerations.SubContextCACertificate)
 			}
 
-		case enumerations.Context_COUNTER_SIGNATURE:
+		case enumerations.ContextCounterSignature:
 			if subContext != "" {
 				add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), context, subContext)
 			} else {
 				add(cryptographicSuiteCatalogue.CounterSignatureCryptographicSuite(), context, "")
-				add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_SIGNING_CERT)
-				add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_CA_CERTIFICATE)
+				add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), context, enumerations.SubContextSigningCert)
+				add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), context, enumerations.SubContextCACertificate)
 			}
 
-		case enumerations.Context_KEY_BINDING_SIGNATURE:
+		case enumerations.ContextKeyBindingSignature:
 			if subContext != "" {
 				add(cryptographicSuiteCatalogue.KeyBindingSignatureCertificatesCryptographicSuite(), context, subContext)
 			} else {
 				add(cryptographicSuiteCatalogue.KeyBindingSignatureCryptographicSuite(), context, "")
-				add(cryptographicSuiteCatalogue.KeyBindingSignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_SIGNING_CERT)
-				add(cryptographicSuiteCatalogue.KeyBindingSignatureCertificatesCryptographicSuite(), context, enumerations.SubContext_CA_CERTIFICATE)
+				add(cryptographicSuiteCatalogue.KeyBindingSignatureCertificatesCryptographicSuite(), context, enumerations.SubContextSigningCert)
+				add(cryptographicSuiteCatalogue.KeyBindingSignatureCertificatesCryptographicSuite(), context, enumerations.SubContextCACertificate)
 			}
 
-		case enumerations.Context_REVOCATION:
+		case enumerations.ContextRevocation:
 			if subContext != "" {
 				add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), context, subContext)
 			} else {
 				add(cryptographicSuiteCatalogue.RevocationCryptographicSuite(), context, "")
-				add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), context, enumerations.SubContext_SIGNING_CERT)
-				add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), context, enumerations.SubContext_CA_CERTIFICATE)
+				add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), context, enumerations.SubContextSigningCert)
+				add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), context, enumerations.SubContextCACertificate)
 			}
 
-		case enumerations.Context_TIMESTAMP:
+		case enumerations.ContextTimestamp:
 			if subContext != "" {
 				add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), context, subContext)
 			} else {
 				add(cryptographicSuiteCatalogue.TimestampCryptographicSuite(), context, "")
-				add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), context, enumerations.SubContext_SIGNING_CERT)
-				add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), context, enumerations.SubContext_CA_CERTIFICATE)
+				add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), context, enumerations.SubContextSigningCert)
+				add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), context, enumerations.SubContextCACertificate)
 			}
 
-		case enumerations.Context_EVIDENCE_RECORD:
+		case enumerations.ContextEvidenceRecord:
 			add(cryptographicSuiteCatalogue.EvidenceRecordCryptographicSuite(), context, subContext)
 
-		case enumerations.Context_EAA:
+		case enumerations.ContextEAA:
 			add(cryptographicSuiteCatalogue.EAACryptographicSuite(), context, subContext)
 
-		case enumerations.Context_EAA_REVOCATION:
+		case enumerations.ContextEAARevocation:
 			add(cryptographicSuiteCatalogue.EAARevocationCryptographicSuite(), context, subContext)
 
 		default:
@@ -451,21 +451,21 @@ func (l *ValidationPolicyLoader) WithCryptographicSuiteCatalogueForContextAndSub
 	} else {
 		// apply all constraints
 		add(cryptographicSuiteCatalogue.CryptographicSuite(), "", subContext)
-		add(cryptographicSuiteCatalogue.SignatureCryptographicSuite(), enumerations.Context_CERTIFICATE, subContext)
-		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.Context_CERTIFICATE, enumerations.SubContext_SIGNING_CERT)
-		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.Context_CERTIFICATE, enumerations.SubContext_CA_CERTIFICATE)
-		add(cryptographicSuiteCatalogue.SignatureCryptographicSuite(), enumerations.Context_SIGNATURE, subContext)
-		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.Context_SIGNATURE, enumerations.SubContext_SIGNING_CERT)
-		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.Context_SIGNATURE, enumerations.SubContext_CA_CERTIFICATE)
-		add(cryptographicSuiteCatalogue.CounterSignatureCryptographicSuite(), enumerations.Context_COUNTER_SIGNATURE, subContext)
-		add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), enumerations.Context_COUNTER_SIGNATURE, enumerations.SubContext_SIGNING_CERT)
-		add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), enumerations.Context_COUNTER_SIGNATURE, enumerations.SubContext_CA_CERTIFICATE)
-		add(cryptographicSuiteCatalogue.RevocationCryptographicSuite(), enumerations.Context_REVOCATION, subContext)
-		add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
-		add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), enumerations.Context_REVOCATION, enumerations.SubContext_CA_CERTIFICATE)
-		add(cryptographicSuiteCatalogue.TimestampCryptographicSuite(), enumerations.Context_TIMESTAMP, subContext)
-		add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), enumerations.Context_TIMESTAMP, enumerations.SubContext_SIGNING_CERT)
-		add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), enumerations.Context_TIMESTAMP, enumerations.SubContext_CA_CERTIFICATE)
+		add(cryptographicSuiteCatalogue.SignatureCryptographicSuite(), enumerations.ContextCertificate, subContext)
+		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.ContextCertificate, enumerations.SubContextSigningCert)
+		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.ContextCertificate, enumerations.SubContextCACertificate)
+		add(cryptographicSuiteCatalogue.SignatureCryptographicSuite(), enumerations.ContextSignature, subContext)
+		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.ContextSignature, enumerations.SubContextSigningCert)
+		add(cryptographicSuiteCatalogue.SignatureCertificatesCryptographicSuite(), enumerations.ContextSignature, enumerations.SubContextCACertificate)
+		add(cryptographicSuiteCatalogue.CounterSignatureCryptographicSuite(), enumerations.ContextCounterSignature, subContext)
+		add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), enumerations.ContextCounterSignature, enumerations.SubContextSigningCert)
+		add(cryptographicSuiteCatalogue.CounterSignatureCertificatesCryptographicSuite(), enumerations.ContextCounterSignature, enumerations.SubContextCACertificate)
+		add(cryptographicSuiteCatalogue.RevocationCryptographicSuite(), enumerations.ContextRevocation, subContext)
+		add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), enumerations.ContextRevocation, enumerations.SubContextSigningCert)
+		add(cryptographicSuiteCatalogue.RevocationCertificatesCryptographicSuite(), enumerations.ContextRevocation, enumerations.SubContextCACertificate)
+		add(cryptographicSuiteCatalogue.TimestampCryptographicSuite(), enumerations.ContextTimestamp, subContext)
+		add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), enumerations.ContextTimestamp, enumerations.SubContextSigningCert)
+		add(cryptographicSuiteCatalogue.TimestampCertificatesCryptographicSuite(), enumerations.ContextTimestamp, enumerations.SubContextCACertificate)
 	}
 
 	return newValidationPolicyLoaderWithCryptoSuite(l, cryptographicSuites)

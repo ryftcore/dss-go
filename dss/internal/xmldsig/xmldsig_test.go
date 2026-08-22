@@ -173,7 +173,7 @@ func TestDetachedResolverPrefersTheDocumentThatHashesRight(t *testing.T) {
 	// OTHER one. DetachedSignatureResolver's digest rule wins over its name rule.
 	right := model.NewInMemoryDocumentWithName([]byte("right"), "right.txt")
 	wrong := model.NewInMemoryDocumentWithName([]byte("wrong"), "wrong.txt")
-	digest, err := right.Digest(enumerations.DigestAlgorithm_SHA256)
+	digest, err := right.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("digest: %v", err)
 	}
@@ -188,7 +188,7 @@ func TestDetachedResolverPrefersTheDocumentThatHashesRight(t *testing.T) {
 
 	r := &xmldsig.DetachedSignatureResolver{
 		Documents:       []model.DSSDocument{wrong, right},
-		DigestAlgorithm: enumerations.DigestAlgorithm_SHA256,
+		DigestAlgorithm: enumerations.DigestAlgorithmSHA256,
 	}
 	ctx := &xmldsig.ResolverContext{Attr: uriAttrOf(t, doc, 0), URIToResolve: "wrong.txt"}
 	if !r.CanResolve(ctx) {

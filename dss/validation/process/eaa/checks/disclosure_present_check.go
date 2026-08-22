@@ -38,7 +38,7 @@ func (c *DisclosurePresentCheck) Process() bool {
 		return false
 	}
 	for _, d := range digestMatchers {
-		if d.Type != nil && enumerations.DigestMatcherType_EAA_DISCLOSURE == d.Type.DigestMatcherType() {
+		if d.Type != nil && enumerations.DigestMatcherTypeEAADisclosure == d.Type.DigestMatcherType() {
 			return true
 		}
 	}
@@ -59,11 +59,11 @@ func (c *DisclosurePresentCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *DisclosurePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *DisclosurePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

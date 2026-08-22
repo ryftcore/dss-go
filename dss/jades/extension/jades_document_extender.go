@@ -65,7 +65,7 @@ func (e *JAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 // dropped per PORTING.md.
 func (e *JAdESDocumentExtender) EmptySignatureParameters() *jades.JAdESSignatureParameters {
 	emptyParameters := jades.NewJAdESSignatureParameters()
-	emptyParameters.SetJwsSerializationType(enumerations.JWSSerializationType_JSON_SERIALIZATION)
+	emptyParameters.SetJwsSerializationType(enumerations.JWSSerializationTypeJSONSerialization)
 	return emptyParameters
 }
 
@@ -85,7 +85,7 @@ func (e *JAdESDocumentExtender) IsSupportedService(service any) bool {
 
 // SignatureForm ports the overridden getSignatureForm().
 func (e *JAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_JAdES
+	return enumerations.SignatureFormJAdES
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.

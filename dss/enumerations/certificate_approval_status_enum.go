@@ -11,64 +11,64 @@ package enumerations
 type CertificateApprovalStatusEnum string
 
 const (
-	// CertificateApprovalStatusEnum_PID_PROVIDER represents a PID provider
+	// CertificateApprovalStatusEnumPIDProvider represents a PID provider
 	// certificate, as defined in the ETSI TS 119 605, Annex C.1.
-	CertificateApprovalStatusEnum_PID_PROVIDER CertificateApprovalStatusEnum = "PID_PROVIDER"
-	// CertificateApprovalStatusEnum_CERT_FOR_PID_REVOCATION represents a
+	CertificateApprovalStatusEnumPIDProvider CertificateApprovalStatusEnum = "PID_PROVIDER"
+	// CertificateApprovalStatusEnumCertForPIDRevocation represents a
 	// certificate for PID revocation, according to the profile defined in
 	// ETSI TS 119 602, Annex C.1.
-	CertificateApprovalStatusEnum_CERT_FOR_PID_REVOCATION CertificateApprovalStatusEnum = "CERT_FOR_PID_REVOCATION"
-	// CertificateApprovalStatusEnum_CERT_FOR_WALLET_ISSUANCE represents a
+	CertificateApprovalStatusEnumCertForPIDRevocation CertificateApprovalStatusEnum = "CERT_FOR_PID_REVOCATION"
+	// CertificateApprovalStatusEnumCertForWalletIssuance represents a
 	// certificate for Wallet solution issuance, according to the profile
 	// defined in ETSI TS 119 602, Annex C.2.
-	CertificateApprovalStatusEnum_CERT_FOR_WALLET_ISSUANCE CertificateApprovalStatusEnum = "CERT_FOR_WALLET_ISSUANCE"
-	// CertificateApprovalStatusEnum_CERT_FOR_WALLET_REVOCATION represents a
+	CertificateApprovalStatusEnumCertForWalletIssuance CertificateApprovalStatusEnum = "CERT_FOR_WALLET_ISSUANCE"
+	// CertificateApprovalStatusEnumCertForWalletRevocation represents a
 	// certificate for Wallet solution revocation, according to the profile
 	// defined in ETSI TS 119 602, Annex C.2.
-	CertificateApprovalStatusEnum_CERT_FOR_WALLET_REVOCATION CertificateApprovalStatusEnum = "CERT_FOR_WALLET_REVOCATION"
-	// CertificateApprovalStatusEnum_CERT_FOR_WRPAC_ISSUANCE represents a
+	CertificateApprovalStatusEnumCertForWalletRevocation CertificateApprovalStatusEnum = "CERT_FOR_WALLET_REVOCATION"
+	// CertificateApprovalStatusEnumCertForWRPACIssuance represents a
 	// certificate for WRPAC issuance, according to the profile defined in
 	// ETSI TS 119 602, Annex F.
-	CertificateApprovalStatusEnum_CERT_FOR_WRPAC_ISSUANCE CertificateApprovalStatusEnum = "CERT_FOR_WRPAC_ISSUANCE"
-	// CertificateApprovalStatusEnum_CERT_FOR_WRPAC_REVOCATION represents a
+	CertificateApprovalStatusEnumCertForWRPACIssuance CertificateApprovalStatusEnum = "CERT_FOR_WRPAC_ISSUANCE"
+	// CertificateApprovalStatusEnumCertForWRPACRevocation represents a
 	// certificate for WRPAC revocation, according to the profile defined in
 	// ETSI TS 119 602, Annex F.
-	CertificateApprovalStatusEnum_CERT_FOR_WRPAC_REVOCATION CertificateApprovalStatusEnum = "CERT_FOR_WRPAC_REVOCATION"
-	// CertificateApprovalStatusEnum_CERT_FOR_WRPRC_ISSUANCE represents a
+	CertificateApprovalStatusEnumCertForWRPACRevocation CertificateApprovalStatusEnum = "CERT_FOR_WRPAC_REVOCATION"
+	// CertificateApprovalStatusEnumCertForWRPRCIssuance represents a
 	// certificate for WRPRC issuance, according to the profile defined in
 	// ETSI TS 119 602, Annex G.
-	CertificateApprovalStatusEnum_CERT_FOR_WRPRC_ISSUANCE CertificateApprovalStatusEnum = "CERT_FOR_WRPRC_ISSUANCE"
-	// CertificateApprovalStatusEnum_CERT_FOR_WRPRC_REVOCATION represents a
+	CertificateApprovalStatusEnumCertForWRPRCIssuance CertificateApprovalStatusEnum = "CERT_FOR_WRPRC_ISSUANCE"
+	// CertificateApprovalStatusEnumCertForWRPRCRevocation represents a
 	// certificate for WRPRC revocation, according to the profile defined in
 	// ETSI TS 119 602, Annex G.
-	CertificateApprovalStatusEnum_CERT_FOR_WRPRC_REVOCATION CertificateApprovalStatusEnum = "CERT_FOR_WRPRC_REVOCATION"
-	// CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE
+	CertificateApprovalStatusEnumCertForWRPRCRevocation CertificateApprovalStatusEnum = "CERT_FOR_WRPRC_REVOCATION"
+	// CertificateApprovalStatusEnumNotifiedCertForPubEAAIssuance
 	// represents a notified certificate for Pub-EAA issuance, according to
 	// the profile defined in ETSI TS 119 602, Annex H.
-	CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE CertificateApprovalStatusEnum = "NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE"
-	// CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION
+	CertificateApprovalStatusEnumNotifiedCertForPubEAAIssuance CertificateApprovalStatusEnum = "NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE"
+	// CertificateApprovalStatusEnumNotifiedCertForPubEAARevocation
 	// represents a notified certificate for Pub-EAA revocation, according to
 	// the profile defined in ETSI TS 119 602, Annex H.
-	CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION CertificateApprovalStatusEnum = "NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION"
-	// CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE
+	CertificateApprovalStatusEnumNotifiedCertForPubEAARevocation CertificateApprovalStatusEnum = "NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION"
+	// CertificateApprovalStatusEnumWithdrawnCertForPubEAAIssuance
 	// represents a withdrawn certificate for Pub-EAA issuance, according to
 	// the profile defined in ETSI TS 119 602, Annex H.
-	CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE CertificateApprovalStatusEnum = "WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE"
-	// CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION
+	CertificateApprovalStatusEnumWithdrawnCertForPubEAAIssuance CertificateApprovalStatusEnum = "WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE"
+	// CertificateApprovalStatusEnumWithdrawnCertForPubEAARevocation
 	// represents a withdrawn certificate for Pub-EAA revocation, according to
 	// the profile defined in ETSI TS 119 602, Annex H.
-	CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION CertificateApprovalStatusEnum = "WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION"
-	// CertificateApprovalStatusEnum_CERT_FOR_REGISTER represents a
+	CertificateApprovalStatusEnumWithdrawnCertForPubEAARevocation CertificateApprovalStatusEnum = "WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION"
+	// CertificateApprovalStatusEnumCertForRegister represents a
 	// certificate for Register, according to the profile defined in ETSI TS
 	// 119 602, Annex G.
-	CertificateApprovalStatusEnum_CERT_FOR_REGISTER CertificateApprovalStatusEnum = "CERT_FOR_REGISTER"
-	// CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN represents a
+	CertificateApprovalStatusEnumCertForRegister CertificateApprovalStatusEnum = "CERT_FOR_REGISTER"
+	// CertificateApprovalStatusEnumCertForUnknown represents a
 	// certificate of unknown type (e.g. an error or conflict on
 	// validation).
-	CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN CertificateApprovalStatusEnum = "CERT_FOR_UNKNOWN"
-	// CertificateApprovalStatusEnum_NA is not applicable (e.g. no LoTE
+	CertificateApprovalStatusEnumCertForUnknown CertificateApprovalStatusEnum = "CERT_FOR_UNKNOWN"
+	// CertificateApprovalStatusEnumNA is not applicable (e.g. no LoTE
 	// trust anchor reached).
-	CertificateApprovalStatusEnum_NA CertificateApprovalStatusEnum = "NA"
+	CertificateApprovalStatusEnumNA CertificateApprovalStatusEnum = "NA"
 )
 
 // certificateApprovalStatusEnumFields holds all per-constant attributes,
@@ -83,53 +83,53 @@ type certificateApprovalStatusEnumFields struct {
 // certificateApprovalStatusEnumData holds the full field tuple for each
 // constant, copied verbatim from the Java enum constructors.
 var certificateApprovalStatusEnumData = map[CertificateApprovalStatusEnum]certificateApprovalStatusEnumFields{
-	CertificateApprovalStatusEnum_PID_PROVIDER: {
-		"PID Provider", LoTETypeEnum_EUPIDProvidersList, LoTEServiceTypeIdentifierEnum_PID_ISSUANCE, nil,
+	CertificateApprovalStatusEnumPIDProvider: {
+		"PID Provider", LoTETypeEnumEUPIDProvidersList, LoTEServiceTypeIdentifierEnumPIDIssuance, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_PID_REVOCATION: {
-		"Certificate for PID Revocation", LoTETypeEnum_EUPIDProvidersList, LoTEServiceTypeIdentifierEnum_PID_REVOCATION, nil,
+	CertificateApprovalStatusEnumCertForPIDRevocation: {
+		"Certificate for PID Revocation", LoTETypeEnumEUPIDProvidersList, LoTEServiceTypeIdentifierEnumPIDRevocation, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WALLET_ISSUANCE: {
-		"Certificate for Wallet Solution Issuance", LoTETypeEnum_EUWalletProvidersList, LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE, nil,
+	CertificateApprovalStatusEnumCertForWalletIssuance: {
+		"Certificate for Wallet Solution Issuance", LoTETypeEnumEUWalletProvidersList, LoTEServiceTypeIdentifierEnumWalletIssuance, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WALLET_REVOCATION: {
-		"Certificate for Wallet Solution Revocation", LoTETypeEnum_EUWalletProvidersList, LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION, nil,
+	CertificateApprovalStatusEnumCertForWalletRevocation: {
+		"Certificate for Wallet Solution Revocation", LoTETypeEnumEUWalletProvidersList, LoTEServiceTypeIdentifierEnumWalletRevocation, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WRPAC_ISSUANCE: {
-		"Certificate for WRPAC Issuance", LoTETypeEnum_EUWRPACProvidersList, LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE, nil,
+	CertificateApprovalStatusEnumCertForWRPACIssuance: {
+		"Certificate for WRPAC Issuance", LoTETypeEnumEUWRPACProvidersList, LoTEServiceTypeIdentifierEnumWRPACIssuance, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WRPAC_REVOCATION: {
-		"Certificate for WRPAC Revocation", LoTETypeEnum_EUWRPACProvidersList, LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION, nil,
+	CertificateApprovalStatusEnumCertForWRPACRevocation: {
+		"Certificate for WRPAC Revocation", LoTETypeEnumEUWRPACProvidersList, LoTEServiceTypeIdentifierEnumWRPACRevocation, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WRPRC_ISSUANCE: {
-		"Certificate for WRPRC Issuance", LoTETypeEnum_EUWRPRCProvidersList, LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE, nil,
+	CertificateApprovalStatusEnumCertForWRPRCIssuance: {
+		"Certificate for WRPRC Issuance", LoTETypeEnumEUWRPRCProvidersList, LoTEServiceTypeIdentifierEnumWRPRCIssuance, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_WRPRC_REVOCATION: {
-		"Certificate for WRPRC Revocation", LoTETypeEnum_EUWRPRCProvidersList, LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION, nil,
+	CertificateApprovalStatusEnumCertForWRPRCRevocation: {
+		"Certificate for WRPRC Revocation", LoTETypeEnumEUWRPRCProvidersList, LoTEServiceTypeIdentifierEnumWRPRCRevocation, nil,
 	},
-	CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE: {
-		"Notified Certificate for Pub-EAA Issuance", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED,
+	CertificateApprovalStatusEnumNotifiedCertForPubEAAIssuance: {
+		"Notified Certificate for Pub-EAA Issuance", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAAIssuance, LoTEServiceStatusEnumPubEAAProviderNotified,
 	},
-	CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION: {
-		"Notified Certificate for Pub-EAA Revocation", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED,
+	CertificateApprovalStatusEnumNotifiedCertForPubEAARevocation: {
+		"Notified Certificate for Pub-EAA Revocation", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAARevocation, LoTEServiceStatusEnumPubEAAProviderNotified,
 	},
-	CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE: {
+	CertificateApprovalStatusEnumWithdrawnCertForPubEAAIssuance: {
 		// NOTE: the Java source reuses the "Notified Certificate for Pub-EAA
 		// Issuance" label verbatim for this WITHDRAWN constant; preserved
 		// as-is (likely an upstream copy/paste bug, not corrected here).
-		"Notified Certificate for Pub-EAA Issuance", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_WITHDRAWN,
+		"Notified Certificate for Pub-EAA Issuance", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAAIssuance, LoTEServiceStatusEnumPubEAAProviderWithdrawn,
 	},
-	CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION: {
+	CertificateApprovalStatusEnumWithdrawnCertForPubEAARevocation: {
 		// NOTE: same upstream label reuse as above, preserved verbatim.
-		"Notified Certificate for Pub-EAA Revocation", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_WITHDRAWN,
+		"Notified Certificate for Pub-EAA Revocation", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAARevocation, LoTEServiceStatusEnumPubEAAProviderWithdrawn,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_REGISTER: {
-		"Certificate for Register", LoTETypeEnum_EURegistrarsAndRegistersList, LoTEServiceTypeIdentifierEnum_REGISTER, nil,
+	CertificateApprovalStatusEnumCertForRegister: {
+		"Certificate for Register", LoTETypeEnumEURegistrarsAndRegistersList, LoTEServiceTypeIdentifierEnumRegister, nil,
 	},
-	CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN: {
+	CertificateApprovalStatusEnumCertForUnknown: {
 		"Certificate for Unknown usage", nil, nil, nil,
 	},
-	CertificateApprovalStatusEnum_NA: {
+	CertificateApprovalStatusEnumNA: {
 		"Not applicable", nil, nil, nil,
 	},
 }
@@ -137,21 +137,21 @@ var certificateApprovalStatusEnumData = map[CertificateApprovalStatusEnum]certif
 // CertificateApprovalStatusEnumValues returns all constants in declaration order.
 func CertificateApprovalStatusEnumValues() []CertificateApprovalStatusEnum {
 	return []CertificateApprovalStatusEnum{
-		CertificateApprovalStatusEnum_PID_PROVIDER,
-		CertificateApprovalStatusEnum_CERT_FOR_PID_REVOCATION,
-		CertificateApprovalStatusEnum_CERT_FOR_WALLET_ISSUANCE,
-		CertificateApprovalStatusEnum_CERT_FOR_WALLET_REVOCATION,
-		CertificateApprovalStatusEnum_CERT_FOR_WRPAC_ISSUANCE,
-		CertificateApprovalStatusEnum_CERT_FOR_WRPAC_REVOCATION,
-		CertificateApprovalStatusEnum_CERT_FOR_WRPRC_ISSUANCE,
-		CertificateApprovalStatusEnum_CERT_FOR_WRPRC_REVOCATION,
-		CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE,
-		CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION,
-		CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE,
-		CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION,
-		CertificateApprovalStatusEnum_CERT_FOR_REGISTER,
-		CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN,
-		CertificateApprovalStatusEnum_NA,
+		CertificateApprovalStatusEnumPIDProvider,
+		CertificateApprovalStatusEnumCertForPIDRevocation,
+		CertificateApprovalStatusEnumCertForWalletIssuance,
+		CertificateApprovalStatusEnumCertForWalletRevocation,
+		CertificateApprovalStatusEnumCertForWRPACIssuance,
+		CertificateApprovalStatusEnumCertForWRPACRevocation,
+		CertificateApprovalStatusEnumCertForWRPRCIssuance,
+		CertificateApprovalStatusEnumCertForWRPRCRevocation,
+		CertificateApprovalStatusEnumNotifiedCertForPubEAAIssuance,
+		CertificateApprovalStatusEnumNotifiedCertForPubEAARevocation,
+		CertificateApprovalStatusEnumWithdrawnCertForPubEAAIssuance,
+		CertificateApprovalStatusEnumWithdrawnCertForPubEAARevocation,
+		CertificateApprovalStatusEnumCertForRegister,
+		CertificateApprovalStatusEnumCertForUnknown,
+		CertificateApprovalStatusEnumNA,
 	}
 }
 

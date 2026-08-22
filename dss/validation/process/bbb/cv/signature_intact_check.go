@@ -50,11 +50,11 @@ func (c *SignatureIntactCheck[T]) Process() bool {
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureIntactCheck[T]) MessageTag() i18n.MessageTag {
 	switch c.context {
-	case enumerations.Context_CERTIFICATE:
+	case enumerations.ContextCertificate:
 		return i18n.MessageTag_BBB_CV_ISIC
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		return i18n.MessageTag_BBB_CV_ISIR
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		return i18n.MessageTag_BBB_CV_ISIT
 	default:
 		return i18n.MessageTag_BBB_CV_ISI
@@ -70,11 +70,11 @@ func (c *SignatureIntactCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SignatureIntactCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SignatureIntactCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CRYPTO_FAILURE
+	return enumerations.SubIndicationSigCryptoFailure
 }

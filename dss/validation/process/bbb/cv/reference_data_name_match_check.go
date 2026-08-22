@@ -41,7 +41,7 @@ func (c *ReferenceDataNameMatchCheck[T]) Process() bool {
 // NullPointerException on a typeless digest matcher; the Go zero value simply
 // takes the non-MANIFEST_ENTRY branch.
 func (c *ReferenceDataNameMatchCheck[T]) MessageTag() i18n.MessageTag {
-	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherType_MANIFEST_ENTRY {
+	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
 		return i18n.MessageTag_BBB_CV_DMENMND
 	}
 	return i18n.MessageTag_BBB_CV_DRNMND
@@ -50,7 +50,7 @@ func (c *ReferenceDataNameMatchCheck[T]) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ReferenceDataNameMatchCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherType_MANIFEST_ENTRY {
+	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
 		return i18n.MessageTag_BBB_CV_DMENMND_ANS
 	}
 	return i18n.MessageTag_BBB_CV_DRNMND_ANS
@@ -59,13 +59,13 @@ func (c *ReferenceDataNameMatchCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ReferenceDataNameMatchCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ReferenceDataNameMatchCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden

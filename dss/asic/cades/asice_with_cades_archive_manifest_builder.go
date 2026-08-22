@@ -53,7 +53,7 @@ func (b *ASiCEWithCAdESArchiveManifestBuilder) IsRootfile(document model.DSSDocu
 
 // SigReferenceMimeType ports the @Override protected getSigReferenceMimeType().
 func (b *ASiCEWithCAdESArchiveManifestBuilder) SigReferenceMimeType() enumerations.MimeType {
-	return enumerations.MimeTypeEnum_TST
+	return enumerations.MimeTypeEnumTST
 }
 
 // InitDefaultAsicContentDocumentFilter ports the @Override protected

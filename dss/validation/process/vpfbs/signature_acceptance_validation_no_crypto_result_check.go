@@ -44,6 +44,6 @@ func (c *SignatureAcceptanceValidationNoCryptoResultCheck[T]) isCryptoFailure(xm
 	if xmlSAV.Conclusion.SubIndication != nil {
 		subIndication = xmlSAV.Conclusion.SubIndication.SubIndication()
 	}
-	return enumerations.Indication_INDETERMINATE == xmlSAV.Conclusion.Indication.Indication() &&
-		enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndication
+	return enumerations.IndicationIndeterminate == xmlSAV.Conclusion.Indication.Indication() &&
+		enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndication
 }

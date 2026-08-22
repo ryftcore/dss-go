@@ -21,7 +21,7 @@ func (r *fakeDownloadResult) Sha2ErrorMessages() []string    { return r.sha2Erro
 func newFakeDownloadResult(content string, sha2ErrorMessages []string) *fakeDownloadResult {
 	return &fakeDownloadResult{
 		doc:               model.NewInMemoryDocument([]byte(content)),
-		digest:            model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte(content)),
+		digest:            model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte(content)),
 		sha2ErrorMessages: sha2ErrorMessages,
 	}
 }

@@ -35,31 +35,31 @@ func (t *typeByTL) Type() enumerations.CertificateType {
 	if enumerations.CertificateQualifiedStatusIsQC(t.qualified) {
 
 		if t.trustService == nil {
-			return enumerations.CertificateType_UNKNOWN
+			return enumerations.CertificateTypeUnknown
 		}
 
 		if IsPreEIDAS(t.trustService.StartDate) {
-			return enumerations.CertificateType_ESIGN
+			return enumerations.CertificateTypeESign
 		}
 
 		usageQualifiers := enumerations.ServiceQualificationGetUsageQualifiers(t.trustService.CapturedQualifierUris())
 
 		if utils.CollectionSize(usageQualifiers) > 1 {
-			return enumerations.CertificateType_UNKNOWN
+			return enumerations.CertificateTypeUnknown
 
 		} else if utils.IsCollectionNotEmpty(usageQualifiers) {
 			// If overrules
 
 			if enumerations.ServiceQualificationIsQcForEsig(usageQualifiers) {
-				return enumerations.CertificateType_ESIGN
+				return enumerations.CertificateTypeESign
 			}
 
 			if enumerations.ServiceQualificationIsQcForEseal(usageQualifiers) {
-				return enumerations.CertificateType_ESEAL
+				return enumerations.CertificateTypeESeal
 			}
 
 			if enumerations.ServiceQualificationIsQcForWSA(usageQualifiers) {
-				return enumerations.CertificateType_WSA
+				return enumerations.CertificateTypeWSA
 			}
 		}
 	}

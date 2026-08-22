@@ -8,8 +8,8 @@ func TestCertificateQualifiedStatus(t *testing.T) {
 		label string
 		isQC  bool
 	}{
-		{CertificateQualifiedStatus_QC, "Qualified", true},
-		{CertificateQualifiedStatus_NOT_QC, "Not qualified", false},
+		{CertificateQualifiedStatusQC, "Qualified", true},
+		{CertificateQualifiedStatusNotQC, "Not qualified", false},
 	}
 	if len(CertificateQualifiedStatusValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(CertificateQualifiedStatusValues()))

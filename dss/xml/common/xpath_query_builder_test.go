@@ -11,13 +11,13 @@ func TestAbstractPath_KAT(t *testing.T) {
 		got  XPathQuery
 		want string
 	}{
-		{"all(SIGNATURE)", All(XMLDSigElement_SIGNATURE), "//ds:Signature"},
-		{"all(SIGNATURE,OBJECT)", All(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT), "//ds:Signature/ds:Object"},
-		{"fromCurrentPosition(SIGNATURE)", FromCurrentPosition(XMLDSigElement_SIGNATURE), "./ds:Signature"},
-		{"fromCurrentPosition(SIGNATURE,OBJECT)", FromCurrentPosition(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT), "./ds:Signature/ds:Object"},
-		{"allFromCurrentPosition(SIGNATURE)", AllFromCurrentPosition(XMLDSigElement_SIGNATURE), ".//ds:Signature"},
-		{"allNotParent(SIGNATURE,OBJECT)", AllNotParent(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT), "//ds:Signature[not(parent::ds:Object)]"},
-		{"fromCurrentPosition(SIGNATURE,ID)", FromCurrentPositionAttribute(XMLDSigElement_SIGNATURE, XMLDSigAttribute_ID), "./ds:Signature/@Id"},
+		{"all(SIGNATURE)", All(XMLDSigElementSignature), "//ds:Signature"},
+		{"all(SIGNATURE,OBJECT)", All(XMLDSigElementSignature, XMLDSigElementObject), "//ds:Signature/ds:Object"},
+		{"fromCurrentPosition(SIGNATURE)", FromCurrentPosition(XMLDSigElementSignature), "./ds:Signature"},
+		{"fromCurrentPosition(SIGNATURE,OBJECT)", FromCurrentPosition(XMLDSigElementSignature, XMLDSigElementObject), "./ds:Signature/ds:Object"},
+		{"allFromCurrentPosition(SIGNATURE)", AllFromCurrentPosition(XMLDSigElementSignature), ".//ds:Signature"},
+		{"allNotParent(SIGNATURE,OBJECT)", AllNotParent(XMLDSigElementSignature, XMLDSigElementObject), "//ds:Signature[not(parent::ds:Object)]"},
+		{"fromCurrentPosition(SIGNATURE,ID)", FromCurrentPositionAttribute(XMLDSigElementSignature, XMLDSigAttributeID), "./ds:Signature/@Id"},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
@@ -31,8 +31,8 @@ func TestAbstractPath_KAT(t *testing.T) {
 func TestXPathQueryBuilder_KAT(t *testing.T) {
 	t.Run("attribute with value", func(t *testing.T) {
 		q := XPathQueryBuilderFromCurrentPosition().
-			Element(XMLDSigElement_REFERENCE).
-			AttributeWithValue(XMLDSigAttribute_TYPE, XMLDSigPath_OBJECT_TYPE).
+			Element(XMLDSigElementReference).
+			AttributeWithValue(XMLDSigAttributeType, XMLDSigPathObjectType).
 			Build()
 		want := "./ds:Reference[@*[local-name()='Type']='http://www.w3.org/2000/09/xmldsig#Object']"
 		if got := q.QueryString(); got != want {
@@ -42,7 +42,7 @@ func TestXPathQueryBuilder_KAT(t *testing.T) {
 
 	t.Run("idValue", func(t *testing.T) {
 		q := XPathQueryBuilderAll().
-			Element(XMLDSigElement_SIGNATURE).
+			Element(XMLDSigElementSignature).
 			IdValue("abc123").
 			Build()
 		want := "//ds:Signature[@*[local-name()='Id']='abc123' or @*[local-name()='id']='abc123' or @*[local-name()='ID']='abc123']"
@@ -67,8 +67,8 @@ func TestXPathQueryBuilder_KAT(t *testing.T) {
 
 	t.Run("attribute without value is an independent node", func(t *testing.T) {
 		q := XPathQueryBuilderFromCurrentPosition().
-			Element(XMLDSigElement_SIGNATURE).
-			Attribute(XMLDSigAttribute_ID).
+			Element(XMLDSigElementSignature).
+			Attribute(XMLDSigAttributeID).
 			Build()
 		if got := q.QueryString(); got != "./ds:Signature/@Id" {
 			t.Errorf("got %q, want %q", got, "./ds:Signature/@Id")
@@ -77,9 +77,9 @@ func TestXPathQueryBuilder_KAT(t *testing.T) {
 
 	t.Run("elements + notChildOf + attribute with value", func(t *testing.T) {
 		q := XPathQueryBuilderAll().
-			Elements(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT).
-			NotChildOf(XMLDSigElement_MANIFEST).
-			AttributeWithValue(XMLDSigAttribute_ID, "xyz").
+			Elements(XMLDSigElementSignature, XMLDSigElementObject).
+			NotChildOf(XMLDSigElementManifest).
+			AttributeWithValue(XMLDSigAttributeID, "xyz").
 			Build()
 		want := "//ds:Signature/ds:Object[not(parent::ds:Manifest)][@*[local-name()='Id']='xyz']"
 		if got := q.QueryString(); got != want {
@@ -96,8 +96,8 @@ func TestXPathQueryBuilder_KAT(t *testing.T) {
 
 	t.Run("flags", func(t *testing.T) {
 		q := XPathQueryBuilderFromCurrentPosition().
-			Element(XMLDSigElement_REFERENCE).
-			AttributeWithValue(XMLDSigAttribute_TYPE, XMLDSigPath_OBJECT_TYPE).
+			Element(XMLDSigElementReference).
+			AttributeWithValue(XMLDSigAttributeType, XMLDSigPathObjectType).
 			Build()
 		if q.IsAll() {
 			t.Errorf("IsAll() = true, want false")

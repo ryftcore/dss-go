@@ -63,9 +63,9 @@ func TestJAdESHeaderParameterNames_Values(t *testing.T) {
 
 func TestJAdESSigningTimeType_Values(t *testing.T) {
 	cases := map[JAdESSigningTimeType]string{
-		JAdESSigningTimeType_IAT:   "IAT",
-		JAdESSigningTimeType_SIG_T: "SIG_T",
-		JAdESSigningTimeType_NONE:  "NONE",
+		JAdESSigningTimeTypeIAT:  "IAT",
+		JAdESSigningTimeTypeSigT: "SIG_T",
+		JAdESSigningTimeTypeNone: "NONE",
 	}
 	for constant, want := range cases {
 		if string(constant) != want {
@@ -86,12 +86,12 @@ func TestJAdESTimestampParameters_Defaults(t *testing.T) {
 	// Java's TimestampParameters field initializer is `DigestAlgorithm digestAlgorithm =
 	// DigestAlgorithm.SHA512;` (dss-model TimestampParameters.java), not null - the frozen
 	// model.NewTimestampParameters() this delegates to already reproduces that default.
-	if p.DigestAlgorithm() != enumerations.DigestAlgorithm_SHA512 {
+	if p.DigestAlgorithm() != enumerations.DigestAlgorithmSHA512 {
 		t.Errorf("DigestAlgorithm() = %q, want SHA512", p.DigestAlgorithm())
 	}
 
-	p2 := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
-	if p2.DigestAlgorithm() != enumerations.DigestAlgorithm_SHA256 {
+	p2 := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	if p2.DigestAlgorithm() != enumerations.DigestAlgorithmSHA256 {
 		t.Errorf("DigestAlgorithm() = %v, want SHA256", p2.DigestAlgorithm())
 	}
 }
@@ -106,12 +106,12 @@ func TestJAdESTimestampParameters_SetCanonicalizationMethodPanics(t *testing.T) 
 }
 
 func TestJAdESTimestampParameters_Equals(t *testing.T) {
-	a := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
-	b := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	a := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	b := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	if !a.Equals(b) {
 		t.Error("expected equal JAdESTimestampParameters")
 	}
-	c := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithm_SHA512)
+	c := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
 	if a.Equals(c) {
 		t.Error("expected unequal JAdESTimestampParameters for different digest algorithms")
 	}
@@ -131,13 +131,13 @@ func TestJAdESSignatureParameters_Defaults(t *testing.T) {
 	if !p.IsBase64UrlEncodedPayload() {
 		t.Error("IsBase64UrlEncodedPayload() default should be true")
 	}
-	if p.SigningCertificateDigestMethod() != enumerations.DigestAlgorithm_SHA512 {
+	if p.SigningCertificateDigestMethod() != enumerations.DigestAlgorithmSHA512 {
 		t.Errorf("SigningCertificateDigestMethod() = %v, want SHA512", p.SigningCertificateDigestMethod())
 	}
-	if p.JwsSerializationType() != enumerations.JWSSerializationType_COMPACT_SERIALIZATION {
+	if p.JwsSerializationType() != enumerations.JWSSerializationTypeCompactSerialization {
 		t.Errorf("JwsSerializationType() = %v, want COMPACT_SERIALIZATION", p.JwsSerializationType())
 	}
-	if p.JadesSigningTimeType() != JAdESSigningTimeType_IAT {
+	if p.JadesSigningTimeType() != JAdESSigningTimeTypeIAT {
 		t.Errorf("JadesSigningTimeType() = %v, want IAT", p.JadesSigningTimeType())
 	}
 	if p.IsBase64UrlEncodedEtsiUComponents() != nil {
@@ -150,8 +150,8 @@ func TestJAdESSignatureParameters_Defaults(t *testing.T) {
 
 func TestJAdESSignatureParameters_SetSignatureLevelRestrictsToJAdES(t *testing.T) {
 	p := NewJAdESSignatureParameters()
-	p.SetSignatureLevel(enumerations.SignatureLevel_JAdES_BASELINE_B)
-	if p.SignatureLevel() != enumerations.SignatureLevel_JAdES_BASELINE_B {
+	p.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
+	if p.SignatureLevel() != enumerations.SignatureLevelJAdESBaselineB {
 		t.Errorf("SignatureLevel() = %v, want JAdES_BASELINE_B", p.SignatureLevel())
 	}
 
@@ -160,7 +160,7 @@ func TestJAdESSignatureParameters_SetSignatureLevelRestrictsToJAdES(t *testing.T
 			t.Fatal("SetSignatureLevel should panic for a non-JAdES level")
 		}
 	}()
-	p.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
+	p.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
 }
 
 func TestJAdESSignatureParameters_LazyTimestampParameters(t *testing.T) {
@@ -223,10 +223,10 @@ func TestHTTPHeader_UnsupportedOperationsPanic(t *testing.T) {
 		"SetName":     func() { h.SetName("x") },
 		"OpenStream":  func() { h.OpenStream() }, //nolint:errcheck
 		"WriteTo":     func() { h.WriteTo(nil) }, //nolint:errcheck
-		"SetMimeType": func() { h.SetMimeType(enumerations.MimeTypeEnum_BINARY) },
-		"Save":        func() { h.Save("/tmp/x") },                                   //nolint:errcheck
-		"Digest":      func() { h.Digest(enumerations.DigestAlgorithm_SHA256) },      //nolint:errcheck
-		"DigestValue": func() { h.DigestValue(enumerations.DigestAlgorithm_SHA256) }, //nolint:errcheck
+		"SetMimeType": func() { h.SetMimeType(enumerations.MimeTypeEnumBinary) },
+		"Save":        func() { h.Save("/tmp/x") },                                  //nolint:errcheck
+		"Digest":      func() { h.Digest(enumerations.DigestAlgorithmSHA256) },      //nolint:errcheck
+		"DigestValue": func() { h.DigestValue(enumerations.DigestAlgorithmSHA256) }, //nolint:errcheck
 	}
 	for name, fn := range panics {
 		func() {
@@ -242,16 +242,16 @@ func TestHTTPHeader_UnsupportedOperationsPanic(t *testing.T) {
 
 func TestHTTPHeaderDigest(t *testing.T) {
 	body := model.NewInMemoryDocument([]byte("hello world"))
-	hd := NewHTTPHeaderDigest(body, enumerations.DigestAlgorithm_SHA256)
+	hd := NewHTTPHeaderDigest(body, enumerations.DigestAlgorithmSHA256)
 
 	if hd.Name() != DSSJsonUtilsHTTPHeaderDigest {
 		t.Errorf("Name() = %q, want %q", hd.Name(), DSSJsonUtilsHTTPHeaderDigest)
 	}
-	digestValue, err := body.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	digestValue, err := body.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}
-	want := enumerations.DigestAlgorithm_SHA256.HttpHeaderAlgo() + "=" + utils.ToBase64(digestValue)
+	want := enumerations.DigestAlgorithmSHA256.HttpHeaderAlgo() + "=" + utils.ToBase64(digestValue)
 	if hd.Value() != want {
 		t.Errorf("Value() = %q, want %q", hd.Value(), want)
 	}
@@ -272,7 +272,7 @@ func TestHTTPHeaderDigest_UnsupportedDigestAlgorithmPanics(t *testing.T) {
 		}
 	}()
 	body := model.NewInMemoryDocument([]byte("hello world"))
-	NewHTTPHeaderDigest(body, enumerations.DigestAlgorithm_SHA384)
+	NewHTTPHeaderDigest(body, enumerations.DigestAlgorithmSHA384)
 }
 
 func TestHTTPHeaderSignatureScope(t *testing.T) {
@@ -282,7 +282,7 @@ func TestHTTPHeaderSignatureScope(t *testing.T) {
 	if scope.DocumentName() != "my-doc" {
 		t.Errorf("DocumentName() = %q, want my-doc", scope.DocumentName())
 	}
-	if scope.Type() != enumerations.SignatureScopeType_FULL {
+	if scope.Type() != enumerations.SignatureScopeTypeFull {
 		t.Errorf("Type() = %v, want FULL", scope.Type())
 	}
 	if scope.Description(nil) != "Payload value digest" {
@@ -302,7 +302,7 @@ func TestHTTPHeaderMessageBodySignatureScope(t *testing.T) {
 	if scope.Description(nil) != "Message body value digest" {
 		t.Errorf("Description() = %q, want %q", scope.Description(nil), "Message body value digest")
 	}
-	if scope.Type() != enumerations.SignatureScopeType_FULL {
+	if scope.Type() != enumerations.SignatureScopeTypeFull {
 		t.Errorf("Type() = %v, want FULL (inherited from HTTPHeaderSignatureScope)", scope.Type())
 	}
 }

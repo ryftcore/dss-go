@@ -326,7 +326,7 @@ func (s *JAdESTimestampSource) signatureTimestampReferences() []*validation.Time
 	var references []*validation.TimestampedReference
 	jadesTSAddReferences(&references, s.encapsulatedReferencesFromTimestamps(s.ContentTimestamps()))
 	jadesTSAddReferences(&references, s.SignerDataReferences())
-	jadesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectType_SIGNATURE))
+	jadesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectTypeSignature))
 	jadesTSAddReferences(&references, s.signingCertificateTimestampReferences())
 	jadesTSAddReferences(&references, s.GetKeyInfoReferences())
 	return references
@@ -694,10 +694,10 @@ func (s *JAdESTimestampSource) MakeTimestampToken(signatureAttribute *EtsiUCompo
 // IncorporateArchiveTimestampReferences -> archiveTimestampReferences -> signatureTimestampReferences.
 func (s *JAdESTimestampSource) MakeTimestampTokens(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
-	if enumerations.TimestampType_ARCHIVE_TIMESTAMP == timestampType {
+	if enumerations.TimestampTypeArchiveTimestamp == timestampType {
 		return s.extractArchiveTimestampTokens(signatureAttribute, references)
 	}
-	if enumerations.TimestampType_SIGNATURE_TIMESTAMP == timestampType {
+	if enumerations.TimestampTypeSignatureTimestamp == timestampType {
 		// Copy first: the base owns the slice it passed in and reuses it across attributes.
 		augmented := make([]*validation.TimestampedReference, len(references))
 		copy(augmented, references)
@@ -739,7 +739,7 @@ func (s *JAdESTimestampSource) toTimestampToken(tstToken any, signatureAttribute
 		return nil
 	}
 	encoding := DSSJsonUtilsGetAsString(tstTokenMap, JAdESHeaderParameterNamesEncoding)
-	if encoding != "" && encoding != enumerations.PKIEncoding_DER.URI() {
+	if encoding != "" && encoding != enumerations.PKIEncodingDER.URI() {
 		// Upstream logs "Unsupported encoding {}".
 		return nil
 	}
@@ -769,13 +769,13 @@ func (s *JAdESTimestampSource) toTimestampToken(tstToken any, signatureAttribute
 func (s *JAdESTimestampSource) extractArchiveTimestampTokens(signatureAttribute *EtsiUComponent,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
 	arcTst := DSSJsonUtilsToMap(signatureAttribute.Value(), JAdESHeaderParameterNamesArcTst)
-	return s.extractTimestampTokens(signatureAttribute, arcTst, enumerations.TimestampType_ARCHIVE_TIMESTAMP, references)
+	return s.extractTimestampTokens(signatureAttribute, arcTst, enumerations.TimestampTypeArchiveTimestamp, references)
 }
 
 // GetArchiveTimestampType implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getArchiveTimestampType(JAdESAttribute).
 func (s *JAdESTimestampSource) GetArchiveTimestampType(unsignedAttribute *EtsiUComponent) enumerations.ArchiveTimestampType {
-	return enumerations.ArchiveTimestampType_JAdES
+	return enumerations.ArchiveTimestampTypeJAdES
 }
 
 // MakeEvidenceRecords implements timestamp.SignatureTimestampSourceOverrides.

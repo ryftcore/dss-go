@@ -357,13 +357,13 @@ func isSupported(encryptionAlgorithm enumerations.EncryptionAlgorithm, parameter
 	// first come, first served logic
 	switch parameterName {
 	case modulesLengthParameter:
-		if enumerations.EncryptionAlgorithm_RSA.IsEquivalent(encryptionAlgorithm) {
+		if enumerations.EncryptionAlgorithmRSA.IsEquivalent(encryptionAlgorithm) {
 			return true
 		}
 	case pLengthParameter:
-		if enumerations.EncryptionAlgorithm_DSA.IsEquivalent(encryptionAlgorithm) ||
-			enumerations.EncryptionAlgorithm_ECDSA.IsEquivalent(encryptionAlgorithm) ||
-			enumerations.EncryptionAlgorithm_EDDSA.IsEquivalent(encryptionAlgorithm) {
+		if enumerations.EncryptionAlgorithmDSA.IsEquivalent(encryptionAlgorithm) ||
+			enumerations.EncryptionAlgorithmECDSA.IsEquivalent(encryptionAlgorithm) ||
+			enumerations.EncryptionAlgorithmEDDSA.IsEquivalent(encryptionAlgorithm) {
 			return true
 		}
 	case qLengthParameter:

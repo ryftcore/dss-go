@@ -38,7 +38,7 @@ func NewContentTimestampBasicValidationCheck(i18nProvider *i18n.I18nProvider, re
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *ContentTimestampBasicValidationCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_TST_BBB
+	return jaxb.XmlBlockTypeTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -60,13 +60,13 @@ func (c *ContentTimestampBasicValidationCheck) ErrorMessageTag() i18n.MessageTag
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ContentTimestampBasicValidationCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ContentTimestampBasicValidationCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden

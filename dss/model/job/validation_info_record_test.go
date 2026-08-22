@@ -39,17 +39,17 @@ var _ ValidationInfoRecord = (*fakeValidationInfoRecord)(nil)
 func TestValidationInfoRecord_RoundTrip(t *testing.T) {
 	now := time.Now()
 	rec := &fakeValidationInfoRecord{
-		indication:    enumerations.Indication_TOTAL_PASSED,
-		subIndication: enumerations.SubIndication_FORMAT_FAILURE,
+		indication:    enumerations.IndicationTotalPassed,
+		subIndication: enumerations.SubIndicationFormatFailure,
 		signingTime:   now,
 		valid:         true,
 	}
 
 	var vir ValidationInfoRecord = rec
-	if vir.Indication() != enumerations.Indication_TOTAL_PASSED {
+	if vir.Indication() != enumerations.IndicationTotalPassed {
 		t.Fatalf("Indication() = %v", vir.Indication())
 	}
-	if vir.SubIndication() != enumerations.SubIndication_FORMAT_FAILURE {
+	if vir.SubIndication() != enumerations.SubIndicationFormatFailure {
 		t.Fatalf("SubIndication() = %v", vir.SubIndication())
 	}
 	if !vir.SigningTime().Equal(now) {

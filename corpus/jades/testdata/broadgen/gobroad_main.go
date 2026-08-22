@@ -169,7 +169,7 @@ func dumpSignature(json *strings.Builder, sig *jades.JAdESSignature, cv validati
 	json.WriteString("        {\n")
 	fmt.Fprintf(json, "          \"signingCertificateFound\": %v,\n", certificateToken != nil)
 	if certificateToken != nil {
-		d, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, certificateToken.Encoded())
+		d, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, certificateToken.Encoded())
 		if err != nil {
 			panic(err)
 		}

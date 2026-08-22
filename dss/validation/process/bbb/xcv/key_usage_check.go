@@ -70,7 +70,7 @@ func (c *KeyUsageCheck) MessageTag() i18n.MessageTag {
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *KeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	if enumerations.Context_CERTIFICATE == c.context {
+	if enumerations.ContextCertificate == c.context {
 		return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGKU_ANS_CERT)
 	}
 	position, err := process.GetSubContextPosition(c.context, c.subContext)
@@ -83,7 +83,7 @@ func (c *KeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *KeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -91,8 +91,8 @@ func (c *KeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication 
 // CA keyCertSign is a part of RFC 5280, while check of sign-cert falls under
 // AdES validation process. Port of getFailedSubIndicationForConclusion().
 func (c *KeyUsageCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	if enumerations.SubContext_CA_CERTIFICATE == c.subContext {
-		return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	if enumerations.SubContextCACertificate == c.subContext {
+		return enumerations.SubIndicationCertificateChainGeneralFailure
 	}
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

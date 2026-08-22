@@ -54,7 +54,7 @@ func (c *ContentTypeCheck) getContentType() []string {
 	if err != nil {
 		panic(err)
 	}
-	if enumerations.SignatureForm_JAdES == signatureForm && c.signature.MimeType() != "" {
+	if enumerations.SignatureFormJAdES == signatureForm && c.signature.MimeType() != "" {
 		contentTypes = append(contentTypes, c.getRFC7515ContentType(c.signature.MimeType()))
 	}
 	return contentTypes
@@ -94,11 +94,11 @@ func (c *ContentTypeCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ContentTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ContentTypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

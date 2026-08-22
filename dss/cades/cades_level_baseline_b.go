@@ -64,32 +64,32 @@ import (
 // org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers constants upstream static-imports. They keep
 // their exact Java field name behind the "OID_" prefix.
 var (
-	// OID_pkcs_9_at_signingTime is 1.2.840.113549.1.9.5.
-	OID_pkcs_9_at_signingTime = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 5}
+	// OIDPkcs9AtSigningTime is 1.2.840.113549.1.9.5.
+	OIDPkcs9AtSigningTime = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 5}
 
-	// OID_id_aa_contentHint is 1.2.840.113549.1.9.16.2.4.
-	OID_id_aa_contentHint = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 4}
+	// OIDIdAaContentHint is 1.2.840.113549.1.9.16.2.4.
+	OIDIdAaContentHint = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 4}
 
-	// OID_id_aa_contentIdentifier is 1.2.840.113549.1.9.16.2.7.
-	OID_id_aa_contentIdentifier = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 7}
+	// OIDIdAaContentIdentifier is 1.2.840.113549.1.9.16.2.7.
+	OIDIdAaContentIdentifier = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 7}
 
-	// OID_id_aa_ets_sigPolicyId is 1.2.840.113549.1.9.16.2.15.
-	OID_id_aa_ets_sigPolicyId = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 15}
+	// OIDIdAaEtsSigPolicyId is 1.2.840.113549.1.9.16.2.15.
+	OIDIdAaEtsSigPolicyId = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 15}
 
-	// OID_id_aa_ets_commitmentType is 1.2.840.113549.1.9.16.2.16.
-	OID_id_aa_ets_commitmentType = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 16}
+	// OIDIdAaEtsCommitmentType is 1.2.840.113549.1.9.16.2.16.
+	OIDIdAaEtsCommitmentType = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 16}
 
-	// OID_id_aa_ets_signerLocation is 1.2.840.113549.1.9.16.2.17.
-	OID_id_aa_ets_signerLocation = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 17}
+	// OIDIdAaEtsSignerLocation is 1.2.840.113549.1.9.16.2.17.
+	OIDIdAaEtsSignerLocation = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 17}
 
-	// OID_id_aa_ets_signerAttr is 1.2.840.113549.1.9.16.2.18.
-	OID_id_aa_ets_signerAttr = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 18}
+	// OIDIdAaEtsSignerAttr is 1.2.840.113549.1.9.16.2.18.
+	OIDIdAaEtsSignerAttr = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 18}
 
-	// OID_id_spq_ets_uri is 1.2.840.113549.1.9.16.5.1.
-	OID_id_spq_ets_uri = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 5, 1}
+	// OIDIdSpqEtsUri is 1.2.840.113549.1.9.16.5.1.
+	OIDIdSpqEtsUri = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 5, 1}
 
-	// OID_id_spq_ets_unotice is 1.2.840.113549.1.9.16.5.2.
-	OID_id_spq_ets_unotice = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 5, 2}
+	// OIDIdSpqEtsUnotice is 1.2.840.113549.1.9.16.5.2.
+	OIDIdSpqEtsUnotice = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 5, 2}
 )
 
 // CAdESLevelBaselineB holds the CAdES-B signature profile; it supports the inclusion of the
@@ -204,15 +204,15 @@ func (b *CAdESLevelBaselineB) AddSignerAttribute(parameters *CAdESSignatureParam
 		claimedAttributes := make([][]byte, 0, len(claimedSignerRoles))
 		for _, claimedSignerRole := range claimedSignerRoles {
 			roles := cadesLevelBaselineBUTF8String(claimedSignerRole)
-			idAaEtsSignerAttr := cadesLevelBaselineBX509Attribute(spi.OID_id_at_role, roles)
+			idAaEtsSignerAttr := cadesLevelBaselineBX509Attribute(spi.OIDIdAtRole, roles)
 			claimedAttributes = append(claimedAttributes, idAaEtsSignerAttr)
 		}
 		var signerAttributes *cmscore.Attribute
 		if !parameters.IsEn319122() {
-			signerAttributes = cmscore.NewAttribute(OID_id_aa_ets_signerAttr,
+			signerAttributes = cmscore.NewAttribute(OIDIdAaEtsSignerAttr,
 				cadesLevelBaselineBSignerAttribute(claimedAttributes))
 		} else {
-			signerAttributes = cmscore.NewAttribute(spi.OID_id_aa_ets_signerAttrV2,
+			signerAttributes = cmscore.NewAttribute(spi.OIDIdAaEtsSignerAttrV2,
 				cms.NewSignerAttributeV2FromClaimedAttributes(claimedAttributes).DER())
 		}
 		return append(signedAttributes, signerAttributes), nil
@@ -226,7 +226,7 @@ func (b *CAdESLevelBaselineB) AddSignerAttribute(parameters *CAdESSignatureParam
 		}
 
 		if len(assertionsToAdd) != 0 {
-			signerAttributes := cmscore.NewAttribute(spi.OID_id_aa_ets_signerAttrV2,
+			signerAttributes := cmscore.NewAttribute(spi.OIDIdAaEtsSignerAttrV2,
 				cms.NewSignerAttributeV2FromSignedAssertions(cms.NewSignedAssertions(assertionsToAdd)).DER())
 			signedAttributes = append(signedAttributes, signerAttributes)
 		}
@@ -240,7 +240,7 @@ func (b *CAdESLevelBaselineB) AddSigningTimeAttribute(parameters *CAdESSignature
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	signingDate := parameters.BLevel().SigningDate()
 	if signingDate != nil {
-		attribute := cmscore.NewAttribute(OID_pkcs_9_at_signingTime, cadesLevelBaselineBTime(*signingDate))
+		attribute := cmscore.NewAttribute(OIDPkcs9AtSigningTime, cadesLevelBaselineBTime(*signingDate))
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -275,7 +275,7 @@ func (b *CAdESLevelBaselineB) AddSignerLocation(parameters *CAdESSignatureParame
 		if err != nil {
 			return nil, err
 		}
-		attribute := cmscore.NewAttribute(OID_id_aa_ets_signerLocation, signerLocation)
+		attribute := cmscore.NewAttribute(OIDIdAaEtsSignerLocation, signerLocation)
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -329,7 +329,7 @@ func (b *CAdESLevelBaselineB) AddCommitmentType(parameters *CAdESSignatureParame
 			}
 			asn1Encodables[ii] = cadesLevelBaselineBCommitmentTypeIndication(encodedIdentifier, qualifiers)
 		}
-		attribute := cmscore.NewAttribute(OID_id_aa_ets_commitmentType, asn1Encodables...)
+		attribute := cmscore.NewAttribute(OIDIdAaEtsCommitmentType, asn1Encodables...)
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -436,7 +436,7 @@ func (b *CAdESLevelBaselineB) AddContentTimestamps(parameters *CAdESSignaturePar
 			if err != nil {
 				return nil, err
 			}
-			attribute := cmscore.NewAttribute(OID_id_aa_ets_contentTimestamp, asn1Object)
+			attribute := cmscore.NewAttribute(OIDIdAaEtsContentTimestamp, asn1Object)
 			signedAttributes = append(signedAttributes, attribute)
 		}
 	}
@@ -491,7 +491,7 @@ func (b *CAdESLevelBaselineB) AddContentHints(parameters *CAdESSignatureParamete
 		// "1.2.840.113549.1.7.1";
 
 		contentHints := cadesLevelBaselineBContentHints(encodedType, contentHintsDescription)
-		attribute := cmscore.NewAttribute(OID_id_aa_contentHint, contentHints)
+		attribute := cmscore.NewAttribute(OIDIdAaContentHint, contentHints)
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -527,7 +527,7 @@ func (b *CAdESLevelBaselineB) AddContentIdentifier(parameters *CAdESSignaturePar
 		contentIdentifierString := contentIdentifierPrefix + parameters.ContentIdentifierSuffix()
 		// ContentIdentifier ::= OCTET STRING
 		contentIdentifier := asn1ber.WriteTLV(asn1ber.TagOctetString, []byte(contentIdentifierString))
-		attribute := cmscore.NewAttribute(OID_id_aa_contentIdentifier, contentIdentifier)
+		attribute := cmscore.NewAttribute(OIDIdAaContentIdentifier, contentIdentifier)
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -589,7 +589,7 @@ func (b *CAdESLevelBaselineB) AddSignaturePolicyId(parameters *CAdESSignaturePar
 			}
 		}
 
-		attribute := cmscore.NewAttribute(OID_id_aa_ets_sigPolicyId, sigPolicy)
+		attribute := cmscore.NewAttribute(OIDIdAaEtsSigPolicyId, sigPolicy)
 		signedAttributes = append(signedAttributes, attribute)
 	}
 	return signedAttributes, nil
@@ -607,7 +607,7 @@ func (b *CAdESLevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]
 
 	spUri := policy.Spuri()
 	if utils.IsStringNotEmpty(spUri) {
-		spuriQualifier := cadesLevelBaselineBSigPolicyQualifierInfo(OID_id_spq_ets_uri,
+		spuriQualifier := cadesLevelBaselineBSigPolicyQualifierInfo(OIDIdSpqEtsUri,
 			asn1ber.WriteTLV(asn1ber.TagIA5String, []byte(policy.Spuri())))
 		qualifierInfos = append(qualifierInfos, spuriQualifier...)
 	}
@@ -641,7 +641,7 @@ func (b *CAdESLevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]
 				"for a CAdES signature policy qualifier!")
 		}
 		asn1UserNotice := cadesLevelBaselineBUserNotice(noticeReference, explicitText)
-		userNoticeQualifier := cadesLevelBaselineBSigPolicyQualifierInfo(OID_id_spq_ets_unotice, asn1UserNotice)
+		userNoticeQualifier := cadesLevelBaselineBSigPolicyQualifierInfo(OIDIdSpqEtsUnotice, asn1UserNotice)
 		qualifierInfos = append(qualifierInfos, userNoticeQualifier...)
 	}
 
@@ -652,7 +652,7 @@ func (b *CAdESLevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]
 			return nil, err
 		}
 		spDocSpecificationQualifier := cadesLevelBaselineBSigPolicyQualifierInfo(
-			spi.OID_id_sp_doc_specification, spDocSpecificationId)
+			spi.OIDIdSpDocSpecification, spDocSpecificationId)
 		qualifierInfos = append(qualifierInfos, spDocSpecificationQualifier...)
 	}
 
@@ -685,12 +685,12 @@ func (b *CAdESLevelBaselineB) AddMimeType(parameters *CAdESSignatureParameters,
 		return signedAttributes, nil
 	}
 
-	var mimeType enumerations.MimeType = enumerations.MimeTypeEnum_BINARY
+	var mimeType enumerations.MimeType = enumerations.MimeTypeEnumBinary
 	if b.documentToSign != nil && b.documentToSign.MimeType() != nil {
 		mimeType = b.documentToSign.MimeType()
 	}
 	mimeTypeDerString := cadesLevelBaselineBUTF8String(mimeType.MimeTypeString())
-	attribute := cmscore.NewAttribute(spi.OID_id_aa_ets_mimeType, mimeTypeDerString)
+	attribute := cmscore.NewAttribute(spi.OIDIdAaEtsMimeType, mimeTypeDerString)
 	return append(signedAttributes, attribute), nil
 }
 

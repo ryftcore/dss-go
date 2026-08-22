@@ -9,7 +9,7 @@
 // CertQualificationAtTimeBlock, is also ported in this package); the size
 // check (>1 distinct values) is order-independent and therefore exact, but
 // the RESULTS additional-info text (rendered only on the >1 branch, which
-// aborts the qualification chain into CertificateQualification_NA regardless
+// aborts the qualification chain into CertificateQualificationNA regardless
 // of the exact set of values) may list the conflicting values in a different
 // order than upstream. See the porter brief's hard rule on hash-order leaks.
 package qualification
@@ -82,7 +82,7 @@ func (c *IsNoQualificationConflictDetectedCheck) ErrorMessageTag() i18n.MessageT
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *IsNoQualificationConflictDetectedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

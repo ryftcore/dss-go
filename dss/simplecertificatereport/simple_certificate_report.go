@@ -744,11 +744,11 @@ func toCertificateApprovalStatus(x *jaxb.XmlCertificateApprovalStatus) enumerati
 	sti := xmlServiceTypeIdentifier(x.ServiceTypeIdentifier)
 	status := xmlServiceStatus(x.ServiceStatus)
 	result := enumerations.CertificateApprovalStatusFromDefinition(lt, sti, status)
-	if result != nil && result.Label() != "" && enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN != result {
+	if result != nil && result.Label() != "" && enumerations.CertificateApprovalStatusEnumCertForUnknown != result {
 		return result
 	}
 	return enumerations.NewCertificateApprovalStatus(
-		enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN.Label(), lt, sti, status)
+		enumerations.CertificateApprovalStatusEnumCertForUnknown.Label(), lt, sti, status)
 }
 
 // getXmlCertificateApprovalStatus finds the XmlCertificateApprovalStatus of

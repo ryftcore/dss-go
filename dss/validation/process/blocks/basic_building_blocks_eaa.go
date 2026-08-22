@@ -25,15 +25,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process/bbb/sav"
 )
 
-// executeEAAFormatChecking dispatches the Context_EAA / Context_EAA_REVOCATION
+// executeEAAFormatChecking dispatches the ContextEAA / ContextEAARevocation
 // branches of the private executeFormatChecking() that call
 // fc.NewEAAFormatChecking / fc.NewEAARevocationFormatChecking.
 func (b *BasicBuildingBlocks) executeEAAFormatChecking() *jaxb.XmlFC {
-	if enumerations.Context_EAA == b.context {
+	if enumerations.ContextEAA == b.context {
 		block := fc.NewEAAFormatChecking(b.i18nProvider, b.diagnosticData,
 			b.token.(*diagnostic.EAAWrapper), b.context, b.policy)
 		return block.Execute()
-	} else if enumerations.Context_EAA_REVOCATION == b.context {
+	} else if enumerations.ContextEAARevocation == b.context {
 		block := fc.NewEAARevocationFormatChecking(b.i18nProvider, b.diagnosticData,
 			b.token.(*diagnostic.EAARevocationTokenWrapper), b.context, b.policy)
 		return block.Execute()
@@ -41,14 +41,14 @@ func (b *BasicBuildingBlocks) executeEAAFormatChecking() *jaxb.XmlFC {
 	return nil
 }
 
-// eaaAcceptanceValidationBlock dispatches the Context_EAA / Context_EAA_REVOCATION
+// eaaAcceptanceValidationBlock dispatches the ContextEAA / ContextEAARevocation
 // branches of the private executeSignatureAcceptanceValidation(XmlAOV) that
 // call sav.NewEAAAcceptanceValidation / sav.NewEAARevocationTokenAcceptanceValidation.
 func (b *BasicBuildingBlocks) eaaAcceptanceValidationBlock(xmlAOV *jaxb.XmlAOV) savBlock {
-	if enumerations.Context_EAA == b.context {
+	if enumerations.ContextEAA == b.context {
 		return sav.NewEAAAcceptanceValidation(b.i18nProvider, b.currentTime,
 			b.token.(*diagnostic.EAAWrapper), b.bbbs, xmlAOV, b.policy)
-	} else if enumerations.Context_EAA_REVOCATION == b.context {
+	} else if enumerations.ContextEAARevocation == b.context {
 		return sav.NewEAARevocationTokenAcceptanceValidation(b.i18nProvider, b.currentTime,
 			b.token.(*diagnostic.EAARevocationTokenWrapper), xmlAOV, b.policy)
 	}

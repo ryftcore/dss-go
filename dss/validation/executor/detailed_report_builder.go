@@ -146,7 +146,7 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 	timestampValidations := make(map[string]*jaxb.XmlTimestamp)
 	evidenceRecordValidations := make(map[string]*jaxb.XmlEvidenceRecord)
 
-	if b.validationLevel == enumerations.ValidationLevel_ARCHIVAL_DATA {
+	if b.validationLevel == enumerations.ValidationLevelArchivalData {
 		evidenceRecordsValidationBlock := b.executeEvidenceRecordsValidations(bbbs, tlAnalysis, poe)
 		for id, value := range evidenceRecordsValidationBlock.EvidenceRecordValidations() {
 			evidenceRecordValidations[id] = value
@@ -159,7 +159,7 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 		}
 	}
 
-	if b.validationLevel != enumerations.ValidationLevel_BASIC_SIGNATURES {
+	if b.validationLevel != enumerations.ValidationLevelBasicSignatures {
 		nonEvidenceRecordTimestamps := b.DiagnosticData.NonEvidenceRecordTimestamps()
 		for id, value := range b.executeTimestampsValidation(
 			nonEvidenceRecordTimestamps, bbbs, evidenceRecordValidations, tlAnalysis, poe, attachedEvidenceRecords) {
@@ -176,7 +176,7 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 			signatureAnalysis.CounterSignature = &counterSignature
 		}
 
-		if b.validationLevel != enumerations.ValidationLevel_BASIC_SIGNATURES {
+		if b.validationLevel != enumerations.ValidationLevelBasicSignatures {
 			for _, timestampId := range signature.TimestampIdsList() {
 				attachedTimestamps[timestampId] = struct{}{}
 			}
@@ -195,14 +195,14 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 			XmlConstraintsConclusionAttrs:                       validationBasic.XmlConstraintsConclusionAttrs,
 		}
 
-		if b.validationLevel == enumerations.ValidationLevel_LONG_TERM_DATA {
+		if b.validationLevel == enumerations.ValidationLevelLongTermData {
 			validationLongTerm := b.executeLongTermValidation(signatureAnalysis, signature, bbbs)
 			validation = &jaxb.XmlConstraintsConclusionWithProofOfExistence{
 				XmlConstraintsConclusionWithProofOfExistenceContent: validationLongTerm.XmlConstraintsConclusionWithProofOfExistenceContent,
 				XmlConstraintsConclusionAttrs:                       validationLongTerm.XmlConstraintsConclusionAttrs,
 			}
 
-		} else if b.validationLevel == enumerations.ValidationLevel_ARCHIVAL_DATA {
+		} else if b.validationLevel == enumerations.ValidationLevelArchivalData {
 			for _, evidenceRecordId := range signature.EvidenceRecordIdsList() {
 				attachedEvidenceRecords[evidenceRecordId] = struct{}{}
 			}
@@ -237,7 +237,7 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 			append(detailedReport.SignatureOrTimestampOrEvidenceRecord, signatureAnalysis)
 	}
 
-	if b.validationLevel == enumerations.ValidationLevel_ARCHIVAL_DATA {
+	if b.validationLevel == enumerations.ValidationLevelArchivalData {
 		for _, evidenceRecord := range b.DiagnosticData.EvidenceRecords() {
 			if _, attached := attachedEvidenceRecords[evidenceRecord.Id()]; attached {
 				continue
@@ -247,7 +247,7 @@ func (b *DetailedReportBuilder) ExecuteValidation(detailedReport *jaxb.XmlDetail
 		}
 	}
 
-	if b.validationLevel != enumerations.ValidationLevel_BASIC_SIGNATURES {
+	if b.validationLevel != enumerations.ValidationLevelBasicSignatures {
 		for _, timestamp := range b.DiagnosticData.TimestampList() {
 			if _, attached := attachedTimestamps[timestamp.Id()]; attached {
 				continue
@@ -327,35 +327,35 @@ func (b *DetailedReportBuilder) executeEvidenceRecordsValidations(
 func (b *DetailedReportBuilder) executeAllBasicBuildingBlocks() map[string]*jaxb.XmlBasicBuildingBlocks {
 	bbbs := make(map[string]*jaxb.XmlBasicBuildingBlocks)
 	switch b.validationLevel {
-	case enumerations.ValidationLevel_ARCHIVAL_DATA:
-		b.process(javaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.Context_REVOCATION, bbbs)
-		b.process(b.DiagnosticData.TimestampList(), enumerations.Context_TIMESTAMP, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
-	case enumerations.ValidationLevel_LONG_TERM_DATA:
-		b.process(javaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.Context_REVOCATION, bbbs)
-		b.process(b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.Context_TIMESTAMP, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
-	case enumerations.ValidationLevel_TIMESTAMPS:
-		b.process(b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.Context_TIMESTAMP, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
-	case enumerations.ValidationLevel_BASIC_SIGNATURES:
-		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.Context_COUNTER_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.Context_KEY_BINDING_SIGNATURE, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.Context_EAA_REVOCATION, bbbs)
-		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.Context_EAA, bbbs)
+	case enumerations.ValidationLevelArchivalData:
+		b.process(javaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.ContextRevocation, bbbs)
+		b.process(b.DiagnosticData.TimestampList(), enumerations.ContextTimestamp, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.ContextSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.ContextCounterSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.ContextKeyBindingSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.ContextEAARevocation, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.ContextEAA, bbbs)
+	case enumerations.ValidationLevelLongTermData:
+		b.process(javaHashSetOrder(b.DiagnosticData.AllRevocationData()), enumerations.ContextRevocation, bbbs)
+		b.process(b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.ContextTimestamp, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.ContextSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.ContextCounterSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.ContextKeyBindingSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.ContextEAARevocation, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.ContextEAA, bbbs)
+	case enumerations.ValidationLevelTimestamps:
+		b.process(b.DiagnosticData.NonEvidenceRecordTimestamps(), enumerations.ContextTimestamp, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.ContextSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.ContextCounterSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.ContextKeyBindingSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.ContextEAARevocation, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.ContextEAA, bbbs)
+	case enumerations.ValidationLevelBasicSignatures:
+		b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.ContextSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllCounterSignatures()), enumerations.ContextCounterSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllKeyBindingSignatures()), enumerations.ContextKeyBindingSignature, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAARevocationTokens()), enumerations.ContextEAARevocation, bbbs)
+		b.process(javaHashSetOrder(b.DiagnosticData.AllEAA()), enumerations.ContextEAA, bbbs)
 	default:
 		panic(fmt.Sprintf("Unsupported validation level %s", b.validationLevel))
 	}
@@ -375,12 +375,12 @@ func (b *DetailedReportBuilder) finalConclusion(conclusion *jaxb.XmlConclusion) 
 // finalIndication is the port of the private getFinalIndication(Indication).
 func (b *DetailedReportBuilder) finalIndication(highestIndication enumerations.Indication) enumerations.Indication {
 	switch highestIndication {
-	case enumerations.Indication_PASSED:
-		return enumerations.Indication_TOTAL_PASSED
-	case enumerations.Indication_INDETERMINATE:
-		return enumerations.Indication_INDETERMINATE
-	case enumerations.Indication_FAILED:
-		return enumerations.Indication_TOTAL_FAILED
+	case enumerations.IndicationPassed:
+		return enumerations.IndicationTotalPassed
+	case enumerations.IndicationIndeterminate:
+		return enumerations.IndicationIndeterminate
+	case enumerations.IndicationFailed:
+		return enumerations.IndicationTotalFailed
 	default:
 		panic(reports.NewDSSReportExceptionMessage(
 			fmt.Sprintf("The Indication '%s' is not supported!", highestIndication)))

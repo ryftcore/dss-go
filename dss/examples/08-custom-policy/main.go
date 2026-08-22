@@ -63,7 +63,7 @@ func main() {
 	// make the effect of a policy constraint visible without needing a
 	// second key store.
 	constraints.SignatureConstraints.BasicSignatureConstraints.ProspectiveCertificateChain.Level =
-		jaxb.LevelValue(enumerations.Level_WARN)
+		jaxb.LevelValue(enumerations.LevelWarn)
 
 	relaxed, err := facade.Marshal(constraints)
 	if err != nil {

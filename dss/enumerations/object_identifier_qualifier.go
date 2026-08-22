@@ -13,25 +13,25 @@ package enumerations
 type ObjectIdentifierQualifier string
 
 const (
-	// ObjectIdentifierQualifier_OID_AS_URI identifies object Identifier
+	// ObjectIdentifierQualifierOIDAsURI identifies object Identifier
 	// encoded as URI (e.g. 'http://test/public').
-	ObjectIdentifierQualifier_OID_AS_URI ObjectIdentifierQualifier = "OID_AS_URI"
-	// ObjectIdentifierQualifier_OID_AS_URN identifies object Identifier
+	ObjectIdentifierQualifierOIDAsURI ObjectIdentifierQualifier = "OID_AS_URI"
+	// ObjectIdentifierQualifierOIDAsURN identifies object Identifier
 	// encoded as URN (e.g. 'urn:oid:1.2.840.113549.1.9.16.6.3').
-	ObjectIdentifierQualifier_OID_AS_URN ObjectIdentifierQualifier = "OID_AS_URN"
+	ObjectIdentifierQualifierOIDAsURN ObjectIdentifierQualifier = "OID_AS_URN"
 )
 
 var objectIdentifierQualifierValueTable = map[ObjectIdentifierQualifier]string{
-	ObjectIdentifierQualifier_OID_AS_URI: "OIDAsURI",
-	ObjectIdentifierQualifier_OID_AS_URN: "OIDAsURN",
+	ObjectIdentifierQualifierOIDAsURI: "OIDAsURI",
+	ObjectIdentifierQualifierOIDAsURN: "OIDAsURN",
 }
 
 // ObjectIdentifierQualifierValues returns all constants in declaration
 // order.
 func ObjectIdentifierQualifierValues() []ObjectIdentifierQualifier {
 	return []ObjectIdentifierQualifier{
-		ObjectIdentifierQualifier_OID_AS_URI,
-		ObjectIdentifierQualifier_OID_AS_URN,
+		ObjectIdentifierQualifierOIDAsURI,
+		ObjectIdentifierQualifierOIDAsURN,
 	}
 }
 

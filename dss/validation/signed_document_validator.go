@@ -126,10 +126,10 @@ func NewSignedDocumentValidatorBase(documentAnalyzer analyzer.DocumentAnalyzer) 
 	}
 	return SignedDocumentValidatorBase{
 		documentAnalyzer:        documentAnalyzer,
-		defaultDigestAlgorithm:  enumerations.DigestAlgorithm_SHA256,
-		tokenExtractionStrategy: enumerations.TokenExtractionStrategy_NONE,
+		defaultDigestAlgorithm:  enumerations.DigestAlgorithmSHA256,
+		tokenExtractionStrategy: enumerations.TokenExtractionStrategyNone,
 		includeSemantics:        false,
-		validationLevel:         enumerations.ValidationLevel_ARCHIVAL_DATA,
+		validationLevel:         enumerations.ValidationLevelArchivalData,
 		// Java's `private Locale locale = Locale.getDefault()`; the ported
 		// i18n.NewI18nProviderForLocale documents "" as exactly that default.
 		locale:                     "",
@@ -474,7 +474,7 @@ func (v *SignedDocumentValidatorBase) ValidateDocumentWithValidationPolicy(
 // assertConfigurationValid(); Java's IllegalArgumentException becomes a
 // returned error.
 func (v *SignedDocumentValidatorBase) AssertConfigurationValid() error {
-	if enumerations.ValidationLevel_BASIC_SIGNATURES == v.validationLevel &&
+	if enumerations.ValidationLevelBasicSignatures == v.validationLevel &&
 		(len(v.documentAnalyzer.DetachedTimestamps()) > 0 || len(v.documentAnalyzer.DetachedEvidenceRecords()) > 0) &&
 		len(v.documentAnalyzer.Signatures()) == 0 {
 		return fmt.Errorf("Basic Signatures validation cannot be used for timestamp or evidence record documents!")

@@ -80,7 +80,7 @@ func NewSigningCertificateRefDigestAlgorithmCheck[T any](i18nProvider *i18n.I18n
 // BlockType returns the validating block type. Port of the overridden
 // getBlockType().
 func (c *SigningCertificateRefDigestAlgorithmCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_AOV_XCV
+	return jaxb.XmlBlockTypeAOVXCV
 }
 
 // Process performs the check. Port of the overridden process().
@@ -161,7 +161,7 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) FailedIndicationForConclu
 	if c.cryptographicValidationResult != nil {
 		return c.cryptographicValidationResult.Conclusion.Indication.Indication()
 	}
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -173,7 +173,7 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) FailedSubIndicationForCon
 		}
 		return c.cryptographicValidationResult.Conclusion.SubIndication.SubIndication()
 	}
-	return enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationCryptoConstraintsFailure
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the
@@ -216,11 +216,11 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) subProcessLevel() enumera
 	conclusion := c.CryptographicValidationResult().Conclusion
 	if conclusion != nil {
 		if utils.IsCollectionNotEmpty(conclusion.Errors) {
-			return enumerations.Level_FAIL
+			return enumerations.LevelFail
 		} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-			return enumerations.Level_WARN
+			return enumerations.LevelWarn
 		} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-			return enumerations.Level_INFORM
+			return enumerations.LevelInform
 		}
 	}
 	return ""
@@ -232,12 +232,12 @@ func getLowestCryptoLevel(currentLevel, subProcessLevel enumerations.Level) enum
 		return subProcessLevel
 	} else if subProcessLevel == "" {
 		return currentLevel
-	} else if enumerations.Level_INFORM == currentLevel || enumerations.Level_INFORM == subProcessLevel {
-		return enumerations.Level_INFORM
-	} else if enumerations.Level_WARN == currentLevel || enumerations.Level_WARN == subProcessLevel {
-		return enumerations.Level_WARN
-	} else if enumerations.Level_FAIL == currentLevel || enumerations.Level_FAIL == subProcessLevel {
-		return enumerations.Level_FAIL
+	} else if enumerations.LevelInform == currentLevel || enumerations.LevelInform == subProcessLevel {
+		return enumerations.LevelInform
+	} else if enumerations.LevelWarn == currentLevel || enumerations.LevelWarn == subProcessLevel {
+		return enumerations.LevelWarn
+	} else if enumerations.LevelFail == currentLevel || enumerations.LevelFail == subProcessLevel {
+		return enumerations.LevelFail
 	}
 	return currentLevel
 }
@@ -249,14 +249,14 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) extractXmlMessage() *jaxb
 		// Collects messages from higher levels only
 		var messages []*jaxb.XmlMessage
 		switch c.Level() {
-		case enumerations.Level_INFORM:
+		case enumerations.LevelInform:
 			messages = append(messages, conclusion.Infos...)
 			messages = append(messages, conclusion.Warnings...)
 			messages = append(messages, conclusion.Errors...)
-		case enumerations.Level_WARN:
+		case enumerations.LevelWarn:
 			messages = append(messages, conclusion.Warnings...)
 			messages = append(messages, conclusion.Errors...)
-		case enumerations.Level_FAIL:
+		case enumerations.LevelFail:
 			messages = append(messages, conclusion.Errors...)
 		}
 		if utils.IsCollectionNotEmpty(messages) {

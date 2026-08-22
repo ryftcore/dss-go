@@ -7,33 +7,33 @@ package enumerations
 type AdditionalServiceInformation string
 
 const (
-	// AdditionalServiceInformation_FOR_ESIGNATURES further specifies the
+	// AdditionalServiceInformationForESignatures further specifies the
 	// "Service type identifier" identified service as being provided for
 	// electronic signatures.
-	AdditionalServiceInformation_FOR_ESIGNATURES AdditionalServiceInformation = "FOR_ESIGNATURES"
-	// AdditionalServiceInformation_FOR_ESEALS further specifies the
+	AdditionalServiceInformationForESignatures AdditionalServiceInformation = "FOR_ESIGNATURES"
+	// AdditionalServiceInformationForESeals further specifies the
 	// "Service type identifier" identified service as being provided for
 	// electronic seals.
-	AdditionalServiceInformation_FOR_ESEALS AdditionalServiceInformation = "FOR_ESEALS"
-	// AdditionalServiceInformation_FOR_WEB_AUTHENTICATION further specifies
+	AdditionalServiceInformationForESeals AdditionalServiceInformation = "FOR_ESEALS"
+	// AdditionalServiceInformationForWebAuthentication further specifies
 	// the "Service type identifier" identified service as being provided
 	// for web site authentication.
-	AdditionalServiceInformation_FOR_WEB_AUTHENTICATION AdditionalServiceInformation = "FOR_WEB_AUTHENTICATION"
+	AdditionalServiceInformationForWebAuthentication AdditionalServiceInformation = "FOR_WEB_AUTHENTICATION"
 )
 
 // additionalServiceInformationURIs holds the URI for each constant.
 var additionalServiceInformationURIs = map[AdditionalServiceInformation]string{
-	AdditionalServiceInformation_FOR_ESIGNATURES:        "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForeSignatures",
-	AdditionalServiceInformation_FOR_ESEALS:             "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForeSeals",
-	AdditionalServiceInformation_FOR_WEB_AUTHENTICATION: "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForWebSiteAuthentication",
+	AdditionalServiceInformationForESignatures:       "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForeSignatures",
+	AdditionalServiceInformationForESeals:            "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForeSeals",
+	AdditionalServiceInformationForWebAuthentication: "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/ForWebSiteAuthentication",
 }
 
 // AdditionalServiceInformationValues returns all constants in declaration order.
 func AdditionalServiceInformationValues() []AdditionalServiceInformation {
 	return []AdditionalServiceInformation{
-		AdditionalServiceInformation_FOR_ESIGNATURES,
-		AdditionalServiceInformation_FOR_ESEALS,
-		AdditionalServiceInformation_FOR_WEB_AUTHENTICATION,
+		AdditionalServiceInformationForESignatures,
+		AdditionalServiceInformationForESeals,
+		AdditionalServiceInformationForWebAuthentication,
 	}
 }
 
@@ -58,37 +58,37 @@ func AdditionalServiceInformationGetByUri(uri string) AdditionalServiceInformati
 // AdditionalServiceInformationIsForeSignatures checks if the given additional
 // service info is the "for eSignatures" identifier.
 func AdditionalServiceInformationIsForeSignatures(additionalServiceInfo string) bool {
-	return string(AdditionalServiceInformation_FOR_ESIGNATURES.URI()) == additionalServiceInfo
+	return string(AdditionalServiceInformationForESignatures.URI()) == additionalServiceInfo
 }
 
 // AdditionalServiceInformationIsForeSeals checks if the given additional
 // service info is the "for eSeals" identifier.
 func AdditionalServiceInformationIsForeSeals(additionalServiceInfo string) bool {
-	return AdditionalServiceInformation_FOR_ESEALS.URI() == additionalServiceInfo
+	return AdditionalServiceInformationForESeals.URI() == additionalServiceInfo
 }
 
 // AdditionalServiceInformationIsForWebAuth checks if the given additional
 // service info is the "for web authentication" identifier.
 func AdditionalServiceInformationIsForWebAuth(additionalServiceInfo string) bool {
-	return AdditionalServiceInformation_FOR_WEB_AUTHENTICATION.URI() == additionalServiceInfo
+	return AdditionalServiceInformationForWebAuthentication.URI() == additionalServiceInfo
 }
 
 // AdditionalServiceInformationIsForeSignaturesList checks if the given list
 // of additional service infos contains the "for eSignatures" identifier.
 func AdditionalServiceInformationIsForeSignaturesList(additionalServiceInfos []string) bool {
-	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformation_FOR_ESIGNATURES.URI())
+	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformationForESignatures.URI())
 }
 
 // AdditionalServiceInformationIsForeSealsList checks if the given list of
 // additional service infos contains the "for eSeals" identifier.
 func AdditionalServiceInformationIsForeSealsList(additionalServiceInfos []string) bool {
-	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformation_FOR_ESEALS.URI())
+	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformationForESeals.URI())
 }
 
 // AdditionalServiceInformationIsForWebAuthList checks if the given list of
 // additional service infos contains the "for web authentication" identifier.
 func AdditionalServiceInformationIsForWebAuthList(additionalServiceInfos []string) bool {
-	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformation_FOR_WEB_AUTHENTICATION.URI())
+	return additionalServiceInformationSliceContains(additionalServiceInfos, AdditionalServiceInformationForWebAuthentication.URI())
 }
 
 // AdditionalServiceInformationIsForeSignaturesOnly checks if the given list

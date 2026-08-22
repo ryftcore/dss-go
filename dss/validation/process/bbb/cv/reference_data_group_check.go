@@ -33,7 +33,7 @@ func NewReferenceDataGroupCheck[T any](i18nProvider *i18n.I18nProvider, result *
 // Process performs the check. Port of process().
 func (c *ReferenceDataGroupCheck[T]) Process() bool {
 	for _, d := range c.digestMatchers {
-		if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE == digestMatcherType(d) {
+		if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference == digestMatcherType(d) {
 			return false
 		}
 	}
@@ -54,11 +54,11 @@ func (c *ReferenceDataGroupCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ReferenceDataGroupCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ReferenceDataGroupCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }

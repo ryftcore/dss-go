@@ -48,11 +48,11 @@ func (c *ProspectiveCertificateChainCheck[T]) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *ProspectiveCertificateChainCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	switch c.context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE, enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature, enumerations.ContextKeyBindingSignature:
 		return i18n.MessageTag_BBB_XCV_CCCBB_SIG_ANS
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		return i18n.MessageTag_BBB_XCV_CCCBB_TSP_ANS
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		return i18n.MessageTag_BBB_XCV_CCCBB_REV_ANS
 	default:
 		return i18n.MessageTag_BBB_XCV_CCCBB_ANS
@@ -62,11 +62,11 @@ func (c *ProspectiveCertificateChainCheck[T]) ErrorMessageTag() i18n.MessageTag 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ProspectiveCertificateChainCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *ProspectiveCertificateChainCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND
+	return enumerations.SubIndicationNoCertificateChainFound
 }

@@ -18,12 +18,12 @@ import (
 // ignored in case of unknown digest algorithm. Port of the private static
 // List<DigestMatcherType> digestMatcherTypesToIgnore.
 var digestMatcherTypesToIgnore = []enumerations.DigestMatcherType{
-	enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE,
-	enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT,
-	enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP,
-	enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE,
-	enumerations.DigestMatcherType_EVIDENCE_RECORD_MASTER_SIGNATURE,
-	enumerations.DigestMatcherType_EAA_ORPHAN_SELECTIVELY_DISCLOSABLE_CLAIM,
+	enumerations.DigestMatcherTypeCounterSignedSignatureValue,
+	enumerations.DigestMatcherTypeEvidenceRecordArchiveObject,
+	enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp,
+	enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence,
+	enumerations.DigestMatcherTypeEvidenceRecordMasterSignature,
+	enumerations.DigestMatcherTypeEAAOrphanSelectivelyDisclosableClaim,
 }
 
 // DigestAlgorithmObsolescenceValidation is the Go form of the abstract Java
@@ -64,7 +64,7 @@ func (c *DigestAlgorithmObsolescenceValidation[T]) buildDigestMatchersValidation
 				}
 
 				if cryptographicValidation == nil || (c.isValid(cryptographicValidation) &&
-					enumerations.Indication_PASSED != dacResult.Conclusion.Indication.Indication()) {
+					enumerations.IndicationPassed != dacResult.Conclusion.Indication.Indication()) {
 					cryptographicValidation = dacResult.CryptographicValidation
 					cryptographicValidation.ConcernedMaterialDescription = c.getMaterialDescription(digestMatchersGroup)
 				}
@@ -146,7 +146,7 @@ func getDigestMatchersByAlgorithmAndPosition(digestMatchers []*diagnosticjaxb.Xm
 		}
 		if digestAlgorithm == digestMatcherDigestAlgorithm(d) && position == matcherPosition &&
 			// COUNTER_SIGNED_SIGNATURE_VALUE is an internal variable
-			enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE != digestMatcherType(d) {
+			enumerations.DigestMatcherTypeCounterSignedSignatureValue != digestMatcherType(d) {
 			result = append(result, d)
 		}
 	}

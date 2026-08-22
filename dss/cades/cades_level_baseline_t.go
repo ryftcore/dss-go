@@ -122,7 +122,7 @@ func (t *CAdESLevelBaselineT) ExtendToTLevelSignatures(signatures []validation.A
 // cadesLevelBaselineTLevelExtensionRequired ports the private tLevelExtensionRequired.
 func cadesLevelBaselineTLevelExtensionRequired(cadesSignature validation.AdvancedSignature,
 	parameters *CAdESSignatureParameters) bool {
-	return enumerations.SignatureLevel_CAdES_BASELINE_T == parameters.SignatureLevel() || !cadesSignature.HasTProfile()
+	return enumerations.SignatureLevelCAdESBaselineT == parameters.SignatureLevel() || !cadesSignature.HasTProfile()
 }
 
 // addSignatureTimestampAttribute ports the private addSignatureTimestampAttribute.
@@ -138,7 +138,7 @@ func (t *CAdESLevelBaselineT) addSignatureTimestampAttribute(signerInformation *
 	if err != nil {
 		return nil, err
 	}
-	return CAdESUtilsAddAttribute(unsignedAttributes, OID_id_aa_signatureTimeStampToken, signatureTimeStamp), nil
+	return CAdESUtilsAddAttribute(unsignedAttributes, OIDIdAaSignatureTimeStampToken, signatureTimeStamp), nil
 }
 
 // cadesLevelBaselineTContains ports List#contains for a signature list, whose Java semantics are

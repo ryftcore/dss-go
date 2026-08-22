@@ -70,7 +70,7 @@ if err != nil {
 
 // Change exactly one thing.
 constraints.SignatureConstraints.BasicSignatureConstraints.
-	ProspectiveCertificateChain.Level = jaxb.LevelValue(enumerations.Level_WARN)
+	ProspectiveCertificateChain.Level = jaxb.LevelValue(enumerations.LevelWarn)
 
 // Marshal it back and validate against it.
 relaxed, err := facade.Marshal(constraints)

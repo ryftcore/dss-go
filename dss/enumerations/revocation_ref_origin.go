@@ -8,19 +8,19 @@ import "fmt"
 type RevocationRefOrigin string
 
 const (
-	// RevocationRefOrigin_COMPLETE_REVOCATION_REFS: the revocation reference was found
+	// RevocationRefOriginCompleteRevocationRefs: the revocation reference was found
 	// in the signature 'complete-revocation-references' attribute (used in CAdES and XAdES).
-	RevocationRefOrigin_COMPLETE_REVOCATION_REFS RevocationRefOrigin = "COMPLETE_REVOCATION_REFS"
-	// RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS: the revocation reference was found
+	RevocationRefOriginCompleteRevocationRefs RevocationRefOrigin = "COMPLETE_REVOCATION_REFS"
+	// RevocationRefOriginAttributeRevocationRefs: the revocation reference was found
 	// in the signature 'attribute-revocation-references' attribute (used in CAdES and XAdES).
-	RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS RevocationRefOrigin = "ATTRIBUTE_REVOCATION_REFS"
+	RevocationRefOriginAttributeRevocationRefs RevocationRefOrigin = "ATTRIBUTE_REVOCATION_REFS"
 )
 
 // RevocationRefOriginValues returns all RevocationRefOrigin constants in declaration order.
 func RevocationRefOriginValues() []RevocationRefOrigin {
 	return []RevocationRefOrigin{
-		RevocationRefOrigin_COMPLETE_REVOCATION_REFS,
-		RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS,
+		RevocationRefOriginCompleteRevocationRefs,
+		RevocationRefOriginAttributeRevocationRefs,
 	}
 }
 

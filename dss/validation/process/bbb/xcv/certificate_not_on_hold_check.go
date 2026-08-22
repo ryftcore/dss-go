@@ -40,7 +40,7 @@ func NewCertificateNotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *proce
 // Process performs the check. Port of process().
 func (c *CertificateNotOnHoldCheck) Process() bool {
 	isOnHold := c.certificateRevocation != nil && c.certificateRevocation.IsRevoked() &&
-		enumerations.RevocationReason_CERTIFICATE_HOLD == c.certificateRevocation.Reason()
+		enumerations.RevocationReasonCertificateHold == c.certificateRevocation.Reason()
 	if isOnHold {
 		revocationDate := c.certificateRevocation.RevocationDate()
 		isOnHold = revocationDate != nil && !c.currentTime.Before(*revocationDate)
@@ -78,11 +78,11 @@ func (c *CertificateNotOnHoldCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateNotOnHoldCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateNotOnHoldCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }

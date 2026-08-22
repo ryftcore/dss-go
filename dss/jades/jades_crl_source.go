@@ -61,23 +61,23 @@ func (s *JAdESCRLSource) extractEtsiU() {
 func (s *JAdESCRLSource) extractRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRVals == attribute.HeaderName() {
 		s.extractCRLValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRVals),
-			enumerations.RevocationOrigin_REVOCATION_VALUES)
+			enumerations.RevocationOriginRevocationValues)
 	}
 }
 
 func (s *JAdESCRLSource) extractAttributeRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArVals == attribute.HeaderName() {
 		s.extractCRLValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArVals),
-			enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES)
+			enumerations.RevocationOriginAttributeRevocationValues)
 	}
 }
 
 func (s *JAdESCRLSource) extractTimestampValidationData(attribute *EtsiUComponent) {
-	s.extractValidationData(attribute, JAdESHeaderParameterNamesTstVD, enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA)
+	s.extractValidationData(attribute, JAdESHeaderParameterNamesTstVD, enumerations.RevocationOriginTimestampValidationData)
 }
 
 func (s *JAdESCRLSource) extractAnyValidationData(attribute *EtsiUComponent) {
-	s.extractValidationData(attribute, JAdESHeaderParameterNamesAnyValData, enumerations.RevocationOrigin_ANY_VALIDATION_DATA)
+	s.extractValidationData(attribute, JAdESHeaderParameterNamesAnyValData, enumerations.RevocationOriginAnyValidationData)
 }
 
 func (s *JAdESCRLSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.RevocationOrigin) {
@@ -95,14 +95,14 @@ func (s *JAdESCRLSource) extractValidationData(attribute *EtsiUComponent, header
 func (s *JAdESCRLSource) extractCompleteRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRRefs == attribute.HeaderName() {
 		s.extractCRLReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRRefs),
-			enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
+			enumerations.RevocationRefOriginCompleteRevocationRefs)
 	}
 }
 
 func (s *JAdESCRLSource) extractAttributeRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArRefs == attribute.HeaderName() {
 		s.extractCRLReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArRefs),
-			enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+			enumerations.RevocationRefOriginAttributeRevocationRefs)
 	}
 }
 
@@ -117,7 +117,7 @@ func (s *JAdESCRLSource) extractCRLValues(rVals *jose.Object, origin enumeration
 func (s *JAdESCRLSource) extractCRLFromPkiOb(pkiOb *jose.Object, origin enumerations.RevocationOrigin) {
 	if pkiOb.Size() != 0 {
 		encoding := DSSJsonUtilsGetAsString(pkiOb, JAdESHeaderParameterNamesEncoding)
-		if utils.IsStringEmpty(encoding) || utils.AreStringsEqual(enumerations.PKIEncoding_DER.URI(), encoding) {
+		if utils.IsStringEmpty(encoding) || utils.AreStringsEqual(enumerations.PKIEncodingDER.URI(), encoding) {
 			val := DSSJsonUtilsGetAsString(pkiOb, JAdESHeaderParameterNamesVal)
 			if utils.IsStringNotEmpty(val) {
 				s.add(val, origin)

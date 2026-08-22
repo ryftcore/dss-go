@@ -30,8 +30,8 @@ func (c *TimestampFormatChecking) InitChain() {
 	var item process.ChainItem[*drjaxb.XmlFC] = c.FirstItem
 
 	// CAdES-V3 timestamp
-	if c.Token.Type() == enumerations.TimestampType_ARCHIVE_TIMESTAMP &&
-		c.Token.ArchiveTimestampType() == enumerations.ArchiveTimestampType_CAdES_V3 {
+	if c.Token.Type() == enumerations.TimestampTypeArchiveTimestamp &&
+		c.Token.ArchiveTimestampType() == enumerations.ArchiveTimestampTypeCAdESV3 {
 		item = c.cadesAtsV3HashIndex()
 		c.FirstItem = item
 	}

@@ -8,24 +8,24 @@ type XAdES132Attribute string
 
 // XAdES132Attribute constants, one per XAdES 1.3.2 schema attribute name.
 const (
-	XAdES132Attribute_ENCODING         XAdES132Attribute = "ENCODING"
-	XAdES132Attribute_ID               XAdES132Attribute = "ID"
-	XAdES132Attribute_OBJECT_REFERENCE XAdES132Attribute = "OBJECT_REFERENCE"
-	XAdES132Attribute_QUALIFIER        XAdES132Attribute = "QUALIFIER"
-	XAdES132Attribute_REFERENCED_DATA  XAdES132Attribute = "REFERENCED_DATA"
-	XAdES132Attribute_TARGET           XAdES132Attribute = "TARGET"
-	XAdES132Attribute_URI              XAdES132Attribute = "URI"
+	XAdES132AttributeEncoding        XAdES132Attribute = "ENCODING"
+	XAdES132AttributeID              XAdES132Attribute = "ID"
+	XAdES132AttributeObjectReference XAdES132Attribute = "OBJECT_REFERENCE"
+	XAdES132AttributeQualifier       XAdES132Attribute = "QUALIFIER"
+	XAdES132AttributeReferencedData  XAdES132Attribute = "REFERENCED_DATA"
+	XAdES132AttributeTarget          XAdES132Attribute = "TARGET"
+	XAdES132AttributeURI             XAdES132Attribute = "URI"
 )
 
 // xades132attributeNames maps each constant to its wire attribute name (getAttributeName()).
 var xades132attributeNames = map[XAdES132Attribute]string{
-	XAdES132Attribute_ENCODING:         "Encoding",
-	XAdES132Attribute_ID:               "Id",
-	XAdES132Attribute_OBJECT_REFERENCE: "ObjectReference",
-	XAdES132Attribute_QUALIFIER:        "Qualifier",
-	XAdES132Attribute_REFERENCED_DATA:  "referencedData",
-	XAdES132Attribute_TARGET:           "Target",
-	XAdES132Attribute_URI:              "URI",
+	XAdES132AttributeEncoding:        "Encoding",
+	XAdES132AttributeID:              "Id",
+	XAdES132AttributeObjectReference: "ObjectReference",
+	XAdES132AttributeQualifier:       "Qualifier",
+	XAdES132AttributeReferencedData:  "referencedData",
+	XAdES132AttributeTarget:          "Target",
+	XAdES132AttributeURI:             "URI",
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().

@@ -189,7 +189,7 @@ func (c *ChainBase[T]) Execute() T {
 
 	if c.Result.Conclusion() == nil {
 		conclusion := &jaxb.XmlConclusion{}
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		c.Result.SetConclusion(conclusion)
 	}
 
@@ -232,22 +232,22 @@ func (c *ChainBase[T]) IsValid(constraintConclusion *jaxb.XmlConstraintsConclusi
 // IsValidConclusion checks if the conclusion is valid, i.e. has a PASSED
 // Indication. Port of isValidConclusion(XmlConclusion).
 func (c *ChainBase[T]) IsValidConclusion(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && enumerations.Indication_PASSED == conclusion.Indication.Indication()
+	return conclusion != nil && enumerations.IndicationPassed == conclusion.Indication.Indication()
 }
 
 // FailLevelRule returns the FAIL level constraint. Port of getFailLevelRule().
 func (c *ChainBase[T]) FailLevelRule() policy.LevelRule {
-	return GetLevelRule(enumerations.Level_FAIL)
+	return GetLevelRule(enumerations.LevelFail)
 }
 
 // WarnLevelRule returns the WARN level constraint. Port of getWarnLevelRule().
 func (c *ChainBase[T]) WarnLevelRule() policy.LevelRule {
-	return GetLevelRule(enumerations.Level_WARN)
+	return GetLevelRule(enumerations.LevelWarn)
 }
 
 // InfoLevelRule returns the INFORM level constraint. Port of getInfoLevelRule().
 func (c *ChainBase[T]) InfoLevelRule() policy.LevelRule {
-	return GetLevelRule(enumerations.Level_INFORM)
+	return GetLevelRule(enumerations.LevelInform)
 }
 
 // collectMessages collects all required messages. Port of the private

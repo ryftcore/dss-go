@@ -298,11 +298,11 @@ func cryptographicConstraintWrapperBuildParameters(encryptionAlgorithm enumerati
 func cryptographicConstraintWrapperGetParameterName(encryptionAlgorithm enumerations.EncryptionAlgorithm) string {
 	if encryptionAlgorithm == "" {
 		return ""
-	} else if enumerations.EncryptionAlgorithm_RSA.IsEquivalent(encryptionAlgorithm) {
+	} else if enumerations.EncryptionAlgorithmRSA.IsEquivalent(encryptionAlgorithm) {
 		return cryptographicConstraintWrapperModulesLengthParameter
-	} else if enumerations.EncryptionAlgorithm_DSA.IsEquivalent(encryptionAlgorithm) ||
-		enumerations.EncryptionAlgorithm_ECDSA.IsEquivalent(encryptionAlgorithm) ||
-		enumerations.EncryptionAlgorithm_EDDSA.IsEquivalent(encryptionAlgorithm) {
+	} else if enumerations.EncryptionAlgorithmDSA.IsEquivalent(encryptionAlgorithm) ||
+		enumerations.EncryptionAlgorithmECDSA.IsEquivalent(encryptionAlgorithm) ||
+		enumerations.EncryptionAlgorithmEDDSA.IsEquivalent(encryptionAlgorithm) {
 		return cryptographicConstraintWrapperPLengthParameter
 	}
 	return ""

@@ -23,9 +23,9 @@ import (
 
 // hashDataInfoTransformPath ports XAdES111Path.HASH_DATA_INFO_TRANSFORM_PATH.
 var hashDataInfoTransformPath = common.FromCurrentPosition(
-	definition.XAdES111Element_HASH_DATA_INFO,
-	definition.XAdES111Element_TRANSFORMS,
-	common.XMLDSigElement_TRANSFORM,
+	definition.XAdES111ElementHashDataInfo,
+	definition.XAdES111ElementTransforms,
+	common.XMLDSigElementTransform,
 )
 
 // XAdESAttribute represents a XAdES attribute. Port of the class XAdESAttribute, implementing
@@ -82,7 +82,7 @@ func (a *XAdESAttribute) NodeList(xPathQuery common.XPathQuery) []*xmldom.Node {
 //
 // LOG.warn("Unable to retrieve the canonicalization algorithm") is dropped per PORTING.md.
 func (a *XAdESAttribute) TimestampCanonicalizationMethod() string {
-	canonicalizationMethod, err := xmlutils.XPathUtilsGetValue(a.element, common.XMLDSigPath_CANONICALIZATION_ALGORITHM_PATH)
+	canonicalizationMethod, err := xmlutils.XPathUtilsGetValue(a.element, common.XMLDSigPathCanonicalizationAlgorithmPath)
 	if err != nil {
 		canonicalizationMethod = ""
 	}
@@ -90,7 +90,7 @@ func (a *XAdESAttribute) TimestampCanonicalizationMethod() string {
 		nodeList, err := xmlutils.XPathUtilsGetNodeList(a.element, hashDataInfoTransformPath)
 		if err == nil && len(nodeList) == 1 {
 			transform := nodeList[0]
-			canonicalizationMethod = transform.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName())
+			canonicalizationMethod = transform.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName())
 		}
 	}
 	return canonicalizationMethod
@@ -110,8 +110,8 @@ func (a *XAdESAttribute) TimestampIncludedReferences() []*validation.TimestampIn
 	}
 	includes := make([]*validation.TimestampInclude, 0, len(timestampIncludes))
 	for _, include := range timestampIncludes {
-		uri := xmlutils.DomUtilsGetId(include.AttrValue("", definition.XAdES132Attribute_URI.AttributeName()))
-		referencedData := include.AttrValue("", definition.XAdES132Attribute_REFERENCED_DATA.AttributeName())
+		uri := xmlutils.DomUtilsGetId(include.AttrValue("", definition.XAdES132AttributeURI.AttributeName()))
+		referencedData := include.AttrValue("", definition.XAdES132AttributeReferencedData.AttributeName())
 		includes = append(includes, validation.NewTimestampIncludeWithURI(uri, referencedData == "true"))
 	}
 	return includes

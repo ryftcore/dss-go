@@ -233,17 +233,17 @@ func ASiCUtilsZipCommentFromMimeTypeString(mimeTypeString string) string {
 // ASiCUtilsIsASiCMimeType checks if the given MimeType is ASiC MimeType. Port of
 // isASiCMimeType(MimeType).
 func ASiCUtilsIsASiCMimeType(mimeType enumerations.MimeType) bool {
-	return mimeType == enumerations.MimeTypeEnum_ASICS ||
-		mimeType == enumerations.MimeTypeEnum_ASICE
+	return mimeType == enumerations.MimeTypeEnumASiCS ||
+		mimeType == enumerations.MimeTypeEnumASiCE
 }
 
 // ASiCUtilsIsOpenDocumentMimeType checks if the given MimeType is OpenDocument MimeType. Port of
 // isOpenDocumentMimeType(MimeType).
 func ASiCUtilsIsOpenDocumentMimeType(mimeType enumerations.MimeType) bool {
-	return mimeType == enumerations.MimeTypeEnum_ODT ||
-		mimeType == enumerations.MimeTypeEnum_ODS ||
-		mimeType == enumerations.MimeTypeEnum_ODG ||
-		mimeType == enumerations.MimeTypeEnum_ODP
+	return mimeType == enumerations.MimeTypeEnumODT ||
+		mimeType == enumerations.MimeTypeEnumODS ||
+		mimeType == enumerations.MimeTypeEnumODG ||
+		mimeType == enumerations.MimeTypeEnumODP
 }
 
 // ASiCUtilsASiCContainerType returns the related ASiCContainerType for the given asicMimeType.
@@ -256,10 +256,10 @@ func ASiCUtilsASiCContainerType(asicMimeType enumerations.MimeType) (enumeration
 	if asicMimeType == nil {
 		panic("MimeType cannot be null!")
 	}
-	if asicMimeType == enumerations.MimeTypeEnum_ASICS {
-		return enumerations.ASiCContainerType_ASiC_S, nil
-	} else if asicMimeType == enumerations.MimeTypeEnum_ASICE || ASiCUtilsIsOpenDocumentMimeType(asicMimeType) {
-		return enumerations.ASiCContainerType_ASiC_E, nil
+	if asicMimeType == enumerations.MimeTypeEnumASiCS {
+		return enumerations.ASiCContainerTypeASiCS, nil
+	} else if asicMimeType == enumerations.MimeTypeEnumASiCE || ASiCUtilsIsOpenDocumentMimeType(asicMimeType) {
+		return enumerations.ASiCContainerTypeASiCE, nil
 	}
 	return "", fmt.Errorf("Not allowed mimetype '%s'", asicMimeType.MimeTypeString())
 }
@@ -273,7 +273,7 @@ func ASiCUtilsIsASiCE(asicParameters *ASiCParameters) bool {
 	if asicParameters.ContainerType() == "" {
 		panic("ASiCContainerType must be defined!")
 	}
-	return enumerations.ASiCContainerType_ASiC_E == asicParameters.ContainerType()
+	return enumerations.ASiCContainerTypeASiCE == asicParameters.ContainerType()
 }
 
 // ASiCUtilsIsASiCS checks if the parameters are configured for ASiCS creation.
@@ -285,7 +285,7 @@ func ASiCUtilsIsASiCS(asicParameters *ASiCParameters) bool {
 	if asicParameters.ContainerType() == "" {
 		panic("ASiCContainerType must be defined!")
 	}
-	return enumerations.ASiCContainerType_ASiC_S == asicParameters.ContainerType()
+	return enumerations.ASiCContainerTypeASiCS == asicParameters.ContainerType()
 }
 
 // ASiCUtilsMimeTypeFromParameters returns a relevant MimeType for the provided parameters. Port of
@@ -295,9 +295,9 @@ func ASiCUtilsMimeTypeFromParameters(asicParameters *ASiCParameters) enumeration
 		return enumerations.MimeTypeFromMimeTypeString(asicParameters.MimeType())
 	}
 	if ASiCUtilsIsASiCE(asicParameters) {
-		return enumerations.MimeTypeEnum_ASICE
+		return enumerations.MimeTypeEnumASiCE
 	}
-	return enumerations.MimeTypeEnum_ASICS
+	return enumerations.MimeTypeEnumASiCS
 }
 
 // ASiCUtilsFilesContainMetaInfFolder checks if the list of filenames contains a document within
@@ -540,7 +540,7 @@ func ASiCUtilsIsASiCSContainer(container model.DSSDocument) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return enumerations.ASiCContainerType_ASiC_S == containerType, nil
+	return enumerations.ASiCContainerTypeASiCS == containerType, nil
 }
 
 // ASiCUtilsIsASiCEContainer verifies whether the given container is of ASiC-E format type. Port of
@@ -550,7 +550,7 @@ func ASiCUtilsIsASiCEContainer(container model.DSSDocument) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return enumerations.ASiCContainerType_ASiC_E == containerType, nil
+	return enumerations.ASiCContainerTypeASiCE == containerType, nil
 }
 
 // ASiCUtilsContainerType verifies the type of the provided container document.
@@ -591,7 +591,7 @@ func ASiCUtilsIsASiCSContainerContent(asicContent *ASiCContent) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return enumerations.ASiCContainerType_ASiC_S == containerType, nil
+	return enumerations.ASiCContainerTypeASiCS == containerType, nil
 }
 
 // ASiCUtilsIsASiCEContainerContent verifies whether the given ASiCContent is of ASiC-E format type.
@@ -601,7 +601,7 @@ func ASiCUtilsIsASiCEContainerContent(asicContent *ASiCContent) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return enumerations.ASiCContainerType_ASiC_E == containerType, nil
+	return enumerations.ASiCContainerTypeASiCE == containerType, nil
 }
 
 // ASiCUtilsContainerTypeOfContent returns the container type.
@@ -659,7 +659,7 @@ func asicUtilsContainerType(containerMimeType enumerations.MimeType, mimetypeDoc
 	}
 	// 3. Check if the container contains more than one document at the root level (ASiC-E)
 	if rootSignedDocumentsNumber > 1 {
-		return enumerations.ASiCContainerType_ASiC_E, nil
+		return enumerations.ASiCContainerTypeASiCE, nil
 	}
 	// 4. Return enforced container type, when present
 	containerType, err = asicUtilsContainerTypeFromMimeType(containerMimeType)
@@ -672,7 +672,7 @@ func asicUtilsContainerType(containerMimeType enumerations.MimeType, mimetypeDoc
 	// 5. Check if the container contains one document at the root level (ASiC-S)
 	// (upstream logs "Unable to define the ASiC Container type with its properties..." here)
 	if rootSignedDocumentsNumber == 1 {
-		containerType = enumerations.ASiCContainerType_ASiC_S
+		containerType = enumerations.ASiCContainerTypeASiCS
 	}
 	// (upstream warns "The provided container does not contain signer documents on the root
 	// level!" otherwise)

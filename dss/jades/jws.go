@@ -168,7 +168,7 @@ func (j *JWS) JwsSerializationType() enumerations.JWSSerializationType {
 	if j.jwsJsonSerializationObject != nil {
 		return j.jwsJsonSerializationObject.JWSSerializationType()
 	}
-	return enumerations.JWSSerializationType_COMPACT_SERIALIZATION
+	return enumerations.JWSSerializationTypeCompactSerialization
 }
 
 // SetKnownCriticalHeaders sets the values of the 'crit' header that must be known and processed.

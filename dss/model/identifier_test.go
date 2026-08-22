@@ -62,7 +62,7 @@ func TestIdentifierXmlIDIsTheSHA256OfTheData(t *testing.T) {
 			if got := identifier.DigestID().Value(); hex.EncodeToString(got) != hex.EncodeToString(want[:]) {
 				t.Errorf("DigestID().Value() = %x, want %x", got, want)
 			}
-			if got := identifier.DigestID().Algorithm(); got != enumerations.DigestAlgorithm_SHA256 {
+			if got := identifier.DigestID().Algorithm(); got != enumerations.DigestAlgorithmSHA256 {
 				t.Errorf("DigestID().Algorithm() = %v, want SHA256", got)
 			}
 		})
@@ -147,20 +147,20 @@ func TestIdentifierPanicsOnNilData(t *testing.T) {
 func TestIdentifierMessageDigestCoversTheGoAlgorithms(t *testing.T) {
 	base := NewIdentifierBase("EntityIdentifier", "EK-", []byte{})
 	supported := map[enumerations.DigestAlgorithm]int{
-		enumerations.DigestAlgorithm_SHA1:     20,
-		enumerations.DigestAlgorithm_SHA224:   28,
-		enumerations.DigestAlgorithm_SHA256:   32,
-		enumerations.DigestAlgorithm_SHA384:   48,
-		enumerations.DigestAlgorithm_SHA512:   64,
-		enumerations.DigestAlgorithm_SHA3_224: 28,
-		enumerations.DigestAlgorithm_SHA3_256: 32,
-		enumerations.DigestAlgorithm_SHA3_384: 48,
-		enumerations.DigestAlgorithm_SHA3_512: 64,
-		enumerations.DigestAlgorithm_MD5:      16,
+		enumerations.DigestAlgorithmSHA1:    20,
+		enumerations.DigestAlgorithmSHA224:  28,
+		enumerations.DigestAlgorithmSHA256:  32,
+		enumerations.DigestAlgorithmSHA384:  48,
+		enumerations.DigestAlgorithmSHA512:  64,
+		enumerations.DigestAlgorithmSHA3224: 28,
+		enumerations.DigestAlgorithmSHA3256: 32,
+		enumerations.DigestAlgorithmSHA3384: 48,
+		enumerations.DigestAlgorithmSHA3512: 64,
+		enumerations.DigestAlgorithmMD5:     16,
 		// RIPEMD160 must stay supported here: CommonDocument computes it for
 		// documents, and in Java both paths go through DigestAlgorithm#getMessageDigest,
 		// so a token or identifier must be able to produce it too.
-		enumerations.DigestAlgorithm_RIPEMD160: 20,
+		enumerations.DigestAlgorithmRIPEMD160: 20,
 	}
 	for algorithm, size := range supported {
 		messageDigest, err := base.MessageDigest(algorithm)
@@ -175,9 +175,9 @@ func TestIdentifierMessageDigestCoversTheGoAlgorithms(t *testing.T) {
 	// The algorithms with no Go standard library implementation report a DSSError carrying
 	// the upstream message.
 	for _, algorithm := range []enumerations.DigestAlgorithm{
-		enumerations.DigestAlgorithm_MD2,
-		enumerations.DigestAlgorithm_WHIRLPOOL,
-		enumerations.DigestAlgorithm_SHAKE128,
+		enumerations.DigestAlgorithmMD2,
+		enumerations.DigestAlgorithmWHIRLPOOL,
+		enumerations.DigestAlgorithmSHAKE128,
 	} {
 		_, err := base.MessageDigest(algorithm)
 		if err == nil {
@@ -197,7 +197,7 @@ func TestIdentifierMessageDigestCoversTheGoAlgorithms(t *testing.T) {
 }
 
 func TestIdentifierBaseFromDigestKeepsTheGivenDigest(t *testing.T) {
-	digest := NewDigest(enumerations.DigestAlgorithm_SHA512, []byte{0x01, 0x02, 0x03})
+	digest := NewDigest(enumerations.DigestAlgorithmSHA512, []byte{0x01, 0x02, 0x03})
 	base := NewIdentifierBaseFromDigest("SignatureIdentifier", "S-", digest)
 	if got := base.AsXmlID(); got != "S-010203" {
 		t.Errorf("AsXmlID() = %q, want %q", got, "S-010203")

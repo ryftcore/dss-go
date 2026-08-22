@@ -99,7 +99,7 @@ func (c *TrustedCertificateMatchTrustServiceCheck) ErrorMessageTag() i18n.Messag
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedCertificateMatchTrustServiceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

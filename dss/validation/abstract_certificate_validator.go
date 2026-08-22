@@ -156,11 +156,11 @@ type AbstractCertificateValidator[R any, PE executor.ProcessExecutor[R]] struct 
 // initializers Java runs with it.
 func NewAbstractCertificateValidator[R any, PE executor.ProcessExecutor[R]]() AbstractCertificateValidator[R, PE] {
 	return AbstractCertificateValidator[R, PE]{
-		TokenExtractionStrategy:   enumerations.TokenExtractionStrategy_NONE,
+		TokenExtractionStrategy:   enumerations.TokenExtractionStrategyNone,
 		IdentifierProvider:        model.NewOriginalIdentifierProvider(),
 		ValidationContextExecutor: spiexecutor.DefaultValidationContextExecutorInstance,
 		Locale:                    "",
-		DefaultDigestAlgorithm:    enumerations.DigestAlgorithm_SHA256,
+		DefaultDigestAlgorithm:    enumerations.DigestAlgorithmSHA256,
 	}
 }
 

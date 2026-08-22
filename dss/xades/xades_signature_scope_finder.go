@@ -82,8 +82,8 @@ func (f *XAdESSignatureScopeFinder) FindSignatureScope(xadesSignature *XAdESSign
 
 	for _, xadesReferenceValidation := range xadesSignature.XAdESReferenceValidations() {
 		switch xadesReferenceValidation.Type() {
-		case enumerations.DigestMatcherType_SIGNED_PROPERTIES, enumerations.DigestMatcherType_KEY_INFO,
-			enumerations.DigestMatcherType_SIGNATURE_PROPERTIES:
+		case enumerations.DigestMatcherTypeSignedProperties, enumerations.DigestMatcherTypeKeyInfo,
+			enumerations.DigestMatcherTypeSignatureProperties:
 			// not a subject for the Signature Scope
 			continue
 		}
@@ -93,11 +93,11 @@ func (f *XAdESSignatureScopeFinder) FindSignatureScope(xadesSignature *XAdESSign
 		transformations := xadesReferenceValidation.TransformationNames()
 
 		switch {
-		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherType_XPOINTER == xadesReferenceValidation.Type():
+		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherTypeXPointer == xadesReferenceValidation.Type():
 			result = append(result, newXPointerSignatureScope(uri,
 				f.CreateInMemoryDocument(xadesReferenceValidation.OriginalContentBytes()), transformations))
 
-		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherType_OBJECT == xadesReferenceValidation.Type():
+		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherTypeObject == xadesReferenceValidation.Type():
 			objectById := DSSXMLUtilsGetObjectById(xadesSignature.SignatureElement(), uri)
 			if objectById != nil && objectById.FirstChild != nil {
 				referencedObject := objectById.FirstChild
@@ -105,7 +105,7 @@ func (f *XAdESSignatureScopeFinder) FindSignatureScope(xadesSignature *XAdESSign
 					f.CreateInMemoryDocument(xadesSignatureScopeFinderMustGetNodeBytes(referencedObject)), transformations))
 			}
 
-		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherType_MANIFEST == xadesReferenceValidation.Type():
+		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherTypeManifest == xadesReferenceValidation.Type():
 			manifestSignatureScope := spiscope.NewManifestSignatureScopeWithNameAndTransformations(
 				xadesSignatureScopeFinderReferenceName(&xadesReferenceValidation.ReferenceValidation),
 				f.CreateDigestDocument(xadesReferenceValidation.Digest()), xadesReferenceValidation.TransformationNames())
@@ -128,7 +128,7 @@ func (f *XAdESSignatureScopeFinder) FindSignatureScope(xadesSignature *XAdESSign
 				}
 			}
 
-		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherType_COUNTER_SIGNATURE == xadesReferenceValidation.Type() &&
+		case xadesReferenceValidation.IsFound() && enumerations.DigestMatcherTypeCounterSignature == xadesReferenceValidation.Type() &&
 			xadesSignature.MasterSignature() != nil:
 			result = append(result, spiscope.NewCounterSignatureScope(xadesSignature.MasterSignature(),
 				f.CreateInMemoryDocument(xadesReferenceValidation.OriginalContentBytes())))

@@ -45,11 +45,11 @@ func (c *QualifiedCheck) Process() bool {
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QualifiedCheck) MessageTag() i18n.MessageTag {
 	switch c.validationTime {
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+	case enumerations.ValidationTimeBESTSignatureTime:
 		return i18n.MessageTag_QUAL_QC_AT_ST
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+	case enumerations.ValidationTimeCertificateIssuanceTime:
 		return i18n.MessageTag_QUAL_QC_AT_CC
-	case enumerations.ValidationTime_VALIDATION_TIME:
+	case enumerations.ValidationTimeValidationTime:
 		return i18n.MessageTag_QUAL_QC_AT_VT
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
@@ -59,11 +59,11 @@ func (c *QualifiedCheck) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QualifiedCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.validationTime {
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+	case enumerations.ValidationTimeBESTSignatureTime:
 		return i18n.MessageTag_QUAL_QC_AT_ST_ANS
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+	case enumerations.ValidationTimeCertificateIssuanceTime:
 		return i18n.MessageTag_QUAL_QC_AT_CC_ANS
-	case enumerations.ValidationTime_VALIDATION_TIME:
+	case enumerations.ValidationTimeValidationTime:
 		return i18n.MessageTag_QUAL_QC_AT_VT_ANS
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
@@ -73,7 +73,7 @@ func (c *QualifiedCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QualifiedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

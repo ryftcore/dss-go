@@ -140,7 +140,7 @@ func (c *PastSignatureValidationCertificateRevocationSelector) RevocationBBBConc
 func (c *PastSignatureValidationCertificateRevocationSelector) revocationDataIssuerTrusted(
 	revocationIssuer *diagnostic.CertificateWrapper) process.ChainItem[*jaxb.XmlCRS] {
 	sunsetDateConstraint := c.ValidationPolicy.CertificateSunsetDateConstraint(
-		enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+		enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return xcv.NewRevocationIssuerTrustedCheck(c.I18nProvider, c.Result, revocationIssuer, c.CurrentTime,
 		sunsetDateConstraint, c.WarnLevelRule())
 }
@@ -165,7 +165,7 @@ func (c *PastSignatureValidationCertificateRevocationSelector) AcceptableRevocat
 func (c *PastSignatureValidationCertificateRevocationSelector) isRevocationIssuerTrusted(
 	certificateWrapper *diagnostic.CertificateWrapper) bool {
 	constraint := c.ValidationPolicy.CertificateSunsetDateConstraint(
-		enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+		enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return process.IsTrustAnchor(certificateWrapper, c.CurrentTime, constraint)
 }
 

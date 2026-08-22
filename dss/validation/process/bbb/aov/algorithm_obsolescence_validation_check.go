@@ -56,13 +56,13 @@ type AlgorithmObsolescenceValidationCheck[T any] struct {
 }
 
 // NewAlgorithmObsolescenceValidationCheck is the convenience constructor,
-// defaulting the block type to XmlBlockType_AOV. Port of
+// defaulting the block type to XmlBlockTypeAOV. Port of
 // AlgorithmObsolescenceValidationCheck(I18nProvider, T, XmlAOV, Date, MessageTag, String).
 func NewAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	tokenId string) *AlgorithmObsolescenceValidationCheck[T] {
 	return NewAlgorithmObsolescenceValidationCheckWithBlockType(i18nProvider, result, aovResult, validationDate,
-		position, jaxb.XmlBlockType_AOV, tokenId)
+		position, jaxb.XmlBlockTypeAOV, tokenId)
 }
 
 // NewAlgorithmObsolescenceValidationCheckWithBlockType is the full constructor.
@@ -86,13 +86,13 @@ func NewAlgorithmObsolescenceValidationCheckWithBlockType[T any](i18nProvider *i
 func getLevelRule(aovResult *jaxb.XmlAOV) policy.LevelRule {
 	conclusion := aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
-		return process.GetLevelRule(enumerations.Level_FAIL)
+		return process.GetLevelRule(enumerations.LevelFail)
 	} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-		return process.GetLevelRule(enumerations.Level_WARN)
+		return process.GetLevelRule(enumerations.LevelWarn)
 	} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-		return process.GetLevelRule(enumerations.Level_INFORM)
+		return process.GetLevelRule(enumerations.LevelInform)
 	}
-	return process.GetLevelRule(enumerations.Level_FAIL) // default
+	return process.GetLevelRule(enumerations.LevelFail) // default
 }
 
 // BlockType returns the validating block type. Port of getBlockType().

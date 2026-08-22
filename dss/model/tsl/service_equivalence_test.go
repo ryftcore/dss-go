@@ -20,7 +20,7 @@ func TestServiceEquivalenceBuilderRoundTrip(t *testing.T) {
 
 	se := NewServiceEquivalenceBuilder().
 		SetLegalInfoIdentifier("legal-id").
-		SetStatus(enumerations.MRAStatus_ENACTED).
+		SetStatus(enumerations.MRAStatusEnacted).
 		SetStartDate(start).
 		SetEndDate(end).
 		SetTypeAsiEquivalence(typeAsi).
@@ -31,7 +31,7 @@ func TestServiceEquivalenceBuilderRoundTrip(t *testing.T) {
 	if se.LegalInfoIdentifier() != "legal-id" {
 		t.Fatalf("unexpected LegalInfoIdentifier: %s", se.LegalInfoIdentifier())
 	}
-	if se.Status() != enumerations.MRAStatus_ENACTED {
+	if se.Status() != enumerations.MRAStatusEnacted {
 		t.Fatalf("unexpected Status: %s", se.Status())
 	}
 	if len(se.TypeAsiEquivalence()) != 1 {

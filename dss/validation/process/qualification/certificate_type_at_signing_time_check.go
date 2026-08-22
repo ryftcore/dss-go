@@ -34,7 +34,7 @@ func NewCertificateTypeAtSigningTimeCheck(i18nProvider *i18n.I18nProvider,
 
 // Process performs the check. Port of process().
 func (c *CertificateTypeAtSigningTimeCheck) Process() bool {
-	return enumerations.CertificateType_UNKNOWN != c.certificateQualification.Type()
+	return enumerations.CertificateTypeUnknown != c.certificateQualification.Type()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -50,7 +50,7 @@ func (c *CertificateTypeAtSigningTimeCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateTypeAtSigningTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

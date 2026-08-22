@@ -7,9 +7,9 @@ func TestMRAEquivalenceContextURI(t *testing.T) {
 		v    MRAEquivalenceContext
 		want string
 	}{
-		{MRAEquivalenceContext_QC_COMPLIANCE, "http://ec.europa.eu/tools/lotl/mra/QcCompliance"},
-		{MRAEquivalenceContext_QC_TYPE, "http://ec.europa.eu/tools/lotl/mra/QcType"},
-		{MRAEquivalenceContext_QC_QSCD, "http://ec.europa.eu/tools/lotl/mra/QcQSCD"},
+		{MRAEquivalenceContextQCCompliance, "http://ec.europa.eu/tools/lotl/mra/QcCompliance"},
+		{MRAEquivalenceContextQCType, "http://ec.europa.eu/tools/lotl/mra/QcType"},
+		{MRAEquivalenceContextQCQSCD, "http://ec.europa.eu/tools/lotl/mra/QcQSCD"},
 	}
 	for _, c := range cases {
 		if got := c.v.URI(); got != c.want {

@@ -17,7 +17,7 @@ func (c *trustServiceStatusPreEIDASConsistency) IsConsistent(trustService *diagn
 	startDate := trustService.StartDate
 	if IsPreEIDAS(startDate) {
 		status := trustService.Status
-		return TrustServiceStatus_GRANTED.URI() != status && TrustServiceStatus_WITHDRAWN.URI() != status
+		return TrustServiceStatusGranted.URI() != status && TrustServiceStatusWithdrawn.URI() != status
 	}
 	return true
 }

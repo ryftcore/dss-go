@@ -5,43 +5,43 @@ package enumerations
 type SignatureScopeType string
 
 const (
-	// SignatureScopeType_FULL means the signature covers the complete
+	// SignatureScopeTypeFull means the signature covers the complete
 	// document.
-	SignatureScopeType_FULL SignatureScopeType = "FULL"
-	// SignatureScopeType_PARTIAL means the signature covers only a part of
+	SignatureScopeTypeFull SignatureScopeType = "FULL"
+	// SignatureScopeTypePartial means the signature covers only a part of
 	// the document.
-	SignatureScopeType_PARTIAL SignatureScopeType = "PARTIAL"
-	// SignatureScopeType_DIGEST means the signature covers only the digest
+	SignatureScopeTypePartial SignatureScopeType = "PARTIAL"
+	// SignatureScopeTypeDigest means the signature covers only the digest
 	// of document.
-	SignatureScopeType_DIGEST SignatureScopeType = "DIGEST"
-	// SignatureScopeType_ARCHIVED means the signature covers its bounded
+	SignatureScopeTypeDigest SignatureScopeType = "DIGEST"
+	// SignatureScopeTypeArchived means the signature covers its bounded
 	// archive.
-	SignatureScopeType_ARCHIVED SignatureScopeType = "ARCHIVED"
-	// SignatureScopeType_COUNTER_SIGNATURE means the signature
+	SignatureScopeTypeArchived SignatureScopeType = "ARCHIVED"
+	// SignatureScopeTypeCounterSignature means the signature
 	// counter-signs its master signature.
-	SignatureScopeType_COUNTER_SIGNATURE SignatureScopeType = "COUNTER_SIGNATURE"
-	// SignatureScopeType_EAA_SIGNATURE is the signature used to issue the
+	SignatureScopeTypeCounterSignature SignatureScopeType = "COUNTER_SIGNATURE"
+	// SignatureScopeTypeEAASignature is the signature used to issue the
 	// EAA.
-	SignatureScopeType_EAA_SIGNATURE SignatureScopeType = "EAA_SIGNATURE"
-	// SignatureScopeType_KEY_BINDING_SIGNATURE is the key binding signature
+	SignatureScopeTypeEAASignature SignatureScopeType = "EAA_SIGNATURE"
+	// SignatureScopeTypeKeyBindingSignature is the key binding signature
 	// used to proof a possession of the key by a Wallet holder.
-	SignatureScopeType_KEY_BINDING_SIGNATURE SignatureScopeType = "KEY_BINDING_SIGNATURE"
-	// SignatureScopeType_SIGNATURE means the evidence record covers a
+	SignatureScopeTypeKeyBindingSignature SignatureScopeType = "KEY_BINDING_SIGNATURE"
+	// SignatureScopeTypeSignature means the evidence record covers a
 	// signature.
-	SignatureScopeType_SIGNATURE SignatureScopeType = "SIGNATURE"
+	SignatureScopeTypeSignature SignatureScopeType = "SIGNATURE"
 )
 
 // SignatureScopeTypeValues returns all constants in declaration order.
 func SignatureScopeTypeValues() []SignatureScopeType {
 	return []SignatureScopeType{
-		SignatureScopeType_FULL,
-		SignatureScopeType_PARTIAL,
-		SignatureScopeType_DIGEST,
-		SignatureScopeType_ARCHIVED,
-		SignatureScopeType_COUNTER_SIGNATURE,
-		SignatureScopeType_EAA_SIGNATURE,
-		SignatureScopeType_KEY_BINDING_SIGNATURE,
-		SignatureScopeType_SIGNATURE,
+		SignatureScopeTypeFull,
+		SignatureScopeTypePartial,
+		SignatureScopeTypeDigest,
+		SignatureScopeTypeArchived,
+		SignatureScopeTypeCounterSignature,
+		SignatureScopeTypeEAASignature,
+		SignatureScopeTypeKeyBindingSignature,
+		SignatureScopeTypeSignature,
 	}
 }
 

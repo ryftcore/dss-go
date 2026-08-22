@@ -4,10 +4,10 @@ import "testing"
 
 func TestVisualSignatureAlignmentVerticalValues(t *testing.T) {
 	want := []VisualSignatureAlignmentVertical{
-		VisualSignatureAlignmentVertical_NONE,
-		VisualSignatureAlignmentVertical_TOP,
-		VisualSignatureAlignmentVertical_MIDDLE,
-		VisualSignatureAlignmentVertical_BOTTOM,
+		VisualSignatureAlignmentVerticalNone,
+		VisualSignatureAlignmentVerticalTop,
+		VisualSignatureAlignmentVerticalMiddle,
+		VisualSignatureAlignmentVerticalBottom,
 	}
 	got := VisualSignatureAlignmentVerticalValues()
 	if len(got) != len(want) {

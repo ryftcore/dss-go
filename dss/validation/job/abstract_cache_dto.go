@@ -149,28 +149,28 @@ func (d *AbstractCacheDTO) SetResultExist(resultExist bool) {
 // IsRefreshNeeded reports whether the cache state is REFRESH_NEEDED. Port of
 // isRefreshNeeded().
 func (d *AbstractCacheDTO) IsRefreshNeeded() bool {
-	return CacheStateEnum_REFRESH_NEEDED == d.cacheState
+	return CacheStateEnumRefreshNeeded == d.cacheState
 }
 
 // IsDesynchronized reports whether the cache state is DESYNCHRONIZED. Port of
 // isDesynchronized().
 func (d *AbstractCacheDTO) IsDesynchronized() bool {
-	return CacheStateEnum_DESYNCHRONIZED == d.cacheState
+	return CacheStateEnumDesynchronized == d.cacheState
 }
 
 // IsSynchronized reports whether the cache state is SYNCHRONIZED. Port of isSynchronized().
 func (d *AbstractCacheDTO) IsSynchronized() bool {
-	return CacheStateEnum_SYNCHRONIZED == d.cacheState
+	return CacheStateEnumSynchronized == d.cacheState
 }
 
 // IsError reports whether the cache state is ERROR. Port of isError().
 func (d *AbstractCacheDTO) IsError() bool {
-	return CacheStateEnum_ERROR == d.cacheState
+	return CacheStateEnumError == d.cacheState
 }
 
 // IsToBeDeleted reports whether the cache state is TO_BE_DELETED. Port of isToBeDeleted().
 func (d *AbstractCacheDTO) IsToBeDeleted() bool {
-	return CacheStateEnum_TO_BE_DELETED == d.cacheState
+	return CacheStateEnumToBEDeleted == d.cacheState
 }
 
 // StatusName returns the cache state's name. Port of getStatusName().

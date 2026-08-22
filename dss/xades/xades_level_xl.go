@@ -67,7 +67,7 @@ func (xl *XAdESLevelXL) ExtendSignatures(signatures []validation.AdvancedSignatu
 	}
 
 	signatureRequirementsChecker := xl.SignatureRequirementsChecker()
-	if enumerations.SignatureLevel_XAdES_XL == xl.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESXL == xl.Params.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToXLLevelPossible(signatures)
 	}
 	signatureRequirementsChecker.AssertSignaturesValid(signaturesToExtend)
@@ -141,5 +141,5 @@ func (xl *XAdESLevelXL) extendToXLLevelSignatures(
 
 // xlLevelExtensionRequired ports the private xlLevelExtensionRequired.
 func (xl *XAdESLevelXL) xlLevelExtensionRequired(signature validation.AdvancedSignature) bool {
-	return enumerations.SignatureLevel_XAdES_XL == xl.Params.SignatureLevel() || !signature.HasAProfile()
+	return enumerations.SignatureLevelXAdESXL == xl.Params.SignatureLevel() || !signature.HasAProfile()
 }

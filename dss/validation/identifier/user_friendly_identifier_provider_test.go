@@ -76,7 +76,7 @@ func TestUserFriendlyIdentifierProviderCertificateRef(t *testing.T) {
 		t.Errorf("IDAsString() = %q, want %q", got, want)
 	}
 
-	skiDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA1, []byte("ski"))
+	skiDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA1, []byte("ski"))
 	if err != nil {
 		t.Fatal(err)
 	}

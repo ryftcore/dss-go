@@ -11,30 +11,30 @@ import "fmt"
 type TextWrapping string
 
 const (
-	// TextWrapping_FILL_BOX: a font size is adapted in order to fill the
+	// TextWrappingFillBox: a font size is adapted in order to fill the
 	// whole signature field's space, by keeping the defined whitespaces in
 	// new lines by user. When using with a combination of image, the image
 	// block is computed at first and the rest space is filled by text.
-	TextWrapping_FILL_BOX TextWrapping = "FILL_BOX"
-	// TextWrapping_FILL_BOX_AND_LINEBREAK: the text is formatted, by
+	TextWrappingFillBox TextWrapping = "FILL_BOX"
+	// TextWrappingFillBoxAndLineBreak: the text is formatted, by
 	// separating the provided text to multiple lines in order to find the
 	// biggest font size in order to wrap the text to the defined signature
 	// field's box. When using with a combination of image, the image block
 	// is computed at first and the rest space is filled by text.
-	TextWrapping_FILL_BOX_AND_LINEBREAK TextWrapping = "FILL_BOX_AND_LINEBREAK"
-	// TextWrapping_FONT_BASED: the text is generated based on the font
+	TextWrappingFillBoxAndLineBreak TextWrapping = "FILL_BOX_AND_LINEBREAK"
+	// TextWrappingFontBased: the text is generated based on the font
 	// values provided within parameters. When using this value with
 	// combination of image, the text is computed at first and the rest
 	// space is filled by the image.
-	TextWrapping_FONT_BASED TextWrapping = "FONT_BASED"
+	TextWrappingFontBased TextWrapping = "FONT_BASED"
 )
 
 // TextWrappingValues returns all constants in declaration order.
 func TextWrappingValues() []TextWrapping {
 	return []TextWrapping{
-		TextWrapping_FILL_BOX,
-		TextWrapping_FILL_BOX_AND_LINEBREAK,
-		TextWrapping_FONT_BASED,
+		TextWrappingFillBox,
+		TextWrappingFillBoxAndLineBreak,
+		TextWrappingFontBased,
 	}
 }
 

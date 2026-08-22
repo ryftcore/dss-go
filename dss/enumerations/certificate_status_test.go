@@ -4,7 +4,7 @@ import "testing"
 
 func TestCertificateStatusValues(t *testing.T) {
 	values := CertificateStatusValues()
-	want := []CertificateStatus{CertificateStatus_GOOD, CertificateStatus_REVOKED, CertificateStatus_UNKNOWN}
+	want := []CertificateStatus{CertificateStatusGood, CertificateStatusRevoked, CertificateStatusUnknown}
 	if len(values) != len(want) {
 		t.Fatalf("expected %d values, got %d", len(want), len(values))
 	}
@@ -22,9 +22,9 @@ func TestCertificateStatusPredicates(t *testing.T) {
 		isRevoked bool
 		isKnown   bool
 	}{
-		{CertificateStatus_GOOD, true, false, true},
-		{CertificateStatus_REVOKED, false, true, true},
-		{CertificateStatus_UNKNOWN, false, false, false},
+		{CertificateStatusGood, true, false, true},
+		{CertificateStatusRevoked, false, true, true},
+		{CertificateStatusUnknown, false, false, false},
 	}
 	for _, c := range cases {
 		if got := c.v.IsGood(); got != c.isGood {

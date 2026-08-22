@@ -126,7 +126,7 @@ func TestCRLUtilsBuildCRLValidity_Valid(t *testing.T) {
 	if !validity.IsValid() {
 		t.Errorf("expected the CRLValidity to be valid")
 	}
-	if validity.SignatureAlgorithm() != enumerations.SignatureAlgorithm_RSA_SHA256 {
+	if validity.SignatureAlgorithm() != enumerations.SignatureAlgorithmRSASHA256 {
 		t.Errorf("SignatureAlgorithm() = %v, want RSA_SHA256", validity.SignatureAlgorithm())
 	}
 	if validity.ThisUpdate() == nil {
@@ -317,7 +317,7 @@ func TestCRLUtilsRevocationInfo(t *testing.T) {
 		if reason == nil {
 			t.Fatalf("expected a revocation reason to be present")
 		}
-		if enumerations.RevocationReasonFromInt(*reason) != enumerations.RevocationReason_KEY_COMPROMISE {
+		if enumerations.RevocationReasonFromInt(*reason) != enumerations.RevocationReasonKeyCompromise {
 			t.Errorf("RevocationReason() = %d, want keyCompromise (1)", *reason)
 		}
 	})

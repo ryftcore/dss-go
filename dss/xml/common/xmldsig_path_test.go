@@ -13,29 +13,29 @@ func TestXMLDSigPath_KAT(t *testing.T) {
 		got  XPathQuery
 		want string
 	}{
-		{"SIGNATURE_PATH", XMLDSigPath_SIGNATURE_PATH, "./ds:Signature"},
-		{"ALL_SIGNATURES_PATH", XMLDSigPath_ALL_SIGNATURES_PATH, "//ds:Signature"},
-		{"OBJECT_PATH", XMLDSigPath_OBJECT_PATH, "./ds:Object"},
-		{"MANIFEST_PATH", XMLDSigPath_MANIFEST_PATH, "./ds:Object/ds:Manifest"},
-		{"SIGNED_INFO_PATH", XMLDSigPath_SIGNED_INFO_PATH, "./ds:SignedInfo"},
-		{"SIGNED_INFO_CANONICALIZATION_METHOD", XMLDSigPath_SIGNED_INFO_CANONICALIZATION_METHOD, "./ds:SignedInfo/ds:CanonicalizationMethod"},
-		{"SIGNED_INFO_REFERENCE_PATH", XMLDSigPath_SIGNED_INFO_REFERENCE_PATH, "./ds:SignedInfo/ds:Reference"},
-		{"SIGNATURE_METHOD_PATH", XMLDSigPath_SIGNATURE_METHOD_PATH, "./ds:SignedInfo/ds:SignatureMethod"},
-		{"REFERENCE_PATH", XMLDSigPath_REFERENCE_PATH, "./ds:Reference"},
-		{"SIGNATURE_VALUE_PATH", XMLDSigPath_SIGNATURE_VALUE_PATH, "./ds:SignatureValue"},
-		{"SIGNATURE_VALUE_ID_PATH", XMLDSigPath_SIGNATURE_VALUE_ID_PATH, "./ds:SignatureValue/@Id"},
-		{"ALL_SIGNATURE_VALUES_PATH", XMLDSigPath_ALL_SIGNATURE_VALUES_PATH, "//ds:SignatureValue"},
-		{"KEY_INFO_PATH", XMLDSigPath_KEY_INFO_PATH, "./ds:KeyInfo"},
-		{"KEY_INFO_X509_DATA", XMLDSigPath_KEY_INFO_X509_DATA, "./ds:KeyInfo/ds:X509Data"},
-		{"KEY_INFO_X509_CERTIFICATE_PATH", XMLDSigPath_KEY_INFO_X509_CERTIFICATE_PATH, "./ds:KeyInfo/ds:X509Data/ds:X509Certificate"},
-		{"SIGNATURE_PROPERTIES_PATH", XMLDSigPath_SIGNATURE_PROPERTIES_PATH, "./ds:Object/ds:SignatureProperties"},
-		{"SIGNATURE_PROPERTY_PATH", XMLDSigPath_SIGNATURE_PROPERTY_PATH, "./ds:Object/ds:SignatureProperties/ds:SignatureProperty"},
-		{"DIGEST_METHOD_ALGORITHM_PATH", XMLDSigPath_DIGEST_METHOD_ALGORITHM_PATH, "./ds:DigestMethod/@Algorithm"},
-		{"DIGEST_VALUE_PATH", XMLDSigPath_DIGEST_VALUE_PATH, "./ds:DigestValue"},
-		{"CANONICALIZATION_ALGORITHM_PATH", XMLDSigPath_CANONICALIZATION_ALGORITHM_PATH, "./ds:CanonicalizationMethod/@Algorithm"},
-		{"TRANSFORM_PATH", XMLDSigPath_TRANSFORM_PATH, "./ds:Transform"},
-		{"TRANSFORMS_PATH", XMLDSigPath_TRANSFORMS_PATH, "./ds:Transforms"},
-		{"TRANSFORMS_TRANSFORM_PATH", XMLDSigPath_TRANSFORMS_TRANSFORM_PATH, "./ds:Transforms/ds:Transform"},
+		{"SIGNATURE_PATH", XMLDSigPathSignaturePath, "./ds:Signature"},
+		{"ALL_SIGNATURES_PATH", XMLDSigPathAllSignaturesPath, "//ds:Signature"},
+		{"OBJECT_PATH", XMLDSigPathObjectPath, "./ds:Object"},
+		{"MANIFEST_PATH", XMLDSigPathManifestPath, "./ds:Object/ds:Manifest"},
+		{"SIGNED_INFO_PATH", XMLDSigPathSignedInfoPath, "./ds:SignedInfo"},
+		{"SIGNED_INFO_CANONICALIZATION_METHOD", XMLDSigPathSignedInfoCanonicalizationMethod, "./ds:SignedInfo/ds:CanonicalizationMethod"},
+		{"SIGNED_INFO_REFERENCE_PATH", XMLDSigPathSignedInfoReferencePath, "./ds:SignedInfo/ds:Reference"},
+		{"SIGNATURE_METHOD_PATH", XMLDSigPathSignatureMethodPath, "./ds:SignedInfo/ds:SignatureMethod"},
+		{"REFERENCE_PATH", XMLDSigPathReferencePath, "./ds:Reference"},
+		{"SIGNATURE_VALUE_PATH", XMLDSigPathSignatureValuePath, "./ds:SignatureValue"},
+		{"SIGNATURE_VALUE_ID_PATH", XMLDSigPathSignatureValueIDPath, "./ds:SignatureValue/@Id"},
+		{"ALL_SIGNATURE_VALUES_PATH", XMLDSigPathAllSignatureValuesPath, "//ds:SignatureValue"},
+		{"KEY_INFO_PATH", XMLDSigPathKeyInfoPath, "./ds:KeyInfo"},
+		{"KEY_INFO_X509_DATA", XMLDSigPathKeyInfoX509Data, "./ds:KeyInfo/ds:X509Data"},
+		{"KEY_INFO_X509_CERTIFICATE_PATH", XMLDSigPathKeyInfoX509CertificatePath, "./ds:KeyInfo/ds:X509Data/ds:X509Certificate"},
+		{"SIGNATURE_PROPERTIES_PATH", XMLDSigPathSignaturePropertiesPath, "./ds:Object/ds:SignatureProperties"},
+		{"SIGNATURE_PROPERTY_PATH", XMLDSigPathSignaturePropertyPath, "./ds:Object/ds:SignatureProperties/ds:SignatureProperty"},
+		{"DIGEST_METHOD_ALGORITHM_PATH", XMLDSigPathDigestMethodAlgorithmPath, "./ds:DigestMethod/@Algorithm"},
+		{"DIGEST_VALUE_PATH", XMLDSigPathDigestValuePath, "./ds:DigestValue"},
+		{"CANONICALIZATION_ALGORITHM_PATH", XMLDSigPathCanonicalizationAlgorithmPath, "./ds:CanonicalizationMethod/@Algorithm"},
+		{"TRANSFORM_PATH", XMLDSigPathTransformPath, "./ds:Transform"},
+		{"TRANSFORMS_PATH", XMLDSigPathTransformsPath, "./ds:Transforms"},
+		{"TRANSFORMS_TRANSFORM_PATH", XMLDSigPathTransformsTransformPath, "./ds:Transforms/ds:Transform"},
 	}
 
 	for _, c := range cases {
@@ -53,9 +53,9 @@ func TestXMLDSigPath_TypeConstants(t *testing.T) {
 		got  string
 		want string
 	}{
-		{"OBJECT_TYPE", XMLDSigPath_OBJECT_TYPE, "http://www.w3.org/2000/09/xmldsig#Object"},
-		{"MANIFEST_TYPE", XMLDSigPath_MANIFEST_TYPE, "http://www.w3.org/2000/09/xmldsig#Manifest"},
-		{"COUNTER_SIGNATURE_TYPE", XMLDSigPath_COUNTER_SIGNATURE_TYPE, "http://uri.etsi.org/01903#CountersignedSignature"},
+		{"OBJECT_TYPE", XMLDSigPathObjectType, "http://www.w3.org/2000/09/xmldsig#Object"},
+		{"MANIFEST_TYPE", XMLDSigPathManifestType, "http://www.w3.org/2000/09/xmldsig#Manifest"},
+		{"COUNTER_SIGNATURE_TYPE", XMLDSigPathCounterSignatureType, "http://uri.etsi.org/01903#CountersignedSignature"},
 	}
 	for _, c := range cases {
 		if c.got != c.want {

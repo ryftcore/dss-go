@@ -50,7 +50,7 @@ func NewPdfTimestampToken(pdfTimestampRevision *PdfDocTimestampRevision) (*PdfTi
 	// PdfTimestampToken (Java passes `this`), so it is built from the two pieces of data it
 	// actually reads out of one instead - see pdf_timestamp_token_identifier_builder.go.
 	identifierBuilder := NewPdfTimestampTokenIdentifierBuilder(encoded, pdfTimestampRevision)
-	base, err := validation.NewTimestampTokenWithIdentifierBuilder(encoded, enumerations.TimestampType_DOCUMENT_TIMESTAMP,
+	base, err := validation.NewTimestampTokenWithIdentifierBuilder(encoded, enumerations.TimestampTypeDocumentTimestamp,
 		[]*validation.TimestampedReference{}, identifierBuilder)
 	if err != nil {
 		return nil, err

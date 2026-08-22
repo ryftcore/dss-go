@@ -192,7 +192,7 @@ func (b *XAdESBuilder) IncorporateDigestValue(parentDom *xmldom.Node, base64Enco
 
 // digestAlgAndValueNamespace ports the private getDigestAlgAndValueNamespace.
 func (b *XAdESBuilder) digestAlgAndValueNamespace() *common.DSSNamespace {
-	if definition.XAdESNamespace_XADES_111.IsSameUri(b.overrides.XadesNamespace().Uri()) {
+	if definition.XAdESNamespaceXAdES111.IsSameUri(b.overrides.XadesNamespace().Uri()) {
 		return b.overrides.XadesNamespace()
 	}
 	return b.overrides.XmldsigNamespace()
@@ -248,14 +248,14 @@ func (b *XAdESBuilder) IncorporateIssuerV1(parentDom *xmldom.Node, certificate *
 	issuerSerialDom := xmlutils.DomUtilsAddElement(b.DocumentDom, parentDom, b.overrides.XadesNamespace(),
 		currentElements.ElementIssuerSerial())
 	x509IssuerNameDom := xmlutils.DomUtilsAddElement(b.DocumentDom, issuerSerialDom,
-		b.overrides.XmldsigNamespace(), common.XMLDSigElement_X509_ISSUER_NAME)
+		b.overrides.XmldsigNamespace(), common.XMLDSigElementX509IssuerName)
 
 	// X500Principal#getName() with no format argument is RFC 2253.
 	issuerX500PrincipalName := certificate.IssuerX500Principal().RFC2253Name()
 	xmlutils.DomUtilsSetTextNode(b.DocumentDom, x509IssuerNameDom, issuerX500PrincipalName)
 
 	x509SerialNumberDom := xmlutils.DomUtilsAddElement(b.DocumentDom, issuerSerialDom,
-		b.overrides.XmldsigNamespace(), common.XMLDSigElement_X509_SERIAL_NUMBER)
+		b.overrides.XmldsigNamespace(), common.XMLDSigElementX509SerialNumber)
 
 	serialNumber := certificate.SerialNumber()
 	serialNumberString := serialNumber.String()
@@ -301,7 +301,7 @@ func (b *XAdESBuilder) notIndentedObjectIds() []string {
 func (b *XAdESBuilder) CreateXmlDocument() (model.DSSDocument, error) {
 	var bytes []byte
 	var err error
-	if enumerations.SigningOperation_SIGN == b.Params.GetContext().OperationKind() && b.Params.IsPrettyPrint() {
+	if enumerations.SigningOperationSign == b.Params.GetContext().OperationKind() && b.Params.IsPrettyPrint() {
 		b.overrides.AlignNodes()
 		indented, indentErr := DSSXMLUtilsGetDocWithIndentedSignature(b.DocumentDom,
 			b.Params.GetDeterministicId(), b.notIndentedObjectIds())
@@ -316,7 +316,7 @@ func (b *XAdESBuilder) CreateXmlDocument() (model.DSSDocument, error) {
 		return nil, err
 	}
 	inMemoryDocument := model.NewInMemoryDocument(bytes)
-	inMemoryDocument.SetMimeType(enumerations.MimeTypeEnum_XML)
+	inMemoryDocument.SetMimeType(enumerations.MimeTypeEnumXML)
 	return inMemoryDocument, nil
 }
 
@@ -347,12 +347,12 @@ func (b *XAdESBuilder) Xades141Namespace() *common.DSSNamespace {
 func (b *XAdESBuilder) CurrentXAdESElements() (definition.XAdESElement, error) {
 	xadesURI := b.overrides.XadesNamespace().Uri()
 	switch {
-	case definition.XAdESNamespace_XADES_132.Uri() == xadesURI:
-		return definition.XAdES132Element_ALL_DATA_OBJECTS_TIMESTAMP, nil
-	case definition.XAdESNamespace_XADES_122.Uri() == xadesURI:
-		return definition.XAdES122Element_ALL_DATA_OBJECTS_TIMESTAMP, nil
-	case definition.XAdESNamespace_XADES_111.Uri() == xadesURI:
-		return definition.XAdES111Element_ALL_DATA_OBJECTS_TIMESTAMP, nil
+	case definition.XAdESNamespaceXAdES132.Uri() == xadesURI:
+		return definition.XAdES132ElementAllDataObjectsTimestamp, nil
+	case definition.XAdESNamespaceXAdES122.Uri() == xadesURI:
+		return definition.XAdES122ElementAllDataObjectsTimestamp, nil
+	case definition.XAdESNamespaceXAdES111.Uri() == xadesURI:
+		return definition.XAdES111ElementAllDataObjectsTimestamp, nil
 	}
 	return nil, fmt.Errorf("Unsupported URI : %s", xadesURI)
 }
@@ -362,11 +362,11 @@ func (b *XAdESBuilder) CurrentXAdESElements() (definition.XAdESElement, error) {
 func (b *XAdESBuilder) CurrentXAdESPath() (definition.XAdESPath, error) {
 	xadesURI := b.overrides.XadesNamespace().Uri()
 	switch {
-	case utils.AreStringsEqual(definition.XAdESNamespace_XADES_132.Uri(), xadesURI):
+	case utils.AreStringsEqual(definition.XAdESNamespaceXAdES132.Uri(), xadesURI):
 		return definition.NewXAdES132Path(), nil
-	case utils.AreStringsEqual(definition.XAdESNamespace_XADES_122.Uri(), xadesURI):
+	case utils.AreStringsEqual(definition.XAdESNamespaceXAdES122.Uri(), xadesURI):
 		return definition.NewXAdES122Path(), nil
-	case utils.AreStringsEqual(definition.XAdESNamespace_XADES_111.Uri(), xadesURI):
+	case utils.AreStringsEqual(definition.XAdESNamespaceXAdES111.Uri(), xadesURI):
 		return definition.NewXAdES111Path(), nil
 	}
 	return nil, fmt.Errorf("Unsupported URI : %s", xadesURI)
@@ -386,14 +386,14 @@ func (b *XAdESBuilder) IncorporateSPDocSpecification(parentElement *xmldom.Node,
 		return err
 	}
 	spDocSpecElement := xmlutils.DomUtilsAddElement(b.DocumentDom, parentElement,
-		b.Xades141Namespace(), definition.XAdES141Element_SP_DOC_SPECIFICATION)
+		b.Xades141Namespace(), definition.XAdES141ElementSPDocSpecification)
 	xmlutils.DomUtilsAddNamespaceAttribute(spDocSpecElement, b.Xades141Namespace())
 
 	identifierElement := xmlutils.DomUtilsAddElement(b.DocumentDom, spDocSpecElement,
 		b.overrides.XadesNamespace(), currentElements.ElementIdentifier())
 	if spDocSpecification.Qualifier() != "" {
 		identifierElement.SetAttr(
-			xmldom.Name{Local: definition.XAdES132Attribute_QUALIFIER.AttributeName()},
+			xmldom.Name{Local: definition.XAdES132AttributeQualifier.AttributeName()},
 			spDocSpecification.Qualifier().Value())
 	}
 	xmlutils.DomUtilsSetTextNode(b.DocumentDom, identifierElement, spDocSpecification.Id())

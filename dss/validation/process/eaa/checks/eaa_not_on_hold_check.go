@@ -32,7 +32,7 @@ func NewEAANotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *process.Resul
 
 // Process performs the check. Port of process().
 func (c *EAANotOnHoldCheck) Process() bool {
-	return c.eaaStatusToken == nil || enumerations.EAAStatus_SUSPENDED != c.eaaStatusToken.Status()
+	return c.eaaStatusToken == nil || enumerations.EAAStatusSuspended != c.eaaStatusToken.Status()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -49,11 +49,11 @@ func (c *EAANotOnHoldCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAANotOnHoldCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAANotOnHoldCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }

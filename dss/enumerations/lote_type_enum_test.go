@@ -8,12 +8,12 @@ func TestLoTETypeEnum(t *testing.T) {
 		uri   string
 		label string
 	}{
-		{LoTETypeEnum_EUPIDProvidersList, "http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList", "EU List of providers of person identity data"},
-		{LoTETypeEnum_EUWalletProvidersList, "http://uri.etsi.org/19602/LoTEType/EUWalletProvidersList", "EU List of wallet providers"},
-		{LoTETypeEnum_EUWRPACProvidersList, "https://uri.etsi.org/19602/LoTEType/EUWRPACProvidersList", "EU List of providers of wallet relying party access certificates"},
-		{LoTETypeEnum_EUWRPRCProvidersList, "http://uri.etsi.org/19602/LoTEType/EUWRPRCProvidersList", "EU List of providers of wallet relying party registration certificates"},
-		{LoTETypeEnum_EUPubEAAProvidersList, "http://uri.etsi.org/19602/LoTEType/EUPubEAAProvidersList", "EU List of public sector bodies issuing electronic attestation of attributes"},
-		{LoTETypeEnum_EURegistrarsAndRegistersList, "http://uri.etsi.org/19602/LoTEType/EURegistrarsAndRegistersList", "EU List of registrars and registers"},
+		{LoTETypeEnumEUPIDProvidersList, "http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList", "EU List of providers of person identity data"},
+		{LoTETypeEnumEUWalletProvidersList, "http://uri.etsi.org/19602/LoTEType/EUWalletProvidersList", "EU List of wallet providers"},
+		{LoTETypeEnumEUWRPACProvidersList, "https://uri.etsi.org/19602/LoTEType/EUWRPACProvidersList", "EU List of providers of wallet relying party access certificates"},
+		{LoTETypeEnumEUWRPRCProvidersList, "http://uri.etsi.org/19602/LoTEType/EUWRPRCProvidersList", "EU List of providers of wallet relying party registration certificates"},
+		{LoTETypeEnumEUPubEAAProvidersList, "http://uri.etsi.org/19602/LoTEType/EUPubEAAProvidersList", "EU List of public sector bodies issuing electronic attestation of attributes"},
+		{LoTETypeEnumEURegistrarsAndRegistersList, "http://uri.etsi.org/19602/LoTEType/EURegistrarsAndRegistersList", "EU List of registrars and registers"},
 	}
 	if len(LoTETypeEnumValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(LoTETypeEnumValues()))

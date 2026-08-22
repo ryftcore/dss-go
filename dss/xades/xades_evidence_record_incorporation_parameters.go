@@ -21,7 +21,7 @@ type XAdESEvidenceRecordIncorporationParameters struct {
 func NewXAdESEvidenceRecordIncorporationParameters() *XAdESEvidenceRecordIncorporationParameters {
 	return &XAdESEvidenceRecordIncorporationParameters{
 		AbstractEvidenceRecordIncorporationParameters: document.NewAbstractEvidenceRecordIncorporationParameters(),
-		xadesERNamespace: definition.XAdESNamespace_XADES_EVIDENCERECORD_NAMESPACE,
+		xadesERNamespace: definition.XAdESNamespaceXAdESEvidencerecordNamespace,
 	}
 }
 
@@ -42,7 +42,7 @@ func (p *XAdESEvidenceRecordIncorporationParameters) SetXadesERNamespace(xadesER
 		panic("xadesERNamespace cannot be null")
 	}
 	uri := xadesERNamespace.Uri()
-	if definition.XAdESNamespace_XADES_EVIDENCERECORD_NAMESPACE.IsSameUri(uri) {
+	if definition.XAdESNamespaceXAdESEvidencerecordNamespace.IsSameUri(uri) {
 		p.xadesERNamespace = xadesERNamespace
 	} else {
 		panic("The provided URI does not match the 132-3 definition!")

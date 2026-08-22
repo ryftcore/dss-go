@@ -168,7 +168,7 @@ func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForCertificate(c
 	validationContext.Validate()
 
 	signatureValidationAlerter := validation.NewSignatureValidationAlerter(validationContext)
-	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperation_SIGN)
+	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperationSign)
 	return signatureValidationAlerter
 }
 
@@ -189,7 +189,7 @@ func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForSignatures(si
 	validationContext.Validate()
 
 	signatureValidationAlerter := validation.NewSignatureValidationAlerter(validationContext)
-	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperation_EXTEND)
+	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperationExtend)
 	return signatureValidationAlerter
 }
 

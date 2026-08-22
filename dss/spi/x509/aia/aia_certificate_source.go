@@ -132,7 +132,7 @@ func (s *AIACertificateSource) IssuerFromAIA() *model.CertificateToken {
 	return nil
 }
 
-// CertificateSourceType returns CertificateSourceType_AIA.
+// CertificateSourceType returns CertificateSourceTypeAIA.
 func (s *AIACertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_AIA
+	return enumerations.CertificateSourceTypeAIA
 }

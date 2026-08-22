@@ -36,7 +36,7 @@ func NewASiCWithCAdESSignatureManifestBuilderWithFilenameFactory(asicContent *as
 
 // SigReferenceMimeType ports the @Override protected getSigReferenceMimeType().
 func (b *ASiCWithCAdESSignatureManifestBuilder) SigReferenceMimeType() enumerations.MimeType {
-	return enumerations.MimeTypeEnum_PKCS7
+	return enumerations.MimeTypeEnumPKCS7
 }
 
 // SetAsicContentDocumentFilter ports the @Override covariant-return

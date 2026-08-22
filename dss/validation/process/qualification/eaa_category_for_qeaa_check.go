@@ -34,7 +34,7 @@ func NewEAACategoryForQEAACheck(i18nProvider *i18n.I18nProvider, result *process
 
 // Process performs the check. Port of process().
 func (c *EAACategoryForQEAACheck) Process() bool {
-	return enumerations.EAACategory_EU_QEAA.URN() == c.eaa.EAACategory()
+	return enumerations.EAACategoryEUQEAA.URN() == c.eaa.EAACategory()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -50,7 +50,7 @@ func (c *EAACategoryForQEAACheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAACategoryForQEAACheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -25,7 +25,7 @@ type EAARevocationAlgorithmObsolescenceValidation struct {
 func NewEAARevocationAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.EAARevocationTokenWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *EAARevocationAlgorithmObsolescenceValidation {
 	c := &EAARevocationAlgorithmObsolescenceValidation{}
-	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.Context_EAA_REVOCATION, validationDate, validationPolicy, c)
+	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextEAARevocation, validationDate, validationPolicy, c)
 	c.InitChainBase(c)
 	return c
 }

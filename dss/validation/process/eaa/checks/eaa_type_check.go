@@ -35,9 +35,9 @@ func NewEAATypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*ja
 // Process performs the check. Port of process().
 func (c *EAATypeCheck) Process() bool {
 	switch c.eaa.EAAType() {
-	case enumerations.EAAType_SD_JWT_VC:
+	case enumerations.EAATypeSDJWTVC:
 		return c.ProcessValueCheck(c.eaa.EAAVerifiableCredentialsTypeUri())
-	case enumerations.EAAType_ISO_IEC_MDOC:
+	case enumerations.EAATypeISOIECMDoc:
 		docType := c.eaa.EAADocumentType()
 		if docType == "" {
 			// Handle IssuerSigned token.
@@ -63,11 +63,11 @@ func (c *EAATypeCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAATypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAATypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

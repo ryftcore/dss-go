@@ -49,7 +49,7 @@ type DSSReference struct {
 
 // NewDSSReference ports the default constructor, including the digestMethod field initializer.
 func NewDSSReference() *DSSReference {
-	return &DSSReference{digestMethod: enumerations.DigestAlgorithm_SHA512}
+	return &DSSReference{digestMethod: enumerations.DigestAlgorithmSHA512}
 }
 
 // Id gets the Id attribute of the reference. Ports getId().

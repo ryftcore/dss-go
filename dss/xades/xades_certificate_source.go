@@ -50,18 +50,18 @@ func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPaths definit
 	s.InitSignatureCertificateSource(s)
 
 	// init
-	s.extractCertificates(common.XMLDSigPath_KEY_INFO_X509_CERTIFICATE_PATH, enumerations.CertificateOrigin_KEY_INFO)
-	s.extractCertificates(xadesPaths.EncapsulatedCertificateValuesPath(), enumerations.CertificateOrigin_CERTIFICATE_VALUES)
-	s.extractCertificates(xadesPaths.EncapsulatedAttrAuthoritiesCertValuesPath(), enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES)
-	s.extractCertificates(xadesPaths.EncapsulatedTimeStampValidationDataCertValuesPath(), enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA)
-	s.extractCertificates(xadesPaths.EncapsulatedAnyValidationDataCertValuesPath(), enumerations.CertificateOrigin_ANY_VALIDATION_DATA)
+	s.extractCertificates(common.XMLDSigPathKeyInfoX509CertificatePath, enumerations.CertificateOriginKeyInfo)
+	s.extractCertificates(xadesPaths.EncapsulatedCertificateValuesPath(), enumerations.CertificateOriginCertificateValues)
+	s.extractCertificates(xadesPaths.EncapsulatedAttrAuthoritiesCertValuesPath(), enumerations.CertificateOriginAttrAuthoritiesCertValues)
+	s.extractCertificates(xadesPaths.EncapsulatedTimeStampValidationDataCertValuesPath(), enumerations.CertificateOriginTimestampValidationData)
+	s.extractCertificates(xadesPaths.EncapsulatedAnyValidationDataCertValuesPath(), enumerations.CertificateOriginAnyValidationData)
 
 	s.extractCertificateRefs(xadesPaths.SigningCertificateChildren(), xadesPaths.SigningCertificateV2Children(),
-		enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+		enumerations.CertificateRefOriginSigningCertificate)
 	s.extractCertificateRefs(xadesPaths.CompleteCertificateRefsCertPath(), xadesPaths.CompleteCertificateRefsV2CertPath(),
-		enumerations.CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS)
+		enumerations.CertificateRefOriginCompleteCertificateRefs)
 	s.extractCertificateRefs(xadesPaths.AttributeCertificateRefsCertPath(), xadesPaths.AttributeCertificateRefsV2CertPath(),
-		enumerations.CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS)
+		enumerations.CertificateRefOriginAttributeCertificateRefs)
 
 	// Upstream logs "+XAdESCertificateSource".
 

@@ -20,7 +20,7 @@ import (
 // testdata/gen/XcvaDirectOracle.java. This test replays the same pairs.
 
 // xcvaFailLevel is the Level.FAIL rule the direct oracle drove every check with.
-var xcvaFailLevel = process.GetLevelRule(enumerations.Level_FAIL)
+var xcvaFailLevel = process.GetLevelRule(enumerations.LevelFail)
 
 // singleRACChain is a chain of exactly one item over an XmlRAC, the Go form of
 // XcvaDirectOracle.SingleRACChain.

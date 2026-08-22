@@ -117,7 +117,7 @@ func (c *CertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateValidityRangeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -126,7 +126,7 @@ func (c *CertificateValidityRangeCheck[T]) FailedSubIndicationForConclusion() en
 	certificateIsKnownToNotBeRevoked := c.usedCertificateRevocation != nil &&
 		!c.usedCertificateRevocation.IsRevoked() && c.isRevocationDataValid()
 	if !c.revocationDataRequired || certificateIsKnownToNotBeRevoked {
-		return enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED
+		return enumerations.SubIndicationOutOfBoundsNotRevoked
 	}
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE
+	return enumerations.SubIndicationOutOfBoundsNoPOE
 }

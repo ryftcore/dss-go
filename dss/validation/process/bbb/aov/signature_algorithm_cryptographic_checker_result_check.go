@@ -67,8 +67,8 @@ func newSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i
 // BlockType returns the validating block type. Port of the overridden
 // getBlockType().
 func (c *SignatureAlgorithmCryptographicCheckerResultCheck[T]) BlockType() jaxb.XmlBlockType {
-	if enumerations.Context_CERTIFICATE == c.context {
-		return jaxb.XmlBlockType_AOV_XCV
+	if enumerations.ContextCertificate == c.context {
+		return jaxb.XmlBlockTypeAOVXCV
 	}
 	return ""
 }

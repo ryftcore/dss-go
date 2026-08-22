@@ -62,27 +62,27 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 	xadesPaths := signature.XAdESPaths()
 
 	// ds:KeyInfo (Cardinality == 1)
-	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPath_KEY_INFO_PATH) != 1 {
+	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPathKeyInfoPath) != 1 {
 		// Upstream logs "ds:KeyInfo element shall be present for XAdES-BASELINE-B signature
 		// (cardinality == 1)!".
 		return false
 	}
 	// ds:SignedInfo/ds:CanonicalizationMethod (Cardinality == 1)
-	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPath_SIGNED_INFO_CANONICALIZATION_METHOD) != 1 {
+	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPathSignedInfoCanonicalizationMethod) != 1 {
 		// Upstream logs "ds:SignedInfo/ds:CanonicalizationMethod element shall be present for
 		// XAdES-BASELINE-B signature (cardinality == 1)!".
 		return false
 	}
 	// ds:SignedInfo/ds:Reference (Cardinality >= 2)
-	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPath_SIGNED_INFO_REFERENCE_PATH) < 2 {
+	if xadesBaselineNumberOfOccurrences(signatureElement, common.XMLDSigPathSignedInfoReferencePath) < 2 {
 		// Upstream logs "ds:SignedInfo/ds:Reference element shall be present for
 		// XAdES-BASELINE-B signature (cardinality >= 2)!".
 		return false
 	}
 	// ds:SignedInfo/ds:Reference/ds:Transforms (Cardinality 0 or 1)
-	referenceList, _ := xmlutils.XPathUtilsGetNodeList(signatureElement, common.XMLDSigPath_SIGNED_INFO_REFERENCE_PATH)
+	referenceList, _ := xmlutils.XPathUtilsGetNodeList(signatureElement, common.XMLDSigPathSignedInfoReferencePath)
 	for _, reference := range referenceList {
-		if xadesBaselineNumberOfOccurrences(reference, common.XMLDSigPath_TRANSFORMS_PATH) > 1 {
+		if xadesBaselineNumberOfOccurrences(reference, common.XMLDSigPathTransformsPath) > 1 {
 			// Upstream logs "Only one ds:Reference/ds:Transforms may be present for
 			// XAdES-BASELINE-B signature (cardinality 0 or 1)!".
 			return false
@@ -150,7 +150,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 	if archiveTimestampPath != nil {
 		archiveTimeStampList, _ := xmlutils.XPathUtilsGetNodeList(signatureElement, archiveTimestampPath)
 		for _, archiveTimeStamp := range archiveTimeStampList {
-			if definition.XAdESNamespace_XADES_132.Uri() == archiveTimeStamp.Name.Space {
+			if definition.XAdESNamespaceXAdES132.Uri() == archiveTimeStamp.Name.Space {
 				// Upstream logs "xades132:ArchiveTimeStamp shall not be present for
 				// XAdES-BASELINE-B signature (cardinality == 0)!".
 				return false
@@ -167,7 +167,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 	// Additional requirement (d)
 	signedInfo := signature.SignedInfo()
 	if signedInfo != nil {
-		canonicalizationMethod, _ := xmlutils.XPathUtilsGetValue(signedInfo, common.XMLDSigPath_CANONICALIZATION_ALGORITHM_PATH)
+		canonicalizationMethod, _ := xmlutils.XPathUtilsGetValue(signedInfo, common.XMLDSigPathCanonicalizationAlgorithmPath)
 		if utils.IsStringNotEmpty(canonicalizationMethod) {
 			switch canonicalizationMethod {
 			case xmldsig.TransformC14N11WithComments, xmldsig.TransformC14NExclWithComments, xmldsig.TransformC14NWithComments,
@@ -188,7 +188,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 			signingCertificateV2 := signingCertificateV2List[0]
 			certList, _ := xmlutils.XPathUtilsGetNodeList(signingCertificateV2, xadesPaths.CurrentCertChildren())
 			for _, cert := range certList {
-				if cert.Attr("", definition.XAdES132Attribute_URI.AttributeName()) != nil {
+				if cert.Attr("", definition.XAdES132AttributeURI.AttributeName()) != nil {
 					// Upstream logs "SigningCertificateV2/Cert shall not include URI optional
 					// attribute for XAdES-BASELINE-B signature (requirement (i))!".
 					return false
@@ -205,12 +205,12 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 		// TODO : check whether other reference types should be checked (i.e. KeyInfo, Manifest, etc.)
 		uri := referenceValidation.Uri()
 		if (uri == "" || xmlutils.DomUtilsStartsFromHash(uri) || xmlutils.DomUtilsIsXPointerQuery(uri)) &&
-			(enumerations.DigestMatcherType_SIGNED_PROPERTIES == referenceValidation.Type() ||
-				enumerations.DigestMatcherType_COUNTER_SIGNATURE == referenceValidation.Type() ||
-				enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE == referenceValidation.Type() ||
-				enumerations.DigestMatcherType_MANIFEST == referenceValidation.Type() ||
-				enumerations.DigestMatcherType_KEY_INFO == referenceValidation.Type() ||
-				enumerations.DigestMatcherType_SIGNATURE_PROPERTIES == referenceValidation.Type()) {
+			(enumerations.DigestMatcherTypeSignedProperties == referenceValidation.Type() ||
+				enumerations.DigestMatcherTypeCounterSignature == referenceValidation.Type() ||
+				enumerations.DigestMatcherTypeCounterSignedSignatureValue == referenceValidation.Type() ||
+				enumerations.DigestMatcherTypeManifest == referenceValidation.Type() ||
+				enumerations.DigestMatcherTypeKeyInfo == referenceValidation.Type() ||
+				enumerations.DigestMatcherTypeSignatureProperties == referenceValidation.Type()) {
 			continue
 		}
 		// Upstream logs "DataObjectFormat shall be generated for each signed data for
@@ -579,7 +579,7 @@ func xadesBaselineIsValidXAdESDataObjectFormat(dataObjectFormat *xmldom.Node, si
 	 * ds:SignedInfo or a signed ds:Manifest element referencing the signed data object
 	 * qualified by this qualifying property.
 	 */
-	objectReferenceAttr := dataObjectFormat.Attr("", definition.XAdES132Attribute_OBJECT_REFERENCE.AttributeName())
+	objectReferenceAttr := dataObjectFormat.Attr("", definition.XAdES132AttributeObjectReference.AttributeName())
 	objectReference := ""
 	if objectReferenceAttr != nil {
 		objectReference = objectReferenceAttr.Value
@@ -628,7 +628,7 @@ func xadesBaselineIsDataObjectFormatValuesCompliant(dataObjectFormat *xmldom.Nod
 		if dataObjectFormatMimeType != nil {
 			object := DSSXMLUtilsGetObjectById(signatureElement, reference.Uri())
 			if object != nil {
-				objectMimeType := object.AttrValue("", common.XMLDSigAttribute_MIME_TYPE.AttributeName())
+				objectMimeType := object.AttrValue("", common.XMLDSigAttributeMIMEType.AttributeName())
 				if utils.IsStringNotEmpty(objectMimeType) && objectMimeType != dataObjectFormatMimeType.TextContent() {
 					// Upstream logs "DataObjectFormat's MimeType attribute shall have the same
 					// value as the corresponding signed ds:Object element, when present!".
@@ -640,7 +640,7 @@ func xadesBaselineIsDataObjectFormatValuesCompliant(dataObjectFormat *xmldom.Nod
 		if dataObjectFormatEncoding != nil {
 			object := DSSXMLUtilsGetObjectById(signatureElement, reference.Uri())
 			if object != nil {
-				objectEncoding := object.AttrValue("", common.XMLDSigAttribute_ENCODING.AttributeName())
+				objectEncoding := object.AttrValue("", common.XMLDSigAttributeEncoding.AttributeName())
 				if utils.IsStringNotEmpty(objectEncoding) && objectEncoding != dataObjectFormatEncoding.TextContent() {
 					// Upstream logs "DataObjectFormat's Encoding attribute shall have the same
 					// value as the corresponding signed ds:Object element, when present!".

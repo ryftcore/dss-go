@@ -8,22 +8,22 @@ type XAdES111Attribute string
 
 // XAdES111Attribute constants, one per XAdES 1.1.1 schema attribute name.
 const (
-	XAdES111Attribute_ID               XAdES111Attribute = "ID"
-	XAdES111Attribute_OBJECT_REFERENCE XAdES111Attribute = "OBJECT_REFERENCE"
-	XAdES111Attribute_QUALIFIER        XAdES111Attribute = "QUALIFIER"
-	XAdES111Attribute_TARGET           XAdES111Attribute = "TARGET"
-	XAdES111Attribute_URI              XAdES111Attribute = "URI"
-	XAdES111Attribute_URI2             XAdES111Attribute = "URI2"
+	XAdES111AttributeID              XAdES111Attribute = "ID"
+	XAdES111AttributeObjectReference XAdES111Attribute = "OBJECT_REFERENCE"
+	XAdES111AttributeQualifier       XAdES111Attribute = "QUALIFIER"
+	XAdES111AttributeTarget          XAdES111Attribute = "TARGET"
+	XAdES111AttributeURI             XAdES111Attribute = "URI"
+	XAdES111AttributeURI2            XAdES111Attribute = "URI2"
 )
 
 // xades111attributeNames maps each constant to its wire attribute name (getAttributeName()).
 var xades111attributeNames = map[XAdES111Attribute]string{
-	XAdES111Attribute_ID:               "Id",
-	XAdES111Attribute_OBJECT_REFERENCE: "ObjectReference",
-	XAdES111Attribute_QUALIFIER:        "Qualifier",
-	XAdES111Attribute_TARGET:           "Target",
-	XAdES111Attribute_URI:              "uri",
-	XAdES111Attribute_URI2:             "URI",
+	XAdES111AttributeID:              "Id",
+	XAdES111AttributeObjectReference: "ObjectReference",
+	XAdES111AttributeQualifier:       "Qualifier",
+	XAdES111AttributeTarget:          "Target",
+	XAdES111AttributeURI:             "uri",
+	XAdES111AttributeURI2:            "URI",
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().

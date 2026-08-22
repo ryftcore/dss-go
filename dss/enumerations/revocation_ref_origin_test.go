@@ -20,8 +20,8 @@ func TestRevocationRefOriginValueOf(t *testing.T) {
 
 func TestRevocationRefOriginValues(t *testing.T) {
 	want := []RevocationRefOrigin{
-		RevocationRefOrigin_COMPLETE_REVOCATION_REFS,
-		RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS,
+		RevocationRefOriginCompleteRevocationRefs,
+		RevocationRefOriginAttributeRevocationRefs,
 	}
 	got := RevocationRefOriginValues()
 	if len(got) != len(want) {

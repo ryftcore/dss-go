@@ -16,8 +16,8 @@ func newTestCatalogue() *CryptographicSuiteCatalogue {
 	certAlgo.SetAlgorithmIdentifierOIDs([]string{"1.2.840.113549.1.1.11"})
 	certEval := NewCryptographicSuiteEvaluation()
 	certEval.SetAlgorithmUsage([]enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_CERTIFICATES,
-		enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_CERTIFICATES,
+		enumerations.CryptographicSuiteAlgorithmUsageSignCertificates,
+		enumerations.CryptographicSuiteAlgorithmUsageValidateCertificates,
 	})
 	certAlgo.SetEvaluationList([]*CryptographicSuiteEvaluation{certEval})
 
@@ -47,7 +47,7 @@ func TestCryptographicSuiteCatalogue_GlobalExcludesCertificateOnlyUsage(t *testi
 	// RSA_SHA256 is SIGN_CERTIFICATES/VALIDATE_CERTIFICATES scoped only,
 	// so it must be filtered out of the global (SIGN_DATA/VALIDATE_DATA)
 	// suite.
-	if _, ok := sigs[enumerations.SignatureAlgorithm_RSA_SHA256]; ok {
+	if _, ok := sigs[enumerations.SignatureAlgorithmRSASHA256]; ok {
 		t.Fatalf("global suite unexpectedly includes certificate-only RSA_SHA256: %v", sigs)
 	}
 }
@@ -56,7 +56,7 @@ func TestCryptographicSuiteCatalogue_SignatureCertificatesIncludesCertUsage(t *t
 	catalogue := newTestCatalogue()
 	suite := catalogue.SignatureCertificatesCryptographicSuite()
 	sigs := suite.AcceptableSignatureAlgorithms()
-	if _, ok := sigs[enumerations.SignatureAlgorithm_RSA_SHA256]; !ok {
+	if _, ok := sigs[enumerations.SignatureAlgorithmRSASHA256]; !ok {
 		t.Fatalf("SignatureCertificatesCryptographicSuite() missing RSA_SHA256: %v", sigs)
 	}
 }

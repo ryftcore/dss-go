@@ -154,20 +154,20 @@ func (c *TrustServiceEquivalenceConverter) getQCStatementOids(condition tslmodel
 
 	if composite, ok := condition.(*CompositeCondition); ok {
 		switch composite.MatchingCriteriaIndicator() {
-		case enumerations.Assert_ALL:
+		case enumerations.AssertAll:
 			for _, childCondition := range composite.Children() {
 				qcStatementIds, qcTypeIds, qcCClegislations, qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove =
 					c.populateFromChild(childCondition, qcStatementIds, qcTypeIds, qcCClegislations,
 						qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove)
 			}
-		case enumerations.Assert_AT_LEAST_ONE:
+		case enumerations.AssertAtLeastOne:
 			children := composite.Children()
 			if len(children) > 0 {
 				qcStatementIds, qcTypeIds, qcCClegislations, qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove =
 					c.populateFromChild(children[0], qcStatementIds, qcTypeIds, qcCClegislations,
 						qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove)
 			}
-		case enumerations.Assert_NONE:
+		case enumerations.AssertNone:
 			for _, childCondition := range composite.Children() {
 				// Reversed lists for NONE.
 				qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove, qcStatementIds, qcTypeIds, qcCClegislations =

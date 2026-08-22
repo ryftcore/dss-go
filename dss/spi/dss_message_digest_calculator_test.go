@@ -14,19 +14,19 @@ import (
 // port supports, as produced by BouncyCastle 1.78.1 / OpenJDK 21 through
 // MessageDigest.getInstance(DigestAlgorithm#getJavaName()).
 var dssMessageDigestCalculatorTestVectors = map[enumerations.DigestAlgorithm]string{
-	enumerations.DigestAlgorithm_SHA1:      "a9993e364706816aba3e25717850c26c9cd0d89d",
-	enumerations.DigestAlgorithm_SHA224:    "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7",
-	enumerations.DigestAlgorithm_SHA256:    "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
-	enumerations.DigestAlgorithm_SHA384:    "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7",
-	enumerations.DigestAlgorithm_SHA512:    "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
-	enumerations.DigestAlgorithm_SHA3_224:  "e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf",
-	enumerations.DigestAlgorithm_SHA3_256:  "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532",
-	enumerations.DigestAlgorithm_SHA3_384:  "ec01498288516fc926459f58e2c6ad8df9b473cb0fc08c2596da7cf0e49be4b298d88cea927ac7f539f1edf228376d25",
-	enumerations.DigestAlgorithm_SHA3_512:  "b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0",
-	enumerations.DigestAlgorithm_RIPEMD160: "8eb208f7e05d987a9b044a8e98c6b087f15a0bfc",
-	enumerations.DigestAlgorithm_MD5:       "900150983cd24fb0d6963f7d28e17f72",
+	enumerations.DigestAlgorithmSHA1:      "a9993e364706816aba3e25717850c26c9cd0d89d",
+	enumerations.DigestAlgorithmSHA224:    "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7",
+	enumerations.DigestAlgorithmSHA256:    "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+	enumerations.DigestAlgorithmSHA384:    "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7",
+	enumerations.DigestAlgorithmSHA512:    "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
+	enumerations.DigestAlgorithmSHA3224:   "e642824c3f8cf24ad09234ee7d3c766fc9a3a5168d0c94ad73b46fdf",
+	enumerations.DigestAlgorithmSHA3256:   "3a985da74fe225b2045c172d6bd390bd855f086e3e9d525b46bfe24511431532",
+	enumerations.DigestAlgorithmSHA3384:   "ec01498288516fc926459f58e2c6ad8df9b473cb0fc08c2596da7cf0e49be4b298d88cea927ac7f539f1edf228376d25",
+	enumerations.DigestAlgorithmSHA3512:   "b751850b1a57168a5693cd924b6b096e08f621827444f70d884f5d0240d2712e10e116e9192af3c91a7ec57647e3934057340b4cf408d5a56592f8274eec53f0",
+	enumerations.DigestAlgorithmRIPEMD160: "8eb208f7e05d987a9b044a8e98c6b087f15a0bfc",
+	enumerations.DigestAlgorithmMD5:       "900150983cd24fb0d6963f7d28e17f72",
 	// BouncyCastle registers "SHAKE256-512" as SHAKE-256 squeezed to 512 bits.
-	enumerations.DigestAlgorithm_SHAKE256_512: "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4",
+	enumerations.DigestAlgorithmSHAKE256512: "483366601360a8771c6863080cc4114d8db44530f8f1e1ee4f94ea37e78b5739d5a15bef186a5386c75744c0527e1faa9f8726e462a12a4feb06bd8801e751e4",
 }
 
 // TestDSSMessageDigestCalculatorKnownAnswers checks every supported algorithm against the
@@ -54,10 +54,10 @@ func TestDSSMessageDigestCalculatorKnownAnswers(t *testing.T) {
 // documented Go-side gap.
 func TestDSSMessageDigestCalculatorUnsupportedAlgorithms(t *testing.T) {
 	for _, digestAlgorithm := range []enumerations.DigestAlgorithm{
-		enumerations.DigestAlgorithm_SHAKE128,
-		enumerations.DigestAlgorithm_SHAKE256,
-		enumerations.DigestAlgorithm_MD2,
-		enumerations.DigestAlgorithm_WHIRLPOOL,
+		enumerations.DigestAlgorithmSHAKE128,
+		enumerations.DigestAlgorithmSHAKE256,
+		enumerations.DigestAlgorithmMD2,
+		enumerations.DigestAlgorithmWHIRLPOOL,
 	} {
 		if _, err := NewDSSMessageDigestCalculator(digestAlgorithm); err == nil {
 			t.Errorf("%s: expected an error", digestAlgorithm)
@@ -77,41 +77,41 @@ func TestDSSMessageDigestCalculatorUnsupportedAlgorithms(t *testing.T) {
 // TestDSSMessageDigestCalculatorUpdateVariants checks that the byte, array, range and reader
 // update paths agree, and that reading a digest resets the state.
 func TestDSSMessageDigestCalculatorUpdateVariants(t *testing.T) {
-	want := dssMessageDigestCalculatorTestVectors[enumerations.DigestAlgorithm_SHA256]
+	want := dssMessageDigestCalculatorTestVectors[enumerations.DigestAlgorithmSHA256]
 
-	byteWise, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	byteWise, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
 	for _, b := range []byte("abc") {
 		byteWise.UpdateByte(b)
 	}
-	if got := hex.EncodeToString(byteWise.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(byteWise.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("byte-wise: got %s", got)
 	}
 	// getMessageDigest resets, so the same calculator restarts from an empty digest.
 	byteWise.Update([]byte("abc"))
-	if got := hex.EncodeToString(byteWise.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(byteWise.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("after reset: got %s", got)
 	}
 
-	ranged, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	ranged, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
 	ranged.UpdateRange([]byte("xxabcxx"), 2, 3)
-	if got := hex.EncodeToString(ranged.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(ranged.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("ranged: got %s", got)
 	}
 
-	fromReader, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	fromReader, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if err := fromReader.UpdateReader(strings.NewReader("abc")); err != nil {
 		t.Fatal(err)
 	}
-	if got := hex.EncodeToString(fromReader.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(fromReader.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("from reader: got %s", got)
 	}
 	// A nil input is ignored, as a null array or stream is upstream.
@@ -119,12 +119,12 @@ func TestDSSMessageDigestCalculatorUpdateVariants(t *testing.T) {
 	if err := fromReader.UpdateReader(nil); err != nil {
 		t.Fatal(err)
 	}
-	empty, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	empty, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
-	emptyDigest := hex.EncodeToString(empty.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value())
-	if got := hex.EncodeToString(fromReader.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != emptyDigest {
+	emptyDigest := hex.EncodeToString(empty.MessageDigest(enumerations.DigestAlgorithmSHA256).Value())
+	if got := hex.EncodeToString(fromReader.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != emptyDigest {
 		t.Errorf("nil updates must not change the digest: got %s", got)
 	}
 
@@ -153,9 +153,9 @@ func (r *dssMessageDigestCalculatorTestReader) Close() error {
 // several algorithms at once, as the CAdES archive-timestamp code needs.
 func TestDSSMessageDigestCalculatorMultipleAlgorithms(t *testing.T) {
 	algorithms := []enumerations.DigestAlgorithm{
-		enumerations.DigestAlgorithm_SHA512,
-		enumerations.DigestAlgorithm_SHA1,
-		enumerations.DigestAlgorithm_SHA256,
+		enumerations.DigestAlgorithmSHA512,
+		enumerations.DigestAlgorithmSHA1,
+		enumerations.DigestAlgorithmSHA256,
 	}
 	calculator, err := NewDSSMessageDigestCalculatorForAlgorithms(algorithms)
 	if err != nil {
@@ -174,7 +174,7 @@ func TestDSSMessageDigestCalculatorMultipleAlgorithms(t *testing.T) {
 			t.Error("expected a panic for an unused algorithm")
 		}
 	}()
-	calculator.MessageDigest(enumerations.DigestAlgorithm_MD5)
+	calculator.MessageDigest(enumerations.DigestAlgorithmMD5)
 }
 
 // TestDSSMessageDigestCalculatorConstructorGuards checks the requireNonNull-style panics.
@@ -185,7 +185,7 @@ func TestDSSMessageDigestCalculatorConstructorGuards(t *testing.T) {
 	}{
 		{"nil", nil},
 		{"empty", []enumerations.DigestAlgorithm{}},
-		{"nil element", []enumerations.DigestAlgorithm{enumerations.DigestAlgorithm_SHA256, ""}},
+		{"nil element", []enumerations.DigestAlgorithm{enumerations.DigestAlgorithmSHA256, ""}},
 	} {
 		func() {
 			defer func() {
@@ -200,9 +200,9 @@ func TestDSSMessageDigestCalculatorConstructorGuards(t *testing.T) {
 
 // TestDSSMessageDigestCalculatorWriter checks the on-the-fly digest writers.
 func TestDSSMessageDigestCalculatorWriter(t *testing.T) {
-	want := dssMessageDigestCalculatorTestVectors[enumerations.DigestAlgorithm_SHA256]
+	want := dssMessageDigestCalculatorTestVectors[enumerations.DigestAlgorithmSHA256]
 
-	discarding, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	discarding, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -213,11 +213,11 @@ func TestDSSMessageDigestCalculatorWriter(t *testing.T) {
 	if err := writer.Close(); err != nil {
 		t.Fatal(err)
 	}
-	if got := hex.EncodeToString(discarding.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(discarding.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("Writer: got %s", got)
 	}
 
-	mirroring, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithm_SHA256)
+	mirroring, err := NewDSSMessageDigestCalculator(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -235,7 +235,7 @@ func TestDSSMessageDigestCalculatorWriter(t *testing.T) {
 	if buffer.String() != "abc" {
 		t.Errorf("the wrapped writer received %q", buffer.String())
 	}
-	if got := hex.EncodeToString(mirroring.MessageDigest(enumerations.DigestAlgorithm_SHA256).Value()); got != want {
+	if got := hex.EncodeToString(mirroring.MessageDigest(enumerations.DigestAlgorithmSHA256).Value()); got != want {
 		t.Errorf("WriterFor: got %s", got)
 	}
 }

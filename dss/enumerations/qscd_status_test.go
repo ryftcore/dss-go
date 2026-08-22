@@ -16,10 +16,10 @@ func TestQSCDStatus(t *testing.T) {
 	if _, err := QSCDStatusValueOf("NOPE"); err == nil {
 		t.Error("expected error for unknown name")
 	}
-	if !QSCDStatusIsQSCD(QSCDStatus_QSCD) {
+	if !QSCDStatusIsQSCD(QSCDStatusQSCD) {
 		t.Error("expected QSCDStatusIsQSCD(QSCD) = true")
 	}
-	if QSCDStatusIsQSCD(QSCDStatus_NOT_QSCD) {
+	if QSCDStatusIsQSCD(QSCDStatusNotQSCD) {
 		t.Error("expected QSCDStatusIsQSCD(NOT_QSCD) = false")
 	}
 }

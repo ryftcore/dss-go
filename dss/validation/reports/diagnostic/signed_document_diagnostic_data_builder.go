@@ -903,14 +903,14 @@ func allRevocationBinariesWithOrigins[R revocation.Revocation](source revocation
 		origin  enumerations.RevocationOrigin
 		binarys []spi.EncapsulatedRevocationTokenIdentifier[R]
 	}{
-		{enumerations.RevocationOrigin_CMS_SIGNED_DATA, source.CMSSignedDataRevocationBinaries()},
-		{enumerations.RevocationOrigin_REVOCATION_VALUES, source.RevocationValuesBinaries()},
-		{enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES, source.AttributeRevocationValuesBinaries()},
-		{enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA, source.TimestampValidationDataBinaries()},
-		{enumerations.RevocationOrigin_ANY_VALIDATION_DATA, source.AnyValidationDataBinaries()},
-		{enumerations.RevocationOrigin_DSS_DICTIONARY, source.DSSDictionaryBinaries()},
-		{enumerations.RevocationOrigin_VRI_DICTIONARY, source.VRIDictionaryBinaries()},
-		{enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL, source.ADBERevocationValuesBinaries()},
+		{enumerations.RevocationOriginCMSSignedData, source.CMSSignedDataRevocationBinaries()},
+		{enumerations.RevocationOriginRevocationValues, source.RevocationValuesBinaries()},
+		{enumerations.RevocationOriginAttributeRevocationValues, source.AttributeRevocationValuesBinaries()},
+		{enumerations.RevocationOriginTimestampValidationData, source.TimestampValidationDataBinaries()},
+		{enumerations.RevocationOriginAnyValidationData, source.AnyValidationDataBinaries()},
+		{enumerations.RevocationOriginDSSDictionary, source.DSSDictionaryBinaries()},
+		{enumerations.RevocationOriginVRIDictionary, source.VRIDictionaryBinaries()},
+		{enumerations.RevocationOriginAdbeRevocationInfoArchival, source.ADBERevocationValuesBinaries()},
 	}
 
 	byID := map[string]*revocationBinaryWithOrigins[R]{}
@@ -939,9 +939,9 @@ func getXmlOrphanRevocation[R revocation.Revocation](b *SignedDocumentDiagnostic
 	xmlOrphanRevocation := &jaxb.XmlOrphanRevocation{}
 	var revType enumerations.RevocationType
 	if _, ok := any(token).(*crlparser.CRLBinary); ok {
-		revType = enumerations.RevocationType_CRL
+		revType = enumerations.RevocationTypeCRL
 	} else {
-		revType = enumerations.RevocationType_OCSP
+		revType = enumerations.RevocationTypeOCSP
 	}
 	t := jaxb.RevocationTypeValue(revType)
 	xmlOrphanRevocation.Type = &t
@@ -964,7 +964,7 @@ func createOrphanTokenFromRevocationIdentifier[R revocation.Revocation](b *Signe
 		return orphanToken
 	}
 	orphanToken = &jaxb.XmlOrphanRevocationToken{}
-	encType := jaxb.XmlEncapsulationType_BINARIES
+	encType := jaxb.XmlEncapsulationTypeBinaries
 	orphanToken.EncapsulationType = &encType
 	idStr := b.identifierProvider.IDAsString(revocationIdentifier)
 	orphanToken.Id = jaxb.NewCollapsedString(idStr)
@@ -981,10 +981,10 @@ func createOrphanTokenFromRevocationIdentifier[R revocation.Revocation](b *Signe
 
 	if crlBin, ok := any(revocationIdentifier).(*crlparser.CRLBinary); ok {
 		_ = crlBin
-		t := jaxb.RevocationTypeValue(enumerations.RevocationType_CRL)
+		t := jaxb.RevocationTypeValue(enumerations.RevocationTypeCRL)
 		orphanToken.RevocationType = &t
 	} else if ocspBin, ok := any(revocationIdentifier).(*spi.OCSPResponseBinary); ok {
-		t := jaxb.RevocationTypeValue(enumerations.RevocationType_OCSP)
+		t := jaxb.RevocationTypeValue(enumerations.RevocationTypeOCSP)
 		orphanToken.RevocationType = &t
 		ocspCertificateSource, err := spi.NewOCSPCertificateSource(ocspBin.BasicOCSPResp())
 		if err != nil {
@@ -1045,7 +1045,7 @@ func createOrphanRevocationFromRef[R revocation.Revocation](b *SignedDocumentDia
 	xmlOrphanRevocation := &jaxb.XmlOrphanRevocation{}
 
 	orphanToken := &jaxb.XmlOrphanRevocationToken{}
-	encType := jaxb.XmlEncapsulationType_REFERENCE
+	encType := jaxb.XmlEncapsulationTypeReference
 	orphanToken.EncapsulationType = &encType
 	idStr := b.identifierProvider.IDAsString(ref)
 	orphanToken.Id = jaxb.NewCollapsedString(idStr)
@@ -1057,15 +1057,15 @@ func createOrphanRevocationFromRef[R revocation.Revocation](b *SignedDocumentDia
 
 	xmlOrphanRevocation.Token = orphanToken
 	if crlRef, ok := any(ref).(*spi.CRLRef); ok {
-		t := jaxb.RevocationTypeValue(enumerations.RevocationType_CRL)
+		t := jaxb.RevocationTypeValue(enumerations.RevocationTypeCRL)
 		orphanToken.RevocationType = &t
-		xt := jaxb.RevocationTypeValue(enumerations.RevocationType_CRL)
+		xt := jaxb.RevocationTypeValue(enumerations.RevocationTypeCRL)
 		xmlOrphanRevocation.Type = &xt
 		xmlOrphanRevocation.RevocationRef = append(xmlOrphanRevocation.RevocationRef, b.GetXmlCRLRevocationRef(crlRef, origins))
 	} else {
-		t := jaxb.RevocationTypeValue(enumerations.RevocationType_OCSP)
+		t := jaxb.RevocationTypeValue(enumerations.RevocationTypeOCSP)
 		orphanToken.RevocationType = &t
-		xt := jaxb.RevocationTypeValue(enumerations.RevocationType_OCSP)
+		xt := jaxb.RevocationTypeValue(enumerations.RevocationTypeOCSP)
 		xmlOrphanRevocation.Type = &xt
 		xmlOrphanRevocation.RevocationRef = append(xmlOrphanRevocation.RevocationRef, b.GetXmlOCSPRevocationRef(any(ref).(*spi.OCSPRef), origins))
 	}
@@ -1353,7 +1353,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) getXmlDigestMatchersForTimestamp(t
 
 func (b *SignedDocumentDiagnosticDataBuilder) getImprintDigestMatcher(timestampToken *validation.TimestampToken) *jaxb.XmlDigestMatcher {
 	digestMatcher := &jaxb.XmlDigestMatcher{}
-	t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_MESSAGE_IMPRINT)
+	t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeMessageImprint)
 	digestMatcher.Type = &t
 	messageImprint := timestampToken.MessageImprint()
 	if !messageImprint.IsEmpty() {
@@ -1379,7 +1379,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) getManifestEntriesDigestMatchers(m
 	if manifestFile != nil && utils.IsCollectionNotEmpty(manifestFile.Entries()) {
 		for _, entry := range manifestFile.Entries() {
 			digestMatcher := &jaxb.XmlDigestMatcher{}
-			t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_MANIFEST_ENTRY)
+			t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeManifestEntry)
 			digestMatcher.Type = &t
 			digest := entry.Digest()
 			if !digest.IsEmpty() {
@@ -1504,11 +1504,11 @@ func (b *SignedDocumentDiagnosticDataBuilder) createXmlTimestampedObject(timesta
 	objectID := timestampReference.ObjectId()
 
 	switch category {
-	case enumerations.TimestampedObjectType_SIGNATURE:
+	case enumerations.TimestampedObjectTypeSignature:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlSignaturesMap[objectID])
 		return timestampedObj
 
-	case enumerations.TimestampedObjectType_CERTIFICATE:
+	case enumerations.TimestampedObjectTypeCertificate:
 		if !b.isUsedCertificate(objectID) {
 			relatedCertificateID, ok := b.referenceMap[objectID]
 			if ok {
@@ -1523,7 +1523,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) createXmlTimestampedObject(timesta
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlCertsMap[objectID])
 		return timestampedObj
 
-	case enumerations.TimestampedObjectType_REVOCATION:
+	case enumerations.TimestampedObjectTypeRevocation:
 		if !b.isUsedRevocation(objectID) {
 			relatedRevocationID, ok := b.referenceMap[objectID]
 			if ok {
@@ -1538,15 +1538,15 @@ func (b *SignedDocumentDiagnosticDataBuilder) createXmlTimestampedObject(timesta
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlRevocationsMap[objectID])
 		return timestampedObj
 
-	case enumerations.TimestampedObjectType_TIMESTAMP:
+	case enumerations.TimestampedObjectTypeTimestamp:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlTimestampsMap[objectID])
 		return timestampedObj
 
-	case enumerations.TimestampedObjectType_EVIDENCE_RECORD:
+	case enumerations.TimestampedObjectTypeEvidenceRecord:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlEvidenceRecordMap[objectID])
 		return timestampedObj
 
-	case enumerations.TimestampedObjectType_SIGNED_DATA:
+	case enumerations.TimestampedObjectTypeSignedData:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlSignedDataMap[objectID])
 		return timestampedObj
 
@@ -1555,14 +1555,14 @@ func (b *SignedDocumentDiagnosticDataBuilder) createXmlTimestampedObject(timesta
 	}
 
 	switch enumerations.TimestampedObjectType(timestampedObj.Category.TimestampedObjectType()) {
-	case enumerations.TimestampedObjectType_CERTIFICATE:
+	case enumerations.TimestampedObjectTypeCertificate:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlOrphanCertificateTokensMap[objectID])
-		orphanCategory := jaxb.TimestampedObjectTypeValue(enumerations.TimestampedObjectType_ORPHAN_CERTIFICATE)
+		orphanCategory := jaxb.TimestampedObjectTypeValue(enumerations.TimestampedObjectTypeOrphanCertificate)
 		timestampedObj.Category = &orphanCategory
 
-	case enumerations.TimestampedObjectType_REVOCATION:
+	case enumerations.TimestampedObjectTypeRevocation:
 		timestampedObj.Token = jaxb.NewXmlTokenRef(b.xmlOrphanRevocationTokensMap[objectID])
-		orphanCategory := jaxb.TimestampedObjectTypeValue(enumerations.TimestampedObjectType_ORPHAN_REVOCATION)
+		orphanCategory := jaxb.TimestampedObjectTypeValue(enumerations.TimestampedObjectTypeOrphanRevocation)
 		timestampedObj.Category = &orphanCategory
 
 	default:

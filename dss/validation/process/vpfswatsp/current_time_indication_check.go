@@ -42,7 +42,7 @@ func NewCurrentTimeIndicationCheck(i18nProvider *i18n.I18nProvider, result *proc
 
 // Process performs the check. Port of process().
 func (c *CurrentTimeIndicationCheck) Process() bool {
-	return enumerations.Indication_PASSED == c.indication
+	return enumerations.IndicationPassed == c.indication
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

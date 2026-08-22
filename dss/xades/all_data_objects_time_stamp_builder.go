@@ -100,7 +100,7 @@ func (b *AllDataObjectsTimeStampBuilder) BuildForDocuments(
 		 * 3) concatenate the resulting octets to those resulting from previously processed
 		 * ds:Reference elements in ds:SignedInfo.
 		 */
-		isNodeSet := ReferenceOutputType_NODE_SET == DSSXMLUtilsGetReferenceOutputType(reference) &&
+		isNodeSet := ReferenceOutputTypeNodeSet == DSSXMLUtilsGetReferenceOutputType(reference) &&
 			xmlutils.DomUtilsIsDOM(referenceContent)
 
 		referenceIs, err := referenceContent.OpenStream()
@@ -128,7 +128,7 @@ func (b *AllDataObjectsTimeStampBuilder) BuildForDocuments(
 		return nil, err
 	}
 	token, err := validation.NewTimestampToken(timeStampResponse.Bytes(),
-		enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP)
+		enumerations.TimestampTypeAllDataObjectsTimestamp)
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause("Cannot build an AllDataObjectsTimestamp", err)
 	}

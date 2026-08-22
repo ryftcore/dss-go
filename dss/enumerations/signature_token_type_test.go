@@ -4,8 +4,8 @@ import "testing"
 
 func TestSignatureTokenTypeValues(t *testing.T) {
 	want := []SignatureTokenType{
-		SignatureTokenType_PKCS11, SignatureTokenType_PKCS12, SignatureTokenType_MSCAPI,
-		SignatureTokenType_APPLE, SignatureTokenType_JKS, SignatureTokenType_MOCCA,
+		SignatureTokenTypePKCS11, SignatureTokenTypePKCS12, SignatureTokenTypeMSCAPI,
+		SignatureTokenTypeApple, SignatureTokenTypeJKS, SignatureTokenTypeMOCCA,
 	}
 	got := SignatureTokenTypeValues()
 	if len(got) != len(want) {

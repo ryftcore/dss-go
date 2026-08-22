@@ -15,7 +15,7 @@ import (
 func TestAssertEncryptionAlgorithmValidMismatch(t *testing.T) {
 	entry := &fakePrivateKeyEntry{certificate: mustLoadCertificateToken(t, "testdata/generated/eku.crt")}
 	// fakePrivateKeyEntry reports RSA; ask for an ECDSA signature algorithm instead.
-	err := abstractSignatureTokenConnectionAssertEncryptionAlgorithmValid(enumerations.SignatureAlgorithm_ECDSA_SHA256, entry)
+	err := abstractSignatureTokenConnectionAssertEncryptionAlgorithmValid(enumerations.SignatureAlgorithmECDSASHA256, entry)
 	if err == nil {
 		t.Fatal("expected an error for a mismatched EncryptionAlgorithm")
 	}
@@ -36,21 +36,21 @@ func TestAssertEncryptionAlgorithmValidPanicsOnNilKeyEntry(t *testing.T) {
 			t.Fatal("expected a panic for a nil keyEntry")
 		}
 	}()
-	_ = abstractSignatureTokenConnectionAssertEncryptionAlgorithmValid(enumerations.SignatureAlgorithm_RSA_SHA256, nil)
+	_ = abstractSignatureTokenConnectionAssertEncryptionAlgorithmValid(enumerations.SignatureAlgorithmRSASHA256, nil)
 }
 
 func TestAssertDigestAlgorithmValidMismatch(t *testing.T) {
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA1, []byte{1, 2, 3})
-	err := abstractSignatureTokenConnectionAssertDigestAlgorithmValid(digest, enumerations.SignatureAlgorithm_RSA_SHA256)
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA1, []byte{1, 2, 3})
+	err := abstractSignatureTokenConnectionAssertDigestAlgorithmValid(digest, enumerations.SignatureAlgorithmRSASHA256)
 	if err == nil {
 		t.Fatal("expected an error: SHA1 digest does not match the SHA256 signature algorithm")
 	}
 }
 
 func TestAssertDigestAlgorithmValidRawAlgorithmAcceptsAnyDigest(t *testing.T) {
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA1, []byte{1, 2, 3})
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA1, []byte{1, 2, 3})
 	// RSA_RAW carries no digest algorithm, so any digest is accepted.
-	if err := abstractSignatureTokenConnectionAssertDigestAlgorithmValid(digest, enumerations.SignatureAlgorithm_RSA_RAW); err != nil {
+	if err := abstractSignatureTokenConnectionAssertDigestAlgorithmValid(digest, enumerations.SignatureAlgorithmRSARaw); err != nil {
 		t.Errorf("unexpected error: %v", err)
 	}
 }
@@ -58,12 +58,12 @@ func TestAssertDigestAlgorithmValidRawAlgorithmAcceptsAnyDigest(t *testing.T) {
 func TestSignDigestUnsupportedEncryptionAlgorithmCombination(t *testing.T) {
 	entry := &fakePrivateKeyEntryWithEncryption{
 		fakePrivateKeyEntry: fakePrivateKeyEntry{certificate: mustLoadCertificateToken(t, "testdata/generated/eku.crt")},
-		encryptionAlgorithm: enumerations.EncryptionAlgorithm_EDDSA,
+		encryptionAlgorithm: enumerations.EncryptionAlgorithmEDDSA,
 	}
 	var base AbstractSignatureTokenConnection
 	// EDDSA has no (EDDSA, "") entry in the SignatureAlgorithm table, matching upstream's
 	// getRawSignatureAlgorithm(EDDSA) UnsupportedOperationException.
-	_, err := base.SignDigest(model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte{1, 2, 3}), entry)
+	_, err := base.SignDigest(model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3}), entry)
 	if err == nil {
 		t.Fatal("expected an error: EdDSA has no raw/digest-signing SignatureAlgorithm")
 	}
@@ -85,7 +85,7 @@ func TestSignECDSANonSHADigests(t *testing.T) {
 	var base AbstractSignatureTokenConnection
 	message := []byte("go 1.27 ecdsa SignerOpts regression input")
 
-	ripemd160Digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_RIPEMD160, message)
+	ripemd160Digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmRIPEMD160, message)
 	if err != nil {
 		t.Fatalf("DSSUtilsDigest(RIPEMD160): %v", err)
 	}
@@ -96,9 +96,9 @@ func TestSignECDSANonSHADigests(t *testing.T) {
 		// digest for <RIPEMD160>with(PLAIN-)ECDSA, the message itself for NONEwithECDSA.
 		verifyDigest []byte
 	}{
-		{enumerations.SignatureAlgorithm_ECDSA_RIPEMD160, ripemd160Digest},
-		{enumerations.SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160, ripemd160Digest},
-		{enumerations.SignatureAlgorithm_ECDSA_RAW, message},
+		{enumerations.SignatureAlgorithmECDSARIPEMD160, ripemd160Digest},
+		{enumerations.SignatureAlgorithmPlainECDSARIPEMD160, ripemd160Digest},
+		{enumerations.SignatureAlgorithmECDSARaw, message},
 	} {
 		value, err := base.SignWithSignatureAlgorithm(model.NewToBeSignedWithBytes(message), tc.signatureAlgorithm, entry)
 		if err != nil {
@@ -118,7 +118,7 @@ type fakeECDSAAccessEntry struct {
 }
 
 func (f *fakeECDSAAccessEntry) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
-	return enumerations.EncryptionAlgorithm_ECDSA
+	return enumerations.EncryptionAlgorithmECDSA
 }
 
 func (f *fakeECDSAAccessEntry) PrivateKey() crypto.Signer { return f.key }

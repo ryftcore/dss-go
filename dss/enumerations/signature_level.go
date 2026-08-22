@@ -1,7 +1,7 @@
 // Ported from dss-enumerations/.../SignatureLevel.java (DSS 6.5.RC1).
 //
 // NOTE: SignatureForm and SignatureProfile (with their exported constants,
-// e.g. SignatureForm_CAdES, SignatureProfile_BASELINE_B, preserving the
+// e.g. SignatureFormCAdES, SignatureProfileBaselineB, preserving the
 // exact Java constant spelling/casing) are defined outside this file's
 // manifest and are assumed to exist per the porting brief.
 package enumerations
@@ -21,67 +21,67 @@ type SignatureLevel string
 // profiles; the non-baseline levels (e.g. XAdES_C, XAdES_X) are the legacy
 // ETSI TS 101 903/CAdES-equivalent extended forms. The _NOT_ETSI values mark
 // a signature container whose content is not recognized as any supported
-// AdES form, and SignatureLevel_UNKNOWN marks a level DSS could not
+// AdES form, and SignatureLevelUnknown marks a level DSS could not
 // determine.
 const (
-	SignatureLevel_XML_NOT_ETSI       SignatureLevel = "XML_NOT_ETSI"
-	SignatureLevel_XAdES_BES          SignatureLevel = "XAdES_BES"
-	SignatureLevel_XAdES_EPES         SignatureLevel = "XAdES_EPES"
-	SignatureLevel_XAdES_T            SignatureLevel = "XAdES_T"
-	SignatureLevel_XAdES_LT           SignatureLevel = "XAdES_LT"
-	SignatureLevel_XAdES_C            SignatureLevel = "XAdES_C"
-	SignatureLevel_XAdES_X            SignatureLevel = "XAdES_X"
-	SignatureLevel_XAdES_XL           SignatureLevel = "XAdES_XL"
-	SignatureLevel_XAdES_A            SignatureLevel = "XAdES_A"
-	SignatureLevel_XAdES_ERS          SignatureLevel = "XAdES_ERS"
-	SignatureLevel_XAdES_BASELINE_B   SignatureLevel = "XAdES_BASELINE_B"
-	SignatureLevel_XAdES_BASELINE_T   SignatureLevel = "XAdES_BASELINE_T"
-	SignatureLevel_XAdES_BASELINE_LT  SignatureLevel = "XAdES_BASELINE_LT"
-	SignatureLevel_XAdES_BASELINE_LTA SignatureLevel = "XAdES_BASELINE_LTA"
+	SignatureLevelXMLNotETSI       SignatureLevel = "XML_NOT_ETSI"
+	SignatureLevelXAdESBES         SignatureLevel = "XAdES_BES"
+	SignatureLevelXAdESEPES        SignatureLevel = "XAdES_EPES"
+	SignatureLevelXAdEST           SignatureLevel = "XAdES_T"
+	SignatureLevelXAdESLT          SignatureLevel = "XAdES_LT"
+	SignatureLevelXAdESC           SignatureLevel = "XAdES_C"
+	SignatureLevelXAdESX           SignatureLevel = "XAdES_X"
+	SignatureLevelXAdESXL          SignatureLevel = "XAdES_XL"
+	SignatureLevelXAdESA           SignatureLevel = "XAdES_A"
+	SignatureLevelXAdESERS         SignatureLevel = "XAdES_ERS"
+	SignatureLevelXAdESBaselineB   SignatureLevel = "XAdES_BASELINE_B"
+	SignatureLevelXAdESBaselineT   SignatureLevel = "XAdES_BASELINE_T"
+	SignatureLevelXAdESBaselineLT  SignatureLevel = "XAdES_BASELINE_LT"
+	SignatureLevelXAdESBaselineLTA SignatureLevel = "XAdES_BASELINE_LTA"
 
-	SignatureLevel_CMS_NOT_ETSI       SignatureLevel = "CMS_NOT_ETSI"
-	SignatureLevel_CAdES_BES          SignatureLevel = "CAdES_BES"
-	SignatureLevel_CAdES_EPES         SignatureLevel = "CAdES_EPES"
-	SignatureLevel_CAdES_T            SignatureLevel = "CAdES_T"
-	SignatureLevel_CAdES_LT           SignatureLevel = "CAdES_LT"
-	SignatureLevel_CAdES_C            SignatureLevel = "CAdES_C"
-	SignatureLevel_CAdES_X            SignatureLevel = "CAdES_X"
-	SignatureLevel_CAdES_XL           SignatureLevel = "CAdES_XL"
-	SignatureLevel_CAdES_A            SignatureLevel = "CAdES_A"
-	SignatureLevel_CAdES_ERS          SignatureLevel = "CAdES_ERS"
-	SignatureLevel_CAdES_BASELINE_B   SignatureLevel = "CAdES_BASELINE_B"
-	SignatureLevel_CAdES_BASELINE_T   SignatureLevel = "CAdES_BASELINE_T"
-	SignatureLevel_CAdES_BASELINE_LT  SignatureLevel = "CAdES_BASELINE_LT"
-	SignatureLevel_CAdES_BASELINE_LTA SignatureLevel = "CAdES_BASELINE_LTA"
+	SignatureLevelCMSNotETSI       SignatureLevel = "CMS_NOT_ETSI"
+	SignatureLevelCAdESBES         SignatureLevel = "CAdES_BES"
+	SignatureLevelCAdESEPES        SignatureLevel = "CAdES_EPES"
+	SignatureLevelCAdEST           SignatureLevel = "CAdES_T"
+	SignatureLevelCAdESLT          SignatureLevel = "CAdES_LT"
+	SignatureLevelCAdESC           SignatureLevel = "CAdES_C"
+	SignatureLevelCAdESX           SignatureLevel = "CAdES_X"
+	SignatureLevelCAdESXL          SignatureLevel = "CAdES_XL"
+	SignatureLevelCAdESA           SignatureLevel = "CAdES_A"
+	SignatureLevelCAdESERS         SignatureLevel = "CAdES_ERS"
+	SignatureLevelCAdESBaselineB   SignatureLevel = "CAdES_BASELINE_B"
+	SignatureLevelCAdESBaselineT   SignatureLevel = "CAdES_BASELINE_T"
+	SignatureLevelCAdESBaselineLT  SignatureLevel = "CAdES_BASELINE_LT"
+	SignatureLevelCAdESBaselineLTA SignatureLevel = "CAdES_BASELINE_LTA"
 
-	SignatureLevel_PDF_NOT_ETSI       SignatureLevel = "PDF_NOT_ETSI"
-	SignatureLevel_PKCS7_B            SignatureLevel = "PKCS7_B"
-	SignatureLevel_PKCS7_T            SignatureLevel = "PKCS7_T"
-	SignatureLevel_PKCS7_LT           SignatureLevel = "PKCS7_LT"
-	SignatureLevel_PKCS7_LTA          SignatureLevel = "PKCS7_LTA"
-	SignatureLevel_PAdES_BES          SignatureLevel = "PAdES_BES"
-	SignatureLevel_PAdES_EPES         SignatureLevel = "PAdES_EPES"
-	SignatureLevel_PAdES_LTV          SignatureLevel = "PAdES_LTV"
-	SignatureLevel_PAdES_BASELINE_B   SignatureLevel = "PAdES_BASELINE_B"
-	SignatureLevel_PAdES_BASELINE_T   SignatureLevel = "PAdES_BASELINE_T"
-	SignatureLevel_PAdES_BASELINE_LT  SignatureLevel = "PAdES_BASELINE_LT"
-	SignatureLevel_PAdES_BASELINE_LTA SignatureLevel = "PAdES_BASELINE_LTA"
+	SignatureLevelPDFNotETSI       SignatureLevel = "PDF_NOT_ETSI"
+	SignatureLevelPKCS7B           SignatureLevel = "PKCS7_B"
+	SignatureLevelPKCS7T           SignatureLevel = "PKCS7_T"
+	SignatureLevelPKCS7LT          SignatureLevel = "PKCS7_LT"
+	SignatureLevelPKCS7LTA         SignatureLevel = "PKCS7_LTA"
+	SignatureLevelPAdESBES         SignatureLevel = "PAdES_BES"
+	SignatureLevelPAdESEPES        SignatureLevel = "PAdES_EPES"
+	SignatureLevelPAdESLTV         SignatureLevel = "PAdES_LTV"
+	SignatureLevelPAdESBaselineB   SignatureLevel = "PAdES_BASELINE_B"
+	SignatureLevelPAdESBaselineT   SignatureLevel = "PAdES_BASELINE_T"
+	SignatureLevelPAdESBaselineLT  SignatureLevel = "PAdES_BASELINE_LT"
+	SignatureLevelPAdESBaselineLTA SignatureLevel = "PAdES_BASELINE_LTA"
 
-	SignatureLevel_JSON_NOT_ETSI      SignatureLevel = "JSON_NOT_ETSI"
-	SignatureLevel_JAdES              SignatureLevel = "JAdES"
-	SignatureLevel_JAdES_BASELINE_B   SignatureLevel = "JAdES_BASELINE_B"
-	SignatureLevel_JAdES_BASELINE_T   SignatureLevel = "JAdES_BASELINE_T"
-	SignatureLevel_JAdES_BASELINE_LT  SignatureLevel = "JAdES_BASELINE_LT"
-	SignatureLevel_JAdES_BASELINE_LTA SignatureLevel = "JAdES_BASELINE_LTA"
+	SignatureLevelJSONNotETSI      SignatureLevel = "JSON_NOT_ETSI"
+	SignatureLevelJAdES            SignatureLevel = "JAdES"
+	SignatureLevelJAdESBaselineB   SignatureLevel = "JAdES_BASELINE_B"
+	SignatureLevelJAdESBaselineT   SignatureLevel = "JAdES_BASELINE_T"
+	SignatureLevelJAdESBaselineLT  SignatureLevel = "JAdES_BASELINE_LT"
+	SignatureLevelJAdESBaselineLTA SignatureLevel = "JAdES_BASELINE_LTA"
 
-	SignatureLevel_CBOR_NOT_ETSI        SignatureLevel = "CBOR_NOT_ETSI"
-	SignatureLevel_CB_AdES              SignatureLevel = "CB_AdES"
-	SignatureLevel_CB_AdES_BASELINE_B   SignatureLevel = "CB_AdES_BASELINE_B"
-	SignatureLevel_CB_AdES_BASELINE_T   SignatureLevel = "CB_AdES_BASELINE_T"
-	SignatureLevel_CB_AdES_BASELINE_LT  SignatureLevel = "CB_AdES_BASELINE_LT"
-	SignatureLevel_CB_AdES_BASELINE_LTA SignatureLevel = "CB_AdES_BASELINE_LTA"
+	SignatureLevelCBORNotETSI       SignatureLevel = "CBOR_NOT_ETSI"
+	SignatureLevelCBAdES            SignatureLevel = "CB_AdES"
+	SignatureLevelCBAdESBaselineB   SignatureLevel = "CB_AdES_BASELINE_B"
+	SignatureLevelCBAdESBaselineT   SignatureLevel = "CB_AdES_BASELINE_T"
+	SignatureLevelCBAdESBaselineLT  SignatureLevel = "CB_AdES_BASELINE_LT"
+	SignatureLevelCBAdESBaselineLTA SignatureLevel = "CB_AdES_BASELINE_LTA"
 
-	SignatureLevel_UNKNOWN SignatureLevel = "UNKNOWN"
+	SignatureLevelUnknown SignatureLevel = "UNKNOWN"
 )
 
 // signatureLevelFields holds the (signatureForm, signatureProfile) pair for
@@ -95,90 +95,90 @@ type signatureLevelFields struct {
 // signatureLevelData holds the full field tuple for each constant, copied
 // verbatim from the Java enum constructors.
 var signatureLevelData = map[SignatureLevel]signatureLevelFields{
-	SignatureLevel_XML_NOT_ETSI:       {SignatureForm_XAdES, SignatureProfile_NOT_ETSI},
-	SignatureLevel_XAdES_BES:          {SignatureForm_XAdES, SignatureProfile_EXTENDED_BES},
-	SignatureLevel_XAdES_EPES:         {SignatureForm_XAdES, SignatureProfile_EXTENDED_EPES},
-	SignatureLevel_XAdES_T:            {SignatureForm_XAdES, SignatureProfile_EXTENDED_T},
-	SignatureLevel_XAdES_LT:           {SignatureForm_XAdES, SignatureProfile_EXTENDED_LT},
-	SignatureLevel_XAdES_C:            {SignatureForm_XAdES, SignatureProfile_EXTENDED_C},
-	SignatureLevel_XAdES_X:            {SignatureForm_XAdES, SignatureProfile_EXTENDED_X},
-	SignatureLevel_XAdES_XL:           {SignatureForm_XAdES, SignatureProfile_EXTENDED_XL},
-	SignatureLevel_XAdES_A:            {SignatureForm_XAdES, SignatureProfile_EXTENDED_A},
-	SignatureLevel_XAdES_ERS:          {SignatureForm_XAdES, SignatureProfile_EXTENDED_ERS},
-	SignatureLevel_XAdES_BASELINE_B:   {SignatureForm_XAdES, SignatureProfile_BASELINE_B},
-	SignatureLevel_XAdES_BASELINE_T:   {SignatureForm_XAdES, SignatureProfile_BASELINE_T},
-	SignatureLevel_XAdES_BASELINE_LT:  {SignatureForm_XAdES, SignatureProfile_BASELINE_LT},
-	SignatureLevel_XAdES_BASELINE_LTA: {SignatureForm_XAdES, SignatureProfile_BASELINE_LTA},
+	SignatureLevelXMLNotETSI:       {SignatureFormXAdES, SignatureProfileNotETSI},
+	SignatureLevelXAdESBES:         {SignatureFormXAdES, SignatureProfileExtendedBES},
+	SignatureLevelXAdESEPES:        {SignatureFormXAdES, SignatureProfileExtendedEPES},
+	SignatureLevelXAdEST:           {SignatureFormXAdES, SignatureProfileExtendedT},
+	SignatureLevelXAdESLT:          {SignatureFormXAdES, SignatureProfileExtendedLT},
+	SignatureLevelXAdESC:           {SignatureFormXAdES, SignatureProfileExtendedC},
+	SignatureLevelXAdESX:           {SignatureFormXAdES, SignatureProfileExtendedX},
+	SignatureLevelXAdESXL:          {SignatureFormXAdES, SignatureProfileExtendedXL},
+	SignatureLevelXAdESA:           {SignatureFormXAdES, SignatureProfileExtendedA},
+	SignatureLevelXAdESERS:         {SignatureFormXAdES, SignatureProfileExtendedERS},
+	SignatureLevelXAdESBaselineB:   {SignatureFormXAdES, SignatureProfileBaselineB},
+	SignatureLevelXAdESBaselineT:   {SignatureFormXAdES, SignatureProfileBaselineT},
+	SignatureLevelXAdESBaselineLT:  {SignatureFormXAdES, SignatureProfileBaselineLT},
+	SignatureLevelXAdESBaselineLTA: {SignatureFormXAdES, SignatureProfileBaselineLTA},
 
-	SignatureLevel_CMS_NOT_ETSI:       {SignatureForm_CAdES, SignatureProfile_NOT_ETSI},
-	SignatureLevel_CAdES_BES:          {SignatureForm_CAdES, SignatureProfile_EXTENDED_BES},
-	SignatureLevel_CAdES_EPES:         {SignatureForm_CAdES, SignatureProfile_EXTENDED_EPES},
-	SignatureLevel_CAdES_T:            {SignatureForm_CAdES, SignatureProfile_EXTENDED_T},
-	SignatureLevel_CAdES_LT:           {SignatureForm_CAdES, SignatureProfile_EXTENDED_LT},
-	SignatureLevel_CAdES_C:            {SignatureForm_CAdES, SignatureProfile_EXTENDED_C},
-	SignatureLevel_CAdES_X:            {SignatureForm_CAdES, SignatureProfile_EXTENDED_X},
-	SignatureLevel_CAdES_XL:           {SignatureForm_CAdES, SignatureProfile_EXTENDED_XL},
-	SignatureLevel_CAdES_A:            {SignatureForm_CAdES, SignatureProfile_EXTENDED_A},
-	SignatureLevel_CAdES_ERS:          {SignatureForm_CAdES, SignatureProfile_EXTENDED_ERS},
-	SignatureLevel_CAdES_BASELINE_B:   {SignatureForm_CAdES, SignatureProfile_BASELINE_B},
-	SignatureLevel_CAdES_BASELINE_T:   {SignatureForm_CAdES, SignatureProfile_BASELINE_T},
-	SignatureLevel_CAdES_BASELINE_LT:  {SignatureForm_CAdES, SignatureProfile_BASELINE_LT},
-	SignatureLevel_CAdES_BASELINE_LTA: {SignatureForm_CAdES, SignatureProfile_BASELINE_LTA},
+	SignatureLevelCMSNotETSI:       {SignatureFormCAdES, SignatureProfileNotETSI},
+	SignatureLevelCAdESBES:         {SignatureFormCAdES, SignatureProfileExtendedBES},
+	SignatureLevelCAdESEPES:        {SignatureFormCAdES, SignatureProfileExtendedEPES},
+	SignatureLevelCAdEST:           {SignatureFormCAdES, SignatureProfileExtendedT},
+	SignatureLevelCAdESLT:          {SignatureFormCAdES, SignatureProfileExtendedLT},
+	SignatureLevelCAdESC:           {SignatureFormCAdES, SignatureProfileExtendedC},
+	SignatureLevelCAdESX:           {SignatureFormCAdES, SignatureProfileExtendedX},
+	SignatureLevelCAdESXL:          {SignatureFormCAdES, SignatureProfileExtendedXL},
+	SignatureLevelCAdESA:           {SignatureFormCAdES, SignatureProfileExtendedA},
+	SignatureLevelCAdESERS:         {SignatureFormCAdES, SignatureProfileExtendedERS},
+	SignatureLevelCAdESBaselineB:   {SignatureFormCAdES, SignatureProfileBaselineB},
+	SignatureLevelCAdESBaselineT:   {SignatureFormCAdES, SignatureProfileBaselineT},
+	SignatureLevelCAdESBaselineLT:  {SignatureFormCAdES, SignatureProfileBaselineLT},
+	SignatureLevelCAdESBaselineLTA: {SignatureFormCAdES, SignatureProfileBaselineLTA},
 
-	SignatureLevel_PDF_NOT_ETSI:       {SignatureForm_PAdES, SignatureProfile_NOT_ETSI},
-	SignatureLevel_PKCS7_B:            {SignatureForm_PKCS7, SignatureProfile_NOT_ETSI},
-	SignatureLevel_PKCS7_T:            {SignatureForm_PKCS7, SignatureProfile_NOT_ETSI},
-	SignatureLevel_PKCS7_LT:           {SignatureForm_PKCS7, SignatureProfile_NOT_ETSI},
-	SignatureLevel_PKCS7_LTA:          {SignatureForm_PKCS7, SignatureProfile_NOT_ETSI},
-	SignatureLevel_PAdES_BES:          {SignatureForm_PAdES, SignatureProfile_EXTENDED_BES},
-	SignatureLevel_PAdES_EPES:         {SignatureForm_PAdES, SignatureProfile_EXTENDED_EPES},
-	SignatureLevel_PAdES_LTV:          {SignatureForm_PAdES, SignatureProfile_EXTENDED_LTV},
-	SignatureLevel_PAdES_BASELINE_B:   {SignatureForm_PAdES, SignatureProfile_BASELINE_B},
-	SignatureLevel_PAdES_BASELINE_T:   {SignatureForm_PAdES, SignatureProfile_BASELINE_T},
-	SignatureLevel_PAdES_BASELINE_LT:  {SignatureForm_PAdES, SignatureProfile_BASELINE_LT},
-	SignatureLevel_PAdES_BASELINE_LTA: {SignatureForm_PAdES, SignatureProfile_BASELINE_LTA},
+	SignatureLevelPDFNotETSI:       {SignatureFormPAdES, SignatureProfileNotETSI},
+	SignatureLevelPKCS7B:           {SignatureFormPKCS7, SignatureProfileNotETSI},
+	SignatureLevelPKCS7T:           {SignatureFormPKCS7, SignatureProfileNotETSI},
+	SignatureLevelPKCS7LT:          {SignatureFormPKCS7, SignatureProfileNotETSI},
+	SignatureLevelPKCS7LTA:         {SignatureFormPKCS7, SignatureProfileNotETSI},
+	SignatureLevelPAdESBES:         {SignatureFormPAdES, SignatureProfileExtendedBES},
+	SignatureLevelPAdESEPES:        {SignatureFormPAdES, SignatureProfileExtendedEPES},
+	SignatureLevelPAdESLTV:         {SignatureFormPAdES, SignatureProfileExtendedLTV},
+	SignatureLevelPAdESBaselineB:   {SignatureFormPAdES, SignatureProfileBaselineB},
+	SignatureLevelPAdESBaselineT:   {SignatureFormPAdES, SignatureProfileBaselineT},
+	SignatureLevelPAdESBaselineLT:  {SignatureFormPAdES, SignatureProfileBaselineLT},
+	SignatureLevelPAdESBaselineLTA: {SignatureFormPAdES, SignatureProfileBaselineLTA},
 
-	SignatureLevel_JSON_NOT_ETSI:      {SignatureForm_JAdES, SignatureProfile_NOT_ETSI},
-	SignatureLevel_JAdES:              {SignatureForm_JAdES, SignatureProfile_AdES},
-	SignatureLevel_JAdES_BASELINE_B:   {SignatureForm_JAdES, SignatureProfile_BASELINE_B},
-	SignatureLevel_JAdES_BASELINE_T:   {SignatureForm_JAdES, SignatureProfile_BASELINE_T},
-	SignatureLevel_JAdES_BASELINE_LT:  {SignatureForm_JAdES, SignatureProfile_BASELINE_LT},
-	SignatureLevel_JAdES_BASELINE_LTA: {SignatureForm_JAdES, SignatureProfile_BASELINE_LTA},
+	SignatureLevelJSONNotETSI:      {SignatureFormJAdES, SignatureProfileNotETSI},
+	SignatureLevelJAdES:            {SignatureFormJAdES, SignatureProfileAdES},
+	SignatureLevelJAdESBaselineB:   {SignatureFormJAdES, SignatureProfileBaselineB},
+	SignatureLevelJAdESBaselineT:   {SignatureFormJAdES, SignatureProfileBaselineT},
+	SignatureLevelJAdESBaselineLT:  {SignatureFormJAdES, SignatureProfileBaselineLT},
+	SignatureLevelJAdESBaselineLTA: {SignatureFormJAdES, SignatureProfileBaselineLTA},
 
-	SignatureLevel_CBOR_NOT_ETSI:        {SignatureForm_CBAdES, SignatureProfile_NOT_ETSI},
-	SignatureLevel_CB_AdES:              {SignatureForm_CBAdES, SignatureProfile_AdES},
-	SignatureLevel_CB_AdES_BASELINE_B:   {SignatureForm_CBAdES, SignatureProfile_BASELINE_B},
-	SignatureLevel_CB_AdES_BASELINE_T:   {SignatureForm_CBAdES, SignatureProfile_BASELINE_T},
-	SignatureLevel_CB_AdES_BASELINE_LT:  {SignatureForm_CBAdES, SignatureProfile_BASELINE_LT},
-	SignatureLevel_CB_AdES_BASELINE_LTA: {SignatureForm_CBAdES, SignatureProfile_BASELINE_LTA},
+	SignatureLevelCBORNotETSI:       {SignatureFormCBAdES, SignatureProfileNotETSI},
+	SignatureLevelCBAdES:            {SignatureFormCBAdES, SignatureProfileAdES},
+	SignatureLevelCBAdESBaselineB:   {SignatureFormCBAdES, SignatureProfileBaselineB},
+	SignatureLevelCBAdESBaselineT:   {SignatureFormCBAdES, SignatureProfileBaselineT},
+	SignatureLevelCBAdESBaselineLT:  {SignatureFormCBAdES, SignatureProfileBaselineLT},
+	SignatureLevelCBAdESBaselineLTA: {SignatureFormCBAdES, SignatureProfileBaselineLTA},
 
 	// UNKNOWN(null, NOT_ETSI): signatureForm is left as the zero value ("")
 	// to mirror the Java null.
-	SignatureLevel_UNKNOWN: {"", SignatureProfile_NOT_ETSI},
+	SignatureLevelUnknown: {"", SignatureProfileNotETSI},
 }
 
 // SignatureLevelValues returns all constants in declaration order.
 func SignatureLevelValues() []SignatureLevel {
 	return []SignatureLevel{
-		SignatureLevel_XML_NOT_ETSI, SignatureLevel_XAdES_BES, SignatureLevel_XAdES_EPES, SignatureLevel_XAdES_T, SignatureLevel_XAdES_LT,
-		SignatureLevel_XAdES_C, SignatureLevel_XAdES_X, SignatureLevel_XAdES_XL, SignatureLevel_XAdES_A, SignatureLevel_XAdES_ERS,
-		SignatureLevel_XAdES_BASELINE_B, SignatureLevel_XAdES_BASELINE_T, SignatureLevel_XAdES_BASELINE_LT, SignatureLevel_XAdES_BASELINE_LTA,
+		SignatureLevelXMLNotETSI, SignatureLevelXAdESBES, SignatureLevelXAdESEPES, SignatureLevelXAdEST, SignatureLevelXAdESLT,
+		SignatureLevelXAdESC, SignatureLevelXAdESX, SignatureLevelXAdESXL, SignatureLevelXAdESA, SignatureLevelXAdESERS,
+		SignatureLevelXAdESBaselineB, SignatureLevelXAdESBaselineT, SignatureLevelXAdESBaselineLT, SignatureLevelXAdESBaselineLTA,
 
-		SignatureLevel_CMS_NOT_ETSI, SignatureLevel_CAdES_BES, SignatureLevel_CAdES_EPES, SignatureLevel_CAdES_T, SignatureLevel_CAdES_LT,
-		SignatureLevel_CAdES_C, SignatureLevel_CAdES_X, SignatureLevel_CAdES_XL, SignatureLevel_CAdES_A, SignatureLevel_CAdES_ERS,
-		SignatureLevel_CAdES_BASELINE_B, SignatureLevel_CAdES_BASELINE_T, SignatureLevel_CAdES_BASELINE_LT, SignatureLevel_CAdES_BASELINE_LTA,
+		SignatureLevelCMSNotETSI, SignatureLevelCAdESBES, SignatureLevelCAdESEPES, SignatureLevelCAdEST, SignatureLevelCAdESLT,
+		SignatureLevelCAdESC, SignatureLevelCAdESX, SignatureLevelCAdESXL, SignatureLevelCAdESA, SignatureLevelCAdESERS,
+		SignatureLevelCAdESBaselineB, SignatureLevelCAdESBaselineT, SignatureLevelCAdESBaselineLT, SignatureLevelCAdESBaselineLTA,
 
-		SignatureLevel_PDF_NOT_ETSI, SignatureLevel_PKCS7_B, SignatureLevel_PKCS7_T, SignatureLevel_PKCS7_LT, SignatureLevel_PKCS7_LTA,
-		SignatureLevel_PAdES_BES, SignatureLevel_PAdES_EPES, SignatureLevel_PAdES_LTV,
-		SignatureLevel_PAdES_BASELINE_B, SignatureLevel_PAdES_BASELINE_T, SignatureLevel_PAdES_BASELINE_LT, SignatureLevel_PAdES_BASELINE_LTA,
+		SignatureLevelPDFNotETSI, SignatureLevelPKCS7B, SignatureLevelPKCS7T, SignatureLevelPKCS7LT, SignatureLevelPKCS7LTA,
+		SignatureLevelPAdESBES, SignatureLevelPAdESEPES, SignatureLevelPAdESLTV,
+		SignatureLevelPAdESBaselineB, SignatureLevelPAdESBaselineT, SignatureLevelPAdESBaselineLT, SignatureLevelPAdESBaselineLTA,
 
-		SignatureLevel_JSON_NOT_ETSI, SignatureLevel_JAdES, SignatureLevel_JAdES_BASELINE_B,
-		SignatureLevel_JAdES_BASELINE_T, SignatureLevel_JAdES_BASELINE_LT, SignatureLevel_JAdES_BASELINE_LTA,
+		SignatureLevelJSONNotETSI, SignatureLevelJAdES, SignatureLevelJAdESBaselineB,
+		SignatureLevelJAdESBaselineT, SignatureLevelJAdESBaselineLT, SignatureLevelJAdESBaselineLTA,
 
-		SignatureLevel_CBOR_NOT_ETSI, SignatureLevel_CB_AdES, SignatureLevel_CB_AdES_BASELINE_B,
-		SignatureLevel_CB_AdES_BASELINE_T, SignatureLevel_CB_AdES_BASELINE_LT, SignatureLevel_CB_AdES_BASELINE_LTA,
+		SignatureLevelCBORNotETSI, SignatureLevelCBAdES, SignatureLevelCBAdESBaselineB,
+		SignatureLevelCBAdESBaselineT, SignatureLevelCBAdESBaselineLT, SignatureLevelCBAdESBaselineLTA,
 
-		SignatureLevel_UNKNOWN,
+		SignatureLevelUnknown,
 	}
 }
 
@@ -206,7 +206,7 @@ func (s SignatureLevel) String() string {
 }
 
 // SignatureForm returns the corresponding SignatureForm, or an error if the
-// signature level does not support one (i.e. SignatureLevel_UNKNOWN).
+// signature level does not support one (i.e. SignatureLevelUnknown).
 func (s SignatureLevel) SignatureForm() (SignatureForm, error) {
 	form := signatureLevelData[s].signatureForm
 	if form == "" {
@@ -246,5 +246,5 @@ func GetSignatureLevel(signatureForm SignatureForm, signatureProfile SignaturePr
 			return current, nil
 		}
 	}
-	return "", fmt.Errorf("the signature level '%s' is not supported", SignatureLevel_UNKNOWN)
+	return "", fmt.Errorf("the signature level '%s' is not supported", SignatureLevelUnknown)
 }

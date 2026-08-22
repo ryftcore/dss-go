@@ -18,7 +18,7 @@ func TestCOSEStructureTypeValueOf(t *testing.T) {
 }
 
 func TestCOSEStructureTypeValues(t *testing.T) {
-	want := []COSEStructureType{COSEStructureType_COSE_SIGN, COSEStructureType_COSE_SIGN1}
+	want := []COSEStructureType{COSEStructureTypeCoseSign, COSEStructureTypeCoseSign1}
 	got := COSEStructureTypeValues()
 	if len(got) != len(want) {
 		t.Fatalf("COSEStructureTypeValues() length = %d, want %d", len(got), len(want))

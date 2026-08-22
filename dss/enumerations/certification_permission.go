@@ -10,33 +10,33 @@ import "fmt"
 type CertificationPermission string
 
 const (
-	// CertificationPermission_NO_CHANGE_PERMITTED: no changes to the
+	// CertificationPermissionNoChangePermitted: no changes to the
 	// document are permitted; any change to the document shall invalidate
 	// the signature.
-	CertificationPermission_NO_CHANGE_PERMITTED CertificationPermission = "NO_CHANGE_PERMITTED"
-	// CertificationPermission_MINIMAL_CHANGES_PERMITTED: permitted changes
+	CertificationPermissionNoChangePermitted CertificationPermission = "NO_CHANGE_PERMITTED"
+	// CertificationPermissionMinimalChangesPermitted: permitted changes
 	// shall be filling in forms, instantiating page templates, and
 	// signing; other changes shall invalidate the signature.
-	CertificationPermission_MINIMAL_CHANGES_PERMITTED CertificationPermission = "MINIMAL_CHANGES_PERMITTED"
-	// CertificationPermission_CHANGES_PERMITTED: permitted changes are the
+	CertificationPermissionMinimalChangesPermitted CertificationPermission = "MINIMAL_CHANGES_PERMITTED"
+	// CertificationPermissionChangesPermitted: permitted changes are the
 	// same as for 2, as well as annotation creation, deletion, and
 	// modification; other changes shall invalidate the signature.
-	CertificationPermission_CHANGES_PERMITTED CertificationPermission = "CHANGES_PERMITTED"
+	CertificationPermissionChangesPermitted CertificationPermission = "CHANGES_PERMITTED"
 )
 
 // certificationPermissionCodes holds the /DocMDP code for each constant.
 var certificationPermissionCodes = map[CertificationPermission]int{
-	CertificationPermission_NO_CHANGE_PERMITTED:       1,
-	CertificationPermission_MINIMAL_CHANGES_PERMITTED: 2,
-	CertificationPermission_CHANGES_PERMITTED:         3,
+	CertificationPermissionNoChangePermitted:       1,
+	CertificationPermissionMinimalChangesPermitted: 2,
+	CertificationPermissionChangesPermitted:        3,
 }
 
 // CertificationPermissionValues returns all constants in declaration order.
 func CertificationPermissionValues() []CertificationPermission {
 	return []CertificationPermission{
-		CertificationPermission_NO_CHANGE_PERMITTED,
-		CertificationPermission_MINIMAL_CHANGES_PERMITTED,
-		CertificationPermission_CHANGES_PERMITTED,
+		CertificationPermissionNoChangePermitted,
+		CertificationPermissionMinimalChangesPermitted,
+		CertificationPermissionChangesPermitted,
 	}
 }
 

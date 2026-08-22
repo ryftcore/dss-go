@@ -41,7 +41,7 @@ func NewProspectiveCertificateChainAtValidationTimeCheck(i18nProvider *i18n.I18n
 
 // failLevelRule ports the private getFailLevelRule().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) failLevelRule() policy.LevelRule {
-	return process.GetLevelRule(enumerations.Level_FAIL)
+	return process.GetLevelRule(enumerations.LevelFail)
 }
 
 // Process performs the check. Port of process().
@@ -71,13 +71,13 @@ func (c *ProspectiveCertificateChainAtValidationTimeCheck) ErrorMessageTag() i18
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE
+	return enumerations.SubIndicationNoCertificateChainFoundNoPOE
 }
 
 // BuildAdditionalInfo builds an additional information. Port of

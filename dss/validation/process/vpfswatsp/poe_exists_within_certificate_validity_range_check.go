@@ -58,13 +58,13 @@ func (c *POEExistsWithinCertificateValidityRangeCheck[T]) ErrorMessageTag() i18n
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *POEExistsWithinCertificateValidityRangeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *POEExistsWithinCertificateValidityRangeCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE
+	return enumerations.SubIndicationRevocationOutOfBoundsNoPOE
 }
 
 // BuildAdditionalInfo builds an additional information. Port of

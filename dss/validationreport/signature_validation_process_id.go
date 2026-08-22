@@ -11,9 +11,9 @@ type SignatureValidationProcessID = jaxb.SignatureValidationProcessID
 
 // The SignatureValidationProcessID values, re-exported from jaxb.
 const (
-	SignatureValidationProcessID_BASIC = jaxb.SignatureValidationProcessID_BASIC
-	SignatureValidationProcessID_LTVM  = jaxb.SignatureValidationProcessID_LTVM
-	SignatureValidationProcessID_LTA   = jaxb.SignatureValidationProcessID_LTA
+	SignatureValidationProcessIDBasic = jaxb.SignatureValidationProcessIDBasic
+	SignatureValidationProcessIDLTVM  = jaxb.SignatureValidationProcessIDLTVM
+	SignatureValidationProcessIDLTA   = jaxb.SignatureValidationProcessIDLTA
 )
 
 // SignatureValidationProcessIDValues returns all SignatureValidationProcessID

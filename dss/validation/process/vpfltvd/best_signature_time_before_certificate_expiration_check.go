@@ -76,11 +76,11 @@ func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) ErrorMessageTag()
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED
+	return enumerations.SubIndicationOutOfBoundsNotRevoked
 }

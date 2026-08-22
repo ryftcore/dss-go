@@ -5,40 +5,40 @@ package enumerations
 type Context string
 
 const (
-	// Context_SIGNATURE: the processing token is a signature.
-	Context_SIGNATURE Context = "SIGNATURE"
-	// Context_COUNTER_SIGNATURE: the processing token is a counter signature.
-	Context_COUNTER_SIGNATURE Context = "COUNTER_SIGNATURE"
-	// Context_KEY_BINDING_SIGNATURE: the processing token is a key binding
+	// ContextSignature: the processing token is a signature.
+	ContextSignature Context = "SIGNATURE"
+	// ContextCounterSignature: the processing token is a counter signature.
+	ContextCounterSignature Context = "COUNTER_SIGNATURE"
+	// ContextKeyBindingSignature: the processing token is a key binding
 	// signature.
-	Context_KEY_BINDING_SIGNATURE Context = "KEY_BINDING_SIGNATURE"
-	// Context_TIMESTAMP: the processing token is a timestamp.
-	Context_TIMESTAMP Context = "TIMESTAMP"
-	// Context_EVIDENCE_RECORD: the processing token is an evidence record.
-	Context_EVIDENCE_RECORD Context = "EVIDENCE_RECORD"
-	// Context_REVOCATION: the processing token is a revocation.
-	Context_REVOCATION Context = "REVOCATION"
-	// Context_CERTIFICATE: the processing token is a certificate.
-	Context_CERTIFICATE Context = "CERTIFICATE"
-	// Context_EAA: the processing token is an electronic attestation of
+	ContextKeyBindingSignature Context = "KEY_BINDING_SIGNATURE"
+	// ContextTimestamp: the processing token is a timestamp.
+	ContextTimestamp Context = "TIMESTAMP"
+	// ContextEvidenceRecord: the processing token is an evidence record.
+	ContextEvidenceRecord Context = "EVIDENCE_RECORD"
+	// ContextRevocation: the processing token is a revocation.
+	ContextRevocation Context = "REVOCATION"
+	// ContextCertificate: the processing token is a certificate.
+	ContextCertificate Context = "CERTIFICATE"
+	// ContextEAA: the processing token is an electronic attestation of
 	// attributes.
-	Context_EAA Context = "EAA"
-	// Context_EAA_REVOCATION: the processing token is an EAA revocation
+	ContextEAA Context = "EAA"
+	// ContextEAARevocation: the processing token is an EAA revocation
 	// token.
-	Context_EAA_REVOCATION Context = "EAA_REVOCATION"
+	ContextEAARevocation Context = "EAA_REVOCATION"
 )
 
 // ContextValues returns all constants in declaration order.
 func ContextValues() []Context {
 	return []Context{
-		Context_SIGNATURE,
-		Context_COUNTER_SIGNATURE,
-		Context_KEY_BINDING_SIGNATURE,
-		Context_TIMESTAMP,
-		Context_EVIDENCE_RECORD,
-		Context_REVOCATION,
-		Context_CERTIFICATE,
-		Context_EAA,
-		Context_EAA_REVOCATION,
+		ContextSignature,
+		ContextCounterSignature,
+		ContextKeyBindingSignature,
+		ContextTimestamp,
+		ContextEvidenceRecord,
+		ContextRevocation,
+		ContextCertificate,
+		ContextEAA,
+		ContextEAARevocation,
 	}
 }

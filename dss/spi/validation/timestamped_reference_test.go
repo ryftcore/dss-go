@@ -9,12 +9,12 @@ import (
 // TestTimestampedReference covers the value semantics the timestamp source relies on: two
 // references are the same reference when their id and category agree.
 func TestTimestampedReference(t *testing.T) {
-	reference := NewTimestampedReference("S-1234", enumerations.TimestampedObjectType_SIGNATURE)
+	reference := NewTimestampedReference("S-1234", enumerations.TimestampedObjectTypeSignature)
 
 	if got := reference.ObjectId(); got != "S-1234" {
 		t.Errorf("ObjectId() = %q, want S-1234", got)
 	}
-	if got := reference.Category(); got != enumerations.TimestampedObjectType_SIGNATURE {
+	if got := reference.Category(); got != enumerations.TimestampedObjectTypeSignature {
 		t.Errorf("Category() = %s, want SIGNATURE", got)
 	}
 	if got, want := reference.String(),
@@ -26,9 +26,9 @@ func TestTimestampedReference(t *testing.T) {
 		other *TimestampedReference
 		equal bool
 	}{
-		"same":          {NewTimestampedReference("S-1234", enumerations.TimestampedObjectType_SIGNATURE), true},
-		"other id":      {NewTimestampedReference("S-5678", enumerations.TimestampedObjectType_SIGNATURE), false},
-		"other type":    {NewTimestampedReference("S-1234", enumerations.TimestampedObjectType_CERTIFICATE), false},
+		"same":          {NewTimestampedReference("S-1234", enumerations.TimestampedObjectTypeSignature), true},
+		"other id":      {NewTimestampedReference("S-5678", enumerations.TimestampedObjectTypeSignature), false},
+		"other type":    {NewTimestampedReference("S-1234", enumerations.TimestampedObjectTypeCertificate), false},
 		"nil reference": {nil, false},
 	}
 	for name, testCase := range cases {
@@ -72,11 +72,11 @@ func TestArchiveTimestampHashIndexStatus(t *testing.T) {
 		t.Errorf("ErrorMessages() = %v, want an empty, non-nil list", got)
 	}
 
-	status.SetVersion(enumerations.ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2)
+	status.SetVersion(enumerations.ArchiveTimestampHashIndexVersionATSHashIndexV2)
 	status.AddErrorMessage("first")
 	status.AddErrorMessage("second")
 
-	if got := status.Version(); got != enumerations.ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2 {
+	if got := status.Version(); got != enumerations.ArchiveTimestampHashIndexVersionATSHashIndexV2 {
 		t.Errorf("Version() = %s, want ATS_HASH_INDEX_V2", got)
 	}
 	if got := status.ErrorMessages(); len(got) != 2 || got[0] != "first" || got[1] != "second" {

@@ -47,7 +47,7 @@ func NewPOEExistsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *POEExistsCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PCV
+	return jaxb.XmlBlockTypePCV
 }
 
 // Process performs the check. Port of process(), which is public upstream: the

@@ -68,10 +68,10 @@ type SignatureImageTextParameters struct {
 // configuration.
 func NewSignatureImageTextParameters() *SignatureImageTextParameters {
 	return &SignatureImageTextParameters{
-		signerTextPosition:            enumerations.SignerTextPosition_LEFT,
-		signerTextVerticalAlignment:   enumerations.SignerTextVerticalAlignment_MIDDLE,
-		signerTextHorizontalAlignment: enumerations.SignerTextHorizontalAlignment_LEFT,
-		textWrapping:                  enumerations.TextWrapping_FONT_BASED,
+		signerTextPosition:            enumerations.SignerTextPositionLeft,
+		signerTextVerticalAlignment:   enumerations.SignerTextVerticalAlignmentMiddle,
+		signerTextHorizontalAlignment: enumerations.SignerTextHorizontalAlignmentLeft,
+		textWrapping:                  enumerations.TextWrappingFontBased,
 		padding:                       SignatureImageTextParametersDefaultPadding,
 		textColor:                     SignatureImageTextParametersDefaultTextColor,
 		backgroundColor:               SignatureImageTextParametersDefaultBackgroundColor,

@@ -41,7 +41,7 @@ func NewValidationTimeSlidingCheck(i18nProvider *i18n.I18nProvider, result *proc
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *ValidationTimeSlidingCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_VTS
+	return jaxb.XmlBlockTypeVTS
 }
 
 // Process performs the check. Port of process().

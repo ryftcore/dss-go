@@ -69,7 +69,7 @@ func (c *TimestampManifestFilenameAdherenceCheck) isLastArchivalTimestamp() bool
 
 // Process performs the check.
 func (c *TimestampManifestFilenameAdherenceCheck) Process() bool {
-	if c.DiagnosticData.ContainerType() == enumerations.ASiCContainerType_ASiC_S {
+	if c.DiagnosticData.ContainerType() == enumerations.ASiCContainerTypeASiCS {
 		// 4.3.3.2 Contents of the container: the META-INF folder may contain other
 		// application specific information - can be of any format.
 		return true

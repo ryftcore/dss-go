@@ -15,17 +15,17 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 type ManifestElement string
 
 const (
-	// ManifestElement_MANIFEST is the "manifest" element.
-	ManifestElement_MANIFEST ManifestElement = "MANIFEST"
+	// ManifestElementManifest is the "manifest" element.
+	ManifestElementManifest ManifestElement = "MANIFEST"
 
-	// ManifestElement_FILE_ENTRY is the "file-entry" element.
-	ManifestElement_FILE_ENTRY ManifestElement = "FILE_ENTRY"
+	// ManifestElementFileEntry is the "file-entry" element.
+	ManifestElementFileEntry ManifestElement = "FILE_ENTRY"
 )
 
 // manifestElementTagNames maps each constant to its wire tag name (getTagName()).
 var manifestElementTagNames = map[ManifestElement]string{
-	ManifestElement_MANIFEST:   "manifest",
-	ManifestElement_FILE_ENTRY: "file-entry",
+	ManifestElementManifest:  "manifest",
+	ManifestElementFileEntry: "file-entry",
 }
 
 // TagName implements common.DSSElement. Ports getTagName().

@@ -12,9 +12,9 @@ type QCIdentMethod interface {
 	OidDescription
 }
 
-// QCIdentMethod_UNKNOWN_METHOD defines a description for an unknown method
+// QCIdentMethodUnknownMethod defines a description for an unknown method
 // by the current implementation.
-const QCIdentMethod_UNKNOWN_METHOD = "qc-identification-method-unknown"
+const QCIdentMethodUnknownMethod = "qc-identification-method-unknown"
 
 // qcIdentMethodUnknown is a plain QCIdentMethod implementation backing the
 // fallback branch of QCIdentMethodFromOID (Java's QCIdentMethod.fromOid
@@ -23,12 +23,12 @@ type qcIdentMethodUnknown struct {
 	oid string
 }
 
-func (q *qcIdentMethodUnknown) Description() string { return QCIdentMethod_UNKNOWN_METHOD }
+func (q *qcIdentMethodUnknown) Description() string { return QCIdentMethodUnknownMethod }
 func (q *qcIdentMethodUnknown) OID() string         { return q.oid }
 
 // QCIdentMethodFromOID returns a QCIdentMethod by the given OID, if it
 // matches a known QCIdentMethodEnum constant. Otherwise, a QCIdentMethod
-// with QCIdentMethod_UNKNOWN_METHOD as its Description and the given oid is
+// with QCIdentMethodUnknownMethod as its Description and the given oid is
 // returned (Java logged this case at debug level via SLF4J; that logging
 // side-effect is not ported — see PORTER_BRIEF notes).
 func QCIdentMethodFromOID(oid string) QCIdentMethod {

@@ -9,9 +9,9 @@ func TestTimestampQualificationFields(t *testing.T) {
 		label    string
 		uri      string
 	}{
-		{TimestampQualification_QTSA, "QTSA", "Qualified timestamp", "urn:cef:dss:timestampQualification:QTSA"},
-		{TimestampQualification_TSA, "TSA", "Not qualified timestamp", "urn:cef:dss:timestampQualification:TSA"},
-		{TimestampQualification_NA, "N/A", "Not applicable", "urn:cef:dss:timestampQualification:notApplicable"},
+		{TimestampQualificationQTSA, "QTSA", "Qualified timestamp", "urn:cef:dss:timestampQualification:QTSA"},
+		{TimestampQualificationTSA, "TSA", "Not qualified timestamp", "urn:cef:dss:timestampQualification:TSA"},
+		{TimestampQualificationNA, "N/A", "Not applicable", "urn:cef:dss:timestampQualification:notApplicable"},
 	}
 	if len(TimestampQualificationValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(TimestampQualificationValues()))

@@ -117,12 +117,12 @@ func (p *ReferenceProcessor) nodeToTransform(doc *xmldom.Node, reference *DSSRef
 	if p.signatureParameters != nil && p.signatureParameters.IsEmbedXML() {
 		doc2 := xmlutils.DomUtilsBuildDOMEmpty()
 		dom := xmlutils.DomUtilsCreateElementNS(doc2, p.signatureParameters.XmldsigNamespace(),
-			common.XMLDSigElement_OBJECT)
+			common.XMLDSigElementObject)
 		dom2 := xmlutils.DomUtilsCreateElementNS(doc2, p.signatureParameters.XmldsigNamespace(),
-			common.XMLDSigElement_OBJECT)
+			common.XMLDSigElementObject)
 		doc2.AppendChild(dom2)
 		dom2.AppendChild(dom)
-		dom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, xmlutils.DomUtilsGetId(uri))
+		dom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, xmlutils.DomUtilsGetId(uri))
 
 		xmlutils.DomUtilsAdoptChildren(dom, doc)
 		return dom
@@ -160,12 +160,12 @@ func (p *ReferenceProcessor) IncorporateReferences(referenceContainer *xmldom.No
 		documentDom := referenceContainer.OwnerDocument()
 		for _, dssReference := range references {
 			referenceDom := xmlutils.DomUtilsCreateElementNS(documentDom, namespace,
-				common.XMLDSigElement_REFERENCE)
+				common.XMLDSigElementReference)
 			referenceContainer.AppendChild(referenceDom)
 
 			if dssReference.Id() != "" {
 				referenceDom.SetAttr(
-					xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, dssReference.Id())
+					xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, dssReference.Id())
 			}
 			// Java's "if (uri != null)": the enveloped reference's URI is the EMPTY string and
 			// upstream does write URI="" for it, so the test is HasUri, not uri != "".
@@ -175,12 +175,12 @@ func (p *ReferenceProcessor) IncorporateReferences(referenceContainer *xmldom.No
 					uri = spi.DSSUtilsEncodeURI(uri)
 				}
 				referenceDom.SetAttr(
-					xmldom.Name{Local: common.XMLDSigAttribute_URI.AttributeName()}, uri)
+					xmldom.Name{Local: common.XMLDSigAttributeURI.AttributeName()}, uri)
 			}
 			referenceType := dssReference.Type()
 			if referenceType != "" {
 				referenceDom.SetAttr(
-					xmldom.Name{Local: common.XMLDSigAttribute_TYPE.AttributeName()}, referenceType)
+					xmldom.Name{Local: common.XMLDSigAttributeType.AttributeName()}, referenceType)
 			}
 
 			DSSXMLUtilsIncorporateTransforms(referenceDom, dssReference.Transforms(), namespace)

@@ -72,13 +72,13 @@ type AbstractSerializableSignatureParameters[TP SerializableTimestampParameters]
 // NewAbstractSerializableSignatureParameters instantiates the object with
 // default values. Ports the protected no-arg constructor.
 func NewAbstractSerializableSignatureParameters[TP SerializableTimestampParameters]() AbstractSerializableSignatureParameters[TP] {
-	signatureAlgorithm := enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1
+	signatureAlgorithm := enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1
 	return AbstractSerializableSignatureParameters[TP]{
 		signatureAlgorithm:                  signatureAlgorithm,
 		encryptionAlgorithm:                 signatureAlgorithm.EncryptionAlgorithm(),
 		digestAlgorithm:                     signatureAlgorithm.DigestAlgorithm(),
 		bLevelParams:                        NewBLevelParameters(),
-		validationDataEncapsulationStrategy: enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA,
+		validationDataEncapsulationStrategy: enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData,
 	}
 }
 

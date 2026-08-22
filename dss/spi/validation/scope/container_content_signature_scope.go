@@ -27,7 +27,7 @@ func (s *ContainerContentSignatureScope) Description(tokenIdentifierProvider mod
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *ContainerContentSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_ARCHIVED
+	return enumerations.SignatureScopeTypeArchived
 }
 
 // compile-time interface assertion.

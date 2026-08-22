@@ -153,16 +153,16 @@ func (e *CAdESLevelBaselineLTA) addArchiveTimestampV3Attribute(cadesSignature *C
 	}
 
 	return CAdESUtilsAddAttribute(unsignedAttributes,
-		spi.OID_id_aa_ets_archiveTimestampV3, timeStampAttributeValue), nil
+		spi.OIDIdAaEtsArchiveTimestampV3, timeStampAttributeValue), nil
 }
 
 // cadesLTAAtsHashIndexTableIdentifier ports the private
 // getAtsHashIndexTableIdentifier(CAdESSignatureParameters).
 func cadesLTAAtsHashIndexTableIdentifier(signatureParameters *CAdESSignatureParameters) asn1.ObjectIdentifier {
 	if !signatureParameters.IsEn319122() {
-		return spi.OID_id_aa_ATSHashIndex
+		return spi.OIDIdAaATSHashIndex
 	}
-	return spi.OID_id_aa_ATSHashIndexV3
+	return spi.OIDIdAaATSHashIndexV3
 }
 
 // compile-time assertion that the LTA profile satisfies the abstract base's contract.

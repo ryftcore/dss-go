@@ -11,9 +11,9 @@ func TestXAdESEvidencerecordNamespaceElement_KAT(t *testing.T) {
 		got  string
 		want string
 	}{
-		{"ASN1_EVIDENCE_RECORD", XAdESEvidencerecordNamespaceElement_ASN1_EVIDENCE_RECORD.TagName(), "ASN1EvidenceRecord"},
-		{"EVIDENCE_RECORD", XAdESEvidencerecordNamespaceElement_EVIDENCE_RECORD.TagName(), "EvidenceRecord"},
-		{"SEALING_EVIDENCE_RECORDS", XAdESEvidencerecordNamespaceElement_SEALING_EVIDENCE_RECORDS.TagName(), "SealingEvidenceRecords"},
+		{"ASN1_EVIDENCE_RECORD", XAdESEvidencerecordNamespaceElementASN1EvidenceRecord.TagName(), "ASN1EvidenceRecord"},
+		{"EVIDENCE_RECORD", XAdESEvidencerecordNamespaceElementEvidenceRecord.TagName(), "EvidenceRecord"},
+		{"SEALING_EVIDENCE_RECORDS", XAdESEvidencerecordNamespaceElementSealingEvidenceRecords.TagName(), "SealingEvidenceRecords"},
 	}
 	for _, c := range cases {
 		if c.got != c.want {

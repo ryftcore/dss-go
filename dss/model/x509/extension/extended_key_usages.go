@@ -22,7 +22,7 @@ func NewExtendedKeyUsages() *ExtendedKeyUsages {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_EXTENDED_KEY_USAGE.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumExtendedKeyUsage.OID()),
 	}
 }
 

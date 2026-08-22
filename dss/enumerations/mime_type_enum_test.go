@@ -13,32 +13,32 @@ type mimeTypeEnumCase struct {
 
 func mimeTypeEnumCases() []mimeTypeEnumCase {
 	return []mimeTypeEnumCase{
-		{MimeTypeEnum_BINARY, "application/octet-stream", nil},
-		{MimeTypeEnum_TEXT, "text/plain", []string{"txt"}},
-		{MimeTypeEnum_XML, "text/xml", []string{"xml"}},
-		{MimeTypeEnum_HTML, "text/html", []string{"html"}},
-		{MimeTypeEnum_PDF, "application/pdf", []string{"pdf"}},
-		{MimeTypeEnum_JSON, "application/json", []string{"json"}},
-		{MimeTypeEnum_JOSE, "application/jose", []string{"jose"}},
-		{MimeTypeEnum_JOSE_JSON, "application/jose+json", []string{"json"}},
-		{MimeTypeEnum_SD_JWT_VC, "application/dc+sd-jwt", []string{"json"}},
-		{MimeTypeEnum_KB_JWT, "application/kb+jwt", []string{"json"}},
-		{MimeTypeEnum_PKCS7, "application/pkcs7-signature", []string{"pkcs7", "p7m", "p7s"}},
-		{MimeTypeEnum_CBOR, "application/cbor", []string{"cbor"}},
-		{MimeTypeEnum_COSE, "application/cose", []string{"cose"}},
-		{MimeTypeEnum_TST, "application/vnd.etsi.timestamp-token", []string{"tst"}},
-		{MimeTypeEnum_CRL, "application/pkix-crl", []string{"crl"}},
-		{MimeTypeEnum_CER, "application/pkix-cert", []string{"cer", "crt"}},
-		{MimeTypeEnum_ZIP, "application/zip", []string{"zip"}},
-		{MimeTypeEnum_ASICS, "application/vnd.etsi.asic-s+zip", []string{"scs", "asics"}},
-		{MimeTypeEnum_ASICE, "application/vnd.etsi.asic-e+zip", []string{"sce", "asice", "bdoc"}},
-		{MimeTypeEnum_ODT, "application/vnd.oasis.opendocument.text", []string{"odt"}},
-		{MimeTypeEnum_ODS, "application/vnd.oasis.opendocument.spreadsheet", []string{"ods"}},
-		{MimeTypeEnum_ODP, "application/vnd.oasis.opendocument.presentation", []string{"odp"}},
-		{MimeTypeEnum_ODG, "application/vnd.oasis.opendocument.graphics", []string{"odg"}},
-		{MimeTypeEnum_PNG, "image/png", []string{"png"}},
-		{MimeTypeEnum_JPEG, "image/jpeg", []string{"jpg", "jpeg"}},
-		{MimeTypeEnum_SVG, "image/svg+xml", []string{"svg"}},
+		{MimeTypeEnumBinary, "application/octet-stream", nil},
+		{MimeTypeEnumText, "text/plain", []string{"txt"}},
+		{MimeTypeEnumXML, "text/xml", []string{"xml"}},
+		{MimeTypeEnumHTML, "text/html", []string{"html"}},
+		{MimeTypeEnumPDF, "application/pdf", []string{"pdf"}},
+		{MimeTypeEnumJSON, "application/json", []string{"json"}},
+		{MimeTypeEnumJOSE, "application/jose", []string{"jose"}},
+		{MimeTypeEnumJOSEJSON, "application/jose+json", []string{"json"}},
+		{MimeTypeEnumSDJWTVC, "application/dc+sd-jwt", []string{"json"}},
+		{MimeTypeEnumKBJWT, "application/kb+jwt", []string{"json"}},
+		{MimeTypeEnumPKCS7, "application/pkcs7-signature", []string{"pkcs7", "p7m", "p7s"}},
+		{MimeTypeEnumCBOR, "application/cbor", []string{"cbor"}},
+		{MimeTypeEnumCose, "application/cose", []string{"cose"}},
+		{MimeTypeEnumTST, "application/vnd.etsi.timestamp-token", []string{"tst"}},
+		{MimeTypeEnumCRL, "application/pkix-crl", []string{"crl"}},
+		{MimeTypeEnumCER, "application/pkix-cert", []string{"cer", "crt"}},
+		{MimeTypeEnumZIP, "application/zip", []string{"zip"}},
+		{MimeTypeEnumASiCS, "application/vnd.etsi.asic-s+zip", []string{"scs", "asics"}},
+		{MimeTypeEnumASiCE, "application/vnd.etsi.asic-e+zip", []string{"sce", "asice", "bdoc"}},
+		{MimeTypeEnumODT, "application/vnd.oasis.opendocument.text", []string{"odt"}},
+		{MimeTypeEnumODS, "application/vnd.oasis.opendocument.spreadsheet", []string{"ods"}},
+		{MimeTypeEnumODP, "application/vnd.oasis.opendocument.presentation", []string{"odp"}},
+		{MimeTypeEnumODG, "application/vnd.oasis.opendocument.graphics", []string{"odg"}},
+		{MimeTypeEnumPNG, "image/png", []string{"png"}},
+		{MimeTypeEnumJPEG, "image/jpeg", []string{"jpg", "jpeg"}},
+		{MimeTypeEnumSVG, "image/svg+xml", []string{"svg"}},
 	}
 }
 
@@ -65,19 +65,19 @@ func TestMimeTypeEnumFields(t *testing.T) {
 }
 
 func TestMimeTypeEnumImplementsMimeType(t *testing.T) {
-	var _ MimeType = MimeTypeEnum_PDF
+	var _ MimeType = MimeTypeEnumPDF
 }
 
 func TestMimeTypeEnumRegisteredAsLoader(t *testing.T) {
 	// The package init() registers MimeTypeEnumLoader; verify resolution
 	// works end-to-end through the MimeType lookup functions.
-	if got := MimeTypeFromMimeTypeString("application/pdf"); got != MimeTypeEnum_PDF {
-		t.Errorf("MimeTypeFromMimeTypeString(pdf) = %v, want %v", got, MimeTypeEnum_PDF)
+	if got := MimeTypeFromMimeTypeString("application/pdf"); got != MimeTypeEnumPDF {
+		t.Errorf("MimeTypeFromMimeTypeString(pdf) = %v, want %v", got, MimeTypeEnumPDF)
 	}
-	if got := MimeTypeFromFileExtension("xml"); got != MimeTypeEnum_XML {
-		t.Errorf("MimeTypeFromFileExtension(xml) = %v, want %v", got, MimeTypeEnum_XML)
+	if got := MimeTypeFromFileExtension("xml"); got != MimeTypeEnumXML {
+		t.Errorf("MimeTypeFromFileExtension(xml) = %v, want %v", got, MimeTypeEnumXML)
 	}
-	if got := MimeTypeFromMimeTypeString("does/not-exist"); got != MimeTypeEnum_BINARY {
-		t.Errorf("MimeTypeFromMimeTypeString(unknown) = %v, want %v", got, MimeTypeEnum_BINARY)
+	if got := MimeTypeFromMimeTypeString("does/not-exist"); got != MimeTypeEnumBinary {
+		t.Errorf("MimeTypeFromMimeTypeString(unknown) = %v, want %v", got, MimeTypeEnumBinary)
 	}
 }

@@ -8,12 +8,12 @@ import (
 
 func TestCertificateContentEquivalenceRoundTrip(t *testing.T) {
 	c := NewCertificateContentEquivalence()
-	c.SetContext(enumerations.MRAEquivalenceContext_QC_COMPLIANCE)
+	c.SetContext(enumerations.MRAEquivalenceContextQCCompliance)
 	oids := NewQCStatementOids()
 	oids.SetQcTypeIds([]string{"0.4.0.1862.1.6.1"})
 	c.SetContentReplacement(oids)
 
-	if c.Context() != enumerations.MRAEquivalenceContext_QC_COMPLIANCE {
+	if c.Context() != enumerations.MRAEquivalenceContextQCCompliance {
 		t.Fatalf("unexpected Context: %v", c.Context())
 	}
 	if c.ContentReplacement() != oids {
@@ -26,15 +26,15 @@ func TestCertificateContentEquivalenceRoundTrip(t *testing.T) {
 
 func TestCertificateContentEquivalenceEquals(t *testing.T) {
 	a := NewCertificateContentEquivalence()
-	a.SetContext(enumerations.MRAEquivalenceContext_QC_TYPE)
+	a.SetContext(enumerations.MRAEquivalenceContextQCType)
 	b := NewCertificateContentEquivalence()
-	b.SetContext(enumerations.MRAEquivalenceContext_QC_TYPE)
+	b.SetContext(enumerations.MRAEquivalenceContextQCType)
 
 	if !a.Equals(b) {
 		t.Fatalf("expected equal CertificateContentEquivalence values")
 	}
 
-	b.SetContext(enumerations.MRAEquivalenceContext_QC_COMPLIANCE)
+	b.SetContext(enumerations.MRAEquivalenceContextQCCompliance)
 	if a.Equals(b) {
 		t.Fatalf("expected unequal CertificateContentEquivalence values after context change")
 	}

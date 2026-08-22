@@ -4,15 +4,15 @@ import "testing"
 
 func TestContextValues(t *testing.T) {
 	want := []Context{
-		Context_SIGNATURE,
-		Context_COUNTER_SIGNATURE,
-		Context_KEY_BINDING_SIGNATURE,
-		Context_TIMESTAMP,
-		Context_EVIDENCE_RECORD,
-		Context_REVOCATION,
-		Context_CERTIFICATE,
-		Context_EAA,
-		Context_EAA_REVOCATION,
+		ContextSignature,
+		ContextCounterSignature,
+		ContextKeyBindingSignature,
+		ContextTimestamp,
+		ContextEvidenceRecord,
+		ContextRevocation,
+		ContextCertificate,
+		ContextEAA,
+		ContextEAARevocation,
 	}
 	got := ContextValues()
 	if len(got) != len(want) {

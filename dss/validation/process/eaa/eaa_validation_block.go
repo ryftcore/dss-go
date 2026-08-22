@@ -190,12 +190,12 @@ func (b *EAAValidationBlock) getXmlValidationSignatureQualification(signature *d
 // getSignatureFinalIndication ports the private getSignatureFinalIndication(Indication).
 func (b *EAAValidationBlock) getSignatureFinalIndication(highestIndication enumerations.Indication) (enumerations.Indication, error) {
 	switch highestIndication {
-	case enumerations.Indication_PASSED:
-		return enumerations.Indication_TOTAL_PASSED, nil
-	case enumerations.Indication_INDETERMINATE:
-		return enumerations.Indication_INDETERMINATE, nil
-	case enumerations.Indication_FAILED:
-		return enumerations.Indication_TOTAL_FAILED, nil
+	case enumerations.IndicationPassed:
+		return enumerations.IndicationTotalPassed, nil
+	case enumerations.IndicationIndeterminate:
+		return enumerations.IndicationIndeterminate, nil
+	case enumerations.IndicationFailed:
+		return enumerations.IndicationTotalFailed, nil
 	default:
 		return "", reports.NewDSSReportExceptionMessage(fmt.Sprintf("The Indication '%s' is not supported!", highestIndication))
 	}

@@ -43,13 +43,13 @@ func (f *PdfObjectModificationsFilter) Filter(objectModifications []ObjectModifi
 func (f *PdfObjectModificationsFilter) skipChange(objectModification ObjectModification) bool {
 	lastKey := objectModification.ObjectTree().LastKey()
 	actionType := objectModification.ActionType()
-	if actionType == enumerations.PdfObjectModificationType_DELETION && lastKey == PAdESConstantsAppearanceDictionaryName {
+	if actionType == enumerations.PdfObjectModificationTypeDeletion && lastKey == PAdESConstantsAppearanceDictionaryName {
 		return true
-	} else if actionType == enumerations.PdfObjectModificationType_MODIFICATION && lastKey == PAdESConstantsAnnotFlag {
+	} else if actionType == enumerations.PdfObjectModificationTypeModification && lastKey == PAdESConstantsAnnotFlag {
 		return true
-	} else if actionType == enumerations.PdfObjectModificationType_MODIFICATION && lastKey == PAdESConstantsTypeName {
+	} else if actionType == enumerations.PdfObjectModificationTypeModification && lastKey == PAdESConstantsTypeName {
 		return true
-	} else if actionType == enumerations.PdfObjectModificationType_MODIFICATION && lastKey == PAdESConstantsItextName {
+	} else if actionType == enumerations.PdfObjectModificationTypeModification && lastKey == PAdESConstantsItextName {
 		return true
 	}
 	return false
@@ -190,7 +190,7 @@ func (f *PdfObjectModificationsFilter) isParentOrKid(key string) bool {
 }
 
 func (f *PdfObjectModificationsFilter) isAnnotsFill(objectModification ObjectModification) bool {
-	if objectModification.ActionType() != enumerations.PdfObjectModificationType_DELETION {
+	if objectModification.ActionType() != enumerations.PdfObjectModificationTypeDeletion {
 		lastKey := objectModification.ObjectTree().LastKey()
 		return f.isAnnotChange(objectModification) && !f.isAnnotsKey(lastKey)
 	}
@@ -199,7 +199,7 @@ func (f *PdfObjectModificationsFilter) isAnnotsFill(objectModification ObjectMod
 
 func (f *PdfObjectModificationsFilter) isAnnotsArrayCreation(objectModification ObjectModification) bool {
 	lastKey := objectModification.ObjectTree().LastKey()
-	if objectModification.ActionType() != enumerations.PdfObjectModificationType_CREATION || !f.isAnnotsKey(lastKey) {
+	if objectModification.ActionType() != enumerations.PdfObjectModificationTypeCreation || !f.isAnnotsKey(lastKey) {
 		return false
 	}
 	_, ok := objectModification.FinalObject().(PdfArray)
@@ -209,7 +209,7 @@ func (f *PdfObjectModificationsFilter) isAnnotsArrayCreation(objectModification 
 func (f *PdfObjectModificationsFilter) isFieldAppearanceCreationChange(objectModification ObjectModification) bool {
 	appearanceDictChangeFound := false
 	annotChangeFound := false
-	if objectModification.ActionType() == enumerations.PdfObjectModificationType_CREATION {
+	if objectModification.ActionType() == enumerations.PdfObjectModificationTypeCreation {
 		for _, chainKey := range objectModification.ObjectTree().KeyChain() {
 			if f.isAnnotsKey(chainKey) {
 				annotChangeFound = true
@@ -225,7 +225,7 @@ func (f *PdfObjectModificationsFilter) isFieldAppearanceCreationChange(objectMod
 func (f *PdfObjectModificationsFilter) isFieldValueAssignmentChange(objectModification ObjectModification) bool {
 	appearanceDictChangeFound := false
 	annotChangeFound := false
-	if objectModification.ActionType() == enumerations.PdfObjectModificationType_CREATION {
+	if objectModification.ActionType() == enumerations.PdfObjectModificationTypeCreation {
 		for _, chainKey := range objectModification.ObjectTree().KeyChain() {
 			if f.isAnnotsKey(chainKey) {
 				annotChangeFound = true
@@ -254,7 +254,7 @@ func (f *PdfObjectModificationsFilter) isEmptyFieldFill(objectModification Objec
 func (f *PdfObjectModificationsFilter) isEmptyAnnotFill(objectModification ObjectModification) bool {
 	appearanceDictChangeFound := false
 	normalAppearanceFound := false
-	if objectModification.ActionType() == enumerations.PdfObjectModificationType_MODIFICATION {
+	if objectModification.ActionType() == enumerations.PdfObjectModificationTypeModification {
 		for _, chainKey := range objectModification.ObjectTree().KeyChain() {
 			if chainKey == PAdESConstantsAppearanceDictionaryName {
 				appearanceDictChangeFound = true
@@ -317,7 +317,7 @@ func (f *PdfObjectModificationsFilter) isStreamFill(objectModification ObjectMod
 func (f *PdfObjectModificationsFilter) isVersionChange(objectModification ObjectModification) bool {
 	key := objectModification.ObjectTree().LastKey()
 	parentKey := f.getParentKey(objectModification)
-	return objectModification.ActionType() == enumerations.PdfObjectModificationType_MODIFICATION &&
+	return objectModification.ActionType() == enumerations.PdfObjectModificationTypeModification &&
 		key == PAdESConstantsVersionName &&
 		f.isOneOf(parentKey, PAdESConstantsCatalogName, PAdESConstantsDataName, PAdESConstantsRootName)
 }
@@ -342,7 +342,7 @@ func (f *PdfObjectModificationsFilter) isCatalogPieceInfoChange(objectModificati
 
 func (f *PdfObjectModificationsFilter) isCatalogPermsCreationChange(objectModification ObjectModification) bool {
 	key := objectModification.ObjectTree().LastKey()
-	return objectModification.ActionType() == enumerations.PdfObjectModificationType_CREATION && key == PAdESConstantsPermsName
+	return objectModification.ActionType() == enumerations.PdfObjectModificationTypeCreation && key == PAdESConstantsPermsName
 }
 
 func (f *PdfObjectModificationsFilter) isCatalogNamesChange(objectModification ObjectModification) bool {
@@ -356,7 +356,7 @@ func (f *PdfObjectModificationsFilter) isCatalogNamesChange(objectModification O
 
 func (f *PdfObjectModificationsFilter) isCatalogOutputIntentsChange(objectModification ObjectModification) bool {
 	key := objectModification.ObjectTree().LastKey()
-	return objectModification.ActionType() == enumerations.PdfObjectModificationType_CREATION && key == PAdESConstantsOutputIntentsName
+	return objectModification.ActionType() == enumerations.PdfObjectModificationTypeCreation && key == PAdESConstantsOutputIntentsName
 }
 
 func (f *PdfObjectModificationsFilter) isMetaDataChange(objectModification ObjectModification) bool {
@@ -382,7 +382,7 @@ func (f *PdfObjectModificationsFilter) isStructTreeRootChange(objectModification
 			PAdESConstantsStructTreeRootParentTreeNextKeyName) {
 			return true
 		} else if isStructTreeRoot && key == PAdESConstantsStructTreeRootKName && lastKey == PAdESConstantsStructTreeRootKName &&
-			(actionType == enumerations.PdfObjectModificationType_CREATION || actionType == enumerations.PdfObjectModificationType_DELETION) {
+			(actionType == enumerations.PdfObjectModificationTypeCreation || actionType == enumerations.PdfObjectModificationTypeDeletion) {
 			return true
 		} else {
 			isStructTreeRoot = false
@@ -416,7 +416,7 @@ func (f *PdfObjectModificationsFilter) isDocTimeStampEmptyFieldFontCreation(obje
 func (f *PdfObjectModificationsFilter) isFontCreationChange(objectModification ObjectModification, signatureType string) bool {
 	key := objectModification.ObjectTree().LastKey()
 	parentKey := f.getParentKey(objectModification)
-	return objectModification.ActionType() == enumerations.PdfObjectModificationType_CREATION &&
+	return objectModification.ActionType() == enumerations.PdfObjectModificationTypeCreation &&
 		(key == PAdESConstantsFontName || parentKey == PAdESConstantsFontName) &&
 		f.checkRecursivelyForNewSignatureCreation(objectModification.OriginalObject(), objectModification.FinalObject(), signatureType)
 }
@@ -437,7 +437,7 @@ func (f *PdfObjectModificationsFilter) isAnnotationChange(objectModification Obj
 
 func (f *PdfObjectModificationsFilter) isOtherAnnotChange(objectModification ObjectModification) bool {
 	if f.isAnnotChange(objectModification) {
-		if objectModification.ActionType() == enumerations.PdfObjectModificationType_DELETION {
+		if objectModification.ActionType() == enumerations.PdfObjectModificationTypeDeletion {
 			if pdfDict, ok := objectModification.OriginalObject().(PdfDict); ok {
 				if valueDict, ok := pdfDict.Object(PAdESConstantsValueName).(PdfDict); ok {
 					return !f.isSignature(valueDict) && !f.isDocTimeStamp(valueDict)

@@ -230,7 +230,7 @@ func (b *TimestampsValidationBlock) buildXmlTimestamp(timestamp *diagnostic.Time
 		xmlTimestamp.ValidationTimestampQualification = timestampQualificationBlock.Execute()
 	}
 
-	if enumerations.ValidationLevel_ARCHIVAL_DATA == b.validationLevel {
+	if enumerations.ValidationLevelArchivalData == b.validationLevel {
 		for _, sigEvidenceRecord := range timestamp.EvidenceRecords() {
 			xmlTimestamp.EvidenceRecord = append(xmlTimestamp.EvidenceRecord, b.evidenceRecordValidations[sigEvidenceRecord.Id()])
 		}
@@ -242,7 +242,7 @@ func (b *TimestampsValidationBlock) buildXmlTimestamp(timestamp *diagnostic.Time
 
 		// extract POE for valid time-stamps
 		if validationProcessTimestampArchivalData.Conclusion != nil &&
-			enumerations.Indication_PASSED == validationProcessTimestampArchivalData.Conclusion.Indication.Indication() {
+			enumerations.IndicationPassed == validationProcessTimestampArchivalData.Conclusion.Indication.Indication() {
 			currentPOE.ExtractPOE(timestamp)
 		}
 

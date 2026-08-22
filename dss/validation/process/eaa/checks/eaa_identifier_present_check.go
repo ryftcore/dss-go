@@ -32,9 +32,9 @@ func NewEAAIdentifierPresentCheck(i18nProvider *i18n.I18nProvider, result *proce
 // Process performs the check. Port of process().
 func (c *EAAIdentifierPresentCheck) Process() bool {
 	switch c.eaa.EAAType() {
-	case enumerations.EAAType_SD_JWT_VC:
+	case enumerations.EAATypeSDJWTVC:
 		return c.eaa.EAAIdentifier() != ""
-	case enumerations.EAAType_ISO_IEC_MDOC:
+	case enumerations.EAATypeISOIECMDoc:
 		return c.eaa.DocumentNumber() != ""
 	default:
 		// Other EAA types not supported.
@@ -56,11 +56,11 @@ func (c *EAAIdentifierPresentCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAIdentifierPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAIdentifierPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

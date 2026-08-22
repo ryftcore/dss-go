@@ -54,13 +54,13 @@ func manifestKATBytes(t *testing.T, document model.DSSDocument) []byte {
 // manifestKATASiCEContent mirrors ManifestOracle#asicEContent.
 func manifestKATASiCEContent() *asic.ASiCContent {
 	asicContent := asic.NewASiCContent()
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetMimeTypeDocument(model.NewInMemoryDocumentWithMimeType(
-		[]byte(enumerations.MimeTypeEnum_ASICE.MimeTypeString()), "mimetype", enumerations.MimeTypeEnum_BINARY))
+		[]byte(enumerations.MimeTypeEnumASiCE.MimeTypeString()), "mimetype", enumerations.MimeTypeEnumBinary))
 	asicContent.SetSignedDocuments([]model.DSSDocument{
-		model.NewInMemoryDocumentWithMimeType([]byte("Hello World !"), "test.text", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("<root/>"), "data.xml", enumerations.MimeTypeEnum_XML),
-		model.NewInMemoryDocumentWithMimeType([]byte{0x00, 0x01, 0x02, 0x03}, "binary.bin", enumerations.MimeTypeEnum_BINARY),
+		model.NewInMemoryDocumentWithMimeType([]byte("Hello World !"), "test.text", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("<root/>"), "data.xml", enumerations.MimeTypeEnumXML),
+		model.NewInMemoryDocumentWithMimeType([]byte{0x00, 0x01, 0x02, 0x03}, "binary.bin", enumerations.MimeTypeEnumBinary),
 	})
 	return asicContent
 }
@@ -68,12 +68,12 @@ func manifestKATASiCEContent() *asic.ASiCContent {
 // manifestKATEncodingContent mirrors ManifestOracle#encodingContent.
 func manifestKATEncodingContent() *asic.ASiCContent {
 	asicContent := asic.NewASiCContent()
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
-		model.NewInMemoryDocumentWithMimeType([]byte("a"), "document 2.txt", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("b"), "détaché.txt", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("c"), "dir/sub dir/file&name.txt", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("d"), "a[b]<c>{d}|e\\f^g`h\"i.txt", enumerations.MimeTypeEnum_TEXT),
+		model.NewInMemoryDocumentWithMimeType([]byte("a"), "document 2.txt", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("b"), "détaché.txt", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("c"), "dir/sub dir/file&name.txt", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("d"), "a[b]<c>{d}|e\\f^g`h\"i.txt", enumerations.MimeTypeEnumText),
 	})
 	return asicContent
 }
@@ -81,10 +81,10 @@ func manifestKATEncodingContent() *asic.ASiCContent {
 // manifestKATPercentContent mirrors ManifestOracle#percentContent.
 func manifestKATPercentContent() *asic.ASiCContent {
 	asicContent := asic.NewASiCContent()
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
-		model.NewInMemoryDocumentWithMimeType([]byte("a"), "100%_done.txt", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("b"), "already%20encoded.txt", enumerations.MimeTypeEnum_TEXT),
+		model.NewInMemoryDocumentWithMimeType([]byte("a"), "100%_done.txt", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("b"), "already%20encoded.txt", enumerations.MimeTypeEnumText),
 	})
 	return asicContent
 }
@@ -94,19 +94,19 @@ func manifestKATArchiveContent() *asic.ASiCContent {
 	asicContent := manifestKATASiCEContent()
 	asicContent.SetSignatureDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("signature-bytes"),
-			"META-INF/signature001.p7s", enumerations.MimeTypeEnum_PKCS7),
+			"META-INF/signature001.p7s", enumerations.MimeTypeEnumPKCS7),
 	})
 	asicContent.SetTimestampDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("timestamp-bytes"),
-			"META-INF/timestamp001.tst", enumerations.MimeTypeEnum_TST),
+			"META-INF/timestamp001.tst", enumerations.MimeTypeEnumTST),
 	})
 	asicContent.SetManifestDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("<manifest/>"),
-			"META-INF/ASiCManifest001.xml", enumerations.MimeTypeEnum_XML),
+			"META-INF/ASiCManifest001.xml", enumerations.MimeTypeEnumXML),
 	})
 	asicContent.SetArchiveManifestDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("<archive-manifest/>"),
-			"META-INF/ASiCArchiveManifest.xml", enumerations.MimeTypeEnum_XML),
+			"META-INF/ASiCArchiveManifest.xml", enumerations.MimeTypeEnumXML),
 	})
 	return asicContent
 }
@@ -123,31 +123,31 @@ func TestManifestBuildersMatchJavaOracle(t *testing.T) {
 	}{
 		{"signature-sha256", func() (model.DSSDocument, error) {
 			return NewASiCWithCAdESSignatureManifestBuilder(manifestKATASiCEContent(),
-				enumerations.DigestAlgorithm_SHA256, "META-INF/signature001.p7s").Build()
+				enumerations.DigestAlgorithmSHA256, "META-INF/signature001.p7s").Build()
 		}},
 		{"signature-sha512", func() (model.DSSDocument, error) {
 			return NewASiCWithCAdESSignatureManifestBuilder(manifestKATASiCEContent(),
-				enumerations.DigestAlgorithm_SHA512, "META-INF/signature001.p7s").Build()
+				enumerations.DigestAlgorithmSHA512, "META-INF/signature001.p7s").Build()
 		}},
 		{"signature-encoded-uris", func() (model.DSSDocument, error) {
 			return NewASiCWithCAdESSignatureManifestBuilder(manifestKATEncodingContent(),
-				enumerations.DigestAlgorithm_SHA256, "META-INF/signature001.p7s").Build()
+				enumerations.DigestAlgorithmSHA256, "META-INF/signature001.p7s").Build()
 		}},
 		{"timestamp-sha256", func() (model.DSSDocument, error) {
 			return NewASiCWithCAdESTimestampManifestBuilder(manifestKATASiCEContent(),
-				enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp001.tst").Build()
+				enumerations.DigestAlgorithmSHA256, "META-INF/timestamp001.tst").Build()
 		}},
 		{"archive-no-rootfile", func() (model.DSSDocument, error) {
 			return NewASiCEWithCAdESArchiveManifestBuilder(manifestKATArchiveContent(), nil,
-				enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp002.tst").Build()
+				enumerations.DigestAlgorithmSHA256, "META-INF/timestamp002.tst").Build()
 		}},
 		{"archive-with-rootfile", func() (model.DSSDocument, error) {
 			return NewASiCEWithCAdESArchiveManifestBuilder(archiveWithRootfileContent, lastArchiveManifest,
-				enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp002.tst").Build()
+				enumerations.DigestAlgorithmSHA256, "META-INF/timestamp002.tst").Build()
 		}},
 		{"archive-sha384", func() (model.DSSDocument, error) {
 			return NewASiCEWithCAdESArchiveManifestBuilder(manifestKATArchiveContent(), nil,
-				enumerations.DigestAlgorithm_SHA384, "META-INF/timestamp002.tst").Build()
+				enumerations.DigestAlgorithmSHA384, "META-INF/timestamp002.tst").Build()
 		}},
 	}
 
@@ -177,10 +177,10 @@ func TestManifestBuildersMatchJavaOracle(t *testing.T) {
 func TestArchiveManifestRootfileIsReferenceEquality(t *testing.T) {
 	asicContent := manifestKATArchiveContent()
 	lookalike := model.NewInMemoryDocumentWithMimeType([]byte("<archive-manifest/>"),
-		"META-INF/ASiCArchiveManifest.xml", enumerations.MimeTypeEnum_XML)
+		"META-INF/ASiCArchiveManifest.xml", enumerations.MimeTypeEnumXML)
 
 	builder := NewASiCEWithCAdESArchiveManifestBuilder(asicContent, lookalike,
-		enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp002.tst")
+		enumerations.DigestAlgorithmSHA256, "META-INF/timestamp002.tst")
 	manifest, err := builder.Build()
 	if err != nil {
 		t.Fatalf("build manifest: %v", err)
@@ -197,20 +197,20 @@ func TestArchiveManifestRootfileIsReferenceEquality(t *testing.T) {
 // only difference between the ASiCEWithCAdESManifestBuilder subclasses.
 func TestSignatureManifestSigReferenceMimeTypes(t *testing.T) {
 	signature := NewASiCWithCAdESSignatureManifestBuilder(manifestKATASiCEContent(),
-		enumerations.DigestAlgorithm_SHA256, "META-INF/signature001.p7s")
-	if got := signature.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnum_PKCS7) {
+		enumerations.DigestAlgorithmSHA256, "META-INF/signature001.p7s")
+	if got := signature.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnumPKCS7) {
 		t.Errorf("signature manifest SigReference MimeType = %v, want PKCS7", got)
 	}
 
 	timestamp := NewASiCWithCAdESTimestampManifestBuilder(manifestKATASiCEContent(),
-		enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp001.tst")
-	if got := timestamp.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnum_TST) {
+		enumerations.DigestAlgorithmSHA256, "META-INF/timestamp001.tst")
+	if got := timestamp.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnumTST) {
 		t.Errorf("timestamp manifest SigReference MimeType = %v, want TST", got)
 	}
 
 	archive := NewASiCEWithCAdESArchiveManifestBuilder(manifestKATArchiveContent(), nil,
-		enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp002.tst")
-	if got := archive.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnum_TST) {
+		enumerations.DigestAlgorithmSHA256, "META-INF/timestamp002.tst")
+	if got := archive.SigReferenceMimeType(); got != enumerations.MimeType(enumerations.MimeTypeEnumTST) {
 		t.Errorf("archive manifest SigReference MimeType = %v, want TST", got)
 	}
 	if got := archive.ManifestFilename(); got != ASiCWithCAdESUtilsDefaultArchiveManifestFilename {
@@ -232,7 +232,7 @@ func TestSignatureManifestSigReferenceMimeTypes(t *testing.T) {
 func TestSignatureManifestPercentEncodedURIs(t *testing.T) {
 	fixtures := loadManifestKATFixtures(t)
 	manifest, err := NewASiCWithCAdESSignatureManifestBuilder(manifestKATPercentContent(),
-		enumerations.DigestAlgorithm_SHA256, "META-INF/signature001.p7s").Build()
+		enumerations.DigestAlgorithmSHA256, "META-INF/signature001.p7s").Build()
 	if err != nil {
 		t.Fatalf("build manifest: %v", err)
 	}

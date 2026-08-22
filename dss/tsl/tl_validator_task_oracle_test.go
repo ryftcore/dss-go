@@ -88,7 +88,7 @@ func TestTLValidatorTask_Oracle(t *testing.T) {
 			t.Error("the signing certificate should be the announced one")
 		}
 		// The announced signer is the actual one, so the chain is found.
-		if got, want := result.Indication(), enumerations.Indication_TOTAL_PASSED; got != want {
+		if got, want := result.Indication(), enumerations.IndicationTotalPassed; got != want {
 			t.Errorf("Indication = %q, want %q", got, want)
 		}
 	})
@@ -100,10 +100,10 @@ func TestTLValidatorTask_Oracle(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Get: %v", err)
 		}
-		if got, want := result.Indication(), enumerations.Indication_INDETERMINATE; got != want {
+		if got, want := result.Indication(), enumerations.IndicationIndeterminate; got != want {
 			t.Errorf("Indication = %q, want %q", got, want)
 		}
-		if got, want := result.SubIndication(), enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND; got != want {
+		if got, want := result.SubIndication(), enumerations.SubIndicationNoCertificateChainFound; got != want {
 			t.Errorf("SubIndication = %q, want %q", got, want)
 		}
 		if result.SigningTime().IsZero() {
@@ -124,10 +124,10 @@ func TestTLValidatorTask_Oracle(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Get: %v", err)
 		}
-		if got, want := result.Indication(), enumerations.Indication_INDETERMINATE; got != want {
+		if got, want := result.Indication(), enumerations.IndicationIndeterminate; got != want {
 			t.Errorf("Indication = %q, want %q", got, want)
 		}
-		if got, want := result.SubIndication(), enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND; got != want {
+		if got, want := result.SubIndication(), enumerations.SubIndicationNoCertificateChainFound; got != want {
 			t.Errorf("SubIndication = %q, want %q", got, want)
 		}
 		if result.SigningTime().IsZero() {
@@ -148,10 +148,10 @@ func TestTLValidatorTask_Oracle(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Get: %v", err)
 		}
-		if got, want := result.Indication(), enumerations.Indication_INDETERMINATE; got != want {
+		if got, want := result.Indication(), enumerations.IndicationIndeterminate; got != want {
 			t.Errorf("Indication = %q, want %q", got, want)
 		}
-		if got, want := result.SubIndication(), enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND; got != want {
+		if got, want := result.SubIndication(), enumerations.SubIndicationNoCertificateChainFound; got != want {
 			t.Errorf("SubIndication = %q, want %q", got, want)
 		}
 		if result.SigningCertificate() == nil {
@@ -169,10 +169,10 @@ func TestTLValidatorTask_Oracle(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Get: %v", err)
 		}
-		if got, want := result.Indication(), enumerations.Indication_TOTAL_FAILED; got != want {
+		if got, want := result.Indication(), enumerations.IndicationTotalFailed; got != want {
 			t.Errorf("Indication = %q, want %q", got, want)
 		}
-		if got, want := result.SubIndication(), enumerations.SubIndication_HASH_FAILURE; got != want {
+		if got, want := result.SubIndication(), enumerations.SubIndicationHashFailure; got != want {
 			t.Errorf("SubIndication = %q, want %q", got, want)
 		}
 		if result.SigningTime().IsZero() {

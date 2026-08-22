@@ -5,26 +5,26 @@ package enumerations
 type CommitmentTypeEnum string
 
 const (
-	// CommitmentTypeEnum_ProofOfOrigin indicates that the signer recognizes
+	// CommitmentTypeEnumProofOfOrigin indicates that the signer recognizes
 	// to have created, approved and sent the signed data.
-	CommitmentTypeEnum_ProofOfOrigin CommitmentTypeEnum = "ProofOfOrigin"
-	// CommitmentTypeEnum_ProofOfReceipt indicates that signer recognizes to
+	CommitmentTypeEnumProofOfOrigin CommitmentTypeEnum = "ProofOfOrigin"
+	// CommitmentTypeEnumProofOfReceipt indicates that signer recognizes to
 	// have received the content of the signed data.
-	CommitmentTypeEnum_ProofOfReceipt CommitmentTypeEnum = "ProofOfReceipt"
-	// CommitmentTypeEnum_ProofOfDelivery indicates that the TSP providing
+	CommitmentTypeEnumProofOfReceipt CommitmentTypeEnum = "ProofOfReceipt"
+	// CommitmentTypeEnumProofOfDelivery indicates that the TSP providing
 	// that indication has delivered a signed data in a local store
 	// accessible to the recipient of the signed data.
-	CommitmentTypeEnum_ProofOfDelivery CommitmentTypeEnum = "ProofOfDelivery"
-	// CommitmentTypeEnum_ProofOfSender indicates that the entity providing
+	CommitmentTypeEnumProofOfDelivery CommitmentTypeEnum = "ProofOfDelivery"
+	// CommitmentTypeEnumProofOfSender indicates that the entity providing
 	// that indication has sent the signed data (but not necessarily created
 	// it).
-	CommitmentTypeEnum_ProofOfSender CommitmentTypeEnum = "ProofOfSender"
-	// CommitmentTypeEnum_ProofOfApproval indicates that the signer has
+	CommitmentTypeEnumProofOfSender CommitmentTypeEnum = "ProofOfSender"
+	// CommitmentTypeEnumProofOfApproval indicates that the signer has
 	// approved the content of the signed data.
-	CommitmentTypeEnum_ProofOfApproval CommitmentTypeEnum = "ProofOfApproval"
-	// CommitmentTypeEnum_ProofOfCreation indicates that the signer has
+	CommitmentTypeEnumProofOfApproval CommitmentTypeEnum = "ProofOfApproval"
+	// CommitmentTypeEnumProofOfCreation indicates that the signer has
 	// created the signed data (but not necessarily approved, nor sent it).
-	CommitmentTypeEnum_ProofOfCreation CommitmentTypeEnum = "ProofOfCreation"
+	CommitmentTypeEnumProofOfCreation CommitmentTypeEnum = "ProofOfCreation"
 )
 
 type commitmentTypeEnumFields struct {
@@ -39,23 +39,23 @@ type commitmentTypeEnumFields struct {
 // zero-value returns on Qualifier() and DocumentationReferences() rather
 // than per-constant table entries.
 var commitmentTypeEnumData = map[CommitmentTypeEnum]commitmentTypeEnumFields{
-	CommitmentTypeEnum_ProofOfOrigin:   {"http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin", "1.2.840.113549.1.9.16.6.1"},
-	CommitmentTypeEnum_ProofOfReceipt:  {"http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt", "1.2.840.113549.1.9.16.6.2"},
-	CommitmentTypeEnum_ProofOfDelivery: {"http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery", "1.2.840.113549.1.9.16.6.3"},
-	CommitmentTypeEnum_ProofOfSender:   {"http://uri.etsi.org/01903/v1.2.2#ProofOfSender", "1.2.840.113549.1.9.16.6.4"},
-	CommitmentTypeEnum_ProofOfApproval: {"http://uri.etsi.org/01903/v1.2.2#ProofOfApproval", "1.2.840.113549.1.9.16.6.5"},
-	CommitmentTypeEnum_ProofOfCreation: {"http://uri.etsi.org/01903/v1.2.2#ProofOfCreation", "1.2.840.113549.1.9.16.6.6"},
+	CommitmentTypeEnumProofOfOrigin:   {"http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin", "1.2.840.113549.1.9.16.6.1"},
+	CommitmentTypeEnumProofOfReceipt:  {"http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt", "1.2.840.113549.1.9.16.6.2"},
+	CommitmentTypeEnumProofOfDelivery: {"http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery", "1.2.840.113549.1.9.16.6.3"},
+	CommitmentTypeEnumProofOfSender:   {"http://uri.etsi.org/01903/v1.2.2#ProofOfSender", "1.2.840.113549.1.9.16.6.4"},
+	CommitmentTypeEnumProofOfApproval: {"http://uri.etsi.org/01903/v1.2.2#ProofOfApproval", "1.2.840.113549.1.9.16.6.5"},
+	CommitmentTypeEnumProofOfCreation: {"http://uri.etsi.org/01903/v1.2.2#ProofOfCreation", "1.2.840.113549.1.9.16.6.6"},
 }
 
 // CommitmentTypeEnumValues returns all constants in declaration order.
 func CommitmentTypeEnumValues() []CommitmentTypeEnum {
 	return []CommitmentTypeEnum{
-		CommitmentTypeEnum_ProofOfOrigin,
-		CommitmentTypeEnum_ProofOfReceipt,
-		CommitmentTypeEnum_ProofOfDelivery,
-		CommitmentTypeEnum_ProofOfSender,
-		CommitmentTypeEnum_ProofOfApproval,
-		CommitmentTypeEnum_ProofOfCreation,
+		CommitmentTypeEnumProofOfOrigin,
+		CommitmentTypeEnumProofOfReceipt,
+		CommitmentTypeEnumProofOfDelivery,
+		CommitmentTypeEnumProofOfSender,
+		CommitmentTypeEnumProofOfApproval,
+		CommitmentTypeEnumProofOfCreation,
 	}
 }
 

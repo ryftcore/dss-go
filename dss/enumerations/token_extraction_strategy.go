@@ -9,52 +9,52 @@ package enumerations
 type TokenExtractionStrategy string
 
 const (
-	// TokenExtractionStrategy_EXTRACT_ALL extracts certificates,
+	// TokenExtractionStrategyExtractAll extracts certificates,
 	// timestamps and revocation data.
-	TokenExtractionStrategy_EXTRACT_ALL TokenExtractionStrategy = "EXTRACT_ALL"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY extracts
+	TokenExtractionStrategyExtractAll TokenExtractionStrategy = "EXTRACT_ALL"
+	// TokenExtractionStrategyExtractCertificatesOnly extracts
 	// certificates.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY TokenExtractionStrategy = "EXTRACT_CERTIFICATES_ONLY"
-	// TokenExtractionStrategy_EXTRACT_TIMESTAMPS_ONLY extracts timestamps.
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_ONLY TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_ONLY"
-	// TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_ONLY extracts
+	TokenExtractionStrategyExtractCertificatesOnly TokenExtractionStrategy = "EXTRACT_CERTIFICATES_ONLY"
+	// TokenExtractionStrategyExtractTimestampsOnly extracts timestamps.
+	TokenExtractionStrategyExtractTimestampsOnly TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_ONLY"
+	// TokenExtractionStrategyExtractRevocationDataOnly extracts
 	// revocation data.
-	TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_ONLY TokenExtractionStrategy = "EXTRACT_REVOCATION_DATA_ONLY"
-	// TokenExtractionStrategy_EXTRACT_EVIDENCE_RECORDS_ONLY extracts
+	TokenExtractionStrategyExtractRevocationDataOnly TokenExtractionStrategy = "EXTRACT_REVOCATION_DATA_ONLY"
+	// TokenExtractionStrategyExtractEvidenceRecordsOnly extracts
 	// evidence records.
-	TokenExtractionStrategy_EXTRACT_EVIDENCE_RECORDS_ONLY TokenExtractionStrategy = "EXTRACT_EVIDENCE_RECORDS_ONLY"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS extracts
+	TokenExtractionStrategyExtractEvidenceRecordsOnly TokenExtractionStrategy = "EXTRACT_EVIDENCE_RECORDS_ONLY"
+	// TokenExtractionStrategyExtractCertificatesAndTimestamps extracts
 	// certificates and timestamps.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractCertificatesAndTimestamps TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS"
+	// TokenExtractionStrategyExtractCertificatesAndEvidenceRecords
 	// extracts certificates and timestamps.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractCertificatesAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyExtractCertificatesAndTimestampsAndEvidenceRecords
 	// extracts certificates, timestamps and evidence records.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA
+	TokenExtractionStrategyExtractCertificatesAndTimestampsAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyExtractCertificatesAndRevocationData
 	// extracts certificates and revocation data.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_REVOCATION_DATA"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA
+	TokenExtractionStrategyExtractCertificatesAndRevocationData TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_REVOCATION_DATA"
+	// TokenExtractionStrategyExtractCertificatesAndTimestampsAndRevocationData
 	// extracts certificates, timestamps and evidence records.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA"
-	// TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractCertificatesAndTimestampsAndRevocationData TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA"
+	// TokenExtractionStrategyExtractCertificatesAndRevocationDataAndEvidenceRecords
 	// extracts certificates, revocation data and evidence records.
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA
+	TokenExtractionStrategyExtractCertificatesAndRevocationDataAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyExtractTimestampsAndRevocationData
 	// extracts timestamps and revocation data.
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA"
-	// TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractTimestampsAndRevocationData TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA"
+	// TokenExtractionStrategyExtractTimestampsAndEvidenceRecords
 	// extracts timestamps and evidence records.
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractTimestampsAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyExtractRevocationDataAndEvidenceRecords
 	// extracts revocation data and evidence records.
-	TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS
+	TokenExtractionStrategyExtractRevocationDataAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyExtractTimestampsAndRevocationDataAndEvidenceRecords
 	// extracts timestamps, revocation data and evidence records.
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
-	// TokenExtractionStrategy_NONE extracts nothing.
-	TokenExtractionStrategy_NONE TokenExtractionStrategy = "NONE"
+	TokenExtractionStrategyExtractTimestampsAndRevocationDataAndEvidenceRecords TokenExtractionStrategy = "EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS"
+	// TokenExtractionStrategyNone extracts nothing.
+	TokenExtractionStrategyNone TokenExtractionStrategy = "NONE"
 )
 
 type tokenExtractionStrategyFields struct {
@@ -67,43 +67,43 @@ type tokenExtractionStrategyFields struct {
 // tokenExtractionStrategyData holds the (certificate, timestamp,
 // revocationData, evidenceRecord) tuple for each constant.
 var tokenExtractionStrategyData = map[TokenExtractionStrategy]tokenExtractionStrategyFields{
-	TokenExtractionStrategy_EXTRACT_ALL:                                                   {true, true, true, true},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY:                                     {true, false, false, false},
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_ONLY:                                       {false, true, false, false},
-	TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_ONLY:                                  {false, false, true, false},
-	TokenExtractionStrategy_EXTRACT_EVIDENCE_RECORDS_ONLY:                                 {false, false, false, true},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS:                           {true, true, false, false},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS:                     {true, false, false, true},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS:      {true, true, false, true},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA:                      {true, false, true, false},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA:       {true, true, true, false},
-	TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS: {true, false, true, true},
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA:                        {false, true, true, false},
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS:                       {false, true, false, true},
-	TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS:                  {false, false, true, true},
-	TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS:   {false, true, true, true},
-	TokenExtractionStrategy_NONE:                                                          {false, false, false, false},
+	TokenExtractionStrategyExtractAll:                                             {true, true, true, true},
+	TokenExtractionStrategyExtractCertificatesOnly:                                {true, false, false, false},
+	TokenExtractionStrategyExtractTimestampsOnly:                                  {false, true, false, false},
+	TokenExtractionStrategyExtractRevocationDataOnly:                              {false, false, true, false},
+	TokenExtractionStrategyExtractEvidenceRecordsOnly:                             {false, false, false, true},
+	TokenExtractionStrategyExtractCertificatesAndTimestamps:                       {true, true, false, false},
+	TokenExtractionStrategyExtractCertificatesAndEvidenceRecords:                  {true, false, false, true},
+	TokenExtractionStrategyExtractCertificatesAndTimestampsAndEvidenceRecords:     {true, true, false, true},
+	TokenExtractionStrategyExtractCertificatesAndRevocationData:                   {true, false, true, false},
+	TokenExtractionStrategyExtractCertificatesAndTimestampsAndRevocationData:      {true, true, true, false},
+	TokenExtractionStrategyExtractCertificatesAndRevocationDataAndEvidenceRecords: {true, false, true, true},
+	TokenExtractionStrategyExtractTimestampsAndRevocationData:                     {false, true, true, false},
+	TokenExtractionStrategyExtractTimestampsAndEvidenceRecords:                    {false, true, false, true},
+	TokenExtractionStrategyExtractRevocationDataAndEvidenceRecords:                {false, false, true, true},
+	TokenExtractionStrategyExtractTimestampsAndRevocationDataAndEvidenceRecords:   {false, true, true, true},
+	TokenExtractionStrategyNone:                                                   {false, false, false, false},
 }
 
 // TokenExtractionStrategyValues returns all constants in declaration order.
 func TokenExtractionStrategyValues() []TokenExtractionStrategy {
 	return []TokenExtractionStrategy{
-		TokenExtractionStrategy_EXTRACT_ALL,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY,
-		TokenExtractionStrategy_EXTRACT_TIMESTAMPS_ONLY,
-		TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_ONLY,
-		TokenExtractionStrategy_EXTRACT_EVIDENCE_RECORDS_ONLY,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA,
-		TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA,
-		TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS,
-		TokenExtractionStrategy_NONE,
+		TokenExtractionStrategyExtractAll,
+		TokenExtractionStrategyExtractCertificatesOnly,
+		TokenExtractionStrategyExtractTimestampsOnly,
+		TokenExtractionStrategyExtractRevocationDataOnly,
+		TokenExtractionStrategyExtractEvidenceRecordsOnly,
+		TokenExtractionStrategyExtractCertificatesAndTimestamps,
+		TokenExtractionStrategyExtractCertificatesAndEvidenceRecords,
+		TokenExtractionStrategyExtractCertificatesAndTimestampsAndEvidenceRecords,
+		TokenExtractionStrategyExtractCertificatesAndRevocationData,
+		TokenExtractionStrategyExtractCertificatesAndTimestampsAndRevocationData,
+		TokenExtractionStrategyExtractCertificatesAndRevocationDataAndEvidenceRecords,
+		TokenExtractionStrategyExtractTimestampsAndRevocationData,
+		TokenExtractionStrategyExtractTimestampsAndEvidenceRecords,
+		TokenExtractionStrategyExtractRevocationDataAndEvidenceRecords,
+		TokenExtractionStrategyExtractTimestampsAndRevocationDataAndEvidenceRecords,
+		TokenExtractionStrategyNone,
 	}
 }
 
@@ -128,7 +128,7 @@ func (t TokenExtractionStrategy) IsEvidenceRecord() bool {
 }
 
 // TokenExtractionStrategyFromParameters returns the enumeration value
-// depending on parameters. Returns TokenExtractionStrategy_NONE if no
+// depending on parameters. Returns TokenExtractionStrategyNone if no
 // constant matches, mirroring the Java fallback.
 func TokenExtractionStrategyFromParameters(certificate, timestamp, revocationData, evidenceRecord bool) TokenExtractionStrategy {
 	for _, v := range TokenExtractionStrategyValues() {
@@ -138,5 +138,5 @@ func TokenExtractionStrategyFromParameters(certificate, timestamp, revocationDat
 			return v
 		}
 	}
-	return TokenExtractionStrategy_NONE
+	return TokenExtractionStrategyNone
 }

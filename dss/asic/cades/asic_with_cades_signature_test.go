@@ -33,11 +33,11 @@ func recoverValue(t *testing.T, run func()) (recovered any) {
 // embedded signature or the signed document cannot be selected unambiguously.
 func TestDataToSignASiCSWithCAdESFromArchive(t *testing.T) {
 	signature := model.NewInMemoryDocumentWithMimeType([]byte("sig"), "META-INF/signature.p7s",
-		enumerations.MimeTypeEnum_PKCS7)
+		enumerations.MimeTypeEnumPKCS7)
 	signed := model.NewInMemoryDocumentWithName([]byte("data"), "test.txt")
 
 	asicContent := asic.NewASiCContent()
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_S)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	asicContent.SetSignatureDocuments([]model.DSSDocument{signature})
 	asicContent.SetSignedDocuments([]model.DSSDocument{signed})
 
@@ -105,8 +105,8 @@ func TestDataToSignHelperBuilderManifestDispatch(t *testing.T) {
 	timestampBuilder := NewASiCWithCAdESTimestampDataToSignHelperBuilder(filenameFactory)
 
 	parameters := NewASiCWithCAdESTimestampParameters()
-	parameters.ASiC().SetContainerType(enumerations.ASiCContainerType_ASiC_E)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.ASiC().SetContainerType(enumerations.ASiCContainerTypeASiCE)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 
 	signatureManifest := readManifest(t, signatureBuilder.GetManifestBuilder(manifestKATASiCEContent(), parameters))
 	if !strings.Contains(signatureManifest, `<asic:SigReference MimeType="application/pkcs7-signature"`) {
@@ -143,7 +143,7 @@ func readManifest(t *testing.T, builder *asic.AbstractASiCManifestBuilder) strin
 // ASiCWithCAdESLevelBaselineLTA overrides with different semantics.
 func TestSignatureExtensionOverridesDispatch(t *testing.T) {
 	parameters := dsscades.NewCAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_T)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineT)
 
 	tspSource := noopTSPSource{}
 	base := NewASiCWithCAdESSignatureExtension(nil, tspSource)
@@ -186,7 +186,7 @@ func TestSignatureExtensionOverridesDispatch(t *testing.T) {
 // which is what lets ASiCWithCAdESLevelBaselineLTA move the previous archive manifest aside.
 func TestArchiveManifestFilenameIsFixed(t *testing.T) {
 	builder := NewASiCEWithCAdESArchiveManifestBuilder(manifestKATArchiveContent(), nil,
-		enumerations.DigestAlgorithm_SHA256, "META-INF/timestamp002.tst")
+		enumerations.DigestAlgorithmSHA256, "META-INF/timestamp002.tst")
 	manifest, err := builder.Build()
 	if err != nil {
 		t.Fatalf("build manifest: %v", err)

@@ -150,8 +150,8 @@ type DiagnosticDataBuilder struct {
 func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
 	return &DiagnosticDataBuilder{
 		allCertificateSources:         spi.NewListCertificateSource(),
-		tokenExtractionStrategy:       enumerations.TokenExtractionStrategy_NONE,
-		defaultDigestAlgorithm:        enumerations.DigestAlgorithm_SHA256,
+		tokenExtractionStrategy:       enumerations.TokenExtractionStrategyNone,
+		defaultDigestAlgorithm:        enumerations.DigestAlgorithmSHA256,
 		identifierProvider:            model.NewOriginalIdentifierProvider(),
 		xmlCertsMap:                   map[string]*jaxb.XmlCertificate{},
 		xmlRevocationsMap:             map[string]*jaxb.XmlRevocation{},
@@ -988,7 +988,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 	xmlRevocation.Id = jaxb.NewCollapsedString(id)
 
 	if revocationToken.IsInternal() {
-		origin := jaxb.RevocationOriginValue(enumerations.RevocationOrigin_INPUT_DOCUMENT)
+		origin := jaxb.RevocationOriginValue(enumerations.RevocationOriginInputDocument)
 		xmlRevocation.Origin = &origin
 	} else {
 		origin := jaxb.RevocationOriginValue(revocationToken.ExternalOrigin())
@@ -1434,7 +1434,7 @@ func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
 // holding an *OCSPCertificateSource has no implicit conversion to *spi.TokenCertificateSource,
 // so it would have to pass the ADDRESS OF THE EMBEDDED FIELD instead - which is a plain
 // *spi.TokenCertificateSource value that has never heard of OCSPCertificateSource's override,
-// so CertificateSourceType() resolves to the base's CertificateSourceType_OTHER and
+// so CertificateSourceType() resolves to the base's CertificateSourceTypeOther and
 // getXmlFoundCertificates's default/else branch's cast to signatureCertificateSourceRefs panics
 // (found live via the phase 8f document-level harness on PAdES-LT.pdf: an orphan OCSP
 // revocation identifier's certificate source hit exactly this). The interface parameter lets
@@ -1530,23 +1530,23 @@ func (b *DiagnosticDataBuilder) GetXmlRelatedCertificates(certificateSource foun
 	}
 
 	switch certificateSource.CertificateSourceType() {
-	case enumerations.CertificateSourceType_OCSP_RESPONSE:
-		add(enumerations.CertificateOrigin_BASIC_OCSP_RESP, certificateSource.Certificates())
-	case enumerations.CertificateSourceType_EVIDENCE_RECORD:
-		add(enumerations.CertificateOrigin_EVIDENCE_RECORD, certificateSource.Certificates())
-	case enumerations.CertificateSourceType_EAA:
-		add(enumerations.CertificateOrigin_EAA, certificateSource.Certificates())
+	case enumerations.CertificateSourceTypeOCSPResponse:
+		add(enumerations.CertificateOriginBasicOCSPResp, certificateSource.Certificates())
+	case enumerations.CertificateSourceTypeEvidenceRecord:
+		add(enumerations.CertificateOriginEvidenceRecord, certificateSource.Certificates())
+	case enumerations.CertificateSourceTypeEAA:
+		add(enumerations.CertificateOriginEAA, certificateSource.Certificates())
 	default:
 		signatureCertificateSource := certificateSource.(signatureCertificateSourceRefs)
-		add(enumerations.CertificateOrigin_KEY_INFO, signatureCertificateSource.KeyInfoCertificates())
-		add(enumerations.CertificateOrigin_SIGNED_DATA, signatureCertificateSource.SignedDataCertificates())
-		add(enumerations.CertificateOrigin_CERTIFICATE_VALUES, signatureCertificateSource.CertificateValues())
-		add(enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES, signatureCertificateSource.AttrAuthoritiesCertValues())
-		add(enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA, signatureCertificateSource.TimeStampValidationDataCertValues())
-		add(enumerations.CertificateOrigin_ANY_VALIDATION_DATA, signatureCertificateSource.AnyValidationDataCertValues())
-		add(enumerations.CertificateOrigin_DSS_DICTIONARY, signatureCertificateSource.DSSDictionaryCertValues())
-		add(enumerations.CertificateOrigin_VRI_DICTIONARY, signatureCertificateSource.VRIDictionaryCertValues())
-		add(enumerations.CertificateOrigin_UNPROTECTED_HEADER, signatureCertificateSource.UnprotectedHeaderCertificates())
+		add(enumerations.CertificateOriginKeyInfo, signatureCertificateSource.KeyInfoCertificates())
+		add(enumerations.CertificateOriginSignedData, signatureCertificateSource.SignedDataCertificates())
+		add(enumerations.CertificateOriginCertificateValues, signatureCertificateSource.CertificateValues())
+		add(enumerations.CertificateOriginAttrAuthoritiesCertValues, signatureCertificateSource.AttrAuthoritiesCertValues())
+		add(enumerations.CertificateOriginTimestampValidationData, signatureCertificateSource.TimeStampValidationDataCertValues())
+		add(enumerations.CertificateOriginAnyValidationData, signatureCertificateSource.AnyValidationDataCertValues())
+		add(enumerations.CertificateOriginDSSDictionary, signatureCertificateSource.DSSDictionaryCertValues())
+		add(enumerations.CertificateOriginVRIDictionary, signatureCertificateSource.VRIDictionaryCertValues())
+		add(enumerations.CertificateOriginUnprotectedHeader, signatureCertificateSource.UnprotectedHeaderCertificates())
 	}
 
 	result := make([]*jaxb.XmlRelatedCertificate, 0, len(order))
@@ -1668,21 +1668,21 @@ func (b *DiagnosticDataBuilder) getOrphanCertificates(certificateSource foundCer
 	}
 
 	switch certificateSource.CertificateSourceType() {
-	case enumerations.CertificateSourceType_OCSP_RESPONSE:
-		add(enumerations.CertificateOrigin_BASIC_OCSP_RESP, certificateSource.Certificates())
-	case enumerations.CertificateSourceType_EAA:
-		add(enumerations.CertificateOrigin_EAA, certificateSource.Certificates())
+	case enumerations.CertificateSourceTypeOCSPResponse:
+		add(enumerations.CertificateOriginBasicOCSPResp, certificateSource.Certificates())
+	case enumerations.CertificateSourceTypeEAA:
+		add(enumerations.CertificateOriginEAA, certificateSource.Certificates())
 	default:
 		signatureCertificateSource := certificateSource.(signatureCertificateSourceRefs)
-		add(enumerations.CertificateOrigin_KEY_INFO, signatureCertificateSource.KeyInfoCertificates())
-		add(enumerations.CertificateOrigin_SIGNED_DATA, signatureCertificateSource.SignedDataCertificates())
-		add(enumerations.CertificateOrigin_CERTIFICATE_VALUES, signatureCertificateSource.CertificateValues())
-		add(enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES, signatureCertificateSource.AttrAuthoritiesCertValues())
-		add(enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA, signatureCertificateSource.TimeStampValidationDataCertValues())
-		add(enumerations.CertificateOrigin_ANY_VALIDATION_DATA, signatureCertificateSource.AnyValidationDataCertValues())
-		add(enumerations.CertificateOrigin_DSS_DICTIONARY, signatureCertificateSource.DSSDictionaryCertValues())
-		add(enumerations.CertificateOrigin_VRI_DICTIONARY, signatureCertificateSource.VRIDictionaryCertValues())
-		add(enumerations.CertificateOrigin_UNPROTECTED_HEADER, signatureCertificateSource.UnprotectedHeaderCertificates())
+		add(enumerations.CertificateOriginKeyInfo, signatureCertificateSource.KeyInfoCertificates())
+		add(enumerations.CertificateOriginSignedData, signatureCertificateSource.SignedDataCertificates())
+		add(enumerations.CertificateOriginCertificateValues, signatureCertificateSource.CertificateValues())
+		add(enumerations.CertificateOriginAttrAuthoritiesCertValues, signatureCertificateSource.AttrAuthoritiesCertValues())
+		add(enumerations.CertificateOriginTimestampValidationData, signatureCertificateSource.TimeStampValidationDataCertValues())
+		add(enumerations.CertificateOriginAnyValidationData, signatureCertificateSource.AnyValidationDataCertValues())
+		add(enumerations.CertificateOriginDSSDictionary, signatureCertificateSource.DSSDictionaryCertValues())
+		add(enumerations.CertificateOriginVRIDictionary, signatureCertificateSource.VRIDictionaryCertValues())
+		add(enumerations.CertificateOriginUnprotectedHeader, signatureCertificateSource.UnprotectedHeaderCertificates())
 	}
 
 	result := make([]*jaxb.XmlOrphanCertificate, 0, len(order))
@@ -1761,7 +1761,7 @@ func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken 
 	orphanToken, ok := b.xmlOrphanCertificateTokensMap[id]
 	if !ok {
 		orphanToken = &jaxb.XmlOrphanCertificateToken{}
-		encType := jaxb.XmlEncapsulationType_BINARIES
+		encType := jaxb.XmlEncapsulationTypeBinaries
 		orphanToken.EncapsulationType = &encType
 		idStr := b.identifierProvider.IDAsString(certificateToken)
 		orphanToken.Id = jaxb.NewCollapsedString(idStr)
@@ -1836,7 +1836,7 @@ func (b *DiagnosticDataBuilder) getXmlOrphanCertificateTokenFromRef(orphanCertif
 	orphanToken, ok := b.xmlOrphanCertificateTokensMap[id]
 	if !ok {
 		orphanToken = &jaxb.XmlOrphanCertificateToken{}
-		encType := jaxb.XmlEncapsulationType_REFERENCE
+		encType := jaxb.XmlEncapsulationTypeReference
 		orphanToken.EncapsulationType = &encType
 		idStr := b.identifierProvider.IDAsString(orphanCertificateRef)
 		orphanToken.Id = jaxb.NewCollapsedString(idStr)
@@ -1961,7 +1961,7 @@ func (b *DiagnosticDataBuilder) GetXmlBasicSignature(token model.Token) *jaxb.Xm
 	xmlBasicSignatureType.KeyLengthUsedToSignThisToken = &keyLength
 
 	signatureValidity := token.SignatureValidity()
-	if enumerations.SignatureValidity_NOT_EVALUATED != signatureValidity {
+	if enumerations.SignatureValidityNotEvaluated != signatureValidity {
 		signatureIntact := token.IsSignatureIntact()
 		xmlBasicSignatureType.SignatureIntact = &signatureIntact
 		signatureValid := token.IsValid()
@@ -2413,7 +2413,7 @@ func (b *DiagnosticDataBuilder) getXmlCertificateSources(token *model.Certificat
 		sort.Slice(certificateSources, func(i, j int) bool { return certificateSources[i] < certificateSources[j] })
 	}
 	if utils.IsCollectionEmpty(certificateSources) {
-		certificateSources = append(certificateSources, enumerations.CertificateSourceType_UNKNOWN)
+		certificateSources = append(certificateSources, enumerations.CertificateSourceTypeUnknown)
 	}
 	result := make([]jaxb.CertificateSourceTypeValue, 0, len(certificateSources))
 	for _, cs := range certificateSources {

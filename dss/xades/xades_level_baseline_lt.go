@@ -73,7 +73,7 @@ func (lt *XAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 	}
 
 	signatureRequirementsChecker := lt.SignatureRequirementsChecker()
-	if enumerations.SignatureLevel_XAdES_BASELINE_LT == lt.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESBaselineLT == lt.Params.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToLTLevelPossible(signaturesToExtend)
 	}
 
@@ -144,7 +144,7 @@ func (lt *XAdESLevelBaselineLT) ValidationDataEncapsulationStrategy() enumeratio
 		return lt.Params.ValidationDataEncapsulationStrategy()
 	}
 	// AnyValidationData is not supported in old XAdES definition
-	return enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA
+	return enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData
 }
 
 // incorporateValidationDataForSignature incorporates the validation data for the signature
@@ -156,13 +156,13 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForSignature(
 	var validationDataForInclusion *validation.ValidationData
 	validationDataEncapsulationStrategy := lt.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
+		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
 		validationDataForInclusion = validationDataContainer.AllValidationDataForSignatureForInclusion(signature)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_LT_SEPARATED,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData:
 		validationDataForInclusion = validationDataContainer.ValidationDataForSignatureForInclusion(signature)
 		validationDataForInclusion.AddValidationData(
 			validationDataContainer.ValidationDataForCounterSignaturesForInclusion(signature))
@@ -177,10 +177,10 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForSignature(
 	ocspsToAdd := validationDataForInclusion.OcspTokens()
 
 	switch validationDataEncapsulationStrategy {
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_LT_SEPARATED,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData:
 		if err := lt.IncorporateCertificateValuesWithIndent(lt.UnsignedSignaturePropertiesDom,
 			certificateValuesToAdd, indent); err != nil {
 			return nil, err
@@ -190,7 +190,7 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForSignature(
 			return nil, err
 		}
 
-	case enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY:
+	case enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
 		if err := lt.IncorporateAnyValidationData(validationDataForInclusion, indent); err != nil {
 			return nil, err
 		}
@@ -213,14 +213,14 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
 	var validationData *validation.ValidationData
 	validationDataEncapsulationStrategy := lt.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_LT_SEPARATED:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated:
 		validationData = validationDataContainer.ValidationDataForSignatureTimestampsForInclusion(signature)
 		validationData.AddValidationData(
 			validationDataContainer.ValidationDataForCounterSignatureTimestampsForInclusion(signature))
 		validationData.ExcludeValidationData(validationDataToExclude)
 		return lt.IncorporateTimestampValidationData(validationData, indent)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData:
 		validationData = validationDataContainer.ValidationDataForSignatureTimestampsForInclusion(signature)
 		validationData.ExcludeValidationData(validationDataToExclude)
 		if err := lt.IncorporateTimestampValidationData(validationData, indent); err != nil {
@@ -233,15 +233,15 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
 		counterSigTstValidationData.ExcludeValidationData(validationDataToExclude)
 		return lt.IncorporateAnyValidationData(counterSigTstValidationData, indent)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData:
 		validationData = validationDataContainer.ValidationDataForSignatureTimestampsForInclusion(signature)
 		validationData.AddValidationData(
 			validationDataContainer.ValidationDataForCounterSignatureTimestampsForInclusion(signature))
 		validationData.ExcludeValidationData(validationDataToExclude)
 		return lt.IncorporateAnyValidationData(validationData, indent)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
+		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
 		// skip
 		return nil
 
@@ -265,5 +265,5 @@ func (lt *XAdESLevelBaselineLT) extendToLTLevelSignatures(
 
 // ltLevelExtensionRequired ports the private ltLevelExtensionRequired.
 func (lt *XAdESLevelBaselineLT) ltLevelExtensionRequired(signature validation.AdvancedSignature) bool {
-	return enumerations.SignatureLevel_XAdES_BASELINE_LT == lt.Params.SignatureLevel() || !signature.HasLTAProfile()
+	return enumerations.SignatureLevelXAdESBaselineLT == lt.Params.SignatureLevel() || !signature.HasLTAProfile()
 }

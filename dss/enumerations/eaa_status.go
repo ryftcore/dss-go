@@ -8,39 +8,39 @@ import "fmt"
 type EAAStatus string
 
 const (
-	// EAAStatus_VALID: the status of the Referenced Token is valid, correct or legal.
-	EAAStatus_VALID EAAStatus = "VALID"
-	// EAAStatus_INVALID: the status of the Referenced Token is revoked, annulled,
+	// EAAStatusValid: the status of the Referenced Token is valid, correct or legal.
+	EAAStatusValid EAAStatus = "VALID"
+	// EAAStatusInvalid: the status of the Referenced Token is revoked, annulled,
 	// taken back, recalled or cancelled.
-	EAAStatus_INVALID EAAStatus = "INVALID"
-	// EAAStatus_SUSPENDED: the status of the Referenced Token is temporarily invalid,
+	EAAStatusInvalid EAAStatus = "INVALID"
+	// EAAStatusSuspended: the status of the Referenced Token is temporarily invalid,
 	// hanging, debarred from privilege. This status is usually temporary.
-	EAAStatus_SUSPENDED EAAStatus = "SUSPENDED"
-	// EAAStatus_APPLICATION_SPECIFIC: the status of the Referenced Token is
+	EAAStatusSuspended EAAStatus = "SUSPENDED"
+	// EAAStatusApplicationSpecific: the status of the Referenced Token is
 	// application specific.
-	EAAStatus_APPLICATION_SPECIFIC EAAStatus = "APPLICATION_SPECIFIC"
-	// EAAStatus_UNKNOWN: the EAA status is not known.
-	EAAStatus_UNKNOWN EAAStatus = "UNKNOWN"
+	EAAStatusApplicationSpecific EAAStatus = "APPLICATION_SPECIFIC"
+	// EAAStatusUnknown: the EAA status is not known.
+	EAAStatusUnknown EAAStatus = "UNKNOWN"
 )
 
 // eaaStatusBitValue maps each EAAStatus with a defined bit value to its bit
-// representation. EAAStatus_UNKNOWN has no bit value (Java's null), matching the
+// representation. EAAStatusUnknown has no bit value (Java's null), matching the
 // empty constructor overload.
 var eaaStatusBitValue = map[EAAStatus]int{
-	EAAStatus_VALID:                0x00,
-	EAAStatus_INVALID:              0x01,
-	EAAStatus_SUSPENDED:            0x02,
-	EAAStatus_APPLICATION_SPECIFIC: 0x03,
+	EAAStatusValid:               0x00,
+	EAAStatusInvalid:             0x01,
+	EAAStatusSuspended:           0x02,
+	EAAStatusApplicationSpecific: 0x03,
 }
 
 // EAAStatusValues returns all EAAStatus constants in declaration order.
 func EAAStatusValues() []EAAStatus {
 	return []EAAStatus{
-		EAAStatus_VALID,
-		EAAStatus_INVALID,
-		EAAStatus_SUSPENDED,
-		EAAStatus_APPLICATION_SPECIFIC,
-		EAAStatus_UNKNOWN,
+		EAAStatusValid,
+		EAAStatusInvalid,
+		EAAStatusSuspended,
+		EAAStatusApplicationSpecific,
+		EAAStatusUnknown,
 	}
 }
 
@@ -56,11 +56,11 @@ func EAAStatusValueOf(name string) (EAAStatus, error) {
 
 // IsValid checks if the EAA status is valid.
 func (e EAAStatus) IsValid() bool {
-	return e == EAAStatus_VALID
+	return e == EAAStatusValid
 }
 
 // BitValue returns the bit representation of the Status Type in a byte hex
-// representation, and false if the status has no defined bit value (EAAStatus_UNKNOWN).
+// representation, and false if the status has no defined bit value (EAAStatusUnknown).
 func (e EAAStatus) BitValue() (int, bool) {
 	v, ok := eaaStatusBitValue[e]
 	return v, ok

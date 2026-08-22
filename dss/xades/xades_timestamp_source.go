@@ -230,105 +230,105 @@ func (s *XAdESTimestampSource) IsContentTimestamp(signedAttribute *XAdESAttribut
 // IsAllDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAllDataObjectsTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAllDataObjectsTimestamp(signedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_ALL_DATA_OBJECTS_TIMESTAMP.IsSameTagName(signedAttribute.Name())
+	return definition.XAdES132ElementAllDataObjectsTimestamp.IsSameTagName(signedAttribute.Name())
 }
 
 // IsIndividualDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isIndividualDataObjectsTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsIndividualDataObjectsTimestamp(signedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP.IsSameTagName(signedAttribute.Name())
+	return definition.XAdES132ElementIndividualDataObjectsTimestamp.IsSameTagName(signedAttribute.Name())
 }
 
 // IsSignatureTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignatureTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsSignatureTimestamp(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_SIGNATURE_TIMESTAMP.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementSignatureTimestamp.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsCompleteCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteCertificateRef(XAdESAttribute).
 func (s *XAdESTimestampSource) IsCompleteCertificateRef(unsignedAttribute *XAdESAttribute) bool {
 	localName := unsignedAttribute.Name()
-	return definition.XAdES132Element_COMPLETE_CERTIFICATE_REFS.IsSameTagName(localName) ||
-		definition.XAdES141Element_COMPLETE_CERTIFICATE_REFS_V2.IsSameTagName(localName)
+	return definition.XAdES132ElementCompleteCertificateRefs.IsSameTagName(localName) ||
+		definition.XAdES141ElementCompleteCertificateRefsV2.IsSameTagName(localName)
 }
 
 // IsAttributeCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeCertificateRef(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAttributeCertificateRef(unsignedAttribute *XAdESAttribute) bool {
 	localName := unsignedAttribute.Name()
-	return definition.XAdES132Element_ATTRIBUTE_CERTIFICATE_REFS.IsSameTagName(localName) ||
-		definition.XAdES141Element_ATTRIBUTE_CERTIFICATE_REFS_V2.IsSameTagName(localName)
+	return definition.XAdES132ElementAttributeCertificateRefs.IsSameTagName(localName) ||
+		definition.XAdES141ElementAttributeCertificateRefsV2.IsSameTagName(localName)
 }
 
 // IsCompleteRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteRevocationRef(XAdESAttribute).
 func (s *XAdESTimestampSource) IsCompleteRevocationRef(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_COMPLETE_REVOCATION_REFS.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementCompleteRevocationRefs.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsAttributeRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeRevocationRef(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAttributeRevocationRef(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_ATTRIBUTE_REVOCATION_REFS.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementAttributeRevocationRefs.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsRefsOnlyTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRefsOnlyTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *XAdESAttribute) bool {
 	localName := unsignedAttribute.Name()
-	return definition.XAdES132Element_REFS_ONLY_TIMESTAMP.IsSameTagName(localName) ||
-		definition.XAdES141Element_REFS_ONLY_TIMESTAMP_V2.IsSameTagName(localName)
+	return definition.XAdES132ElementRefsOnlyTimestamp.IsSameTagName(localName) ||
+		definition.XAdES141ElementRefsOnlyTimestampV2.IsSameTagName(localName)
 }
 
 // IsSigAndRefsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSigAndRefsTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *XAdESAttribute) bool {
 	localName := unsignedAttribute.Name()
-	return definition.XAdES132Element_SIG_AND_REFS_TIMESTAMP.IsSameTagName(localName) ||
-		definition.XAdES141Element_SIG_AND_REFS_TIMESTAMP_V2.IsSameTagName(localName)
+	return definition.XAdES132ElementSigAndRefsTimestamp.IsSameTagName(localName) ||
+		definition.XAdES141ElementSigAndRefsTimestampV2.IsSameTagName(localName)
 }
 
 // IsCertificateValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCertificateValues(XAdESAttribute).
 func (s *XAdESTimestampSource) IsCertificateValues(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_CERTIFICATE_VALUES.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementCertificateValues.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRevocationValues(XAdESAttribute).
 func (s *XAdESTimestampSource) IsRevocationValues(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_REVOCATION_VALUES.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementRevocationValues.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsAttrAuthoritiesCertValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttrAuthoritiesCertValues(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAttrAuthoritiesCertValues(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_ATTR_AUTHORITIES_CERT_VALUES.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementAttrAuthoritiesCertValues.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsAttributeRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeRevocationValues(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAttributeRevocationValues(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_ATTRIBUTE_REVOCATION_VALUES.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementAttributeRevocationValues.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsArchiveTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isArchiveTimestamp(XAdESAttribute).
 func (s *XAdESTimestampSource) IsArchiveTimestamp(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_ARCHIVE_TIMESTAMP.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementArchiveTimestamp.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsTimeStampValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isTimeStampValidationData(XAdESAttribute).
 func (s *XAdESTimestampSource) IsTimeStampValidationData(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES141Element_TIMESTAMP_VALIDATION_DATA.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES141ElementTimestampValidationData.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsAnyValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAnyValidationData(XAdESAttribute).
 func (s *XAdESTimestampSource) IsAnyValidationData(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES141Element_ANY_VALIDATION_DATA.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES141ElementAnyValidationData.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsValidationDataReferences implements timestamp.SignatureTimestampSourceOverrides.
@@ -340,19 +340,19 @@ func (s *XAdESTimestampSource) IsValidationDataReferences(unsignedAttribute *XAd
 // IsCounterSignature implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCounterSignature(XAdESAttribute).
 func (s *XAdESTimestampSource) IsCounterSignature(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES132Element_COUNTER_SIGNATURE.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES132ElementCounterSignature.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsSignaturePolicyStore implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignaturePolicyStore(XAdESAttribute).
 func (s *XAdESTimestampSource) IsSignaturePolicyStore(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdES141Element_SIGNATURE_POLICY_STORE.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdES141ElementSignaturePolicyStore.IsSameTagName(unsignedAttribute.Name())
 }
 
 // IsEvidenceRecord implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isEvidenceRecord(XAdESAttribute).
 func (s *XAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *XAdESAttribute) bool {
-	return definition.XAdESEvidencerecordNamespaceElement_SEALING_EVIDENCE_RECORDS.IsSameTagName(unsignedAttribute.Name())
+	return definition.XAdESEvidencerecordNamespaceElementSealingEvidenceRecords.IsSameTagName(unsignedAttribute.Name())
 }
 
 // MakeTimestampTokens is XAdES's own plural timestamp-token factory: an xades132:XAdESTimeStampType
@@ -387,7 +387,7 @@ func (s *XAdESTimestampSource) MakeTimestampTokens(signatureAttribute *XAdESAttr
 		if timestampToken != nil {
 			timestampToken.SetCanonicalizationMethod(signatureAttribute.TimestampCanonicalizationMethod())
 			timestampToken.SetTimestampIncludes(signatureAttribute.TimestampIncludedReferences())
-			if enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP == timestampType {
+			if enumerations.TimestampTypeIndividualDataObjectsTimestamp == timestampType {
 				xadesTSTimestampAddReferences(timestampToken,
 					s.getIndividualDataContentTimestampReferences(signatureAttribute.TimestampIncludedReferences()))
 			}
@@ -478,7 +478,7 @@ func (s *XAdESTimestampSource) createEvidenceRecord(signatureAttribute *XAdESAtt
 	if err != nil {
 		return nil
 	}
-	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOrigin_SIGNATURE)
+	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOriginSignature)
 
 	embeddedEvidenceRecordHelper := NewXAdESEmbeddedEvidenceRecordHelper(s.signature, signatureAttribute)
 	embeddedEvidenceRecordHelper.SetDetachedContents(s.signature.DetachedContents())
@@ -496,10 +496,10 @@ func (s *XAdESTimestampSource) createEvidenceRecord(signatureAttribute *XAdESAtt
 func xadesTimestampSourceEvidenceRecordDocument(encapsulatedEvidenceRecord *xmldom.Node) model.DSSDocument {
 	localName := encapsulatedEvidenceRecord.Name.Local
 	switch {
-	case definition.XAdESEvidencerecordNamespaceElement_EVIDENCE_RECORD.IsSameTagName(localName):
+	case definition.XAdESEvidencerecordNamespaceElementEvidenceRecord.IsSameTagName(localName):
 		return xmlutils.NewDOMDocument(encapsulatedEvidenceRecord)
 
-	case definition.XAdESEvidencerecordNamespaceElement_ASN1_EVIDENCE_RECORD.IsSameTagName(localName):
+	case definition.XAdESEvidencerecordNamespaceElementASN1EvidenceRecord.IsSameTagName(localName):
 		base64EncodedEvidenceRecord := encapsulatedEvidenceRecord.TextContent()
 		if utils.IsBase64Encoded(base64EncodedEvidenceRecord) {
 			return model.NewInMemoryDocument(utils.FromBase64(base64EncodedEvidenceRecord))
@@ -600,7 +600,7 @@ func (s *XAdESTimestampSource) signatureTimestampReferences() []*validation.Time
 	var references []*validation.TimestampedReference
 	xadesTSAddReferences(&references, s.encapsulatedReferencesFromTimestamps(s.ContentTimestamps()))
 	xadesTSAddReferences(&references, s.SignerDataReferences())
-	xadesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectType_SIGNATURE))
+	xadesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectTypeSignature))
 	xadesTSAddReferences(&references, s.signingCertificateTimestampReferences())
 	if XAdESSignatureUtilsIsKeyInfoCovered(s.signature) {
 		xadesTSAddReferences(&references, s.GetKeyInfoReferences())
@@ -662,8 +662,8 @@ func (s *XAdESTimestampSource) GetCertificateRefs(unsignedAttribute *XAdESAttrib
 // xadesTimestampSourceIsCertificateRefV1 ports the private isCertificateRefV1(XAdESAttribute).
 func xadesTimestampSourceIsCertificateRefV1(unsignedAttribute *XAdESAttribute) bool {
 	localName := unsignedAttribute.Name()
-	return definition.XAdES132Element_ATTRIBUTE_CERTIFICATE_REFS.IsSameTagName(localName) ||
-		definition.XAdES132Element_COMPLETE_CERTIFICATE_REFS.IsSameTagName(localName)
+	return definition.XAdES132ElementAttributeCertificateRefs.IsSameTagName(localName) ||
+		definition.XAdES132ElementCompleteCertificateRefs.IsSameTagName(localName)
 }
 
 // GetCRLRefs implements timestamp.SignatureTimestampSourceOverrides.
@@ -792,16 +792,16 @@ func xadesTimestampSourceEncapsulatedTokenBinaries(encapsulatedElement *xmldom.N
 // GetArchiveTimestampType implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getArchiveTimestampType(XAdESAttribute).
 func (s *XAdESTimestampSource) GetArchiveTimestampType(unsignedAttribute *XAdESAttribute) enumerations.ArchiveTimestampType {
-	if definition.XAdESNamespace_XADES_141.IsSameUri(unsignedAttribute.Namespace()) {
-		return enumerations.ArchiveTimestampType_XAdES_141
+	if definition.XAdESNamespaceXAdES141.IsSameUri(unsignedAttribute.Namespace()) {
+		return enumerations.ArchiveTimestampTypeXAdES141
 	}
-	return enumerations.ArchiveTimestampType_XAdES
+	return enumerations.ArchiveTimestampTypeXAdES
 }
 
 // GetCounterSignatures implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCounterSignatures(XAdESAttribute).
 func (s *XAdESTimestampSource) GetCounterSignatures(unsignedAttribute *XAdESAttribute) []validation.AdvancedSignature {
-	counterSignatureNode, err := xmlutils.XPathUtilsGetNode(unsignedAttribute.Element(), common.XMLDSigPath_SIGNATURE_PATH)
+	counterSignatureNode, err := xmlutils.XPathUtilsGetNode(unsignedAttribute.Element(), common.XMLDSigPathSignaturePath)
 	if err == nil && counterSignatureNode != nil {
 		counterSignatures := s.signature.CounterSignatures()
 		for _, counterSignature := range counterSignatures {

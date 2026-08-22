@@ -113,12 +113,12 @@ func TestASiCUtilsZipCommentBuilders(t *testing.T) {
 	if got := ASiCUtilsZipCommentFromMimeTypeString("application/vnd.etsi.asic-e+zip"); got != "mimetype=application/vnd.etsi.asic-e+zip" {
 		t.Errorf("zip comment = %q", got)
 	}
-	if got := ASiCUtilsZipCommentFromMimeType(enumerations.MimeTypeEnum_ASICS); got != "mimetype=application/vnd.etsi.asic-s+zip" {
+	if got := ASiCUtilsZipCommentFromMimeType(enumerations.MimeTypeEnumASiCS); got != "mimetype=application/vnd.etsi.asic-s+zip" {
 		t.Errorf("zip comment from MimeType = %q", got)
 	}
 
 	parameters := NewASiCParameters()
-	parameters.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	if got := ASiCUtilsZipCommentFromParameters(parameters); got != "" {
 		t.Errorf("zip comment = %q with zipComment off, want \"\"", got)
 	}
@@ -138,19 +138,19 @@ func TestASiCUtilsASiCContainerType(t *testing.T) {
 		mimeType enumerations.MimeType
 		want     enumerations.ASiCContainerType
 	}{
-		{enumerations.MimeTypeEnum_ASICS, enumerations.ASiCContainerType_ASiC_S},
-		{enumerations.MimeTypeEnum_ASICE, enumerations.ASiCContainerType_ASiC_E},
-		{enumerations.MimeTypeEnum_ODT, enumerations.ASiCContainerType_ASiC_E},
-		{enumerations.MimeTypeEnum_ODS, enumerations.ASiCContainerType_ASiC_E},
-		{enumerations.MimeTypeEnum_ODG, enumerations.ASiCContainerType_ASiC_E},
-		{enumerations.MimeTypeEnum_ODP, enumerations.ASiCContainerType_ASiC_E},
+		{enumerations.MimeTypeEnumASiCS, enumerations.ASiCContainerTypeASiCS},
+		{enumerations.MimeTypeEnumASiCE, enumerations.ASiCContainerTypeASiCE},
+		{enumerations.MimeTypeEnumODT, enumerations.ASiCContainerTypeASiCE},
+		{enumerations.MimeTypeEnumODS, enumerations.ASiCContainerTypeASiCE},
+		{enumerations.MimeTypeEnumODG, enumerations.ASiCContainerTypeASiCE},
+		{enumerations.MimeTypeEnumODP, enumerations.ASiCContainerTypeASiCE},
 	} {
 		got, err := ASiCUtilsASiCContainerType(tc.mimeType)
 		if err != nil || got != tc.want {
 			t.Errorf("containerType(%s) = %s (err %v), want %s", tc.mimeType.MimeTypeString(), got, err, tc.want)
 		}
 	}
-	if _, err := ASiCUtilsASiCContainerType(enumerations.MimeTypeEnum_PDF); err == nil {
+	if _, err := ASiCUtilsASiCContainerType(enumerations.MimeTypeEnumPDF); err == nil {
 		t.Error("expected an error for a non-ASiC mimetype")
 	} else if err.Error() != "Not allowed mimetype 'application/pdf'" {
 		t.Errorf("error = %q, want the Java message", err.Error())
@@ -222,7 +222,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 // TestASiCUtilsIsZipRejectsDigestDocument pins the DigestDocument short-circuit: a document with no
 // readable content can never be a container, and must not be opened to find that out.
 func TestASiCUtilsIsZipRejectsDigestDocument(t *testing.T) {
-	digestDocument := model.NewDigestDocumentFromBase64(enumerations.DigestAlgorithm_SHA256,
+	digestDocument := model.NewDigestDocumentFromBase64(enumerations.DigestAlgorithmSHA256,
 		"GTZDVjc8fdBQlkeXsQnPHYFXKVi7B6Nkzo9YDLBODcs=")
 	isZip, err := ASiCUtilsIsZip(digestDocument)
 	if err != nil {
@@ -296,7 +296,7 @@ func modelNames(documents []model.DSSDocument) []string {
 // synthesizes: named "mimetype", STORED, carrying the mimetype string as its content.
 func TestASiCUtilsEnsureMimeTypeAndZipComment(t *testing.T) {
 	parameters := NewASiCParameters()
-	parameters.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	parameters.SetZipComment(true)
 
 	asicContent := NewASiCContent()

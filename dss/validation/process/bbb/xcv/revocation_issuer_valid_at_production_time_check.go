@@ -36,7 +36,7 @@ func NewRevocationIssuerValidAtProductionTimeCheck(i18nProvider *i18n.I18nProvid
 // Process performs the check. Port of process().
 func (c *RevocationIssuerValidAtProductionTimeCheck) Process() bool {
 	// check performed only for OCSP certificates
-	return enumerations.RevocationType_OCSP != c.revocationData.RevocationType() ||
+	return enumerations.RevocationTypeOCSP != c.revocationData.RevocationType() ||
 		c.checkOCSPResponderValidAtRevocationProductionTime()
 }
 
@@ -83,11 +83,11 @@ func (c *RevocationIssuerValidAtProductionTimeCheck) ErrorMessageTag() i18n.Mess
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *RevocationIssuerValidAtProductionTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *RevocationIssuerValidAtProductionTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

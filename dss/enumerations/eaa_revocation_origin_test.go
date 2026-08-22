@@ -3,7 +3,7 @@ package enumerations
 import "testing"
 
 func TestEAARevocationOriginValues(t *testing.T) {
-	want := []EAARevocationOrigin{EAARevocationOrigin_EXTERNAL, EAARevocationOrigin_CACHED}
+	want := []EAARevocationOrigin{EAARevocationOriginExternal, EAARevocationOriginCached}
 	got := EAARevocationOriginValues()
 	if len(got) != len(want) {
 		t.Fatalf("expected %d values, got %d", len(want), len(got))
@@ -13,10 +13,10 @@ func TestEAARevocationOriginValues(t *testing.T) {
 			t.Errorf("index %d: got %v, want %v", i, got[i], w)
 		}
 	}
-	if string(EAARevocationOrigin_EXTERNAL) != "EXTERNAL" {
-		t.Errorf("EXTERNAL = %q", string(EAARevocationOrigin_EXTERNAL))
+	if string(EAARevocationOriginExternal) != "EXTERNAL" {
+		t.Errorf("EXTERNAL = %q", string(EAARevocationOriginExternal))
 	}
-	if string(EAARevocationOrigin_CACHED) != "CACHED" {
-		t.Errorf("CACHED = %q", string(EAARevocationOrigin_CACHED))
+	if string(EAARevocationOriginCached) != "CACHED" {
+		t.Errorf("CACHED = %q", string(EAARevocationOriginCached))
 	}
 }

@@ -263,7 +263,7 @@ func (b *ExtensionBuilder) XadesNamespace() *common.DSSNamespace {
 		if xadesNamespace == nil {
 			// Upstream warns "Current XAdES namespace not found in the parameters
 			// (use the default XAdES 1.3.2)".
-			xadesNamespace = definition.XAdESNamespace_XADES_132
+			xadesNamespace = definition.XAdESNamespaceXAdES132
 		}
 	}
 	return xadesNamespace

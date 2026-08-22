@@ -44,7 +44,7 @@ func NewPastCertificateValidationAcceptableCheck(i18nProvider *i18n.I18nProvider
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *PastCertificateValidationAcceptableCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PCV
+	return jaxb.XmlBlockTypePCV
 }
 
 // Process performs the check. Port of process().
@@ -59,12 +59,12 @@ func (c *PastCertificateValidationAcceptableCheck) Process() bool {
 		}
 
 		// INDETERMINATE cases are treated in following steps depending on POE
-		return enumerations.Indication_PASSED == pcvIndication ||
-			(enumerations.Indication_INDETERMINATE == pcvIndication &&
-				(enumerations.SubIndication_REVOKED_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_REVOKED_CA_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == pcvSubIndication))
+		return enumerations.IndicationPassed == pcvIndication ||
+			(enumerations.IndicationIndeterminate == pcvIndication &&
+				(enumerations.SubIndicationRevokedNoPOE == pcvSubIndication ||
+					enumerations.SubIndicationRevokedCANoPOE == pcvSubIndication ||
+					enumerations.SubIndicationOutOfBoundsNoPOE == pcvSubIndication ||
+					enumerations.SubIndicationCryptoConstraintsFailureNoPOE == pcvSubIndication))
 	}
 	return false
 }

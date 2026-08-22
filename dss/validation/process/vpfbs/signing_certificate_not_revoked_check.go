@@ -45,20 +45,20 @@ func (c *SigningCertificateNotRevokedCheck[T]) Process() bool {
 	if conclusion.SubIndication != nil {
 		subIndication = conclusion.SubIndication.SubIndication()
 	}
-	return !(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-		enumerations.SubIndication_REVOKED_NO_POE == subIndication)
+	return !(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+		enumerations.SubIndicationRevokedNoPOE == subIndication)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SigningCertificateNotRevokedCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *SigningCertificateNotRevokedCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_REVOKED_NO_POE
+	return enumerations.SubIndicationRevokedNoPOE
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

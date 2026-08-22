@@ -88,7 +88,7 @@ func (c *ExtendedKeyUsageCheck) MessageTag() i18n.MessageTag {
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *ExtendedKeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	if enumerations.Context_CERTIFICATE == c.context {
+	if enumerations.ContextCertificate == c.context {
 		return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGEKU_ANS_CERT)
 	}
 	position, err := process.GetSubContextPosition(c.context, c.subContext)
@@ -101,11 +101,11 @@ func (c *ExtendedKeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ExtendedKeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *ExtendedKeyUsageCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

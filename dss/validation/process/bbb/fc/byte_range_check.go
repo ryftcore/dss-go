@@ -37,10 +37,10 @@ func (c *ByteRangeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.Message
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *ByteRangeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *ByteRangeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

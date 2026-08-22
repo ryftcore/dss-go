@@ -1279,7 +1279,7 @@ func (c *SignatureValidationContext) allPOECoveredByRevocationData() (*Revocatio
 	for firstChainCertificate, chain := range orderedCertificateChains {
 		lastCertUsageDate := c.getLatestTimestampUsageDate(firstChainCertificate)
 		if !lastCertUsageDate.IsZero() {
-			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, lastCertUsageDate, &status.TokenStatus, enumerations.Context_TIMESTAMP)
+			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, lastCertUsageDate, &status.TokenStatus, enumerations.ContextTimestamp)
 		}
 	}
 	if !status.IsEmpty() {
@@ -1399,13 +1399,13 @@ func (c *SignatureValidationContext) isRevocationDataRefreshNeeded(certToken *mo
 	// get best-signature-time for b-level certificate chain
 	refreshNeededAfterTime := c.getLatestBestSignatureTime(certToken)
 	if !refreshNeededAfterTime.IsZero() {
-		context = enumerations.Context_SIGNATURE
+		context = enumerations.ContextSignature
 	}
 	// get last usage dates for the same timestamp certificate chain
 	lastTimestampUsageTime := c.getLatestTimestampUsageDate(certToken)
 	if !lastTimestampUsageTime.IsZero() {
 		if context == "" {
-			context = enumerations.Context_TIMESTAMP
+			context = enumerations.ContextTimestamp
 		}
 	}
 	// return best POE for other cases
@@ -1413,7 +1413,7 @@ func (c *SignatureValidationContext) isRevocationDataRefreshNeeded(certToken *mo
 		// shall not return zero
 		refreshNeededAfterTime = c.getLowestPOETimeForToken(certToken)
 		if context == "" {
-			context = enumerations.Context_REVOCATION
+			context = enumerations.ContextRevocation
 		}
 	}
 	freshRevocationDataFound := false
@@ -1426,7 +1426,7 @@ func (c *SignatureValidationContext) isRevocationDataRefreshNeeded(certToken *mo
 		issuerCertificateToken := certificateTokenChain[0]
 		if c.isRevocationFresh(revocationToken, refreshNeededAfterTime, context) &&
 			c.isRevocationIssuedAfterLastTimestampUsage(revocationToken, lastTimestampUsageTime, context) &&
-			enumerations.RevocationReason_CERTIFICATE_HOLD != revocationToken.Reason() &&
+			enumerations.RevocationReasonCertificateHold != revocationToken.Reason() &&
 			c.isRevocationAcceptable(revocationToken, issuerCertificateToken, c.getLowestPOETimeForToken(issuerCertificateToken)) &&
 			c.hasValidPOE(revocationToken, certToken, issuerCertificateToken) {
 			freshRevocationDataFound = true
@@ -1550,7 +1550,7 @@ func (c *SignatureValidationContext) hasValidPOE(revocationToken AnyRevocationTo
 		return false
 	}
 	// useful for short-life certificates (i.e. ocsp responder)
-	if issuerCertToken != nil && !c.isTrustedAtUsageTimeWithContext(issuerCertToken, enumerations.Context_REVOCATION) && !c.hasPOEInTheValidityRange(issuerCertToken) {
+	if issuerCertToken != nil && !c.isTrustedAtUsageTimeWithContext(issuerCertToken, enumerations.ContextRevocation) && !c.hasPOEInTheValidityRange(issuerCertToken) {
 		return false
 	}
 	return true
@@ -1609,7 +1609,7 @@ func (c *SignatureValidationContext) checkAtLeastOneRevocationDataPresentAfterBe
 	for firstChainCertificate, chain := range orderedCertificateChains {
 		if signingCertificateToken != nil && firstChainCertificate.Equals(signingCertificateToken) {
 			bestSignatureTime := c.getEarliestTimestampTime()
-			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, bestSignatureTime, &status.TokenStatus, enumerations.Context_SIGNATURE)
+			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, bestSignatureTime, &status.TokenStatus, enumerations.ContextSignature)
 		}
 	}
 }

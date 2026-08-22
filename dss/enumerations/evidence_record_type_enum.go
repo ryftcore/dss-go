@@ -7,26 +7,26 @@ import "fmt"
 type EvidenceRecordTypeEnum string
 
 const (
-	// EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD is an XML Evidence Record
+	// EvidenceRecordTypeEnumXMLEvidenceRecord is an XML Evidence Record
 	// according to RFC 6283.
-	EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD EvidenceRecordTypeEnum = "XML_EVIDENCE_RECORD"
-	// EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD is an ASN.1 Evidence
+	EvidenceRecordTypeEnumXMLEvidenceRecord EvidenceRecordTypeEnum = "XML_EVIDENCE_RECORD"
+	// EvidenceRecordTypeEnumASN1EvidenceRecord is an ASN.1 Evidence
 	// Record according to RFC 4998.
-	EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD EvidenceRecordTypeEnum = "ASN1_EVIDENCE_RECORD"
+	EvidenceRecordTypeEnumASN1EvidenceRecord EvidenceRecordTypeEnum = "ASN1_EVIDENCE_RECORD"
 )
 
 // evidenceRecordTypeEnumLabels holds the user-friendly label for each
 // constant.
 var evidenceRecordTypeEnumLabels = map[EvidenceRecordTypeEnum]string{
-	EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:  "XML Evidence Record",
-	EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD: "ASN.1 Evidence Record",
+	EvidenceRecordTypeEnumXMLEvidenceRecord:  "XML Evidence Record",
+	EvidenceRecordTypeEnumASN1EvidenceRecord: "ASN.1 Evidence Record",
 }
 
 // EvidenceRecordTypeEnumValues returns all constants in declaration order.
 func EvidenceRecordTypeEnumValues() []EvidenceRecordTypeEnum {
 	return []EvidenceRecordTypeEnum{
-		EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD,
-		EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD,
+		EvidenceRecordTypeEnumXMLEvidenceRecord,
+		EvidenceRecordTypeEnumASN1EvidenceRecord,
 	}
 }
 

@@ -8,25 +8,25 @@ import "fmt"
 type EndorsementType string
 
 const (
-	// EndorsementType_CERTIFIED: attributes certified in attribute certificates
+	// EndorsementTypeCertified: attributes certified in attribute certificates
 	// issued by an Attribute Authority.
-	EndorsementType_CERTIFIED EndorsementType = "CERTIFIED"
-	// EndorsementType_CLAIMED: attributes claimed by the signer.
-	EndorsementType_CLAIMED EndorsementType = "CLAIMED"
-	// EndorsementType_SIGNED: assertions signed by a third party.
-	EndorsementType_SIGNED EndorsementType = "SIGNED"
+	EndorsementTypeCertified EndorsementType = "CERTIFIED"
+	// EndorsementTypeClaimed: attributes claimed by the signer.
+	EndorsementTypeClaimed EndorsementType = "CLAIMED"
+	// EndorsementTypeSigned: assertions signed by a third party.
+	EndorsementTypeSigned EndorsementType = "SIGNED"
 )
 
 // endorsementTypeValue maps each EndorsementType to its string value.
 var endorsementTypeValue = map[EndorsementType]string{
-	EndorsementType_CERTIFIED: "certified",
-	EndorsementType_CLAIMED:   "claimed",
-	EndorsementType_SIGNED:    "signed",
+	EndorsementTypeCertified: "certified",
+	EndorsementTypeClaimed:   "claimed",
+	EndorsementTypeSigned:    "signed",
 }
 
 // EndorsementTypeValues returns all EndorsementType constants in declaration order.
 func EndorsementTypeValues() []EndorsementType {
-	return []EndorsementType{EndorsementType_CERTIFIED, EndorsementType_CLAIMED, EndorsementType_SIGNED}
+	return []EndorsementType{EndorsementTypeCertified, EndorsementTypeClaimed, EndorsementTypeSigned}
 }
 
 // EndorsementTypeValueOf returns the EndorsementType matching the given Java enum name.

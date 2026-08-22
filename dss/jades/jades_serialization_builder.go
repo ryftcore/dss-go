@@ -99,7 +99,7 @@ func (b *JAdESSerializationBuilder) Build(signatureValue *model.SignatureValue) 
 
 	if b.jwsJsonSerializationObject == nil {
 		b.jwsJsonSerializationObject = NewJWSJsonSerializationObject()
-		if enumerations.SignaturePackaging_DETACHED != b.Parameters.SignaturePackaging() {
+		if enumerations.SignaturePackagingDetached != b.Parameters.SignaturePackaging() {
 			// do not include payload for detached case
 			b.jwsJsonSerializationObject.SetPayload(jws.SignedPayload())
 		}
@@ -129,7 +129,7 @@ func (b *JAdESSerializationBuilder) Build(signatureValue *model.SignatureValue) 
 // value. Port of the private assertB64ConfigurationConsistent.
 func (b *JAdESSerializationBuilder) assertB64ConfigurationConsistent() error {
 	// verify only for non-detached cases
-	if enumerations.SignaturePackaging_DETACHED != b.Parameters.SignaturePackaging() {
+	if enumerations.SignaturePackagingDetached != b.Parameters.SignaturePackaging() {
 		base64UrlEncodedPayload := b.Parameters.IsBase64UrlEncodedPayload()
 		for _, jws := range b.jwsJsonSerializationObject.Signatures() {
 			if base64UrlEncodedPayload != !jws.IsRfc7797UnencodedPayload() {
@@ -155,7 +155,7 @@ func (b *JAdESSerializationBuilder) jws() (*JWS, error) {
 
 // MimeType returns the MimeType of the produced signature. Port of #getMimeType.
 func (b *JAdESSerializationBuilder) MimeType() enumerations.MimeType {
-	return enumerations.MimeTypeEnum_JOSE_JSON
+	return enumerations.MimeTypeEnumJOSEJSON
 }
 
 // AssertConfigurationValidity verifies that the configured signature packaging and serialization
@@ -164,11 +164,11 @@ func (b *JAdESSerializationBuilder) MimeType() enumerations.MimeType {
 func (b *JAdESSerializationBuilder) AssertConfigurationValidity(
 	signatureParameters *JAdESSignatureParameters) error {
 	packaging := signatureParameters.SignaturePackaging()
-	if packaging != enumerations.SignaturePackaging_ENVELOPING &&
-		packaging != enumerations.SignaturePackaging_DETACHED {
+	if packaging != enumerations.SignaturePackagingEnveloping &&
+		packaging != enumerations.SignaturePackagingDetached {
 		return fmt.Errorf("Unsupported signature packaging for JSON Serialization Signature: %s", packaging)
 	}
-	if enumerations.JWSSerializationType_JSON_SERIALIZATION != signatureParameters.JwsSerializationType() &&
+	if enumerations.JWSSerializationTypeJSONSerialization != signatureParameters.JwsSerializationType() &&
 		b.jwsJsonSerializationObject != nil {
 		return fmt.Errorf("The '%s' type is not supported for a parallel signing!",
 			signatureParameters.JwsSerializationType())

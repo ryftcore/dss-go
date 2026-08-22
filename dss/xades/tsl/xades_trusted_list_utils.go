@@ -19,13 +19,13 @@ const TLV5Identifier = 5
 const TLV6Identifier = 6
 
 func init() {
-	xmlutils.XPathUtilsRegisterNamespace(definition.TrustedListNamespace_NS)
+	xmlutils.XPathUtilsRegisterNamespace(definition.TrustedListNamespaceNS)
 }
 
 // XAdESTrustedListUtilsGetTSLVersionIdentifier parses the XML Trusted List and returns the TL
 // version, when present. Port of the static getTSLVersionIdentifier(Document).
 func XAdESTrustedListUtilsGetTSLVersionIdentifier(documentDom *xmldom.Node) (*int, error) {
-	tlVersionIdentifierElement, err := xmlutils.XPathUtilsGetElement(documentDom.DocumentElement(), definition.TrustedListPath_TSL_VERSION_IDENTIFIER_PATH)
+	tlVersionIdentifierElement, err := xmlutils.XPathUtilsGetElement(documentDom.DocumentElement(), definition.TrustedListPathTSLVersionIdentifierPath)
 	if err != nil {
 		return nil, err
 	}

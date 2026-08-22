@@ -62,7 +62,7 @@ func asicManifestParserGetManifestRootElement(manifestDocument model.DSSDocument
 	if err != nil {
 		return nil
 	}
-	element, err := xmlutils.XPathUtilsGetElement(manifestDom, ASiCManifestPath_ASIC_MANIFEST_PATH)
+	element, err := xmlutils.XPathUtilsGetElement(manifestDom, ASiCManifestPathASiCManifestPath)
 	if err != nil {
 		return nil
 	}
@@ -72,7 +72,7 @@ func asicManifestParserGetManifestRootElement(manifestDocument model.DSSDocument
 // asicManifestParserGetLinkedSignatureName ports the private static
 // getLinkedSignatureName(Element).
 func asicManifestParserGetLinkedSignatureName(root *xmldom.Node) string {
-	value, err := xmlutils.XPathUtilsGetValue(root, ASiCManifestPath_SIG_REFERENCE_URI_PATH)
+	value, err := xmlutils.XPathUtilsGetValue(root, ASiCManifestPathSigReferenceURIPath)
 	if err != nil {
 		return ""
 	}
@@ -82,12 +82,12 @@ func asicManifestParserGetLinkedSignatureName(root *xmldom.Node) string {
 // asicManifestParserGetMimeType ports the private static getMimeType(Element). Java's
 // try/catch around MimeType.fromMimeTypeString(String) exists to swallow a DSSException on an
 // unrecognized string; the ported MimeTypeFromMimeTypeString never errors (it falls back to
-// MimeTypeEnum_BINARY), so there is no error path left to catch here - a judgment call
+// MimeTypeEnumBinary), so there is no error path left to catch here - a judgment call
 // documented since it is an observable behavior difference (Java returns nil for a malformed
 // mimetype string in some MimeType loader implementations that choose to throw; the Go port's
 // registered loaders do not).
 func asicManifestParserGetMimeType(element *xmldom.Node) enumerations.MimeType {
-	mimeTypeString := element.AttrValue("", ASiCManifestAttribute_MIME_TYPE.AttributeName())
+	mimeTypeString := element.AttrValue("", ASiCManifestAttributeMIMEType.AttributeName())
 	if utils.IsStringNotBlank(mimeTypeString) {
 		return enumerations.MimeTypeFromMimeTypeString(mimeTypeString)
 	}
@@ -97,7 +97,7 @@ func asicManifestParserGetMimeType(element *xmldom.Node) enumerations.MimeType {
 // asicManifestParserGetDigestAlgorithm ports the private static
 // getDigestAlgorithm(Element).
 func asicManifestParserGetDigestAlgorithm(dataObjectReference *xmldom.Node) enumerations.DigestAlgorithm {
-	value, err := xmlutils.XPathUtilsGetValue(dataObjectReference, xmlcommon.XMLDSigPath_DIGEST_METHOD_ALGORITHM_PATH)
+	value, err := xmlutils.XPathUtilsGetValue(dataObjectReference, xmlcommon.XMLDSigPathDigestMethodAlgorithmPath)
 	if err != nil {
 		return ""
 	}
@@ -110,7 +110,7 @@ func asicManifestParserGetDigestAlgorithm(dataObjectReference *xmldom.Node) enum
 
 // asicManifestParserGetDigestValue ports the private static getDigestValue(Element).
 func asicManifestParserGetDigestValue(dataObjectReference *xmldom.Node) []byte {
-	digestValueElement, err := xmlutils.XPathUtilsGetElement(dataObjectReference, xmlcommon.XMLDSigPath_DIGEST_VALUE_PATH)
+	digestValueElement, err := xmlutils.XPathUtilsGetElement(dataObjectReference, xmlcommon.XMLDSigPathDigestValuePath)
 	if err != nil || digestValueElement == nil {
 		return nil
 	}
@@ -127,17 +127,17 @@ func asicManifestParserGetDigestValue(dataObjectReference *xmldom.Node) []byte {
 // IsEvidenceRecordManifest and IsManifest package functions taking a filename string.
 func asicManifestParserGetManifestType(manifestFilename string, root *xmldom.Node) enumerations.ASiCManifestTypeEnum {
 	if ASiCUtilsIsArchiveManifest(manifestFilename) {
-		return enumerations.ASiCManifestTypeEnum_ARCHIVE_MANIFEST
+		return enumerations.ASiCManifestTypeEnumArchiveManifest
 	} else if ASiCUtilsIsEvidenceRecordManifest(manifestFilename) {
-		return enumerations.ASiCManifestTypeEnum_EVIDENCE_RECORD
+		return enumerations.ASiCManifestTypeEnumEvidenceRecord
 	} else if ASiCUtilsIsManifest(manifestFilename) {
-		sigReference, err := xmlutils.XPathUtilsGetElement(root, ASiCManifestPath_SIG_REFERENCE_PATH)
+		sigReference, err := xmlutils.XPathUtilsGetElement(root, ASiCManifestPathSigReferencePath)
 		if err == nil && sigReference != nil {
 			mimeType := asicManifestParserGetMimeType(sigReference)
-			if mimeType == enumerations.MimeTypeEnum_TST {
-				return enumerations.ASiCManifestTypeEnum_TIMESTAMP
+			if mimeType == enumerations.MimeTypeEnumTST {
+				return enumerations.ASiCManifestTypeEnumTimestamp
 			}
-			return enumerations.ASiCManifestTypeEnum_SIGNATURE
+			return enumerations.ASiCManifestTypeEnumSignature
 		}
 	}
 	return ""
@@ -147,13 +147,13 @@ func asicManifestParserGetManifestType(manifestFilename string, root *xmldom.Nod
 // parseManifestEntries(Element).
 func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.ManifestEntry {
 	entries := make([]*model.ManifestEntry, 0)
-	dataObjectReferences, err := xmlutils.XPathUtilsGetNodeList(root, ASiCManifestPath_DATA_OBJECT_REFERENCE_PATH)
+	dataObjectReferences, err := xmlutils.XPathUtilsGetNodeList(root, ASiCManifestPathDataObjectReferencePath)
 	if err != nil || len(dataObjectReferences) == 0 {
 		return entries
 	}
 	for _, dataObjectReference := range dataObjectReferences {
 		entry := model.NewManifestEntry()
-		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ASiCManifestAttribute_URI.AttributeName())))
+		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ASiCManifestAttributeURI.AttributeName())))
 		entry.SetMimeType(asicManifestParserGetMimeType(dataObjectReference))
 
 		digestAlgorithm := asicManifestParserGetDigestAlgorithm(dataObjectReference)
@@ -162,7 +162,7 @@ func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.Manifest
 			entry.SetDigest(model.NewDigest(digestAlgorithm, digestValueBinary))
 		}
 
-		attribute := dataObjectReference.AttrValue("", ASiCManifestAttribute_ROOTFILE.AttributeName())
+		attribute := dataObjectReference.AttrValue("", ASiCManifestAttributeRootFile.AttributeName())
 		if utils.AreStringsEqualIgnoreCase("true", attribute) {
 			entry.SetRootfile(true)
 		}

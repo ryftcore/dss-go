@@ -26,7 +26,7 @@ func NewOCSPNoCheck() *OCSPNoCheck {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumOCSPNoCheck.OID()),
 	}
 }
 

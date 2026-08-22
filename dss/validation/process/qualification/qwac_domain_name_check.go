@@ -47,11 +47,11 @@ func (c *QWACDomainNameCheck) Process() bool {
 			continue
 		}
 		switch generalName.Type.GeneralNameType() {
-		case enumerations.GeneralNameType_DNS_NAME:
+		case enumerations.GeneralNameTypeDNSName:
 			if c.matchesDNSName(host, generalName.Value) {
 				return true
 			}
-		case enumerations.GeneralNameType_IP_ADDRESS:
+		case enumerations.GeneralNameTypeIPAddress:
 			if c.matchesIPAddress(host, generalName.Value) {
 				return true
 			}
@@ -126,7 +126,7 @@ func (c *QWACDomainNameCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QWACDomainNameCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

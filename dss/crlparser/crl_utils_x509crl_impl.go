@@ -207,10 +207,10 @@ func crlUtilsX509CRLImplBuildCRLValidity(crlBinary *CRLBinary, issuerToken *mode
 
 	crlUtilsCheckSignatureValue(revocationList, issuerToken, crlValidity)
 	if crlValidity.IsSignatureIntact() {
-		crlSign := issuerToken.CheckKeyUsage(enumerations.KeyUsageBit_CRL_SIGN)
+		crlSign := issuerToken.CheckKeyUsage(enumerations.KeyUsageBitCRLSign)
 		if !crlSign {
 			crlValidity.SetSignatureInvalidityReason(
-				fmt.Sprintf("CRL issuer does not have '%s' key usage!", enumerations.KeyUsageBit_CRL_SIGN.Value()))
+				fmt.Sprintf("CRL issuer does not have '%s' key usage!", enumerations.KeyUsageBitCRLSign.Value()))
 		}
 		crlValidity.SetCrlSignKeyUsage(crlSign)
 	}

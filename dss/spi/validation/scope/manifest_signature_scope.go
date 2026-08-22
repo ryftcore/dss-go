@@ -45,7 +45,7 @@ func (s *ManifestSignatureScope) Description(tokenIdentifierProvider model.Token
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *ManifestSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_FULL
+	return enumerations.SignatureScopeTypeFull
 }
 
 // compile-time interface assertion.

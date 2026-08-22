@@ -61,7 +61,7 @@ func NewEAAAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime tim
 	validationPolicy policy.ValidationPolicy) *EAAAcceptanceValidation {
 	c := &EAAAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, eaaWrapper, currentTime,
-			enumerations.Context_EAA, aovResult, validationPolicy),
+			enumerations.ContextEAA, aovResult, validationPolicy),
 		bbbs: bbbs,
 	}
 	c.InitChainBase(c)
@@ -79,11 +79,11 @@ func (c *EAAAcceptanceValidation) InitChain() {
 	c.FirstItem = item
 
 	item = item.SetNextItem(c.eaaType())
-	if enumerations.EAAType_SD_JWT_VC == c.token.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.token.EAAType() {
 		item = item.SetNextItem(c.typeIntegrityPresent())
 	}
 
-	if enumerations.EAAType_ISO_IEC_MDOC == c.token.EAAType() {
+	if enumerations.EAATypeISOIECMDoc == c.token.EAAType() {
 		item = item.SetNextItem(c.issuanceDatePresent())
 	}
 

@@ -66,8 +66,8 @@ func NewCryptographicSuite19322(metadata *CryptographicSuiteMetadata, algorithmL
 	return &CryptographicSuite19322{
 		metadata:      metadata,
 		algorithmList: algorithmList,
-		globalLevel:   enumerations.Level_FAIL,
-		algorithmsExpirationTimeAfterPolicyUpdateLevel: enumerations.Level_WARN,
+		globalLevel:   enumerations.LevelFail,
+		algorithmsExpirationTimeAfterPolicyUpdateLevel: enumerations.LevelWarn,
 	}
 }
 

@@ -14,7 +14,7 @@ type MimeType interface {
 
 // MimeTypeFromMimeTypeString returns the first representation of the
 // MimeType corresponding to the given mime-type string, composed of two
-// parts: a "type" and a "subtype". Falls back to MimeTypeEnum_BINARY if no
+// parts: a "type" and a "subtype". Falls back to MimeTypeEnumBinary if no
 // registered MimeTypeLoader recognizes the string.
 func MimeTypeFromMimeTypeString(mimeTypeString string) MimeType {
 	for _, loader := range mimeTypeLoaders() {
@@ -22,22 +22,22 @@ func MimeTypeFromMimeTypeString(mimeTypeString string) MimeType {
 			return mimeType
 		}
 	}
-	return MimeTypeEnum_BINARY
+	return MimeTypeEnumBinary
 }
 
 // MimeTypeFromFileExtension returns the MimeType matching the provided
-// fileExtension, or MimeTypeEnum_BINARY if none is found.
+// fileExtension, or MimeTypeEnumBinary if none is found.
 func MimeTypeFromFileExtension(fileExtension string) MimeType {
 	for _, loader := range mimeTypeLoaders() {
 		if mimeType := loader.FromFileExtension(fileExtension); mimeType != nil {
 			return mimeType
 		}
 	}
-	return MimeTypeEnum_BINARY
+	return MimeTypeEnumBinary
 }
 
 // MimeTypeFromFileName returns the mime-type extrapolated from the file
-// name, or MimeTypeEnum_BINARY if none is found.
+// name, or MimeTypeEnumBinary if none is found.
 //
 // Upstream distinguishes two "no extension" cases that both collapse to "" in Go:
 // getFileExtension returns null only for a null/blank file name, but returns an empty
@@ -53,7 +53,7 @@ func MimeTypeFromFileName(fileName string) MimeType {
 		lowerCaseExtension := strings.ToLower(fileExtension)
 		return MimeTypeFromFileExtension(lowerCaseExtension)
 	}
-	return MimeTypeEnum_BINARY
+	return MimeTypeEnumBinary
 }
 
 // MimeTypeFromFilePath returns the mime-type extrapolated from the base

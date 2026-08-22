@@ -45,7 +45,7 @@ func NewPastSignatureValidationCertificateRevocationSelectorResultCheck(i18nProv
 // BlockType returns the validating block type. Port of the overridden
 // getBlockType().
 func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PSV_CRS
+	return jaxb.XmlBlockTypePSVCRS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden

@@ -51,7 +51,7 @@ func (r *SimpleReport) GetSubIndication(tokenID string) enumerations.SubIndicati
 // validation PASSED. Port of isValid(String).
 func (r *SimpleReport) IsValid(tokenID string) bool {
 	ind := r.GetIndication(tokenID)
-	return ind == enumerations.Indication_TOTAL_PASSED || ind == enumerations.Indication_PASSED
+	return ind == enumerations.IndicationTotalPassed || ind == enumerations.IndicationPassed
 }
 
 // GetSignatureIdList retrieves the signature ids. Port of
@@ -232,7 +232,7 @@ func (r *SimpleReport) GetQualificationInfo(tokenID string) []Message {
 // GetSignatureQualification returns the signature type: QES, AdES, AdESqc,
 // NA. Port of getSignatureQualification(String).
 func (r *SimpleReport) GetSignatureQualification(signatureID string) enumerations.SignatureQualification {
-	qualif := enumerations.SignatureQualification_NA
+	qualif := enumerations.SignatureQualificationNA
 	sig := r.getSignatureByID(signatureID)
 	if sig != nil && sig.SignatureLevel != nil {
 		qualif = sig.SignatureLevel.Value.SignatureQualification()

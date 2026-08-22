@@ -34,15 +34,15 @@ import (
 // org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers constants upstream, hanging off
 // 1.2.840.113549.1.9.16.2, and keep their exact Java field name behind the "OID_" prefix.
 var (
-	// OID_id_aa_ets_revocationRefs is
+	// OIDIdAaEtsRevocationRefs is
 	// id-aa-ets-revocationRefs OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 22 }
-	OID_id_aa_ets_revocationRefs = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 22}
+	OIDIdAaEtsRevocationRefs = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 22}
 
-	// OID_id_aa_ets_revocationValues is
+	// OIDIdAaEtsRevocationValues is
 	// id-aa-ets-revocationValues OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 24 }
-	OID_id_aa_ets_revocationValues = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 24}
+	OIDIdAaEtsRevocationValues = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 24}
 )
 
 // -----------------------------------------------------------------------------
@@ -340,8 +340,8 @@ func (s *CMSCRLSource) extract() error {
 		 * OPTIONAL, ocspVals [1] SEQUENCE OF BasicOCSPResponse OPTIONAL, otherRevVals
 		 * [2] OtherRevVals OPTIONAL}
 		 */
-		s.collectRevocationValues(s.unsignedAttributes, OID_id_aa_ets_revocationValues,
-			enumerations.RevocationOrigin_REVOCATION_VALUES)
+		s.collectRevocationValues(s.unsignedAttributes, OIDIdAaEtsRevocationValues,
+			enumerations.RevocationOriginRevocationValues)
 
 		/*
 		 * ETSI TS 101 733 V2.2.1 (2013-04) pages 39,41 6.2.2
@@ -353,13 +353,13 @@ func (s *CMSCRLSource) extract() error {
 		 * OtherRevRefs OPTIONAL } AttributeRevocationRefs ::= SEQUENCE OF CrlOcspRef
 		 * (the same as for CompleteRevocationRefs)
 		 */
-		s.collectRevocationRefs(OID_id_aa_ets_revocationRefs, enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
+		s.collectRevocationRefs(OIDIdAaEtsRevocationRefs, enumerations.RevocationRefOriginCompleteRevocationRefs)
 
 		/*
 		 * id-aa-ets-attrRevocationRefs OBJECT IDENTIFIER ::= { iso(1) member-body(2)
 		 * us(840) rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 45}
 		 */
-		s.collectRevocationRefs(OID_attributeRevocationRefsOid, enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+		s.collectRevocationRefs(OIDAttributeRevocationRefsOid, enumerations.RevocationRefOriginAttributeRevocationRefs)
 	}
 	return nil
 }
@@ -367,7 +367,7 @@ func (s *CMSCRLSource) extract() error {
 // collectFromSignedData ports the private collectFromSignedData().
 func (s *CMSCRLSource) collectFromSignedData() error {
 	for _, x509CRLHolder := range s.crls {
-		if err := s.AddX509CRLHolder(x509CRLHolder, enumerations.RevocationOrigin_CMS_SIGNED_DATA); err != nil {
+		if err := s.AddX509CRLHolder(x509CRLHolder, enumerations.RevocationOriginCMSSignedData); err != nil {
 			return err
 		}
 	}

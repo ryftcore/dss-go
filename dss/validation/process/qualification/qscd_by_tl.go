@@ -29,7 +29,7 @@ func newQSCDByTL(trustService *diagnostic.TrustServiceWrapper, qualified enumera
 // QSCDStatus is the port of the overridden getQSCDStatus().
 func (q *qscdByTL) QSCDStatus() enumerations.QSCDStatus {
 	if q.trustService == nil || !enumerations.CertificateQualifiedStatusIsQC(q.qualified) {
-		return enumerations.QSCDStatus_NOT_QSCD
+		return enumerations.QSCDStatusNotQSCD
 	}
 
 	capturedQualifiers := q.trustService.CapturedQualifierUris()
@@ -38,19 +38,19 @@ func (q *qscdByTL) QSCDStatus() enumerations.QSCDStatus {
 	if utils.IsCollectionNotEmpty(capturedQualifiers) {
 		if IsPostEIDAS(q.trustService.StartDate) {
 			if enumerations.ServiceQualificationIsQcWithQSCD(capturedQualifiers) || enumerations.ServiceQualificationIsQcQSCDManagedOnBehalf(capturedQualifiers) {
-				return enumerations.QSCDStatus_QSCD
+				return enumerations.QSCDStatusQSCD
 			} else if enumerations.ServiceQualificationIsQcQSCDStatusAsInCert(capturedQualifiers) {
 				return q.qscdFromCertificate.QSCDStatus()
 			} else if enumerations.ServiceQualificationIsQcNoQSCD(capturedQualifiers) {
-				return enumerations.QSCDStatus_NOT_QSCD
+				return enumerations.QSCDStatusNotQSCD
 			}
 		} else { // pre eIDAS
 			if enumerations.ServiceQualificationIsQcWithSSCD(capturedQualifiers) {
-				return enumerations.QSCDStatus_QSCD
+				return enumerations.QSCDStatusQSCD
 			} else if enumerations.ServiceQualificationIsQcSSCDStatusAsInCert(capturedQualifiers) {
 				return q.qscdFromCertificate.QSCDStatus()
 			} else if enumerations.ServiceQualificationIsQcNoSSCD(capturedQualifiers) {
-				return enumerations.QSCDStatus_NOT_QSCD
+				return enumerations.QSCDStatusNotQSCD
 			}
 		}
 	}

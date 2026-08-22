@@ -54,7 +54,7 @@ func (c *AllFilesSignedCheck) relatedManifestFile(signatureFilename string) *dia
 func (c *AllFilesSignedCheck) coveredFilesFromScope() []string {
 	var result []string
 	for _, sigScope := range c.signature.SignatureScopes() {
-		if sigScope.Scope != nil && sigScope.Scope.SignatureScopeType() == enumerations.SignatureScopeType_FULL {
+		if sigScope.Scope != nil && sigScope.Scope.SignatureScopeType() == enumerations.SignatureScopeTypeFull {
 			name := ""
 			if sigScope.Name != nil {
 				name = *sigScope.Name
@@ -73,9 +73,9 @@ func (c *AllFilesSignedCheck) Process() bool {
 	}
 
 	// ASiC-S -> nb files = 1
-	if containerType == enumerations.ASiCContainerType_ASiC_S {
+	if containerType == enumerations.ASiCContainerTypeASiCS {
 		return len(c.containerInfo.ContentFiles.All()) == 1
-	} else if containerType == enumerations.ASiCContainerType_ASiC_E {
+	} else if containerType == enumerations.ASiCContainerTypeASiCE {
 		signatureFilename := c.signature.Filename()
 		contentFiles := c.containerInfo.ContentFiles.All()
 
@@ -88,13 +88,13 @@ func (c *AllFilesSignedCheck) Process() bool {
 			if !coversAllOriginalFiles(coveredFiles, contentFiles) {
 				return false
 			}
-		} else if signatureForm == enumerations.SignatureForm_CAdES {
+		} else if signatureForm == enumerations.SignatureFormCAdES {
 			// CAdES -> manifest file shall be present and signed
 			return false
 		}
 
 		// XAdES -> check signature scope
-		if signatureForm == enumerations.SignatureForm_XAdES {
+		if signatureForm == enumerations.SignatureFormXAdES {
 			return coversAllOriginalFiles(c.coveredFilesFromScope(), contentFiles)
 		}
 
@@ -114,10 +114,10 @@ func (c *AllFilesSignedCheck) ErrorMessageTag() i18n.MessageTag {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *AllFilesSignedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *AllFilesSignedCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

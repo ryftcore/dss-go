@@ -38,57 +38,57 @@ var sigQualifs = func() [3][12]enumerations.SignatureQualification {
 
 	// AdES
 
-	q[sigQualAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualification_QESIG
-	q[sigQualAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualification_QESEAL
-	q[sigQualAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualification_UNKNOWN_QC_QSCD
+	q[sigQualAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualificationQESig
+	q[sigQualAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualificationQESeal
+	q[sigQualAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualificationUnknownQCQSCD
 
-	q[sigQualAdes][sigQualCertForEsig] = enumerations.SignatureQualification_ADESIG_QC
-	q[sigQualAdes][sigQualCertForEseal] = enumerations.SignatureQualification_ADESEAL_QC
-	q[sigQualAdes][sigQualCertForWsa] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualAdes][sigQualCertForUnknown] = enumerations.SignatureQualification_UNKNOWN_QC
+	q[sigQualAdes][sigQualCertForEsig] = enumerations.SignatureQualificationAdESigQC
+	q[sigQualAdes][sigQualCertForEseal] = enumerations.SignatureQualificationAdESealQC
+	q[sigQualAdes][sigQualCertForWsa] = enumerations.SignatureQualificationNotAdES
+	q[sigQualAdes][sigQualCertForUnknown] = enumerations.SignatureQualificationUnknownQC
 
-	q[sigQualAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualification_ADESIG
-	q[sigQualAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualification_ADESEAL
-	q[sigQualAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualification_UNKNOWN
+	q[sigQualAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualificationAdESig
+	q[sigQualAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualificationAdESeal
+	q[sigQualAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualificationNotAdES
+	q[sigQualAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualificationUnknown
 
-	q[sigQualAdes][sigQualNa] = enumerations.SignatureQualification_NA
+	q[sigQualAdes][sigQualNa] = enumerations.SignatureQualificationNA
 
 	// Indeterminate AdES
 
-	q[sigQualIndeterminateAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualification_INDETERMINATE_QESIG
-	q[sigQualIndeterminateAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualification_INDETERMINATE_QESEAL
-	q[sigQualIndeterminateAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualification_INDETERMINATE_UNKNOWN_QC_QSCD
+	q[sigQualIndeterminateAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualificationIndeterminateQESig
+	q[sigQualIndeterminateAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualificationIndeterminateQESeal
+	q[sigQualIndeterminateAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualificationIndeterminateUnknownQCQSCD
 
-	q[sigQualIndeterminateAdes][sigQualCertForEsig] = enumerations.SignatureQualification_INDETERMINATE_ADESIG_QC
-	q[sigQualIndeterminateAdes][sigQualCertForEseal] = enumerations.SignatureQualification_INDETERMINATE_ADESEAL_QC
-	q[sigQualIndeterminateAdes][sigQualCertForWsa] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualIndeterminateAdes][sigQualCertForUnknown] = enumerations.SignatureQualification_INDETERMINATE_UNKNOWN_QC
+	q[sigQualIndeterminateAdes][sigQualCertForEsig] = enumerations.SignatureQualificationIndeterminateAdESigQC
+	q[sigQualIndeterminateAdes][sigQualCertForEseal] = enumerations.SignatureQualificationIndeterminateAdESealQC
+	q[sigQualIndeterminateAdes][sigQualCertForWsa] = enumerations.SignatureQualificationNotAdES
+	q[sigQualIndeterminateAdes][sigQualCertForUnknown] = enumerations.SignatureQualificationIndeterminateUnknownQC
 
-	q[sigQualIndeterminateAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualification_INDETERMINATE_ADESIG
-	q[sigQualIndeterminateAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualification_INDETERMINATE_ADESEAL
-	q[sigQualIndeterminateAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualIndeterminateAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualification_INDETERMINATE_UNKNOWN
+	q[sigQualIndeterminateAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualificationIndeterminateAdESig
+	q[sigQualIndeterminateAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualificationIndeterminateAdESeal
+	q[sigQualIndeterminateAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualificationNotAdES
+	q[sigQualIndeterminateAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualificationIndeterminateUnknown
 
-	q[sigQualIndeterminateAdes][sigQualNa] = enumerations.SignatureQualification_NA
+	q[sigQualIndeterminateAdes][sigQualNa] = enumerations.SignatureQualificationNA
 
 	// Not AdES
 
-	q[sigQualNotAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualification_NOT_ADES_QC_QSCD
-	q[sigQualNotAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualification_NOT_ADES_QC_QSCD
-	q[sigQualNotAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualification_NOT_ADES_QC_QSCD
+	q[sigQualNotAdes][sigQualCertForEsigQscd] = enumerations.SignatureQualificationNotAdESQCQSCD
+	q[sigQualNotAdes][sigQualCertForEsealQscd] = enumerations.SignatureQualificationNotAdESQCQSCD
+	q[sigQualNotAdes][sigQualCertForUnknownQscd] = enumerations.SignatureQualificationNotAdESQCQSCD
 
-	q[sigQualNotAdes][sigQualCertForEsig] = enumerations.SignatureQualification_NOT_ADES_QC
-	q[sigQualNotAdes][sigQualCertForEseal] = enumerations.SignatureQualification_NOT_ADES_QC
-	q[sigQualNotAdes][sigQualCertForWsa] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualNotAdes][sigQualCertForUnknown] = enumerations.SignatureQualification_NOT_ADES_QC
+	q[sigQualNotAdes][sigQualCertForEsig] = enumerations.SignatureQualificationNotAdESQC
+	q[sigQualNotAdes][sigQualCertForEseal] = enumerations.SignatureQualificationNotAdESQC
+	q[sigQualNotAdes][sigQualCertForWsa] = enumerations.SignatureQualificationNotAdES
+	q[sigQualNotAdes][sigQualCertForUnknown] = enumerations.SignatureQualificationNotAdESQC
 
-	q[sigQualNotAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualNotAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualNotAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualification_NOT_ADES
-	q[sigQualNotAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualification_NOT_ADES
+	q[sigQualNotAdes][sigQualCertForEsigPlain] = enumerations.SignatureQualificationNotAdES
+	q[sigQualNotAdes][sigQualCertForEsealPlain] = enumerations.SignatureQualificationNotAdES
+	q[sigQualNotAdes][sigQualCertForWsaPlain] = enumerations.SignatureQualificationNotAdES
+	q[sigQualNotAdes][sigQualCertForUnknownPlain] = enumerations.SignatureQualificationNotAdES
 
-	q[sigQualNotAdes][sigQualNa] = enumerations.SignatureQualification_NOT_ADES
+	q[sigQualNotAdes][sigQualNa] = enumerations.SignatureQualificationNotAdES
 
 	return q
 }()
@@ -105,11 +105,11 @@ func SigQualificationMatrixGetSignatureQualification(ades enumerations.Indicatio
 // getInt(Indication).
 func sigQualificationMatrixGetIndicationInt(indication enumerations.Indication) int {
 	switch indication {
-	case enumerations.Indication_FAILED, enumerations.Indication_TOTAL_FAILED:
+	case enumerations.IndicationFailed, enumerations.IndicationTotalFailed:
 		return 0
-	case enumerations.Indication_PASSED, enumerations.Indication_TOTAL_PASSED:
+	case enumerations.IndicationPassed, enumerations.IndicationTotalPassed:
 		return 1
-	case enumerations.Indication_INDETERMINATE:
+	case enumerations.IndicationIndeterminate:
 		return 2
 	default:
 		panic(fmt.Sprintf("Unsupported indication %s", indication))
@@ -120,29 +120,29 @@ func sigQualificationMatrixGetIndicationInt(indication enumerations.Indication) 
 // getInt(CertificateQualification).
 func sigQualificationMatrixGetCertQualificationInt(certQualification enumerations.CertificateQualification) int {
 	switch certQualification {
-	case enumerations.CertificateQualification_QCERT_FOR_ESIG_QSCD:
+	case enumerations.CertificateQualificationQCERTForESigQSCD:
 		return sigQualCertForEsigQscd
-	case enumerations.CertificateQualification_QCERT_FOR_ESEAL_QSCD:
+	case enumerations.CertificateQualificationQCERTForESealQSCD:
 		return sigQualCertForEsealQscd
-	case enumerations.CertificateQualification_QCERT_FOR_UNKNOWN_QSCD:
+	case enumerations.CertificateQualificationQCERTForUnknownQSCD:
 		return sigQualCertForUnknownQscd
-	case enumerations.CertificateQualification_QCERT_FOR_ESIG:
+	case enumerations.CertificateQualificationQCERTForESig:
 		return sigQualCertForEsig
-	case enumerations.CertificateQualification_QCERT_FOR_ESEAL:
+	case enumerations.CertificateQualificationQCERTForESeal:
 		return sigQualCertForEseal
-	case enumerations.CertificateQualification_QCERT_FOR_WSA:
+	case enumerations.CertificateQualificationQCERTForWSA:
 		return sigQualCertForWsa
-	case enumerations.CertificateQualification_QCERT_FOR_UNKNOWN:
+	case enumerations.CertificateQualificationQCERTForUnknown:
 		return sigQualCertForUnknown
-	case enumerations.CertificateQualification_CERT_FOR_ESIG:
+	case enumerations.CertificateQualificationCertForESig:
 		return sigQualCertForEsigPlain
-	case enumerations.CertificateQualification_CERT_FOR_ESEAL:
+	case enumerations.CertificateQualificationCertForESeal:
 		return sigQualCertForEsealPlain
-	case enumerations.CertificateQualification_CERT_FOR_WSA:
+	case enumerations.CertificateQualificationCertForWSA:
 		return sigQualCertForWsaPlain
-	case enumerations.CertificateQualification_CERT_FOR_UNKNOWN:
+	case enumerations.CertificateQualificationCertForUnknown:
 		return sigQualCertForUnknownPlain
-	case enumerations.CertificateQualification_NA:
+	case enumerations.CertificateQualificationNA:
 		return sigQualNa
 	default:
 		panic(fmt.Sprintf("Unsupported certificate qualification %s", certQualification))

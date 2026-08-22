@@ -13,28 +13,41 @@ Reviewers reject deviations.
 
 ## Enums
 
-Java enums become typed string constants whose **value is exactly Java's `name()`** (serialization compatibility). Because Go constants share one package namespace while Java's are class-scoped, every constant is uniformly named `<TypeName>_<JAVA_NAME>`:
+Java enums become typed string constants whose **value is exactly Java's `name()`** (serialization compatibility). Because Go constants share one package namespace while Java's are class-scoped, the type name is a prefix; the constant is then spelled in Go **MixedCaps**, never `Type_JAVA_NAME`:
 
 ```go
 type SignatureLevel string
 
 const (
-    SignatureLevel_XAdES_BASELINE_B SignatureLevel = "XAdES_BASELINE_B"
+    SignatureLevelXAdESBaselineB SignatureLevel = "XAdES_BASELINE_B"
     ...
 )
 
 type DigestAlgorithm string
 
 const (
-    DigestAlgorithm_SHA256 DigestAlgorithm = "SHA256"
+    DigestAlgorithmSHA256 DigestAlgorithm = "SHA256"
     ...
 )
 ```
 
+The **value is never touched** by this spelling rule. Enum values, XML element and attribute names, i18n message keys, OIDs, URIs, MIME types and JSON keys stay byte-identical to upstream; only the Go identifier is Go-shaped.
+
+Naming a constant, given Java's `TYPE` + `NAME`: split `NAME` on `_`, then join the parts with no separator, rendering each part as follows.
+
+- A part that is already mixed-case is kept verbatim, with its first rune upper-cased: `XAdES`, `CAdES`, `PAdES`, `JAdES`, `ASiC`, `AdES`, `signingCertificate` → `SigningCertificate`.
+- A purely numeric part is kept verbatim and simply concatenated: `XAdES_141` → `XAdES141`, `P_256` → `P256`.
+- An all-caps part that is a **crypto or standards initialism** stays upper-case: `SHA1 SHA3 SHA256 SHA384 SHA512 SHAKE256 MD5 RIPEMD160 RSA RSASSA PSS ECDSA DSA EDDSA HMAC MGF1 ASN1 DER PEM BER CER CMS CRL OCSP TSA TSL TSP TST TL LOTL MRA PKI PKCS PKCS7 PKCS12 SPKI X509 X400 X448 ED25519 XML XMLDSIG XPATH XSD JSON JWS JWT JOSE PDF PNG SVG JPEG MIME HTML HTTP HTTPS URI URL URN UID UUID UTC ID DN CA CN AIA OID EU ETSI IEC ISO RFC W3C QC QSCD QTSP QTSA QWAC PSD2 EEA LDAP FTP TLS SSL GCM MAC B64 UTF8 SECP` — plus the ETSI validation-process block codes (`BBB XCV CV SAV FC ICS PSV VCI ADEST …`).
+- Any other all-caps part is Titlecased word by word: `BASELINE` → `Baseline`, `FOR` → `For`, `SIGNING` → `Signing`, `COMMONNAME` → `CommonName`, `ESIGNATURES` → `ESignatures`.
+- An all-caps part that is an opaque domain code with no word structure stays upper-case: `MessageTag_BBB_XCV_CCCBB` → `MessageTagBBBXCVCCCBB`.
+- In the `OID_*` families, the lowercase ASN.1 arc labels are Titlecased, not initialism-uppercased, because the alternative is unreadable: `OID_id_aa_ets_archiveTimestampV3` → `OIDIdAaEtsArchiveTimestampV3`.
+
+`Test*`/`Example*` function names keep their underscores — that is idiomatic Go (sub-test and example association), not Java naming.
+
 - Instance methods → methods on the type; multi-field enums (OID, URI, code…) back their methods with package-level lookup tables defined next to the constants.
 - Static factories keep their contract: `valueOf` → `SignatureLevelValueOf(string) (SignatureLevel, error)`; `forOid`/`forUri`/`forName` → `SignatureAlgorithmForOID(...)` etc. Java's thrown `IllegalArgumentException` becomes a returned error.
 - Marker interfaces (`OidBasedEnum`, `UriBasedEnum`, …) → Go interfaces in `enumerations`.
-- **Never invent, abbreviate, or "fix" an OID, URI, or enum name.** Copy them from upstream verbatim.
+- **Never invent, abbreviate, or "fix" an OID, a URI, or an enum VALUE.** Copy them from upstream verbatim. This is about the wire: the Go *identifier* is MixedCaps per the rule above, but the string it is bound to is upstream's, byte for byte.
 
 ## Errors, exceptions, alerts
 

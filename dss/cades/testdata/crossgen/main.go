@@ -62,10 +62,10 @@ func main() {
 	// "1.2.3.4.5.6.7.8.9" style placeholders play in DSS's own KeyEntityTSPSource unit tests.
 	tspSource.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
 
-	if err := generateEnveloping(outDir, "cades-b-enveloping.p7m", enumerations.SignatureLevel_CAdES_BASELINE_B, signerEntry, nil); err != nil {
+	if err := generateEnveloping(outDir, "cades-b-enveloping.p7m", enumerations.SignatureLevelCAdESBaselineB, signerEntry, nil); err != nil {
 		fail(fmt.Errorf("generating CAdES-B enveloping: %w", err))
 	}
-	if err := generateEnveloping(outDir, "cades-t-enveloping.p7m", enumerations.SignatureLevel_CAdES_BASELINE_T, signerEntry, tspSource); err != nil {
+	if err := generateEnveloping(outDir, "cades-t-enveloping.p7m", enumerations.SignatureLevelCAdESBaselineT, signerEntry, tspSource); err != nil {
 		fail(fmt.Errorf("generating CAdES-T enveloping: %w", err))
 	}
 	if err := generateDetached(outDir, signerEntry); err != nil {
@@ -110,7 +110,7 @@ func newParameters(level enumerations.SignatureLevel, packaging enumerations.Sig
 	parameters := cades.NewCAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(packaging)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	return parameters
@@ -120,7 +120,7 @@ func newParameters(level enumerations.SignatureLevel, packaging enumerations.Sig
 // given level and writes it to outDir/name.
 func generateEnveloping(outDir, name string, level enumerations.SignatureLevel,
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
-	parameters := newParameters(level, enumerations.SignaturePackaging_ENVELOPING, signerEntry)
+	parameters := newParameters(level, enumerations.SignaturePackagingEnveloping, signerEntry)
 
 	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
@@ -148,7 +148,7 @@ func generateEnveloping(outDir, name string, level enumerations.SignatureLevel,
 // GO direction does for the one genuinely detached fixture it carries, testdata/upstream/
 // validation/dss-1188).
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
-	parameters := newParameters(enumerations.SignatureLevel_CAdES_BASELINE_B, enumerations.SignaturePackaging_DETACHED, signerEntry)
+	parameters := newParameters(enumerations.SignatureLevelCAdESBaselineB, enumerations.SignaturePackagingDetached, signerEntry)
 
 	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
 	toSignDocument := model.NewInMemoryDocumentWithName(sampleContent, "sample-detached.bin")

@@ -10,44 +10,44 @@ package spi
 type OCSPRespStatus string
 
 const (
-	// OCSPRespStatus_SUCCESSFUL means the response has valid confirmations.
-	OCSPRespStatus_SUCCESSFUL OCSPRespStatus = "SUCCESSFUL"
-	// OCSPRespStatus_MALFORMED_REQUEST means the confirmation request was illegal.
-	OCSPRespStatus_MALFORMED_REQUEST OCSPRespStatus = "MALFORMED_REQUEST"
-	// OCSPRespStatus_INTERNAL_ERROR means an internal error occurred in the issuer.
-	OCSPRespStatus_INTERNAL_ERROR OCSPRespStatus = "INTERNAL_ERROR"
-	// OCSPRespStatus_TRY_LATER means the requester should try again later.
-	OCSPRespStatus_TRY_LATER OCSPRespStatus = "TRY_LATER"
-	// OCSPRespStatus_UNKNOWN_STATUS covers the value (4), which RFC 6960 does not use.
-	OCSPRespStatus_UNKNOWN_STATUS OCSPRespStatus = "UNKNOWN_STATUS"
-	// OCSPRespStatus_SIG_REQUIRED means the request must be signed.
-	OCSPRespStatus_SIG_REQUIRED OCSPRespStatus = "SIG_REQUIRED"
-	// OCSPRespStatus_UNAUTHORIZED means the request is unauthorized.
-	OCSPRespStatus_UNAUTHORIZED OCSPRespStatus = "UNAUTHORIZED"
+	// OCSPRespStatusSuccessful means the response has valid confirmations.
+	OCSPRespStatusSuccessful OCSPRespStatus = "SUCCESSFUL"
+	// OCSPRespStatusMalformedRequest means the confirmation request was illegal.
+	OCSPRespStatusMalformedRequest OCSPRespStatus = "MALFORMED_REQUEST"
+	// OCSPRespStatusInternalError means an internal error occurred in the issuer.
+	OCSPRespStatusInternalError OCSPRespStatus = "INTERNAL_ERROR"
+	// OCSPRespStatusTryLater means the requester should try again later.
+	OCSPRespStatusTryLater OCSPRespStatus = "TRY_LATER"
+	// OCSPRespStatusUnknownStatus covers the value (4), which RFC 6960 does not use.
+	OCSPRespStatusUnknownStatus OCSPRespStatus = "UNKNOWN_STATUS"
+	// OCSPRespStatusSigRequired means the request must be signed.
+	OCSPRespStatusSigRequired OCSPRespStatus = "SIG_REQUIRED"
+	// OCSPRespStatusUnauthorized means the request is unauthorized.
+	OCSPRespStatusUnauthorized OCSPRespStatus = "UNAUTHORIZED"
 )
 
 // ocspRespStatusCodes maps every status onto its RFC 6960 code.
 var ocspRespStatusCodes = map[OCSPRespStatus]int{
-	OCSPRespStatus_SUCCESSFUL:        OCSPResponseStatusSuccessful,
-	OCSPRespStatus_MALFORMED_REQUEST: OCSPResponseStatusMalformedRequest,
-	OCSPRespStatus_INTERNAL_ERROR:    OCSPResponseStatusInternalError,
-	OCSPRespStatus_TRY_LATER:         OCSPResponseStatusTryLater,
-	OCSPRespStatus_UNKNOWN_STATUS:    4,
-	OCSPRespStatus_SIG_REQUIRED:      OCSPResponseStatusSigRequired,
-	OCSPRespStatus_UNAUTHORIZED:      OCSPResponseStatusUnauthorized,
+	OCSPRespStatusSuccessful:       OCSPResponseStatusSuccessful,
+	OCSPRespStatusMalformedRequest: OCSPResponseStatusMalformedRequest,
+	OCSPRespStatusInternalError:    OCSPResponseStatusInternalError,
+	OCSPRespStatusTryLater:         OCSPResponseStatusTryLater,
+	OCSPRespStatusUnknownStatus:    4,
+	OCSPRespStatusSigRequired:      OCSPResponseStatusSigRequired,
+	OCSPRespStatusUnauthorized:     OCSPResponseStatusUnauthorized,
 }
 
 // OCSPRespStatusValues returns the statuses in their Java declaration order.
 // Port of OCSPRespStatus.values().
 func OCSPRespStatusValues() []OCSPRespStatus {
 	return []OCSPRespStatus{
-		OCSPRespStatus_SUCCESSFUL,
-		OCSPRespStatus_MALFORMED_REQUEST,
-		OCSPRespStatus_INTERNAL_ERROR,
-		OCSPRespStatus_TRY_LATER,
-		OCSPRespStatus_UNKNOWN_STATUS,
-		OCSPRespStatus_SIG_REQUIRED,
-		OCSPRespStatus_UNAUTHORIZED,
+		OCSPRespStatusSuccessful,
+		OCSPRespStatusMalformedRequest,
+		OCSPRespStatusInternalError,
+		OCSPRespStatusTryLater,
+		OCSPRespStatusUnknownStatus,
+		OCSPRespStatusSigRequired,
+		OCSPRespStatusUnauthorized,
 	}
 }
 
@@ -59,7 +59,7 @@ func OCSPRespStatusFromInt(value int) OCSPRespStatus {
 			return status
 		}
 	}
-	return OCSPRespStatus_UNKNOWN_STATUS
+	return OCSPRespStatusUnknownStatus
 }
 
 // StatusCode returns the RFC 6960 code of the status. Port of getStatusCode().

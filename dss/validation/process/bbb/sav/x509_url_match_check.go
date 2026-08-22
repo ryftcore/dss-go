@@ -38,7 +38,7 @@ func (c *X509UrlMatchCheck) Process() bool {
 	if signingCertificate == nil {
 		return false
 	}
-	x509UrlCertificates := c.signature.FoundCertificates().RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_X509_URL)
+	x509UrlCertificates := c.signature.FoundCertificates().RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginX509URL)
 	for _, r := range x509UrlCertificates {
 		if signingCertificate.Id() == r.Id() {
 			return true
@@ -61,11 +61,11 @@ func (c *X509UrlMatchCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *X509UrlMatchCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *X509UrlMatchCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

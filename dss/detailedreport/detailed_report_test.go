@@ -57,20 +57,20 @@ func TestDetailedReport_dr1(t *testing.T) {
 
 	// The Signature's own top-level Conclusion/Indication is TOTAL_PASSED
 	// (the last <Indication> before </Signature> in dr1.xml).
-	if got := r.FinalIndication(sigId); got != enumerations.Indication_TOTAL_PASSED {
+	if got := r.FinalIndication(sigId); got != enumerations.IndicationTotalPassed {
 		t.Errorf("FinalIndication(sigId) = %v, want TOTAL_PASSED", got)
 	}
-	if got := r.BasicValidationIndication(sigId); got != enumerations.Indication_PASSED {
+	if got := r.BasicValidationIndication(sigId); got != enumerations.IndicationPassed {
 		t.Errorf("BasicValidationIndication(sigId) = %v, want PASSED", got)
 	}
 
 	// <ValidationSignatureQualification SignatureQualification="QESig" ...>
-	if got := r.SignatureQualification(sigId); got != enumerations.SignatureQualification_QESIG {
+	if got := r.SignatureQualification(sigId); got != enumerations.SignatureQualificationQESig {
 		t.Errorf("SignatureQualification(sigId) = %v, want QESig", got)
 	}
 
 	// <ValidationTimestampQualification TimestampQualification="QTSA" ...>
-	if got := r.TimestampQualification(tstId); got != enumerations.TimestampQualification_QTSA {
+	if got := r.TimestampQualification(tstId); got != enumerations.TimestampQualificationQTSA {
 		t.Errorf("TimestampQualification(tstId) = %v, want QTSA", got)
 	}
 
@@ -81,10 +81,10 @@ func TestDetailedReport_dr1(t *testing.T) {
 	if bbb == nil {
 		t.Fatal("BasicBuildingBlockById(sigId) = nil")
 	}
-	if got := bbb.Type.Context(); got != enumerations.Context_SIGNATURE {
+	if got := bbb.Type.Context(); got != enumerations.ContextSignature {
 		t.Errorf("bbb.Type = %v, want SIGNATURE", got)
 	}
-	if got := r.BasicBuildingBlocksIndication(sigId); got != enumerations.Indication_PASSED {
+	if got := r.BasicBuildingBlocksIndication(sigId); got != enumerations.IndicationPassed {
 		t.Errorf("BasicBuildingBlocksIndication(sigId) = %v, want PASSED", got)
 	}
 
@@ -115,7 +115,7 @@ func TestDetailedReport_dr1_HighestConclusion(t *testing.T) {
 	// dr1.xml's signature has no ValidationProcessLongTermData/ArchivalData
 	// block (short-term validation only), so the highest reached level is the
 	// basic validation process, whose Conclusion.Indication is PASSED.
-	if got := highest.Conclusion.Indication.Indication(); got != enumerations.Indication_PASSED {
+	if got := highest.Conclusion.Indication.Indication(); got != enumerations.IndicationPassed {
 		t.Errorf("HighestConclusion(sigId).Conclusion.Indication = %v, want PASSED", got)
 	}
 
@@ -163,10 +163,10 @@ func TestDetailedReport_Fill(t *testing.T) {
 		t.Errorf("BasicBuildingBlockById(S-FILL).VTS.TrustAnchor = %v, want C-ANCHOR", bbb)
 	}
 
-	if got := r.TimestampQualification("T-FILL"); got != enumerations.TimestampQualification_QTSA {
+	if got := r.TimestampQualification("T-FILL"); got != enumerations.TimestampQualificationQTSA {
 		t.Errorf("TimestampQualification(T-FILL) = %v, want QTSA", got)
 	}
-	if got := r.TimestampQualificationAtTstGenerationTime("T-FILL"); got != enumerations.TimestampQualification_QTSA {
+	if got := r.TimestampQualificationAtTstGenerationTime("T-FILL"); got != enumerations.TimestampQualificationQTSA {
 		t.Errorf("TimestampQualificationAtTstGenerationTime(T-FILL) = %v, want QTSA", got)
 	}
 	// No AtTime block was set for TIMESTAMP_POE_TIME, so this should be "".

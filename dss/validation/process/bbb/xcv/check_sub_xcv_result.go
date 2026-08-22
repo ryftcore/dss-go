@@ -31,7 +31,7 @@ func NewCheckSubXCVResult(i18nProvider *i18n.I18nProvider, result *process.Resul
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *CheckSubXCVResult) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_SUB_XCV
+	return jaxb.XmlBlockTypeSubXCV
 }
 
 // Process performs the check. Port of process().

@@ -85,7 +85,7 @@ func TestCertificateSourcesAcceptCertificatesFromTheirConstructors(t *testing.T)
 	})
 
 	t.Run("KeyStoreCertificateSource", func(t *testing.T) {
-		source, err := NewKeyStoreCertificateSource(KeyStoreCertificateSourceType_PEM, nil)
+		source, err := NewKeyStoreCertificateSource(KeyStoreCertificateSourceTypePEM, nil)
 		if err != nil {
 			t.Fatalf("NewKeyStoreCertificateSource: %v", err)
 		}

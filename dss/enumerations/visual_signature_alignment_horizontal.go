@@ -6,28 +6,28 @@ package enumerations
 type VisualSignatureAlignmentHorizontal string
 
 const (
-	// VisualSignatureAlignmentHorizontal_NONE is the default; the x axis is
+	// VisualSignatureAlignmentHorizontalNone is the default; the x axis is
 	// the x coordinate.
-	VisualSignatureAlignmentHorizontal_NONE VisualSignatureAlignmentHorizontal = "NONE"
-	// VisualSignatureAlignmentHorizontal_LEFT means the x axis is left
+	VisualSignatureAlignmentHorizontalNone VisualSignatureAlignmentHorizontal = "NONE"
+	// VisualSignatureAlignmentHorizontalLeft means the x axis is left
 	// padding.
-	VisualSignatureAlignmentHorizontal_LEFT VisualSignatureAlignmentHorizontal = "LEFT"
-	// VisualSignatureAlignmentHorizontal_CENTER means the x axis is
+	VisualSignatureAlignmentHorizontalLeft VisualSignatureAlignmentHorizontal = "LEFT"
+	// VisualSignatureAlignmentHorizontalCenter means the x axis is
 	// automatically calculated.
-	VisualSignatureAlignmentHorizontal_CENTER VisualSignatureAlignmentHorizontal = "CENTER"
-	// VisualSignatureAlignmentHorizontal_RIGHT means the x axis is right
+	VisualSignatureAlignmentHorizontalCenter VisualSignatureAlignmentHorizontal = "CENTER"
+	// VisualSignatureAlignmentHorizontalRight means the x axis is right
 	// padding.
-	VisualSignatureAlignmentHorizontal_RIGHT VisualSignatureAlignmentHorizontal = "RIGHT"
+	VisualSignatureAlignmentHorizontalRight VisualSignatureAlignmentHorizontal = "RIGHT"
 )
 
 // VisualSignatureAlignmentHorizontalValues returns all constants in
 // declaration order.
 func VisualSignatureAlignmentHorizontalValues() []VisualSignatureAlignmentHorizontal {
 	return []VisualSignatureAlignmentHorizontal{
-		VisualSignatureAlignmentHorizontal_NONE,
-		VisualSignatureAlignmentHorizontal_LEFT,
-		VisualSignatureAlignmentHorizontal_CENTER,
-		VisualSignatureAlignmentHorizontal_RIGHT,
+		VisualSignatureAlignmentHorizontalNone,
+		VisualSignatureAlignmentHorizontalLeft,
+		VisualSignatureAlignmentHorizontalCenter,
+		VisualSignatureAlignmentHorizontalRight,
 	}
 }
 

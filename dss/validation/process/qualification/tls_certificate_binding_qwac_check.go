@@ -32,7 +32,7 @@ func NewTLSCertificateBindingQWACCheck(i18nProvider *i18n.I18nProvider, result *
 
 // Process performs the check. Port of process().
 func (c *TLSCertificateBindingQWACCheck) Process() bool {
-	return enumerations.QWACProfile_QWAC_2 == c.qwacProfile
+	return enumerations.QWACProfileQWAC2 == c.qwacProfile
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -48,7 +48,7 @@ func (c *TLSCertificateBindingQWACCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingQWACCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

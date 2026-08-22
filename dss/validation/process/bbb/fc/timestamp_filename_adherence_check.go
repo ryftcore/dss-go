@@ -58,9 +58,9 @@ func (c *TimestampFilenameAdherenceCheck) Process() bool {
 		return false
 	}
 	switch c.DiagnosticData.ContainerType() {
-	case enumerations.ASiCContainerType_ASiC_S:
+	case enumerations.ASiCContainerTypeASiCS:
 		return c.isInitialTimestampToken(filename) || c.isArchiveTimestampToken(filename)
-	case enumerations.ASiCContainerType_ASiC_E:
+	case enumerations.ASiCContainerTypeASiCE:
 		return c.isTimestamp(filename)
 	default:
 		panic(fmt.Sprintf("Container type '%s' is not supported!", c.DiagnosticData.ContainerType()))

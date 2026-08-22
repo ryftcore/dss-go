@@ -8,27 +8,27 @@ import "fmt"
 type COSESignatureType string
 
 const (
-	// COSESignatureType_COSE_SIGN is for signatures using the
+	// COSESignatureTypeCoseSign is for signatures using the
 	// COSE_Signature structure.
-	COSESignatureType_COSE_SIGN COSESignatureType = "COSE_SIGN"
-	// COSESignatureType_COSE_SIGN1 is for signatures using the COSE_Sign1
+	COSESignatureTypeCoseSign COSESignatureType = "COSE_SIGN"
+	// COSESignatureTypeCoseSign1 is for signatures using the COSE_Sign1
 	// structure.
-	COSESignatureType_COSE_SIGN1 COSESignatureType = "COSE_SIGN1"
-	// COSESignatureType_COSE_SIGNATURE is for signatures using the
+	COSESignatureTypeCoseSign1 COSESignatureType = "COSE_SIGN1"
+	// COSESignatureTypeCoseSignature is for signatures using the
 	// COSE_Signature structure.
-	COSESignatureType_COSE_SIGNATURE COSESignatureType = "COSE_SIGNATURE"
-	// COSESignatureType_COSE_COUNTER_SIGNATURE is for full
+	COSESignatureTypeCoseSignature COSESignatureType = "COSE_SIGNATURE"
+	// COSESignatureTypeCoseCounterSignature is for full
 	// counter-signatures.
-	COSESignatureType_COSE_COUNTER_SIGNATURE COSESignatureType = "COSE_COUNTER_SIGNATURE"
-	// COSESignatureType_COSE_COUNTER_SIGNATURE0 is for abbreviated
+	COSESignatureTypeCoseCounterSignature COSESignatureType = "COSE_COUNTER_SIGNATURE"
+	// COSESignatureTypeCoseCounterSignature0 is for abbreviated
 	// counter-signatures0.
-	COSESignatureType_COSE_COUNTER_SIGNATURE0 COSESignatureType = "COSE_COUNTER_SIGNATURE0"
-	// COSESignatureType_COSE_COUNTER_SIGNATURE_V2 is for full
+	COSESignatureTypeCoseCounterSignature0 COSESignatureType = "COSE_COUNTER_SIGNATURE0"
+	// COSESignatureTypeCoseCounterSignatureV2 is for full
 	// counter-signatures with other_fields present.
-	COSESignatureType_COSE_COUNTER_SIGNATURE_V2 COSESignatureType = "COSE_COUNTER_SIGNATURE_V2"
-	// COSESignatureType_COSE_COUNTER_SIGNATURE0_V2 is for abbreviated
+	COSESignatureTypeCoseCounterSignatureV2 COSESignatureType = "COSE_COUNTER_SIGNATURE_V2"
+	// COSESignatureTypeCoseCounterSignature0V2 is for abbreviated
 	// counter-signatures0 with other_fields present.
-	COSESignatureType_COSE_COUNTER_SIGNATURE0_V2 COSESignatureType = "COSE_COUNTER_SIGNATURE0_V2"
+	COSESignatureTypeCoseCounterSignature0V2 COSESignatureType = "COSE_COUNTER_SIGNATURE0_V2"
 )
 
 type coseSignatureTypeFields struct {
@@ -49,38 +49,38 @@ type coseSignatureTypeFields struct {
 // Java's null fields are represented with the corresponding has* boolean set
 // to false.
 var coseSignatureTypeData = map[COSESignatureType]coseSignatureTypeFields{
-	COSESignatureType_COSE_SIGN: {
+	COSESignatureTypeCoseSign: {
 		context: "Signature", hasContext: true,
 		label: "COSE_Sign", hasLabel: true,
 		tag: 98, hasTag: true,
 	},
-	COSESignatureType_COSE_SIGN1: {
+	COSESignatureTypeCoseSign1: {
 		context: "Signature1", hasContext: true,
 		label: "COSE_Sign1", hasLabel: true,
 		tag: 18, hasTag: true,
 	},
-	COSESignatureType_COSE_SIGNATURE: {},
-	COSESignatureType_COSE_COUNTER_SIGNATURE: {
+	COSESignatureTypeCoseSignature: {},
+	COSESignatureTypeCoseCounterSignature: {
 		context: "CounterSignature", hasContext: true,
 		label: "COSE_Countersignature", hasLabel: true,
 		tag: 19, hasTag: true,
 		counterSignature: true, counterSignatureV2: false,
 		counterSignatureHeaderKey: 7, hasCounterSignatureHeaderKey: true,
 	},
-	COSESignatureType_COSE_COUNTER_SIGNATURE0: {
+	COSESignatureTypeCoseCounterSignature0: {
 		context: "CounterSignature0", hasContext: true,
 		label: "COSE_Countersignature0", hasLabel: true,
 		counterSignature: true, counterSignatureV2: false,
 		counterSignatureHeaderKey: 9, hasCounterSignatureHeaderKey: true,
 	},
-	COSESignatureType_COSE_COUNTER_SIGNATURE_V2: {
+	COSESignatureTypeCoseCounterSignatureV2: {
 		context: "CounterSignatureV2", hasContext: true,
 		label: "COSE_Countersignature_V2", hasLabel: true,
 		tag: 19, hasTag: true,
 		counterSignature: true, counterSignatureV2: true,
 		counterSignatureHeaderKey: 11, hasCounterSignatureHeaderKey: true,
 	},
-	COSESignatureType_COSE_COUNTER_SIGNATURE0_V2: {
+	COSESignatureTypeCoseCounterSignature0V2: {
 		context: "CounterSignature0V2", hasContext: true,
 		label: "COSE_Countersignature0_V2", hasLabel: true,
 		counterSignature: true, counterSignatureV2: true,
@@ -91,13 +91,13 @@ var coseSignatureTypeData = map[COSESignatureType]coseSignatureTypeFields{
 // COSESignatureTypeValues returns all constants in declaration order.
 func COSESignatureTypeValues() []COSESignatureType {
 	return []COSESignatureType{
-		COSESignatureType_COSE_SIGN,
-		COSESignatureType_COSE_SIGN1,
-		COSESignatureType_COSE_SIGNATURE,
-		COSESignatureType_COSE_COUNTER_SIGNATURE,
-		COSESignatureType_COSE_COUNTER_SIGNATURE0,
-		COSESignatureType_COSE_COUNTER_SIGNATURE_V2,
-		COSESignatureType_COSE_COUNTER_SIGNATURE0_V2,
+		COSESignatureTypeCoseSign,
+		COSESignatureTypeCoseSign1,
+		COSESignatureTypeCoseSignature,
+		COSESignatureTypeCoseCounterSignature,
+		COSESignatureTypeCoseCounterSignature0,
+		COSESignatureTypeCoseCounterSignatureV2,
+		COSESignatureTypeCoseCounterSignature0V2,
 	}
 }
 

@@ -241,7 +241,7 @@ func runDocumentValidatorSafely(doc model.DSSDocument) (r *reportsResult, err er
 		return nil, ferr
 	}
 	documentValidator.SetCertificateVerifier(permissiveCertificateVerifier())
-	documentValidator.SetValidationLevel(enumerations.ValidationLevel_ARCHIVAL_DATA)
+	documentValidator.SetValidationLevel(enumerations.ValidationLevelArchivalData)
 	documentValidator.SetLocale("en")
 	reports, verr := documentValidator.ValidateDocument()
 	if verr != nil {

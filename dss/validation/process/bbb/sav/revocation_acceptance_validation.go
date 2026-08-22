@@ -26,7 +26,7 @@ func NewRevocationAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentT
 	validationPolicy policy.ValidationPolicy) *RevocationAcceptanceValidation {
 	c := &RevocationAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, revocationWrapper, currentTime,
-			enumerations.Context_REVOCATION, aovResult, validationPolicy),
+			enumerations.ContextRevocation, aovResult, validationPolicy),
 	}
 	c.InitChainBase(c)
 	return c

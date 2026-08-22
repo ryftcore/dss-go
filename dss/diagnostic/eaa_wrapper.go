@@ -320,18 +320,18 @@ func (w *EAAWrapper) EAACategory() string {
 func (w *EAAWrapper) CategoryQualification() enumerations.EAAQualification {
 	eaaCategory := w.EAACategory()
 	switch {
-	case string(enumerations.EAACategory_EU_QEAA.URN()) == eaaCategory:
-		return enumerations.EAAQualification_QEAA
-	case string(enumerations.EAACategory_EU_PUBEAA.URN()) == eaaCategory:
-		return enumerations.EAAQualification_PUBEAA
+	case string(enumerations.EAACategoryEUQEAA.URN()) == eaaCategory:
+		return enumerations.EAAQualificationQEAA
+	case string(enumerations.EAACategoryEUPubEAA.URN()) == eaaCategory:
+		return enumerations.EAAQualificationPubEAA
 	case eaaCategory == "":
 		/*
 		 * EAA-5.2.2.1-01: SD-JWT VC EAAs issued by EAAs issuers registered in the European Union,
 		 * which are neither SD-JWT VC QEAAs nor SD-JWT VC PuB-EAAs, shall not include the category claim.
 		 */
-		return enumerations.EAAQualification_EAA
+		return enumerations.EAAQualificationEAA
 	default:
-		return enumerations.EAAQualification_UNKNOWN
+		return enumerations.EAAQualificationUnknown
 	}
 }
 

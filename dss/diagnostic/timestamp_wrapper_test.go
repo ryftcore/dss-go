@@ -25,9 +25,9 @@ func TestTimestampWrapper_TimestampedObjectCategories(t *testing.T) {
 	ts := &jaxb.XmlTimestamp{
 		TimestampedObjects: &jaxb.TimestampedObjectsWrapper{
 			Items: []*jaxb.XmlTimestampedObject{
-				{Token: jaxb.NewXmlTokenRef(sig), Category: timestampedObjectTypeP(enumerations.TimestampedObjectType_SIGNATURE)},
-				{Token: jaxb.NewXmlTokenRef(cert), Category: timestampedObjectTypeP(enumerations.TimestampedObjectType_CERTIFICATE)},
-				{Token: jaxb.NewXmlTokenRef(rev), Category: timestampedObjectTypeP(enumerations.TimestampedObjectType_REVOCATION)},
+				{Token: jaxb.NewXmlTokenRef(sig), Category: timestampedObjectTypeP(enumerations.TimestampedObjectTypeSignature)},
+				{Token: jaxb.NewXmlTokenRef(cert), Category: timestampedObjectTypeP(enumerations.TimestampedObjectTypeCertificate)},
+				{Token: jaxb.NewXmlTokenRef(rev), Category: timestampedObjectTypeP(enumerations.TimestampedObjectTypeRevocation)},
 			},
 		},
 	}
@@ -68,7 +68,7 @@ func TestTimestampWrapper_TimestampedObjectsWrongTypePanics(t *testing.T) {
 			Items: []*jaxb.XmlTimestampedObject{
 				// Mismatched category vs actual token type - Java throws
 				// IllegalArgumentException here; the Go port panics.
-				{Token: jaxb.NewXmlTokenRef(cert), Category: timestampedObjectTypeP(enumerations.TimestampedObjectType_SIGNATURE)},
+				{Token: jaxb.NewXmlTokenRef(cert), Category: timestampedObjectTypeP(enumerations.TimestampedObjectTypeSignature)},
 			},
 		},
 	}
@@ -84,9 +84,9 @@ func TestTimestampWrapper_TimestampedObjectsWrongTypePanics(t *testing.T) {
 }
 
 func TestTimestampWrapper_TypeAndArchiveType(t *testing.T) {
-	tsType := enumerations.TimestampType_ARCHIVE_TIMESTAMP
+	tsType := enumerations.TimestampTypeArchiveTimestamp
 	tsTypeValue := jaxb.TimestampTypeValue(tsType)
-	archiveType := enumerations.ArchiveTimestampType_CAdES_V3
+	archiveType := enumerations.ArchiveTimestampTypeCAdESV3
 	archiveTypeValue := jaxb.ArchiveTimestampTypeValue(archiveType)
 
 	ts := &jaxb.XmlTimestamp{
@@ -94,16 +94,16 @@ func TestTimestampWrapper_TypeAndArchiveType(t *testing.T) {
 		ArchiveTimestampType: &archiveTypeValue,
 	}
 	w := NewTimestampWrapper(ts)
-	if w.Type() != enumerations.TimestampType_ARCHIVE_TIMESTAMP {
+	if w.Type() != enumerations.TimestampTypeArchiveTimestamp {
 		t.Fatalf("unexpected Type(): %v", w.Type())
 	}
-	if w.ArchiveTimestampType() != enumerations.ArchiveTimestampType_CAdES_V3 {
+	if w.ArchiveTimestampType() != enumerations.ArchiveTimestampTypeCAdESV3 {
 		t.Fatalf("unexpected ArchiveTimestampType(): %v", w.ArchiveTimestampType())
 	}
 }
 
 func TestTimestampWrapper_MessageImprint(t *testing.T) {
-	digestMatcherType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_MESSAGE_IMPRINT)
+	digestMatcherType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeMessageImprint)
 	dataFound := true
 	ts := &jaxb.XmlTimestamp{
 		DigestMatcher: []*jaxb.XmlDigestMatcher{

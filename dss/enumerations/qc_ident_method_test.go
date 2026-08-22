@@ -4,8 +4,8 @@ package enumerations
 import "testing"
 
 func TestQCIdentMethod_UNKNOWN_METHOD_Value(t *testing.T) {
-	if QCIdentMethod_UNKNOWN_METHOD != "qc-identification-method-unknown" {
-		t.Errorf("QCIdentMethod_UNKNOWN_METHOD = %q, want %q", QCIdentMethod_UNKNOWN_METHOD, "qc-identification-method-unknown")
+	if QCIdentMethodUnknownMethod != "qc-identification-method-unknown" {
+		t.Errorf("QCIdentMethodUnknownMethod = %q, want %q", QCIdentMethodUnknownMethod, "qc-identification-method-unknown")
 	}
 }
 
@@ -18,7 +18,7 @@ func TestQCIdentMethodUnknownFallback(t *testing.T) {
 	if fallback.OID() != "1.2.3.4" {
 		t.Errorf("OID() = %q, want %q", fallback.OID(), "1.2.3.4")
 	}
-	if fallback.Description() != QCIdentMethod_UNKNOWN_METHOD {
-		t.Errorf("Description() = %q, want %q", fallback.Description(), QCIdentMethod_UNKNOWN_METHOD)
+	if fallback.Description() != QCIdentMethodUnknownMethod {
+		t.Errorf("Description() = %q, want %q", fallback.Description(), QCIdentMethodUnknownMethod)
 	}
 }

@@ -59,7 +59,7 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 	// document.SignatureRequirementsChecker's assertions have bare returns and panic with error
 	// values (the phase-3 precedent), so they are called for effect here.
 	signatureRequirementsChecker := e.SignatureRequirementsChecker()
-	if enumerations.SignatureLevel_XAdES_X == e.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESX == e.Params.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToXLevelPossible(signaturesToExtend)
 	}
 	signatureRequirementsChecker.AssertSignaturesValid(signaturesToExtend)
@@ -91,7 +91,7 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 		}
 		messageDigest := timestampSource.GetTimestampX1MessageDigest(digestAlgorithm,
 			canonicalizationMethod, e.Params.IsEn319132())
-		if err := e.CreateXAdESTimeStampType(enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP,
+		if err := e.CreateXAdESTimeStampType(enumerations.TimestampTypeValidationDataTimestamp,
 			canonicalizationMethod, messageDigest); err != nil {
 			return err
 		}
@@ -119,7 +119,7 @@ func (e *XAdESLevelX) extendToXLevelSignatures(
 
 // xLevelExtensionRequired ports the private xLevelExtensionRequired.
 func (e *XAdESLevelX) xLevelExtensionRequired(signature validation.AdvancedSignature) bool {
-	return enumerations.SignatureLevel_XAdES_X == e.Params.SignatureLevel() || !signature.HasXProfile()
+	return enumerations.SignatureLevelXAdESX == e.Params.SignatureLevel() || !signature.HasXProfile()
 }
 
 // xadesLevelXUnexpectedSignatureType reports a non-XAdES signature reaching this extension, which

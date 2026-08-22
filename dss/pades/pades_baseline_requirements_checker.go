@@ -121,7 +121,7 @@ func (b *PAdESBaselineRequirementsChecker) cadesChecker() *cades.CAdESBaselineRe
 // InitBaselineRequirementsChecker(b) in NewPAdESBaselineRequirementsChecker, matching Java's own
 // PAdESBaselineRequirementsChecker override of the identical method for the identical reason.
 func (b *PAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_PAdES
+	return enumerations.SignatureFormPAdES
 }
 
 // HasAdESProfile checks if the signature is conformant to the corresponding AdES profile.
@@ -369,22 +369,22 @@ func (b *PAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 		return false
 	}
 	// message-digest (Cardinality == 1)
-	if padesBaselineAttributeValuesSize(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OID_pkcs_9_at_messageDigest)) != 1 {
+	if padesBaselineAttributeValuesSize(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtMessageDigest)) != 1 {
 		// Upstream logs "message-digest attribute shall be present for {}-BES signature
 		// (cardinality == 1)!".
 		return false
 	}
 	// signing-certificate/signing-certificate-v2 (Cardinality == 1)
-	signingCertAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificate)
-	signingCertV2Attrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificateV2)
+	signingCertAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificate)
+	signingCertV2Attrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificateV2)
 	if padesBaselineAttributeValuesSize(signingCertAttrs)+padesBaselineAttributeValuesSize(signingCertV2Attrs) != 1 {
 		// Upstream logs "signing-certificate(-v2) attribute shall be present for {}-BES
 		// signature (cardinality == 1)!".
 		return false
 	}
 	// signer-attributes (Cardinality == 0 or 1)
-	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OID_id_aa_ets_signerAttr))+
-		len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_signerAttrV2)) > 1 {
+	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSignerAttr))+
+		len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSignerAttrV2)) > 1 {
 		// Upstream logs "signer-attributes(-v2) attribute shall not be present multiple times
 		// for {}-BES signature (cardinality == 0 or 1)!".
 		return false
@@ -396,7 +396,7 @@ func (b *PAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 // the given signature type. Port of the private isContentTypeValid(SignerInformation); see
 // cmsExtendedBESRequirements's doc comment for why it is reproduced here rather than reused.
 func (b *PAdESBaselineRequirementsChecker) isContentTypeValid(signerInformation *cmscore.SignerInfo) bool {
-	contentTypeAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OID_pkcs_9_at_contentType)
+	contentTypeAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtContentType)
 	numberOfOccurrences := padesBaselineAttributeValuesSize(contentTypeAttrs)
 	if b.Signature().IsCounterSignature() && numberOfOccurrences == 0 {
 		return true
@@ -423,7 +423,7 @@ func (b *PAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 	signerInformation := padesSignature.SignerInformation()
 	pdfSignatureDictionary := padesSignature.PdfSignatureDictionary()
 	// signature-policy-identifier (Cardinality == 1)
-	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OID_id_aa_ets_sigPolicyId)) == 0 {
+	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSigPolicyId)) == 0 {
 		// Upstream logs "signature-policy-identifier attribute shall be present for PAdES-EPES
 		// signature (cardinality == 1)!".
 		return false
@@ -523,7 +523,7 @@ func (b *PAdESBaselineRequirementsChecker) isLTVTimestampPresent() bool {
 
 // coversLTLevelData ports the private coversLTLevelData(TimestampToken).
 func (b *PAdESBaselineRequirementsChecker) coversLTLevelData(timestampToken *validation.TimestampToken) bool {
-	if enumerations.ArchiveTimestampType_PAdES == timestampToken.ArchiveTimestampType() {
+	if enumerations.ArchiveTimestampTypePAdES == timestampToken.ArchiveTimestampType() {
 		signatureValidationData := b.ValidationContext().GetValidationData(b.Signature())
 		certificateTokens := signatureValidationData.CertificateTokens()
 		crlTokens := signatureValidationData.CrlTokens()

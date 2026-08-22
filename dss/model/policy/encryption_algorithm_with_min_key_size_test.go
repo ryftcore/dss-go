@@ -8,19 +8,19 @@ import (
 )
 
 func TestEncryptionAlgorithmWithMinKeySize_RoundTrip(t *testing.T) {
-	e := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithm_RSA, 2048)
-	if e.EncryptionAlgorithm() != enumerations.EncryptionAlgorithm_RSA {
+	e := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithmRSA, 2048)
+	if e.EncryptionAlgorithm() != enumerations.EncryptionAlgorithmRSA {
 		t.Fatalf("EncryptionAlgorithm() = %v, want RSA", e.EncryptionAlgorithm())
 	}
 	if e.MinKeySize() != 2048 {
 		t.Fatalf("MinKeySize() = %d, want 2048", e.MinKeySize())
 	}
 
-	other := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithm_RSA, 2048)
+	other := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithmRSA, 2048)
 	if !e.Equals(other) {
 		t.Fatalf("Equals() = false for equal instances")
 	}
-	diff := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithm_RSA, 1024)
+	diff := NewEncryptionAlgorithmWithMinKeySize(enumerations.EncryptionAlgorithmRSA, 1024)
 	if e.Equals(diff) {
 		t.Fatalf("Equals() = true for differing minKeySize")
 	}

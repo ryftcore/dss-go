@@ -16,30 +16,30 @@ import "math/big"
 type EllipticCurve string
 
 const (
-	// EllipticCurve_P_256 is the P-256 curve.
-	EllipticCurve_P_256 EllipticCurve = "P_256"
-	// EllipticCurve_P_384 is the P-384 curve.
-	EllipticCurve_P_384 EllipticCurve = "P_384"
-	// EllipticCurve_P_521 is the P-512 curve.
-	EllipticCurve_P_521 EllipticCurve = "P_521"
-	// EllipticCurve_X25519 is X25519.
-	EllipticCurve_X25519 EllipticCurve = "X25519"
-	// EllipticCurve_X448 is X448.
-	EllipticCurve_X448 EllipticCurve = "X448"
-	// EllipticCurve_ED25519 is EdDSA 25519.
-	EllipticCurve_ED25519 EllipticCurve = "ED25519"
-	// EllipticCurve_ED448 is EdDSA 448.
-	EllipticCurve_ED448 EllipticCurve = "ED448"
-	// EllipticCurve_SECP_256K1 is the SECP-256k1 curve.
-	EllipticCurve_SECP_256K1 EllipticCurve = "SECP_256K1"
-	// EllipticCurve_BRAINPOOL_P256_R1 is the Brainpool P-256 R1 curve.
-	EllipticCurve_BRAINPOOL_P256_R1 EllipticCurve = "BRAINPOOL_P256_R1"
-	// EllipticCurve_BRAINPOOL_P320_R1 is the Brainpool P-320 R1 curve.
-	EllipticCurve_BRAINPOOL_P320_R1 EllipticCurve = "BRAINPOOL_P320_R1"
-	// EllipticCurve_BRAINPOOL_P384_R1 is the Brainpool P-384 R1 curve.
-	EllipticCurve_BRAINPOOL_P384_R1 EllipticCurve = "BRAINPOOL_P384_R1"
-	// EllipticCurve_BRAINPOOL_P512_R1 is the Brainpool P-512 R1 curve.
-	EllipticCurve_BRAINPOOL_P512_R1 EllipticCurve = "BRAINPOOL_P512_R1"
+	// EllipticCurveP256 is the P-256 curve.
+	EllipticCurveP256 EllipticCurve = "P_256"
+	// EllipticCurveP384 is the P-384 curve.
+	EllipticCurveP384 EllipticCurve = "P_384"
+	// EllipticCurveP521 is the P-512 curve.
+	EllipticCurveP521 EllipticCurve = "P_521"
+	// EllipticCurveX25519 is X25519.
+	EllipticCurveX25519 EllipticCurve = "X25519"
+	// EllipticCurveX448 is X448.
+	EllipticCurveX448 EllipticCurve = "X448"
+	// EllipticCurveED25519 is EdDSA 25519.
+	EllipticCurveED25519 EllipticCurve = "ED25519"
+	// EllipticCurveED448 is EdDSA 448.
+	EllipticCurveED448 EllipticCurve = "ED448"
+	// EllipticCurveSECP256K1 is the SECP-256k1 curve.
+	EllipticCurveSECP256K1 EllipticCurve = "SECP_256K1"
+	// EllipticCurveBrainpoolP256R1 is the Brainpool P-256 R1 curve.
+	EllipticCurveBrainpoolP256R1 EllipticCurve = "BRAINPOOL_P256_R1"
+	// EllipticCurveBrainpoolP320R1 is the Brainpool P-320 R1 curve.
+	EllipticCurveBrainpoolP320R1 EllipticCurve = "BRAINPOOL_P320_R1"
+	// EllipticCurveBrainpoolP384R1 is the Brainpool P-384 R1 curve.
+	EllipticCurveBrainpoolP384R1 EllipticCurve = "BRAINPOOL_P384_R1"
+	// EllipticCurveBrainpoolP512R1 is the Brainpool P-512 R1 curve.
+	EllipticCurveBrainpoolP512R1 EllipticCurve = "BRAINPOOL_P512_R1"
 )
 
 // EllipticCurveParameter is a minimal port of java.security.spec.ECParameterSpec:
@@ -142,95 +142,95 @@ var ellipticCurveBP512 = EllipticCurveParameter{
 // Only curves with an ECParameterSpec registered in Java are present here
 // (X25519, X448, ED25519, ED448 have none).
 var ellipticCurveParameters = map[EllipticCurve]EllipticCurveParameter{
-	EllipticCurve_P_256:             ellipticCurveP256,
-	EllipticCurve_P_384:             ellipticCurveP384,
-	EllipticCurve_P_521:             ellipticCurveP521,
-	EllipticCurve_SECP_256K1:        ellipticCurveSecp256k1,
-	EllipticCurve_BRAINPOOL_P256_R1: ellipticCurveBP256,
-	EllipticCurve_BRAINPOOL_P320_R1: ellipticCurveBP320,
-	EllipticCurve_BRAINPOOL_P384_R1: ellipticCurveBP384,
-	EllipticCurve_BRAINPOOL_P512_R1: ellipticCurveBP512,
+	EllipticCurveP256:            ellipticCurveP256,
+	EllipticCurveP384:            ellipticCurveP384,
+	EllipticCurveP521:            ellipticCurveP521,
+	EllipticCurveSECP256K1:       ellipticCurveSecp256k1,
+	EllipticCurveBrainpoolP256R1: ellipticCurveBP256,
+	EllipticCurveBrainpoolP320R1: ellipticCurveBP320,
+	EllipticCurveBrainpoolP384R1: ellipticCurveBP384,
+	EllipticCurveBrainpoolP512R1: ellipticCurveBP512,
 }
 
 var ellipticCurveLabel = map[EllipticCurve]string{
-	EllipticCurve_P_256:             "P-256",
-	EllipticCurve_P_384:             "P-384",
-	EllipticCurve_P_521:             "P-521",
-	EllipticCurve_X25519:            "X25519",
-	EllipticCurve_X448:              "X448",
-	EllipticCurve_ED25519:           "Ed25519",
-	EllipticCurve_ED448:             "Ed448",
-	EllipticCurve_SECP_256K1:        "secp256k1",
-	EllipticCurve_BRAINPOOL_P256_R1: "brainpoolP256r1",
-	EllipticCurve_BRAINPOOL_P320_R1: "brainpoolP320r1",
-	EllipticCurve_BRAINPOOL_P384_R1: "brainpoolP384r1",
-	EllipticCurve_BRAINPOOL_P512_R1: "brainpoolP512r1",
+	EllipticCurveP256:            "P-256",
+	EllipticCurveP384:            "P-384",
+	EllipticCurveP521:            "P-521",
+	EllipticCurveX25519:          "X25519",
+	EllipticCurveX448:            "X448",
+	EllipticCurveED25519:         "Ed25519",
+	EllipticCurveED448:           "Ed448",
+	EllipticCurveSECP256K1:       "secp256k1",
+	EllipticCurveBrainpoolP256R1: "brainpoolP256r1",
+	EllipticCurveBrainpoolP320R1: "brainpoolP320r1",
+	EllipticCurveBrainpoolP384R1: "brainpoolP384r1",
+	EllipticCurveBrainpoolP512R1: "brainpoolP512r1",
 }
 
 var ellipticCurveSize = map[EllipticCurve]int{
-	EllipticCurve_P_256:             32,
-	EllipticCurve_P_384:             48,
-	EllipticCurve_P_521:             66,
-	EllipticCurve_X25519:            32,
-	EllipticCurve_X448:              56,
-	EllipticCurve_ED25519:           32,
-	EllipticCurve_ED448:             57,
-	EllipticCurve_SECP_256K1:        32,
-	EllipticCurve_BRAINPOOL_P256_R1: 32,
-	EllipticCurve_BRAINPOOL_P320_R1: 40,
-	EllipticCurve_BRAINPOOL_P384_R1: 48,
-	EllipticCurve_BRAINPOOL_P512_R1: 64,
+	EllipticCurveP256:            32,
+	EllipticCurveP384:            48,
+	EllipticCurveP521:            66,
+	EllipticCurveX25519:          32,
+	EllipticCurveX448:            56,
+	EllipticCurveED25519:         32,
+	EllipticCurveED448:           57,
+	EllipticCurveSECP256K1:       32,
+	EllipticCurveBrainpoolP256R1: 32,
+	EllipticCurveBrainpoolP320R1: 40,
+	EllipticCurveBrainpoolP384R1: 48,
+	EllipticCurveBrainpoolP512R1: 64,
 }
 
 // ellipticCurveCOSEValues mirrors Java's ELLIPTIC_CURVE_COSE_VALUES map;
 // values from the IANA COSE registry.
 var ellipticCurveCOSEValues = map[EllipticCurve]int64{
-	EllipticCurve_P_256:             1,
-	EllipticCurve_P_384:             2,
-	EllipticCurve_P_521:             3,
-	EllipticCurve_X25519:            4,
-	EllipticCurve_X448:              5,
-	EllipticCurve_ED25519:           6,
-	EllipticCurve_ED448:             7,
-	EllipticCurve_SECP_256K1:        8,
-	EllipticCurve_BRAINPOOL_P256_R1: 256,
-	EllipticCurve_BRAINPOOL_P320_R1: 257,
-	EllipticCurve_BRAINPOOL_P384_R1: 258,
-	EllipticCurve_BRAINPOOL_P512_R1: 259,
+	EllipticCurveP256:            1,
+	EllipticCurveP384:            2,
+	EllipticCurveP521:            3,
+	EllipticCurveX25519:          4,
+	EllipticCurveX448:            5,
+	EllipticCurveED25519:         6,
+	EllipticCurveED448:           7,
+	EllipticCurveSECP256K1:       8,
+	EllipticCurveBrainpoolP256R1: 256,
+	EllipticCurveBrainpoolP320R1: 257,
+	EllipticCurveBrainpoolP384R1: 258,
+	EllipticCurveBrainpoolP512R1: 259,
 }
 
 // ellipticCurveOIDs mirrors Java's ELLIPTIC_CURVE_OIDS map. Note P_256 and
 // SECP_256K1 share the same OID value in the Java source (verbatim copy).
 var ellipticCurveOIDs = map[EllipticCurve]string{
-	EllipticCurve_P_256:             "1.2.840.10045.3.1.7",
-	EllipticCurve_P_384:             "1.3.132.0.34",
-	EllipticCurve_P_521:             "1.3.132.0.35",
-	EllipticCurve_X25519:            "1.3.101.110",
-	EllipticCurve_X448:              "1.3.101.111",
-	EllipticCurve_ED25519:           "1.3.101.112",
-	EllipticCurve_ED448:             "1.3.101.113",
-	EllipticCurve_SECP_256K1:        "1.2.840.10045.3.1.7",
-	EllipticCurve_BRAINPOOL_P256_R1: "1.3.36.3.3.2.8.1.1.7",
-	EllipticCurve_BRAINPOOL_P320_R1: "1.3.36.3.3.2.8.1.1.9",
-	EllipticCurve_BRAINPOOL_P384_R1: "1.3.36.3.3.2.8.1.1.11",
-	EllipticCurve_BRAINPOOL_P512_R1: "1.3.36.3.3.2.8.1.1.13",
+	EllipticCurveP256:            "1.2.840.10045.3.1.7",
+	EllipticCurveP384:            "1.3.132.0.34",
+	EllipticCurveP521:            "1.3.132.0.35",
+	EllipticCurveX25519:          "1.3.101.110",
+	EllipticCurveX448:            "1.3.101.111",
+	EllipticCurveED25519:         "1.3.101.112",
+	EllipticCurveED448:           "1.3.101.113",
+	EllipticCurveSECP256K1:       "1.2.840.10045.3.1.7",
+	EllipticCurveBrainpoolP256R1: "1.3.36.3.3.2.8.1.1.7",
+	EllipticCurveBrainpoolP320R1: "1.3.36.3.3.2.8.1.1.9",
+	EllipticCurveBrainpoolP384R1: "1.3.36.3.3.2.8.1.1.11",
+	EllipticCurveBrainpoolP512R1: "1.3.36.3.3.2.8.1.1.13",
 }
 
 // EllipticCurveValues returns all constants in declaration order.
 func EllipticCurveValues() []EllipticCurve {
 	return []EllipticCurve{
-		EllipticCurve_P_256,
-		EllipticCurve_P_384,
-		EllipticCurve_P_521,
-		EllipticCurve_X25519,
-		EllipticCurve_X448,
-		EllipticCurve_ED25519,
-		EllipticCurve_ED448,
-		EllipticCurve_SECP_256K1,
-		EllipticCurve_BRAINPOOL_P256_R1,
-		EllipticCurve_BRAINPOOL_P320_R1,
-		EllipticCurve_BRAINPOOL_P384_R1,
-		EllipticCurve_BRAINPOOL_P512_R1,
+		EllipticCurveP256,
+		EllipticCurveP384,
+		EllipticCurveP521,
+		EllipticCurveX25519,
+		EllipticCurveX448,
+		EllipticCurveED25519,
+		EllipticCurveED448,
+		EllipticCurveSECP256K1,
+		EllipticCurveBrainpoolP256R1,
+		EllipticCurveBrainpoolP320R1,
+		EllipticCurveBrainpoolP384R1,
+		EllipticCurveBrainpoolP512R1,
 	}
 }
 

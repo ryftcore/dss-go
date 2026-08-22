@@ -52,13 +52,13 @@ func newSingleSAVChain(i18nProvider *i18n.I18nProvider, factory savCheckFactory)
 }
 
 func (c *singleSAVChain) InitChain() {
-	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.Level_FAIL))
+	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.LevelFail))
 }
 
 // savMultiValuesRule is the oracle's ANY / NONE / MATCH_COMMITMENT rule at Level.FAIL.
 type savMultiValuesRule struct{ values []string }
 
-func (r savMultiValuesRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r savMultiValuesRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r savMultiValuesRule) Values() []string          { return r.values }
 
 var (
@@ -230,7 +230,7 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 			})
 
 			for _, indication := range []enumerations.Indication{
-				enumerations.Indication_PASSED, enumerations.Indication_FAILED,
+				enumerations.IndicationPassed, enumerations.IndicationFailed,
 			} {
 				reportTimestamps := savReportTimestamps(diagnosticData, indication)
 				token := id + "/" + string(indication)
@@ -280,7 +280,7 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 			for _, contentTimestamp := range contentTimestamps {
 				ct := contentTimestamp
 				for _, indication := range []enumerations.Indication{
-					enumerations.Indication_PASSED, enumerations.Indication_FAILED,
+					enumerations.IndicationPassed, enumerations.IndicationFailed,
 				} {
 					conclusion := &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(indication)}
 					token := id + "/" + ct.Id() + "/" + string(indication)
@@ -410,8 +410,8 @@ func savBaseSignature() *diagjaxb.XmlSignature {
 
 func savSignatureWithRoles() *diagnostic.SignatureWrapper {
 	xml := savBaseSignature()
-	claimedCategory := diagjaxb.EndorsementTypeValue(enumerations.EndorsementType_CLAIMED)
-	certifiedCategory := diagjaxb.EndorsementTypeValue(enumerations.EndorsementType_CERTIFIED)
+	claimedCategory := diagjaxb.EndorsementTypeValue(enumerations.EndorsementTypeClaimed)
+	certifiedCategory := diagjaxb.EndorsementTypeValue(enumerations.EndorsementTypeCertified)
 	xml.SignerRole = []*diagjaxb.XmlSignerRole{
 		{Role: strPtr("claimed-role"), Category: &claimedCategory},
 		{Role: strPtr("certified-role"), Category: &certifiedCategory},
@@ -435,7 +435,7 @@ func savSignatureWithX509Url() *diagnostic.SignatureWrapper {
 
 	xml.SigningCertificate = &diagjaxb.XmlSigningCertificate{Certificate: certificate}
 
-	origin := diagjaxb.CertificateRefOriginValue(enumerations.CertificateRefOrigin_X509_URL)
+	origin := diagjaxb.CertificateRefOriginValue(enumerations.CertificateRefOriginX509URL)
 	related := &diagjaxb.XmlRelatedCertificate{Certificate: certificate}
 	related.CertificateRef = []*diagjaxb.XmlCertificateRef{{Origin: &origin}}
 	xml.FoundCertificates = &diagjaxb.XmlFoundCertificates{
@@ -447,7 +447,7 @@ func savSignatureWithX509Url() *diagnostic.SignatureWrapper {
 func savSignatureWithValidationDataRefsOnlyTimestamp() *diagnostic.SignatureWrapper {
 	xml := savBaseSignature()
 	timestampId := diagjaxb.CollapsedString("T-SYNTHETIC")
-	timestampType := diagjaxb.TimestampTypeValue(enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP)
+	timestampType := diagjaxb.TimestampTypeValue(enumerations.TimestampTypeValidationDataRefsOnlyTimestamp)
 	timestamp := &diagjaxb.XmlTimestamp{Type: &timestampType}
 	timestamp.Id = &timestampId
 	xml.FoundTimestamps = &diagjaxb.FoundTimestampsWrapper{
@@ -466,21 +466,21 @@ func aovOfShape(shape string) *jaxb.XmlAOV {
 	conclusion := &jaxb.XmlConclusion{}
 	switch shape {
 	case "error":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		sub := jaxb.SubIndicationValue(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		sub := jaxb.SubIndicationValue(enumerations.SubIndicationCryptoConstraintsFailure)
 		conclusion.SubIndication = &sub
 		conclusion.Errors = append(conclusion.Errors,
 			aovMessage("ASCCM_AR_ANS_ANR", "The algorithm is no longer reliable!"))
 	case "warning":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		conclusion.Warnings = append(conclusion.Warnings,
 			aovMessage("ASCCM_AR_ANS_AKSNR", "The key size is no longer reliable!"))
 	case "info":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		conclusion.Infos = append(conclusion.Infos,
 			aovMessage("ASCCM_AR_ANS_ANR", "The algorithm expires soon."))
 	default:
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	}
 	result.Conclusion = conclusion
 	if shape == "passed-with-algo" || shape == "passed-with-algo-nokeysize" {
@@ -508,7 +508,7 @@ func savSignatureWithMismatchedKeyIdentifier() *diagnostic.SignatureWrapper {
 	certificate.Id = &certificateId
 
 	match := false
-	origin := diagjaxb.CertificateRefOriginValue(enumerations.CertificateRefOrigin_KEY_IDENTIFIER)
+	origin := diagjaxb.CertificateRefOriginValue(enumerations.CertificateRefOriginKeyIdentifier)
 	ref := &diagjaxb.XmlCertificateRef{
 		Origin:       &origin,
 		IssuerSerial: &diagjaxb.XmlIssuerSerial{Value: diagjaxb.Base64Binary([]byte{1, 2, 3}), Match: &match},

@@ -35,7 +35,7 @@ func NewSunsetDateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *SunsetDateCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_SUB_XCV_TA
+	return jaxb.XmlBlockTypeSubXCVTA
 }
 
 // Process performs the check. Port of process().

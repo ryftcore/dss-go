@@ -36,21 +36,21 @@ var ocspTokenOIDIsisMttAtCertHash = asn1.ObjectIdentifier{1, 3, 36, 8, 3, 13}
 // RIPEMD-160, PLAIN-ECDSA and Ed448 flavours) are deliberately absent: they yield a
 // verification error rather than a silent success.
 var ocspTokenSignatureAlgorithms = map[enumerations.SignatureAlgorithm]x509.SignatureAlgorithm{
-	enumerations.SignatureAlgorithm_RSA_MD5:                 x509.MD5WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA1:                x509.SHA1WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA256:              x509.SHA256WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA384:              x509.SHA384WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA512:              x509.SHA512WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1: x509.SHA256WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1: x509.SHA384WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1: x509.SHA512WithRSAPSS,
-	enumerations.SignatureAlgorithm_ECDSA_SHA1:              x509.ECDSAWithSHA1,
-	enumerations.SignatureAlgorithm_ECDSA_SHA256:            x509.ECDSAWithSHA256,
-	enumerations.SignatureAlgorithm_ECDSA_SHA384:            x509.ECDSAWithSHA384,
-	enumerations.SignatureAlgorithm_ECDSA_SHA512:            x509.ECDSAWithSHA512,
-	enumerations.SignatureAlgorithm_DSA_SHA1:                x509.DSAWithSHA1,
-	enumerations.SignatureAlgorithm_DSA_SHA256:              x509.DSAWithSHA256,
-	enumerations.SignatureAlgorithm_ED25519:                 x509.PureEd25519,
+	enumerations.SignatureAlgorithmRSAMD5:              x509.MD5WithRSA,
+	enumerations.SignatureAlgorithmRSASHA1:             x509.SHA1WithRSA,
+	enumerations.SignatureAlgorithmRSASHA256:           x509.SHA256WithRSA,
+	enumerations.SignatureAlgorithmRSASHA384:           x509.SHA384WithRSA,
+	enumerations.SignatureAlgorithmRSASHA512:           x509.SHA512WithRSA,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1: x509.SHA256WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA384MGF1: x509.SHA384WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1: x509.SHA512WithRSAPSS,
+	enumerations.SignatureAlgorithmECDSASHA1:           x509.ECDSAWithSHA1,
+	enumerations.SignatureAlgorithmECDSASHA256:         x509.ECDSAWithSHA256,
+	enumerations.SignatureAlgorithmECDSASHA384:         x509.ECDSAWithSHA384,
+	enumerations.SignatureAlgorithmECDSASHA512:         x509.ECDSAWithSHA512,
+	enumerations.SignatureAlgorithmDSASHA1:             x509.DSAWithSHA1,
+	enumerations.SignatureAlgorithmDSASHA256:           x509.DSAWithSHA256,
+	enumerations.SignatureAlgorithmED25519:             x509.PureEd25519,
 }
 
 // OCSPToken is the OCSP signed token encapsulating a BasicOCSPResp.
@@ -117,10 +117,10 @@ func (t *OCSPToken) extractStatusInfo(bestSingleResp *SingleResp) {
 	switch {
 	case certStatus.IsGood():
 		// Upstream logs "OCSP status is good".
-		t.SetStatus(enumerations.CertificateStatus_GOOD)
+		t.SetStatus(enumerations.CertificateStatusGood)
 	case certStatus.IsRevoked():
 		// Upstream logs "OCSP status revoked".
-		t.SetStatus(enumerations.CertificateStatus_REVOKED)
+		t.SetStatus(enumerations.CertificateStatusRevoked)
 		t.SetRevocationDate(certStatus.RevocationTime)
 		reasonId := 0 // unspecified
 		if certStatus.HasRevocationReason() {
@@ -129,7 +129,7 @@ func (t *OCSPToken) extractStatusInfo(bestSingleResp *SingleResp) {
 		t.SetReason(enumerations.RevocationReasonFromInt(reasonId))
 	case certStatus.IsUnknown():
 		// Upstream logs "OCSP status unknown".
-		t.SetStatus(enumerations.CertificateStatus_UNKNOWN)
+		t.SetStatus(enumerations.CertificateStatusUnknown)
 	}
 	// Upstream logs "OCSP certificate status: {}" for any other status; the RFC 6960
 	// CertStatus CHOICE has no other alternative.
@@ -311,7 +311,7 @@ func (t *OCSPToken) CheckIsSignedBy(publicKey *model.PublicKey) enumerations.Sig
 	if err := ocspTokenVerifySignature(t.basicOCSPResp, publicKey); err != nil {
 		// Upstream logs "An error occurred during in attempt to check signature owner : ".
 		t.SetInvalidityReason(fmt.Sprintf("%T - %s", err, err.Error()))
-		t.SetSignatureValidity(enumerations.SignatureValidity_INVALID)
+		t.SetSignatureValidity(enumerations.SignatureValidityInvalid)
 		return t.SignatureValidity()
 	}
 	valid := true
@@ -337,7 +337,7 @@ func (t *OCSPToken) isOCSPVersionValid() bool {
 
 // RevocationType returns OCSP. Port of the getRevocationType() override.
 func (t *OCSPToken) RevocationType() enumerations.RevocationType {
-	return enumerations.RevocationType_OCSP
+	return enumerations.RevocationTypeOCSP
 }
 
 // Abbreviation returns the DSS abbreviation of the token, used for debugging.

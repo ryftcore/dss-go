@@ -15,21 +15,21 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 type ManifestAttribute string
 
 const (
-	// ManifestAttribute_VERSION is the "version" attribute.
-	ManifestAttribute_VERSION ManifestAttribute = "VERSION"
+	// ManifestAttributeVersion is the "version" attribute.
+	ManifestAttributeVersion ManifestAttribute = "VERSION"
 
-	// ManifestAttribute_FULL_PATH is the "full-path" attribute.
-	ManifestAttribute_FULL_PATH ManifestAttribute = "FULL_PATH"
+	// ManifestAttributeFullPath is the "full-path" attribute.
+	ManifestAttributeFullPath ManifestAttribute = "FULL_PATH"
 
-	// ManifestAttribute_MEDIA_TYPE is the "media-type" attribute.
-	ManifestAttribute_MEDIA_TYPE ManifestAttribute = "MEDIA_TYPE"
+	// ManifestAttributeMediaType is the "media-type" attribute.
+	ManifestAttributeMediaType ManifestAttribute = "MEDIA_TYPE"
 )
 
 // manifestAttributeNames maps each constant to its wire attribute name (getAttributeName()).
 var manifestAttributeNames = map[ManifestAttribute]string{
-	ManifestAttribute_VERSION:    "version",
-	ManifestAttribute_FULL_PATH:  "full-path",
-	ManifestAttribute_MEDIA_TYPE: "media-type",
+	ManifestAttributeVersion:   "version",
+	ManifestAttributeFullPath:  "full-path",
+	ManifestAttributeMediaType: "media-type",
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().

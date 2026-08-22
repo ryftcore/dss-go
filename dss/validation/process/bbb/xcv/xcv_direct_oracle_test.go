@@ -151,27 +151,27 @@ func (c *singleRFCChain) InitChain() { c.FirstItem = c.factory(c.Result, xcvaFai
 
 type literalMultiValuesRule struct{ value string }
 
-func (r literalMultiValuesRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r literalMultiValuesRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r literalMultiValuesRule) Values() []string          { return []string{r.value} }
 
 type literalNumericValueRule struct{ value float64 }
 
-func (r literalNumericValueRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r literalNumericValueRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r literalNumericValueRule) Value() float64            { return r.value }
 
 type literalValueRule struct{ value string }
 
-func (r literalValueRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r literalValueRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r literalValueRule) Value() string             { return r.value }
 
 type literalDurationRule struct{ millis int64 }
 
-func (r literalDurationRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r literalDurationRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r literalDurationRule) Duration() int64           { return r.millis }
 
 type literalApplicabilityRule struct{}
 
-func (r literalApplicabilityRule) Level() enumerations.Level                     { return enumerations.Level_FAIL }
+func (r literalApplicabilityRule) Level() enumerations.Level                     { return enumerations.LevelFail }
 func (r literalApplicabilityRule) CertificateExtensions() policy.MultiValuesRule { return nil }
 func (r literalApplicabilityRule) CertificatePolicies() policy.MultiValuesRule   { return nil }
 
@@ -478,7 +478,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 					})
 				}
 
-				for _, subContext := range []enumerations.SubContext{enumerations.SubContext_SIGNING_CERT, enumerations.SubContext_CA_CERTIFICATE} {
+				for _, subContext := range []enumerations.SubContext{enumerations.SubContextSigningCert, enumerations.SubContextCACertificate} {
 					sc := subContext
 					suffix := string(sc)
 					for _, variant := range []string{"any", "none"} {
@@ -487,10 +487,10 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 							mv = xcvDirectNone
 						}
 						compareSub(t, expected, name, id, "KeyUsageCheck-"+suffix+"-"+variant, func(r *process.Result[*jaxb.XmlSubXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlSubXCV] {
-							return NewKeyUsageCheck(xcvaI18n(), r, certificate, enumerations.Context_SIGNATURE, sc, mv)
+							return NewKeyUsageCheck(xcvaI18n(), r, certificate, enumerations.ContextSignature, sc, mv)
 						})
 						compareSub(t, expected, name, id, "ExtendedKeyUsageCheck-"+suffix+"-"+variant, func(r *process.Result[*jaxb.XmlSubXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlSubXCV] {
-							return NewExtendedKeyUsageCheck(xcvaI18n(), r, certificate, enumerations.Context_SIGNATURE, sc, mv)
+							return NewExtendedKeyUsageCheck(xcvaI18n(), r, certificate, enumerations.ContextSignature, sc, mv)
 						})
 					}
 					compareSub(t, expected, name, id, "CertificateValidationBeforeSunsetDateCheck-"+suffix, func(r *process.Result[*jaxb.XmlSubXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlSubXCV] {
@@ -509,7 +509,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 				})
 
 				compareXCV(t, expected, name, id, "ProspectiveCertificateChainCheck", func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
-					return NewProspectiveCertificateChainCheck[*jaxb.XmlXCV](xcvaI18n(), r, certificate, enumerations.Context_SIGNATURE, l)
+					return NewProspectiveCertificateChainCheck[*jaxb.XmlXCV](xcvaI18n(), r, certificate, enumerations.ContextSignature, l)
 				})
 				compareXCV(t, expected, name, id, "ProspectiveCertificateChainAtValidationTimeCheck", func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
 					return NewProspectiveCertificateChainAtValidationTimeCheck(xcvaI18n(), r, certificate, xcvDirectCurrentTime, l)
@@ -522,10 +522,10 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 							mv = xcvDirectNone
 						}
 						compareXCV(t, expected, name, id, "TrustServiceStatusCheck-"+variant, func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
-							return NewTrustServiceStatusCheck(xcvaI18n(), r, certificate, usageTime, enumerations.Context_SIGNATURE, mv)
+							return NewTrustServiceStatusCheck(xcvaI18n(), r, certificate, usageTime, enumerations.ContextSignature, mv)
 						})
 						compareXCV(t, expected, name, id, "TrustServiceTypeIdentifierCheck-"+variant, func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
-							return NewTrustServiceTypeIdentifierCheck(xcvaI18n(), r, certificate, usageTime, enumerations.Context_SIGNATURE, mv)
+							return NewTrustServiceTypeIdentifierCheck(xcvaI18n(), r, certificate, usageTime, enumerations.ContextSignature, mv)
 						})
 					}
 				}
@@ -542,7 +542,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 						return NewCertificateAlgorithmObsolescenceValidationCheck[*jaxb.XmlSubXCV](xcvaI18n(), r, aov, xcvDirectCurrentTime, i18n.MessageTag_SIGNING_CERTIFICATE, id)
 					})
 				}
-				for _, indication := range []enumerations.Indication{enumerations.Indication_PASSED, enumerations.Indication_INDETERMINATE} {
+				for _, indication := range []enumerations.Indication{enumerations.IndicationPassed, enumerations.IndicationIndeterminate} {
 					indToken := id + "/" + string(indication)
 					indExpected := expectedByToken[indToken]
 					if indExpected == nil {
@@ -600,7 +600,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 					return NewRevocationIssuerValidityRangeCheck[*jaxb.XmlSubXCV](xcvaI18n(), r, base, xcvDirectCurrentTime, l)
 				})
 
-				for _, subContext := range []enumerations.SubContext{enumerations.SubContext_SIGNING_CERT, enumerations.SubContext_CA_CERTIFICATE} {
+				for _, subContext := range []enumerations.SubContext{enumerations.SubContextSigningCert, enumerations.SubContextCACertificate} {
 					sc := subContext
 					subToken := token + "|" + string(sc)
 					subExpected := expectedByToken[subToken]
@@ -785,10 +785,10 @@ func runSyntheticChecks(t *testing.T, expectedByToken map[string]map[string][]*x
 	trustService := trustServiceCertificate(usageTime)
 	trustExpected := expectedFor(trustService.Id())
 	compareXCV(t, trustExpected, "synthetic", trustService.Id(), "TrustServiceStatusCheck-any", func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
-		return NewTrustServiceStatusCheck(xcvaI18n(), r, trustService, &usageTime, enumerations.Context_SIGNATURE, xcvDirectAny)
+		return NewTrustServiceStatusCheck(xcvaI18n(), r, trustService, &usageTime, enumerations.ContextSignature, xcvDirectAny)
 	})
 	compareXCV(t, trustExpected, "synthetic", trustService.Id(), "TrustServiceTypeIdentifierCheck-any", func(r *process.Result[*jaxb.XmlXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlXCV] {
-		return NewTrustServiceTypeIdentifierCheck(xcvaI18n(), r, trustService, &usageTime, enumerations.Context_SIGNATURE, xcvDirectAny)
+		return NewTrustServiceTypeIdentifierCheck(xcvaI18n(), r, trustService, &usageTime, enumerations.ContextSignature, xcvDirectAny)
 	})
 
 	onHold := onHoldRevocation()
@@ -803,8 +803,8 @@ func onHoldRevocation() *diagnostic.CertificateRevocationWrapper {
 	revocation := &diagjaxb.XmlRevocation{}
 	revocationID := diagjaxb.CollapsedString("R-SYNTH-ON-HOLD")
 	revocation.XmlAbstractTokenAttrs.Id = &revocationID
-	status := diagjaxb.CertificateStatusValue(enumerations.CertificateStatus_REVOKED)
-	reason := diagjaxb.RevocationReasonValue(enumerations.RevocationReason_CERTIFICATE_HOLD)
+	status := diagjaxb.CertificateStatusValue(enumerations.CertificateStatusRevoked)
+	reason := diagjaxb.RevocationReasonValue(enumerations.RevocationReasonCertificateHold)
 	revocationDate := diagjaxb.XSDateTime(xcvDirectCurrentTime.Add(-24 * time.Hour))
 	certRevocation := &diagjaxb.XmlCertificateRevocation{
 		Revocation:     revocation,
@@ -822,9 +822,9 @@ func nameConstraintViolationLeaf() *diagnostic.CertificateWrapper {
 	permitted := &diagjaxb.XmlGeneralSubtree{
 		XmlGeneralNameContent: diagjaxb.XmlGeneralNameContent{Value: "O=Allowed"},
 	}
-	nameType := diagjaxb.GeneralNameTypeValue(enumerations.GeneralNameType_DIRECTORY_NAME)
+	nameType := diagjaxb.GeneralNameTypeValue(enumerations.GeneralNameTypeDirectoryName)
 	permitted.XmlGeneralNameAttrs.Type = &nameType
-	oid := enumerations.CertificateExtensionEnum_NAME_CONSTRAINTS.OID()
+	oid := enumerations.CertificateExtensionEnumNameConstraints.OID()
 	nameConstraints := &diagjaxb.XmlNameConstraints{
 		PermittedSubtree: []*diagjaxb.XmlGeneralSubtree{permitted},
 	}
@@ -848,12 +848,12 @@ func noRevAvailViolationCertificate() *diagnostic.CertificateWrapper {
 	xml := baseCertificate("C-SYNTH-NORA-VIOLATION")
 	present := true
 	noRevAvail := &diagjaxb.XmlNoRevAvail{Present: &present}
-	noRevAvailOID := enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID()
+	noRevAvailOID := enumerations.CertificateExtensionEnumNoRevocationAvailable.OID()
 	noRevAvail.OID = &noRevAvailOID
 	addExtension(xml, noRevAvail)
 
 	aia := &diagjaxb.XmlAuthorityInformationAccess{OcspUrl: []string{"http://example.org/ocsp"}}
-	aiaOID := enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID()
+	aiaOID := enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID()
 	aia.OID = &aiaOID
 	addExtension(xml, aia)
 	return diagnostic.NewCertificateWrapper(xml)
@@ -909,7 +909,7 @@ func qcStatementCertificate() *diagnostic.CertificateWrapper {
 		RolesOfPSP: &diagjaxb.RolesOfPSPWrapper{Items: []*diagjaxb.XmlRoleOfPSP{role}},
 	}
 
-	qcOID := enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID()
+	qcOID := enumerations.CertificateExtensionEnumQCStatements.OID()
 	qc.OID = &qcOID
 	addExtension(xml, qc)
 	return diagnostic.NewCertificateWrapper(xml)
@@ -965,15 +965,15 @@ func aovOfShape(shape, certificateID string) *jaxb.XmlAOV {
 	conclusion := &jaxb.XmlConclusion{}
 	switch shape {
 	case "error":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationCryptoConstraintsFailure)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors, xcvDirectMessage("ASCCM_AR_ANS_ANR", "The algorithm is no longer reliable!"))
 	case "warning":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		conclusion.Warnings = append(conclusion.Warnings, xcvDirectMessage("ASCCM_AR_ANS_AKSNR", "The key size is no longer reliable!"))
 	default:
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	}
 	aov.Conclusion = conclusion
 
@@ -1004,8 +1004,8 @@ func crsOfIndication(indication enumerations.Indication, id string) *jaxb.XmlCRS
 	crsID := id
 	crs.Id = &crsID
 	conclusion := &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(indication)}
-	if indication != enumerations.Indication_PASSED {
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE)
+	if indication != enumerations.IndicationPassed {
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationCertificateChainGeneralFailure)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors, xcvDirectMessage("BBB_XCV_IARDPFC_ANS", "No acceptable revocation data found."))
 	} else {
@@ -1021,8 +1021,8 @@ func rfcOfIndication(indication enumerations.Indication, id string) *jaxb.XmlRFC
 	rfcID := id
 	rfc.Id = &rfcID
 	conclusion := &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(indication)}
-	if indication != enumerations.Indication_PASSED {
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_TRY_LATER)
+	if indication != enumerations.IndicationPassed {
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationTryLater)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors, xcvDirectMessage("BBB_RFC_IRIF_ANS", "The revocation is not considered as 'fresh'."))
 	}
@@ -1034,8 +1034,8 @@ func subXCVOfIndication(indication enumerations.Indication, id string) *jaxb.Xml
 	subXCV := &jaxb.XmlSubXCV{}
 	subXCV.Id = id
 	conclusion := &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(indication)}
-	if indication != enumerations.Indication_PASSED {
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE)
+	if indication != enumerations.IndicationPassed {
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationChainConstraintsFailure)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors, xcvDirectMessage("BBB_XCV_SUB_ANS", "The certificate validation is not conclusive!"))
 	}

@@ -127,11 +127,11 @@ func DSSXMLUtilsRegisterTransformWithNodeSetOutput(transformURI string) bool {
 func DSSXMLUtilsRegisterXAdESNamespaces() {
 	xmlutils.XPathUtilsRegisterNamespace(common.XMLDSigNS)
 
-	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespace_XADES_111)
-	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespace_XADES_122)
-	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespace_XADES_132)
-	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespace_XADES_141)
-	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespace_XADES_EVIDENCERECORD_NAMESPACE)
+	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespaceXAdES111)
+	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespaceXAdES122)
+	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespaceXAdES132)
+	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespaceXAdES141)
+	xmlutils.XPathUtilsRegisterNamespace(definition.XAdESNamespaceXAdESEvidencerecordNamespace)
 	// DO NOT register "xades"
 
 	xmlutils.XPathUtilsRegisterNamespace(DSSXMLUtilsSAMLNamespace)
@@ -241,7 +241,7 @@ func dssXMLUtilsChildNodes(node *xmldom.Node) []*xmldom.Node {
 // subtree, making the whole `if (unsignedSignatureProperties != null)` branch a no-op against
 // the live document. Reproduced exactly rather than fixed, per PORTING.md.
 func DSSXMLUtilsGetDocWithIndentedSignature(documentDom *xmldom.Node, signatureId string, noIndentObjectIds []string) (*xmldom.Node, error) {
-	signatures, err := xmlutils.XPathUtilsGetNodeList(documentDom, common.XMLDSigPath_ALL_SIGNATURES_PATH)
+	signatures, err := xmlutils.XPathUtilsGetNodeList(documentDom, common.XMLDSigPathAllSignaturesPath)
 	if err != nil {
 		return nil, err
 	}
@@ -249,7 +249,7 @@ func DSSXMLUtilsGetDocWithIndentedSignature(documentDom *xmldom.Node, signatureI
 		signatureAttrIdValue := DSSXMLUtilsGetIDIdentifier(signature)
 		if utils.IsStringNotEmpty(signatureAttrIdValue) && strings.Contains(signatureAttrIdValue, signatureId) {
 			unsignedSignatureProperties, err := xmlutils.XPathUtilsGetNode(signature,
-				common.AllFromCurrentPosition(definition.XAdES132Element_UNSIGNED_SIGNATURE_PROPERTIES))
+				common.AllFromCurrentPosition(definition.XAdES132ElementUnsignedSignatureProperties))
 			if err != nil {
 				return nil, err
 			}
@@ -258,7 +258,7 @@ func DSSXMLUtilsGetDocWithIndentedSignature(documentDom *xmldom.Node, signatureI
 			signature.Parent.ReplaceChild(importedSignature, signature)
 			if unsignedSignatureProperties != nil {
 				newUnsignedSignatureProperties, err := xmlutils.XPathUtilsGetNode(signature,
-					common.AllFromCurrentPosition(definition.XAdES132Element_UNSIGNED_SIGNATURE_PROPERTIES))
+					common.AllFromCurrentPosition(definition.XAdES132ElementUnsignedSignatureProperties))
 				if err != nil {
 					return nil, err
 				}
@@ -302,7 +302,7 @@ func dssXMLUtilsContainsString(values []string, value string) bool {
 
 // DSSXMLUtilsGetIndentedNode returns an indented xmlNode. Ports getIndentedNode(Node, Node).
 func DSSXMLUtilsGetIndentedNode(documentDom, xmlNode *xmldom.Node) (*xmldom.Node, error) {
-	signatures, err := xmlutils.XPathUtilsGetNodeList(documentDom, common.XMLDSigPath_ALL_SIGNATURES_PATH)
+	signatures, err := xmlutils.XPathUtilsGetNodeList(documentDom, common.XMLDSigPathAllSignaturesPath)
 	if err != nil {
 		return nil, err
 	}
@@ -418,7 +418,7 @@ func dssXMLUtilsGetTargetIndent(nodeChildren []*xmldom.Node) (string, bool) {
 // if none. If there is more than one ID attribute then the first one is returned. Ports
 // getIDIdentifier(Node).
 func DSSXMLUtilsGetIDIdentifier(node *xmldom.Node) string {
-	return DSSXMLUtilsGetAttribute(node, common.XMLDSigAttribute_ID.AttributeName())
+	return DSSXMLUtilsGetAttribute(node, common.XMLDSigAttributeID.AttributeName())
 }
 
 // DSSXMLUtilsGetAttribute returns the attribute value for the given attribute name if it
@@ -520,7 +520,7 @@ func dssXMLUtilsIsEnvelopedTransform(transformation *xmldom.Node) bool {
 	if transformation.Kind != xmldom.Element {
 		return false
 	}
-	algorithm := transformation.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName())
+	algorithm := transformation.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName())
 	if string(xmldsig.TransformEnvelopedSignature) == algorithm {
 		return true
 	}
@@ -559,13 +559,13 @@ func DSSXMLUtilsGetDigestAndValue(element *xmldom.Node) model.Digest {
 	}
 
 	var digestAlgorithmUri, digestValueBase64 string
-	if definition.XAdESNamespace_XADES_111.IsSameUri(element.Name.Space) {
+	if definition.XAdESNamespaceXAdES111.IsSameUri(element.Name.Space) {
 		digestAlgorithmUri, _ = xmlutils.XPathUtilsGetValue(element,
-			common.FromCurrentPositionAttribute(definition.XAdES111Element_DIGEST_METHOD, common.XMLDSigAttribute_ALGORITHM))
-		digestValueBase64, _ = xmlutils.XPathUtilsGetValue(element, common.FromCurrentPosition(definition.XAdES111Element_DIGEST_VALUE))
+			common.FromCurrentPositionAttribute(definition.XAdES111ElementDigestMethod, common.XMLDSigAttributeAlgorithm))
+		digestValueBase64, _ = xmlutils.XPathUtilsGetValue(element, common.FromCurrentPosition(definition.XAdES111ElementDigestValue))
 	} else {
-		digestAlgorithmUri, _ = xmlutils.XPathUtilsGetValue(element, common.XMLDSigPath_DIGEST_METHOD_ALGORITHM_PATH)
-		digestValueBase64, _ = xmlutils.XPathUtilsGetValue(element, common.XMLDSigPath_DIGEST_VALUE_PATH)
+		digestAlgorithmUri, _ = xmlutils.XPathUtilsGetValue(element, common.XMLDSigPathDigestMethodAlgorithmPath)
+		digestValueBase64, _ = xmlutils.XPathUtilsGetValue(element, common.XMLDSigPathDigestValuePath)
 	}
 
 	digestAlgorithm := dssXMLUtilsGetDigestAlgorithm(digestAlgorithmUri)
@@ -607,7 +607,7 @@ func dssXMLUtilsGetDigestAlgorithm(digestAlgorithmUri string) enumerations.Diges
 // DSSXMLUtilsContainsTransforms checks if the reference element contains any transformation.
 // Ports containsTransforms(Element).
 func DSSXMLUtilsContainsTransforms(referenceElement *xmldom.Node) bool {
-	transforms, err := xmlutils.XPathUtilsGetElement(referenceElement, common.XMLDSigPath_TRANSFORMS_PATH)
+	transforms, err := xmlutils.XPathUtilsGetElement(referenceElement, common.XMLDSigPathTransformsPath)
 	if err != nil {
 		// Upstream logs "Unable to detect Transforms".
 		return false
@@ -647,7 +647,7 @@ func dssXMLUtilsIsSignatureValueReferenced(masterSignature *XAdESSignature, refe
 // Ports isKeyInfoReference(Reference, Element).
 func DSSXMLUtilsIsKeyInfoReference(reference *xmldsig.Reference, signatureElement *xmldom.Node) bool {
 	id := xmlutils.DomUtilsGetId(reference.URI())
-	keyInfoElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPath_KEY_INFO_PATH, id)
+	keyInfoElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPathKeyInfoPath, id)
 	return keyInfoElement != nil
 }
 
@@ -656,27 +656,27 @@ func DSSXMLUtilsIsKeyInfoReference(reference *xmldsig.Reference, signatureElemen
 // isSignaturePropertiesReference(Reference, Element).
 func DSSXMLUtilsIsSignaturePropertiesReference(reference *xmldsig.Reference, signatureElement *xmldom.Node) bool {
 	id := xmlutils.DomUtilsGetId(reference.URI())
-	signaturePropertiesElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPath_SIGNATURE_PROPERTIES_PATH, id)
-	signaturePropertyElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPath_SIGNATURE_PROPERTY_PATH, id)
+	signaturePropertiesElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPathSignaturePropertiesPath, id)
+	signaturePropertyElement := xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPathSignaturePropertyPath, id)
 	return signaturePropertiesElement != nil || signaturePropertyElement != nil
 }
 
 // DSSXMLUtilsIsObjectReferenceType checks if the given referenceType is an xmldsig Object type.
 // Ports isObjectReferenceType(String).
 func DSSXMLUtilsIsObjectReferenceType(referenceType string) bool {
-	return common.XMLDSigPath_OBJECT_TYPE == referenceType
+	return common.XMLDSigPathObjectType == referenceType
 }
 
 // DSSXMLUtilsIsManifestReferenceType checks if the given referenceType is an xmldsig Manifest
 // type. Ports isManifestReferenceType(String).
 func DSSXMLUtilsIsManifestReferenceType(referenceType string) bool {
-	return common.XMLDSigPath_MANIFEST_TYPE == referenceType
+	return common.XMLDSigPathManifestType == referenceType
 }
 
 // DSSXMLUtilsIsCounterSignatureReferenceType checks if the given referenceType is an etsi
 // Countersignature type. Ports isCounterSignatureReferenceType(String).
 func DSSXMLUtilsIsCounterSignatureReferenceType(referenceType string) bool {
-	return common.XMLDSigPath_COUNTER_SIGNATURE_TYPE == referenceType
+	return common.XMLDSigPathCounterSignatureType == referenceType
 }
 
 // DSSXMLUtilsIsSameDocumentReference determines whether referenceUri points to a
@@ -694,7 +694,7 @@ func DSSXMLUtilsGetObjectById(signatureElement *xmldom.Node, id string) *xmldom.
 	}
 	// Upstream logs "An error occurred on attempt to extract Object element with Id '{}' : {}" on
 	// failure; XPathUtilsGetElementByIdWithQuery already reproduces that catch-and-return-nil.
-	return xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPath_OBJECT_PATH, id)
+	return xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPathObjectPath, id)
 }
 
 // DSSXMLUtilsGetManifestById gets ds:Manifest by its Id from the ds:Signature element. Ports
@@ -703,7 +703,7 @@ func DSSXMLUtilsGetManifestById(signatureElement *xmldom.Node, id string) *xmldo
 	if !utils.IsStringNotBlank(id) {
 		return nil
 	}
-	return xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPath_MANIFEST_PATH, id)
+	return xmlutils.XPathUtilsGetElementByIdWithQuery(signatureElement, common.XMLDSigPathManifestPath, id)
 }
 
 // DSSXMLUtilsInitManifest initializes a Manifest object from the provided ds:Manifest element.
@@ -743,7 +743,7 @@ func DSSXMLUtilsInitManifestDetachedContent(manifest *xmldsig.Manifest, detached
 // optional). See the file header's "FLAGGED FOR INTEGRATOR" note on scope. Ports
 // getKeyInfoSigningCertificatePublicKey(Element).
 func DSSXMLUtilsGetKeyInfoSigningCertificatePublicKey(signatureElement *xmldom.Node) *model.PublicKey {
-	keyInfoElement, err := xmlutils.XPathUtilsGetElement(signatureElement, common.XMLDSigPath_KEY_INFO_PATH)
+	keyInfoElement, err := xmlutils.XPathUtilsGetElement(signatureElement, common.XMLDSigPathKeyInfoPath)
 	if err != nil || keyInfoElement == nil {
 		// Upstream logs "Unable to extract the public key. Reason : KeyInfo element is null".
 		return nil
@@ -758,7 +758,7 @@ func DSSXMLUtilsGetKeyInfoSigningCertificatePublicKey(signatureElement *xmldom.N
 // ds:KeyInfo/ds:X509Data/ds:X509Certificate child, when present.
 func dssXMLUtilsKeyInfoPublicKeyFromCertificate(keyInfoElement *xmldom.Node) *model.PublicKey {
 	certElement, err := xmlutils.XPathUtilsGetElement(keyInfoElement,
-		common.FromCurrentPosition(common.XMLDSigElement_X509_DATA, common.XMLDSigElement_X509_CERTIFICATE))
+		common.FromCurrentPosition(common.XMLDSigElementX509Data, common.XMLDSigElementX509Certificate))
 	if err != nil || certElement == nil {
 		return nil
 	}
@@ -775,12 +775,12 @@ func dssXMLUtilsKeyInfoPublicKeyFromCertificate(keyInfoElement *xmldom.Node) *mo
 // ds:KeyInfo/ds:KeyValue/ds:RSAKeyValue child, when present.
 func dssXMLUtilsKeyInfoPublicKeyFromRSAKeyValue(keyInfoElement *xmldom.Node) *model.PublicKey {
 	modulusElement, err := xmlutils.XPathUtilsGetElement(keyInfoElement,
-		common.FromCurrentPosition(common.XMLDSigElement_KEY_VALUE, common.XMLDSigElement_RSA_KEY_VALUE, common.XMLDSigElement_MODULUS))
+		common.FromCurrentPosition(common.XMLDSigElementKeyValue, common.XMLDSigElementRSAKeyValue, common.XMLDSigElementModulus))
 	if err != nil || modulusElement == nil {
 		return nil
 	}
 	exponentElement, err := xmlutils.XPathUtilsGetElement(keyInfoElement,
-		common.FromCurrentPosition(common.XMLDSigElement_KEY_VALUE, common.XMLDSigElement_RSA_KEY_VALUE, common.XMLDSigElement_EXPONENT))
+		common.FromCurrentPosition(common.XMLDSigElementKeyValue, common.XMLDSigElementRSAKeyValue, common.XMLDSigElementExponent))
 	if err != nil || exponentElement == nil {
 		return nil
 	}
@@ -817,7 +817,7 @@ func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, mas
 	 * The CounterSignature qualifying property shall contain one countersignature
 	 * of the XAdES signature where CounterSignature is incorporated.
 	 */
-	counterSignatureNode, err := xmlutils.XPathUtilsGetNode(counterSignatureElement, common.XMLDSigPath_SIGNATURE_PATH)
+	counterSignatureNode, err := xmlutils.XPathUtilsGetNode(counterSignatureElement, common.XMLDSigPathSignaturePath)
 	if err != nil || counterSignatureNode == nil {
 		return nil
 	}
@@ -835,20 +835,20 @@ func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, mas
 // elements found in documentNode. Ports getAllSignaturesExceptCounterSignatures(Node).
 func DSSXMLUtilsGetAllSignaturesExceptCounterSignatures(documentNode *xmldom.Node) ([]*xmldom.Node, error) {
 	return xmlutils.XPathUtilsGetNodeList(documentNode,
-		common.AllNotParent(common.XMLDSigElement_SIGNATURE, definition.XAdES132Element_COUNTER_SIGNATURE))
+		common.AllNotParent(common.XMLDSigElementSignature, definition.XAdES132ElementCounterSignature))
 }
 
 // DSSXMLUtilsGetAllEncapsulatedTimestamps returns a NodeList of all
 // "xades:EncapsulatedTimeStamp" elements found in documentNode. Ports
 // getAllEncapsulatedTimestamps(Node).
 func DSSXMLUtilsGetAllEncapsulatedTimestamps(documentNode *xmldom.Node) ([]*xmldom.Node, error) {
-	return xmlutils.XPathUtilsGetNodeList(documentNode, common.All(definition.XAdES132Element_ENCAPSULATED_TIMESTAMP))
+	return xmlutils.XPathUtilsGetNodeList(documentNode, common.All(definition.XAdES132ElementEncapsulatedTimestamp))
 }
 
 // DSSXMLUtilsGetReferenceNodeList returns a NodeList of "ds:Reference" elements. Ports
 // getReferenceNodeList(Node).
 func DSSXMLUtilsGetReferenceNodeList(signatureElement *xmldom.Node) ([]*xmldom.Node, error) {
-	return xmlutils.XPathUtilsGetNodeList(signatureElement, common.XMLDSigPath_SIGNED_INFO_REFERENCE_PATH)
+	return xmlutils.XPathUtilsGetNodeList(signatureElement, common.XMLDSigPathSignedInfoReferencePath)
 }
 
 // DSSXMLUtilsGetReferenceOutputType returns the expected dereferencing output for the provided
@@ -877,20 +877,20 @@ func DSSXMLUtilsGetReferenceOutputType[T *DSSReference | *xmldsig.Reference](ref
 				if transform.Kind != xmldom.Element {
 					continue
 				}
-				outputType = dssXMLUtilsGetTransformOutputType(transform.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName()))
+				outputType = dssXMLUtilsGetTransformOutputType(transform.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName()))
 			}
 		}
 		return outputType
 	}
-	return ReferenceOutputType_OCTET_STREAM
+	return ReferenceOutputTypeOctetStream
 }
 
 // dssXMLUtilsGetDereferenceOutputType ports the private static getDereferenceOutputType(String).
 func dssXMLUtilsGetDereferenceOutputType(referenceUri string) ReferenceOutputType {
 	if DSSXMLUtilsIsSameDocumentReference(referenceUri) {
-		return ReferenceOutputType_NODE_SET
+		return ReferenceOutputTypeNodeSet
 	}
-	return ReferenceOutputType_OCTET_STREAM
+	return ReferenceOutputTypeOctetStream
 }
 
 // dssXMLUtilsGetTransformOutputType ports the private static getTransformOutputType(String).
@@ -899,9 +899,9 @@ func dssXMLUtilsGetTransformOutputType(algorithmUri string) ReferenceOutputType 
 	_, ok := dssXMLUtilsTransformsWithNodeSetOutput[algorithmUri]
 	dssXMLUtilsMu.Unlock()
 	if ok {
-		return ReferenceOutputType_NODE_SET
+		return ReferenceOutputTypeNodeSet
 	}
-	return ReferenceOutputType_OCTET_STREAM
+	return ReferenceOutputTypeOctetStream
 }
 
 // DSSXMLUtilsApplyTransforms applies transforms on the node and returns the byte array to be
@@ -953,7 +953,7 @@ func DSSXMLUtilsApplyTransformsToDocument(document model.DSSDocument, transforms
 func DSSXMLUtilsGetReferenceDigestAlgos(referenceContainer *xmldom.Node) []enumerations.DigestAlgorithm {
 	var digestAlgorithms []enumerations.DigestAlgorithm
 	seen := make(map[enumerations.DigestAlgorithm]struct{})
-	referenceNodeList, err := xmlutils.XPathUtilsGetNodeList(referenceContainer, common.XMLDSigPath_REFERENCE_PATH)
+	referenceNodeList, err := xmlutils.XPathUtilsGetNodeList(referenceContainer, common.XMLDSigPathReferencePath)
 	if err != nil {
 		return digestAlgorithms
 	}
@@ -972,12 +972,12 @@ func DSSXMLUtilsGetReferenceDigestAlgos(referenceContainer *xmldom.Node) []enume
 // DSSXMLUtilsGetReferenceTypes returns a list of reference types. Ports getReferenceTypes(Element).
 func DSSXMLUtilsGetReferenceTypes(referenceContainer *xmldom.Node) []string {
 	var referenceTypes []string
-	referenceNodeList, err := xmlutils.XPathUtilsGetNodeList(referenceContainer, common.XMLDSigPath_REFERENCE_PATH)
+	referenceNodeList, err := xmlutils.XPathUtilsGetNodeList(referenceContainer, common.XMLDSigPathReferencePath)
 	if err != nil {
 		return referenceTypes
 	}
 	for _, referenceElement := range referenceNodeList {
-		typ := referenceElement.AttrValue("", common.XMLDSigAttribute_TYPE.AttributeName())
+		typ := referenceElement.AttrValue("", common.XMLDSigAttributeType.AttributeName())
 		if utils.IsStringNotEmpty(typ) {
 			referenceTypes = append(referenceTypes, typ)
 		}
@@ -1024,7 +1024,7 @@ func DSSXMLUtilsGetReferenceId(reference *xmldsig.Reference) string {
 	if element == nil {
 		return ""
 	}
-	return DSSXMLUtilsGetAttribute(element, common.XMLDSigAttribute_ID.AttributeName())
+	return DSSXMLUtilsGetAttribute(element, common.XMLDSigAttributeID.AttributeName())
 }
 
 // DSSXMLUtilsGetReferenceURI retrieves the URI attribute value of the given reference, when
@@ -1038,7 +1038,7 @@ func DSSXMLUtilsGetReferenceURI(reference *xmldsig.Reference) string {
 	if element == nil {
 		return ""
 	}
-	referenceUri := DSSXMLUtilsGetAttribute(element, common.XMLDSigAttribute_URI.AttributeName())
+	referenceUri := DSSXMLUtilsGetAttribute(element, common.XMLDSigAttributeURI.AttributeName())
 	if referenceUri == "" {
 		return ""
 	}
@@ -1087,7 +1087,7 @@ func DSSXMLUtilsIsReferencedContentAmbiguous(document *xmldom.Node, uri string) 
 func DSSXMLUtilsIncorporateTransforms(parentElement *xmldom.Node, transforms []DSSTransform, namespace *common.DSSNamespace) {
 	if utils.IsCollectionNotEmpty(transforms) {
 		documentDom := parentElement.OwnerDocument()
-		transformsDom := xmlutils.DomUtilsCreateElementNS(documentDom, namespace, common.XMLDSigElement_TRANSFORMS)
+		transformsDom := xmlutils.DomUtilsCreateElementNS(documentDom, namespace, common.XMLDSigElementTransforms)
 		parentElement.AppendChild(transformsDom)
 		for _, dssTransform := range transforms {
 			dssTransform.CreateTransform(documentDom, transformsDom)
@@ -1102,8 +1102,8 @@ func DSSXMLUtilsIncorporateTransforms(parentElement *xmldom.Node, transforms []D
 // Ports incorporateDigestMethod(Element, DigestAlgorithm, DSSNamespace).
 func DSSXMLUtilsIncorporateDigestMethod(parentElement *xmldom.Node, digestAlgorithm enumerations.DigestAlgorithm, namespace *common.DSSNamespace) {
 	documentDom := parentElement.OwnerDocument()
-	digestMethodDom := xmlutils.DomUtilsAddElement(documentDom, parentElement, namespace, common.XMLDSigElement_DIGEST_METHOD)
-	digestMethodDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, digestAlgorithm.URI())
+	digestMethodDom := xmlutils.DomUtilsAddElement(documentDom, parentElement, namespace, common.XMLDSigElementDigestMethod)
+	digestMethodDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, digestAlgorithm.URI())
 }
 
 // DSSXMLUtilsIncorporateDigestValue creates the ds:DigestValue DOM object:
@@ -1113,7 +1113,7 @@ func DSSXMLUtilsIncorporateDigestMethod(parentElement *xmldom.Node, digestAlgori
 // Ports incorporateDigestValue(Element, String, DSSNamespace).
 func DSSXMLUtilsIncorporateDigestValue(parentDom *xmldom.Node, base64EncodedDigestBytes string, namespace *common.DSSNamespace) {
 	documentDom := parentDom.OwnerDocument()
-	digestValueDom := xmlutils.DomUtilsCreateElementNS(documentDom, namespace, common.XMLDSigElement_DIGEST_VALUE)
+	digestValueDom := xmlutils.DomUtilsCreateElementNS(documentDom, namespace, common.XMLDSigElementDigestValue)
 	digestValueDom.AppendChild(xmldom.NewText(base64EncodedDigestBytes))
 	parentDom.AppendChild(digestValueDom)
 }

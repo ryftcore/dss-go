@@ -78,13 +78,13 @@ func (b *ASiCEWithXAdESManifestBuilder) SetManifestFilename(manifestFilename str
 // (Objects.requireNonNull) on invalid entries/state.
 func (b *ASiCEWithXAdESManifestBuilder) Build() (model.DSSDocument, error) {
 	documentDom := xmlutils.DomUtilsBuildDOMEmpty()
-	manifestDom := xmlutils.DomUtilsCreateElementNS(documentDom, ManifestNS, ManifestElement_MANIFEST)
-	xmlutils.DomUtilsSetAttributeNS(manifestDom, ManifestNS, ManifestAttribute_VERSION, "1.2")
+	manifestDom := xmlutils.DomUtilsCreateElementNS(documentDom, ManifestNS, ManifestElementManifest)
+	xmlutils.DomUtilsSetAttributeNS(manifestDom, ManifestNS, ManifestAttributeVersion, "1.2")
 	documentDom.AppendChild(manifestDom)
 
-	rootDom := xmlutils.DomUtilsAddElement(documentDom, manifestDom, ManifestNS, ManifestElement_FILE_ENTRY)
-	xmlutils.DomUtilsSetAttributeNS(rootDom, ManifestNS, ManifestAttribute_FULL_PATH, "/")
-	xmlutils.DomUtilsSetAttributeNS(rootDom, ManifestNS, ManifestAttribute_MEDIA_TYPE, enumerations.MimeTypeEnum_ASICE.MimeTypeString())
+	rootDom := xmlutils.DomUtilsAddElement(documentDom, manifestDom, ManifestNS, ManifestElementFileEntry)
+	xmlutils.DomUtilsSetAttributeNS(rootDom, ManifestNS, ManifestAttributeFullPath, "/")
+	xmlutils.DomUtilsSetAttributeNS(rootDom, ManifestNS, ManifestAttributeMediaType, enumerations.MimeTypeEnumASiCE.MimeTypeString())
 
 	for _, entry := range b.getEntries() {
 		if entry == nil {
@@ -94,15 +94,15 @@ func (b *ASiCEWithXAdESManifestBuilder) Build() (model.DSSDocument, error) {
 			panic("ManifestEntry#Uri cannot be null! Please define the document's name.")
 		}
 
-		fileDom := xmlutils.DomUtilsAddElement(documentDom, manifestDom, ManifestNS, ManifestElement_FILE_ENTRY)
-		xmlutils.DomUtilsSetAttributeNS(fileDom, ManifestNS, ManifestAttribute_FULL_PATH, entry.Uri())
+		fileDom := xmlutils.DomUtilsAddElement(documentDom, manifestDom, ManifestNS, ManifestElementFileEntry)
+		xmlutils.DomUtilsSetAttributeNS(fileDom, ManifestNS, ManifestAttributeFullPath, entry.Uri())
 		mimeType := entry.MimeType()
 		if mimeType == nil {
 			// Upstream logs a warning naming the manifest entry's URI here (dropped per
 			// PORTING.md).
-			mimeType = enumerations.MimeTypeEnum_BINARY
+			mimeType = enumerations.MimeTypeEnumBinary
 		}
-		xmlutils.DomUtilsSetAttributeNS(fileDom, ManifestNS, ManifestAttribute_MEDIA_TYPE, mimeType.MimeTypeString())
+		xmlutils.DomUtilsSetAttributeNS(fileDom, ManifestNS, ManifestAttributeMediaType, mimeType.MimeTypeString())
 	}
 
 	return xmlutils.DomUtilsCreateDssDocumentFromDomDocument(documentDom, b.manifestFilename)

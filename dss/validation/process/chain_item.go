@@ -185,11 +185,11 @@ func (c *ChainItemBase[T]) Execute() {
 		c.callNext()
 	} else {
 		switch level {
-		case enumerations.Level_IGNORE:
+		case enumerations.LevelIgnore:
 			c.ignore()
-		case enumerations.Level_FAIL:
+		case enumerations.LevelFail:
 			c.fail()
-		case enumerations.Level_INFORM, enumerations.Level_WARN:
+		case enumerations.LevelInform, enumerations.LevelWarn:
 			c.informOrWarn(level)
 		default:
 			// Unknown level
@@ -225,17 +225,17 @@ func (c *ChainItemBase[T]) PreviousErrors() []*jaxb.XmlMessage {
 
 // recordIgnore ports the private recordIgnore().
 func (c *ChainItemBase[T]) recordIgnore() {
-	c.recordConstraint(jaxb.XmlStatus_IGNORED)
+	c.recordConstraint(jaxb.XmlStatusIgnored)
 }
 
 // recordValid ports the private recordValid().
 func (c *ChainItemBase[T]) recordValid() {
-	c.recordConstraint(jaxb.XmlStatus_OK)
+	c.recordConstraint(jaxb.XmlStatusOK)
 }
 
 // recordInvalid ports the private recordInvalid().
 func (c *ChainItemBase[T]) recordInvalid() {
-	c.recordConstraint(jaxb.XmlStatus_NOT_OK)
+	c.recordConstraint(jaxb.XmlStatusNotOK)
 }
 
 // recordCustomSuccessConclusion ports the private recordCustomSuccessConclusion().
@@ -284,10 +284,10 @@ func setSubIndication(conclusion *jaxb.XmlConclusion, subIndication enumerations
 
 // recordInfosOrWarns ports the private recordInfosOrWarns(Level).
 func (c *ChainItemBase[T]) recordInfosOrWarns(level enumerations.Level) {
-	if enumerations.Level_INFORM == level {
-		c.recordConstraint(jaxb.XmlStatus_INFORMATION)
-	} else if enumerations.Level_WARN == level {
-		c.recordConstraint(jaxb.XmlStatus_WARNING)
+	if enumerations.LevelInform == level {
+		c.recordConstraint(jaxb.XmlStatusInformation)
+	} else if enumerations.LevelWarn == level {
+		c.recordConstraint(jaxb.XmlStatusWarning)
 	}
 }
 
@@ -306,15 +306,15 @@ func (c *ChainItemBase[T]) recordConstraint(status jaxb.XmlStatus) {
 		xmlConstraint.BlockType = &blockType
 	}
 
-	if jaxb.XmlStatus_NOT_OK == status {
+	if jaxb.XmlStatusNotOK == status {
 		xmlConstraint.Error = overrides.BuildErrorMessage()
-	} else if jaxb.XmlStatus_WARNING == status {
+	} else if jaxb.XmlStatusWarning == status {
 		xmlConstraint.Warning = overrides.BuildErrorMessage()
-	} else if jaxb.XmlStatus_INFORMATION == status {
+	} else if jaxb.XmlStatusInformation == status {
 		xmlConstraint.Info = overrides.BuildErrorMessage()
 	}
 
-	if jaxb.XmlStatus_IGNORED != status {
+	if jaxb.XmlStatusIgnored != status {
 		xmlConstraint.AdditionalInfo = overrides.BuildAdditionalInfo()
 	}
 	c.addConstraint(xmlConstraint)
@@ -450,19 +450,19 @@ func (c *ChainItemBase[T]) IsValid(constraintConclusion *jaxb.XmlConstraintsConc
 // IsValidConclusion checks if the conclusion has a PASSED indication. Port of
 // isValidConclusion(XmlConclusion).
 func (c *ChainItemBase[T]) IsValidConclusion(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-		enumerations.Indication_TOTAL_PASSED == conclusion.Indication.Indication())
+	return conclusion != nil && (enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+		enumerations.IndicationTotalPassed == conclusion.Indication.Indication())
 }
 
 // IsInvalidConclusion checks if the conclusion has a FAILED indication. Port of
 // isInvalidConclusion(XmlConclusion).
 func (c *ChainItemBase[T]) IsInvalidConclusion(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_FAILED == conclusion.Indication.Indication() ||
-		enumerations.Indication_TOTAL_FAILED == conclusion.Indication.Indication())
+	return conclusion != nil && (enumerations.IndicationFailed == conclusion.Indication.Indication() ||
+		enumerations.IndicationTotalFailed == conclusion.Indication.Indication())
 }
 
 // IsIndeterminateConclusion checks if the conclusion has an INDETERMINATE
 // indication. Port of isIndeterminateConclusion(XmlConclusion).
 func (c *ChainItemBase[T]) IsIndeterminateConclusion(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication()
+	return conclusion != nil && enumerations.IndicationIndeterminate == conclusion.Indication.Indication()
 }

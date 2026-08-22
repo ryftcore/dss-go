@@ -96,8 +96,8 @@ func checkSuite(t *testing.T, golden map[string]string, seen map[string]bool, pr
 
 	sigAlgos := suite.AcceptableSignatureAlgorithms()
 	for _, sa := range []enumerations.SignatureAlgorithm{
-		enumerations.SignatureAlgorithm_RSA_SHA256,
-		enumerations.SignatureAlgorithm_ECDSA_SHA256,
+		enumerations.SignatureAlgorithmRSASHA256,
+		enumerations.SignatureAlgorithmECDSASHA256,
 	} {
 		check(t, golden, seen, prefix+"."+string(sa)+".evaluations", evaluationsCanonical(sigAlgos[sa]))
 	}

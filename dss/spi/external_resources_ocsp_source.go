@@ -105,7 +105,7 @@ func (s *ExternalResourcesOCSPSource) load(reader io.Reader) error {
 	if err != nil {
 		return model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to load OCSP token : %s", err), err)
 	}
-	s.AddBinary(ocspResponseBinary, enumerations.RevocationOrigin_EXTERNAL)
+	s.AddBinary(ocspResponseBinary, enumerations.RevocationOriginExternal)
 	return nil
 }
 
@@ -118,7 +118,7 @@ func (s *ExternalResourcesOCSPSource) RevocationTokens(certificate *model.Certif
 		return nil, err
 	}
 	for _, revocationToken := range revocationTokens {
-		revocationToken.SetExternalOrigin(enumerations.RevocationOrigin_EXTERNAL)
+		revocationToken.SetExternalOrigin(enumerations.RevocationOriginExternal)
 	}
 	return revocationTokens, nil
 }

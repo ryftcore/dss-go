@@ -5,12 +5,12 @@ package enumerations
 type TimestampQualification string
 
 const (
-	// TimestampQualification_QTSA is a Qualified timestamp token.
-	TimestampQualification_QTSA TimestampQualification = "QTSA"
-	// TimestampQualification_TSA is a Not-qualified timestamp token.
-	TimestampQualification_TSA TimestampQualification = "TSA"
-	// TimestampQualification_NA is Not-applicable (not determined).
-	TimestampQualification_NA TimestampQualification = "NA"
+	// TimestampQualificationQTSA is a Qualified timestamp token.
+	TimestampQualificationQTSA TimestampQualification = "QTSA"
+	// TimestampQualificationTSA is a Not-qualified timestamp token.
+	TimestampQualificationTSA TimestampQualification = "TSA"
+	// TimestampQualificationNA is Not-applicable (not determined).
+	TimestampQualificationNA TimestampQualification = "NA"
 )
 
 type timestampQualificationFields struct {
@@ -22,17 +22,17 @@ type timestampQualificationFields struct {
 // timestampQualificationData holds the (readable, label, uri) tuple for
 // each constant.
 var timestampQualificationData = map[TimestampQualification]timestampQualificationFields{
-	TimestampQualification_QTSA: {"QTSA", "Qualified timestamp", "urn:cef:dss:timestampQualification:QTSA"},
-	TimestampQualification_TSA:  {"TSA", "Not qualified timestamp", "urn:cef:dss:timestampQualification:TSA"},
-	TimestampQualification_NA:   {"N/A", "Not applicable", "urn:cef:dss:timestampQualification:notApplicable"},
+	TimestampQualificationQTSA: {"QTSA", "Qualified timestamp", "urn:cef:dss:timestampQualification:QTSA"},
+	TimestampQualificationTSA:  {"TSA", "Not qualified timestamp", "urn:cef:dss:timestampQualification:TSA"},
+	TimestampQualificationNA:   {"N/A", "Not applicable", "urn:cef:dss:timestampQualification:notApplicable"},
 }
 
 // TimestampQualificationValues returns all constants in declaration order.
 func TimestampQualificationValues() []TimestampQualification {
 	return []TimestampQualification{
-		TimestampQualification_QTSA,
-		TimestampQualification_TSA,
-		TimestampQualification_NA,
+		TimestampQualificationQTSA,
+		TimestampQualificationTSA,
+		TimestampQualificationNA,
 	}
 }
 

@@ -63,9 +63,9 @@ func main() {
 	signingDate := time.Date(year, 1, 15, 10, 30, 45, 0, time.UTC)
 
 	parameters := cades.NewCAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_B)
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	parameters.BLevel().SetSigningDate(&signingDate)

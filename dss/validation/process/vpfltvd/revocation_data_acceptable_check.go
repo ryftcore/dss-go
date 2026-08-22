@@ -36,7 +36,7 @@ func NewRevocationDataAcceptableCheck[T any](i18nProvider *i18n.I18nProvider, re
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *RevocationDataAcceptableCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_REV_BBB
+	return jaxb.XmlBlockTypeRevBBB
 }
 
 // Process performs the check. Port of process().

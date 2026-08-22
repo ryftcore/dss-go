@@ -46,9 +46,9 @@ func (c *TLMRACheck) ErrorMessageTag() i18n.MessageTag {
 	if parentTL != nil {
 		tslType := parentTL.Type
 		if tslType != nil {
-			if enumerations.TSLTypeEnum_EUlistofthelists.URI() == *tslType {
+			if enumerations.TSLTypeEnumEUlistofthelists.URI() == *tslType {
 				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V1
-			} else if enumerations.TSLTypeEnum_AdESlistofthelists.URI() == *tslType {
+			} else if enumerations.TSLTypeEnumAdESlistofthelists.URI() == *tslType {
 				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V2
 			}
 		}
@@ -60,7 +60,7 @@ func (c *TLMRACheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLMRACheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port of

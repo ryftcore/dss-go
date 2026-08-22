@@ -290,7 +290,7 @@ func (a *PDFDocumentAnalyzer) timestampedReferences(signatureScopes []mscope.Sig
 	for _, signatureScope := range signatureScopes {
 		if a.AddReference(signatureScope) {
 			timestampedReferences = append(timestampedReferences,
-				validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectType_SIGNED_DATA))
+				validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectTypeSignedData))
 		}
 	}
 	return timestampedReferences

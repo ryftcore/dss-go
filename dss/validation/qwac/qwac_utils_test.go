@@ -22,7 +22,7 @@ func sigWithDigestMatchers(matchers ...*jaxb.XmlDigestMatcher) *diagnostic.Signa
 }
 
 func sigDEntryFor(documentName string, found, intact bool) *jaxb.XmlDigestMatcher {
-	t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_SIG_D_ENTRY)
+	t := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeSigDEntry)
 	name := documentName
 	return &jaxb.XmlDigestMatcher{
 		DataFound:    found,
@@ -68,7 +68,7 @@ func TestGetIdentifiedTLSCertificates_SkipsWhenNotFoundOrNotIntact(t *testing.T)
 
 func TestGetIdentifiedTLSCertificates_SkipsWrongType(t *testing.T) {
 	cert := certWithId("C-1")
-	other := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_MESSAGE_DIGEST)
+	other := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeMessageDigest)
 	name := "C-1"
 	sig := sigWithDigestMatchers(&jaxb.XmlDigestMatcher{
 		DataFound: true, DataIntact: true, Type: &other, DocumentName: &name,
@@ -95,7 +95,7 @@ func TestGetIdentifiedTLSCertificates_SkipsNilType(t *testing.T) {
 
 func TestGetIdentifiedTLSCertificates_SkipsNilDocumentName(t *testing.T) {
 	cert := certWithId("C-1")
-	tp := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_SIG_D_ENTRY)
+	tp := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeSigDEntry)
 	sig := sigWithDigestMatchers(&jaxb.XmlDigestMatcher{
 		DataFound: true, DataIntact: true, Type: &tp,
 	})

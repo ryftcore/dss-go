@@ -83,11 +83,11 @@ func (c *EAAAdministrativePeriodNotExpiredCheck) ErrorMessageTag() i18n.MessageT
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAAdministrativePeriodNotExpiredCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAAdministrativePeriodNotExpiredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE
+	return enumerations.SubIndicationOutOfBoundsNoPOE
 }

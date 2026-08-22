@@ -965,8 +965,8 @@ func TestXAdES122Path_QueryStringKAT(t *testing.T) {
 		}
 	})
 
-	if got := p.Namespace().Uri(); got != XAdESNamespace_XADES_122.Uri() {
-		t.Errorf("Namespace().Uri() = %q, want %q", got, XAdESNamespace_XADES_122.Uri())
+	if got := p.Namespace().Uri(); got != XAdESNamespaceXAdES122.Uri() {
+		t.Errorf("Namespace().Uri() = %q, want %q", got, XAdESNamespaceXAdES122.Uri())
 	}
 	if got := p.SignedPropertiesUri(); got != "http://uri.etsi.org/01903/v1.2.2#SignedProperties" {
 		t.Errorf("SignedPropertiesUri() = %q, want %q", got, "http://uri.etsi.org/01903/v1.2.2#SignedProperties")

@@ -40,19 +40,19 @@ func (c *ReferenceDataExistenceCheck[T]) Process() bool {
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ReferenceDataExistenceCheck[T]) MessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
-	case enumerations.DigestMatcherType_MESSAGE_IMPRINT:
+	case enumerations.DigestMatcherTypeMessageImprint:
 		return i18n.MessageTag_BBB_CV_TSP_IRDOF
-	case enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
 		return i18n.MessageTag_BBB_CV_CS_CSSVF
-	case enumerations.DigestMatcherType_MANIFEST_ENTRY:
+	case enumerations.DigestMatcherTypeManifestEntry:
 		return i18n.MessageTag_BBB_CV_IMEOF
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
 		return i18n.MessageTag_BBB_CV_ER_ATSRF
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
 		return i18n.MessageTag_BBB_CV_ER_ATSSRF
-	case enumerations.DigestMatcherType_EAA_DISCLOSURE:
+	case enumerations.DigestMatcherTypeEAADisclosure:
 		return i18n.MessageTag_BBB_CV_EAA_SDCBF
-	case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
+	case enumerations.DigestMatcherTypeEAANestedDisclosure:
 		return i18n.MessageTag_BBB_CV_EAA_NSDCBF
 	default:
 		return i18n.MessageTag_BBB_CV_IRDOF
@@ -63,19 +63,19 @@ func (c *ReferenceDataExistenceCheck[T]) MessageTag() i18n.MessageTag {
 // getErrorMessageTag().
 func (c *ReferenceDataExistenceCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
-	case enumerations.DigestMatcherType_MESSAGE_IMPRINT:
+	case enumerations.DigestMatcherTypeMessageImprint:
 		return i18n.MessageTag_BBB_CV_TSP_IRDOF_ANS
-	case enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
 		return i18n.MessageTag_BBB_CV_CS_CSSVF_ANS
-	case enumerations.DigestMatcherType_MANIFEST_ENTRY:
+	case enumerations.DigestMatcherTypeManifestEntry:
 		return i18n.MessageTag_BBB_CV_IMEOF_ANS
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
 		return i18n.MessageTag_BBB_CV_ER_ATSRF_ANS
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
 		return i18n.MessageTag_BBB_CV_ER_ATSSRF_ANS
-	case enumerations.DigestMatcherType_EAA_DISCLOSURE:
+	case enumerations.DigestMatcherTypeEAADisclosure:
 		return i18n.MessageTag_BBB_CV_EAA_SDCBF_ANS
-	case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
+	case enumerations.DigestMatcherTypeEAANestedDisclosure:
 		return i18n.MessageTag_BBB_CV_EAA_NSDCBF_ANS
 	default:
 		return i18n.MessageTag_BBB_CV_IRDOF_ANS
@@ -85,13 +85,13 @@ func (c *ReferenceDataExistenceCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ReferenceDataExistenceCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ReferenceDataExistenceCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden
@@ -99,12 +99,12 @@ func (c *ReferenceDataExistenceCheck[T]) FailedSubIndicationForConclusion() enum
 func (c *ReferenceDataExistenceCheck[T]) BuildAdditionalInfo() *string {
 	var referenceName interface{}
 	switch digestMatcherType(c.digestMatcher) {
-	case enumerations.DigestMatcherType_MESSAGE_IMPRINT,
-		enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
+	case enumerations.DigestMatcherTypeMessageImprint,
+		enumerations.DigestMatcherTypeCounterSignedSignatureValue:
 		return nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
 		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
 		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST_SEQ
 	default:
 		referenceName = c.getReferenceName(c.digestMatcher)
@@ -121,7 +121,7 @@ func (c *ReferenceDataExistenceCheck[T]) getReferenceName(digestMatcher *diagnos
 		return digestMatcherUri(digestMatcher)
 	} else if digestMatcher.DisclosableClaim != nil && digestMatcher.DisclosableClaim.Name != nil {
 		claimName := *digestMatcher.DisclosableClaim.Name
-		if enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE == digestMatcherType(digestMatcher) &&
+		if enumerations.DigestMatcherTypeEAANestedDisclosure == digestMatcherType(digestMatcher) &&
 			digestMatcher.DisclosableClaim.Value != "" {
 			claimName += fmt.Sprintf(" '%s'", digestMatcher.DisclosableClaim.Value)
 		}

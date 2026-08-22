@@ -73,8 +73,8 @@ func (t *AbstractTransform) SetNamespace(namespace *common.DSSNamespace) {
 // CreateTransform creates a ds:Transform element and appends it to parentNode.
 // Ports createTransform(Document, Element).
 func (t *AbstractTransform) CreateTransform(document, parentNode *xmldom.Node) *xmldom.Node {
-	transformDom := xmlutils.DomUtilsAddElement(document, parentNode, t.namespace, common.XMLDSigElement_TRANSFORM)
-	transformDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, t.algorithm)
+	transformDom := xmlutils.DomUtilsAddElement(document, parentNode, t.namespace, common.XMLDSigElementTransform)
+	transformDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, t.algorithm)
 	return transformDom
 }
 

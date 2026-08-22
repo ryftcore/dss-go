@@ -89,7 +89,7 @@ func TestOCSPTokenKAT_MultipleSingleResponses(t *testing.T) {
 	if got := certificates[0].DSSIDAsString(); got != "C-4BD191286E5FD03A0D203507A06975155B3B9DDE914DB714948C3A9A57E44CBD" {
 		t.Errorf("embedded certificate = %s, want C-4BD191286E5FD03A0D203507A06975155B3B9DDE914DB714948C3A9A57E44CBD", got)
 	}
-	if got := certificateSource.CertificateSourceType(); got != enumerations.CertificateSourceType_OCSP_RESPONSE {
+	if got := certificateSource.CertificateSourceType(); got != enumerations.CertificateSourceTypeOCSPResponse {
 		t.Errorf("CertificateSourceType() = %s, want OCSP_RESPONSE", got)
 	}
 
@@ -107,9 +107,9 @@ func TestOCSPTokenKAT_MultipleSingleResponses(t *testing.T) {
 		reason         enumerations.RevocationReason
 		revocationDate int64
 	}{
-		{"ocsp_multi_leaf1.der", "101", enumerations.CertificateStatus_GOOD, "", 0},
-		{"ocsp_multi_leaf2.der", "102", enumerations.CertificateStatus_REVOKED, enumerations.RevocationReason_KEY_COMPROMISE, 1786565942000},
-		{"ocsp_multi_leaf3.der", "103", enumerations.CertificateStatus_UNKNOWN, "", 0},
+		{"ocsp_multi_leaf1.der", "101", enumerations.CertificateStatusGood, "", 0},
+		{"ocsp_multi_leaf2.der", "102", enumerations.CertificateStatusRevoked, enumerations.RevocationReasonKeyCompromise, 1786565942000},
+		{"ocsp_multi_leaf3.der", "103", enumerations.CertificateStatusUnknown, "", 0},
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.certificate, func(t *testing.T) {
@@ -150,7 +150,7 @@ func TestOCSPTokenKAT_MultipleSingleResponses(t *testing.T) {
 			if got := token.NextUpdate().UnixMilli(); got != 1786569556000 {
 				t.Errorf("NextUpdate() = %d, want 1786569556000", got)
 			}
-			if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA256 {
+			if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA256 {
 				t.Errorf("SignatureAlgorithm() = %q, want RSA_SHA256", got)
 			}
 			if !token.IsSignatureIntact() || !token.IsValid() {
@@ -218,7 +218,7 @@ func TestOCSPTokenKAT_Extensions(t *testing.T) {
 	if !token.CertHashMatch() {
 		t.Errorf("CertHashMatch() = false, want true")
 	}
-	if got := token.Status(); got != enumerations.CertificateStatus_GOOD {
+	if got := token.Status(); got != enumerations.CertificateStatusGood {
 		t.Errorf("Status() = %q, want GOOD", got)
 	}
 	if !token.IsValid() {

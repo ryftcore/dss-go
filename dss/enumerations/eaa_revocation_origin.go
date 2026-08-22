@@ -5,18 +5,18 @@ package enumerations
 type EAARevocationOrigin string
 
 const (
-	// EAARevocationOrigin_EXTERNAL indicates the status data was provided
+	// EAARevocationOriginExternal indicates the status data was provided
 	// by the user or extracted from online source.
-	EAARevocationOrigin_EXTERNAL EAARevocationOrigin = "EXTERNAL"
-	// EAARevocationOrigin_CACHED indicates the status data was obtained
+	EAARevocationOriginExternal EAARevocationOrigin = "EXTERNAL"
+	// EAARevocationOriginCached indicates the status data was obtained
 	// from a local DB or cache.
-	EAARevocationOrigin_CACHED EAARevocationOrigin = "CACHED"
+	EAARevocationOriginCached EAARevocationOrigin = "CACHED"
 )
 
 // EAARevocationOriginValues returns all constants in declaration order.
 func EAARevocationOriginValues() []EAARevocationOrigin {
 	return []EAARevocationOrigin{
-		EAARevocationOrigin_EXTERNAL,
-		EAARevocationOrigin_CACHED,
+		EAARevocationOriginExternal,
+		EAARevocationOriginCached,
 	}
 }

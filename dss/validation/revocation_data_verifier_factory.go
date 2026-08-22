@@ -77,7 +77,7 @@ func (f *RevocationDataVerifierFactory) instantiateCryptographicSuite(
 	var acceptableSignatureAlgorithms []*modelpolicy.SignatureAlgorithmWithMinKeySize
 
 	cryptographicSuite := f.revocationCryptographicSuite(f.validationPolicy)
-	if cryptographicSuite != nil && enumerations.Level_FAIL == cryptographicSuite.Level() {
+	if cryptographicSuite != nil && enumerations.LevelFail == cryptographicSuite.Level() {
 		currentTime := f.ValidationTime()
 		acceptableDigestAlgorithms = validationpolicy.GetReliableDigestAlgorithmsAtTime(cryptographicSuite, currentTime)
 		acceptableSignatureAlgorithms = validationpolicy.GetReliableSignatureAlgorithmsWithMinimalKeyLengthAtTime(
@@ -100,7 +100,7 @@ func (f *RevocationDataVerifierFactory) instantiateCryptographicSuite(
 // getRevocationCryptographicSuite(ValidationPolicy).
 func (f *RevocationDataVerifierFactory) revocationCryptographicSuite(
 	validationPolicy modelpolicy.ValidationPolicy) modelpolicy.CryptographicSuite {
-	return validationPolicy.SignatureCryptographicConstraint(enumerations.Context_REVOCATION)
+	return validationPolicy.SignatureCryptographicConstraint(enumerations.ContextRevocation)
 }
 
 // toSignatureAlgorithmWithKeySizesMap is the port of the private
@@ -126,11 +126,11 @@ func (f *RevocationDataVerifierFactory) instantiateRevocationSkipConstraints(
 	certificateExtensions := newOrderedStringSet()
 	certificatePolicies := newOrderedStringSet()
 
-	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.Context_SIGNATURE)
-	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.Context_COUNTER_SIGNATURE)
-	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.Context_KEY_BINDING_SIGNATURE)
-	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.Context_REVOCATION)
-	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.Context_TIMESTAMP)
+	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.ContextSignature)
+	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.ContextCounterSignature)
+	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.ContextKeyBindingSignature)
+	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.ContextRevocation)
+	f.populateRevocationSkipFromBasicSignatureConstraints(certificateExtensions, certificatePolicies, enumerations.ContextTimestamp)
 
 	revocationDataVerifier.SetRevocationSkipCertificateExtensions(certificateExtensions.values)
 	revocationDataVerifier.SetRevocationSkipCertificatePolicies(certificatePolicies.values)
@@ -163,9 +163,9 @@ func (s *orderedStringSet) addAll(values []string) {
 func (f *RevocationDataVerifierFactory) populateRevocationSkipFromBasicSignatureConstraints(
 	certificateExtensions, certificatePolicies *orderedStringSet, context enumerations.Context) {
 	f.populateRevocationSkipFromCertificateConstraints(certificateExtensions, certificatePolicies,
-		context, enumerations.SubContext_SIGNING_CERT)
+		context, enumerations.SubContextSigningCert)
 	f.populateRevocationSkipFromCertificateConstraints(certificateExtensions, certificatePolicies,
-		context, enumerations.SubContext_CA_CERTIFICATE)
+		context, enumerations.SubContextCACertificate)
 }
 
 // populateRevocationSkipFromCertificateConstraints is the port of the private
@@ -194,14 +194,14 @@ func (f *RevocationDataVerifierFactory) populateRevocationSkipFromCertificateCon
 func (f *RevocationDataVerifierFactory) instantiateRevocationFreshnessConstraints(
 	revocationDataVerifier *spivalidation.RevocationDataVerifier) {
 	revocationDataVerifier.SetSignatureMaximumRevocationFreshness(f.signatureRevocationFreshnessConstraint())
-	revocationDataVerifier.SetTimestampMaximumRevocationFreshness(f.revocationFreshnessConstraint(enumerations.Context_TIMESTAMP))
-	revocationDataVerifier.SetRevocationMaximumRevocationFreshness(f.revocationFreshnessConstraint(enumerations.Context_REVOCATION))
+	revocationDataVerifier.SetTimestampMaximumRevocationFreshness(f.revocationFreshnessConstraint(enumerations.ContextTimestamp))
+	revocationDataVerifier.SetRevocationMaximumRevocationFreshness(f.revocationFreshnessConstraint(enumerations.ContextRevocation))
 
-	revocationFreshnessNextUpdateConstraint := f.revocationFreshnessNextUpdateConstraintPresent(enumerations.Context_SIGNATURE)
-	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.Context_COUNTER_SIGNATURE)
-	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.Context_KEY_BINDING_SIGNATURE)
-	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.Context_TIMESTAMP)
-	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.Context_REVOCATION)
+	revocationFreshnessNextUpdateConstraint := f.revocationFreshnessNextUpdateConstraintPresent(enumerations.ContextSignature)
+	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.ContextCounterSignature)
+	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.ContextKeyBindingSignature)
+	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.ContextTimestamp)
+	revocationFreshnessNextUpdateConstraint = revocationFreshnessNextUpdateConstraint || f.revocationFreshnessNextUpdateConstraintPresent(enumerations.ContextRevocation)
 
 	revocationDataVerifier.SetCheckRevocationFreshnessNextUpdate(revocationFreshnessNextUpdateConstraint)
 }
@@ -209,14 +209,14 @@ func (f *RevocationDataVerifierFactory) instantiateRevocationFreshnessConstraint
 // signatureRevocationFreshnessConstraint is the port of the private
 // getSignatureRevocationFreshnessConstraint().
 func (f *RevocationDataVerifierFactory) signatureRevocationFreshnessConstraint() *int64 {
-	maximumRevocationFreshness := f.revocationFreshnessConstraint(enumerations.Context_SIGNATURE)
+	maximumRevocationFreshness := f.revocationFreshnessConstraint(enumerations.ContextSignature)
 
-	counterSignatureRevocationFreshnessConstraint := f.revocationFreshnessConstraint(enumerations.Context_COUNTER_SIGNATURE)
+	counterSignatureRevocationFreshnessConstraint := f.revocationFreshnessConstraint(enumerations.ContextCounterSignature)
 	if maximumRevocationFreshness == nil || (counterSignatureRevocationFreshnessConstraint != nil &&
 		*counterSignatureRevocationFreshnessConstraint < *maximumRevocationFreshness) {
 		maximumRevocationFreshness = counterSignatureRevocationFreshnessConstraint
 	}
-	keyBindingSignatureRevocationFreshnessConstraint := f.revocationFreshnessConstraint(enumerations.Context_KEY_BINDING_SIGNATURE)
+	keyBindingSignatureRevocationFreshnessConstraint := f.revocationFreshnessConstraint(enumerations.ContextKeyBindingSignature)
 	if maximumRevocationFreshness == nil || (keyBindingSignatureRevocationFreshnessConstraint != nil &&
 		*keyBindingSignatureRevocationFreshnessConstraint < *maximumRevocationFreshness) {
 		maximumRevocationFreshness = keyBindingSignatureRevocationFreshnessConstraint
@@ -228,8 +228,8 @@ func (f *RevocationDataVerifierFactory) signatureRevocationFreshnessConstraint()
 // revocationFreshnessConstraint is the port of the private
 // getRevocationFreshnessConstraint(Context).
 func (f *RevocationDataVerifierFactory) revocationFreshnessConstraint(context enumerations.Context) *int64 {
-	maximumRevocationFreshness := f.revocationFreshnessConstraintValue(context, enumerations.SubContext_SIGNING_CERT)
-	caCertRevocationFreshness := f.revocationFreshnessConstraintValue(context, enumerations.SubContext_CA_CERTIFICATE)
+	maximumRevocationFreshness := f.revocationFreshnessConstraintValue(context, enumerations.SubContextSigningCert)
+	caCertRevocationFreshness := f.revocationFreshnessConstraintValue(context, enumerations.SubContextCACertificate)
 	if maximumRevocationFreshness == nil || (caCertRevocationFreshness != nil &&
 		*caCertRevocationFreshness < *maximumRevocationFreshness) {
 		maximumRevocationFreshness = caCertRevocationFreshness
@@ -253,12 +253,12 @@ func (f *RevocationDataVerifierFactory) revocationFreshnessConstraintValue(conte
 // getRevocationFreshnessNextUpdateConstraintPresent(Context).
 func (f *RevocationDataVerifierFactory) revocationFreshnessNextUpdateConstraintPresent(context enumerations.Context) bool {
 	revocationFreshnessNextUpdateConstraint := f.validationPolicy.RevocationFreshnessNextUpdateConstraint(
-		context, enumerations.SubContext_SIGNING_CERT)
+		context, enumerations.SubContextSigningCert)
 	if revocationFreshnessNextUpdateConstraint != nil {
 		return true
 	}
 	revocationFreshnessNextUpdateConstraint = f.validationPolicy.RevocationFreshnessNextUpdateConstraint(
-		context, enumerations.SubContext_CA_CERTIFICATE)
+		context, enumerations.SubContextCACertificate)
 	return revocationFreshnessNextUpdateConstraint != nil
 }
 
@@ -266,20 +266,20 @@ func (f *RevocationDataVerifierFactory) revocationFreshnessNextUpdateConstraintP
 // the private instantiateAcceptRevocationIssuersWithoutRevocationConstraint(RevocationDataVerifier).
 func (f *RevocationDataVerifierFactory) instantiateAcceptRevocationIssuersWithoutRevocationConstraint(
 	revocationDataVerifier *spivalidation.RevocationDataVerifier) {
-	revocationDataAvailableConstraint := f.revocationDataAvailablePresent(enumerations.Context_REVOCATION)
+	revocationDataAvailableConstraint := f.revocationDataAvailablePresent(enumerations.ContextRevocation)
 	revocationDataVerifier.SetAcceptRevocationCertificatesWithoutRevocation(!revocationDataAvailableConstraint)
 
-	revocationDataAvailableConstraint = f.revocationDataAvailablePresent(enumerations.Context_TIMESTAMP)
+	revocationDataAvailableConstraint = f.revocationDataAvailablePresent(enumerations.ContextTimestamp)
 	revocationDataVerifier.SetAcceptTimestampCertificatesWithoutRevocation(!revocationDataAvailableConstraint)
 }
 
 // revocationDataAvailablePresent is the port of the private
 // getRevocationDataAvailablePresent(Context).
 func (f *RevocationDataVerifierFactory) revocationDataAvailablePresent(context enumerations.Context) bool {
-	signingCertificateRule := f.validationPolicy.RevocationDataAvailableConstraint(context, enumerations.SubContext_SIGNING_CERT)
-	if signingCertificateRule != nil && enumerations.Level_FAIL == signingCertificateRule.Level() {
+	signingCertificateRule := f.validationPolicy.RevocationDataAvailableConstraint(context, enumerations.SubContextSigningCert)
+	if signingCertificateRule != nil && enumerations.LevelFail == signingCertificateRule.Level() {
 		return true
 	}
-	caCertificateRule := f.validationPolicy.RevocationDataAvailableConstraint(context, enumerations.SubContext_CA_CERTIFICATE)
-	return caCertificateRule != nil && enumerations.Level_FAIL == caCertificateRule.Level()
+	caCertificateRule := f.validationPolicy.RevocationDataAvailableConstraint(context, enumerations.SubContextCACertificate)
+	return caCertificateRule != nil && enumerations.LevelFail == caCertificateRule.Level()
 }

@@ -46,9 +46,9 @@ func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) Process() bool {
 	if conclusion.SubIndication != nil {
 		subIndication = conclusion.SubIndication.SubIndication()
 	}
-	return !(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-		(enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndication ||
-			enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndication))
+	return !(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+		(enumerations.SubIndicationOutOfBoundsNoPOE == subIndication ||
+			enumerations.SubIndicationOutOfBoundsNotRevoked == subIndication))
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

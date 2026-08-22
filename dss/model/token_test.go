@@ -10,7 +10,7 @@ func TestTokenBaseDefaults(t *testing.T) {
 	base := NewTokenBase()
 
 	// The Java field initialisers.
-	if got := base.SignatureValidity(); got != enumerations.SignatureValidity_NOT_EVALUATED {
+	if got := base.SignatureValidity(); got != enumerations.SignatureValidityNotEvaluated {
 		t.Errorf("SignatureValidity() = %v, want NOT_EVALUATED", got)
 	}
 	if got := base.InvalidityReason(); got != "" {
@@ -38,11 +38,11 @@ func TestTokenBaseProtectedFieldSetters(t *testing.T) {
 	// go through these setters instead.
 	base := NewTokenBase()
 
-	base.SetSignatureAlgorithm(enumerations.SignatureAlgorithm_RSA_SHA512)
-	if got := base.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA512 {
+	base.SetSignatureAlgorithm(enumerations.SignatureAlgorithmRSASHA512)
+	if got := base.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA512 {
 		t.Errorf("SignatureAlgorithm() = %v", got)
 	}
-	base.SetSignatureValidity(enumerations.SignatureValidity_VALID)
+	base.SetSignatureValidity(enumerations.SignatureValidityValid)
 	if !base.IsSignatureIntact() || !base.IsValid() {
 		t.Error("a VALID signature must be reported as intact")
 	}

@@ -8,38 +8,38 @@ import "fmt"
 type CertificateRefOrigin string
 
 const (
-	// CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS: the certificate reference was
+	// CertificateRefOriginAttributeCertificateRefs: the certificate reference was
 	// embedded in the signature 'attribute-certificate-references' attribute.
-	CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS CertificateRefOrigin = "ATTRIBUTE_CERTIFICATE_REFS"
-	// CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS: the certificate reference was
+	CertificateRefOriginAttributeCertificateRefs CertificateRefOrigin = "ATTRIBUTE_CERTIFICATE_REFS"
+	// CertificateRefOriginCompleteCertificateRefs: the certificate reference was
 	// embedded in the signature 'complete-certificate-references' attribute.
-	CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS CertificateRefOrigin = "COMPLETE_CERTIFICATE_REFS"
-	// CertificateRefOrigin_SIGNING_CERTIFICATE: the certificate reference was
+	CertificateRefOriginCompleteCertificateRefs CertificateRefOrigin = "COMPLETE_CERTIFICATE_REFS"
+	// CertificateRefOriginSigningCertificate: the certificate reference was
 	// embedded in the signature 'signing-certificate' attribute.
-	CertificateRefOrigin_SIGNING_CERTIFICATE CertificateRefOrigin = "SIGNING_CERTIFICATE"
-	// CertificateRefOrigin_KEY_IDENTIFIER is used as a hint to identify the signing
+	CertificateRefOriginSigningCertificate CertificateRefOrigin = "SIGNING_CERTIFICATE"
+	// CertificateRefOriginKeyIdentifier is used as a hint to identify the signing
 	// certificate (used in JAdES).
-	CertificateRefOrigin_KEY_IDENTIFIER CertificateRefOrigin = "KEY_IDENTIFIER"
-	// CertificateRefOrigin_X509_URL is used as a hint to identify the resource
+	CertificateRefOriginKeyIdentifier CertificateRefOrigin = "KEY_IDENTIFIER"
+	// CertificateRefOriginX509URL is used as a hint to identify the resource
 	// containing the signing certificate or certificate chain (used in JAdES).
-	CertificateRefOrigin_X509_URL CertificateRefOrigin = "X509_URL"
-	// CertificateRefOrigin_PUBLIC_KEY contains a public key of the signing certificate.
-	CertificateRefOrigin_PUBLIC_KEY CertificateRefOrigin = "PUBLIC_KEY"
-	// CertificateRefOrigin_UNPROTECTED_HEADER_REFS: certificate reference present
+	CertificateRefOriginX509URL CertificateRefOrigin = "X509_URL"
+	// CertificateRefOriginPublicKey contains a public key of the signing certificate.
+	CertificateRefOriginPublicKey CertificateRefOrigin = "PUBLIC_KEY"
+	// CertificateRefOriginUnprotectedHeaderRefs: certificate reference present
 	// within an unprotected header parameter (JWS or COSE).
-	CertificateRefOrigin_UNPROTECTED_HEADER_REFS CertificateRefOrigin = "UNPROTECTED_HEADER_REFS"
+	CertificateRefOriginUnprotectedHeaderRefs CertificateRefOrigin = "UNPROTECTED_HEADER_REFS"
 )
 
 // CertificateRefOriginValues returns all CertificateRefOrigin constants in declaration order.
 func CertificateRefOriginValues() []CertificateRefOrigin {
 	return []CertificateRefOrigin{
-		CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS,
-		CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS,
-		CertificateRefOrigin_SIGNING_CERTIFICATE,
-		CertificateRefOrigin_KEY_IDENTIFIER,
-		CertificateRefOrigin_X509_URL,
-		CertificateRefOrigin_PUBLIC_KEY,
-		CertificateRefOrigin_UNPROTECTED_HEADER_REFS,
+		CertificateRefOriginAttributeCertificateRefs,
+		CertificateRefOriginCompleteCertificateRefs,
+		CertificateRefOriginSigningCertificate,
+		CertificateRefOriginKeyIdentifier,
+		CertificateRefOriginX509URL,
+		CertificateRefOriginPublicKey,
+		CertificateRefOriginUnprotectedHeaderRefs,
 	}
 }
 

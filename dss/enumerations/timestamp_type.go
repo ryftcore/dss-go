@@ -5,38 +5,38 @@ package enumerations
 type TimestampType string
 
 const (
-	// TimestampType_CONTENT_TIMESTAMP: CAdES: id-aa-ets-contentTimestamp,
+	// TimestampTypeContentTimestamp: CAdES: id-aa-ets-contentTimestamp,
 	// JAdES: adoTst.
-	TimestampType_CONTENT_TIMESTAMP TimestampType = "CONTENT_TIMESTAMP"
-	// TimestampType_ALL_DATA_OBJECTS_TIMESTAMP: XAdES:
+	TimestampTypeContentTimestamp TimestampType = "CONTENT_TIMESTAMP"
+	// TimestampTypeAllDataObjectsTimestamp: XAdES:
 	// AllDataObjectsTimestamp.
-	TimestampType_ALL_DATA_OBJECTS_TIMESTAMP TimestampType = "ALL_DATA_OBJECTS_TIMESTAMP"
-	// TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP: XAdES:
+	TimestampTypeAllDataObjectsTimestamp TimestampType = "ALL_DATA_OBJECTS_TIMESTAMP"
+	// TimestampTypeIndividualDataObjectsTimestamp: XAdES:
 	// IndividualDataObjectsTimeStamp.
-	TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP TimestampType = "INDIVIDUAL_DATA_OBJECTS_TIMESTAMP"
-	// TimestampType_SIGNATURE_TIMESTAMP: CAdES/PAdES:
+	TimestampTypeIndividualDataObjectsTimestamp TimestampType = "INDIVIDUAL_DATA_OBJECTS_TIMESTAMP"
+	// TimestampTypeSignatureTimestamp: CAdES/PAdES:
 	// id-aa-signatureTimeStampToken, XAdES: SignatureTimeStamp, JAdES:
 	// sigTst.
-	TimestampType_SIGNATURE_TIMESTAMP TimestampType = "SIGNATURE_TIMESTAMP"
-	// TimestampType_VRI_TIMESTAMP: PAdES: /VRI/TS.
-	TimestampType_VRI_TIMESTAMP TimestampType = "VRI_TIMESTAMP"
-	// TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP: CAdES:
+	TimestampTypeSignatureTimestamp TimestampType = "SIGNATURE_TIMESTAMP"
+	// TimestampTypeVRITimestamp: PAdES: /VRI/TS.
+	TimestampTypeVRITimestamp TimestampType = "VRI_TIMESTAMP"
+	// TimestampTypeValidationDataRefsOnlyTimestamp: CAdES:
 	// id-aa-ets-certCRLTimestamp, XAdES: RefsOnlyTimeStamp, JAdES: rfsTst.
-	TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP TimestampType = "VALIDATION_DATA_REFSONLY_TIMESTAMP"
-	// TimestampType_VALIDATION_DATA_TIMESTAMP: CAdES: id-aa-ets-escTimeStamp,
+	TimestampTypeValidationDataRefsOnlyTimestamp TimestampType = "VALIDATION_DATA_REFSONLY_TIMESTAMP"
+	// TimestampTypeValidationDataTimestamp: CAdES: id-aa-ets-escTimeStamp,
 	// XAdES: SigAndRefsTimeStamp, JAdES: sigRTst.
-	TimestampType_VALIDATION_DATA_TIMESTAMP TimestampType = "VALIDATION_DATA_TIMESTAMP"
-	// TimestampType_CONTAINER_TIMESTAMP is the ASiC detached timestamp.
-	TimestampType_CONTAINER_TIMESTAMP TimestampType = "CONTAINER_TIMESTAMP"
-	// TimestampType_DOCUMENT_TIMESTAMP is the PAdES-LTV "document
+	TimestampTypeValidationDataTimestamp TimestampType = "VALIDATION_DATA_TIMESTAMP"
+	// TimestampTypeContainerTimestamp is the ASiC detached timestamp.
+	TimestampTypeContainerTimestamp TimestampType = "CONTAINER_TIMESTAMP"
+	// TimestampTypeDocumentTimestamp is the PAdES-LTV "document
 	// timestamp".
-	TimestampType_DOCUMENT_TIMESTAMP TimestampType = "DOCUMENT_TIMESTAMP"
-	// TimestampType_ARCHIVE_TIMESTAMP: CAdES: id-aa-ets-archiveTimestamp,
+	TimestampTypeDocumentTimestamp TimestampType = "DOCUMENT_TIMESTAMP"
+	// TimestampTypeArchiveTimestamp: CAdES: id-aa-ets-archiveTimestamp,
 	// XAdES: ArchiveTimeStamp, JAdES: arcTst.
-	TimestampType_ARCHIVE_TIMESTAMP TimestampType = "ARCHIVE_TIMESTAMP"
-	// TimestampType_EVIDENCE_RECORD_TIMESTAMP is an evidence record
+	TimestampTypeArchiveTimestamp TimestampType = "ARCHIVE_TIMESTAMP"
+	// TimestampTypeEvidenceRecordTimestamp is an evidence record
 	// time-stamp.
-	TimestampType_EVIDENCE_RECORD_TIMESTAMP TimestampType = "EVIDENCE_RECORD_TIMESTAMP"
+	TimestampTypeEvidenceRecordTimestamp TimestampType = "EVIDENCE_RECORD_TIMESTAMP"
 )
 
 type timestampTypeFields struct {
@@ -49,33 +49,33 @@ type timestampTypeFields struct {
 // signature: 0 - content timestamps, 1 - signature timestamp, 2 -
 // validation data timestamps, 3 - archive timestamps.
 var timestampTypeData = map[TimestampType]timestampTypeFields{
-	TimestampType_CONTENT_TIMESTAMP:                  {0, false},
-	TimestampType_ALL_DATA_OBJECTS_TIMESTAMP:         {0, false},
-	TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP:  {0, false},
-	TimestampType_SIGNATURE_TIMESTAMP:                {1, true},
-	TimestampType_VRI_TIMESTAMP:                      {1, true},
-	TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP: {2, false},
-	TimestampType_VALIDATION_DATA_TIMESTAMP:          {2, true},
-	TimestampType_CONTAINER_TIMESTAMP:                {3, true},
-	TimestampType_DOCUMENT_TIMESTAMP:                 {3, true},
-	TimestampType_ARCHIVE_TIMESTAMP:                  {3, true},
-	TimestampType_EVIDENCE_RECORD_TIMESTAMP:          {3, true},
+	TimestampTypeContentTimestamp:                {0, false},
+	TimestampTypeAllDataObjectsTimestamp:         {0, false},
+	TimestampTypeIndividualDataObjectsTimestamp:  {0, false},
+	TimestampTypeSignatureTimestamp:              {1, true},
+	TimestampTypeVRITimestamp:                    {1, true},
+	TimestampTypeValidationDataRefsOnlyTimestamp: {2, false},
+	TimestampTypeValidationDataTimestamp:         {2, true},
+	TimestampTypeContainerTimestamp:              {3, true},
+	TimestampTypeDocumentTimestamp:               {3, true},
+	TimestampTypeArchiveTimestamp:                {3, true},
+	TimestampTypeEvidenceRecordTimestamp:         {3, true},
 }
 
 // TimestampTypeValues returns all constants in declaration order.
 func TimestampTypeValues() []TimestampType {
 	return []TimestampType{
-		TimestampType_CONTENT_TIMESTAMP,
-		TimestampType_ALL_DATA_OBJECTS_TIMESTAMP,
-		TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP,
-		TimestampType_SIGNATURE_TIMESTAMP,
-		TimestampType_VRI_TIMESTAMP,
-		TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP,
-		TimestampType_VALIDATION_DATA_TIMESTAMP,
-		TimestampType_CONTAINER_TIMESTAMP,
-		TimestampType_DOCUMENT_TIMESTAMP,
-		TimestampType_ARCHIVE_TIMESTAMP,
-		TimestampType_EVIDENCE_RECORD_TIMESTAMP,
+		TimestampTypeContentTimestamp,
+		TimestampTypeAllDataObjectsTimestamp,
+		TimestampTypeIndividualDataObjectsTimestamp,
+		TimestampTypeSignatureTimestamp,
+		TimestampTypeVRITimestamp,
+		TimestampTypeValidationDataRefsOnlyTimestamp,
+		TimestampTypeValidationDataTimestamp,
+		TimestampTypeContainerTimestamp,
+		TimestampTypeDocumentTimestamp,
+		TimestampTypeArchiveTimestamp,
+		TimestampTypeEvidenceRecordTimestamp,
 	}
 }
 
@@ -99,25 +99,25 @@ func (t TimestampType) IsValidationDataTimestamp() bool {
 // IsContainerTimestamp checks if the timestamp type is a container
 // timestamp (used for ASiC).
 func (t TimestampType) IsContainerTimestamp() bool {
-	return t == TimestampType_CONTAINER_TIMESTAMP
+	return t == TimestampTypeContainerTimestamp
 }
 
 // IsDocumentTimestamp checks if the timestamp type is a document timestamp
 // (used for PAdES).
 func (t TimestampType) IsDocumentTimestamp() bool {
-	return t == TimestampType_DOCUMENT_TIMESTAMP
+	return t == TimestampTypeDocumentTimestamp
 }
 
 // IsArchivalTimestamp checks if the timestamp type is an archive
 // timestamp.
 func (t TimestampType) IsArchivalTimestamp() bool {
-	return t == TimestampType_ARCHIVE_TIMESTAMP
+	return t == TimestampTypeArchiveTimestamp
 }
 
 // IsEvidenceRecordTimestamp checks if the timestamp type is an evidence
 // record timestamp.
 func (t TimestampType) IsEvidenceRecordTimestamp() bool {
-	return t == TimestampType_EVIDENCE_RECORD_TIMESTAMP
+	return t == TimestampTypeEvidenceRecordTimestamp
 }
 
 // CoversSignature checks if a timestamp of this type covers a signature.

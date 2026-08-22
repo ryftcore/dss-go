@@ -21,7 +21,7 @@ func NewSubjectKeyIdentifier() *SubjectKeyIdentifier {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID()),
 	}
 }
 

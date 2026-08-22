@@ -83,22 +83,22 @@ func dssASN1UtilsTestCertificate(t *testing.T, name string) *model.CertificateTo
 // SHAKE256-512 special case DSS-3651 introduced.
 func TestDSSASN1UtilsAlgorithmIdentifierForDigest(t *testing.T) {
 	expected := map[enumerations.DigestAlgorithm]string{
-		enumerations.DigestAlgorithm_SHA1:         "300906052b0e03021a0500",
-		enumerations.DigestAlgorithm_SHA224:       "300b0609608648016503040204",
-		enumerations.DigestAlgorithm_SHA256:       "300b0609608648016503040201",
-		enumerations.DigestAlgorithm_SHA384:       "300b0609608648016503040202",
-		enumerations.DigestAlgorithm_SHA512:       "300b0609608648016503040203",
-		enumerations.DigestAlgorithm_SHA3_224:     "300b0609608648016503040207",
-		enumerations.DigestAlgorithm_SHA3_256:     "300b0609608648016503040208",
-		enumerations.DigestAlgorithm_SHA3_384:     "300b0609608648016503040209",
-		enumerations.DigestAlgorithm_SHA3_512:     "300b060960864801650304020a",
-		enumerations.DigestAlgorithm_SHAKE128:     "300b060960864801650304020b",
-		enumerations.DigestAlgorithm_SHAKE256:     "300b060960864801650304020c",
-		enumerations.DigestAlgorithm_RIPEMD160:    "300906052b240302010500",
-		enumerations.DigestAlgorithm_MD2:          "300c06082a864886f70d02020500",
-		enumerations.DigestAlgorithm_MD5:          "300c06082a864886f70d02050500",
-		enumerations.DigestAlgorithm_WHIRLPOOL:    "3008060628cf06030037",
-		enumerations.DigestAlgorithm_SHAKE256_512: "300f060960864801650304021202020200",
+		enumerations.DigestAlgorithmSHA1:        "300906052b0e03021a0500",
+		enumerations.DigestAlgorithmSHA224:      "300b0609608648016503040204",
+		enumerations.DigestAlgorithmSHA256:      "300b0609608648016503040201",
+		enumerations.DigestAlgorithmSHA384:      "300b0609608648016503040202",
+		enumerations.DigestAlgorithmSHA512:      "300b0609608648016503040203",
+		enumerations.DigestAlgorithmSHA3224:     "300b0609608648016503040207",
+		enumerations.DigestAlgorithmSHA3256:     "300b0609608648016503040208",
+		enumerations.DigestAlgorithmSHA3384:     "300b0609608648016503040209",
+		enumerations.DigestAlgorithmSHA3512:     "300b060960864801650304020a",
+		enumerations.DigestAlgorithmSHAKE128:    "300b060960864801650304020b",
+		enumerations.DigestAlgorithmSHAKE256:    "300b060960864801650304020c",
+		enumerations.DigestAlgorithmRIPEMD160:   "300906052b240302010500",
+		enumerations.DigestAlgorithmMD2:         "300c06082a864886f70d02020500",
+		enumerations.DigestAlgorithmMD5:         "300c06082a864886f70d02050500",
+		enumerations.DigestAlgorithmWHIRLPOOL:   "3008060628cf06030037",
+		enumerations.DigestAlgorithmSHAKE256512: "300f060960864801650304021202020200",
 	}
 	for _, digestAlgorithm := range enumerations.DigestAlgorithmValues() {
 		identifier, err := DSSASN1UtilsAlgorithmIdentifierForDigest(digestAlgorithm)
@@ -281,9 +281,9 @@ func TestDSSASN1UtilsEnsurePlainSignatureValue(t *testing.T) {
 		t.Fatal(err)
 	}
 	for _, algorithm := range []enumerations.EncryptionAlgorithm{
-		enumerations.EncryptionAlgorithm_ECDSA,
-		enumerations.EncryptionAlgorithm_PLAIN_ECDSA,
-		enumerations.EncryptionAlgorithm_DSA,
+		enumerations.EncryptionAlgorithmECDSA,
+		enumerations.EncryptionAlgorithmPlainECDSA,
+		enumerations.EncryptionAlgorithmDSA,
 	} {
 		value, err := DSSASN1UtilsEnsurePlainSignatureValue(algorithm, asn1Value)
 		if err != nil {
@@ -293,7 +293,7 @@ func TestDSSASN1UtilsEnsurePlainSignatureValue(t *testing.T) {
 			t.Errorf("%s: got %s, want 0102", algorithm, got)
 		}
 	}
-	value, err := DSSASN1UtilsEnsurePlainSignatureValue(enumerations.EncryptionAlgorithm_RSA, asn1Value)
+	value, err := DSSASN1UtilsEnsurePlainSignatureValue(enumerations.EncryptionAlgorithmRSA, asn1Value)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -302,7 +302,7 @@ func TestDSSASN1UtilsEnsurePlainSignatureValue(t *testing.T) {
 	}
 	// A plain value stays plain, even for ECDSA.
 	plain := []byte{0x01, 0x02}
-	value, err = DSSASN1UtilsEnsurePlainSignatureValue(enumerations.EncryptionAlgorithm_ECDSA, plain)
+	value, err = DSSASN1UtilsEnsurePlainSignatureValue(enumerations.EncryptionAlgorithmECDSA, plain)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -553,14 +553,14 @@ func TestDSSASN1UtilsAsn1SignaturePolicyDigest(t *testing.T) {
 	answers := dssASN1UtilsTestKAT(t)
 	policyBytes := dssASN1UtilsTestHex(t, answers, "policy_bytes")
 	want := dssASN1UtilsTestHex(t, answers, "policy_digest_sha256")
-	got, err := DSSASN1UtilsAsn1SignaturePolicyDigest(enumerations.DigestAlgorithm_SHA256, policyBytes)
+	got, err := DSSASN1UtilsAsn1SignaturePolicyDigest(enumerations.DigestAlgorithmSHA256, policyBytes)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !bytes.Equal(got, want) {
 		t.Errorf("\n got %x\nwant %x", got, want)
 	}
-	if _, err := DSSASN1UtilsAsn1SignaturePolicyDigest(enumerations.DigestAlgorithm_SHA256, []byte{0x05, 0x00}); err == nil {
+	if _, err := DSSASN1UtilsAsn1SignaturePolicyDigest(enumerations.DigestAlgorithmSHA256, []byte{0x05, 0x00}); err == nil {
 		t.Error("a policy that is not a SEQUENCE must be rejected")
 	}
 }
@@ -661,7 +661,7 @@ func TestDSSASN1UtilsTagAndEncodingChecks(t *testing.T) {
 // TestDSSASN1UtilsAlgorithmIdentifierFromATSHashIndex covers the ats-hash-index accessor,
 // including the upstream case where the first element is a bare OBJECT IDENTIFIER.
 func TestDSSASN1UtilsAlgorithmIdentifierFromATSHashIndex(t *testing.T) {
-	identifier, err := DSSASN1UtilsAlgorithmIdentifierForDigest(enumerations.DigestAlgorithm_SHA256)
+	identifier, err := DSSASN1UtilsAlgorithmIdentifierForDigest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}

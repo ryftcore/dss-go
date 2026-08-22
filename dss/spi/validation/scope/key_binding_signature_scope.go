@@ -48,7 +48,7 @@ func (s *KeyBindingSignatureScope) eaaPresentationID(tokenIdentifierProvider mod
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *KeyBindingSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_KEY_BINDING_SIGNATURE
+	return enumerations.SignatureScopeTypeKeyBindingSignature
 }
 
 // compile-time interface assertion.

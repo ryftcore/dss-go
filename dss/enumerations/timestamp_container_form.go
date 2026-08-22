@@ -7,22 +7,22 @@ import "strings"
 type TimestampContainerForm string
 
 const (
-	// TimestampContainerForm_PDF is used to timestamp a PDF document.
-	TimestampContainerForm_PDF TimestampContainerForm = "PDF"
-	// TimestampContainerForm_ASiC_E is used to timestamp provided
+	// TimestampContainerFormPDF is used to timestamp a PDF document.
+	TimestampContainerFormPDF TimestampContainerForm = "PDF"
+	// TimestampContainerFormASiCE is used to timestamp provided
 	// document(s) and creates an ASiC-E container.
-	TimestampContainerForm_ASiC_E TimestampContainerForm = "ASiC_E"
-	// TimestampContainerForm_ASiC_S is used to timestamp provided
+	TimestampContainerFormASiCE TimestampContainerForm = "ASiC_E"
+	// TimestampContainerFormASiCS is used to timestamp provided
 	// document(s) and creates an ASiC-S container.
-	TimestampContainerForm_ASiC_S TimestampContainerForm = "ASiC_S"
+	TimestampContainerFormASiCS TimestampContainerForm = "ASiC_S"
 )
 
 // TimestampContainerFormValues returns all constants in declaration order.
 func TimestampContainerFormValues() []TimestampContainerForm {
 	return []TimestampContainerForm{
-		TimestampContainerForm_PDF,
-		TimestampContainerForm_ASiC_E,
-		TimestampContainerForm_ASiC_S,
+		TimestampContainerFormPDF,
+		TimestampContainerFormASiCE,
+		TimestampContainerFormASiCS,
 	}
 }
 

@@ -8,8 +8,8 @@ func TestCryptographicSuiteRecommendation(t *testing.T) {
 		v     CryptographicSuiteRecommendation
 		value string
 	}{
-		{CryptographicSuiteRecommendation_RECOMMENDED, "R"},
-		{CryptographicSuiteRecommendation_LEGACY, "L"},
+		{CryptographicSuiteRecommendationRecommended, "R"},
+		{CryptographicSuiteRecommendationLegacy, "L"},
 	}
 	if len(CryptographicSuiteRecommendationValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(CryptographicSuiteRecommendationValues()))

@@ -37,20 +37,20 @@ import (
 // revocationDataVerifierDefaultDigestAlgorithms is the default collection of Digest Algorithms
 // to accept from CRL/OCSP responders, synchronized with ETSI 119 312 V1.4.2.
 var revocationDataVerifierDefaultDigestAlgorithms = []enumerations.DigestAlgorithm{
-	enumerations.DigestAlgorithm_SHA224, enumerations.DigestAlgorithm_SHA256,
-	enumerations.DigestAlgorithm_SHA384, enumerations.DigestAlgorithm_SHA512,
-	enumerations.DigestAlgorithm_SHA3_256, enumerations.DigestAlgorithm_SHA3_384,
-	enumerations.DigestAlgorithm_SHA3_512,
+	enumerations.DigestAlgorithmSHA224, enumerations.DigestAlgorithmSHA256,
+	enumerations.DigestAlgorithmSHA384, enumerations.DigestAlgorithmSHA512,
+	enumerations.DigestAlgorithmSHA3256, enumerations.DigestAlgorithmSHA3384,
+	enumerations.DigestAlgorithmSHA3512,
 }
 
 // revocationDataVerifierDefaultEncryptionAlgorithmsKeyLength is the default map of acceptable
 // Encryption Algorithms and their corresponding minimal key length.
 var revocationDataVerifierDefaultEncryptionAlgorithmsKeyLength = map[enumerations.EncryptionAlgorithm]int{
-	enumerations.EncryptionAlgorithm_DSA:         2048,
-	enumerations.EncryptionAlgorithm_RSA:         1900,
-	enumerations.EncryptionAlgorithm_RSASSA_PSS:  1900,
-	enumerations.EncryptionAlgorithm_ECDSA:       256,
-	enumerations.EncryptionAlgorithm_PLAIN_ECDSA: 256,
+	enumerations.EncryptionAlgorithmDSA:        2048,
+	enumerations.EncryptionAlgorithmRSA:        1900,
+	enumerations.EncryptionAlgorithmRSASSAPSS:  1900,
+	enumerations.EncryptionAlgorithmECDSA:      256,
+	enumerations.EncryptionAlgorithmPlainECDSA: 256,
 }
 
 // revocationDataVerifierDefaultMaximumRevocationFreshness is the default maximum revocation
@@ -61,9 +61,9 @@ const revocationDataVerifierDefaultMaximumRevocationFreshness = int64(0)
 // certificate extension OIDs indicating the revocation check is not required for those
 // certificates: valassured-ST-certs, id_pkix_ocsp_nocheck and noRevAvail.
 var revocationDataVerifierDefaultRevocationSkipCertificateExtensions = []string{
-	spi.OID_id_etsi_ext_valassured_ST_certs.String(),
-	enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID(),
-	enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID(),
+	spi.OIDIdEtsiExtValassuredSTCerts.String(),
+	enumerations.CertificateExtensionEnumOCSPNoCheck.OID(),
+	enumerations.CertificateExtensionEnumNoRevocationAvailable.OID(),
 }
 
 // RevocationDataVerifier is used to verify acceptance of a revocation data for the following
@@ -288,7 +288,7 @@ func (v *RevocationDataVerifier) IsAcceptableForChain(revocationToken AnyRevocat
 	certificateChain []*model.CertificateToken, controlTime time.Time) bool {
 	return v.isRevocationTokenValid(revocationToken) && v.isRevocationDataComplete(revocationToken) &&
 		v.isGoodIssuer(revocationToken, issuerCertificateToken, controlTime) &&
-		v.IsCertificateChainValid(certificateChain, controlTime, enumerations.Context_REVOCATION) && v.isConsistent(revocationToken) &&
+		v.IsCertificateChainValid(certificateChain, controlTime, enumerations.ContextRevocation) && v.isConsistent(revocationToken) &&
 		v.isAcceptableSignatureAlgorithm(revocationToken, issuerCertificateToken)
 }
 
@@ -320,7 +320,7 @@ func (v *RevocationDataVerifier) isGoodIssuer(revocationToken AnyRevocationToken
 	if issuerCertificateToken == nil {
 		return false
 	}
-	if enumerations.RevocationType_OCSP == revocationToken.RevocationType() &&
+	if enumerations.RevocationTypeOCSP == revocationToken.RevocationType() &&
 		!spi.DSSRevocationUtilsCheckIssuerValidAtRevocationProductionTime(revocationToken, issuerCertificateToken) {
 		return false
 	}
@@ -502,7 +502,7 @@ func (v *RevocationDataVerifier) isTrustedAtTime(certificateToken *model.Certifi
 	if currentTrustAnchorVerifier == nil {
 		return false
 	}
-	return currentTrustAnchorVerifier.IsTrustedAtTime(certificateToken, controlTime, enumerations.Context_REVOCATION)
+	return currentTrustAnchorVerifier.IsTrustedAtTime(certificateToken, controlTime, enumerations.ContextRevocation)
 }
 
 // IsRevocationDataFresh verifies if the revocationToken considered within context is fresh
@@ -559,12 +559,12 @@ func getDifference(nextUpdate, thisUpdate time.Time) int64 {
 // Java's UnsupportedOperationException for an unhandled context becomes a panic.
 func (v *RevocationDataVerifier) maximumRevocationFreshness(context enumerations.Context) *int64 {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE,
-		enumerations.Context_KEY_BINDING_SIGNATURE, enumerations.Context_CERTIFICATE:
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature,
+		enumerations.ContextKeyBindingSignature, enumerations.ContextCertificate:
 		return v.signatureMaximumRevocationFreshness
-	case enumerations.Context_TIMESTAMP, enumerations.Context_EVIDENCE_RECORD:
+	case enumerations.ContextTimestamp, enumerations.ContextEvidenceRecord:
 		return v.timestampMaximumRevocationFreshness
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		return v.revocationMaximumRevocationFreshness
 	default:
 		panic("The provided validation context '" + string(context) + "' is not supported!")
@@ -609,8 +609,8 @@ func (v *RevocationDataVerifier) IsCertificateChainValid(certificateTokenChain [
 
 // isAcceptCertificatesWithoutRevocation is the port of the private isAcceptCertificatesWithoutRevocation(Context).
 func (v *RevocationDataVerifier) isAcceptCertificatesWithoutRevocation(context enumerations.Context) bool {
-	return (enumerations.Context_TIMESTAMP == context && v.acceptTimestampCertificatesWithoutRevocation) ||
-		(enumerations.Context_REVOCATION == context && v.acceptRevocationCertificatesWithoutRevocation)
+	return (enumerations.ContextTimestamp == context && v.acceptTimestampCertificatesWithoutRevocation) ||
+		(enumerations.ContextRevocation == context && v.acceptRevocationCertificatesWithoutRevocation)
 }
 
 // isCertificateValid verifies if the certificate is valid. Port of

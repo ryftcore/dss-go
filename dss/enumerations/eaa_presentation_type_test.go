@@ -19,11 +19,11 @@ func TestEAAPresentationTypeValueOf(t *testing.T) {
 
 func TestEAAPresentationTypeValues(t *testing.T) {
 	want := []EAAPresentationType{
-		EAAPresentationType_SD_JWT,
-		EAAPresentationType_MDOC_DEVICE_RESPONSE,
-		EAAPresentationType_MDOC_ISSUER_SIGNED,
-		EAAPresentationType_JWS,
-		EAAPresentationType_X509_AC,
+		EAAPresentationTypeSDJWT,
+		EAAPresentationTypeMDocDeviceResponse,
+		EAAPresentationTypeMDocIssuerSigned,
+		EAAPresentationTypeJWS,
+		EAAPresentationTypeX509AC,
 	}
 	got := EAAPresentationTypeValues()
 	if len(got) != len(want) {

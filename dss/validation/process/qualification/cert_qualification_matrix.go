@@ -24,25 +24,25 @@ const (
 var certQualifications = func() [2][4][2]enumerations.CertificateQualification {
 	var q [2][4][2]enumerations.CertificateQualification
 
-	q[certQualQC][certQualESig][certQualQSCD] = enumerations.CertificateQualification_QCERT_FOR_ESIG_QSCD
-	q[certQualQC][certQualESeal][certQualQSCD] = enumerations.CertificateQualification_QCERT_FOR_ESEAL_QSCD
-	q[certQualQC][certQualWSA][certQualQSCD] = enumerations.CertificateQualification_QCERT_FOR_WSA
-	q[certQualQC][certQualUnknown][certQualQSCD] = enumerations.CertificateQualification_QCERT_FOR_UNKNOWN_QSCD
+	q[certQualQC][certQualESig][certQualQSCD] = enumerations.CertificateQualificationQCERTForESigQSCD
+	q[certQualQC][certQualESeal][certQualQSCD] = enumerations.CertificateQualificationQCERTForESealQSCD
+	q[certQualQC][certQualWSA][certQualQSCD] = enumerations.CertificateQualificationQCERTForWSA
+	q[certQualQC][certQualUnknown][certQualQSCD] = enumerations.CertificateQualificationQCERTForUnknownQSCD
 
-	q[certQualQC][certQualESig][certQualNotQSCD] = enumerations.CertificateQualification_QCERT_FOR_ESIG
-	q[certQualQC][certQualESeal][certQualNotQSCD] = enumerations.CertificateQualification_QCERT_FOR_ESEAL
-	q[certQualQC][certQualWSA][certQualNotQSCD] = enumerations.CertificateQualification_QCERT_FOR_WSA
-	q[certQualQC][certQualUnknown][certQualNotQSCD] = enumerations.CertificateQualification_QCERT_FOR_UNKNOWN
+	q[certQualQC][certQualESig][certQualNotQSCD] = enumerations.CertificateQualificationQCERTForESig
+	q[certQualQC][certQualESeal][certQualNotQSCD] = enumerations.CertificateQualificationQCERTForESeal
+	q[certQualQC][certQualWSA][certQualNotQSCD] = enumerations.CertificateQualificationQCERTForWSA
+	q[certQualQC][certQualUnknown][certQualNotQSCD] = enumerations.CertificateQualificationQCERTForUnknown
 
-	q[certQualNotQC][certQualESig][certQualNotQSCD] = enumerations.CertificateQualification_CERT_FOR_ESIG
-	q[certQualNotQC][certQualESeal][certQualNotQSCD] = enumerations.CertificateQualification_CERT_FOR_ESEAL
-	q[certQualNotQC][certQualWSA][certQualNotQSCD] = enumerations.CertificateQualification_CERT_FOR_WSA
-	q[certQualNotQC][certQualUnknown][certQualNotQSCD] = enumerations.CertificateQualification_CERT_FOR_UNKNOWN
+	q[certQualNotQC][certQualESig][certQualNotQSCD] = enumerations.CertificateQualificationCertForESig
+	q[certQualNotQC][certQualESeal][certQualNotQSCD] = enumerations.CertificateQualificationCertForESeal
+	q[certQualNotQC][certQualWSA][certQualNotQSCD] = enumerations.CertificateQualificationCertForWSA
+	q[certQualNotQC][certQualUnknown][certQualNotQSCD] = enumerations.CertificateQualificationCertForUnknown
 
-	q[certQualNotQC][certQualESig][certQualQSCD] = enumerations.CertificateQualification_CERT_FOR_ESIG
-	q[certQualNotQC][certQualESeal][certQualQSCD] = enumerations.CertificateQualification_CERT_FOR_ESEAL
-	q[certQualNotQC][certQualWSA][certQualQSCD] = enumerations.CertificateQualification_CERT_FOR_WSA
-	q[certQualNotQC][certQualUnknown][certQualQSCD] = enumerations.CertificateQualification_CERT_FOR_UNKNOWN
+	q[certQualNotQC][certQualESig][certQualQSCD] = enumerations.CertificateQualificationCertForESig
+	q[certQualNotQC][certQualESeal][certQualQSCD] = enumerations.CertificateQualificationCertForESeal
+	q[certQualNotQC][certQualWSA][certQualQSCD] = enumerations.CertificateQualificationCertForWSA
+	q[certQualNotQC][certQualUnknown][certQualQSCD] = enumerations.CertificateQualificationCertForUnknown
 
 	return q
 }()
@@ -58,11 +58,11 @@ func GetCertQualification(qc enumerations.CertificateQualifiedStatus, certType e
 // certTypeInt ports the private static getInt(CertificateType).
 func certTypeInt(certType enumerations.CertificateType) int {
 	switch certType {
-	case enumerations.CertificateType_ESIGN:
+	case enumerations.CertificateTypeESign:
 		return certQualESig
-	case enumerations.CertificateType_ESEAL:
+	case enumerations.CertificateTypeESeal:
 		return certQualESeal
-	case enumerations.CertificateType_WSA:
+	case enumerations.CertificateTypeWSA:
 		return certQualWSA
 	default:
 		return certQualUnknown

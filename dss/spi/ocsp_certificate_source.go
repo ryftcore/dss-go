@@ -52,7 +52,7 @@ func (s *OCSPCertificateSource) extractCertificateTokens() error {
 		if err != nil {
 			return model.NewDSSErrorMessageCause("Unable to read the certificate of the OCSP response", err)
 		}
-		s.AddCertificateWithOrigin(certificateToken, enumerations.CertificateOrigin_BASIC_OCSP_RESP)
+		s.AddCertificateWithOrigin(certificateToken, enumerations.CertificateOriginBasicOCSPResp)
 	}
 	return nil
 }
@@ -65,7 +65,7 @@ func (s *OCSPCertificateSource) extractCertificateRefs() error {
 	}
 	signingCertificateRef := NewCertificateRef()
 	signingCertificateRef.SetResponderId(responderId)
-	s.AddCertificateRef(signingCertificateRef, enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	s.AddCertificateRef(signingCertificateRef, enumerations.CertificateRefOriginSigningCertificate)
 	return nil
 }
 
@@ -92,7 +92,7 @@ func (s *OCSPCertificateSource) extractCandidatesForSigningCertificate(
 		candidates.Add(NewCertificateValidity(certificateToken))
 	}
 
-	signingCertificateRefs := s.CertificateRefsByOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	signingCertificateRefs := s.CertificateRefsByOrigin(enumerations.CertificateRefOriginSigningCertificate)
 	if utils.IsCollectionNotEmpty(signingCertificateRefs) {
 		signingCertificateRef := signingCertificateRefs[0]
 		for _, certificateValidity := range candidates.CertificateValidityList() {
@@ -112,7 +112,7 @@ func (s *OCSPCertificateSource) extractCandidatesForSigningCertificate(
 // CertificateSourceType returns OCSP_RESPONSE. Port of the getCertificateSourceType()
 // override.
 func (s *OCSPCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_OCSP_RESPONSE
+	return enumerations.CertificateSourceTypeOCSPResponse
 }
 
 // compile-time assertion: an OCSPCertificateSource is a revocation certificate source.

@@ -516,7 +516,7 @@ func timestampTokenSliceSortStable(timestampTokens []*validation.TimestampToken,
 func containsTimestampsCoveringOtherTimestamps(timestampTokens []*validation.TimestampToken) bool {
 	for _, timestampToken := range timestampTokens {
 		for _, reference := range timestampToken.TimestampedReferences() {
-			if reference.Category() == enumerations.TimestampedObjectType_TIMESTAMP {
+			if reference.Category() == enumerations.TimestampedObjectTypeTimestamp {
 				return true
 			}
 		}
@@ -651,13 +651,13 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromSignedAttribut
 		var timestampTokens []*validation.TimestampToken
 
 		if s.overrides.IsContentTimestamp(signedAttribute) {
-			timestampTokens = s.makeTimestampTokens(signedAttribute, enumerations.TimestampType_CONTENT_TIMESTAMP, s.SignerDataReferences())
+			timestampTokens = s.makeTimestampTokens(signedAttribute, enumerations.TimestampTypeContentTimestamp, s.SignerDataReferences())
 
 		} else if s.overrides.IsAllDataObjectsTimestamp(signedAttribute) {
-			timestampTokens = s.makeTimestampTokens(signedAttribute, enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP, s.SignerDataReferences())
+			timestampTokens = s.makeTimestampTokens(signedAttribute, enumerations.TimestampTypeAllDataObjectsTimestamp, s.SignerDataReferences())
 
 		} else if s.overrides.IsIndividualDataObjectsTimestamp(signedAttribute) {
-			timestampTokens = s.makeTimestampTokensDefault(signedAttribute, enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP)
+			timestampTokens = s.makeTimestampTokensDefault(signedAttribute, enumerations.TimestampTypeIndividualDataObjectsTimestamp)
 
 		} else {
 			continue
@@ -687,7 +687,7 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromUnsignedAttrib
 
 		switch {
 		case s.overrides.IsSignatureTimestamp(unsignedAttribute):
-			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampType_SIGNATURE_TIMESTAMP, s.getSignatureTimestampReferences())
+			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampTypeSignatureTimestamp, s.getSignatureTimestampReferences())
 			if len(timestampTokens) == 0 {
 				continue
 			}
@@ -705,7 +705,7 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromUnsignedAttrib
 			references := []*validation.TimestampedReference{}
 			addReferences(&references, s.unsignedPropertiesReferences)
 
-			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP, references)
+			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampTypeValidationDataRefsOnlyTimestamp, references)
 			if len(timestampTokens) == 0 {
 				continue
 			}
@@ -718,7 +718,7 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromUnsignedAttrib
 			addReferences(&references, s.getEncapsulatedReferencesFromTimestamps(processedSignatureTimestamps))
 			addReferences(&references, s.unsignedPropertiesReferences)
 
-			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP, references)
+			timestampTokens = s.makeTimestampTokens(unsignedAttribute, enumerations.TimestampTypeValidationDataTimestamp, references)
 			if len(timestampTokens) == 0 {
 				continue
 			}
@@ -733,7 +733,7 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromUnsignedAttrib
 			continue
 
 		case s.overrides.IsArchiveTimestamp(unsignedAttribute):
-			timestampTokens = s.makeTimestampTokensDefault(unsignedAttribute, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+			timestampTokens = s.makeTimestampTokensDefault(unsignedAttribute, enumerations.TimestampTypeArchiveTimestamp)
 			if len(timestampTokens) == 0 {
 				continue
 			}
@@ -867,7 +867,7 @@ func (s *SignatureTimestampSource[AS, SA]) getSignatureTimestampReferences() []*
 // getSignatureReference creates a timestamped reference for the current signature.
 // Port of the protected getSignatureReference().
 func (s *SignatureTimestampSource[AS, SA]) getSignatureReference() *validation.TimestampedReference {
-	return validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectType_SIGNATURE)
+	return validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectTypeSignature)
 }
 
 // getEncapsulatedReferencesFromTimestamps returns a list of TimestampedReferences for tokens
@@ -926,7 +926,7 @@ func (s *SignatureTimestampSource[AS, SA]) getTimestampedRevocationRefs(unsigned
 // getTimestampedCertificateValues returns a list of TimestampedReferences from unsignedAttribute
 // containing certificate values. Port of the protected getTimestampedCertificateValues(SA).
 func (s *SignatureTimestampSource[AS, SA]) getTimestampedCertificateValues(unsignedAttribute SA) []*validation.TimestampedReference {
-	return CreateReferencesForIdentifiers(s.overrides.GetEncapsulatedCertificateIdentifiers(unsignedAttribute), enumerations.TimestampedObjectType_CERTIFICATE)
+	return CreateReferencesForIdentifiers(s.overrides.GetEncapsulatedCertificateIdentifiers(unsignedAttribute), enumerations.TimestampedObjectTypeCertificate)
 }
 
 // getTimestampedRevocationValues returns a list of timestamped revocation references extracted
@@ -1001,7 +1001,7 @@ func (s *SignatureTimestampSource[AS, SA]) getTimestampValidationData(unsignedAt
 func (s *SignatureTimestampSource[AS, SA]) getAnyValidationData(unsignedAttribute SA) []*validation.TimestampedReference {
 	timestampedReferences := []*validation.TimestampedReference{}
 	addReferences(&timestampedReferences, CreateReferencesForIdentifiers(
-		s.overrides.GetEncapsulatedCertificateIdentifiers(unsignedAttribute), enumerations.TimestampedObjectType_CERTIFICATE))
+		s.overrides.GetEncapsulatedCertificateIdentifiers(unsignedAttribute), enumerations.TimestampedObjectTypeCertificate))
 	addReferences(&timestampedReferences, CreateReferencesForCRLBinaries(s.overrides.GetEncapsulatedCRLIdentifiers(unsignedAttribute)))
 	addReferences(&timestampedReferences, must(CreateReferencesForOCSPBinaries(s.overrides.GetEncapsulatedOCSPIdentifiers(unsignedAttribute), s.certificateSource)))
 	return timestampedReferences
@@ -1038,7 +1038,7 @@ func (s *SignatureTimestampSource[AS, SA]) getCounterSignaturesReferences(counte
 func (s *SignatureTimestampSource[AS, SA]) GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference {
 	var counterSigReferences []*validation.TimestampedReference
 
-	counterSigReferences = append(counterSigReferences, validation.NewTimestampedReference(counterSignature.ID(), enumerations.TimestampedObjectType_SIGNATURE))
+	counterSigReferences = append(counterSigReferences, validation.NewTimestampedReference(counterSignature.ID(), enumerations.TimestampedObjectTypeSignature))
 
 	signatureCertificateSource := counterSignature.CertificateSource()
 	addReferences(&counterSigReferences, CreateReferencesForCertificates(signatureCertificateSource.Certificates()))
@@ -1055,7 +1055,7 @@ func (s *SignatureTimestampSource[AS, SA]) GetCounterSignatureReferences(counter
 func filterSignatureTimestamps(previousTimestampedTimestamp []*validation.TimestampToken) []*validation.TimestampToken {
 	result := []*validation.TimestampToken{}
 	for _, timestampToken := range previousTimestampedTimestamp {
-		if timestampToken.TimeStampType() == enumerations.TimestampType_SIGNATURE_TIMESTAMP {
+		if timestampToken.TimeStampType() == enumerations.TimestampTypeSignatureTimestamp {
 			result = append(result, timestampToken)
 		}
 	}

@@ -116,26 +116,26 @@ func (c *EAAQualificationBlock) getSigningCertificate() *diagnostic.CertificateW
 // determineFinalQualification(XmlValidationEAAQualificationProcess, XmlValidationPIDQualificationProcess).
 func (c *EAAQualificationBlock) determineFinalQualification(eaaQualificationProcess *jaxb.XmlValidationEAAQualificationProcess,
 	pidQualificationProcess *jaxb.XmlValidationPIDQualificationProcess) {
-	eaaQualification := enumerations.EAAQualification_NA
+	eaaQualification := enumerations.EAAQualificationNA
 	if eaaQualificationProcess != nil {
 		eaaQualification = eaaQualificationProcess.EAAQualification.EAAQualification()
 	}
-	if enumerations.EAAQualification_NA != eaaQualification {
+	if enumerations.EAAQualificationNA != eaaQualification {
 		c.Result.Value.EAAQualification = append(c.Result.Value.EAAQualification, jaxb.EAAQualificationValue(eaaQualification))
 	}
-	pidQualification := enumerations.EAAQualification_NA
+	pidQualification := enumerations.EAAQualificationNA
 	if pidQualificationProcess != nil {
 		pidQualification = pidQualificationProcess.EAAQualification.EAAQualification()
 	}
-	if (enumerations.EAAQualification_PID == pidQualification || enumerations.EAAQualification_INDETERMINATE_PID == pidQualification) &&
+	if (enumerations.EAAQualificationPID == pidQualification || enumerations.EAAQualificationIndeterminatePID == pidQualification) &&
 		pidQualification != eaaQualification {
 		c.Result.Value.EAAQualification = append(c.Result.Value.EAAQualification, jaxb.EAAQualificationValue(pidQualification))
-	} else if (enumerations.EAAQualification_UNKNOWN == pidQualification || enumerations.EAAQualification_INDETERMINATE_UNKNOWN == pidQualification) &&
-		enumerations.EAAQualification_NA == eaaQualification {
+	} else if (enumerations.EAAQualificationUnknown == pidQualification || enumerations.EAAQualificationIndeterminateUnknown == pidQualification) &&
+		enumerations.EAAQualificationNA == eaaQualification {
 		c.Result.Value.EAAQualification = append(c.Result.Value.EAAQualification, jaxb.EAAQualificationValue(pidQualification))
 	}
 	if utils.IsCollectionEmpty(c.Result.Value.EAAQualification) {
-		c.Result.Value.EAAQualification = append(c.Result.Value.EAAQualification, jaxb.EAAQualificationValue(enumerations.EAAQualification_NA))
+		c.Result.Value.EAAQualification = append(c.Result.Value.EAAQualification, jaxb.EAAQualificationValue(enumerations.EAAQualificationNA))
 	}
 }
 

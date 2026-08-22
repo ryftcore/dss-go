@@ -11,7 +11,7 @@ type XPathQueryIdentifierParameter struct {
 // given ID value.
 func NewXPathQueryIdentifierParameter(idValue string) *XPathQueryIdentifierParameter {
 	return &XPathQueryIdentifierParameter{
-		XPathQueryAttributeParameter: NewXPathQueryAttributeParameterIgnoreCase(XMLDSigAttribute_ID, idValue, true),
+		XPathQueryAttributeParameter: NewXPathQueryAttributeParameterIgnoreCase(XMLDSigAttributeID, idValue, true),
 	}
 }
 

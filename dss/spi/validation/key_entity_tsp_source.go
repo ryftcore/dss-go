@@ -80,11 +80,11 @@ var keyEntityTSPSourceOIDSHA256 = asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4
 // their crypto.Hash counterparts. An algorithm absent from the table cannot be used, which is
 // the Go counterpart of the JCA refusing to provide a MessageDigest for it.
 var keyEntityTSPSourceHashes = map[enumerations.DigestAlgorithm]crypto.Hash{
-	enumerations.DigestAlgorithm_SHA1:   crypto.SHA1,
-	enumerations.DigestAlgorithm_SHA224: crypto.SHA224,
-	enumerations.DigestAlgorithm_SHA256: crypto.SHA256,
-	enumerations.DigestAlgorithm_SHA384: crypto.SHA384,
-	enumerations.DigestAlgorithm_SHA512: crypto.SHA512,
+	enumerations.DigestAlgorithmSHA1:   crypto.SHA1,
+	enumerations.DigestAlgorithmSHA224: crypto.SHA224,
+	enumerations.DigestAlgorithmSHA256: crypto.SHA256,
+	enumerations.DigestAlgorithmSHA384: crypto.SHA384,
+	enumerations.DigestAlgorithmSHA512: crypto.SHA512,
 }
 
 // KeyEntityTSPSourceOverrides is the contract a subclass of KeyEntityTSPSource may implement.
@@ -144,10 +144,10 @@ type KeyEntityTSPSource struct {
 func keyEntityTSPSourceDefaults() KeyEntityTSPSource {
 	return KeyEntityTSPSource{
 		acceptedDigestAlgorithms: []enumerations.DigestAlgorithm{
-			enumerations.DigestAlgorithm_SHA224, enumerations.DigestAlgorithm_SHA256,
-			enumerations.DigestAlgorithm_SHA384, enumerations.DigestAlgorithm_SHA512,
+			enumerations.DigestAlgorithmSHA224, enumerations.DigestAlgorithmSHA256,
+			enumerations.DigestAlgorithmSHA384, enumerations.DigestAlgorithmSHA512,
 		},
-		digestAlgorithm: enumerations.DigestAlgorithm_SHA512,
+		digestAlgorithm: enumerations.DigestAlgorithmSHA512,
 	}
 }
 
@@ -517,7 +517,7 @@ func (s *KeyEntityTSPSource) signedAttributes(tstInfo []byte,
 		cmscore.NewAttribute(cmscore.OIDSigningTime, keyEntityTSPSourceTime(genTime)),
 		cmscore.NewAttribute(keyEntityTSPSourceCMSAlgorithmProtect,
 			keyEntityTSPSourceAlgorithmProtection(signatureAlgorithm)),
-		cmscore.NewAttribute(spi.OID_id_aa_signingCertificateV2,
+		cmscore.NewAttribute(spi.OIDIdAaSigningCertificateV2,
 			keyEntityTSPSourceSigningCertificateV2(messageImprintOID, certificateHash)),
 		cmscore.NewAttribute(cmscore.OIDMessageDigest, asn1ber.WriteTLV(asn1ber.TagOctetString, messageDigest)),
 	}, nil
@@ -592,7 +592,7 @@ func keyEntityTSPSourceSigningCertificateV2(hashAlgorithm asn1.ObjectIdentifier,
 func keyEntityTSPSourceSignatureAlgorithmIdentifier(
 	signatureAlgorithm enumerations.SignatureAlgorithm) *asn1ber.AlgorithmIdentifier {
 	oid := mustParseOID(signatureAlgorithm.OID())
-	if signatureAlgorithm.EncryptionAlgorithm() == enumerations.EncryptionAlgorithm_RSA {
+	if signatureAlgorithm.EncryptionAlgorithm() == enumerations.EncryptionAlgorithmRSA {
 		return asn1ber.NewAlgorithmIdentifierWithParameters(oid, asn1ber.DERNull)
 	}
 	return asn1ber.NewAlgorithmIdentifier(oid)
@@ -603,7 +603,7 @@ func keyEntityTSPSourceSignatureAlgorithmIdentifier(
 // upstream's initResponseGenerator.
 func keyEntityTSPSourceSign(signer crypto.Signer, signatureAlgorithm enumerations.SignatureAlgorithm,
 	toBeSigned []byte) ([]byte, error) {
-	if signatureAlgorithm.EncryptionAlgorithm() == enumerations.EncryptionAlgorithm_EDDSA {
+	if signatureAlgorithm.EncryptionAlgorithm() == enumerations.EncryptionAlgorithmEDDSA {
 		// EdDSA is a pure signature scheme: the whole message is signed, not a digest of it.
 		return signer.Sign(rand.Reader, toBeSigned, crypto.Hash(0))
 	}
@@ -628,11 +628,11 @@ func keyEntityTSPSourceEncryptionAlgorithmForKey(signer crypto.Signer) (enumerat
 	}
 	switch signer.Public().(type) {
 	case *rsa.PublicKey:
-		return enumerations.EncryptionAlgorithm_RSA, nil
+		return enumerations.EncryptionAlgorithmRSA, nil
 	case *ecdsa.PublicKey:
-		return enumerations.EncryptionAlgorithm_ECDSA, nil
+		return enumerations.EncryptionAlgorithmECDSA, nil
 	case ed25519.PublicKey:
-		return enumerations.EncryptionAlgorithm_EDDSA, nil
+		return enumerations.EncryptionAlgorithmEDDSA, nil
 	}
 	return "", fmt.Errorf("unsupported algorithm: %T", signer.Public())
 }

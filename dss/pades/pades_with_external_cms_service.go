@@ -114,7 +114,7 @@ func (s *PAdESWithExternalCMSService) SignDocument(toSignDocument model.DSSDocum
 	pdfSignatureService := s.PAdESSignatureService()
 	signatureDocument := pdfSignatureService.Sign(toSignDocument, derEncodedCMS, parameters)
 
-	if enumerations.SignatureLevel_PAdES_BASELINE_B != parameters.SignatureLevel() &&
+	if enumerations.SignatureLevelPAdESBaselineB != parameters.SignatureLevel() &&
 		padesWithExternalCMSServiceIsExtensionRequired(cmsSignedData, parameters) {
 		parameters.GetContext().SetDetachedContents([]model.DSSDocument{toSignDocument})
 		padesService := s.PAdESService()
@@ -163,9 +163,9 @@ func (s *PAdESWithExternalCMSService) PAdESService() *PAdESService {
 func (s *PAdESWithExternalCMSService) FinalDocumentName(originalFile model.DSSDocument,
 	level enumerations.SignatureLevel) string {
 	name, err := validation.NewFileNameBuilder().SetOriginalFilename(originalFile.Name()).
-		SetSigningOperation(enumerations.SigningOperation_SIGN).SetSignatureLevel(level).
-		SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPED).
-		SetMimeType(enumerations.MimeTypeEnum_PDF).Build()
+		SetSigningOperation(enumerations.SigningOperationSign).SetSignatureLevel(level).
+		SetSignaturePackaging(enumerations.SignaturePackagingEnveloped).
+		SetMimeType(enumerations.MimeTypeEnumPDF).Build()
 	if err != nil {
 		panic(err)
 	}
@@ -182,12 +182,12 @@ func padesWithExternalCMSServiceAssertNotDigestDocument(document model.DSSDocume
 // padesWithExternalCMSServiceIsExtensionRequired ports the private #isExtensionRequired.
 func padesWithExternalCMSServiceIsExtensionRequired(cmsSignedData *cms.CMS,
 	parameters *PAdESSignatureParameters) bool {
-	if enumerations.SignatureLevel_PAdES_BASELINE_T == parameters.SignatureLevel() {
+	if enumerations.SignatureLevelPAdESBaselineT == parameters.SignatureLevel() {
 		// only first SignerInformation is considered.
 		signerInformation := spi.DSSASN1UtilsFirstSignerInformation(cmsSignedData.SignerInfos())
 		unsignedAttributes := cades.CAdESUnsignedAttributesBuild(signerInformation)
 		for _, attribute := range unsignedAttributes.Attributes() {
-			if cades.OID_id_aa_signatureTimeStampToken.Equal(attribute.ASN1Oid()) {
+			if cades.OIDIdAaSignatureTimeStampToken.Equal(attribute.ASN1Oid()) {
 				// Upstream logs "The CMS signature already contains a signature-time-stamp
 				// attribute! The extension to '%s' level is skipped."
 				return false

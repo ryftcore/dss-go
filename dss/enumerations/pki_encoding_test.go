@@ -7,11 +7,11 @@ func TestPKIEncodingURI(t *testing.T) {
 		v   PKIEncoding
 		uri string
 	}{
-		{PKIEncoding_DER, "http://uri.etsi.org/01903/v1.2.2#DER"},
-		{PKIEncoding_BER, "http://uri.etsi.org/01903/v1.2.2#BER"},
-		{PKIEncoding_CER, "http://uri.etsi.org/01903/v1.2.2#CER"},
-		{PKIEncoding_PER, "http://uri.etsi.org/01903/v1.2.2#PER"},
-		{PKIEncoding_XER, "http://uri.etsi.org/01903/v1.2.2#XER"},
+		{PKIEncodingDER, "http://uri.etsi.org/01903/v1.2.2#DER"},
+		{PKIEncodingBER, "http://uri.etsi.org/01903/v1.2.2#BER"},
+		{PKIEncodingCER, "http://uri.etsi.org/01903/v1.2.2#CER"},
+		{PKIEncodingPER, "http://uri.etsi.org/01903/v1.2.2#PER"},
+		{PKIEncodingXER, "http://uri.etsi.org/01903/v1.2.2#XER"},
 	}
 	if len(PKIEncodingValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(PKIEncodingValues()))

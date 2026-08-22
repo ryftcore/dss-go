@@ -91,14 +91,14 @@ func (c *RevocationDateAfterBestSignatureTimeCheck) ErrorMessageTag() i18n.Messa
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *RevocationDateAfterBestSignatureTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *RevocationDateAfterBestSignatureTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	if enumerations.SubContext_SIGNING_CERT == c.subContext {
-		return enumerations.SubIndication_REVOKED_NO_POE
+	if enumerations.SubContextSigningCert == c.subContext {
+		return enumerations.SubIndicationRevokedNoPOE
 	}
-	return enumerations.SubIndication_REVOKED_CA_NO_POE
+	return enumerations.SubIndicationRevokedCANoPOE
 }

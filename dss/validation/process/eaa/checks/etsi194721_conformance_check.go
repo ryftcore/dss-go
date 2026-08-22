@@ -55,21 +55,21 @@ func (c *ETSI194721ConformanceCheck) Process() bool {
 }
 
 func (c *ETSI194721ConformanceCheck) checkVCTPresent() bool {
-	if enumerations.EAAType_SD_JWT_VC == c.eaa.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.eaa.EAAType() {
 		return c.eaa.EAAVerifiableCredentialsTypeUri() != ""
 	}
 	return true
 }
 
 func (c *ETSI194721ConformanceCheck) checkVCTIntegrityPresent() bool {
-	if enumerations.EAAType_SD_JWT_VC == c.eaa.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.eaa.EAAType() {
 		return c.eaa.EAAVerifiableCredentialsTypeIntegrityBytes() != nil
 	}
 	return true
 }
 
 func (c *ETSI194721ConformanceCheck) checkSDJWTIssuingAuthorityAndCountryPresent() bool {
-	if enumerations.EAAType_SD_JWT_VC == c.eaa.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.eaa.EAAType() {
 		eaaSignature := c.eaa.EAASignatures()[0]
 		signingCertificate := eaaSignature.SigningCertificate()
 		relatedCertificates := eaaSignature.FoundCertificates().RelatedCertificates()
@@ -79,8 +79,8 @@ func (c *ETSI194721ConformanceCheck) checkSDJWTIssuingAuthorityAndCountryPresent
 			if signingCertificate.IsQcCompliance() {
 				return c.eaa.DocumentIssuingAuthority() == "" && c.eaa.DocumentIssuingAuthorityCountry() == ""
 			}
-		} else if enumerations.EAAQualification_QEAA == c.eaa.CategoryQualification() ||
-			enumerations.EAAQualification_PUBEAA == c.eaa.CategoryQualification() {
+		} else if enumerations.EAAQualificationQEAA == c.eaa.CategoryQualification() ||
+			enumerations.EAAQualificationPubEAA == c.eaa.CategoryQualification() {
 			// NOTE: TS 119 472-1 v1.2.1 expects a QC for a QEAA/PubEAA, but does
 			// not define how to proceed for a not QC. Therefore we accept any
 			// certificate in such a case.
@@ -103,21 +103,21 @@ func certificateIn(signingCertificate *diagnostic.CertificateWrapper, relatedCer
 }
 
 func (c *ETSI194721ConformanceCheck) checkMDOCIssuingAuthorityPresent() bool {
-	if enumerations.EAAType_ISO_IEC_MDOC == c.eaa.EAAType() {
+	if enumerations.EAATypeISOIECMDoc == c.eaa.EAAType() {
 		return c.eaa.DocumentIssuingAuthority() != ""
 	}
 	return true
 }
 
 func (c *ETSI194721ConformanceCheck) checkMDOCDocumentNumberPresent() bool {
-	if enumerations.EAAType_ISO_IEC_MDOC == c.eaa.EAAType() {
+	if enumerations.EAATypeISOIECMDoc == c.eaa.EAAType() {
 		return c.eaa.DocumentNumber() != ""
 	}
 	return true
 }
 
 func (c *ETSI194721ConformanceCheck) checkSDJWTAdministrativeDateConformance() bool {
-	if enumerations.EAAType_SD_JWT_VC == c.eaa.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.eaa.EAAType() {
 		return (c.eaa.AdministrativeIssuanceDate() == nil) == (c.eaa.AdministrativeExpirationDate() == nil)
 	}
 	return true
@@ -155,8 +155,8 @@ func (c *ETSI194721ConformanceCheck) checkNoStatusIfShortLived() bool {
 }
 
 func (c *ETSI194721ConformanceCheck) checkStatusIsPresentIfMandatory() bool {
-	if (enumerations.EAAQualification_QEAA == c.eaa.CategoryQualification() ||
-		enumerations.EAAQualification_PUBEAA == c.eaa.CategoryQualification()) &&
+	if (enumerations.EAAQualificationQEAA == c.eaa.CategoryQualification() ||
+		enumerations.EAAQualificationPubEAA == c.eaa.CategoryQualification()) &&
 		!utils.IsTrue(c.eaa.ShortLived()) {
 		return c.eaa.EAAPayload().EAAStatus() != nil
 	}
@@ -240,11 +240,11 @@ func (c *ETSI194721ConformanceCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ETSI194721ConformanceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *ETSI194721ConformanceCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

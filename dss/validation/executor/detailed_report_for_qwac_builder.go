@@ -60,7 +60,7 @@ func NewDetailedReportForQWACBuilder(i18nProvider *i18n.I18nProvider,
 // executeAllBasicBuildingBlocks().
 func (b *DetailedReportForQWACBuilder) ExecuteAllBasicBuildingBlocks() map[string]*jaxb.XmlBasicBuildingBlocks {
 	bbbs := b.DetailedReportForCertificateBuilder.ExecuteAllBasicBuildingBlocks()
-	b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.Context_SIGNATURE, bbbs)
+	b.process(javaHashSetOrder(b.DiagnosticData.AllSignatures()), enumerations.ContextSignature, bbbs)
 	return bbbs
 }
 
@@ -158,19 +158,19 @@ func (b *DetailedReportForQWACBuilder) qwacProfile(bindingSignature *jaxb.XmlSig
 			return qwacProcess.QWACType.QWACProfile()
 		}
 	}
-	return enumerations.QWACProfile_NOT_QWAC
+	return enumerations.QWACProfileNotQWAC
 }
 
 // signatureFinalIndication is the port of the private
 // getSignatureFinalIndication(Indication).
 func (b *DetailedReportForQWACBuilder) signatureFinalIndication(highestIndication enumerations.Indication) enumerations.Indication {
 	switch highestIndication {
-	case enumerations.Indication_PASSED:
-		return enumerations.Indication_TOTAL_PASSED
-	case enumerations.Indication_INDETERMINATE:
-		return enumerations.Indication_INDETERMINATE
-	case enumerations.Indication_FAILED:
-		return enumerations.Indication_TOTAL_FAILED
+	case enumerations.IndicationPassed:
+		return enumerations.IndicationTotalPassed
+	case enumerations.IndicationIndeterminate:
+		return enumerations.IndicationIndeterminate
+	case enumerations.IndicationFailed:
+		return enumerations.IndicationTotalFailed
 	default:
 		panic(reports.NewDSSReportExceptionMessage(
 			fmt.Sprintf("The Indication '%s' is not supported!", highestIndication)))

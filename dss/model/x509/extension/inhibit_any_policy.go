@@ -25,7 +25,7 @@ func NewInhibitAnyPolicy() *InhibitAnyPolicy {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumInhibitAnyPolicy.OID()),
 		value:                -1,
 	}
 }

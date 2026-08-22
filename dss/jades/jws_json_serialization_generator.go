@@ -43,9 +43,9 @@ func (g *JWSJsonSerializationGenerator) Generate() (model.DSSDocument, error) {
 	var err error
 
 	switch g.output {
-	case enumerations.JWSSerializationType_JSON_SERIALIZATION:
+	case enumerations.JWSSerializationTypeJSONSerialization:
 		jsonSerialization = g.buildJWSJsonSerialization()
-	case enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION:
+	case enumerations.JWSSerializationTypeFlattenedJSONSerialization:
 		jsonSerialization, err = g.buildFlattenedJwsJsonSerialization()
 		if err != nil {
 			return nil, err

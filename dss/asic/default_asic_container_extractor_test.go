@@ -71,7 +71,7 @@ func TestDefaultASiCContainerExtractorGroupsEntries(t *testing.T) {
 	if asicContent.AsicContainer() != model.DSSDocument(container) {
 		t.Error("the original container was not recorded")
 	}
-	if asicContent.ContainerType() != enumerations.ASiCContainerType_ASiC_E {
+	if asicContent.ContainerType() != enumerations.ASiCContainerTypeASiCE {
 		t.Errorf("containerType = %q, want ASiC_E", asicContent.ContainerType())
 	}
 	if asicContent.MimeTypeDocument() == nil || asicContent.MimeTypeDocument().Name() != ASiCUtilsMimeType {

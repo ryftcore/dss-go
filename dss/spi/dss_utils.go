@@ -564,7 +564,7 @@ func dssUtilsP7cCertificates(input []byte) ([][]byte, error) {
 // DSSUtilsSHA1Digest digests the given string with the SHA1 algorithm and hex-encodes the
 // resulting byte array. Port of getSHA1Digest(String).
 func DSSUtilsSHA1Digest(stringToDigest string) (string, error) {
-	d, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA1, []byte(stringToDigest))
+	d, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA1, []byte(stringToDigest))
 	if err != nil {
 		return "", err
 	}
@@ -590,11 +590,11 @@ func DSSUtilsDigest(digestAlgorithm enumerations.DigestAlgorithm, data []byte) (
 	// The SHAKE output lengths are BouncyCastle's: SHAKEDigest#getDigestSize() answers
 	// fixedOutputLength / 4, i.e. TWICE the security strength in bytes - 32 bytes for
 	// SHAKE-128 and 64 for SHAKE-256, not 16 and 32.
-	case enumerations.DigestAlgorithm_SHAKE128:
+	case enumerations.DigestAlgorithmSHAKE128:
 		out := make([]byte, 32)
 		sha3.ShakeSum128(out, data)
 		return out, nil
-	case enumerations.DigestAlgorithm_SHAKE256:
+	case enumerations.DigestAlgorithmSHAKE256:
 		out := make([]byte, 64)
 		sha3.ShakeSum256(out, data)
 		return out, nil
@@ -621,29 +621,29 @@ func DSSUtilsDigest(digestAlgorithm enumerations.DigestAlgorithm, data []byte) (
 // BouncyCastle registers "SHAKE256-512".
 func DSSUtilsMessageDigest(digestAlgorithm enumerations.DigestAlgorithm) (hash.Hash, error) {
 	switch digestAlgorithm {
-	case enumerations.DigestAlgorithm_MD5:
+	case enumerations.DigestAlgorithmMD5:
 		return md5.New(), nil
-	case enumerations.DigestAlgorithm_SHA1:
+	case enumerations.DigestAlgorithmSHA1:
 		return sha1.New(), nil
-	case enumerations.DigestAlgorithm_SHA224:
+	case enumerations.DigestAlgorithmSHA224:
 		return sha256.New224(), nil
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		return sha256.New(), nil
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		return sha512.New384(), nil
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		return sha512.New(), nil
-	case enumerations.DigestAlgorithm_SHA3_224:
+	case enumerations.DigestAlgorithmSHA3224:
 		return sha3.New224(), nil
-	case enumerations.DigestAlgorithm_SHA3_256:
+	case enumerations.DigestAlgorithmSHA3256:
 		return sha3.New256(), nil
-	case enumerations.DigestAlgorithm_SHA3_384:
+	case enumerations.DigestAlgorithmSHA3384:
 		return sha3.New384(), nil
-	case enumerations.DigestAlgorithm_SHA3_512:
+	case enumerations.DigestAlgorithmSHA3512:
 		return sha3.New512(), nil
-	case enumerations.DigestAlgorithm_RIPEMD160:
+	case enumerations.DigestAlgorithmRIPEMD160:
 		return ripemd160.New(), nil
-	case enumerations.DigestAlgorithm_SHAKE256_512:
+	case enumerations.DigestAlgorithmSHAKE256512:
 		return &dssUtilsShake{shake: sha3.NewShake256(), size: 64}, nil
 	}
 	return nil, model.NewDSSErrorMessageCause(
@@ -752,7 +752,7 @@ func DSSUtilsGetDigest(digestAlgo enumerations.DigestAlgorithm, dssDocument mode
 // DSSUtilsMD5Digest returns the hex encoding of the MD5 digest of bytes. Port of
 // getMD5Digest(byte[]).
 func DSSUtilsMD5Digest(data []byte) (string, error) {
-	d, err := DSSUtilsDigest(enumerations.DigestAlgorithm_MD5, data)
+	d, err := DSSUtilsDigest(enumerations.DigestAlgorithmMD5, data)
 	if err != nil {
 		return "", err
 	}
@@ -1451,12 +1451,12 @@ func DSSUtilsConvertECSignatureValue(expectedAlgorithm enumerations.SignatureAlg
 	var signatureValueBinaries []byte
 	var err error
 	switch {
-	case expectedEncryptionAlgorithm == enumerations.EncryptionAlgorithm_ECDSA &&
-		signatureEncryptionAlgorithm == enumerations.EncryptionAlgorithm_PLAIN_ECDSA:
+	case expectedEncryptionAlgorithm == enumerations.EncryptionAlgorithmECDSA &&
+		signatureEncryptionAlgorithm == enumerations.EncryptionAlgorithmPlainECDSA:
 		signatureValueBinaries, err = DSSASN1UtilsToStandardDSASignatureValue(signatureValue.Value())
 
-	case expectedEncryptionAlgorithm == enumerations.EncryptionAlgorithm_PLAIN_ECDSA &&
-		signatureEncryptionAlgorithm == enumerations.EncryptionAlgorithm_ECDSA:
+	case expectedEncryptionAlgorithm == enumerations.EncryptionAlgorithmPlainECDSA &&
+		signatureEncryptionAlgorithm == enumerations.EncryptionAlgorithmECDSA:
 		signatureValueBinaries, err = DSSASN1UtilsToPlainDSASignatureValue(signatureValue.Value())
 
 	default:
@@ -1481,9 +1481,9 @@ func DSSUtilsConvertECSignatureValue(expectedAlgorithm enumerations.SignatureAlg
 func DSSUtilsEdDSASignatureAlgorithm(signatureValue []byte) enumerations.SignatureAlgorithm {
 	switch len(signatureValue) {
 	case 64:
-		return enumerations.SignatureAlgorithm_ED25519
+		return enumerations.SignatureAlgorithmED25519
 	case 114:
-		return enumerations.SignatureAlgorithm_ED448
+		return enumerations.SignatureAlgorithmED448
 	default:
 		return ""
 	}

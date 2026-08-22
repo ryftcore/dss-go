@@ -80,11 +80,11 @@ func TestAbstractASiCFilenameFactoryAssertASiCContentIsValid(t *testing.T) {
 	factory := newAbstractASiCFilenameFactoryProbe()
 
 	asicContent := NewASiCContent()
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_S)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	if err := factory.AssertASiCContentIsValid(asicContent); err != nil {
 		t.Errorf("ASiC-S must be accepted: %v", err)
 	}
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	if err := factory.AssertASiCContentIsValid(asicContent); err != nil {
 		t.Errorf("ASiC-E must be accepted: %v", err)
 	}

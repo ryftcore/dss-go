@@ -81,9 +81,9 @@ func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordFilename(asicContent
 	}
 	// Same name for both ASiC-S and ASiC-E
 	switch evidenceRecordType {
-	case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 		return asic.ASiCUtilsEvidenceRecordXML // "META-INF/evidencerecord.xml"
-	case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 		return asic.ASiCUtilsEvidenceRecordERS
 	default:
 		panic(exception.NewIllegalInputException(

@@ -38,7 +38,7 @@ func NewRevocationFreshnessCheckerResultCheck[T any](i18nProvider *i18n.I18nProv
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *RevocationFreshnessCheckerResultCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_RFC
+	return jaxb.XmlBlockTypeRFC
 }
 
 // Process performs the check. Port of process().

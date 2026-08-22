@@ -79,7 +79,7 @@ func (e *ASiCWithXAdESDocumentExtender) IsSupportedService(service any) bool {
 
 // SignatureForm ports the overridden getSignatureForm().
 func (e *ASiCWithXAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_XAdES
+	return enumerations.SignatureFormXAdES
 }
 
 // IsASiC ports the overridden isASiC().

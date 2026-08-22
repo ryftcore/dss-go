@@ -178,7 +178,7 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 		 * and it shall go to step 5).
 		 */
 		if c.IsValid(&xmlXCV.XmlConstraintsConclusionContent) {
-			x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+			x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 
 		} else {
 			x509ValidationStatus.Indication = xmlXCV.Conclusion.Indication
@@ -197,8 +197,8 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 			 */
 			item = item.SetNextItem(c.signingCertificateNotRevoked(xmlXCV))
 
-			if enumerations.Indication_INDETERMINATE == xcvIndication(xmlXCV) &&
-				enumerations.SubIndication_REVOKED_NO_POE == xcvSubIndication(xmlXCV) &&
+			if enumerations.IndicationIndeterminate == xcvIndication(xmlXCV) &&
+				enumerations.SubIndicationRevokedNoPOE == xcvSubIndication(xmlXCV) &&
 				utils.IsCollectionNotEmpty(contentTimestamps) {
 				revocationTime := c.getRevocationTimeForSigningCertificate()
 
@@ -217,8 +217,8 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 
 							if revocationTime != nil && timestampWrapper.ProductionTime() != nil &&
 								timestampWrapper.ProductionTime().After(*revocationTime) {
-								x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
-								setXmlSubIndication(x509ValidationStatus, enumerations.SubIndication_REVOKED)
+								x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.IndicationFailed)
+								setXmlSubIndication(x509ValidationStatus, enumerations.SubIndicationRevoked)
 								break
 							}
 						}
@@ -242,9 +242,9 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 			 */
 			item = item.SetNextItem(c.validationTimeAtValidityRange(xmlXCV))
 
-			if enumerations.Indication_INDETERMINATE == xcvIndication(xmlXCV) &&
-				(enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == xcvSubIndication(xmlXCV) ||
-					enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == xcvSubIndication(xmlXCV)) &&
+			if enumerations.IndicationIndeterminate == xcvIndication(xmlXCV) &&
+				(enumerations.SubIndicationOutOfBoundsNoPOE == xcvSubIndication(xmlXCV) ||
+					enumerations.SubIndicationOutOfBoundsNotRevoked == xcvSubIndication(xmlXCV)) &&
 				utils.IsCollectionNotEmpty(contentTimestamps) {
 				var certificateNotAfter *time.Time
 				if signingCertificate := c.Token.SigningCertificate(); signingCertificate != nil {
@@ -266,8 +266,8 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 
 							if certificateNotAfter != nil && timestampWrapper.ProductionTime() != nil &&
 								timestampWrapper.ProductionTime().After(*certificateNotAfter) {
-								x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
-								setXmlSubIndication(x509ValidationStatus, enumerations.SubIndication_EXPIRED)
+								x509ValidationStatus.Indication = jaxb.IndicationValue(enumerations.IndicationFailed)
+								setXmlSubIndication(x509ValidationStatus, enumerations.SubIndicationExpired)
 								break
 							}
 						}
@@ -320,8 +320,8 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 			 * shall return the indication and subindication contained in X509_validation-status,
 			 * with any associated information about the reason.
 			 */
-			if enumerations.Indication_INDETERMINATE == x509ValidationStatus.Indication.Indication() ||
-				enumerations.Indication_FAILED == x509ValidationStatus.Indication.Indication() {
+			if enumerations.IndicationIndeterminate == x509ValidationStatus.Indication.Indication() ||
+				enumerations.IndicationFailed == x509ValidationStatus.Indication.Indication() {
 
 				item = item.SetNextItem(c.basicValidationProcess(x509ValidationStatus))
 
@@ -354,7 +354,7 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 		 * If the signature acceptance validation process returns PASSED, the Basic Signature validation
 		 * process shall go to the next step.
 		 */
-		if enumerations.Indication_PASSED == xmlSAV.Conclusion.Indication.Indication() {
+		if enumerations.IndicationPassed == xmlSAV.Conclusion.Indication.Indication() {
 			// continue
 
 			/*
@@ -369,8 +369,8 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 			 * validation process shall return the indication INDETERMINATE with the sub-indication
 			 * CRYPTO_CONSTRAINTS_FAILURE_NO_POE.
 			 */
-		} else if enumerations.Indication_INDETERMINATE == xmlSAV.Conclusion.Indication.Indication() &&
-			savSubIndication(xmlSAV) == enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE &&
+		} else if enumerations.IndicationIndeterminate == xmlSAV.Conclusion.Indication.Indication() &&
+			savSubIndication(xmlSAV) == enumerations.SubIndicationCryptoConstraintsFailureNoPOE &&
 			c.isSignatureValueConcernedByFailure(xmlAOV) && utils.IsCollectionNotEmpty(contentTimestamps) {
 
 			item = item.SetNextItem(c.contentTimestampsPresent(contentTimestamps))
@@ -567,7 +567,7 @@ func (c *AbstractBasicValidationProcess[T]) isSignatureValueConcernedByFailure(x
 // given conclusion. Port of the overridden
 // collectMessages(XmlConclusion, XmlConstraint).
 func (c *AbstractBasicValidationProcess[T]) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType != nil && jaxb.XmlBlockType_CNT_TST_BBB == *constraint.BlockType {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeCNTTSTBBB == *constraint.BlockType {
 		if constraint.Error != nil {
 			conclusion.Errors = append(conclusion.Errors, constraint.Error)
 		}

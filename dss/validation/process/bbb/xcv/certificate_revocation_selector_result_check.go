@@ -38,7 +38,7 @@ func NewCertificateRevocationSelectorResultCheck[T any](i18nProvider *i18n.I18nP
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *CertificateRevocationSelectorResultCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_CRS
+	return jaxb.XmlBlockTypeCRS
 }
 
 // Process performs the check. Port of process().

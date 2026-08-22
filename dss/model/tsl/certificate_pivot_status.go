@@ -5,10 +5,10 @@ package tsl
 type CertificatePivotStatus string
 
 const (
-	// CertificatePivotStatus_ADDED marks a certificate that has been added with a new pivot.
-	CertificatePivotStatus_ADDED CertificatePivotStatus = "ADDED"
-	// CertificatePivotStatus_NOT_CHANGED marks a certificate that has not been changed.
-	CertificatePivotStatus_NOT_CHANGED CertificatePivotStatus = "NOT_CHANGED"
-	// CertificatePivotStatus_REMOVED marks a certificate that has been removed with a new pivot.
-	CertificatePivotStatus_REMOVED CertificatePivotStatus = "REMOVED"
+	// CertificatePivotStatusAdded marks a certificate that has been added with a new pivot.
+	CertificatePivotStatusAdded CertificatePivotStatus = "ADDED"
+	// CertificatePivotStatusNotChanged marks a certificate that has not been changed.
+	CertificatePivotStatusNotChanged CertificatePivotStatus = "NOT_CHANGED"
+	// CertificatePivotStatusRemoved marks a certificate that has been removed with a new pivot.
+	CertificatePivotStatusRemoved CertificatePivotStatus = "REMOVED"
 )

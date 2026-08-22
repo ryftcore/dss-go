@@ -11,13 +11,13 @@ func TestSpDocSpecificationRoundTripAndEquals(t *testing.T) {
 	a.SetId("2.2.25.1")
 	a.SetDescription("desc")
 	a.SetDocumentationReferences("http://doc")
-	a.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+	a.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 
 	b := NewSpDocSpecification()
 	b.SetId("2.2.25.1")
 	b.SetDescription("desc")
 	b.SetDocumentationReferences("http://doc")
-	b.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+	b.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 
 	if a.Id() != "2.2.25.1" || a.Description() != "desc" {
 		t.Fatalf("Id()/Description() = %q/%q", a.Id(), a.Description())

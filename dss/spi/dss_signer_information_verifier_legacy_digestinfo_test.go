@@ -33,11 +33,11 @@ var legacyDigestInfoKey = func() *rsa.PrivateKey {
 // i.e. the non-canonical DigestInfo real-world signers produce, for the given content.
 func legacyDigestInfoWithoutNullParameter(t *testing.T, content []byte) []byte {
 	t.Helper()
-	digest, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, content)
+	digest, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, content)
 	if err != nil {
 		t.Fatalf("digesting: %s", err)
 	}
-	objectIdentifier, err := asn1ber.OIDFromString(enumerations.DigestAlgorithm_SHA256.OID())
+	objectIdentifier, err := asn1ber.OIDFromString(enumerations.DigestAlgorithmSHA256.OID())
 	if err != nil {
 		t.Fatalf("parsing the SHA-256 OID: %s", err)
 	}
@@ -63,14 +63,14 @@ func TestVerifyAcceptsDigestInfoWithoutNullParameter(t *testing.T) {
 		t.Fatalf("signing: %s", err)
 	}
 	if err := legacyDigestInfoVerifier().Verify(
-		enumerations.SignatureAlgorithm_RSA_SHA256, legacyDigestInfoContent, signature); err != nil {
+		enumerations.SignatureAlgorithmRSASHA256, legacyDigestInfoContent, signature); err != nil {
 		t.Errorf("a DigestInfo without the NULL parameter must verify: %s", err)
 	}
 }
 
 // TestVerifyStillAcceptsCanonicalDigestInfo checks the fallback did not disturb the normal path.
 func TestVerifyStillAcceptsCanonicalDigestInfo(t *testing.T) {
-	digest, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, legacyDigestInfoContent)
+	digest, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, legacyDigestInfoContent)
 	if err != nil {
 		t.Fatalf("digesting: %s", err)
 	}
@@ -79,7 +79,7 @@ func TestVerifyStillAcceptsCanonicalDigestInfo(t *testing.T) {
 		t.Fatalf("signing: %s", err)
 	}
 	if err := legacyDigestInfoVerifier().Verify(
-		enumerations.SignatureAlgorithm_RSA_SHA256, legacyDigestInfoContent, signature); err != nil {
+		enumerations.SignatureAlgorithmRSASHA256, legacyDigestInfoContent, signature); err != nil {
 		t.Errorf("a canonical signature must still verify: %s", err)
 	}
 }
@@ -97,7 +97,7 @@ func TestVerifyRejectsEverythingElse(t *testing.T) {
 
 	t.Run("different content", func(t *testing.T) {
 		if err := legacyDigestInfoVerifier().Verify(
-			enumerations.SignatureAlgorithm_RSA_SHA256, []byte("something else entirely"), signature); err == nil {
+			enumerations.SignatureAlgorithmRSASHA256, []byte("something else entirely"), signature); err == nil {
 			t.Error("a signature over different content must be rejected")
 		}
 	})
@@ -107,7 +107,7 @@ func TestVerifyRejectsEverythingElse(t *testing.T) {
 		copy(tampered, signature)
 		tampered[len(tampered)-1] ^= 0x01
 		if err := legacyDigestInfoVerifier().Verify(
-			enumerations.SignatureAlgorithm_RSA_SHA256, legacyDigestInfoContent, tampered); err == nil {
+			enumerations.SignatureAlgorithmRSASHA256, legacyDigestInfoContent, tampered); err == nil {
 			t.Error("a tampered signature must be rejected")
 		}
 	})
@@ -122,14 +122,14 @@ func TestVerifyRejectsEverythingElse(t *testing.T) {
 			t.Fatalf("signing: %s", err)
 		}
 		if err := legacyDigestInfoVerifier().Verify(
-			enumerations.SignatureAlgorithm_RSA_SHA256, legacyDigestInfoContent, forged); err == nil {
+			enumerations.SignatureAlgorithmRSASHA256, legacyDigestInfoContent, forged); err == nil {
 			t.Error("a DigestInfo with trailing bytes must be rejected")
 		}
 	})
 
 	t.Run("wrong digest algorithm", func(t *testing.T) {
 		if err := legacyDigestInfoVerifier().Verify(
-			enumerations.SignatureAlgorithm_RSA_SHA512, legacyDigestInfoContent, signature); err == nil {
+			enumerations.SignatureAlgorithmRSASHA512, legacyDigestInfoContent, signature); err == nil {
 			t.Error("verifying under a different digest algorithm must be rejected")
 		}
 	})
@@ -139,9 +139,9 @@ func TestVerifyRejectsEverythingElse(t *testing.T) {
 // v1.5 - notably for RSASSA-PSS, whose encoding carries no DigestInfo at all.
 func TestVerifyFallbackScope(t *testing.T) {
 	for _, signatureAlgorithm := range []enumerations.SignatureAlgorithm{
-		enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1,
-		enumerations.SignatureAlgorithm_ECDSA_SHA256,
-		enumerations.SignatureAlgorithm_ED25519,
+		enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1,
+		enumerations.SignatureAlgorithmECDSASHA256,
+		enumerations.SignatureAlgorithmED25519,
 	} {
 		if err := dssSignerInformationVerifierVerifyRSAWithoutDigestInfoNullParameter(
 			&legacyDigestInfoKey.PublicKey, signatureAlgorithm, legacyDigestInfoContent, []byte{0x00}); err == nil {

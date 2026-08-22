@@ -37,7 +37,7 @@ func NewPIDProviderCertificateAtValidationTimeCheck(i18nProvider *i18n.I18nProvi
 
 // Process performs the check. Port of process().
 func (c *PIDProviderCertificateAtValidationTimeCheck) Process() bool {
-	return enumerations.CertificateApprovalStatusEnum_PID_PROVIDER == c.certificateApprovalStatusAtValidationTime
+	return enumerations.CertificateApprovalStatusEnumPIDProvider == c.certificateApprovalStatusAtValidationTime
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
@@ -53,7 +53,7 @@ func (c *PIDProviderCertificateAtValidationTimeCheck) ErrorMessageTag() i18n.Mes
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PIDProviderCertificateAtValidationTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -18,10 +18,10 @@ const ASiCWithCAdESUtilsDefaultArchiveManifestFilename = asic.ASiCUtilsMetaInfFo
 // given signatureFilename. Ports the static getSignedDocument(ASiCContent, String).
 func ASiCWithCAdESUtilsGetSignedDocument(extractResult *asic.ASiCContent, signatureFilename string) model.DSSDocument {
 	containerType := extractResult.ContainerType()
-	if enumerations.ASiCContainerType_ASiC_S == containerType && len(extractResult.RootLevelSignedDocuments()) == 1 {
+	if enumerations.ASiCContainerTypeASiCS == containerType && len(extractResult.RootLevelSignedDocuments()) == 1 {
 		return extractResult.RootLevelSignedDocuments()[0] // Collection size should be equal 1
 
-	} else if enumerations.ASiCContainerType_ASiC_E == containerType {
+	} else if enumerations.ASiCContainerTypeASiCE == containerType {
 		// the manifest file is signed
 		manifestDocuments := extractResult.ManifestDocuments()
 		signatureDocuments := extractResult.SignatureDocuments()

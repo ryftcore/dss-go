@@ -6,7 +6,7 @@
 // DEVIATION: java.security.KeyStore is a generic, provider-backed abstraction covering many
 // formats (JKS, PKCS12, ...) addressed by alias. Go has no equivalent generic keystore type.
 // This port narrows KeyStoreCertificateSourceType to the two formats the brief approves:
-// KeyStoreCertificateSourceType_PKCS12 (read-only: golang.org/x/crypto/pkcs12 exposes no
+// KeyStoreCertificateSourceTypePKCS12 (read-only: golang.org/x/crypto/pkcs12 exposes no
 // encoder in the vendored version, so Store on a PKCS12-typed source returns an error) and
 //
 // LIMITATION (PKCS12 reading): golang.org/x/crypto/pkcs12 only understands the legacy
@@ -17,7 +17,7 @@
 // Loading such a keystore therefore needs it re-exported with `openssl pkcs12 -legacy`
 // (or an alternative PKCS#12 reader) until the dependency grows PBES2 support.
 //
-// KeyStoreCertificateSourceType_PEM (a plain concatenated PEM/DER certificate collection,
+// KeyStoreCertificateSourceTypePEM (a plain concatenated PEM/DER certificate collection,
 // which Java's KeyStore SPI has no counterpart for - it stands in for "PEM/DER cert
 // collections" the brief calls for). JKS - and any other Java keystore type string - is
 // rejected with a clear "unsupported" error; this is a documented deviation, flagged in the
@@ -55,13 +55,13 @@ import (
 type KeyStoreCertificateSourceType string
 
 const (
-	// KeyStoreCertificateSourceType_PKCS12 is a PKCS#12 keystore ("PKCS12" in Java), read-only
+	// KeyStoreCertificateSourceTypePKCS12 is a PKCS#12 keystore ("PKCS12" in Java), read-only
 	// in this port.
-	KeyStoreCertificateSourceType_PKCS12 KeyStoreCertificateSourceType = "PKCS12"
-	// KeyStoreCertificateSourceType_PEM is a plain concatenated PEM (or raw concatenated DER)
+	KeyStoreCertificateSourceTypePKCS12 KeyStoreCertificateSourceType = "PKCS12"
+	// KeyStoreCertificateSourceTypePEM is a plain concatenated PEM (or raw concatenated DER)
 	// certificate collection; not a Java KeyStore type, added to satisfy the "PEM/DER cert
 	// collections" requirement without a real generic keystore abstraction.
-	KeyStoreCertificateSourceType_PEM KeyStoreCertificateSourceType = "PEM"
+	KeyStoreCertificateSourceTypePEM KeyStoreCertificateSourceType = "PEM"
 )
 
 // KeyStoreCertificateSource implements a CertificateSource using a keystore (PKCS12 or a
@@ -119,7 +119,7 @@ func NewKeyStoreCertificateSourceFromReader(ksStream io.Reader, ksType KeyStoreC
 // initKeystore ports the private initKeystore(InputStream, String, char[]).
 func (k *KeyStoreCertificateSource) initKeystore(ksStream io.Reader) error {
 	switch k.ksType {
-	case KeyStoreCertificateSourceType_PKCS12, KeyStoreCertificateSourceType_PEM:
+	case KeyStoreCertificateSourceTypePKCS12, KeyStoreCertificateSourceTypePEM:
 		// supported, handled below
 	case "JKS":
 		return model.NewDSSError("Unable to initialize the keystore: JKS keystores are not supported by this Go port (documented deviation; use PKCS12 or PEM)")
@@ -140,9 +140,9 @@ func (k *KeyStoreCertificateSource) initKeystore(ksStream io.Reader) error {
 
 	var certificates []*model.CertificateToken
 	switch k.ksType {
-	case KeyStoreCertificateSourceType_PKCS12:
+	case KeyStoreCertificateSourceTypePKCS12:
 		certificates, err = keyStoreCertificateSourceParsePKCS12(data, string(k.passwordProtection))
-	case KeyStoreCertificateSourceType_PEM:
+	case KeyStoreCertificateSourceTypePEM:
 		certificates, err = keyStoreCertificateSourceParsePEMOrDER(data)
 	}
 	if err != nil {
@@ -289,7 +289,7 @@ func (k *KeyStoreCertificateSource) ClearAllCertificates() {
 // concatenated PEM CERTIFICATE blocks.
 func (k *KeyStoreCertificateSource) Store(w io.Writer) error {
 	switch k.ksType {
-	case KeyStoreCertificateSourceType_PEM:
+	case KeyStoreCertificateSourceTypePEM:
 		for _, certificateToken := range k.entries.Values() {
 			block := &pem.Block{Type: "CERTIFICATE", Bytes: certificateToken.Encoded()}
 			if err := pem.Encode(w, block); err != nil {
@@ -305,7 +305,7 @@ func (k *KeyStoreCertificateSource) Store(w io.Writer) error {
 // getKey ports the private getKey(String): a PKCS12 workaround for
 // https://bugs.openjdk.java.net/browse/JDK-8079616, lower-casing the alias.
 func (k *KeyStoreCertificateSource) getKey(inputKey string) string {
-	if k.ksType == KeyStoreCertificateSourceType_PKCS12 {
+	if k.ksType == KeyStoreCertificateSourceTypePKCS12 {
 		return strings.ToLower(inputKey)
 	}
 	return inputKey

@@ -9,100 +9,100 @@ type XMLDSigElement string
 
 // XMLDSigElement constants, one per XMLDSig schema element name.
 const (
-	XMLDSigElement_CANONICALIZATION_METHOD XMLDSigElement = "CANONICALIZATION_METHOD"
-	XMLDSigElement_DIGEST_METHOD           XMLDSigElement = "DIGEST_METHOD"
-	XMLDSigElement_DIGEST_VALUE            XMLDSigElement = "DIGEST_VALUE"
-	XMLDSigElement_DSA_KEY_VALUE           XMLDSigElement = "DSA_KEY_VALUE"
-	XMLDSigElement_EXPONENT                XMLDSigElement = "EXPONENT"
-	XMLDSigElement_G                       XMLDSigElement = "G"
-	XMLDSigElement_HMAC_OUTPUT_LENGTH      XMLDSigElement = "HMAC_OUTPUT_LENGTH"
-	XMLDSigElement_J                       XMLDSigElement = "J"
-	XMLDSigElement_KEY_INFO                XMLDSigElement = "KEY_INFO"
-	XMLDSigElement_KEY_NAME                XMLDSigElement = "KEY_NAME"
-	XMLDSigElement_KEY_VALUE               XMLDSigElement = "KEY_VALUE"
-	XMLDSigElement_MANIFEST                XMLDSigElement = "MANIFEST"
-	XMLDSigElement_MGMT_DATA               XMLDSigElement = "MGMT_DATA"
-	XMLDSigElement_MODULUS                 XMLDSigElement = "MODULUS"
-	XMLDSigElement_OBJECT                  XMLDSigElement = "OBJECT"
-	XMLDSigElement_P                       XMLDSigElement = "P"
-	XMLDSigElement_PGEN_COUNTER            XMLDSigElement = "PGEN_COUNTER"
-	XMLDSigElement_PGP_DATA                XMLDSigElement = "PGP_DATA"
-	XMLDSigElement_PGP_KEY_ID              XMLDSigElement = "PGP_KEY_ID"
-	XMLDSigElement_PGP_KEY_PACKET          XMLDSigElement = "PGP_KEY_PACKET"
-	XMLDSigElement_Q                       XMLDSigElement = "Q"
-	XMLDSigElement_REFERENCE               XMLDSigElement = "REFERENCE"
-	XMLDSigElement_RETRIEVAL_METHOD        XMLDSigElement = "RETRIEVAL_METHOD"
-	XMLDSigElement_RSA_KEY_VALUE           XMLDSigElement = "RSA_KEY_VALUE"
-	XMLDSigElement_SEED                    XMLDSigElement = "SEED"
-	XMLDSigElement_SIGNATURE               XMLDSigElement = "SIGNATURE"
-	XMLDSigElement_SIGNATURE_METHOD        XMLDSigElement = "SIGNATURE_METHOD"
-	XMLDSigElement_SIGNATURE_PROPERTIES    XMLDSigElement = "SIGNATURE_PROPERTIES"
-	XMLDSigElement_SIGNATURE_PROPERTY      XMLDSigElement = "SIGNATURE_PROPERTY"
-	XMLDSigElement_SIGNATURE_VALUE         XMLDSigElement = "SIGNATURE_VALUE"
-	XMLDSigElement_SIGNED_INFO             XMLDSigElement = "SIGNED_INFO"
-	XMLDSigElement_SPKI_DATA               XMLDSigElement = "SPKI_DATA"
-	XMLDSigElement_SPKI_SEXP               XMLDSigElement = "SPKI_SEXP"
-	XMLDSigElement_TRANSFORM               XMLDSigElement = "TRANSFORM"
-	XMLDSigElement_TRANSFORMS              XMLDSigElement = "TRANSFORMS"
-	XMLDSigElement_X509_CERTIFICATE        XMLDSigElement = "X509_CERTIFICATE"
-	XMLDSigElement_X509_CRL                XMLDSigElement = "X509_CRL"
-	XMLDSigElement_X509_DATA               XMLDSigElement = "X509_DATA"
-	XMLDSigElement_X509_ISSUER_NAME        XMLDSigElement = "X509_ISSUER_NAME"
-	XMLDSigElement_X509_ISSUER_SERIAL      XMLDSigElement = "X509_ISSUER_SERIAL"
-	XMLDSigElement_X509_SERIAL_NUMBER      XMLDSigElement = "X509_SERIAL_NUMBER"
-	XMLDSigElement_X509_SKI                XMLDSigElement = "X509_SKI"
-	XMLDSigElement_X509_SUBJECT_NAME       XMLDSigElement = "X509_SUBJECT_NAME"
-	XMLDSigElement_XPATH                   XMLDSigElement = "XPATH"
-	XMLDSigElement_Y                       XMLDSigElement = "Y"
+	XMLDSigElementCanonicalizationMethod XMLDSigElement = "CANONICALIZATION_METHOD"
+	XMLDSigElementDigestMethod           XMLDSigElement = "DIGEST_METHOD"
+	XMLDSigElementDigestValue            XMLDSigElement = "DIGEST_VALUE"
+	XMLDSigElementDSAKeyValue            XMLDSigElement = "DSA_KEY_VALUE"
+	XMLDSigElementExponent               XMLDSigElement = "EXPONENT"
+	XMLDSigElementG                      XMLDSigElement = "G"
+	XMLDSigElementHMACOutputLength       XMLDSigElement = "HMAC_OUTPUT_LENGTH"
+	XMLDSigElementJ                      XMLDSigElement = "J"
+	XMLDSigElementKeyInfo                XMLDSigElement = "KEY_INFO"
+	XMLDSigElementKeyName                XMLDSigElement = "KEY_NAME"
+	XMLDSigElementKeyValue               XMLDSigElement = "KEY_VALUE"
+	XMLDSigElementManifest               XMLDSigElement = "MANIFEST"
+	XMLDSigElementMgmtData               XMLDSigElement = "MGMT_DATA"
+	XMLDSigElementModulus                XMLDSigElement = "MODULUS"
+	XMLDSigElementObject                 XMLDSigElement = "OBJECT"
+	XMLDSigElementP                      XMLDSigElement = "P"
+	XMLDSigElementPgenCounter            XMLDSigElement = "PGEN_COUNTER"
+	XMLDSigElementPGPData                XMLDSigElement = "PGP_DATA"
+	XMLDSigElementPGPKeyID               XMLDSigElement = "PGP_KEY_ID"
+	XMLDSigElementPGPKeyPacket           XMLDSigElement = "PGP_KEY_PACKET"
+	XMLDSigElementQ                      XMLDSigElement = "Q"
+	XMLDSigElementReference              XMLDSigElement = "REFERENCE"
+	XMLDSigElementRetrievalMethod        XMLDSigElement = "RETRIEVAL_METHOD"
+	XMLDSigElementRSAKeyValue            XMLDSigElement = "RSA_KEY_VALUE"
+	XMLDSigElementSeed                   XMLDSigElement = "SEED"
+	XMLDSigElementSignature              XMLDSigElement = "SIGNATURE"
+	XMLDSigElementSignatureMethod        XMLDSigElement = "SIGNATURE_METHOD"
+	XMLDSigElementSignatureProperties    XMLDSigElement = "SIGNATURE_PROPERTIES"
+	XMLDSigElementSignatureProperty      XMLDSigElement = "SIGNATURE_PROPERTY"
+	XMLDSigElementSignatureValue         XMLDSigElement = "SIGNATURE_VALUE"
+	XMLDSigElementSignedInfo             XMLDSigElement = "SIGNED_INFO"
+	XMLDSigElementSPKIData               XMLDSigElement = "SPKI_DATA"
+	XMLDSigElementSPKISexp               XMLDSigElement = "SPKI_SEXP"
+	XMLDSigElementTransform              XMLDSigElement = "TRANSFORM"
+	XMLDSigElementTransforms             XMLDSigElement = "TRANSFORMS"
+	XMLDSigElementX509Certificate        XMLDSigElement = "X509_CERTIFICATE"
+	XMLDSigElementX509CRL                XMLDSigElement = "X509_CRL"
+	XMLDSigElementX509Data               XMLDSigElement = "X509_DATA"
+	XMLDSigElementX509IssuerName         XMLDSigElement = "X509_ISSUER_NAME"
+	XMLDSigElementX509IssuerSerial       XMLDSigElement = "X509_ISSUER_SERIAL"
+	XMLDSigElementX509SerialNumber       XMLDSigElement = "X509_SERIAL_NUMBER"
+	XMLDSigElementX509SKI                XMLDSigElement = "X509_SKI"
+	XMLDSigElementX509SubjectName        XMLDSigElement = "X509_SUBJECT_NAME"
+	XMLDSigElementXPATH                  XMLDSigElement = "XPATH"
+	XMLDSigElementY                      XMLDSigElement = "Y"
 )
 
 // xmldsigElementTagNames maps each constant to its wire tag name (getTagName()).
 var xmldsigElementTagNames = map[XMLDSigElement]string{
-	XMLDSigElement_CANONICALIZATION_METHOD: "CanonicalizationMethod",
-	XMLDSigElement_DIGEST_METHOD:           "DigestMethod",
-	XMLDSigElement_DIGEST_VALUE:            "DigestValue",
-	XMLDSigElement_DSA_KEY_VALUE:           "DSAKeyValue",
-	XMLDSigElement_EXPONENT:                "Exponent",
-	XMLDSigElement_G:                       "G",
-	XMLDSigElement_HMAC_OUTPUT_LENGTH:      "HMACOutputLength",
-	XMLDSigElement_J:                       "J",
-	XMLDSigElement_KEY_INFO:                "KeyInfo",
-	XMLDSigElement_KEY_NAME:                "KeyName",
-	XMLDSigElement_KEY_VALUE:               "KeyValue",
-	XMLDSigElement_MANIFEST:                "Manifest",
-	XMLDSigElement_MGMT_DATA:               "MgmtData",
-	XMLDSigElement_MODULUS:                 "Modulus",
-	XMLDSigElement_OBJECT:                  "Object",
-	XMLDSigElement_P:                       "P",
-	XMLDSigElement_PGEN_COUNTER:            "PgenCounter",
-	XMLDSigElement_PGP_DATA:                "PGPData",
-	XMLDSigElement_PGP_KEY_ID:              "PGPKeyID",
-	XMLDSigElement_PGP_KEY_PACKET:          "PGPKeyPacket",
-	XMLDSigElement_Q:                       "Q",
-	XMLDSigElement_REFERENCE:               "Reference",
-	XMLDSigElement_RETRIEVAL_METHOD:        "RetrievalMethod",
-	XMLDSigElement_RSA_KEY_VALUE:           "RSAKeyValue",
-	XMLDSigElement_SEED:                    "Seed",
-	XMLDSigElement_SIGNATURE:               "Signature",
-	XMLDSigElement_SIGNATURE_METHOD:        "SignatureMethod",
-	XMLDSigElement_SIGNATURE_PROPERTIES:    "SignatureProperties",
-	XMLDSigElement_SIGNATURE_PROPERTY:      "SignatureProperty",
-	XMLDSigElement_SIGNATURE_VALUE:         "SignatureValue",
-	XMLDSigElement_SIGNED_INFO:             "SignedInfo",
-	XMLDSigElement_SPKI_DATA:               "SPKIData",
-	XMLDSigElement_SPKI_SEXP:               "SPKISexp",
-	XMLDSigElement_TRANSFORM:               "Transform",
-	XMLDSigElement_TRANSFORMS:              "Transforms",
-	XMLDSigElement_X509_CERTIFICATE:        "X509Certificate",
-	XMLDSigElement_X509_CRL:                "X509CRL",
-	XMLDSigElement_X509_DATA:               "X509Data",
-	XMLDSigElement_X509_ISSUER_NAME:        "X509IssuerName",
-	XMLDSigElement_X509_ISSUER_SERIAL:      "X509IssuerSerial",
-	XMLDSigElement_X509_SERIAL_NUMBER:      "X509SerialNumber",
-	XMLDSigElement_X509_SKI:                "X509SKI",
-	XMLDSigElement_X509_SUBJECT_NAME:       "X509SubjectName",
-	XMLDSigElement_XPATH:                   "XPath",
-	XMLDSigElement_Y:                       "Y",
+	XMLDSigElementCanonicalizationMethod: "CanonicalizationMethod",
+	XMLDSigElementDigestMethod:           "DigestMethod",
+	XMLDSigElementDigestValue:            "DigestValue",
+	XMLDSigElementDSAKeyValue:            "DSAKeyValue",
+	XMLDSigElementExponent:               "Exponent",
+	XMLDSigElementG:                      "G",
+	XMLDSigElementHMACOutputLength:       "HMACOutputLength",
+	XMLDSigElementJ:                      "J",
+	XMLDSigElementKeyInfo:                "KeyInfo",
+	XMLDSigElementKeyName:                "KeyName",
+	XMLDSigElementKeyValue:               "KeyValue",
+	XMLDSigElementManifest:               "Manifest",
+	XMLDSigElementMgmtData:               "MgmtData",
+	XMLDSigElementModulus:                "Modulus",
+	XMLDSigElementObject:                 "Object",
+	XMLDSigElementP:                      "P",
+	XMLDSigElementPgenCounter:            "PgenCounter",
+	XMLDSigElementPGPData:                "PGPData",
+	XMLDSigElementPGPKeyID:               "PGPKeyID",
+	XMLDSigElementPGPKeyPacket:           "PGPKeyPacket",
+	XMLDSigElementQ:                      "Q",
+	XMLDSigElementReference:              "Reference",
+	XMLDSigElementRetrievalMethod:        "RetrievalMethod",
+	XMLDSigElementRSAKeyValue:            "RSAKeyValue",
+	XMLDSigElementSeed:                   "Seed",
+	XMLDSigElementSignature:              "Signature",
+	XMLDSigElementSignatureMethod:        "SignatureMethod",
+	XMLDSigElementSignatureProperties:    "SignatureProperties",
+	XMLDSigElementSignatureProperty:      "SignatureProperty",
+	XMLDSigElementSignatureValue:         "SignatureValue",
+	XMLDSigElementSignedInfo:             "SignedInfo",
+	XMLDSigElementSPKIData:               "SPKIData",
+	XMLDSigElementSPKISexp:               "SPKISexp",
+	XMLDSigElementTransform:              "Transform",
+	XMLDSigElementTransforms:             "Transforms",
+	XMLDSigElementX509Certificate:        "X509Certificate",
+	XMLDSigElementX509CRL:                "X509CRL",
+	XMLDSigElementX509Data:               "X509Data",
+	XMLDSigElementX509IssuerName:         "X509IssuerName",
+	XMLDSigElementX509IssuerSerial:       "X509IssuerSerial",
+	XMLDSigElementX509SerialNumber:       "X509SerialNumber",
+	XMLDSigElementX509SKI:                "X509SKI",
+	XMLDSigElementX509SubjectName:        "X509SubjectName",
+	XMLDSigElementXPATH:                  "XPath",
+	XMLDSigElementY:                      "Y",
 }
 
 // TagName implements DSSElement. Ports getTagName().

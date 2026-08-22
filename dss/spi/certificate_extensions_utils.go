@@ -123,103 +123,103 @@ func certificateExtensionsUtilsSetCertificateExtensions(certificateExtensions *e
 // CertificateExtensionsUtilsIsSubjectAlternativeNames reports whether oid is the subject
 // alternative names extension OID. Port of isSubjectAlternativeNames(String).
 func CertificateExtensionsUtilsIsSubjectAlternativeNames(oid string) bool {
-	return enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME.OID() == oid
+	return enumerations.CertificateExtensionEnumSubjectAlternativeName.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsAuthorityKeyIdentifier reports whether oid is the authority key
 // identifier extension OID. Port of isAuthorityKeyIdentifier(String).
 func CertificateExtensionsUtilsIsAuthorityKeyIdentifier(oid string) bool {
-	return enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER.OID() == oid
+	return enumerations.CertificateExtensionEnumAuthorityKeyIdentifier.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsSubjectKeyIdentifier reports whether oid is the subject key
 // identifier extension OID. Port of isSubjectKeyIdentifier(String).
 func CertificateExtensionsUtilsIsSubjectKeyIdentifier(oid string) bool {
-	return enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER.OID() == oid
+	return enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsAuthorityInformationAccess reports whether oid is the authority
 // information access extension OID. Port of isAuthorityInformationAccess(String).
 func CertificateExtensionsUtilsIsAuthorityInformationAccess(oid string) bool {
-	return enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID() == oid
+	return enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsCRLDistributionPoints reports whether oid is the CRL distribution
 // points extension OID. Port of isCRLDistributionPoints(String).
 func CertificateExtensionsUtilsIsCRLDistributionPoints(oid string) bool {
-	return enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS.OID() == oid
+	return enumerations.CertificateExtensionEnumCRLDistributionPoints.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsBasicConstraints reports whether oid is the basic constraints
 // extension OID. Port of isBasicConstraints(String).
 func CertificateExtensionsUtilsIsBasicConstraints(oid string) bool {
-	return enumerations.CertificateExtensionEnum_BASIC_CONSTRAINTS.OID() == oid
+	return enumerations.CertificateExtensionEnumBasicConstraints.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsNameConstraints reports whether oid is the name constraints
 // extension OID. Port of isNameConstraints(String).
 func CertificateExtensionsUtilsIsNameConstraints(oid string) bool {
-	return enumerations.CertificateExtensionEnum_NAME_CONSTRAINTS.OID() == oid
+	return enumerations.CertificateExtensionEnumNameConstraints.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsPolicyConstraints reports whether oid is the policy constraints
 // extension OID. Port of isPolicyConstraints(String).
 func CertificateExtensionsUtilsIsPolicyConstraints(oid string) bool {
-	return enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS.OID() == oid
+	return enumerations.CertificateExtensionEnumPolicyConstraints.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsKeyUsage reports whether oid is the key usage extension OID.
 // Port of isKeyUsage(String).
 func CertificateExtensionsUtilsIsKeyUsage(oid string) bool {
-	return enumerations.CertificateExtensionEnum_KEY_USAGE.OID() == oid
+	return enumerations.CertificateExtensionEnumKeyUsage.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsExtendedKeyUsage reports whether oid is the extended key usage
 // extension OID. Port of isExtendedKeyUsage(String).
 func CertificateExtensionsUtilsIsExtendedKeyUsage(oid string) bool {
-	return enumerations.CertificateExtensionEnum_EXTENDED_KEY_USAGE.OID() == oid
+	return enumerations.CertificateExtensionEnumExtendedKeyUsage.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsInhibitAnyPolicy reports whether oid is the inhibit anyPolicy
 // extension OID. Port of isInhibitAnyPolicy(String).
 func CertificateExtensionsUtilsIsInhibitAnyPolicy(oid string) bool {
-	return enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY.OID() == oid
+	return enumerations.CertificateExtensionEnumInhibitAnyPolicy.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsFreshestCRL reports whether oid is the Freshest CRL (a.k.a. Delta
 // CRL) extension OID. Port of isFreshestCRL(String).
 func CertificateExtensionsUtilsIsFreshestCRL(oid string) bool {
-	return enumerations.CertificateExtensionEnum_FRESHEST_CRL.OID() == oid
+	return enumerations.CertificateExtensionEnumFreshestCRL.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsCertificatePolicies reports whether oid is the certificate policies
 // extension OID. Port of isCertificatePolicies(String).
 func CertificateExtensionsUtilsIsCertificatePolicies(oid string) bool {
-	return enumerations.CertificateExtensionEnum_CERTIFICATE_POLICIES.OID() == oid
+	return enumerations.CertificateExtensionEnumCertificatePolicies.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsOcspNoCheck reports whether oid is the ocsp-nocheck extension OID.
 // Port of isOcspNoCheck(String).
 func CertificateExtensionsUtilsIsOcspNoCheck(oid string) bool {
-	return enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID() == oid
+	return enumerations.CertificateExtensionEnumOCSPNoCheck.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsValidityAssuredShortTerm reports whether oid is the
 // ext-etsi-valassured-ST-certs extension OID. Port of isValidityAssuredShortTerm(String).
 func CertificateExtensionsUtilsIsValidityAssuredShortTerm(oid string) bool {
-	return enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM.OID() == oid
+	return enumerations.CertificateExtensionEnumValidityAssuredShortTerm.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsQcStatements reports whether oid is the qc-statements extension OID.
 // Port of isQcStatements(String).
 func CertificateExtensionsUtilsIsQcStatements(oid string) bool {
-	return enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID() == oid
+	return enumerations.CertificateExtensionEnumQCStatements.OID() == oid
 }
 
 // CertificateExtensionsUtilsIsNoRevocationAvailable reports whether oid is the noRevAvail
 // extension OID. Port of isNoRevocationAvailable(String).
 func CertificateExtensionsUtilsIsNoRevocationAvailable(oid string) bool {
-	return enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID() == oid
+	return enumerations.CertificateExtensionEnumNoRevocationAvailable.OID() == oid
 }
 
 // CertificateExtensionsUtilsSubjectAlternativeNames returns the subject alternative names, when
@@ -322,7 +322,7 @@ func certificateExtensionsUtilsGeneralNameOf(altName certificateExtensionsUtilsA
 		return generalName
 	}
 	value := altName.value
-	if generalNameType == enumerations.GeneralNameType_DIRECTORY_NAME {
+	if generalNameType == enumerations.GeneralNameTypeDirectoryName {
 		value = certificateExtensionsUtilsToRFC2253RDN(altName.directoryName)
 	}
 	generalName.SetValue(value)
@@ -333,7 +333,7 @@ func certificateExtensionsUtilsGeneralNameOf(altName certificateExtensionsUtilsA
 // when present. Port of getAuthorityInformationAccess(CertificateToken).
 func CertificateExtensionsUtilsAuthorityInformationAccess(certificateToken *model.CertificateToken) *extension.AuthorityInformationAccess {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID()
+	oid := enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID()
 	authInfoAccessExtensionValue := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(authInfoAccessExtensionValue) == 0 {
 		return nil
@@ -409,7 +409,7 @@ func CertificateExtensionsUtilsOCSPAccessUrls(certificate *model.CertificateToke
 // reported through the same error.
 func CertificateExtensionsUtilsAuthorityKeyIdentifier(certificateToken *model.CertificateToken) (*extension.AuthorityKeyIdentifier, error) {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER.OID()
+	oid := enumerations.CertificateExtensionEnumAuthorityKeyIdentifier.OID()
 	extensionValue := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(extensionValue) == 0 {
 		return nil, nil
@@ -476,7 +476,7 @@ func CertificateExtensionsUtilsAuthorityKeyIdentifier(certificateToken *model.Ce
 // As for the authority key identifier, the Java DSSException becomes a returned model.DSSError.
 func CertificateExtensionsUtilsSubjectKeyIdentifier(certificateToken *model.CertificateToken) (*extension.SubjectKeyIdentifier, error) {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER.OID()
+	oid := enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID()
 	extensionValue := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(extensionValue) == 0 {
 		return nil, nil
@@ -501,7 +501,7 @@ func CertificateExtensionsUtilsSubjectKeyIdentifier(certificateToken *model.Cert
 // CertificateExtensionsUtilsCRLDistributionPoints returns the CRL distribution points, when
 // present. Port of getCRLDistributionPoints(CertificateToken).
 func CertificateExtensionsUtilsCRLDistributionPoints(certificateToken *model.CertificateToken) *extension.CRLDistributionPoints {
-	oid := enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS.OID()
+	oid := enumerations.CertificateExtensionEnumCRLDistributionPoints.OID()
 	crlDistributionPointsBytes := certificateExtensionsUtilsExtensionValue(certificateToken.Certificate(), oid)
 	if crlDistributionPointsBytes == nil {
 		return nil
@@ -597,7 +597,7 @@ func CertificateExtensionsUtilsBasicConstraints(certificateToken *model.Certific
 // Port of getNameConstraints(CertificateToken).
 func CertificateExtensionsUtilsNameConstraints(certificateToken *model.CertificateToken) *extension.NameConstraints {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_NAME_CONSTRAINTS.OID()
+	oid := enumerations.CertificateExtensionEnumNameConstraints.OID()
 	nameConstraintsBinaries := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(nameConstraintsBinaries) == 0 {
 		return nil
@@ -707,30 +707,30 @@ func certificateExtensionsUtilsGeneralSubtrees(subtreesContent []byte) ([]*exten
 // iPAddress and an OBJECT IDENTIFIER for registeredID.
 func certificateExtensionsUtilsStringValue(generalNameType enumerations.GeneralNameType, generalName certificateExtensionsUtilsTagged) string {
 	switch generalNameType {
-	case enumerations.GeneralNameType_OTHER_NAME,
-		enumerations.GeneralNameType_EDI_PARTY_NAME,
-		enumerations.GeneralNameType_X400_ADDRESS:
+	case enumerations.GeneralNameTypeOtherName,
+		enumerations.GeneralNameTypeEDIPartyName,
+		enumerations.GeneralNameTypeX400Address:
 		return certificateExtensionsUtilsToHexEncoded(certificateExtensionsUtilsRetag(generalName.content, cbasn1.SEQUENCE))
 
-	case enumerations.GeneralNameType_RFC822_NAME,
-		enumerations.GeneralNameType_DNS_NAME,
-		enumerations.GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER:
+	case enumerations.GeneralNameTypeRFC822Name,
+		enumerations.GeneralNameTypeDNSName,
+		enumerations.GeneralNameTypeUniformResourceIdentifier:
 		if !generalName.constructed {
 			return string(generalName.content)
 		}
 		return certificateExtensionsUtilsToHexEncoded(generalName.full)
 
-	case enumerations.GeneralNameType_DIRECTORY_NAME:
+	case enumerations.GeneralNameTypeDirectoryName:
 		principal, err := model.NewX500Principal(generalName.content)
 		if err != nil {
 			return certificateExtensionsUtilsToHexEncoded(generalName.content)
 		}
 		return model.NewX500PrincipalHelper(principal).RFC2253()
 
-	case enumerations.GeneralNameType_IP_ADDRESS:
+	case enumerations.GeneralNameTypeIPAddress:
 		return certificateExtensionsUtilsToHexEncoded(generalName.content)
 
-	case enumerations.GeneralNameType_REGISTERED_ID:
+	case enumerations.GeneralNameTypeRegisteredID:
 		objectIdentifier, ok := certificateExtensionsUtilsObjectIdentifier(generalName.content)
 		if !ok {
 			return certificateExtensionsUtilsToHexEncoded(generalName.content)
@@ -751,7 +751,7 @@ func certificateExtensionsUtilsToHexEncoded(binaries []byte) string {
 // present. Port of getPolicyConstraints(CertificateToken).
 func CertificateExtensionsUtilsPolicyConstraints(certificateToken *model.CertificateToken) *extension.PolicyConstraints {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS.OID()
+	oid := enumerations.CertificateExtensionEnumPolicyConstraints.OID()
 	policyConstraintsBinaries := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(policyConstraintsBinaries) == 0 {
 		return nil
@@ -795,7 +795,7 @@ func CertificateExtensionsUtilsPolicyConstraints(certificateToken *model.Certifi
 // present. Port of getInhibitAnyPolicy(CertificateToken).
 func CertificateExtensionsUtilsInhibitAnyPolicy(certificateToken *model.CertificateToken) *extension.InhibitAnyPolicy {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY.OID()
+	oid := enumerations.CertificateExtensionEnumInhibitAnyPolicy.OID()
 	inhibitAnyPolicyBinaries := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(inhibitAnyPolicyBinaries) == 0 {
 		return nil
@@ -818,7 +818,7 @@ func CertificateExtensionsUtilsInhibitAnyPolicy(certificateToken *model.Certific
 // CertificateExtensionsUtilsFreshestCRL returns the Freshest CRL, when present.
 // Port of getFreshestCRL(CertificateToken).
 func CertificateExtensionsUtilsFreshestCRL(certificateToken *model.CertificateToken) *extension.FreshestCRL {
-	oid := enumerations.CertificateExtensionEnum_FRESHEST_CRL.OID()
+	oid := enumerations.CertificateExtensionEnumFreshestCRL.OID()
 	freshestCrlBytes := certificateExtensionsUtilsExtensionValue(certificateToken.Certificate(), oid)
 	if freshestCrlBytes == nil {
 		return nil
@@ -834,7 +834,7 @@ func CertificateExtensionsUtilsFreshestCRL(certificateToken *model.CertificateTo
 // Port of getKeyUsage(CertificateToken).
 func CertificateExtensionsUtilsKeyUsage(certificateToken *model.CertificateToken) *extension.KeyUsage {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_KEY_USAGE.OID()
+	oid := enumerations.CertificateExtensionEnumKeyUsage.OID()
 	// X509Certificate#getKeyUsage() answers null only when the extension is absent.
 	if certificateExtensionsUtilsExtensionContent(certificate, oid) == nil {
 		return nil
@@ -850,7 +850,7 @@ func CertificateExtensionsUtilsKeyUsage(certificateToken *model.CertificateToken
 // Port of getExtendedKeyUsage(CertificateToken).
 func CertificateExtensionsUtilsExtendedKeyUsage(certificateToken *model.CertificateToken) *extension.ExtendedKeyUsages {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_EXTENDED_KEY_USAGE.OID()
+	oid := enumerations.CertificateExtensionEnumExtendedKeyUsage.OID()
 	extendedKeyUsage := extension.NewExtendedKeyUsages()
 	extendedKeyUsage.SetOctets(certificateExtensionsUtilsExtensionValue(certificate, oid))
 
@@ -880,7 +880,7 @@ func CertificateExtensionsUtilsExtendedKeyUsage(certificateToken *model.Certific
 // Port of getCertificatePolicies(CertificateToken).
 func CertificateExtensionsUtilsCertificatePolicies(certificateToken *model.CertificateToken) *extension.CertificatePolicies {
 	certificate := certificateToken.Certificate()
-	oid := enumerations.CertificateExtensionEnum_CERTIFICATE_POLICIES.OID()
+	oid := enumerations.CertificateExtensionEnumCertificatePolicies.OID()
 	certificatePoliciesBinaries := certificateExtensionsUtilsExtensionValue(certificate, oid)
 	if len(certificatePoliciesBinaries) == 0 {
 		return nil
@@ -948,7 +948,7 @@ func certificateExtensionsUtilsCertificatePolicy(policyObject []byte) (*extensio
 // CertificateExtensionsUtilsOcspNoCheck returns the ocsp-nocheck extension value, when present.
 // Port of getOcspNoCheck(CertificateToken).
 func CertificateExtensionsUtilsOcspNoCheck(certificateToken *model.CertificateToken) *extension.OCSPNoCheck {
-	oid := enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID()
+	oid := enumerations.CertificateExtensionEnumOCSPNoCheck.OID()
 	extensionValue := certificateExtensionsUtilsExtensionValue(certificateToken.Certificate(), oid)
 	if extensionValue == nil {
 		return nil
@@ -971,7 +971,7 @@ func CertificateExtensionsUtilsHasOcspNoCheckExtension(certificateToken *model.C
 // CertificateExtensionsUtilsValAssuredSTCerts returns the ext-etsi-valassured-ST-certs extension
 // value, when present. Port of getValAssuredSTCerts(CertificateToken).
 func CertificateExtensionsUtilsValAssuredSTCerts(certificateToken *model.CertificateToken) *extension.ValidityAssuredShortTerm {
-	oid := enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM.OID()
+	oid := enumerations.CertificateExtensionEnumValidityAssuredShortTerm.OID()
 	extensionValue := certificateExtensionsUtilsExtensionValue(certificateToken.Certificate(), oid)
 	if extensionValue == nil {
 		return nil
@@ -1001,7 +1001,7 @@ func certificateExtensionsUtilsIsNullIdentifiedValuePresent(extensionValue []byt
 // CertificateExtensionsUtilsNoRevAvail returns the noRevAvail extension value, when present.
 // Port of getNoRevAvail(CertificateToken).
 func CertificateExtensionsUtilsNoRevAvail(certificateToken *model.CertificateToken) *extension.NoRevAvail {
-	oid := enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID()
+	oid := enumerations.CertificateExtensionEnumNoRevocationAvailable.OID()
 	extensionValue := certificateExtensionsUtilsExtensionValue(certificateToken.Certificate(), oid)
 	if extensionValue == nil {
 		return nil

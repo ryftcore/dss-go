@@ -50,16 +50,16 @@ func (c *AbstractPdfLockDictionaryCheck) Process() bool {
 	lockedFields := c.PdfLockDictionary.Field
 	if c.PdfLockDictionary.Action != nil {
 		switch c.PdfLockDictionary.Action.PdfLockAction() {
-		case enumerations.PdfLockAction_ALL:
+		case enumerations.PdfLockActionAll:
 			return false
-		case enumerations.PdfLockAction_EXCLUDE:
+		case enumerations.PdfLockActionExclude:
 			for _, fieldName := range modifiedFieldNames {
 				if !containsString(lockedFields, fieldName) {
 					return false
 				}
 			}
 			return true
-		case enumerations.PdfLockAction_INCLUDE:
+		case enumerations.PdfLockActionInclude:
 			for _, fieldName := range modifiedFieldNames {
 				if containsString(lockedFields, fieldName) {
 					return false

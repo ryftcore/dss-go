@@ -173,8 +173,8 @@ func TestKnownAnswersSerializationGenerator(t *testing.T) {
 		name   string
 		output enumerations.JWSSerializationType
 	}{
-		{"GEN_FLATTENED", enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION},
-		{"GEN_COMPLETE", enumerations.JWSSerializationType_JSON_SERIALIZATION},
+		{"GEN_FLATTENED", enumerations.JWSSerializationTypeFlattenedJSONSerialization},
+		{"GEN_COMPLETE", enumerations.JWSSerializationTypeJSONSerialization},
 	} {
 		for _, c := range jadesJSONKATSection(t, cases, section.name) {
 			t.Run(section.name+"/"+c.name, func(t *testing.T) {
@@ -205,7 +205,7 @@ func TestKnownAnswersConverter(t *testing.T) {
 			if document.Name() != "json-flattened-serialization.json" {
 				t.Errorf("document name = %q", document.Name())
 			}
-			if document.MimeType() != enumerations.MimeTypeEnum_JSON {
+			if document.MimeType() != enumerations.MimeTypeEnumJSON {
 				t.Errorf("mime type = %v", document.MimeType())
 			}
 		})
@@ -294,7 +294,7 @@ func TestKnownAnswersSerializationParser(t *testing.T) {
 func TestKnownAnswersOidObject(t *testing.T) {
 	byName := jadesJSONKATByName(t, jadesJSONKATLoad(t), "OID")
 
-	commitment, err := DSSJsonUtilsOidObject(enumerations.CommitmentTypeEnum_ProofOfOrigin)
+	commitment, err := DSSJsonUtilsOidObject(enumerations.CommitmentTypeEnumProofOfOrigin)
 	if err != nil {
 		t.Fatalf("DSSJsonUtilsOidObject: %v", err)
 	}
@@ -473,18 +473,18 @@ func TestFlattenedSerializationRejectsMultipleSignatures(t *testing.T) {
 	object.AddSignature(NewJWS())
 	object.AddSignature(NewJWS())
 	_, err := NewJWSJsonSerializationGenerator(object,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION).Generate()
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization).Generate()
 	if err == nil {
 		t.Fatal("a flattened serialization with two signatures was accepted")
 	}
 
 	empty := NewJWSJsonSerializationObject()
 	if _, err := NewJWSJsonSerializationGenerator(empty,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION).Generate(); err == nil {
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization).Generate(); err == nil {
 		t.Fatal("a flattened serialization with no signature was accepted")
 	}
 	if _, err := NewJWSJsonSerializationGenerator(empty,
-		enumerations.JWSSerializationType_COMPACT_SERIALIZATION).Generate(); err == nil {
+		enumerations.JWSSerializationTypeCompactSerialization).Generate(); err == nil {
 		t.Fatal("the generator accepted the compact serialization type")
 	}
 }

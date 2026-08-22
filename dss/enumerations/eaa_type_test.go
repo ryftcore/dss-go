@@ -3,7 +3,7 @@ package enumerations
 import "testing"
 
 func TestEAATypeValues(t *testing.T) {
-	want := []EAAType{EAAType_SD_JWT_VC, EAAType_ISO_IEC_MDOC, EAAType_W3C_VC, EAAType_X509_AC}
+	want := []EAAType{EAATypeSDJWTVC, EAATypeISOIECMDoc, EAATypeW3CVC, EAATypeX509AC}
 	got := EAATypeValues()
 	if len(got) != len(want) {
 		t.Fatalf("expected %d values, got %d", len(want), len(got))
@@ -14,10 +14,10 @@ func TestEAATypeValues(t *testing.T) {
 		}
 	}
 	names := map[EAAType]string{
-		EAAType_SD_JWT_VC:    "SD_JWT_VC",
-		EAAType_ISO_IEC_MDOC: "ISO_IEC_MDOC",
-		EAAType_W3C_VC:       "W3C_VC",
-		EAAType_X509_AC:      "X509_AC",
+		EAATypeSDJWTVC:    "SD_JWT_VC",
+		EAATypeISOIECMDoc: "ISO_IEC_MDOC",
+		EAATypeW3CVC:      "W3C_VC",
+		EAATypeX509AC:     "X509_AC",
 	}
 	for v, name := range names {
 		if string(v) != name {

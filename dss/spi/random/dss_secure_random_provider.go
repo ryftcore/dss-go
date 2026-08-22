@@ -25,7 +25,7 @@ type DSSSecureRandomProvider struct {
 // NewDSSSecureRandomProvider creates a DSSSecureRandomProvider using SHA512 to derive blocks
 // (512-bit blocks). Port of the default constructor.
 func NewDSSSecureRandomProvider() *DSSSecureRandomProvider {
-	return &DSSSecureRandomProvider{digestAlgorithm: enumerations.DigestAlgorithm_SHA512}
+	return &DSSSecureRandomProvider{digestAlgorithm: enumerations.DigestAlgorithmSHA512}
 }
 
 // NewDSSSecureRandomProviderWithDigestAlgorithm creates a DSSSecureRandomProvider deriving

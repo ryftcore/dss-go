@@ -70,8 +70,8 @@ func (c *PIDQualificationProcessBlock) InitChain() {
 		panic("No signatures found within the EAA token!")
 	}
 
-	var certificateApprovalStatusAtIssuanceTime enumerations.CertificateApprovalStatus = enumerations.CertificateApprovalStatusEnum_NA
-	var certificateApprovalStatusAtValidationTime enumerations.CertificateApprovalStatus = enumerations.CertificateApprovalStatusEnum_NA
+	var certificateApprovalStatusAtIssuanceTime enumerations.CertificateApprovalStatus = enumerations.CertificateApprovalStatusEnumNA
+	var certificateApprovalStatusAtValidationTime enumerations.CertificateApprovalStatus = enumerations.CertificateApprovalStatusEnumNA
 
 	signature := c.eaa.EAASignatures()[0]
 	signingCertificate := signature.SigningCertificate()
@@ -154,7 +154,7 @@ func (c *PIDQualificationProcessBlock) InitChain() {
 				filter := TrustedEntitiesFilterFactoryCreateFilterByListUrls(trustedSourceUrls)
 				relatedServices := filter.Filter(originalTESs)
 
-				filter = TrustedEntitiesFilterFactoryCreateFilterByServiceTypeIdentifierUri(enumerations.LoTEServiceTypeIdentifierEnum_PID_ISSUANCE.URI())
+				filter = TrustedEntitiesFilterFactoryCreateFilterByServiceTypeIdentifierUri(enumerations.LoTEServiceTypeIdentifierEnumPIDIssuance.URI())
 				filteredServices := filter.Filter(relatedServices)
 
 				item = item.SetNextItem(c.stiForPIDIssuance(filteredServices))
@@ -247,8 +247,8 @@ func (c *PIDQualificationProcessBlock) getLoTEAnalysis(listSource *diagjaxb.XmlT
 // Port of the overridable protected getCertUsageAtIssuanceTimeBlock(CertificateWrapper, List).
 func (c *PIDQualificationProcessBlock) getCertUsageAtIssuanceTimeBlock(certificate *diagnostic.CertificateWrapper,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
-	return NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME,
-		certificate, enumerations.LoTETypeEnum_EUPIDProvidersList.URI(), enumerations.LoTEServiceTypeIdentifierEnum_PID_ISSUANCE.URI(), acceptableServices)
+	return NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
+		certificate, enumerations.LoTETypeEnumEUPIDProvidersList.URI(), enumerations.LoTEServiceTypeIdentifierEnumPIDIssuance.URI(), acceptableServices)
 }
 
 // getCertUsageAtValidationTimeBlock gets a certificate qualification
@@ -256,8 +256,8 @@ func (c *PIDQualificationProcessBlock) getCertUsageAtIssuanceTimeBlock(certifica
 // overridable protected getCertUsageAtValidationTimeBlock(CertificateWrapper, List).
 func (c *PIDQualificationProcessBlock) getCertUsageAtValidationTimeBlock(certificate *diagnostic.CertificateWrapper,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
-	return NewCertificateApprovalStatusAtTimeBlock(c.I18nProvider, enumerations.ValidationTime_VALIDATION_TIME, &c.currentTime,
-		certificate, enumerations.LoTETypeEnum_EUPIDProvidersList.URI(), enumerations.LoTEServiceTypeIdentifierEnum_PID_ISSUANCE.URI(), acceptableServices)
+	return NewCertificateApprovalStatusAtTimeBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &c.currentTime,
+		certificate, enumerations.LoTETypeEnumEUPIDProvidersList.URI(), enumerations.LoTEServiceTypeIdentifierEnumPIDIssuance.URI(), acceptableServices)
 }
 
 // getCertificateApprovalStatus ports the private

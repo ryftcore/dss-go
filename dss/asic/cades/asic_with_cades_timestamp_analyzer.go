@@ -43,9 +43,9 @@ func newASiCWithCAdESTimestampAnalyzer() *ASiCWithCAdESTimestampAnalyzer {
 // NewASiCWithCAdESTimestampAnalyzer is the default constructor. Ports
 // ASiCWithCAdESTimestampAnalyzer(DSSDocument), which delegates to the single-argument
 // DetachedTimestampAnalyzer(DSSDocument) constructor and so keeps its
-// TimestampType_CONTENT_TIMESTAMP default.
+// TimestampTypeContentTimestamp default.
 func NewASiCWithCAdESTimestampAnalyzer(timestamp model.DSSDocument) *ASiCWithCAdESTimestampAnalyzer {
-	return NewASiCWithCAdESTimestampAnalyzerWithType(timestamp, enumerations.TimestampType_CONTENT_TIMESTAMP)
+	return NewASiCWithCAdESTimestampAnalyzerWithType(timestamp, enumerations.TimestampTypeContentTimestamp)
 }
 
 // NewASiCWithCAdESTimestampAnalyzerWithType is the default constructor with a timestamp type.

@@ -13,7 +13,7 @@ func sha1CryptographicConstraint() *jaxb.CryptographicConstraint {
 	cc := &jaxb.CryptographicConstraint{
 		AcceptableDigestAlgo: &jaxb.ListAlgo{Algos: []*jaxb.Algo{{Value: "SHA1"}}},
 	}
-	cc.Level = jaxb.LevelValue(enumerations.Level_FAIL)
+	cc.Level = jaxb.LevelValue(enumerations.LevelFail)
 	return cc
 }
 
@@ -21,7 +21,7 @@ func sha256CryptographicConstraint() *jaxb.CryptographicConstraint {
 	cc := &jaxb.CryptographicConstraint{
 		AcceptableDigestAlgo: &jaxb.ListAlgo{Algos: []*jaxb.Algo{{Value: "SHA256"}}},
 	}
-	cc.Level = jaxb.LevelValue(enumerations.Level_FAIL)
+	cc.Level = jaxb.LevelValue(enumerations.LevelFail)
 	return cc
 }
 
@@ -56,7 +56,7 @@ func TestValidationPolicyWithCryptographicSuite_GlobalCryptoSuiteAppliesEverywhe
 	p := NewValidationPolicyWithCryptographicSuite(etsi)
 
 	for _, context := range enumerations.ContextValues() {
-		if context == enumerations.Context_EVIDENCE_RECORD {
+		if context == enumerations.ContextEvidenceRecord {
 			continue
 		}
 		if got := len(p.SignatureCryptographicConstraint(context).AcceptableDigestAlgorithms()); got != 0 {
@@ -67,22 +67,22 @@ func TestValidationPolicyWithCryptographicSuite_GlobalCryptoSuiteAppliesEverywhe
 	p.SetCryptographicSuite(policy.NewCryptographicConstraintWrapper(sha1CryptographicConstraint()))
 
 	for _, context := range enumerations.ContextValues() {
-		if context == enumerations.Context_EVIDENCE_RECORD {
+		if context == enumerations.ContextEvidenceRecord {
 			continue
 		}
 		digestAlgos := p.SignatureCryptographicConstraint(context).AcceptableDigestAlgorithms()
-		if _, ok := digestAlgos[enumerations.DigestAlgorithm_SHA1]; !ok || len(digestAlgos) != 1 {
+		if _, ok := digestAlgos[enumerations.DigestAlgorithmSHA1]; !ok || len(digestAlgos) != 1 {
 			t.Fatalf("context %s: expected {SHA1}, got %v", context, digestAlgorithmKeys(t, digestAlgos))
 		}
 		for _, subContext := range enumerations.SubContextValues() {
 			certDigestAlgos := p.CertificateCryptographicConstraint(context, subContext).AcceptableDigestAlgorithms()
-			if _, ok := certDigestAlgos[enumerations.DigestAlgorithm_SHA1]; !ok || len(certDigestAlgos) != 1 {
+			if _, ok := certDigestAlgos[enumerations.DigestAlgorithmSHA1]; !ok || len(certDigestAlgos) != 1 {
 				t.Fatalf("context %s/%s: expected {SHA1}, got %v", context, subContext, digestAlgorithmKeys(t, certDigestAlgos))
 			}
 		}
 	}
 	erDigestAlgos := p.EvidenceRecordCryptographicConstraint().AcceptableDigestAlgorithms()
-	if _, ok := erDigestAlgos[enumerations.DigestAlgorithm_SHA1]; !ok || len(erDigestAlgos) != 1 {
+	if _, ok := erDigestAlgos[enumerations.DigestAlgorithmSHA1]; !ok || len(erDigestAlgos) != 1 {
 		t.Fatalf("EvidenceRecordCryptographicConstraint: expected {SHA1}, got %v", digestAlgorithmKeys(t, erDigestAlgos))
 	}
 }
@@ -96,10 +96,10 @@ func TestValidationPolicyWithCryptographicSuite_PerContextOverridesOnlyThatScope
 		p.SetCryptographicSuiteForContext(policy.NewCryptographicConstraintWrapper(sha256CryptographicConstraint()), context)
 
 		for _, currentContext := range enumerations.ContextValues() {
-			if currentContext == enumerations.Context_EVIDENCE_RECORD {
+			if currentContext == enumerations.ContextEvidenceRecord {
 				erDigestAlgos := p.EvidenceRecordCryptographicConstraint().AcceptableDigestAlgorithms()
 				wantSHA256 := context == currentContext
-				_, hasSHA256 := erDigestAlgos[enumerations.DigestAlgorithm_SHA256]
+				_, hasSHA256 := erDigestAlgos[enumerations.DigestAlgorithmSHA256]
 				if hasSHA256 != wantSHA256 {
 					t.Fatalf("context %s / current %s: EvidenceRecord SHA256 present=%v, want %v", context, currentContext, hasSHA256, wantSHA256)
 				}
@@ -107,7 +107,7 @@ func TestValidationPolicyWithCryptographicSuite_PerContextOverridesOnlyThatScope
 			}
 			digestAlgos := p.SignatureCryptographicConstraint(currentContext).AcceptableDigestAlgorithms()
 			wantSHA256 := context == currentContext
-			_, hasSHA256 := digestAlgos[enumerations.DigestAlgorithm_SHA256]
+			_, hasSHA256 := digestAlgos[enumerations.DigestAlgorithmSHA256]
 			if hasSHA256 != wantSHA256 {
 				t.Fatalf("context %s / current %s: Signature SHA256 present=%v, want %v", context, currentContext, hasSHA256, wantSHA256)
 			}
@@ -121,15 +121,15 @@ func TestValidationPolicyWithCryptographicSuite_SetCryptographicSuiteForContextA
 	p := NewValidationPolicyWithCryptographicSuite(etsi)
 
 	if err := p.SetCryptographicSuiteForContextAndSubContext(policy.NewCryptographicConstraintWrapper(sha256CryptographicConstraint()),
-		enumerations.Context_CERTIFICATE, enumerations.SubContext_SIGNING_CERT); err != nil {
+		enumerations.ContextCertificate, enumerations.SubContextSigningCert); err != nil {
 		t.Fatalf("SetCryptographicSuiteForContextAndSubContext returned error: %v", err)
 	}
 
-	digestAlgos := p.CertificateCryptographicConstraint(enumerations.Context_CERTIFICATE, enumerations.SubContext_SIGNING_CERT).AcceptableDigestAlgorithms()
-	if _, ok := digestAlgos[enumerations.DigestAlgorithm_SHA256]; !ok {
+	digestAlgos := p.CertificateCryptographicConstraint(enumerations.ContextCertificate, enumerations.SubContextSigningCert).AcceptableDigestAlgorithms()
+	if _, ok := digestAlgos[enumerations.DigestAlgorithmSHA256]; !ok {
 		t.Fatalf("expected SHA256 in SIGNING_CERT scope, got %v", digestAlgorithmKeys(t, digestAlgos))
 	}
-	otherDigestAlgos := p.CertificateCryptographicConstraint(enumerations.Context_CERTIFICATE, enumerations.SubContext_CA_CERTIFICATE).AcceptableDigestAlgorithms()
+	otherDigestAlgos := p.CertificateCryptographicConstraint(enumerations.ContextCertificate, enumerations.SubContextCACertificate).AcceptableDigestAlgorithms()
 	if len(otherDigestAlgos) != 0 {
 		t.Fatalf("expected CA_CERTIFICATE scope untouched, got %v", digestAlgorithmKeys(t, otherDigestAlgos))
 	}
@@ -141,7 +141,7 @@ func TestValidationPolicyWithCryptographicSuite_EvidenceRecordSubContextRejected
 	p := NewValidationPolicyWithCryptographicSuite(etsi)
 
 	err := p.SetCryptographicSuiteForContextAndSubContext(policy.NewCryptographicConstraintWrapper(sha256CryptographicConstraint()),
-		enumerations.Context_EVIDENCE_RECORD, enumerations.SubContext_SIGNING_CERT)
+		enumerations.ContextEvidenceRecord, enumerations.SubContextSigningCert)
 	if err == nil {
 		t.Fatal("expected an error for EVIDENCE_RECORD with a non-empty SubContext")
 	}

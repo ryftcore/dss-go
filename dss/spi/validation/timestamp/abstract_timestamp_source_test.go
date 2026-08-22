@@ -49,9 +49,9 @@ func loadFixtureTimestampToken(t *testing.T, timestampType enumerations.Timestam
 
 func TestAddReferenceDedupsByEquals(t *testing.T) {
 	var list []*validation.TimestampedReference
-	ref1 := validation.NewTimestampedReference("id-1", enumerations.TimestampedObjectType_CERTIFICATE)
-	ref1Dup := validation.NewTimestampedReference("id-1", enumerations.TimestampedObjectType_CERTIFICATE)
-	ref2 := validation.NewTimestampedReference("id-2", enumerations.TimestampedObjectType_CERTIFICATE)
+	ref1 := validation.NewTimestampedReference("id-1", enumerations.TimestampedObjectTypeCertificate)
+	ref1Dup := validation.NewTimestampedReference("id-1", enumerations.TimestampedObjectTypeCertificate)
+	ref2 := validation.NewTimestampedReference("id-2", enumerations.TimestampedObjectTypeCertificate)
 
 	addReference(&list, ref1)
 	addReference(&list, ref1Dup) // equal to ref1 (same id + category): must not be appended again
@@ -68,11 +68,11 @@ func TestAddReferenceDedupsByEquals(t *testing.T) {
 func TestAddReferenceForIdentifier(t *testing.T) {
 	var list []*validation.TimestampedReference
 	id := fakeXMLIdentifiable{id: "cert-id"}
-	addReferenceForIdentifier(&list, id, enumerations.TimestampedObjectType_CERTIFICATE)
+	addReferenceForIdentifier(&list, id, enumerations.TimestampedObjectTypeCertificate)
 	if len(list) != 1 {
 		t.Fatalf("len(list) = %d, want 1", len(list))
 	}
-	if list[0].ObjectId() != "cert-id" || list[0].Category() != enumerations.TimestampedObjectType_CERTIFICATE {
+	if list[0].ObjectId() != "cert-id" || list[0].Category() != enumerations.TimestampedObjectTypeCertificate {
 		t.Fatalf("list[0] = %+v, want {cert-id CERTIFICATE}", list[0])
 	}
 }
@@ -85,11 +85,11 @@ func (f fakeXMLIdentifiable) AsXmlID() string { return f.id }
 
 func TestMergeReferencesDoesNotMutateBase(t *testing.T) {
 	base := []*validation.TimestampedReference{
-		validation.NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE),
+		validation.NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate),
 	}
 	additional := []*validation.TimestampedReference{
-		validation.NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE), // dup
-		validation.NewTimestampedReference("b", enumerations.TimestampedObjectType_REVOCATION),
+		validation.NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate), // dup
+		validation.NewTimestampedReference("b", enumerations.TimestampedObjectTypeRevocation),
 	}
 
 	merged := mergeReferences(base, additional)
@@ -104,10 +104,10 @@ func TestMergeReferencesDoesNotMutateBase(t *testing.T) {
 
 func TestContainsEqualReference(t *testing.T) {
 	refs := []*validation.TimestampedReference{
-		validation.NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE),
+		validation.NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate),
 	}
-	same := validation.NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE)
-	different := validation.NewTimestampedReference("b", enumerations.TimestampedObjectType_CERTIFICATE)
+	same := validation.NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate)
+	different := validation.NewTimestampedReference("b", enumerations.TimestampedObjectTypeCertificate)
 
 	if !containsEqualReference(refs, same) {
 		t.Fatal("containsEqualReference() = false, want true for an equal reference")
@@ -118,8 +118,8 @@ func TestContainsEqualReference(t *testing.T) {
 }
 
 func TestTimestampAddReferences(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	ref := validation.NewTimestampedReference("extra", enumerations.TimestampedObjectType_SIGNED_DATA)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	ref := validation.NewTimestampedReference("extra", enumerations.TimestampedObjectTypeSignedData)
 
 	before := len(token.TimestampedReferences())
 	timestampAddReferences(token, []*validation.TimestampedReference{ref})
@@ -149,11 +149,11 @@ func TestTimestampAddReferences(t *testing.T) {
 // ---- ensureOnlyDataTimestampReferencesPresent --------------------------------------------------
 
 func TestEnsureOnlyDataTimestampReferencesPresentDropsUncoveredSignedData(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
-	covered := validation.NewTimestampedReference("covered-data", enumerations.TimestampedObjectType_SIGNED_DATA)
-	uncovered := validation.NewTimestampedReference("uncovered-data", enumerations.TimestampedObjectType_SIGNED_DATA)
-	nonData := validation.NewTimestampedReference("cert-ref", enumerations.TimestampedObjectType_CERTIFICATE)
+	covered := validation.NewTimestampedReference("covered-data", enumerations.TimestampedObjectTypeSignedData)
+	uncovered := validation.NewTimestampedReference("uncovered-data", enumerations.TimestampedObjectTypeSignedData)
+	nonData := validation.NewTimestampedReference("cert-ref", enumerations.TimestampedObjectTypeCertificate)
 	token.SetTimestampedReferences([]*validation.TimestampedReference{covered, uncovered, nonData})
 
 	// referencesToCheck only vouches for "covered"; SIGNED_DATA entries absent from it must be
@@ -204,7 +204,7 @@ func generateTimestampSourceTestCertificate(t *testing.T) *model.CertificateToke
 func TestCreateReferenceForCertificate(t *testing.T) {
 	cert := generateTimestampSourceTestCertificate(t)
 	ref := CreateReferenceForCertificate(cert)
-	if ref.Category() != enumerations.TimestampedObjectType_CERTIFICATE {
+	if ref.Category() != enumerations.TimestampedObjectTypeCertificate {
 		t.Fatalf("Category() = %v, want CERTIFICATE", ref.Category())
 	}
 	if ref.ObjectId() != cert.DSSID().AsXmlID() {
@@ -249,7 +249,7 @@ func TestSignerDataTimestampedReferencesRecursesThroughChildren(t *testing.T) {
 		t.Fatalf("len(refs) = %d, want 2 (parent + child)", len(refs))
 	}
 	for _, r := range refs {
-		if r.Category() != enumerations.TimestampedObjectType_SIGNED_DATA {
+		if r.Category() != enumerations.TimestampedObjectTypeSignedData {
 			t.Fatalf("Category() = %v, want SIGNED_DATA for every reference", r.Category())
 		}
 	}
@@ -266,7 +266,7 @@ func TestSignerDataTimestampedReferencesRecursesThroughChildren(t *testing.T) {
 // ---- ReferencesFromTimestamp: a real fixture TimestampToken, empty merged sources -------------
 
 func TestReferencesFromTimestampIncludesTheTokenItself(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
 	refs, err := ReferencesFromTimestamp(token,
 		spi.NewListCertificateSource(),
@@ -278,7 +278,7 @@ func TestReferencesFromTimestampIncludesTheTokenItself(t *testing.T) {
 
 	found := false
 	for _, r := range refs {
-		if r.Category() == enumerations.TimestampedObjectType_TIMESTAMP && r.ObjectId() == token.DSSIDAsString() {
+		if r.Category() == enumerations.TimestampedObjectTypeTimestamp && r.ObjectId() == token.DSSIDAsString() {
 			found = true
 		}
 	}

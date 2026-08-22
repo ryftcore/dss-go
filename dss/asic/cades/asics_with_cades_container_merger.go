@@ -68,7 +68,7 @@ func (m *ASiCSWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.ASi
 
 // GetTargetASiCContainerType ports the @Override protected getTargetASiCContainerType().
 func (m *ASiCSWithCAdESContainerMerger) GetTargetASiCContainerType() enumerations.ASiCContainerType {
-	return enumerations.ASiCContainerType_ASiC_S
+	return enumerations.ASiCContainerTypeASiCS
 }
 
 // EnsureContainerContentAllowMerge ports the @Override protected

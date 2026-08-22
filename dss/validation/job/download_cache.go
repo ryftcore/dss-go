@@ -50,7 +50,7 @@ func isSHA2ContentMatch(cachedResult DownloadResult, downloadedResult DownloadRe
 		(utils.IsCollectionEmpty(cachedResult.Sha2ErrorMessages()) && slices.Equal(cachedResult.Sha2ErrorMessages(), downloadedResult.Sha2ErrorMessages()))
 }
 
-// CacheType returns CacheType_DOWNLOAD. Port of getCacheType().
+// CacheType returns CacheTypeDownload. Port of getCacheType().
 func (c *DownloadCache) CacheType() CacheType {
-	return CacheType_DOWNLOAD
+	return CacheTypeDownload
 }

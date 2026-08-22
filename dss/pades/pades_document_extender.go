@@ -80,7 +80,7 @@ func (e *PAdESDocumentExtender) IsSupportedService(service any) bool {
 
 // SignatureForm ports the overridden getSignatureForm().
 func (e *PAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_PAdES
+	return enumerations.SignatureFormPAdES
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.

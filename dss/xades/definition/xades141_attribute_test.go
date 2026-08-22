@@ -10,9 +10,9 @@ func TestXAdES141Attribute_KAT(t *testing.T) {
 		got  string
 		want string
 	}{
-		{"ID", XAdES141Attribute_ID.AttributeName(), "Id"},
-		{"ORDER", XAdES141Attribute_ORDER.AttributeName(), "Order"},
-		{"URI", XAdES141Attribute_URI.AttributeName(), "URI"},
+		{"ID", XAdES141AttributeID.AttributeName(), "Id"},
+		{"ORDER", XAdES141AttributeOrder.AttributeName(), "Order"},
+		{"URI", XAdES141AttributeURI.AttributeName(), "URI"},
 	}
 	for _, c := range cases {
 		if c.got != c.want {

@@ -20,10 +20,10 @@ func TestSignaturePackagingValueOf(t *testing.T) {
 
 func TestSignaturePackagingValues(t *testing.T) {
 	want := []SignaturePackaging{
-		SignaturePackaging_ENVELOPED,
-		SignaturePackaging_ENVELOPING,
-		SignaturePackaging_DETACHED,
-		SignaturePackaging_INTERNALLY_DETACHED,
+		SignaturePackagingEnveloped,
+		SignaturePackagingEnveloping,
+		SignaturePackagingDetached,
+		SignaturePackagingInternallyDetached,
 	}
 	got := SignaturePackagingValues()
 	if len(got) != len(want) {

@@ -131,11 +131,11 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) Title() i18n.
 // InitChain initializes the chain. Port of initChain().
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 
-	currentContext := enumerations.Context_SIGNATURE
+	currentContext := enumerations.ContextSignature
 	if c.currentSignature.IsCounterSignature() {
-		currentContext = enumerations.Context_COUNTER_SIGNATURE
+		currentContext = enumerations.ContextCounterSignature
 	} else if c.currentSignature.IsKeyBindingSignature() {
-		currentContext = enumerations.Context_KEY_BINDING_SIGNATURE
+		currentContext = enumerations.ContextKeyBindingSignature
 	}
 
 	/*
@@ -171,9 +171,9 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	c.certificateRevocationMap = make(map[string]*diagnostic.CertificateRevocationWrapper)
 
 	for _, certificateWrapper := range c.currentSignature.CertificateChain() {
-		subContext := enumerations.SubContext_CA_CERTIFICATE
+		subContext := enumerations.SubContextCACertificate
 		if c.currentSignature.SigningCertificate() != nil && c.currentSignature.SigningCertificate().Id() == certificateWrapper.Id() {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		}
 		if c.isTrustAnchor(certificateWrapper, bestSignatureTime.Time.Time(), currentContext, subContext) {
 			break
@@ -291,8 +291,8 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	 *    REVOKED_NO_POE or REVOKED_CA_NO_POE, respectively.
 	 */
 	bsSubIndication := xmlSubIndication(bsConclusion)
-	if enumerations.Indication_INDETERMINATE == bsConclusion.Indication.Indication() &&
-		(enumerations.SubIndication_REVOKED_NO_POE == bsSubIndication || enumerations.SubIndication_REVOKED_CA_NO_POE == bsSubIndication) {
+	if enumerations.IndicationIndeterminate == bsConclusion.Indication.Indication() &&
+		(enumerations.SubIndicationRevokedNoPOE == bsSubIndication || enumerations.SubIndicationRevokedCANoPOE == bsSubIndication) {
 
 		bestSignatureTimeTime := bestSignatureTime.Time.Time()
 		item = c.revocationDateAfterBestSignatureTimeValidation(item, &bestSignatureTimeTime, bsSubIndication)
@@ -315,8 +315,8 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	 * a. If the returned indication was PASSED, the process shall continue with step 4)e);
 	 * b. Else, the process shall return the indication and sub-indication which was returned by step 2).
 	 */
-	if enumerations.Indication_PASSED == bsConclusion.Indication.Indication() ||
-		(enumerations.Indication_INDETERMINATE == bsConclusion.Indication.Indication() && enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == bsSubIndication) {
+	if enumerations.IndicationPassed == bsConclusion.Indication.Indication() ||
+		(enumerations.IndicationIndeterminate == bsConclusion.Indication.Indication() && enumerations.SubIndicationOutOfBoundsNoPOE == bsSubIndication) {
 
 		// verify signing certificate presence for the check
 		if c.currentSignature.SigningCertificate() != nil {
@@ -324,7 +324,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 			bestSignatureTimeTime := bestSignatureTime.Time.Time()
 			item = item.SetNextItem(c.bestSignatureTimeNotBeforeCertificateIssuance(&bestSignatureTimeTime))
 
-			if enumerations.Indication_PASSED != bsConclusion.Indication.Indication() {
+			if enumerations.IndicationPassed != bsConclusion.Indication.Indication() {
 
 				item = item.SetNextItem(c.certificateKnownToBeNotRevokedFail(bsConclusion, &bestSignatureTimeTime)) //nolint:staticcheck // mirrors upstream ValidationProcessForSignaturesWithLongTermValidationData#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
@@ -357,14 +357,14 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	 * perform step 4)e).
 	 * b. Else, the process shall return the indication INDETERMINATE/OUT_OF_BOUNDS_NOT_REVOKED.
 	 */
-	if enumerations.Indication_INDETERMINATE == bsConclusion.Indication.Indication() && enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == bsSubIndication {
+	if enumerations.IndicationIndeterminate == bsConclusion.Indication.Indication() && enumerations.SubIndicationOutOfBoundsNotRevoked == bsSubIndication {
 
 		bestSignatureTimeTime := bestSignatureTime.Time.Time()
 		item = item.SetNextItem(c.bestSignatureTimeNotBeforeCertificateIssuance(&bestSignatureTimeTime))
 
 		item = item.SetNextItem(c.bestSignatureTimeBeforeCertificateExpiration(&bestSignatureTimeTime))
 
-		if c.revocationDataRequired(c.currentSignature.SigningCertificate(), currentContext, enumerations.SubContext_SIGNING_CERT).Process() {
+		if c.revocationDataRequired(c.currentSignature.SigningCertificate(), currentContext, enumerations.SubContextSigningCert).Process() {
 			item = item.SetNextItem(c.certificateKnownToBeNotRevokedWarn(bsConclusion, &bestSignatureTimeTime, currentContext))
 		}
 
@@ -423,7 +423,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) InitChain() {
 	 *       the sub indication TRY_LATER and a suggestion on when to try the validation gain,
 	 *       if returned by the validation process in step 2).
 	 */
-	if enumerations.Indication_INDETERMINATE == bsConclusion.Indication.Indication() && enumerations.SubIndication_TRY_LATER == bsSubIndication {
+	if enumerations.IndicationIndeterminate == bsConclusion.Indication.Indication() && enumerations.SubIndicationTryLater == bsSubIndication {
 		bestSignatureTimeTime := bestSignatureTime.Time.Time()
 		item = c.revocationIsFresh(item, &bestSignatureTimeTime, currentContext)
 	}
@@ -546,7 +546,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) revocationIsF
 
 		subContext := c.getSubContext(certificate)
 
-		if enumerations.RevocationReason_CERTIFICATE_HOLD == revocationData.Reason() {
+		if enumerations.RevocationReasonCertificateHold == revocationData.Reason() {
 			item = item.SetNextItem(c.checkCertificateSuspensionNotBeforeBestSignatureTime(revocationData,
 				bestSignatureTime, currentContext, subContext))
 
@@ -590,11 +590,11 @@ func newRevocationFreshnessCheckerTryLaterResultCheck(i18nProvider *i18n.I18nPro
 }
 
 func (c *revocationFreshnessCheckerTryLaterResultCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 func (c *revocationFreshnessCheckerTryLaterResultCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) checkCertificateSuspensionNotBeforeBestSignatureTime(
@@ -615,8 +615,8 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) revocationDat
 		subContext := c.getSubContext(certificate)
 
 		// separate cases to check based on the returned subIndication
-		if (enumerations.SubContext_SIGNING_CERT == subContext && enumerations.SubIndication_REVOKED_NO_POE == subIndication) ||
-			(enumerations.SubContext_CA_CERTIFICATE == subContext && enumerations.SubIndication_REVOKED_CA_NO_POE == subIndication) {
+		if (enumerations.SubContextSigningCert == subContext && enumerations.SubIndicationRevokedNoPOE == subIndication) ||
+			(enumerations.SubContextCACertificate == subContext && enumerations.SubIndicationRevokedCANoPOE == subIndication) {
 
 			item = item.SetNextItem(vpfltvd.NewRevocationDateAfterBestSignatureTimeCheck(c.I18nProvider, c.Result, revocationData,
 				bestSignatureTime, constraint, subContext))
@@ -647,7 +647,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) certificateKn
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) isRevocationIssuerTrusted(
 	revocationWrapper *diagnostic.CertificateRevocationWrapper, bestSignatureTime *time.Time) bool {
-	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return revocationWrapper != nil && revocationWrapper.SigningCertificate() != nil && bestSignatureTime != nil &&
 		process.IsTrustAnchor(revocationWrapper.SigningCertificate(), *bestSignatureTime, sunsetDateConstraint)
 }
@@ -661,7 +661,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) certificateKn
 		revocationWrapper = c.certificateRevocationMap[signingCertificate.Id()]
 	}
 	isRevocationIssuerTrusted := c.isRevocationIssuerTrusted(revocationWrapper, bestSignatureTime)
-	constraint, err := process.GetConstraintOrMaxLevel(c.policy.RevocationIssuerNotExpiredConstraint(context, enumerations.SubContext_SIGNING_CERT), enumerations.Level_WARN)
+	constraint, err := process.GetConstraintOrMaxLevel(c.policy.RevocationIssuerNotExpiredConstraint(context, enumerations.SubContextSigningCert), enumerations.LevelWarn)
 	if err != nil {
 		panic(err)
 	}
@@ -731,7 +731,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) signatureIsAc
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) certificateChainReliableAtTime(
 	item process.ChainItem[*jaxb.XmlValidationProcessLongTermData], token diagnostic.TokenProxy, validationTime time.Time,
 	context enumerations.Context) process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {
-	if token.SigningCertificate() == nil || c.isTrustAnchor(token.SigningCertificate(), validationTime, context, enumerations.SubContext_SIGNING_CERT) ||
+	if token.SigningCertificate() == nil || c.isTrustAnchor(token.SigningCertificate(), validationTime, context, enumerations.SubContextSigningCert) ||
 		utils.IsCollectionEmpty(token.CertificateChain()) {
 		return item
 	}
@@ -767,7 +767,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) checkRevocati
 	revocationBBB := c.bbbs[revocationData.Id()]
 	if _, ok := checkedTokenIds[revocationData.Id()]; !ok && revocationBBB != nil {
 
-		position, err := process.GetCryptoPosition(enumerations.Context_REVOCATION)
+		position, err := process.GetCryptoPosition(enumerations.ContextRevocation)
 		if err != nil {
 			panic(err)
 		}
@@ -786,9 +786,9 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) isTrustAnchor
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) getSubContext(certificateWrapper *diagnostic.CertificateWrapper) enumerations.SubContext {
 	if c.currentSignature.SigningCertificate() != nil && c.currentSignature.SigningCertificate().Id() == certificateWrapper.Id() {
-		return enumerations.SubContext_SIGNING_CERT
+		return enumerations.SubContextSigningCert
 	}
-	return enumerations.SubContext_CA_CERTIFICATE
+	return enumerations.SubContextCACertificate
 }
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) getCurrentTime() *jaxb.XmlProofOfExistence {
@@ -817,15 +817,15 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) getTimestampV
 }
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) isCryptoConstraintFailureNoPoe(conclusion *jaxb.XmlConclusion) bool {
-	return enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-		enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == xmlSubIndication(conclusion)
+	return enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+		enumerations.SubIndicationCryptoConstraintsFailureNoPOE == xmlSubIndication(conclusion)
 }
 
 // CollectMessages collects required messages from the given constraint to the
 // given conclusion. Port of the overridden
 // collectMessages(XmlConclusion, XmlConstraint).
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType != nil && jaxb.XmlBlockType_TST_BBB == *constraint.BlockType && c.policy.TimestampValidConstraint() == nil {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeTSTBBB == *constraint.BlockType && c.policy.TimestampValidConstraint() == nil {
 		// skip validation messages for TSTs
 	} else {
 		c.ChainBase.CollectMessages(conclusion, constraint)

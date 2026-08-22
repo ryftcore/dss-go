@@ -48,10 +48,10 @@ func (c *PdfAnnotationOverlapCheck) BuildErrorMessage() *drjaxb.XmlMessage {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *PdfAnnotationOverlapCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *PdfAnnotationOverlapCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

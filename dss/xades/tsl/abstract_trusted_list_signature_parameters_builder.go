@@ -74,7 +74,7 @@ func (b *AbstractTrustedListSignatureParametersBuilder) InitAbstractTrustedListS
 	b.AbstractSignatureParametersBuilder.InitParameters = xades.NewXAdESSignatureParameters
 	b.overrides = overrides
 	b.tlXmlDocument = tlXmlDocument
-	b.referenceDigestAlgorithm = enumerations.DigestAlgorithm_SHA512
+	b.referenceDigestAlgorithm = enumerations.DigestAlgorithmSHA512
 }
 
 // SetReferenceId sets an Enveloped Reference Id to use.
@@ -99,8 +99,8 @@ func (b *AbstractTrustedListSignatureParametersBuilder) SetReferenceDigestAlgori
 func (b *AbstractTrustedListSignatureParametersBuilder) Build() *xades.XAdESSignatureParameters {
 	signatureParameters := b.AbstractSignatureParametersBuilder.Build()
 
-	signatureParameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPED)
-	signatureParameters.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
+	signatureParameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)
+	signatureParameters.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
 	signatureParameters.SetEn319132(b.overrides.IsEn319132())
 
 	references := b.GetReferences()

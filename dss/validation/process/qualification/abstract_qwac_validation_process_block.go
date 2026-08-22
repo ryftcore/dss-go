@@ -130,7 +130,7 @@ func (c *AbstractQWACValidationProcessBlock) InitChain() {
 	// 4.2.1 of the present document, except as described below:
 	// - the extKeyUsage value shall only assert the extendedKeyUsage
 	// purpose of id-kp-tls-binding as specified in Annex A.
-	if enumerations.QWACProfile_QWAC_2 == c.overrides.QWACProfile() {
+	if enumerations.QWACProfileQWAC2 == c.overrides.QWACProfile() {
 		item = item.SetNextItem(c.qwac2ExtKeyUsage())
 	}
 

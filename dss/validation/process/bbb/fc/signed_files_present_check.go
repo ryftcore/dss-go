@@ -30,7 +30,7 @@ func NewSignedFilesPresentCheck(i18nProvider *i18n.I18nProvider, result *process
 
 func (c *SignedFilesPresentCheck) isASiCS() bool {
 	return c.containerInfo.ContainerType != nil &&
-		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerType_ASiC_S
+		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerTypeASiCS
 }
 
 func isRootDirectoryFile(fileName string) bool {
@@ -77,10 +77,10 @@ func (c *SignedFilesPresentCheck) ErrorMessageTag() i18n.MessageTag {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *SignedFilesPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *SignedFilesPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

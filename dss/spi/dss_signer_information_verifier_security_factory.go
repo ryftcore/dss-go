@@ -30,21 +30,21 @@ import (
 // dss_content_verifier_provider_security_factory.go for why the table is duplicated rather than
 // shared (PORTING.md: "no shared helpers across files").
 var dssSignerInformationVerifierSecurityFactorySignatureAlgorithms = map[enumerations.SignatureAlgorithm]stdx509.SignatureAlgorithm{
-	enumerations.SignatureAlgorithm_RSA_MD5:                 stdx509.MD5WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA1:                stdx509.SHA1WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA256:              stdx509.SHA256WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA384:              stdx509.SHA384WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA512:              stdx509.SHA512WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1: stdx509.SHA256WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1: stdx509.SHA384WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1: stdx509.SHA512WithRSAPSS,
-	enumerations.SignatureAlgorithm_ECDSA_SHA1:              stdx509.ECDSAWithSHA1,
-	enumerations.SignatureAlgorithm_ECDSA_SHA256:            stdx509.ECDSAWithSHA256,
-	enumerations.SignatureAlgorithm_ECDSA_SHA384:            stdx509.ECDSAWithSHA384,
-	enumerations.SignatureAlgorithm_ECDSA_SHA512:            stdx509.ECDSAWithSHA512,
-	enumerations.SignatureAlgorithm_DSA_SHA1:                stdx509.DSAWithSHA1,
-	enumerations.SignatureAlgorithm_DSA_SHA256:              stdx509.DSAWithSHA256,
-	enumerations.SignatureAlgorithm_ED25519:                 stdx509.PureEd25519,
+	enumerations.SignatureAlgorithmRSAMD5:              stdx509.MD5WithRSA,
+	enumerations.SignatureAlgorithmRSASHA1:             stdx509.SHA1WithRSA,
+	enumerations.SignatureAlgorithmRSASHA256:           stdx509.SHA256WithRSA,
+	enumerations.SignatureAlgorithmRSASHA384:           stdx509.SHA384WithRSA,
+	enumerations.SignatureAlgorithmRSASHA512:           stdx509.SHA512WithRSA,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1: stdx509.SHA256WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA384MGF1: stdx509.SHA384WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1: stdx509.SHA512WithRSAPSS,
+	enumerations.SignatureAlgorithmECDSASHA1:           stdx509.ECDSAWithSHA1,
+	enumerations.SignatureAlgorithmECDSASHA256:         stdx509.ECDSAWithSHA256,
+	enumerations.SignatureAlgorithmECDSASHA384:         stdx509.ECDSAWithSHA384,
+	enumerations.SignatureAlgorithmECDSASHA512:         stdx509.ECDSAWithSHA512,
+	enumerations.SignatureAlgorithmDSASHA1:             stdx509.DSAWithSHA1,
+	enumerations.SignatureAlgorithmDSASHA256:           stdx509.DSAWithSHA256,
+	enumerations.SignatureAlgorithmED25519:             stdx509.PureEd25519,
 }
 
 // SignerInformationVerifier is the minimal replacement for BouncyCastle's
@@ -94,11 +94,11 @@ func (v *SignerInformationVerifier) Verify(signatureAlgorithm enumerations.Signa
 // deliberately absent (its encoding carries no DigestInfo at all), and so is every non-RSA
 // family.
 var dssSignerInformationVerifierSecurityFactoryPKCS1v15RSAAlgorithms = map[enumerations.SignatureAlgorithm]bool{
-	enumerations.SignatureAlgorithm_RSA_MD5:    true,
-	enumerations.SignatureAlgorithm_RSA_SHA1:   true,
-	enumerations.SignatureAlgorithm_RSA_SHA256: true,
-	enumerations.SignatureAlgorithm_RSA_SHA384: true,
-	enumerations.SignatureAlgorithm_RSA_SHA512: true,
+	enumerations.SignatureAlgorithmRSAMD5:    true,
+	enumerations.SignatureAlgorithmRSASHA1:   true,
+	enumerations.SignatureAlgorithmRSASHA256: true,
+	enumerations.SignatureAlgorithmRSASHA384: true,
+	enumerations.SignatureAlgorithmRSASHA512: true,
 }
 
 // dssSignerInformationVerifierVerifyRSAWithoutDigestInfoNullParameter verifies an RSA PKCS#1

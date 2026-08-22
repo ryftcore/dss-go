@@ -27,7 +27,7 @@ func NewNoRevAvail() *NoRevAvail {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumNoRevocationAvailable.OID()),
 	}
 }
 

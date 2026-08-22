@@ -68,10 +68,10 @@ func (c *IdentificationOfTheSigningCertificate) InitChain() {
 	item := c.signingCertificateRecognition()
 	c.FirstItem = item
 
-	isSignature := enumerations.Context_SIGNATURE == c.context ||
-		enumerations.Context_COUNTER_SIGNATURE == c.context ||
-		enumerations.Context_KEY_BINDING_SIGNATURE == c.context
-	isTimestamp := enumerations.Context_TIMESTAMP == c.context
+	isSignature := enumerations.ContextSignature == c.context ||
+		enumerations.ContextCounterSignature == c.context ||
+		enumerations.ContextKeyBindingSignature == c.context
+	isTimestamp := enumerations.ContextTimestamp == c.context
 
 	if isSignature || isTimestamp {
 		/*
@@ -127,10 +127,10 @@ func (c *IdentificationOfTheSigningCertificate) AddAdditionalInfo() {
 			chainItem := &jaxb.XmlChainItem{}
 			chainItem.Id = certificate.Id()
 			sources := certificate.Sources()
-			if containsSource(sources, enumerations.CertificateSourceType_TRUSTED_LIST) {
-				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceType_TRUSTED_LIST)
-			} else if containsSource(sources, enumerations.CertificateSourceType_TRUSTED_STORE) {
-				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceType_TRUSTED_STORE)
+			if containsSource(sources, enumerations.CertificateSourceTypeTrustedList) {
+				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceTypeTrustedList)
+			} else if containsSource(sources, enumerations.CertificateSourceTypeTrustedStore) {
+				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceTypeTrustedStore)
 			} else {
 				chainItem.Source = jaxb.CertificateSourceTypeValue(sources[0])
 			}

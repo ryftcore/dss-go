@@ -35,7 +35,7 @@ func NewDetailedReportForEAAPresentationBuilder(i18nProvider *i18n.I18nProvider,
 	includeSemantics bool) *DetailedReportForEAAPresentationBuilder {
 	b := &DetailedReportForEAAPresentationBuilder{
 		DetailedReportBuilder: *NewDetailedReportBuilder(i18nProvider, currentTime, validationPolicy,
-			enumerations.ValidationLevel_BASIC_SIGNATURES, diagnosticData, includeSemantics),
+			enumerations.ValidationLevelBasicSignatures, diagnosticData, includeSemantics),
 	}
 	b.InitDetailedReportBuilder(b)
 	return b

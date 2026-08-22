@@ -27,7 +27,7 @@ func NewTimestampAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTi
 	validationPolicy policy.ValidationPolicy) *TimestampAcceptanceValidation {
 	c := &TimestampAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, timestamp, currentTime,
-			enumerations.Context_TIMESTAMP, aovResult, validationPolicy),
+			enumerations.ContextTimestamp, aovResult, validationPolicy),
 	}
 	c.InitChainBase(c)
 	return c

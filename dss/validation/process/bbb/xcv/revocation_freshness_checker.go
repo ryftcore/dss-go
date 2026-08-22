@@ -92,12 +92,12 @@ func (c *RevocationFreshnessChecker) InitChain() {
 		 * considered fresh.
 		 */
 		revocationFreshnessConstraint := c.policy.RevocationFreshnessConstraint(c.context, c.subContext)
-		if revocationFreshnessConstraint == nil || enumerations.Level_IGNORE == revocationFreshnessConstraint.Level() {
+		if revocationFreshnessConstraint == nil || enumerations.LevelIgnore == revocationFreshnessConstraint.Level() {
 			switch c.revocationData.RevocationType() {
-			case enumerations.RevocationType_CRL:
+			case enumerations.RevocationTypeCRL:
 				item = c.crlNextUpdateCheck(c.revocationData)
 				c.FirstItem = item
-			case enumerations.RevocationType_OCSP:
+			case enumerations.RevocationTypeOCSP:
 				item = c.ocspNextUpdateCheck(c.revocationData)
 				c.FirstItem = item
 			default:

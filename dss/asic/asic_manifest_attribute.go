@@ -9,18 +9,18 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 type ASiCManifestAttribute string
 
 const (
-	ASiCManifestAttribute_URI       ASiCManifestAttribute = "URI"
-	ASiCManifestAttribute_MIME_TYPE ASiCManifestAttribute = "MIME_TYPE"
-	ASiCManifestAttribute_ROOTFILE  ASiCManifestAttribute = "ROOTFILE"
-	ASiCManifestAttribute_CRITICAL  ASiCManifestAttribute = "CRITICAL"
+	ASiCManifestAttributeURI      ASiCManifestAttribute = "URI"
+	ASiCManifestAttributeMIMEType ASiCManifestAttribute = "MIME_TYPE"
+	ASiCManifestAttributeRootFile ASiCManifestAttribute = "ROOTFILE"
+	ASiCManifestAttributeCritical ASiCManifestAttribute = "CRITICAL"
 )
 
 // asicManifestAttributeNames maps each constant to its wire attribute name (getAttributeName()).
 var asicManifestAttributeNames = map[ASiCManifestAttribute]string{
-	ASiCManifestAttribute_URI:       "URI",
-	ASiCManifestAttribute_MIME_TYPE: "MimeType",
-	ASiCManifestAttribute_ROOTFILE:  "Rootfile",
-	ASiCManifestAttribute_CRITICAL:  "Critical",
+	ASiCManifestAttributeURI:      "URI",
+	ASiCManifestAttributeMIMEType: "MimeType",
+	ASiCManifestAttributeRootFile: "Rootfile",
+	ASiCManifestAttributeCritical: "Critical",
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().

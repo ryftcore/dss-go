@@ -72,18 +72,18 @@ func NewCertificateAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18
 func certificateAOVLevelRule(aovResult *jaxb.XmlAOV) policy.LevelRule {
 	conclusion := aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
-		return process.GetLevelRule(enumerations.Level_FAIL)
+		return process.GetLevelRule(enumerations.LevelFail)
 	} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-		return process.GetLevelRule(enumerations.Level_WARN)
+		return process.GetLevelRule(enumerations.LevelWarn)
 	} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-		return process.GetLevelRule(enumerations.Level_INFORM)
+		return process.GetLevelRule(enumerations.LevelInform)
 	}
-	return process.GetLevelRule(enumerations.Level_FAIL) // default
+	return process.GetLevelRule(enumerations.LevelFail) // default
 }
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_AOV_XCV
+	return jaxb.XmlBlockTypeAOVXCV
 }
 
 // Process performs the check. Port of process().
@@ -111,8 +111,8 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) getCertificateCrypt
 // passed conclusion carrying neither warnings nor infos.
 func isValidAOVCryptographicConclusion(conclusion *jaxb.XmlConclusion) bool {
 	return conclusion != nil &&
-		(enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-			enumerations.Indication_TOTAL_PASSED == conclusion.Indication.Indication()) &&
+		(enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+			enumerations.IndicationTotalPassed == conclusion.Indication.Indication()) &&
 		utils.IsCollectionEmpty(conclusion.Warnings) && utils.IsCollectionEmpty(conclusion.Infos)
 }
 

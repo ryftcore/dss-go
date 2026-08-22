@@ -70,9 +70,9 @@ func (b *ASiCWithXAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCConte
 
 		asice := asic.ASiCUtilsIsASiCE(parameters.ASiC())
 		switch {
-		case asice && enumerations.ASiCContainerType_ASiC_E == currentContainerType:
+		case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 			return NewDataToSignASiCEWithXAdESHelper(asicContent)
-		case !asice && enumerations.ASiCContainerType_ASiC_S == currentContainerType:
+		case !asice && enumerations.ASiCContainerTypeASiCS == currentContainerType:
 			return NewDataToSignASiCSWithXAdESHelper(asicContent)
 		default:
 			panic(fmt.Sprintf("Original container type '%s' vs parameter : '%s'",

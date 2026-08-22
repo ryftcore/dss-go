@@ -23,7 +23,7 @@ func newQSCDByCertificatePostEIDAS(certificate *diagnostic.CertificateWrapper) *
 func (q *qscdByCertificatePostEIDAS) QSCDStatus() enumerations.QSCDStatus {
 	// checks only in QC statement extension
 	if q.certificate.IsSupportedByQSCD() {
-		return enumerations.QSCDStatus_QSCD
+		return enumerations.QSCDStatusQSCD
 	}
-	return enumerations.QSCDStatus_NOT_QSCD
+	return enumerations.QSCDStatusNotQSCD
 }

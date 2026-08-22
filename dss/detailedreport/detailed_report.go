@@ -152,7 +152,7 @@ func (r *DetailedReport) SignatureIds() []string {
 	result := []string{}
 	for _, bbb := range r.jaxbDetailedReport.BasicBuildingBlocks {
 		t := bbb.Type.Context()
-		if enumerations.Context_SIGNATURE == t || enumerations.Context_COUNTER_SIGNATURE == t || enumerations.Context_KEY_BINDING_SIGNATURE == t {
+		if enumerations.ContextSignature == t || enumerations.ContextCounterSignature == t || enumerations.ContextKeyBindingSignature == t {
 			result = append(result, bbb.Id)
 		}
 	}
@@ -181,7 +181,7 @@ func (r *DetailedReport) FirstTimestampId() string {
 func (r *DetailedReport) TimestampIds() []string {
 	result := []string{}
 	for _, bbb := range r.jaxbDetailedReport.BasicBuildingBlocks {
-		if enumerations.Context_TIMESTAMP == bbb.Type.Context() {
+		if enumerations.ContextTimestamp == bbb.Type.Context() {
 			result = append(result, bbb.Id)
 		}
 	}
@@ -216,7 +216,7 @@ func (r *DetailedReport) EvidenceRecordIds() []string {
 		}
 	}
 	for _, bbb := range r.jaxbDetailedReport.BasicBuildingBlocks {
-		if enumerations.Context_TIMESTAMP == bbb.Type.Context() {
+		if enumerations.ContextTimestamp == bbb.Type.Context() {
 			result = append(result, bbb.Id)
 		}
 	}
@@ -247,7 +247,7 @@ func (r *DetailedReport) FirstEAAId() string {
 func (r *DetailedReport) RevocationIds() []string {
 	result := []string{}
 	for _, bbb := range r.jaxbDetailedReport.BasicBuildingBlocks {
-		if enumerations.Context_REVOCATION == bbb.Type.Context() {
+		if enumerations.ContextRevocation == bbb.Type.Context() {
 			result = append(result, bbb.Id)
 		}
 	}
@@ -508,13 +508,13 @@ func (r *DetailedReport) TimestampQualification(timestampId string) enumerations
 // TimestampQualificationAtTstGenerationTime gets the qualification for a
 // timestamp with the given id at the timestamp generation time.
 func (r *DetailedReport) TimestampQualificationAtTstGenerationTime(timestampId string) enumerations.TimestampQualification {
-	return r.timestampQualificationAtValidationTime(enumerations.ValidationTime_TIMESTAMP_GENERATION_TIME, timestampId)
+	return r.timestampQualificationAtValidationTime(enumerations.ValidationTimeTimestampGenerationTime, timestampId)
 }
 
 // TimestampQualificationAtBestPoeTime gets the qualification for a timestamp
 // with the given id at its best available POE time.
 func (r *DetailedReport) TimestampQualificationAtBestPoeTime(timestampId string) enumerations.TimestampQualification {
-	return r.timestampQualificationAtValidationTime(enumerations.ValidationTime_TIMESTAMP_POE_TIME, timestampId)
+	return r.timestampQualificationAtValidationTime(enumerations.ValidationTimeTimestampPOETime, timestampId)
 }
 
 func (r *DetailedReport) timestampQualificationAtValidationTime(validationTime enumerations.ValidationTime, timestampId string) enumerations.TimestampQualification {
@@ -727,18 +727,18 @@ func (r *DetailedReport) IsCertificateValidation() bool {
 // CertificateQualificationAtIssuance gets the qualification for certificate
 // with id at its issuance time.
 func (r *DetailedReport) CertificateQualificationAtIssuance(certificateId string) enumerations.CertificateQualification {
-	return r.certificateQualificationAtTime(enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME, certificateId)
+	return r.certificateQualificationAtTime(enumerations.ValidationTimeCertificateIssuanceTime, certificateId)
 }
 
 // CertificateQualificationAtValidation gets the qualification for certificate
 // with id at the validation time.
 func (r *DetailedReport) CertificateQualificationAtValidation(certificateId string) enumerations.CertificateQualification {
-	return r.certificateQualificationAtTime(enumerations.ValidationTime_VALIDATION_TIME, certificateId)
+	return r.certificateQualificationAtTime(enumerations.ValidationTimeValidationTime, certificateId)
 }
 
 func (r *DetailedReport) certificateQualificationAtTime(validationTime enumerations.ValidationTime, certificateId string) enumerations.CertificateQualification {
 	if certificateId == "" {
-		return enumerations.CertificateQualification_NA
+		return enumerations.CertificateQualificationNA
 	}
 
 	certificate := r.XmlCertificateById(certificateId)
@@ -765,7 +765,7 @@ func (r *DetailedReport) certificateQualificationAtTime(validationTime enumerati
 		}
 	}
 
-	return enumerations.CertificateQualification_NA
+	return enumerations.CertificateQualificationNA
 }
 
 // CertificateQWACProfile gets the QWAC Profile of the given certificate, if
@@ -803,7 +803,7 @@ func (r *DetailedReport) CertificateQWACProfile(certificateId string) enumeratio
 // obtained on TS 119 602 List(s) of Trusted Entities processing for the
 // certificate with the given identifier at the certificate issuance time.
 func (r *DetailedReport) CertificateApprovalStatussAtIssuanceTime(certificateId string) []enumerations.CertificateApprovalStatus {
-	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME)
+	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTimeCertificateIssuanceTime)
 }
 
 // CertificateApprovalStatussAtValidationTime gets certificate approval
@@ -811,7 +811,7 @@ func (r *DetailedReport) CertificateApprovalStatussAtIssuanceTime(certificateId 
 // the certificate with the given identifier at the certificate validation
 // time.
 func (r *DetailedReport) CertificateApprovalStatussAtValidationTime(certificateId string) []enumerations.CertificateApprovalStatus {
-	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTime_VALIDATION_TIME)
+	return r.certificateApprovalStatussAtTime(certificateId, enumerations.ValidationTimeValidationTime)
 }
 
 func (r *DetailedReport) certificateApprovalStatussAtTime(certificateId string, validationTime enumerations.ValidationTime) []enumerations.CertificateApprovalStatus {
@@ -843,10 +843,10 @@ func buildFromXmlCertificateApprovalStatus(xmlCertificateApprovalStatus *jaxb.Xm
 	result := enumerations.CertificateApprovalStatusFromDefinition(xmlCertificateApprovalStatus.ListType,
 		xmlCertificateApprovalStatus.ServiceTypeIdentifier, xmlCertificateApprovalStatus.ServiceStatus)
 	if result != nil && result.Label() != "" &&
-		result != enumerations.CertificateApprovalStatus(enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN) {
+		result != enumerations.CertificateApprovalStatus(enumerations.CertificateApprovalStatusEnumCertForUnknown) {
 		return result
 	}
-	return enumerations.NewCertificateApprovalStatus(enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN.Label(),
+	return enumerations.NewCertificateApprovalStatus(enumerations.CertificateApprovalStatusEnumCertForUnknown.Label(),
 		xmlCertificateApprovalStatus.ListType, xmlCertificateApprovalStatus.ServiceTypeIdentifier, xmlCertificateApprovalStatus.ServiceStatus)
 }
 

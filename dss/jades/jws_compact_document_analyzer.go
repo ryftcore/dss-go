@@ -80,7 +80,7 @@ func (a *JWSCompactDocumentAnalyzer) BuildJwsJsonSerializationObject() *JWSJsonS
 			panic(model.NewDSSErrorWithCause(err))
 		}
 		jwsJsonSerializationObject := DSSJsonUtilsToJWSJsonSerializationObject(jws)
-		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
+		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationTypeCompactSerialization)
 		return jwsJsonSerializationObject
 	}
 	panic(exception.NewIllegalInputException("The given document is not supported by JWSCompactDocumentValidator!"))

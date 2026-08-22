@@ -136,7 +136,7 @@ func (c *AlgorithmObsolescenceValidation[T]) CryptographicSuite() policy.Cryptog
 // validation result. Port of protected boolean isValid(XmlCryptographicValidation).
 func (c *AlgorithmObsolescenceValidation[T]) isValid(cryptographicValidation *jaxb.XmlCryptographicValidation) bool {
 	return cryptographicValidation != nil && cryptographicValidation.Conclusion != nil &&
-		enumerations.Indication_PASSED == cryptographicValidation.Conclusion.Indication.Indication()
+		enumerations.IndicationPassed == cryptographicValidation.Conclusion.Indication.Indication()
 }
 
 // AddAdditionalInfo adds additional info to the chain. Port of the overridden

@@ -8,8 +8,8 @@ func TestQCIdentMethodEnumFields(t *testing.T) {
 		description string
 		oid         string
 	}{
-		{QCIdentMethodEnum_QCT_EIDAS2_ACD, "qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.3"},
-		{QCIdentMethodEnum_QCT_EIDAS2_B, "qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.4"},
+		{QCIdentMethodEnumQCTEIDAS2ACD, "qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.3"},
+		{QCIdentMethodEnumQCTEIDAS2B, "qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.4"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.OID(); got != tt.oid {
@@ -24,8 +24,8 @@ func TestQCIdentMethodEnumFields(t *testing.T) {
 func TestQCIdentMethodEnumForLabel(t *testing.T) {
 	// Both constants share the same description upstream; forLabel resolves
 	// to the first declared match.
-	if got := QCIdentMethodEnumForLabel("qc-ident-method-eIDAS2-acd"); got != QCIdentMethodEnum_QCT_EIDAS2_ACD {
-		t.Errorf("QCIdentMethodEnumForLabel(shared) = %q, want %q", got, QCIdentMethodEnum_QCT_EIDAS2_ACD)
+	if got := QCIdentMethodEnumForLabel("qc-ident-method-eIDAS2-acd"); got != QCIdentMethodEnumQCTEIDAS2ACD {
+		t.Errorf("QCIdentMethodEnumForLabel(shared) = %q, want %q", got, QCIdentMethodEnumQCTEIDAS2ACD)
 	}
 	if got := QCIdentMethodEnumForLabel("bogus"); got != "" {
 		t.Errorf("QCIdentMethodEnumForLabel(bogus) = %q, want empty", got)
@@ -49,7 +49,7 @@ func TestQCIdentMethodFromOIDResolvesEnum(t *testing.T) {
 		t.Errorf("QCIdentMethodFromOID known oid = %q, want %q", got.OID(), "0.4.0.1862.1.8.3")
 	}
 	unknown := QCIdentMethodFromOID("9.9.9")
-	if unknown.Description() != QCIdentMethod_UNKNOWN_METHOD {
-		t.Errorf("QCIdentMethodFromOID unknown description = %q, want %q", unknown.Description(), QCIdentMethod_UNKNOWN_METHOD)
+	if unknown.Description() != QCIdentMethodUnknownMethod {
+		t.Errorf("QCIdentMethodFromOID unknown description = %q, want %q", unknown.Description(), QCIdentMethodUnknownMethod)
 	}
 }

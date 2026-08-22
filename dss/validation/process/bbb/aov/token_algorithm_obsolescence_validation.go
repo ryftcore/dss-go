@@ -67,9 +67,9 @@ func (c *TokenAlgorithmObsolescenceValidation[T]) buildCertificateChainValidatio
 	for _, certificate := range certificateChain {
 		var subContext enumerations.SubContext
 		if signingCertificate.Equals(certificate) {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		} else {
-			subContext = enumerations.SubContext_CA_CERTIFICATE
+			subContext = enumerations.SubContextCACertificate
 		}
 
 		if c.isTrustAnchor(certificate, subContext) {
@@ -115,7 +115,7 @@ func (c *TokenAlgorithmObsolescenceValidation[T]) signatureAlgorithmCryptographi
 func (c *TokenAlgorithmObsolescenceValidation[T]) signatureAlgorithmCryptographicCheckResultWithTokenId(ccResult *jaxb.XmlCC,
 	position i18n.MessageTag, cryptographicSuite policy.CryptographicSuite, tokenId string) process.ChainItem[*jaxb.XmlAOV] {
 	return NewSignatureAlgorithmCryptographicCheckerResultCheckWithContext(c.I18nProvider, c.Result, c.validationDate,
-		enumerations.Context_CERTIFICATE, position, ccResult, cryptographicSuite, tokenId)
+		enumerations.ContextCertificate, position, ccResult, cryptographicSuite, tokenId)
 }
 
 // isTrustAnchor ports the private isTrustAnchor(CertificateWrapper, SubContext).

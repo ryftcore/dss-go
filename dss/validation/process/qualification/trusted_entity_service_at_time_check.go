@@ -75,7 +75,7 @@ func (c *TrustedEntityServiceAtTimeCheck) BuildErrorMessage() *jaxb.XmlMessage {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedEntityServiceAtTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

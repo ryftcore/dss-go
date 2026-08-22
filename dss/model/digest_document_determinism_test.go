@@ -15,11 +15,11 @@ func TestDigestDocumentExistingDigestDeterministic(t *testing.T) {
 	build := func() enumerations.DigestAlgorithm {
 		d := NewDigestDocument()
 		for _, alg := range []enumerations.DigestAlgorithm{
-			enumerations.DigestAlgorithm_SHA512,
-			enumerations.DigestAlgorithm_SHA1,
-			enumerations.DigestAlgorithm_SHA384,
-			enumerations.DigestAlgorithm_SHA3_256,
-			enumerations.DigestAlgorithm_SHA256,
+			enumerations.DigestAlgorithmSHA512,
+			enumerations.DigestAlgorithmSHA1,
+			enumerations.DigestAlgorithmSHA384,
+			enumerations.DigestAlgorithmSHA3256,
+			enumerations.DigestAlgorithmSHA256,
 		} {
 			d.AddDigestValue(alg, []byte("digest-for-"+string(alg)))
 		}
@@ -30,7 +30,7 @@ func TestDigestDocumentExistingDigestDeterministic(t *testing.T) {
 		return digest.Algorithm()
 	}
 	want := build()
-	if want != enumerations.DigestAlgorithm_SHA512 {
+	if want != enumerations.DigestAlgorithmSHA512 {
 		t.Fatalf("ExistingDigest() algorithm = %s, want the first-added algorithm SHA512", want)
 	}
 	for i := 0; i < 25; i++ {

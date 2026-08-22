@@ -47,10 +47,10 @@ func (c *SignerInformationStoreCheck) ErrorMessageTag() i18n.MessageTag {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *SignerInformationStoreCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *SignerInformationStoreCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

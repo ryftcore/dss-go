@@ -25,7 +25,7 @@ import (
 
 // etsiValidationPolicyDefaultValidationModel is the default validation model
 // (SHELL). Ports EtsiValidationPolicy#DEFAULT_VALIDATION_MODEL.
-const etsiValidationPolicyDefaultValidationModel = enumerations.ValidationModel_SHELL
+const etsiValidationPolicyDefaultValidationModel = enumerations.ValidationModelShell
 
 // EtsiValidationPolicy encapsulates the constraint file that controls the
 // policy used during the validation process. Ports EtsiValidationPolicy.
@@ -2343,7 +2343,7 @@ func (p *EtsiValidationPolicy) Cryptographic() *jaxb.CryptographicConstraint {
 
 // signingCertificateByContext ports the private getSigningCertificateByContext(Context) helper.
 func (p *EtsiValidationPolicy) signingCertificateByContext(context enumerations.Context) *jaxb.CertificateConstraints {
-	return p.certificateConstraints(context, enumerations.SubContext_SIGNING_CERT)
+	return p.certificateConstraints(context, enumerations.SubContextSigningCert)
 }
 
 // certificateConstraints ports the private getCertificateConstraints(Context, SubContext) helper.
@@ -2351,9 +2351,9 @@ func (p *EtsiValidationPolicy) certificateConstraints(context enumerations.Conte
 	bsc := p.basicSignatureConstraintsByContext(context)
 	if bsc != nil {
 		switch subContext {
-		case enumerations.SubContext_SIGNING_CERT:
+		case enumerations.SubContextSigningCert:
 			return bsc.SigningCertificate
-		case enumerations.SubContext_CA_CERTIFICATE:
+		case enumerations.SubContextCACertificate:
 			return bsc.CACertificate
 		}
 	}
@@ -2364,29 +2364,29 @@ func (p *EtsiValidationPolicy) certificateConstraints(context enumerations.Conte
 // getBasicSignatureConstraintsByContext(Context) helper.
 func (p *EtsiValidationPolicy) basicSignatureConstraintsByContext(context enumerations.Context) *jaxb.BasicSignatureConstraints {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_CERTIFICATE: // TODO improve
+	case enumerations.ContextSignature, enumerations.ContextCertificate: // TODO improve
 		if mainSignature := p.SignatureConstraints(); mainSignature != nil {
 			return mainSignature.BasicSignatureConstraints
 		}
-	case enumerations.Context_COUNTER_SIGNATURE:
+	case enumerations.ContextCounterSignature:
 		if counterSignature := p.CounterSignatureConstraints(); counterSignature != nil {
 			return counterSignature.BasicSignatureConstraints
 		}
-	case enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextKeyBindingSignature:
 		if keyBindingSignature := p.KeyBindingSignatureConstraints(); keyBindingSignature != nil {
 			return keyBindingSignature.BasicSignatureConstraints
 		}
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		if timestampConstraints := p.TimestampConstraints(); timestampConstraints != nil {
 			return timestampConstraints.BasicSignatureConstraints
 		}
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		if revocationConstraints := p.RevocationConstraints(); revocationConstraints != nil {
 			return revocationConstraints.BasicSignatureConstraints
 		}
-	case enumerations.Context_EAA:
+	case enumerations.ContextEAA:
 		return nil
-	case enumerations.Context_EAA_REVOCATION:
+	case enumerations.ContextEAARevocation:
 		if eaaRevocationConstraints := p.EAARevocationConstraints(); eaaRevocationConstraints != nil {
 			return eaaRevocationConstraints.BasicSignatureConstraints
 		}
@@ -2401,19 +2401,19 @@ func (p *EtsiValidationPolicy) basicSignatureConstraintsByContext(context enumer
 // null for an unsupported context rather than throwing.
 func (p *EtsiValidationPolicy) signedAttributeConstraints(context enumerations.Context) *jaxb.SignedAttributesConstraints {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_CERTIFICATE: // TODO improve
+	case enumerations.ContextSignature, enumerations.ContextCertificate: // TODO improve
 		if mainSignature := p.SignatureConstraints(); mainSignature != nil {
 			return mainSignature.SignedAttributes
 		}
-	case enumerations.Context_COUNTER_SIGNATURE:
+	case enumerations.ContextCounterSignature:
 		if counterSignature := p.CounterSignatureConstraints(); counterSignature != nil {
 			return counterSignature.SignedAttributes
 		}
-	case enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextKeyBindingSignature:
 		if keyBindingSignature := p.KeyBindingSignatureConstraints(); keyBindingSignature != nil {
 			return keyBindingSignature.SignedAttributes
 		}
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		if timestampConstraints := p.TimestampConstraints(); timestampConstraints != nil {
 			return timestampConstraints.SignedAttributes
 		}
@@ -2426,15 +2426,15 @@ func (p *EtsiValidationPolicy) signedAttributeConstraints(context enumerations.C
 // null for an unsupported context rather than throwing.
 func (p *EtsiValidationPolicy) unsignedAttributeConstraints(context enumerations.Context) *jaxb.UnsignedAttributesConstraints {
 	switch context {
-	case enumerations.Context_SIGNATURE:
+	case enumerations.ContextSignature:
 		if mainSignature := p.SignatureConstraints(); mainSignature != nil {
 			return mainSignature.UnsignedAttributes
 		}
-	case enumerations.Context_COUNTER_SIGNATURE:
+	case enumerations.ContextCounterSignature:
 		if counterSignature := p.CounterSignatureConstraints(); counterSignature != nil {
 			return counterSignature.UnsignedAttributes
 		}
-	case enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextKeyBindingSignature:
 		if keyBindingSignature := p.KeyBindingSignatureConstraints(); keyBindingSignature != nil {
 			return keyBindingSignature.UnsignedAttributes
 		}
@@ -2447,11 +2447,11 @@ func (p *EtsiValidationPolicy) unsignedAttributeConstraints(context enumerations
 // null for an unsupported context rather than throwing.
 func (p *EtsiValidationPolicy) signatureConstraintsByContext(context enumerations.Context) *jaxb.SignatureConstraints {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_CERTIFICATE: // TODO improve
+	case enumerations.ContextSignature, enumerations.ContextCertificate: // TODO improve
 		return p.SignatureConstraints()
-	case enumerations.Context_COUNTER_SIGNATURE:
+	case enumerations.ContextCounterSignature:
 		return p.CounterSignatureConstraints()
-	case enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextKeyBindingSignature:
 		return p.KeyBindingSignatureConstraints()
 	}
 	return nil

@@ -49,7 +49,7 @@ func NewCMSSignedDocumentWithName(data *CMS, name string) *CMSSignedDocument {
 	if data == nil {
 		panic("The CMSSignedData cannot be null")
 	}
-	inMemory := model.NewInMemoryDocumentWithMimeType(data.DEREncoded(), name, enumerations.MimeTypeEnum_PKCS7)
+	inMemory := model.NewInMemoryDocumentWithMimeType(data.DEREncoded(), name, enumerations.MimeTypeEnumPKCS7)
 	return &CMSSignedDocument{InMemoryDocument: inMemory, signedData: data}
 }
 

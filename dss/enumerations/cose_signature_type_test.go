@@ -14,13 +14,13 @@ func TestCOSESignatureTypeFields(t *testing.T) {
 		counterSigHdrKey    int64
 		hasCounterSigHdrKey bool
 	}{
-		{COSESignatureType_COSE_SIGN, "Signature", "COSE_Sign", 98, true, false, false, 0, false},
-		{COSESignatureType_COSE_SIGN1, "Signature1", "COSE_Sign1", 18, true, false, false, 0, false},
-		{COSESignatureType_COSE_SIGNATURE, "", "", 0, false, false, false, 0, false},
-		{COSESignatureType_COSE_COUNTER_SIGNATURE, "CounterSignature", "COSE_Countersignature", 19, true, true, false, 7, true},
-		{COSESignatureType_COSE_COUNTER_SIGNATURE0, "CounterSignature0", "COSE_Countersignature0", 0, false, true, false, 9, true},
-		{COSESignatureType_COSE_COUNTER_SIGNATURE_V2, "CounterSignatureV2", "COSE_Countersignature_V2", 19, true, true, true, 11, true},
-		{COSESignatureType_COSE_COUNTER_SIGNATURE0_V2, "CounterSignature0V2", "COSE_Countersignature0_V2", 0, false, true, true, 12, true},
+		{COSESignatureTypeCoseSign, "Signature", "COSE_Sign", 98, true, false, false, 0, false},
+		{COSESignatureTypeCoseSign1, "Signature1", "COSE_Sign1", 18, true, false, false, 0, false},
+		{COSESignatureTypeCoseSignature, "", "", 0, false, false, false, 0, false},
+		{COSESignatureTypeCoseCounterSignature, "CounterSignature", "COSE_Countersignature", 19, true, true, false, 7, true},
+		{COSESignatureTypeCoseCounterSignature0, "CounterSignature0", "COSE_Countersignature0", 0, false, true, false, 9, true},
+		{COSESignatureTypeCoseCounterSignatureV2, "CounterSignatureV2", "COSE_Countersignature_V2", 19, true, true, true, 11, true},
+		{COSESignatureTypeCoseCounterSignature0V2, "CounterSignature0V2", "COSE_Countersignature0_V2", 0, false, true, true, 12, true},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Context(); got != tt.context {
@@ -56,7 +56,7 @@ func TestCOSESignatureTypeTagPanicsWhenUnavailable(t *testing.T) {
 			t.Error("expected panic for missing tag, got none")
 		}
 	}()
-	COSESignatureType_COSE_COUNTER_SIGNATURE0.Tag()
+	COSESignatureTypeCoseCounterSignature0.Tag()
 }
 
 func TestCOSESignatureTypeForLabel(t *testing.T) {
@@ -79,10 +79,10 @@ func TestCOSESignatureTypeCounterSignatureContextByHeaderKey(t *testing.T) {
 		key  int64
 		want COSESignatureType
 	}{
-		{7, COSESignatureType_COSE_COUNTER_SIGNATURE},
-		{9, COSESignatureType_COSE_COUNTER_SIGNATURE0},
-		{11, COSESignatureType_COSE_COUNTER_SIGNATURE_V2},
-		{12, COSESignatureType_COSE_COUNTER_SIGNATURE0_V2},
+		{7, COSESignatureTypeCoseCounterSignature},
+		{9, COSESignatureTypeCoseCounterSignature0},
+		{11, COSESignatureTypeCoseCounterSignatureV2},
+		{12, COSESignatureTypeCoseCounterSignature0V2},
 		{999, ""},
 	}
 	for _, tt := range tests {

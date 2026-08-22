@@ -46,7 +46,7 @@ func NewLongTermValidationCheck(i18nProvider *i18n.I18nProvider,
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *LongTermValidationCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_LTV
+	return jaxb.XmlBlockTypeLTV
 }
 
 // Process performs the check. Port of process().

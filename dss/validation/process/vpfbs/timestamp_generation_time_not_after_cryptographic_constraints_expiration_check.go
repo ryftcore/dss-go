@@ -43,7 +43,7 @@ func NewTimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_CNT_TST_BBB
+	return jaxb.XmlBlockTypeCNTTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -56,13 +56,13 @@ func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationCryptoConstraintsFailure
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

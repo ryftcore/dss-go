@@ -32,37 +32,37 @@ func newDetailedReportMessageCollector(detailedReport *DetailedReport) *Detailed
 // AdESValidationErrors returns a list of ETSI EN 319 102-1 AdES validation
 // error messages for a token with the given id.
 func (c *DetailedReportMessageCollector) AdESValidationErrors(tokenId string) []Message {
-	return c.collectAdESValidationMessages(enumerations.MessageType_ERROR, tokenId)
+	return c.collectAdESValidationMessages(enumerations.MessageTypeError, tokenId)
 }
 
 // AdESValidationWarnings returns a list of ETSI EN 319 102-1 AdES validation
 // warning messages for a token with the given id.
 func (c *DetailedReportMessageCollector) AdESValidationWarnings(tokenId string) []Message {
-	return c.collectAdESValidationMessages(enumerations.MessageType_WARN, tokenId)
+	return c.collectAdESValidationMessages(enumerations.MessageTypeWarn, tokenId)
 }
 
 // AdESValidationInfos returns a list of ETSI EN 319 102-1 AdES validation info
 // messages for a token with the given id.
 func (c *DetailedReportMessageCollector) AdESValidationInfos(tokenId string) []Message {
-	return c.collectAdESValidationMessages(enumerations.MessageType_INFO, tokenId)
+	return c.collectAdESValidationMessages(enumerations.MessageTypeInfo, tokenId)
 }
 
 // QualificationErrors returns a list of qualification validation errors for a
 // token with the given id.
 func (c *DetailedReportMessageCollector) QualificationErrors(tokenId string) []Message {
-	return c.collectQualificationMessages(enumerations.MessageType_ERROR, tokenId)
+	return c.collectQualificationMessages(enumerations.MessageTypeError, tokenId)
 }
 
 // QualificationWarnings returns a list of qualification validation warnings
 // for a token with the given id.
 func (c *DetailedReportMessageCollector) QualificationWarnings(tokenId string) []Message {
-	return c.collectQualificationMessages(enumerations.MessageType_WARN, tokenId)
+	return c.collectQualificationMessages(enumerations.MessageTypeWarn, tokenId)
 }
 
 // QualificationInfos returns a list of qualification validation infos for a
 // token with the given id.
 func (c *DetailedReportMessageCollector) QualificationInfos(tokenId string) []Message {
-	return c.collectQualificationMessages(enumerations.MessageType_INFO, tokenId)
+	return c.collectQualificationMessages(enumerations.MessageTypeInfo, tokenId)
 }
 
 // CertificateQualificationErrorsAtIssuanceTime returns a list of
@@ -70,7 +70,7 @@ func (c *DetailedReportMessageCollector) QualificationInfos(tokenId string) []Me
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtIssuanceTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageType_ERROR, certificateId)
+	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeError, certificateId)
 }
 
 // CertificateQualificationWarningsAtIssuanceTime returns a list of
@@ -78,7 +78,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtIssuanc
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtIssuanceTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageType_WARN, certificateId)
+	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeWarn, certificateId)
 }
 
 // CertificateQualificationInfosAtIssuanceTime returns a list of qualification
@@ -86,7 +86,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtIssua
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtIssuanceTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageType_INFO, certificateId)
+	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeInfo, certificateId)
 }
 
 // CertificateQualificationErrorsAtValidationTime returns a list of
@@ -94,7 +94,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtIssuance
 // validation time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtValidationTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageType_ERROR, certificateId)
+	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeError, certificateId)
 }
 
 // CertificateQualificationWarningsAtValidationTime returns a list of
@@ -102,7 +102,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtValidat
 // validation time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtValidationTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageType_WARN, certificateId)
+	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeWarn, certificateId)
 }
 
 // CertificateQualificationInfosAtValidationTime returns a list of
@@ -110,28 +110,28 @@ func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtValid
 // given id at validation time.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtValidationTime(certificateId string) []Message {
-	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageType_INFO, certificateId)
+	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeInfo, certificateId)
 }
 
 // QWACValidationErrors returns a list of QWAC validation errors for a
 // certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
 func (c *DetailedReportMessageCollector) QWACValidationErrors(certificateId string) []Message {
-	return c.collectQWACValidationDetails(enumerations.MessageType_ERROR, certificateId)
+	return c.collectQWACValidationDetails(enumerations.MessageTypeError, certificateId)
 }
 
 // QWACValidationWarnings returns a list of QWAC validation warnings for a
 // certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
 func (c *DetailedReportMessageCollector) QWACValidationWarnings(certificateId string) []Message {
-	return c.collectQWACValidationDetails(enumerations.MessageType_WARN, certificateId)
+	return c.collectQWACValidationDetails(enumerations.MessageTypeWarn, certificateId)
 }
 
 // QWACValidationInfos returns a list of QWAC validation information messages
 // for a certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
 func (c *DetailedReportMessageCollector) QWACValidationInfos(certificateId string) []Message {
-	return c.collectQWACValidationDetails(enumerations.MessageType_INFO, certificateId)
+	return c.collectQWACValidationDetails(enumerations.MessageTypeInfo, certificateId)
 }
 
 // CertificateApprovalStatusErrorsAtIssuanceTime returns a list of
@@ -140,7 +140,7 @@ func (c *DetailedReportMessageCollector) QWACValidationInfos(certificateId strin
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageType_ERROR, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeError, certificateId, certificateApprovalStatus)
 }
 
 // CertificateApprovalStatusWarningsAtIssuanceTime returns a list of
@@ -149,7 +149,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtIssuan
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageType_WARN, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeWarn, certificateId, certificateApprovalStatus)
 }
 
 // CertificateApprovalStatusInfosAtIssuanceTime returns a list of TS 119 602
@@ -158,7 +158,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtIssu
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageType_INFO, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeInfo, certificateId, certificateApprovalStatus)
 }
 
 // CertificateApprovalStatusErrorsAtValidationTime returns a list of
@@ -167,7 +167,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtIssuanc
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageType_ERROR, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeError, certificateId, certificateApprovalStatus)
 }
 
 // CertificateApprovalStatusWarningsAtValidationTime returns a list of
@@ -176,7 +176,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtValida
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageType_WARN, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeWarn, certificateId, certificateApprovalStatus)
 }
 
 // CertificateApprovalStatusInfosAtValidationTime returns a list of
@@ -185,7 +185,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtVali
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
 func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageType_INFO, certificateId, certificateApprovalStatus)
+	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeInfo, certificateId, certificateApprovalStatus)
 }
 
 func (c *DetailedReportMessageCollector) collectAdESValidationMessages(t messageType, tokenId string) []Message {
@@ -236,13 +236,13 @@ func (c *DetailedReportMessageCollector) collectSignatureValidation(t messageTyp
 	result := []Message{}
 
 	highestConclusion := c.detailedReport.HighestConclusion(derefString(xmlSignature.Id))
-	if enumerations.MessageType_ERROR != t || (xmlSignature.ValidationProcessBasicSignature != nil &&
+	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessBasicSignature != nil &&
 		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessBasicSignature.Conclusion)) {
 		if xmlSignature.ValidationProcessBasicSignature != nil {
 			addMessages(&result, getMessages(t, xmlSignature.ValidationProcessBasicSignature.Conclusion))
 		}
 	}
-	if enumerations.MessageType_ERROR != t || (xmlSignature.ValidationProcessLongTermData != nil &&
+	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessLongTermData != nil &&
 		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessLongTermData.Conclusion)) {
 		if xmlSignature.ValidationProcessLongTermData != nil {
 			addMessages(&result, getMessages(t, xmlSignature.ValidationProcessLongTermData.Conclusion))
@@ -257,8 +257,8 @@ func (c *DetailedReportMessageCollector) collectTimestampValidation(t messageTyp
 
 	timestampBasic := xmlTimestamp.ValidationProcessBasicTimestamp
 	timestampArchivalData := xmlTimestamp.ValidationProcessArchivalDataTimestamp
-	if timestampArchivalData == nil || enumerations.MessageType_ERROR != t ||
-		enumerations.Indication_PASSED != indicationOf(timestampArchivalData.Conclusion) {
+	if timestampArchivalData == nil || enumerations.MessageTypeError != t ||
+		enumerations.IndicationPassed != indicationOf(timestampArchivalData.Conclusion) {
 		if timestampBasic != nil {
 			addMessages(&result, getMessages(t, timestampBasic.Conclusion))
 		}
@@ -340,15 +340,15 @@ func (c *DetailedReportMessageCollector) collectCertificateQualification(t messa
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuanceTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
-	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME)
+	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeCertificateIssuanceTime)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtBestSignatureTime(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
-	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTime_BEST_SIGNATURE_TIME)
+	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeBESTSignatureTime)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValidationTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
-	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTime_VALIDATION_TIME)
+	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeValidationTime)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuanceTime(t messageType, certificateId string) []Message {
@@ -458,11 +458,11 @@ func (c *DetailedReportMessageCollector) getCertificateApprovalStatusProcess(cer
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtIssuanceTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME)
+	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTimeCertificateIssuanceTime)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtValidationTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
-	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTime_VALIDATION_TIME)
+	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTimeValidationTime)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtTime(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus, validationTime enumerations.ValidationTime) []Message {
@@ -479,11 +479,11 @@ func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtTime(
 func getMessages(t messageType, conclusion *jaxb.XmlConclusion) []Message {
 	if conclusion != nil {
 		switch t {
-		case enumerations.MessageType_ERROR:
+		case enumerations.MessageTypeError:
 			return convertMessages(conclusion.Errors)
-		case enumerations.MessageType_WARN:
+		case enumerations.MessageTypeWarn:
 			return convertMessages(conclusion.Warnings)
-		case enumerations.MessageType_INFO:
+		case enumerations.MessageTypeInfo:
 			return convertMessages(conclusion.Infos)
 		}
 	}

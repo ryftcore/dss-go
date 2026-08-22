@@ -53,9 +53,9 @@ func (s *TrustedListsCertificateSource) SetSummary(summary *tsl.TLValidationJobS
 	s.summary = summary
 }
 
-// CertificateSourceType returns CertificateSourceType_TRUSTED_LIST.
+// CertificateSourceType returns CertificateSourceTypeTrustedList.
 func (s *TrustedListsCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_TRUSTED_LIST
+	return enumerations.CertificateSourceTypeTrustedList
 }
 
 // AddCertificate is not applicable for this kind of certificate source: it panics. You should

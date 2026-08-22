@@ -16,7 +16,7 @@ func TestManifestBuilderAgainstJavaOracle(t *testing.T) {
 	oracle := loadXAdESSignABuilderOracle(t)
 
 	t.Run("manifest-default", func(t *testing.T) {
-		builder, err := NewManifestBuilder(enumerations.DigestAlgorithm_SHA256,
+		builder, err := NewManifestBuilder(enumerations.DigestAlgorithmSHA256,
 			[]model.DSSDocument{xadesSignABuilderTextDocument(), xadesSignABuilderXMLDocument()})
 		if err != nil {
 			t.Fatalf("NewManifestBuilder: %v", err)
@@ -31,7 +31,7 @@ func TestManifestBuilderAgainstJavaOracle(t *testing.T) {
 	})
 
 	t.Run("manifest-named-sha512", func(t *testing.T) {
-		builder, err := NewManifestBuilderWithId("my-manifest", enumerations.DigestAlgorithm_SHA512,
+		builder, err := NewManifestBuilderWithId("my-manifest", enumerations.DigestAlgorithmSHA512,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 		if err != nil {
 			t.Fatalf("NewManifestBuilderWithId: %v", err)
@@ -46,7 +46,7 @@ func TestManifestBuilderAgainstJavaOracle(t *testing.T) {
 	})
 
 	t.Run("manifest-custom-namespace", func(t *testing.T) {
-		builder, err := NewManifestBuilderWithNamespace("prefixed", enumerations.DigestAlgorithm_SHA256,
+		builder, err := NewManifestBuilderWithNamespace("prefixed", enumerations.DigestAlgorithmSHA256,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()},
 			common.NewDSSNamespace(common.XMLDSigNS.Uri(), "dsig"))
 		if err != nil {
@@ -65,7 +65,7 @@ func TestManifestBuilderAgainstJavaOracle(t *testing.T) {
 // TestManifestBuilderRejectsEmptyInput covers the two IllegalArgumentException guards, which the
 // port turns into constructor errors.
 func TestManifestBuilderRejectsEmptyInput(t *testing.T) {
-	if _, err := NewManifestBuilder(enumerations.DigestAlgorithm_SHA256, nil); err == nil {
+	if _, err := NewManifestBuilder(enumerations.DigestAlgorithmSHA256, nil); err == nil {
 		t.Error("an empty document list must be rejected")
 	} else if err.Error() != "List of documents cannot be empty!" {
 		t.Errorf("unexpected message: %q", err.Error())
@@ -81,7 +81,7 @@ func TestManifestBuilderRejectsEmptyInput(t *testing.T) {
 // TestManifestBuilderManifestReferences checks that the references the builder derived from the
 // documents are the ones it exposes, in order - the accessor ASiC relies on.
 func TestManifestBuilderManifestReferences(t *testing.T) {
-	builder, err := NewManifestBuilder(enumerations.DigestAlgorithm_SHA256,
+	builder, err := NewManifestBuilder(enumerations.DigestAlgorithmSHA256,
 		[]model.DSSDocument{xadesSignABuilderTextDocument(), xadesSignABuilderXMLDocument()})
 	if err != nil {
 		t.Fatalf("NewManifestBuilder: %v", err)

@@ -454,7 +454,7 @@ func (p *UserFriendlyIdentifierProvider) idAsStringForRevTokenIdentifier(revocat
 	var sb strings.Builder
 	sb.WriteString(p.revocationIdentifierPrefix(revocationIdentifier))
 	sb.WriteString(stringDelimiter)
-	digestValue, err := revocationIdentifier.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	digestValue, err := revocationIdentifier.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		// Java's DSSException for an unavailable algorithm is unchecked and propagates
 		// straight out of getIdAsStringForRevTokenIdentifier (and out of getIdAsString
@@ -478,7 +478,7 @@ func (p *UserFriendlyIdentifierProvider) idAsStringForEvidenceRecordIdentifier(e
 		// that throws ClassCastException (an unchecked exception) for any other concrete
 		// Identifier - reproduced as the panicking one-result type assertion form.
 		multipleDigestIdentifier := evidenceRecord.DSSID().(*model.MultipleDigestIdentifier)
-		digestValue, err := multipleDigestIdentifier.DigestValue(enumerations.DigestAlgorithm_SHA256)
+		digestValue, err := multipleDigestIdentifier.DigestValue(enumerations.DigestAlgorithmSHA256)
 		if err != nil {
 			panic(err.Error())
 		}

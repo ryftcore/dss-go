@@ -68,9 +68,9 @@ func rsaLargeExponentVerify(publicKey crypto.PublicKey, signatureAlgorithm enume
 	}
 
 	switch signatureAlgorithm.EncryptionAlgorithm() {
-	case enumerations.EncryptionAlgorithm_RSA:
+	case enumerations.EncryptionAlgorithmRSA:
 		return rsaVerifyPKCS1v15Encoding(encodedMessage, digestAlgorithm, digest)
-	case enumerations.EncryptionAlgorithm_RSASSA_PSS:
+	case enumerations.EncryptionAlgorithmRSASSAPSS:
 		return rsaVerifyPSSEncoding(encodedMessage, rsaPublicKey.N.BitLen()-1, digestAlgorithm, digest)
 	default:
 		return fmt.Errorf("%s is not an RSA signature algorithm", signatureAlgorithm)
@@ -244,13 +244,13 @@ func rsaCryptoHash(digestAlgorithm enumerations.DigestAlgorithm) (crypto.Hash, e
 // rsaPSSHashes are the digest algorithms an RSASSA-PSS or RSA PKCS#1 v1.5 signature this port
 // recognises can use.
 var rsaPSSHashes = map[enumerations.DigestAlgorithm]crypto.Hash{
-	enumerations.DigestAlgorithm_SHA1:     crypto.SHA1,
-	enumerations.DigestAlgorithm_SHA224:   crypto.SHA224,
-	enumerations.DigestAlgorithm_SHA256:   crypto.SHA256,
-	enumerations.DigestAlgorithm_SHA384:   crypto.SHA384,
-	enumerations.DigestAlgorithm_SHA512:   crypto.SHA512,
-	enumerations.DigestAlgorithm_SHA3_224: crypto.SHA3_224,
-	enumerations.DigestAlgorithm_SHA3_256: crypto.SHA3_256,
-	enumerations.DigestAlgorithm_SHA3_384: crypto.SHA3_384,
-	enumerations.DigestAlgorithm_SHA3_512: crypto.SHA3_512,
+	enumerations.DigestAlgorithmSHA1:    crypto.SHA1,
+	enumerations.DigestAlgorithmSHA224:  crypto.SHA224,
+	enumerations.DigestAlgorithmSHA256:  crypto.SHA256,
+	enumerations.DigestAlgorithmSHA384:  crypto.SHA384,
+	enumerations.DigestAlgorithmSHA512:  crypto.SHA512,
+	enumerations.DigestAlgorithmSHA3224: crypto.SHA3_224,
+	enumerations.DigestAlgorithmSHA3256: crypto.SHA3_256,
+	enumerations.DigestAlgorithmSHA3384: crypto.SHA3_384,
+	enumerations.DigestAlgorithmSHA3512: crypto.SHA3_512,
 }

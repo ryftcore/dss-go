@@ -84,13 +84,13 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 
 	claimedQualification := c.getClaimedQualification()
 
-	if enumerations.EAAQualification_QEAA == claimedQualification {
+	if enumerations.EAAQualificationQEAA == claimedQualification {
 		item = item.SetNextItem(c.categoryForQEAA())
-	} else if enumerations.EAAQualification_PUBEAA == claimedQualification {
+	} else if enumerations.EAAQualificationPubEAA == claimedQualification {
 		item = item.SetNextItem(c.categoryForPubEAA())
 	}
 
-	signatureQualification := enumerations.SignatureQualification_NA
+	signatureQualification := enumerations.SignatureQualificationNA
 
 	if signingCertificate != nil {
 
@@ -170,7 +170,7 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 
 				// TODO : add filter for EAA and Pub-EAA ?
 
-				if enumerations.EAAQualification_QEAA == claimedQualification {
+				if enumerations.EAAQualificationQEAA == claimedQualification {
 
 					// 1. filter by service for EAA/Q
 					filter = TrustServicesFilterFactoryCreateFilterByQEAA()
@@ -208,11 +208,11 @@ func (c *EAAQualificationProcessBlock) InitChain() {
 
 		signatureQualification = validationSignatureQualification.SignatureQualification.SignatureQualification()
 
-		if enumerations.EAAQualification_QEAA == claimedQualification || enumerations.EAAQualification_PUBEAA == claimedQualification {
+		if enumerations.EAAQualificationQEAA == claimedQualification || enumerations.EAAQualificationPubEAA == claimedQualification {
 			item = item.SetNextItem(c.isSignatureQualificationStatusAcceptable(signature, signatureQualification))
 		}
 
-		if enumerations.EAAQualification_PUBEAA == claimedQualification {
+		if enumerations.EAAQualificationPubEAA == claimedQualification {
 			psbEaa := c.psbEaa(signingCertificate)
 			item = item.SetNextItem(psbEaa) //nolint:staticcheck // mirrors upstream EAAQualificationProcessBlock#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 
@@ -272,7 +272,7 @@ func (c *EAAQualificationProcessBlock) hasGrantedStatus(services []*diagnostic.T
 }
 
 func (c *EAAQualificationProcessBlock) hasGrantedStatusAtValidationTime(services []*diagnostic.TrustServiceWrapper) process.ChainItem[*jaxb.XmlValidationEAAQualificationProcess] {
-	return NewGrantedStatusAtTimeCheck(c.I18nProvider, c.Result, services, enumerations.ValidationTime_VALIDATION_TIME, c.FailLevelRule())
+	return NewGrantedStatusAtTimeCheck(c.I18nProvider, c.Result, services, enumerations.ValidationTimeValidationTime, c.FailLevelRule())
 }
 
 func (c *EAAQualificationProcessBlock) psbEaa(certificateWrapper *diagnostic.CertificateWrapper) *EAAIssuerQcPSBPresentCheck {
@@ -302,22 +302,22 @@ func (c *EAAQualificationProcessBlock) getTLAnalysis(url string) *jaxb.XmlTLAnal
 // getClaimedQualification ports the private getClaimedQualification().
 func (c *EAAQualificationProcessBlock) getClaimedQualification() enumerations.EAAQualification {
 	eaaCategory := c.eaa.EAACategory()
-	if enumerations.EAACategory_EU_QEAA.URN() == eaaCategory {
-		return enumerations.EAAQualification_QEAA
-	} else if enumerations.EAACategory_EU_PUBEAA.URN() == eaaCategory {
-		return enumerations.EAAQualification_PUBEAA
+	if enumerations.EAACategoryEUQEAA.URN() == eaaCategory {
+		return enumerations.EAAQualificationQEAA
+	} else if enumerations.EAACategoryEUPubEAA.URN() == eaaCategory {
+		return enumerations.EAAQualificationPubEAA
 	} else if eaaCategory == "" {
 		// EAA-5.2.2.1-01: SD-JWT VC EAAs issued by EAAs issuers registered in the European Union,
 		// which are neither SD-JWT VC QEAAs nor SD-JWT VC PuB-EAAs, shall not include the category claim.
-		return enumerations.EAAQualification_EAA
+		return enumerations.EAAQualificationEAA
 	}
-	return enumerations.EAAQualification_UNKNOWN
+	return enumerations.EAAQualificationUnknown
 }
 
 // toNotQualifiedEAA ports the private toNotQualifiedEAA(EAAQualification).
 func (c *EAAQualificationProcessBlock) toNotQualifiedEAA(qualification enumerations.EAAQualification) enumerations.EAAQualification {
-	if enumerations.EAAQualification_QEAA == qualification || enumerations.EAAQualification_PUBEAA == qualification {
-		return enumerations.EAAQualification_EAA
+	if enumerations.EAAQualificationQEAA == qualification || enumerations.EAAQualificationPubEAA == qualification {
+		return enumerations.EAAQualificationEAA
 	}
 	return qualification
 }

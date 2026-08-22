@@ -124,9 +124,9 @@ func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent
 	}
 	if isASiCS {
 		switch evidenceRecordType {
-		case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+		case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 			return asic.ASiCUtilsEvidenceRecordXML // "META-INF/evidencerecord.xml"
-		case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+		case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 			return asic.ASiCUtilsEvidenceRecordERS
 		default:
 			panic(exception.NewIllegalInputException(
@@ -138,10 +138,10 @@ func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent
 	existingEvidenceRecordNames := spi.DSSUtilsDocumentNames(asicContent.EvidenceRecordDocuments())
 	var targetEvidenceRecordName string
 	switch evidenceRecordType {
-	case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 		targetEvidenceRecordName = asic.ASiCUtilsASiCEMetaInfCAdESEvidenceRecordXML // "META-INF/evidencerecord*.xml"
 		existingEvidenceRecordNames = filterStringsHasSuffix(existingEvidenceRecordNames, asic.ASiCUtilsXMLExtension)
-	case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 		targetEvidenceRecordName = asic.ASiCUtilsASiCEMetaInfCAdESEvidenceRecordASN1 // "META-INF/evidencerecord*.ers"
 		existingEvidenceRecordNames = filterStringsHasSuffix(existingEvidenceRecordNames, asic.ASiCUtilsERASN1Extension)
 	default:

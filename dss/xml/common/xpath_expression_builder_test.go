@@ -12,37 +12,37 @@ func TestXPathExpressionBuilder_KAT(t *testing.T) {
 	}{
 		{
 			"all().element(SIGNATURE).build()",
-			NewXPathExpressionBuilder().All().Element(XMLDSigElement_SIGNATURE).Build(),
+			NewXPathExpressionBuilder().All().Element(XMLDSigElementSignature).Build(),
 			"//ds:Signature",
 		},
 		{
 			"fromCurrentPosition().element(SIGNATURE).build()",
-			NewXPathExpressionBuilder().FromCurrentPosition().Element(XMLDSigElement_SIGNATURE).Build(),
+			NewXPathExpressionBuilder().FromCurrentPosition().Element(XMLDSigElementSignature).Build(),
 			"./ds:Signature",
 		},
 		{
 			"all().fromCurrentPosition().elements(SIGNATURE,OBJECT).build()",
-			NewXPathExpressionBuilder().All().FromCurrentPosition().Elements(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT).Build(),
+			NewXPathExpressionBuilder().All().FromCurrentPosition().Elements(XMLDSigElementSignature, XMLDSigElementObject).Build(),
 			".//ds:Signature/ds:Object",
 		},
 		{
 			"all().elements(SIGNATURE,OBJECT).notParentOf(MANIFEST).build()",
-			NewXPathExpressionBuilder().All().Elements(XMLDSigElement_SIGNATURE, XMLDSigElement_OBJECT).NotParentOf(XMLDSigElement_MANIFEST).Build(),
+			NewXPathExpressionBuilder().All().Elements(XMLDSigElementSignature, XMLDSigElementObject).NotParentOf(XMLDSigElementManifest).Build(),
 			"//ds:Signature/ds:Object[not(parent::ds:Manifest)]",
 		},
 		{
 			"all().element(SIGNATURE).notParentOf(OBJECT).build()",
-			NewXPathExpressionBuilder().All().Element(XMLDSigElement_SIGNATURE).NotParentOf(XMLDSigElement_OBJECT).Build(),
+			NewXPathExpressionBuilder().All().Element(XMLDSigElementSignature).NotParentOf(XMLDSigElementObject).Build(),
 			"//ds:Signature[not(parent::ds:Object)]",
 		},
 		{
 			"fromCurrentPosition().element(SIGNATURE_VALUE).attribute(ID).build()",
-			NewXPathExpressionBuilder().FromCurrentPosition().Element(XMLDSigElement_SIGNATURE_VALUE).Attribute(XMLDSigAttribute_ID).Build(),
+			NewXPathExpressionBuilder().FromCurrentPosition().Element(XMLDSigElementSignatureValue).Attribute(XMLDSigAttributeID).Build(),
 			"./ds:SignatureValue/@Id",
 		},
 		{
 			"all().fromCurrentPosition().element(SIGNATURE).build()",
-			NewXPathExpressionBuilder().All().FromCurrentPosition().Element(XMLDSigElement_SIGNATURE).Build(),
+			NewXPathExpressionBuilder().All().FromCurrentPosition().Element(XMLDSigElementSignature).Build(),
 			".//ds:Signature",
 		},
 	}
@@ -66,5 +66,5 @@ func TestXPathExpressionBuilder_BuildPanicsWithoutAllOrFromCurrentPosition(t *te
 			t.Fatalf("panic = %v, want %q", r, "Unsupported operation")
 		}
 	}()
-	NewXPathExpressionBuilder().Element(XMLDSigElement_SIGNATURE).Build()
+	NewXPathExpressionBuilder().Element(XMLDSigElementSignature).Build()
 }

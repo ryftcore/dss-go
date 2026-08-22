@@ -10,14 +10,14 @@ type ObjectType = jaxb.ObjectType
 
 // The ObjectType values, re-exported from jaxb.
 const (
-	ObjectType_CERTIFICATE     = jaxb.ObjectType_CERTIFICATE
-	ObjectType_CRL             = jaxb.ObjectType_CRL
-	ObjectType_OCSP_RESPONSE   = jaxb.ObjectType_OCSP_RESPONSE
-	ObjectType_TIMESTAMP       = jaxb.ObjectType_TIMESTAMP
-	ObjectType_EVIDENCE_RECORD = jaxb.ObjectType_EVIDENCE_RECORD
-	ObjectType_PUBLIC_KEY      = jaxb.ObjectType_PUBLIC_KEY
-	ObjectType_SIGNED_DATA     = jaxb.ObjectType_SIGNED_DATA
-	ObjectType_OTHER           = jaxb.ObjectType_OTHER
+	ObjectTypeCertificate    = jaxb.ObjectTypeCertificate
+	ObjectTypeCRL            = jaxb.ObjectTypeCRL
+	ObjectTypeOCSPResponse   = jaxb.ObjectTypeOCSPResponse
+	ObjectTypeTimestamp      = jaxb.ObjectTypeTimestamp
+	ObjectTypeEvidenceRecord = jaxb.ObjectTypeEvidenceRecord
+	ObjectTypePublicKey      = jaxb.ObjectTypePublicKey
+	ObjectTypeSignedData     = jaxb.ObjectTypeSignedData
+	ObjectTypeOther          = jaxb.ObjectTypeOther
 )
 
 // ObjectTypeValues returns all ObjectType constants in declaration order.

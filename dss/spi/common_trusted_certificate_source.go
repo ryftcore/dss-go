@@ -30,10 +30,10 @@ func NewCommonTrustedCertificateSource() *CommonTrustedCertificateSource {
 	}
 }
 
-// CertificateSourceType returns CertificateSourceType_TRUSTED_STORE.
+// CertificateSourceType returns CertificateSourceTypeTrustedStore.
 // Port of getCertificateSourceType().
 func (s *CommonTrustedCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_TRUSTED_STORE
+	return enumerations.CertificateSourceTypeTrustedStore
 }
 
 // ImportAsTrusted declares all certificates from a given certificate source as trusted.

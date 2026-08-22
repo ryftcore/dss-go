@@ -20,124 +20,124 @@ import (
 // comment above it - see mra_path_test.go.
 var (
 	// CERTIFICATE_CONTENT_DECLARATION_POINTED_PARTY_PATH = "./mra:CertificateContentDeclarationPointedParty"
-	MRAPath_CERTIFICATE_CONTENT_DECLARATION_POINTED_PARTY_PATH = common.FromCurrentPosition(
-		MRAElement_CERTIFICATE_CONTENT_DECLARATION_POINTED_PARTY)
+	MRAPathCertificateContentDeclarationPointedPartyPath = common.FromCurrentPosition(
+		MRAElementCertificateContentDeclarationPointedParty)
 
 	// CERTIFICATE_CONTENT_DECLARATION_POINTING_PARTY_PATH = "./mra:CertificateContentDeclarationPointingParty"
-	MRAPath_CERTIFICATE_CONTENT_DECLARATION_POINTING_PARTY_PATH = common.FromCurrentPosition(
-		MRAElement_CERTIFICATE_CONTENT_DECLARATION_POINTING_PARTY)
+	MRAPathCertificateContentDeclarationPointingPartyPath = common.FromCurrentPosition(
+		MRAElementCertificateContentDeclarationPointingParty)
 
 	// CERTIFICATE_CONTENT_REFERENCES_EQUIVALENCE_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:CertificateContentReferencesEquivalenceList/mra:CertificateContentReferenceEquivalence"
-	MRAPath_CERTIFICATE_CONTENT_REFERENCES_EQUIVALENCE_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_CERTIFICATE_CONTENT_REFERENCES_EQUIVALENCE_LIST,
-		MRAElement_CERTIFICATE_CONTENT_REFERENCES_EQUIVALENCE)
+	MRAPathCertificateContentReferencesEquivalencePath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementCertificateContentReferencesEquivalenceList,
+		MRAElementCertificateContentReferencesEquivalence)
 
 	// CERTIFICATE_CONTENT_REFERENCE_EQUIVALENCE_CONTEXT_PATH = "./mra:CertificateContentReferenceEquivalenceContext"
-	MRAPath_CERTIFICATE_CONTENT_REFERENCE_EQUIVALENCE_CONTEXT_PATH = common.FromCurrentPosition(
-		MRAElement_CERTIFICATE_CONTENT_REFERENCE_EQUIVALENCE_CONTEXT)
+	MRAPathCertificateContentReferenceEquivalenceContextPath = common.FromCurrentPosition(
+		MRAElementCertificateContentReferenceEquivalenceContext)
 
 	// MUTUAL_RECOGNITION_AGREEMENT_INFORMATION_PATH = "//mra:MutualRecognitionAgreementInformation"
-	MRAPath_MUTUAL_RECOGNITION_AGREEMENT_INFORMATION_PATH = common.All(
-		MRAElement_MUTUAL_RECOGNITION_AGREEMENT_INFORMATION)
+	MRAPathMutualRecognitionAgreementInformationPath = common.All(
+		MRAElementMutualRecognitionAgreementInformation)
 
 	// QUALIFIER_EQUIVALENCE_LIST_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLQualificationExtensionEquivalenceList/mra:QualifierEquivalenceList"
-	MRAPath_QUALIFIER_EQUIVALENCE_LIST_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_QUALIFICATION_EXTENSION_EQUIVALENCE_LIST,
-		MRAElement_QUALIFIER_EQUIVALENCE_LIST)
+	MRAPathQualifierEquivalenceListPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLQualificationExtensionEquivalenceList,
+		MRAElementQualifierEquivalenceList)
 
 	// SERVICE_TYPE_IDENTIFIER_PATH = "./mra:TrustServiceTSLType/tl:ServiceTypeIdentifier"
-	MRAPath_SERVICE_TYPE_IDENTIFIER_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_TSL_TYPE,
-		xadesdefinition.TrustedListElement_SERVICE_TYPE_IDENTIFIER)
+	MRAPathServiceTypeIdentifierPath = common.FromCurrentPosition(
+		MRAElementTrustServiceTSLType,
+		xadesdefinition.TrustedListElementServiceTypeIdentifier)
 
 	// TRUST_SERVICE_EQUIVALENCE_HISTORY_INSTANCE_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceEquivalenceHistory/mra:TrustServiceEquivalenceHistoryInstance"
-	MRAPath_TRUST_SERVICE_EQUIVALENCE_HISTORY_INSTANCE_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_HISTORY,
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_HISTORY_INSTANCE)
+	MRAPathTrustServiceEquivalenceHistoryInstancePath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceEquivalenceHistory,
+		MRAElementTrustServiceEquivalenceHistoryInstance)
 
 	// TRUST_SERVICE_EQUIVALENCE_INFORMATION_STATUS_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceEquivalenceStatus"
-	MRAPath_TRUST_SERVICE_EQUIVALENCE_INFORMATION_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_STATUS)
+	MRAPathTrustServiceEquivalenceInformationStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceEquivalenceStatus)
 
 	// TRUST_SERVICE_EQUIVALENCE_INFORMATION_STATUS_STARTING_TIME_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceEquivalenceStatusStartingTime"
-	MRAPath_TRUST_SERVICE_EQUIVALENCE_INFORMATION_STATUS_STARTING_TIME_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_STATUS_STARTING_TIME)
+	MRAPathTrustServiceEquivalenceInformationStatusStartingTimePath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceEquivalenceStatusStartingTime)
 
 	// TRUST_SERVICE_EQUIVALENCE_STATUS_PATH = "./mra:TrustServiceEquivalenceStatus"
-	MRAPath_TRUST_SERVICE_EQUIVALENCE_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_STATUS)
+	MRAPathTrustServiceEquivalenceStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceStatus)
 
 	// TRUST_SERVICE_EQUIVALENCE_STATUS_STARTING_TIME_PATH = "./mra:TrustServiceEquivalenceStatusStartingTime"
-	MRAPath_TRUST_SERVICE_EQUIVALENCE_STATUS_STARTING_TIME_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_STATUS_STARTING_TIME)
+	MRAPathTrustServiceEquivalenceStatusStartingTimePath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceStatusStartingTime)
 
 	// TRUST_SERVICE_LEGAL_IDENTIFIER_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceLegalIdentifier"
-	MRAPath_TRUST_SERVICE_LEGAL_IDENTIFIER_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_LEGAL_IDENTIFIER)
+	MRAPathTrustServiceLegalIdentifierPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceLegalIdentifier)
 
 	// TRUST_SERVICE_TSL_TYPE_PATH = "./mra:TrustServiceTSLType"
-	MRAPath_TRUST_SERVICE_TSL_TYPE_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_TSL_TYPE)
+	MRAPathTrustServiceTSLTypePath = common.FromCurrentPosition(
+		MRAElementTrustServiceTSLType)
 
 	// TRUST_SERVICE_TSL_TYPE_LIST_POINTED_PARTY_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLTypeEquivalenceList/mra:TrustServiceTSLTypeListPointedParty"
-	MRAPath_TRUST_SERVICE_TSL_TYPE_LIST_POINTED_PARTY_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_TYPE_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_TYPE_LIST_POINTED_PARTY)
+	MRAPathTrustServiceTSLTypeListPointedPartyPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLTypeEquivalenceList,
+		MRAElementTrustServiceTSLTypeListPointedParty)
 
 	// TRUST_SERVICE_TSL_TYPE_LIST_POINTING_PARTY_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLTypeEquivalenceList/mra:TrustServiceTSLTypeListPointingParty"
-	MRAPath_TRUST_SERVICE_TSL_TYPE_LIST_POINTING_PARTY_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_TYPE_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_TYPE_LIST_POINTING_PARTY)
+	MRAPathTrustServiceTSLTypeListPointingPartyPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLTypeEquivalenceList,
+		MRAElementTrustServiceTSLTypeListPointingParty)
 
 	// TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE_LIST_POINTED_PARTY_SERVICE_STATUS_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLStatusEquivalenceList/mra:TrustServiceTSLStatusInvalidEquivalence/mra:TrustServiceTSLStatusListPointedParty/tl:ServiceStatus"
-	MRAPath_TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE_LIST_POINTED_PARTY_SERVICE_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_LIST_POINTED_PARTY,
-		xadesdefinition.TrustedListElement_SERVICE_STATUS)
+	MRAPathTrustServiceTSLStatusInvalidEquivalenceListPointedPartyServiceStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLStatusEquivalenceList,
+		MRAElementTrustServiceTSLStatusInvalidEquivalence,
+		MRAElementTrustServiceTSLStatusListPointedParty,
+		xadesdefinition.TrustedListElementServiceStatus)
 
 	// TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE_LIST_POINTING_PARTY_SERVICE_STATUS_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLStatusEquivalenceList/mra:TrustServiceTSLStatusInvalidEquivalence/mra:TrustServiceTSLStatusListPointingParty/tl:ServiceStatus"
-	MRAPath_TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE_LIST_POINTING_PARTY_SERVICE_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_INVALID_EQUIVALENCE,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_LIST_POINTING_PARTY,
-		xadesdefinition.TrustedListElement_SERVICE_STATUS)
+	MRAPathTrustServiceTSLStatusInvalidEquivalenceListPointingPartyServiceStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLStatusEquivalenceList,
+		MRAElementTrustServiceTSLStatusInvalidEquivalence,
+		MRAElementTrustServiceTSLStatusListPointingParty,
+		xadesdefinition.TrustedListElementServiceStatus)
 
 	// TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE_LIST_POINTED_PARTY_SERVICE_STATUS_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLStatusEquivalenceList/mra:TrustServiceTSLStatusValidEquivalence/mra:TrustServiceTSLStatusListPointedParty/tl:ServiceStatus"
-	MRAPath_TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE_LIST_POINTED_PARTY_SERVICE_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_LIST_POINTED_PARTY,
-		xadesdefinition.TrustedListElement_SERVICE_STATUS)
+	MRAPathTrustServiceTSLStatusValidEquivalenceListPointedPartyServiceStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLStatusEquivalenceList,
+		MRAElementTrustServiceTSLStatusValidEquivalence,
+		MRAElementTrustServiceTSLStatusListPointedParty,
+		xadesdefinition.TrustedListElementServiceStatus)
 
 	// TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE_LIST_POINTING_PARTY_SERVICE_STATUS_PATH =
 	// "./mra:TrustServiceEquivalenceInformation/mra:TrustServiceTSLStatusEquivalenceList/mra:TrustServiceTSLStatusValidEquivalence/mra:TrustServiceTSLStatusListPointingParty/tl:ServiceStatus"
-	MRAPath_TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE_LIST_POINTING_PARTY_SERVICE_STATUS_PATH = common.FromCurrentPosition(
-		MRAElement_TRUST_SERVICE_EQUIVALENCE_INFORMATION,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_EQUIVALENCE_LIST,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_VALID_EQUIVALENCE,
-		MRAElement_TRUST_SERVICE_TSL_STATUS_LIST_POINTING_PARTY,
-		xadesdefinition.TrustedListElement_SERVICE_STATUS)
+	MRAPathTrustServiceTSLStatusValidEquivalenceListPointingPartyServiceStatusPath = common.FromCurrentPosition(
+		MRAElementTrustServiceEquivalenceInformation,
+		MRAElementTrustServiceTSLStatusEquivalenceList,
+		MRAElementTrustServiceTSLStatusValidEquivalence,
+		MRAElementTrustServiceTSLStatusListPointingParty,
+		xadesdefinition.TrustedListElementServiceStatus)
 )

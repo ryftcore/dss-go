@@ -87,9 +87,9 @@ func TestXcvaBlocksAgainstJavaOracle(t *testing.T) {
 				}
 
 				for _, signature := range diagnosticData.Signatures() {
-					context := enumerations.Context_SIGNATURE
+					context := enumerations.ContextSignature
 					if signature.IsCounterSignature() {
-						context = enumerations.Context_COUNTER_SIGNATURE
+						context = enumerations.ContextCounterSignature
 					}
 					signingCertificate := signature.SigningCertificate()
 					if signingCertificate == nil {
@@ -109,7 +109,7 @@ func TestXcvaBlocksAgainstJavaOracle(t *testing.T) {
 					cert, usageTime := signingCertificate, timestamp.ProductionTime()
 					compare("TST|"+timestamp.Id(), func() *xcvaNode {
 						return toXcvaXCV(NewX509CertificateValidation(xcvaI18n(), cert, xcvaCurrentTime,
-							usageTime, enumerations.Context_TIMESTAMP, passedAOV(), validationPolicy).Execute())
+							usageTime, enumerations.ContextTimestamp, passedAOV(), validationPolicy).Execute())
 					})
 				}
 				for _, revocation := range xcvaRevocationsSortedById(diagnosticData) {
@@ -120,14 +120,14 @@ func TestXcvaBlocksAgainstJavaOracle(t *testing.T) {
 					cert, usageTime := signingCertificate, revocation.ProductionDate()
 					compare("REV|"+revocation.Id(), func() *xcvaNode {
 						return toXcvaXCV(NewX509CertificateValidation(xcvaI18n(), cert, xcvaCurrentTime,
-							usageTime, enumerations.Context_REVOCATION, passedAOV(), validationPolicy).Execute())
+							usageTime, enumerations.ContextRevocation, passedAOV(), validationPolicy).Execute())
 					})
 				}
 				for _, certificate := range diagnosticData.UsedCertificates() {
 					cert := certificate
 					compare("CERT|"+cert.Id(), func() *xcvaNode {
 						return toXcvaXCV(NewX509CertificateValidation(xcvaI18n(), cert, xcvaCurrentTime,
-							cert.NotBefore(), enumerations.Context_CERTIFICATE, passedAOV(), validationPolicy).Execute())
+							cert.NotBefore(), enumerations.ContextCertificate, passedAOV(), validationPolicy).Execute())
 					})
 					compare("CRS|"+cert.Id(), func() *xcvaNode {
 						return toXcvaCRS(NewCertificateRevocationSelector(xcvaI18n(), cert,

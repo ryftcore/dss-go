@@ -126,7 +126,7 @@ func newDetachedTimestampAnalyzer() *DetachedTimestampAnalyzer {
 // NewDetachedTimestampAnalyzer is the default constructor. Port of
 // DetachedTimestampAnalyzer(DSSDocument).
 func NewDetachedTimestampAnalyzer(timestampFile model.DSSDocument) *DetachedTimestampAnalyzer {
-	return NewDetachedTimestampAnalyzerWithType(timestampFile, enumerations.TimestampType_CONTENT_TIMESTAMP)
+	return NewDetachedTimestampAnalyzerWithType(timestampFile, enumerations.TimestampTypeContentTimestamp)
 }
 
 // NewDetachedTimestampAnalyzerWithType is the default constructor with a type. Port of
@@ -302,7 +302,7 @@ func (a *DetachedTimestampAnalyzer) getTimestampedReferences(signatureScopes []m
 	for _, signatureScope := range signatureScopes {
 		if overrides.AddReference(signatureScope) {
 			timestampedReferences = append(timestampedReferences,
-				validation.NewTimestampedReference(signatureScope.DSSID().AsXmlID(), enumerations.TimestampedObjectType_SIGNED_DATA))
+				validation.NewTimestampedReference(signatureScope.DSSID().AsXmlID(), enumerations.TimestampedObjectTypeSignedData))
 		}
 	}
 	return timestampedReferences

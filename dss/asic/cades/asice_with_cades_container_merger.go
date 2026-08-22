@@ -100,7 +100,7 @@ func (m *ASiCEWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.ASi
 
 // GetTargetASiCContainerType ports the @Override protected getTargetASiCContainerType().
 func (m *ASiCEWithCAdESContainerMerger) GetTargetASiCContainerType() enumerations.ASiCContainerType {
-	return enumerations.ASiCContainerType_ASiC_E
+	return enumerations.ASiCContainerTypeASiCE
 }
 
 // EnsureContainerContentAllowMerge ports the @Override protected
@@ -338,9 +338,9 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordDocumentsValid() {
 
 func (m *ASiCEWithCAdESContainerMerger) getEvidenceRecordType(evidenceRecordFilename string) enumerations.EvidenceRecordTypeEnum {
 	if asic.ASiCUtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
-		return enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD
+		return enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord
 	} else if asic.ASiCUtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
-		return enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD
+		return enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord
 	}
 	panic(fmt.Sprintf("The evidence record with filename '%s' is not supported!", evidenceRecordFilename))
 }
@@ -350,15 +350,15 @@ func (m *ASiCEWithCAdESContainerMerger) replaceSigReferenceDocumentName(evidence
 	if err != nil {
 		panic(err)
 	}
-	manifestRoot, err := xmlutils.XPathUtilsGetElement(manifestDocumentDom, asic.ASiCManifestPath_ASIC_MANIFEST_PATH)
+	manifestRoot, err := xmlutils.XPathUtilsGetElement(manifestDocumentDom, asic.ASiCManifestPathASiCManifestPath)
 	if err != nil || manifestRoot == nil {
 		panic(fmt.Sprintf("Invalid structure of ASiCEvidenceRecordManifest with name '%s'.", evidenceRecordManifest.Name()))
 	}
-	sigReferenceElement, err := xmlutils.XPathUtilsGetElement(manifestRoot, asic.ASiCManifestPath_SIG_REFERENCE_PATH)
+	sigReferenceElement, err := xmlutils.XPathUtilsGetElement(manifestRoot, asic.ASiCManifestPathSigReferencePath)
 	if err != nil || sigReferenceElement == nil {
 		panic(fmt.Sprintf("Invalid structure of ASiCEvidenceRecordManifest with name '%s'.", evidenceRecordManifest.Name()))
 	}
-	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ASiCManifestAttribute_URI.AttributeName()}, newEvidenceRecordName)
+	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ASiCManifestAttributeURI.AttributeName()}, newEvidenceRecordName)
 	serializedBytes, err := xmlutils.DomUtilsSerializeNode(manifestDocumentDom)
 	if err != nil {
 		panic(err)

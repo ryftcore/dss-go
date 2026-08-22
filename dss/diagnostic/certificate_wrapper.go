@@ -160,7 +160,7 @@ func (w *CertificateWrapper) SubjectAlternativeNames() []*jaxb.XmlGeneralName {
 }
 
 func (w *CertificateWrapper) getXmlSubjectAlternativeNames() *jaxb.XmlSubjectAlternativeNames {
-	return w.CertificateExtensionForOid[*jaxb.XmlSubjectAlternativeNames](enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlSubjectAlternativeNames](enumerations.CertificateExtensionEnumSubjectAlternativeName.OID())
 }
 
 // IsCA reports whether the certificate defines BasicConstraints.cA extension set to TRUE. Port
@@ -181,7 +181,7 @@ func (w *CertificateWrapper) PathLenConstraint() int {
 }
 
 func (w *CertificateWrapper) getXmlBasicConstraints() *jaxb.XmlBasicConstraints {
-	return w.CertificateExtensionForOid[*jaxb.XmlBasicConstraints](enumerations.CertificateExtensionEnum_BASIC_CONSTRAINTS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlBasicConstraints](enumerations.CertificateExtensionEnumBasicConstraints.OID())
 }
 
 // RequireExplicitPolicy returns value of the requireExplicitPolicy field of
@@ -205,7 +205,7 @@ func (w *CertificateWrapper) InhibitPolicyMapping() int {
 }
 
 func (w *CertificateWrapper) getXmlPolicyConstraints() *jaxb.XmlPolicyConstraints {
-	return w.CertificateExtensionForOid[*jaxb.XmlPolicyConstraints](enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlPolicyConstraints](enumerations.CertificateExtensionEnumPolicyConstraints.OID())
 }
 
 // InhibitAnyPolicy returns value of the inhibitAnyPolicy certificate extension's value.
@@ -219,7 +219,7 @@ func (w *CertificateWrapper) InhibitAnyPolicy() int {
 }
 
 func (w *CertificateWrapper) getXmlInhibitAnyPolicy() *jaxb.XmlInhibitAnyPolicy {
-	return w.CertificateExtensionForOid[*jaxb.XmlInhibitAnyPolicy](enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlInhibitAnyPolicy](enumerations.CertificateExtensionEnumInhibitAnyPolicy.OID())
 }
 
 // PermittedSubtrees returns value of the permittedSubtrees field of nameConstraints
@@ -243,7 +243,7 @@ func (w *CertificateWrapper) ExcludedSubtrees() []*jaxb.XmlGeneralSubtree {
 }
 
 func (w *CertificateWrapper) getXmlNameConstraints() *jaxb.XmlNameConstraints {
-	return w.CertificateExtensionForOid[*jaxb.XmlNameConstraints](enumerations.CertificateExtensionEnum_NAME_CONSTRAINTS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlNameConstraints](enumerations.CertificateExtensionEnumNameConstraints.OID())
 }
 
 // KeyUsages returns the defined key-usages for the certificate. Port of getKeyUsages().
@@ -260,7 +260,7 @@ func (w *CertificateWrapper) KeyUsages() []enumerations.KeyUsageBit {
 }
 
 func (w *CertificateWrapper) getXmlKeyUsage() *jaxb.XmlKeyUsages {
-	return w.CertificateExtensionForOid[*jaxb.XmlKeyUsages](enumerations.CertificateExtensionEnum_KEY_USAGE.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlKeyUsages](enumerations.CertificateExtensionEnumKeyUsage.OID())
 }
 
 // IsRevocationDataAvailable reports whether the revocation data is available for the
@@ -311,7 +311,7 @@ func (w *CertificateWrapper) IsIdPkixOcspNoCheck() bool {
 }
 
 func (w *CertificateWrapper) getXmlIdPkixOcspNoCheck() *jaxb.XmlIdPkixOcspNoCheck {
-	return w.CertificateExtensionForOid[*jaxb.XmlIdPkixOcspNoCheck](enumerations.CertificateExtensionEnum_OCSP_NOCHECK.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlIdPkixOcspNoCheck](enumerations.CertificateExtensionEnumOCSPNoCheck.OID())
 }
 
 // IsIdKpOCSPSigning checks if the certificate has an extended-key-usage "ocspSigning"
@@ -320,7 +320,7 @@ func (w *CertificateWrapper) IsIdKpOCSPSigning() bool {
 	extendedKeyUsage := w.getXmlExtendedKeyUsages()
 	if extendedKeyUsage != nil {
 		for _, xmlOID := range extendedKeyUsage.ExtendedKeyUsageOid {
-			if enumerations.ExtendedKeyUsage_OCSP_SIGNING.OID() == xmlOID.Value {
+			if enumerations.ExtendedKeyUsageOCSPSigning.OID() == xmlOID.Value {
 				return true
 			}
 		}
@@ -338,7 +338,7 @@ func (w *CertificateWrapper) IsValAssuredShortTermCertificate() bool {
 }
 
 func (w *CertificateWrapper) getXmlValAssuredShortTermCertificate() *jaxb.XmlValAssuredShortTermCertificate {
-	return w.CertificateExtensionForOid[*jaxb.XmlValAssuredShortTermCertificate](enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlValAssuredShortTermCertificate](enumerations.CertificateExtensionEnumValidityAssuredShortTerm.OID())
 }
 
 // IsNoRevAvail reports whether the certificate contains noRevAvail extension, as defined in
@@ -350,7 +350,7 @@ func (w *CertificateWrapper) IsNoRevAvail() bool {
 }
 
 func (w *CertificateWrapper) getXmlNoRevAvail() *jaxb.XmlNoRevAvail {
-	return w.CertificateExtensionForOid[*jaxb.XmlNoRevAvail](enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlNoRevAvail](enumerations.CertificateExtensionEnumNoRevocationAvailable.OID())
 }
 
 // ExtendedKeyUsages returns a list of extended-key-usages. Port of getExtendedKeyUsages().
@@ -363,7 +363,7 @@ func (w *CertificateWrapper) ExtendedKeyUsages() []*jaxb.XmlOID {
 }
 
 func (w *CertificateWrapper) getXmlExtendedKeyUsages() *jaxb.XmlExtendedKeyUsages {
-	return w.CertificateExtensionForOid[*jaxb.XmlExtendedKeyUsages](enumerations.CertificateExtensionEnum_EXTENDED_KEY_USAGE.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlExtendedKeyUsages](enumerations.CertificateExtensionEnumExtendedKeyUsage.OID())
 }
 
 // NotBefore returns the certificate's notBefore date. Port of getNotBefore().
@@ -669,7 +669,7 @@ func (w *CertificateWrapper) CRLDistributionPoints() []string {
 }
 
 func (w *CertificateWrapper) getXmlCRLDistributionPoints() *jaxb.XmlCRLDistributionPoints {
-	return w.CertificateExtensionForOid[*jaxb.XmlCRLDistributionPoints](enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlCRLDistributionPoints](enumerations.CertificateExtensionEnumCRLDistributionPoints.OID())
 }
 
 // FreshestCRLUrls returns the Freshest CRL URLs. Port of getFreshestCRLUrls().
@@ -682,7 +682,7 @@ func (w *CertificateWrapper) FreshestCRLUrls() []string {
 }
 
 func (w *CertificateWrapper) getXmlFreshestCRL() *jaxb.XmlFreshestCRL {
-	return w.CertificateExtensionForOid[*jaxb.XmlFreshestCRL](enumerations.CertificateExtensionEnum_FRESHEST_CRL.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlFreshestCRL](enumerations.CertificateExtensionEnumFreshestCRL.OID())
 }
 
 // CAIssuersAccessUrls returns the Authority Information Access URLs. Port of
@@ -705,7 +705,7 @@ func (w *CertificateWrapper) OCSPAccessUrls() []string {
 }
 
 func (w *CertificateWrapper) getXmlAuthorityInformationAccess() *jaxb.XmlAuthorityInformationAccess {
-	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityInformationAccess](enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityInformationAccess](enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID())
 }
 
 // AuthorityKeyIdentifier returns the Authority Key Identifier certificate extension's
@@ -731,7 +731,7 @@ func (w *CertificateWrapper) AuthorityKeyIdentifierIssuerSerial() []byte {
 }
 
 func (w *CertificateWrapper) getXmlAuthorityKeyIdentifier() *jaxb.XmlAuthorityKeyIdentifier {
-	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityKeyIdentifier](enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityKeyIdentifier](enumerations.CertificateExtensionEnumAuthorityKeyIdentifier.OID())
 }
 
 // SubjectKeyIdentifier returns the Subject Key Identifier certificate extension's value,
@@ -745,7 +745,7 @@ func (w *CertificateWrapper) SubjectKeyIdentifier() []byte {
 }
 
 func (w *CertificateWrapper) getXmlSubjectKeyIdentifier() *jaxb.XmlSubjectKeyIdentifier {
-	return w.CertificateExtensionForOid[*jaxb.XmlSubjectKeyIdentifier](enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlSubjectKeyIdentifier](enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID())
 }
 
 // CpsUrls returns the certificate policies URLs. Port of getCpsUrls().
@@ -789,7 +789,7 @@ func (w *CertificateWrapper) CertificatePolicies() []*jaxb.XmlCertificatePolicy 
 }
 
 func (w *CertificateWrapper) getXmlCertificatePolicies() *jaxb.XmlCertificatePolicies {
-	return w.CertificateExtensionForOid[*jaxb.XmlCertificatePolicies](enumerations.CertificateExtensionEnum_CERTIFICATE_POLICIES.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlCertificatePolicies](enumerations.CertificateExtensionEnumCertificatePolicies.OID())
 }
 
 // CertificatePoliciesOids returns the certificate policies OIDs. Port of
@@ -973,7 +973,7 @@ func (w *CertificateWrapper) getOriginalThirdCountryMapping() *jaxb.XmlOriginalT
 }
 
 func (w *CertificateWrapper) getXmlQcStatements() *jaxb.XmlQcStatements {
-	return w.CertificateExtensionForOid[*jaxb.XmlQcStatements](enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID())
+	return w.CertificateExtensionForOid[*jaxb.XmlQcStatements](enumerations.CertificateExtensionEnumQCStatements.OID())
 }
 
 func oidValues(xmlOids []*jaxb.XmlOID) []string {

@@ -4,14 +4,14 @@ import "testing"
 
 func TestTimestampedObjectTypeValues(t *testing.T) {
 	want := []TimestampedObjectType{
-		TimestampedObjectType_SIGNED_DATA,
-		TimestampedObjectType_SIGNATURE,
-		TimestampedObjectType_CERTIFICATE,
-		TimestampedObjectType_REVOCATION,
-		TimestampedObjectType_TIMESTAMP,
-		TimestampedObjectType_EVIDENCE_RECORD,
-		TimestampedObjectType_ORPHAN_CERTIFICATE,
-		TimestampedObjectType_ORPHAN_REVOCATION,
+		TimestampedObjectTypeSignedData,
+		TimestampedObjectTypeSignature,
+		TimestampedObjectTypeCertificate,
+		TimestampedObjectTypeRevocation,
+		TimestampedObjectTypeTimestamp,
+		TimestampedObjectTypeEvidenceRecord,
+		TimestampedObjectTypeOrphanCertificate,
+		TimestampedObjectTypeOrphanRevocation,
 	}
 	got := TimestampedObjectTypeValues()
 	if len(got) != len(want) {

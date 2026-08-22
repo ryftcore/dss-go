@@ -164,7 +164,7 @@ func TestCertificateTokenSelfSignedAndSelfIssued(t *testing.T) {
 		t.Error("the root certificate is self-signed")
 	}
 	// isSelfSigned() marks the token's signature as VALID.
-	if root.SignatureValidity() != enumerations.SignatureValidity_VALID {
+	if root.SignatureValidity() != enumerations.SignatureValidityValid {
 		t.Errorf("root SignatureValidity() = %v", root.SignatureValidity())
 	}
 	if !root.IsSignatureIntact() || !root.IsValid() {
@@ -181,7 +181,7 @@ func TestCertificateTokenSelfSignedAndSelfIssued(t *testing.T) {
 	if leaf.IsSelfSigned() {
 		t.Error("the leaf certificate is not self-signed")
 	}
-	if leaf.SignatureValidity() != enumerations.SignatureValidity_NOT_EVALUATED {
+	if leaf.SignatureValidity() != enumerations.SignatureValidityNotEvaluated {
 		t.Errorf("leaf SignatureValidity() = %v before any check", leaf.SignatureValidity())
 	}
 }
@@ -196,7 +196,7 @@ func TestCertificateTokenIsSignedBy(t *testing.T) {
 	if !leaf.IsSignedByToken(root) {
 		t.Fatalf("the leaf must be signed by the root, reason: %q", leaf.InvalidityReason())
 	}
-	if leaf.SignatureValidity() != enumerations.SignatureValidity_VALID {
+	if leaf.SignatureValidity() != enumerations.SignatureValidityValid {
 		t.Errorf("leaf SignatureValidity() = %v", leaf.SignatureValidity())
 	}
 	if leaf.InvalidityReason() != "" {
@@ -234,13 +234,13 @@ func TestCertificateTokenCheckIsSignedByRecordsTheFailure(t *testing.T) {
 	root := certificateTokenFixture(t, rootCertificateBase64)
 	leaf := certificateTokenFixture(t, leafCertificateBase64)
 
-	if got := leaf.CheckIsSignedBy(leaf.PublicKey()); got != enumerations.SignatureValidity_INVALID {
+	if got := leaf.CheckIsSignedBy(leaf.PublicKey()); got != enumerations.SignatureValidityInvalid {
 		t.Errorf("CheckIsSignedBy(wrong key) = %v", got)
 	}
 	if leaf.InvalidityReason() == "" {
 		t.Error("a failed check must record an invalidity reason")
 	}
-	if got := leaf.CheckIsSignedBy(root.PublicKey()); got != enumerations.SignatureValidity_VALID {
+	if got := leaf.CheckIsSignedBy(root.PublicKey()); got != enumerations.SignatureValidityValid {
 		t.Errorf("CheckIsSignedBy(root) = %v", got)
 	}
 	if leaf.InvalidityReason() != "" {
@@ -258,7 +258,7 @@ func TestCertificateTokenCertificateProperties(t *testing.T) {
 	if got := leaf.SerialNumber().String(); got != "305419896" {
 		t.Errorf("leaf SerialNumber() = %s", got)
 	}
-	if got := root.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA256 {
+	if got := root.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA256 {
 		t.Errorf("SignatureAlgorithm() = %v", got)
 	}
 	if !root.IsCA() {
@@ -303,9 +303,9 @@ func TestCertificateTokenKeyUsageBits(t *testing.T) {
 	leaf := certificateTokenFixture(t, leafCertificateBase64)
 
 	want := []enumerations.KeyUsageBit{
-		enumerations.KeyUsageBit_DIGITAL_SIGNATURE,
-		enumerations.KeyUsageBit_KEY_CERT_SIGN,
-		enumerations.KeyUsageBit_CRL_SIGN,
+		enumerations.KeyUsageBitDigitalSignature,
+		enumerations.KeyUsageBitKeyCertSign,
+		enumerations.KeyUsageBitCRLSign,
 	}
 	got := root.KeyUsageBits()
 	if len(got) != len(want) {
@@ -316,16 +316,16 @@ func TestCertificateTokenKeyUsageBits(t *testing.T) {
 			t.Errorf("root KeyUsageBits()[%d] = %v, want %v", i, got[i], want[i])
 		}
 	}
-	if !root.CheckKeyUsage(enumerations.KeyUsageBit_KEY_CERT_SIGN) {
+	if !root.CheckKeyUsage(enumerations.KeyUsageBitKeyCertSign) {
 		t.Error("the root must carry keyCertSign")
 	}
-	if root.CheckKeyUsage(enumerations.KeyUsageBit_KEY_ENCIPHERMENT) {
+	if root.CheckKeyUsage(enumerations.KeyUsageBitKeyEncipherment) {
 		t.Error("the root must not carry keyEncipherment")
 	}
 
 	leafWant := []enumerations.KeyUsageBit{
-		enumerations.KeyUsageBit_DIGITAL_SIGNATURE,
-		enumerations.KeyUsageBit_NON_REPUDIATION,
+		enumerations.KeyUsageBitDigitalSignature,
+		enumerations.KeyUsageBitNonRepudiation,
 	}
 	leafGot := leaf.KeyUsageBits()
 	if len(leafGot) != len(leafWant) {
@@ -422,21 +422,21 @@ func TestCertificateTokenEqualsAndDigest(t *testing.T) {
 
 	// getDigest delegates to the identifier, so SHA-256 comes from the cache and the other
 	// algorithms are computed from the certificate binaries.
-	sha256Digest, err := root.Digest(enumerations.DigestAlgorithm_SHA256)
+	sha256Digest, err := root.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(sha256Digest) != 32 {
 		t.Errorf("SHA-256 digest length = %d", len(sha256Digest))
 	}
-	sha512Digest, err := root.Digest(enumerations.DigestAlgorithm_SHA512)
+	sha512Digest, err := root.Digest(enumerations.DigestAlgorithmSHA512)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(sha512Digest) != 64 {
 		t.Errorf("SHA-512 digest length = %d", len(sha512Digest))
 	}
-	if _, err := root.Digest(enumerations.DigestAlgorithm_WHIRLPOOL); err == nil {
+	if _, err := root.Digest(enumerations.DigestAlgorithmWHIRLPOOL); err == nil {
 		t.Error("an algorithm without a Go implementation must be reported")
 	}
 }

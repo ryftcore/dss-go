@@ -48,25 +48,25 @@ import (
 // name behind the "OID_" prefix, the convention oid.go already applies to DSS's own OID.java
 // constants.
 var (
-	// OID_id_aa_signingCertificate is
+	// OIDIdAaSigningCertificate is
 	// id-aa-signingCertificate OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 12 }
-	OID_id_aa_signingCertificate = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 12}
+	OIDIdAaSigningCertificate = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 12}
 
-	// OID_id_aa_signingCertificateV2 is
+	// OIDIdAaSigningCertificateV2 is
 	// id-aa-signingCertificateV2 OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 47 }
-	OID_id_aa_signingCertificateV2 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 47}
+	OIDIdAaSigningCertificateV2 = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 47}
 
-	// OID_id_aa_ets_certificateRefs is
+	// OIDIdAaEtsCertificateRefs is
 	// id-aa-ets-certificateRefs OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 21 }
-	OID_id_aa_ets_certificateRefs = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 21}
+	OIDIdAaEtsCertificateRefs = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 21}
 
-	// OID_id_aa_ets_certValues is
+	// OIDIdAaEtsCertValues is
 	// id-aa-ets-certValues OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840)
 	// rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 23 }
-	OID_id_aa_ets_certValues = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 23}
+	OIDIdAaEtsCertValues = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 23}
 )
 
 // essCertIDv2DefaultHashAlgorithm is the DEFAULT of ESSCertIDv2.hashAlgorithm, i.e.
@@ -475,10 +475,10 @@ func NewCMSCertificateSource(signerInformations []*cmscore.SignerInfo, certifica
 	source.extractSigningCertificateReferences()
 
 	source.extractCertificateValues()
-	source.extractCertificateRefsFromUnsignedAttribute(OID_id_aa_ets_certificateRefs,
-		enumerations.CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS)
-	source.extractCertificateRefsFromUnsignedAttribute(OID_attributeCertificateRefsOid,
-		enumerations.CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS)
+	source.extractCertificateRefsFromUnsignedAttribute(OIDIdAaEtsCertificateRefs,
+		enumerations.CertificateRefOriginCompleteCertificateRefs)
+	source.extractCertificateRefsFromUnsignedAttribute(OIDAttributeCertificateRefsOid,
+		enumerations.CertificateRefOriginAttributeCertificateRefs)
 	return source, nil
 }
 
@@ -498,12 +498,12 @@ func (s *CMSCertificateSource) extractCertificateIdentifiers() error {
 			signerIdentifier.SetCurrent(true)
 			found = true
 		}
-		s.AddCertificateIdentifier(signerIdentifier, enumerations.CertificateOrigin_SIGNED_DATA)
+		s.AddCertificateIdentifier(signerIdentifier, enumerations.CertificateOriginSignedData)
 	}
 	if !found {
 		// Upstream logs "SID not found in SignerInfos".
 		currentSignerIdentifier.SetCurrent(true)
-		s.AddCertificateIdentifier(currentSignerIdentifier, enumerations.CertificateOrigin_SIGNED_DATA)
+		s.AddCertificateIdentifier(currentSignerIdentifier, enumerations.CertificateOriginSignedData)
 	}
 	return nil
 }
@@ -519,7 +519,7 @@ func (s *CMSCertificateSource) extractSignedCertificates() {
 			// Upstream logs "Cannot extract certificates from CMS Signed Data : {}".
 			return
 		}
-		s.AddCertificateWithOrigin(certificate, enumerations.CertificateOrigin_SIGNED_DATA)
+		s.AddCertificateWithOrigin(certificate, enumerations.CertificateOriginSignedData)
 	}
 }
 
@@ -527,10 +527,10 @@ func (s *CMSCertificateSource) extractSignedCertificates() {
 func (s *CMSCertificateSource) extractSigningCertificateReferences() {
 	signedAttributes := s.currentSignerInformation.SignedAttributes
 	if len(signedAttributes) > 0 {
-		for _, signingCertificateV1Attribute := range signedAttributes.GetAll(OID_id_aa_signingCertificate) {
+		for _, signingCertificateV1Attribute := range signedAttributes.GetAll(OIDIdAaSigningCertificate) {
 			s.extractSigningCertificateV1(signingCertificateV1Attribute)
 		}
-		for _, signingCertificateV2Attribute := range signedAttributes.GetAll(OID_id_aa_signingCertificateV2) {
+		for _, signingCertificateV2Attribute := range signedAttributes.GetAll(OIDIdAaSigningCertificateV2) {
 			s.extractSigningCertificateV2(signingCertificateV2Attribute)
 		}
 	}
@@ -548,7 +548,7 @@ func (s *CMSCertificateSource) extractSigningCertificateV1(attribute *cmscore.At
 		if err != nil {
 			continue
 		}
-		s.extractESSCertIDs(certs, enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+		s.extractESSCertIDs(certs, enumerations.CertificateRefOriginSigningCertificate)
 	}
 }
 
@@ -559,7 +559,7 @@ func (s *CMSCertificateSource) extractESSCertIDs(essCertIDs []*ESSCertID, origin
 
 		certHash := essCertID.CertHash
 		if len(certHash) > 0 {
-			certRef.SetCertDigest(model.NewDigest(enumerations.DigestAlgorithm_SHA1, certHash))
+			certRef.SetCertDigest(model.NewDigest(enumerations.DigestAlgorithmSHA1, certHash))
 			// Upstream logs "Found Certificate Hash in signingCertificateAttributeV1 {} with
 			// algorithm {}" in debug.
 		}
@@ -580,7 +580,7 @@ func (s *CMSCertificateSource) extractSigningCertificateV2(attribute *cmscore.At
 		if err != nil {
 			continue
 		}
-		if err := s.extractESSCertIDv2s(certs, enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE); err != nil {
+		if err := s.extractESSCertIDv2s(certs, enumerations.CertificateRefOriginSigningCertificate); err != nil {
 			// DigestAlgorithm.forOID's IllegalArgumentException lands in the same catch.
 			continue
 		}
@@ -615,7 +615,7 @@ func (s *CMSCertificateSource) extractCertificateValues() {
 	// for both an absent and an empty attribute table, and DSSASN1UtilsAsn1Attributes
 	// answers an empty slice for either, so the guard is redundant here.
 	unsignedAttributes := s.currentSignerInformation.UnsignedAttributes
-	attributes := DSSASN1UtilsAsn1Attributes(unsignedAttributes, OID_id_aa_ets_certValues)
+	attributes := DSSASN1UtilsAsn1Attributes(unsignedAttributes, OIDIdAaEtsCertValues)
 	for _, attribute := range attributes {
 		s.extractCertificateValuesFromAttribute(attribute)
 	}
@@ -639,7 +639,7 @@ func (s *CMSCertificateSource) extractCertificateValuesFromAttribute(attribute *
 				// Upstream logs "Unable to parse encapsulated certificate : {}".
 				continue
 			}
-			s.AddCertificateWithOrigin(certificate, enumerations.CertificateOrigin_CERTIFICATE_VALUES)
+			s.AddCertificateWithOrigin(certificate, enumerations.CertificateOriginCertificateValues)
 		}
 	}
 	// Upstream logs "Certificate values shall be encoded as an ASN1Sequence. Found encoding :

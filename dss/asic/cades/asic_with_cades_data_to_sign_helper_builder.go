@@ -83,11 +83,11 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) fromArchive(asicContent *asic.ASi
 
 	asice := asic.ASiCUtilsIsASiCE(parameters.ASiC())
 	switch {
-	case asice && enumerations.ASiCContainerType_ASiC_E == currentContainerType:
+	case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 		manifestDocument := b.createManifestDocument(asicContent, parameters)
 		return NewDataToSignASiCEWithCAdESHelper(asicContent, manifestDocument)
 
-	case !asice && enumerations.ASiCContainerType_ASiC_S == currentContainerType:
+	case !asice && enumerations.ASiCContainerTypeASiCS == currentContainerType:
 		return NewDataToSignASiCSWithCAdESFromArchive(asicContent)
 
 	default:
@@ -100,12 +100,12 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) fromArchive(asicContent *asic.ASi
 func (b *ASiCWithCAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.ASiCContent,
 	parameters ASiCWithCAdESCommonParameters) GetDataToSignASiCWithCAdESHelper {
 	if asic.ASiCUtilsIsASiCE(parameters.ASiC()) {
-		asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+		asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 		manifestDocument := b.createManifestDocument(asicContent, parameters)
 		return NewDataToSignASiCEWithCAdESHelper(asicContent, manifestDocument)
 	}
 
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_S)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	asicsSignedDocument := b.GetASiCSSignedDocument(asicContent.SignedDocuments(), parameters.ZipCreationDate())
 	asicContent.SetSignedDocuments([]model.DSSDocument{asicsSignedDocument})
 	return NewDataToSignASiCSWithCAdESFromFiles(asicContent)

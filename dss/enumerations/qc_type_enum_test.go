@@ -8,11 +8,11 @@ func TestQCTypeEnum(t *testing.T) {
 		description string
 		oid         string
 	}{
-		{QCTypeEnum_QCT_ESIGN, "qc-type-esign", "0.4.0.1862.1.6.1"},
-		{QCTypeEnum_QCT_ESEAL, "qc-type-eseal", "0.4.0.1862.1.6.2"},
-		{QCTypeEnum_QCT_WEB, "qc-type-web", "0.4.0.1862.1.6.3"},
-		{QCTypeEnum_QCT_PID, "qc-type-pid", "0.4.0.194126.1.1"},
-		{QCTypeEnum_QCT_WAL, "qc-type-wal", "0.4.0.194126.1.2"},
+		{QCTypeEnumQCTESign, "qc-type-esign", "0.4.0.1862.1.6.1"},
+		{QCTypeEnumQCTESeal, "qc-type-eseal", "0.4.0.1862.1.6.2"},
+		{QCTypeEnumQCTWeb, "qc-type-web", "0.4.0.1862.1.6.3"},
+		{QCTypeEnumQCTPID, "qc-type-pid", "0.4.0.194126.1.1"},
+		{QCTypeEnumQCTWAL, "qc-type-wal", "0.4.0.194126.1.2"},
 	}
 	if len(QCTypeEnumValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(QCTypeEnumValues()))

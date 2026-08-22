@@ -42,8 +42,8 @@ func syncStrategyValidationInfo(resultExist bool, indication enumerations.Indica
 		return job.NewValidationCacheDTOBuilder(job.NewCachedEntry[job.ValidationResult]()).Build()
 	}
 	subIndication := enumerations.SubIndication("")
-	if indication == enumerations.Indication_TOTAL_FAILED {
-		subIndication = enumerations.SubIndication_HASH_FAILURE
+	if indication == enumerations.IndicationTotalFailed {
+		subIndication = enumerations.SubIndicationHashFailure
 	}
 	// A non-nil certificate source, because ValidationCacheDTOBuilder#build() reads
 	// getPotentialSigners(), which dereferences it (as Java's does).
@@ -71,31 +71,31 @@ func TestExpirationAndSignatureCheckStrategy_Oracle(t *testing.T) {
 		want                         bool
 	}{
 		// Neither flag set: a still-valid, TOTAL_PASSED list synchronizes.
-		{"validAndFresh", true, future, true, enumerations.Indication_TOTAL_PASSED, false, false, true},
+		{"validAndFresh", true, future, true, enumerations.IndicationTotalPassed, false, false, true},
 		// Expiry gate. A null next-update date counts as expired upstream
 		// (`nextUpdateDate == null || currentDate.after(nextUpdateDate)`); the Go stand-in for
 		// that null is the zero time.Time.
-		{"expired", true, past, true, enumerations.Indication_TOTAL_PASSED, false, false, false},
-		{"expiredAccepted", true, past, true, enumerations.Indication_TOTAL_PASSED, true, false, true},
-		{"noNextUpdate", true, time.Time{}, true, enumerations.Indication_TOTAL_PASSED, false, false, false},
-		{"noNextUpdateAccepted", true, time.Time{}, true, enumerations.Indication_TOTAL_PASSED, true, false, true},
+		{"expired", true, past, true, enumerations.IndicationTotalPassed, false, false, false},
+		{"expiredAccepted", true, past, true, enumerations.IndicationTotalPassed, true, false, true},
+		{"noNextUpdate", true, time.Time{}, true, enumerations.IndicationTotalPassed, false, false, false},
+		{"noNextUpdateAccepted", true, time.Time{}, true, enumerations.IndicationTotalPassed, true, false, true},
 		// No parsing result at all: the expiry gate does not apply (Java guards on
 		// isResultExist()), so only the signature gate can refuse.
-		{"noParsingResult", false, time.Time{}, true, enumerations.Indication_TOTAL_PASSED, false, false, true},
-		{"noParsingResultInvalid", false, time.Time{}, true, enumerations.Indication_TOTAL_FAILED, false, false, false},
+		{"noParsingResult", false, time.Time{}, true, enumerations.IndicationTotalPassed, false, false, true},
+		{"noParsingResultInvalid", false, time.Time{}, true, enumerations.IndicationTotalFailed, false, false, false},
 		// Signature gate. isValid() is "indication == TOTAL_PASSED", so both TOTAL_FAILED and
 		// INDETERMINATE refuse.
-		{"brokenSignature", true, future, true, enumerations.Indication_TOTAL_FAILED, false, false, false},
-		{"brokenSignatureAccepted", true, future, true, enumerations.Indication_TOTAL_FAILED, false, true, true},
-		{"indeterminateSignature", true, future, true, enumerations.Indication_INDETERMINATE, false, false, false},
-		{"indeterminateSignatureAccepted", true, future, true, enumerations.Indication_INDETERMINATE, false, true, true},
+		{"brokenSignature", true, future, true, enumerations.IndicationTotalFailed, false, false, false},
+		{"brokenSignatureAccepted", true, future, true, enumerations.IndicationTotalFailed, false, true, true},
+		{"indeterminateSignature", true, future, true, enumerations.IndicationIndeterminate, false, false, false},
+		{"indeterminateSignatureAccepted", true, future, true, enumerations.IndicationIndeterminate, false, true, true},
 		// No validation result: the signature gate does not apply either.
 		{"noValidationResult", true, future, false, "", false, false, true},
 		// Both gates refuse; accepting only one is not enough.
-		{"expiredAndBroken", true, past, true, enumerations.Indication_TOTAL_FAILED, false, false, false},
-		{"expiredAcceptedStillBroken", true, past, true, enumerations.Indication_TOTAL_FAILED, true, false, false},
-		{"brokenAcceptedStillExpired", true, past, true, enumerations.Indication_TOTAL_FAILED, false, true, false},
-		{"bothAccepted", true, past, true, enumerations.Indication_TOTAL_FAILED, true, true, true},
+		{"expiredAndBroken", true, past, true, enumerations.IndicationTotalFailed, false, false, false},
+		{"expiredAcceptedStillBroken", true, past, true, enumerations.IndicationTotalFailed, true, false, false},
+		{"brokenAcceptedStillExpired", true, past, true, enumerations.IndicationTotalFailed, false, true, false},
+		{"bothAccepted", true, past, true, enumerations.IndicationTotalFailed, true, true, true},
 	}
 
 	for _, c := range cases {
@@ -152,7 +152,7 @@ func expectedWithLOTLDefaults(parsingResultExist bool, nextUpdateDate time.Time,
 		return false
 	}
 	if validationResultExist {
-		return indication == enumerations.Indication_TOTAL_PASSED
+		return indication == enumerations.IndicationTotalPassed
 	}
 	return true
 }
@@ -164,7 +164,7 @@ func expectedWithLOTLDefaults(parsingResultExist bool, nextUpdateDate time.Time,
 func TestAcceptAllStrategy_Oracle(t *testing.T) {
 	tlInfo := tslmodel.NewTLInfo(nil,
 		syncStrategyParsingInfo(true, time.Now().Add(-24*time.Hour)),
-		syncStrategyValidationInfo(true, enumerations.Indication_TOTAL_FAILED),
+		syncStrategyValidationInfo(true, enumerations.IndicationTotalFailed),
 		"http://test/tl.xml")
 	lotlInfo := lotlInfoFor(tlInfo)
 

@@ -236,7 +236,7 @@ func TestDSSRevocationUtilsLoadOCSP(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s: %v", prefix, err)
 			}
-			if digestAlgorithm != enumerations.DigestAlgorithm_SHA256 {
+			if digestAlgorithm != enumerations.DigestAlgorithmSHA256 {
 				t.Errorf("%s: expected SHA-256, got %s", prefix, digestAlgorithm)
 			}
 		}
@@ -309,7 +309,7 @@ func TestDSSRevocationUtilsOCSPCertificateID(t *testing.T) {
 	ca := dssRevocationUtilsTestCertificate(t, "ocsp_ca.der")
 	leaf := dssRevocationUtilsTestCertificate(t, "ocsp_leaf.der")
 
-	certID, err := DSSRevocationUtilsOCSPCertificateID(leaf, ca, enumerations.DigestAlgorithm_SHA256)
+	certID, err := DSSRevocationUtilsOCSPCertificateID(leaf, ca, enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -365,7 +365,7 @@ func TestDSSRevocationUtilsOCSPCertificateID(t *testing.T) {
 func TestDSSRevocationUtilsMatchesIgnoresAlgorithmParameters(t *testing.T) {
 	ca := dssRevocationUtilsTestCertificate(t, "ocsp_ca.der")
 	leaf := dssRevocationUtilsTestCertificate(t, "ocsp_leaf.der")
-	certID, err := DSSRevocationUtilsOCSPCertificateID(leaf, ca, enumerations.DigestAlgorithm_SHA256)
+	certID, err := DSSRevocationUtilsOCSPCertificateID(leaf, ca, enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -405,8 +405,8 @@ func TestDSSRevocationUtilsOtherHash(t *testing.T) {
 		derKey, algKey, valueKey string
 		algorithm                enumerations.DigestAlgorithm
 	}{
-		{"otherhash_sha1_der", "otherhash_sha1_alg", "otherhash_sha1_value", enumerations.DigestAlgorithm_SHA1},
-		{"otherhash_other_der", "otherhash_other_alg", "otherhash_other_value", enumerations.DigestAlgorithm_SHA256},
+		{"otherhash_sha1_der", "otherhash_sha1_alg", "otherhash_sha1_value", enumerations.DigestAlgorithmSHA1},
+		{"otherhash_other_der", "otherhash_other_alg", "otherhash_other_value", enumerations.DigestAlgorithmSHA256},
 	} {
 		otherHash, err := ParseOtherHash(dssRevocationUtilsTestHex(t, answers, entry.derKey))
 		if err != nil {

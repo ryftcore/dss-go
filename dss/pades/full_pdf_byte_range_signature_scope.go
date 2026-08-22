@@ -30,7 +30,7 @@ func NewFullPdfByteRangeSignatureScope(byteRange *ByteRange, document model.DSSD
 
 // Type returns the type of the signature scope. Port of the getType() override.
 func (s *FullPdfByteRangeSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_FULL
+	return enumerations.SignatureScopeTypeFull
 }
 
 // compile-time interface assertion.

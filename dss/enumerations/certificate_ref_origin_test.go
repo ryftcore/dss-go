@@ -20,13 +20,13 @@ func TestCertificateRefOriginValueOf(t *testing.T) {
 
 func TestCertificateRefOriginValues(t *testing.T) {
 	want := []CertificateRefOrigin{
-		CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS,
-		CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS,
-		CertificateRefOrigin_SIGNING_CERTIFICATE,
-		CertificateRefOrigin_KEY_IDENTIFIER,
-		CertificateRefOrigin_X509_URL,
-		CertificateRefOrigin_PUBLIC_KEY,
-		CertificateRefOrigin_UNPROTECTED_HEADER_REFS,
+		CertificateRefOriginAttributeCertificateRefs,
+		CertificateRefOriginCompleteCertificateRefs,
+		CertificateRefOriginSigningCertificate,
+		CertificateRefOriginKeyIdentifier,
+		CertificateRefOriginX509URL,
+		CertificateRefOriginPublicKey,
+		CertificateRefOriginUnprotectedHeaderRefs,
 	}
 	got := CertificateRefOriginValues()
 	if len(got) != len(want) {

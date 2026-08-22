@@ -52,40 +52,40 @@ import (
 type ObjectType string
 
 const (
-	// ObjectType_CERTIFICATE is a certificate.
-	ObjectType_CERTIFICATE ObjectType = "CERTIFICATE"
-	// ObjectType_CRL is a CRL.
-	ObjectType_CRL ObjectType = "CRL"
-	// ObjectType_OCSP_RESPONSE is an OCSP response.
-	ObjectType_OCSP_RESPONSE ObjectType = "OCSP_RESPONSE"
-	// ObjectType_TIMESTAMP is a TimeStamp.
-	ObjectType_TIMESTAMP ObjectType = "TIMESTAMP"
-	// ObjectType_EVIDENCE_RECORD is an evidence record.
-	ObjectType_EVIDENCE_RECORD ObjectType = "EVIDENCE_RECORD"
-	// ObjectType_PUBLIC_KEY is a public key.
-	ObjectType_PUBLIC_KEY ObjectType = "PUBLIC_KEY"
-	// ObjectType_SIGNED_DATA is signed data.
-	ObjectType_SIGNED_DATA ObjectType = "SIGNED_DATA"
-	// ObjectType_OTHER is other.
-	ObjectType_OTHER ObjectType = "OTHER"
+	// ObjectTypeCertificate is a certificate.
+	ObjectTypeCertificate ObjectType = "CERTIFICATE"
+	// ObjectTypeCRL is a CRL.
+	ObjectTypeCRL ObjectType = "CRL"
+	// ObjectTypeOCSPResponse is an OCSP response.
+	ObjectTypeOCSPResponse ObjectType = "OCSP_RESPONSE"
+	// ObjectTypeTimestamp is a TimeStamp.
+	ObjectTypeTimestamp ObjectType = "TIMESTAMP"
+	// ObjectTypeEvidenceRecord is an evidence record.
+	ObjectTypeEvidenceRecord ObjectType = "EVIDENCE_RECORD"
+	// ObjectTypePublicKey is a public key.
+	ObjectTypePublicKey ObjectType = "PUBLIC_KEY"
+	// ObjectTypeSignedData is signed data.
+	ObjectTypeSignedData ObjectType = "SIGNED_DATA"
+	// ObjectTypeOther is other.
+	ObjectTypeOther ObjectType = "OTHER"
 )
 
 var objectTypeURI = map[ObjectType]string{
-	ObjectType_CERTIFICATE:     "urn:etsi:019102:validationObject:certificate",
-	ObjectType_CRL:             "urn:etsi:019102:validationObject:CRL",
-	ObjectType_OCSP_RESPONSE:   "urn:etsi:019102:validationObject:OCSPResponse",
-	ObjectType_TIMESTAMP:       "urn:etsi:019102:validationObject:timestamp",
-	ObjectType_EVIDENCE_RECORD: "urn:etsi:019102:validationObject:evidencerecord",
-	ObjectType_PUBLIC_KEY:      "urn:etsi:019102:validationObject:publicKey",
-	ObjectType_SIGNED_DATA:     "urn:etsi:019102:validationObject:signedData",
-	ObjectType_OTHER:           "urn:etsi:019102:validationObject:other",
+	ObjectTypeCertificate:    "urn:etsi:019102:validationObject:certificate",
+	ObjectTypeCRL:            "urn:etsi:019102:validationObject:CRL",
+	ObjectTypeOCSPResponse:   "urn:etsi:019102:validationObject:OCSPResponse",
+	ObjectTypeTimestamp:      "urn:etsi:019102:validationObject:timestamp",
+	ObjectTypeEvidenceRecord: "urn:etsi:019102:validationObject:evidencerecord",
+	ObjectTypePublicKey:      "urn:etsi:019102:validationObject:publicKey",
+	ObjectTypeSignedData:     "urn:etsi:019102:validationObject:signedData",
+	ObjectTypeOther:          "urn:etsi:019102:validationObject:other",
 }
 
 // ObjectTypeValues returns all ObjectType constants in declaration order.
 func ObjectTypeValues() []ObjectType {
 	return []ObjectType{
-		ObjectType_CERTIFICATE, ObjectType_CRL, ObjectType_OCSP_RESPONSE, ObjectType_TIMESTAMP,
-		ObjectType_EVIDENCE_RECORD, ObjectType_PUBLIC_KEY, ObjectType_SIGNED_DATA, ObjectType_OTHER,
+		ObjectTypeCertificate, ObjectTypeCRL, ObjectTypeOCSPResponse, ObjectTypeTimestamp,
+		ObjectTypeEvidenceRecord, ObjectTypePublicKey, ObjectTypeSignedData, ObjectTypeOther,
 	}
 }
 
@@ -119,23 +119,23 @@ func (o *ObjectType) UnmarshalText(text []byte) error {
 type ConstraintStatus string
 
 const (
-	// ConstraintStatus_APPLIED: the constraint has been applied.
-	ConstraintStatus_APPLIED ConstraintStatus = "APPLIED"
-	// ConstraintStatus_DISABLED: the constraint has been disabled.
-	ConstraintStatus_DISABLED ConstraintStatus = "DISABLED"
-	// ConstraintStatus_OVERRIDDEN: the constraint has been overridden.
-	ConstraintStatus_OVERRIDDEN ConstraintStatus = "OVERRIDDEN"
+	// ConstraintStatusApplied: the constraint has been applied.
+	ConstraintStatusApplied ConstraintStatus = "APPLIED"
+	// ConstraintStatusDisabled: the constraint has been disabled.
+	ConstraintStatusDisabled ConstraintStatus = "DISABLED"
+	// ConstraintStatusOverridden: the constraint has been overridden.
+	ConstraintStatusOverridden ConstraintStatus = "OVERRIDDEN"
 )
 
 var constraintStatusURI = map[ConstraintStatus]string{
-	ConstraintStatus_APPLIED:    "urn:etsi:019102:constraintStatus:applied",
-	ConstraintStatus_DISABLED:   "urn:etsi:019102:constraintStatus:disabled",
-	ConstraintStatus_OVERRIDDEN: "urn:etsi:019102:constraintStatus:overridden",
+	ConstraintStatusApplied:    "urn:etsi:019102:constraintStatus:applied",
+	ConstraintStatusDisabled:   "urn:etsi:019102:constraintStatus:disabled",
+	ConstraintStatusOverridden: "urn:etsi:019102:constraintStatus:overridden",
 }
 
 // ConstraintStatusValues returns all ConstraintStatus constants in declaration order.
 func ConstraintStatusValues() []ConstraintStatus {
-	return []ConstraintStatus{ConstraintStatus_APPLIED, ConstraintStatus_DISABLED, ConstraintStatus_OVERRIDDEN}
+	return []ConstraintStatus{ConstraintStatusApplied, ConstraintStatusDisabled, ConstraintStatusOverridden}
 }
 
 // ConstraintStatusValueOf returns the ConstraintStatus matching the given Java enum name.
@@ -167,23 +167,23 @@ func (c *ConstraintStatus) UnmarshalText(text []byte) error {
 type TypeOfProof string
 
 const (
-	// TypeOfProof_VALIDATION: the POE has been derived during validation.
-	TypeOfProof_VALIDATION TypeOfProof = "VALIDATION"
-	// TypeOfProof_PROVIDED: the POE has been provided to the SVA as an input.
-	TypeOfProof_PROVIDED TypeOfProof = "PROVIDED"
-	// TypeOfProof_POLICY: the POE has been derived by the policy.
-	TypeOfProof_POLICY TypeOfProof = "POLICY"
+	// TypeOfProofValidation: the POE has been derived during validation.
+	TypeOfProofValidation TypeOfProof = "VALIDATION"
+	// TypeOfProofProvided: the POE has been provided to the SVA as an input.
+	TypeOfProofProvided TypeOfProof = "PROVIDED"
+	// TypeOfProofPolicy: the POE has been derived by the policy.
+	TypeOfProofPolicy TypeOfProof = "POLICY"
 )
 
 var typeOfProofURI = map[TypeOfProof]string{
-	TypeOfProof_VALIDATION: "urn:etsi:019102:poetype:validation",
-	TypeOfProof_PROVIDED:   "urn:etsi:019102:poetype:provided",
-	TypeOfProof_POLICY:     "urn:etsi:019102:poetype:policy",
+	TypeOfProofValidation: "urn:etsi:019102:poetype:validation",
+	TypeOfProofProvided:   "urn:etsi:019102:poetype:provided",
+	TypeOfProofPolicy:     "urn:etsi:019102:poetype:policy",
 }
 
 // TypeOfProofValues returns all TypeOfProof constants in declaration order.
 func TypeOfProofValues() []TypeOfProof {
-	return []TypeOfProof{TypeOfProof_VALIDATION, TypeOfProof_PROVIDED, TypeOfProof_POLICY}
+	return []TypeOfProof{TypeOfProofValidation, TypeOfProofProvided, TypeOfProofPolicy}
 }
 
 // TypeOfProofValueOf returns the TypeOfProof matching the given Java enum name.
@@ -215,30 +215,30 @@ func (t *TypeOfProof) UnmarshalText(text []byte) error {
 type SignatureValidationProcessID string
 
 const (
-	// SignatureValidationProcessID_BASIC: the SVA performed the Validation
+	// SignatureValidationProcessIDBasic: the SVA performed the Validation
 	// Process for Basic Signatures (ETSI TS 119 102-1, clause 5.3).
-	SignatureValidationProcessID_BASIC SignatureValidationProcessID = "BASIC"
-	// SignatureValidationProcessID_LTVM: the SVA performed the Validation
+	SignatureValidationProcessIDBasic SignatureValidationProcessID = "BASIC"
+	// SignatureValidationProcessIDLTVM: the SVA performed the Validation
 	// Process for Signatures with Time and LongTerm-Validation Material
 	// (ETSI TS 119 102-1, clause 5.5).
-	SignatureValidationProcessID_LTVM SignatureValidationProcessID = "LTVM"
-	// SignatureValidationProcessID_LTA: the SVA performed the Validation
+	SignatureValidationProcessIDLTVM SignatureValidationProcessID = "LTVM"
+	// SignatureValidationProcessIDLTA: the SVA performed the Validation
 	// process for Signatures providing Long Term Availability and Integrity
 	// of Validation Material (ETSI TS 119 102-1, clause 5.6).
-	SignatureValidationProcessID_LTA SignatureValidationProcessID = "LTA"
+	SignatureValidationProcessIDLTA SignatureValidationProcessID = "LTA"
 )
 
 var signatureValidationProcessIDURI = map[SignatureValidationProcessID]string{
-	SignatureValidationProcessID_BASIC: "urn:etsi:019102:validationprocess:Basic",
-	SignatureValidationProcessID_LTVM:  "urn:etsi:019102:validationprocess:LTVM",
-	SignatureValidationProcessID_LTA:   "urn:etsi:019102:validationprocess:LTA",
+	SignatureValidationProcessIDBasic: "urn:etsi:019102:validationprocess:Basic",
+	SignatureValidationProcessIDLTVM:  "urn:etsi:019102:validationprocess:LTVM",
+	SignatureValidationProcessIDLTA:   "urn:etsi:019102:validationprocess:LTA",
 }
 
 // SignatureValidationProcessIDValues returns all SignatureValidationProcessID
 // constants in declaration order.
 func SignatureValidationProcessIDValues() []SignatureValidationProcessID {
 	return []SignatureValidationProcessID{
-		SignatureValidationProcessID_BASIC, SignatureValidationProcessID_LTVM, SignatureValidationProcessID_LTA,
+		SignatureValidationProcessIDBasic, SignatureValidationProcessIDLTVM, SignatureValidationProcessIDLTA,
 	}
 }
 

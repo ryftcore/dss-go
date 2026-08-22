@@ -72,7 +72,7 @@ func (b *DataObjectFormatBuilder) toDataObjectFormat(reference *DSSReference) *D
 // getReferenceMimeType returns the mimetype String of the given reference. Ports the private
 // getReferenceMimeType(DSSReference).
 func (b *DataObjectFormatBuilder) getReferenceMimeType(reference *DSSReference) string {
-	dataObjectFormatMimeType := enumerations.MimeType(enumerations.MimeTypeEnum_BINARY)
+	dataObjectFormatMimeType := enumerations.MimeType(enumerations.MimeTypeEnumBinary)
 	content := reference.Contents()
 	if content != nil && content.MimeType() != nil {
 		dataObjectFormatMimeType = content.MimeType()

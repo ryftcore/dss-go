@@ -12,25 +12,25 @@ import "fmt"
 type CryptographicSuiteRecommendation string
 
 const (
-	// CryptographicSuiteRecommendation_RECOMMENDED is the recommended
+	// CryptographicSuiteRecommendationRecommended is the recommended
 	// cryptographic algorithm.
-	CryptographicSuiteRecommendation_RECOMMENDED CryptographicSuiteRecommendation = "RECOMMENDED"
-	// CryptographicSuiteRecommendation_LEGACY is the legacy cryptographic
+	CryptographicSuiteRecommendationRecommended CryptographicSuiteRecommendation = "RECOMMENDED"
+	// CryptographicSuiteRecommendationLegacy is the legacy cryptographic
 	// algorithm.
-	CryptographicSuiteRecommendation_LEGACY CryptographicSuiteRecommendation = "LEGACY"
+	CryptographicSuiteRecommendationLegacy CryptographicSuiteRecommendation = "LEGACY"
 )
 
 // cryptographicSuiteRecommendationValues holds the string value for each constant.
 var cryptographicSuiteRecommendationValues = map[CryptographicSuiteRecommendation]string{
-	CryptographicSuiteRecommendation_RECOMMENDED: "R",
-	CryptographicSuiteRecommendation_LEGACY:      "L",
+	CryptographicSuiteRecommendationRecommended: "R",
+	CryptographicSuiteRecommendationLegacy:      "L",
 }
 
 // CryptographicSuiteRecommendationValues returns all constants in declaration order.
 func CryptographicSuiteRecommendationValues() []CryptographicSuiteRecommendation {
 	return []CryptographicSuiteRecommendation{
-		CryptographicSuiteRecommendation_RECOMMENDED,
-		CryptographicSuiteRecommendation_LEGACY,
+		CryptographicSuiteRecommendationRecommended,
+		CryptographicSuiteRecommendationLegacy,
 	}
 }
 

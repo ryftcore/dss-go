@@ -13,7 +13,7 @@
 // module present simply never constructs an EAAWrapper/EAARevocationTokenWrapper
 // token in the first place. These two methods therefore return nil
 // unconditionally, mirroring "never construct those" rather than reimplementing
-// any EAA logic: they exist only so the two Context_EAA(_REVOCATION) branches
+// any EAA logic: they exist only so the two ContextEAA / ContextEAARevocation branches
 // in basic_building_blocks.go have something to call under both tag states.
 package blocks
 

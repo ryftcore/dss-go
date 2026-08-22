@@ -10,25 +10,25 @@ import "fmt"
 type EvidenceRecordTimestampType string
 
 const (
-	// EvidenceRecordTimestampType_ARCHIVE_TIMESTAMP is the initial archive
+	// EvidenceRecordTimestampTypeArchiveTimestamp is the initial archive
 	// time-stamp.
-	EvidenceRecordTimestampType_ARCHIVE_TIMESTAMP EvidenceRecordTimestampType = "ARCHIVE_TIMESTAMP"
-	// EvidenceRecordTimestampType_TIMESTAMP_RENEWAL_ARCHIVE_TIMESTAMP is
+	EvidenceRecordTimestampTypeArchiveTimestamp EvidenceRecordTimestampType = "ARCHIVE_TIMESTAMP"
+	// EvidenceRecordTimestampTypeTimestampRenewalArchiveTimestamp is
 	// the time-stamp used to renew a previous archive time-stamp within the
 	// same ArchiveTimestampChain.
-	EvidenceRecordTimestampType_TIMESTAMP_RENEWAL_ARCHIVE_TIMESTAMP EvidenceRecordTimestampType = "TIMESTAMP_RENEWAL_ARCHIVE_TIMESTAMP"
-	// EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP is
+	EvidenceRecordTimestampTypeTimestampRenewalArchiveTimestamp EvidenceRecordTimestampType = "TIMESTAMP_RENEWAL_ARCHIVE_TIMESTAMP"
+	// EvidenceRecordTimestampTypeHashTreeRenewalArchiveTimestamp is
 	// the time-stamp used to renew a hash-tree, starting a new
 	// ArchiveTimeStampSequence.
-	EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP EvidenceRecordTimestampType = "HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP"
+	EvidenceRecordTimestampTypeHashTreeRenewalArchiveTimestamp EvidenceRecordTimestampType = "HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP"
 )
 
 // EvidenceRecordTimestampTypeValues returns all constants in declaration order.
 func EvidenceRecordTimestampTypeValues() []EvidenceRecordTimestampType {
 	return []EvidenceRecordTimestampType{
-		EvidenceRecordTimestampType_ARCHIVE_TIMESTAMP,
-		EvidenceRecordTimestampType_TIMESTAMP_RENEWAL_ARCHIVE_TIMESTAMP,
-		EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP,
+		EvidenceRecordTimestampTypeArchiveTimestamp,
+		EvidenceRecordTimestampTypeTimestampRenewalArchiveTimestamp,
+		EvidenceRecordTimestampTypeHashTreeRenewalArchiveTimestamp,
 	}
 }
 

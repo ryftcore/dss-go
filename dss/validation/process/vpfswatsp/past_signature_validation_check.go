@@ -34,7 +34,7 @@ func NewPastSignatureValidationCheck(i18nProvider *i18n.I18nProvider,
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *PastSignatureValidationCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PSV
+	return jaxb.XmlBlockTypePSV
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

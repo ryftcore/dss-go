@@ -20,6 +20,6 @@ func TestSignatureIntactWithIdCheckAgainstJavaOracle(t *testing.T) {
 	assertDirectRow(t, id,
 		func(result *process.Result[*jaxb.XmlCV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlCV] {
 			return NewSignatureIntactWithIdCheck(i18nProviderForTests, result, signature,
-				enumerations.Context_SIGNATURE, rule)
+				enumerations.ContextSignature, rule)
 		})
 }

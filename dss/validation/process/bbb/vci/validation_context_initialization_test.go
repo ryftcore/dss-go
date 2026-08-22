@@ -198,9 +198,9 @@ func TestValidationContextInitializationAgainstJavaOracle(t *testing.T) {
 
 			var produced []*oracleRow
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				result := NewValidationContextInitialization(i18nProvider, signature, context, validationPolicy).Execute()
 				produced = append(produced, toRow(name, signature.Id(), context, "VCI",

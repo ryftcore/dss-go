@@ -35,14 +35,14 @@ func conclusionWith(indication enumerations.Indication, subIndication enumeratio
 }
 
 func passedConclusion() *jaxb.XmlConclusion {
-	return conclusionWith(enumerations.Indication_PASSED, "")
+	return conclusionWith(enumerations.IndicationPassed, "")
 }
 
 type fixedLevelRule struct{ level enumerations.Level }
 
 func (f *fixedLevelRule) Level() enumerations.Level { return f.level }
 
-func failLevel() *fixedLevelRule { return &fixedLevelRule{level: enumerations.Level_FAIL} }
+func failLevel() *fixedLevelRule { return &fixedLevelRule{level: enumerations.LevelFail} }
 
 func newTestCertificate(id string, notBefore, notAfter *time.Time) *diagnostic.CertificateWrapper {
 	cid := diagjaxb.CollapsedString(id)
@@ -97,12 +97,12 @@ func TestRevocationDataAcceptableCheck(t *testing.T) {
 	})
 
 	t.Run("disallowed conclusion fails", func(t *testing.T) {
-		conclusion := conclusionWith(enumerations.Indication_INDETERMINATE, enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE)
+		conclusion := conclusionWith(enumerations.IndicationIndeterminate, enumerations.SubIndicationSigConstraintsFailure)
 		c := NewRevocationDataAcceptableCheck(i18nProvider, newTestResult(), "rev1", conclusion, failLevel())
 		if c.Process() {
 			t.Fatalf("expected Process() to be false for a disallowed conclusion")
 		}
-		if got := c.FailedIndicationForConclusion(); got != enumerations.Indication_INDETERMINATE {
+		if got := c.FailedIndicationForConclusion(); got != enumerations.IndicationIndeterminate {
 			t.Errorf("FailedIndicationForConclusion() = %v, want INDETERMINATE", got)
 		}
 	})
@@ -149,7 +149,7 @@ func TestBestSignatureTimeBeforeCertificateExpirationCheck(t *testing.T) {
 		if c.Process() {
 			t.Fatalf("expected Process() to be false when best-signature-time is after expiration")
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationOutOfBoundsNotRevoked {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want OUT_OF_BOUNDS_NOT_REVOKED", got)
 		}
 	})
@@ -176,10 +176,10 @@ func TestBestSignatureTimeNotBeforeCertificateIssuanceCheck(t *testing.T) {
 		if c.Process() {
 			t.Fatalf("expected Process() to be false when best-signature-time is before issuance")
 		}
-		if got := c.FailedIndicationForConclusion(); got != enumerations.Indication_FAILED {
+		if got := c.FailedIndicationForConclusion(); got != enumerations.IndicationFailed {
 			t.Errorf("FailedIndicationForConclusion() = %v, want FAILED", got)
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_NOT_YET_VALID {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationNotYetValid {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want NOT_YET_VALID", got)
 		}
 	})
@@ -192,11 +192,11 @@ func TestRevocationDateAfterBestSignatureTimeCheck(t *testing.T) {
 	t.Run("revocation after best-signature-time fails (signing cert)", func(t *testing.T) {
 		revDate := bst.Add(time.Hour)
 		rev := newTestCertificateRevocation("rev1", &revDate)
-		c := NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider, newTestResult(), rev, &bst, failLevel(), enumerations.SubContext_SIGNING_CERT)
+		c := NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider, newTestResult(), rev, &bst, failLevel(), enumerations.SubContextSigningCert)
 		if !c.Process() {
 			t.Fatalf("expected Process() to be true (i.e. revocation IS after bst) triggering the failure branch")
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_REVOKED_NO_POE {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationRevokedNoPOE {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want REVOKED_NO_POE for SIGNING_CERT", got)
 		}
 	})
@@ -204,11 +204,11 @@ func TestRevocationDateAfterBestSignatureTimeCheck(t *testing.T) {
 	t.Run("revocation before best-signature-time does not trigger", func(t *testing.T) {
 		revDate := bst.Add(-time.Hour)
 		rev := newTestCertificateRevocation("rev1", &revDate)
-		c := NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider, newTestResult(), rev, &bst, failLevel(), enumerations.SubContext_CA_CERTIFICATE)
+		c := NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider, newTestResult(), rev, &bst, failLevel(), enumerations.SubContextCACertificate)
 		if c.Process() {
 			t.Fatalf("expected Process() to be false when revocation predates best-signature-time")
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_REVOKED_CA_NO_POE {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationRevokedCANoPOE {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want REVOKED_CA_NO_POE for CA_CERTIFICATE", got)
 		}
 	})
@@ -263,7 +263,7 @@ func TestTimestampCoherenceOrderCheck(t *testing.T) {
 	t0 := time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	t.Run("single timestamp always coherent", func(t *testing.T) {
-		ts := []*diagnostic.TimestampWrapper{newTestTimestamp("tst1", &t0, enumerations.TimestampType_SIGNATURE_TIMESTAMP)}
+		ts := []*diagnostic.TimestampWrapper{newTestTimestamp("tst1", &t0, enumerations.TimestampTypeSignatureTimestamp)}
 		c := NewTimestampCoherenceOrderCheck(i18nProvider, newTestResult(), ts, failLevel())
 		if !c.Process() {
 			t.Fatalf("expected Process() to be true for a single timestamp")
@@ -273,8 +273,8 @@ func TestTimestampCoherenceOrderCheck(t *testing.T) {
 	t.Run("different types with coherent time order passes", func(t *testing.T) {
 		t1 := t0.Add(time.Hour)
 		ts := []*diagnostic.TimestampWrapper{
-			newTestTimestamp("cts1", &t0, enumerations.TimestampType_CONTENT_TIMESTAMP),
-			newTestTimestamp("sts1", &t1, enumerations.TimestampType_SIGNATURE_TIMESTAMP),
+			newTestTimestamp("cts1", &t0, enumerations.TimestampTypeContentTimestamp),
+			newTestTimestamp("sts1", &t1, enumerations.TimestampTypeSignatureTimestamp),
 		}
 		c := NewTimestampCoherenceOrderCheck(i18nProvider, newTestResult(), ts, failLevel())
 		if !c.Process() {
@@ -286,14 +286,14 @@ func TestTimestampCoherenceOrderCheck(t *testing.T) {
 		t1 := t0.Add(time.Hour)
 		// A signature timestamp produced before a content timestamp is incoherent.
 		ts := []*diagnostic.TimestampWrapper{
-			newTestTimestamp("sts1", &t0, enumerations.TimestampType_SIGNATURE_TIMESTAMP),
-			newTestTimestamp("cts1", &t1, enumerations.TimestampType_CONTENT_TIMESTAMP),
+			newTestTimestamp("sts1", &t0, enumerations.TimestampTypeSignatureTimestamp),
+			newTestTimestamp("cts1", &t1, enumerations.TimestampTypeContentTimestamp),
 		}
 		c := NewTimestampCoherenceOrderCheck(i18nProvider, newTestResult(), ts, failLevel())
 		if c.Process() {
 			t.Fatalf("expected Process() to be false when timestamp types are produced out of order")
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_TIMESTAMP_ORDER_FAILURE {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationTimestampOrderFailure {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want TIMESTAMP_ORDER_FAILURE", got)
 		}
 	})

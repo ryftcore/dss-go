@@ -125,19 +125,19 @@ func (b *FileNameBuilder) Build() (string, error) {
 
 	if b.signingOperation != "" {
 		switch b.signingOperation {
-		case enumerations.SigningOperation_SIGN:
+		case enumerations.SigningOperationSign:
 			finalName.WriteString(fileNameBuilderSignedSuffix)
-		case enumerations.SigningOperation_COUNTER_SIGN:
+		case enumerations.SigningOperationCounterSign:
 			finalName.WriteString(fileNameBuilderCounterSignedSuffix)
-		case enumerations.SigningOperation_TIMESTAMP:
+		case enumerations.SigningOperationTimestamp:
 			finalName.WriteString(fileNameBuilderTimestampedSuffix)
-		case enumerations.SigningOperation_EXTEND:
+		case enumerations.SigningOperationExtend:
 			finalName.WriteString(fileNameBuilderExtendedSuffix)
-		case enumerations.SigningOperation_ADD_SIG_POLICY_STORE:
+		case enumerations.SigningOperationAddSigPolicyStore:
 			finalName.WriteString(fileNameBuilderSignaturePolicyStoreSuffix)
-		case enumerations.SigningOperation_ADD_EVIDENCE_RECORD:
+		case enumerations.SigningOperationAddEvidenceRecord:
 			finalName.WriteString(fileNameBuilderEvidenceRecordSuffix)
-		case enumerations.SigningOperation_EAA_PRESENTATION:
+		case enumerations.SigningOperationEAAPresentation:
 			finalName.WriteString(fileNameBuilderEAAPresentationSuffix)
 		default:
 			return "", model.NewDSSError(fmt.Sprintf("The following operation '%s' is not supported!", b.signingOperation))
@@ -166,12 +166,12 @@ func (b *FileNameBuilder) Build() (string, error) {
 
 // isContainerMimeType is the private isContainerMimeType(MimeType).
 func (b *FileNameBuilder) isContainerMimeType(mimeType enumerations.MimeType) bool {
-	return mimeType == enumerations.MimeTypeEnum_ASICS || mimeType == enumerations.MimeTypeEnum_ASICE
+	return mimeType == enumerations.MimeTypeEnumASiCS || mimeType == enumerations.MimeTypeEnumASiCE
 }
 
 // isEAA is the private isEAA().
 func (b *FileNameBuilder) isEAA() bool {
-	return enumerations.SigningOperation_EAA_PRESENTATION == b.signingOperation
+	return enumerations.SigningOperationEAAPresentation == b.signingOperation
 }
 
 // fileExtensionString is the private getFileExtensionString(SignatureLevel, SignaturePackaging,
@@ -186,22 +186,22 @@ func (b *FileNameBuilder) fileExtensionString(level enumerations.SignatureLevel,
 			return "", err
 		}
 		switch signatureForm {
-		case enumerations.SignatureForm_XAdES:
-			return enumerations.MimeTypeEnum_XML.Extension(), nil
-		case enumerations.SignatureForm_CAdES:
+		case enumerations.SignatureFormXAdES:
+			return enumerations.MimeTypeEnumXML.Extension(), nil
+		case enumerations.SignatureFormCAdES:
 			if packaging != "" {
-				if enumerations.SignaturePackaging_DETACHED == packaging {
+				if enumerations.SignaturePackagingDetached == packaging {
 					return fileNameBuilderP7SExtension, nil
 				}
 				return fileNameBuilderP7MExtension, nil
 			}
 			// return empty (break)
-		case enumerations.SignatureForm_PAdES:
-			return enumerations.MimeTypeEnum_PDF.Extension(), nil
-		case enumerations.SignatureForm_JAdES:
-			return enumerations.MimeTypeEnum_JSON.Extension(), nil
-		case enumerations.SignatureForm_CBAdES:
-			return enumerations.MimeTypeEnum_COSE.Extension(), nil
+		case enumerations.SignatureFormPAdES:
+			return enumerations.MimeTypeEnumPDF.Extension(), nil
+		case enumerations.SignatureFormJAdES:
+			return enumerations.MimeTypeEnumJSON.Extension(), nil
+		case enumerations.SignatureFormCBAdES:
+			return enumerations.MimeTypeEnumCose.Extension(), nil
 		default:
 			return "", model.NewDSSError(fmt.Sprintf(
 				"Unable to generate a full document name! The SignatureForm %s is not supported.", signatureForm))

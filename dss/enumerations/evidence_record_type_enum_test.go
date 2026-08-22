@@ -7,8 +7,8 @@ func TestEvidenceRecordTypeEnumFromLabel(t *testing.T) {
 		v     EvidenceRecordTypeEnum
 		label string
 	}{
-		{EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD, "XML Evidence Record"},
-		{EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD, "ASN.1 Evidence Record"},
+		{EvidenceRecordTypeEnumXMLEvidenceRecord, "XML Evidence Record"},
+		{EvidenceRecordTypeEnumASN1EvidenceRecord, "ASN.1 Evidence Record"},
 	}
 	if len(EvidenceRecordTypeEnumValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(EvidenceRecordTypeEnumValues()))

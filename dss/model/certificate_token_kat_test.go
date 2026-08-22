@@ -68,7 +68,7 @@ func TestCertificateTokenAccessorsMatchJava(t *testing.T) {
 	if got, want := token.SerialNumber().String(), "51452618447144882269376807931937041156760437373"; got != want {
 		t.Errorf("SerialNumber() = %q, want %q", got, want)
 	}
-	if got, want := token.SignatureAlgorithm(), enumerations.SignatureAlgorithm_RSA_SHA256; got != want {
+	if got, want := token.SignatureAlgorithm(), enumerations.SignatureAlgorithmRSASHA256; got != want {
 		t.Errorf("SignatureAlgorithm() = %q, want %q (from sigAlgOID 1.2.840.113549.1.1.11)", got, want)
 	}
 	if got, want := token.Subject().Canonical(), "cn=john doe,o=acme,c=be"; got != want {
@@ -84,7 +84,7 @@ func TestCertificateTokenAccessorsMatchJava(t *testing.T) {
 		t.Errorf("IsSelfSigned() must be true")
 	}
 	// isSelfSigned() marks the token's signature as VALID, as upstream does.
-	if got, want := token.SignatureValidity(), enumerations.SignatureValidity_VALID; got != want {
+	if got, want := token.SignatureValidity(), enumerations.SignatureValidityValid; got != want {
 		t.Errorf("SignatureValidity() = %q, want %q", got, want)
 	}
 	if !token.IsCA() {

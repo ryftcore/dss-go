@@ -11,7 +11,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
-// ManifestPath_FILE_ENTRY_PATH is the XPath expression to return manifest:file-entry entries
+// ManifestPathFileEntryPath is the XPath expression to return manifest:file-entry entries
 // from the current position.
 //
 // KAT-verified against a Java oracle run over dss-asic-xades 6.5.RC1 + dss-xml-common 6.5.RC1
@@ -22,18 +22,18 @@ import (
 // (fromCurrentPosition, not all) and the oracle both agree on the value below.
 //
 // FILE_ENTRY_PATH.getQueryString() = "./manifest:manifest/manifest:file-entry"
-var ManifestPath_FILE_ENTRY_PATH = common.FromCurrentPosition(ManifestElement_MANIFEST, ManifestElement_FILE_ENTRY)
+var ManifestPathFileEntryPath = common.FromCurrentPosition(ManifestElementManifest, ManifestElementFileEntry)
 
 // ManifestPathGetFullPathAttribute returns "manifest:full-path" with the given
 // manifestNamespace's prefix. Ports the static getFullPathAttribute(DSSNamespace).
 func ManifestPathGetFullPathAttribute(manifestNamespace *common.DSSNamespace) string {
-	return manifestPathAddPrefixIfNeeded(ManifestAttribute_FULL_PATH.AttributeName(), manifestNamespace)
+	return manifestPathAddPrefixIfNeeded(ManifestAttributeFullPath.AttributeName(), manifestNamespace)
 }
 
 // ManifestPathGetMediaTypeAttribute returns "manifest:media-type" with the given
 // manifestNamespace's prefix. Ports the static getMediaTypeAttribute(DSSNamespace).
 func ManifestPathGetMediaTypeAttribute(manifestNamespace *common.DSSNamespace) string {
-	return manifestPathAddPrefixIfNeeded(ManifestAttribute_MEDIA_TYPE.AttributeName(), manifestNamespace)
+	return manifestPathAddPrefixIfNeeded(ManifestAttributeMediaType.AttributeName(), manifestNamespace)
 }
 
 // manifestPathAddPrefixIfNeeded ports the private static addPrefixIfNeeded(String,

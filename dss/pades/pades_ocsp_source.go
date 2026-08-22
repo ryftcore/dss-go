@@ -140,7 +140,7 @@ func (s *PAdESOCSPSource) VRIDictionaryTokens() []spi.RevocationToken[revocation
 // archival CMS attribute. Port of the getADBERevocationValuesBinaries() override.
 //
 // The base OfflineOCSPSourceBase already implements this by filtering on
-// RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL, which is the only origin this class's
+// RevocationOriginAdbeRevocationInfoArchival, which is the only origin this class's
 // constructor ever adds to; this override is the promoted method inherited from
 // spi.OfflineOCSPSourceBase (embedded via cmsOCSPSource), reproducing the Java override
 // unchanged.

@@ -31,15 +31,15 @@ type AbstractSignatureTokenConnection struct{}
 // hash (and, per PSSParameterSpec(digestJavaName, "MGF1", MGF1ParameterSpec(digestJavaName), ...),
 // as its MGF1 hash too) onto their crypto.Hash counterparts.
 var abstractSignatureTokenConnectionPSSHashes = map[enumerations.DigestAlgorithm]crypto.Hash{
-	enumerations.DigestAlgorithm_SHA1:     crypto.SHA1,
-	enumerations.DigestAlgorithm_SHA224:   crypto.SHA224,
-	enumerations.DigestAlgorithm_SHA256:   crypto.SHA256,
-	enumerations.DigestAlgorithm_SHA384:   crypto.SHA384,
-	enumerations.DigestAlgorithm_SHA512:   crypto.SHA512,
-	enumerations.DigestAlgorithm_SHA3_224: crypto.SHA3_224,
-	enumerations.DigestAlgorithm_SHA3_256: crypto.SHA3_256,
-	enumerations.DigestAlgorithm_SHA3_384: crypto.SHA3_384,
-	enumerations.DigestAlgorithm_SHA3_512: crypto.SHA3_512,
+	enumerations.DigestAlgorithmSHA1:    crypto.SHA1,
+	enumerations.DigestAlgorithmSHA224:  crypto.SHA224,
+	enumerations.DigestAlgorithmSHA256:  crypto.SHA256,
+	enumerations.DigestAlgorithmSHA384:  crypto.SHA384,
+	enumerations.DigestAlgorithmSHA512:  crypto.SHA512,
+	enumerations.DigestAlgorithmSHA3224: crypto.SHA3_224,
+	enumerations.DigestAlgorithmSHA3256: crypto.SHA3_256,
+	enumerations.DigestAlgorithmSHA3384: crypto.SHA3_384,
+	enumerations.DigestAlgorithmSHA3512: crypto.SHA3_512,
 }
 
 // Sign implements SignatureTokenConnection. Port of
@@ -117,7 +117,7 @@ func (a *AbstractSignatureTokenConnection) SignDigestWithSignatureAlgorithm(dige
 // signing. Port of the protected ensureDigestUniform(SignatureAlgorithm, Digest).
 func (a *AbstractSignatureTokenConnection) ensureDigestUniform(signatureAlgorithm enumerations.SignatureAlgorithm,
 	digest model.Digest) (model.Digest, error) {
-	if enumerations.EncryptionAlgorithm_RSA == signatureAlgorithm.EncryptionAlgorithm() && !DigestInfoEncoderIsEncoded(digest.Value()) {
+	if enumerations.EncryptionAlgorithmRSA == signatureAlgorithm.EncryptionAlgorithm() && !DigestInfoEncoderIsEncoded(digest.Value()) {
 		encodedDigest, err := DigestInfoEncoderEncode(digest.Algorithm().OID(), digest.Value())
 		if err != nil {
 			return model.Digest{}, err
@@ -135,14 +135,14 @@ func (a *AbstractSignatureTokenConnection) ensureDigestUniform(signatureAlgorith
 //     hashed here with signatureAlgorithm's digest algorithm;
 //   - EdDSA is a pure signature scheme (the "Ed25519"/"Ed448" JCE algorithms hash the whole
 //     message as part of signing, not a digest of it) and a "NONEwith<Encryption>" instance (a
-//     *_RAW signature algorithm, i.e. no digest algorithm) does not hash either, so in both cases
+//     SignatureAlgorithm*Raw algorithm, i.e. no digest algorithm) does not hash either, so in both cases
 //     the message passes through unchanged;
 //   - plain RSA additionally ASN.1 DigestInfo-wraps the hash, replicating what
 //     "<digest>withRSA" builds internally before PKCS#1 v1.5 padding.
 func abstractSignatureTokenConnectionPrepareMessage(signatureAlgorithm enumerations.SignatureAlgorithm, messageBytes []byte) ([]byte, error) {
 	encryptionAlgorithm := signatureAlgorithm.EncryptionAlgorithm()
 	digestAlgorithm := signatureAlgorithm.DigestAlgorithm()
-	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_EDDSA || digestAlgorithm == "" {
+	if encryptionAlgorithm == enumerations.EncryptionAlgorithmEDDSA || digestAlgorithm == "" {
 		return messageBytes, nil
 	}
 
@@ -150,7 +150,7 @@ func abstractSignatureTokenConnectionPrepareMessage(signatureAlgorithm enumerati
 	if err != nil {
 		return nil, err
 	}
-	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_RSA {
+	if encryptionAlgorithm == enumerations.EncryptionAlgorithmRSA {
 		return DigestInfoEncoderEncode(digestAlgorithm.OID(), hashed)
 	}
 	return hashed, nil
@@ -176,7 +176,7 @@ func abstractSignatureTokenConnectionSign(preparedInput []byte, encryptionAlgori
 	}
 	signer := accessEntry.PrivateKey()
 
-	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_RSASSA_PSS {
+	if encryptionAlgorithm == enumerations.EncryptionAlgorithmRSASSAPSS {
 		hash, supported := abstractSignatureTokenConnectionPSSHashes[pssDigestAlgorithm]
 		if !supported {
 			return nil, fmt.Errorf("NoSuchAlgorithmException : %s cannot be used with RSASSA-PSS", pssDigestAlgorithm)
@@ -199,12 +199,12 @@ func abstractSignatureTokenConnectionSign(preparedInput []byte, encryptionAlgori
 	// for pure mode), and the plain-RSA path below must stay raw:
 	// preparedInput is already DigestInfo-wrapped and a named hash would
 	// make crypto/rsa wrap it a second time.
-	if encryptionAlgorithm == enumerations.EncryptionAlgorithm_ECDSA ||
-		encryptionAlgorithm == enumerations.EncryptionAlgorithm_PLAIN_ECDSA {
+	if encryptionAlgorithm == enumerations.EncryptionAlgorithmECDSA ||
+		encryptionAlgorithm == enumerations.EncryptionAlgorithmPlainECDSA {
 		if hash, ok := abstractSignatureTokenConnectionPSSHashes[pssDigestAlgorithm]; ok {
 			return signer.Sign(rand.Reader, preparedInput, hash)
 		}
-		if pssDigestAlgorithm == enumerations.DigestAlgorithm_RIPEMD160 {
+		if pssDigestAlgorithm == enumerations.DigestAlgorithmRIPEMD160 {
 			return signer.Sign(rand.Reader, preparedInput, crypto.RIPEMD160)
 		}
 		return signer.Sign(rand.Reader, preparedInput, nil)

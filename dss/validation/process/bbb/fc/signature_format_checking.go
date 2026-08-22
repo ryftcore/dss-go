@@ -49,8 +49,8 @@ func (c *SignatureFormatChecking) InitChain() {
 	}
 
 	// JAdES
-	if signatureForm, err := c.Token.SignatureFormat().SignatureForm(); err == nil && signatureForm == enumerations.SignatureForm_JAdES {
-		if c.Token.EncryptionAlgorithm() != "" && c.Token.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithm_ECDSA) {
+	if signatureForm, err := c.Token.SignatureFormat().SignatureForm(); err == nil && signatureForm == enumerations.SignatureFormJAdES {
+		if c.Token.EncryptionAlgorithm() != "" && c.Token.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithmECDSA) {
 			item = item.SetNextItem(c.ellipticCurveKeySizeCheck())
 		}
 	}

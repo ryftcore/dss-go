@@ -22,28 +22,28 @@ package enumerations
 type RevocationReason string
 
 const (
-	// RevocationReason_UNSPECIFIED is unspecified.
-	RevocationReason_UNSPECIFIED RevocationReason = "UNSPECIFIED"
-	// RevocationReason_KEY_COMPROMISE is keyCompromise.
-	RevocationReason_KEY_COMPROMISE RevocationReason = "KEY_COMPROMISE"
-	// RevocationReason_CA_COMPROMISE is cACompromise.
-	RevocationReason_CA_COMPROMISE RevocationReason = "CA_COMPROMISE"
-	// RevocationReason_AFFILIATION_CHANGED is affiliationChanged.
-	RevocationReason_AFFILIATION_CHANGED RevocationReason = "AFFILIATION_CHANGED"
-	// RevocationReason_SUPERSEDED is superseded.
-	RevocationReason_SUPERSEDED RevocationReason = "SUPERSEDED"
-	// RevocationReason_CESSATION_OF_OPERATION is cessationOfOperation.
-	RevocationReason_CESSATION_OF_OPERATION RevocationReason = "CESSATION_OF_OPERATION"
-	// RevocationReason_CERTIFICATE_HOLD is certificateHold.
-	RevocationReason_CERTIFICATE_HOLD RevocationReason = "CERTIFICATE_HOLD"
-	// RevocationReason_REMOVE_FROM_CRL is removeFromCRL. Missing in ETSI VR
+	// RevocationReasonUnspecified is unspecified.
+	RevocationReasonUnspecified RevocationReason = "UNSPECIFIED"
+	// RevocationReasonKeyCompromise is keyCompromise.
+	RevocationReasonKeyCompromise RevocationReason = "KEY_COMPROMISE"
+	// RevocationReasonCACompromise is cACompromise.
+	RevocationReasonCACompromise RevocationReason = "CA_COMPROMISE"
+	// RevocationReasonAffiliationChanged is affiliationChanged.
+	RevocationReasonAffiliationChanged RevocationReason = "AFFILIATION_CHANGED"
+	// RevocationReasonSuperseded is superseded.
+	RevocationReasonSuperseded RevocationReason = "SUPERSEDED"
+	// RevocationReasonCessationOfOperation is cessationOfOperation.
+	RevocationReasonCessationOfOperation RevocationReason = "CESSATION_OF_OPERATION"
+	// RevocationReasonCertificateHold is certificateHold.
+	RevocationReasonCertificateHold RevocationReason = "CERTIFICATE_HOLD"
+	// RevocationReasonRemoveFromCRL is removeFromCRL. Missing in ETSI VR
 	// standard.
-	RevocationReason_REMOVE_FROM_CRL RevocationReason = "REMOVE_FROM_CRL"
-	// RevocationReason_PRIVILEGE_WITHDRAWN is privilegeWithdrawn.
-	RevocationReason_PRIVILEGE_WITHDRAWN RevocationReason = "PRIVILEGE_WITHDRAWN"
-	// RevocationReason_AA_COMPROMISE is aACompromise. Missing in ETSI VI
+	RevocationReasonRemoveFromCRL RevocationReason = "REMOVE_FROM_CRL"
+	// RevocationReasonPrivilegeWithdrawn is privilegeWithdrawn.
+	RevocationReasonPrivilegeWithdrawn RevocationReason = "PRIVILEGE_WITHDRAWN"
+	// RevocationReasonAACompromise is aACompromise. Missing in ETSI VI
 	// standard.
-	RevocationReason_AA_COMPROMISE RevocationReason = "AA_COMPROMISE"
+	RevocationReasonAACompromise RevocationReason = "AA_COMPROMISE"
 )
 
 type revocationReasonFields struct {
@@ -54,31 +54,31 @@ type revocationReasonFields struct {
 
 // revocationReasonData holds the (shortName, uri, value) tuple for each constant.
 var revocationReasonData = map[RevocationReason]revocationReasonFields{
-	RevocationReason_UNSPECIFIED:            {"unspecified", "urn:etsi:019102:revocationReason:unspecified", 0},
-	RevocationReason_KEY_COMPROMISE:         {"keyCompromise", "urn:etsi:019102:revocationReason:keyCompromise", 1},
-	RevocationReason_CA_COMPROMISE:          {"cACompromise", "urn:etsi:019102:revocationReason:cACompromise", 2},
-	RevocationReason_AFFILIATION_CHANGED:    {"affiliationChanged", "urn:etsi:019102:revocationReason:affiliationChanged", 3},
-	RevocationReason_SUPERSEDED:             {"superseded", "urn:etsi:019102:revocationReason:superseded", 4},
-	RevocationReason_CESSATION_OF_OPERATION: {"cessationOfOperation", "urn:etsi:019102:revocationReason:cessationOfOperation", 5},
-	RevocationReason_CERTIFICATE_HOLD:       {"certificateHold", "urn:etsi:019102:revocationReason:certificateHold", 6},
-	RevocationReason_REMOVE_FROM_CRL:        {"removeFromCRL", "urn:etsi:019102:revocationReason:removeFromCRL", 8},
-	RevocationReason_PRIVILEGE_WITHDRAWN:    {"privilegeWithdrawn", "urn:etsi:019102:revocationReason:privilegeWithdrawn", 9},
-	RevocationReason_AA_COMPROMISE:          {"aACompromise", "urn:etsi:019102:revocationReason:aACompromise", 10},
+	RevocationReasonUnspecified:          {"unspecified", "urn:etsi:019102:revocationReason:unspecified", 0},
+	RevocationReasonKeyCompromise:        {"keyCompromise", "urn:etsi:019102:revocationReason:keyCompromise", 1},
+	RevocationReasonCACompromise:         {"cACompromise", "urn:etsi:019102:revocationReason:cACompromise", 2},
+	RevocationReasonAffiliationChanged:   {"affiliationChanged", "urn:etsi:019102:revocationReason:affiliationChanged", 3},
+	RevocationReasonSuperseded:           {"superseded", "urn:etsi:019102:revocationReason:superseded", 4},
+	RevocationReasonCessationOfOperation: {"cessationOfOperation", "urn:etsi:019102:revocationReason:cessationOfOperation", 5},
+	RevocationReasonCertificateHold:      {"certificateHold", "urn:etsi:019102:revocationReason:certificateHold", 6},
+	RevocationReasonRemoveFromCRL:        {"removeFromCRL", "urn:etsi:019102:revocationReason:removeFromCRL", 8},
+	RevocationReasonPrivilegeWithdrawn:   {"privilegeWithdrawn", "urn:etsi:019102:revocationReason:privilegeWithdrawn", 9},
+	RevocationReasonAACompromise:         {"aACompromise", "urn:etsi:019102:revocationReason:aACompromise", 10},
 }
 
 // RevocationReasonValues returns all constants in declaration order.
 func RevocationReasonValues() []RevocationReason {
 	return []RevocationReason{
-		RevocationReason_UNSPECIFIED,
-		RevocationReason_KEY_COMPROMISE,
-		RevocationReason_CA_COMPROMISE,
-		RevocationReason_AFFILIATION_CHANGED,
-		RevocationReason_SUPERSEDED,
-		RevocationReason_CESSATION_OF_OPERATION,
-		RevocationReason_CERTIFICATE_HOLD,
-		RevocationReason_REMOVE_FROM_CRL,
-		RevocationReason_PRIVILEGE_WITHDRAWN,
-		RevocationReason_AA_COMPROMISE,
+		RevocationReasonUnspecified,
+		RevocationReasonKeyCompromise,
+		RevocationReasonCACompromise,
+		RevocationReasonAffiliationChanged,
+		RevocationReasonSuperseded,
+		RevocationReasonCessationOfOperation,
+		RevocationReasonCertificateHold,
+		RevocationReasonRemoveFromCRL,
+		RevocationReasonPrivilegeWithdrawn,
+		RevocationReasonAACompromise,
 	}
 }
 

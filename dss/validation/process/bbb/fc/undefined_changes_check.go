@@ -41,10 +41,10 @@ func (c *UndefinedChangesCheck) ErrorMessageTag() i18n.MessageTag {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *UndefinedChangesCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *UndefinedChangesCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

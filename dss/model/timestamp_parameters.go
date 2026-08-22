@@ -23,7 +23,7 @@ var _ SerializableTimestampParameters = (*TimestampParameters)(nil)
 // NewTimestampParameters creates the object with the default digest
 // algorithm (SHA512). Ports the empty constructor.
 func NewTimestampParameters() TimestampParameters {
-	return TimestampParameters{digestAlgorithm: enumerations.DigestAlgorithm_SHA512}
+	return TimestampParameters{digestAlgorithm: enumerations.DigestAlgorithmSHA512}
 }
 
 // NewTimestampParametersWithDigestAlgorithm creates the object with the

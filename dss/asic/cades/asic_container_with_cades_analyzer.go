@@ -156,7 +156,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) getTimestampValidator(timestampDocument
 		manifestFile = a.GetValidatedManifestFile(archiveManifest)
 		if manifestFile != nil {
 			if asic.ASiCUtilsCoversSignature(manifestFile) {
-				archiveTimestampType = enumerations.ArchiveTimestampType_CAdES_DETACHED
+				archiveTimestampType = enumerations.ArchiveTimestampTypeCAdESDetached
 				archiveTimestampTypeSet = true
 			}
 		}
@@ -172,7 +172,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) getTimestampValidator(timestampDocument
 		}
 	}
 
-	timestampValidator := NewASiCWithCAdESTimestampAnalyzerWithType(timestampDocument, enumerations.TimestampType_CONTAINER_TIMESTAMP)
+	timestampValidator := NewASiCWithCAdESTimestampAnalyzerWithType(timestampDocument, enumerations.TimestampTypeContainerTimestamp)
 	timestampValidator.SetTimestampedData(timestampedDocument)
 	timestampValidator.SetManifestFile(manifestFile)
 	if archiveTimestampTypeSet {
@@ -289,7 +289,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	for _, manifestDocument := range a.GetArchiveManifestDocuments() {
 		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
-			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnum_ARCHIVE_MANIFEST)
+			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumArchiveManifest)
 			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
@@ -299,7 +299,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	for _, manifestDocument := range a.GetEvidenceRecordManifestDocuments() {
 		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
-			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnum_EVIDENCE_RECORD)
+			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
 			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
@@ -324,7 +324,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) OriginalDocumentsForSignature(advancedS
 		return []model.DSSDocument{}
 	}
 	retrievedDocs := advancedSignature.DetachedContents()
-	if enumerations.ASiCContainerType_ASiC_S == a.GetContainerType() {
+	if enumerations.ASiCContainerTypeASiCS == a.GetContainerType() {
 		return a.GetSignedDocumentsASiCS(retrievedDocs)
 	}
 	linkedManifest := asic.ASiCManifestParserGetLinkedManifest(a.GetManifestDocuments(), advancedSignature.Filename())

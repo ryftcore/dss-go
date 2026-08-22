@@ -111,7 +111,7 @@ func (t *ComplexTransform) transformObject() (*xmldom.Node, error) {
 // constructor steps it reproduces.
 func (t *ComplexTransform) BuildTransformObject() (*xmldom.Node, error) {
 	document := xmlutils.DomUtilsBuildDOMEmpty()
-	transformsDom := xmlutils.DomUtilsCreateElementNS(document, t.namespace, common.XMLDSigElement_TRANSFORMS)
+	transformsDom := xmlutils.DomUtilsCreateElementNS(document, t.namespace, common.XMLDSigElementTransforms)
 	document.AppendChild(transformsDom)
 	t.self.CreateTransform(document, transformsDom)
 
@@ -124,7 +124,7 @@ func (t *ComplexTransform) BuildTransformObject() (*xmldom.Node, error) {
 
 	transform := xmldom.NewElement(xmldom.Name{
 		Space:  common.XMLDSigNS.Uri(),
-		Local:  common.XMLDSigElement_TRANSFORM.TagName(),
+		Local:  common.XMLDSigElementTransform.TagName(),
 		Prefix: complexTransformDefaultPrefix,
 	})
 	transform.SetAttr(xmldom.Name{
@@ -132,7 +132,7 @@ func (t *ComplexTransform) BuildTransformObject() (*xmldom.Node, error) {
 		Local:  complexTransformDefaultPrefix,
 		Prefix: "xmlns",
 	}, common.XMLDSigNS.Uri())
-	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, t.algorithm)
+	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, t.algorithm)
 
 	// transformsDom.getFirstChild().getChildNodes(): the parameter children of the
 	// ds:Transform the subclass just created, deep-cloned onto the new element.

@@ -43,7 +43,7 @@ func NewTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result 
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *TimestampValidationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_TST
+	return jaxb.XmlBlockTypeTST
 }
 
 // Process performs the check. Port of process().

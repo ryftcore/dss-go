@@ -55,7 +55,7 @@ func (s *PdfVriDictSource) TimestampToken() *validation.TimestampToken {
 		if utils.IsArrayNotEmpty(tsStream) {
 			identifierBuilder := NewVriDictionaryTimestampIdentifierBuilder(tsStream, s.vriDictionaryName)
 			timestampToken, err := validation.NewTimestampTokenWithIdentifierBuilder(s.pdfVriDict.TSStream(),
-				enumerations.TimestampType_VRI_TIMESTAMP, []*validation.TimestampedReference{}, identifierBuilder)
+				enumerations.TimestampTypeVRITimestamp, []*validation.TimestampedReference{}, identifierBuilder)
 			if err != nil {
 				// Upstream logs "An error occurred while extracting 'TS' timestamp from the
 				// corresponding /VRI dictionary : {}" at warn level.

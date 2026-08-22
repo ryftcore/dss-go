@@ -34,7 +34,7 @@ import (
 
 // sampleXMLContent is the fixed payload every generated signature covers. Its own text records
 // what generated it, so a file found on disk explains itself. It has to be well-formed XML (not
-// just any bytes) for SignaturePackaging_ENVELOPED, which embeds the ds:Signature as a child of
+// just any bytes) for SignaturePackagingEnveloped, which embeds the ds:Signature as a child of
 // this document's own root element.
 const sampleXMLContent = `<?xml version="1.0" encoding="UTF-8"?>` +
 	`<SampleDocument xmlns="urn:dss:go:crossgen">` +
@@ -72,16 +72,16 @@ func main() {
 	// "1.2.3.4.5.6.7.8.9" style placeholders play in DSS's own KeyEntityTSPSource unit tests.
 	tspSource.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
 
-	if err := generate(outDir, "xades-b-enveloped.xml", enumerations.SignatureLevel_XAdES_BASELINE_B,
-		enumerations.SignaturePackaging_ENVELOPED, signerEntry, nil); err != nil {
+	if err := generate(outDir, "xades-b-enveloped.xml", enumerations.SignatureLevelXAdESBaselineB,
+		enumerations.SignaturePackagingEnveloped, signerEntry, nil); err != nil {
 		fail(fmt.Errorf("generating XAdES-B enveloped: %w", err))
 	}
-	if err := generate(outDir, "xades-b-enveloping.xml", enumerations.SignatureLevel_XAdES_BASELINE_B,
-		enumerations.SignaturePackaging_ENVELOPING, signerEntry, nil); err != nil {
+	if err := generate(outDir, "xades-b-enveloping.xml", enumerations.SignatureLevelXAdESBaselineB,
+		enumerations.SignaturePackagingEnveloping, signerEntry, nil); err != nil {
 		fail(fmt.Errorf("generating XAdES-B enveloping: %w", err))
 	}
-	if err := generate(outDir, "xades-t-enveloping.xml", enumerations.SignatureLevel_XAdES_BASELINE_T,
-		enumerations.SignaturePackaging_ENVELOPING, signerEntry, tspSource); err != nil {
+	if err := generate(outDir, "xades-t-enveloping.xml", enumerations.SignatureLevelXAdESBaselineT,
+		enumerations.SignaturePackagingEnveloping, signerEntry, tspSource); err != nil {
 		fail(fmt.Errorf("generating XAdES-T enveloping: %w", err))
 	}
 	if err := generateDetached(outDir, signerEntry); err != nil {
@@ -127,7 +127,7 @@ func newParameters(level enumerations.SignatureLevel, packaging enumerations.Sig
 	parameters := xades.NewXAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(packaging)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	return parameters
@@ -143,7 +143,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 		service.TspSource = tspSource
 	}
 
-	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample.xml", enumerations.MimeTypeEnum_XML)
+	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample.xml", enumerations.MimeTypeEnumXML)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)
 	signatureToken, err := reopenSignatureToken()
@@ -162,10 +162,10 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 // signature and the original content it covers (upstream needs the latter as detached content to
 // validate reference/message-digest intactness).
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
-	parameters := newParameters(enumerations.SignatureLevel_XAdES_BASELINE_B, enumerations.SignaturePackaging_DETACHED, signerEntry)
+	parameters := newParameters(enumerations.SignatureLevelXAdESBaselineB, enumerations.SignaturePackagingDetached, signerEntry)
 
 	service := xades.NewXAdESService(validation.NewCommonCertificateVerifier())
-	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample-detached.xml", enumerations.MimeTypeEnum_XML)
+	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample-detached.xml", enumerations.MimeTypeEnumXML)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)
 	signatureToken, err := reopenSignatureToken()

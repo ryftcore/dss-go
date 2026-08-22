@@ -62,16 +62,16 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) ErrorMessageTag() i
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
 	if c.isCryptoFailure() {
-		return enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE
+		return enumerations.SubIndicationCryptoConstraintsFailureNoPOE
 	}
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }
 
 // isCryptoFailure ports the private isCryptoFailure().
@@ -83,8 +83,8 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) isCryptoFailure() b
 		if xmlRAC.Conclusion.SubIndication != nil {
 			subIndication = xmlRAC.Conclusion.SubIndication.SubIndication()
 		}
-		if enumerations.Indication_INDETERMINATE == xmlRAC.Conclusion.Indication.Indication() &&
-			enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndication {
+		if enumerations.IndicationIndeterminate == xmlRAC.Conclusion.Indication.Indication() &&
+			enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndication {
 			return true
 		}
 	}

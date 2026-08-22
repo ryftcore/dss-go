@@ -39,7 +39,7 @@ func NewEAARevocationTokenAcceptanceValidation(i18nProvider *i18n.I18nProvider, 
 	validationPolicy policy.ValidationPolicy) *EAARevocationTokenAcceptanceValidation {
 	c := &EAARevocationTokenAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, eaaRevocationTokenWrapper,
-			currentTime, enumerations.Context_EAA_REVOCATION, aovResult, validationPolicy),
+			currentTime, enumerations.ContextEAARevocation, aovResult, validationPolicy),
 	}
 	c.InitChainBase(c)
 	return c

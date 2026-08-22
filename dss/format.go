@@ -100,30 +100,30 @@ type (
 // Frequently used enumeration values, re-exported so that the common paths need
 // no import of the enumerations package.
 const (
-	DigestSHA256 = enumerations.DigestAlgorithm_SHA256
-	DigestSHA384 = enumerations.DigestAlgorithm_SHA384
-	DigestSHA512 = enumerations.DigestAlgorithm_SHA512
+	DigestSHA256 = enumerations.DigestAlgorithmSHA256
+	DigestSHA384 = enumerations.DigestAlgorithmSHA384
+	DigestSHA512 = enumerations.DigestAlgorithmSHA512
 
-	PackagingEnveloped  = enumerations.SignaturePackaging_ENVELOPED
-	PackagingEnveloping = enumerations.SignaturePackaging_ENVELOPING
-	PackagingDetached   = enumerations.SignaturePackaging_DETACHED
+	PackagingEnveloped  = enumerations.SignaturePackagingEnveloped
+	PackagingEnveloping = enumerations.SignaturePackagingEnveloping
+	PackagingDetached   = enumerations.SignaturePackagingDetached
 
-	ContainerASiCS = enumerations.ASiCContainerType_ASiC_S
-	ContainerASiCE = enumerations.ASiCContainerType_ASiC_E
+	ContainerASiCS = enumerations.ASiCContainerTypeASiCS
+	ContainerASiCE = enumerations.ASiCContainerTypeASiCE
 
-	JWSCompact       = enumerations.JWSSerializationType_COMPACT_SERIALIZATION
-	JWSJSON          = enumerations.JWSSerializationType_JSON_SERIALIZATION
-	JWSFlattenedJSON = enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION
+	JWSCompact       = enumerations.JWSSerializationTypeCompactSerialization
+	JWSJSON          = enumerations.JWSSerializationTypeJSONSerialization
+	JWSFlattenedJSON = enumerations.JWSSerializationTypeFlattenedJSONSerialization
 
-	ValidationBasicSignatures = enumerations.ValidationLevel_BASIC_SIGNATURES
-	ValidationTimestamps      = enumerations.ValidationLevel_TIMESTAMPS
-	ValidationLongTermData    = enumerations.ValidationLevel_LONG_TERM_DATA
-	ValidationArchivalData    = enumerations.ValidationLevel_ARCHIVAL_DATA
+	ValidationBasicSignatures = enumerations.ValidationLevelBasicSignatures
+	ValidationTimestamps      = enumerations.ValidationLevelTimestamps
+	ValidationLongTermData    = enumerations.ValidationLevelLongTermData
+	ValidationArchivalData    = enumerations.ValidationLevelArchivalData
 
-	IndicationTotalPassed      = enumerations.Indication_TOTAL_PASSED
-	IndicationIndeterminate    = enumerations.Indication_INDETERMINATE
-	IndicationTotalFailed      = enumerations.Indication_TOTAL_FAILED
-	IndicationNoSignatureFound = enumerations.Indication_NO_SIGNATURE_FOUND
+	IndicationTotalPassed      = enumerations.IndicationTotalPassed
+	IndicationIndeterminate    = enumerations.IndicationIndeterminate
+	IndicationTotalFailed      = enumerations.IndicationTotalFailed
+	IndicationNoSignatureFound = enumerations.IndicationNoSignatureFound
 )
 
 // Errors the facade returns in addition to whatever the underlying services
@@ -232,40 +232,40 @@ func (l Level) NeedsTimestamp() bool { return l != LevelB }
 // the ASiC services expect.
 var baselineLevels = map[Format]map[Level]SignatureLevel{
 	FormatCAdES: {
-		LevelB:   enumerations.SignatureLevel_CAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_CAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_CAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_CAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelCAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelCAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelCAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelCAdESBaselineLTA,
 	},
 	FormatXAdES: {
-		LevelB:   enumerations.SignatureLevel_XAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_XAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_XAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_XAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelXAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelXAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelXAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelXAdESBaselineLTA,
 	},
 	FormatPAdES: {
-		LevelB:   enumerations.SignatureLevel_PAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_PAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_PAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_PAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelPAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelPAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelPAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelPAdESBaselineLTA,
 	},
 	FormatJAdES: {
-		LevelB:   enumerations.SignatureLevel_JAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_JAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_JAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_JAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelJAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelJAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelJAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelJAdESBaselineLTA,
 	},
 	FormatASiCWithCAdES: {
-		LevelB:   enumerations.SignatureLevel_CAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_CAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_CAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_CAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelCAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelCAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelCAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelCAdESBaselineLTA,
 	},
 	FormatASiCWithXAdES: {
-		LevelB:   enumerations.SignatureLevel_XAdES_BASELINE_B,
-		LevelT:   enumerations.SignatureLevel_XAdES_BASELINE_T,
-		LevelLT:  enumerations.SignatureLevel_XAdES_BASELINE_LT,
-		LevelLTA: enumerations.SignatureLevel_XAdES_BASELINE_LTA,
+		LevelB:   enumerations.SignatureLevelXAdESBaselineB,
+		LevelT:   enumerations.SignatureLevelXAdESBaselineT,
+		LevelLT:  enumerations.SignatureLevelXAdESBaselineLT,
+		LevelLTA: enumerations.SignatureLevelXAdESBaselineLTA,
 	},
 }
 

@@ -10,17 +10,17 @@ package enumerations
 type SigDMechanism string
 
 const (
-	// SigDMechanism_HTTP_HEADERS is 5.2.8.2 Mechanism HttpHeaders.
-	SigDMechanism_HTTP_HEADERS SigDMechanism = "HTTP_HEADERS"
-	// SigDMechanism_OBJECT_ID_BY_URI is 5.2.8.3.2 Mechanism ObjectIdByURI.
-	SigDMechanism_OBJECT_ID_BY_URI SigDMechanism = "OBJECT_ID_BY_URI"
-	// SigDMechanism_OBJECT_ID_BY_URI_HASH is 5.2.8.3.3 Mechanism
+	// SigDMechanismHTTPHeaders is 5.2.8.2 Mechanism HttpHeaders.
+	SigDMechanismHTTPHeaders SigDMechanism = "HTTP_HEADERS"
+	// SigDMechanismObjectIDByURI is 5.2.8.3.2 Mechanism ObjectIdByURI.
+	SigDMechanismObjectIDByURI SigDMechanism = "OBJECT_ID_BY_URI"
+	// SigDMechanismObjectIDByURIHash is 5.2.8.3.3 Mechanism
 	// ObjectIdByURIHash. NOTE: the default signature creation mechanism
 	// used by DSS.
-	SigDMechanism_OBJECT_ID_BY_URI_HASH SigDMechanism = "OBJECT_ID_BY_URI_HASH"
-	// SigDMechanism_NO_SIG_D creates a simple DETACHED signature with
+	SigDMechanismObjectIDByURIHash SigDMechanism = "OBJECT_ID_BY_URI_HASH"
+	// SigDMechanismNoSigD creates a simple DETACHED signature with
 	// omitted payload (without SigD element).
-	SigDMechanism_NO_SIG_D SigDMechanism = "NO_SIG_D"
+	SigDMechanismNoSigD SigDMechanism = "NO_SIG_D"
 )
 
 type sigDMechanismFields struct {
@@ -39,28 +39,28 @@ type sigDMechanismFields struct {
 // legitimate cbadesUri="" is intentionally still matched — see
 // SigDMechanismForCBAdESUri).
 var sigDMechanismData = map[SigDMechanism]sigDMechanismFields{
-	SigDMechanism_HTTP_HEADERS:          {"http://uri.etsi.org/19182/HttpHeaders", ""},
-	SigDMechanism_OBJECT_ID_BY_URI:      {"http://uri.etsi.org/19182/ObjectIdByURI", "http://uri.etsi.org/19152/ObjectIdByURI"},
-	SigDMechanism_OBJECT_ID_BY_URI_HASH: {"http://uri.etsi.org/19182/ObjectIdByURIHash", "http://uri.etsi.org/19152/ObjectIdByURIHash"},
-	SigDMechanism_NO_SIG_D:              {"", ""},
+	SigDMechanismHTTPHeaders:       {"http://uri.etsi.org/19182/HttpHeaders", ""},
+	SigDMechanismObjectIDByURI:     {"http://uri.etsi.org/19182/ObjectIdByURI", "http://uri.etsi.org/19152/ObjectIdByURI"},
+	SigDMechanismObjectIDByURIHash: {"http://uri.etsi.org/19182/ObjectIdByURIHash", "http://uri.etsi.org/19152/ObjectIdByURIHash"},
+	SigDMechanismNoSigD:            {"", ""},
 }
 
 // sigDMechanismHasCBAdESURI records, per constant, whether Java's cbadesUri
 // constructor argument was non-null (HTTP_HEADERS passed null explicitly).
 var sigDMechanismHasCBAdESURI = map[SigDMechanism]bool{
-	SigDMechanism_HTTP_HEADERS:          false,
-	SigDMechanism_OBJECT_ID_BY_URI:      true,
-	SigDMechanism_OBJECT_ID_BY_URI_HASH: true,
-	SigDMechanism_NO_SIG_D:              true,
+	SigDMechanismHTTPHeaders:       false,
+	SigDMechanismObjectIDByURI:     true,
+	SigDMechanismObjectIDByURIHash: true,
+	SigDMechanismNoSigD:            true,
 }
 
 // SigDMechanismValues returns all constants in declaration order.
 func SigDMechanismValues() []SigDMechanism {
 	return []SigDMechanism{
-		SigDMechanism_HTTP_HEADERS,
-		SigDMechanism_OBJECT_ID_BY_URI,
-		SigDMechanism_OBJECT_ID_BY_URI_HASH,
-		SigDMechanism_NO_SIG_D,
+		SigDMechanismHTTPHeaders,
+		SigDMechanismObjectIDByURI,
+		SigDMechanismObjectIDByURIHash,
+		SigDMechanismNoSigD,
 	}
 }
 

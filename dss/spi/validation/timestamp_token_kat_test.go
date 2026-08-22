@@ -78,12 +78,12 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 	oracle := timestampTokenKATOracle(t)
 	binaries := timestampTokenKATFile(t, "timestamp-token.tst")
 
-	token, err := NewTimestampToken(binaries, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token, err := NewTimestampToken(binaries, enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
 
-	if got := token.TimeStampType(); got != enumerations.TimestampType_SIGNATURE_TIMESTAMP {
+	if got := token.TimeStampType(); got != enumerations.TimestampTypeSignatureTimestamp {
 		t.Errorf("TimeStampType() = %s, want SIGNATURE_TIMESTAMP", got)
 	}
 	if got, want := token.GenerationTime().UnixMilli(), oracle["timestamp-token.tst.genTime"]; strconv.FormatInt(got, 10) != want {
@@ -92,7 +92,7 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 	if !token.CreationDate().Equal(token.GenerationTime()) {
 		t.Errorf("CreationDate() = %s, want the generation time %s", token.CreationDate(), token.GenerationTime())
 	}
-	if got := token.DigestAlgorithm(); got != enumerations.DigestAlgorithm_SHA256 {
+	if got := token.DigestAlgorithm(); got != enumerations.DigestAlgorithmSHA256 {
 		t.Errorf("DigestAlgorithm() = %s, want SHA256", got)
 	}
 	messageImprint := token.MessageImprint()
@@ -100,7 +100,7 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 		oracle["timestamp-token.tst.messageImprintDigest"]; got != want {
 		t.Errorf("MessageImprint().Value() = %s, want %s", got, want)
 	}
-	if got := messageImprint.Algorithm(); got != enumerations.DigestAlgorithm_SHA256 {
+	if got := messageImprint.Algorithm(); got != enumerations.DigestAlgorithmSHA256 {
 		t.Errorf("MessageImprint().Algorithm() = %s, want SHA256", got)
 	}
 	if got := token.TSTInfoTsa(); got != nil {
@@ -131,7 +131,7 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 	if got, want := hex.EncodeToString(sha256Sum(encoded)), oracle["timestamp-token.tst.sha256"]; got != want {
 		t.Errorf("Encoded() digest = %s, want %s", got, want)
 	}
-	digest, err := token.Digest(enumerations.DigestAlgorithm_SHA256)
+	digest, err := token.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("Digest() failed: %v", err)
 	}
@@ -141,7 +141,7 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 
 	// The identifier is the "T-" prefixed digest of the DER encoding, which makes it stable
 	// across re-parsings of the same bytes.
-	twin, err := NewTimestampToken(binaries, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	twin, err := NewTimestampToken(binaries, enumerations.TimestampTypeArchiveTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -159,7 +159,7 @@ func TestTimestampTokenKAT_Fields(t *testing.T) {
 // signature over the signed attributes.
 func TestTimestampTokenKAT_SignedBy(t *testing.T) {
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -171,10 +171,10 @@ func TestTimestampTokenKAT_SignedBy(t *testing.T) {
 	if !token.IsSignatureIntact() {
 		t.Error("IsSignatureIntact() = false, want true")
 	}
-	if got := token.SignatureValidity(); got != enumerations.SignatureValidity_VALID {
+	if got := token.SignatureValidity(); got != enumerations.SignatureValidityValid {
 		t.Errorf("SignatureValidity() = %s, want VALID", got)
 	}
-	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA512 {
+	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA512 {
 		t.Errorf("SignatureAlgorithm() = %s, want RSA_SHA512", got)
 	}
 	if got := token.IssuerX500Principal(); got == nil || !strings.Contains(got.String(), "Test TSA") {
@@ -187,14 +187,14 @@ func TestTimestampTokenKAT_SignedBy(t *testing.T) {
 
 	// The CA certificate is not the signer: its issuer and serial do not match the SID.
 	fresh, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
 	if fresh.IsSignedByToken(timestampTokenKATCertificate(t, "ca.crt")) {
 		t.Error("IsSignedByToken(ca) = true, want false")
 	}
-	if got := fresh.SignatureValidity(); got != enumerations.SignatureValidity_NOT_EVALUATED {
+	if got := fresh.SignatureValidity(); got != enumerations.SignatureValidityNotEvaluated {
 		t.Errorf("SignatureValidity() = %s, want NOT_EVALUATED for a certificate the SID rejects", got)
 	}
 
@@ -206,7 +206,7 @@ func TestTimestampTokenKAT_SignedBy(t *testing.T) {
 		t.Fatal("plain.crt does not share the TSA public key; the fixture lost its purpose")
 	}
 	again, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -220,7 +220,7 @@ func TestTimestampTokenKAT_SignedBy(t *testing.T) {
 func TestTimestampTokenKAT_MatchData(t *testing.T) {
 	content := timestampTokenKATFile(t, "content.bin")
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -251,12 +251,12 @@ func TestTimestampTokenKAT_MatchData(t *testing.T) {
 
 	// So does a DSSMessageDigest carrying the same algorithm and value.
 	if !token.MatchDataMessageDigest(model.NewDSSMessageDigestWithValue(
-		enumerations.DigestAlgorithm_SHA256, expected)) {
+		enumerations.DigestAlgorithmSHA256, expected)) {
 		t.Error("MatchDataMessageDigest(SHA256) = false, want true")
 	}
 	// A message digest computed with another algorithm never matches.
 	if token.MatchDataMessageDigest(model.NewDSSMessageDigestWithValue(
-		enumerations.DigestAlgorithm_SHA512, expected)) {
+		enumerations.DigestAlgorithmSHA512, expected)) {
 		t.Error("MatchDataMessageDigest(SHA512) = true, want false: the imprint is a SHA-256 one")
 	}
 	// Neither does an empty one.
@@ -288,12 +288,12 @@ func TestTimestampTokenKAT_MatchData(t *testing.T) {
 func TestTimestampTokenKAT_Sha512Fixture(t *testing.T) {
 	oracle := timestampTokenKATOracle(t)
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token-sha512.tst"),
-		enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+		enumerations.TimestampTypeArchiveTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
 
-	if got := token.DigestAlgorithm(); got != enumerations.DigestAlgorithm_SHA512 {
+	if got := token.DigestAlgorithm(); got != enumerations.DigestAlgorithmSHA512 {
 		t.Errorf("DigestAlgorithm() = %s, want SHA512", got)
 	}
 	if got, want := hex.EncodeToString(token.MessageImprint().Value()),
@@ -306,7 +306,7 @@ func TestTimestampTokenKAT_Sha512Fixture(t *testing.T) {
 	if !token.IsSignedByToken(timestampTokenKATCertificate(t, "tsa.crt")) {
 		t.Fatalf("IsSignedByToken(tsa) = false, want true (reason: %s)", token.InvalidityReason())
 	}
-	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA256 {
+	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA256 {
 		t.Errorf("SignatureAlgorithm() = %s, want RSA_SHA256", got)
 	}
 	if !token.MatchData(sha512Sum(timestampTokenKATFile(t, "content.bin"))) {
@@ -335,14 +335,14 @@ func TestTimestampTokenKAT_TamperedContentInfo(t *testing.T) {
 	tampered := append([]byte{}, binaries...)
 	tampered[index] ^= 0x01
 
-	token, err := NewTimestampToken(tampered, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token, err := NewTimestampToken(tampered, enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
 	if token.IsSignedByToken(timestampTokenKATCertificate(t, "tsa.crt")) {
 		t.Error("IsSignedByToken(tsa) = true for a tampered token, want false")
 	}
-	if got := token.SignatureValidity(); got != enumerations.SignatureValidity_INVALID {
+	if got := token.SignatureValidity(); got != enumerations.SignatureValidityInvalid {
 		t.Errorf("SignatureValidity() = %s, want INVALID", got)
 	}
 	if got := token.InvalidityReason(); !strings.Contains(got, "CMSSignerDigestMismatchException") {
@@ -354,7 +354,7 @@ func TestTimestampTokenKAT_TamperedContentInfo(t *testing.T) {
 // generation time and the two verdicts.
 func TestTimestampTokenKAT_ToString(t *testing.T) {
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -383,7 +383,7 @@ func TestTimestampTokenKAT_ToString(t *testing.T) {
 // TestTimestampTokenKAT_Rejected covers the two structural checks BouncyCastle's TimeStampToken
 // constructor performs and this port performs in its place.
 func TestTimestampTokenKAT_Rejected(t *testing.T) {
-	if _, err := NewTimestampToken([]byte{0x30, 0x00}, enumerations.TimestampType_SIGNATURE_TIMESTAMP); err == nil {
+	if _, err := NewTimestampToken([]byte{0x30, 0x00}, enumerations.TimestampTypeSignatureTimestamp); err == nil {
 		t.Error("NewTimestampToken() accepted a document that is not a CMS")
 	}
 	// A CMS whose eContentType is not id-ct-TSTInfo is not a time-stamp.
@@ -397,7 +397,7 @@ func TestTimestampTokenKAT_Rejected(t *testing.T) {
 		t.Fatal("the eContentType was not found in the fixture")
 	}
 	notATimestamp[index+12] = 0x05
-	if _, err := NewTimestampToken(notATimestamp, enumerations.TimestampType_SIGNATURE_TIMESTAMP); err == nil {
+	if _, err := NewTimestampToken(notATimestamp, enumerations.TimestampTypeSignatureTimestamp); err == nil {
 		t.Error("NewTimestampToken() accepted a CMS that does not encapsulate a TSTInfo")
 	}
 }
@@ -406,7 +406,7 @@ func TestTimestampTokenKAT_Rejected(t *testing.T) {
 // raises when the message imprint is read before any matchData call.
 func TestTimestampTokenIsMessageImprintDataIntactPanics(t *testing.T) {
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -424,7 +424,7 @@ func TestTimestampTokenIsMessageImprintDataIntactPanics(t *testing.T) {
 // two PublicKey-based overloads.
 func TestTimestampTokenIsSignedByPublicKeyPanics(t *testing.T) {
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -448,8 +448,8 @@ func TestTimestampTokenIsSignedByPublicKeyPanics(t *testing.T) {
 // TestTimestampTokenSetters covers the plain state the validation layers set on a token.
 func TestTimestampTokenSetters(t *testing.T) {
 	token, err := NewTimestampTokenWithReferences(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_ARCHIVE_TIMESTAMP,
-		[]*TimestampedReference{NewTimestampedReference("id", enumerations.TimestampedObjectType_SIGNATURE)})
+		enumerations.TimestampTypeArchiveTimestamp,
+		[]*TimestampedReference{NewTimestampedReference("id", enumerations.TimestampedObjectTypeSignature)})
 	if err != nil {
 		t.Fatalf("NewTimestampTokenWithReferences() failed: %v", err)
 	}
@@ -461,8 +461,8 @@ func TestTimestampTokenSetters(t *testing.T) {
 	if got := token.Filename(); got != "timestamp.tst" {
 		t.Errorf("Filename() = %q, want timestamp.tst", got)
 	}
-	token.SetArchiveTimestampType(enumerations.ArchiveTimestampType_CAdES_V3)
-	if got := token.ArchiveTimestampType(); got != enumerations.ArchiveTimestampType_CAdES_V3 {
+	token.SetArchiveTimestampType(enumerations.ArchiveTimestampTypeCAdESV3)
+	if got := token.ArchiveTimestampType(); got != enumerations.ArchiveTimestampTypeCAdESV3 {
 		t.Errorf("ArchiveTimestampType() = %s, want CAdES_V3", got)
 	}
 	token.SetCanonicalizationMethod("http://www.w3.org/2001/10/xml-exc-c14n#")
@@ -480,11 +480,11 @@ func TestTimestampTokenSetters(t *testing.T) {
 		t.Error("ManifestFile() did not return the manifest that was set")
 	}
 	status := NewArchiveTimestampHashIndexStatus()
-	status.SetVersion(enumerations.ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3)
+	status.SetVersion(enumerations.ArchiveTimestampHashIndexVersionATSHashIndexV3)
 	status.AddErrorMessage("boom")
 	token.SetAtsHashIndexStatus(status)
 	if got := token.AtsHashIndexStatus(); got == nil ||
-		got.Version() != enumerations.ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3 ||
+		got.Version() != enumerations.ArchiveTimestampHashIndexVersionATSHashIndexV3 ||
 		len(got.ErrorMessages()) != 1 {
 		t.Errorf("AtsHashIndexStatus() = %v, want the status that was set", got)
 	}
@@ -497,7 +497,7 @@ func TestTimestampTokenSetters(t *testing.T) {
 // orphan reference never invalidates the time-stamp, any other broken one does.
 func TestTimestampTokenAreReferenceValidationsValid(t *testing.T) {
 	token, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token.tst"),
-		enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+		enumerations.TimestampTypeArchiveTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -506,7 +506,7 @@ func TestTimestampTokenAreReferenceValidationsValid(t *testing.T) {
 	}
 
 	intact := model.NewReferenceValidation()
-	intact.SetType(enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	intact.SetType(enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	intact.SetFound(true)
 	intact.SetIntact(true)
 	token.SetReferenceValidations([]*model.ReferenceValidation{intact})
@@ -515,14 +515,14 @@ func TestTimestampTokenAreReferenceValidationsValid(t *testing.T) {
 	}
 
 	orphan := model.NewReferenceValidation()
-	orphan.SetType(enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE)
+	orphan.SetType(enumerations.DigestMatcherTypeEvidenceRecordOrphanReference)
 	token.SetReferenceValidations([]*model.ReferenceValidation{intact, orphan})
 	if !token.AreReferenceValidationsValid() {
 		t.Error("AreReferenceValidationsValid() = false for an orphan reference, want true")
 	}
 
 	broken := model.NewReferenceValidation()
-	broken.SetType(enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	broken.SetType(enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	broken.SetFound(true)
 	token.SetReferenceValidations([]*model.ReferenceValidation{intact, broken})
 	if token.AreReferenceValidationsValid() {

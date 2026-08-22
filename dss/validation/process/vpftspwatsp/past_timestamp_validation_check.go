@@ -40,7 +40,7 @@ func NewPastTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, res
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *PastTimestampValidationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_TST_PSV
+	return jaxb.XmlBlockTypeTSTPSV
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().

@@ -13,7 +13,7 @@ func NewXAdES122Path() *XAdES122Path {
 
 // Namespace implements XAdESPath. Ports getNamespace().
 func (p *XAdES122Path) Namespace() *common.DSSNamespace {
-	return XAdESNamespace_XADES_122
+	return XAdESNamespaceXAdES122
 }
 
 // SignedPropertiesUri implements XAdESPath. Ports getSignedPropertiesUri().
@@ -28,32 +28,32 @@ func (p *XAdES122Path) CounterSignatureUri() string {
 
 // QualifyingPropertiesPath implements XAdESPath. Ports getQualifyingPropertiesPath().
 func (p *XAdES122Path) QualifyingPropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties)
 }
 
 // SignedPropertiesPath implements XAdESPath. Ports getSignedPropertiesPath().
 func (p *XAdES122Path) SignedPropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties)
 }
 
 // SignedSignaturePropertiesPath implements XAdESPath. Ports getSignedSignaturePropertiesPath().
 func (p *XAdES122Path) SignedSignaturePropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties)
 }
 
 // SigningTimePath implements XAdESPath. Ports getSigningTimePath().
 func (p *XAdES122Path) SigningTimePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNING_TIME)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSigningTime)
 }
 
 // SigningCertificatePath implements XAdESPath. Ports getSigningCertificatePath().
 func (p *XAdES122Path) SigningCertificatePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNING_CERTIFICATE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSigningCertificate)
 }
 
 // SigningCertificateChildren implements XAdESPath. Ports getSigningCertificateChildren().
 func (p *XAdES122Path) SigningCertificateChildren() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNING_CERTIFICATE, XAdES122Element_CERT)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSigningCertificate, XAdES122ElementCert)
 }
 
 // SigningCertificateV2Path implements XAdESPath. Ports getSigningCertificateV2Path().
@@ -68,7 +68,7 @@ func (p *XAdES122Path) SigningCertificateV2Children() common.XPathQuery {
 
 // SignatureProductionPlacePath implements XAdESPath. Ports getSignatureProductionPlacePath().
 func (p *XAdES122Path) SignatureProductionPlacePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNATURE_PRODUCTION_PLACE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSignatureProductionPlace)
 }
 
 // SignatureProductionPlaceV2Path implements XAdESPath. Ports getSignatureProductionPlaceV2Path().
@@ -78,17 +78,17 @@ func (p *XAdES122Path) SignatureProductionPlaceV2Path() common.XPathQuery {
 
 // SignaturePolicyIdentifierPath implements XAdESPath. Ports getSignaturePolicyIdentifierPath().
 func (p *XAdES122Path) SignaturePolicyIdentifierPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNATURE_POLICY_IDENTIFIER)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSignaturePolicyIdentifier)
 }
 
 // SignerRolePath implements XAdESPath. Ports getSignerRolePath().
 func (p *XAdES122Path) SignerRolePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNER_ROLE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSignerRole)
 }
 
 // ClaimedRolePath implements XAdESPath. Ports getClaimedRolePath().
 func (p *XAdES122Path) ClaimedRolePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNER_ROLE, XAdES122Element_CLAIMED_ROLES, XAdES122Element_CLAIMED_ROLE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSignerRole, XAdES122ElementClaimedRoles, XAdES122ElementClaimedRole)
 }
 
 // SignedAssertionPath implements XAdESPath. Ports getSignedAssertionPath().
@@ -108,7 +108,7 @@ func (p *XAdES122Path) ClaimedRoleV2Path() common.XPathQuery {
 
 // CertifiedRolePath implements XAdESPath. Ports getCertifiedRolePath().
 func (p *XAdES122Path) CertifiedRolePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNER_ROLE, XAdES122Element_CERTIFIED_ROLES, XAdES122Element_CERTIFIED_ROLE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedSignatureProperties, XAdES122ElementSignerRole, XAdES122ElementCertifiedRoles, XAdES122ElementCertifiedRole)
 }
 
 // CertifiedRoleV2Path implements XAdESPath. Ports getCertifiedRoleV2Path().
@@ -118,72 +118,72 @@ func (p *XAdES122Path) CertifiedRoleV2Path() common.XPathQuery {
 
 // SignedDataObjectPropertiesPath implements XAdESPath. Ports getSignedDataObjectPropertiesPath().
 func (p *XAdES122Path) SignedDataObjectPropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties)
 }
 
 // AllDataObjectsTimestampPath implements XAdESPath. Ports getAllDataObjectsTimestampPath().
 func (p *XAdES122Path) AllDataObjectsTimestampPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_ALL_DATA_OBJECTS_TIMESTAMP)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementAllDataObjectsTimestamp)
 }
 
 // IndividualDataObjectsTimestampPath implements XAdESPath. Ports getIndividualDataObjectsTimestampPath().
 func (p *XAdES122Path) IndividualDataObjectsTimestampPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementIndividualDataObjectsTimestamp)
 }
 
 // DataObjectFormat implements XAdESPath. Ports getDataObjectFormat().
 func (p *XAdES122Path) DataObjectFormat() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_DATA_OBJECT_FORMAT)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementDataObjectFormat)
 }
 
 // DataObjectFormatMimeType implements XAdESPath. Ports getDataObjectFormatMimeType().
 func (p *XAdES122Path) DataObjectFormatMimeType() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_DATA_OBJECT_FORMAT, XAdES122Element_MIME_TYPE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementDataObjectFormat, XAdES122ElementMIMEType)
 }
 
 // DataObjectFormatObjectIdentifier implements XAdESPath. Ports getDataObjectFormatObjectIdentifier().
 func (p *XAdES122Path) DataObjectFormatObjectIdentifier() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_DATA_OBJECT_FORMAT, XAdES122Element_OBJECT_IDENTIFIER)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementDataObjectFormat, XAdES122ElementObjectIdentifier)
 }
 
 // CommitmentTypeIndicationPath implements XAdESPath. Ports getCommitmentTypeIndicationPath().
 func (p *XAdES122Path) CommitmentTypeIndicationPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_SIGNED_PROPERTIES, XAdES122Element_SIGNED_DATA_OBJECT_PROPERTIES, XAdES122Element_COMMITMENT_TYPE_INDICATION)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementSignedProperties, XAdES122ElementSignedDataObjectProperties, XAdES122ElementCommitmentTypeIndication)
 }
 
 // UnsignedPropertiesPath implements XAdESPath. Ports getUnsignedPropertiesPath().
 func (p *XAdES122Path) UnsignedPropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties)
 }
 
 // UnsignedSignaturePropertiesPath implements XAdESPath. Ports getUnsignedSignaturePropertiesPath().
 func (p *XAdES122Path) UnsignedSignaturePropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties)
 }
 
 // CounterSignaturePath implements XAdESPath. Ports getCounterSignaturePath().
 func (p *XAdES122Path) CounterSignaturePath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_COUNTER_SIGNATURE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCounterSignature)
 }
 
 // AttributeRevocationRefsPath implements XAdESPath. Ports getAttributeRevocationRefsPath().
 func (p *XAdES122Path) AttributeRevocationRefsPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_ATTRIBUTE_REVOCATION_REFS)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementAttributeRevocationRefs)
 }
 
 // CompleteRevocationRefsPath implements XAdESPath. Ports getCompleteRevocationRefsPath().
 func (p *XAdES122Path) CompleteRevocationRefsPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_COMPLETE_REVOCATION_REFS)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCompleteRevocationRefs)
 }
 
 // CompleteCertificateRefsPath implements XAdESPath. Ports getCompleteCertificateRefsPath().
 func (p *XAdES122Path) CompleteCertificateRefsPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_COMPLETE_CERTIFICATE_REFS)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCompleteCertificateRefs)
 }
 
 // CompleteCertificateRefsCertPath implements XAdESPath. Ports getCompleteCertificateRefsCertPath().
 func (p *XAdES122Path) CompleteCertificateRefsCertPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_COMPLETE_CERTIFICATE_REFS, XAdES122Element_CERT_REFS, XAdES122Element_CERT)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCompleteCertificateRefs, XAdES122ElementCertRefs, XAdES122ElementCert)
 }
 
 // CompleteCertificateRefsV2Path implements XAdESPath. Ports getCompleteCertificateRefsV2Path().
@@ -198,12 +198,12 @@ func (p *XAdES122Path) CompleteCertificateRefsV2CertPath() common.XPathQuery {
 
 // AttributeCertificateRefsPath implements XAdESPath. Ports getAttributeCertificateRefsPath().
 func (p *XAdES122Path) AttributeCertificateRefsPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_ATTRIBUTE_CERTIFICATE_REFS)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementAttributeCertificateRefs)
 }
 
 // AttributeCertificateRefsCertPath implements XAdESPath. Ports getAttributeCertificateRefsCertPath().
 func (p *XAdES122Path) AttributeCertificateRefsCertPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_ATTRIBUTE_CERTIFICATE_REFS, XAdES122Element_CERT_REFS, XAdES122Element_CERT)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementAttributeCertificateRefs, XAdES122ElementCertRefs, XAdES122ElementCert)
 }
 
 // AttributeCertificateRefsV2Path implements XAdESPath. Ports getAttributeCertificateRefsV2Path().
@@ -218,12 +218,12 @@ func (p *XAdES122Path) AttributeCertificateRefsV2CertPath() common.XPathQuery {
 
 // CertificateValuesPath implements XAdESPath. Ports getCertificateValuesPath().
 func (p *XAdES122Path) CertificateValuesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_CERTIFICATE_VALUES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCertificateValues)
 }
 
 // RevocationValuesPath implements XAdESPath. Ports getRevocationValuesPath().
 func (p *XAdES122Path) RevocationValuesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_REVOCATION_VALUES)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementRevocationValues)
 }
 
 // AttributeRevocationValuesPath implements XAdESPath. Ports getAttributeRevocationValuesPath().
@@ -233,7 +233,7 @@ func (p *XAdES122Path) AttributeRevocationValuesPath() common.XPathQuery {
 
 // EncapsulatedCertificateValuesPath implements XAdESPath. Ports getEncapsulatedCertificateValuesPath().
 func (p *XAdES122Path) EncapsulatedCertificateValuesPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_CERTIFICATE_VALUES, XAdES122Element_ENCAPSULATED_X509_CERTIFICATE)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementCertificateValues, XAdES122ElementEncapsulatedX509Certificate)
 }
 
 // AttrAuthoritiesCertValuesPath implements XAdESPath. Ports getAttrAuthoritiesCertValuesPath().
@@ -273,12 +273,12 @@ func (p *XAdES122Path) AnyValidationDataRevocationValuesPath() common.XPathQuery
 
 // SignatureTimestampPath implements XAdESPath. Ports getSignatureTimestampPath().
 func (p *XAdES122Path) SignatureTimestampPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIGNATURE_TIMESTAMP)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementSignatureTimestamp)
 }
 
 // SigAndRefsTimestampPath implements XAdESPath. Ports getSigAndRefsTimestampPath().
 func (p *XAdES122Path) SigAndRefsTimestampPath() common.XPathQuery {
-	return common.FromCurrentPosition(common.XMLDSigElement_OBJECT, XAdES122Element_QUALIFYING_PROPERTIES, XAdES122Element_UNSIGNED_PROPERTIES, XAdES122Element_UNSIGNED_SIGNATURE_PROPERTIES, XAdES122Element_SIG_AND_REFS_TIMESTAMP)
+	return common.FromCurrentPosition(common.XMLDSigElementObject, XAdES122ElementQualifyingProperties, XAdES122ElementUnsignedProperties, XAdES122ElementUnsignedSignatureProperties, XAdES122ElementSigAndRefsTimestamp)
 }
 
 // SigAndRefsTimestampV2Path implements XAdESPath. Ports getSigAndRefsTimestampV2Path().
@@ -318,47 +318,47 @@ func (p *XAdES122Path) SealingEvidenceRecordsPath() common.XPathQuery {
 
 // CurrentCRLValuesChildren implements XAdESPath. Ports getCurrentCRLValuesChildren().
 func (p *XAdES122Path) CurrentCRLValuesChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_VALUES, XAdES122Element_ENCAPSULATED_CRL_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementCRLValues, XAdES122ElementEncapsulatedCRLValue)
 }
 
 // CurrentCRLRefsChildren implements XAdESPath. Ports getCurrentCRLRefsChildren().
 func (p *XAdES122Path) CurrentCRLRefsChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_REFS, XAdES122Element_CRL_REF)
+	return common.FromCurrentPosition(XAdES122ElementCRLRefs, XAdES122ElementCRLRef)
 }
 
 // CurrentCRLRefCRLIdentifier implements XAdESPath. Ports getCurrentCRLRefCRLIdentifier().
 func (p *XAdES122Path) CurrentCRLRefCRLIdentifier() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_IDENTIFIER)
+	return common.FromCurrentPosition(XAdES122ElementCRLIdentifier)
 }
 
 // CurrentCRLRefCRLIdentifierIssuer implements XAdESPath. Ports getCurrentCRLRefCRLIdentifierIssuer().
 func (p *XAdES122Path) CurrentCRLRefCRLIdentifierIssuer() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_IDENTIFIER, XAdES122Element_ISSUER)
+	return common.FromCurrentPosition(XAdES122ElementCRLIdentifier, XAdES122ElementIssuer)
 }
 
 // CurrentCRLRefCRLIdentifierIssueTime implements XAdESPath. Ports getCurrentCRLRefCRLIdentifierIssueTime().
 func (p *XAdES122Path) CurrentCRLRefCRLIdentifierIssueTime() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_IDENTIFIER, XAdES122Element_ISSUE_TIME)
+	return common.FromCurrentPosition(XAdES122ElementCRLIdentifier, XAdES122ElementIssueTime)
 }
 
 // CurrentCRLRefCRLIdentifierNumber implements XAdESPath. Ports getCurrentCRLRefCRLIdentifierNumber().
 func (p *XAdES122Path) CurrentCRLRefCRLIdentifierNumber() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_IDENTIFIER, XAdES122Element_NUMBER)
+	return common.FromCurrentPosition(XAdES122ElementCRLIdentifier, XAdES122ElementNumber)
 }
 
 // CurrentOCSPValuesChildren implements XAdESPath. Ports getCurrentOCSPValuesChildren().
 func (p *XAdES122Path) CurrentOCSPValuesChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OCSP_VALUES, XAdES122Element_ENCAPSULATED_OCSP_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementOCSPValues, XAdES122ElementEncapsulatedOCSPValue)
 }
 
 // CurrentOCSPRefsChildren implements XAdESPath. Ports getCurrentOCSPRefsChildren().
 func (p *XAdES122Path) CurrentOCSPRefsChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OCSP_REFS, XAdES122Element_OCSP_REF)
+	return common.FromCurrentPosition(XAdES122ElementOCSPRefs, XAdES122ElementOCSPRef)
 }
 
 // CurrentOCSPRefResponderID implements XAdESPath. Ports getCurrentOCSPRefResponderID().
 func (p *XAdES122Path) CurrentOCSPRefResponderID() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OCSP_IDENTIFIER, XAdES122Element_RESPONDER_ID)
+	return common.FromCurrentPosition(XAdES122ElementOCSPIdentifier, XAdES122ElementResponderID)
 }
 
 // CurrentOCSPRefResponderIDByName implements XAdESPath. Ports getCurrentOCSPRefResponderIDByName().
@@ -373,17 +373,17 @@ func (p *XAdES122Path) CurrentOCSPRefResponderIDByKey() common.XPathQuery {
 
 // CurrentOCSPRefProducedAt implements XAdESPath. Ports getCurrentOCSPRefProducedAt().
 func (p *XAdES122Path) CurrentOCSPRefProducedAt() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OCSP_IDENTIFIER, XAdES122Element_PRODUCED_AT)
+	return common.FromCurrentPosition(XAdES122ElementOCSPIdentifier, XAdES122ElementProducedAt)
 }
 
 // CurrentDigestAlgAndValue implements XAdESPath. Ports getCurrentDigestAlgAndValue().
 func (p *XAdES122Path) CurrentDigestAlgAndValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_DIGEST_ALG_AND_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementDigestAlgAndValue)
 }
 
 // CurrentCertRefsCertChildren implements XAdESPath. Ports getCurrentCertRefsCertChildren().
 func (p *XAdES122Path) CurrentCertRefsCertChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CERT_REFS, XAdES122Element_CERT)
+	return common.FromCurrentPosition(XAdES122ElementCertRefs, XAdES122ElementCert)
 }
 
 // CurrentCertRefs141CertChildren implements XAdESPath. Ports getCurrentCertRefs141CertChildren().
@@ -393,57 +393,57 @@ func (p *XAdES122Path) CurrentCertRefs141CertChildren() common.XPathQuery {
 
 // CurrentCertChildren implements XAdESPath. Ports getCurrentCertChildren().
 func (p *XAdES122Path) CurrentCertChildren() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CERT)
+	return common.FromCurrentPosition(XAdES122ElementCert)
 }
 
 // CurrentCertDigest implements XAdESPath. Ports getCurrentCertDigest().
 func (p *XAdES122Path) CurrentCertDigest() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CERT_DIGEST)
+	return common.FromCurrentPosition(XAdES122ElementCertDigest)
 }
 
 // CurrentEncapsulatedTimestamp implements XAdESPath. Ports getCurrentEncapsulatedTimestamp().
 func (p *XAdES122Path) CurrentEncapsulatedTimestamp() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ENCAPSULATED_TIMESTAMP)
+	return common.FromCurrentPosition(XAdES122ElementEncapsulatedTimestamp)
 }
 
 // CurrentEncapsulatedCertificate implements XAdESPath. Ports getCurrentEncapsulatedCertificate().
 func (p *XAdES122Path) CurrentEncapsulatedCertificate() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ENCAPSULATED_X509_CERTIFICATE)
+	return common.FromCurrentPosition(XAdES122ElementEncapsulatedX509Certificate)
 }
 
 // CurrentCertificateValuesEncapsulatedCertificate implements XAdESPath. Ports getCurrentCertificateValuesEncapsulatedCertificate().
 func (p *XAdES122Path) CurrentCertificateValuesEncapsulatedCertificate() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CERTIFICATE_VALUES, XAdES122Element_ENCAPSULATED_X509_CERTIFICATE)
+	return common.FromCurrentPosition(XAdES122ElementCertificateValues, XAdES122ElementEncapsulatedX509Certificate)
 }
 
 // CurrentRevocationValuesEncapsulatedOCSPValue implements XAdESPath. Ports getCurrentRevocationValuesEncapsulatedOCSPValue().
 func (p *XAdES122Path) CurrentRevocationValuesEncapsulatedOCSPValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_REVOCATION_VALUES, XAdES122Element_OCSP_VALUES, XAdES122Element_ENCAPSULATED_OCSP_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementRevocationValues, XAdES122ElementOCSPValues, XAdES122ElementEncapsulatedOCSPValue)
 }
 
 // CurrentEncapsulatedOCSPValue implements XAdESPath. Ports getCurrentEncapsulatedOCSPValue().
 func (p *XAdES122Path) CurrentEncapsulatedOCSPValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OCSP_VALUES, XAdES122Element_ENCAPSULATED_OCSP_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementOCSPValues, XAdES122ElementEncapsulatedOCSPValue)
 }
 
 // CurrentRevocationValuesEncapsulatedCRLValue implements XAdESPath. Ports getCurrentRevocationValuesEncapsulatedCRLValue().
 func (p *XAdES122Path) CurrentRevocationValuesEncapsulatedCRLValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_REVOCATION_VALUES, XAdES122Element_CRL_VALUES, XAdES122Element_ENCAPSULATED_CRL_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementRevocationValues, XAdES122ElementCRLValues, XAdES122ElementEncapsulatedCRLValue)
 }
 
 // CurrentEncapsulatedCRLValue implements XAdESPath. Ports getCurrentEncapsulatedCRLValue().
 func (p *XAdES122Path) CurrentEncapsulatedCRLValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_CRL_VALUES, XAdES122Element_ENCAPSULATED_CRL_VALUE)
+	return common.FromCurrentPosition(XAdES122ElementCRLValues, XAdES122ElementEncapsulatedCRLValue)
 }
 
 // CurrentIssuerSerialIssuerNamePath implements XAdESPath. Ports getCurrentIssuerSerialIssuerNamePath().
 func (p *XAdES122Path) CurrentIssuerSerialIssuerNamePath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ISSUER_SERIAL, common.XMLDSigElement_X509_ISSUER_NAME)
+	return common.FromCurrentPosition(XAdES122ElementIssuerSerial, common.XMLDSigElementX509IssuerName)
 }
 
 // CurrentIssuerSerialSerialNumberPath implements XAdESPath. Ports getCurrentIssuerSerialSerialNumberPath().
 func (p *XAdES122Path) CurrentIssuerSerialSerialNumberPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ISSUER_SERIAL, common.XMLDSigElement_X509_SERIAL_NUMBER)
+	return common.FromCurrentPosition(XAdES122ElementIssuerSerial, common.XMLDSigElementX509SerialNumber)
 }
 
 // CurrentIssuerSerialV2Path implements XAdESPath. Ports getCurrentIssuerSerialV2Path().
@@ -453,87 +453,87 @@ func (p *XAdES122Path) CurrentIssuerSerialV2Path() common.XPathQuery {
 
 // CurrentCommitmentIdentifierPath implements XAdESPath. Ports getCurrentCommitmentIdentifierPath().
 func (p *XAdES122Path) CurrentCommitmentIdentifierPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_COMMITMENT_TYPE_ID, XAdES122Element_IDENTIFIER)
+	return common.FromCurrentPosition(XAdES122ElementCommitmentTypeID, XAdES122ElementIdentifier)
 }
 
 // CurrentCommitmentDescriptionPath implements XAdESPath. Ports getCurrentCommitmentDescriptionPath().
 func (p *XAdES122Path) CurrentCommitmentDescriptionPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_COMMITMENT_TYPE_ID, XAdES122Element_DESCRIPTION)
+	return common.FromCurrentPosition(XAdES122ElementCommitmentTypeID, XAdES122ElementDescription)
 }
 
 // CurrentCommitmentDocumentationReferencesPath implements XAdESPath. Ports getCurrentCommitmentDocumentationReferencesPath().
 func (p *XAdES122Path) CurrentCommitmentDocumentationReferencesPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_COMMITMENT_TYPE_ID, XAdES122Element_DOCUMENTATION_REFERENCES)
+	return common.FromCurrentPosition(XAdES122ElementCommitmentTypeID, XAdES122ElementDocumentationReferences)
 }
 
 // CurrentDocumentationReference implements XAdESPath. Ports getCurrentDocumentationReference().
 func (p *XAdES122Path) CurrentDocumentationReference() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_DOCUMENTATION_REFERENCE)
+	return common.FromCurrentPosition(XAdES122ElementDocumentationReference)
 }
 
 // CurrentDescription implements XAdESPath. Ports getCurrentDescription().
 func (p *XAdES122Path) CurrentDescription() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_DESCRIPTION)
+	return common.FromCurrentPosition(XAdES122ElementDescription)
 }
 
 // CurrentObjectIdentifier implements XAdESPath. Ports getCurrentObjectIdentifier().
 func (p *XAdES122Path) CurrentObjectIdentifier() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OBJECT_IDENTIFIER)
+	return common.FromCurrentPosition(XAdES122ElementObjectIdentifier)
 }
 
 // CurrentCommitmentObjectReferencesPath implements XAdESPath. Ports getCurrentCommitmentObjectReferencesPath().
 func (p *XAdES122Path) CurrentCommitmentObjectReferencesPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_OBJECT_REFERENCE)
+	return common.FromCurrentPosition(XAdES122ElementObjectReference)
 }
 
 // CurrentCommitmentAllSignedDataObjectsPath implements XAdESPath. Ports getCurrentCommitmentAllSignedDataObjectsPath().
 func (p *XAdES122Path) CurrentCommitmentAllSignedDataObjectsPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ALL_SIGNED_DATA_OBJECTS)
+	return common.FromCurrentPosition(XAdES122ElementAllSignedDataObjects)
 }
 
 // CurrentMimeType implements XAdESPath. Ports getCurrentMimeType().
 func (p *XAdES122Path) CurrentMimeType() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_MIME_TYPE)
+	return common.FromCurrentPosition(XAdES122ElementMIMEType)
 }
 
 // CurrentEncoding implements XAdESPath. Ports getCurrentEncoding().
 func (p *XAdES122Path) CurrentEncoding() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_ENCODING)
+	return common.FromCurrentPosition(XAdES122ElementEncoding)
 }
 
 // CurrentSignaturePolicyId implements XAdESPath. Ports getCurrentSignaturePolicyId().
 func (p *XAdES122Path) CurrentSignaturePolicyId() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_ID, XAdES122Element_IDENTIFIER)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyID, XAdES122ElementIdentifier)
 }
 
 // CurrentSignaturePolicyDigestAlgAndValue implements XAdESPath. Ports getCurrentSignaturePolicyDigestAlgAndValue().
 func (p *XAdES122Path) CurrentSignaturePolicyDigestAlgAndValue() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_HASH)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyHash)
 }
 
 // CurrentSignaturePolicySPURI implements XAdESPath. Ports getCurrentSignaturePolicySPURI().
 func (p *XAdES122Path) CurrentSignaturePolicySPURI() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_QUALIFIERS, XAdES122Element_SIG_POLICY_QUALIFIER, XAdES122Element_SP_URI)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyQualifiers, XAdES122ElementSigPolicyQualifier, XAdES122ElementSPURI)
 }
 
 // CurrentSignaturePolicySPUserNotice implements XAdESPath. Ports getCurrentSignaturePolicySPUserNotice().
 func (p *XAdES122Path) CurrentSignaturePolicySPUserNotice() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_QUALIFIERS, XAdES122Element_SIG_POLICY_QUALIFIER, XAdES122Element_SP_USER_NOTICE)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyQualifiers, XAdES122ElementSigPolicyQualifier, XAdES122ElementSPUserNotice)
 }
 
 // CurrentSPUserNoticeNoticeRefOrganization implements XAdESPath. Ports getCurrentSPUserNoticeNoticeRefOrganization().
 func (p *XAdES122Path) CurrentSPUserNoticeNoticeRefOrganization() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_NOTICE_REF, XAdES122Element_ORGANIZATION)
+	return common.FromCurrentPosition(XAdES122ElementNoticeRef, XAdES122ElementOrganization)
 }
 
 // CurrentSPUserNoticeNoticeRefNoticeNumbers implements XAdESPath. Ports getCurrentSPUserNoticeNoticeRefNoticeNumbers().
 func (p *XAdES122Path) CurrentSPUserNoticeNoticeRefNoticeNumbers() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_NOTICE_REF, XAdES122Element_NOTICE_NUMBERS)
+	return common.FromCurrentPosition(XAdES122ElementNoticeRef, XAdES122ElementNoticeNumbers)
 }
 
 // CurrentSPUserNoticeExplicitText implements XAdESPath. Ports getCurrentSPUserNoticeExplicitText().
 func (p *XAdES122Path) CurrentSPUserNoticeExplicitText() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_EXPLICIT_TEXT)
+	return common.FromCurrentPosition(XAdES122ElementExplicitText)
 }
 
 // CurrentSignaturePolicySPDocSpecification implements XAdESPath. Ports getCurrentSignaturePolicySPDocSpecification().
@@ -548,37 +548,37 @@ func (p *XAdES122Path) CurrentSignaturePolicySPDocSpecificationIdentifier() comm
 
 // CurrentSignaturePolicyDescription implements XAdESPath. Ports getCurrentSignaturePolicyDescription().
 func (p *XAdES122Path) CurrentSignaturePolicyDescription() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_ID, XAdES122Element_DESCRIPTION)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyID, XAdES122ElementDescription)
 }
 
 // CurrentSignaturePolicyDocumentationReferences implements XAdESPath. Ports getCurrentSignaturePolicyDocumentationReferences().
 func (p *XAdES122Path) CurrentSignaturePolicyDocumentationReferences() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_ID, XAdES122Element_DOCUMENTATION_REFERENCES)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyID, XAdES122ElementDocumentationReferences)
 }
 
 // CurrentSignaturePolicyImplied implements XAdESPath. Ports getCurrentSignaturePolicyImplied().
 func (p *XAdES122Path) CurrentSignaturePolicyImplied() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_IMPLIED)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyImplied)
 }
 
 // CurrentSignaturePolicyTransforms implements XAdESPath. Ports getCurrentSignaturePolicyTransforms().
 func (p *XAdES122Path) CurrentSignaturePolicyTransforms() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, common.XMLDSigElement_TRANSFORMS)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, common.XMLDSigElementTransforms)
 }
 
 // CurrentSignaturePolicyQualifiers implements XAdESPath. Ports getCurrentSignaturePolicyQualifiers().
 func (p *XAdES122Path) CurrentSignaturePolicyQualifiers() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_SIGNATURE_POLICY_ID, XAdES122Element_SIG_POLICY_QUALIFIERS)
+	return common.FromCurrentPosition(XAdES122ElementSignaturePolicyID, XAdES122ElementSigPolicyQualifiers)
 }
 
 // CurrentInclude implements XAdESPath. Ports getCurrentInclude().
 func (p *XAdES122Path) CurrentInclude() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_INCLUDE)
+	return common.FromCurrentPosition(XAdES122ElementInclude)
 }
 
 // CurrentQualifyingPropertiesPath implements XAdESPath. Ports getCurrentQualifyingPropertiesPath().
 func (p *XAdES122Path) CurrentQualifyingPropertiesPath() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_QUALIFYING_PROPERTIES)
+	return common.FromCurrentPosition(XAdES122ElementQualifyingProperties)
 }
 
 // CurrentSPDocSpecification implements XAdESPath. Ports getCurrentSPDocSpecification().
@@ -588,7 +588,7 @@ func (p *XAdES122Path) CurrentSPDocSpecification() common.XPathQuery {
 
 // CurrentIdentifier implements XAdESPath. Ports getCurrentIdentifier().
 func (p *XAdES122Path) CurrentIdentifier() common.XPathQuery {
-	return common.FromCurrentPosition(XAdES122Element_IDENTIFIER)
+	return common.FromCurrentPosition(XAdES122ElementIdentifier)
 }
 
 // CurrentSPDocSpecificationIdentifier implements XAdESPath. Ports getCurrentSPDocSpecificationIdentifier().

@@ -41,10 +41,10 @@ func (c *AcceptableZipCommentCheck) ErrorMessageTag() i18n.MessageTag {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *AcceptableZipCommentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *AcceptableZipCommentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

@@ -58,14 +58,14 @@ func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAd
 // appendContainedOCSPResponses ports the private appendContainedOCSPResponses().
 func (s *XAdESOCSPSource) appendContainedOCSPResponses() {
 	// values
-	s.collectValues(s.xadesPaths.RevocationValuesPath(), enumerations.RevocationOrigin_REVOCATION_VALUES)
-	s.collectValues(s.xadesPaths.AttributeRevocationValuesPath(), enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES)
-	s.collectValues(s.xadesPaths.TimeStampValidationDataRevocationValuesPath(), enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA)
-	s.collectValues(s.xadesPaths.AnyValidationDataRevocationValuesPath(), enumerations.RevocationOrigin_ANY_VALIDATION_DATA)
+	s.collectValues(s.xadesPaths.RevocationValuesPath(), enumerations.RevocationOriginRevocationValues)
+	s.collectValues(s.xadesPaths.AttributeRevocationValuesPath(), enumerations.RevocationOriginAttributeRevocationValues)
+	s.collectValues(s.xadesPaths.TimeStampValidationDataRevocationValuesPath(), enumerations.RevocationOriginTimestampValidationData)
+	s.collectValues(s.xadesPaths.AnyValidationDataRevocationValuesPath(), enumerations.RevocationOriginAnyValidationData)
 
 	// references
-	s.collectRefs(s.xadesPaths.CompleteRevocationRefsPath(), enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
-	s.collectRefs(s.xadesPaths.AttributeRevocationRefsPath(), enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+	s.collectRefs(s.xadesPaths.CompleteRevocationRefsPath(), enumerations.RevocationRefOriginCompleteRevocationRefs)
+	s.collectRefs(s.xadesPaths.AttributeRevocationRefsPath(), enumerations.RevocationRefOriginAttributeRevocationRefs)
 }
 
 // collectValues ports the private collectValues(XPathQuery, RevocationOrigin).

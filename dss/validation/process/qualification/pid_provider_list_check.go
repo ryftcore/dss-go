@@ -33,7 +33,7 @@ func NewPIDProviderListCheck(i18nProvider *i18n.I18nProvider, result *process.Re
 // Process performs the check. Port of process().
 func (c *PIDProviderListCheck) Process() bool {
 	listType := enumerations.ListTypeFromURI(c.listTypeUri)
-	return enumerations.LoTETypeEnum_EUPIDProvidersList == listType
+	return enumerations.LoTETypeEnumEUPIDProvidersList == listType
 }
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
@@ -55,7 +55,7 @@ func (c *PIDProviderListCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PIDProviderListCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

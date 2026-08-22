@@ -18,64 +18,64 @@ func TestSignatureLevel_FormAndProfile(t *testing.T) {
 		// back to that first constant instead of themselves.
 		ambiguous bool
 	}{
-		{SignatureLevel_XML_NOT_ETSI, SignatureForm_XAdES, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_XAdES_BES, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_BES, false},
-		{SignatureLevel_XAdES_EPES, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_EPES, false},
-		{SignatureLevel_XAdES_T, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_T, false},
-		{SignatureLevel_XAdES_LT, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_LT, false},
-		{SignatureLevel_XAdES_C, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_C, false},
-		{SignatureLevel_XAdES_X, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_X, false},
-		{SignatureLevel_XAdES_XL, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_XL, false},
-		{SignatureLevel_XAdES_A, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_A, false},
-		{SignatureLevel_XAdES_ERS, SignatureForm_XAdES, false, SignatureProfile_EXTENDED_ERS, false},
-		{SignatureLevel_XAdES_BASELINE_B, SignatureForm_XAdES, false, SignatureProfile_BASELINE_B, false},
-		{SignatureLevel_XAdES_BASELINE_T, SignatureForm_XAdES, false, SignatureProfile_BASELINE_T, false},
-		{SignatureLevel_XAdES_BASELINE_LT, SignatureForm_XAdES, false, SignatureProfile_BASELINE_LT, false},
-		{SignatureLevel_XAdES_BASELINE_LTA, SignatureForm_XAdES, false, SignatureProfile_BASELINE_LTA, false},
+		{SignatureLevelXMLNotETSI, SignatureFormXAdES, false, SignatureProfileNotETSI, false},
+		{SignatureLevelXAdESBES, SignatureFormXAdES, false, SignatureProfileExtendedBES, false},
+		{SignatureLevelXAdESEPES, SignatureFormXAdES, false, SignatureProfileExtendedEPES, false},
+		{SignatureLevelXAdEST, SignatureFormXAdES, false, SignatureProfileExtendedT, false},
+		{SignatureLevelXAdESLT, SignatureFormXAdES, false, SignatureProfileExtendedLT, false},
+		{SignatureLevelXAdESC, SignatureFormXAdES, false, SignatureProfileExtendedC, false},
+		{SignatureLevelXAdESX, SignatureFormXAdES, false, SignatureProfileExtendedX, false},
+		{SignatureLevelXAdESXL, SignatureFormXAdES, false, SignatureProfileExtendedXL, false},
+		{SignatureLevelXAdESA, SignatureFormXAdES, false, SignatureProfileExtendedA, false},
+		{SignatureLevelXAdESERS, SignatureFormXAdES, false, SignatureProfileExtendedERS, false},
+		{SignatureLevelXAdESBaselineB, SignatureFormXAdES, false, SignatureProfileBaselineB, false},
+		{SignatureLevelXAdESBaselineT, SignatureFormXAdES, false, SignatureProfileBaselineT, false},
+		{SignatureLevelXAdESBaselineLT, SignatureFormXAdES, false, SignatureProfileBaselineLT, false},
+		{SignatureLevelXAdESBaselineLTA, SignatureFormXAdES, false, SignatureProfileBaselineLTA, false},
 
-		{SignatureLevel_CMS_NOT_ETSI, SignatureForm_CAdES, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_CAdES_BES, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_BES, false},
-		{SignatureLevel_CAdES_EPES, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_EPES, false},
-		{SignatureLevel_CAdES_T, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_T, false},
-		{SignatureLevel_CAdES_LT, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_LT, false},
-		{SignatureLevel_CAdES_C, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_C, false},
-		{SignatureLevel_CAdES_X, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_X, false},
-		{SignatureLevel_CAdES_XL, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_XL, false},
-		{SignatureLevel_CAdES_A, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_A, false},
-		{SignatureLevel_CAdES_ERS, SignatureForm_CAdES, false, SignatureProfile_EXTENDED_ERS, false},
-		{SignatureLevel_CAdES_BASELINE_B, SignatureForm_CAdES, false, SignatureProfile_BASELINE_B, false},
-		{SignatureLevel_CAdES_BASELINE_T, SignatureForm_CAdES, false, SignatureProfile_BASELINE_T, false},
-		{SignatureLevel_CAdES_BASELINE_LT, SignatureForm_CAdES, false, SignatureProfile_BASELINE_LT, false},
-		{SignatureLevel_CAdES_BASELINE_LTA, SignatureForm_CAdES, false, SignatureProfile_BASELINE_LTA, false},
+		{SignatureLevelCMSNotETSI, SignatureFormCAdES, false, SignatureProfileNotETSI, false},
+		{SignatureLevelCAdESBES, SignatureFormCAdES, false, SignatureProfileExtendedBES, false},
+		{SignatureLevelCAdESEPES, SignatureFormCAdES, false, SignatureProfileExtendedEPES, false},
+		{SignatureLevelCAdEST, SignatureFormCAdES, false, SignatureProfileExtendedT, false},
+		{SignatureLevelCAdESLT, SignatureFormCAdES, false, SignatureProfileExtendedLT, false},
+		{SignatureLevelCAdESC, SignatureFormCAdES, false, SignatureProfileExtendedC, false},
+		{SignatureLevelCAdESX, SignatureFormCAdES, false, SignatureProfileExtendedX, false},
+		{SignatureLevelCAdESXL, SignatureFormCAdES, false, SignatureProfileExtendedXL, false},
+		{SignatureLevelCAdESA, SignatureFormCAdES, false, SignatureProfileExtendedA, false},
+		{SignatureLevelCAdESERS, SignatureFormCAdES, false, SignatureProfileExtendedERS, false},
+		{SignatureLevelCAdESBaselineB, SignatureFormCAdES, false, SignatureProfileBaselineB, false},
+		{SignatureLevelCAdESBaselineT, SignatureFormCAdES, false, SignatureProfileBaselineT, false},
+		{SignatureLevelCAdESBaselineLT, SignatureFormCAdES, false, SignatureProfileBaselineLT, false},
+		{SignatureLevelCAdESBaselineLTA, SignatureFormCAdES, false, SignatureProfileBaselineLTA, false},
 
-		{SignatureLevel_PDF_NOT_ETSI, SignatureForm_PAdES, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_PKCS7_B, SignatureForm_PKCS7, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_PKCS7_T, SignatureForm_PKCS7, false, SignatureProfile_NOT_ETSI, true},
-		{SignatureLevel_PKCS7_LT, SignatureForm_PKCS7, false, SignatureProfile_NOT_ETSI, true},
-		{SignatureLevel_PKCS7_LTA, SignatureForm_PKCS7, false, SignatureProfile_NOT_ETSI, true},
-		{SignatureLevel_PAdES_BES, SignatureForm_PAdES, false, SignatureProfile_EXTENDED_BES, false},
-		{SignatureLevel_PAdES_EPES, SignatureForm_PAdES, false, SignatureProfile_EXTENDED_EPES, false},
-		{SignatureLevel_PAdES_LTV, SignatureForm_PAdES, false, SignatureProfile_EXTENDED_LTV, false},
-		{SignatureLevel_PAdES_BASELINE_B, SignatureForm_PAdES, false, SignatureProfile_BASELINE_B, false},
-		{SignatureLevel_PAdES_BASELINE_T, SignatureForm_PAdES, false, SignatureProfile_BASELINE_T, false},
-		{SignatureLevel_PAdES_BASELINE_LT, SignatureForm_PAdES, false, SignatureProfile_BASELINE_LT, false},
-		{SignatureLevel_PAdES_BASELINE_LTA, SignatureForm_PAdES, false, SignatureProfile_BASELINE_LTA, false},
+		{SignatureLevelPDFNotETSI, SignatureFormPAdES, false, SignatureProfileNotETSI, false},
+		{SignatureLevelPKCS7B, SignatureFormPKCS7, false, SignatureProfileNotETSI, false},
+		{SignatureLevelPKCS7T, SignatureFormPKCS7, false, SignatureProfileNotETSI, true},
+		{SignatureLevelPKCS7LT, SignatureFormPKCS7, false, SignatureProfileNotETSI, true},
+		{SignatureLevelPKCS7LTA, SignatureFormPKCS7, false, SignatureProfileNotETSI, true},
+		{SignatureLevelPAdESBES, SignatureFormPAdES, false, SignatureProfileExtendedBES, false},
+		{SignatureLevelPAdESEPES, SignatureFormPAdES, false, SignatureProfileExtendedEPES, false},
+		{SignatureLevelPAdESLTV, SignatureFormPAdES, false, SignatureProfileExtendedLTV, false},
+		{SignatureLevelPAdESBaselineB, SignatureFormPAdES, false, SignatureProfileBaselineB, false},
+		{SignatureLevelPAdESBaselineT, SignatureFormPAdES, false, SignatureProfileBaselineT, false},
+		{SignatureLevelPAdESBaselineLT, SignatureFormPAdES, false, SignatureProfileBaselineLT, false},
+		{SignatureLevelPAdESBaselineLTA, SignatureFormPAdES, false, SignatureProfileBaselineLTA, false},
 
-		{SignatureLevel_JSON_NOT_ETSI, SignatureForm_JAdES, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_JAdES, SignatureForm_JAdES, false, SignatureProfile_AdES, false},
-		{SignatureLevel_JAdES_BASELINE_B, SignatureForm_JAdES, false, SignatureProfile_BASELINE_B, false},
-		{SignatureLevel_JAdES_BASELINE_T, SignatureForm_JAdES, false, SignatureProfile_BASELINE_T, false},
-		{SignatureLevel_JAdES_BASELINE_LT, SignatureForm_JAdES, false, SignatureProfile_BASELINE_LT, false},
-		{SignatureLevel_JAdES_BASELINE_LTA, SignatureForm_JAdES, false, SignatureProfile_BASELINE_LTA, false},
+		{SignatureLevelJSONNotETSI, SignatureFormJAdES, false, SignatureProfileNotETSI, false},
+		{SignatureLevelJAdES, SignatureFormJAdES, false, SignatureProfileAdES, false},
+		{SignatureLevelJAdESBaselineB, SignatureFormJAdES, false, SignatureProfileBaselineB, false},
+		{SignatureLevelJAdESBaselineT, SignatureFormJAdES, false, SignatureProfileBaselineT, false},
+		{SignatureLevelJAdESBaselineLT, SignatureFormJAdES, false, SignatureProfileBaselineLT, false},
+		{SignatureLevelJAdESBaselineLTA, SignatureFormJAdES, false, SignatureProfileBaselineLTA, false},
 
-		{SignatureLevel_CBOR_NOT_ETSI, SignatureForm_CBAdES, false, SignatureProfile_NOT_ETSI, false},
-		{SignatureLevel_CB_AdES, SignatureForm_CBAdES, false, SignatureProfile_AdES, false},
-		{SignatureLevel_CB_AdES_BASELINE_B, SignatureForm_CBAdES, false, SignatureProfile_BASELINE_B, false},
-		{SignatureLevel_CB_AdES_BASELINE_T, SignatureForm_CBAdES, false, SignatureProfile_BASELINE_T, false},
-		{SignatureLevel_CB_AdES_BASELINE_LT, SignatureForm_CBAdES, false, SignatureProfile_BASELINE_LT, false},
-		{SignatureLevel_CB_AdES_BASELINE_LTA, SignatureForm_CBAdES, false, SignatureProfile_BASELINE_LTA, false},
+		{SignatureLevelCBORNotETSI, SignatureFormCBAdES, false, SignatureProfileNotETSI, false},
+		{SignatureLevelCBAdES, SignatureFormCBAdES, false, SignatureProfileAdES, false},
+		{SignatureLevelCBAdESBaselineB, SignatureFormCBAdES, false, SignatureProfileBaselineB, false},
+		{SignatureLevelCBAdESBaselineT, SignatureFormCBAdES, false, SignatureProfileBaselineT, false},
+		{SignatureLevelCBAdESBaselineLT, SignatureFormCBAdES, false, SignatureProfileBaselineLT, false},
+		{SignatureLevelCBAdESBaselineLTA, SignatureFormCBAdES, false, SignatureProfileBaselineLTA, false},
 
-		{SignatureLevel_UNKNOWN, "", true, SignatureProfile_NOT_ETSI, false},
+		{SignatureLevelUnknown, "", true, SignatureProfileNotETSI, false},
 	}
 	if len(SignatureLevelValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(SignatureLevelValues()))
@@ -104,8 +104,8 @@ func TestSignatureLevel_FormAndProfile(t *testing.T) {
 			// Declaration-order collision: the (form, profile) pair is shared
 			// with an earlier constant, so GetSignatureLevel legitimately
 			// resolves to that earlier constant (PKCS7_B), not c.v.
-			if got, err := GetSignatureLevel(c.form, c.prof); err != nil || got != SignatureLevel_PKCS7_B {
-				t.Errorf("GetSignatureLevel(%v, %v) = %v, %v; want %v, nil (canonical first match)", c.form, c.prof, got, err, SignatureLevel_PKCS7_B)
+			if got, err := GetSignatureLevel(c.form, c.prof); err != nil || got != SignatureLevelPKCS7B {
+				t.Errorf("GetSignatureLevel(%v, %v) = %v, %v; want %v, nil (canonical first match)", c.form, c.prof, got, err, SignatureLevelPKCS7B)
 			}
 		}
 	}
@@ -114,7 +114,7 @@ func TestSignatureLevel_FormAndProfile(t *testing.T) {
 	}
 	// Upstream throws UnsupportedOperationException rather than returning null here: the
 	// scan reaches UNKNOWN, whose null signature form makes getSignatureForm() throw.
-	if got, err := GetSignatureLevel(SignatureForm_XAdES, SignatureProfile("bogus")); err == nil {
+	if got, err := GetSignatureLevel(SignatureFormXAdES, SignatureProfile("bogus")); err == nil {
 		t.Errorf("GetSignatureLevel(unmatched) = %v, nil; want an error", got)
 	}
 	if got, err := GetSignatureLevel("", ""); err == nil {
@@ -124,13 +124,13 @@ func TestSignatureLevel_FormAndProfile(t *testing.T) {
 
 func TestSignatureLevel_ValueByNameAndString(t *testing.T) {
 	got, err := SignatureLevelValueByName("XAdES-BASELINE-B")
-	if err != nil || got != SignatureLevel_XAdES_BASELINE_B {
-		t.Errorf("SignatureLevelValueByName(XAdES-BASELINE-B) = %v, %v; want %v, nil", got, err, SignatureLevel_XAdES_BASELINE_B)
+	if err != nil || got != SignatureLevelXAdESBaselineB {
+		t.Errorf("SignatureLevelValueByName(XAdES-BASELINE-B) = %v, %v; want %v, nil", got, err, SignatureLevelXAdESBaselineB)
 	}
 	if _, err := SignatureLevelValueByName("NOPE-NOPE"); err == nil {
 		t.Error("expected error for unknown dashed name")
 	}
-	if got := SignatureLevel_XAdES_BASELINE_B.String(); got != "XAdES-BASELINE-B" {
-		t.Errorf("SignatureLevel_XAdES_BASELINE_B.String() = %q, want %q", got, "XAdES-BASELINE-B")
+	if got := SignatureLevelXAdESBaselineB.String(); got != "XAdES-BASELINE-B" {
+		t.Errorf("SignatureLevelXAdESBaselineB.String() = %q, want %q", got, "XAdES-BASELINE-B")
 	}
 }

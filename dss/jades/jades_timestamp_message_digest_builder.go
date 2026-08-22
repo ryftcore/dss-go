@@ -155,7 +155,7 @@ func (b *JAdESTimestampMessageDigestBuilder) writeJWSPayloadValue(digestCalculat
 func (b *JAdESTimestampMessageDigestBuilder) writeSigDReferencedOctets(digestCalculator *spi.DSSMessageDigestCalculator,
 	sigDMechanism enumerations.SigDMechanism) error {
 	switch sigDMechanism {
-	case enumerations.SigDMechanism_HTTP_HEADERS:
+	case enumerations.SigDMechanismHTTPHeaders:
 		documentList := b.signature.SignedDocumentsByHTTPHeaderName()
 		httpHeadersPayloadBuilder := NewHttpHeadersPayloadBuilder(documentList, true)
 		sigDOctets, err := httpHeadersPayloadBuilder.Build()
@@ -165,7 +165,7 @@ func (b *JAdESTimestampMessageDigestBuilder) writeSigDReferencedOctets(digestCal
 		digestCalculator.Update(sigDOctets)
 		return nil
 
-	case enumerations.SigDMechanism_OBJECT_ID_BY_URI, enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH:
+	case enumerations.SigDMechanismObjectIDByURI, enumerations.SigDMechanismObjectIDByURIHash:
 		documentList := b.signature.SignedDocumentsForObjectIdByUriMechanism()
 		return DSSJsonUtilsWriteDocumentsDigest(documentList, !b.signature.Jws().IsRfc7797UnencodedPayload(), digestCalculator)
 

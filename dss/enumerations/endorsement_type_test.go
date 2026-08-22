@@ -7,9 +7,9 @@ func TestEndorsementTypeValue(t *testing.T) {
 		v    EndorsementType
 		want string
 	}{
-		{EndorsementType_CERTIFIED, "certified"},
-		{EndorsementType_CLAIMED, "claimed"},
-		{EndorsementType_SIGNED, "signed"},
+		{EndorsementTypeCertified, "certified"},
+		{EndorsementTypeClaimed, "claimed"},
+		{EndorsementTypeSigned, "signed"},
 	}
 	for _, c := range cases {
 		if got := c.v.Value(); got != c.want {
@@ -23,9 +23,9 @@ func TestEndorsementTypeFromString(t *testing.T) {
 		s    string
 		want EndorsementType
 	}{
-		{"certified", EndorsementType_CERTIFIED},
-		{"claimed", EndorsementType_CLAIMED},
-		{"signed", EndorsementType_SIGNED},
+		{"certified", EndorsementTypeCertified},
+		{"claimed", EndorsementTypeClaimed},
+		{"signed", EndorsementTypeSigned},
 	} {
 		got := EndorsementTypeFromString(c.s)
 		if got != c.want {

@@ -7,10 +7,10 @@ func TestSigDMechanismJAdESUri(t *testing.T) {
 		v    SigDMechanism
 		want string
 	}{
-		{SigDMechanism_HTTP_HEADERS, "http://uri.etsi.org/19182/HttpHeaders"},
-		{SigDMechanism_OBJECT_ID_BY_URI, "http://uri.etsi.org/19182/ObjectIdByURI"},
-		{SigDMechanism_OBJECT_ID_BY_URI_HASH, "http://uri.etsi.org/19182/ObjectIdByURIHash"},
-		{SigDMechanism_NO_SIG_D, ""},
+		{SigDMechanismHTTPHeaders, "http://uri.etsi.org/19182/HttpHeaders"},
+		{SigDMechanismObjectIDByURI, "http://uri.etsi.org/19182/ObjectIdByURI"},
+		{SigDMechanismObjectIDByURIHash, "http://uri.etsi.org/19182/ObjectIdByURIHash"},
+		{SigDMechanismNoSigD, ""},
 	}
 	for _, tt := range tests {
 		if got := tt.v.JAdESUri(); got != tt.want {
@@ -23,7 +23,7 @@ func TestSigDMechanismJAdESUri(t *testing.T) {
 }
 
 func TestSigDMechanismCBAdESUri(t *testing.T) {
-	uri, ok := SigDMechanism_HTTP_HEADERS.CBAdESUri()
+	uri, ok := SigDMechanismHTTPHeaders.CBAdESUri()
 	if ok {
 		t.Errorf("HTTP_HEADERS.CBAdESUri() ok = true, want false (uri=%q)", uri)
 	}
@@ -32,9 +32,9 @@ func TestSigDMechanismCBAdESUri(t *testing.T) {
 		v    SigDMechanism
 		want string
 	}{
-		{SigDMechanism_OBJECT_ID_BY_URI, "http://uri.etsi.org/19152/ObjectIdByURI"},
-		{SigDMechanism_OBJECT_ID_BY_URI_HASH, "http://uri.etsi.org/19152/ObjectIdByURIHash"},
-		{SigDMechanism_NO_SIG_D, ""},
+		{SigDMechanismObjectIDByURI, "http://uri.etsi.org/19152/ObjectIdByURI"},
+		{SigDMechanismObjectIDByURIHash, "http://uri.etsi.org/19152/ObjectIdByURIHash"},
+		{SigDMechanismNoSigD, ""},
 	}
 	for _, tt := range tests {
 		got, ok := tt.v.CBAdESUri()

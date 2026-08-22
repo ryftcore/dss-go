@@ -52,7 +52,7 @@ func (c *TLSCertificateBindingSignatureValidationResultCheck) ErrorMessageTag() 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the overridden getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingSignatureValidationResultCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -111,7 +111,7 @@ func (c *TLSCertificateBindingSignatureExpiryDateCheck) ErrorMessageTag() i18n.M
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingSignatureExpiryDateCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

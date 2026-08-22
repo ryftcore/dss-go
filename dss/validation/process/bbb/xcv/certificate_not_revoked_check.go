@@ -44,7 +44,7 @@ func NewCertificateNotRevokedCheck(i18nProvider *i18n.I18nProvider, result *proc
 // Process performs the check. Port of process().
 func (c *CertificateNotRevokedCheck) Process() bool {
 	isRevoked := c.certificateRevocation != nil && c.certificateRevocation.IsRevoked() &&
-		enumerations.RevocationReason_CERTIFICATE_HOLD != c.certificateRevocation.Reason()
+		enumerations.RevocationReasonCertificateHold != c.certificateRevocation.Reason()
 	if isRevoked {
 		revocationDate := c.certificateRevocation.RevocationDate()
 		isRevoked = revocationDate != nil && !c.currentTime.Before(*revocationDate)
@@ -82,14 +82,14 @@ func (c *CertificateNotRevokedCheck) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateNotRevokedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateNotRevokedCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	if enumerations.SubContext_SIGNING_CERT == c.subContext {
-		return enumerations.SubIndication_REVOKED_NO_POE
+	if enumerations.SubContextSigningCert == c.subContext {
+		return enumerations.SubIndicationRevokedNoPOE
 	}
-	return enumerations.SubIndication_REVOKED_CA_NO_POE
+	return enumerations.SubIndicationRevokedCANoPOE
 }

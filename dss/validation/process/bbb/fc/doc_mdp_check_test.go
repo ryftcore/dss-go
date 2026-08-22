@@ -37,18 +37,18 @@ func TestDocMDPCheck_Process(t *testing.T) {
 		want        bool
 	}{
 		{"happy: no permissions set, no modifications flag", "", 0, 0, 0, true},
-		{"happy: NO_CHANGE_PERMITTED, no changes", enumerations.CertificationPermission_NO_CHANGE_PERMITTED, 0, 0, 0, true},
-		{"failure: NO_CHANGE_PERMITTED, form fill change", enumerations.CertificationPermission_NO_CHANGE_PERMITTED, 1, 0, 0, false},
-		{"happy: MINIMAL_CHANGES_PERMITTED, form fill only", enumerations.CertificationPermission_MINIMAL_CHANGES_PERMITTED, 1, 0, 0, true},
-		{"failure: MINIMAL_CHANGES_PERMITTED, annotation change", enumerations.CertificationPermission_MINIMAL_CHANGES_PERMITTED, 0, 1, 0, false},
-		{"happy: CHANGES_PERMITTED, form+annotation", enumerations.CertificationPermission_CHANGES_PERMITTED, 1, 1, 0, true},
-		{"failure: CHANGES_PERMITTED, undefined change", enumerations.CertificationPermission_CHANGES_PERMITTED, 0, 0, 1, false},
+		{"happy: NO_CHANGE_PERMITTED, no changes", enumerations.CertificationPermissionNoChangePermitted, 0, 0, 0, true},
+		{"failure: NO_CHANGE_PERMITTED, form fill change", enumerations.CertificationPermissionNoChangePermitted, 1, 0, 0, false},
+		{"happy: MINIMAL_CHANGES_PERMITTED, form fill only", enumerations.CertificationPermissionMinimalChangesPermitted, 1, 0, 0, true},
+		{"failure: MINIMAL_CHANGES_PERMITTED, annotation change", enumerations.CertificationPermissionMinimalChangesPermitted, 0, 1, 0, false},
+		{"happy: CHANGES_PERMITTED, form+annotation", enumerations.CertificationPermissionChangesPermitted, 1, 1, 0, true},
+		{"failure: CHANGES_PERMITTED, undefined change", enumerations.CertificationPermissionChangesPermitted, 0, 0, 1, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := NewDocMDPCheck(testI18nProvider(t), newTestFCResult(),
 				newPDFRevision(tt.permissions, tt.formFill, tt.annotation, tt.undefined),
-				process.GetLevelRule(enumerations.Level_FAIL))
+				process.GetLevelRule(enumerations.LevelFail))
 			if got := c.Process(); got != tt.want {
 				t.Errorf("Process() = %v, want %v", got, tt.want)
 			}

@@ -74,7 +74,7 @@ func (c *TLSCertificateBindingPresentInSignatureCheck) ErrorMessageTag() i18n.Me
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingPresentInSignatureCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

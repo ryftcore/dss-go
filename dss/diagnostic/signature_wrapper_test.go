@@ -16,8 +16,8 @@ var (
 )
 
 func TestSignatureWrapper_TimestampListByType(t *testing.T) {
-	sigTsType := jaxb.TimestampTypeValue(enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	archiveTsType := jaxb.TimestampTypeValue(enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	sigTsType := jaxb.TimestampTypeValue(enumerations.TimestampTypeSignatureTimestamp)
+	archiveTsType := jaxb.TimestampTypeValue(enumerations.TimestampTypeArchiveTimestamp)
 
 	sigTs := &jaxb.XmlTimestamp{Type: &sigTsType}
 	sigTs.Id = jaxb.NewCollapsedString("sig-ts")
@@ -63,8 +63,8 @@ func TestSignatureWrapper_TimestampListByType(t *testing.T) {
 }
 
 func TestSignatureWrapper_MessageDigest(t *testing.T) {
-	msgDigestType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_MESSAGE_DIGEST)
-	otherType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_REFERENCE)
+	msgDigestType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeMessageDigest)
+	otherType := jaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeReference)
 	sig := &jaxb.XmlSignature{
 		DigestMatchers: &jaxb.DigestMatchersWrapper{
 			Items: []*jaxb.XmlDigestMatcher{
@@ -81,7 +81,7 @@ func TestSignatureWrapper_MessageDigest(t *testing.T) {
 }
 
 func TestRevocationWrapper_Basics(t *testing.T) {
-	origin := jaxb.RevocationOriginValue(enumerations.RevocationOrigin_INPUT_DOCUMENT)
+	origin := jaxb.RevocationOriginValue(enumerations.RevocationOriginInputDocument)
 	rev := &jaxb.XmlRevocation{Origin: &origin}
 	rev.Id = jaxb.NewCollapsedString("rev-1")
 
@@ -89,7 +89,7 @@ func TestRevocationWrapper_Basics(t *testing.T) {
 	if w.Id() != "rev-1" {
 		t.Fatalf("unexpected Id(): %q", w.Id())
 	}
-	if w.Origin() != enumerations.RevocationOrigin_INPUT_DOCUMENT {
+	if w.Origin() != enumerations.RevocationOriginInputDocument {
 		t.Fatalf("unexpected Origin(): %v", w.Origin())
 	}
 	if !w.IsInternalRevocationOrigin() {

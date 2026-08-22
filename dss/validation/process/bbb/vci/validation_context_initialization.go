@@ -64,7 +64,7 @@ func (c *ValidationContextInitialization) InitChain() {
 	c.FirstItem = item
 
 	if c.signature.IsPolicyPresent() &&
-		string(enumerations.SignaturePolicyType_IMPLICIT_POLICY) != c.signature.PolicyId() {
+		string(enumerations.SignaturePolicyTypeImplicitPolicy) != c.signature.PolicyId() {
 
 		item = item.SetNextItem(c.signaturePolicyIdentified())
 

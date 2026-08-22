@@ -84,7 +84,7 @@ func (c *AbstractCryptographicCheckerResultCheck[T]) Process() bool {
 // allCCConstraintsValid ports the private allConstraintsValid(XmlConstraintsConclusion).
 func allCCConstraintsValid(result *jaxb.XmlCC) bool {
 	for _, constraint := range result.Constraint {
-		if jaxb.XmlStatus_OK != constraint.Status && jaxb.XmlStatus_IGNORED != constraint.Status {
+		if jaxb.XmlStatusOK != constraint.Status && jaxb.XmlStatusIgnored != constraint.Status {
 			return false
 		}
 	}
@@ -97,11 +97,11 @@ func (c *AbstractCryptographicCheckerResultCheck[T]) Level() enumerations.Level 
 	conclusion := c.ccResult.Conclusion
 	if conclusion != nil {
 		if utils.IsCollectionNotEmpty(conclusion.Errors) {
-			return enumerations.Level_FAIL
+			return enumerations.LevelFail
 		} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-			return enumerations.Level_WARN
+			return enumerations.LevelWarn
 		} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-			return enumerations.Level_INFORM
+			return enumerations.LevelInform
 		}
 	}
 	return c.UninterruptedChainItemBase.Level()

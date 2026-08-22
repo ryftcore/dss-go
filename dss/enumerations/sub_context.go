@@ -5,18 +5,18 @@ package enumerations
 type SubContext string
 
 const (
-	// SubContext_SIGNING_CERT is used for a signing certificate validation.
-	SubContext_SIGNING_CERT SubContext = "SIGNING_CERT"
-	// SubContext_CA_CERTIFICATE is used for not trusted CA certificates in
+	// SubContextSigningCert is used for a signing certificate validation.
+	SubContextSigningCert SubContext = "SIGNING_CERT"
+	// SubContextCACertificate is used for not trusted CA certificates in
 	// a chain.
-	SubContext_CA_CERTIFICATE SubContext = "CA_CERTIFICATE"
+	SubContextCACertificate SubContext = "CA_CERTIFICATE"
 )
 
 // SubContextValues returns all constants in declaration order.
 func SubContextValues() []SubContext {
 	return []SubContext{
-		SubContext_SIGNING_CERT,
-		SubContext_CA_CERTIFICATE,
+		SubContextSigningCert,
+		SubContextCACertificate,
 	}
 }
 

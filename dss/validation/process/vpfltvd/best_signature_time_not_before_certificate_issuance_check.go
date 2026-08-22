@@ -79,11 +79,11 @@ func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) ErrorMessageTag(
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NOT_YET_VALID
+	return enumerations.SubIndicationNotYetValid
 }

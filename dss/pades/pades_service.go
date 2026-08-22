@@ -89,13 +89,13 @@ func (s *PAdESService) extensionProfile(signatureLevel enumerations.SignatureLev
 		panic("SignatureLevel must be defined!")
 	}
 	switch signatureLevel {
-	case enumerations.SignatureLevel_PAdES_BASELINE_B:
+	case enumerations.SignatureLevelPAdESBaselineB:
 		return nil
-	case enumerations.SignatureLevel_PAdES_BASELINE_T:
+	case enumerations.SignatureLevelPAdESBaselineT:
 		return NewPAdESLevelBaselineT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
-	case enumerations.SignatureLevel_PAdES_BASELINE_LT:
+	case enumerations.SignatureLevelPAdESBaselineLT:
 		return NewPAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
-	case enumerations.SignatureLevel_PAdES_BASELINE_LTA:
+	case enumerations.SignatureLevelPAdESBaselineLTA:
 		return NewPAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
@@ -122,7 +122,7 @@ func (s *PAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
 		panic(err)
 	}
 	timestampToken, err := validation.NewTimestampToken(timeStampResponse.Bytes(),
-		enumerations.TimestampType_CONTENT_TIMESTAMP)
+		enumerations.TimestampTypeContentTimestamp)
 	if err != nil {
 		panic(model.NewDSSErrorMessageCause("Cannot obtain the content timestamp", err))
 	}
@@ -224,13 +224,13 @@ func (s *PAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 	signature := pdfSignatureService.Sign(toSignDocument, cmsSignedData, parameters)
 
 	extension := s.extensionProfile(signatureLevel)
-	if signatureLevel != enumerations.SignatureLevel_PAdES_BASELINE_B &&
-		signatureLevel != enumerations.SignatureLevel_PAdES_BASELINE_T && extension != nil {
+	if signatureLevel != enumerations.SignatureLevelPAdESBaselineB &&
+		signatureLevel != enumerations.SignatureLevelPAdESBaselineT && extension != nil {
 		signature = extension.ExtendSignatures(signature, parameters)
 	}
 
 	parameters.Reinit()
-	name, err := s.GetFinalFileNameWithLevel(toSignDocument, enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(toSignDocument, enumerations.SigningOperationSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -276,7 +276,7 @@ func (s *PAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 	extension := s.extensionProfile(parameters.SignatureLevel())
 	if extension != nil {
 		extended := extension.ExtendSignatures(toExtendDocument, parameters)
-		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperation_EXTEND,
+		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperationExtend,
 			parameters.SignatureLevel())
 		if err != nil {
 			panic(err)
@@ -289,7 +289,7 @@ func (s *PAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 
 // padesServiceAssertExtensionParametersValid ports the private #assertExtensionParametersValid.
 func padesServiceAssertExtensionParametersValid(parameters *PAdESSignatureParameters) {
-	if enumerations.SignatureLevel_PAdES_BASELINE_B == parameters.SignatureLevel() {
+	if enumerations.SignatureLevelPAdESBaselineB == parameters.SignatureLevel() {
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
 	}
 }
@@ -354,7 +354,7 @@ func (s *PAdESService) Timestamp(toTimestampDocument model.DSSDocument,
 
 	timestampService := NewPAdESTimestampServiceWithPDFService(s.TspSource, s.SignatureTimestampService())
 	timestampedDocument := timestampService.TimestampDocument(extendedDocument, parameters)
-	name, err := s.GetFinalFileName(toTimestampDocument, enumerations.SigningOperation_TIMESTAMP)
+	name, err := s.GetFinalFileName(toTimestampDocument, enumerations.SigningOperationTimestamp)
 	if err != nil {
 		panic(err)
 	}

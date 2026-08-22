@@ -37,7 +37,7 @@ func NewQualifiedCertificateForWSAAtTimeCheck(i18nProvider *i18n.I18nProvider, r
 // Process performs the check. Port of process().
 func (c *QualifiedCertificateForWSAAtTimeCheck) Process() bool {
 	return c.certificateQualification.CertificateQualification != nil &&
-		enumerations.CertificateQualification_QCERT_FOR_WSA == c.certificateQualification.CertificateQualification.CertificateQualification()
+		enumerations.CertificateQualificationQCERTForWSA == c.certificateQualification.CertificateQualification.CertificateQualification()
 }
 
 // BuildConstraintMessage builds a constraint message. Port of
@@ -83,7 +83,7 @@ func (c *QualifiedCertificateForWSAAtTimeCheck) BuildAdditionalInfo() *string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QualifiedCertificateForWSAAtTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -4,7 +4,7 @@ import "testing"
 
 func TestSignerTextVerticalAlignmentValues(t *testing.T) {
 	want := []SignerTextVerticalAlignment{
-		SignerTextVerticalAlignment_TOP, SignerTextVerticalAlignment_MIDDLE, SignerTextVerticalAlignment_BOTTOM,
+		SignerTextVerticalAlignmentTop, SignerTextVerticalAlignmentMiddle, SignerTextVerticalAlignmentBottom,
 	}
 	got := SignerTextVerticalAlignmentValues()
 	if len(got) != len(want) {

@@ -7,10 +7,10 @@ func TestCertificateTypeLabel(t *testing.T) {
 		v    CertificateType
 		want string
 	}{
-		{CertificateType_ESIGN, "eSig"},
-		{CertificateType_ESEAL, "eSeal"},
-		{CertificateType_WSA, "WSA"},
-		{CertificateType_UNKNOWN, "unknown"},
+		{CertificateTypeESign, "eSig"},
+		{CertificateTypeESeal, "eSeal"},
+		{CertificateTypeWSA, "WSA"},
+		{CertificateTypeUnknown, "unknown"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Label(); got != tt.want {

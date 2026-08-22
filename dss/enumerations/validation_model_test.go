@@ -4,9 +4,9 @@ import "testing"
 
 func TestValidationModelValues(t *testing.T) {
 	want := []ValidationModel{
-		ValidationModel_SHELL,
-		ValidationModel_CHAIN,
-		ValidationModel_HYBRID,
+		ValidationModelShell,
+		ValidationModelChain,
+		ValidationModelHybrid,
 	}
 	got := ValidationModelValues()
 	if len(got) != len(want) {

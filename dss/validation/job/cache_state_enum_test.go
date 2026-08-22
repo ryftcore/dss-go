@@ -7,31 +7,31 @@ import "testing"
 // file header comment in cache_state_enum.go for the derivation).
 func TestCacheStateEnum_TransitionTable(t *testing.T) {
 	allStates := []CacheStateEnum{
-		CacheStateEnum_REFRESH_NEEDED, CacheStateEnum_DESYNCHRONIZED, CacheStateEnum_SYNCHRONIZED,
-		CacheStateEnum_ERROR, CacheStateEnum_TO_BE_DELETED,
+		CacheStateEnumRefreshNeeded, CacheStateEnumDesynchronized, CacheStateEnumSynchronized,
+		CacheStateEnumError, CacheStateEnumToBEDeleted,
 	}
 
 	// wantPanic[method] is the set of starting states for which the transition panics.
 	wantPanic := map[string]map[CacheStateEnum]bool{
-		"sync":          {CacheStateEnum_REFRESH_NEEDED: true, CacheStateEnum_ERROR: true, CacheStateEnum_TO_BE_DELETED: true},
-		"desync":        {CacheStateEnum_DESYNCHRONIZED: true},
-		"refreshNeeded": {CacheStateEnum_DESYNCHRONIZED: true},
-		"toBeDeleted":   {CacheStateEnum_DESYNCHRONIZED: true, CacheStateEnum_TO_BE_DELETED: true},
-		"error":         {CacheStateEnum_DESYNCHRONIZED: true, CacheStateEnum_SYNCHRONIZED: true, CacheStateEnum_ERROR: true, CacheStateEnum_TO_BE_DELETED: true},
+		"sync":          {CacheStateEnumRefreshNeeded: true, CacheStateEnumError: true, CacheStateEnumToBEDeleted: true},
+		"desync":        {CacheStateEnumDesynchronized: true},
+		"refreshNeeded": {CacheStateEnumDesynchronized: true},
+		"toBeDeleted":   {CacheStateEnumDesynchronized: true, CacheStateEnumToBEDeleted: true},
+		"error":         {CacheStateEnumDesynchronized: true, CacheStateEnumSynchronized: true, CacheStateEnumError: true, CacheStateEnumToBEDeleted: true},
 	}
 
 	for _, start := range allStates {
 		t.Run(string(start)+"/sync", func(t *testing.T) {
-			checkTransition(t, start, wantPanic["sync"][start], CacheStateEnum_SYNCHRONIZED, func(ctx *CurrentCacheContext) { start.Sync(ctx) })
+			checkTransition(t, start, wantPanic["sync"][start], CacheStateEnumSynchronized, func(ctx *CurrentCacheContext) { start.Sync(ctx) })
 		})
 		t.Run(string(start)+"/desync", func(t *testing.T) {
-			checkTransition(t, start, wantPanic["desync"][start], CacheStateEnum_DESYNCHRONIZED, func(ctx *CurrentCacheContext) { start.Desync(ctx) })
+			checkTransition(t, start, wantPanic["desync"][start], CacheStateEnumDesynchronized, func(ctx *CurrentCacheContext) { start.Desync(ctx) })
 		})
 		t.Run(string(start)+"/refreshNeeded", func(t *testing.T) {
-			checkTransition(t, start, wantPanic["refreshNeeded"][start], CacheStateEnum_REFRESH_NEEDED, func(ctx *CurrentCacheContext) { start.RefreshNeeded(ctx) })
+			checkTransition(t, start, wantPanic["refreshNeeded"][start], CacheStateEnumRefreshNeeded, func(ctx *CurrentCacheContext) { start.RefreshNeeded(ctx) })
 		})
 		t.Run(string(start)+"/toBeDeleted", func(t *testing.T) {
-			checkTransition(t, start, wantPanic["toBeDeleted"][start], CacheStateEnum_TO_BE_DELETED, func(ctx *CurrentCacheContext) { start.ToBeDeleted(ctx) })
+			checkTransition(t, start, wantPanic["toBeDeleted"][start], CacheStateEnumToBEDeleted, func(ctx *CurrentCacheContext) { start.ToBeDeleted(ctx) })
 		})
 		t.Run(string(start)+"/error", func(t *testing.T) {
 			ctx := forceCacheState(start)
@@ -46,7 +46,7 @@ func TestCacheStateEnum_TransitionTable(t *testing.T) {
 				if r != nil {
 					t.Fatalf("state=%s: unexpected panic on error(): %v", start, r)
 				}
-				if ctx.CurrentState() != CacheStateEnum_ERROR {
+				if ctx.CurrentState() != CacheStateEnumError {
 					t.Fatalf("state=%s: after error() want ERROR, got %s", start, ctx.CurrentState())
 				}
 			}()

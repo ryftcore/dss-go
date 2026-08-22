@@ -83,7 +83,7 @@ func (c *QWACForTLSBindingCertificateValidationBlock) InitChain() {
 		v := jaxb.QWACProfileValue(qwac2Process.QWACProfile())
 		c.Result.Value.QWACType = &v
 	} else {
-		v := jaxb.QWACProfileValue(enumerations.QWACProfile_NOT_QWAC)
+		v := jaxb.QWACProfileValue(enumerations.QWACProfileNotQWAC)
 		c.Result.Value.QWACType = &v
 	}
 }

@@ -28,7 +28,7 @@ func NewAuthorityInformationAccess() *AuthorityInformationAccess {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID()),
 	}
 }
 

@@ -203,7 +203,7 @@ func TestCertificateExtensionsUtilsUpstreamNameConstraints(t *testing.T) {
 		"#0000000000000000",
 		"#0000000000000000000000000000000000000000000000000000000000000000",
 	} {
-		if got := excludedSubtrees[i].GeneralNameType(); got != enumerations.GeneralNameType_IP_ADDRESS {
+		if got := excludedSubtrees[i].GeneralNameType(); got != enumerations.GeneralNameTypeIPAddress {
 			t.Errorf("excluded subtree %d type = %q, want IP_ADDRESS", i, got)
 		}
 		if got := excludedSubtrees[i].Value(); got != want {
@@ -254,23 +254,23 @@ func TestCertificateExtensionsUtilsPredicates(t *testing.T) {
 		predicate func(string) bool
 		value     enumerations.CertificateExtensionEnum
 	}{
-		{"SubjectAlternativeNames", CertificateExtensionsUtilsIsSubjectAlternativeNames, enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME},
-		{"AuthorityKeyIdentifier", CertificateExtensionsUtilsIsAuthorityKeyIdentifier, enumerations.CertificateExtensionEnum_AUTHORITY_KEY_IDENTIFIER},
-		{"SubjectKeyIdentifier", CertificateExtensionsUtilsIsSubjectKeyIdentifier, enumerations.CertificateExtensionEnum_SUBJECT_KEY_IDENTIFIER},
-		{"AuthorityInformationAccess", CertificateExtensionsUtilsIsAuthorityInformationAccess, enumerations.CertificateExtensionEnum_AUTHORITY_INFORMATION_ACCESS},
-		{"CRLDistributionPoints", CertificateExtensionsUtilsIsCRLDistributionPoints, enumerations.CertificateExtensionEnum_CRL_DISTRIBUTION_POINTS},
-		{"BasicConstraints", CertificateExtensionsUtilsIsBasicConstraints, enumerations.CertificateExtensionEnum_BASIC_CONSTRAINTS},
-		{"NameConstraints", CertificateExtensionsUtilsIsNameConstraints, enumerations.CertificateExtensionEnum_NAME_CONSTRAINTS},
-		{"PolicyConstraints", CertificateExtensionsUtilsIsPolicyConstraints, enumerations.CertificateExtensionEnum_POLICY_CONSTRAINTS},
-		{"KeyUsage", CertificateExtensionsUtilsIsKeyUsage, enumerations.CertificateExtensionEnum_KEY_USAGE},
-		{"ExtendedKeyUsage", CertificateExtensionsUtilsIsExtendedKeyUsage, enumerations.CertificateExtensionEnum_EXTENDED_KEY_USAGE},
-		{"InhibitAnyPolicy", CertificateExtensionsUtilsIsInhibitAnyPolicy, enumerations.CertificateExtensionEnum_INHIBIT_ANY_POLICY},
-		{"FreshestCRL", CertificateExtensionsUtilsIsFreshestCRL, enumerations.CertificateExtensionEnum_FRESHEST_CRL},
-		{"CertificatePolicies", CertificateExtensionsUtilsIsCertificatePolicies, enumerations.CertificateExtensionEnum_CERTIFICATE_POLICIES},
-		{"OcspNoCheck", CertificateExtensionsUtilsIsOcspNoCheck, enumerations.CertificateExtensionEnum_OCSP_NOCHECK},
-		{"ValidityAssuredShortTerm", CertificateExtensionsUtilsIsValidityAssuredShortTerm, enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM},
-		{"QcStatements", CertificateExtensionsUtilsIsQcStatements, enumerations.CertificateExtensionEnum_QC_STATEMENTS},
-		{"NoRevocationAvailable", CertificateExtensionsUtilsIsNoRevocationAvailable, enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE},
+		{"SubjectAlternativeNames", CertificateExtensionsUtilsIsSubjectAlternativeNames, enumerations.CertificateExtensionEnumSubjectAlternativeName},
+		{"AuthorityKeyIdentifier", CertificateExtensionsUtilsIsAuthorityKeyIdentifier, enumerations.CertificateExtensionEnumAuthorityKeyIdentifier},
+		{"SubjectKeyIdentifier", CertificateExtensionsUtilsIsSubjectKeyIdentifier, enumerations.CertificateExtensionEnumSubjectKeyIdentifier},
+		{"AuthorityInformationAccess", CertificateExtensionsUtilsIsAuthorityInformationAccess, enumerations.CertificateExtensionEnumAuthorityInformationAccess},
+		{"CRLDistributionPoints", CertificateExtensionsUtilsIsCRLDistributionPoints, enumerations.CertificateExtensionEnumCRLDistributionPoints},
+		{"BasicConstraints", CertificateExtensionsUtilsIsBasicConstraints, enumerations.CertificateExtensionEnumBasicConstraints},
+		{"NameConstraints", CertificateExtensionsUtilsIsNameConstraints, enumerations.CertificateExtensionEnumNameConstraints},
+		{"PolicyConstraints", CertificateExtensionsUtilsIsPolicyConstraints, enumerations.CertificateExtensionEnumPolicyConstraints},
+		{"KeyUsage", CertificateExtensionsUtilsIsKeyUsage, enumerations.CertificateExtensionEnumKeyUsage},
+		{"ExtendedKeyUsage", CertificateExtensionsUtilsIsExtendedKeyUsage, enumerations.CertificateExtensionEnumExtendedKeyUsage},
+		{"InhibitAnyPolicy", CertificateExtensionsUtilsIsInhibitAnyPolicy, enumerations.CertificateExtensionEnumInhibitAnyPolicy},
+		{"FreshestCRL", CertificateExtensionsUtilsIsFreshestCRL, enumerations.CertificateExtensionEnumFreshestCRL},
+		{"CertificatePolicies", CertificateExtensionsUtilsIsCertificatePolicies, enumerations.CertificateExtensionEnumCertificatePolicies},
+		{"OcspNoCheck", CertificateExtensionsUtilsIsOcspNoCheck, enumerations.CertificateExtensionEnumOCSPNoCheck},
+		{"ValidityAssuredShortTerm", CertificateExtensionsUtilsIsValidityAssuredShortTerm, enumerations.CertificateExtensionEnumValidityAssuredShortTerm},
+		{"QcStatements", CertificateExtensionsUtilsIsQcStatements, enumerations.CertificateExtensionEnumQCStatements},
+		{"NoRevocationAvailable", CertificateExtensionsUtilsIsNoRevocationAvailable, enumerations.CertificateExtensionEnumNoRevocationAvailable},
 	} {
 		if !testCase.predicate(testCase.value.OID()) {
 			t.Errorf("Is%s(%q) = false, want true", testCase.name, testCase.value.OID())
@@ -286,10 +286,10 @@ func TestCertificateExtensionsUtilsPredicates(t *testing.T) {
 		value enumerations.CertificateExtensionEnum
 		oid   string
 	}{
-		{"ocsp-nocheck", enumerations.CertificateExtensionEnum_OCSP_NOCHECK, "1.3.6.1.5.5.7.48.1.5"},
-		{"ext-etsi-valassured-ST-certs", enumerations.CertificateExtensionEnum_VALIDITY_ASSURED_SHORT_TERM, "0.4.0.194121.2.1"},
-		{"qcStatements", enumerations.CertificateExtensionEnum_QC_STATEMENTS, "1.3.6.1.5.5.7.1.3"},
-		{"noRevAvail", enumerations.CertificateExtensionEnum_NO_REVOCATION_AVAILABLE, "2.5.29.56"},
+		{"ocsp-nocheck", enumerations.CertificateExtensionEnumOCSPNoCheck, "1.3.6.1.5.5.7.48.1.5"},
+		{"ext-etsi-valassured-ST-certs", enumerations.CertificateExtensionEnumValidityAssuredShortTerm, "0.4.0.194121.2.1"},
+		{"qcStatements", enumerations.CertificateExtensionEnumQCStatements, "1.3.6.1.5.5.7.1.3"},
+		{"noRevAvail", enumerations.CertificateExtensionEnumNoRevocationAvailable, "2.5.29.56"},
 	} {
 		if got := testCase.value.OID(); got != testCase.oid {
 			t.Errorf("%s OID = %q, want %q", testCase.name, got, testCase.oid)

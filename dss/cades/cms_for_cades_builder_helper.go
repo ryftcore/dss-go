@@ -212,5 +212,5 @@ func (h *CMSForCAdESBuilderHelper) InitCMSBuilder() *cms.CMSBuilder {
 // IsEncapsulateSignerData reports whether the signed data shall be encapsulated.
 // Port of the protected #isEncapsulateSignerData.
 func (h *CMSForCAdESBuilderHelper) IsEncapsulateSignerData() bool {
-	return enumerations.SignaturePackaging_DETACHED != h.SignatureParameters.SignaturePackaging()
+	return enumerations.SignaturePackagingDetached != h.SignatureParameters.SignaturePackaging()
 }

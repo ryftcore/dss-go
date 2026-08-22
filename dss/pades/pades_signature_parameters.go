@@ -155,7 +155,7 @@ func NewPAdESSignatureParameters() *PAdESSignatureParameters {
 // signatureLevel is empty or is not a PAdES level (Java's IllegalArgumentException).
 func (p *PAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
-	if err != nil || enumerations.SignatureForm_PAdES != form {
+	if err != nil || enumerations.SignatureFormPAdES != form {
 		panic("Only PAdES form is allowed !")
 	}
 	p.CAdESSignatureParameters.SetSignatureLevel(signatureLevel)

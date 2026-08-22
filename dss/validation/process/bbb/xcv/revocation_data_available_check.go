@@ -45,7 +45,7 @@ func NewRevocationDataAvailableCheckWithId[T any](i18nProvider *i18n.I18nProvide
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *RevocationDataAvailableCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_LTV_SUB_XCV
+	return jaxb.XmlBlockTypeLTVSubXCV
 }
 
 // Process performs the check. Port of process().
@@ -66,11 +66,11 @@ func (c *RevocationDataAvailableCheck[T]) ErrorMessageTag() i18n.MessageTag {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *RevocationDataAvailableCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *RevocationDataAvailableCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }
