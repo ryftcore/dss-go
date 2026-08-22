@@ -206,3 +206,62 @@ func TestPageRotationNormalisesHugeAndNonFiniteValues(t *testing.T) {
 		}
 	})
 }
+
+// TestClampKeyLen pins the [0, digest] bound clampKeyLen enforces. clampDictInt
+// saturates /Length's magnitude but not its sign, and the /V 4 and /V 5 arms of
+// setupEncryption divide it by 8 without the floor /V 2 has, so both ends of the
+// range used to reach the Algorithm 2/3 digest slicing unbounded.
+func TestClampKeyLen(t *testing.T) {
+	const digestLen = 16
+	tests := []struct {
+		name   string
+		keyLen int
+		want   int
+	}{
+		{"zero passes through", 0, 0},
+		{"in-range passes through", 5, 5},
+		{"digest length passes through", digestLen, digestLen},
+		{"negative floors at zero", -1, 0},
+		{"far negative floors at zero", math.MinInt32, 0},
+		{"one past digest caps", digestLen + 1, digestLen},
+		{"far beyond digest caps", 250000000, digestLen},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := clampKeyLen(tc.keyLen, digestLen); got != tc.want {
+				t.Errorf("clampKeyLen(%d, %d) = %d, want %d", tc.keyLen, digestLen, got, tc.want)
+			}
+		})
+	}
+}
+
+// TestHostileEncryptLengthDoesNotPanic is the end-to-end regression for
+// clampKeyLen. /Length is attacker-controlled through pdf.OpenBytes, which
+// pades.NativePdfDocumentReader calls on an untrusted document, and a /V 4 or
+// /V 5 dictionary carries it into computeRC4Key and computeKeyRev234 unfloored:
+// /Length -8 sliced digest[:-1] and /Length 2000000000 sliced digest[:250000000],
+// both panicking rather than rejecting the file. Every case must now come back
+// as an error.
+func TestHostileEncryptLengthDoesNotPanic(t *testing.T) {
+	tests := []struct {
+		name string
+		dict string
+	}{
+		{"negative length, R4", "<< /Filter /Standard /V 4 /R 4 /Length -8 /P -1 /O <00> /U <00> >>"},
+		{"negative length, R3", "<< /Filter /Standard /V 4 /R 3 /Length -8 /P -1 /O <00> /U <00> >>"},
+		{"negative length, R2", "<< /Filter /Standard /V 4 /R 2 /Length -8 /P -1 /O <00> /U <00> >>"},
+		{"negative length, V5", "<< /Filter /Standard /V 5 /R 6 /Length -8 /P -1 /O <00> /U <00> >>"},
+		{"huge length, R4", "<< /Filter /Standard /V 4 /R 4 /Length 2000000000 /P -1 /O <00> /U <00> >>"},
+		{"huge length, R3", "<< /Filter /Standard /V 2 /R 3 /Length 2000000000 /P -1 /O <00> /U <00> >>"},
+		{"int32-saturated length", "<< /Filter /Standard /V 4 /R 4 /Length 99999999999999999999 /P -1 /O <00> /U <00> >>"},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			data := buildReaderPDF("%PDF-1.6\n", catalogObjs(rdrObj{num: 5, body: tc.dict}),
+				"/Encrypt 5 0 R\n/ID [<30313233343536373839616263646566> <30313233343536373839616263646566>]\n")
+			if _, err := OpenBytes(data, nil); err == nil {
+				t.Errorf("OpenBytes accepted a hostile /Length, want an error")
+			}
+		})
+	}
+}

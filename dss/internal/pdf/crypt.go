@@ -49,6 +49,25 @@ func clampDictInt(v int64) int {
 	}
 }
 
+// clampKeyLen bounds a /Length-derived key size to what an MD5 digest can
+// supply. clampDictInt saturates /Length's magnitude but not its sign, and the
+// /V 4 and /V 5 branches divide it by 8 without a floor, so a hostile /Encrypt
+// reaches the Algorithm 2/3 digest slicing with an arbitrary int: /Length -8
+// gives -1 and /Length 2000000000 gives 250000000, and both panic. Clamping to
+// [0, digest] leaves every well-formed /Length untouched — the default is 40
+// bits, or 5 bytes — and lets a malformed one fail closed on the password check
+// instead of taking the process down.
+func clampKeyLen(keyLen, digestLen int) int {
+	switch {
+	case keyLen < 0:
+		return 0
+	case keyLen > digestLen:
+		return digestLen
+	default:
+		return keyLen
+	}
+}
+
 // Permissions is the decoded /P bitfield plus which password matched.
 type Permissions struct {
 	Raw              int32
@@ -292,14 +311,12 @@ func userPasswordFromOwner(pw, o []byte, r, keyLen int) []byte {
 func computeRC4Key(pw []byte, r, keyLen int) []byte {
 	sum := md5.Sum(truncateOrPad(pw))
 	digest := sum[:]
+	keyLen = clampKeyLen(keyLen, len(digest))
 	if r == 3 || r == 4 {
 		for i := 0; i < 50; i++ {
 			s := md5.Sum(digest[:keyLen])
 			digest = s[:]
 		}
-	}
-	if keyLen > len(digest) {
-		keyLen = len(digest)
 	}
 	return append([]byte(nil), digest[:keyLen]...)
 }
@@ -341,17 +358,12 @@ func computeKeyRev234(pw, o []byte, p int32, id []byte, encMeta bool, keyLen, r 
 		h.Write([]byte{0xff, 0xff, 0xff, 0xff})
 	}
 	digest := h.Sum(nil)
+	keyLen = clampKeyLen(keyLen, len(digest))
 	if r == 3 || r == 4 {
-		if keyLen > len(digest) {
-			keyLen = len(digest)
-		}
 		for i := 0; i < 50; i++ {
 			s := md5.Sum(digest[:keyLen])
 			digest = s[:]
 		}
-	}
-	if keyLen > len(digest) {
-		keyLen = len(digest)
 	}
 	return append([]byte(nil), digest[:keyLen]...)
 }
