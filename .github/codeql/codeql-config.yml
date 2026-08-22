@@ -1,0 +1,11 @@
+name: dss-go
+query-filters:
+  # This library's job is to compute digests under an algorithm the caller or the
+  # signature being validated chooses; ETSI EN 319 122/132 require SHA-1 and
+  # RIPEMD-160 support for legacy signatures, and no secret reaches these code
+  # paths. Every alert this rule produced on the first baseline was a false
+  # positive (see the triage of alerts 12-19). Weak *ciphers* are deliberately
+  # NOT excluded: go/weak-cryptographic-algorithm stays on so that any new
+  # RC4/DES use is caught.
+  - exclude:
+      id: go/weak-sensitive-data-hashing

@@ -11,6 +11,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -899,17 +900,20 @@ func (d *Document) PageRotation(page int) int {
 	if err != nil {
 		return 0
 	}
-	var r int
+	var r int64
 	switch v := d.inherited(dict, "Rotate").(type) {
 	case Integer:
-		r = int(v)
+		r = int64(v)
 	case Real:
-		r = int(v.Val)
+		if math.IsNaN(v.Val) || v.Val < math.MinInt32 || v.Val > math.MaxInt32 {
+			return 0
+		}
+		r = int64(v.Val)
 	default:
 		return 0
 	}
 	r = ((r % 360) + 360) % 360
-	return ((r + 45) / 90 % 4) * 90
+	return int(((r + 45) / 90 % 4) * 90)
 }
 
 // Annotation is one /Annots entry.

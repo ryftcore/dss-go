@@ -401,9 +401,11 @@ func PAdESUtilsExtractPermissionsDictionary(wrapper PdfDict) *SigFieldPermission
 	if PAdESConstantsSigFieldLockName == wrapper.NameValue(PAdESConstantsTypeName) {
 		permissions := wrapper.NumberValue(PAdESConstantsPermissionsName)
 		if permissions != nil {
-			certificationPermission, err := enumerations.CertificationPermissionFromCode(int(*permissions))
-			if err == nil {
-				sigFieldPermissions.SetCertificationPermission(certificationPermission)
+			if code, ok := pdfNumberToInt(*permissions); ok {
+				certificationPermission, err := enumerations.CertificationPermissionFromCode(code)
+				if err == nil {
+					sigFieldPermissions.SetCertificationPermission(certificationPermission)
+				}
 			}
 		}
 	}
