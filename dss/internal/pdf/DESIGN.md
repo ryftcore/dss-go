@@ -1,12 +1,11 @@
 # PDF engine binding design: `internal/pdf`
 
-*Destination: `dss/internal/pdf/DESIGN.md`. Binding for both implementers. Reviewers reject
-deviations that are not amended into this file first. Precedent and house style:
+*Design record for the native PDF engine. Companion document:
 `dss/internal/xmldom/DESIGN.md` (the same exercise for the XML stack).*
 
 | Upstream artefact this package replaces | Where it lives upstream |
 | --- | --- |
-| `org.apache.pdfbox:pdfbox:3.0.7` (parser, `COSDocument`/`COSWriter`, security handlers, filters) | maven central; sources extracted to `scratchpad/pdfbox-src/` |
+| `org.apache.pdfbox:pdfbox:3.0.7` (parser, `COSDocument`/`COSWriter`, security handlers, filters) | maven central |
 | `com.github.librepdf:openpdf:1.3.43` | second SPI implementation upstream — **not** ported (§0.3) |
 | `dss-pades-pdfbox` (`PdfBoxDocumentReader`, `PdfBoxSignatureService`, `PdfBoxDict`, `PdfBoxArray`, `PdfBoxObjectKey`, `PdfBoxUtils`) | the only consumer whose calls define our scope |
 | `dss-pades` `eu.europa.esig.dss.pdf.*` SPI (`PdfDocumentReader`, `PdfDict`, `PdfArray`, `PdfObject`) | the interface `internal/pdf` must be able to satisfy |
@@ -106,18 +105,20 @@ internal/pdf      ← this document. stdlib only.
 `internal/pdf` parses `/ByteRange` into `[]int64`; `pades.ByteRange` (the port of
 `eu.europa.esig.dss.pades.validation.ByteRange`) owns `validate()` and `getLength()`.
 
+The writer depends on the reader only through the `*Document` surface in §4.3.
+
 ---
 
 ## 1. Evidence: what the upstream corpus actually contains
 
 Everything in §2 is scoped from measurement, not from the PDF spec's table of contents. The survey
-program is `internal/pdf/testdata/gen/PdfOracle.java` (§6).
+program is `internal/pdf/testdata/gen/PdfOracle.java` (§5).
 
-*Reproduction artefacts from the run that produced this table, kept in the phase scratchpad:*
+*Reproduction artefacts from the run that produced this table (not committed):*
 `PdfCorpusSurvey.java` (the prototype oracle), `pdfprobe-pom.xml` (the two-dependency pom that
 fetches pdfbox 3.0.7 and its sources), `pdf_corpus_survey.txt` (the full 248-line per-file dump plus
-the summary quoted below), and `pdfbox-src/` (the extracted pdfbox 3.0.7 sources cited throughout
-§2.7 and §3.2). The numbers below are its output over
+the summary quoted below), and the extracted pdfbox 3.0.7 sources cited throughout
+§2.7 and §3.2. The numbers below are its output over
 **all 248 PDFs** under `dss-pades/src/test/resources` with pdfbox 3.0.7.
 
 ```
@@ -686,7 +687,7 @@ Reasoning, from evidence rather than taste:
    `circumventBug2650`.
 
 So the three assertions are split across three KAT families, and each one is explicit about what it
-proves (§6.3). What we *do* commit to, and test:
+proves (§5.3). What we *do* commit to, and test:
 
 * **Determinism** — same inputs ⇒ same bytes, always. Golden files.
 * **Prefix preservation** — `out[:len(in)] == in`. Always.
@@ -700,7 +701,7 @@ proves (§6.3). What we *do* commit to, and test:
 
 ## 4. The exported Go API — **PINNED**
 
-Two implementers build against this in parallel. It does not change without an amendment to this
+This surface is pinned. It does not change without an amendment to this
 file. Every exported symbol below is final: name, signature, semantics.
 
 ### 4.1 `object.go` — object model *(written first, jointly reviewed, then frozen)*
@@ -1198,41 +1199,9 @@ func ReplaceContents(doc []byte, cms []byte) ([]byte, error)
 
 ---
 
-## 5. File ownership — who owns what, so the two builders never conflict
+## 5. Oracle strategy and KATs
 
-| File | Owner | Contents |
-| --- | --- | --- |
-| `doc.go` | **joint, first commit** | package doc + provenance header per `PORTING.md` |
-| `object.go` | **joint, first commit, then frozen** | §4.1 |
-| `errors.go` | **joint, first commit, then frozen** | §4.2 |
-| `lexer.go` | Reader | §2.1 |
-| `parser.go` | Reader | indirect objects, stream bodies, S1–S5 |
-| `xref.go` | Reader | §2.3, `XRefSection`, chain walk, hybrid |
-| `objstm.go` | Reader | §2.4 |
-| `filter.go` | Reader | §2.5 + §4.4 |
-| `crypt.go` | Reader | §2.6 |
-| `repair.go` | Reader | §2.7 X1–X4, brute-force object scan |
-| `document.go` | Reader | §4.3 — `Document`, accessors, pages, AcroForm, signature fields |
-| `revision.go` | Reader | §2.8 — `ScanRevisions`, `SignedRanges`, `ContentsRange` |
-| `writer.go` | Writer | §4.5 — R1–R11 serialization primitives |
-| `xrefwrite.go` | Writer | §3.4 — R12–R14, table and stream emission |
-| `incremental.go` | Writer | §4.6 `Updater`, R15–R16, R20–R21, `Result` |
-| `sign.go` | Writer | §3.3 — `AddSignature`, R17–R19, `ReplaceContents` |
-| `dss.go` | Writer | §3.5 — `SetDSSDictionary` |
-| `*_test.go` | file owner | one test file per source file |
-| `kat_test.go` | **joint** | the oracle-driven corpus tests (§6) |
-| `testdata/gen/PdfOracle.java` | **joint** | §6.2 |
-
-Sequencing: `doc.go` + `object.go` + `errors.go` land in one reviewed commit before either
-implementer starts. After that the two sets of files do not overlap. The writer depends on the
-reader only through the frozen `*Document` surface in §4.3, which it may treat as available from
-day one by writing against a hand-built fixture.
-
----
-
-## 6. Oracle strategy and KATs
-
-### 6.1 Shape
+### 5.1 Shape
 
 Same contract as the BouncyCastle and Santuario oracles used in phases 2–4, restated because it is
 what makes the goldens trustworthy:
@@ -1244,7 +1213,7 @@ what makes the goldens trustworthy:
   a corresponding Go-side failure. A Go success where Java failed is a **test failure**.
 * `manifest.txt` records the SHA-256 of every golden and of every corpus file.
 
-### 6.2 The oracle program
+### 5.2 The oracle program
 
 `internal/pdf/testdata/gen/PdfOracle.java`, header comment carrying the exact, proven command:
 
@@ -1260,8 +1229,8 @@ java -Dorg.slf4j.simpleLogger.defaultLogLevel=off -cp "$CP:/tmp/pdforacle" \
 ```
 
 The pdfbox 3.0.7 jars are fetched once with a two-dependency `pom.xml` and
-`mvn dependency:build-classpath`; the sources jar (`-Dartifact=…:jar:sources`) is extracted to
-`scratchpad/pdfbox-src/` and is the citation source for every rule in §2.7 and §3.2.
+`mvn dependency:build-classpath`; the sources jar (`-Dartifact=…:jar:sources`) is the citation
+source for every rule in §2.7 and §3.2.
 
 **Per-PDF dump fields** — one record per corpus file, tab-separated, stable field order:
 
@@ -1294,11 +1263,11 @@ A prototype of this program already exists and has been run over the full corpus
 output. Productionising it means adding `revisionEnds`, `objectKeys`, `permissions`, page/annotation
 geometry, `dss`/`vri` and the SHA-256 digests.
 
-### 6.3 The three KAT families, and exactly what each asserts
+### 5.3 The three KAT families, and exactly what each asserts
 
 **KAT-A — reader parity (`TestOracleCorpus`).** Corpus = all 248 upstream PDFs, copied into
 `internal/pdf/testdata/corpus/` mirroring their upstream paths per `PORTING.md`. For each file, every
-oracle field in §6.2 is compared. **Asserts**: our parse agrees with pdfbox on structure, on repair
+oracle field in §5.2 is compared. **Asserts**: our parse agrees with pdfbox on structure, on repair
 outcomes, and on every byte we hand upward. **Does not assert** anything about output bytes.
 
 **KAT-B — writer determinism (`TestWriterGolden`).** ~18 hand-authored scenarios, each a
@@ -1332,7 +1301,7 @@ pdfbox output — that is deliberate, per §3.6, and the test file says so in a 
 **KAT-C — interop, both directions (`TestInterop`, build tag `interop`).**
 * *Go → Java*: every KAT-B scenario's output is fed to the oracle; the oracle must parse it, report
   the expected revision count, xref style, signature inventory and `/ByteRange`, and — for the signed
-  scenarios driven from the `pades` layer in phase 5's integration gate — upstream DSS must validate
+  scenarios driven from the `pades` layer — upstream DSS must validate
   it to the expected `SignatureLevel` and `Indication`.
 * *Java → Go*: every one of the 199 corpus PDFs that carries at least one filled signature
   dictionary (207 have signature fields; 8 of those hold only empty fields) is re-validated by the Go port and each
@@ -1342,7 +1311,7 @@ pdfbox output — that is deliberate, per §3.6, and the test file says so in a 
 
 **Asserts**: real-world validity. This is the family that decides whether the port ships.
 
-### 6.4 Unit tests that do not need an oracle
+### 5.4 Unit tests that do not need an oracle
 
 Every §2.7 tolerance gets a hand-built minimal input (usually under 400 bytes) and a Go test named
 for its rule ID: `TestLenient_H2_NoVersion`, `TestLenient_X2_BruteForce`,
@@ -1352,7 +1321,7 @@ prose, and they are the regression net when pdfbox is bumped. `FormatReal`, `Enc
 
 ---
 
-## 7. Review checklist for the two implementers
+## 6. Review checklist
 
 1. Does `Dict` preserve insertion order through `Set` on an existing key? (§2.2)
 2. Does the writer ever seek backwards into the original bytes? It must not. (§3.1)
@@ -1374,10 +1343,10 @@ prose, and they are the regression net when pdfbox is bumped. `FormatReal`, `Enc
 
 ---
 
-## Amendment 1 (post-audit): encryption on write
+## Encryption on write
 
-§4 pinned no encryption-on-write API, but R20 (append to encrypted documents)
-requires one. The implemented surface is `writerEncryptHook` in
+R20 (append to encrypted documents) requires an encryption-on-write path.
+The implemented surface is `writerEncryptHook` in
 `incremental.go`: the Updater re-encrypts new/updated strings and streams with
 the document's existing security handler (AESV2, AESV3, RC4-128) before
 serialization, reusing the reader's decryption state. Verified empirically

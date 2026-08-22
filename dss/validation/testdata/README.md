@@ -18,8 +18,8 @@ Two lines per policy:
   reads BY REFLECTION: upstream keeps those fields package-private and exposes
   no getters, and the port keeps them unexported for the same reason. The row is
   shipped as the recorded contract of what the factory must produce; the Go test
-  can only assert that the factory builds. See the phase-8f porter notes for the
-  behavioural assertions that would close the gap.
+  can only assert that the factory builds. Closing that gap needs behavioural
+  assertions driven through `RevocationDataVerifier`'s public surface.
 
 ## Regenerating
 

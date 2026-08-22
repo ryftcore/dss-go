@@ -33,7 +33,7 @@ same four.
 
 `CryptographicVerification` never wires `AtLeastOneReferenceDataObjectFoundCheck`,
 `ReferenceDataGroupCheck` or `SignatureIntactWithIdCheck` - they belong to the
-evidence-record and archival blocks of later phases. Those, plus the branches the
+evidence-record and archival blocks. Those, plus the branches the
 50 dumps happen not to reach (a failing manifest-entry group, a name mismatch, a
 `CERTIFICATE`-context signature-intact message, a covering HashTree-renewal
 time-stamp, and every vci failure - the default policy runs the vci checks below

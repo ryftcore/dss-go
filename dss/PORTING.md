@@ -1,11 +1,12 @@
 # Porting conventions (Java DSS → Go)
 
-Binding rules for every ported package. Reviewers reject deviations.
+Binding rules for every ported package, and for every change to one.
+Reviewers reject deviations.
 
 ## Layout & naming
 
 - One Go file per Java class: `SignatureLevel.java` → `signature_level.go`; its tests in `signature_level_test.go`.
-- Java package → Go package per the mapping table in `/PORTING_PLAN.md`. Keep upstream file organization recognizable so diffs against upstream stay tractable.
+- Java package → Go package per the mapping table in `/docs/migrating-from-java/index.md`. Keep upstream file organization recognizable so diffs against upstream stay tractable.
 - Exported Go identifiers keep the Java name (minus `get`/`set` prefixes where un-idiomatic): `getSignatureAlgorithm()` → `SignatureAlgorithm()`.
 - Each file starts with a comment naming its upstream source: `// Ported from dss-enumerations/.../SignatureLevel.java (DSS 6.5.RC1).`
 - Machinery that BouncyCastle provides upstream has no Java class to mirror, so it lives under `internal/` instead of being duplicated per package: `internal/asn1ber` holds the BER/DER/DL engine and the generic X.509 structures (`AlgorithmIdentifier`, `IssuerSerial`, `GeneralName`) extracted from `DSSASN1Utils`. `internal/cmscore` builds on it with the RFC 5652 CMS and RFC 3161 time-stamp structures that replace `org.bouncycastle.asn1.cms.*`, `org.bouncycastle.cms.*` and `org.bouncycastle.tsp.*`; the public `cms` package wraps it. Such a package states its provenance in `doc.go` and imports the standard library plus, at most, the other `internal/` packages it is layered on - never a DSS package, since the DSS packages are what import it. Packages that exposed those types before the extraction keep their API through type aliases.

@@ -59,7 +59,7 @@ them takes.
 - A one-item chain defines no title `MessageTag`, so Java leaves the `Title`
   attribute null while the generated Go model carries `Title` as a plain string.
   `../aov_direct_oracle_test.go` normalises that one field and nothing else (same
-  as the phase 8c and XCVA direct corpora).
+  as the `fc`/`sav` and XCVA direct corpora).
 - Two block rows deviate from Java in the ORDER of their constraint list, and in
   nothing else:
   `SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation#buildSignedAttributesValidationChain`

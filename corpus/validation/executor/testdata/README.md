@@ -13,8 +13,8 @@ classpath).
 
 ## `oracle/full_corpus.jsonl` and `oracle/full-corpus/`
 
-THE PHASE 8 EXIT CRITERION's item (A): executor-level verdict parity, checked
-by `full_corpus_oracle_test.go`'s `TestFullCorpusExecutorOracle` against
+Executor-level verdict parity, checked by `full_corpus_oracle_test.go`'s
+`TestFullCorpusExecutorOracle` against
 literally every file (273, no exclusions) under upstream's diag-data test
 resource tree - the real corpus `DefaultSignatureProcessExecutorTest` and its
 neighbors draw from, spanning every JIRA-ticket regression fixture plus the
@@ -91,7 +91,7 @@ several archive time-stamps) - so a digest mismatch on those can be diffed
 rather than merely reported.
 
 The inputs are not a private fixture: they are the very same documents the
-phase-8a marshal-parity corpus and the phase-8c BasicBuildingBlocks corpus read.
+marshal-parity corpus and the BasicBuildingBlocks corpus read.
 The `model-*.xml` files are excluded for the reason given in
 `../../process/bbb/fc/testdata/README.md`: they are schema-coverage dumps, not
 real validation inputs.

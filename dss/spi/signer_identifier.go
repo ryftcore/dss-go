@@ -1,6 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/SignerIdentifier.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.spi.x509 flattens into the Go package spi (see PORTING_PLAN.md), so the type
+// eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the type
 // keeps its Java name unqualified.
 package spi
 

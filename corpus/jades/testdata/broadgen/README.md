@@ -1,8 +1,8 @@
 # Broad differential corpus runner (JAdES)
 
 Differential harness over the **entire** upstream `dss-jades/src/test/resources`
-corpus (63 JSON fixtures, 65 signatures), used by the Phase 6 audit. Unlike the
-committed 30-fixture cross-validation suite, this walks every upstream JAdES
+corpus (63 JSON fixtures, 65 signatures). Unlike the committed 30-fixture
+cross-validation suite, this walks every upstream JAdES
 fixture through both implementations and diffs the dumped JSON — the same role
 `../../../pades/testdata/broadgen/` plays for PAdES, where the sampled suite
 missed 16 defects the broad run caught.
@@ -28,7 +28,7 @@ bucket (content / signature / X1 / X2 / archive) with each token's DSS-Id,
 generation time, message-imprint found/intact/hex, token signature intactness,
 and its sorted set of timestamped references.
 
-## Result (Phase 6 audit)
+## Result
 
 62 of 63 files byte-identical. The one remaining difference is
 `validation/jades-with-double-sigt.json`, where both implementations reject the
@@ -67,7 +67,7 @@ fix fails that suite (22 and 9 assertions respectively).
 their attribute objects on every call exactly the way the JAdES adapter did, and
 `cades_timestamp_source.go` / `xades_timestamp_source.go` both feed
 `GetAttributeOrder` into their time-stamp identifier builders. The same defect (2)
-is therefore latent in those formats. It was left alone because they are frozen
-for this phase and a fix there needs its own broad differential run to confirm —
+is therefore latent in those formats. It is left alone because a fix there needs
+its own broad differential run to confirm —
 XAdES in particular wraps a mutable DOM, so a cache would need invalidation that
 the JAdES signed properties (an immutable protected header) do not.

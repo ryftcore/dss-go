@@ -778,8 +778,8 @@ func (s *SignatureTimestampSource[AS, SA]) makeTimestampTokensFromUnsignedAttrib
 
 		default:
 			// Unsupported attribute encountered during TimestampSource processing; entry is
-			// skipped. Upstream logs a warning here (slf4j dropped per PORTING_PLAN.md, not
-			// load-bearing).
+			// skipped. Upstream logs a warning here (slf4j is not ported; the log
+			// line is not load-bearing).
 			continue
 		}
 

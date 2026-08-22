@@ -71,7 +71,7 @@ another.
 | **Diagnostic-data corpus** | full verdicts computed from already-built diagnostic data | Exercises the whole EN 319 102-1 engine without any format-parsing in the way. |
 | **Document-level end-to-end** | both engines start from the *original* signed document | The only layer that also exercises format detection and each format's own diagnostic-data builder. |
 | **Report byte-parity** | digests of the rendered report XML | Catches schema and serialization drift no verdict comparison would notice. |
-| **Live cross-validation** | Go-signed documents validated by a running Java DSS, and Java-signed documents validated here | The only test of the *production* interop claim. Needs Java; run during the port, recorded in `PORTING_PLAN.md`. |
+| **Live cross-validation** | Go-signed documents validated by a running Java DSS, and Java-signed documents validated here | The only test of the *production* interop claim. Needs Java; not part of `go test`. See [The numbers](numbers.md). |
 | **Differential sweeps** | both engines over an entire upstream corpus, diffed | Finds what a curated fixture set misses. This is how several real defects were found. |
 
 The document-level layer deserves a note. Starting from already-built diagnostic

@@ -2,15 +2,14 @@
 
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/EAAAcceptanceValidation.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): gated behind the "eaa" build tag - the
-// same technique used for fc/eaa_format_checking.go (see its header for the
-// rationale: PORTING_PLAN.md lists eu.europa.esig.dss.validation.process.eaa
-// as deferred past phase 9, not a numbered upcoming phase). This keeps the
+// Gated behind the "eaa" build tag - the same technique used for
+// fc/eaa_format_checking.go (see its header for the rationale:
+// eu.europa.esig.dss.validation.process.eaa is deferred). This keeps the
 // default, untagged `go build ./...`/`go vet ./...`/`go test ./...` green;
 // AbstractAcceptanceValidation (this package) and every other sav file that
 // does not touch EAA build and are exercised today.
 //
-// INTEGRATION UPDATE (phase 8e integration pass): the forward dependency this
+// The forward dependency this
 // header originally speculated about is now real and confirmed matching
 // (eu.europa.esig.dss.validation.process.eaa.checks + eaa.status both flatten
 // into github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, constructors

@@ -3,7 +3,7 @@
 // # Package layout
 //
 // eu.europa.esig.dss.spi.validation.timestamp is a 1:1 sibling package of the flattened
-// dss/spi/validation package (see PORTING_PLAN.md): AdvancedSignature, SignatureAttribute,
+// dss/spi/validation package: AdvancedSignature, SignatureAttribute,
 // SignatureProperties, TimestampToken, TimestampedReference, TimestampSource and EvidenceRecord
 // all live there and are referenced here as validation.X.
 //

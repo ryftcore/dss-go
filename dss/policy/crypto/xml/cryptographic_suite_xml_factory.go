@@ -70,7 +70,7 @@ func (f *CryptographicSuiteXmlFactory) LoadCryptographicSuite(cryptographicSuite
 
 // LoadCryptographicSuiteFromReader ports
 // CryptographicSuiteXmlFactory#loadCryptographicSuite(InputStream). Named
-// per PORTING_PLAN's Java-overload convention (see
+// per PORTING.md's Java-overload convention (see
 // model/policy.CryptographicSuiteFactory's doc comment).
 //
 // Java wraps any failure (including the try-with-resources close) in an

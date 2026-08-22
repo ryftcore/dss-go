@@ -2,12 +2,9 @@
 
 // Ported from dss-validation/.../validation/process/bbb/fc/EAAFormatChecking.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): gated behind the "eaa" build tag, the
-// same technique already used for phase8/phase8d/phase8e forward
-// dependencies elsewhere in this tree. eu.europa.esig.dss.validation.process.eaa
-// is explicitly listed as deferred past phase 9 in PORTING_PLAN.md ("EAA/mdoc
-// modules ... revisit after Phase 9"), not merely a later numbered phase, so
-// it gets its own feature tag rather than a phaseNN one. Only this file and
+// Gated behind the "eaa" build tag: eu.europa.esig.dss.validation.process.eaa
+// is deferred (see docs/compatibility/known-gaps.md, "EAA"), so it gets a
+// feature tag of its own. Only this file and
 // eaa_revocation_format_checking.go in this package need the tag - every
 // other fc file is untagged and builds today. blocks/basic_building_blocks_eaa.go
 // (the only caller of NewEAAFormatChecking) carries the same eaa tag, so

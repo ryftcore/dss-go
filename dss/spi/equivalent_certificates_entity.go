@@ -1,6 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/EquivalentCertificatesEntity.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.spi.x509 flattens into the Go package spi (see PORTING_PLAN.md). The Java
+// eu.europa.esig.dss.spi.x509 flattens into the Go package spi. The Java
 // class has default (package) visibility, so the Go type stays unexported: it is an internal
 // detail of CommonCertificateSource (ported separately, chunk X509-B) and its subclasses.
 package spi

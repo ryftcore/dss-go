@@ -29,8 +29,7 @@
 // without re-running BC's own digest-over-content computation; contentReferenceValidation below
 // documents the narrowed behaviour this causes.
 //
-// # FORWARD DEPENDENCIES (sibling chunks of this same phase; this file does not build in
-// # isolation until they land - see PORTING_PLAN.md "cades chunks may NOT build mid-port")
+// # FORWARD DEPENDENCIES
 //
 // VAL-B chunk (eu.europa.esig.dss.cades.validation, same Go package per PORTING.md's cades
 // layout) is assumed to expose:

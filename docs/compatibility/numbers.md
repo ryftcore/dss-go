@@ -15,8 +15,8 @@ Please [report it](https://github.com/ryftcore/dss-go/issues).
 | Version | **6.5.RC1** |
 | Commit | `4c2129862948bfd53ca1455832260aa17e183cf8` |
 
-Recorded in `UPSTREAM.md` and `PORTING_PLAN.md`. Every ported source file names
-the Java file it came from in its header comment.
+Recorded in `UPSTREAM.md` and `NOTICE`. Every ported source file names the
+Java file it came from in its header comment.
 
 ## The library itself
 
@@ -57,15 +57,14 @@ Each row is a test in `go test ./... -count=1`.
 ## Live cross-validation against a running Java DSS
 
 The measurements above compare against **recorded** Java output. Separately,
-during the port, each format family was cross-validated against a **live**
+each format family was cross-validated against a **live**
 Java DSS 6.5.RC1 build in both directions — documents signed here validated by
 Java, documents signed by Java validated here, plus broad differential sweeps
 over entire upstream corpora.
 
-Those runs are recorded phase by phase in
-[`PORTING_PLAN.md`](https://github.com/ryftcore/dss-go/blob/main/PORTING_PLAN.md),
-which is the historical record of the port and the place to read them in
-context.
+Those runs are not part of `go test` and are not reproducible from this
+repository alone — see the warning below. What *is* reproducible is
+everything in the table above.
 
 !!! warning "They are not reproducible from this repository alone"
     Re-running live cross-validation needs a JDK and a built upstream DSS

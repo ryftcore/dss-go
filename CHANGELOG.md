@@ -12,8 +12,8 @@ there is no tagged release yet).
 Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
 baseline: version 6.5.RC1, commit
 `4c2129862948bfd53ca1455832260aa17e183cf8`) to Go, module
-`github.com/ryftcore/dss-go/dss`. See `PORTING_PLAN.md` for the full
-phase-by-phase porting record, module mapping, and verification detail
+`github.com/ryftcore/dss-go/dss`. See `UPSTREAM.md` for the baseline pin,
+the documentation site's compatibility pages for the verification detail
 behind every claim below, and `dss/PORTING.md` for the porting
 conventions applied throughout.
 
@@ -31,9 +31,9 @@ conventions applied throughout.
     Java-extended documents). ASiC also covers Java-built containers
     extended by this port and re-validated by Java.
 
-  Per-phase scope, fixture counts and results are in `PORTING_PLAN.md`;
-  what runs in `go test` versus what was a one-time sweep is separated
-  in the repository's compatibility documentation. The formats:
+  Fixture counts and results, and what runs in `go test` versus what was
+  a one-time sweep, are separated in the repository's compatibility
+  documentation. The formats:
   - **CAdES** (CMS Advanced Electronic Signatures), levels B/T/LT/LTA.
   - **XAdES**, levels B/T/LT/LTA, including a byte-exact native XML
     canonicalization (C14N 1.0/1.1/exclusive) and XML-DSig
@@ -70,10 +70,10 @@ conventions applied throughout.
 - A compatibility test harness with byte-parity and verdict-parity
   oracles generated from upstream Java DSS, exercised per-package and,
   for the full signature-format matrix end to end, in
-  `dss/harness` — see `PORTING_PLAN.md`'s progress table for the scope
-  and scale verified in each phase (fixture counts, corpus sizes, and
-  parity results are recorded there per phase; this file does not
-  restate per-phase numbers to avoid the two drifting apart).
+  `dss/harness` — see the compatibility documentation for the scope and
+  scale verified (fixture counts, corpus sizes and parity results are
+  recorded there; this file does not restate them, to avoid the two
+  drifting apart).
 - **Go 1.27 is the minimum supported release** (`go 1.27.0` in
   `dss/go.mod`). Earlier toolchains cannot build the module: the public
   API relies on generic methods, which Go 1.27 is the first release to
@@ -90,10 +90,37 @@ conventions applied throughout.
   *interfaces* still erase to the constraint's base type: Go forbids type
   parameters on interface methods. See `dss/PORTING.md`.
 
+### Documentation
+
+- **Porting-era planning documents removed.** `PORTING_PLAN.md` — the
+  phase-by-phase roadmap and progress tracker for the Java→Go port — has
+  been deleted. It described *how the port was built*, not how the library
+  behaves, and every durable claim it carried now lives where a reader will
+  look for it: the upstream baseline pin in `UPSTREAM.md` and `NOTICE`, the
+  Maven-module → Go-package mapping in the "Migrating from Java DSS"
+  documentation page, and the accepted gaps in the "Known gaps"
+  compatibility page. All references to it — in `README.md`, `CHANGELOG.md`,
+  `CONTRIBUTING.md`, `UPSTREAM.md`, `NOTICE`, the compatibility
+  documentation and 28 Go source files — were repointed at those
+  successors.
+- **Porting narration removed from durable documents.** Phase labels,
+  implementer assignments and session-diary notes were stripped from
+  `dss/internal/pdf/DESIGN.md`, `dss/internal/xmldom/DESIGN.md`,
+  `dss/harness/README.md` and eight test-fixture provenance READMEs. Their
+  technical content — the design decisions, the measured corpus evidence,
+  the pinned APIs, the oracle provenance, the regeneration recipes and the
+  recorded divergences — is unchanged.
+- **Attribution and licensing documents are unchanged.** `LICENSE`, `NOTICE`
+  (pointer update only), `CONTRIBUTING.md`'s DCO and LGPL-2.1
+  inbound = outbound terms, `SECURITY.md`, `CODE_OF_CONDUCT.md` and every
+  `// Ported from` header remain exactly as they were. `dss/PORTING.md` is
+  kept: it is the normative conventions document for contributed ports, not
+  a porting-progress record.
+
 ### Known limitations
 
-Tracked, accepted gaps in this initial port (see `PORTING_PLAN.md`'s
-"Known accepted gaps" for the authoritative, currently-maintained list;
+Tracked, accepted gaps in this initial port (the documentation site's
+"Known gaps" page is the authoritative, currently-maintained list;
 summarized here as of this port):
 
 - **No online time-stamping or revocation clients in the library.**
@@ -144,9 +171,9 @@ summarized here as of this port):
 
 ### Deferred (out of initial scope)
 
-Not ported in this initial release — see `PORTING_PLAN.md`'s module
-mapping for the full list: upstream's REST/SOAP remote services and
-clients, `dss-cookbook`, coverage/BOM modules, and evidence-record
-modules.
+Not ported in this initial release — see the "Not ported at all" table
+on the documentation site's "Known gaps" page: upstream's REST/SOAP
+remote services and clients, `dss-cookbook`, coverage/BOM modules, and
+evidence-record modules.
 
 [Unreleased]: https://github.com/ryftcore/dss-go/compare/main...HEAD
