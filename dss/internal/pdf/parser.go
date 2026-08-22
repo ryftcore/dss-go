@@ -418,6 +418,9 @@ func (p *parser) parseIndirectAt(off int64, want ObjectKey) (Object, ObjectKey, 
 	if t3.kind != tokKeyword || t3.raw != "obj" {
 		return nil, want, false
 	}
+	if !isValidGeneration(t2.i) {
+		return nil, want, false
+	}
 	got := ObjectKey{Num: t1.i, Gen: uint16(t2.i)}
 	if !want.IsZero() || want.Num != 0 {
 		if got.Num != want.Num {

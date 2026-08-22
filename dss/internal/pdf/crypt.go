@@ -19,6 +19,7 @@ import (
 	"crypto/sha512"
 	"encoding/binary"
 	"fmt"
+	"math"
 	"math/big"
 )
 
@@ -30,6 +31,22 @@ type Encryption struct {
 	StmF      Name // "StdCF" | "Identity"
 	StrF      Name
 	CFM       Name // "V2" | "AESV2" | "AESV3" | "None"
+}
+
+// clampDictInt narrows an /Encrypt entry to an int, saturating at the int32
+// bounds. Every entry it is used on (/V, /R, /Length) has a small spec-defined
+// range, so saturation cannot change the reading of a well-formed document; it
+// only stops a hostile 64-bit value from wrapping into a plausible one where int
+// is 32 bits wide.
+func clampDictInt(v int64) int {
+	switch {
+	case v > math.MaxInt32:
+		return math.MaxInt32
+	case v < math.MinInt32:
+		return math.MinInt32
+	default:
+		return int(v)
+	}
 }
 
 // Permissions is the decoded /P bitfield plus which password matched.
@@ -105,9 +122,9 @@ func (d *Document) setupEncryption() error {
 		return fmt.Errorf("%w: /Filter /%s", ErrUnsupportedSecurityHandler, filter)
 	}
 	h.enc.Handler = filter
-	h.enc.V = int(dictInt(encDict, "V", 0))
-	h.enc.R = int(dictInt(encDict, "R", 0))
-	length := int(dictInt(encDict, "Length", 40))
+	h.enc.V = clampDictInt(dictInt(encDict, "V", 0))
+	h.enc.R = clampDictInt(dictInt(encDict, "R", 0))
+	length := clampDictInt(dictInt(encDict, "Length", 40))
 	if b, ok := encDict.GetRaw("EncryptMetadata").(Bool); ok {
 		h.encryptMeta = bool(b)
 	}
@@ -141,11 +158,11 @@ func (d *Document) setupEncryption() error {
 			if sub, ok := d.Resolve(cf.GetRaw(cfName)).(*Dict); ok {
 				cfm, _ := sub.GetRaw("CFM").(Name)
 				h.enc.CFM = cfm
-				if l := dictInt(sub, "Length", 0); l > 0 {
+				if l := clampDictInt(dictInt(sub, "Length", 0)); l > 0 {
 					if l <= 40 {
-						keyLenBytes = int(l) // some files give bytes, some bits
+						keyLenBytes = l // some files give bytes, some bits
 					} else {
-						keyLenBytes = int(l) / 8
+						keyLenBytes = l / 8
 					}
 				}
 			}
@@ -159,8 +176,8 @@ func (d *Document) setupEncryption() error {
 		case "AESV3":
 			h.useAES = true
 			keyLenBytes = 32
-			if l := dictInt(encDict, "Length", 0); l > 0 && int(l)/8 < 32 {
-				keyLenBytes = int(l) / 8
+			if l := clampDictInt(dictInt(encDict, "Length", 0)); l > 0 && l/8 < 32 {
+				keyLenBytes = l / 8
 			}
 		}
 	default:
