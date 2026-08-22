@@ -7,6 +7,7 @@ package diagnostic
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
 	dssdiag "github.com/ryftcore/dss-go/dss/diagnostic"
@@ -346,16 +347,7 @@ func (b *XmlTrustServiceProviderBuilder) checkServiceTypeAsiEquivalence(serviceI
 
 func (b *XmlTrustServiceProviderBuilder) checkServiceTypeASi(serviceInfoStatus *tsl.TrustServiceStatusAndInformationExtensions, serviceTypeASi tsl.ServiceTypeASi) bool {
 	return serviceInfoStatus.Type() != "" && serviceInfoStatus.Type() == serviceTypeASi.Type() &&
-		(serviceTypeASi.Asi() == "" || containsString(serviceInfoStatus.AdditionalServiceInfoUris(), serviceTypeASi.Asi()))
-}
-
-func containsString(values []string, value string) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
-	}
-	return false
+		(serviceTypeASi.Asi() == "" || slices.Contains(serviceInfoStatus.AdditionalServiceInfoUris(), serviceTypeASi.Asi()))
 }
 
 func (b *XmlTrustServiceProviderBuilder) checkCertTypeAsiEquivalence(certToken *model.CertificateToken,
@@ -415,7 +407,7 @@ func (b *XmlTrustServiceProviderBuilder) checkStatusEquivalence(serviceInfoStatu
 		return false
 	}
 	for _, statusEquivalence := range statusEquivalenceMap {
-		if containsString(statusEquivalence.PointedStatuses, serviceInfoStatus.Status()) {
+		if slices.Contains(statusEquivalence.PointedStatuses, serviceInfoStatus.Status()) {
 			return true
 		}
 	}
@@ -559,7 +551,7 @@ func (b *XmlTrustServiceProviderBuilder) getStatusSubstitution(serviceInfoStatus
 		return ""
 	}
 	for _, equivalence := range statusEquivalence {
-		if containsString(equivalence.PointedStatuses, serviceInfoStatus.Status()) {
+		if slices.Contains(equivalence.PointedStatuses, serviceInfoStatus.Status()) {
 			if len(equivalence.PointingStatuses) > 0 {
 				return equivalence.PointingStatuses[0]
 			}

@@ -2,6 +2,8 @@
 package process
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/diagnostic"
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/utils"
@@ -44,7 +46,7 @@ func hasPolicyIdOIDs(certificate *diagnostic.CertificateWrapper, certificatePoli
 	policyIds := certificate.PolicyIds()
 	if utils.IsCollectionNotEmpty(policyIds) {
 		for _, policyId := range certificatePolicyIds {
-			if containsString(policyIds, policyId.OID()) {
+			if slices.Contains(policyIds, policyId.OID()) {
 				return true
 			}
 		}

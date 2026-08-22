@@ -2,6 +2,8 @@
 package fc
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/diagnostic"
 	diagjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -50,7 +52,7 @@ func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) checkManifestFilesCov
 	for _, manifestEntry := range manifestEntries {
 		// skip validation for the first loop (same manifest is evaluated)
 		if !rootProcess {
-			if !containsString(coveredEntries, manifestEntry) {
+			if !slices.Contains(coveredEntries, manifestEntry) {
 				return false
 			}
 			if _, ok := checkedEntries[manifestEntry]; ok {
@@ -71,7 +73,7 @@ func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) isAnyRootLevelDocumen
 	root := rootLevelFiles(c.DiagnosticData.ContainerContentFilenames())
 	entries := timestampManifest.Entries.All()
 	for _, r := range root {
-		if containsString(entries, r) {
+		if slices.Contains(entries, r) {
 			return true
 		}
 	}

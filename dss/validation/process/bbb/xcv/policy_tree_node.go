@@ -6,7 +6,11 @@
 // hashable key.
 package xcv
 
-import "github.com/ryftcore/dss-go/dss/utils"
+import (
+	"slices"
+
+	"github.com/ryftcore/dss-go/dss/utils"
+)
 
 // policyTreeAnyPolicyOID represents an anyPolicy OID.
 const policyTreeAnyPolicyOID = "2.5.29.32.0"
@@ -64,7 +68,7 @@ func (n *PolicyTreeNode) AddChildNodeIfMatch(policyNode *PolicyTreeNode) bool {
 	 * set the qualifier_set to P-Q, and set the
 	 * expected_policy_set to {P-OID}.
 	 */
-	if containsString(n.expectedPolicySet, policyNode.validPolicy) {
+	if slices.Contains(n.expectedPolicySet, policyNode.validPolicy) {
 		n.children = append(n.children, policyNode)
 		return true
 	}
@@ -80,16 +84,6 @@ func (n *PolicyTreeNode) AddChildNodeIfMatch(policyNode *PolicyTreeNode) bool {
 		// AnyPolicy child is created within the caller class
 		n.children = append(n.children, policyNode)
 		return true
-	}
-	return false
-}
-
-// containsString reports whether values contains value.
-func containsString(values []string, value string) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
 	}
 	return false
 }

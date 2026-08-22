@@ -14,6 +14,7 @@ package process
 import (
 	"fmt"
 	"regexp"
+	"slices"
 	"time"
 
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
@@ -545,7 +546,7 @@ func GetDomainName(uri string) string {
 // of processValueCheck(String, List).
 func ProcessValueCheck(value string, expectedValues []string) bool {
 	if utils.IsStringNotEmpty(value) && utils.IsCollectionNotEmpty(expectedValues) {
-		return containsString(expectedValues, allValue) || containsString(expectedValues, value)
+		return slices.Contains(expectedValues, allValue) || slices.Contains(expectedValues, value)
 	}
 	return false
 }
@@ -595,17 +596,6 @@ func ProcessValuesForEachExpectedCheck(values []string, expectedValues []string)
 	} else {
 		return utils.IsCollectionEmpty(expectedValues)
 	}
-}
-
-// containsString ports java.util.List#contains(Object) for the String lists this
-// class matches against.
-func containsString(values []string, value string) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
-	}
-	return false
 }
 
 // GetFinalCryptographicValidation returns final cryptographic validation from
