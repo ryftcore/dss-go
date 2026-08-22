@@ -5,15 +5,15 @@ import (
 	"encoding/asn1"
 	"fmt"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // CAdESEmbeddedEvidenceRecordBuilder is used to embed an existing ERS evidence record within a

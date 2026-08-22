@@ -6,8 +6,8 @@ package cades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // ASiCWithCAdESCommonParameters defines common parameters for an ASiC with CAdES container for

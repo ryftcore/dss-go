@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/tsl/TrustPropertiesCertificateSource.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // TrustPropertiesCertificateSource provides an abstraction for a certificate source containing
 // information about a validation status of Trusted Lists and corresponding trust properties.

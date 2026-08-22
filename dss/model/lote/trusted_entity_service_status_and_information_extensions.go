@@ -4,7 +4,7 @@ package lote
 import (
 	"time"
 
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 // TrustedEntityServiceStatusAndInformationExtensions contains information about the service

@@ -22,7 +22,7 @@ package main
 import (
 	"log"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 func main() {

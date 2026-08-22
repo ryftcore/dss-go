@@ -21,8 +21,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // signatureAlgorithmOracle parses testdata/signature-algorithm-identifiers.txt into its sections,

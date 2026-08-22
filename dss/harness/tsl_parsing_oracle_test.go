@@ -67,10 +67,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/tsl"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/tsl"
 )
 
 // tpNullInt is the sentinel both the Go conversion and the Java generator use for a null/nil

@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/trust/filter/TrustedEntityServiceByStatusFilter.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // TrustedEntityServiceByStatusFilter filters trusted entity services by a status URI.
 type TrustedEntityServiceByStatusFilter struct {

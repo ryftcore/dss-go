@@ -1,7 +1,7 @@
 // Ported from dss-document/src/main/java/eu/europa/esig/dss/signature/resources/InMemoryResourcesHandlerBuilder.java (DSS 6.5.RC1).
 package document
 
-import "github.com/utain/esig/dss/spi/signature/resources"
+import "github.com/ryftcore/dss-go/dss/spi/signature/resources"
 
 // InMemoryResourcesHandlerBuilder creates an InMemoryResourcesHandler to create in-memory
 // objects.

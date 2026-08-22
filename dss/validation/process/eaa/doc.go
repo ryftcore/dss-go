@@ -17,7 +17,7 @@
 // eaa package closes the cycle
 // bbb/sav -> eaa -> qualification -> vpfswatsp -> bbb/sav
 // under `-tags eaa`. The checks now live in the sibling package
-// github.com/utain/esig/dss/validation/process/eaa/checks (Java's own eaa vs
+// github.com/ryftcore/dss-go/dss/validation/process/eaa/checks (Java's own eaa vs
 // eaa.checks/eaa.status package boundary), which has no qualification
 // dependency and so does not participate in the cycle - the same "prefer
 // Java's own package boundary" escape hatch already used for

@@ -167,7 +167,7 @@ diagnostic := reports.GetDiagnosticData()
 `dss.Reports` embeds the port's `validation/reports.Reports`, so every accessor
 upstream offers is available; the facade adds convenience, it does not wrap
 anything away. Field-by-field reference:
-[pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss#Reports).
+[pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss#Reports).
 
 From the CLI, each report renders directly, and a saved SimpleReport can be
 turned back into the human summary later:

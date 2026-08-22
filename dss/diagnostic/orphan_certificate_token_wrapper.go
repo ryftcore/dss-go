@@ -4,7 +4,7 @@ package diagnostic
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // OrphanCertificateTokenWrapper wraps an XML orphan certificate. Port of

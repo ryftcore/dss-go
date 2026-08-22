@@ -16,12 +16,12 @@ package cades
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ASiCWithCAdESTimestampScopeFinder is used to find a timestamp source for a detached timestamp

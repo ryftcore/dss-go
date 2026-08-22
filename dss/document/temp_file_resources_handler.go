@@ -14,7 +14,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // TempFileResourcesHandler stores temporary documents to a unique file within the filesystem.

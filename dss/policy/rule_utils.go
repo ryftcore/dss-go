@@ -4,7 +4,7 @@ package policy
 import (
 	"math"
 
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // ruleUtilsNanosPerUnit gives the java.util.concurrent.TimeUnit scale (in

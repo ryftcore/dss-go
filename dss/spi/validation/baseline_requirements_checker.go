@@ -37,10 +37,10 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // BaselineRequirementsCheckerSignature is what BaselineRequirementsChecker needs from its type

@@ -5,7 +5,7 @@
 // AbstractTrustServiceFilter follows.
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // AbstractTrustedEntityServiceFilterOverrides declares the abstract
 // isAcceptable(TrustedEntityServiceWrapper) method that AbstractTrustedEntityServiceFilter

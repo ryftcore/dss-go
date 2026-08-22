@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // compositeAIASourceDeterminismFakeSource records that it was tried (into a shared, ordered

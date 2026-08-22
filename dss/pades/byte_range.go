@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // ByteRange represents a ByteRange of a PDF Revision.

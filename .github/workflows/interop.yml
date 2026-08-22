@@ -31,6 +31,9 @@ on:
         required: false
         default: "self-hosted"
 
+permissions:
+  contents: read
+
 jobs:
   harness-oracle:
     name: harness oracle comparison

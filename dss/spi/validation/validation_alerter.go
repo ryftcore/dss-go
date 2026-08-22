@@ -4,7 +4,7 @@
 // and executes alerts based on the validation result.
 package validation
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // ValidationAlerter is used with ValidationContext to perform validation and execute alerts
 // based on the validation result.

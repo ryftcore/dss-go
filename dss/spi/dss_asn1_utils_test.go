@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // dssASN1UtilsTestKAT loads the known-answer file produced against BouncyCastle 1.78.1 and

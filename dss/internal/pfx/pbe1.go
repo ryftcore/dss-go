@@ -7,7 +7,7 @@ import (
 	"encoding/asn1"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // pbeParams is RFC 7292 Appendix A.3's PBEParameter, the AlgorithmIdentifier.parameters shape

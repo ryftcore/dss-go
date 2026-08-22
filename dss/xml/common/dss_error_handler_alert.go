@@ -4,7 +4,7 @@ package common
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/alert"
+	"github.com/ryftcore/dss-go/dss/alert"
 )
 
 // dssErrorHandlerDetector fires whenever the handler recorded any error, fatal error or

@@ -3,9 +3,9 @@ package xades
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // TestManifestBuilderAgainstJavaOracle compares the ds:Manifest documents against upstream DSS

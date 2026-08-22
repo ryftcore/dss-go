@@ -45,7 +45,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // claimDateTimeFormat is the lexical form of eu.europa.esig.dss.jaxb.parsers.DateParser

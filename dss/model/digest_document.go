@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DigestDocument is a digest-only representation of a DSSDocument. It can

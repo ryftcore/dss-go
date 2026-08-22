@@ -8,10 +8,10 @@
 package extension
 
 import (
-	asiccades "github.com/utain/esig/dss/asic/cades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	asiccades "github.com/ryftcore/dss-go/dss/asic/cades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESDocumentExtender is the ASiC with CAdES container specific implementation of a

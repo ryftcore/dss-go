@@ -1,7 +1,7 @@
 // Ported from dss-model/.../SerializableTimestampParameters.java (DSS 6.5.RC1).
 package model
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // SerializableTimestampParameters is the common interface for timestamp
 // parameters.

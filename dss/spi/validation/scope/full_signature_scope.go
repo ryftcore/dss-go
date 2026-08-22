@@ -2,9 +2,9 @@
 package scope
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
 )
 
 // FullSignatureScope is a marker type meaning that the signature covers the whole document.

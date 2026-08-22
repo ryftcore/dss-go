@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/x509/extension/NoRevAvail.java (DSS 6.5.RC1).
 package extension
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // NoRevAvail is RFC 9608 "No Revocation Available for X.509 Public Key Certificates".
 //

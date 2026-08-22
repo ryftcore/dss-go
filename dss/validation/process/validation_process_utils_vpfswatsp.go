@@ -19,10 +19,10 @@ package process
 import (
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // POEExtraction is the set of proofs of existence the three functions below

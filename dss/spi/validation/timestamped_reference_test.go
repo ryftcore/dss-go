@@ -3,7 +3,7 @@ package validation
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TestTimestampedReference covers the value semantics the timestamp source relies on: two

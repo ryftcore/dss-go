@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/xpath/item/XPathQueryEndItem.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // XPathQueryEndItem marks the end of an XPath expression chain. Its use is optional and
 // does not affect processing, but it prevents further extension of the chain. Unlike every

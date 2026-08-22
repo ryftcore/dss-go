@@ -4,8 +4,8 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/utain/esig/dss/diagnostic"
-	diagjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // fakeSignatureWrapper is a minimal diagnostic.AbstractSignatureWrapperOverrides for tests

@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/x509/extension/CertificatePolicies.java (DSS 6.5.RC1).
 package extension
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // CertificatePolicies is RFC 5280 4.2.1.4. Certificate Policies.
 //

@@ -2,8 +2,8 @@
 package lote
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // TrustedPropertiesCertificateSource contains trusted certificates and related trusted

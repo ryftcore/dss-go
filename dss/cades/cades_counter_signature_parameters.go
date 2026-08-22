@@ -4,7 +4,7 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CAdESCounterSignatureParameters holds parameters for a CAdES counter-signature creation.

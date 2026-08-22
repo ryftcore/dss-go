@@ -4,10 +4,10 @@ package tsl
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // sha2FileCacheDataLoaderOneDayMillis defines a one day constraint in milliseconds. Port of the

@@ -23,7 +23,7 @@ package spi
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSSecurityFactory is the generic base used to build an O from an I. FactoryClassName names

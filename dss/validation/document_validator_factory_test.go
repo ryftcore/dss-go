@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	"github.com/utain/esig/dss/validation/executor"
+	"github.com/ryftcore/dss-go/dss/model"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
 )
 
 // stubAnalyzer is the smallest analyzer.DocumentAnalyzer that

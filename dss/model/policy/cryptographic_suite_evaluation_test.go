@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 func TestCryptographicSuiteEvaluation_RoundTrip(t *testing.T) {

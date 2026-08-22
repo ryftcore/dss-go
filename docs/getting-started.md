@@ -27,7 +27,7 @@ then from the command line.
 ## Install
 
 ```sh
-go get github.com/utain/esig/dss
+go get github.com/ryftcore/dss-go/dss
 ```
 
 Two runtime dependencies come with it — `golang.org/x/crypto` and
@@ -44,7 +44,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 func main() {
@@ -109,7 +109,7 @@ validation works](concepts/validation.md) explains why.
     ```
 
     And the root package's own `Example*` functions on
-    [pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss#pkg-examples) are
+    [pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss#pkg-examples) are
     compiled and run by the test suite, so they are always current.
 
 ## Where the options actually matter
@@ -130,15 +130,15 @@ sensible default. The fields worth knowing on day one:
 | `ValidateOptions.Policy` | Your own constraint set instead of the bundled ETSI one. See [A custom validation policy](guides/custom-validation-policy.md). |
 
 The full field-by-field reference is the godoc:
-[`SignOptions`](https://pkg.go.dev/github.com/utain/esig/dss#SignOptions),
-[`ValidateOptions`](https://pkg.go.dev/github.com/utain/esig/dss#ValidateOptions).
+[`SignOptions`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss#SignOptions),
+[`ValidateOptions`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss#ValidateOptions).
 
 ## The CLI
 
 Same library, no Go code.
 
 ```sh
-go install github.com/utain/esig/dss/cmd/esig@latest
+go install github.com/ryftcore/dss-go/dss/cmd/esig@latest
 ```
 
 Sign a PDF, then validate what came out:

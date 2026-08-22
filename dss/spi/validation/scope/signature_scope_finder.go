@@ -2,8 +2,8 @@
 package scope
 
 import (
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // SignatureScopeFinder builds a list of SignatureScopes from an AdvancedSignature.

@@ -15,10 +15,10 @@ package validation
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/x509/aia"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/x509/aia"
 )
 
 // CommonCertificateVerifier is the default CertificateVerifier implementation.

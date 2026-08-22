@@ -4,7 +4,7 @@ package policy
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // CryptographicSuite contains policy for validation of cryptographic

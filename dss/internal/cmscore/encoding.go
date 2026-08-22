@@ -10,7 +10,7 @@ import (
 	"math/big"
 	"sort"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // derSetOf writes a SET OF from its already DER-encoded members, ordering them as X.690

@@ -2,7 +2,7 @@
 
 package trustedlist
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // MRAStatusParserParse parses the string and returns a MRAStatus, the empty
 // value if v does not match any known URI. slf4j's LOG.warn on an

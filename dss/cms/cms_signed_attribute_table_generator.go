@@ -19,8 +19,8 @@ package cms
 import (
 	"encoding/asn1"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
 )
 
 // OID_id_aa_cmsAlgorithmProtect is id-aa-cmsAlgorithmProtect OBJECT IDENTIFIER ::= {iso(1)

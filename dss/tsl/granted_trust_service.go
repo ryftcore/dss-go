@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process/qualification"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process/qualification"
 )
 
 // GrantedTrustService filters TrustServices by 'granted' property (supports pre- and

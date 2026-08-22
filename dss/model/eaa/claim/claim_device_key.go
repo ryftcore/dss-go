@@ -4,7 +4,7 @@ package claim
 import (
 	"crypto"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ClaimDeviceKey represents a device key used for creating a key-binding

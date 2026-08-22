@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/client/http/AdvancedDataLoader.java (DSS 6.5.RC1).
 package http
 
-import modelhttp "github.com/utain/esig/dss/model/http"
+import modelhttp "github.com/ryftcore/dss-go/dss/model/http"
 
 // AdvancedDataLoader is used to perform a remote request (HTTP, HTTPS, etc.)
 // and retrieve a modelhttp.ResponseEnvelope object, containing contextual

@@ -6,9 +6,9 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSTransformOutput represents an xmldsig.Data (Santuario XMLSignatureInput) wrapper.

@@ -4,8 +4,8 @@ package http
 import (
 	"fmt"
 
-	modelhttp "github.com/utain/esig/dss/model/http"
-	"github.com/utain/esig/dss/spi/exception"
+	modelhttp "github.com/ryftcore/dss-go/dss/model/http"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // nativeHTTPDataLoaderHTTPMethod are the available HTTP methods. Ports the

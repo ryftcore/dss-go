@@ -5,7 +5,7 @@ reproduces it. Run the command from a **full checkout** — one that includes th
 repository-root `corpus/` tree — with `cd dss` first.
 
 If a number here and a test disagree, the test is right and this page is a bug.
-Please [report it](https://github.com/utain/esig/issues).
+Please [report it](https://github.com/ryftcore/dss-go/issues).
 
 ## Upstream baseline
 
@@ -63,7 +63,7 @@ Java, documents signed by Java validated here, plus broad differential sweeps
 over entire upstream corpora.
 
 Those runs are recorded phase by phase in
-[`PORTING_PLAN.md`](https://github.com/utain/esig/blob/main/PORTING_PLAN.md),
+[`PORTING_PLAN.md`](https://github.com/ryftcore/dss-go/blob/main/PORTING_PLAN.md),
 which is the historical record of the port and the place to read them in
 context.
 

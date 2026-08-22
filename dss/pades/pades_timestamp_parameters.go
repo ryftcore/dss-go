@@ -17,9 +17,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PAdESTimestampParametersDefaultContentSize is the default length of a reserved space for the

@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // InMemoryDocument is an in-memory representation of a DSSDocument.

@@ -27,10 +27,10 @@ package validation
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TrustAnchorVerifier is used to verify whether a given certificate token is trusted at the

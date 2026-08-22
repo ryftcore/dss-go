@@ -4,8 +4,8 @@
 package asic
 
 import (
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
 )
 
 // SecureContainerHandlerBuilder is the default implementation of a builder, building a new

@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/job/TLValidationJob.java (DSS 6.5.RC1).
 //
 // CROSS-CHUNK DEPENDENCY: TLValidationJob extends the generic
-// github.com/utain/esig/dss/validation/job.ValidationJob[D, L, C] (dss-validation-job, VALJOB
+// github.com/ryftcore/dss-go/dss/validation/job.ValidationJob[D, L, C] (dss-validation-job, VALJOB
 // chunk, now landed - see validation_job.go, abstract_analysis.go and
 // abstract_runnable_analysis.go there for the base's exact API this file relies on).
 //
@@ -23,11 +23,11 @@ package tsl
 import (
 	"sync"
 
-	"github.com/utain/esig/dss/alert"
-	modeljob "github.com/utain/esig/dss/model/job"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi/client/http"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/alert"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi/client/http"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // TLValidationJob is the main class performing the TL/LOTL download / parsing / validation

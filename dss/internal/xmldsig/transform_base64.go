@@ -5,7 +5,7 @@ package xmldsig
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // base64Transform decodes its input from base64. Port of TransformBase64Decode.

@@ -13,9 +13,9 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // crlRefDateFormat reproduces java.util.Date#toString(), which CRLRef's toString()

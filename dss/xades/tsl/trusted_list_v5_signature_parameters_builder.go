@@ -7,8 +7,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // TrustedListV5SignatureParametersBuilder creates Signature parameters for a Trusted List V5

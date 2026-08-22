@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/tsl/MRA.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/model/timedependent"
+import "github.com/ryftcore/dss-go/dss/model/timedependent"
 
 // MRA contains information extracted from the MutualRecognitionAgreementInformation element of
 // a Mutual Recognition Agreement schema.

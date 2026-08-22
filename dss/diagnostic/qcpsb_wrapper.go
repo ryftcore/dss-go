@@ -1,7 +1,7 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/QCPSBWrapper.java (DSS 6.5.RC1).
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // QCPSBWrapper provides a user-friendly API for dealing with jaxb.XmlQcPSB.
 type QCPSBWrapper struct {

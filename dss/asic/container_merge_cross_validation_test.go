@@ -28,16 +28,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
 
 	// Imported for their init(): each registers its ASiCContainerMergerFactory with the
 	// asic package, the Go stand-in for upstream's ServiceLoader discovery. Without them
 	// DefaultContainerMergerFromDocuments would reject every pair.
-	_ "github.com/utain/esig/dss/asic/cades"
-	_ "github.com/utain/esig/dss/asic/xades"
+	_ "github.com/ryftcore/dss-go/dss/asic/cades"
+	_ "github.com/ryftcore/dss-go/dss/asic/xades"
 )
 
 type mergeOracleEntry struct {

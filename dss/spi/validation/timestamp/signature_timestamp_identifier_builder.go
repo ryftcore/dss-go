@@ -16,8 +16,8 @@ package timestamp
 import (
 	"strconv"
 
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // signatureTimestampIdentifierBuilderOrderOfAttributePrefix is the prefix string for the order

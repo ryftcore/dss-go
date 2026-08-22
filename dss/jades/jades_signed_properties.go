@@ -3,9 +3,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // JAdESSignedProperties represents a list of JAdES signed properties (protected header). Port of

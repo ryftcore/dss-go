@@ -5,7 +5,7 @@ package xmldsig
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // envelopedSignatureTransform removes the enclosing ds:Signature from the input.

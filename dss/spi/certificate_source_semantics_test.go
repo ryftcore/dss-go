@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // certificateSourceSemanticsTestToken loads one of the DER certificates of testdata/asn1 as a

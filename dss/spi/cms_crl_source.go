@@ -23,11 +23,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/crlparser"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/crlparser"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // The unsigned attribute types the two revocation sources read. They are

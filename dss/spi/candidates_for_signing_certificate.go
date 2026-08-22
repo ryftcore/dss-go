@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CandidatesForSigningCertificate.java (DSS 6.5.RC1).
 package spi
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // CandidatesForSigningCertificate holds the list of the candidates for the signing
 // certificate of the main signature.

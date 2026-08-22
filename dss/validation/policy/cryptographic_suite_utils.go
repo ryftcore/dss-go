@@ -26,9 +26,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // Key size parameter names used by RSA/DSA algorithms. Ports the public

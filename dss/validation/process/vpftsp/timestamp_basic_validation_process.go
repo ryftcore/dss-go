@@ -6,11 +6,11 @@
 package vpftsp
 
 import (
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/vpfbs"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpfbs"
 )
 
 // TimestampBasicValidationProcess performs Time-stamp validation building

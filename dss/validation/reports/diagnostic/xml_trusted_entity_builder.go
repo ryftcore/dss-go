@@ -8,10 +8,10 @@ package diagnostic
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/lote"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/lote"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XmlTrustedEntityBuilder builds an eu.europa.esig.dss.diagnostic.jaxb.XmlTrustedEntity

@@ -2,8 +2,8 @@
 package lote
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // LoTEInfo computes a summary for a single TS 119 602 List of Trusted Entities processing

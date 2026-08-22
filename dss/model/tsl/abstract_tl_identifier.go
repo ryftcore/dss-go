@@ -4,7 +4,7 @@
 // the Phase 1b cycle-driven flattening table.
 package tsl
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // tlURLProvider is satisfied by TLInfo and LOTLInfo (which embeds TLInfo), giving
 // AbstractTLIdentifier access to tlInfo.getUrl() without depending on a concrete type. This

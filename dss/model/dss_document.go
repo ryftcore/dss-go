@@ -4,7 +4,7 @@ package model
 import (
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // DSSDocument represents a DSS document.

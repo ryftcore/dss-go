@@ -17,8 +17,8 @@ import (
 	"encoding/binary"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
 // JAdESAttributeIdentifier represents an identifier of a JAdES Attribute (or 'etsiU' component).

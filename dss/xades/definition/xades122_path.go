@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/xades122/XAdES122Path.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdES122Path holds the XAdES 122 paths.
 type XAdES122Path struct{}

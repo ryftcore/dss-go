@@ -5,8 +5,8 @@ import (
 	"bytes"
 	"errors"
 
-	"github.com/utain/esig/dss/internal/xmlc14n"
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmlc14n"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // SignedInfo is a ds:SignedInfo. Port of SignedInfo, which extends Manifest in Java too: the

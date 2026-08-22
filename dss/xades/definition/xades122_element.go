@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/xades122/XAdES122Element.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdES122Element defines elements for a XAdES 1.2.2 schema.
 type XAdES122Element string

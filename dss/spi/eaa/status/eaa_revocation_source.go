@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/status/EAARevocationSource.java (DSS 6.5.RC1).
 package status
 
-import "github.com/utain/esig/dss/spi/validation"
+import "github.com/ryftcore/dss-go/dss/spi/validation"
 
 // EAARevocationSource executes an EAA Status request for the given EAA
 // token using the Status List Token mechanism, as defined in IETF Token

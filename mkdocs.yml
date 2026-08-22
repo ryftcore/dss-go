@@ -13,11 +13,11 @@ site_description: >-
   A pure Go port of the EU Digital Signature Services (DSS) library - create
   and validate CAdES, XAdES, PAdES, JAdES and ASiC signatures, interoperably
   with Java DSS.
-site_url: https://utain.github.io/esig/
+site_url: https://ryftcore.github.io/dss-go/
 site_author: esig contributors
 
-repo_url: https://github.com/utain/esig
-repo_name: utain/esig
+repo_url: https://github.com/ryftcore/dss-go
+repo_name: ryftcore/dss-go
 edit_uri: edit/main/docs/
 
 copyright: >-
@@ -69,10 +69,10 @@ extra_css:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/utain/esig
+      link: https://github.com/ryftcore/dss-go
       name: esig on GitHub
     - icon: fontawesome/brands/golang
-      link: https://pkg.go.dev/github.com/utain/esig/dss
+      link: https://pkg.go.dev/github.com/ryftcore/dss-go/dss
       name: API reference on pkg.go.dev
 
 markdown_extensions:

@@ -23,9 +23,9 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // XsltTransform is the XSLT transform.

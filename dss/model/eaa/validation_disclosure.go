@@ -5,9 +5,9 @@ import (
 	"bytes"
 	"reflect"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/eaa/claim"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/eaa/claim"
 )
 
 // ValidationDisclosure is the generic base of an EAA Disclosure on

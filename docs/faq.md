@@ -104,7 +104,7 @@ into them, because the native PDF engine has no rasteriser. See
 ## Why is the API reference not on this site?
 
 Because Go already has a good one. Everything exported is documented on
-[pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss), generated from the
+[pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss), generated from the
 source, so it cannot drift. This site explains *concepts* and *decisions*;
 duplicating godoc here would only create a second version to go stale.
 
@@ -126,7 +126,7 @@ the oracle harness and parity gates.
 
 ## How do I report a bug?
 
-The [issue tracker](https://github.com/utain/esig/issues), which has templates
+The [issue tracker](https://github.com/ryftcore/dss-go/issues), which has templates
 for bugs, features, and specifically for **interop mismatches** against Java
 DSS. For a suspected security vulnerability, do **not** open a public issue —
 follow `SECURITY.md`.
@@ -138,7 +138,7 @@ conventions. The one rule worth knowing before you start: **a change that
 diverges from upstream Java behaviour needs a documented reason.** Interop is
 the product.
 
-## Why is the module `github.com/utain/esig/dss` and not `github.com/utain/esig`?
+## Why is the module `github.com/ryftcore/dss-go/dss` and not `github.com/ryftcore/dss-go`?
 
 Because the Go module lives in the `dss/` subdirectory, so that the heavy test
 corpora can sit beside it at the repository root — outside the module, and

@@ -14,8 +14,8 @@ package xades
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 const (

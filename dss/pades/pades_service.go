@@ -35,11 +35,11 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PAdESService is the PAdES implementation of DocumentSignatureService.

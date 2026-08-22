@@ -55,9 +55,9 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // validationPolicyFactoryRegistry and cryptographicSuiteFactoryRegistry hold the factories

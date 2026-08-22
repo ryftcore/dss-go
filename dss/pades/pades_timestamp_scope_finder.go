@@ -12,9 +12,9 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
 )
 
 // PAdESTimestampScopeFinder finds a scope for a PDF document timestamp. Port of the class

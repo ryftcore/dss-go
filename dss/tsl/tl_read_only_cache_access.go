@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	modeljob "github.com/utain/esig/dss/model/job"
-	"github.com/utain/esig/dss/validation/job"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // TLReadOnlyCacheAccess accesses the Trusted List cache in a read-only mode.

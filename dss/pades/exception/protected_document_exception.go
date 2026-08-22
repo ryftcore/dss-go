@@ -7,7 +7,7 @@
 package exception
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ProtectedDocumentException is thrown when the document is protected (the requested operation

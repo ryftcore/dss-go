@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/cache/access/ReadOnlyCacheAccessByKey.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // ReadOnlyCacheAccessByKey provides a read only interface for cache by key.
 type ReadOnlyCacheAccessByKey interface {

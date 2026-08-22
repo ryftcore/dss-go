@@ -10,10 +10,10 @@ package utils
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xpath10"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xpath10"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // JavaXmlXPathQueryExecutor is DSS's default XPathQueryExecutor / XPathStringExecutor

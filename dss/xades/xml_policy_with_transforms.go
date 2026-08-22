@@ -14,8 +14,8 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XmlPolicyWithTransforms is an extension of the Policy class allowing addition of a custom

@@ -3,7 +3,7 @@ package xades
 import (
 	"testing"
 
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // TestPrettyPrintTransformerAgainstJavaOracle compares the indented DOM against upstream DSS

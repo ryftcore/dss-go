@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/BasicBuildingBlockDefinition.java (DSS 6.5.RC1).
 package process
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // BasicBuildingBlockDefinition is the definition of signature Basic Building
 // Blocks as per EN 319 102-1. Implements enumerations.UriBasedEnum.

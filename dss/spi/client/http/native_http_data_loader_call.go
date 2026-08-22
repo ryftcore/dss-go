@@ -18,9 +18,9 @@ import (
 	"net/http"
 	"time"
 
-	modelhttp "github.com/utain/esig/dss/model/http"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	modelhttp "github.com/ryftcore/dss-go/dss/model/http"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // nativeHTTPErrorMessage is the default error message format.

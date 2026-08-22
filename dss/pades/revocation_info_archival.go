@@ -25,7 +25,7 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // RevocationInfoArchival ports the ASN1Object subclass eu.europa.esig.dss.pades.validation.

@@ -2,8 +2,8 @@
 package document
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // DocumentSignatureService provides operations for the signature creation and for its extension,

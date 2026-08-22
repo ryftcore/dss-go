@@ -62,15 +62,15 @@ import (
 	"testing"
 	"time"
 
-	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	simplereportjaxb "github.com/utain/esig/dss/simplereport/jaxb"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	detailedreportjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	simplereportjaxb "github.com/ryftcore/dss-go/dss/simplereport/jaxb"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 var fullCorpusValidationTime = time.UnixMilli(1700000000000).UTC()

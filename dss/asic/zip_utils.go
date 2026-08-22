@@ -44,7 +44,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ZipUtils is used for processing (reading and creation) of ZIP archives. See ZipContainerHandler.

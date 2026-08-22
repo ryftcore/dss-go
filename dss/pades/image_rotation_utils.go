@@ -17,7 +17,7 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // Rotation angle constants. Port of ImageRotationUtils.ANGLE_0/90/180/270/360.

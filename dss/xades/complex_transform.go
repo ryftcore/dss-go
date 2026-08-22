@@ -55,11 +55,11 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // complexTransformRegistry is the transform-algorithm registry Santuario keeps statically on

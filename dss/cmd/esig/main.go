@@ -1,10 +1,10 @@
 // Command esig is a command-line front end for the dss Go module
-// (github.com/utain/esig/dss): sign, extend, validate and inspect the
+// (github.com/ryftcore/dss-go/dss): sign, extend, validate and inspect the
 // signature formats the library supports, render the reports [dss.Validate]
 // produces, and refresh a local trusted-list cache.
 //
 // It is a thin wrapper: every subcommand delegates to the dss package facade
-// (github.com/utain/esig/dss) and is a living example of that API. Advanced
+// (github.com/ryftcore/dss-go/dss) and is a living example of that API. Advanced
 // use that the facade does not cover is reached through the underlying
 // packages directly - see the dss package doc.
 //

@@ -3,9 +3,9 @@ package fc
 import (
 	"testing"
 
-	diagjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/process"
+	diagjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 func fullScope(name string, kind enumerations.SignatureScopeType) *diagjaxb.XmlSignatureScope {

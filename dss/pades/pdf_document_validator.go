@@ -3,9 +3,9 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // PDFDocumentValidator is the validation of a PDF document. Port of the class

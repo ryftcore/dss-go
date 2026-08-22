@@ -4,9 +4,9 @@
 package cms
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // PrecomputedDigestCalculatorProvider allows providing digest values without the original

@@ -2,7 +2,7 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CertificateReorderer reorders a certificate collection to the corresponding certificate

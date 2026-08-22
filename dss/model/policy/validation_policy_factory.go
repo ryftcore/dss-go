@@ -4,7 +4,7 @@ package policy
 import (
 	"io"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ValidationPolicyFactory contains methods to load a ValidationPolicy

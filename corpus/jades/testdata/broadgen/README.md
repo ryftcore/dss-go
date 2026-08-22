@@ -13,7 +13,7 @@ missed 16 defects the broad run caught.
 - `gobroad_main.go` — Go counterpart of the same dump. Kept under `testdata/`
   so the go tool ignores it; build it by copying it into a throwaway package
   inside the module (`dss/zz_broad/main.go`, `go build ./zz_broad`), or from a
-  scratch module with `go mod edit -replace github.com/utain/esig/dss=<repo>/dss`.
+  scratch module with `go mod edit -replace github.com/ryftcore/dss-go/dss=<repo>/dss`.
 - Diff the two JSON files (any structural JSON diff works); every difference is
   a parity defect on one side.
 

@@ -55,10 +55,10 @@
 // custom certificate/revocation sources, trusted-list refresh jobs - is
 // reached through the packages the facade delegates to, which stay fully
 // exported and are documented on their own:
-// [github.com/utain/esig/dss/cades], [github.com/utain/esig/dss/xades],
-// [github.com/utain/esig/dss/pades], [github.com/utain/esig/dss/jades],
-// [github.com/utain/esig/dss/asic], [github.com/utain/esig/dss/validation],
-// [github.com/utain/esig/dss/tsl] and [github.com/utain/esig/dss/token].
+// [github.com/ryftcore/dss-go/dss/cades], [github.com/ryftcore/dss-go/dss/xades],
+// [github.com/ryftcore/dss-go/dss/pades], [github.com/ryftcore/dss-go/dss/jades],
+// [github.com/ryftcore/dss-go/dss/asic], [github.com/ryftcore/dss-go/dss/validation],
+// [github.com/ryftcore/dss-go/dss/tsl] and [github.com/ryftcore/dss-go/dss/token].
 // Facade types are plain aliases of the underlying ones wherever possible, so
 // mixing the two levels needs no conversion.
 //
@@ -70,7 +70,7 @@
 //
 //   - Levels T, LT and LTA require a [TSPSource] you supply
 //     (SignOptions.TSPSource). The port ships
-//     [github.com/utain/esig/dss/spi/validation.KeyEntityTSPSource], which
+//     [github.com/ryftcore/dss-go/dss/spi/validation.KeyEntityTSPSource], which
 //     issues RFC 3161 tokens from a local key - enough for tests and for a
 //     self-hosted TSA, but not an HTTP TSA client.
 //   - Revocation data for LT and LTA must likewise come from a CRL/OCSP source
@@ -83,7 +83,7 @@
 // The ported services follow Java DSS and raise unchecked exceptions, which the
 // port turns into panics. Every facade function recovers them and returns them
 // as an error wrapping the original value, so errors.As against the port's
-// error types (for example [github.com/utain/esig/dss/model.DSSError])
+// error types (for example [github.com/ryftcore/dss-go/dss/model.DSSError])
 // keeps working.
 //
 // # Registration
@@ -94,8 +94,8 @@
 // validation policy and the XML cryptographic suite - which is what makes
 // [Validate]'s format auto-detection work out of the box. Applications that
 // use the underlying packages directly must perform that registration
-// themselves; see [github.com/utain/esig/dss/validation.RegisterDocumentValidatorFactory]
-// and [github.com/utain/esig/dss/validation/policy.RegisterValidationPolicyFactory].
+// themselves; see [github.com/ryftcore/dss-go/dss/validation.RegisterDocumentValidatorFactory]
+// and [github.com/ryftcore/dss-go/dss/validation/policy.RegisterValidationPolicyFactory].
 //
 // # Where to look next
 //

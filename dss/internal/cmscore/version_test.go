@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // signerInfoOfVersion returns a SignerInfo carrying only the version, which is all

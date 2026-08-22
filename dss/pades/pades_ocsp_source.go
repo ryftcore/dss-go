@@ -13,11 +13,11 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PAdESOCSPSource is an OCSPSource that retrieves the OCSPResp from a PAdES Signature.

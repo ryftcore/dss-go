@@ -14,9 +14,9 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/spi/validation/identifier"
-	"github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESAttributeIdentifier represents an identifier of a XAdES Attribute. Port of the class

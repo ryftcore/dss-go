@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/cache/access/TLCacheAccessFactory.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/validation/job"
+import "github.com/ryftcore/dss-go/dss/validation/job"
 
 // TLCacheAccessFactory accesses the cache for the Trusted Lists validation job.
 type TLCacheAccessFactory struct {

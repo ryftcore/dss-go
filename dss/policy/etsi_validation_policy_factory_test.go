@@ -9,8 +9,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 func TestEtsiValidationPolicyFactoryLoadDefaultValidationPolicy(t *testing.T) {

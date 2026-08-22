@@ -4,8 +4,8 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // CanonicalizationTransform performs a canonicalization transform on an XML NodeSet.

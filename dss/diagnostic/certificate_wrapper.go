@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // CertificateWrapper provides a user-friendly interface of dealing with JAXB XmlCertificate.

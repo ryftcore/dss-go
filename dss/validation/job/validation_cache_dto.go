@@ -4,9 +4,9 @@ package job
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modeljob "github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // ValidationCacheDTO is the validation record DTO. It implements

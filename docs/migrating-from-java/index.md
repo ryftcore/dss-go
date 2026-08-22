@@ -103,7 +103,7 @@ underlying ones, not wrappers.
 ## Java class → Go symbol
 
 Harvested from the `// Ported from` header on each Go file. Import paths are
-relative to `github.com/utain/esig/dss`.
+relative to `github.com/ryftcore/dss-go/dss`.
 
 ### Signing services and parameters
 
@@ -204,7 +204,7 @@ relative to `github.com/utain/esig/dss`.
 
 Anything not listed: the Go file's header names its Java source, so
 `grep -r "YourClass.java" dss/` finds it. Full API reference on
-[pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss).
+[pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss).
 
 ## Maven module → Go package
 

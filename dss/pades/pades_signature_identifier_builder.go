@@ -16,8 +16,8 @@ package pades
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PAdESSignatureIdentifierBuilder builds a signature identifier for a PAdES signature.

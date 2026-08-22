@@ -2,8 +2,8 @@
 package eaa
 
 import (
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // EAAPresentationAnalyzer performs validation of a presentation of Electronic Attestation of

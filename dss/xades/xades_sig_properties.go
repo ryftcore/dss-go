@@ -2,8 +2,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
 )
 
 // XAdESSigProperties represents a list of XAdESAttributes. Port of the abstract class

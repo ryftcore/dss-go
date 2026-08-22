@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/EAAKeyBindingPayload.java (DSS 6.5.RC1).
 package validation
 
-import "github.com/utain/esig/dss/model/eaa/claim"
+import "github.com/ryftcore/dss-go/dss/model/eaa/claim"
 
 // EAAKeyBindingPayload represents a key binding payload.
 type EAAKeyBindingPayload interface {

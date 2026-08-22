@@ -2,11 +2,11 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // CAdESDiagnosticDataBuilder is the DiagnosticDataBuilder for a CMS signature. Port of the

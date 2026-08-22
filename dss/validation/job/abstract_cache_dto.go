@@ -4,7 +4,7 @@ package job
 import (
 	"time"
 
-	modeljob "github.com/utain/esig/dss/model/job"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // AbstractCacheDTO is the abstract cache DTO. It implements modeljob.InfoRecord.

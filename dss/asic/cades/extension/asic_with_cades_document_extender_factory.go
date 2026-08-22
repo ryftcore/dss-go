@@ -7,8 +7,8 @@
 package extension
 
 import (
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESDocumentExtenderFactory is used to check and load a corresponding DocumentExtender

@@ -4,7 +4,7 @@ package model
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // Token is the contract of the different token types (certificate, OCSP, CRL, timestamp)

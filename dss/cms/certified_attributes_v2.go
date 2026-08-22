@@ -16,7 +16,7 @@ package cms
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // CertifiedAttributesV2 is a sequence of X.509 attribute certificates.

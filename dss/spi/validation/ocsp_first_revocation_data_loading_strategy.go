@@ -17,7 +17,7 @@
 // analogous branch.
 package validation
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // OCSPFirstRevocationDataLoadingStrategy fetches firstly the OCSP token response, and if not
 // available, tries CRL, returning the first succeeded result.

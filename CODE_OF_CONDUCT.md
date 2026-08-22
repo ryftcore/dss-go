@@ -60,7 +60,7 @@ is officially representing the community in public spaces.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may
 be reported to the repository owner via GitHub: open a private report
-through the [utain/esig Security Advisories](https://github.com/utain/esig/security/advisories/new)
+through the [ryftcore/dss-go Security Advisories](https://github.com/ryftcore/dss-go/security/advisories/new)
 page (which reaches the owner privately), or contact the owner directly
 through their GitHub profile at https://github.com/utain if the matter
 is not security-related. All complaints will be reviewed and

@@ -20,8 +20,8 @@ package pades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // PdfCMSRevision defines a PDF revision containing CMS data (signature/timestamp).

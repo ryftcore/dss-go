@@ -2,9 +2,9 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // ASiCContainerWithCAdESValidatorFactory returns a relevant validator for an ASiC with CAdES

@@ -1,7 +1,7 @@
 # Examples
 
 Nine small, runnable programs, each teaching one story with the root
-[`dss`](https://pkg.go.dev/github.com/utain/esig/dss) facade. Every example
+[`dss`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss) facade. Every example
 is a self-contained `package main` you can read top to bottom; run it with:
 
 ```sh
@@ -38,13 +38,13 @@ facade itself covers the common paths only (see the `dss` package doc's
 visible PDF signature appearances, custom certificate/revocation sources,
 XAdES references and transforms, and more are reached through the
 underlying packages the facade delegates to
-([`cades`](https://pkg.go.dev/github.com/utain/esig/dss/cades),
-[`xades`](https://pkg.go.dev/github.com/utain/esig/dss/xades),
-[`pades`](https://pkg.go.dev/github.com/utain/esig/dss/pades),
-[`jades`](https://pkg.go.dev/github.com/utain/esig/dss/jades),
-[`asic`](https://pkg.go.dev/github.com/utain/esig/dss/asic),
-[`validation`](https://pkg.go.dev/github.com/utain/esig/dss/validation),
-[`tsl`](https://pkg.go.dev/github.com/utain/esig/dss/tsl)), documented on
+([`cades`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/cades),
+[`xades`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/xades),
+[`pades`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/pades),
+[`jades`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/jades),
+[`asic`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/asic),
+[`validation`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/validation),
+[`tsl`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/tsl)), documented on
 their own.
 
 For the CLI built on this same facade, see `dss/cmd/esig`.

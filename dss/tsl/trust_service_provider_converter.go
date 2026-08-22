@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TrustServiceProviderConverter converts a TSPType to a TrustServiceProvider.

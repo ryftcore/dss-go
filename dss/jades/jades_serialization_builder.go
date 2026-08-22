@@ -13,11 +13,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESSerializationBuilder builds a JWS JSON Serialization signature.

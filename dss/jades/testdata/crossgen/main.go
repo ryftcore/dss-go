@@ -28,16 +28,16 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/jades"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/jades"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // sampleJSONContent is the fixed payload every generated signature covers. Its own text records
 // what generated it, so a file found on disk explains itself.
-const sampleJSONContent = `{"note":"DSS Go port cross-validation sample content - github.com/utain/esig/dss jades/testdata/crossgen. Signed by the Go port's own JAdESService, verified by upstream DSS 6.5.RC1's SignedDocumentValidator."}`
+const sampleJSONContent = `{"note":"DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss jades/testdata/crossgen. Signed by the Go port's own JAdESService, verified by upstream DSS 6.5.RC1's SignedDocumentValidator."}`
 
 // detachedContentName is the document name the ObjectIdByURIHash sigD mechanism references (and
 // the file name written to <outdir>): matters because the sigD header embeds it as a URI, and

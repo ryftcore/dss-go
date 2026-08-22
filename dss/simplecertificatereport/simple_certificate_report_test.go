@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/simplecertificatereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/simplecertificatereport/jaxb"
 )
 
 // loadOracle reads a Java-produced oracle dump from the sibling jaxb

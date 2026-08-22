@@ -1,7 +1,7 @@
 // Ported from dss-document/src/main/java/eu/europa/esig/dss/evidencerecord/AbstractEvidenceRecordIncorporationParameters.java (DSS 6.5.RC1).
 package document
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // AbstractEvidenceRecordIncorporationParameters contains parameters used on Evidence Record
 // incorporation within an existing signature.

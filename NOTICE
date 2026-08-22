@@ -1,7 +1,7 @@
 esig — Go port of EU DSS (Digital Signature Services)
 Copyright and license notices
 
-This project (github.com/utain/esig) is a derivative work: a Go language
+This project (github.com/ryftcore/dss-go) is a derivative work: a Go language
 port of the Java "DSS - Digital Signature Services" library published by
 the European Commission at:
 

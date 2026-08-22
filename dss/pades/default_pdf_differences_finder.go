@@ -12,8 +12,8 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DefaultPdfDifferencesFinder is the default implementation used to find differences in pages

@@ -3,8 +3,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/model"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // XMLDocumentValidatorFactory loads the relevant validator for an XML document validation. Port

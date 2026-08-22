@@ -29,7 +29,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // signatureAlgorithmIdentifierHex maps a JCE signature algorithm name (SignatureAlgorithm.JCEID())

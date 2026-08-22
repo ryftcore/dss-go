@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/xades132/XAdES132Attribute.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdES132Attribute defines attributes for a XAdES 1.3.2 schema.
 type XAdES132Attribute string

@@ -15,9 +15,9 @@ package vpfswatsp
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // POEExtraction performs 5.6.2.3 POE extraction.

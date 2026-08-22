@@ -15,7 +15,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // tokenID is a minimal diagnostic.TokenProxy stand-in: javaHashSetOrder only

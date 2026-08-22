@@ -4,7 +4,7 @@
 package executor
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
 )
 
 // EAAPresentationProcessExecutor performs validation and reports building for

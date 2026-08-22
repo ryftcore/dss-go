@@ -1,7 +1,7 @@
 // Ported from dss-xml-utils/src/main/java/eu/europa/esig/dss/xml/utils/xpath/XPathStringExecutor.java (DSS 6.5.RC1).
 package utils
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // XPathStringExecutor executes the given XPath String expression.
 //

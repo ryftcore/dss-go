@@ -27,11 +27,11 @@ package jades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESLevelBaselineLTA creates an LTA-level of a JAdES signature.

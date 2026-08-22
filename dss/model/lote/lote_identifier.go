@@ -4,7 +4,7 @@
 // per the Phase 1b cycle-driven flattening table.
 package lote
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // loteIdentifierPrefix is the "LoTE-" prefix LoTEIdentifier passes to AbstractLoTEIdentifier.
 const loteIdentifierPrefix = "LoTE-"

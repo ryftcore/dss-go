@@ -9,8 +9,8 @@ package spi
 import (
 	"io"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // dssP7CCertificatesSecurityFactoryClassName is CertificateFactory.class.getSimpleName().

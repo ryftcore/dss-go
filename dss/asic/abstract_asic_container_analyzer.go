@@ -2,14 +2,14 @@
 package asic
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	analyzertimestamp "github.com/utain/esig/dss/spi/validation/analyzer/timestamp"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	analyzertimestamp "github.com/ryftcore/dss-go/dss/spi/validation/analyzer/timestamp"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // AbstractASiCContainerAnalyzerOverrides declares the ASiC-specific abstract operations

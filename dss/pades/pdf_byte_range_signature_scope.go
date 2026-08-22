@@ -6,8 +6,8 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
 )
 
 // PdfByteRangeSignatureScope represents a signed PDF byte range. Port of the abstract class

@@ -23,7 +23,7 @@ package spi
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // SignatureIntegrityValidatorOverrides declares the operation Java's abstract class leaves

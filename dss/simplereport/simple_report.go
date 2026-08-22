@@ -6,8 +6,8 @@ package simplereport
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/simplereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/simplereport/jaxb"
 )
 
 // SimpleReport is a SimpleReport holder to fetch values from a JAXB

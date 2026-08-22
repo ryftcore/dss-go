@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 // CertificateTrustTime defines a validity period during which a certificate is considered as a

@@ -12,7 +12,7 @@ there is no tagged release yet).
 Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
 baseline: version 6.5.RC1, commit
 `4c2129862948bfd53ca1455832260aa17e183cf8`) to Go, module
-`github.com/utain/esig/dss`. See `PORTING_PLAN.md` for the full
+`github.com/ryftcore/dss-go/dss`. See `PORTING_PLAN.md` for the full
 phase-by-phase porting record, module mapping, and verification detail
 behind every claim below, and `dss/PORTING.md` for the porting
 conventions applied throughout.
@@ -149,4 +149,4 @@ mapping for the full list: upstream's REST/SOAP remote services and
 clients, `dss-cookbook`, coverage/BOM modules, and evidence-record
 modules.
 
-[Unreleased]: https://github.com/utain/esig/compare/main...HEAD
+[Unreleased]: https://github.com/ryftcore/dss-go/compare/main...HEAD

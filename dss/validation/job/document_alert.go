@@ -2,8 +2,8 @@
 package job
 
 import (
-	"github.com/utain/esig/dss/alert"
-	modeljob "github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/alert"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // DocumentAlert processes events on document processing. D is the current

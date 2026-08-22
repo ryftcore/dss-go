@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/job"
 )
 
 // TLInfo computes a summary for a single Trusted List processing result.

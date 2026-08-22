@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/SignatureBuilder.java (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SignatureBuilder builds a XAdES signature of the defined format.
 //

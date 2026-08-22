@@ -11,9 +11,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // JWS is an extension of a JSON Web Signature according to RFC 7515. Port of the class JWS.

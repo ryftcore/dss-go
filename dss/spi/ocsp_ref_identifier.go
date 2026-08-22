@@ -13,7 +13,7 @@ import (
 	"encoding/binary"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // OCSPRefIdentifier is the identifier of an OCSP token reference.

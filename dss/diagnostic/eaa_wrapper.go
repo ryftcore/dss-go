@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // EAAWrapper provides a user-friendly interface for information extraction from a

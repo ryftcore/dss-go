@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // compositeRevocationSourceDeterminismFakeRevocation is a stand-in for a concrete Revocation

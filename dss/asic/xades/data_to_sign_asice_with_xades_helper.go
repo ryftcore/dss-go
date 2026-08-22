@@ -4,8 +4,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DataToSignASiCEWithXAdESHelper generates a DataToSign for ASiC-E with XAdES.

@@ -6,8 +6,8 @@ package jades
 import (
 	"crypto"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // JAdESSignatureIntegrityValidator checks the integrity of a JAdES SignatureValue. Port of the

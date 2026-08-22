@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/utain/esig/dss/alert"
+	"github.com/ryftcore/dss-go/dss/alert"
 )
 
 func TestAbstractConfigurator_SetSecurityFeatures_CollectsFailuresAndAlerts(t *testing.T) {

@@ -12,8 +12,8 @@ import (
 	"testing"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // TestSerializeAgainstJavaTransformerOracle is the byte-parity gate for

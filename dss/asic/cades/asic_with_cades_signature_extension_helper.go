@@ -2,10 +2,10 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	dsscades "github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/asic"
+	dsscades "github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // ASiCWithCAdESSignatureExtensionHelper contains useful methods for ASiC with CAdES counter

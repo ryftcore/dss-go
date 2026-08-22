@@ -4,7 +4,7 @@
 // type keeps its Java name unqualified.
 package spi
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // TrustedCertificateSource provides an abstraction of a CertificateSource containing trust
 // anchors.

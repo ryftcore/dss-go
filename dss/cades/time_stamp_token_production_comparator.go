@@ -9,9 +9,9 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // TimeStampTokenProductionComparator compares production time of TimeStampTokens, checking

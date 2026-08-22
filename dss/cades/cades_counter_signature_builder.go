@@ -20,13 +20,13 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/signature/resources"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // CAdESCounterSignatureBuilder builds a CAdES counter signature.

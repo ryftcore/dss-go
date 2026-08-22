@@ -21,7 +21,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/utain/esig/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 )
 
 // LOTLSigningCertificatesAnnouncementSchemeInformationURI filters the LOTL signing certificates

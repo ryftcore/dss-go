@@ -11,9 +11,9 @@ package executor
 import (
 	"time"
 
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // AbstractProcessExecutor is the abstract validation process executor.

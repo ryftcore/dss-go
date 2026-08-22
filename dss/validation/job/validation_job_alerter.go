@@ -2,9 +2,9 @@
 package job
 
 import (
-	"github.com/utain/esig/dss/alert"
-	modeljob "github.com/utain/esig/dss/model/job"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/alert"
+	modeljob "github.com/ryftcore/dss-go/dss/model/job"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ValidationJobAlerter processes alerts on ValidationJob. D is the current

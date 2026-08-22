@@ -7,7 +7,7 @@
 // native_pdf_signature_service.go's already-landed call site.
 package pades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // PdfSignatureRevision represents a PDF revision for an electronic signature.
 // Port of the PdfSignatureRevision class, extending PdfCMSRevision.

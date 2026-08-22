@@ -16,9 +16,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // The ZIPCORE chunk is pinned against two Java oracles over the same 188 ZIP/ASiC fixtures of

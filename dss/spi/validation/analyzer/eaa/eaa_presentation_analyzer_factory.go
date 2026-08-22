@@ -4,7 +4,7 @@ package eaa
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // EAAPresentationAnalyzerFactory is used to load a specific EAAPresentationAnalyzer based on

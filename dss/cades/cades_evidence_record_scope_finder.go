@@ -6,10 +6,10 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
 )
 
 // CAdESEvidenceRecordScopeFinder builds a list of covered scopes for a CAdES embedded

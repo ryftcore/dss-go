@@ -2,7 +2,7 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // OCSPSignatureIntegrityValidator verifies the integrity of the OCSP token signature against

@@ -5,7 +5,7 @@ import (
 	"crypto"
 	"crypto/x509"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // keyStoreEntry is a single alias's private-key-entry contents, standing in for what

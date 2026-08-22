@@ -7,9 +7,9 @@ package validation
 import (
 	"sort"
 
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TokenStatus contains tokens concerned by an occurred event and corresponding information

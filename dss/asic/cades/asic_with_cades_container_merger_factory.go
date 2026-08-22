@@ -4,8 +4,8 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESContainerMergerFactory is used to load a relevant merger for ASiC with CAdES

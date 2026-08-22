@@ -10,17 +10,17 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // CMSDocumentAnalyzer is the validation of a CMS document. Port of the class

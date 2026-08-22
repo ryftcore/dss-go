@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/x509/extension/OCSPNoCheck.java (DSS 6.5.RC1).
 package extension
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // OCSPNoCheck is RFC 6960 "4.2.2.2.1. Revocation Checking of an Authorized Responder".
 //

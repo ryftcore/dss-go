@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/cache/access/AbstractCacheAccessFactory.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // AbstractCacheAccessFactoryOverrides declares the operations Java's abstract
 // AbstractCacheAccessFactory<D,P,V> class leaves abstract, standing in for the virtual

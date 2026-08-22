@@ -17,7 +17,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // DiagnosticDataFacade is used to marshal/unmarshal a DiagnosticData report.

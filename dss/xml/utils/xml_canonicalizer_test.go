@@ -3,7 +3,7 @@ package utils
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmlc14n"
+	"github.com/ryftcore/dss-go/dss/internal/xmlc14n"
 )
 
 func TestXMLCanonicalizerCreateInstanceDefaults(t *testing.T) {

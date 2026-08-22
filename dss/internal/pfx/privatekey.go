@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // parsePrivateKeyInfo parses a cleartext PKCS#8 PrivateKeyInfo (RFC 5958), the shape both a

@@ -5,9 +5,9 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/job"
-	validationjob "github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/job"
+	validationjob "github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // LOTLChangeApplier applies changes in the LOTL cache.

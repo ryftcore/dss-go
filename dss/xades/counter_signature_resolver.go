@@ -12,13 +12,13 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // CounterSignatureResolver resolves the counter-signed ds:SignatureValue document only. Port of

@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/XAdESElement.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdESElement is a XAdES element definition, shared across the XAdES 1.1.1/1.2.2/1.3.2
 // schema versions. Each concrete version (XAdES111Element, XAdES122Element, XAdES132Element)

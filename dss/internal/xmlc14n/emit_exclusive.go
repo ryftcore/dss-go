@@ -5,7 +5,7 @@ package xmlc14n
 import (
 	"sort"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // outputAttributesSubtreeExclusive ports Canonicalizer20010315Excl.outputAttributesSubtree.

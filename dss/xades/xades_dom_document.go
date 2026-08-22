@@ -13,9 +13,9 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/xades/definition"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESDOMDocument represents a wrapper of an *xmldom.Node Document, containing utility methods

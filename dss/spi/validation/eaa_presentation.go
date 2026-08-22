@@ -13,7 +13,7 @@
 // javadoc.
 package validation
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // EAAPresentation represents an EAA Presentation document.
 type EAAPresentation interface {

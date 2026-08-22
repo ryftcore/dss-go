@@ -18,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // signedAssertionOID is the SignedAssertion OID this port hard-codes, "0.4.0.19122.1.6", per

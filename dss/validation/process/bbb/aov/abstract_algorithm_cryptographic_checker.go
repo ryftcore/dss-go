@@ -8,10 +8,10 @@ package aov
 import (
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 // algorithmUnidentified is the name string for a unidentified (unsupported)

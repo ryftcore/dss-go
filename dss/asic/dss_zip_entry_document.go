@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DSSZipEntryDocument is a DSSDocument carrying metadata for a ZIP-container entry.
 type DSSZipEntryDocument interface {

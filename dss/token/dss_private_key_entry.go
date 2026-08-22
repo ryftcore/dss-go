@@ -2,8 +2,8 @@
 package token
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSPrivateKeyEntry is the interface for a private key entry retrieved from a

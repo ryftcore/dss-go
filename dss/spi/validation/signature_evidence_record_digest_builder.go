@@ -4,7 +4,7 @@
 // in this same Go package per S2B_BRIEF.md's package layout table.
 package validation
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SignatureEvidenceRecordDigestBuilder generates a digest for an evidence record to be embedded
 // within a given signature.

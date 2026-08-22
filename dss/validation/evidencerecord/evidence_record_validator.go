@@ -2,9 +2,9 @@
 package evidencerecord
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // EvidenceRecordValidator is the interface to be used for evidence record validation.

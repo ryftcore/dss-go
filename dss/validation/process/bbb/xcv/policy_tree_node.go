@@ -6,7 +6,7 @@
 // hashable key.
 package xcv
 
-import "github.com/utain/esig/dss/utils"
+import "github.com/ryftcore/dss-go/dss/utils"
 
 // policyTreeAnyPolicyOID represents an anyPolicy OID.
 const policyTreeAnyPolicyOID = "2.5.29.32.0"

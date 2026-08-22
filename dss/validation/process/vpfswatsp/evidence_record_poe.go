@@ -6,8 +6,8 @@ package vpfswatsp
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // EvidenceRecordPOE is a POE provided by an evidence record.

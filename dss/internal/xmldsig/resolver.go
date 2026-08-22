@@ -10,7 +10,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // ResolverContext is what a resolver is asked about. Port of ResourceResolverContext.

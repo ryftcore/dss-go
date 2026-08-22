@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // ManifestElement is the Manifest element enumeration. Ports the Java enum per PORTING.md's
 // enum convention: a typed string whose value is the Java name(), with the wire tag name held

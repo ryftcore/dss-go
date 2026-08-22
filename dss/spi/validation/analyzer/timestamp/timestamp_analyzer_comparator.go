@@ -3,7 +3,7 @@
 // java.io.Serializable is dropped (no Go counterpart), per PORTING.md.
 package timestamp
 
-import "github.com/utain/esig/dss/spi/validation"
+import "github.com/ryftcore/dss-go/dss/spi/validation"
 
 // timestampAnalyzerComparatorTimestampComparator is used to compare the timestamps. Port of the
 // private static final TimestampTokenComparator timestampComparator field.

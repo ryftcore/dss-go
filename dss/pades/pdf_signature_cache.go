@@ -10,7 +10,7 @@
 // nil is Java's null.
 package pades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // PdfSignatureCache is used as a DTO containing cached data to accelerate the signature creation
 // process. Port of the PdfSignatureCache class.

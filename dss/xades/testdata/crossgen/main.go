@@ -25,11 +25,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
-	"github.com/utain/esig/dss/xades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
+	"github.com/ryftcore/dss-go/dss/xades"
 )
 
 // sampleXMLContent is the fixed payload every generated signature covers. Its own text records
@@ -38,7 +38,7 @@ import (
 // this document's own root element.
 const sampleXMLContent = `<?xml version="1.0" encoding="UTF-8"?>` +
 	`<SampleDocument xmlns="urn:dss:go:crossgen">` +
-	`<Note>DSS Go port cross-validation sample content - github.com/utain/esig/dss xades/testdata/crossgen. ` +
+	`<Note>DSS Go port cross-validation sample content - github.com/ryftcore/dss-go/dss xades/testdata/crossgen. ` +
 	`Signed by the Go port's own XAdESService, verified by upstream DSS 6.5.RC1's SignedDocumentValidator.</Note>` +
 	`</SampleDocument>`
 

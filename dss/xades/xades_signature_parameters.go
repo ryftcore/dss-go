@@ -34,15 +34,15 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/xades/definition"
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XPathElementPlacement defines ways to embed a signature (used for ENVELOPED format), the

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // AbstractCacheOverrides declares the operation Java's abstract AbstractCache<R> class

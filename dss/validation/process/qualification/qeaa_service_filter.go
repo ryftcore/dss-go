@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/trust/filter/QEAAServiceFilter.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // QEAAServiceFilter filters trust services with the 'EAA/Q' service identifier type.
 type QEAAServiceFilter struct {

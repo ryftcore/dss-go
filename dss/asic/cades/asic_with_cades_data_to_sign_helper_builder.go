@@ -4,9 +4,9 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESDataToSignHelperBuilderOverrides declares the operation Java's abstract

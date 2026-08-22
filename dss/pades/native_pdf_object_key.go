@@ -7,7 +7,7 @@
 // with it (see the FORWARD DEPENDENCIES note in pdf_composite_dss_dict_certificate_source.go).
 package pades
 
-import "github.com/utain/esig/dss/internal/pdf"
+import "github.com/ryftcore/dss-go/dss/internal/pdf"
 
 // NativePdfObjectKey identifies an indirect PDF object by number and generation.
 type NativePdfObjectKey struct {

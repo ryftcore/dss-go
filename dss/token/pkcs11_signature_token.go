@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // Pkcs11SignatureToken is a PKCS11 token with callback.

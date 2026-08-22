@@ -2,8 +2,8 @@
 package xcv
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JoinedPseudoStrategy represents a merged strategy to extract pseudo

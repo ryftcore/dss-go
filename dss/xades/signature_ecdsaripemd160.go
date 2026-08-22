@@ -10,7 +10,7 @@
 // replacement for what SignatureECDSARIPEMD160 exists to teach Santuario.
 package xades
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // SignatureECDSARIPEMD160URI is the URI SignatureECDSARIPEMD160.engineGetURI() returns,
 // exposed here for parity with upstream in case a caller still expects a symbol for it.

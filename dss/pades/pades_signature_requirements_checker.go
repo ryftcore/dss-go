@@ -17,10 +17,10 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // PAdESSignatureRequirementsChecker verifies signature creation or augmentation requirements for

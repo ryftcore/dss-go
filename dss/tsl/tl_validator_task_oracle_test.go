@@ -16,12 +16,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	"github.com/utain/esig/dss/spi"
-	validationpolicy "github.com/utain/esig/dss/validation/policy"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	"github.com/ryftcore/dss-go/dss/spi"
+	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
 // INTEGRATION FLAG (see this batch's porter notes): Java discovers the ETSI

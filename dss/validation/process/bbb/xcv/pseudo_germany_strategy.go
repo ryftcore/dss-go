@@ -4,8 +4,8 @@ package xcv
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // pseudoGermanyCountryCode is the Germany country code.

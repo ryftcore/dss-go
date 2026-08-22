@@ -1,7 +1,7 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/xpath/item/XPathQueryElementItem.java (DSS 6.5.RC1).
 package common
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // xPathQueryElementColon is the namespace-prefix separator.
 const xPathQueryElementColon = ":"

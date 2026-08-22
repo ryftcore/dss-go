@@ -2,8 +2,8 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // TimestampOCSPSource is an OCSPSource that retrieves information embedded in a TimeStampToken.

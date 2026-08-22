@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/token"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // ErrNoKeyEntry is returned when a key store holds no usable private key
@@ -19,7 +19,7 @@ var ErrNoKeyEntry = errors.New("dss: the key store holds no private key entry")
 //
 // Use [OpenPKCS12] for the common case, or [NewSigner] to drive any
 // [token.SignatureTokenConnection] the port provides (see the
-// [github.com/utain/esig/dss/token] package) or one of your own.
+// [github.com/ryftcore/dss-go/dss/token] package) or one of your own.
 type Signer struct {
 	conn  token.SignatureTokenConnection
 	key   token.DSSPrivateKeyEntry

@@ -5,7 +5,7 @@ import (
 	"encoding/asn1"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // ContentInfo is the RFC 5652 outermost structure

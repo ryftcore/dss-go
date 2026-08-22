@@ -3,7 +3,7 @@ package lote
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 func TestNewTrustedPropertiesPanicsOnNilLoTEInfo(t *testing.T) {

@@ -1,7 +1,7 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/lote/LoTEValidationJobSummary.java (DSS 6.5.RC1).
 package lote
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // LoTEValidationJobSummary contains summary of the validation result of a List of Trusted
 // Entities validation job.

@@ -2,9 +2,9 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // OfflineOCSPSourceBase helps implement an OCSPSource over an already loaded list of basic

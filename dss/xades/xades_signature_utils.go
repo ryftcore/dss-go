@@ -10,12 +10,12 @@ package xades
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/xades/definition"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESSignatureUtilsGetSignerDocuments returns the list of original signed documents. Ports

@@ -6,7 +6,7 @@
 // why the interface collapses BC's Provider/Calculator pair into one method.
 package cms
 
-import "github.com/utain/esig/dss/internal/asn1ber"
+import "github.com/ryftcore/dss-go/dss/internal/asn1ber"
 
 // DigestCalculatorProvider hands back the message-digest value to use for a given digest
 // AlgorithmIdentifier. Port of the shared contract of

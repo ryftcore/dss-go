@@ -14,7 +14,7 @@ package pades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // PAdESCommonParameters defines a list of common PAdES parameters between signature and

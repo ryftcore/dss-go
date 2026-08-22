@@ -14,9 +14,9 @@ package jades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESExtensionBuilder is the abstract base allowing the signature extension.

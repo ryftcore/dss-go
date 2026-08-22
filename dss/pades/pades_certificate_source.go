@@ -22,11 +22,11 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PAdESCertificateSource is a CertificateSource that retrieves the certificate from a PAdES

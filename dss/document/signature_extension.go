@@ -1,7 +1,7 @@
 // Ported from dss-document/src/main/java/eu/europa/esig/dss/signature/SignatureExtension.java (DSS 6.5.RC1).
 package document
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SignatureExtension extends the level of AdES signature of a document. After level -B, going
 // upper in the signature format level consists of adding unsigned properties to the signature.

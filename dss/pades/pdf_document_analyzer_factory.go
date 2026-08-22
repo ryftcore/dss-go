@@ -4,8 +4,8 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // PDFDocumentAnalyzerFactory loads a relevant validator for a PDF document. Port of the class

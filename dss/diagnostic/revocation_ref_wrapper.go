@@ -6,8 +6,8 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // RevocationRefWrapper represents a revocation data reference wrapper.

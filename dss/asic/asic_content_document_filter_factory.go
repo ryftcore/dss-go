@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/evidencerecord/ASiCContentDocumentFilterFactory.java (DSS 6.5.RC1).
 package asic
 
-import "github.com/utain/esig/dss/utils"
+import "github.com/ryftcore/dss-go/dss/utils"
 
 // EmptyFilter creates an ASiCContentDocumentFilter with an empty configuration. Ports the
 // static factory emptyFilter(). Java's private no-arg constructor has no Go analogue: this

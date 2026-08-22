@@ -3,7 +3,7 @@
 // FORWARD DEPENDENCY: qualification.EAAQualificationBlock and
 // qualification.SignatureQualificationBlock are ported by the shared
 // QCERT/QTRUST/QSIG porters into package
-// github.com/utain/esig/dss/validation/process/qualification, assumed to have
+// github.com/ryftcore/dss-go/dss/validation/process/qualification, assumed to have
 // the shapes
 //
 //	func NewEAAQualificationBlock(i18nProvider *i18n.I18nProvider, eaa *diagnostic.EAAWrapper,
@@ -25,14 +25,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process/qualification"
-	"github.com/utain/esig/dss/validation/process/vpfbs"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process/qualification"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpfbs"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // EAAValidationBlock performs validation of the EAA.

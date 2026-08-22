@@ -26,7 +26,7 @@ package cms
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // SignerAttributeV2 is the signer-attributes-v2 value: at most one of ClaimedAttributes,

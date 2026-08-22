@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/cache/access/AbstractReadOnlyCacheAccessByKey.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // AbstractReadOnlyCacheAccessByKey prevents reading of other records but the one with the
 // defined key. D, P, V mirror Java's "<D extends DownloadInfoRecord, P extends

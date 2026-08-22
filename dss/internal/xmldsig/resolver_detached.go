@@ -8,9 +8,9 @@ import (
 	"io"
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DetachedSignatureResolver resolves a ds:Reference whose URI names a detached document, or

@@ -6,8 +6,8 @@ package document
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // fakeRequirementsSignature is a partial AdvancedSignature double (same technique as

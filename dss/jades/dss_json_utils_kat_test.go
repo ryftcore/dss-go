@@ -8,10 +8,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // jadesJSONKATCase is one row of testdata/jades_json_oracle.tsv, which was produced by running

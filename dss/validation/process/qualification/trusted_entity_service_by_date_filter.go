@@ -4,7 +4,7 @@ package qualification
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
 )
 
 // TrustedEntityServiceByDateFilter filters trusted entity services by date.

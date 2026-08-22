@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // zipUtilsRecordingHandler is a ZipContainerHandler that records that it was asked to do the work,

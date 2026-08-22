@@ -2,9 +2,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	dssvalidation "github.com/utain/esig/dss/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
 // JAdESDocumentValidatorFactory loads the relevant Validator to process a given JAdES signature.

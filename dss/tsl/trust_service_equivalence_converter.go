@@ -2,11 +2,11 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/timedependent"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TrustServiceEquivalenceConverter extracts the MRA equivalence scheme for a Trusted List.

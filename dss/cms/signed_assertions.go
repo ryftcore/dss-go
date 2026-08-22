@@ -4,7 +4,7 @@
 //	SignedAssertions ::= SEQUENCE OF SignedAssertion
 package cms
 
-import "github.com/utain/esig/dss/internal/asn1ber"
+import "github.com/ryftcore/dss-go/dss/internal/asn1ber"
 
 // SignedAssertions is a list of signed assertions. Port of the SignedAssertions class.
 type SignedAssertions struct {

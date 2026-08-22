@@ -4,7 +4,7 @@ package document
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ProfileParameters manages the internal variables used in the process of creating of a

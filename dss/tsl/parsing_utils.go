@@ -2,9 +2,9 @@
 package tsl
 
 import (
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ParsingUtilsXMLLOTLPointer extracts the XML LOTL Pointer from the parsing cache of a pivot,

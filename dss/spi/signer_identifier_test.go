@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TestSignerIdentifierKnownAnswers checks the DER IssuerSerial, the string form and the flattened

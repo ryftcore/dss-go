@@ -3,8 +3,8 @@ package jaxb
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
 )
 
 // TestNamespaceDSigProvenance pins namespaceDSig (jaxb_crossns.go) against

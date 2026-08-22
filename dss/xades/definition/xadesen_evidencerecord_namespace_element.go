@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/xadesen/XAdESEvidencerecordNamespaceElement.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdESEvidencerecordNamespaceElement defines elements specified within
 // "http://uri.etsi.org/19132/v1.1.1#" XAdES Evidence Record container namespace (ETSI TS 119 132-3).

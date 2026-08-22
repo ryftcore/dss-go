@@ -22,7 +22,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/utain/esig/dss/simplereport/jaxb"
+	"github.com/ryftcore/dss-go/dss/simplereport/jaxb"
 )
 
 // SimpleReportFacade contains methods to generate a SimpleReport.

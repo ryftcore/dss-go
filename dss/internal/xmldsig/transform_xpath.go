@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xpath10"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xpath10"
 )
 
 // xpathTransform is the ds:XPath transform of XMLDSIG 6.6.3. Port of TransformXPath.

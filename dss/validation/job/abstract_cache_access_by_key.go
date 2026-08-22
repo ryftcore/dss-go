@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/cache/access/AbstractCacheAccessByKey.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // AbstractCacheAccessByKey is the abstract implementation to access a cache record by a
 // specified key. D, P, V mirror Java's "<D extends DownloadInfoRecord, P extends

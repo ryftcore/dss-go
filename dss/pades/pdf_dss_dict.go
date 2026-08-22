@@ -30,9 +30,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/utain/esig/dss/crlparser"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/crlparser"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PdfDssDict represents the DSS dictionary. Port of the PdfDssDict interface.

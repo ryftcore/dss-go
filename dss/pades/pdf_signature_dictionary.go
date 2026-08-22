@@ -33,9 +33,9 @@ package pades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // PdfSignatureDictionary contains PDF signature dictionary information. It merges the Java

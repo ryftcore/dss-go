@@ -7,11 +7,11 @@
 // directly, promoting its exported behaviour unchanged.
 package tsl
 
-import "github.com/utain/esig/dss/validation/job"
+import "github.com/ryftcore/dss-go/dss/validation/job"
 
 // CacheCleaner is used to clean outdated cache entries.
 //
-// Deprecated: since DSS 6.5. Use github.com/utain/esig/dss/validation/job.CacheCleaner instead.
+// Deprecated: since DSS 6.5. Use github.com/ryftcore/dss-go/dss/validation/job.CacheCleaner instead.
 type CacheCleaner struct {
 	*job.CacheCleaner
 }

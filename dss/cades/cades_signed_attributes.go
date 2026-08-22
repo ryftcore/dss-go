@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/CAdESSignedAttributes.java (DSS 6.5.RC1).
 package cades
 
-import "github.com/utain/esig/dss/internal/cmscore"
+import "github.com/ryftcore/dss-go/dss/internal/cmscore"
 
 // CAdESSignedAttributes represents the CAdES Signed attributes. Port of the class
 // CAdESSignedAttributes, extending CAdESSigProperties.

@@ -1,6 +1,6 @@
 package xpath10
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // Expr is a compiled expression. It is immutable and safe for concurrent use, mirroring the
 // javax.xml.xpath.XPathExpression that DSS compiles once and evaluates many times.

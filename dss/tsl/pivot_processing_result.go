@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // PivotProcessingResult contains the pivot and its introduced signing certificates for the LOTL

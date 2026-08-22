@@ -14,7 +14,7 @@ import (
 	"errors"
 	"io"
 
-	modelpolicy "github.com/utain/esig/dss/model/policy"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // CryptographicSuiteXmlFacade performs unmarshalling for the ETSI TS

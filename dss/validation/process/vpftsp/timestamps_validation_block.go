@@ -4,17 +4,17 @@
 // sibling porters in the same phase, not yet present when this file was
 // written:
 //
-//   - github.com/utain/esig/dss/validation/process/vpfswatsp for POEExtraction
+//   - github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp for POEExtraction
 //     (LTVA). This one IS already present with the assumed shape:
 //     NewPOEExtraction(), Init(*diagnostic.DiagnosticData, time.Time),
 //     ExtractPOE(*diagnostic.TimestampWrapper).
-//   - github.com/utain/esig/dss/validation/process/qualification (shared
+//   - github.com/ryftcore/dss-go/dss/validation/process/qualification (shared
 //     QCERT/QTRUST/QSIG porters) for TimestampQualificationBlock, assumed to
 //     have the shape
 //     NewTimestampQualificationBlock(*i18n.I18nProvider, *diagnostic.TimestampWrapper, []*jaxb.XmlTLAnalysis, *vpfswatsp.POEExtraction) *TimestampQualificationBlock
 //     with an Execute() *jaxb.XmlValidationTimestampQualification method,
 //     mirroring Java's TimestampQualificationBlock(I18nProvider, TimestampWrapper, List<XmlTLAnalysis>, POEExtraction).
-//   - github.com/utain/esig/dss/validation/process/vpftspwatsp (LTVA) for
+//   - github.com/ryftcore/dss-go/dss/validation/process/vpftspwatsp (LTVA) for
 //     ValidationProcessForTimestampsWithArchivalData, assumed to have the shape
 //     NewValidationProcessForTimestampsWithArchivalData(*i18n.I18nProvider, *diagnostic.TimestampWrapper, *jaxb.XmlValidationProcessBasicTimestamp, map[string]*jaxb.XmlBasicBuildingBlocks, map[string]*jaxb.XmlEvidenceRecord, time.Time, policy.ValidationPolicy, *vpfswatsp.POEExtraction) *ValidationProcessForTimestampsWithArchivalData
 //     with an Execute() *jaxb.XmlValidationProcessArchivalDataTimestamp method,
@@ -31,14 +31,14 @@ import (
 	"sort"
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process/qualification"
-	"github.com/utain/esig/dss/validation/process/vpfswatsp"
-	"github.com/utain/esig/dss/validation/process/vpftspwatsp"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process/qualification"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp"
+	"github.com/ryftcore/dss-go/dss/validation/process/vpftspwatsp"
 )
 
 // TimestampsValidationBlockOverrides declares the overridable protected methods

@@ -14,11 +14,11 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/timestamp"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/timestamp"
 )
 
 // PdfRevisionTimestampSource extracts a timestamp from a single PdfRevision. Port of the class

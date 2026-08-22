@@ -2,8 +2,8 @@
 package validation
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // TSPSource is the abstraction of a Time Stamping authority which delivers RFC 3161 Time Stamp

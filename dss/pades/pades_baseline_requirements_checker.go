@@ -74,13 +74,13 @@
 package pades
 
 import (
-	"github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // PAdESBaselineRequirementsChecker checks conformance of a PAdES signature to the requested

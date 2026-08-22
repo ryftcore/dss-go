@@ -17,11 +17,11 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	dsstimestamp "github.com/utain/esig/dss/validation/timestamp"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	dsstimestamp "github.com/ryftcore/dss-go/dss/validation/timestamp"
 )
 
 // ASiCWithCAdESTimestampValidator is the abstract validator for an ASiC with CAdES timestamp.

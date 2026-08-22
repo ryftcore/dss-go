@@ -4,8 +4,8 @@
 package executor
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // DocumentProcessExecutor processes a document validation. Port of the

@@ -6,7 +6,7 @@
 // package layout). That one check class - the sole consumer of an
 // already-built XmlAOV result, with no dependency on the rest of the aov
 // tree - has since been ported minimally into
-// github.com/utain/esig/dss/validation/process/bbb/aov (see that package's
+// github.com/ryftcore/dss-go/dss/validation/process/bbb/aov (see that package's
 // header for the exact scope), so this file now builds as originally
 // written.
 package sav
@@ -14,13 +14,13 @@ package sav
 import (
 	"time"
 
-	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/bbb/aov"
+	jaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/aov"
 )
 
 // AbstractAcceptanceValidation is 5.2.8 Signature acceptance validation (SAV).

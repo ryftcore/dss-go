@@ -11,10 +11,10 @@
 package extension
 
 import (
-	"github.com/utain/esig/dss/document"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/jades"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/document"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/jades"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // JAdESDocumentExtender is the JAdES specific implementation of a

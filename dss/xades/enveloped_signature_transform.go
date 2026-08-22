@@ -5,8 +5,8 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // EnvelopedSignatureTransform is used for an Enveloped Signature.

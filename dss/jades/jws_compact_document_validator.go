@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWSCompactDocumentValidator.java (DSS 6.5.RC1).
 package jades
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // JWSCompactDocumentValidator validates a JWS Compact signature. Port of the class
 // JWSCompactDocumentValidator, extending AbstractJWSDocumentValidator.

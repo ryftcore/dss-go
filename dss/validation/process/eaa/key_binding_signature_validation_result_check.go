@@ -13,7 +13,7 @@
 //
 // FORWARD DEPENDENCY: qualification.SignatureValidationResultCheck is ported
 // by the shared QCERT/QTRUST/QSIG porters into package
-// github.com/utain/esig/dss/validation/process/qualification, assumed to have
+// github.com/ryftcore/dss-go/dss/validation/process/qualification, assumed to have
 // the shape
 //
 //	type SignatureValidationResultCheck[T any] struct { *process.ChainItemBase[T]; ... }
@@ -25,11 +25,11 @@
 package eaa
 
 import (
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/qualification"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/qualification"
 )
 
 // KeyBindingSignatureValidationResultCheck performs verification of the

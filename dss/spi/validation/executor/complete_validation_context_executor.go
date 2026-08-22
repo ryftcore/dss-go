@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/executor/CompleteValidationContextExecutor.java (DSS 6.5.RC1).
 package executor
 
-import "github.com/utain/esig/dss/spi/validation"
+import "github.com/ryftcore/dss-go/dss/spi/validation"
 
 // CompleteValidationContextExecutor executes complete validation of the ValidationContext,
 // including running of all checks with the alerts processing specified in CertificateVerifier.

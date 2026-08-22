@@ -13,7 +13,7 @@ package crlparser
 import (
 	"math/big"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ICRLUtils is the contract for dealing with CRLs.

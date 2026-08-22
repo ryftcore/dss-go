@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // ManifestNS is the OpenDocument Manifest namespace. Ports ManifestNamespace.NS;
 // ManifestNamespace itself was a namespace-only holder class with a private constructor, so it

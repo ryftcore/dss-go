@@ -6,9 +6,9 @@ package vpfswatsp
 import (
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TimestampPOE is a POE provided by a time-stamp token.

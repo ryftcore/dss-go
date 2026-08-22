@@ -9,7 +9,7 @@ package cmscore
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 )
 
 // SignerInfoBuilder assembles a SignerInfo. The version is derived from the SignerIdentifier

@@ -24,12 +24,12 @@ import (
 	"io"
 	"sort"
 
-	"github.com/utain/esig/dss/internal/asn1ber"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/signature/resources"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
 )
 
 // CMSUtilsParseToCMS parses the given DSSDocument to a CMS object. Port of #parseToCMS(DSSDocument),

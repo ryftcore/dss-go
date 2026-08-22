@@ -4,9 +4,9 @@ package scope
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // SignatureScopeWithTransformationsBase is the signature scope with the performed

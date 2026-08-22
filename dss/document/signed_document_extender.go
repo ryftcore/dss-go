@@ -10,10 +10,10 @@
 package document
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/extension"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/extension"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // SignedDocumentExtender contains common code for signature augmentation utilities.

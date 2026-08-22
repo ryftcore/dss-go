@@ -4,8 +4,8 @@ package diagnostic
 import (
 	"slices"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // FoundCertificatesProxy handles method logic to process XmlFoundCertificates and returns

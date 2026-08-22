@@ -2,12 +2,12 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	dsscades "github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/asic"
+	dsscades "github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // ASiCWithCAdESDiagnosticDataBuilder is the DiagnosticData builder for an ASiC with CAdES

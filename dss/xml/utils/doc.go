@@ -5,7 +5,7 @@
 // and construction surface XAdES (a later phase) builds on, and XMLCanonicalizer is a thin,
 // stateless-per-call wrapper over internal/xmlc14n.
 //
-// Import as xmlutils from any package that also imports github.com/utain/esig/dss/utils
+// Import as xmlutils from any package that also imports github.com/ryftcore/dss-go/dss/utils
 // (same bare package name "utils", different import path) to avoid a collision; within this
 // package's own files no alias is needed.
 //

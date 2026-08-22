@@ -100,7 +100,7 @@ port ships `KeyEntityTSPSource`: it issues real RFC 3161 tokens signed by a key
 you hold.
 
 ```go
-import spivalidation "github.com/utain/esig/dss/spi/validation"
+import spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 
 tsa, err := spivalidation.NewKeyEntityTSPSourceFromKeyStorePath(
 	"tsa.p12", "PKCS12", "password", "", "password")

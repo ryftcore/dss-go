@@ -28,7 +28,7 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DefaultPdfObjectModificationsFinder is the default implementation used to find the

@@ -1,7 +1,7 @@
 // Ported from dss-token/src/main/java/eu/europa/esig/dss/token/SunPKCS11Initializer.java (DSS 6.5.RC1).
 package token
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SunPKCS11InitializerGetProvider initializes the JCA SunPKCS11 provider from the given
 // configuration. Port of the static getProvider(String).

@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // KeyUsageCondition is a condition based on the certificate key usage.

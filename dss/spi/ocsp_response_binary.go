@@ -4,8 +4,8 @@ package spi
 import (
 	"encoding/asn1"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // OCSPResponseBinary is the binary of an OCSP response token. The identifier digests the

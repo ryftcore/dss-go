@@ -8,8 +8,8 @@ package jades
 import (
 	"time"
 
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // JWTPayload represents a payload of the RFC 7519 "JSON Web Token (JWT)". Port of the class

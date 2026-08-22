@@ -4,8 +4,8 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // JAdESCertificateRefExtractionUtilsCreateCertificateRef parses the xRefs component value and

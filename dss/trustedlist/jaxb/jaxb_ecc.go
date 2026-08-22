@@ -23,7 +23,7 @@ package jaxb
 import (
 	"encoding/xml"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // keyUsageBitAttr adapts enumerations.KeyUsageBit to KeyUsageBitType's

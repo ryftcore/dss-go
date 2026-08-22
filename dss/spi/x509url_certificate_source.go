@@ -4,7 +4,7 @@
 // type keeps its Java name unqualified.
 package spi
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // X509URLCertificateSource provides certificates to be extracted by a URL.
 type X509URLCertificateSource interface {

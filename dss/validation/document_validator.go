@@ -25,15 +25,15 @@ import (
 	"io"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	spi "github.com/utain/esig/dss/spi"
-	spipolicy "github.com/utain/esig/dss/spi/policy"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	spiexecutor "github.com/utain/esig/dss/spi/validation/executor"
-	"github.com/utain/esig/dss/validation/executor"
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	spi "github.com/ryftcore/dss-go/dss/spi"
+	spipolicy "github.com/ryftcore/dss-go/dss/spi/policy"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	spiexecutor "github.com/ryftcore/dss-go/dss/spi/validation/executor"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // DocumentValidator is the interface of a document validator. Port of the

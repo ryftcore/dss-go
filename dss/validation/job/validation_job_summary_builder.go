@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/summary/ValidationJobSummaryBuilder.java (DSS 6.5.RC1).
 package job
 
-import modeljob "github.com/utain/esig/dss/model/job"
+import modeljob "github.com/ryftcore/dss-go/dss/model/job"
 
 // ValidationJobSummaryBuilder builds a modeljob.ValidationJobSummary. D is the current
 // modeljob.DocumentInfo, L the parent modeljob.DocumentListInfo, mirroring Java's

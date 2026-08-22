@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/reference/XPath2FilterEnvelopedSignatureTransform.java (DSS 6.5.RC1).
 package xades
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 const (
 	// xPath2FilterEnvelopedSignatureTransformSubtractFilter is the subtract filter. Port of the

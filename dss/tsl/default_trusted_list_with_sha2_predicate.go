@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
 )
 
 // DefaultTrustedListWithSha2PredicateOverrides captures every member Test() reaches through

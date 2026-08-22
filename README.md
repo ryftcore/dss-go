@@ -1,7 +1,7 @@
 # esig — digital signatures in pure Go
 
-[![CI](https://github.com/utain/esig/actions/workflows/ci.yml/badge.svg)](https://github.com/utain/esig/actions/workflows/ci.yml)
-[![Go Reference](https://pkg.go.dev/badge/github.com/utain/esig/dss.svg)](https://pkg.go.dev/github.com/utain/esig/dss)
+[![CI](https://github.com/ryftcore/dss-go/actions/workflows/ci.yml/badge.svg)](https://github.com/ryftcore/dss-go/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/ryftcore/dss-go/dss.svg)](https://pkg.go.dev/github.com/ryftcore/dss-go/dss)
 [![Go 1.27+](https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/dl/)
 [![License: LGPL-2.1](https://img.shields.io/badge/License-LGPL--2.1-blue.svg)](LICENSE)
 
@@ -35,13 +35,13 @@ direction, at which levels.
 ## Install
 
 ```sh
-go get github.com/utain/esig/dss
+go get github.com/ryftcore/dss-go/dss
 ```
 
 Go 1.27 or newer. The CLI, once a version is tagged:
 
 ```sh
-go install github.com/utain/esig/dss/cmd/esig@latest
+go install github.com/ryftcore/dss-go/dss/cmd/esig@latest
 ```
 
 Until then, build it from a checkout — `cd dss && make cli-build` puts it in
@@ -59,7 +59,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 func main() {
@@ -103,12 +103,12 @@ S-5F32BDAC…20A0D995 TOTAL_PASSED  XAdES-BASELINE-B
 DetailedReport, the ETSI TS 119 102-2 validation report and the diagnostic data —
 as XML identical to what Java DSS emits.
 
-The root [`dss`](https://pkg.go.dev/github.com/utain/esig/dss) package is a thin
+The root [`dss`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss) package is a thin
 facade over the ported packages, covering the common paths and holding no logic
 of its own. Everything it deliberately leaves out — counter-signatures, XAdES
 references and transforms, signature policy stores, custom revocation sources,
 trusted-list refresh jobs — is reached through the packages underneath, which are
-fully exported and documented on [pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss).
+fully exported and documented on [pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss).
 
 Nine runnable, commented programs live in
 [`dss/examples/`](dss/examples/README.md) — one story each, all but the
@@ -278,8 +278,8 @@ the phase-by-phase record is [PORTING_PLAN.md](PORTING_PLAN.md).
 
 | | |
 |---|---|
-| **Guides and concepts** | [utain.github.io/esig](https://utain.github.io/esig/) — what the signature formats and levels mean, how validation reaches a verdict, trusted lists and eIDAS, and how to do the common tasks. Built from `docs/` by the Pages workflow |
-| **API reference** | [pkg.go.dev/github.com/utain/esig/dss](https://pkg.go.dev/github.com/utain/esig/dss) |
+| **Guides and concepts** | [ryftcore.github.io/dss-go](https://ryftcore.github.io/dss-go/) — what the signature formats and levels mean, how validation reaches a verdict, trusted lists and eIDAS, and how to do the common tasks. Built from `docs/` by the Pages workflow |
+| **API reference** | [pkg.go.dev/github.com/ryftcore/dss-go/dss](https://pkg.go.dev/github.com/ryftcore/dss-go/dss) |
 | **Examples** | [`dss/examples/`](dss/examples/README.md) |
 | **Porting record** | [PORTING_PLAN.md](PORTING_PLAN.md) — module mapping, phases, gaps |
 | **Porting conventions** | [dss/PORTING.md](dss/PORTING.md) — binding rules for contributed ports |
@@ -291,7 +291,7 @@ the phase-by-phase record is [PORTING_PLAN.md](PORTING_PLAN.md).
 ## Repository layout
 
 ```
-dss/           the Go module — github.com/utain/esig/dss
+dss/           the Go module — github.com/ryftcore/dss-go/dss
   cmd/esig/      the CLI
   examples/      nine runnable example programs
   internal/      engines with no Java class to mirror (ASN.1/BER, CMS, PDF, JOSE, C14N, PFX)

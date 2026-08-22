@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 // TrustServiceStatusAndInformationExtensions defines information for a TrustService.

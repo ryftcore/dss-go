@@ -6,7 +6,7 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // RevocationRefIdentifier is a unique id for a revocation reference.

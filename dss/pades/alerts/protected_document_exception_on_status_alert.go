@@ -8,8 +8,8 @@
 package alerts
 
 import (
-	"github.com/utain/esig/dss/alert"
-	"github.com/utain/esig/dss/pades/exception"
+	"github.com/ryftcore/dss-go/dss/alert"
+	"github.com/ryftcore/dss-go/dss/pades/exception"
 )
 
 // ProtectedDocumentExceptionOnStatusAlert is used to throw a

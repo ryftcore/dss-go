@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // identifierTestZeroPrefixData hashes to a SHA-256 digest whose first byte is 0x00, and

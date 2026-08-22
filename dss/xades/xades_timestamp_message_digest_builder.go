@@ -38,16 +38,16 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/internal/xmldsig"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/timestamp"
-	"github.com/utain/esig/dss/xades/definition"
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/timestamp"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESTimestampMessageDigestBuilder builds a message-imprint for XAdES timestamps. Port of the

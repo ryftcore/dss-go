@@ -9,7 +9,7 @@
 package executor
 
 import (
-	"github.com/utain/esig/dss/validation/reports"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
 // CertificateProcessExecutor processes a certificate validation. Port of the

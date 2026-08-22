@@ -7,7 +7,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // Namespace URIs. Port of Constants.SignatureSpecNS and the XPath Filter 2.0 namespace of

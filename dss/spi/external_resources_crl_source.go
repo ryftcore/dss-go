@@ -9,11 +9,11 @@ import (
 	"io"
 	"os"
 
-	"github.com/utain/esig/dss/crlparser"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/crlparser"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ExternalResourcesCRLSource provides a CRL source based on a list of external CRLs.

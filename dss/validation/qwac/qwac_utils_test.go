@@ -3,9 +3,9 @@ package qwac
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 func certWithId(id string) *diagnostic.CertificateWrapper {

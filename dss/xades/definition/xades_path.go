@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/XAdESPath.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdESPath contains a list of useful XAdES XPaths, one implementation per XAdES schema
 // version (XAdES111Path, XAdES122Path, XAdES132Path). A path a given schema version does

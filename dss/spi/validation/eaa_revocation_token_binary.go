@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/EAARevocationTokenBinary.java (DSS 6.5.RC1).
 package validation
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // EAARevocationTokenBinary contains binaries of the EAA revocation token.
 type EAARevocationTokenBinary struct {

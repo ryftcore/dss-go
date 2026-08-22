@@ -12,9 +12,9 @@ package cades
 import (
 	"bytes"
 
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // CAdESSignatureIdentifierBuilder builds a SignatureIdentifier for a CAdES signature. Port of

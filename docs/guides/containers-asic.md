@@ -50,7 +50,7 @@ first argument is not decoration.
 ## What comes out
 
 Opening the result as an ordinary ZIP archive — this is the actual output of
-[`examples/06-asice-container`](https://github.com/utain/esig/tree/main/dss/examples/06-asice-container):
+[`examples/06-asice-container`](https://github.com/ryftcore/dss-go/tree/main/dss/examples/06-asice-container):
 
 ```console
 container: container-signed-xades-baseline-b.sce
@@ -130,7 +130,7 @@ unzips untrusted input, and the port's guards for this are mutation-tested.
 **Containers can be merged.** Two containers covering related material can be
 combined, with the merge rules the standard defines. That path lives in the
 `asic` package rather than the facade — see
-[pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss/asic).
+[pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss/asic).
 
 **ASiC-S with a time-stamp only.** A container can carry a time-stamp over its
 single data object rather than a signature — proving existence without claiming

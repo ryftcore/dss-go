@@ -3,10 +3,10 @@ package policy
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 func sha1CryptographicConstraint() *jaxb.CryptographicConstraint {

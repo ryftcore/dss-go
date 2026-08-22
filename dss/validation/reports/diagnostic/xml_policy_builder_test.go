@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/model"
-	modelsignature "github.com/utain/esig/dss/model/signature"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelsignature "github.com/ryftcore/dss-go/dss/model/signature"
 )
 
 // The XmlPolicyBuilder nullable-member KAT.

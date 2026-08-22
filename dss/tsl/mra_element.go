@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/definition/mra/MRAElement.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // MRAElement contains a list of MRA (Mutual Recognition Agreement) elements. Java enum ->
 // typed string constants whose value is exactly Java's name(), per PORTING.md; the per-constant

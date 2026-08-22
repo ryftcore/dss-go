@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CertificateValidity.java (DSS 6.5.RC1).
 package spi
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // CertificateValidity stores the information about the validity of the signing certificate.
 type CertificateValidity struct {

@@ -3,12 +3,12 @@ package policy
 import (
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	dsspolicy "github.com/utain/esig/dss/policy"
-	cryptojson "github.com/utain/esig/dss/policy/crypto/json"
-	cryptoxml "github.com/utain/esig/dss/policy/crypto/xml"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	dsspolicy "github.com/ryftcore/dss-go/dss/policy"
+	cryptojson "github.com/ryftcore/dss-go/dss/policy/crypto/json"
+	cryptoxml "github.com/ryftcore/dss-go/dss/policy/crypto/xml"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // Test-local ServiceLoader wiring: this chunk's manifest does not include (and PORTING.md

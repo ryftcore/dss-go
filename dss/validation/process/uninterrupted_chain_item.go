@@ -2,8 +2,8 @@
 package process
 
 import (
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
 )
 
 // UninterruptedChainItemBase allows to continue the chain validation process in

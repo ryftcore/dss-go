@@ -10,12 +10,12 @@ import (
 	"io"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/trustedlist"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
-	xadestsl "github.com/utain/esig/dss/xades/tsl"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/trustedlist"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
+	xadestsl "github.com/ryftcore/dss-go/dss/xades/tsl"
 )
 
 // trustedListFacade is the Go form of the eu.europa.esig.trustedlist.TrustedListFacade return

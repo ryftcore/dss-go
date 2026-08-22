@@ -4,7 +4,7 @@ package analyzer
 import (
 	"errors"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // errDocumentFormatNotRecognized is shared by DocumentAnalyzerFromDocument,

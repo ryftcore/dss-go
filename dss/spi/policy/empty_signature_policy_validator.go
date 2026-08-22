@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/policy/EmptySignaturePolicyValidator.java (DSS 6.5.RC1).
 package policy
 
-import "github.com/utain/esig/dss/model/signature"
+import "github.com/ryftcore/dss-go/dss/model/signature"
 
 // EmptySignaturePolicyValidator covers the case of empty signature policies
 // (no asn1,... file has been downloaded).

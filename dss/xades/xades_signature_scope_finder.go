@@ -53,14 +53,14 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESSignatureScopeFinder performs operations in order to find all signed data for a XAdES

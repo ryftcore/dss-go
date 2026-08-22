@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // XAdESCounterSignatureParameters holds the parameters for a XAdES counter-signature creation.

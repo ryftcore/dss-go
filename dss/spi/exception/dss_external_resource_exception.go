@@ -2,7 +2,7 @@
 package exception
 
 import (
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // DSSExternalResourceException is thrown in case of an external error arisen during a data

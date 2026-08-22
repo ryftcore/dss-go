@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // manifestKATFixture is one entry of testdata/manifest-oracle.json, produced by

@@ -63,15 +63,15 @@
 package timestamp
 
 import (
-	"github.com/utain/esig/dss/crlparser"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/model/x509/revocation"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/identifier"
-	validationscope "github.com/utain/esig/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/crlparser"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
+	validationscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
 )
 
 // SignatureTimestampSourceOverrides is the contract a concrete format-specific timestamp source

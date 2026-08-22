@@ -4,10 +4,10 @@ package policy
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/signature"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/signature"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // nonASN1SignaturePolicyValidatorXMLBOM is the UTF-8 BOM ([]byte{0xEF, 0xBB,

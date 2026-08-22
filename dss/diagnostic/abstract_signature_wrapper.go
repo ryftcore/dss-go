@@ -4,8 +4,8 @@ package diagnostic
 import (
 	"math/big"
 
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // AbstractSignatureWrapperOverrides declares the operations Java's abstract class

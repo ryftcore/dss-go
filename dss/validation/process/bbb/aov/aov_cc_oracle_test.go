@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // The cc KAT: every row of testdata/oracle/aov_cc.jsonl is the XmlCC upstream's

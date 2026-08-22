@@ -4,11 +4,11 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // ManifestEntrySignatureScope represents a Manifest entry document. Port of the class

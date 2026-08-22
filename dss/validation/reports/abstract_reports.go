@@ -13,10 +13,10 @@
 package reports
 
 import (
-	"github.com/utain/esig/dss/detailedreport"
-	detailedreportjaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/detailedreport"
+	detailedreportjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
 // AbstractReportsOverrides captures the members Java's AbstractReports

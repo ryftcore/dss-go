@@ -2,8 +2,8 @@
 package qualification
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // trustServiceQSCDConsistency: a Trusted Service can not have QSCD and NoQSCD qualifiers

@@ -2,7 +2,7 @@
 // (Apache Santuario xmlsec 3.0.6): attribute emission for Canonical XML 1.0 and 1.1.
 package xmlc14n
 
-import "github.com/utain/esig/dss/internal/xmldom"
+import "github.com/ryftcore/dss-go/dss/internal/xmldom"
 
 // outputAttributesSubtreeInclusive ports Canonicalizer20010315.outputAttributesSubtree.
 //

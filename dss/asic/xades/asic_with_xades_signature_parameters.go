@@ -6,8 +6,8 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/asic"
-	dssxades "github.com/utain/esig/dss/xades"
+	"github.com/ryftcore/dss-go/dss/asic"
+	dssxades "github.com/ryftcore/dss-go/dss/xades"
 )
 
 // ASiCWithXAdESSignatureParameters defines SignatureParameters to deal with ASiC with XAdES

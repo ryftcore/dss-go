@@ -15,8 +15,8 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // BaselineBCertificateSelector is used to retrieve the used certificates for a signature from

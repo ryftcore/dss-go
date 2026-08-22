@@ -7,7 +7,7 @@
 // point PAdESService#setPdfObjFactory exposes.
 package pades
 
-import "github.com/utain/esig/dss/spi/signature/resources"
+import "github.com/ryftcore/dss-go/dss/spi/signature/resources"
 
 // IPdfObjFactory loads the relevant implementations of PDFSignatureService.
 type IPdfObjFactory interface {

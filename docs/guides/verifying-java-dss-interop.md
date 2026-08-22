@@ -108,7 +108,7 @@ esig validate their-document.pdf -trust ca.cer -format detailed   -out detailed.
 ## Reporting a mismatch
 
 There is a dedicated issue template — **Interop mismatch (vs Java DSS)** — on
-the [repository's issue tracker](https://github.com/utain/esig/issues/new/choose).
+the [repository's issue tracker](https://github.com/ryftcore/dss-go/issues/new/choose).
 It asks for the Java DSS version, this library's version or commit, the input
 document, and the two reports, because those four things are what make a
 mismatch reproducible.

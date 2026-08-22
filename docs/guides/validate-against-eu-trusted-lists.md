@@ -91,10 +91,10 @@ The library route, where qualification actually works. The moving parts:
 
 ```go
 import (
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/spi"
-	spitsl "github.com/utain/esig/dss/spi/tsl"
-	"github.com/utain/esig/dss/tsl"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spitsl "github.com/ryftcore/dss-go/dss/spi/tsl"
+	"github.com/ryftcore/dss-go/dss/tsl"
 )
 
 // 1. Where the LOTL lives, and what anchors its signature.
@@ -129,7 +129,7 @@ reports, err := dss.Validate(doc, dss.ValidateOptions{
 
 By default a `LOTLSource` follows the EU trusted-list pointers it finds, which
 is what you want in production and what makes the refresh slow. The repository's
-[`examples/07-validate-eu-trusted-lists`](https://github.com/utain/esig/tree/main/dss/examples/07-validate-eu-trusted-lists)
+[`examples/07-validate-eu-trusted-lists`](https://github.com/ryftcore/dss-go/tree/main/dss/examples/07-validate-eu-trusted-lists)
 program is a complete, runnable version of the above that deliberately narrows
 the predicate so it fetches only the LOTL itself and stays fast — read it for
 the full working code, including how it degrades gracefully offline.

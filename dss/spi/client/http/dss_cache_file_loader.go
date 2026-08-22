@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/client/http/DSSCacheFileLoader.java (DSS 6.5.RC1).
 package http
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DSSCacheFileLoader implements a file loader implementing a caching
 // mechanism, allowing to remove cache externally (to be used within a

@@ -1,7 +1,7 @@
 // Ported from dss-token/src/main/java/eu/europa/esig/dss/token/MSCAPISignatureToken.java (DSS 6.5.RC1).
 package token
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // MSCAPISignatureToken provides all MS CAPI API access logic.
 //

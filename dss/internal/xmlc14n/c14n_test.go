@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 func parse(t *testing.T, src string) *xmldom.Node {

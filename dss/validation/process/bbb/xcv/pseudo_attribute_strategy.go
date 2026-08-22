@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/xcv/sub/checks/pseudo/PseudoAttributeStrategy.java (DSS 6.5.RC1).
 package xcv
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // pseudoAttributeStrategy extracts the pseudo string defined in X500
 // Attributes for the certificate. Unexported: Java's package-private class

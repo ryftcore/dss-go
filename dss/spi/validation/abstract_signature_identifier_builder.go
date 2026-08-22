@@ -9,9 +9,9 @@ import (
 	"time"
 	"unicode/utf16"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // AbstractSignatureIdentifierBuilderMETAINFFolder is the META-INF folder (used to determine a

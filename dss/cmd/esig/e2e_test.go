@@ -20,8 +20,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // fixture resolves a path under the dss module's own testdata/ directory -

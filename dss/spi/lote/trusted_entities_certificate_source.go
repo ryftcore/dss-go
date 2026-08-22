@@ -13,12 +13,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/lote"
-	"github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/lote"
+	"github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TrustedEntitiesCertificateSource is a certificate source built based on trusted entities.

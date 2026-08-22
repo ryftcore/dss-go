@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // certificateTokenKATCertificate is a self-signed RSA/SHA-256 certificate for

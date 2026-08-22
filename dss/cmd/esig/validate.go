@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/simplereport"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/simplereport"
 )
 
 // cmdValidate implements "esig validate".

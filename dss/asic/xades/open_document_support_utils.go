@@ -4,8 +4,8 @@ package xades
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // openDocumentSupportUtilsExternalData defines the external data directory name.

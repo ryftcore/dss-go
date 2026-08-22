@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // CRLValidity encapsulates all information related to the validity of a CRL. Use IsValid to

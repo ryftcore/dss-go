@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/evidencerecord/digest/DataObjectDigestBuilder.java (DSS 6.5.RC1).
 package digest
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DataObjectDigestBuilder is a common interface for the classes providing a
 // functionality build digest for data objects to be protected by an

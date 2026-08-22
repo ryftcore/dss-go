@@ -9,7 +9,7 @@
 // Java simple class name.
 package identifier
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // SignatureAttributeIdentifier identifies uniquely an unsigned attribute of a signature.
 type SignatureAttributeIdentifier struct {

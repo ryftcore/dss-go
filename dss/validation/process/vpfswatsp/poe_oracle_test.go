@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/diagnostic"
-	diagnosticjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	diagnosticjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // The POE KAT: every row of testdata/oracle/poe.jsonl is what upstream's

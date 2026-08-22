@@ -6,7 +6,7 @@
 // identifier), a 1:1 subpackage per S2B_BRIEF.md's package-layout section.
 package validation
 
-import "github.com/utain/esig/dss/spi/validation/identifier"
+import "github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 
 // SignatureAttribute defines a child of "signed-signature-properties" or
 // "unsigned-signature-properties" element.

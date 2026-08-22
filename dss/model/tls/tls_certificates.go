@@ -1,7 +1,7 @@
 // Ported from dss-model/.../TLSCertificates.java (DSS 6.5.RC1).
 package tls
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // TLSCertificates represents information obtained from a remote server as
 // the result of the TLS/SSL handshake.

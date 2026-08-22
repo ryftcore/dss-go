@@ -4,7 +4,7 @@ package model
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TimestampParameters represents the parameters provided when generating

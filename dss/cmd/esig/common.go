@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/utain/esig/dss"
+	"github.com/ryftcore/dss-go/dss"
 )
 
 // stringList collects a repeatable flag (e.g. -detached, -trust) into a

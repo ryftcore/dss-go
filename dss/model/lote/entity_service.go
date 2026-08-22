@@ -2,8 +2,8 @@
 package lote
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/timedependent"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
 )
 
 // EntityService contains information about an entity service. S is the concrete

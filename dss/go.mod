@@ -1,4 +1,4 @@
-module github.com/utain/esig/dss
+module github.com/ryftcore/dss-go/dss
 
 go 1.27.0
 

@@ -8,7 +8,7 @@
 //
 // INTEGRATION UPDATE (phase 8e integration pass): see
 // eaa_acceptance_validation.go's header in this same package - the checks
-// this file wires live in github.com/utain/esig/dss/validation/process/eaa/checks
+// this file wires live in github.com/ryftcore/dss-go/dss/validation/process/eaa/checks
 // (confirmed matching), a dedicated package rather than the eaa root package,
 // specifically to keep this file's import from re-closing the
 // bbb/sav -> eaa -> qualification -> vpfswatsp -> bbb/sav cycle.
@@ -17,13 +17,13 @@ package sav
 import (
 	"time"
 
-	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/eaa/checks"
+	jaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/eaa/checks"
 )
 
 // EAARevocationTokenAcceptanceValidation performs verification of an EAA

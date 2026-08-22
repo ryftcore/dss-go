@@ -47,7 +47,7 @@ package jaxb
 import (
 	"encoding/xml"
 
-	"github.com/utain/esig/dss/internal/xmldsig"
+	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
 )
 
 // namespaceDSig is the XMLDSig namespace 1910202xmlSchema.xsd's ds:-prefixed

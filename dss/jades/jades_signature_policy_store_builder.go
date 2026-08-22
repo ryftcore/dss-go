@@ -18,11 +18,11 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/jose"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/internal/jose"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESSignaturePolicyStoreBuilder is the builder used to incorporate a SignaturePolicyStore into

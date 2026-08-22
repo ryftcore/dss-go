@@ -11,8 +11,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/validation/job"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/validation/job"
 )
 
 // XmlDownloadResult defines the download result.

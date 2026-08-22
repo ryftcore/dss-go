@@ -12,8 +12,8 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
 // JAdESAttribute represents the JAdES header. Port of the class JAdESAttribute, implementing

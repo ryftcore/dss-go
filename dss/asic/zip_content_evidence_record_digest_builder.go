@@ -2,10 +2,10 @@
 package asic
 
 import (
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/x509/evidencerecord/digest"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/x509/evidencerecord/digest"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // ZipContentEvidenceRecordDigestBuilder builds hashes for all documents present within a ZIP

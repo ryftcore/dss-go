@@ -5,7 +5,7 @@
 // in no s5b manifest (see pdf_object.go's header).
 package pades
 
-import "github.com/utain/esig/dss/enumerations"
+import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // ObjectModification represents a modification that occurred in a PDF document.
 // Port of the ObjectModification class.

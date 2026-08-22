@@ -2,10 +2,10 @@
 package diagnostic
 
 import (
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model/x509/extension"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model/x509/extension"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // XmlQcStatementsBuilder is used to build a XmlQcStatements object and enveloped objects.

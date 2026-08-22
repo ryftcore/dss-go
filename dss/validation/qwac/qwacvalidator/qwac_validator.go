@@ -38,17 +38,17 @@ import (
 	stdx509 "crypto/x509"
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	modelhttp "github.com/utain/esig/dss/model/http"
-	"github.com/utain/esig/dss/spi"
-	spihttp "github.com/utain/esig/dss/spi/client/http"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/utils"
-	dssvalidation "github.com/utain/esig/dss/validation"
-	"github.com/utain/esig/dss/validation/executor"
-	"github.com/utain/esig/dss/validation/qwac"
-	"github.com/utain/esig/dss/validation/reports"
-	reportsdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelhttp "github.com/ryftcore/dss-go/dss/model/http"
+	"github.com/ryftcore/dss-go/dss/spi"
+	spihttp "github.com/ryftcore/dss-go/dss/spi/client/http"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/utils"
+	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
+	"github.com/ryftcore/dss-go/dss/validation/executor"
+	"github.com/ryftcore/dss-go/dss/validation/qwac"
+	"github.com/ryftcore/dss-go/dss/validation/reports"
+	reportsdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // qwacValidationPolicyLocation is the path for the default QWAC validation policy.

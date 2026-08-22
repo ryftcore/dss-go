@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/definition/XAdESNamespace.java (DSS 6.5.RC1).
 package definition
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // XAdESNamespace defines the list of used XAdES namespaces. Ports the Java
 // namespace-only holder class (private constructor, no other members) as package-level vars.

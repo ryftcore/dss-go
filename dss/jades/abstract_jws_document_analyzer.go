@@ -11,10 +11,10 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/policy"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/policy"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
 // AbstractJWSDocumentAnalyzerOverrides declares the operations AbstractJWSDocumentAnalyzer calls

@@ -16,7 +16,7 @@
 // Go equivalent of the instanceof check being false.
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // PlaceOfBirthClaimWrapper wraps a jaxb.XmlPlaceOfBirthClaim, or a generic jaxb.XmlClaim from a
 // schema position not concretely typed XmlPlaceOfBirthClaim; see the file note above.

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/xml/common"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
 // The expectations in this file are known answers taken from a Java harness run against

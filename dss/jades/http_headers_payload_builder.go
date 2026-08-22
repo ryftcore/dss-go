@@ -24,9 +24,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // httpHeaderDocument is the Go stand-in for Java's `HTTPHeader` static type in this file: the

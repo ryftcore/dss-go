@@ -36,11 +36,11 @@ package jades
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	modelscope "github.com/utain/esig/dss/model/scope"
-	"github.com/utain/esig/dss/spi/validation/scope"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	modelscope "github.com/ryftcore/dss-go/dss/model/scope"
+	"github.com/ryftcore/dss-go/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // JAdESSignatureScopeFinder finds a SignatureScope for a JAdES signature. Port of the class

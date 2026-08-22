@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // The four fixtures below are not upstream documents. They exist to attack the parts of the

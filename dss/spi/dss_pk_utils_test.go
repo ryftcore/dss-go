@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // dssPKUtilsTestPublicKey marshals a Go key into a SubjectPublicKeyInfo and wraps it the way

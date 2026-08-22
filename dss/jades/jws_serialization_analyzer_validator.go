@@ -25,9 +25,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/exception"
-	"github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 // JWSSerializationAnalyzerValidator validates a JWS Serialization or Flattened signature format.

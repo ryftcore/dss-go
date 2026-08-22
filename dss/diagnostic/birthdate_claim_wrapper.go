@@ -9,7 +9,7 @@
 // concrete type, dropping the always-true runtime check but keeping its behaviour.
 package diagnostic
 
-import "github.com/utain/esig/dss/diagnostic/jaxb"
+import "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 
 // BirthdateClaimWrapper wraps a jaxb.XmlBirthdateClaim.
 type BirthdateClaimWrapper struct {

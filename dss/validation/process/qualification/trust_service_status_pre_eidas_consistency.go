@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/trust/consistency/TrustServiceStatusPreEIDASConsistency.java (DSS 6.5.RC1).
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // trustServiceStatusPreEIDASConsistency verifies status of a trusted service created
 // before eIDAS.

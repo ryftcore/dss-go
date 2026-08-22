@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // TestDigestInfoEncoderEncodeKAT is a known-answer test: the standard PKCS#1 v1.5 DigestInfo

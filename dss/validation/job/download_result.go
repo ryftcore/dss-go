@@ -1,7 +1,7 @@
 // Ported from dss-validation-job/src/main/java/eu/europa/esig/dss/validation/job/download/DownloadResult.java (DSS 6.5.RC1).
 package job
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // DownloadResult provides methods to extract information about a download job.
 type DownloadResult interface {

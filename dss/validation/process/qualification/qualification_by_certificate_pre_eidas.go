@@ -2,10 +2,10 @@
 package qualification
 
 import (
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 // qualificationByCertificatePreEIDAS gets certificate qualification status

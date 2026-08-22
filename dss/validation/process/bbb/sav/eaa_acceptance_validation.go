@@ -13,7 +13,7 @@
 // INTEGRATION UPDATE (phase 8e integration pass): the forward dependency this
 // header originally speculated about is now real and confirmed matching
 // (eu.europa.esig.dss.validation.process.eaa.checks + eaa.status both flatten
-// into github.com/utain/esig/dss/validation/process/eaa/checks, constructors
+// into github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, constructors
 // 1:1 with their Java signatures) - EXCEPT for package name: the phase 8e EAA
 // porter (LTVB) initially landed the flattened checks directly in the eaa
 // root package (alongside EAAValidationBlock/EAAValidationProcess). That
@@ -33,14 +33,14 @@ package sav
 import (
 	"time"
 
-	jaxb "github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process"
-	"github.com/utain/esig/dss/validation/process/eaa/checks"
+	jaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/validation/process/eaa/checks"
 )
 
 // EAAAcceptanceValidation performs verification of an EAA against the

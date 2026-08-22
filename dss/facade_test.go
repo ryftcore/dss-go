@@ -7,8 +7,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/utain/esig/dss"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
 func testSigner(t *testing.T) *dss.Signer {

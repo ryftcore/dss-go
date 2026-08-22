@@ -4,12 +4,12 @@ package qualification
 import (
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	dssjaxb "github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	dssjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 // TLValidationBlock is used to perform validation of a Trusted List.

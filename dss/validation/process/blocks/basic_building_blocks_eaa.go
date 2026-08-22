@@ -19,11 +19,11 @@
 package blocks
 
 import (
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/validation/process/bbb/fc"
-	"github.com/utain/esig/dss/validation/process/bbb/sav"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/fc"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/sav"
 )
 
 // executeEAAFormatChecking dispatches the Context_EAA / Context_EAA_REVOCATION

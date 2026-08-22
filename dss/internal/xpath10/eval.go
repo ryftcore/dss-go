@@ -3,7 +3,7 @@ package xpath10
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // value is an XPath object. The subset can only produce three of the four XPath 1.0 types -

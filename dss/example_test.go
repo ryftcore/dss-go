@@ -6,9 +6,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/utain/esig/dss"
-	spivalidation "github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/token"
+	"github.com/ryftcore/dss-go/dss"
+	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/token"
 )
 
 // The examples sign and validate in the same process, using the small

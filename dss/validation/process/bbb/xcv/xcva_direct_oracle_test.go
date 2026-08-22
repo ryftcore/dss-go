@@ -5,11 +5,11 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/corpustest"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/validation/process"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
 // The rac check KAT: every row of testdata/oracle/xcva_direct.jsonl is the XmlRAC

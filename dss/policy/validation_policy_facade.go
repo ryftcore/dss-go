@@ -21,8 +21,8 @@ import (
 	"io"
 	"os"
 
-	modelpolicy "github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	modelpolicy "github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 // ValidationPolicyFacade is used to read an XML validation policy. Ports

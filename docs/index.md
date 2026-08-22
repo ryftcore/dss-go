@@ -9,7 +9,7 @@ answer the question *"is this signature qualified under eIDAS?"* — that is wha
 this library is for.
 
 ```go
-import "github.com/utain/esig/dss"
+import "github.com/ryftcore/dss-go/dss"
 ```
 
 It is a port, not a reimplementation. Wherever [Java DSS
@@ -78,7 +78,7 @@ Three things ship in this repository, layered on each other.
 ```mermaid
 flowchart TD
     subgraph app["your program"]
-        A["import github.com/utain/esig/dss"]
+        A["import github.com/ryftcore/dss-go/dss"]
     end
     subgraph cli["esig CLI"]
         C["esig sign / validate / extend / inspect / tl"]
@@ -102,11 +102,11 @@ flowchart TD
 ```
 
 **The library.** 115 exported packages mirroring the upstream Maven modules and
-their Java packages. The [`dss`](https://pkg.go.dev/github.com/utain/esig/dss)
+their Java packages. The [`dss`](https://pkg.go.dev/github.com/ryftcore/dss-go/dss)
 root package is a thin facade over them covering the two things most programs
 need — sign a document, validate a document. Everything else stays reachable in
 the packages underneath, which are fully exported and documented on
-[pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss).
+[pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss).
 
 **The CLI.** `esig` is a single binary built on that same facade: sign, extend,
 validate, inspect a document, or refresh a local cache of the EU trusted lists.
@@ -157,7 +157,7 @@ as much a defect as a bug in the code.
 |---|---|
 | To understand the vocabulary | [Concepts](concepts/signature-formats.md) |
 | To get something working | [Getting started](getting-started.md), then the [Guides](guides/sign-a-pdf.md) |
-| The API reference | [pkg.go.dev](https://pkg.go.dev/github.com/utain/esig/dss) — this site never duplicates godoc |
+| The API reference | [pkg.go.dev](https://pkg.go.dev/github.com/ryftcore/dss-go/dss) — this site never duplicates godoc |
 | To know how far the Java parity goes | [Compatibility](compatibility/methodology.md) |
 | To translate Java DSS code you already have | [Migrating from Java DSS](migrating-from-java/index.md) |
 | Short answers | [FAQ](faq.md) |

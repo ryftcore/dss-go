@@ -2,8 +2,8 @@
 package tsl
 
 import (
-	"github.com/utain/esig/dss/alert"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/alert"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
 )
 
 // TLSignatureErrorDetection detects if an error in a TL validation occurred.

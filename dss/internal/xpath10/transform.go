@@ -32,7 +32,7 @@ package xpath10
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // CompileTransform compiles an XML-DSig transform expression against ns.

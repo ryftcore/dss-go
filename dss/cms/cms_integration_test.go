@@ -18,9 +18,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/internal/cmscore"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 func generateTestCertificate(t *testing.T) (*rsa.PrivateKey, *model.CertificateToken) {

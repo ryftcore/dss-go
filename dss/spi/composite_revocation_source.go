@@ -9,8 +9,8 @@ package spi
 import (
 	"sort"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // CompositeRevocationSource allows retrieving a RevocationToken from different sources. The

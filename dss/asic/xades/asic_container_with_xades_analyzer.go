@@ -18,13 +18,13 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/analyzer"
-	"github.com/utain/esig/dss/utils"
-	dssxades "github.com/utain/esig/dss/xades"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
+	"github.com/ryftcore/dss-go/dss/utils"
+	dssxades "github.com/ryftcore/dss-go/dss/xades"
 )
 
 // ASiCContainerWithXAdESAnalyzer is an implementation to validate ASiC containers with XAdES

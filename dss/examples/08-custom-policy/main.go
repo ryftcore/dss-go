@@ -13,11 +13,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/utain/esig/dss"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/examples/internal/fixtures"
-	"github.com/utain/esig/dss/policy"
-	"github.com/utain/esig/dss/policy/jaxb"
+	"github.com/ryftcore/dss-go/dss"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/examples/internal/fixtures"
+	"github.com/ryftcore/dss-go/dss/policy"
+	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
 func main() {

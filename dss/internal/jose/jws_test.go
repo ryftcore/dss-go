@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // jwsCase is one row of testdata/jws_oracle.tsv: a JWS that jose4j really signed, together with

@@ -4,11 +4,11 @@ package tsl
 import (
 	"time"
 
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/model/timedependent"
-	tslmodel "github.com/utain/esig/dss/model/tsl"
-	"github.com/utain/esig/dss/trustedlist/jaxb"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/model/timedependent"
+	tslmodel "github.com/ryftcore/dss-go/dss/model/tsl"
+	"github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // TrustServiceConverter converts a TSPServiceType to a TrustService.

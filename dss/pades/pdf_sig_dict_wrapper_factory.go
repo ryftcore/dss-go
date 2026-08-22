@@ -17,8 +17,8 @@ package pades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/cms"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/cms"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // PdfSigDictWrapperFactory creates a PdfSignatureDictionary instance.

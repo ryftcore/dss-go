@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/utain/esig/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 )
 
 // XMLSignature is a ds:Signature. Port of XMLSignature(Element, String, boolean), the

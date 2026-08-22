@@ -18,7 +18,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/utain/esig/dss/internal/corpustest"
+	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
 // oracleCases pairs each source policy resource with its oracle remarshal.

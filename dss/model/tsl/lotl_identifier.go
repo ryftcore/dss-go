@@ -4,7 +4,7 @@
 // the Phase 1b cycle-driven flattening table.
 package tsl
 
-import "github.com/utain/esig/dss/model"
+import "github.com/ryftcore/dss-go/dss/model"
 
 // lotlIdentifierPrefix is the "LOTL-" prefix LOTLIdentifier passes to AbstractTLIdentifier.
 const lotlIdentifierPrefix = "LOTL-"

@@ -4,7 +4,7 @@
 // package layout table ("spi.eaa" is one of the packages flattened into dss/spi/validation).
 package validation
 
-import "github.com/utain/esig/dss/model/eaa/claim"
+import "github.com/ryftcore/dss-go/dss/model/eaa/claim"
 
 // EAAPayload provides an interface for accessing the content of the EAA payload.
 type EAAPayload interface {

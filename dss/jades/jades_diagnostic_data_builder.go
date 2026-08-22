@@ -2,9 +2,9 @@
 package jades
 
 import (
-	"github.com/utain/esig/dss/diagnostic/jaxb"
-	"github.com/utain/esig/dss/spi/validation"
-	dssdiagnostic "github.com/utain/esig/dss/validation/reports/diagnostic"
+	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
 // JAdESDiagnosticDataBuilder is the DiagnosticDataBuilder for a JWS signature. Port of the class

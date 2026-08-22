@@ -2,8 +2,8 @@
 package cades
 
 import (
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
 )
 
 // ASiCWithCAdESContainerExtractorFactory is used to load a corresponding

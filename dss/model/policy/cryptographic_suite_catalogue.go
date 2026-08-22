@@ -4,7 +4,7 @@ package policy
 import (
 	"strings"
 
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // CryptographicSuiteCatalogue provides an abstract implementation of an

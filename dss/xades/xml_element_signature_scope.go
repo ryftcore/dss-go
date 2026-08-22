@@ -4,10 +4,10 @@ package xades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/model"
-	mscope "github.com/utain/esig/dss/model/scope"
-	spiscope "github.com/utain/esig/dss/spi/validation/scope"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/model"
+	mscope "github.com/ryftcore/dss-go/dss/model/scope"
+	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
 )
 
 // XmlElementSignatureScope is the XML element signature scope. Port of the class

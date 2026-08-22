@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/definition/mra/MRANamespace.java (DSS 6.5.RC1).
 package tsl
 
-import "github.com/utain/esig/dss/xml/common"
+import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // MRANamespace_NS is the Trusted List MRA XSD namespace. Port of MRANamespace.NS; the Java
 // class is a static-only utils holder with a private constructor, which Go renders as this

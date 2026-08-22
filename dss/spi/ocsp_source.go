@@ -2,7 +2,7 @@
 package spi
 
 import (
-	"github.com/utain/esig/dss/model/x509/revocation"
+	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 )
 
 // OCSPSource is the typed sub-interface which allows collection of OCSPTokens. The

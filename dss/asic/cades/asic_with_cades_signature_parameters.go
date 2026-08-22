@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/utain/esig/dss/asic"
-	dsscades "github.com/utain/esig/dss/cades"
-	"github.com/utain/esig/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/asic"
+	dsscades "github.com/ryftcore/dss-go/dss/cades"
+	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
 // ASiCWithCAdESSignatureParameters defines SignatureParameters to deal with ASiC with CAdES

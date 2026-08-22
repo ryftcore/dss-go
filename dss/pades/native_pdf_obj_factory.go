@@ -10,7 +10,7 @@
 // (internal/pdf/DESIGN.md §0.2).
 package pades
 
-import "github.com/utain/esig/dss/spi/signature/resources"
+import "github.com/ryftcore/dss-go/dss/spi/signature/resources"
 
 // NativePdfObjFactory produces PDFSignatureService instances backed by the native internal/pdf
 // engine. A nil configuration field means "leave the service's own default", which is what

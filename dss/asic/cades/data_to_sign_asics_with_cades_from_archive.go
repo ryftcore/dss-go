@@ -4,9 +4,9 @@ package cades
 import (
 	"fmt"
 
-	"github.com/utain/esig/dss/asic"
-	"github.com/utain/esig/dss/model"
-	"github.com/utain/esig/dss/utils"
+	"github.com/ryftcore/dss-go/dss/asic"
+	"github.com/ryftcore/dss-go/dss/model"
+	"github.com/ryftcore/dss-go/dss/utils"
 )
 
 // DataToSignASiCSWithCAdESFromArchive generates a DataToSign with ASiC-S with CAdES from an

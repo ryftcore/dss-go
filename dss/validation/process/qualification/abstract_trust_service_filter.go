@@ -6,7 +6,7 @@
 // process.ChainItemBase follows for InitChainItem.
 package qualification
 
-import "github.com/utain/esig/dss/diagnostic"
+import "github.com/ryftcore/dss-go/dss/diagnostic"
 
 // AbstractTrustServiceFilterOverrides declares the abstract isAcceptable(TrustServiceWrapper)
 // method that AbstractTrustServiceFilter dispatches to. A concrete filter registers itself

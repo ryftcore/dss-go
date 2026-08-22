@@ -19,7 +19,7 @@
 //     the only expressible difference from Java.
 package tsl
 
-import "github.com/utain/esig/dss/validation/job"
+import "github.com/ryftcore/dss-go/dss/validation/job"
 
 // tlSourceDefaultSupportedTLVersions is the list of default supported TL versions. Port of the
 // private static DEFAULT_SUPPORTED_TL_VERSIONS constant; it is copied into every new TLSource so

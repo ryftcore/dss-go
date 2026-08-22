@@ -21,19 +21,19 @@ package blocks
 import (
 	"time"
 
-	"github.com/utain/esig/dss/detailedreport/jaxb"
-	"github.com/utain/esig/dss/diagnostic"
-	"github.com/utain/esig/dss/enumerations"
-	"github.com/utain/esig/dss/i18n"
-	"github.com/utain/esig/dss/model/policy"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/validation/process/bbb/aov"
-	"github.com/utain/esig/dss/validation/process/bbb/cv"
-	"github.com/utain/esig/dss/validation/process/bbb/fc"
-	"github.com/utain/esig/dss/validation/process/bbb/isc"
-	"github.com/utain/esig/dss/validation/process/bbb/sav"
-	"github.com/utain/esig/dss/validation/process/bbb/vci"
-	"github.com/utain/esig/dss/validation/process/bbb/xcv"
+	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
+	"github.com/ryftcore/dss-go/dss/diagnostic"
+	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/i18n"
+	"github.com/ryftcore/dss-go/dss/model/policy"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/aov"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/cv"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/fc"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/isc"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/sav"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/vci"
+	"github.com/ryftcore/dss-go/dss/validation/process/bbb/xcv"
 )
 
 // aovBlock is the Go form of Java's AlgorithmObsolescenceValidation<?> local.

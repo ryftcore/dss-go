@@ -12,13 +12,13 @@
 package xades
 
 import (
-	"github.com/utain/esig/dss/internal/xmldom"
-	"github.com/utain/esig/dss/spi/validation"
-	"github.com/utain/esig/dss/spi/validation/identifier"
-	"github.com/utain/esig/dss/utils"
-	"github.com/utain/esig/dss/xades/definition"
-	"github.com/utain/esig/dss/xml/common"
-	xmlutils "github.com/utain/esig/dss/xml/utils"
+	"github.com/ryftcore/dss-go/dss/internal/xmldom"
+	"github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
+	"github.com/ryftcore/dss-go/dss/utils"
+	"github.com/ryftcore/dss-go/dss/xades/definition"
+	"github.com/ryftcore/dss-go/dss/xml/common"
+	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
 // hashDataInfoTransformPath ports XAdES111Path.HASH_DATA_INFO_TRANSFORM_PATH.

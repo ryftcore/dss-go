@@ -4,7 +4,7 @@ package utils
 import (
 	"sort"
 
-	"github.com/utain/esig/dss/internal/xpath10"
+	"github.com/ryftcore/dss-go/dss/internal/xpath10"
 )
 
 // NamespaceContextMap manages a prefix <-> namespace-URI registry, as used by XPath queries.
