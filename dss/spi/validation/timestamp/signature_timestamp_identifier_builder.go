@@ -1,12 +1,5 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/SignatureTimestampIdentifierBuilder.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: AdvancedSignature (already ported, dss/spi/validation/advanced_signature.go)
-// and SignatureAttribute (Java spi.validation.SignatureAttribute, not yet landed - a sibling
-// chunk of phase 2b owns it) both flatten into dss/spi/validation and are referenced here as
-// validation.AdvancedSignature / validation.SignatureAttribute. SignatureAttribute's assumed
-// shape is documented in signature_timestamp_source.go, this package's other and heavier
-// consumer of it.
-//
 // org.bouncycastle.tsp.TimeStampToken becomes internal/cmscore.TimeStampToken, per PORTING.md's
 // BouncyCastle-replacement rule; TimeStampToken.Encoded() (unlike Java's getEncoded(), which can
 // raise IOException) cannot fail; it hands back the bytes the token was parsed from, so the

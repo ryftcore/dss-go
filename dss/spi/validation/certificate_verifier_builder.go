@@ -1,19 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/CertificateVerifierBuilder.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY (flagged per S2B_BRIEF.md): TrustAnchorVerifier (Java
-// spi.validation.TrustAnchorVerifier) is assigned to sibling chunk VAL-C (s2b_VAL-C.txt),
-// which lands it in this same package. It is referenced here by name only, using the shape
-// inferred from every TrustAnchorVerifier call this file makes (the Java source itself,
-// spi/validation/TrustAnchorVerifier.java, read for accuracy though out of manifest scope):
-//
-//	func NewEmptyTrustAnchorVerifier() *TrustAnchorVerifier // createEmptyTrustAnchorVerifier()
-//	func (*TrustAnchorVerifier) SetUseSunsetDate(bool)
-//	func (*TrustAnchorVerifier) TrustedCertificateSource() spi.CertificateSource
-//	func (*TrustAnchorVerifier) SetTrustedCertificateSource(spi.CertificateSource)
-//	func (*TrustAnchorVerifier) IsAcceptRevocationUntrustedCertificateChains() bool
-//	func (*TrustAnchorVerifier) SetAcceptRevocationUntrustedCertificateChains(bool)
-//	func (*TrustAnchorVerifier) IsAcceptTimestampUntrustedCertificateChains() bool
-//	func (*TrustAnchorVerifier) SetAcceptTimestampUntrustedCertificateChains(bool)
 package validation
 
 // CertificateVerifierBuilder builds a copy of CertificateVerifier.

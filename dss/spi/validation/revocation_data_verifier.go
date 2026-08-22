@@ -1,28 +1,11 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/RevocationDataVerifier.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (flagged per S2B_BRIEF.md): this file is one of the contracts
-// signature_validation_context.go (sibling chunk) already documents its expectations of; the
-// public surface below matches that header comment's "RevocationDataVerifier (VAL-B)" entry
-// verbatim (constructor names, TrustAnchorVerifier()/SetTrustAnchorVerifier,
-// SetValidationContext, IsAcceptable, CheckCertificateNotRevoked, IsRevocationDataSkip,
-// IsRevocationDataFresh, IsAcceptableForChain, IsAfterThisUpdateAndBeforeNextUpdate). Two types
-// referenced here are owned by sibling chunks and used opaquely / by their documented shape:
+// ValidationContext.GetRevocationData keeps the Get prefix (unlike most of this port's dropped
+// getters) for consistency with SignatureValidationContext's other getters; see
+// validation_context.go's header comment for more.
 //
-//   - TrustAnchorVerifier (VAL-C): NewDefaultTrustAnchorVerifier() *TrustAnchorVerifier,
-//     IsTrustedAtTime(cert *model.CertificateToken, controlTime time.Time, context enumerations.Context) bool
-//     (see signature_validation_context.go's own header comment).
-//   - ValidationContext (VAL-C): the interface SignatureValidationContext implements. This file
-//     only needs two of its members, inferred from every ValidationContext call the Java source
-//     makes (addCertificateTokenForVerification(CertificateToken), getRevocationData(CertificateToken)):
-//     AddCertificateTokenForVerification(certificateToken *model.CertificateToken)
-//     GetRevocationData(certificateToken *model.CertificateToken) []AnyRevocationToken
-//     (integration note: originally written as RevocationData per PORTING.md's get-dropped
-//     convention; renamed to GetRevocationData to match ValidationContext's landed interface,
-//     which keeps the get-prefix for consistency with SignatureValidationContext's other
-//     getters - see validation_context.go's header for the full cross-chunk conflict writeup.)
-//
-// AnyRevocationToken (the Go analogue of Java's raw RevocationToken<?>) is already defined in
-// crl_first_revocation_data_loading_strategy.go, landed earlier in this same chunk.
+// AnyRevocationToken (the Go analogue of Java's raw RevocationToken<?>) is defined in
+// crl_first_revocation_data_loading_strategy.go.
 package validation
 
 import (

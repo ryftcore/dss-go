@@ -1,38 +1,16 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/EAARevocationToken.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (flagged per S2B_BRIEF.md):
-//
-//   - EAA (Java spi.eaa.EAA, an interface) and EAAStatusTokenIdentifier (Java
-//     spi.eaa.EAAStatusTokenIdentifier) are not in this manifest (S2B_BRIEF.md only assigns
-//     EAAKeyBindingPayload, EAARevocationToken and EAAValidationParameters from the spi.eaa
-//     package to this chunk) but are SCC-flattened into this same Go package by a sibling chunk.
-//     Their assumed shapes, inferred from every EAA/EAAStatusTokenIdentifier use in this file
-//     (the only Java source calling into them within this manifest):
-//
-//     type EAA interface {
-//     model.IdentifierBasedObject
-//     ID() string // getId(), declared directly on EAA (not only inherited via IdentifierBasedObject)
-//     // ... remaining getters (Filename, Signatures, EAAType, DisclosureValidations,
-//     // KeyBindingSignature, KeyBindingSignaturePayload, DeviceKeyCertificateSource, Payload,
-//     // SelectiveDisclosuresDigestAlgorithm) are irrelevant to this file and omitted here.
-//     }
-//
-//     func NewEAAStatusTokenIdentifier(eaaRevocationToken *EAARevocationToken) *EAAStatusTokenIdentifier
-//     // EAAStatusTokenIdentifier embeds model.TokenIdentifier, mirroring the Java
-//     // "extends TokenIdentifier" relationship (see SignatureIdentifier/TimestampToken's own
-//     // BuildTokenIdentifier for the same &X.TokenIdentifier pattern).
-//
-//   - Concrete EAA revocation tokens (e.g. dss-eaa-revocation-common's EAAStatusListToken, out of
-//     scope for phase 2b) embed *EAARevocationToken and call InitToken(self) in their own
-//     constructor, per the phase 2a handoff fact that every concrete Token constructor calls the
-//     Init pattern. EAARevocationToken itself stays uninitialised (no InitToken call here) because
-//     Java's EAARevocationToken is abstract and, like Token#getCreationDate, leaves
-//     checkIsSignedBy/buildTokenIdentifier/getIssuerX500Principal available for a subclass to
-//     *inherit* rather than re-override - Go achieves the same effect via method promotion once a
-//     concrete subclass registers itself (or this type, if unmodified) as the model.TokenOverrides.
-//     Consequently EAARevocationToken does not fully satisfy model.Token on its own (it also never
-//     overrides CreationDate(), left abstract by Java too) and carries no compile-time Token
-//     assertion, matching Token#getCreationDate being abstract in the Java source.
+// Concrete EAA revocation tokens (e.g. dss-eaa-revocation-common's EAAStatusListToken) embed
+// *EAARevocationToken and call InitToken(self) in their own constructor, following the
+// convention that every concrete Token constructor calls the Init pattern. EAARevocationToken
+// itself stays uninitialised (no InitToken call here) because Java's EAARevocationToken is
+// abstract and, like Token#getCreationDate, leaves
+// checkIsSignedBy/buildTokenIdentifier/getIssuerX500Principal available for a subclass to
+// *inherit* rather than re-override - Go achieves the same effect via method promotion once a
+// concrete subclass registers itself (or this type, if unmodified) as the model.TokenOverrides.
+// Consequently EAARevocationToken does not fully satisfy model.Token on its own (it also never
+// overrides CreationDate(), left abstract by Java too) and carries no compile-time Token
+// assertion, matching Token#getCreationDate being abstract in the Java source.
 package validation
 
 import (

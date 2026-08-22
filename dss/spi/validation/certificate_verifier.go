@@ -1,11 +1,5 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/CertificateVerifier.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY (flagged per S2B_BRIEF.md): TrustAnchorVerifier (Java
-// spi.validation.TrustAnchorVerifier) is assigned to sibling chunk VAL-C (s2b_VAL-C.txt),
-// which lands it in this same package. It is referenced here by name only, matching the
-// shape already documented by revocation_data_verifier.go's header comment
-// (NewDefaultTrustAnchorVerifier() *TrustAnchorVerifier).
-//
 // Java overloads setTrustedCertSources/setAdjunctCertSources for CertificateSource... and
 // ListCertificateSource; Go cannot overload by parameter type, so the ListCertificateSource
 // variants are named SetTrustedCertSourcesFromList/SetAdjunctCertSourcesFromList, following

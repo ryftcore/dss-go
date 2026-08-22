@@ -1,10 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CertificateRefIdentifier.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: this file references CertificateRef (a spi.x509 type flattened into
-// this package, ported in a sibling chunk of phase 2a). Its assumed shape, inferred from the
-// Java getters actually called below, is a struct with accessor methods CertDigest()
-// model.Digest, CertificateIdentifier() *SignerIdentifier, ResponderId() *ResponderId,
-// Kid() string, X509Url() string and PublicKey() *model.PublicKey.
 package spi
 
 import (

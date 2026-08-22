@@ -1,11 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/signature/AdvancedSignature.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: EAA (Java spi.eaa.EAA), EvidenceRecord (Java spi.x509.evidencerecord.
-// EvidenceRecord) and CertificateVerifier (Java spi.validation.CertificateVerifier) are all
-// flattened into this same Go package by sibling chunks of phase 2b and are therefore
-// referenced unqualified, following the precedent set by timestamp_source.go's EvidenceRecord
-// forward dependency. Their assumed shapes are not needed here: every use below is either a
-// parameter or return value passed through opaquely.
 package validation
 
 import (

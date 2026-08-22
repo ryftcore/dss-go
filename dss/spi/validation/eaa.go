@@ -1,9 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/EAA.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY (flagged per S2B_BRIEF.md): EAAPayload (Java spi.eaa.EAAPayload) is
-// assigned to sibling chunk VAL-C (S2B_BRIEF.md manifest s2b_VAL-C.txt), not this manifest,
-// but EAA.getPayload() returns it. It is referenced here by name only; VAL-C supplies the
-// definition into this same package.
 package validation
 
 import (

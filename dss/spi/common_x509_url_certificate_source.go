@@ -1,14 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CommonX509URLCertificateSource.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCIES:
-//   - X509URLCertificateSource (spi.x509, flattened into this package, ported in a sibling
-//     chunk of phase 2a): assumed to be an interface embedding CertificateSource with a single
-//     extra method CertificatesByURL(uri string) []*model.CertificateToken (port of
-//     getCertificatesByUrl(String)).
-//   - dsshttp.DataLoader (eu.europa.esig.dss.spi.client.http, its own Go package per
-//     PORTING.md's package layout, not yet ported in this phase): assumed to expose
-//     Get(url string) []byte (port of get(String), returning nil on failure), matching the
-//     single method this file actually calls.
 package spi
 
 import (

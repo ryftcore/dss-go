@@ -1,11 +1,5 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CommonCertificateSource.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: this file references CertificateRef and CertificateTokenRefMatcher, two
-// spi.x509 types flattened into this package and ported in a sibling chunk of phase 2a.
-// CertificateTokenRefMatcher's assumed shape, inferred from the Java signature actually called
-// below, is a struct with a default constructor NewCertificateTokenRefMatcher() and a method
-// Match(*model.CertificateToken, *CertificateRef) bool.
-//
 // Java's synchronized blocks around the entitiesByEntityKey/entitiesByPublicKey/tokensBySubject
 // mutations exist only to make concurrent AddCertificate/removeCertificate calls safe; per
 // PORTING.md this is not the lazy-init-caching case that earns a mutex, so the port is not

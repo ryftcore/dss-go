@@ -41,17 +41,7 @@
 // comment); it is still invoked, from this file's init(), for fidelity, though it currently has
 // no observable effect.
 //
-// slf4j logging (the LOG.info/LOG.warn calls) is dropped per the phase 2a handoff fact ("slf4j
-// dropped unless load-bearing").
-//
-// FORWARD DEPENDENCY (flagged per S2B_BRIEF.md): EvidenceRecordScopeFinder (Java
-// spi.validation.scope.EvidenceRecordScopeFinder) is owned by a sibling chunk of phase 2b
-// (package scope, dss/spi/validation/scope) not yet landed. It is referenced here by name only,
-// with the shape inferred from every call this file makes to it (the Java source itself, out of
-// this manifest's scope, was read for accuracy):
-//
-//	func scope.NewEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord) *scope.EvidenceRecordScopeFinder
-//	func (*scope.EvidenceRecordScopeFinder) FindEvidenceRecordScope() []modelscope.SignatureScope
+// Java's slf4j logging (the LOG.info/LOG.warn calls) has no Go equivalent and is not ported.
 package analyzer
 
 import (
@@ -823,8 +813,7 @@ func (a *DefaultDocumentAnalyzer) getEvidenceRecord(evidenceRecordAnalyzer Evide
 }
 
 // getEvidenceRecordScopes finds evidence record scopes. Port of
-// getEvidenceRecordScopes(EvidenceRecord). See the file header's FORWARD DEPENDENCY note on
-// scope.EvidenceRecordScopeFinder.
+// getEvidenceRecordScopes(EvidenceRecord).
 func (a *DefaultDocumentAnalyzer) getEvidenceRecordScopes(evidenceRecord validation.EvidenceRecord) []modelscope.SignatureScope {
 	return scope.NewEvidenceRecordScopeFinder(evidenceRecord).FindEvidenceRecordScope()
 }

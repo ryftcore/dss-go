@@ -1,9 +1,5 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CertificateSource.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: this file references CertificateRef, a spi.x509 type flattened into
-// this package and ported in a sibling chunk of phase 2a; see certificate_ref_identifier.go
-// for its assumed shape.
-//
 // Java's Set<CertificateToken> return values are ported as map[string]*model.CertificateToken
 // keyed by the token's DSSIDAsString(), matching the convention equivalent_certificates_entity.go
 // (chunk X509-B) already established for the same Java Set<CertificateToken>-over-hashCode

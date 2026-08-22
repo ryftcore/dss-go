@@ -1,8 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/tsp/TimestampSource.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: EvidenceRecord (Java spi.x509.evidencerecord.EvidenceRecord) is flattened
-// into this same Go package by a sibling chunk of phase 2b and is therefore referenced
-// unqualified.
 package validation
 
 import (

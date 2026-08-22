@@ -1,11 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/evidencerecord/EmbeddedEvidenceRecordHelper.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.validation.evidencerecord.EmbeddedEvidenceRecordHelper lands in this
-// same Go package per S2B_BRIEF.md's package layout table.
-//
-// FORWARD DEPENDENCY: this file is already relied upon opaquely by evidence_record.go (a sibling
-// chunk file landed earlier), which documents it as one of two forward dependencies of
-// EvidenceRecord.
+// Java spi.validation.evidencerecord.EmbeddedEvidenceRecordHelper lands in this same Go
+// package.
 //
 // Java's Integer getOrderOfAttribute()/getOrderWithinAttribute() are nullable box types; ported
 // as *int, matching this codebase's nullable-numeric convention (see model/eaa/claim.Claim's

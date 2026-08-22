@@ -1,14 +1,13 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/evidencerecord/AbstractSignatureEvidenceRecordDigestBuilder.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.validation.evidencerecord.AbstractSignatureEvidenceRecordDigestBuilder
-// lands in this same Go package per S2B_BRIEF.md's package layout table.
+// Java spi.validation.evidencerecord.AbstractSignatureEvidenceRecordDigestBuilder lands in this
+// same Go package.
 //
-// FORWARD DEPENDENCY: SignatureEvidenceRecordDigestBuilder (Java
+// SignatureEvidenceRecordDigestBuilder (Java
 // spi.validation.evidencerecord.SignatureEvidenceRecordDigestBuilder, the interface this class
-// implements) is not in this manifest and is left unreferenced: Go has no "implements" clause to
-// satisfy explicitly, and this abstract base's own methods do not need to call back into it.
-// SignatureAttribute (Java spi.validation.SignatureAttribute) is a forward dependency handled
-// opaquely, following evidence_record.go's precedent.
+// implements) is left unreferenced: Go has no "implements" clause to satisfy explicitly, and
+// this abstract base's own methods do not need to call back into it. SignatureAttribute (Java
+// spi.validation.SignatureAttribute) is used opaquely, following evidence_record.go's approach.
 package validation
 
 import (
@@ -84,8 +83,7 @@ func NewAbstractSignatureEvidenceRecordDigestBuilderFromSignature(signature Adva
 // SignatureDocument returns the signature document to compute a hash value for, nil when the
 // builder was instantiated from a signature instead. Exported accessor for the Java `protected`
 // field of the same name, needed by concrete-format subclasses living in other Go packages
-// (cades, ...) - flagged out-of-manifest addition to this otherwise-frozen file, see S3_BRIEF.md
-// "flag needs in notes; the integrator arbitrates".
+// (cades, ...).
 func (b *AbstractSignatureEvidenceRecordDigestBuilder) SignatureDocument() model.DSSDocument {
 	return b.signatureDocument
 }

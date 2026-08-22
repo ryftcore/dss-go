@@ -1,13 +1,12 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/JdbcRevocationSource.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.spi.client.jdbc (JdbcCacheConnector, SqlQuery, SqlSelectQuery, SqlRecord)
-// is not ported (this port has no JDBC cache layer), yet this entire Java class
-// is organized around it - every abstract
-// method and half the concrete ones are typed against it, so the reference is load-bearing
-// (compile-impossible without it). Per the porter brief, the minimal interfaces/types it needs
-// are forward-declared below with "Forward-declared for phase-2b/3:" comments and flagged in
-// the report; the eventual JDBC chunk owns replacing them with (or making its real types
-// satisfy) these shapes.
+// eu.europa.esig.dss.spi.client.jdbc's JdbcCacheConnector/SqlQuery/SqlSelectQuery/SqlRecord are
+// ported in the sibling package dss/spi/client/jdbc, but with concrete struct shapes that do not
+// match what this class needs (it is typed against them in every abstract method and half the
+// concrete ones). The minimal interfaces are therefore declared below as structural stand-ins.
+//
+// TODO: make dss/spi/client/jdbc's concrete types satisfy these interfaces, or retype this file
+// against them, and drop the stand-ins.
 package spi
 
 import (
@@ -16,28 +15,27 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// SqlQuery is a forward-declared stand-in for
-// eu.europa.esig.dss.spi.client.jdbc.query.SqlQuery. Forward-declared for phase-2b/3.
+// SqlQuery is a structural stand-in for
+// eu.europa.esig.dss.spi.client.jdbc.query.SqlQuery; see the file header.
 type SqlQuery interface {
 }
 
-// SqlSelectQuery is a forward-declared stand-in for
-// eu.europa.esig.dss.spi.client.jdbc.query.SqlSelectQuery. Forward-declared for phase-2b/3.
+// SqlSelectQuery is a structural stand-in for
+// eu.europa.esig.dss.spi.client.jdbc.query.SqlSelectQuery; see the file header.
 type SqlSelectQuery interface {
 	SqlQuery
 }
 
-// SqlRecord is a forward-declared stand-in for
+// SqlRecord is a structural stand-in for
 // eu.europa.esig.dss.spi.client.jdbc.record.SqlRecord, the row type
-// buildRevocationTokenFromResult reads from. Forward-declared for phase-2b/3.
+// buildRevocationTokenFromResult reads from; see the file header.
 type SqlRecord interface {
 }
 
-// JdbcCacheConnector is a forward-declared stand-in for
+// JdbcCacheConnector is a structural stand-in for
 // eu.europa.esig.dss.spi.client.jdbc.JdbcCacheConnector, connecting to an SQL database and
-// performing queries. Forward-declared for phase-2b/3; method names/shapes are inferred from
-// the four call sites in JdbcRevocationSource.java (select, execute, executeThrowable,
-// tableQuery).
+// performing queries; see the file header. Method names/shapes are inferred from the four call
+// sites in JdbcRevocationSource.java (select, execute, executeThrowable, tableQuery).
 type JdbcCacheConnector interface {
 	// Select executes query with args and returns the resulting records. Port of
 	// select(SqlSelectQuery, Object...).

@@ -1,65 +1,11 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/timestamp/SignatureTimestampSource.java (DSS 6.5.RC1).
 //
-// # FORWARD DEPENDENCY: SignatureAttribute / SignatureProperties
-//
-// Java's eu.europa.esig.dss.spi.validation.SignatureAttribute and .SignatureProperties<SA> are
-// flattened into the sibling dss/spi/validation package by another chunk of phase 2b (the "SIG"
-// chunk, which also owns AdvancedSignature - already landed - and the concrete format-specific
-// SignatureAttribute implementations of later phases). Their assumed shapes, inferred from every
-// call this manifest makes on them (this file and signature_timestamp_identifier_builder.go),
-// are:
-//
-//	type SignatureAttribute interface {
-//		Identifier() model.Identifier // getIdentifier(); Java returns the narrower
-//		                              // SignatureAttributeIdentifier (spi.validation.identifier,
-//		                              // a 1:1 sibling package outside this manifest's scope);
-//		                              // only .asXmlId() is ever called on it here, so the Go
-//		                              // shape is narrowed to the minimum this manifest needs.
-//	}
-//
-//	type SignatureProperties[SA SignatureAttribute] interface {
-//		IsExist() bool  // isExist()
-//		Attributes() []SA // getAttributes()
-//	}
-//
 // Java's SignatureAttribute declares no equals() override, so its default is
 // java.lang.Object's - reference identity - which getAttributeOrder below relies on; the SA type
 // parameter therefore additionally carries Go's `comparable` constraint (every concrete
 // SignatureAttribute in this codebase is expected to be a pointer type, for which `comparable`
 // is pointer identity, matching Java exactly), rather than requiring an Equals method that
 // Java's own contract does not provide.
-//
-// # FORWARD DEPENDENCY: EncapsulatedTimestampScopeFinder
-//
-// eu.europa.esig.dss.spi.validation.scope.EncapsulatedTimestampScopeFinder is a 1:1 sibling
-// package (dss/spi/validation/scope, imported here as validationscope) outside this manifest.
-// Its assumed shape, inferred from getTimestampScopes below (its only call site in this
-// manifest), is:
-//
-//	type EncapsulatedTimestampScopeFinder struct{ ... }
-//	func NewEncapsulatedTimestampScopeFinder() *EncapsulatedTimestampScopeFinder
-//	func (f *EncapsulatedTimestampScopeFinder) SetSignature(signature validation.AdvancedSignature)
-//	func (f *EncapsulatedTimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope
-//
-// # GAP flagged for integrator: TimestampToken.SetTimestampedReferences
-//
-// Throughout this file and abstract_timestamp_source.go, Java mutates the
-// List<TimestampedReference> a TimestampToken.getTimestampedReferences() call already returns,
-// relying on Java's List reference semantics (e.g. incorporateArchiveTimestampReferences,
-// processExternalTimestamp). dss/spi/validation/timestamp_token.go (already ported, frozen,
-// outside this manifest) exposes TimestampedReferences() but no mutator, and Go slices returned
-// by value do not alias the field they came from. This file therefore calls
-// TimestampToken.SetTimestampedReferences([]*validation.TimestampedReference), via this
-// package's timestampAddReferences helper (abstract_timestamp_source.go), which does not exist
-// yet in timestamp_token.go. Adding it is a one-method, additive, non-breaking change mirroring
-// the SetManifestFile/SetFilename/... pattern already used there:
-//
-//	func (t *TimestampToken) SetTimestampedReferences(timestampedReferences []*TimestampedReference) {
-//		t.timestampedReferences = timestampedReferences
-//	}
-//
-// This chunk does not add it itself (timestamp_token.go is outside this manifest); flagged
-// prominently in the porter report.
 package timestamp
 
 import (

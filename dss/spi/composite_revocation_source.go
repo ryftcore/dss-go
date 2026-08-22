@@ -1,9 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CompositeRevocationSource.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: this file references the generic interfaces RevocationSource[R] and
-// RevocationToken[R] (spi.x509.revocation, flattened into this package, used unqualified
-// elsewhere in this package - e.g. ocsp_source.go, ocsp_token_ref_matcher.go - and ported in a
-// sibling chunk of phase 2a).
 package spi
 
 import (
