@@ -12,23 +12,18 @@
 // names both this file and DigestDocumentXMLSignatureInput as sources), which builds
 // xmldsig.Data values inline via NewOctetData/NewPreCalculatedDigestData rather than through an
 // intermediate wrapper type - Data has no exported Document backreference to attach one to, and
-// internal/xmldsig is frozen (PORTING.md: no edits to frozen packages).
+// internal/xmldsig is frozen.
 //
-// This type is still ported in full, one Go file per Java file per PORTING.md, mirroring the
-// Java public surface (the document-carrying constructor, MIMEType, the
-// IsPreCalculatedDigest/PreCalculatedDigest/SetPreCalculatedDigest override triple) on top of an
-// embedded *xmldsig.Data built the same way the frozen resolver builds one.
+// This type is still ported in full, mirroring the Java public surface (the document-carrying
+// constructor, MIMEType, the IsPreCalculatedDigest/PreCalculatedDigest/SetPreCalculatedDigest
+// override triple) on top of an embedded *xmldsig.Data built the same way the frozen resolver
+// builds one.
 //
-// FLAGGED FOR INTEGRATOR: DSSXMLUtils#getDocument(Reference), assumed elsewhere in this package
-// (xades_reference_validation.go's DSSXMLUtilsGetDocument call, landed by a sibling chunk) as
-// the Go analogue of "type-assert the reference's XMLSignatureInput to
-// DSSDocumentXMLSignatureInput and read its document", cannot be implemented that way here:
-// the frozen resolver's Data values never pass through this wrapper, so there is no
-// Data->DSSDocument backreference to recover post hoc. Whoever lands DSSXMLUtils.java (not in
-// this manifest) needs a different strategy - e.g. having the reference-resolution call site
-// re-run DetachedSignatureResolver's own candidate selection, or threading the resolved
-// model.DSSDocument through xmldsig.ResolverContext/Reference some other way - since the
-// type-assertion Java performs has no Go equivalent against the frozen Data type.
+// DSSXMLUtilsGetDocument(reference) cannot recover the original model.DSSDocument the way Java's
+// getDocument(Reference) does (type-asserting the reference's XMLSignatureInput to
+// DSSDocumentXMLSignatureInput and reading its document): the frozen internal/xmldsig resolver's
+// Data values never pass through this wrapper, so there is no Data->DSSDocument backreference to
+// recover post hoc. DSSXMLUtilsGetDocument therefore always returns nil (see dss_xml_utils.go).
 package xades
 
 import (

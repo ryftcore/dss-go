@@ -60,7 +60,7 @@ func TestXMLCanonicalizerCanonicalizeBytes(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// Exclusive c14n drops the unused namespace declaration - see XML_DESIGN.md §2.4.
+	// Exclusive c14n drops the unused namespace declaration.
 	want := `<r><c></c></r>`
 	if string(out) != want {
 		t.Fatalf("CanonicalizeBytes() = %q, want %q", out, want)

@@ -3,8 +3,7 @@
 // org.bouncycastle.asn1.tsp.EvidenceRecord has no Go port yet (no existing DSS class mirrors
 // it - it is a raw RFC 4998 ASN.1 structure, not the spi/validation.EvidenceRecord model type).
 // ToEvidenceRecord below therefore returns the generic parsed *asn1ber.Element for the
-// attribute value, which callers can walk field-by-field until a typed EvidenceRecord lands;
-// this is flagged for the integrator per PORTING.md's "flag needs in notes" rule.
+// attribute value, which callers can walk field-by-field until a typed EvidenceRecord lands.
 package cades
 
 import (

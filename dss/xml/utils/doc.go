@@ -1,9 +1,9 @@
 // Package utils ports dss-xml-utils (13 Java source files, root package plus the xpath
-// subpackage) into a single Go package, as instructed for this phase. It is DSS's bridge
-// between internal/xmldom + internal/xmlc14n + internal/xpath10 and the rest of DSS:
-// DOMDocument adapts an *xmldom.Node to model.DSSDocument, DomUtils/XPathUtils are the query
-// and construction surface XAdES (a later phase) builds on, and XMLCanonicalizer is a thin,
-// stateless-per-call wrapper over internal/xmlc14n.
+// subpackage) into a single Go package. It is DSS's bridge between internal/xmldom +
+// internal/xmlc14n + internal/xpath10 and the rest of DSS: DOMDocument adapts an
+// *xmldom.Node to model.DSSDocument, DomUtils/XPathUtils are the query and construction
+// surface XAdES builds on, and XMLCanonicalizer is a thin, stateless-per-call wrapper over
+// internal/xmlc14n.
 //
 // Import as xmlutils from any package that also imports github.com/ryftcore/dss-go/dss/utils
 // (same bare package name "utils", different import path) to avoid a collision; within this
@@ -42,9 +42,9 @@
 //     hardwired to JavaXmlXPathQueryExecutor, matching upstream's practical (not merely
 //     theoretical) default.
 //   - DomUtilsGetDate's xsd:dateTime parsing (RFC3339, optionally with fractional seconds,
-//     falling back to a no-offset/UTC form) has not been checked against a Java
-//     DatatypeFactory oracle; flagged as the one XML_DESIGN.md "must be exact" item this
-//     package could not KAT-verify without dss-xades fixtures.
+//     falling back to a no-offset/UTC form) has been checked against a Java DatatypeFactory
+//     oracle; see dom_utils.go's header for the one correction applied and the one gap
+//     deliberately left open.
 //   - DomUtilsAddNamespaceAttribute resolves an ambiguity in Java's own
 //     Element#setAttribute("xmlns:"+prefix, uri) (which, per the DOM Level 2 contract,
 //     creates an attribute with a null namespaceURI - not a namespace-aware declaration) in

@@ -1,36 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/scope/JAdESSignatureScopeFinder.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java's eu.europa.esig.dss.jades.validation.scope package folds into this one Go
-// package per the phase-6 package layout (S6_BRIEF.md).
-//
-// FORWARD DEPENDENCY: *JAdESSignature - see abstract_jws_document_analyzer.go's file header. This
-// file additionally needs:
-//
-//	func (s *JAdESSignature) ReferenceValidations() []*model.ReferenceValidation // getReferenceValidations()
-//
-// (IsCounterSignature/IsKeyBindingSignature/MasterSignature/EAA are already part of
-// validation.AdvancedSignature, which *JAdESSignature is assumed to implement.)
-//
-// FORWARD DEPENDENCY: HTTPHeader / HTTPHeaderDigest / HTTPHeaderSignatureScope /
-// HTTPHeaderMessageBodySignatureScope (Java eu.europa.esig.dss.jades package - the "jades root"
-// SCC per S6_BRIEF.md - HTTPHeader.java, HTTPHeaderDigest.java, HTTPHeaderSignatureScope.java,
-// HTTPHeaderMessageBodySignatureScope.java) are not in this manifest. Assumed shapes, inferred
-// from every call this file makes to them and from http_headers_payload_builder.go's own
-// httpHeaderDocument interface (already landed, same package):
-//
-//	type HTTPHeader struct { ... } // implements model.DSSDocument, Value()/SetValue() string
-//	type HTTPHeaderDigest struct { HTTPHeader; ... }
-//	func (h *HTTPHeaderDigest) MessageBodyDocument() model.DSSDocument // getMessageBodyDocument()
-//
-//	type HTTPHeaderSignatureScope struct { scope.SignatureScope-implementing base; ... }
-//	func NewHTTPHeaderSignatureScope(document model.DSSDocument) *HTTPHeaderSignatureScope
-//
-//	type HTTPHeaderMessageBodySignatureScope struct { ... }
-//	func NewHTTPHeaderMessageBodySignatureScope(document model.DSSDocument) *HTTPHeaderMessageBodySignatureScope
-//
-// DSSJsonUtils.HTTP_HEADER_DIGEST is already ported as DSSJsonUtilsHTTPHeaderDigest in
-// dss_json_utils.go (a sibling chunk's file, landed before this one); reused here rather than
-// redeclared.
+// SCC flattening: Java's eu.europa.esig.dss.jades.validation.scope package is flattened into
+// this one Go package.
 package jades
 
 import (

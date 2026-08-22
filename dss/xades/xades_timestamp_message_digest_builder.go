@@ -2,12 +2,11 @@
 //
 // # Santuario replacement
 //
-// org.apache.xml.security.signature.{Reference,XMLSignatureInput} calls map to internal/xmldsig
-// per its doc.go table (frozen; see S4D_BRIEF.md's "Santuario-replacement rules"): Reference is
-// *xmldsig.Reference (already used throughout this package, e.g. dss_reference.go,
-// reference_processor.go), and XMLSignatureInput's getOctetStream() is *xmldsig.Data.Bytes().
-// XMLCanonicalizer canonicalization goes through xml/utils.XMLCanonicalizer (frozen, byte-parity
-// with the Java Transformer per S4D_BRIEF.md).
+// org.apache.xml.security.signature.{Reference,XMLSignatureInput} calls map to internal/xmldsig,
+// which is frozen: Reference is *xmldsig.Reference (already used throughout this package, e.g.
+// dss_reference.go, reference_processor.go), and XMLSignatureInput's getOctetStream() is
+// *xmldsig.Data.Bytes(). XMLCanonicalizer canonicalization goes through xml/utils.XMLCanonicalizer,
+// which is frozen and byte-parity with the Java Transformer.
 //
 // # Exception-scope deviation
 //

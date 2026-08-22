@@ -1,8 +1,7 @@
 // Package common ports dss-xml-common, flattening its six Java subpackages (root,
 // definition, definition/xmldsig, exception, alert, xpath, xpath/item) into a single Go
-// package, as instructed for this phase (collision-checked: snake_case-ing every one of the
-// 37 upstream file names produces no clash, so no subpackage-name filename prefixing was
-// needed).
+// package (snake_case-ing every one of the 37 upstream file names produces no clash, so no
+// subpackage-name filename prefixing was needed).
 //
 // # What this package is
 //

@@ -1,5 +1,5 @@
-// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness (task #12,
-// XAdES extension): it signs a fixed sample document with this package's own XAdESService,
+// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness: it signs a
+// fixed sample document with this package's own XAdESService,
 // producing XAdES-B enveloped, XAdES-B enveloping, XAdES-B detached, and XAdES-T enveloping
 // signatures with real crypto (an RSA PKCS#12 test key for the signer, an EC PKCS#12 test key as
 // a self-hosted TSA via spi/validation.KeyEntityTSPSource - the same two key stores

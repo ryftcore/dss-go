@@ -16,8 +16,8 @@
 // its own separate `context *XAdESProfileParameters` field (shadowing the embedded field's NAME
 // only, not its storage) and shadows every base method whose Java behaviour depends on that
 // field being the XAdES one: GetContext (returns *XAdESProfileParameters, the type every XAdES
-// call site in this package already assumes per S4D_BRIEF.md's forward-dependency comments),
-// GetDeterministicId (re-implemented against this shadowed GetContext so
+// call site in this package already assumes), GetDeterministicId (re-implemented against this
+// shadowed GetContext so
 // XAdESCounterSignatureParameters's own override - see xades_counter_signature_parameters.go's
 // "Deterministic Id priming" section - and every base-typed reader agree on one cached value),
 // DetachedContents (checks the shadowed context first, exactly like the base, then falls back to

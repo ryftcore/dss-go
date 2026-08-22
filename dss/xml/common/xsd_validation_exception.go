@@ -4,7 +4,7 @@ package common
 import "strings"
 
 // XSDValidationException is raised for XSD validation error(s). Ports the unchecked
-// RuntimeException; callers match it with errors.As per PORTING.md.
+// RuntimeException; callers match it with errors.As.
 //
 // Java's addSuppressed(exception) chain (one suppressed exception per collected
 // SAXParseException) has no port: Go has no suppressed-exception mechanism, and nothing in

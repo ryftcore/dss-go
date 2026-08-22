@@ -1,14 +1,5 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESOCSPSource.java
 // (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: XAdESRevocationRefExtractionUtils (Java eu.europa.esig.dss.xades.
-// validation.XAdESRevocationRefExtractionUtils, same "validation" SCC, hence the same Go
-// package) is owned by a sibling chunk not in this manifest. The single entry point this file
-// calls, inferred from its Java source and every call site here:
-//
-//	func XAdESRevocationRefExtractionUtilsCreateOCSPRef(xadesPaths definition.XAdESPath, ocspRefElement *xmldom.Node) *spi.OCSPRef
-//	  - port of the static createOCSPRef(XAdESPath, Element); nil on a malformed/incomplete
-//	    OCSPRef element (Java returns null after logging a warning).
 package xades
 
 import (

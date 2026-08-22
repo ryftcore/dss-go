@@ -1,7 +1,7 @@
 // Ported from specs-jades/src/test/java/eu/europa/esig/jades/JAdESUtilsTest.java (DSS 6.5.RC1),
 // as vectors (testdata/, copied from specs-jades/src/test/resources) plus the assertions
-// rewritten in Go. Per S6_BRIEF.md, message parity with the everit/jsonsKema Java library is NOT
-// a contract for this port; only presence/absence of an error - identified by a recognizable
+// rewritten in Go. Message parity with the everit/jsonsKema Java library is NOT a contract for
+// this port; only presence/absence of an error - identified by a recognizable
 // substring naming the offending property, exactly as assertErrorFound does upstream - is
 // verified.
 package specs

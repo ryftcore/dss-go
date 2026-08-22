@@ -1,11 +1,4 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/evidencerecord/EmbeddedEvidenceRecordBuilder.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY (sibling chunk of the xades SCC, landing in this package; naming follows
-// the XAdESSignatureUtils-prefixed forward-dependency convention already established by
-// xades_baseline_requirements_checker.go / xades_timestamp_source.go / xml_document_analyzer.go):
-//
-//	func XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties *XAdESUnsignedSigProperties) *XAdESAttribute
-//	  // XAdESSignatureUtils.getLastSealingEvidenceRecordAttribute(XAdESUnsignedSigProperties)
 package xades
 
 import (

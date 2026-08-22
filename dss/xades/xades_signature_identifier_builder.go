@@ -1,9 +1,8 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESSignatureIdentifierBuilder.java
 // (DSS 6.5.RC1).
 //
-// XAdESDOMDocument (Java eu.europa.esig.dss.xades.dom.XAdESDOMDocument) is a forward dependency
-// of the sibling "dom" chunk of this same SCC (see xades_signature.go's file header for the full
-// contract); SignatureNodes() []*xmldom.Node is the only member this file needs.
+// XAdESDOMDocument (Java eu.europa.esig.dss.xades.dom.XAdESDOMDocument, see xades_dom_document.go);
+// SignatureNodes() []*xmldom.Node is the only member this file needs.
 package xades
 
 import (

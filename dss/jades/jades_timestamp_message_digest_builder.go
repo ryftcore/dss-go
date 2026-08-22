@@ -1,16 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/timestamp/JAdESTimestampMessageDigestBuilder.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java's eu.europa.esig.dss.jades.validation.timestamp package folds into this
-// one Go package per the phase-6 package layout (S6_BRIEF.md).
-//
-// FORWARD DEPENDENCY: *JAdESSignature - see abstract_jws_document_analyzer.go's file header. This
-// file additionally needs:
-//
-//	func (s *JAdESSignature) Jws() *JWS                                             // getJws()
-//	func (s *JAdESSignature) SigDMechanism() *enumerations.SigDMechanism            // getSigDMechanism(), nil when absent
-//	func (s *JAdESSignature) SignedDocumentsByHTTPHeaderName() []model.DSSDocument  // getSignedDocumentsByHTTPHeaderName()
-//	func (s *JAdESSignature) SignedDocumentsForObjectIdByUriMechanism() []model.DSSDocument // getSignedDocumentsForObjectIdByUriMechanism()
-//	func (s *JAdESSignature) EtsiUHeader() *JAdESEtsiUHeader                        // getEtsiUHeader() (already used by other landed jades files, e.g. jades_level_baseline_lt.go)
+// SCC flattening: Java's eu.europa.esig.dss.jades.validation.timestamp package is flattened
+// into this one Go package.
 //
 // # Canonicalization
 //

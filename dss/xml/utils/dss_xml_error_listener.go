@@ -4,7 +4,7 @@
 // hooked onto a javax.xml.transform.Transformer to log-then-rethrow warnings/errors/fatal
 // errors raised during serialization. Go's serializer (internal/xmldom.Node.Serialize) has no
 // pluggable error-listener hook - it just returns an error - and slf4j logging is dropped
-// package-wide per PORTING.md. DSSXmlErrorListener is kept as a documented, functionally
+// package-wide. DSSXmlErrorListener is kept as a documented, functionally
 // inert type so call sites ported unchanged from Java compile: each method stands in for "log
 // then rethrow" by returning err unchanged (there is no logger to log to, and nothing in this
 // port currently raises through an ErrorListener-shaped hook).

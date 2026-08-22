@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/EtsiUComponent.java (DSS 6.5.RC1).
 //
-// EtsiUComponent extends JAdESAttribute in Java (jades_attribute.go, landed by a sibling chunk of
-// phase 6 (VALA), same package): this port embeds it, reaching JAdESAttribute's unexported
+// EtsiUComponent extends JAdESAttribute in Java (jades_attribute.go, same package): this port
+// embeds it, reaching JAdESAttribute's unexported
 // name/value/identifier fields directly from newEtsiUComponent - legal because both types live in
 // package jades, mirroring the "protected field, same-package subclass" relationship the Java
 // source expresses (see jades_attribute.go's own file header, which already documents this same

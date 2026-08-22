@@ -1,4 +1,4 @@
-// Cross-validation harness, direction GO -> UPSTREAM (task #12, XAdES extension): the second
+// Cross-validation harness, direction GO -> UPSTREAM: the second
 // end-to-end compatibility proof in the other direction from
 // xades_upstream_cross_validation_test.go. It runs testdata/crossgen (a standalone `go run`
 // program - see its own doc comment) to sign XAdES-B enveloped, XAdES-B enveloping, and

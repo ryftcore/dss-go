@@ -21,7 +21,7 @@
 //
 // MultipleDocumentsService() returns a thin adapter that does satisfy
 // document.MultipleDocumentsSignatureService by forwarding to those methods, so the Java contract
-// is not lost; ASiC-JAdES (phase 7) is the caller that will need it.
+// is not lost; ASiC-JAdES is the caller that needs it.
 //
 // # Errors
 //

@@ -1,34 +1,11 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XMLDocumentAnalyzer.java
 // (DSS 6.5.RC1).
 //
-// Extends spi/validation/analyzer.DefaultDocumentAnalyzer (already landed, Phase 2), the same
-// DocumentAnalyzer/DefaultDocumentAnalyzer split cades.CMSDocumentAnalyzer (Phase 3) already
-// establishes for CAdES; this file mirrors that precedent's shape (newXMLDocumentAnalyzer +
+// Extends spi/validation/analyzer.DefaultDocumentAnalyzer, the same
+// DocumentAnalyzer/DefaultDocumentAnalyzer split cades.CMSDocumentAnalyzer already establishes
+// for CAdES; this file mirrors that precedent's shape (newXMLDocumentAnalyzer +
 // NewXMLDocumentAnalyzer + BuildSignatures + IsSupported + OriginalDocumentsForSignature +
 // GetDefaultSignaturePolicyValidator).
-//
-// # FORWARD DEPENDENCIES (sibling chunks of this same "validation" SCC and dss/xades/dom,
-// # landing in this same Go package per S4D_BRIEF.md's package-layout rule; see
-// # xades_signature.go's header for the XAdESDOMDocument/XAdESDOMElement/XAdESSignature shapes
-// # this file also relies on, repeated here only where this file needs more of their surface)
-//
-//	func (d *XAdESDOMDocument) ClearXAdESPathHolders()  // getXAdESPathHolders().clear(); the
-//	  deprecated clearQueryHolders() mutates the document's path-holder list in place, the same
-//	  "getter returns a mutable, stable list reference" assumption xades_signature.go's
-//	  AddXAdESPathHolder note documents.
-//	func NewXAdESSignatureFromDOMElement(signatureElement *XAdESDOMElement) *XAdESSignature
-//	  (already declared as a forward dependency by xades_signature.go; this file is one of its
-//	  two Java call sites, the other being XAdESSignature's own single-Element constructor).
-//	type XMLSignaturePolicyValidator struct { ... }             // Java validation.policy.XMLSignaturePolicyValidator
-//	func NewXMLSignaturePolicyValidator() *XMLSignaturePolicyValidator
-//	  - satisfies spi/policy.SignaturePolicyValidator.
-//
-// Root package (eu.europa.esig.dss.xades, Java DSSXMLUtils/XAdESSignatureUtils - not in this
-// manifest, same "DSSXMLUtils"-prefixed forward-dependency convention xades_signature.go already
-// establishes):
-//
-//	var DSSXMLUtilsSAMLNamespace *common.DSSNamespace              // DSSXMLUtils.SAML_NAMESPACE
-//	func XAdESSignatureUtilsGetSignerDocuments(signature *XAdESSignature) []model.DSSDocument
 package xades
 
 import (

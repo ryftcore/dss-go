@@ -4,14 +4,6 @@
 // PORTING.md "port test vectors, not JUnit code" - these are exhaustive table tests over the
 // registry-like constant sets, plus behavioural tests mirroring what upstream's getters/setters
 // guarantee.
-//
-// NOTE: at the time this file was written, github.com/ryftcore/dss-go/dss/jades did not yet compile
-// as a whole, so this file could not be executed end-to-end - see the phase-6 integration pass
-// for the cross-chunk fixups (analyzer.DocumentAnalyzer.JwsJsonSerializationObject reached via a
-// new jwsDocumentAnalyzerBase helper, EtsiUComponentBuild -> EtsiUComponentBuildFromValue's
-// arity, SignatureById -> SignatureByID, DSSId -> DSSID, GetSignatureTimestampData/
-// GetArchiveTimestampData's single-value return) that made the package buildable. None of that
-// surface was owned by this ROOT chunk's manifest.
 package jades
 
 import (

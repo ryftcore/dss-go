@@ -1,7 +1,5 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESOCSPSource.java
 // (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: JAdESEtsiUHeader/EtsiUComponent - see jades_certificate_source.go's header.
 package jades
 
 import (

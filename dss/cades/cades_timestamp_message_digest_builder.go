@@ -8,37 +8,6 @@
 // entirely owned here (there is no upstream V2-building counterpart to lean on: TS 101 733's
 // Annex K legacy hash covers the CMS SignedData shape directly, not an ats-hash-index).
 //
-// FORWARD DEPENDENCY: *CAdESSignature (Java eu.europa.esig.dss.cades.validation.CAdESSignature)
-// is assigned to a sibling chunk of this manifest and is not (re)declared here; every other
-// landed file in this package already forward-references it the same way (see e.g.
-// cades_level_baseline_lta_timestamp_extractor.go's NewCadesLevelBaselineLTATimestampExtractor).
-// The subset of its API this file calls, inferred from the Java constructor bodies:
-//
-//	func (s *CAdESSignature) CertificateSource() *spi.SignatureCertificateSource // getCertificateSource()
-//	func (s *CAdESSignature) CMS() *cms.CMS                                     // getCMS()
-//	func (s *CAdESSignature) SignerInformation() *cmscore.SignerInfo           // getSignerInformation()
-//	func (s *CAdESSignature) DetachedContents() []model.DSSDocument            // getDetachedContents()
-//
-// all four already assumed by cadesLTASignature/NewCadesLevelBaselineLTATimestampExtractor in
-// this same package, so *CAdESSignature satisfying them is not a new requirement this file adds.
-//
-// FORWARD DEPENDENCY: the dss-cms package (Java eu.europa.esig.dss.cms), assigned to the
-// dependency-closed CMSAPI chunk, is imported here exactly as cades_utils.go and
-// cades_level_baseline_lta_timestamp_extractor.go already do (cms.CMS, cms.CMS#IsDetachedSignature).
-// This file additionally needs three CMSUtils statics flattened per PORTING.md's
-// "<JavaClass><MethodName>" convention for static utility classes (the same convention
-// CAdESUtils already follows in this very package):
-//
-//	func CMSUtilsWriteContentInfoEncoded(cmsDocument *cms.CMS, w io.Writer) error
-//	func CMSUtilsWriteSignedDataCertificatesEncoded(cmsDocument *cms.CMS, w io.Writer) error
-//	func CMSUtilsWriteSignedDataCRLsEncoded(cmsDocument *cms.CMS, w io.Writer) error
-//
-// ports of ICMSUtils#writeContentInfoEncoded/writeSignedDataCertificatesEncoded/
-// writeSignedDataCRLsEncoded(CMS, OutputStream), each of which "Writes the encoded binaries of
-// the [...] field to the given OutputStream" (their Javadoc) - i.e. an io.Writer per this port's
-// stream convention (PORTING.md "Streams & documents"), with the declared IOException becoming
-// an error return per PORTING.md's "Errors, exceptions, alerts".
-//
 // DEVIATIONS:
 //
 //   - getSignedDataCertificateReferences/getSignatureSignedDataReferences in

@@ -7,9 +7,9 @@
 // one static overload - parsing an RFC 2253/4514 distinguished-name STRING back into an
 // X500Principal, the mirror image of model.X500Principal.RFC2253Name()/RFC2253NameWithOIDMap -
 // has no Go counterpart there. PORTING.md forbids editing a frozen package, so it is reproduced
-// here, scoped to this package, and flagged in the porter's report for the integrator to
-// consider hoisting into spi/dss_asn1_utils.go later (every future caller of the same Java
-// static method would otherwise have to duplicate it again).
+// here, scoped to this package; it would be a good candidate to hoist into spi/dss_asn1_utils.go
+// later (every future caller of the same Java static method would otherwise have to duplicate it
+// again).
 //
 // DEVIATION: the parser supports the RFC 2253 keyword set model.X500Principal's own RFC2253Name()
 // encoder emits verbatim (CN, C, L, ST, O, OU, STREET, DC, UID - see model/x500_principal.go's

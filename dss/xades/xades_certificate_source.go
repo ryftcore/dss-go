@@ -2,10 +2,8 @@
 // (DSS 6.5.RC1).
 //
 // DSSXMLUtilsGetKeyInfoSigningCertificatePublicKey (Java DSSXMLUtils.getKeyInfoSigningCertificatePublicKey(Element))
-// is a forward dependency of the root eu.europa.esig.dss.xades package (not in this manifest),
-// per the same "DSSXMLUtils"-prefixed forward-dependency convention xades_signature.go's header
-// already documents for its own sibling call sites; its assumed shape is
-// func DSSXMLUtilsGetKeyInfoSigningCertificatePublicKey(signatureElement *xmldom.Node) *model.PublicKey.
+// is one of the "DSSXMLUtils"-prefixed package-level functions that stand in for Java's static
+// utility class eu.europa.esig.dss.xades.DSSXMLUtils (see dss_xml_utils.go).
 package xades
 
 import (

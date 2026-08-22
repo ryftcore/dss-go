@@ -1,6 +1,6 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/CAdESUtils.java (DSS 6.5.RC1).
 //
-// # BouncyCastle replacements (see PORTING.md)
+// # BouncyCastle replacements
 //
 //   - org.bouncycastle.cms.SignerInformation      -> *cmscore.SignerInfo
 //   - org.bouncycastle.asn1.cms.AttributeTable    -> cmscore.Attributes

@@ -1,9 +1,8 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/jwt/JWTClaimNames.java
 // (DSS 6.5.RC1).
 //
-// The Java package eu.europa.esig.dss.jades.jwt is folded into this one Go package, per the
-// phase-6 package layout; the JWTClaimNames prefix keeps the class-scoped names unambiguous in
-// Go's single package namespace.
+// The Java package eu.europa.esig.dss.jades.jwt is flattened into this one Go package; the
+// JWTClaimNames prefix keeps the class-scoped names unambiguous in Go's single package namespace.
 package jades
 
 // The registered claim names of RFC 7519 "JSON Web Token (JWT)" section 4.1. Values are verbatim.

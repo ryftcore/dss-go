@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/timestamp/JAdESTimestampSource.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java's eu.europa.esig.dss.jades.validation.timestamp package folds into this
-// one Go package per the phase-6 package layout (S6_BRIEF.md).
+// SCC flattening: Java's eu.europa.esig.dss.jades.validation.timestamp package is flattened into
+// this one Go package.
 //
 // # DEVIATION: SA generic parameter is *EtsiUComponent, not *JAdESAttribute
 //
@@ -26,28 +26,6 @@
 // the adapter's synthetic EtsiUComponent wrapping (Component=nil, base64UrlEncoded=false) is never
 // observed. GetCounterSignatures below is simpler than Java's for this same reason: unsignedAttribute
 // already IS a *EtsiUComponent, with no `instanceof` check needed.
-//
-// FORWARD DEPENDENCY: *JAdESSignature - see abstract_jws_document_analyzer.go's file header. This
-// file additionally needs:
-//
-//	func (s *JAdESSignature) Jws() *JWS                              // getJws() (already used elsewhere)
-//	func (s *JAdESSignature) EtsiUHeader() *JAdESEtsiUHeader         // getEtsiUHeader() (already used elsewhere)
-//	func (s *JAdESSignature) MasterCSigComponent() *EtsiUComponent  // (already referenced by dss_json_utils.go's DSSJsonUtilsExtractJAdESCounterSignature via SetMasterCSigComponent)
-//
-// FORWARD DEPENDENCY: JAdESSignedProperties (Java eu.europa.esig.dss.jades.validation.
-// JAdESSignedProperties) is not in this manifest. Assumed shape, matching its Java source (read
-// for accuracy, out of this manifest's scope):
-//
-//	type JAdESSignedProperties struct { ... } // implements validation.SignatureProperties[*JAdESAttribute]
-//	func NewJAdESSignedProperties(headers *jose.Headers) *JAdESSignedProperties
-//
-// FORWARD DEPENDENCY: JAdESCertificateRefExtractionUtils / JAdESRevocationRefExtractionUtils
-// (Java eu.europa.esig.dss.jades.validation, static utility classes, flattened per PORTING.md's
-// "<JavaClass><MethodName>" convention). Assumed shapes:
-//
-//	func JAdESCertificateRefExtractionUtilsCreateCertificateRef(certId *jose.Object) *spi.CertificateRef
-//	func JAdESRevocationRefExtractionUtilsCreateCRLRef(crlRefMap *jose.Object) *spi.CRLRef
-//	func JAdESRevocationRefExtractionUtilsCreateOCSPRef(ocspRefMap *jose.Object) *spi.OCSPRef
 package jades
 
 import (
@@ -791,7 +769,4 @@ func (s *JAdESTimestampSource) MakeEvidenceRecords(signatureAttribute *EtsiUComp
 // compile-time assertion: *JAdESTimestampSource implements
 // timestamp.SignatureTimestampSourceOverrides[*JAdESSignature, *EtsiUComponent] (see the file
 // header's DEVIATION note on why the SA parameter differs from Java's literal type argument).
-// Will not compile until JAdESSignature/JAdESSignedProperties/JAdESCertificateRefExtractionUtils/
-// JAdESRevocationRefExtractionUtils land (forward dependencies of sibling chunks); see
-// PORTING.md's "chunks may NOT build mid-port" rule.
 var _ timestamp.SignatureTimestampSourceOverrides[*JAdESSignature, *EtsiUComponent] = (*JAdESTimestampSource)(nil)

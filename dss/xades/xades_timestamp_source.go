@@ -1,39 +1,21 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/timestamp/XAdESTimestampSource.java (DSS 6.5.RC1).
 //
-// # FORMERLY A GAP, NOW FIXED: MakeTimestampTokens (plural) is part of SignatureTimestampSourceOverrides
+// # MakeTimestampTokens (plural), not MakeTimestampToken (singular), is the override hook
 //
 // Java's SignatureTimestampSource#makeTimestampTokens(SA, TimestampType, List) (3-arg, `protected`
 // - concrete but overridable) is called unqualified, hence virtually dispatched, from the base's
 // own makeTimestampTokensFromSignedAttributes()/makeTimestampTokensFromUnsignedAttributes(). The
 // base's plain body wraps the abstract, fully-dispatched makeTimestampToken(SA, TimestampType,
 // List) (SINGULAR) in a one-element list; XAdESTimestampSource.java overrides the PLURAL method
-// instead (an xades132:XAdESTimeStampType element can carry more than one xades132:EncapsulatedTimeStamp,
-// so one signature attribute can produce several TimestampTokens at once) and its singular
-// makeTimestampToken override unconditionally throws UnsupportedOperationException, matching the
-// fact it is never meant to be called for XAdES.
+// instead (an xades132:XAdESTimeStampType element can carry more than one
+// xades132:EncapsulatedTimeStamp, so one signature attribute can produce several TimestampTokens
+// at once), and its singular makeTimestampToken override unconditionally throws
+// UnsupportedOperationException, matching the fact it is never meant to be called for XAdES.
 //
-// This was flagged as a severe, blocking integration gap: Go's SignatureTimestampSourceOverrides
-// (spi/validation/timestamp/signature_timestamp_source.go) had no override hook for the plural
-// method, so the base flow's own timestamp-token-creation path (populateTimestampTokens ->
-// makeTimestampTokensFromSignedAttributes/makeTimestampTokensFromUnsignedAttributes -> the base's
-// private makeTimestampTokens -> s.overrides.MakeTimestampToken singular) reached this file's
-// MakeTimestampToken (singular), which panics exactly like Java's - i.e. every XAdES signature
-// with at least one SignatureTimeStamp/AllDataObjectsTimeStamp/etc. attribute (so effectively every
-// T/LT/LTA-level signature) panicked while parsing. Confirmed by cross-validation harness
-// smoke-testing against real upstream fixtures (task #12 XAdES extension): the overwhelming
-// majority of T-level-and-up fixtures tried panicked with exactly this message before the fix
-// below landed.
-//
-// Fixed by adding `MakeTimestampTokens(signatureAttribute SA, timestampType
-// enumerations.TimestampType, references []*validation.TimestampedReference)
-// []*validation.TimestampToken` to SignatureTimestampSourceOverrides, with a default base
-// implementation on SignatureTimestampSource itself (promoted by embedding to every format that
-// does not shadow it - CAdES, JAdES) preserving the original wrap-the-singular-result-in-a-slice
-// behaviour, and changing the base's private makeTimestampTokens to call
-// s.overrides.MakeTimestampTokens(...) (plural) instead of wrapping
-// s.overrides.MakeTimestampToken(...) (singular) directly. This file's MakeTimestampTokens below -
-// unchanged by the fix, it was already a correct, complete port of the Java override - is now
-// actually reached from createAndValidate()'s internal flow, exactly as intended.
+// SignatureTimestampSourceOverrides therefore declares MakeTimestampTokens alongside the singular
+// MakeTimestampToken, with a default base implementation on SignatureTimestampSource (promoted by
+// embedding to every format that does not shadow it - CAdES, JAdES) that wraps the singular result
+// in a one-element slice. This file's MakeTimestampTokens below overrides that default.
 //
 // # GAP flagged for integrator: getTimestampScopes/getSignatureTimestampReferences/
 // # getArchiveTimestampReferences are concrete-but-overridable base methods with no override hook
@@ -76,25 +58,6 @@
 // (all the boolean predicates, MakeEvidenceRecords, GetCertificateRefs/GetCRLRefs/GetOCSPRefs,
 // GetEncapsulated*Identifiers, GetArchiveTimestampType, GetCounterSignatures) dispatches correctly
 // today - only the four named above need the fixes described.
-//
-// # FORWARD DEPENDENCY: XAdESSignature.XAdESReferenceValidations
-//
-// getIndividualDataContentTimestampReferences below needs the same additive accessor
-// xades_signature_scope_finder.go's file header already documents in full (recovering the
-// concrete *XAdESReferenceValidation the base XAdESSignature.ReferenceValidations() ([]*model.
-// ReferenceValidation) return value cannot express through Go's lack of instanceof-style downcasting).
-//
-// # FORWARD DEPENDENCY: XAdESEmbeddedEvidenceRecordHelper
-//
-// eu.europa.esig.dss.xades.evidencerecord.XAdESEmbeddedEvidenceRecordHelper (same "evidencerecord"
-// SCC folded into this Go package per S4D_BRIEF.md's package-layout rule, but assigned to a
-// different, not-yet-landed sibling chunk) is assumed to embed validation.
-// AbstractEmbeddedEvidenceRecordHelper (spi/validation, frozen) and therefore promote
-// SetDetachedContents/SetOrderOfAttribute/SetOrderWithinAttribute, mirroring
-// cades_timestamp_source.go's identical CAdESEmbeddedEvidenceRecordHelper assumption:
-//
-//	type XAdESEmbeddedEvidenceRecordHelper struct { validation.AbstractEmbeddedEvidenceRecordHelper; ... }
-//	func NewXAdESEmbeddedEvidenceRecordHelper(signature *XAdESSignature, signatureAttribute *XAdESAttribute) *XAdESEmbeddedEvidenceRecordHelper
 package xades
 
 import (
@@ -545,9 +508,8 @@ func (s *XAdESTimestampSource) getIndividualDataContentTimestampReferences(
 // xadesTimestampSourceIsContentTimestampedReference ports the private
 // isContentTimestampedReference(XAdESReferenceValidation, List<TimestampInclude>); named
 // distinctly from xades_timestamp_scope_finder.go's identical-bodied private method of the same
-// Java name (Java declares its own private copy in each class; this port mirrors that
-// duplication rather than sharing a helper, per PORTING.md's "no shared cross-file helpers"
-// convention for lowerCamel-prefixed unexported functions of different owning types).
+// Java name, since Java declares its own private copy in each class and this port mirrors that
+// duplication rather than sharing a helper.
 func xadesTimestampSourceIsContentTimestampedReference(xadesReferenceValidation *XAdESReferenceValidation,
 	includes []*validation.TimestampInclude) bool {
 	if xadesReferenceValidation.Id() != "" {
@@ -875,7 +837,5 @@ func xadesTSMust[T any](value T, err error) T {
 
 // compile-time assertion: *XAdESTimestampSource implements
 // timestamp.SignatureTimestampSourceOverrides[*XAdESSignature, *XAdESAttribute], matching Java's
-// "extends SignatureTimestampSource<XAdESSignature, XAdESAttribute>". Will not compile until
-// XAdESEmbeddedEvidenceRecordHelper and XAdESSignature.XAdESReferenceValidations land (forward
-// dependencies of sibling chunks); see PORTING.md's "chunks may NOT build mid-port" rule.
+// "extends SignatureTimestampSource<XAdESSignature, XAdESAttribute>".
 var _ timestamp.SignatureTimestampSourceOverrides[*XAdESSignature, *XAdESAttribute] = (*XAdESTimestampSource)(nil)

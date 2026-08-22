@@ -5,9 +5,9 @@
 // (rather than to AbstractJAdESUtils' own JAdES-specific schemaDefinitions()): this validates a
 // JWS document's generic envelope shape (compact/JSON/flattened serialization), independent of
 // any JAdES-specific header constraint - those are checked separately through
-// JAdESProtectedHeaderUtils / JAdESUnprotectedHeaderUtils. Since specs-jws is out of manifest and
-// specs is dependency-closed (S6_BRIEF.md), JWSUtils' definitions are inlined here rather than
-// routed through a separate, unreachable package - the same cross-chunk assumption documented in
+// JAdESProtectedHeaderUtils / JAdESUnprotectedHeaderUtils. Since specs-jws is not a module this
+// port ports separately, and specs is dependency-closed, JWSUtils' definitions are inlined here
+// rather than routed through a separate package - the same collapsing documented in
 // abstract_jades_utils.go.
 package specs
 

@@ -1,9 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/scope/CAdESSignatureScopeFinder.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java eu.europa.esig.dss.cades.validation.scope lands in this Go package per
-// S3_BRIEF.md's package layout table ("dss-cades: all packages EXCEPT extension form one SCC ->
-// ONE Go package cades at dss/cades"); the manifest itself targets dss/cades for both scope
-// finder files, not a scope subpackage.
+// SCC flattening: Java eu.europa.esig.dss.cades.validation.scope is flattened into this one Go
+// package.
 package cades
 
 import (

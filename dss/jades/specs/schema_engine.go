@@ -14,7 +14,7 @@
 // DEVIATION FROM UPSTREAM (documented per PORTING.md): error message text does NOT match
 // jsonsKema's wording or structure. Only the presence/absence of a validation error - and, where
 // this port's own tests assert it, a recognizable substring naming the offending property or
-// keyword - is a contract; exact message parity is explicitly out of scope (see S6_BRIEF.md).
+// keyword - is a contract; exact message parity with everit/jsonsKema is out of scope.
 // "format" (date-time, uri, uri-reference) and "contentEncoding" (base64) are both draft-07
 // *annotation* keywords, not validation assertions in the general spec, and this corpus's own
 // values regularly hold base64url content under a "contentEncoding":"base64" declaration (e.g.

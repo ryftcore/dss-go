@@ -1,24 +1,22 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESStructureValidator.java
 // (DSS 6.5.RC1).
 //
-// BLOCKED FORWARD DEPENDENCY (flagged per S4D_BRIEF.md's "flag needs in notes" rule, for the
-// integrator to arbitrate): upstream's getUtils(XAdESPath) resolves an XSDAbstractUtils
-// implementation (eu.europa.esig.xades.XAdES111Utils / XAdES122Utils / XAdES319132Utils) drawn
-// from the separate "dss-jaxb-xades"-family artifacts (XSD schemas bundled as JAXB resources)
-// and hands it to DSSXMLUtils.validateAgainstXSD(XSDAbstractUtils, Source), which runs a
-// javax.xml.validation.Validator against it. This port assigns no home to those XSD
-// schema resources or to a javax.xml.validation-equivalent Go package - there is no
-// bundled-schema or XML-Schema-validator package anywhere in this port. This file therefore
-// assumes, without being able to point at a landed package, that a sibling phase supplies:
+// XSD structure validation is a permanent no-op in this port. Upstream's
+// getUtils(XAdESPath) resolves an XSDAbstractUtils implementation
+// (eu.europa.esig.xades.XAdES111Utils / XAdES122Utils / XAdES319132Utils) that
+// bundles the XAdES XSD schemas as JAXB resources and hands it to
+// DSSXMLUtils.validateAgainstXSD(XSDAbstractUtils, Source), which runs a
+// javax.xml.validation.Validator. There is no bundled-schema or
+// XML-Schema-validator package in this port, so dss_xml_utils.go's
+// XAdES111XSDUtils/XAdES122XSDUtils/XAdES319132XSDUtils return opaque
+// placeholders and DSSXMLUtilsValidateAgainstXSD always reports no errors -
+// i.e. every structure is considered valid. getUtils's namespace dispatch
+// below, including its panic on an unrecognized namespace, is still exercised
+// faithfully; only the schema check itself is skipped.
 //
-//	func XAdES111XSDUtils() XAdESStructureXSDUtils    // eu.europa.esig.xades.XAdES111Utils#getInstance()
-//	func XAdES122XSDUtils() XAdESStructureXSDUtils    // eu.europa.esig.xades.XAdES122Utils#getInstance()
-//	func XAdES319132XSDUtils() XAdESStructureXSDUtils // eu.europa.esig.xades.XAdES319132Utils#getInstance()
-//	func DSSXMLUtilsValidateAgainstXSD(xsdUtils XAdESStructureXSDUtils, source *xmldom.Node) []string
-//
-// XAdESStructureXSDUtils stands in for eu.europa.esig.dss.jaxb.common.XSDAbstractUtils, an
-// opaque marker type here since this file never calls a method on it directly (only getUtils
-// selects one, and DSSXMLUtilsValidateAgainstXSD consumes it).
+// XAdESStructureXSDUtils stands in for
+// eu.europa.esig.dss.jaxb.common.XSDAbstractUtils: an opaque marker type, since
+// nothing here calls a method on it.
 package xades
 
 import (
@@ -28,7 +26,7 @@ import (
 )
 
 // XAdESStructureXSDUtils stands in for eu.europa.esig.dss.jaxb.common.XSDAbstractUtils; see the
-// file header BLOCKED FORWARD DEPENDENCY note.
+// file header's note on XSD validation.
 type XAdESStructureXSDUtils interface{}
 
 // XAdESStructureValidator validates a structure of a XAdES signature against a corresponding

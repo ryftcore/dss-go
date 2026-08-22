@@ -243,8 +243,8 @@ func (b *CAdESBaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
 	// rather than being one) reaching this shared CAdES logic through
 	// PAdESBaselineRequirementsChecker.ContainsLTLevelCertificates's delegation is exactly Java's
 	// ordinary virtual dispatch, which a Go concrete-type assertion cannot reproduce. Confirmed by
-	// pades/testdata/crossgen's own downstream cross-validation fixtures (task #12, PAdES
-	// extension): a self-signed test certificate chain drives MinimalLTRequirement into this exact
+	// pades/testdata/crossgen's own downstream cross-validation fixtures: a self-signed test
+	// certificate chain drives MinimalLTRequirement into this exact
 	// call, and the assertion below used to panic on every one of them.
 	timestampListCertificateSource := sig.TimestampSource().TimestampCertificateSourcesExceptLastArchiveTimestamp()
 	timestampCertificateSources := timestampListCertificateSource.Sources()

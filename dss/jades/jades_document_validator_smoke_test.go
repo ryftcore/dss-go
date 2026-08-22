@@ -1,8 +1,6 @@
-// Smoke test for the un-gated JAdES validator tree (abstract_jws_document_validator.go,
+// Smoke test for the JAdES validator tree (abstract_jws_document_validator.go,
 // jades_diagnostic_data_builder.go, jades_document_validator_factory.go,
-// jws_compact_document_validator.go, jws_serialization_document_validator.go), now that the
-// phase 8 validation engine (dss/validation, dss/validation/executor, dss/validation/policy,
-// dss/simplereport, dss/policy) has landed and their `phase8` build tags were removed.
+// jws_compact_document_validator.go, jws_serialization_document_validator.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, both
 // JWS analyzers (compact and serialization/flattened), JAdESDiagnosticDataBuilder, the default

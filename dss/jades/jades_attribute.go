@@ -1,14 +1,9 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESAttribute.java
 // (DSS 6.5.RC1).
 //
-// EtsiUComponent (Java, same package eu.europa.esig.dss.jades.validation, not in this manifest -
-// see S6_BRIEF.md's VAL chunk split) extends this class, setting its protected name/value/
-// identifier fields directly from its own constructor rather than through NewJAdESAttribute/the
-// lazily-computed Identifier(). Its Go counterpart, landing in a sibling chunk of this same
-// package, is therefore assumed to reach the unexported name/value/identifier fields below by
-// embedding JAdESAttribute and writing to the promoted fields directly - legal because both types
-// live in package jades, mirroring the "protected field, same-package subclass" relationship the
-// Java source expresses.
+// EtsiUComponent (same package) extends this class, reaching the unexported name/value/identifier
+// fields via embedding + promoted-field writes - legal because both types live in package jades,
+// mirroring Java's "protected field, same-package subclass" relationship.
 package jades
 
 import (

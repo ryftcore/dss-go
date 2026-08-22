@@ -1,14 +1,12 @@
 // Ported from specs-jades/src/main/java/eu/europa/esig/jades/AbstractJAdESUtils.java (DSS 6.5.RC1).
 //
 // Java's AbstractJAdESUtils extends specs-jws' eu.europa.esig.jws.AbstractJWSUtils, itself
-// extending dss-json-common's eu.europa.esig.json.JSONSchemaAbstractUtils - neither of which is
-// in this phase's manifest (they belong to modules outside dss-jades/specs-jades). Per
-// S6_BRIEF.md, "specs is dependency-closed (may build/test itself)", so the three-level Java
-// hierarchy collapses into this single Go type: the two out-of-manifest base classes' behaviour
-// (getSchemaDefinitions's JSON-draft-07 + RFC7515/7517 entries, the validateAgainstSchema /
-// getSchema / getValidator caching machinery) is folded in here rather than ported into a
-// separate, unreachable base package. This is a cross-chunk assumption; flagged in this porter's
-// notes to the lead.
+// extending dss-json-common's eu.europa.esig.json.JSONSchemaAbstractUtils - neither of which
+// belongs to a module this port ports separately (they live outside dss-jades/specs-jades).
+// Since specs is dependency-closed, the three-level Java hierarchy collapses into this single Go
+// type: the two base classes' behaviour (getSchemaDefinitions's JSON-draft-07 + RFC7515/7517
+// entries, the validateAgainstSchema/getSchema/getValidator caching machinery) is folded in here
+// rather than split into a separate package.
 package specs
 
 import (

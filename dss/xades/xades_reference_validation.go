@@ -11,8 +11,7 @@
 // Go has no virtual dispatch across embedding, so TransformationNames below is reached only
 // through the concrete *XAdESReferenceValidation. Every dss-xades call site that needs the
 // XAdES behaviour holds the concrete type; a diagnostic-data builder that walks
-// []*model.ReferenceValidation would see the embedded (empty) list instead, and those builders
-// are phase8-gated.
+// []*model.ReferenceValidation would see the embedded (empty) list instead.
 package xades
 
 import (

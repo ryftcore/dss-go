@@ -23,7 +23,7 @@
 // JUDGMENT CALL (flagged for the integrator): so that the Java contract is not simply lost,
 // MultipleDocumentsService() returns a thin adapter that does satisfy
 // document.MultipleDocumentsSignatureService by forwarding to the four methods above. It adds
-// no behaviour; ASiC-XAdES (phase 7) is the caller that will need it.
+// no behaviour; ASiC-XAdES is the caller that needs it.
 //
 // # Errors
 //

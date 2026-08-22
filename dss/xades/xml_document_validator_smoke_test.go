@@ -1,7 +1,5 @@
-// Smoke test for the un-gated XAdES validator pair (xml_document_validator.go,
-// xml_document_validator_factory.go), now that the phase 8 validation engine (dss/validation,
-// dss/validation/executor, dss/validation/policy, dss/simplereport, dss/policy) has landed and
-// their `phase8` build tags were removed.
+// Smoke test for the XAdES validator pair (xml_document_validator.go,
+// xml_document_validator_factory.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // XMLDocumentAnalyzer, the base SignedDocumentDiagnosticDataBuilder (XAdES ships no

@@ -5,14 +5,7 @@
 // Performs checks according to EN 319 132-1 v1.1.1 "6.3 Requirements on XAdES signature's
 // elements, qualifying properties and services".
 //
-// FORWARD DEPENDENCIES (root eu.europa.esig.dss.xades package, not in this manifest, same
-// "DSSXMLUtils"-prefixed convention xades_signature.go's header already documents for its own
-// call sites):
-//
-//	func DSSXMLUtilsGetObjectById(signatureElement *xmldom.Node, uri string) *xmldom.Node // getObjectById(Element, String)
-//	func XAdESSignatureUtilsIsKeyInfoCovered(signature *XAdESSignature) bool              // XAdESSignatureUtils.isKeyInfoCovered(XAdESSignature)
-//
-// slf4j logging is dropped per PORTING.md; every LOG.warn/LOG.debug call site is called out in
+// slf4j logging is dropped; every LOG.warn/LOG.debug call site is called out in
 // the surrounding comment instead.
 package xades
 

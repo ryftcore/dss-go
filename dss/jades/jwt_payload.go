@@ -1,8 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/jwt/JWTPayload.java
 // (DSS 6.5.RC1).
 //
-// The Java package eu.europa.esig.dss.jades.jwt is folded into this one Go package, per the
-// phase-6 package layout.
+// The Java package eu.europa.esig.dss.jades.jwt is flattened into this one Go package.
 package jades
 
 import (

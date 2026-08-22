@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/CAdESSignature.java
 // (DSS 6.5.RC1).
 //
-// # BouncyCastle replacements (see PORTING.md and cades_utils.go's header)
+// # BouncyCastle replacements (see cades_utils.go's header)
 //
 //   - org.bouncycastle.cms.SignerInformation      -> *cmscore.SignerInfo
 //   - org.bouncycastle.cms.SignerInformationStore -> []*cmscore.SignerInfo
@@ -29,46 +29,9 @@
 // without re-running BC's own digest-over-content computation; contentReferenceValidation below
 // documents the narrowed behaviour this causes.
 //
-// # FORWARD DEPENDENCIES
-//
-// VAL-B chunk (eu.europa.esig.dss.cades.validation, same Go package per PORTING.md's cades
-// layout) is assumed to expose:
-//
-//	func NewCAdESCertificateSource(cms *cms.CMS, signerInformation *cmscore.SignerInfo) *CAdESCertificateSource
-//	  - CAdESCertificateSource embeds spi.SignatureCertificateSource by value (so
-//	    &x.SignatureCertificateSource has the exact type CertificateSource() must return) and
-//	    self-registers via InitSignatureCertificateSource, matching the "outermost concrete
-//	    source registers itself" rule; its Java constructor declares no throws.
-//	func NewCAdESCRLSource(cms *cms.CMS, unsignedAttributes cmscore.Attributes) (*CAdESCRLSource, error)
-//	  - embeds spi.CMSCRLSource, whose own constructor already returns an error (extract()
-//	    failures); CAdESCRLSource's Java constructor has no throws clause of its own but
-//	    CAdESSignature.getCRLSource() still wraps the call in try/catch(Exception), which this
-//	    signature accommodates.
-//	func NewCAdESOCSPSource(cms *cms.CMS, unsignedAttributes cmscore.Attributes) (*CAdESOCSPSource, error)
-//	  - embeds spi.CMSOCSPSource, same reasoning; CAdESSignature.getOCSPSource() has NO
-//	    try/catch around the Java constructor call, so an error here is a panic below (an
-//	    unchecked exception propagating out of the Java getter uncaught).
-//	func NewCAdESSignatureIntegrityValidator(signerInformationToCheck *cmscore.SignerInfo) *CAdESSignatureIntegrityValidator
-//	  - satisfies spi.SignatureIntegrityValidator via an embedded spi.SignatureIntegrityValidatorBase.
-//	func NewCAdESSignatureIdentifierBuilder(signature *CAdESSignature) *CAdESSignatureIdentifierBuilder
-//	  - satisfies validation.SignatureIdentifierBuilder.
-//	func NewCAdESSignatureScopeFinder() *CAdESSignatureScopeFinder with
-//	func (f *CAdESSignatureScopeFinder) FindSignatureScope(s *CAdESSignature) []scope.SignatureScope
-//	  - satisfies scope.SignatureScopeFinder[*CAdESSignature].
-//
-// TS chunk (already landed, cades_timestamp_source.go) additionally documents its own
-// assumptions about this file's public surface (SignerInformation, CMS, DetachedContents,
-// CertificateSource, CRLSource, OCSPSource, CounterSignatures, ID) - all provided below,
-// matching that file's header exactly.
-//
-// CMSAPI chunk (dss/cms) is assumed to expose, alongside what cms_utils.go already lands:
-//
-//	func CMSUtilsRecomputeSignerInformation(cmsDoc *cms.CMS, signerId *cmscore.SignerIdentifier,
-//	    digestCalculatorProvider cms.DigestCalculatorProvider,
-//	    resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (*cmscore.SignerInfo, error)
-//	  - port of CMSUtils#recomputeSignerInformation(CMS, SignerId, DigestCalculatorProvider,
-//	    DSSResourcesHandlerBuilder), whose declared "throws CMSException" becomes the error
-//	    return per PORTING.md.
+// cades_timestamp_source.go additionally documents its own assumptions about this file's public
+// surface (SignerInformation, CMS, DetachedContents, CertificateSource, CRLSource, OCSPSource,
+// CounterSignatures, ID) - all provided below, matching that file's header exactly.
 //
 // # Deviations
 //
@@ -1531,12 +1494,11 @@ func (s *CAdESSignature) CounterSignatures() []validation.AdvancedSignature {
 
 // CAdESSignerInformationStore is this port's counterpart of BC's SignerInformationStore for the
 // narrow purpose CounterSignatureStore below serves: a collection of SignerInfos exposing the
-// single SignerInfos() accessor CAdESSignatureIdentifierBuilder needs (see that file's header
-// FORWARD DEPENDENCY note, which documents the same accessor under the name of a full *cms.CMS -
-// building one of those would need a complete SignedData this counter-signature list does not
-// have, exactly as Java's own SignerInformationStore carries no CMSSignedData of its own
-// either; sharing the SignerInfos() method name is what that file's assumption actually needs,
-// so it is reproduced here on a lightweight named slice type instead).
+// single SignerInfos() accessor CAdESSignatureIdentifierBuilder needs. Building a full *cms.CMS
+// instead would need a complete SignedData this counter-signature list does not have, exactly as
+// Java's own SignerInformationStore carries no CMSSignedData of its own either; sharing the
+// SignerInfos() method name is what CAdESSignatureIdentifierBuilder actually needs, so it is
+// reproduced here on a lightweight named slice type instead.
 type CAdESSignerInformationStore []*cmscore.SignerInfo
 
 // SignerInfos returns the underlying SignerInfo slice. Port of SignerInformationStore#getSigners().

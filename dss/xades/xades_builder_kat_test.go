@@ -5,7 +5,7 @@
 // Nothing here is hand-derived: for every (XAdES namespace x en319132 x digest algorithm)
 // combination the golden holds the serialized DOM upstream builds, and this test rebuilds the
 // same fragment with the Go port and compares the serialization byte for byte. That is the
-// byte-compatibility contract this chunk owes the signature it ends up inside: element order,
+// byte-compatibility contract this package owes the signature it ends up inside: element order,
 // where the xmlns declarations land, the ds:/xades: prefixes, and the Qualifier/Algorithm
 // attribute values.
 //
@@ -203,7 +203,7 @@ type xadesBuilderKATError string
 func (e xadesBuilderKATError) Error() string { return string(e) }
 
 // TestXAdESBuilderToXmlIdentifierMatchesJavaOracle pins the deterministic XML Id every
-// timestamp and validation-data element in this chunk is labelled with.
+// timestamp and validation-data element in this package is labelled with.
 func TestXAdESBuilderToXmlIdentifierMatchesJavaOracle(t *testing.T) {
 	certificate := xadesBuilderKATCertificate(t)
 

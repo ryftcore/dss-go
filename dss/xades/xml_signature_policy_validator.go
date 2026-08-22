@@ -2,10 +2,9 @@
 // dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/policy/XMLSignaturePolicyValidator.java
 // (DSS 6.5.RC1).
 //
-// Package layout: eu.europa.esig.dss.xades.validation.policy is part of the "validation" SCC
-// (S4D_BRIEF.md's package-layout rule groups root/dataobject/dom/evidencerecord/reference/
-// signature/validation/validation.policy/validation.scope/validation.timestamp into one Go
-// package `xades`), hence no `policy` subpackage here.
+// Package layout: eu.europa.esig.dss.xades.validation.policy is grouped, along with
+// root/dataobject/dom/evidencerecord/reference/signature/validation/validation.scope/
+// validation.timestamp, into one Go package `xades`, hence no `policy` subpackage here.
 //
 // Santuario replacement: upstream's getDigestAfterTransforms constructs
 // org.apache.xml.security.transforms.Transforms directly from the ds:Transforms element and

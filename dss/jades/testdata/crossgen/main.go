@@ -1,5 +1,5 @@
-// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness (task #12,
-// JAdES extension): it signs a fixed sample document with this package's own JAdESService,
+// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness: it signs a
+// fixed sample document with this package's own JAdESService,
 // producing JAdES-B and JAdES-T signatures in both COMPACT and FLATTENED JSON serialization, plus
 // a DETACHED (sigD, ObjectIdByURIHash mechanism) JAdES-B, with real crypto (an RSA PKCS#12 test
 // key for the signer, an EC PKCS#12 test key as a self-hosted TSA via

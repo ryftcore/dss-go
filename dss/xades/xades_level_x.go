@@ -57,7 +57,7 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 	}
 
 	// document.SignatureRequirementsChecker's assertions have bare returns and panic with error
-	// values (the phase-3 precedent), so they are called for effect here.
+	// values, so they are called for effect here.
 	signatureRequirementsChecker := e.SignatureRequirementsChecker()
 	if enumerations.SignatureLevelXAdESX == e.Params.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToXLevelPossible(signaturesToExtend)
