@@ -11,11 +11,11 @@ import (
 )
 
 // jsonObject wraps a parsed JSON object (a map, per encoding/json's decode
-// of a JSON object into interface{}) and provides the subset of
+// of a JSON object into any) and provides the subset of
 // JsonObjectWrapper's typed accessors this package's callers use. Ports
 // JsonObjectWrapper, minus the isEmpty()/getJsonObject() methods this
 // package never calls.
-type jsonObject map[string]interface{}
+type jsonObject map[string]any
 
 // parseJSONObject parses r and returns its root value as a jsonObject.
 // Ports `new JSONParser().parse(is)` followed by the caller's own check
@@ -24,14 +24,14 @@ type jsonObject map[string]interface{}
 // package, and it immediately requires an object - see
 // cryptographic_suite_json_factory.go).
 func parseJSONObject(r io.Reader) (jsonObject, error) {
-	var raw interface{}
+	var raw any
 	if err := json.NewDecoder(r).Decode(&raw); err != nil {
 		return nil, err
 	}
 	if raw == nil {
 		return nil, errors.New("parsed JSON cannot be null")
 	}
-	obj, ok := raw.(map[string]interface{})
+	obj, ok := raw.(map[string]any)
 	if !ok {
 		return nil, errors.New("parsed JSON cannot be null")
 	}
@@ -47,7 +47,7 @@ func (o jsonObject) getAsObject(name string) jsonObject {
 	if !ok {
 		return nil
 	}
-	m, ok := v.(map[string]interface{})
+	m, ok := v.(map[string]any)
 	if !ok {
 		return nil
 	}
@@ -99,13 +99,13 @@ func (o jsonObject) getAsObjectList(name string) []jsonObject {
 	if !ok {
 		return nil
 	}
-	arr, ok := v.([]interface{})
+	arr, ok := v.([]any)
 	if !ok {
 		return nil
 	}
 	var result []jsonObject
 	for _, elem := range arr {
-		m, ok := elem.(map[string]interface{})
+		m, ok := elem.(map[string]any)
 		if !ok {
 			continue
 		}
@@ -123,7 +123,7 @@ func (o jsonObject) getAsStringList(name string) []string {
 	if !ok {
 		return nil
 	}
-	arr, ok := v.([]interface{})
+	arr, ok := v.([]any)
 	if !ok {
 		return nil
 	}
