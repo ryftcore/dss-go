@@ -11,11 +11,11 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// ASiCContainerEvidenceRecordParameters defines the configuration for creation of an ASiC
+// ContainerEvidenceRecordParameters defines the configuration for creation of an ASiC
 // container containing an evidence record document. Java's `extends ASiCParameters` becomes
 // embedding.
-type ASiCContainerEvidenceRecordParameters struct {
-	ASiCParameters
+type ContainerEvidenceRecordParameters struct {
+	Parameters
 
 	// asicEvidenceRecordManifest is the ASiC evidence record manifest file to be added within
 	// the container.
@@ -23,13 +23,13 @@ type ASiCContainerEvidenceRecordParameters struct {
 }
 
 // NewASiCContainerEvidenceRecordParameters is the port of the default constructor.
-func NewASiCContainerEvidenceRecordParameters() *ASiCContainerEvidenceRecordParameters {
-	return &ASiCContainerEvidenceRecordParameters{}
+func NewASiCContainerEvidenceRecordParameters() *ContainerEvidenceRecordParameters {
+	return &ContainerEvidenceRecordParameters{}
 }
 
 // AsicEvidenceRecordManifest gets the ASiCEvidenceRecordManifest file to be added within the
 // container. Port of getAsicEvidenceRecordManifest().
-func (p *ASiCContainerEvidenceRecordParameters) AsicEvidenceRecordManifest() model.DSSDocument {
+func (p *ContainerEvidenceRecordParameters) AsicEvidenceRecordManifest() model.DSSDocument {
 	return p.asicEvidenceRecordManifest
 }
 
@@ -41,18 +41,18 @@ func (p *ASiCContainerEvidenceRecordParameters) AsicEvidenceRecordManifest() mod
 // document will be taken from the manifest signature reference.
 //
 // Port of setAsicEvidenceRecordManifest(DSSDocument).
-func (p *ASiCContainerEvidenceRecordParameters) SetAsicEvidenceRecordManifest(asicEvidenceRecordManifest model.DSSDocument) {
+func (p *ContainerEvidenceRecordParameters) SetAsicEvidenceRecordManifest(asicEvidenceRecordManifest model.DSSDocument) {
 	p.asicEvidenceRecordManifest = asicEvidenceRecordManifest
 }
 
 // String ports toString().
-func (p *ASiCContainerEvidenceRecordParameters) String() string {
+func (p *ContainerEvidenceRecordParameters) String() string {
 	manifest := "null"
 	if p.asicEvidenceRecordManifest != nil {
 		manifest = fmt.Sprintf("%v", p.asicEvidenceRecordManifest)
 	}
 	return "ASiCContainerEvidenceRecordParameters [asicEvidenceRecordManifest=" + manifest + "] " +
-		p.ASiCParameters.String()
+		p.Parameters.String()
 }
 
 // Equals ports equals(Object). Java's Objects.equals(asicEvidenceRecordManifest, ...) dispatches
@@ -60,14 +60,14 @@ func (p *ASiCContainerEvidenceRecordParameters) String() string {
 // implementation carries its own concrete Equals - see the note in
 // pades/pdf_byte_range_document.go), so reference identity is compared here, which is what
 // Java's equals() reduces to for the distinct-instance case this is used in.
-func (p *ASiCContainerEvidenceRecordParameters) Equals(other *ASiCContainerEvidenceRecordParameters) bool {
+func (p *ContainerEvidenceRecordParameters) Equals(other *ContainerEvidenceRecordParameters) bool {
 	if p == other {
 		return true
 	}
 	if p == nil || other == nil {
 		return false
 	}
-	if !p.ASiCParameters.Equals(&other.ASiCParameters) {
+	if !p.Parameters.Equals(&other.Parameters) {
 		return false
 	}
 	return p.asicEvidenceRecordManifest == other.asicEvidenceRecordManifest

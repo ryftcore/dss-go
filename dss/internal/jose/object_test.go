@@ -43,7 +43,7 @@ func TestObjectRePutKeepsPosition(t *testing.T) {
 }
 
 // TestObjectRemoveAndReplace covers the two mutators DSS uses on a parsed header:
-// JWSConverter replaces the 'etsiU' array in place, and JAdESEtsiUHeader removes components.
+// JWSConverter replaces the 'etsiU' array in place, and EtsiUHeader removes components.
 func TestObjectRemoveAndReplace(t *testing.T) {
 	o := NewObjectFromPairs("a", 1, "b", 2, "c", 3)
 

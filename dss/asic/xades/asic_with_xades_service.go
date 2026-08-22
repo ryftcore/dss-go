@@ -13,10 +13,10 @@
 // MultipleDocumentsSignatureService) so it needs no Multiple companion.
 //
 // Go has no overloading, so this type cannot itself satisfy both
-// document.DocumentSignatureService[SP,TP] and document.MultipleDocumentsSignatureService[SP,TP]
+// document.SignatureService[SP,TP] and document.MultipleDocumentsSignatureService[SP,TP]
 // (they declare the same method names, single-document vs list-typed) the way Java's class does.
 // This port keeps the plain names for the single-document shape - so *ASiCWithXAdESService
-// satisfies document.DocumentSignatureService - and MultipleDocumentsService() below returns a
+// satisfies document.SignatureService - and MultipleDocumentsService() below returns a
 // thin adapter satisfying document.MultipleDocumentsSignatureService by forwarding to the
 // *Multiple methods.
 package xades
@@ -46,8 +46,8 @@ func init() {
 // ASiCWithXAdESService contains the main methods for ASiC with XAdES signature
 // creation/extension.
 type ASiCWithXAdESService struct {
-	asic.AbstractASiCSignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters,
-		*dssxades.XAdESCounterSignatureParameters, *dssxades.XAdESEvidenceRecordIncorporationParameters]
+	asic.AbstractASiCSignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters,
+		*dssxades.CounterSignatureParameters, *dssxades.EvidenceRecordIncorporationParameters]
 
 	// asicFilenameFactory defines rules for filename creation for new ZIP entries (e.g.
 	// signature files, etc.).
@@ -55,9 +55,9 @@ type ASiCWithXAdESService struct {
 }
 
 var (
-	_ asic.AbstractASiCSignatureServiceOverrides[*ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters] = (*ASiCWithXAdESService)(nil)
-	_ document.DocumentSignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters]          = (*ASiCWithXAdESService)(nil)
-	_ asic.EvidenceRecordIncorporationService[*dssxades.XAdESEvidenceRecordIncorporationParameters]                     = (*ASiCWithXAdESService)(nil)
+	_ asic.AbstractASiCSignatureServiceOverrides[*ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters] = (*ASiCWithXAdESService)(nil)
+	_ document.SignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters]                  = (*ASiCWithXAdESService)(nil)
+	_ asic.EvidenceRecordIncorporationService[*dssxades.EvidenceRecordIncorporationParameters]                     = (*ASiCWithXAdESService)(nil)
 )
 
 // NewASiCWithXAdESService is the default constructor to instantiate the service. Ports
@@ -66,8 +66,8 @@ func NewASiCWithXAdESService(certificateVerifier validation.CertificateVerifier)
 	// Upstream logs "+ ASiCService with XAdES created".
 	service := &ASiCWithXAdESService{
 		AbstractASiCSignatureService: asic.NewAbstractASiCSignatureService[*ASiCWithXAdESSignatureParameters,
-			*dssxades.XAdESTimestampParameters, *dssxades.XAdESCounterSignatureParameters,
-			*dssxades.XAdESEvidenceRecordIncorporationParameters](certificateVerifier),
+			*dssxades.TimestampParameters, *dssxades.CounterSignatureParameters,
+			*dssxades.EvidenceRecordIncorporationParameters](certificateVerifier),
 		asicFilenameFactory: NewDefaultASiCWithXAdESFilenameFactory(),
 	}
 	service.InitAbstractASiCSignatureService(service)
@@ -91,15 +91,15 @@ func (s *ASiCWithXAdESService) SetAsicFilenameFactory(asicFilenameFactory ASiCWi
 // AbstractSignatureService#assertSigningCertificateValid(AbstractSignatureParameters<?>).
 //
 // Java declares the parameter with a wildcard, which matters here: this service's TP is
-// XAdESTimestampParameters, while the parameters objects it receives extend
-// XAdESSignatureParameters, i.e. AbstractSignatureParameters<XAdESTimestampParameters>. The Go
+// TimestampParameters, while the parameters objects it receives extend
+// SignatureParameters, i.e. AbstractSignatureParameters<TimestampParameters>. The Go
 // port of the base method is bound to the service's own TP and so cannot accept them; this
 // wrapper re-instantiates the frozen base with the XAdES timestamp-parameter type and delegates
 // to it, rather than duplicating the check.
 func (s *ASiCWithXAdESService) assertSigningCertificateValid(
-	parameters *document.AbstractSignatureParameters[*dssxades.XAdESTimestampParameters]) {
-	checker := document.NewAbstractSignatureService[*dssxades.XAdESSignatureParameters,
-		*dssxades.XAdESTimestampParameters](s.CertificateVerifier)
+	parameters *document.AbstractSignatureParameters[*dssxades.TimestampParameters]) {
+	checker := document.NewAbstractSignatureService[*dssxades.SignatureParameters,
+		*dssxades.TimestampParameters](s.CertificateVerifier)
 	checker.AssertSigningCertificateValid(parameters)
 }
 
@@ -174,7 +174,7 @@ func (s *ASiCWithXAdESService) SignDocumentMultiple(toSignDocuments []model.DSSD
 	newSignature := s.GetXAdESService().SignDocuments(dataToSignHelper.ToBeSigned(), xadesParameters, signatureValue)
 	newSignature.SetName(s.asicFilenameFactory.SignatureFilename(asicContent))
 
-	asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), newSignature))
+	asicContent.SetSignatureDocuments(asic.UtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), newSignature))
 
 	var signingDate time.Time
 	if bLevelSigningDate := parameters.BLevel().SigningDate(); bLevelSigningDate != nil {
@@ -197,7 +197,7 @@ func (s *ASiCWithXAdESService) SignDocumentMultiple(toSignDocuments []model.DSSD
 // Panics unconditionally with Java's UnsupportedOperationException message: ASiC-S/E with
 // XAdES does not support adding a detached timestamp file.
 func (s *ASiCWithXAdESService) TimestampMultiple(toTimestampDocuments []model.DSSDocument,
-	parameters *dssxades.XAdESTimestampParameters) model.DSSDocument {
+	parameters *dssxades.TimestampParameters) model.DSSDocument {
 	panic("Timestamp file cannot be added with ASiC-S/E + XAdES")
 }
 
@@ -222,7 +222,7 @@ func (s *ASiCWithXAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 
 	signatureDocuments := extensionHelper.GetSignatureDocuments()
 
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		panic(err)
 	}
@@ -231,9 +231,9 @@ func (s *ASiCWithXAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 	parameters.GetContext().SetDetachedContents(s.GetDetachedContents(asicContent, isOpenDocument))
 
 	for _, signature := range signatureDocuments {
-		extendedDocument := s.GetXAdESService().ExtendDocument(signature, &parameters.XAdESSignatureParameters)
+		extendedDocument := s.GetXAdESService().ExtendDocument(signature, &parameters.SignatureParameters)
 		extendedDocument.SetName(signature.Name())
-		signatureDocuments = asic.ASiCUtilsAddOrReplaceDocument(signatureDocuments, extendedDocument)
+		signatureDocuments = asic.UtilsAddOrReplaceDocument(signatureDocuments, extendedDocument)
 		asicContent.SetSignatureDocuments(signatureDocuments)
 	}
 
@@ -255,7 +255,7 @@ func (s *ASiCWithXAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 
 // assertExtensionSupported ports the private assertExtensionSupported(DSSDocument).
 func (s *ASiCWithXAdESService) assertExtensionSupported(toExtendDocument model.DSSDocument) {
-	isASiC, err := asic.ASiCUtilsIsASiC(toExtendDocument)
+	isASiC, err := asic.UtilsIsASiC(toExtendDocument)
 	if err != nil {
 		panic(err)
 	}
@@ -265,8 +265,8 @@ func (s *ASiCWithXAdESService) assertExtensionSupported(toExtendDocument model.D
 }
 
 // GetDetachedContents returns a detached contents to be used for a signature validation. Ports
-// the protected getDetachedContents(ASiCContent, boolean).
-func (s *ASiCWithXAdESService) GetDetachedContents(asicContent *asic.ASiCContent, isOpenDocument bool) []model.DSSDocument {
+// the protected getDetachedContents(Content, boolean).
+func (s *ASiCWithXAdESService) GetDetachedContents(asicContent *asic.Content, isOpenDocument bool) []model.DSSDocument {
 	if isOpenDocument {
 		return OpenDocumentSupportUtilsGetOpenDocumentCoverage(asicContent)
 	}
@@ -275,20 +275,20 @@ func (s *ASiCWithXAdESService) GetDetachedContents(asicContent *asic.ASiCContent
 
 // GetXAdESService returns the XAdESService to be used for signing. Ports the protected
 // getXAdESService().
-func (s *ASiCWithXAdESService) GetXAdESService() *dssxades.XAdESService {
+func (s *ASiCWithXAdESService) GetXAdESService() *dssxades.Service {
 	xadesService := dssxades.NewXAdESService(s.CertificateVerifier)
 	xadesService.SetTspSource(s.TspSource)
 	return xadesService
 }
 
-// getXAdESParameters returns an instance of XAdESSignatureParameters to be used for a signature
+// getXAdESParameters returns an instance of SignatureParameters to be used for a signature
 // file creation. Ports the private getXAdESParameters(ASiCWithXAdESSignatureParameters, List,
 // boolean).
 //
 // Panics with an *exception.IllegalInputException when more than one signature file is present
 // for an ASiC-S/OpenDocument container, or when the existing signature file is not valid XML.
 func (s *ASiCWithXAdESService) getXAdESParameters(parameters *ASiCWithXAdESSignatureParameters,
-	signatureDocuments []model.DSSDocument, openDocument bool) *dssxades.XAdESSignatureParameters {
+	signatureDocuments []model.DSSDocument, openDocument bool) *dssxades.SignatureParameters {
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 
 	var rootDocument *xmldom.Node
@@ -317,7 +317,7 @@ func (s *ASiCWithXAdESService) getXAdESParameters(parameters *ASiCWithXAdESSigna
 	}
 
 	parameters.SetRootDocument(rootDocument)
-	return &parameters.XAdESSignatureParameters
+	return &parameters.SignatureParameters
 }
 
 // buildDomRoot ports the private buildDomRoot(boolean).
@@ -374,7 +374,7 @@ func (s *ASiCWithXAdESService) AddSignaturePolicyStore(asicContainer model.DSSDo
 	for _, signature := range signatureDocuments {
 		signatureWithPolicyStore := xadesService.AddSignaturePolicyStore(signature, signaturePolicyStore)
 		signatureWithPolicyStore.SetName(signature.Name())
-		signatureDocuments = asic.ASiCUtilsAddOrReplaceDocument(signatureDocuments, signatureWithPolicyStore)
+		signatureDocuments = asic.UtilsAddOrReplaceDocument(signatureDocuments, signatureWithPolicyStore)
 		asicContent.SetSignatureDocuments(signatureDocuments)
 	}
 
@@ -391,11 +391,11 @@ func (s *ASiCWithXAdESService) AddSignaturePolicyStore(asicContainer model.DSSDo
 }
 
 // GetDataToBeCounterSigned ports the @Override
-// getDataToBeCounterSigned(DSSDocument, XAdESCounterSignatureParameters).
+// getDataToBeCounterSigned(DSSDocument, CounterSignatureParameters).
 //
 // Panics with Java's messages when a required argument is nil (Objects.requireNonNull).
 func (s *ASiCWithXAdESService) GetDataToBeCounterSigned(asicContainer model.DSSDocument,
-	parameters *dssxades.XAdESCounterSignatureParameters) *model.ToBeSigned {
+	parameters *dssxades.CounterSignatureParameters) *model.ToBeSigned {
 	if asicContainer == nil {
 		panic("asicContainer cannot be null!")
 	}
@@ -412,11 +412,11 @@ func (s *ASiCWithXAdESService) GetDataToBeCounterSigned(asicContainer model.DSSD
 }
 
 // CounterSignSignature ports the @Override
-// counterSignSignature(DSSDocument, XAdESCounterSignatureParameters, SignatureValue).
+// counterSignSignature(DSSDocument, CounterSignatureParameters, SignatureValue).
 //
 // Panics with Java's messages when a required argument is nil (Objects.requireNonNull).
 func (s *ASiCWithXAdESService) CounterSignSignature(asicContainer model.DSSDocument,
-	parameters *dssxades.XAdESCounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+	parameters *dssxades.CounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if asicContainer == nil {
 		panic("asicContainer cannot be null!")
 	}
@@ -436,7 +436,7 @@ func (s *ASiCWithXAdESService) CounterSignSignature(asicContainer model.DSSDocum
 	xadesService := s.GetXAdESService()
 	counterSignedSignature := xadesService.CounterSignSignature(signatureDocument, parameters, signatureValue)
 	counterSignedSignature.SetName(signatureDocument.Name())
-	asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), counterSignedSignature))
+	asicContent.SetSignatureDocuments(asic.UtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), counterSignedSignature))
 
 	var signingDate time.Time
 	if bLevelSigningDate := parameters.BLevel().SigningDate(); bLevelSigningDate != nil {
@@ -453,12 +453,12 @@ func (s *ASiCWithXAdESService) CounterSignSignature(asicContainer model.DSSDocum
 }
 
 // AddSignatureEvidenceRecord ports the @Override
-// addSignatureEvidenceRecord(DSSDocument, DSSDocument, XAdESEvidenceRecordIncorporationParameters).
+// addSignatureEvidenceRecord(DSSDocument, DSSDocument, EvidenceRecordIncorporationParameters).
 //
 // Panics with Java's messages when a required argument is nil (Objects.requireNonNull).
 func (s *ASiCWithXAdESService) AddSignatureEvidenceRecord(asicContainer model.DSSDocument,
 	evidenceRecordDocument model.DSSDocument,
-	parameters *dssxades.XAdESEvidenceRecordIncorporationParameters) model.DSSDocument {
+	parameters *dssxades.EvidenceRecordIncorporationParameters) model.DSSDocument {
 	if asicContainer == nil {
 		panic("The ASiC container cannot be null!")
 	}
@@ -478,7 +478,7 @@ func (s *ASiCWithXAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 	xadesService := s.GetXAdESService()
 	signatureWithEvidenceRecord := xadesService.AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDocument, parameters)
 	signatureWithEvidenceRecord.SetName(signatureDocument.Name())
-	asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), signatureWithEvidenceRecord))
+	asicContent.SetSignatureDocuments(asic.UtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), signatureWithEvidenceRecord))
 
 	resultArchive := s.BuildASiCContainer(asicContent)
 	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddEvidenceRecord,
@@ -491,12 +491,12 @@ func (s *ASiCWithXAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 }
 
 // AddContainerEvidenceRecord ports the @Override
-// addContainerEvidenceRecord(List, DSSDocument, ASiCContainerEvidenceRecordParameters).
+// addContainerEvidenceRecord(List, DSSDocument, ContainerEvidenceRecordParameters).
 //
 // Panics with Java's messages when a required argument is nil, undefined, or the document list
 // is empty.
 func (s *ASiCWithXAdESService) AddContainerEvidenceRecord(documents []model.DSSDocument,
-	evidenceRecordDocument model.DSSDocument, parameters *asic.ASiCContainerEvidenceRecordParameters) model.DSSDocument {
+	evidenceRecordDocument model.DSSDocument, parameters *asic.ContainerEvidenceRecordParameters) model.DSSDocument {
 	if evidenceRecordDocument == nil {
 		panic("The evidence record document cannot be null!")
 	}
@@ -528,16 +528,16 @@ func (s *ASiCWithXAdESService) AddContainerEvidenceRecord(documents []model.DSSD
 // AddContainerEvidenceRecordMultiple delegates to AddContainerEvidenceRecord; it exists to
 // satisfy asic.AbstractASiCSignatureServiceOverrides, whose name disambiguates Java's overload.
 func (s *ASiCWithXAdESService) AddContainerEvidenceRecordMultiple(documents []model.DSSDocument,
-	evidenceRecordDocument model.DSSDocument, parameters *asic.ASiCContainerEvidenceRecordParameters) model.DSSDocument {
+	evidenceRecordDocument model.DSSDocument, parameters *asic.ContainerEvidenceRecordParameters) model.DSSDocument {
 	return s.AddContainerEvidenceRecord(documents, evidenceRecordDocument, parameters)
 }
 
 // MultipleDocumentsService adapts this service to document.MultipleDocumentsSignatureService.
 // See the package-level note: Java's ASiCWithXAdESService implements that interface directly,
-// which Go cannot express on the same type because document.DocumentSignatureService declares
+// which Go cannot express on the same type because document.SignatureService declares
 // the same four method names with single-document parameters.
 func (s *ASiCWithXAdESService) MultipleDocumentsService() document.MultipleDocumentsSignatureService[
-	*ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters] {
+	*ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters] {
 	return &asicWithXAdESServiceMultipleDocumentsAdapter{service: s}
 }
 
@@ -573,8 +573,8 @@ func (a *asicWithXAdESServiceMultipleDocumentsAdapter) ExtendDocument(toExtendDo
 }
 
 func (a *asicWithXAdESServiceMultipleDocumentsAdapter) Timestamp(toTimestampDocuments []model.DSSDocument,
-	parameters *dssxades.XAdESTimestampParameters) model.DSSDocument {
+	parameters *dssxades.TimestampParameters) model.DSSDocument {
 	return a.service.TimestampMultiple(toTimestampDocuments, parameters)
 }
 
-var _ document.MultipleDocumentsSignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters] = (*asicWithXAdESServiceMultipleDocumentsAdapter)(nil)
+var _ document.MultipleDocumentsSignatureService[*ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters] = (*asicWithXAdESServiceMultipleDocumentsAdapter)(nil)

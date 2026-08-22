@@ -17,8 +17,8 @@ type CertificateQualificationForQWACBlock struct {
 }
 
 // NewCertificateQualificationForQWACBlock is the default constructor. Port
-// of CertificateQualificationForQWACBlock(I18nProvider, XmlConclusion, Date, CertificateWrapper, List).
-func NewCertificateQualificationForQWACBlock(i18nProvider *i18n.I18nProvider, buildingBlocksConclusion *jaxb.XmlConclusion,
+// of CertificateQualificationForQWACBlock(Provider, XmlConclusion, Date, CertificateWrapper, List).
+func NewCertificateQualificationForQWACBlock(i18nProvider *i18n.Provider, buildingBlocksConclusion *jaxb.XmlConclusion,
 	validationTime time.Time, signingCertificate *diagnostic.CertificateWrapper,
 	tlAnalysis []*jaxb.XmlTLAnalysis) *CertificateQualificationForQWACBlock {
 	c := &CertificateQualificationForQWACBlock{

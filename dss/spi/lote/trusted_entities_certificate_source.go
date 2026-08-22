@@ -26,7 +26,7 @@ type TrustedEntitiesCertificateSource struct {
 	spi.CommonTrustedCertificateSource
 
 	// summary is the TL Validation job summary.
-	summary *lote.LoTEValidationJobSummary
+	summary *lote.ValidationJobSummary
 
 	// trustPropertiesByEntity is the map of trust properties by EntityIdentifier (public
 	// keys), keyed by EntityIdentifier.AsXmlID().
@@ -47,12 +47,12 @@ func NewTrustedEntitiesCertificateSource() *TrustedEntitiesCertificateSource {
 }
 
 // Summary gets LoTE Validation job summary.
-func (s *TrustedEntitiesCertificateSource) Summary() *lote.LoTEValidationJobSummary {
+func (s *TrustedEntitiesCertificateSource) Summary() *lote.ValidationJobSummary {
 	return s.summary
 }
 
 // SetSummary sets LoTE Validation job summary.
-func (s *TrustedEntitiesCertificateSource) SetSummary(summary *lote.LoTEValidationJobSummary) {
+func (s *TrustedEntitiesCertificateSource) SetSummary(summary *lote.ValidationJobSummary) {
 	s.summary = summary
 }
 

@@ -3,7 +3,7 @@
 //
 // Java implements org.bouncycastle.operator.ContentSigner: getAlgorithmIdentifier() names the
 // signature algorithm, getOutputStream() is where a caller (BouncyCastle's
-// SignerInfoGeneratorBuilder, here CMSSignerInfoGeneratorBuilder.Build) writes the bytes that
+// SignerInfoGeneratorBuilder, here SignerInfoGeneratorBuilder.Build) writes the bytes that
 // would be signed, and getSignature() answers the signature - but always the pre-computed one
 // supplied at construction, regardless of what was written to the output stream. That is DSS's
 // two-step signing: the empty-signature form captures the exact bytes-to-be-sign

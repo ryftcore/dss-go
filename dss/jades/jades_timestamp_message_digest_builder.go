@@ -19,12 +19,12 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// JAdESTimestampMessageDigestBuilder builds the message-imprint digest for JAdES timestamps.
+// TimestampMessageDigestBuilder builds the message-imprint digest for JAdES timestamps.
 // Port of the class JAdESTimestampMessageDigestBuilder, implementing
-// timestamp.TimestampMessageDigestBuilder.
-type JAdESTimestampMessageDigestBuilder struct {
+// timestamp.MessageDigestBuilder.
+type TimestampMessageDigestBuilder struct {
 	// signature is the signature.
-	signature *JAdESSignature
+	signature *Signature
 
 	// digestAlgorithm is the digest algorithm to be used for message-imprint digest computation.
 	digestAlgorithm enumerations.DigestAlgorithm
@@ -37,17 +37,17 @@ type JAdESTimestampMessageDigestBuilder struct {
 	canonicalizationAlgorithm string
 
 	// timestampAttribute is the signature element containing the time-stamp token.
-	timestampAttribute *JAdESAttribute
+	timestampAttribute *Attribute
 }
 
 // newJAdESTimestampMessageDigestBuilder is the port of the private (JAdESSignature) constructor.
 //
 // Panics with the Java message when signature is nil (Objects.requireNonNull).
-func newJAdESTimestampMessageDigestBuilder(signature *JAdESSignature) *JAdESTimestampMessageDigestBuilder {
+func newJAdESTimestampMessageDigestBuilder(signature *Signature) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
 	}
-	return &JAdESTimestampMessageDigestBuilder{signature: signature}
+	return &TimestampMessageDigestBuilder{signature: signature}
 }
 
 // NewJAdESTimestampMessageDigestBuilder is the constructor to compute message-imprint for
@@ -55,7 +55,7 @@ func newJAdESTimestampMessageDigestBuilder(signature *JAdESSignature) *JAdESTime
 // DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewJAdESTimestampMessageDigestBuilder(signature *JAdESSignature, digestAlgorithm enumerations.DigestAlgorithm) *JAdESTimestampMessageDigestBuilder {
+func NewJAdESTimestampMessageDigestBuilder(signature *Signature, digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
 	b := newJAdESTimestampMessageDigestBuilder(signature)
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
@@ -69,7 +69,7 @@ func NewJAdESTimestampMessageDigestBuilder(signature *JAdESSignature, digestAlgo
 // TimestampToken) constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewJAdESTimestampMessageDigestBuilderForToken(signature *JAdESSignature, timestampToken *validation.TimestampToken) *JAdESTimestampMessageDigestBuilder {
+func NewJAdESTimestampMessageDigestBuilderForToken(signature *Signature, timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
 	b := newJAdESTimestampMessageDigestBuilder(signature)
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
@@ -82,21 +82,21 @@ func NewJAdESTimestampMessageDigestBuilderForToken(signature *JAdESSignature, ti
 
 // SetCanonicalizationAlgorithm sets the canonicalization algorithm to be used for message-digest
 // computation. Port of setCanonicalizationAlgorithm(String).
-func (b *JAdESTimestampMessageDigestBuilder) SetCanonicalizationAlgorithm(canonicalizationAlgorithm string) *JAdESTimestampMessageDigestBuilder {
+func (b *TimestampMessageDigestBuilder) SetCanonicalizationAlgorithm(canonicalizationAlgorithm string) *TimestampMessageDigestBuilder {
 	b.canonicalizationAlgorithm = canonicalizationAlgorithm
 	return b
 }
 
 // SetTimestampAttribute sets a signature attribute identifying the time-stamp token. Port of
-// setTimestampAttribute(JAdESAttribute).
-func (b *JAdESTimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttribute *JAdESAttribute) *JAdESTimestampMessageDigestBuilder {
+// setTimestampAttribute(Attribute).
+func (b *TimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttribute *Attribute) *TimestampMessageDigestBuilder {
 	b.timestampAttribute = timestampAttribute
 	return b
 }
 
 // ContentTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder. Port of
 // getContentTimestampMessageDigest().
-func (b *JAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.contentTimestampMessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR[_WITH_ID].
@@ -107,7 +107,7 @@ func (b *JAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() mod
 
 // contentTimestampMessageDigest is the fallible core of ContentTimestampMessageDigest. Port of
 // the try block of getContentTimestampMessageDigest().
-func (b *JAdESTimestampMessageDigestBuilder) contentTimestampMessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) contentTimestampMessageDigest() (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -119,7 +119,7 @@ func (b *JAdESTimestampMessageDigestBuilder) contentTimestampMessageDigest() (mo
 }
 
 // writeSignedDataBinaries ports the private writeSignedDataBinaries(DSSMessageDigestCalculator).
-func (b *JAdESTimestampMessageDigestBuilder) writeSignedDataBinaries(digestCalculator *spi.DSSMessageDigestCalculator) error {
+func (b *TimestampMessageDigestBuilder) writeSignedDataBinaries(digestCalculator *spi.DSSMessageDigestCalculator) error {
 	if sigDMechanism := b.signature.SigDMechanism(); sigDMechanism != nil {
 		return b.writeSigDReferencedOctets(digestCalculator, *sigDMechanism)
 	}
@@ -127,7 +127,7 @@ func (b *JAdESTimestampMessageDigestBuilder) writeSignedDataBinaries(digestCalcu
 }
 
 // writeJWSPayloadValue ports the private writeJWSPayloadValue(DSSMessageDigestCalculator).
-func (b *JAdESTimestampMessageDigestBuilder) writeJWSPayloadValue(digestCalculator *spi.DSSMessageDigestCalculator) error {
+func (b *TimestampMessageDigestBuilder) writeJWSPayloadValue(digestCalculator *spi.DSSMessageDigestCalculator) error {
 	var payload []byte
 	if b.signature.Jws().IsRfc7797UnencodedPayload() {
 		payload = b.signature.Jws().UnverifiedPayloadBytes()
@@ -143,7 +143,7 @@ func (b *JAdESTimestampMessageDigestBuilder) writeJWSPayloadValue(digestCalculat
 
 // writeSigDReferencedOctets ports the private writeSigDReferencedOctets(DSSMessageDigestCalculator,
 // SigDMechanism).
-func (b *JAdESTimestampMessageDigestBuilder) writeSigDReferencedOctets(digestCalculator *spi.DSSMessageDigestCalculator,
+func (b *TimestampMessageDigestBuilder) writeSigDReferencedOctets(digestCalculator *spi.DSSMessageDigestCalculator,
 	sigDMechanism enumerations.SigDMechanism) error {
 	switch sigDMechanism {
 	case enumerations.SigDMechanismHTTPHeaders:
@@ -168,7 +168,7 @@ func (b *JAdESTimestampMessageDigestBuilder) writeSigDReferencedOctets(digestCal
 
 // SignatureTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder. Port of
 // getSignatureTimestampMessageDigest().
-func (b *JAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) SignatureTimestampMessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.signatureTimestampMessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR[_WITH_ID].
@@ -182,7 +182,7 @@ func (b *JAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() m
 //
 // 5.3.4 The sigTst JSON object: the input of the message imprint computation for the time-stamp
 // tokens encapsulated by sigTst JSON object shall be the base64url-encoded JWS Signature Value.
-func (b *JAdESTimestampMessageDigestBuilder) signatureTimestampMessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) signatureTimestampMessageDigest() (model.DSSMessageDigest, error) {
 	signatureTimestampData := b.base64UrlEncodedSignatureValue()
 	digest, err := spi.DSSUtilsDigest(b.digestAlgorithm, signatureTimestampData)
 	if err != nil {
@@ -193,7 +193,7 @@ func (b *JAdESTimestampMessageDigestBuilder) signatureTimestampMessageDigest() (
 
 // TimestampX1MessageDigest implements timestamp.TimestampMessageDigestBuilder. Port of
 // getTimestampX1MessageDigest().
-func (b *JAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.timestampX1MessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR[_WITH_ID].
@@ -204,7 +204,7 @@ func (b *JAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DS
 
 // timestampX1MessageDigest is the fallible core of TimestampX1MessageDigest. Port of the try
 // block of getTimestampX1MessageDigest() (A.1.5.1 The sigRTst JSON object).
-func (b *JAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) timestampX1MessageDigest() (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -224,7 +224,7 @@ func (b *JAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.D
 	if DSSJsonUtilsCheckComponentsUnicity(etsiU) {
 		etsiUHeader := b.signature.EtsiUHeader()
 		for _, etsiUComponent := range etsiUHeader.Attributes() {
-			if b.timestampAttribute != nil && b.timestampAttribute.Equals(&etsiUComponent.JAdESAttribute) {
+			if b.timestampAttribute != nil && b.timestampAttribute.Equals(&etsiUComponent.Attribute) {
 				// the current timestamp is found, stop the iteration
 				break
 			}
@@ -255,7 +255,7 @@ func jadesTMDBIsAllowedTypeEntry(etsiUComponent *EtsiUComponent, allowedTypes ..
 
 // TimestampX2MessageDigest implements timestamp.TimestampMessageDigestBuilder. Port of
 // getTimestampX2MessageDigest().
-func (b *JAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.timestampX2MessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR[_WITH_ID].
@@ -266,7 +266,7 @@ func (b *JAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DS
 
 // timestampX2MessageDigest is the fallible core of TimestampX2MessageDigest. Port of the try
 // block of getTimestampX2MessageDigest() (A.1.5.2.2 The rfsTst JSON object).
-func (b *JAdESTimestampMessageDigestBuilder) timestampX2MessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) timestampX2MessageDigest() (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -295,7 +295,7 @@ func (b *JAdESTimestampMessageDigestBuilder) timestampX2MessageDigest() (model.D
 
 // ArchiveTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder. Port of
 // getArchiveTimestampMessageDigest() (5.3.6.3.1 Processing).
-func (b *JAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.archiveTimestampMessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR[_WITH_ID].
@@ -305,7 +305,7 @@ func (b *JAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() mod
 }
 
 // archiveTimestampMessageDigest is the fallible core of ArchiveTimestampMessageDigest.
-func (b *JAdESTimestampMessageDigestBuilder) archiveTimestampMessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) archiveTimestampMessageDigest() (model.DSSMessageDigest, error) {
 	jws := b.signature.Jws()
 
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
@@ -337,7 +337,7 @@ func (b *JAdESTimestampMessageDigestBuilder) archiveTimestampMessageDigest() (mo
 	if DSSJsonUtilsCheckComponentsUnicity(etsiU) {
 		etsiUHeader := b.signature.EtsiUHeader()
 		for _, etsiUComponent := range etsiUHeader.Attributes() {
-			if b.timestampAttribute != nil && b.timestampAttribute.Equals(&etsiUComponent.JAdESAttribute) {
+			if b.timestampAttribute != nil && b.timestampAttribute.Equals(&etsiUComponent.Attribute) {
 				// the timestamp is reached, stop the iteration
 				break
 			}
@@ -351,13 +351,13 @@ func (b *JAdESTimestampMessageDigestBuilder) archiveTimestampMessageDigest() (mo
 }
 
 // base64UrlEncodedSignatureValue ports the private getBase64UrlEncodedSignatureValue().
-func (b *JAdESTimestampMessageDigestBuilder) base64UrlEncodedSignatureValue() []byte {
+func (b *TimestampMessageDigestBuilder) base64UrlEncodedSignatureValue() []byte {
 	messageImprint := b.signature.Jws().EncodedSignature()
 	return []byte(messageImprint)
 }
 
 // etsiUComponentValue ports the private getEtsiUComponentValue(EtsiUComponent, String).
-func (b *JAdESTimestampMessageDigestBuilder) etsiUComponentValue(etsiUComponent *EtsiUComponent, canonicalizationMethod string) []byte {
+func (b *TimestampMessageDigestBuilder) etsiUComponentValue(etsiUComponent *EtsiUComponent, canonicalizationMethod string) []byte {
 	component := etsiUComponent.Component()
 	if etsiUComponent.IsBase64UrlEncoded() {
 		str, _ := component.(string)

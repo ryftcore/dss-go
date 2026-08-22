@@ -6,7 +6,7 @@
 // of the 189 fixtures copied verbatim from dss-asic-{common,cades,xades}, through BOTH per-format
 // stacks:
 //
-//   - ASiCWithCAdESContainerExtractor and ASiCWithXAdESContainerExtractor: the full ASiCContent
+//   - ASiCWithCAdESContainerExtractor and ASiCWithXAdESContainerExtractor: the full Content
 //     bucketing (container type, zip comment, mimetype document, and each of the ten document
 //     buckets plus the two derived views), compared by name and in order. A single entry landing
 //     in the wrong bucket silently changes what a signature is taken to cover.
@@ -165,12 +165,12 @@ func TestBroadCorpusExtractionMatchesUpstream(t *testing.T) {
 		for _, flavor := range []struct {
 			name    string
 			want    broadExtraction
-			extract func() (*asic.ASiCContent, error)
+			extract func() (*asic.Content, error)
 		}{
-			{"cades", fixture.CAdES, func() (*asic.ASiCContent, error) {
+			{"cades", fixture.CAdES, func() (*asic.Content, error) {
 				return asiccades.NewASiCWithCAdESContainerExtractor(document).Extract()
 			}},
-			{"xades", fixture.XAdES, func() (*asic.ASiCContent, error) {
+			{"xades", fixture.XAdES, func() (*asic.Content, error) {
 				return asicxades.NewASiCWithXAdESContainerExtractor(document).Extract()
 			}},
 		} {
@@ -207,7 +207,7 @@ func TestBroadCorpusManifestParsingMatchesUpstream(t *testing.T) {
 		document := broadLoadFixture(t, fixture.Path)
 
 		if fixture.CAdES.Error == nil {
-			content, errMessage := broadExtract(func() (*asic.ASiCContent, error) {
+			content, errMessage := broadExtract(func() (*asic.Content, error) {
 				return asiccades.NewASiCWithCAdESContainerExtractor(document).Extract()
 			})
 			if errMessage != "" {
@@ -226,7 +226,7 @@ func TestBroadCorpusManifestParsingMatchesUpstream(t *testing.T) {
 				cadesManifests++
 				manifest := manifests[i]
 				got, errMessage := broadParseManifest(func() *model.ManifestFile {
-					return asic.ASiCManifestParserGetManifestFile(manifest)
+					return asic.ManifestParserGetManifestFile(manifest)
 				})
 				for _, diff := range broadDiffManifest(want, got, errMessage) {
 					t.Errorf("%s [cades manifest %s]: %s", fixture.Path, want.Name, diff)
@@ -235,7 +235,7 @@ func TestBroadCorpusManifestParsingMatchesUpstream(t *testing.T) {
 		}
 
 		if fixture.XAdES.Error == nil {
-			content, errMessage := broadExtract(func() (*asic.ASiCContent, error) {
+			content, errMessage := broadExtract(func() (*asic.Content, error) {
 				return asicxades.NewASiCWithXAdESContainerExtractor(document).Extract()
 			})
 			if errMessage != "" {
@@ -275,7 +275,7 @@ func TestBroadCorpusLinkedManifestMatchesUpstream(t *testing.T) {
 			continue
 		}
 		document := broadLoadFixture(t, fixture.Path)
-		content, errMessage := broadExtract(func() (*asic.ASiCContent, error) {
+		content, errMessage := broadExtract(func() (*asic.Content, error) {
 			return asiccades.NewASiCWithCAdESContainerExtractor(document).Extract()
 		})
 		if errMessage != "" {
@@ -287,7 +287,7 @@ func TestBroadCorpusLinkedManifestMatchesUpstream(t *testing.T) {
 		for _, want := range fixture.LinkedManifests {
 			probes++
 			var got *string
-			linked := asic.ASiCManifestParserGetLinkedManifest(manifests, want.Signature)
+			linked := asic.ManifestParserGetLinkedManifest(manifests, want.Signature)
 			if linked != nil {
 				name := linked.Name()
 				got = &name
@@ -456,7 +456,7 @@ func broadLoadFixture(t *testing.T, rel string) model.DSSDocument {
 
 // broadExtract runs one extraction, funnelling both the returned error and a panic (the Go port
 // splits upstream's single exception channel between the two) into one message.
-func broadExtract(extract func() (*asic.ASiCContent, error)) (content *asic.ASiCContent, errMessage string) {
+func broadExtract(extract func() (*asic.Content, error)) (content *asic.Content, errMessage string) {
 	defer func() {
 		if r := recover(); r != nil {
 			content, errMessage = nil, panicMessage(r)
@@ -492,9 +492,9 @@ func errorMessageOrPlaceholder(err error) string {
 	return "error"
 }
 
-// broadDiffExtraction compares one ASiCContent against the oracle, returning one line per
+// broadDiffExtraction compares one Content against the oracle, returning one line per
 // mismatching field.
-func broadDiffExtraction(want broadExtraction, got *asic.ASiCContent) []string {
+func broadDiffExtraction(want broadExtraction, got *asic.Content) []string {
 	var diffs []string
 	compare := func(field, wantValue, gotValue string) {
 		if wantValue != gotValue {

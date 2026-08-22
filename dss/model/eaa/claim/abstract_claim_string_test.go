@@ -68,8 +68,8 @@ func TestAbstractClaimStringMatchesJava(t *testing.T) {
 func TestEveryConcreteClaimImplementsString(t *testing.T) {
 	// The Java classes that extend AbstractClaim, and therefore inherit toString().
 	concrete := []any{
-		&ClaimArray{}, &ClaimBoolean{}, &ClaimByteString{}, &ClaimDate{},
-		&ClaimMap{}, &ClaimNull{}, &ClaimNumber{}, &ClaimString{},
+		&Array{}, &Boolean{}, &ByteString{}, &Date{},
+		&Map{}, &Null{}, &Number{}, &String{},
 	}
 	for _, c := range concrete {
 		if _, ok := c.(interface{ String() string }); !ok {

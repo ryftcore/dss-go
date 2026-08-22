@@ -46,7 +46,7 @@ type SignedDocumentExtenderBase struct {
 
 	// Services are (optional) document signature services. When defined, the applicable
 	// instance of a corresponding service will be used. If no suitable service found, a new
-	// service instance will be created. Each element is a DocumentSignatureService[SP, TP] for
+	// service instance will be created. Each element is a SignatureService[SP, TP] for
 	// some format-specific SP/TP - Go generics have no wildcard/existential type to express
 	// Java's DocumentSignatureService<?, ?>[], so this is untyped here and type-asserted by
 	// AbstractDocumentExtender's InitSignatureService.

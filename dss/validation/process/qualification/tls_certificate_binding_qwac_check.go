@@ -19,8 +19,8 @@ type TLSCertificateBindingQWACCheck struct {
 }
 
 // NewTLSCertificateBindingQWACCheck is the default constructor. Port of
-// TLSCertificateBindingQWACCheck(I18nProvider, XmlValidationQWACProcess, QWACProfile, LevelRule).
-func NewTLSCertificateBindingQWACCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// TLSCertificateBindingQWACCheck(Provider, XmlValidationQWACProcess, QWACProfile, LevelRule).
+func NewTLSCertificateBindingQWACCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	qwacProfile enumerations.QWACProfile, constraint policy.LevelRule) *TLSCertificateBindingQWACCheck {
 	c := &TLSCertificateBindingQWACCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -21,7 +21,7 @@ type EAARevocationIssuerValidAtIssuanceTimeCheck struct {
 }
 
 // NewEAARevocationIssuerValidAtIssuanceTimeCheck is the default constructor.
-func NewEAARevocationIssuerValidAtIssuanceTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationIssuerValidAtIssuanceTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, constraint policy.LevelRule) *EAARevocationIssuerValidAtIssuanceTimeCheck {
 	c := &EAARevocationIssuerValidAtIssuanceTimeCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

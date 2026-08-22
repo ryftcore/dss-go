@@ -20,8 +20,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESSerializationBuilder builds a JWS JSON Serialization signature.
-type JAdESSerializationBuilder struct {
+// SerializationBuilder builds a JWS JSON Serialization signature.
+type SerializationBuilder struct {
 	AbstractJAdESBuilder
 
 	// jwsJsonSerializationObject is the JWS signature container.
@@ -32,9 +32,9 @@ type JAdESSerializationBuilder struct {
 // Port of JAdESSerializationBuilder(CertificateVerifier, JAdESSignatureParameters,
 // List<DSSDocument>).
 func NewJAdESSerializationBuilder(certificateVerifier validation.CertificateVerifier,
-	parameters *JAdESSignatureParameters,
-	documentsToSign []model.DSSDocument) (*JAdESSerializationBuilder, error) {
-	builder := &JAdESSerializationBuilder{}
+	parameters *SignatureParameters,
+	documentsToSign []model.DSSDocument) (*SerializationBuilder, error) {
+	builder := &SerializationBuilder{}
 	if err := builder.InitAbstractJAdESBuilder(builder, certificateVerifier, parameters,
 		documentsToSign); err != nil {
 		return nil, err
@@ -46,14 +46,14 @@ func NewJAdESSerializationBuilder(certificateVerifier validation.CertificateVeri
 // Port of JAdESSerializationBuilder(CertificateVerifier, JAdESSignatureParameters,
 // JWSJsonSerializationObject).
 func NewJAdESSerializationBuilderFromSignature(certificateVerifier validation.CertificateVerifier,
-	parameters *JAdESSignatureParameters,
-	jwsJsonSerializationObject *JWSJsonSerializationObject) (*JAdESSerializationBuilder, error) {
+	parameters *SignatureParameters,
+	jwsJsonSerializationObject *JWSJsonSerializationObject) (*SerializationBuilder, error) {
 	documentsToSign, err := jadesSerializationBuilderExtractDocumentToBeSigned(parameters,
 		jwsJsonSerializationObject)
 	if err != nil {
 		return nil, err
 	}
-	builder := &JAdESSerializationBuilder{}
+	builder := &SerializationBuilder{}
 	if err := builder.InitAbstractJAdESBuilder(builder, certificateVerifier, parameters,
 		documentsToSign); err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func NewJAdESSerializationBuilderFromSignature(certificateVerifier validation.Ce
 
 // jadesSerializationBuilderExtractDocumentToBeSigned ports the private static
 // extractDocumentToBeSigned.
-func jadesSerializationBuilderExtractDocumentToBeSigned(parameters *JAdESSignatureParameters,
+func jadesSerializationBuilderExtractDocumentToBeSigned(parameters *SignatureParameters,
 	jwsJsonSerializationObject *JWSJsonSerializationObject) ([]model.DSSDocument, error) {
 	if utils.IsStringNotBlank(jwsJsonSerializationObject.Payload()) {
 		// enveloping signature
@@ -87,7 +87,7 @@ func jadesSerializationBuilderExtractDocumentToBeSigned(parameters *JAdESSignatu
 }
 
 // Build builds the JWS JSON Serialization signature. Port of #build(SignatureValue).
-func (b *JAdESSerializationBuilder) Build(signatureValue *model.SignatureValue) (model.DSSDocument, error) {
+func (b *SerializationBuilder) Build(signatureValue *model.SignatureValue) (model.DSSDocument, error) {
 	if err := b.AssertConfigurationValidity(b.Parameters); err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func (b *JAdESSerializationBuilder) Build(signatureValue *model.SignatureValue) 
 
 // assertB64ConfigurationConsistent checks that all not detached signatures have the same 'b64'
 // value. Port of the private assertB64ConfigurationConsistent.
-func (b *JAdESSerializationBuilder) assertB64ConfigurationConsistent() error {
+func (b *SerializationBuilder) assertB64ConfigurationConsistent() error {
 	// verify only for non-detached cases
 	if enumerations.SignaturePackagingDetached != b.Parameters.SignaturePackaging() {
 		base64UrlEncodedPayload := b.Parameters.IsBase64UrlEncodedPayload()
@@ -142,7 +142,7 @@ func (b *JAdESSerializationBuilder) assertB64ConfigurationConsistent() error {
 }
 
 // jws ports the private getJWS.
-func (b *JAdESSerializationBuilder) jws() (*JWS, error) {
+func (b *SerializationBuilder) jws() (*JWS, error) {
 	jws := NewJWS()
 	if err := b.IncorporateHeader(jws); err != nil {
 		return nil, err
@@ -154,15 +154,15 @@ func (b *JAdESSerializationBuilder) jws() (*JWS, error) {
 }
 
 // MimeType returns the MimeType of the produced signature. Port of #getMimeType.
-func (b *JAdESSerializationBuilder) MimeType() enumerations.MimeType {
+func (b *SerializationBuilder) MimeType() enumerations.MimeType {
 	return enumerations.MimeTypeEnumJOSEJSON
 }
 
 // AssertConfigurationValidity verifies that the configured signature packaging and serialization
 // type are supported by a JWS JSON Serialization signature.
 // Port of the protected, overridden #assertConfigurationValidity.
-func (b *JAdESSerializationBuilder) AssertConfigurationValidity(
-	signatureParameters *JAdESSignatureParameters) error {
+func (b *SerializationBuilder) AssertConfigurationValidity(
+	signatureParameters *SignatureParameters) error {
 	packaging := signatureParameters.SignaturePackaging()
 	if packaging != enumerations.SignaturePackagingEnveloping &&
 		packaging != enumerations.SignaturePackagingDetached {
@@ -176,5 +176,5 @@ func (b *JAdESSerializationBuilder) AssertConfigurationValidity(
 	return nil
 }
 
-// Compile-time assertion that *JAdESSerializationBuilder satisfies the builder contract.
-var _ JAdESBuilder = (*JAdESSerializationBuilder)(nil)
+// Compile-time assertion that *SerializationBuilder satisfies the builder contract.
+var _ Builder = (*SerializationBuilder)(nil)

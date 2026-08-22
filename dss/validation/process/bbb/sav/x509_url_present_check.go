@@ -21,8 +21,8 @@ type X509UrlPresentCheck struct {
 }
 
 // NewX509UrlPresentCheck is the default constructor. Port of
-// X509UrlPresentCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewX509UrlPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// X509UrlPresentCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewX509UrlPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *X509UrlPresentCheck {
 	c := &X509UrlPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

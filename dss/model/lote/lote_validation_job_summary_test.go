@@ -11,11 +11,11 @@ func TestNewLoTEValidationJobSummaryErrorsWhenEmpty(t *testing.T) {
 func TestLoTEValidationJobSummaryRoundTrip(t *testing.T) {
 	lolote := NewLoLoTEInfo(nil, nil, nil, "https://example.org/lolote.xml")
 	child := NewLoTEInfoWithParent(nil, nil, nil, "https://example.org/child.xml", lolote)
-	lolote.SetChildrenInfos([]*LoTEInfo{child})
+	lolote.SetChildrenInfos([]*Info{child})
 
 	other := NewLoTEInfo(nil, nil, nil, "https://example.org/other.xml")
 
-	summary, err := NewLoTEValidationJobSummary([]*LoLoTEInfo{lolote}, []*LoTEInfo{other})
+	summary, err := NewLoTEValidationJobSummary([]*LoLoTEInfo{lolote}, []*Info{other})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

@@ -191,7 +191,7 @@ func dssSignerInformationVerifierSecurityFactoryBuild(publicKey *model.PublicKey
 	// certificate resolved for it - e.g. a PDF revision whose CMS SignerInfo names a certificate
 	// this port never located). Upstream's PUBLIC_TOKEN_INSTANCE.buildWithProvider(null, ...)
 	// passes a null PublicKey straight into BouncyCastle's JcaSimpleSignerInfoVerifierBuilder
-	// without a null check either, relying entirely on CAdESSignatureIntegrityValidator.verify's
+	// without a null check either, relying entirely on SignatureIntegrityValidator.verify's
 	// own "catch (Exception e)" to turn whatever BC throws into a graceful DSSException - so a
 	// panic here (as this used to do) turns a candidate correctly rejected as "not the signing
 	// certificate" into a process-ending crash the moment a PDF/CMS carries more than one signer

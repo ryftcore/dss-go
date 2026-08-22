@@ -12,24 +12,24 @@ import (
 )
 
 // JAdESCRLSource extracts and stores CRLs from a JAdES signature. Port of the class
-// JAdESCRLSource, extending spi.OfflineCRLSourceBase.
-type JAdESCRLSource struct {
+// CRLSource, extending spi.OfflineCRLSourceBase.
+type CRLSource struct {
 	spi.OfflineCRLSourceBase
 
 	// etsiUHeader represents the unsigned 'etsiU' header. Port of the private transient final
-	// JAdESEtsiUHeader etsiUHeader field.
-	etsiUHeader *JAdESEtsiUHeader
+	// EtsiUHeader etsiUHeader field.
+	etsiUHeader *EtsiUHeader
 }
 
 // NewJAdESCRLSource is the default constructor. Port of the public JAdESCRLSource(JAdESEtsiUHeader)
 // constructor.
 //
 // Panics with the Java message when etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESCRLSource(etsiUHeader *JAdESEtsiUHeader) *JAdESCRLSource {
+func NewJAdESCRLSource(etsiUHeader *EtsiUHeader) *CRLSource {
 	if etsiUHeader == nil {
 		panic("etsiUComponents cannot be null")
 	}
-	s := &JAdESCRLSource{
+	s := &CRLSource{
 		OfflineCRLSourceBase: spi.NewOfflineCRLSourceBase(),
 		etsiUHeader:          etsiUHeader,
 	}
@@ -40,7 +40,7 @@ func NewJAdESCRLSource(etsiUHeader *JAdESEtsiUHeader) *JAdESCRLSource {
 	return s
 }
 
-func (s *JAdESCRLSource) extractEtsiU() {
+func (s *CRLSource) extractEtsiU() {
 	if !s.etsiUHeader.IsExist() {
 		return
 	}
@@ -56,29 +56,29 @@ func (s *JAdESCRLSource) extractEtsiU() {
 	}
 }
 
-func (s *JAdESCRLSource) extractRevocationValues(attribute *EtsiUComponent) {
+func (s *CRLSource) extractRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRVals == attribute.HeaderName() {
 		s.extractCRLValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRVals),
 			enumerations.RevocationOriginRevocationValues)
 	}
 }
 
-func (s *JAdESCRLSource) extractAttributeRevocationValues(attribute *EtsiUComponent) {
+func (s *CRLSource) extractAttributeRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArVals == attribute.HeaderName() {
 		s.extractCRLValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArVals),
 			enumerations.RevocationOriginAttributeRevocationValues)
 	}
 }
 
-func (s *JAdESCRLSource) extractTimestampValidationData(attribute *EtsiUComponent) {
+func (s *CRLSource) extractTimestampValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesTstVD, enumerations.RevocationOriginTimestampValidationData)
 }
 
-func (s *JAdESCRLSource) extractAnyValidationData(attribute *EtsiUComponent) {
+func (s *CRLSource) extractAnyValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesAnyValData, enumerations.RevocationOriginAnyValidationData)
 }
 
-func (s *JAdESCRLSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.RevocationOrigin) {
+func (s *CRLSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.RevocationOrigin) {
 	if headerName == attribute.HeaderName() {
 		tstVd := DSSJsonUtilsToMap(attribute.Value(), headerName)
 		if tstVd.Size() != 0 {
@@ -90,21 +90,21 @@ func (s *JAdESCRLSource) extractValidationData(attribute *EtsiUComponent, header
 	}
 }
 
-func (s *JAdESCRLSource) extractCompleteRevocationRefs(attribute *EtsiUComponent) {
+func (s *CRLSource) extractCompleteRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRRefs == attribute.HeaderName() {
 		s.extractCRLReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRRefs),
 			enumerations.RevocationRefOriginCompleteRevocationRefs)
 	}
 }
 
-func (s *JAdESCRLSource) extractAttributeRevocationRefs(attribute *EtsiUComponent) {
+func (s *CRLSource) extractAttributeRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArRefs == attribute.HeaderName() {
 		s.extractCRLReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArRefs),
 			enumerations.RevocationRefOriginAttributeRevocationRefs)
 	}
 }
 
-func (s *JAdESCRLSource) extractCRLValues(rVals *jose.Object, origin enumerations.RevocationOrigin) {
+func (s *CRLSource) extractCRLValues(rVals *jose.Object, origin enumerations.RevocationOrigin) {
 	crlVals := DSSJsonUtilsGetAsList(rVals, JAdESHeaderParameterNamesCrlVals)
 	for _, item := range crlVals {
 		pkiOb := DSSJsonUtilsToMap(item, JAdESHeaderParameterNamesPkiOb)
@@ -112,7 +112,7 @@ func (s *JAdESCRLSource) extractCRLValues(rVals *jose.Object, origin enumeration
 	}
 }
 
-func (s *JAdESCRLSource) extractCRLFromPkiOb(pkiOb *jose.Object, origin enumerations.RevocationOrigin) {
+func (s *CRLSource) extractCRLFromPkiOb(pkiOb *jose.Object, origin enumerations.RevocationOrigin) {
 	if pkiOb.Size() != 0 {
 		encoding := DSSJsonUtilsGetAsString(pkiOb, JAdESHeaderParameterNamesEncoding)
 		if utils.IsStringEmpty(encoding) || utils.AreStringsEqual(enumerations.PKIEncodingDER.URI(), encoding) {
@@ -126,7 +126,7 @@ func (s *JAdESCRLSource) extractCRLFromPkiOb(pkiOb *jose.Object, origin enumerat
 	}
 }
 
-func (s *JAdESCRLSource) add(crlValueDerB64 string, origin enumerations.RevocationOrigin) {
+func (s *CRLSource) add(crlValueDerB64 string, origin enumerations.RevocationOrigin) {
 	crlBinary, err := crlparser.CRLUtilsBuildCRLBinary(utils.FromBase64(crlValueDerB64))
 	if err != nil {
 		// Upstream logs "Unable to extract CRL from '{}'. Reason : {}".
@@ -135,12 +135,12 @@ func (s *JAdESCRLSource) add(crlValueDerB64 string, origin enumerations.Revocati
 	s.AddBinary(crlBinary, origin)
 }
 
-func (s *JAdESCRLSource) extractCRLReferences(rRefs *jose.Object, origin enumerations.RevocationRefOrigin) {
+func (s *CRLSource) extractCRLReferences(rRefs *jose.Object, origin enumerations.RevocationRefOrigin) {
 	crlRefs := DSSJsonUtilsGetAsList(rRefs, JAdESHeaderParameterNamesCrlRefs)
 	for _, item := range crlRefs {
 		crlRefMap := DSSJsonUtilsToMapValue(item)
 		if crlRefMap.Size() != 0 {
-			crlRef := JAdESRevocationRefExtractionUtilsCreateCRLRef(crlRefMap)
+			crlRef := RevocationRefExtractionUtilsCreateCRLRef(crlRefMap)
 			if crlRef != nil {
 				s.AddRevocationReference(crlRef, origin)
 			}
@@ -148,5 +148,5 @@ func (s *JAdESCRLSource) extractCRLReferences(rRefs *jose.Object, origin enumera
 	}
 }
 
-// compile-time assertion: a JAdESCRLSource satisfies spi.OfflineRevocationSourceOverrides.
-var _ spi.OfflineRevocationSourceOverrides[revocation.CRL] = (*JAdESCRLSource)(nil)
+// compile-time assertion: a CRLSource satisfies spi.OfflineRevocationSourceOverrides.
+var _ spi.OfflineRevocationSourceOverrides[revocation.CRL] = (*CRLSource)(nil)

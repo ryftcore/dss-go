@@ -25,15 +25,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESSignaturePolicyStoreBuilder is the builder used to incorporate a SignaturePolicyStore into
-// a JAdESSignature document.
-type JAdESSignaturePolicyStoreBuilder struct {
-	JAdESExtensionBuilder
+// SignaturePolicyStoreBuilder is the builder used to incorporate a SignaturePolicyStore into
+// a Signature document.
+type SignaturePolicyStoreBuilder struct {
+	ExtensionBuilder
 }
 
 // NewJAdESSignaturePolicyStoreBuilder is the default constructor.
-func NewJAdESSignaturePolicyStoreBuilder() *JAdESSignaturePolicyStoreBuilder {
-	return &JAdESSignaturePolicyStoreBuilder{}
+func NewJAdESSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
+	return &SignaturePolicyStoreBuilder{}
 }
 
 // AddSignaturePolicyStore adds signaturePolicyStore to all signatures inside the document
@@ -41,7 +41,7 @@ func NewJAdESSignaturePolicyStoreBuilder() *JAdESSignaturePolicyStoreBuilder {
 // store shall be incorporated as a base64url-encoded component of the 'etsiU' header, FALSE when
 // it shall be incorporated in its clear JSON representation.
 // Port of #addSignaturePolicyStore(DSSDocument, SignaturePolicyStore, boolean).
-func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStore(doc model.DSSDocument,
+func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStore(doc model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore, base64UrlInstance bool) (model.DSSDocument, error) {
 	if doc == nil {
 		panic("Signature document must be provided!")
@@ -60,7 +60,7 @@ func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStore(doc model.DSS
 
 	signaturePolicyStoreAdded := false
 	for _, signature := range signatures {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -84,7 +84,7 @@ func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStore(doc model.DSS
 // AddSignaturePolicyStoreForSignature adds signaturePolicyStore to the signature inside the
 // document with the given signatureId.
 // Port of #addSignaturePolicyStore(DSSDocument, SignaturePolicyStore, boolean, String).
-func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(doc model.DSSDocument,
+func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(doc model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore, base64UrlInstance bool,
 	signatureId string) (model.DSSDocument, error) {
 	if doc == nil {
@@ -105,7 +105,7 @@ func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(d
 		return nil, exception.NewIllegalInputException(fmt.Sprintf(
 			"Unable to find a signature with Id : %s!", signatureId))
 	}
-	jadesSignature, ok := signature.(*JAdESSignature)
+	jadesSignature, ok := signature.(*Signature)
 	if !ok {
 		return nil, fmt.Errorf("unexpected signature type %T", signature)
 	}
@@ -128,8 +128,8 @@ func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(d
 // AddSignaturePolicyStoreIfDigestMatch adds the SignaturePolicyStore to jadesSignature if
 // required, and reports whether it has been added.
 // Port of the protected #addSignaturePolicyStoreIfDigestMatch.
-func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
-	jadesSignature *JAdESSignature, signaturePolicyStore *model.SignaturePolicyStore,
+func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
+	jadesSignature *Signature, signaturePolicyStore *model.SignaturePolicyStore,
 	base64UrlInstance bool, documentAnalyzer *AbstractJWSDocumentAnalyzer) (bool, error) {
 	if _, err := b.AssertEtsiUComponentsConsistentWithEncoding(jadesSignature.Jws(),
 		&base64UrlInstance); err != nil {
@@ -177,7 +177,7 @@ func (b *JAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
 // CheckDigest verifies that the digests computed in the provided SignaturePolicyStore match the
 // digest defined in the incorporated signature policy identifier.
 // Port of the protected #checkDigest.
-func (b *JAdESSignaturePolicyStoreBuilder) CheckDigest(jadesSignature *JAdESSignature,
+func (b *SignaturePolicyStoreBuilder) CheckDigest(jadesSignature *Signature,
 	signaturePolicyStore *model.SignaturePolicyStore,
 	documentAnalyzer *AbstractJWSDocumentAnalyzer) (bool, error) {
 	signaturePolicy := jadesSignature.SignaturePolicy()

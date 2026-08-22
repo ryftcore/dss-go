@@ -18,7 +18,7 @@ import (
 )
 
 // DefaultContentSize is the reserved /Contents size in bytes (R17), matching
-// both PAdESSignatureParameters.signatureSize and
+// both SignatureParameters.signatureSize and
 // SignatureOptions.DEFAULT_SIGNATURE_SIZE upstream.
 const DefaultContentSize = 9472
 

@@ -12,10 +12,10 @@ import (
 	spiscope "github.com/ryftcore/dss-go/dss/spi/validation/scope"
 )
 
-// CAdESEvidenceRecordScopeFinder builds a list of covered scopes for a CAdES embedded
+// EvidenceRecordScopeFinder builds a list of covered scopes for a CAdES embedded
 // Evidence Record. Port of the class CAdESEvidenceRecordScopeFinder, extending
 // spiscope.EvidenceRecordScopeFinder.
-type CAdESEvidenceRecordScopeFinder struct {
+type EvidenceRecordScopeFinder struct {
 	spiscope.EvidenceRecordScopeFinder
 
 	// signature is the signature to cover.
@@ -23,9 +23,9 @@ type CAdESEvidenceRecordScopeFinder struct {
 }
 
 // NewCAdESEvidenceRecordScopeFinder is the port of the constructor
-// CAdESEvidenceRecordScopeFinder(EvidenceRecord, AdvancedSignature).
-func NewCAdESEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) *CAdESEvidenceRecordScopeFinder {
-	return &CAdESEvidenceRecordScopeFinder{
+// EvidenceRecordScopeFinder(EvidenceRecord, AdvancedSignature).
+func NewCAdESEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) *EvidenceRecordScopeFinder {
+	return &EvidenceRecordScopeFinder{
 		EvidenceRecordScopeFinder: *spiscope.NewEvidenceRecordScopeFinder(evidenceRecord),
 		signature:                 signature,
 	}
@@ -33,7 +33,7 @@ func NewCAdESEvidenceRecordScopeFinder(evidenceRecord validation.EvidenceRecord,
 
 // FindEvidenceRecordScope returns a list of covered scopes for the CAdES embedded Evidence
 // Record. Port of the findEvidenceRecordScope() override.
-func (f *CAdESEvidenceRecordScopeFinder) FindEvidenceRecordScope() []mscope.SignatureScope {
+func (f *EvidenceRecordScopeFinder) FindEvidenceRecordScope() []mscope.SignatureScope {
 	evidenceRecordScopes := f.EvidenceRecordScopeFinder.FindEvidenceRecordScope()
 	if f.IsSignatureEmbeddedAndValid(f.EvidenceRecord) && f.isSignatureCovered(f.EvidenceRecord, f.signature) {
 		evidenceRecordScopes = append(evidenceRecordScopes,
@@ -43,16 +43,16 @@ func (f *CAdESEvidenceRecordScopeFinder) FindEvidenceRecordScope() []mscope.Sign
 }
 
 // isSignatureCovered ports the private isSignatureCovered(EvidenceRecord, AdvancedSignature).
-func (f *CAdESEvidenceRecordScopeFinder) isSignatureCovered(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) bool {
-	masterSignature := evidenceRecord.MasterSignature().(*CAdESSignature)
-	cadesSignature := signature.(*CAdESSignature)
+func (f *EvidenceRecordScopeFinder) isSignatureCovered(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) bool {
+	masterSignature := evidenceRecord.MasterSignature().(*Signature)
+	cadesSignature := signature.(*Signature)
 	return masterSignature.CMS() == cadesSignature.CMS()
 }
 
 // getCAdESSignatureDocument ports the private getCAdESSignatureDocument(AdvancedSignature).
 // TODO (upstream): improve?
-func (f *CAdESEvidenceRecordScopeFinder) getCAdESSignatureDocument(signature validation.AdvancedSignature) model.DSSDocument {
-	cadesSignature := signature.(*CAdESSignature)
+func (f *EvidenceRecordScopeFinder) getCAdESSignatureDocument(signature validation.AdvancedSignature) model.DSSDocument {
+	cadesSignature := signature.(*Signature)
 	derEncoded := cadesSignature.SignerInformation().DER()
 	return f.CreateInMemoryDocument(derEncoded)
 }

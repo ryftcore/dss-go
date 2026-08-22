@@ -42,7 +42,7 @@ func pdfSignatureFieldExtractFieldName(sigFieldDict PdfDict) string {
 func pdfSignatureFieldExtractLockDictionary(sigFieldDict PdfDict) *SigFieldPermissions {
 	lock := sigFieldDict.AsDict(PAdESConstantsLockName)
 	if lock != nil {
-		return PAdESUtilsExtractPermissionsDictionary(lock)
+		return UtilsExtractPermissionsDictionary(lock)
 	}
 	return nil
 }

@@ -25,7 +25,7 @@ type EAARevocationNotExpiredCheck struct {
 }
 
 // NewEAARevocationNotExpiredCheck is the default constructor.
-func NewEAARevocationNotExpiredCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationNotExpiredCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, validationTime time.Time,
 	constraint policy.LevelRule) *EAARevocationNotExpiredCheck {
 	c := &EAARevocationNotExpiredCheck{

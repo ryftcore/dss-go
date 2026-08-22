@@ -22,10 +22,10 @@ const abstractASiCContentBuilderZipEntryDetachedFile = "detached-file"
 type AbstractASiCContentBuilderOverrides interface {
 	// GetContainerExtractor returns an instance of a corresponding container extractor class.
 	// Port of the protected abstract getContainerExtractor(DSSDocument).
-	GetContainerExtractor(archiveDocument model.DSSDocument) ASiCContainerExtractor
+	GetContainerExtractor(archiveDocument model.DSSDocument) ContainerExtractor
 }
 
-// AbstractASiCContentBuilder builds an instance of ASiCContent. As input, an ASiC Container can
+// AbstractASiCContentBuilder builds an instance of Content. As input, an ASiC Container can
 // be used or documents to be signed.
 type AbstractASiCContentBuilder struct {
 	// overrides points back at the concrete builder; see InitAbstractASiCContentBuilder.
@@ -52,13 +52,13 @@ func (b *AbstractASiCContentBuilder) requireOverrides() AbstractASiCContentBuild
 	return b.overrides
 }
 
-// Build builds the ASiCContent from the given documents, representing an ASiC Container or a
+// Build builds the Content from the given documents, representing an ASiC Container or a
 // list of documents to be signed, and the target asicContainerType. Ports
 // build(List, ASiCContainerType).
-func (b *AbstractASiCContentBuilder) Build(documents []model.DSSDocument, asicContainerType enumerations.ASiCContainerType) *ASiCContent {
+func (b *AbstractASiCContentBuilder) Build(documents []model.DSSDocument, asicContainerType enumerations.ASiCContainerType) *Content {
 	if utils.IsCollectionNotEmpty(documents) && len(documents) == 1 {
 		archiveDocument := documents[0]
-		isASiC, err := ASiCUtilsIsASiC(archiveDocument)
+		isASiC, err := UtilsIsASiC(archiveDocument)
 		if err != nil {
 			panic(err)
 		}
@@ -73,7 +73,7 @@ func (b *AbstractASiCContentBuilder) Build(documents []model.DSSDocument, asicCo
 }
 
 // fromZipArchive ports the private fromZipArchive(ASiCContainerExtractor, ASiCContainerType).
-func (b *AbstractASiCContentBuilder) fromZipArchive(extractor ASiCContainerExtractor, asicContainerType enumerations.ASiCContainerType) *ASiCContent {
+func (b *AbstractASiCContentBuilder) fromZipArchive(extractor ContainerExtractor, asicContainerType enumerations.ASiCContainerType) *Content {
 	asicContent, err := extractor.Extract()
 	if err != nil {
 		panic(err)
@@ -83,7 +83,7 @@ func (b *AbstractASiCContentBuilder) fromZipArchive(extractor ASiCContainerExtra
 }
 
 // fromFiles ports the private fromFiles(List, ASiCContainerType).
-func (b *AbstractASiCContentBuilder) fromFiles(documents []model.DSSDocument, asicContainerType enumerations.ASiCContainerType) *ASiCContent {
+func (b *AbstractASiCContentBuilder) fromFiles(documents []model.DSSDocument, asicContainerType enumerations.ASiCContainerType) *Content {
 	b.assertDocumentNamesDefined(documents)
 
 	asicContent := NewASiCContent()
@@ -95,8 +95,8 @@ func (b *AbstractASiCContentBuilder) fromFiles(documents []model.DSSDocument, as
 
 // assertContainerTypeValid ports the private assertContainerTypeValid(ASiCContent,
 // ASiCContainerType).
-func (b *AbstractASiCContentBuilder) assertContainerTypeValid(result *ASiCContent, asicContainerType enumerations.ASiCContainerType) {
-	if ASiCUtilsFilesContainSignatures(spi.DSSUtilsDocumentNames(result.AllDocuments())) &&
+func (b *AbstractASiCContentBuilder) assertContainerTypeValid(result *Content, asicContainerType enumerations.ASiCContainerType) {
+	if UtilsFilesContainSignatures(spi.DSSUtilsDocumentNames(result.AllDocuments())) &&
 		utils.IsCollectionEmpty(result.SignatureDocuments()) {
 		panic("Container type doesn't match! The same container type shall be chosen.")
 	}

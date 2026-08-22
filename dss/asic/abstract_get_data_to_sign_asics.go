@@ -10,7 +10,7 @@ type AbstractGetDataToSignASiCS struct {
 }
 
 // NewAbstractGetDataToSignASiCS is the default constructor. Ports
-// AbstractGetDataToSignASiCS(ASiCContent).
-func NewAbstractGetDataToSignASiCS(asicContent *ASiCContent) AbstractGetDataToSignASiCS {
+// AbstractGetDataToSignASiCS(Content).
+func NewAbstractGetDataToSignASiCS(asicContent *Content) AbstractGetDataToSignASiCS {
 	return AbstractGetDataToSignASiCS{AbstractGetDataToSignHelper: NewAbstractGetDataToSignHelper(asicContent)}
 }

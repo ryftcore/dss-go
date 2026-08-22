@@ -21,8 +21,8 @@ type CertificateQcQSCDLegislationCheck struct {
 }
 
 // NewCertificateQcQSCDLegislationCheck is the default constructor. Port of
-// CertificateQcQSCDLegislationCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateQcQSCDLegislationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateQcQSCDLegislationCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificateQcQSCDLegislationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateQcQSCDLegislationCheck {
 	c := &CertificateQcQSCDLegislationCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

@@ -20,27 +20,27 @@ import (
 )
 
 // XAdESAttributeIdentifier represents an identifier of a XAdES Attribute. Port of the class
-// XAdESAttributeIdentifier, extending identifier.SignatureAttributeIdentifier.
-type XAdESAttributeIdentifier struct {
+// AttributeIdentifier, extending identifier.SignatureAttributeIdentifier.
+type AttributeIdentifier struct {
 	identifier.SignatureAttributeIdentifier
 }
 
 // newXAdESAttributeIdentifier is the port of the package-private XAdESAttributeIdentifier(byte[])
 // constructor.
-func newXAdESAttributeIdentifier(data []byte) *XAdESAttributeIdentifier {
-	return &XAdESAttributeIdentifier{
+func newXAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("XAdESAttributeIdentifier", data),
 	}
 }
 
-// XAdESAttributeIdentifierBuild builds the XAdESAttributeIdentifier from the given property
+// AttributeIdentifierBuild builds the AttributeIdentifier from the given property
 // node. Port of the static build(Node).
 //
 // Panics with the Java DSSException message when the node cannot be serialized (Java's
 // try-with-resources catches only IOException from the in-memory ByteArrayOutputStream/
 // DataOutputStream pair, which cannot actually fail; DomUtils.serializeNode(node) itself does not
 // declare a checked exception in Java, so this mirrors an unchecked failure here too).
-func XAdESAttributeIdentifierBuild(node *xmldom.Node) *XAdESAttributeIdentifier {
+func AttributeIdentifierBuild(node *xmldom.Node) *AttributeIdentifier {
 	binaries, err := xadesAttributeIdentifierGetBinaries(node)
 	if err != nil {
 		panic(fmt.Sprintf("Unable to build a XAdES Attribute Identifier : %s", err.Error()))

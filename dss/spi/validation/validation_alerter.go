@@ -6,9 +6,9 @@ package validation
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// ValidationAlerter is used with ValidationContext to perform validation and execute alerts
+// Alerter is used with Context to perform validation and execute alerts
 // based on the validation result.
-type ValidationAlerter interface {
+type Alerter interface {
 	// AssertAllRequiredRevocationDataPresent verifies if all processed certificates have a
 	// revocation data. The behavior is configured with
 	// CertificateVerifier.SetAlertOnMissingRevocationData(alert.StatusAlert). Port of
@@ -45,7 +45,7 @@ type ValidationAlerter interface {
 	AssertAllSignatureCertificateHaveFreshRevocationData()
 
 	// AssertAllSignaturesNotExpired verifies whether all signatures added to the
-	// ValidationContext are not yet expired. The behavior is configured with
+	// Context are not yet expired. The behavior is configured with
 	// CertificateVerifier.SetAlertOnExpiredCertificate(alert.StatusAlert). Port of
 	// assertAllSignaturesNotExpired().
 	AssertAllSignaturesNotExpired()
@@ -56,7 +56,7 @@ type ValidationAlerter interface {
 	AssertCertificateNotExpired(certificateToken *model.CertificateToken)
 
 	// AssertAllSignaturesAreYetValid verifies whether all signatures added to the
-	// ValidationContext have been produced with yet valid certificates. The behavior is
+	// Context have been produced with yet valid certificates. The behavior is
 	// configured with CertificateVerifier.SetAlertOnNotYetValidCertificate(alert.StatusAlert).
 	// Port of assertAllSignaturesAreYetValid().
 	AssertAllSignaturesAreYetValid()

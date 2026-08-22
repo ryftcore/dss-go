@@ -25,20 +25,20 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESCounterSignatureBuilder creates a JAdES counter signature.
-type JAdESCounterSignatureBuilder struct {
-	JAdESExtensionBuilder
+// CounterSignatureBuilder creates a JAdES counter signature.
+type CounterSignatureBuilder struct {
+	ExtensionBuilder
 }
 
 // NewJAdESCounterSignatureBuilder is the default constructor.
-func NewJAdESCounterSignatureBuilder() *JAdESCounterSignatureBuilder {
-	return &JAdESCounterSignatureBuilder{}
+func NewJAdESCounterSignatureBuilder() *CounterSignatureBuilder {
+	return &CounterSignatureBuilder{}
 }
 
 // GetSignatureValueToBeSigned extracts the SignatureValue binaries from the provided JAdES
 // signature. Port of #getSignatureValueToBeSigned.
-func (b *JAdESCounterSignatureBuilder) GetSignatureValueToBeSigned(signatureDocument model.DSSDocument,
-	parameters *JAdESCounterSignatureParameters) (model.DSSDocument, error) {
+func (b *CounterSignatureBuilder) GetSignatureValueToBeSigned(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters) (model.DSSDocument, error) {
 
 	documentAnalyzerFactory := NewJWSDocumentAnalyzerFactory()
 	documentAnalyzer := jwsDocumentAnalyzerBase(documentAnalyzerFactory.Create(signatureDocument))
@@ -54,7 +54,7 @@ func (b *JAdESCounterSignatureBuilder) GetSignatureValueToBeSigned(signatureDocu
 	if err != nil {
 		return nil, err
 	}
-	jadesSignature, ok := signature.(*JAdESSignature)
+	jadesSignature, ok := signature.(*Signature)
 	if !ok {
 		return nil, fmt.Errorf("unexpected signature type %T", signature)
 	}
@@ -63,9 +63,9 @@ func (b *JAdESCounterSignatureBuilder) GetSignatureValueToBeSigned(signatureDocu
 
 // BuildEmbeddedCounterSignature embeds the counter signature into the original JAdES signature
 // and returns the result. Port of #buildEmbeddedCounterSignature.
-func (b *JAdESCounterSignatureBuilder) BuildEmbeddedCounterSignature(signatureDocument,
+func (b *CounterSignatureBuilder) BuildEmbeddedCounterSignature(signatureDocument,
 	counterSignature model.DSSDocument,
-	parameters *JAdESCounterSignatureParameters) (model.DSSDocument, error) {
+	parameters *CounterSignatureParameters) (model.DSSDocument, error) {
 
 	documentAnalyzerFactory := NewJWSDocumentAnalyzerFactory()
 	documentAnalyzer := jwsDocumentAnalyzerBase(documentAnalyzerFactory.Create(signatureDocument))
@@ -81,12 +81,12 @@ func (b *JAdESCounterSignatureBuilder) BuildEmbeddedCounterSignature(signatureDo
 	if err != nil {
 		return nil, err
 	}
-	jadesSignature, ok := signature.(*JAdESSignature)
+	jadesSignature, ok := signature.(*Signature)
 	if !ok {
 		return nil, fmt.Errorf("unexpected signature type %T", signature)
 	}
 	if err := b.AssertEtsiUComponentsConsistent(jadesSignature.Jws(),
-		&parameters.JAdESSignatureParameters); err != nil {
+		&parameters.SignatureParameters); err != nil {
 		return nil, err
 	}
 
@@ -111,9 +111,9 @@ func (b *JAdESCounterSignatureBuilder) BuildEmbeddedCounterSignature(signatureDo
 }
 
 // updateMasterSignatureRecursively ports the private updateMasterSignatureRecursively.
-func (b *JAdESCounterSignatureBuilder) updateMasterSignatureRecursively(
-	jadesSignature *JAdESSignature) error {
-	masterSignature, ok := jadesSignature.MasterSignature().(*JAdESSignature)
+func (b *CounterSignatureBuilder) updateMasterSignatureRecursively(
+	jadesSignature *Signature) error {
+	masterSignature, ok := jadesSignature.MasterSignature().(*Signature)
 	if !ok || masterSignature == nil {
 		return nil
 	}
@@ -131,7 +131,7 @@ func (b *JAdESCounterSignatureBuilder) updateMasterSignatureRecursively(
 	if err != nil {
 		return err
 	}
-	// EtsiUComponentBuildFromValue wants the concrete *JAdESAttributeIdentifier; going through
+	// EtsiUComponentBuildFromValue wants the concrete *AttributeIdentifier; going through
 	// the exported Identifier() would unwrap to the generic identifier.SignatureAttributeIdentifier
 	// interface (see jades_attribute.go's Identifier()), so this reaches the unexported
 	// identifier field directly, same-package, exactly as EtsiUComponent's own constructor does.
@@ -169,9 +169,9 @@ func jadesCounterSignatureBuilderCSig(counterSignature model.DSSDocument,
 }
 
 // replaceCSigComponent ports the private replaceCSigComponent.
-func (b *JAdESCounterSignatureBuilder) replaceCSigComponent(jadesSignature *JAdESSignature,
+func (b *CounterSignatureBuilder) replaceCSigComponent(jadesSignature *Signature,
 	cSigAttribute *EtsiUComponent) error {
-	masterSignature, ok := jadesSignature.MasterSignature().(*JAdESSignature)
+	masterSignature, ok := jadesSignature.MasterSignature().(*Signature)
 	if !ok {
 		return fmt.Errorf("unexpected master signature type %T", jadesSignature.MasterSignature())
 	}
@@ -185,7 +185,7 @@ func (b *JAdESCounterSignatureBuilder) replaceCSigComponent(jadesSignature *JAdE
 }
 
 // extractSignatureById ports the private extractSignatureById.
-func (b *JAdESCounterSignatureBuilder) extractSignatureById(signatures []validation.AdvancedSignature,
+func (b *CounterSignatureBuilder) extractSignatureById(signatures []validation.AdvancedSignature,
 	signatureId string) (validation.AdvancedSignature, error) {
 	if signatureId == "" {
 		panic("The Id of a signature to be counter signed shall be defined! " +
@@ -196,7 +196,7 @@ func (b *JAdESCounterSignatureBuilder) extractSignatureById(signatures []validat
 		return nil, errors.New("The provided signatureDocument does not contain JAdES Signatures!")
 	}
 	for _, signature := range signatures {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -213,8 +213,8 @@ func (b *JAdESCounterSignatureBuilder) extractSignatureById(signatures []validat
 }
 
 // signatureOrItsCounterSignature ports the private getSignatureOrItsCounterSignature.
-func (b *JAdESCounterSignatureBuilder) signatureOrItsCounterSignature(signature *JAdESSignature,
-	signatureId string) (*JAdESSignature, error) {
+func (b *CounterSignatureBuilder) signatureOrItsCounterSignature(signature *Signature,
+	signatureId string) (*Signature, error) {
 	if signatureId == "" || signatureId == signature.ID() {
 		return signature, nil
 	}

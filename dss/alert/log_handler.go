@@ -12,7 +12,7 @@ import (
 // spacing between Debug/Info/Warn/Error) below LevelDebug.
 const LevelTrace slog.Level = slog.LevelDebug - 4
 
-// LogHandler is an AlertHandler which logs the object at the configured slog.Level.
+// LogHandler is an Handler which logs the object at the configured slog.Level.
 type LogHandler[T any] struct {
 	level  slog.Level
 	logger *slog.Logger

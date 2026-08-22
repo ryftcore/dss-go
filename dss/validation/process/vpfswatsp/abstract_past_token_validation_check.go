@@ -40,8 +40,8 @@ type AbstractPastTokenValidationCheck[T any] struct {
 }
 
 // NewAbstractPastTokenValidationCheck is the default constructor. Port of the
-// protected AbstractPastTokenValidationCheck(I18nProvider, T, TokenProxy, XmlPSV, LevelRule).
-func NewAbstractPastTokenValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// protected AbstractPastTokenValidationCheck(Provider, T, TokenProxy, XmlPSV, LevelRule).
+func NewAbstractPastTokenValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	token diagnostic.TokenProxy, xmlPSV *jaxb.XmlPSV,
 	constraint policy.LevelRule) *AbstractPastTokenValidationCheck[T] {
 	c := &AbstractPastTokenValidationCheck[T]{

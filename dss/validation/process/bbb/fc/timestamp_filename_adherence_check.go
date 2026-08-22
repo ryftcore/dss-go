@@ -25,8 +25,8 @@ type TimestampFilenameAdherenceCheck struct {
 }
 
 // NewTimestampFilenameAdherenceCheck is the default constructor.
-func NewTimestampFilenameAdherenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	diagnosticData *diagnostic.DiagnosticData, token *diagnostic.TimestampWrapper,
+func NewTimestampFilenameAdherenceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	diagnosticData *diagnostic.Data, token *diagnostic.TimestampWrapper,
 	constraint policy.LevelRule) *TimestampFilenameAdherenceCheck {
 	c := &TimestampFilenameAdherenceCheck{}
 	c.InitFilenameAdherenceCheck(i18nProvider, result, diagnosticData, token, constraint)

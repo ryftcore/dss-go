@@ -20,8 +20,8 @@ type AcceptableTrustedListPresenceCheck[T any] struct {
 }
 
 // NewAcceptableTrustedListPresenceCheck is the default constructor. Port of
-// AcceptableTrustedListPresenceCheck(I18nProvider, T, Set, LevelRule).
-func NewAcceptableTrustedListPresenceCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AcceptableTrustedListPresenceCheck(Provider, T, Set, LevelRule).
+func NewAcceptableTrustedListPresenceCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validTLUrls map[string]struct{}, constraint policy.LevelRule) *AcceptableTrustedListPresenceCheck[T] {
 	c := &AcceptableTrustedListPresenceCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

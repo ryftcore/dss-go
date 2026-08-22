@@ -42,7 +42,7 @@ func (c *CMS) Version() int { return c.core.Version() }
 // DigestAlgorithmIDs returns a set of algorithm identifiers (OIDs) incorporated within
 // SignedData.digestAlgorithms field of CMS. Port of #getDigestAlgorithmIDs; Java returns a
 // Set, the received order is kept here since every caller either de-duplicates itself
-// (CMSUtilsPopulateDigestAlgorithmSet) or does not care about duplicates.
+// (UtilsPopulateDigestAlgorithmSet) or does not care about duplicates.
 func (c *CMS) DigestAlgorithmIDs() []*asn1ber.AlgorithmIdentifier { return c.core.DigestAlgorithmIDs() }
 
 // IsDetachedSignature returns whether the signature is detached (i.e.

@@ -54,8 +54,8 @@ func NewASiCWithCAdESLevelBaselineLTAWithFilenameFactory(certificateVerifier val
 }
 
 // Extend ports the @Override extend(ASiCContent, CAdESSignatureParameters).
-func (e *ASiCWithCAdESLevelBaselineLTA) Extend(asicContent *asic.ASiCContent,
-	parameters *dsscades.CAdESSignatureParameters) *asic.ASiCContent {
+func (e *ASiCWithCAdESLevelBaselineLTA) Extend(asicContent *asic.Content,
+	parameters *dsscades.SignatureParameters) *asic.Content {
 	// LT-level extension, if required
 	asicContent = e.ASiCWithCAdESSignatureExtension.Extend(asicContent, parameters)
 	// LTA-level extension
@@ -67,13 +67,13 @@ func (e *ASiCWithCAdESLevelBaselineLTA) Extend(asicContent *asic.ASiCContent,
 //
 // NOTE: This method is to be used for a direct timestamping with an ArchiveManifest, without
 // in-depth signature attributes (the signature extension is still applied). Use
-// Extend(ASiCContent, *CAdESSignatureParameters) for a proper signature(s) extension.
+// Extend(Content, *SignatureParameters) for a proper signature(s) extension.
 //
 // Ports the public extend(ASiCContent, DigestAlgorithm); Go has no overloading, so the Java
-// overload set extend(ASiCContent, CAdESSignatureParameters) / extend(ASiCContent,
+// overload set extend(Content, SignatureParameters) / extend(Content,
 // DigestAlgorithm) becomes Extend / ExtendWithDigestAlgorithm.
-func (e *ASiCWithCAdESLevelBaselineLTA) ExtendWithDigestAlgorithm(asicContent *asic.ASiCContent,
-	digestAlgorithm enumerations.DigestAlgorithm) *asic.ASiCContent {
+func (e *ASiCWithCAdESLevelBaselineLTA) ExtendWithDigestAlgorithm(asicContent *asic.Content,
+	digestAlgorithm enumerations.DigestAlgorithm) *asic.Content {
 	// ensure the signatures are extended to LT-level, when necessary
 	asicContent = e.ASiCWithCAdESSignatureExtension.Extend(asicContent, e.getEmptyLTLevelSignatureParameters())
 	return e.extendWithDigestAlgorithms(asicContent, digestAlgorithm, digestAlgorithm)
@@ -81,9 +81,9 @@ func (e *ASiCWithCAdESLevelBaselineLTA) ExtendWithDigestAlgorithm(asicContent *a
 
 // extendWithDigestAlgorithms extends the ASiC Container by adding a new Archive Manifest,
 // time-stamp file and the necessary validation data. Ports the private
-// extend(ASiCContent, DigestAlgorithm, DigestAlgorithm).
-func (e *ASiCWithCAdESLevelBaselineLTA) extendWithDigestAlgorithms(asicContent *asic.ASiCContent,
-	manifestDigestAlgorithm, tstDigestAlgorithm enumerations.DigestAlgorithm) *asic.ASiCContent {
+// extend(Content, DigestAlgorithm, DigestAlgorithm).
+func (e *ASiCWithCAdESLevelBaselineLTA) extendWithDigestAlgorithms(asicContent *asic.Content,
+	manifestDigestAlgorithm, tstDigestAlgorithm enumerations.DigestAlgorithm) *asic.Content {
 	// shall be computed on the first step, before timestamp extension/creation
 	timestampFilename := e.asicFilenameFactory.TimestampFilename(asicContent)
 
@@ -99,7 +99,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendWithDigestAlgorithms(asicContent *
 		// signatures and detached timestamps to gather fresh validation data; that step
 		// lives in asic_with_cades_lta_validation_phase8.go.
 		extendedTimestamp := e.extendLastArchiveTimestampWithValidationData(asicContent, lastTimestamp)
-		asicContent.SetTimestampDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), extendedTimestamp))
+		asicContent.SetTimestampDocuments(asic.UtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), extendedTimestamp))
 	}
 
 	var lastArchiveManifest model.DSSDocument
@@ -141,7 +141,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) getLastManifestFile(manifests []model.DS
 		lastManifest = spi.DSSUtilsDocumentWithLastName(manifests)
 	}
 	if lastManifest != nil {
-		return asic.ASiCManifestParserGetManifestFile(lastManifest)
+		return asic.ManifestParserGetManifestFile(lastManifest)
 	}
 	return nil
 }
@@ -174,8 +174,8 @@ func (e *ASiCWithCAdESLevelBaselineLTA) getLastTimestampDocument(lastManifestFil
 
 // extendTimestamp ports the private extendTimestamp(DSSDocument, ValidationData).
 func (e *ASiCWithCAdESLevelBaselineLTA) extendTimestamp(archiveTimestamp model.DSSDocument,
-	validationDataForInclusion *validation.ValidationData) model.DSSDocument {
-	timestampCMS, err := cms.CMSUtilsParseToCMS(archiveTimestamp)
+	validationDataForInclusion *validation.Data) model.DSSDocument {
+	timestampCMS, err := cms.UtilsParseToCMS(archiveTimestamp)
 	if err != nil {
 		panic(err)
 	}
@@ -190,15 +190,15 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendTimestamp(archiveTimestamp model.D
 }
 
 // getEmptyLTLevelSignatureParameters ports the private getEmptyLTLevelSignatureParameters().
-func (e *ASiCWithCAdESLevelBaselineLTA) getEmptyLTLevelSignatureParameters() *dsscades.CAdESSignatureParameters {
+func (e *ASiCWithCAdESLevelBaselineLTA) getEmptyLTLevelSignatureParameters() *dsscades.SignatureParameters {
 	parameters := dsscades.NewCAdESSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineLT)
 	return parameters
 }
 
 // ExtensionRequired ports the @Override protected
-// extensionRequired(CAdESSignatureParameters, boolean).
-func (e *ASiCWithCAdESLevelBaselineLTA) ExtensionRequired(parameters *dsscades.CAdESSignatureParameters,
+// extensionRequired(SignatureParameters, boolean).
+func (e *ASiCWithCAdESLevelBaselineLTA) ExtensionRequired(parameters *dsscades.SignatureParameters,
 	coveredByManifest bool) bool {
 	return !coveredByManifest
 }
@@ -206,17 +206,17 @@ func (e *ASiCWithCAdESLevelBaselineLTA) ExtensionRequired(parameters *dsscades.C
 // GetLTAExtensionProfile ports the @Override protected
 // getLTAExtensionProfile(TSPSource, CertificateVerifier).
 func (e *ASiCWithCAdESLevelBaselineLTA) GetLTAExtensionProfile(tspSource validation.TSPSource,
-	certificateVerifier validation.CertificateVerifier) dsscades.CAdESSignatureExtender {
+	certificateVerifier validation.CertificateVerifier) dsscades.SignatureExtender {
 	return dsscades.NewCAdESLevelBaselineLT(tspSource, certificateVerifier)
 }
 
 // AssertExtendSignaturePossible ports the @Override protected
-// assertExtendSignaturePossible(CAdESSignatureParameters, boolean).
+// assertExtendSignaturePossible(SignatureParameters, boolean).
 //
 // Panics with an *exception.IllegalInputException when the signature is already covered by a
 // manifest file.
 func (e *ASiCWithCAdESLevelBaselineLTA) AssertExtendSignaturePossible(
-	parameters *dsscades.CAdESSignatureParameters, coveredByManifest bool) {
+	parameters *dsscades.SignatureParameters, coveredByManifest bool) {
 	if coveredByManifest {
 		panic(exception.NewIllegalInputException(
 			"Cannot extend signature to '" + string(enumerations.SignatureLevelCAdESBaselineLTA) +

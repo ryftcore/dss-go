@@ -21,8 +21,8 @@ type RevocationResponderIdMatchCheck struct {
 }
 
 // NewRevocationResponderIdMatchCheck is the default constructor. Port of
-// RevocationResponderIdMatchCheck(I18nProvider, XmlRAC, RevocationWrapper, LevelRule).
-func NewRevocationResponderIdMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRAC],
+// RevocationResponderIdMatchCheck(Provider, XmlRAC, RevocationWrapper, LevelRule).
+func NewRevocationResponderIdMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRAC],
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *RevocationResponderIdMatchCheck {
 	c := &RevocationResponderIdMatchCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

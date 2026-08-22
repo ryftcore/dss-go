@@ -82,13 +82,13 @@ func (c *SignatureRequirementsChecker[TP]) isSigningCertificateIdentified(signat
 
 // assertCertificatesAreYetValidForSignatures ports the no-certificateToken private
 // #assertCertificatesAreYetValid(ValidationAlerter) overload.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreYetValidForSignatures(validationAlerter validation.ValidationAlerter) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreYetValidForSignatures(validationAlerter validation.Alerter) {
 	c.assertCertificatesAreYetValid(validationAlerter, nil)
 }
 
 // assertCertificatesAreYetValid ports the private #assertCertificatesAreYetValid(ValidationAlerter,
 // CertificateToken) overload; certificateToken nil means "validate signatures" instead.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreYetValid(validationAlerter validation.ValidationAlerter, certificateToken *model.CertificateToken) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreYetValid(validationAlerter validation.Alerter, certificateToken *model.CertificateToken) {
 	if c.certificateVerifier.AlertOnNotYetValidCertificate() == nil {
 		return
 	}
@@ -101,13 +101,13 @@ func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreYetValid(validat
 
 // assertCertificatesAreNotExpiredForSignatures ports the no-certificateToken private
 // #assertCertificatesAreNotExpired(ValidationAlerter) overload.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotExpiredForSignatures(validationAlerter validation.ValidationAlerter) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotExpiredForSignatures(validationAlerter validation.Alerter) {
 	c.assertCertificatesAreNotExpired(validationAlerter, nil)
 }
 
 // assertCertificatesAreNotExpired ports the private #assertCertificatesAreNotExpired(ValidationAlerter,
 // CertificateToken) overload.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotExpired(validationAlerter validation.ValidationAlerter, certificateToken *model.CertificateToken) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotExpired(validationAlerter validation.Alerter, certificateToken *model.CertificateToken) {
 	if c.certificateVerifier.AlertOnExpiredCertificate() == nil {
 		return
 	}
@@ -120,13 +120,13 @@ func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotExpired(valid
 
 // assertCertificatesAreNotRevokedForSignatures ports the no-certificateToken private
 // #assertCertificatesAreNotRevoked(ValidationAlerter) overload.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotRevokedForSignatures(validationAlerter validation.ValidationAlerter) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotRevokedForSignatures(validationAlerter validation.Alerter) {
 	c.assertCertificatesAreNotRevoked(validationAlerter, nil)
 }
 
 // assertCertificatesAreNotRevoked ports the private #assertCertificatesAreNotRevoked(ValidationAlerter,
 // CertificateToken) overload.
-func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotRevoked(validationAlerter validation.ValidationAlerter, certificateToken *model.CertificateToken) {
+func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotRevoked(validationAlerter validation.Alerter, certificateToken *model.CertificateToken) {
 	if !c.signatureParameters.CheckCertificateRevocation() {
 		return
 	}
@@ -144,7 +144,7 @@ func (c *SignatureRequirementsChecker[TP]) assertCertificatesAreNotRevoked(valid
 
 // initValidationAlerterForCertificate initializes the validation alerter for certificate
 // validation. Port of the CertificateToken overload of #initValidationAlerter.
-func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForCertificate(certificateToken *model.CertificateToken) validation.ValidationAlerter {
+func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForCertificate(certificateToken *model.CertificateToken) validation.Alerter {
 	var signingDate time.Time
 	if sd := c.signatureParameters.BLevel().SigningDate(); sd != nil {
 		signingDate = *sd
@@ -174,7 +174,7 @@ func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForCertificate(c
 
 // initValidationAlerterForSignatures initializes the validation alerter for signature
 // validation. Port of the Collection<AdvancedSignature> overload of #initValidationAlerter.
-func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForSignatures(signatures []validation.AdvancedSignature) validation.ValidationAlerter {
+func (c *SignatureRequirementsChecker[TP]) initValidationAlerterForSignatures(signatures []validation.AdvancedSignature) validation.Alerter {
 	var signingDate time.Time
 	if sd := c.signatureParameters.BLevel().SigningDate(); sd != nil {
 		signingDate = *sd

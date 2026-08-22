@@ -1,5 +1,5 @@
 // Tests for the jdbc package. There is no upstream JUnit for
-// JdbcCacheConnector/SqlQuery/SqlSelectQuery to port test vectors from
+// CacheConnector/SqlQuery/SqlSelectQuery to port test vectors from
 // (see dss-spi client/jdbc upstream), so behavior is
 // verified against a lightweight in-process database/sql/driver fake
 // registered below, exercising the same success/rollback contracts the
@@ -238,7 +238,7 @@ func TestGetRecordsPropagatesGetRecordError(t *testing.T) {
 	}
 }
 
-// ---- JdbcCacheConnector.Execute --------------------------------------------
+// ---- CacheConnector.Execute --------------------------------------------
 
 func TestJdbcCacheConnectorExecuteNilQueryPanics(t *testing.T) {
 	c := NewJdbcCacheConnector(openFakeDB(t, &fakeBehavior{}))
@@ -299,7 +299,7 @@ func TestJdbcCacheConnectorExecuteCommitError(t *testing.T) {
 	}
 }
 
-// ---- JdbcCacheConnector.Select --------------------------------------------
+// ---- CacheConnector.Select --------------------------------------------
 
 func TestJdbcCacheConnectorSelectSuccess(t *testing.T) {
 	b := &fakeBehavior{
@@ -347,7 +347,7 @@ func TestJdbcCacheConnectorSelectCommitError(t *testing.T) {
 	}
 }
 
-// ---- JdbcCacheConnector.TableQuery -----------------------------------------
+// ---- CacheConnector.TableQuery -----------------------------------------
 
 func TestJdbcCacheConnectorTableQuerySuccess(t *testing.T) {
 	b := &fakeBehavior{
@@ -394,7 +394,7 @@ func TestJdbcCacheConnectorTableQueryCommitError(t *testing.T) {
 	}
 }
 
-// ---- JdbcCacheConnector.ExecuteThrowable -----------------------------------
+// ---- CacheConnector.ExecuteThrowable -----------------------------------
 
 func TestJdbcCacheConnectorExecuteThrowableSuccess(t *testing.T) {
 	b := &fakeBehavior{

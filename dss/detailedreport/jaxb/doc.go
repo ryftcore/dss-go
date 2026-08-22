@@ -36,5 +36,5 @@
 //
 // Deferred: nothing in this schema requires an XSLT engine or XSD validator (see
 // the detailedreport package's doc.go for the DetailedReportXmlDefiner/
-// DetailedReportFacade deferrals, which mirror dss/diagnostic's).
+// Facade deferrals, which mirror dss/diagnostic's).
 package jaxb

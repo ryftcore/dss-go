@@ -63,8 +63,8 @@ func NewASiCContainerWithCAdESAnalyzer(asicContainer model.DSSDocument) *ASiCCon
 }
 
 // NewASiCContainerWithCAdESAnalyzerFromContent is the constructor with ASiCContent. Ports
-// ASiCContainerWithCAdESAnalyzer(ASiCContent).
-func NewASiCContainerWithCAdESAnalyzerFromContent(asicContent *asic.ASiCContent) *ASiCContainerWithCAdESAnalyzer {
+// ASiCContainerWithCAdESAnalyzer(Content).
+func NewASiCContainerWithCAdESAnalyzerFromContent(asicContent *asic.Content) *ASiCContainerWithCAdESAnalyzer {
 	a := newASiCContainerWithCAdESAnalyzer()
 	a.InitFromContent(asicContent)
 	return a
@@ -77,7 +77,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) IsSupported(dssDocument model.DSSDocume
 
 // IsSupportedASiCContent ports the @Override isSupported(ASiCContent), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
-func (a *ASiCContainerWithCAdESAnalyzer) IsSupportedASiCContent(asicContent *asic.ASiCContent) bool {
+func (a *ASiCContainerWithCAdESAnalyzer) IsSupportedASiCContent(asicContent *asic.Content) bool {
 	return NewASiCWithCAdESFormatDetector().IsSupportedASiCContent(asicContent)
 }
 
@@ -106,7 +106,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 				cadesValidator.SetDetachedContents([]model.DSSDocument{signedDocument})
 			}
 
-			signatureManifest := asic.ASiCManifestParserGetLinkedManifest(a.GetAllManifestDocuments(), signature.Name())
+			signatureManifest := asic.ManifestParserGetLinkedManifest(a.GetAllManifestDocuments(), signature.Name())
 			if signatureManifest != nil {
 				manifestFile := a.GetValidatedManifestFile(signatureManifest)
 				cadesValidator.SetManifestFile(manifestFile)
@@ -120,9 +120,9 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 
 // GetTimestampAnalyzers returns a list of timestamp validators for timestamps embedded into the
 // container. Ports the protected getTimestampAnalyzers().
-func (a *ASiCContainerWithCAdESAnalyzer) GetTimestampAnalyzers() []analyzertimestamp.TimestampAnalyzer {
+func (a *ASiCContainerWithCAdESAnalyzer) GetTimestampAnalyzers() []analyzertimestamp.Analyzer {
 	if a.TimestampAnalyzers == nil {
-		a.TimestampAnalyzers = make([]analyzertimestamp.TimestampAnalyzer, 0)
+		a.TimestampAnalyzers = make([]analyzertimestamp.Analyzer, 0)
 		for _, timestamp := range a.GetTimestampDocuments() {
 			timestampValidator := a.getTimestampValidator(timestamp)
 			if timestampValidator != nil {
@@ -138,7 +138,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetTimestampAnalyzers() []analyzertimes
 // sortTimestampAnalyzers ports the .sort(new TimestampAnalyzerComparator()) call, local to this
 // file per PORTING.md (no cross-file shared helpers) via a plain insertion sort over the
 // comparator's Less.
-func sortTimestampAnalyzers(items []analyzertimestamp.TimestampAnalyzer, comparator analyzertimestamp.TimestampAnalyzerComparator) {
+func sortTimestampAnalyzers(items []analyzertimestamp.Analyzer, comparator analyzertimestamp.AnalyzerComparator) {
 	for i := 1; i < len(items); i++ {
 		for j := i; j > 0 && comparator.Less(items[j], items[j-1]); j-- {
 			items[j], items[j-1] = items[j-1], items[j]
@@ -154,12 +154,12 @@ func (a *ASiCContainerWithCAdESAnalyzer) getTimestampValidator(timestampDocument
 	var archiveTimestampType enumerations.ArchiveTimestampType
 	var archiveTimestampTypeSet bool
 
-	archiveManifest := asic.ASiCManifestParserGetLinkedManifest(a.GetAllManifestDocuments(), timestampDocument.Name())
+	archiveManifest := asic.ManifestParserGetLinkedManifest(a.GetAllManifestDocuments(), timestampDocument.Name())
 	if archiveManifest != nil {
 		timestampedDocument = archiveManifest
 		manifestFile = a.GetValidatedManifestFile(archiveManifest)
 		if manifestFile != nil {
-			if asic.ASiCUtilsCoversSignature(manifestFile) {
+			if asic.UtilsCoversSignature(manifestFile) {
 				archiveTimestampType = enumerations.ArchiveTimestampTypeCAdESDetached
 				archiveTimestampTypeSet = true
 			}
@@ -232,7 +232,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) AttachExternalTimestamps(allSignatures 
 }
 
 // getExternalTimestamp ports the private getExternalTimestamp(TimestampAnalyzer, List).
-func (a *ASiCContainerWithCAdESAnalyzer) getExternalTimestamp(tstAnalyzer analyzertimestamp.TimestampAnalyzer, allSignatures []validation.AdvancedSignature) *validation.TimestampToken {
+func (a *ASiCContainerWithCAdESAnalyzer) getExternalTimestamp(tstAnalyzer analyzertimestamp.Analyzer, allSignatures []validation.AdvancedSignature) *validation.TimestampToken {
 	timestampValidator, ok := tstAnalyzer.(*ASiCWithCAdESTimestampAnalyzer)
 	if !ok {
 		return nil
@@ -254,10 +254,10 @@ func (a *ASiCContainerWithCAdESAnalyzer) getExternalTimestamp(tstAnalyzer analyz
 }
 
 // getCAdESSignatureFromFileName ports the private getCAdESSignatureFromFileName(List, String).
-func (a *ASiCContainerWithCAdESAnalyzer) getCAdESSignatureFromFileName(signatures []validation.AdvancedSignature, fileName string) *dsscades.CAdESSignature {
+func (a *ASiCContainerWithCAdESAnalyzer) getCAdESSignatureFromFileName(signatures []validation.AdvancedSignature, fileName string) *dsscades.Signature {
 	for _, advancedSignature := range signatures {
 		if utils.AreStringsEqual(fileName, advancedSignature.Filename()) && !advancedSignature.IsCounterSignature() {
-			if cadesSignature, ok := advancedSignature.(*dsscades.CAdESSignature); ok {
+			if cadesSignature, ok := advancedSignature.(*dsscades.Signature); ok {
 				return cadesSignature
 			}
 			return nil
@@ -272,7 +272,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	descriptions := make([]*model.ManifestFile, 0)
 
 	for _, manifestDocument := range a.GetManifestDocuments() {
-		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
+		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
 			asiceWithCAdESManifestValidator.ValidateEntries()
@@ -281,7 +281,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	}
 
 	for _, manifestDocument := range a.GetArchiveManifestDocuments() {
-		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
+		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumArchiveManifest)
 			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
@@ -291,7 +291,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	}
 
 	for _, manifestDocument := range a.GetEvidenceRecordManifestDocuments() {
-		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
+		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
 			asiceWithCAdESManifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
@@ -308,7 +308,7 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetManifestFilesDescriptions() []*model
 // AbstractASiCContainerAnalyzer's embedded DefaultDocumentAnalyzer).
 func (a *ASiCContainerWithCAdESAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
 	if advancedSignature.IsCounterSignature() {
-		cadesSignature, ok := advancedSignature.(*dsscades.CAdESSignature)
+		cadesSignature, ok := advancedSignature.(*dsscades.Signature)
 		if ok {
 			originalDocument, err := cadesSignature.OriginalDocument()
 			if err == nil {
@@ -321,11 +321,11 @@ func (a *ASiCContainerWithCAdESAnalyzer) OriginalDocumentsForSignature(advancedS
 	if enumerations.ASiCContainerTypeASiCS == a.GetContainerType() {
 		return a.GetSignedDocumentsASiCS(retrievedDocs)
 	}
-	linkedManifest := asic.ASiCManifestParserGetLinkedManifest(a.GetManifestDocuments(), advancedSignature.Filename())
+	linkedManifest := asic.ManifestParserGetLinkedManifest(a.GetManifestDocuments(), advancedSignature.Filename())
 	if linkedManifest == nil {
 		return []model.DSSDocument{}
 	}
-	manifestFile := asic.ASiCManifestParserGetManifestFile(linkedManifest)
+	manifestFile := asic.ManifestParserGetManifestFile(linkedManifest)
 	if manifestFile == nil {
 		return []model.DSSDocument{}
 	}

@@ -25,8 +25,8 @@ type TrustedEntityServiceAtTimeCheck struct {
 }
 
 // NewTrustedEntityServiceAtTimeCheck is the default constructor. Port of
-// TrustedEntityServiceAtTimeCheck(I18nProvider, XmlValidationCertificateApprovalStatus, List, ValidationTime, LevelRule).
-func NewTrustedEntityServiceAtTimeCheck(i18nProvider *i18n.I18nProvider,
+// TrustedEntityServiceAtTimeCheck(Provider, XmlValidationCertificateApprovalStatus, List, ValidationTime, LevelRule).
+func NewTrustedEntityServiceAtTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateApprovalStatus], trustedServicesAtTime []*diagnostic.TrustedEntityServiceWrapper,
 	validationTime enumerations.ValidationTime, constraint policy.LevelRule) *TrustedEntityServiceAtTimeCheck {
 	c := &TrustedEntityServiceAtTimeCheck{

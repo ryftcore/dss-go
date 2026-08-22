@@ -23,7 +23,7 @@
 //     `<ConstraintsParameters xmlns="..." Name="...">`; the RI writes an
 //     element's attributes first and its namespace declarations last, i.e.
 //     `<ConstraintsParameters Name="..." xmlns="...">`. Unlike
-//     DiagnosticData - whose document element declares no attributes at all,
+//     Data - whose document element declares no attributes at all,
 //     which is why dss/diagnostic/jaxb needs no counterpart - the policy
 //     document element carries the optional Name attribute, so the difference
 //     is observable. jaxbRootNamespaceLast moves the declaration back.

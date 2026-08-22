@@ -2,7 +2,7 @@
 //
 // Java extends XAdESLevelBaselineT and overrides extendSignatures(List); the Go port embeds the
 // -T level, and "super.extendSignatures(signatures)" is the explicit
-// c.XAdESLevelBaselineT.ExtendSignatures call. XAdESLevelX embeds this type in turn.
+// c.LevelBaselineT.ExtendSignatures call. LevelX embeds this type in turn.
 //
 // BouncyCastle's BasicOCSPResp/RespID are replaced by their spi counterparts (PORTING.md);
 // XMLGregorianCalendar.toXMLFormat() is folded into DomUtilsCreateXMLGregorianCalendar, which
@@ -22,22 +22,22 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESLevelC contains the XAdES-C profile aspects.
-type XAdESLevelC struct {
-	XAdESLevelBaselineT
+// LevelC contains the XAdES-C profile aspects.
+type LevelC struct {
+	LevelBaselineT
 }
 
-// NewXAdESLevelC is the default constructor for XAdESLevelC.
+// NewXAdESLevelC is the default constructor for LevelC.
 // Port of XAdESLevelC(CertificateVerifier).
-func NewXAdESLevelC(certificateVerifier validation.CertificateVerifier) *XAdESLevelC {
-	extension := &XAdESLevelC{}
+func NewXAdESLevelC(certificateVerifier validation.CertificateVerifier) *LevelC {
+	extension := &LevelC{}
 	extension.InitXAdESLevelC(extension, certificateVerifier)
 	return extension
 }
 
 // InitXAdESLevelC registers the concrete extension level with this base and forwards to the -T
 // level. Port of the super(certificateVerifier) call of XAdESLevelC(CertificateVerifier).
-func (c *XAdESLevelC) InitXAdESLevelC(self XAdESSignatureExtensionOverrides,
+func (c *LevelC) InitXAdESLevelC(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	c.InitXAdESLevelBaselineT(self, certificateVerifier)
 }
@@ -52,8 +52,8 @@ func (c *XAdESLevelC) InitXAdESLevelC(self XAdESSignatureExtensionOverrides,
 // There SHALL be at most one occurrence of the CompleteRevocationRefs and
 // CompleteCertificateRefs properties in the signature; old references must be removed.
 // Port of the overridden protected #extendSignatures(List).
-func (c *XAdESLevelC) ExtendSignatures(signatures []validation.AdvancedSignature) error {
-	if err := c.XAdESLevelBaselineT.ExtendSignatures(signatures); err != nil {
+func (c *LevelC) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := c.LevelBaselineT.ExtendSignatures(signatures); err != nil {
 		return err
 	}
 
@@ -64,7 +64,7 @@ func (c *XAdESLevelC) ExtendSignatures(signatures []validation.AdvancedSignature
 
 	// Reset sources
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -92,9 +92,9 @@ func (c *XAdESLevelC) ExtendSignatures(signatures []validation.AdvancedSignature
 		return err
 	}
 
-	// Append ValidationData
+	// Append Data
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -160,7 +160,7 @@ func (c *XAdESLevelC) ExtendSignatures(signatures []validation.AdvancedSignature
 }
 
 // extendToCLevelSignatures ports the private getExtendToCLevelSignatures.
-func (c *XAdESLevelC) extendToCLevelSignatures(
+func (c *LevelC) extendToCLevelSignatures(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	signaturesToExtend := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
@@ -172,7 +172,7 @@ func (c *XAdESLevelC) extendToCLevelSignatures(
 }
 
 // cLevelExtensionRequired ports the private cLevelExtensionRequired.
-func (c *XAdESLevelC) cLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+func (c *LevelC) cLevelExtensionRequired(signature validation.AdvancedSignature) bool {
 	return enumerations.SignatureLevelXAdESC == c.Params.SignatureLevel() ||
 		enumerations.SignatureLevelXAdESXL == c.Params.SignatureLevel() ||
 		!signature.HasXProfile()
@@ -181,7 +181,7 @@ func (c *XAdESLevelC) cLevelExtensionRequired(signature validation.AdvancedSigna
 // removeOldCertificateRefs ports the private removeOldCertificateRefs, including its exact
 // two-step removal: the V1 element is removed first and the V2 element is removed whenever it
 // exists or the V1 removal yielded no indent.
-func (c *XAdESLevelC) removeOldCertificateRefs() (string, error) {
+func (c *LevelC) removeOldCertificateRefs() (string, error) {
 	text := ""
 	certRefs, err := xmlutils.XPathUtilsGetElement(c.XadesSignature.SignatureElement(),
 		c.XadesPath.CompleteCertificateRefsPath())
@@ -205,7 +205,7 @@ func (c *XAdESLevelC) removeOldCertificateRefs() (string, error) {
 }
 
 // removeOldRevocationRefs ports the private removeOldRevocationRefs.
-func (c *XAdESLevelC) removeOldRevocationRefs() error {
+func (c *LevelC) removeOldRevocationRefs() error {
 	toRemove, err := xmlutils.XPathUtilsGetElement(c.XadesSignature.SignatureElement(),
 		c.XadesPath.CompleteRevocationRefsPath())
 	if err != nil {
@@ -221,7 +221,7 @@ func (c *XAdESLevelC) removeOldRevocationRefs() error {
 
 // incorporateCertificateRefs ports the private incorporateCertificateRefs. Upstream carries a
 // "TODO : review indent usage" here: the indent argument is accepted but never applied.
-func (c *XAdESLevelC) incorporateCertificateRefs(parentDom *xmldom.Node,
+func (c *LevelC) incorporateCertificateRefs(parentDom *xmldom.Node,
 	certificatesToBeAdded []*model.CertificateToken, indent string) error {
 	_ = indent
 	if utils.IsCollectionNotEmpty(certificatesToBeAdded) {
@@ -246,7 +246,7 @@ func (c *XAdESLevelC) incorporateCertificateRefs(parentDom *xmldom.Node,
 }
 
 // createCompleteCertificateRefsDom ports the private createCompleteCertificateRefsDom.
-func (c *XAdESLevelC) createCompleteCertificateRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
+func (c *LevelC) createCompleteCertificateRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
 	if c.Params.IsEn319132() {
 		return xmlutils.DomUtilsAddElement(c.DocumentDom, parentDom, c.Xades141Namespace(),
 			definition.XAdES141ElementCompleteCertificateRefsV2), nil
@@ -260,7 +260,7 @@ func (c *XAdESLevelC) createCompleteCertificateRefsDom(parentDom *xmldom.Node) (
 }
 
 // createCertRefsDom ports the private createCertRefsDom.
-func (c *XAdESLevelC) createCertRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
+func (c *LevelC) createCertRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
 	if c.Params.IsEn319132() {
 		return xmlutils.DomUtilsAddElement(c.DocumentDom, parentDom, c.Xades141Namespace(),
 			definition.XAdES141ElementCertRefs), nil
@@ -274,16 +274,16 @@ func (c *XAdESLevelC) createCertRefsDom(parentDom *xmldom.Node) (*xmldom.Node, e
 }
 
 // validationDataForCLevelInclusion ports the private getValidationDataForCLevelInclusion.
-func (c *XAdESLevelC) validationDataForCLevelInclusion(
-	validationDataContainer *validation.ValidationDataContainer,
-	signature validation.AdvancedSignature) *validation.ValidationData {
+func (c *LevelC) validationDataForCLevelInclusion(
+	validationDataContainer *validation.DataContainer,
+	signature validation.AdvancedSignature) *validation.Data {
 	validationData := validationDataContainer.AllValidationDataForSignature(signature)
 	validationData.ExcludeCertificateTokens(c.certificateTokensForExclusion())
 	return validationData
 }
 
 // certificateTokensForExclusion ports the private getCertificateTokensForExclusion.
-func (c *XAdESLevelC) certificateTokensForExclusion() []*model.CertificateToken {
+func (c *LevelC) certificateTokensForExclusion() []*model.CertificateToken {
 	/*
 	 * A.1.1 The CompleteCertificateRefsV2 qualifying property
 	 *
@@ -313,7 +313,7 @@ func (c *XAdESLevelC) certificateTokensForExclusion() []*model.CertificateToken 
 //	        <xades:Number>4415260066222</xades:Number>
 //
 // Port of the private incorporateCRLRefs.
-func (c *XAdESLevelC) incorporateCRLRefs(completeRevocationRefsDom *xmldom.Node,
+func (c *LevelC) incorporateCRLRefs(completeRevocationRefsDom *xmldom.Node,
 	crlTokens []*spi.CRLToken) error {
 	if len(crlTokens) == 0 {
 		return nil
@@ -378,7 +378,7 @@ func (c *XAdESLevelC) incorporateCRLRefs(completeRevocationRefsDom *xmldom.Node,
 //	            ...
 //
 // Port of the private incorporateOCSPRefs.
-func (c *XAdESLevelC) incorporateOCSPRefs(completeRevocationRefsDom *xmldom.Node,
+func (c *LevelC) incorporateOCSPRefs(completeRevocationRefsDom *xmldom.Node,
 	ocspTokens []*spi.OCSPToken) error {
 	if len(ocspTokens) == 0 {
 		return nil

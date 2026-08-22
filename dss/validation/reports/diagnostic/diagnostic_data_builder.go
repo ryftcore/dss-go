@@ -4,12 +4,12 @@
 //
 // Java's DiagnosticDataBuilder is abstract; SignedDocumentDiagnosticDataBuilder (in this same
 // package) overrides the protected linkSigningCertificateAndChains(Set<CertificateToken>) to a
-// no-op, and DiagnosticDataBuilder.build() self-calls it - so the base's own build() needs
+// no-op, and DataBuilder.build() self-calls it - so the base's own build() needs
 // virtual dispatch to reach the override when called through a SignedDocumentDiagnosticDataBuilder
 // (or QWACCertificateDiagnosticDataBuilder) instance via super.build(). Every other protected/
 // public method below is inherited unmodified by every subclass in this package and
 // the CAdES/PAdES/JAdES/ASiC/QWAC consumers, so it stays an ordinary method;
-// only LinkSigningCertificateAndChains is collected into DiagnosticDataBuilderOverrides,
+// only LinkSigningCertificateAndChains is collected into DataBuilderOverrides,
 // following the same Init<TypeName> registration pattern used elsewhere in this port (e.g.
 // AbstractSignatureIdentifierBuilder, analyzer.DefaultDocumentAnalyzer).
 //
@@ -65,18 +65,18 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// DiagnosticDataBuilderOverrides declares the operations DiagnosticDataBuilder calls back into
+// DataBuilderOverrides declares the operations DataBuilder calls back into
 // that at least one subclass in this port overrides. A concrete/intermediate builder registers
 // itself through InitDiagnosticDataBuilder; every method a subclass does not override is
-// supplied by the embedded DiagnosticDataBuilder through ordinary Go method promotion.
-type DiagnosticDataBuilderOverrides interface {
+// supplied by the embedded DataBuilder through ordinary Go method promotion.
+type DataBuilderOverrides interface {
 	// LinkSigningCertificateAndChains links the certificates and their certificate chains. Port
 	// of the protected linkSigningCertificateAndChains(Set<CertificateToken>).
 	LinkSigningCertificateAndChains(certificates []*model.CertificateToken)
 }
 
-// DiagnosticDataBuilder contains a common code for DiagnosticData building.
-type DiagnosticDataBuilder struct {
+// DataBuilder contains a common code for Data building.
+type DataBuilder struct {
 	// usedCertificates are the certificates used during the validation process. Port of the
 	// protected Set<CertificateToken> usedCertificates.
 	usedCertificates []*model.CertificateToken
@@ -138,17 +138,17 @@ type DiagnosticDataBuilder struct {
 	// tlInfoMap is the cached map of trusted lists with corresponding TLInfo.
 	tlInfoMap map[string]*tsl.TLInfo
 
-	// loteInfoMap is the cached map of lists of trusted entities with corresponding LoTEInfo.
-	loteInfoMap map[string]*lote.LoTEInfo
+	// loteInfoMap is the cached map of lists of trusted entities with corresponding Info.
+	loteInfoMap map[string]*lote.Info
 
 	// overrides points back at the concrete/intermediate builder; see InitDiagnosticDataBuilder.
-	overrides DiagnosticDataBuilderOverrides
+	overrides DataBuilderOverrides
 }
 
 // NewDiagnosticDataBuilder instantiates the object with default values. Port of the protected
 // default constructor.
-func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
-	return &DiagnosticDataBuilder{
+func NewDiagnosticDataBuilder() *DataBuilder {
+	return &DataBuilder{
 		allCertificateSources:         spi.NewListCertificateSource(),
 		tokenExtractionStrategy:       enumerations.TokenExtractionStrategyNone,
 		defaultDigestAlgorithm:        enumerations.DigestAlgorithmSHA256,
@@ -163,18 +163,18 @@ func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
 		certificateIdsMap:             map[string]*model.CertificateToken{},
 		signingCertificateMap:         map[string]*model.CertificateToken{},
 		tlInfoMap:                     map[string]*tsl.TLInfo{},
-		loteInfoMap:                   map[string]*lote.LoTEInfo{},
+		loteInfoMap:                   map[string]*lote.Info{},
 	}
 }
 
 // InitDiagnosticDataBuilder registers the concrete/intermediate builder with the base so it can
-// dispatch to DiagnosticDataBuilderOverrides. Every constructor in the DiagnosticDataBuilder
+// dispatch to DataBuilderOverrides. Every constructor in the DataBuilder
 // family must call this once.
-func (b *DiagnosticDataBuilder) InitDiagnosticDataBuilder(overrides DiagnosticDataBuilderOverrides) {
+func (b *DataBuilder) InitDiagnosticDataBuilder(overrides DataBuilderOverrides) {
 	b.overrides = overrides
 }
 
-func (b *DiagnosticDataBuilder) diagnosticDataBuilderOverrides() DiagnosticDataBuilderOverrides {
+func (b *DataBuilder) diagnosticDataBuilderOverrides() DataBuilderOverrides {
 	if b.overrides == nil {
 		panic("DiagnosticDataBuilder was not initialised: the concrete builder must call InitDiagnosticDataBuilder in its constructor")
 	}
@@ -182,9 +182,9 @@ func (b *DiagnosticDataBuilder) diagnosticDataBuilderOverrides() DiagnosticDataB
 }
 
 // LinkSigningCertificateAndChains links the certificates and their certificate chains. This is
-// the base (default) body of DiagnosticDataBuilderOverrides.LinkSigningCertificateAndChains.
+// the base (default) body of DataBuilderOverrides.LinkSigningCertificateAndChains.
 // Port of the protected linkSigningCertificateAndChains(Set<CertificateToken>).
-func (b *DiagnosticDataBuilder) LinkSigningCertificateAndChains(certificates []*model.CertificateToken) {
+func (b *DataBuilder) LinkSigningCertificateAndChains(certificates []*model.CertificateToken) {
 	for _, certificateToken := range certificates {
 		certificateToken = b.getProcessedCertificateToken(certificateToken)
 		xmlCertificate := b.xmlCertsMap[certificateToken.DSSIDAsString()]
@@ -198,13 +198,13 @@ func (b *DiagnosticDataBuilder) LinkSigningCertificateAndChains(certificates []*
 }
 
 // UsedCertificates sets the used certificates. Port of usedCertificates(Set<CertificateToken>).
-func (b *DiagnosticDataBuilder) UsedCertificates(usedCertificates []*model.CertificateToken) *DiagnosticDataBuilder {
+func (b *DataBuilder) UsedCertificates(usedCertificates []*model.CertificateToken) *DataBuilder {
 	b.usedCertificates = usedCertificates
 	return b
 }
 
 // UsedRevocations sets the used revocation data. Port of usedRevocations(Set<RevocationToken<?>>).
-func (b *DiagnosticDataBuilder) UsedRevocations(usedRevocations []validation.AnyRevocationToken) *DiagnosticDataBuilder {
+func (b *DataBuilder) UsedRevocations(usedRevocations []validation.AnyRevocationToken) *DataBuilder {
 	b.usedRevocations = usedRevocations
 	return b
 }
@@ -212,7 +212,7 @@ func (b *DiagnosticDataBuilder) UsedRevocations(usedRevocations []validation.Any
 // AllCertificateSources sets the ListCertificateSource containing all certificate sources used
 // in the validator (including trusted certificate sources). Port of
 // allCertificateSources(ListCertificateSource).
-func (b *DiagnosticDataBuilder) AllCertificateSources(allCertificateSources *spi.ListCertificateSource) *DiagnosticDataBuilder {
+func (b *DataBuilder) AllCertificateSources(allCertificateSources *spi.ListCertificateSource) *DataBuilder {
 	if allCertificateSources != nil && !allCertificateSources.ContainsTrustedCertSources() {
 		// Port of LOG.warn(...): Java's slf4j logging has no Go equivalent and is not ported;
 		// the warning has no observable effect and is not load-bearing.
@@ -222,21 +222,21 @@ func (b *DiagnosticDataBuilder) AllCertificateSources(allCertificateSources *spi
 }
 
 // ValidationDate sets the validation date. Port of validationDate(Date).
-func (b *DiagnosticDataBuilder) ValidationDate(validationDate time.Time) *DiagnosticDataBuilder {
+func (b *DataBuilder) ValidationDate(validationDate time.Time) *DataBuilder {
 	b.validationDate = validationDate
 	return b
 }
 
 // TokenExtractionStrategy sets the TokenExtractionStrategy to follow for the token extraction.
 // Port of tokenExtractionStrategy(TokenExtractionStrategy).
-func (b *DiagnosticDataBuilder) TokenExtractionStrategy(tokenExtractionStrategy enumerations.TokenExtractionStrategy) *DiagnosticDataBuilder {
+func (b *DataBuilder) TokenExtractionStrategy(tokenExtractionStrategy enumerations.TokenExtractionStrategy) *DataBuilder {
 	b.tokenExtractionStrategy = tokenExtractionStrategy
 	return b
 }
 
 // TokenIdentifierProvider sets the TokenIdentifierProvider for identifiers generation. Port of
 // tokenIdentifierProvider(TokenIdentifierProvider).
-func (b *DiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model.TokenIdentifierProvider) *DiagnosticDataBuilder {
+func (b *DataBuilder) TokenIdentifierProvider(identifierProvider model.TokenIdentifierProvider) *DataBuilder {
 	b.identifierProvider = identifierProvider
 	return b
 }
@@ -244,30 +244,30 @@ func (b *DiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model
 // GetTokenExtractionStrategy returns the TokenExtractionStrategy set via TokenExtractionStrategy.
 // Cross-package accessor for
 // ASiCWithCAdESDiagnosticDataBuilder.buildDetachedXmlSignature() (in the ASiC package), which
-// needs to propagate this field into a freshly-built nested CAdESDiagnosticDataBuilder the way
+// needs to propagate this field into a freshly-built nested DiagnosticDataBuilder the way
 // Java reads the protected tokenExtractionStrategy field directly - see
 // SignedDocumentDiagnosticDataBuilder.GetDocumentCertificateSource's doc comment for the same
 // cross-package-getter rationale. Purely additive; does not change TokenExtractionStrategy's
 // existing fluent-setter behavior.
-func (b *DiagnosticDataBuilder) GetTokenExtractionStrategy() enumerations.TokenExtractionStrategy {
+func (b *DataBuilder) GetTokenExtractionStrategy() enumerations.TokenExtractionStrategy {
 	return b.tokenExtractionStrategy
 }
 
 // GetTokenIdentifierProvider returns the TokenIdentifierProvider set via TokenIdentifierProvider.
 // See GetTokenExtractionStrategy's doc comment.
-func (b *DiagnosticDataBuilder) GetTokenIdentifierProvider() model.TokenIdentifierProvider {
+func (b *DataBuilder) GetTokenIdentifierProvider() model.TokenIdentifierProvider {
 	return b.identifierProvider
 }
 
 // DefaultDigestAlgorithm sets the default DigestAlgorithm which will be used for tokens'
 // DigestAlgoAndValue calculation. Port of defaultDigestAlgorithm(DigestAlgorithm).
-func (b *DiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *DiagnosticDataBuilder {
+func (b *DataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *DataBuilder {
 	b.defaultDigestAlgorithm = digestAlgorithm
 	return b
 }
 
 // Build builds the XmlDiagnosticData. Port of build().
-func (b *DiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
+func (b *DataBuilder) Build() *jaxb.XmlDiagnosticData {
 	diagnosticData := &jaxb.XmlDiagnosticData{}
 	if !b.validationDate.IsZero() {
 		diagnosticData.ValidationDate = jaxb.NewXSDateTime(b.validationDate)
@@ -295,7 +295,7 @@ func (b *DiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	return diagnosticData
 }
 
-func (b *DiagnosticDataBuilder) isUseTrustedLists() bool {
+func (b *DataBuilder) isUseTrustedLists() bool {
 	if !b.allCertificateSources.IsEmpty() {
 		for _, certificateSource := range b.allCertificateSources.Sources() {
 			if _, ok := certificateSource.(tsl.TrustPropertiesCertificateSource); ok {
@@ -306,7 +306,7 @@ func (b *DiagnosticDataBuilder) isUseTrustedLists() bool {
 	return false
 }
 
-func (b *DiagnosticDataBuilder) isUseLoTEs() bool {
+func (b *DataBuilder) isUseLoTEs() bool {
 	if !b.allCertificateSources.IsEmpty() {
 		for _, certificateSource := range b.allCertificateSources.Sources() {
 			if _, ok := certificateSource.(*spilote.TrustedEntitiesCertificateSource); ok {
@@ -317,7 +317,7 @@ func (b *DiagnosticDataBuilder) isUseLoTEs() bool {
 	return false
 }
 
-func (b *DiagnosticDataBuilder) buildXmlCertificates(certificates []*model.CertificateToken) []*jaxb.XmlCertificate {
+func (b *DataBuilder) buildXmlCertificates(certificates []*model.CertificateToken) []*jaxb.XmlCertificate {
 	builtCertificates := make([]*jaxb.XmlCertificate, 0)
 	if utils.IsCollectionNotEmpty(certificates) {
 		tokens := append([]*model.CertificateToken{}, certificates...)
@@ -339,7 +339,7 @@ func (b *DiagnosticDataBuilder) buildXmlCertificates(certificates []*model.Certi
 	return builtCertificates
 }
 
-func (b *DiagnosticDataBuilder) linkCertificatesAndTrustServices(certificates []*model.CertificateToken) {
+func (b *DataBuilder) linkCertificatesAndTrustServices(certificates []*model.CertificateToken) {
 	if utils.IsCollectionNotEmpty(certificates) {
 		for _, certificateToken := range certificates {
 			trustServiceProviders := NewXmlTrustServiceProviderBuilder(b.xmlCertsMap, b.xmlTrustedListsMap, b.tlInfoMap).
@@ -352,7 +352,7 @@ func (b *DiagnosticDataBuilder) linkCertificatesAndTrustServices(certificates []
 	}
 }
 
-func (b *DiagnosticDataBuilder) getRelatedTrustServices(certToken *model.CertificateToken) map[*model.CertificateToken][]*tsl.TrustProperties {
+func (b *DataBuilder) getRelatedTrustServices(certToken *model.CertificateToken) map[*model.CertificateToken][]*tsl.TrustProperties {
 	result := make(map[*model.CertificateToken][]*tsl.TrustProperties)
 	for _, trustedSource := range b.allCertificateSources.Sources() {
 		trustedCertSource, ok := trustedSource.(tsl.TrustPropertiesCertificateSource)
@@ -384,7 +384,7 @@ func (b *DiagnosticDataBuilder) getRelatedTrustServices(certToken *model.Certifi
 	return result
 }
 
-func (b *DiagnosticDataBuilder) buildXmlRevocations(revocations []validation.AnyRevocationToken) []*jaxb.XmlRevocation {
+func (b *DataBuilder) buildXmlRevocations(revocations []validation.AnyRevocationToken) []*jaxb.XmlRevocation {
 	builtRevocations := make([]*jaxb.XmlRevocation, 0)
 	if utils.IsCollectionNotEmpty(revocations) {
 		tokens := append([]validation.AnyRevocationToken{}, revocations...)
@@ -410,7 +410,7 @@ func (b *DiagnosticDataBuilder) buildXmlRevocations(revocations []validation.Any
 	return builtRevocations
 }
 
-func (b *DiagnosticDataBuilder) linkCertificatesAndRevocations(certificates []*model.CertificateToken) {
+func (b *DataBuilder) linkCertificatesAndRevocations(certificates []*model.CertificateToken) {
 	if utils.IsCollectionNotEmpty(certificates) {
 		for _, certificateToken := range certificates {
 			xmlCertificate := b.xmlCertsMap[certificateToken.DSSIDAsString()]
@@ -437,7 +437,7 @@ func (b *DiagnosticDataBuilder) linkCertificatesAndRevocations(certificates []*m
 }
 
 // BuildXmlOrphanTokens builds a list of XmlOrphanTokens. Port of buildXmlOrphanTokens().
-func (b *DiagnosticDataBuilder) BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens {
+func (b *DataBuilder) BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens {
 	if utils.IsMapNotEmpty(b.xmlOrphanCertificateTokensMap) || utils.IsMapNotEmpty(b.xmlOrphanRevocationTokensMap) {
 		xmlOrphanTokens := &jaxb.XmlOrphanTokens{}
 		for _, key := range b.xmlOrphanCertificateTokensOrder {
@@ -451,7 +451,7 @@ func (b *DiagnosticDataBuilder) BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens {
 	return nil
 }
 
-func (b *DiagnosticDataBuilder) buildXmlTrustedLists(trustedCertificateSources *spi.ListCertificateSource) []*jaxb.XmlTrustedList {
+func (b *DataBuilder) buildXmlTrustedLists(trustedCertificateSources *spi.ListCertificateSource) []*jaxb.XmlTrustedList {
 	trustedLists := make([]*jaxb.XmlTrustedList, 0)
 
 	mapTrustedLists := map[string]*jaxb.XmlTrustedList{}
@@ -481,7 +481,7 @@ func (b *DiagnosticDataBuilder) buildXmlTrustedLists(trustedCertificateSources *
 	return trustedLists
 }
 
-func (b *DiagnosticDataBuilder) mergeTrustedListsMap(dst map[string]*jaxb.XmlTrustedList, order *[]string, src map[string]*jaxb.XmlTrustedList) {
+func (b *DataBuilder) mergeTrustedListsMap(dst map[string]*jaxb.XmlTrustedList, order *[]string, src map[string]*jaxb.XmlTrustedList) {
 	for key, value := range src {
 		if _, exists := dst[key]; !exists {
 			dst[key] = value
@@ -490,7 +490,7 @@ func (b *DiagnosticDataBuilder) mergeTrustedListsMap(dst map[string]*jaxb.XmlTru
 	}
 }
 
-func (b *DiagnosticDataBuilder) getTrustedListsMap(tlCertSource tsl.TrustPropertiesCertificateSource,
+func (b *DataBuilder) getTrustedListsMap(tlCertSource tsl.TrustPropertiesCertificateSource,
 	summary *tsl.TLValidationJobSummary) map[string]*jaxb.XmlTrustedList {
 	mapTrustedLists := map[string]*jaxb.XmlTrustedList{}
 	for _, tlID := range b.getTLIdentifiers(tlCertSource) {
@@ -505,7 +505,7 @@ func (b *DiagnosticDataBuilder) getTrustedListsMap(tlCertSource tsl.TrustPropert
 	return mapTrustedLists
 }
 
-func (b *DiagnosticDataBuilder) getTLIdentifiers(tlCS tsl.TrustPropertiesCertificateSource) []model.Identifier {
+func (b *DataBuilder) getTLIdentifiers(tlCS tsl.TrustPropertiesCertificateSource) []model.Identifier {
 	var tlIdentifiers []model.Identifier
 	seen := map[string]bool{}
 	for _, certificateToken := range b.usedCertificates {
@@ -524,7 +524,7 @@ func (b *DiagnosticDataBuilder) getTLIdentifiers(tlCS tsl.TrustPropertiesCertifi
 	return tlIdentifiers
 }
 
-func (b *DiagnosticDataBuilder) getListOfTrustedListsMap(tlCertSource tsl.TrustPropertiesCertificateSource,
+func (b *DataBuilder) getListOfTrustedListsMap(tlCertSource tsl.TrustPropertiesCertificateSource,
 	summary *tsl.TLValidationJobSummary) map[string]*jaxb.XmlTrustedList {
 	mapListOfTrustedLists := map[string]*jaxb.XmlTrustedList{}
 	for _, lotlID := range b.getLOTLIdentifiers(tlCertSource) {
@@ -539,7 +539,7 @@ func (b *DiagnosticDataBuilder) getListOfTrustedListsMap(tlCertSource tsl.TrustP
 	return mapListOfTrustedLists
 }
 
-func (b *DiagnosticDataBuilder) getLOTLIdentifiers(tlCS tsl.TrustPropertiesCertificateSource) []model.Identifier {
+func (b *DataBuilder) getLOTLIdentifiers(tlCS tsl.TrustPropertiesCertificateSource) []model.Identifier {
 	var lotlIdentifiers []model.Identifier
 	seen := map[string]bool{}
 	for _, certificateToken := range b.usedCertificates {
@@ -560,7 +560,7 @@ func (b *DiagnosticDataBuilder) getLOTLIdentifiers(tlCS tsl.TrustPropertiesCerti
 
 // getXmlTrustSourceListForTL builds/looks up the XmlTrustedList for a TLInfo (Java's overload
 // getXmlTrustSourceList(TLInfo)).
-func (b *DiagnosticDataBuilder) getXmlTrustSourceListForTL(tlInfo *tsl.TLInfo) *jaxb.XmlTrustedList {
+func (b *DataBuilder) getXmlTrustSourceListForTL(tlInfo *tsl.TLInfo) *jaxb.XmlTrustedList {
 	id := tlInfo.DSSIDAsString()
 	result, ok := b.xmlTrustedListsMap[id]
 	if !ok {
@@ -618,7 +618,7 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForTL(tlInfo *tsl.TLInfo) *
 // getXmlTrustSourceList(TLInfo) called with a LOTLInfo, which is-a TLInfo in Java; Go has no
 // upcast, so this is a distinct helper sharing the same body against LOTLInfo's TLInfo-shaped
 // accessors).
-func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLOTL(lotlInfo *tsl.LOTLInfo) *jaxb.XmlTrustedList {
+func (b *DataBuilder) getXmlTrustSourceListForLOTL(lotlInfo *tsl.LOTLInfo) *jaxb.XmlTrustedList {
 	id := lotlInfo.DSSIDAsString()
 	result, ok := b.xmlTrustedListsMap[id]
 	if !ok {
@@ -673,7 +673,7 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLOTL(lotlInfo *tsl.LOTLI
 	return result
 }
 
-func (b *DiagnosticDataBuilder) linkCertificatesAndTrustedEntities(certificates []*model.CertificateToken) {
+func (b *DataBuilder) linkCertificatesAndTrustedEntities(certificates []*model.CertificateToken) {
 	if utils.IsCollectionNotEmpty(certificates) {
 		for _, certificateToken := range certificates {
 			trustedEntities := NewXmlTrustedEntityBuilder(b.xmlCertsMap, b.xmlTrustSourceMap).
@@ -686,7 +686,7 @@ func (b *DiagnosticDataBuilder) linkCertificatesAndTrustedEntities(certificates 
 	}
 }
 
-func (b *DiagnosticDataBuilder) getRelatedTrustedProperties(certToken *model.CertificateToken) map[*model.CertificateToken][]*lote.TrustedProperties {
+func (b *DataBuilder) getRelatedTrustedProperties(certToken *model.CertificateToken) map[*model.CertificateToken][]*lote.TrustedProperties {
 	result := make(map[*model.CertificateToken][]*lote.TrustedProperties)
 	for _, trustedSource := range b.allCertificateSources.Sources() {
 		trustedCertSource, ok := trustedSource.(*spilote.TrustedEntitiesCertificateSource)
@@ -717,7 +717,7 @@ func (b *DiagnosticDataBuilder) getRelatedTrustedProperties(certToken *model.Cer
 	return result
 }
 
-func (b *DiagnosticDataBuilder) buildXmlLoTEs(trustedCertificateSources *spi.ListCertificateSource) []*jaxb.XmlListOfTrustedEntities {
+func (b *DataBuilder) buildXmlLoTEs(trustedCertificateSources *spi.ListCertificateSource) []*jaxb.XmlListOfTrustedEntities {
 	trustSourceLists := make([]*jaxb.XmlListOfTrustedEntities, 0)
 
 	mapLists := map[string]*jaxb.XmlListOfTrustedEntities{}
@@ -747,7 +747,7 @@ func (b *DiagnosticDataBuilder) buildXmlLoTEs(trustedCertificateSources *spi.Lis
 	return trustSourceLists
 }
 
-func (b *DiagnosticDataBuilder) mergeLoTEMap(dst map[string]*jaxb.XmlListOfTrustedEntities, order *[]string, src map[string]*jaxb.XmlListOfTrustedEntities) {
+func (b *DataBuilder) mergeLoTEMap(dst map[string]*jaxb.XmlListOfTrustedEntities, order *[]string, src map[string]*jaxb.XmlListOfTrustedEntities) {
 	for key, value := range src {
 		if _, exists := dst[key]; !exists {
 			dst[key] = value
@@ -756,8 +756,8 @@ func (b *DiagnosticDataBuilder) mergeLoTEMap(dst map[string]*jaxb.XmlListOfTrust
 	}
 }
 
-func (b *DiagnosticDataBuilder) getLoTEMap(teCertSource *spilote.TrustedEntitiesCertificateSource,
-	summary *lote.LoTEValidationJobSummary) map[string]*jaxb.XmlListOfTrustedEntities {
+func (b *DataBuilder) getLoTEMap(teCertSource *spilote.TrustedEntitiesCertificateSource,
+	summary *lote.ValidationJobSummary) map[string]*jaxb.XmlListOfTrustedEntities {
 	mapTrustedEntitiesLists := map[string]*jaxb.XmlListOfTrustedEntities{}
 	for _, loteID := range b.getLOTEIdentifiers(teCertSource) {
 		if _, exists := mapTrustedEntitiesLists[loteID.AsXmlID()]; exists {
@@ -771,7 +771,7 @@ func (b *DiagnosticDataBuilder) getLoTEMap(teCertSource *spilote.TrustedEntities
 	return mapTrustedEntitiesLists
 }
 
-func (b *DiagnosticDataBuilder) getLOTEIdentifiers(teCertSource *spilote.TrustedEntitiesCertificateSource) []model.Identifier {
+func (b *DataBuilder) getLOTEIdentifiers(teCertSource *spilote.TrustedEntitiesCertificateSource) []model.Identifier {
 	var loteIdentifiers []model.Identifier
 	seen := map[string]bool{}
 	add := func(id model.Identifier) {
@@ -796,8 +796,8 @@ func (b *DiagnosticDataBuilder) getLOTEIdentifiers(teCertSource *spilote.Trusted
 	return loteIdentifiers
 }
 
-func (b *DiagnosticDataBuilder) getListOfLoTEMap(teCertSource *spilote.TrustedEntitiesCertificateSource,
-	summary *lote.LoTEValidationJobSummary) map[string]*jaxb.XmlListOfTrustedEntities {
+func (b *DataBuilder) getListOfLoTEMap(teCertSource *spilote.TrustedEntitiesCertificateSource,
+	summary *lote.ValidationJobSummary) map[string]*jaxb.XmlListOfTrustedEntities {
 	mapListsOfTrustedEntitiesLists := map[string]*jaxb.XmlListOfTrustedEntities{}
 	for _, loloteID := range b.getLoLoTEIdentifiers(teCertSource) {
 		if _, exists := mapListsOfTrustedEntitiesLists[loloteID.AsXmlID()]; exists {
@@ -811,7 +811,7 @@ func (b *DiagnosticDataBuilder) getListOfLoTEMap(teCertSource *spilote.TrustedEn
 	return mapListsOfTrustedEntitiesLists
 }
 
-func (b *DiagnosticDataBuilder) getLoLoTEIdentifiers(loteCS *spilote.TrustedEntitiesCertificateSource) []model.Identifier {
+func (b *DataBuilder) getLoLoTEIdentifiers(loteCS *spilote.TrustedEntitiesCertificateSource) []model.Identifier {
 	var loloteIdentifiers []model.Identifier
 	seen := map[string]bool{}
 	for _, certificateToken := range b.usedCertificates {
@@ -830,9 +830,9 @@ func (b *DiagnosticDataBuilder) getLoLoTEIdentifiers(loteCS *spilote.TrustedEnti
 	return loloteIdentifiers
 }
 
-// getXmlTrustSourceListForLoTE builds/looks up the XmlListOfTrustedEntities for a LoTEInfo
+// getXmlTrustSourceListForLoTE builds/looks up the XmlListOfTrustedEntities for a Info
 // (Java's overload getXmlTrustSourceList(LoTEInfo)).
-func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoTE(loteInfo *lote.LoTEInfo) *jaxb.XmlListOfTrustedEntities {
+func (b *DataBuilder) getXmlTrustSourceListForLoTE(loteInfo *lote.Info) *jaxb.XmlListOfTrustedEntities {
 	id := loteInfo.DSSIDAsString()
 	result, ok := b.xmlTrustSourceMap[id]
 	if !ok {
@@ -885,7 +885,7 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoTE(loteInfo *lote.LoTE
 // (Java's getXmlTrustSourceList(LoTEInfo) called with a LoLoTEInfo, which is-a LoTEInfo in
 // Java; Go has no upcast, so this is a distinct helper against LoLoTEInfo's LoTEInfo-shaped
 // accessors).
-func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoLoTE(loloteInfo *lote.LoLoTEInfo) *jaxb.XmlListOfTrustedEntities {
+func (b *DataBuilder) getXmlTrustSourceListForLoLoTE(loloteInfo *lote.LoLoTEInfo) *jaxb.XmlListOfTrustedEntities {
 	id := loloteInfo.DSSIDAsString()
 	result, ok := b.xmlTrustSourceMap[id]
 	if !ok {
@@ -928,9 +928,9 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoLoTE(loloteInfo *lote.
 	if validationCacheInfo != nil {
 		result.WellSigned = validationCacheInfo.IsValid()
 	}
-	// Same LoLoTEInfo/LoTEInfo type-mismatch as getXmlTrustSourceListForLOTL's LOTLInfo/TLInfo
+	// Same LoLoTEInfo/Info type-mismatch as getXmlTrustSourceListForLOTL's LOTLInfo/TLInfo
 	// case above: Java's loteInfoMap.put(id, loteInfo) upcasts the LoLoTEInfo into the
-	// Map<String, LoTEInfo> field; this port keeps the two distinct, and loteInfoMap has no
+	// Map<String, Info> field; this port keeps the two distinct, and loteInfoMap has no
 	// reader anywhere in this port (it is populated but never consulted, matching the Java
 	// field's own dead-write shape here), so the entry is simply omitted rather than inserted
 	// lossy.
@@ -939,7 +939,7 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoLoTE(loloteInfo *lote.
 
 // GetXmlStructuralValidation creates an XmlStructuralValidation for the given errorMessages.
 // Port of the protected getXmlStructuralValidation(List<String>).
-func (b *DiagnosticDataBuilder) GetXmlStructuralValidation(errorMessages []string) *jaxb.XmlStructuralValidation {
+func (b *DataBuilder) GetXmlStructuralValidation(errorMessages []string) *jaxb.XmlStructuralValidation {
 	xmlStructuralValidation := &jaxb.XmlStructuralValidation{}
 	xmlStructuralValidation.Valid = utils.IsCollectionEmpty(errorMessages)
 	if utils.IsCollectionNotEmpty(errorMessages) {
@@ -950,7 +950,7 @@ func (b *DiagnosticDataBuilder) GetXmlStructuralValidation(errorMessages []strin
 
 // GetXmlSignerInfo creates an XmlSignerInfo from a SignerIdentifier. Port of the protected
 // getXmlSignerInfo(SignerIdentifier).
-func (b *DiagnosticDataBuilder) GetXmlSignerInfo(signerIdentifier *spi.SignerIdentifier) *jaxb.XmlSignerInfo {
+func (b *DataBuilder) GetXmlSignerInfo(signerIdentifier *spi.SignerIdentifier) *jaxb.XmlSignerInfo {
 	xmlSignerInfo := &jaxb.XmlSignerInfo{}
 	if signerIdentifier.IssuerName() != nil {
 		issuerName := signerIdentifier.IssuerName().String()
@@ -968,7 +968,7 @@ func (b *DiagnosticDataBuilder) GetXmlSignerInfo(signerIdentifier *spi.SignerIde
 	return xmlSignerInfo
 }
 
-func (b *DiagnosticDataBuilder) getXmlSignerInfoForResponderID(responderId *spi.ResponderId) *jaxb.XmlSignerInfo {
+func (b *DataBuilder) getXmlSignerInfoForResponderID(responderId *spi.ResponderId) *jaxb.XmlSignerInfo {
 	xmlSignerInfo := &jaxb.XmlSignerInfo{}
 	if responderId.X500Principal() != nil {
 		issuerName := responderId.X500Principal().String()
@@ -983,7 +983,7 @@ func (b *DiagnosticDataBuilder) getXmlSignerInfoForResponderID(responderId *spi.
 
 // BuildDetachedXmlRevocation builds an XmlRevocation from the given RevocationToken. Port of
 // the protected buildDetachedXmlRevocation(RevocationToken<?>).
-func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken validation.AnyRevocationToken) *jaxb.XmlRevocation {
+func (b *DataBuilder) BuildDetachedXmlRevocation(revocationToken validation.AnyRevocationToken) *jaxb.XmlRevocation {
 	xmlRevocation := &jaxb.XmlRevocation{}
 	id := b.identifierProvider.IDAsString(revocationToken)
 	xmlRevocation.Id = jaxb.NewCollapsedString(id)
@@ -1051,7 +1051,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlRevocation(revocationToken valid
 
 // getXmlRevocationRefs returns a list of XmlRevocationRef for a token with tokenId. Port of the
 // protected getXmlRevocationRefs(String, Map<RevocationRef<R>, Set<RevocationRefOrigin>>).
-func (b *DiagnosticDataBuilder) getXmlRevocationRefs[R revocation.Revocation](tokenId string, refs []spi.RevocationRefOriginsEntry[R]) []*jaxb.XmlRevocationRef {
+func (b *DataBuilder) getXmlRevocationRefs[R revocation.Revocation](tokenId string, refs []spi.RevocationRefOriginsEntry[R]) []*jaxb.XmlRevocationRef {
 	xmlRevocationRefs := make([]*jaxb.XmlRevocationRef, 0)
 	for _, entry := range refs {
 		ref := entry.Reference
@@ -1070,7 +1070,7 @@ func (b *DiagnosticDataBuilder) getXmlRevocationRefs[R revocation.Revocation](to
 
 // GetXmlCRLRevocationRef builds an XmlRevocationRef from a CRLRef. Port of the protected
 // getXmlCRLRevocationRef(CRLRef, Set<RevocationRefOrigin>).
-func (b *DiagnosticDataBuilder) GetXmlCRLRevocationRef(crlRef *spi.CRLRef, origins []enumerations.RevocationRefOrigin) *jaxb.XmlRevocationRef {
+func (b *DataBuilder) GetXmlCRLRevocationRef(crlRef *spi.CRLRef, origins []enumerations.RevocationRefOrigin) *jaxb.XmlRevocationRef {
 	xmlRevocationRef := &jaxb.XmlRevocationRef{}
 	xmlRevocationRef.Origin = revocationRefOriginValues(origins)
 	if !crlRef.Digest().IsEmpty() {
@@ -1096,7 +1096,7 @@ func (b *DiagnosticDataBuilder) GetXmlCRLRevocationRef(crlRef *spi.CRLRef, origi
 
 // GetXmlOCSPRevocationRef builds an XmlRevocationRef from an OCSPRef. Port of the protected
 // getXmlOCSPRevocationRef(OCSPRef, Set<RevocationRefOrigin>).
-func (b *DiagnosticDataBuilder) GetXmlOCSPRevocationRef(ocspRef *spi.OCSPRef, origins []enumerations.RevocationRefOrigin) *jaxb.XmlRevocationRef {
+func (b *DataBuilder) GetXmlOCSPRevocationRef(ocspRef *spi.OCSPRef, origins []enumerations.RevocationRefOrigin) *jaxb.XmlRevocationRef {
 	xmlRevocationRef := &jaxb.XmlRevocationRef{}
 	xmlRevocationRef.Origin = revocationRefOriginValues(origins)
 	if !ocspRef.Digest().IsEmpty() {
@@ -1126,13 +1126,13 @@ func revocationRefOriginValues(origins []enumerations.RevocationRefOrigin) []jax
 
 // GetXmlForCertificateChain returns a certificate chain for the token. Port of the protected
 // getXmlForCertificateChain(Token).
-func (b *DiagnosticDataBuilder) GetXmlForCertificateChain(token model.Token) []*jaxb.XmlChainItem {
+func (b *DataBuilder) GetXmlForCertificateChain(token model.Token) []*jaxb.XmlChainItem {
 	return b.getXmlForCertificateChainWithSource(token, nil)
 }
 
 // getXmlForCertificateChainWithSource returns a certificate chain for the token from the
 // certificateSource. Port of the protected getXmlForCertificateChain(Token, CertificateSource).
-func (b *DiagnosticDataBuilder) getXmlForCertificateChainWithSource(token model.Token, certificateSource tokenCertificateSourceRefs) []*jaxb.XmlChainItem {
+func (b *DataBuilder) getXmlForCertificateChainWithSource(token model.Token, certificateSource tokenCertificateSourceRefs) []*jaxb.XmlChainItem {
 	if token == nil {
 		return nil
 	}
@@ -1170,7 +1170,7 @@ func containsToken(tokens []model.Token, token *model.CertificateToken) bool {
 	return false
 }
 
-func (b *DiagnosticDataBuilder) ensureCertificateChain(token model.Token, certChain []*jaxb.XmlChainItem, processedTokens []model.Token) {
+func (b *DataBuilder) ensureCertificateChain(token model.Token, certChain []*jaxb.XmlChainItem, processedTokens []model.Token) {
 	if utils.IsCollectionNotEmpty(certChain) {
 		certificate := b.xmlCertsMap[token.DSSIDAsString()]
 		if certificate != nil {
@@ -1191,13 +1191,13 @@ func (b *DiagnosticDataBuilder) ensureCertificateChain(token model.Token, certCh
 	}
 }
 
-func (b *DiagnosticDataBuilder) getXmlSigningCertificateFromXmlCertificate(xmlCertificate *jaxb.XmlCertificate) *jaxb.XmlSigningCertificate {
+func (b *DataBuilder) getXmlSigningCertificateFromXmlCertificate(xmlCertificate *jaxb.XmlCertificate) *jaxb.XmlSigningCertificate {
 	xmlSigningCertificate := &jaxb.XmlSigningCertificate{}
 	xmlSigningCertificate.Certificate = xmlCertificate
 	return xmlSigningCertificate
 }
 
-func (b *DiagnosticDataBuilder) getCertChainSinceIndex(certChain []*jaxb.XmlChainItem, index int) []*jaxb.XmlChainItem {
+func (b *DataBuilder) getCertChainSinceIndex(certChain []*jaxb.XmlChainItem, index int) []*jaxb.XmlChainItem {
 	result := make([]*jaxb.XmlChainItem, 0, len(certChain)-index)
 	for i := index; i < len(certChain); i++ {
 		result = append(result, certChain[i])
@@ -1207,7 +1207,7 @@ func (b *DiagnosticDataBuilder) getCertChainSinceIndex(certChain []*jaxb.XmlChai
 
 // GetXmlForCertificateChainForValidity builds a certificate chain for a CertificateValidity.
 // Port of the protected getXmlForCertificateChain(CertificateValidity, CertificateSource).
-func (b *DiagnosticDataBuilder) GetXmlForCertificateChainForValidity(certificateValidity *spi.CertificateValidity,
+func (b *DataBuilder) GetXmlForCertificateChainForValidity(certificateValidity *spi.CertificateValidity,
 	certificateSource tokenCertificateSourceRefs) []*jaxb.XmlChainItem {
 	if certificateValidity == nil {
 		return nil
@@ -1234,7 +1234,7 @@ func (b *DiagnosticDataBuilder) GetXmlForCertificateChainForValidity(certificate
 	return certChainTokens
 }
 
-func (b *DiagnosticDataBuilder) getXmlChainItem(token *model.CertificateToken) *jaxb.XmlChainItem {
+func (b *DataBuilder) getXmlChainItem(token *model.CertificateToken) *jaxb.XmlChainItem {
 	xmlCertificate, ok := b.xmlCertsMap[token.DSSIDAsString()]
 	if ok {
 		chainItem := &jaxb.XmlChainItem{}
@@ -1244,13 +1244,13 @@ func (b *DiagnosticDataBuilder) getXmlChainItem(token *model.CertificateToken) *
 	return nil
 }
 
-func (b *DiagnosticDataBuilder) getXmlSigningCertificateForToken(token model.Token) *jaxb.XmlSigningCertificate {
+func (b *DataBuilder) getXmlSigningCertificateForToken(token model.Token) *jaxb.XmlSigningCertificate {
 	return b.getXmlSigningCertificateForTokenAndSource(token, nil)
 }
 
 // GetXmlSigningCertificate creates the SigningCertificate element for the current token. Port
 // of the protected getXmlSigningCertificate(Token, CertificateSource).
-func (b *DiagnosticDataBuilder) getXmlSigningCertificateForTokenAndSource(token model.Token, certificateSource tokenCertificateSourceRefs) *jaxb.XmlSigningCertificate {
+func (b *DataBuilder) getXmlSigningCertificateForTokenAndSource(token model.Token, certificateSource tokenCertificateSourceRefs) *jaxb.XmlSigningCertificate {
 	xmlSignCertType := &jaxb.XmlSigningCertificate{}
 	certificateByPubKey := b.getIssuerCertificateFromSource(token, certificateSource)
 	if certificateByPubKey != nil {
@@ -1265,7 +1265,7 @@ func (b *DiagnosticDataBuilder) getXmlSigningCertificateForTokenAndSource(token 
 	return xmlSignCertType
 }
 
-func (b *DiagnosticDataBuilder) getIssuerCertificate(token model.Token) *model.CertificateToken {
+func (b *DataBuilder) getIssuerCertificate(token model.Token) *model.CertificateToken {
 	return b.getIssuerCertificateFromSource(token, nil)
 }
 
@@ -1278,7 +1278,7 @@ type tokenCertificateSourceRefs interface {
 	Certificates() []*model.CertificateToken
 }
 
-func (b *DiagnosticDataBuilder) getIssuerCertificateFromSource(token model.Token, certificateSource tokenCertificateSourceRefs) *model.CertificateToken {
+func (b *DataBuilder) getIssuerCertificateFromSource(token model.Token, certificateSource tokenCertificateSourceRefs) *model.CertificateToken {
 	if token == nil || token.PublicKeyOfTheSigner() == nil {
 		return nil
 	}
@@ -1309,11 +1309,11 @@ func (b *DiagnosticDataBuilder) getIssuerCertificateFromSource(token model.Token
 	return issuer
 }
 
-func (b *DiagnosticDataBuilder) getBestCertificateFromCandidates(token model.Token, candidates []*model.CertificateToken) *model.CertificateToken {
+func (b *DataBuilder) getBestCertificateFromCandidates(token model.Token, candidates []*model.CertificateToken) *model.CertificateToken {
 	return spi.NewTokenIssuerSelector(token, candidates).Issuer()
 }
 
-func (b *DiagnosticDataBuilder) getCertsWithPublicKey(publicKey *model.PublicKey, candidates []*model.CertificateToken) []*model.CertificateToken {
+func (b *DataBuilder) getCertsWithPublicKey(publicKey *model.PublicKey, candidates []*model.CertificateToken) []*model.CertificateToken {
 	founds := make([]*model.CertificateToken, 0)
 	if publicKey != nil {
 		for _, cert := range candidates {
@@ -1329,7 +1329,7 @@ func (b *DiagnosticDataBuilder) getCertsWithPublicKey(publicKey *model.PublicKey
 	return founds
 }
 
-func (b *DiagnosticDataBuilder) getProcessedCertificateToken(certificateToken *model.CertificateToken) *model.CertificateToken {
+func (b *DataBuilder) getProcessedCertificateToken(certificateToken *model.CertificateToken) *model.CertificateToken {
 	processedCertificateToken, ok := b.certificateIdsMap[certificateToken.DSSIDAsString()]
 	if !ok {
 		processedCertificateToken = certificateToken
@@ -1341,7 +1341,7 @@ func (b *DiagnosticDataBuilder) getProcessedCertificateToken(certificateToken *m
 // GetXmlSigningCertificateForIdentifier gets a signing certificate token for a token with
 // tokenIdentifier. Port of the protected getXmlSigningCertificate(Identifier,
 // CertificateValidity).
-func (b *DiagnosticDataBuilder) GetXmlSigningCertificateForIdentifier(tokenIdentifier model.Identifier, certificateValidity *spi.CertificateValidity) *jaxb.XmlSigningCertificate {
+func (b *DataBuilder) GetXmlSigningCertificateForIdentifier(tokenIdentifier model.Identifier, certificateValidity *spi.CertificateValidity) *jaxb.XmlSigningCertificate {
 	xmlSignCertType := &jaxb.XmlSigningCertificate{}
 	signingCertificate := b.getSigningCertificate(certificateValidity)
 	if signingCertificate != nil {
@@ -1356,7 +1356,7 @@ func (b *DiagnosticDataBuilder) GetXmlSigningCertificateForIdentifier(tokenIdent
 	return xmlSignCertType
 }
 
-func (b *DiagnosticDataBuilder) getSigningCertificate(certificateValidity *spi.CertificateValidity) *model.CertificateToken {
+func (b *DataBuilder) getSigningCertificate(certificateValidity *spi.CertificateValidity) *model.CertificateToken {
 	signingCertificateToken := certificateValidity.CertificateToken()
 	if signingCertificateToken == nil && certificateValidity.PublicKey() != nil {
 		signingCertificateToken = b.getCertificateByPubKey(certificateValidity.PublicKey())
@@ -1370,7 +1370,7 @@ func (b *DiagnosticDataBuilder) getSigningCertificate(certificateValidity *spi.C
 	return signingCertificateToken
 }
 
-func (b *DiagnosticDataBuilder) getCertificateByPubKey(publicKey *model.PublicKey) *model.CertificateToken {
+func (b *DataBuilder) getCertificateByPubKey(publicKey *model.PublicKey) *model.CertificateToken {
 	if publicKey != nil {
 		candidates := b.getCertsWithPublicKey(publicKey, b.usedCertificates)
 		if utils.IsCollectionNotEmpty(candidates) {
@@ -1380,7 +1380,7 @@ func (b *DiagnosticDataBuilder) getCertificateByPubKey(publicKey *model.PublicKe
 	return nil
 }
 
-func (b *DiagnosticDataBuilder) getCertificateByCertificateIdentifier(signerIdentifier *spi.SignerIdentifier) *model.CertificateToken {
+func (b *DataBuilder) getCertificateByCertificateIdentifier(signerIdentifier *spi.SignerIdentifier) *model.CertificateToken {
 	if signerIdentifier == nil {
 		return nil
 	}
@@ -1405,14 +1405,14 @@ func (b *DiagnosticDataBuilder) getCertificateByCertificateIdentifier(signerIden
 	return nil
 }
 
-func (b *DiagnosticDataBuilder) getXmlDistinguishedName(x500PrincipalFormat, value string) *jaxb.XmlDistinguishedName {
+func (b *DataBuilder) getXmlDistinguishedName(x500PrincipalFormat, value string) *jaxb.XmlDistinguishedName {
 	xmlDistinguishedName := &jaxb.XmlDistinguishedName{}
 	xmlDistinguishedName.Format = &x500PrincipalFormat
 	xmlDistinguishedName.Value = value
 	return xmlDistinguishedName
 }
 
-func (b *DiagnosticDataBuilder) getCleanedUrls(urls []string) []string {
+func (b *DataBuilder) getCleanedUrls(urls []string) []string {
 	cleanedUrls := make([]string, 0, len(urls))
 	for _, url := range urls {
 		cleanedUrls = append(cleanedUrls, b.getCleanedUrl(url))
@@ -1420,7 +1420,7 @@ func (b *DiagnosticDataBuilder) getCleanedUrls(urls []string) []string {
 	return cleanedUrls
 }
 
-func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
+func (b *DataBuilder) getCleanedUrl(url string) string {
 	return spi.DSSUtilsRemoveControlCharacters(url)
 }
 
@@ -1441,7 +1441,7 @@ func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
 // revocation identifier's certificate source hit exactly this). The interface parameter lets
 // every caller pass the OUTER value it actually has (here, ocspCertificateSource itself),
 // which correctly dispatches the override, matching Java.
-func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
+func (b *DataBuilder) GetXmlFoundCertificatesForSource(certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
 	return b.getXmlFoundCertificates(nil, certificateSource)
 }
 
@@ -1453,7 +1453,7 @@ func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForSource(certificateSour
 // CertificateSourceType(), ReferencesForCertificateToken(), CertificateRefOrigins(),
 // OrphanCertificateRefs()), which every concrete certificate source embeds
 // spi.TokenCertificateSource for and therefore has - see foundCertificatesSource.
-func (b *DiagnosticDataBuilder) GetXmlFoundCertificatesForToken(tokenIdentifier model.Identifier, certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
+func (b *DataBuilder) GetXmlFoundCertificatesForToken(tokenIdentifier model.Identifier, certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
 	return b.getXmlFoundCertificates(tokenIdentifier, certificateSource)
 }
 
@@ -1491,7 +1491,7 @@ type signatureCertificateSourceRefs interface {
 	UnprotectedHeaderCertificates() []*model.CertificateToken
 }
 
-func (b *DiagnosticDataBuilder) getXmlFoundCertificates(tokenIdentifier model.Identifier, certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
+func (b *DataBuilder) getXmlFoundCertificates(tokenIdentifier model.Identifier, certificateSource foundCertificatesSource) *jaxb.XmlFoundCertificates {
 	xmlFoundCertificates := &jaxb.XmlFoundCertificates{}
 	xmlFoundCertificates.RelatedCertificate = b.GetXmlRelatedCertificates(certificateSource)
 	xmlRelatedCertificatesForOrphanReferences := b.GetXmlRelatedCertificateForOrphanReferences(certificateSource)
@@ -1509,7 +1509,7 @@ func (b *DiagnosticDataBuilder) getXmlFoundCertificates(tokenIdentifier model.Id
 	return xmlFoundCertificates
 }
 
-func (b *DiagnosticDataBuilder) containsCertificate(certificates []*jaxb.XmlRelatedCertificate, xmlRelatedCertificate *jaxb.XmlRelatedCertificate) bool {
+func (b *DataBuilder) containsCertificate(certificates []*jaxb.XmlRelatedCertificate, xmlRelatedCertificate *jaxb.XmlRelatedCertificate) bool {
 	for _, c := range certificates {
 		if xmlRelatedCertificate.Certificate.Id.String() == c.Certificate.Id.String() {
 			return true
@@ -1523,7 +1523,7 @@ func (b *DiagnosticDataBuilder) containsCertificate(certificates []*jaxb.XmlRela
 // accessors already (embedding satisfies signatureCertificateSourceRefs structurally); it
 // dispatches on CertificateSourceType() exactly as Java's getXmlRelatedCertificates does. Port
 // of the private getXmlRelatedCertificates(TokenCertificateSource).
-func (b *DiagnosticDataBuilder) GetXmlRelatedCertificates(certificateSource foundCertificatesSource) []*jaxb.XmlRelatedCertificate {
+func (b *DataBuilder) GetXmlRelatedCertificates(certificateSource foundCertificatesSource) []*jaxb.XmlRelatedCertificate {
 	relatedCertificatesMap := map[string]*jaxb.XmlRelatedCertificate{}
 	var order []string
 	add := func(origin enumerations.CertificateOrigin, tokens []*model.CertificateToken) {
@@ -1560,7 +1560,7 @@ func (b *DiagnosticDataBuilder) GetXmlRelatedCertificates(certificateSource foun
 // PopulateCertificateOriginMap fills the certificates origins map with the given properties.
 // Port of the protected populateCertificateOriginMap(Map<String,XmlRelatedCertificate>,
 // CertificateOrigin, List<CertificateToken>, TokenCertificateSource).
-func (b *DiagnosticDataBuilder) populateCertificateOriginMap(relatedCertificatesMap map[string]*jaxb.XmlRelatedCertificate, order *[]string,
+func (b *DataBuilder) populateCertificateOriginMap(relatedCertificatesMap map[string]*jaxb.XmlRelatedCertificate, order *[]string,
 	origin enumerations.CertificateOrigin, certificateTokens []*model.CertificateToken, certificateSource foundCertificatesSource) {
 	for _, certificateToken := range certificateTokens {
 		id := certificateToken.DSSIDAsString()
@@ -1587,7 +1587,7 @@ func containsCertificateOrigin(origins []jaxb.CertificateOriginValue, origin enu
 
 // PopulateXmlRelatedCertificatesList builds an XmlRelatedCertificate. Port of the protected
 // populateXmlRelatedCertificatesList(CertificateOrigin, CertificateToken, TokenCertificateSource).
-func (b *DiagnosticDataBuilder) PopulateXmlRelatedCertificatesList(origin enumerations.CertificateOrigin, cert *model.CertificateToken,
+func (b *DataBuilder) PopulateXmlRelatedCertificatesList(origin enumerations.CertificateOrigin, cert *model.CertificateToken,
 	certificateSource foundCertificatesSource) *jaxb.XmlRelatedCertificate {
 	xrc := &jaxb.XmlRelatedCertificate{}
 	xrc.Origin = append(xrc.Origin, jaxb.CertificateOriginValue(origin))
@@ -1607,7 +1607,7 @@ func (b *DiagnosticDataBuilder) PopulateXmlRelatedCertificatesList(origin enumer
 // PopulateXmlRelatedCertificatesListInto builds an XmlRelatedCertificate and populates the
 // relatedCertificates list. Port of the protected populateXmlRelatedCertificatesList(
 // List<XmlRelatedCertificate>, TokenCertificateSource, CertificateToken, CertificateRef).
-func (b *DiagnosticDataBuilder) PopulateXmlRelatedCertificatesListInto(relatedCertificates []*jaxb.XmlRelatedCertificate,
+func (b *DataBuilder) PopulateXmlRelatedCertificatesListInto(relatedCertificates []*jaxb.XmlRelatedCertificate,
 	certificateSource foundCertificatesSource, cert *model.CertificateToken, certificateRef *spi.CertificateRef) []*jaxb.XmlRelatedCertificate {
 	xrc := b.getXmlRelatedCertificateWithId(relatedCertificates, b.identifierProvider.IDAsString(cert))
 	if xrc == nil {
@@ -1624,7 +1624,7 @@ func (b *DiagnosticDataBuilder) PopulateXmlRelatedCertificatesListInto(relatedCe
 	return relatedCertificates
 }
 
-func (b *DiagnosticDataBuilder) getXmlRelatedCertificateWithId(relatedCertificates []*jaxb.XmlRelatedCertificate, certId string) *jaxb.XmlRelatedCertificate {
+func (b *DataBuilder) getXmlRelatedCertificateWithId(relatedCertificates []*jaxb.XmlRelatedCertificate, certId string) *jaxb.XmlRelatedCertificate {
 	for _, relatedCertificate := range relatedCertificates {
 		if certId == relatedCertificate.Certificate.Id.String() {
 			return relatedCertificate
@@ -1635,7 +1635,7 @@ func (b *DiagnosticDataBuilder) getXmlRelatedCertificateWithId(relatedCertificat
 
 // GetXmlCertificateRef builds an XmlCertificateRef from a CertificateRef. Port of the protected
 // getXmlCertificateRef(CertificateRef, CertificateRefOrigin).
-func (b *DiagnosticDataBuilder) GetXmlCertificateRef(ref *spi.CertificateRef, origin enumerations.CertificateRefOrigin) *jaxb.XmlCertificateRef {
+func (b *DataBuilder) GetXmlCertificateRef(ref *spi.CertificateRef, origin enumerations.CertificateRefOrigin) *jaxb.XmlCertificateRef {
 	certificateRef := &jaxb.XmlCertificateRef{}
 	signerIdentifier := ref.CertificateIdentifier()
 	if signerIdentifier != nil {
@@ -1661,7 +1661,7 @@ func (b *DiagnosticDataBuilder) GetXmlCertificateRef(ref *spi.CertificateRef, or
 	return certificateRef
 }
 
-func (b *DiagnosticDataBuilder) getOrphanCertificates(certificateSource foundCertificatesSource, signingCertificate *model.CertificateToken) []*jaxb.XmlOrphanCertificate {
+func (b *DataBuilder) getOrphanCertificates(certificateSource foundCertificatesSource, signingCertificate *model.CertificateToken) []*jaxb.XmlOrphanCertificate {
 	orphanCertificatesMap := map[string]*jaxb.XmlOrphanCertificate{}
 	var order []string
 	add := func(origin enumerations.CertificateOrigin, tokens []*model.CertificateToken) {
@@ -1696,7 +1696,7 @@ func (b *DiagnosticDataBuilder) getOrphanCertificates(certificateSource foundCer
 // PopulateOrphanCertificateOriginMap fills the orphan certificate map with the given values.
 // Port of the protected populateOrphanCertificateOriginMap(Map<String,XmlOrphanCertificate>,
 // CertificateOrigin, List<CertificateToken>, TokenCertificateSource, CertificateToken).
-func (b *DiagnosticDataBuilder) populateOrphanCertificateOriginMap(orphanCertificatesMap map[string]*jaxb.XmlOrphanCertificate, order *[]string,
+func (b *DataBuilder) populateOrphanCertificateOriginMap(orphanCertificatesMap map[string]*jaxb.XmlOrphanCertificate, order *[]string,
 	origin enumerations.CertificateOrigin, certificateTokens []*model.CertificateToken, certificateSource foundCertificatesSource,
 	signingCertificate *model.CertificateToken) {
 	for _, certificateToken := range certificateTokens {
@@ -1717,7 +1717,7 @@ func (b *DiagnosticDataBuilder) populateOrphanCertificateOriginMap(orphanCertifi
 // GetXmlOrphanCertificate builds an XmlOrphanCertificateToken. Port of the protected
 // getXmlOrphanCertificate(CertificateOrigin, CertificateToken, TokenCertificateSource,
 // CertificateToken).
-func (b *DiagnosticDataBuilder) GetXmlOrphanCertificate(origin enumerations.CertificateOrigin, certificateToken *model.CertificateToken,
+func (b *DataBuilder) GetXmlOrphanCertificate(origin enumerations.CertificateOrigin, certificateToken *model.CertificateToken,
 	certificateSource foundCertificatesSource, signingCertificate *model.CertificateToken) *jaxb.XmlOrphanCertificate {
 	xoc := &jaxb.XmlOrphanCertificate{}
 	xoc.Origin = append(xoc.Origin, jaxb.CertificateOriginValue(origin))
@@ -1742,7 +1742,7 @@ func (b *DiagnosticDataBuilder) GetXmlOrphanCertificate(origin enumerations.Cert
 // expose unexported fields to an embedding type in another package, so this getter is the
 // narrowest surface that reproduces the same check. No existing behavior changes - purely
 // additive.
-func (b *DiagnosticDataBuilder) IsKnownCertificate(id string) bool {
+func (b *DataBuilder) IsKnownCertificate(id string) bool {
 	_, ok := b.xmlCertsMap[id]
 	return ok
 }
@@ -1750,14 +1750,14 @@ func (b *DiagnosticDataBuilder) IsKnownCertificate(id string) bool {
 // IsKnownRevocation reports whether id (a revocation identifier's AsXmlID()) has already been
 // recorded as a non-orphan XmlRevocation (i.e. is a key of the private xmlRevocationsMap cache).
 // See IsKnownCertificate's doc comment for why this accessor exists.
-func (b *DiagnosticDataBuilder) IsKnownRevocation(id string) bool {
+func (b *DataBuilder) IsKnownRevocation(id string) bool {
 	_, ok := b.xmlRevocationsMap[id]
 	return ok
 }
 
 // BuildXmlOrphanCertificateToken builds an XmlOrphanCertificateToken from the given
 // CertificateToken. Port of the protected buildXmlOrphanCertificateToken(CertificateToken).
-func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken *model.CertificateToken) *jaxb.XmlOrphanCertificateToken {
+func (b *DataBuilder) BuildXmlOrphanCertificateToken(certificateToken *model.CertificateToken) *jaxb.XmlOrphanCertificateToken {
 	id := certificateToken.DSSIDAsString()
 	orphanToken, ok := b.xmlOrphanCertificateTokensMap[id]
 	if !ok {
@@ -1809,7 +1809,7 @@ func (b *DiagnosticDataBuilder) BuildXmlOrphanCertificateToken(certificateToken 
 	return orphanToken
 }
 
-func (b *DiagnosticDataBuilder) getOrphanCertificateRefs(certificateSource foundCertificatesSource, signingCertificate *model.CertificateToken) []*jaxb.XmlOrphanCertificate {
+func (b *DataBuilder) getOrphanCertificateRefs(certificateSource foundCertificatesSource, signingCertificate *model.CertificateToken) []*jaxb.XmlOrphanCertificate {
 	orphanCertificates := make([]*jaxb.XmlOrphanCertificate, 0)
 	orphanCertificateRefs := certificateSource.OrphanCertificateRefs()
 	for _, orphanCertificateRef := range orphanCertificateRefs {
@@ -1820,7 +1820,7 @@ func (b *DiagnosticDataBuilder) getOrphanCertificateRefs(certificateSource found
 	return orphanCertificates
 }
 
-func (b *DiagnosticDataBuilder) createXmlOrphanCertificateFromRef(certificateSource foundCertificatesSource,
+func (b *DataBuilder) createXmlOrphanCertificateFromRef(certificateSource foundCertificatesSource,
 	orphanCertificateRef *spi.CertificateRef, signingCertificate *model.CertificateToken) *jaxb.XmlOrphanCertificate {
 	orphanCertificate := &jaxb.XmlOrphanCertificate{}
 	orphanCertificate.Token = b.getXmlOrphanCertificateTokenFromRef(orphanCertificateRef)
@@ -1832,7 +1832,7 @@ func (b *DiagnosticDataBuilder) createXmlOrphanCertificateFromRef(certificateSou
 	return orphanCertificate
 }
 
-func (b *DiagnosticDataBuilder) getXmlOrphanCertificateTokenFromRef(orphanCertificateRef *spi.CertificateRef) *jaxb.XmlOrphanCertificateToken {
+func (b *DataBuilder) getXmlOrphanCertificateTokenFromRef(orphanCertificateRef *spi.CertificateRef) *jaxb.XmlOrphanCertificateToken {
 	id := orphanCertificateRef.DSSIDAsString()
 	orphanToken, ok := b.xmlOrphanCertificateTokensMap[id]
 	if !ok {
@@ -1853,7 +1853,7 @@ func (b *DiagnosticDataBuilder) getXmlOrphanCertificateTokenFromRef(orphanCertif
 // GetXmlRelatedCertificateForOrphanReferences returns a list of XmlRelatedCertificates for
 // orphan references within certificateSource. Port of the protected
 // getXmlRelatedCertificateForOrphanReferences(TokenCertificateSource).
-func (b *DiagnosticDataBuilder) GetXmlRelatedCertificateForOrphanReferences(certificateSource foundCertificatesSource) []*jaxb.XmlRelatedCertificate {
+func (b *DataBuilder) GetXmlRelatedCertificateForOrphanReferences(certificateSource foundCertificatesSource) []*jaxb.XmlRelatedCertificate {
 	relatedCertificates := make([]*jaxb.XmlRelatedCertificate, 0)
 	for _, certificateRef := range certificateSource.OrphanCertificateRefs() {
 		certificateTokens := b.GetUsedCertificatesByCertificateRef(certificateRef)
@@ -1868,7 +1868,7 @@ func (b *DiagnosticDataBuilder) GetXmlRelatedCertificateForOrphanReferences(cert
 
 // GetUsedCertificatesByCertificateRef returns used certificates matched by the certificateRef.
 // Port of the protected getUsedCertificatesByCertificateRef(CertificateRef).
-func (b *DiagnosticDataBuilder) GetUsedCertificatesByCertificateRef(certificateRef *spi.CertificateRef) []*model.CertificateToken {
+func (b *DataBuilder) GetUsedCertificatesByCertificateRef(certificateRef *spi.CertificateRef) []*model.CertificateToken {
 	matcher := &spi.CertificateTokenRefMatcher{}
 	tokensFromRefs := b.allCertificateSources.FindTokensFromCertRef(certificateRef)
 
@@ -1889,7 +1889,7 @@ func (b *DiagnosticDataBuilder) GetUsedCertificatesByCertificateRef(certificateR
 
 // VerifyAgainstCertificateToken verifies the reference against a certificate token. Port of the
 // protected verifyAgainstCertificateToken(XmlCertificateRef, CertificateRef, CertificateToken).
-func (b *DiagnosticDataBuilder) VerifyAgainstCertificateToken(xmlCertificateRef *jaxb.XmlCertificateRef, ref *spi.CertificateRef, signingCertificate *model.CertificateToken) {
+func (b *DataBuilder) VerifyAgainstCertificateToken(xmlCertificateRef *jaxb.XmlCertificateRef, ref *spi.CertificateRef, signingCertificate *model.CertificateToken) {
 	tokenRefMatcher := &spi.CertificateTokenRefMatcher{}
 	digestAlgoAndValue := xmlCertificateRef.DigestAlgoAndValue
 	if digestAlgoAndValue != nil {
@@ -1904,13 +1904,13 @@ func (b *DiagnosticDataBuilder) VerifyAgainstCertificateToken(xmlCertificateRef 
 	}
 }
 
-func (b *DiagnosticDataBuilder) getXmlIssuerSerial(signerIdentifier *spi.SignerIdentifier) *jaxb.XmlIssuerSerial {
+func (b *DataBuilder) getXmlIssuerSerial(signerIdentifier *spi.SignerIdentifier) *jaxb.XmlIssuerSerial {
 	xmlIssuerSerial := &jaxb.XmlIssuerSerial{}
 	xmlIssuerSerial.Value = jaxb.Base64Binary(signerIdentifier.IssuerSerialEncoded())
 	return xmlIssuerSerial
 }
 
-func (b *DiagnosticDataBuilder) getXmlIssuerEntityKey(token model.Token) *jaxb.XmlIssuerEntityKey {
+func (b *DataBuilder) getXmlIssuerEntityKey(token model.Token) *jaxb.XmlIssuerEntityKey {
 	var issuerCertificate *model.CertificateToken
 	if token.IsSelfSigned() {
 		issuerCertificate = token.(*model.CertificateToken)
@@ -1948,7 +1948,7 @@ func bytesEqual(a, b []byte) bool {
 
 // GetXmlBasicSignature gets an XmlBasicSignature for a Token. Port of the protected
 // getXmlBasicSignature(Token).
-func (b *DiagnosticDataBuilder) GetXmlBasicSignature(token model.Token) *jaxb.XmlBasicSignature {
+func (b *DataBuilder) GetXmlBasicSignature(token model.Token) *jaxb.XmlBasicSignature {
 	xmlBasicSignatureType := &jaxb.XmlBasicSignature{}
 
 	signatureAlgorithm := token.SignatureAlgorithm()
@@ -1973,7 +1973,7 @@ func (b *DiagnosticDataBuilder) GetXmlBasicSignature(token model.Token) *jaxb.Xm
 
 // BuildDetachedXmlCertificate builds an XmlCertificate from the given CertificateToken. Port of
 // the protected buildDetachedXmlCertificate(CertificateToken).
-func (b *DiagnosticDataBuilder) BuildDetachedXmlCertificate(certToken *model.CertificateToken) *jaxb.XmlCertificate {
+func (b *DataBuilder) BuildDetachedXmlCertificate(certToken *model.CertificateToken) *jaxb.XmlCertificate {
 	xmlCert := &jaxb.XmlCertificate{}
 	id := b.identifierProvider.IDAsString(certToken)
 	xmlCert.Id = jaxb.NewCollapsedString(id)
@@ -2065,7 +2065,7 @@ func (b *DiagnosticDataBuilder) BuildDetachedXmlCertificate(certToken *model.Cer
 	return xmlCert
 }
 
-func (b *DiagnosticDataBuilder) getXmlCertificateExtensions(token *model.CertificateToken) []jaxb.XmlCertificateExtensionItem {
+func (b *DataBuilder) getXmlCertificateExtensions(token *model.CertificateToken) []jaxb.XmlCertificateExtensionItem {
 	certificateExtensions, err := spi.CertificateExtensionsUtilsCertificateExtensions(token)
 	if err != nil {
 		panic(err)
@@ -2130,7 +2130,7 @@ func (b *DiagnosticDataBuilder) getXmlCertificateExtensions(token *model.Certifi
 	return xmlCertificateExtensions
 }
 
-func (b *DiagnosticDataBuilder) getXmlKeyUsages(keyUsage *extension.KeyUsage) *jaxb.XmlKeyUsages {
+func (b *DataBuilder) getXmlKeyUsages(keyUsage *extension.KeyUsage) *jaxb.XmlKeyUsages {
 	xmlKeyUsages := &jaxb.XmlKeyUsages{}
 	b.fillXmlCertificateExtension(&xmlKeyUsages.XmlCertificateExtensionContent, &xmlKeyUsages.XmlCertificateExtensionAttrs, keyUsage)
 	for _, bit := range keyUsage.KeyUsageBits() {
@@ -2139,21 +2139,21 @@ func (b *DiagnosticDataBuilder) getXmlKeyUsages(keyUsage *extension.KeyUsage) *j
 	return xmlKeyUsages
 }
 
-func (b *DiagnosticDataBuilder) getXmlExtendedKeyUsages(extendedKeyUsages *extension.ExtendedKeyUsages) *jaxb.XmlExtendedKeyUsages {
+func (b *DataBuilder) getXmlExtendedKeyUsages(extendedKeyUsages *extension.ExtendedKeyUsages) *jaxb.XmlExtendedKeyUsages {
 	xmlExtendedKeyUsages := &jaxb.XmlExtendedKeyUsages{}
 	b.fillXmlCertificateExtension(&xmlExtendedKeyUsages.XmlCertificateExtensionContent, &xmlExtendedKeyUsages.XmlCertificateExtensionAttrs, extendedKeyUsages)
 	xmlExtendedKeyUsages.ExtendedKeyUsageOid = b.getXmlOids(extendedKeyUsages.Oids())
 	return xmlExtendedKeyUsages
 }
 
-func (b *DiagnosticDataBuilder) getXmlCertificatePolicies(certificatePolicies *extension.CertificatePolicies) *jaxb.XmlCertificatePolicies {
+func (b *DataBuilder) getXmlCertificatePolicies(certificatePolicies *extension.CertificatePolicies) *jaxb.XmlCertificatePolicies {
 	xmlCertificatePolicies := &jaxb.XmlCertificatePolicies{}
 	b.fillXmlCertificateExtension(&xmlCertificatePolicies.XmlCertificateExtensionContent, &xmlCertificatePolicies.XmlCertificateExtensionAttrs, certificatePolicies)
 	xmlCertificatePolicies.CertificatePolicy = b.getXmlCertificatePolicyList(certificatePolicies.PolicyList())
 	return xmlCertificatePolicies
 }
 
-func (b *DiagnosticDataBuilder) getXmlCertificatePolicyList(certificatePolicies []*extension.CertificatePolicy) []*jaxb.XmlCertificatePolicy {
+func (b *DataBuilder) getXmlCertificatePolicyList(certificatePolicies []*extension.CertificatePolicy) []*jaxb.XmlCertificatePolicy {
 	result := make([]*jaxb.XmlCertificatePolicy, 0, len(certificatePolicies))
 	for _, cp := range certificatePolicies {
 		xmlCP := &jaxb.XmlCertificatePolicy{}
@@ -2170,14 +2170,14 @@ func (b *DiagnosticDataBuilder) getXmlCertificatePolicyList(certificatePolicies 
 	return result
 }
 
-func (b *DiagnosticDataBuilder) getXmlSubjectAlternativeNames(subjectAlternativeNames *extension.SubjectAlternativeNames) *jaxb.XmlSubjectAlternativeNames {
+func (b *DataBuilder) getXmlSubjectAlternativeNames(subjectAlternativeNames *extension.SubjectAlternativeNames) *jaxb.XmlSubjectAlternativeNames {
 	xmlSubjectAlternativeNames := &jaxb.XmlSubjectAlternativeNames{}
 	b.fillXmlCertificateExtension(&xmlSubjectAlternativeNames.XmlCertificateExtensionContent, &xmlSubjectAlternativeNames.XmlCertificateExtensionAttrs, subjectAlternativeNames)
 	xmlSubjectAlternativeNames.SubjectAlternativeName = b.getXmlGeneralNames(subjectAlternativeNames.GeneralNames())
 	return xmlSubjectAlternativeNames
 }
 
-func (b *DiagnosticDataBuilder) getXmlGeneralNames(generalNames []*extension.GeneralName) []*jaxb.XmlGeneralName {
+func (b *DataBuilder) getXmlGeneralNames(generalNames []*extension.GeneralName) []*jaxb.XmlGeneralName {
 	result := make([]*jaxb.XmlGeneralName, 0, len(generalNames))
 	for _, generalName := range generalNames {
 		result = append(result, b.getXmlGeneralName(generalName))
@@ -2185,7 +2185,7 @@ func (b *DiagnosticDataBuilder) getXmlGeneralNames(generalNames []*extension.Gen
 	return result
 }
 
-func (b *DiagnosticDataBuilder) getXmlGeneralName(generalName *extension.GeneralName) *jaxb.XmlGeneralName {
+func (b *DataBuilder) getXmlGeneralName(generalName *extension.GeneralName) *jaxb.XmlGeneralName {
 	xmlGeneralName := &jaxb.XmlGeneralName{}
 	t := jaxb.GeneralNameTypeValue(generalName.GeneralNameType())
 	xmlGeneralName.Type = &t
@@ -2193,7 +2193,7 @@ func (b *DiagnosticDataBuilder) getXmlGeneralName(generalName *extension.General
 	return xmlGeneralName
 }
 
-func (b *DiagnosticDataBuilder) getXmlBasicConstraints(basicConstraints *extension.BasicConstraints) *jaxb.XmlBasicConstraints {
+func (b *DataBuilder) getXmlBasicConstraints(basicConstraints *extension.BasicConstraints) *jaxb.XmlBasicConstraints {
 	xmlBasicConstraints := &jaxb.XmlBasicConstraints{}
 	b.fillXmlCertificateExtension(&xmlBasicConstraints.XmlCertificateExtensionContent, &xmlBasicConstraints.XmlCertificateExtensionAttrs, basicConstraints)
 	xmlBasicConstraints.CA = basicConstraints.IsCa()
@@ -2204,7 +2204,7 @@ func (b *DiagnosticDataBuilder) getXmlBasicConstraints(basicConstraints *extensi
 	return xmlBasicConstraints
 }
 
-func (b *DiagnosticDataBuilder) getXmlPolicyConstraints(policyConstraints *extension.PolicyConstraints) *jaxb.XmlPolicyConstraints {
+func (b *DataBuilder) getXmlPolicyConstraints(policyConstraints *extension.PolicyConstraints) *jaxb.XmlPolicyConstraints {
 	xmlPolicyConstraints := &jaxb.XmlPolicyConstraints{}
 	b.fillXmlCertificateExtension(&xmlPolicyConstraints.XmlCertificateExtensionContent, &xmlPolicyConstraints.XmlCertificateExtensionAttrs, policyConstraints)
 	if policyConstraints.InhibitPolicyMapping() != -1 {
@@ -2218,7 +2218,7 @@ func (b *DiagnosticDataBuilder) getXmlPolicyConstraints(policyConstraints *exten
 	return xmlPolicyConstraints
 }
 
-func (b *DiagnosticDataBuilder) getXmlInhibitAnyPolicy(inhibitAnyPolicy *extension.InhibitAnyPolicy) *jaxb.XmlInhibitAnyPolicy {
+func (b *DataBuilder) getXmlInhibitAnyPolicy(inhibitAnyPolicy *extension.InhibitAnyPolicy) *jaxb.XmlInhibitAnyPolicy {
 	xmlInhibitAnyPolicy := &jaxb.XmlInhibitAnyPolicy{}
 	b.fillXmlCertificateExtension(&xmlInhibitAnyPolicy.XmlCertificateExtensionContent, &xmlInhibitAnyPolicy.XmlCertificateExtensionAttrs, inhibitAnyPolicy)
 	if inhibitAnyPolicy.Value() != -1 {
@@ -2228,7 +2228,7 @@ func (b *DiagnosticDataBuilder) getXmlInhibitAnyPolicy(inhibitAnyPolicy *extensi
 	return xmlInhibitAnyPolicy
 }
 
-func (b *DiagnosticDataBuilder) getXmlNameConstraints(nameConstraints *extension.NameConstraints) *jaxb.XmlNameConstraints {
+func (b *DataBuilder) getXmlNameConstraints(nameConstraints *extension.NameConstraints) *jaxb.XmlNameConstraints {
 	xmlNameConstraints := &jaxb.XmlNameConstraints{}
 	b.fillXmlCertificateExtension(&xmlNameConstraints.XmlCertificateExtensionContent, &xmlNameConstraints.XmlCertificateExtensionAttrs, nameConstraints)
 	if utils.IsCollectionNotEmpty(nameConstraints.PermittedSubtrees()) {
@@ -2240,7 +2240,7 @@ func (b *DiagnosticDataBuilder) getXmlNameConstraints(nameConstraints *extension
 	return xmlNameConstraints
 }
 
-func (b *DiagnosticDataBuilder) getXmlGeneralSubtrees(generalSubtrees []*extension.GeneralSubtree) []*jaxb.XmlGeneralSubtree {
+func (b *DataBuilder) getXmlGeneralSubtrees(generalSubtrees []*extension.GeneralSubtree) []*jaxb.XmlGeneralSubtree {
 	result := make([]*jaxb.XmlGeneralSubtree, 0, len(generalSubtrees))
 	for _, generalSubtree := range generalSubtrees {
 		result = append(result, b.getXmlGeneralSubtree(generalSubtree))
@@ -2248,7 +2248,7 @@ func (b *DiagnosticDataBuilder) getXmlGeneralSubtrees(generalSubtrees []*extensi
 	return result
 }
 
-func (b *DiagnosticDataBuilder) getXmlGeneralSubtree(generalSubtree *extension.GeneralSubtree) *jaxb.XmlGeneralSubtree {
+func (b *DataBuilder) getXmlGeneralSubtree(generalSubtree *extension.GeneralSubtree) *jaxb.XmlGeneralSubtree {
 	xmlGeneralSubtree := &jaxb.XmlGeneralSubtree{}
 	t := jaxb.GeneralNameTypeValue(generalSubtree.GeneralNameType())
 	xmlGeneralSubtree.Type = &t
@@ -2258,21 +2258,21 @@ func (b *DiagnosticDataBuilder) getXmlGeneralSubtree(generalSubtree *extension.G
 	return xmlGeneralSubtree
 }
 
-func (b *DiagnosticDataBuilder) getXmlCRLDistributionPoints(crlDistributionPoints *extension.CRLDistributionPoints) *jaxb.XmlCRLDistributionPoints {
+func (b *DataBuilder) getXmlCRLDistributionPoints(crlDistributionPoints *extension.CRLDistributionPoints) *jaxb.XmlCRLDistributionPoints {
 	xmlCRLDistributionPoints := &jaxb.XmlCRLDistributionPoints{}
 	b.fillXmlCertificateExtension(&xmlCRLDistributionPoints.XmlCertificateExtensionContent, &xmlCRLDistributionPoints.XmlCertificateExtensionAttrs, crlDistributionPoints)
 	xmlCRLDistributionPoints.CrlUrl = b.getCleanedUrls(crlDistributionPoints.CrlUrls())
 	return xmlCRLDistributionPoints
 }
 
-func (b *DiagnosticDataBuilder) getXmlFreshestCRL(freshestCRL *extension.FreshestCRL) *jaxb.XmlFreshestCRL {
+func (b *DataBuilder) getXmlFreshestCRL(freshestCRL *extension.FreshestCRL) *jaxb.XmlFreshestCRL {
 	xmlFreshestCRL := &jaxb.XmlFreshestCRL{}
 	b.fillXmlCertificateExtension(&xmlFreshestCRL.XmlCertificateExtensionContent, &xmlFreshestCRL.XmlCertificateExtensionAttrs, freshestCRL)
 	xmlFreshestCRL.CrlUrl = b.getCleanedUrls(freshestCRL.CrlUrls())
 	return xmlFreshestCRL
 }
 
-func (b *DiagnosticDataBuilder) getXmlAuthorityKeyIdentifier(aki *extension.AuthorityKeyIdentifier) *jaxb.XmlAuthorityKeyIdentifier {
+func (b *DataBuilder) getXmlAuthorityKeyIdentifier(aki *extension.AuthorityKeyIdentifier) *jaxb.XmlAuthorityKeyIdentifier {
 	xmlAuthorityKeyIdentifier := &jaxb.XmlAuthorityKeyIdentifier{}
 	b.fillXmlCertificateExtension(&xmlAuthorityKeyIdentifier.XmlCertificateExtensionContent, &xmlAuthorityKeyIdentifier.XmlCertificateExtensionAttrs, aki)
 	if aki.KeyIdentifier() != nil {
@@ -2286,7 +2286,7 @@ func (b *DiagnosticDataBuilder) getXmlAuthorityKeyIdentifier(aki *extension.Auth
 	return xmlAuthorityKeyIdentifier
 }
 
-func (b *DiagnosticDataBuilder) getXmlSubjectKeyIdentifier(ski *extension.SubjectKeyIdentifier) *jaxb.XmlSubjectKeyIdentifier {
+func (b *DataBuilder) getXmlSubjectKeyIdentifier(ski *extension.SubjectKeyIdentifier) *jaxb.XmlSubjectKeyIdentifier {
 	xmlSubjectKeyIdentifier := &jaxb.XmlSubjectKeyIdentifier{}
 	b.fillXmlCertificateExtension(&xmlSubjectKeyIdentifier.XmlCertificateExtensionContent, &xmlSubjectKeyIdentifier.XmlCertificateExtensionAttrs, ski)
 	if ski.Ski() != nil {
@@ -2296,7 +2296,7 @@ func (b *DiagnosticDataBuilder) getXmlSubjectKeyIdentifier(ski *extension.Subjec
 	return xmlSubjectKeyIdentifier
 }
 
-func (b *DiagnosticDataBuilder) getXmlAuthorityInformationAccess(aia *extension.AuthorityInformationAccess) *jaxb.XmlAuthorityInformationAccess {
+func (b *DataBuilder) getXmlAuthorityInformationAccess(aia *extension.AuthorityInformationAccess) *jaxb.XmlAuthorityInformationAccess {
 	xmlAuthorityInformationAccess := &jaxb.XmlAuthorityInformationAccess{}
 	b.fillXmlCertificateExtension(&xmlAuthorityInformationAccess.XmlCertificateExtensionContent, &xmlAuthorityInformationAccess.XmlCertificateExtensionAttrs, aia)
 	xmlAuthorityInformationAccess.CaIssuersUrl = b.getCleanedUrls(aia.CaIssuers())
@@ -2304,7 +2304,7 @@ func (b *DiagnosticDataBuilder) getXmlAuthorityInformationAccess(aia *extension.
 	return xmlAuthorityInformationAccess
 }
 
-func (b *DiagnosticDataBuilder) getXmlIdPkixOcspNoCheck(ocspNoCheck *extension.OCSPNoCheck) *jaxb.XmlIdPkixOcspNoCheck {
+func (b *DataBuilder) getXmlIdPkixOcspNoCheck(ocspNoCheck *extension.OCSPNoCheck) *jaxb.XmlIdPkixOcspNoCheck {
 	xmlIdPkixOcspNoCheck := &jaxb.XmlIdPkixOcspNoCheck{}
 	b.fillXmlCertificateExtension(&xmlIdPkixOcspNoCheck.XmlCertificateExtensionContent, &xmlIdPkixOcspNoCheck.XmlCertificateExtensionAttrs, ocspNoCheck)
 	present := ocspNoCheck.IsOcspNoCheck()
@@ -2312,7 +2312,7 @@ func (b *DiagnosticDataBuilder) getXmlIdPkixOcspNoCheck(ocspNoCheck *extension.O
 	return xmlIdPkixOcspNoCheck
 }
 
-func (b *DiagnosticDataBuilder) getXmlValAssuredShortTermCertificate(valAssuredST *extension.ValidityAssuredShortTerm) *jaxb.XmlValAssuredShortTermCertificate {
+func (b *DataBuilder) getXmlValAssuredShortTermCertificate(valAssuredST *extension.ValidityAssuredShortTerm) *jaxb.XmlValAssuredShortTermCertificate {
 	xmlValAssuredShortTermCertificate := &jaxb.XmlValAssuredShortTermCertificate{}
 	b.fillXmlCertificateExtension(&xmlValAssuredShortTermCertificate.XmlCertificateExtensionContent, &xmlValAssuredShortTermCertificate.XmlCertificateExtensionAttrs, valAssuredST)
 	present := valAssuredST.IsValAssuredSTCerts()
@@ -2320,7 +2320,7 @@ func (b *DiagnosticDataBuilder) getXmlValAssuredShortTermCertificate(valAssuredS
 	return xmlValAssuredShortTermCertificate
 }
 
-func (b *DiagnosticDataBuilder) getXmlNoRevAvail(noRevAvail *extension.NoRevAvail) *jaxb.XmlNoRevAvail {
+func (b *DataBuilder) getXmlNoRevAvail(noRevAvail *extension.NoRevAvail) *jaxb.XmlNoRevAvail {
 	xmlNoRevAvail := &jaxb.XmlNoRevAvail{}
 	b.fillXmlCertificateExtension(&xmlNoRevAvail.XmlCertificateExtensionContent, &xmlNoRevAvail.XmlCertificateExtensionAttrs, noRevAvail)
 	present := noRevAvail.IsNoRevAvail()
@@ -2328,7 +2328,7 @@ func (b *DiagnosticDataBuilder) getXmlNoRevAvail(noRevAvail *extension.NoRevAvai
 	return xmlNoRevAvail
 }
 
-func (b *DiagnosticDataBuilder) getXmlOtherCertificateExtensions(otherCertificateExtensions []*extension.CertificateExtension) []jaxb.XmlCertificateExtensionItem {
+func (b *DataBuilder) getXmlOtherCertificateExtensions(otherCertificateExtensions []*extension.CertificateExtension) []jaxb.XmlCertificateExtensionItem {
 	result := make([]jaxb.XmlCertificateExtensionItem, 0, len(otherCertificateExtensions))
 	for _, certificateExtension := range otherCertificateExtensions {
 		xmlCertificateExtension := &jaxb.XmlCertificateExtension{}
@@ -2350,7 +2350,7 @@ type certificateExtensionLike interface {
 	IsCritical() bool
 }
 
-func (b *DiagnosticDataBuilder) fillXmlCertificateExtension(content *jaxb.XmlCertificateExtensionContent, attrs *jaxb.XmlCertificateExtensionAttrs, certificateExtension certificateExtensionLike) {
+func (b *DataBuilder) fillXmlCertificateExtension(content *jaxb.XmlCertificateExtensionContent, attrs *jaxb.XmlCertificateExtensionAttrs, certificateExtension certificateExtensionLike) {
 	oid := certificateExtension.OID()
 	attrs.OID = &oid
 	// Java: xmlCertificateExtension.setDescription(certificateExtension.getDescription()),
@@ -2365,7 +2365,7 @@ func (b *DiagnosticDataBuilder) fillXmlCertificateExtension(content *jaxb.XmlCer
 	attrs.Critical = &critical
 }
 
-func (b *DiagnosticDataBuilder) getXmlTrusted(certificateToken *model.CertificateToken) *jaxb.XmlTrusted {
+func (b *DataBuilder) getXmlTrusted(certificateToken *model.CertificateToken) *jaxb.XmlTrusted {
 	xmlTrusted := &jaxb.XmlTrusted{}
 	if b.allCertificateSources.IsTrusted(certificateToken) {
 		certificateTrustTime := b.getCertificateTrustTime(certificateToken)
@@ -2384,7 +2384,7 @@ func (b *DiagnosticDataBuilder) getXmlTrusted(certificateToken *model.Certificat
 	return xmlTrusted
 }
 
-func (b *DiagnosticDataBuilder) getCertificateTrustTime(certificateToken *model.CertificateToken) *tsl.CertificateTrustTime {
+func (b *DataBuilder) getCertificateTrustTime(certificateToken *model.CertificateToken) *tsl.CertificateTrustTime {
 	var certificateTrustTime *tsl.CertificateTrustTime
 	for _, trustedSource := range b.allCertificateSources.Sources() {
 		if !trustedSource.IsTrusted(certificateToken) {
@@ -2404,7 +2404,7 @@ func (b *DiagnosticDataBuilder) getCertificateTrustTime(certificateToken *model.
 	return certificateTrustTime
 }
 
-func (b *DiagnosticDataBuilder) getXmlCertificateSources(token *model.CertificateToken) []jaxb.CertificateSourceTypeValue {
+func (b *DataBuilder) getXmlCertificateSources(token *model.CertificateToken) []jaxb.CertificateSourceTypeValue {
 	certificateSources := make([]enumerations.CertificateSourceType, 0)
 	if b.allCertificateSources != nil {
 		sourceTypes := b.allCertificateSources.CertificateSourceTypeOf(token)
@@ -2423,7 +2423,7 @@ func (b *DiagnosticDataBuilder) getXmlCertificateSources(token *model.Certificat
 	return result
 }
 
-func (b *DiagnosticDataBuilder) getRevocationsForCert(certToken *model.CertificateToken) []validation.AnyRevocationToken {
+func (b *DataBuilder) getRevocationsForCert(certToken *model.CertificateToken) []validation.AnyRevocationToken {
 	revocations := make([]validation.AnyRevocationToken, 0)
 	if utils.IsCollectionNotEmpty(b.usedRevocations) {
 		for _, revocationToken := range b.usedRevocations {
@@ -2435,7 +2435,7 @@ func (b *DiagnosticDataBuilder) getRevocationsForCert(certToken *model.Certifica
 	return revocations
 }
 
-func (b *DiagnosticDataBuilder) getXmlOids(oidList []string) []*jaxb.XmlOID {
+func (b *DataBuilder) getXmlOids(oidList []string) []*jaxb.XmlOID {
 	result := make([]*jaxb.XmlOID, 0)
 	if utils.IsCollectionNotEmpty(oidList) {
 		for _, oid := range oidList {
@@ -2454,7 +2454,7 @@ func (b *DiagnosticDataBuilder) getXmlOids(oidList []string) []*jaxb.XmlOID {
 // the protected getXmlDigestAlgoAndValue(Digest); model.Digest is a Go value type (its zero
 // value stands for Java's null Digest), unlike the *model.CertificateExtension-family pointer
 // types this file otherwise uses nil for.
-func (b *DiagnosticDataBuilder) GetXmlDigestAlgoAndValueForDigestValue(digest model.Digest) *jaxb.XmlDigestAlgoAndValue {
+func (b *DataBuilder) GetXmlDigestAlgoAndValueForDigestValue(digest model.Digest) *jaxb.XmlDigestAlgoAndValue {
 	if digest.IsEmpty() {
 		return b.GetXmlDigestAlgoAndValueFor("", nil)
 	}
@@ -2463,7 +2463,7 @@ func (b *DiagnosticDataBuilder) GetXmlDigestAlgoAndValueForDigestValue(digest mo
 
 // GetXmlDigestAlgoAndValueFor builds an XmlDigestAlgoAndValue for a DigestAlgorithm and
 // digestValue. Port of the protected getXmlDigestAlgoAndValue(DigestAlgorithm, byte[]).
-func (b *DiagnosticDataBuilder) GetXmlDigestAlgoAndValueFor(digestAlgo enumerations.DigestAlgorithm, digestValue []byte) *jaxb.XmlDigestAlgoAndValue {
+func (b *DataBuilder) GetXmlDigestAlgoAndValueFor(digestAlgo enumerations.DigestAlgorithm, digestValue []byte) *jaxb.XmlDigestAlgoAndValue {
 	xmlDigestAlgAndValue := &jaxb.XmlDigestAlgoAndValue{}
 	if digestAlgo != "" {
 		v := jaxb.DigestAlgorithmValue(digestAlgo)
@@ -2479,7 +2479,7 @@ func (b *DiagnosticDataBuilder) GetXmlDigestAlgoAndValueFor(digestAlgo enumerati
 
 // certificateChainWrapper wraps a possibly-nil chain slice into the jaxb wrapper type, matching
 // Java's null List (no <CertificateChain/> element) vs a populated one.
-func (b *DiagnosticDataBuilder) certificateChainWrapper(chain []*jaxb.XmlChainItem) *jaxb.CertificateChainWrapper {
+func (b *DataBuilder) certificateChainWrapper(chain []*jaxb.XmlChainItem) *jaxb.CertificateChainWrapper {
 	if chain == nil {
 		return nil
 	}

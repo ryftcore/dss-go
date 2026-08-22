@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/signature/PAdESWithExternalCMSService.java (DSS 6.5.RC1).
 //
 // BouncyCastle's CMSSignedData is cms.CMS (PORTING.md), so DSSUtils.toCMSSignedData becomes
-// cms.CMSUtilsParseToCMS and DSSASN1Utils.getDEREncoded(CMSSignedData) becomes CMS.DEREncoded.
+// cms.UtilsParseToCMS and DSSASN1Utils.getDEREncoded(CMSSignedData) becomes CMS.DEREncoded.
 // java.io.Serializable, the serialVersionUID and slf4j are dropped.
 package pades
 
@@ -17,7 +17,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// PAdESWithExternalCMSService creates a PAdES signature using an external CMS provider.
+// WithExternalCMSService creates a PAdES signature using an external CMS provider.
 //
 // To create a signature with this service, follow the algorithm:
 //  1. create a message-digest computed on the PDF ByteRange:
@@ -30,12 +30,12 @@ import (
 //     signedDocument := service.SignDocument(toSignDocument, parameters, cmsDocument).
 //
 // NOTES:
-//   - unlike PAdESService, the PAdESSignatureParameters given to this service do not need a
+//   - unlike Service, the SignatureParameters given to this service do not need a
 //     signing certificate and certificate chain when using external signing;
 //   - signature extension to -T level with this service never leads to a signature-timestamp
 //     inside the CMS signed data; it always creates a new revision with a document timestamp;
 //   - a content timestamp is not supported by this service.
-type PAdESWithExternalCMSService struct {
+type WithExternalCMSService struct {
 	// certificateVerifier is used for a certificate chain validation.
 	certificateVerifier validation.CertificateVerifier
 
@@ -48,25 +48,25 @@ type PAdESWithExternalCMSService struct {
 
 // NewPAdESWithExternalCMSService is the default constructor.
 // Port of the no-arg PAdESWithExternalCMSService() constructor.
-func NewPAdESWithExternalCMSService() *PAdESWithExternalCMSService {
-	return &PAdESWithExternalCMSService{pdfObjFactory: NewDefaultPdfObjFactory()}
+func NewPAdESWithExternalCMSService() *WithExternalCMSService {
+	return &WithExternalCMSService{pdfObjFactory: NewDefaultPdfObjFactory()}
 }
 
 // SetCertificateVerifier defines the CertificateVerifier used for a signature extension and on
 // the CMS creation method. It is not required for B-level remote-signing solutions.
 // Port of #setCertificateVerifier.
-func (s *PAdESWithExternalCMSService) SetCertificateVerifier(certificateVerifier validation.CertificateVerifier) {
+func (s *WithExternalCMSService) SetCertificateVerifier(certificateVerifier validation.CertificateVerifier) {
 	s.certificateVerifier = certificateVerifier
 }
 
 // SetTspSource defines the TSP (timestamp provider) source. Port of #setTspSource.
-func (s *PAdESWithExternalCMSService) SetTspSource(tspSource validation.TSPSource) {
+func (s *WithExternalCMSService) SetTspSource(tspSource validation.TSPSource) {
 	s.tspSource = tspSource
 }
 
 // SetPdfObjFactory sets the IPdfObjFactory, i.e. the implementation to be used. Cannot be nil.
 // Port of #setPdfObjFactory.
-func (s *PAdESWithExternalCMSService) SetPdfObjFactory(pdfObjFactory IPdfObjFactory) {
+func (s *WithExternalCMSService) SetPdfObjFactory(pdfObjFactory IPdfObjFactory) {
 	if pdfObjFactory == nil {
 		panic("PdfObjFactory is null")
 	}
@@ -75,15 +75,15 @@ func (s *PAdESWithExternalCMSService) SetPdfObjFactory(pdfObjFactory IPdfObjFact
 
 // GetMessageDigest computes the message-digest of the signature ByteRange to be used for the CMS
 // signed data creation. Port of #getMessageDigest.
-func (s *PAdESWithExternalCMSService) GetMessageDigest(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) model.DSSMessageDigest {
+func (s *WithExternalCMSService) GetMessageDigest(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSMessageDigest {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
 	if parameters == nil {
 		panic("SignatureParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.MessageDigest(toSignDocument, parameters)
@@ -91,8 +91,8 @@ func (s *PAdESWithExternalCMSService) GetMessageDigest(toSignDocument model.DSSD
 
 // SignDocument embeds the provided external cmsDocument into toSignDocument within a new
 // signature revision. Port of #signDocument.
-func (s *PAdESWithExternalCMSService) SignDocument(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters, cmsDocument model.DSSDocument) model.DSSDocument {
+func (s *WithExternalCMSService) SignDocument(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters, cmsDocument model.DSSDocument) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
@@ -105,7 +105,7 @@ func (s *PAdESWithExternalCMSService) SignDocument(toSignDocument model.DSSDocum
 	if cmsDocument == nil {
 		panic("CMSDocument cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 	padesWithExternalCMSServiceAssertNotDigestDocument(cmsDocument)
 
 	cmsSignedData := padesWithExternalCMSServiceToCMSSignedData(cmsDocument)
@@ -128,7 +128,7 @@ func (s *PAdESWithExternalCMSService) SignDocument(toSignDocument model.DSSDocum
 
 // padesWithExternalCMSServiceToCMSSignedData ports the private #toCMSSignedData.
 func padesWithExternalCMSServiceToCMSSignedData(document model.DSSDocument) *cms.CMS {
-	parsed, err := cms.CMSUtilsParseToCMS(document)
+	parsed, err := cms.UtilsParseToCMS(document)
 	if err != nil {
 		panic(exception.NewIllegalInputExceptionWithCause(
 			fmt.Sprintf("A CMS file is expected : %s", err.Error()), err))
@@ -138,13 +138,13 @@ func padesWithExternalCMSServiceToCMSSignedData(document model.DSSDocument) *cms
 
 // PAdESSignatureService returns a new PDFSignatureService for a signature creation.
 // Port of the protected #getPAdESSignatureService.
-func (s *PAdESWithExternalCMSService) PAdESSignatureService() PDFSignatureService {
+func (s *WithExternalCMSService) PAdESSignatureService() PDFSignatureService {
 	return s.pdfObjFactory.NewPAdESSignatureService()
 }
 
-// PAdESService creates an instance of a PAdESService to be used for a signature extension.
+// Service creates an instance of a Service to be used for a signature extension.
 // Port of the protected #getPAdESService.
-func (s *PAdESWithExternalCMSService) PAdESService() *PAdESService {
+func (s *WithExternalCMSService) PAdESService() *Service {
 	if s.certificateVerifier == nil {
 		panic("CertificateVerifier shall be provided for PAdES extension!")
 	}
@@ -160,7 +160,7 @@ func (s *PAdESWithExternalCMSService) PAdESService() *PAdESService {
 
 // FinalDocumentName generates and returns a final name for the document to be created.
 // Port of the protected #getFinalDocumentName.
-func (s *PAdESWithExternalCMSService) FinalDocumentName(originalFile model.DSSDocument,
+func (s *WithExternalCMSService) FinalDocumentName(originalFile model.DSSDocument,
 	level enumerations.SignatureLevel) string {
 	name, err := validation.NewFileNameBuilder().SetOriginalFilename(originalFile.Name()).
 		SetSigningOperation(enumerations.SigningOperationSign).SetSignatureLevel(level).
@@ -181,11 +181,11 @@ func padesWithExternalCMSServiceAssertNotDigestDocument(document model.DSSDocume
 
 // padesWithExternalCMSServiceIsExtensionRequired ports the private #isExtensionRequired.
 func padesWithExternalCMSServiceIsExtensionRequired(cmsSignedData *cms.CMS,
-	parameters *PAdESSignatureParameters) bool {
+	parameters *SignatureParameters) bool {
 	if enumerations.SignatureLevelPAdESBaselineT == parameters.SignatureLevel() {
 		// only first SignerInformation is considered.
 		signerInformation := spi.DSSASN1UtilsFirstSignerInformation(cmsSignedData.SignerInfos())
-		unsignedAttributes := cades.CAdESUnsignedAttributesBuild(signerInformation)
+		unsignedAttributes := cades.UnsignedAttributesBuild(signerInformation)
 		for _, attribute := range unsignedAttributes.Attributes() {
 			if cades.OIDIdAaSignatureTimeStampToken.Equal(attribute.ASN1Oid()) {
 				// Upstream logs "The CMS signature already contains a signature-time-stamp
@@ -200,7 +200,7 @@ func padesWithExternalCMSServiceIsExtensionRequired(cmsSignedData *cms.CMS,
 // IsValidCMSSignedData verifies whether the given CMS document is cryptographically valid
 // against the message-digest computed on the PDF signature ByteRange.
 // Port of #isValidCMSSignedData.
-func (s *PAdESWithExternalCMSService) IsValidCMSSignedData(messageDigest model.DSSMessageDigest,
+func (s *WithExternalCMSService) IsValidCMSSignedData(messageDigest model.DSSMessageDigest,
 	cmsDocument model.DSSDocument) bool {
 	if messageDigest.Value() == nil {
 		panic("messageDigest shall be provided!")
@@ -209,7 +209,7 @@ func (s *PAdESWithExternalCMSService) IsValidCMSSignedData(messageDigest model.D
 		panic("cmsDocument shall be provided!")
 	}
 
-	parsedCMS, err := cms.CMSUtilsParseToCMS(cmsDocument)
+	parsedCMS, err := cms.UtilsParseToCMS(cmsDocument)
 	if err != nil {
 		// Upstream logs "Unable to decode the provided CMS document : {}".
 		return false
@@ -233,7 +233,7 @@ func (s *PAdESWithExternalCMSService) IsValidCMSSignedData(messageDigest model.D
 
 // IsValidPAdESBaselineCMSSignedData verifies whether the given CMS signature is compliant with
 // the PAdES format. Port of #isValidPAdESBaselineCMSSignedData.
-func (s *PAdESWithExternalCMSService) IsValidPAdESBaselineCMSSignedData(messageDigest model.DSSMessageDigest,
+func (s *WithExternalCMSService) IsValidPAdESBaselineCMSSignedData(messageDigest model.DSSMessageDigest,
 	cmsDocument model.DSSDocument) bool {
 	if messageDigest.Value() == nil {
 		panic("messageDigest shall be provided!")
@@ -242,7 +242,7 @@ func (s *PAdESWithExternalCMSService) IsValidPAdESBaselineCMSSignedData(messageD
 		panic("cmsDocument shall be provided!")
 	}
 
-	parsedCMS, err := cms.CMSUtilsParseToCMS(cmsDocument)
+	parsedCMS, err := cms.UtilsParseToCMS(cmsDocument)
 	if err != nil {
 		// Upstream logs "Unable to decode the provided CMS document : {}".
 		return false
@@ -255,7 +255,7 @@ func (s *PAdESWithExternalCMSService) IsValidPAdESBaselineCMSSignedData(messageD
 
 // padesWithExternalCMSServiceToCAdESSignature ports the private #toCAdESSignature.
 func padesWithExternalCMSServiceToCAdESSignature(parsedCMS *cms.CMS,
-	messageDigest model.DSSMessageDigest) *cades.CAdESSignature {
+	messageDigest model.DSSMessageDigest) *cades.Signature {
 	signature := cades.NewCAdESSignature(parsedCMS,
 		spi.DSSASN1UtilsFirstSignerInformation(parsedCMS.SignerInfos()))
 	signature.SetDetachedContents([]model.DSSDocument{spi.DSSUtilsToDigestDocument(messageDigest.Digest)})

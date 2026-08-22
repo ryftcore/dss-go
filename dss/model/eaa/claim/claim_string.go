@@ -1,14 +1,14 @@
 // Ported from dss-model/.../claim/ClaimString.java (DSS 6.5.RC1).
 package claim
 
-// ClaimString represents a String encoded (selectively) disclosable
+// String represents a String encoded (selectively) disclosable
 // claim.
 //
 // NOTE: since this codebase represents a Java null String as Go's ""
 // (see claim.go), IsNullOrEmpty here is indistinguishable from "value is
 // the empty string", matching the existing string-nullability convention
 // used throughout dss/model.
-type ClaimString struct {
+type String struct {
 	AbstractClaim
 
 	// value is the string value of the claim.
@@ -20,32 +20,32 @@ type ClaimString struct {
 }
 
 // NewClaimString ports the default constructor.
-func NewClaimString(value string) *ClaimString {
+func NewClaimString(value string) *String {
 	return NewClaimStringWithName("", value)
 }
 
 // NewClaimStringWithName ports the constructor with claim header name
 // provided.
-func NewClaimStringWithName(name, value string) *ClaimString {
+func NewClaimStringWithName(name, value string) *String {
 	return NewClaimStringWithDisclosable(name, value, false)
 }
 
 // NewClaimStringWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimStringWithDisclosable(name, value string, selectivelyDisclosable bool) *ClaimString {
+func NewClaimStringWithDisclosable(name, value string, selectivelyDisclosable bool) *String {
 	return NewClaimStringWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimStringWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimStringWithParent(name, value string, selectivelyDisclosable bool, parent Claim) *ClaimString {
+func NewClaimStringWithParent(name, value string, selectivelyDisclosable bool, parent Claim) *String {
 	return NewClaimStringFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimStringFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimStringFull(name, namespace, value string, selectivelyDisclosable bool, parent Claim) *ClaimString {
-	return &ClaimString{
+func NewClaimStringFull(name, namespace, value string, selectivelyDisclosable bool, parent Claim) *String {
+	return &String{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
 		valuePresent:  true,
@@ -53,21 +53,21 @@ func NewClaimStringFull(name, namespace, value string, selectivelyDisclosable bo
 }
 
 // StringValue returns the string value of the claim.
-func (c *ClaimString) StringValue() string { return c.value }
+func (c *String) StringValue() string { return c.value }
 
 // IsStringValueType always returns true.
-func (c *ClaimString) IsStringValueType() bool { return true }
+func (c *String) IsStringValueType() bool { return true }
 
 // ValueAsString returns the string value of the claim.
-func (c *ClaimString) ValueAsString() string { return c.value }
+func (c *String) ValueAsString() string { return c.value }
 
 // IsNullOrEmpty ports ClaimString#isNullOrEmpty (`value == null`; not
 // checking for the empty string, matching upstream verbatim).
-func (c *ClaimString) IsNullOrEmpty() bool { return !c.valuePresent }
+func (c *String) IsNullOrEmpty() bool { return !c.valuePresent }
 
 // Equals ports ClaimString#equals (including the AbstractClaim
 // super.equals() comparison).
-func (c *ClaimString) Equals(other *ClaimString) bool {
+func (c *String) Equals(other *String) bool {
 	if c == other {
 		return true
 	}
@@ -81,4 +81,4 @@ func (c *ClaimString) Equals(other *ClaimString) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *ClaimString) String() string { return AbstractClaimString(c) }
+func (c *String) String() string { return AbstractClaimString(c) }

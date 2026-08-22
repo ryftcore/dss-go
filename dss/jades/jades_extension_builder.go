@@ -2,7 +2,7 @@
 //
 // Java overloads assertEtsiUComponentsConsistent on (JWS, JAdESSignatureParameters) and
 // (JWS, Boolean); Go cannot overload, so the parameter-taking one keeps the plain name and the
-// Boolean-taking one - the one JAdESSignaturePolicyStoreBuilder calls with a plain boolean -
+// Boolean-taking one - the one SignaturePolicyStoreBuilder calls with a plain boolean -
 // becomes AssertEtsiUComponentsConsistentWithEncoding.
 //
 // Java's `Boolean` (a nullable tri-state: TRUE, FALSE, or "not configured") becomes *bool here,
@@ -19,15 +19,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESExtensionBuilder is the abstract base allowing the signature extension.
-type JAdESExtensionBuilder struct {
+// ExtensionBuilder is the abstract base allowing the signature extension.
+type ExtensionBuilder struct {
 }
 
 // AssertEtsiUComponentsConsistent checks that the type of etsiU components is consistent and
 // writes the resolved encoding back into the signature parameters.
 // Port of the protected #assertEtsiUComponentsConsistent(JWS, JAdESSignatureParameters).
-func (b *JAdESExtensionBuilder) AssertEtsiUComponentsConsistent(jws *JWS,
-	signatureParameters *JAdESSignatureParameters) error {
+func (b *ExtensionBuilder) AssertEtsiUComponentsConsistent(jws *JWS,
+	signatureParameters *SignatureParameters) error {
 	isBase64UrlEtsiUComponents := signatureParameters.IsBase64UrlEncodedEtsiUComponents()
 	resolved, err := b.AssertEtsiUComponentsConsistentWithEncoding(jws, isBase64UrlEtsiUComponents)
 	if err != nil {
@@ -41,7 +41,7 @@ func (b *JAdESExtensionBuilder) AssertEtsiUComponentsConsistent(jws *JWS,
 // consistent and returns the target encoding: TRUE if the etsiU parameters shall be base64url
 // encoded, FALSE otherwise.
 // Port of the protected #assertEtsiUComponentsConsistent(JWS, Boolean).
-func (b *JAdESExtensionBuilder) AssertEtsiUComponentsConsistentWithEncoding(jws *JWS,
+func (b *ExtensionBuilder) AssertEtsiUComponentsConsistentWithEncoding(jws *JWS,
 	isBase64UrlEtsiUComponents *bool) (bool, error) {
 	etsiU := DSSJsonUtilsEtsiU(jws)
 	if utils.IsCollectionNotEmpty(etsiU) {
@@ -75,7 +75,7 @@ func (b *JAdESExtensionBuilder) AssertEtsiUComponentsConsistentWithEncoding(jws 
 
 // AssertJWSJsonSerializationObjectValid checks that the jwsJsonSerializationObject is valid and
 // can be extended. Port of the protected #assertJWSJsonSerializationObjectValid.
-func (b *JAdESExtensionBuilder) AssertJWSJsonSerializationObjectValid(
+func (b *ExtensionBuilder) AssertJWSJsonSerializationObjectValid(
 	jwsJsonSerializationObject *JWSJsonSerializationObject) error {
 	if jwsJsonSerializationObject == nil {
 		return exception.NewIllegalInputException(
@@ -95,7 +95,7 @@ func (b *JAdESExtensionBuilder) AssertJWSJsonSerializationObjectValid(
 
 // AssertJSONSerializationObjectMayBeExtended checks that the given jwsJsonSerializationObject can
 // be extended. Port of the protected #assertJSONSerializationObjectMayBeExtended.
-func (b *JAdESExtensionBuilder) AssertJSONSerializationObjectMayBeExtended(
+func (b *ExtensionBuilder) AssertJSONSerializationObjectMayBeExtended(
 	jwsJsonSerializationObject *JWSJsonSerializationObject) error {
 	if err := b.AssertJWSJsonSerializationObjectValid(jwsJsonSerializationObject); err != nil {
 		return err

@@ -22,8 +22,8 @@ type IdentificationOfSigningCertificateResultCheck[T any] struct {
 
 // NewIdentificationOfSigningCertificateResultCheck is the default constructor.
 // Port of
-// IdentificationOfSigningCertificateResultCheck(I18nProvider, T, XmlISC, TokenProxy, LevelRule).
-func NewIdentificationOfSigningCertificateResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// IdentificationOfSigningCertificateResultCheck(Provider, T, XmlISC, TokenProxy, LevelRule).
+func NewIdentificationOfSigningCertificateResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlISC *jaxb.XmlISC, token diagnostic.TokenProxy, constraint policy.LevelRule) *IdentificationOfSigningCertificateResultCheck[T] {
 	c := &IdentificationOfSigningCertificateResultCheck[T]{
 		// Identification of Signing Certificate building block suffix ("-ISC"),

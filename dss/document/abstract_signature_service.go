@@ -19,7 +19,7 @@ func init() {
 // Java's AbstractSignatureService<SP, TP> implements DocumentSignatureService<SP, TP>; this Go
 // port does not assert that conformance, since - like the Java class it ports - it is meant to
 // be embedded by a concrete, format-specific service (CAdES, XAdES, ... ported in later phases)
-// that supplies the remaining DocumentSignatureService methods (GetDataToSign, SignDocument,
+// that supplies the remaining SignatureService methods (GetDataToSign, SignDocument,
 // ExtendDocument, GetContentTimestamp) this type does not implement, matching
 // AbstractDocumentExtender's equivalent non-assertion in this same package.
 type AbstractSignatureService[SP model.SerializableSignatureParameters, TP model.SerializableTimestampParameters] struct {

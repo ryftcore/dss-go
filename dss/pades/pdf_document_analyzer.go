@@ -70,7 +70,7 @@ func NewPDFDocumentAnalyzer(document model.DSSDocument) *PDFDocumentAnalyzer {
 // IsSupported checks if the document is supported by the current validator.
 // Port of isSupported(DSSDocument).
 func (a *PDFDocumentAnalyzer) IsSupported(dssDocument model.DSSDocument) bool {
-	return PAdESUtilsIsPDFDocument(dssDocument)
+	return UtilsIsPDFDocument(dssDocument)
 }
 
 // SetPdfObjFactory sets the IPdfObjFactory. Allow to set the used implementation. Cannot be nil.
@@ -88,12 +88,12 @@ func (a *PDFDocumentAnalyzer) SetPasswordProtection(passwordProtection []byte) {
 	a.passwordProtection = passwordProtection
 }
 
-// PrepareValidationContext initializes and fills a ValidationContext with the necessary data
+// PrepareValidationContext initializes and fills a Context with the necessary data
 // sources. Port of the protected prepareValidationContext(Collection, Collection, Collection,
 // CertificateVerifier) override.
 func (a *PDFDocumentAnalyzer) PrepareValidationContext(signatures []validation.AdvancedSignature,
 	detachedTimestamps []*validation.TimestampToken, detachedEvidenceRecords []validation.EvidenceRecord,
-	certificateVerifier validation.CertificateVerifier) validation.ValidationContext {
+	certificateVerifier validation.CertificateVerifier) validation.Context {
 	validationContext := a.DefaultDocumentAnalyzer.PrepareValidationContext(signatures, detachedTimestamps,
 		detachedEvidenceRecords, certificateVerifier)
 	dssRevisions := a.DssRevisions()
@@ -103,7 +103,7 @@ func (a *PDFDocumentAnalyzer) PrepareValidationContext(signatures []validation.A
 
 // prepareDssDictionaryValidationContext fills the validationContext with certificate tokens
 // from dssRevisions. Port of the protected prepareDssDictionaryValidationContext(ValidationContext, List).
-func (a *PDFDocumentAnalyzer) prepareDssDictionaryValidationContext(validationContext validation.ValidationContext,
+func (a *PDFDocumentAnalyzer) prepareDssDictionaryValidationContext(validationContext validation.Context,
 	dssRevisions []*PdfDocDssRevision) {
 	for _, dssRevision := range dssRevisions {
 		validationContext.AddDocumentCertificateSource(dssRevision.CertificateSource())
@@ -278,9 +278,9 @@ func (a *PDFDocumentAnalyzer) appendExternalEvidenceRecordsToTimestamp(timestamp
 	}
 }
 
-// PAdESTimestampScopeFinder returns a PDF timestamp scope finder.
+// TimestampScopeFinder returns a PDF timestamp scope finder.
 // Port of the protected getPAdESTimestampScopeFinder().
-func (a *PDFDocumentAnalyzer) PAdESTimestampScopeFinder() *PAdESTimestampScopeFinder {
+func (a *PDFDocumentAnalyzer) PAdESTimestampScopeFinder() *TimestampScopeFinder {
 	return NewPAdESTimestampScopeFinder()
 }
 
@@ -314,30 +314,30 @@ func (a *PDFDocumentAnalyzer) Revisions() []PdfRevision {
 	return a.documentRevisions
 }
 
-// InstantiateValidationDataContainer creates a new instance of ValidationDataContainer.
+// InstantiateValidationDataContainer creates a new instance of DataContainer.
 // Port of the protected instantiateValidationDataContainer() override.
-func (a *PDFDocumentAnalyzer) InstantiateValidationDataContainer() *validation.ValidationDataContainer {
-	return &NewPdfValidationDataContainer(a.DssRevisions()).ValidationDataContainer
+func (a *PDFDocumentAnalyzer) InstantiateValidationDataContainer() *validation.DataContainer {
+	return &NewPdfValidationDataContainer(a.DssRevisions()).DataContainer
 }
 
-// ValidationData extracts a validation data for the provided collection of signatures and/or
+// Data extracts a validation data for the provided collection of signatures and/or
 // timestamps, narrowed to the PDF-specific container. Port of the
 // getValidationData(Collection, Collection) override, which in Java narrows the return type to
 // PdfValidationDataContainer via a checked cast of the value the base class's virtually
 // dispatched instantiateValidationDataContainer() (overridden just above) already built.
 //
 // The public analyzer.DocumentAnalyzer interface fixes GetValidationDataWithTimestamps's return
-// type to *validation.ValidationDataContainer (no covariant return in Go), so this method is a
+// type to *validation.DataContainer (no covariant return in Go), so this method is a
 // distinct, PDF-only entry point - matching the already-landed SIGN chunk call sites
 // (pades_level_baseline_lt.go, pades_extension_service.go) that call
-// pdfDocumentAnalyzer.ValidationData(signatures, detachedTimestamps) and use the result's
+// pdfDocumentAnalyzer.Data(signatures, detachedTimestamps) and use the result's
 // PdfValidationDataContainer-only IsEmpty() / signatureService.AddDssDictionary directly.
 //
 // Recovering the *PdfValidationDataContainer Java's cast reaches, from the
-// *validation.ValidationDataContainer GetValidationDataWithTimestamps is contractually fixed to
+// *validation.DataContainer GetValidationDataWithTimestamps is contractually fixed to
 // return, needs unsafe.Pointer: InstantiateValidationDataContainer above always builds the
 // value by allocating a *PdfValidationDataContainer and returning the address of its embedded
-// validation.ValidationDataContainer field, which - because that field is declared first in
+// validation.DataContainer field, which - because that field is declared first in
 // PdfValidationDataContainer's field list (pdf_validation_data_container.go) - the Go spec
 // guarantees sits at the same address as the enclosing *PdfValidationDataContainer itself. This
 // is the same "first embedded field, cast back" idiom Go's own composite literals rely on for
@@ -357,9 +357,9 @@ func (a *PDFDocumentAnalyzer) ValidationData(signatures []validation.AdvancedSig
 // OriginalDocumentsForSignature returns the signed document(s) without their signature(s).
 // Port of the getOriginalDocuments(AdvancedSignature) override.
 func (a *PDFDocumentAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
-	padesSignature := advancedSignature.(*PAdESSignature)
+	padesSignature := advancedSignature.(*Signature)
 	result := make([]model.DSSDocument, 0)
-	originalPDF := PAdESUtilsGetOriginalPDF(padesSignature)
+	originalPDF := UtilsGetOriginalPDF(padesSignature)
 	if originalPDF != nil {
 		isEmpty, err := spi.DSSUtilsIsEmpty(originalPDF)
 		if err == nil && !isEmpty {

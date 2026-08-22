@@ -30,18 +30,18 @@ import (
 // TS 119 182-1. Port of the private static final Date SIG_T_OBSOLESCENCE_DATE field.
 var jadesBaselineRequirementsCheckerSigTObsolescenceDate = time.Date(2025, time.July, 15, 0, 0, 0, 0, time.UTC)
 
-// JAdESBaselineRequirementsChecker checks conformance of a JAdES signature to the requested
+// BaselineRequirementsChecker checks conformance of a JAdES signature to the requested
 // baseline format. Port of the class JAdESBaselineRequirementsChecker, extending
-// validation.BaselineRequirementsChecker[*JAdESSignature].
-type JAdESBaselineRequirementsChecker struct {
-	validation.BaselineRequirementsChecker[*JAdESSignature]
+// validation.BaselineRequirementsChecker[*Signature].
+type BaselineRequirementsChecker struct {
+	validation.BaselineRequirementsChecker[*Signature]
 }
 
 // NewJAdESBaselineRequirementsChecker is the default constructor. Port of the public
-// JAdESBaselineRequirementsChecker(JAdESSignature, CertificateVerifier) constructor.
-func NewJAdESBaselineRequirementsChecker(signature *JAdESSignature, offlineCertificateVerifier validation.CertificateVerifier) *JAdESBaselineRequirementsChecker {
-	checker := &JAdESBaselineRequirementsChecker{
-		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*JAdESSignature](signature, offlineCertificateVerifier),
+// BaselineRequirementsChecker(Signature, CertificateVerifier) constructor.
+func NewJAdESBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+	checker := &BaselineRequirementsChecker{
+		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](signature, offlineCertificateVerifier),
 	}
 	checker.InitBaselineRequirementsChecker(checker)
 	return checker
@@ -49,7 +49,7 @@ func NewJAdESBaselineRequirementsChecker(signature *JAdESSignature, offlineCerti
 
 // HasAdESProfile checks if the signature is conformant to the corresponding AdES profile. Port
 // of the hasAdESProfile() override.
-func (b *JAdESBaselineRequirementsChecker) HasAdESProfile() bool {
+func (b *BaselineRequirementsChecker) HasAdESProfile() bool {
 	signature := b.Signature()
 	jws := signature.Jws()
 
@@ -98,7 +98,7 @@ func (b *JAdESBaselineRequirementsChecker) HasAdESProfile() bool {
 
 // HasBaselineBProfile checks if the signature has a corresponding BASELINE-B profile. Port of
 // the hasBaselineBProfile() override.
-func (b *JAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineBProfile() bool {
 	signature := b.Signature()
 	jws := signature.Jws()
 	etsiUHeader := signature.EtsiUHeader()
@@ -156,7 +156,7 @@ func (b *JAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 }
 
 // critRequirements ports the private critRequirements(JWS, String).
-func (b *JAdESBaselineRequirementsChecker) critRequirements(jws *JWS, profile string) bool {
+func (b *BaselineRequirementsChecker) critRequirements(jws *JWS, profile string) bool {
 	var critList []any
 
 	// crit (conditional presence, required only for some elements)
@@ -276,7 +276,7 @@ func jadesBaselineRequirementsCheckerContains(list []any, key string) bool {
 }
 
 // signingTimeRequirement ports the private signingTimeRequirement(JWS).
-func (b *JAdESBaselineRequirementsChecker) signingTimeRequirement(jws *JWS) bool {
+func (b *BaselineRequirementsChecker) signingTimeRequirement(jws *JWS) bool {
 	/*
 	 * a) Requirements for iat and sigT. Before 2025-07-15T00:00:00Z the generator should include
 	 *    the iat header parameter for indicating the claimed signing time in new JAdES signatures
@@ -321,7 +321,7 @@ func (b *JAdESBaselineRequirementsChecker) signingTimeRequirement(jws *JWS) bool
 
 // HasBaselineTProfile checks if the signature has a corresponding BASELINE-T profile. Port of
 // the hasBaselineTProfile() override.
-func (b *JAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineTProfile() bool {
 	if !b.MinimalTRequirement() {
 		return false
 	}
@@ -347,7 +347,7 @@ func (b *JAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
 
 // HasBaselineLTProfile checks if the signature has a corresponding BASELINE-LT profile. Port of
 // the hasBaselineLTProfile() override.
-func (b *JAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTProfile() bool {
 	if !b.MinimalLTRequirement() {
 		return false
 	}
@@ -394,17 +394,17 @@ func (b *JAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
 // ContainsLTLevelCertificates verifies whether the signature contains some of the LT-/XL level
 // attributes. Port of the protected containsLTLevelCertificates() override, implementing
 // validation.BaselineRequirementsCheckerOverrides.
-func (b *JAdESBaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
+func (b *BaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
 	return b.containsCertificateValues() || b.containsTstOrAnyValDataCertificates()
 }
 
-func (b *JAdESBaselineRequirementsChecker) containsCertificateValues() bool {
+func (b *BaselineRequirementsChecker) containsCertificateValues() bool {
 	etsiUHeader := b.Signature().EtsiUHeader()
 	return len(DSSJsonUtilsUnsignedPropertiesWithHeaderName(etsiUHeader, JAdESHeaderParameterNamesXVals))+
 		len(DSSJsonUtilsUnsignedPropertiesWithHeaderName(etsiUHeader, JAdESHeaderParameterNamesAxVals)) != 0
 }
 
-func (b *JAdESBaselineRequirementsChecker) containsTstOrAnyValDataCertificates() bool {
+func (b *BaselineRequirementsChecker) containsTstOrAnyValDataCertificates() bool {
 	etsiUHeader := b.Signature().EtsiUHeader()
 	var validationDataHeaders []*EtsiUComponent
 	validationDataHeaders = append(validationDataHeaders, DSSJsonUtilsUnsignedPropertiesWithHeaderName(etsiUHeader, JAdESHeaderParameterNamesTstVD)...)
@@ -420,9 +420,9 @@ func (b *JAdESBaselineRequirementsChecker) containsTstOrAnyValDataCertificates()
 
 // HasBaselineLTAProfile checks if the signature has a corresponding BASELINE-LTA profile. Port
 // of the hasBaselineLTAProfile() override.
-func (b *JAdESBaselineRequirementsChecker) HasBaselineLTAProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTAProfile() bool {
 	return b.MinimalLTARequirement()
 }
 
-// compile-time assertion: a JAdESBaselineRequirementsChecker satisfies its own overrides contract.
-var _ validation.BaselineRequirementsCheckerOverrides = (*JAdESBaselineRequirementsChecker)(nil)
+// compile-time assertion: a BaselineRequirementsChecker satisfies its own overrides contract.
+var _ validation.BaselineRequirementsCheckerOverrides = (*BaselineRequirementsChecker)(nil)

@@ -21,15 +21,15 @@ type SignatureAcceptanceValidation struct {
 	*AbstractAcceptanceValidation[*diagnostic.SignatureWrapper]
 
 	// diagnosticData is the Diagnostic Data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// bbbs is a map of BasicBuildingBlocks.
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks
 }
 
 // NewSignatureAcceptanceValidation is the default constructor. Port of
-// SignatureAcceptanceValidation(I18nProvider, DiagnosticData, Date, SignatureWrapper, Context, Map, XmlAOV, ValidationPolicy).
-func NewSignatureAcceptanceValidation(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// SignatureAcceptanceValidation(Provider, Data, Date, SignatureWrapper, Context, Map, XmlAOV, ValidationPolicy).
+func NewSignatureAcceptanceValidation(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	currentTime time.Time, signature *diagnostic.SignatureWrapper, context enumerations.Context,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *SignatureAcceptanceValidation {

@@ -23,7 +23,7 @@ type DigestAlgorithmCryptographicChecker struct {
 }
 
 // NewDigestAlgorithmCryptographicChecker is the default constructor.
-func NewDigestAlgorithmCryptographicChecker(i18nProvider *i18n.I18nProvider, digestAlgorithm enumerations.DigestAlgorithm,
+func NewDigestAlgorithmCryptographicChecker(i18nProvider *i18n.Provider, digestAlgorithm enumerations.DigestAlgorithm,
 	validationDate time.Time, position i18n.MessageTag, constraint policy.CryptographicSuite) *DigestAlgorithmCryptographicChecker {
 	c := &DigestAlgorithmCryptographicChecker{digestAlgorithm: digestAlgorithm}
 	c.InitAbstractAlgorithmCryptographicChecker(i18nProvider, validationDate, position, constraint, c)

@@ -11,7 +11,7 @@
 // forwarding functions (see object_type.go, constraint_status.go,
 // type_of_proof.go, signature_validation_process_id.go and
 // uri_based_enum_parser.go). This split is forced by Go's import-cycle
-// rule: ValidationReportFacade (this package) must import jaxb for
+// rule: Facade (this package) must import jaxb for
 // ValidationReportType, and the generated model's ConstraintStatusType/
 // POEType/SignatureValidationProcessType/ValidationObjectType fields are
 // typed with these very enums, so jaxb must be able to use them too - Java's

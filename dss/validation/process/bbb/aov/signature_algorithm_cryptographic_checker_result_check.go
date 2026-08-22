@@ -31,7 +31,7 @@ type SignatureAlgorithmCryptographicCheckerResultCheck[T any] struct {
 // constructor. Port of SignatureAlgorithmCryptographicCheckerResultCheck(
 // I18nProvider, T, Date, MessageTag, XmlCC, LevelRule): a Java caller passing
 // a null context maps to this constructor.
-func NewSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, position i18n.MessageTag, ccResult *jaxb.XmlCC,
 	constraint policy.LevelRule) *SignatureAlgorithmCryptographicCheckerResultCheck[T] {
 	return newSignatureAlgorithmCryptographicCheckerResultCheck(i18nProvider, result, validationDate, "", position,
@@ -40,15 +40,15 @@ func NewSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i
 
 // NewSignatureAlgorithmCryptographicCheckerResultCheckWithContext is the full
 // constructor. Port of SignatureAlgorithmCryptographicCheckerResultCheck(
-// I18nProvider, T, Date, Context, MessageTag, XmlCC, LevelRule, String).
-func NewSignatureAlgorithmCryptographicCheckerResultCheckWithContext[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// Provider, T, Date, Context, MessageTag, XmlCC, LevelRule, String).
+func NewSignatureAlgorithmCryptographicCheckerResultCheckWithContext[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, context enumerations.Context, position i18n.MessageTag, ccResult *jaxb.XmlCC,
 	constraint policy.LevelRule, tokenId string) *SignatureAlgorithmCryptographicCheckerResultCheck[T] {
 	return newSignatureAlgorithmCryptographicCheckerResultCheck(i18nProvider, result, validationDate, context, position,
 		ccResult, constraint, tokenId)
 }
 
-func newSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func newSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, context enumerations.Context, position i18n.MessageTag, ccResult *jaxb.XmlCC,
 	constraint policy.LevelRule, tokenId string) *SignatureAlgorithmCryptographicCheckerResultCheck[T] {
 	c := &SignatureAlgorithmCryptographicCheckerResultCheck[T]{

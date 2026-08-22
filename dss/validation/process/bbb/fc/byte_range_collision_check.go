@@ -18,12 +18,12 @@ type ByteRangeCollisionCheck struct {
 	*process.ChainItemBase[*drjaxb.XmlFC]
 
 	currentSignature diagnostic.AbstractSignatureWrapperOverrides
-	diagnosticData   *diagnostic.DiagnosticData
+	diagnosticData   *diagnostic.Data
 }
 
 // NewByteRangeCollisionCheck is the default constructor.
-func NewByteRangeCollisionCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	signatureWrapper diagnostic.AbstractSignatureWrapperOverrides, diagnosticData *diagnostic.DiagnosticData,
+func NewByteRangeCollisionCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	signatureWrapper diagnostic.AbstractSignatureWrapperOverrides, diagnosticData *diagnostic.Data,
 	constraint policy.LevelRule) *ByteRangeCollisionCheck {
 	c := &ByteRangeCollisionCheck{currentSignature: signatureWrapper, diagnosticData: diagnosticData}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

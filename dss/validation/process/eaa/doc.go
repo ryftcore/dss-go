@@ -1,15 +1,15 @@
 // Package eaa ports eu.europa.esig.dss.validation.process.eaa (DSS 6.5.RC1):
-// EAAValidationBlock, EAAValidationProcess, and the one eaa.checks class that
+// ValidationBlock, ValidationProcess, and the one eaa.checks class that
 // belongs here rather than in the sibling eaa/checks package -
 // KeyBindingSignatureValidationResultCheck, since it wires
 // qualification.SignatureValidationResultCheck and this package already
-// imports qualification for EAAValidationBlock/EAAValidationProcess.
+// imports qualification for ValidationBlock/ValidationProcess.
 //
 // eu.europa.esig.dss.validation.process.eaa.checks and
 // eu.europa.esig.dss.validation.process.eaa.status were originally flattened
 // into this same package, following the checks-subpackage flattening
 // convention used throughout this port. That has been undone:
-// EAAValidationBlock pulls in package qualification, and qualification ->
+// ValidationBlock pulls in package qualification, and qualification ->
 // vpfswatsp -> bbb/sav, while bbb/sav's `-tags eaa` files
 // (eaa_acceptance_validation.go, eaa_revocation_token_acceptance_validation.go)
 // and bbb/fc's equivalents need the eaa.checks/eaa.status check constructors -

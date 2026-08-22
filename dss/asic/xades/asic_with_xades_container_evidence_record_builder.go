@@ -25,9 +25,9 @@ var _ asic.AbstractASiCContainerEvidenceRecordBuilderOverrides = (*ASiCWithXAdES
 
 // NewASiCWithXAdESContainerEvidenceRecordBuilder is the default constructor. Ports
 // ASiCWithXAdESContainerEvidenceRecordBuilder(CertificateVerifier,
-// ASiCEvidenceRecordFilenameFactory).
+// EvidenceRecordFilenameFactory).
 func NewASiCWithXAdESContainerEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier,
-	asicFilenameFactory asic.ASiCEvidenceRecordFilenameFactory) *ASiCWithXAdESContainerEvidenceRecordBuilder {
+	asicFilenameFactory asic.EvidenceRecordFilenameFactory) *ASiCWithXAdESContainerEvidenceRecordBuilder {
 	b := &ASiCWithXAdESContainerEvidenceRecordBuilder{
 		AbstractASiCContainerEvidenceRecordBuilder: asic.NewAbstractASiCContainerEvidenceRecordBuilderBase(certificateVerifier, asicFilenameFactory),
 	}
@@ -41,13 +41,13 @@ func (b *ASiCWithXAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *a
 }
 
 // AssertEvidenceRecordFilenameValid ports the @Override protected
-// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, ASiCContent). Named exported
+// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, Content). Named exported
 // here (rather than shadowing the embedded base's unexported assertEvidenceRecordFilenameValid)
 // since the base dispatches self-calls through overrides per the virtual-dispatch precedent -
 // see the caller in the base's Build().
 //
 // Panics with an *exception.IllegalInputException matching Java's IllegalInputException.
-func (b *ASiCWithXAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *asic.ASiCContent) {
+func (b *ASiCWithXAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *asic.Content) {
 	evidenceRecordDocuments := asicContent.EvidenceRecordDocuments()
 	if utils.IsCollectionNotEmpty(evidenceRecordDocuments) {
 		for _, name := range spi.DSSUtilsDocumentNames(evidenceRecordDocuments) {

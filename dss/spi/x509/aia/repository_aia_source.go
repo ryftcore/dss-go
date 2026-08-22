@@ -34,7 +34,7 @@ type RepositoryAIASourceOverrides interface {
 type RepositoryAIASource struct {
 	// ProxiedSource is used to access certificate tokens that are not present in the
 	// repository.
-	ProxiedSource AIASource
+	ProxiedSource Source
 
 	// overrides points back at the concrete repository; see InitRepositoryAIASource.
 	overrides RepositoryAIASourceOverrides
@@ -57,7 +57,7 @@ func (r *RepositoryAIASource) repositoryAIASourceOverrides() RepositoryAIASource
 
 // SetProxySource sets a source to access an AIA in case the requested certificates are not
 // present in the repository.
-func (r *RepositoryAIASource) SetProxySource(proxiedSource AIASource) {
+func (r *RepositoryAIASource) SetProxySource(proxiedSource Source) {
 	r.ProxiedSource = proxiedSource
 }
 
@@ -101,7 +101,7 @@ func (r *RepositoryAIASource) CertificatesByAIAWithRefresh(certificateToken *mod
 // ProxiedSource and inserts/updates values in the cache source if required.
 func (r *RepositoryAIASource) extractAndInsertCertificatesFromProxiedSource(certificateToken *model.CertificateToken, aiaKeys []string) []*model.CertificateToken {
 	if r.ProxiedSource == nil {
-		// "Proxied AIASource is not provided!" LOG.warn dropped, not load-bearing per
+		// "Proxied Source is not provided!" LOG.warn dropped, not load-bearing per
 		// PORTING.md.
 		return nil
 	}
@@ -220,4 +220,4 @@ func (r *RepositoryAIASource) extractAIAFromCacheSource(aiaKeys []string) []*mod
 	return certificateTokens
 }
 
-var _ AIASource = (*RepositoryAIASource)(nil)
+var _ Source = (*RepositoryAIASource)(nil)

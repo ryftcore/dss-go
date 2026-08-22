@@ -18,7 +18,7 @@ type AcceptableMimetypeFileContentCheck struct {
 }
 
 // NewAcceptableMimetypeFileContentCheck is the default constructor.
-func NewAcceptableMimetypeFileContentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewAcceptableMimetypeFileContentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	mimetypeFileContent string, constraint policy.MultiValuesRule) *AcceptableMimetypeFileContentCheck {
 	c := &AcceptableMimetypeFileContentCheck{mimetypeFileContent: mimetypeFileContent}
 	c.AbstractMultiValuesCheckItem = bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint)

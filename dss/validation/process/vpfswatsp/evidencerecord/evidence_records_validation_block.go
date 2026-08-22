@@ -11,7 +11,7 @@
 // String-key hash order of the time-stamp ids - unspecified, yet it decides the
 // order of the <Timestamp> elements of the detailed report, which is
 // order-sensitive output. The Go port reproduces that order exactly, by
-// walking the same insertion order (EvidenceRecordTimestampsValidationBlock#
+// walking the same insertion order (TimestampsValidationBlock#
 // getTimestamps(), production time descending) through
 // utils.JavaHashMapStringKeyOrder.
 //
@@ -21,7 +21,7 @@
 //
 // Package placement deviation: Java's vpfswatsp.evidencerecord
 // is a package of its own, distinct from vpfswatsp. Everything else in the
-// vpfswatsp tree folds into one Go package, but EvidenceRecordTimestampsValidationBlock
+// vpfswatsp tree folds into one Go package, but TimestampsValidationBlock
 // extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
 // (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
 // therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
@@ -45,10 +45,10 @@ import (
 // provided to the validator.
 type EvidenceRecordsValidationBlock struct {
 	// i18nProvider is the i18n provider.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// Policy is the validation policy. Exported because Java declares the
 	// field protected.
@@ -79,8 +79,8 @@ type EvidenceRecordsValidationBlock struct {
 }
 
 // NewEvidenceRecordsValidationBlock is the default constructor. Port of
-// EvidenceRecordsValidationBlock(I18nProvider, DiagnosticData, ValidationPolicy, Date, Map, List, ValidationLevel, POEExtraction).
-func NewEvidenceRecordsValidationBlock(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// EvidenceRecordsValidationBlock(Provider, Data, ValidationPolicy, Date, Map, List, ValidationLevel, POEExtraction).
+func NewEvidenceRecordsValidationBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tlAnalysis []*jaxb.XmlTLAnalysis,
 	validationLevel enumerations.ValidationLevel, poe *vpfswatsp.POEExtraction) *EvidenceRecordsValidationBlock {

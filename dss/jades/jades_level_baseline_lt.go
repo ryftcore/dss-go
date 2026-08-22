@@ -1,8 +1,8 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/signature/JAdESLevelBaselineLT.java (DSS 6.5.RC1).
 //
-// This level embeds JAdESLevelBaselineT and overrides its virtual ExtendSignatures; see the
+// This level embeds LevelBaselineT and overrides its virtual ExtendSignatures; see the
 // header of jades_level_baseline_t.go for how the Java override chain is expressed. The "super"
-// call is the explicit lt.JAdESLevelBaselineT.ExtendSignatures.
+// call is the explicit lt.LevelBaselineT.ExtendSignatures.
 //
 // Every JSON object this level builds is HashMap-ordered upstream and therefore built here with
 // NewJsonObject(), whose wrapped object reproduces java.util.HashMap's bucket order: the 'val'
@@ -13,7 +13,7 @@
 // not a detail that can be normalized away here.
 //
 // Java's Set<CertificateToken>/Set<CRLToken>/Set<OCSPToken> become the slices the frozen
-// ValidationData answers, which already fixes their iteration order.
+// Data answers, which already fixes their iteration order.
 //
 // Every Java throw becomes a returned error.
 package jades
@@ -28,24 +28,24 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESLevelBaselineLT creates an LT-level of a JAdES signature.
-type JAdESLevelBaselineLT struct {
-	JAdESLevelBaselineT
+// LevelBaselineLT creates an LT-level of a JAdES signature.
+type LevelBaselineLT struct {
+	LevelBaselineT
 }
 
 // NewJAdESLevelBaselineLT is the default constructor.
 // Port of JAdESLevelBaselineLT(CertificateVerifier).
-func NewJAdESLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *JAdESLevelBaselineLT {
-	extension := &JAdESLevelBaselineLT{}
+func NewJAdESLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
+	extension := &LevelBaselineLT{}
 	extension.InitJAdESLevelBaselineT(extension, certificateVerifier)
 	return extension
 }
 
 // ExtendSignatures extends the signatures to the -LT level.
 // Port of the protected, overridden #extendSignatures(List, JAdESSignatureParameters).
-func (lt *JAdESLevelBaselineLT) ExtendSignatures(signatures []validation.AdvancedSignature,
-	params *JAdESSignatureParameters) error {
-	if err := lt.JAdESLevelBaselineT.ExtendSignatures(signatures, params); err != nil {
+func (lt *LevelBaselineLT) ExtendSignatures(signatures []validation.AdvancedSignature,
+	params *SignatureParameters) error {
+	if err := lt.LevelBaselineT.ExtendSignatures(signatures, params); err != nil {
 		return err
 	}
 
@@ -56,7 +56,7 @@ func (lt *JAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 
 	// Reset sources
 	for _, signature := range signaturesToExtend {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -80,9 +80,9 @@ func (lt *JAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 		return err
 	}
 
-	// Append ValidationData
+	// Append Data
 	for _, signature := range signaturesToExtend {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -120,8 +120,8 @@ func (lt *JAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 }
 
 // removeOldCertificateValues ports the private removeOldCertificateValues.
-func (lt *JAdESLevelBaselineLT) removeOldCertificateValues(jadesSignature *JAdESSignature,
-	etsiUHeader *JAdESEtsiUHeader) error {
+func (lt *LevelBaselineLT) removeOldCertificateValues(jadesSignature *Signature,
+	etsiUHeader *EtsiUHeader) error {
 	if err := etsiUHeader.RemoveComponent(JAdESHeaderParameterNamesXVals); err != nil {
 		return err
 	}
@@ -130,8 +130,8 @@ func (lt *JAdESLevelBaselineLT) removeOldCertificateValues(jadesSignature *JAdES
 }
 
 // removeOldRevocationValues ports the private removeOldRevocationValues.
-func (lt *JAdESLevelBaselineLT) removeOldRevocationValues(jadesSignature *JAdESSignature,
-	etsiUHeader *JAdESEtsiUHeader) error {
+func (lt *LevelBaselineLT) removeOldRevocationValues(jadesSignature *Signature,
+	etsiUHeader *EtsiUHeader) error {
 	if err := etsiUHeader.RemoveComponent(JAdESHeaderParameterNamesRVals); err != nil {
 		return err
 	}
@@ -142,8 +142,8 @@ func (lt *JAdESLevelBaselineLT) removeOldRevocationValues(jadesSignature *JAdESS
 // RemoveLastTimestampAndAnyValidationData removes the 'tstVd' and 'anyValData' header parameters
 // appearing at the end of the 'etsiU' unsigned property array.
 // Port of the protected #removeLastTimestampAndAnyValidationData.
-func (lt *JAdESLevelBaselineLT) RemoveLastTimestampAndAnyValidationData(jadesSignature *JAdESSignature,
-	etsiUHeader *JAdESEtsiUHeader) error {
+func (lt *LevelBaselineLT) RemoveLastTimestampAndAnyValidationData(jadesSignature *Signature,
+	etsiUHeader *EtsiUHeader) error {
 	resetSources := false
 	for {
 		removed, err := etsiUHeader.RemoveLastComponent(JAdESHeaderParameterNamesTstVD,
@@ -166,11 +166,11 @@ func (lt *JAdESLevelBaselineLT) RemoveLastTimestampAndAnyValidationData(jadesSig
 // incorporateValidationDataForSignature incorporates the validation data for the signature
 // validation, according to the chosen validation data encapsulation mechanism, and returns the
 // incorporated validation data. Port of the private incorporateValidationDataForSignature.
-func (lt *JAdESLevelBaselineLT) incorporateValidationDataForSignature(
-	validationDataContainer *validation.ValidationDataContainer, signature validation.AdvancedSignature,
-	etsiUHeader *JAdESEtsiUHeader,
-	signatureParameters *JAdESSignatureParameters) (*validation.ValidationData, error) {
-	var validationDataForInclusion *validation.ValidationData
+func (lt *LevelBaselineLT) incorporateValidationDataForSignature(
+	validationDataContainer *validation.DataContainer, signature validation.AdvancedSignature,
+	etsiUHeader *EtsiUHeader,
+	signatureParameters *SignatureParameters) (*validation.Data, error) {
+	var validationDataForInclusion *validation.Data
 	validationDataEncapsulationStrategy := signatureParameters.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
@@ -223,11 +223,11 @@ func (lt *JAdESLevelBaselineLT) incorporateValidationDataForSignature(
 // incorporateValidationDataForTimestamps incorporates the validation data for the signature
 // timestamps validation, according to the chosen validation data encapsulation mechanism.
 // Port of the private incorporateValidationDataForTimestamps.
-func (lt *JAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
-	validationDataContainer *validation.ValidationDataContainer, signature validation.AdvancedSignature,
-	etsiUHeader *JAdESEtsiUHeader, signatureParameters *JAdESSignatureParameters,
-	validationDataToExclude *validation.ValidationData) error {
-	var validationData *validation.ValidationData
+func (lt *LevelBaselineLT) incorporateValidationDataForTimestamps(
+	validationDataContainer *validation.DataContainer, signature validation.AdvancedSignature,
+	etsiUHeader *EtsiUHeader, signatureParameters *SignatureParameters,
+	validationDataToExclude *validation.Data) error {
+	var validationData *validation.Data
 	validationDataEncapsulationStrategy := signatureParameters.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated:
@@ -275,7 +275,7 @@ func (lt *JAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
 }
 
 // XVals builds and returns the 'xVals' array. Port of the protected #getXVals.
-func (lt *JAdESLevelBaselineLT) XVals(certificateValuesToAdd []*model.CertificateToken) []any {
+func (lt *LevelBaselineLT) XVals(certificateValuesToAdd []*model.CertificateToken) []any {
 	xValsArray := make([]any, 0, len(certificateValuesToAdd))
 	for _, certificateToken := range certificateValuesToAdd {
 		xValsArray = append(xValsArray, jadesLevelBaselineLTX509CertObject(certificateToken))
@@ -295,7 +295,7 @@ func jadesLevelBaselineLTX509CertObject(certificateToken *model.CertificateToken
 
 // IncorporateXVals incorporates the provided set of certificates into etsiUHeader.
 // Port of the protected #incorporateXVals.
-func (lt *JAdESLevelBaselineLT) IncorporateXVals(etsiUHeader *JAdESEtsiUHeader,
+func (lt *LevelBaselineLT) IncorporateXVals(etsiUHeader *EtsiUHeader,
 	certificateValuesToAdd []*model.CertificateToken, base64UrlEncoded bool) error {
 	if utils.IsCollectionNotEmpty(certificateValuesToAdd) {
 		xVals := lt.XVals(certificateValuesToAdd)
@@ -305,7 +305,7 @@ func (lt *JAdESLevelBaselineLT) IncorporateXVals(etsiUHeader *JAdESEtsiUHeader,
 }
 
 // RVals builds and returns the 'rVals' object. Port of the protected #getRVals.
-func (lt *JAdESLevelBaselineLT) RVals(crlsToAdd []*spi.CRLToken, ocspsToAdd []*spi.OCSPToken) *JsonObject {
+func (lt *LevelBaselineLT) RVals(crlsToAdd []*spi.CRLToken, ocspsToAdd []*spi.OCSPToken) *JsonObject {
 	rValsObject := NewJsonObject()
 	if utils.IsCollectionNotEmpty(crlsToAdd) {
 		rValsObject.Put(JAdESHeaderParameterNamesCrlVals, jadesLevelBaselineLTCrlVals(crlsToAdd))
@@ -340,7 +340,7 @@ func jadesLevelBaselineLTOcspVals(ocspsToAdd []*spi.OCSPToken) []any {
 
 // IncorporateRVals incorporates the provided revocation data into etsiUHeader.
 // Port of the protected #incorporateRVals.
-func (lt *JAdESLevelBaselineLT) IncorporateRVals(etsiUHeader *JAdESEtsiUHeader, crlsToAdd []*spi.CRLToken,
+func (lt *LevelBaselineLT) IncorporateRVals(etsiUHeader *EtsiUHeader, crlsToAdd []*spi.CRLToken,
 	ocspsToAdd []*spi.OCSPToken, base64UrlEncoded bool) error {
 	if utils.IsCollectionNotEmpty(crlsToAdd) || utils.IsCollectionNotEmpty(ocspsToAdd) {
 		rVals := lt.RVals(crlsToAdd, ocspsToAdd)
@@ -351,24 +351,24 @@ func (lt *JAdESLevelBaselineLT) IncorporateRVals(etsiUHeader *JAdESEtsiUHeader, 
 
 // IncorporateTstValidationData incorporates the 'tstVD' dictionary in the signature.
 // Port of the protected #incorporateTstValidationData.
-func (lt *JAdESLevelBaselineLT) IncorporateTstValidationData(etsiUHeader *JAdESEtsiUHeader,
-	validationDataForInclusion *validation.ValidationData, base64UrlEncoded bool) error {
+func (lt *LevelBaselineLT) IncorporateTstValidationData(etsiUHeader *EtsiUHeader,
+	validationDataForInclusion *validation.Data, base64UrlEncoded bool) error {
 	return lt.IncorporateValidationData(etsiUHeader, validationDataForInclusion,
 		JAdESHeaderParameterNamesTstVD, base64UrlEncoded)
 }
 
 // IncorporateAnyValidationData incorporates the 'anyValData' dictionary in the signature.
 // Port of the protected #incorporateAnyValidationData.
-func (lt *JAdESLevelBaselineLT) IncorporateAnyValidationData(etsiUHeader *JAdESEtsiUHeader,
-	validationDataForInclusion *validation.ValidationData, base64UrlEncoded bool) error {
+func (lt *LevelBaselineLT) IncorporateAnyValidationData(etsiUHeader *EtsiUHeader,
+	validationDataForInclusion *validation.Data, base64UrlEncoded bool) error {
 	return lt.IncorporateValidationData(etsiUHeader, validationDataForInclusion,
 		JAdESHeaderParameterNamesAnyValData, base64UrlEncoded)
 }
 
 // IncorporateValidationData incorporates the validation data container in the signature under the
 // given header name. Port of the protected #incorporateValidationData.
-func (lt *JAdESLevelBaselineLT) IncorporateValidationData(etsiUHeader *JAdESEtsiUHeader,
-	validationDataForInclusion *validation.ValidationData, headerName string,
+func (lt *LevelBaselineLT) IncorporateValidationData(etsiUHeader *EtsiUHeader,
+	validationDataForInclusion *validation.Data, headerName string,
 	base64UrlEncoded bool) error {
 	if !validationDataForInclusion.IsEmpty() {
 		tstVd := lt.tstVd(validationDataForInclusion)
@@ -378,7 +378,7 @@ func (lt *JAdESLevelBaselineLT) IncorporateValidationData(etsiUHeader *JAdESEtsi
 }
 
 // tstVd ports the private getTstVd.
-func (lt *JAdESLevelBaselineLT) tstVd(validationDataForInclusion *validation.ValidationData) *JsonObject {
+func (lt *LevelBaselineLT) tstVd(validationDataForInclusion *validation.Data) *JsonObject {
 	certificateTokens := validationDataForInclusion.CertificateTokens()
 	crlTokens := validationDataForInclusion.CrlTokens()
 	ocspTokens := validationDataForInclusion.OcspTokens()
@@ -395,7 +395,7 @@ func (lt *JAdESLevelBaselineLT) tstVd(validationDataForInclusion *validation.Val
 
 // jadesLevelBaselineLTExtendToLTLevelSignatures ports the private getExtendToLTLevelSignatures.
 func jadesLevelBaselineLTExtendToLTLevelSignatures(signatures []validation.AdvancedSignature,
-	parameters *JAdESSignatureParameters) []validation.AdvancedSignature {
+	parameters *SignatureParameters) []validation.AdvancedSignature {
 	toBeExtended := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
 		if jadesLevelBaselineLTLtLevelExtensionRequired(signature, parameters) {
@@ -407,10 +407,10 @@ func jadesLevelBaselineLTExtendToLTLevelSignatures(signatures []validation.Advan
 
 // jadesLevelBaselineLTLtLevelExtensionRequired ports the private ltLevelExtensionRequired.
 func jadesLevelBaselineLTLtLevelExtensionRequired(signature validation.AdvancedSignature,
-	parameters *JAdESSignatureParameters) bool {
+	parameters *SignatureParameters) bool {
 	return enumerations.SignatureLevelJAdESBaselineLT == parameters.SignatureLevel() ||
 		!signature.HasLTAProfile()
 }
 
-// Compile-time assertion that *JAdESLevelBaselineLT satisfies the extension contract.
-var _ JAdESLevelBaselineExtension = (*JAdESLevelBaselineLT)(nil)
+// Compile-time assertion that *LevelBaselineLT satisfies the extension contract.
+var _ LevelBaselineExtension = (*LevelBaselineLT)(nil)

@@ -17,12 +17,12 @@ type SignatureIntactWithIdCheck[T any] struct {
 }
 
 // NewSignatureIntactWithIdCheck is the default constructor. Port of
-// SignatureIntactWithIdCheck(I18nProvider, T, TokenProxy, Context, LevelRule).
+// SignatureIntactWithIdCheck(Provider, T, TokenProxy, Context, LevelRule).
 //
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' buildAdditionalInfo rather than the one
 // inherited from SignatureIntactCheck.
-func NewSignatureIntactWithIdCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewSignatureIntactWithIdCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	token diagnostic.TokenProxy, context enumerations.Context,
 	constraint policy.LevelRule) *SignatureIntactWithIdCheck[T] {
 	c := &SignatureIntactWithIdCheck[T]{

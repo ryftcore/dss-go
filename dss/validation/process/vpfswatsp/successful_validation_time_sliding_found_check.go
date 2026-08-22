@@ -23,8 +23,8 @@ type SuccessfulValidationTimeSlidingFoundCheck struct {
 }
 
 // NewSuccessfulValidationTimeSlidingFoundCheck is the default constructor. Port
-// of SuccessfulValidationTimeSlidingFoundCheck(I18nProvider, XmlPCV, XmlVTS, LevelRule).
-func NewSuccessfulValidationTimeSlidingFoundCheck(i18nProvider *i18n.I18nProvider,
+// of SuccessfulValidationTimeSlidingFoundCheck(Provider, XmlPCV, XmlVTS, LevelRule).
+func NewSuccessfulValidationTimeSlidingFoundCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlPCV], vts *jaxb.XmlVTS,
 	constraint policy.LevelRule) *SuccessfulValidationTimeSlidingFoundCheck {
 	c := &SuccessfulValidationTimeSlidingFoundCheck{

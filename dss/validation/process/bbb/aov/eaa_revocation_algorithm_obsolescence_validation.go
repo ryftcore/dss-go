@@ -22,7 +22,7 @@ type EAARevocationAlgorithmObsolescenceValidation struct {
 }
 
 // NewEAARevocationAlgorithmObsolescenceValidation is the common constructor.
-func NewEAARevocationAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.EAARevocationTokenWrapper,
+func NewEAARevocationAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.EAARevocationTokenWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *EAARevocationAlgorithmObsolescenceValidation {
 	c := &EAARevocationAlgorithmObsolescenceValidation{}
 	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextEAARevocation, validationDate, validationPolicy, c)

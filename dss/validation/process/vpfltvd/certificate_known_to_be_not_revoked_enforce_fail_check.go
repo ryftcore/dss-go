@@ -20,12 +20,12 @@ type CertificateKnownToBeNotRevokedEnforceFailCheck struct {
 
 // NewCertificateKnownToBeNotRevokedEnforceFailCheck is the default
 // constructor. Port of
-// CertificateKnownToBeNotRevokedEnforceFailCheck(I18nProvider, XmlValidationProcessLongTermData, CertificateWrapper, CertificateRevocationWrapper, boolean, Date, XmlConclusion, LevelRule).
+// CertificateKnownToBeNotRevokedEnforceFailCheck(Provider, XmlValidationProcessLongTermData, CertificateWrapper, CertificateRevocationWrapper, boolean, Date, XmlConclusion, LevelRule).
 //
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' Process rather than the one inherited
 // from CertificateKnownToBeNotRevokedCheck.
-func NewCertificateKnownToBeNotRevokedEnforceFailCheck(i18nProvider *i18n.I18nProvider,
+func NewCertificateKnownToBeNotRevokedEnforceFailCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], certificate *diagnostic.CertificateWrapper,
 	revocationData *diagnostic.CertificateRevocationWrapper, isRevocationDataIssuerTrusted bool, currentTime *time.Time,
 	bsConclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *CertificateKnownToBeNotRevokedEnforceFailCheck {

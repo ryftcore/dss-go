@@ -17,7 +17,7 @@ import (
 // XAdESDocumentExtender is the XAdES specific implementation of a
 // eu.europa.esig.dss.spi.augmentation.DocumentExtender.
 type XAdESDocumentExtender struct {
-	document.AbstractDocumentExtender[*xades.XAdESSignatureParameters, *xades.XAdESTimestampParameters]
+	document.AbstractDocumentExtender[*xades.SignatureParameters, *xades.TimestampParameters]
 }
 
 // newXAdESDocumentExtender is the package-private empty constructor, used by
@@ -42,7 +42,7 @@ func NewXAdESDocumentExtender(doc model.DSSDocument) *XAdESDocumentExtender {
 
 // CreateSignatureService ports the overridden protected createSignatureService(). Panics with
 // the Java message when no CertificateVerifier was provided (Objects.requireNonNull).
-func (e *XAdESDocumentExtender) CreateSignatureService() document.DocumentSignatureService[*xades.XAdESSignatureParameters, *xades.XAdESTimestampParameters] {
+func (e *XAdESDocumentExtender) CreateSignatureService() document.SignatureService[*xades.SignatureParameters, *xades.TimestampParameters] {
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding XAdESService!")
 	}
@@ -57,21 +57,21 @@ func (e *XAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 }
 
 // EmptySignatureParameters ports the overridden protected emptySignatureParameters().
-func (e *XAdESDocumentExtender) EmptySignatureParameters() *xades.XAdESSignatureParameters {
+func (e *XAdESDocumentExtender) EmptySignatureParameters() *xades.SignatureParameters {
 	return xades.NewXAdESSignatureParameters()
 }
 
 // IsSupportedParameters ports the overridden protected
 // isSupportedParameters(SerializableSignatureParameters).
 func (e *XAdESDocumentExtender) IsSupportedParameters(parameters model.SerializableSignatureParameters) bool {
-	_, ok := parameters.(*xades.XAdESSignatureParameters)
+	_, ok := parameters.(*xades.SignatureParameters)
 	return ok
 }
 
 // IsSupportedService ports the overridden protected
-// isSupportedService(DocumentSignatureService<?, ?>).
+// isSupportedService(SignatureService<?, ?>).
 func (e *XAdESDocumentExtender) IsSupportedService(service any) bool {
-	_, ok := service.(*xades.XAdESService)
+	_, ok := service.(*xades.Service)
 	return ok
 }
 
@@ -81,4 +81,4 @@ func (e *XAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.
-var _ document.AbstractDocumentExtenderOverrides[*xades.XAdESSignatureParameters, *xades.XAdESTimestampParameters] = (*XAdESDocumentExtender)(nil)
+var _ document.AbstractDocumentExtenderOverrides[*xades.SignatureParameters, *xades.TimestampParameters] = (*XAdESDocumentExtender)(nil)

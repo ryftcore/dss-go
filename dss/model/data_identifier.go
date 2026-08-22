@@ -29,7 +29,7 @@ func NewDataIdentifierForDocument(name string, document DSSDocument) (*DataIdent
 // produces the same bytes.
 //
 // Upstream wraps an IOException from the ByteArrayOutputStream/DataOutputStream pair in a
-// DSSException reading "Unable to build a JAdESAttributeIdentifier. Reason : %s". Neither
+// DSSException reading "Unable to build a AttributeIdentifier. Reason : %s". Neither
 // stream can fail, and their Go counterparts (slice appends) cannot fail either, so that
 // branch has no counterpart here.
 func dataIdentifierBuild(name string, document DSSDocument) ([]byte, error) {
@@ -83,7 +83,7 @@ func dataIdentifierGetDigest(document DSSDocument) (Digest, bool, error) {
 	if err != nil {
 		// Propagated unchanged: upstream's build() catches IOException only, and
 		// getDigestValue raises a DSSException ("Unable to compute the digest"), so the
-		// "Unable to build a JAdESAttributeIdentifier" wrapper never applies to this path.
+		// "Unable to build a AttributeIdentifier" wrapper never applies to this path.
 		return Digest{}, false, err
 	}
 	return NewDigest(IdentifierDigestAlgorithm, value), true, nil

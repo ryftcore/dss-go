@@ -16,8 +16,8 @@ type UninterruptedChainItemBase[T any] struct {
 }
 
 // NewUninterruptedChainItemBase is the default constructor. Port of
-// UninterruptedChainItem(I18nProvider, T, LevelRule).
-func NewUninterruptedChainItemBase[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
+// UninterruptedChainItem(Provider, T, LevelRule).
+func NewUninterruptedChainItemBase[T any](i18nProvider *i18n.Provider, result *Result[T],
 	constraint policy.LevelRule) *UninterruptedChainItemBase[T] {
 	return &UninterruptedChainItemBase[T]{
 		ChainItemBase: NewChainItemBase(i18nProvider, result, constraint),
@@ -25,8 +25,8 @@ func NewUninterruptedChainItemBase[T any](i18nProvider *i18n.I18nProvider, resul
 }
 
 // NewUninterruptedChainItemBaseWithId is the constructor with custom Id. Port of
-// UninterruptedChainItem(I18nProvider, T, LevelRule, String).
-func NewUninterruptedChainItemBaseWithId[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
+// UninterruptedChainItem(Provider, T, LevelRule, String).
+func NewUninterruptedChainItemBaseWithId[T any](i18nProvider *i18n.Provider, result *Result[T],
 	constraint policy.LevelRule, id string) *UninterruptedChainItemBase[T] {
 	return &UninterruptedChainItemBase[T]{
 		ChainItemBase: NewChainItemBaseWithId(i18nProvider, result, constraint, id),

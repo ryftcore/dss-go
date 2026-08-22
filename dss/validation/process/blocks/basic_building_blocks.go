@@ -44,10 +44,10 @@ type savBlock interface {
 // BasicBuildingBlocks is 5.2 Basic building blocks.
 type BasicBuildingBlocks struct {
 	// i18nProvider is the internationalization provider.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 
 	// diagnosticData is the Diagnostic Data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// token is the validating token.
 	token diagnostic.TokenProxy
@@ -66,8 +66,8 @@ type BasicBuildingBlocks struct {
 }
 
 // NewBasicBuildingBlocks is the default constructor. Port of
-// BasicBuildingBlocks(I18nProvider, DiagnosticData, TokenProxy, Date, Map, ValidationPolicy, Context).
-func NewBasicBuildingBlocks(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// BasicBuildingBlocks(Provider, Data, TokenProxy, Date, Map, ValidationPolicy, Context).
+func NewBasicBuildingBlocks(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	token diagnostic.TokenProxy, currentTime time.Time, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	validationPolicy policy.ValidationPolicy, context enumerations.Context) *BasicBuildingBlocks {
 	return &BasicBuildingBlocks{

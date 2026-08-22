@@ -15,5 +15,5 @@ type EntityService[S ServiceStatusAndInformationExtensions] interface {
 	// Certificates gets a list of certificates.
 	Certificates() []*model.CertificateToken
 	// StatusAndInformationExtensions gets status based on time.
-	StatusAndInformationExtensions() *timedependent.TimeDependentValues[S]
+	StatusAndInformationExtensions() *timedependent.Values[S]
 }

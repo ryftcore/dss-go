@@ -6,21 +6,21 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
-// CAdESAttributeIdentifier represents a unique identifier for an attribute from a CAdES
+// AttributeIdentifier represents a unique identifier for an attribute from a CAdES
 // signature. Port of the class CAdESAttributeIdentifier, extending SignatureAttributeIdentifier.
-type CAdESAttributeIdentifier struct {
+type AttributeIdentifier struct {
 	identifier.SignatureAttributeIdentifier
 }
 
 // newCAdESAttributeIdentifier is the port of the package-private
-// CAdESAttributeIdentifier(byte[]) constructor.
-func newCAdESAttributeIdentifier(data []byte) *CAdESAttributeIdentifier {
-	return &CAdESAttributeIdentifier{
+// AttributeIdentifier(byte[]) constructor.
+func newCAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("CAdESAttributeIdentifier", data),
 	}
 }
 
-// CAdESAttributeIdentifierBuild builds the identifier for a CAdES attribute.
+// AttributeIdentifierBuild builds the identifier for a CAdES attribute.
 // Port of the static build(Attribute, Integer) method.
 //
 // Java's DataOutputStream#write(int) call on the order argument writes only its low-order
@@ -28,7 +28,7 @@ func newCAdESAttributeIdentifier(data []byte) *CAdESAttributeIdentifier {
 // than "fixed" to encode the whole integer. The DSSException build() raises on an IOException
 // cannot occur here, since building the byte slice below cannot fail; there is accordingly no
 // error return.
-func CAdESAttributeIdentifierBuild(attribute *cmscore.Attribute, order *int) *CAdESAttributeIdentifier {
+func AttributeIdentifierBuild(attribute *cmscore.Attribute, order *int) *AttributeIdentifier {
 	var data []byte
 	if attribute != nil {
 		// attribute identifier + value

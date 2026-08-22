@@ -19,7 +19,7 @@ type FormatCheck struct {
 }
 
 // NewFormatCheck is the default constructor.
-func NewFormatCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewFormatCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *FormatCheck {
 	c := &FormatCheck{signature: signature}
 	c.AbstractMultiValuesCheckItem = bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint)

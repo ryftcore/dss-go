@@ -8,8 +8,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// AIACertificateSource is the certificate source requesting issuer certificates by AIA.
-type AIACertificateSource struct {
+// CertificateSource is the certificate source requesting issuer certificates by AIA.
+type CertificateSource struct {
 	spi.CommonCertificateSource
 
 	// certificate is the certificate token to get the issuer for.
@@ -19,19 +19,19 @@ type AIACertificateSource struct {
 // newAIACertificateSource is the constructor creating an AIA certificate source for
 // certificate. Ports the protected AIACertificateSource(CertificateToken) constructor. Panics
 // if certificate is nil (Java Objects.requireNonNull).
-func newAIACertificateSource(certificate *model.CertificateToken) *AIACertificateSource {
+func newAIACertificateSource(certificate *model.CertificateToken) *CertificateSource {
 	if certificate == nil {
 		panic("The certificate cannot be null")
 	}
-	return &AIACertificateSource{
+	return &CertificateSource{
 		CommonCertificateSource: spi.NewCommonCertificateSource(),
 		certificate:             certificate,
 	}
 }
 
-// AIACertificateSourceForCertificateToken retrieves an AIA.caIssuers for the given certificate
+// CertificateSourceForCertificateToken retrieves an AIA.caIssuers for the given certificate
 // using aiaSource. NOTE: this function performs an AIA URI request on instantiation.
-func AIACertificateSourceForCertificateToken(certificate *model.CertificateToken, aiaSource AIASource) *AIACertificateSource {
+func CertificateSourceForCertificateToken(certificate *model.CertificateToken, aiaSource Source) *CertificateSource {
 	aiaCertificateSource := newAIACertificateSource(certificate)
 
 	func() {
@@ -114,7 +114,7 @@ func aiaCertificateSourceDedup(certificateTokens []*model.CertificateToken) []*m
 
 // IssuerFromAIA gets the issuer's certificate from Authority Information Access through the
 // id-ad-caIssuers extension. Returns nil if not found.
-func (s *AIACertificateSource) IssuerFromAIA() *model.CertificateToken {
+func (s *CertificateSource) IssuerFromAIA() *model.CertificateToken {
 	candidates := s.Certificates()
 	if utils.IsCollectionNotEmpty(candidates) {
 		// The potential issuers might support 3 known scenarios:
@@ -133,6 +133,6 @@ func (s *AIACertificateSource) IssuerFromAIA() *model.CertificateToken {
 }
 
 // CertificateSourceType returns CertificateSourceTypeAIA.
-func (s *AIACertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
+func (s *CertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
 	return enumerations.CertificateSourceTypeAIA
 }

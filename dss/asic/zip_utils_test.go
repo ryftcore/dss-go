@@ -80,7 +80,7 @@ func TestZipUtilsSetZipContainerHandlerBuilderPanicsOnNil(t *testing.T) {
 	ZipUtilsInstance().SetZipContainerHandlerBuilder(nil)
 }
 
-// TestZipUtilsCreateZipArchiveFromASiCContent pins that the ASiCContent overload writes
+// TestZipUtilsCreateZipArchiveFromASiCContent pins that the Content overload writes
 // getAllDocuments() in order and carries the content's zip comment over.
 func TestZipUtilsCreateZipArchiveFromASiCContent(t *testing.T) {
 	asicContent := NewASiCContent()
@@ -108,7 +108,7 @@ func TestZipUtilsCreateZipArchiveFromASiCContent(t *testing.T) {
 			t.Fatalf("entry[%d] = %q, want %q", i, names[i], want[i])
 		}
 	}
-	comment, err := ASiCUtilsZipCommentFromArchiveContainer(archive)
+	comment, err := UtilsZipCommentFromArchiveContainer(archive)
 	if err != nil {
 		t.Fatalf("zip comment: %v", err)
 	}

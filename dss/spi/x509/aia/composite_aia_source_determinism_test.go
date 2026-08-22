@@ -20,7 +20,7 @@ func (f *compositeAIASourceDeterminismFakeSource) CertificatesByAIA(_ *model.Cer
 	return nil
 }
 
-var _ AIASource = (*compositeAIASourceDeterminismFakeSource)(nil)
+var _ Source = (*compositeAIASourceDeterminismFakeSource)(nil)
 
 // TestCompositeAIASourceOrderedKeysDeterministic verifies that compositeAIASourceOrderedKeys'
 // try order is stable across runs: it used to range directly over the aiaSources map -
@@ -30,7 +30,7 @@ func TestCompositeAIASourceOrderedKeysDeterministic(t *testing.T) {
 	build := func() []string {
 		var log []string
 		source := NewCompositeAIASource()
-		source.SetAIASources(map[string]AIASource{
+		source.SetAIASources(map[string]Source{
 			"delta":   &compositeAIASourceDeterminismFakeSource{name: "delta", log: &log},
 			"alpha":   &compositeAIASourceDeterminismFakeSource{name: "alpha", log: &log},
 			"charlie": &compositeAIASourceDeterminismFakeSource{name: "charlie", log: &log},

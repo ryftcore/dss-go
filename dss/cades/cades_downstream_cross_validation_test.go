@@ -1,7 +1,7 @@
 // Cross-validation harness, direction GO -> UPSTREAM: the first end-to-end
 // compatibility proof in the other direction from cades_upstream_cross_validation_test.go. It
 // runs testdata/crossgen (a standalone `go run` program - see its own doc comment) to sign CAdES-B
-// and CAdES-T documents with this package's own CAdESService and a real PKCS#12 test key, then
+// and CAdES-T documents with this package's own Service and a real PKCS#12 test key, then
 // hands the output to testdata/crossgen/CrossGenValidator.java, which loads each file with
 // upstream DSS 6.5.RC1's own SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder and
 // asserts the signature is intact, the signing certificate is identified, and the level is

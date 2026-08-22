@@ -33,8 +33,8 @@ type CertificateApprovalStatusBlock struct {
 }
 
 // NewCertificateApprovalStatusBlock is the default constructor. Port of
-// CertificateApprovalStatusBlock(I18nProvider, XmlConclusion, Date, CertificateWrapper, List).
-func NewCertificateApprovalStatusBlock(i18nProvider *i18n.I18nProvider, buildingBlocksConclusion *jaxb.XmlConclusion,
+// CertificateApprovalStatusBlock(Provider, XmlConclusion, Date, CertificateWrapper, List).
+func NewCertificateApprovalStatusBlock(i18nProvider *i18n.Provider, buildingBlocksConclusion *jaxb.XmlConclusion,
 	validationTime time.Time, signingCertificate *diagnostic.CertificateWrapper,
 	loteAnalysis []*jaxb.XmlLoTEAnalysis) *CertificateApprovalStatusBlock {
 	xmlResult := &jaxb.XmlCertificateApprovalStatusProcess{}

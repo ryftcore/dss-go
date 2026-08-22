@@ -17,7 +17,7 @@ type TimestampFormatChecking struct {
 }
 
 // NewTimestampFormatChecking is the default constructor.
-func NewTimestampFormatChecking(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+func NewTimestampFormatChecking(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	timestamp *diagnostic.TimestampWrapper, context enumerations.Context, pol policy.ValidationPolicy) *TimestampFormatChecking {
 	c := &TimestampFormatChecking{}
 	c.InitAbstractSignatureFormatChecking(i18nProvider, diagnosticData, timestamp, context, pol, c)

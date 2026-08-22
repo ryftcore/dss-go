@@ -10,14 +10,14 @@
 // Which elements those are is not hand-listed: it is derived by reflection
 // from the model types themselves, starting at ConstraintsParameters (every
 // generated type in this schema is reachable from the document element, so a
-// single root suffices - unlike dss/diagnostic/jaxb's DiagnosticData.xsd,
+// single root suffices - unlike dss/diagnostic/jaxb's Data.xsd,
 // which needed an explicit registry of unreachable types). An element is
 // complex when the Go field bound to it is a struct - exactly the schema's
 // complexType/simpleType split.
 //
 // A complexType with simpleContent (Algo) counts as character data, not as
 // complex: the RI writes <X></X> for one whose value is the empty string.
-// There is no such deviation to record here: unlike DiagnosticData.xsd's
+// There is no such deviation to record here: unlike Data.xsd's
 // XmlOID et al., policy.xsd's only simpleContent type (Algo) is always
 // non-empty in every upstream policy resource, so the "RI writes <X/> for
 // a null simpleContent value" case documented in

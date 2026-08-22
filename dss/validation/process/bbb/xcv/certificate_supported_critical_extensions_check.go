@@ -26,7 +26,7 @@ type CertificateSupportedCriticalExtensionsCheck struct {
 
 // NewCertificateSupportedCriticalExtensionsCheck is the default constructor.
 // Port of CertificateSupportedCriticalExtensionsCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateSupportedCriticalExtensionsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+func NewCertificateSupportedCriticalExtensionsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateSupportedCriticalExtensionsCheck {
 	c := &CertificateSupportedCriticalExtensionsCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

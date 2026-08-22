@@ -1,5 +1,5 @@
 // Command bytecmp is the Go half of the CAdES-B byte-exactness harness
-// (cades_byte_exactness_test.go): it signs a fixed payload with this package's own CAdESService,
+// (cades_byte_exactness_test.go): it signs a fixed payload with this package's own Service,
 // with every input pinned - key store, signing certificate and chain, content, signing time,
 // digest algorithm - so the resulting CMS can be compared byte for byte against the one upstream
 // DSS's own CAdESService produces from the identical inputs (ByteExactnessFixtures.java).

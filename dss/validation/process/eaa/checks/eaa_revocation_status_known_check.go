@@ -20,7 +20,7 @@ type EAARevocationStatusKnownCheck struct {
 }
 
 // NewEAARevocationStatusKnownCheck is the default constructor.
-func NewEAARevocationStatusKnownCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationStatusKnownCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatus *diagnostic.EAARevocationWrapper, constraint policy.LevelRule) *EAARevocationStatusKnownCheck {
 	c := &EAARevocationStatusKnownCheck{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, eaaStatus.Id()),

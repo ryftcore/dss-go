@@ -16,7 +16,7 @@ func TestNewTrustPropertiesPanicsOnNilTLInfo(t *testing.T) {
 			t.Fatalf("unexpected panic message: %v", r)
 		}
 	}()
-	NewTrustProperties(nil, NewTrustServiceProvider(), &timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]{})
+	NewTrustProperties(nil, NewTrustServiceProvider(), &timedependent.Values[*TrustServiceStatusAndInformationExtensions]{})
 }
 
 func TestNewTrustPropertiesPanicsOnNilTrustServiceProvider(t *testing.T) {
@@ -29,7 +29,7 @@ func TestNewTrustPropertiesPanicsOnNilTrustServiceProvider(t *testing.T) {
 			t.Fatalf("unexpected panic message: %v", r)
 		}
 	}()
-	NewTrustProperties(&TLInfo{}, nil, &timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]{})
+	NewTrustProperties(&TLInfo{}, nil, &timedependent.Values[*TrustServiceStatusAndInformationExtensions]{})
 }
 
 func TestNewTrustPropertiesPanicsOnNilTrustService(t *testing.T) {
@@ -48,7 +48,7 @@ func TestNewTrustPropertiesPanicsOnNilTrustService(t *testing.T) {
 func TestNewTrustPropertiesRoundTrip(t *testing.T) {
 	tlInfo := &TLInfo{}
 	tsp := NewTrustServiceProvider()
-	trustService := &timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]{}
+	trustService := &timedependent.Values[*TrustServiceStatusAndInformationExtensions]{}
 
 	tp := NewTrustProperties(tlInfo, tsp, trustService)
 	if tp.LOTLInfo() != nil {

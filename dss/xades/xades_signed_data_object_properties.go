@@ -3,11 +3,11 @@
 //
 // XAdESSigProperties (Java eu.europa.esig.dss.xades.validation.XAdESSigProperties, the same Go
 // package xades) lives alongside this file as xades_sig_properties.go: abstract in Java,
-// implementing spi.validation.SignatureProperties[XAdESAttribute] over a signature-properties DOM
+// implementing spi.validation.SignatureProperties[Attribute] over a signature-properties DOM
 // element and an XAdESPath. Its constructor is the package-private
 // newXAdESSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath)
-// XAdESSigProperties, called directly below - Go has no abstract-class dispatch to register back
-// into, and XAdESSigProperties calls nothing virtual on its embedder (IsExist/Attributes are
+// SigProperties, called directly below - Go has no abstract-class dispatch to register back
+// into, and SigProperties calls nothing virtual on its embedder (IsExist/Attributes are
 // entirely self-contained), so no Init-style registration is needed.
 package xades
 
@@ -18,22 +18,22 @@ import (
 )
 
 // XAdESSignedDataObjectProperties builds XAdESSignedDataObjectProperties. Port of the class
-// XAdESSignedDataObjectProperties, extending XAdESSigProperties.
-type XAdESSignedDataObjectProperties struct {
-	XAdESSigProperties
+// SignedDataObjectProperties, extending SigProperties.
+type SignedDataObjectProperties struct {
+	SigProperties
 }
 
 // newXAdESSignedDataObjectProperties is the port of the package-private
-// XAdESSignedDataObjectProperties(Element, XAdESPath) constructor.
-func newXAdESSignedDataObjectProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESSignedDataObjectProperties {
-	return &XAdESSignedDataObjectProperties{
-		XAdESSigProperties: newXAdESSigProperties(signatureProperties, xadesPaths),
+// SignedDataObjectProperties(Element, XAdESPath) constructor.
+func newXAdESSignedDataObjectProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *SignedDataObjectProperties {
+	return &SignedDataObjectProperties{
+		SigProperties: newXAdESSigProperties(signatureProperties, xadesPaths),
 	}
 }
 
 // XAdESSignedDataObjectPropertiesBuild builds a XAdESSignedDataObjectProperties. Port of the
 // static build(Element, XAdESPath).
-func XAdESSignedDataObjectPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESSignedDataObjectProperties {
+func SignedDataObjectPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *SignedDataObjectProperties {
 	signedSignatureProperties := xadesSignedDataObjectPropertiesGetSignedSignaturePropertiesDom(signatureElement, xadesPaths)
 	return newXAdESSignedDataObjectProperties(signedSignatureProperties, xadesPaths)
 }

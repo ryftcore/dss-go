@@ -16,16 +16,16 @@ type CounterSignatureCheck struct {
 	*process.ChainItemBase[*jaxb.XmlSAV]
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// signature is the signature to check.
 	signature *diagnostic.SignatureWrapper
 }
 
 // NewCounterSignatureCheck is the default constructor. Port of
-// CounterSignatureCheck(I18nProvider, XmlSAV, DiagnosticData, SignatureWrapper, LevelRule).
-func NewCounterSignatureCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
-	diagnosticData *diagnostic.DiagnosticData, signature *diagnostic.SignatureWrapper,
+// CounterSignatureCheck(Provider, XmlSAV, Data, SignatureWrapper, LevelRule).
+func NewCounterSignatureCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
+	diagnosticData *diagnostic.Data, signature *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *CounterSignatureCheck {
 	c := &CounterSignatureCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

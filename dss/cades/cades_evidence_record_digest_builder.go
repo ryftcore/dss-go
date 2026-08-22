@@ -14,9 +14,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// CAdESEvidenceRecordDigestBuilder computes message-imprint of a CMS signature to be protected
+// EvidenceRecordDigestBuilder computes message-imprint of a CMS signature to be protected
 // by an evidence-record.
-type CAdESEvidenceRecordDigestBuilder struct {
+type EvidenceRecordDigestBuilder struct {
 	validation.AbstractSignatureEvidenceRecordDigestBuilder
 
 	// detachedDocument is the original document in case of a detached signature.
@@ -27,31 +27,31 @@ type CAdESEvidenceRecordDigestBuilder struct {
 	derEncoded bool
 }
 
-// NewCAdESEvidenceRecordDigestBuilder instantiates CAdESEvidenceRecordDigestBuilder with a
+// NewCAdESEvidenceRecordDigestBuilder instantiates EvidenceRecordDigestBuilder with a
 // SHA-256 digest algorithm. Port of CAdESEvidenceRecordDigestBuilder(DSSDocument).
-func NewCAdESEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *CAdESEvidenceRecordDigestBuilder {
-	return &CAdESEvidenceRecordDigestBuilder{
+func NewCAdESEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilder(signatureDocument),
 	}
 }
 
-// NewCAdESEvidenceRecordDigestBuilderWithAlgorithm instantiates CAdESEvidenceRecordDigestBuilder
+// NewCAdESEvidenceRecordDigestBuilderWithAlgorithm instantiates EvidenceRecordDigestBuilder
 // with a custom digest algorithm. Port of CAdESEvidenceRecordDigestBuilder(DSSDocument,
 // DigestAlgorithm).
-func NewCAdESEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *CAdESEvidenceRecordDigestBuilder {
-	return &CAdESEvidenceRecordDigestBuilder{
+func NewCAdESEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument, digestAlgorithm),
 	}
 }
 
-// newCAdESEvidenceRecordDigestBuilderFromSignature instantiates CAdESEvidenceRecordDigestBuilder
+// newCAdESEvidenceRecordDigestBuilderFromSignature instantiates EvidenceRecordDigestBuilder
 // from a signature for the given evidenceRecordAttribute. Used on validation of an existing
 // evidence record. Port of the protected
-// CAdESEvidenceRecordDigestBuilder(AdvancedSignature, SignatureAttribute, DigestAlgorithm)
+// EvidenceRecordDigestBuilder(AdvancedSignature, SignatureAttribute, DigestAlgorithm)
 // constructor.
 func newCAdESEvidenceRecordDigestBuilderFromSignature(signature validation.AdvancedSignature,
-	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) *CAdESEvidenceRecordDigestBuilder {
-	return &CAdESEvidenceRecordDigestBuilder{
+	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderFromSignature(
 			signature, evidenceRecordAttribute, digestAlgorithm),
 	}
@@ -60,14 +60,14 @@ func newCAdESEvidenceRecordDigestBuilderFromSignature(signature validation.Advan
 // SetDetachedContent sets an original document in case of a detached signature. When set,
 // please use BuildExternalEvidenceRecordDigest to compute hash for both the signature and the
 // original document. Port of #setDetachedContent, chainable.
-func (b *CAdESEvidenceRecordDigestBuilder) SetDetachedContent(detachedDocument model.DSSDocument) *CAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetDetachedContent(detachedDocument model.DSSDocument) *EvidenceRecordDigestBuilder {
 	b.detachedDocument = detachedDocument
 	return b
 }
 
 // SetDEREncoded sets whether a signature shall be DER-encoded prior to the hash computation.
 // Port of #setDEREncoded, chainable.
-func (b *CAdESEvidenceRecordDigestBuilder) SetDEREncoded(derEncoded bool) *CAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetDEREncoded(derEncoded bool) *EvidenceRecordDigestBuilder {
 	b.derEncoded = derEncoded
 	return b
 }
@@ -75,14 +75,14 @@ func (b *CAdESEvidenceRecordDigestBuilder) SetDEREncoded(derEncoded bool) *CAdES
 // SetParallelEvidenceRecord overrides AbstractSignatureEvidenceRecordDigestBuilder, keeping the
 // concrete return type. Port of the covariant-return #setParallelEvidenceRecord(boolean)
 // override.
-func (b *CAdESEvidenceRecordDigestBuilder) SetParallelEvidenceRecord(parallelEvidenceRecord bool) *CAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetParallelEvidenceRecord(parallelEvidenceRecord bool) *EvidenceRecordDigestBuilder {
 	b.AbstractSignatureEvidenceRecordDigestBuilder.SetParallelEvidenceRecord(parallelEvidenceRecord)
 	return b
 }
 
 // Build generates the hash value for the signature enveloping the evidence-record. Port of
 // #build().
-func (b *CAdESEvidenceRecordDigestBuilder) Build() (model.Digest, error) {
+func (b *EvidenceRecordDigestBuilder) Build() (model.Digest, error) {
 	cmsObj, err := b.getCMS()
 	if err != nil {
 		return model.Digest{}, err
@@ -96,7 +96,7 @@ func (b *CAdESEvidenceRecordDigestBuilder) Build() (model.Digest, error) {
 //
 // Returns the signature digest on the first position, and the digest of the detached document
 // on the second.
-func (b *CAdESEvidenceRecordDigestBuilder) BuildExternalEvidenceRecordDigest() ([]model.Digest, error) {
+func (b *EvidenceRecordDigestBuilder) BuildExternalEvidenceRecordDigest() ([]model.Digest, error) {
 	cmsObj, err := b.getCMS()
 	if err != nil {
 		return nil, err
@@ -116,22 +116,22 @@ func (b *CAdESEvidenceRecordDigestBuilder) BuildExternalEvidenceRecordDigest() (
 //
 // Panics when neither a signature nor a signature document was provided (Java's
 // IllegalStateException).
-func (b *CAdESEvidenceRecordDigestBuilder) getCMS() (*cms.CMS, error) {
+func (b *EvidenceRecordDigestBuilder) getCMS() (*cms.CMS, error) {
 	if b.Signature() != nil {
-		cadesSignature, ok := b.Signature().(*CAdESSignature)
+		cadesSignature, ok := b.Signature().(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", b.Signature())
 		}
 		return cadesSignature.CMS(), nil
 	} else if b.SignatureDocument() != nil {
-		return cms.CMSUtilsParseToCMS(b.SignatureDocument())
+		return cms.UtilsParseToCMS(b.SignatureDocument())
 	}
 	panic("Either a signature or a signature document shall be provided!")
 }
 
 // getDigest ports the protected #getDigest(CMS): the digest of cmsObj to be protected by an
 // evidence record.
-func (b *CAdESEvidenceRecordDigestBuilder) getDigest(cmsObj *cms.CMS) (model.Digest, error) {
+func (b *EvidenceRecordDigestBuilder) getDigest(cmsObj *cms.CMS) (model.Digest, error) {
 	messageImprint, err := b.getCMSContentInfoMessageImprint(cmsObj)
 	if err != nil {
 		return model.Digest{}, err
@@ -146,13 +146,13 @@ func (b *CAdESEvidenceRecordDigestBuilder) getDigest(cmsObj *cms.CMS) (model.Dig
 // getDigestOfDocument ports the protected getDigest(DSSDocument) inherited from
 // AbstractSignatureEvidenceRecordDigestBuilder (unexported there, so reproduced here rather than
 // widening that method's visibility for a single non-CMS-typed caller).
-func (b *CAdESEvidenceRecordDigestBuilder) getDigestOfDocument(document model.DSSDocument) (model.Digest, error) {
+func (b *EvidenceRecordDigestBuilder) getDigestOfDocument(document model.DSSDocument) (model.Digest, error) {
 	return document.Digest(b.DigestAlgorithm())
 }
 
 // getCMSContentInfoMessageImprint returns a CMSSignedData's message-imprint to be protected by
 // an evidence record. Port of the protected #getCMSContentInfoMessageImprint(CMS).
-func (b *CAdESEvidenceRecordDigestBuilder) getCMSContentInfoMessageImprint(cmsObj *cms.CMS) ([]byte, error) {
+func (b *EvidenceRecordDigestBuilder) getCMSContentInfoMessageImprint(cmsObj *cms.CMS) ([]byte, error) {
 	if b.IsParallelEvidenceRecord() || b.Signature() != nil {
 		var err error
 		cmsObj, err = b.getCMSSignedDataBeforeLastEvidenceRecord(cmsObj)
@@ -168,22 +168,22 @@ func (b *CAdESEvidenceRecordDigestBuilder) getCMSContentInfoMessageImprint(cmsOb
 
 // getCMSSignedDataBeforeLastEvidenceRecord creates a CMS that predates protection by the latest
 // evidence-record. Port of the protected #getCMSSignedDataBeforeLastEvidenceRecord(CMS).
-func (b *CAdESEvidenceRecordDigestBuilder) getCMSSignedDataBeforeLastEvidenceRecord(cmsObj *cms.CMS) (*cms.CMS, error) {
+func (b *EvidenceRecordDigestBuilder) getCMSSignedDataBeforeLastEvidenceRecord(cmsObj *cms.CMS) (*cms.CMS, error) {
 	signerWithERFound := false
 	var newSignerInformationList []*cmscore.SignerInfo
 
-	cadesSignature, signatureIsSet := b.Signature().(*CAdESSignature)
+	cadesSignature, signatureIsSet := b.Signature().(*Signature)
 
 	for _, signerInformation := range cmsObj.SignerInfos() {
 		current := signerInformation
 		if !signatureIsSet || cadesSignature.SignerInformation() == signerInformation {
-			unsignedAttributes := CAdESUnsignedAttributesBuild(signerInformation)
+			unsignedAttributes := UnsignedAttributesBuild(signerInformation)
 
-			var targetEvidenceRecordAttribute *CAdESAttribute
+			var targetEvidenceRecordAttribute *Attribute
 			if b.IsParallelEvidenceRecord() {
 				targetEvidenceRecordAttribute = cadesEvidenceRecordDigestBuilderLatestEvidenceRecordAttribute(unsignedAttributes)
 			} else if b.EvidenceRecordAttribute() != nil {
-				attribute, ok := b.EvidenceRecordAttribute().(*CAdESAttribute)
+				attribute, ok := b.EvidenceRecordAttribute().(*Attribute)
 				if !ok {
 					return nil, fmt.Errorf("unexpected evidence record attribute type %T", b.EvidenceRecordAttribute())
 				}
@@ -202,7 +202,7 @@ func (b *CAdESEvidenceRecordDigestBuilder) getCMSSignedDataBeforeLastEvidenceRec
 
 				unsignedAttributesTable := cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter(unsignedAttributes, targetEvidenceRecordAttribute)
 				var err error
-				current, err = cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesTable)
+				current, err = cms.UtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesTable)
 				if err != nil {
 					return nil, err
 				}
@@ -214,12 +214,12 @@ func (b *CAdESEvidenceRecordDigestBuilder) getCMSSignedDataBeforeLastEvidenceRec
 		}
 		newSignerInformationList = append(newSignerInformationList, current)
 	}
-	return cms.CMSUtilsReplaceSigners(cmsObj, newSignerInformationList)
+	return cms.UtilsReplaceSigners(cmsObj, newSignerInformationList)
 }
 
 // cadesEvidenceRecordDigestBuilderLatestEvidenceRecordAttribute ports the private
-// getLatestEvidenceRecordAttribute(CAdESUnsignedAttributes).
-func cadesEvidenceRecordDigestBuilderLatestEvidenceRecordAttribute(unsignedAttributes *CAdESUnsignedAttributes) *CAdESAttribute {
+// getLatestEvidenceRecordAttribute(UnsignedAttributes).
+func cadesEvidenceRecordDigestBuilderLatestEvidenceRecordAttribute(unsignedAttributes *UnsignedAttributes) *Attribute {
 	if unsignedAttributes != nil {
 		attributes := unsignedAttributes.Attributes() // returns sorted
 		if len(attributes) > 0 {
@@ -239,9 +239,9 @@ func cadesEvidenceRecordDigestBuilderLatestEvidenceRecordAttribute(unsignedAttri
 }
 
 // cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter ports the private
-// removeAttributesAtAndAfter(CAdESUnsignedAttributes, CAdESAttribute).
-func cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter(unsignedAttributes *CAdESUnsignedAttributes, unsignedAttribute *CAdESAttribute) cmscore.Attributes {
-	var attributesList []*CAdESAttribute
+// removeAttributesAtAndAfter(UnsignedAttributes, Attribute).
+func cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter(unsignedAttributes *UnsignedAttributes, unsignedAttribute *Attribute) cmscore.Attributes {
+	var attributesList []*Attribute
 	for _, attribute := range unsignedAttributes.Attributes() {
 		if unsignedAttribute.Equals(attribute) {
 			break // break if the target attribute is reached
@@ -255,7 +255,7 @@ func cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter(unsignedAttribut
 
 	// ensure the original order
 	sort.Slice(attributesList, func(i, j int) bool {
-		return CAdESAttributeCompare(attributesList[i], attributesList[j]) < 0
+		return AttributeCompare(attributesList[i], attributesList[j]) < 0
 	})
 
 	attrs := make(cmscore.Attributes, 0, len(attributesList))
@@ -271,7 +271,7 @@ func cadesEvidenceRecordDigestBuilderRemoveAttributesAtAndAfter(unsignedAttribut
 
 // getEncoded ports the protected #getEncoded(CMS): the CMS binaries, DER-encoded when
 // derEncoded is set.
-func (b *CAdESEvidenceRecordDigestBuilder) getEncoded(cmsObj *cms.CMS) []byte {
+func (b *EvidenceRecordDigestBuilder) getEncoded(cmsObj *cms.CMS) []byte {
 	if b.derEncoded {
 		return cmsObj.DEREncoded()
 	}

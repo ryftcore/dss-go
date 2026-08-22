@@ -22,8 +22,8 @@ type MessageDigestOrSignedPropertiesCheck struct {
 }
 
 // NewMessageDigestOrSignedPropertiesCheck is the default constructor. Port of
-// MessageDigestOrSignedPropertiesCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewMessageDigestOrSignedPropertiesCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// MessageDigestOrSignedPropertiesCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewMessageDigestOrSignedPropertiesCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *MessageDigestOrSignedPropertiesCheck {
 	c := &MessageDigestOrSignedPropertiesCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

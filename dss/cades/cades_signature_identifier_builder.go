@@ -10,21 +10,21 @@ import (
 )
 
 // CAdESSignatureIdentifierBuilder builds a SignatureIdentifier for a CAdES signature. Port of
-// the class CAdESSignatureIdentifierBuilder, extending
+// the class SignatureIdentifierBuilder, extending
 // spi/validation.AbstractSignatureIdentifierBuilder.
-type CAdESSignatureIdentifierBuilder struct {
+type SignatureIdentifierBuilder struct {
 	validation.AbstractSignatureIdentifierBuilder
 
 	// cadesSignature is the signature to build the identifier for, typed as the concrete CAdES
 	// signature so CounterSignaturePosition/SignaturePosition need no runtime cast (Java casts
 	// its inherited `signature` field instead, since its base class only knows AdvancedSignature).
-	cadesSignature *CAdESSignature
+	cadesSignature *Signature
 }
 
 // NewCAdESSignatureIdentifierBuilder is the port of the constructor
-// CAdESSignatureIdentifierBuilder(CAdESSignature).
-func NewCAdESSignatureIdentifierBuilder(signature *CAdESSignature) *CAdESSignatureIdentifierBuilder {
-	b := &CAdESSignatureIdentifierBuilder{
+// SignatureIdentifierBuilder(Signature).
+func NewCAdESSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
+	b := &SignatureIdentifierBuilder{
 		AbstractSignatureIdentifierBuilder: validation.NewAbstractSignatureIdentifierBuilderBase(signature),
 		cadesSignature:                     signature,
 	}
@@ -35,14 +35,14 @@ func NewCAdESSignatureIdentifierBuilder(signature *CAdESSignature) *CAdESSignatu
 // WriteSignedProperties shadows spi/validation.AbstractSignatureIdentifierBuilder's method of
 // the same name: it appends the manifest filename after the inherited signed properties. Port
 // of the protected writeSignedProperties(ByteArrayOutputStream) override.
-func (b *CAdESSignatureIdentifierBuilder) WriteSignedProperties(buffer *bytes.Buffer) {
+func (b *SignatureIdentifierBuilder) WriteSignedProperties(buffer *bytes.Buffer) {
 	b.AbstractSignatureIdentifierBuilder.WriteSignedProperties(buffer)
 	b.WriteString(buffer, b.manifestFilename())
 }
 
 // manifestFilename ports the private getManifestFilename(); returns "" where Java returns null,
 // which WriteString already treats identically to an absent value.
-func (b *CAdESSignatureIdentifierBuilder) manifestFilename() string {
+func (b *SignatureIdentifierBuilder) manifestFilename() string {
 	manifestFile := b.Signature().ManifestFile()
 	if manifestFile != nil {
 		return manifestFile.Filename()
@@ -56,7 +56,7 @@ func (b *CAdESSignatureIdentifierBuilder) manifestFilename() string {
 // PORTING.md precedent in analyzer/default_document_analyzer.go's "Virtual dispatch" note, and
 // spi/validation/timestamp/timestamp_identifier_builder.go for the same pattern applied to a
 // sibling identifier builder).
-func (b *CAdESSignatureIdentifierBuilder) BuildBinaries() []byte {
+func (b *SignatureIdentifierBuilder) BuildBinaries() []byte {
 	buffer := &bytes.Buffer{}
 	b.WriteSignedProperties(buffer)
 	b.WriteSignaturePosition(buffer)
@@ -66,28 +66,28 @@ func (b *CAdESSignatureIdentifierBuilder) BuildBinaries() []byte {
 // BuildSignatureIdentifier builds the SignatureIdentifier for the provided signature. Port of
 // build() with its Java return type; shadows the base to route through this type's
 // BuildBinaries().
-func (b *CAdESSignatureIdentifierBuilder) BuildSignatureIdentifier() *validation.SignatureIdentifier {
+func (b *SignatureIdentifierBuilder) BuildSignatureIdentifier() *validation.SignatureIdentifier {
 	return validation.NewSignatureIdentifier(b.BuildBinaries())
 }
 
 // Build builds the SignatureIdentifier for the provided signature, satisfying
 // model.IdentifierBuilder. Port of build(); shadows the base for the same reason as
 // BuildSignatureIdentifier.
-func (b *CAdESSignatureIdentifierBuilder) Build() model.Identifier {
+func (b *SignatureIdentifierBuilder) Build() model.Identifier {
 	return b.BuildSignatureIdentifier()
 }
 
 // CounterSignaturePosition returns the current counter signature position in its master
 // signature. Port of the protected getCounterSignaturePosition(AdvancedSignature) override.
-func (b *CAdESSignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
-	cadesMasterSignature := masterSignature.(*CAdESSignature)
+func (b *SignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
+	cadesMasterSignature := masterSignature.(*Signature)
 	return cadesSignatureIdentifierBuilderCount(
 		cadesMasterSignature.CounterSignatureStore().SignerInfos(), b.cadesSignature.SignerInformation())
 }
 
 // SignaturePosition returns a position of a signature in the provided file. Port of the
 // protected getSignaturePosition() override.
-func (b *CAdESSignatureIdentifierBuilder) SignaturePosition() any {
+func (b *SignatureIdentifierBuilder) SignaturePosition() any {
 	return cadesSignatureIdentifierBuilderCount(
 		b.cadesSignature.CMS().SignerInfos(), b.cadesSignature.SignerInformation())
 }

@@ -26,8 +26,8 @@ type AbstractRevocationFreshCheck struct {
 }
 
 // NewAbstractRevocationFreshCheck is the default constructor. Port of
-// AbstractRevocationFreshCheck(I18nProvider, XmlRFC, RevocationWrapper, Date, LevelRule).
-func NewAbstractRevocationFreshCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRFC],
+// AbstractRevocationFreshCheck(Provider, XmlRFC, RevocationWrapper, Date, LevelRule).
+func NewAbstractRevocationFreshCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRFC],
 	revocationData *diagnostic.RevocationWrapper, validationDate time.Time,
 	constraint policy.LevelRule) *AbstractRevocationFreshCheck {
 	return &AbstractRevocationFreshCheck{

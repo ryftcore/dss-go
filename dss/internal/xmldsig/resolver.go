@@ -62,7 +62,7 @@ func Resolve(perManifest, global []URIResolver, ctx *ResolverContext) (*Data, er
 }
 
 // DefaultResolvers returns the same-document resolvers, in the order
-// XAdESSignature.initDefaultResolvers registers them: the XPath-injection-guarded fragment
+// Signature.initDefaultResolvers registers them: the XPath-injection-guarded fragment
 // resolver, then the XPointer resolver.
 //
 // This is deliberately NOT Santuario's registerDefaultResolvers(), which also installs

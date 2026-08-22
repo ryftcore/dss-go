@@ -1,6 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/RevocationDataVerifier.java (DSS 6.5.RC1).
 //
-// ValidationContext.GetRevocationData keeps the Get prefix (unlike most of this port's dropped
+// Context.GetRevocationData keeps the Get prefix (unlike most of this port's dropped
 // getters) for consistency with SignatureValidationContext's other getters; see
 // validation_context.go's header comment for more.
 //
@@ -108,7 +108,7 @@ type RevocationDataVerifier struct {
 	trustAnchorVerifier *TrustAnchorVerifier
 
 	// validationContext is the signature validation context.
-	validationContext ValidationContext
+	validationContext Context
 }
 
 // NewEmptyRevocationDataVerifier creates an empty instance of RevocationDataVerifier. All
@@ -235,8 +235,8 @@ func (v *RevocationDataVerifier) SetTrustAnchorVerifier(trustAnchorVerifier *Tru
 }
 
 // SetValidationContext sets the validation context for certificates validation. Port of the
-// protected setValidationContext(ValidationContext).
-func (v *RevocationDataVerifier) SetValidationContext(validationContext ValidationContext) {
+// protected setValidationContext(Context).
+func (v *RevocationDataVerifier) SetValidationContext(validationContext Context) {
 	v.validationContext = validationContext
 }
 

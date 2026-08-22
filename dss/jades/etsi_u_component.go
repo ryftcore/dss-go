@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/EtsiUComponent.java (DSS 6.5.RC1).
 //
 // EtsiUComponent extends JAdESAttribute in Java (jades_attribute.go, same package): this port
-// embeds it, reaching JAdESAttribute's unexported
+// embeds it, reaching Attribute's unexported
 // name/value/identifier fields directly from newEtsiUComponent - legal because both types live in
 // package jades, mirroring the "protected field, same-package subclass" relationship the Java
 // source expresses (see jades_attribute.go's own file header, which already documents this same
@@ -9,11 +9,11 @@
 package jades
 
 // EtsiUComponent represents an item of the 'etsiU' header array. Port of the class
-// EtsiUComponent, extending JAdESAttribute.
+// EtsiUComponent, extending Attribute.
 //
 // java.io.Serializable is dropped (no Go counterpart).
 type EtsiUComponent struct {
-	JAdESAttribute
+	Attribute
 
 	// base64UrlEncoded reports whether the component is a base64url encoded instance.
 	base64UrlEncoded bool
@@ -23,10 +23,10 @@ type EtsiUComponent struct {
 }
 
 // newEtsiUComponent is the port of the package-private constructor
-// EtsiUComponent(Object, String, Object, JAdESAttributeIdentifier).
-func newEtsiUComponent(component any, headerName string, value any, identifier *JAdESAttributeIdentifier) *EtsiUComponent {
+// EtsiUComponent(Object, String, Object, AttributeIdentifier).
+func newEtsiUComponent(component any, headerName string, value any, identifier *AttributeIdentifier) *EtsiUComponent {
 	c := &EtsiUComponent{
-		JAdESAttribute:   *NewJAdESAttribute(headerName, value),
+		Attribute:        *NewJAdESAttribute(headerName, value),
 		component:        component,
 		base64UrlEncoded: DSSJsonUtilsIsStringFormat(component),
 	}
@@ -45,16 +45,16 @@ func EtsiUComponentBuild(component any, order int) *EtsiUComponent {
 		}
 		headerName := keys[0]
 		value := m.Value(headerName)
-		identifier := JAdESAttributeIdentifierBuildWithOrder(headerName, value, &order)
+		identifier := AttributeIdentifierBuildWithOrder(headerName, value, &order)
 		return newEtsiUComponent(component, headerName, value, identifier)
 	}
 	return nil
 }
 
 // EtsiUComponentBuildFromValue builds the EtsiUComponent from the given parameters. Port of the
-// static build(String, Object, boolean, JAdESAttributeIdentifier).
+// static build(String, Object, boolean, AttributeIdentifier).
 func EtsiUComponentBuildFromValue(headerName string, value any, base64UrlEncoded bool,
-	identifier *JAdESAttributeIdentifier) *EtsiUComponent {
+	identifier *AttributeIdentifier) *EtsiUComponent {
 	component := etsiUComponentCreate(headerName, value, base64UrlEncoded)
 	return newEtsiUComponent(component, headerName, value, identifier)
 }

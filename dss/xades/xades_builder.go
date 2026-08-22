@@ -8,13 +8,13 @@
 // call back into those three through Java's virtual dispatch. Go has no method overriding
 // across embedding, so - exactly as document/abstract_document_extender.go and
 // cades/cades_signature_extension.go already do, per the TokenBase.InitToken(self) convention
-// of PORTING.md - the three are collected in XAdESBuilderOverrides, every concrete builder
+// of PORTING.md - the three are collected in BuilderOverrides, every concrete builder
 // registers itself with InitXAdESBuilder/InitXAdESBuilderWithVerifier, and this base always
-// reaches them through b.overrides. XAdESBuilder keeps its own XmldsigNamespace/XadesNamespace
+// reaches them through b.overrides. Builder keeps its own XmldsigNamespace/XadesNamespace
 // as the "super" implementations an override may delegate back to.
 //
 // A grep over dss-xades confirms the closed set of overridden members: alignNodes
-// (ExtensionBuilder, XAdESSignatureBuilder), getXmldsigNamespace and getXadesNamespace
+// (ExtensionBuilder, AbstractSignatureBuilder), getXmldsigNamespace and getXadesNamespace
 // (ExtensionBuilder). getXades141Namespace, getCurrentXAdESElements, getCurrentXAdESPath and
 // createXmlDocument are never overridden and therefore stay plain methods here - they still
 // consult b.overrides for the namespace they are built on, so an ExtensionBuilder sees the
@@ -78,7 +78,7 @@ const (
 // abstract or expects a subclass to override, and that the base implementation itself calls
 // back into. Every concrete builder satisfies this and registers itself through
 // InitXAdESBuilder / InitXAdESBuilderWithVerifier.
-type XAdESBuilderOverrides interface {
+type BuilderOverrides interface {
 	// AlignNodes aligns children indents. Port of the protected abstract #alignNodes.
 	AlignNodes()
 
@@ -91,17 +91,17 @@ type XAdESBuilderOverrides interface {
 	XadesNamespace() *common.DSSNamespace
 }
 
-// XAdESBuilder builds a XAdES signature. It is the abstract base of every XAdES builder:
-// XAdESSignatureBuilder for signature creation, ExtensionBuilder (and through it every
+// Builder builds a XAdES signature. It is the abstract base of every XAdES builder:
+// AbstractSignatureBuilder for signature creation, ExtensionBuilder (and through it every
 // -T/-C/-X/-XL/-A/-LT/-LTA level and the SignaturePolicyStoreBuilder) for extension.
-type XAdESBuilder struct {
+type Builder struct {
 	// XadesPath holds the XAdESPath implementation which contains all constants and queries
 	// needed to cope with the default signature schema. Port of the protected xadesPath.
 	XadesPath definition.XAdESPath
 
 	// Params is the set of parameters relating to the structure and process of the creation or
 	// extension of the electronic signature. Port of the protected params.
-	Params *XAdESSignatureParameters
+	Params *SignatureParameters
 
 	// DocumentDom is the root XML document root (with signature).
 	// Port of the protected documentDom.
@@ -113,18 +113,18 @@ type XAdESBuilder struct {
 
 	// overrides points back at the concrete builder; see InitXAdESBuilder. Left nil (bare zero
 	// value) panics on first use, matching the TokenBase.InitToken(self) convention.
-	overrides XAdESBuilderOverrides
+	overrides BuilderOverrides
 }
 
 // InitXAdESBuilder registers the concrete builder with its base.
 // Port of the protected empty XAdESBuilder() constructor.
-func (b *XAdESBuilder) InitXAdESBuilder(self XAdESBuilderOverrides) {
+func (b *Builder) InitXAdESBuilder(self BuilderOverrides) {
 	b.overrides = self
 }
 
 // InitXAdESBuilderWithVerifier registers the concrete builder with its base and stores the
 // CertificateVerifier. Port of the protected XAdESBuilder(CertificateVerifier) constructor.
-func (b *XAdESBuilder) InitXAdESBuilderWithVerifier(self XAdESBuilderOverrides,
+func (b *Builder) InitXAdESBuilderWithVerifier(self BuilderOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	b.overrides = self
 	b.CertificateVerifier = certificateVerifier
@@ -138,7 +138,7 @@ func (b *XAdESBuilder) InitXAdESBuilderWithVerifier(self XAdESBuilderOverrides,
 //	</CertDigest>
 //
 // Port of the protected #incorporateCertDigest.
-func (b *XAdESBuilder) IncorporateCertDigest(parentDom *xmldom.Node,
+func (b *Builder) IncorporateCertDigest(parentDom *xmldom.Node,
 	digestAlgorithm enumerations.DigestAlgorithm, token model.Token) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -155,7 +155,7 @@ func (b *XAdESBuilder) IncorporateCertDigest(parentDom *xmldom.Node,
 //	<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
 //
 // Port of the protected #incorporateDigestMethod.
-func (b *XAdESBuilder) IncorporateDigestMethod(parentDom *xmldom.Node,
+func (b *Builder) IncorporateDigestMethod(parentDom *xmldom.Node,
 	digestAlgorithm enumerations.DigestAlgorithm) {
 	namespace := b.digestAlgAndValueNamespace()
 	DSSXMLUtilsIncorporateDigestMethod(parentDom, digestAlgorithm, namespace)
@@ -168,7 +168,7 @@ func (b *XAdESBuilder) IncorporateDigestMethod(parentDom *xmldom.Node,
 // Port of the protected #incorporateDigestValue(Element, DigestAlgorithm, Token); Java's two
 // incorporateDigestValue overloads cannot share one Go name, so the Token-taking one carries
 // the OfToken suffix and the String-taking one keeps the plain name.
-func (b *XAdESBuilder) IncorporateDigestValueOfToken(parentDom *xmldom.Node,
+func (b *Builder) IncorporateDigestValueOfToken(parentDom *xmldom.Node,
 	digestAlgorithm enumerations.DigestAlgorithm, token model.Token) error {
 	digest, err := token.Digest(digestAlgorithm)
 	if err != nil {
@@ -185,13 +185,13 @@ func (b *XAdESBuilder) IncorporateDigestValueOfToken(parentDom *xmldom.Node,
 //	<ds:DigestValue>fj8SJujSXU4fi342bdtiKVbglA0=</ds:DigestValue>
 //
 // Port of the protected #incorporateDigestValue(Element, String).
-func (b *XAdESBuilder) IncorporateDigestValue(parentDom *xmldom.Node, base64EncodedDigestBytes string) {
+func (b *Builder) IncorporateDigestValue(parentDom *xmldom.Node, base64EncodedDigestBytes string) {
 	namespace := b.digestAlgAndValueNamespace()
 	DSSXMLUtilsIncorporateDigestValue(parentDom, base64EncodedDigestBytes, namespace)
 }
 
 // digestAlgAndValueNamespace ports the private getDigestAlgAndValueNamespace.
-func (b *XAdESBuilder) digestAlgAndValueNamespace() *common.DSSNamespace {
+func (b *Builder) digestAlgAndValueNamespace() *common.DSSNamespace {
 	if definition.XAdESNamespaceXAdES111.IsSameUri(b.overrides.XadesNamespace().Uri()) {
 		return b.overrides.XadesNamespace()
 	}
@@ -212,7 +212,7 @@ func (b *XAdESBuilder) digestAlgAndValueNamespace() *common.DSSNamespace {
 //	</Cert>
 //
 // Port of the protected #incorporateCert.
-func (b *XAdESBuilder) IncorporateCert(parentDom *xmldom.Node, certificate *model.CertificateToken,
+func (b *Builder) IncorporateCert(parentDom *xmldom.Node, certificate *model.CertificateToken,
 	digestAlgorithm enumerations.DigestAlgorithm) (*xmldom.Node, error) {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -240,7 +240,7 @@ func (b *XAdESBuilder) IncorporateCert(parentDom *xmldom.Node, certificate *mode
 
 // IncorporateIssuerV1 incorporates the xades:IssuerSerial element.
 // Port of the protected #incorporateIssuerV1.
-func (b *XAdESBuilder) IncorporateIssuerV1(parentDom *xmldom.Node, certificate *model.CertificateToken) error {
+func (b *Builder) IncorporateIssuerV1(parentDom *xmldom.Node, certificate *model.CertificateToken) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -265,7 +265,7 @@ func (b *XAdESBuilder) IncorporateIssuerV1(parentDom *xmldom.Node, certificate *
 
 // IncorporateIssuerV2 incorporates the xades:IssuerSerialV2 element.
 // Port of the protected #incorporateIssuerV2.
-func (b *XAdESBuilder) IncorporateIssuerV2(parentDom *xmldom.Node, certificate *model.CertificateToken) error {
+func (b *Builder) IncorporateIssuerV2(parentDom *xmldom.Node, certificate *model.CertificateToken) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -284,7 +284,7 @@ func (b *XAdESBuilder) IncorporateIssuerV2(parentDom *xmldom.Node, certificate *
 
 // notIndentedObjectIds returns the list of object ids that must not be indented in any case.
 // Port of the private getNotIndentedObjectIds.
-func (b *XAdESBuilder) notIndentedObjectIds() []string {
+func (b *Builder) notIndentedObjectIds() []string {
 	ids := make([]string, 0)
 	dssReferences := b.Params.References()
 	for _, reference := range dssReferences {
@@ -298,7 +298,7 @@ func (b *XAdESBuilder) notIndentedObjectIds() []string {
 
 // CreateXmlDocument creates a DSSDocument from the current documentDom.
 // Port of the protected #createXmlDocument.
-func (b *XAdESBuilder) CreateXmlDocument() (model.DSSDocument, error) {
+func (b *Builder) CreateXmlDocument() (model.DSSDocument, error) {
 	var bytes []byte
 	var err error
 	if enumerations.SigningOperationSign == b.Params.GetContext().OperationKind() && b.Params.IsPrettyPrint() {
@@ -323,19 +323,19 @@ func (b *XAdESBuilder) CreateXmlDocument() (model.DSSDocument, error) {
 // XmldsigNamespace returns the currently used XMLDSig namespace.
 // Port of the protected #getXmldsigNamespace; ExtensionBuilder overrides it and delegates back
 // here when the signature under extension carries no namespace of its own.
-func (b *XAdESBuilder) XmldsigNamespace() *common.DSSNamespace {
+func (b *Builder) XmldsigNamespace() *common.DSSNamespace {
 	return b.Params.XmldsigNamespace()
 }
 
 // XadesNamespace returns the currently used XAdES namespace.
 // Port of the protected #getXadesNamespace; see XmldsigNamespace for the override note.
-func (b *XAdESBuilder) XadesNamespace() *common.DSSNamespace {
+func (b *Builder) XadesNamespace() *common.DSSNamespace {
 	return b.Params.XadesNamespace()
 }
 
 // Xades141Namespace returns the currently used XAdES 1.4.1 namespace.
 // Port of the protected #getXades141Namespace.
-func (b *XAdESBuilder) Xades141Namespace() *common.DSSNamespace {
+func (b *Builder) Xades141Namespace() *common.DSSNamespace {
 	return b.Params.Xades141Namespace()
 }
 
@@ -344,7 +344,7 @@ func (b *XAdESBuilder) Xades141Namespace() *common.DSSNamespace {
 // needs any enum instance to reach the interface's instance methods (which ignore the
 // receiver), so the Go port names that same first constant. Java's IllegalArgumentException
 // becomes a returned error.
-func (b *XAdESBuilder) CurrentXAdESElements() (definition.XAdESElement, error) {
+func (b *Builder) CurrentXAdESElements() (definition.XAdESElement, error) {
 	xadesURI := b.overrides.XadesNamespace().Uri()
 	switch {
 	case definition.XAdESNamespaceXAdES132.Uri() == xadesURI:
@@ -359,7 +359,7 @@ func (b *XAdESBuilder) CurrentXAdESElements() (definition.XAdESElement, error) {
 
 // CurrentXAdESPath gets the relevant XAdESPath implementation for the namespace in use.
 // Port of the protected #getCurrentXAdESPath.
-func (b *XAdESBuilder) CurrentXAdESPath() (definition.XAdESPath, error) {
+func (b *Builder) CurrentXAdESPath() (definition.XAdESPath, error) {
 	xadesURI := b.overrides.XadesNamespace().Uri()
 	switch {
 	case utils.AreStringsEqual(definition.XAdESNamespaceXAdES132.Uri(), xadesURI):
@@ -379,7 +379,7 @@ func (b *XAdESBuilder) CurrentXAdESPath() (definition.XAdESPath, error) {
 //	</xades141:SPDocSpecification>
 //
 // Port of the protected #incorporateSPDocSpecification.
-func (b *XAdESBuilder) IncorporateSPDocSpecification(parentElement *xmldom.Node,
+func (b *Builder) IncorporateSPDocSpecification(parentElement *xmldom.Node,
 	spDocSpecification *model.SpDocSpecification) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -420,7 +420,7 @@ func (b *XAdESBuilder) IncorporateSPDocSpecification(parentElement *xmldom.Node,
 
 // ToXmlIdentifier transforms a DSS Identifier to an XML Id type.
 // Port of the protected #toXmlIdentifier.
-func (b *XAdESBuilder) ToXmlIdentifier(identifier model.Identifier) (string, error) {
+func (b *Builder) ToXmlIdentifier(identifier model.Identifier) (string, error) {
 	digest, err := spi.DSSUtilsSHA1Digest(identifier.AsXmlID())
 	if err != nil {
 		return "", err

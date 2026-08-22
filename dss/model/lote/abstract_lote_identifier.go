@@ -13,13 +13,13 @@ type AbstractLoTEIdentifier struct {
 
 // NewAbstractLoTEIdentifier builds the identifier over the SHA-256 digest of the target
 // List's URL bytes with the given prefix (e.g. "LoTE-", "LoLoTE-"). className is the Java
-// simple class name of the concrete identifier subclass (e.g. "LoTEIdentifier",
+// simple class name of the concrete identifier subclass (e.g. "Identifier",
 // "LoLoTEIdentifier"), which IdentifierBase needs for its Equals/String ports.
 //
 // Port of the protected AbstractLoTEIdentifier(String, LoTEInfo) constructor; listInfo is typed
 // *LoTEInfo exactly as in Java (LoLoTEInfo embeds LoTEInfo, so callers pass its embedded field,
 // e.g. &loloteInfo.LoTEInfo, mirroring Java's implicit upcast of "this").
-func NewAbstractLoTEIdentifier(className, prefix string, listInfo *LoTEInfo) AbstractLoTEIdentifier {
+func NewAbstractLoTEIdentifier(className, prefix string, listInfo *Info) AbstractLoTEIdentifier {
 	return AbstractLoTEIdentifier{
 		MultipleDigestIdentifier: model.NewMultipleDigestIdentifier(className, prefix, []byte(listInfo.Url())),
 	}

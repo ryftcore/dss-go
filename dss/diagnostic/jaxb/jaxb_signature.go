@@ -54,7 +54,7 @@ type XmlSPDocSpecification struct {
 }
 
 // XmlSignatureDigestReference is the Go form of the generated JAXB class XmlSignatureDigestReference
-// (complexType SignatureDigestReference).
+// (complexType DigestReference).
 type XmlSignatureDigestReference struct {
 	CanonicalizationMethod *string               `xml:"CanonicalizationMethod,omitempty"`
 	DigestMethod           *DigestAlgorithmValue `xml:"DigestMethod,omitempty"`
@@ -62,7 +62,7 @@ type XmlSignatureDigestReference struct {
 }
 
 // XmlSignatureProductionPlace is the Go form of the generated JAXB class XmlSignatureProductionPlace
-// (complexType SignatureProductionPlace).
+// (complexType ProductionPlace).
 type XmlSignatureProductionPlace struct {
 	PostalAddress       []string `xml:"PostalAddress"`
 	City                *string  `xml:"City,omitempty"`

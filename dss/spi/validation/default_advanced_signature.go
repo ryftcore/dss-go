@@ -16,7 +16,7 @@ import (
 // DefaultAdvancedSignatureOverrides declares every operation DefaultAdvancedSignature calls
 // back into virtually: the AdvancedSignature interface methods it deliberately leaves
 // unimplemented (deferred to the format-specific final signature type of a later phase, e.g.
-// CAdESSignature/XAdESSignature) that it nonetheless calls on itself, plus its own
+// Signature/Signature) that it nonetheless calls on itself, plus its own
 // protected-abstract and protected-overridable hooks. It stands in for the virtual dispatch a
 // Java abstract class gets for free; a concrete signature registers itself with
 // DefaultAdvancedSignature.InitDefaultAdvancedSignature so that the base can reach them, the way
@@ -87,12 +87,12 @@ type DefaultAdvancedSignatureOverrides interface {
 
 	// BuildSignaturePolicy extracts a signature policy from a signature and builds the object.
 	// Port of the protected abstract buildSignaturePolicy().
-	BuildSignaturePolicy() *signature.SignaturePolicy
+	BuildSignaturePolicy() *signature.Policy
 
-	// BuildSignatureDigestReference builds a new SignatureDigestReference according to the
+	// BuildSignatureDigestReference builds a new DigestReference according to the
 	// applicable signature format rules. Port of the protected abstract
 	// buildSignatureDigestReference(DigestAlgorithm).
-	BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference
+	BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference
 
 	// CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to
 	// the signature format. Port of the protected abstract
@@ -133,7 +133,7 @@ type DefaultAdvancedSignature struct {
 
 	// signatureCryptographicVerification contains the result of the signature mathematical
 	// validation. It is initialised when CheckSignatureIntegrity is called.
-	signatureCryptographicVerification *signature.SignatureCryptographicVerification
+	signatureCryptographicVerification *signature.CryptographicVerification
 
 	// structureValidationMessages is a list of error messages from a structure validation.
 	structureValidationMessages []string
@@ -180,8 +180,8 @@ type DefaultAdvancedSignature struct {
 	// keyBindingSignature indicates whether the signature is a key binding signature.
 	keyBindingSignature bool
 
-	// signaturePolicy is the SignaturePolicy identifier.
-	signaturePolicy *signature.SignaturePolicy
+	// signaturePolicy is the Policy identifier.
+	signaturePolicy *signature.Policy
 
 	// signatureScopes is a list of found SignatureScopes.
 	signatureScopes []scope.SignatureScope
@@ -192,9 +192,9 @@ type DefaultAdvancedSignature struct {
 	// signatureIdentifier is the cached unique signature identifier.
 	signatureIdentifier *SignatureIdentifier
 
-	// signatureDigestReferences caches computed SignatureDigestReference's as defined in ETSI
+	// signatureDigestReferences caches computed DigestReference's as defined in ETSI
 	// TS 119 102-2 ch. "4.1.1.5 Signature Reference".
-	signatureDigestReferences map[enumerations.DigestAlgorithm]*signature.SignatureDigestReference
+	signatureDigestReferences map[enumerations.DigestAlgorithm]*signature.DigestReference
 
 	// baselineRequirementsChecker performs a conformance check for the signature to a given
 	// profile. "transient" (Java) has no Go counterpart since this port has no serialization.
@@ -540,9 +540,9 @@ func (s *DefaultAdvancedSignature) SetKeyBindingSignature(keyBindingSignature bo
 	s.keyBindingSignature = keyBindingSignature
 }
 
-// SignatureCryptographicVerification gets the signature's cryptographic validation result,
+// CryptographicVerification gets the signature's cryptographic validation result,
 // running CheckSignatureIntegrity on first use. Port of getSignatureCryptographicVerification().
-func (s *DefaultAdvancedSignature) SignatureCryptographicVerification() *signature.SignatureCryptographicVerification {
+func (s *DefaultAdvancedSignature) SignatureCryptographicVerification() *signature.CryptographicVerification {
 	if s.signatureCryptographicVerification == nil {
 		s.defaultAdvancedSignatureOverrides().CheckSignatureIntegrity()
 	}
@@ -552,7 +552,7 @@ func (s *DefaultAdvancedSignature) SignatureCryptographicVerification() *signatu
 // SetSignatureCryptographicVerification sets the result of the signature mathematical
 // validation. The Go counterpart of writing Java's protected signatureCryptographicVerification
 // field from a subclass's CheckSignatureIntegrity implementation.
-func (s *DefaultAdvancedSignature) SetSignatureCryptographicVerification(verification *signature.SignatureCryptographicVerification) {
+func (s *DefaultAdvancedSignature) SetSignatureCryptographicVerification(verification *signature.CryptographicVerification) {
 	s.signatureCryptographicVerification = verification
 }
 
@@ -688,21 +688,21 @@ func (s *DefaultAdvancedSignature) AllEvidenceRecords() []EvidenceRecord {
 	return evidenceRecords
 }
 
-// SignaturePolicy returns the Signature Policy OID from the signature, building it via
+// Policy returns the Signature Policy OID from the signature, building it via
 // BuildSignaturePolicy on first use. Port of getSignaturePolicy().
-func (s *DefaultAdvancedSignature) SignaturePolicy() *signature.SignaturePolicy {
+func (s *DefaultAdvancedSignature) SignaturePolicy() *signature.Policy {
 	if s.signaturePolicy == nil {
 		s.signaturePolicy = s.defaultAdvancedSignatureOverrides().BuildSignaturePolicy()
 	}
 	return s.signaturePolicy
 }
 
-// SignatureDigestReference returns a signature reference element as defined in TS 119 442 -
+// DigestReference returns a signature reference element as defined in TS 119 442 -
 // V1.1.1, ch. 5.1.4.2.1.3 XML component, building and caching it per DigestAlgorithm on first
 // use. Port of getSignatureDigestReference(DigestAlgorithm).
-func (s *DefaultAdvancedSignature) SignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference {
+func (s *DefaultAdvancedSignature) SignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference {
 	if s.signatureDigestReferences == nil {
-		s.signatureDigestReferences = make(map[enumerations.DigestAlgorithm]*signature.SignatureDigestReference)
+		s.signatureDigestReferences = make(map[enumerations.DigestAlgorithm]*signature.DigestReference)
 	}
 	if reference, ok := s.signatureDigestReferences[digestAlgorithm]; ok {
 		return reference

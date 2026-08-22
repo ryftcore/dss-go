@@ -11,7 +11,7 @@ import (
 // LogTLParsingErrorAlertHandler warns on TL parsing error.
 type LogTLParsingErrorAlertHandler struct{}
 
-var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLParsingErrorAlertHandler)(nil)
+var _ alert.Handler[*tslmodel.TLInfo] = (*LogTLParsingErrorAlertHandler)(nil)
 
 // NewLogTLParsingErrorAlertHandler is the default constructor.
 func NewLogTLParsingErrorAlertHandler() *LogTLParsingErrorAlertHandler {

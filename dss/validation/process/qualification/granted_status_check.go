@@ -32,8 +32,8 @@ type GrantedStatusCheck[T any] struct {
 }
 
 // NewGrantedStatusCheck is the default constructor. Port of
-// GrantedStatusCheck(I18nProvider, T, List, LevelRule).
-func NewGrantedStatusCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// GrantedStatusCheck(Provider, T, List, LevelRule).
+func NewGrantedStatusCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *GrantedStatusCheck[T] {
 	c := &GrantedStatusCheck[T]{
 		ChainItemBase:       process.NewChainItemBase(i18nProvider, result, constraint),

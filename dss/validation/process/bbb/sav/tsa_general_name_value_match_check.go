@@ -20,8 +20,8 @@ type TSAGeneralNameValueMatchCheck struct {
 }
 
 // NewTSAGeneralNameValueMatchCheck is the default constructor. Port of
-// TSAGeneralNameValueMatchCheck(I18nProvider, XmlSAV, TimestampWrapper, LevelRule).
-func NewTSAGeneralNameValueMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// TSAGeneralNameValueMatchCheck(Provider, XmlSAV, TimestampWrapper, LevelRule).
+func NewTSAGeneralNameValueMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	timestampWrapper *diagnostic.TimestampWrapper, constraint policy.LevelRule) *TSAGeneralNameValueMatchCheck {
 	c := &TSAGeneralNameValueMatchCheck{
 		ChainItemBase:    process.NewChainItemBase(i18nProvider, result, constraint),

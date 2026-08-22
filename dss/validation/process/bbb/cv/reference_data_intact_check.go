@@ -21,8 +21,8 @@ type ReferenceDataIntactCheck[T any] struct {
 }
 
 // NewReferenceDataIntactCheck is the default constructor. Port of
-// ReferenceDataIntactCheck(I18nProvider, T, XmlDigestMatcher, LevelRule).
-func NewReferenceDataIntactCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ReferenceDataIntactCheck(Provider, T, XmlDigestMatcher, LevelRule).
+func NewReferenceDataIntactCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	digestMatcher *diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ReferenceDataIntactCheck[T] {
 	c := &ReferenceDataIntactCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -41,8 +41,8 @@ type QWACForTLSBindingCertificateValidationBlock struct {
 
 // NewQWACForTLSBindingCertificateValidationBlock is the default constructor.
 // Port of
-// QWACForTLSBindingCertificateValidationBlock(I18nProvider, Date, SignatureWrapper, CertificateWrapper, Map, XmlCertificateQualificationProcess, String).
-func NewQWACForTLSBindingCertificateValidationBlock(i18nProvider *i18n.I18nProvider, validationTime time.Time,
+// QWACForTLSBindingCertificateValidationBlock(Provider, Date, SignatureWrapper, CertificateWrapper, Map, XmlCertificateQualificationProcess, String).
+func NewQWACForTLSBindingCertificateValidationBlock(i18nProvider *i18n.Provider, validationTime time.Time,
 	bindingSignature *diagnostic.SignatureWrapper, certificate *diagnostic.CertificateWrapper,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, certificateQualification *jaxb.XmlCertificateQualificationProcess,
 	websiteUrl string) *QWACForTLSBindingCertificateValidationBlock {

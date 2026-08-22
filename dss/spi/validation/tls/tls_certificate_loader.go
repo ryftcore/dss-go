@@ -5,13 +5,13 @@ package tls
 
 import "github.com/ryftcore/dss-go/dss/model/tls"
 
-// TLSCertificateLoader is the data loader which includes server webpage certificates to the
+// CertificateLoader is the data loader which includes server webpage certificates to the
 // response context. Use GetTLSCertificates(url) to extract the data.
-type TLSCertificateLoader interface {
+type CertificateLoader interface {
 	// GetTLSCertificates extracts TLS/SSL-certificates from the given web page. Port of
 	// getTLSCertificates(String).
 	//
 	// urlString represents a URL of a webpage with a secure connection (HTTPS); the return
 	// value contains the chain of the TLS/SSL certificates and other supportive information.
-	GetTLSCertificates(urlString string) *tls.TLSCertificates
+	GetTLSCertificates(urlString string) *tls.Certificates
 }

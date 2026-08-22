@@ -43,8 +43,8 @@ func NewASiCContainerWithXAdESAnalyzer(asicContainer model.DSSDocument) *ASiCCon
 }
 
 // NewASiCContainerWithXAdESAnalyzerFromContent is the constructor with ASiCContent. Ports
-// ASiCContainerWithXAdESAnalyzer(ASiCContent).
-func NewASiCContainerWithXAdESAnalyzerFromContent(asicContent *asic.ASiCContent) *ASiCContainerWithXAdESAnalyzer {
+// ASiCContainerWithXAdESAnalyzer(Content).
+func NewASiCContainerWithXAdESAnalyzerFromContent(asicContent *asic.Content) *ASiCContainerWithXAdESAnalyzer {
 	a := newASiCContainerWithXAdESAnalyzer()
 	a.InitFromContent(asicContent)
 	return a
@@ -57,7 +57,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) IsSupported(dssDocument model.DSSDocume
 
 // IsSupportedASiCContent ports the @Override isSupported(ASiCContent), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
-func (a *ASiCContainerWithXAdESAnalyzer) IsSupportedASiCContent(asicContent *asic.ASiCContent) bool {
+func (a *ASiCContainerWithXAdESAnalyzer) IsSupportedASiCContent(asicContent *asic.Content) bool {
 	return NewASiCWithXAdESFormatDetector().IsSupportedASiCContent(asicContent)
 }
 
@@ -90,7 +90,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 			}
 			documentAnalyzer.SetCertificateVerifier(a.CertificateVerifier())
 
-			isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(a.GetMimeTypeDocument())
+			isOpenDocument, err := asic.UtilsIsOpenDocument(a.GetMimeTypeDocument())
 			if err == nil && isOpenDocument {
 				documentAnalyzer.SetDetachedContents(OpenDocumentSupportUtilsGetOpenDocumentCoverage(a.AsicContent))
 			} else if enumerations.ASiCContainerTypeASiCS == a.GetContainerType() {
@@ -122,7 +122,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	}
 
 	for _, manifestDocument := range a.GetEvidenceRecordManifestDocuments() {
-		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
+		manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
 			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
 			manifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
@@ -136,8 +136,8 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetManifestFilesDescriptions() []*model
 
 // OriginalDocumentsForSignature ports the @Override getOriginalDocuments(AdvancedSignature).
 func (a *ASiCContainerWithXAdESAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
-	xadesSignature := advancedSignature.(*dssxades.XAdESSignature)
-	retrievedDocs := dssxades.XAdESSignatureUtilsGetSignerDocuments(xadesSignature)
+	xadesSignature := advancedSignature.(*dssxades.Signature)
+	retrievedDocs := dssxades.SignatureUtilsGetSignerDocuments(xadesSignature)
 	if utils.IsCollectionNotEmpty(retrievedDocs) {
 		return a.extractArchiveDocuments(retrievedDocs)
 	}

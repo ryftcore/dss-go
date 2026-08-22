@@ -4,7 +4,7 @@
 // DEFERRED: Java's ValidationReportUtils (an XSDAbstractUtils singleton)
 // builds two thread-safe resources this port has no stdlib equivalent for:
 // a JAXBContext (needed only to drive JAXB's own marshaller/unmarshaller,
-// which ValidationReportFacade.go replaces with encoding/xml) and an XSD
+// which Facade.go replaces with encoding/xml) and an XSD
 // Schema assembled from 1910202xmlSchema.xsd plus the trusted-list, XAdES
 // and XMLDSig schemas it imports (via TrustedList211Utils.getXSDSources()).
 // The schema location constant is kept for documentation/testdata
@@ -13,7 +13,7 @@
 // stdlib-first dependency policy without tech-lead sign-off (PORTING.md
 // "Dependency policy") - the same deferral dss/simplereport's
 // SimpleReportXmlDefiner documents for SimpleReport.xsd.
-// ValidationReportFacade.Marshal/Unmarshal (the half of this pair the
+// Facade.Marshal/Unmarshal (the half of this pair the
 // marshal-parity KAT actually exercises, via jaxb.Marshal/Unmarshal) does
 // not depend on it. ObjectFactory.java (ValidationReportUtils.OBJECT_FACTORY)
 // has no Go counterpart either, for the reason jaxb/doc.go gives.

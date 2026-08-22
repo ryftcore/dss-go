@@ -28,11 +28,11 @@ func NewDefaultASiCWithCAdESFilenameFactory() *DefaultASiCWithCAdESFilenameFacto
 }
 
 // SignatureFilename ports the @Override getSignatureFilename(ASiCContent).
-func (f *DefaultASiCWithCAdESFilenameFactory) SignatureFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) SignatureFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -45,11 +45,11 @@ func (f *DefaultASiCWithCAdESFilenameFactory) SignatureFilename(asicContent *asi
 }
 
 // TimestampFilename ports the @Override getTimestampFilename(ASiCContent).
-func (f *DefaultASiCWithCAdESFilenameFactory) TimestampFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) TimestampFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -64,11 +64,11 @@ func (f *DefaultASiCWithCAdESFilenameFactory) TimestampFilename(asicContent *asi
 // ManifestFilename ports the @Override getManifestFilename(ASiCContent).
 //
 // Panics with Java's UnsupportedOperationException message for an ASiC-S container.
-func (f *DefaultASiCWithCAdESFilenameFactory) ManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) ManifestFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainerContent(asicContent)
+	isASiCE, err := asic.UtilsIsASiCEContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -83,11 +83,11 @@ func (f *DefaultASiCWithCAdESFilenameFactory) ManifestFilename(asicContent *asic
 // ArchiveManifestFilename ports the @Override getArchiveManifestFilename(ASiCContent).
 //
 // Panics with Java's UnsupportedOperationException message for an ASiC-S container.
-func (f *DefaultASiCWithCAdESFilenameFactory) ArchiveManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) ArchiveManifestFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainerContent(asicContent)
+	isASiCE, err := asic.UtilsIsASiCEContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -101,7 +101,7 @@ func (f *DefaultASiCWithCAdESFilenameFactory) ArchiveManifestFilename(asicConten
 }
 
 // DataPackageFilename ports the @Override getDataPackageFilename(ASiCContent).
-func (f *DefaultASiCWithCAdESFilenameFactory) DataPackageFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) DataPackageFilename(asicContent *asic.Content) string {
 	return asic.ASiCUtilsPackageZip // "package.zip"
 }
 
@@ -111,14 +111,14 @@ func (f *DefaultASiCWithCAdESFilenameFactory) DataPackageFilename(asicContent *a
 // Panics with Java's NullPointerException message when evidenceRecordType is empty
 // (Objects.requireNonNull), or its UnsupportedOperationException message for an unsupported
 // evidenceRecordType.
-func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.ASiCContent, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
+func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.Content, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
 	if evidenceRecordType == "" {
 		panic("EvidenceRecordType shall be defined!")
 	}
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -152,8 +152,8 @@ func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent
 }
 
 // EvidenceRecordManifestFilename ports the @Override getEvidenceRecordManifestFilename(
-// ASiCContent).
-func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.ASiCContent) string {
+// Content).
+func (f *DefaultASiCWithCAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}

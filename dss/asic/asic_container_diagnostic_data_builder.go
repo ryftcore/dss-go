@@ -8,10 +8,10 @@ import (
 	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
-// ASiCContainerDiagnosticDataBuilder is the DiagnosticDataBuilder for an ASiC container. Port
-// of the class ASiCContainerDiagnosticDataBuilder, extending
+// ContainerDiagnosticDataBuilder is the DataBuilder for an ASiC container. Port
+// of the class ContainerDiagnosticDataBuilder, extending
 // validation/reports/diagnostic.SignedDocumentDiagnosticDataBuilder.
-type ASiCContainerDiagnosticDataBuilder struct {
+type ContainerDiagnosticDataBuilder struct {
 	dssdiagnostic.SignedDocumentDiagnosticDataBuilder
 
 	// containerInfo is the information about the validating container.
@@ -20,8 +20,8 @@ type ASiCContainerDiagnosticDataBuilder struct {
 
 // NewASiCContainerDiagnosticDataBuilder instantiates a builder with nil/zero values. Port of
 // the default constructor.
-func NewASiCContainerDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder {
-	b := &ASiCContainerDiagnosticDataBuilder{
+func NewASiCContainerDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder {
+	b := &ContainerDiagnosticDataBuilder{
 		SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 	}
 	b.InitSignedDocumentDiagnosticDataBuilder(b)
@@ -29,20 +29,20 @@ func NewASiCContainerDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder
 }
 
 // ContainerInfo sets the container info (ASiC). Ports containerInfo(ContainerInfo).
-func (b *ASiCContainerDiagnosticDataBuilder) ContainerInfo(containerInfo *model.ContainerInfo) *ASiCContainerDiagnosticDataBuilder {
+func (b *ContainerDiagnosticDataBuilder) ContainerInfo(containerInfo *model.ContainerInfo) *ContainerDiagnosticDataBuilder {
 	b.containerInfo = containerInfo
 	return b
 }
 
 // Build ports the @Override build().
-func (b *ASiCContainerDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
+func (b *ContainerDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	diagnosticData := b.SignedDocumentDiagnosticDataBuilder.Build()
 	diagnosticData.ContainerInfo = b.getXmlContainerInfo()
 	return diagnosticData
 }
 
 // getXmlContainerInfo ports the private getXmlContainerInfo().
-func (b *ASiCContainerDiagnosticDataBuilder) getXmlContainerInfo() *jaxb.XmlContainerInfo {
+func (b *ContainerDiagnosticDataBuilder) getXmlContainerInfo() *jaxb.XmlContainerInfo {
 	if b.containerInfo == nil {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (b *ASiCContainerDiagnosticDataBuilder) getXmlContainerInfo() *jaxb.XmlCont
 }
 
 // getXmlManifests ports the private getXmlManifests(List).
-func (b *ASiCContainerDiagnosticDataBuilder) getXmlManifests(manifestFiles []*model.ManifestFile) []*jaxb.XmlManifestFile {
+func (b *ContainerDiagnosticDataBuilder) getXmlManifests(manifestFiles []*model.ManifestFile) []*jaxb.XmlManifestFile {
 	xmlManifests := make([]*jaxb.XmlManifestFile, 0, len(manifestFiles))
 	if utils.IsCollectionNotEmpty(manifestFiles) {
 		for _, manifestFile := range manifestFiles {

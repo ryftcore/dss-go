@@ -7,8 +7,8 @@
 // the whole createOCSPRef/createCRLRef call and returning null) when the value is present but not
 // a JSON object. This file instead reads them through DSSJsonUtilsGetAsMap, which degrades to an
 // empty map on a type mismatch rather than aborting - the same tolerant-cast convention every
-// other DSSJsonUtils-based reader in this port already uses (see JAdESCertificateSource,
-// JAdESCRLSource, JAdESOCSPSource). A malformed non-map value under 'ocspId'/'crlId'/'responderId'
+// other DSSJsonUtils-based reader in this port already uses (see CertificateSource,
+// CRLSource, OCSPSource). A malformed non-map value under 'ocspId'/'crlId'/'responderId'
 // is accordingly treated as absent rather than failing the whole reference, which can only ever
 // produce a reference DSS itself would otherwise have discarded entirely.
 package jades
@@ -24,9 +24,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESRevocationRefExtractionUtilsCreateOCSPRef extracts an OCSPRef from the 'ocspRefs' header.
+// RevocationRefExtractionUtilsCreateOCSPRef extracts an OCSPRef from the 'ocspRefs' header.
 // Port of the public static createOCSPRef(Map).
-func JAdESRevocationRefExtractionUtilsCreateOCSPRef(ocpRef *jose.Object) *spi.OCSPRef {
+func RevocationRefExtractionUtilsCreateOCSPRef(ocpRef *jose.Object) *spi.OCSPRef {
 	var responderId *spi.ResponderId
 	var producedAt time.Time
 
@@ -81,9 +81,9 @@ func jadesRevocationRefExtractionUtilsResponderId(ocspId *jose.Object) (*spi.Res
 	return nil, nil
 }
 
-// JAdESRevocationRefExtractionUtilsCreateCRLRef extracts a CRLRef from the 'crlRefs' header.
+// RevocationRefExtractionUtilsCreateCRLRef extracts a CRLRef from the 'crlRefs' header.
 // Port of the public static createCRLRef(Map).
-func JAdESRevocationRefExtractionUtilsCreateCRLRef(crlRefMap *jose.Object) *spi.CRLRef {
+func RevocationRefExtractionUtilsCreateCRLRef(crlRefMap *jose.Object) *spi.CRLRef {
 	var crlIssuer *model.X500Principal
 	var crlIssuedTime time.Time
 	var crlNumber *big.Int

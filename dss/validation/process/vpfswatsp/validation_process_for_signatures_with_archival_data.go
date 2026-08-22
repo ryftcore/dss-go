@@ -6,7 +6,7 @@
 // plain generic ChainItem whose Go constructor is
 //
 //	vpfltvd.NewTimestampDelayCheck[T](
-//	    *i18n.I18nProvider, *process.Result[T], *diagnostic.SignatureWrapper, time.Time, policy.DurationRule)
+//	    *i18n.Provider, *process.Result[T], *diagnostic.SignatureWrapper, time.Time, policy.DurationRule)
 package vpfswatsp
 
 import (
@@ -35,7 +35,7 @@ type ValidationProcessForSignaturesWithArchivalData struct {
 	validationProcessLongTermData *jaxb.XmlValidationProcessLongTermData
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// signature is the signature.
 	signature *diagnostic.SignatureWrapper
@@ -67,9 +67,9 @@ type ValidationProcessForSignaturesWithArchivalData struct {
 
 // NewValidationProcessForSignaturesWithArchivalData is the default constructor.
 // Port of ValidationProcessForSignaturesWithArchivalData(I18nProvider, XmlSignature, SignatureWrapper, DiagnosticData, Map, ValidationPolicy, Date, POEExtraction).
-func NewValidationProcessForSignaturesWithArchivalData(i18nProvider *i18n.I18nProvider,
+func NewValidationProcessForSignaturesWithArchivalData(i18nProvider *i18n.Provider,
 	signatureAnalysis *jaxb.XmlSignature, signature *diagnostic.SignatureWrapper,
-	diagnosticData *diagnostic.DiagnosticData, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
+	diagnosticData *diagnostic.Data, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	poe *POEExtraction) *ValidationProcessForSignaturesWithArchivalData {
 	xmlResult := &jaxb.XmlValidationProcessArchivalData{}

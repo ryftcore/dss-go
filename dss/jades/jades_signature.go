@@ -1,8 +1,8 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESSignature.java
 // (DSS 6.5.RC1).
 //
-// JAdESEtsiUHeader/EtsiUComponent, JAdESTimestampSource and JAdESSignatureScopeFinder consume
-// *JAdESSignature's API as implemented below. Three of this file's own methods deliberately
+// EtsiUHeader/EtsiUComponent, TimestampSource and SignatureScopeFinder consume
+// *Signature's API as implemented below. Three of this file's own methods deliberately
 // deviate from conventions used elsewhere in this port to match what those siblings expect:
 // Jws() (not JWS()), SigDMechanism() returning *enumerations.SigDMechanism (a pointer, not the
 // plain-value+"" sentinel convention used elsewhere), and OriginalDocuments() returning
@@ -34,7 +34,7 @@ import (
 // validation.DefaultAdvancedSignature.
 //
 // serialVersionUID and java.io.Serializable are dropped (no Go counterpart).
-type JAdESSignature struct {
+type Signature struct {
 	validation.DefaultAdvancedSignature
 
 	// jws is the JWS signature object. Port of the private final JWS jws field.
@@ -50,23 +50,23 @@ type JAdESSignature struct {
 	masterCSigComponent *EtsiUComponent
 
 	// etsiUHeader is the list of unsigned properties embedded into the 'etsiU' array. Port of
-	// the private JAdESEtsiUHeader etsiUHeader field.
-	etsiUHeader *JAdESEtsiUHeader
+	// the private EtsiUHeader etsiUHeader field.
+	etsiUHeader *EtsiUHeader
 
 	// jadesCachedCryptoVerification is this port's idempotency guard for CheckSignatureIntegrity,
 	// a replacement for reading the (inaccessible, cross-package-private)
 	// signatureCryptographicVerification field directly the way Java's own method does for its
 	// "already computed" early-return check. It is set to the same
-	// *signature.SignatureCryptographicVerification value handed to
+	// *signature.CryptographicVerification value handed to
 	// SetSignatureCryptographicVerification, so the two never disagree - the same pattern
 	// cades_signature.go's cachedCryptoVerification field documents.
-	jadesCachedCryptoVerification *signature.SignatureCryptographicVerification
+	jadesCachedCryptoVerification *signature.CryptographicVerification
 }
 
 // NewJAdESSignature is the default constructor. Port of the public JAdESSignature(JWS)
 // constructor.
-func NewJAdESSignature(jws *JWS) *JAdESSignature {
-	s := &JAdESSignature{
+func NewJAdESSignature(jws *JWS) *Signature {
+	s := &Signature{
 		DefaultAdvancedSignature: validation.NewDefaultAdvancedSignatureBase(),
 		jws:                      jws,
 		isDetached:               utils.IsArrayEmpty(jws.UnverifiedPayloadBytes()),
@@ -80,18 +80,18 @@ func NewJAdESSignature(jws *JWS) *JAdESSignature {
 // Named Jws (not JWS) to match the surface other, already-landed sibling files in this package
 // depend on (e.g. jades_timestamp_source.go, jades_timestamp_message_digest_builder.go,
 // jades_diagnostic_data_builder.go, jades_counter_signature_builder.go).
-func (s *JAdESSignature) Jws() *JWS {
+func (s *Signature) Jws() *JWS {
 	return s.jws
 }
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
-func (s *JAdESSignature) SignatureForm() enumerations.SignatureForm {
+func (s *Signature) SignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureFormJAdES
 }
 
 // SignatureAlgorithm retrieves the signature algorithm (or cipher) used for generating the
 // signature. Port of getSignatureAlgorithm().
-func (s *JAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
+func (s *Signature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 	signatureAlgorithm := enumerations.SignatureAlgorithmForJWADefault(s.jws.AlgorithmHeaderValue(), "")
 	if signatureAlgorithm == "" {
 		// Upstream logs "SignatureAlgorithm '{}' is not supported!".
@@ -103,7 +103,7 @@ func (s *JAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 
 // SigningTime returns the signing time included within the signature, or nil. Port of
 // getSigningTime().
-func (s *JAdESSignature) SigningTime() *time.Time {
+func (s *Signature) SigningTime() *time.Time {
 	iat := s.jws.ProtectedHeaderValueAsNumber(JWTClaimNamesIat)
 	sigT := s.jws.ProtectedHeaderValueAsString(JAdESHeaderParameterNamesSigT)
 	if iat != nil && utils.IsStringNotEmpty(sigT) {
@@ -128,32 +128,32 @@ func (s *JAdESSignature) SigningTime() *time.Time {
 // longest-lived TLS certificate identified in the sigD member payload, or the notAfter time of
 // the signing certificate. The value shall be encoded as specified in IETF RFC 7519. Port of the
 // public Date getExpirationTime().
-func (s *JAdESSignature) ExpirationTime() time.Time {
+func (s *Signature) ExpirationTime() time.Time {
 	exp := s.jws.ProtectedHeaderValueAsNumber(JWTClaimNamesExp)
 	return DSSJsonUtilsToNumericDate(exp)
 }
 
 // IsDetachedSignature checks if the JAdES Signature is detached (payload is not present within
 // the signature structure). Port of the public boolean isDetachedSignature().
-func (s *JAdESSignature) IsDetachedSignature() bool {
+func (s *Signature) IsDetachedSignature() bool {
 	return s.isDetached
 }
 
 // MasterCSigComponent gets the 'cSig' component embedding the current signature. Port of the
 // public EtsiUComponent getMasterCSigComponent().
-func (s *JAdESSignature) MasterCSigComponent() *EtsiUComponent {
+func (s *Signature) MasterCSigComponent() *EtsiUComponent {
 	return s.masterCSigComponent
 }
 
 // SetMasterCSigComponent sets the 'cSig' component embedding the current signature. Port of the
 // public void setMasterCSigComponent(EtsiUComponent).
-func (s *JAdESSignature) SetMasterCSigComponent(masterCSigComponent *EtsiUComponent) {
+func (s *Signature) SetMasterCSigComponent(masterCSigComponent *EtsiUComponent) {
 	s.masterCSigComponent = masterCSigComponent
 }
 
 // CertificateSource gets a certificate source which contains ALL certificates embedded in the
 // signature. Port of getCertificateSource().
-func (s *JAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
+func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
 		jadesCertificateSource := NewJAdESCertificateSource(s.jws, s.EtsiUHeader())
 		s.SetOfflineCertificateSource(&jadesCertificateSource.SignatureCertificateSource)
@@ -163,7 +163,7 @@ func (s *JAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
 
 // CRLSource gets a CRL source which contains ALL CRLs embedded in the signature. Port of
 // getCRLSource().
-func (s *JAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
+func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
 		s.SetSignatureCRLSource(NewJAdESCRLSource(s.EtsiUHeader()))
 	}
@@ -172,7 +172,7 @@ func (s *JAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL]
 
 // OCSPSource gets an OCSP source which contains ALL OCSP responses embedded in the signature.
 // Port of getOCSPSource().
-func (s *JAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
+func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
 		s.SetSignatureOCSPSource(NewJAdESOCSPSource(s.EtsiUHeader()))
 	}
@@ -183,16 +183,16 @@ func (s *JAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCS
 // the signature. Port of getTimestampSource(), covariant in Java (returns JAdESTimestampSource);
 // Go interface satisfaction needs the exact validation.TimestampSource return type, so JAdES
 // callers needing the concrete type assert on the result.
-func (s *JAdESSignature) TimestampSource() validation.TimestampSource {
+func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
 		s.SetSignatureTimestampSource(NewJAdESTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
 
-// SignatureProductionPlace returns information about the place where the signature was
+// ProductionPlace returns information about the place where the signature was
 // generated. Port of getSignatureProductionPlace().
-func (s *JAdESSignature) SignatureProductionPlace() *signature.SignatureProductionPlace {
+func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
 	signaturePlace := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigPl)
 	if signaturePlace.Size() != 0 {
 		result := signature.NewSignatureProductionPlace()
@@ -213,7 +213,7 @@ func (s *JAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 // Java wraps this whole method in try/catch(Exception), logging "Cannot read signature policy
 // store". None of the operations below (map/string extraction, base64 decoding) has a Go panic
 // source to guard against, so the try/catch is not reproduced with a recover().
-func (s *JAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
+func (s *Signature) SignaturePolicyStore() *model.SignaturePolicyStore {
 	sigPStMap := s.unsignedPropertyAsMap(JAdESHeaderParameterNamesSigPSt)
 	if sigPStMap.Size() == 0 {
 		return nil
@@ -242,7 +242,7 @@ func (s *JAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
 
 // CommitmentTypeIndications obtains the information concerning commitment type indication linked
 // to the signature. Port of getCommitmentTypeIndications().
-func (s *JAdESSignature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
+func (s *Signature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
 	var result []*signature.CommitmentTypeIndication
 	signedCommitments := s.jws.ProtectedHeaderValueAsList(JAdESHeaderParameterNamesSrCms)
 	for _, signedCommitment := range signedCommitments {
@@ -271,7 +271,7 @@ func (s *JAdESSignature) CommitmentTypeIndications() []*signature.CommitmentType
 
 // ContentType returns the content type of the signature, not applicable for JAdES (see
 // TS 119 102-2 v1.4.1). Port of getContentType().
-func (s *JAdESSignature) ContentType() string {
+func (s *Signature) ContentType() string {
 	return ""
 }
 
@@ -281,7 +281,7 @@ func (s *JAdESSignature) ContentType() string {
 // parameter, prefixed with the string "application/" when this prefix has been omitted in the
 // cty header parameter. NOTE: the sigD header parameter has one member that contains
 // information of the format and type of the constituents of the JWS Payload.
-func (s *JAdESSignature) MimeType() string {
+func (s *Signature) MimeType() string {
 	value := s.jws.ContentTypeHeaderValue()
 	if utils.IsStringEmpty(value) {
 		// sigD: return the first one when present
@@ -298,7 +298,7 @@ func (s *JAdESSignature) MimeType() string {
 
 // SignatureType returns value of the "typ" header parameter, declaring the media type of the
 // JWS, when present. Port of getSignatureType().
-func (s *JAdESSignature) SignatureType() string {
+func (s *Signature) SignatureType() string {
 	value := s.jws.ProtectedHeaderValueAsString(jose.HeaderType)
 	if utils.IsStringNotEmpty(value) {
 		return DSSJsonUtilsMimeTypeString(value)
@@ -308,7 +308,7 @@ func (s *JAdESSignature) SignatureType() string {
 
 // CertifiedSignerRoles returns the certified roles of the signer. Port of
 // getCertifiedSignerRoles().
-func (s *JAdESSignature) CertifiedSignerRoles() []*signature.SignerRole {
+func (s *Signature) CertifiedSignerRoles() []*signature.SignerRole {
 	var result []*signature.SignerRole
 	signerAttributes := s.signerAttributes()
 	if signerAttributes.Size() != 0 {
@@ -343,7 +343,7 @@ func jadesSignatureCertifiedVal(certifiedItem any) string {
 }
 
 // ClaimedSignerRoles returns the claimed roles of the signer. Port of getClaimedSignerRoles().
-func (s *JAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
+func (s *Signature) ClaimedSignerRoles() []*signature.SignerRole {
 	signerAttributes := s.signerAttributes()
 	if signerAttributes.Size() != 0 {
 		claimed := DSSJsonUtilsGetAsList(signerAttributes, JAdESHeaderParameterNamesClaimed)
@@ -356,7 +356,7 @@ func (s *JAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
 
 // SignedAssertions returns the list of embedded signed assertions. Port of
 // getSignedAssertions().
-func (s *JAdESSignature) SignedAssertions() []*signature.SignerRole {
+func (s *Signature) SignedAssertions() []*signature.SignerRole {
 	signerAttributes := s.signerAttributes()
 	if signerAttributes.Size() != 0 {
 		signedAssertions := DSSJsonUtilsGetAsList(signerAttributes, JAdESHeaderParameterNamesSignedAssertions)
@@ -403,13 +403,13 @@ func jadesSignatureValueToString(val any) string {
 }
 
 // signerAttributes ports the private getSignerAttributes().
-func (s *JAdESSignature) signerAttributes() *jose.Object {
+func (s *Signature) signerAttributes() *jose.Object {
 	return s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSrAts)
 }
 
 // CounterSignatures returns a list of counter signatures applied to this signature. Port of
 // getCounterSignatures().
-func (s *JAdESSignature) CounterSignatures() []validation.AdvancedSignature {
+func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 	if s.CachedCounterSignatures() != nil {
 		return s.CachedCounterSignatures()
 	}
@@ -436,13 +436,13 @@ func (s *JAdESSignature) CounterSignatures() []validation.AdvancedSignature {
 }
 
 // DAIdentifier is not applicable for JAdES. Port of getDAIdentifier().
-func (s *JAdESSignature) DAIdentifier() string {
+func (s *Signature) DAIdentifier() string {
 	return ""
 }
 
 // BuildSignaturePolicy extracts a signature policy from a signature and builds the object. Port
 // of the protected buildSignaturePolicy().
-func (s *JAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
+func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	sigPolicy := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigPid)
 	if sigPolicy.Size() == 0 {
 		return nil
@@ -548,24 +548,24 @@ func jadesSignatureSPDSpec(qualifiers []any) *model.SpDocSpecification {
 }
 
 // SignatureValue gets the SignatureValue bytes. Port of getSignatureValue().
-func (s *JAdESSignature) SignatureValue() []byte {
+func (s *Signature) SignatureValue() []byte {
 	return s.jws.SignatureValue()
 }
 
 // EtsiUHeader returns unsigned properties embedded into the 'etsiU' array. Port of the public
-// JAdESEtsiUHeader getEtsiUHeader().
-func (s *JAdESSignature) EtsiUHeader() *JAdESEtsiUHeader {
+// EtsiUHeader getEtsiUHeader().
+func (s *Signature) EtsiUHeader() *EtsiUHeader {
 	if s.etsiUHeader == nil {
 		s.etsiUHeader = NewJAdESEtsiUHeader(s.jws)
 	}
 	return s.etsiUHeader
 }
 
-// BuildSignatureDigestReference builds a new SignatureDigestReference according to the
+// BuildSignatureDigestReference builds a new DigestReference according to the
 // applicable signature format rules. Port of buildSignatureDigestReference(DigestAlgorithm).
 //
 // TODO: no definition available in ETSI TS 119 442 - V1.1.1 (upstream's own TODO, reproduced).
-func (s *JAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference {
+func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference {
 	encodedHeader := s.jws.EncodedHeader()
 	var payload string
 	if s.jws.IsRfc7797UnencodedPayload() {
@@ -583,7 +583,7 @@ func (s *JAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerati
 }
 
 // DataToBeSignedRepresentation returns the DTBSR. Port of getDataToBeSignedRepresentation().
-func (s *JAdESSignature) DataToBeSignedRepresentation() model.Digest {
+func (s *Signature) DataToBeSignedRepresentation() model.Digest {
 	referenceValidations := s.ReferenceValidations()
 	for _, referenceValidation := range referenceValidations {
 		if enumerations.DigestMatcherTypeJWSSigningInput == referenceValidation.Type() {
@@ -599,13 +599,13 @@ func (s *JAdESSignature) DataToBeSignedRepresentation() model.Digest {
 
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id. Port of the
 // protected getSignatureIdentifierBuilder().
-func (s *JAdESSignature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
+func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
 	return NewJAdESSignatureIdentifierBuilder(s)
 }
 
 // CheckSignatureIntegrity verifies the signature integrity; checks if the signed content has not
 // been tampered with. Port of checkSignatureIntegrity().
-func (s *JAdESSignature) CheckSignatureIntegrity() {
+func (s *Signature) CheckSignatureIntegrity() {
 	if s.jadesCachedCryptoVerification != nil {
 		return
 	}
@@ -643,7 +643,7 @@ func (s *JAdESSignature) CheckSignatureIntegrity() {
 // getReferenceValidations(). Left entirely abstract by DefaultAdvancedSignature (see that type's
 // cachedReferenceValidations field doc comment); CachedReferenceValidations/
 // SetCachedReferenceValidations are used as the cache slot.
-func (s *JAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
+func (s *Signature) ReferenceValidations() []*model.ReferenceValidation {
 	if s.CachedReferenceValidations() == nil {
 		var referenceValidations []*model.ReferenceValidation
 
@@ -678,7 +678,7 @@ func (s *JAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 // resolution is preserved (jadesSignaturePayload below); the outer one has no remaining Go panic
 // source once that inner recovery is in place (every DSSJsonUtils/spi call downstream returns
 // values, not panics, in this port) and is accordingly not reproduced with a second recover().
-func (s *JAdESSignature) signingInputReferenceValidation() *model.ReferenceValidation {
+func (s *Signature) signingInputReferenceValidation() *model.ReferenceValidation {
 	signatureValueReferenceValidation := model.NewReferenceValidation()
 	signatureValueReferenceValidation.SetType(enumerations.DigestMatcherTypeJWSSigningInput)
 
@@ -721,7 +721,7 @@ func (s *JAdESSignature) signingInputReferenceValidation() *model.ReferenceValid
 // jadesSignaturePayload ports the inner try body of getSigningInputReferenceValidation() that
 // resolves and sets the JWS payload for a detached signature, catching any failure the same way
 // (a dropped LOG.warn "Unable to determine a JWS payload").
-func (s *JAdESSignature) jadesSignaturePayload(signatureValueReferenceValidation *model.ReferenceValidation) {
+func (s *Signature) jadesSignaturePayload(signatureValueReferenceValidation *model.ReferenceValidation) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs "Unable to determine a JWS payload. Reason : {}".
@@ -766,12 +766,12 @@ func (s *JAdESSignature) jadesSignaturePayload(signatureValueReferenceValidation
 }
 
 // Kid gets Kid value when present. Port of the public String getKid().
-func (s *JAdESSignature) Kid() string {
+func (s *Signature) Kid() string {
 	return s.jws.KeyIDHeaderValue()
 }
 
 // detachedReferenceValidations ports the private getDetachedReferenceValidations().
-func (s *JAdESSignature) detachedReferenceValidations() []*model.ReferenceValidation {
+func (s *Signature) detachedReferenceValidations() []*model.ReferenceValidation {
 	sigDMechanism := s.SigDMechanism()
 	if sigDMechanism != nil {
 		switch *sigDMechanism {
@@ -793,7 +793,7 @@ func (s *JAdESSignature) detachedReferenceValidations() []*model.ReferenceValida
 // Returns a pointer (not the plain enumerations.SigDMechanism value every other enum accessor in
 // this port uses, with "" as the null sentinel) to match the surface
 // jades_timestamp_message_digest_builder.go depends on.
-func (s *JAdESSignature) SigDMechanism() *enumerations.SigDMechanism {
+func (s *Signature) SigDMechanism() *enumerations.SigDMechanism {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
 		mechanismUri := DSSJsonUtilsGetAsString(signatureDetached, JAdESHeaderParameterNamesMId)
@@ -808,7 +808,7 @@ func (s *JAdESSignature) SigDMechanism() *enumerations.SigDMechanism {
 }
 
 // incorporatedPayload ports the private getIncorporatedPayload().
-func (s *JAdESSignature) incorporatedPayload() []byte {
+func (s *Signature) incorporatedPayload() []byte {
 	payload, err := DSSJsonUtilsDocumentOctets(s.DetachedContents()[0], !s.jws.IsRfc7797UnencodedPayload())
 	if err != nil {
 		panic(err)
@@ -819,7 +819,7 @@ func (s *JAdESSignature) incorporatedPayload() []byte {
 // payloadForHttpHeadersMechanism ports the private getPayloadForHttpHeadersMechanism().
 //
 // Panics with the Java message when the detached contents are missing (IllegalArgumentException).
-func (s *JAdESSignature) payloadForHttpHeadersMechanism() []byte {
+func (s *Signature) payloadForHttpHeadersMechanism() []byte {
 	if utils.IsCollectionEmpty(s.DetachedContents()) {
 		panic("The detached contents shall be provided for validating a detached signature!")
 	}
@@ -847,7 +847,7 @@ func (s *JAdESSignature) payloadForHttpHeadersMechanism() []byte {
 // List<DSSDocument> getSignedDocumentsByHTTPHeaderName().
 //
 // Panics with the Java message when a named signed document is not found (IllegalArgumentException).
-func (s *JAdESSignature) SignedDocumentsByHTTPHeaderName() []model.DSSDocument {
+func (s *Signature) SignedDocumentsByHTTPHeaderName() []model.DSSDocument {
 	signedDataUriList := s.signedDataUriList()
 
 	if utils.IsCollectionEmpty(s.DetachedContents()) {
@@ -881,7 +881,7 @@ func (s *JAdESSignature) SignedDocumentsByHTTPHeaderName() []model.DSSDocument {
 // getPayloadForObjectIdByUriMechanism(List<String>).
 //
 // Panics with the Java message when the detached contents are missing (IllegalArgumentException).
-func (s *JAdESSignature) payloadForObjectIdByUriMechanism(signedDataUriList []string) []byte {
+func (s *Signature) payloadForObjectIdByUriMechanism(signedDataUriList []string) []byte {
 	if utils.IsCollectionEmpty(s.DetachedContents()) {
 		panic("The detached contents shall be provided for validating a detached signature!")
 	}
@@ -897,7 +897,7 @@ func (s *JAdESSignature) payloadForObjectIdByUriMechanism(signedDataUriList []st
 // SignedDocumentsForObjectIdByUriMechanism returns a list of documents for ObjectIdByUrl or
 // ObjectIdByUriHash mechanisms. Keeps the original order according to 'pars' dictionary content.
 // Port of the public List<DSSDocument> getSignedDocumentsForObjectIdByUriMechanism().
-func (s *JAdESSignature) SignedDocumentsForObjectIdByUriMechanism() []model.DSSDocument {
+func (s *Signature) SignedDocumentsForObjectIdByUriMechanism() []model.DSSDocument {
 	signedDataUriList := s.signedDataUriList()
 	return s.signedDocumentsForUris(signedDataUriList)
 }
@@ -905,7 +905,7 @@ func (s *JAdESSignature) SignedDocumentsForObjectIdByUriMechanism() []model.DSSD
 // signedDocumentsForUris ports the private getSignedDocumentsForUris(List<String>).
 //
 // Panics with the Java message when a named signed document is not found (IllegalArgumentException).
-func (s *JAdESSignature) signedDocumentsForUris(signedDataUriList []string) []model.DSSDocument {
+func (s *Signature) signedDocumentsForUris(signedDataUriList []string) []model.DSSDocument {
 	var signedDocumentsByUri []model.DSSDocument
 	if len(signedDataUriList) == 1 && len(s.DetachedContents()) == 1 {
 		signedDocumentsByUri = []model.DSSDocument{s.DetachedContents()[0]}
@@ -925,7 +925,7 @@ func (s *JAdESSignature) signedDocumentsForUris(signedDataUriList []string) []mo
 
 // referenceValidationsByUriHashMechanism ports the private
 // getReferenceValidationsByUriHashMechanism().
-func (s *JAdESSignature) referenceValidationsByUriHashMechanism() []*model.ReferenceValidation {
+func (s *Signature) referenceValidationsByUriHashMechanism() []*model.ReferenceValidation {
 	detachedDocuments := s.DetachedContents()
 
 	if utils.IsCollectionEmpty(s.DetachedContents()) {
@@ -997,7 +997,7 @@ func (s *JAdESSignature) referenceValidationsByUriHashMechanism() []*model.Refer
 }
 
 // digestAlgorithmForDetachedContent ports the private getDigestAlgorithmForDetachedContent().
-func (s *JAdESSignature) digestAlgorithmForDetachedContent() enumerations.DigestAlgorithm {
+func (s *Signature) digestAlgorithmForDetachedContent() enumerations.DigestAlgorithm {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
 		digestAlgoUri := DSSJsonUtilsGetAsString(signatureDetached, JAdESHeaderParameterNamesHashM)
@@ -1013,7 +1013,7 @@ func (s *JAdESSignature) digestAlgorithmForDetachedContent() enumerations.Digest
 
 // detachedDocumentByDigest ports the private getDetachedDocumentByDigest(DigestAlgorithm,
 // byte[], String, List<DSSDocument>).
-func (s *JAdESSignature) detachedDocumentByDigest(digestAlgorithm enumerations.DigestAlgorithm, expectedDigest []byte,
+func (s *Signature) detachedDocumentByDigest(digestAlgorithm enumerations.DigestAlgorithm, expectedDigest []byte,
 	signedDataName string, detachedContent []model.DSSDocument) model.DSSDocument {
 	if digestAlgorithm == "" || expectedDigest == nil {
 		return nil
@@ -1036,7 +1036,7 @@ func jadesSignatureDetachedDocumentByName(documentName string, detachedContent [
 // signedDataUriHashMap ports the private getSignedDataUriHashMap(), returning both the map
 // (Java's Map<String, String>) and its insertion order (Java's LinkedHashMap iteration order),
 // since Go maps do not preserve one.
-func (s *JAdESSignature) signedDataUriHashMap() (map[string]string, []string) {
+func (s *Signature) signedDataUriHashMap() (map[string]string, []string) {
 	signedDataHashMap := make(map[string]string)
 	var order []string
 
@@ -1058,7 +1058,7 @@ func (s *JAdESSignature) signedDataUriHashMap() (map[string]string, []string) {
 }
 
 // signedDataUriList ports the private getSignedDataUriList().
-func (s *JAdESSignature) signedDataUriList() []string {
+func (s *Signature) signedDataUriList() []string {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
 		pars := DSSJsonUtilsGetAsList(signatureDetached, JAdESHeaderParameterNamesPars)
@@ -1068,7 +1068,7 @@ func (s *JAdESSignature) signedDataUriList() []string {
 }
 
 // signedDataHashList ports the private getSignedDataHashList().
-func (s *JAdESSignature) signedDataHashList() []string {
+func (s *Signature) signedDataHashList() []string {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
 		pars := DSSJsonUtilsGetAsList(signatureDetached, JAdESHeaderParameterNamesHashV)
@@ -1078,7 +1078,7 @@ func (s *JAdESSignature) signedDataHashList() []string {
 }
 
 // signedDataContentTypeList ports the private getSignedDataContentTypeList().
-func (s *JAdESSignature) signedDataContentTypeList() []string {
+func (s *Signature) signedDataContentTypeList() []string {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
 		ctys := DSSJsonUtilsGetAsList(signatureDetached, JAdESHeaderParameterNamesCtys)
@@ -1094,7 +1094,7 @@ func (s *JAdESSignature) signedDataContentTypeList() []string {
 // getDigestValue/toBase64Url calls this reaches are not guarded by a try/catch here, so an
 // unchecked exception would propagate out of this (and, transitively, getReferenceValidations())
 // uncaught.
-func (s *JAdESSignature) isDocumentDigestMatch(document model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm,
+func (s *Signature) isDocumentDigestMatch(document model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm,
 	expectedDigest []byte, signedDataName string) bool {
 	_, isDigestDocument := document.(*model.DigestDocument)
 
@@ -1126,11 +1126,11 @@ func (s *JAdESSignature) isDocumentDigestMatch(document model.DSSDocument, diges
 }
 
 // counterSignatureReferenceValidation ports the private getCounterSignatureReferenceValidation().
-func (s *JAdESSignature) counterSignatureReferenceValidation() *model.ReferenceValidation {
+func (s *Signature) counterSignatureReferenceValidation() *model.ReferenceValidation {
 	referenceValidation := model.NewReferenceValidation()
 	referenceValidation.SetType(enumerations.DigestMatcherTypeCounterSignedSignatureValue)
 
-	masterSignature, _ := s.MasterSignature().(*JAdESSignature)
+	masterSignature, _ := s.MasterSignature().(*Signature)
 	if masterSignature != nil {
 		signatureValue := masterSignature.jws.SignatureValue()
 		if utils.IsArrayNotEmpty(signatureValue) {
@@ -1159,7 +1159,7 @@ func (s *JAdESSignature) counterSignatureReferenceValidation() *model.ReferenceV
 //
 // Panics with the underlying error when the key binding input digest cannot be computed: the
 // Java DSSDocument#getDigest call this reaches is not guarded by a try/catch here.
-func (s *JAdESSignature) keyBindingSignatureReferenceValidation() *model.ReferenceValidation {
+func (s *Signature) keyBindingSignatureReferenceValidation() *model.ReferenceValidation {
 	referenceValidation := model.NewReferenceValidation()
 	referenceValidation.SetType(enumerations.DigestMatcherTypeEAAKeyBinding)
 
@@ -1195,7 +1195,7 @@ func (s *JAdESSignature) keyBindingSignatureReferenceValidation() *model.Referen
 }
 
 // sdHash ports the private getSdHash().
-func (s *JAdESSignature) sdHash() []byte {
+func (s *Signature) sdHash() []byte {
 	payload, err := s.jws.DecodedPayload()
 	if err != nil {
 		panic(err)
@@ -1212,12 +1212,12 @@ func (s *JAdESSignature) sdHash() []byte {
 // sdAlg ports the private getSdAlg().
 //
 // Panics with the Java message when there are no EAA signatures (IllegalStateException).
-func (s *JAdESSignature) sdAlg() enumerations.DigestAlgorithm {
+func (s *Signature) sdAlg() enumerations.DigestAlgorithm {
 	eaaSignatures := s.EAA().Signatures()
 	if utils.IsCollectionEmpty(eaaSignatures) {
 		panic("EAA signatures cannot be null or empty!")
 	}
-	eaaSignature := eaaSignatures[0].(*JAdESSignature)
+	eaaSignature := eaaSignatures[0].(*Signature)
 	payload, err := eaaSignature.jws.DecodedPayload()
 	if err != nil {
 		panic(err)
@@ -1236,7 +1236,7 @@ func (s *JAdESSignature) sdAlg() enumerations.DigestAlgorithm {
 }
 
 // unsignedPropertyAsMap ports the private getUnsignedPropertyAsMap(String).
-func (s *JAdESSignature) unsignedPropertyAsMap(headerName string) *jose.Object {
+func (s *Signature) unsignedPropertyAsMap(headerName string) *jose.Object {
 	unsignedPropertiesWithHeaderName := DSSJsonUtilsUnsignedPropertiesWithHeaderName(s.EtsiUHeader(), headerName)
 	if utils.IsCollectionNotEmpty(unsignedPropertiesWithHeaderName) {
 		// return the first occurrence
@@ -1252,7 +1252,7 @@ func (s *JAdESSignature) unsignedPropertyAsMap(headerName string) *jose.Object {
 // IllegalArgumentException (a named detached document not found) propagate out of this method;
 // this port instead reports it as an error, matching the (documents, error) contract
 // abstract_jws_document_analyzer.go relies on and its own caller's err != nil handling.
-func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err error) {
+func (s *Signature) OriginalDocuments() (documents []model.DSSDocument, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			documents = nil
@@ -1303,7 +1303,7 @@ func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err
 
 // DataFoundUpToLevel returns the level up to which the signature has been found conformant.
 // Port of getDataFoundUpToLevel().
-func (s *JAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
+func (s *Signature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	if !s.HasAdESProfile() {
 		return enumerations.SignatureLevelJSONNotETSI
 	}
@@ -1324,13 +1324,13 @@ func (s *JAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
-func (s *JAdESSignature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
+func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
 	return NewJAdESBaselineRequirementsChecker(s, certificateVerifier)
 }
 
 // ValidateStructure processes the structure validation of the signature. Port of the protected
 // validateStructure().
-func (s *JAdESSignature) ValidateStructure() []string {
+func (s *Signature) ValidateStructure() []string {
 	validationErrors := DSSJsonUtilsValidateAgainstJAdESSchema(s.jws)
 	if utils.IsCollectionNotEmpty(validationErrors) {
 		// Upstream logs "Error(s) occurred during the JSON schema validation : {}".
@@ -1339,16 +1339,16 @@ func (s *JAdESSignature) ValidateStructure() []string {
 }
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
-func (s *JAdESSignature) FindSignatureScopes() []scope.SignatureScope {
+func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
 	return NewJAdESSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // AddExternalTimestamp is not supported for JAdES. Port of addExternalTimestamp(TimestampToken).
 //
 // Panics with the Java message (UnsupportedOperationException).
-func (s *JAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
+func (s *Signature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
 	panic("The method addExternalTimestamp(timestamp) is not supported for JAdES!")
 }
 
-// compile-time assertion: a JAdESSignature satisfies its own overrides contract.
-var _ validation.DefaultAdvancedSignatureOverrides = (*JAdESSignature)(nil)
+// compile-time assertion: a Signature satisfies its own overrides contract.
+var _ validation.DefaultAdvancedSignatureOverrides = (*Signature)(nil)

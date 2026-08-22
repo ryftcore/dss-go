@@ -34,7 +34,7 @@ type AbstractReportsBase struct {
 	// the protected validateXml field.
 	ValidateXml bool
 
-	diagnosticDataWrapper *diagnostic.DiagnosticData
+	diagnosticDataWrapper *diagnostic.Data
 	detailedReportWrapper *detailedreport.DetailedReport
 
 	xmlDiagnosticData string
@@ -80,7 +80,7 @@ func (a *AbstractReportsBase) SetValidateXml(validateXml bool) {
 
 // GetDiagnosticData returns the reference to the diagnostic data object
 // generated during the validation process. Port of getDiagnosticData().
-func (a *AbstractReportsBase) GetDiagnosticData() *diagnostic.DiagnosticData {
+func (a *AbstractReportsBase) GetDiagnosticData() *diagnostic.Data {
 	return a.diagnosticDataWrapper
 }
 

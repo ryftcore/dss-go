@@ -5,7 +5,7 @@
 //
 // # Main entry types
 //
-// TrustedListFacade marshals and unmarshals a trustedlist/jaxb.TrustStatusListType
+// Facade marshals and unmarshals a trustedlist/jaxb.TrustStatusListType
 // to and from its ETSI TS 119 612 XML representation. MRAFacade does the
 // same for the MRA extension XML fragments. The mra_* and
 // trusted_list_utils.go helpers implement the equivalence-context, status

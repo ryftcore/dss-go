@@ -9,41 +9,41 @@ package alert
 // cause.toString() (i.e. "java.lang.SomeException: cause message"). Go errors have no
 // class-qualified toString(), so NewAlertErrorWithCause uses cause.Error() as the message
 // instead — the idiomatic Go equivalent, not a byte-exact reproduction of the Java string.
-type AlertError struct {
+type Error struct {
 	message string
 	cause   error
 }
 
-// NewAlertError creates an empty AlertError.
-func NewAlertError() *AlertError {
-	return &AlertError{}
+// NewAlertError creates an empty Error.
+func NewAlertError() *Error {
+	return &Error{}
 }
 
-// NewAlertErrorWithMessage creates an AlertError with the given message.
-func NewAlertErrorWithMessage(message string) *AlertError {
-	return &AlertError{message: message}
+// NewAlertErrorWithMessage creates an Error with the given message.
+func NewAlertErrorWithMessage(message string) *Error {
+	return &Error{message: message}
 }
 
-// NewAlertErrorWithCause creates a re-throwable AlertError wrapping cause.
-func NewAlertErrorWithCause(cause error) *AlertError {
+// NewAlertErrorWithCause creates a re-throwable Error wrapping cause.
+func NewAlertErrorWithCause(cause error) *Error {
 	message := ""
 	if cause != nil {
 		message = cause.Error()
 	}
-	return &AlertError{message: message, cause: cause}
+	return &Error{message: message, cause: cause}
 }
 
-// NewAlertErrorWithMessageAndCause creates a re-throwable AlertError with a custom message.
-func NewAlertErrorWithMessageAndCause(message string, cause error) *AlertError {
-	return &AlertError{message: message, cause: cause}
+// NewAlertErrorWithMessageAndCause creates a re-throwable Error with a custom message.
+func NewAlertErrorWithMessageAndCause(message string, cause error) *Error {
+	return &Error{message: message, cause: cause}
 }
 
 // Error returns the error message.
-func (e *AlertError) Error() string {
+func (e *Error) Error() string {
 	return e.message
 }
 
 // Unwrap returns the wrapped cause, if any, enabling errors.Is/errors.As.
-func (e *AlertError) Unwrap() error {
+func (e *Error) Unwrap() error {
 	return e.cause
 }

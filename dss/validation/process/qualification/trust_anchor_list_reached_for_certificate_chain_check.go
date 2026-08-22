@@ -21,8 +21,8 @@ type TrustAnchorListReachedForCertificateChainCheck struct {
 
 // NewTrustAnchorListReachedForCertificateChainCheck is the default
 // constructor. Port of
-// TrustAnchorListReachedForCertificateChainCheck(I18nProvider, XmlValidationEAAQualification, CertificateWrapper, LevelRule).
-func NewTrustAnchorListReachedForCertificateChainCheck(i18nProvider *i18n.I18nProvider,
+// TrustAnchorListReachedForCertificateChainCheck(Provider, XmlValidationEAAQualification, CertificateWrapper, LevelRule).
+func NewTrustAnchorListReachedForCertificateChainCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationEAAQualification], signingCertificate *diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *TrustAnchorListReachedForCertificateChainCheck {
 	c := &TrustAnchorListReachedForCertificateChainCheck{

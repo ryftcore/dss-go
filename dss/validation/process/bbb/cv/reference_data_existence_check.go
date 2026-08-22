@@ -21,8 +21,8 @@ type ReferenceDataExistenceCheck[T any] struct {
 }
 
 // NewReferenceDataExistenceCheck is the default constructor. Port of
-// ReferenceDataExistenceCheck(I18nProvider, T, XmlDigestMatcher, LevelRule).
-func NewReferenceDataExistenceCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ReferenceDataExistenceCheck(Provider, T, XmlDigestMatcher, LevelRule).
+func NewReferenceDataExistenceCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	digestMatcher *diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ReferenceDataExistenceCheck[T] {
 	c := &ReferenceDataExistenceCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

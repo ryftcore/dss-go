@@ -34,8 +34,8 @@ type ValidationTimeSlidingCertificateRevocationSelector struct {
 
 // NewValidationTimeSlidingCertificateRevocationSelector is the default
 // constructor. Port of
-// ValidationTimeSlidingCertificateRevocationSelector(I18nProvider, CertificateWrapper, List, Date, Map, String, POEExtraction, ValidationPolicy).
-func NewValidationTimeSlidingCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
+// ValidationTimeSlidingCertificateRevocationSelector(Provider, CertificateWrapper, List, Date, Map, String, POEExtraction, ValidationPolicy).
+func NewValidationTimeSlidingCertificateRevocationSelector(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper,
 	certificateRevocationData []*diagnostic.CertificateRevocationWrapper, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string, poe *POEExtraction,
@@ -147,7 +147,7 @@ type vtsAcceptableRevocationDataAvailableCheck struct {
 
 // newVTSAcceptableRevocationDataAvailableCheck instantiates the anonymous
 // subclass.
-func newVTSAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.I18nProvider,
+func newVTSAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlCRS], acceptableRevocationData *diagnostic.RevocationWrapper,
 	constraint policy.LevelRule) *vtsAcceptableRevocationDataAvailableCheck {
 	c := &vtsAcceptableRevocationDataAvailableCheck{

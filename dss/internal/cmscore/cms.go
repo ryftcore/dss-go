@@ -31,7 +31,7 @@ func ParseCMS(input []byte) (*CMS, error) {
 
 // ParseCMSTolerateTrailingBytes decodes a complete CMS document the same way ParseCMS does,
 // except it does not require the input to be fully consumed - see
-// ParseContentInfoTolerateTrailingBytes's doc comment. cms.CMSUtilsParseToCMSBinaries, the
+// ParseContentInfoTolerateTrailingBytes's doc comment. cms.UtilsParseToCMSBinaries, the
 // entry point for parsing a whole document (as opposed to a CMS structure embedded in a fixed
 // field, e.g. an OCTET STRING's content), uses this rather than ParseCMS.
 func ParseCMSTolerateTrailingBytes(input []byte) (*CMS, error) {

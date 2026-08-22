@@ -129,7 +129,7 @@ func loadXcvaRows(t *testing.T, path string) []*xcvaRow {
 // loadXcvaDiagnosticData reads the dump a row names: "dd/<name>" is one of the
 // synthetic dumps in testdata/dd, anything else a member of the marshal-parity
 // corpus.
-func loadXcvaDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadXcvaDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
@@ -169,10 +169,10 @@ func xcvaPolicies(t *testing.T) map[string]modelpolicy.ValidationPolicy {
 	}
 }
 
-// xcvaI18nProvider is the single I18nProvider both replays use, built once.
+// xcvaI18nProvider is the single Provider both replays use, built once.
 var xcvaI18nProvider = i18n.NewI18nProvider()
 
-func xcvaI18n() *i18n.I18nProvider { return xcvaI18nProvider }
+func xcvaI18n() *i18n.Provider { return xcvaI18nProvider }
 
 // xcvaDefaultPolicyValue is the default ETSI policy, loaded once.
 var xcvaDefaultPolicyValue modelpolicy.ValidationPolicy

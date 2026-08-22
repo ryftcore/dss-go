@@ -7,29 +7,29 @@ import (
 )
 
 // CAdESUnsignedAttributes represents the CAdES Unsigned attributes. Port of the class
-// CAdESUnsignedAttributes, extending CAdESSigProperties.
-type CAdESUnsignedAttributes struct {
-	CAdESSigProperties
+// UnsignedAttributes, extending SigProperties.
+type UnsignedAttributes struct {
+	SigProperties
 }
 
 // newCAdESUnsignedAttributes is the port of the package-private
-// CAdESUnsignedAttributes(ASN1Set) constructor.
-func newCAdESUnsignedAttributes(attributeTable cmscore.Attributes, exists bool) *CAdESUnsignedAttributes {
-	return &CAdESUnsignedAttributes{CAdESSigProperties: newCAdESSigProperties(attributeTable, exists)}
+// UnsignedAttributes(ASN1Set) constructor.
+func newCAdESUnsignedAttributes(attributeTable cmscore.Attributes, exists bool) *UnsignedAttributes {
+	return &UnsignedAttributes{SigProperties: newCAdESSigProperties(attributeTable, exists)}
 }
 
-// CAdESUnsignedAttributesBuild builds the CAdESUnsignedAttributes from a SignerInfo.
+// UnsignedAttributesBuild builds the UnsignedAttributes from a SignerInfo.
 // Extraction from SignerInfo allows keeping the actual order. Port of the static
 // build(SignerInformation).
-func CAdESUnsignedAttributesBuild(signerInformation *cmscore.SignerInfo) *CAdESUnsignedAttributes {
+func UnsignedAttributesBuild(signerInformation *cmscore.SignerInfo) *UnsignedAttributes {
 	// Extraction from SignerInfo allows to keep actual order
 	return newCAdESUnsignedAttributes(signerInformation.UnsignedAttributes, signerInformation.HasUnsignedAttributes())
 }
 
-// Attributes overrides CAdESSigProperties.Attributes(): multiple timestamps need to be sorted
+// Attributes overrides SigProperties.Attributes(): multiple timestamps need to be sorted
 // in CAdES by their production date. Port of getAttributes().
-func (u *CAdESUnsignedAttributes) Attributes() []*CAdESAttribute {
-	attributes := u.CAdESSigProperties.Attributes()
+func (u *UnsignedAttributes) Attributes() []*Attribute {
+	attributes := u.SigProperties.Attributes()
 	return cadesUnsignedAttributesSort(attributes)
 }
 
@@ -38,7 +38,7 @@ func (u *CAdESUnsignedAttributes) Attributes() []*CAdESAttribute {
 // cadesAttributeTimeStampCompare is not a total order (many pairs compare equal, e.g. any two
 // non-timestamp, non-evidence-record attributes) and Java relies on the bubble sort's specific
 // adjacent-swap pattern to leave those pairs in their original relative order.
-func cadesUnsignedAttributesSort(attributes []*CAdESAttribute) []*CAdESAttribute {
+func cadesUnsignedAttributesSort(attributes []*Attribute) []*Attribute {
 	for ii := 0; ii < len(attributes)-1; ii++ {
 		for jj := 0; jj < len(attributes)-ii-1; jj++ {
 			cadesAttribute := attributes[jj]
@@ -52,8 +52,8 @@ func cadesUnsignedAttributesSort(attributes []*CAdESAttribute) []*CAdESAttribute
 }
 
 // cadesAttributeTimeStampCompare ports the private static final class
-// CAdESAttributeTimeStampComparator.compare(CAdESAttribute, CAdESAttribute).
-func cadesAttributeTimeStampCompare(o1, o2 *CAdESAttribute) int {
+// CAdESAttributeTimeStampComparator.compare(Attribute, Attribute).
+func cadesAttributeTimeStampCompare(o1, o2 *Attribute) int {
 	result := cadesAttributeCompareByType(o1, o2)
 	if result == 0 {
 		result = cadesAttributeCompareByTimeStampToken(o1, o2)
@@ -69,7 +69,7 @@ func cadesAttributeTimeStampCompare(o1, o2 *CAdESAttribute) int {
 
 // cadesAttributeCompareByType ports the private compareByType(CAdESAttribute, CAdESAttribute):
 // evidence records are always the last, timestamps are the last but before evidence records.
-func cadesAttributeCompareByType(attributeOne, attributeTwo *CAdESAttribute) int {
+func cadesAttributeCompareByType(attributeOne, attributeTwo *Attribute) int {
 	if !attributeOne.IsEvidenceRecord() && attributeTwo.IsEvidenceRecord() {
 		return -1
 	} else if attributeOne.IsEvidenceRecord() && !attributeTwo.IsEvidenceRecord() {
@@ -83,8 +83,8 @@ func cadesAttributeCompareByType(attributeOne, attributeTwo *CAdESAttribute) int
 }
 
 // cadesAttributeCompareByTimeStampToken ports the private
-// compareByTimeStampToken(CAdESAttribute, CAdESAttribute).
-func cadesAttributeCompareByTimeStampToken(attributeOne, attributeTwo *CAdESAttribute) int {
+// compareByTimeStampToken(Attribute, Attribute).
+func cadesAttributeCompareByTimeStampToken(attributeOne, attributeTwo *Attribute) int {
 	var current, next *cmscore.TimeStampToken
 	if attributeOne.IsTimeStampToken() {
 		current = attributeOne.ToTimeStampToken()
@@ -100,8 +100,8 @@ func cadesAttributeCompareByTimeStampToken(attributeOne, attributeTwo *CAdESAttr
 }
 
 // cadesAttributeCompareByTimestampType ports the private
-// compareByTimestampType(CAdESAttribute, CAdESAttribute).
-func cadesAttributeCompareByTimestampType(attributeOne, attributeTwo *CAdESAttribute) int {
+// compareByTimestampType(Attribute, Attribute).
+func cadesAttributeCompareByTimestampType(attributeOne, attributeTwo *Attribute) int {
 	timestampTypeOne := attributeOne.TimestampTokenType()
 	timestampTypeTwo := attributeTwo.TimestampTokenType()
 	if timestampTypeOne != "" && timestampTypeTwo != "" {
@@ -111,8 +111,8 @@ func cadesAttributeCompareByTimestampType(attributeOne, attributeTwo *CAdESAttri
 }
 
 // cadesAttributeCompareByEvidenceRecord ports the private
-// compareByEvidenceRecord(CAdESAttribute, CAdESAttribute).
-func cadesAttributeCompareByEvidenceRecord(attributeOne, attributeTwo *CAdESAttribute) int {
+// compareByEvidenceRecord(Attribute, Attribute).
+func cadesAttributeCompareByEvidenceRecord(attributeOne, attributeTwo *Attribute) int {
 	var evidenceRecordOne, evidenceRecordTwo *asn1ber.Element
 	if attributeOne.IsEvidenceRecord() {
 		evidenceRecordOne = attributeOne.ToEvidenceRecord()

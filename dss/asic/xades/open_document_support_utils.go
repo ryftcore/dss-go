@@ -26,7 +26,7 @@ const openDocumentSupportUtilsExternalData = "external-data/"
 // "external-data/" should be omitted.
 //
 // Ports the static getOpenDocumentCoverage(ASiCContent).
-func OpenDocumentSupportUtilsGetOpenDocumentCoverage(asicContent *asic.ASiCContent) []model.DSSDocument {
+func OpenDocumentSupportUtilsGetOpenDocumentCoverage(asicContent *asic.Content) []model.DSSDocument {
 	docs := make([]model.DSSDocument, 0)
 	docs = append(docs, asicContent.SignedDocuments()...)
 	docs = append(docs, asicContent.ManifestDocuments()...)

@@ -4,21 +4,21 @@
 //
 // Upstream builds the whole XAdES augmentation ladder out of one overridden protected method:
 //
-//	XAdESLevelBaselineT.extendSignatures(List<AdvancedSignature>)
-//	  <- XAdESLevelBaselineLT   <- XAdESLevelBaselineLTA
-//	  <- XAdESLevelC            <- XAdESLevelX  <- XAdESLevelXL  <- XAdESLevelA
+//	LevelBaselineT.extendSignatures(List<AdvancedSignature>)
+//	  <- LevelBaselineLT   <- LevelBaselineLTA
+//	  <- LevelC            <- LevelX  <- LevelXL  <- LevelA
 //
 // each override calling super.extendSignatures(signatures) first. Go has no method overriding
 // across embedding, so - per the TokenBase.InitToken(self) convention of PORTING.md, the same
 // one cades/cades_signature_extension.go uses - every level embeds the level below it,
 // registers itself through Init<Level>(self, certificateVerifier), and the public entry point
 // ExtendSignaturesDocument dispatches into the most-derived override via t.overrides. A "super"
-// call is then the plain, explicit embedded-field call, e.g. lt.XAdESLevelBaselineT.ExtendSignatures.
+// call is then the plain, explicit embedded-field call, e.g. lt.LevelBaselineT.ExtendSignatures.
 //
 // Java's two extendSignatures overloads get two Go names:
 //
 //	extendSignatures(List<AdvancedSignature>)                -> ExtendSignatures (the virtual one)
-//	extendSignatures(DSSDocument, XAdESSignatureParameters)  -> ExtendSignaturesDocument
+//	extendSignatures(DSSDocument, SignatureParameters)  -> ExtendSignaturesDocument
 //
 // Likewise the two incorporateCertificateValues / incorporateRevocationValues overloads: the
 // indent-taking ones carry the WithIndent suffix.
@@ -46,20 +46,20 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESSignatureExtensionOverrides declares the operation every XAdES extension level overrides and
-// that XAdESLevelBaselineT.ExtendSignaturesDocument dispatches into, together with the XAdESBuilder
+// SignatureExtensionOverrides declares the operation every XAdES extension level overrides and
+// that LevelBaselineT.ExtendSignaturesDocument dispatches into, together with the Builder
 // hooks the shared base already needs. Every level satisfies both halves through its embedded
 // ancestors.
-type XAdESSignatureExtensionOverrides interface {
-	XAdESBuilderOverrides
+type SignatureExtensionOverrides interface {
+	BuilderOverrides
 
 	// ExtendSignatures extends the given signatures to the level of the concrete
 	// implementation. Port of the protected, overridden #extendSignatures(List).
 	ExtendSignatures(signatures []validation.AdvancedSignature) error
 }
 
-// XAdESLevelBaselineT is the -T profile of a XAdES signature.
-type XAdESLevelBaselineT struct {
+// LevelBaselineT is the -T profile of a XAdES signature.
+type LevelBaselineT struct {
 	ExtensionBuilder
 
 	// TspSource encapsulates the Time Stamp Protocol needed to create the level -T of the
@@ -67,21 +67,21 @@ type XAdESLevelBaselineT struct {
 	TspSource validation.TSPSource
 
 	// overrides points back at the most-derived level; see InitXAdESLevelBaselineT.
-	overrides XAdESSignatureExtensionOverrides
+	overrides SignatureExtensionOverrides
 }
 
-// NewXAdESLevelBaselineT is the default constructor for XAdESLevelBaselineT.
+// NewXAdESLevelBaselineT is the default constructor for LevelBaselineT.
 // Port of XAdESLevelBaselineT(CertificateVerifier).
-func NewXAdESLevelBaselineT(certificateVerifier validation.CertificateVerifier) *XAdESLevelBaselineT {
-	extension := &XAdESLevelBaselineT{}
+func NewXAdESLevelBaselineT(certificateVerifier validation.CertificateVerifier) *LevelBaselineT {
+	extension := &LevelBaselineT{}
 	extension.InitXAdESLevelBaselineT(extension, certificateVerifier)
 	return extension
 }
 
 // InitXAdESLevelBaselineT registers the concrete extension level with this base and forwards
 // the CertificateVerifier to ExtensionBuilder. Port of the protected
-// XAdESLevelBaselineT(CertificateVerifier) constructor's super(certificateVerifier) call.
-func (t *XAdESLevelBaselineT) InitXAdESLevelBaselineT(self XAdESSignatureExtensionOverrides,
+// LevelBaselineT(CertificateVerifier) constructor's super(certificateVerifier) call.
+func (t *LevelBaselineT) InitXAdESLevelBaselineT(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	t.overrides = self
 	t.InitExtensionBuilderWithVerifier(self, certificateVerifier)
@@ -89,13 +89,13 @@ func (t *XAdESLevelBaselineT) InitXAdESLevelBaselineT(self XAdESSignatureExtensi
 
 // SetTspSource sets the TSP source to be used when extending the digital signature.
 // Port of #setTspSource.
-func (t *XAdESLevelBaselineT) SetTspSource(tspSource validation.TSPSource) {
+func (t *LevelBaselineT) SetTspSource(tspSource validation.TSPSource) {
 	t.TspSource = tspSource
 }
 
 // incorporateC14nMethod ports the private incorporateC14nMethod: it appends
 // <ds:CanonicalizationMethod Algorithm="..."/> to parentDom.
-func (t *XAdESLevelBaselineT) incorporateC14nMethod(parentDom *xmldom.Node, signedInfoC14nMethod string) {
+func (t *LevelBaselineT) incorporateC14nMethod(parentDom *xmldom.Node, signedInfoC14nMethod string) {
 	canonicalizationMethodDom := xmlutils.DomUtilsCreateElementNS(t.DocumentDom,
 		t.XmldsigNamespace(), common.XMLDSigElementCanonicalizationMethod)
 	canonicalizationMethodDom.SetAttr(
@@ -107,8 +107,8 @@ func (t *XAdESLevelBaselineT) incorporateC14nMethod(parentDom *xmldom.Node, sign
 // implementation. Port of the #extendSignatures(DSSDocument, XAdESSignatureParameters) overload
 // declared by SignatureExtension; Java's DSSException becomes the returned error, its
 // Objects.requireNonNull a panic.
-func (t *XAdESLevelBaselineT) ExtendSignaturesDocument(dssDocument model.DSSDocument,
-	params *XAdESSignatureParameters) (model.DSSDocument, error) {
+func (t *LevelBaselineT) ExtendSignaturesDocument(dssDocument model.DSSDocument,
+	params *SignatureParameters) (model.DSSDocument, error) {
 	if dssDocument == nil {
 		panic("The document cannot be null")
 	}
@@ -166,7 +166,7 @@ func xadesLevelBaselineTAssertNoEmbeddedSignaturesPresent(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	result := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's cast; an XMLDocumentAnalyzer only ever yields XAdESSignatures.
 			continue
@@ -200,7 +200,7 @@ func xadesLevelBaselineTHasSignatureAsParent(element *xmldom.Node) bool {
 // the timestamp token is obtained from the TSP source. Adds a <SignatureTimeStamp> segment into
 // the <UnsignedSignatureProperties> element.
 // Port of the protected #extendSignatures(List).
-func (t *XAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+func (t *LevelBaselineT) ExtendSignatures(signatures []validation.AdvancedSignature) error {
 	signaturesToExtend := t.extendToTLevelSignatures(signatures)
 	if utils.IsCollectionEmpty(signaturesToExtend) {
 		return nil
@@ -213,7 +213,7 @@ func (t *XAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedS
 	signatureRequirementsChecker.AssertSigningCertificatesAreValid(signaturesToExtend)
 
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -249,13 +249,13 @@ func (t *XAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedS
 
 // SignatureRequirementsChecker instantiates a SignatureRequirementsChecker.
 // Port of the protected #getSignatureRequirementsChecker.
-func (t *XAdESLevelBaselineT) SignatureRequirementsChecker() *document.SignatureRequirementsChecker[*XAdESTimestampParameters] {
-	return document.NewSignatureRequirementsChecker[*XAdESTimestampParameters](t.CertificateVerifier,
+func (t *LevelBaselineT) SignatureRequirementsChecker() *document.SignatureRequirementsChecker[*TimestampParameters] {
+	return document.NewSignatureRequirementsChecker[*TimestampParameters](t.CertificateVerifier,
 		&t.Params.AbstractSignatureParameters)
 }
 
 // extendToTLevelSignatures ports the private getExtendToTLevelSignatures.
-func (t *XAdESLevelBaselineT) extendToTLevelSignatures(
+func (t *LevelBaselineT) extendToTLevelSignatures(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	toBeExtended := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
@@ -267,7 +267,7 @@ func (t *XAdESLevelBaselineT) extendToTLevelSignatures(
 }
 
 // tLevelExtensionRequired ports the private tLevelExtensionRequired.
-func (t *XAdESLevelBaselineT) tLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+func (t *LevelBaselineT) tLevelExtensionRequired(signature validation.AdvancedSignature) bool {
 	return enumerations.SignatureLevelXAdESBaselineT == t.Params.SignatureLevel() || !signature.HasTProfile()
 }
 
@@ -279,7 +279,7 @@ func (t *XAdESLevelBaselineT) tLevelExtensionRequired(signature validation.Advan
 //	</xades:CertificateValues>
 //
 // Port of the protected #incorporateCertificateValues(Element, Collection).
-func (t *XAdESLevelBaselineT) IncorporateCertificateValues(parentDom *xmldom.Node,
+func (t *LevelBaselineT) IncorporateCertificateValues(parentDom *xmldom.Node,
 	certificatesToBeAdded []*model.CertificateToken) (*xmldom.Node, error) {
 	var certificateValuesDom *xmldom.Node
 	if utils.IsCollectionNotEmpty(certificatesToBeAdded) {
@@ -304,7 +304,7 @@ func (t *XAdESLevelBaselineT) IncorporateCertificateValues(parentDom *xmldom.Nod
 //	<xades:RevocationValues>
 //
 // Port of the protected #incorporateRevocationValues(Element, Collection, Collection).
-func (t *XAdESLevelBaselineT) IncorporateRevocationValues(parentDom *xmldom.Node,
+func (t *LevelBaselineT) IncorporateRevocationValues(parentDom *xmldom.Node,
 	crlsToAdd []*spi.CRLToken, ocspsToAdd []*spi.OCSPToken) (*xmldom.Node, error) {
 	var revocationValuesDom *xmldom.Node
 
@@ -333,7 +333,7 @@ func (t *XAdESLevelBaselineT) IncorporateRevocationValues(parentDom *xmldom.Node
 //	</xades:CRLValues>
 //
 // Port of the private incorporateCrlTokens.
-func (t *XAdESLevelBaselineT) incorporateCrlTokens(parentDom *xmldom.Node, crlTokens []*spi.CRLToken) error {
+func (t *LevelBaselineT) incorporateCrlTokens(parentDom *xmldom.Node, crlTokens []*spi.CRLToken) error {
 	if len(crlTokens) == 0 {
 		return nil
 	}
@@ -361,7 +361,7 @@ func (t *XAdESLevelBaselineT) incorporateCrlTokens(parentDom *xmldom.Node, crlTo
 //	</xades:OCSPValues>
 //
 // Port of the private incorporateOcspTokens.
-func (t *XAdESLevelBaselineT) incorporateOcspTokens(parentDom *xmldom.Node, ocspTokens []*spi.OCSPToken) error {
+func (t *LevelBaselineT) incorporateOcspTokens(parentDom *xmldom.Node, ocspTokens []*spi.OCSPToken) error {
 	if len(ocspTokens) == 0 {
 		return nil
 	}
@@ -384,7 +384,7 @@ func (t *XAdESLevelBaselineT) incorporateOcspTokens(parentDom *xmldom.Node, ocsp
 // IncorporateCertificateValuesWithIndent incorporates all certificates passed as parameter, as
 // well as adding missing indents if the indent parameter is specified.
 // Port of the protected #incorporateCertificateValues(Element, Collection, String).
-func (t *XAdESLevelBaselineT) IncorporateCertificateValuesWithIndent(parentDom *xmldom.Node,
+func (t *LevelBaselineT) IncorporateCertificateValuesWithIndent(parentDom *xmldom.Node,
 	certificatesToBeAdded []*model.CertificateToken, indent string) error {
 	certificatesDom, err := t.IncorporateCertificateValues(parentDom, certificatesToBeAdded)
 	if err != nil {
@@ -402,7 +402,7 @@ func (t *XAdESLevelBaselineT) IncorporateCertificateValuesWithIndent(parentDom *
 // IncorporateRevocationValuesWithIndent incorporates revocation values, as well as adding
 // missing indents if the indent parameter is specified.
 // Port of the protected #incorporateRevocationValues(Element, Collection, Collection, String).
-func (t *XAdESLevelBaselineT) IncorporateRevocationValuesWithIndent(parentDom *xmldom.Node,
+func (t *LevelBaselineT) IncorporateRevocationValuesWithIndent(parentDom *xmldom.Node,
 	crlsToAdd []*spi.CRLToken, ocspsToAdd []*spi.OCSPToken, indent string) error {
 	revocationDom, err := t.IncorporateRevocationValues(parentDom, crlsToAdd, ocspsToAdd)
 	if err != nil {
@@ -420,10 +420,10 @@ func (t *XAdESLevelBaselineT) IncorporateRevocationValuesWithIndent(parentDom *x
 // RemoveOldCertificateValues removes old certificate values from the unsigned signature
 // properties element and returns the indent of the removed node, nil when there was none.
 // Port of the protected #removeOldCertificateValues. Java's String return is null-able and its
-// callers test it against null (see XAdESLevelBaselineLT); ExtensionBuilder.RemoveNode answers
+// callers test it against null (see LevelBaselineLT); ExtensionBuilder.RemoveNode answers
 // "" where Java answers null, and the two agree in practice - a removed node either has a
 // whitespace TEXT sibling in a pretty-printed document or none at all, never an empty one.
-func (t *XAdESLevelBaselineT) RemoveOldCertificateValues() (string, error) {
+func (t *LevelBaselineT) RemoveOldCertificateValues() (string, error) {
 	text := ""
 	toRemove, err := xmlutils.XPathUtilsGetElement(t.XadesSignature.SignatureElement(),
 		t.XadesPath.CertificateValuesPath())
@@ -439,7 +439,7 @@ func (t *XAdESLevelBaselineT) RemoveOldCertificateValues() (string, error) {
 
 // RemoveOldRevocationValues removes old revocation values from the unsigned signature
 // properties element. Port of the protected #removeOldRevocationValues.
-func (t *XAdESLevelBaselineT) RemoveOldRevocationValues() error {
+func (t *LevelBaselineT) RemoveOldRevocationValues() error {
 	toRemove, err := xmlutils.XPathUtilsGetElement(t.XadesSignature.SignatureElement(),
 		t.XadesPath.RevocationValuesPath())
 	if err != nil {
@@ -456,7 +456,7 @@ func (t *XAdESLevelBaselineT) RemoveOldRevocationValues() error {
 // AnyValidationData elements appearing at the end of the unsigned properties, and returns the
 // indent of the last removed element, nil when none was present.
 // Port of the protected #removeLastTimestampAndAnyValidationData.
-func (t *XAdESLevelBaselineT) RemoveLastTimestampAndAnyValidationData() (string, error) {
+func (t *LevelBaselineT) RemoveLastTimestampAndAnyValidationData() (string, error) {
 	toRemove, err := t.lastElementIfPresent(definition.XAdES141ElementTimestampValidationData,
 		definition.XAdES141ElementAnyValidationData)
 	if err != nil {
@@ -484,7 +484,7 @@ func (t *XAdESLevelBaselineT) RemoveLastTimestampAndAnyValidationData() (string,
 }
 
 // lastElementIfPresent ports the private getLastElementIfPresent.
-func (t *XAdESLevelBaselineT) lastElementIfPresent(xadesElements ...common.DSSElement) (*xmldom.Node, error) {
+func (t *LevelBaselineT) lastElementIfPresent(xadesElements ...common.DSSElement) (*xmldom.Node, error) {
 	unsignedSignatureProperties, err := xmlutils.XPathUtilsGetNode(t.XadesSignature.SignatureElement(),
 		t.XadesPath.UnsignedSignaturePropertiesPath())
 	if err != nil {
@@ -511,16 +511,16 @@ func (t *XAdESLevelBaselineT) lastElementIfPresent(xadesElements ...common.DSSEl
 
 // IncorporateTimestampValidationData incorporates the timestamp validation data in the
 // signature. Port of the protected #incorporateTimestampValidationData.
-func (t *XAdESLevelBaselineT) IncorporateTimestampValidationData(
-	validationDataForInclusion *validation.ValidationData, indent string) error {
+func (t *LevelBaselineT) IncorporateTimestampValidationData(
+	validationDataForInclusion *validation.Data, indent string) error {
 	return t.IncorporateValidationData(validationDataForInclusion, indent,
 		definition.XAdES141ElementTimestampValidationData, xadesBuilderTstVdPrefix)
 }
 
 // IncorporateAnyValidationData incorporates the AnyValidationData in the signature.
 // Port of the protected #incorporateAnyValidationData.
-func (t *XAdESLevelBaselineT) IncorporateAnyValidationData(
-	validationDataForInclusion *validation.ValidationData, indent string) error {
+func (t *LevelBaselineT) IncorporateAnyValidationData(
+	validationDataForInclusion *validation.Data, indent string) error {
 	return t.IncorporateValidationData(validationDataForInclusion, indent,
 		definition.XAdES141ElementAnyValidationData, xadesBuilderAnyVdPrefix)
 }
@@ -528,8 +528,8 @@ func (t *XAdESLevelBaselineT) IncorporateAnyValidationData(
 // IncorporateValidationData incorporates the given validation data in the signature, under the
 // given XAdES 1.4.1 element and with the given Id prefix.
 // Port of the protected #incorporateValidationData.
-func (t *XAdESLevelBaselineT) IncorporateValidationData(
-	validationDataForInclusion *validation.ValidationData, indent string,
+func (t *LevelBaselineT) IncorporateValidationData(
+	validationDataForInclusion *validation.Data, indent string,
 	element common.DSSElement, prefix string) error {
 	if validationDataForInclusion.IsEmpty() {
 		return nil
@@ -573,7 +573,7 @@ func (t *XAdESLevelBaselineT) IncorporateValidationData(
 
 // IncorporateArchiveTimestamp incorporates the archive timestamp object.
 // Port of the protected #incorporateArchiveTimestamp.
-func (t *XAdESLevelBaselineT) IncorporateArchiveTimestamp() error {
+func (t *LevelBaselineT) IncorporateArchiveTimestamp() error {
 	archiveTimestampParameters := t.Params.GetArchiveTimestampParameters()
 	digestAlgorithm := archiveTimestampParameters.DigestAlgorithm()
 	canonicalizationMethod := archiveTimestampParameters.CanonicalizationMethod()
@@ -588,7 +588,7 @@ func (t *XAdESLevelBaselineT) IncorporateArchiveTimestamp() error {
 
 // CreateXAdESTimeStampType creates any XAdES TimeStamp object representation. The timestamp
 // token is obtained from the TSP source. Port of the protected #createXAdESTimeStampType.
-func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumerations.TimestampType,
+func (t *LevelBaselineT) CreateXAdESTimeStampType(timestampType enumerations.TimestampType,
 	timestampC14nMethod string, messageDigest model.DSSMessageDigest) error {
 
 	xadesURI := t.XadesNamespace().Uri()
@@ -669,7 +669,7 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 	// Id="..." attribute is not allowed in XAdES 1.1.1
 	if !definition.XAdESNamespaceXAdES111.IsSameUri(xadesURI) {
 		// Add Id after the element is constructed
-		attributeIdentifier := XAdESAttributeIdentifierBuild(timeStampDom)
+		attributeIdentifier := AttributeIdentifierBuild(timeStampDom)
 		timestampID, err := t.ToXmlIdentifier(attributeIdentifier)
 		if err != nil {
 			return err
@@ -691,7 +691,7 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 //	</HashDataInfo>
 //
 // Port of the private incorporateHashDataInfo.
-func (t *XAdESLevelBaselineT) incorporateHashDataInfo(timeStampDom *xmldom.Node, timestampC14nMethod string) {
+func (t *LevelBaselineT) incorporateHashDataInfo(timeStampDom *xmldom.Node, timestampC14nMethod string) {
 	hashDataInfoDom := xmlutils.DomUtilsAddElement(t.DocumentDom, timeStampDom,
 		t.XadesNamespace(), definition.XAdES111ElementHashDataInfo)
 	hashDataInfoDom.SetAttr(xmldom.Name{Local: definition.XAdES111AttributeURI.AttributeName()},
@@ -705,7 +705,7 @@ func (t *XAdESLevelBaselineT) incorporateHashDataInfo(timeStampDom *xmldom.Node,
 }
 
 // incorporateXAdES122Include ports the private incorporateXAdES122Include.
-func (t *XAdESLevelBaselineT) incorporateXAdES122Include(timeStampDom *xmldom.Node) {
+func (t *LevelBaselineT) incorporateXAdES122Include(timeStampDom *xmldom.Node) {
 	includeDom := xmlutils.DomUtilsAddElement(t.DocumentDom, timeStampDom, t.XadesNamespace(),
 		definition.XAdES122ElementInclude)
 	includeDom.SetAttr(xmldom.Name{Local: definition.XAdES122AttributeURI.AttributeName()},
@@ -716,7 +716,7 @@ func (t *XAdESLevelBaselineT) incorporateXAdES122Include(timeStampDom *xmldom.No
 // binary documents (used for the -LTA level extension).
 // Port of the protected #assertDetachedDocumentsContainBinaries; Java's
 // IllegalArgumentException becomes a returned error.
-func (t *XAdESLevelBaselineT) AssertDetachedDocumentsContainBinaries() error {
+func (t *LevelBaselineT) AssertDetachedDocumentsContainBinaries() error {
 	detachedContents := t.Params.DetachedContents()
 	if utils.IsCollectionNotEmpty(detachedContents) {
 		for _, detachedDocument := range detachedContents {
@@ -735,8 +735,8 @@ func (t *XAdESLevelBaselineT) AssertDetachedDocumentsContainBinaries() error {
 // validation.TimestampSource interface the AdvancedSignature contract declares (the CAdES
 // precedent), an `any` parameter accepts both, and the assertion below recovers the concrete
 // source either way.
-func xadesLevelBaselineTTimestampSource(source any) (*XAdESTimestampSource, error) {
-	if timestampSource, ok := source.(*XAdESTimestampSource); ok {
+func xadesLevelBaselineTTimestampSource(source any) (*TimestampSource, error) {
+	if timestampSource, ok := source.(*TimestampSource); ok {
 		return timestampSource, nil
 	}
 	return nil, fmt.Errorf("the signature timestamp source is not a XAdESTimestampSource, but %T", source)

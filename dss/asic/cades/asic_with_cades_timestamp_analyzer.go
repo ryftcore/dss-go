@@ -122,9 +122,9 @@ func (a *ASiCWithCAdESTimestampAnalyzer) GetTimestampScopes(timestampToken *vali
 
 // AddReference ports the @Override protected addReference(SignatureScope).
 //
-// Cross-chunk assumption (ZIPCORE): ASiCUtilsIsSignature/ASiCUtilsIsTimestamp/
-// ASiCUtilsIsEvidenceRecord take a filename string.
+// Cross-chunk assumption (ZIPCORE): UtilsIsSignature/UtilsIsTimestamp/
+// UtilsIsEvidenceRecord take a filename string.
 func (a *ASiCWithCAdESTimestampAnalyzer) AddReference(signatureScope mscope.SignatureScope) bool {
 	fileName := signatureScope.DocumentName()
-	return fileName == "" || (!asic.ASiCUtilsIsSignature(fileName) && !asic.ASiCUtilsIsTimestamp(fileName) && !asic.ASiCUtilsIsEvidenceRecord(fileName))
+	return fileName == "" || (!asic.UtilsIsSignature(fileName) && !asic.UtilsIsTimestamp(fileName) && !asic.UtilsIsEvidenceRecord(fileName))
 }

@@ -21,21 +21,21 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESBaselineRequirementsChecker checks conformance of a XAdES signature to the requested
+// BaselineRequirementsChecker checks conformance of a XAdES signature to the requested
 // baseline format. Port of the class XAdESBaselineRequirementsChecker, extending
-// validation.BaselineRequirementsChecker[XAdESSignature].
-type XAdESBaselineRequirementsChecker struct {
-	validation.BaselineRequirementsChecker[*XAdESSignature]
+// validation.BaselineRequirementsChecker[Signature].
+type BaselineRequirementsChecker struct {
+	validation.BaselineRequirementsChecker[*Signature]
 
 	// statusMap is the cached reference validation status map.
 	statusMap map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus
 }
 
 // NewXAdESBaselineRequirementsChecker is the default constructor. Port of the public
-// XAdESBaselineRequirementsChecker(XAdESSignature, CertificateVerifier) constructor.
-func NewXAdESBaselineRequirementsChecker(signature *XAdESSignature, offlineCertificateVerifier validation.CertificateVerifier) *XAdESBaselineRequirementsChecker {
-	checker := &XAdESBaselineRequirementsChecker{
-		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*XAdESSignature](signature, offlineCertificateVerifier),
+// BaselineRequirementsChecker(Signature, CertificateVerifier) constructor.
+func NewXAdESBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+	checker := &BaselineRequirementsChecker{
+		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](signature, offlineCertificateVerifier),
 	}
 	checker.InitBaselineRequirementsChecker(checker)
 	return checker
@@ -43,13 +43,13 @@ func NewXAdESBaselineRequirementsChecker(signature *XAdESSignature, offlineCerti
 
 // HasAdESProfile checks if the signature is conformant to the corresponding AdES profile. Port
 // of the hasAdESProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasAdESProfile() bool {
+func (b *BaselineRequirementsChecker) HasAdESProfile() bool {
 	return b.HasExtendedBESProfile() || b.HasBaselineBProfile()
 }
 
 // HasBaselineBProfile checks if the signature has a corresponding BASELINE-B profile. Port of
 // the hasBaselineBProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineBProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -109,7 +109,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 		return false
 	}
 	// CommitmentTypeIndication (Cardinality >= 0)
-	// SignatureProductionPlace/SignatureProductionPlaceV2 (Cardinality 0 or 1)
+	// ProductionPlace/SignatureProductionPlaceV2 (Cardinality 0 or 1)
 	if xadesBaselineNumberOfOccurrences(signatureElement, xadesPaths.SignatureProductionPlacePath())+
 		xadesBaselineNumberOfOccurrences(signatureElement, xadesPaths.SignatureProductionPlaceV2Path()) > 1 {
 		// Upstream logs "Only one SignatureProductionPlace(V2) may be present for
@@ -215,7 +215,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 
 // HasBaselineTProfile checks if the signature has a corresponding BASELINE-T profile. Port of
 // the hasBaselineTProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineTProfile() bool {
 	if !b.MinimalTRequirement() {
 		return false
 	}
@@ -244,7 +244,7 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
 
 // HasBaselineLTProfile checks if the signature has a corresponding BASELINE-LT profile. Port of
 // the hasBaselineLTProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTProfile() bool {
 	if !b.MinimalLTRequirement() {
 		return false
 	}
@@ -308,12 +308,12 @@ func (b *XAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
 
 // ContainsLTLevelCertificates implements validation.BaselineRequirementsCheckerOverrides. Port
 // of the protected containsLTLevelCertificates() override.
-func (b *XAdESBaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
+func (b *BaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
 	return b.containsCertificateValues() || b.containsTstOrAnyValDataCertificates()
 }
 
 // containsCertificateValues ports the private containsCertificateValues().
-func (b *XAdESBaselineRequirementsChecker) containsCertificateValues() bool {
+func (b *BaselineRequirementsChecker) containsCertificateValues() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -322,7 +322,7 @@ func (b *XAdESBaselineRequirementsChecker) containsCertificateValues() bool {
 }
 
 // containsTstOrAnyValDataCertificates ports the private containsTstOrAnyValDataCertificates().
-func (b *XAdESBaselineRequirementsChecker) containsTstOrAnyValDataCertificates() bool {
+func (b *BaselineRequirementsChecker) containsTstOrAnyValDataCertificates() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -332,13 +332,13 @@ func (b *XAdESBaselineRequirementsChecker) containsTstOrAnyValDataCertificates()
 
 // HasBaselineLTAProfile checks if the signature has a corresponding BASELINE-LTA profile. Port
 // of the hasBaselineLTAProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasBaselineLTAProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTAProfile() bool {
 	return b.MinimalLTARequirement()
 }
 
 // HasExtendedBESProfile checks if the signature has a corresponding *AdES-BES profile. Port of
 // the hasExtendedBESProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedBESProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -365,7 +365,7 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
 			return false
 		}
 	}
-	// SignatureProductionPlace/SignatureProductionPlaceV2 (Cardinality 0 or 1)
+	// ProductionPlace/SignatureProductionPlaceV2 (Cardinality 0 or 1)
 	if xadesBaselineNumberOfOccurrences(signatureElement, xadesPaths.SignatureProductionPlacePath())+
 		xadesBaselineNumberOfOccurrences(signatureElement, xadesPaths.SignatureProductionPlaceV2Path()) > 1 {
 		// Upstream logs "Only one SignatureProductionPlace(V2) may be present for XAdES-BES
@@ -394,7 +394,7 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
 
 // HasExtendedEPESProfile checks if the signature has a corresponding *AdES-EPES profile. Port
 // of the hasExtendedEPESProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -425,7 +425,7 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 
 // HasExtendedTProfile checks if the signature has a corresponding *AdES-T profile. Port of the
 // hasExtendedTProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedTProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedTProfile() bool {
 	if !b.MinimalTRequirement() {
 		return false
 	}
@@ -455,7 +455,7 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedTProfile() bool {
 
 // HasExtendedCProfile checks if the signature has a corresponding *AdES-C profile. Port of the
 // hasExtendedCProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedCProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -487,7 +487,7 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
 
 // HasExtendedXProfile checks if the signature has a corresponding *AdES-X profile. Port of the
 // hasExtendedXProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedXProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedXProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -506,19 +506,19 @@ func (b *XAdESBaselineRequirementsChecker) HasExtendedXProfile() bool {
 
 // HasExtendedXLProfile checks if the signature has a corresponding *AdES-XL profile. Port of the
 // hasExtendedXLProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedXLProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedXLProfile() bool {
 	return b.MinimalLTRequirement()
 }
 
 // HasExtendedAProfile checks if the signature has a corresponding *AdES-A profile. Port of the
 // hasExtendedAProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedAProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedAProfile() bool {
 	return b.MinimalLTARequirement()
 }
 
 // HasExtendedERSProfile checks if the signature has a corresponding *AdES-E-ERS profile. Port of
 // the hasExtendedERSProfile() override.
-func (b *XAdESBaselineRequirementsChecker) HasExtendedERSProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedERSProfile() bool {
 	signature := b.Signature()
 	signatureElement := signature.SignatureElement()
 	xadesPaths := signature.XAdESPaths()
@@ -553,8 +553,8 @@ func xadesBaselineDataObjectFormatList(signatureElement *xmldom.Node, xadesPaths
 }
 
 // xadesBaselineIsValidXAdESDataObjectFormat ports the private isValidXAdESDataObjectFormat(Element,
-// XAdESSignature, XAdESPath, Map).
-func xadesBaselineIsValidXAdESDataObjectFormat(dataObjectFormat *xmldom.Node, signature *XAdESSignature, xadesPaths definition.XAdESPath,
+// Signature, XAdESPath, Map).
+func xadesBaselineIsValidXAdESDataObjectFormat(dataObjectFormat *xmldom.Node, signature *Signature, xadesPaths definition.XAdESPath,
 	referenceStatusMap map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus) bool {
 	// 5.2.4 The DataObjectFormat qualifying property
 	signatureElement := signature.SignatureElement()
@@ -646,8 +646,8 @@ func xadesBaselineIsDataObjectFormatValuesCompliant(dataObjectFormat *xmldom.Nod
 }
 
 // xadesBaselineIsValidXAdESBaselineDataObjectFormat ports the private
-// isValidXAdESBaselineDataObjectFormat(Element, XAdESSignature, XAdESPath, Map).
-func xadesBaselineIsValidXAdESBaselineDataObjectFormat(dataObjectFormat *xmldom.Node, signature *XAdESSignature, xadesPaths definition.XAdESPath,
+// isValidXAdESBaselineDataObjectFormat(Element, Signature, XAdESPath, Map).
+func xadesBaselineIsValidXAdESBaselineDataObjectFormat(dataObjectFormat *xmldom.Node, signature *Signature, xadesPaths definition.XAdESPath,
 	referenceStatusMap map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus) bool {
 	if !xadesBaselineIsValidXAdESDataObjectFormat(dataObjectFormat, signature, xadesPaths, referenceStatusMap) {
 		return false
@@ -680,10 +680,10 @@ func xadesBaselineIsValidXAdESBaselineDataObjectFormat(dataObjectFormat *xmldom.
 }
 
 // isSigningCertificateSignedInKeyInfo ports the private isSigningCertificateSignedInKeyInfo().
-func (b *XAdESBaselineRequirementsChecker) isSigningCertificateSignedInKeyInfo() bool {
+func (b *BaselineRequirementsChecker) isSigningCertificateSignedInKeyInfo() bool {
 	signature := b.Signature()
 	signingCertificate := signature.SigningCertificateToken()
-	if signingCertificate != nil && XAdESSignatureUtilsIsKeyInfoCovered(signature) {
+	if signingCertificate != nil && SignatureUtilsIsKeyInfoCovered(signature) {
 		keyInfoCertificates := signature.CertificateSource().KeyInfoCertificates()
 		for _, keyInfoCertificate := range keyInfoCertificates {
 			if signingCertificate.Equals(keyInfoCertificate) {
@@ -712,7 +712,7 @@ func xadesBaselineIsElementPresent(element *xmldom.Node, xPathString common.XPat
 }
 
 // referenceValidationStatusMap ports the private getReferenceValidationStatusMap().
-func (b *XAdESBaselineRequirementsChecker) referenceValidationStatusMap() map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus {
+func (b *BaselineRequirementsChecker) referenceValidationStatusMap() map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus {
 	if b.statusMap == nil {
 		b.statusMap = make(map[string]*xadesBaselineRequirementsCheckerReferenceValidationStatus)
 		for _, referenceValidation := range b.Signature().ReferenceValidations() {
@@ -752,10 +752,10 @@ func newXadesBaselineRequirementsCheckerReferenceValidationStatusManifestEntry(r
 	return &xadesBaselineRequirementsCheckerReferenceValidationStatus{referenceValidation: referenceValidation, dataObjectFormatFound: true}
 }
 
-// compile-time assertion: an XAdESBaselineRequirementsChecker satisfies its own overrides
+// compile-time assertion: an BaselineRequirementsChecker satisfies its own overrides
 // contract and the non-generic BaselineRequirementsCheckerContract DefaultAdvancedSignature
 // stores it as.
 var (
-	_ validation.BaselineRequirementsCheckerOverrides = (*XAdESBaselineRequirementsChecker)(nil)
-	_ validation.BaselineRequirementsCheckerContract  = (*XAdESBaselineRequirementsChecker)(nil)
+	_ validation.BaselineRequirementsCheckerOverrides = (*BaselineRequirementsChecker)(nil)
+	_ validation.BaselineRequirementsCheckerContract  = (*BaselineRequirementsChecker)(nil)
 )

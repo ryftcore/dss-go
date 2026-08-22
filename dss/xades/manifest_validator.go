@@ -15,7 +15,7 @@
 // DSSXMLUtils.initManifestWithDetachedContent/initManifestDetachedContent; per
 // internal/xmldsig's doc.go table this is internal/xmldsig.Manifest/NewManifest plus a
 // DetachedSignatureResolver registered per distinct digest algorithm found in the manifest's
-// references - the same pattern XAdESSignature.initDetachedSignatureResolvers already uses for
+// references - the same pattern Signature.initDetachedSignatureResolvers already uses for
 // ds:SignedInfo (xades_signature.go).
 package xades
 

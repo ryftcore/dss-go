@@ -7,10 +7,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// SignaturePolicyValidationResult contains results of a SignaturePolicy validation.
+// PolicyValidationResult contains results of a Policy validation.
 //
 // java.io.Serializable is dropped silently (no Go counterpart).
-type SignaturePolicyValidationResult struct {
+type PolicyValidationResult struct {
 	// identified indicates if the signature policy has been identified.
 	identified bool
 
@@ -40,54 +40,54 @@ type signaturePolicyValidationError struct {
 
 // NewSignaturePolicyValidationResult is the default constructor instantiating the object
 // with null (zero) values.
-func NewSignaturePolicyValidationResult() *SignaturePolicyValidationResult {
-	return &SignaturePolicyValidationResult{}
+func NewSignaturePolicyValidationResult() *PolicyValidationResult {
+	return &PolicyValidationResult{}
 }
 
 // IsIdentified returns if the signature policy has been obtained successfully. Port of
 // isIdentified().
-func (s *SignaturePolicyValidationResult) IsIdentified() bool {
+func (s *PolicyValidationResult) IsIdentified() bool {
 	return s.identified
 }
 
 // SetIdentified sets if the signature policy has been obtained successfully. Port of
 // setIdentified(boolean).
-func (s *SignaturePolicyValidationResult) SetIdentified(identified bool) {
+func (s *PolicyValidationResult) SetIdentified(identified bool) {
 	s.identified = identified
 }
 
 // IsDigestValid returns if the signature policy has been validated successfully. Port of
 // isDigestValid().
-func (s *SignaturePolicyValidationResult) IsDigestValid() bool {
+func (s *PolicyValidationResult) IsDigestValid() bool {
 	return s.digestValid
 }
 
 // SetDigestValid sets if the signature policy is valid. Port of setDigestValid(boolean).
-func (s *SignaturePolicyValidationResult) SetDigestValid(digestValid bool) {
+func (s *PolicyValidationResult) SetDigestValid(digestValid bool) {
 	s.digestValid = digestValid
 }
 
 // IsAsn1Processable returns if the signature policy is ASN.1 processable. Port of
 // isAsn1Processable().
-func (s *SignaturePolicyValidationResult) IsAsn1Processable() bool {
+func (s *PolicyValidationResult) IsAsn1Processable() bool {
 	return s.asn1Processable
 }
 
 // SetAsn1Processable sets if the signature policy is ASN.1 processable. Port of
 // setAsn1Processable(boolean).
-func (s *SignaturePolicyValidationResult) SetAsn1Processable(asn1Processable bool) {
+func (s *PolicyValidationResult) SetAsn1Processable(asn1Processable bool) {
 	s.asn1Processable = asn1Processable
 }
 
 // IsDigestAlgorithmsEqual returns if the DigestAlgorithm defined in the policy and used for
 // the validation do match. Port of isDigestAlgorithmsEqual().
-func (s *SignaturePolicyValidationResult) IsDigestAlgorithmsEqual() bool {
+func (s *PolicyValidationResult) IsDigestAlgorithmsEqual() bool {
 	return s.digestAlgorithmsEqual
 }
 
 // SetDigestAlgorithmsEqual sets if the digest algorithms match. Port of
 // setDigestAlgorithmsEqual(boolean).
-func (s *SignaturePolicyValidationResult) SetDigestAlgorithmsEqual(digestAlgorithmsEqual bool) {
+func (s *PolicyValidationResult) SetDigestAlgorithmsEqual(digestAlgorithmsEqual bool) {
 	s.digestAlgorithmsEqual = digestAlgorithmsEqual
 }
 
@@ -97,20 +97,20 @@ func (s *SignaturePolicyValidationResult) SetDigestAlgorithmsEqual(digestAlgorit
 // NOTE: returns the zero Digest if a validator was not able to compute the digest.
 //
 // Port of getDigest().
-func (s *SignaturePolicyValidationResult) Digest() model.Digest {
+func (s *PolicyValidationResult) Digest() model.Digest {
 	return s.digest
 }
 
 // SetDigest sets the Digest computed on the extracted signature policy document. Port of
 // setDigest(Digest).
-func (s *SignaturePolicyValidationResult) SetDigest(digest model.Digest) {
+func (s *PolicyValidationResult) SetDigest(digest model.Digest) {
 	s.digest = digest
 }
 
 // AddError allows adding a new error message occurred during the validation. A repeated
 // errorKey overwrites the message the way Java's Map#put would. Port of addError(String,
 // String).
-func (s *SignaturePolicyValidationResult) AddError(errorKey, errorMessage string) {
+func (s *PolicyValidationResult) AddError(errorKey, errorMessage string) {
 	for i := range s.errors {
 		if s.errors[i].key == errorKey {
 			s.errors[i].message = errorMessage
@@ -122,7 +122,7 @@ func (s *SignaturePolicyValidationResult) AddError(errorKey, errorMessage string
 
 // ProcessingErrors returns a user-friendly String with the obtained error messages occurred
 // during the validation process. Port of getProcessingErrors().
-func (s *SignaturePolicyValidationResult) ProcessingErrors() string {
+func (s *PolicyValidationResult) ProcessingErrors() string {
 	if len(s.errors) == 0 {
 		return ""
 	}

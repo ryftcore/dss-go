@@ -28,7 +28,7 @@ func TestASiCParametersAccessors(t *testing.T) {
 
 // TestASiCParametersEquals pins the three fields equals() compares.
 func TestASiCParametersEquals(t *testing.T) {
-	build := func() *ASiCParameters {
+	build := func() *Parameters {
 		parameters := NewASiCParameters()
 		parameters.SetZipComment(true)
 		parameters.SetMimeType("application/vnd.etsi.asic-e+zip")
@@ -39,10 +39,10 @@ func TestASiCParametersEquals(t *testing.T) {
 	if !first.Equals(second) || !first.Equals(first) || first.Equals(nil) {
 		t.Fatal("equals is not reflexive/consistent")
 	}
-	for _, mutate := range []func(*ASiCParameters){
-		func(p *ASiCParameters) { p.SetZipComment(false) },
-		func(p *ASiCParameters) { p.SetMimeType("other") },
-		func(p *ASiCParameters) { p.SetContainerType(enumerations.ASiCContainerTypeASiCS) },
+	for _, mutate := range []func(*Parameters){
+		func(p *Parameters) { p.SetZipComment(false) },
+		func(p *Parameters) { p.SetMimeType("other") },
+		func(p *Parameters) { p.SetContainerType(enumerations.ASiCContainerTypeASiCS) },
 	} {
 		mutated := build()
 		mutate(mutated)
@@ -52,24 +52,24 @@ func TestASiCParametersEquals(t *testing.T) {
 	}
 }
 
-// TestASiCParametersMimeTypeResolution pins getMimeType(ASiCParameters): an explicit mimetype wins,
+// TestASiCParametersMimeTypeResolution pins getMimeType(Parameters): an explicit mimetype wins,
 // otherwise the container type decides.
 func TestASiCParametersMimeTypeResolution(t *testing.T) {
 	parameters := NewASiCParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCS)
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCS) {
+	if got := UtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCS) {
 		t.Errorf("mimeType = %v, want ASICS", got)
 	}
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCE) {
+	if got := UtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCE) {
 		t.Errorf("mimeType = %v, want ASICE", got)
 	}
 	parameters.SetMimeType("application/vnd.oasis.opendocument.text")
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got.MimeTypeString() != "application/vnd.oasis.opendocument.text" {
+	if got := UtilsMimeTypeFromParameters(parameters); got.MimeTypeString() != "application/vnd.oasis.opendocument.text" {
 		t.Errorf("an explicit mimetype must win, got %q", got.MimeTypeString())
 	}
 
-	if !ASiCUtilsIsASiCE(parameters) || ASiCUtilsIsASiCS(parameters) {
+	if !UtilsIsASiCE(parameters) || UtilsIsASiCS(parameters) {
 		t.Error("isASiCE/isASiCS disagree with the container type")
 	}
 	defer func() {
@@ -77,7 +77,7 @@ func TestASiCParametersMimeTypeResolution(t *testing.T) {
 			t.Fatalf("panic = %v, want the Java message", recovered)
 		}
 	}()
-	ASiCUtilsIsASiCE(NewASiCParameters())
+	UtilsIsASiCE(NewASiCParameters())
 }
 
 // TestASiCContainerEvidenceRecordParametersEmbedsASiCParameters pins the inheritance: the base

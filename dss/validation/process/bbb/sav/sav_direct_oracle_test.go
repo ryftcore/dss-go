@@ -40,7 +40,7 @@ type singleSAVChain struct {
 
 type savCheckFactory func(result *process.Result[*jaxb.XmlSAV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlSAV]
 
-func newSingleSAVChain(i18nProvider *i18n.I18nProvider, factory savCheckFactory) *singleSAVChain {
+func newSingleSAVChain(i18nProvider *i18n.Provider, factory savCheckFactory) *singleSAVChain {
 	xmlSAV := &jaxb.XmlSAV{}
 	c := &singleSAVChain{
 		ChainBase: process.NewChainBase(i18nProvider, process.NewResult(xmlSAV,
@@ -382,7 +382,7 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 // savReportTimestamps mirrors the oracle's reportTimestamps: one detailed-report
 // XmlTimestamp per used time-stamp, each with a basic-validation conclusion
 // carrying the given indication.
-func savReportTimestamps(diagnosticData *diagnostic.DiagnosticData,
+func savReportTimestamps(diagnosticData *diagnostic.Data,
 	indication enumerations.Indication) []*jaxb.XmlTimestamp {
 	var wrappers []*diagnostic.TimestampWrapper
 	if savSafeExecute(func() { wrappers = diagnosticData.TimestampList() }) {

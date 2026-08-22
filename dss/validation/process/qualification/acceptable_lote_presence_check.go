@@ -20,8 +20,8 @@ type AcceptableLoTEPresenceCheck[T any] struct {
 }
 
 // NewAcceptableLoTEPresenceCheck is the default constructor. Port of
-// AcceptableLoTEPresenceCheck(I18nProvider, T, Set, LevelRule).
-func NewAcceptableLoTEPresenceCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AcceptableLoTEPresenceCheck(Provider, T, Set, LevelRule).
+func NewAcceptableLoTEPresenceCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validLoTEUrls map[*jaxb.XmlTrustSourceList]struct{}, constraint policy.LevelRule) *AcceptableLoTEPresenceCheck[T] {
 	c := &AcceptableLoTEPresenceCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

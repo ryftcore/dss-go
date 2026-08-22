@@ -28,8 +28,8 @@ type TimestampDigestAlgorithmValidationCheck[T any] struct {
 }
 
 // NewTimestampDigestAlgorithmValidationCheck is the default constructor. Port
-// of TimestampDigestAlgorithmValidationCheck(I18nProvider, T, TimestampWrapper, XmlCryptographicValidation, Date, LevelRule).
-func NewTimestampDigestAlgorithmValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of TimestampDigestAlgorithmValidationCheck(Provider, T, TimestampWrapper, XmlCryptographicValidation, Date, LevelRule).
+func NewTimestampDigestAlgorithmValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, cvResult *jaxb.XmlCryptographicValidation, currentTime time.Time,
 	constraint policy.LevelRule) *TimestampDigestAlgorithmValidationCheck[T] {
 	c := &TimestampDigestAlgorithmValidationCheck[T]{

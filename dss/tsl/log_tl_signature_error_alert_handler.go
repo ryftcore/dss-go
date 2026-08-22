@@ -11,7 +11,7 @@ import (
 // LogTLSignatureErrorAlertHandler warns on TL validation error.
 type LogTLSignatureErrorAlertHandler struct{}
 
-var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLSignatureErrorAlertHandler)(nil)
+var _ alert.Handler[*tslmodel.TLInfo] = (*LogTLSignatureErrorAlertHandler)(nil)
 
 // NewLogTLSignatureErrorAlertHandler is the default constructor.
 func NewLogTLSignatureErrorAlertHandler() *LogTLSignatureErrorAlertHandler {

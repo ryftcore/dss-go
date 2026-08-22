@@ -27,8 +27,8 @@ type SignatureTypeCheck struct {
 }
 
 // NewSignatureTypeCheck is the default constructor. Port of
-// SignatureTypeCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewSignatureTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// SignatureTypeCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewSignatureTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *SignatureTypeCheck {
 	c := &SignatureTypeCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

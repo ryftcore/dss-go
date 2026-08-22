@@ -21,7 +21,7 @@ type PublicKeySizeKnownCheck struct {
 }
 
 // NewPublicKeySizeKnownCheck is the default constructor.
-func NewPublicKeySizeKnownCheck(i18nProvider *i18n.I18nProvider, keySize string, result *process.Result[*jaxb.XmlCC],
+func NewPublicKeySizeKnownCheck(i18nProvider *i18n.Provider, keySize string, result *process.Result[*jaxb.XmlCC],
 	position i18n.MessageTag, cryptographicSuite policy.CryptographicSuite) *PublicKeySizeKnownCheck {
 	c := &PublicKeySizeKnownCheck{keySize: keySize}
 	c.AbstractCryptographicCheck = NewAbstractCryptographicCheck(i18nProvider, result, position,

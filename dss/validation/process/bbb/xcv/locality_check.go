@@ -21,8 +21,8 @@ type LocalityCheck struct {
 }
 
 // NewLocalityCheck is the default constructor. Port of
-// LocalityCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewLocalityCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// LocalityCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewLocalityCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *LocalityCheck {
 	c := &LocalityCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

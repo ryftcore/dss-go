@@ -21,8 +21,8 @@ type TLSCertificateBindingSignatureFoundCheck struct {
 
 // NewTLSCertificateBindingSignatureFoundCheck is the default constructor.
 // Port of
-// TLSCertificateBindingSignatureFoundCheck(I18nProvider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
-func NewTLSCertificateBindingSignatureFoundCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// TLSCertificateBindingSignatureFoundCheck(Provider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
+func NewTLSCertificateBindingSignatureFoundCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *TLSCertificateBindingSignatureFoundCheck {
 	c := &TLSCertificateBindingSignatureFoundCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

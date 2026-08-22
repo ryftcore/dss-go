@@ -15,7 +15,7 @@
 //     algorithm - what cmscore.SignedDataBuilder derives automatically when left unset, exactly
 //     mirroring BC's own generate(), which populates digestAlgs purely from
 //     signerGen.getDigestAlgorithm() (new signers) and each old SignerInformation's
-//     digestAlgorithmID - unioned with digestAlgorithmIDs (CMSBuilder's own explicit
+//     digestAlgorithmID - unioned with digestAlgorithmIDs (Builder's own explicit
 //     addition, covering an original CMS's digest algorithms that no current SignerInfo
 //     implies, e.g. after a signer was dropped). CMSObjectGenerator does this as two separate
 //     steps (generate(), then CMSUtils.populateDigestAlgorithmSet); Generate does it in one.
@@ -32,7 +32,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// AbstractCMSGenerator is this package's (only) CMSGenerator implementation, containing the set
+// AbstractCMSGenerator is this package's (only) Generator implementation, containing the set
 // variable values. Port of the abstract AbstractCMSGenerator class plus - see the file header -
 // the native generation logic dss-cms-object's CMSObjectGenerator supplies upstream.
 type AbstractCMSGenerator struct {
@@ -179,7 +179,7 @@ func (g *AbstractCMSGenerator) encapsulatedContentBytes() ([]byte, error) {
 
 // certificateChoices builds the SignedData.certificates members: the plain certificates of
 // certificateStore, followed by the already-tagged [2] IMPLICIT AttributeCertificateV2 members
-// of attributeCertificates. Shared with CMSUtilsReplaceCertificatesAndCRLs, which rebuilds the
+// of attributeCertificates. Shared with UtilsReplaceCertificatesAndCRLs, which rebuilds the
 // same field from a different source.
 func certificateChoices(certificateStore, attributeCertificates [][]byte) []cmscore.CertificateChoice {
 	choices := make([]cmscore.CertificateChoice, 0, len(certificateStore)+len(attributeCertificates))
@@ -195,7 +195,7 @@ func certificateChoices(certificateStore, attributeCertificates [][]byte) []cmsc
 // revocationInfoChoices builds the SignedData.crls members: the CRLs of crls, the OCSP
 // responses of ocspResponsesStore under id-ri-ocsp-response, and the OCSP basic responses of
 // ocspBasicStore under id-pkix-ocsp-basic. Port of CMSObjectUtils#toCRLsStore. Shared with
-// CMSUtilsReplaceCertificatesAndCRLs.
+// UtilsReplaceCertificatesAndCRLs.
 func revocationInfoChoices(crls, ocspResponsesStore, ocspBasicStore [][]byte) []cmscore.RevocationInfoChoice {
 	choices := make([]cmscore.RevocationInfoChoice, 0, len(crls)+len(ocspResponsesStore)+len(ocspBasicStore))
 	for _, crl := range crls {

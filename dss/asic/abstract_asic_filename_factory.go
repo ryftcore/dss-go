@@ -129,7 +129,7 @@ func (f *AbstractASiCFilenameFactory) WithMetaInfFolder(filename string) string 
 // (IllegalArgumentException).
 //
 // Port of the protected assertASiCContentIsValid(ASiCContent).
-func (f *AbstractASiCFilenameFactory) AssertASiCContentIsValid(asicContent *ASiCContent) error {
+func (f *AbstractASiCFilenameFactory) AssertASiCContentIsValid(asicContent *Content) error {
 	if asicContent == nil {
 		panic("ASiCContent shall be provided!")
 	}
@@ -155,8 +155,8 @@ func (f *AbstractASiCFilenameFactory) AssertFilenameValid(filename string, docum
 }
 
 // ValidDataPackageFilename returns a valid data package filename. Port of the protected
-// getValidDataPackageFilename(String, ASiCContent).
-func (f *AbstractASiCFilenameFactory) ValidDataPackageFilename(dataPackageFilename string, asicContent *ASiCContent) (string, error) {
+// getValidDataPackageFilename(String, Content).
+func (f *AbstractASiCFilenameFactory) ValidDataPackageFilename(dataPackageFilename string, asicContent *Content) (string, error) {
 	if err := f.abstractASiCFilenameFactoryOverrides().AssertFilenameValid(dataPackageFilename, asicContent.SignedDocuments()); err != nil {
 		return "", err
 	}
@@ -174,7 +174,7 @@ func (f *AbstractASiCFilenameFactory) ValidDataPackageFilename(dataPackageFilena
 // optional.
 //
 // Port of the protected getValidEvidenceRecordManifestFilename(String, ASiCContent).
-func (f *AbstractASiCFilenameFactory) ValidEvidenceRecordManifestFilename(evidenceRecordManifestFilename string, asicContent *ASiCContent) (string, error) {
+func (f *AbstractASiCFilenameFactory) ValidEvidenceRecordManifestFilename(evidenceRecordManifestFilename string, asicContent *Content) (string, error) {
 	evidenceRecordManifestFilename = f.abstractASiCFilenameFactoryOverrides().WithMetaInfFolder(evidenceRecordManifestFilename)
 	if err := f.abstractASiCFilenameFactoryOverrides().AssertFilenameValid(evidenceRecordManifestFilename, asicContent.EvidenceRecordManifestDocuments()); err != nil {
 		return "", err

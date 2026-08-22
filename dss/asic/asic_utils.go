@@ -155,7 +155,7 @@ const asicUtilsMaxToRead = 0xFFFF + 2 + 4
 
 // ASiCUtilsIsSignature verifies if the entryName represents a signature file name. Port of
 // isSignature(String).
-func ASiCUtilsIsSignature(entryName string) bool {
+func UtilsIsSignature(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(entryName, ASiCUtilsSignatureFilename) &&
 		!strings.Contains(entryName, ASiCUtilsManifestFilename)
@@ -163,116 +163,116 @@ func ASiCUtilsIsSignature(entryName string) bool {
 
 // ASiCUtilsIsTimestamp verifies if the entryName represents a timestamp file name. Port of
 // isTimestamp(String).
-func ASiCUtilsIsTimestamp(entryName string) bool {
+func UtilsIsTimestamp(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(entryName, ASiCUtilsTimestampFilename) &&
 		strings.HasSuffix(entryName, ASiCUtilsTSTExtension)
 }
 
-// ASiCUtilsIsEvidenceRecord verifies if the entryName represents an evidence record filename. Port
+// UtilsIsEvidenceRecord verifies if the entryName represents an evidence record filename. Port
 // of isEvidenceRecord(String).
-func ASiCUtilsIsEvidenceRecord(entryName string) bool {
+func UtilsIsEvidenceRecord(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(entryName, ASiCUtilsEvidenceRecordFilename) &&
 		(strings.HasSuffix(entryName, ASiCUtilsXMLExtension) || strings.HasSuffix(entryName, ASiCUtilsERASN1Extension))
 }
 
-// ASiCUtilsIsXmlEvidenceRecord verifies if the entryName represents an XMLERS evidence record
+// UtilsIsXmlEvidenceRecord verifies if the entryName represents an XMLERS evidence record
 // filename. Port of isXmlEvidenceRecord(String).
-func ASiCUtilsIsXmlEvidenceRecord(entryName string) bool {
+func UtilsIsXmlEvidenceRecord(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(entryName, ASiCUtilsEvidenceRecordFilename) &&
 		strings.HasSuffix(entryName, ASiCUtilsXMLExtension)
 }
 
-// ASiCUtilsIsAsn1EvidenceRecord verifies if the entryName represents an ERS ASN.1 evidence record
+// UtilsIsAsn1EvidenceRecord verifies if the entryName represents an ERS ASN.1 evidence record
 // filename. Port of isAsn1EvidenceRecord(String).
-func ASiCUtilsIsAsn1EvidenceRecord(entryName string) bool {
+func UtilsIsAsn1EvidenceRecord(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(entryName, ASiCUtilsEvidenceRecordFilename) &&
 		strings.HasSuffix(entryName, ASiCUtilsERASN1Extension)
 }
 
 // ASiCUtilsMimeTypeString returns the target MimeType string. Port of
-// getMimeTypeString(ASiCParameters).
-func ASiCUtilsMimeTypeString(asicParameters *ASiCParameters) string {
-	mimeType := ASiCUtilsMimeTypeFromParameters(asicParameters)
+// getMimeTypeString(Parameters).
+func UtilsMimeTypeString(asicParameters *Parameters) string {
+	mimeType := UtilsMimeTypeFromParameters(asicParameters)
 	return mimeType.MimeTypeString()
 }
 
-// ASiCUtilsZipCommentFromParameters returns a ZIP Comment String according to the given
+// UtilsZipCommentFromParameters returns a ZIP Comment String according to the given
 // parameters. Port of getZipComment(ASiCParameters).
-func ASiCUtilsZipCommentFromParameters(asicParameters *ASiCParameters) string {
+func UtilsZipCommentFromParameters(asicParameters *Parameters) string {
 	if asicParameters.IsZipComment() {
-		return ASiCUtilsZipCommentFromMimeTypeString(ASiCUtilsMimeTypeString(asicParameters))
+		return UtilsZipCommentFromMimeTypeString(UtilsMimeTypeString(asicParameters))
 	}
 	return utils.EmptyString
 }
 
 // ASiCUtilsZipCommentFromMimeType returns a ZIP Comment String from the provided MimeType. Port of
 // getZipComment(MimeType).
-func ASiCUtilsZipCommentFromMimeType(mimeType enumerations.MimeType) string {
-	return ASiCUtilsZipCommentFromMimeTypeString(mimeType.MimeTypeString())
+func UtilsZipCommentFromMimeType(mimeType enumerations.MimeType) string {
+	return UtilsZipCommentFromMimeTypeString(mimeType.MimeTypeString())
 }
 
-// ASiCUtilsZipCommentFromMimeTypeString returns a ZIP Comment String from the provided
+// UtilsZipCommentFromMimeTypeString returns a ZIP Comment String from the provided
 // mimeTypeString. Port of getZipComment(String).
-func ASiCUtilsZipCommentFromMimeTypeString(mimeTypeString string) string {
+func UtilsZipCommentFromMimeTypeString(mimeTypeString string) string {
 	return ASiCUtilsMimeTypeComment + mimeTypeString
 }
 
 // ASiCUtilsIsASiCMimeType checks if the given MimeType is ASiC MimeType. Port of
 // isASiCMimeType(MimeType).
-func ASiCUtilsIsASiCMimeType(mimeType enumerations.MimeType) bool {
+func UtilsIsASiCMimeType(mimeType enumerations.MimeType) bool {
 	return mimeType == enumerations.MimeTypeEnumASiCS ||
 		mimeType == enumerations.MimeTypeEnumASiCE
 }
 
 // ASiCUtilsIsOpenDocumentMimeType checks if the given MimeType is OpenDocument MimeType. Port of
 // isOpenDocumentMimeType(MimeType).
-func ASiCUtilsIsOpenDocumentMimeType(mimeType enumerations.MimeType) bool {
+func UtilsIsOpenDocumentMimeType(mimeType enumerations.MimeType) bool {
 	return mimeType == enumerations.MimeTypeEnumODT ||
 		mimeType == enumerations.MimeTypeEnumODS ||
 		mimeType == enumerations.MimeTypeEnumODG ||
 		mimeType == enumerations.MimeTypeEnumODP
 }
 
-// ASiCUtilsASiCContainerType returns the related ASiCContainerType for the given asicMimeType.
+// UtilsASiCContainerType returns the related ASiCContainerType for the given asicMimeType.
 //
 // Panics with the Java message when asicMimeType is nil (Objects.requireNonNull); returns an error
 // for a mimetype that is neither ASiC nor OpenDocument (IllegalArgumentException).
 //
 // Port of getASiCContainerType(MimeType).
-func ASiCUtilsASiCContainerType(asicMimeType enumerations.MimeType) (enumerations.ASiCContainerType, error) {
+func UtilsASiCContainerType(asicMimeType enumerations.MimeType) (enumerations.ASiCContainerType, error) {
 	if asicMimeType == nil {
 		panic("MimeType cannot be null!")
 	}
 	if asicMimeType == enumerations.MimeTypeEnumASiCS {
 		return enumerations.ASiCContainerTypeASiCS, nil
-	} else if asicMimeType == enumerations.MimeTypeEnumASiCE || ASiCUtilsIsOpenDocumentMimeType(asicMimeType) {
+	} else if asicMimeType == enumerations.MimeTypeEnumASiCE || UtilsIsOpenDocumentMimeType(asicMimeType) {
 		return enumerations.ASiCContainerTypeASiCE, nil
 	}
 	return "", fmt.Errorf("Not allowed mimetype '%s'", asicMimeType.MimeTypeString())
 }
 
-// ASiCUtilsIsASiCE checks if the parameters are configured for ASiCE creation.
+// UtilsIsASiCE checks if the parameters are configured for ASiCE creation.
 //
 // Panics with the Java message when the container type is not set (Objects.requireNonNull).
 //
 // Port of isASiCE(ASiCParameters).
-func ASiCUtilsIsASiCE(asicParameters *ASiCParameters) bool {
+func UtilsIsASiCE(asicParameters *Parameters) bool {
 	if asicParameters.ContainerType() == "" {
 		panic("ASiCContainerType must be defined!")
 	}
 	return enumerations.ASiCContainerTypeASiCE == asicParameters.ContainerType()
 }
 
-// ASiCUtilsIsASiCS checks if the parameters are configured for ASiCS creation.
+// UtilsIsASiCS checks if the parameters are configured for ASiCS creation.
 //
 // Panics with the Java message when the container type is not set (Objects.requireNonNull).
 //
 // Port of isASiCS(ASiCParameters).
-func ASiCUtilsIsASiCS(asicParameters *ASiCParameters) bool {
+func UtilsIsASiCS(asicParameters *Parameters) bool {
 	if asicParameters.ContainerType() == "" {
 		panic("ASiCContainerType must be defined!")
 	}
@@ -280,20 +280,20 @@ func ASiCUtilsIsASiCS(asicParameters *ASiCParameters) bool {
 }
 
 // ASiCUtilsMimeTypeFromParameters returns a relevant MimeType for the provided parameters. Port of
-// getMimeType(ASiCParameters).
-func ASiCUtilsMimeTypeFromParameters(asicParameters *ASiCParameters) enumerations.MimeType {
+// getMimeType(Parameters).
+func UtilsMimeTypeFromParameters(asicParameters *Parameters) enumerations.MimeType {
 	if utils.IsStringNotBlank(asicParameters.MimeType()) {
 		return enumerations.MimeTypeFromMimeTypeString(asicParameters.MimeType())
 	}
-	if ASiCUtilsIsASiCE(asicParameters) {
+	if UtilsIsASiCE(asicParameters) {
 		return enumerations.MimeTypeEnumASiCE
 	}
 	return enumerations.MimeTypeEnumASiCS
 }
 
-// ASiCUtilsFilesContainMetaInfFolder checks if the list of filenames contains a document within
+// UtilsFilesContainMetaInfFolder checks if the list of filenames contains a document within
 // the /META-INF folder. Port of filesContainMetaInfFolder(List).
-func ASiCUtilsFilesContainMetaInfFolder(filenames []string) bool {
+func UtilsFilesContainMetaInfFolder(filenames []string) bool {
 	for _, filename := range filenames {
 		if strings.HasPrefix(filename, ASiCUtilsMetaInfFolder) {
 			return true
@@ -302,12 +302,12 @@ func ASiCUtilsFilesContainMetaInfFolder(filenames []string) bool {
 	return false
 }
 
-// ASiCUtilsFilesContainCorrectSignatureFileWithExtension checks if the list of filenames contains
+// UtilsFilesContainCorrectSignatureFileWithExtension checks if the list of filenames contains
 // a signature with the expected extension. Port of
 // filesContainCorrectSignatureFileWithExtension(List, String).
-func ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames []string, extension string) bool {
+func UtilsFilesContainCorrectSignatureFileWithExtension(filenames []string, extension string) bool {
 	for _, filename := range filenames {
-		if ASiCUtilsIsSignature(filename) && strings.HasSuffix(filename, extension) {
+		if UtilsIsSignature(filename) && strings.HasSuffix(filename, extension) {
 			return true
 		}
 	}
@@ -316,9 +316,9 @@ func ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames []string, 
 
 // ASiCUtilsFilesContainSignatures checks if the list of filenames contains a signature(s). Port of
 // filesContainSignatures(List).
-func ASiCUtilsFilesContainSignatures(filenames []string) bool {
+func UtilsFilesContainSignatures(filenames []string) bool {
 	for _, filename := range filenames {
-		if ASiCUtilsIsSignature(filename) {
+		if UtilsIsSignature(filename) {
 			return true
 		}
 	}
@@ -327,37 +327,37 @@ func ASiCUtilsFilesContainSignatures(filenames []string) bool {
 
 // ASiCUtilsFilesContainTimestamps checks if the list of filenames contains a timestamp. Port of
 // filesContainTimestamps(List).
-func ASiCUtilsFilesContainTimestamps(filenames []string) bool {
+func UtilsFilesContainTimestamps(filenames []string) bool {
 	for _, filename := range filenames {
-		if ASiCUtilsIsTimestamp(filename) {
+		if UtilsIsTimestamp(filename) {
 			return true
 		}
 	}
 	return false
 }
 
-// ASiCUtilsFilesContainEvidenceRecords checks if the list of filenames contains an evidence
+// UtilsFilesContainEvidenceRecords checks if the list of filenames contains an evidence
 // record. Port of filesContainEvidenceRecords(List).
-func ASiCUtilsFilesContainEvidenceRecords(filenames []string) bool {
+func UtilsFilesContainEvidenceRecords(filenames []string) bool {
 	for _, filename := range filenames {
-		if ASiCUtilsIsEvidenceRecord(filename) {
+		if UtilsIsEvidenceRecord(filename) {
 			return true
 		}
 	}
 	return false
 }
 
-// ASiCUtilsIsAsicFileContent checks if the list of filenames represents an ASiC container content.
+// UtilsIsAsicFileContent checks if the list of filenames represents an ASiC container content.
 // Port of isAsicFileContent(List).
-func ASiCUtilsIsAsicFileContent(filenames []string) bool {
-	return ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsCAdESSignatureExtension) ||
-		ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsXMLExtension) ||
-		ASiCUtilsFilesContainTimestamps(filenames) ||
-		ASiCUtilsFilesContainEvidenceRecords(filenames)
+func UtilsIsAsicFileContent(filenames []string) bool {
+	return UtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsCAdESSignatureExtension) ||
+		UtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsXMLExtension) ||
+		UtilsFilesContainTimestamps(filenames) ||
+		UtilsFilesContainEvidenceRecords(filenames)
 }
 
 // ASiCUtilsIsZip checks if the document is a ZIP container. Port of isZip(DSSDocument).
-func ASiCUtilsIsZip(doc model.DSSDocument) (bool, error) {
+func UtilsIsZip(doc model.DSSDocument) (bool, error) {
 	if doc == nil {
 		return false, nil
 	}
@@ -371,7 +371,7 @@ func ASiCUtilsIsZip(doc model.DSSDocument) (bool, error) {
 			doc.Name(), err.Error()), err)
 	}
 	defer is.Close()
-	result, err := ASiCUtilsIsZipStream(is)
+	result, err := UtilsIsZipStream(is)
 	if err != nil {
 		return false, model.NewDSSErrorMessageCause(fmt.Sprintf(
 			"Unable to determine whether the document with name '%s' represents a ZIP container. Reason : %s",
@@ -380,12 +380,12 @@ func ASiCUtilsIsZip(doc model.DSSDocument) (bool, error) {
 	return result, nil
 }
 
-// ASiCUtilsIsZipStream checks if the given stream contains a ZIP container.
+// UtilsIsZipStream checks if the given stream contains a ZIP container.
 //
 // Panics with the Java message when is is nil (Objects.requireNonNull).
 //
 // Port of isZip(InputStream).
-func ASiCUtilsIsZipStream(is io.Reader) (bool, error) {
+func UtilsIsZipStream(is io.Reader) (bool, error) {
 	if is == nil {
 		panic("InputStream cannot be null!")
 	}
@@ -398,8 +398,8 @@ func ASiCUtilsIsZipStream(is io.Reader) (bool, error) {
 
 // ASiCUtilsIsASiC verifies whether the given document represents an ASiC container. Port of
 // isASiC(DSSDocument).
-func ASiCUtilsIsASiC(doc model.DSSDocument) (bool, error) {
-	isZip, err := ASiCUtilsIsZip(doc)
+func UtilsIsASiC(doc model.DSSDocument) (bool, error) {
+	isZip, err := UtilsIsZip(doc)
 	if err != nil {
 		return false, err
 	}
@@ -408,45 +408,45 @@ func ASiCUtilsIsASiC(doc model.DSSDocument) (bool, error) {
 		if err != nil {
 			return false, err
 		}
-		return ASiCUtilsFilesContainMetaInfFolder(filenames), nil
+		return UtilsFilesContainMetaInfFolder(filenames), nil
 	}
 	return false, nil
 }
 
-// ASiCUtilsIsASiCWithXAdES checks if the extracted filenames represent an ASiC with XAdES content.
+// UtilsIsASiCWithXAdES checks if the extracted filenames represent an ASiC with XAdES content.
 //
 // Note: The method looks for format specific documents. It returns FALSE for shared document
 // formats between XAdES and CAdES (e.g. evidence records).
 //
 // Port of isASiCWithXAdES(List).
-func ASiCUtilsIsASiCWithXAdES(filenames []string) bool {
-	return ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsXMLExtension)
+func UtilsIsASiCWithXAdES(filenames []string) bool {
+	return UtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsXMLExtension)
 }
 
-// ASiCUtilsIsASiCWithCAdES checks if the extracted filenames represent an ASiC with CAdES content.
+// UtilsIsASiCWithCAdES checks if the extracted filenames represent an ASiC with CAdES content.
 //
 // Note: The method looks for format specific documents. It returns FALSE for shared document
 // formats between XAdES and CAdES (e.g. evidence records).
 //
 // Port of isASiCWithCAdES(List).
-func ASiCUtilsIsASiCWithCAdES(filenames []string) bool {
-	return ASiCUtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsCAdESSignatureExtension) ||
-		ASiCUtilsFilesContainTimestamps(filenames)
+func UtilsIsASiCWithCAdES(filenames []string) bool {
+	return UtilsFilesContainCorrectSignatureFileWithExtension(filenames, ASiCUtilsCAdESSignatureExtension) ||
+		UtilsFilesContainTimestamps(filenames)
 }
 
 // ASiCUtilsIsXAdES checks if the entryName is a relevant XAdES signature. Port of isXAdES(String).
-func ASiCUtilsIsXAdES(entryName string) bool {
-	return ASiCUtilsIsSignature(entryName) && strings.HasSuffix(entryName, ASiCUtilsXMLExtension)
+func UtilsIsXAdES(entryName string) bool {
+	return UtilsIsSignature(entryName) && strings.HasSuffix(entryName, ASiCUtilsXMLExtension)
 }
 
 // ASiCUtilsIsCAdES checks if the entryName is a relevant CAdES signature. Port of isCAdES(String).
-func ASiCUtilsIsCAdES(entryName string) bool {
-	return ASiCUtilsIsSignature(entryName) && strings.HasSuffix(entryName, ASiCUtilsCAdESSignatureExtension)
+func UtilsIsCAdES(entryName string) bool {
+	return UtilsIsSignature(entryName) && strings.HasSuffix(entryName, ASiCUtilsCAdESSignatureExtension)
 }
 
 // ASiCUtilsIsContainerOpenDocument checks if the archive represents an OpenDocument. Port of
 // isContainerOpenDocument(DSSDocument).
-func ASiCUtilsIsContainerOpenDocument(archiveContainer model.DSSDocument) (bool, error) {
+func UtilsIsContainerOpenDocument(archiveContainer model.DSSDocument) (bool, error) {
 	mimetype, err := asicUtilsMimetypeDocument(archiveContainer)
 	if err != nil {
 		return false, err
@@ -454,7 +454,7 @@ func ASiCUtilsIsContainerOpenDocument(archiveContainer model.DSSDocument) (bool,
 	if mimetype == nil {
 		return false, nil
 	}
-	return ASiCUtilsIsOpenDocument(mimetype)
+	return UtilsIsOpenDocument(mimetype)
 }
 
 // asicUtilsMimetypeDocument is the port of the private getMimetypeDocument(DSSDocument).
@@ -464,34 +464,34 @@ func asicUtilsMimetypeDocument(archiveDocument model.DSSDocument) (model.DSSDocu
 		return nil, err
 	}
 	for _, doc := range documents {
-		if ASiCUtilsIsMimetype(doc.Name()) {
+		if UtilsIsMimetype(doc.Name()) {
 			return doc, nil
 		}
 	}
 	return nil, nil
 }
 
-// ASiCUtilsIsOpenDocument checks if the mimeType document defines an OpenDocument.
+// UtilsIsOpenDocument checks if the mimeType document defines an OpenDocument.
 //
 // Port of isOpenDocument(DSSDocument). Note upstream's dead null-guard: getMimeType(mimeTypeDoc) is
 // evaluated before `if (mimeTypeDoc != null)`, so a null argument returns FALSE only because
 // getMimeType returns null for it - reproduced here.
-func ASiCUtilsIsOpenDocument(mimeTypeDoc model.DSSDocument) (bool, error) {
-	mimeType, err := ASiCUtilsMimeTypeFromDocument(mimeTypeDoc)
+func UtilsIsOpenDocument(mimeTypeDoc model.DSSDocument) (bool, error) {
+	mimeType, err := UtilsMimeTypeFromDocument(mimeTypeDoc)
 	if err != nil {
 		return false, err
 	}
 	if mimeTypeDoc != nil {
-		return ASiCUtilsIsOpenDocumentMimeType(mimeType), nil
+		return UtilsIsOpenDocumentMimeType(mimeType), nil
 	}
 	return false, nil
 }
 
-// ASiCUtilsAreFilesContainMimetype checks if the list of filenames contains a mimetype file. Port
+// UtilsAreFilesContainMimetype checks if the list of filenames contains a mimetype file. Port
 // of areFilesContainMimetype(List).
-func ASiCUtilsAreFilesContainMimetype(filenames []string) bool {
+func UtilsAreFilesContainMimetype(filenames []string) bool {
 	for _, filename := range filenames {
-		if ASiCUtilsIsMimetype(filename) {
+		if UtilsIsMimetype(filename) {
 			return true
 		}
 	}
@@ -499,13 +499,13 @@ func ASiCUtilsAreFilesContainMimetype(filenames []string) bool {
 }
 
 // ASiCUtilsIsMimetype checks if the given name is a "mimetype". Port of isMimetype(String).
-func ASiCUtilsIsMimetype(entryName string) bool {
+func UtilsIsMimetype(entryName string) bool {
 	return ASiCUtilsMimeType == entryName
 }
 
 // ASiCUtilsMimeTypeFromDocument extracts and returns the MimeType from the document. Port of
 // getMimeType(DSSDocument).
-func ASiCUtilsMimeTypeFromDocument(mimeTypeDocument model.DSSDocument) (enumerations.MimeType, error) {
+func UtilsMimeTypeFromDocument(mimeTypeDocument model.DSSDocument) (enumerations.MimeType, error) {
 	if mimeTypeDocument == nil {
 		return nil, nil
 	}
@@ -526,8 +526,8 @@ func ASiCUtilsMimeTypeFromDocument(mimeTypeDocument model.DSSDocument) (enumerat
 
 // ASiCUtilsIsASiCSContainer verifies whether the given container is of ASiC-S format type. Port of
 // isASiCSContainer(DSSDocument).
-func ASiCUtilsIsASiCSContainer(container model.DSSDocument) (bool, error) {
-	containerType, err := ASiCUtilsContainerType(container)
+func UtilsIsASiCSContainer(container model.DSSDocument) (bool, error) {
+	containerType, err := UtilsContainerType(container)
 	if err != nil {
 		return false, err
 	}
@@ -536,20 +536,20 @@ func ASiCUtilsIsASiCSContainer(container model.DSSDocument) (bool, error) {
 
 // ASiCUtilsIsASiCEContainer verifies whether the given container is of ASiC-E format type. Port of
 // isASiCEContainer(DSSDocument).
-func ASiCUtilsIsASiCEContainer(container model.DSSDocument) (bool, error) {
-	containerType, err := ASiCUtilsContainerType(container)
+func UtilsIsASiCEContainer(container model.DSSDocument) (bool, error) {
+	containerType, err := UtilsContainerType(container)
 	if err != nil {
 		return false, err
 	}
 	return enumerations.ASiCContainerTypeASiCE == containerType, nil
 }
 
-// ASiCUtilsContainerType verifies the type of the provided container document.
+// UtilsContainerType verifies the type of the provided container document.
 //
 // Panics with the Java message when archiveContainer is nil (Objects.requireNonNull).
 //
 // Port of getContainerType(DSSDocument).
-func ASiCUtilsContainerType(archiveContainer model.DSSDocument) (enumerations.ASiCContainerType, error) {
+func UtilsContainerType(archiveContainer model.DSSDocument) (enumerations.ASiCContainerType, error) {
 	if archiveContainer == nil {
 		panic("Archive container shall be provided!")
 	}
@@ -560,13 +560,13 @@ func ASiCUtilsContainerType(archiveContainer model.DSSDocument) (enumerations.AS
 	}
 
 	var mimetypeDocument model.DSSDocument
-	if ASiCUtilsAreFilesContainMimetype(entryNames) {
+	if UtilsAreFilesContainMimetype(entryNames) {
 		mimetypeDocument, err = asicUtilsMimetypeDocument(archiveContainer)
 		if err != nil {
 			return "", err
 		}
 	}
-	zipComment, err := ASiCUtilsZipCommentFromArchiveContainer(archiveContainer)
+	zipComment, err := UtilsZipCommentFromArchiveContainer(archiveContainer)
 	if err != nil {
 		return "", err
 	}
@@ -575,32 +575,32 @@ func ASiCUtilsContainerType(archiveContainer model.DSSDocument) (enumerations.AS
 	return asicUtilsContainerType(archiveContainer.MimeType(), mimetypeDocument, zipComment, signedDocumentsNumber)
 }
 
-// ASiCUtilsIsASiCSContainerContent verifies whether the given ASiCContent is of ASiC-S format type.
+// UtilsIsASiCSContainerContent verifies whether the given Content is of ASiC-S format type.
 // Port of isASiCSContainer(ASiCContent).
-func ASiCUtilsIsASiCSContainerContent(asicContent *ASiCContent) (bool, error) {
-	containerType, err := ASiCUtilsContainerTypeOfContent(asicContent)
+func UtilsIsASiCSContainerContent(asicContent *Content) (bool, error) {
+	containerType, err := UtilsContainerTypeOfContent(asicContent)
 	if err != nil {
 		return false, err
 	}
 	return enumerations.ASiCContainerTypeASiCS == containerType, nil
 }
 
-// ASiCUtilsIsASiCEContainerContent verifies whether the given ASiCContent is of ASiC-E format type.
+// UtilsIsASiCEContainerContent verifies whether the given Content is of ASiC-E format type.
 // Port of isASiCEContainer(ASiCContent).
-func ASiCUtilsIsASiCEContainerContent(asicContent *ASiCContent) (bool, error) {
-	containerType, err := ASiCUtilsContainerTypeOfContent(asicContent)
+func UtilsIsASiCEContainerContent(asicContent *Content) (bool, error) {
+	containerType, err := UtilsContainerTypeOfContent(asicContent)
 	if err != nil {
 		return false, err
 	}
 	return enumerations.ASiCContainerTypeASiCE == containerType, nil
 }
 
-// ASiCUtilsContainerTypeOfContent returns the container type.
+// UtilsContainerTypeOfContent returns the container type.
 //
 // Panics with the Java message when asicContent is nil (Objects.requireNonNull).
 //
 // Port of getContainerType(ASiCContent).
-func ASiCUtilsContainerTypeOfContent(asicContent *ASiCContent) (enumerations.ASiCContainerType, error) {
+func UtilsContainerTypeOfContent(asicContent *Content) (enumerations.ASiCContainerType, error) {
 	if asicContent == nil {
 		panic("ASiCContent shall be provided!")
 	}
@@ -621,7 +621,7 @@ func ASiCUtilsContainerTypeOfContent(asicContent *ASiCContent) (enumerations.ASi
 func asicUtilsNumberOfSignedRootDocuments(containerEntryNames []string) int {
 	signedDocumentCounter := 0
 	for _, documentName := range containerEntryNames {
-		if !strings.Contains(documentName, "/") && !ASiCUtilsIsMimetype(documentName) {
+		if !strings.Contains(documentName, "/") && !UtilsIsMimetype(documentName) {
 			signedDocumentCounter++
 		}
 	}
@@ -688,7 +688,7 @@ func asicUtilsContainerTypeFromZipComment(zipComment string) (enumerations.ASiCC
 // getContainerTypeFromMimeTypeDocument(DSSDocument).
 func asicUtilsContainerTypeFromMimeTypeDocument(mimetype model.DSSDocument) (enumerations.ASiCContainerType, error) {
 	if mimetype != nil {
-		mimeTypeFromEmbeddedFile, err := ASiCUtilsMimeTypeFromDocument(mimetype)
+		mimeTypeFromEmbeddedFile, err := UtilsMimeTypeFromDocument(mimetype)
 		if err != nil {
 			return "", err
 		}
@@ -700,31 +700,31 @@ func asicUtilsContainerTypeFromMimeTypeDocument(mimetype model.DSSDocument) (enu
 // asicUtilsContainerTypeFromMimeType is the port of the private
 // getContainerTypeFromMimeType(MimeType).
 func asicUtilsContainerTypeFromMimeType(mimeType enumerations.MimeType) (enumerations.ASiCContainerType, error) {
-	if ASiCUtilsIsASiCMimeType(mimeType) {
-		return ASiCUtilsASiCContainerType(mimeType)
+	if UtilsIsASiCMimeType(mimeType) {
+		return UtilsASiCContainerType(mimeType)
 	}
 	return "", nil
 }
 
 // ASiCUtilsIsManifest checks if the fileName matches a Manifest name standard. Port of
 // isManifest(String).
-func ASiCUtilsIsManifest(fileName string) bool {
+func UtilsIsManifest(fileName string) bool {
 	return strings.HasPrefix(fileName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(fileName, ASiCUtilsASiCManifestFilename) &&
 		strings.HasSuffix(fileName, ASiCUtilsXMLExtension)
 }
 
-// ASiCUtilsIsArchiveManifest checks if the fileName matches an Archive Manifest name standard. Port
+// UtilsIsArchiveManifest checks if the fileName matches an Archive Manifest name standard. Port
 // of isArchiveManifest(String).
-func ASiCUtilsIsArchiveManifest(fileName string) bool {
+func UtilsIsArchiveManifest(fileName string) bool {
 	return strings.HasPrefix(fileName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(fileName, ASiCUtilsASiCArchiveManifestFilename) &&
 		strings.HasSuffix(fileName, ASiCUtilsXMLExtension)
 }
 
-// ASiCUtilsIsEvidenceRecordManifest checks if the fileName matches an Evidence Record Manifest name
+// UtilsIsEvidenceRecordManifest checks if the fileName matches an Evidence Record Manifest name
 // standard. Port of isEvidenceRecordManifest(String).
-func ASiCUtilsIsEvidenceRecordManifest(fileName string) bool {
+func UtilsIsEvidenceRecordManifest(fileName string) bool {
 	return strings.HasPrefix(fileName, ASiCUtilsMetaInfFolder) &&
 		strings.Contains(fileName, ASiCUtilsASiCEvidenceRecordManifestFilename) &&
 		strings.HasSuffix(fileName, ASiCUtilsXMLExtension)
@@ -732,16 +732,16 @@ func ASiCUtilsIsEvidenceRecordManifest(fileName string) bool {
 
 // ASiCUtilsCoversSignature checks if the manifestFile covers a signature. Port of
 // coversSignature(ManifestFile).
-func ASiCUtilsCoversSignature(manifestFile *model.ManifestFile) bool {
+func UtilsCoversSignature(manifestFile *model.ManifestFile) bool {
 	for _, manifestEntry := range manifestFile.Entries() {
-		if ASiCUtilsIsSignature(manifestEntry.Uri()) {
+		if UtilsIsSignature(manifestEntry.Uri()) {
 			return true
 		}
 	}
 	return false
 }
 
-// ASiCUtilsAddOrReplaceDocument searches for a document in documentList with the name of
+// UtilsAddOrReplaceDocument searches for a document in documentList with the name of
 // newDocument and replaces the found entry with the updated version, or adds the document to the
 // given list if no such entry has been found.
 //
@@ -749,7 +749,7 @@ func ASiCUtilsCoversSignature(manifestFile *model.ManifestFile) bool {
 // list is returned and callers assign it back (see the mutation idiom note in asic_content.go).
 //
 // Port of addOrReplaceDocument(List, DSSDocument).
-func ASiCUtilsAddOrReplaceDocument(documentList []model.DSSDocument, newDocument model.DSSDocument) []model.DSSDocument {
+func UtilsAddOrReplaceDocument(documentList []model.DSSDocument, newDocument model.DSSDocument) []model.DSSDocument {
 	for i := 0; i < len(documentList); i++ {
 		if newDocument.Name() == documentList[i].Name() {
 			documentList[i] = newDocument
@@ -759,11 +759,11 @@ func ASiCUtilsAddOrReplaceDocument(documentList []model.DSSDocument, newDocument
 	return append(documentList, newDocument)
 }
 
-// ASiCUtilsEnsureMimeTypeAndZipComment ensures the mimetype file and zip-comment are present within
-// the given ASiCContent. If the entry is not defined, a new value is created from ASiCParameters.
+// UtilsEnsureMimeTypeAndZipComment ensures the mimetype file and zip-comment are present within
+// the given Content. If the entry is not defined, a new value is created from Parameters.
 //
 // Port of ensureMimeTypeAndZipComment(ASiCContent, ASiCParameters).
-func ASiCUtilsEnsureMimeTypeAndZipComment(asicContent *ASiCContent, asicParameters *ASiCParameters) (*ASiCContent, error) {
+func UtilsEnsureMimeTypeAndZipComment(asicContent *Content, asicParameters *Parameters) (*Content, error) {
 	if asicContent.MimeTypeDocument() == nil {
 		mimeType, err := asicUtilsMimeTypeFromContent(asicContent, asicParameters)
 		if err != nil {
@@ -780,13 +780,13 @@ func ASiCUtilsEnsureMimeTypeAndZipComment(asicContent *ASiCContent, asicParamete
 }
 
 // asicUtilsMimeTypeFromContent is the port of the private getMimeType(ASiCContent, ASiCParameters).
-func asicUtilsMimeTypeFromContent(asicContent *ASiCContent, asicParameters *ASiCParameters) (enumerations.MimeType, error) {
+func asicUtilsMimeTypeFromContent(asicContent *Content, asicParameters *Parameters) (enumerations.MimeType, error) {
 	var mimeType enumerations.MimeType
 	mimeTypeDocument := asicContent.MimeTypeDocument()
 	if mimeTypeDocument != nil {
 		// re-use the same mime-type when extending a container
 		var err error
-		mimeType, err = ASiCUtilsMimeTypeFromDocument(mimeTypeDocument)
+		mimeType, err = UtilsMimeTypeFromDocument(mimeTypeDocument)
 		if err != nil {
 			return nil, err
 		}
@@ -795,19 +795,19 @@ func asicUtilsMimeTypeFromContent(asicContent *ASiCContent, asicParameters *ASiC
 		if asicParameters == nil {
 			panic("ASiCParameters shall be present for the requested operation!")
 		}
-		mimeType = ASiCUtilsMimeTypeFromParameters(asicParameters)
+		mimeType = UtilsMimeTypeFromParameters(asicParameters)
 	}
 	return mimeType, nil
 }
 
 // asicUtilsZipCommentFromContent is the port of the private getZipComment(ASiCContent,
-// ASiCParameters).
-func asicUtilsZipCommentFromContent(asicContent *ASiCContent, asicParameters *ASiCParameters) string {
+// Parameters).
+func asicUtilsZipCommentFromContent(asicContent *Content, asicParameters *Parameters) string {
 	zipComment := asicContent.ZipComment()
 	if utils.IsStringNotEmpty(zipComment) {
 		return zipComment
 	} else if asicParameters != nil {
-		return ASiCUtilsZipCommentFromParameters(asicParameters)
+		return UtilsZipCommentFromParameters(asicParameters)
 	}
 	return utils.EmptyString
 }
@@ -821,21 +821,21 @@ func asicUtilsCreateMimetypeDocument(mimeType enumerations.MimeType) model.DSSDo
 	return zipEntryDocument
 }
 
-// ASiCUtilsRootLevelSignedDocuments retrieves signed documents from a root level of the container
+// UtilsRootLevelSignedDocuments retrieves signed documents from a root level of the container
 // (used for ASiC-E container). Port of getRootLevelSignedDocuments(ASiCContent).
-func ASiCUtilsRootLevelSignedDocuments(asicContent *ASiCContent) []model.DSSDocument {
+func UtilsRootLevelSignedDocuments(asicContent *Content) []model.DSSDocument {
 	signedDocuments := asicContent.SignedDocuments()
 	if utils.IsCollectionEmpty(signedDocuments) {
 		return []model.DSSDocument{}
 	} else if utils.CollectionSize(signedDocuments) == 1 {
 		return signedDocuments
 	}
-	return ASiCUtilsRootLevelDocuments(signedDocuments)
+	return UtilsRootLevelDocuments(signedDocuments)
 }
 
-// ASiCUtilsRootLevelDocuments returns root-level documents across the provided list of documents.
+// UtilsRootLevelDocuments returns root-level documents across the provided list of documents.
 // Port of getRootLevelDocuments(List).
-func ASiCUtilsRootLevelDocuments(documents []model.DSSDocument) []model.DSSDocument {
+func UtilsRootLevelDocuments(documents []model.DSSDocument) []model.DSSDocument {
 	rootDocuments := make([]model.DSSDocument, 0)
 	for _, doc := range documents {
 		documentName := doc.Name()
@@ -846,12 +846,12 @@ func ASiCUtilsRootLevelDocuments(documents []model.DSSDocument) []model.DSSDocum
 	return rootDocuments
 }
 
-// ASiCUtilsZipCommentFromArchiveContainer returns a zip comment from the ASiC container, or "" when
+// UtilsZipCommentFromArchiveContainer returns a zip comment from the ASiC container, or "" when
 // the archive carries none (Java null).
 //
 // Port of getZipComment(DSSDocument), byte-scan and all - including its signed-byte commentLen
 // arithmetic, whose only consequence upstream is a log line this port drops.
-func ASiCUtilsZipCommentFromArchiveContainer(archiveContainer model.DSSDocument) (string, error) {
+func UtilsZipCommentFromArchiveContainer(archiveContainer model.DSSDocument) (string, error) {
 	fileLength, err := asicUtilsFileLength(archiveContainer)
 	if err != nil {
 		return "", err
@@ -931,13 +931,13 @@ func asicUtilsFileLength(archiveContainer model.DSSDocument) (int64, error) {
 	return size, nil
 }
 
-// ASiCUtilsToSimpleManifestEntries transforms a list of given documents to a list of "simple" (only
+// UtilsToSimpleManifestEntries transforms a list of given documents to a list of "simple" (only
 // basic information) manifest entries.
 //
 // Panics with the Java message when a document is nil (Objects.requireNonNull).
 //
 // Port of toSimpleManifestEntries(List).
-func ASiCUtilsToSimpleManifestEntries(documents []model.DSSDocument) []*model.ManifestEntry {
+func UtilsToSimpleManifestEntries(documents []model.DSSDocument) []*model.ManifestEntry {
 	entries := make([]*model.ManifestEntry, 0)
 	for _, doc := range documents {
 		if doc == nil {
@@ -953,12 +953,12 @@ func ASiCUtilsToSimpleManifestEntries(documents []model.DSSDocument) []*model.Ma
 	return entries
 }
 
-// ASiCUtilsIsCoveredByManifest checks if a document (e.g. a signature) with the given filename is
+// UtilsIsCoveredByManifest checks if a document (e.g. a signature) with the given filename is
 // covered by a manifest. Port of isCoveredByManifest(List, String).
-func ASiCUtilsIsCoveredByManifest(manifestDocuments []model.DSSDocument, filename string) bool {
+func UtilsIsCoveredByManifest(manifestDocuments []model.DSSDocument, filename string) bool {
 	if utils.IsCollectionNotEmpty(manifestDocuments) {
 		for _, archiveManifest := range manifestDocuments {
-			manifestFile := ASiCManifestParserGetManifestFile(archiveManifest)
+			manifestFile := ManifestParserGetManifestFile(archiveManifest)
 			if manifestFile != nil {
 				for _, entry := range manifestFile.Entries() {
 					if filename != "" && filename == entry.Uri() {

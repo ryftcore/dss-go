@@ -20,7 +20,7 @@ type EAARevocationSubjectMatchCheck struct {
 }
 
 // NewEAARevocationSubjectMatchCheck is the default constructor.
-func NewEAARevocationSubjectMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationSubjectMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, constraint policy.LevelRule) *EAARevocationSubjectMatchCheck {
 	c := &EAARevocationSubjectMatchCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

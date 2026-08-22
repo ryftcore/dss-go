@@ -27,7 +27,7 @@ func NewNonASN1SignaturePolicyValidator() *NonASN1SignaturePolicyValidator {
 }
 
 // CanValidate reports whether the policy content is neither ASN.1 nor XML.
-func (v *NonASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signature.SignaturePolicy) bool {
+func (v *NonASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signature.Policy) bool {
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent == nil {
 		return false
@@ -57,7 +57,7 @@ func nonASN1SignaturePolicyValidatorStartsWithXMLBOM(policyContent model.DSSDocu
 
 // Validate recomputes the digest of the policy content and compares it
 // against the declared digest.
-func (v *NonASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult {
+func (v *NonASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
 	validationResult := signature.NewSignaturePolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()

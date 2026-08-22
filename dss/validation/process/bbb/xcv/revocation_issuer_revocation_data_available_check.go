@@ -22,7 +22,7 @@ type RevocationIssuerRevocationDataAvailableCheck struct {
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' getMessageTag/getErrorMessageTag rather
 // than the ones inherited from RevocationDataAvailableCheck.
-func NewRevocationIssuerRevocationDataAvailableCheck(i18nProvider *i18n.I18nProvider,
+func NewRevocationIssuerRevocationDataAvailableCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlRAC], certificate *diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *RevocationIssuerRevocationDataAvailableCheck {
 	c := &RevocationIssuerRevocationDataAvailableCheck{

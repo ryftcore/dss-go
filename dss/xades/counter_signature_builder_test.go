@@ -27,10 +27,10 @@ import (
 // xadesCounterSignatureMasterDocument rebuilds the signature to be counter-signed, and checks it
 // is byte-identical to the one the oracle counter-signed.
 func xadesCounterSignatureMasterDocument(t *testing.T,
-	oracle xadesSignABuilderOracle) (model.DSSDocument, *XAdESSignatureParameters) {
+	oracle xadesSignABuilderOracle) (model.DSSDocument, *SignatureParameters) {
 	t.Helper()
 	masterParams := xadesSignABuilderEnvelopingParams(t)
-	builderRef, err := XAdESSignatureBuilderGetSignatureBuilder(masterParams,
+	builderRef, err := SignatureBuilderGetSignatureBuilder(masterParams,
 		xadesSignABuilderTextDocument(), xadesSignABuilderVerifier())
 	if err != nil {
 		t.Fatalf("building the master signature builder: %v", err)
@@ -50,7 +50,7 @@ func xadesCounterSignatureMasterDocument(t *testing.T,
 
 // xadesCounterSignatureParams mirrors SignABuilderOracle's counter-signature parameters.
 func xadesCounterSignatureParams(t *testing.T,
-	signatureIdToCounterSign string) *XAdESCounterSignatureParameters {
+	signatureIdToCounterSign string) *CounterSignatureParameters {
 	t.Helper()
 	params := NewXAdESCounterSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
@@ -121,7 +121,7 @@ func TestCounterSignatureBuilderAgainstJavaOracle(t *testing.T) {
 
 	// The counter signature itself: an enveloping signature over the canonicalized SignatureValue.
 	embeddedParams := xadesSignABuilderEnvelopingParams(t)
-	counterBuilderRef, err := XAdESSignatureBuilderGetSignatureBuilder(embeddedParams,
+	counterBuilderRef, err := SignatureBuilderGetSignatureBuilder(embeddedParams,
 		canonicalizedSignatureValue, xadesSignABuilderVerifier())
 	if err != nil {
 		t.Fatalf("building the counter-signature builder: %v", err)

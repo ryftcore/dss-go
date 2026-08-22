@@ -21,8 +21,8 @@ type EAACategoryForEAAPresenceCheck struct {
 }
 
 // NewEAACategoryForEAAPresenceCheck is the default constructor. Port of
-// EAACategoryForEAAPresenceCheck(I18nProvider, XmlValidationEAAQualificationProcess, EAAWrapper, LevelRule).
-func NewEAACategoryForEAAPresenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
+// EAACategoryForEAAPresenceCheck(Provider, XmlValidationEAAQualificationProcess, EAAWrapper, LevelRule).
+func NewEAACategoryForEAAPresenceCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
 	eaa *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAACategoryForEAAPresenceCheck {
 	c := &EAACategoryForEAAPresenceCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

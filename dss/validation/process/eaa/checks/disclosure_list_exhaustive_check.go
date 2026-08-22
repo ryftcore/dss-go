@@ -22,7 +22,7 @@ type DisclosureListExhaustiveCheck struct {
 }
 
 // NewDisclosureListExhaustiveCheck is the default constructor.
-func NewDisclosureListExhaustiveCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlFC],
+func NewDisclosureListExhaustiveCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlFC],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *DisclosureListExhaustiveCheck {
 	c := &DisclosureListExhaustiveCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

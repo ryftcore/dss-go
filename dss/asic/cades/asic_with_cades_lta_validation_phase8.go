@@ -1,4 +1,4 @@
-// Extracted from ASiCWithCAdESLevelBaselineLTA.extend(ASiCContent, DigestAlgorithm,
+// Extracted from ASiCWithCAdESLevelBaselineLTA.extend(Content, DigestAlgorithm,
 // DigestAlgorithm) (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
 // ASiCWithCAdESLevelBaselineLTA.java, DSS 6.5.RC1).
 //
@@ -14,8 +14,8 @@ import (
 // extendLastArchiveTimestampWithValidationData re-validates the container's signatures and
 // detached timestamps, gathers the resulting validation data, and returns a new version of
 // lastTimestamp extended (via CMS) with that data. Ports the analyzer-dependent portion of the
-// private extend(ASiCContent, DigestAlgorithm, DigestAlgorithm).
-func (e *ASiCWithCAdESLevelBaselineLTA) extendLastArchiveTimestampWithValidationData(asicContent *asic.ASiCContent, lastTimestamp model.DSSDocument) model.DSSDocument {
+// private extend(Content, DigestAlgorithm, DigestAlgorithm).
+func (e *ASiCWithCAdESLevelBaselineLTA) extendLastArchiveTimestampWithValidationData(asicContent *asic.Content, lastTimestamp model.DSSDocument) model.DSSDocument {
 	containerValidator := NewASiCContainerWithCAdESAnalyzerFromContent(asicContent)
 	containerValidator.SetCertificateVerifier(e.CertificateVerifier)
 	containerValidator.SetValidationContextExecutor(executor.CompleteValidationContextExecutorInstance)

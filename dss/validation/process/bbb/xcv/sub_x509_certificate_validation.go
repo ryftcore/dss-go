@@ -41,8 +41,8 @@ type SubX509CertificateValidation struct {
 }
 
 // NewSubX509CertificateValidation is the default constructor. Port of
-// SubX509CertificateValidation(I18nProvider, CertificateWrapper, Date, Date, Context, SubContext, XmlAOV, ValidationPolicy).
-func NewSubX509CertificateValidation(i18nProvider *i18n.I18nProvider, currentCertificate *diagnostic.CertificateWrapper,
+// SubX509CertificateValidation(Provider, CertificateWrapper, Date, Date, Context, SubContext, XmlAOV, ValidationPolicy).
+func NewSubX509CertificateValidation(i18nProvider *i18n.Provider, currentCertificate *diagnostic.CertificateWrapper,
 	validationDate time.Time, currentTime time.Time, context enumerations.Context, subContext enumerations.SubContext,
 	aovResult *jaxb.XmlAOV, validationPolicy policy.ValidationPolicy) *SubX509CertificateValidation {
 	xmlSubXCV := &jaxb.XmlSubXCV{}

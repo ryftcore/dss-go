@@ -20,8 +20,8 @@ type BasicSignatureValidationProcess struct {
 }
 
 // NewBasicSignatureValidationProcess is the default constructor. Port of
-// BasicSignatureValidationProcess(I18nProvider, DiagnosticData, SignatureWrapper, List, Map).
-func NewBasicSignatureValidationProcess(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// BasicSignatureValidationProcess(Provider, Data, SignatureWrapper, List, Map).
+func NewBasicSignatureValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	signatureWrapper *diagnostic.SignatureWrapper, xmlTimestamps []*jaxb.XmlTimestamp,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks) *BasicSignatureValidationProcess {
 	xmlResult := &jaxb.XmlValidationProcessBasicSignature{}
@@ -44,7 +44,7 @@ func (c *BasicSignatureValidationProcess) Title() i18n.MessageTag {
 }
 
 // getCurrentTime ports the private getCurrentTime(DiagnosticData).
-func (c *BasicSignatureValidationProcess) getCurrentTime(diagnosticData *diagnostic.DiagnosticData) *jaxb.XmlProofOfExistence {
+func (c *BasicSignatureValidationProcess) getCurrentTime(diagnosticData *diagnostic.Data) *jaxb.XmlProofOfExistence {
 	proofOfExistence := &jaxb.XmlProofOfExistence{}
 	if validationDate := diagnosticData.ValidationDate(); validationDate != nil {
 		proofOfExistence.Time = jaxb.XSDateTime(*validationDate)

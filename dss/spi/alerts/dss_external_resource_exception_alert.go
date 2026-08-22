@@ -10,7 +10,7 @@ import (
 // the Status' error string. Port of the lambda passed to AbstractStatusAlert's constructor.
 type dssExternalResourceExceptionAlertHandler struct{}
 
-// Process implements alert.AlertHandler[alert.Status].
+// Process implements alert.Handler[alert.Status].
 func (dssExternalResourceExceptionAlertHandler) Process(object alert.Status) error {
 	return exception.NewDSSExternalResourceException(object.ErrorString())
 }

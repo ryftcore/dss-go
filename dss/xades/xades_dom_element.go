@@ -6,31 +6,31 @@ import (
 	"github.com/ryftcore/dss-go/dss/xades/definition"
 )
 
-// XAdESDOMElement represents a wrapper for an *xmldom.Node Element object for a XAdES signature.
-type XAdESDOMElement struct {
+// DOMElement represents a wrapper for an *xmldom.Node Element object for a XAdES signature.
+type DOMElement struct {
 	// ownerDocument is the owner document.
-	ownerDocument *XAdESDOMDocument
+	ownerDocument *DOMDocument
 
 	// element is the XML DOM element.
 	element *xmldom.Node
 }
 
 // NewXAdESDOMElement is the default constructor.
-func NewXAdESDOMElement(element *xmldom.Node, ownerDocument *XAdESDOMDocument) *XAdESDOMElement {
-	return &XAdESDOMElement{element: element, ownerDocument: ownerDocument}
+func NewXAdESDOMElement(element *xmldom.Node, ownerDocument *DOMDocument) *DOMElement {
+	return &DOMElement{element: element, ownerDocument: ownerDocument}
 }
 
 // Element gets the XML DOM Element. Ports getElement().
-func (e *XAdESDOMElement) Element() *xmldom.Node {
+func (e *DOMElement) Element() *xmldom.Node {
 	return e.element
 }
 
 // OwnerDocument gets the owner document. Ports getOwnerDocument().
-func (e *XAdESDOMElement) OwnerDocument() *XAdESDOMDocument {
+func (e *DOMElement) OwnerDocument() *DOMDocument {
 	return e.ownerDocument
 }
 
 // XAdESPathHolders gets a list of registered XAdES Path holders. Ports getXAdESPathHolders().
-func (e *XAdESDOMElement) XAdESPathHolders() []definition.XAdESPath {
+func (e *DOMElement) XAdESPathHolders() []definition.XAdESPath {
 	return e.ownerDocument.XAdESPathHolders()
 }

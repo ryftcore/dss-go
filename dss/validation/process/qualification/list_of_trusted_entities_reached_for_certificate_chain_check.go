@@ -22,8 +22,8 @@ type ListOfTrustedEntitiesReachedForCertificateChainCheck struct {
 
 // NewListOfTrustedEntitiesReachedForCertificateChainCheck is the default
 // constructor. Port of
-// ListOfTrustedEntitiesReachedForCertificateChainCheck(I18nProvider, XmlValidationPIDQualificationProcess, CertificateWrapper, LevelRule).
-func NewListOfTrustedEntitiesReachedForCertificateChainCheck(i18nProvider *i18n.I18nProvider,
+// ListOfTrustedEntitiesReachedForCertificateChainCheck(Provider, XmlValidationPIDQualificationProcess, CertificateWrapper, LevelRule).
+func NewListOfTrustedEntitiesReachedForCertificateChainCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationPIDQualificationProcess], signingCertificate *diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *ListOfTrustedEntitiesReachedForCertificateChainCheck {
 	c := &ListOfTrustedEntitiesReachedForCertificateChainCheck{

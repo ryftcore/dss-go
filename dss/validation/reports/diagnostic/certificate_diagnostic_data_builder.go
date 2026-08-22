@@ -11,15 +11,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// CertificateDiagnosticDataBuilder builds the DiagnosticData for a CertificateToken validation.
+// CertificateDiagnosticDataBuilder builds the Data for a CertificateToken validation.
 type CertificateDiagnosticDataBuilder struct {
-	DiagnosticDataBuilder
+	DataBuilder
 }
 
 // NewCertificateDiagnosticDataBuilder is the port of the default constructor.
 func NewCertificateDiagnosticDataBuilder() *CertificateDiagnosticDataBuilder {
 	b := &CertificateDiagnosticDataBuilder{
-		DiagnosticDataBuilder: *NewDiagnosticDataBuilder(),
+		DataBuilder: *NewDiagnosticDataBuilder(),
 	}
 	b.InitDiagnosticDataBuilder(b)
 	return b
@@ -27,7 +27,7 @@ func NewCertificateDiagnosticDataBuilder() *CertificateDiagnosticDataBuilder {
 
 // Build builds the XmlDiagnosticData. Port of the public @Override build().
 func (b *CertificateDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
-	diagnosticData := b.DiagnosticDataBuilder.Build()
+	diagnosticData := b.DataBuilder.Build()
 
 	diagnosticData.OrphanTokens = b.BuildXmlOrphanTokens()
 
@@ -37,28 +37,28 @@ func (b *CertificateDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 // UsedCertificates re-declares the fluent setter with the CertificateDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override usedCertificates(Set<CertificateToken>).
 func (b *CertificateDiagnosticDataBuilder) UsedCertificates(usedCertificates []*model.CertificateToken) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.UsedCertificates(usedCertificates)
+	b.DataBuilder.UsedCertificates(usedCertificates)
 	return b
 }
 
 // UsedRevocations re-declares the fluent setter with the CertificateDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override usedRevocations(Set<RevocationToken<?>>).
 func (b *CertificateDiagnosticDataBuilder) UsedRevocations(usedRevocations []validation.AnyRevocationToken) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.UsedRevocations(usedRevocations)
+	b.DataBuilder.UsedRevocations(usedRevocations)
 	return b
 }
 
 // AllCertificateSources re-declares the fluent setter with the CertificateDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override allCertificateSources(ListCertificateSource).
 func (b *CertificateDiagnosticDataBuilder) AllCertificateSources(trustedCertSources *spi.ListCertificateSource) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.AllCertificateSources(trustedCertSources)
+	b.DataBuilder.AllCertificateSources(trustedCertSources)
 	return b
 }
 
 // ValidationDate re-declares the fluent setter with the CertificateDiagnosticDataBuilder return
 // type. Port of the covariant-return @Override validationDate(Date).
 func (b *CertificateDiagnosticDataBuilder) ValidationDate(validationDate time.Time) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.ValidationDate(validationDate)
+	b.DataBuilder.ValidationDate(validationDate)
 	return b
 }
 
@@ -66,13 +66,13 @@ func (b *CertificateDiagnosticDataBuilder) ValidationDate(validationDate time.Ti
 // CertificateDiagnosticDataBuilder return type. Port of the covariant-return @Override
 // tokenExtractionStrategy(TokenExtractionStrategy).
 func (b *CertificateDiagnosticDataBuilder) TokenExtractionStrategy(tokenExtractionStrategy enumerations.TokenExtractionStrategy) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.TokenExtractionStrategy(tokenExtractionStrategy)
+	b.DataBuilder.TokenExtractionStrategy(tokenExtractionStrategy)
 	return b
 }
 
 // DefaultDigestAlgorithm re-declares the fluent setter with the CertificateDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override defaultDigestAlgorithm(DigestAlgorithm).
 func (b *CertificateDiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *CertificateDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.DefaultDigestAlgorithm(digestAlgorithm)
+	b.DataBuilder.DefaultDigestAlgorithm(digestAlgorithm)
 	return b
 }

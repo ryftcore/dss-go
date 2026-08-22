@@ -2,7 +2,7 @@
 //
 // Java extends XAdESLevelXL and overrides extendSignatures(List); the Go port embeds the -XL
 // level, and "super.extendSignatures(signatures)" is the explicit
-// a.XAdESLevelXL.ExtendSignatures call. This is the top of the legacy (non-baseline) XAdES
+// a.LevelXL.ExtendSignatures call. This is the top of the legacy (non-baseline) XAdES
 // augmentation ladder.
 package xades
 
@@ -13,22 +13,22 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// XAdESLevelA holds the level A aspects of XAdES.
-type XAdESLevelA struct {
-	XAdESLevelXL
+// LevelA holds the level A aspects of XAdES.
+type LevelA struct {
+	LevelXL
 }
 
-// NewXAdESLevelA is the default constructor for XAdESLevelA.
+// NewXAdESLevelA is the default constructor for LevelA.
 // Port of XAdESLevelA(CertificateVerifier).
-func NewXAdESLevelA(certificateVerifier validation.CertificateVerifier) *XAdESLevelA {
-	extension := &XAdESLevelA{}
+func NewXAdESLevelA(certificateVerifier validation.CertificateVerifier) *LevelA {
+	extension := &LevelA{}
 	extension.InitXAdESLevelA(extension, certificateVerifier)
 	return extension
 }
 
 // InitXAdESLevelA registers the concrete extension level with this base and forwards to the -XL
 // level. Port of the super(certificateVerifier) call of XAdESLevelA(CertificateVerifier).
-func (a *XAdESLevelA) InitXAdESLevelA(self XAdESSignatureExtensionOverrides,
+func (a *LevelA) InitXAdESLevelA(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	a.InitXAdESLevelXL(self, certificateVerifier)
 }
@@ -38,8 +38,8 @@ func (a *XAdESLevelA) InitXAdESLevelA(self XAdESSignatureExtensionOverrides,
 // XAdES-X-L form of the electronic signature and the signed data objects. A XAdES-A form MAY
 // contain several ArchiveTimeStamp elements.
 // Port of the overridden protected #extendSignatures(List).
-func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature) error {
-	if err := a.XAdESLevelXL.ExtendSignatures(signatures); err != nil {
+func (a *LevelA) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := a.LevelXL.ExtendSignatures(signatures); err != nil {
 		return err
 	}
 
@@ -49,7 +49,7 @@ func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature
 	addTimestampValidationData := false
 
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -67,7 +67,7 @@ func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature
 	}
 
 	// Perform signature validation
-	var validationDataContainer *validation.ValidationDataContainer
+	var validationDataContainer *validation.DataContainer
 	if addTimestampValidationData {
 		container, err := a.DocumentAnalyzer.GetValidationData(signatures)
 		if err != nil {
@@ -76,9 +76,9 @@ func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature
 		validationDataContainer = container
 	}
 
-	// Append LTA-level (+ ValidationData)
+	// Append LTA-level (+ Data)
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -114,7 +114,7 @@ func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature
 }
 
 // assertExtendSignatureToAPossible ports the private assertExtendSignatureToAPossible.
-func (a *XAdESLevelA) assertExtendSignatureToAPossible() error {
+func (a *LevelA) assertExtendSignatureToAPossible() error {
 	if enumerations.SignatureLevelXAdESA == a.Params.SignatureLevel() {
 		return a.AssertDetachedDocumentsContainBinaries()
 	}

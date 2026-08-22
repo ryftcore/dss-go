@@ -33,14 +33,14 @@ func NewAbstractASiCWithCAdESDataToSignHelperBuilder(asicFilenameFactory ASiCWit
 }
 
 // IsASiCArchive gets whether the ASiC represents an existing archive. Ports the protected
-// isASiCArchive(ASiCContent).
-func (b *AbstractASiCWithCAdESDataToSignHelperBuilder) IsASiCArchive(asicContent *asic.ASiCContent) bool {
+// isASiCArchive(Content).
+func (b *AbstractASiCWithCAdESDataToSignHelperBuilder) IsASiCArchive(asicContent *asic.Content) bool {
 	return utils.IsCollectionNotEmpty(asicContent.SignatureDocuments()) ||
 		utils.IsCollectionNotEmpty(asicContent.TimestampDocuments()) ||
 		utils.IsCollectionNotEmpty(asicContent.EvidenceRecordDocuments())
 }
 
 // GetDataPackageName ports the @Override protected getDataPackageName(ASiCContent).
-func (b *AbstractASiCWithCAdESDataToSignHelperBuilder) GetDataPackageName(asicContent *asic.ASiCContent) string {
+func (b *AbstractASiCWithCAdESDataToSignHelperBuilder) GetDataPackageName(asicContent *asic.Content) string {
 	return b.asicFilenameFactory.DataPackageFilename(asicContent)
 }

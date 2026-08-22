@@ -14,7 +14,7 @@ import (
 // equivalent of a Java subclass inheriting a non-abstract protected method.
 type analyzerLeafWithoutOverride struct{ *AbstractASiCContainerAnalyzer }
 
-func (l *analyzerLeafWithoutOverride) IsSupportedASiCContent(*ASiCContent) bool { return true }
+func (l *analyzerLeafWithoutOverride) IsSupportedASiCContent(*Content) bool { return true }
 func (l *analyzerLeafWithoutOverride) GetContainerExtractor() *DefaultASiCContainerExtractor {
 	return nil
 }

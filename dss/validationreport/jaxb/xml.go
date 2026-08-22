@@ -6,7 +6,7 @@
 // simple types JAXB binds by hand (base64Binary, dateTime), and the
 // Marshal/Unmarshal entry points. It reproduces the pattern documented in
 // dss/diagnostic/jaxb/xml.go; see that file for the full
-// rationale of jaxbCanonical. Unlike DiagnosticData.xsd's root, ValidationReportType
+// rationale of jaxbCanonical. Unlike Data.xsd's root, ValidationReportType
 // carries no XML attributes of its own (its content is a plain element
 // sequence), so the document element never has attributes ahead of its
 // xmlns declaration and the "namespace written last" quirk documented for
@@ -156,7 +156,7 @@ func (r *IDREFS) UnmarshalXMLAttr(attr xml.Attr) error {
 // --------------------------------------------------------------- entry points
 
 // Unmarshal parses a validation-report document, the way
-// ValidationReportFacade's underlying AbstractJaxbFacade.unmarshall does.
+// Facade's underlying AbstractJaxbFacade.unmarshall does.
 func Unmarshal(data []byte) (*ValidationReportType, error) {
 	vr := &ValidationReportType{}
 	if err := xml.Unmarshal(data, vr); err != nil {
@@ -166,7 +166,7 @@ func Unmarshal(data []byte) (*ValidationReportType, error) {
 }
 
 // Marshal writes a validation-report document byte-for-byte the way
-// ValidationReportFacade's underlying AbstractJaxbFacade.marshall does: the
+// Facade's underlying AbstractJaxbFacade.marshall does: the
 // XML declaration, four-space indented output, a trailing newline, and the
 // JAXB spellings jaxbCanonical restores.
 func Marshal(vr *ValidationReportType) ([]byte, error) {

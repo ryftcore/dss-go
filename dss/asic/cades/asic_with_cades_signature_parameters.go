@@ -15,10 +15,10 @@ import (
 // ASiCWithCAdESSignatureParameters defines SignatureParameters to deal with ASiC with CAdES
 // signature creation/extension.
 type ASiCWithCAdESSignatureParameters struct {
-	dsscades.CAdESSignatureParameters
+	dsscades.SignatureParameters
 
 	// asicParams is the object representing the parameters related to ASiC for the signature.
-	asicParams *asic.ASiCParameters
+	asicParams *asic.Parameters
 }
 
 var _ ASiCWithCAdESCommonParameters = (*ASiCWithCAdESSignatureParameters)(nil)
@@ -27,13 +27,13 @@ var _ ASiCWithCAdESCommonParameters = (*ASiCWithCAdESSignatureParameters)(nil)
 // the default constructor.
 func NewASiCWithCAdESSignatureParameters() *ASiCWithCAdESSignatureParameters {
 	return &ASiCWithCAdESSignatureParameters{
-		CAdESSignatureParameters: *dsscades.NewCAdESSignatureParameters(),
-		asicParams:               asic.NewASiCParameters(),
+		SignatureParameters: *dsscades.NewCAdESSignatureParameters(),
+		asicParams:          asic.NewASiCParameters(),
 	}
 }
 
 // ASiC ports the @Override aSiC().
-func (p *ASiCWithCAdESSignatureParameters) ASiC() *asic.ASiCParameters {
+func (p *ASiCWithCAdESSignatureParameters) ASiC() *asic.Parameters {
 	return p.asicParams
 }
 
@@ -46,7 +46,7 @@ func (p *ASiCWithCAdESSignatureParameters) SetSignatureLevel(signatureLevel enum
 	if signatureLevel == "" || err != nil || enumerations.SignatureFormCAdES != form {
 		panic("Only CAdES form is allowed !")
 	}
-	p.CAdESSignatureParameters.SetSignatureLevel(signatureLevel)
+	p.SignatureParameters.SetSignatureLevel(signatureLevel)
 }
 
 // ZipCreationDate ports the @Override getZipCreationDate().
@@ -60,7 +60,7 @@ func (p *ASiCWithCAdESSignatureParameters) ZipCreationDate() time.Time {
 // String ports #toString.
 func (p *ASiCWithCAdESSignatureParameters) String() string {
 	return fmt.Sprintf("ASiCWithCAdESSignatureParameters [asicParams=%v] %s",
-		p.asicParams, p.CAdESSignatureParameters.String())
+		p.asicParams, p.SignatureParameters.String())
 }
 
 // Equals ports #equals.
@@ -71,7 +71,7 @@ func (p *ASiCWithCAdESSignatureParameters) Equals(other *ASiCWithCAdESSignatureP
 	if other == nil {
 		return false
 	}
-	if !p.CAdESSignatureParameters.Equals(&other.CAdESSignatureParameters) {
+	if !p.SignatureParameters.Equals(&other.SignatureParameters) {
 		return false
 	}
 	return asicWithCAdESSignatureParametersASiCParamsEquals(p.asicParams, other.asicParams)
@@ -79,7 +79,7 @@ func (p *ASiCWithCAdESSignatureParameters) Equals(other *ASiCWithCAdESSignatureP
 
 // asicWithCAdESSignatureParametersASiCParamsEquals ports the Objects.equals(asicParams,
 // that.asicParams) comparison, local to this file per PORTING.md (no cross-file shared helpers).
-func asicWithCAdESSignatureParametersASiCParamsEquals(a, b *asic.ASiCParameters) bool {
+func asicWithCAdESSignatureParametersASiCParamsEquals(a, b *asic.Parameters) bool {
 	if a == b {
 		return true
 	}

@@ -29,11 +29,11 @@ func NewDefaultASiCWithXAdESFilenameFactory() *DefaultASiCWithXAdESFilenameFacto
 }
 
 // SignatureFilename ports the @Override getSignatureFilename(ASiCContent).
-func (f *DefaultASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +41,7 @@ func (f *DefaultASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asi
 		return asic.ASiCUtilsSignaturesXML // "META-INF/signatures.xml"
 	}
 
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		panic(err)
 	}
@@ -56,12 +56,12 @@ func (f *DefaultASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asi
 }
 
 // ManifestFilename ports the @Override getManifestFilename(ASiCContent).
-func (f *DefaultASiCWithXAdESFilenameFactory) ManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithXAdESFilenameFactory) ManifestFilename(asicContent *asic.Content) string {
 	return asic.ASiCUtilsASiCEMetaInfManifest // "META-INF/manifest.xml"
 }
 
 // DataPackageFilename ports the @Override getDataPackageFilename(ASiCContent).
-func (f *DefaultASiCWithXAdESFilenameFactory) DataPackageFilename(asicContent *asic.ASiCContent) string {
+func (f *DefaultASiCWithXAdESFilenameFactory) DataPackageFilename(asicContent *asic.Content) string {
 	return asic.ASiCUtilsPackageZip // "package.zip"
 }
 
@@ -71,7 +71,7 @@ func (f *DefaultASiCWithXAdESFilenameFactory) DataPackageFilename(asicContent *a
 // Panics with Java's NullPointerException message when evidenceRecordType is empty
 // (Objects.requireNonNull), or its UnsupportedOperationException message for an unsupported
 // evidenceRecordType.
-func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.ASiCContent,
+func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.Content,
 	evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
 	if evidenceRecordType == "" {
 		panic("EvidenceRecordType shall be defined!")
@@ -92,8 +92,8 @@ func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordFilename(asicContent
 }
 
 // EvidenceRecordManifestFilename ports the @Override
-// getEvidenceRecordManifestFilename(ASiCContent).
-func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.ASiCContent) string {
+// getEvidenceRecordManifestFilename(Content).
+func (f *DefaultASiCWithXAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.Content) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}

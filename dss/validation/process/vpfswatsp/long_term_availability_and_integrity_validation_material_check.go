@@ -35,8 +35,8 @@ type LongTermAvailabilityAndIntegrityValidationMaterialCheck struct {
 
 // NewLongTermAvailabilityAndIntegrityValidationMaterialCheck is the default
 // constructor. Port of
-// LongTermAvailabilityAndIntegrityValidationMaterialCheck(I18nProvider, XmlValidationProcessArchivalData, SignatureWrapper, XmlConstraintsConclusion, LevelRule).
-func NewLongTermAvailabilityAndIntegrityValidationMaterialCheck(i18nProvider *i18n.I18nProvider,
+// LongTermAvailabilityAndIntegrityValidationMaterialCheck(Provider, XmlValidationProcessArchivalData, SignatureWrapper, XmlConstraintsConclusion, LevelRule).
+func NewLongTermAvailabilityAndIntegrityValidationMaterialCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessArchivalData], signature *diagnostic.SignatureWrapper,
 	longTermValidationResult *jaxb.XmlConstraintsConclusionContent,
 	constraint policy.LevelRule) *LongTermAvailabilityAndIntegrityValidationMaterialCheck {

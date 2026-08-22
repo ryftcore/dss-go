@@ -31,8 +31,8 @@ type LongTermValidationCheck struct {
 }
 
 // NewLongTermValidationCheck is the default constructor. Port of
-// LongTermValidationCheck(I18nProvider, XmlValidationProcessArchivalData, XmlConstraintsConclusion, LevelRule).
-func NewLongTermValidationCheck(i18nProvider *i18n.I18nProvider,
+// LongTermValidationCheck(Provider, XmlValidationProcessArchivalData, XmlConstraintsConclusion, LevelRule).
+func NewLongTermValidationCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessArchivalData],
 	longTermValidationResult *jaxb.XmlConstraintsConclusionContent,
 	constraint policy.LevelRule) *LongTermValidationCheck {

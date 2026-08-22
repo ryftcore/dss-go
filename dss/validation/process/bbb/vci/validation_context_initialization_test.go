@@ -91,9 +91,9 @@ func loadRows(t *testing.T, path string) []*oracleRow {
 }
 
 // loadDiagnosticData reads a dump through jaxb.Unmarshal, not through
-// DiagnosticDataFacade.Unmarshal: only the former links the IDREF graph, and
+// DataFacade.Unmarshal: only the former links the IDREF graph, and
 // without that link the chain items carry no certificate (see notes).
-func loadDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(corpusDir, name)))
 	if err != nil {

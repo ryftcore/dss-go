@@ -21,8 +21,8 @@ type CertificateSemanticsIdentifierCheck struct {
 }
 
 // NewCertificateSemanticsIdentifierCheck is the default constructor. Port of
-// CertificateSemanticsIdentifierCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateSemanticsIdentifierCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateSemanticsIdentifierCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificateSemanticsIdentifierCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateSemanticsIdentifierCheck {
 	c := &CertificateSemanticsIdentifierCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

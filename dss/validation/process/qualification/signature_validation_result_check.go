@@ -20,8 +20,8 @@ type SignatureValidationResultCheck[T any] struct {
 }
 
 // NewSignatureValidationResultCheck is the default constructor. Port of
-// SignatureValidationResultCheck(I18nProvider, T, XmlConclusion, LevelRule).
-func NewSignatureValidationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// SignatureValidationResultCheck(Provider, T, XmlConclusion, LevelRule).
+func NewSignatureValidationResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	basicValidationConclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *SignatureValidationResultCheck[T] {
 	c := &SignatureValidationResultCheck[T]{
 		ChainItemBase:                      process.NewChainItemBase(i18nProvider, result, constraint),

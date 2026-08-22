@@ -16,7 +16,7 @@ import (
 type AbstractFormatChecking[S diagnostic.AbstractTokenProxyOverrides] struct {
 	*process.ChainBase[*drjaxb.XmlFC]
 
-	DiagnosticData *diagnostic.DiagnosticData
+	DiagnosticData *diagnostic.Data
 	Token          S
 	Context        enumerations.Context
 	Policy         policy.ValidationPolicy
@@ -24,8 +24,8 @@ type AbstractFormatChecking[S diagnostic.AbstractTokenProxyOverrides] struct {
 
 // InitAbstractFormatChecking wires the shared state; called by the concrete constructor
 // before InitChainBase.
-func (c *AbstractFormatChecking[S]) InitAbstractFormatChecking(i18nProvider *i18n.I18nProvider,
-	diagnosticData *diagnostic.DiagnosticData, token S, context enumerations.Context, pol policy.ValidationPolicy) {
+func (c *AbstractFormatChecking[S]) InitAbstractFormatChecking(i18nProvider *i18n.Provider,
+	diagnosticData *diagnostic.Data, token S, context enumerations.Context, pol policy.ValidationPolicy) {
 	c.DiagnosticData = diagnosticData
 	c.Token = token
 	c.Context = context

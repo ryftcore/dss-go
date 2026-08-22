@@ -55,7 +55,7 @@ type DetachedTimestampAnalyzerOverrides interface {
 	//
 	// Java throws an unchecked DSSException on a malformed timestamp; ported as a returned error
 	// (data-dependent on the validating document's bytes), consumed by Timestamp() below - whose
-	// own signature, fixed by the already-frozen timestamp.TimestampAnalyzer interface this type
+	// own signature, fixed by the already-frozen timestamp.Analyzer interface this type
 	// implements, has no error return, so Timestamp() panics on failure (a forced deviation; see
 	// its own doc comment).
 	CreateTimestampToken() (*validation.TimestampToken, error)
@@ -85,7 +85,7 @@ type DetachedTimestampAnalyzer struct {
 // compile-time interface assertions.
 var (
 	_ analyzer.DocumentAnalyzer                 = (*DetachedTimestampAnalyzer)(nil)
-	_ analyzertimestamp.TimestampAnalyzer       = (*DetachedTimestampAnalyzer)(nil)
+	_ analyzertimestamp.Analyzer                = (*DetachedTimestampAnalyzer)(nil)
 	_ DetachedTimestampAnalyzerOverrides        = (*DetachedTimestampAnalyzer)(nil)
 	_ analyzer.DefaultDocumentAnalyzerOverrides = (*DetachedTimestampAnalyzer)(nil)
 )
@@ -165,7 +165,7 @@ func (a *DetachedTimestampAnalyzer) IsSupported(dssDocument model.DSSDocument) b
 // in spi/dss_utils.go, which cannot import cms) since this is the second
 // package independently needing it.
 func detachedTimestampAnalyzerIsTimestampToken(document model.DSSDocument) bool {
-	parsedCMS, err := cms.CMSUtilsParseToCMS(document)
+	parsedCMS, err := cms.UtilsParseToCMS(document)
 	if err != nil {
 		return false
 	}
@@ -184,7 +184,7 @@ func (a *DetachedTimestampAnalyzer) BuildDetachedTimestamps() []*validation.Time
 // Panics on a malformed timestamp document (see DetachedTimestampAnalyzerOverrides.
 // CreateTimestampToken's doc comment on why this is a forced deviation from PORTING.md's
 // data-dependent-throw-to-error rule: the interface this method satisfies,
-// timestampsrc.TimestampAnalyzer, is already frozen with no error return).
+// timestampsrc.Analyzer, is already frozen with no error return).
 func (a *DetachedTimestampAnalyzer) Timestamp() *validation.TimestampToken {
 	if a.timestampToken == nil {
 		overrides := a.detachedTimestampAnalyzerOverrides()

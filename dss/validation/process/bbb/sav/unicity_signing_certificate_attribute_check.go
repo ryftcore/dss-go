@@ -20,8 +20,8 @@ type UnicitySigningCertificateAttributeCheck struct {
 }
 
 // NewUnicitySigningCertificateAttributeCheck is the default constructor. Port of
-// UnicitySigningCertificateAttributeCheck(I18nProvider, XmlSAV, TokenProxy, LevelRule).
-func NewUnicitySigningCertificateAttributeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// UnicitySigningCertificateAttributeCheck(Provider, XmlSAV, TokenProxy, LevelRule).
+func NewUnicitySigningCertificateAttributeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *UnicitySigningCertificateAttributeCheck {
 	c := &UnicitySigningCertificateAttributeCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -21,8 +21,8 @@ type AuthorityInfoAccessPresentCheck struct {
 }
 
 // NewAuthorityInfoAccessPresentCheck is the default constructor. Port of
-// AuthorityInfoAccessPresentCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewAuthorityInfoAccessPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// AuthorityInfoAccessPresentCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewAuthorityInfoAccessPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *AuthorityInfoAccessPresentCheck {
 	c := &AuthorityInfoAccessPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

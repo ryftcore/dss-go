@@ -23,8 +23,8 @@ type SelfIssuedOCSPCheck struct {
 }
 
 // NewSelfIssuedOCSPCheck is the default constructor. Port of
-// SelfIssuedOCSPCheck(I18nProvider, XmlRAC, CertificateWrapper, RevocationWrapper, LevelRule).
-func NewSelfIssuedOCSPCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRAC],
+// SelfIssuedOCSPCheck(Provider, XmlRAC, CertificateWrapper, RevocationWrapper, LevelRule).
+func NewSelfIssuedOCSPCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRAC],
 	certificateWrapper *diagnostic.CertificateWrapper, revocationData *diagnostic.RevocationWrapper,
 	constraint policy.LevelRule) *SelfIssuedOCSPCheck {
 	c := &SelfIssuedOCSPCheck{

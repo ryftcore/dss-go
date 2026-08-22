@@ -32,12 +32,12 @@ func NewEmbeddedEvidenceRecordBuilder(certificateVerifier validation.Certificate
 // AddEvidenceRecord adds the evidence record document to a signature with the given
 // signatureId (via parameters), provided the evidence record correctly applies to the
 // signature. Port of #addEvidenceRecord(DSSDocument, DSSDocument,
-// XAdESEvidenceRecordIncorporationParameters).
+// EvidenceRecordIncorporationParameters).
 //
 // Panics when signatureDocument, evidenceRecordDocument or parameters is nil (Java
 // Objects.requireNonNull).
 func (b *EmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
-	parameters *XAdESEvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
+	parameters *EvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
 	if signatureDocument == nil {
 		panic("Signature document must be provided!")
 	}
@@ -58,7 +58,7 @@ func (b *EmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument, evi
 // getXAdESSignature gets a signature to incorporate evidence record into. Port of the
 // protected #getXAdESSignature(DSSDocument, String, List).
 func (b *EmbeddedEvidenceRecordBuilder) getXAdESSignature(signatureDocument model.DSSDocument, signatureId string,
-	detachedContent []model.DSSDocument) (*XAdESSignature, error) {
+	detachedContent []model.DSSDocument) (*Signature, error) {
 	documentAnalyzer, err := b.initDocumentAnalyzer(signatureDocument, detachedContent)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getXAdESSignature(signatureDocument mode
 		if sig == nil {
 			return nil, fmt.Errorf("unable to find a signature with Id : %s!", signatureId)
 		}
-		xadesSignature, ok := sig.(*XAdESSignature)
+		xadesSignature, ok := sig.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", sig)
 		}
@@ -86,7 +86,7 @@ func (b *EmbeddedEvidenceRecordBuilder) getXAdESSignature(signatureDocument mode
 			"Please provide a signatureId within the parameters.", documentAnalyzer.Document().Name())
 	}
 	// if one signature
-	xadesSignature, ok := signatures[0].(*XAdESSignature)
+	xadesSignature, ok := signatures[0].(*Signature)
 	if !ok {
 		return nil, fmt.Errorf("unexpected signature type %T", signatures[0])
 	}
@@ -95,8 +95,8 @@ func (b *EmbeddedEvidenceRecordBuilder) getXAdESSignature(signatureDocument mode
 
 // addEvidenceRecord adds evidenceRecordDocument to the signature's DOM. Port of the protected
 // #addEvidenceRecord(XAdESSignature, DSSDocument, XAdESEvidenceRecordIncorporationParameters).
-func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *XAdESSignature, evidenceRecordDocument model.DSSDocument,
-	parameters *XAdESEvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
+func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecord(xadesSignature *Signature, evidenceRecordDocument model.DSSDocument,
+	parameters *EvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
 	xadesSignature, err := b.InitializeSignatureBuilder(xadesSignature)
 	if err != nil {
 		return nil, err
@@ -188,26 +188,26 @@ func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecordElement(nodes []*xmldom
 }
 
 // getUnsignedAttributeToEmbed ports the private
-// getUnsignedAttributeToEmbed(XAdESEvidenceRecordIncorporationParameters).
-func (b *EmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(parameters *XAdESEvidenceRecordIncorporationParameters) *XAdESAttribute {
+// getUnsignedAttributeToEmbed(EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(parameters *EvidenceRecordIncorporationParameters) *Attribute {
 	if parameters.IsParallelEvidenceRecord() {
 		return b.getLastSealingEvidenceRecordAttribute()
 	}
-	// new XAdESAttribute to be created
+	// new Attribute to be created
 	return nil
 }
 
 // getLastSealingEvidenceRecordAttribute ports the private
 // getLastSealingEvidenceRecordAttribute().
-func (b *EmbeddedEvidenceRecordBuilder) getLastSealingEvidenceRecordAttribute() *XAdESAttribute {
+func (b *EmbeddedEvidenceRecordBuilder) getLastSealingEvidenceRecordAttribute() *Attribute {
 	unsignedSigProperties := NewXAdESUnsignedSigProperties(b.UnsignedSignaturePropertiesDom, b.XadesPath)
-	return XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties)
+	return SignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties)
 }
 
 // getEvidenceRecord ports the private getEvidenceRecord(DSSDocument, XAdESSignature,
-// XAdESAttribute, XAdESEvidenceRecordIncorporationParameters).
-func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, signature *XAdESSignature,
-	unsignedAttribute *XAdESAttribute, parameters *XAdESEvidenceRecordIncorporationParameters) (validation.EvidenceRecord, error) {
+// Attribute, EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, signature *Signature,
+	unsignedAttribute *Attribute, parameters *EvidenceRecordIncorporationParameters) (validation.EvidenceRecord, error) {
 	evidenceRecordAnalyzer, err := analyzer.EvidenceRecordAnalyzerFromDocument(evidenceRecordDocument)
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause(
@@ -222,9 +222,9 @@ func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument
 }
 
 // assertEvidenceRecordValid ports the private #assertEvidenceRecordValid(EvidenceRecord,
-// XAdESAttribute, XAdESEvidenceRecordIncorporationParameters).
-func (b *EmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord validation.EvidenceRecord, unsignedAttribute *XAdESAttribute,
-	parameters *XAdESEvidenceRecordIncorporationParameters) error {
+// Attribute, EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord validation.EvidenceRecord, unsignedAttribute *Attribute,
+	parameters *EvidenceRecordIncorporationParameters) error {
 	if unsignedAttribute != nil {
 		if err := b.assertContainsOnlySameTypeEvidenceRecords(unsignedAttribute, evidenceRecord.EvidenceRecordType()); err != nil {
 			return err
@@ -246,8 +246,8 @@ func (b *EmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord
 }
 
 // assertContainsOnlySameTypeEvidenceRecords ports the private
-// assertContainsOnlySameTypeEvidenceRecords(XAdESAttribute, EvidenceRecordTypeEnum).
-func (b *EmbeddedEvidenceRecordBuilder) assertContainsOnlySameTypeEvidenceRecords(unsignedAttribute *XAdESAttribute,
+// assertContainsOnlySameTypeEvidenceRecords(Attribute, EvidenceRecordTypeEnum).
+func (b *EmbeddedEvidenceRecordBuilder) assertContainsOnlySameTypeEvidenceRecords(unsignedAttribute *Attribute,
 	evidenceRecordType enumerations.EvidenceRecordTypeEnum) error {
 	sealingEvidenceRecordElement := unsignedAttribute.Element()
 
@@ -297,9 +297,9 @@ func (b *EmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord valida
 }
 
 // getSealingEvidenceRecordElement ports the private
-// getSealingEvidenceRecordElement(XAdESAttribute, XAdESEvidenceRecordIncorporationParameters).
-func (b *EmbeddedEvidenceRecordBuilder) getSealingEvidenceRecordElement(unsignedAttribute *XAdESAttribute,
-	parameters *XAdESEvidenceRecordIncorporationParameters) (*xmldom.Node, error) {
+// getSealingEvidenceRecordElement(Attribute, EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) getSealingEvidenceRecordElement(unsignedAttribute *Attribute,
+	parameters *EvidenceRecordIncorporationParameters) (*xmldom.Node, error) {
 	if unsignedAttribute != nil {
 		// parallel evidence record
 		return unsignedAttribute.Element(), nil

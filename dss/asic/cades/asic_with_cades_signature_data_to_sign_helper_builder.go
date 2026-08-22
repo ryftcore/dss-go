@@ -29,7 +29,7 @@ func NewASiCWithCAdESSignatureDataToSignHelperBuilder(
 // GetManifestBuilder ports the @Override protected
 // getManifestBuilder(ASiCContent, ASiCWithCAdESCommonParameters), whose Java return type is
 // narrowed covariantly to ASiCEWithCAdESManifestBuilder.
-func (b *ASiCWithCAdESSignatureDataToSignHelperBuilder) GetManifestBuilder(asicContent *asic.ASiCContent,
+func (b *ASiCWithCAdESSignatureDataToSignHelperBuilder) GetManifestBuilder(asicContent *asic.Content,
 	parameters ASiCWithCAdESCommonParameters) *asic.AbstractASiCManifestBuilder {
 	// Required as a part of the created manifest file
 	signatureFilename := b.asicFilenameFactory.SignatureFilename(asicContent)

@@ -21,7 +21,7 @@ type EAARevocationSubjectCheck struct {
 }
 
 // NewEAARevocationSubjectCheck is the default constructor.
-func NewEAARevocationSubjectCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationSubjectCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, constraint policy.MultiValuesRule) *EAARevocationSubjectCheck {
 	c := &EAARevocationSubjectCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

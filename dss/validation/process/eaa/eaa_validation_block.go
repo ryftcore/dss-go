@@ -15,13 +15,13 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/reports"
 )
 
-// EAAValidationBlock performs validation of the EAA.
-type EAAValidationBlock struct {
+// ValidationBlock performs validation of the EAA.
+type ValidationBlock struct {
 	// i18nProvider is the i18n provider.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// Policy is the validation policy. Exported because Java declares the
 	// field protected.
@@ -42,11 +42,11 @@ type EAAValidationBlock struct {
 }
 
 // NewEAAValidationBlock is the default constructor. Port of
-// EAAValidationBlock(I18nProvider, DiagnosticData, ValidationPolicy, Date, Map, List, List).
-func NewEAAValidationBlock(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// ValidationBlock(Provider, Data, ValidationPolicy, Date, Map, List, List).
+func NewEAAValidationBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
-	tlAnalysis []*jaxb.XmlTLAnalysis, loteAnalysis []*jaxb.XmlLoTEAnalysis) *EAAValidationBlock {
-	return &EAAValidationBlock{
+	tlAnalysis []*jaxb.XmlTLAnalysis, loteAnalysis []*jaxb.XmlLoTEAnalysis) *ValidationBlock {
+	return &ValidationBlock{
 		i18nProvider:   i18nProvider,
 		diagnosticData: diagnosticData,
 		Policy:         validationPolicy,
@@ -58,7 +58,7 @@ func NewEAAValidationBlock(i18nProvider *i18n.I18nProvider, diagnosticData *diag
 }
 
 // Execute performs validation of EAA presentations. Port of execute().
-func (b *EAAValidationBlock) Execute() []*jaxb.XmlEAA {
+func (b *ValidationBlock) Execute() []*jaxb.XmlEAA {
 	var result []*jaxb.XmlEAA
 
 	for _, eaaWrapper := range b.diagnosticData.EAAs() {
@@ -111,7 +111,7 @@ func (b *EAAValidationBlock) Execute() []*jaxb.XmlEAA {
 
 // getEAASignatureValidation ports the private
 // getEAASignatureValidation(SignatureWrapper).
-func (b *EAAValidationBlock) getEAASignatureValidation(signatureWrapper *diagnostic.SignatureWrapper) *jaxb.XmlSignature {
+func (b *ValidationBlock) getEAASignatureValidation(signatureWrapper *diagnostic.SignatureWrapper) *jaxb.XmlSignature {
 
 	xmlSignature := &jaxb.XmlSignature{}
 	id := signatureWrapper.Id()
@@ -132,7 +132,7 @@ func (b *EAAValidationBlock) getEAASignatureValidation(signatureWrapper *diagnos
 
 // executeBasicValidation ports the private
 // executeBasicValidation(XmlSignature, SignatureWrapper, Map).
-func (b *EAAValidationBlock) executeBasicValidation(signatureAnalysis *jaxb.XmlSignature,
+func (b *ValidationBlock) executeBasicValidation(signatureAnalysis *jaxb.XmlSignature,
 	signature *diagnostic.SignatureWrapper) *jaxb.XmlValidationProcessBasicSignature {
 	vpfbsProcess := vpfbs.NewBasicSignatureValidationProcess(b.i18nProvider, b.diagnosticData, signature, nil, b.bbbs)
 	bs := vpfbsProcess.Execute()
@@ -142,7 +142,7 @@ func (b *EAAValidationBlock) executeBasicValidation(signatureAnalysis *jaxb.XmlS
 
 // getXmlValidationSignatureQualification ports the private
 // getXmlValidationSignatureQualification(SignatureWrapper, XmlSignature).
-func (b *EAAValidationBlock) getXmlValidationSignatureQualification(signature *diagnostic.SignatureWrapper,
+func (b *ValidationBlock) getXmlValidationSignatureQualification(signature *diagnostic.SignatureWrapper,
 	xmlSignature *jaxb.XmlSignature) *jaxb.XmlValidationSignatureQualification {
 	if xmlSignature == nil {
 		panic(fmt.Sprintf("Signature validation is not found for Id '%s'", signature.Id()))
@@ -168,7 +168,7 @@ func (b *EAAValidationBlock) getXmlValidationSignatureQualification(signature *d
 }
 
 // getSignatureFinalIndication ports the private getSignatureFinalIndication(Indication).
-func (b *EAAValidationBlock) getSignatureFinalIndication(highestIndication enumerations.Indication) (enumerations.Indication, error) {
+func (b *ValidationBlock) getSignatureFinalIndication(highestIndication enumerations.Indication) (enumerations.Indication, error) {
 	switch highestIndication {
 	case enumerations.IndicationPassed:
 		return enumerations.IndicationTotalPassed, nil

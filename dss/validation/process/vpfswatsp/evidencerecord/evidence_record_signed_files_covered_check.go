@@ -4,7 +4,7 @@
 //
 // Package placement deviation: Java's vpfswatsp.evidencerecord
 // is a package of its own, distinct from vpfswatsp. Everything else in the
-// vpfswatsp tree folds into one Go package, but EvidenceRecordTimestampsValidationBlock
+// vpfswatsp tree folds into one Go package, but TimestampsValidationBlock
 // extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
 // (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
 // therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
@@ -23,9 +23,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
-// EvidenceRecordSignedFilesCoveredCheck verifies whether all files originally
+// SignedFilesCoveredCheck verifies whether all files originally
 // signed by a signature are covered by the evidence record.
-type EvidenceRecordSignedFilesCoveredCheck struct {
+type SignedFilesCoveredCheck struct {
 	*process.ChainItemBase[*jaxb.XmlValidationProcessEvidenceRecord]
 
 	// evidenceRecord is the evidence record to be validated.
@@ -33,12 +33,12 @@ type EvidenceRecordSignedFilesCoveredCheck struct {
 }
 
 // NewEvidenceRecordSignedFilesCoveredCheck is the default constructor. Port of
-// EvidenceRecordSignedFilesCoveredCheck(I18nProvider, XmlValidationProcessEvidenceRecord, EvidenceRecordWrapper, LevelRule).
-func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.I18nProvider,
+// SignedFilesCoveredCheck(Provider, XmlValidationProcessEvidenceRecord, EvidenceRecordWrapper, LevelRule).
+func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessEvidenceRecord],
 	evidenceRecord *diagnostic.EvidenceRecordWrapper,
-	constraint policy.LevelRule) *EvidenceRecordSignedFilesCoveredCheck {
-	c := &EvidenceRecordSignedFilesCoveredCheck{
+	constraint policy.LevelRule) *SignedFilesCoveredCheck {
+	c := &SignedFilesCoveredCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),
 		evidenceRecord: evidenceRecord,
 	}
@@ -48,7 +48,7 @@ func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.I18nProvider,
 
 // Process performs the check. Port of process(): the two nested Stream#allMatch
 // / Stream#anyMatch predicates become plain loops.
-func (c *EvidenceRecordSignedFilesCoveredCheck) Process() bool {
+func (c *SignedFilesCoveredCheck) Process() bool {
 	if enumerations.EvidenceRecordOriginSignature == c.evidenceRecord.Origin() {
 		// embedded signature covers all original documents
 		return true
@@ -88,24 +88,24 @@ func signedFileCovered(signatureDigestMatcher *diagnosticjaxb.XmlDigestMatcher,
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
-func (c *EvidenceRecordSignedFilesCoveredCheck) MessageTag() i18n.MessageTag {
+func (c *SignedFilesCoveredCheck) MessageTag() i18n.MessageTag {
 	return i18n.MessageTagBBBCVERHasSDoc
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
-func (c *EvidenceRecordSignedFilesCoveredCheck) ErrorMessageTag() i18n.MessageTag {
+func (c *SignedFilesCoveredCheck) ErrorMessageTag() i18n.MessageTag {
 	return i18n.MessageTagBBBCVERHasSDocANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
-func (c *EvidenceRecordSignedFilesCoveredCheck) FailedIndicationForConclusion() enumerations.Indication {
+func (c *SignedFilesCoveredCheck) FailedIndicationForConclusion() enumerations.Indication {
 	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
-func (c *EvidenceRecordSignedFilesCoveredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
+func (c *SignedFilesCoveredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
 	return enumerations.SubIndicationFormatFailure
 }

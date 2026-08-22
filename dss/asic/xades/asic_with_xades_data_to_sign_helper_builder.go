@@ -44,19 +44,19 @@ func NewASiCWithXAdESDataToSignHelperBuilder(asicFilenameFactory ASiCWithXAdESFi
 }
 
 // Build creates a GetDataToSignASiCWithXAdESHelper from an ASiCContent. Ports
-// build(ASiCContent, ASiCWithXAdESSignatureParameters).
+// build(Content, ASiCWithXAdESSignatureParameters).
 //
 // Panics with Java's UnsupportedOperationException message on a container type mismatch, and
-// re-raises the error from ASiCUtilsEnsureMimeTypeAndZipComment/ASiCUtilsIsOpenDocument as a
+// re-raises the error from UtilsEnsureMimeTypeAndZipComment/UtilsIsOpenDocument as a
 // panic (Java's underlying DSSException propagates the same way).
-func (b *ASiCWithXAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCContent,
+func (b *ASiCWithXAdESDataToSignHelperBuilder) Build(asicContent *asic.Content,
 	parameters *ASiCWithXAdESSignatureParameters) GetDataToSignASiCWithXAdESHelper {
-	asicContent, err := asic.ASiCUtilsEnsureMimeTypeAndZipComment(asicContent, parameters.ASiC())
+	asicContent, err := asic.UtilsEnsureMimeTypeAndZipComment(asicContent, parameters.ASiC())
 	if err != nil {
 		panic(err)
 	}
 
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		panic(err)
 	}
@@ -68,7 +68,7 @@ func (b *ASiCWithXAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCConte
 	if utils.IsCollectionNotEmpty(asicContent.SignatureDocuments()) {
 		currentContainerType := asicContent.ContainerType()
 
-		asice := asic.ASiCUtilsIsASiCE(parameters.ASiC())
+		asice := asic.UtilsIsASiCE(parameters.ASiC())
 		switch {
 		case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 			return NewDataToSignASiCEWithXAdESHelper(asicContent)
@@ -84,9 +84,9 @@ func (b *ASiCWithXAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCConte
 }
 
 // fromFiles ports the private fromFiles(ASiCContent, ASiCWithXAdESSignatureParameters).
-func (b *ASiCWithXAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.ASiCContent,
+func (b *ASiCWithXAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.Content,
 	parameters *ASiCWithXAdESSignatureParameters) GetDataToSignASiCWithXAdESHelper {
-	if asic.ASiCUtilsIsASiCE(parameters.ASiC()) {
+	if asic.UtilsIsASiCE(parameters.ASiC()) {
 		asicManifest := b.createASiCManifest(asicContent)
 		asicContent.SetManifestDocuments(append(asicContent.ManifestDocuments(), asicManifest))
 		return NewDataToSignASiCEWithXAdESHelper(asicContent)
@@ -102,8 +102,8 @@ func (b *ASiCWithXAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.ASiCC
 }
 
 // createASiCManifest returns the ASiC Manifest. Ports the private
-// createASiCManifest(ASiCContent).
-func (b *ASiCWithXAdESDataToSignHelperBuilder) createASiCManifest(asicContent *asic.ASiCContent) model.DSSDocument {
+// createASiCManifest(Content).
+func (b *ASiCWithXAdESDataToSignHelperBuilder) createASiCManifest(asicContent *asic.Content) model.DSSDocument {
 	manifestDocument, err := NewASiCEWithXAdESManifestBuilder().
 		SetDocuments(asicContent.SignedDocuments()).
 		SetManifestFilename(b.asicFilenameFactory.ManifestFilename(asicContent)).
@@ -115,6 +115,6 @@ func (b *ASiCWithXAdESDataToSignHelperBuilder) createASiCManifest(asicContent *a
 }
 
 // GetDataPackageName ports the @Override protected getDataPackageName(ASiCContent).
-func (b *ASiCWithXAdESDataToSignHelperBuilder) GetDataPackageName(asicContent *asic.ASiCContent) string {
+func (b *ASiCWithXAdESDataToSignHelperBuilder) GetDataPackageName(asicContent *asic.Content) string {
 	return b.asicFilenameFactory.DataPackageFilename(asicContent)
 }

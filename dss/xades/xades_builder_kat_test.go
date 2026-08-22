@@ -43,11 +43,11 @@ type xadesBuilderKATCase struct {
 	XmlIdentifier       string `json:"xmlIdentifier"`
 }
 
-// xadesBuilderKATBuilder is the concrete XAdESBuilder the KAT drives, mirroring the anonymous
+// xadesBuilderKATBuilder is the concrete Builder the KAT drives, mirroring the anonymous
 // subclass the Java oracle uses: XAdESBuilder is abstract only in AlignNodes, and the KAT never
 // reaches CreateXmlDocument.
 type xadesBuilderKATBuilder struct {
-	XAdESBuilder
+	Builder
 }
 
 func (b *xadesBuilderKATBuilder) AlignNodes() {

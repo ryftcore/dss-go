@@ -7,7 +7,7 @@ type SilentOnAlert[T any] struct {
 }
 
 // NewSilentOnAlert creates a SilentOnAlert using detector to decide when to fire.
-func NewSilentOnAlert[T any](detector AlertDetector[T]) *SilentOnAlert[T] {
+func NewSilentOnAlert[T any](detector Detector[T]) *SilentOnAlert[T] {
 	return &SilentOnAlert[T]{
 		AbstractAlert: NewAbstractAlert[T](detector, NewSilentHandler[T]()),
 	}

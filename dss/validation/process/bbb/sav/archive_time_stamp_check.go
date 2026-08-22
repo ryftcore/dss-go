@@ -16,8 +16,8 @@ type ArchiveTimeStampCheck struct {
 }
 
 // NewArchiveTimeStampCheck is the default constructor. Port of
-// ArchiveTimeStampCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewArchiveTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ArchiveTimeStampCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewArchiveTimeStampCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *ArchiveTimeStampCheck {
 	c := &ArchiveTimeStampCheck{
 		AbstractTimeStampTypeCheck: NewAbstractTimeStampTypeCheck(i18nProvider, result, signature, constraint),

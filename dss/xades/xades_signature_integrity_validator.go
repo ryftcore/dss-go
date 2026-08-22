@@ -11,8 +11,8 @@ import (
 )
 
 // XAdESSignatureIntegrityValidator verifies integrity of a XAdES signature. Port of the class
-// XAdESSignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
-type XAdESSignatureIntegrityValidator struct {
+// SignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
+type SignatureIntegrityValidator struct {
 	spi.SignatureIntegrityValidatorBase
 
 	// santuarioSignature is the relevant xmldsig.XMLSignature instance (Santuario replacement,
@@ -21,9 +21,9 @@ type XAdESSignatureIntegrityValidator struct {
 }
 
 // NewXAdESSignatureIntegrityValidator is the default constructor. Port of the constructor
-// XAdESSignatureIntegrityValidator(XMLSignature).
-func NewXAdESSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignature) *XAdESSignatureIntegrityValidator {
-	v := &XAdESSignatureIntegrityValidator{santuarioSignature: santuarioSignature}
+// SignatureIntegrityValidator(XMLSignature).
+func NewXAdESSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignature) *SignatureIntegrityValidator {
+	v := &SignatureIntegrityValidator{santuarioSignature: santuarioSignature}
 	v.InitSignatureIntegrityValidator(v)
 	return v
 }
@@ -32,7 +32,7 @@ func NewXAdESSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignatur
 //
 // The DSSException Java wraps an XMLSignatureException in is returned here as an error, its
 // message built the same way.
-func (v *XAdESSignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
+func (v *SignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
 	var key any
 	if publicKey != nil {
 		key = publicKey.Key()

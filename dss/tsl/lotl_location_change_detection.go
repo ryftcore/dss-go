@@ -12,7 +12,7 @@ type LOTLLocationChangeDetection struct {
 	lotlSource *LOTLSource
 }
 
-var _ alert.AlertDetector[*tslmodel.LOTLInfo] = (*LOTLLocationChangeDetection)(nil)
+var _ alert.Detector[*tslmodel.LOTLInfo] = (*LOTLLocationChangeDetection)(nil)
 
 // NewLOTLLocationChangeDetection is the default constructor.
 func NewLOTLLocationChangeDetection(lotlSource *LOTLSource) *LOTLLocationChangeDetection {

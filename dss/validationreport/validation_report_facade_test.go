@@ -8,7 +8,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
-// TestFacadeRoundTrip exercises ValidationReportFacade.Marshal/Unmarshal
+// TestFacadeRoundTrip exercises Facade.Marshal/Unmarshal
 // (the hand facade path, distinct from jaxb.Marshal/Unmarshal - see
 // validation_report_facade.go's header) over one of the marshal-parity
 // oracles, checking it parses without error and reproduces the same

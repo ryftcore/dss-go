@@ -21,8 +21,8 @@ type DigestValuePresentCheck struct {
 }
 
 // NewDigestValuePresentCheck is the default constructor. Port of
-// DigestValuePresentCheck(I18nProvider, XmlISC, TokenProxy, LevelRule).
-func NewDigestValuePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlISC],
+// DigestValuePresentCheck(Provider, XmlISC, TokenProxy, LevelRule).
+func NewDigestValuePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlISC],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *DigestValuePresentCheck {
 	c := &DigestValuePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -17,8 +17,8 @@ type CertQualificationAtTimeForQWACBlock struct {
 
 // NewCertQualificationAtTimeForQWACBlockAtIssuanceTime is the constructor to
 // instantiate the validation at the certificate's issuance time. Port of
-// CertQualificationAtTimeForQWACBlock(I18nProvider, ValidationTime, CertificateWrapper, List).
-func NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime,
+// CertQualificationAtTimeForQWACBlock(Provider, ValidationTime, CertificateWrapper, List).
+func NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime,
 	signingCertificate *diagnostic.CertificateWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeForQWACBlock {
 	c := &CertQualificationAtTimeForQWACBlock{
 		CertQualificationAtTimeBlock: NewCertQualificationAtTimeBlockAtIssuanceTime(i18nProvider, validationTime, signingCertificate, acceptableServices),
@@ -29,8 +29,8 @@ func NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(i18nProvider *i18n.I18
 
 // NewCertQualificationAtTimeForQWACBlock is the constructor to instantiate
 // the validation at the validation time. Port of
-// CertQualificationAtTimeForQWACBlock(I18nProvider, ValidationTime, Date, CertificateWrapper, List).
-func NewCertQualificationAtTimeForQWACBlock(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime, date *time.Time,
+// CertQualificationAtTimeForQWACBlock(Provider, ValidationTime, Date, CertificateWrapper, List).
+func NewCertQualificationAtTimeForQWACBlock(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime, date *time.Time,
 	signingCertificate *diagnostic.CertificateWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeForQWACBlock {
 	c := &CertQualificationAtTimeForQWACBlock{
 		CertQualificationAtTimeBlock: NewCertQualificationAtTimeBlock(i18nProvider, validationTime, date, signingCertificate, acceptableServices),

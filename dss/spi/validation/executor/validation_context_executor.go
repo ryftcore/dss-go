@@ -3,9 +3,9 @@ package executor
 
 import "github.com/ryftcore/dss-go/dss/spi/validation"
 
-// ValidationContextExecutor defines a strategy for execution of a ValidationContext's
+// ValidationContextExecutor defines a strategy for execution of a Context's
 // validation.
 type ValidationContextExecutor interface {
 	// Validate performs validation of validationContext. Port of validate(ValidationContext).
-	Validate(validationContext validation.ValidationContext)
+	Validate(validationContext validation.Context)
 }

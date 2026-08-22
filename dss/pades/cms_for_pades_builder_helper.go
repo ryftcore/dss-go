@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/signature/CMSForPAdESBuilderHelper.java (DSS 6.5.RC1).
 //
 // Java extends cades.CMSForCAdESBuilderHelper and overrides initCAdESProfile (to return a
-// PAdESLevelBaselineB) and isEncapsulateSignerData (always false), plus three covariant-return
+// LevelBaselineB) and isEncapsulateSignerData (always false), plus three covariant-return
 // setters. Go has no method overriding across embedding: the embedded helper's CreateCMS and
 // CreateSignerInfoGenerator would call the base's own InitCAdESProfile / IsEncapsulateSignerData.
 // As cades/cms_for_cades_builder_helper.go's header prescribes for a specialised helper, the
@@ -30,7 +30,7 @@ type CMSForPAdESBuilderHelper struct {
 
 	// signatureParameters is the PAdES view of the parameters handed to the constructor. The
 	// embedded helper only keeps the CAdES projection of them.
-	signatureParameters *PAdESSignatureParameters
+	signatureParameters *SignatureParameters
 
 	// originalCMS mirrors the base field of the same name; see the file header.
 	originalCMS *cms.CMS
@@ -42,18 +42,18 @@ type CMSForPAdESBuilderHelper struct {
 	includeUnsignedAttributes bool
 
 	// padesProfile is the cached instance of the PAdES profile, i.e. the base's cadesProfile.
-	padesProfile *PAdESLevelBaselineB
+	padesProfile *LevelBaselineB
 }
 
 // NewCMSForPAdESBuilderHelper is the default constructor.
 // Port of CMSForPAdESBuilderHelper(DSSMessageDigest, PAdESSignatureParameters, ContentSigner);
 // Java passes DSSUtils.toDigestDocument(messageDigest) as the document to sign.
 func NewCMSForPAdESBuilderHelper(messageDigest model.DSSMessageDigest,
-	signatureParameters *PAdESSignatureParameters, contentSigner cms.ContentSigner) *CMSForPAdESBuilderHelper {
+	signatureParameters *SignatureParameters, contentSigner cms.ContentSigner) *CMSForPAdESBuilderHelper {
 	digestDocument := spi.DSSUtilsToDigestDocument(messageDigest.Digest)
 	return &CMSForPAdESBuilderHelper{
 		CMSForCAdESBuilderHelper: *cades.NewCMSForCAdESBuilderHelper(digestDocument,
-			&signatureParameters.CAdESSignatureParameters, contentSigner),
+			&signatureParameters.SignatureParameters, contentSigner),
 		messageDigest:       messageDigest,
 		signatureParameters: signatureParameters,
 	}
@@ -128,9 +128,9 @@ func (h *CMSForPAdESBuilderHelper) InitUnsignedAttributesTable() cmscore.Attribu
 	return nil
 }
 
-// PAdESProfile gets the cached PAdESLevelBaselineB used for the attribute tables.
+// PAdESProfile gets the cached LevelBaselineB used for the attribute tables.
 // Port of the inherited protected #getCAdESProfile with this type's #initCAdESProfile.
-func (h *CMSForPAdESBuilderHelper) PAdESProfile() *PAdESLevelBaselineB {
+func (h *CMSForPAdESBuilderHelper) PAdESProfile() *LevelBaselineB {
 	if h.padesProfile == nil {
 		h.padesProfile = h.InitCAdESProfile()
 	}
@@ -139,14 +139,14 @@ func (h *CMSForPAdESBuilderHelper) PAdESProfile() *PAdESLevelBaselineB {
 
 // InitCAdESProfile instantiates the PAdES Baseline B profile carrying the revision's
 // message-digest. Port of the protected #initCAdESProfile override.
-func (h *CMSForPAdESBuilderHelper) InitCAdESProfile() *PAdESLevelBaselineB {
+func (h *CMSForPAdESBuilderHelper) InitCAdESProfile() *LevelBaselineB {
 	return NewPAdESLevelBaselineB(h.messageDigest)
 }
 
-// InitCMSBuilder instantiates a CMSBuilder for the CMS creation.
+// InitCMSBuilder instantiates a Builder for the CMS creation.
 // Port of the inherited protected #initCMSBuilder; re-declared so that IsEncapsulateSignerData
 // resolves to this type's override.
-func (h *CMSForPAdESBuilderHelper) InitCMSBuilder() *cms.CMSBuilder {
+func (h *CMSForPAdESBuilderHelper) InitCMSBuilder() *cms.Builder {
 	return cms.NewCMSBuilder().
 		SetSigningCertificate(h.SignatureParameters.SigningCertificate()).
 		SetCertificateChain(h.SignatureParameters.CertificateChain()).

@@ -37,7 +37,7 @@ func NewBasicASN1SignaturePolicyValidator() *BasicASN1SignaturePolicyValidator {
 
 // CanValidate reports whether the policy content starts with an ASN.1
 // SEQUENCE tag.
-func (v *BasicASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signature.SignaturePolicy) bool {
+func (v *BasicASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signature.Policy) bool {
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent == nil {
 		return false
@@ -52,7 +52,7 @@ func (v *BasicASN1SignaturePolicyValidator) CanValidate(signaturePolicy *signatu
 // Validate parses the ASN.1 signature policy and compares its declared
 // digest algorithm and digest value against the ones carried by
 // signaturePolicy.
-func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult {
+func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
 	validationResult := signature.NewSignaturePolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()

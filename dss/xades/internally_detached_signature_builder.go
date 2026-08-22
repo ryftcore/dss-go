@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/signature/InternallyDetachedSignatureBuilder.java (DSS 6.5.RC1).
 //
 // Java's class is package-private and overrides three of the hooks collected in
-// XAdESSignatureBuilderOverrides - assertSignaturePossible(), buildRootDocumentDom() and
+// SignatureBuilderOverrides - assertSignaturePossible(), buildRootDocumentDom() and
 // incorporateFiles() - while inheriting getParentNodeOfSignature() and
 // incorporateSignatureDom(Node) from XPathPlacementSignatureBuilder. Go has no method overriding
 // across embedding, so this builder registers itself with InitXPathPlacementSignatureBuilder and
@@ -37,7 +37,7 @@ type InternallyDetachedSignatureBuilder struct {
 // NewInternallyDetachedSignatureBuilder is the constructor for a single-document signing. The
 // internally detached signature uses by default the exclusive method of canonicalization.
 // Port of InternallyDetachedSignatureBuilder(XAdESSignatureParameters, DSSDocument, CertificateVerifier).
-func NewInternallyDetachedSignatureBuilder(params *XAdESSignatureParameters, document model.DSSDocument,
+func NewInternallyDetachedSignatureBuilder(params *SignatureParameters, document model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *InternallyDetachedSignatureBuilder {
 	return NewInternallyDetachedSignatureBuilderForDocuments(params, []model.DSSDocument{document},
 		certificateVerifier)
@@ -47,7 +47,7 @@ func NewInternallyDetachedSignatureBuilder(params *XAdESSignatureParameters, doc
 // signing. The internally detached signature uses by default the exclusive method of
 // canonicalization.
 // Port of InternallyDetachedSignatureBuilder(XAdESSignatureParameters, List<DSSDocument>, CertificateVerifier).
-func NewInternallyDetachedSignatureBuilderForDocuments(params *XAdESSignatureParameters,
+func NewInternallyDetachedSignatureBuilderForDocuments(params *SignatureParameters,
 	documents []model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *InternallyDetachedSignatureBuilder {
 	builder := &InternallyDetachedSignatureBuilder{}
@@ -59,7 +59,7 @@ func NewInternallyDetachedSignatureBuilderForDocuments(params *XAdESSignaturePar
 // parallel-signature check only applies when the signature is placed into the original document
 // by XPath. Port of the overridden protected #assertSignaturePossible.
 func (b *InternallyDetachedSignatureBuilder) AssertSignaturePossible() error {
-	if err := b.XAdESSignatureBuilder.AssertSignaturePossible(); err != nil {
+	if err := b.AbstractSignatureBuilder.AssertSignaturePossible(); err != nil {
 		return err
 	}
 

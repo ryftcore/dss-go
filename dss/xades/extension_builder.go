@@ -2,17 +2,17 @@
 //
 // Java's ExtensionBuilder is abstract: it is the base of every XAdES extension (-T, -C, -X, -XL,
 // -A, -LT, -LTA, the SignaturePolicyStoreBuilder and the CounterSignatureBuilder) and overrides
-// three XAdESBuilder members - alignNodes(), getXmldsigNamespace() and getXadesNamespace() - all
-// three of which XAdESBuilder itself calls back into. Go has no method overriding across
+// three Builder members - alignNodes(), getXmldsigNamespace() and getXadesNamespace() - all
+// three of which Builder itself calls back into. Go has no method overriding across
 // embedding, so this type registers the concrete extension with the base through
 // InitExtensionBuilder / InitExtensionBuilderWithVerifier, which forward to
 // InitXAdESBuilder / InitXAdESBuilderWithVerifier; the three overrides are promoted to the
-// concrete extension and reached through XAdESBuilder's overrides field, the
+// concrete extension and reached through Builder's overrides field, the
 // TokenBase.InitToken(self) convention of PORTING.md.
 //
 // The two namespace overrides delegate back to the base implementation - Java's
 // params.getXmldsigNamespace() / params.getXadesNamespace() - when the signature being extended
-// carries no namespace of its own, which is what XAdESBuilder.XmldsigNamespace/XadesNamespace do.
+// carries no namespace of its own, which is what Builder.XmldsigNamespace/XadesNamespace do.
 //
 // Errors: IllegalInputException stays spi/exception.IllegalInputException and is returned
 // (PORTING.md: throw -> (T, error)). slf4j logging is dropped.
@@ -31,11 +31,11 @@ import (
 
 // ExtensionBuilder builds a XAdES signature extension.
 type ExtensionBuilder struct {
-	XAdESBuilder
+	Builder
 
 	// XadesSignature allows accessing the DOM signature representation using XPath.
 	// Port of the protected xadesSignature.
-	XadesSignature *XAdESSignature
+	XadesSignature *Signature
 
 	// CurrentSignatureDom is the current signature being extended.
 	// Port of the protected currentSignatureDom.
@@ -60,20 +60,20 @@ type ExtensionBuilder struct {
 
 // InitExtensionBuilder registers the concrete extension with its base.
 // Port of the protected empty ExtensionBuilder() constructor.
-func (b *ExtensionBuilder) InitExtensionBuilder(self XAdESBuilderOverrides) {
+func (b *ExtensionBuilder) InitExtensionBuilder(self BuilderOverrides) {
 	b.InitXAdESBuilder(self)
 }
 
 // InitExtensionBuilderWithVerifier registers the concrete extension with its base and stores the
 // CertificateVerifier. Port of the protected ExtensionBuilder(CertificateVerifier) constructor.
-func (b *ExtensionBuilder) InitExtensionBuilderWithVerifier(self XAdESBuilderOverrides,
+func (b *ExtensionBuilder) InitExtensionBuilderWithVerifier(self BuilderOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	b.InitXAdESBuilderWithVerifier(self, certificateVerifier)
 }
 
 // InitializeSignatureBuilder initializes all variables to be used for signature extension.
 // Port of the protected #initializeSignatureBuilder.
-func (b *ExtensionBuilder) InitializeSignatureBuilder(signature *XAdESSignature) (*XAdESSignature, error) {
+func (b *ExtensionBuilder) InitializeSignatureBuilder(signature *Signature) (*Signature, error) {
 	b.XadesSignature = signature
 	b.CurrentSignatureDom = b.XadesSignature.SignatureElement()
 

@@ -337,9 +337,9 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 }
 
 // signatureParameters is the slice of the ported signature-parameter types the
-// facade sets. Every concrete parameters type - CAdESSignatureParameters,
-// XAdESSignatureParameters, PAdESSignatureParameters,
-// JAdESSignatureParameters and the two ASiC ones - satisfies it, several of
+// facade sets. Every concrete parameters type - SignatureParameters,
+// SignatureParameters, SignatureParameters,
+// SignatureParameters and the two ASiC ones - satisfies it, several of
 // them with their own overriding SetSignatureLevel, which is why the facade
 // calls through this interface rather than through a shared embedded struct.
 type signatureParameters interface {
@@ -393,9 +393,9 @@ func applyTSPSource(service tspSourceSetter, opts SignOptions) {
 }
 
 // signOne runs the get-data-to-sign / sign / embed flow of
-// document.DocumentSignatureService.
+// document.SignatureService.
 func signOne[SP model.SerializableSignatureParameters, TP model.SerializableTimestampParameters](
-	service document.DocumentSignatureService[SP, TP], parameters SP, doc Document,
+	service document.SignatureService[SP, TP], parameters SP, doc Document,
 	signer *Signer, digestAlgorithm DigestAlgorithm) (Document, error) {
 	dataToSign := service.GetDataToSign(doc, parameters)
 	signatureValue, err := signer.conn.Sign(dataToSign, digestAlgorithm, signer.key)

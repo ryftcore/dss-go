@@ -22,8 +22,8 @@ type BasicConstraintsMaxPathLengthCheck struct {
 }
 
 // NewBasicConstraintsMaxPathLengthCheck is the default constructor. Port of
-// BasicConstraintsMaxPathLengthCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewBasicConstraintsMaxPathLengthCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// BasicConstraintsMaxPathLengthCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewBasicConstraintsMaxPathLengthCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *BasicConstraintsMaxPathLengthCheck {
 	c := &BasicConstraintsMaxPathLengthCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

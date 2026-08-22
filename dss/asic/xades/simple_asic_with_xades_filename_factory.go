@@ -53,7 +53,7 @@ func NewSimpleASiCWithXAdESFilenameFactory() *SimpleASiCWithXAdESFilenameFactory
 }
 
 // SignatureFilename ports the @Override getSignatureFilename(ASiCContent).
-func (f *SimpleASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithXAdESFilenameFactory) SignatureFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.signatureFilename) {
 		return f.getValidSignatureFilename(f.signatureFilename, asicContent)
 	}
@@ -73,7 +73,7 @@ func (f *SimpleASiCWithXAdESFilenameFactory) SetSignatureFilename(signatureFilen
 }
 
 // ManifestFilename ports the @Override getManifestFilename(ASiCContent).
-func (f *SimpleASiCWithXAdESFilenameFactory) ManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithXAdESFilenameFactory) ManifestFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.manifestFilename) {
 		return f.getValidManifestFilename(f.manifestFilename, asicContent)
 	}
@@ -91,7 +91,7 @@ func (f *SimpleASiCWithXAdESFilenameFactory) SetManifestFilename(manifestFilenam
 }
 
 // DataPackageFilename ports the @Override getDataPackageFilename(ASiCContent).
-func (f *SimpleASiCWithXAdESFilenameFactory) DataPackageFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithXAdESFilenameFactory) DataPackageFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.dataPackageFilename) {
 		validFilename, err := f.ValidDataPackageFilename(f.dataPackageFilename, asicContent)
 		if err != nil {
@@ -111,8 +111,8 @@ func (f *SimpleASiCWithXAdESFilenameFactory) SetDataPackageFilename(dataPackageF
 }
 
 // EvidenceRecordManifestFilename ports the @Override
-// getEvidenceRecordManifestFilename(ASiCContent).
-func (f *SimpleASiCWithXAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.ASiCContent) string {
+// getEvidenceRecordManifestFilename(Content).
+func (f *SimpleASiCWithXAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.evidenceRecordManifestFilename) {
 		validFilename, err := f.ValidEvidenceRecordManifestFilename(f.evidenceRecordManifestFilename, asicContent)
 		if err != nil {
@@ -130,19 +130,19 @@ func (f *SimpleASiCWithXAdESFilenameFactory) SetEvidenceRecordManifestFilename(e
 }
 
 // getValidSignatureFilename returns a valid signature filename. Ports the protected
-// getValidSignatureFilename(String, ASiCContent).
+// getValidSignatureFilename(String, Content).
 //
 // Panics with Java's IllegalArgumentException messages on an invalid filename.
-func (f *SimpleASiCWithXAdESFilenameFactory) getValidSignatureFilename(signatureFilename string, asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithXAdESFilenameFactory) getValidSignatureFilename(signatureFilename string, asicContent *asic.Content) string {
 	signatureFilename = f.WithMetaInfFolder(signatureFilename)
 	if err := f.AssertFilenameValid(signatureFilename, asicContent.SignatureDocuments()); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		panic(err)
 	}
@@ -164,8 +164,8 @@ func (f *SimpleASiCWithXAdESFilenameFactory) getValidSignatureFilename(signature
 }
 
 // getValidManifestFilename returns a valid manifest filename. Ports the protected
-// getValidManifestFilename(String, ASiCContent).
-func (f *SimpleASiCWithXAdESFilenameFactory) getValidManifestFilename(manifestFilename string, asicContent *asic.ASiCContent) string {
+// getValidManifestFilename(String, Content).
+func (f *SimpleASiCWithXAdESFilenameFactory) getValidManifestFilename(manifestFilename string, asicContent *asic.Content) string {
 	manifestFilename = f.WithMetaInfFolder(manifestFilename)
 	if err := f.AssertFilenameValid(manifestFilename, asicContent.ManifestDocuments()); err != nil {
 		panic(err)

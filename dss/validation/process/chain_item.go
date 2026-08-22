@@ -102,8 +102,8 @@ type ChainItemOverrides interface {
 // continue/stop the current treatment. The ChainItem is a validation constraint
 // which allows to collect information, warnings, errors,...
 type ChainItemBase[T any] struct {
-	// I18nProvider is the internationalization provider.
-	I18nProvider *i18n.I18nProvider
+	// Provider is the internationalization provider.
+	I18nProvider *i18n.Provider
 
 	// constraint is the Level constraint for the current chain item.
 	constraint policy.LevelRule
@@ -123,10 +123,10 @@ type ChainItemBase[T any] struct {
 }
 
 // NewChainItemBase is the common constructor. Port of
-// ChainItem(I18nProvider, T, LevelRule).
+// ChainItem(Provider, T, LevelRule).
 //
 // Panics with the Java message when i18nProvider is nil (Objects.requireNonNull).
-func NewChainItemBase[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
+func NewChainItemBase[T any](i18nProvider *i18n.Provider, result *Result[T],
 	constraint policy.LevelRule) *ChainItemBase[T] {
 	return newChainItemBase(i18nProvider, result, constraint, nil)
 }
@@ -135,12 +135,12 @@ func NewChainItemBase[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
 // validation, taking the XmlBasicBuildingBlocks id. Port of
 // ChainItem(I18nProvider, T, LevelRule, String). A Java caller passing a null id
 // maps to NewChainItemBase.
-func NewChainItemBaseWithId[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
+func NewChainItemBaseWithId[T any](i18nProvider *i18n.Provider, result *Result[T],
 	constraint policy.LevelRule, bbbId string) *ChainItemBase[T] {
 	return newChainItemBase(i18nProvider, result, constraint, &bbbId)
 }
 
-func newChainItemBase[T any](i18nProvider *i18n.I18nProvider, result *Result[T],
+func newChainItemBase[T any](i18nProvider *i18n.Provider, result *Result[T],
 	constraint policy.LevelRule, bbbId *string) *ChainItemBase[T] {
 	if i18nProvider == nil {
 		panic("i18nProvider must be defined!")

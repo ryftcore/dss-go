@@ -13,8 +13,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/document"
 )
 
-// PAdESProfileParameters is used to accelerate the signature creation process for PAdES.
-type PAdESProfileParameters struct {
+// ProfileParameters is used to accelerate the signature creation process for PAdES.
+type ProfileParameters struct {
 	document.ProfileParameters
 
 	// pdfToBeSignedCache is the internal cache used to accelerate the signature creation
@@ -23,13 +23,13 @@ type PAdESProfileParameters struct {
 }
 
 // NewPAdESProfileParameters is the default constructor.
-func NewPAdESProfileParameters() *PAdESProfileParameters {
-	return &PAdESProfileParameters{ProfileParameters: *document.NewProfileParameters()}
+func NewPAdESProfileParameters() *ProfileParameters {
+	return &ProfileParameters{ProfileParameters: *document.NewProfileParameters()}
 }
 
 // PdfToBeSignedCache gets the PDF signature cache, lazily instantiating it. Port of
 // #getPdfToBeSignedCache.
-func (p *PAdESProfileParameters) PdfToBeSignedCache() *PdfSignatureCache {
+func (p *ProfileParameters) PdfToBeSignedCache() *PdfSignatureCache {
 	if p.pdfToBeSignedCache == nil {
 		p.pdfToBeSignedCache = NewPdfSignatureCache()
 	}
@@ -37,17 +37,17 @@ func (p *PAdESProfileParameters) PdfToBeSignedCache() *PdfSignatureCache {
 }
 
 // SetPdfToBeSignedCache sets the PDF signature cache. Port of #setPdfToBeSignedCache.
-func (p *PAdESProfileParameters) SetPdfToBeSignedCache(pdfToBeSignedCache *PdfSignatureCache) {
+func (p *ProfileParameters) SetPdfToBeSignedCache(pdfToBeSignedCache *PdfSignatureCache) {
 	p.pdfToBeSignedCache = pdfToBeSignedCache
 }
 
 // String ports #toString.
-func (p *PAdESProfileParameters) String() string {
+func (p *ProfileParameters) String() string {
 	return fmt.Sprintf("PAdESProfileParameters [pdfToBeSignedCache=%v] %s", p.pdfToBeSignedCache, p.ProfileParameters.String())
 }
 
 // Equals ports #equals.
-func (p *PAdESProfileParameters) Equals(other *PAdESProfileParameters) bool {
+func (p *ProfileParameters) Equals(other *ProfileParameters) bool {
 	if p == other {
 		return true
 	}

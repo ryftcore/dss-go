@@ -13,12 +13,12 @@ import "github.com/ryftcore/dss-go/dss/asic"
 // both container types, when applicable. The type of the container can be obtained from
 // asicContent.ContainerType().
 type ASiCWithCAdESFilenameFactory interface {
-	asic.ASiCFilenameFactory
-	asic.ASiCEvidenceRecordFilenameFactory
+	asic.FilenameFactory
+	asic.EvidenceRecordFilenameFactory
 
 	// TimestampFilename returns a filename for a timestamp file to be created. Port of
-	// getTimestampFilename(ASiCContent).
-	TimestampFilename(asicContent *asic.ASiCContent) string
+	// getTimestampFilename(Content).
+	TimestampFilename(asicContent *asic.Content) string
 
 	// ArchiveManifestFilename returns a new filename of an archive manifest file to be moved.
 	//
@@ -26,5 +26,5 @@ type ASiCWithCAdESFilenameFactory interface {
 	// while moving the last existing archive manifest.
 	//
 	// Port of getArchiveManifestFilename(ASiCContent).
-	ArchiveManifestFilename(asicContent *asic.ASiCContent) string
+	ArchiveManifestFilename(asicContent *asic.Content) string
 }

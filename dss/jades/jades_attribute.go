@@ -13,7 +13,7 @@ import (
 
 // JAdESAttribute represents the JAdES header. Port of the class JAdESAttribute, implementing
 // spi/validation.SignatureAttribute.
-type JAdESAttribute struct {
+type Attribute struct {
 	// name if the header. Port of the protected String name field.
 	name string
 
@@ -21,31 +21,31 @@ type JAdESAttribute struct {
 	value any
 
 	// identifier identifies the instance, computed lazily. Port of the protected
-	// JAdESAttributeIdentifier identifier field.
-	identifier *JAdESAttributeIdentifier
+	// AttributeIdentifier identifier field.
+	identifier *AttributeIdentifier
 }
 
 // NewJAdESAttribute is the default constructor. Port of the public JAdESAttribute(String, Object)
 // constructor.
-func NewJAdESAttribute(name string, value any) *JAdESAttribute {
-	return &JAdESAttribute{name: name, value: value}
+func NewJAdESAttribute(name string, value any) *Attribute {
+	return &Attribute{name: name, value: value}
 }
 
 // HeaderName gets the header's name. Port of getHeaderName().
-func (a *JAdESAttribute) HeaderName() string {
+func (a *Attribute) HeaderName() string {
 	return a.name
 }
 
 // Value gets the value. Port of getValue().
-func (a *JAdESAttribute) Value() any {
+func (a *Attribute) Value() any {
 	return a.value
 }
 
-// Identifier gets the attribute identifier, computing it via JAdESAttributeIdentifierBuild on
+// Identifier gets the attribute identifier, computing it via AttributeIdentifierBuild on
 // first use. Port of getIdentifier(), implementing spi/validation.SignatureAttribute.
-func (a *JAdESAttribute) Identifier() identifier.SignatureAttributeIdentifier {
+func (a *Attribute) Identifier() identifier.SignatureAttributeIdentifier {
 	if a.identifier == nil {
-		a.identifier = JAdESAttributeIdentifierBuild(a.name, a.value)
+		a.identifier = AttributeIdentifierBuild(a.name, a.value)
 	}
 	return a.identifier.SignatureAttributeIdentifier
 }
@@ -57,7 +57,7 @@ func (a *JAdESAttribute) Identifier() identifier.SignatureAttributeIdentifier {
 // match; EtsiUComponent is not part of this manifest (see the file header), so this narrower,
 // same-concrete-type comparison mirrors the CAdESAttribute/XAdESAttribute precedent rather than
 // attempting to reproduce that cross-type distinction here.
-func (a *JAdESAttribute) Equals(other *JAdESAttribute) bool {
+func (a *Attribute) Equals(other *Attribute) bool {
 	if a == other {
 		return true
 	}
@@ -69,5 +69,5 @@ func (a *JAdESAttribute) Equals(other *JAdESAttribute) bool {
 	return selfID.Equals(&otherID)
 }
 
-// compile-time assertion: a JAdESAttribute satisfies spi/validation.SignatureAttribute.
-var _ validation.SignatureAttribute = (*JAdESAttribute)(nil)
+// compile-time assertion: a Attribute satisfies spi/validation.SignatureAttribute.
+var _ validation.SignatureAttribute = (*Attribute)(nil)

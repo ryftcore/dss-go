@@ -20,8 +20,8 @@ type CertificatePS2DQcRolesOfPSPCheck struct {
 }
 
 // NewCertificatePS2DQcRolesOfPSPCheck is the default constructor. Port of
-// CertificatePS2DQcRolesOfPSPCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificatePS2DQcRolesOfPSPCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificatePS2DQcRolesOfPSPCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificatePS2DQcRolesOfPSPCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificatePS2DQcRolesOfPSPCheck {
 	c := &CertificatePS2DQcRolesOfPSPCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

@@ -7,11 +7,11 @@ package alert
 // stops the loop (no try/catch). Process mirrors that by returning on the first handler
 // error rather than running all handlers unconditionally.
 type CompositeAlertHandler[T any] struct {
-	handlers []AlertHandler[T]
+	handlers []Handler[T]
 }
 
 // NewCompositeAlertHandler creates a CompositeAlertHandler running the given handlers in order.
-func NewCompositeAlertHandler[T any](handlers []AlertHandler[T]) *CompositeAlertHandler[T] {
+func NewCompositeAlertHandler[T any](handlers []Handler[T]) *CompositeAlertHandler[T] {
 	return &CompositeAlertHandler[T]{handlers: handlers}
 }
 

@@ -21,8 +21,8 @@ type CertificateQcEuPDSLocationCheck struct {
 }
 
 // NewCertificateQcEuPDSLocationCheck is the default constructor. Port of
-// CertificateQcEuPDSLocationCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateQcEuPDSLocationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateQcEuPDSLocationCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificateQcEuPDSLocationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateQcEuPDSLocationCheck {
 	c := &CertificateQcEuPDSLocationCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

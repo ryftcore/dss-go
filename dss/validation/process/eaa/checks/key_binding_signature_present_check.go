@@ -20,7 +20,7 @@ type KeyBindingSignaturePresentCheck struct {
 }
 
 // NewKeyBindingSignaturePresentCheck is the default constructor.
-func NewKeyBindingSignaturePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlFC],
+func NewKeyBindingSignaturePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlFC],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *KeyBindingSignaturePresentCheck {
 	c := &KeyBindingSignaturePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

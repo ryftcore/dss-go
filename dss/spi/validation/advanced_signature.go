@@ -164,21 +164,21 @@ type AdvancedSignature interface {
 	// Port of checkSignatureIntegrity().
 	CheckSignatureIntegrity()
 
-	// SignatureCryptographicVerification gets the signature's cryptographic validation result.
+	// CryptographicVerification gets the signature's cryptographic validation result.
 	// Port of getSignatureCryptographicVerification().
-	SignatureCryptographicVerification() *signature.SignatureCryptographicVerification
+	SignatureCryptographicVerification() *signature.CryptographicVerification
 
-	// SignaturePolicy returns the Signature Policy OID from the signature.
+	// Policy returns the Signature Policy OID from the signature.
 	// Port of getSignaturePolicy().
-	SignaturePolicy() *signature.SignaturePolicy
+	SignaturePolicy() *signature.Policy
 
 	// SignaturePolicyStore returns the Signature Policy Store from the signature.
 	// Port of getSignaturePolicyStore().
 	SignaturePolicyStore() *model.SignaturePolicyStore
 
-	// SignatureProductionPlace returns information about the place where the signature was
+	// ProductionPlace returns information about the place where the signature was
 	// generated. Port of getSignatureProductionPlace().
-	SignatureProductionPlace() *signature.SignatureProductionPlace
+	SignatureProductionPlace() *signature.ProductionPlace
 
 	// CommitmentTypeIndications obtains the information concerning commitment type indication
 	// linked to the signature. Port of getCommitmentTypeIndications().
@@ -370,10 +370,10 @@ type AdvancedSignature interface {
 	// for the message-imprint (CAdES). Port of getReferenceValidations().
 	ReferenceValidations() []*model.ReferenceValidation
 
-	// SignatureDigestReference returns a signature reference element as defined in TS 119 442 -
+	// DigestReference returns a signature reference element as defined in TS 119 442 -
 	// V1.1.1 - Electronic Signatures and Infrastructures (ESI), ch. 5.1.4.2.1.3 XML component.
 	// Port of getSignatureDigestReference(DigestAlgorithm).
-	SignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference
+	SignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference
 
 	// DataToBeSignedRepresentation returns the DTBSR, which is then used to create the
 	// signature.

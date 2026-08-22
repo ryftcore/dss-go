@@ -21,8 +21,8 @@ type PastRevocationDataValidationConclusiveCheck struct {
 }
 
 // NewPastRevocationDataValidationConclusiveCheck is the constructor. Port of
-// PastRevocationDataValidationConclusiveCheck(I18nProvider, XmlPSV, XmlConclusion, LevelRule).
-func NewPastRevocationDataValidationConclusiveCheck(i18nProvider *i18n.I18nProvider,
+// PastRevocationDataValidationConclusiveCheck(Provider, XmlPSV, XmlConclusion, LevelRule).
+func NewPastRevocationDataValidationConclusiveCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlPSV], conclusion *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *PastRevocationDataValidationConclusiveCheck {
 	c := &PastRevocationDataValidationConclusiveCheck{

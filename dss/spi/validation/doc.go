@@ -1,7 +1,7 @@
 // Package validation ports the dss-spi validation subpackage
 // (eu.europa.esig.dss.spi.validation), the shared building blocks every
-// per-format AdvancedSignature implementation (CAdESSignature,
-// XAdESSignature, ...) and evidence-record validator is built from:
+// per-format AdvancedSignature implementation (Signature,
+// Signature, ...) and evidence-record validator is built from:
 // signature identifier derivation, embedded evidence-record helpers, and
 // the AdvancedSignature interface itself.
 //

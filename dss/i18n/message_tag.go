@@ -14,7 +14,7 @@ type MessageTag string
 // suffix (and numbered "_ANS1", "_ANS2", ...) marks the negative-answer
 // variant of the message immediately preceding it. Individual constants are
 // intentionally undocumented beyond their name — see dss-messages.properties
-// (embedded via I18nProvider) for the exact human-readable text each
+// (embedded via Provider) for the exact human-readable text each
 // resolves to.
 const (
 	MessageTagBBBFCIEFF                                 MessageTag = "BBB_FC_IEFF"

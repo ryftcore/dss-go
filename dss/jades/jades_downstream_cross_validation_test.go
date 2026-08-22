@@ -2,7 +2,7 @@
 // end-to-end compatibility proof in the other direction from
 // jades_upstream_cross_validation_test.go. It runs testdata/crossgen (a standalone `go run`
 // program - see its own doc comment) to sign JAdES-B and JAdES-T documents (compact AND flattened/
-// full JSON serializations, plus a DETACHED 'sigD' case) with this package's own JAdESService and
+// full JSON serializations, plus a DETACHED 'sigD' case) with this package's own Service and
 // a real PKCS#12 test key (and, for -T, a real KeyEntityTSPSource-backed timestamp), then hands
 // the output to testdata/crossgen/CrossGenValidator.java, which loads each file with upstream DSS
 // 6.5.RC1's own SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder and asserts the

@@ -11,12 +11,12 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// ASiCParameters regroups the signature parameters related to ASiC form.
+// Parameters regroups the signature parameters related to ASiC form.
 //
 // Java subclasses (ASiCContainerEvidenceRecordParameters here, and the format-specific
 // ASiCWith{CAdES,XAdES}SignatureParameters in the dss-asic-cades/dss-asic-xades ports) embed this
 // struct by value rather than extending it.
-type ASiCParameters struct {
+type Parameters struct {
 	// zipComment indicates if the ZIP comment should be used to store the signed content
 	// mime-type.
 	zipComment bool
@@ -30,52 +30,52 @@ type ASiCParameters struct {
 }
 
 // NewASiCParameters instantiates an object with null values. Port of the default constructor.
-func NewASiCParameters() *ASiCParameters {
-	return &ASiCParameters{}
+func NewASiCParameters() *Parameters {
+	return &Parameters{}
 }
 
 // IsZipComment indicates if the ZIP comment must include the mime-type. Port of isZipComment().
-func (p *ASiCParameters) IsZipComment() bool {
+func (p *Parameters) IsZipComment() bool {
 	return p.zipComment
 }
 
 // SetZipComment sets if the zip comment will contain the mime type. Port of
 // setZipComment(boolean).
-func (p *ASiCParameters) SetZipComment(zipComment bool) {
+func (p *Parameters) SetZipComment(zipComment bool) {
 	p.zipComment = zipComment
 }
 
 // MimeType gets the mimetype. Port of getMimeType().
-func (p *ASiCParameters) MimeType() string {
+func (p *Parameters) MimeType() string {
 	return p.mimeType
 }
 
 // SetMimeType sets the mime-type within the mimetype file. Port of setMimeType(String).
-func (p *ASiCParameters) SetMimeType(mimeType string) {
+func (p *Parameters) SetMimeType(mimeType string) {
 	p.mimeType = mimeType
 }
 
 // ContainerType returns the expected type of the ASiC container. Port of getContainerType().
-func (p *ASiCParameters) ContainerType() enumerations.ASiCContainerType {
+func (p *Parameters) ContainerType() enumerations.ASiCContainerType {
 	return p.containerType
 }
 
 // SetContainerType sets the expected container type. Port of
 // setContainerType(ASiCContainerType).
-func (p *ASiCParameters) SetContainerType(containerType enumerations.ASiCContainerType) {
+func (p *Parameters) SetContainerType(containerType enumerations.ASiCContainerType) {
 	p.containerType = containerType
 }
 
 // String ports toString(). Java prints the null mimeType as the four characters 'null' between
 // the single quotes and the null containerType as null; the Go zero values ("" and "") render as
 // empty instead - a cosmetic difference in a debug-only string.
-func (p *ASiCParameters) String() string {
+func (p *Parameters) String() string {
 	return fmt.Sprintf("ASiCParameters [zipComment=%t, mimeType='%s', containerType=%s]",
 		p.zipComment, p.mimeType, string(p.containerType))
 }
 
 // Equals ports equals(Object).
-func (p *ASiCParameters) Equals(other *ASiCParameters) bool {
+func (p *Parameters) Equals(other *Parameters) bool {
 	if p == other {
 		return true
 	}

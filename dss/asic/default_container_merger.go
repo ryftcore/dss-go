@@ -30,16 +30,16 @@ type DefaultContainerMergerOverrides interface {
 	// abstract getContainerExtractor(DSSDocument).
 	//
 	// Cross-chunk assumption (ZIPCORE): DefaultASiCContainerExtractor exposes an Extract()
-	// (*ASiCContent, error) method.
+	// (*Content, error) method.
 	GetContainerExtractor(container model.DSSDocument) *DefaultASiCContainerExtractor
 
 	// IsSupportedDocument verifies whether the provided container is supported by the current
 	// class. Port of the protected abstract isSupported(DSSDocument).
 	IsSupportedDocument(container model.DSSDocument) bool
 
-	// IsSupportedContent verifies whether the provided ASiCContent is supported by the current
+	// IsSupportedContent verifies whether the provided Content is supported by the current
 	// class. Port of the protected abstract isSupported(ASiCContent).
-	IsSupportedContent(asicContent *ASiCContent) bool
+	IsSupportedContent(asicContent *Content) bool
 
 	// EnsureContainerContentAllowMerge verifies whether containers can be merged. Port of the
 	// protected abstract ensureContainerContentAllowMerge().
@@ -54,7 +54,7 @@ type DefaultContainerMergerOverrides interface {
 	GetTargetASiCContainerType() enumerations.ASiCContainerType
 }
 
-// DefaultContainerMerger loads a relevant ASiCContainerMerger in order to merge content of
+// DefaultContainerMerger loads a relevant ContainerMerger in order to merge content of
 // given containers. Ports the abstract class implementing ASiCContainerMerger.
 type DefaultContainerMerger struct {
 	// overrides points back at the concrete merger; see InitDefaultContainerMerger.
@@ -63,7 +63,7 @@ type DefaultContainerMerger struct {
 	// AsicContents is an array of ASiC contents representing containers to be merged. Java
 	// declares the field protected; exported here since Go subclasses in the cades/xades ASiC
 	// packages live in different packages.
-	AsicContents []*ASiCContent
+	AsicContents []*Content
 
 	// creationTime defines creation time of the merged container.
 	creationTime    time.Time
@@ -93,7 +93,7 @@ func (m *DefaultContainerMerger) requireOverrides() DefaultContainerMergerOverri
 	return m.overrides
 }
 
-// InitFromDocuments is used to create an ASiCContainerMerger from provided container
+// InitFromDocuments is used to create an ContainerMerger from provided container
 // documents. Port of the protected DefaultContainerMerger(DSSDocument...) constructor, split
 // out because it calls back into GetContainerExtractor (an overrides method) - see
 // InitDefaultContainerMerger's doc comment.
@@ -102,7 +102,7 @@ func (m *DefaultContainerMerger) requireOverrides() DefaultContainerMergerOverri
 func (m *DefaultContainerMerger) InitFromDocuments(containers ...model.DSSDocument) {
 	defaultContainerMergerAssertDocumentsNotNull(containers)
 	overrides := m.requireOverrides()
-	asicContents := make([]*ASiCContent, len(containers))
+	asicContents := make([]*Content, len(containers))
 	for i, container := range containers {
 		extractor := overrides.GetContainerExtractor(container)
 		content, err := extractor.Extract()
@@ -114,9 +114,9 @@ func (m *DefaultContainerMerger) InitFromDocuments(containers ...model.DSSDocume
 	m.AsicContents = asicContents
 }
 
-// InitFromASiCContents is used to create an ASiCContainerMerger from the given ASiCContents.
+// InitFromASiCContents is used to create an ContainerMerger from the given ASiCContents.
 // Port of the protected DefaultContainerMerger(ASiCContent...) constructor.
-func (m *DefaultContainerMerger) InitFromASiCContents(asicContents ...*ASiCContent) {
+func (m *DefaultContainerMerger) InitFromASiCContents(asicContents ...*Content) {
 	defaultContainerMergerAssertContentsNotNull(asicContents)
 	m.AsicContents = asicContents
 }
@@ -137,24 +137,24 @@ func (m *DefaultContainerMerger) SetCreationTime(creationTime time.Time) {
 	m.creationTimeSet = true
 }
 
-// defaultContainerMergerFactoryRegistry holds the ASiCContainerMergerFactory implementations
+// defaultContainerMergerFactoryRegistry holds the ContainerMergerFactory implementations
 // registered via RegisterASiCContainerMergerFactory, consulted in registration order - the Go
 // equivalent of Java's ServiceLoader.load(ASiCContainerMergerFactory.class) iteration.
-var defaultContainerMergerFactoryRegistry []ASiCContainerMergerFactory
+var defaultContainerMergerFactoryRegistry []ContainerMergerFactory
 
-// RegisterASiCContainerMergerFactory registers an ASiCContainerMergerFactory to be consulted by
+// RegisterASiCContainerMergerFactory registers an ContainerMergerFactory to be consulted by
 // DefaultContainerMergerFromDocuments and DefaultContainerMergerFromASiCContents.
-func RegisterASiCContainerMergerFactory(f ASiCContainerMergerFactory) {
+func RegisterASiCContainerMergerFactory(f ContainerMergerFactory) {
 	defaultContainerMergerFactoryRegistry = append(defaultContainerMergerFactoryRegistry, f)
 }
 
-// DefaultContainerMergerFromDocuments loads a relevant ASiCContainerMerger to be used to merge
+// DefaultContainerMergerFromDocuments loads a relevant ContainerMerger to be used to merge
 // given container documents. Ports the static fromDocuments(DSSDocument...).
 //
 // Java's UnsupportedOperationException("Document format not recognized/handled") is returned
 // as an error instead, matching the EvidenceRecordAnalyzerFromDocument precedent (data-
 // dependent on which merger factories happen to be registered).
-func DefaultContainerMergerFromDocuments(containers ...model.DSSDocument) (ASiCContainerMerger, error) {
+func DefaultContainerMergerFromDocuments(containers ...model.DSSDocument) (ContainerMerger, error) {
 	defaultContainerMergerAssertDocumentsNotNull(containers)
 	for _, mergerFactory := range defaultContainerMergerFactoryRegistry {
 		if mergerFactory.IsSupportedDocuments(containers...) {
@@ -164,9 +164,9 @@ func DefaultContainerMergerFromDocuments(containers ...model.DSSDocument) (ASiCC
 	return nil, fmt.Errorf("document format not recognized/handled")
 }
 
-// DefaultContainerMergerFromASiCContents loads a relevant ASiCContainerMerger to be used to
+// DefaultContainerMergerFromASiCContents loads a relevant ContainerMerger to be used to
 // merge given ASiCContents. Ports the static fromASiCContents(ASiCContent...).
-func DefaultContainerMergerFromASiCContents(asicContents ...*ASiCContent) (ASiCContainerMerger, error) {
+func DefaultContainerMergerFromASiCContents(asicContents ...*Content) (ContainerMerger, error) {
 	defaultContainerMergerAssertContentsNotNull(asicContents)
 	for _, mergerFactory := range defaultContainerMergerFactoryRegistry {
 		if mergerFactory.IsSupportedContents(asicContents...) {
@@ -182,7 +182,7 @@ func (m *DefaultContainerMerger) IsSupportedDocuments(containers ...model.DSSDoc
 	defaultContainerMergerAssertDocumentsNotNull(containers)
 	overrides := m.requireOverrides()
 	for _, containerDocument := range containers {
-		isZip, err := ASiCUtilsIsZip(containerDocument)
+		isZip, err := UtilsIsZip(containerDocument)
 		if err != nil {
 			panic(err)
 		}
@@ -198,8 +198,8 @@ func (m *DefaultContainerMerger) IsSupportedDocuments(containers ...model.DSSDoc
 }
 
 // IsSupportedContents implements ASiCContainerMerger. Ports the @Override
-// isSupported(ASiCContent...).
-func (m *DefaultContainerMerger) IsSupportedContents(asicContents ...*ASiCContent) bool {
+// isSupported(Content...).
+func (m *DefaultContainerMerger) IsSupportedContents(asicContents ...*Content) bool {
 	defaultContainerMergerAssertContentsNotNull(asicContents)
 	overrides := m.requireOverrides()
 	for _, asicContent := range asicContents {
@@ -230,7 +230,7 @@ func (m *DefaultContainerMerger) Merge() model.DSSDocument {
 // mergeToASiCContent().
 //
 // Panics with Java's NullPointerException message when no container was provided.
-func (m *DefaultContainerMerger) MergeToASiCContent() *ASiCContent {
+func (m *DefaultContainerMerger) MergeToASiCContent() *Content {
 	if len(m.AsicContents) == 0 {
 		panic("At least one container shall be provided!")
 	}
@@ -244,34 +244,34 @@ func (m *DefaultContainerMerger) MergeToASiCContent() *ASiCContent {
 // createMergedResult creates a new ASiCContent by merging the given containers. Ports the
 // protected createMergedResult().
 //
-// Cross-chunk assumption (ZIPCORE): ASiCContent exposes the getter/setter pairs named below
+// Cross-chunk assumption (ZIPCORE): Content exposes the getter/setter pairs named below
 // (Go-cased from the Java getX/setX accessors) for SignedDocuments, SignatureDocuments,
 // ManifestDocuments, ArchiveManifestDocuments, EvidenceRecordManifestDocuments,
 // TimestampDocuments, EvidenceRecordDocuments, UnsupportedDocuments and Folders, all
 // []model.DSSDocument.
-func (m *DefaultContainerMerger) createMergedResult() *ASiCContent {
+func (m *DefaultContainerMerger) createMergedResult() *Content {
 	asicContent := m.createEmptyContainer()
 
 	asicContent.SetZipComment(m.getZipComment())
 	asicContent.SetMimeTypeDocument(m.getMimeTypeDocument())
 
-	asicContent.SetSignedDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).SignedDocuments)))
-	asicContent.SetSignatureDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).SignatureDocuments)))
-	asicContent.SetManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).ManifestDocuments)))
-	asicContent.SetArchiveManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).ArchiveManifestDocuments)))
-	asicContent.SetEvidenceRecordManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).EvidenceRecordManifestDocuments)))
-	asicContent.SetTimestampDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).TimestampDocuments)))
-	asicContent.SetEvidenceRecordDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).EvidenceRecordDocuments)))
-	asicContent.SetUnsupportedDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).UnsupportedDocuments)))
-	asicContent.SetFolders(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*ASiCContent).Folders)))
+	asicContent.SetSignedDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).SignedDocuments)))
+	asicContent.SetSignatureDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).SignatureDocuments)))
+	asicContent.SetManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).ManifestDocuments)))
+	asicContent.SetArchiveManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).ArchiveManifestDocuments)))
+	asicContent.SetEvidenceRecordManifestDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).EvidenceRecordManifestDocuments)))
+	asicContent.SetTimestampDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).TimestampDocuments)))
+	asicContent.SetEvidenceRecordDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).EvidenceRecordDocuments)))
+	asicContent.SetUnsupportedDocuments(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).UnsupportedDocuments)))
+	asicContent.SetFolders(m.mergeDocumentLists(collectDocumentLists(m.AsicContents, (*Content).Folders)))
 
 	return asicContent
 }
 
 // collectDocumentLists ports the repeated
-// Arrays.stream(asicContents).map(ASiCContent::getX).collect(Collectors.toList()) idiom as a
+// Arrays.stream(asicContents).map(Content::getX).collect(Collectors.toList()) idiom as a
 // small generic helper local to this file (not a cross-file shared helper, per PORTING.md).
-func collectDocumentLists(asicContents []*ASiCContent, getter func(*ASiCContent) []model.DSSDocument) [][]model.DSSDocument {
+func collectDocumentLists(asicContents []*Content, getter func(*Content) []model.DSSDocument) [][]model.DSSDocument {
 	result := make([][]model.DSSDocument, len(asicContents))
 	for i, c := range asicContents {
 		result[i] = getter(c)
@@ -282,9 +282,9 @@ func collectDocumentLists(asicContents []*ASiCContent, getter func(*ASiCContent)
 // createEmptyContainer creates an empty container. Ports the protected
 // createEmptyContainer().
 //
-// Cross-chunk assumption (ZIPCORE): NewASiCContent() *ASiCContent and
+// Cross-chunk assumption (ZIPCORE): NewASiCContent() *Content and
 // SetContainerType(enumerations.ASiCContainerType).
-func (m *DefaultContainerMerger) createEmptyContainer() *ASiCContent {
+func (m *DefaultContainerMerger) createEmptyContainer() *Content {
 	asicContent := NewASiCContent()
 	asicContent.SetContainerType(m.getContainerType())
 	return asicContent
@@ -391,7 +391,7 @@ func (m *DefaultContainerMerger) getFinalContainerName(asicContainerType enumera
 
 // getOriginalContainerFilename ports the private getOriginalContainerFilename().
 //
-// Cross-chunk assumption (ZIPCORE): ASiCContent exposes AsicContainer() model.DSSDocument.
+// Cross-chunk assumption (ZIPCORE): Content exposes AsicContainer() model.DSSDocument.
 func (m *DefaultContainerMerger) getOriginalContainerFilename() string {
 	for _, asicContent := range m.AsicContents {
 		if asicContent.AsicContainer() != nil && asicContent.AsicContainer().Name() != "" {
@@ -431,8 +431,8 @@ func defaultContainerMergerAssertDocumentsNotNull(containers []model.DSSDocument
 }
 
 // defaultContainerMergerAssertContentsNotNull ports the private static
-// assertNotNull(ASiCContent...).
-func defaultContainerMergerAssertContentsNotNull(asicContents []*ASiCContent) {
+// assertNotNull(Content...).
+func defaultContainerMergerAssertContentsNotNull(asicContents []*Content) {
 	if len(asicContents) == 0 {
 		panic("At least one ASiCContent shall be provided!")
 	}

@@ -29,8 +29,8 @@ type PastValidationAcceptableRevocationDataAvailable[T any] struct {
 
 // NewPastValidationAcceptableRevocationDataAvailable is the constructor without
 // certificate. Port of
-// PastValidationAcceptableRevocationDataAvailable(I18nProvider, T, List, List, LevelRule).
-func NewPastValidationAcceptableRevocationDataAvailable[T any](i18nProvider *i18n.I18nProvider,
+// PastValidationAcceptableRevocationDataAvailable(Provider, T, List, List, LevelRule).
+func NewPastValidationAcceptableRevocationDataAvailable[T any](i18nProvider *i18n.Provider,
 	result *process.Result[T], revocationData []*diagnostic.CertificateRevocationWrapper,
 	revocationAcceptanceResults []*jaxb.XmlRAC,
 	constraint policy.LevelRule) *PastValidationAcceptableRevocationDataAvailable[T] {

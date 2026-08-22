@@ -2,7 +2,7 @@
 // cms_document_validator_factory.go, cades_diagnostic_data_builder.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidatorFromDocument dispatch, the
-// CMSDocumentAnalyzer, CAdESDiagnosticDataBuilder's virtual-dispatch override of
+// CMSDocumentAnalyzer, DiagnosticDataBuilder's virtual-dispatch override of
 // BuildDetachedXmlSignature/BuildDetachedXmlTimestamp, the default validation policy, and the
 // executor/report-builder tree - against real signed CAdES fixtures already committed under
 // testdata/upstream/validation.
@@ -118,7 +118,7 @@ func TestCMSDocumentValidator_Smoke(t *testing.T) {
 				}
 			}
 
-			// The diagnostic data must have gone through CAdESDiagnosticDataBuilder's override,
+			// The diagnostic data must have gone through DiagnosticDataBuilder's override,
 			// not the base SignedDocumentDiagnosticDataBuilder default - the fixtures carry
 			// SignerInformationStore data built only by the CAdES-specific override.
 			diagnosticData := reports.GetDiagnosticDataJaxb()

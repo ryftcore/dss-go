@@ -18,16 +18,16 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// JAdESCompactBuilder builds a JWS Compact Signature.
-type JAdESCompactBuilder struct {
+// CompactBuilder builds a JWS Compact Signature.
+type CompactBuilder struct {
 	AbstractJAdESBuilder
 }
 
 // NewJAdESCompactBuilder is the default constructor.
 // Port of JAdESCompactBuilder(CertificateVerifier, JAdESSignatureParameters, List<DSSDocument>).
 func NewJAdESCompactBuilder(certificateVerifier validation.CertificateVerifier,
-	parameters *JAdESSignatureParameters, documentsToSign []model.DSSDocument) (*JAdESCompactBuilder, error) {
-	builder := &JAdESCompactBuilder{}
+	parameters *SignatureParameters, documentsToSign []model.DSSDocument) (*CompactBuilder, error) {
+	builder := &CompactBuilder{}
 	if err := builder.InitAbstractJAdESBuilder(builder, certificateVerifier, parameters,
 		documentsToSign); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func NewJAdESCompactBuilder(certificateVerifier validation.CertificateVerifier,
 // Build builds the concatenation of signed header and payload (the dataToBeSigned string) in the
 // way: BASE64URL(UTF8(JWS Protected Header)) || '.' || BASE64URL(JWS Payload), followed by the
 // signature value. Port of #build(SignatureValue).
-func (b *JAdESCompactBuilder) Build(signatureValue *model.SignatureValue) (model.DSSDocument, error) {
+func (b *CompactBuilder) Build(signatureValue *model.SignatureValue) (model.DSSDocument, error) {
 	if err := b.AssertConfigurationValidity(b.Parameters); err != nil {
 		return nil, err
 	}
@@ -70,15 +70,15 @@ func (b *JAdESCompactBuilder) Build(signatureValue *model.SignatureValue) (model
 }
 
 // MimeType returns the MimeType of the produced signature. Port of #getMimeType.
-func (b *JAdESCompactBuilder) MimeType() enumerations.MimeType {
+func (b *CompactBuilder) MimeType() enumerations.MimeType {
 	return enumerations.MimeTypeEnumJOSE
 }
 
 // AssertConfigurationValidity verifies that the configured signature packaging and level are
 // supported by a JAdES Compact Signature.
 // Port of the protected, overridden #assertConfigurationValidity.
-func (b *JAdESCompactBuilder) AssertConfigurationValidity(
-	signatureParameters *JAdESSignatureParameters) error {
+func (b *CompactBuilder) AssertConfigurationValidity(
+	signatureParameters *SignatureParameters) error {
 	if signatureParameters.SignaturePackaging() == "" {
 		panic("SignaturePackaging shall be defined!")
 	}
@@ -99,5 +99,5 @@ func (b *JAdESCompactBuilder) AssertConfigurationValidity(
 	return nil
 }
 
-// Compile-time assertion that *JAdESCompactBuilder satisfies the builder contract.
-var _ JAdESBuilder = (*JAdESCompactBuilder)(nil)
+// Compile-time assertion that *CompactBuilder satisfies the builder contract.
+var _ Builder = (*CompactBuilder)(nil)

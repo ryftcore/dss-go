@@ -11,7 +11,7 @@ import (
 // LogLOTLLocationChangeAlertHandler warns on the LOTL location change.
 type LogLOTLLocationChangeAlertHandler struct{}
 
-var _ alert.AlertHandler[*tslmodel.LOTLInfo] = (*LogLOTLLocationChangeAlertHandler)(nil)
+var _ alert.Handler[*tslmodel.LOTLInfo] = (*LogLOTLLocationChangeAlertHandler)(nil)
 
 // NewLogLOTLLocationChangeAlertHandler is the default constructor.
 func NewLogLOTLLocationChangeAlertHandler() *LogLOTLLocationChangeAlertHandler {

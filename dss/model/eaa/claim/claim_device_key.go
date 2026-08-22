@@ -7,9 +7,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// ClaimDeviceKey represents a device key used for creating a key-binding
+// DeviceKey represents a device key used for creating a key-binding
 // signature.
-type ClaimDeviceKey interface {
+type DeviceKey interface {
 	Claim
 
 	// PublicKey gets the public key. Ports ClaimDeviceKey#getPublicKey.

@@ -47,8 +47,8 @@ type ValidationTimeSliding struct {
 }
 
 // NewValidationTimeSliding is the default constructor. Port of
-// ValidationTimeSliding(I18nProvider, TokenProxy, CertificateWrapper, Date, POEExtraction, Map, Context, ValidationPolicy).
-func NewValidationTimeSliding(i18nProvider *i18n.I18nProvider, token diagnostic.TokenProxy,
+// ValidationTimeSliding(Provider, TokenProxy, CertificateWrapper, Date, POEExtraction, Map, Context, ValidationPolicy).
+func NewValidationTimeSliding(i18nProvider *i18n.Provider, token diagnostic.TokenProxy,
 	trustedCertificate *diagnostic.CertificateWrapper, currentTime time.Time, poe *POEExtraction,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, context enumerations.Context,
 	validationPolicy policy.ValidationPolicy) *ValidationTimeSliding {

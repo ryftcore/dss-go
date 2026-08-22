@@ -23,8 +23,8 @@ type TimestampBasicValidationProcess struct {
 }
 
 // NewTimestampBasicValidationProcess is the default constructor. Port of
-// TimestampBasicValidationProcess(I18nProvider, DiagnosticData, TimestampWrapper, Map).
-func NewTimestampBasicValidationProcess(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// TimestampBasicValidationProcess(Provider, Data, TimestampWrapper, Map).
+func NewTimestampBasicValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	timestamp *diagnostic.TimestampWrapper, bbbs map[string]*jaxb.XmlBasicBuildingBlocks) *TimestampBasicValidationProcess {
 	xmlResult := &jaxb.XmlValidationProcessBasicTimestamp{}
 	result := process.NewResult(xmlResult, &xmlResult.XmlConstraintsConclusionContent, &xmlResult.XmlConstraintsConclusionAttrs)

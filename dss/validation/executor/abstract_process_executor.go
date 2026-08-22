@@ -34,7 +34,7 @@ type AbstractProcessExecutor struct {
 
 	// i18nProvider is the i18n provider. Port of the private i18nProvider
 	// field.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 }
 
 // NewAbstractProcessExecutor is the default constructor instantiating the
@@ -86,9 +86,9 @@ func (e *AbstractProcessExecutor) SetLocale(locale string) {
 	e.i18nProvider = i18n.NewI18nProviderForLocale(locale)
 }
 
-// I18nProvider gets the i18nProvider, instantiating it with the default
+// Provider gets the i18nProvider, instantiating it with the default
 // locale on first use. Port of the protected getI18nProvider().
-func (e *AbstractProcessExecutor) I18nProvider() *i18n.I18nProvider {
+func (e *AbstractProcessExecutor) I18nProvider() *i18n.Provider {
 	if e.i18nProvider == nil {
 		e.i18nProvider = i18n.NewI18nProvider()
 	}

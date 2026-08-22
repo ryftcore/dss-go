@@ -62,7 +62,7 @@ func NewSimpleASiCWithCAdESFilenameFactory() *SimpleASiCWithCAdESFilenameFactory
 }
 
 // SignatureFilename ports the @Override getSignatureFilename(ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) SignatureFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) SignatureFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.signatureFilename) {
 		return f.getValidSignatureFilename(f.signatureFilename, asicContent)
 	}
@@ -81,7 +81,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetSignatureFilename(signatureFilen
 }
 
 // TimestampFilename ports the @Override getTimestampFilename(ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) TimestampFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) TimestampFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.timestampFilename) {
 		return f.getValidTimestampFilename(f.timestampFilename, asicContent)
 	}
@@ -104,7 +104,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetTimestampFilename(timestampFilen
 //
 // Panics with Java's NullPointerException message when evidenceRecordType is empty
 // (Objects.requireNonNull).
-func (f *SimpleASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.ASiCContent, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) EvidenceRecordFilename(asicContent *asic.Content, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
 	if evidenceRecordType == "" {
 		panic("EvidenceRecordType shall be defined!")
 	}
@@ -126,7 +126,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetEvidenceRecordFilename(evidenceR
 }
 
 // ManifestFilename ports the @Override getManifestFilename(ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) ManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) ManifestFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.manifestFilename) {
 		return f.getValidManifestFilename(f.manifestFilename, asicContent)
 	}
@@ -144,7 +144,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetManifestFilename(manifestFilenam
 }
 
 // ArchiveManifestFilename ports the @Override getArchiveManifestFilename(ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) ArchiveManifestFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) ArchiveManifestFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.archiveManifestFilename) {
 		return f.getValidArchiveManifestFilename(f.archiveManifestFilename, asicContent)
 	}
@@ -158,7 +158,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetArchiveManifestFilename(archiveM
 }
 
 // DataPackageFilename ports the @Override getDataPackageFilename(ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) DataPackageFilename(asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) DataPackageFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.dataPackageFilename) {
 		validFilename, err := f.ValidDataPackageFilename(f.dataPackageFilename, asicContent)
 		if err != nil {
@@ -175,8 +175,8 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetDataPackageFilename(dataPackageF
 }
 
 // EvidenceRecordManifestFilename ports the @Override getEvidenceRecordManifestFilename(
-// ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.ASiCContent) string {
+// Content).
+func (f *SimpleASiCWithCAdESFilenameFactory) EvidenceRecordManifestFilename(asicContent *asic.Content) string {
 	if utils.IsStringNotEmpty(f.evidenceRecordManifestFilename) {
 		validFilename, err := f.ValidEvidenceRecordManifestFilename(f.evidenceRecordManifestFilename, asicContent)
 		if err != nil {
@@ -194,15 +194,15 @@ func (f *SimpleASiCWithCAdESFilenameFactory) SetEvidenceRecordManifestFilename(e
 }
 
 // getValidSignatureFilename returns a valid signature filename. Ports the protected
-// getValidSignatureFilename(String, ASiCContent).
+// getValidSignatureFilename(String, Content).
 //
 // Panics with Java's IllegalArgumentException messages on an invalid filename.
-func (f *SimpleASiCWithCAdESFilenameFactory) getValidSignatureFilename(signatureFilename string, asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) getValidSignatureFilename(signatureFilename string, asicContent *asic.Content) string {
 	signatureFilename = f.WithMetaInfFolder(signatureFilename)
 	if err := f.AssertFilenameValid(signatureFilename, asicContent.SignatureDocuments()); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -220,13 +220,13 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidSignatureFilename(signature
 }
 
 // getValidTimestampFilename returns a valid timestamp filename. Ports the protected
-// getValidTimestampFilename(String, ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) getValidTimestampFilename(timestampFilename string, asicContent *asic.ASiCContent) string {
+// getValidTimestampFilename(String, Content).
+func (f *SimpleASiCWithCAdESFilenameFactory) getValidTimestampFilename(timestampFilename string, asicContent *asic.Content) string {
 	timestampFilename = f.WithMetaInfFolder(timestampFilename)
 	if err := f.AssertFilenameValid(timestampFilename, asicContent.TimestampDocuments()); err != nil {
 		panic(err)
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -245,8 +245,8 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidTimestampFilename(timestamp
 }
 
 // getValidEvidenceRecordFilename returns a valid evidence record filename. Ports the protected
-// getValidEvidenceRecordFilename(String, ASiCContent, EvidenceRecordTypeEnum).
-func (f *SimpleASiCWithCAdESFilenameFactory) getValidEvidenceRecordFilename(evidenceRecordFilename string, asicContent *asic.ASiCContent, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
+// getValidEvidenceRecordFilename(String, Content, EvidenceRecordTypeEnum).
+func (f *SimpleASiCWithCAdESFilenameFactory) getValidEvidenceRecordFilename(evidenceRecordFilename string, asicContent *asic.Content, evidenceRecordType enumerations.EvidenceRecordTypeEnum) string {
 	if err := f.AssertASiCContentIsValid(asicContent); err != nil {
 		panic(err)
 	}
@@ -269,7 +269,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidEvidenceRecordFilename(evid
 		panic(exception.NewIllegalInputException(
 			"The Evidence Record Type '" + string(evidenceRecordType) + "' is not supported!"))
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -289,8 +289,8 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidEvidenceRecordFilename(evid
 }
 
 // getValidManifestFilename returns a valid manifest filename. Ports the protected
-// getValidManifestFilename(String, ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) getValidManifestFilename(manifestFilename string, asicContent *asic.ASiCContent) string {
+// getValidManifestFilename(String, Content).
+func (f *SimpleASiCWithCAdESFilenameFactory) getValidManifestFilename(manifestFilename string, asicContent *asic.Content) string {
 	manifestFilename = f.WithMetaInfFolder(manifestFilename)
 	if err := f.AssertFilenameValid(manifestFilename, asicContent.ManifestDocuments()); err != nil {
 		panic(err)
@@ -312,7 +312,7 @@ func (f *SimpleASiCWithCAdESFilenameFactory) getValidManifestFilename(manifestFi
 // "META-INF/" is optional.
 //
 // Ports the protected getValidArchiveManifestFilename(String, ASiCContent).
-func (f *SimpleASiCWithCAdESFilenameFactory) getValidArchiveManifestFilename(archiveManifestFilename string, asicContent *asic.ASiCContent) string {
+func (f *SimpleASiCWithCAdESFilenameFactory) getValidArchiveManifestFilename(archiveManifestFilename string, asicContent *asic.Content) string {
 	archiveManifestFilename = f.WithMetaInfFolder(archiveManifestFilename)
 	if err := f.AssertFilenameValid(archiveManifestFilename, asicContent.ArchiveManifestDocuments()); err != nil {
 		panic(err)

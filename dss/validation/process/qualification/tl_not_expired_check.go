@@ -29,8 +29,8 @@ type TLNotExpiredCheck struct {
 }
 
 // NewTLNotExpiredCheck is the default constructor. Port of
-// TLNotExpiredCheck(I18nProvider, XmlTLAnalysis, XmlTrustSourceList, Date, LevelRule).
-func NewTLNotExpiredCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlTLAnalysis],
+// TLNotExpiredCheck(Provider, XmlTLAnalysis, XmlTrustSourceList, Date, LevelRule).
+func NewTLNotExpiredCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlTLAnalysis],
 	currentTL *dssjaxb.XmlTrustSourceListContent, currentTime time.Time,
 	constraint policy.LevelRule) *TLNotExpiredCheck {
 	c := &TLNotExpiredCheck{

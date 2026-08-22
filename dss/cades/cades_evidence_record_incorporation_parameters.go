@@ -3,15 +3,15 @@ package cades
 
 import "github.com/ryftcore/dss-go/dss/document"
 
-// CAdESEvidenceRecordIncorporationParameters holds parameters for an existing evidence record
+// EvidenceRecordIncorporationParameters holds parameters for an existing evidence record
 // embedding into an existing CAdES signature.
-type CAdESEvidenceRecordIncorporationParameters struct {
+type EvidenceRecordIncorporationParameters struct {
 	document.AbstractEvidenceRecordIncorporationParameters
 }
 
 // NewCAdESEvidenceRecordIncorporationParameters is the default constructor.
-func NewCAdESEvidenceRecordIncorporationParameters() *CAdESEvidenceRecordIncorporationParameters {
-	return &CAdESEvidenceRecordIncorporationParameters{
+func NewCAdESEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
+	return &EvidenceRecordIncorporationParameters{
 		AbstractEvidenceRecordIncorporationParameters: document.NewAbstractEvidenceRecordIncorporationParameters(),
 	}
 }

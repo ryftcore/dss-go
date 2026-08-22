@@ -25,7 +25,7 @@ import (
 )
 
 // schemeInformationTask is the minimal concrete AbstractParsingTask: it inherits the base's
-// CreateTrustedListFacade (i.e. the plain TrustedListFacade, like TLParsingTask does).
+// CreateTrustedListFacade (i.e. the plain Facade, like TLParsingTask does).
 type schemeInformationTask struct {
 	AbstractParsingTaskBase
 }

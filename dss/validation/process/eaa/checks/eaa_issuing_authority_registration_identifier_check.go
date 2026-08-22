@@ -22,7 +22,7 @@ type EAAIssuingAuthorityRegistrationIdentifierCheck struct {
 }
 
 // NewEAAIssuingAuthorityRegistrationIdentifierCheck is the default constructor.
-func NewEAAIssuingAuthorityRegistrationIdentifierCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAIssuingAuthorityRegistrationIdentifierCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAAIssuingAuthorityRegistrationIdentifierCheck {
 	c := &EAAIssuingAuthorityRegistrationIdentifierCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

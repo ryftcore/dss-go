@@ -26,16 +26,16 @@ type CertificateValidationBeforeSunsetDateCheck[T any] struct {
 
 // NewCertificateValidationBeforeSunsetDateCheck is the default constructor.
 // Port of CertificateValidationBeforeSunsetDateCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule).
-func NewCertificateValidationBeforeSunsetDateCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewCertificateValidationBeforeSunsetDateCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, controlTime time.Time, constraint policy.LevelRule) *CertificateValidationBeforeSunsetDateCheck[T] {
 	return newCertificateValidationBeforeSunsetDateCheck(i18nProvider, result, certificate, controlTime, constraint, nil)
 }
 
 // newCertificateValidationBeforeSunsetDateCheck is the constructor with an
 // optional certificate identifier. Port of the protected constructor
-// CertificateValidationBeforeSunsetDateCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule, String);
+// CertificateValidationBeforeSunsetDateCheck(Provider, T, CertificateWrapper, Date, LevelRule, String);
 // a nil certificateId matches Java's null (no explicit BBB id).
-func newCertificateValidationBeforeSunsetDateCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func newCertificateValidationBeforeSunsetDateCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, controlTime time.Time, constraint policy.LevelRule,
 	certificateId *string) *CertificateValidationBeforeSunsetDateCheck[T] {
 	var chainItemBase *process.ChainItemBase[T]

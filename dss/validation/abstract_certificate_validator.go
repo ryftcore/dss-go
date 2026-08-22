@@ -19,7 +19,7 @@
 //     base fluent setters with covariant return types, which Go cannot express
 //     in one interface, so InitDiagnosticDataBuilder hands back a pair: the
 //     concrete builder (for the virtual build() and for the downcast) plus a
-//     pointer to its embedded DiagnosticDataBuilder (carrying the base fluent
+//     pointer to its embedded DataBuilder (carrying the base fluent
 //     setters Java's statically-typed chain calls). Both refer to the same
 //     object.
 //
@@ -58,7 +58,7 @@ import (
 var defaultValidationPolicyResources embed.FS
 
 // DiagnosticDataBuilderRef is the Go stand-in for the polymorphic use Java
-// makes of the DiagnosticDataBuilder base type: the only member the validator
+// makes of the DataBuilder base type: the only member the validator
 // calls through it is build().
 type DiagnosticDataBuilderRef interface {
 	// Build builds the XmlDiagnosticData. Port of build().
@@ -86,28 +86,28 @@ type AbstractCertificateValidatorOverrides[PE any] interface {
 	// valid. Port of the protected assertConfigurationValid().
 	AssertConfigurationValid() error
 
-	// PrepareValidationContext initializes and fills the ValidationContext
+	// PrepareValidationContext initializes and fills the Context
 	// for a certificate token validation. Port of the protected
 	// prepareValidationContext(CertificateVerifier).
-	PrepareValidationContext(certificateVerifier spivalidation.CertificateVerifier) spivalidation.ValidationContext
+	PrepareValidationContext(certificateVerifier spivalidation.CertificateVerifier) spivalidation.Context
 
-	// CreateValidationContext creates a new instance of ValidationContext.
+	// CreateValidationContext creates a new instance of Context.
 	// Port of the protected createValidationContext().
-	CreateValidationContext() spivalidation.ValidationContext
+	CreateValidationContext() spivalidation.Context
 
 	// PrepareDiagnosticDataBuilder creates a DiagnosticDataBuilder. Port of
 	// the protected prepareDiagnosticDataBuilder().
 	PrepareDiagnosticDataBuilder() DiagnosticDataBuilderRef
 
-	// CreateDiagnosticDataBuilder creates and fills the DiagnosticDataBuilder
+	// CreateDiagnosticDataBuilder creates and fills the DataBuilder
 	// with the relevant data. Port of the protected
-	// createDiagnosticDataBuilder(ValidationContext).
-	CreateDiagnosticDataBuilder(validationContext spivalidation.ValidationContext) DiagnosticDataBuilderRef
+	// createDiagnosticDataBuilder(Context).
+	CreateDiagnosticDataBuilder(validationContext spivalidation.Context) DiagnosticDataBuilderRef
 
-	// InitDiagnosticDataBuilder instantiates a new DiagnosticDataBuilder.
+	// InitDiagnosticDataBuilder instantiates a new DataBuilder.
 	// Port of the protected initDiagnosticDataBuilder(); see the file header
 	// on the returned pair.
-	InitDiagnosticDataBuilder() (DiagnosticDataBuilderRef, *reportsdiagnostic.DiagnosticDataBuilder)
+	InitDiagnosticDataBuilder() (DiagnosticDataBuilderRef, *reportsdiagnostic.DataBuilder)
 }
 
 // AbstractCertificateValidator contains common configuration and methods for
@@ -130,7 +130,7 @@ type AbstractCertificateValidator[R any, PE executor.ProcessExecutor[R]] struct 
 	// protected identifierProvider field.
 	IdentifierProvider model.TokenIdentifierProvider
 
-	// ValidationContextExecutor performs validation of the ValidationContext.
+	// ValidationContextExecutor performs validation of the Context.
 	// Port of the protected validationContextExecutor field.
 	ValidationContextExecutor spiexecutor.ValidationContextExecutor
 
@@ -467,21 +467,21 @@ func (v *AbstractCertificateValidator[R, PE]) GetDiagnosticData() *diagnosticjax
 	return v.certificateValidatorOverrides().PrepareDiagnosticDataBuilder().Build()
 }
 
-// PrepareValidationContext initializes and fills the ValidationContext for a
+// PrepareValidationContext initializes and fills the Context for a
 // certificate token validation. Port of the protected
 // prepareValidationContext(CertificateVerifier).
 func (v *AbstractCertificateValidator[R, PE]) PrepareValidationContext(
-	certificateVerifier spivalidation.CertificateVerifier) spivalidation.ValidationContext {
+	certificateVerifier spivalidation.CertificateVerifier) spivalidation.Context {
 	svc := v.certificateValidatorOverrides().CreateValidationContext()
 	svc.Initialize(certificateVerifier)
 	return svc
 }
 
-// CreateValidationContext creates a new instance of ValidationContext
+// CreateValidationContext creates a new instance of Context
 // performing preparation of validation data, certificate chain building,
 // revocation request, as well as custom validation checks execution. Port of
 // the protected createValidationContext().
-func (v *AbstractCertificateValidator[R, PE]) CreateValidationContext() spivalidation.ValidationContext {
+func (v *AbstractCertificateValidator[R, PE]) CreateValidationContext() spivalidation.Context {
 	return spivalidation.NewSignatureValidationContextAtTime(v.ValidationTime())
 }
 
@@ -497,17 +497,17 @@ func (v *AbstractCertificateValidator[R, PE]) PrepareDiagnosticDataBuilder() Dia
 }
 
 // ValidateContext processes the validation. Port of the protected
-// validateContext(ValidationContext).
-func (v *AbstractCertificateValidator[R, PE]) ValidateContext(validationContext spivalidation.ValidationContext) {
+// validateContext(Context).
+func (v *AbstractCertificateValidator[R, PE]) ValidateContext(validationContext spivalidation.Context) {
 	v.ValidationContextExecutor.Validate(validationContext)
 }
 
-// CreateDiagnosticDataBuilder creates and fills the DiagnosticDataBuilder
+// CreateDiagnosticDataBuilder creates and fills the DataBuilder
 // with the relevant data. Port of the protected
-// createDiagnosticDataBuilder(ValidationContext); the fluent chain runs on the
+// createDiagnosticDataBuilder(Context); the fluent chain runs on the
 // embedded base builder, exactly as Java's statically-typed chain does.
 func (v *AbstractCertificateValidator[R, PE]) CreateDiagnosticDataBuilder(
-	validationContext spivalidation.ValidationContext) DiagnosticDataBuilderRef {
+	validationContext spivalidation.Context) DiagnosticDataBuilderRef {
 	ref, base := v.certificateValidatorOverrides().InitDiagnosticDataBuilder()
 	base.UsedCertificates(validationContext.GetProcessedCertificates()).
 		UsedRevocations(validationContext.GetProcessedRevocations()).
@@ -522,7 +522,7 @@ func (v *AbstractCertificateValidator[R, PE]) CreateDiagnosticDataBuilder(
 // InitDiagnosticDataBuilder instantiates a new DiagnosticDataBuilder. Port of
 // the protected initDiagnosticDataBuilder(); see the file header on the
 // returned pair.
-func (v *AbstractCertificateValidator[R, PE]) InitDiagnosticDataBuilder() (DiagnosticDataBuilderRef, *reportsdiagnostic.DiagnosticDataBuilder) {
+func (v *AbstractCertificateValidator[R, PE]) InitDiagnosticDataBuilder() (DiagnosticDataBuilderRef, *reportsdiagnostic.DataBuilder) {
 	builder := reportsdiagnostic.NewCertificateDiagnosticDataBuilder()
-	return builder, &builder.DiagnosticDataBuilder
+	return builder, &builder.DataBuilder
 }

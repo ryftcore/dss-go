@@ -9,8 +9,8 @@
 // base's, unchanged.
 //
 // The type parameter is *cades.CAdESTimestampParameters, not *PAdESTimestampParameters: Java's
-// PAdESSignatureParameters extends CAdESSignatureParameters extends
-// AbstractSignatureParameters<CAdESTimestampParameters>, so that is the timestamp-parameters type
+// SignatureParameters extends SignatureParameters extends
+// AbstractSignatureParameters<TimestampParameters>, so that is the timestamp-parameters type
 // the checked AbstractSignatureParameters carries.
 //
 // slf4j is dropped (PORTING.md).
@@ -23,10 +23,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// PAdESSignatureRequirementsChecker verifies signature creation or augmentation requirements for
+// SignatureRequirementsChecker verifies signature creation or augmentation requirements for
 // PAdES signatures.
-type PAdESSignatureRequirementsChecker struct {
-	*document.SignatureRequirementsChecker[*cades.CAdESTimestampParameters]
+type SignatureRequirementsChecker struct {
+	*document.SignatureRequirementsChecker[*cades.TimestampParameters]
 
 	// certificateVerifier is the base's field of the same name, kept here because the base does
 	// not expose it and the re-declared assertions need the augmentation alert.
@@ -36,9 +36,9 @@ type PAdESSignatureRequirementsChecker struct {
 // NewPAdESSignatureRequirementsChecker is the default constructor.
 // Port of PAdESSignatureRequirementsChecker(CertificateVerifier, PAdESSignatureParameters).
 func NewPAdESSignatureRequirementsChecker(certificateVerifier validation.CertificateVerifier,
-	signatureParameters *PAdESSignatureParameters) *PAdESSignatureRequirementsChecker {
-	return &PAdESSignatureRequirementsChecker{
-		SignatureRequirementsChecker: document.NewSignatureRequirementsChecker[*cades.CAdESTimestampParameters](
+	signatureParameters *SignatureParameters) *SignatureRequirementsChecker {
+	return &SignatureRequirementsChecker{
+		SignatureRequirementsChecker: document.NewSignatureRequirementsChecker[*cades.TimestampParameters](
 			certificateVerifier, &signatureParameters.AbstractSignatureParameters),
 		certificateVerifier: certificateVerifier,
 	}
@@ -47,14 +47,14 @@ func NewPAdESSignatureRequirementsChecker(certificateVerifier validation.Certifi
 // AssertExtendToTLevelPossible verifies whether extension of the signatures to T-level is
 // possible. Port of the inherited #assertExtendToTLevelPossible; re-declared so that
 // CheckTLevelIsHighest below is the one that runs.
-func (c *PAdESSignatureRequirementsChecker) AssertExtendToTLevelPossible(signatures []validation.AdvancedSignature) {
+func (c *SignatureRequirementsChecker) AssertExtendToTLevelPossible(signatures []validation.AdvancedSignature) {
 	c.assertTLevelIsHighest(signatures)
 	c.assertHasNoEmbeddedEvidenceRecords(signatures)
 }
 
 // assertTLevelIsHighest checks whether across signatures the T-level is highest and T-level
 // augmentation can be performed. Port of the inherited protected #assertTLevelIsHighest.
-func (c *PAdESSignatureRequirementsChecker) assertTLevelIsHighest(signatures []validation.AdvancedSignature) {
+func (c *SignatureRequirementsChecker) assertTLevelIsHighest(signatures []validation.AdvancedSignature) {
 	if c.certificateVerifier.AugmentationAlertOnHigherSignatureLevel() == nil {
 		return
 	}
@@ -71,7 +71,7 @@ func (c *PAdESSignatureRequirementsChecker) assertTLevelIsHighest(signatures []v
 
 // assertHasNoEmbeddedEvidenceRecords checks whether none of the signatures is preserved by an
 // embedded evidence record. Port of the inherited protected #assertHasNoEmbeddedEvidenceRecords.
-func (c *PAdESSignatureRequirementsChecker) assertHasNoEmbeddedEvidenceRecords(signatures []validation.AdvancedSignature) {
+func (c *SignatureRequirementsChecker) assertHasNoEmbeddedEvidenceRecords(signatures []validation.AdvancedSignature) {
 	if c.certificateVerifier.AugmentationAlertOnHigherSignatureLevel() == nil {
 		return
 	}
@@ -93,7 +93,7 @@ func (c *PAdESSignatureRequirementsChecker) assertHasNoEmbeddedEvidenceRecords(s
 // CAdES/XAdES rule, a PAdES signature carrying a DSS dictionary but no associated timestamp may
 // still be extended, so that a best-signature-time can be provided and fresh revocation data
 // incorporated. Port of the protected #checkTLevelIsHighest override.
-func (c *PAdESSignatureRequirementsChecker) CheckTLevelIsHighest(signature validation.AdvancedSignature,
+func (c *SignatureRequirementsChecker) CheckTLevelIsHighest(signature validation.AdvancedSignature,
 	status *validation.SignatureStatus) {
 	if signature.HasLTAProfile() {
 		status.AddRelatedTokenAndErrorMessage(signature, "The signature is already extended with a higher level.")

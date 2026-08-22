@@ -41,7 +41,7 @@ import (
 	"time"
 )
 
-// Namespace is the target namespace of DiagnosticData.xsd. The schema declares
+// Namespace is the target namespace of Data.xsd. The schema declares
 // elementFormDefault="qualified" and the RI binds it to the default prefix, so
 // only the document element carries an xmlns declaration.
 const Namespace = "http://dss.esig.europa.eu/validation/diagnostic"
@@ -837,7 +837,7 @@ func (w *CertificateExtensionsWrapper) UnmarshalXML(d *xml.Decoder, start xml.St
 // --------------------------------------------------------------- entry points
 
 // Unmarshal parses a diagnostic-data document and links its IDREF graph, the way
-// DiagnosticDataFacade.unmarshall does.
+// DataFacade.unmarshall does.
 func Unmarshal(data []byte) (*XmlDiagnosticData, error) {
 	dd := &XmlDiagnosticData{}
 	if err := xml.Unmarshal(data, dd); err != nil {
@@ -848,7 +848,7 @@ func Unmarshal(data []byte) (*XmlDiagnosticData, error) {
 }
 
 // Marshal writes a diagnostic-data document byte-for-byte the way
-// DiagnosticDataFacade.marshall does: the XML declaration, four-space indented
+// DataFacade.marshall does: the XML declaration, four-space indented
 // output, a trailing newline, and the JAXB spellings jaxbCanonical restores.
 func Marshal(dd *XmlDiagnosticData) ([]byte, error) {
 	var buf bytes.Buffer

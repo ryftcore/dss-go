@@ -833,7 +833,7 @@ func (w *SignatureWrapper) IsPolicyPresent() bool {
 	return w.signature.Policy != nil
 }
 
-// PolicyProcessingError returns an error string occurred during a SignaturePolicy proceeding,
+// PolicyProcessingError returns an error string occurred during a Policy proceeding,
 // when applicable. Port of getPolicyProcessingError().
 func (w *SignatureWrapper) PolicyProcessingError() string {
 	if policy := w.signature.Policy; policy != nil && policy.ProcessingError != nil {

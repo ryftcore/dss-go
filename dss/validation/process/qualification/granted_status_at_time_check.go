@@ -25,8 +25,8 @@ type GrantedStatusAtTimeCheck[T any] struct {
 }
 
 // NewGrantedStatusAtTimeCheck is the default constructor. Port of
-// GrantedStatusAtTimeCheck(I18nProvider, T, List, ValidationTime, LevelRule).
-func NewGrantedStatusAtTimeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// GrantedStatusAtTimeCheck(Provider, T, List, ValidationTime, LevelRule).
+func NewGrantedStatusAtTimeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, validationTime enumerations.ValidationTime,
 	constraint policy.LevelRule) *GrantedStatusAtTimeCheck[T] {
 	c := &GrantedStatusAtTimeCheck[T]{

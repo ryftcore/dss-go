@@ -52,8 +52,8 @@ type AbstractQWACValidationProcessBlockOverrides interface {
 // InitAbstractQWACValidationProcessBlock wires the shared state; called by
 // the concrete constructor before InitChainBase. Port of the common
 // constructor
-// AbstractQWACValidationProcessBlock(I18nProvider, Date, CertificateWrapper, XmlConclusion, XmlCertificateQualificationProcess, String).
-func (c *AbstractQWACValidationProcessBlock) InitAbstractQWACValidationProcessBlock(i18nProvider *i18n.I18nProvider,
+// AbstractQWACValidationProcessBlock(Provider, Date, CertificateWrapper, XmlConclusion, XmlCertificateQualificationProcess, String).
+func (c *AbstractQWACValidationProcessBlock) InitAbstractQWACValidationProcessBlock(i18nProvider *i18n.Provider,
 	validationTime time.Time, certificate *diagnostic.CertificateWrapper, buildingBlocksConclusion *jaxb.XmlConclusion,
 	certificateQualification *jaxb.XmlCertificateQualificationProcess, websiteUrl string,
 	overrides AbstractQWACValidationProcessBlockOverrides) {

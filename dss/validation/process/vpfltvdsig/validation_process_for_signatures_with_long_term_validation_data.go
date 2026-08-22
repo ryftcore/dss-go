@@ -65,7 +65,7 @@ type ValidationProcessForSignaturesWithLongTermValidationData struct {
 	basicSignatureValidation *jaxb.XmlConstraintsConclusionContent
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// currentSignature is the signature.
 	currentSignature *diagnostic.SignatureWrapper
@@ -99,9 +99,9 @@ type ValidationProcessForSignaturesWithLongTermValidationData struct {
 
 // NewValidationProcessForSignaturesWithLongTermValidationData is the default
 // constructor. Port of
-// ValidationProcessForSignaturesWithLongTermValidationData(I18nProvider, XmlSignature, DiagnosticData, SignatureWrapper, Map, ValidationPolicy, Date).
-func NewValidationProcessForSignaturesWithLongTermValidationData(i18nProvider *i18n.I18nProvider,
-	signatureAnalysis *jaxb.XmlSignature, diagnosticData *diagnostic.DiagnosticData, currentSignature *diagnostic.SignatureWrapper,
+// ValidationProcessForSignaturesWithLongTermValidationData(Provider, XmlSignature, Data, SignatureWrapper, Map, ValidationPolicy, Date).
+func NewValidationProcessForSignaturesWithLongTermValidationData(i18nProvider *i18n.Provider,
+	signatureAnalysis *jaxb.XmlSignature, diagnosticData *diagnostic.Data, currentSignature *diagnostic.SignatureWrapper,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, validationPolicy policy.ValidationPolicy,
 	currentDate time.Time) *ValidationProcessForSignaturesWithLongTermValidationData {
 	xmlResult := &jaxb.XmlValidationProcessLongTermData{}
@@ -579,7 +579,7 @@ type revocationFreshnessCheckerTryLaterResultCheck struct {
 	*xcv.RevocationFreshnessCheckerResultCheck[*jaxb.XmlValidationProcessLongTermData]
 }
 
-func newRevocationFreshnessCheckerTryLaterResultCheck(i18nProvider *i18n.I18nProvider,
+func newRevocationFreshnessCheckerTryLaterResultCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], rfcResult *jaxb.XmlRFC,
 	constraint policy.LevelRule) *revocationFreshnessCheckerTryLaterResultCheck {
 	c := &revocationFreshnessCheckerTryLaterResultCheck{

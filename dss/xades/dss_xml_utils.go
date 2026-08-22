@@ -440,7 +440,7 @@ func DSSXMLUtilsGetAttribute(node *xmldom.Node, attributeName string) string {
 // validateAgainstXSD(XSDAbstractUtils, Source). See the file header's "FLAGGED FOR INTEGRATOR"
 // note: no bundled-schema/javax.xml.validation-equivalent Go package exists yet in this port, so
 // this always reports no errors (i.e. the structure is always considered valid).
-func DSSXMLUtilsValidateAgainstXSD(xsdUtils XAdESStructureXSDUtils, source *xmldom.Node) []string {
+func DSSXMLUtilsValidateAgainstXSD(xsdUtils StructureXSDUtils, source *xmldom.Node) []string {
 	return nil
 }
 
@@ -450,28 +450,28 @@ func DSSXMLUtilsValidateAgainstXSD(xsdUtils XAdESStructureXSDUtils, source *xmld
 // XAdES XSD schema resources or javax.xml.validation equivalent exists anywhere in this port
 // yet, so these return an opaque placeholder value;
 // DSSXMLUtilsValidateAgainstXSD above never inspects it (it always reports no errors), so the
-// placeholder is never dereferenced. XAdESStructureValidator.getUtils's namespace dispatch -
+// placeholder is never dereferenced. StructureValidator.getUtils's namespace dispatch -
 // including its UnsupportedOperationException panic for unrecognized namespaces - is still
 // exercised faithfully; only the actual schema validation is a no-op.
 var (
-	xades111XSDUtils    XAdESStructureXSDUtils = struct{}{}
-	xades122XSDUtils    XAdESStructureXSDUtils = struct{}{}
-	xades319132XSDUtils XAdESStructureXSDUtils = struct{}{}
+	xades111XSDUtils    StructureXSDUtils = struct{}{}
+	xades122XSDUtils    StructureXSDUtils = struct{}{}
+	xades319132XSDUtils StructureXSDUtils = struct{}{}
 )
 
 // XAdES111XSDUtils ports eu.europa.esig.xades.XAdES111Utils#getInstance(). See the note above.
-func XAdES111XSDUtils() XAdESStructureXSDUtils {
+func XAdES111XSDUtils() StructureXSDUtils {
 	return xades111XSDUtils
 }
 
 // XAdES122XSDUtils ports eu.europa.esig.xades.XAdES122Utils#getInstance(). See the note above.
-func XAdES122XSDUtils() XAdESStructureXSDUtils {
+func XAdES122XSDUtils() StructureXSDUtils {
 	return xades122XSDUtils
 }
 
 // XAdES319132XSDUtils ports eu.europa.esig.xades.XAdES319132Utils#getInstance(). See the note
 // above.
-func XAdES319132XSDUtils() XAdESStructureXSDUtils {
+func XAdES319132XSDUtils() StructureXSDUtils {
 	return xades319132XSDUtils
 }
 
@@ -623,9 +623,9 @@ func DSSXMLUtilsIsSignedProperties(reference *xmldsig.Reference, xadesPath defin
 
 // DSSXMLUtilsIsCounterSignatureReference determines if the given reference refers to a
 // CounterSignature element within the signature. Ports isCounterSignatureReference(Reference,
-// XAdESSignature).
-func DSSXMLUtilsIsCounterSignatureReference(reference *xmldsig.Reference, sig *XAdESSignature) bool {
-	masterSignature, _ := sig.MasterSignature().(*XAdESSignature)
+// Signature).
+func DSSXMLUtilsIsCounterSignatureReference(reference *xmldsig.Reference, sig *Signature) bool {
+	masterSignature, _ := sig.MasterSignature().(*Signature)
 	if masterSignature != nil {
 		return DSSXMLUtilsIsCounterSignatureReferenceType(reference.Type()) ||
 			dssXMLUtilsIsSignatureValueReferenced(masterSignature, reference)
@@ -637,8 +637,8 @@ func DSSXMLUtilsIsCounterSignatureReference(reference *xmldsig.Reference, sig *X
 }
 
 // dssXMLUtilsIsSignatureValueReferenced ports the private static
-// isSignatureValueReferenced(XAdESSignature, Reference).
-func dssXMLUtilsIsSignatureValueReferenced(masterSignature *XAdESSignature, reference *xmldsig.Reference) bool {
+// isSignatureValueReferenced(Signature, Reference).
+func dssXMLUtilsIsSignatureValueReferenced(masterSignature *Signature, reference *xmldsig.Reference) bool {
 	sigValueID := masterSignature.SignatureValueId()
 	return sigValueID != "" && sigValueID == xmlutils.DomUtilsGetId(reference.URI())
 }
@@ -802,8 +802,8 @@ func dssXMLUtilsKeyInfoPublicKeyFromRSAKeyValue(keyInfoElement *xmldom.Node) *mo
 
 // DSSXMLUtilsCreateCounterSignature creates and returns a counter signature found in
 // counterSignatureElement. Returns nil on failure. Ports createCounterSignature(Element,
-// XAdESSignature).
-func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, masterSignature *XAdESSignature) (result validation.AdvancedSignature) {
+// Signature).
+func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, masterSignature *Signature) (result validation.AdvancedSignature) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs "An error occurred during counter signature extraction. The element
@@ -823,7 +823,7 @@ func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, mas
 	}
 	counterSigDOMElement := NewXAdESDOMElement(counterSignatureNode, masterSignature.OwnerDocument())
 
-	// Verify that the element is a proper signature by trying to build a XAdESSignature out of it
+	// Verify that the element is a proper signature by trying to build a Signature out of it
 	xadesCounterSignature := NewXAdESSignatureFromDOMElement(counterSigDOMElement)
 	xadesCounterSignature.SetFilename(masterSignature.Filename())
 	xadesCounterSignature.SetDetachedContents(masterSignature.DetachedContents())
@@ -1121,8 +1121,8 @@ func DSSXMLUtilsIncorporateDigestValue(parentDom *xmldom.Node, base64EncodedDige
 // DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault returns params.ReferenceDigestAlgorithm() if
 // set, params.DigestAlgorithm() otherwise. Panics with the Java message when neither algorithm is
 // usable (IllegalArgumentException upstream). Ports getReferenceDigestAlgorithmOrDefault(
-// XAdESSignatureParameters).
-func DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(params *XAdESSignatureParameters) enumerations.DigestAlgorithm {
+// SignatureParameters).
+func DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(params *SignatureParameters) enumerations.DigestAlgorithm {
 	digestAlgorithm := params.ReferenceDigestAlgorithm()
 	if digestAlgorithm == "" {
 		digestAlgorithm = params.DigestAlgorithm()

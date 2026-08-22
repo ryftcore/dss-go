@@ -19,8 +19,8 @@ type SigningTimeInCertificateValidityRangeCheck[T any] struct {
 }
 
 // NewSigningTimeInCertificateValidityRangeCheck is the default constructor. Port
-// of SigningTimeInCertificateValidityRangeCheck(I18nProvider, T, SignatureWrapper, LevelRule).
-func NewSigningTimeInCertificateValidityRangeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of SigningTimeInCertificateValidityRangeCheck(Provider, T, SignatureWrapper, LevelRule).
+func NewSigningTimeInCertificateValidityRangeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *SigningTimeInCertificateValidityRangeCheck[T] {
 	c := &SigningTimeInCertificateValidityRangeCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

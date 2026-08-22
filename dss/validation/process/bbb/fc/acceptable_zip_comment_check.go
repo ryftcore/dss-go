@@ -18,7 +18,7 @@ type AcceptableZipCommentCheck struct {
 }
 
 // NewAcceptableZipCommentCheck is the default constructor.
-func NewAcceptableZipCommentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewAcceptableZipCommentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	zipComment string, constraint policy.MultiValuesRule) *AcceptableZipCommentCheck {
 	c := &AcceptableZipCommentCheck{zipComment: zipComment}
 	c.AbstractMultiValuesCheckItem = bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint)

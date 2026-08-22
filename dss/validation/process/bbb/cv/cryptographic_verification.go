@@ -54,7 +54,7 @@ type CryptographicVerification struct {
 	*process.ChainBase[*jaxb.XmlCV]
 
 	// diagnosticData is the Diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// token is the token to verify.
 	token diagnostic.TokenProxy
@@ -67,8 +67,8 @@ type CryptographicVerification struct {
 }
 
 // NewCryptographicVerification is the default constructor. Port of
-// CryptographicVerification(I18nProvider, DiagnosticData, TokenProxy, Context, ValidationPolicy).
-func NewCryptographicVerification(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// CryptographicVerification(Provider, Data, TokenProxy, Context, ValidationPolicy).
+func NewCryptographicVerification(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	token diagnostic.TokenProxy, context enumerations.Context,
 	validationPolicy policy.ValidationPolicy) *CryptographicVerification {
 	xmlCV := &jaxb.XmlCV{}

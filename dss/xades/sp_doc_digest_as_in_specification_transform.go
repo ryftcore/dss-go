@@ -13,7 +13,7 @@ var errSPDocDigestAsInSpecificationTransformNotForReferences = errors.New(
 	"The transform SPDocDigestAsInSpecificationTransform cannot be used for reference processing!")
 
 // spDocDigestAsInSpecificationTransformAlgorithmURI is the SPDocDigestAsInSpecification
-// algorithm URI, "http://uri.etsi.org/01903/v1.3.2/SignaturePolicy/SPDocDigestAsInSpecification".
+// algorithm URI, "http://uri.etsi.org/01903/v1.3.2/Policy/SPDocDigestAsInSpecification".
 // Port of the private ALGORITHM_URI field, which reads
 // DSSXMLUtils.SP_DOC_DIGEST_AS_IN_SPECIFICATION_ALGORITHM_URI - so the value is taken from
 // there rather than repeated. A var rather than a const only so that the declaration does not

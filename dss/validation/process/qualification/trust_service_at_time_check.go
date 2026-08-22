@@ -24,8 +24,8 @@ type TrustServiceAtTimeCheck struct {
 }
 
 // NewTrustServiceAtTimeCheck is the default constructor. Port of
-// TrustServiceAtTimeCheck(I18nProvider, XmlValidationCertificateQualification, List, ValidationTime, LevelRule).
-func NewTrustServiceAtTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// TrustServiceAtTimeCheck(Provider, XmlValidationCertificateQualification, List, ValidationTime, LevelRule).
+func NewTrustServiceAtTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, validationTime enumerations.ValidationTime,
 	constraint policy.LevelRule) *TrustServiceAtTimeCheck {
 	c := &TrustServiceAtTimeCheck{

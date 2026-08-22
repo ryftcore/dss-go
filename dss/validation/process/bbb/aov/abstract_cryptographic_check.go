@@ -24,8 +24,8 @@ type AbstractCryptographicCheck struct {
 }
 
 // NewAbstractCryptographicCheck is the default constructor. Port of
-// AbstractCryptographicCheck(I18nProvider, XmlCC, MessageTag, LevelRule).
-func NewAbstractCryptographicCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCC],
+// AbstractCryptographicCheck(Provider, XmlCC, MessageTag, LevelRule).
+func NewAbstractCryptographicCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlCC],
 	position i18n.MessageTag, constraint policy.LevelRule) *AbstractCryptographicCheck {
 	return &AbstractCryptographicCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

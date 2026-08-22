@@ -31,7 +31,7 @@ type XmlContainerInfo struct {
 }
 
 // XmlDiagnosticData is the Go form of the generated JAXB class XmlDiagnosticData
-// (complexType DiagnosticData).
+// (complexType Data).
 type XmlDiagnosticData struct {
 	XMLName                 xml.Name                        `xml:"http://dss.esig.europa.eu/validation/diagnostic DiagnosticData"`
 	DocumentName            *string                         `xml:"DocumentName,omitempty"`

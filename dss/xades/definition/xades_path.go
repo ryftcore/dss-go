@@ -40,7 +40,7 @@ type XAdESPath interface {
 	// SigningCertificateV2Children gets path "./ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties/xades:SigningCertificateV2/xades:Cert"
 	SigningCertificateV2Children() common.XPathQuery
 
-	// SignatureProductionPlacePath gets path "./ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties/xades:SignatureProductionPlace"
+	// SignatureProductionPlacePath gets path "./ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties/xades:ProductionPlace"
 	SignatureProductionPlacePath() common.XPathQuery
 
 	// SignatureProductionPlaceV2Path gets path "./ds:Object/xades:QualifyingProperties/xades:SignedProperties/xades:SignedSignatureProperties/xades:SignatureProductionPlaceV2"

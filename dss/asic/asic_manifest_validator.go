@@ -9,8 +9,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// ASiCManifestValidator performs validation of an ASiC Manifest entries.
-type ASiCManifestValidator struct {
+// ManifestValidator performs validation of an ASiC Manifest entries.
+type ManifestValidator struct {
 	// manifest is the manifest to validate.
 	manifest *model.ManifestFile
 
@@ -19,14 +19,14 @@ type ASiCManifestValidator struct {
 }
 
 // NewASiCManifestValidator is the default constructor. Ports
-// ASiCManifestValidator(ManifestFile, List).
+// ManifestValidator(ManifestFile, List).
 //
 // Panics with the Java message when manifest is nil (Objects.requireNonNull).
-func NewASiCManifestValidator(manifest *model.ManifestFile, signedDocuments []model.DSSDocument) *ASiCManifestValidator {
+func NewASiCManifestValidator(manifest *model.ManifestFile, signedDocuments []model.DSSDocument) *ManifestValidator {
 	if manifest == nil {
 		panic("ManifestFile must be defined!")
 	}
-	return &ASiCManifestValidator{
+	return &ManifestValidator{
 		manifest:        manifest,
 		signedDocuments: signedDocuments,
 	}
@@ -34,7 +34,7 @@ func NewASiCManifestValidator(manifest *model.ManifestFile, signedDocuments []mo
 
 // ValidateEntries validates the manifest entries and returns the list of validated
 // ManifestEntrys. Ports validateEntries(). Logging (LOG.warn) is dropped per PORTING.md.
-func (v *ASiCManifestValidator) ValidateEntries() []*model.ManifestEntry {
+func (v *ManifestValidator) ValidateEntries() []*model.ManifestEntry {
 	manifestEntries := v.manifest.Entries()
 	if utils.IsCollectionEmpty(v.signedDocuments) {
 		// no signed data to validate on

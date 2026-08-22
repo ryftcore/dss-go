@@ -25,8 +25,8 @@ type SignaturePolicyIdentifierCheck struct {
 }
 
 // NewSignaturePolicyIdentifierCheck is the default constructor. Port of
-// SignaturePolicyIdentifierCheck(I18nProvider, XmlVCI, SignatureWrapper, MultiValuesRule).
-func NewSignaturePolicyIdentifierCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVCI],
+// SignaturePolicyIdentifierCheck(Provider, XmlVCI, SignatureWrapper, MultiValuesRule).
+func NewSignaturePolicyIdentifierCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVCI],
 	signature *diagnostic.SignatureWrapper, multiValues policy.MultiValuesRule) *SignaturePolicyIdentifierCheck {
 	c := &SignaturePolicyIdentifierCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, multiValues),

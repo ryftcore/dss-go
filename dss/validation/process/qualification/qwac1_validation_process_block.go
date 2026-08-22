@@ -17,8 +17,8 @@ type QWAC1ValidationProcessBlock struct {
 }
 
 // NewQWAC1ValidationProcessBlock is the common constructor. Port of
-// QWAC1ValidationProcessBlock(I18nProvider, Date, CertificateWrapper, XmlConclusion, XmlCertificateQualificationProcess, String).
-func NewQWAC1ValidationProcessBlock(i18nProvider *i18n.I18nProvider, validationTime time.Time,
+// QWAC1ValidationProcessBlock(Provider, Date, CertificateWrapper, XmlConclusion, XmlCertificateQualificationProcess, String).
+func NewQWAC1ValidationProcessBlock(i18nProvider *i18n.Provider, validationTime time.Time,
 	certificate *diagnostic.CertificateWrapper, buildingBlocksConclusion *jaxb.XmlConclusion,
 	certificateQualification *jaxb.XmlCertificateQualificationProcess, websiteUrl string) *QWAC1ValidationProcessBlock {
 	c := &QWAC1ValidationProcessBlock{AbstractQWACValidationProcessBlock: &AbstractQWACValidationProcessBlock{}}

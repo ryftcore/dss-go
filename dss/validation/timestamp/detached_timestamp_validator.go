@@ -19,7 +19,7 @@ type DetachedTimestampValidator struct {
 }
 
 // compile-time interface assertion.
-var _ TimestampValidator = (*DetachedTimestampValidator)(nil)
+var _ Validator = (*DetachedTimestampValidator)(nil)
 
 // newDetachedTimestampValidator wires the wrapping shared by both exported constructors. Port of
 // the package-private DetachedTimestampValidator() constructor, which in Java delegates to

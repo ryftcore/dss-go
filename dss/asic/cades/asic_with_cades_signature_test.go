@@ -172,11 +172,11 @@ func TestSignatureExtensionOverridesDispatch(t *testing.T) {
 
 	// The LTA extension profile of an LTA-level augmentation is an LT (not an LTA) profile:
 	// the archive timestamp lives in the ASiCArchiveManifest, not inside the CAdES signature.
-	if _, ok := base.requireOverrides().GetLTAExtensionProfile(tspSource, nil).(*dsscades.CAdESLevelBaselineLTA); !ok {
+	if _, ok := base.requireOverrides().GetLTAExtensionProfile(tspSource, nil).(*dsscades.LevelBaselineLTA); !ok {
 		t.Error("base GetLTAExtensionProfile did not return a CAdESLevelBaselineLTA")
 	}
 	if _, ok := lta.ASiCWithCAdESSignatureExtension.requireOverrides().
-		GetLTAExtensionProfile(tspSource, nil).(*dsscades.CAdESLevelBaselineLT); !ok {
+		GetLTAExtensionProfile(tspSource, nil).(*dsscades.LevelBaselineLT); !ok {
 		t.Error("LTA GetLTAExtensionProfile did not return a CAdESLevelBaselineLT - the override was not dispatched")
 	}
 }

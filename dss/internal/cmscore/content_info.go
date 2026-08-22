@@ -53,7 +53,7 @@ func ParseContentInfo(input []byte) (*ContentInfo, error) {
 // ParseContentInfoTolerateTrailingBytes decodes a ContentInfo the same way ParseContentInfo
 // does, except it does not require the input to be fully consumed.
 //
-// This is the entry point for parsing a whole document (CMSUtilsParseToCMSBinaries's caller uses
+// This is the entry point for parsing a whole document (UtilsParseToCMSBinaries's caller uses
 // it, not ParseContentInfo) rather than an isolated byte slice: BC's own
 // CMSSignedData(InputStream) constructor - built on ASN1InputStream#readObject(), which reads
 // exactly one top-level ASN.1 object off the stream and stops - never looks at what follows it

@@ -27,8 +27,8 @@ type ProspectiveCertificateChainAtValidationTimeCheck struct {
 
 // NewProspectiveCertificateChainAtValidationTimeCheck is the default
 // constructor. Port of
-// ProspectiveCertificateChainAtValidationTimeCheck(I18nProvider, XmlXCV, CertificateWrapper, Date, LevelRule).
-func NewProspectiveCertificateChainAtValidationTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlXCV],
+// ProspectiveCertificateChainAtValidationTimeCheck(Provider, XmlXCV, CertificateWrapper, Date, LevelRule).
+func NewProspectiveCertificateChainAtValidationTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlXCV],
 	certificate *diagnostic.CertificateWrapper, controlTime time.Time, constraint policy.LevelRule) *ProspectiveCertificateChainAtValidationTimeCheck {
 	c := &ProspectiveCertificateChainAtValidationTimeCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

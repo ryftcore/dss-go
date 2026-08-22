@@ -212,7 +212,7 @@ func getXmlRACForId(racs []*jaxb.XmlRAC, tokenId string) *jaxb.XmlRAC {
 // Port of getFormattedDate(Date).
 //
 // Java returns null for a null Date; the Go port returns the empty string, so
-// that the result stays directly usable as an I18nProvider argument (a *string
+// that the result stays directly usable as an Provider argument (a *string
 // there would render as a pointer, and a nil interface as "<nil>" rather than
 // Java's "null").
 func GetFormattedDate(date *time.Time) string {
@@ -226,7 +226,7 @@ func GetFormattedDate(date *time.Time) string {
 // of buildStringMessage(I18nProvider, MessageTag, Object...): Java's null result
 // (no message tag defined) is nil here, since the callers propagate it into
 // members where absent and empty differ.
-func BuildStringMessage(i18nProvider *i18n.I18nProvider, messageTag i18n.MessageTag, args ...any) *string {
+func BuildStringMessage(i18nProvider *i18n.Provider, messageTag i18n.MessageTag, args ...any) *string {
 	if messageTag != "" {
 		message := i18nProvider.GetMessage(messageTag, args...)
 		return &message
@@ -542,22 +542,22 @@ func GetDomainName(uri string) string {
 	return domainNamePattern.ReplaceAllString(uri, "")
 }
 
-// ProcessValueCheck checks the value against the list of expected values. Port
+// ValueCheck checks the value against the list of expected values. Port
 // of processValueCheck(String, List).
-func ProcessValueCheck(value string, expectedValues []string) bool {
+func ValueCheck(value string, expectedValues []string) bool {
 	if utils.IsStringNotEmpty(value) && utils.IsCollectionNotEmpty(expectedValues) {
 		return slices.Contains(expectedValues, allValue) || slices.Contains(expectedValues, value)
 	}
 	return false
 }
 
-// ProcessValuesCheck checks the values against the expected values. It returns
+// ValuesCheck checks the values against the expected values. It returns
 // TRUE if at least one of the values is allowed by the list of expected values.
 // Port of processValuesCheck(List, List).
-func ProcessValuesCheck(values []string, expectedValues []string) bool {
+func ValuesCheck(values []string, expectedValues []string) bool {
 	if utils.IsCollectionNotEmpty(values) {
 		for _, value := range values {
-			if ProcessValueCheck(value, expectedValues) {
+			if ValueCheck(value, expectedValues) {
 				return true
 			}
 		}
@@ -567,13 +567,13 @@ func ProcessValuesCheck(values []string, expectedValues []string) bool {
 	}
 }
 
-// ProcessAllValuesCheck checks the values against the expected values. It
+// AllValuesCheck checks the values against the expected values. It
 // returns TRUE if all the values are allowed by the list of expected values.
 // Port of processAllValuesCheck(List, List).
-func ProcessAllValuesCheck(values []string, expectedValues []string) bool {
+func AllValuesCheck(values []string, expectedValues []string) bool {
 	if utils.IsCollectionNotEmpty(values) {
 		for _, value := range values {
-			if !ProcessValueCheck(value, expectedValues) {
+			if !ValueCheck(value, expectedValues) {
 				return false
 			}
 		}
@@ -583,12 +583,12 @@ func ProcessAllValuesCheck(values []string, expectedValues []string) bool {
 	}
 }
 
-// ProcessValuesForEachExpectedCheck checks whether values contain all the
+// ValuesForEachExpectedCheck checks whether values contain all the
 // expectedValues. Port of processValuesForEachExpectedCheck(List, List).
-func ProcessValuesForEachExpectedCheck(values []string, expectedValues []string) bool {
+func ValuesForEachExpectedCheck(values []string, expectedValues []string) bool {
 	if utils.IsCollectionNotEmpty(values) {
 		for _, expectedValue := range expectedValues {
-			if !ProcessValueCheck(expectedValue, values) {
+			if !ValueCheck(expectedValue, values) {
 				return false
 			}
 		}

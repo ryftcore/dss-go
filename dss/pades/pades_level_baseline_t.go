@@ -6,11 +6,11 @@
 //
 // Java's two extendSignatures overloads cannot share one Go name:
 //
-//	extendSignatures(DSSDocument, PAdESSignatureParameters)                        -> ExtendSignatures
-//	extendSignatures(DSSDocument, PDFDocumentAnalyzer, PAdESSignatureParameters)   -> ExtendSignaturesWithAnalyzer
+//	extendSignatures(DSSDocument, SignatureParameters)                        -> ExtendSignatures
+//	extendSignatures(DSSDocument, PDFDocumentAnalyzer, SignatureParameters)   -> ExtendSignaturesWithAnalyzer
 //
-// The second is overridden by PAdESLevelBaselineLT and called from the first, so the base
-// dispatches through PAdESLevelBaselineTOverrides, registered by InitPAdESLevelBaselineT - the
+// The second is overridden by LevelBaselineLT and called from the first, so the base
+// dispatches through LevelBaselineTOverrides, registered by InitPAdESLevelBaselineT - the
 // convention cades/cades_signature_extension.go established.
 //
 // slf4j is dropped (PORTING.md).
@@ -26,18 +26,18 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// PAdESLevelBaselineTOverrides declares the operation PAdESLevelBaselineT calls back into and
-// PAdESLevelBaselineLT overrides.
-type PAdESLevelBaselineTOverrides interface {
+// LevelBaselineTOverrides declares the operation LevelBaselineT calls back into and
+// LevelBaselineLT overrides.
+type LevelBaselineTOverrides interface {
 	// ExtendSignaturesWithAnalyzer performs the document extension for the signatures the given
 	// analyzer found. Port of the protected
-	// extendSignatures(DSSDocument, PDFDocumentAnalyzer, PAdESSignatureParameters).
+	// extendSignatures(DSSDocument, PDFDocumentAnalyzer, SignatureParameters).
 	ExtendSignaturesWithAnalyzer(signedDocument model.DSSDocument, pdfDocumentAnalyzer *PDFDocumentAnalyzer,
-		parameters *PAdESSignatureParameters) model.DSSDocument
+		parameters *SignatureParameters) model.DSSDocument
 }
 
-// PAdESLevelBaselineT holds the PAdES Baseline T signature profile.
-type PAdESLevelBaselineT struct {
+// LevelBaselineT holds the PAdES Baseline T signature profile.
+type LevelBaselineT struct {
 	// tspSource obtains a timestamp.
 	tspSource validation.TSPSource
 
@@ -48,22 +48,22 @@ type PAdESLevelBaselineT struct {
 	PdfObjectFactory IPdfObjFactory
 
 	// overrides points back at the concrete extension; see InitPAdESLevelBaselineT.
-	overrides PAdESLevelBaselineTOverrides
+	overrides LevelBaselineTOverrides
 }
 
 // NewPAdESLevelBaselineT is the default constructor.
 // Port of PAdESLevelBaselineT(TSPSource, CertificateVerifier, IPdfObjFactory).
 func NewPAdESLevelBaselineT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
-	pdfObjectFactory IPdfObjFactory) *PAdESLevelBaselineT {
-	extension := &PAdESLevelBaselineT{}
+	pdfObjectFactory IPdfObjFactory) *LevelBaselineT {
+	extension := &LevelBaselineT{}
 	extension.InitPAdESLevelBaselineT(extension, tspSource, certificateVerifier, pdfObjectFactory)
 	return extension
 }
 
 // InitPAdESLevelBaselineT registers the concrete extension with its base and applies the
 // constructor's checks. Port of the protected
-// PAdESLevelBaselineT(TSPSource, CertificateVerifier, IPdfObjFactory) constructor.
-func (t *PAdESLevelBaselineT) InitPAdESLevelBaselineT(self PAdESLevelBaselineTOverrides,
+// LevelBaselineT(TSPSource, CertificateVerifier, IPdfObjFactory) constructor.
+func (t *LevelBaselineT) InitPAdESLevelBaselineT(self LevelBaselineTOverrides,
 	tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
 	pdfObjectFactory IPdfObjFactory) {
 	if tspSource == nil {
@@ -83,9 +83,9 @@ func (t *PAdESLevelBaselineT) InitPAdESLevelBaselineT(self PAdESLevelBaselineTOv
 
 // ExtendSignatures adds a DocumentTimeStamp to the document; a signature-timestamp (CMS) is
 // impossible to add while extending. Port of
-// extendSignatures(DSSDocument, PAdESSignatureParameters).
-func (t *PAdESLevelBaselineT) ExtendSignatures(signedDocument model.DSSDocument,
-	params *PAdESSignatureParameters) model.DSSDocument {
+// extendSignatures(DSSDocument, SignatureParameters).
+func (t *LevelBaselineT) ExtendSignatures(signedDocument model.DSSDocument,
+	params *SignatureParameters) model.DSSDocument {
 	if signedDocument == nil {
 		panic("DSSDocument cannot be null!")
 	}
@@ -98,9 +98,9 @@ func (t *PAdESLevelBaselineT) ExtendSignatures(signedDocument model.DSSDocument,
 }
 
 // ExtendSignaturesWithAnalyzer performs a document extension. Port of the protected
-// extendSignatures(DSSDocument, PDFDocumentAnalyzer, PAdESSignatureParameters).
-func (t *PAdESLevelBaselineT) ExtendSignaturesWithAnalyzer(signedDocument model.DSSDocument,
-	pdfDocumentAnalyzer *PDFDocumentAnalyzer, parameters *PAdESSignatureParameters) model.DSSDocument {
+// extendSignatures(DSSDocument, PDFDocumentAnalyzer, SignatureParameters).
+func (t *LevelBaselineT) ExtendSignaturesWithAnalyzer(signedDocument model.DSSDocument,
+	pdfDocumentAnalyzer *PDFDocumentAnalyzer, parameters *SignatureParameters) model.DSSDocument {
 	signatures := pdfDocumentAnalyzer.Signatures()
 	if utils.IsCollectionEmpty(signatures) {
 		panic(exception.NewIllegalInputException("No signatures found to be extended!"))
@@ -124,14 +124,14 @@ func (t *PAdESLevelBaselineT) ExtendSignaturesWithAnalyzer(signedDocument model.
 
 // signatureTimestampService returns a PDFSignatureService to be used for a signature timestamp
 // creation. Port of the private #getSignatureTimestampService.
-func (t *PAdESLevelBaselineT) signatureTimestampService() PDFSignatureService {
+func (t *LevelBaselineT) signatureTimestampService() PDFSignatureService {
 	return t.PdfObjectFactory.NewSignatureTimestampService()
 }
 
 // TimestampDocument timestamps the document with the given PDFSignatureService.
 // Port of the protected #timestampDocument.
-func (t *PAdESLevelBaselineT) TimestampDocument(signedDocument model.DSSDocument,
-	timestampParameters *PAdESTimestampParameters, pwd []byte,
+func (t *LevelBaselineT) TimestampDocument(signedDocument model.DSSDocument,
+	timestampParameters *TimestampParameters, pwd []byte,
 	pdfSignatureService PDFSignatureService) model.DSSDocument {
 	padesTimestampService := NewPAdESTimestampServiceWithPDFService(t.tspSource, pdfSignatureService)
 	timestampParameters.SetPasswordProtection(pwd)
@@ -140,8 +140,8 @@ func (t *PAdESLevelBaselineT) TimestampDocument(signedDocument model.DSSDocument
 
 // PDFDocumentValidator returns a document analyzer instance configured for the extension.
 // Port of the protected #getPDFDocumentValidator.
-func (t *PAdESLevelBaselineT) PDFDocumentValidator(signedDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) *PDFDocumentAnalyzer {
+func (t *LevelBaselineT) PDFDocumentValidator(signedDocument model.DSSDocument,
+	parameters *SignatureParameters) *PDFDocumentAnalyzer {
 	pdfDocumentValidator := NewPDFDocumentAnalyzer(signedDocument)
 	pdfDocumentValidator.SetCertificateVerifier(t.CertificateVerifier)
 	pdfDocumentValidator.SetValidationContextExecutor(executor.CompleteValidationContextExecutorInstance)
@@ -151,11 +151,11 @@ func (t *PAdESLevelBaselineT) PDFDocumentValidator(signedDocument model.DSSDocum
 }
 
 // padesLevelBaselineTIsTLevelExtensionRequired ports the private #isTLevelExtensionRequired.
-func padesLevelBaselineTIsTLevelExtensionRequired(parameters *PAdESSignatureParameters,
+func padesLevelBaselineTIsTLevelExtensionRequired(parameters *SignatureParameters,
 	signatures []validation.AdvancedSignature) bool {
 	tLevelExtensionRequired := false
 	for _, signature := range signatures {
-		padesSignature := signature.(*PAdESSignature)
+		padesSignature := signature.(*Signature)
 		if padesLevelBaselineTRequiresDocumentTimestamp(padesSignature, parameters) {
 			tLevelExtensionRequired = true
 		}
@@ -164,11 +164,11 @@ func padesLevelBaselineTIsTLevelExtensionRequired(parameters *PAdESSignaturePara
 }
 
 // padesLevelBaselineTRequiresDocumentTimestamp ports the private #requiresDocumentTimestamp.
-func padesLevelBaselineTRequiresDocumentTimestamp(signature *PAdESSignature,
-	signatureParameters *PAdESSignatureParameters) bool {
+func padesLevelBaselineTRequiresDocumentTimestamp(signature *Signature,
+	signatureParameters *SignatureParameters) bool {
 	return enumerations.SignatureLevelPAdESBaselineT == signatureParameters.SignatureLevel() ||
 		!signature.HasTProfile()
 }
 
 // Compile-time assertion standing in for Java's "implements SignatureExtension<PAdESSignatureParameters>".
-var _ document.SignatureExtension[*PAdESSignatureParameters] = (*PAdESLevelBaselineT)(nil)
+var _ document.SignatureExtension[*SignatureParameters] = (*LevelBaselineT)(nil)

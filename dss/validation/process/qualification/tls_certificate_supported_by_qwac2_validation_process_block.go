@@ -18,7 +18,7 @@ type TLSCertificateSupportedByQWAC2ValidationProcessBlock struct {
 	*process.ChainBase[*jaxb.XmlValidationQWACProcess]
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// tlsCertificate is the certificate to determine qualification for.
 	tlsCertificate *diagnostic.CertificateWrapper
@@ -42,8 +42,8 @@ type TLSCertificateSupportedByQWAC2ValidationProcessBlock struct {
 
 // NewTLSCertificateSupportedByQWAC2ValidationProcessBlock is the common
 // constructor. Port of
-// TLSCertificateSupportedByQWAC2ValidationProcessBlock(I18nProvider, DiagnosticData, CertificateWrapper, XmlConclusion, XmlConclusion, QWACProfile, String).
-func NewTLSCertificateSupportedByQWAC2ValidationProcessBlock(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// TLSCertificateSupportedByQWAC2ValidationProcessBlock(Provider, Data, CertificateWrapper, XmlConclusion, XmlConclusion, QWACProfile, String).
+func NewTLSCertificateSupportedByQWAC2ValidationProcessBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	tlsCertificate *diagnostic.CertificateWrapper, tlsCertificateBasicValidationConclusion *jaxb.XmlConclusion,
 	bindingSignatureBasicValidationConclusion *jaxb.XmlConclusion, bindingCertificateProfile enumerations.QWACProfile,
 	websiteUrl string) *TLSCertificateSupportedByQWAC2ValidationProcessBlock {

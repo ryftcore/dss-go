@@ -20,8 +20,8 @@ type ContentHintsCheck struct {
 }
 
 // NewContentHintsCheck is the default constructor. Port of
-// ContentHintsCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewContentHintsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ContentHintsCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewContentHintsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *ContentHintsCheck {
 	c := &ContentHintsCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

@@ -9,22 +9,22 @@ import (
 )
 
 // XAdESUnsignedSigProperties represents unsigned XAdES signature properties. Port of the class
-// XAdESUnsignedSigProperties, extending XAdESSigProperties.
-type XAdESUnsignedSigProperties struct {
-	XAdESSigProperties
+// UnsignedSigProperties, extending SigProperties.
+type UnsignedSigProperties struct {
+	SigProperties
 }
 
 // NewXAdESUnsignedSigProperties is the port of the public
-// XAdESUnsignedSigProperties(Element, XAdESPath) constructor.
-func NewXAdESUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESUnsignedSigProperties {
-	return &XAdESUnsignedSigProperties{
-		XAdESSigProperties: newXAdESSigProperties(unsignedSignatureProperties, xadesPaths),
+// UnsignedSigProperties(Element, XAdESPath) constructor.
+func NewXAdESUnsignedSigProperties(unsignedSignatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) *UnsignedSigProperties {
+	return &UnsignedSigProperties{
+		SigProperties: newXAdESSigProperties(unsignedSignatureProperties, xadesPaths),
 	}
 }
 
 // XAdESUnsignedSigPropertiesBuild builds a XAdESUnsignedSigProperties. Port of the static
 // build(Element, XAdESPath).
-func XAdESUnsignedSigPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESUnsignedSigProperties {
+func UnsignedSigPropertiesBuild(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *UnsignedSigProperties {
 	unsignedSignatureProperties := xadesUnsignedSigPropertiesGetUnsignedSignaturePropertiesDom(signatureElement, xadesPaths)
 	return NewXAdESUnsignedSigProperties(unsignedSignatureProperties, xadesPaths)
 }

@@ -6,7 +6,7 @@
 // simple type JAXB binds by hand (dateTime), and the Marshal/Unmarshal entry
 // points. It reproduces the pattern documented in
 // dss/diagnostic/jaxb/xml.go; see that file for the full
-// rationale of jaxbCanonical. Unlike DiagnosticData.xsd, this schema declares
+// rationale of jaxbCanonical. Unlike Data.xsd, this schema declares
 // no @XmlID/@XmlIDREF attributes, so the IDREF object-graph linking that file
 // performs (Link/walk/resolveRefs) has no counterpart here.
 //
@@ -88,7 +88,7 @@ func NewXSDateTime(t time.Time) *XSDateTime {
 
 // --------------------------------------------------------------- entry points
 
-// Unmarshal parses a simple-report document, the way SimpleReportFacade's
+// Unmarshal parses a simple-report document, the way Facade's
 // underlying AbstractJaxbFacade.unmarshall does.
 func Unmarshal(data []byte) (*XmlSimpleReport, error) {
 	sr := &XmlSimpleReport{}
@@ -99,7 +99,7 @@ func Unmarshal(data []byte) (*XmlSimpleReport, error) {
 }
 
 // Marshal writes a simple-report document byte-for-byte the way
-// SimpleReportFacade's underlying AbstractJaxbFacade.marshall does: the XML
+// Facade's underlying AbstractJaxbFacade.marshall does: the XML
 // declaration, four-space indented output, a trailing newline, and the JAXB
 // spellings jaxbCanonical restores.
 func Marshal(sr *XmlSimpleReport) ([]byte, error) {

@@ -3,20 +3,20 @@ package asic
 
 import "github.com/ryftcore/dss-go/dss/xml/common"
 
-// ASiCManifestAttribute represents a collection of attributes defined in ASiC XSD schema.
+// ManifestAttribute represents a collection of attributes defined in ASiC XSD schema.
 // Ports the Java enum per PORTING.md's enum convention: a typed string whose value is the
 // Java name(), with the wire attribute name held in a lookup table.
-type ASiCManifestAttribute string
+type ManifestAttribute string
 
 const (
-	ASiCManifestAttributeURI      ASiCManifestAttribute = "URI"
-	ASiCManifestAttributeMIMEType ASiCManifestAttribute = "MIME_TYPE"
-	ASiCManifestAttributeRootFile ASiCManifestAttribute = "ROOTFILE"
-	ASiCManifestAttributeCritical ASiCManifestAttribute = "CRITICAL"
+	ASiCManifestAttributeURI      ManifestAttribute = "URI"
+	ASiCManifestAttributeMIMEType ManifestAttribute = "MIME_TYPE"
+	ASiCManifestAttributeRootFile ManifestAttribute = "ROOTFILE"
+	ASiCManifestAttributeCritical ManifestAttribute = "CRITICAL"
 )
 
 // asicManifestAttributeNames maps each constant to its wire attribute name (getAttributeName()).
-var asicManifestAttributeNames = map[ASiCManifestAttribute]string{
+var asicManifestAttributeNames = map[ManifestAttribute]string{
 	ASiCManifestAttributeURI:      "URI",
 	ASiCManifestAttributeMIMEType: "MimeType",
 	ASiCManifestAttributeRootFile: "Rootfile",
@@ -24,8 +24,8 @@ var asicManifestAttributeNames = map[ASiCManifestAttribute]string{
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().
-func (a ASiCManifestAttribute) AttributeName() string {
+func (a ManifestAttribute) AttributeName() string {
 	return asicManifestAttributeNames[a]
 }
 
-var _ common.DSSAttribute = ASiCManifestAttribute("")
+var _ common.DSSAttribute = ManifestAttribute("")

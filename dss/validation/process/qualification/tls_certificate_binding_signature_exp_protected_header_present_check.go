@@ -21,8 +21,8 @@ type TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck struct {
 
 // NewTLSCertificateBindingSignatureExpProtectedHeaderPresentCheck is the
 // default constructor. Port of
-// TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck(I18nProvider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
-func NewTLSCertificateBindingSignatureExpProtectedHeaderPresentCheck(i18nProvider *i18n.I18nProvider,
+// TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck(Provider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
+func NewTLSCertificateBindingSignatureExpProtectedHeaderPresentCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationQWACProcess], signature *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck {
 	c := &TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck{

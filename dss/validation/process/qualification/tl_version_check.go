@@ -29,8 +29,8 @@ type TLVersionCheck struct {
 }
 
 // NewTLVersionCheck is the default constructor. Port of
-// TLVersionCheck(I18nProvider, XmlTLAnalysis, XmlTrustSourceList, Date, MultiValuesRule).
-func NewTLVersionCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlTLAnalysis],
+// TLVersionCheck(Provider, XmlTLAnalysis, XmlTrustSourceList, Date, MultiValuesRule).
+func NewTLVersionCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlTLAnalysis],
 	currentTL *dssjaxb.XmlTrustSourceListContent, currentTime time.Time,
 	constraint policy.MultiValuesRule) *TLVersionCheck {
 	c := &TLVersionCheck{

@@ -31,9 +31,9 @@ type BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationChec
 
 // NewBestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck
 // is the default constructor. Port of
-// BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck(I18nProvider, XmlPSV, Date, CertificateWrapper, SubIndication, LevelRule).
+// BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck(Provider, XmlPSV, Date, CertificateWrapper, SubIndication, LevelRule).
 func NewBestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck(
-	i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPSV], controlTime time.Time,
+	i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPSV], controlTime time.Time,
 	certificate *diagnostic.CertificateWrapper, currentTimeSubIndication enumerations.SubIndication,
 	constraint policy.LevelRule) *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck {
 	c := &BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck{

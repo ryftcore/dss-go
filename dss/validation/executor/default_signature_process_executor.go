@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // EAAPresentationProcessExecutor overrides the protected
-// getDetailedReportBuilder(DiagnosticData), which buildReports() self-calls,
+// getDetailedReportBuilder(Data), which buildReports() self-calls,
 // so the call is routed through DefaultSignatureProcessExecutorOverrides,
 // registered by every constructor via InitDefaultSignatureProcessExecutor.
 
@@ -22,7 +22,7 @@ import (
 type DefaultSignatureProcessExecutorOverrides interface {
 	// DetailedReportBuilderFor instantiates a builder for the Detailed
 	// Report. Port of the protected getDetailedReportBuilder(DiagnosticData).
-	DetailedReportBuilderFor(diagnosticData *diagnostic.DiagnosticData) *DetailedReportBuilder
+	DetailedReportBuilderFor(diagnosticData *diagnostic.Data) *DetailedReportBuilder
 }
 
 // DefaultSignatureProcessExecutor executes a signature validation process and
@@ -115,13 +115,13 @@ func (e *DefaultSignatureProcessExecutor) Execute() *reports.Reports {
 
 // DiagnosticData gets the DiagnosticData. Port of the protected
 // getDiagnosticData().
-func (e *DefaultSignatureProcessExecutor) DiagnosticData() *diagnostic.DiagnosticData {
+func (e *DefaultSignatureProcessExecutor) DiagnosticData() *diagnostic.Data {
 	return diagnostic.NewDiagnosticData(e.JaxbDiagnosticData)
 }
 
 // BuildReports builds the reports. Port of the protected
-// buildReports(DiagnosticData).
-func (e *DefaultSignatureProcessExecutor) BuildReports(diagnosticData *diagnostic.DiagnosticData) *reports.Reports {
+// buildReports(Data).
+func (e *DefaultSignatureProcessExecutor) BuildReports(diagnosticData *diagnostic.Data) *reports.Reports {
 
 	detailedReportBuilder := e.signatureExecutorOverrides().DetailedReportBuilderFor(diagnosticData)
 	jaxbDetailedReport := detailedReportBuilder.Build()
@@ -143,16 +143,16 @@ func (e *DefaultSignatureProcessExecutor) BuildReports(diagnosticData *diagnosti
 // DetailedReportBuilderFor instantiates a builder for the Detailed Report.
 // Port of the protected getDetailedReportBuilder(DiagnosticData).
 func (e *DefaultSignatureProcessExecutor) DetailedReportBuilderFor(
-	diagnosticData *diagnostic.DiagnosticData) *DetailedReportBuilder {
+	diagnosticData *diagnostic.Data) *DetailedReportBuilder {
 	return NewDetailedReportBuilder(e.I18nProvider(), e.CurrentTimeValue, e.Policy,
 		e.ValidationLevel, diagnosticData, e.IncludeSemantics)
 }
 
 // SimpleReportBuilderFor instantiates a builder for the Simple Report. Port of
-// the protected getSimpleReportBuilder(DiagnosticData, DetailedReport). No
+// the protected getSimpleReportBuilder(Data, DetailedReport). No
 // upstream subclass overrides it, so it is not routed through the overrides
 // interface.
-func (e *DefaultSignatureProcessExecutor) SimpleReportBuilderFor(diagnosticData *diagnostic.DiagnosticData,
+func (e *DefaultSignatureProcessExecutor) SimpleReportBuilderFor(diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport) *SimpleReportBuilder {
 	return NewSimpleReportBuilder(e.I18nProvider(), e.CurrentTimeValue, e.Policy,
 		diagnosticData, detailedReport, e.IncludeSemantics)
@@ -162,7 +162,7 @@ func (e *DefaultSignatureProcessExecutor) SimpleReportBuilderFor(diagnosticData 
 // Validation Report 102-2. Port of the protected
 // getETSIValidationReportBuilder(DiagnosticData, DetailedReport). No upstream
 // subclass overrides it, so it is not routed through the overrides interface.
-func (e *DefaultSignatureProcessExecutor) ETSIValidationReportBuilderFor(diagnosticData *diagnostic.DiagnosticData,
+func (e *DefaultSignatureProcessExecutor) ETSIValidationReportBuilderFor(diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport) *ETSIValidationReportBuilder {
 	return NewETSIValidationReportBuilder(e.CurrentTimeValue, diagnosticData, detailedReport)
 }

@@ -12,8 +12,8 @@ import (
 )
 
 // XAdESOCSPSource retrieves OCSP values from an XAdES (XL/LT) signature. Port of the class
-// XAdESOCSPSource, extending spi.OfflineOCSPSourceBase.
-type XAdESOCSPSource struct {
+// OCSPSource, extending spi.OfflineOCSPSourceBase.
+type OCSPSource struct {
 	spi.OfflineOCSPSourceBase
 
 	// signatureElement is the current signature element.
@@ -24,11 +24,11 @@ type XAdESOCSPSource struct {
 }
 
 // NewXAdESOCSPSource is the default constructor for XAdESOCSPSource. Port of the constructor
-// XAdESOCSPSource(Element, XAdESPath).
+// OCSPSource(Element, XAdESPath).
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESOCSPSource {
+func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *OCSPSource {
 	if signatureElement == nil {
 		panic("Signature element cannot be null")
 	}
@@ -36,7 +36,7 @@ func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAd
 		panic("XAdESPaths cannot be null")
 	}
 
-	s := &XAdESOCSPSource{
+	s := &OCSPSource{
 		OfflineOCSPSourceBase: spi.NewOfflineOCSPSourceBase(),
 		signatureElement:      signatureElement,
 		xadesPaths:            xadesPaths,
@@ -47,7 +47,7 @@ func NewXAdESOCSPSource(signatureElement *xmldom.Node, xadesPaths definition.XAd
 }
 
 // appendContainedOCSPResponses ports the private appendContainedOCSPResponses().
-func (s *XAdESOCSPSource) appendContainedOCSPResponses() {
+func (s *OCSPSource) appendContainedOCSPResponses() {
 	// values
 	s.collectValues(s.xadesPaths.RevocationValuesPath(), enumerations.RevocationOriginRevocationValues)
 	s.collectValues(s.xadesPaths.AttributeRevocationValuesPath(), enumerations.RevocationOriginAttributeRevocationValues)
@@ -60,7 +60,7 @@ func (s *XAdESOCSPSource) appendContainedOCSPResponses() {
 }
 
 // collectValues ports the private collectValues(XPathQuery, RevocationOrigin).
-func (s *XAdESOCSPSource) collectValues(revocationValuesPath common.XPathQuery, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) collectValues(revocationValuesPath common.XPathQuery, origin enumerations.RevocationOrigin) {
 	if revocationValuesPath == nil {
 		return
 	}
@@ -83,7 +83,7 @@ func (s *XAdESOCSPSource) collectValues(revocationValuesPath common.XPathQuery, 
 }
 
 // collectRefs ports the private collectRefs(XPathQuery, RevocationRefOrigin).
-func (s *XAdESOCSPSource) collectRefs(revocationRefsPath common.XPathQuery, revocationRefOrigin enumerations.RevocationRefOrigin) {
+func (s *OCSPSource) collectRefs(revocationRefsPath common.XPathQuery, revocationRefOrigin enumerations.RevocationRefOrigin) {
 	if revocationRefsPath == nil {
 		return
 	}
@@ -99,7 +99,7 @@ func (s *XAdESOCSPSource) collectRefs(revocationRefsPath common.XPathQuery, revo
 		}
 		for _, ocspRefElement := range ocspRefNodes {
 			if ocspRefElement != nil {
-				ocspRef := XAdESRevocationRefExtractionUtilsCreateOCSPRef(s.xadesPaths, ocspRefElement)
+				ocspRef := RevocationRefExtractionUtilsCreateOCSPRef(s.xadesPaths, ocspRefElement)
 				if ocspRef != nil {
 					s.AddRevocationReference(ocspRef, revocationRefOrigin)
 				}
@@ -112,7 +112,7 @@ func (s *XAdESOCSPSource) collectRefs(revocationRefsPath common.XPathQuery, revo
 //
 // Upstream logs "Cannot retrieve OCSP response from '{}' : {}" and swallows the error; slf4j
 // logging is dropped per PORTING.md, so a load failure is simply skipped here too.
-func (s *XAdESOCSPSource) convertAndAppend(ocspValue string, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) convertAndAppend(ocspValue string, origin enumerations.RevocationOrigin) {
 	basicOCSPResp, err := spi.DSSRevocationUtilsLoadOCSPBase64Encoded(ocspValue)
 	if err != nil {
 		return

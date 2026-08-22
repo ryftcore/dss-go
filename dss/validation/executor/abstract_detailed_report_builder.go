@@ -30,11 +30,11 @@ import (
 type AbstractDetailedReportBuilder struct {
 	// I18nProvider is the i18n provider. Port of the protected final
 	// i18nProvider field.
-	I18nProvider *i18n.I18nProvider
+	I18nProvider *i18n.Provider
 
 	// DiagnosticData is the DiagnosticData to use. Port of the protected
 	// final diagnosticData field.
-	DiagnosticData *diagnostic.DiagnosticData
+	DiagnosticData *diagnostic.Data
 
 	// Policy is the validation policy. Port of the protected final policy
 	// field.
@@ -51,11 +51,11 @@ type AbstractDetailedReportBuilder struct {
 }
 
 // NewAbstractDetailedReportBuilder is the default constructor. Port of the
-// protected AbstractDetailedReportBuilder(I18nProvider, Date,
-// ValidationPolicy, DiagnosticData) constructor.
-func NewAbstractDetailedReportBuilder(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// protected AbstractDetailedReportBuilder(Provider, Date,
+// ValidationPolicy, Data) constructor.
+func NewAbstractDetailedReportBuilder(i18nProvider *i18n.Provider, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy,
-	diagnosticData *diagnostic.DiagnosticData) AbstractDetailedReportBuilder {
+	diagnosticData *diagnostic.Data) AbstractDetailedReportBuilder {
 	return AbstractDetailedReportBuilder{
 		I18nProvider:   i18nProvider,
 		CurrentTime:    currentTime,
@@ -81,8 +81,8 @@ func (b *AbstractDetailedReportBuilder) Init() *jaxb.XmlDetailedReport {
 }
 
 // ExecuteAllTLAnalysis executes the TL analysis. Port of the protected
-// executeAllTLAnalysis(DiagnosticData, ValidationPolicy, Date).
-func (b *AbstractDetailedReportBuilder) ExecuteAllTLAnalysis(diagnosticData *diagnostic.DiagnosticData,
+// executeAllTLAnalysis(Data, ValidationPolicy, Date).
+func (b *AbstractDetailedReportBuilder) ExecuteAllTLAnalysis(diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time) []*jaxb.XmlTLAnalysis {
 	var result []*jaxb.XmlTLAnalysis
 	result = append(result, b.validateTL(validationPolicy, currentTime, diagnosticData.ListOfTrustedLists())...)
@@ -105,8 +105,8 @@ func (b *AbstractDetailedReportBuilder) validateTL(validationPolicy policy.Valid
 }
 
 // ExecuteAllLoTEAnalysis executes the LoTE analysis. Port of the protected
-// executeAllLoTEAnalysis(DiagnosticData, ValidationPolicy, Date).
-func (b *AbstractDetailedReportBuilder) ExecuteAllLoTEAnalysis(diagnosticData *diagnostic.DiagnosticData,
+// executeAllLoTEAnalysis(Data, ValidationPolicy, Date).
+func (b *AbstractDetailedReportBuilder) ExecuteAllLoTEAnalysis(diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time) []*jaxb.XmlLoTEAnalysisEntry {
 	var result []*jaxb.XmlLoTEAnalysisEntry
 	result = append(result, b.validateLoTE(validationPolicy, currentTime, diagnosticData.ListsOfListsOfTrustedEntities())...)

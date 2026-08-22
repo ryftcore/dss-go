@@ -20,8 +20,8 @@ type KeyIdentifierPresentCheck struct {
 }
 
 // NewKeyIdentifierPresentCheck is the default constructor. Port of
-// KeyIdentifierPresentCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewKeyIdentifierPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// KeyIdentifierPresentCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewKeyIdentifierPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *KeyIdentifierPresentCheck {
 	c := &KeyIdentifierPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

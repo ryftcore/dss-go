@@ -16,13 +16,13 @@
 // DEVIATION (documented precedent: xades_signature.go's "Deviations" section and
 // xades_reference_validation.go's header note the same Go-has-no-virtual-dispatch-through-
 // embedding limitation): spi/policy.SignaturePolicyValidator (frozen) declares
-// CanValidate/Validate over the concrete base type *signature.SignaturePolicy, not an interface,
+// CanValidate/Validate over the concrete base type *signature.Policy, not an interface,
 // so a caller can never hand this validator a value whose Go runtime type is
-// *XAdESSignaturePolicy - only ever the embedded *signature.SignaturePolicy field, which carries
+// *SignaturePolicy - only ever the embedded *signature.Policy field, which carries
 // no trace of the wrapping type. Upstream's `signaturePolicy instanceof XAdESSignaturePolicy`
 // check is therefore reproduced as xmlSignaturePolicyValidatorTransforms below, which always
 // answers nil through this frozen entry point; the getDigestAfterTransforms path is real and
-// exercised by its own callers (were any to hold a concrete *XAdESSignaturePolicy directly), but
+// exercised by its own callers (were any to hold a concrete *SignaturePolicy directly), but
 // unreachable from Validate() as currently wired. Flagged for the integrator per PORTING.md.
 package xades
 
@@ -56,7 +56,7 @@ func NewXMLSignaturePolicyValidator() *XMLSignaturePolicyValidator {
 }
 
 // CanValidate is the port of canValidate(SignaturePolicy).
-func (v *XMLSignaturePolicyValidator) CanValidate(signaturePolicy *signature.SignaturePolicy) bool {
+func (v *XMLSignaturePolicyValidator) CanValidate(signaturePolicy *signature.Policy) bool {
 	policyContent := signaturePolicy.PolicyContent()
 	if policyContent != nil {
 		startsWithXmlPreamble, err := xmlutils.DomUtilsStartsWithXmlPreambleDocument(policyContent)
@@ -69,7 +69,7 @@ func (v *XMLSignaturePolicyValidator) CanValidate(signaturePolicy *signature.Sig
 }
 
 // Validate is the port of validate(SignaturePolicy).
-func (v *XMLSignaturePolicyValidator) Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult {
+func (v *XMLSignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
 	validationResult := signature.NewSignaturePolicyValidationResult()
 
 	policyContent := signaturePolicy.PolicyContent()
@@ -116,10 +116,10 @@ func (v *XMLSignaturePolicyValidator) Validate(signaturePolicy *signature.Signat
 }
 
 // xmlSignaturePolicyValidatorTransforms ports the `signaturePolicy instanceof
-// XAdESSignaturePolicy` check and subsequent xadesSignaturePolicy.getTransforms() call; see this
+// SignaturePolicy` check and subsequent xadesSignaturePolicy.getTransforms() call; see this
 // file's header for why it always returns nil through the frozen SignaturePolicyValidator entry
 // point.
-func xmlSignaturePolicyValidatorTransforms(signaturePolicy *signature.SignaturePolicy) *xmldom.Node {
+func xmlSignaturePolicyValidatorTransforms(signaturePolicy *signature.Policy) *xmldom.Node {
 	return nil
 }
 

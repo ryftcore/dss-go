@@ -3,7 +3,7 @@ package executor
 
 import "github.com/ryftcore/dss-go/dss/spi/validation"
 
-// SkipValidationContextExecutor skips validation of the ValidationContext.
+// SkipValidationContextExecutor skips validation of the Context.
 type SkipValidationContextExecutor struct{}
 
 // SkipValidationContextExecutorInstance is the singleton instance.
@@ -11,7 +11,7 @@ type SkipValidationContextExecutor struct{}
 var SkipValidationContextExecutorInstance = &SkipValidationContextExecutor{}
 
 // Validate skips validation entirely.
-func (e *SkipValidationContextExecutor) Validate(validationContext validation.ValidationContext) {
+func (e *SkipValidationContextExecutor) Validate(validationContext validation.Context) {
 	// skip
 }
 

@@ -30,7 +30,7 @@ type DigestAlgorithmAtValidationTimeCheck struct {
 }
 
 // NewDigestAlgorithmAtValidationTimeCheck is the default constructor.
-func NewDigestAlgorithmAtValidationTimeCheck(i18nProvider *i18n.I18nProvider, digestAlgo enumerations.DigestAlgorithm,
+func NewDigestAlgorithmAtValidationTimeCheck(i18nProvider *i18n.Provider, digestAlgo enumerations.DigestAlgorithm,
 	validationDate time.Time, result *process.Result[*jaxb.XmlCC], position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *DigestAlgorithmAtValidationTimeCheck {
 	c := &DigestAlgorithmAtValidationTimeCheck{

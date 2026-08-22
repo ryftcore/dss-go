@@ -42,7 +42,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 	var (
 		document   *cms.CMS
 		signerInfo *cmscore.SignerInfo
-		extractor  *CadesLevelBaselineLTATimestampExtractor
+		extractor  *LevelBaselineLTATimestampExtractor
 		original   model.DSSDocument
 		name       string
 		checked    int
@@ -63,7 +63,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			document, err = cms.CMSUtilsParseToCMSBinaries(raw)
+			document, err = cms.UtilsParseToCMSBinaries(raw)
 			if err != nil {
 				t.Fatalf("%s: %v", name, err)
 			}
@@ -246,7 +246,7 @@ func TestCadesLTAAttributeTableOrder(t *testing.T) {
 
 // -----------------------------------------------------------------------------
 // The signature the KAT drives the extractor with: it answers the seven accessors
-// CadesLevelBaselineLTATimestampExtractor reads, straight off the parsed CMS, so that the
+// LevelBaselineLTATimestampExtractor reads, straight off the parsed CMS, so that the
 // byte-exact core is exercised without the document analyzer.
 // -----------------------------------------------------------------------------
 
@@ -335,7 +335,7 @@ func cadesLTAOracleArchiveTimestamp(t *testing.T, signerInfo *cmscore.SignerInfo
 	return nil
 }
 
-func cadesLTAOracleAtsHashIndex(t *testing.T, extractor *CadesLevelBaselineLTATimestampExtractor,
+func cadesLTAOracleAtsHashIndex(t *testing.T, extractor *LevelBaselineLTATimestampExtractor,
 	signerInfo *cmscore.SignerInfo, version, digestAlgorithm string) *cmscore.Attribute {
 	t.Helper()
 	attribute, err := extractor.AtsHashIndex(signerInfo,

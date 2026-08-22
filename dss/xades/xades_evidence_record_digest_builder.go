@@ -24,9 +24,9 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESEvidenceRecordDigestBuilder computes message-imprint of an XML signature to be protected
+// EvidenceRecordDigestBuilder computes message-imprint of an XML signature to be protected
 // by an evidence-record.
-type XAdESEvidenceRecordDigestBuilder struct {
+type EvidenceRecordDigestBuilder struct {
 	validation.AbstractSignatureEvidenceRecordDigestBuilder
 
 	// detachedContent is the list of detached documents covered by the signature.
@@ -37,30 +37,30 @@ type XAdESEvidenceRecordDigestBuilder struct {
 	signatureId string
 }
 
-// NewXAdESEvidenceRecordDigestBuilder instantiates XAdESEvidenceRecordDigestBuilder with a
+// NewXAdESEvidenceRecordDigestBuilder instantiates EvidenceRecordDigestBuilder with a
 // SHA-256 digest algorithm. Port of XAdESEvidenceRecordDigestBuilder(DSSDocument).
-func NewXAdESEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *XAdESEvidenceRecordDigestBuilder {
-	return &XAdESEvidenceRecordDigestBuilder{
+func NewXAdESEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilder(signatureDocument),
 	}
 }
 
-// NewXAdESEvidenceRecordDigestBuilderWithAlgorithm instantiates XAdESEvidenceRecordDigestBuilder
+// NewXAdESEvidenceRecordDigestBuilderWithAlgorithm instantiates EvidenceRecordDigestBuilder
 // with a custom digest algorithm. Port of XAdESEvidenceRecordDigestBuilder(DSSDocument,
 // DigestAlgorithm).
-func NewXAdESEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *XAdESEvidenceRecordDigestBuilder {
-	return &XAdESEvidenceRecordDigestBuilder{
+func NewXAdESEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument, digestAlgorithm),
 	}
 }
 
-// newXAdESEvidenceRecordDigestBuilderFromSignature instantiates XAdESEvidenceRecordDigestBuilder
+// newXAdESEvidenceRecordDigestBuilderFromSignature instantiates EvidenceRecordDigestBuilder
 // from a signature for the given evidenceRecordAttribute. Used on validation of an existing
 // evidence record. Port of the protected XAdESEvidenceRecordDigestBuilder(AdvancedSignature,
 // SignatureAttribute, DigestAlgorithm) constructor.
 func newXAdESEvidenceRecordDigestBuilderFromSignature(signature validation.AdvancedSignature,
-	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) *XAdESEvidenceRecordDigestBuilder {
-	return &XAdESEvidenceRecordDigestBuilder{
+	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) *EvidenceRecordDigestBuilder {
+	return &EvidenceRecordDigestBuilder{
 		AbstractSignatureEvidenceRecordDigestBuilder: *validation.NewAbstractSignatureEvidenceRecordDigestBuilderFromSignature(
 			signature, evidenceRecordAttribute, digestAlgorithm),
 	}
@@ -68,7 +68,7 @@ func newXAdESEvidenceRecordDigestBuilderFromSignature(signature validation.Advan
 
 // SetDetachedContent sets a list of detached documents covered by the signature. Port of
 // #setDetachedContent, chainable.
-func (b *XAdESEvidenceRecordDigestBuilder) SetDetachedContent(detachedContent []model.DSSDocument) *XAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetDetachedContent(detachedContent []model.DSSDocument) *EvidenceRecordDigestBuilder {
 	b.detachedContent = detachedContent
 	return b
 }
@@ -76,7 +76,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) SetDetachedContent(detachedContent []
 // SetSignatureId sets identifier of the signature to be covered by an evidence-record. Accepts
 // a DSS identifier, or an internal signature element's identifier. Note: required for documents
 // containing multiple signatures. Port of #setSignatureId, chainable.
-func (b *XAdESEvidenceRecordDigestBuilder) SetSignatureId(signatureId string) *XAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetSignatureId(signatureId string) *EvidenceRecordDigestBuilder {
 	b.signatureId = signatureId
 	return b
 }
@@ -84,14 +84,14 @@ func (b *XAdESEvidenceRecordDigestBuilder) SetSignatureId(signatureId string) *X
 // SetParallelEvidenceRecord overrides AbstractSignatureEvidenceRecordDigestBuilder, keeping the
 // concrete return type. Port of the covariant-return #setParallelEvidenceRecord(boolean)
 // override.
-func (b *XAdESEvidenceRecordDigestBuilder) SetParallelEvidenceRecord(parallelEvidenceRecord bool) *XAdESEvidenceRecordDigestBuilder {
+func (b *EvidenceRecordDigestBuilder) SetParallelEvidenceRecord(parallelEvidenceRecord bool) *EvidenceRecordDigestBuilder {
 	b.AbstractSignatureEvidenceRecordDigestBuilder.SetParallelEvidenceRecord(parallelEvidenceRecord)
 	return b
 }
 
 // Build generates the hash value for the signature enveloping the evidence-record. Port of
 // #build().
-func (b *XAdESEvidenceRecordDigestBuilder) Build() (model.Digest, error) {
+func (b *EvidenceRecordDigestBuilder) Build() (model.Digest, error) {
 	xadesSignature, err := b.getXAdESSignature()
 	if err != nil {
 		return model.Digest{}, err
@@ -108,9 +108,9 @@ func (b *XAdESEvidenceRecordDigestBuilder) Build() (model.Digest, error) {
 //
 // Panics when neither an AdvancedSignature nor a signature document was provided (Java's
 // IllegalStateException).
-func (b *XAdESEvidenceRecordDigestBuilder) getXAdESSignature() (*XAdESSignature, error) {
+func (b *EvidenceRecordDigestBuilder) getXAdESSignature() (*Signature, error) {
 	if b.Signature() != nil {
-		xadesSignature, ok := b.Signature().(*XAdESSignature)
+		xadesSignature, ok := b.Signature().(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", b.Signature())
 		}
@@ -143,7 +143,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getXAdESSignature() (*XAdESSignature,
 			signature = signatures[0]
 		}
 
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -154,7 +154,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getXAdESSignature() (*XAdESSignature,
 
 // getXmlSignatureMessageImprint generates message-imprint for the given XAdESSignature. Port of
 // the protected #getXmlSignatureMessageImprint(XAdESSignature).
-func (b *XAdESEvidenceRecordDigestBuilder) getXmlSignatureMessageImprint(signature *XAdESSignature) (model.DSSMessageDigest, error) {
+func (b *EvidenceRecordDigestBuilder) getXmlSignatureMessageImprint(signature *Signature) (model.DSSMessageDigest, error) {
 	/*
 	 * The initial time-stamp token encapsulated within the first ArchiveTimeStamp of any of
 	 * the evidence-records enclosed within the xadesen:SealingEvidenceRecords unsigned
@@ -281,7 +281,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getXmlSignatureMessageImprint(signatu
 
 // getCanonicalizationAlgorithm returns the corresponding ds:CanonicalizationMethod used within
 // the signature. Port of the protected #getCanonicalizationAlgorithm(XAdESSignature).
-func (b *XAdESEvidenceRecordDigestBuilder) getCanonicalizationAlgorithm(signature *XAdESSignature) (string, error) {
+func (b *EvidenceRecordDigestBuilder) getCanonicalizationAlgorithm(signature *Signature) (string, error) {
 	signedInfo := signature.SignedInfo()
 	if signedInfo == nil {
 		return "", fmt.Errorf("ds:SignedInfo element shall be defined within a signature")
@@ -301,7 +301,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getCanonicalizationAlgorithm(signatur
 
 // getReferenceBytesDigestValue ports the private
 // getReferenceBytesDigestValue(Reference, String).
-func (b *XAdESEvidenceRecordDigestBuilder) getReferenceBytesDigestValue(reference *xmldsig.Reference, canonicalizationAlgorithm string) ([]byte, error) {
+func (b *EvidenceRecordDigestBuilder) getReferenceBytesDigestValue(reference *xmldsig.Reference, canonicalizationAlgorithm string) ([]byte, error) {
 	/*
 	 * 1) process the retrieved ds:Reference element according to the reference-processing
 	 * model of XMLDSIG clause 4.4.3.2;
@@ -339,7 +339,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getReferenceBytesDigestValue(referenc
 }
 
 // getDigestValueOnBytes ports the private getDigestValueOnInputStream(InputStream).
-func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnBytes(data []byte) ([]byte, error) {
+func (b *EvidenceRecordDigestBuilder) getDigestValueOnBytes(data []byte) ([]byte, error) {
 	messageDigestCalculator, err := spi.NewDSSMessageDigestCalculator(b.DigestAlgorithm())
 	if err != nil {
 		return nil, err
@@ -349,8 +349,8 @@ func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnBytes(data []byte) ([
 }
 
 // getDigestValueOnCanonicalizedNodeByQuery ports the private
-// getDigestValueOnCanonicalizedNode(XAdESSignature, XPathQuery, String).
-func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNodeByQuery(signature *XAdESSignature,
+// getDigestValueOnCanonicalizedNode(Signature, XPathQuery, String).
+func (b *EvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNodeByQuery(signature *Signature,
 	xPathQuery common.XPathQuery, canonicalizationAlgorithm string) ([]byte, error) {
 	element, err := xmlutils.XPathUtilsGetElement(signature.SignatureElement(), xPathQuery)
 	if err != nil {
@@ -361,7 +361,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNodeByQu
 
 // getDigestValueOnCanonicalizedNode ports the private getDigestValueOnCanonicalizedNode(Node,
 // String).
-func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNode(node *xmldom.Node, canonicalizationAlgorithm string) ([]byte, error) {
+func (b *EvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNode(node *xmldom.Node, canonicalizationAlgorithm string) ([]byte, error) {
 	messageDigest, err := DSSXMLUtilsGetDigestOnCanonicalizedNode(node, b.DigestAlgorithm(), canonicalizationAlgorithm)
 	if err != nil {
 		return nil, err
@@ -370,10 +370,10 @@ func (b *XAdESEvidenceRecordDigestBuilder) getDigestValueOnCanonicalizedNode(nod
 }
 
 // getUnsignedSignaturePropertiesList ports the private
-// getUnsignedSignaturePropertiesList(XAdESSignature).
-func (b *XAdESEvidenceRecordDigestBuilder) getUnsignedSignaturePropertiesList(signature *XAdESSignature) ([]*XAdESAttribute, error) {
+// getUnsignedSignaturePropertiesList(Signature).
+func (b *EvidenceRecordDigestBuilder) getUnsignedSignaturePropertiesList(signature *Signature) ([]*Attribute, error) {
 	// NOTE : only direct incorporation is supported
-	unsignedSigProperties := XAdESUnsignedSigPropertiesBuild(signature.SignatureElement(), signature.XAdESPaths())
+	unsignedSigProperties := UnsignedSigPropertiesBuild(signature.SignatureElement(), signature.XAdESPaths())
 	if !unsignedSigProperties.IsExist() {
 		// Upstream logs "No xades:UnsignedSignatureProperties is present to compute the
 		// message-imprint for an evidence-record".
@@ -384,7 +384,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getUnsignedSignaturePropertiesList(si
 	}
 
 	if b.IsParallelEvidenceRecord() {
-		erAttribute := XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties)
+		erAttribute := SignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties)
 		if erAttribute != nil {
 			return b.getPrecedingAttributes(unsignedSigProperties, erAttribute), nil
 		}
@@ -394,10 +394,10 @@ func (b *XAdESEvidenceRecordDigestBuilder) getUnsignedSignaturePropertiesList(si
 
 // getPrecedingAttributes ports the private getPrecedingAttributes(XAdESUnsignedSigProperties,
 // SignatureAttribute).
-func (b *XAdESEvidenceRecordDigestBuilder) getPrecedingAttributes(unsignedSigProperties *XAdESUnsignedSigProperties,
-	attribute validation.SignatureAttribute) []*XAdESAttribute {
-	target, _ := attribute.(*XAdESAttribute)
-	var attributes []*XAdESAttribute
+func (b *EvidenceRecordDigestBuilder) getPrecedingAttributes(unsignedSigProperties *UnsignedSigProperties,
+	attribute validation.SignatureAttribute) []*Attribute {
+	target, _ := attribute.(*Attribute)
+	var attributes []*Attribute
 	for _, currentAttribute := range unsignedSigProperties.Attributes() {
 		if target != nil && target.Equals(currentAttribute) {
 			break
@@ -408,7 +408,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getPrecedingAttributes(unsignedSigPro
 }
 
 // containsQualifyingProperties ports the private containsQualifyingProperties(Node, XAdESPath).
-func (b *XAdESEvidenceRecordDigestBuilder) containsQualifyingProperties(node *xmldom.Node, xadesPath definition.XAdESPath) bool {
+func (b *EvidenceRecordDigestBuilder) containsQualifyingProperties(node *xmldom.Node, xadesPath definition.XAdESPath) bool {
 	qualifyingProperties, err := xmlutils.XPathUtilsGetNode(node, xadesPath.CurrentQualifyingPropertiesPath())
 	if err != nil {
 		return false
@@ -418,7 +418,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) containsQualifyingProperties(node *xm
 
 // getManifestDataObjectDigests ports the private getManifestDataObjectDigests(XAdESSignature,
 // Reference, String).
-func (b *XAdESEvidenceRecordDigestBuilder) getManifestDataObjectDigests(signature *XAdESSignature, referenceToManifest *xmldsig.Reference,
+func (b *EvidenceRecordDigestBuilder) getManifestDataObjectDigests(signature *Signature, referenceToManifest *xmldsig.Reference,
 	canonicalizationAlgorithm string) ([][]byte, error) {
 	var digestObjectsGroup [][]byte
 	if err := b.getManifestDataObjectDigestsRecursively(signature, referenceToManifest, canonicalizationAlgorithm, &digestObjectsGroup); err != nil {
@@ -428,8 +428,8 @@ func (b *XAdESEvidenceRecordDigestBuilder) getManifestDataObjectDigests(signatur
 }
 
 // getManifestDataObjectDigestsRecursively ports the private
-// getManifestDataObjectDigestsRecursively(XAdESSignature, Reference, String, List<byte[]>).
-func (b *XAdESEvidenceRecordDigestBuilder) getManifestDataObjectDigestsRecursively(signature *XAdESSignature, referenceToManifest *xmldsig.Reference,
+// getManifestDataObjectDigestsRecursively(Signature, Reference, String, List<byte[]>).
+func (b *EvidenceRecordDigestBuilder) getManifestDataObjectDigestsRecursively(signature *Signature, referenceToManifest *xmldsig.Reference,
 	canonicalizationAlgorithm string, digestObjectsGroup *[][]byte) error {
 	manifestReferences, err := b.getManifestReferences(signature, referenceToManifest)
 	if err != nil {
@@ -468,7 +468,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getManifestDataObjectDigestsRecursive
 }
 
 // getManifestReferences ports the private getManifestReferences(XAdESSignature, Reference).
-func (b *XAdESEvidenceRecordDigestBuilder) getManifestReferences(signature *XAdESSignature, referenceToManifest *xmldsig.Reference) ([]*xmldsig.Reference, error) {
+func (b *EvidenceRecordDigestBuilder) getManifestReferences(signature *Signature, referenceToManifest *xmldsig.Reference) ([]*xmldsig.Reference, error) {
 	uri := referenceToManifest.URI()
 	manifestElement := DSSXMLUtilsGetManifestById(signature.SignatureElement(), uri)
 	manifest, err := xmldsig.NewManifest(manifestElement, nil)
@@ -497,12 +497,12 @@ func xadesEvidenceRecordDigestBuilderInitManifestDetachedContent(manifest *xmlds
 }
 
 // isResultXmlNodeSet ports the private isResultXmlNodeSet(Reference).
-func (b *XAdESEvidenceRecordDigestBuilder) isResultXmlNodeSet(reference *xmldsig.Reference) bool {
+func (b *EvidenceRecordDigestBuilder) isResultXmlNodeSet(reference *xmldsig.Reference) bool {
 	return ReferenceOutputTypeNodeSet == DSSXMLUtilsGetReferenceOutputType(reference)
 }
 
 // computeDigestValueGroupHash ports the private computeDigestValueGroupHash(List<byte[]>).
-func (b *XAdESEvidenceRecordDigestBuilder) computeDigestValueGroupHash(digestValueGroup [][]byte) (model.DSSMessageDigest, error) {
+func (b *EvidenceRecordDigestBuilder) computeDigestValueGroupHash(digestValueGroup [][]byte) (model.DSSMessageDigest, error) {
 	/*
 	 * The algorithm by which a root hash value is generated from the <HashTree> element is as
 	 * follows: the content of each <DigestValue> element within the first <Sequence> element is
@@ -537,4 +537,4 @@ func (b *XAdESEvidenceRecordDigestBuilder) computeDigestValueGroupHash(digestVal
 }
 
 // compile-time interface assertion.
-var _ validation.SignatureEvidenceRecordDigestBuilder = (*XAdESEvidenceRecordDigestBuilder)(nil)
+var _ validation.SignatureEvidenceRecordDigestBuilder = (*EvidenceRecordDigestBuilder)(nil)

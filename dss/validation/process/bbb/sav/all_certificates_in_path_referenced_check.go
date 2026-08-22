@@ -20,8 +20,8 @@ type AllCertificatesInPathReferencedCheck struct {
 }
 
 // NewAllCertificatesInPathReferencedCheck is the default constructor. Port of
-// AllCertificatesInPathReferencedCheck(I18nProvider, XmlSAV, TokenProxy, LevelRule).
-func NewAllCertificatesInPathReferencedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// AllCertificatesInPathReferencedCheck(Provider, XmlSAV, TokenProxy, LevelRule).
+func NewAllCertificatesInPathReferencedCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *AllCertificatesInPathReferencedCheck {
 	c := &AllCertificatesInPathReferencedCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

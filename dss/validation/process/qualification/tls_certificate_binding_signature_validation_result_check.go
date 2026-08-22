@@ -17,8 +17,8 @@ type TLSCertificateBindingSignatureValidationResultCheck struct {
 
 // NewTLSCertificateBindingSignatureValidationResultCheck is the default
 // constructor. Port of
-// TLSCertificateBindingSignatureValidationResultCheck(I18nProvider, XmlValidationQWACProcess, XmlConclusion, LevelRule).
-func NewTLSCertificateBindingSignatureValidationResultCheck(i18nProvider *i18n.I18nProvider,
+// TLSCertificateBindingSignatureValidationResultCheck(Provider, XmlValidationQWACProcess, XmlConclusion, LevelRule).
+func NewTLSCertificateBindingSignatureValidationResultCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationQWACProcess], bindingSignatureBasicValidationConclusion *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *TLSCertificateBindingSignatureValidationResultCheck {
 	c := &TLSCertificateBindingSignatureValidationResultCheck{

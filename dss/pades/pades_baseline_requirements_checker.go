@@ -7,18 +7,18 @@
 // the surrounding comment instead.
 //
 // STRUCTURE DEVIATION (documented for the integrator): Java's PAdESBaselineRequirementsChecker
-// extends CAdESBaselineRequirementsChecker, itself hard-typed as
+// extends BaselineRequirementsChecker, itself hard-typed as
 // BaselineRequirementsChecker<CAdESSignature> (not re-parametrised for PAdESSignature - Java
-// relies on PAdESSignature being a CAdESSignature subtype and on virtual dispatch to route every
-// signature.getXxx() call the shared/CAdES code makes back to PAdESSignature's own overrides).
+// relies on Signature being a Signature subtype and on virtual dispatch to route every
+// signature.getXxx() call the shared/CAdES code makes back to Signature's own overrides).
 // Go generics have no covariant substitution for a type parameter and no virtual dispatch
-// through an embedded base, so this port cannot embed cades.CAdESBaselineRequirementsChecker
-// (pinned to *cades.CAdESSignature) and still have MinimalLTRequirement/MinimalTRequirement/
-// ContainsSigningCertificate/ValidationContext/CertificateSourcesExceptLastArchiveTimestamp
-// resolve against PAdESSignature's own (DSS-dictionary-aware) certificate/CRL/OCSP sources - the
+// through an embedded base, so this port cannot embed cades.BaselineRequirementsChecker
+// (pinned to *cades.Signature) and still have MinimalLTRequirement/MinimalTRequirement/
+// ContainsSigningCertificate/Context/CertificateSourcesExceptLastArchiveTimestamp
+// resolve against Signature's own (DSS-dictionary-aware) certificate/CRL/OCSP sources - the
 // behaviour every method PAdESBaselineRequirementsChecker.java itself defines actually needs.
-// Instead this type embeds its own validation.BaselineRequirementsChecker[*PAdESSignature]
-// (a sibling of cades.CAdESBaselineRequirementsChecker, not a specialisation of it), giving
+// Instead this type embeds its own validation.BaselineRequirementsChecker[*Signature]
+// (a sibling of cades.BaselineRequirementsChecker, not a specialisation of it), giving
 // correct polymorphism for those methods. The six profile methods
 // (HasExtendedTProfile/C/X/XL/A/ERS) that PAdESBaselineRequirementsChecker.java does not
 // override at all (pure Java inheritance of CAdESBaselineRequirementsChecker's CMS/
@@ -38,10 +38,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// PAdESBaselineRequirementsChecker checks conformance of a PAdES signature to the requested
+// BaselineRequirementsChecker checks conformance of a PAdES signature to the requested
 // baseline format.
-type PAdESBaselineRequirementsChecker struct {
-	validation.BaselineRequirementsChecker[*PAdESSignature]
+type BaselineRequirementsChecker struct {
+	validation.BaselineRequirementsChecker[*Signature]
 
 	// offlineCertificateVerifier mirrors the base's own copy, kept here as well so cadesChecker
 	// can build a fresh cades-level checker with the same verifier.
@@ -50,9 +50,9 @@ type PAdESBaselineRequirementsChecker struct {
 
 // NewPAdESBaselineRequirementsChecker is the default constructor.
 // Port of the constructor PAdESBaselineRequirementsChecker(PAdESSignature, CertificateVerifier).
-func NewPAdESBaselineRequirementsChecker(signature *PAdESSignature, offlineCertificateVerifier validation.CertificateVerifier) *PAdESBaselineRequirementsChecker {
-	checker := &PAdESBaselineRequirementsChecker{
-		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*PAdESSignature](signature, offlineCertificateVerifier),
+func NewPAdESBaselineRequirementsChecker(signature *Signature, offlineCertificateVerifier validation.CertificateVerifier) *BaselineRequirementsChecker {
+	checker := &BaselineRequirementsChecker{
+		BaselineRequirementsChecker: validation.NewBaselineRequirementsCheckerBaseWithVerifier[*Signature](signature, offlineCertificateVerifier),
 		offlineCertificateVerifier:  offlineCertificateVerifier,
 	}
 	checker.InitBaselineRequirementsChecker(checker)
@@ -61,33 +61,33 @@ func NewPAdESBaselineRequirementsChecker(signature *PAdESSignature, offlineCerti
 
 // cadesChecker builds a CAdES-level requirements checker over this signature's embedded CAdES
 // CMS handling; see this file's header ("STRUCTURE DEVIATION") for why and its limits.
-func (b *PAdESBaselineRequirementsChecker) cadesChecker() *cades.CAdESBaselineRequirementsChecker {
-	return cades.NewCAdESBaselineRequirementsChecker(b.Signature().CAdESSignature, b.offlineCertificateVerifier)
+func (b *BaselineRequirementsChecker) cadesChecker() *cades.BaselineRequirementsChecker {
+	return cades.NewCAdESBaselineRequirementsChecker(b.Signature().Signature, b.offlineCertificateVerifier)
 }
 
 // GetBaselineSignatureForm returns the signature form corresponding to the signature: PAdES.
 // Port of the protected getBaselineSignatureForm(), exported to satisfy this port's
 // validation.BaselineRequirementsCheckerOverrides (see that interface's doc comment on
 // GetBaselineSignatureForm). b's own HasBaselineBProfile() override never actually reaches
-// cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements() through this method -
+// cades.BaselineRequirementsChecker.cmsBaselineBRequirements() through this method -
 // cmsBaselineBRequirements() below builds a fresh CMSForPAdESBaselineRequirementsChecker, whose
 // own GetBaselineSignatureForm() override is what that call chain actually resolves - but this
 // override still has to exist so b satisfies BaselineRequirementsCheckerOverrides for
 // InitBaselineRequirementsChecker(b) in NewPAdESBaselineRequirementsChecker, matching Java's own
-// PAdESBaselineRequirementsChecker override of the identical method for the identical reason.
-func (b *PAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
+// BaselineRequirementsChecker override of the identical method for the identical reason.
+func (b *BaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureFormPAdES
 }
 
 // HasAdESProfile checks if the signature is conformant to the corresponding AdES profile.
 // Port of hasAdESProfile().
-func (b *PAdESBaselineRequirementsChecker) HasAdESProfile() bool {
+func (b *BaselineRequirementsChecker) HasAdESProfile() bool {
 	return b.HasExtendedBESProfile() || b.HasBaselineBProfile()
 }
 
 // HasBaselineBProfile checks if the signature has a corresponding BASELINE-B profile.
 // Port of hasBaselineBProfile().
-func (b *PAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineBProfile() bool {
 	if !b.cmsBaselineBRequirements() {
 		return false
 	}
@@ -157,14 +157,14 @@ func (b *PAdESBaselineRequirementsChecker) HasBaselineBProfile() bool {
 
 // cmsBaselineBRequirements checks if BASELINE-B requirements are satisfied for a CMS signature.
 // Port of the protected cmsBaselineBRequirements() override.
-func (b *PAdESBaselineRequirementsChecker) cmsBaselineBRequirements() bool {
-	cmsRequirementsChecker := NewCMSForPAdESBaselineRequirementsChecker(b.Signature().CAdESSignature)
+func (b *BaselineRequirementsChecker) cmsBaselineBRequirements() bool {
+	cmsRequirementsChecker := NewCMSForPAdESBaselineRequirementsChecker(b.Signature().Signature)
 	return cmsRequirementsChecker.IsValidForPAdESBaselineBProfile()
 }
 
 // HasBaselineTProfile checks if the signature has a corresponding BASELINE-T profile.
 // Port of hasBaselineTProfile().
-func (b *PAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineTProfile() bool {
 	// signature-time-stamp or document-time-stamp (Cardinality >= 1)
 	if utils.IsCollectionEmpty(b.Signature().SignatureTimestamps()) &&
 		utils.IsCollectionEmpty(b.Signature().DocumentTimestamps()) {
@@ -177,13 +177,13 @@ func (b *PAdESBaselineRequirementsChecker) HasBaselineTProfile() bool {
 
 // HasBaselineLTProfile checks if the signature has a corresponding BASELINE-LT profile.
 // Port of hasBaselineLTProfile().
-func (b *PAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTProfile() bool {
 	return b.hasLTProfile()
 }
 
 // hasLTProfile verifies a presence of LT-profile for a PDF signature.
 // Port of the protected hasLTProfile().
-func (b *PAdESBaselineRequirementsChecker) hasLTProfile() bool {
+func (b *BaselineRequirementsChecker) hasLTProfile() bool {
 	if !b.MinimalLTRequirement() {
 		return false
 	}
@@ -200,7 +200,7 @@ func (b *PAdESBaselineRequirementsChecker) hasLTProfile() bool {
 
 // HasBaselineLTAProfile checks if the signature has a corresponding BASELINE-LTA profile.
 // Port of hasBaselineLTAProfile().
-func (b *PAdESBaselineRequirementsChecker) HasBaselineLTAProfile() bool {
+func (b *BaselineRequirementsChecker) HasBaselineLTAProfile() bool {
 	// Additional requirement (y)
 	if !b.isBaselineLTATimestampPresent() {
 		// Upstream logs "document-time-stamp covering LT-level and containing a key SubFilter
@@ -212,7 +212,7 @@ func (b *PAdESBaselineRequirementsChecker) HasBaselineLTAProfile() bool {
 }
 
 // isBaselineLTATimestampPresent ports the private isBaselineLTATimestampPresent().
-func (b *PAdESBaselineRequirementsChecker) isBaselineLTATimestampPresent() bool {
+func (b *BaselineRequirementsChecker) isBaselineLTATimestampPresent() bool {
 	for _, timestampToken := range b.Signature().DocumentTimestamps() {
 		if b.isBaselineLTATimestamp(timestampToken) {
 			return true
@@ -222,13 +222,13 @@ func (b *PAdESBaselineRequirementsChecker) isBaselineLTATimestampPresent() bool 
 }
 
 // isBaselineLTATimestamp ports the private isBaselineLTATimestamp(TimestampToken).
-func (b *PAdESBaselineRequirementsChecker) isBaselineLTATimestamp(timestampToken *validation.TimestampToken) bool {
+func (b *BaselineRequirementsChecker) isBaselineLTATimestamp(timestampToken *validation.TimestampToken) bool {
 	return b.containsRFC3161SubFilter(timestampToken) && b.coversLTLevelData(timestampToken)
 }
 
 // HasExtendedBESProfile checks if the signature has a corresponding *AdES-BES profile.
 // Port of hasExtendedBESProfile().
-func (b *PAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedBESProfile() bool {
 	if !b.cmsExtendedBESRequirements() {
 		return false
 	}
@@ -306,15 +306,15 @@ func (b *PAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
 // cmsExtendedBESRequirements verifies whether CMS is conformant to the E-BES profile.
 //
 // Port of the protected cmsExtendedBESRequirements(); not overridden by upstream
-// PAdESBaselineRequirementsChecker, so inherited unchanged from
-// CAdESBaselineRequirementsChecker. Unlike the six HasExtendedXxxProfile methods above, that
+// BaselineRequirementsChecker, so inherited unchanged from
+// BaselineRequirementsChecker. Unlike the six HasExtendedXxxProfile methods above, that
 // inherited method (and the private helpers it calls: isContentTypeValid,
 // isMessageDigestPresent, isOneSigningCertificatePresent, getAttributeValuesSize) are
 // unexported in package cades, so delegating to cadesChecker() is not possible here; this
 // reproduces the same three cardinality checks directly instead, against
-// cades.CAdESUtilsSignedAttributesOfType/spi.DSSASN1UtilsAsn1Encodable, the same building
+// cades.UtilsSignedAttributesOfType/spi.DSSASN1UtilsAsn1Encodable, the same building
 // blocks cades_baseline_requirements_checker.go itself is built from.
-func (b *PAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
+func (b *BaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 	signerInformation := b.Signature().SignerInformation()
 
 	// content-type (Cardinality == 1)
@@ -324,22 +324,22 @@ func (b *PAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 		return false
 	}
 	// message-digest (Cardinality == 1)
-	if padesBaselineAttributeValuesSize(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtMessageDigest)) != 1 {
+	if padesBaselineAttributeValuesSize(cades.UtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtMessageDigest)) != 1 {
 		// Upstream logs "message-digest attribute shall be present for {}-BES signature
 		// (cardinality == 1)!".
 		return false
 	}
 	// signing-certificate/signing-certificate-v2 (Cardinality == 1)
-	signingCertAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificate)
-	signingCertV2Attrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificateV2)
+	signingCertAttrs := cades.UtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificate)
+	signingCertV2Attrs := cades.UtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificateV2)
 	if padesBaselineAttributeValuesSize(signingCertAttrs)+padesBaselineAttributeValuesSize(signingCertV2Attrs) != 1 {
 		// Upstream logs "signing-certificate(-v2) attribute shall be present for {}-BES
 		// signature (cardinality == 1)!".
 		return false
 	}
 	// signer-attributes (Cardinality == 0 or 1)
-	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSignerAttr))+
-		len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSignerAttrV2)) > 1 {
+	if len(cades.UtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSignerAttr))+
+		len(cades.UtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSignerAttrV2)) > 1 {
 		// Upstream logs "signer-attributes(-v2) attribute shall not be present multiple times
 		// for {}-BES signature (cardinality == 0 or 1)!".
 		return false
@@ -350,8 +350,8 @@ func (b *PAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 // isContentTypeValid verifies whether the presence of content-type attribute is conformant to
 // the given signature type. Port of the private isContentTypeValid(SignerInformation); see
 // cmsExtendedBESRequirements's doc comment for why it is reproduced here rather than reused.
-func (b *PAdESBaselineRequirementsChecker) isContentTypeValid(signerInformation *cmscore.SignerInfo) bool {
-	contentTypeAttrs := cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtContentType)
+func (b *BaselineRequirementsChecker) isContentTypeValid(signerInformation *cmscore.SignerInfo) bool {
+	contentTypeAttrs := cades.UtilsSignedAttributesOfType(signerInformation, cades.OIDPkcs9AtContentType)
 	numberOfOccurrences := padesBaselineAttributeValuesSize(contentTypeAttrs)
 	if b.Signature().IsCounterSignature() && numberOfOccurrences == 0 {
 		return true
@@ -373,12 +373,12 @@ func padesBaselineAttributeValuesSize(attributes []*cmscore.Attribute) int {
 
 // HasExtendedEPESProfile checks if the signature has a corresponding *AdES-EPES profile.
 // Port of hasExtendedEPESProfile().
-func (b *PAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 	padesSignature := b.Signature()
 	signerInformation := padesSignature.SignerInformation()
 	pdfSignatureDictionary := padesSignature.PdfSignatureDictionary()
 	// signature-policy-identifier (Cardinality == 1)
-	if len(cades.CAdESUtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSigPolicyId)) == 0 {
+	if len(cades.UtilsSignedAttributesOfType(signerInformation, cades.OIDIdAaEtsSigPolicyId)) == 0 {
 		// Upstream logs "signature-policy-identifier attribute shall be present for PAdES-EPES
 		// signature (cardinality == 1)!".
 		return false
@@ -394,59 +394,59 @@ func (b *PAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 
 // HasExtendedTProfile checks if the signature has a corresponding *AdES-T profile. Port of
 // hasExtendedTProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) HasExtendedTProfile() bool {
+// inherited unchanged from BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) HasExtendedTProfile() bool {
 	return b.cadesChecker().HasExtendedTProfile()
 }
 
 // HasExtendedCProfile checks if the signature has a corresponding *AdES-C profile. Port of
 // hasExtendedCProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
+// inherited unchanged from BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) HasExtendedCProfile() bool {
 	return b.cadesChecker().HasExtendedCProfile()
 }
 
 // HasExtendedXProfile checks if the signature has a corresponding *AdES-X profile. Port of
 // hasExtendedXProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) HasExtendedXProfile() bool {
+// inherited unchanged from BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) HasExtendedXProfile() bool {
 	return b.cadesChecker().HasExtendedXProfile()
 }
 
 // HasExtendedXLProfile checks if the signature has a corresponding *AdES-XL profile. Port of
 // hasExtendedXLProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header for the
+// inherited unchanged from BaselineRequirementsChecker - see this file's header for the
 // narrow deviation this delegation carries (MinimalLTRequirement resolves against the embedded
-// CAdESSignature's own sources rather than PAdESSignature's DSS-dictionary-aware ones here).
-func (b *PAdESBaselineRequirementsChecker) HasExtendedXLProfile() bool {
+// Signature's own sources rather than Signature's DSS-dictionary-aware ones here).
+func (b *BaselineRequirementsChecker) HasExtendedXLProfile() bool {
 	return b.cadesChecker().HasExtendedXLProfile()
 }
 
 // HasExtendedAProfile checks if the signature has a corresponding *AdES-A profile. Port of
 // hasExtendedAProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) HasExtendedAProfile() bool {
+// inherited unchanged from BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) HasExtendedAProfile() bool {
 	return b.cadesChecker().HasExtendedAProfile()
 }
 
 // HasExtendedERSProfile checks if the signature has a corresponding *AdES-E-ERS profile. Port of
 // hasExtendedERSProfile(); not overridden by upstream PAdESBaselineRequirementsChecker, so
-// inherited unchanged from CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) HasExtendedERSProfile() bool {
+// inherited unchanged from BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) HasExtendedERSProfile() bool {
 	return b.cadesChecker().HasExtendedERSProfile()
 }
 
 // ContainsLTLevelCertificates verifies whether the signature contains some of the LT-/XL-level
 // attributes. Port of the protected containsLTLevelCertificates() override; not defined by
 // upstream PAdESBaselineRequirementsChecker, so inherited unchanged from
-// CAdESBaselineRequirementsChecker - see this file's header.
-func (b *PAdESBaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
+// BaselineRequirementsChecker - see this file's header.
+func (b *BaselineRequirementsChecker) ContainsLTLevelCertificates() bool {
 	return b.cadesChecker().ContainsLTLevelCertificates()
 }
 
 // HasExtendedLTVProfile checks if the signature has a corresponding PAdES-E-LTV profile.
 // Port of hasExtendedLTVProfile().
-func (b *PAdESBaselineRequirementsChecker) HasExtendedLTVProfile() bool {
+func (b *BaselineRequirementsChecker) HasExtendedLTVProfile() bool {
 	// a) Validation data check
 	if !b.MinimalLTRequirement() {
 		return false
@@ -467,7 +467,7 @@ func (b *PAdESBaselineRequirementsChecker) HasExtendedLTVProfile() bool {
 }
 
 // isLTVTimestampPresent ports the private isLTVTimestampPresent().
-func (b *PAdESBaselineRequirementsChecker) isLTVTimestampPresent() bool {
+func (b *BaselineRequirementsChecker) isLTVTimestampPresent() bool {
 	for _, timestampToken := range b.Signature().DocumentTimestamps() {
 		if b.coversLTLevelData(timestampToken) {
 			return true
@@ -477,7 +477,7 @@ func (b *PAdESBaselineRequirementsChecker) isLTVTimestampPresent() bool {
 }
 
 // coversLTLevelData ports the private coversLTLevelData(TimestampToken).
-func (b *PAdESBaselineRequirementsChecker) coversLTLevelData(timestampToken *validation.TimestampToken) bool {
+func (b *BaselineRequirementsChecker) coversLTLevelData(timestampToken *validation.TimestampToken) bool {
 	if enumerations.ArchiveTimestampTypePAdES == timestampToken.ArchiveTimestampType() {
 		signatureValidationData := b.ValidationContext().GetValidationData(b.Signature())
 		certificateTokens := signatureValidationData.CertificateTokens()
@@ -496,7 +496,7 @@ func (b *PAdESBaselineRequirementsChecker) coversLTLevelData(timestampToken *val
 
 // coversDSSCertificateTokens ports the private coversDSSCertificateTokens(TimestampToken,
 // Collection<CertificateToken>).
-func (b *PAdESBaselineRequirementsChecker) coversDSSCertificateTokens(timestampToken *validation.TimestampToken,
+func (b *BaselineRequirementsChecker) coversDSSCertificateTokens(timestampToken *validation.TimestampToken,
 	certificateTokens []*model.CertificateToken) bool {
 	dssCertificates := make([]*model.CertificateToken, 0)
 	dssCertificates = append(dssCertificates, b.Signature().CertificateSource().DSSDictionaryCertValues()...)
@@ -530,7 +530,7 @@ func padesBaselineContainsCertificate(certificates []*model.CertificateToken, ca
 // shall be determined in prior using HasBaselineLTProfile()!
 // Port of the private coversRevocationTokens(TimestampToken, Collection<CRLToken>,
 // Collection<OCSPToken>).
-func (b *PAdESBaselineRequirementsChecker) coversRevocationTokens(timestampToken *validation.TimestampToken,
+func (b *BaselineRequirementsChecker) coversRevocationTokens(timestampToken *validation.TimestampToken,
 	crlTokens []*spi.CRLToken, ocspTokens []*spi.OCSPToken) bool {
 	revocationsByCertificate := padesBaselineRevocationsByCertificate(crlTokens, ocspTokens)
 	for _, revocationTokens := range revocationsByCertificate {
@@ -550,7 +550,7 @@ func (b *PAdESBaselineRequirementsChecker) coversRevocationTokens(timestampToken
 
 // coversTimestampTokens ports the private coversTimestampTokens(TimestampToken,
 // Collection<TimestampToken>).
-func (b *PAdESBaselineRequirementsChecker) coversTimestampTokens(timestampToken *validation.TimestampToken,
+func (b *BaselineRequirementsChecker) coversTimestampTokens(timestampToken *validation.TimestampToken,
 	signatureTimestampTokens []*validation.TimestampToken) bool {
 	timestampedReferences := timestampToken.TimestampedReferences()
 	if utils.IsCollectionNotEmpty(timestampedReferences) {
@@ -566,7 +566,7 @@ func (b *PAdESBaselineRequirementsChecker) coversTimestampTokens(timestampToken 
 }
 
 // coversOwnRevocationData ports the private coversOwnRevocationData(TimestampToken).
-func (b *PAdESBaselineRequirementsChecker) coversOwnRevocationData(timestampToken *validation.TimestampToken) bool {
+func (b *BaselineRequirementsChecker) coversOwnRevocationData(timestampToken *validation.TimestampToken) bool {
 	sig := b.Signature()
 	validationContext := validation.NewSignatureValidationContext()
 	validationContext.Initialize(b.offlineCertificateVerifier)
@@ -626,7 +626,7 @@ func padesBaselineEnrichRevocationDataMap(revocationDataMap map[string][]model.T
 }
 
 // coversToken ports the private coversToken(TimestampToken, Token).
-func (b *PAdESBaselineRequirementsChecker) coversToken(timestampToken *validation.TimestampToken, token model.Token) bool {
+func (b *BaselineRequirementsChecker) coversToken(timestampToken *validation.TimestampToken, token model.Token) bool {
 	for _, timestampedReference := range timestampToken.TimestampedReferences() {
 		if token.DSSIDAsString() == timestampedReference.ObjectId() {
 			return true
@@ -636,7 +636,7 @@ func (b *PAdESBaselineRequirementsChecker) coversToken(timestampToken *validatio
 }
 
 // containsRFC3161SubFilter ports the private containsRFC3161SubFilter(TimestampToken).
-func (b *PAdESBaselineRequirementsChecker) containsRFC3161SubFilter(timestampToken *validation.TimestampToken) bool {
+func (b *BaselineRequirementsChecker) containsRFC3161SubFilter(timestampToken *validation.TimestampToken) bool {
 	pdfTimestampToken, ok := PdfTimestampTokenOf(timestampToken)
 	if !ok {
 		return false
@@ -651,7 +651,7 @@ func (b *PAdESBaselineRequirementsChecker) containsRFC3161SubFilter(timestampTok
 
 // HasPKCS7Profile checks if the signature has PKCS#7 profile (according to ISO 32000-1).
 // Port of hasPKCS7Profile().
-func (b *PAdESBaselineRequirementsChecker) HasPKCS7Profile() bool {
+func (b *BaselineRequirementsChecker) HasPKCS7Profile() bool {
 	padesSignature := b.Signature()
 	pdfSignatureDictionary := padesSignature.PdfSignatureDictionary()
 	// SubFilter shall take one of the following values: (adbe.pkcs7.detached, adbe.pkcs7.sha1)
@@ -701,18 +701,18 @@ func (b *PAdESBaselineRequirementsChecker) HasPKCS7Profile() bool {
 }
 
 // HasPKCS7TProfile checks if the signature has a PKCS#7-T profile. Port of hasPKCS7TProfile().
-func (b *PAdESBaselineRequirementsChecker) HasPKCS7TProfile() bool {
+func (b *BaselineRequirementsChecker) HasPKCS7TProfile() bool {
 	return b.HasBaselineTProfile()
 }
 
 // HasPKCS7LTProfile checks if the signature has a PKCS#7-LT profile. Port of hasPKCS7LTProfile().
-func (b *PAdESBaselineRequirementsChecker) HasPKCS7LTProfile() bool {
+func (b *BaselineRequirementsChecker) HasPKCS7LTProfile() bool {
 	return b.hasLTProfile()
 }
 
 // HasPKCS7LTAProfile checks if the signature has a PKCS#7-LTA profile.
 // Port of hasPKCS7LTAProfile().
-func (b *PAdESBaselineRequirementsChecker) HasPKCS7LTAProfile() bool {
+func (b *BaselineRequirementsChecker) HasPKCS7LTAProfile() bool {
 	ltaTimestampFound := false
 	for _, timestampToken := range b.Signature().DocumentTimestamps() {
 		if b.coversLTLevelData(timestampToken) {

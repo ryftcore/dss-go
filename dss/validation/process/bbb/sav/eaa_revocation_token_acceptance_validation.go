@@ -31,8 +31,8 @@ type EAARevocationTokenAcceptanceValidation struct {
 }
 
 // NewEAARevocationTokenAcceptanceValidation is the default constructor. Port of
-// EAARevocationTokenAcceptanceValidation(I18nProvider, Date, EAARevocationTokenWrapper, XmlAOV, ValidationPolicy).
-func NewEAARevocationTokenAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// EAARevocationTokenAcceptanceValidation(Provider, Date, EAARevocationTokenWrapper, XmlAOV, ValidationPolicy).
+func NewEAARevocationTokenAcceptanceValidation(i18nProvider *i18n.Provider, currentTime time.Time,
 	eaaRevocationTokenWrapper *diagnostic.EAARevocationTokenWrapper, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *EAARevocationTokenAcceptanceValidation {
 	c := &EAARevocationTokenAcceptanceValidation{

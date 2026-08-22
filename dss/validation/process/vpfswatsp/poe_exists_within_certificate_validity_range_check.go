@@ -26,7 +26,7 @@ type POEExistsWithinCertificateValidityRangeCheck[T any] struct {
 
 // NewPOEExistsWithinCertificateValidityRangeCheck is the default constructor.
 // Port of POEExistsWithinCertificateValidityRangeCheck(I18nProvider, T, CertificateWrapper, POEExtraction, LevelRule).
-func NewPOEExistsWithinCertificateValidityRangeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewPOEExistsWithinCertificateValidityRangeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, poe *POEExtraction,
 	constraint policy.LevelRule) *POEExistsWithinCertificateValidityRangeCheck[T] {
 	c := &POEExistsWithinCertificateValidityRangeCheck[T]{

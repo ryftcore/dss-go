@@ -15,7 +15,7 @@ import (
 // creation.
 //
 // NOTE: the same instance of SignatureParameters shall be used on calls
-// DocumentSignatureService.GetDataToSign(...) and DocumentSignatureService.SignDocument(...).
+// SignatureService.GetDataToSign(...) and SignatureService.SignDocument(...).
 type TrustedListV5SignatureParametersBuilder struct {
 	AbstractTrustedListSignatureParametersBuilder
 }

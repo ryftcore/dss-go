@@ -3,7 +3,7 @@ package alert
 
 import "fmt"
 
-// ThrowAlertExceptionHandler is an AlertHandler which reports an AlertError built from the
+// ThrowAlertExceptionHandler is an Handler which reports an Error built from the
 // object's string representation. Java throws the AlertException; Go returns it.
 type ThrowAlertExceptionHandler[T any] struct{}
 

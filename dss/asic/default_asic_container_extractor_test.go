@@ -24,32 +24,32 @@ func newDefaultASiCContainerExtractorProbe(asicContainer model.DSSDocument) *def
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedManifest(entryName string) bool {
 	p.calls["manifest"]++
-	return ASiCUtilsIsManifest(entryName)
+	return UtilsIsManifest(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedArchiveManifest(entryName string) bool {
 	p.calls["archiveManifest"]++
-	return ASiCUtilsIsArchiveManifest(entryName)
+	return UtilsIsArchiveManifest(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedEvidenceRecordManifest(entryName string) bool {
 	p.calls["evidenceRecordManifest"]++
-	return ASiCUtilsIsEvidenceRecordManifest(entryName)
+	return UtilsIsEvidenceRecordManifest(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedSignature(entryName string) bool {
 	p.calls["signature"]++
-	return ASiCUtilsIsCAdES(entryName)
+	return UtilsIsCAdES(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedTimestamp(entryName string) bool {
 	p.calls["timestamp"]++
-	return ASiCUtilsIsTimestamp(entryName)
+	return UtilsIsTimestamp(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsAllowedEvidenceRecord(entryName string) bool {
 	p.calls["evidenceRecord"]++
-	return ASiCUtilsIsEvidenceRecord(entryName)
+	return UtilsIsEvidenceRecord(entryName)
 }
 
 func (p *defaultASiCContainerExtractorProbe) IsSupportedContainerFormat() bool { return true }
@@ -125,7 +125,7 @@ func (f *defaultASiCContainerExtractorFactoryProbe) IsSupported(asicContainer mo
 	return f.supported
 }
 
-func (f *defaultASiCContainerExtractorFactoryProbe) Create(asicContainer model.DSSDocument) ASiCContainerExtractor {
+func (f *defaultASiCContainerExtractorFactoryProbe) Create(asicContainer model.DSSDocument) ContainerExtractor {
 	return newDefaultASiCContainerExtractorProbe(asicContainer)
 }
 

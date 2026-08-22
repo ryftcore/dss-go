@@ -8,26 +8,26 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// CAdESTimestampParameters defines TimestampParameters to deal with CAdES timestamp creation.
-type CAdESTimestampParameters struct {
+// TimestampParameters defines TimestampParameters to deal with CAdES timestamp creation.
+type TimestampParameters struct {
 	model.TimestampParameters
 }
 
-var _ model.SerializableTimestampParameters = (*CAdESTimestampParameters)(nil)
+var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
 // NewCAdESTimestampParameters instantiates the object with the default digest algorithm. Port of
 // the empty constructor.
-func NewCAdESTimestampParameters() *CAdESTimestampParameters {
-	return &CAdESTimestampParameters{TimestampParameters: model.NewTimestampParameters()}
+func NewCAdESTimestampParameters() *TimestampParameters {
+	return &TimestampParameters{TimestampParameters: model.NewTimestampParameters()}
 }
 
 // NewCAdESTimestampParametersWithDigestAlgorithm instantiates the object with the given digest
 // algorithm to use for timestamping data. Port of CAdESTimestampParameters(DigestAlgorithm).
-func NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *CAdESTimestampParameters {
-	return &CAdESTimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
+func NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+	return &TimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
 }
 
 // String ports #toString.
-func (p *CAdESTimestampParameters) String() string {
+func (p *TimestampParameters) String() string {
 	return fmt.Sprintf("CAdESTimestampParameters %s", p.TimestampParameters.String())
 }

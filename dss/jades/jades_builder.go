@@ -12,8 +12,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// JAdESBuilder builds a JAdES signature.
-type JAdESBuilder interface {
+// Builder builds a JAdES signature.
+type Builder interface {
 	// Build builds a signature, adding the given SignatureValue to it, and returns the
 	// DSSDocument containing the JWS binaries. Port of #build(SignatureValue).
 	Build(signatureValue *model.SignatureValue) (model.DSSDocument, error)

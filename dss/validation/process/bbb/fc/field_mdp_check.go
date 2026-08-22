@@ -16,7 +16,7 @@ type FieldMDPCheck struct {
 }
 
 // NewFieldMDPCheck is the default constructor.
-func NewFieldMDPCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewFieldMDPCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *FieldMDPCheck {
 	c := &FieldMDPCheck{}
 	c.InitAbstractPdfLockDictionaryCheck(i18nProvider, result, pdfRevision, pdfRevision.FieldMDP(), constraint)

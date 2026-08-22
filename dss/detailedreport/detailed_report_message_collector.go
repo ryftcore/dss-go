@@ -14,54 +14,54 @@ import (
 // enumerations.MessageType constants are used directly at call sites.
 type messageType = enumerations.MessageType
 
-// DetailedReportMessageCollector is used to collect all messages for a token
+// MessageCollector is used to collect all messages for a token
 // validation by a defined type from a DetailedReport.
-type DetailedReportMessageCollector struct {
+type MessageCollector struct {
 	// detailedReport is the DetailedReport used to collect messages from.
 	detailedReport *DetailedReport
 }
 
 // newDetailedReportMessageCollector is the default constructor.
-func newDetailedReportMessageCollector(detailedReport *DetailedReport) *DetailedReportMessageCollector {
+func newDetailedReportMessageCollector(detailedReport *DetailedReport) *MessageCollector {
 	if detailedReport == nil {
 		panic("DetailedReport cannot be nil!")
 	}
-	return &DetailedReportMessageCollector{detailedReport: detailedReport}
+	return &MessageCollector{detailedReport: detailedReport}
 }
 
 // AdESValidationErrors returns a list of ETSI EN 319 102-1 AdES validation
 // error messages for a token with the given id.
-func (c *DetailedReportMessageCollector) AdESValidationErrors(tokenId string) []Message {
+func (c *MessageCollector) AdESValidationErrors(tokenId string) []Message {
 	return c.collectAdESValidationMessages(enumerations.MessageTypeError, tokenId)
 }
 
 // AdESValidationWarnings returns a list of ETSI EN 319 102-1 AdES validation
 // warning messages for a token with the given id.
-func (c *DetailedReportMessageCollector) AdESValidationWarnings(tokenId string) []Message {
+func (c *MessageCollector) AdESValidationWarnings(tokenId string) []Message {
 	return c.collectAdESValidationMessages(enumerations.MessageTypeWarn, tokenId)
 }
 
 // AdESValidationInfos returns a list of ETSI EN 319 102-1 AdES validation info
 // messages for a token with the given id.
-func (c *DetailedReportMessageCollector) AdESValidationInfos(tokenId string) []Message {
+func (c *MessageCollector) AdESValidationInfos(tokenId string) []Message {
 	return c.collectAdESValidationMessages(enumerations.MessageTypeInfo, tokenId)
 }
 
 // QualificationErrors returns a list of qualification validation errors for a
 // token with the given id.
-func (c *DetailedReportMessageCollector) QualificationErrors(tokenId string) []Message {
+func (c *MessageCollector) QualificationErrors(tokenId string) []Message {
 	return c.collectQualificationMessages(enumerations.MessageTypeError, tokenId)
 }
 
 // QualificationWarnings returns a list of qualification validation warnings
 // for a token with the given id.
-func (c *DetailedReportMessageCollector) QualificationWarnings(tokenId string) []Message {
+func (c *MessageCollector) QualificationWarnings(tokenId string) []Message {
 	return c.collectQualificationMessages(enumerations.MessageTypeWarn, tokenId)
 }
 
 // QualificationInfos returns a list of qualification validation infos for a
 // token with the given id.
-func (c *DetailedReportMessageCollector) QualificationInfos(tokenId string) []Message {
+func (c *MessageCollector) QualificationInfos(tokenId string) []Message {
 	return c.collectQualificationMessages(enumerations.MessageTypeInfo, tokenId)
 }
 
@@ -69,7 +69,7 @@ func (c *DetailedReportMessageCollector) QualificationInfos(tokenId string) []Me
 // qualification validation errors for a certificate with the given id at
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtIssuanceTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationErrorsAtIssuanceTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeError, certificateId)
 }
 
@@ -77,7 +77,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtIssuanc
 // qualification validation warnings for a certificate with the given id at
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtIssuanceTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationWarningsAtIssuanceTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeWarn, certificateId)
 }
 
@@ -85,7 +85,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtIssua
 // validation information messages for a certificate with the given id at
 // certificate issuance time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtIssuanceTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationInfosAtIssuanceTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtIssuanceTime(enumerations.MessageTypeInfo, certificateId)
 }
 
@@ -93,7 +93,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtIssuance
 // qualification validation errors for a certificate with the given id at
 // validation time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtValidationTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationErrorsAtValidationTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeError, certificateId)
 }
 
@@ -101,7 +101,7 @@ func (c *DetailedReportMessageCollector) CertificateQualificationErrorsAtValidat
 // qualification validation warnings for a certificate with the given id at
 // validation time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtValidationTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationWarningsAtValidationTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeWarn, certificateId)
 }
 
@@ -109,28 +109,28 @@ func (c *DetailedReportMessageCollector) CertificateQualificationWarningsAtValid
 // qualification validation information messages for a certificate with the
 // given id at validation time.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateQualificationInfosAtValidationTime(certificateId string) []Message {
+func (c *MessageCollector) CertificateQualificationInfosAtValidationTime(certificateId string) []Message {
 	return c.collectCertificateQualificationAtValidationTime(enumerations.MessageTypeInfo, certificateId)
 }
 
 // QWACValidationErrors returns a list of QWAC validation errors for a
 // certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
-func (c *DetailedReportMessageCollector) QWACValidationErrors(certificateId string) []Message {
+func (c *MessageCollector) QWACValidationErrors(certificateId string) []Message {
 	return c.collectQWACValidationDetails(enumerations.MessageTypeError, certificateId)
 }
 
 // QWACValidationWarnings returns a list of QWAC validation warnings for a
 // certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
-func (c *DetailedReportMessageCollector) QWACValidationWarnings(certificateId string) []Message {
+func (c *MessageCollector) QWACValidationWarnings(certificateId string) []Message {
 	return c.collectQWACValidationDetails(enumerations.MessageTypeWarn, certificateId)
 }
 
 // QWACValidationInfos returns a list of QWAC validation information messages
 // for a certificate with the given id at certificate issuance time.
 // NOTE: applicable only on QWAC validation.
-func (c *DetailedReportMessageCollector) QWACValidationInfos(certificateId string) []Message {
+func (c *MessageCollector) QWACValidationInfos(certificateId string) []Message {
 	return c.collectQWACValidationDetails(enumerations.MessageTypeInfo, certificateId)
 }
 
@@ -139,7 +139,7 @@ func (c *DetailedReportMessageCollector) QWACValidationInfos(certificateId strin
 // with the given id at certificate issuance time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusErrorsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeError, certificateId, certificateApprovalStatus)
 }
 
@@ -148,7 +148,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtIssuan
 // certificate with the given id at certificate issuance time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusWarningsAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeWarn, certificateId, certificateApprovalStatus)
 }
 
@@ -157,7 +157,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtIssu
 // certificate with the given id at certificate issuance time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusInfosAtIssuanceTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtIssuanceTime(enumerations.MessageTypeInfo, certificateId, certificateApprovalStatus)
 }
 
@@ -166,7 +166,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtIssuanc
 // with the given id at validation time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusErrorsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeError, certificateId, certificateApprovalStatus)
 }
 
@@ -175,7 +175,7 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusErrorsAtValida
 // certificate with the given id at validation time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusWarningsAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeWarn, certificateId, certificateApprovalStatus)
 }
 
@@ -184,11 +184,11 @@ func (c *DetailedReportMessageCollector) CertificateApprovalStatusWarningsAtVali
 // a certificate with the given id at validation time and the given
 // certificateApprovalStatus.
 // NOTE: applicable only for certificate validation.
-func (c *DetailedReportMessageCollector) CertificateApprovalStatusInfosAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) CertificateApprovalStatusInfosAtValidationTime(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtValidationTime(enumerations.MessageTypeInfo, certificateId, certificateApprovalStatus)
 }
 
-func (c *DetailedReportMessageCollector) collectAdESValidationMessages(t messageType, tokenId string) []Message {
+func (c *MessageCollector) collectAdESValidationMessages(t messageType, tokenId string) []Message {
 	if signatureById := c.detailedReport.XmlSignatureById(tokenId); signatureById != nil {
 		return c.collectSignatureValidation(t, signatureById)
 	}
@@ -216,7 +216,7 @@ func (c *DetailedReportMessageCollector) collectAdESValidationMessages(t message
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) collectQualificationMessages(t messageType, tokenId string) []Message {
+func (c *MessageCollector) collectQualificationMessages(t messageType, tokenId string) []Message {
 	if signatureById := c.detailedReport.XmlSignatureById(tokenId); signatureById != nil {
 		return c.collectSignatureQualification(t, signatureById)
 	}
@@ -232,7 +232,7 @@ func (c *DetailedReportMessageCollector) collectQualificationMessages(t messageT
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) collectSignatureValidation(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
+func (c *MessageCollector) collectSignatureValidation(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
 	result := []Message{}
 
 	highestConclusion := c.detailedReport.HighestConclusion(derefString(xmlSignature.Id))
@@ -252,7 +252,7 @@ func (c *DetailedReportMessageCollector) collectSignatureValidation(t messageTyp
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectTimestampValidation(t messageType, xmlTimestamp *jaxb.XmlTimestamp) []Message {
+func (c *MessageCollector) collectTimestampValidation(t messageType, xmlTimestamp *jaxb.XmlTimestamp) []Message {
 	result := []Message{}
 
 	timestampBasic := xmlTimestamp.ValidationProcessBasicTimestamp
@@ -269,7 +269,7 @@ func (c *DetailedReportMessageCollector) collectTimestampValidation(t messageTyp
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectEvidenceRecordValidation(t messageType, xmlEvidenceRecord *jaxb.XmlEvidenceRecord) []Message {
+func (c *MessageCollector) collectEvidenceRecordValidation(t messageType, xmlEvidenceRecord *jaxb.XmlEvidenceRecord) []Message {
 	result := []Message{}
 
 	validationProcessEvidenceRecord := xmlEvidenceRecord.ValidationProcessEvidenceRecord
@@ -279,7 +279,7 @@ func (c *DetailedReportMessageCollector) collectEvidenceRecordValidation(t messa
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectEAAValidation(t messageType, xmlEAA *jaxb.XmlEAA) []Message {
+func (c *MessageCollector) collectEAAValidation(t messageType, xmlEAA *jaxb.XmlEAA) []Message {
 	result := []Message{}
 
 	validationProcessEAA := xmlEAA.ValidationProcessEAA
@@ -289,25 +289,25 @@ func (c *DetailedReportMessageCollector) collectEAAValidation(t messageType, xml
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectTLAnalysisValidation(t messageType, tlAnalysisById *jaxb.XmlTLAnalysis) []Message {
+func (c *MessageCollector) collectTLAnalysisValidation(t messageType, tlAnalysisById *jaxb.XmlTLAnalysis) []Message {
 	result := []Message{}
 	addMessages(&result, messages(t, tlAnalysisById.Conclusion))
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectBBBValidation(t messageType, bbbById *jaxb.XmlBasicBuildingBlocks) []Message {
+func (c *MessageCollector) collectBBBValidation(t messageType, bbbById *jaxb.XmlBasicBuildingBlocks) []Message {
 	result := []Message{}
 	addMessages(&result, messages(t, bbbById.Conclusion))
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectXmlConclusionValidation(t messageType, xmlConclusion *jaxb.XmlConclusion) []Message {
+func (c *MessageCollector) collectXmlConclusionValidation(t messageType, xmlConclusion *jaxb.XmlConclusion) []Message {
 	result := []Message{}
 	addMessages(&result, messages(t, xmlConclusion))
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectSignatureQualification(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
+func (c *MessageCollector) collectSignatureQualification(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
 	result := []Message{}
 	if v := xmlSignature.ValidationSignatureQualification; v != nil {
 		addMessages(&result, messages(t, v.Conclusion))
@@ -315,7 +315,7 @@ func (c *DetailedReportMessageCollector) collectSignatureQualification(t message
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectTimestampQualification(t messageType, xmlTimestamp *jaxb.XmlTimestamp) []Message {
+func (c *MessageCollector) collectTimestampQualification(t messageType, xmlTimestamp *jaxb.XmlTimestamp) []Message {
 	result := []Message{}
 	if v := xmlTimestamp.ValidationTimestampQualification; v != nil {
 		addMessages(&result, messages(t, v.Conclusion))
@@ -323,7 +323,7 @@ func (c *DetailedReportMessageCollector) collectTimestampQualification(t message
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectEAAQualification(t messageType, xmlEAA *jaxb.XmlEAA) []Message {
+func (c *MessageCollector) collectEAAQualification(t messageType, xmlEAA *jaxb.XmlEAA) []Message {
 	result := []Message{}
 	if v := xmlEAA.ValidationEAAQualification; v != nil {
 		addMessages(&result, messages(t, v.Conclusion))
@@ -331,7 +331,7 @@ func (c *DetailedReportMessageCollector) collectEAAQualification(t messageType, 
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualification(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
+func (c *MessageCollector) collectCertificateQualification(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
 	result := []Message{}
 	addMessages(&result, c.collectCertificateQualificationAtIssuanceTimeFrom(t, certificateQualificationProcess))
 	addMessages(&result, c.collectCertificateQualificationAtBestSignatureTime(t, certificateQualificationProcess))
@@ -339,19 +339,19 @@ func (c *DetailedReportMessageCollector) collectCertificateQualification(t messa
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuanceTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtIssuanceTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
 	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeCertificateIssuanceTime)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtBestSignatureTime(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtBestSignatureTime(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
 	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeBESTSignatureTime)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValidationTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtValidationTimeFrom(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification) []Message {
 	return c.collectCertificateQualificationAtTime(t, certificateQualificationProcess, enumerations.ValidationTimeValidationTime)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuanceTime(t messageType, certificateId string) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtIssuanceTime(t messageType, certificateId string) []Message {
 	certificateQualificationProcess := c.certificateQualificationProcess(certificateId)
 	if certificateQualificationProcess != nil {
 		return c.collectCertificateQualificationAtIssuanceTimeFrom(t, certificateQualificationProcess)
@@ -359,7 +359,7 @@ func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuan
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) certificateQualificationProcess(certificateId string) []*jaxb.XmlValidationCertificateQualification {
+func (c *MessageCollector) certificateQualificationProcess(certificateId string) []*jaxb.XmlValidationCertificateQualification {
 	xmlCertificate := c.detailedReport.XmlCertificateById(certificateId)
 	if xmlCertificate != nil && xmlCertificate.CertificateQualificationProcess != nil {
 		return xmlCertificate.CertificateQualificationProcess.ValidationCertificateQualification
@@ -378,7 +378,7 @@ func (c *DetailedReportMessageCollector) certificateQualificationProcess(certifi
 	return []*jaxb.XmlValidationCertificateQualification{}
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValidationTime(t messageType, certificateId string) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtValidationTime(t messageType, certificateId string) []Message {
 	certificateQualificationProcess := c.certificateQualificationProcess(certificateId)
 	if certificateQualificationProcess != nil {
 		return c.collectCertificateQualificationAtValidationTimeFrom(t, certificateQualificationProcess)
@@ -386,7 +386,7 @@ func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValida
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateQualificationAtTime(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification, validationTime enumerations.ValidationTime) []Message {
+func (c *MessageCollector) collectCertificateQualificationAtTime(t messageType, certificateQualificationProcess []*jaxb.XmlValidationCertificateQualification, validationTime enumerations.ValidationTime) []Message {
 	if certificateQualificationProcess != nil {
 		for _, cq := range certificateQualificationProcess {
 			if validationTime == validationTimeOf(cq.ValidationTime) {
@@ -397,7 +397,7 @@ func (c *DetailedReportMessageCollector) collectCertificateQualificationAtTime(t
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) collectQWACValidationDetails(t messageType, certificateId string) []Message {
+func (c *MessageCollector) collectQWACValidationDetails(t messageType, certificateId string) []Message {
 	if certificateId == "" {
 		return []Message{}
 	}
@@ -427,17 +427,17 @@ func (c *DetailedReportMessageCollector) collectQWACValidationDetails(t messageT
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtIssuanceTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) collectCertificateApprovalStatusAtIssuanceTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	certificateApprovalStatusProcess := c.certificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
 	return c.collectCertificateApprovalStatusAtIssuanceTimeFrom(t, certificateApprovalStatusProcess)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtValidationTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
+func (c *MessageCollector) collectCertificateApprovalStatusAtValidationTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
 	certificateApprovalStatusProcess := c.certificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
 	return c.collectCertificateApprovalStatusAtValidationTimeFrom(t, certificateApprovalStatusProcess)
 }
 
-func (c *DetailedReportMessageCollector) certificateApprovalStatusProcess(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []*jaxb.XmlValidationCertificateApprovalStatus {
+func (c *MessageCollector) certificateApprovalStatusProcess(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []*jaxb.XmlValidationCertificateApprovalStatus {
 	result := []*jaxb.XmlValidationCertificateApprovalStatus{}
 
 	xmlCertificate := c.detailedReport.XmlCertificateById(certificateId)
@@ -457,15 +457,15 @@ func (c *DetailedReportMessageCollector) certificateApprovalStatusProcess(certif
 	return result
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtIssuanceTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
+func (c *MessageCollector) collectCertificateApprovalStatusAtIssuanceTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTimeCertificateIssuanceTime)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtValidationTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
+func (c *MessageCollector) collectCertificateApprovalStatusAtValidationTimeFrom(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus) []Message {
 	return c.collectCertificateApprovalStatusAtTime(t, certificateApprovalStatusProcesses, enumerations.ValidationTimeValidationTime)
 }
 
-func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtTime(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus, validationTime enumerations.ValidationTime) []Message {
+func (c *MessageCollector) collectCertificateApprovalStatusAtTime(t messageType, certificateApprovalStatusProcesses []*jaxb.XmlValidationCertificateApprovalStatus, validationTime enumerations.ValidationTime) []Message {
 	if certificateApprovalStatusProcesses != nil {
 		for _, cas := range certificateApprovalStatusProcesses {
 			if validationTime == validationTimeOf(cas.ValidationTime) {

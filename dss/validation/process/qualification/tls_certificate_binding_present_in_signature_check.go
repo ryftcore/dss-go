@@ -26,8 +26,8 @@ type TLSCertificateBindingPresentInSignatureCheck struct {
 
 // NewTLSCertificateBindingPresentInSignatureCheck is the default
 // constructor. Port of
-// TLSCertificateBindingPresentInSignatureCheck(I18nProvider, XmlValidationQWACProcess, CertificateWrapper, SignatureWrapper, LevelRule).
-func NewTLSCertificateBindingPresentInSignatureCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// TLSCertificateBindingPresentInSignatureCheck(Provider, XmlValidationQWACProcess, CertificateWrapper, SignatureWrapper, LevelRule).
+func NewTLSCertificateBindingPresentInSignatureCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	tlsCertificate *diagnostic.CertificateWrapper, bindingSignature *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *TLSCertificateBindingPresentInSignatureCheck {
 	c := &TLSCertificateBindingPresentInSignatureCheck{

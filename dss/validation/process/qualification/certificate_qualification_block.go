@@ -52,8 +52,8 @@ type CertificateQualificationBlockOverrides interface {
 }
 
 // NewCertificateQualificationBlock is the default constructor. Port of
-// CertificateQualificationBlock(I18nProvider, XmlConclusion, Date, CertificateWrapper, List).
-func NewCertificateQualificationBlock(i18nProvider *i18n.I18nProvider, buildingBlocksConclusion *jaxb.XmlConclusion,
+// CertificateQualificationBlock(Provider, XmlConclusion, Date, CertificateWrapper, List).
+func NewCertificateQualificationBlock(i18nProvider *i18n.Provider, buildingBlocksConclusion *jaxb.XmlConclusion,
 	validationTime time.Time, signingCertificate *diagnostic.CertificateWrapper,
 	tlAnalysis []*jaxb.XmlTLAnalysis) *CertificateQualificationBlock {
 	xmlResult := &jaxb.XmlCertificateQualificationProcess{}

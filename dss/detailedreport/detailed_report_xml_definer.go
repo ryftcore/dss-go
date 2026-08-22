@@ -10,7 +10,7 @@
 // PdfTemplates() are stubs returning an error: no Go stdlib XSD validator or
 // XSLT engine exists, and adding a third-party one is outside the
 // stdlib-first dependency policy without tech-lead sign-off (PORTING.md
-// "Dependency policy"). DetailedReportFacade.Marshal/Unmarshal (the half of
+// "Dependency policy"). Facade.Marshal/Unmarshal (the half of
 // this pair the marshal-parity KAT actually exercises) does not depend on any
 // of the three.
 package detailedreport

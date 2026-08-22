@@ -12,9 +12,9 @@ type TrustedPropertiesCertificateSource interface {
 	tsl.TrustedCertificateSourceWithTime
 
 	// Summary gets TL Validation job summary.
-	Summary() *LoTEValidationJobSummary
+	Summary() *ValidationJobSummary
 	// SetSummary sets TL Validation job summary.
-	SetSummary(summary *LoTEValidationJobSummary)
+	SetSummary(summary *ValidationJobSummary)
 	// TrustedProperties returns TrustedProperties for the given certificate, when applicable.
 	TrustedProperties(token *model.CertificateToken) []*TrustedProperties
 	// SetTrustedPropertiesByCertificates allows filling the CertificateSource.

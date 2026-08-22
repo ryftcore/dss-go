@@ -7,9 +7,9 @@ import (
 	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
-// EAAPresentationValidator is used to validate an Electronic Attestation of Attributes
+// PresentationValidator is used to validate an Electronic Attestation of Attributes
 // presentation.
-type EAAPresentationValidator interface {
+type PresentationValidator interface {
 	dssvalidation.DocumentValidator
 
 	// EAAPresentation gets the EAAPresentation created from the provided document on

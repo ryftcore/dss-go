@@ -6,9 +6,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
-// EAAPresentationAnalyzer performs validation of a presentation of Electronic Attestation of
+// PresentationAnalyzer performs validation of a presentation of Electronic Attestation of
 // Attributes (EAA).
-type EAAPresentationAnalyzer interface {
+type PresentationAnalyzer interface {
 	analyzer.DocumentAnalyzer
 
 	// EAAPresentation gets the extracted Electronic Attestation of Attributes (EAA)

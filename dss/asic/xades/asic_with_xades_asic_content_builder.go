@@ -8,7 +8,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// ASiCWithXAdESASiCContentBuilder builds an ASiCContent for an ASiC with XAdES container.
+// ASiCWithXAdESASiCContentBuilder builds an Content for an ASiC with XAdES container.
 //
 // Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
 // InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
@@ -31,6 +31,6 @@ func NewASiCWithXAdESASiCContentBuilder() *ASiCWithXAdESASiCContentBuilder {
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (b *ASiCWithXAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ASiCContainerExtractor {
+func (b *ASiCWithXAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ContainerExtractor {
 	return NewASiCWithXAdESContainerExtractor(archiveDocument)
 }

@@ -13,7 +13,7 @@
 // remainder of the pattern as quoted (i.e. any subsequent braces would be
 // interpreted as literal characters, not placeholders) - it does not
 // throw, and it does not restore the apostrophe. This is a known upstream
-// quirk (the apostrophe never reaches I18nProvider's callers), and the
+// quirk (the apostrophe never reaches Provider's callers), and the
 // marshal-parity contract requires reproducing it rather than "fixing" it.
 package i18n
 
@@ -26,7 +26,7 @@ import (
 // messageFormat ports the relevant subset of
 // java.text.MessageFormat#format(String, Object...) (as invoked via the
 // static convenience method MessageFormat.format(pattern, args) used by
-// I18nProvider).
+// Provider).
 func messageFormat(pattern string, args []any) string {
 	var out strings.Builder
 	inQuote := false
@@ -114,9 +114,9 @@ func messageFormat(pattern string, args []any) string {
 // MessageFormat falls back to Object#toString() for arguments without a
 // registered Format (which, absent a FormatType in the pattern, is every
 // argument DSS ever substitutes - always a String, produced either
-// directly by callers or by I18nProvider's nested-MessageTag resolution).
+// directly by callers or by Provider's nested-MessageTag resolution).
 // fmt.Sprint mirrors that default toString() fallback for the argument
-// types passed through I18nProvider.
+// types passed through Provider.
 func messageFormatArgString(arg any) string {
 	if s, ok := arg.(string); ok {
 		return s

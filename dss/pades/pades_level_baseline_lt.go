@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/signature/PAdESLevelBaselineLT.java (DSS 6.5.RC1).
 //
 // Java's class is package-private and extends PAdESLevelBaselineT, overriding the protected
-// three-argument extendSignatures. The Go type embeds PAdESLevelBaselineT and registers itself
+// three-argument extendSignatures. The Go type embeds LevelBaselineT and registers itself
 // with InitPAdESLevelBaselineT, so the base's ExtendSignatures dispatches into the override
 // below.
 package pades
@@ -13,26 +13,26 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// PAdESLevelBaselineLT holds the PAdES Baseline LT signature profile.
-type PAdESLevelBaselineLT struct {
-	PAdESLevelBaselineT
+// LevelBaselineLT holds the PAdES Baseline LT signature profile.
+type LevelBaselineLT struct {
+	LevelBaselineT
 }
 
 // NewPAdESLevelBaselineLT is the default constructor.
 // Port of PAdESLevelBaselineLT(TSPSource, CertificateVerifier, IPdfObjFactory).
 func NewPAdESLevelBaselineLT(tspSource validation.TSPSource, certificateVerifier validation.CertificateVerifier,
-	pdfObjectFactory IPdfObjFactory) *PAdESLevelBaselineLT {
-	extension := &PAdESLevelBaselineLT{}
+	pdfObjectFactory IPdfObjFactory) *LevelBaselineLT {
+	extension := &LevelBaselineLT{}
 	extension.InitPAdESLevelBaselineT(extension, tspSource, certificateVerifier, pdfObjectFactory)
 	return extension
 }
 
 // ExtendSignaturesWithAnalyzer extends the document to LT-level, adding a DSS dictionary
 // revision after the T-level extension the base performs. Port of the protected
-// extendSignatures(DSSDocument, PDFDocumentAnalyzer, PAdESSignatureParameters) override.
-func (lt *PAdESLevelBaselineLT) ExtendSignaturesWithAnalyzer(signedDocument model.DSSDocument,
-	pdfDocumentAnalyzer *PDFDocumentAnalyzer, parameters *PAdESSignatureParameters) model.DSSDocument {
-	extendedDocument := lt.PAdESLevelBaselineT.ExtendSignaturesWithAnalyzer(signedDocument,
+// extendSignatures(DSSDocument, PDFDocumentAnalyzer, SignatureParameters) override.
+func (lt *LevelBaselineLT) ExtendSignaturesWithAnalyzer(signedDocument model.DSSDocument,
+	pdfDocumentAnalyzer *PDFDocumentAnalyzer, parameters *SignatureParameters) model.DSSDocument {
+	extendedDocument := lt.LevelBaselineT.ExtendSignaturesWithAnalyzer(signedDocument,
 		pdfDocumentAnalyzer, parameters)
 	tLevelAdded := extendedDocument != signedDocument
 	if tLevelAdded { // check if T-level has been added
@@ -58,9 +58,9 @@ func (lt *PAdESLevelBaselineLT) ExtendSignaturesWithAnalyzer(signedDocument mode
 
 // padesSignatureService returns a PDFSignatureService to be used for a DSS dictionary addition.
 // Port of the private #getPAdESSignatureService.
-func (lt *PAdESLevelBaselineLT) padesSignatureService() PDFSignatureService {
+func (lt *LevelBaselineLT) padesSignatureService() PDFSignatureService {
 	return lt.PdfObjectFactory.NewPAdESSignatureService()
 }
 
 // Compile-time assertion standing in for Java's "extends PAdESLevelBaselineT".
-var _ document.SignatureExtension[*PAdESSignatureParameters] = (*PAdESLevelBaselineLT)(nil)
+var _ document.SignatureExtension[*SignatureParameters] = (*LevelBaselineLT)(nil)

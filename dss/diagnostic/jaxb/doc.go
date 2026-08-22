@@ -9,7 +9,7 @@
 // Marshal produces the bytes the JAXB reference implementation produces for the
 // same tree. The classes are grouped into files by schema area rather than one
 // file per class; jaxb_model.go lists them all, and the schema sweep in
-// jaxb_schema_test.go checks the model against DiagnosticData.xsd complexType
+// jaxb_schema_test.go checks the model against Data.xsd complexType
 // by complexType.
 //
 // Two generated files have no Go counterpart of their own, by design:
@@ -19,7 +19,7 @@
 //     so the namespace is the Namespace constant and the qualified element form
 //     is what Marshal applies in xml.go.
 //   - ObjectFactory.java is xjc's 146 no-arg createXxx() factories plus the
-//     @XmlElementDecl naming DiagnosticData as the document element. Go composite
+//     @XmlElementDecl naming Data as the document element. Go composite
 //     literals replace the factories, and the document element is bound by
 //     XmlDiagnosticData's XMLName field, so porting the class would add nothing
 //     callers can use.
@@ -33,7 +33,7 @@
 // requires that corpus to reach every element and attribute name the model
 // binds, so no binding is pinned by the schema sweep alone.
 //
-// Deferred: DiagnosticDataFacade.generateSVG applies
+// Deferred: DataFacade.generateSVG applies
 // dss-diagnostic-jaxb's xslt/svg/diagnostic-data.xslt to a diagnostic-data
 // document. The stylesheet is copied to testdata/xslt/svg for the record, but no
 // XSLT engine is ported and nothing in scope consumes it.

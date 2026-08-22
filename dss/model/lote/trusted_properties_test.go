@@ -16,7 +16,7 @@ func TestNewTrustedPropertiesPanicsOnNilLoTEInfo(t *testing.T) {
 			t.Fatalf("unexpected panic message: %v", r)
 		}
 	}()
-	NewTrustedProperties(nil, NewTrustedEntity(), &timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]{})
+	NewTrustedProperties(nil, NewTrustedEntity(), &timedependent.Values[ServiceStatusAndInformationExtensions]{})
 }
 
 func TestNewTrustedPropertiesPanicsOnNilTrustedEntity(t *testing.T) {
@@ -29,7 +29,7 @@ func TestNewTrustedPropertiesPanicsOnNilTrustedEntity(t *testing.T) {
 			t.Fatalf("unexpected panic message: %v", r)
 		}
 	}()
-	NewTrustedProperties(&LoTEInfo{}, nil, &timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]{})
+	NewTrustedProperties(&Info{}, nil, &timedependent.Values[ServiceStatusAndInformationExtensions]{})
 }
 
 func TestNewTrustedPropertiesPanicsOnNilTrustedServices(t *testing.T) {
@@ -42,13 +42,13 @@ func TestNewTrustedPropertiesPanicsOnNilTrustedServices(t *testing.T) {
 			t.Fatalf("unexpected panic message: %v", r)
 		}
 	}()
-	NewTrustedProperties(&LoTEInfo{}, NewTrustedEntity(), nil)
+	NewTrustedProperties(&Info{}, NewTrustedEntity(), nil)
 }
 
 func TestNewTrustedPropertiesRoundTrip(t *testing.T) {
-	listInfo := &LoTEInfo{}
+	listInfo := &Info{}
 	entity := NewTrustedEntity()
-	services := &timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]{}
+	services := &timedependent.Values[ServiceStatusAndInformationExtensions]{}
 
 	tp := NewTrustedProperties(listInfo, entity, services)
 	if tp.LoLoTEInfo() != nil {

@@ -258,7 +258,7 @@ func xadesRefsXSLTDOM(t *testing.T) *xmldom.Node {
 // gen/RefsOracle.java freezes.
 var xadesRefsSigningDate = time.Date(2021, time.January, 1, 0, 0, 0, 0, time.UTC)
 
-func xadesRefsBaseParams(t *testing.T) *XAdESSignatureParameters {
+func xadesRefsBaseParams(t *testing.T) *SignatureParameters {
 	t.Helper()
 	params := NewXAdESSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
@@ -271,7 +271,7 @@ func xadesRefsBaseParams(t *testing.T) *XAdESSignatureParameters {
 	return params
 }
 
-func xadesRefsParamsFor(t *testing.T, packaging enumerations.SignaturePackaging) *XAdESSignatureParameters {
+func xadesRefsParamsFor(t *testing.T, packaging enumerations.SignaturePackaging) *SignatureParameters {
 	t.Helper()
 	params := xadesRefsBaseParams(t)
 	params.SetSignaturePackaging(packaging)
@@ -635,7 +635,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 		}
 	}
 
-	build := func(t *testing.T, params *XAdESSignatureParameters,
+	build := func(t *testing.T, params *SignatureParameters,
 		documents []model.DSSDocument) ([]*DSSReference, error) {
 		t.Helper()
 		provider := NewReferenceIdProvider()
@@ -645,37 +645,37 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 
 	cases := []struct {
 		name      string
-		params    func(t *testing.T) *XAdESSignatureParameters
+		params    func(t *testing.T) *SignatureParameters
 		documents func(t *testing.T) []model.DSSDocument
 	}{
-		{"refbuild-enveloped", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-enveloped", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
-		{"refbuild-enveloping", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-enveloping", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
-		{"refbuild-detached", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-detached", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
 		// The document has no name, so upstream leaves the URI null - not empty.
-		{"refbuild-detached-unnamed", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-detached-unnamed", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsUnnamedDocument()} }},
 
-		{"refbuild-internally-detached", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-internally-detached", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
-		{"refbuild-enveloping-embed-xml", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-enveloping-embed-xml", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			return params
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
-		{"refbuild-enveloping-manifest", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-enveloping-manifest", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			return params
@@ -683,7 +683,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 			return []model.DSSDocument{xadesRefsManifestDocument(t)}
 		}},
 
-		{"refbuild-two-documents", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-two-documents", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument {
 			return []model.DSSDocument{xadesRefsTextDocument(), xadesRefsSecondDocument()}
@@ -714,14 +714,14 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 	// Rejections.
 	rejections := []struct {
 		name      string
-		params    func(t *testing.T) *XAdESSignatureParameters
+		params    func(t *testing.T) *SignatureParameters
 		documents func(t *testing.T) []model.DSSDocument
 	}{
-		{"refbuild-enveloped-not-xml", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-enveloped-not-xml", func(t *testing.T) *SignatureParameters {
 			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
-		{"refbuild-manifest-without-id", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-manifest-without-id", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			return params
@@ -729,7 +729,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 			return []model.DSSDocument{xadesRefsXMLWithoutIDDocument()}
 		}},
 
-		{"refbuild-embed-xml-not-xml", func(t *testing.T) *XAdESSignatureParameters {
+		{"refbuild-embed-xml-not-xml", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			return params
@@ -796,7 +796,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 		}
 	}
 
-	incorporate := func(t *testing.T, name string, params *XAdESSignatureParameters,
+	incorporate := func(t *testing.T, name string, params *SignatureParameters,
 		documents []model.DSSDocument, namespace *common.DSSNamespace) {
 		t.Helper()
 		provider := NewReferenceIdProvider()
@@ -950,34 +950,34 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 	// The rejections, each with hand-assembled references, exactly as the oracle assembles them.
 	explicit := []struct {
 		name   string
-		params func(t *testing.T) *XAdESSignatureParameters
+		params func(t *testing.T) *SignatureParameters
 	}{
-		{"verify-enveloped-without-transform", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-enveloped-without-transform", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 			params.SetReferences([]*DSSReference{reference("r-1", "", xadesRefsXMLDocument(), nil)})
 			return params
 		}},
-		{"verify-base64-embed-xml", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-base64-embed-xml", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsXMLDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
-		{"verify-base64-manifest", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-base64-manifest", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsXMLDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
-		{"verify-base64-detached", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-base64-detached", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 			params.SetReferences([]*DSSReference{reference("r-1", "hello.txt", xadesRefsTextDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
-		{"verify-base64-with-other-transform", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-base64-with-other-transform", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsTextDocument(),
 				[]DSSTransform{
@@ -986,7 +986,7 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 				})})
 			return params
 		}},
-		{"verify-missing-element-id", func(t *testing.T) *XAdESSignatureParameters {
+		{"verify-missing-element-id", func(t *testing.T) *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached)
 			params.SetReferences([]*DSSReference{reference("r-1", "#absent-id", xadesRefsXMLDocument(),
 				[]DSSTransform{NewCanonicalizationTransform(xadesRefsC14NExclusive)})})
@@ -1022,9 +1022,9 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 	oracle := loadXAdESRefsOracle(t)
 
-	run := func(t *testing.T, name string, params *XAdESSignatureParameters, documents []model.DSSDocument) {
+	run := func(t *testing.T, name string, params *SignatureParameters, documents []model.DSSDocument) {
 		t.Helper()
-		builderRef, err := XAdESSignatureBuilderGetSignatureBuilderForDocuments(params, documents,
+		builderRef, err := SignatureBuilderGetSignatureBuilderForDocuments(params, documents,
 			validation.NewCommonCertificateVerifier())
 		if err != nil {
 			t.Fatalf("case %s: building the signature builder: %v", name, err)
@@ -1111,7 +1111,7 @@ func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 	// the following transform without usable state; see apply-enveloped-then-c14n above for the
 	// diagnosis and the internal/xmldsig fix. Asserted outright, never skipped.
 	t.Run("si-enveloped-enveloped-transform", func(t *testing.T) {
-		newParams := func() *XAdESSignatureParameters {
+		newParams := func() *SignatureParameters {
 			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 			explicit := NewDSSReference()
 			explicit.SetId("r-1")

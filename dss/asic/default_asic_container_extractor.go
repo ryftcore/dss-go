@@ -72,7 +72,7 @@ func (e *DefaultASiCContainerExtractor) InitDefaultASiCContainerExtractor(overri
 	e.AsicContainer = asicContainer
 }
 
-// DefaultASiCContainerExtractorFromDocument loads an implementation of ASiCContainerExtractor
+// DefaultASiCContainerExtractorFromDocument loads an implementation of ContainerExtractor
 // corresponding to the asicContainer type.
 //
 // Panics with the Java message when asicContainer is nil (Objects.requireNonNull); returns an error
@@ -80,7 +80,7 @@ func (e *DefaultASiCContainerExtractor) InitDefaultASiCContainerExtractor(overri
 //
 // Port of the static fromDocument(DSSDocument); the ServiceLoader iteration becomes the registry in
 // asic_container_extractor_factory.go.
-func DefaultASiCContainerExtractorFromDocument(asicContainer model.DSSDocument) (ASiCContainerExtractor, error) {
+func DefaultASiCContainerExtractorFromDocument(asicContainer model.DSSDocument) (ContainerExtractor, error) {
 	if asicContainer == nil {
 		panic("ASiC container cannot be null!")
 	}
@@ -94,17 +94,17 @@ func DefaultASiCContainerExtractorFromDocument(asicContainer model.DSSDocument) 
 }
 
 // Extract extracts the content (documents) embedded into the ASiC container. Port of extract().
-func (e *DefaultASiCContainerExtractor) Extract() (*ASiCContent, error) {
+func (e *DefaultASiCContainerExtractor) Extract() (*Content, error) {
 	result, err := e.zipParsing(e.AsicContainer)
 	if err != nil {
 		return nil, err
 	}
-	zipComment, err := ASiCUtilsZipCommentFromArchiveContainer(e.AsicContainer)
+	zipComment, err := UtilsZipCommentFromArchiveContainer(e.AsicContainer)
 	if err != nil {
 		return nil, err
 	}
 	result.SetZipComment(zipComment)
-	containerType, err := ASiCUtilsContainerTypeOfContent(result)
+	containerType, err := UtilsContainerTypeOfContent(result)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (e *DefaultASiCContainerExtractor) Extract() (*ASiCContent, error) {
 }
 
 // zipParsing is the port of the private zipParsing(DSSDocument).
-func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocument) (*ASiCContent, error) {
+func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocument) (*Content, error) {
 	result := NewASiCContent()
 	result.SetAsicContainer(asicContainer)
 
@@ -154,7 +154,7 @@ func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocume
 			}
 
 		} else if !e.isFolder(entryName) {
-			if ASiCUtilsIsMimetype(entryName) {
+			if UtilsIsMimetype(entryName) {
 				result.SetMimeTypeDocument(currentDocument)
 			} else {
 				result.SetSignedDocuments(append(result.SignedDocuments(), currentDocument))
@@ -170,9 +170,9 @@ func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocume
 }
 
 // containerDocuments is the port of the private getContainerDocuments(ASiCContent).
-func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *ASiCContent) ([]model.DSSDocument, error) {
+func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *Content) ([]model.DSSDocument, error) {
 	containerDocuments := make([]model.DSSDocument, 0)
-	isASiCS, err := ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *ASiCCont
 				// container! Extraction of embedded documents not possible.
 				return []model.DSSDocument{}, nil
 			}
-			isZip, err := ASiCUtilsIsZip(signerDocument)
+			isZip, err := UtilsIsZip(signerDocument)
 			if err != nil {
 				return nil, err
 			}

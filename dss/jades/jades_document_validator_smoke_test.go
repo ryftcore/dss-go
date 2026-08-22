@@ -3,7 +3,7 @@
 // jws_compact_document_validator.go, jws_serialization_document_validator.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, both
-// JWS analyzers (compact and serialization/flattened), JAdESDiagnosticDataBuilder, the default
+// JWS analyzers (compact and serialization/flattened), DiagnosticDataBuilder, the default
 // validation policy, and the executor/report-builder tree - against real signed JAdES fixtures
 // already committed under testdata/upstream.
 //
@@ -136,7 +136,7 @@ func TestJAdESDocumentValidatorFactory_RegistersItself(t *testing.T) {
 
 	found := false
 	for _, factory := range dssvalidation.DocumentValidatorFactories() {
-		if _, ok := factory.(*JAdESDocumentValidatorFactory); ok {
+		if _, ok := factory.(*DocumentValidatorFactory); ok {
 			found = true
 			if !factory.IsSupported(doc) {
 				t.Error("registered JAdESDocumentValidatorFactory.IsSupported() = false, want true")

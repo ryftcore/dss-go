@@ -20,7 +20,7 @@
 // modelled the same way here: a name-tagged item list plus hand-written
 // MarshalXML/UnmarshalXML that dispatches by element name against a small
 // name->type table, exactly the technique dss/diagnostic/jaxb's
-// CertificateExtensionsWrapper uses for DiagnosticData.xsd's
+// CertificateExtensionsWrapper uses for Data.xsd's
 // CertificateExtensions choice. Order is preserved item-for-item, which is
 // what the marshal-parity KAT depends on.
 //

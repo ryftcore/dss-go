@@ -20,8 +20,8 @@ type AuthorityKeyIdentifierPresentCheck struct {
 }
 
 // NewAuthorityKeyIdentifierPresentCheck is the default constructor. Port of
-// AuthorityKeyIdentifierPresentCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewAuthorityKeyIdentifierPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// AuthorityKeyIdentifierPresentCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewAuthorityKeyIdentifierPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *AuthorityKeyIdentifierPresentCheck {
 	c := &AuthorityKeyIdentifierPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -28,9 +28,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process/vpftsp"
 )
 
-// EvidenceRecordTimestampsValidationBlock verifies a time-stamp of an Evidence
+// TimestampsValidationBlock verifies a time-stamp of an Evidence
 // Record.
-type EvidenceRecordTimestampsValidationBlock struct {
+type TimestampsValidationBlock struct {
 	*vpftsp.TimestampsValidationBlock
 
 	// evidenceRecord is the evidence record whose time-stamps are validated;
@@ -39,13 +39,13 @@ type EvidenceRecordTimestampsValidationBlock struct {
 }
 
 // NewEvidenceRecordTimestampsValidationBlock is the default constructor. Port
-// of EvidenceRecordTimestampsValidationBlock(I18nProvider, EvidenceRecordWrapper, DiagnosticData, ValidationPolicy, Date, Map, List, ValidationLevel).
-func NewEvidenceRecordTimestampsValidationBlock(i18nProvider *i18n.I18nProvider,
-	evidenceRecord *diagnostic.EvidenceRecordWrapper, diagnosticData *diagnostic.DiagnosticData,
+// of TimestampsValidationBlock(Provider, EvidenceRecordWrapper, Data, ValidationPolicy, Date, Map, List, ValidationLevel).
+func NewEvidenceRecordTimestampsValidationBlock(i18nProvider *i18n.Provider,
+	evidenceRecord *diagnostic.EvidenceRecordWrapper, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tlAnalysis []*jaxb.XmlTLAnalysis,
-	validationLevel enumerations.ValidationLevel) *EvidenceRecordTimestampsValidationBlock {
-	b := &EvidenceRecordTimestampsValidationBlock{
+	validationLevel enumerations.ValidationLevel) *TimestampsValidationBlock {
+	b := &TimestampsValidationBlock{
 		TimestampsValidationBlock: &vpftsp.TimestampsValidationBlock{},
 		evidenceRecord:            evidenceRecord,
 	}
@@ -63,7 +63,7 @@ func NewEvidenceRecordTimestampsValidationBlock(i18nProvider *i18n.I18nProvider,
 // which is a stable sort and raises a NullPointerException on a time-stamp
 // without a production time; sort.SliceStable is the same stable sort, and a
 // missing production time dereferences here in its place.
-func (b *EvidenceRecordTimestampsValidationBlock) Timestamps() []*diagnostic.TimestampWrapper {
+func (b *TimestampsValidationBlock) Timestamps() []*diagnostic.TimestampWrapper {
 	timestamps := b.evidenceRecord.TimestampList()
 	timestampList := make([]*diagnostic.TimestampWrapper, len(timestamps))
 	copy(timestampList, timestamps)
@@ -75,7 +75,7 @@ func (b *EvidenceRecordTimestampsValidationBlock) Timestamps() []*diagnostic.Tim
 
 // Poe returns the POE container to be used for the given timestamp. Port of the
 // overridden getPoe(TimestampWrapper).
-func (b *EvidenceRecordTimestampsValidationBlock) Poe(timestamp *diagnostic.TimestampWrapper) *vpfswatsp.POEExtraction {
+func (b *TimestampsValidationBlock) Poe(timestamp *diagnostic.TimestampWrapper) *vpfswatsp.POEExtraction {
 	poe := b.TimestampsValidationBlock.Poe(timestamp)
 	/*
 	 * i) Before validating a time-stamp the process shall extract POEs (as per clause 5.6.2.3) of the
@@ -93,7 +93,7 @@ func (b *EvidenceRecordTimestampsValidationBlock) Poe(timestamp *diagnostic.Time
 // nextTimestamp ports the private getNextTimestamp(TimestampWrapper): the
 // iterator walk returns the entry following the first one whose id matches,
 // or null when the match is the last entry (or there is none).
-func (b *EvidenceRecordTimestampsValidationBlock) nextTimestamp(
+func (b *TimestampsValidationBlock) nextTimestamp(
 	currentTimestamp *diagnostic.TimestampWrapper) *diagnostic.TimestampWrapper {
 	evidenceRecordTimestamps := b.Timestamps()
 	for i, timestampWrapper := range evidenceRecordTimestamps {

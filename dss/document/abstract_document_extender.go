@@ -40,7 +40,7 @@ type AbstractDocumentExtenderOverrides[SP AbstractDocumentExtenderTarget, TP mod
 
 	// CreateSignatureService creates a new instance of DocumentSignatureService. Port of the
 	// protected abstract #createSignatureService.
-	CreateSignatureService() DocumentSignatureService[SP, TP]
+	CreateSignatureService() SignatureService[SP, TP]
 
 	// IsSupportedService verifies whether the provided document signature service is supported
 	// by the current implementation. Port of the protected abstract #isSupportedService; service
@@ -119,10 +119,10 @@ func (e *AbstractDocumentExtender[SP, TP]) extendDocument(signatureProfile enume
 
 // InitSignatureService initializes a new DocumentSignatureService. Port of the protected
 // #initSignatureService.
-func (e *AbstractDocumentExtender[SP, TP]) InitSignatureService() DocumentSignatureService[SP, TP] {
+func (e *AbstractDocumentExtender[SP, TP]) InitSignatureService() SignatureService[SP, TP] {
 	for _, service := range e.Services {
 		if e.overrides.IsSupportedService(service) {
-			if typed, ok := service.(DocumentSignatureService[SP, TP]); ok {
+			if typed, ok := service.(SignatureService[SP, TP]); ok {
 				return typed
 			}
 		}

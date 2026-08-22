@@ -56,8 +56,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// CAdESTimestampMessageDigestBuilder builds timestamped data binaries for a CAdES signature.
-type CAdESTimestampMessageDigestBuilder struct {
+// TimestampMessageDigestBuilder builds timestamped data binaries for a CAdES signature.
+type TimestampMessageDigestBuilder struct {
 	// cms is the CMS.
 	cms *cms.CMS
 
@@ -67,8 +67,8 @@ type CAdESTimestampMessageDigestBuilder struct {
 	// detachedDocuments is the list of detached documents.
 	detachedDocuments []model.DSSDocument
 
-	// timestampExtractor is the instance of CadesLevelBaselineLTATimestampExtractor.
-	timestampExtractor *CadesLevelBaselineLTATimestampExtractor
+	// timestampExtractor is the instance of LevelBaselineLTATimestampExtractor.
+	timestampExtractor *LevelBaselineLTATimestampExtractor
 
 	// digestAlgorithm is the digest algorithm to be used for message-imprint digest computation.
 	digestAlgorithm enumerations.DigestAlgorithm
@@ -82,8 +82,8 @@ type CAdESTimestampMessageDigestBuilder struct {
 // Port of the (CAdESSignature, DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewCAdESTimestampMessageDigestBuilder(signature *CAdESSignature,
-	digestAlgorithm enumerations.DigestAlgorithm) *CAdESTimestampMessageDigestBuilder {
+func NewCAdESTimestampMessageDigestBuilder(signature *Signature,
+	digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
 	builder := newCAdESTimestampMessageDigestBuilder(signature, signature.CertificateSource().SignedDataCertificates())
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
@@ -98,8 +98,8 @@ func NewCAdESTimestampMessageDigestBuilder(signature *CAdESSignature,
 // TimestampToken) constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewCAdESTimestampMessageDigestBuilderForToken(signature *CAdESSignature,
-	certificateSource *spi.ListCertificateSource, timestampToken *validation.TimestampToken) *CAdESTimestampMessageDigestBuilder {
+func NewCAdESTimestampMessageDigestBuilderForToken(signature *Signature,
+	certificateSource *spi.ListCertificateSource, timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
 	builder := newCAdESTimestampMessageDigestBuilder(signature, certificateSource.Certificates())
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
@@ -117,15 +117,15 @@ func NewCAdESTimestampMessageDigestBuilderForToken(signature *CAdESSignature,
 // constructors above only ever pass it for the requireNonNull side effect.
 //
 // Panics with the Java messages when signature or certificates is nil.
-func newCAdESTimestampMessageDigestBuilder(signature *CAdESSignature,
-	certificates []*model.CertificateToken) *CAdESTimestampMessageDigestBuilder {
+func newCAdESTimestampMessageDigestBuilder(signature *Signature,
+	certificates []*model.CertificateToken) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
 	}
 	if certificates == nil {
 		panic("List of CertificateToken's cannot be null!")
 	}
-	return &CAdESTimestampMessageDigestBuilder{
+	return &TimestampMessageDigestBuilder{
 		cms:                signature.CMS(),
 		signerInformation:  signature.SignerInformation(),
 		detachedDocuments:  signature.DetachedContents(),
@@ -133,15 +133,15 @@ func newCAdESTimestampMessageDigestBuilder(signature *CAdESSignature,
 	}
 }
 
-// ContentTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// ContentTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getContentTimestampMessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
 	return b.originalDocumentDigest()
 }
 
-// SignatureTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// SignatureTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getSignatureTimestampMessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) SignatureTimestampMessageDigest() model.DSSMessageDigest {
 	signature := b.signerInformation.Signature
 	digest, err := spi.DSSUtilsDigest(b.digestAlgorithm, signature)
 	if err != nil {
@@ -150,9 +150,9 @@ func (b *CAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() m
 	return model.NewDSSMessageDigestWithValue(b.digestAlgorithm, digest)
 }
 
-// TimestampX1MessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// TimestampX1MessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getTimestampX1MessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.timestampX1MessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR ("Unable to compute message-imprint for
@@ -164,7 +164,7 @@ func (b *CAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() model.DS
 
 // timestampX1MessageDigest is the fallible core of TimestampX1MessageDigest.
 // Port of the try block of getTimestampX1MessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) timestampX1MessageDigest() (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -174,7 +174,7 @@ func (b *CAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.D
 	// We don't include the outer SEQUENCE, only the attrType and attrValues as stated by the TS
 	// §6.3.5, NOTE 2.
 
-	attributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, OIDIdAaSignatureTimeStampToken)
+	attributes := UtilsUnsignedAttributesOfType(b.signerInformation, OIDIdAaSignatureTimeStampToken)
 	if utils.IsArrayNotEmpty(attributes) {
 		for _, attribute := range attributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -192,9 +192,9 @@ func (b *CAdESTimestampMessageDigestBuilder) timestampX1MessageDigest() (model.D
 	return digestCalculator.MessageDigest(b.digestAlgorithm), nil
 }
 
-// TimestampX2MessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// TimestampX2MessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getTimestampX2MessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DSSMessageDigest {
 	messageDigest, err := b.timestampX2MessageDigest()
 	if err != nil {
 		// Upstream logs MESSAGE_IMPRINT_ERROR and returns null.
@@ -205,7 +205,7 @@ func (b *CAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() model.DS
 
 // timestampX2MessageDigest is the fallible core of TimestampX2MessageDigest.
 // Port of the try block of getTimestampX2MessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) timestampX2MessageDigest() (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) timestampX2MessageDigest() (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -219,8 +219,8 @@ func (b *CAdESTimestampMessageDigestBuilder) timestampX2MessageDigest() (model.D
 // writeTimestampX2MessageDigest feeds digestCalculator with the certificate-refs and
 // revocation-refs unsigned attributes, common to Type 1 (X1) and Type 2 (X2) message-imprints.
 // Port of the private writeTimestampX2MessageDigest(DSSMessageDigestCalculator).
-func (b *CAdESTimestampMessageDigestBuilder) writeTimestampX2MessageDigest(digestCalculator *spi.DSSMessageDigestCalculator) error {
-	certAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsCertificateRefs)
+func (b *TimestampMessageDigestBuilder) writeTimestampX2MessageDigest(digestCalculator *spi.DSSMessageDigestCalculator) error {
+	certAttributes := UtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsCertificateRefs)
 	if utils.IsArrayNotEmpty(certAttributes) {
 		for _, attribute := range certAttributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -231,7 +231,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeTimestampX2MessageDigest(diges
 			digestCalculator.Update(valuesDER)
 		}
 	}
-	revAttributes := CAdESUtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsRevocationRefs)
+	revAttributes := UtilsUnsignedAttributesOfType(b.signerInformation, spi.OIDIdAaEtsRevocationRefs)
 	if utils.IsArrayNotEmpty(revAttributes) {
 		for _, attribute := range revAttributes {
 			typeDER, valuesDER, err := cadesTMDBAttrTypeAndValuesDER(attribute)
@@ -252,7 +252,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeTimestampX2MessageDigest(diges
 // SEQUENCE wrapper: see the "We don't include the outer SEQUENCE" comment this ports.
 //
 // attribute is assumed parsed (attribute.Element() non-nil): every attribute this file reaches
-// through CAdESUtilsUnsignedAttributesOfType comes from a *cmscore.SignerInfo obtained by
+// through UtilsUnsignedAttributesOfType comes from a *cmscore.SignerInfo obtained by
 // parsing an existing CMS signature (this builder computes message-imprints for validation, not
 // construction), which cmscore always parses from bytes. asn1ber.Element#DEREncoded() sorts a
 // SET's members by their encoding on the way out, reproducing BouncyCastle's DERSet ordering for
@@ -266,9 +266,9 @@ func cadesTMDBAttrTypeAndValuesDER(attribute *cmscore.Attribute) (typeDER, value
 	return asn1ber.EncodeOID(attribute.Type), element.Children()[1].DEREncoded(), nil
 }
 
-// ArchiveTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// ArchiveTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getArchiveTimestampMessageDigest().
-func (b *CAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() model.DSSMessageDigest {
 	// V3 is used by default.
 	archiveTimestampType := enumerations.ArchiveTimestampTypeCAdESV3
 	if b.timestampToken != nil {
@@ -302,7 +302,7 @@ func (b *CAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() mod
 // DSSException`: nothing catches it at either of its two call sites upstream (this method,
 // itself uncaught in ArchiveTimestampMessageDigest), so a failure here panics, matching Java's
 // unchecked propagation.
-func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV3() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) archiveTimestampDataV3() model.DSSMessageDigest {
 	atsHashIndexAttribute, err := b.timestampExtractor.VerifiedAtsHashIndex(b.signerInformation, b.timestampToken)
 	if err != nil {
 		panic(model.NewDSSErrorWithCause(err))
@@ -322,7 +322,7 @@ func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV3() model.DSSM
 }
 
 // originalDocumentDigest ports the private getOriginalDocumentDigest().
-func (b *CAdESTimestampMessageDigestBuilder) originalDocumentDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) originalDocumentDigest() model.DSSMessageDigest {
 	originalDocument := b.originalDocument()
 	if originalDocument == nil {
 		// Upstream logs "The original document is not found for TimestampToken with Id '{}'!
@@ -356,7 +356,7 @@ func (b *CAdESTimestampMessageDigestBuilder) originalDocumentDigest() model.DSSM
 // According to RFC 5652 it is possible to use DER or BER encoding for SignedData structure. The
 // exception is the signed attributes attribute and authenticated attributes which have to be DER
 // encoded.
-func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV2(includeUnsignedAttrsTagAndLength bool) model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) archiveTimestampDataV2(includeUnsignedAttrsTagAndLength bool) model.DSSMessageDigest {
 	messageDigest, err := b.archiveTimestampDataV2Try(includeUnsignedAttrsTagAndLength)
 	if err != nil {
 		// When error in computing or in format the algorithm just continues. Upstream logs
@@ -369,7 +369,7 @@ func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV2(includeUnsig
 
 // archiveTimestampDataV2Try is the fallible core of archiveTimestampDataV2.
 // Port of the try block of getArchiveTimestampDataV2(boolean).
-func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV2Try(includeUnsignedAttrsTagAndLength bool) (model.DSSMessageDigest, error) {
+func (b *TimestampMessageDigestBuilder) archiveTimestampDataV2Try(includeUnsignedAttrsTagAndLength bool) (model.DSSMessageDigest, error) {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, err
@@ -404,15 +404,15 @@ func (b *CAdESTimestampMessageDigestBuilder) archiveTimestampDataV2Try(includeUn
 }
 
 // writeContentInfoBytes ports the private writeContentInfoBytes(OutputStream).
-func (b *CAdESTimestampMessageDigestBuilder) writeContentInfoBytes(w io.Writer) error {
-	return cms.CMSUtilsWriteContentInfoEncoded(b.cms, w)
+func (b *TimestampMessageDigestBuilder) writeContentInfoBytes(w io.Writer) error {
+	return cms.UtilsWriteContentInfoEncoded(b.cms, w)
 }
 
 // writeOriginalDocumentBinaries ports the private writeOriginalDocumentBinaries(OutputStream).
 //
 // Detached signatures have either no encapContentInfo in signedData, or it exists but has no
 // eContent.
-func (b *CAdESTimestampMessageDigestBuilder) writeOriginalDocumentBinaries(w io.Writer) error {
+func (b *TimestampMessageDigestBuilder) writeOriginalDocumentBinaries(w io.Writer) error {
 	originalDocument := b.originalDocument()
 	if originalDocument == nil {
 		return model.NewDSSError(fmt.Sprintf(
@@ -428,13 +428,13 @@ func (b *CAdESTimestampMessageDigestBuilder) writeOriginalDocumentBinaries(w io.
 }
 
 // writeCertificateDataBytes ports the private writeCertificateDataBytes(OutputStream).
-func (b *CAdESTimestampMessageDigestBuilder) writeCertificateDataBytes(w io.Writer) error {
-	return cms.CMSUtilsWriteSignedDataCertificatesEncoded(b.cms, w)
+func (b *TimestampMessageDigestBuilder) writeCertificateDataBytes(w io.Writer) error {
+	return cms.UtilsWriteSignedDataCertificatesEncoded(b.cms, w)
 }
 
 // writeCRLDataBytes ports the private writeCRLDataBytes(OutputStream).
-func (b *CAdESTimestampMessageDigestBuilder) writeCRLDataBytes(w io.Writer) error {
-	return cms.CMSUtilsWriteSignedDataCRLsEncoded(b.cms, w)
+func (b *TimestampMessageDigestBuilder) writeCRLDataBytes(w io.Writer) error {
+	return cms.UtilsWriteSignedDataCRLsEncoded(b.cms, w)
 }
 
 // writeSignerInfoBytes ports the private writeSignerInfoBytes(OutputStream, boolean), together
@@ -447,7 +447,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeCRLDataBytes(w io.Writer) erro
 // one at a time produces the identical concatenation of octets that iterating
 // getSignerInfoEncoded(...)'s resulting ASN1Sequence and DER-encoding each member individually
 // does upstream.
-func (b *CAdESTimestampMessageDigestBuilder) writeSignerInfoBytes(w io.Writer, includeUnsignedAttrsTagAndLength bool) error {
+func (b *TimestampMessageDigestBuilder) writeSignerInfoBytes(w io.Writer, includeUnsignedAttrsTagAndLength bool) error {
 	signerInfo := b.signerInformation
 
 	filteredUnauthenticatedAttributes, err := b.filterUnauthenticatedAttributes()
@@ -470,7 +470,7 @@ func (b *CAdESTimestampMessageDigestBuilder) writeSignerInfoBytes(w io.Writer, i
 		return err
 	}
 
-	signedAttributes, err := CAdESUtilsDERSignedAttributes(signerInfo)
+	signedAttributes, err := UtilsDERSignedAttributes(signerInfo)
 	if err != nil {
 		return err
 	}
@@ -522,11 +522,11 @@ func (b *CAdESTimestampMessageDigestBuilder) writeSignerInfoBytes(w io.Writer, i
 // DEVIATION: reads signerInformation.UnsignedAttributes directly instead of raising on a
 // SignerInfo carrying no unsignedAttrs field at all (Java: NullPointerException from
 // unauthenticatedAttributes.size()); see the file header.
-func (b *CAdESTimestampMessageDigestBuilder) filterUnauthenticatedAttributes() ([][]byte, error) {
+func (b *TimestampMessageDigestBuilder) filterUnauthenticatedAttributes() ([][]byte, error) {
 	var kept [][]byte
 	for _, attribute := range b.signerInformation.UnsignedAttributes {
 		if spi.OIDIdAaEtsArchiveTimestampV2.Equal(attribute.Type) || spi.OIDIdAaEtsArchiveTimestampV3.Equal(attribute.Type) {
-			token := CAdESUtilsTimeStampToken(attribute)
+			token := UtilsTimeStampToken(attribute)
 			if token == nil || !token.TSTInfo().GenTime.Before(b.timestampToken.GenerationTime()) {
 				continue
 			}
@@ -543,8 +543,8 @@ func (b *CAdESTimestampMessageDigestBuilder) filterUnauthenticatedAttributes() (
 // originalDocument ports the private getOriginalDocument(), which never lets
 // CAdESUtils.getOriginalDocument's DSSException escape: it is caught, logged, and answered with
 // null.
-func (b *CAdESTimestampMessageDigestBuilder) originalDocument() model.DSSDocument {
-	document, err := CAdESUtilsOriginalDocument(b.cms, b.detachedDocuments)
+func (b *TimestampMessageDigestBuilder) originalDocument() model.DSSDocument {
+	document, err := UtilsOriginalDocument(b.cms, b.detachedDocuments)
 	if err != nil {
 		// Upstream logs "Cannot extract original document! Reason : {}".
 		return nil
@@ -552,6 +552,6 @@ func (b *CAdESTimestampMessageDigestBuilder) originalDocument() model.DSSDocumen
 	return document
 }
 
-// compile-time assertion: *CAdESTimestampMessageDigestBuilder satisfies
+// compile-time assertion: *TimestampMessageDigestBuilder satisfies
 // timestamp.TimestampMessageDigestBuilder, matching Java's "implements TimestampMessageDigestBuilder".
-var _ timestamp.TimestampMessageDigestBuilder = (*CAdESTimestampMessageDigestBuilder)(nil)
+var _ timestamp.MessageDigestBuilder = (*TimestampMessageDigestBuilder)(nil)

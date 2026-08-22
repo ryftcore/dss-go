@@ -91,7 +91,7 @@ func loadFCRows(t *testing.T, path string) []*fcOracleRow {
 
 // loadFCDiagnosticData reads a dump through jaxb.Unmarshal, which links the IDREF
 // graph the wrappers navigate.
-func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(fcCorpusRoot, name)))
 	if err != nil {

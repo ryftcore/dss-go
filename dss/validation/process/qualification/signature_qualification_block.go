@@ -70,8 +70,8 @@ type SignatureQualificationBlockOverrides interface {
 }
 
 // NewSignatureQualificationBlock is the default constructor. Port of
-// SignatureQualificationBlock(I18nProvider, XmlConstraintsConclusionWithProofOfExistence, CertificateWrapper, List).
-func NewSignatureQualificationBlock(i18nProvider *i18n.I18nProvider,
+// SignatureQualificationBlock(Provider, XmlConstraintsConclusionWithProofOfExistence, CertificateWrapper, List).
+func NewSignatureQualificationBlock(i18nProvider *i18n.Provider,
 	etsi319102validation *jaxb.XmlConstraintsConclusionWithProofOfExistence,
 	signingCertificate *diagnostic.CertificateWrapper, tlAnalysis []*jaxb.XmlTLAnalysis) *SignatureQualificationBlock {
 	xmlResult := &jaxb.XmlValidationSignatureQualification{}

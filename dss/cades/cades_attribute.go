@@ -17,46 +17,46 @@ import (
 )
 
 // CAdESAttribute represents a CAdES attribute, part of AttributeTable. Port of the class
-// CAdESAttribute, implementing spi/validation.SignatureAttribute.
-type CAdESAttribute struct {
+// Attribute, implementing spi/validation.SignatureAttribute.
+type Attribute struct {
 	// attribute is the Attribute value.
 	attribute *cmscore.Attribute
 	// order of the attribute within signature properties.
 	order *int
 	// identifier caches Identifier(); mirrors the protected identifier field.
-	identifier *CAdESAttributeIdentifier
+	identifier *AttributeIdentifier
 }
 
 // NewCAdESAttribute is the port of the package-private CAdESAttribute(Attribute, Integer)
 // constructor.
-func NewCAdESAttribute(attribute *cmscore.Attribute, order *int) *CAdESAttribute {
-	return &CAdESAttribute{attribute: attribute, order: order}
+func NewCAdESAttribute(attribute *cmscore.Attribute, order *int) *Attribute {
+	return &Attribute{attribute: attribute, order: order}
 }
 
 // ASN1Oid returns the object identifier. Port of getASN1Oid().
-func (a *CAdESAttribute) ASN1Oid() asn1.ObjectIdentifier {
+func (a *Attribute) ASN1Oid() asn1.ObjectIdentifier {
 	return a.attribute.Type
 }
 
 // AttrValues returns the attribute values set. Port of getAttrValues().
-func (a *CAdESAttribute) AttrValues() []*asn1ber.Element {
+func (a *Attribute) AttrValues() []*asn1ber.Element {
 	return a.attribute.Values
 }
 
 // Attribute returns the attribute. Port of getAttribute().
-func (a *CAdESAttribute) Attribute() *cmscore.Attribute {
+func (a *Attribute) Attribute() *cmscore.Attribute {
 	return a.attribute
 }
 
 // ASN1Object returns the inner ASN1Encodable object. Port of getASN1Object().
-func (a *CAdESAttribute) ASN1Object() *asn1ber.Element {
+func (a *Attribute) ASN1Object() *asn1ber.Element {
 	return spi.DSSASN1UtilsAsn1Encodable(a.attribute)
 }
 
-// IsTimeStampToken checks if the given CAdESAttribute is a timestamp token.
+// IsTimeStampToken checks if the given Attribute is a timestamp token.
 // Port of isTimeStampToken().
-func (a *CAdESAttribute) IsTimeStampToken() bool {
-	for _, oid := range CAdESUtilsTimestampOids() {
+func (a *Attribute) IsTimeStampToken() bool {
+	for _, oid := range UtilsTimestampOids() {
 		if oid.Equal(a.ASN1Oid()) {
 			return true
 		}
@@ -66,18 +66,18 @@ func (a *CAdESAttribute) IsTimeStampToken() bool {
 
 // TimestampTokenType returns type of the timestamp token, when applicable.
 // Port of getTimestampTokenType().
-func (a *CAdESAttribute) TimestampTokenType() enumerations.TimestampType {
+func (a *Attribute) TimestampTokenType() enumerations.TimestampType {
 	if a.IsTimeStampToken() {
-		return CAdESUtilsTimestampTypeByOid(a.ASN1Oid())
+		return UtilsTimestampTypeByOid(a.ASN1Oid())
 	}
 	return ""
 }
 
 // ToTimeStampToken returns a TimeStampToken if possible, nil otherwise. Port of
 // toTimeStampToken().
-func (a *CAdESAttribute) ToTimeStampToken() *cmscore.TimeStampToken {
+func (a *Attribute) ToTimeStampToken() *cmscore.TimeStampToken {
 	if a.IsTimeStampToken() {
-		token := CAdESUtilsTimeStampToken(a.attribute)
+		token := UtilsTimeStampToken(a.attribute)
 		if token != nil {
 			return token
 		}
@@ -91,8 +91,8 @@ func (a *CAdESAttribute) ToTimeStampToken() *cmscore.TimeStampToken {
 
 // IsEvidenceRecord checks if the given CAdES attribute represents an evidence record.
 // Port of isEvidenceRecord().
-func (a *CAdESAttribute) IsEvidenceRecord() bool {
-	for _, oid := range CAdESUtilsEvidenceRecordOids() {
+func (a *Attribute) IsEvidenceRecord() bool {
+	for _, oid := range UtilsEvidenceRecordOids() {
 		if oid.Equal(a.ASN1Oid()) {
 			return true
 		}
@@ -102,7 +102,7 @@ func (a *CAdESAttribute) IsEvidenceRecord() bool {
 
 // ToEvidenceRecord returns an EvidenceRecord if possible, nil otherwise. Port of
 // toEvidenceRecord(). See the file header on the returned type.
-func (a *CAdESAttribute) ToEvidenceRecord() *asn1ber.Element {
+func (a *Attribute) ToEvidenceRecord() *asn1ber.Element {
 	if a.IsEvidenceRecord() {
 		object := a.ASN1Object()
 		if object != nil {
@@ -118,21 +118,21 @@ func (a *CAdESAttribute) ToEvidenceRecord() *asn1ber.Element {
 
 // Order gets order of the CAdES Attribute from the original AttributeTable. Port of the
 // protected getOrder().
-func (a *CAdESAttribute) Order() *int {
+func (a *Attribute) Order() *int {
 	return a.order
 }
 
 // Identifier gets the attribute identifier. Port of getIdentifier(), implementing
 // spi/validation.SignatureAttribute.
-func (a *CAdESAttribute) Identifier() identifier.SignatureAttributeIdentifier {
+func (a *Attribute) Identifier() identifier.SignatureAttributeIdentifier {
 	if a.identifier == nil {
-		a.identifier = CAdESAttributeIdentifierBuild(a.attribute, a.order)
+		a.identifier = AttributeIdentifierBuild(a.attribute, a.order)
 	}
 	return a.identifier.SignatureAttributeIdentifier
 }
 
 // String is the port of toString().
-func (a *CAdESAttribute) String() string {
+func (a *Attribute) String() string {
 	oid := a.ASN1Oid()
 	if oid != nil {
 		return oid.String()
@@ -141,7 +141,7 @@ func (a *CAdESAttribute) String() string {
 }
 
 // Equals is the port of equals(Object), which CAdESAttribute compares by Identifier.
-func (a *CAdESAttribute) Equals(other *CAdESAttribute) bool {
+func (a *Attribute) Equals(other *Attribute) bool {
 	if a == other {
 		return true
 	}

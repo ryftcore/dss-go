@@ -1,6 +1,6 @@
 // Cross-validation harness, direction UPSTREAM -> GO, for the container MERGE surface.
 //
-// dss-asic-*'s merger hierarchy (ASiCContainerMerger / DefaultContainerMerger / the four
+// dss-asic-*'s merger hierarchy (ContainerMerger / DefaultContainerMerger / the four
 // ASiC{S,E}With{CAdES,XAdES}ContainerMergers) decides, for a pair of Java-built containers,
 // whether they may be merged at all and - when they may - what the merged container holds. Those
 // rules are what stand between a merge and a silently corrupted signed container, so they are
@@ -33,7 +33,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 	"github.com/ryftcore/dss-go/dss/model"
 
-	// Imported for their init(): each registers its ASiCContainerMergerFactory with the
+	// Imported for their init(): each registers its ContainerMergerFactory with the
 	// asic package, the Go stand-in for upstream's ServiceLoader discovery. Without them
 	// DefaultContainerMergerFromDocuments would reject every pair.
 	_ "github.com/ryftcore/dss-go/dss/asic/cades"
@@ -205,11 +205,11 @@ func goMerge(a, b model.DSSDocument) (result goMergeResult) {
 		entries = append(entries, mergeOracleEntry{Name: entry.Name(), SHA256: hex.EncodeToString(digest.Value())})
 	}
 
-	containerType, err := asic.ASiCUtilsContainerType(container)
+	containerType, err := asic.UtilsContainerType(container)
 	if err != nil {
 		return goMergeResult{errorMessage: err.Error()}
 	}
-	comment, err := asic.ASiCUtilsZipCommentFromArchiveContainer(container)
+	comment, err := asic.UtilsZipCommentFromArchiveContainer(container)
 	if err != nil {
 		return goMergeResult{errorMessage: err.Error()}
 	}

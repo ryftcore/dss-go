@@ -171,4 +171,4 @@ func defaultAIASourceDedup(certificateTokens []*model.CertificateToken) []*model
 	return result
 }
 
-var _ AIASource = (*DefaultAIASource)(nil)
+var _ Source = (*DefaultAIASource)(nil)

@@ -79,7 +79,7 @@ func (s *PdfDssDictOCSPSource) OcspMap() map[PdfObjectKey]*spi.OCSPResponseBinar
 			for key, ocspBinary := range s.dssDictionary.OCSPs() {
 				s.ocspMap[key] = ocspBinary
 			}
-			vriDicts := PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
+			vriDicts := UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
 			for _, vriDict := range vriDicts {
 				for key, ocspBinary := range vriDict.OCSPs() {
 					s.ocspMap[key] = ocspBinary
@@ -143,7 +143,7 @@ func (s *PdfDssDictOCSPSource) VRIDictionaryTokens() []spi.RevocationToken[revoc
 func (s *PdfDssDictOCSPSource) keySetFromVRIDictionaries() []PdfObjectKey {
 	if s.dssDictionary != nil {
 		result := make([]PdfObjectKey, 0)
-		vris := PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
+		vris := UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
 		for _, vriDict := range vris {
 			for _, key := range pdfDssDictOCSPSourceSortedKeys(vriDict.OCSPs()) {
 				if !pdfDssDictOCSPSourceContainsKey(result, key) {
@@ -215,7 +215,7 @@ func (s *PdfDssDictOCSPSource) revocationDataOriginsForBinary(
 	if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(s.dssDictionary.OCSPs()), tokenBinaryObjectIDs) {
 		result = append(result, enumerations.RevocationOriginDSSDictionary)
 	}
-	for _, vriDict := range PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
+	for _, vriDict := range UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
 		if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(vriDict.OCSPs()), tokenBinaryObjectIDs) {
 			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOriginVRIDictionary) {
 				result = append(result, enumerations.RevocationOriginVRIDictionary)
@@ -251,7 +251,7 @@ func (s *PdfDssDictOCSPSource) revocationDataOriginsForToken(
 	if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(s.dssDictionary.OCSPs()), tokenObjectIDs) {
 		result = append(result, enumerations.RevocationOriginDSSDictionary)
 	}
-	for _, vriDict := range PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
+	for _, vriDict := range UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
 		if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(vriDict.OCSPs()), tokenObjectIDs) {
 			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOriginVRIDictionary) {
 				result = append(result, enumerations.RevocationOriginVRIDictionary)

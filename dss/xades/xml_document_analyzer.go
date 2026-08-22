@@ -27,7 +27,7 @@ type XMLDocumentAnalyzer struct {
 	analyzer.DefaultDocumentAnalyzer
 
 	// domDocument is the document to validate.
-	domDocument *XAdESDOMDocument
+	domDocument *DOMDocument
 
 	// disableXSWProtection defines if the XSW protection shall be disabled (false by default).
 	disableXSWProtection bool
@@ -80,7 +80,7 @@ func NewXMLDocumentAnalyzerWithPathHolders(dssDocument model.DSSDocument, xadesP
 }
 
 // xmlDocumentAnalyzerToDomDocument ports the private toDomDocument(DSSDocument, List<XAdESPath>).
-func xmlDocumentAnalyzerToDomDocument(document model.DSSDocument, xadesPathsHolders []definition.XAdESPath) (*XAdESDOMDocument, error) {
+func xmlDocumentAnalyzerToDomDocument(document model.DSSDocument, xadesPathsHolders []definition.XAdESPath) (*DOMDocument, error) {
 	dom, err := xmlutils.DomUtilsBuildDOMFromDocument(document)
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause(fmt.Sprintf("An XML file is expected : %s", err.Error()), err)
@@ -139,8 +139,8 @@ func (a *XMLDocumentAnalyzer) BuildSignatures() []validation.AdvancedSignature {
 // OriginalDocumentsForSignature returns the signed document(s) without their signature(s). Port
 // of the getOriginalDocuments(AdvancedSignature) override.
 func (a *XMLDocumentAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
-	xadesSignature := advancedSignature.(*XAdESSignature)
-	return XAdESSignatureUtilsGetSignerDocuments(xadesSignature)
+	xadesSignature := advancedSignature.(*Signature)
+	return SignatureUtilsGetSignerDocuments(xadesSignature)
 }
 
 // XAdESPathsHolder returns the XAdESPaths. Port of the deprecated getXAdESPathsHolder().

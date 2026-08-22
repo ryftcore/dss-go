@@ -25,7 +25,7 @@ type PdfVriDictSource struct {
 // vriDictionaryName is the SHA-1 of the signature name.
 func NewPdfVriDictSource(dssDictionary PdfDssDict, vriDictionaryName string) *PdfVriDictSource {
 	source := &PdfVriDictSource{vriDictionaryName: vriDictionaryName}
-	vris := PAdESUtilsVRIsWithName(dssDictionary, vriDictionaryName)
+	vris := UtilsVRIsWithName(dssDictionary, vriDictionaryName)
 	if utils.CollectionSize(vris) == 1 {
 		source.pdfVriDict = vris[0]
 	}

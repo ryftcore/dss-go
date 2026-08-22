@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESEtsiUHeader.java (DSS 6.5.RC1).
 //
-// See etsi_u_component.go's file header for the JAdESAttribute/JAdESAttributeIdentifier forward
-// dependency this file also relies on (JAdESAttribute.Equals, used by ReplaceComponent).
+// See etsi_u_component.go's file header for the Attribute/AttributeIdentifier forward
+// dependency this file also relies on (Attribute.Equals, used by ReplaceComponent).
 //
 // Java's `unprotected.computeIfAbsent(ETSI_U, k -> new JSONArray())` relies on List reference
 // semantics: the returned JSONArray is the SAME object stored in the map, so
@@ -25,12 +25,12 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESEtsiUHeader represents the list of components present inside the unprotected 'etsiU'
+// EtsiUHeader represents the list of components present inside the unprotected 'etsiU'
 // header. Port of the class JAdESEtsiUHeader, implementing validation.SignatureProperties[
 // *EtsiUComponent].
 //
 // java.io.Serializable is dropped (no Go counterpart).
-type JAdESEtsiUHeader struct {
+type EtsiUHeader struct {
 	// jws is the JWS signature.
 	jws *JWS
 
@@ -39,17 +39,17 @@ type JAdESEtsiUHeader struct {
 }
 
 // NewJAdESEtsiUHeader is the default constructor. Port of the (JWS) constructor.
-func NewJAdESEtsiUHeader(jws *JWS) *JAdESEtsiUHeader {
-	return &JAdESEtsiUHeader{jws: jws}
+func NewJAdESEtsiUHeader(jws *JWS) *EtsiUHeader {
+	return &EtsiUHeader{jws: jws}
 }
 
 // IsExist implements validation.SignatureProperties. Port of isExist().
-func (h *JAdESEtsiUHeader) IsExist() bool {
+func (h *EtsiUHeader) IsExist() bool {
 	return utils.IsCollectionNotEmpty(h.Attributes())
 }
 
 // Attributes implements validation.SignatureProperties. Port of getAttributes().
-func (h *JAdESEtsiUHeader) Attributes() []*EtsiUComponent {
+func (h *EtsiUHeader) Attributes() []*EtsiUComponent {
 	if h.components == nil {
 		components := []*EtsiUComponent{}
 		etsiUContent := DSSJsonUtilsEtsiU(h.jws)
@@ -68,7 +68,7 @@ func (h *JAdESEtsiUHeader) Attributes() []*EtsiUComponent {
 
 // AddComponent adds a new entry to the 'etsiU' array. Port of addComponent(String, Object,
 // boolean). See the file header's DEVIATION note on the error return.
-func (h *JAdESEtsiUHeader) AddComponent(headerName string, value any, base64UrlEncoded bool) error {
+func (h *EtsiUHeader) AddComponent(headerName string, value any, base64UrlEncoded bool) error {
 	etsiU := h.getEtsiUToEdit()
 	etsiEntry := jadesEtsiUHeaderComponent(headerName, value, base64UrlEncoded)
 	etsiU = append(etsiU, etsiEntry)
@@ -88,7 +88,7 @@ func jadesEtsiUHeaderComponent(name string, value any, base64UrlEncoded bool) an
 
 // RemoveComponent removes the 'etsiU' components with the given headerName. Port of
 // removeComponent(String). See the file header's DEVIATION note on the error return.
-func (h *JAdESEtsiUHeader) RemoveComponent(headerName string) error {
+func (h *EtsiUHeader) RemoveComponent(headerName string) error {
 	etsiU := h.getEtsiUToEdit()
 	if utils.IsCollectionNotEmpty(etsiU) {
 		kept := make([]any, 0, len(etsiU))
@@ -106,7 +106,7 @@ func (h *JAdESEtsiUHeader) RemoveComponent(headerName string) error {
 // RemoveLastComponent removes the last 'etsiU' item if the name matches one of the given
 // headerName values. Port of removeLastComponent(String...), returning whether the component has
 // been removed. See the file header's DEVIATION note on the error return.
-func (h *JAdESEtsiUHeader) RemoveLastComponent(headerName ...string) (bool, error) {
+func (h *EtsiUHeader) RemoveLastComponent(headerName ...string) (bool, error) {
 	etsiU := h.getEtsiUToEdit()
 	if utils.IsCollectionNotEmpty(etsiU) {
 		last := etsiU[len(etsiU)-1]
@@ -139,11 +139,11 @@ func jadesEtsiUHeaderMatches(item any, headerName ...string) bool {
 
 // ReplaceComponent replaces the given attribute within the 'etsiU' header array. Port of
 // replaceComponent(EtsiUComponent). See the file header's DEVIATION note on the error return.
-func (h *JAdESEtsiUHeader) ReplaceComponent(attribute *EtsiUComponent) error {
+func (h *EtsiUHeader) ReplaceComponent(attribute *EtsiUComponent) error {
 	etsiU := h.getEtsiUToEdit()
 	for position, item := range etsiU {
 		currentComponent := EtsiUComponentBuild(item, position)
-		if currentComponent != nil && attribute.Equals(&currentComponent.JAdESAttribute) {
+		if currentComponent != nil && attribute.Equals(&currentComponent.Attribute) {
 			etsiU[position] = attribute.Component()
 			break
 		}
@@ -156,7 +156,7 @@ func (h *JAdESEtsiUHeader) ReplaceComponent(attribute *EtsiUComponent) error {
 // `unprotected.computeIfAbsent(ETSI_U, k -> new JSONArray())`'s side effect of creating the
 // 'unprotected' header map when absent (the Go counterpart of jws.setUnprotected(new HashMap<>())
 // above it). See the file header on why callers must write the result back via setEtsiU.
-func (h *JAdESEtsiUHeader) getEtsiUToEdit() []any {
+func (h *EtsiUHeader) getEtsiUToEdit() []any {
 	unprotected := h.jws.Unprotected()
 	if unprotected == nil {
 		unprotected = jose.NewObject()
@@ -173,11 +173,11 @@ func (h *JAdESEtsiUHeader) getEtsiUToEdit() []any {
 
 // setEtsiU writes etsiU back to the 'unprotected' header map under the 'etsiU' key. See the file
 // header.
-func (h *JAdESEtsiUHeader) setEtsiU(etsiU []any) {
+func (h *EtsiUHeader) setEtsiU(etsiU []any) {
 	h.jws.Unprotected().Put(JAdESHeaderParameterNamesEtsiU, etsiU)
 }
 
 // clearCachedAttributes ports the private clearCachedAttributes().
-func (h *JAdESEtsiUHeader) clearCachedAttributes() {
+func (h *EtsiUHeader) clearCachedAttributes() {
 	h.components = nil
 }

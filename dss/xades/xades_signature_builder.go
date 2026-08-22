@@ -7,7 +7,7 @@
 // intermediate XPathPlacementSignatureBuilder) override. Go has no method overriding across
 // embedding, so - exactly as xades_builder.go, document/abstract_document_extender.go and
 // cades/cades_signature_extension.go already do, per the TokenBase.InitToken(self) convention of
-// PORTING.md - those six are collected in XAdESSignatureBuilderOverrides, every concrete builder
+// PORTING.md - those six are collected in SignatureBuilderOverrides, every concrete builder
 // registers itself with InitXAdESSignatureBuilder, and this base always reaches them through
 // b.overrides. The base's own implementations stay as methods, so a subclass that does not
 // override a hook inherits it by embedding and still satisfies the interface.
@@ -20,7 +20,7 @@
 //	getParentNodeOfSignature         Detached, XPathPlacement
 //	incorporateSignatureDom(Node)    XPathPlacement
 //	incorporateSignedObjects         Enveloping
-//	alignNodes                       (XAdESBuilderOverrides; implemented here)
+//	alignNodes                       (BuilderOverrides; implemented here)
 //
 // Java's two incorporateSignatureDom overloads cannot share one Go name: the public no-argument
 // one keeps IncorporateSignatureDom, the protected Node-taking one - the overridden one - becomes
@@ -40,7 +40,7 @@
 // model.BLevelParameters stores the policy as a concrete *model.Policy and XmlPolicyWithTransforms
 // embeds model.Policy by value, so Go cannot recover the outer value from the pointer. The branch
 // is therefore resolved through the registry below; see
-// XAdESSignatureBuilderRegisterPolicyTransforms. FLAGGED FOR THE INTEGRATOR: the structurally
+// SignatureBuilderRegisterPolicyTransforms. FLAGGED FOR THE INTEGRATOR: the structurally
 // clean fix is for model.BLevelParameters to hold the signature policy behind an interface, which
 // is a change to a frozen package.
 package xades
@@ -84,8 +84,8 @@ const (
 // its packaging subclasses override and that build() calls back into. Every concrete builder
 // satisfies this - inheriting the base implementation by embedding for the hooks it does not
 // override - and registers itself through InitXAdESSignatureBuilder.
-type XAdESSignatureBuilderOverrides interface {
-	XAdESBuilderOverrides
+type SignatureBuilderOverrides interface {
+	BuilderOverrides
 
 	// AssertSignaturePossible verifies whether the provided documents allow signature creation
 	// with the given signature format. Port of the protected #assertSignaturePossible.
@@ -112,10 +112,10 @@ type XAdESSignatureBuilderOverrides interface {
 	IncorporateSignedObjects() error
 }
 
-// XAdESSignatureBuilder implements all the necessary mechanisms to build each form of the XML
+// AbstractSignatureBuilder implements all the necessary mechanisms to build each form of the XML
 // signature. It is the abstract base of the four packaging builders.
-type XAdESSignatureBuilder struct {
-	XAdESBuilder
+type AbstractSignatureBuilder struct {
+	Builder
 
 	// Built indicates if the signature was already built (two-steps building).
 	// Port of the protected built.
@@ -166,26 +166,26 @@ type XAdESSignatureBuilder struct {
 	UnsignedSignaturePropertiesDom *xmldom.Node
 
 	// overrides points back at the concrete builder; see InitXAdESSignatureBuilder.
-	overrides XAdESSignatureBuilderOverrides
+	overrides SignatureBuilderOverrides
 }
 
-// XAdESSignatureBuilderGetSignatureBuilder creates the signature builder according to the
+// SignatureBuilderGetSignatureBuilder creates the signature builder according to the
 // packaging, for signing a single document.
 // Port of the static #getSignatureBuilder(XAdESSignatureParameters, DSSDocument, CertificateVerifier).
-func XAdESSignatureBuilderGetSignatureBuilder(params *XAdESSignatureParameters,
+func SignatureBuilderGetSignatureBuilder(params *SignatureParameters,
 	document model.DSSDocument,
-	certificateVerifier validation.CertificateVerifier) (XAdESSignatureBuilderRef, error) {
-	return XAdESSignatureBuilderGetSignatureBuilderForDocuments(params,
+	certificateVerifier validation.CertificateVerifier) (SignatureBuilderRef, error) {
+	return SignatureBuilderGetSignatureBuilderForDocuments(params,
 		[]model.DSSDocument{document}, certificateVerifier)
 }
 
-// XAdESSignatureBuilderGetSignatureBuilderForDocuments creates the signature builder according to
+// SignatureBuilderGetSignatureBuilderForDocuments creates the signature builder according to
 // the packaging, for signing a list of documents. Java's Objects.requireNonNull panics with its
 // message; the unsupported-packaging DSSException becomes a returned error.
 // Port of the static #getSignatureBuilder(XAdESSignatureParameters, List<DSSDocument>, CertificateVerifier).
-func XAdESSignatureBuilderGetSignatureBuilderForDocuments(params *XAdESSignatureParameters,
+func SignatureBuilderGetSignatureBuilderForDocuments(params *SignatureParameters,
 	documents []model.DSSDocument,
-	certificateVerifier validation.CertificateVerifier) (XAdESSignatureBuilderRef, error) {
+	certificateVerifier validation.CertificateVerifier) (SignatureBuilderRef, error) {
 	if params.SignaturePackaging() == "" {
 		panic("Cannot create a SignatureBuilder. SignaturePackaging shall be defined!")
 	}
@@ -205,10 +205,10 @@ func XAdESSignatureBuilderGetSignatureBuilderForDocuments(params *XAdESSignature
 }
 
 // InitXAdESSignatureBuilder registers the concrete builder with its base and applies the two
-// protected XAdESSignatureBuilder constructors' body: it stores the parameters, the documents and
+// protected AbstractSignatureBuilder constructors' body: it stores the parameters, the documents and
 // the deterministic Id, and reads the three canonicalization methods off the parameters.
-func (b *XAdESSignatureBuilder) InitXAdESSignatureBuilder(self XAdESSignatureBuilderOverrides,
-	params *XAdESSignatureParameters, documents []model.DSSDocument,
+func (b *AbstractSignatureBuilder) InitXAdESSignatureBuilder(self SignatureBuilderOverrides,
+	params *SignatureParameters, documents []model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) {
 	b.InitXAdESBuilderWithVerifier(self, certificateVerifier)
 	b.overrides = self
@@ -221,7 +221,7 @@ func (b *XAdESSignatureBuilder) InitXAdESSignatureBuilder(self XAdESSignatureBui
 }
 
 // setCanonicalizationMethods ports the private setCanonicalizationMethods.
-func (b *XAdESSignatureBuilder) setCanonicalizationMethods(params *XAdESSignatureParameters) {
+func (b *AbstractSignatureBuilder) setCanonicalizationMethods(params *SignatureParameters) {
 	b.KeyInfoCanonicalizationMethod = params.KeyInfoCanonicalizationMethod()
 	b.SignedInfoCanonicalizationMethod = params.SignedInfoCanonicalizationMethod()
 	b.SignedPropertiesCanonicalizationMethod = params.SignedPropertiesCanonicalizationMethod()
@@ -230,7 +230,7 @@ func (b *XAdESSignatureBuilder) setCanonicalizationMethods(params *XAdESSignatur
 // Build is the main method which is called to build the XML signature. It returns the
 // canonicalized ds:SignedInfo segment of the signature, the data used to define the
 // ds:SignatureValue element. Port of #build().
-func (b *XAdESSignatureBuilder) Build() ([]byte, error) {
+func (b *AbstractSignatureBuilder) Build() ([]byte, error) {
 	if err := b.overrides.AssertSignaturePossible(); err != nil {
 		return nil, err
 	}
@@ -301,7 +301,7 @@ func (b *XAdESSignatureBuilder) Build() ([]byte, error) {
 
 // AssertSignaturePossible verifies whether the provided documents allow signature creation with
 // the given signature format. Port of the protected #assertSignaturePossible.
-func (b *XAdESSignatureBuilder) AssertSignaturePossible() error {
+func (b *AbstractSignatureBuilder) AssertSignaturePossible() error {
 	if utils.CollectionSize(b.Documents) == 0 {
 		return errors.New("No documents have been provided to the signature creation!")
 	}
@@ -309,7 +309,7 @@ func (b *XAdESSignatureBuilder) AssertSignaturePossible() error {
 }
 
 // ensureConfigurationValidity ports the private ensureConfigurationValidity.
-func (b *XAdESSignatureBuilder) ensureConfigurationValidity() error {
+func (b *AbstractSignatureBuilder) ensureConfigurationValidity() error {
 	if err := b.checkSignaturePackagingValidity(); err != nil {
 		return err
 	}
@@ -334,7 +334,7 @@ func (b *XAdESSignatureBuilder) ensureConfigurationValidity() error {
 }
 
 // initReferenceBuilder ports the private initReferenceBuilder.
-func (b *XAdESSignatureBuilder) initReferenceBuilder() *ReferenceBuilder {
+func (b *AbstractSignatureBuilder) initReferenceBuilder() *ReferenceBuilder {
 	detachedContent := b.Documents
 	referenceIdProvider := NewReferenceIdProvider()
 	referenceIdProvider.SetSignatureParameters(b.Params)
@@ -342,7 +342,7 @@ func (b *XAdESSignatureBuilder) initReferenceBuilder() *ReferenceBuilder {
 }
 
 // checkSignaturePackagingValidity ports the private checkSignaturePackagingValidity.
-func (b *XAdESSignatureBuilder) checkSignaturePackagingValidity() error {
+func (b *AbstractSignatureBuilder) checkSignaturePackagingValidity() error {
 	if enumerations.SignaturePackagingEnveloping != b.Params.SignaturePackaging() {
 		if b.Params.IsManifestSignature() {
 			return fmt.Errorf(
@@ -360,27 +360,27 @@ func (b *XAdESSignatureBuilder) checkSignaturePackagingValidity() error {
 
 // IncorporateFiles incorporates the provided documents within the final file. Not implemented by
 // default. Port of the protected #incorporateFiles.
-func (b *XAdESSignatureBuilder) IncorporateFiles() error {
+func (b *AbstractSignatureBuilder) IncorporateFiles() error {
 	// not implemented by default
 	return nil
 }
 
 // initRootDocumentDom instantiates a root Document DOM when needed.
 // Port of the protected #initRootDocumentDom.
-func (b *XAdESSignatureBuilder) initRootDocumentDom() {
+func (b *AbstractSignatureBuilder) initRootDocumentDom() {
 	if b.DocumentDom == nil {
 		b.DocumentDom = b.overrides.BuildRootDocumentDom()
 	}
 }
 
 // BuildRootDocumentDom builds an empty Document. Port of the protected #buildRootDocumentDom.
-func (b *XAdESSignatureBuilder) BuildRootDocumentDom() *xmldom.Node {
+func (b *AbstractSignatureBuilder) BuildRootDocumentDom() *xmldom.Node {
 	return xmlutils.DomUtilsBuildDOMEmpty()
 }
 
 // IncorporateSignatureDom creates a new instance of the ds:Signature element and incorporates it
 // into its parent node. Port of the public #incorporateSignatureDom().
-func (b *XAdESSignatureBuilder) IncorporateSignatureDom() {
+func (b *AbstractSignatureBuilder) IncorporateSignatureDom() {
 	b.SignatureDom = xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementSignature)
 	xmlutils.DomUtilsAddNamespaceAttribute(b.SignatureDom, b.overrides.XmldsigNamespace())
@@ -392,13 +392,13 @@ func (b *XAdESSignatureBuilder) IncorporateSignatureDom() {
 
 // ParentNodeOfSignature returns the parent node of the signature.
 // Port of the protected #getParentNodeOfSignature.
-func (b *XAdESSignatureBuilder) ParentNodeOfSignature() *xmldom.Node {
+func (b *AbstractSignatureBuilder) ParentNodeOfSignature() *xmldom.Node {
 	return b.DocumentDom
 }
 
 // IncorporateSignatureDomToParent incorporates the signature element into the parent node.
 // Port of the protected #incorporateSignatureDom(Node).
-func (b *XAdESSignatureBuilder) IncorporateSignatureDomToParent(parentNodeOfSignature *xmldom.Node) {
+func (b *AbstractSignatureBuilder) IncorporateSignatureDomToParent(parentNodeOfSignature *xmldom.Node) {
 	parentNodeOfSignature.AppendChild(b.SignatureDom)
 }
 
@@ -411,7 +411,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignatureDomToParent(parentNodeOfSign
 //	</ds:SignedInfo>
 //
 // Port of the public #incorporateSignedInfo.
-func (b *XAdESSignatureBuilder) IncorporateSignedInfo() error {
+func (b *AbstractSignatureBuilder) IncorporateSignedInfo() error {
 	if utils.IsArrayNotEmpty(b.Params.SignedData()) {
 		// Upstream logs "Using explicit SignedInfo from parameter" here.
 		parsed, err := xmlutils.DomUtilsBuildDOMFromBytes(b.Params.SignedData())
@@ -446,7 +446,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignedInfo() error {
 //	<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
 //
 // Port of the private incorporateCanonicalizationMethod.
-func (b *XAdESSignatureBuilder) incorporateCanonicalizationMethod(parentDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateCanonicalizationMethod(parentDom *xmldom.Node,
 	signedInfoCanonicalizationMethod string) {
 	canonicalizationMethodDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom,
 		b.overrides.XmldsigNamespace(), common.XMLDSigElementCanonicalizationMethod)
@@ -458,7 +458,7 @@ func (b *XAdESSignatureBuilder) incorporateCanonicalizationMethod(parentDom *xml
 
 // incorporateReferences creates the ds:Reference elements in the signature.
 // Port of the private incorporateReferences.
-func (b *XAdESSignatureBuilder) incorporateReferences() error {
+func (b *AbstractSignatureBuilder) incorporateReferences() error {
 	referenceProcessor := NewReferenceProcessor(b.Params)
 	return referenceProcessor.IncorporateReferences(b.SignedInfoDom, b.Params.References(),
 		b.overrides.XmldsigNamespace())
@@ -477,7 +477,7 @@ func (b *XAdESSignatureBuilder) incorporateReferences() error {
 //	</ds:KeyInfo>
 //
 // Port of the protected #incorporateKeyInfo.
-func (b *XAdESSignatureBuilder) IncorporateKeyInfo() error {
+func (b *AbstractSignatureBuilder) IncorporateKeyInfo() error {
 	if b.Params.SigningCertificate() == nil && b.Params.GenerateTBSWithoutCertificate() {
 		// Upstream logs "Signing certificate not available and must be added to signature DOM later".
 		return nil
@@ -524,7 +524,7 @@ func (b *XAdESSignatureBuilder) IncorporateKeyInfo() error {
 
 // addSubjectAndCertificate creates the ds:X509SubjectName (optional) and ds:X509Certificate
 // (mandatory) tags. Port of the private addSubjectAndCertificate.
-func (b *XAdESSignatureBuilder) addSubjectAndCertificate(x509DataDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) addSubjectAndCertificate(x509DataDom *xmldom.Node,
 	token *model.CertificateToken) {
 	xmlutils.DomUtilsAddTextElement(b.DocumentDom, x509DataDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementX509SubjectName, token.Subject().RFC2253())
@@ -533,14 +533,14 @@ func (b *XAdESSignatureBuilder) addSubjectAndCertificate(x509DataDom *xmldom.Nod
 
 // addCertificate creates the mandatory ds:X509Certificate tag.
 // Port of the private addCertificate.
-func (b *XAdESSignatureBuilder) addCertificate(x509DataDom *xmldom.Node, token *model.CertificateToken) {
+func (b *AbstractSignatureBuilder) addCertificate(x509DataDom *xmldom.Node, token *model.CertificateToken) {
 	xmlutils.DomUtilsAddTextElement(b.DocumentDom, x509DataDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementX509Certificate, utils.ToBase64(token.Encoded()))
 }
 
 // IncorporateObjects incorporates the ds:Object tags.
 // Port of the protected #incorporateObjects.
-func (b *XAdESSignatureBuilder) IncorporateObjects() error {
+func (b *AbstractSignatureBuilder) IncorporateObjects() error {
 	if err := b.IncorporateQualifyingProperties(); err != nil {
 		return err
 	}
@@ -560,7 +560,7 @@ func (b *XAdESSignatureBuilder) IncorporateObjects() error {
 //	</ds:Object>
 //
 // Port of the protected #incorporateQualifyingProperties.
-func (b *XAdESSignatureBuilder) IncorporateQualifyingProperties() error {
+func (b *AbstractSignatureBuilder) IncorporateQualifyingProperties() error {
 	if utils.IsArrayNotEmpty(b.Params.SignedAdESObject()) {
 		// Upstream logs "Incorporating signed XAdES Object from parameter" here.
 		if xmlutils.DomUtilsIsDOMBytes(b.Params.SignedAdESObject()) {
@@ -597,7 +597,7 @@ func (b *XAdESSignatureBuilder) IncorporateQualifyingProperties() error {
 // IncorporateSignedObjects incorporates the list of signed ds:Object elements (used for
 // Enveloping packaging). By default only the objects enforced through the references are
 // processed. Port of the protected #incorporateSignedObjects.
-func (b *XAdESSignatureBuilder) IncorporateSignedObjects() error {
+func (b *AbstractSignatureBuilder) IncorporateSignedObjects() error {
 	// process only for enforced objects by default
 	references := b.Params.References()
 	for _, reference := range references {
@@ -612,7 +612,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignedObjects() error {
 
 // IncorporateCustomObjects incorporates a list of custom ds:Object elements within the
 // ds:Signature element. Port of the protected #incorporateCustomObjects.
-func (b *XAdESSignatureBuilder) IncorporateCustomObjects() error {
+func (b *AbstractSignatureBuilder) IncorporateCustomObjects() error {
 	if utils.IsCollectionNotEmpty(b.Params.Objects()) {
 		for _, object := range b.Params.Objects() {
 			if err := b.IncorporateObject(object); err != nil {
@@ -625,7 +625,7 @@ func (b *XAdESSignatureBuilder) IncorporateCustomObjects() error {
 
 // IncorporateObject incorporates the given object within the ds:Signature.
 // Port of the protected #incorporateObject.
-func (b *XAdESSignatureBuilder) IncorporateObject(object *DSSObject) error {
+func (b *AbstractSignatureBuilder) IncorporateObject(object *DSSObject) error {
 	if object.Content() == nil {
 		return errors.New("The content shall be defined inside DSSObject element! " +
 			"Incorporation is not possible.")
@@ -682,7 +682,7 @@ func (b *XAdESSignatureBuilder) IncorporateObject(object *DSSObject) error {
 //	</ds:Reference>
 //
 // Port of the protected #incorporateReferenceSignedProperties.
-func (b *XAdESSignatureBuilder) IncorporateReferenceSignedProperties() error {
+func (b *AbstractSignatureBuilder) IncorporateReferenceSignedProperties() error {
 	reference := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementReference)
 	b.SignedInfoDom.AppendChild(reference)
@@ -740,7 +740,7 @@ func (b *XAdESSignatureBuilder) IncorporateReferenceSignedProperties() error {
 //	</ds:Reference>
 //
 // Port of the protected #incorporateReferenceKeyInfo.
-func (b *XAdESSignatureBuilder) IncorporateReferenceKeyInfo() error {
+func (b *AbstractSignatureBuilder) IncorporateReferenceKeyInfo() error {
 	if !b.Params.IsSignKeyInfo() {
 		return nil
 	}
@@ -782,7 +782,7 @@ func (b *XAdESSignatureBuilder) IncorporateReferenceKeyInfo() error {
 // incorporateDigestValueOfReference creates the ds:DigestValue DOM object for the given digest
 // value computed on a canonicalized content.
 // Port of the private incorporateDigestValueOfReference.
-func (b *XAdESSignatureBuilder) incorporateDigestValueOfReference(referenceDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateDigestValueOfReference(referenceDom *xmldom.Node,
 	digestValue []byte) {
 	digestValueDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementDigestValue)
@@ -794,7 +794,7 @@ func (b *XAdESSignatureBuilder) incorporateDigestValueOfReference(referenceDom *
 
 // IncorporateSignatureValue incorporates the ds:SignatureValue element.
 // Port of the protected #incorporateSignatureValue.
-func (b *XAdESSignatureBuilder) IncorporateSignatureValue() {
+func (b *AbstractSignatureBuilder) IncorporateSignatureValue() {
 	b.SignatureValueDom = xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
 		common.XMLDSigElementSignatureValue)
 	b.SignatureDom.AppendChild(b.SignatureValueDom)
@@ -807,7 +807,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignatureValue() {
 //	<SignedProperties Id="xades-ide5c549340079fe19f3f90f03354a5965">
 //
 // Port of the protected #incorporateSignedProperties.
-func (b *XAdESSignatureBuilder) IncorporateSignedProperties() error {
+func (b *AbstractSignatureBuilder) IncorporateSignedProperties() error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -826,7 +826,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignedProperties() error {
 
 // IncorporateSignedSignatureProperties creates the xades:SignedSignatureProperties DOM element.
 // Port of the protected #incorporateSignedSignatureProperties.
-func (b *XAdESSignatureBuilder) IncorporateSignedSignatureProperties() error {
+func (b *AbstractSignatureBuilder) IncorporateSignedSignatureProperties() error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -855,7 +855,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignedSignatureProperties() error {
 
 // incorporatePolicy creates the xades:SignaturePolicyIdentifier DOM object.
 // Port of the private incorporatePolicy.
-func (b *XAdESSignatureBuilder) incorporatePolicy() error {
+func (b *AbstractSignatureBuilder) incorporatePolicy() error {
 	signaturePolicy := b.Params.BLevel().SignaturePolicy()
 	if signaturePolicy == nil {
 		return nil
@@ -906,7 +906,7 @@ func (b *XAdESSignatureBuilder) incorporatePolicy() error {
 	}
 
 	// Java: `if (signaturePolicy instanceof XmlPolicyWithTransforms)`; see the file header.
-	if transforms, ok := XAdESSignatureBuilderPolicyTransforms(signaturePolicy); ok {
+	if transforms, ok := SignatureBuilderPolicyTransforms(signaturePolicy); ok {
 		DSSXMLUtilsIncorporateTransforms(signaturePolicyIdDom, transforms, b.overrides.XmldsigNamespace())
 	}
 
@@ -932,7 +932,7 @@ func (b *XAdESSignatureBuilder) incorporatePolicy() error {
 
 // incorporateSigPolicyQualifiers creates the xades:SigPolicyQualifiers DOM object.
 // Port of the private incorporateSigPolicyQualifiers.
-func (b *XAdESSignatureBuilder) incorporateSigPolicyQualifiers(signaturePolicyIdDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateSigPolicyQualifiers(signaturePolicyIdDom *xmldom.Node,
 	signaturePolicy *model.Policy) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -1002,7 +1002,7 @@ func (b *XAdESSignatureBuilder) incorporateSigPolicyQualifiers(signaturePolicyId
 // Port of the private incorporateSigningTime. DomUtils.createXMLGregorianCalendar(date) is
 // immediately followed by toXMLFormat() upstream; the Go DomUtils folds the two into one call
 // that returns the lexical form directly.
-func (b *XAdESSignatureBuilder) incorporateSigningTime() error {
+func (b *AbstractSignatureBuilder) incorporateSigningTime() error {
 	var signingDate time.Time
 	if sd := b.Params.BLevel().SigningDate(); sd != nil {
 		signingDate = *sd
@@ -1023,7 +1023,7 @@ func (b *XAdESSignatureBuilder) incorporateSigningTime() error {
 
 // incorporateSigningCertificate creates the xades:SigningCertificate(V2) building block DOM
 // object. Port of the private incorporateSigningCertificate.
-func (b *XAdESSignatureBuilder) incorporateSigningCertificate() error {
+func (b *AbstractSignatureBuilder) incorporateSigningCertificate() error {
 	if b.Params.SigningCertificate() == nil && b.Params.GenerateTBSWithoutCertificate() {
 		return nil
 	}
@@ -1039,7 +1039,7 @@ func (b *XAdESSignatureBuilder) incorporateSigningCertificate() error {
 }
 
 // incorporateSigningCertificateV1 ports the private incorporateSigningCertificateV1.
-func (b *XAdESSignatureBuilder) incorporateSigningCertificateV1(certificates []*model.CertificateToken) error {
+func (b *AbstractSignatureBuilder) incorporateSigningCertificateV1(certificates []*model.CertificateToken) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -1057,7 +1057,7 @@ func (b *XAdESSignatureBuilder) incorporateSigningCertificateV1(certificates []*
 }
 
 // incorporateSigningCertificateV2 ports the private incorporateSigningCertificateV2.
-func (b *XAdESSignatureBuilder) incorporateSigningCertificateV2(certificates []*model.CertificateToken) error {
+func (b *AbstractSignatureBuilder) incorporateSigningCertificateV2(certificates []*model.CertificateToken) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -1076,7 +1076,7 @@ func (b *XAdESSignatureBuilder) incorporateSigningCertificateV2(certificates []*
 
 // incorporateSignedDataObjectProperties incorporates the xades:SignedDataObjectProperties DOM
 // element. Port of the private incorporateSignedDataObjectProperties.
-func (b *XAdESSignatureBuilder) incorporateSignedDataObjectProperties() error {
+func (b *AbstractSignatureBuilder) incorporateSignedDataObjectProperties() error {
 	if err := b.incorporateDataObjectFormat(); err != nil {
 		return err
 	}
@@ -1090,7 +1090,7 @@ func (b *XAdESSignatureBuilder) incorporateSignedDataObjectProperties() error {
 // xades:SignedDataObjectProperties element. EN 319 132-1 clause 4.3.5: a XAdES signature shall
 // not incorporate an empty SignedDataObjectProperties element.
 // Port of the private getSignedDataObjectPropertiesDom.
-func (b *XAdESSignatureBuilder) signedDataObjectPropertiesDom() (*xmldom.Node, error) {
+func (b *AbstractSignatureBuilder) signedDataObjectPropertiesDom() (*xmldom.Node, error) {
 	if b.SignedDataObjectPropertiesDom == nil {
 		currentElements, err := b.CurrentXAdESElements()
 		if err != nil {
@@ -1110,7 +1110,7 @@ func (b *XAdESSignatureBuilder) signedDataObjectPropertiesDom() (*xmldom.Node, e
 //	</DataObjectFormat>
 //
 // Port of the private incorporateDataObjectFormat.
-func (b *XAdESSignatureBuilder) incorporateDataObjectFormat() error {
+func (b *AbstractSignatureBuilder) incorporateDataObjectFormat() error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -1179,7 +1179,7 @@ func (b *XAdESSignatureBuilder) incorporateDataObjectFormat() error {
 }
 
 // keyInfoDataObjectFormat ports the private getKeyInfoDataObjectFormat.
-func (b *XAdESSignatureBuilder) keyInfoDataObjectFormat() *DSSDataObjectFormat {
+func (b *AbstractSignatureBuilder) keyInfoDataObjectFormat() *DSSDataObjectFormat {
 	keyInfoDataObjectFormat := NewDSSDataObjectFormat()
 	keyInfoDataObjectFormat.SetObjectReference(xmlutils.DomUtilsToElementReference(
 		XAdESSignatureBuilderReferencePrefix + XAdESSignatureBuilderKeyInfoPrefix + b.DeterministicId))
@@ -1210,7 +1210,7 @@ func xadesSignatureBuilderAssertDataObjectFormatValid(dataObjectFormat *DSSDataO
 
 // incorporateContentTimestamps incorporates the content-timestamps within the signature being
 // created. Port of the private incorporateContentTimestamps.
-func (b *XAdESSignatureBuilder) incorporateContentTimestamps() error {
+func (b *AbstractSignatureBuilder) incorporateContentTimestamps() error {
 	contentTimestamps := b.Params.ContentTimestamps()
 	if contentTimestamps == nil {
 		return nil
@@ -1252,7 +1252,7 @@ func (b *XAdESSignatureBuilder) incorporateContentTimestamps() error {
 
 // incorporateSignerRole incorporates the signer claimed roleType into the signed signature
 // properties. Port of the private incorporateSignerRole.
-func (b *XAdESSignatureBuilder) incorporateSignerRole() error {
+func (b *AbstractSignatureBuilder) incorporateSignerRole() error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -1295,7 +1295,7 @@ func (b *XAdESSignatureBuilder) incorporateSignerRole() error {
 }
 
 // addRoles ports the private addRoles.
-func (b *XAdESSignatureBuilder) addRoles(signerRoles []string, rolesDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) addRoles(signerRoles []string, rolesDom *xmldom.Node,
 	roleType common.DSSElement) {
 	for _, signerRole := range signerRoles {
 		roleDom := xmlutils.DomUtilsAddElement(b.DocumentDom, rolesDom, b.overrides.XadesNamespace(), roleType)
@@ -1304,7 +1304,7 @@ func (b *XAdESSignatureBuilder) addRoles(signerRoles []string, rolesDom *xmldom.
 }
 
 // incorporateSignatureProductionPlace ports the private incorporateSignatureProductionPlace.
-func (b *XAdESSignatureBuilder) incorporateSignatureProductionPlace() error {
+func (b *AbstractSignatureBuilder) incorporateSignatureProductionPlace() error {
 	signatureProductionPlace := b.Params.BLevel().SignerLocation()
 	if signatureProductionPlace == nil || signatureProductionPlace.IsEmpty() {
 		return nil
@@ -1375,7 +1375,7 @@ func (b *XAdESSignatureBuilder) incorporateSignatureProductionPlace() error {
 //	</xsd:complexType>
 //
 // Port of the private incorporateCommitmentTypeIndications.
-func (b *XAdESSignatureBuilder) incorporateCommitmentTypeIndications() error {
+func (b *AbstractSignatureBuilder) incorporateCommitmentTypeIndications() error {
 	commitmentTypeIndications := b.Params.BLevel().CommitmentTypeIndications()
 	if !utils.IsCollectionNotEmpty(commitmentTypeIndications) {
 		return nil
@@ -1497,7 +1497,7 @@ func xadesSignatureBuilderAssertCommitmentTypeNotNull(commitmentType enumeration
 //	</xsd:complexType>
 //
 // Port of the private incorporateObjectIdentifier.
-func (b *XAdESSignatureBuilder) incorporateObjectIdentifier(parentDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateObjectIdentifier(parentDom *xmldom.Node,
 	objectIdentifier enumerations.ObjectIdentifier) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -1526,7 +1526,7 @@ func (b *XAdESSignatureBuilder) incorporateObjectIdentifier(parentDom *xmldom.No
 
 // incorporateIdentifier creates the xades:Identifier DOM object of an xades:ObjectIdentifierType.
 // Port of the private incorporateIdentifier.
-func (b *XAdESSignatureBuilder) incorporateIdentifier(parentDom *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateIdentifier(parentDom *xmldom.Node,
 	objectIdentifier enumerations.ObjectIdentifier) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -1585,7 +1585,7 @@ func (b *XAdESSignatureBuilder) incorporateIdentifier(parentDom *xmldom.Node,
 }
 
 // incorporateDocumentationReferences ports the private incorporateDocumentationReferences.
-func (b *XAdESSignatureBuilder) incorporateDocumentationReferences(parentElement *xmldom.Node,
+func (b *AbstractSignatureBuilder) incorporateDocumentationReferences(parentElement *xmldom.Node,
 	documentationReferences []string) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -1602,7 +1602,7 @@ func (b *XAdESSignatureBuilder) incorporateDocumentationReferences(parentElement
 
 // SignDocument adds the signature value to the signature and returns the XML signature.
 // Port of the overridden #signDocument(byte[]).
-func (b *XAdESSignatureBuilder) SignDocument(signatureValue []byte) (model.DSSDocument, error) {
+func (b *AbstractSignatureBuilder) SignDocument(signatureValue []byte) (model.DSSDocument, error) {
 	if !b.Built {
 		if _, err := b.Build(); err != nil {
 			return nil, err
@@ -1622,7 +1622,7 @@ func (b *XAdESSignatureBuilder) SignDocument(signatureValue []byte) (model.DSSDo
 
 // AddContentTimestamp adds the content of a timestamp into a given timestamp element.
 // Port of the protected #addContentTimestamp.
-func (b *XAdESSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Node,
+func (b *AbstractSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Node,
 	token *validation.TimestampToken) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
@@ -1663,7 +1663,7 @@ func (b *XAdESSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Nod
 	timestampElement.AppendChild(encapsulatedTimestampElement)
 
 	// Build Id after time-stamp incorporation to ensure timestampElement contains a new time-stamp
-	attributeIdentifier := XAdESAttributeIdentifierBuild(timestampElement)
+	attributeIdentifier := AttributeIdentifierBuild(timestampElement)
 	xmlIdentifier, err := b.ToXmlIdentifier(attributeIdentifier)
 	if err != nil {
 		return err
@@ -1678,7 +1678,7 @@ func (b *XAdESSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Nod
 
 // NodeToCanonicalize returns the node to be canonicalized, applying indents if required.
 // Port of the protected #getNodeToCanonicalize.
-func (b *XAdESSignatureBuilder) NodeToCanonicalize(node *xmldom.Node) (*xmldom.Node, error) {
+func (b *AbstractSignatureBuilder) NodeToCanonicalize(node *xmldom.Node) (*xmldom.Node, error) {
 	if b.Params.IsPrettyPrint() {
 		return DSSXMLUtilsGetIndentedNode(b.DocumentDom, node)
 	}
@@ -1686,7 +1686,7 @@ func (b *XAdESSignatureBuilder) NodeToCanonicalize(node *xmldom.Node) (*xmldom.N
 }
 
 // AlignNodes aligns children indents. Port of the overridden protected #alignNodes.
-func (b *XAdESSignatureBuilder) AlignNodes() {
+func (b *AbstractSignatureBuilder) AlignNodes() {
 	if b.UnsignedSignaturePropertiesDom != nil {
 		DSSXMLUtilsAlignChildrenIndents(b.UnsignedSignaturePropertiesDom)
 	}
@@ -1696,7 +1696,7 @@ func (b *XAdESSignatureBuilder) AlignNodes() {
 }
 
 // addAssertions ports the private addAssertions.
-func (b *XAdESSignatureBuilder) addAssertions(signedAssertions []string, rolesDom *xmldom.Node) error {
+func (b *AbstractSignatureBuilder) addAssertions(signedAssertions []string, rolesDom *xmldom.Node) error {
 	currentElements, err := b.CurrentXAdESElements()
 	if err != nil {
 		return err
@@ -1716,28 +1716,28 @@ func (b *XAdESSignatureBuilder) addAssertions(signedAssertions []string, rolesDo
 }
 
 // xadesSignatureBuilderPolicyTransformsRegistry backs
-// XAdESSignatureBuilderRegisterPolicyTransforms / XAdESSignatureBuilderPolicyTransforms. See the
+// SignatureBuilderRegisterPolicyTransforms / SignatureBuilderPolicyTransforms. See the
 // file header: it stands in for Java's `instanceof XmlPolicyWithTransforms`, which Go cannot
 // express because model.BLevelParameters hands out a *model.Policy and XmlPolicyWithTransforms
 // embeds model.Policy by value.
 var xadesSignatureBuilderPolicyTransformsRegistry sync.Map // map[*model.Policy][]DSSTransform
 
-// XAdESSignatureBuilderRegisterPolicyTransforms records policy as an XmlPolicyWithTransforms and
+// SignatureBuilderRegisterPolicyTransforms records policy as an XmlPolicyWithTransforms and
 // returns the *model.Policy to hand to BLevelParameters.SetSignaturePolicy, so that
 // incorporatePolicy writes its ds:Transforms exactly where Java's
 // `signaturePolicy instanceof XmlPolicyWithTransforms` branch does.
 //
 //	xmlPolicy := xades.NewXmlPolicyWithTransforms()
 //	xmlPolicy.SetTransforms(transforms)
-//	params.BLevel().SetSignaturePolicy(xades.XAdESSignatureBuilderRegisterPolicyTransforms(xmlPolicy))
-func XAdESSignatureBuilderRegisterPolicyTransforms(policy *XmlPolicyWithTransforms) *model.Policy {
+//	params.BLevel().SetSignaturePolicy(xades.SignatureBuilderRegisterPolicyTransforms(xmlPolicy))
+func SignatureBuilderRegisterPolicyTransforms(policy *XmlPolicyWithTransforms) *model.Policy {
 	xadesSignatureBuilderPolicyTransformsRegistry.Store(&policy.Policy, policy.Transforms())
 	return &policy.Policy
 }
 
-// XAdESSignatureBuilderPolicyTransforms resolves the ds:Transforms registered for policy, and
+// SignatureBuilderPolicyTransforms resolves the ds:Transforms registered for policy, and
 // reports whether policy is the model.Policy of an XmlPolicyWithTransforms.
-func XAdESSignatureBuilderPolicyTransforms(policy *model.Policy) ([]DSSTransform, bool) {
+func SignatureBuilderPolicyTransforms(policy *model.Policy) ([]DSSTransform, bool) {
 	value, ok := xadesSignatureBuilderPolicyTransformsRegistry.Load(policy)
 	if !ok {
 		return nil, false

@@ -7,7 +7,7 @@
 // whose Go constructor is
 //
 //	vpfltvd.NewBestSignatureTimeNotBeforeCertificateIssuanceCheck[T](
-//	    *i18n.I18nProvider, *process.Result[T], time.Time, *diagnostic.CertificateWrapper, policy.LevelRule)
+//	    *i18n.Provider, *process.Result[T], time.Time, *diagnostic.CertificateWrapper, policy.LevelRule)
 package vpfswatsp
 
 import (
@@ -53,8 +53,8 @@ type PastSignatureValidation struct {
 }
 
 // NewPastSignatureValidation is the default constructor. Port of
-// PastSignatureValidation(I18nProvider, TokenProxy, Map, XmlConclusion, POEExtraction, Date, ValidationPolicy, Context).
-func NewPastSignatureValidation(i18nProvider *i18n.I18nProvider, token diagnostic.TokenProxy,
+// PastSignatureValidation(Provider, TokenProxy, Map, XmlConclusion, POEExtraction, Date, ValidationPolicy, Context).
+func NewPastSignatureValidation(i18nProvider *i18n.Provider, token diagnostic.TokenProxy,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, currentConclusion *jaxb.XmlConclusion, poe *POEExtraction,
 	currentTime time.Time, validationPolicy policy.ValidationPolicy,
 	context enumerations.Context) *PastSignatureValidation {
@@ -574,7 +574,7 @@ type psvRevocationFreshnessCheckerResultCheck struct {
 
 // newPSVRevocationFreshnessCheckerResultCheck instantiates the anonymous
 // subclass.
-func newPSVRevocationFreshnessCheckerResultCheck(i18nProvider *i18n.I18nProvider,
+func newPSVRevocationFreshnessCheckerResultCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlPSV], rfcResult *jaxb.XmlRFC,
 	constraint policy.LevelRule) *psvRevocationFreshnessCheckerResultCheck {
 	c := &psvRevocationFreshnessCheckerResultCheck{

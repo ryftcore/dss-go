@@ -18,19 +18,19 @@ import (
 	"github.com/ryftcore/dss-go/dss/simplereport/jaxb"
 )
 
-// SimpleReportFacade contains methods to generate a SimpleReport.
-type SimpleReportFacade struct{}
+// Facade contains methods to generate a SimpleReport.
+type Facade struct{}
 
 // NewSimpleReportFacade instantiates a new SimpleReportFacade. Port of
 // newFacade().
-func NewSimpleReportFacade() *SimpleReportFacade {
-	return &SimpleReportFacade{}
+func NewSimpleReportFacade() *Facade {
+	return &Facade{}
 }
 
 // Marshal returns the XML representation of simpleReport. Port of
 // marshall(T) (schema validation always requested in Java; see the file
 // header for why this port does not perform it).
-func (f *SimpleReportFacade) Marshal(simpleReport *jaxb.XmlSimpleReport) (string, error) {
+func (f *Facade) Marshal(simpleReport *jaxb.XmlSimpleReport) (string, error) {
 	if simpleReport == nil {
 		return "", errors.New("JAXBObject is null")
 	}
@@ -43,7 +43,7 @@ func (f *SimpleReportFacade) Marshal(simpleReport *jaxb.XmlSimpleReport) (string
 
 // MarshalToWriter marshals simpleReport into w. Port of marshall(T,
 // OutputStream).
-func (f *SimpleReportFacade) MarshalToWriter(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
+func (f *Facade) MarshalToWriter(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
 	if simpleReport == nil {
 		return errors.New("JAXBObject is null")
 	}
@@ -60,7 +60,7 @@ func (f *SimpleReportFacade) MarshalToWriter(simpleReport *jaxb.XmlSimpleReport,
 
 // Unmarshal unmarshals r and returns the XmlSimpleReport. Port of
 // unmarshall(InputStream).
-func (f *SimpleReportFacade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleReport, error) {
+func (f *Facade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleReport, error) {
 	if r == nil {
 		return nil, errors.New("InputStream is null")
 	}
@@ -74,21 +74,21 @@ func (f *SimpleReportFacade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleReport, erro
 
 // UnmarshalString unmarshals xmlObject and returns the XmlSimpleReport.
 // Port of unmarshall(String).
-func (f *SimpleReportFacade) UnmarshalString(xmlObject string) (*jaxb.XmlSimpleReport, error) {
+func (f *Facade) UnmarshalString(xmlObject string) (*jaxb.XmlSimpleReport, error) {
 	return f.Unmarshal(bytes.NewReader([]byte(xmlObject)))
 }
 
 // GenerateHtmlReport generates a Bootstrap 4 Simple report. Port of
 // generateHtmlReport(XmlSimpleReport); XSLT execution is deferred, see
 // SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GenerateHtmlReport(simpleReport *jaxb.XmlSimpleReport) (string, error) {
+func (f *Facade) GenerateHtmlReport(simpleReport *jaxb.XmlSimpleReport) (string, error) {
 	return "", ErrHtmlTemplatesNotSupported
 }
 
 // GenerateHtmlReportToWriter generates a Bootstrap 4 Simple report into w.
 // Port of generateHtmlReport(XmlSimpleReport, Result); XSLT execution is
 // deferred, see SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GenerateHtmlReportToWriter(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
+func (f *Facade) GenerateHtmlReportToWriter(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
 	return ErrHtmlTemplatesNotSupported
 }
 
@@ -96,7 +96,7 @@ func (f *SimpleReportFacade) GenerateHtmlReportToWriter(simpleReport *jaxb.XmlSi
 // from already-marshalled simple-report XML. Port of
 // generateHtmlReport(String); XSLT execution is deferred, see
 // SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GenerateHtmlReportFromMarshalled(marshalledSimpleReport string) (string, error) {
+func (f *Facade) GenerateHtmlReportFromMarshalled(marshalledSimpleReport string) (string, error) {
 	return "", ErrHtmlTemplatesNotSupported
 }
 
@@ -104,14 +104,14 @@ func (f *SimpleReportFacade) GenerateHtmlReportFromMarshalled(marshalledSimpleRe
 // report from already-marshalled simple-report XML into w. Port of
 // generateHtmlReport(String, Result); XSLT execution is deferred, see
 // SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GenerateHtmlReportFromMarshalledToWriter(marshalledSimpleReport string, w io.Writer) error {
+func (f *Facade) GenerateHtmlReportFromMarshalledToWriter(marshalledSimpleReport string, w io.Writer) error {
 	return ErrHtmlTemplatesNotSupported
 }
 
 // GeneratePdfReport generates a PDF Simple report. Port of
 // generatePdfReport(XmlSimpleReport, Result); XSLT execution is deferred,
 // see SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GeneratePdfReport(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
+func (f *Facade) GeneratePdfReport(simpleReport *jaxb.XmlSimpleReport, w io.Writer) error {
 	return ErrPdfTemplatesNotSupported
 }
 
@@ -119,6 +119,6 @@ func (f *SimpleReportFacade) GeneratePdfReport(simpleReport *jaxb.XmlSimpleRepor
 // already-marshalled simple-report XML into w. Port of
 // generatePdfReport(String, Result); XSLT execution is deferred, see
 // SimpleReportXmlDefiner.
-func (f *SimpleReportFacade) GeneratePdfReportFromMarshalled(marshalledSimpleReport string, w io.Writer) error {
+func (f *Facade) GeneratePdfReportFromMarshalled(marshalledSimpleReport string, w io.Writer) error {
 	return ErrPdfTemplatesNotSupported
 }

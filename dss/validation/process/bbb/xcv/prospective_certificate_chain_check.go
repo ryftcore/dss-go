@@ -22,8 +22,8 @@ type ProspectiveCertificateChainCheck[T any] struct {
 }
 
 // NewProspectiveCertificateChainCheck is the default constructor. Port of
-// ProspectiveCertificateChainCheck(I18nProvider, T, CertificateWrapper, Context, LevelRule).
-func NewProspectiveCertificateChainCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ProspectiveCertificateChainCheck(Provider, T, CertificateWrapper, Context, LevelRule).
+func NewProspectiveCertificateChainCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, context enumerations.Context,
 	constraint policy.LevelRule) *ProspectiveCertificateChainCheck[T] {
 	c := &ProspectiveCertificateChainCheck[T]{

@@ -22,8 +22,8 @@ type CertificateTypeCoverageCheck struct {
 }
 
 // NewCertificateTypeCoverageCheck is the default constructor. Port of
-// CertificateTypeCoverageCheck(I18nProvider, XmlValidationCertificateQualification, List, LevelRule).
-func NewCertificateTypeCoverageCheck(i18nProvider *i18n.I18nProvider,
+// CertificateTypeCoverageCheck(Provider, XmlValidationCertificateQualification, List, LevelRule).
+func NewCertificateTypeCoverageCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateQualification], trustServicesAtTime []*diagnostic.TrustServiceWrapper,
 	constraint policy.LevelRule) *CertificateTypeCoverageCheck {
 	c := &CertificateTypeCoverageCheck{

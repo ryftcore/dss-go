@@ -17,7 +17,7 @@
 //   - SignedDocumentValidator (the interface below) deliberately omits
 //     getDocumentAnalyzer() and initializeDiagnosticDataBuilder(): both are
 //     overridden in Java with COVARIANT return types
-//     (CMSDocumentAnalyzer/CAdESDiagnosticDataBuilder, ...), which in Go is a
+//     (CMSDocumentAnalyzer/DiagnosticDataBuilder, ...), which in Go is a
 //     shadowing method with a different signature and would take the concrete
 //     validator out of the interface's method set.
 //
@@ -69,8 +69,8 @@ type SignedDocumentValidator interface {
 // initializeDiagnosticDataBuilder(): QWACValidator, for one, calls it on the
 // validator fromDocument() handed it. It is a separate interface rather than a
 // member of SignedDocumentValidator because Java's format-specific validators
-// override the method with COVARIANT return types (CAdESDiagnosticDataBuilder,
-// PAdESDiagnosticDataBuilder, ...) - the ported ones all narrow back to
+// override the method with COVARIANT return types (DiagnosticDataBuilder,
+// DiagnosticDataBuilder, ...) - the ported ones all narrow back to
 // *SignedDocumentDiagnosticDataBuilder, but a future one need not, and would
 // then silently drop out of SignedDocumentValidator's method set. Callers
 // assert to this interface instead.
@@ -593,13 +593,13 @@ func (v *SignedDocumentValidatorBase) OriginalDocumentsForSignature(advancedSign
 // GetValidationData is the port of the getValidationData(Collection)
 // overload.
 func (v *SignedDocumentValidatorBase) GetValidationData(
-	signatures []spivalidation.AdvancedSignature) (*spivalidation.ValidationDataContainer, error) {
+	signatures []spivalidation.AdvancedSignature) (*spivalidation.DataContainer, error) {
 	return v.documentAnalyzer.GetValidationData(signatures)
 }
 
 // GetValidationDataWithTimestamps is the port of the
 // getValidationData(Collection, Collection) overload.
 func (v *SignedDocumentValidatorBase) GetValidationDataWithTimestamps(signatures []spivalidation.AdvancedSignature,
-	detachedTimestamps []*spivalidation.TimestampToken) (*spivalidation.ValidationDataContainer, error) {
+	detachedTimestamps []*spivalidation.TimestampToken) (*spivalidation.DataContainer, error) {
 	return v.documentAnalyzer.GetValidationDataWithTimestamps(signatures, detachedTimestamps)
 }

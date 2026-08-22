@@ -47,7 +47,7 @@ func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedDocument(container mod
 }
 
 // IsSupportedContent ports the @Override protected isSupported(ASiCContent).
-func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	return NewASiCWithXAdESFormatDetector().IsSupportedZipContent(asicContent)
 }
 

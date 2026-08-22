@@ -5,8 +5,8 @@
 // implements Marshal/Unmarshal directly with encoding/xml (the low-level byte-exact
 // Marshal/Unmarshal that the KAT actually exercises lives in jaxb/xml.go, which this facade
 // does not call). XSD-schema validation is not implemented - see ValidationReportUtils's
-// deferred Schema() stub. ValidationReportFacade has no HTML/PDF report generation methods to
-// port, unlike SimpleReportFacade/DetailedReportFacade - the ETSI Validation Report has no
+// deferred Schema() stub. Facade has no HTML/PDF report generation methods to
+// port, unlike Facade/Facade - the ETSI Validation Report has no
 // XSLT stylesheets of its own.
 package validationreport
 
@@ -19,19 +19,19 @@ import (
 	"github.com/ryftcore/dss-go/dss/validationreport/jaxb"
 )
 
-// ValidationReportFacade performs marshalling/unmarshalling operations for
+// Facade performs marshalling/unmarshalling operations for
 // an ETSI Validation report.
-type ValidationReportFacade struct{}
+type Facade struct{}
 
 // NewValidationReportFacade creates a new facade. Port of newFacade().
-func NewValidationReportFacade() *ValidationReportFacade {
-	return &ValidationReportFacade{}
+func NewValidationReportFacade() *Facade {
+	return &Facade{}
 }
 
 // Marshal returns the XML representation of validationReport. Port of
 // marshall(T) (schema validation always requested in Java; see the file
 // header for why this port does not perform it).
-func (f *ValidationReportFacade) Marshal(validationReport *jaxb.ValidationReportType) (string, error) {
+func (f *Facade) Marshal(validationReport *jaxb.ValidationReportType) (string, error) {
 	if validationReport == nil {
 		return "", errors.New("JAXBObject is null")
 	}
@@ -44,7 +44,7 @@ func (f *ValidationReportFacade) Marshal(validationReport *jaxb.ValidationReport
 
 // MarshalToWriter marshals validationReport into w. Port of marshall(T,
 // OutputStream).
-func (f *ValidationReportFacade) MarshalToWriter(validationReport *jaxb.ValidationReportType, w io.Writer) error {
+func (f *Facade) MarshalToWriter(validationReport *jaxb.ValidationReportType, w io.Writer) error {
 	if validationReport == nil {
 		return errors.New("JAXBObject is null")
 	}
@@ -61,7 +61,7 @@ func (f *ValidationReportFacade) MarshalToWriter(validationReport *jaxb.Validati
 
 // Unmarshal unmarshals r and returns the ValidationReportType. Port of
 // unmarshall(InputStream).
-func (f *ValidationReportFacade) Unmarshal(r io.Reader) (*jaxb.ValidationReportType, error) {
+func (f *Facade) Unmarshal(r io.Reader) (*jaxb.ValidationReportType, error) {
 	if r == nil {
 		return nil, errors.New("InputStream is null")
 	}
@@ -75,6 +75,6 @@ func (f *ValidationReportFacade) Unmarshal(r io.Reader) (*jaxb.ValidationReportT
 
 // UnmarshalString unmarshals xmlObject and returns the ValidationReportType.
 // Port of unmarshall(String).
-func (f *ValidationReportFacade) UnmarshalString(xmlObject string) (*jaxb.ValidationReportType, error) {
+func (f *Facade) UnmarshalString(xmlObject string) (*jaxb.ValidationReportType, error) {
 	return f.Unmarshal(bytes.NewReader([]byte(xmlObject)))
 }

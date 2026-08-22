@@ -37,8 +37,8 @@ type POENotAfterCARevocationTimeCheck struct {
 }
 
 // NewPOENotAfterCARevocationTimeCheck is the default constructor. Port of
-// POENotAfterCARevocationTimeCheck(I18nProvider, XmlPSV, Collection, Date, POEExtraction, LevelRule).
-func NewPOENotAfterCARevocationTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPSV],
+// POENotAfterCARevocationTimeCheck(Provider, XmlPSV, Collection, Date, POEExtraction, LevelRule).
+func NewPOENotAfterCARevocationTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPSV],
 	revocationData []*diagnostic.CertificateRevocationWrapper, caRevocationTime *time.Time,
 	poeExtraction *POEExtraction, constraint policy.LevelRule) *POENotAfterCARevocationTimeCheck {
 	c := &POENotAfterCARevocationTimeCheck{

@@ -21,11 +21,11 @@ type propertyBundle map[string]string
 // dss-messages_xx.properties locale variants - see MessageTagTest and
 // I18nProviderTest, which rely on java.util.ResourceBundle silently
 // falling back to this same default for every locale), so this is the
-// bundle every I18nProvider resolves to, regardless of locale.
+// bundle every Provider resolves to, regardless of locale.
 var defaultBundle = parseProperties(dssMessagesProperties)
 
 // I18nProvider is the internalization provider. Ports I18nProvider.
-type I18nProvider struct {
+type Provider struct {
 	bundle propertyBundle
 }
 
@@ -35,18 +35,18 @@ type I18nProvider struct {
 // default Locale, and - per the defaultBundle doc comment - the locale
 // makes no difference to bundle resolution in this port, so this is
 // exactly NewI18nProviderForLocale("").
-func NewI18nProvider() *I18nProvider {
+func NewI18nProvider() *Provider {
 	return NewI18nProviderForLocale("")
 }
 
-// NewI18nProviderForLocale returns an instance of I18nProvider for the
+// NewI18nProviderForLocale returns an instance of Provider for the
 // given locale (e.g. "fr", "fr_FR", "de"). Ports I18nProvider(Locale).
 //
 // The locale argument is accepted for API parity with the Java
 // constructor but does not currently affect resolution: see the
 // defaultBundle doc comment.
-func NewI18nProviderForLocale(locale string) *I18nProvider {
-	return &I18nProvider{bundle: defaultBundle}
+func NewI18nProviderForLocale(locale string) *Provider {
+	return &Provider{bundle: defaultBundle}
 }
 
 // GetMessage extracts a message by its key. Ports
@@ -55,7 +55,7 @@ func NewI18nProviderForLocale(locale string) *I18nProvider {
 // Panics with the Java exception's message if messageTag is the empty
 // MessageTag (""), the Go stand-in for Java's null messageTag (a
 // requireNonNull-style check on a value type - see PORTING.md).
-func (p *I18nProvider) GetMessage(messageTag MessageTag, args ...any) string {
+func (p *Provider) GetMessage(messageTag MessageTag, args ...any) string {
 	if messageTag == "" {
 		panic("messageTag cannot be null!")
 	}
@@ -72,7 +72,7 @@ func (p *I18nProvider) GetMessage(messageTag MessageTag, args ...any) string {
 
 // translateArgs allows nested MessageTags. Ports the private
 // getArgs(Object[]) helper.
-func (p *I18nProvider) translateArgs(args []any) []any {
+func (p *Provider) translateArgs(args []any) []any {
 	if args == nil {
 		return nil
 	}

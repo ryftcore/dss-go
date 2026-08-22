@@ -8,8 +8,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// JAdESTimestampParameters holds the parameters to create a JAdES timestamp.
-type JAdESTimestampParameters struct {
+// TimestampParameters holds the parameters to create a JAdES timestamp.
+type TimestampParameters struct {
 	model.TimestampParameters
 
 	// canonicalizationMethod is the canonicalization method to use for timestamp's
@@ -17,41 +17,41 @@ type JAdESTimestampParameters struct {
 	canonicalizationMethod string
 }
 
-var _ model.SerializableTimestampParameters = (*JAdESTimestampParameters)(nil)
+var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
 // NewJAdESTimestampParameters is the empty constructor.
-func NewJAdESTimestampParameters() *JAdESTimestampParameters {
-	return &JAdESTimestampParameters{TimestampParameters: model.NewTimestampParameters()}
+func NewJAdESTimestampParameters() *TimestampParameters {
+	return &TimestampParameters{TimestampParameters: model.NewTimestampParameters()}
 }
 
 // NewJAdESTimestampParametersWithDigestAlgorithm is the default constructor, taking the
 // DigestAlgorithm to use for a message-imprint calculation. Port of
-// JAdESTimestampParameters(DigestAlgorithm).
-func NewJAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *JAdESTimestampParameters {
-	return &JAdESTimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
+// TimestampParameters(DigestAlgorithm).
+func NewJAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+	return &TimestampParameters{TimestampParameters: model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm)}
 }
 
 // CanonicalizationMethod gets the canonicalization algorithm for the timestamp. Port of
 // #getCanonicalizationMethod.
-func (p *JAdESTimestampParameters) CanonicalizationMethod() string {
+func (p *TimestampParameters) CanonicalizationMethod() string {
 	return p.canonicalizationMethod
 }
 
 // SetCanonicalizationMethod sets the canonicalization algorithm for the timestamp. Port of
 // #setCanonicalizationMethod; upstream is not yet implemented and unconditionally panics with
 // the same message (Java throws UnsupportedOperationException).
-func (p *JAdESTimestampParameters) SetCanonicalizationMethod(canonicalizationMethod string) {
+func (p *TimestampParameters) SetCanonicalizationMethod(canonicalizationMethod string) {
 	panic("Canonicalization is not supported in the current version.")
 }
 
 // String ports #toString.
-func (p *JAdESTimestampParameters) String() string {
+func (p *TimestampParameters) String() string {
 	return fmt.Sprintf("JAdESTimestampParameters [canonicalizationMethod='%s'] %s",
 		p.canonicalizationMethod, p.TimestampParameters.String())
 }
 
 // Equals ports #equals.
-func (p *JAdESTimestampParameters) Equals(other *JAdESTimestampParameters) bool {
+func (p *TimestampParameters) Equals(other *TimestampParameters) bool {
 	if p == other {
 		return true
 	}

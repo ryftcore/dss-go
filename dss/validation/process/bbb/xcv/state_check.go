@@ -21,8 +21,8 @@ type StateCheck struct {
 }
 
 // NewStateCheck is the default constructor. Port of
-// StateCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewStateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// StateCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewStateCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *StateCheck {
 	c := &StateCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

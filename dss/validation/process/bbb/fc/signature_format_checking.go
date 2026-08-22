@@ -20,7 +20,7 @@ type SignatureFormatChecking struct {
 }
 
 // NewSignatureFormatChecking is the default constructor.
-func NewSignatureFormatChecking(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+func NewSignatureFormatChecking(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	signature *diagnostic.SignatureWrapper, context enumerations.Context, pol policy.ValidationPolicy) *SignatureFormatChecking {
 	c := &SignatureFormatChecking{}
 	c.InitAbstractSignatureFormatChecking(i18nProvider, diagnosticData, signature, context, pol, c)

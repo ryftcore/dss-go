@@ -13,13 +13,13 @@ import (
 // UserNotice and SpDocSpecification are outside this manifest; assumed to
 // already exist in this package.
 type Policy struct {
-	// id is the Id of the SignaturePolicy.
+	// id is the Id of the Policy.
 	id string
 
 	// qualifier is the qualifier attribute for XAdES Identifier.
 	qualifier enumerations.ObjectIdentifierQualifier
 
-	// description is the SignaturePolicy description.
+	// description is the Policy description.
 	description string
 
 	// documentationReferences is the array of documentation references
@@ -32,13 +32,13 @@ type Policy struct {
 	// digestValue is the computed digest value.
 	digestValue []byte
 
-	// spUri is the SignaturePolicy URI qualifier.
+	// spUri is the Policy URI qualifier.
 	spUri string
 
-	// userNotice is the SignaturePolicy UserNotice qualifier.
+	// userNotice is the Policy UserNotice qualifier.
 	userNotice *UserNotice
 
-	// spDocSpecification is the SignaturePolicy Document Specification
+	// spDocSpecification is the Policy Document Specification
 	// qualifier.
 	spDocSpecification *SpDocSpecification
 

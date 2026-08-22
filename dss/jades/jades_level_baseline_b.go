@@ -46,13 +46,13 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESLevelBaselineB builds a JOSE header according to TS 119-182.
-type JAdESLevelBaselineB struct {
+// LevelBaselineB builds a JOSE header according to TS 119-182.
+type LevelBaselineB struct {
 	// certificateVerifier is the CertificateVerifier to use.
 	certificateVerifier validation.CertificateVerifier
 
 	// parameters holds the signature parameters.
-	parameters *JAdESSignatureParameters
+	parameters *SignatureParameters
 
 	// documentsToSign is the list of documents to sign.
 	documentsToSign []model.DSSDocument
@@ -65,7 +65,7 @@ type JAdESLevelBaselineB struct {
 // NewJAdESLevelBaselineB is the default constructor.
 // Port of JAdESLevelBaselineB(CertificateVerifier, JAdESSignatureParameters, List<DSSDocument>).
 func NewJAdESLevelBaselineB(certificateVerifier validation.CertificateVerifier,
-	parameters *JAdESSignatureParameters, documentsToSign []model.DSSDocument) (*JAdESLevelBaselineB, error) {
+	parameters *SignatureParameters, documentsToSign []model.DSSDocument) (*LevelBaselineB, error) {
 	if certificateVerifier == nil {
 		panic("certificateVerifier must not be null!")
 	}
@@ -77,7 +77,7 @@ func NewJAdESLevelBaselineB(certificateVerifier validation.CertificateVerifier,
 	if utils.IsCollectionEmpty(documentsToSign) {
 		return nil, errors.New("Documents to sign must be provided!")
 	}
-	return &JAdESLevelBaselineB{
+	return &LevelBaselineB{
 		certificateVerifier: certificateVerifier,
 		parameters:          parameters,
 		documentsToSign:     documentsToSign,
@@ -87,7 +87,7 @@ func NewJAdESLevelBaselineB(certificateVerifier validation.CertificateVerifier,
 
 // SignedProperties returns the map representing the signed header of a signature.
 // Port of #getSignedProperties.
-func (b *JAdESLevelBaselineB) SignedProperties() (*jose.Object, error) {
+func (b *LevelBaselineB) SignedProperties() (*jose.Object, error) {
 	// RFC 7515 headers
 	if err := b.IncorporateSignatureAlgorithm(); err != nil {
 		return nil, err
@@ -143,7 +143,7 @@ func (b *JAdESLevelBaselineB) SignedProperties() (*jose.Object, error) {
 
 // IncorporateSignatureAlgorithm incorporates 5.1.2 the alg (X.509 URL) header parameter.
 // Port of the protected #incorporateSignatureAlgorithm.
-func (b *JAdESLevelBaselineB) IncorporateSignatureAlgorithm() error {
+func (b *LevelBaselineB) IncorporateSignatureAlgorithm() error {
 	id := b.parameters.SignatureAlgorithm().JWAID()
 	if utils.IsStringNotEmpty(id) {
 		b.AddHeader(jose.HeaderAlgorithm, id)
@@ -155,7 +155,7 @@ func (b *JAdESLevelBaselineB) IncorporateSignatureAlgorithm() error {
 
 // IncorporateContentType incorporates 5.1.3 the cty (content type) header parameter.
 // Port of the protected #incorporateContentType.
-func (b *JAdESLevelBaselineB) IncorporateContentType() error {
+func (b *LevelBaselineB) IncorporateContentType() error {
 	if enumerations.SignaturePackagingDetached == b.parameters.SignaturePackaging() &&
 		b.parameters.ContentType() == "" {
 		// SHOULD NOT be used for detached signatures (see EN 119-182 ch.5.1.3)
@@ -179,7 +179,7 @@ func (b *JAdESLevelBaselineB) IncorporateContentType() error {
 }
 
 // rfc7515ConformantMimeTypeString ports the private getRFC7515ConformantMimeTypeString.
-func (b *JAdESLevelBaselineB) rfc7515ConformantMimeTypeString(mimeTypeString string) (string, error) {
+func (b *LevelBaselineB) rfc7515ConformantMimeTypeString(mimeTypeString string) (string, error) {
 	/*
 	 * RFC 7515 :
 	 * To keep messages compact in common situations, it is RECOMMENDED that
@@ -201,7 +201,7 @@ func (b *JAdESLevelBaselineB) rfc7515ConformantMimeTypeString(mimeTypeString str
 
 // IncorporateKeyIdentifier incorporates 5.1.4 the kid (key identifier) header parameter.
 // Port of the protected #incorporateKeyIdentifier.
-func (b *JAdESLevelBaselineB) IncorporateKeyIdentifier() {
+func (b *LevelBaselineB) IncorporateKeyIdentifier() {
 	if b.parameters.IsIncludeKeyIdentifier() {
 		kid := b.parameters.KeyIdentifier()
 		if kid == "" && b.parameters.SigningCertificate() != nil {
@@ -216,7 +216,7 @@ func (b *JAdESLevelBaselineB) IncorporateKeyIdentifier() {
 
 // IncorporateSigningCertificateUri incorporates 5.1.5 the x5u (X.509 URL) header parameter.
 // Port of the protected #incorporateSigningCertificateUri.
-func (b *JAdESLevelBaselineB) IncorporateSigningCertificateUri() {
+func (b *LevelBaselineB) IncorporateSigningCertificateUri() {
 	x509Url := b.parameters.X509Url()
 	if utils.IsStringNotEmpty(x509Url) {
 		b.AddHeader(jose.HeaderX509URL, x509Url)
@@ -226,7 +226,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificateUri() {
 // IncorporateSigningCertificate incorporates 5.1.7 the x5t#S256 (X.509 Certificate SHA-256
 // Thumbprint) header parameter or 5.2.2 the x5t#o (X509 certificate digest) header parameter.
 // Port of the protected #incorporateSigningCertificate.
-func (b *JAdESLevelBaselineB) IncorporateSigningCertificate() error {
+func (b *LevelBaselineB) IncorporateSigningCertificate() error {
 	signingCertificate := b.parameters.SigningCertificate()
 	if signingCertificate == nil {
 		return nil
@@ -249,7 +249,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificate() error {
 // involved, so it is spelled out here over CertificateToken#getDigest(SHA256), which digests
 // exactly that DER encoding. Java's returned error channel: getDigest can fail, which Java's
 // version cannot express, so the signature carries an error.
-func (b *JAdESLevelBaselineB) IncorporateSigningCertificateSha256Thumbprint(
+func (b *LevelBaselineB) IncorporateSigningCertificateSha256Thumbprint(
 	signingCertificate *model.CertificateToken) error {
 	thumbprint, err := signingCertificate.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
@@ -262,7 +262,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificateSha256Thumbprint(
 
 // IncorporateCertificateChain incorporates 5.1.8 the x5c (X.509 Certificate Chain) header
 // parameter. Port of the protected #incorporateCertificateChain.
-func (b *JAdESLevelBaselineB) IncorporateCertificateChain() error {
+func (b *LevelBaselineB) IncorporateCertificateChain() error {
 	if !b.parameters.IsIncludeCertificateChain() || b.parameters.SigningCertificate() == nil {
 		return nil
 	}
@@ -286,7 +286,7 @@ func (b *JAdESLevelBaselineB) IncorporateCertificateChain() error {
 
 // IncorporateCritical incorporates 5.1.9 the crit (critical) header parameter.
 // Port of the protected #incorporateCritical.
-func (b *JAdESLevelBaselineB) IncorporateCritical() {
+func (b *LevelBaselineB) IncorporateCritical() {
 	/*
 	 * ETSI TS 119 182-1, 5.1.9	The crit (critical) header parameter
 	 *
@@ -307,7 +307,7 @@ func (b *JAdESLevelBaselineB) IncorporateCritical() {
 
 // IncorporateType incorporates RFC 7515 : 4.1.9. "typ" (Type) Header Parameter.
 // Port of the protected #incorporateType.
-func (b *JAdESLevelBaselineB) IncorporateType() error {
+func (b *LevelBaselineB) IncorporateType() error {
 	if !b.parameters.IsIncludeSignatureType() {
 		return nil
 	}
@@ -348,7 +348,7 @@ func (b *JAdESLevelBaselineB) IncorporateType() error {
 
 // IncorporateB64 incorporates the RFC 7797 Unencoded Payload Option.
 // Port of the protected #incorporateB64.
-func (b *JAdESLevelBaselineB) IncorporateB64() error {
+func (b *LevelBaselineB) IncorporateB64() error {
 	// incorporate only with FALSE value
 	if !b.parameters.IsBase64UrlEncodedPayload() {
 		if err := b.assertPayloadEncodingValid(); err != nil {
@@ -360,7 +360,7 @@ func (b *JAdESLevelBaselineB) IncorporateB64() error {
 }
 
 // assertPayloadEncodingValid ports the private assertPayloadEncodingValid.
-func (b *JAdESLevelBaselineB) assertPayloadEncodingValid() error {
+func (b *LevelBaselineB) assertPayloadEncodingValid() error {
 	payloadBytes, err := b.PayloadBytes()
 	if err != nil {
 		return err
@@ -396,7 +396,7 @@ func (b *JAdESLevelBaselineB) assertPayloadEncodingValid() error {
 
 // IncorporateSigningTime incorporates 5.1.11 iat or 5.2.1 sigT (claimed signing time) header
 // parameter. Port of the protected #incorporateSigningTime.
-func (b *JAdESLevelBaselineB) IncorporateSigningTime() error {
+func (b *LevelBaselineB) IncorporateSigningTime() error {
 	signingDate := b.parameters.BLevel().SigningDate()
 	switch b.parameters.JadesSigningTimeType() {
 	case JAdESSigningTimeTypeIAT:
@@ -417,7 +417,7 @@ func (b *JAdESLevelBaselineB) IncorporateSigningTime() error {
 // IncorporateSigningCertificateOtherDigestReference incorporates 5.2.2.2 the x5t#o (X509
 // certificate digest) header parameter.
 // Port of the protected #incorporateSigningCertificateOtherDigestReference.
-func (b *JAdESLevelBaselineB) IncorporateSigningCertificateOtherDigestReference(
+func (b *LevelBaselineB) IncorporateSigningCertificateOtherDigestReference(
 	signingCertificate *model.CertificateToken, digestAlgorithm enumerations.DigestAlgorithm) error {
 	digestValue, err := signingCertificate.Digest(digestAlgorithm)
 	if err != nil {
@@ -434,13 +434,13 @@ func (b *JAdESLevelBaselineB) IncorporateSigningCertificateOtherDigestReference(
 
 // IncorporateX509CertificateDigests incorporates 5.2.2.3 the sigX5ts (X509 certificates digests).
 // Port of the protected #incorporateX509CertificateDigests.
-func (b *JAdESLevelBaselineB) IncorporateX509CertificateDigests() {
+func (b *LevelBaselineB) IncorporateX509CertificateDigests() {
 	// addition of multiple signing certificate references are not supported in DSS
 }
 
 // IncorporateSignerCommitments incorporates 5.2.3 the srCms (signer commitments) header
 // parameter. Port of the protected #incorporateSignerCommitments.
-func (b *JAdESLevelBaselineB) IncorporateSignerCommitments() error {
+func (b *LevelBaselineB) IncorporateSignerCommitments() error {
 	if utils.IsCollectionEmpty(b.parameters.BLevel().CommitmentTypeIndications()) {
 		return nil
 	}
@@ -479,7 +479,7 @@ func (b *JAdESLevelBaselineB) IncorporateSignerCommitments() error {
 // commitmentQualifiers ports the private getCommitmentQualifiers. Java returns
 // List<JsonObject>, which the caller stores as a plain List value (not a JSONArray); the []any
 // used here serializes identically.
-func (b *JAdESLevelBaselineB) commitmentQualifiers(
+func (b *LevelBaselineB) commitmentQualifiers(
 	commitmentType enumerations.CommitmentType) ([]any, error) {
 	commQuals := make([]any, 0)
 	commonCommitmentType, ok := commitmentType.(*model.CommonCommitmentType)
@@ -531,7 +531,7 @@ func (b *JAdESLevelBaselineB) commitmentQualifiers(
 
 // IncorporateSignatureProductionPlace incorporates 5.2.4 the sigPl (signature production place)
 // header parameter. Port of the protected #incorporateSignatureProductionPlace.
-func (b *JAdESLevelBaselineB) IncorporateSignatureProductionPlace() {
+func (b *LevelBaselineB) IncorporateSignatureProductionPlace() {
 	signerProductionPlace := b.parameters.BLevel().SignerLocation()
 	if signerProductionPlace == nil || signerProductionPlace.IsEmpty() {
 		return
@@ -572,7 +572,7 @@ func (b *JAdESLevelBaselineB) IncorporateSignatureProductionPlace() {
 
 // IncorporateSignerAttributes incorporates 5.2.5 the srAts (signer attributes) header parameter.
 // Port of the protected #incorporateSignerAttributes.
-func (b *JAdESLevelBaselineB) IncorporateSignerAttributes() {
+func (b *LevelBaselineB) IncorporateSignerAttributes() {
 	srAtsParams := jose.NewObject()
 
 	// TODO : certified are not supported
@@ -595,7 +595,7 @@ func (b *JAdESLevelBaselineB) IncorporateSignerAttributes() {
 }
 
 // qArray ports the private getQArray.
-func (b *JAdESLevelBaselineB) qArray(qArrayVals []string) []any {
+func (b *LevelBaselineB) qArray(qArrayVals []string) []any {
 	qArrays := make([]any, 0)
 
 	/*
@@ -657,7 +657,7 @@ func (b *JAdESLevelBaselineB) qArray(qArrayVals []string) []any {
 
 // IncorporateContentTimestamps incorporates 5.2.6 the adoTst (signed data time-stamp) header
 // parameter. Port of the protected #incorporateContentTimestamps.
-func (b *JAdESLevelBaselineB) IncorporateContentTimestamps() error {
+func (b *LevelBaselineB) IncorporateContentTimestamps() error {
 	if utils.IsCollectionEmpty(b.parameters.ContentTimestamps()) {
 		return nil
 	}
@@ -687,7 +687,7 @@ func jadesLevelBaselineBToTimestampBinaries(
 
 // IncorporateSignaturePolicy incorporates 5.2.7 the sigPId (signature policy identifier) header
 // parameter. Port of the protected #incorporateSignaturePolicy.
-func (b *JAdESLevelBaselineB) IncorporateSignaturePolicy() error {
+func (b *LevelBaselineB) IncorporateSignaturePolicy() error {
 	signaturePolicy := b.parameters.BLevel().SignaturePolicy()
 	if signaturePolicy == nil || signaturePolicy.IsEmpty() {
 		return nil
@@ -805,7 +805,7 @@ func jadesLevelBaselineBSignaturePolicyQualifiers(signaturePolicy *model.Policy)
 
 // IncorporateDetachedContents incorporates 5.2.8 the sigD header parameter.
 // Port of the protected #incorporateDetachedContents.
-func (b *JAdESLevelBaselineB) IncorporateDetachedContents() error {
+func (b *LevelBaselineB) IncorporateDetachedContents() error {
 	if enumerations.SignaturePackagingDetached != b.parameters.SignaturePackaging() {
 		return nil
 	}
@@ -843,7 +843,7 @@ func (b *JAdESLevelBaselineB) IncorporateDetachedContents() error {
 }
 
 // assertDetachedContentValid ports the private assertDetachedContentValid.
-func (b *JAdESLevelBaselineB) assertDetachedContentValid() error {
+func (b *LevelBaselineB) assertDetachedContentValid() error {
 	sigDMechanism := b.parameters.SigDMechanism()
 	if sigDMechanism == "" {
 		return errors.New("The SigDMechanism is not defined for a detached signature! " +
@@ -876,7 +876,7 @@ func (b *JAdESLevelBaselineB) assertDetachedContentValid() error {
 }
 
 // assertHttpHeadersConfigurationValid ports the private assertHttpHeadersConfigurationValid.
-func (b *JAdESLevelBaselineB) assertHttpHeadersConfigurationValid() error {
+func (b *LevelBaselineB) assertHttpHeadersConfigurationValid() error {
 	/*
 	 * 5.1.10 The b64 header parameter
 	 *
@@ -894,7 +894,7 @@ func (b *JAdESLevelBaselineB) assertHttpHeadersConfigurationValid() error {
 }
 
 // sigDForHttpHeadersMechanism ports the private getSigDForHttpHeadersMechanism.
-func (b *JAdESLevelBaselineB) sigDForHttpHeadersMechanism(detachedContents []model.DSSDocument) *jose.Object {
+func (b *LevelBaselineB) sigDForHttpHeadersMechanism(detachedContents []model.DSSDocument) *jose.Object {
 	sigDParams := jose.NewObject()
 
 	sigDParams.Put(JAdESHeaderParameterNamesMId, enumerations.SigDMechanismHTTPHeaders.JAdESUri())
@@ -904,7 +904,7 @@ func (b *JAdESLevelBaselineB) sigDForHttpHeadersMechanism(detachedContents []mod
 }
 
 // sigDForObjectIdByUriMechanism ports the private getSigDForObjectIdByUriMechanism.
-func (b *JAdESLevelBaselineB) sigDForObjectIdByUriMechanism(
+func (b *LevelBaselineB) sigDForObjectIdByUriMechanism(
 	detachedContents []model.DSSDocument) (*jose.Object, error) {
 	sigDParams := jose.NewObject()
 
@@ -921,7 +921,7 @@ func (b *JAdESLevelBaselineB) sigDForObjectIdByUriMechanism(
 }
 
 // sigDForObjectIdByUriHashMechanism ports the private getSigDForObjectIdByUriHashMechanism.
-func (b *JAdESLevelBaselineB) sigDForObjectIdByUriHashMechanism(
+func (b *LevelBaselineB) sigDForObjectIdByUriHashMechanism(
 	detachedContents []model.DSSDocument) (*jose.Object, error) {
 	sigDParams := jose.NewObject()
 
@@ -955,7 +955,7 @@ func jadesLevelBaselineBSignedDataReferences(detachedContents []model.DSSDocumen
 }
 
 // referenceDigestAlgorithmOrDefault ports the private getReferenceDigestAlgorithmOrDefault.
-func (b *JAdESLevelBaselineB) referenceDigestAlgorithmOrDefault() enumerations.DigestAlgorithm {
+func (b *LevelBaselineB) referenceDigestAlgorithmOrDefault() enumerations.DigestAlgorithm {
 	if b.parameters.ReferenceDigestAlgorithm() != "" {
 		return b.parameters.ReferenceDigestAlgorithm()
 	}
@@ -963,7 +963,7 @@ func (b *JAdESLevelBaselineB) referenceDigestAlgorithmOrDefault() enumerations.D
 }
 
 // signedDataDigests ports the private getSignedDataDigests.
-func (b *JAdESLevelBaselineB) signedDataDigests(detachedContents []model.DSSDocument,
+func (b *LevelBaselineB) signedDataDigests(detachedContents []model.DSSDocument,
 	digestAlgorithm enumerations.DigestAlgorithm) ([]any, error) {
 	/*
 	 * The hashV member shall be a non-empty array of strings. Each element of the
@@ -1006,7 +1006,7 @@ func (b *JAdESLevelBaselineB) signedDataDigests(detachedContents []model.DSSDocu
 
 // signedDataMimeTypesIfPresent returns a 'ctys' array for the given documents.
 // Port of the private getSignedDataMimeTypesIfPresent.
-func (b *JAdESLevelBaselineB) signedDataMimeTypesIfPresent(
+func (b *LevelBaselineB) signedDataMimeTypesIfPresent(
 	detachedContents []model.DSSDocument) ([]any, error) {
 	mimeTypes := make([]any, 0, len(detachedContents))
 	for _, document := range detachedContents {
@@ -1063,7 +1063,7 @@ func jadesLevelBaselineBHttpHeaderNames(detachedContents []model.DSSDocument) []
 
 // incorporateExpirationTime incorporates RFC 7519 : 4.1.4. "exp" (Expiration Time) Claim.
 // Port of the private incorporateExpirationTime.
-func (b *JAdESLevelBaselineB) incorporateExpirationTime() {
+func (b *LevelBaselineB) incorporateExpirationTime() {
 	if b.parameters.ExpirationTime() != nil {
 		expirationTimeInSeconds := spi.DSSUtilsTimeValueInSeconds(b.parameters.ExpirationTime().UnixMilli())
 		b.AddHeader(JWTClaimNamesExp, expirationTimeInSeconds)
@@ -1072,13 +1072,13 @@ func (b *JAdESLevelBaselineB) incorporateExpirationTime() {
 
 // AddHeader adds a new header to the signedProperties map.
 // Port of the protected #addHeader.
-func (b *JAdESLevelBaselineB) AddHeader(headerName string, value any) {
+func (b *LevelBaselineB) AddHeader(headerName string, value any) {
 	b.signedProperties.Put(headerName, value)
 }
 
 // PayloadBytes returns the JWS payload for the given signature parameters.
 // Port of #getPayloadBytes.
-func (b *JAdESLevelBaselineB) PayloadBytes() ([]byte, error) {
+func (b *LevelBaselineB) PayloadBytes() ([]byte, error) {
 	if enumerations.SignaturePackagingDetached != b.parameters.SignaturePackaging() ||
 		enumerations.SigDMechanismNoSigD == b.parameters.SigDMechanism() {
 		return b.incorporatedPayload()
@@ -1102,18 +1102,18 @@ func (b *JAdESLevelBaselineB) PayloadBytes() ([]byte, error) {
 }
 
 // incorporatedPayload ports the private getIncorporatedPayload.
-func (b *JAdESLevelBaselineB) incorporatedPayload() ([]byte, error) {
+func (b *LevelBaselineB) incorporatedPayload() ([]byte, error) {
 	return DSSJsonUtilsDocumentOctets(b.documentsToSign[0], b.parameters.IsBase64UrlEncodedPayload())
 }
 
 // payloadForHttpHeadersMechanism ports the private getPayloadForHttpHeadersMechanism.
-func (b *JAdESLevelBaselineB) payloadForHttpHeadersMechanism() ([]byte, error) {
+func (b *LevelBaselineB) payloadForHttpHeadersMechanism() ([]byte, error) {
 	httpHeadersPayloadBuilder := NewHttpHeadersPayloadBuilder(b.documentsToSign, false)
 	return httpHeadersPayloadBuilder.Build()
 }
 
 // payloadForObjectIdByUriMechanism ports the private getPayloadForObjectIdByUriMechanism.
-func (b *JAdESLevelBaselineB) payloadForObjectIdByUriMechanism() ([]byte, error) {
+func (b *LevelBaselineB) payloadForObjectIdByUriMechanism() ([]byte, error) {
 	// NOTE: base64url encoding is processed by JWS
 	return DSSJsonUtilsConcatenateDSSDocuments(b.documentsToSign, b.parameters.IsBase64UrlEncodedPayload())
 }

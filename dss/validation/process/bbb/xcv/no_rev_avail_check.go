@@ -20,8 +20,8 @@ type NoRevAvailCheck struct {
 }
 
 // NewNoRevAvailCheck is the default constructor. Port of
-// NoRevAvailCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewNoRevAvailCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// NoRevAvailCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewNoRevAvailCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *NoRevAvailCheck {
 	c := &NoRevAvailCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

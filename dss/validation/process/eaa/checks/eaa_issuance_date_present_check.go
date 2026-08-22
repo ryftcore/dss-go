@@ -20,7 +20,7 @@ type EAAIssuanceDatePresentCheck struct {
 }
 
 // NewEAAIssuanceDatePresentCheck is the default constructor.
-func NewEAAIssuanceDatePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAIssuanceDatePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAAIssuanceDatePresentCheck {
 	c := &EAAIssuanceDatePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -1,11 +1,11 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/SignatureValidationAlerter.java (DSS 6.5.RC1).
 //
-// This type implements the already-landed ValidationAlerter interface (spi/validation/validation_alerter.go),
+// This type implements the already-landed Alerter interface (spi/validation/validation_alerter.go),
 // whose AssertXxx methods return no error (matching Java's void signature literally). Java's
 // underlying alert.alert(status) call is itself void but may throw an unchecked
 // AlertException (e.g. via ExceptionOnStatusAlert); the Go alert.Alert(T) port returns an error
 // instead of throwing (see alert.Alert's own doc comment: "the returned error carries what Java
-// would throw as an AlertException"). Since ValidationAlerter's fixed signature here has no
+// would throw as an AlertException"). Since Alerter's fixed signature here has no
 // error channel to propagate that through, a non-nil error from Alert(status) is repanicked,
 // reproducing Java's unchecked-exception propagation out of a void method.
 //
@@ -136,7 +136,7 @@ func (a *SignatureValidationAlerter) AssertAllSignatureCertificateHaveFreshRevoc
 	}
 }
 
-// AssertAllSignaturesNotExpired verifies whether all signatures added to the ValidationContext
+// AssertAllSignaturesNotExpired verifies whether all signatures added to the Context
 // are not yet expired.
 func (a *SignatureValidationAlerter) AssertAllSignaturesNotExpired() {
 	alertOnExpiredCertificate := a.validationContext.getCertificateVerifier().AlertOnExpiredCertificate()
@@ -165,7 +165,7 @@ func (a *SignatureValidationAlerter) AssertCertificateNotExpired(certificateToke
 	}
 }
 
-// AssertAllSignaturesAreYetValid verifies whether all signatures added to the ValidationContext
+// AssertAllSignaturesAreYetValid verifies whether all signatures added to the Context
 // have been produced with yet valid certificates.
 func (a *SignatureValidationAlerter) AssertAllSignaturesAreYetValid() {
 	alertOnNotYetValidCertificate := a.validationContext.getCertificateVerifier().AlertOnNotYetValidCertificate()
@@ -233,5 +233,5 @@ func (a *SignatureValidationAlerter) alert(statusAlert alert.StatusAlert, status
 	}
 }
 
-// compile-time assertion: a SignatureValidationAlerter is a ValidationAlerter.
-var _ ValidationAlerter = (*SignatureValidationAlerter)(nil)
+// compile-time assertion: a SignatureValidationAlerter is a Alerter.
+var _ Alerter = (*SignatureValidationAlerter)(nil)

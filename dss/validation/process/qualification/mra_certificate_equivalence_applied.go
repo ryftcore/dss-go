@@ -22,8 +22,8 @@ type MRACertificateEquivalenceApplied[T any] struct {
 }
 
 // NewMRACertificateEquivalenceApplied is the default constructor. Port of
-// MRACertificateEquivalenceApplied(I18nProvider, T, CertificateWrapper, LevelRule).
-func NewMRACertificateEquivalenceApplied[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// MRACertificateEquivalenceApplied(Provider, T, CertificateWrapper, LevelRule).
+func NewMRACertificateEquivalenceApplied[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificateWrapper *diagnostic.CertificateWrapper, constraint policy.LevelRule) *MRACertificateEquivalenceApplied[T] {
 	c := &MRACertificateEquivalenceApplied[T]{
 		ChainItemBase:      process.NewChainItemBase(i18nProvider, result, constraint),

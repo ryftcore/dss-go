@@ -35,7 +35,7 @@
 //  5. DIRECTORY ENTRIES. archive/zip's Writer forces a name ending in "/" to STORED with zero
 //     sizes; java.util.zip.ZipOutputStream keeps whatever method the entry asked for, emitting a
 //     2-byte empty deflate stream for a DEFLATED one. Across the 188-container fixture corpus this
-//     changes only the framing of content-free entries (ASiCContent.folders), which no manifest
+//     changes only the framing of content-free entries (Content.folders), which no manifest
 //     ever digest-references, and preserving it would require pre-compressing every entry to learn
 //     its compressed size before the local header is written.
 package asic
@@ -122,7 +122,7 @@ func (z *ZipUtils) CreateZipArchiveFromEntriesAt(containerEntries []model.DSSDoc
 
 // CreateZipArchive creates a ZIP-Archive with the given asicContent, indicating the current
 // creation time. Port of createZipArchive(ASiCContent).
-func (z *ZipUtils) CreateZipArchive(asicContent *ASiCContent) (model.DSSDocument, error) {
+func (z *ZipUtils) CreateZipArchive(asicContent *Content) (model.DSSDocument, error) {
 	return z.CreateZipArchiveAt(asicContent, time.Now())
 }
 
@@ -131,7 +131,7 @@ func (z *ZipUtils) CreateZipArchive(asicContent *ASiCContent) (model.DSSDocument
 // creationTime is optional: see CreateZipArchiveFromEntriesAt.
 //
 // Port of createZipArchive(ASiCContent, Date).
-func (z *ZipUtils) CreateZipArchiveAt(asicContent *ASiCContent, creationTime time.Time) (model.DSSDocument, error) {
+func (z *ZipUtils) CreateZipArchiveAt(asicContent *Content, creationTime time.Time) (model.DSSDocument, error) {
 	return z.CreateZipArchiveFromEntriesAt(asicContent.AllDocuments(), creationTime, asicContent.ZipComment())
 }
 

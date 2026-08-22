@@ -3,20 +3,20 @@ package xades
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// XAdESSignatureProfile is a XAdES signature creation profile.
+// SignatureProfile is a XAdES signature creation profile.
 //
 // Java's two signDocument overloads declare no checked exception; both landed implementers
-// (XAdESLevelBaselineB.SignDocument/SignDocuments, xades_level_baseline_b.go) return a Go error
+// (LevelBaselineB.SignDocument/SignDocuments, xades_level_baseline_b.go) return a Go error
 // alongside the document, so the interface follows suit per PORTING.md's unchecked-exception
 // convention.
-type XAdESSignatureProfile interface {
+type SignatureProfile interface {
 	// SignDocument creates a signature of the defined profile for signing a document. Ports
-	// signDocument(DSSDocument, XAdESSignatureParameters, byte[]).
-	SignDocument(toSignDocument model.DSSDocument, parameters *XAdESSignatureParameters,
+	// signDocument(DSSDocument, SignatureParameters, byte[]).
+	SignDocument(toSignDocument model.DSSDocument, parameters *SignatureParameters,
 		signatureValue []byte) (model.DSSDocument, error)
 
 	// SignDocuments creates a signature of the defined profile for signing a list of documents.
 	// Ports signDocument(List<DSSDocument>, XAdESSignatureParameters, byte[]).
-	SignDocuments(toSignDocuments []model.DSSDocument, parameters *XAdESSignatureParameters,
+	SignDocuments(toSignDocuments []model.DSSDocument, parameters *SignatureParameters,
 		signatureValue []byte) (model.DSSDocument, error)
 }

@@ -40,9 +40,9 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV1 extracts a CertificateRef from a
+// CertificateRefExtractionUtilsCreateCertificateRefFromV1 extracts a CertificateRef from a
 // V1 certRefElement. Port of the public static createCertificateRefFromV1(Element, XAdESPath).
-func XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV1(certRefElement *xmldom.Node, xadesPaths definition.XAdESPath) *spi.CertificateRef {
+func CertificateRefExtractionUtilsCreateCertificateRefFromV1(certRefElement *xmldom.Node, xadesPaths definition.XAdESPath) *spi.CertificateRef {
 	if certRefElement == nil {
 		return nil
 	}
@@ -57,9 +57,9 @@ func XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV1(certRefElement
 	return certRef
 }
 
-// XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV2 extracts a CertificateRef from a
+// CertificateRefExtractionUtilsCreateCertificateRefFromV2 extracts a CertificateRef from a
 // V2 certRefElement. Port of the public static createCertificateRefFromV2(Element, XAdESPath).
-func XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV2(certRefElement *xmldom.Node, xadesPaths definition.XAdESPath) *spi.CertificateRef {
+func CertificateRefExtractionUtilsCreateCertificateRefFromV2(certRefElement *xmldom.Node, xadesPaths definition.XAdESPath) *spi.CertificateRef {
 	if certRefElement == nil {
 		return nil
 	}

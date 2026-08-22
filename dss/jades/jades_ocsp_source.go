@@ -10,24 +10,24 @@ import (
 )
 
 // JAdESOCSPSource extracts and stores OCSPs from a JAdES signature. Port of the class
-// JAdESOCSPSource, extending spi.OfflineOCSPSourceBase.
-type JAdESOCSPSource struct {
+// OCSPSource, extending spi.OfflineOCSPSourceBase.
+type OCSPSource struct {
 	spi.OfflineOCSPSourceBase
 
 	// etsiUHeader represents the unsigned 'etsiU' header. Port of the private transient final
-	// JAdESEtsiUHeader etsiUHeader field.
-	etsiUHeader *JAdESEtsiUHeader
+	// EtsiUHeader etsiUHeader field.
+	etsiUHeader *EtsiUHeader
 }
 
 // NewJAdESOCSPSource is the default constructor. Port of the public
-// JAdESOCSPSource(JAdESEtsiUHeader) constructor.
+// OCSPSource(EtsiUHeader) constructor.
 //
 // Panics with the Java message when etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESOCSPSource(etsiUHeader *JAdESEtsiUHeader) *JAdESOCSPSource {
+func NewJAdESOCSPSource(etsiUHeader *EtsiUHeader) *OCSPSource {
 	if etsiUHeader == nil {
 		panic("etsiUHeader cannot be null")
 	}
-	s := &JAdESOCSPSource{
+	s := &OCSPSource{
 		OfflineOCSPSourceBase: spi.NewOfflineOCSPSourceBase(),
 		etsiUHeader:           etsiUHeader,
 	}
@@ -41,7 +41,7 @@ func NewJAdESOCSPSource(etsiUHeader *JAdESEtsiUHeader) *JAdESOCSPSource {
 	return s
 }
 
-func (s *JAdESOCSPSource) extractEtsiU() {
+func (s *OCSPSource) extractEtsiU() {
 	if !s.etsiUHeader.IsExist() {
 		return
 	}
@@ -57,29 +57,29 @@ func (s *JAdESOCSPSource) extractEtsiU() {
 	}
 }
 
-func (s *JAdESOCSPSource) extractRevocationValues(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRVals == attribute.HeaderName() {
 		s.extractOCSPValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRVals),
 			enumerations.RevocationOriginRevocationValues)
 	}
 }
 
-func (s *JAdESOCSPSource) extractAttributeRevocationValues(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractAttributeRevocationValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArVals == attribute.HeaderName() {
 		s.extractOCSPValues(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArVals),
 			enumerations.RevocationOriginAttributeRevocationValues)
 	}
 }
 
-func (s *JAdESOCSPSource) extractTimestampValidationData(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractTimestampValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesTstVD, enumerations.RevocationOriginTimestampValidationData)
 }
 
-func (s *JAdESOCSPSource) extractAnyValidationData(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractAnyValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesAnyValData, enumerations.RevocationOriginAnyValidationData)
 }
 
-func (s *JAdESOCSPSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.RevocationOrigin) {
 	if headerName == attribute.HeaderName() {
 		tstVd := DSSJsonUtilsToMap(attribute.Value(), headerName)
 		if tstVd.Size() != 0 {
@@ -91,21 +91,21 @@ func (s *JAdESOCSPSource) extractValidationData(attribute *EtsiUComponent, heade
 	}
 }
 
-func (s *JAdESOCSPSource) extractCompleteRevocationRefs(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractCompleteRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesRRefs == attribute.HeaderName() {
 		s.extractOCSPReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesRRefs),
 			enumerations.RevocationRefOriginCompleteRevocationRefs)
 	}
 }
 
-func (s *JAdESOCSPSource) extractAttributeRevocationRefs(attribute *EtsiUComponent) {
+func (s *OCSPSource) extractAttributeRevocationRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesArRefs == attribute.HeaderName() {
 		s.extractOCSPReferences(DSSJsonUtilsToMap(attribute.Value(), JAdESHeaderParameterNamesArRefs),
 			enumerations.RevocationRefOriginAttributeRevocationRefs)
 	}
 }
 
-func (s *JAdESOCSPSource) extractOCSPValues(rVals *jose.Object, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) extractOCSPValues(rVals *jose.Object, origin enumerations.RevocationOrigin) {
 	ocspVals := DSSJsonUtilsGetAsList(rVals, JAdESHeaderParameterNamesOcspVals)
 	for _, item := range ocspVals {
 		pkiOb := DSSJsonUtilsToMap(item, JAdESHeaderParameterNamesPkiOb)
@@ -113,7 +113,7 @@ func (s *JAdESOCSPSource) extractOCSPValues(rVals *jose.Object, origin enumerati
 	}
 }
 
-func (s *JAdESOCSPSource) extractOCSPFromPkiOb(pkiOb *jose.Object, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) extractOCSPFromPkiOb(pkiOb *jose.Object, origin enumerations.RevocationOrigin) {
 	if pkiOb.Size() != 0 {
 		encoding := DSSJsonUtilsGetAsString(pkiOb, JAdESHeaderParameterNamesEncoding)
 		if utils.IsStringEmpty(encoding) || utils.AreStringsEqual(enumerations.PKIEncodingDER.URI(), encoding) {
@@ -127,7 +127,7 @@ func (s *JAdESOCSPSource) extractOCSPFromPkiOb(pkiOb *jose.Object, origin enumer
 	}
 }
 
-func (s *JAdESOCSPSource) add(ocspValueDerB64 string, origin enumerations.RevocationOrigin) {
+func (s *OCSPSource) add(ocspValueDerB64 string, origin enumerations.RevocationOrigin) {
 	basicOCSPResp, err := spi.DSSRevocationUtilsLoadOCSPBase64Encoded(ocspValueDerB64)
 	if err != nil {
 		// Upstream logs "Unable to extract OCSP from '{}'".
@@ -141,12 +141,12 @@ func (s *JAdESOCSPSource) add(ocspValueDerB64 string, origin enumerations.Revoca
 	s.AddBinary(ocspResponseBinary, origin)
 }
 
-func (s *JAdESOCSPSource) extractOCSPReferences(rRefs *jose.Object, origin enumerations.RevocationRefOrigin) {
+func (s *OCSPSource) extractOCSPReferences(rRefs *jose.Object, origin enumerations.RevocationRefOrigin) {
 	ocspRefs := DSSJsonUtilsGetAsList(rRefs, JAdESHeaderParameterNamesOcspRefs)
 	for _, item := range ocspRefs {
 		ocspRefMap := DSSJsonUtilsToMapValue(item)
 		if ocspRefMap.Size() != 0 {
-			ocspRef := JAdESRevocationRefExtractionUtilsCreateOCSPRef(ocspRefMap)
+			ocspRef := RevocationRefExtractionUtilsCreateOCSPRef(ocspRefMap)
 			if ocspRef != nil {
 				s.AddRevocationReference(ocspRef, origin)
 			}

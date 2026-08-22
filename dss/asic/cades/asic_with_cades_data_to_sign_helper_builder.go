@@ -16,14 +16,14 @@ import (
 type ASiCWithCAdESDataToSignHelperBuilderOverrides interface {
 	// GetManifestBuilder returns an AbstractASiCManifestBuilder to be used for a
 	// signed/timestamped manifest creation. Port of the protected abstract
-	// getManifestBuilder(ASiCContent, ASiCWithCAdESCommonParameters).
+	// getManifestBuilder(Content, ASiCWithCAdESCommonParameters).
 	//
 	// Java's covariant overrides narrow the return type to ASiCEWithCAdESManifestBuilder; in Go
 	// the subclasses hand back the *asic.AbstractASiCManifestBuilder their concrete builder
 	// embeds, which already carries the concrete builder as its registered overrides - so
 	// Build() on it dispatches to the concrete getSigReferenceMimeType()/getManifestFilename()
 	// exactly as Java does.
-	GetManifestBuilder(asicContent *asic.ASiCContent, parameters ASiCWithCAdESCommonParameters) *asic.AbstractASiCManifestBuilder
+	GetManifestBuilder(asicContent *asic.Content, parameters ASiCWithCAdESCommonParameters) *asic.AbstractASiCManifestBuilder
 }
 
 // ASiCWithCAdESDataToSignHelperBuilder builds a relevant GetDataToSignASiCWithCAdESHelper for
@@ -61,10 +61,10 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) requireOverrides() ASiCWithCAdESD
 }
 
 // Build creates a GetDataToSignASiCWithCAdESHelper from an ASiCContent. Ports
-// build(ASiCContent, ASiCWithCAdESCommonParameters).
-func (b *ASiCWithCAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCContent,
+// build(Content, ASiCWithCAdESCommonParameters).
+func (b *ASiCWithCAdESDataToSignHelperBuilder) Build(asicContent *asic.Content,
 	parameters ASiCWithCAdESCommonParameters) GetDataToSignASiCWithCAdESHelper {
-	asicContent, err := asic.ASiCUtilsEnsureMimeTypeAndZipComment(asicContent, parameters.ASiC())
+	asicContent, err := asic.UtilsEnsureMimeTypeAndZipComment(asicContent, parameters.ASiC())
 	if err != nil {
 		panic(err)
 	}
@@ -77,11 +77,11 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) Build(asicContent *asic.ASiCConte
 // fromArchive ports the private fromArchive(ASiCContent, ASiCWithCAdESCommonParameters).
 //
 // Panics with Java's UnsupportedOperationException message on a container type mismatch.
-func (b *ASiCWithCAdESDataToSignHelperBuilder) fromArchive(asicContent *asic.ASiCContent,
+func (b *ASiCWithCAdESDataToSignHelperBuilder) fromArchive(asicContent *asic.Content,
 	parameters ASiCWithCAdESCommonParameters) GetDataToSignASiCWithCAdESHelper {
 	currentContainerType := asicContent.ContainerType()
 
-	asice := asic.ASiCUtilsIsASiCE(parameters.ASiC())
+	asice := asic.UtilsIsASiCE(parameters.ASiC())
 	switch {
 	case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 		manifestDocument := b.createManifestDocument(asicContent, parameters)
@@ -97,9 +97,9 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) fromArchive(asicContent *asic.ASi
 }
 
 // fromFiles ports the private fromFiles(ASiCContent, ASiCWithCAdESCommonParameters).
-func (b *ASiCWithCAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.ASiCContent,
+func (b *ASiCWithCAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.Content,
 	parameters ASiCWithCAdESCommonParameters) GetDataToSignASiCWithCAdESHelper {
-	if asic.ASiCUtilsIsASiCE(parameters.ASiC()) {
+	if asic.UtilsIsASiCE(parameters.ASiC()) {
 		asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 		manifestDocument := b.createManifestDocument(asicContent, parameters)
 		return NewDataToSignASiCEWithCAdESHelper(asicContent, manifestDocument)
@@ -112,8 +112,8 @@ func (b *ASiCWithCAdESDataToSignHelperBuilder) fromFiles(asicContent *asic.ASiCC
 }
 
 // createManifestDocument ports the private
-// createManifestDocument(ASiCContent, ASiCWithCAdESCommonParameters).
-func (b *ASiCWithCAdESDataToSignHelperBuilder) createManifestDocument(asicContent *asic.ASiCContent,
+// createManifestDocument(Content, ASiCWithCAdESCommonParameters).
+func (b *ASiCWithCAdESDataToSignHelperBuilder) createManifestDocument(asicContent *asic.Content,
 	parameters ASiCWithCAdESCommonParameters) model.DSSDocument {
 	manifestDocument, err := b.requireOverrides().GetManifestBuilder(asicContent, parameters).Build()
 	if err != nil {

@@ -27,9 +27,9 @@ func (f *ASiCContainerWithXAdESValidatorFactory) IsSupported(document model.DSSD
 	return validator.IsSupported(document)
 }
 
-// IsSupportedContent verifies whether the provided ASiCContent is supported by the underlying
+// IsSupportedContent verifies whether the provided Content is supported by the underlying
 // validator's class. Ports isSupported(ASiCContent).
-func (f *ASiCContainerWithXAdESValidatorFactory) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (f *ASiCContainerWithXAdESValidatorFactory) IsSupportedContent(asicContent *asic.Content) bool {
 	validator := newASiCContainerWithXAdESValidator()
 	return validator.IsSupportedContent(asicContent)
 }
@@ -40,8 +40,8 @@ func (f *ASiCContainerWithXAdESValidatorFactory) Create(document model.DSSDocume
 }
 
 // CreateFromContent creates a SignedDocumentValidator for the given asicContent. Ports
-// create(ASiCContent).
-func (f *ASiCContainerWithXAdESValidatorFactory) CreateFromContent(asicContent *asic.ASiCContent) dssvalidation.SignedDocumentValidator {
+// create(Content).
+func (f *ASiCContainerWithXAdESValidatorFactory) CreateFromContent(asicContent *asic.Content) dssvalidation.SignedDocumentValidator {
 	return NewASiCContainerWithXAdESValidatorFromContent(asicContent)
 }
 

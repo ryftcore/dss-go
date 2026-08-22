@@ -62,7 +62,7 @@ type CommonCertificateVerifier struct {
 
 	// aiaSource is used to download a certificate's issuer by the AIA URI(s) defining within a
 	// certificate.
-	aiaSource aia.AIASource
+	aiaSource aia.Source
 
 	// alertOnInvalidSignature sets the behavior to follow in case of invalid signature
 	// (augmentation process).
@@ -354,15 +354,15 @@ func assertNotTrusted(adjunctCertificateSource spi.CertificateSource) {
 	_ = adjunctCertificateSource
 }
 
-// AIASource gets the AIASource used to load a certificate's issuer by defined AIA URI(s)
+// Source gets the Source used to load a certificate's issuer by defined AIA URI(s)
 // within the token. Port of getAIASource().
-func (v *CommonCertificateVerifier) AIASource() aia.AIASource {
+func (v *CommonCertificateVerifier) AIASource() aia.Source {
 	return v.aiaSource
 }
 
-// SetAIASource sets the AIASource used to load a certificate's issuer by defined AIA URI(s)
+// SetAIASource sets the Source used to load a certificate's issuer by defined AIA URI(s)
 // within the token. Port of setAIASource(...).
-func (v *CommonCertificateVerifier) SetAIASource(aiaSource aia.AIASource) {
+func (v *CommonCertificateVerifier) SetAIASource(aiaSource aia.Source) {
 	v.aiaSource = aiaSource
 }
 

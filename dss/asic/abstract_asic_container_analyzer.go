@@ -19,9 +19,9 @@ import (
 // alongside) analyzer.DefaultDocumentAnalyzerOverrides - see this type's doc comment for the
 // two-tier composition contract every concrete analyzer must follow.
 type AbstractASiCContainerAnalyzerOverrides interface {
-	// IsSupportedASiCContent checks if the ASiCContent is supported by the current validator.
+	// IsSupportedASiCContent checks if the Content is supported by the current validator.
 	// Port of the public abstract isSupported(ASiCContent).
-	IsSupportedASiCContent(asicContent *ASiCContent) bool
+	IsSupportedASiCContent(asicContent *Content) bool
 
 	// GetContainerExtractor returns the relevant container extractor. Port of the protected
 	// abstract getContainerExtractor().
@@ -77,7 +77,7 @@ type AbstractASiCContainerAnalyzer struct {
 
 	// AsicContent is the container extraction result. Java declares the field protected;
 	// exported here since Go subclasses live in different packages.
-	AsicContent *ASiCContent
+	AsicContent *Content
 
 	// SignatureValidators is the list of signature document analyzers. Java declares the
 	// field protected.
@@ -85,7 +85,7 @@ type AbstractASiCContainerAnalyzer struct {
 
 	// TimestampAnalyzers is the list of timestamp document analyzers. Java declares the field
 	// protected.
-	TimestampAnalyzers []analyzertimestamp.TimestampAnalyzer
+	TimestampAnalyzers []analyzertimestamp.Analyzer
 
 	// EvidenceRecordAnalyzers is the list of evidence record document analyzers. Java declares
 	// the field protected.
@@ -142,13 +142,13 @@ func (a *AbstractASiCContainerAnalyzer) InitFromDocument(document model.DSSDocum
 }
 
 // InitFromContent ports the protected AbstractASiCContainerAnalyzer(ASiCContent) constructor.
-func (a *AbstractASiCContainerAnalyzer) InitFromContent(asicContent *ASiCContent) {
+func (a *AbstractASiCContainerAnalyzer) InitFromContent(asicContent *Content) {
 	a.SetDocument(asicContent.AsicContainer())
 	a.AsicContent = asicContent
 }
 
 // extractEntries extracts documents from a container. Ports the private extractEntries().
-func (a *AbstractASiCContainerAnalyzer) extractEntries() *ASiCContent {
+func (a *AbstractASiCContainerAnalyzer) extractEntries() *Content {
 	extractor := a.requireOverrides().GetContainerExtractor()
 	content, err := extractor.Extract()
 	if err != nil {
@@ -377,12 +377,12 @@ func (a *AbstractASiCContainerAnalyzer) getEvidenceRecordAnalyzer(evidenceRecord
 	var manifestFile *model.ManifestFile
 	detachedContents := a.GetAllDocuments()
 
-	evidenceRecordManifest := ASiCManifestParserGetLinkedManifest(a.GetEvidenceRecordManifestDocuments(), evidenceRecordDocument.Name())
+	evidenceRecordManifest := ManifestParserGetLinkedManifest(a.GetEvidenceRecordManifestDocuments(), evidenceRecordDocument.Name())
 	if evidenceRecordManifest != nil {
 		manifestFile = a.GetValidatedManifestFile(evidenceRecordManifest)
 	}
 
-	isASiCSContainer, err := ASiCUtilsIsASiCSContainerContent(a.AsicContent)
+	isASiCSContainer, err := UtilsIsASiCSContainerContent(a.AsicContent)
 	if err != nil {
 		return nil
 	}
@@ -390,7 +390,7 @@ func (a *AbstractASiCContainerAnalyzer) getEvidenceRecordAnalyzer(evidenceRecord
 		if manifestFile != nil {
 			manifestFile = nil
 		}
-		rootLevelSignedDocuments := ASiCUtilsRootLevelSignedDocuments(a.AsicContent)
+		rootLevelSignedDocuments := UtilsRootLevelSignedDocuments(a.AsicContent)
 		if len(rootLevelSignedDocuments) == 1 {
 			detachedContents = rootLevelSignedDocuments
 		} else {
@@ -498,9 +498,9 @@ func (a *AbstractASiCContainerAnalyzer) GetValidatedManifestFile(manifest model.
 // AddReference ports the @Override protected addReference(SignatureScope). Shadows the
 // embedded DefaultDocumentAnalyzer.AddReference.
 //
-// Cross-chunk assumption (ZIPCORE): ASiCUtilsIsSignature/ASiCUtilsIsTimestamp/
-// ASiCUtilsIsEvidenceRecord take a filename string.
+// Cross-chunk assumption (ZIPCORE): UtilsIsSignature/UtilsIsTimestamp/
+// UtilsIsEvidenceRecord take a filename string.
 func (a *AbstractASiCContainerAnalyzer) AddReference(signatureScope scope.SignatureScope) bool {
 	fileName := signatureScope.DocumentName()
-	return fileName == "" || (!ASiCUtilsIsSignature(fileName) && !ASiCUtilsIsTimestamp(fileName) && !ASiCUtilsIsEvidenceRecord(fileName))
+	return fileName == "" || (!UtilsIsSignature(fileName) && !UtilsIsTimestamp(fileName) && !UtilsIsEvidenceRecord(fileName))
 }

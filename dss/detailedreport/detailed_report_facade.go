@@ -14,19 +14,19 @@ import (
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 )
 
-// DetailedReportFacade contains methods for DetailedReport generation.
-type DetailedReportFacade struct{}
+// Facade contains methods for DetailedReport generation.
+type Facade struct{}
 
 // NewDetailedReportFacade creates a new DetailedReportFacade. Port of
 // newFacade().
-func NewDetailedReportFacade() *DetailedReportFacade {
-	return &DetailedReportFacade{}
+func NewDetailedReportFacade() *Facade {
+	return &Facade{}
 }
 
 // Marshal returns the XML representation of detailedReportJaxb. Port of
 // marshall(T) (schema validation always requested in Java; see the file
 // header for why this port does not perform it).
-func (f *DetailedReportFacade) Marshal(detailedReportJaxb *jaxb.XmlDetailedReport) (string, error) {
+func (f *Facade) Marshal(detailedReportJaxb *jaxb.XmlDetailedReport) (string, error) {
 	if detailedReportJaxb == nil {
 		return "", errors.New("JAXBObject is null")
 	}
@@ -40,7 +40,7 @@ func (f *DetailedReportFacade) Marshal(detailedReportJaxb *jaxb.XmlDetailedRepor
 // Unmarshal unmarshals xmlObject and returns the XmlDetailedReport. Port of
 // unmarshall(String) (unmarshall(InputStream) is not ported separately: Go's
 // []byte-based jaxb.Unmarshal already covers both Java overloads).
-func (f *DetailedReportFacade) Unmarshal(xmlObject string) (*jaxb.XmlDetailedReport, error) {
+func (f *Facade) Unmarshal(xmlObject string) (*jaxb.XmlDetailedReport, error) {
 	if xmlObject == "" {
 		return nil, errors.New("InputStream is null")
 	}
@@ -50,27 +50,27 @@ func (f *DetailedReportFacade) Unmarshal(xmlObject string) (*jaxb.XmlDetailedRep
 // GenerateHtmlReport generates a Bootstrap 4 Detailed report. Port of
 // generateHtmlReport(XmlDetailedReport); XSLT execution is deferred, see
 // DetailedReportXmlDefiner.
-func (f *DetailedReportFacade) GenerateHtmlReport(detailedReport *jaxb.XmlDetailedReport) (string, error) {
+func (f *Facade) GenerateHtmlReport(detailedReport *jaxb.XmlDetailedReport) (string, error) {
 	return "", ErrHtmlBootstrap4TemplatesNotSupported
 }
 
 // GenerateHtmlReportFromMarshalled generates a Bootstrap 4 Detailed report
 // from a string. Port of generateHtmlReport(String); XSLT execution is
 // deferred, see DetailedReportXmlDefiner.
-func (f *DetailedReportFacade) GenerateHtmlReportFromMarshalled(marshalledDetailedReport string) (string, error) {
+func (f *Facade) GenerateHtmlReportFromMarshalled(marshalledDetailedReport string) (string, error) {
 	return "", ErrHtmlBootstrap4TemplatesNotSupported
 }
 
 // GeneratePdfReport generates a PDF Detailed report. Port of
 // generatePdfReport(XmlDetailedReport, Result); XSLT execution is deferred,
 // see DetailedReportXmlDefiner.
-func (f *DetailedReportFacade) GeneratePdfReport(detailedReport *jaxb.XmlDetailedReport) error {
+func (f *Facade) GeneratePdfReport(detailedReport *jaxb.XmlDetailedReport) error {
 	return ErrPdfTemplatesNotSupported
 }
 
 // GeneratePdfReportFromMarshalled generates a PDF Detailed report from a
 // string. Port of generatePdfReport(String, Result); XSLT execution is
 // deferred, see DetailedReportXmlDefiner.
-func (f *DetailedReportFacade) GeneratePdfReportFromMarshalled(marshalledDetailedReport string) error {
+func (f *Facade) GeneratePdfReportFromMarshalled(marshalledDetailedReport string) error {
 	return ErrPdfTemplatesNotSupported
 }

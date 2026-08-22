@@ -18,7 +18,7 @@ type PdfAnnotationOverlapCheck struct {
 }
 
 // NewPdfAnnotationOverlapCheck is the default constructor.
-func NewPdfAnnotationOverlapCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewPdfAnnotationOverlapCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *PdfAnnotationOverlapCheck {
 	c := &PdfAnnotationOverlapCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

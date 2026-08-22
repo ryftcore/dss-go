@@ -6,10 +6,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// DocumentSignatureService provides operations for the signature creation and for its extension,
+// SignatureService provides operations for the signature creation and for its extension,
 // generic over the SP implementation of signature parameters and TP implementation of timestamp
 // parameters corresponding to the supported signature/document format.
-type DocumentSignatureService[SP model.SerializableSignatureParameters, TP model.SerializableTimestampParameters] interface {
+type SignatureService[SP model.SerializableSignatureParameters, TP model.SerializableTimestampParameters] interface {
 	// GetDataToSign retrieves the bytes of the data that need to be signed based on the
 	// toSignDocument and parameters. When toSignDocument contains an already existing signature
 	// the returned bytes are related to a new parallel signature.

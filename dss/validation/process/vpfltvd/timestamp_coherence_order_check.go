@@ -20,8 +20,8 @@ type TimestampCoherenceOrderCheck struct {
 }
 
 // NewTimestampCoherenceOrderCheck is the default constructor. Port of
-// TimestampCoherenceOrderCheck(I18nProvider, XmlValidationProcessLongTermData, List, LevelRule).
-func NewTimestampCoherenceOrderCheck(i18nProvider *i18n.I18nProvider,
+// TimestampCoherenceOrderCheck(Provider, XmlValidationProcessLongTermData, List, LevelRule).
+func NewTimestampCoherenceOrderCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], timestamps []*diagnostic.TimestampWrapper,
 	constraint policy.LevelRule) *TimestampCoherenceOrderCheck {
 	c := &TimestampCoherenceOrderCheck{

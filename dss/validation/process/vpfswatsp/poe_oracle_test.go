@@ -254,7 +254,7 @@ func assertPOESnapshot(t *testing.T, label string, got POE, want *poeSnapshot) {
 
 // poeSeededTokenIds mirrors the id walk of POEExtraction#init, de-duplicated the
 // way the oracle does it.
-func poeSeededTokenIds(dd *diagnostic.DiagnosticData) []string {
+func poeSeededTokenIds(dd *diagnostic.Data) []string {
 	var ids []string
 	for _, w := range dd.AllSignatures() {
 		ids = append(ids, w.Id())
@@ -302,7 +302,7 @@ func poeSeededTokenIds(dd *diagnostic.DiagnosticData) []string {
 }
 
 // poeComparablePOEs mirrors the oracle's comparablePOEs.
-func poeComparablePOEs(dd *diagnostic.DiagnosticData) ([]string, []POE) {
+func poeComparablePOEs(dd *diagnostic.Data) ([]string, []POE) {
 	labels := []string{"control-time"}
 	poes := []POE{NewPOE(poeControlTime)}
 	for _, timestamp := range dd.TimestampList() {
@@ -333,7 +333,7 @@ func poeEvidenceRecordUsable(evidenceRecord *diagnostic.EvidenceRecordWrapper) (
 	return firstTimestamp != nil && firstTimestamp.ProductionTime() != nil
 }
 
-func poeCertificateById(dd *diagnostic.DiagnosticData, id string) *diagnostic.CertificateWrapper {
+func poeCertificateById(dd *diagnostic.Data, id string) *diagnostic.CertificateWrapper {
 	for _, certificate := range dd.UsedCertificates() {
 		if certificate.Id() == id {
 			return certificate
@@ -381,7 +381,7 @@ func readPOEOracle(t *testing.T) []*poeRow {
 	return rows
 }
 
-func loadPOEDump(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadPOEDump(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	// poeDumpDir (this package's own synthetic dumps) is checked first and
 	// stays in-package; anything else is a member of the marshal-parity

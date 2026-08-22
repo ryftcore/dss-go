@@ -19,8 +19,8 @@ type ReferenceDataNameMatchCheck[T any] struct {
 }
 
 // NewReferenceDataNameMatchCheck is the default constructor. Port of
-// ReferenceDataNameMatchCheck(I18nProvider, T, XmlDigestMatcher, LevelRule).
-func NewReferenceDataNameMatchCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ReferenceDataNameMatchCheck(Provider, T, XmlDigestMatcher, LevelRule).
+func NewReferenceDataNameMatchCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	digestMatcher *diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ReferenceDataNameMatchCheck[T] {
 	c := &ReferenceDataNameMatchCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

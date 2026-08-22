@@ -1,11 +1,11 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/signature/SignatureProductionPlace.java (DSS 6.5.RC1).
 package signature
 
-// SignatureProductionPlace represents the information concerning the signature production
+// ProductionPlace represents the information concerning the signature production
 // place.
 //
 // java.io.Serializable is dropped silently (no Go counterpart).
-type SignatureProductionPlace struct {
+type ProductionPlace struct {
 	// city is the location (city).
 	city string
 
@@ -30,75 +30,75 @@ type SignatureProductionPlace struct {
 
 // NewSignatureProductionPlace is the default constructor instantiating the object with null
 // (zero) values.
-func NewSignatureProductionPlace() *SignatureProductionPlace {
-	return &SignatureProductionPlace{}
+func NewSignatureProductionPlace() *ProductionPlace {
+	return &ProductionPlace{}
 }
 
 // City gets location (city). Port of getCity().
-func (s *SignatureProductionPlace) City() string {
+func (s *ProductionPlace) City() string {
 	return s.city
 }
 
 // SetCity sets location (city). Port of setCity(String).
-func (s *SignatureProductionPlace) SetCity(city string) {
+func (s *ProductionPlace) SetCity(city string) {
 	s.city = city
 }
 
 // StateOrProvince gets region (stateOrProvince). Port of getStateOrProvince().
-func (s *SignatureProductionPlace) StateOrProvince() string {
+func (s *ProductionPlace) StateOrProvince() string {
 	return s.stateOrProvince
 }
 
 // SetStateOrProvince sets region (stateOrProvince). Port of setStateOrProvince(String).
-func (s *SignatureProductionPlace) SetStateOrProvince(stateOrProvince string) {
+func (s *ProductionPlace) SetStateOrProvince(stateOrProvince string) {
 	s.stateOrProvince = stateOrProvince
 }
 
 // PostOfficeBoxNumber gets postOfficeBoxNumber. Port of getPostOfficeBoxNumber().
-func (s *SignatureProductionPlace) PostOfficeBoxNumber() string {
+func (s *ProductionPlace) PostOfficeBoxNumber() string {
 	return s.postOfficeBoxNumber
 }
 
 // SetPostOfficeBoxNumber sets postOfficeBoxNumber. Port of
 // setPostOfficeBoxNumber(String).
-func (s *SignatureProductionPlace) SetPostOfficeBoxNumber(postOfficeBoxNumber string) {
+func (s *ProductionPlace) SetPostOfficeBoxNumber(postOfficeBoxNumber string) {
 	s.postOfficeBoxNumber = postOfficeBoxNumber
 }
 
 // PostalCode gets postal code. Port of getPostalCode().
-func (s *SignatureProductionPlace) PostalCode() string {
+func (s *ProductionPlace) PostalCode() string {
 	return s.postalCode
 }
 
 // SetPostalCode sets postal code. Port of setPostalCode(String).
-func (s *SignatureProductionPlace) SetPostalCode(postalCode string) {
+func (s *ProductionPlace) SetPostalCode(postalCode string) {
 	s.postalCode = postalCode
 }
 
 // CountryName gets country name. Port of getCountryName().
-func (s *SignatureProductionPlace) CountryName() string {
+func (s *ProductionPlace) CountryName() string {
 	return s.countryName
 }
 
 // SetCountryName sets country name (can be 2-letters abbreviation, e.g. LU for Luxembourg).
 // Port of setCountryName(String).
-func (s *SignatureProductionPlace) SetCountryName(countryName string) {
+func (s *ProductionPlace) SetCountryName(countryName string) {
 	s.countryName = countryName
 }
 
 // StreetAddress gets the address. Port of getStreetAddress().
-func (s *SignatureProductionPlace) StreetAddress() string {
+func (s *ProductionPlace) StreetAddress() string {
 	return s.streetAddress
 }
 
 // SetStreetAddress sets the address. Port of setStreetAddress(String).
-func (s *SignatureProductionPlace) SetStreetAddress(streetAddress string) {
+func (s *ProductionPlace) SetStreetAddress(streetAddress string) {
 	s.streetAddress = streetAddress
 }
 
 // PostalAddress gets postal address (used in CAdES), lazily initialising the backing slice
 // as Java lazily initialises its ArrayList. Port of getPostalAddress().
-func (s *SignatureProductionPlace) PostalAddress() []string {
+func (s *ProductionPlace) PostalAddress() []string {
 	if s.postalAddress == nil {
 		s.postalAddress = make([]string, 0)
 	}
@@ -107,6 +107,6 @@ func (s *SignatureProductionPlace) PostalAddress() []string {
 
 // SetPostalAddress sets postal address (used in CAdES). Port of
 // setPostalAddress(List<String>).
-func (s *SignatureProductionPlace) SetPostalAddress(postalAddress []string) {
+func (s *ProductionPlace) SetPostalAddress(postalAddress []string) {
 	s.postalAddress = postalAddress
 }

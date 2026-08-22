@@ -19,8 +19,8 @@ type SignerLocationCheck struct {
 }
 
 // NewSignerLocationCheck is the default constructor. Port of
-// SignerLocationCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewSignerLocationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// SignerLocationCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewSignerLocationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *SignerLocationCheck {
 	c := &SignerLocationCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

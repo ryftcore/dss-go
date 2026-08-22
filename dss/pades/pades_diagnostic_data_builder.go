@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // Virtual dispatch: buildDetachedXmlTimestamp() and buildXmlOrphanTokens() are both called back
-// into from the base SignedDocumentDiagnosticDataBuilder/DiagnosticDataBuilder rather than
+// into from the base SignedDocumentDiagnosticDataBuilder/DataBuilder rather than
 // invoked directly on a concretely-typed receiver, so both are exported here
 // (BuildDetachedXmlTimestamp, BuildXmlOrphanTokens) to satisfy
 // dssdiagnostic.SignedDocumentDiagnosticDataBuilderOverrides, which includes a
@@ -23,15 +23,15 @@ import (
 )
 
 // PAdESDiagnosticDataBuilder is the DiagnosticDataBuilder for a PDF signature. Port of the class
-// PAdESDiagnosticDataBuilder, extending cades.CAdESDiagnosticDataBuilder.
-type PAdESDiagnosticDataBuilder struct {
-	cades.CAdESDiagnosticDataBuilder
+// DiagnosticDataBuilder, extending cades.DiagnosticDataBuilder.
+type DiagnosticDataBuilder struct {
+	cades.DiagnosticDataBuilder
 }
 
 // NewPAdESDiagnosticDataBuilder is the port of the default constructor.
-func NewPAdESDiagnosticDataBuilder() *PAdESDiagnosticDataBuilder {
-	b := &PAdESDiagnosticDataBuilder{
-		CAdESDiagnosticDataBuilder: cades.CAdESDiagnosticDataBuilder{
+func NewPAdESDiagnosticDataBuilder() *DiagnosticDataBuilder {
+	b := &DiagnosticDataBuilder{
+		DiagnosticDataBuilder: cades.DiagnosticDataBuilder{
 			SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 		},
 	}
@@ -42,9 +42,9 @@ func NewPAdESDiagnosticDataBuilder() *PAdESDiagnosticDataBuilder {
 // BuildDetachedXmlSignature builds the XmlSignature, adding PDF-specific PDFRevision and
 // VRIDictionaryCreationTime data. Port of the buildDetachedXmlSignature(AdvancedSignature)
 // override.
-func (b *PAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
-	xmlSignature := b.CAdESDiagnosticDataBuilder.BuildDetachedXmlSignature(signature)
-	padesSignature := signature.(*PAdESSignature)
+func (b *DiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
+	xmlSignature := b.DiagnosticDataBuilder.BuildDetachedXmlSignature(signature)
+	padesSignature := signature.(*Signature)
 	xmlSignature.PDFRevision = b.xmlPDFRevision(padesSignature.PdfRevision())
 	xmlSignature.VRIDictionaryCreationTime = xsDateTimeOrNil(padesSignature.VRICreationTime())
 	return xmlSignature
@@ -52,8 +52,8 @@ func (b *PAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validat
 
 // BuildDetachedXmlTimestamp builds the XmlTimestamp, adding the PDFRevision for
 // DOCUMENT_TIMESTAMPs. Port of the protected buildDetachedXmlTimestamp(TimestampToken) override.
-func (b *PAdESDiagnosticDataBuilder) BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp {
-	xmlTimestamp := b.CAdESDiagnosticDataBuilder.BuildDetachedXmlTimestamp(timestampToken)
+func (b *DiagnosticDataBuilder) BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp {
+	xmlTimestamp := b.DiagnosticDataBuilder.BuildDetachedXmlTimestamp(timestampToken)
 	if pdfTimestampToken, ok := PdfTimestampTokenOf(timestampToken); ok {
 		xmlTimestamp.PDFRevision = b.xmlPDFRevision(pdfTimestampToken.PdfRevision())
 	}
@@ -71,7 +71,7 @@ func xsDateTimeOrNil(t *time.Time) *jaxb.XSDateTime {
 }
 
 // xmlPDFRevision ports the private getXmlPDFRevision(PdfRevision).
-func (b *PAdESDiagnosticDataBuilder) xmlPDFRevision(pdfRevision PdfRevision) *jaxb.XmlPDFRevision {
+func (b *DiagnosticDataBuilder) xmlPDFRevision(pdfRevision PdfRevision) *jaxb.XmlPDFRevision {
 	if pdfRevision == nil {
 		return nil
 	}
@@ -88,7 +88,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlPDFRevision(pdfRevision PdfRevision) *ja
 }
 
 // xmlPDFSignatureField ports the private getXmlPDFSignatureField(PdfSignatureField).
-func (b *PAdESDiagnosticDataBuilder) xmlPDFSignatureField(pdfSignatureField *PdfSignatureField) *jaxb.XmlPDFSignatureField {
+func (b *DiagnosticDataBuilder) xmlPDFSignatureField(pdfSignatureField *PdfSignatureField) *jaxb.XmlPDFSignatureField {
 	name := pdfSignatureField.FieldName()
 	return &jaxb.XmlPDFSignatureField{
 		Name:         &name,
@@ -97,7 +97,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlPDFSignatureField(pdfSignatureField *Pdf
 }
 
 // xmlPDFLockDictionary ports the private getXmlPDFLockDictionary(SigFieldPermissions).
-func (b *PAdESDiagnosticDataBuilder) xmlPDFLockDictionary(lockDictionary *SigFieldPermissions) *jaxb.XmlPDFLockDictionary {
+func (b *DiagnosticDataBuilder) xmlPDFLockDictionary(lockDictionary *SigFieldPermissions) *jaxb.XmlPDFLockDictionary {
 	if lockDictionary == nil {
 		return nil
 	}
@@ -117,7 +117,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlPDFLockDictionary(lockDictionary *SigFie
 }
 
 // xmlPDFSignatureDictionary ports the private getXmlPDFSignatureDictionary(PdfSignatureDictionary).
-func (b *PAdESDiagnosticDataBuilder) xmlPDFSignatureDictionary(pdfSigDict *PdfSignatureDictionary) *jaxb.XmlPDFSignatureDictionary {
+func (b *DiagnosticDataBuilder) xmlPDFSignatureDictionary(pdfSigDict *PdfSignatureDictionary) *jaxb.XmlPDFSignatureDictionary {
 	if pdfSigDict == nil {
 		return nil
 	}
@@ -148,7 +148,7 @@ func padesDiagnosticDataBuilderEmptyToNil(value string) *string {
 }
 
 // xmlByteRange ports the private getXmlByteRange(ByteRange).
-func (b *PAdESDiagnosticDataBuilder) xmlByteRange(byteRange *ByteRange) *jaxb.XmlByteRange {
+func (b *DiagnosticDataBuilder) xmlByteRange(byteRange *ByteRange) *jaxb.XmlByteRange {
 	return &jaxb.XmlByteRange{
 		Value: byteRange.ToBigIntegerList(),
 		Valid: byteRange.IsValid(),
@@ -156,7 +156,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlByteRange(byteRange *ByteRange) *jaxb.Xm
 }
 
 // xmlDocMDP ports the private getXmlDocMDP(CertificationPermission).
-func (b *PAdESDiagnosticDataBuilder) xmlDocMDP(certificationPermission enumerations.CertificationPermission) *jaxb.XmlDocMDP {
+func (b *DiagnosticDataBuilder) xmlDocMDP(certificationPermission enumerations.CertificationPermission) *jaxb.XmlDocMDP {
 	if certificationPermission == "" {
 		return nil
 	}
@@ -165,7 +165,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlDocMDP(certificationPermission enumerati
 }
 
 // xmlModificationDetection ports the private getXmlModificationDetection(PdfModificationDetection).
-func (b *PAdESDiagnosticDataBuilder) xmlModificationDetection(modificationDetection *PdfModificationDetection) *jaxb.XmlModificationDetection {
+func (b *DiagnosticDataBuilder) xmlModificationDetection(modificationDetection *PdfModificationDetection) *jaxb.XmlModificationDetection {
 	if modificationDetection == nil || !modificationDetection.AreModificationsDetected() {
 		return nil
 	}
@@ -190,7 +190,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlModificationDetection(modificationDetect
 }
 
 // xmlModifications ports the private getXmlModifications(List<PdfModification>).
-func (b *PAdESDiagnosticDataBuilder) xmlModifications(modifications []PdfModification) []*jaxb.XmlModification {
+func (b *DiagnosticDataBuilder) xmlModifications(modifications []PdfModification) []*jaxb.XmlModification {
 	xmlModifications := make([]*jaxb.XmlModification, 0, len(modifications))
 	for _, pdfModification := range modifications {
 		xmlModifications = append(xmlModifications, b.xmlModification(pdfModification))
@@ -199,12 +199,12 @@ func (b *PAdESDiagnosticDataBuilder) xmlModifications(modifications []PdfModific
 }
 
 // xmlModification ports the private getXmlModification(PdfModification).
-func (b *PAdESDiagnosticDataBuilder) xmlModification(pdfModification PdfModification) *jaxb.XmlModification {
+func (b *DiagnosticDataBuilder) xmlModification(pdfModification PdfModification) *jaxb.XmlModification {
 	return &jaxb.XmlModification{Page: jaxb.NewBigIntegerFromInt64(int64(pdfModification.Page()))}
 }
 
 // xmlObjectModifications ports the private getXmlObjectModifications(PdfObjectModifications).
-func (b *PAdESDiagnosticDataBuilder) xmlObjectModifications(objectModifications PdfObjectModifications) *jaxb.XmlObjectModifications {
+func (b *DiagnosticDataBuilder) xmlObjectModifications(objectModifications PdfObjectModifications) *jaxb.XmlObjectModifications {
 	xmlObjectModifications := &jaxb.XmlObjectModifications{}
 	for _, modification := range objectModifications.SecureChanges() {
 		xmlObjectModifications.ExtensionChange = append(xmlObjectModifications.ExtensionChange, b.xmlObjectModification(modification))
@@ -222,7 +222,7 @@ func (b *PAdESDiagnosticDataBuilder) xmlObjectModifications(objectModifications 
 }
 
 // xmlObjectModification ports the private getXmlObjectModification(ObjectModification).
-func (b *PAdESDiagnosticDataBuilder) xmlObjectModification(objectModification ObjectModification) *jaxb.XmlObjectModification {
+func (b *DiagnosticDataBuilder) xmlObjectModification(objectModification ObjectModification) *jaxb.XmlObjectModification {
 	action := jaxb.PdfObjectModificationTypeValue(objectModification.ActionType())
 	return &jaxb.XmlObjectModification{
 		Value:     objectModification.ObjectTree().String(),
@@ -233,13 +233,13 @@ func (b *PAdESDiagnosticDataBuilder) xmlObjectModification(objectModification Ob
 }
 
 // BuildXmlOrphanTokens ports the protected @Override buildXmlOrphanTokens().
-func (b *PAdESDiagnosticDataBuilder) BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens {
+func (b *DiagnosticDataBuilder) BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens {
 	b.buildOrphanTokensFromDocumentSources() // necessary to collect all data from DSS PDF revisions
-	return b.DiagnosticDataBuilder.BuildXmlOrphanTokens()
+	return b.DataBuilder.BuildXmlOrphanTokens()
 }
 
 // buildOrphanTokensFromDocumentSources ports the private buildOrphanTokensFromDocumentSources().
-func (b *PAdESDiagnosticDataBuilder) buildOrphanTokensFromDocumentSources() {
+func (b *DiagnosticDataBuilder) buildOrphanTokensFromDocumentSources() {
 	for _, certificateToken := range b.GetDocumentCertificateSource().Certificates() {
 		id := certificateToken.DSSIDAsString()
 		if !b.IsKnownCertificate(id) {

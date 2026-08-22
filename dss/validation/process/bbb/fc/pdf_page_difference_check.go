@@ -18,7 +18,7 @@ type PdfPageDifferenceCheck struct {
 }
 
 // NewPdfPageDifferenceCheck is the default constructor.
-func NewPdfPageDifferenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewPdfPageDifferenceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *PdfPageDifferenceCheck {
 	c := &PdfPageDifferenceCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

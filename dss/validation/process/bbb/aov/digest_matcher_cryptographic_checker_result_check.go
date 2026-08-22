@@ -29,7 +29,7 @@ type DigestMatcherCryptographicCheckerResultCheck[T any] struct {
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' BuildAdditionalInfo rather than the one
 // inherited from DigestAlgorithmCryptographicCheckerResultCheck.
-func NewDigestMatcherCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewDigestMatcherCryptographicCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, position i18n.MessageTag, referenceNames []string, ccResult *jaxb.XmlCC,
 	constraint policy.LevelRule) *DigestMatcherCryptographicCheckerResultCheck[T] {
 	c := &DigestMatcherCryptographicCheckerResultCheck[T]{

@@ -17,20 +17,20 @@ import (
 	"github.com/ryftcore/dss-go/dss/simplecertificatereport/jaxb"
 )
 
-// SimpleCertificateReportFacade contains methods to generate a
+// Facade contains methods to generate a
 // SimpleCertificateReport.
-type SimpleCertificateReportFacade struct{}
+type Facade struct{}
 
 // NewSimpleCertificateReportFacade instantiates a new
 // SimpleCertificateReportFacade. Port of newFacade().
-func NewSimpleCertificateReportFacade() *SimpleCertificateReportFacade {
-	return &SimpleCertificateReportFacade{}
+func NewSimpleCertificateReportFacade() *Facade {
+	return &Facade{}
 }
 
 // Marshal returns the XML representation of simpleCertificateReport. Port
 // of marshall(T) (schema validation always requested in Java; see the file
 // header for why this port does not perform it).
-func (f *SimpleCertificateReportFacade) Marshal(simpleCertificateReport *jaxb.XmlSimpleCertificateReport) (string, error) {
+func (f *Facade) Marshal(simpleCertificateReport *jaxb.XmlSimpleCertificateReport) (string, error) {
 	if simpleCertificateReport == nil {
 		return "", errors.New("JAXBObject is null")
 	}
@@ -43,7 +43,7 @@ func (f *SimpleCertificateReportFacade) Marshal(simpleCertificateReport *jaxb.Xm
 
 // MarshalToWriter marshals simpleCertificateReport into w. Port of
 // marshall(T, OutputStream).
-func (f *SimpleCertificateReportFacade) MarshalToWriter(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
+func (f *Facade) MarshalToWriter(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
 	if simpleCertificateReport == nil {
 		return errors.New("JAXBObject is null")
 	}
@@ -60,7 +60,7 @@ func (f *SimpleCertificateReportFacade) MarshalToWriter(simpleCertificateReport 
 
 // Unmarshal unmarshals r and returns the XmlSimpleCertificateReport. Port
 // of unmarshall(InputStream).
-func (f *SimpleCertificateReportFacade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleCertificateReport, error) {
+func (f *Facade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleCertificateReport, error) {
 	if r == nil {
 		return nil, errors.New("InputStream is null")
 	}
@@ -74,14 +74,14 @@ func (f *SimpleCertificateReportFacade) Unmarshal(r io.Reader) (*jaxb.XmlSimpleC
 
 // UnmarshalString unmarshals xmlObject and returns the
 // XmlSimpleCertificateReport. Port of unmarshall(String).
-func (f *SimpleCertificateReportFacade) UnmarshalString(xmlObject string) (*jaxb.XmlSimpleCertificateReport, error) {
+func (f *Facade) UnmarshalString(xmlObject string) (*jaxb.XmlSimpleCertificateReport, error) {
 	return f.Unmarshal(bytes.NewReader([]byte(xmlObject)))
 }
 
 // GenerateHtmlReport generates a Bootstrap 4 Simple certificate report.
 // Port of generateHtmlReport(XmlSimpleCertificateReport); XSLT execution is
 // deferred, see SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GenerateHtmlReport(simpleCertificateReport *jaxb.XmlSimpleCertificateReport) (string, error) {
+func (f *Facade) GenerateHtmlReport(simpleCertificateReport *jaxb.XmlSimpleCertificateReport) (string, error) {
 	return "", ErrHtmlTemplatesNotSupported
 }
 
@@ -89,7 +89,7 @@ func (f *SimpleCertificateReportFacade) GenerateHtmlReport(simpleCertificateRepo
 // report into w. Port of generateHtmlReport(XmlSimpleCertificateReport,
 // Result); XSLT execution is deferred, see
 // SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GenerateHtmlReportToWriter(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
+func (f *Facade) GenerateHtmlReportToWriter(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
 	return ErrHtmlTemplatesNotSupported
 }
 
@@ -97,7 +97,7 @@ func (f *SimpleCertificateReportFacade) GenerateHtmlReportToWriter(simpleCertifi
 // certificate report from already-marshalled simple-certificate-report
 // XML. Port of generateHtmlReport(String); XSLT execution is deferred, see
 // SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GenerateHtmlReportFromMarshalled(marshalledSimpleCertificateReport string) (string, error) {
+func (f *Facade) GenerateHtmlReportFromMarshalled(marshalledSimpleCertificateReport string) (string, error) {
 	return "", ErrHtmlTemplatesNotSupported
 }
 
@@ -105,14 +105,14 @@ func (f *SimpleCertificateReportFacade) GenerateHtmlReportFromMarshalled(marshal
 // certificate report from already-marshalled simple-certificate-report XML
 // into w. Port of generateHtmlReport(String, Result); XSLT execution is
 // deferred, see SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GenerateHtmlReportFromMarshalledToWriter(marshalledSimpleCertificateReport string, w io.Writer) error {
+func (f *Facade) GenerateHtmlReportFromMarshalledToWriter(marshalledSimpleCertificateReport string, w io.Writer) error {
 	return ErrHtmlTemplatesNotSupported
 }
 
 // GeneratePdfReport generates a PDF Simple certificate report into w. Port
 // of generatePdfReport(XmlSimpleCertificateReport, Result); XSLT execution
 // is deferred, see SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GeneratePdfReport(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
+func (f *Facade) GeneratePdfReport(simpleCertificateReport *jaxb.XmlSimpleCertificateReport, w io.Writer) error {
 	return ErrPdfTemplatesNotSupported
 }
 
@@ -120,6 +120,6 @@ func (f *SimpleCertificateReportFacade) GeneratePdfReport(simpleCertificateRepor
 // from already-marshalled simple-certificate-report XML into w. Port of
 // generatePdfReport(String, Result); XSLT execution is deferred, see
 // SimpleCertificateReportXmlDefiner.
-func (f *SimpleCertificateReportFacade) GeneratePdfReportFromMarshalled(marshalledSimpleCertificateReport string, w io.Writer) error {
+func (f *Facade) GeneratePdfReportFromMarshalled(marshalledSimpleCertificateReport string, w io.Writer) error {
 	return ErrPdfTemplatesNotSupported
 }

@@ -1,5 +1,5 @@
-// Tests for this porter's ROOT-chunk additions: JAdESHeaderParameterNames, JAdESSigningTimeType,
-// JAdESTimestampParameters, JAdESSignatureParameters, and the HTTPHeader family. Ported test
+// Tests for this porter's ROOT-chunk additions: JAdESHeaderParameterNames, SigningTimeType,
+// TimestampParameters, SignatureParameters, and the HTTPHeader family. Ported test
 // *vectors* are not applicable here (these are constant/value-object classes, not parsers), per
 // PORTING.md "port test vectors, not JUnit code" - these are exhaustive table tests over the
 // registry-like constant sets, plus behavioural tests mirroring what upstream's getters/setters
@@ -54,7 +54,7 @@ func TestJAdESHeaderParameterNames_Values(t *testing.T) {
 }
 
 func TestJAdESSigningTimeType_Values(t *testing.T) {
-	cases := map[JAdESSigningTimeType]string{
+	cases := map[SigningTimeType]string{
 		JAdESSigningTimeTypeIAT:  "IAT",
 		JAdESSigningTimeTypeSigT: "SIG_T",
 		JAdESSigningTimeTypeNone: "NONE",
@@ -64,7 +64,7 @@ func TestJAdESSigningTimeType_Values(t *testing.T) {
 			t.Errorf("constant = %q, want %q", constant, want)
 		}
 	}
-	values := JAdESSigningTimeTypeValues()
+	values := SigningTimeTypeValues()
 	if len(values) != 3 {
 		t.Fatalf("JAdESSigningTimeTypeValues() = %v, want 3 entries", values)
 	}

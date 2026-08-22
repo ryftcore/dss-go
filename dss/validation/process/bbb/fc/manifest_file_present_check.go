@@ -18,7 +18,7 @@ type ManifestFilePresentCheck struct {
 }
 
 // NewManifestFilePresentCheck is the default constructor.
-func NewManifestFilePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewManifestFilePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	containerInfo *diagjaxb.XmlContainerInfo, constraint policy.LevelRule) *ManifestFilePresentCheck {
 	c := &ManifestFilePresentCheck{containerInfo: containerInfo}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

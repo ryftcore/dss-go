@@ -23,8 +23,8 @@ type QSCDCheck struct {
 }
 
 // NewQSCDCheck is the default constructor. Port of
-// QSCDCheck(I18nProvider, XmlValidationCertificateQualification, QSCDStatus, ValidationTime, LevelRule).
-func NewQSCDCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// QSCDCheck(Provider, XmlValidationCertificateQualification, QSCDStatus, ValidationTime, LevelRule).
+func NewQSCDCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	qscdStatus enumerations.QSCDStatus, validationTime enumerations.ValidationTime,
 	constraint policy.LevelRule) *QSCDCheck {
 	c := &QSCDCheck{

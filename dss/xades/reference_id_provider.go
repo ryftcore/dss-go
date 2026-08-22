@@ -10,7 +10,7 @@ import (
 // ReferenceIdProvider is used to generate a deterministic reference identifier.
 type ReferenceIdProvider struct {
 	// signatureParameters are the signature parameters used to create the signature.
-	signatureParameters *XAdESSignatureParameters
+	signatureParameters *SignatureParameters
 
 	// referenceIdPrefix is the id-prefix for the ds:Reference element. Java's field
 	// initializer is "r" (its javadoc says "r-", which the code contradicts).
@@ -28,7 +28,7 @@ func NewReferenceIdProvider() *ReferenceIdProvider {
 
 // SetSignatureParameters sets the signature parameters used to build a deterministic
 // identifier. Ports setSignatureParameters(XAdESSignatureParameters).
-func (p *ReferenceIdProvider) SetSignatureParameters(signatureParameters *XAdESSignatureParameters) {
+func (p *ReferenceIdProvider) SetSignatureParameters(signatureParameters *SignatureParameters) {
 	p.signatureParameters = signatureParameters
 }
 

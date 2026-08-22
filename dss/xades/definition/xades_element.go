@@ -269,7 +269,7 @@ type XAdESElement interface {
 	// ElementSignaturePolicyImplied gets the "SignaturePolicyImplied" element.
 	ElementSignaturePolicyImplied() common.DSSElement
 
-	// ElementSignatureProductionPlace gets the "SignatureProductionPlace" element.
+	// ElementSignatureProductionPlace gets the "ProductionPlace" element.
 	ElementSignatureProductionPlace() common.DSSElement
 
 	// ElementSignatureProductionPlaceV2 gets the "SignatureProductionPlaceV2" element.

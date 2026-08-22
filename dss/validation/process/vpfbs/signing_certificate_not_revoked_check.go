@@ -21,8 +21,8 @@ type SigningCertificateNotRevokedCheck[T any] struct {
 }
 
 // NewSigningCertificateNotRevokedCheck is the default constructor. Port of
-// SigningCertificateNotRevokedCheck(I18nProvider, T, XmlXCV, TokenProxy, LevelRule).
-func NewSigningCertificateNotRevokedCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// SigningCertificateNotRevokedCheck(Provider, T, XmlXCV, TokenProxy, LevelRule).
+func NewSigningCertificateNotRevokedCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlXCV *jaxb.XmlXCV, token diagnostic.TokenProxy, constraint policy.LevelRule) *SigningCertificateNotRevokedCheck[T] {
 	c := &SigningCertificateNotRevokedCheck[T]{
 		// X509 Certificate Validation building block suffix ("-XCV"), a

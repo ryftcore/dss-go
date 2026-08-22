@@ -1,7 +1,7 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/extension/ASiCWithXAdESDocumentExtender.java (DSS 6.5.RC1).
 //
 // Java's `extends AbstractDocumentExtender<ASiCWithXAdESSignatureParameters,
-// XAdESTimestampParameters>` becomes embedding plus the InitAbstractDocumentExtender(self)
+// TimestampParameters>` becomes embedding plus the InitAbstractDocumentExtender(self)
 // registration documented in dss-document's abstract_document_extender.go: Go has no method
 // overriding across embedding, so the base dispatches into the five methods below through
 // document.AbstractDocumentExtenderOverrides. Mirrors the
@@ -19,7 +19,7 @@ import (
 // ASiCWithXAdESDocumentExtender is the ASiC with XAdES container specific implementation of a
 // eu.europa.esig.dss.spi.augmentation.DocumentExtender.
 type ASiCWithXAdESDocumentExtender struct {
-	document.AbstractDocumentExtender[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters]
+	document.AbstractDocumentExtender[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters]
 }
 
 // newASiCWithXAdESDocumentExtender is the package-private empty constructor, used by
@@ -44,7 +44,7 @@ func NewASiCWithXAdESDocumentExtender(doc model.DSSDocument) *ASiCWithXAdESDocum
 
 // CreateSignatureService ports the overridden protected createSignatureService(). Panics with
 // the Java message when no CertificateVerifier was provided (Objects.requireNonNull).
-func (e *ASiCWithXAdESDocumentExtender) CreateSignatureService() document.DocumentSignatureService[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters] {
+func (e *ASiCWithXAdESDocumentExtender) CreateSignatureService() document.SignatureService[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters] {
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding ASiCWithXAdESService!")
 	}
@@ -71,7 +71,7 @@ func (e *ASiCWithXAdESDocumentExtender) IsSupportedParameters(parameters model.S
 }
 
 // IsSupportedService ports the overridden protected
-// isSupportedService(DocumentSignatureService<?, ?>).
+// isSupportedService(SignatureService<?, ?>).
 func (e *ASiCWithXAdESDocumentExtender) IsSupportedService(service any) bool {
 	_, ok := service.(*asicxades.ASiCWithXAdESService)
 	return ok
@@ -88,4 +88,4 @@ func (e *ASiCWithXAdESDocumentExtender) IsASiC() bool {
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.
-var _ document.AbstractDocumentExtenderOverrides[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.XAdESTimestampParameters] = (*ASiCWithXAdESDocumentExtender)(nil)
+var _ document.AbstractDocumentExtenderOverrides[*asicxades.ASiCWithXAdESSignatureParameters, *dssxades.TimestampParameters] = (*ASiCWithXAdESDocumentExtender)(nil)

@@ -52,7 +52,7 @@ func manifestKATBytes(t *testing.T, document model.DSSDocument) []byte {
 }
 
 // manifestKATASiCEContent mirrors ManifestOracle#asicEContent.
-func manifestKATASiCEContent() *asic.ASiCContent {
+func manifestKATASiCEContent() *asic.Content {
 	asicContent := asic.NewASiCContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetMimeTypeDocument(model.NewInMemoryDocumentWithMimeType(
@@ -66,7 +66,7 @@ func manifestKATASiCEContent() *asic.ASiCContent {
 }
 
 // manifestKATEncodingContent mirrors ManifestOracle#encodingContent.
-func manifestKATEncodingContent() *asic.ASiCContent {
+func manifestKATEncodingContent() *asic.Content {
 	asicContent := asic.NewASiCContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
@@ -79,7 +79,7 @@ func manifestKATEncodingContent() *asic.ASiCContent {
 }
 
 // manifestKATPercentContent mirrors ManifestOracle#percentContent.
-func manifestKATPercentContent() *asic.ASiCContent {
+func manifestKATPercentContent() *asic.Content {
 	asicContent := asic.NewASiCContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
@@ -90,7 +90,7 @@ func manifestKATPercentContent() *asic.ASiCContent {
 }
 
 // manifestKATArchiveContent mirrors ManifestOracle#archiveContent.
-func manifestKATArchiveContent() *asic.ASiCContent {
+func manifestKATArchiveContent() *asic.Content {
 	asicContent := manifestKATASiCEContent()
 	asicContent.SetSignatureDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("signature-bytes"),

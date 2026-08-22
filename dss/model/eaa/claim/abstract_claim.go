@@ -147,9 +147,12 @@ func AbstractClaimString(c Claim) string {
 	return abstractClaimSimpleName(c) + " {" + "'" + c.Name() + "'" + disclosure + ": " + c.ValueAsString() + "}"
 }
 
-// abstractClaimSimpleName returns the Go type name of the concrete claim,
-// which is kept identical to the Java class name getClass().getSimpleName()
-// reports.
+// abstractClaimSimpleName returns the name that getClass().getSimpleName()
+// reports for the concrete claim upstream. It is part of the rendered
+// toString() contract and is cross-validated against Java, so it must NOT
+// track the Go type name: every concrete claim type in this package is the
+// Java class name minus the "Claim" prefix (which would stutter with the
+// package name), so the Java name is recovered by putting the prefix back.
 func abstractClaimSimpleName(c Claim) string {
 	t := reflect.TypeOf(c)
 	for t != nil && t.Kind() == reflect.Pointer {
@@ -158,7 +161,7 @@ func abstractClaimSimpleName(c Claim) string {
 	if t == nil {
 		return ""
 	}
-	return t.Name()
+	return "Claim" + t.Name()
 }
 
 // Equals ports AbstractClaim#equals: NOTE this compares name,

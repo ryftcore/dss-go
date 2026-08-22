@@ -10,8 +10,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/model/job"
 )
 
-// LoTEParsingInfoRecord represents a List of Trusted Entities parsing result record.
-type LoTEParsingInfoRecord interface {
+// ParsingInfoRecord represents a List of Trusted Entities parsing result record.
+type ParsingInfoRecord interface {
 	job.ParsingInfoRecord
 
 	// Type gets the List Type.

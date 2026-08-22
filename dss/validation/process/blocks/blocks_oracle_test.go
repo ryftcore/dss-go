@@ -203,7 +203,7 @@ func loadBlocksRows(t *testing.T, path string) []*blocksRow {
 	return rows
 }
 
-func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
@@ -226,7 +226,7 @@ func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticD
 
 var blocksI18nProvider = i18n.NewI18nProvider()
 
-func blocksI18n() *i18n.I18nProvider { return blocksI18nProvider }
+func blocksI18n() *i18n.Provider { return blocksI18nProvider }
 
 var blocksDefaultPolicyValue modelpolicy.ValidationPolicy
 

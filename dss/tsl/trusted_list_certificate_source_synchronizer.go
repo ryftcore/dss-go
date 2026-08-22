@@ -228,7 +228,7 @@ func (s *TrustedListCertificateSourceSynchronizer) syncTLInfosCache(tlInfos []*t
 }
 
 func (s *TrustedListCertificateSourceSynchronizer) trustProperties(relatedLOTL *tslmodel.LOTLInfo, tlInfo *tslmodel.TLInfo, detached *tslmodel.TrustServiceProvider,
-	statusAndInformationExtensions *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions]) *tslmodel.TrustProperties {
+	statusAndInformationExtensions *timedependent.Values[*tslmodel.TrustServiceStatusAndInformationExtensions]) *tslmodel.TrustProperties {
 	if relatedLOTL != nil {
 		return tslmodel.NewTrustPropertiesWithLOTL(relatedLOTL, tlInfo, detached, statusAndInformationExtensions)
 	}
@@ -236,7 +236,7 @@ func (s *TrustedListCertificateSourceSynchronizer) trustProperties(relatedLOTL *
 }
 
 func (s *TrustedListCertificateSourceSynchronizer) certificateTrustTimes(
-	statusAndInformationExtensions *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions],
+	statusAndInformationExtensions *timedependent.Values[*tslmodel.TrustServiceStatusAndInformationExtensions],
 	trustAnchorValidityPredicate TrustAnchorPeriodPredicate) []*tslmodel.CertificateTrustTime {
 	if trustAnchorValidityPredicate == nil {
 		// return empty instance (always valid), when no predicate is defined

@@ -19,7 +19,7 @@ type EAAPseudonymUsageCheck struct {
 }
 
 // NewEAAPseudonymUsageCheck is the default constructor.
-func NewEAAPseudonymUsageCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAPseudonymUsageCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAAPseudonymUsageCheck {
 	c := &EAAPseudonymUsageCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -19,8 +19,8 @@ type CertificateSignatureValidCheck[T any] struct {
 }
 
 // NewCertificateSignatureValidCheck is the default constructor. Port of
-// CertificateSignatureValidCheck(I18nProvider, T, CertificateWrapper, LevelRule).
-func NewCertificateSignatureValidCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateSignatureValidCheck(Provider, T, CertificateWrapper, LevelRule).
+func NewCertificateSignatureValidCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateSignatureValidCheck[T] {
 	c := &CertificateSignatureValidCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

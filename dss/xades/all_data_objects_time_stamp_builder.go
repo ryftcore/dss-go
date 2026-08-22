@@ -30,13 +30,13 @@ type AllDataObjectsTimeStampBuilder struct {
 	tspSource validation.TSPSource
 
 	// signatureParameters holds the signature parameters.
-	signatureParameters *XAdESSignatureParameters
+	signatureParameters *SignatureParameters
 }
 
 // NewAllDataObjectsTimeStampBuilder is the default constructor.
 // Port of AllDataObjectsTimeStampBuilder(TSPSource, XAdESSignatureParameters).
 func NewAllDataObjectsTimeStampBuilder(tspSource validation.TSPSource,
-	signatureParameters *XAdESSignatureParameters) *AllDataObjectsTimeStampBuilder {
+	signatureParameters *SignatureParameters) *AllDataObjectsTimeStampBuilder {
 	return &AllDataObjectsTimeStampBuilder{
 		tspSource:           tspSource,
 		signatureParameters: signatureParameters,

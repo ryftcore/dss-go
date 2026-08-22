@@ -22,7 +22,7 @@ type XmlDiagnosticDataFactory struct {
 	validationTime time.Time
 
 	// validationContext is the current validation context.
-	validationContext validation.ValidationContext
+	validationContext validation.Context
 
 	// defaultDigestAlgorithm is the used default digest algorithm for tokens definition.
 	defaultDigestAlgorithm enumerations.DigestAlgorithm
@@ -58,7 +58,7 @@ func (f *XmlDiagnosticDataFactory) SetValidationTime(validationTime time.Time) *
 }
 
 // SetValidationContext sets the validation context. Port of setValidationContext(ValidationContext).
-func (f *XmlDiagnosticDataFactory) SetValidationContext(validationContext validation.ValidationContext) *XmlDiagnosticDataFactory {
+func (f *XmlDiagnosticDataFactory) SetValidationContext(validationContext validation.Context) *XmlDiagnosticDataFactory {
 	f.validationContext = validationContext
 	return f
 }
@@ -88,7 +88,7 @@ func (f *XmlDiagnosticDataFactory) SetTokenIdentifierProvider(tokenIdentifierPro
 //
 // Dispatches through the registered SignedDocumentDiagnosticDataBuilderOverrides rather than
 // calling Build() directly on the base-typed f.diagnosticDataBuilder: Java's virtual dispatch
-// reaches ASiCContainerDiagnosticDataBuilder.build()'s ContainerInfo-adding @Override through
+// reaches ContainerDiagnosticDataBuilder.build()'s ContainerInfo-adding @Override through
 // this same call in XmlDiagnosticDataFactory.create(), but f.diagnosticDataBuilder is statically
 // typed *SignedDocumentDiagnosticDataBuilder (SignedDocumentValidatorOverrides.
 // InitializeDiagnosticDataBuilder's declared return type - see validation/signed_document_validator.go),

@@ -9,9 +9,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// JAdESSignatureParameters holds the parameters to create/extend a JAdES signature.
-type JAdESSignatureParameters struct {
-	document.AbstractSignatureParameters[*JAdESTimestampParameters]
+// SignatureParameters holds the parameters to create/extend a JAdES signature.
+type SignatureParameters struct {
+	document.AbstractSignatureParameters[*TimestampParameters]
 
 	// includeCertificateChain defines if certificate chain binaries must be included into the
 	// signed header ('x5c' attribute).
@@ -98,7 +98,7 @@ type JAdESSignatureParameters struct {
 
 	// jadesSigningTimeType identifies a type of claimed signing time header to be used on JAdES
 	// signature creation.
-	jadesSigningTimeType JAdESSigningTimeType
+	jadesSigningTimeType SigningTimeType
 
 	// expirationTime is the value of the 'exp' (expiration time) signed header parameter as per
 	// ETSI TS 119 411-5. The value is used for a TLS Certificate Binding signature and contains
@@ -108,9 +108,9 @@ type JAdESSignatureParameters struct {
 
 // NewJAdESSignatureParameters instantiates the object with default parameters. Port of the
 // default constructor.
-func NewJAdESSignatureParameters() *JAdESSignatureParameters {
-	return &JAdESSignatureParameters{
-		AbstractSignatureParameters:    document.NewAbstractSignatureParameters[*JAdESTimestampParameters](),
+func NewJAdESSignatureParameters() *SignatureParameters {
+	return &SignatureParameters{
+		AbstractSignatureParameters:    document.NewAbstractSignatureParameters[*TimestampParameters](),
 		includeCertificateChain:        true,
 		includeSignatureType:           true,
 		includeKeyIdentifier:           true,
@@ -124,7 +124,7 @@ func NewJAdESSignatureParameters() *JAdESSignatureParameters {
 // SetSignatureLevel overrides AbstractSerializableSignatureParameters#setSignatureLevel,
 // restricting the value to the JAdES form. Panics with the Java message when signatureLevel is
 // empty or not a JAdES level (IllegalArgumentException upstream).
-func (p *JAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
+func (p *SignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
 	if signatureLevel == "" || err != nil || enumerations.SignatureFormJAdES != form {
 		panic("Only JAdES form is allowed !")
@@ -134,7 +134,7 @@ func (p *JAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations
 
 // GetContentTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating JAdESTimestampParameters. Port of #getContentTimestampParameters.
-func (p *JAdESSignatureParameters) GetContentTimestampParameters() *JAdESTimestampParameters {
+func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
 		p.ContentTimestampParameters = NewJAdESTimestampParameters()
 	}
@@ -143,7 +143,7 @@ func (p *JAdESSignatureParameters) GetContentTimestampParameters() *JAdESTimesta
 
 // GetSignatureTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating JAdESTimestampParameters. Port of #getSignatureTimestampParameters.
-func (p *JAdESSignatureParameters) GetSignatureTimestampParameters() *JAdESTimestampParameters {
+func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
 		p.SignatureTimestampParameters = NewJAdESTimestampParameters()
 	}
@@ -152,7 +152,7 @@ func (p *JAdESSignatureParameters) GetSignatureTimestampParameters() *JAdESTimes
 
 // GetArchiveTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating JAdESTimestampParameters. Port of #getArchiveTimestampParameters.
-func (p *JAdESSignatureParameters) GetArchiveTimestampParameters() *JAdESTimestampParameters {
+func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
 		p.ArchiveTimestampParameters = NewJAdESTimestampParameters()
 	}
@@ -161,91 +161,91 @@ func (p *JAdESSignatureParameters) GetArchiveTimestampParameters() *JAdESTimesta
 
 // IsIncludeCertificateChain defines if complete certificate chain binaries must be included into
 // the signed header ('x5c' attribute). Port of #isIncludeCertificateChain.
-func (p *JAdESSignatureParameters) IsIncludeCertificateChain() bool {
+func (p *SignatureParameters) IsIncludeCertificateChain() bool {
 	return p.includeCertificateChain
 }
 
 // SetIncludeCertificateChain sets if complete certificate chain binaries must be included into
 // the signed header. Default: TRUE. Port of #setIncludeCertificateChain.
-func (p *JAdESSignatureParameters) SetIncludeCertificateChain(includeCertificateChain bool) {
+func (p *SignatureParameters) SetIncludeCertificateChain(includeCertificateChain bool) {
 	p.includeCertificateChain = includeCertificateChain
 }
 
 // IsIncludeSignatureType defines if the signature MimeType string must be included into the
 // signed header ('typ' attribute). Port of #isIncludeSignatureType.
-func (p *JAdESSignatureParameters) IsIncludeSignatureType() bool {
+func (p *SignatureParameters) IsIncludeSignatureType() bool {
 	return p.includeSignatureType
 }
 
 // SetIncludeSignatureType sets if the signature MimeType string must be included into the
 // signed header ('typ' attribute). Default: TRUE. Port of #setIncludeSignatureType.
-func (p *JAdESSignatureParameters) SetIncludeSignatureType(includeSignatureType bool) {
+func (p *SignatureParameters) SetIncludeSignatureType(includeSignatureType bool) {
 	p.includeSignatureType = includeSignatureType
 }
 
 // SignatureType gets the MimeType of the signature, to be incorporated in the signed header
 // ('typ' attribute). Port of #getSignatureType.
-func (p *JAdESSignatureParameters) SignatureType() string {
+func (p *SignatureParameters) SignatureType() string {
 	return p.signatureType
 }
 
 // SetSignatureType sets the MimeType of the signature to be incorporated within the signed
 // header ('typ' attribute). Default: derived from the selected JWS serialization type. Port of
 // #setSignatureType.
-func (p *JAdESSignatureParameters) SetSignatureType(signatureType string) {
+func (p *SignatureParameters) SetSignatureType(signatureType string) {
 	p.signatureType = signatureType
 }
 
 // IsIncludeKeyIdentifier returns whether a 'kid' (key identifier) header parameter should be
 // created. Port of #isIncludeKeyIdentifier.
-func (p *JAdESSignatureParameters) IsIncludeKeyIdentifier() bool {
+func (p *SignatureParameters) IsIncludeKeyIdentifier() bool {
 	return p.includeKeyIdentifier
 }
 
 // SetIncludeKeyIdentifier sets whether a 'kid' (key identifier) header parameter should be
 // created within a protected header, provided that a signing-certificate is defined within the
 // signature parameters. Default: TRUE. Port of #setIncludeKeyIdentifier.
-func (p *JAdESSignatureParameters) SetIncludeKeyIdentifier(includeKeyIdentifier bool) {
+func (p *SignatureParameters) SetIncludeKeyIdentifier(includeKeyIdentifier bool) {
 	p.includeKeyIdentifier = includeKeyIdentifier
 }
 
 // KeyIdentifier gets the value of the 'kid' (key identifier) protected header parameter. Port of
 // #getKeyIdentifier.
-func (p *JAdESSignatureParameters) KeyIdentifier() string {
+func (p *SignatureParameters) KeyIdentifier() string {
 	return p.keyIdentifier
 }
 
 // SetKeyIdentifier sets the 'kid' value to be incorporated within the signature's protected
 // header. Port of #setKeyIdentifier.
-func (p *JAdESSignatureParameters) SetKeyIdentifier(keyIdentifier string) {
+func (p *SignatureParameters) SetKeyIdentifier(keyIdentifier string) {
 	p.keyIdentifier = keyIdentifier
 }
 
 // ContentType gets value of the 'cty' (content type) signed header parameter is to be included
 // in a protected header of the signature. Port of #getContentType.
-func (p *JAdESSignatureParameters) ContentType() string {
+func (p *SignatureParameters) ContentType() string {
 	return p.contentType
 }
 
 // SetContentType sets value of the 'cty' (content type) signed header parameter is to be
 // included in a protected header of the signature. Port of #setContentType.
-func (p *JAdESSignatureParameters) SetContentType(contentType string) {
+func (p *SignatureParameters) SetContentType(contentType string) {
 	p.contentType = contentType
 }
 
 // X509Url returns the value of the 'x5u' header parameter if present. Port of #getX509Url.
-func (p *JAdESSignatureParameters) X509Url() string {
+func (p *SignatureParameters) X509Url() string {
 	return p.x509Url
 }
 
 // SetX509Url sets the value for the 'x5u' signed header parameter. Port of #setX509Url.
-func (p *JAdESSignatureParameters) SetX509Url(x509Url string) {
+func (p *SignatureParameters) SetX509Url(x509Url string) {
 	p.x509Url = x509Url
 }
 
 // SigningCertificateDigestMethod sees SetSigningCertificateDigestMethod. Port of
 // #getSigningCertificateDigestMethod.
-func (p *JAdESSignatureParameters) SigningCertificateDigestMethod() enumerations.DigestAlgorithm {
+func (p *SignatureParameters) SigningCertificateDigestMethod() enumerations.DigestAlgorithm {
 	return p.signingCertificateDigestMethod
 }
 
@@ -254,7 +254,7 @@ func (p *JAdESSignatureParameters) SigningCertificateDigestMethod() enumerations
 // or 'x5t#o' for other algorithms). Default: SHA512 ('x5t#o' attribute will be created). Panics
 // with the Java message when signingCertificateDigestMethod is empty (Objects.requireNonNull
 // upstream). Port of #setSigningCertificateDigestMethod.
-func (p *JAdESSignatureParameters) SetSigningCertificateDigestMethod(signingCertificateDigestMethod enumerations.DigestAlgorithm) {
+func (p *SignatureParameters) SetSigningCertificateDigestMethod(signingCertificateDigestMethod enumerations.DigestAlgorithm) {
 	if signingCertificateDigestMethod == "" {
 		panic("SigningCertificateDigestMethod cannot be null!")
 	}
@@ -262,7 +262,7 @@ func (p *JAdESSignatureParameters) SetSigningCertificateDigestMethod(signingCert
 }
 
 // JwsSerializationType gets the JWSSerializationType. Port of #getJwsSerializationType.
-func (p *JAdESSignatureParameters) JwsSerializationType() enumerations.JWSSerializationType {
+func (p *SignatureParameters) JwsSerializationType() enumerations.JWSSerializationType {
 	return p.jwsSerializationType
 }
 
@@ -270,7 +270,7 @@ func (p *JAdESSignatureParameters) JwsSerializationType() enumerations.JWSSerial
 // JWSSerializationType.COMPACT_SERIALIZATION. Panics with the Java message when
 // jwsSerializationType is empty (Objects.requireNonNull upstream). Port of
 // #setJwsSerializationType.
-func (p *JAdESSignatureParameters) SetJwsSerializationType(jwsSerializationType enumerations.JWSSerializationType) {
+func (p *SignatureParameters) SetJwsSerializationType(jwsSerializationType enumerations.JWSSerializationType) {
 	if jwsSerializationType == "" {
 		panic("JWSSerializationType cannot be null!")
 	}
@@ -278,19 +278,19 @@ func (p *JAdESSignatureParameters) SetJwsSerializationType(jwsSerializationType 
 }
 
 // SigDMechanism returns a SigDMechanism to use. Port of #getSigDMechanism.
-func (p *JAdESSignatureParameters) SigDMechanism() enumerations.SigDMechanism {
+func (p *SignatureParameters) SigDMechanism() enumerations.SigDMechanism {
 	return p.sigDMechanism
 }
 
 // SetSigDMechanism sets SigDMechanism to use for a Detached signature. Port of
 // #setSigDMechanism.
-func (p *JAdESSignatureParameters) SetSigDMechanism(sigDMechanism enumerations.SigDMechanism) {
+func (p *SignatureParameters) SetSigDMechanism(sigDMechanism enumerations.SigDMechanism) {
 	p.sigDMechanism = sigDMechanism
 }
 
 // JadesSigningTimeType returns the JAdES claimed signing-time header parameters to be used.
 // Port of #getJadesSigningTimeType.
-func (p *JAdESSignatureParameters) JadesSigningTimeType() JAdESSigningTimeType {
+func (p *SignatureParameters) JadesSigningTimeType() SigningTimeType {
 	return p.jadesSigningTimeType
 }
 
@@ -304,14 +304,14 @@ func (p *JAdESSignatureParameters) JadesSigningTimeType() JAdESSigningTimeType {
 // signatures.
 //
 // Default: IAT ('iat' header parameter will be used). Port of #setJadesSigningTimeType.
-func (p *JAdESSignatureParameters) SetJadesSigningTimeType(jadesSigningTimeType JAdESSigningTimeType) {
+func (p *SignatureParameters) SetJadesSigningTimeType(jadesSigningTimeType SigningTimeType) {
 	p.jadesSigningTimeType = jadesSigningTimeType
 }
 
 // ExpirationTime gets the expiration time of the signature. NOTE: The signed header is used for
 // an ETSI TS 119 411-5 TLS Certificate Binding signature and contains an expiry date of the
 // binding. nil is Java's null (unset). Port of #getExpirationTime.
-func (p *JAdESSignatureParameters) ExpirationTime() *time.Time {
+func (p *SignatureParameters) ExpirationTime() *time.Time {
 	return p.expirationTime
 }
 
@@ -320,13 +320,13 @@ func (p *JAdESSignatureParameters) ExpirationTime() *time.Time {
 // not be accepted for processing. NOTE: The signed header is used for an ETSI TS 119 411-5 TLS
 // Certificate Binding signature and contains an expiry date of the binding. Port of
 // #setExpirationTime.
-func (p *JAdESSignatureParameters) SetExpirationTime(expirationTime *time.Time) {
+func (p *SignatureParameters) SetExpirationTime(expirationTime *time.Time) {
 	p.expirationTime = expirationTime
 }
 
 // IsBase64UrlEncodedPayload gets if base64Url encoded payload shall be used. Port of
 // #isBase64UrlEncodedPayload.
-func (p *JAdESSignatureParameters) IsBase64UrlEncodedPayload() bool {
+func (p *SignatureParameters) IsBase64UrlEncodedPayload() bool {
 	return p.base64UrlEncodedPayload
 }
 
@@ -339,7 +339,7 @@ func (p *JAdESSignatureParameters) IsBase64UrlEncodedPayload() bool {
 //
 // Default: TRUE (base64Url encoded payload will be used). Port of
 // #setBase64UrlEncodedPayload.
-func (p *JAdESSignatureParameters) SetBase64UrlEncodedPayload(base64EncodedPayload bool) {
+func (p *SignatureParameters) SetBase64UrlEncodedPayload(base64EncodedPayload bool) {
 	p.base64UrlEncodedPayload = base64EncodedPayload
 }
 
@@ -349,7 +349,7 @@ func (p *JAdESSignatureParameters) SetBase64UrlEncodedPayload(base64EncodedPaylo
 // Default: TRUE (base64Url encoded etsiU components will be used). Port of
 // #isBase64UrlEncodedEtsiUComponents; the *bool return mirrors Java's nullable Boolean (nil is
 // Java's null, unset).
-func (p *JAdESSignatureParameters) IsBase64UrlEncodedEtsiUComponents() *bool {
+func (p *SignatureParameters) IsBase64UrlEncodedEtsiUComponents() *bool {
 	return p.base64UrlEncodedEtsiUComponents
 }
 
@@ -364,12 +364,12 @@ func (p *JAdESSignatureParameters) IsBase64UrlEncodedEtsiUComponents() *bool {
 // #setBase64UrlEncodedEtsiUComponents(boolean); the *bool parameter lets nil clear the value,
 // matching the field's nullable-Boolean nature (Java's overload only ever assigns a boxed
 // non-null boolean, but every call site in this port passes an explicit pointer).
-func (p *JAdESSignatureParameters) SetBase64UrlEncodedEtsiUComponents(base64UrlEncodedEtsiUComponents *bool) {
+func (p *SignatureParameters) SetBase64UrlEncodedEtsiUComponents(base64UrlEncodedEtsiUComponents *bool) {
 	p.base64UrlEncodedEtsiUComponents = base64UrlEncodedEtsiUComponents
 }
 
 // String ports #toString.
-func (p *JAdESSignatureParameters) String() string {
+func (p *SignatureParameters) String() string {
 	return fmt.Sprintf("JAdESSignatureParameters [includeCertificateChain=%v, includeSignatureType=%v, includeKeyIdentifier=%v, x509Url='%v', base64UrlEncodedPayload=%v, base64UrlEncodedEtsiUComponents=%v, signingCertificateDigestMethod=%v, jwsSerializationType=%v, sigDMechanism=%v, jadesSigningTimeType=%v] %s",
 		p.includeCertificateChain, p.includeSignatureType, p.includeKeyIdentifier, p.x509Url,
 		p.base64UrlEncodedPayload, boolPtrString(p.base64UrlEncodedEtsiUComponents),
@@ -390,7 +390,7 @@ func boolPtrString(b *bool) string {
 }
 
 // Equals ports #equals.
-func (p *JAdESSignatureParameters) Equals(other *JAdESSignatureParameters) bool {
+func (p *SignatureParameters) Equals(other *SignatureParameters) bool {
 	if p == other {
 		return true
 	}

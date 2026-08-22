@@ -23,7 +23,7 @@
 // so the type assertion below succeeds for those formats.
 // xades.XMLDocumentValidator does not implement SignedDocumentValidatorOverrides
 // at all (see that type's own header: unlike the other formats, XAdES ships no
-// format-specific DiagnosticDataBuilder subclass), so for a bare XAdES TLS
+// format-specific DataBuilder subclass), so for a bare XAdES TLS
 // Certificate Binding signature the assertion below fails and this port falls
 // back to Java's other reachable behavior for a null diagnostic data builder (an
 // empty signature section) - never a nil-pointer panic downstream.
@@ -90,19 +90,19 @@ func newQWACValidator(url string, certificateToken *model.CertificateToken) *QWA
 	return v
 }
 
-// QWACValidatorFromURL instantiates a new QWACValidator to verify the TSL/SSL certificate from
+// FromURL instantiates a new QWACValidator to verify the TSL/SSL certificate from
 // the specified url. When loaded with this function, QWACValidator performs a request to the
 // remote url to retrieve the actual TSL/SSL certificate and perform its validation. Port of
 // fromUrl(String).
-func QWACValidatorFromURL(url string) *QWACValidator {
+func FromURL(url string) *QWACValidator {
 	return newQWACValidator(url, nil)
 }
 
-// QWACValidatorFromURLAndCertificate instantiates a new QWACValidator to verify the provided
+// FromURLAndCertificate instantiates a new QWACValidator to verify the provided
 // TSL/SSL certificateToken against the specified url. When loaded with this function,
 // QWACValidator validates the provided certificateToken whether it can be used as a QWAC TSL/SSL
 // certificate for the url. Port of fromUrlAndCertificate(String, CertificateToken).
-func QWACValidatorFromURLAndCertificate(url string, certificateToken *model.CertificateToken) *QWACValidator {
+func FromURLAndCertificate(url string, certificateToken *model.CertificateToken) *QWACValidator {
 	return newQWACValidator(url, certificateToken)
 }
 
@@ -155,13 +155,13 @@ func (v *QWACValidator) connectToURL() *modelhttp.ResponseEnvelope {
 	return v.dataLoaderOrDefault().RequestGetFull(v.url, true, false)
 }
 
-// prepareQWACValidationContext prepares a ValidationContext using the configuration and
+// prepareQWACValidationContext prepares a Context using the configuration and
 // provided data objects. Port of the protected prepareValidationContext(CertificateToken, List,
 // AdvancedSignature) - an overload of, not an override of, the base 1-arg
 // prepareValidationContext(CertificateVerifier) that PrepareValidationContext (promoted,
 // unshadowed, from AbstractCertificateValidator below) already satisfies.
 func (v *QWACValidator) prepareQWACValidationContext(tlsCertificate *model.CertificateToken, otherTLSCertificates []*model.CertificateToken,
-	signature spivalidation.AdvancedSignature) spivalidation.ValidationContext {
+	signature spivalidation.AdvancedSignature) spivalidation.Context {
 	certificateVerifierForValidation := v.offlineCertificateVerifier()
 
 	validationContext := v.PrepareValidationContext(certificateVerifierForValidation)
@@ -275,13 +275,13 @@ func (v *QWACValidator) assertResponseValid(response *modelhttp.ResponseEnvelope
 }
 
 // createQWACDiagnosticDataBuilder creates and configures a new DiagnosticDataBuilder. Port of
-// the protected createDiagnosticDataBuilder(ValidationContext, SignedDocumentValidator,
+// the protected createDiagnosticDataBuilder(Context, SignedDocumentValidator,
 // CertificateToken, String, AdvancedSignature) - an overload of, not an override of, the base
-// 1-arg createDiagnosticDataBuilder(ValidationContext) that CreateDiagnosticDataBuilder
+// 1-arg createDiagnosticDataBuilder(Context) that CreateDiagnosticDataBuilder
 // (promoted, unshadowed, from AbstractCertificateValidator below) already satisfies; this
 // method calls that promoted 1-arg method directly, exactly as Java's
 // `super.createDiagnosticDataBuilder(validationContext)` does.
-func (v *QWACValidator) createQWACDiagnosticDataBuilder(validationContext spivalidation.ValidationContext,
+func (v *QWACValidator) createQWACDiagnosticDataBuilder(validationContext spivalidation.Context,
 	signedDocumentValidator dssvalidation.SignedDocumentValidator, tlsCertificate *model.CertificateToken,
 	tlsCertificateBindingURL string, signature spivalidation.AdvancedSignature) dssvalidation.DiagnosticDataBuilderRef {
 	base := v.CreateDiagnosticDataBuilder(validationContext)
@@ -317,9 +317,9 @@ func (v *QWACValidator) offlineCertificateVerifier() spivalidation.CertificateVe
 }
 
 // InitDiagnosticDataBuilder ports the protected initDiagnosticDataBuilder() override.
-func (v *QWACValidator) InitDiagnosticDataBuilder() (dssvalidation.DiagnosticDataBuilderRef, *reportsdiagnostic.DiagnosticDataBuilder) {
+func (v *QWACValidator) InitDiagnosticDataBuilder() (dssvalidation.DiagnosticDataBuilderRef, *reportsdiagnostic.DataBuilder) {
 	builder := reportsdiagnostic.NewQWACCertificateDiagnosticDataBuilder()
-	return builder, &builder.DiagnosticDataBuilder
+	return builder, &builder.DataBuilder
 }
 
 // DefaultValidationPolicyPath ports the protected getDefaultValidationPolicyPath() override.

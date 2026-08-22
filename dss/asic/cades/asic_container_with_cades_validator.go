@@ -1,14 +1,14 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/ASiCContainerWithCAdESValidator.java (DSS 6.5.RC1).
 //
-// NAMING (judgment call): the frozen asic.AbstractASiCContainerValidator names its ASiCContent
+// NAMING (judgment call): the frozen asic.AbstractASiCContainerValidator names its Content
 // overload `IsSupported(asicContent *ASiCContent) bool`, which in Java is a same-name overload
 // of the DSSDocument-taking `isSupported(DSSDocument)` the SignedDocumentValidator interface
 // requires - Go cannot host both spellings on one type. This leaf therefore defines its own
 // `IsSupported(document model.DSSDocument) bool` (satisfying the interface, delegating to the
-// wrapped DocumentAnalyzer), which shadows the promoted ASiCContent overload entirely, and
+// wrapped DocumentAnalyzer), which shadows the promoted Content overload entirely, and
 // exposes that overload under the renamed `IsSupportedContent`, matching the
 // IsSupportedASiCContent/IsSupportedContent naming convention already established elsewhere in
-// this port (asic.ASiCFormatDetector, asic.DefaultContainerMergerOverrides).
+// this port (asic.FormatDetector, asic.DefaultContainerMergerOverrides).
 package cades
 
 import (
@@ -58,8 +58,8 @@ func NewASiCContainerWithCAdESValidator(asicContainer model.DSSDocument) *ASiCCo
 }
 
 // NewASiCContainerWithCAdESValidatorFromContent is the constructor with ASiCContent. Ports
-// ASiCContainerWithCAdESValidator(ASiCContent).
-func NewASiCContainerWithCAdESValidatorFromContent(asicContent *asic.ASiCContent) *ASiCContainerWithCAdESValidator {
+// ASiCContainerWithCAdESValidator(Content).
+func NewASiCContainerWithCAdESValidatorFromContent(asicContent *asic.Content) *ASiCContainerWithCAdESValidator {
 	v := &ASiCContainerWithCAdESValidator{
 		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithCAdESAnalyzerFromContent(asicContent)),
 	}
@@ -85,16 +85,16 @@ func (v *ASiCContainerWithCAdESValidator) IsSupported(document model.DSSDocument
 	return v.GetDocumentAnalyzer().IsSupported(document)
 }
 
-// IsSupportedContent verifies whether the provided ASiCContent is supported by the current
+// IsSupportedContent verifies whether the provided Content is supported by the current
 // validator. Ports the isSupported(ASiCContent) overload; see the file header's naming note.
-func (v *ASiCContainerWithCAdESValidator) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (v *ASiCContainerWithCAdESValidator) IsSupportedContent(asicContent *asic.Content) bool {
 	return v.AbstractASiCContainerValidator.IsSupported(asicContent)
 }
 
 // InstantiateASiCDiagnosticDataBuilder ports the @Override protected
 // instantiateASiCDiagnosticDataBuilder(), implementing
 // asic.AbstractASiCContainerValidatorOverrides - see that interface's doc comment.
-func (v *ASiCContainerWithCAdESValidator) InstantiateASiCDiagnosticDataBuilder() *asic.ASiCContainerDiagnosticDataBuilder {
+func (v *ASiCContainerWithCAdESValidator) InstantiateASiCDiagnosticDataBuilder() *asic.ContainerDiagnosticDataBuilder {
 	builder := NewASiCWithCAdESDiagnosticDataBuilder()
-	return &builder.ASiCContainerDiagnosticDataBuilder
+	return &builder.ContainerDiagnosticDataBuilder
 }

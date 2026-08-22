@@ -20,7 +20,7 @@ type EAANotOnHoldCheck struct {
 }
 
 // NewEAANotOnHoldCheck is the default constructor.
-func NewEAANotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAANotOnHoldCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationWrapper, constraint policy.LevelRule) *EAANotOnHoldCheck {
 	c := &EAANotOnHoldCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

@@ -16,13 +16,13 @@ func NewEmptySignaturePolicyValidator() *EmptySignaturePolicyValidator {
 
 // CanValidate reports whether signaturePolicy has no policy content and is
 // not a zero-hash policy.
-func (v *EmptySignaturePolicyValidator) CanValidate(signaturePolicy *signature.SignaturePolicy) bool {
+func (v *EmptySignaturePolicyValidator) CanValidate(signaturePolicy *signature.Policy) bool {
 	return signaturePolicy.PolicyContent() == nil && !signaturePolicy.IsZeroHash()
 }
 
 // Validate reports the policy's digest as valid exactly when the policy
 // carries no identifier.
-func (v *EmptySignaturePolicyValidator) Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult {
+func (v *EmptySignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
 	validationResult := signature.NewSignaturePolicyValidationResult()
 	validationResult.SetDigestValid(signaturePolicy.Identifier() == "")
 	return validationResult

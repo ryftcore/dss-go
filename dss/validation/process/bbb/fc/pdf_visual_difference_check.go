@@ -20,7 +20,7 @@ type PdfVisualDifferenceCheck struct {
 }
 
 // NewPdfVisualDifferenceCheck is the default constructor.
-func NewPdfVisualDifferenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewPdfVisualDifferenceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *PdfVisualDifferenceCheck {
 	c := &PdfVisualDifferenceCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

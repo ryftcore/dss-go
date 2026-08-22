@@ -20,7 +20,7 @@ type EAAOneTimeUseCheck struct {
 }
 
 // NewEAAOneTimeUseCheck is the default constructor.
-func NewEAAOneTimeUseCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAOneTimeUseCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAAOneTimeUseCheck {
 	c := &EAAOneTimeUseCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

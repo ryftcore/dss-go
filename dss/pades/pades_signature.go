@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PAdESSignature.java
 // (DSS 6.5.RC1).
 //
-// PAdESSignature extends cades.CAdESSignature across a package boundary (dss-cades ->
+// Signature extends cades.Signature across a package boundary (dss-cades ->
 // dss-pades in Java; cades -> pades in this port). Go has no protected
 // field visibility across packages, so every Java protected field this class reads/writes
 // (offlineCertificateSource, signatureCRLSource, signatureOCSPSource, signatureTimestampSource,
@@ -10,10 +10,10 @@
 // (OfflineCertificateSource/SetOfflineCertificateSource, SignatureCRLSource/
 // SetSignatureCRLSource, SignatureOCSPSource/SetSignatureOCSPSource, SignatureTimestampSource/
 // SetSignatureTimestampSource, SetDetachedContents), promoted through the embedded
-// *cades.CAdESSignature. NewPAdESSignature re-registers virtual dispatch onto the PAdESSignature
+// *cades.Signature. NewPAdESSignature re-registers virtual dispatch onto the Signature
 // value itself (InitDefaultAdvancedSignature(s), promoted the same way NewCAdESSignature calls
-// it onto itself) so that every DefaultAdvancedSignatureOverrides method PAdESSignature does not
-// itself define keeps resolving, unchanged, to *cades.CAdESSignature's implementation (Go method
+// it onto itself) so that every DefaultAdvancedSignatureOverrides method Signature does not
+// itself define keeps resolving, unchanged, to *cades.Signature's implementation (Go method
 // promotion standing in for Java's single-dispatch inheritance), while every method PAdESSignature
 // does define below shadows it.
 package pades
@@ -43,9 +43,9 @@ const (
 )
 
 // PAdESSignature is the implementation of AdvancedSignature for PAdES. Port of the class
-// PAdESSignature, extending cades.CAdESSignature.
-type PAdESSignature struct {
-	*cades.CAdESSignature
+// Signature, extending cades.Signature.
+type Signature struct {
+	*cades.Signature
 
 	// pdfSignatureRevision is the corresponding PDF revision.
 	pdfSignatureRevision *PdfSignatureRevision
@@ -66,13 +66,13 @@ type PAdESSignature struct {
 	vriKey string
 }
 
-// NewPAdESSignature is the default constructor for PAdESSignature.
+// NewPAdESSignature is the default constructor for Signature.
 // Port of the protected PAdESSignature(PdfSignatureRevision, List<PdfRevision>) constructor.
-func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevisions []PdfRevision) *PAdESSignature {
+func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevisions []PdfRevision) *Signature {
 	cadesSignature := cades.NewCAdESSignature(pdfSignatureRevision.CMS(),
 		spi.DSSASN1UtilsFirstSignerInformation(pdfSignatureRevision.CMS().SignerInfos()))
-	s := &PAdESSignature{
-		CAdESSignature:       cadesSignature,
+	s := &Signature{
+		Signature:            cadesSignature,
 		pdfSignatureRevision: pdfSignatureRevision,
 		documentRevisions:    documentRevisions,
 	}
@@ -80,20 +80,20 @@ func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevis
 	s.SetDetachedContents([]model.DSSDocument{pdfSignatureRevision.SignedData()})
 
 	// Eagerly warms the offline certificate/CRL/OCSP source caches - shared embedded
-	// DefaultAdvancedSignature fields CAdESSignature.CertificateSource/CRLSource/OCSPSource also
+	// DefaultAdvancedSignature fields Signature.CertificateSource/CRLSource/OCSPSource also
 	// lazily populate on first call - with THIS type's own PAdES-enriched (DSS-dictionary and
 	// VRI aware) sources, before anything else gets a chance to populate them first.
 	//
 	// Without this, the generic timestamp-source machinery (spi/validation/timestamp's
-	// SignatureTimestampSource[*cades.CAdESSignature, *cades.CAdESAttribute], concretely typed
+	// SignatureTimestampSource[*cades.Signature, *cades.Attribute], concretely typed
 	// per pades_timestamp_source.go's header on why it mirrors Java's unparametrized
-	// CAdESTimestampSource<CAdESSignature,CAdESAttribute> inheritance) calls
+	// TimestampSource<Signature,Attribute> inheritance) calls
 	// s.signature.CertificateSource()/CRLSource()/OCSPSource() through the embedded
-	// *cades.CAdESSignature field the moment DocumentTimestamps() is first queried (directly, or
+	// *cades.Signature field the moment DocumentTimestamps() is first queried (directly, or
 	// via PDF modification-detection post-processing in PDFDocumentAnalyzer.postProcessing).
 	// Since Go has no runtime vtable for a concrete (non-interface) generic type parameter - only
 	// Java's virtual dispatch reaches PAdESSignature.getCertificateSource() there - that call
-	// resolves to CAdESSignature's OWN method body, which lazily constructs a plain CAdES
+	// resolves to Signature's OWN method body, which lazily constructs a plain CAdES
 	// certificate source (CMS-embedded certs only, no /DSS or /VRI dictionary awareness) and
 	// PERMANENTLY caches it into the very same shared offlineCertificateSource/
 	// signatureCRLSource/signatureOCSPSource fields this type's own CertificateSource()/
@@ -103,7 +103,7 @@ func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevis
 	// Confirmed by pades/testdata/upstream/validation/PAdES-LT.pdf in the PAdES cross-validation
 	// harness, whose signing certificates are embedded only in the document's /DSS and /VRI
 	// dictionaries, not in each signature's own CMS: without this warm-up,
-	// SigningCertificateToken()/SignatureCryptographicVerification()/DataFoundUpToLevel() for
+	// SigningCertificateToken()/CryptographicVerification()/DataFoundUpToLevel() for
 	// such a signature silently degrade to "certificate not found"/broken signature/PAdES_BES the
 	// moment DocumentTimestamps() is queried.
 	s.CertificateSource()
@@ -115,22 +115,22 @@ func NewPAdESSignature(pdfSignatureRevision *PdfSignatureRevision, documentRevis
 
 // SetDssCertificateSource sets a joint DSS/VRI Certificate Source.
 // Port of setDssCertificateSource(ListCertificateSource).
-func (s *PAdESSignature) SetDssCertificateSource(dssCertificateSource *spi.ListCertificateSource) {
+func (s *Signature) SetDssCertificateSource(dssCertificateSource *spi.ListCertificateSource) {
 	s.dssCertificateSource = dssCertificateSource
 }
 
 // SetDssCRLSource sets a joint DSS/VRI CRL Source. Port of setDssCRLSource(ListRevocationSource).
-func (s *PAdESSignature) SetDssCRLSource(dssCRLSource *spi.ListRevocationSource[revocation.CRL]) {
+func (s *Signature) SetDssCRLSource(dssCRLSource *spi.ListRevocationSource[revocation.CRL]) {
 	s.dssCRLSource = dssCRLSource
 }
 
 // SetDssOCSPSource sets a joint DSS/VRI OCSP Source. Port of setDssOCSPSource(ListRevocationSource).
-func (s *PAdESSignature) SetDssOCSPSource(dssOCSPSource *spi.ListRevocationSource[revocation.OCSP]) {
+func (s *Signature) SetDssOCSPSource(dssOCSPSource *spi.ListRevocationSource[revocation.OCSP]) {
 	s.dssOCSPSource = dssOCSPSource
 }
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
-func (s *PAdESSignature) SignatureForm() enumerations.SignatureForm {
+func (s *Signature) SignatureForm() enumerations.SignatureForm {
 	if s.hasPKCS7SubFilter() {
 		return enumerations.SignatureFormPKCS7
 	}
@@ -139,7 +139,7 @@ func (s *PAdESSignature) SignatureForm() enumerations.SignatureForm {
 
 // CertificateSource gets a certificate source which contains ALL certificates embedded in the
 // signature. Port of getCertificateSource().
-func (s *PAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
+func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
 		padesCertificateSource, err := NewPAdESCertificateSource(s.pdfSignatureRevision, s.VRIKey(), s.SignerInformation())
 		if err != nil {
@@ -152,7 +152,7 @@ func (s *PAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
 
 // CRLSource gets a CRL source which contains ALL CRLs embedded in the signature.
 // Port of getCRLSource().
-func (s *PAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
+func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
 		s.SetSignatureCRLSource(NewPAdESCRLSource(s.pdfSignatureRevision, s.VRIKey(), s.SignerInformation().SignedAttributes))
 	}
@@ -161,7 +161,7 @@ func (s *PAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL]
 
 // OCSPSource gets an OCSP source which contains ALL OCSP responses embedded in the signature.
 // Port of getOCSPSource().
-func (s *PAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
+func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
 		s.SetSignatureOCSPSource(NewPAdESOCSPSource(s.pdfSignatureRevision, s.VRIKey(), s.SignerInformation().SignedAttributes))
 	}
@@ -170,8 +170,8 @@ func (s *PAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCS
 
 // CompleteCertificateSource returns a complete certificate source including the joint DSS/VRI
 // source, when set. Port of getCompleteCertificateSource().
-func (s *PAdESSignature) CompleteCertificateSource() *spi.ListCertificateSource {
-	completeCertificateSource := s.CAdESSignature.CompleteCertificateSource()
+func (s *Signature) CompleteCertificateSource() *spi.ListCertificateSource {
+	completeCertificateSource := s.Signature.CompleteCertificateSource()
 	if s.dssCertificateSource != nil {
 		completeCertificateSource.AddAll(s.dssCertificateSource)
 	}
@@ -180,8 +180,8 @@ func (s *PAdESSignature) CompleteCertificateSource() *spi.ListCertificateSource 
 
 // CompleteCRLSource returns a complete CRL source including the joint DSS/VRI source, when set.
 // Port of getCompleteCRLSource().
-func (s *PAdESSignature) CompleteCRLSource() *spi.ListRevocationSource[revocation.CRL] {
-	completeCRLSource := s.CAdESSignature.CompleteCRLSource()
+func (s *Signature) CompleteCRLSource() *spi.ListRevocationSource[revocation.CRL] {
+	completeCRLSource := s.Signature.CompleteCRLSource()
 	if s.dssCRLSource != nil {
 		completeCRLSource.AddAllFrom(s.dssCRLSource)
 	}
@@ -190,8 +190,8 @@ func (s *PAdESSignature) CompleteCRLSource() *spi.ListRevocationSource[revocatio
 
 // CompleteOCSPSource returns a complete OCSP source including the joint DSS/VRI source, when
 // set. Port of getCompleteOCSPSource().
-func (s *PAdESSignature) CompleteOCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
-	completeOCSPSource := s.CAdESSignature.CompleteOCSPSource()
+func (s *Signature) CompleteOCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
+	completeOCSPSource := s.Signature.CompleteOCSPSource()
 	if s.dssOCSPSource != nil {
 		completeOCSPSource.AddAllFrom(s.dssOCSPSource)
 	}
@@ -200,9 +200,9 @@ func (s *PAdESSignature) CompleteOCSPSource() *spi.ListRevocationSource[revocati
 
 // TimestampSource gets a Signature Timestamp source which contains ALL timestamps embedded in
 // the signature. Port of getTimestampSource(), covariant in Java (returns
-// PAdESTimestampSource); Go has no covariant return, so PAdES-specific callers assert on the
+// TimestampSource); Go has no covariant return, so PAdES-specific callers assert on the
 // result, as in cades_signature.go's TimestampSource().
-func (s *PAdESSignature) TimestampSource() validation.TimestampSource {
+func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
 		s.SetSignatureTimestampSource(NewPAdESTimestampSource(s, s.documentRevisions))
 	}
@@ -210,46 +210,46 @@ func (s *PAdESSignature) TimestampSource() validation.TimestampSource {
 }
 
 // DocumentTimestamps returns the list of document timestamps. Port of getDocumentTimestamps().
-func (s *PAdESSignature) DocumentTimestamps() []*validation.TimestampToken {
-	return s.TimestampSource().(*PAdESTimestampSource).DocumentTimestamps()
+func (s *Signature) DocumentTimestamps() []*validation.TimestampToken {
+	return s.TimestampSource().(*TimestampSource).DocumentTimestamps()
 }
 
 // VRITimestamps returns a list of timestamps enveloped within /VRI dictionary for the current
 // signature. Port of getVRITimestamps().
-func (s *PAdESSignature) VRITimestamps() []*validation.TimestampToken {
-	return s.TimestampSource().(*PAdESTimestampSource).VriTimestamps()
+func (s *Signature) VRITimestamps() []*validation.TimestampToken {
+	return s.TimestampSource().(*TimestampSource).VriTimestamps()
 }
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes()
 // override.
-func (s *PAdESSignature) FindSignatureScopes() []scope.SignatureScope {
+func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
 	return NewPAdESSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // SigningTime returns the claimed signing time. Port of getSigningTime().
-func (s *PAdESSignature) SigningTime() *time.Time {
+func (s *Signature) SigningTime() *time.Time {
 	signingTime := s.pdfSignatureRevision.SigningDate()
 	return &signingTime
 }
 
 // ContentIdentifier returns nil, not applicable for PAdES. Port of getContentIdentifier().
-func (s *PAdESSignature) ContentIdentifier() string {
+func (s *Signature) ContentIdentifier() string {
 	return ""
 }
 
 // ContentHints returns nil, not applicable for PAdES. Port of getContentHints().
-func (s *PAdESSignature) ContentHints() string {
+func (s *Signature) ContentHints() string {
 	return ""
 }
 
 // CounterSignatures returns an empty list, not applicable for PAdES.
 // Port of getCounterSignatures().
-func (s *PAdESSignature) CounterSignatures() []validation.AdvancedSignature {
+func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 	return []validation.AdvancedSignature{}
 }
 
 // OriginalDocument returns the original signed document. Port of getOriginalDocument().
-func (s *PAdESSignature) OriginalDocument() (model.DSSDocument, error) {
+func (s *Signature) OriginalDocument() (model.DSSDocument, error) {
 	return s.pdfSignatureRevision.SignedData(), nil
 }
 
@@ -258,7 +258,7 @@ func (s *PAdESSignature) OriginalDocument() (model.DSSDocument, error) {
 //
 // ISO 32000-1: adbe.pkcs7.sha1: The SHA-1 digest of the document's byte range shall be
 // encapsulated in the CMSSignedData field with ContentInfo of type Data.
-func (s *PAdESSignature) SignerDocumentContent() (model.DSSDocument, error) {
+func (s *Signature) SignerDocumentContent() (model.DSSDocument, error) {
 	signerDocument, err := s.OriginalDocument()
 	if err != nil {
 		return nil, err
@@ -276,16 +276,16 @@ func (s *PAdESSignature) SignerDocumentContent() (model.DSSDocument, error) {
 
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id.
 // Port of the protected getSignatureIdentifierBuilder() override.
-func (s *PAdESSignature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
+func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
 	return NewPAdESSignatureIdentifierBuilder(s)
 }
 
-// BuildSignatureDigestReference builds a new SignatureDigestReference according to the PAdES
+// BuildSignatureDigestReference builds a new DigestReference according to the PAdES
 // format rules: the input of the digest value computation is the result of decoding the
 // hexadecimal string present within the /Contents field of the Signature PDF dictionary
 // enclosing one PAdES digital signature (TS 119 442 - V1.1.1, ch. 5.1.4.2.1.3 XML component).
 // Port of buildSignatureDigestReference(DigestAlgorithm).
-func (s *PAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference {
+func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference {
 	contents := s.PdfSignatureDictionary().Contents()
 	digestValue, err := spi.DSSUtilsDigest(digestAlgorithm, contents)
 	if err != nil {
@@ -295,13 +295,13 @@ func (s *PAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerati
 }
 
 // HasLTVProfile checks if the LTV-level is present in the signature. Port of hasLTVProfile().
-func (s *PAdESSignature) HasLTVProfile() bool {
+func (s *Signature) HasLTVProfile() bool {
 	return s.BaselineRequirementsChecker().HasExtendedLTVProfile()
 }
 
 // DataFoundUpToLevel returns the signature level up to which the data is found.
 // Port of getDataFoundUpToLevel().
-func (s *PAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
+func (s *Signature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	signatureForm := s.SignatureForm()
 	if enumerations.SignatureFormPAdES == signatureForm && s.HasBESProfile() {
 		if !s.HasBProfile() {
@@ -343,53 +343,53 @@ func (s *PAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 // BaselineRequirementsChecker narrows the return type of the promoted
 // CAdESSignature.BaselineRequirementsChecker(). Port of the protected
 // getBaselineRequirementsChecker() override.
-func (s *PAdESSignature) BaselineRequirementsChecker() *PAdESBaselineRequirementsChecker {
-	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*PAdESBaselineRequirementsChecker)
+func (s *Signature) BaselineRequirementsChecker() *BaselineRequirementsChecker {
+	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*BaselineRequirementsChecker)
 }
 
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier)
 // override.
-func (s *PAdESSignature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
+func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
 	return NewPAdESBaselineRequirementsChecker(s, certificateVerifier)
 }
 
 // HasPKCS7Profile checks the presence of PKCS#7 corresponding SubFilter.
 // Port of hasPKCS7Profile().
-func (s *PAdESSignature) HasPKCS7Profile() bool {
+func (s *Signature) HasPKCS7Profile() bool {
 	return s.BaselineRequirementsChecker().HasPKCS7Profile()
 }
 
 // HasPKCS7TProfile checks the presence of a signature-time-stamp.
 // Port of hasPKCS7TProfile().
-func (s *PAdESSignature) HasPKCS7TProfile() bool {
+func (s *Signature) HasPKCS7TProfile() bool {
 	return s.BaselineRequirementsChecker().HasPKCS7TProfile()
 }
 
 // HasPKCS7LTProfile checks the presence of a validation data. Port of hasPKCS7LTProfile().
-func (s *PAdESSignature) HasPKCS7LTProfile() bool {
+func (s *Signature) HasPKCS7LTProfile() bool {
 	return s.BaselineRequirementsChecker().HasPKCS7LTProfile()
 }
 
 // HasPKCS7LTAProfile checks the presence of an archive-time-stamp.
 // Port of hasPKCS7LTAProfile().
-func (s *PAdESSignature) HasPKCS7LTAProfile() bool {
+func (s *Signature) HasPKCS7LTAProfile() bool {
 	return s.BaselineRequirementsChecker().HasPKCS7LTAProfile()
 }
 
 // HasAProfile checks the presence of ArchiveTimeStamp element in the signature, what is the
 // proof -A profile existence. Port of the hasAProfile() override.
-func (s *PAdESSignature) HasAProfile() bool {
+func (s *Signature) HasAProfile() bool {
 	return s.BaselineRequirementsChecker().HasExtendedAProfile()
 }
 
 // DssDictionary gets the last DSS dictionary for the signature. Port of getDssDictionary().
-func (s *PAdESSignature) DssDictionary() PdfDssDict {
+func (s *Signature) DssDictionary() PdfDssDict {
 	return s.pdfSignatureRevision.DssDictionary()
 }
 
 // hasPKCS7SubFilter ports the private hasPKCS7SubFilter().
-func (s *PAdESSignature) hasPKCS7SubFilter() bool {
+func (s *Signature) hasPKCS7SubFilter() bool {
 	if s.pdfSignatureRevision != nil {
 		subFilter := s.pdfSignatureRevision.PdfSigDictInfo().SubFilter()
 		return PAdESConstantsSignaturePKCS7SubFilter == subFilter || PAdESConstantsSignaturePKCS7SHA1SubFilter == subFilter
@@ -399,18 +399,18 @@ func (s *PAdESSignature) hasPKCS7SubFilter() bool {
 
 // PdfRevision retrieves a PdfRevision (PAdES) related to the current signature.
 // Port of getPdfRevision().
-func (s *PAdESSignature) PdfRevision() *PdfSignatureRevision {
+func (s *Signature) PdfRevision() *PdfSignatureRevision {
 	return s.pdfSignatureRevision
 }
 
 // PdfSignatureDictionary gets the PdfSignatureDictionary. Port of getPdfSignatureDictionary().
-func (s *PAdESSignature) PdfSignatureDictionary() *PdfSignatureDictionary {
+func (s *Signature) PdfSignatureDictionary() *PdfSignatureDictionary {
 	return s.pdfSignatureRevision.PdfSigDictInfo()
 }
 
 // VRIKey returns the name of the related to the signature VRI dictionary.
 // Port of getVRIKey().
-func (s *PAdESSignature) VRIKey() string {
+func (s *Signature) VRIKey() string {
 	if s.vriKey == "" {
 		// By ETSI EN 319 142-1 V1.1.1, VRI dictionary's name is the base-16-encoded (uppercase)
 		// SHA1 digest of the signature to which it applies
@@ -425,7 +425,7 @@ func (s *PAdESSignature) VRIKey() string {
 
 // VRICreationTime returns a VRI creation time defined within 'TU' field of a corresponding
 // /VRI dictionary. Port of getVRICreationTime().
-func (s *PAdESSignature) VRICreationTime() *time.Time {
+func (s *Signature) VRICreationTime() *time.Time {
 	dssDictionary := s.DssDictionary()
 	if dssDictionary != nil {
 		pdfVriDictTimestampSource := NewPdfVriDictSource(dssDictionary, s.VRIKey())
@@ -435,6 +435,6 @@ func (s *PAdESSignature) VRICreationTime() *time.Time {
 }
 
 // AddExternalTimestamp is not supported for PAdES. Port of addExternalTimestamp(TimestampToken).
-func (s *PAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
+func (s *Signature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
 	panic("The action is not supported for PAdES!")
 }

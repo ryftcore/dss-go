@@ -10,15 +10,15 @@ import (
 )
 
 // CAdESDiagnosticDataBuilder is the DiagnosticDataBuilder for a CMS signature. Port of the
-// class CAdESDiagnosticDataBuilder, extending
+// class DiagnosticDataBuilder, extending
 // validation/reports/diagnostic.SignedDocumentDiagnosticDataBuilder.
-type CAdESDiagnosticDataBuilder struct {
+type DiagnosticDataBuilder struct {
 	dssdiagnostic.SignedDocumentDiagnosticDataBuilder
 }
 
 // NewCAdESDiagnosticDataBuilder is the port of the default constructor.
-func NewCAdESDiagnosticDataBuilder() *CAdESDiagnosticDataBuilder {
-	b := &CAdESDiagnosticDataBuilder{
+func NewCAdESDiagnosticDataBuilder() *DiagnosticDataBuilder {
+	b := &DiagnosticDataBuilder{
 		SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 	}
 	b.InitSignedDocumentDiagnosticDataBuilder(b)
@@ -27,11 +27,11 @@ func NewCAdESDiagnosticDataBuilder() *CAdESDiagnosticDataBuilder {
 
 // cadesLikeSignature is the minimal surface BuildDetachedXmlSignature needs from a CAdES-based
 // signature. Java's `(CAdESSignature) signature` upcast succeeds for PAdESSignature too (it
-// extends CAdESSignature); the Go port PAdESSignature instead embeds *CAdESSignature by
-// pointer (see pades/pades_signature.go), so it is never itself a *CAdESSignature and a
-// concrete-type assertion to *CAdESSignature panics for it. Asserting to this interface instead
-// - which *CAdESSignature satisfies directly and *PAdESSignature satisfies via its own
-// ContentIdentifier/ContentHints overrides plus the embedded *CAdESSignature's promoted
+// extends Signature); the Go port Signature instead embeds *Signature by
+// pointer (see pades/pades_signature.go), so it is never itself a *Signature and a
+// concrete-type assertion to *Signature panics for it. Asserting to this interface instead
+// - which *Signature satisfies directly and *Signature satisfies via its own
+// ContentIdentifier/ContentHints overrides plus the embedded *Signature's promoted
 // SignerInformationStoreInfos - lets both signature families reach this method. Added because
 // pades/pades_diagnostic_data_builder.go's smoke test caught the panic; purely additive, no
 // existing CAdES-only behavior changes.
@@ -44,7 +44,7 @@ type cadesLikeSignature interface {
 // BuildDetachedXmlSignature builds the XmlSignature, adding CAdES-specific content-identifier,
 // content-hints and SignerInformationStore data. Port of the public @Override
 // buildDetachedXmlSignature(AdvancedSignature).
-func (b *CAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
+func (b *DiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
 	xmlSignature := b.SignedDocumentDiagnosticDataBuilder.BuildDetachedXmlSignature(signature)
 	cadesSignature := signature.(cadesLikeSignature)
 	if contentIdentifier := cadesSignature.ContentIdentifier(); contentIdentifier != "" {
@@ -61,7 +61,7 @@ func (b *CAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validat
 
 // BuildDetachedXmlTimestamp builds the XmlTimestamp, adding the ats-hash-index validation
 // status when present. Port of the protected @Override buildDetachedXmlTimestamp(TimestampToken).
-func (b *CAdESDiagnosticDataBuilder) BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp {
+func (b *DiagnosticDataBuilder) BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp {
 	xmlTimestamp := b.SignedDocumentDiagnosticDataBuilder.BuildDetachedXmlTimestamp(timestampToken)
 	atsHashIndexStatus := timestampToken.AtsHashIndexStatus()
 	if atsHashIndexStatus != nil {

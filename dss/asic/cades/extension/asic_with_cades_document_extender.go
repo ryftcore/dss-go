@@ -42,7 +42,7 @@ func NewASiCWithCAdESDocumentExtender(doc model.DSSDocument) *ASiCWithCAdESDocum
 
 // CreateSignatureService ports the overridden protected createSignatureService(). Panics with
 // the Java message when no CertificateVerifier was provided (Objects.requireNonNull).
-func (e *ASiCWithCAdESDocumentExtender) CreateSignatureService() document.DocumentSignatureService[*asiccades.ASiCWithCAdESSignatureParameters, *asiccades.ASiCWithCAdESTimestampParameters] {
+func (e *ASiCWithCAdESDocumentExtender) CreateSignatureService() document.SignatureService[*asiccades.ASiCWithCAdESSignatureParameters, *asiccades.ASiCWithCAdESTimestampParameters] {
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding ASiCWithCAdESService!")
 	}
@@ -69,7 +69,7 @@ func (e *ASiCWithCAdESDocumentExtender) IsSupportedParameters(parameters model.S
 }
 
 // IsSupportedService ports the overridden protected
-// isSupportedService(DocumentSignatureService<?, ?>).
+// isSupportedService(SignatureService<?, ?>).
 func (e *ASiCWithCAdESDocumentExtender) IsSupportedService(service any) bool {
 	_, ok := service.(*asiccades.ASiCWithCAdESService)
 	return ok

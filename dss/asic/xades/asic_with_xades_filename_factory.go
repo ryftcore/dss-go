@@ -15,6 +15,6 @@ import "github.com/ryftcore/dss-go/dss/asic"
 // for both container types, when applicable. The type of the container can be obtained from
 // asicContent.ContainerType().
 type ASiCWithXAdESFilenameFactory interface {
-	asic.ASiCFilenameFactory
-	asic.ASiCEvidenceRecordFilenameFactory
+	asic.FilenameFactory
+	asic.EvidenceRecordFilenameFactory
 }

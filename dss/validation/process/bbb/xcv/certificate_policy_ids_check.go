@@ -21,8 +21,8 @@ type CertificatePolicyIdsCheck struct {
 }
 
 // NewCertificatePolicyIdsCheck is the default constructor. Port of
-// CertificatePolicyIdsCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificatePolicyIdsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificatePolicyIdsCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificatePolicyIdsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificatePolicyIdsCheck {
 	c := &CertificatePolicyIdsCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

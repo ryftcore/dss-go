@@ -22,8 +22,8 @@ type SunsetDateCheck struct {
 }
 
 // NewSunsetDateCheck is the default constructor. Port of
-// SunsetDateCheck(I18nProvider, XmlVTS, CertificateWrapper, LevelRule).
-func NewSunsetDateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVTS],
+// SunsetDateCheck(Provider, XmlVTS, CertificateWrapper, LevelRule).
+func NewSunsetDateCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVTS],
 	trustedCertificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *SunsetDateCheck {
 	c := &SunsetDateCheck{
 		ChainItemBase:      process.NewChainItemBaseWithId(i18nProvider, result, constraint, trustedCertificate.Id()),

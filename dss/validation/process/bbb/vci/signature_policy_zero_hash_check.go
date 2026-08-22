@@ -19,8 +19,8 @@ type SignaturePolicyZeroHashCheck struct {
 }
 
 // NewSignaturePolicyZeroHashCheck is the default constructor. Port of
-// SignaturePolicyZeroHashCheck(I18nProvider, XmlVCI, SignatureWrapper, LevelRule).
-func NewSignaturePolicyZeroHashCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVCI],
+// SignaturePolicyZeroHashCheck(Provider, XmlVCI, SignatureWrapper, LevelRule).
+func NewSignaturePolicyZeroHashCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVCI],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *SignaturePolicyZeroHashCheck {
 	c := &SignaturePolicyZeroHashCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

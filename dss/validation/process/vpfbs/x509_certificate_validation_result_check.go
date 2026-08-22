@@ -20,8 +20,8 @@ type X509CertificateValidationResultCheck[T any] struct {
 }
 
 // NewX509CertificateValidationResultCheck is the default constructor. Port of
-// X509CertificateValidationResultCheck(I18nProvider, T, XmlXCV, TokenProxy, LevelRule).
-func NewX509CertificateValidationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// X509CertificateValidationResultCheck(Provider, T, XmlXCV, TokenProxy, LevelRule).
+func NewX509CertificateValidationResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlXCV *jaxb.XmlXCV, token diagnostic.TokenProxy, constraint policy.LevelRule) *X509CertificateValidationResultCheck[T] {
 	c := &X509CertificateValidationResultCheck[T]{
 		// X509 Certificate Validation building block suffix ("-XCV"), a

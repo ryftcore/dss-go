@@ -34,7 +34,7 @@ import (
 type SimpleReportForCertificateBuilder struct {
 	// diagnosticData is the diagnostic data. Port of the private final
 	// diagnosticData field.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// detailedReport is the detailed report. Port of the private final
 	// detailedReport field.
@@ -53,9 +53,9 @@ type SimpleReportForCertificateBuilder struct {
 }
 
 // NewSimpleReportForCertificateBuilder is the default constructor. Port of
-// SimpleReportForCertificateBuilder(DiagnosticData, DetailedReport,
+// SimpleReportForCertificateBuilder(Data, DetailedReport,
 // ValidationPolicy, Date, String).
-func NewSimpleReportForCertificateBuilder(diagnosticData *diagnostic.DiagnosticData,
+func NewSimpleReportForCertificateBuilder(diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport, validationPolicy policy.ValidationPolicy,
 	currentTime time.Time, certificateId string) *SimpleReportForCertificateBuilder {
 	return &SimpleReportForCertificateBuilder{

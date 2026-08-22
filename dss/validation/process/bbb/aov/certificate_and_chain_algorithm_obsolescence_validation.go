@@ -23,7 +23,7 @@ type CertificateAndChainAlgorithmObsolescenceValidation struct {
 
 // NewCertificateAndChainAlgorithmObsolescenceValidation is the default
 // constructor.
-func NewCertificateAndChainAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.CertificateWrapper,
+func NewCertificateAndChainAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.CertificateWrapper,
 	context enumerations.Context, validationDate time.Time,
 	validationPolicy policy.ValidationPolicy) *CertificateAndChainAlgorithmObsolescenceValidation {
 	c := &CertificateAndChainAlgorithmObsolescenceValidation{}

@@ -25,8 +25,8 @@ type TrustedEntityServiceWithStiCheck struct {
 }
 
 // NewTrustedEntityServiceWithStiCheck is the default constructor. Port of
-// TrustedEntityServiceWithStiCheck(I18nProvider, XmlValidationCertificateApprovalStatus, List, String, LevelRule).
-func NewTrustedEntityServiceWithStiCheck(i18nProvider *i18n.I18nProvider,
+// TrustedEntityServiceWithStiCheck(Provider, XmlValidationCertificateApprovalStatus, List, String, LevelRule).
+func NewTrustedEntityServiceWithStiCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateApprovalStatus], trustedServicesWithSti []*diagnostic.TrustedEntityServiceWrapper,
 	stiUri string, constraint policy.LevelRule) *TrustedEntityServiceWithStiCheck {
 	c := &TrustedEntityServiceWithStiCheck{

@@ -59,7 +59,7 @@ type SigningCertificateRefDigestAlgorithmCheck[T any] struct {
 }
 
 // NewSigningCertificateRefDigestAlgorithmCheck is the default constructor.
-func NewSigningCertificateRefDigestAlgorithmCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewSigningCertificateRefDigestAlgorithmCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, certificateRefs []*diagnostic.CertificateRefWrapper, certificateId string,
 	context enumerations.Context, subContext enumerations.SubContext, validationPolicy policy.ValidationPolicy,
 	constraint policy.LevelRule) *SigningCertificateRefDigestAlgorithmCheck[T] {

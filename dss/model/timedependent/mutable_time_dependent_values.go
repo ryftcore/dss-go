@@ -5,7 +5,7 @@ import "reflect"
 
 // MutableTimeDependentValues is a mutable list of time-dependent values.
 type MutableTimeDependentValues[T TimeDependent] struct {
-	TimeDependentValues[T]
+	Values[T]
 }
 
 // NewMutableTimeDependentValues is the empty constructor.
@@ -15,7 +15,7 @@ func NewMutableTimeDependentValues[T TimeDependent]() *MutableTimeDependentValue
 
 // NewMutableTimeDependentValuesFrom is the default constructor from a source list.
 func NewMutableTimeDependentValuesFrom[T TimeDependent](srcList []T) *MutableTimeDependentValues[T] {
-	return &MutableTimeDependentValues[T]{TimeDependentValues: *NewTimeDependentValuesFrom(srcList)}
+	return &MutableTimeDependentValues[T]{Values: *NewTimeDependentValuesFrom(srcList)}
 }
 
 // Clear clears the current list.

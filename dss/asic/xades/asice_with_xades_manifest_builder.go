@@ -120,7 +120,7 @@ func (b *ASiCEWithXAdESManifestBuilder) getEntries() []*model.ManifestEntry {
 		if entriesNotEmpty {
 			panic("Either DSSDocuments or ManifestEntries shall be provided!")
 		}
-		return asic.ASiCUtilsToSimpleManifestEntries(b.documents)
+		return asic.UtilsToSimpleManifestEntries(b.documents)
 	case entriesNotEmpty:
 		return b.entries
 	default:

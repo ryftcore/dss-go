@@ -6,7 +6,7 @@
 // *SignatureValidationContext continues to satisfy this interface, which is required for
 // signature_validation_context.go:264's `c.revocationDataVerifier.SetValidationContext(c)` and
 // baseline_requirements_checker.go's `b.validationContext = NewSignatureValidationContext()`
-// (assigned to a field/return typed ValidationContext) to compile.
+// (assigned to a field/return typed Context) to compile.
 //
 // Per the Java 6.2+ behavior change documented in the javadoc of every checkXxx() method below
 // ("returning only the boolean validation result, without alerts handling"), these methods
@@ -32,10 +32,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// ValidationContext allows the implementation of the validators for: certificates, timestamps
+// Context allows the implementation of the validators for: certificates, timestamps
 // and revocation data.
-type ValidationContext interface {
-	// Initialize initializes the ValidationContext by retrieving the relevant data from
+type Context interface {
+	// Initialize initializes the Context by retrieving the relevant data from
 	// certificateVerifier. Port of initialize(CertificateVerifier).
 	Initialize(certificateVerifier CertificateVerifier)
 
@@ -120,7 +120,7 @@ type ValidationContext interface {
 	// checkAllSignatureCertificateHaveFreshRevocationData().
 	CheckAllSignatureCertificateHaveFreshRevocationData() bool
 
-	// CheckAllSignaturesNotExpired returns whether all signatures added to the ValidationContext
+	// CheckAllSignaturesNotExpired returns whether all signatures added to the Context
 	// are not yet expired. Port of checkAllSignaturesNotExpired().
 	CheckAllSignaturesNotExpired() bool
 
@@ -129,7 +129,7 @@ type ValidationContext interface {
 	CheckCertificateNotExpired(certificateToken *model.CertificateToken) bool
 
 	// CheckAllSignaturesAreYetValid returns whether all signatures added to the
-	// ValidationContext have been produced with yet valid certificates at the time of signing.
+	// Context have been produced with yet valid certificates at the time of signing.
 	// Port of checkAllSignaturesAreYetValid().
 	CheckAllSignaturesAreYetValid() bool
 
@@ -181,11 +181,11 @@ type ValidationContext interface {
 
 	// GetValidationData returns a validation data for the given signature's certificate chain.
 	// Port of getValidationData(AdvancedSignature).
-	GetValidationData(signature AdvancedSignature) *ValidationData
+	GetValidationData(signature AdvancedSignature) *Data
 
 	// GetValidationDataForTimestamp returns a validation data for the given timestampToken's
 	// certificate chain. Port of the getValidationData(TimestampToken) overload.
-	GetValidationDataForTimestamp(timestampToken *TimestampToken) *ValidationData
+	GetValidationDataForTimestamp(timestampToken *TimestampToken) *Data
 
 	// GetRevocationData returns revocation data for the given certificateToken, whether
 	// extracted from a signature file or obtained online. Port of
@@ -193,5 +193,5 @@ type ValidationContext interface {
 	GetRevocationData(certificateToken *model.CertificateToken) []AnyRevocationToken
 }
 
-// compile-time assertion: *SignatureValidationContext satisfies ValidationContext.
-var _ ValidationContext = (*SignatureValidationContext)(nil)
+// compile-time assertion: *SignatureValidationContext satisfies Context.
+var _ Context = (*SignatureValidationContext)(nil)

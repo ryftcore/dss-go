@@ -36,8 +36,8 @@ type SatisfyingRevocationDataExistsCheck[T any] struct {
 }
 
 // NewSatisfyingRevocationDataExistsCheck is the default constructor. Port of
-// SatisfyingRevocationDataExistsCheck(I18nProvider, T, XmlCRS, CertificateWrapper, Date, LevelRule).
-func NewSatisfyingRevocationDataExistsCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// SatisfyingRevocationDataExistsCheck(Provider, T, XmlCRS, CertificateWrapper, Date, LevelRule).
+func NewSatisfyingRevocationDataExistsCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	crsResult *jaxb.XmlCRS, certificateWrapper *diagnostic.CertificateWrapper, controlTime time.Time,
 	constraint policy.LevelRule) *SatisfyingRevocationDataExistsCheck[T] {
 	c := &SatisfyingRevocationDataExistsCheck[T]{

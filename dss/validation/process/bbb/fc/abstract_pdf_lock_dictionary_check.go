@@ -25,7 +25,7 @@ type AbstractPdfLockDictionaryCheck struct {
 
 // InitAbstractPdfLockDictionaryCheck wires the shared state; called by the concrete
 // constructor before InitChainItem.
-func (c *AbstractPdfLockDictionaryCheck) InitAbstractPdfLockDictionaryCheck(i18nProvider *i18n.I18nProvider,
+func (c *AbstractPdfLockDictionaryCheck) InitAbstractPdfLockDictionaryCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*drjaxb.XmlFC], pdfRevision *diagnostic.PDFRevisionWrapper, pdfLockDictionary *diagjaxb.XmlPDFLockDictionary,
 	constraint policy.LevelRule) {
 	c.PdfRevision = pdfRevision

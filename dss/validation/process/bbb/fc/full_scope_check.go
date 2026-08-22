@@ -18,7 +18,7 @@ type FullScopeCheck struct {
 }
 
 // NewFullScopeCheck is the default constructor.
-func NewFullScopeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewFullScopeCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	signatureScopes []*diagjaxb.XmlSignatureScope, constraint policy.LevelRule) *FullScopeCheck {
 	c := &FullScopeCheck{signatureScopes: signatureScopes}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

@@ -32,7 +32,7 @@ type SqlSelectQuery interface {
 type SqlRecord interface {
 }
 
-// JdbcCacheConnector is a structural stand-in for
+// CacheConnector is a structural stand-in for
 // eu.europa.esig.dss.spi.client.jdbc.JdbcCacheConnector, connecting to an SQL database and
 // performing queries; see the file header. Method names/shapes are inferred from the four call
 // sites in JdbcRevocationSource.java (select, execute, executeThrowable, tableQuery).
@@ -143,7 +143,7 @@ func (s *JdbcRevocationSourceBase[R]) JdbcCacheConnector() JdbcCacheConnector {
 }
 
 // SetJdbcCacheConnector sets the SQL connection DataSource. Port of
-// setJdbcCacheConnector(JdbcCacheConnector).
+// setJdbcCacheConnector(CacheConnector).
 func (s *JdbcRevocationSourceBase[R]) SetJdbcCacheConnector(jdbcCacheConnector JdbcCacheConnector) {
 	s.jdbcCacheConnector = jdbcCacheConnector
 }

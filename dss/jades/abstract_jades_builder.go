@@ -3,9 +3,9 @@
 // # assertConfigurationValidity, and how Java's abstract call survives the port
 //
 // Java's AbstractJAdESBuilder#buildDataToBeSigned() calls the abstract
-// assertConfigurationValidity(parameters), which JAdESCompactBuilder and JAdESSerializationBuilder
+// assertConfigurationValidity(parameters), which CompactBuilder and SerializationBuilder
 // implement differently. Go has no virtual dispatch across embedding, so - per the
-// TokenBase.InitToken(self) convention of PORTING.md, and exactly as xades.XAdESLevelBaselineT
+// TokenBase.InitToken(self) convention of PORTING.md, and exactly as xades.LevelBaselineT
 // does - the concrete builder registers itself through InitAbstractJAdESBuilder(self, ...) and the
 // base dispatches into it via b.overrides.
 //
@@ -27,31 +27,31 @@ import (
 
 // JAdESBuilderOverrides declares the operation Java leaves abstract in AbstractJAdESBuilder and
 // that the base implementation itself calls back into. Both concrete builders satisfy it.
-type JAdESBuilderOverrides interface {
+type BuilderOverrides interface {
 	// AssertConfigurationValidity verifies that the given signaturePackaging type is supported,
 	// returning an error when the configuration is not valid. Port of the protected abstract
 	// #assertConfigurationValidity.
-	AssertConfigurationValidity(signatureParameters *JAdESSignatureParameters) error
+	AssertConfigurationValidity(signatureParameters *SignatureParameters) error
 }
 
 // AbstractJAdESBuilder is the abstract JAdES signature builder.
 type AbstractJAdESBuilder struct {
 	// Parameters holds the signature parameters. Port of the protected final `parameters`.
-	Parameters *JAdESSignatureParameters
+	Parameters *SignatureParameters
 
 	// JadesLevelBaselineB is the instance of the B-level generator class. Port of the protected
 	// final `jadesLevelBaselineB`.
-	JadesLevelBaselineB *JAdESLevelBaselineB
+	JadesLevelBaselineB *LevelBaselineB
 
 	// overrides points back at the concrete builder; see InitAbstractJAdESBuilder.
-	overrides JAdESBuilderOverrides
+	overrides BuilderOverrides
 }
 
 // InitAbstractJAdESBuilder registers the concrete builder with this base and builds the B-level
 // generator. Port of the protected AbstractJAdESBuilder(CertificateVerifier,
-// JAdESSignatureParameters, List<DSSDocument>) constructor.
-func (b *AbstractJAdESBuilder) InitAbstractJAdESBuilder(self JAdESBuilderOverrides,
-	certificateVerifier validation.CertificateVerifier, parameters *JAdESSignatureParameters,
+// SignatureParameters, List<DSSDocument>) constructor.
+func (b *AbstractJAdESBuilder) InitAbstractJAdESBuilder(self BuilderOverrides,
+	certificateVerifier validation.CertificateVerifier, parameters *SignatureParameters,
 	documentsToSign []model.DSSDocument) error {
 	if certificateVerifier == nil {
 		panic("CertificateVerifier must be defined!")
@@ -91,7 +91,7 @@ func (b *AbstractJAdESBuilder) BuildDataToBeSigned() (*model.ToBeSigned, error) 
 }
 
 // IncorporateHeader incorporates the signed header into the given JWS. The insertion order of
-// the JAdESLevelBaselineB properties - which is what the serialized protected header, and hence
+// the LevelBaselineB properties - which is what the serialized protected header, and hence
 // the signature, depends on - is preserved by the jose.Object the B-level generator builds, the
 // Go counterpart of Java's LinkedHashMap. Port of the protected #incorporateHeader.
 func (b *AbstractJAdESBuilder) IncorporateHeader(jws *JWS) error {

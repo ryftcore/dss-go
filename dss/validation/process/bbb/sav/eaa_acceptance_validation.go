@@ -13,7 +13,7 @@
 // flatten into github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, with
 // constructors 1:1 with their Java signatures - this mirrors Java's own eaa
 // vs eaa.checks/eaa.status package boundary, which does not import
-// qualification. EAAValidationBlock/EAAValidationProcess/
+// qualification. ValidationBlock/ValidationProcess/
 // KeyBindingSignatureValidationResultCheck remain in the eaa root package,
 // since KeyBindingSignatureValidationResultCheck needs qualification and
 // nothing in bbb/sav or bbb/fc references it.
@@ -45,8 +45,8 @@ type EAAAcceptanceValidation struct {
 }
 
 // NewEAAAcceptanceValidation is the default constructor. Port of
-// EAAAcceptanceValidation(I18nProvider, Date, EAAWrapper, Map, XmlAOV, ValidationPolicy).
-func NewEAAAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// EAAAcceptanceValidation(Provider, Date, EAAWrapper, Map, XmlAOV, ValidationPolicy).
+func NewEAAAcceptanceValidation(i18nProvider *i18n.Provider, currentTime time.Time,
 	eaaWrapper *diagnostic.EAAWrapper, bbbs map[string]*jaxb.XmlBasicBuildingBlocks, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *EAAAcceptanceValidation {
 	c := &EAAAcceptanceValidation{

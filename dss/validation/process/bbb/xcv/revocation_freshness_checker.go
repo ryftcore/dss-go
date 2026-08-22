@@ -40,8 +40,8 @@ type RevocationFreshnessChecker struct {
 }
 
 // NewRevocationFreshnessChecker is the default constructor. Port of
-// RevocationFreshnessChecker(I18nProvider, RevocationWrapper, Date, Context, SubContext, ValidationPolicy).
-func NewRevocationFreshnessChecker(i18nProvider *i18n.I18nProvider, revocationData *diagnostic.RevocationWrapper,
+// RevocationFreshnessChecker(Provider, RevocationWrapper, Date, Context, SubContext, ValidationPolicy).
+func NewRevocationFreshnessChecker(i18nProvider *i18n.Provider, revocationData *diagnostic.RevocationWrapper,
 	validationDate time.Time, context enumerations.Context, subContext enumerations.SubContext,
 	validationPolicy policy.ValidationPolicy) *RevocationFreshnessChecker {
 	xmlRFC := &jaxb.XmlRFC{}

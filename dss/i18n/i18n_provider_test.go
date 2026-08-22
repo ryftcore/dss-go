@@ -94,7 +94,7 @@ func TestI18nProviderUnknownTagFallsBackToId(t *testing.T) {
 	// Every MessageTag has a bundle entry (see TestAllMessageTagsResolve
 	// in message_tag_test.go); simulate the "missing key" branch directly
 	// against the bundle rather than mutating the shared defaultBundle.
-	provider := &I18nProvider{bundle: propertyBundle{}}
+	provider := &Provider{bundle: propertyBundle{}}
 	tag := MessageTagBBBXCVCCCBB
 	if got := provider.GetMessage(tag); got != tag.Id() {
 		t.Fatalf("GetMessage with empty bundle = %q, want %q", got, tag.Id())

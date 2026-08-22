@@ -2,7 +2,7 @@
 //
 // This type is the central consumer of most other types in this package: CertificateVerifier,
 // RevocationDataLoadingStrategyFactory, RevocationDataVerifier, TimestampTokenVerifier,
-// TrustAnchorVerifier, ValidationContext (the interface this type implements), ValidationData,
+// TrustAnchorVerifier, Context (the interface this type implements), Data,
 // TokenStatus, RevocationFreshnessStatus and EvidenceRecord. Every exported method below is
 // named to match those types' actual Java-derived Go names (get/is dropped, Set kept as SetX).
 //
@@ -85,7 +85,7 @@ type SignatureValidationContext struct {
 	revocationCertificateSources *spi.ListCertificateSource
 
 	// aiaSource is used to access certificates by AIA.
-	aiaSource aia.AIASource
+	aiaSource aia.Source
 	// remoteOCSPSource is the external OCSP source.
 	remoteOCSPSource spi.RevocationSource[revocation.OCSP]
 	// remoteCRLSource is the external CRL source.
@@ -604,7 +604,7 @@ func (c *SignatureValidationContext) getIssuerWithSource(token model.Token, cert
 	// Request AIA only when no issuer has been found yet
 	if issuerCertificateToken == nil && c.aiaSource != nil {
 		if certToken, ok := token.(*model.CertificateToken); ok && !signatureValidationContextTokenIssuerMapContainsKey(c.tokenIssuerMap, token) {
-			aiaCertificateSource := aia.AIACertificateSourceForCertificateToken(certToken, c.aiaSource)
+			aiaCertificateSource := aia.CertificateSourceForCertificateToken(certToken, c.aiaSource)
 			issuerCertificateToken = aiaCertificateSource.IssuerFromAIA()
 			c.addCertificateSource(c.aiaCertificateSources, aiaCertificateSource)
 		}
@@ -1784,17 +1784,17 @@ func (c *SignatureValidationContext) isTrustedAtTime(token model.Token, controlT
 
 // GetValidationData returns the validation data (certificates + revocation) for the given
 // signature. Port of getValidationData(AdvancedSignature).
-func (c *SignatureValidationContext) GetValidationData(signature AdvancedSignature) *ValidationData {
+func (c *SignatureValidationContext) GetValidationData(signature AdvancedSignature) *Data {
 	return c.getValidationDataForCertificate(signature.SigningCertificateToken())
 }
 
 // GetValidationDataForTimestamp returns the validation data (certificates + revocation) for
 // the given timestamp. Port of the getValidationData(TimestampToken) overload.
-func (c *SignatureValidationContext) GetValidationDataForTimestamp(timestampToken *TimestampToken) *ValidationData {
+func (c *SignatureValidationContext) GetValidationDataForTimestamp(timestampToken *TimestampToken) *Data {
 	return c.getValidationDataForCertificate(c.getIssuer(timestampToken))
 }
 
-func (c *SignatureValidationContext) getValidationDataForCertificate(certificateToken *model.CertificateToken) *ValidationData {
+func (c *SignatureValidationContext) getValidationDataForCertificate(certificateToken *model.CertificateToken) *Data {
 	validationData := NewValidationData()
 	if certificateToken != nil {
 		c.populateValidationDataRecursively(certificateToken, validationData)
@@ -1802,7 +1802,7 @@ func (c *SignatureValidationContext) getValidationDataForCertificate(certificate
 	return validationData
 }
 
-func (c *SignatureValidationContext) populateValidationDataRecursively(token model.Token, validationData *ValidationData) {
+func (c *SignatureValidationContext) populateValidationDataRecursively(token model.Token, validationData *Data) {
 	added := validationData.AddToken(token)
 	if added {
 		if certificateToken, ok := token.(*model.CertificateToken); ok {

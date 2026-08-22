@@ -3,8 +3,8 @@ package qualification
 
 import "github.com/ryftcore/dss-go/dss/enumerations"
 
-// QualificationStrategy extracts the qualification status for a certificate.
-type QualificationStrategy interface {
+// Strategy extracts the qualification status for a certificate.
+type Strategy interface {
 	// QualifiedStatus gets certificate qualification status. Port of
 	// getQualifiedStatus().
 	QualifiedStatus() enumerations.CertificateQualifiedStatus

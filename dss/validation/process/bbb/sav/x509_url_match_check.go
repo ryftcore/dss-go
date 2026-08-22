@@ -21,8 +21,8 @@ type X509UrlMatchCheck struct {
 }
 
 // NewX509UrlMatchCheck is the default constructor. Port of
-// X509UrlMatchCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewX509UrlMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// X509UrlMatchCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewX509UrlMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *X509UrlMatchCheck {
 	c := &X509UrlMatchCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

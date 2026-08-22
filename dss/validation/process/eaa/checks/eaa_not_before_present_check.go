@@ -20,7 +20,7 @@ type EAANotBeforePresentCheck struct {
 }
 
 // NewEAANotBeforePresentCheck is the default constructor.
-func NewEAANotBeforePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAANotBeforePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAANotBeforePresentCheck {
 	c := &EAANotBeforePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

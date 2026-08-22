@@ -21,8 +21,8 @@ type CertificateQcIdentificationMethodCheck struct {
 }
 
 // NewCertificateQcIdentificationMethodCheck is the default constructor. Port
-// of CertificateQcIdentificationMethodCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateQcIdentificationMethodCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// of CertificateQcIdentificationMethodCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificateQcIdentificationMethodCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateQcIdentificationMethodCheck {
 	c := &CertificateQcIdentificationMethodCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

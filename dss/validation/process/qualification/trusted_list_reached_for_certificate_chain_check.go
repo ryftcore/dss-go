@@ -20,8 +20,8 @@ type TrustedListReachedForCertificateChainCheck[T any] struct {
 
 // NewTrustedListReachedForCertificateChainCheck is the default constructor.
 // Port of
-// TrustedListReachedForCertificateChainCheck(I18nProvider, T, CertificateWrapper, LevelRule).
-func NewTrustedListReachedForCertificateChainCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TrustedListReachedForCertificateChainCheck(Provider, T, CertificateWrapper, LevelRule).
+func NewTrustedListReachedForCertificateChainCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	signingCertificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *TrustedListReachedForCertificateChainCheck[T] {
 	c := &TrustedListReachedForCertificateChainCheck[T]{
 		ChainItemBase:      process.NewChainItemBase(i18nProvider, result, constraint),

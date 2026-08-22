@@ -3,7 +3,7 @@
 // The public entry points (GetDataToSign, SignMessageDigest) turn the (T, error) of the layers
 // below back into Java's propagating unchecked exception, i.e. into a panic carrying the error -
 // the convention cades/cades_service.go established for a service class. The protected builders
-// keep their error channel, because PAdESService calls them directly.
+// keep their error channel, because Service calls them directly.
 //
 // org.bouncycastle's ContentSigner is cms.ContentSigner (PORTING.md); slf4j is dropped.
 package pades
@@ -66,13 +66,13 @@ func (s *ExternalCMSService) SetTspSource(tspSource validation.TSPSource) {
 // NOTE: the DSSResourcesHandlerBuilder is supported only within the 'dss-cms-stream' module!
 // Port of #setResourcesHandlerBuilder.
 func (s *ExternalCMSService) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
-	s.ResourcesHandlerBuilder = cms.CMSUtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
+	s.ResourcesHandlerBuilder = cms.UtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
 }
 
 // GetDataToSign computes the signed attributes of a CMS signed data to be used for a private-key
 // signing. Port of #getDataToSign.
 func (s *ExternalCMSService) GetDataToSign(messageDigest model.DSSMessageDigest,
-	parameters *PAdESSignatureParameters) *model.ToBeSigned {
+	parameters *SignatureParameters) *model.ToBeSigned {
 	if messageDigest.Value() == nil {
 		// Java's Objects.requireNonNull(messageDigest); a DSSMessageDigest is a value type in
 		// Go, so the closest analogue of "null" is the zero value, i.e. no digest value.
@@ -93,7 +93,7 @@ func (s *ExternalCMSService) GetDataToSign(messageDigest model.DSSMessageDigest,
 // BuildToBeSignedData builds the data to be signed without executing additional checks on the
 // provided configuration. Port of the protected #buildToBeSignedData.
 func (s *ExternalCMSService) BuildToBeSignedData(messageDigest model.DSSMessageDigest,
-	parameters *PAdESSignatureParameters) (*model.ToBeSigned, error) {
+	parameters *SignatureParameters) (*model.ToBeSigned, error) {
 	signatureAlgorithm := parameters.SignatureAlgorithm()
 	customContentSigner, err := cms.NewCustomContentSignerBuilder().Build(signatureAlgorithm)
 	if err != nil {
@@ -111,7 +111,7 @@ func (s *ExternalCMSService) BuildToBeSignedData(messageDigest model.DSSMessageD
 // SignMessageDigest creates a signed CMS to be incorporated within a PDF document for a PAdES
 // signature creation. Port of #signMessageDigest.
 func (s *ExternalCMSService) SignMessageDigest(messageDigest model.DSSMessageDigest,
-	parameters *PAdESSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if messageDigest.Value() == nil {
 		// Java's Objects.requireNonNull(messageDigest); a DSSMessageDigest is a value type in
 		// Go, so the closest analogue of "null" is the zero value, i.e. no digest value.
@@ -130,7 +130,7 @@ func (s *ExternalCMSService) SignMessageDigest(messageDigest model.DSSMessageDig
 		panic(err)
 	}
 	parameters.Reinit()
-	signatureDocument, err := cms.CMSUtilsWriteToDSSDocument(signedCMS, s.ResourcesHandlerBuilder)
+	signatureDocument, err := cms.UtilsWriteToDSSDocument(signedCMS, s.ResourcesHandlerBuilder)
 	if err != nil {
 		panic(err)
 	}
@@ -140,7 +140,7 @@ func (s *ExternalCMSService) SignMessageDigest(messageDigest model.DSSMessageDig
 // BuildCMS builds a CMS without executing additional checks on the provided configuration.
 // Port of the protected #buildCMS.
 func (s *ExternalCMSService) BuildCMS(messageDigest model.DSSMessageDigest,
-	parameters *PAdESSignatureParameters, signatureValue *model.SignatureValue) (*cms.CMS, error) {
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) (*cms.CMS, error) {
 	signatureAlgorithm := parameters.SignatureAlgorithm()
 	signatureLevel := parameters.SignatureLevel()
 	if signatureAlgorithm == "" {
@@ -176,7 +176,7 @@ func (s *ExternalCMSService) BuildCMS(messageDigest model.DSSMessageDigest,
 
 		cadesLevelBaselineT := cades.NewCAdESLevelBaselineT(s.tspSource, s.certificateVerifier)
 		if signedCMS, err = cadesLevelBaselineT.ExtendCMSSignatures(signedCMS,
-			&parameters.CAdESSignatureParameters); err != nil {
+			&parameters.SignatureParameters); err != nil {
 			return nil, err
 		}
 	}
@@ -187,7 +187,7 @@ func (s *ExternalCMSService) BuildCMS(messageDigest model.DSSMessageDigest,
 // CMS creation process. Port of the protected #assertConfigurationValid; Java's unchecked
 // IllegalArgumentException is a panic here, as the method returns nothing upstream.
 func (s *ExternalCMSService) AssertConfigurationValid(messageDigest model.DSSMessageDigest,
-	parameters *PAdESSignatureParameters) {
+	parameters *SignatureParameters) {
 	signatureLevel := parameters.SignatureLevel()
 	if signatureLevel == "" {
 		panic("SignatureLevel shall be defined!")
@@ -207,7 +207,7 @@ func (s *ExternalCMSService) AssertConfigurationValid(messageDigest model.DSSMes
 
 // AssertSigningCertificateValid raises an exception if the signing rules forbid the use of the
 // certificate. Port of the protected #assertSigningCertificateValid.
-func (s *ExternalCMSService) AssertSigningCertificateValid(parameters *PAdESSignatureParameters) {
+func (s *ExternalCMSService) AssertSigningCertificateValid(parameters *SignatureParameters) {
 	signingCertificate := parameters.SigningCertificate()
 	if signingCertificate == nil {
 		if parameters.GenerateTBSWithoutCertificate() {
@@ -217,7 +217,7 @@ func (s *ExternalCMSService) AssertSigningCertificateValid(parameters *PAdESSign
 			"Set signing certificate or use method setGenerateTBSWithoutCertificate(true).")
 	}
 
-	signatureRequirementsChecker := document.NewSignatureRequirementsChecker[*cades.CAdESTimestampParameters](
+	signatureRequirementsChecker := document.NewSignatureRequirementsChecker[*cades.TimestampParameters](
 		s.certificateVerifier, &parameters.AbstractSignatureParameters)
 	signatureRequirementsChecker.AssertSigningCertificateIsValid(signingCertificate)
 }
@@ -225,7 +225,7 @@ func (s *ExternalCMSService) AssertSigningCertificateValid(parameters *PAdESSign
 // InitCMSBuilderHelper instantiates a CMSForPAdESBuilderHelper.
 // Port of the protected #initCMSBuilderHelper.
 func (s *ExternalCMSService) InitCMSBuilderHelper(messageDigest model.DSSMessageDigest,
-	signatureParameters *PAdESSignatureParameters, contentSigner cms.ContentSigner) *CMSForPAdESBuilderHelper {
+	signatureParameters *SignatureParameters, contentSigner cms.ContentSigner) *CMSForPAdESBuilderHelper {
 	return NewCMSForPAdESBuilderHelper(messageDigest, signatureParameters, contentSigner).
 		SetTrustedCertificateSource(s.certificateVerifier.TrustedCertSources())
 }

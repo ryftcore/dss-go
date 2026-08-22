@@ -23,8 +23,8 @@ type AdESAcceptableCheck struct {
 }
 
 // NewAdESAcceptableCheck is the default constructor. Port of
-// AdESAcceptableCheck(I18nProvider, XmlValidationSignatureQualification, XmlConclusion, LevelRule).
-func NewAdESAcceptableCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationSignatureQualification],
+// AdESAcceptableCheck(Provider, XmlValidationSignatureQualification, XmlConclusion, LevelRule).
+func NewAdESAcceptableCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationSignatureQualification],
 	etsi319102Conclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *AdESAcceptableCheck {
 	c := &AdESAcceptableCheck{
 		ChainItemBase:        process.NewChainItemBase(i18nProvider, result, constraint),

@@ -20,8 +20,8 @@ type GivenNameCheck struct {
 }
 
 // NewGivenNameCheck is the default constructor. Port of
-// GivenNameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewGivenNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// GivenNameCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewGivenNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *GivenNameCheck {
 	c := &GivenNameCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

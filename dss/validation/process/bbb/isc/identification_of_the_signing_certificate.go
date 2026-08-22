@@ -37,8 +37,8 @@ type IdentificationOfTheSigningCertificate struct {
 }
 
 // NewIdentificationOfTheSigningCertificate is the default constructor. Port of
-// IdentificationOfTheSigningCertificate(I18nProvider, TokenProxy, Context, ValidationPolicy).
-func NewIdentificationOfTheSigningCertificate(i18nProvider *i18n.I18nProvider, token diagnostic.TokenProxy,
+// IdentificationOfTheSigningCertificate(Provider, TokenProxy, Context, ValidationPolicy).
+func NewIdentificationOfTheSigningCertificate(i18nProvider *i18n.Provider, token diagnostic.TokenProxy,
 	context enumerations.Context, validationPolicy policy.ValidationPolicy) *IdentificationOfTheSigningCertificate {
 	xmlISC := &jaxb.XmlISC{}
 	c := &IdentificationOfTheSigningCertificate{

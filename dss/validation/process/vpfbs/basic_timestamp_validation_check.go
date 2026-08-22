@@ -41,8 +41,8 @@ type BasicTimestampValidationCheck[T any] struct {
 }
 
 // NewBasicTimestampValidationCheck is the default constructor. Port of
-// BasicTimestampValidationCheck(I18nProvider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule).
-func NewBasicTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// BasicTimestampValidationCheck(Provider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule).
+func NewBasicTimestampValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlValidationProcessBasicTimestamp,
 	constraint policy.LevelRule) *BasicTimestampValidationCheck[T] {
 	return newBasicTimestampValidationCheck(i18nProvider, result, timestamp, timestampValidationResult, constraint, nil)
@@ -50,14 +50,14 @@ func NewBasicTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, re
 
 // NewBasicTimestampValidationCheckWithId is the constructor to instantiate the
 // check with an Id provided. Port of
-// BasicTimestampValidationCheck(I18nProvider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule, String).
-func NewBasicTimestampValidationCheckWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// BasicTimestampValidationCheck(Provider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule, String).
+func NewBasicTimestampValidationCheckWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlValidationProcessBasicTimestamp,
 	constraint policy.LevelRule, bbbId string) *BasicTimestampValidationCheck[T] {
 	return newBasicTimestampValidationCheck(i18nProvider, result, timestamp, timestampValidationResult, constraint, &bbbId)
 }
 
-func newBasicTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func newBasicTimestampValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlValidationProcessBasicTimestamp,
 	constraint policy.LevelRule, bbbId *string) *BasicTimestampValidationCheck[T] {
 	var chainItemBase *process.ChainItemBase[T]

@@ -33,7 +33,7 @@ type SignatureAlgorithmAtValidationTimeCheck struct {
 }
 
 // NewSignatureAlgorithmAtValidationTimeCheck is the default constructor.
-func NewSignatureAlgorithmAtValidationTimeCheck(i18nProvider *i18n.I18nProvider, signatureAlgorithm enumerations.SignatureAlgorithm,
+func NewSignatureAlgorithmAtValidationTimeCheck(i18nProvider *i18n.Provider, signatureAlgorithm enumerations.SignatureAlgorithm,
 	keyLength string, validationDate time.Time, result *process.Result[*jaxb.XmlCC], position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *SignatureAlgorithmAtValidationTimeCheck {
 	c := &SignatureAlgorithmAtValidationTimeCheck{

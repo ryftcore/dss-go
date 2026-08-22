@@ -16,7 +16,7 @@ import (
 )
 
 // CMSBuilder builds a CMS. Port of the CMSBuilder class.
-type CMSBuilder struct {
+type Builder struct {
 	// signingCertificate is the signing-certificate to generate CMS with.
 	signingCertificate *model.CertificateToken
 	// certificateChain is the certificate chain to be incorporated within
@@ -37,21 +37,21 @@ type CMSBuilder struct {
 	encapsulate bool
 }
 
-// NewCMSBuilder is the default constructor for CMSBuilder.
-func NewCMSBuilder() *CMSBuilder {
-	return &CMSBuilder{trustAnchorBPPolicy: true, encapsulate: true}
+// NewCMSBuilder is the default constructor for Builder.
+func NewCMSBuilder() *Builder {
+	return &Builder{trustAnchorBPPolicy: true, encapsulate: true}
 }
 
 // SetSigningCertificate sets a signing-certificate to be used for CMS generation. Port of
 // #setSigningCertificate.
-func (b *CMSBuilder) SetSigningCertificate(signingCertificate *model.CertificateToken) *CMSBuilder {
+func (b *Builder) SetSigningCertificate(signingCertificate *model.CertificateToken) *Builder {
 	b.signingCertificate = signingCertificate
 	return b
 }
 
 // SetCertificateChain sets a collection of certificates to be incorporated within
 // SignedData.certificates field. Port of #setCertificateChain.
-func (b *CMSBuilder) SetCertificateChain(certificateChain []*model.CertificateToken) *CMSBuilder {
+func (b *Builder) SetCertificateChain(certificateChain []*model.CertificateToken) *Builder {
 	b.certificateChain = certificateChain
 	return b
 }
@@ -59,14 +59,14 @@ func (b *CMSBuilder) SetCertificateChain(certificateChain []*model.CertificateTo
 // SetGenerateWithoutCertificates sets whether CMS is to be generated without certificates
 // inside. Default: false (an attempt to generate without certificates will result in an
 // error). Port of #setGenerateWithoutCertificates.
-func (b *CMSBuilder) SetGenerateWithoutCertificates(generateWithoutCertificates bool) *CMSBuilder {
+func (b *Builder) SetGenerateWithoutCertificates(generateWithoutCertificates bool) *Builder {
 	b.generateWithoutCertificates = generateWithoutCertificates
 	return b
 }
 
 // SetTrustedCertificateSource sets a trusted certificate source. See trustAnchorBPPolicy for
 // more details. Port of #setTrustedCertificateSource.
-func (b *CMSBuilder) SetTrustedCertificateSource(trustedCertificateSource spi.CertificateSource) *CMSBuilder {
+func (b *Builder) SetTrustedCertificateSource(trustedCertificateSource spi.CertificateSource) *Builder {
 	b.trustedCertificateSource = trustedCertificateSource
 	return b
 }
@@ -75,14 +75,14 @@ func (b *CMSBuilder) SetTrustedCertificateSource(trustedCertificateSource spi.Ce
 // enabled, the trust anchor is not included in the generated certificate chain. Otherwise, the
 // chain is generated up to a trust anchor, including the trust anchor itself. Default: true.
 // Port of #setTrustAnchorBPPolicy.
-func (b *CMSBuilder) SetTrustAnchorBPPolicy(trustAnchorBPPolicy bool) *CMSBuilder {
+func (b *Builder) SetTrustAnchorBPPolicy(trustAnchorBPPolicy bool) *Builder {
 	b.trustAnchorBPPolicy = trustAnchorBPPolicy
 	return b
 }
 
 // SetOriginalCMS sets the original CMS, whose internal field values will be copied to a new
 // CMS. Port of #setOriginalCMS.
-func (b *CMSBuilder) SetOriginalCMS(originalCMS *CMS) *CMSBuilder {
+func (b *Builder) SetOriginalCMS(originalCMS *CMS) *Builder {
 	b.originalCMS = originalCMS
 	return b
 }
@@ -90,13 +90,13 @@ func (b *CMSBuilder) SetOriginalCMS(originalCMS *CMS) *CMSBuilder {
 // SetEncapsulate sets whether a signer content shall be encapsulated to the CMS. When enabled
 // creates an enveloping signature, otherwise creates a detached signature. Default: true. Port
 // of #setEncapsulate.
-func (b *CMSBuilder) SetEncapsulate(encapsulate bool) *CMSBuilder {
+func (b *Builder) SetEncapsulate(encapsulate bool) *Builder {
 	b.encapsulate = encapsulate
 	return b
 }
 
 // CreateCMS builds a CMS. Port of #createCMS(SignerInfoGenerator, DSSDocument).
-func (b *CMSBuilder) CreateCMS(signerInfoGenerator *SignerInfoGenerator, toSignDocument model.DSSDocument) (*CMS, error) {
+func (b *Builder) CreateCMS(signerInfoGenerator *SignerInfoGenerator, toSignDocument model.DSSDocument) (*CMS, error) {
 	generator := NewAbstractCMSGenerator()
 
 	generator.SetSignerInfoGenerator(signerInfoGenerator)
@@ -124,7 +124,7 @@ func (b *CMSBuilder) CreateCMS(signerInfoGenerator *SignerInfoGenerator, toSignD
 // certificateStore returns the certificate store: the original CMS's own certificates (when
 // one is set), deduplicated with the ones getJcaCertStore selects. Port of the private
 // #getCertificateStore.
-func (b *CMSBuilder) certificateStore() ([][]byte, error) {
+func (b *Builder) certificateStore() ([][]byte, error) {
 	var certificates []*model.CertificateToken
 	if b.originalCMS != nil {
 		for _, encoded := range b.originalCMS.Certificates() {
@@ -153,7 +153,7 @@ func (b *CMSBuilder) certificateStore() ([][]byte, error) {
 // the JcaCertStore wrapping (see the file header).
 //
 // "The order of the certificates is important, the fist one must be the signing certificate."
-func (b *CMSBuilder) addJcaCertStoreCertificates(certificates []*model.CertificateToken) ([]*model.CertificateToken, error) {
+func (b *Builder) addJcaCertStoreCertificates(certificates []*model.CertificateToken) ([]*model.CertificateToken, error) {
 	var certificatesToAdd []*model.CertificateToken
 	if b.signingCertificate == nil && b.generateWithoutCertificates {
 		certificatesToAdd = nil
@@ -188,7 +188,7 @@ func containsCertificateToken(certificates []*model.CertificateToken, candidate 
 
 // digestAlgorithmIDs ports the private #getDigestAlgorithmIDs(SignerInfoGenerator): the
 // original CMS's digest algorithm identifiers, plus the new signer's own.
-func (b *CMSBuilder) digestAlgorithmIDs(signerInfoGenerator *SignerInfoGenerator) []*asn1ber.AlgorithmIdentifier {
+func (b *Builder) digestAlgorithmIDs(signerInfoGenerator *SignerInfoGenerator) []*asn1ber.AlgorithmIdentifier {
 	var digestAlgorithmIDs []*asn1ber.AlgorithmIdentifier
 	if b.originalCMS != nil {
 		digestAlgorithmIDs = mergeAlgorithmIdentifiers(digestAlgorithmIDs, b.originalCMS.DigestAlgorithmIDs())
@@ -202,7 +202,7 @@ func (b *CMSBuilder) digestAlgorithmIDs(signerInfoGenerator *SignerInfoGenerator
 //
 // Panics with the Java message when originalCMS was not set (Java's NullPointerException raised
 // directly, not a DSSException, so the port matches with a panic rather than an error).
-func (b *CMSBuilder) ExtendCMSSignedData(certificateTokens []*model.CertificateToken, crlTokens []*spi.CRLToken,
+func (b *Builder) ExtendCMSSignedData(certificateTokens []*model.CertificateToken, crlTokens []*spi.CRLToken,
 	ocspTokens []*spi.OCSPToken) (*CMS, error) {
 	if b.originalCMS == nil {
 		panic("Original CMSSignedData shall be provided! Use #setOriginalCMSSignedData(CMSSignedData) method.")
@@ -223,7 +223,7 @@ func (b *CMSBuilder) ExtendCMSSignedData(certificateTokens []*model.CertificateT
 		ocspResponses.add(ocspToken.Encoded())
 	}
 
-	return CMSUtilsReplaceCertificatesAndCRLs(b.originalCMS, certificates.values, b.originalCMS.AttributeCertificates(),
+	return UtilsReplaceCertificatesAndCRLs(b.originalCMS, certificates.values, b.originalCMS.AttributeCertificates(),
 		crls.values, ocspResponses.values, b.originalCMS.OcspBasicStore())
 }
 

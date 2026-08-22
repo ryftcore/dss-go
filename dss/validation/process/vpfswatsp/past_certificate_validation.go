@@ -43,8 +43,8 @@ type PastCertificateValidation struct {
 }
 
 // NewPastCertificateValidation is the default constructor. Port of
-// PastCertificateValidation(I18nProvider, TokenProxy, Map, POEExtraction, Date, ValidationPolicy, Context).
-func NewPastCertificateValidation(i18nProvider *i18n.I18nProvider, token diagnostic.TokenProxy,
+// PastCertificateValidation(Provider, TokenProxy, Map, POEExtraction, Date, ValidationPolicy, Context).
+func NewPastCertificateValidation(i18nProvider *i18n.Provider, token diagnostic.TokenProxy,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, poe *POEExtraction, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy, context enumerations.Context) *PastCertificateValidation {
 	xmlPCV := &jaxb.XmlPCV{}

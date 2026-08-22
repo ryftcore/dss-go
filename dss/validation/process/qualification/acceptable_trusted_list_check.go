@@ -15,8 +15,8 @@ type AcceptableTrustedListCheck[T any] struct {
 }
 
 // NewAcceptableTrustedListCheck is the default constructor. Port of
-// AcceptableTrustedListCheck(I18nProvider, T, XmlTLAnalysis, LevelRule).
-func NewAcceptableTrustedListCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AcceptableTrustedListCheck(Provider, T, XmlTLAnalysis, LevelRule).
+func NewAcceptableTrustedListCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	tlAnalysis *jaxb.XmlTLAnalysis, constraint policy.LevelRule) *AcceptableTrustedListCheck[T] {
 	c := &AcceptableTrustedListCheck[T]{
 		AbstractTrustedListCheck: NewAbstractTrustedListCheck(i18nProvider, result, tlAnalysis, constraint),

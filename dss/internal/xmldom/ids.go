@@ -6,7 +6,7 @@ import (
 )
 
 // RegisterIDs indexes ID attributes over the whole document, reproducing
-// XAdESDOMDocument.recursiveIdBrowse: per element, in attribute order, the first
+// DOMDocument.recursiveIdBrowse: per element, in attribute order, the first
 // attribute whose local name equals "Id" case-insensitively; plus any xml:id.
 // It must be called on a document node.
 //

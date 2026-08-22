@@ -13,7 +13,7 @@
 // dss/validationreport package (flattened with the root type and the
 // facade). But every ConstraintStatusType/POEType/SignatureValidationProcessType/
 // ValidationObjectType field these enums back is a generated model field
-// here in jaxb, and ValidationReportFacade (in dss/validationreport) already
+// here in jaxb, and Facade (in dss/validationreport) already
 // imports jaxb for ValidationReportType - so dss/validationreport -> jaxb is
 // a fixed edge, and jaxb cannot also import dss/validationreport for the
 // enum types without a Go import cycle Java's classpath never had to

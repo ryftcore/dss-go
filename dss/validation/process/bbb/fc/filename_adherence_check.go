@@ -30,13 +30,13 @@ type FilenameAdherenceCheck[T diagnostic.AbstractSignatureWrapperOverrides] stru
 	*process.ChainItemBase[*drjaxb.XmlFC]
 
 	Token          T
-	DiagnosticData *diagnostic.DiagnosticData
+	DiagnosticData *diagnostic.Data
 }
 
 // InitFilenameAdherenceCheck wires the shared state; called by the concrete constructor
 // before InitChainItem.
-func (c *FilenameAdherenceCheck[T]) InitFilenameAdherenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	diagnosticData *diagnostic.DiagnosticData, token T, constraint policy.LevelRule) {
+func (c *FilenameAdherenceCheck[T]) InitFilenameAdherenceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	diagnosticData *diagnostic.Data, token T, constraint policy.LevelRule) {
 	c.Token = token
 	c.DiagnosticData = diagnosticData
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

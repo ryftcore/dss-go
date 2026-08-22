@@ -130,13 +130,13 @@ func TestUpstreamCrossValidation(t *testing.T) {
 				// Top-level signatures are already initialized by CMSDocumentAnalyzer's own
 				// BuildSignatures(); only recursed-into counter signatures need it (see
 				// checkXvalSignature's isCounterSig parameter).
-				checkXvalSignature(t, sig.(*CAdESSignature), gf.Signatures[i], i, false)
+				checkXvalSignature(t, sig.(*Signature), gf.Signatures[i], i, false)
 			}
 		})
 	}
 }
 
-func checkXvalSignature(t *testing.T, sig *CAdESSignature, want xvalSignature, index int, isCounterSig bool) {
+func checkXvalSignature(t *testing.T, sig *Signature, want xvalSignature, index int, isCounterSig bool) {
 	t.Helper()
 
 	// A nested counter signature is not initialized by CMSDocumentAnalyzer's BuildSignatures()
@@ -218,7 +218,7 @@ func checkXvalSignature(t *testing.T, sig *CAdESSignature, want xvalSignature, i
 		t.Fatalf("signature[%d]: golden carries %d counter-signature entries for a count of %d", index, len(want.CounterSignatures), want.CounterSignatureCount)
 	}
 	for i, cs := range counterSignatures {
-		checkXvalSignature(t, cs.(*CAdESSignature), want.CounterSignatures[i], i, true)
+		checkXvalSignature(t, cs.(*Signature), want.CounterSignatures[i], i, true)
 	}
 }
 

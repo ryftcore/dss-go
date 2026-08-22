@@ -8,14 +8,14 @@ type EAAKeyBindingPayload interface {
 	claim.Claim
 
 	// Nonce gets the value of the nonce from the key binding payload. Port of getNonce().
-	Nonce() claim.ClaimString
+	Nonce() claim.String
 
 	// IssuedAt gets the issuance date from the key binding payload. Port of getIssuedAt().
-	IssuedAt() claim.ClaimDate
+	IssuedAt() claim.Date
 
 	// Audience gets the value of the audience from the key binding payload. Port of getAudience().
-	Audience() claim.ClaimString
+	Audience() claim.String
 
 	// SdHash gets the value of the "sd_hash" from the key binding payload. Port of getSdHash().
-	SdHash() claim.ClaimString
+	SdHash() claim.String
 }

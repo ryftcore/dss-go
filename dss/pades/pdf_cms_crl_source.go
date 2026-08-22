@@ -78,7 +78,7 @@ func (s *PdfCmsCRLSource) extractCRLArchivalValues(signedAttributes cmscore.Attr
 // PORTING.md, so the entry is simply skipped here, same as every other malformed-revocation
 // degradation elsewhere in this port.
 func (s *PdfCmsCRLSource) extractRevocationInfoArchival(attrValue *asn1ber.Element) {
-	revValues := PAdESUtilsRevocationInfoArchival(attrValue)
+	revValues := UtilsRevocationInfoArchival(attrValue)
 	if revValues != nil {
 		for _, revValue := range revValues.CrlVals() {
 			crlBinary, err := crlparser.CRLUtilsBuildCRLBinary(revValue)

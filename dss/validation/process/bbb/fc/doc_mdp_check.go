@@ -20,7 +20,7 @@ type DocMDPCheck struct {
 }
 
 // NewDocMDPCheck is the default constructor.
-func NewDocMDPCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewDocMDPCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *DocMDPCheck {
 	c := &DocMDPCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

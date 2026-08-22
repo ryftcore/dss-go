@@ -13,7 +13,7 @@
 // Subpackages group model types by concern: model/policy (cryptographic
 // suite and certificate applicability rules), model/scope (signature
 // scopes), model/signature (signature-level value objects such as
-// SignaturePolicy), model/timedependent (time-varying value containers),
+// Policy), model/timedependent (time-varying value containers),
 // model/tsl and model/lote (trusted-list and List of Trusted Entities
 // identifiers), model/job (validation job info records), model/http
 // (HTTP response envelopes), and model/tls (TLS certificate chains).

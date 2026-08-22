@@ -28,8 +28,8 @@ type RevocationIssuerTrustedCheck[T any] struct {
 }
 
 // NewRevocationIssuerTrustedCheck is the default constructor. Port of
-// RevocationIssuerTrustedCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule, LevelRule).
-func NewRevocationIssuerTrustedCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationIssuerTrustedCheck(Provider, T, CertificateWrapper, Date, LevelRule, LevelRule).
+func NewRevocationIssuerTrustedCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, revocationIssuerSunsetDateConstraint policy.LevelRule,
 	constraint policy.LevelRule) *RevocationIssuerTrustedCheck[T] {
 	c := &RevocationIssuerTrustedCheck[T]{

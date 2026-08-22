@@ -36,7 +36,7 @@ type abstractASiCContainerAnalyzerBase interface {
 type AbstractASiCContainerValidatorOverrides interface {
 	// InstantiateASiCDiagnosticDataBuilder creates a new SignedDocumentDiagnosticDataBuilder.
 	// Port of the protected instantiateASiCDiagnosticDataBuilder().
-	InstantiateASiCDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder
+	InstantiateASiCDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder
 }
 
 // AbstractASiCContainerValidator is the abstract class for an ASiC container validation. Port
@@ -90,8 +90,8 @@ func (v *AbstractASiCContainerValidator) GetDocumentAnalyzer() *AbstractASiCCont
 }
 
 // IsSupported checks if the ASiCContent is supported by the current validator. Ports
-// isSupported(ASiCContent).
-func (v *AbstractASiCContainerValidator) IsSupported(asicContent *ASiCContent) bool {
+// isSupported(Content).
+func (v *AbstractASiCContainerValidator) IsSupported(asicContent *Content) bool {
 	return v.GetDocumentAnalyzer().requireOverrides().IsSupportedASiCContent(asicContent)
 }
 
@@ -185,6 +185,6 @@ func (v *AbstractASiCContainerValidator) InitializeDiagnosticDataBuilder() *dssd
 // the protected instantiateASiCDiagnosticDataBuilder(). The default implementation - promoted
 // to any concrete leaf validator that does not shadow it, exactly as
 // ASiCContainerWithXAdESValidator relies on in Java by not overriding this method either.
-func (v *AbstractASiCContainerValidator) InstantiateASiCDiagnosticDataBuilder() *ASiCContainerDiagnosticDataBuilder {
+func (v *AbstractASiCContainerValidator) InstantiateASiCDiagnosticDataBuilder() *ContainerDiagnosticDataBuilder {
 	return NewASiCContainerDiagnosticDataBuilder()
 }

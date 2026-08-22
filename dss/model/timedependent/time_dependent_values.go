@@ -7,32 +7,32 @@ import (
 	"time"
 )
 
-// TimeDependentValues is an immutable list of time-dependent values, with the latest value
+// Values is an immutable list of time-dependent values, with the latest value
 // first.
 //
 // java.io.Serializable is dropped silently (no Go counterpart). The "protected final List<T>
 // list" field Java subclasses (MutableTimeDependentValues) mutate directly is kept unexported
 // here: MutableTimeDependentValues lives in this same package and reaches it directly, which
 // is the Go counterpart of a protected field accessed from a subclass.
-type TimeDependentValues[T TimeDependent] struct {
+type Values[T TimeDependent] struct {
 	list []T
 }
 
 // NewTimeDependentValues is the empty list of values.
-func NewTimeDependentValues[T TimeDependent]() *TimeDependentValues[T] {
-	return &TimeDependentValues[T]{}
+func NewTimeDependentValues[T TimeDependent]() *Values[T] {
+	return &Values[T]{}
 }
 
 // NewTimeDependentValuesFrom is the copy constructor.
-func NewTimeDependentValuesFrom[T TimeDependent](srcList []T) *TimeDependentValues[T] {
-	v := &TimeDependentValues[T]{list: make([]T, 0, len(srcList))}
+func NewTimeDependentValuesFrom[T TimeDependent](srcList []T) *Values[T] {
+	v := &Values[T]{list: make([]T, 0, len(srcList))}
 	v.list = append(v.list, srcList...)
 	return v
 }
 
 // Iterator returns a range-over-func iterator on the immutable list, the Go counterpart of
 // Java's Iterable<T>#iterator().
-func (v *TimeDependentValues[T]) Iterator() iter.Seq[T] {
+func (v *Values[T]) Iterator() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for _, x := range v.list {
 			if !yield(x) {
@@ -44,7 +44,7 @@ func (v *TimeDependentValues[T]) Iterator() iter.Seq[T] {
 
 // Latest gets the latest time dependent value, or the zero value of T when the list is empty
 // (Java's null). Port of getLatest().
-func (v *TimeDependentValues[T]) Latest() T {
+func (v *Values[T]) Latest() T {
 	if len(v.list) == 0 {
 		var zero T
 		return zero
@@ -54,7 +54,7 @@ func (v *TimeDependentValues[T]) Latest() T {
 
 // Current gets the value with the date d if present, or the zero value of T otherwise
 // (Java's null). Port of getCurrent(Date).
-func (v *TimeDependentValues[T]) Current(d time.Time) T {
+func (v *Values[T]) Current(d time.Time) T {
 	for _, x := range v.list {
 		if !x.StartDate().After(d) {
 			endDate := x.EndDate()
@@ -69,7 +69,7 @@ func (v *TimeDependentValues[T]) Current(d time.Time) T {
 
 // After gets a list of time dependent values occurred after notBefore. Port of
 // getAfter(Date).
-func (v *TimeDependentValues[T]) After(notBefore time.Time) []T {
+func (v *Values[T]) After(notBefore time.Time) []T {
 	result := make([]T, 0)
 	for _, x := range v.list {
 		endDate := x.EndDate()
@@ -83,7 +83,7 @@ func (v *TimeDependentValues[T]) After(notBefore time.Time) []T {
 // String renders the list the way java.util.List#toString() would, joining each element's
 // String() (or default formatting when T does not implement fmt.Stringer) with ", " between
 // square brackets. Port of toString().
-func (v *TimeDependentValues[T]) String() string {
+func (v *Values[T]) String() string {
 	parts := make([]string, len(v.list))
 	for i, x := range v.list {
 		parts[i] = timeDependentValueString(x)

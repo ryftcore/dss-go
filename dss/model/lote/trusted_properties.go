@@ -10,17 +10,17 @@ type TrustedProperties struct {
 	// loloteInfo is the LoLoTE id.
 	loloteInfo *LoLoTEInfo
 	// listInfo is the LoTE id.
-	listInfo *LoTEInfo
+	listInfo *Info
 	// trustedEntity is the trustedEntity.
 	trustedEntity *TrustedEntity
 	// trustedServices is the current trust service.
-	trustedServices *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]
+	trustedServices *timedependent.Values[ServiceStatusAndInformationExtensions]
 }
 
 // NewTrustedProperties creates a TrustedProperties object for extracted information from an
 // "independent" list.
-func NewTrustedProperties(listInfo *LoTEInfo, trustedEntity *TrustedEntity,
-	trustedServices *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]) *TrustedProperties {
+func NewTrustedProperties(listInfo *Info, trustedEntity *TrustedEntity,
+	trustedServices *timedependent.Values[ServiceStatusAndInformationExtensions]) *TrustedProperties {
 	return NewTrustedPropertiesWithLoLoTE(nil, listInfo, trustedEntity, trustedServices)
 }
 
@@ -30,8 +30,8 @@ func NewTrustedProperties(listInfo *LoTEInfo, trustedEntity *TrustedEntity,
 // Panics with "tlInfo cannot be null!", "trustedEntity cannot be null!", or "trustedServices
 // cannot be null!" when the respective argument is nil, mirroring Objects.requireNonNull (the
 // Java message names "tlInfo" even though the parameter is listInfo, kept verbatim).
-func NewTrustedPropertiesWithLoLoTE(loloteInfo *LoLoTEInfo, listInfo *LoTEInfo, trustedEntity *TrustedEntity,
-	trustedServices *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]) *TrustedProperties {
+func NewTrustedPropertiesWithLoLoTE(loloteInfo *LoLoTEInfo, listInfo *Info, trustedEntity *TrustedEntity,
+	trustedServices *timedependent.Values[ServiceStatusAndInformationExtensions]) *TrustedProperties {
 	if listInfo == nil {
 		panic("tlInfo cannot be null!")
 	}
@@ -54,8 +54,8 @@ func (t *TrustedProperties) LoLoTEInfo() *LoLoTEInfo {
 	return t.loloteInfo
 }
 
-// LoTEInfo gets List.
-func (t *TrustedProperties) LoTEInfo() *LoTEInfo {
+// Info gets List.
+func (t *TrustedProperties) LoTEInfo() *Info {
 	return t.listInfo
 }
 
@@ -65,6 +65,6 @@ func (t *TrustedProperties) TrustedEntity() *TrustedEntity {
 }
 
 // TrustedServices gets trust service.
-func (t *TrustedProperties) TrustedServices() *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions] {
+func (t *TrustedProperties) TrustedServices() *timedependent.Values[ServiceStatusAndInformationExtensions] {
 	return t.trustedServices
 }

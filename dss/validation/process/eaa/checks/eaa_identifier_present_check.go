@@ -19,7 +19,7 @@ type EAAIdentifierPresentCheck struct {
 }
 
 // NewEAAIdentifierPresentCheck is the default constructor.
-func NewEAAIdentifierPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAIdentifierPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAAIdentifierPresentCheck {
 	c := &EAAIdentifierPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

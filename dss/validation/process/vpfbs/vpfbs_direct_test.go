@@ -25,7 +25,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process"
 )
 
-func newTestI18nProvider() *i18n.I18nProvider {
+func newTestI18nProvider() *i18n.Provider {
 	return i18n.NewI18nProvider()
 }
 

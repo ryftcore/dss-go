@@ -17,10 +17,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// PAdESExtensionService obtains the validation data for the signatures/timestamps within a PDF
+// ExtensionService obtains the validation data for the signatures/timestamps within a PDF
 // file and incorporates it on the LT-level of the document, i.e. creates a DSS dictionary
 // revision.
-type PAdESExtensionService struct {
+type ExtensionService struct {
 	// certificateVerifier processes the validation data.
 	certificateVerifier validation.CertificateVerifier
 
@@ -30,21 +30,21 @@ type PAdESExtensionService struct {
 
 // NewPAdESExtensionService instantiates the service with the default IPdfObjFactory.
 // Port of PAdESExtensionService(CertificateVerifier).
-func NewPAdESExtensionService(certificateVerifier validation.CertificateVerifier) *PAdESExtensionService {
+func NewPAdESExtensionService(certificateVerifier validation.CertificateVerifier) *ExtensionService {
 	return NewPAdESExtensionServiceWithFactory(certificateVerifier, NewDefaultPdfObjFactory())
 }
 
 // NewPAdESExtensionServiceWithFactory is the default constructor.
 // Port of PAdESExtensionService(CertificateVerifier, IPdfObjFactory).
 func NewPAdESExtensionServiceWithFactory(certificateVerifier validation.CertificateVerifier,
-	pdfObjectFactory IPdfObjFactory) *PAdESExtensionService {
+	pdfObjectFactory IPdfObjFactory) *ExtensionService {
 	if certificateVerifier == nil {
 		panic("CertificateVerifier cannot be null!")
 	}
 	if pdfObjectFactory == nil {
 		panic("PdfObjectFactory cannot be null!")
 	}
-	return &PAdESExtensionService{certificateVerifier: certificateVerifier, pdfObjectFactory: pdfObjectFactory}
+	return &ExtensionService{certificateVerifier: certificateVerifier, pdfObjectFactory: pdfObjectFactory}
 }
 
 // IncorporateValidationData adds a DSS dictionary revision to the given document without
@@ -53,14 +53,14 @@ func NewPAdESExtensionServiceWithFactory(certificateVerifier validation.Certific
 //
 // NOTE: this method does not check the validity of the provided signatures/timestamps (e.g. a
 // T-level, ...). Port of incorporateValidationData(DSSDocument).
-func (s *PAdESExtensionService) IncorporateValidationData(document model.DSSDocument) model.DSSDocument {
+func (s *ExtensionService) IncorporateValidationData(document model.DSSDocument) model.DSSDocument {
 	return s.IncorporateValidationDataWithPassword(document, nil)
 }
 
 // IncorporateValidationDataWithPassword adds a DSS dictionary revision to the given document
 // protected by a passwordProtection, with the required validation data if needed and without a
 // VRI dictionary. Port of incorporateValidationData(DSSDocument, char[]).
-func (s *PAdESExtensionService) IncorporateValidationDataWithPassword(document model.DSSDocument,
+func (s *ExtensionService) IncorporateValidationDataWithPassword(document model.DSSDocument,
 	passwordProtection []byte) model.DSSDocument {
 	return s.IncorporateValidationDataWithVRI(document, passwordProtection, false)
 }
@@ -69,7 +69,7 @@ func (s *PAdESExtensionService) IncorporateValidationDataWithPassword(document m
 // protected by a passwordProtection, with the required validation data if needed and a VRI
 // dictionary when includeVRIDict is set.
 // Port of incorporateValidationData(DSSDocument, char[], boolean).
-func (s *PAdESExtensionService) IncorporateValidationDataWithVRI(document model.DSSDocument,
+func (s *ExtensionService) IncorporateValidationDataWithVRI(document model.DSSDocument,
 	passwordProtection []byte, includeVRIDict bool) model.DSSDocument {
 	if document == nil {
 		panic("The document to be extended shall be provided!")
@@ -116,7 +116,7 @@ func padesExtensionServiceSignatureTimestamps(signatures []validation.AdvancedSi
 }
 
 // pdfDocumentAnalyzer ports the private #getPDFDocumentAnalyzer.
-func (s *PAdESExtensionService) pdfDocumentAnalyzer(document model.DSSDocument,
+func (s *ExtensionService) pdfDocumentAnalyzer(document model.DSSDocument,
 	passwordProtection []byte) *PDFDocumentAnalyzer {
 	pdfDocumentAnalyzer := NewPDFDocumentAnalyzer(document)
 	pdfDocumentAnalyzer.SetCertificateVerifier(s.certificateVerifier)
@@ -127,6 +127,6 @@ func (s *PAdESExtensionService) pdfDocumentAnalyzer(document model.DSSDocument,
 }
 
 // newPdfSignatureService ports the private #newPdfSignatureService.
-func (s *PAdESExtensionService) newPdfSignatureService() PDFSignatureService {
+func (s *ExtensionService) newPdfSignatureService() PDFSignatureService {
 	return s.pdfObjectFactory.NewPAdESSignatureService()
 }

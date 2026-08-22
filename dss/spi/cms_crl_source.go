@@ -283,7 +283,7 @@ func DSSASN1UtilsRevocationValues(encodable []byte) *RevocationValues {
 
 // CMSCRLSource is a CRLSource that retrieves information from a CMS SignedData container.
 // Port of the abstract class CMSCRLSource; the concrete sources of the later phases
-// (CAdESCRLSource, TimestampCRLSource) embed the *CMSCRLSource NewCMSCRLSource returns.
+// (CRLSource, TimestampCRLSource) embed the *CMSCRLSource NewCMSCRLSource returns.
 //
 // As with OfflineCRLSourceBase, this abstract base does not call
 // InitOfflineRevocationSource: the outermost concrete source registers itself, so that

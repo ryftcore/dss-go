@@ -10,20 +10,20 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESTimestampParameters holds the parameters for a XAdES timestamp creation.
-type XAdESTimestampParameters struct {
+// TimestampParameters holds the parameters for a XAdES timestamp creation.
+type TimestampParameters struct {
 	model.TimestampParameters
 
 	// canonicalizationMethod is the canonicalization method to use for the message-imprint.
 	canonicalizationMethod string
 }
 
-var _ model.SerializableTimestampParameters = (*XAdESTimestampParameters)(nil)
+var _ model.SerializableTimestampParameters = (*TimestampParameters)(nil)
 
 // NewXAdESTimestampParameters instantiates the object with null values, including the
 // canonicalizationMethod field initializer. Port of the empty constructor.
-func NewXAdESTimestampParameters() *XAdESTimestampParameters {
-	return &XAdESTimestampParameters{
+func NewXAdESTimestampParameters() *TimestampParameters {
+	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParameters(),
 		canonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 	}
@@ -32,8 +32,8 @@ func NewXAdESTimestampParameters() *XAdESTimestampParameters {
 // NewXAdESTimestampParametersWithDigestAlgorithm is a constructor with a digest algorithm to
 // use for message-imprint digest calculation, including the canonicalizationMethod field
 // initializer. Port of XAdESTimestampParameters(DigestAlgorithm).
-func NewXAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *XAdESTimestampParameters {
-	return &XAdESTimestampParameters{
+func NewXAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),
 		canonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 	}
@@ -41,24 +41,24 @@ func NewXAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations
 
 // NewXAdESTimestampParametersWithCanonicalization is the default constructor with a digest
 // algorithm and canonicalization method to use for the message-imprint. Port of
-// XAdESTimestampParameters(DigestAlgorithm, String).
+// TimestampParameters(DigestAlgorithm, String).
 func NewXAdESTimestampParametersWithCanonicalization(digestAlgorithm enumerations.DigestAlgorithm,
-	canonicalizationMethod string) *XAdESTimestampParameters {
-	return &XAdESTimestampParameters{
+	canonicalizationMethod string) *TimestampParameters {
+	return &TimestampParameters{
 		TimestampParameters:    model.NewTimestampParametersWithDigestAlgorithm(digestAlgorithm),
 		canonicalizationMethod: canonicalizationMethod,
 	}
 }
 
 // CanonicalizationMethod gets the canonicalization method. Ports getCanonicalizationMethod().
-func (p *XAdESTimestampParameters) CanonicalizationMethod() string {
+func (p *TimestampParameters) CanonicalizationMethod() string {
 	return p.canonicalizationMethod
 }
 
 // SetCanonicalizationMethod sets the canonicalization method. Panics with the Java message when
 // canonicalizationMethod is empty (IllegalArgumentException upstream). Ports
 // setCanonicalizationMethod(String).
-func (p *XAdESTimestampParameters) SetCanonicalizationMethod(canonicalizationMethod string) {
+func (p *TimestampParameters) SetCanonicalizationMethod(canonicalizationMethod string) {
 	if utils.IsStringEmpty(canonicalizationMethod) {
 		panic("Canonicalization cannot be empty! See EN 319 132-1: 4.5 Managing canonicalization of XML nodesets.")
 	}
@@ -66,13 +66,13 @@ func (p *XAdESTimestampParameters) SetCanonicalizationMethod(canonicalizationMet
 }
 
 // String ports toString().
-func (p *XAdESTimestampParameters) String() string {
+func (p *TimestampParameters) String() string {
 	return fmt.Sprintf("XAdESTimestampParameters [canonicalizationMethod='%s'] %s",
 		p.canonicalizationMethod, p.TimestampParameters.String())
 }
 
 // Equals ports equals(Object).
-func (p *XAdESTimestampParameters) Equals(other *XAdESTimestampParameters) bool {
+func (p *TimestampParameters) Equals(other *TimestampParameters) bool {
 	if p == other {
 		return true
 	}

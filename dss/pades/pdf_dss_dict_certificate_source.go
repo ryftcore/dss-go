@@ -69,7 +69,7 @@ func (s *PdfDssDictCertificateSource) extractFromDssDictSource() {
 func (s *PdfDssDictCertificateSource) CertificateMap() map[PdfObjectKey]*model.CertificateToken {
 	if s.dssDictionary != nil {
 		dssCerts := s.dssDictionary.CERTs()
-		vriDicts := PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
+		vriDicts := UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
 		for _, vriDict := range vriDicts {
 			for key, certToken := range vriDict.CERTs() {
 				dssCerts[key] = certToken
@@ -94,7 +94,7 @@ func (s *PdfDssDictCertificateSource) DSSDictionaryCertValues() []*model.Certifi
 func (s *PdfDssDictCertificateSource) VRIDictionaryCertValues() []*model.CertificateToken {
 	if s.dssDictionary != nil {
 		certKeys := make([]PdfObjectKey, 0)
-		vris := PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
+		vris := UtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName)
 		for _, vri := range vris {
 			for _, key := range pdfDssDictCertificateSourceSortedKeys(vri.CERTs()) {
 				if !pdfDssDictCertificateSourceContainsKey(certKeys, key) {

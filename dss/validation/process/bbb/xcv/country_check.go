@@ -20,8 +20,8 @@ type CountryCheck struct {
 }
 
 // NewCountryCheck is the default constructor. Port of
-// CountryCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCountryCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CountryCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCountryCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CountryCheck {
 	c := &CountryCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

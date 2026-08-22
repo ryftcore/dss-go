@@ -21,8 +21,8 @@ type OrganizationUnitCheck struct {
 }
 
 // NewOrganizationUnitCheck is the default constructor. Port of
-// OrganizationUnitCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewOrganizationUnitCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// OrganizationUnitCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewOrganizationUnitCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *OrganizationUnitCheck {
 	c := &OrganizationUnitCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

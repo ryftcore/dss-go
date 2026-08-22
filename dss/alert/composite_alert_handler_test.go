@@ -18,7 +18,7 @@ func (h *recordingHandler) Process(object Status) error {
 
 func TestCompositeAlertHandler_RunsAllInOrder(t *testing.T) {
 	var calls []string
-	h := NewCompositeAlertHandler[Status]([]AlertHandler[Status]{
+	h := NewCompositeAlertHandler[Status]([]Handler[Status]{
 		&recordingHandler{calls: &calls, name: "first"},
 		&recordingHandler{calls: &calls, name: "second"},
 		&recordingHandler{calls: &calls, name: "third"},
@@ -37,7 +37,7 @@ func TestCompositeAlertHandler_RunsAllInOrder(t *testing.T) {
 func TestCompositeAlertHandler_StopsAtFirstError(t *testing.T) {
 	var calls []string
 	boom := errors.New("boom")
-	h := NewCompositeAlertHandler[Status]([]AlertHandler[Status]{
+	h := NewCompositeAlertHandler[Status]([]Handler[Status]{
 		&recordingHandler{calls: &calls, name: "first"},
 		&recordingHandler{calls: &calls, name: "second", err: boom},
 		&recordingHandler{calls: &calls, name: "third"},
@@ -55,7 +55,7 @@ func TestCompositeAlertHandler_StopsAtFirstError(t *testing.T) {
 }
 
 func TestCompositeAlertHandler_ComposesWithThrowAndSilent(t *testing.T) {
-	h := NewCompositeAlertHandler[Status]([]AlertHandler[Status]{
+	h := NewCompositeAlertHandler[Status]([]Handler[Status]{
 		NewSilentHandler[Status](),
 		NewThrowAlertExceptionHandler[Status](),
 	})
@@ -64,7 +64,7 @@ func TestCompositeAlertHandler_ComposesWithThrowAndSilent(t *testing.T) {
 	status.SetMessage("boom message")
 
 	err := h.Process(status)
-	var alertErr *AlertError
+	var alertErr *Error
 	if !errors.As(err, &alertErr) {
 		t.Fatalf("Process() error = %v, want *AlertError", err)
 	}

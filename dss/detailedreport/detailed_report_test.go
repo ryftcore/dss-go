@@ -1,4 +1,4 @@
-// Behavior tests for DetailedReport/DetailedReportMessageCollector against
+// Behavior tests for DetailedReport/MessageCollector against
 // Java-dumped answers: every assertion below reads a value straight out of
 // one of jaxb's testdata/oracle fixtures (real JAXB reference implementation
 // output), so the expected values are what upstream actually produced, not

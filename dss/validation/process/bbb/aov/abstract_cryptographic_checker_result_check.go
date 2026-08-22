@@ -34,10 +34,10 @@ type AbstractCryptographicCheckerResultCheck[T any] struct {
 }
 
 // NewAbstractCryptographicCheckerResultCheck is the default constructor. Port
-// of AbstractCryptographicCheckerResultCheck(I18nProvider, T, MessageTag,
+// of AbstractCryptographicCheckerResultCheck(Provider, T, MessageTag,
 // XmlCC, LevelRule): a Java caller passing a null tokenId maps to this
 // constructor, matching process.NewChainItemBase's own convention.
-func NewAbstractCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewAbstractCryptographicCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	position i18n.MessageTag, ccResult *jaxb.XmlCC, constraint policy.LevelRule) *AbstractCryptographicCheckerResultCheck[T] {
 	return &AbstractCryptographicCheckerResultCheck[T]{
 		UninterruptedChainItemBase: process.NewUninterruptedChainItemBase(i18nProvider, result, constraint),
@@ -49,8 +49,8 @@ func NewAbstractCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nPr
 
 // NewAbstractCryptographicCheckerResultCheckWithId is the constructor
 // carrying a token identifier. Port of
-// AbstractCryptographicCheckerResultCheck(I18nProvider, T, MessageTag, XmlCC, LevelRule, String).
-func NewAbstractCryptographicCheckerResultCheckWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AbstractCryptographicCheckerResultCheck(Provider, T, MessageTag, XmlCC, LevelRule, String).
+func NewAbstractCryptographicCheckerResultCheckWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	position i18n.MessageTag, ccResult *jaxb.XmlCC, constraint policy.LevelRule, tokenId string) *AbstractCryptographicCheckerResultCheck[T] {
 	return &AbstractCryptographicCheckerResultCheck[T]{
 		UninterruptedChainItemBase: process.NewUninterruptedChainItemBaseWithId(i18nProvider, result, constraint, tokenId),

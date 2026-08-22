@@ -154,7 +154,7 @@ func (t *TLParsingTask) filter(trustServiceProviders []*jaxb.TSPType) []*jaxb.TS
 	return kept
 }
 
-// CreateTrustedListFacade keeps the base's TrustedListFacade: TLParsingTask does not override
+// CreateTrustedListFacade keeps the base's Facade: TLParsingTask does not override
 // createTrustedListFacade(). The method is restated so that *TLParsingTask - and not the embedded
 // base value - is what InitAbstractParsingTask registers, which matters only for LOTLParsingTask
 // but is spelled out here for symmetry.

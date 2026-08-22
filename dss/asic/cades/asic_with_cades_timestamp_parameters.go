@@ -15,28 +15,28 @@ import (
 // ASiCWithCAdESTimestampParameters defines TimestampParameters to deal with ASiC with CAdES
 // timestamp creation.
 type ASiCWithCAdESTimestampParameters struct {
-	dsscades.CAdESTimestampParameters
+	dsscades.TimestampParameters
 
 	// zipCreationDate is used to set the DateTime for created ZIP entries.
 	zipCreationDate time.Time
 
 	// asicParams is the object representing the parameters related to ASiC for the timestamp.
-	asicParams *asic.ASiCParameters
+	asicParams *asic.Parameters
 }
 
 var _ ASiCWithCAdESCommonParameters = (*ASiCWithCAdESTimestampParameters)(nil)
 
 // ASiC ports the @Override aSiC().
-func (p *ASiCWithCAdESTimestampParameters) ASiC() *asic.ASiCParameters {
+func (p *ASiCWithCAdESTimestampParameters) ASiC() *asic.Parameters {
 	return p.asicParams
 }
 
 // NewASiCWithCAdESTimestampParameters is the empty constructor. Port of the empty constructor.
 func NewASiCWithCAdESTimestampParameters() *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		CAdESTimestampParameters: *dsscades.NewCAdESTimestampParameters(),
-		zipCreationDate:          time.Now(),
-		asicParams:               asic.NewASiCParameters(),
+		TimestampParameters: *dsscades.NewCAdESTimestampParameters(),
+		zipCreationDate:     time.Now(),
+		asicParams:          asic.NewASiCParameters(),
 	}
 }
 
@@ -44,20 +44,20 @@ func NewASiCWithCAdESTimestampParameters() *ASiCWithCAdESTimestampParameters {
 // DigestAlgorithm. Port of ASiCWithCAdESTimestampParameters(DigestAlgorithm).
 func NewASiCWithCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		CAdESTimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
-		zipCreationDate:          time.Now(),
-		asicParams:               asic.NewASiCParameters(),
+		TimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
+		zipCreationDate:     time.Now(),
+		asicParams:          asic.NewASiCParameters(),
 	}
 }
 
 // NewASiCWithCAdESTimestampParametersWithDigestAlgorithmAndASiCParams is the constructor defining
 // a DigestAlgorithm and ASiCParameters. Port of ASiCWithCAdESTimestampParameters(DigestAlgorithm,
-// ASiCParameters).
-func NewASiCWithCAdESTimestampParametersWithDigestAlgorithmAndASiCParams(digestAlgorithm enumerations.DigestAlgorithm, asicParams *asic.ASiCParameters) *ASiCWithCAdESTimestampParameters {
+// Parameters).
+func NewASiCWithCAdESTimestampParametersWithDigestAlgorithmAndASiCParams(digestAlgorithm enumerations.DigestAlgorithm, asicParams *asic.Parameters) *ASiCWithCAdESTimestampParameters {
 	return &ASiCWithCAdESTimestampParameters{
-		CAdESTimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
-		zipCreationDate:          time.Now(),
-		asicParams:               asicParams,
+		TimestampParameters: *dsscades.NewCAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm),
+		zipCreationDate:     time.Now(),
+		asicParams:          asicParams,
 	}
 }
 
@@ -75,7 +75,7 @@ func (p *ASiCWithCAdESTimestampParameters) SetZipCreationDate(zipCreationDate ti
 // String ports #toString.
 func (p *ASiCWithCAdESTimestampParameters) String() string {
 	return fmt.Sprintf("ASiCWithCAdESTimestampParameters [zipCreationDate=%v, asicParams=%v] %s",
-		p.zipCreationDate, p.asicParams, p.CAdESTimestampParameters.String())
+		p.zipCreationDate, p.asicParams, p.TimestampParameters.String())
 }
 
 // Equals ports #equals.

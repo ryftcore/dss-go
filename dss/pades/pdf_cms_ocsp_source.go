@@ -60,7 +60,7 @@ func (s *PdfCmsOCSPSource) extractOCSPArchivalValues(signedAttributes cmscore.At
 // OCSPException; slf4j logging is dropped per PORTING.md, so the entry is simply skipped here,
 // same as every malformed-revocation degradation elsewhere in this port.
 func (s *PdfCmsOCSPSource) extractRevocationInfoArchival(attrValue *asn1ber.Element) {
-	revocationArchival := PAdESUtilsRevocationInfoArchival(attrValue)
+	revocationArchival := UtilsRevocationInfoArchival(attrValue)
 	if revocationArchival != nil {
 		for _, encodedOcspResponse := range revocationArchival.OcspVals() {
 			ocspResp := spi.DSSRevocationUtilsOcspResp(encodedOcspResponse)

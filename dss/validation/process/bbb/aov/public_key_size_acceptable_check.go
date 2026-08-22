@@ -27,7 +27,7 @@ type PublicKeySizeAcceptableCheck struct {
 }
 
 // NewPublicKeySizeAcceptableCheck is the default constructor.
-func NewPublicKeySizeAcceptableCheck(i18nProvider *i18n.I18nProvider, signatureAlgorithm enumerations.SignatureAlgorithm,
+func NewPublicKeySizeAcceptableCheck(i18nProvider *i18n.Provider, signatureAlgorithm enumerations.SignatureAlgorithm,
 	keyLength string, result *process.Result[*jaxb.XmlCC], position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *PublicKeySizeAcceptableCheck {
 	c := &PublicKeySizeAcceptableCheck{

@@ -23,7 +23,7 @@ func newTestFCResult() *process.Result[*drjaxb.XmlFC] {
 	return process.NewResult(xmlFC, &xmlFC.XmlConstraintsConclusionContent, &xmlFC.XmlConstraintsConclusionAttrs)
 }
 
-func testI18nProvider(t *testing.T) *i18n.I18nProvider {
+func testI18nProvider(t *testing.T) *i18n.Provider {
 	t.Helper()
 	return i18n.NewI18nProvider()
 }

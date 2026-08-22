@@ -3,17 +3,17 @@
 // Java extends AbstractSignatureService<XAdESSignatureParameters, XAdESTimestampParameters> and
 // implements MultipleDocumentsSignatureService, CounterSignatureService and
 // EvidenceRecordIncorporationService; the Go port embeds
-// document.AbstractSignatureService[*XAdESSignatureParameters, *XAdESTimestampParameters], the
-// same way cades.CAdESService does.
+// document.AbstractSignatureService[*SignatureParameters, *TimestampParameters], the
+// same way cades.Service does.
 //
 // # Overloads, and the one interface Go cannot let this type carry
 //
 // Java overloads getContentTimestamp, getDataToSign, signDocument and timestamp on
-// DSSDocument vs List<DSSDocument>: DocumentSignatureService declares the first shape,
+// DSSDocument vs List<DSSDocument>: SignatureService declares the first shape,
 // MultipleDocumentsSignatureService the second, and one Java class satisfies both. Go has no
 // overloading, so a single type cannot carry both method sets. This port keeps the plain names
-// for the single-document shape - so *XAdESService satisfies document.DocumentSignatureService,
-// as cades.CAdESService does - and gives the multi-document shape distinct names:
+// for the single-document shape - so *Service satisfies document.SignatureService,
+// as cades.Service does - and gives the multi-document shape distinct names:
 //
 //	getContentTimestamp(List, SP)          -> GetContentTimestampForDocuments
 //	getDataToSign(List, SP)                -> GetDataToSignForDocuments
@@ -51,13 +51,13 @@ func init() {
 	DSSXMLUtilsRegisterXAdESNamespaces()
 }
 
-// XAdESSignatureExtender is the slice of SignatureExtension<XAdESSignatureParameters> that
+// SignatureExtender is the slice of SignatureExtension<SignatureParameters> that
 // getExtensionProfile's local variable is typed with upstream: Java assigns an
-// XAdESLevelBaselineT, -C, -X, -XL, -A, -LT or -LTA to it, and each of the seven is a distinct
-// Go type embedding XAdESLevelBaselineT, so the switch below needs an interface value. Every
+// LevelBaselineT, -C, -X, -XL, -A, -LT or -LTA to it, and each of the seven is a distinct
+// Go type embedding LevelBaselineT, so the switch below needs an interface value. Every
 // XAdES extension level satisfies it through that embedded base. Same technique, and same
-// reason, as cades.CAdESSignatureExtender.
-type XAdESSignatureExtender interface {
+// reason, as cades.SignatureExtender.
+type SignatureExtender interface {
 	// SetTspSource sets the TSP source used when extending. Port of
 	// XAdESLevelBaselineT#setTspSource.
 	SetTspSource(tspSource validation.TSPSource)
@@ -67,36 +67,36 @@ type XAdESSignatureExtender interface {
 	// ExtendSignatures name belongs to the List<AdvancedSignature> overload every level
 	// overrides, so the document-taking entry point carries the Document suffix.
 	ExtendSignaturesDocument(document model.DSSDocument,
-		params *XAdESSignatureParameters) (model.DSSDocument, error)
+		params *SignatureParameters) (model.DSSDocument, error)
 }
 
-// XAdESService is the XAdES implementation of DocumentSignatureService.
-type XAdESService struct {
-	document.AbstractSignatureService[*XAdESSignatureParameters, *XAdESTimestampParameters]
+// Service is the XAdES implementation of SignatureService.
+type Service struct {
+	document.AbstractSignatureService[*SignatureParameters, *TimestampParameters]
 }
 
-// NewXAdESService creates an instance of the XAdESService. A certificate verifier must be
+// NewXAdESService creates an instance of the Service. A certificate verifier must be
 // provided; it supplies information on the sources to be used in the validation process in the
 // context of a signature. Port of XAdESService(CertificateVerifier).
-func NewXAdESService(certificateVerifier validation.CertificateVerifier) *XAdESService {
+func NewXAdESService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ XAdESService created".
-	return &XAdESService{
-		AbstractSignatureService: document.NewAbstractSignatureService[*XAdESSignatureParameters,
-			*XAdESTimestampParameters](certificateVerifier),
+	return &Service{
+		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters,
+			*TimestampParameters](certificateVerifier),
 	}
 }
 
 // GetContentTimestamp creates a content-timestamp covering the document to be signed.
 // Port of the #getContentTimestamp(DSSDocument, XAdESSignatureParameters) overload.
-func (s *XAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
-	parameters *XAdESSignatureParameters) *validation.TimestampToken {
+func (s *Service) GetContentTimestamp(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *validation.TimestampToken {
 	return s.GetContentTimestampForDocuments([]model.DSSDocument{toSignDocument}, parameters)
 }
 
 // GetContentTimestampForDocuments creates a content-timestamp covering all documents to be
 // signed. Port of the #getContentTimestamp(List<DSSDocument>, XAdESSignatureParameters) overload.
-func (s *XAdESService) GetContentTimestampForDocuments(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters) *validation.TimestampToken {
+func (s *Service) GetContentTimestampForDocuments(toSignDocuments []model.DSSDocument,
+	parameters *SignatureParameters) *validation.TimestampToken {
 	if s.TspSource == nil {
 		panic("A TSPSource is required !")
 	}
@@ -110,8 +110,8 @@ func (s *XAdESService) GetContentTimestampForDocuments(toSignDocuments []model.D
 
 // GetDataToSign retrieves the data to be signed.
 // Port of the #getDataToSign(DSSDocument, XAdESSignatureParameters) overload.
-func (s *XAdESService) GetDataToSign(toSignDocument model.DSSDocument,
-	parameters *XAdESSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToSign(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *model.ToBeSigned {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
@@ -120,8 +120,8 @@ func (s *XAdESService) GetDataToSign(toSignDocument model.DSSDocument,
 
 // GetDataToSignForDocuments retrieves the data to be signed over several documents.
 // Port of the #getDataToSign(List<DSSDocument>, XAdESSignatureParameters) overload.
-func (s *XAdESService) GetDataToSignForDocuments(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToSignForDocuments(toSignDocuments []model.DSSDocument,
+	parameters *SignatureParameters) *model.ToBeSigned {
 	if toSignDocuments == nil {
 		panic("toSignDocuments cannot be null!")
 	}
@@ -145,8 +145,8 @@ func (s *XAdESService) GetDataToSignForDocuments(toSignDocuments []model.DSSDocu
 
 // SignDocument signs the document with the provided signature value.
 // Port of the #signDocument(DSSDocument, XAdESSignatureParameters, SignatureValue) overload.
-func (s *XAdESService) SignDocument(toSignDocument model.DSSDocument,
-	parameters *XAdESSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+func (s *Service) SignDocument(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument is not defined!")
 	}
@@ -155,8 +155,8 @@ func (s *XAdESService) SignDocument(toSignDocument model.DSSDocument,
 
 // SignDocuments signs the documents with the provided signature value.
 // Port of the #signDocument(List<DSSDocument>, XAdESSignatureParameters, SignatureValue) overload.
-func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+func (s *Service) SignDocuments(toSignDocuments []model.DSSDocument,
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if toSignDocuments == nil {
 		panic("toSignDocuments are not defined!")
 	}
@@ -175,7 +175,7 @@ func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 	xadesServiceAssertDocumentsValid(toSignDocuments)
 
 	parameters.GetContext().SetOperationKind(enumerations.SigningOperationSign)
-	var profile XAdESSignatureProfile
+	var profile SignatureProfile
 	context := parameters.GetContext()
 	if context.Profile() != nil {
 		profile = context.Profile()
@@ -210,8 +210,8 @@ func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 }
 
 // ExtendDocument extends the level of the signatures in the document. Port of #extendDocument.
-func (s *XAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
-	parameters *XAdESSignatureParameters) model.DSSDocument {
+func (s *Service) ExtendDocument(toExtendDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSDocument {
 	if toExtendDocument == nil {
 		panic("toExtendDocument cannot be null!")
 	}
@@ -242,15 +242,15 @@ func (s *XAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 
 // TimestampDocuments is unsupported for this file format.
 // Port of the overridden #timestamp(List<DSSDocument>, XAdESTimestampParameters).
-func (s *XAdESService) TimestampDocuments(toTimestampDocuments []model.DSSDocument,
-	parameters *XAdESTimestampParameters) model.DSSDocument {
+func (s *Service) TimestampDocuments(toTimestampDocuments []model.DSSDocument,
+	parameters *TimestampParameters) model.DSSDocument {
 	panic("Unsupported operation for this file format")
 }
 
 // extensionProfile chooses the extension profile according to the passed parameters, returning
 // nil for the -B level exactly as Java returns null. Port of the private getExtensionProfile.
-func (s *XAdESService) extensionProfile(parameters *XAdESSignatureParameters) XAdESSignatureExtender {
-	var extension XAdESSignatureExtender
+func (s *Service) extensionProfile(parameters *SignatureParameters) SignatureExtender {
+	var extension SignatureExtender
 	switch parameters.SignatureLevel() {
 	case enumerations.SignatureLevelXAdESBaselineB:
 		return nil
@@ -278,7 +278,7 @@ func (s *XAdESService) extensionProfile(parameters *XAdESSignatureParameters) XA
 // xadesServiceAssertMultiDocumentsAllowed checks that only DETACHED and ENVELOPING signatures
 // carry several documents. Port of the private assertMultiDocumentsAllowed.
 func xadesServiceAssertMultiDocumentsAllowed(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters) {
+	parameters *SignatureParameters) {
 	if parameters.SignaturePackaging() == "" {
 		panic("SignaturePackaging shall be defined!")
 	}
@@ -317,7 +317,7 @@ func xadesServiceAssertDocumentsValid(toSignDocuments []model.DSSDocument) {
 
 // AddSignaturePolicyStore incorporates a Signature Policy Store as an unsigned property into the
 // XAdES Signature. Port of #addSignaturePolicyStore.
-func (s *XAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
+func (s *Service) AddSignaturePolicyStore(doc model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore) model.DSSDocument {
 	if doc == nil {
 		panic("The document cannot be null")
@@ -342,8 +342,8 @@ func (s *XAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
 
 // GetDataToBeCounterSigned retrieves the data to be counter-signed.
 // Port of #getDataToBeCounterSigned.
-func (s *XAdESService) GetDataToBeCounterSigned(signatureDocument model.DSSDocument,
-	parameters *XAdESCounterSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToBeCounterSigned(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters) *model.ToBeSigned {
 	if signatureDocument == nil {
 		panic("signatureDocument cannot be null!")
 	}
@@ -365,13 +365,13 @@ func (s *XAdESService) GetDataToBeCounterSigned(signatureDocument model.DSSDocum
 	}
 	parameters.SetReferences([]*DSSReference{counterSignatureReference})
 
-	return s.GetDataToSign(signatureValue, &parameters.XAdESSignatureParameters)
+	return s.GetDataToSign(signatureValue, &parameters.SignatureParameters)
 }
 
 // CounterSignSignature counter-signs the signature document with the provided signature value.
 // Port of #counterSignSignature.
-func (s *XAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
-	parameters *XAdESCounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+func (s *Service) CounterSignSignature(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if signatureDocument == nil {
 		panic("signatureDocument cannot be null!")
 	}
@@ -398,7 +398,7 @@ func (s *XAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 	}
 	parameters.SetReferences([]*DSSReference{counterSignatureReference})
 
-	counterSignature := s.SignDocument(signatureValueToSign, &parameters.XAdESSignatureParameters, signatureValue)
+	counterSignature := s.SignDocument(signatureValueToSign, &parameters.SignatureParameters, signatureValue)
 	counterSigned, err := counterSignatureBuilder.BuildEmbeddedCounterSignature(signatureDocument,
 		counterSignature, parameters)
 	if err != nil {
@@ -419,8 +419,8 @@ func (s *XAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 
 // AddSignatureEvidenceRecord incorporates an evidence record as an unsigned property into the
 // XAdES Signature. Port of #addSignatureEvidenceRecord.
-func (s *XAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
-	parameters *XAdESEvidenceRecordIncorporationParameters) model.DSSDocument {
+func (s *Service) AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
+	parameters *EvidenceRecordIncorporationParameters) model.DSSDocument {
 	if signatureDocument == nil {
 		panic("The signature document cannot be null")
 	}
@@ -445,7 +445,7 @@ func (s *XAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 
 // xadesServiceVerifyAndSetCounterSignatureParameters ports the private
 // verifyAndSetCounterSignatureParameters.
-func xadesServiceVerifyAndSetCounterSignatureParameters(parameters *XAdESCounterSignatureParameters) {
+func xadesServiceVerifyAndSetCounterSignatureParameters(parameters *CounterSignatureParameters) {
 	if parameters.SignaturePackaging() == "" {
 		parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	} else if enumerations.SignaturePackagingDetached != parameters.SignaturePackaging() {
@@ -456,27 +456,27 @@ func xadesServiceVerifyAndSetCounterSignatureParameters(parameters *XAdESCounter
 
 // MultipleDocumentsService adapts this service to document.MultipleDocumentsSignatureService.
 // See the package-level note: Java's XAdESService implements that interface directly, which Go
-// cannot express on the same type because DocumentSignatureService declares the same four
+// cannot express on the same type because SignatureService declares the same four
 // method names with single-document parameters.
-func (s *XAdESService) MultipleDocumentsService() document.MultipleDocumentsSignatureService[
-	*XAdESSignatureParameters, *XAdESTimestampParameters] {
+func (s *Service) MultipleDocumentsService() document.MultipleDocumentsSignatureService[
+	*SignatureParameters, *TimestampParameters] {
 	return &xadesServiceMultipleDocumentsAdapter{service: s}
 }
 
 // xadesServiceMultipleDocumentsAdapter forwards MultipleDocumentsSignatureService to the
-// ...ForDocuments / SignDocuments / TimestampDocuments methods of XAdESService. It holds no
+// ...ForDocuments / SignDocuments / TimestampDocuments methods of Service. It holds no
 // state and adds no behaviour.
 type xadesServiceMultipleDocumentsAdapter struct {
-	service *XAdESService
+	service *Service
 }
 
 func (a *xadesServiceMultipleDocumentsAdapter) GetContentTimestamp(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters) *validation.TimestampToken {
+	parameters *SignatureParameters) *validation.TimestampToken {
 	return a.service.GetContentTimestampForDocuments(toSignDocuments, parameters)
 }
 
 func (a *xadesServiceMultipleDocumentsAdapter) GetDataToSign(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters) *model.ToBeSigned {
+	parameters *SignatureParameters) *model.ToBeSigned {
 	return a.service.GetDataToSignForDocuments(toSignDocuments, parameters)
 }
 
@@ -486,26 +486,26 @@ func (a *xadesServiceMultipleDocumentsAdapter) IsValidSignatureValue(toBeSigned 
 }
 
 func (a *xadesServiceMultipleDocumentsAdapter) SignDocument(toSignDocuments []model.DSSDocument,
-	parameters *XAdESSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	return a.service.SignDocuments(toSignDocuments, parameters, signatureValue)
 }
 
 func (a *xadesServiceMultipleDocumentsAdapter) ExtendDocument(toExtendDocument model.DSSDocument,
-	parameters *XAdESSignatureParameters) model.DSSDocument {
+	parameters *SignatureParameters) model.DSSDocument {
 	return a.service.ExtendDocument(toExtendDocument, parameters)
 }
 
 func (a *xadesServiceMultipleDocumentsAdapter) Timestamp(toTimestampDocuments []model.DSSDocument,
-	parameters *XAdESTimestampParameters) model.DSSDocument {
+	parameters *TimestampParameters) model.DSSDocument {
 	return a.service.TimestampDocuments(toTimestampDocuments, parameters)
 }
 
 // Compile-time assertions that XAdESService satisfies the three service interfaces Java's
-// XAdESService carries with single-document (or non-overloaded) signatures, and that the
+// Service carries with single-document (or non-overloaded) signatures, and that the
 // adapter above satisfies the fourth.
 var (
-	_ document.DocumentSignatureService[*XAdESSignatureParameters, *XAdESTimestampParameters]          = (*XAdESService)(nil)
-	_ document.CounterSignatureService[*XAdESCounterSignatureParameters]                               = (*XAdESService)(nil)
-	_ document.EvidenceRecordIncorporationService[*XAdESEvidenceRecordIncorporationParameters]         = (*XAdESService)(nil)
-	_ document.MultipleDocumentsSignatureService[*XAdESSignatureParameters, *XAdESTimestampParameters] = (*xadesServiceMultipleDocumentsAdapter)(nil)
+	_ document.SignatureService[*SignatureParameters, *TimestampParameters]                  = (*Service)(nil)
+	_ document.CounterSignatureService[*CounterSignatureParameters]                          = (*Service)(nil)
+	_ document.EvidenceRecordIncorporationService[*EvidenceRecordIncorporationParameters]    = (*Service)(nil)
+	_ document.MultipleDocumentsSignatureService[*SignatureParameters, *TimestampParameters] = (*xadesServiceMultipleDocumentsAdapter)(nil)
 )

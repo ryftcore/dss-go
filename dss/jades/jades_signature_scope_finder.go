@@ -15,20 +15,20 @@ import (
 )
 
 // JAdESSignatureScopeFinder finds a SignatureScope for a JAdES signature. Port of the class
-// JAdESSignatureScopeFinder, extending scope.AbstractSignatureScopeFinder and implementing
-// scope.SignatureScopeFinder[*JAdESSignature].
-type JAdESSignatureScopeFinder struct {
+// SignatureScopeFinder, extending scope.AbstractSignatureScopeFinder and implementing
+// scope.SignatureScopeFinder[*Signature].
+type SignatureScopeFinder struct {
 	scope.AbstractSignatureScopeFinder
 }
 
 // NewJAdESSignatureScopeFinder is the port of the default constructor.
-func NewJAdESSignatureScopeFinder() *JAdESSignatureScopeFinder {
-	return &JAdESSignatureScopeFinder{AbstractSignatureScopeFinder: scope.NewAbstractSignatureScopeFinder()}
+func NewJAdESSignatureScopeFinder() *SignatureScopeFinder {
+	return &SignatureScopeFinder{AbstractSignatureScopeFinder: scope.NewAbstractSignatureScopeFinder()}
 }
 
 // FindSignatureScope implements scope.SignatureScopeFinder. Port of
-// findSignatureScope(JAdESSignature).
-func (f *JAdESSignatureScopeFinder) FindSignatureScope(jadesSignature *JAdESSignature) []modelscope.SignatureScope {
+// findSignatureScope(Signature).
+func (f *SignatureScopeFinder) FindSignatureScope(jadesSignature *Signature) []modelscope.SignatureScope {
 	var result []modelscope.SignatureScope
 
 	originalDocuments := f.getOriginalDocuments(jadesSignature)
@@ -72,11 +72,11 @@ func (f *JAdESSignatureScopeFinder) FindSignatureScope(jadesSignature *JAdESSign
 }
 
 // getOriginalDocuments returns original documents for the given JAdES signature. Port of the
-// protected getOriginalDocuments(JAdESSignature).
+// protected getOriginalDocuments(Signature).
 //
 // The DSSException Java catches (logging "A JAdES signer's original document is not found
 // [{}].") is swallowed the same way here, since slf4j logging is dropped per PORTING.md.
-func (f *JAdESSignatureScopeFinder) getOriginalDocuments(jadesSignature *JAdESSignature) []model.DSSDocument {
+func (f *SignatureScopeFinder) getOriginalDocuments(jadesSignature *Signature) []model.DSSDocument {
 	documents, err := jadesSignature.OriginalDocuments()
 	if err != nil {
 		return nil
@@ -86,7 +86,7 @@ func (f *JAdESSignatureScopeFinder) getOriginalDocuments(jadesSignature *JAdESSi
 
 // getSignatureScopeFromOriginalDocument returns a SignatureScope for the given originalDocument.
 // Port of the protected getSignatureScopeFromOriginalDocument(DSSDocument, ReferenceValidation).
-func (f *JAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocument(originalDocument model.DSSDocument,
+func (f *SignatureScopeFinder) getSignatureScopeFromOriginalDocument(originalDocument model.DSSDocument,
 	referenceValidation *model.ReferenceValidation) modelscope.SignatureScope {
 	var documentName string
 	if originalDocument != nil && originalDocument.Name() != "" {
@@ -104,7 +104,7 @@ func (f *JAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocument(origin
 
 // getSignatureScopeFromOriginalDocuments extracts a SignatureScope list from a list of original
 // documents. Port of the protected getSignatureScopeFromOriginalDocuments(List).
-func (f *JAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocuments(originalDocuments []model.DSSDocument) []modelscope.SignatureScope {
+func (f *SignatureScopeFinder) getSignatureScopeFromOriginalDocuments(originalDocuments []model.DSSDocument) []modelscope.SignatureScope {
 	var result []modelscope.SignatureScope
 	if utils.IsCollectionEmpty(originalDocuments) {
 		return result
@@ -128,7 +128,7 @@ func (f *JAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocuments(origi
 }
 
 // getHttpHeaderSignatureScope ports the private getHttpHeaderSignatureScope(List).
-func (f *JAdESSignatureScopeFinder) getHttpHeaderSignatureScope(originalDocuments []model.DSSDocument) []modelscope.SignatureScope {
+func (f *SignatureScopeFinder) getHttpHeaderSignatureScope(originalDocuments []model.DSSDocument) []modelscope.SignatureScope {
 	var httpHeadersSignatureScopes []modelscope.SignatureScope
 
 	httpHeadersPayloadSignatureScope := f.getHttpHeadersPayloadSignatureScope(originalDocuments)
@@ -150,7 +150,7 @@ func (f *JAdESSignatureScopeFinder) getHttpHeaderSignatureScope(originalDocument
 //
 // Panics on a build failure (Java's HttpHeadersPayloadBuilder#build() throws unchecked; this
 // port's Build returns an error - see http_headers_payload_builder.go).
-func (f *JAdESSignatureScopeFinder) getHttpHeadersPayloadSignatureScope(originalDocuments []model.DSSDocument) modelscope.SignatureScope {
+func (f *SignatureScopeFinder) getHttpHeadersPayloadSignatureScope(originalDocuments []model.DSSDocument) modelscope.SignatureScope {
 	httpHeadersPayloadBuilder := NewHttpHeadersPayloadBuilder(originalDocuments, false)
 	payload, err := httpHeadersPayloadBuilder.Build()
 	if err != nil {
@@ -160,7 +160,7 @@ func (f *JAdESSignatureScopeFinder) getHttpHeadersPayloadSignatureScope(original
 }
 
 // getHttpHeaderDigestSignatureScope ports the private getHttpHeaderDigestSignatureScope(HTTPHeader).
-func (f *JAdESSignatureScopeFinder) getHttpHeaderDigestSignatureScope(digestHttpHeader *HTTPHeaderDigest) modelscope.SignatureScope {
+func (f *SignatureScopeFinder) getHttpHeaderDigestSignatureScope(digestHttpHeader *HTTPHeaderDigest) modelscope.SignatureScope {
 	digest := f.getDigest(digestHttpHeader.Value())
 	if digest == nil {
 		return nil
@@ -170,7 +170,7 @@ func (f *JAdESSignatureScopeFinder) getHttpHeaderDigestSignatureScope(digestHttp
 
 // getDigest ports the private getDigest(String), swallowing any parse failure and returning nil,
 // matching the Java catch-all try/catch(Exception).
-func (f *JAdESSignatureScopeFinder) getDigest(digestHeaderValue string) (result *model.Digest) {
+func (f *SignatureScopeFinder) getDigest(digestHeaderValue string) (result *model.Digest) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs "Unable to extract Digest HTTP Header value. Reason : {}".
@@ -192,5 +192,5 @@ func (f *JAdESSignatureScopeFinder) getDigest(digestHeaderValue string) (result 
 	return &digest
 }
 
-// compile-time assertions: *JAdESSignatureScopeFinder implements scope.SignatureScopeFinder.
-var _ scope.SignatureScopeFinder[*JAdESSignature] = (*JAdESSignatureScopeFinder)(nil)
+// compile-time assertions: *SignatureScopeFinder implements scope.SignatureScopeFinder.
+var _ scope.SignatureScopeFinder[*Signature] = (*SignatureScopeFinder)(nil)

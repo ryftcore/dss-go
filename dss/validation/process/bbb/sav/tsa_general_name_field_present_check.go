@@ -19,8 +19,8 @@ type TSAGeneralNameFieldPresentCheck struct {
 }
 
 // NewTSAGeneralNameFieldPresentCheck is the default constructor. Port of
-// TSAGeneralNameFieldPresentCheck(I18nProvider, XmlSAV, TimestampWrapper, LevelRule).
-func NewTSAGeneralNameFieldPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// TSAGeneralNameFieldPresentCheck(Provider, XmlSAV, TimestampWrapper, LevelRule).
+func NewTSAGeneralNameFieldPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	timestampWrapper *diagnostic.TimestampWrapper, constraint policy.LevelRule) *TSAGeneralNameFieldPresentCheck {
 	c := &TSAGeneralNameFieldPresentCheck{
 		ChainItemBase:    process.NewChainItemBase(i18nProvider, result, constraint),

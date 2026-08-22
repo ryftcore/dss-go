@@ -518,6 +518,6 @@ func (f *fakeAdvancedSignature) EmbeddedEvidenceRecords() []validation.EvidenceR
 	return nil
 }
 func (f *fakeAdvancedSignature) InitBaselineRequirementsChecker(validation.CertificateVerifier) {}
-func (f *fakeAdvancedSignature) SignaturePolicy() *signature.SignaturePolicy                    { return nil }
+func (f *fakeAdvancedSignature) SignaturePolicy() *signature.Policy                             { return nil }
 
 var _ validation.AdvancedSignature = (*fakeAdvancedSignature)(nil)

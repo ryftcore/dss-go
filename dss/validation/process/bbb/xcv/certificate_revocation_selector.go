@@ -90,9 +90,9 @@ type CertificateRevocationSelector struct {
 }
 
 // NewCertificateRevocationSelector is the default constructor. Port of
-// CertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, ValidationPolicy),
+// CertificateRevocationSelector(Provider, CertificateWrapper, Date, ValidationPolicy),
 // which delegates to the constructor below with a fresh empty set.
-func NewCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
+func NewCertificateRevocationSelector(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy) *CertificateRevocationSelector {
 	return NewCertificateRevocationSelectorWithValidatedTokens(i18nProvider, certificate, currentTime,
@@ -101,8 +101,8 @@ func NewCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
 
 // NewCertificateRevocationSelectorWithValidatedTokens is the constructor with a
 // set of validated tokens. Port of
-// CertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, ValidationPolicy, Set).
-func NewCertificateRevocationSelectorWithValidatedTokens(i18nProvider *i18n.I18nProvider,
+// CertificateRevocationSelector(Provider, CertificateWrapper, Date, ValidationPolicy, Set).
+func NewCertificateRevocationSelectorWithValidatedTokens(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy, validatedTokens map[string]struct{}) *CertificateRevocationSelector {
 	c := &CertificateRevocationSelector{}
@@ -114,7 +114,7 @@ func NewCertificateRevocationSelectorWithValidatedTokens(i18nProvider *i18n.I18n
 // InitCertificateRevocationSelectorState wires the shared state, the way the
 // Java constructor body does. A subclass calls it before
 // InitCertificateRevocationSelector, in place of the Java super(...) call.
-func (c *CertificateRevocationSelector) InitCertificateRevocationSelectorState(i18nProvider *i18n.I18nProvider,
+func (c *CertificateRevocationSelector) InitCertificateRevocationSelectorState(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy, validatedTokens map[string]struct{}) {
 	xmlCRS := &jaxb.XmlCRS{}

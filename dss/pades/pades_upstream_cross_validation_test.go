@@ -1,13 +1,13 @@
 // Cross-validation harness, direction UPSTREAM -> GO: parses the
 // PAdES signatures checked into testdata/upstream/ with this package's own
-// PDFDocumentAnalyzer/PAdESSignature and compares the result against
+// PDFDocumentAnalyzer/Signature and compares the result against
 // testdata/upstream-cross-validation.json, ground truth dumped straight from upstream DSS
 // 6.5.RC1's own PDFDocumentAnalyzer/PAdESSignature (see testdata/gen/CrossValidationOracle.java
 // for how to regenerate it, and its header for exactly what it asserts and why). This is the
 // first direction of the compatibility proof: signatures upstream DSS produced/accepts must
 // parse in the Go port to the same signature count, signing certificate, claimed signing time,
 // detected level, CMS SignerId, cryptographic verification, and - via the PDF-specific layer
-// PAdESSignature.PdfRevision() exposes - the same /ByteRange, /SubFilter and other signature
+// Signature.PdfRevision() exposes - the same /ByteRange, /SubFilter and other signature
 // dictionary fields, signature field name(s), document/VRI timestamp counts, and, most PAdES-
 // specific of all, the same PDF modification-detection verdict: whether upstream's own
 // incremental-update diff (internal/pdf's own Go equivalent) flags the file as modified after
@@ -54,7 +54,7 @@ type pvalSignature struct {
 	MessageDigestValueHex    *string `json:"messageDigestValueHex"`
 	CounterSignatureCount    int     `json:"counterSignatureCount"`
 
-	// PDF-specific layer: PAdESSignature.PdfRevision().
+	// PDF-specific layer: Signature.PdfRevision().
 	SubFilter                  string   `json:"subFilter"`
 	Filter                     *string  `json:"filter"`
 	SignerName                 *string  `json:"signerName"`
@@ -140,7 +140,7 @@ func TestUpstreamCrossValidation(t *testing.T) {
 			}
 
 			for i, sig := range signatures {
-				checkPvalSignature(t, sig.(*PAdESSignature), gf.Signatures[i], i)
+				checkPvalSignature(t, sig.(*Signature), gf.Signatures[i], i)
 			}
 
 			detachedTimestamps := a.DetachedTimestamps()
@@ -157,7 +157,7 @@ func TestUpstreamCrossValidation(t *testing.T) {
 	}
 }
 
-func checkPvalSignature(t *testing.T, sig *PAdESSignature, want pvalSignature, index int) {
+func checkPvalSignature(t *testing.T, sig *Signature, want pvalSignature, index int) {
 	t.Helper()
 
 	certificateToken := sig.SigningCertificateToken()

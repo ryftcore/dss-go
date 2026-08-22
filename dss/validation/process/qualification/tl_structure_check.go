@@ -22,8 +22,8 @@ type TLStructureCheck struct {
 }
 
 // NewTLStructureCheck is the default constructor. Port of
-// TLStructureCheck(I18nProvider, XmlTLAnalysis, XmlTrustSourceList, LevelRule).
-func NewTLStructureCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlTLAnalysis],
+// TLStructureCheck(Provider, XmlTLAnalysis, XmlTrustSourceList, LevelRule).
+func NewTLStructureCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlTLAnalysis],
 	currentTL *dssjaxb.XmlTrustSourceListContent, constraint policy.LevelRule) *TLStructureCheck {
 	c := &TLStructureCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

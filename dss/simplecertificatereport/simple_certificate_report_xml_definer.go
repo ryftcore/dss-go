@@ -8,7 +8,7 @@
 // HTML and PDF report rendering). This port keeps the schema/XSLT
 // resource location constants for documentation/testdata purposes, but
 // Schema()/HtmlBootstrap4Templates()/PdfTemplates() are stubs returning an
-// error. SimpleCertificateReportFacade.Marshal/Unmarshal (the half of this pair
+// error. Facade.Marshal/Unmarshal (the half of this pair
 // that the marshal-parity KAT actually exercises, via jaxb.Marshal/
 // Unmarshal) does not depend on any of the three.
 package simplecertificatereport
@@ -38,13 +38,13 @@ const SimpleCertificateReportXsltPdfLocation = "/xslt/pdf/simple-certificate-rep
 var ErrXSDSchemaNotSupported = errors.New("simplecertificatereport: SimpleCertificateReport.xsd schema validation is not implemented in this port (deferred, see SimpleCertificateReportXmlDefiner)")
 
 // ErrHtmlTemplatesNotSupported is returned by HtmlBootstrap4Templates()
-// (and SimpleCertificateReportFacade's HTML report generators): no XSLT
+// (and Facade's HTML report generators): no XSLT
 // engine ships in the Go stdlib and none has been added to this port (see
 // the file header).
 var ErrHtmlTemplatesNotSupported = errors.New("simplecertificatereport: simple-certificate-report-bootstrap4.xslt HTML rendering is not implemented in this port (deferred, see SimpleCertificateReportXmlDefiner)")
 
 // ErrPdfTemplatesNotSupported is returned by PdfTemplates() (and
-// SimpleCertificateReportFacade's PDF report generators): no XSLT engine
+// Facade's PDF report generators): no XSLT engine
 // ships in the Go stdlib and none has been added to this port (see the
 // file header).
 var ErrPdfTemplatesNotSupported = errors.New("simplecertificatereport: simple-certificate-report.xslt PDF rendering is not implemented in this port (deferred, see SimpleCertificateReportXmlDefiner)")

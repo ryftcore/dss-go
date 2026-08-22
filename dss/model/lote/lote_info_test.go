@@ -21,7 +21,7 @@ func TestLoTEInfoDSSIDIsCachedAndUsesLoTEIdentifier(t *testing.T) {
 	l := NewLoTEInfo(nil, nil, nil, "https://example.org/lote.xml")
 
 	id := l.DSSID()
-	if _, ok := id.(*LoTEIdentifier); !ok {
+	if _, ok := id.(*Identifier); !ok {
 		t.Fatalf("expected DSSID() to return a *LoTEIdentifier, got %T", id)
 	}
 	if l.DSSID() != id {
@@ -34,7 +34,7 @@ func TestLoTEInfoDSSIDIsCachedAndUsesLoTEIdentifier(t *testing.T) {
 
 func TestLoLoTEInfoDSSIDUsesLoLoTEIdentifier(t *testing.T) {
 	// LoLoTEInfo overrides buildIdentifier(); DSSID() called on the LoLoTEInfo must reflect the
-	// override, not the embedded LoTEInfo's own LoTEIdentifier.
+	// override, not the embedded Info's own Identifier.
 	l := NewLoLoTEInfo(nil, nil, nil, "https://example.org/lolote.xml")
 
 	id := l.DSSID()
@@ -42,7 +42,7 @@ func TestLoLoTEInfoDSSIDUsesLoLoTEIdentifier(t *testing.T) {
 		t.Fatalf("expected DSSID() to return a *LoLoTEIdentifier, got %T", id)
 	}
 
-	children := []*LoTEInfo{NewLoTEInfoWithParent(nil, nil, nil, "https://example.org/child.xml", l)}
+	children := []*Info{NewLoTEInfoWithParent(nil, nil, nil, "https://example.org/child.xml", l)}
 	l.SetChildrenInfos(children)
 	if len(l.ChildrenInfos()) != 1 || l.ChildrenInfos()[0].Parent() != l {
 		t.Fatalf("unexpected ChildrenInfos(): %v", l.ChildrenInfos())

@@ -4,7 +4,7 @@
 //
 // Java's XAdESTimestampSource#getTimestampScopes(TimestampToken) override (a concrete-but-not-
 // abstract protected method on the frozen spi/validation/timestamp.SignatureTimestampSource,
-// outside this manifest) constructs and uses ITS OWN XAdESTimestampScopeFinder instead of the
+// outside this manifest) constructs and uses ITS OWN TimestampScopeFinder instead of the
 // base's plain EncapsulatedTimestampScopeFinder. Go's SignatureTimestampSource[AS, SA] (already
 // landed, spi/validation/timestamp/signature_timestamp_source.go) has no override hook for this
 // method at all - unlike every fully-abstract method (routed through
@@ -13,7 +13,7 @@
 // GetCounterSignatureReferences, see cades_timestamp_source.go's file header for the identical
 // pattern), its private getTimestampScopes always constructs a bare
 // validationscope.NewEncapsulatedTimestampScopeFinder() and calls s.signature (not through
-// s.overrides). This file's XAdESTimestampScopeFinder is therefore correct and independently
+// s.overrides). This file's TimestampScopeFinder is therefore correct and independently
 // usable (xades_timestamp_source.go's GetTimestampScopes method, exported for exactly this
 // reason, constructs and uses it directly), but is NOT reached by
 // SignatureTimestampSource.validateTimestamps()'s own calls to getTimestampScopes(timestampToken)
@@ -24,7 +24,7 @@
 // validateTimestamps's call site is changed to go through it. Flagged prominently in the porter
 // report; the integrator arbitrates.
 //
-// Type-asserts the embedded AdvancedSignature to *XAdESSignature to call its
+// Type-asserts the embedded AdvancedSignature to *Signature to call its
 // XAdESReferenceValidations() (see xades_signature_scope_finder.go).
 package xades
 
@@ -36,14 +36,14 @@ import (
 )
 
 // XAdESTimestampScopeFinder finds a timestamp scope for a XAdES encapsulated timestamp. Port of
-// the class XAdESTimestampScopeFinder, extending spiscope.EncapsulatedTimestampScopeFinder.
-type XAdESTimestampScopeFinder struct {
+// the class TimestampScopeFinder, extending spiscope.EncapsulatedTimestampScopeFinder.
+type TimestampScopeFinder struct {
 	*spiscope.EncapsulatedTimestampScopeFinder
 }
 
 // NewXAdESTimestampScopeFinder is the port of the default constructor.
-func NewXAdESTimestampScopeFinder() *XAdESTimestampScopeFinder {
-	return &XAdESTimestampScopeFinder{EncapsulatedTimestampScopeFinder: spiscope.NewEncapsulatedTimestampScopeFinder()}
+func NewXAdESTimestampScopeFinder() *TimestampScopeFinder {
+	return &TimestampScopeFinder{EncapsulatedTimestampScopeFinder: spiscope.NewEncapsulatedTimestampScopeFinder()}
 }
 
 // FindTimestampScope returns a timestamp scope for the given TimestampToken, dispatching to this
@@ -55,7 +55,7 @@ func NewXAdESTimestampScopeFinder() *XAdESTimestampScopeFinder {
 // FilterCoveredSignatureScopes below the call it needs - the same embedding-has-no-virtual-
 // dispatch limitation flagged throughout this port (e.g. xades_reference_validation.go's
 // TransformationNames).
-func (f *XAdESTimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope {
+func (f *TimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope {
 	if timestampToken.IsMessageImprintDataIntact() {
 		return f.FilterCoveredSignatureScopes(timestampToken)
 	}
@@ -64,13 +64,13 @@ func (f *XAdESTimestampScopeFinder) FindTimestampScope(timestampToken *validatio
 
 // FilterCoveredSignatureScopes filters and returns covered SignatureScopes by the current
 // timestamp. Port of the protected filterCoveredSignatureScopes(TimestampToken) override.
-func (f *XAdESTimestampScopeFinder) FilterCoveredSignatureScopes(timestampToken *validation.TimestampToken) []scope.SignatureScope {
+func (f *TimestampScopeFinder) FilterCoveredSignatureScopes(timestampToken *validation.TimestampToken) []scope.SignatureScope {
 	timestampIncludes := timestampToken.TimestampIncludes()
 	if utils.IsCollectionNotEmpty(timestampIncludes) {
 		individualSignatureScopes := make([]scope.SignatureScope, 0)
 		signatureScopes := f.Signature.SignatureScopes()
 		if utils.IsCollectionNotEmpty(signatureScopes) {
-			if xadesSignature, ok := f.Signature.(*XAdESSignature); ok {
+			if xadesSignature, ok := f.Signature.(*Signature); ok {
 				for _, xadesReferenceValidation := range xadesSignature.XAdESReferenceValidations() {
 					if xadesTimestampScopeFinderIsContentTimestampedReference(xadesReferenceValidation, timestampIncludes) {
 						for _, signatureScope := range signatureScopes {
@@ -88,8 +88,8 @@ func (f *XAdESTimestampScopeFinder) FilterCoveredSignatureScopes(timestampToken 
 }
 
 // xadesTimestampScopeFinderIsContentTimestampedReference ports the private
-// isContentTimestampedReference(XAdESReferenceValidation, List<TimestampInclude>).
-func xadesTimestampScopeFinderIsContentTimestampedReference(xadesReferenceValidation *XAdESReferenceValidation,
+// isContentTimestampedReference(ReferenceValidation, List<TimestampInclude>).
+func xadesTimestampScopeFinderIsContentTimestampedReference(xadesReferenceValidation *ReferenceValidation,
 	includes []*validation.TimestampInclude) bool {
 	if xadesReferenceValidation.Id() != "" {
 		for _, timestampInclude := range includes {
@@ -102,4 +102,4 @@ func xadesTimestampScopeFinderIsContentTimestampedReference(xadesReferenceValida
 }
 
 // compile-time interface assertion.
-var _ spiscope.TimestampScopeFinder = (*XAdESTimestampScopeFinder)(nil)
+var _ spiscope.TimestampScopeFinder = (*TimestampScopeFinder)(nil)

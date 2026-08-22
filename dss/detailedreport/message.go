@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // dss-jaxb-parsers has not been ported as its own package, but
-// DetailedReportMessageCollector returns this DTO from every one of its
+// MessageCollector returns this DTO from every one of its
 // public methods, so it has no working port without it. Message is small,
 // self-contained and carries no dependency of its own, so it is implemented
 // directly here since it has no other consumer in this package; a dedicated

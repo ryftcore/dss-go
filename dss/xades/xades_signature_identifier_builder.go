@@ -13,22 +13,22 @@ import (
 )
 
 // XAdESSignatureIdentifierBuilder builds a DSS identifier for a XAdES signature. Port of the
-// class XAdESSignatureIdentifierBuilder, extending
+// class SignatureIdentifierBuilder, extending
 // spi/validation.AbstractSignatureIdentifierBuilder.
-type XAdESSignatureIdentifierBuilder struct {
+type SignatureIdentifierBuilder struct {
 	validation.AbstractSignatureIdentifierBuilder
 
 	// xadesSignature is the signature to build the identifier for, typed as the concrete XAdES
 	// signature so CounterSignaturePosition/SignaturePosition/SignatureFilePosition need no
 	// runtime cast (Java casts its inherited `signature` field instead, since its base class only
 	// knows AdvancedSignature).
-	xadesSignature *XAdESSignature
+	xadesSignature *Signature
 }
 
 // NewXAdESSignatureIdentifierBuilder is the port of the constructor
-// XAdESSignatureIdentifierBuilder(XAdESSignature).
-func NewXAdESSignatureIdentifierBuilder(signature *XAdESSignature) *XAdESSignatureIdentifierBuilder {
-	b := &XAdESSignatureIdentifierBuilder{
+// SignatureIdentifierBuilder(Signature).
+func NewXAdESSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
+	b := &SignatureIdentifierBuilder{
 		AbstractSignatureIdentifierBuilder: validation.NewAbstractSignatureIdentifierBuilderBase(signature),
 		xadesSignature:                     signature,
 	}
@@ -38,13 +38,13 @@ func NewXAdESSignatureIdentifierBuilder(signature *XAdESSignature) *XAdESSignatu
 
 // CounterSignaturePosition returns the current counter signature position in its master
 // signature. Port of the protected getCounterSignaturePosition(AdvancedSignature) override.
-func (b *XAdESSignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
-	xadesMasterSignature := masterSignature.(*XAdESSignature)
+func (b *SignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
+	xadesMasterSignature := masterSignature.(*Signature)
 	xadesSignature := b.xadesSignature
 
 	counter := 0
 	for _, counterSignature := range xadesMasterSignature.CounterSignatures() {
-		xadesCounterSignature := counterSignature.(*XAdESSignature)
+		xadesCounterSignature := counterSignature.(*Signature)
 		if xadesSignature.SignatureElement() == xadesCounterSignature.SignatureElement() {
 			break
 		}
@@ -56,7 +56,7 @@ func (b *XAdESSignatureIdentifierBuilder) CounterSignaturePosition(masterSignatu
 
 // SignaturePosition returns a position of a signature in the provided file. Port of the
 // protected getSignaturePosition() override.
-func (b *XAdESSignatureIdentifierBuilder) SignaturePosition() any {
+func (b *SignatureIdentifierBuilder) SignaturePosition() any {
 	xadesSignature := b.xadesSignature
 	signatureElement := xadesSignature.SignatureElement()
 	ownerDocument := xadesSignature.OwnerDocument()
@@ -75,7 +75,7 @@ func (b *XAdESSignatureIdentifierBuilder) SignaturePosition() any {
 
 // SignatureFilePosition returns a position of a signature file. Port of the protected
 // getSignatureFilePosition() override.
-func (b *XAdESSignatureIdentifierBuilder) SignatureFilePosition() any {
+func (b *SignatureIdentifierBuilder) SignatureFilePosition() any {
 	signatureFilename := b.Signature().Filename()
 	if utils.IsStringNotEmpty(signatureFilename) && strings.HasPrefix(signatureFilename, validation.AbstractSignatureIdentifierBuilderMETAINFFolder) {
 		return signatureFilename

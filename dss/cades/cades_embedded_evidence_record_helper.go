@@ -7,28 +7,28 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// CAdESEmbeddedEvidenceRecordHelper contains common methods for validation of a CAdES embedded
+// EmbeddedEvidenceRecordHelper contains common methods for validation of a CAdES embedded
 // evidence record.
-type CAdESEmbeddedEvidenceRecordHelper struct {
+type EmbeddedEvidenceRecordHelper struct {
 	validation.AbstractEmbeddedEvidenceRecordHelper
 }
 
 // NewCAdESEmbeddedEvidenceRecordHelperForSignature instantiates a helper for an evidence record
 // applied for the whole signature content (not yet embedded). Port of the constructor
-// CAdESEmbeddedEvidenceRecordHelper(CAdESSignature).
-func NewCAdESEmbeddedEvidenceRecordHelperForSignature(sig *CAdESSignature) *CAdESEmbeddedEvidenceRecordHelper {
-	h := &CAdESEmbeddedEvidenceRecordHelper{}
+// EmbeddedEvidenceRecordHelper(Signature).
+func NewCAdESEmbeddedEvidenceRecordHelperForSignature(sig *Signature) *EmbeddedEvidenceRecordHelper {
+	h := &EmbeddedEvidenceRecordHelper{}
 	h.InitAbstractEmbeddedEvidenceRecordHelper(h, sig)
 	return h
 }
 
 // NewCAdESEmbeddedEvidenceRecordHelper is the default constructor. Port of the constructor
-// CAdESEmbeddedEvidenceRecordHelper(CAdESSignature, CAdESAttribute); evidenceRecordAttribute may
-// be nil, matching this port's use as the (CAdESSignature) overload too (see
+// EmbeddedEvidenceRecordHelper(Signature, Attribute); evidenceRecordAttribute may
+// be nil, matching this port's use as the (Signature) overload too (see
 // NewCAdESEmbeddedEvidenceRecordHelperForSignature, which forwards to the same Init entry point
 // with a nil attribute already).
-func NewCAdESEmbeddedEvidenceRecordHelper(sig *CAdESSignature, evidenceRecordAttribute *CAdESAttribute) *CAdESEmbeddedEvidenceRecordHelper {
-	h := &CAdESEmbeddedEvidenceRecordHelper{}
+func NewCAdESEmbeddedEvidenceRecordHelper(sig *Signature, evidenceRecordAttribute *Attribute) *EmbeddedEvidenceRecordHelper {
+	h := &EmbeddedEvidenceRecordHelper{}
 	h.InitAbstractEmbeddedEvidenceRecordHelperWithAttribute(h, sig, evidenceRecordAttribute)
 	return h
 }
@@ -38,7 +38,7 @@ func NewCAdESEmbeddedEvidenceRecordHelper(sig *CAdESSignature, evidenceRecordAtt
 // Panics when detachedContents does not contain exactly one document (Java's
 // IllegalArgumentException("One and only one detached document is allowed for an embedded
 // evidence record in CAdES!")).
-func (h *CAdESEmbeddedEvidenceRecordHelper) SetDetachedContents(detachedContents []model.DSSDocument) {
+func (h *EmbeddedEvidenceRecordHelper) SetDetachedContents(detachedContents []model.DSSDocument) {
 	if len(detachedContents) != 1 {
 		panic("One and only one detached document is allowed for an embedded evidence record in CAdES!")
 	}
@@ -48,7 +48,7 @@ func (h *CAdESEmbeddedEvidenceRecordHelper) SetDetachedContents(detachedContents
 // DigestBuilder implements AbstractEmbeddedEvidenceRecordHelperOverrides, shadowing
 // AbstractEmbeddedEvidenceRecordHelper's own (panicking) default. Port of the protected
 // #getDigestBuilder(AdvancedSignature, SignatureAttribute, DigestAlgorithm) override.
-func (h *CAdESEmbeddedEvidenceRecordHelper) DigestBuilder(sig validation.AdvancedSignature,
+func (h *EmbeddedEvidenceRecordHelper) DigestBuilder(sig validation.AdvancedSignature,
 	evidenceRecordAttribute validation.SignatureAttribute, digestAlgorithm enumerations.DigestAlgorithm) validation.SignatureEvidenceRecordDigestBuilder {
 	digestBuilder := newCAdESEvidenceRecordDigestBuilderFromSignature(sig, evidenceRecordAttribute, digestAlgorithm)
 	if isDetached, err := h.isDetached(sig); err == nil && isDetached {
@@ -60,10 +60,10 @@ func (h *CAdESEmbeddedEvidenceRecordHelper) DigestBuilder(sig validation.Advance
 // isDetached ports the private isDetached(AdvancedSignature).
 //
 // Panics for a signature that is not a *CAdESSignature (Java's
-// IllegalStateException("Only instance of CAdESSignature is supported by
-// CAdESEmbeddedEvidenceRecordHelper")).
-func (h *CAdESEmbeddedEvidenceRecordHelper) isDetached(sig validation.AdvancedSignature) (bool, error) {
-	cadesSignature, ok := sig.(*CAdESSignature)
+// IllegalStateException("Only instance of Signature is supported by
+// EmbeddedEvidenceRecordHelper")).
+func (h *EmbeddedEvidenceRecordHelper) isDetached(sig validation.AdvancedSignature) (bool, error) {
+	cadesSignature, ok := sig.(*Signature)
 	if !ok {
 		panic("Only instance of CAdESSignature is supported by CAdESEmbeddedEvidenceRecordHelper")
 	}
@@ -72,7 +72,7 @@ func (h *CAdESEmbeddedEvidenceRecordHelper) isDetached(sig validation.AdvancedSi
 
 // detachedDocument gets the detached document covered by a detached CAdES. Port of the
 // protected #getDetachedDocument().
-func (h *CAdESEmbeddedEvidenceRecordHelper) detachedDocument() model.DSSDocument {
+func (h *EmbeddedEvidenceRecordHelper) detachedDocument() model.DSSDocument {
 	detachedContents := h.DetachedContents()
 	if len(detachedContents) == 1 {
 		return detachedContents[0]
@@ -86,9 +86,9 @@ func (h *CAdESEmbeddedEvidenceRecordHelper) detachedDocument() model.DSSDocument
 //
 // Panics when digestBuilder is not a *CAdESEvidenceRecordDigestBuilder (Java's
 // IllegalArgumentException("The digestBuilder shall be an instance of
-// CAdESEvidenceRecordDigestBuilder!")).
-func (h *CAdESEmbeddedEvidenceRecordHelper) SetDEREncoding(digestBuilder validation.SignatureEvidenceRecordDigestBuilder, derEncoded bool) {
-	cadesDigestBuilder, ok := digestBuilder.(*CAdESEvidenceRecordDigestBuilder)
+// EvidenceRecordDigestBuilder!")).
+func (h *EmbeddedEvidenceRecordHelper) SetDEREncoding(digestBuilder validation.SignatureEvidenceRecordDigestBuilder, derEncoded bool) {
+	cadesDigestBuilder, ok := digestBuilder.(*EvidenceRecordDigestBuilder)
 	if !ok {
 		panic("The digestBuilder shall be an instance of CAdESEvidenceRecordDigestBuilder!")
 	}
@@ -97,12 +97,12 @@ func (h *CAdESEmbeddedEvidenceRecordHelper) SetDEREncoding(digestBuilder validat
 
 // IsEncodingSelectionSupported reports whether a DER/BER encoding selection is supported by the
 // current implementation. Port of #isEncodingSelectionSupported().
-func (h *CAdESEmbeddedEvidenceRecordHelper) IsEncodingSelectionSupported() bool {
+func (h *EmbeddedEvidenceRecordHelper) IsEncodingSelectionSupported() bool {
 	return true
 }
 
 // IsAbsentHashtreeSupported reports whether an absent hashtree computation is supported by the
 // current implementation. Port of #isAbsentHashtreeSupported().
-func (h *CAdESEmbeddedEvidenceRecordHelper) IsAbsentHashtreeSupported() bool {
+func (h *EmbeddedEvidenceRecordHelper) IsAbsentHashtreeSupported() bool {
 	return true
 }

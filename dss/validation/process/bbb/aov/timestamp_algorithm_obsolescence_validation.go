@@ -19,7 +19,7 @@ type TimestampAlgorithmObsolescenceValidation struct {
 }
 
 // NewTimestampAlgorithmObsolescenceValidation is the default constructor.
-func NewTimestampAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.TimestampWrapper,
+func NewTimestampAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.TimestampWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *TimestampAlgorithmObsolescenceValidation {
 	c := &TimestampAlgorithmObsolescenceValidation{}
 	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextTimestamp, validationDate, validationPolicy, c)

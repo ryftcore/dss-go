@@ -20,8 +20,8 @@ type CertificateIssuerNameCheck struct {
 }
 
 // NewCertificateIssuerNameCheck is the default constructor. Port of
-// CertificateIssuerNameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificateIssuerNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateIssuerNameCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificateIssuerNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateIssuerNameCheck {
 	c := &CertificateIssuerNameCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

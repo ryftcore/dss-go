@@ -39,8 +39,8 @@ type TimestampQualificationBlock struct {
 }
 
 // NewTimestampQualificationBlock is the default constructor. Port of
-// TimestampQualificationBlock(I18nProvider, TimestampWrapper, List, POEExtraction).
-func NewTimestampQualificationBlock(i18nProvider *i18n.I18nProvider, timestamp *diagnostic.TimestampWrapper,
+// TimestampQualificationBlock(Provider, TimestampWrapper, List, POEExtraction).
+func NewTimestampQualificationBlock(i18nProvider *i18n.Provider, timestamp *diagnostic.TimestampWrapper,
 	tlAnalysis []*jaxb.XmlTLAnalysis, poe *vpfswatsp.POEExtraction) *TimestampQualificationBlock {
 	xmlResult := &jaxb.XmlValidationTimestampQualification{}
 	c := &TimestampQualificationBlock{

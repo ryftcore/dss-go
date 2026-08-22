@@ -37,7 +37,7 @@ type ASiCWithCAdESTimestampValidator struct {
 // compile-time interface assertions.
 var (
 	_ dssvalidation.SignedDocumentValidator = (*ASiCWithCAdESTimestampValidator)(nil)
-	_ dsstimestamp.TimestampValidator       = (*ASiCWithCAdESTimestampValidator)(nil)
+	_ dsstimestamp.Validator                = (*ASiCWithCAdESTimestampValidator)(nil)
 )
 
 // NewASiCWithCAdESTimestampValidator is the default constructor. Ports

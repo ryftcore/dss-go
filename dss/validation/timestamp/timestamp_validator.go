@@ -6,8 +6,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// TimestampValidator is the interface to be used for timestamp validation.
-type TimestampValidator interface {
+// Validator is the interface to be used for timestamp validation.
+type Validator interface {
 	// Timestamp returns a single TimestampToken to be validated. Port of getTimestamp().
 	Timestamp() *validation.TimestampToken
 

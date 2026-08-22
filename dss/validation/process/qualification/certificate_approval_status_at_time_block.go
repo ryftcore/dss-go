@@ -30,8 +30,8 @@ type CertificateApprovalStatusAtTimeBlock struct {
 
 // NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime is the constructor
 // to instantiate the validation at the certificate's issuance time. Port of
-// CertificateApprovalStatusAtTimeBlock(I18nProvider, ValidationTime, CertificateWrapper, String, String, List).
-func NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime,
+// CertificateApprovalStatusAtTimeBlock(Provider, ValidationTime, CertificateWrapper, String, String, List).
+func NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime,
 	signingCertificate *diagnostic.CertificateWrapper, listTypeUri, stiUri string,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
 	return NewCertificateApprovalStatusAtTimeBlock(i18nProvider, validationTime, nil, signingCertificate, listTypeUri, stiUri, acceptableServices)
@@ -39,8 +39,8 @@ func NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(i18nProvider *i18n.I1
 
 // NewCertificateApprovalStatusAtTimeBlock is the constructor to instantiate
 // the validation at the validation time. Port of
-// CertificateApprovalStatusAtTimeBlock(I18nProvider, ValidationTime, Date, CertificateWrapper, String, String, List).
-func NewCertificateApprovalStatusAtTimeBlock(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime, date *time.Time,
+// CertificateApprovalStatusAtTimeBlock(Provider, ValidationTime, Date, CertificateWrapper, String, String, List).
+func NewCertificateApprovalStatusAtTimeBlock(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime, date *time.Time,
 	signingCertificate *diagnostic.CertificateWrapper, listTypeUri, stiUri string,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
 	xmlResult := &jaxb.XmlValidationCertificateApprovalStatus{}

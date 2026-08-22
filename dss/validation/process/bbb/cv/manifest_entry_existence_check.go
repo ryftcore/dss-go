@@ -20,8 +20,8 @@ type ManifestEntryExistenceCheck struct {
 }
 
 // NewManifestEntryExistenceCheck is the default constructor. Port of
-// ManifestEntryExistenceCheck(I18nProvider, XmlCV, List, LevelRule).
-func NewManifestEntryExistenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCV],
+// ManifestEntryExistenceCheck(Provider, XmlCV, List, LevelRule).
+func NewManifestEntryExistenceCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlCV],
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ManifestEntryExistenceCheck {
 	c := &ManifestEntryExistenceCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

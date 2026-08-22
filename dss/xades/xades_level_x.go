@@ -5,7 +5,7 @@
 // follows the same convention every other level in this package uses: the concrete level embeds
 // the previous one, registers itself with the base through InitXAdESLevelX (which forwards to
 // InitXAdESLevelC), and ExtendSignatures is reached through the registered overrides. The
-// explicit super call becomes a direct call on the embedded XAdESLevelC.
+// explicit super call becomes a direct call on the embedded LevelC.
 //
 // Errors: the requirements checks and the message-digest computation return errors here where
 // Java throws (PORTING.md: throw -> (T, error)).
@@ -19,21 +19,21 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// XAdESLevelX represents the implementation of the XAdES level -X extension.
-type XAdESLevelX struct {
-	XAdESLevelC
+// LevelX represents the implementation of the XAdES level -X extension.
+type LevelX struct {
+	LevelC
 }
 
-// NewXAdESLevelX is the default constructor for XAdESLevelX.
+// NewXAdESLevelX is the default constructor for LevelX.
 // Port of XAdESLevelX(CertificateVerifier).
-func NewXAdESLevelX(certificateVerifier validation.CertificateVerifier) *XAdESLevelX {
-	level := &XAdESLevelX{}
+func NewXAdESLevelX(certificateVerifier validation.CertificateVerifier) *LevelX {
+	level := &LevelX{}
 	level.InitXAdESLevelX(level, certificateVerifier)
 	return level
 }
 
-// InitXAdESLevelX registers the concrete level with this base and with XAdESLevelC.
-func (e *XAdESLevelX) InitXAdESLevelX(self XAdESSignatureExtensionOverrides,
+// InitXAdESLevelX registers the concrete level with this base and with LevelC.
+func (e *LevelX) InitXAdESLevelX(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	e.InitXAdESLevelC(self, certificateVerifier)
 }
@@ -46,8 +46,8 @@ func (e *XAdESLevelX) InitXAdESLevelX(self XAdESSignatureExtensionOverrides,
 // A XAdES-X form MAY contain several SigAndRefsTimeStamp elements, obtained from different TSAs.
 //
 // Port of the overridden protected #extendSignatures(List).
-func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature) error {
-	if err := e.XAdESLevelC.ExtendSignatures(signatures); err != nil {
+func (e *LevelX) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := e.LevelC.ExtendSignatures(signatures); err != nil {
 		return err
 	}
 
@@ -65,7 +65,7 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 	signatureRequirementsChecker.AssertSignaturesValid(signaturesToExtend)
 
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return xadesLevelXUnexpectedSignatureType(signature)
 		}
@@ -83,9 +83,9 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 		digestAlgorithm := signatureTimestampParameters.DigestAlgorithm()
 		canonicalizationMethod := signatureTimestampParameters.CanonicalizationMethod()
 		// AdvancedSignature.TimestampSource() is invariant in Go, so the covariant Java return
-		// (XAdESTimestampSource) is recovered by a type assertion - the same shape
-		// cades_baseline_requirements_checker.go already uses for CAdESTimestampSource.
-		timestampSource, ok := e.XadesSignature.TimestampSource().(*XAdESTimestampSource)
+		// (TimestampSource) is recovered by a type assertion - the same shape
+		// cades_baseline_requirements_checker.go already uses for TimestampSource.
+		timestampSource, ok := e.XadesSignature.TimestampSource().(*TimestampSource)
 		if !ok {
 			return fmt.Errorf("unexpected timestamp source type %T", e.XadesSignature.TimestampSource())
 		}
@@ -106,7 +106,7 @@ func (e *XAdESLevelX) ExtendSignatures(signatures []validation.AdvancedSignature
 }
 
 // extendToXLevelSignatures ports the private getExtendToXLevelSignatures.
-func (e *XAdESLevelX) extendToXLevelSignatures(
+func (e *LevelX) extendToXLevelSignatures(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	signaturesToExtend := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
@@ -118,7 +118,7 @@ func (e *XAdESLevelX) extendToXLevelSignatures(
 }
 
 // xLevelExtensionRequired ports the private xLevelExtensionRequired.
-func (e *XAdESLevelX) xLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+func (e *LevelX) xLevelExtensionRequired(signature validation.AdvancedSignature) bool {
 	return enumerations.SignatureLevelXAdESX == e.Params.SignatureLevel() || !signature.HasXProfile()
 }
 

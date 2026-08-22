@@ -29,8 +29,8 @@ type AcceptableBasicTimestampValidationCheck[T any] struct {
 }
 
 // NewAcceptableBasicTimestampValidationCheck is the default constructor. Port
-// of AcceptableBasicTimestampValidationCheck(I18nProvider, T, XmlConstraintsConclusion, LevelRule).
-func NewAcceptableBasicTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of AcceptableBasicTimestampValidationCheck(Provider, T, XmlConstraintsConclusion, LevelRule).
+func NewAcceptableBasicTimestampValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	basicTimestampValidation *jaxb.XmlConstraintsConclusionContent,
 	constraint policy.LevelRule) *AcceptableBasicTimestampValidationCheck[T] {
 	c := &AcceptableBasicTimestampValidationCheck[T]{

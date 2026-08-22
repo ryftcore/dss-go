@@ -29,8 +29,8 @@ type RevocationDataRequiredCheck[T any] struct {
 }
 
 // NewRevocationDataRequiredCheck is the default constructor. Port of
-// RevocationDataRequiredCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule, CertificateApplicabilityRule).
-func NewRevocationDataRequiredCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationDataRequiredCheck(Provider, T, CertificateWrapper, Date, LevelRule, CertificateApplicabilityRule).
+func NewRevocationDataRequiredCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, certificateSunsetDateConstraint policy.LevelRule,
 	constraint policy.CertificateApplicabilityRule) *RevocationDataRequiredCheck[T] {
 	c := &RevocationDataRequiredCheck[T]{

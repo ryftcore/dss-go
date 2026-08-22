@@ -27,8 +27,8 @@ type SignatureFilenameAdherenceCheck struct {
 }
 
 // NewSignatureFilenameAdherenceCheck is the default constructor.
-func NewSignatureFilenameAdherenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	diagnosticData *diagnostic.DiagnosticData, token *diagnostic.SignatureWrapper,
+func NewSignatureFilenameAdherenceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	diagnosticData *diagnostic.Data, token *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *SignatureFilenameAdherenceCheck {
 	c := &SignatureFilenameAdherenceCheck{}
 	c.InitFilenameAdherenceCheck(i18nProvider, result, diagnosticData, token, constraint)

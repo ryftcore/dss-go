@@ -94,7 +94,7 @@ func loadSAVRows(t *testing.T, path string) []*savOracleRow {
 	return rows
 }
 
-func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(savCorpusDir, name)))
 	if err != nil {

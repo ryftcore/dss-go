@@ -21,24 +21,24 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation/identifier"
 )
 
-// JAdESAttributeIdentifier represents an identifier of a JAdES Attribute (or 'etsiU' component).
+// AttributeIdentifier represents an identifier of a JAdES Attribute (or 'etsiU' component).
 // Port of the class JAdESAttributeIdentifier, extending identifier.SignatureAttributeIdentifier.
-type JAdESAttributeIdentifier struct {
+type AttributeIdentifier struct {
 	identifier.SignatureAttributeIdentifier
 }
 
 // newJAdESAttributeIdentifier is the port of the package-private JAdESAttributeIdentifier(byte[])
 // constructor.
-func newJAdESAttributeIdentifier(data []byte) *JAdESAttributeIdentifier {
-	return &JAdESAttributeIdentifier{
+func newJAdESAttributeIdentifier(data []byte) *AttributeIdentifier {
+	return &AttributeIdentifier{
 		SignatureAttributeIdentifier: identifier.NewSignatureAttributeIdentifierBase("JAdESAttributeIdentifier", data),
 	}
 }
 
 // JAdESAttributeIdentifierBuild builds a JAdES Attribute identifier. Port of the static
 // build(String, Object), which delegates to build(headerName, value, null).
-func JAdESAttributeIdentifierBuild(headerName string, value any) *JAdESAttributeIdentifier {
-	return JAdESAttributeIdentifierBuildWithOrder(headerName, value, nil)
+func AttributeIdentifierBuild(headerName string, value any) *AttributeIdentifier {
+	return AttributeIdentifierBuildWithOrder(headerName, value, nil)
 }
 
 // JAdESAttributeIdentifierBuildWithOrder builds the identifier for an 'etsiU' component. Port of
@@ -47,7 +47,7 @@ func JAdESAttributeIdentifierBuild(headerName string, value any) *JAdESAttribute
 // Java wraps the ByteArrayOutputStream/DataOutputStream pair in a try-with-resources and converts
 // any IOException into a DSSException; a bytes.Buffer cannot fail to write, so that branch is
 // unreachable here and there is accordingly no error return.
-func JAdESAttributeIdentifierBuildWithOrder(headerName string, value any, order *int) *JAdESAttributeIdentifier {
+func AttributeIdentifierBuildWithOrder(headerName string, value any, order *int) *AttributeIdentifier {
 	var buf bytes.Buffer
 	if headerName != "" {
 		jadesAttributeIdentifierWriteChars(&buf, headerName)

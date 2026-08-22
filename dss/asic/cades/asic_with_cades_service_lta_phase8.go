@@ -1,4 +1,4 @@
-// Extracted from ASiCWithCAdESService.isLtaExtensionPossible(ASiCContent)
+// Extracted from ASiCWithCAdESService.isLtaExtensionPossible(Content)
 // (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
 // ASiCWithCAdESService.java, DSS 6.5.RC1).
 package cades
@@ -11,7 +11,7 @@ import (
 // isLtaExtensionPossible reports whether an LTA extension is possible: it is not when a
 // signature does not have a signature-time-stamp, as it would make the further signature
 // extension impossible as per 162-1. Ports the private isLtaExtensionPossible(ASiCContent).
-func (s *ASiCWithCAdESService) isLtaExtensionPossible(asicContent *asic.ASiCContent) bool {
+func (s *ASiCWithCAdESService) isLtaExtensionPossible(asicContent *asic.Content) bool {
 	containerValidator := NewASiCContainerWithCAdESAnalyzerFromContent(asicContent)
 	containerValidator.SetCertificateVerifier(s.CertificateVerifier)
 

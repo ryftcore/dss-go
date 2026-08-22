@@ -15,7 +15,7 @@ import (
 type AbstractASiCDataToSignHelperBuilderOverrides interface {
 	// GetDataPackageName returns a name for a package zip container, containing the original
 	// signer data. Port of the protected abstract getDataPackageName(ASiCContent).
-	GetDataPackageName(asicContent *ASiCContent) string
+	GetDataPackageName(asicContent *Content) string
 }
 
 // AbstractASiCDataToSignHelperBuilder builds a relevant GetDataToSignASiCWithCAdESHelper for
@@ -64,7 +64,7 @@ func (b *AbstractASiCDataToSignHelperBuilder) GetASiCSSignedDocument(filesToBeSi
 // createPackageZip(List, Date).
 //
 // ZipUtils.getInstance().createZipArchive(List, Date, String) (Java passes a nil zipComment
-// here); ASiCContent exposes SetContainerDocuments([]model.DSSDocument). Panics on a zip
+// here); Content exposes SetContainerDocuments([]model.DSSDocument). Panics on a zip
 // creation error, matching the panic-on-Build-error convention used throughout this port.
 func (b *AbstractASiCDataToSignHelperBuilder) CreatePackageZip(documents []model.DSSDocument, signingDate time.Time) model.DSSDocument {
 	packageZip, err := ZipUtilsInstance().CreateZipArchiveFromEntriesAt(documents, signingDate, "")

@@ -10,7 +10,7 @@ import (
 
 // ZipContentEvidenceRecordDigestBuilder builds hashes for all documents present within a ZIP
 // archive. Note: for covering an ASiC container with an evidence record, please use
-// ASiCEvidenceRecordDigestBuilder.
+// EvidenceRecordDigestBuilder.
 type ZipContentEvidenceRecordDigestBuilder struct {
 	// documents is the list of documents to compute hashes for.
 	documents []model.DSSDocument
@@ -26,7 +26,7 @@ type ZipContentEvidenceRecordDigestBuilder struct {
 
 // newZipContentEvidenceRecordDigestBuilderBase ports the two protected constructors
 // (no-arg, delegating to SHA256, and the single-DigestAlgorithm form): both leave documents
-// nil, for use by subclasses (e.g. ASiCEvidenceRecordDigestBuilder) that supply their own
+// nil, for use by subclasses (e.g. EvidenceRecordDigestBuilder) that supply their own
 // document list via an overridden BuildDigestGroup.
 func newZipContentEvidenceRecordDigestBuilderBase(digestAlgorithm enumerations.DigestAlgorithm) *ZipContentEvidenceRecordDigestBuilder {
 	return &ZipContentEvidenceRecordDigestBuilder{
@@ -75,7 +75,7 @@ func (b *ZipContentEvidenceRecordDigestBuilder) SetDataObjectDigestBuilderFactor
 // method is only invoked directly on a
 // *ZipContentEvidenceRecordDigestBuilder value (never through an overrides interface), since
 // no code in this package holds a ZipContentEvidenceRecordDigestBuilder-typed reference to an
-// embedded ASiCEvidenceRecordDigestBuilder and expects override dispatch.
+// embedded EvidenceRecordDigestBuilder and expects override dispatch.
 func (b *ZipContentEvidenceRecordDigestBuilder) BuildDigestGroup() []model.Digest {
 	b.AssertConfigurationValid()
 	return b.ComputeDigestForDocuments(b.documents)

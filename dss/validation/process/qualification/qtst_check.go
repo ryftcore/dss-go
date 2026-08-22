@@ -21,8 +21,8 @@ type QTSTCheck[T any] struct {
 }
 
 // NewQTSTCheck is the default constructor. Port of
-// QTSTCheck(I18nProvider, T, List, LevelRule).
-func NewQTSTCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// QTSTCheck(Provider, T, List, LevelRule).
+func NewQTSTCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *QTSTCheck[T] {
 	c := &QTSTCheck[T]{
 		ChainItemBase:       process.NewChainItemBase(i18nProvider, result, constraint),

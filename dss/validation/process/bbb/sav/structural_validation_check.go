@@ -22,8 +22,8 @@ type StructuralValidationCheck struct {
 }
 
 // NewStructuralValidationCheck is the default constructor. Port of
-// StructuralValidationCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewStructuralValidationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// StructuralValidationCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewStructuralValidationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *StructuralValidationCheck {
 	c := &StructuralValidationCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

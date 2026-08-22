@@ -18,8 +18,8 @@ type ListTypeKnownCheck struct {
 }
 
 // NewListTypeKnownCheck is the default constructor. Port of
-// ListTypeKnownCheck(I18nProvider, XmlCertificateApprovalStatusProcess, String, LevelRule).
-func NewListTypeKnownCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCertificateApprovalStatusProcess],
+// ListTypeKnownCheck(Provider, XmlCertificateApprovalStatusProcess, String, LevelRule).
+func NewListTypeKnownCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlCertificateApprovalStatusProcess],
 	listTypeUri string, constraint policy.LevelRule) *ListTypeKnownCheck {
 	c := &ListTypeKnownCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -21,8 +21,8 @@ type ManifestEntryGroupCheck struct {
 }
 
 // NewManifestEntryGroupCheck is the default constructor. Port of
-// ManifestEntryGroupCheck(I18nProvider, XmlCV, List, LevelRule).
-func NewManifestEntryGroupCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCV],
+// ManifestEntryGroupCheck(Provider, XmlCV, List, LevelRule).
+func NewManifestEntryGroupCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlCV],
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ManifestEntryGroupCheck {
 	c := &ManifestEntryGroupCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

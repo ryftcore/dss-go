@@ -8,7 +8,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// ZeroHashSignaturePolicyValidator performs validation of a SignaturePolicy
+// ZeroHashSignaturePolicyValidator performs validation of a Policy
 // with zero-sigPolicyHash. See EN 319 122-1 "5.2.9 The
 // signature-policy-identifier attribute and the SigPolicyQualifierInfo
 // type".
@@ -22,12 +22,12 @@ func NewZeroHashSignaturePolicyValidator() *ZeroHashSignaturePolicyValidator {
 }
 
 // CanValidate reports whether signaturePolicy uses a zero hash.
-func (v *ZeroHashSignaturePolicyValidator) CanValidate(signaturePolicy *signature.SignaturePolicy) bool {
+func (v *ZeroHashSignaturePolicyValidator) CanValidate(signaturePolicy *signature.Policy) bool {
 	return signaturePolicy.IsZeroHash()
 }
 
 // Validate always reports the policy as identified with a valid digest.
-func (v *ZeroHashSignaturePolicyValidator) Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult {
+func (v *ZeroHashSignaturePolicyValidator) Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult {
 	validationResult := signature.NewSignaturePolicyValidationResult()
 	validationResult.SetIdentified(true)
 	validationResult.SetDigestValid(true)

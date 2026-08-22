@@ -31,5 +31,5 @@ func (f *PdfRevisionScopeFinder) findSignatureScope(pdfRevision PdfCMSRevision) 
 
 // getOriginalPdfRevision ports the private getOriginalPdfRevision(PdfCMSRevision).
 func (f *PdfRevisionScopeFinder) getOriginalPdfRevision(pdfRevision PdfCMSRevision) model.DSSDocument {
-	return PAdESUtilsGetOriginalPDFFromRevision(pdfRevision)
+	return UtilsGetOriginalPDFFromRevision(pdfRevision)
 }

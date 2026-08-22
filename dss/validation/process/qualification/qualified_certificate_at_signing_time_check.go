@@ -21,8 +21,8 @@ type QualifiedCertificateAtSigningTimeCheck struct {
 
 // NewQualifiedCertificateAtSigningTimeCheck is the default constructor. Port
 // of
-// QualifiedCertificateAtSigningTimeCheck(I18nProvider, XmlValidationSignatureQualification, CertificateQualification, LevelRule).
-func NewQualifiedCertificateAtSigningTimeCheck(i18nProvider *i18n.I18nProvider,
+// QualifiedCertificateAtSigningTimeCheck(Provider, XmlValidationSignatureQualification, CertificateQualification, LevelRule).
+func NewQualifiedCertificateAtSigningTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationSignatureQualification],
 	qualificationAtSigningTime enumerations.CertificateQualification, constraint policy.LevelRule) *QualifiedCertificateAtSigningTimeCheck {
 	c := &QualifiedCertificateAtSigningTimeCheck{

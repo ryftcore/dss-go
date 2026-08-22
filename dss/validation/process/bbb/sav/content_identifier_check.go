@@ -20,8 +20,8 @@ type ContentIdentifierCheck struct {
 }
 
 // NewContentIdentifierCheck is the default constructor. Port of
-// ContentIdentifierCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewContentIdentifierCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ContentIdentifierCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewContentIdentifierCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *ContentIdentifierCheck {
 	c := &ContentIdentifierCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

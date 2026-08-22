@@ -24,8 +24,8 @@ type CertificateTypeCheck struct {
 }
 
 // NewCertificateTypeCheck is the default constructor. Port of
-// CertificateTypeCheck(I18nProvider, XmlValidationCertificateQualification, CertificateType, ValidationTime, LevelRule).
-func NewCertificateTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// CertificateTypeCheck(Provider, XmlValidationCertificateQualification, CertificateType, ValidationTime, LevelRule).
+func NewCertificateTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	certType enumerations.CertificateType, validationTime enumerations.ValidationTime,
 	constraint policy.LevelRule) *CertificateTypeCheck {
 	c := &CertificateTypeCheck{

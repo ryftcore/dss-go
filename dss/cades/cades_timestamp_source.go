@@ -5,7 +5,7 @@
 // This file needs read access to the merged certificate/CRL/OCSP sources
 // SignatureTimestampSource[AS, SA] (spi/validation/timestamp, frozen) builds up during
 // populateTimestampTokens() - Java's protected `certificateSource`/`crlSource`/`ocspSource`
-// fields, which every subclass (CAdESTimestampSource included) reads directly - and to the
+// fields, which every subclass (TimestampSource included) reads directly - and to the
 // position-lookup its protected getAttributeOrder(SA) provides. Neither is exported today. The
 // four one-method, additive, non-breaking accessors below (mirroring the already-documented
 // SetTimestampedReferences GAP in signature_timestamp_source.go) are assumed to exist:
@@ -23,9 +23,9 @@
 //		return s.getAttributeOrder(signatureAttribute)
 //	}
 //
-// This file calls them as CAdESTimestampSource.CertificateSource()/CRLSource()/OCSPSource()/
-// GetAttributeOrder(), promoted through the embedded SignatureTimestampSource[*CAdESSignature,
-// *CAdESAttribute].
+// This file calls them as TimestampSource.CertificateSource()/CRLSource()/OCSPSource()/
+// GetAttributeOrder(), promoted through the embedded SignatureTimestampSource[*Signature,
+// *Attribute].
 //
 // # GAP flagged for integrator: three CAdES overrides of "concrete but overridable" base hooks
 // # are currently unreachable
@@ -64,12 +64,12 @@
 //	GetSignatureSignedDataReferences() []*validation.TimestampedReference
 //	GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference
 //
-// Until this lands, this file's CAdESTimestampSource.IncorporateArchiveTimestampReferences /
+// Until this lands, this file's TimestampSource.IncorporateArchiveTimestampReferences /
 // GetSignatureSignedDataReferences / GetCounterSignatureReferences are correct or best-effort
 // faithful ports of the Java overrides (each fully self-contained, calling only already-exported
 // base accessors, the GAP-flagged four above, and this package's own exported/reusable helpers -
 // no other base access needed), reachable if invoked directly through the concrete
-// *CAdESTimestampSource type, but NOT yet reachable from the base's own internal population
+// *TimestampSource type, but NOT yet reachable from the base's own internal population
 // flow: archive timestamps created today get the base's plain (non-CAdES-augmented) reference
 // set, and counter-signature/external-timestamp/external-evidence-record processing does not
 // yet pick up the merged CMS SignedData references this file's GetSignatureSignedDataReferences
@@ -94,22 +94,22 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// CAdESTimestampSource is the timestamp source for a CAdES signature.
-type CAdESTimestampSource struct {
-	timestamp.SignatureTimestampSource[*CAdESSignature, *CAdESAttribute]
+// TimestampSource is the timestamp source for a CAdES signature.
+type TimestampSource struct {
+	timestamp.SignatureTimestampSource[*Signature, *Attribute]
 
 	// signature is being validated. Kept alongside the embedded base's own private copy: Java's
 	// `signature` field, declared on the abstract SignatureTimestampSource class, is directly
 	// visible to this subclass; Go has no equivalent of protected field access across packages,
-	// so this file keeps its own reference, exactly as CadesLevelBaselineLTATimestampExtractor
+	// so this file keeps its own reference, exactly as LevelBaselineLTATimestampExtractor
 	// does in this same package for the identical reason.
-	signature *CAdESSignature
+	signature *Signature
 }
 
 // NewCAdESTimestampSource is the default constructor. Port of the (CAdESSignature) constructor.
-func NewCAdESTimestampSource(signature *CAdESSignature) *CAdESTimestampSource {
-	source := &CAdESTimestampSource{
-		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*CAdESSignature, *CAdESAttribute](signature),
+func NewCAdESTimestampSource(signature *Signature) *TimestampSource {
+	source := &TimestampSource{
+		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*Signature, *Attribute](signature),
 		signature:                signature,
 	}
 	source.InitSignatureTimestampSource(source)
@@ -119,154 +119,154 @@ func NewCAdESTimestampSource(signature *CAdESSignature) *CAdESTimestampSource {
 // GetTimestampMessageImprintDigestBuilderForAlgorithm implements
 // timestamp.SignatureTimestampSourceOverrides. Port of the
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm) override.
-func (c *CAdESTimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
-	digestAlgorithm enumerations.DigestAlgorithm) timestamp.TimestampMessageDigestBuilder {
+func (c *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
+	digestAlgorithm enumerations.DigestAlgorithm) timestamp.MessageDigestBuilder {
 	return NewCAdESTimestampMessageDigestBuilder(c.signature, digestAlgorithm)
 }
 
 // GetTimestampMessageImprintDigestBuilderForToken implements
 // timestamp.SignatureTimestampSourceOverrides. Port of the
 // getTimestampMessageImprintDigestBuilder(TimestampToken) override.
-func (c *CAdESTimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
-	timestampToken *validation.TimestampToken) timestamp.TimestampMessageDigestBuilder {
+func (c *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
+	timestampToken *validation.TimestampToken) timestamp.MessageDigestBuilder {
 	return NewCAdESTimestampMessageDigestBuilderForToken(c.signature, c.CertificateSource(), timestampToken)
 }
 
 // BuildSignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides.
 // Port of buildSignedSignatureProperties().
-func (c *CAdESTimestampSource) BuildSignedSignatureProperties() validation.SignatureProperties[*CAdESAttribute] {
-	return CAdESSignedAttributesBuild(c.signature.SignerInformation())
+func (c *TimestampSource) BuildSignedSignatureProperties() validation.SignatureProperties[*Attribute] {
+	return SignedAttributesBuild(c.signature.SignerInformation())
 }
 
 // BuildUnsignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides.
 // Port of buildUnsignedSignatureProperties().
-func (c *CAdESTimestampSource) BuildUnsignedSignatureProperties() validation.SignatureProperties[*CAdESAttribute] {
-	return CAdESUnsignedAttributesBuild(c.signature.SignerInformation())
+func (c *TimestampSource) BuildUnsignedSignatureProperties() validation.SignatureProperties[*Attribute] {
+	return UnsignedAttributesBuild(c.signature.SignerInformation())
 }
 
 // IsContentTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isContentTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsContentTimestamp(signedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsContentTimestamp(signedAttribute *Attribute) bool {
 	return OIDIdAaEtsContentTimestamp.Equal(signedAttribute.ASN1Oid())
 }
 
 // IsAllDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isAllDataObjectsTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAllDataObjectsTimestamp(signedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAllDataObjectsTimestamp(signedAttribute *Attribute) bool {
 	return false
 }
 
 // IsIndividualDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isIndividualDataObjectsTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsIndividualDataObjectsTimestamp(signedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsIndividualDataObjectsTimestamp(signedAttribute *Attribute) bool {
 	return false
 }
 
 // IsSignatureTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignatureTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsSignatureTimestamp(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsSignatureTimestamp(unsignedAttribute *Attribute) bool {
 	return OIDIdAaSignatureTimeStampToken.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsCompleteCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteCertificateRef(CAdESAttribute).
-func (c *CAdESTimestampSource) IsCompleteCertificateRef(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsCompleteCertificateRef(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsCertificateRefs.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsAttributeCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeCertificateRef(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAttributeCertificateRef(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAttributeCertificateRef(unsignedAttribute *Attribute) bool {
 	return spi.OIDAttributeCertificateRefsOid.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsCompleteRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteRevocationRef(CAdESAttribute).
-func (c *CAdESTimestampSource) IsCompleteRevocationRef(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsCompleteRevocationRef(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsRevocationRefs.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsAttributeRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeRevocationRef(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAttributeRevocationRef(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAttributeRevocationRef(unsignedAttribute *Attribute) bool {
 	return spi.OIDAttributeRevocationRefsOid.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsRefsOnlyTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRefsOnlyTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *Attribute) bool {
 	return OIDIdAaEtsCertCRLTimestamp.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsSigAndRefsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSigAndRefsTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *Attribute) bool {
 	return OIDIdAaEtsEscTimeStamp.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsCertificateValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCertificateValues(CAdESAttribute).
-func (c *CAdESTimestampSource) IsCertificateValues(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsCertificateValues(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsCertValues.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRevocationValues(CAdESAttribute).
-func (c *CAdESTimestampSource) IsRevocationValues(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsRevocationValues(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsRevocationValues.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsAttrAuthoritiesCertValues implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isAttrAuthoritiesCertValues(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAttrAuthoritiesCertValues(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAttrAuthoritiesCertValues(unsignedAttribute *Attribute) bool {
 	return false
 }
 
 // IsAttributeRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isAttributeRevocationValues(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAttributeRevocationValues(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAttributeRevocationValues(unsignedAttribute *Attribute) bool {
 	return false
 }
 
 // IsArchiveTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isArchiveTimestamp(CAdESAttribute).
-func (c *CAdESTimestampSource) IsArchiveTimestamp(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsArchiveTimestamp(unsignedAttribute *Attribute) bool {
 	return c.isArchiveTimestampV2Attribute(unsignedAttribute) || c.isArchiveTimestampV3Attribute(unsignedAttribute)
 }
 
 // isArchiveTimestampV2Attribute ports the private isArchiveTimestampV2(CAdESAttribute); named
 // distinctly from isArchiveTimestampV2Token (the private (TimestampToken) overload) since Go has
 // no overloading.
-func (c *CAdESTimestampSource) isArchiveTimestampV2Attribute(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) isArchiveTimestampV2Attribute(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsArchiveTimestampV2.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // isArchiveTimestampV3Attribute ports the private isArchiveTimestampV3(CAdESAttribute).
-func (c *CAdESTimestampSource) isArchiveTimestampV3Attribute(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) isArchiveTimestampV3Attribute(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsArchiveTimestampV3.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsTimeStampValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isTimeStampValidationData(CAdESAttribute).
-func (c *CAdESTimestampSource) IsTimeStampValidationData(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsTimeStampValidationData(unsignedAttribute *Attribute) bool {
 	return false
 }
 
 // IsAnyValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isAnyValidationData(CAdESAttribute).
-func (c *CAdESTimestampSource) IsAnyValidationData(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsAnyValidationData(unsignedAttribute *Attribute) bool {
 	return false
 }
 
 // IsValidationDataReferences implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for CAdES. Port of isValidationDataReferences(CAdESAttribute).
-func (c *CAdESTimestampSource) IsValidationDataReferences(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsValidationDataReferences(unsignedAttribute *Attribute) bool {
 	return false
 }
 
 // IsCounterSignature implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCounterSignature(CAdESAttribute).
-func (c *CAdESTimestampSource) IsCounterSignature(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsCounterSignature(unsignedAttribute *Attribute) bool {
 	return OIDCounterSignature.Equal(unsignedAttribute.ASN1Oid())
 }
 
@@ -278,13 +278,13 @@ var OIDCounterSignature = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 6}
 
 // IsSignaturePolicyStore implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignaturePolicyStore(CAdESAttribute).
-func (c *CAdESTimestampSource) IsSignaturePolicyStore(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsSignaturePolicyStore(unsignedAttribute *Attribute) bool {
 	return spi.OIDIdAaEtsSigPolicyStore.Equal(unsignedAttribute.ASN1Oid())
 }
 
 // IsEvidenceRecord implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isEvidenceRecord(CAdESAttribute).
-func (c *CAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *CAdESAttribute) bool {
+func (c *TimestampSource) IsEvidenceRecord(unsignedAttribute *Attribute) bool {
 	return unsignedAttribute.IsEvidenceRecord()
 }
 
@@ -294,7 +294,7 @@ func (c *CAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *CAdESAttribut
 // Panics on a construction failure (model.NewDSSErrorWithCause), matching Java's unchecked
 // propagation of `new TimestampToken(...)`'s failure through a method with no throws clause; see
 // the SignatureTimestampSourceOverrides doc comment on this convention.
-func (c *CAdESTimestampSource) MakeTimestampToken(signatureAttribute *CAdESAttribute, timestampType enumerations.TimestampType,
+func (c *TimestampSource) MakeTimestampToken(signatureAttribute *Attribute, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) *validation.TimestampToken {
 	timeStampToken := signatureAttribute.ToTimeStampToken()
 	if timeStampToken == nil {
@@ -314,7 +314,7 @@ func (c *CAdESTimestampSource) MakeTimestampToken(signatureAttribute *CAdESAttri
 
 // MakeEvidenceRecords implements timestamp.SignatureTimestampSourceOverrides.
 // Port of makeEvidenceRecords(CAdESAttribute, List).
-func (c *CAdESTimestampSource) MakeEvidenceRecords(unsignedAttribute *CAdESAttribute,
+func (c *TimestampSource) MakeEvidenceRecords(unsignedAttribute *Attribute,
 	references []*validation.TimestampedReference) []validation.EvidenceRecord {
 	var result []validation.EvidenceRecord
 	attrValues := unsignedAttribute.AttrValues()
@@ -329,7 +329,7 @@ func (c *CAdESTimestampSource) MakeEvidenceRecords(unsignedAttribute *CAdESAttri
 // createEvidenceRecord ports the private createEvidenceRecord(CAdESAttribute, ASN1Encodable, int),
 // whose surrounding try/catch (any failure logged and answered with null) is reproduced by
 // returning nil on the first failing step, per PORTING.md.
-func (c *CAdESTimestampSource) createEvidenceRecord(unsignedAttribute *CAdESAttribute,
+func (c *TimestampSource) createEvidenceRecord(unsignedAttribute *Attribute,
 	erASN1Encodable *asn1ber.Element, orderWithinAttribute int) validation.EvidenceRecord {
 	erEncoded := erASN1Encodable.DEREncoded()
 	erDocument := model.NewInMemoryDocument(erEncoded)
@@ -340,7 +340,7 @@ func (c *CAdESTimestampSource) createEvidenceRecord(unsignedAttribute *CAdESAttr
 	}
 	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOriginSignature)
 
-	incorporationType := CAdESUtilsEvidenceRecordIncorporationType(unsignedAttribute.ASN1Oid())
+	incorporationType := UtilsEvidenceRecordIncorporationType(unsignedAttribute.ASN1Oid())
 	evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(incorporationType)
 
 	embeddedEvidenceRecordHelper := NewCAdESEmbeddedEvidenceRecordHelper(c.signature, unsignedAttribute)
@@ -366,7 +366,7 @@ func (c *CAdESTimestampSource) createEvidenceRecord(unsignedAttribute *CAdESAttr
 // See the file header GAP note: not yet reachable from the base's own internal population flow
 // (incorporateArchiveTimestampReferencesForTokens calls the base's own implementation, not this
 // one) until SignatureTimestampSourceOverrides gains this method.
-func (c *CAdESTimestampSource) IncorporateArchiveTimestampReferences(timestampToken *validation.TimestampToken,
+func (c *TimestampSource) IncorporateArchiveTimestampReferences(timestampToken *validation.TimestampToken,
 	previousTimestamps []*validation.TimestampToken) {
 	if c.isArchiveTimestampV2Token(timestampToken) {
 		// For an ATSTv2 all the incorporated unsigned properties are covered.
@@ -384,17 +384,17 @@ func (c *CAdESTimestampSource) IncorporateArchiveTimestampReferences(timestampTo
 	cadesTSAddReferences(&timestampedReferences, c.signatureTimestampReferences())
 
 	unsignedAttributes := timestampToken.UnsignedAttributes()
-	atsHashIndexVersionIdentifier := CAdESUtilsAtsHashIndexVersionIdentifier(unsignedAttributes)
-	atsHashIndex := CAdESUtilsAtsHashIndexByVersion(unsignedAttributes, atsHashIndexVersionIdentifier)
+	atsHashIndexVersionIdentifier := UtilsAtsHashIndexVersionIdentifier(unsignedAttributes)
+	atsHashIndex := UtilsAtsHashIndexByVersion(unsignedAttributes, atsHashIndexVersionIdentifier)
 	if atsHashIndex != nil {
 		digestAlgorithm := c.hashIndexDigestAlgorithm(atsHashIndex)
 
-		certsHashIndex := CAdESUtilsCertificatesHashIndex(atsHashIndex)
-		crlHashIndex := CAdESUtilsCRLHashIndex(atsHashIndex)
+		certsHashIndex := UtilsCertificatesHashIndex(atsHashIndex)
+		crlHashIndex := UtilsCRLHashIndex(atsHashIndex)
 		cadesTSAddReferences(&timestampedReferences, c.signedDataCertificateReferences(certsHashIndex, digestAlgorithm))
 		cadesTSAddReferences(&timestampedReferences, c.signedDataRevocationReferences(crlHashIndex, digestAlgorithm))
 
-		unsignedAttrsHashIndex := CAdESUtilsUnsignedAttributesHashIndex(atsHashIndex)
+		unsignedAttrsHashIndex := UtilsUnsignedAttributesHashIndex(atsHashIndex)
 		cadesTSAddReferences(&timestampedReferences, c.unsignedAttributesReferences(
 			atsHashIndexVersionIdentifier, unsignedAttrsHashIndex, digestAlgorithm, previousTimestamps))
 	}
@@ -402,9 +402,9 @@ func (c *CAdESTimestampSource) IncorporateArchiveTimestampReferences(timestampTo
 }
 
 // isArchiveTimestampV2Token ports the private isArchiveTimestampV2(TimestampToken); named
-// distinctly from isArchiveTimestampV2Attribute (the private (CAdESAttribute) overload) since Go
+// distinctly from isArchiveTimestampV2Attribute (the private (Attribute) overload) since Go
 // has no overloading.
-func (c *CAdESTimestampSource) isArchiveTimestampV2Token(timestampToken *validation.TimestampToken) bool {
+func (c *TimestampSource) isArchiveTimestampV2Token(timestampToken *validation.TimestampToken) bool {
 	return timestampToken.ArchiveTimestampType() == enumerations.ArchiveTimestampTypeCAdESV2 ||
 		timestampToken.ArchiveTimestampType() == enumerations.ArchiveTimestampTypeCAdES
 }
@@ -414,7 +414,7 @@ func (c *CAdESTimestampSource) isArchiveTimestampV2Token(timestampToken *validat
 // getArchiveTimestampReferences), reimplemented here from exported accessors since this file
 // cannot reach the base's private version, followed by CAdES's own extra addition ("executed for
 // ArchiveTimestampV2 only" upstream). Port of the override.
-func (c *CAdESTimestampSource) archiveTimestampReferences(previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
+func (c *TimestampSource) archiveTimestampReferences(previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
 	var timestampedReferences []*validation.TimestampedReference
 	cadesTSAddReferences(&timestampedReferences, c.signatureTimestampReferences())
 	cadesTSAddReferences(&timestampedReferences, c.encapsulatedReferencesFromTimestamps(previousTimestamps))
@@ -426,7 +426,7 @@ func (c *CAdESTimestampSource) archiveTimestampReferences(previousTimestamps []*
 
 // signatureTimestampReferences reimplements the base's private getSignatureTimestampReferences(),
 // which this file cannot call directly, from exported base accessors.
-func (c *CAdESTimestampSource) signatureTimestampReferences() []*validation.TimestampedReference {
+func (c *TimestampSource) signatureTimestampReferences() []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	cadesTSAddReferences(&references, c.encapsulatedReferencesFromTimestamps(c.ContentTimestamps()))
 	cadesTSAddReferences(&references, c.SignerDataReferences())
@@ -437,7 +437,7 @@ func (c *CAdESTimestampSource) signatureTimestampReferences() []*validation.Time
 
 // signingCertificateTimestampReferences reimplements the base's private
 // getSigningCertificateTimestampReferences().
-func (c *CAdESTimestampSource) signingCertificateTimestampReferences() []*validation.TimestampedReference {
+func (c *TimestampSource) signingCertificateTimestampReferences() []*validation.TimestampedReference {
 	signatureCertificateSource := c.signature.CertificateSource()
 	return timestamp.CreateReferencesForCertificateRefs(
 		signatureCertificateSource.SigningCertificateRefs(), signatureCertificateSource, c.CertificateSource())
@@ -446,7 +446,7 @@ func (c *CAdESTimestampSource) signingCertificateTimestampReferences() []*valida
 // encapsulatedReferencesFromTimestamps reimplements the base's private
 // getEncapsulatedReferencesFromTimestamps(List), from the exported timestamp.ReferencesFromTimestamp
 // and this file's GAP-flagged merged-source accessors.
-func (c *CAdESTimestampSource) encapsulatedReferencesFromTimestamps(timestampTokens []*validation.TimestampToken) []*validation.TimestampedReference {
+func (c *TimestampSource) encapsulatedReferencesFromTimestamps(timestampTokens []*validation.TimestampToken) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	for _, timestampToken := range timestampTokens {
 		refs := cadesTSMust(timestamp.ReferencesFromTimestamp(timestampToken, c.CertificateSource(), c.CRLSource(), c.OCSPSource()))
@@ -464,7 +464,7 @@ func (c *CAdESTimestampSource) encapsulatedReferencesFromTimestamps(timestampTok
 // correctly, on the base type itself in both Java and Go - the instanceof guard is defensive and
 // redundant even upstream; see cades_timestamp_message_digest_builder.go's file header for the
 // identical judgment call.
-func (c *CAdESTimestampSource) signedDataCertificateReferences(certsHashIndex []byte,
+func (c *TimestampSource) signedDataCertificateReferences(certsHashIndex []byte,
 	digestAlgorithm enumerations.DigestAlgorithm) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	certsHashList := cadesTSMust(spi.DSSASN1UtilsDEROctetStrings(certsHashIndex))
@@ -480,7 +480,7 @@ func (c *CAdESTimestampSource) signedDataCertificateReferences(certsHashIndex []
 
 // signedDataRevocationReferences ports the private
 // getSignedDataRevocationReferences(ASN1Sequence, DigestAlgorithm).
-func (c *CAdESTimestampSource) signedDataRevocationReferences(crlsHashIndex []byte,
+func (c *TimestampSource) signedDataRevocationReferences(crlsHashIndex []byte,
 	digestAlgorithm enumerations.DigestAlgorithm) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	crlsHashList := cadesTSMust(spi.DSSASN1UtilsDEROctetStrings(crlsHashIndex))
@@ -495,7 +495,7 @@ func (c *CAdESTimestampSource) signedDataRevocationReferences(crlsHashIndex []by
 // reusing cadesLTACMSSignedDataRevocationBinaries (defined in this package by
 // cades_level_baseline_lta_timestamp_extractor.go) as the Go equivalent of the
 // `instanceof CMSCRLSource` guard - see that function's own doc comment.
-func (c *CAdESTimestampSource) signedDataCRLBinaries(crlsHashList [][]byte,
+func (c *TimestampSource) signedDataCRLBinaries(crlsHashList [][]byte,
 	digestAlgorithm enumerations.DigestAlgorithm) []*crlparser.CRLBinary {
 	var crlBinaries []*crlparser.CRLBinary
 	for _, identifier := range cadesLTACMSSignedDataRevocationBinaries[revocation.CRL](c.signature.CRLSource()) {
@@ -516,7 +516,7 @@ func (c *CAdESTimestampSource) signedDataCRLBinaries(crlsHashList [][]byte,
 
 // signedDataOCSPResponseBinaries ports the private
 // getSignedDataOCSPResponseBinaries(List, DigestAlgorithm).
-func (c *CAdESTimestampSource) signedDataOCSPResponseBinaries(crlsHashList [][]byte,
+func (c *TimestampSource) signedDataOCSPResponseBinaries(crlsHashList [][]byte,
 	digestAlgorithm enumerations.DigestAlgorithm) []*spi.OCSPResponseBinary {
 	var ocspBinaries []*spi.OCSPResponseBinary
 	for _, identifier := range cadesLTACMSSignedDataRevocationBinaries[revocation.OCSP](c.signature.OCSPSource()) {
@@ -534,7 +534,7 @@ func (c *CAdESTimestampSource) signedDataOCSPResponseBinaries(crlsHashList [][]b
 // isOCSPResponsePresent ports the private isOCSPResponsePresent(OCSPResponseBinary, List,
 // DigestAlgorithm): "This method tries the best option to verify the digest of an OCSP response,
 // if it fails, tries the alternative encoding".
-func (c *CAdESTimestampSource) isOCSPResponsePresent(binary *spi.OCSPResponseBinary, crlsHashList [][]byte,
+func (c *TimestampSource) isOCSPResponsePresent(binary *spi.OCSPResponseBinary, crlsHashList [][]byte,
 	digestAlgorithm enumerations.DigestAlgorithm) bool {
 	objectIdentifier := binary.ASN1ObjectIdentifier()
 	if cmscore.OIDPKIXOCSPBasic.Equal(objectIdentifier) {
@@ -552,7 +552,7 @@ func (c *CAdESTimestampSource) isOCSPResponsePresent(binary *spi.OCSPResponseBin
 // ASN1ObjectIdentifier, List, DigestAlgorithm).
 func cadesTSIsOCSPDigestValueMatch(binaries []byte, objectIdentifier asn1.ObjectIdentifier, crlsHashList [][]byte,
 	digestAlgorithm enumerations.DigestAlgorithm) bool {
-	encoded := cadesTSMust(CAdESUtilsSignedDataEncodedOCSPResponse(binaries, objectIdentifier))
+	encoded := cadesTSMust(UtilsSignedDataEncodedOCSPResponse(binaries, objectIdentifier))
 	digest := cadesTSMust(spi.DSSUtilsDigest(digestAlgorithm, encoded))
 	return cadesTSIsDigestValuePresent(digest, crlsHashList)
 }
@@ -560,21 +560,21 @@ func cadesTSIsOCSPDigestValueMatch(binaries []byte, objectIdentifier asn1.Object
 // unsignedAttributesReferences ports the private getUnsignedAttributesReferences
 // (ASN1ObjectIdentifier, ASN1Sequence, DigestAlgorithm, List).
 //
-// Rebuilds the unsigned-signature-properties directly via CAdESUnsignedAttributesBuild rather
+// Rebuilds the unsigned-signature-properties directly via UnsignedAttributesBuild rather
 // than reaching the base's cached, identity-comparable copy (unreachable from this package - see
 // the file header GAP note on getAttributeOrder for the one place that distinction *does*
 // matter): this method only ever compares attribute *content* (a digest of its octets) against
 // timestampUnsignedAttributesHashesList, never object identity, so a freshly parsed copy is
 // behaviourally identical.
-func (c *CAdESTimestampSource) unsignedAttributesReferences(atsHashIndexVersionIdentifier asn1.ObjectIdentifier,
+func (c *TimestampSource) unsignedAttributesReferences(atsHashIndexVersionIdentifier asn1.ObjectIdentifier,
 	unsignedAttrsHashIndex []byte, digestAlgorithm enumerations.DigestAlgorithm,
 	previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	timestampUnsignedAttributesHashesList := cadesTSMust(spi.DSSASN1UtilsDEROctetStrings(unsignedAttrsHashIndex))
 
-	unsignedSignatureProperties := CAdESUnsignedAttributesBuild(c.signature.SignerInformation())
+	unsignedSignatureProperties := UnsignedAttributesBuild(c.signature.SignerInformation())
 	for _, unsignedAttribute := range unsignedSignatureProperties.Attributes() {
-		octets := cadesTSMust(CAdESUtilsOctetStringForAtsHashIndex(unsignedAttribute.Attribute(), atsHashIndexVersionIdentifier))
+		octets := cadesTSMust(UtilsOctetStringForAtsHashIndex(unsignedAttribute.Attribute(), atsHashIndexVersionIdentifier))
 		for _, bytesToDigest := range octets {
 			digest := cadesTSMust(spi.DSSUtilsDigest(digestAlgorithm, bytesToDigest))
 			if cadesTSIsDigestValuePresent(digest, timestampUnsignedAttributesHashesList) {
@@ -586,8 +586,8 @@ func (c *CAdESTimestampSource) unsignedAttributesReferences(atsHashIndexVersionI
 }
 
 // referencesFromUnsignedProperty ports the private getReferencesFromUnsignedProperty
-// (CAdESAttribute, List).
-func (c *CAdESTimestampSource) referencesFromUnsignedProperty(unsignedAttribute *CAdESAttribute,
+// (Attribute, List).
+func (c *TimestampSource) referencesFromUnsignedProperty(unsignedAttribute *Attribute,
 	previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
 	switch {
 	case unsignedAttribute.IsTimeStampToken():
@@ -621,8 +621,8 @@ func (c *CAdESTimestampSource) referencesFromUnsignedProperty(unsignedAttribute 
 }
 
 // referencesFromMatchingTimestamp ports the private getReferencesFromMatchingTimestamp
-// (CAdESAttribute, List).
-func (c *CAdESTimestampSource) referencesFromMatchingTimestamp(unsignedAttribute *CAdESAttribute,
+// (Attribute, List).
+func (c *TimestampSource) referencesFromMatchingTimestamp(unsignedAttribute *Attribute,
 	previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
 	asn1Object := unsignedAttribute.ASN1Object()
 	derEncoded := asn1Object.DEREncoded()
@@ -636,12 +636,12 @@ func (c *CAdESTimestampSource) referencesFromMatchingTimestamp(unsignedAttribute
 
 // timestampedCertificateRefs reimplements the base's private getTimestampedCertificateRefs(SA),
 // which this file cannot call directly, from the exported timestamp.CreateReferencesForCertificateRefs.
-func (c *CAdESTimestampSource) timestampedCertificateRefs(unsignedAttribute *CAdESAttribute) []*validation.TimestampedReference {
+func (c *TimestampSource) timestampedCertificateRefs(unsignedAttribute *Attribute) []*validation.TimestampedReference {
 	return timestamp.CreateReferencesForCertificateRefs(c.GetCertificateRefs(unsignedAttribute), c.signature.CertificateSource(), c.CertificateSource())
 }
 
 // timestampedRevocationRefs reimplements the base's private getTimestampedRevocationRefs(SA).
-func (c *CAdESTimestampSource) timestampedRevocationRefs(unsignedAttribute *CAdESAttribute) []*validation.TimestampedReference {
+func (c *TimestampSource) timestampedRevocationRefs(unsignedAttribute *Attribute) []*validation.TimestampedReference {
 	var timestampedReferences []*validation.TimestampedReference
 	cadesTSAddReferences(&timestampedReferences,
 		timestamp.CreateReferencesForCRLRefs(c.GetCRLRefs(unsignedAttribute), c.signature.CRLSource(), c.CRLSource()))
@@ -653,14 +653,14 @@ func (c *CAdESTimestampSource) timestampedRevocationRefs(unsignedAttribute *CAdE
 
 // timestampedCertificateValues reimplements the base's private
 // getTimestampedCertificateValues(SA).
-func (c *CAdESTimestampSource) timestampedCertificateValues(unsignedAttribute *CAdESAttribute) []*validation.TimestampedReference {
+func (c *TimestampSource) timestampedCertificateValues(unsignedAttribute *Attribute) []*validation.TimestampedReference {
 	return timestamp.CreateReferencesForIdentifiers(
 		c.GetEncapsulatedCertificateIdentifiers(unsignedAttribute), enumerations.TimestampedObjectTypeCertificate)
 }
 
 // timestampedRevocationValues reimplements the base's private
 // getTimestampedRevocationValues(SA).
-func (c *CAdESTimestampSource) timestampedRevocationValues(unsignedAttribute *CAdESAttribute) []*validation.TimestampedReference {
+func (c *TimestampSource) timestampedRevocationValues(unsignedAttribute *Attribute) []*validation.TimestampedReference {
 	var timestampedReferences []*validation.TimestampedReference
 	cadesTSAddReferences(&timestampedReferences, timestamp.CreateReferencesForCRLBinaries(c.GetEncapsulatedCRLIdentifiers(unsignedAttribute)))
 	ocspRefs := cadesTSMust(timestamp.CreateReferencesForOCSPBinaries(c.GetEncapsulatedOCSPIdentifiers(unsignedAttribute), c.CertificateSource()))
@@ -673,7 +673,7 @@ func (c *CAdESTimestampSource) timestampedRevocationValues(unsignedAttribute *CA
 // (singular) directly rather than through the base (see the file header GAP note): this is, if
 // anything, more correct than what the base's own dispatch-broken plural helper would currently
 // produce for a CAdES signature.
-func (c *CAdESTimestampSource) counterSignaturesReferences(counterSignatures []validation.AdvancedSignature) []*validation.TimestampedReference {
+func (c *TimestampSource) counterSignaturesReferences(counterSignatures []validation.AdvancedSignature) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	for _, counterSignature := range counterSignatures {
 		references = append(references, c.GetCounterSignatureReferences(counterSignature)...)
@@ -691,7 +691,7 @@ func (c *CAdESTimestampSource) counterSignaturesReferences(counterSignatures []v
 // See the file header GAP note: not yet reachable from the base's own internal callers
 // (getArchiveTimestampReferences, processExternalTimestamp, processExternalEvidenceRecord) until
 // SignatureTimestampSourceOverrides gains this method.
-func (c *CAdESTimestampSource) GetSignatureSignedDataReferences() []*validation.TimestampedReference {
+func (c *TimestampSource) GetSignatureSignedDataReferences() []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	cadesTSAddReferences(&references, timestamp.CreateReferencesForCertificates(c.signature.CertificateSource().SignedDataCertificates()))
 	cadesTSAddReferences(&references, timestamp.CreateReferencesForCRLBinaries(
@@ -708,7 +708,7 @@ func (c *CAdESTimestampSource) GetSignatureSignedDataReferences() []*validation.
 // identifier rather than the raw ats-hash-index sequence) applied to the same
 // AlgorithmIdentifierFromATSHashIndex extraction; reused directly (both Java classes carry their
 // own private copy of the identical logic).
-func (c *CAdESTimestampSource) hashIndexDigestAlgorithm(atsHashIndex []byte) enumerations.DigestAlgorithm {
+func (c *TimestampSource) hashIndexDigestAlgorithm(atsHashIndex []byte) enumerations.DigestAlgorithm {
 	return cadesTSMust(cadesLTAHashIndexDigestAlgorithm(spi.DSSASN1UtilsAlgorithmIdentifierFromATSHashIndex(atsHashIndex)))
 }
 
@@ -724,7 +724,7 @@ func cadesTSIsDigestValuePresent(digestValue []byte, hashList [][]byte) bool {
 
 // GetCertificateRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCertificateRefs(CAdESAttribute).
-func (c *CAdESTimestampSource) GetCertificateRefs(unsignedAttribute *CAdESAttribute) []*spi.CertificateRef {
+func (c *TimestampSource) GetCertificateRefs(unsignedAttribute *Attribute) []*spi.CertificateRef {
 	var certRefs []*spi.CertificateRef
 	seq := unsignedAttribute.ASN1Object()
 	if seq == nil {
@@ -748,7 +748,7 @@ func (c *CAdESTimestampSource) GetCertificateRefs(unsignedAttribute *CAdESAttrib
 // GetCRLRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCRLRefs(CAdESAttribute). Unlike GetCertificateRefs, Java declares no per-iteration
 // try/catch here: a parse failure panics, matching unchecked propagation.
-func (c *CAdESTimestampSource) GetCRLRefs(unsignedAttribute *CAdESAttribute) []*spi.CRLRef {
+func (c *TimestampSource) GetCRLRefs(unsignedAttribute *Attribute) []*spi.CRLRef {
 	var refs []*spi.CRLRef
 	seq := unsignedAttribute.ASN1Object()
 	if seq == nil {
@@ -767,7 +767,7 @@ func (c *CAdESTimestampSource) GetCRLRefs(unsignedAttribute *CAdESAttribute) []*
 
 // GetOCSPRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getOCSPRefs(CAdESAttribute); see GetCRLRefs on the absence of a per-iteration try/catch.
-func (c *CAdESTimestampSource) GetOCSPRefs(unsignedAttribute *CAdESAttribute) []*spi.OCSPRef {
+func (c *TimestampSource) GetOCSPRefs(unsignedAttribute *Attribute) []*spi.OCSPRef {
 	var refs []*spi.OCSPRef
 	seq := unsignedAttribute.ASN1Object()
 	if seq == nil {
@@ -786,7 +786,7 @@ func (c *CAdESTimestampSource) GetOCSPRefs(unsignedAttribute *CAdESAttribute) []
 
 // GetEncapsulatedCertificateIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedCertificateIdentifiers(CAdESAttribute).
-func (c *CAdESTimestampSource) GetEncapsulatedCertificateIdentifiers(unsignedAttribute *CAdESAttribute) []model.Identifier {
+func (c *TimestampSource) GetEncapsulatedCertificateIdentifiers(unsignedAttribute *Attribute) []model.Identifier {
 	var certificateIdentifiers []model.Identifier
 	seq := unsignedAttribute.ASN1Object()
 	if seq == nil {
@@ -805,7 +805,7 @@ func (c *CAdESTimestampSource) GetEncapsulatedCertificateIdentifiers(unsignedAtt
 
 // GetEncapsulatedCRLIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedCRLIdentifiers(CAdESAttribute).
-func (c *CAdESTimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *CAdESAttribute) []*crlparser.CRLBinary {
+func (c *TimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *Attribute) []*crlparser.CRLBinary {
 	asn1Object := unsignedAttribute.ASN1Object()
 	if asn1Object == nil {
 		return nil
@@ -818,7 +818,7 @@ func (c *CAdESTimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *
 }
 
 // buildCRLIdentifiers ports the protected buildCRLIdentifiers(CertificateList...).
-func (c *CAdESTimestampSource) buildCRLIdentifiers(crlVals [][]byte) []*crlparser.CRLBinary {
+func (c *TimestampSource) buildCRLIdentifiers(crlVals [][]byte) []*crlparser.CRLBinary {
 	var crlBinaryIdentifiers []*crlparser.CRLBinary
 	for _, crlVal := range crlVals {
 		crlBinary, err := crlparser.CRLUtilsBuildCRLBinary(crlVal)
@@ -833,7 +833,7 @@ func (c *CAdESTimestampSource) buildCRLIdentifiers(crlVals [][]byte) []*crlparse
 
 // GetEncapsulatedOCSPIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedOCSPIdentifiers(CAdESAttribute).
-func (c *CAdESTimestampSource) GetEncapsulatedOCSPIdentifiers(unsignedAttribute *CAdESAttribute) []*spi.OCSPResponseBinary {
+func (c *TimestampSource) GetEncapsulatedOCSPIdentifiers(unsignedAttribute *Attribute) []*spi.OCSPResponseBinary {
 	asn1Object := unsignedAttribute.ASN1Object()
 	if asn1Object == nil {
 		return nil
@@ -846,7 +846,7 @@ func (c *CAdESTimestampSource) GetEncapsulatedOCSPIdentifiers(unsignedAttribute 
 }
 
 // buildOCSPIdentifiers ports the protected buildOCSPIdentifiers(BasicOCSPResponse...).
-func (c *CAdESTimestampSource) buildOCSPIdentifiers(ocspVals [][]byte) []*spi.OCSPResponseBinary {
+func (c *TimestampSource) buildOCSPIdentifiers(ocspVals [][]byte) []*spi.OCSPResponseBinary {
 	var ocspIdentifiers []*spi.OCSPResponseBinary
 	for _, ocspVal := range ocspVals {
 		basicOCSPResp := spi.DSSRevocationUtilsBasicOcspResp(ocspVal)
@@ -865,7 +865,7 @@ func (c *CAdESTimestampSource) buildOCSPIdentifiers(ocspVals [][]byte) []*spi.OC
 
 // GetArchiveTimestampType implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getArchiveTimestampType(CAdESAttribute).
-func (c *CAdESTimestampSource) GetArchiveTimestampType(unsignedAttribute *CAdESAttribute) enumerations.ArchiveTimestampType {
+func (c *TimestampSource) GetArchiveTimestampType(unsignedAttribute *Attribute) enumerations.ArchiveTimestampType {
 	switch {
 	case spi.OIDIdAaEtsArchiveTimestampV2.Equal(unsignedAttribute.ASN1Oid()):
 		return enumerations.ArchiveTimestampTypeCAdESV2
@@ -880,7 +880,7 @@ func (c *CAdESTimestampSource) GetArchiveTimestampType(unsignedAttribute *CAdESA
 //
 // Unable to build a SignerInformation with BC (protected constructor): extract all found
 // CounterSignatures and compare with a found SignerInfo(s).
-func (c *CAdESTimestampSource) GetCounterSignatures(unsignedAttribute *CAdESAttribute) []validation.AdvancedSignature {
+func (c *TimestampSource) GetCounterSignatures(unsignedAttribute *Attribute) []validation.AdvancedSignature {
 	var cadesResult []validation.AdvancedSignature
 	allCounterSignatures := c.signature.CounterSignatures()
 
@@ -891,9 +891,9 @@ func (c *CAdESTimestampSource) GetCounterSignatures(unsignedAttribute *CAdESAttr
 		for _, counterSignature := range allCounterSignatures {
 			// Java casts unconditionally: `(CAdESSignature) counterSignature`. Every concrete
 			// AdvancedSignature a CAdES source's CounterSignatures() hands out is a
-			// *CAdESSignature, so this assertion always succeeds in practice; a genuine mismatch
+			// *Signature, so this assertion always succeeds in practice; a genuine mismatch
 			// panics, exactly as Java's ClassCastException would.
-			cadesCounterSignature := counterSignature.(*CAdESSignature)
+			cadesCounterSignature := counterSignature.(*Signature)
 			encodedSignerInfo := cadesCounterSignature.SignerInformation().DER()
 			if bytes.Equal(encodedSI, encodedSignerInfo) {
 				cadesResult = append(cadesResult, counterSignature)
@@ -912,7 +912,7 @@ func (c *CAdESTimestampSource) GetCounterSignatures(unsignedAttribute *CAdESAttr
 // See the file header GAP note: not yet reachable from the base's own internal
 // getCounterSignaturesReferences (plural) until SignatureTimestampSourceOverrides gains this
 // method; this file's own counterSignaturesReferences above calls it directly instead.
-func (c *CAdESTimestampSource) GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference {
+func (c *TimestampSource) GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference {
 	var counterSigReferences []*validation.TimestampedReference
 
 	counterSigReferences = append(counterSigReferences,
@@ -984,7 +984,7 @@ func cadesTSMust[T any](value T, err error) T {
 	return value
 }
 
-// compile-time assertion: *CAdESTimestampSource implements
+// compile-time assertion: *TimestampSource implements
 // timestamp.SignatureTimestampSourceOverrides[*CAdESSignature, *CAdESAttribute], matching Java's
-// "extends SignatureTimestampSource<CAdESSignature, CAdESAttribute>".
-var _ timestamp.SignatureTimestampSourceOverrides[*CAdESSignature, *CAdESAttribute] = (*CAdESTimestampSource)(nil)
+// "extends SignatureTimestampSource<Signature, Attribute>".
+var _ timestamp.SignatureTimestampSourceOverrides[*Signature, *Attribute] = (*TimestampSource)(nil)

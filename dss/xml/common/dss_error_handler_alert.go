@@ -40,7 +40,7 @@ func NewDSSErrorHandlerAlert() *DSSErrorHandlerAlert {
 	return a
 }
 
-// dssErrorHandlerAlertHandlerFunc adapts a plain function to alert.AlertHandler[*DSSErrorHandler].
+// dssErrorHandlerAlertHandlerFunc adapts a plain function to alert.Handler[*DSSErrorHandler].
 type dssErrorHandlerAlertHandlerFunc func(*DSSErrorHandler) error
 
 func (f dssErrorHandlerAlertHandlerFunc) Process(h *DSSErrorHandler) error {
