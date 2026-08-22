@@ -21,8 +21,8 @@ type CertificatePolicyTreeCheck struct {
 }
 
 // NewCertificatePolicyTreeCheck is the default constructor. Port of
-// CertificatePolicyTreeCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificatePolicyTreeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificatePolicyTreeCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificatePolicyTreeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificatePolicyTreeCheck {
 	c := &CertificatePolicyTreeCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

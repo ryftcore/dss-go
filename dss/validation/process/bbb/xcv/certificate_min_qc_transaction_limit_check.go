@@ -25,8 +25,8 @@ type CertificateMinQcTransactionLimitCheck struct {
 }
 
 // NewCertificateMinQcTransactionLimitCheck is the default constructor. Port
-// of CertificateMinQcTransactionLimitCheck(I18nProvider, XmlSubXCV, CertificateWrapper, NumericValueRule).
-func NewCertificateMinQcTransactionLimitCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// of CertificateMinQcTransactionLimitCheck(Provider, XmlSubXCV, CertificateWrapper, NumericValueRule).
+func NewCertificateMinQcTransactionLimitCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.NumericValueRule) *CertificateMinQcTransactionLimitCheck {
 	c := &CertificateMinQcTransactionLimitCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

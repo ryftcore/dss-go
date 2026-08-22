@@ -5,7 +5,7 @@
 // The Java extract sub-package flattens into this Go package.
 //
 // Java's six abstract isAllowed*(String) predicates - the whole reason this class is abstract - are
-// carried by DefaultASiCContainerExtractorOverrides. Routing zipParsing's calls through that
+// carried by DefaultContainerExtractorOverrides. Routing zipParsing's calls through that
 // interface is what keeps a subclass's predicates in play; plain Go embedding would bind them
 // statically to this file's (non-existent) implementations.
 //
@@ -22,8 +22,8 @@ import (
 )
 
 // DefaultASiCContainerExtractorOverrides captures the abstract methods of Java's
-// DefaultASiCContainerExtractor that the class calls on itself.
-type DefaultASiCContainerExtractorOverrides interface {
+// DefaultContainerExtractor that the class calls on itself.
+type DefaultContainerExtractorOverrides interface {
 	// IsAllowedManifest checks if the given file name represents an allowed manifest name for
 	// the current ASiC container format. Port of the protected abstract
 	// isAllowedManifest(String).
@@ -55,24 +55,24 @@ type DefaultASiCContainerExtractorOverrides interface {
 	IsAllowedEvidenceRecord(entryName string) bool
 }
 
-// DefaultASiCContainerExtractor is used to read an ASiC Container and to retrieve its content files.
-type DefaultASiCContainerExtractor struct {
+// DefaultContainerExtractor is used to read an ASiC Container and to retrieve its content files.
+type DefaultContainerExtractor struct {
 	// overrides points back at the concrete extractor; see InitDefaultASiCContainerExtractor.
-	overrides DefaultASiCContainerExtractorOverrides
+	overrides DefaultContainerExtractorOverrides
 
 	// AsicContainer represents an ASiC container. Port of the protected final asicContainer.
 	AsicContainer model.DSSDocument
 }
 
 // InitDefaultASiCContainerExtractor is the port of the protected
-// DefaultASiCContainerExtractor(DSSDocument) constructor, extended with the overrides argument Go
+// DefaultContainerExtractor(DSSDocument) constructor, extended with the overrides argument Go
 // needs to keep the subclass predicates reachable.
-func (e *DefaultASiCContainerExtractor) InitDefaultASiCContainerExtractor(overrides DefaultASiCContainerExtractorOverrides, asicContainer model.DSSDocument) {
+func (e *DefaultContainerExtractor) InitDefaultASiCContainerExtractor(overrides DefaultContainerExtractorOverrides, asicContainer model.DSSDocument) {
 	e.overrides = overrides
 	e.AsicContainer = asicContainer
 }
 
-// DefaultASiCContainerExtractorFromDocument loads an implementation of ASiCContainerExtractor
+// DefaultContainerExtractorFromDocument loads an implementation of ContainerExtractor
 // corresponding to the asicContainer type.
 //
 // Panics with the Java message when asicContainer is nil (Objects.requireNonNull); returns an error
@@ -80,7 +80,7 @@ func (e *DefaultASiCContainerExtractor) InitDefaultASiCContainerExtractor(overri
 //
 // Port of the static fromDocument(DSSDocument); the ServiceLoader iteration becomes the registry in
 // asic_container_extractor_factory.go.
-func DefaultASiCContainerExtractorFromDocument(asicContainer model.DSSDocument) (ASiCContainerExtractor, error) {
+func DefaultContainerExtractorFromDocument(asicContainer model.DSSDocument) (ContainerExtractor, error) {
 	if asicContainer == nil {
 		panic("ASiC container cannot be null!")
 	}
@@ -94,17 +94,17 @@ func DefaultASiCContainerExtractorFromDocument(asicContainer model.DSSDocument) 
 }
 
 // Extract extracts the content (documents) embedded into the ASiC container. Port of extract().
-func (e *DefaultASiCContainerExtractor) Extract() (*ASiCContent, error) {
+func (e *DefaultContainerExtractor) Extract() (*Content, error) {
 	result, err := e.zipParsing(e.AsicContainer)
 	if err != nil {
 		return nil, err
 	}
-	zipComment, err := ASiCUtilsZipCommentFromArchiveContainer(e.AsicContainer)
+	zipComment, err := UtilsZipCommentFromArchiveContainer(e.AsicContainer)
 	if err != nil {
 		return nil, err
 	}
 	result.SetZipComment(zipComment)
-	containerType, err := ASiCUtilsContainerTypeOfContent(result)
+	containerType, err := UtilsContainerTypeOfContent(result)
 	if err != nil {
 		return nil, err
 	}
@@ -118,8 +118,8 @@ func (e *DefaultASiCContainerExtractor) Extract() (*ASiCContent, error) {
 }
 
 // zipParsing is the port of the private zipParsing(DSSDocument).
-func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocument) (*ASiCContent, error) {
-	result := NewASiCContent()
+func (e *DefaultContainerExtractor) zipParsing(asicContainer model.DSSDocument) (*Content, error) {
+	result := NewContent()
 	result.SetAsicContainer(asicContainer)
 
 	documents, err := ZipUtilsInstance().ExtractContainerContent(asicContainer)
@@ -154,7 +154,7 @@ func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocume
 			}
 
 		} else if !e.isFolder(entryName) {
-			if ASiCUtilsIsMimetype(entryName) {
+			if UtilsIsMimetype(entryName) {
 				result.SetMimeTypeDocument(currentDocument)
 			} else {
 				result.SetSignedDocuments(append(result.SignedDocuments(), currentDocument))
@@ -170,9 +170,9 @@ func (e *DefaultASiCContainerExtractor) zipParsing(asicContainer model.DSSDocume
 }
 
 // containerDocuments is the port of the private getContainerDocuments(ASiCContent).
-func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *ASiCContent) ([]model.DSSDocument, error) {
+func (e *DefaultContainerExtractor) containerDocuments(asicContent *Content) ([]model.DSSDocument, error) {
 	containerDocuments := make([]model.DSSDocument, 0)
-	isASiCS, err := ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *ASiCCont
 				// container! Extraction of embedded documents not possible.
 				return []model.DSSDocument{}, nil
 			}
-			isZip, err := ASiCUtilsIsZip(signerDocument)
+			isZip, err := UtilsIsZip(signerDocument)
 			if err != nil {
 				return nil, err
 			}
@@ -200,11 +200,11 @@ func (e *DefaultASiCContainerExtractor) containerDocuments(asicContent *ASiCCont
 }
 
 // isMetaInfFolder is the port of the private isMetaInfFolder(String).
-func (e *DefaultASiCContainerExtractor) isMetaInfFolder(entryName string) bool {
+func (e *DefaultContainerExtractor) isMetaInfFolder(entryName string) bool {
 	return strings.HasPrefix(entryName, ASiCUtilsMetaInfFolder)
 }
 
 // isFolder is the port of the private isFolder(String).
-func (e *DefaultASiCContainerExtractor) isFolder(entryName string) bool {
+func (e *DefaultContainerExtractor) isFolder(entryName string) bool {
 	return strings.HasSuffix(entryName, "/")
 }

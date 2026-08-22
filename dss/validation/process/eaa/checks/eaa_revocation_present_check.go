@@ -20,7 +20,7 @@ type EAARevocationPresentCheck struct {
 }
 
 // NewEAARevocationPresentCheck is the default constructor.
-func NewEAARevocationPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAARevocationPresentCheck {
 	c := &EAARevocationPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -101,7 +101,7 @@ type specItem struct {
 	spec spec
 }
 
-func newSpecItem(i18nProvider *i18n.I18nProvider, result *Result[*jaxb.XmlConstraintsConclusion],
+func newSpecItem(i18nProvider *i18n.Provider, result *Result[*jaxb.XmlConstraintsConclusion],
 	s spec) *specItem {
 	var base *ChainItemBase[*jaxb.XmlConstraintsConclusion]
 	if s.bbbId == "" {
@@ -145,7 +145,7 @@ type uninterruptedSpecItem struct {
 	spec spec
 }
 
-func newUninterruptedSpecItem(i18nProvider *i18n.I18nProvider,
+func newUninterruptedSpecItem(i18nProvider *i18n.Provider,
 	result *Result[*jaxb.XmlConstraintsConclusion], s spec) *uninterruptedSpecItem {
 	var base *UninterruptedChainItemBase[*jaxb.XmlConstraintsConclusion]
 	if s.bbbId == "" {
@@ -190,7 +190,7 @@ type specChain struct {
 	title i18n.MessageTag
 }
 
-func newSpecChain(i18nProvider *i18n.I18nProvider, title i18n.MessageTag, specs []spec) *specChain {
+func newSpecChain(i18nProvider *i18n.Provider, title i18n.MessageTag, specs []spec) *specChain {
 	result := &jaxb.XmlConstraintsConclusion{}
 	c := &specChain{
 		ChainBase: NewChainBase(i18nProvider, NewResult(result,
@@ -424,7 +424,7 @@ func toOracleMessage(message *jaxb.XmlMessage) *oracleMessage {
 
 func TestChainSemanticsAgainstJavaOracle(t *testing.T) {
 	rows := loadOracleRows(t, corpustest.Path(t, "oracle/chain_semantics.jsonl"))
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	for _, sc := range chainScenarios() {
 		t.Run(sc.name, func(t *testing.T) {

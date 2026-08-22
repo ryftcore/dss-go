@@ -3,26 +3,26 @@ package timedependent
 
 import "reflect"
 
-// MutableTimeDependentValues is a mutable list of time-dependent values.
-type MutableTimeDependentValues[T TimeDependent] struct {
-	TimeDependentValues[T]
+// MutableValues is a mutable list of time-dependent values.
+type MutableValues[T TimeDependent] struct {
+	Values[T]
 }
 
 // NewMutableTimeDependentValues is the empty constructor.
-func NewMutableTimeDependentValues[T TimeDependent]() *MutableTimeDependentValues[T] {
-	return &MutableTimeDependentValues[T]{}
+func NewMutableTimeDependentValues[T TimeDependent]() *MutableValues[T] {
+	return &MutableValues[T]{}
 }
 
 // NewMutableTimeDependentValuesFrom is the default constructor from a source list.
-func NewMutableTimeDependentValuesFrom[T TimeDependent](srcList []T) *MutableTimeDependentValues[T] {
-	return &MutableTimeDependentValues[T]{TimeDependentValues: *NewTimeDependentValuesFrom(srcList)}
+func NewMutableTimeDependentValuesFrom[T TimeDependent](srcList []T) *MutableValues[T] {
+	return &MutableValues[T]{Values: *NewValuesFrom(srcList)}
 }
 
 // Clear clears the current list.
 //
 // Java declares this method synchronized; the Go port is not goroutine-safe, matching the
 // rest of the value objects in dss-model.
-func (v *MutableTimeDependentValues[T]) Clear() {
+func (v *MutableValues[T]) Clear() {
 	v.list = v.list[:0]
 }
 
@@ -34,7 +34,7 @@ func (v *MutableTimeDependentValues[T]) Clear() {
 //
 // Java declares this method synchronized; the Go port is not goroutine-safe, matching the
 // rest of the value objects in dss-model.
-func (v *MutableTimeDependentValues[T]) AddOldest(x T) {
+func (v *MutableValues[T]) AddOldest(x T) {
 	if timeDependentIsNil(x) {
 		panic("Cannot add null")
 	}
@@ -52,7 +52,7 @@ func (v *MutableTimeDependentValues[T]) AddOldest(x T) {
 }
 
 // List gets the current list. Port of getList().
-func (v *MutableTimeDependentValues[T]) List() []T {
+func (v *MutableValues[T]) List() []T {
 	return v.list
 }
 

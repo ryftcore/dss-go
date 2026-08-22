@@ -21,7 +21,7 @@ type EAASubjectPseudonymCheck struct {
 }
 
 // NewEAASubjectPseudonymCheck is the default constructor.
-func NewEAASubjectPseudonymCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAASubjectPseudonymCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAASubjectPseudonymCheck {
 	c := &EAASubjectPseudonymCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

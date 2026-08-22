@@ -20,9 +20,9 @@ var _ asic.AbstractASiCContainerEvidenceRecordBuilderOverrides = (*ASiCWithCAdES
 
 // NewASiCWithCAdESContainerEvidenceRecordBuilder is the default constructor. Ports
 // ASiCWithCAdESContainerEvidenceRecordBuilder(CertificateVerifier,
-// ASiCEvidenceRecordFilenameFactory).
+// EvidenceRecordFilenameFactory).
 func NewASiCWithCAdESContainerEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier,
-	asicFilenameFactory asic.ASiCEvidenceRecordFilenameFactory) *ASiCWithCAdESContainerEvidenceRecordBuilder {
+	asicFilenameFactory asic.EvidenceRecordFilenameFactory) *ASiCWithCAdESContainerEvidenceRecordBuilder {
 	b := &ASiCWithCAdESContainerEvidenceRecordBuilder{
 		AbstractASiCContainerEvidenceRecordBuilder: asic.NewAbstractASiCContainerEvidenceRecordBuilderBase(certificateVerifier, asicFilenameFactory),
 	}
@@ -31,24 +31,24 @@ func NewASiCWithCAdESContainerEvidenceRecordBuilder(certificateVerifier validati
 }
 
 // GetASiCContentBuilder ports the @Override protected getASiCContentBuilder().
-func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *asic.AbstractASiCContentBuilder {
-	return NewASiCWithCAdESASiCContentBuilder().AbstractASiCContentBuilder
+func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *asic.AbstractContentBuilder {
+	return NewASiCWithCAdESASiCContentBuilder().AbstractContentBuilder
 }
 
 // AssertEvidenceRecordFilenameValid ports the @Override protected
-// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, ASiCContent). Named exported
+// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, Content). Named exported
 // here (rather than shadowing the embedded base's unexported assertEvidenceRecordFilenameValid)
 // since the base dispatches self-calls through overrides per the virtual-dispatch precedent -
 // see the caller in the base's Build().
-func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *asic.ASiCContent) {
+func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *asic.Content) {
 	b.AbstractASiCContainerEvidenceRecordBuilder.AssertEvidenceRecordFilenameValid(evidenceRecordFilename, evidenceRecordType, asicContent)
 
 	if enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord == evidenceRecordType &&
-		!asic.ASiCUtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
+		!asic.UtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 4998 Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with CAdES filename convention!", evidenceRecordFilename)))
 	} else if enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord == evidenceRecordType &&
-		!asic.ASiCUtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
+		!asic.UtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 6283 XML Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with CAdES filename convention!", evidenceRecordFilename)))
 	}

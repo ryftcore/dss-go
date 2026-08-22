@@ -21,15 +21,15 @@ import (
 type AbstractASiCContainerEvidenceRecordBuilderOverrides interface {
 	// GetASiCContentBuilder gets an instance of AbstractASiCContentBuilder. Port of the
 	// protected abstract getASiCContentBuilder().
-	GetASiCContentBuilder() *AbstractASiCContentBuilder
+	GetASiCContentBuilder() *AbstractContentBuilder
 
 	// AssertEvidenceRecordFilenameValid verifies validity of the evidence record filename to
 	// the ASiC container convention. Java declares this protected (not abstract) with a default
 	// body, and CAdES/XAdES subclasses override it to layer format-specific checks on top via
 	// super.assertEvidenceRecordFilenameValid(...); ported through the overrides interface (not
 	// a plain self-call) so Build() reaches the leaf override. Port of the protected
-	// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, ASiCContent).
-	AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *ASiCContent)
+	// assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, Content).
+	AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *Content)
 }
 
 // AbstractASiCContainerEvidenceRecordBuilder incorporates an existing evidence record document
@@ -44,13 +44,13 @@ type AbstractASiCContainerEvidenceRecordBuilder struct {
 	CertificateVerifier validation.CertificateVerifier
 
 	// AsicFilenameFactory is the filename factory. Java declares the field protected final.
-	AsicFilenameFactory ASiCEvidenceRecordFilenameFactory
+	AsicFilenameFactory EvidenceRecordFilenameFactory
 }
 
 // NewAbstractASiCContainerEvidenceRecordBuilderBase is the default constructor. Port of the
-// protected constructor(CertificateVerifier, ASiCEvidenceRecordFilenameFactory). The subclass
+// protected constructor(CertificateVerifier, EvidenceRecordFilenameFactory). The subclass
 // constructor must follow it with InitAbstractASiCContainerEvidenceRecordBuilder.
-func NewAbstractASiCContainerEvidenceRecordBuilderBase(certificateVerifier validation.CertificateVerifier, asicFilenameFactory ASiCEvidenceRecordFilenameFactory) AbstractASiCContainerEvidenceRecordBuilder {
+func NewAbstractASiCContainerEvidenceRecordBuilderBase(certificateVerifier validation.CertificateVerifier, asicFilenameFactory EvidenceRecordFilenameFactory) AbstractASiCContainerEvidenceRecordBuilder {
 	return AbstractASiCContainerEvidenceRecordBuilder{
 		CertificateVerifier: certificateVerifier,
 		AsicFilenameFactory: asicFilenameFactory,
@@ -72,12 +72,12 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) requireOverrides() Abstract
 }
 
 // Build builds an ASiCContent containing the evidence record file document. Ports
-// build(List, DSSDocument, ASiCContainerEvidenceRecordParameters).
+// build(List, DSSDocument, ContainerEvidenceRecordParameters).
 //
-// Cross-chunk assumption (ZIPCORE): ASiCUtilsEnsureMimeTypeAndZipComment(*ASiCContent,
+// Cross-chunk assumption (ZIPCORE): UtilsEnsureMimeTypeAndZipComment(*Content,
 // *ASiCContainerEvidenceRecordParameters) *ASiCContent mirrors
-// ASiCUtils.ensureMimeTypeAndZipComment(ASiCContent, ASiCParameters).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) Build(documents []model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ASiCContainerEvidenceRecordParameters) (*ASiCContent, error) {
+// ASiCUtils.ensureMimeTypeAndZipComment(Content, Parameters).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) Build(documents []model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ContainerEvidenceRecordParameters) (*Content, error) {
 	asicContent := b.initASiCContent(documents, parameters)
 	b.assertASiCContentValid(asicContent, parameters)
 
@@ -106,19 +106,19 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) Build(documents []model.DSS
 		asicContent.SetEvidenceRecordManifestDocuments(append(asicContent.EvidenceRecordManifestDocuments(), evidenceRecordManifest))
 	}
 
-	return ASiCUtilsEnsureMimeTypeAndZipComment(asicContent, &parameters.ASiCParameters)
+	return UtilsEnsureMimeTypeAndZipComment(asicContent, &parameters.Parameters)
 }
 
 // initASiCContent initializes an ASiCContent from the given list of documents. Ports the
-// protected initASiCContent(List, ASiCParameters).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) initASiCContent(documents []model.DSSDocument, parameters *ASiCContainerEvidenceRecordParameters) *ASiCContent {
+// protected initASiCContent(List, Parameters).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) initASiCContent(documents []model.DSSDocument, parameters *ContainerEvidenceRecordParameters) *Content {
 	return b.requireOverrides().GetASiCContentBuilder().Build(documents, parameters.ContainerType())
 }
 
 // getASiCEvidenceRecordManifest gets the provided ASiCEvidenceRecordManifest file. Ports the
-// protected getASiCEvidenceRecordManifest(ASiCContainerEvidenceRecordParameters). Logging
+// protected getASiCEvidenceRecordManifest(ContainerEvidenceRecordParameters). Logging
 // (LOG.info) is dropped per PORTING.md.
-func (b *AbstractASiCContainerEvidenceRecordBuilder) getASiCEvidenceRecordManifest(parameters *ASiCContainerEvidenceRecordParameters) model.DSSDocument {
+func (b *AbstractASiCContainerEvidenceRecordBuilder) getASiCEvidenceRecordManifest(parameters *ContainerEvidenceRecordParameters) model.DSSDocument {
 	if parameters.AsicEvidenceRecordManifest() != nil {
 		if enumerations.ASiCContainerTypeASiCE == parameters.ContainerType() {
 			return parameters.AsicEvidenceRecordManifest()
@@ -128,8 +128,8 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getASiCEvidenceRecordManife
 }
 
 // getEvidenceRecord creates an EvidenceRecord from a provided evidenceRecordDocument. Ports
-// the protected getEvidenceRecord(DSSDocument, ManifestFile, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, manifestFile *model.ManifestFile, asicContent *ASiCContent) validation.EvidenceRecord {
+// the protected getEvidenceRecord(DSSDocument, ManifestFile, Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, manifestFile *model.ManifestFile, asicContent *Content) validation.EvidenceRecord {
 	evidenceRecordAnalyzer, err := analyzer.EvidenceRecordAnalyzerFromDocument(evidenceRecordDocument)
 	if err == nil {
 		evidenceRecordAnalyzer.SetManifestFile(manifestFile)
@@ -143,8 +143,8 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecord(evidenceR
 
 // parseManifestFile attempts to parse an evidenceRecordManifest document as an
 // ASiCEvidenceRecordManifest file. Ports the protected parseManifestFile(DSSDocument,
-// ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceRecordManifest model.DSSDocument, asicContent *ASiCContent) *model.ManifestFile {
+// Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceRecordManifest model.DSSDocument, asicContent *Content) *model.ManifestFile {
 	if evidenceRecordManifest == nil {
 		return nil
 	}
@@ -155,7 +155,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceR
 		evidenceRecordManifest.SetName(b.AsicFilenameFactory.EvidenceRecordManifestFilename(asicContent))
 	}
 
-	manifestFile := ASiCManifestParserGetManifestFile(evidenceRecordManifest)
+	manifestFile := ManifestParserGetManifestFile(evidenceRecordManifest)
 	if manifestFile == nil {
 		panic(exception.NewIllegalInputException("Unable to parse the provided ASiCEvidenceRecordManifest document! More detail in logs."))
 	}
@@ -165,27 +165,27 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceR
 
 // assertASiCEvidenceRecordManifestValid verifies whether the ASiCEvidenceRecordManifest
 // filename is valid. Ports the protected assertASiCEvidenceRecordManifestValid(String,
-// ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCEvidenceRecordManifestValid(manifestFilename string, asicContent *ASiCContent) {
+// Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCEvidenceRecordManifestValid(manifestFilename string, asicContent *Content) {
 	asicDocumentNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
 	if slices.Contains(asicDocumentNames, manifestFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("The manifest filename '%s' is already present "+
 			"within the ASiC container!", manifestFilename)))
 	}
-	if !ASiCUtilsIsEvidenceRecordManifest(manifestFilename) {
+	if !UtilsIsEvidenceRecordManifest(manifestFilename) {
 		panic(fmt.Sprintf("The manifest filename '%s' is not compliant "+
 			"to the ASiCEvidenceRecordManifest filename convention!", manifestFilename))
 	}
 }
 
 // assertManifestFileValid verifies the validity of the ASiCEvidenceRecordManifest file. Ports
-// the protected assertManifestFileValid(ManifestFile, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestFileValid(manifestFile *model.ManifestFile, asicContent *ASiCContent) {
+// the protected assertManifestFileValid(ManifestFile, Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestFileValid(manifestFile *model.ManifestFile, asicContent *Content) {
 	if manifestFile == nil {
 		return
 	}
 
-	manifestValidator := NewASiCManifestValidator(manifestFile, asicContent.AllDocuments())
+	manifestValidator := NewManifestValidator(manifestFile, asicContent.AllDocuments())
 	manifestValidator.ValidateEntries()
 
 	for _, manifestEntry := range manifestFile.Entries() {
@@ -205,8 +205,8 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestFileValid(man
 }
 
 // getDocumentsCoveredByEvidenceRecord ports the private getDocumentsCoveredByEvidenceRecord(
-// EvidenceRecord, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) getDocumentsCoveredByEvidenceRecord(evidenceRecord validation.EvidenceRecord, asicContent *ASiCContent) []model.DSSDocument {
+// EvidenceRecord, Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) getDocumentsCoveredByEvidenceRecord(evidenceRecord validation.EvidenceRecord, asicContent *Content) []model.DSSDocument {
 	coveredDocuments := make([]model.DSSDocument, 0)
 	allDocuments := asicContent.AllDocuments()
 	allDocumentFilenames := spi.DSSUtilsDocumentNames(allDocuments)
@@ -220,7 +220,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getDocumentsCoveredByEviden
 
 // getEvidenceRecordFilename gets the filename for the evidence record to be incorporated.
 // Ports the protected getEvidenceRecordFilename(EvidenceRecord, ManifestFile, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecordFilename(evidenceRecord validation.EvidenceRecord, manifestFile *model.ManifestFile, asicContent *ASiCContent) string {
+func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecordFilename(evidenceRecord validation.EvidenceRecord, manifestFile *model.ManifestFile, asicContent *Content) string {
 	if manifestFile != nil {
 		return manifestFile.SignatureFilename()
 	}
@@ -229,11 +229,11 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecordFilename(e
 
 // buildEvidenceRecordManifest builds an ASiCEvidenceRecordManifest for the evidence record
 // based on a list of coveredDocuments when required. Ports the protected
-// buildEvidenceRecordManifest(ASiCContent, List, DigestAlgorithm, String).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) buildEvidenceRecordManifest(asicContent *ASiCContent, coveredDocuments []model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) model.DSSDocument {
+// buildEvidenceRecordManifest(Content, List, DigestAlgorithm, String).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) buildEvidenceRecordManifest(asicContent *Content, coveredDocuments []model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) model.DSSDocument {
 	if enumerations.ASiCContainerTypeASiCE == asicContent.ContainerType() {
 		names := spi.DSSUtilsDocumentNames(coveredDocuments)
-		manifestDocument, err := NewASiCEvidenceRecordManifestBuilder(asicContent, digestAlgorithm, evidenceRecordFilename).
+		manifestDocument, err := NewEvidenceRecordManifestBuilder(asicContent, digestAlgorithm, evidenceRecordFilename).
 			SetAsicContentDocumentFilter(AllowedFilenamesFilter(names...)).
 			SetEvidenceRecordFilenameFactory(b.AsicFilenameFactory).
 			Build()
@@ -246,16 +246,16 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) buildEvidenceRecordManifest
 	return nil
 }
 
-// assertASiCContentValid verifies whether the provided ASiCContent is valid and can be
+// assertASiCContentValid verifies whether the provided Content is valid and can be
 // successfully protected by a new evidence record. Ports the protected
-// assertASiCContentValid(ASiCContent, ASiCParameters).
+// assertASiCContentValid(Content, Parameters).
 //
 // Cross-chunk assumption (ZIPCORE): ASiCUtilsIsASiCE(*ASiCParameters) bool mirrors
-// ASiCUtils.isASiCE(ASiCParameters).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCContentValid(asicContent *ASiCContent, parameters *ASiCContainerEvidenceRecordParameters) {
+// ASiCUtils.isASiCE(Parameters).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCContentValid(asicContent *Content, parameters *ContainerEvidenceRecordParameters) {
 	currentContainerType := asicContent.ContainerType()
 
-	asice := ASiCUtilsIsASiCE(&parameters.ASiCParameters)
+	asice := UtilsIsASiCE(&parameters.Parameters)
 	switch {
 	case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 		// ok
@@ -283,7 +283,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCContentValid(asic
 // assertSignedDataCovered verifies whether the original or signed documents are successfully
 // covered by the evidence record. Ports the protected assertSignedDataCovered(ASiCContent,
 // List).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) assertSignedDataCovered(asicContent *ASiCContent, coveredDocumentFilenames []string) {
+func (b *AbstractASiCContainerEvidenceRecordBuilder) assertSignedDataCovered(asicContent *Content, coveredDocumentFilenames []string) {
 	signedDocumentNames := spi.DSSUtilsDocumentNames(asicContent.SignedDocuments())
 	for _, signedDocumentFilename := range signedDocumentNames {
 		if !slices.Contains(coveredDocumentFilenames, signedDocumentFilename) {
@@ -293,14 +293,14 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertSignedDataCovered(asi
 	}
 
 	for _, documentName := range coveredDocumentFilenames {
-		linkedManifest := ASiCManifestParserGetLinkedManifest(asicContent.AllManifestDocuments(), documentName)
+		linkedManifest := ManifestParserGetLinkedManifest(asicContent.AllManifestDocuments(), documentName)
 		b.assertManifestSignedDataCoveredRecursively(linkedManifest, coveredDocumentFilenames, asicContent)
 	}
 }
 
 // assertManifestSignedDataCoveredRecursively ports the private
-// assertManifestSignedDataCoveredRecursively(DSSDocument, List, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestSignedDataCoveredRecursively(manifestDocument model.DSSDocument, coveredDocumentNames []string, asicContent *ASiCContent) {
+// assertManifestSignedDataCoveredRecursively(DSSDocument, List, Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestSignedDataCoveredRecursively(manifestDocument model.DSSDocument, coveredDocumentNames []string, asicContent *Content) {
 	if manifestDocument == nil {
 		return
 	}
@@ -308,7 +308,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestSignedDataCov
 		panic(exception.NewIllegalInputException(fmt.Sprintf("Digest of a signed ASiC Manifest with name '%s' "+
 			"has not been found in the evidence record's covered objects!", manifestDocument.Name())))
 	}
-	manifestFile := ASiCManifestParserGetManifestFile(manifestDocument)
+	manifestFile := ManifestParserGetManifestFile(manifestDocument)
 	if manifestFile != nil {
 		for _, entry := range manifestFile.Entries() {
 			if !slices.Contains(coveredDocumentNames, entry.Uri()) {
@@ -316,7 +316,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestSignedDataCov
 					"a covered ASiC Manifest with name '%s' has not been found in the evidence record's covered objects!",
 					entry.Uri())))
 			}
-			linkedManifest := ASiCManifestParserGetLinkedManifest(asicContent.AllManifestDocuments(), entry.Uri())
+			linkedManifest := ManifestParserGetLinkedManifest(asicContent.AllManifestDocuments(), entry.Uri())
 			b.assertManifestSignedDataCoveredRecursively(linkedManifest, coveredDocumentNames, asicContent)
 		}
 	}
@@ -362,8 +362,8 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertEvidenceRecordValid(e
 // provides; CAdES/XAdES leaf builders call this via
 // b.AbstractASiCContainerEvidenceRecordBuilder.AssertEvidenceRecordFilenameValid(...) before
 // layering their own checks, matching Java's super.assertEvidenceRecordFilenameValid(...). Ports
-// the protected assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, ASiCContent).
-func (b *AbstractASiCContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *ASiCContent) {
+// the protected assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, Content).
+func (b *AbstractASiCContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *Content) {
 	asicDocumentNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
 	if slices.Contains(asicDocumentNames, evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("The evidence record filename '%s' is already present "+

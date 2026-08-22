@@ -30,8 +30,8 @@ type TrustedEntityServiceStatusConsistencyCheck struct {
 
 // NewTrustedEntityServiceStatusConsistencyCheck is the default constructor.
 // Port of
-// TrustedEntityServiceStatusConsistencyCheck(I18nProvider, XmlValidationCertificateApprovalStatus, List, LevelRule).
-func NewTrustedEntityServiceStatusConsistencyCheck(i18nProvider *i18n.I18nProvider,
+// TrustedEntityServiceStatusConsistencyCheck(Provider, XmlValidationCertificateApprovalStatus, List, LevelRule).
+func NewTrustedEntityServiceStatusConsistencyCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateApprovalStatus], trustedServicesWithSti []*diagnostic.TrustedEntityServiceWrapper,
 	constraint policy.LevelRule) *TrustedEntityServiceStatusConsistencyCheck {
 	c := &TrustedEntityServiceStatusConsistencyCheck{

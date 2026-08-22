@@ -15,18 +15,18 @@ import (
 	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 )
 
-// DiagnosticDataFacade is used to marshal/unmarshal a DiagnosticData report.
-type DiagnosticDataFacade struct{}
+// DataFacade is used to marshal/unmarshal a Data report.
+type DataFacade struct{}
 
 // NewDiagnosticDataFacade creates a new instance of DiagnosticDataFacade. Port of newFacade().
-func NewDiagnosticDataFacade() *DiagnosticDataFacade {
-	return &DiagnosticDataFacade{}
+func NewDataFacade() *DataFacade {
+	return &DataFacade{}
 }
 
 // Marshal returns the XML representation of diagnosticDataJaxb. Port of marshall(T) (schema
 // validation always requested in Java; see the file header for why this port does not perform
 // it).
-func (f *DiagnosticDataFacade) Marshal(diagnosticDataJaxb *jaxb.XmlDiagnosticData) (string, error) {
+func (f *DataFacade) Marshal(diagnosticDataJaxb *jaxb.XmlDiagnosticData) (string, error) {
 	if diagnosticDataJaxb == nil {
 		return "", errors.New("JAXBObject is null")
 	}
@@ -38,7 +38,7 @@ func (f *DiagnosticDataFacade) Marshal(diagnosticDataJaxb *jaxb.XmlDiagnosticDat
 }
 
 // MarshalToWriter marshals diagnosticDataJaxb into w. Port of marshall(T, OutputStream).
-func (f *DiagnosticDataFacade) MarshalToWriter(diagnosticDataJaxb *jaxb.XmlDiagnosticData, w io.Writer) error {
+func (f *DataFacade) MarshalToWriter(diagnosticDataJaxb *jaxb.XmlDiagnosticData, w io.Writer) error {
 	if diagnosticDataJaxb == nil {
 		return errors.New("JAXBObject is null")
 	}
@@ -54,7 +54,7 @@ func (f *DiagnosticDataFacade) MarshalToWriter(diagnosticDataJaxb *jaxb.XmlDiagn
 }
 
 // Unmarshal unmarshals r and returns the XmlDiagnosticData. Port of unmarshall(InputStream).
-func (f *DiagnosticDataFacade) Unmarshal(r io.Reader) (*jaxb.XmlDiagnosticData, error) {
+func (f *DataFacade) Unmarshal(r io.Reader) (*jaxb.XmlDiagnosticData, error) {
 	if r == nil {
 		return nil, errors.New("InputStream is null")
 	}
@@ -76,32 +76,32 @@ func (f *DiagnosticDataFacade) Unmarshal(r io.Reader) (*jaxb.XmlDiagnosticData, 
 
 // UnmarshalString unmarshals xmlObject and returns the XmlDiagnosticData. Port of
 // unmarshall(String).
-func (f *DiagnosticDataFacade) UnmarshalString(xmlObject string) (*jaxb.XmlDiagnosticData, error) {
+func (f *DataFacade) UnmarshalString(xmlObject string) (*jaxb.XmlDiagnosticData, error) {
 	return f.Unmarshal(bytes.NewReader([]byte(xmlObject)))
 }
 
 // GenerateSVG generates a SVG representation of the diagnostic data. Port of
 // generateSVG(XmlDiagnosticData); XSLT execution is deferred, see DiagnosticDataXmlDefiner.
-func (f *DiagnosticDataFacade) GenerateSVG(diagnosticDataJaxb *jaxb.XmlDiagnosticData) (string, error) {
+func (f *DataFacade) GenerateSVG(diagnosticDataJaxb *jaxb.XmlDiagnosticData) (string, error) {
 	return "", ErrSvgTemplatesNotSupported
 }
 
 // GenerateSVGToWriter generates a SVG representation of the diagnostic data into w. Port of
 // generateSVG(XmlDiagnosticData, Result); XSLT execution is deferred, see
 // DiagnosticDataXmlDefiner.
-func (f *DiagnosticDataFacade) GenerateSVGToWriter(diagnosticDataJaxb *jaxb.XmlDiagnosticData, w io.Writer) error {
+func (f *DataFacade) GenerateSVGToWriter(diagnosticDataJaxb *jaxb.XmlDiagnosticData, w io.Writer) error {
 	return ErrSvgTemplatesNotSupported
 }
 
 // GenerateSVGFromMarshalled generates a SVG representation from already-marshalled diagnostic
 // data. Port of generateSVG(String); XSLT execution is deferred, see DiagnosticDataXmlDefiner.
-func (f *DiagnosticDataFacade) GenerateSVGFromMarshalled(marshalledDiagnosticData string) (string, error) {
+func (f *DataFacade) GenerateSVGFromMarshalled(marshalledDiagnosticData string) (string, error) {
 	return "", ErrSvgTemplatesNotSupported
 }
 
 // GenerateSVGFromMarshalledToWriter generates a SVG representation from already-marshalled
 // diagnostic data into w. Port of generateSVG(String, Result); XSLT execution is deferred, see
 // DiagnosticDataXmlDefiner.
-func (f *DiagnosticDataFacade) GenerateSVGFromMarshalledToWriter(marshalledDiagnosticData string, w io.Writer) error {
+func (f *DataFacade) GenerateSVGFromMarshalledToWriter(marshalledDiagnosticData string, w io.Writer) error {
 	return ErrSvgTemplatesNotSupported
 }

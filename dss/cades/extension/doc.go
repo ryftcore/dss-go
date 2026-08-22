@@ -5,5 +5,5 @@
 //
 // The main entry types are CAdESDocumentExtender and
 // CAdESDocumentExtenderFactory; most callers reach this through
-// cades.CAdESService rather than directly.
+// cades.Service rather than directly.
 package extension

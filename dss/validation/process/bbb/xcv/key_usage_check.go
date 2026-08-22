@@ -28,8 +28,8 @@ type KeyUsageCheck struct {
 }
 
 // NewKeyUsageCheck is the default constructor. Port of
-// KeyUsageCheck(I18nProvider, XmlSubXCV, CertificateWrapper, Context, SubContext, MultiValuesRule).
-func NewKeyUsageCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// KeyUsageCheck(Provider, XmlSubXCV, CertificateWrapper, Context, SubContext, MultiValuesRule).
+func NewKeyUsageCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, context enumerations.Context, subContext enumerations.SubContext,
 	constraint policy.MultiValuesRule) *KeyUsageCheck {
 	c := &KeyUsageCheck{

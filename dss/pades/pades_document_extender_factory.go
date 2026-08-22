@@ -14,30 +14,30 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// PAdESDocumentExtenderFactory is used to check and load a corresponding DocumentExtender
+// DocumentExtenderFactory is used to check and load a corresponding DocumentExtender
 // implementation for a PAdES signature or signatures augmentation.
-type PAdESDocumentExtenderFactory struct{}
+type DocumentExtenderFactory struct{}
 
-// NewPAdESDocumentExtenderFactory is the default constructor.
-func NewPAdESDocumentExtenderFactory() *PAdESDocumentExtenderFactory {
-	return &PAdESDocumentExtenderFactory{}
+// NewDocumentExtenderFactory is the default constructor.
+func NewDocumentExtenderFactory() *DocumentExtenderFactory {
+	return &DocumentExtenderFactory{}
 }
 
 // IsSupported ports the overridden isSupported(DSSDocument).
-func (f *PAdESDocumentExtenderFactory) IsSupported(doc model.DSSDocument) bool {
-	return newPAdESDocumentExtender().IsSupported(doc)
+func (f *DocumentExtenderFactory) IsSupported(doc model.DSSDocument) bool {
+	return newDocumentExtender().IsSupported(doc)
 }
 
 // Create ports the overridden create(DSSDocument).
-func (f *PAdESDocumentExtenderFactory) Create(doc model.DSSDocument) document.SignedDocumentExtender {
-	return NewPAdESDocumentExtender(doc)
+func (f *DocumentExtenderFactory) Create(doc model.DSSDocument) document.SignedDocumentExtender {
+	return NewDocumentExtender(doc)
 }
 
 // init registers the factory with dss-document's SignedDocumentExtender registry, standing in
 // for the META-INF/services/eu.europa.esig.dss.extension.SignedDocumentExtenderFactory entry.
 func init() {
-	document.RegisterSignedDocumentExtenderFactory(NewPAdESDocumentExtenderFactory())
+	document.RegisterSignedDocumentExtenderFactory(NewDocumentExtenderFactory())
 }
 
 // compile-time assertion.
-var _ document.SignedDocumentExtenderFactory = (*PAdESDocumentExtenderFactory)(nil)
+var _ document.SignedDocumentExtenderFactory = (*DocumentExtenderFactory)(nil)

@@ -82,8 +82,8 @@ type AlgorithmObsolescenceValidation[T any] struct {
 
 // InitAlgorithmObsolescenceValidation wires the shared state; called by the
 // concrete constructor before InitChainBase. Port of the common constructor
-// AlgorithmObsolescenceValidation(I18nProvider, T, Context, Date, ValidationPolicy).
-func (c *AlgorithmObsolescenceValidation[T]) InitAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider,
+// AlgorithmObsolescenceValidation(Provider, T, Context, Date, ValidationPolicy).
+func (c *AlgorithmObsolescenceValidation[T]) InitAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider,
 	token T, context enumerations.Context, validationDate time.Time, validationPolicy policy.ValidationPolicy,
 	overrides AlgorithmObsolescenceValidationOverrides) {
 	xmlAOV := &jaxb.XmlAOV{}

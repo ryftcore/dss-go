@@ -87,17 +87,17 @@ func TestASiCUtilsEntryNamePredicates(t *testing.T) {
 				got, want bool
 				label     string
 			}{
-				{ASiCUtilsIsSignature(tc.name), tc.signature, "isSignature"},
-				{ASiCUtilsIsTimestamp(tc.name), tc.timestamp, "isTimestamp"},
-				{ASiCUtilsIsEvidenceRecord(tc.name), tc.evidenceRecord, "isEvidenceRecord"},
-				{ASiCUtilsIsXmlEvidenceRecord(tc.name), tc.xmlER, "isXmlEvidenceRecord"},
-				{ASiCUtilsIsAsn1EvidenceRecord(tc.name), tc.asn1ER, "isAsn1EvidenceRecord"},
-				{ASiCUtilsIsXAdES(tc.name), tc.xades, "isXAdES"},
-				{ASiCUtilsIsCAdES(tc.name), tc.cades, "isCAdES"},
-				{ASiCUtilsIsManifest(tc.name), tc.manifest, "isManifest"},
-				{ASiCUtilsIsArchiveManifest(tc.name), tc.archiveManifest, "isArchiveManifest"},
-				{ASiCUtilsIsEvidenceRecordManifest(tc.name), tc.evidenceRecordManifest, "isEvidenceRecordManifest"},
-				{ASiCUtilsIsMimetype(tc.name), tc.mimetype, "isMimetype"},
+				{UtilsIsSignature(tc.name), tc.signature, "isSignature"},
+				{UtilsIsTimestamp(tc.name), tc.timestamp, "isTimestamp"},
+				{UtilsIsEvidenceRecord(tc.name), tc.evidenceRecord, "isEvidenceRecord"},
+				{UtilsIsXmlEvidenceRecord(tc.name), tc.xmlER, "isXmlEvidenceRecord"},
+				{UtilsIsAsn1EvidenceRecord(tc.name), tc.asn1ER, "isAsn1EvidenceRecord"},
+				{UtilsIsXAdES(tc.name), tc.xades, "isXAdES"},
+				{UtilsIsCAdES(tc.name), tc.cades, "isCAdES"},
+				{UtilsIsManifest(tc.name), tc.manifest, "isManifest"},
+				{UtilsIsArchiveManifest(tc.name), tc.archiveManifest, "isArchiveManifest"},
+				{UtilsIsEvidenceRecordManifest(tc.name), tc.evidenceRecordManifest, "isEvidenceRecordManifest"},
+				{UtilsIsMimetype(tc.name), tc.mimetype, "isMimetype"},
 			}
 			for _, check := range checks {
 				if check.got != check.want {
@@ -110,23 +110,23 @@ func TestASiCUtilsEntryNamePredicates(t *testing.T) {
 
 // TestASiCUtilsZipCommentBuilders pins the "mimetype=" prefix every ASiC zip comment carries.
 func TestASiCUtilsZipCommentBuilders(t *testing.T) {
-	if got := ASiCUtilsZipCommentFromMimeTypeString("application/vnd.etsi.asic-e+zip"); got != "mimetype=application/vnd.etsi.asic-e+zip" {
+	if got := UtilsZipCommentFromMimeTypeString("application/vnd.etsi.asic-e+zip"); got != "mimetype=application/vnd.etsi.asic-e+zip" {
 		t.Errorf("zip comment = %q", got)
 	}
-	if got := ASiCUtilsZipCommentFromMimeType(enumerations.MimeTypeEnumASiCS); got != "mimetype=application/vnd.etsi.asic-s+zip" {
+	if got := UtilsZipCommentFromMimeType(enumerations.MimeTypeEnumASiCS); got != "mimetype=application/vnd.etsi.asic-s+zip" {
 		t.Errorf("zip comment from MimeType = %q", got)
 	}
 
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
-	if got := ASiCUtilsZipCommentFromParameters(parameters); got != "" {
+	if got := UtilsZipCommentFromParameters(parameters); got != "" {
 		t.Errorf("zip comment = %q with zipComment off, want \"\"", got)
 	}
 	parameters.SetZipComment(true)
-	if got := ASiCUtilsZipCommentFromParameters(parameters); got != "mimetype=application/vnd.etsi.asic-e+zip" {
+	if got := UtilsZipCommentFromParameters(parameters); got != "mimetype=application/vnd.etsi.asic-e+zip" {
 		t.Errorf("zip comment = %q", got)
 	}
-	if got := ASiCUtilsMimeTypeString(parameters); got != "application/vnd.etsi.asic-e+zip" {
+	if got := UtilsMimeTypeString(parameters); got != "application/vnd.etsi.asic-e+zip" {
 		t.Errorf("mimetype string = %q", got)
 	}
 }
@@ -145,12 +145,12 @@ func TestASiCUtilsASiCContainerType(t *testing.T) {
 		{enumerations.MimeTypeEnumODG, enumerations.ASiCContainerTypeASiCE},
 		{enumerations.MimeTypeEnumODP, enumerations.ASiCContainerTypeASiCE},
 	} {
-		got, err := ASiCUtilsASiCContainerType(tc.mimeType)
+		got, err := UtilsASiCContainerType(tc.mimeType)
 		if err != nil || got != tc.want {
 			t.Errorf("containerType(%s) = %s (err %v), want %s", tc.mimeType.MimeTypeString(), got, err, tc.want)
 		}
 	}
-	if _, err := ASiCUtilsASiCContainerType(enumerations.MimeTypeEnumPDF); err == nil {
+	if _, err := UtilsASiCContainerType(enumerations.MimeTypeEnumPDF); err == nil {
 		t.Error("expected an error for a non-ASiC mimetype")
 	} else if err.Error() != "Not allowed mimetype 'application/pdf'" {
 		t.Errorf("error = %q, want the Java message", err.Error())
@@ -168,7 +168,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 		t.Run(container.Path, func(t *testing.T) {
 			doc := zipCoreFileDocument(t, container.Path)
 
-			isZip, err := ASiCUtilsIsZip(doc)
+			isZip, err := UtilsIsZip(doc)
 			if err != nil {
 				t.Fatalf("isZip: %v", err)
 			}
@@ -176,7 +176,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 				t.Errorf("isZip = %t, DSS = %t", isZip, container.IsZip)
 			}
 
-			isASiC, err := ASiCUtilsIsASiC(doc)
+			isASiC, err := UtilsIsASiC(doc)
 			if err != nil {
 				t.Fatalf("isASiC: %v", err)
 			}
@@ -184,7 +184,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 				t.Errorf("isASiC = %t, DSS = %t", isASiC, container.IsASiC)
 			}
 
-			isOpenDocument, err := ASiCUtilsIsContainerOpenDocument(doc)
+			isOpenDocument, err := UtilsIsContainerOpenDocument(doc)
 			if err != nil {
 				t.Fatalf("isContainerOpenDocument: %v", err)
 			}
@@ -192,7 +192,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 				t.Errorf("isContainerOpenDocument = %t, DSS = %t", isOpenDocument, container.IsContainerOpenDocument)
 			}
 
-			containerType, err := ASiCUtilsContainerType(doc)
+			containerType, err := UtilsContainerType(doc)
 			if err != nil {
 				t.Fatalf("containerType: %v", err)
 			}
@@ -204,7 +204,7 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 				t.Errorf("containerType = %q, DSS = %q", containerType, wantContainerType)
 			}
 
-			zipComment, err := ASiCUtilsZipCommentFromArchiveContainer(doc)
+			zipComment, err := UtilsZipCommentFromArchiveContainer(doc)
 			if err != nil {
 				t.Fatalf("zipComment: %v", err)
 			}
@@ -224,14 +224,14 @@ func TestASiCUtilsContainerInspectionMatchesDSS(t *testing.T) {
 func TestASiCUtilsIsZipRejectsDigestDocument(t *testing.T) {
 	digestDocument := model.NewDigestDocumentFromBase64(enumerations.DigestAlgorithmSHA256,
 		"GTZDVjc8fdBQlkeXsQnPHYFXKVi7B6Nkzo9YDLBODcs=")
-	isZip, err := ASiCUtilsIsZip(digestDocument)
+	isZip, err := UtilsIsZip(digestDocument)
 	if err != nil {
 		t.Fatalf("isZip: %v", err)
 	}
 	if isZip {
 		t.Error("isZip(DigestDocument) = true, want false")
 	}
-	if isZip, err := ASiCUtilsIsZip(nil); err != nil || isZip {
+	if isZip, err := UtilsIsZip(nil); err != nil || isZip {
 		t.Errorf("isZip(nil) = %t (err %v), want false", isZip, err)
 	}
 }
@@ -244,13 +244,13 @@ func TestASiCUtilsAddOrReplaceDocument(t *testing.T) {
 	replacement := model.NewInMemoryDocumentWithName([]byte("3"), "a.txt")
 
 	documents := []model.DSSDocument{first, second}
-	documents = ASiCUtilsAddOrReplaceDocument(documents, replacement)
+	documents = UtilsAddOrReplaceDocument(documents, replacement)
 	if len(documents) != 2 || documents[0] != model.DSSDocument(replacement) || documents[1] != model.DSSDocument(second) {
 		t.Fatalf("replace-in-place failed: %v", documents)
 	}
 
 	third := model.NewInMemoryDocumentWithName([]byte("4"), "c.txt")
-	documents = ASiCUtilsAddOrReplaceDocument(documents, third)
+	documents = UtilsAddOrReplaceDocument(documents, third)
 	if len(documents) != 3 || documents[2] != model.DSSDocument(third) {
 		t.Fatalf("append failed: %v", documents)
 	}
@@ -265,21 +265,21 @@ func TestASiCUtilsRootLevelDocuments(t *testing.T) {
 		model.NewInMemoryDocumentWithName([]byte("m"), "mimetype"),
 		model.NewInMemoryDocumentWithName([]byte("c"), "c.txt"),
 	}
-	rootLevel := ASiCUtilsRootLevelDocuments(documents)
+	rootLevel := UtilsRootLevelDocuments(documents)
 	if len(rootLevel) != 2 || rootLevel[0].Name() != "a.txt" || rootLevel[1].Name() != "c.txt" {
 		t.Fatalf("rootLevelDocuments = %v", modelNames(rootLevel))
 	}
 
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetSignedDocuments(documents)
-	if got := ASiCUtilsRootLevelSignedDocuments(asicContent); len(got) != 2 {
+	if got := UtilsRootLevelSignedDocuments(asicContent); len(got) != 2 {
 		t.Fatalf("rootLevelSignedDocuments = %v", modelNames(got))
 	}
 
 	// A single signed document is returned as-is, even when it lives in a folder.
 	single := []model.DSSDocument{model.NewInMemoryDocumentWithName([]byte("b"), "folder/b.txt")}
 	asicContent.SetSignedDocuments(single)
-	if got := ASiCUtilsRootLevelSignedDocuments(asicContent); len(got) != 1 || got[0].Name() != "folder/b.txt" {
+	if got := UtilsRootLevelSignedDocuments(asicContent); len(got) != 1 || got[0].Name() != "folder/b.txt" {
 		t.Fatalf("a single signed document must be returned unfiltered, got %v", modelNames(got))
 	}
 }
@@ -295,12 +295,12 @@ func modelNames(documents []model.DSSDocument) []string {
 // TestASiCUtilsEnsureMimeTypeAndZipComment pins the mimetype document ensureMimeTypeAndZipComment
 // synthesizes: named "mimetype", STORED, carrying the mimetype string as its content.
 func TestASiCUtilsEnsureMimeTypeAndZipComment(t *testing.T) {
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	parameters.SetZipComment(true)
 
-	asicContent := NewASiCContent()
-	if _, err := ASiCUtilsEnsureMimeTypeAndZipComment(asicContent, parameters); err != nil {
+	asicContent := NewContent()
+	if _, err := UtilsEnsureMimeTypeAndZipComment(asicContent, parameters); err != nil {
 		t.Fatalf("ensureMimeTypeAndZipComment: %v", err)
 	}
 	mimetypeDocument := asicContent.MimeTypeDocument()
@@ -323,7 +323,7 @@ func TestASiCUtilsEnsureMimeTypeAndZipComment(t *testing.T) {
 
 	// A second call is a no-op (both fields are already populated).
 	before := asicContent.MimeTypeDocument()
-	if _, err := ASiCUtilsEnsureMimeTypeAndZipComment(asicContent, parameters); err != nil {
+	if _, err := UtilsEnsureMimeTypeAndZipComment(asicContent, parameters); err != nil {
 		t.Fatalf("ensureMimeTypeAndZipComment (second call): %v", err)
 	}
 	if asicContent.MimeTypeDocument() != before {
@@ -337,7 +337,7 @@ func TestASiCUtilsToSimpleManifestEntries(t *testing.T) {
 		model.NewInMemoryDocumentWithName([]byte("a"), "a.xml"),
 		model.NewInMemoryDocumentWithName([]byte("b"), "b.txt"),
 	}
-	entries := ASiCUtilsToSimpleManifestEntries(documents)
+	entries := UtilsToSimpleManifestEntries(documents)
 	if len(entries) != 2 {
 		t.Fatalf("entries = %d, want 2", len(entries))
 	}
@@ -366,37 +366,37 @@ func TestASiCUtilsFilenameCollectionPredicates(t *testing.T) {
 	evidenceRecord := []string{"mimetype", "test.txt", "META-INF/evidencerecord.ers"}
 	plain := []string{"a.txt", "b.txt"}
 
-	if !ASiCUtilsFilesContainMetaInfFolder(cades) || ASiCUtilsFilesContainMetaInfFolder(plain) {
+	if !UtilsFilesContainMetaInfFolder(cades) || UtilsFilesContainMetaInfFolder(plain) {
 		t.Error("filesContainMetaInfFolder")
 	}
-	if !ASiCUtilsFilesContainSignatures(cades) || ASiCUtilsFilesContainSignatures(plain) {
+	if !UtilsFilesContainSignatures(cades) || UtilsFilesContainSignatures(plain) {
 		t.Error("filesContainSignatures")
 	}
-	if !ASiCUtilsFilesContainTimestamps(timestamped) || ASiCUtilsFilesContainTimestamps(cades) {
+	if !UtilsFilesContainTimestamps(timestamped) || UtilsFilesContainTimestamps(cades) {
 		t.Error("filesContainTimestamps")
 	}
-	if !ASiCUtilsFilesContainEvidenceRecords(evidenceRecord) || ASiCUtilsFilesContainEvidenceRecords(cades) {
+	if !UtilsFilesContainEvidenceRecords(evidenceRecord) || UtilsFilesContainEvidenceRecords(cades) {
 		t.Error("filesContainEvidenceRecords")
 	}
-	if !ASiCUtilsAreFilesContainMimetype(cades) || ASiCUtilsAreFilesContainMimetype(plain) {
+	if !UtilsAreFilesContainMimetype(cades) || UtilsAreFilesContainMimetype(plain) {
 		t.Error("areFilesContainMimetype")
 	}
-	if !ASiCUtilsIsASiCWithCAdES(cades) || ASiCUtilsIsASiCWithCAdES(xades) {
+	if !UtilsIsASiCWithCAdES(cades) || UtilsIsASiCWithCAdES(xades) {
 		t.Error("isASiCWithCAdES")
 	}
-	if !ASiCUtilsIsASiCWithXAdES(xades) || ASiCUtilsIsASiCWithXAdES(cades) {
+	if !UtilsIsASiCWithXAdES(xades) || UtilsIsASiCWithXAdES(cades) {
 		t.Error("isASiCWithXAdES")
 	}
 	// Evidence records are a shared format: neither format-specific predicate claims them.
-	if ASiCUtilsIsASiCWithCAdES(evidenceRecord) || ASiCUtilsIsASiCWithXAdES(evidenceRecord) {
+	if UtilsIsASiCWithCAdES(evidenceRecord) || UtilsIsASiCWithXAdES(evidenceRecord) {
 		t.Error("an evidence record must not be claimed by either format predicate")
 	}
 	for _, filenames := range [][]string{cades, xades, timestamped, evidenceRecord} {
-		if !ASiCUtilsIsAsicFileContent(filenames) {
+		if !UtilsIsAsicFileContent(filenames) {
 			t.Errorf("isAsicFileContent(%v) = false", filenames)
 		}
 	}
-	if ASiCUtilsIsAsicFileContent(plain) {
+	if UtilsIsAsicFileContent(plain) {
 		t.Error("isAsicFileContent(plain) = true")
 	}
 }

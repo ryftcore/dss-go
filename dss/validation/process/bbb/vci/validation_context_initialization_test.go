@@ -27,7 +27,7 @@ import (
 const corpusDir = "diagnostic/jaxb/testdata/oracle" // corpus/-relative (internal/corpustest)
 
 // i18nProviderForTests is the provider both KATs run with, as the oracle does.
-var i18nProviderForTests = i18n.NewI18nProvider()
+var i18nProviderForTests = i18n.NewProvider()
 
 type oracleMessage struct {
 	Key   *string `json:"key"`
@@ -91,9 +91,9 @@ func loadRows(t *testing.T, path string) []*oracleRow {
 }
 
 // loadDiagnosticData reads a dump through jaxb.Unmarshal, not through
-// DiagnosticDataFacade.Unmarshal: only the former links the IDREF graph, and
+// DataFacade.Unmarshal: only the former links the IDREF graph, and
 // without that link the chain items carry no certificate (see notes).
-func loadDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(corpusDir, name)))
 	if err != nil {
@@ -103,7 +103,7 @@ func loadDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 func toRow(file, token string, context enumerations.Context, block string,

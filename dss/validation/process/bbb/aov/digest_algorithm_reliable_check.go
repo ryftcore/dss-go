@@ -24,7 +24,7 @@ type DigestAlgorithmReliableCheck struct {
 }
 
 // NewDigestAlgorithmReliableCheck is the default constructor.
-func NewDigestAlgorithmReliableCheck(i18nProvider *i18n.I18nProvider, digestAlgo enumerations.DigestAlgorithm,
+func NewDigestAlgorithmReliableCheck(i18nProvider *i18n.Provider, digestAlgo enumerations.DigestAlgorithm,
 	result *process.Result[*jaxb.XmlCC], position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *DigestAlgorithmReliableCheck {
 	c := &DigestAlgorithmReliableCheck{

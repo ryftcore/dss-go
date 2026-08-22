@@ -18,14 +18,14 @@ import (
 type AbstractSignedAndTimestampedFilesCoveredCheck[T any] struct {
 	*process.ChainItemBase[T]
 
-	DiagnosticData    *diagnostic.DiagnosticData
+	DiagnosticData    *diagnostic.Data
 	TimestampFilename string
 }
 
 // InitAbstractSignedAndTimestampedFilesCoveredCheck wires the shared state; called by the
 // concrete constructor before InitChainItem.
 func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) InitAbstractSignedAndTimestampedFilesCoveredCheck(
-	i18nProvider *i18n.I18nProvider, result *process.Result[T], diagnosticData *diagnostic.DiagnosticData, timestampFilename string,
+	i18nProvider *i18n.Provider, result *process.Result[T], diagnosticData *diagnostic.Data, timestampFilename string,
 	constraint policy.LevelRule) {
 	c.DiagnosticData = diagnosticData
 	c.TimestampFilename = timestampFilename

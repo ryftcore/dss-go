@@ -8,15 +8,15 @@ import (
 )
 
 // JAdESDiagnosticDataBuilder is the DiagnosticDataBuilder for a JWS signature. Port of the class
-// JAdESDiagnosticDataBuilder, extending
+// DiagnosticDataBuilder, extending
 // validation/reports/diagnostic.SignedDocumentDiagnosticDataBuilder.
-type JAdESDiagnosticDataBuilder struct {
+type DiagnosticDataBuilder struct {
 	dssdiagnostic.SignedDocumentDiagnosticDataBuilder
 }
 
 // NewJAdESDiagnosticDataBuilder is the port of the default constructor.
-func NewJAdESDiagnosticDataBuilder() *JAdESDiagnosticDataBuilder {
-	b := &JAdESDiagnosticDataBuilder{
+func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
+	b := &DiagnosticDataBuilder{
 		SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 	}
 	b.InitSignedDocumentDiagnosticDataBuilder(b)
@@ -25,9 +25,9 @@ func NewJAdESDiagnosticDataBuilder() *JAdESDiagnosticDataBuilder {
 
 // BuildDetachedXmlSignature builds the XmlSignature, adding the JWS serialization type and
 // expiration time. Port of the buildDetachedXmlSignature(AdvancedSignature) override.
-func (b *JAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
+func (b *DiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
 	xmlSignature := b.SignedDocumentDiagnosticDataBuilder.BuildDetachedXmlSignature(signature)
-	jadesSignature := signature.(*JAdESSignature)
+	jadesSignature := signature.(*Signature)
 	serializationType := jaxb.JWSSerializationTypeValue(jadesSignature.Jws().JwsSerializationType())
 	xmlSignature.JWSSerializationType = &serializationType
 	if expirationTime := jadesSignature.ExpirationTime(); !expirationTime.IsZero() {

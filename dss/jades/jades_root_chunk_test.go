@@ -1,5 +1,5 @@
-// Tests for this porter's ROOT-chunk additions: JAdESHeaderParameterNames, JAdESSigningTimeType,
-// JAdESTimestampParameters, JAdESSignatureParameters, and the HTTPHeader family. Ported test
+// Tests for this porter's ROOT-chunk additions: JAdESHeaderParameterNames, SigningTimeType,
+// TimestampParameters, SignatureParameters, and the HTTPHeader family. Ported test
 // *vectors* are not applicable here (these are constant/value-object classes, not parsers), per
 // PORTING.md "port test vectors, not JUnit code" - these are exhaustive table tests over the
 // registry-like constant sets, plus behavioural tests mirroring what upstream's getters/setters
@@ -54,24 +54,24 @@ func TestJAdESHeaderParameterNames_Values(t *testing.T) {
 }
 
 func TestJAdESSigningTimeType_Values(t *testing.T) {
-	cases := map[JAdESSigningTimeType]string{
-		JAdESSigningTimeTypeIAT:  "IAT",
-		JAdESSigningTimeTypeSigT: "SIG_T",
-		JAdESSigningTimeTypeNone: "NONE",
+	cases := map[SigningTimeType]string{
+		SigningTimeTypeIAT:  "IAT",
+		SigningTimeTypeSigT: "SIG_T",
+		SigningTimeTypeNone: "NONE",
 	}
 	for constant, want := range cases {
 		if string(constant) != want {
 			t.Errorf("constant = %q, want %q", constant, want)
 		}
 	}
-	values := JAdESSigningTimeTypeValues()
+	values := SigningTimeTypeValues()
 	if len(values) != 3 {
 		t.Fatalf("JAdESSigningTimeTypeValues() = %v, want 3 entries", values)
 	}
 }
 
 func TestJAdESTimestampParameters_Defaults(t *testing.T) {
-	p := NewJAdESTimestampParameters()
+	p := NewTimestampParameters()
 	if p.CanonicalizationMethod() != "" {
 		t.Errorf("CanonicalizationMethod() = %q, want empty", p.CanonicalizationMethod())
 	}
@@ -82,7 +82,7 @@ func TestJAdESTimestampParameters_Defaults(t *testing.T) {
 		t.Errorf("DigestAlgorithm() = %q, want SHA512", p.DigestAlgorithm())
 	}
 
-	p2 := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	p2 := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	if p2.DigestAlgorithm() != enumerations.DigestAlgorithmSHA256 {
 		t.Errorf("DigestAlgorithm() = %v, want SHA256", p2.DigestAlgorithm())
 	}
@@ -94,23 +94,23 @@ func TestJAdESTimestampParameters_SetCanonicalizationMethodPanics(t *testing.T) 
 			t.Fatal("SetCanonicalizationMethod should panic - not supported in the current version")
 		}
 	}()
-	NewJAdESTimestampParameters().SetCanonicalizationMethod("http://www.w3.org/2001/10/xml-exc-c14n#")
+	NewTimestampParameters().SetCanonicalizationMethod("http://www.w3.org/2001/10/xml-exc-c14n#")
 }
 
 func TestJAdESTimestampParameters_Equals(t *testing.T) {
-	a := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
-	b := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	a := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	b := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	if !a.Equals(b) {
 		t.Error("expected equal JAdESTimestampParameters")
 	}
-	c := NewJAdESTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
+	c := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
 	if a.Equals(c) {
 		t.Error("expected unequal JAdESTimestampParameters for different digest algorithms")
 	}
 }
 
 func TestJAdESSignatureParameters_Defaults(t *testing.T) {
-	p := NewJAdESSignatureParameters()
+	p := NewSignatureParameters()
 	if !p.IsIncludeCertificateChain() {
 		t.Error("IsIncludeCertificateChain() default should be true")
 	}
@@ -129,7 +129,7 @@ func TestJAdESSignatureParameters_Defaults(t *testing.T) {
 	if p.JwsSerializationType() != enumerations.JWSSerializationTypeCompactSerialization {
 		t.Errorf("JwsSerializationType() = %v, want COMPACT_SERIALIZATION", p.JwsSerializationType())
 	}
-	if p.JadesSigningTimeType() != JAdESSigningTimeTypeIAT {
+	if p.JadesSigningTimeType() != SigningTimeTypeIAT {
 		t.Errorf("JadesSigningTimeType() = %v, want IAT", p.JadesSigningTimeType())
 	}
 	if p.IsBase64UrlEncodedEtsiUComponents() != nil {
@@ -141,7 +141,7 @@ func TestJAdESSignatureParameters_Defaults(t *testing.T) {
 }
 
 func TestJAdESSignatureParameters_SetSignatureLevelRestrictsToJAdES(t *testing.T) {
-	p := NewJAdESSignatureParameters()
+	p := NewSignatureParameters()
 	p.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
 	if p.SignatureLevel() != enumerations.SignatureLevelJAdESBaselineB {
 		t.Errorf("SignatureLevel() = %v, want JAdES_BASELINE_B", p.SignatureLevel())
@@ -156,7 +156,7 @@ func TestJAdESSignatureParameters_SetSignatureLevelRestrictsToJAdES(t *testing.T
 }
 
 func TestJAdESSignatureParameters_LazyTimestampParameters(t *testing.T) {
-	p := NewJAdESSignatureParameters()
+	p := NewSignatureParameters()
 	if p.GetContentTimestampParameters() == nil {
 		t.Fatal("GetContentTimestampParameters() should lazily instantiate")
 	}
@@ -169,7 +169,7 @@ func TestJAdESSignatureParameters_LazyTimestampParameters(t *testing.T) {
 }
 
 func TestJAdESSignatureParameters_SetBase64UrlEncodedEtsiUComponents(t *testing.T) {
-	p := NewJAdESSignatureParameters()
+	p := NewSignatureParameters()
 	trueVal := true
 	p.SetBase64UrlEncodedEtsiUComponents(&trueVal)
 	if p.IsBase64UrlEncodedEtsiUComponents() == nil || !*p.IsBase64UrlEncodedEtsiUComponents() {
@@ -178,7 +178,7 @@ func TestJAdESSignatureParameters_SetBase64UrlEncodedEtsiUComponents(t *testing.
 }
 
 func TestJAdESSignatureParameters_ExpirationTime(t *testing.T) {
-	p := NewJAdESSignatureParameters()
+	p := NewSignatureParameters()
 	now := time.Now()
 	p.SetExpirationTime(&now)
 	if p.ExpirationTime() == nil || !p.ExpirationTime().Equal(now) {

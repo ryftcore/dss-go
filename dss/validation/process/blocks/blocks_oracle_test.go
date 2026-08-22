@@ -203,7 +203,7 @@ func loadBlocksRows(t *testing.T, path string) []*blocksRow {
 	return rows
 }
 
-func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
@@ -221,12 +221,12 @@ func loadBlocksDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticD
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
-var blocksI18nProvider = i18n.NewI18nProvider()
+var blocksI18nProvider = i18n.NewProvider()
 
-func blocksI18n() *i18n.I18nProvider { return blocksI18nProvider }
+func blocksI18n() *i18n.Provider { return blocksI18nProvider }
 
 var blocksDefaultPolicyValue modelpolicy.ValidationPolicy
 

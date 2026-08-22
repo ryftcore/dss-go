@@ -25,8 +25,8 @@ type CommitmentTypeIndicationsCheck struct {
 }
 
 // NewCommitmentTypeIndicationsCheck is the default constructor. Port of
-// CommitmentTypeIndicationsCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewCommitmentTypeIndicationsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// CommitmentTypeIndicationsCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewCommitmentTypeIndicationsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *CommitmentTypeIndicationsCheck {
 	c := &CommitmentTypeIndicationsCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

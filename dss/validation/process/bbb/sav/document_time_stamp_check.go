@@ -16,8 +16,8 @@ type DocumentTimeStampCheck struct {
 }
 
 // NewDocumentTimeStampCheck is the default constructor. Port of
-// DocumentTimeStampCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewDocumentTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// DocumentTimeStampCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewDocumentTimeStampCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *DocumentTimeStampCheck {
 	c := &DocumentTimeStampCheck{
 		AbstractTimeStampTypeCheck: NewAbstractTimeStampTypeCheck(i18nProvider, result, signature, constraint),

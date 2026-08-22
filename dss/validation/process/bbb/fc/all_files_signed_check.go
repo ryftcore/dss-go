@@ -22,7 +22,7 @@ type AllFilesSignedCheck struct {
 }
 
 // NewAllFilesSignedCheck is the default constructor.
-func NewAllFilesSignedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewAllFilesSignedCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	signature *diagnostic.SignatureWrapper, containerInfo *diagjaxb.XmlContainerInfo,
 	constraint policy.LevelRule) *AllFilesSignedCheck {
 	c := &AllFilesSignedCheck{signature: signature, containerInfo: containerInfo}

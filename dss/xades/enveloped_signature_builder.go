@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/signature/EnvelopedSignatureBuilder.java (DSS 6.5.RC1).
 //
 // Java's class is package-private and overrides two of the hooks collected in
-// XAdESSignatureBuilderOverrides - assertSignaturePossible() and buildRootDocumentDom() - while
+// SignatureBuilderOverrides - assertSignaturePossible() and buildRootDocumentDom() - while
 // inheriting getParentNodeOfSignature() and incorporateSignatureDom(Node) from
 // XPathPlacementSignatureBuilder. Go has no method overriding across embedding, so this builder
 // registers itself with InitXPathPlacementSignatureBuilder and the two it does not override are
@@ -10,7 +10,7 @@
 //
 // DEVIATION (flagged for the integrator, and consistent with detached_signature_builder.go): the
 // Java class is package-private. The whole XAdES SCC is one Go package, so unexported would
-// preserve that exactly, but the type is named by XAdESSignatureBuilderGetSignatureBuilder's
+// preserve that exactly, but the type is named by SignatureBuilderGetSignatureBuilder's
 // factory in a sibling file and reads better under the "exported identifiers keep the Java name"
 // rule of PORTING.md, so it is exported here. Nothing outside dss-xades constructs it upstream.
 package xades
@@ -30,7 +30,7 @@ type EnvelopedSignatureBuilder struct {
 // NewEnvelopedSignatureBuilder is the constructor for a single-document signing. The enveloped
 // signature uses by default the exclusive method of canonicalization.
 // Port of EnvelopedSignatureBuilder(XAdESSignatureParameters, DSSDocument, CertificateVerifier).
-func NewEnvelopedSignatureBuilder(params *XAdESSignatureParameters, document model.DSSDocument,
+func NewEnvelopedSignatureBuilder(params *SignatureParameters, document model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *EnvelopedSignatureBuilder {
 	return NewEnvelopedSignatureBuilderForDocuments(params, []model.DSSDocument{document}, certificateVerifier)
 }
@@ -38,7 +38,7 @@ func NewEnvelopedSignatureBuilder(params *XAdESSignatureParameters, document mod
 // NewEnvelopedSignatureBuilderForDocuments is the constructor for multiple documents signing. The
 // enveloped signature uses by default the exclusive method of canonicalization.
 // Port of EnvelopedSignatureBuilder(XAdESSignatureParameters, List<DSSDocument>, CertificateVerifier).
-func NewEnvelopedSignatureBuilderForDocuments(params *XAdESSignatureParameters,
+func NewEnvelopedSignatureBuilderForDocuments(params *SignatureParameters,
 	documents []model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *EnvelopedSignatureBuilder {
 	builder := &EnvelopedSignatureBuilder{}
@@ -49,7 +49,7 @@ func NewEnvelopedSignatureBuilderForDocuments(params *XAdESSignatureParameters,
 // AssertSignaturePossible verifies that exactly one XML document was provided and that adding a
 // parallel signature to it is possible. Port of the overridden protected #assertSignaturePossible.
 func (b *EnvelopedSignatureBuilder) AssertSignaturePossible() error {
-	if err := b.XAdESSignatureBuilder.AssertSignaturePossible(); err != nil {
+	if err := b.AbstractSignatureBuilder.AssertSignaturePossible(); err != nil {
 		return err
 	}
 	return b.AssertOriginalXmlDocumentValid()

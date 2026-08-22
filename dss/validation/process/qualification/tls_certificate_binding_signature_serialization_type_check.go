@@ -21,8 +21,8 @@ type TLSCertificateBindingSignatureSerializationTypeCheck struct {
 
 // NewTLSCertificateBindingSignatureSerializationTypeCheck is the default
 // constructor. Port of
-// TLSCertificateBindingSignatureSerializationTypeCheck(I18nProvider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
-func NewTLSCertificateBindingSignatureSerializationTypeCheck(i18nProvider *i18n.I18nProvider,
+// TLSCertificateBindingSignatureSerializationTypeCheck(Provider, XmlValidationQWACProcess, SignatureWrapper, LevelRule).
+func NewTLSCertificateBindingSignatureSerializationTypeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationQWACProcess], signature *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *TLSCertificateBindingSignatureSerializationTypeCheck {
 	c := &TLSCertificateBindingSignatureSerializationTypeCheck{

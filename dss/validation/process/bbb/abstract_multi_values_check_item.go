@@ -19,8 +19,8 @@ type AbstractMultiValuesCheckItem[T any] struct {
 }
 
 // NewAbstractMultiValuesCheckItem is the default constructor. Port of
-// AbstractMultiValuesCheckItem(I18nProvider, T, MultiValuesRule).
-func NewAbstractMultiValuesCheckItem[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AbstractMultiValuesCheckItem(Provider, T, MultiValuesRule).
+func NewAbstractMultiValuesCheckItem[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	constraint policy.MultiValuesRule) *AbstractMultiValuesCheckItem[T] {
 	return &AbstractMultiValuesCheckItem[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
@@ -28,29 +28,29 @@ func NewAbstractMultiValuesCheckItem[T any](i18nProvider *i18n.I18nProvider, res
 	}
 }
 
-// ProcessValueCheck checks the value, returning TRUE if the value is allowed by
+// ValueCheck checks the value, returning TRUE if the value is allowed by
 // the constraint. Port of processValueCheck(String).
 func (c *AbstractMultiValuesCheckItem[T]) ProcessValueCheck(value string) bool {
-	return process.ProcessValueCheck(value, c.constraint.Values())
+	return process.ValueCheck(value, c.constraint.Values())
 }
 
-// ProcessValuesCheck checks the values, returning TRUE if the values are allowed
+// ValuesCheck checks the values, returning TRUE if the values are allowed
 // by the constraint. Port of processValuesCheck(List).
 func (c *AbstractMultiValuesCheckItem[T]) ProcessValuesCheck(values []string) bool {
-	return process.ProcessValuesCheck(values, c.constraint.Values())
+	return process.ValuesCheck(values, c.constraint.Values())
 }
 
-// ProcessAllValuesCheck checks the values, returning TRUE if all the values are
+// AllValuesCheck checks the values, returning TRUE if all the values are
 // allowed by the constraint. Port of processAllValuesCheck(List).
 func (c *AbstractMultiValuesCheckItem[T]) ProcessAllValuesCheck(values []string) bool {
-	return process.ProcessAllValuesCheck(values, c.constraint.Values())
+	return process.AllValuesCheck(values, c.constraint.Values())
 }
 
-// ProcessValuesForEachExpectedCheck checks whether values contain all the
+// ValuesForEachExpectedCheck checks whether values contain all the
 // expected values specified in the policy constraint. Port of
 // processValuesForEachExpectedCheck(List).
 func (c *AbstractMultiValuesCheckItem[T]) ProcessValuesForEachExpectedCheck(values []string) bool {
-	return process.ProcessValuesForEachExpectedCheck(values, c.constraint.Values())
+	return process.ValuesForEachExpectedCheck(values, c.constraint.Values())
 }
 
 // Values gets a list of expected values as specified within the policy

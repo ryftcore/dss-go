@@ -15,7 +15,7 @@ import (
 // dss-messages.properties, so the faithful equivalent is "resolving
 // falls back to the bundle value, not to Id()".
 func TestAllMessageTagsResolve(t *testing.T) {
-	provider := NewI18nProvider()
+	provider := NewProvider()
 	for _, tag := range MessageTagValues() {
 		if msg, want := provider.GetMessage(tag), defaultBundle[tag.Id()]; msg != messageFormat(want, nil) {
 			t.Errorf("MessageTag %s resolved to %q, want %q", tag.Id(), msg, messageFormat(want, nil))

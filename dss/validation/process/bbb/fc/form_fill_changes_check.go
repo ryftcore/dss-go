@@ -19,7 +19,7 @@ type FormFillChangesCheck struct {
 }
 
 // NewFormFillChangesCheck is the default constructor.
-func NewFormFillChangesCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewFormFillChangesCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *FormFillChangesCheck {
 	c := &FormFillChangesCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

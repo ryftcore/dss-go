@@ -42,8 +42,8 @@ type AbstractAcceptanceValidation[TK diagnostic.TokenProxy] struct {
 }
 
 // NewAbstractAcceptanceValidation is the default constructor. Port of
-// AbstractAcceptanceValidation(I18nProvider, T, Date, Context, XmlAOV, ValidationPolicy).
-func NewAbstractAcceptanceValidation[TK diagnostic.TokenProxy](i18nProvider *i18n.I18nProvider, token TK,
+// AbstractAcceptanceValidation(Provider, T, Date, Context, XmlAOV, ValidationPolicy).
+func NewAbstractAcceptanceValidation[TK diagnostic.TokenProxy](i18nProvider *i18n.Provider, token TK,
 	currentTime time.Time, context enumerations.Context, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *AbstractAcceptanceValidation[TK] {
 	xmlSAV := &jaxb.XmlSAV{}

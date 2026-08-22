@@ -16,6 +16,6 @@ type DocumentAlert[D modeljob.DocumentInfo[P], P modeljob.DocumentInfo[P]] struc
 // NewDocumentAlert creates a DocumentAlert from the given detector and handler. Port of the
 // default constructor.
 func NewDocumentAlert[D modeljob.DocumentInfo[P], P modeljob.DocumentInfo[P]](
-	detection alert.AlertDetector[D], handler alert.AlertHandler[D]) *DocumentAlert[D, P] {
+	detection alert.Detector[D], handler alert.Handler[D]) *DocumentAlert[D, P] {
 	return &DocumentAlert[D, P]{AbstractAlert: alert.NewAbstractAlert(detection, handler)}
 }

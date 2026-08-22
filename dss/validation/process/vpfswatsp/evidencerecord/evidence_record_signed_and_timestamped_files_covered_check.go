@@ -4,7 +4,7 @@
 //
 // Package placement deviation: Java's vpfswatsp.evidencerecord
 // is a package of its own, distinct from vpfswatsp. Everything else in the
-// vpfswatsp tree folds into one Go package, but EvidenceRecordTimestampsValidationBlock
+// vpfswatsp tree folds into one Go package, but TimestampsValidationBlock
 // extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
 // (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
 // therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
@@ -21,24 +21,24 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process/bbb/fc"
 )
 
-// EvidenceRecordSignedAndTimestampedFilesCoveredCheck verifies whether all
+// SignedAndTimestampedFilesCoveredCheck verifies whether all
 // signed and/or time-asserted file objects are subsequently covered by the
 // evidence record.
-type EvidenceRecordSignedAndTimestampedFilesCoveredCheck struct {
+type SignedAndTimestampedFilesCoveredCheck struct {
 	*fc.AbstractSignedAndTimestampedFilesCoveredCheck[*jaxb.XmlValidationProcessEvidenceRecord]
 
 	// evidenceRecordWrapper is the evidence record to be validated.
 	evidenceRecordWrapper *diagnostic.EvidenceRecordWrapper
 }
 
-// NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck is the default
+// NewSignedAndTimestampedFilesCoveredCheck is the default
 // constructor. Port of
-// EvidenceRecordSignedAndTimestampedFilesCoveredCheck(I18nProvider, XmlValidationProcessEvidenceRecord, DiagnosticData, EvidenceRecordWrapper, LevelRule).
-func NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.I18nProvider,
-	result *process.Result[*jaxb.XmlValidationProcessEvidenceRecord], diagnosticData *diagnostic.DiagnosticData,
+// SignedAndTimestampedFilesCoveredCheck(Provider, XmlValidationProcessEvidenceRecord, Data, EvidenceRecordWrapper, LevelRule).
+func NewSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.Provider,
+	result *process.Result[*jaxb.XmlValidationProcessEvidenceRecord], diagnosticData *diagnostic.Data,
 	evidenceRecordWrapper *diagnostic.EvidenceRecordWrapper,
-	constraint policy.LevelRule) *EvidenceRecordSignedAndTimestampedFilesCoveredCheck {
-	c := &EvidenceRecordSignedAndTimestampedFilesCoveredCheck{
+	constraint policy.LevelRule) *SignedAndTimestampedFilesCoveredCheck {
+	c := &SignedAndTimestampedFilesCoveredCheck{
 		AbstractSignedAndTimestampedFilesCoveredCheck: &fc.AbstractSignedAndTimestampedFilesCoveredCheck[*jaxb.XmlValidationProcessEvidenceRecord]{},
 		evidenceRecordWrapper:                         evidenceRecordWrapper,
 	}
@@ -50,7 +50,7 @@ func NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.I
 
 // Process performs the check. Port of the overridden process(), whose
 // super.process() call is the embedded base's.
-func (c *EvidenceRecordSignedAndTimestampedFilesCoveredCheck) Process() bool {
+func (c *SignedAndTimestampedFilesCoveredCheck) Process() bool {
 	if !c.AbstractSignedAndTimestampedFilesCoveredCheck.Process() {
 		return false
 	}
@@ -63,7 +63,7 @@ func (c *EvidenceRecordSignedAndTimestampedFilesCoveredCheck) Process() bool {
 // generated DocumentName and Filename members are pointers/strings, whose nil
 // and "" are Java's null (SignatureWrapper#getFilename() returns the plain
 // string the wrapper holds, empty when absent).
-func (c *EvidenceRecordSignedAndTimestampedFilesCoveredCheck) coveredDocumentEntries() []string {
+func (c *SignedAndTimestampedFilesCoveredCheck) coveredDocumentEntries() []string {
 	result := make([]string, 0)
 	for _, digestMatcher := range c.evidenceRecordWrapper.DigestMatchers() {
 		if digestMatcher.DocumentName != nil {

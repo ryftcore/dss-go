@@ -36,8 +36,8 @@ type ASiCEWithCAdESArchiveManifestBuilder struct {
 var _ asic.AbstractASiCManifestBuilderOverrides = (*ASiCEWithCAdESArchiveManifestBuilder)(nil)
 
 // NewASiCEWithCAdESArchiveManifestBuilder is the default constructor. Ports
-// ASiCEWithCAdESArchiveManifestBuilder(ASiCContent, DSSDocument, DigestAlgorithm, String).
-func NewASiCEWithCAdESArchiveManifestBuilder(asicContent *asic.ASiCContent, lastArchiveManifest model.DSSDocument,
+// ASiCEWithCAdESArchiveManifestBuilder(Content, DSSDocument, DigestAlgorithm, String).
+func NewASiCEWithCAdESArchiveManifestBuilder(asicContent *asic.Content, lastArchiveManifest model.DSSDocument,
 	digestAlgorithm enumerations.DigestAlgorithm, timestampFilename string) *ASiCEWithCAdESArchiveManifestBuilder {
 	builder := &ASiCEWithCAdESArchiveManifestBuilder{lastArchiveManifest: lastArchiveManifest}
 	builder.InitAbstractASiCManifestBuilderWithDigestAlgorithm(builder, asicContent, timestampFilename, digestAlgorithm)
@@ -58,14 +58,14 @@ func (b *ASiCEWithCAdESArchiveManifestBuilder) SigReferenceMimeType() enumeratio
 
 // InitDefaultAsicContentDocumentFilter ports the @Override protected
 // initDefaultAsicContentDocumentFilter().
-func (b *ASiCEWithCAdESArchiveManifestBuilder) InitDefaultAsicContentDocumentFilter() *asic.ASiCContentDocumentFilter {
+func (b *ASiCEWithCAdESArchiveManifestBuilder) InitDefaultAsicContentDocumentFilter() *asic.ContentDocumentFilter {
 	return asic.ArchiveDocumentsFilter()
 }
 
 // SetAsicContentDocumentFilter ports the @Override covariant-return
-// setAsicContentDocumentFilter(ASiCContentDocumentFilter).
+// setAsicContentDocumentFilter(ContentDocumentFilter).
 func (b *ASiCEWithCAdESArchiveManifestBuilder) SetAsicContentDocumentFilter(
-	asicContentDocumentFilter *asic.ASiCContentDocumentFilter) *ASiCEWithCAdESArchiveManifestBuilder {
+	asicContentDocumentFilter *asic.ContentDocumentFilter) *ASiCEWithCAdESArchiveManifestBuilder {
 	b.AbstractASiCManifestBuilder.SetAsicContentDocumentFilter(asicContentDocumentFilter)
 	return b
 }

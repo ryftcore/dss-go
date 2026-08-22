@@ -1,6 +1,6 @@
 // Cross-validation harness, direction UPSTREAM -> GO: parses the
 // JAdES signatures checked into testdata/upstream/ with this package's own
-// JWSDocumentAnalyzerFactory/JAdESSignature and compares the result against
+// JWSDocumentAnalyzerFactory/Signature and compares the result against
 // testdata/upstream-cross-validation.json, ground truth dumped straight from upstream DSS
 // 6.5.RC1's own JWSDocumentAnalyzerFactory/JAdESSignature (see testdata/gen/CrossValidationOracle.java
 // for how to regenerate it, and its header for exactly what it asserts and why). This is the
@@ -13,7 +13,7 @@
 //
 // A distinct second half - testdata/gen/CrossValidationOracle.java's EXCEPTION_FILES /
 // exceptionFiles - covers fixtures upstream's own JWSCompactDocumentAnalyzer rejects outright
-// (an unchecked exception raised while parsing, before a JAdESSignature ever exists): a Go port
+// (an unchecked exception raised while parsing, before a Signature ever exists): a Go port
 // that quietly accepted what upstream refuses to even parse would be the dangerous failure mode,
 // exactly the same rationale PAdES's modification-detection verdicts and XAdES/CAdES's signature-
 // intact verdicts are asserted strictly for.
@@ -74,7 +74,7 @@ type jvalSignature struct {
 //     the signature properties into the token identifier. Losing that position (a lookup that
 //     misses because the attribute objects are rebuilt on every access) changes every content
 //     time-stamp's id without changing anything else.
-//   - TimestampedReferences: JAdESTimestampSource's getSignatureTimestampReferences() override
+//   - TimestampedReferences: TimestampSource's getSignatureTimestampReferences() override
 //     folds getKeyInfoReferences() into a signature time-stamp's covered set. Missing that
 //     override drops exactly one certificate reference per signature time-stamp.
 type jvalTimestamp struct {
@@ -159,7 +159,7 @@ func TestUpstreamCrossValidation(t *testing.T) {
 				// Top-level signatures are already initialized by
 				// AbstractJWSDocumentAnalyzer's own BuildSignatures(); only recursed-into
 				// counter signatures need it below.
-				checkJvalSignature(t, sig.(*JAdESSignature), gf.Signatures[i], i, false)
+				checkJvalSignature(t, sig.(*Signature), gf.Signatures[i], i, false)
 			}
 		})
 	}
@@ -218,7 +218,7 @@ func recoverCreateAndParse(document model.DSSDocument) (message string) {
 	return ""
 }
 
-func checkJvalSignature(t *testing.T, sig *JAdESSignature, want jvalSignature, index int, isCounterSig bool) {
+func checkJvalSignature(t *testing.T, sig *Signature, want jvalSignature, index int, isCounterSig bool) {
 	t.Helper()
 
 	// A nested counter signature is not initialized by AbstractJWSDocumentAnalyzer's own
@@ -342,7 +342,7 @@ func checkJvalSignature(t *testing.T, sig *JAdESSignature, want jvalSignature, i
 		t.Fatalf("signature[%d]: golden carries %d counter-signature entries for a count of %d", index, len(want.CounterSignatures), want.CounterSignatureCount)
 	}
 	for i, cs := range counterSignatures {
-		checkJvalSignature(t, cs.(*JAdESSignature), want.CounterSignatures[i], i, true)
+		checkJvalSignature(t, cs.(*Signature), want.CounterSignatures[i], i, true)
 	}
 }
 

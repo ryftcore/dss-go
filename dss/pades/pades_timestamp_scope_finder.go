@@ -10,28 +10,28 @@ import (
 )
 
 // PAdESTimestampScopeFinder finds a scope for a PDF document timestamp. Port of the class
-// PAdESTimestampScopeFinder, extending PdfRevisionScopeFinder and implementing
+// TimestampScopeFinder, extending PdfRevisionScopeFinder and implementing
 // spiscope.TimestampScopeFinder.
-type PAdESTimestampScopeFinder struct {
+type TimestampScopeFinder struct {
 	PdfRevisionScopeFinder
 
 	// signature is the AdvancedSignature embedding the timestamp.
 	signature validation.AdvancedSignature
 }
 
-// NewPAdESTimestampScopeFinder is the default constructor.
-func NewPAdESTimestampScopeFinder() *PAdESTimestampScopeFinder {
-	return &PAdESTimestampScopeFinder{PdfRevisionScopeFinder: newPdfRevisionScopeFinder()}
+// NewTimestampScopeFinder is the default constructor.
+func NewTimestampScopeFinder() *TimestampScopeFinder {
+	return &TimestampScopeFinder{PdfRevisionScopeFinder: newPdfRevisionScopeFinder()}
 }
 
 // SetSignature sets an encapsulating AdvancedSignature. Port of setSignature(AdvancedSignature).
-func (f *PAdESTimestampScopeFinder) SetSignature(signature validation.AdvancedSignature) {
+func (f *TimestampScopeFinder) SetSignature(signature validation.AdvancedSignature) {
 	f.signature = signature
 }
 
 // FindTimestampScope returns a list of SignatureScopes for the given TimestampToken. Port of
 // findTimestampScope(TimestampToken).
-func (f *PAdESTimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope {
+func (f *TimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope {
 	if timestampToken.IsMessageImprintDataIntact() {
 		// for a document time-stamp
 		if pdfTimestampToken, ok := PdfTimestampTokenOf(timestampToken); ok {
@@ -44,4 +44,4 @@ func (f *PAdESTimestampScopeFinder) FindTimestampScope(timestampToken *validatio
 }
 
 // compile-time interface assertion.
-var _ spiscope.TimestampScopeFinder = (*PAdESTimestampScopeFinder)(nil)
+var _ spiscope.TimestampScopeFinder = (*TimestampScopeFinder)(nil)

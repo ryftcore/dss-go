@@ -11,9 +11,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// defaultAIASourceAllProtocols lists every dsshttp.Protocol value, standing in for
+// defaultSourceAllProtocols lists every dsshttp.Protocol value, standing in for
 // Protocol.values(); used as the default acceptedProtocols.
-var defaultAIASourceAllProtocols = []dsshttp.Protocol{
+var defaultSourceAllProtocols = []dsshttp.Protocol{
 	dsshttp.ProtocolFile,
 	dsshttp.ProtocolHTTP,
 	dsshttp.ProtocolHTTPS,
@@ -21,8 +21,8 @@ var defaultAIASourceAllProtocols = []dsshttp.Protocol{
 	dsshttp.ProtocolFTP,
 }
 
-// DefaultAIASource is used to download issuer certificates by AIA from remote sources.
-type DefaultAIASource struct {
+// DefaultSource is used to download issuer certificates by AIA from remote sources.
+type DefaultSource struct {
 	// dataLoader is used to download data.
 	dataLoader dsshttp.DataLoader
 
@@ -31,23 +31,23 @@ type DefaultAIASource struct {
 	acceptedProtocols []dsshttp.Protocol
 }
 
-// NewDefaultAIASource instantiates a dsshttp.NativeHTTPDataLoader as the default data loader.
-func NewDefaultAIASource() *DefaultAIASource {
-	return NewDefaultAIASourceWithDataLoader(dsshttp.NewNativeHTTPDataLoader())
+// NewDefaultSource instantiates a dsshttp.NativeHTTPDataLoader as the default data loader.
+func NewDefaultSource() *DefaultSource {
+	return NewDefaultSourceWithDataLoader(dsshttp.NewNativeHTTPDataLoader())
 }
 
-// NewDefaultAIASourceWithDataLoader is the default constructor with a defined DataLoader.
+// NewDefaultSourceWithDataLoader is the default constructor with a defined DataLoader.
 // Panics if dataLoader is nil (Java Objects.requireNonNull).
-func NewDefaultAIASourceWithDataLoader(dataLoader dsshttp.DataLoader) *DefaultAIASource {
+func NewDefaultSourceWithDataLoader(dataLoader dsshttp.DataLoader) *DefaultSource {
 	if dataLoader == nil {
 		panic("dataLoader cannot be null!")
 	}
-	return &DefaultAIASource{dataLoader: dataLoader, acceptedProtocols: defaultAIASourceAllProtocols}
+	return &DefaultSource{dataLoader: dataLoader, acceptedProtocols: defaultSourceAllProtocols}
 }
 
 // SetDataLoader sets the data loader to be used to download a certificate token by AIA. Panics
 // if dataLoader is nil.
-func (s *DefaultAIASource) SetDataLoader(dataLoader dsshttp.DataLoader) {
+func (s *DefaultSource) SetDataLoader(dataLoader dsshttp.DataLoader) {
 	if dataLoader == nil {
 		panic("dataLoader cannot be null!")
 	}
@@ -57,7 +57,7 @@ func (s *DefaultAIASource) SetDataLoader(dataLoader dsshttp.DataLoader) {
 // SetAcceptedProtocols defines a set of protocols to be accepted and used by the AIA Source.
 // All protocols which are not defined in the collection will be skipped.
 // Default: all protocols are accepted (FILE, HTTP, HTTPS, LDAP, FTP).
-func (s *DefaultAIASource) SetAcceptedProtocols(acceptedProtocols []dsshttp.Protocol) {
+func (s *DefaultSource) SetAcceptedProtocols(acceptedProtocols []dsshttp.Protocol) {
 	s.acceptedProtocols = acceptedProtocols
 }
 
@@ -66,7 +66,7 @@ func (s *DefaultAIASource) SetAcceptedProtocols(acceptedProtocols []dsshttp.Prot
 //
 // Panics if certificateToken is nil, or if no DataLoader is configured (Java
 // Objects.requireNonNull).
-func (s *DefaultAIASource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
+func (s *DefaultSource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
 	if certificateToken == nil {
 		panic("CertificateToken cannot be null!")
 	}
@@ -77,12 +77,12 @@ func (s *DefaultAIASource) CertificatesByAIA(certificateToken *model.Certificate
 	caIssuersUrls := s.getCAIssuersUrls(certificateToken)
 
 	for _, caIssuersURL := range caIssuersUrls {
-		loadedCertificates, ok := defaultAIASourceTryLoad(s, caIssuersURL)
+		loadedCertificates, ok := defaultSourceTryLoad(s, caIssuersURL)
 		if ok {
 			for _, certificate := range loadedCertificates {
 				certificate.SetSourceURL(caIssuersURL)
 			}
-			return defaultAIASourceDedup(loadedCertificates)
+			return defaultSourceDedup(loadedCertificates)
 		}
 		// "Unable to retrieve AIA certificates with URL..." LOG.warn dropped, not
 		// load-bearing per PORTING.md.
@@ -91,11 +91,11 @@ func (s *DefaultAIASource) CertificatesByAIA(certificateToken *model.Certificate
 	return nil
 }
 
-// defaultAIASourceTryLoad executes the caIssuers request and loads the resulting P7C
+// defaultSourceTryLoad executes the caIssuers request and loads the resulting P7C
 // certificates, recovering from any panic raised along the way (e.g. by
 // executeCAIssuersRequest or a malformed P7C body) and reporting failure via ok=false. Ports
 // the per-URL try/catch(Exception) inside getCertificatesByAIA.
-func defaultAIASourceTryLoad(s *DefaultAIASource, caIssuersURL string) (loaded []*model.CertificateToken, ok bool) {
+func defaultSourceTryLoad(s *DefaultSource, caIssuersURL string) (loaded []*model.CertificateToken, ok bool) {
 	defer func() {
 		if recover() != nil {
 			loaded, ok = nil, false
@@ -110,7 +110,7 @@ func defaultAIASourceTryLoad(s *DefaultAIASource, caIssuersURL string) (loaded [
 }
 
 // getCAIssuersUrls returns a list of caIssuers URLs for the given certificateToken.
-func (s *DefaultAIASource) getCAIssuersUrls(certificateToken *model.CertificateToken) []string {
+func (s *DefaultSource) getCAIssuersUrls(certificateToken *model.CertificateToken) []string {
 	urls := spi.CertificateExtensionsUtilsCAIssuersAccessUrls(certificateToken)
 	if utils.IsCollectionEmpty(urls) {
 		// "There is no AIA extension for certificate download." LOG.info dropped, not
@@ -121,7 +121,7 @@ func (s *DefaultAIASource) getCAIssuersUrls(certificateToken *model.CertificateT
 }
 
 // filterURLs keeps only the URLs whose protocol is accepted.
-func (s *DefaultAIASource) filterURLs(urls []string) []string {
+func (s *DefaultSource) filterURLs(urls []string) []string {
 	var filtered []string
 	for _, url := range urls {
 		if s.isURLAccepted(url) {
@@ -134,7 +134,7 @@ func (s *DefaultAIASource) filterURLs(urls []string) []string {
 // executeCAIssuersRequest executes a GET request to retrieve caIssuers from caIssuersURL.
 // Panics with a *exception.DSSExternalResourceException when the DataLoader returns an empty
 // response.
-func (s *DefaultAIASource) executeCAIssuersRequest(caIssuersURL string) []byte {
+func (s *DefaultSource) executeCAIssuersRequest(caIssuersURL string) []byte {
 	bytes := s.dataLoader.Get(caIssuersURL)
 	if utils.IsArrayNotEmpty(bytes) {
 		return bytes
@@ -144,7 +144,7 @@ func (s *DefaultAIASource) executeCAIssuersRequest(caIssuersURL string) []byte {
 }
 
 // isURLAccepted reports whether url's protocol is one of acceptedProtocols.
-func (s *DefaultAIASource) isURLAccepted(url string) bool {
+func (s *DefaultSource) isURLAccepted(url string) bool {
 	if utils.IsCollectionNotEmpty(s.acceptedProtocols) {
 		for _, protocol := range s.acceptedProtocols {
 			if protocol.IsTheSame(url) {
@@ -155,9 +155,9 @@ func (s *DefaultAIASource) isURLAccepted(url string) bool {
 	return false
 }
 
-// defaultAIASourceDedup de-duplicates certificateTokens by DSSIDAsString() while preserving
+// defaultSourceDedup de-duplicates certificateTokens by DSSIDAsString() while preserving
 // order, standing in for `new LinkedHashSet<>(...)`.
-func defaultAIASourceDedup(certificateTokens []*model.CertificateToken) []*model.CertificateToken {
+func defaultSourceDedup(certificateTokens []*model.CertificateToken) []*model.CertificateToken {
 	seen := make(map[string]struct{}, len(certificateTokens))
 	result := make([]*model.CertificateToken, 0, len(certificateTokens))
 	for _, certificateToken := range certificateTokens {
@@ -171,4 +171,4 @@ func defaultAIASourceDedup(certificateTokens []*model.CertificateToken) []*model
 	return result
 }
 
-var _ AIASource = (*DefaultAIASource)(nil)
+var _ Source = (*DefaultSource)(nil)

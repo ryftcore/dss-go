@@ -16,27 +16,27 @@ import (
 // into InitFromDocument/InitFromContent because the document one calls back into
 // getASiCContainerExtractor.
 type ASiCWithCAdESSignatureExtensionHelper struct {
-	*asic.ASiCSignatureExtensionHelper
+	*asic.SignatureExtensionHelper
 }
 
-var _ asic.ASiCSignatureExtensionHelperOverrides = (*ASiCWithCAdESSignatureExtensionHelper)(nil)
+var _ asic.SignatureExtensionHelperOverrides = (*ASiCWithCAdESSignatureExtensionHelper)(nil)
 
 // NewASiCWithCAdESSignatureExtensionHelper is the default constructor. Ports the protected
 // ASiCWithCAdESSignatureExtensionHelper(DSSDocument).
 func NewASiCWithCAdESSignatureExtensionHelper(asicContainer model.DSSDocument) *ASiCWithCAdESSignatureExtensionHelper {
 	helper := &ASiCWithCAdESSignatureExtensionHelper{
-		ASiCSignatureExtensionHelper: asic.NewASiCSignatureExtensionHelperBase(),
+		SignatureExtensionHelper: asic.NewSignatureExtensionHelperBase(),
 	}
 	helper.InitASiCSignatureExtensionHelper(helper)
 	helper.InitFromDocument(asicContainer)
 	return helper
 }
 
-// NewASiCWithCAdESSignatureExtensionHelperFromContent creates a helper from an ASiCContent.
+// NewASiCWithCAdESSignatureExtensionHelperFromContent creates a helper from an Content.
 // Ports the protected ASiCWithCAdESSignatureExtensionHelper(ASiCContent).
-func NewASiCWithCAdESSignatureExtensionHelperFromContent(asicContent *asic.ASiCContent) *ASiCWithCAdESSignatureExtensionHelper {
+func NewASiCWithCAdESSignatureExtensionHelperFromContent(asicContent *asic.Content) *ASiCWithCAdESSignatureExtensionHelper {
 	helper := &ASiCWithCAdESSignatureExtensionHelper{
-		ASiCSignatureExtensionHelper: asic.NewASiCSignatureExtensionHelperBase(),
+		SignatureExtensionHelper: asic.NewSignatureExtensionHelperBase(),
 	}
 	helper.InitASiCSignatureExtensionHelper(helper)
 	helper.InitFromContent(asicContent)
@@ -45,7 +45,7 @@ func NewASiCWithCAdESSignatureExtensionHelperFromContent(asicContent *asic.ASiCC
 
 // GetASiCContainerExtractor ports the @Override protected
 // getASiCContainerExtractor(DSSDocument).
-func (h *ASiCWithCAdESSignatureExtensionHelper) GetASiCContainerExtractor(asicContainer model.DSSDocument) asic.ASiCContainerExtractor {
+func (h *ASiCWithCAdESSignatureExtensionHelper) GetASiCContainerExtractor(asicContainer model.DSSDocument) asic.ContainerExtractor {
 	return NewASiCWithCAdESContainerExtractor(asicContainer)
 }
 
@@ -74,10 +74,10 @@ func (h *ASiCWithCAdESSignatureExtensionHelper) GetDetachedDocuments(signatureFi
 
 // GetManifestFile ports the @Override getManifestFile(String).
 func (h *ASiCWithCAdESSignatureExtensionHelper) GetManifestFile(signatureFilename string) *model.ManifestFile {
-	signatureManifest := asic.ASiCManifestParserGetLinkedManifest(
+	signatureManifest := asic.ManifestParserGetLinkedManifest(
 		h.GetAsicContent().AllManifestDocuments(), signatureFilename)
 	if signatureManifest != nil {
-		return asic.ASiCManifestParserGetManifestFile(signatureManifest)
+		return asic.ManifestParserGetManifestFile(signatureManifest)
 	}
 	return nil
 }

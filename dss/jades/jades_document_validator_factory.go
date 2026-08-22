@@ -7,17 +7,17 @@ import (
 	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
-// JAdESDocumentValidatorFactory loads the relevant Validator to process a given JAdES signature.
+// DocumentValidatorFactory loads the relevant Validator to process a given JAdES signature.
 // Port of the class JAdESDocumentValidatorFactory, implementing validation.DocumentValidatorFactory.
-type JAdESDocumentValidatorFactory struct{}
+type DocumentValidatorFactory struct{}
 
 // NewJAdESDocumentValidatorFactory is the port of the default constructor.
-func NewJAdESDocumentValidatorFactory() *JAdESDocumentValidatorFactory {
-	return &JAdESDocumentValidatorFactory{}
+func NewDocumentValidatorFactory() *DocumentValidatorFactory {
+	return &DocumentValidatorFactory{}
 }
 
 // IsSupported is the port of isSupported(DSSDocument).
-func (f *JAdESDocumentValidatorFactory) IsSupported(document model.DSSDocument) bool {
+func (f *DocumentValidatorFactory) IsSupported(document model.DSSDocument) bool {
 	compactValidator := NewJWSCompactDocumentValidator()
 	if compactValidator.IsSupported(document) {
 		return true
@@ -31,7 +31,7 @@ func (f *JAdESDocumentValidatorFactory) IsSupported(document model.DSSDocument) 
 //
 // Panics with the Java message when document is not supported (Java throws
 // IllegalArgumentException, unchecked).
-func (f *JAdESDocumentValidatorFactory) Create(document model.DSSDocument) dssvalidation.SignedDocumentValidator {
+func (f *DocumentValidatorFactory) Create(document model.DSSDocument) dssvalidation.SignedDocumentValidator {
 	compactValidator := NewJWSCompactDocumentValidator()
 	if compactValidator.IsSupported(document) {
 		return NewJWSCompactDocumentValidatorFromDocument(document)
@@ -46,8 +46,8 @@ func (f *JAdESDocumentValidatorFactory) Create(document model.DSSDocument) dssva
 }
 
 // compile-time interface assertion.
-var _ dssvalidation.DocumentValidatorFactory = (*JAdESDocumentValidatorFactory)(nil)
+var _ dssvalidation.DocumentValidatorFactory = (*DocumentValidatorFactory)(nil)
 
 func init() {
-	dssvalidation.RegisterDocumentValidatorFactory(NewJAdESDocumentValidatorFactory())
+	dssvalidation.RegisterDocumentValidatorFactory(NewDocumentValidatorFactory())
 }

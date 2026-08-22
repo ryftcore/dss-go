@@ -20,8 +20,8 @@ type ContentTimestampsCheck[T any] struct {
 }
 
 // NewContentTimestampsCheck is the default constructor. Port of
-// ContentTimestampsCheck(I18nProvider, T, List, LevelRule).
-func NewContentTimestampsCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ContentTimestampsCheck(Provider, T, List, LevelRule).
+func NewContentTimestampsCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	contentTimestamps []*diagnostic.TimestampWrapper, constraint policy.LevelRule) *ContentTimestampsCheck[T] {
 	c := &ContentTimestampsCheck[T]{
 		ChainItemBase:     process.NewChainItemBase(i18nProvider, result, constraint),

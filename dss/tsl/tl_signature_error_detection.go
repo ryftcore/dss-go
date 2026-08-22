@@ -9,7 +9,7 @@ import (
 // TLSignatureErrorDetection detects if an error in a TL validation occurred.
 type TLSignatureErrorDetection struct{}
 
-var _ alert.AlertDetector[*tslmodel.TLInfo] = (*TLSignatureErrorDetection)(nil)
+var _ alert.Detector[*tslmodel.TLInfo] = (*TLSignatureErrorDetection)(nil)
 
 // NewTLSignatureErrorDetection is the default constructor.
 func NewTLSignatureErrorDetection() *TLSignatureErrorDetection {

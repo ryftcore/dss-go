@@ -14,7 +14,7 @@ import (
 // signature/timestamp creation.
 type ASiCWithCAdESCommonParameters interface {
 	// ASiC returns ASiC container parameters. Port of aSiC().
-	ASiC() *asic.ASiCParameters
+	ASiC() *asic.Parameters
 
 	// DigestAlgorithm returns a DigestAlgorithm to be used to hash a data to be timestamped.
 	// Port of getDigestAlgorithm().

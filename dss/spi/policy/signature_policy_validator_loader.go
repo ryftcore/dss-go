@@ -4,8 +4,8 @@ package policy
 import "github.com/ryftcore/dss-go/dss/model/signature"
 
 // SignaturePolicyValidatorLoader loads a relevant SignaturePolicyValidator
-// for the provided SignaturePolicy.
+// for the provided Policy.
 type SignaturePolicyValidatorLoader interface {
-	// LoadValidator returns the relevant validator for a SignaturePolicy.
-	LoadValidator(signaturePolicy *signature.SignaturePolicy) SignaturePolicyValidator
+	// LoadValidator returns the relevant validator for a Policy.
+	LoadValidator(signaturePolicy *signature.Policy) SignaturePolicyValidator
 }

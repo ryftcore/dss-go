@@ -4,12 +4,12 @@
 // same Go package (dss/asic/xades).
 //
 // NAMING (judgment call, mirrors the cades precedent's identical note): the frozen
-// asic.AbstractASiCContainerValidator names its ASiCContent overload
+// asic.AbstractASiCContainerValidator names its Content overload
 // `IsSupported(asicContent *ASiCContent) bool`, which in Java is a same-name overload of the
 // DSSDocument-taking `isSupported(DSSDocument)` the SignedDocumentValidator interface requires -
 // Go cannot host both spellings on one type. This leaf therefore defines its own
 // `IsSupported(document model.DSSDocument) bool` (satisfying the interface, delegating to the
-// wrapped DocumentAnalyzer), which shadows the promoted ASiCContent overload entirely, and
+// wrapped DocumentAnalyzer), which shadows the promoted Content overload entirely, and
 // exposes that overload under the renamed `IsSupportedContent`.
 package xades
 
@@ -60,8 +60,8 @@ func NewASiCContainerWithXAdESValidator(asicContainer model.DSSDocument) *ASiCCo
 }
 
 // NewASiCContainerWithXAdESValidatorFromContent is the constructor with ASiCContent. Ports
-// ASiCContainerWithXAdESValidator(ASiCContent).
-func NewASiCContainerWithXAdESValidatorFromContent(asicContent *asic.ASiCContent) *ASiCContainerWithXAdESValidator {
+// ASiCContainerWithXAdESValidator(Content).
+func NewASiCContainerWithXAdESValidatorFromContent(asicContent *asic.Content) *ASiCContainerWithXAdESValidator {
 	v := &ASiCContainerWithXAdESValidator{
 		AbstractASiCContainerValidator: asic.NewAbstractASiCContainerValidator(NewASiCContainerWithXAdESAnalyzerFromContent(asicContent)),
 	}
@@ -85,9 +85,9 @@ func (v *ASiCContainerWithXAdESValidator) IsSupported(document model.DSSDocument
 	return v.GetDocumentAnalyzer().IsSupported(document)
 }
 
-// IsSupportedContent verifies whether the provided ASiCContent is supported by the current
+// IsSupportedContent verifies whether the provided Content is supported by the current
 // validator. Ports the isSupported(ASiCContent) overload; see the file header's naming note.
-func (v *ASiCContainerWithXAdESValidator) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (v *ASiCContainerWithXAdESValidator) IsSupportedContent(asicContent *asic.Content) bool {
 	return v.AbstractASiCContainerValidator.IsSupported(asicContent)
 }
 

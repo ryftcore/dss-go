@@ -14,7 +14,7 @@ type TrustProperties struct {
 	// trustServiceProvider is the trustServiceProvider.
 	trustServiceProvider *TrustServiceProvider
 	// trustService is the trustService.
-	trustService *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]
+	trustService *timedependent.Values[*TrustServiceStatusAndInformationExtensions]
 }
 
 // NewTrustProperties creates a TrustProperties object for extracted information from an
@@ -25,7 +25,7 @@ type TrustProperties struct {
 // null!", "trustService cannot be null!") when the respective argument is nil, mirroring
 // Objects.requireNonNull.
 func NewTrustProperties(tlInfo *TLInfo, trustServiceProvider *TrustServiceProvider,
-	trustService *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]) *TrustProperties {
+	trustService *timedependent.Values[*TrustServiceStatusAndInformationExtensions]) *TrustProperties {
 	return NewTrustPropertiesWithLOTL(nil, tlInfo, trustServiceProvider, trustService)
 }
 
@@ -35,7 +35,7 @@ func NewTrustProperties(tlInfo *TLInfo, trustServiceProvider *TrustServiceProvid
 // null!", "trustService cannot be null!") when the respective argument is nil, mirroring
 // Objects.requireNonNull.
 func NewTrustPropertiesWithLOTL(lotlInfo *LOTLInfo, tlInfo *TLInfo, trustServiceProvider *TrustServiceProvider,
-	trustService *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]) *TrustProperties {
+	trustService *timedependent.Values[*TrustServiceStatusAndInformationExtensions]) *TrustProperties {
 	if tlInfo == nil {
 		panic("tlInfo cannot be null!")
 	}
@@ -69,6 +69,6 @@ func (t *TrustProperties) TrustServiceProvider() *TrustServiceProvider {
 }
 
 // TrustService gets the trust service.
-func (t *TrustProperties) TrustService() *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions] {
+func (t *TrustProperties) TrustService() *timedependent.Values[*TrustServiceStatusAndInformationExtensions] {
 	return t.trustService
 }

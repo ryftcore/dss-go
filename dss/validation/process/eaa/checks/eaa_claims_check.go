@@ -23,7 +23,7 @@ type EAAClaimsCheck struct {
 }
 
 // NewEAAClaimsCheck is the default constructor.
-func NewEAAClaimsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAClaimsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAAClaimsCheck {
 	c := &EAAClaimsCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),
@@ -45,7 +45,7 @@ func (c *EAAClaimsCheck) BuildAdditionalInfo() *string {
 	claimNames := c.eaa.AllEAAPayloadClaimNames()
 	notPresentClaims := make([]string, 0)
 	for _, v := range c.Values() {
-		if !process.ProcessValueCheck(v, claimNames) {
+		if !process.ValueCheck(v, claimNames) {
 			notPresentClaims = append(notPresentClaims, v)
 		}
 	}

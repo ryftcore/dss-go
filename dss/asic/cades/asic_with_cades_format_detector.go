@@ -8,10 +8,10 @@ import (
 )
 
 // ASiCWithCAdESFormatDetector verifies whether the provided document is a supported container by
-// the dss-asic-cades implementation. Implements asic.ASiCFormatDetector.
+// the dss-asic-cades implementation. Implements asic.FormatDetector.
 type ASiCWithCAdESFormatDetector struct{}
 
-var _ asic.ASiCFormatDetector = (*ASiCWithCAdESFormatDetector)(nil)
+var _ asic.FormatDetector = (*ASiCWithCAdESFormatDetector)(nil)
 
 // NewASiCWithCAdESFormatDetector is the default constructor.
 func NewASiCWithCAdESFormatDetector() *ASiCWithCAdESFormatDetector {
@@ -20,7 +20,7 @@ func NewASiCWithCAdESFormatDetector() *ASiCWithCAdESFormatDetector {
 
 // IsSupportedZip ports the @Override isSupportedZip(DSSDocument).
 func (d *ASiCWithCAdESFormatDetector) IsSupportedZip(document model.DSSDocument) bool {
-	isZip, err := asic.ASiCUtilsIsZip(document)
+	isZip, err := asic.UtilsIsZip(document)
 	if err != nil || !isZip {
 		return false
 	}
@@ -28,17 +28,17 @@ func (d *ASiCWithCAdESFormatDetector) IsSupportedZip(document model.DSSDocument)
 	if err != nil {
 		return false
 	}
-	if asic.ASiCUtilsIsASiCWithCAdES(filenames) {
+	if asic.UtilsIsASiCWithCAdES(filenames) {
 		return true
 	}
 	// NOTE : areFilesContainMimetype check is executed in order to avoid documents reading
-	if asic.ASiCUtilsIsASiCWithXAdES(filenames) {
+	if asic.UtilsIsASiCWithXAdES(filenames) {
 		return false
 	}
-	if !asic.ASiCUtilsAreFilesContainMimetype(filenames) {
+	if !asic.UtilsAreFilesContainMimetype(filenames) {
 		return true
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsContainerOpenDocument(document)
+	isOpenDocument, err := asic.UtilsIsContainerOpenDocument(document)
 	if err != nil {
 		return false
 	}
@@ -47,7 +47,7 @@ func (d *ASiCWithCAdESFormatDetector) IsSupportedZip(document model.DSSDocument)
 
 // IsSupportedASiC ports the @Override isSupportedASiC(DSSDocument).
 func (d *ASiCWithCAdESFormatDetector) IsSupportedASiC(document model.DSSDocument) bool {
-	isZip, err := asic.ASiCUtilsIsZip(document)
+	isZip, err := asic.UtilsIsZip(document)
 	if err != nil || !isZip {
 		return false
 	}
@@ -55,20 +55,20 @@ func (d *ASiCWithCAdESFormatDetector) IsSupportedASiC(document model.DSSDocument
 	if err != nil {
 		return false
 	}
-	if !asic.ASiCUtilsFilesContainMetaInfFolder(filenames) {
+	if !asic.UtilsFilesContainMetaInfFolder(filenames) {
 		return false
 	}
-	if asic.ASiCUtilsIsASiCWithCAdES(filenames) {
+	if asic.UtilsIsASiCWithCAdES(filenames) {
 		return true
 	}
 	// NOTE : areFilesContainMimetype check is executed in order to avoid documents reading
-	if asic.ASiCUtilsIsASiCWithXAdES(filenames) {
+	if asic.UtilsIsASiCWithXAdES(filenames) {
 		return false
 	}
-	if !asic.ASiCUtilsAreFilesContainMimetype(filenames) {
+	if !asic.UtilsAreFilesContainMimetype(filenames) {
 		return true
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsContainerOpenDocument(document)
+	isOpenDocument, err := asic.UtilsIsContainerOpenDocument(document)
 	if err != nil {
 		return false
 	}
@@ -76,15 +76,15 @@ func (d *ASiCWithCAdESFormatDetector) IsSupportedASiC(document model.DSSDocument
 }
 
 // IsSupportedZipContent ports the @Override isSupportedZip(ASiCContent).
-func (d *ASiCWithCAdESFormatDetector) IsSupportedZipContent(asicContent *asic.ASiCContent) bool {
+func (d *ASiCWithCAdESFormatDetector) IsSupportedZipContent(asicContent *asic.Content) bool {
 	entryNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
-	if asic.ASiCUtilsIsASiCWithXAdES(entryNames) {
+	if asic.UtilsIsASiCWithXAdES(entryNames) {
 		return false
 	}
-	if !asic.ASiCUtilsAreFilesContainMimetype(entryNames) {
+	if !asic.UtilsAreFilesContainMimetype(entryNames) {
 		return true
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		return false
 	}
@@ -92,18 +92,18 @@ func (d *ASiCWithCAdESFormatDetector) IsSupportedZipContent(asicContent *asic.AS
 }
 
 // IsSupportedASiCContent ports the @Override isSupportedASiC(ASiCContent).
-func (d *ASiCWithCAdESFormatDetector) IsSupportedASiCContent(asicContent *asic.ASiCContent) bool {
+func (d *ASiCWithCAdESFormatDetector) IsSupportedASiCContent(asicContent *asic.Content) bool {
 	entryNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
-	if !asic.ASiCUtilsFilesContainMetaInfFolder(entryNames) {
+	if !asic.UtilsFilesContainMetaInfFolder(entryNames) {
 		return false
 	}
-	if asic.ASiCUtilsIsASiCWithXAdES(entryNames) {
+	if asic.UtilsIsASiCWithXAdES(entryNames) {
 		return false
 	}
-	if !asic.ASiCUtilsAreFilesContainMimetype(entryNames) {
+	if !asic.UtilsAreFilesContainMimetype(entryNames) {
 		return true
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(asicContent.MimeTypeDocument())
+	isOpenDocument, err := asic.UtilsIsOpenDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		return false
 	}

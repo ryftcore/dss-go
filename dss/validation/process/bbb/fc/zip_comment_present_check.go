@@ -19,7 +19,7 @@ type ZipCommentPresentCheck struct {
 }
 
 // NewZipCommentPresentCheck is the default constructor.
-func NewZipCommentPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewZipCommentPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	zipComment string, constraint policy.LevelRule) *ZipCommentPresentCheck {
 	c := &ZipCommentPresentCheck{zipComment: zipComment}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

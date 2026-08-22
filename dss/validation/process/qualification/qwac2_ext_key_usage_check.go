@@ -21,8 +21,8 @@ type QWAC2ExtKeyUsageCheck struct {
 }
 
 // NewQWAC2ExtKeyUsageCheck is the default constructor. Port of
-// QWAC2ExtKeyUsageCheck(I18nProvider, XmlValidationQWACProcess, CertificateWrapper, LevelRule).
-func NewQWAC2ExtKeyUsageCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// QWAC2ExtKeyUsageCheck(Provider, XmlValidationQWACProcess, CertificateWrapper, LevelRule).
+func NewQWAC2ExtKeyUsageCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *QWAC2ExtKeyUsageCheck {
 	c := &QWAC2ExtKeyUsageCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

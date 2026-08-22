@@ -20,8 +20,8 @@ type CertificateQcComplianceCheck struct {
 }
 
 // NewCertificateQcComplianceCheck is the default constructor. Port of
-// CertificateQcComplianceCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificateQcComplianceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateQcComplianceCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificateQcComplianceCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateQcComplianceCheck {
 	c := &CertificateQcComplianceCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

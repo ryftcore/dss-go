@@ -26,8 +26,8 @@ type BasicValidationProcessCheck[T any] struct {
 }
 
 // NewBasicValidationProcessCheck is the default constructor. Port of
-// BasicValidationProcessCheck(I18nProvider, T, XmlConclusion, TokenProxy, LevelRule).
-func NewBasicValidationProcessCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// BasicValidationProcessCheck(Provider, T, XmlConclusion, TokenProxy, LevelRule).
+func NewBasicValidationProcessCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlConclusion *jaxb.XmlConclusion, token diagnostic.TokenProxy, constraint policy.LevelRule) *BasicValidationProcessCheck[T] {
 	c := &BasicValidationProcessCheck[T]{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, token.Id()),

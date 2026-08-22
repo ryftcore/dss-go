@@ -1,120 +1,120 @@
 // Ported from dss-model/.../claim/ClaimCredentialSubject.java (DSS 6.5.RC1).
 package claim
 
-// ClaimCredentialSubject represents a "4.8 Credential Subject" claim
+// CredentialSubject represents a "4.8 Credential Subject" claim
 // defined in W3C Verifiable Credentials Data Model v2.0.
-type ClaimCredentialSubject interface {
+type CredentialSubject interface {
 	Claim
 
 	// FullName gets the user's full name information, when present.
 	// Ports ClaimCredentialSubject#getFullName.
-	FullName() *ClaimString
+	FullName() *String
 
 	// GivenName gets the user's first or given name information, when
 	// present. Ports ClaimCredentialSubject#getGivenName.
-	GivenName() *ClaimString
+	GivenName() *String
 
 	// FamilyName gets the user's last name or surname information, when
 	// present. Ports ClaimCredentialSubject#getFamilyName.
-	FamilyName() *ClaimString
+	FamilyName() *String
 
 	// MiddleName gets the user's middle name information, when present.
 	// Ports ClaimCredentialSubject#getMiddleName.
-	MiddleName() *ClaimString
+	MiddleName() *String
 
 	// Nickname gets the user's casual name information, when present.
 	// Ports ClaimCredentialSubject#getNickname.
-	Nickname() *ClaimString
+	Nickname() *String
 
 	// ShortName gets the user's preferred name, usually a shorthand name,
 	// when present. Ports ClaimCredentialSubject#getShortName.
-	ShortName() *ClaimString
+	ShortName() *String
 
 	// ProfileUrl gets the user's profile page URL, when present. Ports
 	// ClaimCredentialSubject#getProfileUrl.
-	ProfileUrl() *ClaimString
+	ProfileUrl() *String
 
 	// PictureUrl gets the user's profile picture URL, when present.
 	// Ports ClaimCredentialSubject#getPictureUrl.
-	PictureUrl() *ClaimString
+	PictureUrl() *String
 
 	// WebsiteUrl gets the user's website or blog URL, when present.
 	// Ports ClaimCredentialSubject#getWebsiteUrl.
-	WebsiteUrl() *ClaimString
+	WebsiteUrl() *String
 
 	// Email gets the user's preferred email address, when present. Ports
 	// ClaimCredentialSubject#getEmail.
-	Email() *ClaimString
+	Email() *String
 
 	// EmailVerified gets whether the user's email address has been
 	// verified, when present. Ports
 	// ClaimCredentialSubject#getEmailVerified.
-	EmailVerified() *ClaimBoolean
+	EmailVerified() *Boolean
 
 	// Gender gets the user's gender, when present. Ports
 	// ClaimCredentialSubject#getGender.
-	Gender() *ClaimString
+	Gender() *String
 
 	// Birthdate gets the user's birthdate, when present. Ports
 	// ClaimCredentialSubject#getBirthdate.
-	Birthdate() *ClaimDate
+	Birthdate() *Date
 
 	// Timezone gets the user's TimeZone, when present. Ports
 	// ClaimCredentialSubject#getTimezone.
-	Timezone() *ClaimString
+	Timezone() *String
 
 	// Locale gets the user's locale, when present. Ports
 	// ClaimCredentialSubject#getLocale.
-	Locale() *ClaimString
+	Locale() *String
 
 	// Address gets the user's full postal or physical address, when
 	// present. Ports ClaimCredentialSubject#getAddress.
-	Address() ClaimAddress
+	Address() Address
 
 	// PhoneNumber gets the user's preferred telephone number, when
 	// present. Ports ClaimCredentialSubject#getPhoneNumber.
-	PhoneNumber() *ClaimString
+	PhoneNumber() *String
 
 	// PhoneNumberVerified gets whether the user's preferred telephone
 	// number has been verified, when present. Ports
 	// ClaimCredentialSubject#getPhoneNumberVerified.
-	PhoneNumberVerified() *ClaimBoolean
+	PhoneNumberVerified() *Boolean
 
 	// PlaceOfBirth gets user's place of birth, when present. Ports
 	// ClaimCredentialSubject#getPlaceOfBirth.
-	PlaceOfBirth() ClaimPlaceOfBirth
+	PlaceOfBirth() PlaceOfBirth
 
 	// Nationalities gets user's nationalities using ICAO 3-letter codes,
 	// when present. Ports ClaimCredentialSubject#getNationalities.
-	Nationalities() *ClaimArray
+	Nationalities() *Array
 
 	// BirthGivenName gets user's first or given name when they were born,
 	// when present. Ports ClaimCredentialSubject#getBirthGivenName.
-	BirthGivenName() *ClaimString
+	BirthGivenName() *String
 
 	// BirthFamilyName gets user's family or last name when they were
 	// born, when present. Ports
 	// ClaimCredentialSubject#getBirthFamilyName.
-	BirthFamilyName() *ClaimString
+	BirthFamilyName() *String
 
 	// BirthMiddleName gets user's middle name when they were born, when
 	// present. Ports ClaimCredentialSubject#getBirthMiddleName.
-	BirthMiddleName() *ClaimString
+	BirthMiddleName() *String
 
 	// Salutation gets user's salutation, e.g., "Mr", when present. Ports
 	// ClaimCredentialSubject#getSalutation.
-	Salutation() *ClaimString
+	Salutation() *String
 
 	// Title gets user's title, e.g., "Dr", when present. Ports
 	// ClaimCredentialSubject#getTitle.
-	Title() *ClaimString
+	Title() *String
 
 	// MobilePhoneNumber gets user's mobile phone number, when present.
 	// Ports ClaimCredentialSubject#getMobilePhoneNumber.
-	MobilePhoneNumber() *ClaimString
+	MobilePhoneNumber() *String
 
 	// Pseudonym gets user's stage name, religious name or any other type
 	// of alias/pseudonym, when present. Ports
 	// ClaimCredentialSubject#getPseudonym.
-	Pseudonym() *ClaimString
+	Pseudonym() *String
 }

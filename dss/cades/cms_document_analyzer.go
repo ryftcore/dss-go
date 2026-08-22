@@ -50,7 +50,7 @@ func NewCMSDocumentAnalyzerFromDocument(document model.DSSDocument) (*CMSDocumen
 	}
 	a := newCMSDocumentAnalyzer()
 	a.SetDocument(document)
-	parsedCMS, err := cms.CMSUtilsParseToCMS(document)
+	parsedCMS, err := cms.UtilsParseToCMS(document)
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause("A CMS file is expected : "+err.Error(), err)
 	}
@@ -80,7 +80,7 @@ func (a *CMSDocumentAnalyzer) IsSupported(dssDocument model.DSSDocument) bool {
 // imports cms and spi, while nothing in spi imports cades or cms - spi cannot import cms, which
 // this check needs to parse the document.
 func cmsDocumentAnalyzerIsTimestampToken(document model.DSSDocument) bool {
-	parsedCMS, err := cms.CMSUtilsParseToCMS(document)
+	parsedCMS, err := cms.UtilsParseToCMS(document)
 	if err != nil {
 		return false
 	}
@@ -93,7 +93,7 @@ func (a *CMSDocumentAnalyzer) BuildSignatures() []validation.AdvancedSignature {
 	signatures := make([]validation.AdvancedSignature, 0)
 	if a.cms != nil {
 		for _, signerInformation := range a.cms.SignerInfos() {
-			cadesSignature := NewCAdESSignature(a.cms, signerInformation)
+			cadesSignature := NewSignature(a.cms, signerInformation)
 			if a.HasDocument() {
 				cadesSignature.SetFilename(a.Document().Name())
 			}
@@ -139,14 +139,14 @@ func (a *CMSDocumentAnalyzer) AppendExternalEvidenceRecords(allSignatureList []v
 
 // cmsDocumentAnalyzerSameCMS ports the private sameCMS(AdvancedSignature, AdvancedSignature).
 func cmsDocumentAnalyzerSameCMS(signatureOne, signatureTwo validation.AdvancedSignature) bool {
-	cadesSignatureOne := signatureOne.(*CAdESSignature)
-	cadesSignatureTwo := signatureTwo.(*CAdESSignature)
+	cadesSignatureOne := signatureOne.(*Signature)
+	cadesSignatureTwo := signatureTwo.(*Signature)
 	return cadesSignatureOne.CMS() == cadesSignatureTwo.CMS()
 }
 
 // addSignatureScope ports the private addSignatureScope(EvidenceRecord, AdvancedSignature).
 func (a *CMSDocumentAnalyzer) addSignatureScope(evidenceRecord validation.EvidenceRecord, signature validation.AdvancedSignature) {
-	evidenceRecordScopeFinder := NewCAdESEvidenceRecordScopeFinder(evidenceRecord, signature)
+	evidenceRecordScopeFinder := NewEvidenceRecordScopeFinder(evidenceRecord, signature)
 	evidenceRecordScopes := evidenceRecordScopeFinder.FindEvidenceRecordScope()
 	evidenceRecord.SetEvidenceRecordScopes(evidenceRecordScopes)
 	evidenceRecord.SetTimestampedReferences(
@@ -215,7 +215,7 @@ func (a *CMSDocumentAnalyzer) CMS() *cms.CMS {
 // The DSSException Java catches (logging "Cannot retrieve a list of original documents") is
 // swallowed the same way here, since slf4j logging is dropped per PORTING.md.
 func (a *CMSDocumentAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
-	cadesSignature := advancedSignature.(*CAdESSignature)
+	cadesSignature := advancedSignature.(*Signature)
 	document, err := cadesSignature.OriginalDocument()
 	if err != nil {
 		return []model.DSSDocument{}

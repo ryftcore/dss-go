@@ -20,8 +20,8 @@ type PseudonymCheck struct {
 }
 
 // NewPseudonymCheck is the default constructor. Port of
-// PseudonymCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewPseudonymCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// PseudonymCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewPseudonymCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *PseudonymCheck {
 	c := &PseudonymCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

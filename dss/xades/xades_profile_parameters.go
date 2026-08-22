@@ -2,10 +2,10 @@
 //
 // Java extends document.signature.ProfileParameters, adding the XAdES-specific profile/builder/
 // operationKind/references fields. The Go port embeds document.ProfileParameters by value,
-// following the XAdESCounterSignatureParameters/XAdESSignatureParameters precedent of embedding
+// following the CounterSignatureParameters/SignatureParameters precedent of embedding
 // the base struct rather than trying to reproduce Java's field-level polymorphism (see
 // xades_signature_parameters.go's header for the fuller discussion of that limitation and how
-// this type's embedding is exactly what lets XAdESSignatureParameters.GetContext() and the base
+// this type's embedding is exactly what lets SignatureParameters.GetContext() and the base
 // document.AbstractSignatureParameters.GetContext() answer the same underlying values for the
 // fields both know about).
 //
@@ -19,12 +19,12 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// XAdESProfileParameters is used to accelerate the signature creation process for XAdES.
-type XAdESProfileParameters struct {
+// ProfileParameters is used to accelerate the signature creation process for XAdES.
+type ProfileParameters struct {
 	document.ProfileParameters
 
 	// profile is the XAdES creation profile.
-	profile XAdESSignatureProfile
+	profile SignatureProfile
 
 	// builder is the builder used to create the signature structure.
 	builder SignatureBuilder
@@ -36,64 +36,64 @@ type XAdESProfileParameters struct {
 	references []*DSSReference
 }
 
-// NewXAdESProfileParameters is the default constructor.
-func NewXAdESProfileParameters() *XAdESProfileParameters {
-	return &XAdESProfileParameters{ProfileParameters: *document.NewProfileParameters()}
+// NewProfileParameters is the default constructor.
+func NewProfileParameters() *ProfileParameters {
+	return &ProfileParameters{ProfileParameters: *document.NewProfileParameters()}
 }
 
 // Profile returns the current Profile used to generate the signature or its extension. Ports
 // getProfile().
-func (p *XAdESProfileParameters) Profile() XAdESSignatureProfile {
+func (p *ProfileParameters) Profile() SignatureProfile {
 	return p.profile
 }
 
 // SetProfile sets the current Profile used to generate the signature or its extension. Ports
-// setProfile(XAdESSignatureProfile).
-func (p *XAdESProfileParameters) SetProfile(profile XAdESSignatureProfile) {
+// setProfile(SignatureProfile).
+func (p *ProfileParameters) SetProfile(profile SignatureProfile) {
 	p.profile = profile
 }
 
 // Builder gets the signature builder. Ports getBuilder().
-func (p *XAdESProfileParameters) Builder() SignatureBuilder {
+func (p *ProfileParameters) Builder() SignatureBuilder {
 	return p.builder
 }
 
 // SetBuilder sets the signature builder. Ports setBuilder(SignatureBuilder).
-func (p *XAdESProfileParameters) SetBuilder(builder SignatureBuilder) {
+func (p *ProfileParameters) SetBuilder(builder SignatureBuilder) {
 	p.builder = builder
 }
 
 // OperationKind gets the current operation type. Ports getOperationKind().
-func (p *XAdESProfileParameters) OperationKind() enumerations.SigningOperation {
+func (p *ProfileParameters) OperationKind() enumerations.SigningOperation {
 	return p.operationKind
 }
 
 // SetOperationKind sets the operation kind. Ports setOperationKind(SigningOperation).
-func (p *XAdESProfileParameters) SetOperationKind(operationKind enumerations.SigningOperation) {
+func (p *ProfileParameters) SetOperationKind(operationKind enumerations.SigningOperation) {
 	p.operationKind = operationKind
 }
 
 // References returns a list of references to be incorporated to the signature. Ports
 // getReferences().
-func (p *XAdESProfileParameters) References() []*DSSReference {
+func (p *ProfileParameters) References() []*DSSReference {
 	return p.references
 }
 
 // SetReferences sets a list of references to be incorporated into the signature. Ports
 // setReferences(List<DSSReference>).
-func (p *XAdESProfileParameters) SetReferences(references []*DSSReference) {
+func (p *ProfileParameters) SetReferences(references []*DSSReference) {
 	p.references = references
 }
 
 // String ports toString(). Java's toString does not call super.toString(), unlike most
 // classes in this port; reproduced verbatim.
-func (p *XAdESProfileParameters) String() string {
+func (p *ProfileParameters) String() string {
 	return fmt.Sprintf("XAdESProfileParameters{profile=%v, builder=%v, operationKind=%v, references=%v}",
 		p.profile, p.builder, p.operationKind, p.references)
 }
 
 // Equals ports equals(Object).
-func (p *XAdESProfileParameters) Equals(other *XAdESProfileParameters) bool {
+func (p *ProfileParameters) Equals(other *ProfileParameters) bool {
 	if p == other {
 		return true
 	}

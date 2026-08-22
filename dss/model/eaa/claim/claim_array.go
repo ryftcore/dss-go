@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-// ClaimArray represents an Array encoded (selectively) disclosable claim.
+// Array represents an Array encoded (selectively) disclosable claim.
 // It is designed for embedding by concrete subtypes: Java's abstract
 // `createClaim(Object)` method is ported as the CreateClaim function
 // field, which embedders MUST set (typically from their own constructor)
 // before calling ListValue/ValueAsString.
-type ClaimArray struct {
+type Array struct {
 	AbstractClaim
 
 	// value is the content of the array (raw, untyped items - mirrors
@@ -26,14 +26,14 @@ type ClaimArray struct {
 
 // NewClaimArray ports the constructor with claim name, value, selectively
 // disclosable status and parent claim provided.
-func NewClaimArray(name string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *ClaimArray {
-	return NewClaimArrayFull(name, "", value, selectivelyDisclosable, parent, createClaim)
+func NewArray(name string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
+	return NewArrayFull(name, "", value, selectivelyDisclosable, parent, createClaim)
 }
 
 // NewClaimArrayFull ports the constructor with claim name, namespace,
 // value, selectively disclosable status and parent claim provided.
-func NewClaimArrayFull(name, namespace string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *ClaimArray {
-	return &ClaimArray{
+func NewArrayFull(name, namespace string, value []any, selectivelyDisclosable bool, parent Claim, createClaim func(value any) Claim) *Array {
+	return &Array{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
 		CreateClaim:   createClaim,
@@ -42,7 +42,7 @@ func NewClaimArrayFull(name, namespace string, value []any, selectivelyDisclosab
 
 // ListValue converts every array item into a Claim via CreateClaim. Ports
 // ClaimArray#getListValue.
-func (c *ClaimArray) ListValue() []Claim {
+func (c *Array) ListValue() []Claim {
 	if len(c.value) == 0 {
 		return []Claim{}
 	}
@@ -54,13 +54,13 @@ func (c *ClaimArray) ListValue() []Claim {
 }
 
 // IsArrayValueType always returns true.
-func (c *ClaimArray) IsArrayValueType() bool { return true }
+func (c *Array) IsArrayValueType() bool { return true }
 
 // IsNullOrEmpty ports ClaimArray#isNullOrEmpty.
-func (c *ClaimArray) IsNullOrEmpty() bool { return len(c.value) == 0 }
+func (c *Array) IsNullOrEmpty() bool { return len(c.value) == 0 }
 
 // ValueAsString ports ClaimArray#getValueAsString.
-func (c *ClaimArray) ValueAsString() string {
+func (c *Array) ValueAsString() string {
 	var sb strings.Builder
 	sb.WriteString("[")
 	items := c.ListValue()
@@ -82,7 +82,7 @@ func (c *ClaimArray) ValueAsString() string {
 
 // Equals ports ClaimArray#equals (including the AbstractClaim
 // super.equals() comparison).
-func (c *ClaimArray) Equals(other *ClaimArray) bool {
+func (c *Array) Equals(other *Array) bool {
 	if c == other {
 		return true
 	}
@@ -96,4 +96,4 @@ func (c *ClaimArray) Equals(other *ClaimArray) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *ClaimArray) String() string { return AbstractClaimString(c) }
+func (c *Array) String() string { return AbstractString(c) }

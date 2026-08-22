@@ -31,8 +31,8 @@ type POEExistsCheck struct {
 }
 
 // NewPOEExistsCheck is the default constructor. Port of
-// POEExistsCheck(I18nProvider, XmlPSV, TokenProxy, Date, POEExtraction, LevelRule).
-func NewPOEExistsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPSV],
+// POEExistsCheck(Provider, XmlPSV, TokenProxy, Date, POEExtraction, LevelRule).
+func NewPOEExistsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPSV],
 	token diagnostic.TokenProxy, controlTime *time.Time, poe *POEExtraction,
 	constraint policy.LevelRule) *POEExistsCheck {
 	c := &POEExistsCheck{

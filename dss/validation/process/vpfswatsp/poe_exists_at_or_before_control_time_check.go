@@ -32,8 +32,8 @@ type POEExistsAtOrBeforeControlTimeCheck[T any] struct {
 }
 
 // NewPOEExistsAtOrBeforeControlTimeCheck is the default constructor. Port of
-// POEExistsAtOrBeforeControlTimeCheck(I18nProvider, T, TokenProxy, TimestampedObjectType, Date, POEExtraction, LevelRule).
-func NewPOEExistsAtOrBeforeControlTimeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// POEExistsAtOrBeforeControlTimeCheck(Provider, T, TokenProxy, TimestampedObjectType, Date, POEExtraction, LevelRule).
+func NewPOEExistsAtOrBeforeControlTimeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	token diagnostic.TokenProxy, referenceCategory enumerations.TimestampedObjectType, controlTime time.Time,
 	poe *POEExtraction, constraint policy.LevelRule) *POEExistsAtOrBeforeControlTimeCheck[T] {
 	c := &POEExistsAtOrBeforeControlTimeCheck[T]{

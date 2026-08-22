@@ -21,7 +21,7 @@ import (
 type ReferenceProcessor struct {
 	// signatureParameters are the signature parameters used on signature creation. Nil for
 	// non-signature references, e.g. for a Manifest.
-	signatureParameters *XAdESSignatureParameters
+	signatureParameters *SignatureParameters
 }
 
 // NewReferenceProcessorEmpty ports the empty constructor, to be used for non-signature
@@ -32,7 +32,7 @@ func NewReferenceProcessorEmpty() *ReferenceProcessor {
 
 // NewReferenceProcessor is the constructor to be used for reference processing on signature
 // creation. Ports ReferenceProcessor(XAdESSignatureParameters).
-func NewReferenceProcessor(signatureParameters *XAdESSignatureParameters) *ReferenceProcessor {
+func NewReferenceProcessor(signatureParameters *SignatureParameters) *ReferenceProcessor {
 	return &ReferenceProcessor{signatureParameters: signatureParameters}
 }
 

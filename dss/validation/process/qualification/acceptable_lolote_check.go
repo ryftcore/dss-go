@@ -15,8 +15,8 @@ type AcceptableLoLoTECheck[T any] struct {
 }
 
 // NewAcceptableLoLoTECheck is the default constructor. Port of
-// AcceptableLoLoTECheck(I18nProvider, T, XmlLoTEAnalysis, LevelRule).
-func NewAcceptableLoLoTECheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AcceptableLoLoTECheck(Provider, T, XmlLoTEAnalysis, LevelRule).
+func NewAcceptableLoLoTECheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	loloteAnalysis *jaxb.XmlLoTEAnalysis, constraint policy.LevelRule) *AcceptableLoLoTECheck[T] {
 	c := &AcceptableLoLoTECheck[T]{
 		AcceptableLoTECheck: NewAcceptableLoTECheck(i18nProvider, result, loloteAnalysis, constraint),

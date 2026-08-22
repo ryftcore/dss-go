@@ -19,8 +19,8 @@ type RevocationBasicValidationProcess struct {
 }
 
 // NewRevocationBasicValidationProcess is the default constructor. Port of
-// RevocationBasicValidationProcess(I18nProvider, DiagnosticData, RevocationWrapper, Map).
-func NewRevocationBasicValidationProcess(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// RevocationBasicValidationProcess(Provider, Data, RevocationWrapper, Map).
+func NewRevocationBasicValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	revocationData *diagnostic.RevocationWrapper, bbbs map[string]*jaxb.XmlBasicBuildingBlocks) *RevocationBasicValidationProcess {
 	xmlResult := &jaxb.XmlRevocationBasicValidation{}
 	result := process.NewResult(xmlResult, &xmlResult.XmlConstraintsConclusionContent, &xmlResult.XmlConstraintsConclusionAttrs)

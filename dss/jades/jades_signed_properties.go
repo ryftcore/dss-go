@@ -9,22 +9,22 @@ import (
 )
 
 // JAdESSignedProperties represents a list of JAdES signed properties (protected header). Port of
-// the class JAdESSignedProperties, implementing validation.SignatureProperties[*JAdESAttribute].
-type JAdESSignedProperties struct {
+// the class SignedProperties, implementing validation.SignatureProperties[*Attribute].
+type SignedProperties struct {
 	// headers represent the protected header map. Port of the private final Headers headers
 	// field.
 	headers *jose.Headers
 }
 
 // NewJAdESSignedProperties is the default constructor. Port of the public
-// JAdESSignedProperties(Headers) constructor.
-func NewJAdESSignedProperties(headers *jose.Headers) *JAdESSignedProperties {
-	return &JAdESSignedProperties{headers: headers}
+// SignedProperties(Headers) constructor.
+func NewSignedProperties(headers *jose.Headers) *SignedProperties {
+	return &SignedProperties{headers: headers}
 }
 
 // IsExist checks if "unsigned-signature-properties" exists and can be processed. Port of
 // isExist().
-func (p *JAdESSignedProperties) IsExist() bool {
+func (p *SignedProperties) IsExist() bool {
 	return p.headers != nil
 }
 
@@ -34,12 +34,12 @@ func (p *JAdESSignedProperties) IsExist() bool {
 // re-parsed as a map: getMapKeyValues() throws an unchecked DSSException, propagating out of
 // getAttributes() uncaught (no AdvancedSignature accessor reached from here has an error
 // return to use instead).
-func (p *JAdESSignedProperties) Attributes() []*JAdESAttribute {
+func (p *SignedProperties) Attributes() []*Attribute {
 	headerMap := p.mapKeyValues()
 
-	var attributes []*JAdESAttribute
+	var attributes []*Attribute
 	for _, key := range headerMap.Keys() {
-		attributes = append(attributes, NewJAdESAttribute(key, headerMap.Value(key)))
+		attributes = append(attributes, NewAttribute(key, headerMap.Value(key)))
 	}
 	return attributes
 }
@@ -47,7 +47,7 @@ func (p *JAdESSignedProperties) Attributes() []*JAdESAttribute {
 // mapKeyValues ports the private getMapKeyValues().
 //
 // TODO avoid to parse (upstream's own comment, reproduced verbatim).
-func (p *JAdESSignedProperties) mapKeyValues() *jose.Object {
+func (p *SignedProperties) mapKeyValues() *jose.Object {
 	headerMap, err := DSSJsonUtilsParseJSONStringToMap(p.headers.FullHeaderAsJSONString())
 	if err != nil {
 		panic(model.NewDSSErrorMessageCause("Unable to retrieve the map from the headers", err))
@@ -55,6 +55,6 @@ func (p *JAdESSignedProperties) mapKeyValues() *jose.Object {
 	return headerMap
 }
 
-// compile-time assertion: a JAdESSignedProperties satisfies
-// validation.SignatureProperties[*JAdESAttribute].
-var _ validation.SignatureProperties[*JAdESAttribute] = (*JAdESSignedProperties)(nil)
+// compile-time assertion: a SignedProperties satisfies
+// validation.SignatureProperties[*Attribute].
+var _ validation.SignatureProperties[*Attribute] = (*SignedProperties)(nil)

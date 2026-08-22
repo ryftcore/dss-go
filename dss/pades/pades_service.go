@@ -1,25 +1,25 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/signature/PAdESService.java (DSS 6.5.RC1).
 //
 // Java extends AbstractSignatureService<PAdESSignatureParameters, PAdESTimestampParameters>; the
-// Go port embeds document.AbstractSignatureService[*PAdESSignatureParameters, *cades.CAdESTimestampParameters]
-// (NOT [...,*PAdESTimestampParameters] - an INTEGRATION CORRECTION, see below) and satisfies
-// document.DocumentSignatureService[*PAdESSignatureParameters, *PAdESTimestampParameters] with
+// Go port embeds document.AbstractSignatureService[*SignatureParameters, *cades.TimestampParameters]
+// (NOT [...,*TimestampParameters] - an INTEGRATION CORRECTION, see below) and satisfies
+// document.SignatureService[*SignatureParameters, *TimestampParameters] with
 // the methods below (see the compile-time assertion at the end of the file); those two generic
 // parameterizations are independent; nothing requires them to agree.
 //
-// INTEGRATION CORRECTION: originally embedded with TP=*PAdESTimestampParameters, matching
-// DocumentSignatureService's TP. But pades_signature_parameters.go's header (see its "Context /
-// timestamp-parameters storage" section) documents a deliberate design: PAdESSignatureParameters
-// embeds cades.CAdESSignatureParameters by a single, unshadowed field, so its only promoted
-// AbstractSignatureParameters is document.AbstractSignatureParameters[*cades.CAdESTimestampParameters]
-// - there is no [*PAdESTimestampParameters]-instantiated one to take the address of. That made
+// INTEGRATION CORRECTION: originally embedded with TP=*TimestampParameters, matching
+// SignatureService's TP. But pades_signature_parameters.go's header (see its "Context /
+// timestamp-parameters storage" section) documents a deliberate design: SignatureParameters
+// embeds cades.SignatureParameters by a single, unshadowed field, so its only promoted
+// AbstractSignatureParameters is document.AbstractSignatureParameters[*cades.TimestampParameters]
+// - there is no [*TimestampParameters]-instantiated one to take the address of. That made
 // GetDataToSign/SignDocument's `s.AssertSigningCertificateValid(&parameters.AbstractSignatureParameters)`
 // calls (which need *document.AbstractSignatureParameters[TP] for the embedded base's own TP) a
 // type error. Of AbstractSignatureService[SP, TP]'s two TP-typed methods, Timestamp is shadowed
-// by PAdESService's own directly-declared Timestamp(*PAdESTimestampParameters) below (so the
+// by Service's own directly-declared Timestamp(*TimestampParameters) below (so the
 // embedded, unreachable default's TP is inconsequential) and AssertSigningCertificateValid is
 // the only one actually invoked through the embedded base - so re-pointing the embed's TP at
-// *cades.CAdESTimestampParameters (matching what parameters.AbstractSignatureParameters actually
+// *cades.TimestampParameters (matching what parameters.AbstractSignatureParameters actually
 // is) resolves the mismatch with no change to pades_signature_parameters.go's chosen structure.
 //
 // As in cades/cades_service.go, this is where the (T, error) of the layers below turns back into
@@ -42,9 +42,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// PAdESService is the PAdES implementation of DocumentSignatureService.
-type PAdESService struct {
-	document.AbstractSignatureService[*PAdESSignatureParameters, *cades.CAdESTimestampParameters]
+// Service is the PAdES implementation of SignatureService.
+type Service struct {
+	document.AbstractSignatureService[*SignatureParameters, *cades.TimestampParameters]
 
 	// cmsForPAdESGenerationService builds the CMS signed data.
 	cmsForPAdESGenerationService *ExternalCMSService
@@ -53,14 +53,14 @@ type PAdESService struct {
 	pdfObjFactory IPdfObjFactory
 }
 
-// NewPAdESService creates an instance of the PAdESService. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided: it gives information on the sources to be used in the validation process in the
 // context of a signature. Port of PAdESService(CertificateVerifier).
-func NewPAdESService(certificateVerifier validation.CertificateVerifier) *PAdESService {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ PAdESService created".
-	return &PAdESService{
-		AbstractSignatureService: document.NewAbstractSignatureService[*PAdESSignatureParameters,
-			*cades.CAdESTimestampParameters](certificateVerifier),
+	return &Service{
+		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters,
+			*cades.TimestampParameters](certificateVerifier),
 		cmsForPAdESGenerationService: NewExternalCMSService(certificateVerifier),
 		pdfObjFactory:                NewDefaultPdfObjFactory(),
 	}
@@ -68,7 +68,7 @@ func NewPAdESService(certificateVerifier validation.CertificateVerifier) *PAdESS
 
 // SetPdfObjFactory sets the IPdfObjFactory, i.e. the implementation to be used. Cannot be nil.
 // Port of #setPdfObjFactory.
-func (s *PAdESService) SetPdfObjFactory(pdfObjFactory IPdfObjFactory) {
+func (s *Service) SetPdfObjFactory(pdfObjFactory IPdfObjFactory) {
 	if pdfObjFactory == nil {
 		panic("PdfObjFactory is null")
 	}
@@ -77,14 +77,14 @@ func (s *PAdESService) SetPdfObjFactory(pdfObjFactory IPdfObjFactory) {
 
 // SetTspSource defines the TSP source, propagating it to the CMS generation service.
 // Port of the #setTspSource override.
-func (s *PAdESService) SetTspSource(tspSource validation.TSPSource) {
+func (s *Service) SetTspSource(tspSource validation.TSPSource) {
 	s.AbstractSignatureService.SetTspSource(tspSource)
 	s.cmsForPAdESGenerationService.SetTspSource(tspSource)
 }
 
 // extensionProfile ports the private #getExtensionProfile. It returns nil for PAdES-BASELINE-B,
 // which upstream's null return models.
-func (s *PAdESService) extensionProfile(signatureLevel enumerations.SignatureLevel) document.SignatureExtension[*PAdESSignatureParameters] {
+func (s *Service) extensionProfile(signatureLevel enumerations.SignatureLevel) document.SignatureExtension[*SignatureParameters] {
 	if signatureLevel == "" {
 		panic("SignatureLevel must be defined!")
 	}
@@ -92,11 +92,11 @@ func (s *PAdESService) extensionProfile(signatureLevel enumerations.SignatureLev
 	case enumerations.SignatureLevelPAdESBaselineB:
 		return nil
 	case enumerations.SignatureLevelPAdESBaselineT:
-		return NewPAdESLevelBaselineT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	case enumerations.SignatureLevelPAdESBaselineLT:
-		return NewPAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineLT(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	case enumerations.SignatureLevelPAdESBaselineLTA:
-		return NewPAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
+		return NewLevelBaselineLTA(s.TspSource, s.CertificateVerifier, s.pdfObjFactory)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
 	}
@@ -104,15 +104,15 @@ func (s *PAdESService) extensionProfile(signatureLevel enumerations.SignatureLev
 
 // GetContentTimestamp requests a content time-stamp computed on the PDF revision to be signed.
 // Port of #getContentTimestamp.
-func (s *PAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) *validation.TimestampToken {
+func (s *Service) GetContentTimestamp(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *validation.TimestampToken {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
 	if parameters == nil {
 		panic("SignatureParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 	padesServiceAssertContentTimestampParametersValid(parameters)
 
 	pdfSignatureService := s.ContentTimestampService()
@@ -131,7 +131,7 @@ func (s *PAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
 
 // padesServiceAssertContentTimestampParametersValid ports the private
 // #assertContentTimestampParametersValid.
-func padesServiceAssertContentTimestampParametersValid(parameters *PAdESSignatureParameters) {
+func padesServiceAssertContentTimestampParametersValid(parameters *SignatureParameters) {
 	if parameters.DigestAlgorithm() != parameters.ContentTimestampParameters().DigestAlgorithm() {
 		panic("DigestAlgorithm for content timestamp creation shall be " +
 			"the same as the one defined in PAdESSignatureParameters!")
@@ -140,15 +140,15 @@ func padesServiceAssertContentTimestampParametersValid(parameters *PAdESSignatur
 
 // PreviewPageWithVisualSignature returns a page preview with the visual signature.
 // Port of #previewPageWithVisualSignature.
-func (s *PAdESService) PreviewPageWithVisualSignature(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) model.DSSDocument {
+func (s *Service) PreviewPageWithVisualSignature(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
 	if parameters == nil {
 		panic("SignatureParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.PreviewPageWithVisualSignature(toSignDocument, parameters)
@@ -156,15 +156,15 @@ func (s *PAdESService) PreviewPageWithVisualSignature(toSignDocument model.DSSDo
 
 // PreviewSignatureField returns a preview of the signature field.
 // Port of #previewSignatureField.
-func (s *PAdESService) PreviewSignatureField(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) model.DSSDocument {
+func (s *Service) PreviewSignatureField(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
 	if parameters == nil {
 		panic("SignatureParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.PreviewSignatureField(toSignDocument, parameters)
@@ -172,8 +172,8 @@ func (s *PAdESService) PreviewSignatureField(toSignDocument model.DSSDocument,
 
 // GetDataToSign retrieves the data to be signed, i.e. the signed attributes of the CMS built over
 // the digest of the PDF revision's ByteRange. Port of #getDataToSign.
-func (s *PAdESService) GetDataToSign(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToSign(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *model.ToBeSigned {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
@@ -181,7 +181,7 @@ func (s *PAdESService) GetDataToSign(toSignDocument model.DSSDocument,
 		panic("SignatureParameters cannot be null!")
 	}
 
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 	s.AssertSigningCertificateValid(&parameters.AbstractSignatureParameters)
 
 	messageDigest := s.ComputeDocumentDigest(toSignDocument, parameters)
@@ -194,14 +194,14 @@ func (s *PAdESService) GetDataToSign(toSignDocument model.DSSDocument,
 
 // ComputeDocumentDigest computes the digest of the document to be signed.
 // Port of the protected #computeDocumentDigest.
-func (s *PAdESService) ComputeDocumentDigest(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) model.DSSMessageDigest {
+func (s *Service) ComputeDocumentDigest(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSMessageDigest {
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.MessageDigest(toSignDocument, parameters)
 }
 
 // SignDocument signs the document with the provided signature value. Port of #signDocument.
-func (s *PAdESService) SignDocument(toSignDocument model.DSSDocument, parameters *PAdESSignatureParameters,
+func (s *Service) SignDocument(toSignDocument model.DSSDocument, parameters *SignatureParameters,
 	signatureValue *model.SignatureValue) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
@@ -210,7 +210,7 @@ func (s *PAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 		panic("SignatureParameters cannot be null!")
 	}
 
-	PAdESUtilsAssertPdfDocument(toSignDocument)
+	UtilsAssertPdfDocument(toSignDocument)
 	s.AssertSigningCertificateValid(&parameters.AbstractSignatureParameters)
 	signatureValue, err := s.EnsureSignatureValue(parameters.SignatureAlgorithm(), signatureValue)
 	if err != nil {
@@ -241,8 +241,8 @@ func (s *PAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 
 // GenerateCMSSignedData generates the DER-encoded CMS signed data enveloped by the PDF signature
 // dictionary. Port of the protected #generateCMSSignedData.
-func (s *PAdESService) GenerateCMSSignedData(toSignDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters, signatureValue *model.SignatureValue) []byte {
+func (s *Service) GenerateCMSSignedData(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters, signatureValue *model.SignatureValue) []byte {
 	signatureAlgorithm := parameters.SignatureAlgorithm()
 	signatureLevel := parameters.SignatureLevel()
 	if signatureAlgorithm == "" {
@@ -261,8 +261,8 @@ func (s *PAdESService) GenerateCMSSignedData(toSignDocument model.DSSDocument,
 }
 
 // ExtendDocument extends the signatures of the given PDF document. Port of #extendDocument.
-func (s *PAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
-	parameters *PAdESSignatureParameters) model.DSSDocument {
+func (s *Service) ExtendDocument(toExtendDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSDocument {
 	if toExtendDocument == nil {
 		panic("toExtendDocument is not defined!")
 	}
@@ -270,7 +270,7 @@ func (s *PAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 		panic("Cannot extend the signature. SignatureParameters are not defined!")
 	}
 
-	PAdESUtilsAssertPdfDocument(toExtendDocument)
+	UtilsAssertPdfDocument(toExtendDocument)
 	padesServiceAssertExtensionParametersValid(parameters)
 
 	extension := s.extensionProfile(parameters.SignatureLevel())
@@ -288,7 +288,7 @@ func (s *PAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 }
 
 // padesServiceAssertExtensionParametersValid ports the private #assertExtensionParametersValid.
-func padesServiceAssertExtensionParametersValid(parameters *PAdESSignatureParameters) {
+func padesServiceAssertExtensionParametersValid(parameters *SignatureParameters) {
 	if enumerations.SignatureLevelPAdESBaselineB == parameters.SignatureLevel() {
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
 	}
@@ -296,18 +296,18 @@ func padesServiceAssertExtensionParametersValid(parameters *PAdESSignatureParame
 
 // GetAvailableSignatureFields returns the not signed signature fields of the document.
 // Port of getAvailableSignatureFields(DSSDocument).
-func (s *PAdESService) GetAvailableSignatureFields(document model.DSSDocument) []string {
+func (s *Service) GetAvailableSignatureFields(document model.DSSDocument) []string {
 	return s.GetAvailableSignatureFieldsWithPassword(document, nil)
 }
 
 // GetAvailableSignatureFieldsWithPassword returns the not signed signature fields of an
 // encrypted document. Port of getAvailableSignatureFields(DSSDocument, char[]).
-func (s *PAdESService) GetAvailableSignatureFieldsWithPassword(document model.DSSDocument,
+func (s *Service) GetAvailableSignatureFieldsWithPassword(document model.DSSDocument,
 	passwordProtection []byte) []string {
 	if document == nil {
 		panic("DSSDocument is not defined!")
 	}
-	PAdESUtilsAssertPdfDocument(document)
+	UtilsAssertPdfDocument(document)
 
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.GetAvailableSignatureFields(document, passwordProtection)
@@ -315,14 +315,14 @@ func (s *PAdESService) GetAvailableSignatureFieldsWithPassword(document model.DS
 
 // AddNewSignatureField adds a new signature field to an existing PDF document.
 // Port of addNewSignatureField(DSSDocument, SignatureFieldParameters).
-func (s *PAdESService) AddNewSignatureField(document model.DSSDocument,
+func (s *Service) AddNewSignatureField(document model.DSSDocument,
 	parameters *SignatureFieldParameters) model.DSSDocument {
 	return s.AddNewSignatureFieldWithPassword(document, parameters, nil)
 }
 
 // AddNewSignatureFieldWithPassword adds a new signature field to an existing encrypted PDF
 // document. Port of addNewSignatureField(DSSDocument, SignatureFieldParameters, char[]).
-func (s *PAdESService) AddNewSignatureFieldWithPassword(document model.DSSDocument,
+func (s *Service) AddNewSignatureFieldWithPassword(document model.DSSDocument,
 	parameters *SignatureFieldParameters, passwordProtection []byte) model.DSSDocument {
 	if document == nil {
 		panic("DSSDocument is not defined!")
@@ -330,7 +330,7 @@ func (s *PAdESService) AddNewSignatureFieldWithPassword(document model.DSSDocume
 	if parameters == nil {
 		panic("SignatureFieldParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(document)
+	UtilsAssertPdfDocument(document)
 
 	pdfSignatureService := s.PAdESSignatureService()
 	return pdfSignatureService.AddNewSignatureField(document, parameters, passwordProtection)
@@ -338,21 +338,21 @@ func (s *PAdESService) AddNewSignatureFieldWithPassword(document model.DSSDocume
 
 // Timestamp adds a document timestamp to an unsigned document, incorporating the validation data
 // first. Port of #timestamp.
-func (s *PAdESService) Timestamp(toTimestampDocument model.DSSDocument,
-	parameters *PAdESTimestampParameters) model.DSSDocument {
+func (s *Service) Timestamp(toTimestampDocument model.DSSDocument,
+	parameters *TimestampParameters) model.DSSDocument {
 	if toTimestampDocument == nil {
 		panic("Document to be timestamped is not defined!")
 	}
 	if parameters == nil {
 		panic("PAdESTimestampParameters cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toTimestampDocument)
+	UtilsAssertPdfDocument(toTimestampDocument)
 
-	extensionService := NewPAdESExtensionServiceWithFactory(s.CertificateVerifier, s.pdfObjFactory)
+	extensionService := NewExtensionServiceWithFactory(s.CertificateVerifier, s.pdfObjFactory)
 	extendedDocument := extensionService.IncorporateValidationDataWithPassword(toTimestampDocument,
 		parameters.PasswordProtection())
 
-	timestampService := NewPAdESTimestampServiceWithPDFService(s.TspSource, s.SignatureTimestampService())
+	timestampService := NewTimestampServiceWithPDFService(s.TspSource, s.SignatureTimestampService())
 	timestampedDocument := timestampService.TimestampDocument(extendedDocument, parameters)
 	name, err := s.GetFinalFileName(toTimestampDocument, enumerations.SigningOperationTimestamp)
 	if err != nil {
@@ -364,22 +364,22 @@ func (s *PAdESService) Timestamp(toTimestampDocument model.DSSDocument,
 
 // PAdESSignatureService returns a new PDFSignatureService for a signature creation.
 // Port of the protected #getPAdESSignatureService.
-func (s *PAdESService) PAdESSignatureService() PDFSignatureService {
+func (s *Service) PAdESSignatureService() PDFSignatureService {
 	return s.pdfObjFactory.NewPAdESSignatureService()
 }
 
 // ContentTimestampService returns a new PDFSignatureService for a content timestamp creation.
 // Port of the protected #getContentTimestampService.
-func (s *PAdESService) ContentTimestampService() PDFSignatureService {
+func (s *Service) ContentTimestampService() PDFSignatureService {
 	return s.pdfObjFactory.NewContentTimestampService()
 }
 
 // SignatureTimestampService returns a new PDFSignatureService for a timestamp creation.
 // Port of the protected #getSignatureTimestampService.
-func (s *PAdESService) SignatureTimestampService() PDFSignatureService {
+func (s *Service) SignatureTimestampService() PDFSignatureService {
 	return s.pdfObjFactory.NewSignatureTimestampService()
 }
 
 // Compile-time interface assertion, standing in for Java's
-// "extends AbstractSignatureService<PAdESSignatureParameters, PAdESTimestampParameters>".
-var _ document.DocumentSignatureService[*PAdESSignatureParameters, *PAdESTimestampParameters] = (*PAdESService)(nil)
+// "extends AbstractSignatureService<SignatureParameters, TimestampParameters>".
+var _ document.SignatureService[*SignatureParameters, *TimestampParameters] = (*Service)(nil)

@@ -21,8 +21,8 @@ type CertificateQualificationConclusiveCheck struct {
 
 // NewCertificateQualificationConclusiveCheck is the default constructor.
 // Port of
-// CertificateQualificationConclusiveCheck(I18nProvider, XmlValidationQWACProcess, XmlCertificateQualificationProcess, LevelRule).
-func NewCertificateQualificationConclusiveCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// CertificateQualificationConclusiveCheck(Provider, XmlValidationQWACProcess, XmlCertificateQualificationProcess, LevelRule).
+func NewCertificateQualificationConclusiveCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificateQualification *jaxb.XmlCertificateQualificationProcess, constraint policy.LevelRule) *CertificateQualificationConclusiveCheck {
 	c := &CertificateQualificationConclusiveCheck{
 		ChainItemBase:            process.NewChainItemBase(i18nProvider, result, constraint),

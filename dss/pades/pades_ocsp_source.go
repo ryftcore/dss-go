@@ -3,7 +3,7 @@
 //
 // java.io.Serializable is dropped (no Go counterpart). Java's Map<..., Set<RevocationOrigin>>
 // return values become slices of pairs, as in pades_crl_source.go's
-// PAdESCRLSourceBinaryOriginsEntry for the sibling PAdESCRLSource (see that file's header for
+// CRLSourceBinaryOriginsEntry for the sibling CRLSource (see that file's header for
 // why getAllRevocationBinariesWithOrigins()/getAllRevocationTokensWithOrigins() are each
 // source's own method rather than an override of a base one in this port).
 package pades
@@ -16,8 +16,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// PAdESOCSPSource is an OCSPSource that retrieves the OCSPResp from a PAdES Signature.
-type PAdESOCSPSource struct {
+// OCSPSource is an OCSPSource that retrieves the OCSPResp from a PAdES Signature.
+type OCSPSource struct {
 	spi.OfflineOCSPSourceBase
 
 	// cmsOCSPSource is the CMS OCSP source.
@@ -28,17 +28,17 @@ type PAdESOCSPSource struct {
 }
 
 // NewPAdESOCSPSource is the default constructor. Port of the constructor
-// PAdESOCSPSource(PdfSignatureRevision, String, AttributeTable).
+// OCSPSource(PdfSignatureRevision, String, AttributeTable).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
-func NewPAdESOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
-	signedAttributes cmscore.Attributes) *PAdESOCSPSource {
+func NewOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+	signedAttributes cmscore.Attributes) *OCSPSource {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")
 	}
 
-	source := &PAdESOCSPSource{
+	source := &OCSPSource{
 		OfflineOCSPSourceBase: spi.NewOfflineOCSPSourceBase(),
 		cmsOCSPSource:         NewPdfCmsOCSPSource(signedAttributes),
 		dssDictOCSPSource: NewPdfDssDictOCSPSourceWithVRIName(
@@ -53,7 +53,7 @@ func NewPAdESOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionar
 
 // RevocationTokens returns the OCSP tokens found by both the CMS source and the DSS dictionary
 // source. Port of the getRevocationTokens(CertificateToken, CertificateToken) override.
-func (s *PAdESOCSPSource) RevocationTokens(certificateToken, issuerToken *model.CertificateToken) ([]spi.RevocationToken[revocation.OCSP], error) {
+func (s *OCSPSource) RevocationTokens(certificateToken, issuerToken *model.CertificateToken) ([]spi.RevocationToken[revocation.OCSP], error) {
 	revocationTokens := make([]spi.RevocationToken[revocation.OCSP], 0)
 	cmsTokens, err := s.cmsOCSPSource.RevocationTokens(certificateToken, issuerToken)
 	if err != nil {
@@ -69,12 +69,12 @@ func (s *PAdESOCSPSource) RevocationTokens(certificateToken, issuerToken *model.
 }
 
 // AllRevocationBinaries retrieves all found revocation binaries. Port of the inherited
-// getAllRevocationBinaries(); see pades_crl_source.go's PAdESCRLSource.AllRevocationBinaries doc
+// getAllRevocationBinaries(); see pades_crl_source.go's CRLSource.AllRevocationBinaries doc
 // comment - the identical CRL/OCSP asymmetry applies here (Java: virtual dispatch to THIS type's
 // own getAllRevocationBinariesWithOrigins() override below, which the promoted
 // spi.OfflineRevocationSourceBase.AllRevocationBinaries this type would otherwise inherit cannot
 // reach).
-func (s *PAdESOCSPSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
+func (s *OCSPSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
 	entries := s.AllRevocationBinariesWithOrigins()
 	result := make([]spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP], 0, len(entries))
 	for _, entry := range entries {
@@ -85,7 +85,7 @@ func (s *PAdESOCSPSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTo
 
 // AllRevocationTokens retrieves a slice of all found RevocationTokens. Port of the inherited
 // getAllRevocationTokens(); see AllRevocationBinaries's doc comment.
-func (s *PAdESOCSPSource) AllRevocationTokens() []spi.RevocationToken[revocation.OCSP] {
+func (s *OCSPSource) AllRevocationTokens() []spi.RevocationToken[revocation.OCSP] {
 	entries := s.AllRevocationTokensWithOrigins()
 	result := make([]spi.RevocationToken[revocation.OCSP], 0, len(entries))
 	for _, entry := range entries {
@@ -95,8 +95,8 @@ func (s *PAdESOCSPSource) AllRevocationTokens() []spi.RevocationToken[revocation
 }
 
 // IsEmpty checks if the current source is empty. Port of the inherited isEmpty(); see
-// pades_crl_source.go's PAdESCRLSource.IsEmpty doc comment.
-func (s *PAdESOCSPSource) IsEmpty() bool {
+// pades_crl_source.go's CRLSource.IsEmpty doc comment.
+func (s *OCSPSource) IsEmpty() bool {
 	return len(s.AllRevocationBinariesWithOrigins()) == 0 &&
 		len(s.AllRevocationTokensWithOrigins()) == 0 &&
 		len(s.AllRevocationReferences()) == 0
@@ -104,31 +104,31 @@ func (s *PAdESOCSPSource) IsEmpty() bool {
 
 // OcspMap returns a map of all OCSP entries contained in DSS dictionary or into nested VRI
 // dictionaries. Port of getOcspMap().
-func (s *PAdESOCSPSource) OcspMap() map[PdfObjectKey]*spi.OCSPResponseBinary {
+func (s *OCSPSource) OcspMap() map[PdfObjectKey]*spi.OCSPResponseBinary {
 	return s.dssDictOCSPSource.OcspMap()
 }
 
 // DSSDictionaryBinaries returns the OCSP binaries of the /DSS dictionary. Port of the
 // getDSSDictionaryBinaries() override.
-func (s *PAdESOCSPSource) DSSDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
+func (s *OCSPSource) DSSDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
 	return s.dssDictOCSPSource.DSSDictionaryBinaries()
 }
 
 // DSSDictionaryTokens returns the OCSP tokens of the /DSS dictionary. Port of the
 // getDSSDictionaryTokens() override.
-func (s *PAdESOCSPSource) DSSDictionaryTokens() []spi.RevocationToken[revocation.OCSP] {
+func (s *OCSPSource) DSSDictionaryTokens() []spi.RevocationToken[revocation.OCSP] {
 	return s.dssDictOCSPSource.DSSDictionaryTokens()
 }
 
 // VRIDictionaryBinaries returns the OCSP binaries of the /VRI dictionaries. Port of the
 // getVRIDictionaryBinaries() override.
-func (s *PAdESOCSPSource) VRIDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
+func (s *OCSPSource) VRIDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
 	return s.dssDictOCSPSource.VRIDictionaryBinaries()
 }
 
 // VRIDictionaryTokens returns the OCSP tokens of the /VRI dictionaries. Port of the
 // getVRIDictionaryTokens() override.
-func (s *PAdESOCSPSource) VRIDictionaryTokens() []spi.RevocationToken[revocation.OCSP] {
+func (s *OCSPSource) VRIDictionaryTokens() []spi.RevocationToken[revocation.OCSP] {
 	return s.dssDictOCSPSource.VRIDictionaryTokens()
 }
 
@@ -140,20 +140,20 @@ func (s *PAdESOCSPSource) VRIDictionaryTokens() []spi.RevocationToken[revocation
 // constructor ever adds to; this override is the promoted method inherited from
 // spi.OfflineOCSPSourceBase (embedded via cmsOCSPSource), reproducing the Java override
 // unchanged.
-func (s *PAdESOCSPSource) ADBERevocationValuesBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
+func (s *OCSPSource) ADBERevocationValuesBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP] {
 	return s.cmsOCSPSource.ADBERevocationValuesBinaries()
 }
 
 // ADBERevocationValuesTokens returns the OCSP tokens found in the ADBE revocation info archival
 // CMS attribute. Port of the getADBERevocationValuesTokens() override.
-func (s *PAdESOCSPSource) ADBERevocationValuesTokens() []spi.RevocationToken[revocation.OCSP] {
+func (s *OCSPSource) ADBERevocationValuesTokens() []spi.RevocationToken[revocation.OCSP] {
 	return s.dssDictOCSPSource.ADBERevocationValuesTokens()
 }
 
-// PAdESOCSPSourceBinaryOriginsEntry pairs an OCSP binary with the origins it has been found
+// OCSPSourceBinaryOriginsEntry pairs an OCSP binary with the origins it has been found
 // with, standing in for one entry of Java's
 // Map<EncapsulatedRevocationTokenIdentifier<OCSP>, Set<RevocationOrigin>>.
-type PAdESOCSPSourceBinaryOriginsEntry struct {
+type OCSPSourceBinaryOriginsEntry struct {
 	Binary  spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP]
 	Origins []enumerations.RevocationOrigin
 }
@@ -161,8 +161,8 @@ type PAdESOCSPSourceBinaryOriginsEntry struct {
 // AllRevocationBinariesWithOrigins returns a map of all revocation binaries with the
 // corresponding origins. Port of the getAllRevocationBinariesWithOrigins() override, together
 // with the private populateMapWithSet(Map, Map) helper it calls twice.
-func (s *PAdESOCSPSource) AllRevocationBinariesWithOrigins() []PAdESOCSPSourceBinaryOriginsEntry {
-	result := make([]PAdESOCSPSourceBinaryOriginsEntry, 0)
+func (s *OCSPSource) AllRevocationBinariesWithOrigins() []OCSPSourceBinaryOriginsEntry {
+	result := make([]OCSPSourceBinaryOriginsEntry, 0)
 	for _, entry := range s.cmsOCSPSource.AllRevocationBinariesWithOrigins() {
 		result = padesOCSPSourceMergeBinaryOrigins(result, entry.Binary, entry.Origins)
 	}
@@ -175,7 +175,7 @@ func (s *PAdESOCSPSource) AllRevocationBinariesWithOrigins() []PAdESOCSPSourceBi
 // AllRevocationTokensWithOrigins returns a map of all revocation tokens with the corresponding
 // origins. Port of the getAllRevocationTokensWithOrigins() override, together with the private
 // populateMapWithSet(Map, Map) helper it calls twice.
-func (s *PAdESOCSPSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenOriginsEntry[revocation.OCSP] {
+func (s *OCSPSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenOriginsEntry[revocation.OCSP] {
 	result := make([]spi.RevocationTokenOriginsEntry[revocation.OCSP], 0)
 	for _, entry := range s.cmsOCSPSource.AllRevocationTokensWithOrigins() {
 		result = padesOCSPSourceMergeTokenOrigins(result, entry.Token, entry.Origins)
@@ -190,9 +190,9 @@ func (s *PAdESOCSPSource) AllRevocationTokensWithOrigins() []spi.RevocationToken
 // origins of an already-present entry for the same binary (matched on its DSS identifier,
 // AsXmlID()) rather than duplicating it - the Set<RevocationOrigin> semantics of the private
 // populateMapWithSet(Map, Map) helper's Map<..., Set<RevocationOrigin>> value.
-func padesOCSPSourceMergeBinaryOrigins(result []PAdESOCSPSourceBinaryOriginsEntry,
+func padesOCSPSourceMergeBinaryOrigins(result []OCSPSourceBinaryOriginsEntry,
 	binary spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP],
-	origins []enumerations.RevocationOrigin) []PAdESOCSPSourceBinaryOriginsEntry {
+	origins []enumerations.RevocationOrigin) []OCSPSourceBinaryOriginsEntry {
 	for i := range result {
 		if result[i].Binary.AsXmlID() == binary.AsXmlID() {
 			result[i].Origins = padesOCSPSourceUnionOrigins(result[i].Origins, origins)
@@ -200,7 +200,7 @@ func padesOCSPSourceMergeBinaryOrigins(result []PAdESOCSPSourceBinaryOriginsEntr
 		}
 	}
 	merged := append([]enumerations.RevocationOrigin{}, origins...)
-	return append(result, PAdESOCSPSourceBinaryOriginsEntry{Binary: binary, Origins: merged})
+	return append(result, OCSPSourceBinaryOriginsEntry{Binary: binary, Origins: merged})
 }
 
 // padesOCSPSourceMergeTokenOrigins merges one (token, origins) pair into result, unioning the

@@ -18,8 +18,8 @@ type DataToSignASiCSWithCAdESFromArchive struct {
 var _ GetDataToSignASiCWithCAdESHelper = (*DataToSignASiCSWithCAdESFromArchive)(nil)
 
 // NewDataToSignASiCSWithCAdESFromArchive is the default constructor. Ports
-// DataToSignASiCSWithCAdESFromArchive(ASiCContent).
-func NewDataToSignASiCSWithCAdESFromArchive(asicContent *asic.ASiCContent) *DataToSignASiCSWithCAdESFromArchive {
+// DataToSignASiCSWithCAdESFromArchive(Content).
+func NewDataToSignASiCSWithCAdESFromArchive(asicContent *asic.Content) *DataToSignASiCSWithCAdESFromArchive {
 	return &DataToSignASiCSWithCAdESFromArchive{
 		AbstractGetDataToSignASiCSWithCAdES: NewAbstractGetDataToSignASiCSWithCAdES(asicContent),
 	}

@@ -9,20 +9,20 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// PAdESSignatureIdentifierBuilder builds a signature identifier for a PAdES signature.
-type PAdESSignatureIdentifierBuilder struct {
+// SignatureIdentifierBuilder builds a signature identifier for a PAdES signature.
+type SignatureIdentifierBuilder struct {
 	validation.AbstractSignatureIdentifierBuilder
 
 	// padesSignature is the signature to build the identifier for, typed as the concrete PAdES
 	// signature so SignaturePosition needs no runtime cast (Java casts its inherited `signature`
 	// field instead, since its base class only knows AdvancedSignature).
-	padesSignature *PAdESSignature
+	padesSignature *Signature
 }
 
 // NewPAdESSignatureIdentifierBuilder is the port of the constructor
-// PAdESSignatureIdentifierBuilder(PAdESSignature).
-func NewPAdESSignatureIdentifierBuilder(signature *PAdESSignature) *PAdESSignatureIdentifierBuilder {
-	b := &PAdESSignatureIdentifierBuilder{
+// SignatureIdentifierBuilder(Signature).
+func NewSignatureIdentifierBuilder(signature *Signature) *SignatureIdentifierBuilder {
+	b := &SignatureIdentifierBuilder{
 		AbstractSignatureIdentifierBuilder: validation.NewAbstractSignatureIdentifierBuilderBase(signature),
 		padesSignature:                     signature,
 	}
@@ -34,13 +34,13 @@ func NewPAdESSignatureIdentifierBuilder(signature *PAdESSignature) *PAdESSignatu
 // getCounterSignaturePosition(AdvancedSignature) override.
 //
 // Panics with the Java message, matching UnsupportedOperationException.
-func (b *PAdESSignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
+func (b *SignatureIdentifierBuilder) CounterSignaturePosition(masterSignature validation.AdvancedSignature) any {
 	panic("Not supported in PAdES!")
 }
 
 // SignaturePosition returns a position of a signature in the provided file. Port of the
 // protected getSignaturePosition() override.
-func (b *PAdESSignatureIdentifierBuilder) SignaturePosition() any {
+func (b *SignatureIdentifierBuilder) SignaturePosition() any {
 	pdfRevision := b.padesSignature.PdfRevision()
 	var buffer bytes.Buffer
 	for _, signatureField := range pdfRevision.Fields() {
@@ -58,7 +58,7 @@ func (b *PAdESSignatureIdentifierBuilder) SignaturePosition() any {
 // identifier builder). PAdES does not override WriteSignedProperties, so this simply reproduces
 // the base's BuildBinaries body over the base's WriteSignaturePosition (which itself dispatches
 // through PositionId to this type's SignaturePosition/CounterSignaturePosition, correctly).
-func (b *PAdESSignatureIdentifierBuilder) BuildBinaries() []byte {
+func (b *SignatureIdentifierBuilder) BuildBinaries() []byte {
 	buffer := &bytes.Buffer{}
 	b.WriteSignedProperties(buffer)
 	b.WriteSignaturePosition(buffer)
@@ -68,13 +68,13 @@ func (b *PAdESSignatureIdentifierBuilder) BuildBinaries() []byte {
 // BuildSignatureIdentifier builds the SignatureIdentifier for the provided signature. Port of
 // build() with its Java return type; shadows the base to route through this type's
 // BuildBinaries().
-func (b *PAdESSignatureIdentifierBuilder) BuildSignatureIdentifier() *validation.SignatureIdentifier {
+func (b *SignatureIdentifierBuilder) BuildSignatureIdentifier() *validation.SignatureIdentifier {
 	return validation.NewSignatureIdentifier(b.BuildBinaries())
 }
 
 // Build builds the SignatureIdentifier for the provided signature, satisfying
 // model.IdentifierBuilder. Port of build(); shadows the base for the same reason as
 // BuildSignatureIdentifier.
-func (b *PAdESSignatureIdentifierBuilder) Build() model.Identifier {
+func (b *SignatureIdentifierBuilder) Build() model.Identifier {
 	return b.BuildSignatureIdentifier()
 }

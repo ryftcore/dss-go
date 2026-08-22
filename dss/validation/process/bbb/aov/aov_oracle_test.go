@@ -129,7 +129,7 @@ func loadAovRows(t *testing.T, path string) []*aovRow {
 
 // loadAovDiagnosticData reads the dump a row names: "dd/<name>" is one of XCVA's
 // synthetic dumps, anything else a member of the marshal-parity corpus.
-func loadAovDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadAovDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	var path string
 	if rest, ok := strings.CutPrefix(name, "dd/"); ok {
@@ -145,13 +145,13 @@ func loadAovDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
-// aovI18nProvider is the single I18nProvider all three replays use.
-var aovI18nProvider = i18n.NewI18nProvider()
+// aovI18nProvider is the single Provider all three replays use.
+var aovI18nProvider = i18n.NewProvider()
 
-func aovI18n() *i18n.I18nProvider { return aovI18nProvider }
+func aovI18n() *i18n.Provider { return aovI18nProvider }
 
 var aovDefaultPolicyValue modelpolicy.ValidationPolicy
 

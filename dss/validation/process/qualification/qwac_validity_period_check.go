@@ -20,8 +20,8 @@ type QWACValidityPeriodCheck struct {
 }
 
 // NewQWACValidityPeriodCheck is the default constructor. Port of
-// QWACValidityPeriodCheck(I18nProvider, XmlValidationQWACProcess, CertificateWrapper, Date, LevelRule).
-func NewQWACValidityPeriodCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// QWACValidityPeriodCheck(Provider, XmlValidationQWACProcess, CertificateWrapper, Date, LevelRule).
+func NewQWACValidityPeriodCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, constraint policy.LevelRule) *QWACValidityPeriodCheck {
 	c := &QWACValidityPeriodCheck{
 		CertificateValidityRangeCheck: xcv.NewCertificateValidityRangeCheckMinimal(i18nProvider, result, certificate, currentTime, constraint),

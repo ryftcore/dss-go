@@ -3,9 +3,9 @@ package aia
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// AIASource allows loading of issuing certificates by defined AIA URI within a
+// Source allows loading of issuing certificates by defined AIA URI within a
 // model.CertificateToken.
-type AIASource interface {
+type Source interface {
 	// CertificatesByAIA loads a set of CertificateTokens accessed by AIA URIs from the
 	// provided certificateToken. Ports getCertificatesByAIA(CertificateToken); the returned
 	// slice stands in for Java's Set<CertificateToken>, order-preserving and de-duplicated by

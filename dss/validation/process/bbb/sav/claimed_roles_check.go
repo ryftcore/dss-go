@@ -20,8 +20,8 @@ type ClaimedRolesCheck struct {
 }
 
 // NewClaimedRolesCheck is the default constructor. Port of
-// ClaimedRolesCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewClaimedRolesCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ClaimedRolesCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewClaimedRolesCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *ClaimedRolesCheck {
 	c := &ClaimedRolesCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

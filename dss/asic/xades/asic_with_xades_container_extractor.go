@@ -15,11 +15,11 @@ const asicWithXAdESContainerExtractorMetainfManifestFilename = asic.ASiCUtilsMet
 // ASiCWithXAdESContainerExtractor is used to extract the content (documents) embedded into an
 // ASiC with XAdES container.
 type ASiCWithXAdESContainerExtractor struct {
-	asic.DefaultASiCContainerExtractor
+	asic.DefaultContainerExtractor
 }
 
-var _ asic.ASiCContainerExtractor = (*ASiCWithXAdESContainerExtractor)(nil)
-var _ asic.DefaultASiCContainerExtractorOverrides = (*ASiCWithXAdESContainerExtractor)(nil)
+var _ asic.ContainerExtractor = (*ASiCWithXAdESContainerExtractor)(nil)
+var _ asic.DefaultContainerExtractorOverrides = (*ASiCWithXAdESContainerExtractor)(nil)
 
 // NewASiCWithXAdESContainerExtractor is the default constructor. Ports
 // ASiCWithXAdESContainerExtractor(DSSDocument).
@@ -35,13 +35,13 @@ func (e *ASiCWithXAdESContainerExtractor) IsSupportedContainerFormat() bool {
 	if err != nil {
 		panic(err)
 	}
-	if asic.ASiCUtilsIsAsicFileContent(filenames) {
+	if asic.UtilsIsAsicFileContent(filenames) {
 		return true
 	}
-	if !asic.ASiCUtilsAreFilesContainMimetype(filenames) {
+	if !asic.UtilsAreFilesContainMimetype(filenames) {
 		return false
 	}
-	isOpenDocument, err := asic.ASiCUtilsIsContainerOpenDocument(e.AsicContainer)
+	isOpenDocument, err := asic.UtilsIsContainerOpenDocument(e.AsicContainer)
 	if err != nil {
 		return false
 	}
@@ -62,12 +62,12 @@ func (e *ASiCWithXAdESContainerExtractor) IsAllowedArchiveManifest(entryName str
 // IsAllowedEvidenceRecordManifest ports the @Override protected
 // isAllowedEvidenceRecordManifest(String).
 func (e *ASiCWithXAdESContainerExtractor) IsAllowedEvidenceRecordManifest(entryName string) bool {
-	return asic.ASiCUtilsIsEvidenceRecordManifest(entryName)
+	return asic.UtilsIsEvidenceRecordManifest(entryName)
 }
 
 // IsAllowedSignature ports the @Override protected isAllowedSignature(String).
 func (e *ASiCWithXAdESContainerExtractor) IsAllowedSignature(entryName string) bool {
-	return asic.ASiCUtilsIsXAdES(entryName)
+	return asic.UtilsIsXAdES(entryName)
 }
 
 // IsAllowedTimestamp ports the @Override protected isAllowedTimestamp(String). No timestamp

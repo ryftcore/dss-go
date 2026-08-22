@@ -34,7 +34,7 @@ type DefaultSignaturePolicyValidatorLoader struct {
 	defaultSignaturePolicyValidator SignaturePolicyValidator
 
 	// supportHashAsInTechnicalSpecification defines whether the
-	// SignaturePolicy.hashAsInTechnicalSpecification attribute is
+	// Policy.hashAsInTechnicalSpecification attribute is
 	// supported. Default: true.
 	supportHashAsInTechnicalSpecification bool
 }
@@ -81,25 +81,25 @@ func DefaultSignaturePolicyValidatorLoaderPolicyBased() *DefaultSignaturePolicyV
 
 // SetDefaultSignaturePolicyValidator sets a SignaturePolicyValidator to be
 // used for default signature policy processing according to the signature
-// format (when SignaturePolicy.hashAsInTechnicalSpecification == false).
+// format (when Policy.hashAsInTechnicalSpecification == false).
 func (l *DefaultSignaturePolicyValidatorLoader) SetDefaultSignaturePolicyValidator(defaultSignaturePolicyValidator SignaturePolicyValidator) {
 	l.defaultSignaturePolicyValidator = defaultSignaturePolicyValidator
 }
 
 // SetSupportHashAsInTechnicalSpecification sets whether the
-// SignaturePolicy.hashAsInTechnicalSpecification attribute is supported. If
+// Policy.hashAsInTechnicalSpecification attribute is supported. If
 // set to true, the behavior of the loader will change based on the
 // attribute presence. Otherwise, it is ignored.
 //
-// Default: true (SignaturePolicy.hashAsInTechnicalSpecification attribute
+// Default: true (Policy.hashAsInTechnicalSpecification attribute
 // is supported).
 func (l *DefaultSignaturePolicyValidatorLoader) SetSupportHashAsInTechnicalSpecification(supportHashAsInTechnicalSpecification bool) {
 	l.supportHashAsInTechnicalSpecification = supportHashAsInTechnicalSpecification
 }
 
-// LoadValidator returns the relevant validator for a SignaturePolicy. See
+// LoadValidator returns the relevant validator for a Policy. See
 // the file-level deviation note regarding the ServiceLoader replacement.
-func (l *DefaultSignaturePolicyValidatorLoader) LoadValidator(signaturePolicy *signature.SignaturePolicy) SignaturePolicyValidator {
+func (l *DefaultSignaturePolicyValidatorLoader) LoadValidator(signaturePolicy *signature.Policy) SignaturePolicyValidator {
 	if l.defaultSignaturePolicyValidator != nil &&
 		(!l.supportHashAsInTechnicalSpecification || !signaturePolicy.IsHashAsInTechnicalSpecification()) {
 		return l.defaultSignaturePolicyValidator

@@ -1,12 +1,12 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESSignature.java
 // (DSS 6.5.RC1).
 //
-// XAdESSignature implements spi/validation.AdvancedSignature (all interface methods, real
-// logic), the XAdES counterpart of cades.CAdESSignature. It embeds
+// Signature implements spi/validation.AdvancedSignature (all interface methods, real
+// logic), the XAdES counterpart of cades.Signature. It embeds
 // validation.DefaultAdvancedSignature and registers itself via InitDefaultAdvancedSignature,
 // satisfying the DefaultAdvancedSignatureOverrides interface with real per-format logic; the
 // remaining AdvancedSignature methods this base does not cover (SigningTime,
-// SignatureProductionPlace, SignaturePolicyStore, ContentType, MimeType, SignatureType,
+// ProductionPlace, SignaturePolicyStore, ContentType, MimeType, SignatureType,
 // DAIdentifier, DataFoundUpToLevel, SignatureValue, ReferenceValidations,
 // DataToBeSignedRepresentation, AddExternalTimestamp, CommitmentTypeIndications) are implemented
 // directly, mirroring Java's own class exactly as CAdESSignature does for its set.
@@ -17,7 +17,7 @@
 // wholesale by internal/xmldsig (frozen). getSantuarioSignature() below builds an
 // *xmldsig.XMLSignature the same way Java's private method builds an
 // org.apache.xml.security.signature.XMLSignature: registering the document's ID attributes first
-// (xmldom's RegisterIDs via XAdESDOMDocument.RecursiveIdBrowse - required before
+// (xmldom's RegisterIDs via DOMDocument.RecursiveIdBrowse - required before
 // internal/xmldsig/signature.go's NewXMLSignature is called), then wiring detached-content and
 // counter-signature resolvers when DetachedContents is non-empty. internal/xmldsig has no
 // JCE-style registry to initialize (RSA-RIPEMD160 is dispatched directly in its sigalg.go), and
@@ -28,22 +28,22 @@
 // # Deviations
 //
 //   - checkSignatureIntegrity's Java catch(Exception) branch appends a synthetic
-//     "/ XAdESSignature/Line number/<n>" suffix derived from walking the JVM stack trace for the
+//     "/ Signature/Line number/<n>" suffix derived from walking the JVM stack trace for the
 //     first frame inside this class. Go has no equivalent stack-introspection API in use
 //     elsewhere in this port, so checkSignatureIntegrityUnsafe's defer/recover (which reproduces
 //     the broad try/catch itself, since GetReferences/ReferenceValidations/getSantuarioSignature
 //     all panic on the same unchecked failure Java's DSSException represents) keeps the
 //     underlying error message only, dropping the line-number suffix.
 //   - SignaturePolicy()/BuildSignaturePolicy(): Java's getSignaturePolicy() override
-//     downcasts super.getSignaturePolicy() to XAdESSignaturePolicy for its own callers' benefit.
+//     downcasts super.getSignaturePolicy() to SignaturePolicy for its own callers' benefit.
 //     No landed caller in this package needs that narrower type (signature_policy_store_builder.go
-//     only reads .Digest(), present on the plain base signature.SignaturePolicy already), so this
+//     only reads .Digest(), present on the plain base signature.Policy already), so this
 //     file implements only BuildSignaturePolicy() (the required override-interface entry) and
-//     leaves the promoted, non-covariant SignaturePolicy() getter from DefaultAdvancedSignature in
+//     leaves the promoted, non-covariant Policy() getter from DefaultAdvancedSignature in
 //     place - matching the "Go has no covariant returns, type-assert if you need the narrower
 //     type" convention advanced_signature.go's own doc comment documents for DSSID(). A caller
-//     that DOES need XAdESSignaturePolicy.TransformsDescription()'s override will only see the
-//     base (always-empty) implementation through the plain *signature.SignaturePolicy this file
+//     that DOES need SignaturePolicy.TransformsDescription()'s override will only see the
+//     base (always-empty) implementation through the plain *signature.Policy this file
 //     hands back - the same embedding-has-no-virtual-dispatch limitation
 //     xades_reference_validation.go already flags for TransformationNames.
 //   - GetReferenceValidations' manifest-entry dependent validations
@@ -91,16 +91,16 @@ func init() {
 	DSSXMLUtilsRegisterXAdESNamespaces()
 }
 
-// XAdESSignature parses an XAdES signature structure. Note that for each signature to be
+// Signature parses an XAdES signature structure. Note that for each signature to be
 // validated a new instance of this object must be created. Port of the class XAdESSignature,
 // extending validation.DefaultAdvancedSignature.
 //
 // serialVersionUID and java.io.Serializable are dropped (no Go counterpart).
-type XAdESSignature struct {
+type Signature struct {
 	validation.DefaultAdvancedSignature
 
 	// signatureElement represents the signature element container.
-	signatureElement *XAdESDOMElement
+	signatureElement *DOMElement
 
 	// xmldSigNamespace is the XMLDSIG namespace.
 	xmldSigNamespace *common.DSSNamespace
@@ -129,43 +129,43 @@ type XAdESSignature struct {
 	// cachedCryptoVerification is this port's idempotency guard for CheckSignatureIntegrity, a
 	// replacement for reading the (inaccessible, cross-package-private)
 	// signatureCryptographicVerification field directly the way Java's own method does for its
-	// "already computed" early-return check; see cades.CAdESSignature's identical field for the
-	// precedent. It is set to the same *signature.SignatureCryptographicVerification handed to
+	// "already computed" early-return check; see cades.Signature's identical field for the
+	// precedent. It is set to the same *signature.CryptographicVerification handed to
 	// SetSignatureCryptographicVerification, so the two never disagree.
-	cachedCryptoVerification *signature.SignatureCryptographicVerification
+	cachedCryptoVerification *signature.CryptographicVerification
 }
 
-// NewXAdESSignature is used when creating the signature. The default XPathQueryHolder is set.
+// NewSignature is used when creating the signature. The default XPathQueryHolder is set.
 // Port of the public XAdESSignature(Element) constructor.
-func NewXAdESSignature(signatureElement *xmldom.Node) *XAdESSignature {
-	return NewXAdESSignatureWithPathHolders(signatureElement, []definition.XAdESPath{&definition.XAdES132Path{}})
+func NewSignature(signatureElement *xmldom.Node) *Signature {
+	return NewSignatureWithPathHolders(signatureElement, []definition.XAdESPath{&definition.XAdES132Path{}})
 }
 
 // NewXAdESSignatureWithPathHolders is the default constructor for XAdESSignature. Port of the
-// public XAdESSignature(Element, List<XAdESPath>) constructor.
+// public Signature(Element, List<XAdESPath>) constructor.
 //
 // Panics with the Java messages when signatureElement or xadesPathHolders is missing
 // (Objects.requireNonNull).
-func NewXAdESSignatureWithPathHolders(signatureElement *xmldom.Node, xadesPathHolders []definition.XAdESPath) *XAdESSignature {
+func NewSignatureWithPathHolders(signatureElement *xmldom.Node, xadesPathHolders []definition.XAdESPath) *Signature {
 	if signatureElement == nil {
 		panic("Signature Element cannot be null")
 	}
 	if xadesPathHolders == nil {
 		panic("XAdES Path holders cannot be null")
 	}
-	ownerDocument := NewXAdESDOMDocument(signatureElement.OwnerDocument(), xadesPathHolders)
-	return NewXAdESSignatureFromDOMElement(NewXAdESDOMElement(signatureElement, ownerDocument))
+	ownerDocument := NewDOMDocument(signatureElement.OwnerDocument(), xadesPathHolders)
+	return NewSignatureFromDOMElement(NewDOMElement(signatureElement, ownerDocument))
 }
 
 // NewXAdESSignatureFromDOMElement is used when creating the signature. Port of the public
-// XAdESSignature(XAdESDOMElement) constructor.
+// Signature(DOMElement) constructor.
 //
 // Panics with the Java message when signatureElement is missing (Objects.requireNonNull).
-func NewXAdESSignatureFromDOMElement(signatureElement *XAdESDOMElement) *XAdESSignature {
+func NewSignatureFromDOMElement(signatureElement *DOMElement) *Signature {
 	if signatureElement == nil {
 		panic("Signature Element cannot be null")
 	}
-	s := &XAdESSignature{
+	s := &Signature{
 		DefaultAdvancedSignature: validation.NewDefaultAdvancedSignatureBase(),
 		signatureElement:         signatureElement,
 	}
@@ -177,13 +177,13 @@ func NewXAdESSignatureFromDOMElement(signatureElement *XAdESDOMElement) *XAdESSi
 // SetDisableXSWProtection: NOT RECOMMENDED - this parameter allows disabling protection against
 // XML Signature wrapping attacks (XSW). It disables the research by XPath expression for defined
 // Type attributes. Port of setDisableXSWProtection(boolean).
-func (s *XAdESSignature) SetDisableXSWProtection(disableXSWProtection bool) {
+func (s *Signature) SetDisableXSWProtection(disableXSWProtection bool) {
 	s.disableXSWProtection = disableXSWProtection
 }
 
-// initialiseSettings is called when creating a new instance of XAdESSignature with unknown
+// initialiseSettings is called when creating a new instance of Signature with unknown
 // schema. Port of the private initialiseSettings().
-func (s *XAdESSignature) initialiseSettings() {
+func (s *Signature) initialiseSettings() {
 	s.RecursiveNamespaceBrowser(s.SignatureElement())
 	if s.xadesPath == nil {
 		// Upstream logs "There is no suitable XAdESPaths / XAdESNamespace to manage the
@@ -195,7 +195,7 @@ func (s *XAdESSignature) initialiseSettings() {
 
 // RecursiveNamespaceBrowser sets the namespace which will determine the XAdESPaths to use. The
 // content of the Transform element is ignored. Port of the public recursiveNamespaceBrowser(Element).
-func (s *XAdESSignature) RecursiveNamespaceBrowser(element *xmldom.Node) {
+func (s *Signature) RecursiveNamespaceBrowser(element *xmldom.Node) {
 	for node := element.FirstChild; node != nil; node = node.NextSibling {
 		if node.Kind != xmldom.Element {
 			continue
@@ -215,7 +215,7 @@ func (s *XAdESSignature) RecursiveNamespaceBrowser(element *xmldom.Node) {
 }
 
 // setXAdESPathAndNamespace ports the private setXAdESPathAndNamespace(String, String).
-func (s *XAdESSignature) setXAdESPathAndNamespace(prefix, namespaceURI string) {
+func (s *Signature) setXAdESPathAndNamespace(prefix, namespaceURI string) {
 	for _, currentXAdESPaths := range s.signatureElement.XAdESPathHolders() {
 		if currentXAdESPaths.Namespace().IsSameUri(namespaceURI) {
 			s.xadesPath = currentXAdESPaths
@@ -226,37 +226,37 @@ func (s *XAdESSignature) setXAdESPathAndNamespace(prefix, namespaceURI string) {
 
 // XAdESPathsHolders returns a list of used XAdESPaths. Port of the deprecated
 // getXAdESPathsHolders().
-func (s *XAdESSignature) XAdESPathsHolders() []definition.XAdESPath {
+func (s *Signature) XAdESPathsHolders() []definition.XAdESPath {
 	return s.signatureElement.XAdESPathHolders()
 }
 
 // XAdESPaths gets the current XAdESPath. Port of getXAdESPaths().
-func (s *XAdESSignature) XAdESPaths() definition.XAdESPath {
+func (s *Signature) XAdESPaths() definition.XAdESPath {
 	return s.xadesPath
 }
 
 // XmldSigNamespace returns the XMLDSIG namespace. Port of getXmldSigNamespace().
-func (s *XAdESSignature) XmldSigNamespace() *common.DSSNamespace {
+func (s *Signature) XmldSigNamespace() *common.DSSNamespace {
 	return s.xmldSigNamespace
 }
 
 // XadesNamespace returns the XAdES namespace. Port of getXadesNamespace().
-func (s *XAdESSignature) XadesNamespace() *common.DSSNamespace {
+func (s *Signature) XadesNamespace() *common.DSSNamespace {
 	return s.xadesNamespace
 }
 
 // SignatureElement returns the w3c.dom encapsulated signature element. Port of getSignatureElement().
-func (s *XAdESSignature) SignatureElement() *xmldom.Node {
+func (s *Signature) SignatureElement() *xmldom.Node {
 	return s.signatureElement.Element()
 }
 
 // OwnerDocument gets the owner document. Port of getOwnerDocument().
-func (s *XAdESSignature) OwnerDocument() *XAdESDOMDocument {
+func (s *Signature) OwnerDocument() *DOMDocument {
 	return s.signatureElement.OwnerDocument()
 }
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
-func (s *XAdESSignature) SignatureForm() enumerations.SignatureForm {
+func (s *Signature) SignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureFormXAdES
 }
 
@@ -266,7 +266,7 @@ func (s *XAdESSignature) SignatureForm() enumerations.SignatureForm {
 // Panics when ds:SignedInfo/ds:SignatureMethod cannot be found: Java calls .getAttribute(...)
 // directly on the XPathUtils.getElement(...) result with no null check, an unchecked
 // NullPointerException for a signature without one.
-func (s *XAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
+func (s *Signature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 	element, err := xmlutils.XPathUtilsGetElement(s.SignatureElement(), common.XMLDSigPathSignatureMethodPath)
 	if err != nil || element == nil {
 		panic("xades: ds:SignedInfo/ds:SignatureMethod not found")
@@ -281,27 +281,27 @@ func (s *XAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 
 // CertificateSource gets a certificate source which contains ALL certificates embedded in the
 // signature. Port of getCertificateSource().
-func (s *XAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
+func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
-		xadesCertificateSource := NewXAdESCertificateSource(s.SignatureElement(), s.xadesPath)
+		xadesCertificateSource := NewCertificateSource(s.SignatureElement(), s.xadesPath)
 		s.SetOfflineCertificateSource(&xadesCertificateSource.SignatureCertificateSource)
 	}
 	return s.OfflineCertificateSource()
 }
 
 // CRLSource gets a CRL source which contains ALL CRLs embedded in the signature. Port of getCRLSource().
-func (s *XAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
+func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
-		s.SetSignatureCRLSource(NewXAdESCRLSource(s.SignatureElement(), s.xadesPath))
+		s.SetSignatureCRLSource(NewCRLSource(s.SignatureElement(), s.xadesPath))
 	}
 	return s.SignatureCRLSource()
 }
 
 // OCSPSource gets an OCSP source which contains ALL OCSP responses embedded in the signature.
 // Port of getOCSPSource().
-func (s *XAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
+func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
-		s.SetSignatureOCSPSource(NewXAdESOCSPSource(s.SignatureElement(), s.xadesPath))
+		s.SetSignatureOCSPSource(NewOCSPSource(s.SignatureElement(), s.xadesPath))
 	}
 	return s.SignatureOCSPSource()
 }
@@ -310,15 +310,15 @@ func (s *XAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCS
 // the signature. Port of getTimestampSource(), covariant in Java (returns XAdESTimestampSource);
 // Go callers needing the concrete type type-assert instead (xades_level_baseline_t.go and
 // xades_level_x.go both do this).
-func (s *XAdESSignature) TimestampSource() validation.TimestampSource {
+func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
-		s.SetSignatureTimestampSource(NewXAdESTimestampSource(s))
+		s.SetSignatureTimestampSource(NewTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
 
 // SigningTime returns the signing time included within the signature, or nil. Port of getSigningTime().
-func (s *XAdESSignature) SigningTime() *time.Time {
+func (s *Signature) SigningTime() *time.Time {
 	signingTimeEl, err := xmlutils.XPathUtilsGetElement(s.SignatureElement(), s.xadesPath.SigningTimePath())
 	if err != nil || signingTimeEl == nil {
 		return nil
@@ -332,7 +332,7 @@ func (s *XAdESSignature) SigningTime() *time.Time {
 
 // BuildSignaturePolicy extracts a signature policy from a signature and builds the object. Port
 // of the protected buildSignaturePolicy().
-func (s *XAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
+func (s *Signature) BuildSignaturePolicy() *signature.Policy {
 	policyIdentifier, err := xmlutils.XPathUtilsGetElement(s.SignatureElement(), s.xadesPath.SignaturePolicyIdentifierPath())
 	if err != nil || policyIdentifier == nil {
 		return nil
@@ -354,7 +354,7 @@ func (s *XAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
 			policyUrlString = policyIdString
 		}
 
-		xadesSignaturePolicy := NewXAdESSignaturePolicyWithIdentifier(policyIdString)
+		xadesSignaturePolicy := NewSignaturePolicyWithIdentifier(policyIdString)
 
 		digestElement, _ := xmlutils.XPathUtilsGetElement(policyIdentifier, s.xadesPath.CurrentSignaturePolicyDigestAlgAndValue())
 		xadesSignaturePolicy.SetDigest(DSSXMLUtilsGetDigestAndValue(digestElement))
@@ -395,20 +395,20 @@ func (s *XAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
 			xadesSignaturePolicy.SetHashAsInTechnicalSpecification(s.isHashComputationAsInPolicySpecification(transformsNode))
 		}
 
-		return &xadesSignaturePolicy.SignaturePolicy
+		return &xadesSignaturePolicy.Policy
 	}
 
 	// Implicit policy.
 	signaturePolicyImplied, err := xmlutils.XPathUtilsGetElement(policyIdentifier, s.xadesPath.CurrentSignaturePolicyImplied())
 	if err == nil && signaturePolicyImplied != nil {
-		return &NewXAdESSignaturePolicy().SignaturePolicy
+		return &NewSignaturePolicy().Policy
 	}
 	return nil
 }
 
 // buildSPUserNotice ports the private buildSPUserNotice(Element). A malformed value is caught
 // and dropped (Java logs "Unable to build SPUserNotice qualifier. Reason : {}" and returns nil).
-func (s *XAdESSignature) buildSPUserNotice(spUserNoticeElement *xmldom.Node) (result *model.UserNotice) {
+func (s *Signature) buildSPUserNotice(spUserNoticeElement *xmldom.Node) (result *model.UserNotice) {
 	defer func() {
 		if recover() != nil {
 			result = nil
@@ -443,7 +443,7 @@ func (s *XAdESSignature) buildSPUserNotice(spUserNoticeElement *xmldom.Node) (re
 
 // isHashComputationAsInPolicySpecification ports the private
 // isHashComputationAsInPolicySpecification(Element).
-func (s *XAdESSignature) isHashComputationAsInPolicySpecification(transforms *xmldom.Node) bool {
+func (s *Signature) isHashComputationAsInPolicySpecification(transforms *xmldom.Node) bool {
 	if transforms != nil && transforms.FirstChild != nil {
 		transformList, err := xmlutils.XPathUtilsGetNodeList(transforms, common.XMLDSigPathTransformPath)
 		if err == nil && len(transformList) == 1 {
@@ -455,7 +455,7 @@ func (s *XAdESSignature) isHashComputationAsInPolicySpecification(transforms *xm
 }
 
 // buildSpDocSpecification ports the private buildSpDocSpecification(Element).
-func (s *XAdESSignature) buildSpDocSpecification(spDocSpecificationElement *xmldom.Node) *model.SpDocSpecification {
+func (s *Signature) buildSpDocSpecification(spDocSpecificationElement *xmldom.Node) *model.SpDocSpecification {
 	spDocSpec := model.NewSpDocSpecification()
 
 	identifierElement, _ := xmlutils.XPathUtilsGetElement(spDocSpecificationElement, s.xadesPath.CurrentIdentifier())
@@ -489,9 +489,9 @@ func (s *XAdESSignature) buildSpDocSpecification(spDocSpecificationElement *xmld
 	return spDocSpec
 }
 
-// SignatureProductionPlace returns information about the place where the signature was
+// ProductionPlace returns information about the place where the signature was
 // generated. Port of getSignatureProductionPlace().
-func (s *XAdESSignature) SignatureProductionPlace() *signature.SignatureProductionPlace {
+func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.SignatureProductionPlacePath())
 	if err != nil {
 		nodeList = nil
@@ -508,7 +508,7 @@ func (s *XAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 		return nil
 	}
 
-	signatureProductionPlace := signature.NewSignatureProductionPlace()
+	signatureProductionPlace := signature.NewProductionPlace()
 	for item := nodeList[0].FirstChild; item != nil; item = item.NextSibling {
 		name := item.Name.Local
 		nodeValue := item.TextContent()
@@ -529,7 +529,7 @@ func (s *XAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 }
 
 // SignaturePolicyStore returns the Signature Policy Store from the signature. Port of getSignaturePolicyStore().
-func (s *XAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
+func (s *Signature) SignaturePolicyStore() *model.SignaturePolicyStore {
 	signaturePolicyStorePath := s.xadesPath.SignaturePolicyStorePath()
 	if signaturePolicyStorePath == nil {
 		return nil
@@ -572,7 +572,7 @@ func (s *XAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
 }
 
 // SignedAssertions returns the list of embedded signed assertions. Port of getSignedAssertions().
-func (s *XAdESSignature) SignedAssertions() []*signature.SignerRole {
+func (s *Signature) SignedAssertions() []*signature.SignerRole {
 	result := []*signature.SignerRole{}
 	signedAssertionPath := s.xadesPath.SignedAssertionPath()
 	if signedAssertionPath != nil {
@@ -591,7 +591,7 @@ func (s *XAdESSignature) SignedAssertions() []*signature.SignerRole {
 }
 
 // ClaimedSignerRoles returns the claimed roles of the signer. Port of getClaimedSignerRoles().
-func (s *XAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
+func (s *Signature) ClaimedSignerRoles() []*signature.SignerRole {
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.ClaimedRolePath())
 	if err != nil {
 		nodeList = nil
@@ -612,7 +612,7 @@ func (s *XAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
 }
 
 // CertifiedSignerRoles returns the certified roles of the signer. Port of getCertifiedSignerRoles().
-func (s *XAdESSignature) CertifiedSignerRoles() []*signature.SignerRole {
+func (s *Signature) CertifiedSignerRoles() []*signature.SignerRole {
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.CertifiedRolePath())
 	if err != nil {
 		nodeList = nil
@@ -633,7 +633,7 @@ func (s *XAdESSignature) CertifiedSignerRoles() []*signature.SignerRole {
 }
 
 // ContentType returns the value of the signed attribute content-type. Port of getContentType().
-func (s *XAdESSignature) ContentType() string {
+func (s *Signature) ContentType() string {
 	allContentTypes, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.DataObjectFormatObjectIdentifier())
 	if err == nil {
 		for _, node := range allContentTypes {
@@ -647,7 +647,7 @@ func (s *XAdESSignature) ContentType() string {
 }
 
 // MimeType returns the value of the signed attribute mime-type. Port of getMimeType().
-func (s *XAdESSignature) MimeType() string {
+func (s *Signature) MimeType() string {
 	allMimeTypes, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.DataObjectFormatMimeType())
 	if err == nil {
 		for _, node := range allMimeTypes {
@@ -662,12 +662,12 @@ func (s *XAdESSignature) MimeType() string {
 
 // SignatureType returns the value of the signature type protected header. Not supported for
 // XAdES. Port of getSignatureType().
-func (s *XAdESSignature) SignatureType() string {
+func (s *Signature) SignatureType() string {
 	return ""
 }
 
 // SignatureValueBase64 returns a base64 SignatureValue. Port of the public getSignatureValueBase64().
-func (s *XAdESSignature) SignatureValueBase64() string {
+func (s *Signature) SignatureValueBase64() string {
 	signatureValueElement, err := xmlutils.XPathUtilsGetElement(s.SignatureElement(), common.XMLDSigPathSignatureValuePath)
 	if err != nil || signatureValueElement == nil {
 		return ""
@@ -676,7 +676,7 @@ func (s *XAdESSignature) SignatureValueBase64() string {
 }
 
 // SignatureValue returns the digital signature value. Port of getSignatureValue().
-func (s *XAdESSignature) SignatureValue() []byte {
+func (s *Signature) SignatureValue() []byte {
 	signatureValueBase64 := s.SignatureValueBase64()
 	if signatureValueBase64 != "" && utils.IsBase64Encoded(signatureValueBase64) {
 		return utils.FromBase64(signatureValueBase64)
@@ -686,7 +686,7 @@ func (s *XAdESSignature) SignatureValue() []byte {
 }
 
 // SignatureValueId returns Id of the ds:SignatureValue element. Port of getSignatureValueId().
-func (s *XAdESSignature) SignatureValueId() string {
+func (s *Signature) SignatureValueId() string {
 	value, err := xmlutils.XPathUtilsGetValue(s.SignatureElement(), common.XMLDSigPathSignatureValueIDPath)
 	if err != nil {
 		return ""
@@ -696,7 +696,7 @@ func (s *XAdESSignature) SignatureValueId() string {
 
 // Objects returns the list of ds:Object elements for the current signature element. Port of the
 // public getObjects().
-func (s *XAdESSignature) Objects() []*xmldom.Node {
+func (s *Signature) Objects() []*xmldom.Node {
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), common.XMLDSigPathObjectPath)
 	if err != nil {
 		return nil
@@ -706,20 +706,20 @@ func (s *XAdESSignature) Objects() []*xmldom.Node {
 
 // AddExternalTimestamp allows adding an external timestamp. Not supported for XAdES. Port of
 // addExternalTimestamp(TimestampToken).
-func (s *XAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
+func (s *Signature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
 	panic("The action is not supported for XAdES!")
 }
 
-// BaselineRequirementsChecker returns the cached instance of the XAdESBaselineRequirementsChecker.
+// BaselineRequirementsChecker returns the cached instance of the BaselineRequirementsChecker.
 // Port of the protected covariant-return override getBaselineRequirementsChecker().
-func (s *XAdESSignature) BaselineRequirementsChecker() *XAdESBaselineRequirementsChecker {
-	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*XAdESBaselineRequirementsChecker)
+func (s *Signature) BaselineRequirementsChecker() *BaselineRequirementsChecker {
+	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*BaselineRequirementsChecker)
 }
 
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
-func (s *XAdESSignature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
-	return NewXAdESBaselineRequirementsChecker(s, certificateVerifier)
+func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
+	return NewBaselineRequirementsChecker(s, certificateVerifier)
 }
 
 // CheckSignatureIntegrity verifies the signature integrity; checks if the signed content has not
@@ -728,11 +728,11 @@ func (s *XAdESSignature) CreateBaselineRequirementsChecker(certificateVerifier v
 // The early "already computed" return reads s.cachedCryptoVerification rather than the base's
 // own (inaccessible, cross-package-private) signatureCryptographicVerification field; see that
 // field's doc comment.
-func (s *XAdESSignature) CheckSignatureIntegrity() {
+func (s *Signature) CheckSignatureIntegrity() {
 	if s.cachedCryptoVerification != nil {
 		return
 	}
-	verification := signature.NewSignatureCryptographicVerification()
+	verification := signature.NewCryptographicVerification()
 	s.cachedCryptoVerification = verification
 	s.SetSignatureCryptographicVerification(verification)
 
@@ -747,7 +747,7 @@ func (s *XAdESSignature) CheckSignatureIntegrity() {
 // checkSignatureIntegrityUnsafe runs the try body of checkSignatureIntegrity(); its defer/
 // recover reproduces the surrounding catch(Exception), since GetSantuarioSignature/References/
 // ReferenceValidations all panic on the same unchecked failures Java's DSSException represents.
-func (s *XAdESSignature) checkSignatureIntegrityUnsafe(verification *signature.SignatureCryptographicVerification) (err error) {
+func (s *Signature) checkSignatureIntegrityUnsafe(verification *signature.CryptographicVerification) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			if e, ok := r.(error); ok {
@@ -764,7 +764,7 @@ func (s *XAdESSignature) checkSignatureIntegrityUnsafe(verification *signature.S
 	}
 	candidatesForSigningCertificate := s.CandidatesForSigningCertificate()
 
-	signingCertificateValidator := NewXAdESSignatureIntegrityValidator(currentSantuarioSignature)
+	signingCertificateValidator := NewSignatureIntegrityValidator(currentSantuarioSignature)
 	certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 	if certificateValidity != nil {
 		if err := candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity); err != nil {
@@ -787,7 +787,7 @@ func (s *XAdESSignature) checkSignatureIntegrityUnsafe(verification *signature.S
 
 // ReferenceValidations returns individual validation for each reference. Port of
 // getReferenceValidations().
-func (s *XAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
+func (s *Signature) ReferenceValidations() []*model.ReferenceValidation {
 	if s.CachedReferenceValidations() != nil {
 		return s.CachedReferenceValidations()
 	}
@@ -800,7 +800,7 @@ func (s *XAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 	for _, reference := range santuarioReferences {
 		// Named refValidation, not "validation": that identifier would shadow the imported
 		// spi/validation package for the rest of this loop body.
-		refValidation := NewXAdESReferenceValidation(reference)
+		refValidation := NewReferenceValidation(reference)
 		refValidation.SetType(enumerations.DigestMatcherTypeReference)
 		referenceValidations = append(referenceValidations, &refValidation.ReferenceValidation)
 
@@ -854,7 +854,7 @@ func (s *XAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 			case DSSXMLUtilsIsCounterSignatureReference(reference, s):
 				refValidation.SetType(enumerations.DigestMatcherTypeCounterSignature)
 				// found is checked in the reference validation.
-				if masterSignature, ok := s.MasterSignature().(*XAdESSignature); ok {
+				if masterSignature, ok := s.MasterSignature().(*Signature); ok {
 					referenceValidations = append(referenceValidations,
 						s.getCounterSignatureReferenceValidation(reference, masterSignature))
 				}
@@ -893,18 +893,18 @@ func (s *XAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 }
 
 // XAdESReferenceValidations narrows ReferenceValidations() down to the elements that were built
-// as *XAdESReferenceValidation (via the registry xades_reference_validation.go maintains for
+// as *ReferenceValidation (via the registry xades_reference_validation.go maintains for
 // exactly this purpose - Go has no instanceof/covariant-return equivalent through embedding).
 // Ports the effect of Java's `getReferenceValidations().stream().filter(rv -> rv instanceof
-// XAdESReferenceValidation)...` idiom used by XAdESSignatureScopeFinder,
-// XAdESTimestampScopeFinder and XAdESTimestampSource. Not every element qualifies: e.g. notFound()
+// ReferenceValidation)...` idiom used by SignatureScopeFinder,
+// TimestampScopeFinder and TimestampSource. Not every element qualifies: e.g. notFound()
 // and getCounterSignatureReferenceValidation() below build plain *model.ReferenceValidation
 // values that were never registered.
-func (s *XAdESSignature) XAdESReferenceValidations() []*XAdESReferenceValidation {
+func (s *Signature) XAdESReferenceValidations() []*ReferenceValidation {
 	referenceValidations := s.ReferenceValidations()
-	result := make([]*XAdESReferenceValidation, 0, len(referenceValidations))
+	result := make([]*ReferenceValidation, 0, len(referenceValidations))
 	for _, rv := range referenceValidations {
-		if xrv, ok := XAdESReferenceValidationFor(rv); ok {
+		if xrv, ok := ReferenceValidationFor(rv); ok {
 			result = append(result, xrv)
 		}
 	}
@@ -912,8 +912,8 @@ func (s *XAdESSignature) XAdESReferenceValidations() []*XAdESReferenceValidation
 }
 
 // getCounterSignatureReferenceValidation ports the private
-// getCounterSignatureReferenceValidation(Reference, XAdESSignature).
-func (s *XAdESSignature) getCounterSignatureReferenceValidation(counterSignatureReference *xmldsig.Reference, masterSignature *XAdESSignature) *model.ReferenceValidation {
+// getCounterSignatureReferenceValidation(Reference, Signature).
+func (s *Signature) getCounterSignatureReferenceValidation(counterSignatureReference *xmldsig.Reference, masterSignature *Signature) *model.ReferenceValidation {
 	referenceValidation := model.NewReferenceValidation()
 	referenceValidation.SetType(enumerations.DigestMatcherTypeCounterSignedSignatureValue)
 
@@ -954,7 +954,7 @@ func (s *XAdESSignature) getCounterSignatureReferenceValidation(counterSignature
 
 // ensureCounterSignatureReferenceFound ports the private
 // ensureCounterSignatureReferenceFound(List<ReferenceValidation>).
-func (s *XAdESSignature) ensureCounterSignatureReferenceFound(referenceValidations []*model.ReferenceValidation) []*model.ReferenceValidation {
+func (s *Signature) ensureCounterSignatureReferenceFound(referenceValidations []*model.ReferenceValidation) []*model.ReferenceValidation {
 	for _, r := range referenceValidations {
 		if r.Type() == enumerations.DigestMatcherTypeCounterSignedSignatureValue {
 			return referenceValidations
@@ -968,7 +968,7 @@ func (s *XAdESSignature) ensureCounterSignatureReferenceFound(referenceValidatio
 	return append(referenceValidations, referenceValidation)
 }
 
-// BuildSignatureDigestReference builds a new SignatureDigestReference according to the
+// BuildSignatureDigestReference builds a new DigestReference according to the
 // applicable signature format rules.
 //
 // TS 119 442 - V1.1.1 - Electronic Signatures and Infrastructures (ESI), ch. 5.1.4.2.1.3 XML
@@ -978,16 +978,16 @@ func (s *XAdESSignature) ensureCounterSignatureReferenceFound(referenceValidatio
 // contents. The canonicalization shall be computed keeping this ds:Signature element as a
 // descendant of the XML root element, without detaching it. Port of the protected
 // buildSignatureDigestReference(DigestAlgorithm).
-func (s *XAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference {
+func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference {
 	messageDigest, err := DSSXMLUtilsGetDigestOnCanonicalizedNode(s.SignatureElement(), digestAlgorithm, xadesSignatureDefaultCanonicalizationMethod)
 	if err != nil {
 		panic(err)
 	}
-	return signature.NewSignatureDigestReferenceWithCanonicalization(xadesSignatureDefaultCanonicalizationMethod, messageDigest.Digest)
+	return signature.NewDigestReferenceWithCanonicalization(xadesSignatureDefaultCanonicalizationMethod, messageDigest.Digest)
 }
 
 // DataToBeSignedRepresentation returns the DTBSR. Port of getDataToBeSignedRepresentation().
-func (s *XAdESSignature) DataToBeSignedRepresentation() model.Digest {
+func (s *Signature) DataToBeSignedRepresentation() model.Digest {
 	digestAlgorithm := s.DigestAlgorithm()
 	if digestAlgorithm == "" {
 		// Upstream logs "DigestAlgorithm is not found! Unable to compute DTBSR.".
@@ -1012,7 +1012,7 @@ func (s *XAdESSignature) DataToBeSignedRepresentation() model.Digest {
 }
 
 // SignedInfo returns the ds:SignedInfo element. Port of the public getSignedInfo().
-func (s *XAdESSignature) SignedInfo() *xmldom.Node {
+func (s *Signature) SignedInfo() *xmldom.Node {
 	element, err := xmlutils.XPathUtilsGetElement(s.SignatureElement(), common.XMLDSigPathSignedInfoPath)
 	if err != nil {
 		// Upstream logs "Unable to extract ds:SignedInfo element! Reason : %s.".
@@ -1023,18 +1023,18 @@ func (s *XAdESSignature) SignedInfo() *xmldom.Node {
 
 // getManifestReferences returns a list of all references contained in the given manifest. Port
 // of the private getManifestReferences(Element).
-func (s *XAdESSignature) getManifestReferences(manifestElement *xmldom.Node) []*model.ReferenceValidation {
+func (s *Signature) getManifestReferences(manifestElement *xmldom.Node) []*model.ReferenceValidation {
 	mv := NewManifestValidator(manifestElement, s.DetachedContents())
 	return mv.Validate()
 }
 
 // findSignedPropertiesById ports the private findSignedPropertiesById(String).
-func (s *XAdESSignature) findSignedPropertiesById(uri string) bool {
+func (s *Signature) findSignedPropertiesById(uri string) bool {
 	return s.getSignedPropertiesById(uri) != nil
 }
 
 // getSignedPropertiesById ports the private getSignedPropertiesById(String).
-func (s *XAdESSignature) getSignedPropertiesById(uri string) *xmldom.Node {
+func (s *Signature) getSignedPropertiesById(uri string) *xmldom.Node {
 	if utils.IsStringNotBlank(uri) {
 		return xmlutils.XPathUtilsGetElementByIdWithQuery(s.SignatureElement(), s.xadesPath.SignedPropertiesPath(), uri)
 	}
@@ -1042,12 +1042,12 @@ func (s *XAdESSignature) getSignedPropertiesById(uri string) *xmldom.Node {
 }
 
 // findObjectById ports the private findObjectById(String).
-func (s *XAdESSignature) findObjectById(uri string) bool {
+func (s *Signature) findObjectById(uri string) bool {
 	return s.ObjectById(uri) != nil
 }
 
 // ObjectById gets ds:Object by its Id. Port of the public getObjectById(String).
-func (s *XAdESSignature) ObjectById(id string) *xmldom.Node {
+func (s *Signature) ObjectById(id string) *xmldom.Node {
 	if utils.IsStringNotBlank(id) {
 		return xmlutils.XPathUtilsGetElementByIdWithQuery(s.SignatureElement(), common.XMLDSigPathObjectPath, id)
 	}
@@ -1055,7 +1055,7 @@ func (s *XAdESSignature) ObjectById(id string) *xmldom.Node {
 }
 
 // ManifestById gets ds:Manifest by its Id. Port of the public getManifestById(String).
-func (s *XAdESSignature) ManifestById(id string) *xmldom.Node {
+func (s *Signature) ManifestById(id string) *xmldom.Node {
 	if utils.IsStringNotBlank(id) {
 		return xmlutils.XPathUtilsGetElementByIdWithQuery(s.SignatureElement(), common.XMLDSigPathManifestPath, id)
 	}
@@ -1063,7 +1063,7 @@ func (s *XAdESSignature) ManifestById(id string) *xmldom.Node {
 }
 
 // notFound ports the private notFound(DigestMatcherType).
-func (s *XAdESSignature) notFound(typ enumerations.DigestMatcherType) *model.ReferenceValidation {
+func (s *Signature) notFound(typ enumerations.DigestMatcherType) *model.ReferenceValidation {
 	refValidation := model.NewReferenceValidation()
 	refValidation.SetType(typ)
 	refValidation.SetFound(false)
@@ -1078,7 +1078,7 @@ func (s *XAdESSignature) notFound(typ enumerations.DigestMatcherType) *model.Ref
 // returns the error explicitly to the one caller that needs to catch it faithfully
 // (checkSignatureIntegrityUnsafe) and panics through mustGetSantuarioSignature everywhere else,
 // reproducing that unchecked propagation.
-func (s *XAdESSignature) getSantuarioSignature() (*xmldsig.XMLSignature, error) {
+func (s *Signature) getSantuarioSignature() (*xmldsig.XMLSignature, error) {
 	if s.santuarioSignature != nil {
 		return s.santuarioSignature, nil
 	}
@@ -1101,7 +1101,7 @@ func (s *XAdESSignature) getSantuarioSignature() (*xmldsig.XMLSignature, error) 
 
 // mustGetSantuarioSignature calls getSantuarioSignature and panics on error, reproducing the
 // unchecked DSSException every direct Java caller (with no try/catch of its own) relies on.
-func (s *XAdESSignature) mustGetSantuarioSignature() *xmldsig.XMLSignature {
+func (s *Signature) mustGetSantuarioSignature() *xmldsig.XMLSignature {
 	sig, err := s.getSantuarioSignature()
 	if err != nil {
 		panic(err)
@@ -1110,7 +1110,7 @@ func (s *XAdESSignature) mustGetSantuarioSignature() *xmldsig.XMLSignature {
 }
 
 // initDetachedSignatureResolvers ports the private initDetachedSignatureResolvers(List<DSSDocument>).
-func (s *XAdESSignature) initDetachedSignatureResolvers(detachedContents []model.DSSDocument) {
+func (s *Signature) initDetachedSignatureResolvers(detachedContents []model.DSSDocument) {
 	signedInfoElement := s.SignedInfo()
 	if signedInfoElement == nil {
 		return
@@ -1126,7 +1126,7 @@ func (s *XAdESSignature) initDetachedSignatureResolvers(detachedContents []model
 
 // initCounterSignatureResolver is used for a counter signature extension only. Port of the
 // private initCounterSignatureResolver(List<DSSDocument>).
-func (s *XAdESSignature) initCounterSignatureResolver(detachedContents []model.DSSDocument) {
+func (s *Signature) initCounterSignatureResolver(detachedContents []model.DSSDocument) {
 	signedInfoElement := s.SignedInfo()
 	if signedInfoElement == nil {
 		return
@@ -1146,7 +1146,7 @@ func (s *XAdESSignature) initCounterSignatureResolver(detachedContents []model.D
 }
 
 // isDetachedSignatureValueDocument ports the private isDetachedSignatureValueDocument(DSSDocument).
-func (s *XAdESSignature) isDetachedSignatureValueDocument(detachedContent model.DSSDocument) (result bool) {
+func (s *Signature) isDetachedSignatureValueDocument(detachedContent model.DSSDocument) (result bool) {
 	defer func() {
 		if recover() != nil {
 			result = false
@@ -1179,7 +1179,7 @@ func (s *XAdESSignature) isDetachedSignatureValueDocument(detachedContent model.
 // As indicated by its name, it contains one countersignature of the qualified signature.
 //
 // Port of getCounterSignatures().
-func (s *XAdESSignature) CounterSignatures() []validation.AdvancedSignature {
+func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 	if s.CachedCounterSignatures() != nil {
 		return s.CachedCounterSignatures()
 	}
@@ -1202,12 +1202,12 @@ func (s *XAdESSignature) CounterSignatures() []validation.AdvancedSignature {
 
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id. Port of the
 // protected getSignatureIdentifierBuilder().
-func (s *XAdESSignature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
-	return NewXAdESSignatureIdentifierBuilder(s)
+func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
+	return NewSignatureIdentifierBuilder(s)
 }
 
 // DAIdentifier returns an identifier provided by the Driving Application (DA). Port of getDAIdentifier().
-func (s *XAdESSignature) DAIdentifier() string {
+func (s *Signature) DAIdentifier() string {
 	if !s.daIdentifierComputed {
 		s.daIdentifier = DSSXMLUtilsGetIDIdentifier(s.SignatureElement())
 		s.daIdentifierComputed = true
@@ -1217,7 +1217,7 @@ func (s *XAdESSignature) DAIdentifier() string {
 
 // UnsignedSignatureProperties retrieves the name of each node found under the
 // UnsignedSignatureProperties element. Port of the public getUnsignedSignatureProperties().
-func (s *XAdESSignature) UnsignedSignatureProperties() []string {
+func (s *Signature) UnsignedSignatureProperties() []string {
 	names, err := xmlutils.XPathUtilsGetChildrenNames(s.SignatureElement(), s.xadesPath.UnsignedSignaturePropertiesPath())
 	if err != nil {
 		return nil
@@ -1227,7 +1227,7 @@ func (s *XAdESSignature) UnsignedSignatureProperties() []string {
 
 // SignedSignatureProperties retrieves the name of each node found under the
 // SignedSignatureProperties element. Port of the public getSignedSignatureProperties().
-func (s *XAdESSignature) SignedSignatureProperties() []string {
+func (s *Signature) SignedSignatureProperties() []string {
 	names, err := xmlutils.XPathUtilsGetChildrenNames(s.SignatureElement(), s.xadesPath.SignedSignaturePropertiesPath())
 	if err != nil {
 		return nil
@@ -1237,7 +1237,7 @@ func (s *XAdESSignature) SignedSignatureProperties() []string {
 
 // SignedProperties retrieves the name of each node found under the SignedProperties element.
 // Port of the public getSignedProperties().
-func (s *XAdESSignature) SignedProperties() []string {
+func (s *Signature) SignedProperties() []string {
 	names, err := xmlutils.XPathUtilsGetChildrenNames(s.SignatureElement(), s.xadesPath.SignedPropertiesPath())
 	if err != nil {
 		return nil
@@ -1247,7 +1247,7 @@ func (s *XAdESSignature) SignedProperties() []string {
 
 // UnsignedProperties retrieves the name of each node found under the UnsignedProperties element.
 // Port of the public getUnsignedProperties().
-func (s *XAdESSignature) UnsignedProperties() []string {
+func (s *Signature) UnsignedProperties() []string {
 	names, err := xmlutils.XPathUtilsGetChildrenNames(s.SignatureElement(), s.xadesPath.UnsignedPropertiesPath())
 	if err != nil {
 		return nil
@@ -1257,7 +1257,7 @@ func (s *XAdESSignature) UnsignedProperties() []string {
 
 // SignedDataObjectProperties retrieves the name of each node found under the
 // SignedDataObjectProperties element. Port of the public getSignedDataObjectProperties().
-func (s *XAdESSignature) SignedDataObjectProperties() []string {
+func (s *Signature) SignedDataObjectProperties() []string {
 	names, err := xmlutils.XPathUtilsGetChildrenNames(s.SignatureElement(), s.xadesPath.SignedDataObjectPropertiesPath())
 	if err != nil {
 		return nil
@@ -1266,7 +1266,7 @@ func (s *XAdESSignature) SignedDataObjectProperties() []string {
 }
 
 // DataFoundUpToLevel returns the signature level. Port of getDataFoundUpToLevel().
-func (s *XAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
+func (s *Signature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	if !s.HasBESProfile() {
 		return enumerations.SignatureLevelXMLNotETSI
 	}
@@ -1328,20 +1328,20 @@ func (s *XAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 }
 
 // ValidateStructure processes the structure validation of the signature. Port of validateStructure().
-func (s *XAdESSignature) ValidateStructure() []string {
-	structureValidator := XAdESStructureValidatorFactoryGetInstance().FromXAdESSignature(s)
+func (s *Signature) ValidateStructure() []string {
+	structureValidator := StructureValidatorFactoryGetInstance().FromXAdESSignature(s)
 	structureValidator.Validate()
 	return structureValidator.ValidationErrors()
 }
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
-func (s *XAdESSignature) FindSignatureScopes() []scope.SignatureScope {
-	return NewXAdESSignatureScopeFinder().FindSignatureScope(s)
+func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
+	return NewSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // CommitmentTypeIndications obtains the information concerning commitment type indication
 // linked to the signature. Port of getCommitmentTypeIndications().
-func (s *XAdESSignature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
+func (s *Signature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
 	var result []*signature.CommitmentTypeIndication
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), s.xadesPath.CommitmentTypeIndicationPath())
 	if err == nil && len(nodeList) > 0 {
@@ -1393,7 +1393,7 @@ func (s *XAdESSignature) CommitmentTypeIndications() []*signature.CommitmentType
 }
 
 // getDocumentationReferences ports the private getDocumentationReferences(Element).
-func (s *XAdESSignature) getDocumentationReferences(docRefsNode *xmldom.Node) []string {
+func (s *Signature) getDocumentationReferences(docRefsNode *xmldom.Node) []string {
 	docRefsChildNodes, err := xmlutils.XPathUtilsGetNodeList(docRefsNode, s.xadesPath.CurrentDocumentationReference())
 	if err == nil && len(docRefsChildNodes) > 0 {
 		docRefs := make([]string, 0, len(docRefsChildNodes))
@@ -1406,7 +1406,7 @@ func (s *XAdESSignature) getDocumentationReferences(docRefsNode *xmldom.Node) []
 }
 
 // getObjectReferences ports the private getObjectReferences(NodeList).
-func (s *XAdESSignature) getObjectReferences(commitmentObjectReferencesNodeList []*xmldom.Node) []string {
+func (s *Signature) getObjectReferences(commitmentObjectReferencesNodeList []*xmldom.Node) []string {
 	signedDataObjects := make([]string, 0, len(commitmentObjectReferencesNodeList))
 	for _, node := range commitmentObjectReferencesNodeList {
 		signedDataObjects = append(signedDataObjects, xmlutils.DomUtilsGetId(node.TextContent()))
@@ -1418,7 +1418,7 @@ func (s *XAdESSignature) getObjectReferences(commitmentObjectReferencesNodeList 
 //
 // A reference that fails to parse is skipped, matching Java's behavior (which logs "Unable to
 // retrieve reference #{} : {}" and continues).
-func (s *XAdESSignature) References() []*xmldsig.Reference {
+func (s *Signature) References() []*xmldsig.Reference {
 	if s.references == nil {
 		xmlSignature := s.mustGetSantuarioSignature()
 		signedInfo := xmlSignature.SignedInfo()
@@ -1437,7 +1437,7 @@ func (s *XAdESSignature) References() []*xmldsig.Reference {
 
 // SignatureObjects gets a list of found signature ds:Object elements. Port of the public
 // getSignatureObjects().
-func (s *XAdESSignature) SignatureObjects() []*xmldom.Node {
+func (s *Signature) SignatureObjects() []*xmldom.Node {
 	list, err := xmlutils.XPathUtilsGetNodeList(s.SignatureElement(), common.XMLDSigPathObjectPath)
 	if err != nil {
 		return nil
@@ -1455,6 +1455,6 @@ func (s *XAdESSignature) SignatureObjects() []*xmldom.Node {
 
 // RegisterXAdESPaths allows registering a new XAdESPaths. Port of the deprecated
 // registerXAdESPaths(XAdESPath).
-func (s *XAdESSignature) RegisterXAdESPaths(xadesPaths definition.XAdESPath) {
+func (s *Signature) RegisterXAdESPaths(xadesPaths definition.XAdESPath) {
 	s.OwnerDocument().AddXAdESPathHolder(xadesPaths)
 }

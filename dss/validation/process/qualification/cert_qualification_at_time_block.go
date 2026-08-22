@@ -55,16 +55,16 @@ type CertQualificationAtTimeBlockOverrides interface {
 
 // NewCertQualificationAtTimeBlockAtIssuanceTime is the constructor to
 // instantiate the validation at the certificate's issuance time. Port of
-// CertQualificationAtTimeBlock(I18nProvider, ValidationTime, CertificateWrapper, List).
-func NewCertQualificationAtTimeBlockAtIssuanceTime(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime,
+// CertQualificationAtTimeBlock(Provider, ValidationTime, CertificateWrapper, List).
+func NewCertQualificationAtTimeBlockAtIssuanceTime(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime,
 	signingCertificate *diagnostic.CertificateWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
 	return NewCertQualificationAtTimeBlock(i18nProvider, validationTime, nil, signingCertificate, acceptableServices)
 }
 
 // NewCertQualificationAtTimeBlock is the constructor to instantiate the
 // validation at the validation time. Port of
-// CertQualificationAtTimeBlock(I18nProvider, ValidationTime, Date, CertificateWrapper, List).
-func NewCertQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime, date *time.Time,
+// CertQualificationAtTimeBlock(Provider, ValidationTime, Date, CertificateWrapper, List).
+func NewCertQualificationAtTimeBlock(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime, date *time.Time,
 	signingCertificate *diagnostic.CertificateWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
 	xmlResult := &jaxb.XmlValidationCertificateQualification{}
 	c := &CertQualificationAtTimeBlock{

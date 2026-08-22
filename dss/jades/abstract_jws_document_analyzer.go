@@ -76,7 +76,7 @@ func (a *AbstractJWSDocumentAnalyzer) InitFromDocument(document model.DSSDocumen
 // The DSSException Java catches (logging "Cannot retrieve a list of original documents") is
 // swallowed the same way here, since slf4j logging is dropped per PORTING.md.
 func (a *AbstractJWSDocumentAnalyzer) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
-	jadesSignature := advancedSignature.(*JAdESSignature)
+	jadesSignature := advancedSignature.(*Signature)
 	documents, err := jadesSignature.OriginalDocuments()
 	if err != nil {
 		return []model.DSSDocument{}

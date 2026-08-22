@@ -28,7 +28,7 @@ type SignatureAlgorithmCryptographicChecker struct {
 }
 
 // NewSignatureAlgorithmCryptographicChecker is the default constructor.
-func NewSignatureAlgorithmCryptographicChecker(i18nProvider *i18n.I18nProvider, signatureAlgorithm enumerations.SignatureAlgorithm,
+func NewSignatureAlgorithmCryptographicChecker(i18nProvider *i18n.Provider, signatureAlgorithm enumerations.SignatureAlgorithm,
 	keyLengthUsedToSignThisToken string, validationDate time.Time, position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *SignatureAlgorithmCryptographicChecker {
 	c := &SignatureAlgorithmCryptographicChecker{

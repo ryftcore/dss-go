@@ -206,7 +206,7 @@ func aovSameConstraintMultiset(t *testing.T, want, got *aovRow) bool {
 
 // aovRevocationsSortedById mirrors the driver, which sorts the Java Set of
 // revocation wrappers by id before iterating it.
-func aovRevocationsSortedById(data *diagnostic.DiagnosticData) []*diagnostic.RevocationWrapper {
+func aovRevocationsSortedById(data *diagnostic.Data) []*diagnostic.RevocationWrapper {
 	revocations := append([]*diagnostic.RevocationWrapper(nil), data.AllRevocationData()...)
 	sort.SliceStable(revocations, func(i, j int) bool { return revocations[i].Id() < revocations[j].Id() })
 	return revocations

@@ -14,7 +14,7 @@
 // below, including its panic on an unrecognized namespace, is still exercised
 // faithfully; only the schema check itself is skipped.
 //
-// XAdESStructureXSDUtils stands in for
+// StructureXSDUtils stands in for
 // eu.europa.esig.dss.jaxb.common.XSDAbstractUtils: an opaque marker type, since
 // nothing here calls a method on it.
 package xades
@@ -27,11 +27,11 @@ import (
 
 // XAdESStructureXSDUtils stands in for eu.europa.esig.dss.jaxb.common.XSDAbstractUtils; see the
 // file header's note on XSD validation.
-type XAdESStructureXSDUtils any
+type StructureXSDUtils any
 
-// XAdESStructureValidator validates a structure of a XAdES signature against a corresponding
+// StructureValidator validates a structure of a XAdES signature against a corresponding
 // XSD. Port of the class XAdESStructureValidator.
-type XAdESStructureValidator struct {
+type StructureValidator struct {
 	// signatureElement is the ds:Signature element to validate structure for.
 	signatureElement *xmldom.Node
 
@@ -46,14 +46,14 @@ type XAdESStructureValidator struct {
 }
 
 // newXAdESStructureValidator is the port of the protected constructor
-// XAdESStructureValidator(Element, XAdESPath).
-func newXAdESStructureValidator(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *XAdESStructureValidator {
-	return &XAdESStructureValidator{signatureElement: signatureElement, xadesPath: xadesPath}
+// StructureValidator(Element, XAdESPath).
+func newStructureValidator(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *StructureValidator {
+	return &StructureValidator{signatureElement: signatureElement, xadesPath: xadesPath}
 }
 
 // Validate validates the signature against the corresponding XSD and returns whether the
 // signature has a valid XML structure. Port of validate().
-func (v *XAdESStructureValidator) Validate() bool {
+func (v *StructureValidator) Validate() bool {
 	v.errors = DSSXMLUtilsValidateAgainstXSD(v.getUtils(v.xadesPath), v.signatureElement)
 	v.errorsSet = true
 	return utils.IsCollectionEmpty(v.errors)
@@ -63,19 +63,19 @@ func (v *XAdESStructureValidator) Validate() bool {
 // getValidationErrors().
 //
 // Panics with the Java message when Validate has not been run yet (IllegalStateException).
-func (v *XAdESStructureValidator) ValidationErrors() []string {
+func (v *StructureValidator) ValidationErrors() []string {
 	if !v.errorsSet {
 		panic("The method XAdESStructureValidator#validate shall be executed before accessing the validation messages!")
 	}
 	return v.errors
 }
 
-// getUtils gets a XAdES implementation of XAdESStructureXSDUtils corresponding to the given
+// getUtils gets a XAdES implementation of StructureXSDUtils corresponding to the given
 // XAdESPath. Port of the protected getUtils(XAdESPath).
 //
 // Panics with the Java message when the namespace is not supported for structure validation
 // (UnsupportedOperationException).
-func (v *XAdESStructureValidator) getUtils(xadesPath definition.XAdESPath) XAdESStructureXSDUtils {
+func (v *StructureValidator) getUtils(xadesPath definition.XAdESPath) StructureXSDUtils {
 	namespace := xadesPath.Namespace()
 	switch namespace {
 	case definition.XAdESNamespaceXAdES111:

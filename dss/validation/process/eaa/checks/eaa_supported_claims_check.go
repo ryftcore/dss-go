@@ -22,7 +22,7 @@ type EAASupportedClaimsCheck struct {
 }
 
 // NewEAASupportedClaimsCheck is the default constructor.
-func NewEAASupportedClaimsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAASupportedClaimsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAASupportedClaimsCheck {
 	c := &EAASupportedClaimsCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

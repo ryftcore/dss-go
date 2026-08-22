@@ -19,12 +19,12 @@ type SignatureAcceptanceValidationNoCryptoResultCheck[T any] struct {
 
 // NewSignatureAcceptanceValidationNoCryptoResultCheck is the default
 // constructor. Port of
-// SignatureAcceptanceValidationNoCryptoResultCheck(I18nProvider, T, XmlSAV, TokenProxy, LevelRule).
+// SignatureAcceptanceValidationNoCryptoResultCheck(Provider, T, XmlSAV, TokenProxy, LevelRule).
 //
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' Process rather than the one inherited
 // from SignatureAcceptanceValidationResultCheck.
-func NewSignatureAcceptanceValidationNoCryptoResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewSignatureAcceptanceValidationNoCryptoResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlSAV *jaxb.XmlSAV, token diagnostic.TokenProxy, constraint policy.LevelRule) *SignatureAcceptanceValidationNoCryptoResultCheck[T] {
 	c := &SignatureAcceptanceValidationNoCryptoResultCheck[T]{
 		SignatureAcceptanceValidationResultCheck: NewSignatureAcceptanceValidationResultCheck(i18nProvider, result, xmlSAV, token, constraint),

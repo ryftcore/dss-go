@@ -19,7 +19,7 @@ type EllipticCurveKeySizeCheck struct {
 }
 
 // NewEllipticCurveKeySizeCheck is the default constructor.
-func NewEllipticCurveKeySizeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewEllipticCurveKeySizeCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *EllipticCurveKeySizeCheck {
 	c := &EllipticCurveKeySizeCheck{signature: signature}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

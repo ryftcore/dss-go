@@ -143,7 +143,7 @@ func (v *TLStructureVerifier) validateTrustedListV6(documentDom *xmldom.Node) []
 }
 
 // validateAgainstXSD ports the private validateAgainstXSD(Document, XSDAbstractUtils).
-func (v *TLStructureVerifier) validateAgainstXSD(documentDom *xmldom.Node, xsdUtils xades.XAdESStructureXSDUtils) []string {
+func (v *TLStructureVerifier) validateAgainstXSD(documentDom *xmldom.Node, xsdUtils xades.StructureXSDUtils) []string {
 	return xades.DSSXMLUtilsValidateAgainstXSD(xsdUtils, documentDom)
 }
 
@@ -154,19 +154,19 @@ func (v *TLStructureVerifier) validateAgainstXSD(documentDom *xmldom.Node, xsdUt
 // xades.DSSXMLUtilsValidateAgainstXSD (which never inspects its xsdUtils argument) always reports
 // no errors; these placeholders are never dereferenced.
 var (
-	trustedListXSDUtils    xades.XAdESStructureXSDUtils = struct{}{}
-	trustedList211XSDUtils xades.XAdESStructureXSDUtils = struct{}{}
+	trustedListXSDUtils    xades.StructureXSDUtils = struct{}{}
+	trustedList211XSDUtils xades.StructureXSDUtils = struct{}{}
 )
 
 // TrustedListXSDUtils ports eu.europa.esig.trustedlist.TrustedListUtils#getInstance() (TL V6).
 // See the note above.
-func TrustedListXSDUtils() xades.XAdESStructureXSDUtils {
+func TrustedListXSDUtils() xades.StructureXSDUtils {
 	return trustedListXSDUtils
 }
 
 // TrustedList211XSDUtils ports eu.europa.esig.trustedlist211.TrustedList211Utils#getInstance()
 // (TL V5). See the note above.
-func TrustedList211XSDUtils() xades.XAdESStructureXSDUtils {
+func TrustedList211XSDUtils() xades.StructureXSDUtils {
 	return trustedList211XSDUtils
 }
 

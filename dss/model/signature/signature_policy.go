@@ -6,11 +6,11 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// SignaturePolicy represents the values of a SignaturePolicy extracted on a signature
+// Policy represents the values of a Policy extracted on a signature
 // validation.
 //
 // java.io.Serializable is dropped silently (no Go counterpart).
-type SignaturePolicy struct {
+type Policy struct {
 	// identifier is the signature policy identifier.
 	identifier string
 
@@ -48,54 +48,54 @@ type SignaturePolicy struct {
 	docSpecification *model.SpDocSpecification
 
 	// validationResult is the validation result of the current signature policy.
-	validationResult *SignaturePolicyValidationResult
+	validationResult *PolicyValidationResult
 }
 
-// NewSignaturePolicy is the default constructor for SignaturePolicy: it represents the
+// NewPolicy is the default constructor for Policy: it represents the
 // implied policy.
-func NewSignaturePolicy() *SignaturePolicy {
-	return &SignaturePolicy{identifier: string(enumerations.SignaturePolicyTypeImplicitPolicy)}
+func NewPolicy() *Policy {
+	return &Policy{identifier: string(enumerations.SignaturePolicyTypeImplicitPolicy)}
 }
 
-// NewSignaturePolicyWithIdentifier is the default constructor for SignaturePolicy with the
+// NewPolicyWithIdentifier is the default constructor for Policy with the
 // policy identifier.
-func NewSignaturePolicyWithIdentifier(identifier string) *SignaturePolicy {
-	return &SignaturePolicy{identifier: identifier}
+func NewPolicyWithIdentifier(identifier string) *Policy {
+	return &Policy{identifier: identifier}
 }
 
 // Identifier returns the signature policy identifier. Port of getIdentifier().
-func (s *SignaturePolicy) Identifier() string {
+func (s *Policy) Identifier() string {
 	return s.identifier
 }
 
 // Description gets the description. Port of getDescription().
-func (s *SignaturePolicy) Description() string {
+func (s *Policy) Description() string {
 	return s.description
 }
 
 // SetDescription sets the description (optional). Port of setDescription(String).
-func (s *SignaturePolicy) SetDescription(description string) {
+func (s *Policy) SetDescription(description string) {
 	s.description = description
 }
 
 // PolicyContent returns a DSSDocument with the signature policy content. Port of
 // getPolicyContent().
-func (s *SignaturePolicy) PolicyContent() model.DSSDocument {
+func (s *Policy) PolicyContent() model.DSSDocument {
 	return s.policyContent
 }
 
 // SetPolicyContent sets the policy document content. Port of setPolicyContent(DSSDocument).
-func (s *SignaturePolicy) SetPolicyContent(policyContent model.DSSDocument) {
+func (s *Policy) SetPolicyContent(policyContent model.DSSDocument) {
 	s.policyContent = policyContent
 }
 
 // Digest gets the Digest. Port of getDigest().
-func (s *SignaturePolicy) Digest() model.Digest {
+func (s *Policy) Digest() model.Digest {
 	return s.digest
 }
 
 // SetDigest sets the Digest. Port of setDigest(Digest).
-func (s *SignaturePolicy) SetDigest(digest model.Digest) {
+func (s *Policy) SetDigest(digest model.Digest) {
 	s.digest = digest
 }
 
@@ -104,13 +104,13 @@ func (s *SignaturePolicy) SetDigest(digest model.Digest) {
 // NOTE: optional, used in XAdES.
 //
 // Port of getDocumentationReferences().
-func (s *SignaturePolicy) DocumentationReferences() []string {
+func (s *Policy) DocumentationReferences() []string {
 	return s.documentationReferences
 }
 
 // SetDocumentationReferences sets the documentation references. Port of
 // setDocumentationReferences(List<String>).
-func (s *SignaturePolicy) SetDocumentationReferences(documentationReferences []string) {
+func (s *Policy) SetDocumentationReferences(documentationReferences []string) {
 	s.documentationReferences = documentationReferences
 }
 
@@ -120,78 +120,78 @@ func (s *SignaturePolicy) SetDocumentationReferences(documentationReferences []s
 //
 // Port of getTransformsDescription(); returns an empty (non-nil) slice by default, matching
 // Java's Collections.emptyList().
-func (s *SignaturePolicy) TransformsDescription() []string {
+func (s *Policy) TransformsDescription() []string {
 	return []string{}
 }
 
 // IsZeroHash returns if the policy is a zero-hash (no hash check shall be performed). Port
 // of isZeroHash().
-func (s *SignaturePolicy) IsZeroHash() bool {
+func (s *Policy) IsZeroHash() bool {
 	return s.zeroHash
 }
 
 // SetZeroHash sets if the policy is a zero-hash (no hash check shall be performed). Port of
 // setZeroHash(boolean).
-func (s *SignaturePolicy) SetZeroHash(zeroHash bool) {
+func (s *Policy) SetZeroHash(zeroHash bool) {
 	s.zeroHash = zeroHash
 }
 
 // IsHashAsInTechnicalSpecification returns if the digest should be computed as specified in
 // the relevant technical specification. Port of isHashAsInTechnicalSpecification().
-func (s *SignaturePolicy) IsHashAsInTechnicalSpecification() bool {
+func (s *Policy) IsHashAsInTechnicalSpecification() bool {
 	return s.hashAsInTechnicalSpecification
 }
 
 // SetHashAsInTechnicalSpecification sets whether the digest should be computed as specified
 // in a corresponding technical specification. Port of
 // setHashAsInTechnicalSpecification(boolean).
-func (s *SignaturePolicy) SetHashAsInTechnicalSpecification(hashAsInTechnicalSpecification bool) {
+func (s *Policy) SetHashAsInTechnicalSpecification(hashAsInTechnicalSpecification bool) {
 	s.hashAsInTechnicalSpecification = hashAsInTechnicalSpecification
 }
 
 // URI returns the signature policy URI (if found), empty when not available. Port of
 // getUri().
-func (s *SignaturePolicy) URI() string {
+func (s *Policy) URI() string {
 	return s.uri
 }
 
 // SetURI sets the signature policy URI. Port of setUri(String).
-func (s *SignaturePolicy) SetURI(uri string) {
+func (s *Policy) SetURI(uri string) {
 	s.uri = uri
 }
 
 // UserNotice gets the user notice that should be displayed when the signature is verified.
 // Port of getUserNotice().
-func (s *SignaturePolicy) UserNotice() *model.UserNotice {
+func (s *Policy) UserNotice() *model.UserNotice {
 	return s.userNotice
 }
 
 // SetUserNotice sets the user notice that should be displayed when the signature is
 // verified. Port of setUserNotice(UserNotice).
-func (s *SignaturePolicy) SetUserNotice(userNotice *model.UserNotice) {
+func (s *Policy) SetUserNotice(userNotice *model.UserNotice) {
 	s.userNotice = userNotice
 }
 
 // DocSpecification gets the Document Specification Qualifier when present. Port of
 // getDocSpecification().
-func (s *SignaturePolicy) DocSpecification() *model.SpDocSpecification {
+func (s *Policy) DocSpecification() *model.SpDocSpecification {
 	return s.docSpecification
 }
 
 // SetDocSpecification sets the Document Specification qualifier. Port of
 // setDocSpecification(SpDocSpecification).
-func (s *SignaturePolicy) SetDocSpecification(docSpecification *model.SpDocSpecification) {
+func (s *Policy) SetDocSpecification(docSpecification *model.SpDocSpecification) {
 	s.docSpecification = docSpecification
 }
 
 // ValidationResult gets the validation result of the signature policy. Port of
 // getValidationResult().
-func (s *SignaturePolicy) ValidationResult() *SignaturePolicyValidationResult {
+func (s *Policy) ValidationResult() *PolicyValidationResult {
 	return s.validationResult
 }
 
 // SetValidationResult sets the signature policy's validation result. Port of
-// setValidationResult(SignaturePolicyValidationResult).
-func (s *SignaturePolicy) SetValidationResult(validationResult *SignaturePolicyValidationResult) {
+// setValidationResult(PolicyValidationResult).
+func (s *Policy) SetValidationResult(validationResult *PolicyValidationResult) {
 	s.validationResult = validationResult
 }

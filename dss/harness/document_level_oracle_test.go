@@ -40,8 +40,8 @@
 //   - F2, in spi/validation/timestamp/signature_timestamp_source.go's
 //     getAttributeOrder: it compared the carrying SignatureAttribute by Go
 //     POINTER identity, where Java calls signatureAttribute.equals(property),
-//     which every concrete attribute class (CAdESAttribute, XAdESAttribute,
-//     JAdESAttribute, CBAdESAttribute) overrides as identifier equality. Since
+//     which every concrete attribute class (Attribute, Attribute,
+//     Attribute, CBAdESAttribute) overrides as identifier equality. Since
 //     SignatureProperties.Attributes() rebuilds its list on every call, the
 //     pointer never matched, the order silently came back nil, and the
 //     "-OOA-<n>" component vanished from the position string every encapsulated
@@ -49,7 +49,7 @@
 //     fixtures (every CAdES/XAdES/PAdES/ASiC format carrying an embedded
 //     signature- or archive-timestamp).
 //
-//   - F3, in cms/cms_utils.go's CMSUtilsWriteContentInfoEncoded: it wrote the
+//   - F3, in cms/cms_utils.go's UtilsWriteContentInfoEncoded: it wrote the
 //     OUTER CMS ContentInfo instead of SignedData.encapContentInfo, feeding the
 //     whole signature into every CAdES archive-timestamp-v2 message imprint, so
 //     such timestamps verified FAILED/HASH_FAILURE where Java found them intact

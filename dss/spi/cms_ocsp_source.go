@@ -30,7 +30,7 @@ var CMSObjectIdentifierIDRIOcspResponse = cmscore.OIDRIOCSPResponse
 
 // CMSOCSPSource is an OCSPSource that retrieves information from a CMS SignedData container.
 // Port of the abstract class CMSOCSPSource; the concrete sources of the later phases
-// (CAdESOCSPSource, TimestampOCSPSource) embed the *CMSOCSPSource NewCMSOCSPSource returns.
+// (OCSPSource, TimestampOCSPSource) embed the *CMSOCSPSource NewCMSOCSPSource returns.
 //
 // As with OfflineOCSPSourceBase, this abstract base does not call
 // InitOfflineRevocationSource: the outermost concrete source registers itself, so that

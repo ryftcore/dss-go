@@ -7,9 +7,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/xml/common"
 )
 
-// XAdESEvidenceRecordIncorporationParameters holds parameters for an evidence record
+// EvidenceRecordIncorporationParameters holds parameters for an evidence record
 // incorporation within a XAdES signature.
-type XAdESEvidenceRecordIncorporationParameters struct {
+type EvidenceRecordIncorporationParameters struct {
 	document.AbstractEvidenceRecordIncorporationParameters
 
 	// xadesERNamespace is the XAdES 132-3 namespace definition for the evidence record element
@@ -17,9 +17,9 @@ type XAdESEvidenceRecordIncorporationParameters struct {
 	xadesERNamespace *common.DSSNamespace
 }
 
-// NewXAdESEvidenceRecordIncorporationParameters is the default constructor.
-func NewXAdESEvidenceRecordIncorporationParameters() *XAdESEvidenceRecordIncorporationParameters {
-	return &XAdESEvidenceRecordIncorporationParameters{
+// NewEvidenceRecordIncorporationParameters is the default constructor.
+func NewEvidenceRecordIncorporationParameters() *EvidenceRecordIncorporationParameters {
+	return &EvidenceRecordIncorporationParameters{
 		AbstractEvidenceRecordIncorporationParameters: document.NewAbstractEvidenceRecordIncorporationParameters(),
 		xadesERNamespace: definition.XAdESNamespaceXAdESEvidencerecordNamespace,
 	}
@@ -27,7 +27,7 @@ func NewXAdESEvidenceRecordIncorporationParameters() *XAdESEvidenceRecordIncorpo
 
 // XadesERNamespace gets a namespace for elements for the evidence record inclusion. Port of
 // #getXadesERNamespace.
-func (p *XAdESEvidenceRecordIncorporationParameters) XadesERNamespace() *common.DSSNamespace {
+func (p *EvidenceRecordIncorporationParameters) XadesERNamespace() *common.DSSNamespace {
 	return p.xadesERNamespace
 }
 
@@ -37,7 +37,7 @@ func (p *XAdESEvidenceRecordIncorporationParameters) XadesERNamespace() *common.
 // Panics when xadesERNamespace is nil (Java's Objects.requireNonNull) or when its URI does not
 // match the 132-3 definition (Java's IllegalArgumentException("The provided URI does not match
 // the 132-3 definition!")). Port of #setXadesERNamespace.
-func (p *XAdESEvidenceRecordIncorporationParameters) SetXadesERNamespace(xadesERNamespace *common.DSSNamespace) {
+func (p *EvidenceRecordIncorporationParameters) SetXadesERNamespace(xadesERNamespace *common.DSSNamespace) {
 	if xadesERNamespace == nil {
 		panic("xadesERNamespace cannot be null")
 	}

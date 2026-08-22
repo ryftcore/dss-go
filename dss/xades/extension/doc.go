@@ -5,5 +5,5 @@
 //
 // The main entry types are XAdESDocumentExtender and
 // XAdESDocumentExtenderFactory; most callers reach this through
-// xades.XAdESService rather than directly.
+// xades.Service rather than directly.
 package extension

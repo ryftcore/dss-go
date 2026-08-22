@@ -20,8 +20,8 @@ type QWACValidationResultCheck struct {
 }
 
 // NewQWACValidationResultCheck is the default constructor. Port of
-// QWACValidationResultCheck(I18nProvider, XmlQWACProcess, XmlValidationQWACProcess[], LevelRule).
-func NewQWACValidationResultCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlQWACProcess],
+// QWACValidationResultCheck(Provider, XmlQWACProcess, XmlValidationQWACProcess[], LevelRule).
+func NewQWACValidationResultCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlQWACProcess],
 	qwacValidationProcesses []*jaxb.XmlValidationQWACProcess, constraint policy.LevelRule) *QWACValidationResultCheck {
 	c := &QWACValidationResultCheck{
 		ChainItemBase:           process.NewChainItemBase(i18nProvider, result, constraint),

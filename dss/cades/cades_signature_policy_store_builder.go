@@ -14,22 +14,22 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/signature/resources"
 )
 
-// CAdESSignaturePolicyStoreBuilder builds a SignaturePolicyStore for a CAdES signature.
-type CAdESSignaturePolicyStoreBuilder struct {
+// SignaturePolicyStoreBuilder builds a SignaturePolicyStore for a CAdES signature.
+type SignaturePolicyStoreBuilder struct {
 	// resourcesHandlerBuilder is used to create data container objects such as an OutputStream or
 	// a DSSDocument.
 	resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESSignaturePolicyStoreBuilder is the default constructor.
-func NewCAdESSignaturePolicyStoreBuilder() *CAdESSignaturePolicyStoreBuilder {
-	return &CAdESSignaturePolicyStoreBuilder{}
+// NewSignaturePolicyStoreBuilder is the default constructor.
+func NewSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
+	return &SignaturePolicyStoreBuilder{}
 }
 
 // SetResourcesHandlerBuilder sets a DSSResourcesHandlerBuilder to be used for operating with
 // internal objects during the signature creation procedure. Port of
 // #setResourcesHandlerBuilder.
-func (b *CAdESSignaturePolicyStoreBuilder) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
+func (b *SignaturePolicyStoreBuilder) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
 	b.resourcesHandlerBuilder = resourcesHandlerBuilder
 }
 
@@ -39,13 +39,13 @@ func (b *CAdESSignaturePolicyStoreBuilder) SetResourcesHandlerBuilder(resourcesH
 //
 // Panics when signatureDocument is nil (Java Objects.requireNonNull("Signature document must be
 // provided!")).
-func (b *CAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStore(signatureDocument model.DSSDocument,
+func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStore(signatureDocument model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore) (model.DSSDocument, error) {
 	if signatureDocument == nil {
 		panic("Signature document must be provided!")
 	}
 
-	originalCmsSignedData, err := cms.CMSUtilsParseToCMS(signatureDocument)
+	originalCmsSignedData, err := cms.UtilsParseToCMS(signatureDocument)
 	if err != nil {
 		return nil, err
 	}
@@ -53,18 +53,18 @@ func (b *CAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStore(signatureDocu
 	if err != nil {
 		return nil, err
 	}
-	newCmsSignedData, err = cms.CMSUtilsPopulateDigestAlgorithmSet(newCmsSignedData, originalCmsSignedData.DigestAlgorithmIDs())
+	newCmsSignedData, err = cms.UtilsPopulateDigestAlgorithmSet(newCmsSignedData, originalCmsSignedData.DigestAlgorithmIDs())
 	if err != nil {
 		return nil, err
 	}
-	return cms.CMSUtilsWriteToDSSDocument(newCmsSignedData, b.resourcesHandlerBuilder)
+	return cms.UtilsWriteToDSSDocument(newCmsSignedData, b.resourcesHandlerBuilder)
 }
 
 // ExtendCMS creates a new CMS with a SignaturePolicyStore for matching signatures. Port of
 // #extendCMS(CMS, SignaturePolicyStore).
 //
 // Panics when cmsObj is nil (Java Objects.requireNonNull("CMS must be provided!")).
-func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMS(cmsObj *cms.CMS, signaturePolicyStore *model.SignaturePolicyStore) (*cms.CMS, error) {
+func (b *SignaturePolicyStoreBuilder) ExtendCMS(cmsObj *cms.CMS, signaturePolicyStore *model.SignaturePolicyStore) (*cms.CMS, error) {
 	if cmsObj == nil {
 		panic("CMS must be provided!")
 	}
@@ -82,7 +82,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMS(cmsObj *cms.CMS, signatureP
 
 	signaturePolicyStoreAdded := false
 	for _, sig := range signatures {
-		cadesSignature, ok := sig.(*CAdESSignature)
+		cadesSignature, ok := sig.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", sig)
 		}
@@ -98,7 +98,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMS(cmsObj *cms.CMS, signatureP
 	if !signaturePolicyStoreAdded {
 		return nil, exception.NewIllegalInputException("The process did not find a signature to add SignaturePolicyStore!")
 	}
-	return cms.CMSUtilsReplaceSigners(cmsObj, newSignerInformationList)
+	return cms.UtilsReplaceSigners(cmsObj, newSignerInformationList)
 }
 
 // AddSignaturePolicyStoreForSignature adds a signaturePolicyStore to a signature with the given
@@ -108,13 +108,13 @@ func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMS(cmsObj *cms.CMS, signatureP
 //
 // Panics when signatureDocument is nil (Java Objects.requireNonNull("Signature document must be
 // provided!")).
-func (b *CAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(signatureDocument model.DSSDocument,
+func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(signatureDocument model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore, signatureId string) (model.DSSDocument, error) {
 	if signatureDocument == nil {
 		panic("Signature document must be provided!")
 	}
 
-	originalCmsSignedData, err := cms.CMSUtilsParseToCMS(signatureDocument)
+	originalCmsSignedData, err := cms.UtilsParseToCMS(signatureDocument)
 	if err != nil {
 		return nil, err
 	}
@@ -122,18 +122,18 @@ func (b *CAdESSignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(s
 	if err != nil {
 		return nil, err
 	}
-	newCmsSignedData, err = cms.CMSUtilsPopulateDigestAlgorithmSet(newCmsSignedData, originalCmsSignedData.DigestAlgorithmIDs())
+	newCmsSignedData, err = cms.UtilsPopulateDigestAlgorithmSet(newCmsSignedData, originalCmsSignedData.DigestAlgorithmIDs())
 	if err != nil {
 		return nil, err
 	}
-	return cms.CMSUtilsWriteToDSSDocument(newCmsSignedData, b.resourcesHandlerBuilder)
+	return cms.UtilsWriteToDSSDocument(newCmsSignedData, b.resourcesHandlerBuilder)
 }
 
 // ExtendCMSForSignature creates a new CMS with a SignaturePolicyStore for a signature with
 // signatureId. Port of #extendCMS(CMS, SignaturePolicyStore, String).
 //
 // Panics when cmsObj is nil (Java Objects.requireNonNull("CMS must be provided!")).
-func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMSForSignature(cmsObj *cms.CMS, signaturePolicyStore *model.SignaturePolicyStore,
+func (b *SignaturePolicyStoreBuilder) ExtendCMSForSignature(cmsObj *cms.CMS, signaturePolicyStore *model.SignaturePolicyStore,
 	signatureId string) (*cms.CMS, error) {
 	if cmsObj == nil {
 		panic("CMS must be provided!")
@@ -150,7 +150,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMSForSignature(cmsObj *cms.CMS
 
 	var newSignerInformationList []*cmscore.SignerInfo
 	for _, currentSignature := range documentAnalyzer.Signatures() {
-		cadesSignature, ok := currentSignature.(*CAdESSignature)
+		cadesSignature, ok := currentSignature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", currentSignature)
 		}
@@ -169,13 +169,13 @@ func (b *CAdESSignaturePolicyStoreBuilder) ExtendCMSForSignature(cmsObj *cms.CMS
 			newSignerInformationList = append(newSignerInformationList, cadesSignature.SignerInformation())
 		}
 	}
-	return cms.CMSUtilsReplaceSigners(cmsObj, newSignerInformationList)
+	return cms.UtilsReplaceSigners(cmsObj, newSignerInformationList)
 }
 
 // addSignaturePolicyStoreIfDigestMatch adds SignaturePolicyStore to cadesSignature if required.
 // Port of the protected #addSignaturePolicyStoreIfDigestMatch(CAdESSignature,
 // SignaturePolicyStore).
-func (b *CAdESSignaturePolicyStoreBuilder) addSignaturePolicyStoreIfDigestMatch(cadesSignature *CAdESSignature,
+func (b *SignaturePolicyStoreBuilder) addSignaturePolicyStoreIfDigestMatch(cadesSignature *Signature,
 	signaturePolicyStore *model.SignaturePolicyStore) (*cmscore.SignerInfo, error) {
 	signerInformation := cadesSignature.SignerInformation()
 
@@ -200,7 +200,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) addSignaturePolicyStoreIfDigestMatch(
 // checkDigest verifies if the digests computed in the provided signaturePolicyStore match the
 // digest defined in the incorporated signature policy identifier. Port of the protected
 // #checkDigest(CAdESSignature, SignaturePolicyStore).
-func (b *CAdESSignaturePolicyStoreBuilder) checkDigest(cadesSignature *CAdESSignature, signaturePolicyStore *model.SignaturePolicyStore) (bool, error) {
+func (b *SignaturePolicyStoreBuilder) checkDigest(cadesSignature *Signature, signaturePolicyStore *model.SignaturePolicyStore) (bool, error) {
 	signaturePolicy := cadesSignature.SignaturePolicy()
 	if signaturePolicy == nil {
 		// signature-policy-identifier is not defined for a signature.
@@ -230,16 +230,16 @@ func (b *CAdESSignaturePolicyStoreBuilder) checkDigest(cadesSignature *CAdESSign
 
 // addSignaturePolicyStoreToSignerInformation ports the private
 // addSignaturePolicyStore(SignerInformation, SignaturePolicyStore).
-func (b *CAdESSignaturePolicyStoreBuilder) addSignaturePolicyStoreToSignerInformation(signerInformation *cmscore.SignerInfo,
+func (b *SignaturePolicyStoreBuilder) addSignaturePolicyStoreToSignerInformation(signerInformation *cmscore.SignerInfo,
 	signaturePolicyStore *model.SignaturePolicyStore) (*cmscore.SignerInfo, error) {
-	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+	unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 	sigPolicyStore, err := b.signaturePolicyStoreValue(signaturePolicyStore)
 	if err != nil {
 		return nil, err
 	}
 	unsignedAttributesWithPolicyStore := append(append(cmscore.Attributes{}, unsignedAttributes...),
 		cmscore.NewAttribute(spi.OIDIdAaEtsSigPolicyStore, sigPolicyStore))
-	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesWithPolicyStore)
+	return cms.UtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesWithPolicyStore)
 }
 
 // signaturePolicyStoreValue ports the private getSignaturePolicyStore(SignaturePolicyStore):
@@ -252,7 +252,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) addSignaturePolicyStoreToSignerInform
 //	 sigPolicyEncoded OCTET STRING,
 //	 sigPolicyLocalURI IA5String
 //	}
-func (b *CAdESSignaturePolicyStoreBuilder) signaturePolicyStoreValue(signaturePolicyStore *model.SignaturePolicyStore) ([]byte, error) {
+func (b *SignaturePolicyStoreBuilder) signaturePolicyStoreValue(signaturePolicyStore *model.SignaturePolicyStore) ([]byte, error) {
 	var body []byte
 
 	// spDocSpec
@@ -283,7 +283,7 @@ func (b *CAdESSignaturePolicyStoreBuilder) signaturePolicyStoreValue(signaturePo
 //
 // Panics with the Java message when signaturePolicyStore, its SpDocSpecification or the
 // SpDocSpecification's Id is missing (Java Objects.requireNonNull).
-func (b *CAdESSignaturePolicyStoreBuilder) assertConfigurationValid(signaturePolicyStore *model.SignaturePolicyStore) error {
+func (b *SignaturePolicyStoreBuilder) assertConfigurationValid(signaturePolicyStore *model.SignaturePolicyStore) error {
 	if signaturePolicyStore == nil {
 		panic("SignaturePolicyStore must be provided")
 	}
@@ -305,11 +305,11 @@ func (b *CAdESSignaturePolicyStoreBuilder) assertConfigurationValid(signaturePol
 
 // assertSignaturePolicyStoreExtensionPossible ports the private
 // assertSignaturePolicyStoreExtensionPossible(SignerInformation).
-func (b *CAdESSignaturePolicyStoreBuilder) assertSignaturePolicyStoreExtensionPossible(signerInformation *cmscore.SignerInfo) error {
-	if CAdESUtilsContainsATSTv2(signerInformation) {
+func (b *SignaturePolicyStoreBuilder) assertSignaturePolicyStoreExtensionPossible(signerInformation *cmscore.SignerInfo) error {
+	if UtilsContainsATSTv2(signerInformation) {
 		return exception.NewIllegalInputException("Cannot add signature policy store to a CAdES containing an archiveTimestampV2")
 	}
-	if CAdESUtilsContainsEvidenceRecord(signerInformation) {
+	if UtilsContainsEvidenceRecord(signerInformation) {
 		return exception.NewIllegalInputException("Cannot add signature policy store to a CMS containing an evidence record unsigned attribute.")
 	}
 	return nil

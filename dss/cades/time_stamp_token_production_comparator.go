@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/TimeStampTokenProductionComparator.java (DSS 6.5.RC1).
 //
 // This class lives in eu.europa.esig.dss.cades, not .cades.validation, but it is ported into
-// this same Go package because CAdESUnsignedAttributes needs it to sort timestamp/evidence-record
+// this same Go package because UnsignedAttributes needs it to sort timestamp/evidence-record
 // unsigned attributes by production time, and cades_level_baseline_lt.go calls
 // NewTimeStampTokenProductionComparator().
 package cades
@@ -56,8 +56,8 @@ func (c TimeStampTokenProductionComparator) compareByGenerationTime(tst1, tst2 *
 }
 
 func (c TimeStampTokenProductionComparator) compareByHashTableSize(tst1, tst2 *cmscore.TimeStampToken) int {
-	atsHashIndexOne := CAdESUtilsAtsHashIndex(timeStampTokenProductionComparatorUnsignedAttributes(tst1))
-	atsHashIndexTwo := CAdESUtilsAtsHashIndex(timeStampTokenProductionComparatorUnsignedAttributes(tst2))
+	atsHashIndexOne := UtilsAtsHashIndex(timeStampTokenProductionComparatorUnsignedAttributes(tst1))
+	atsHashIndexTwo := UtilsAtsHashIndex(timeStampTokenProductionComparatorUnsignedAttributes(tst2))
 
 	if atsHashIndexOne != nil && atsHashIndexTwo != nil {
 		hashTableSizeOne := timeStampTokenProductionComparatorHashTableSize(atsHashIndexOne)

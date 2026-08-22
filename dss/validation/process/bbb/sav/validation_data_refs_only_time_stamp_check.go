@@ -17,8 +17,8 @@ type ValidationDataRefsOnlyTimeStampCheck struct {
 }
 
 // NewValidationDataRefsOnlyTimeStampCheck is the default constructor. Port of
-// ValidationDataRefsOnlyTimeStampCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewValidationDataRefsOnlyTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ValidationDataRefsOnlyTimeStampCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewValidationDataRefsOnlyTimeStampCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *ValidationDataRefsOnlyTimeStampCheck {
 	c := &ValidationDataRefsOnlyTimeStampCheck{
 		AbstractTimeStampTypeCheck: NewAbstractTimeStampTypeCheck(i18nProvider, result, signature, constraint),

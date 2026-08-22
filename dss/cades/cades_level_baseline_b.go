@@ -37,7 +37,7 @@
 //     from Java's new String(byte[]); the Go port passes the bytes through unchanged. The two
 //     agree for every well-formed UTF-8 content and differ only in how many U+FFFD a malformed
 //     byte sequence collapses to.
-//   - "parameters instanceof CAdESCounterSignatureParameters", which suppresses the mime-type
+//   - "parameters instanceof CounterSignatureParameters", which suppresses the mime-type
 //     attribute, has no Go equivalent across an embedded struct; see the counterSignature field.
 package cades
 
@@ -92,54 +92,54 @@ var (
 	OIDIdSpqEtsUnotice = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 5, 2}
 )
 
-// CAdESLevelBaselineB holds the CAdES-B signature profile; it supports the inclusion of the
+// LevelBaselineB holds the CAdES-B signature profile; it supports the inclusion of the
 // mandatory signed id_aa_ets_sigPolicyId attribute as specified in ETSI TS 101 733 V1.8.1,
 // clause 5.8.1.
-type CAdESLevelBaselineB struct {
+type LevelBaselineB struct {
 	// documentToSign is the document to be signed.
 	documentToSign model.DSSDocument
 
 	// counterSignature stands in for Java's "parameters instanceof
-	// CAdESCounterSignatureParameters" test in addMimeType. Go's embedding does not preserve
-	// the dynamic type of an embedded *CAdESSignatureParameters, so the fact that the
+	// CounterSignatureParameters" test in addMimeType. Go's embedding does not preserve
+	// the dynamic type of an embedded *SignatureParameters, so the fact that the
 	// parameters describe a counter-signature travels with the profile instead: the
 	// counter-signature builder asks CMSForCAdESBuilderHelper for a counter-signature profile
 	// (SetCounterSignature), which is the single upstream call site of the instanceof test.
 	counterSignature bool
 }
 
-// NewCAdESLevelBaselineB is the default constructor for CAdESLevelBaselineB.
+// NewLevelBaselineB is the default constructor for LevelBaselineB.
 // Port of the no-arg constructor, i.e. of CAdESLevelBaselineB(null).
-func NewCAdESLevelBaselineB() *CAdESLevelBaselineB {
-	return NewCAdESLevelBaselineBWithDocument(nil)
+func NewLevelBaselineB() *LevelBaselineB {
+	return NewLevelBaselineBWithDocument(nil)
 }
 
-// NewCAdESLevelBaselineBWithDocument is the constructor for CAdESLevelBaselineB with a
+// NewLevelBaselineBWithDocument is the constructor for LevelBaselineB with a
 // documentToSign. Port of CAdESLevelBaselineB(DSSDocument).
-func NewCAdESLevelBaselineBWithDocument(documentToSign model.DSSDocument) *CAdESLevelBaselineB {
-	return &CAdESLevelBaselineB{documentToSign: documentToSign}
+func NewLevelBaselineBWithDocument(documentToSign model.DSSDocument) *LevelBaselineB {
+	return &LevelBaselineB{documentToSign: documentToSign}
 }
 
 // SetCounterSignature marks the profile as building the signed attributes of a counter
 // signature, which suppresses the mime-type attribute. See the counterSignature field: this
-// stands in for the "parameters instanceof CAdESCounterSignatureParameters" test of
+// stands in for the "parameters instanceof CounterSignatureParameters" test of
 // #addMimeType, which Go's embedding cannot express.
-func (b *CAdESLevelBaselineB) SetCounterSignature(counterSignature bool) {
+func (b *LevelBaselineB) SetCounterSignature(counterSignature bool) {
 	b.counterSignature = counterSignature
 }
 
 // UnsignedAttributes returns the table of unsigned properties, which is empty at level B.
 // Port of getUnsignedAttributes().
-func (b *CAdESLevelBaselineB) UnsignedAttributes() cmscore.Attributes {
+func (b *LevelBaselineB) UnsignedAttributes() cmscore.Attributes {
 	return cmscore.Attributes{}
 }
 
 // SignedAttributes generates and returns the signed attributes table.
 // Port of getSignedAttributes(CAdESSignatureParameters).
-func (b *CAdESLevelBaselineB) SignedAttributes(parameters *CAdESSignatureParameters) (cmscore.Attributes, error) {
+func (b *LevelBaselineB) SignedAttributes(parameters *SignatureParameters) (cmscore.Attributes, error) {
 	if utils.IsArrayNotEmpty(parameters.SignedData()) {
 		// Upstream logs "Using explicit SignedAttributes from parameter".
-		return CAdESUtilsAttributesFromByteArray(parameters.SignedData())
+		return UtilsAttributesFromByteArray(parameters.SignedData())
 	}
 
 	signedAttributes := cmscore.Attributes{}
@@ -149,7 +149,7 @@ func (b *CAdESLevelBaselineB) SignedAttributes(parameters *CAdESSignatureParamet
 // AddSignedAttributes adds the signed attributes to the signedAttributes table.
 // Port of the protected #addSignedAttributes(CAdESSignatureParameters, ASN1EncodableVector);
 // Java mutates the vector in place, the Go port appends to and returns the slice.
-func (b *CAdESLevelBaselineB) AddSignedAttributes(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSignedAttributes(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	var err error
 	if signedAttributes, err = b.AddSigningCertificateAttribute(parameters, signedAttributes); err != nil {
@@ -196,7 +196,7 @@ func (b *CAdESLevelBaselineB) AddSignedAttributes(parameters *CAdESSignaturePara
 // The signer-attributes attribute shall be a signed attribute.
 //
 // Port of the protected #addSignerAttribute.
-func (b *CAdESLevelBaselineB) AddSignerAttribute(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSignerAttribute(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	claimedSignerRoles := parameters.BLevel().ClaimedSignerRoles()
 	if claimedSignerRoles != nil {
@@ -236,7 +236,7 @@ func (b *CAdESLevelBaselineB) AddSignerAttribute(parameters *CAdESSignatureParam
 
 // AddSigningTimeAttribute adds a signing time attribute.
 // Port of the protected #addSigningTimeAttribute.
-func (b *CAdESLevelBaselineB) AddSigningTimeAttribute(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSigningTimeAttribute(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	signingDate := parameters.BLevel().SigningDate()
 	if signingDate != nil {
@@ -257,7 +257,7 @@ func (b *CAdESLevelBaselineB) AddSigningTimeAttribute(parameters *CAdESSignature
 // attribute.
 //
 // Port of the protected #addSignerLocation.
-func (b *CAdESLevelBaselineB) AddSignerLocation(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSignerLocation(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	signerLocationParameter := parameters.BLevel().SignerLocation()
 	if signerLocationParameter != nil && !signerLocationParameter.IsEmpty() {
@@ -304,7 +304,7 @@ func cadesLevelBaselineBPostalAddressSequence(postalAddressParameter []string) [
 // commitment-type-indication attribute conveys such information.
 //
 // Port of the protected #addCommitmentType.
-func (b *CAdESLevelBaselineB) AddCommitmentType(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddCommitmentType(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	commitmentTypeIndications := parameters.BLevel().CommitmentTypeIndications()
 	if utils.IsCollectionNotEmpty(commitmentTypeIndications) {
@@ -350,7 +350,7 @@ func (b *CAdESLevelBaselineB) AddCommitmentType(parameters *CAdESSignatureParame
 //	 [COMMITMENT-TYPE &Qualifier] }
 //
 // Port of the protected #getCommitmentQualifiers(CommitmentType).
-func (b *CAdESLevelBaselineB) CommitmentQualifiers(commitmentType enumerations.CommitmentType) ([]byte, error) {
+func (b *LevelBaselineB) CommitmentQualifiers(commitmentType enumerations.CommitmentType) ([]byte, error) {
 	var qualifiers []byte
 	if commonCommitmentType, ok := commitmentType.(*model.CommonCommitmentType); ok {
 		commitmentTypeQualifiers := commonCommitmentType.CommitmentTypeQualifiers()
@@ -424,7 +424,7 @@ func (b *CAdESLevelBaselineB) CommitmentQualifiers(commitmentType enumerations.C
 // computed on data as read.
 //
 // Port of the protected #addContentTimestamps.
-func (b *CAdESLevelBaselineB) AddContentTimestamps(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddContentTimestamps(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 
 	if utils.IsCollectionNotEmpty(parameters.ContentTimestamps()) {
@@ -470,7 +470,7 @@ func (b *CAdESLevelBaselineB) AddContentTimestamps(parameters *CAdESSignaturePar
 // contentTypes defined elsewhere; such definitions are outside the scope of the present document.
 //
 // Port of the protected #addContentHints.
-func (b *CAdESLevelBaselineB) AddContentHints(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddContentHints(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	if utils.IsStringNotBlank(parameters.ContentHintsType()) {
 
@@ -513,7 +513,7 @@ func (b *CAdESLevelBaselineB) AddContentHints(parameters *CAdESSignatureParamete
 // information), a GeneralizedTime string, and a random number.
 //
 // Port of the protected #addContentIdentifier.
-func (b *CAdESLevelBaselineB) AddContentIdentifier(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddContentIdentifier(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	contentIdentifierPrefix := parameters.ContentIdentifierPrefix()
 	if utils.IsStringNotBlank(contentIdentifierPrefix) {
@@ -549,7 +549,7 @@ func cadesLevelBaselineBContentIdentifierSuffix(now time.Time) (string, error) {
 
 // AddSignaturePolicyId adds a signature policy identifier.
 // Port of the protected #addSignaturePolicyId.
-func (b *CAdESLevelBaselineB) AddSignaturePolicyId(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSignaturePolicyId(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	policy := parameters.BLevel().SignaturePolicy()
 	if policy != nil {
@@ -602,7 +602,7 @@ func (b *CAdESLevelBaselineB) AddSignaturePolicyId(parameters *CAdESSignaturePar
 // Port of the private buildSigPolicyQualifiers(Policy). Exported because AddSignaturePolicyId,
 // which upstream may override, is the only caller and Go has no package-private visibility
 // between a type's own methods.
-func (b *CAdESLevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]byte, error) {
+func (b *LevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]byte, error) {
 	var qualifierInfos []byte
 
 	spUri := policy.Spuri()
@@ -661,7 +661,7 @@ func (b *CAdESLevelBaselineB) BuildSigPolicyQualifiers(policy *model.Policy) ([]
 
 // AddSigningCertificateAttribute adds a signing-certificate attribute.
 // Port of the protected #addSigningCertificateAttribute.
-func (b *CAdESLevelBaselineB) AddSigningCertificateAttribute(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddSigningCertificateAttribute(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	if parameters.SigningCertificate() == nil && parameters.GenerateTBSWithoutCertificate() {
 		// Upstream logs "Signing certificate not available and must be added to signed
@@ -669,13 +669,13 @@ func (b *CAdESLevelBaselineB) AddSigningCertificateAttribute(parameters *CAdESSi
 		return signedAttributes, nil
 	}
 
-	return CAdESUtilsAddSigningCertificateAttribute(signedAttributes, parameters.DigestAlgorithm(),
+	return UtilsAddSigningCertificateAttribute(signedAttributes, parameters.DigestAlgorithm(),
 		parameters.SigningCertificate())
 }
 
 // AddMimeType adds a MimeType attribute.
 // Port of the protected #addMimeType.
-func (b *CAdESLevelBaselineB) AddMimeType(parameters *CAdESSignatureParameters,
+func (b *LevelBaselineB) AddMimeType(parameters *SignatureParameters,
 	signedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 	if b.counterSignature {
 		// Java: parameters instanceof CAdESCounterSignatureParameters.

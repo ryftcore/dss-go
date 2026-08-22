@@ -17,8 +17,8 @@ type ValidationDataTimeStampCheck struct {
 }
 
 // NewValidationDataTimeStampCheck is the default constructor. Port of
-// ValidationDataTimeStampCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewValidationDataTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ValidationDataTimeStampCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewValidationDataTimeStampCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *ValidationDataTimeStampCheck {
 	c := &ValidationDataTimeStampCheck{
 		AbstractTimeStampTypeCheck: NewAbstractTimeStampTypeCheck(i18nProvider, result, signature, constraint),

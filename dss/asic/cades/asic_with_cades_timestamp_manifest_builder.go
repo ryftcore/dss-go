@@ -14,8 +14,8 @@ type ASiCWithCAdESTimestampManifestBuilder struct {
 var _ asic.AbstractASiCManifestBuilderOverrides = (*ASiCWithCAdESTimestampManifestBuilder)(nil)
 
 // NewASiCWithCAdESTimestampManifestBuilder is the default constructor. Ports
-// ASiCWithCAdESTimestampManifestBuilder(ASiCContent, DigestAlgorithm, String).
-func NewASiCWithCAdESTimestampManifestBuilder(asicContent *asic.ASiCContent,
+// ASiCWithCAdESTimestampManifestBuilder(Content, DigestAlgorithm, String).
+func NewASiCWithCAdESTimestampManifestBuilder(asicContent *asic.Content,
 	digestAlgorithm enumerations.DigestAlgorithm, timestampFilename string) *ASiCWithCAdESTimestampManifestBuilder {
 	builder := &ASiCWithCAdESTimestampManifestBuilder{}
 	builder.initASiCEWithCAdESManifestBuilder(builder, asicContent, timestampFilename, digestAlgorithm)
@@ -24,8 +24,8 @@ func NewASiCWithCAdESTimestampManifestBuilder(asicContent *asic.ASiCContent,
 
 // NewASiCWithCAdESTimestampManifestBuilderWithFilenameFactory is the constructor with filename
 // factory. Ports
-// ASiCWithCAdESTimestampManifestBuilder(ASiCContent, DigestAlgorithm, String, ASiCWithCAdESFilenameFactory).
-func NewASiCWithCAdESTimestampManifestBuilderWithFilenameFactory(asicContent *asic.ASiCContent,
+// ASiCWithCAdESTimestampManifestBuilder(Content, DigestAlgorithm, String, ASiCWithCAdESFilenameFactory).
+func NewASiCWithCAdESTimestampManifestBuilderWithFilenameFactory(asicContent *asic.Content,
 	digestAlgorithm enumerations.DigestAlgorithm, timestampFilename string,
 	asicFilenameFactory ASiCWithCAdESFilenameFactory) *ASiCWithCAdESTimestampManifestBuilder {
 	builder := &ASiCWithCAdESTimestampManifestBuilder{}
@@ -40,9 +40,9 @@ func (b *ASiCWithCAdESTimestampManifestBuilder) SigReferenceMimeType() enumerati
 }
 
 // SetAsicContentDocumentFilter ports the @Override covariant-return
-// setAsicContentDocumentFilter(ASiCContentDocumentFilter).
+// setAsicContentDocumentFilter(ContentDocumentFilter).
 func (b *ASiCWithCAdESTimestampManifestBuilder) SetAsicContentDocumentFilter(
-	asicContentDocumentFilter *asic.ASiCContentDocumentFilter) *ASiCWithCAdESTimestampManifestBuilder {
+	asicContentDocumentFilter *asic.ContentDocumentFilter) *ASiCWithCAdESTimestampManifestBuilder {
 	b.AbstractASiCManifestBuilder.SetAsicContentDocumentFilter(asicContentDocumentFilter)
 	return b
 }

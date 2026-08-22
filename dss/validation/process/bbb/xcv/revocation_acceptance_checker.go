@@ -44,7 +44,7 @@ type RevocationAcceptanceChecker struct {
 }
 
 // NewRevocationAcceptanceChecker is the default constructor. Port of
-// RevocationAcceptanceChecker(I18nProvider, CertificateWrapper,
+// RevocationAcceptanceChecker(Provider, CertificateWrapper,
 // CertificateRevocationWrapper, Date, ValidationPolicy, Set).
 //
 // Java copies the revocation's thisUpdate and productionDate into the result;
@@ -53,7 +53,7 @@ type RevocationAcceptanceChecker struct {
 // zero time. The one reader of the distinction,
 // RevocationAcceptanceCheckerResultCheck#buildAdditionalInfo, tests the zero
 // time in its place - see that file.
-func NewRevocationAcceptanceChecker(i18nProvider *i18n.I18nProvider, certificate *diagnostic.CertificateWrapper,
+func NewRevocationAcceptanceChecker(i18nProvider *i18n.Provider, certificate *diagnostic.CertificateWrapper,
 	revocationData *diagnostic.CertificateRevocationWrapper, controlTime time.Time,
 	validationPolicy policy.ValidationPolicy, validatedTokens map[string]struct{}) *RevocationAcceptanceChecker {
 	xmlRAC := &jaxb.XmlRAC{}

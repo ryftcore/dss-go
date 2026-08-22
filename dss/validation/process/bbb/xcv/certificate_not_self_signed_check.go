@@ -19,8 +19,8 @@ type CertificateNotSelfSignedCheck struct {
 }
 
 // NewCertificateNotSelfSignedCheck is the default constructor. Port of
-// CertificateNotSelfSignedCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificateNotSelfSignedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateNotSelfSignedCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificateNotSelfSignedCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateNotSelfSignedCheck {
 	c := &CertificateNotSelfSignedCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

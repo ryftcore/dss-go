@@ -20,7 +20,7 @@ type EAATypeIntegrityPresentCheck struct {
 }
 
 // NewEAATypeIntegrityPresentCheck is the default constructor.
-func NewEAATypeIntegrityPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAATypeIntegrityPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAATypeIntegrityPresentCheck {
 	c := &EAATypeIntegrityPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

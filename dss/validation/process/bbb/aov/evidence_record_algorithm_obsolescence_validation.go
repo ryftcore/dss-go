@@ -23,7 +23,7 @@ type EvidenceRecordAlgorithmObsolescenceValidation struct {
 
 // NewEvidenceRecordAlgorithmObsolescenceValidation is the default
 // constructor.
-func NewEvidenceRecordAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.EvidenceRecordWrapper,
+func NewEvidenceRecordAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.EvidenceRecordWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *EvidenceRecordAlgorithmObsolescenceValidation {
 	c := &EvidenceRecordAlgorithmObsolescenceValidation{}
 	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextEvidenceRecord, validationDate, validationPolicy, c)

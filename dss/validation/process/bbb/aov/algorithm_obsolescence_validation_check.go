@@ -44,8 +44,8 @@ type AlgorithmObsolescenceValidationCheck[T any] struct {
 
 // NewAlgorithmObsolescenceValidationCheck is the convenience constructor,
 // defaulting the block type to XmlBlockTypeAOV. Port of
-// AlgorithmObsolescenceValidationCheck(I18nProvider, T, XmlAOV, Date, MessageTag, String).
-func NewAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AlgorithmObsolescenceValidationCheck(Provider, T, XmlAOV, Date, MessageTag, String).
+func NewAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	tokenId string) *AlgorithmObsolescenceValidationCheck[T] {
 	return NewAlgorithmObsolescenceValidationCheckWithBlockType(i18nProvider, result, aovResult, validationDate,
@@ -55,7 +55,7 @@ func NewAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.I18nProvi
 // NewAlgorithmObsolescenceValidationCheckWithBlockType is the full constructor.
 // Port of AlgorithmObsolescenceValidationCheck(I18nProvider, T, XmlAOV, Date,
 // MessageTag, XmlBlockType, String).
-func NewAlgorithmObsolescenceValidationCheckWithBlockType[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewAlgorithmObsolescenceValidationCheckWithBlockType[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	blockType jaxb.XmlBlockType, tokenId string) *AlgorithmObsolescenceValidationCheck[T] {
 	c := &AlgorithmObsolescenceValidationCheck[T]{

@@ -22,7 +22,7 @@ type ASiCSWithXAdESContainerMerger struct {
 }
 
 var _ asic.DefaultContainerMergerOverrides = (*ASiCSWithXAdESContainerMerger)(nil)
-var _ asic.ASiCContainerMerger = (*ASiCSWithXAdESContainerMerger)(nil)
+var _ asic.ContainerMerger = (*ASiCSWithXAdESContainerMerger)(nil)
 
 // newASiCSWithXAdESContainerMerger is the empty constructor. Port of the package-private empty
 // constructor.
@@ -44,7 +44,7 @@ func NewASiCSWithXAdESContainerMerger(containers ...model.DSSDocument) *ASiCSWit
 
 // NewASiCSWithXAdESContainerMergerFromContents creates an ASiC-S With XAdES from to given
 // ASiCContents. Ports ASiCSWithXAdESContainerMerger(ASiCContent...).
-func NewASiCSWithXAdESContainerMergerFromContents(asicContents ...*asic.ASiCContent) *ASiCSWithXAdESContainerMerger {
+func NewASiCSWithXAdESContainerMergerFromContents(asicContents ...*asic.Content) *ASiCSWithXAdESContainerMerger {
 	m := newASiCSWithXAdESContainerMerger()
 	m.InitFromASiCContents(asicContents...)
 	return m
@@ -55,7 +55,7 @@ func (m *ASiCSWithXAdESContainerMerger) IsSupportedDocument(container model.DSSD
 	if !m.AbstractASiCWithXAdESContainerMerger.IsSupportedDocument(container) {
 		return false
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainer(container)
+	isASiCE, err := asic.UtilsIsASiCEContainer(container)
 	if err != nil {
 		panic(err)
 	}
@@ -63,11 +63,11 @@ func (m *ASiCSWithXAdESContainerMerger) IsSupportedDocument(container model.DSSD
 }
 
 // IsSupportedContent ports the @Override public isSupported(ASiCContent).
-func (m *ASiCSWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCSWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	if !m.AbstractASiCWithXAdESContainerMerger.IsSupportedContent(asicContent) {
 		return false
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainerContent(asicContent)
+	isASiCE, err := asic.UtilsIsASiCEContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -237,11 +237,11 @@ func (m *ASiCSWithXAdESContainerMerger) getAllDocumentAnalyzers() []*dssxades.XM
 	return analyzers
 }
 
-func (m *ASiCSWithXAdESContainerMerger) getAllSignatures(analyzers []*dssxades.XMLDocumentAnalyzer) []*dssxades.XAdESSignature {
-	signatures := make([]*dssxades.XAdESSignature, 0)
+func (m *ASiCSWithXAdESContainerMerger) getAllSignatures(analyzers []*dssxades.XMLDocumentAnalyzer) []*dssxades.Signature {
+	signatures := make([]*dssxades.Signature, 0)
 	for _, analyzer := range analyzers {
 		for _, signature := range analyzer.Signatures() {
-			if xadesSignature, ok := signature.(*dssxades.XAdESSignature); ok {
+			if xadesSignature, ok := signature.(*dssxades.Signature); ok {
 				signatures = append(signatures, xadesSignature)
 			}
 		}
@@ -249,12 +249,12 @@ func (m *ASiCSWithXAdESContainerMerger) getAllSignatures(analyzers []*dssxades.X
 	return signatures
 }
 
-func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignatures(signatures []*dssxades.XAdESSignature) bool {
+func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignatures(signatures []*dssxades.Signature) bool {
 	signatureIds := m.getSignatureIds(signatures)
 	return !m.checkDuplicatesPresent(signatureIds)
 }
 
-func (m *ASiCSWithXAdESContainerMerger) getSignatureIds(signatures []*dssxades.XAdESSignature) []string {
+func (m *ASiCSWithXAdESContainerMerger) getSignatureIds(signatures []*dssxades.Signature) []string {
 	ids := make([]string, 0, len(signatures))
 	for _, signature := range signatures {
 		ids = append(ids, signature.DAIdentifier())
@@ -262,12 +262,12 @@ func (m *ASiCSWithXAdESContainerMerger) getSignatureIds(signatures []*dssxades.X
 	return ids
 }
 
-func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignedData(signatures []*dssxades.XAdESSignature) bool {
+func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignedData(signatures []*dssxades.Signature) bool {
 	signedDataObjectIdsOne := m.getSignedDataObjectIds(signatures)
 	return !m.checkDuplicatesPresent(signedDataObjectIdsOne)
 }
 
-func (m *ASiCSWithXAdESContainerMerger) getSignedDataObjectIds(signatures []*dssxades.XAdESSignature) []string {
+func (m *ASiCSWithXAdESContainerMerger) getSignedDataObjectIds(signatures []*dssxades.Signature) []string {
 	ids := make([]string, 0)
 	for _, xadesSignature := range signatures {
 		for _, reference := range xadesSignature.References() {
@@ -291,12 +291,12 @@ func (m *ASiCSWithXAdESContainerMerger) getSignedDataObjectIds(signatures []*dss
 	return ids
 }
 
-func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignatureValues(signatures []*dssxades.XAdESSignature) bool {
+func (m *ASiCSWithXAdESContainerMerger) checkNoCommonIdsBetweenSignatureValues(signatures []*dssxades.Signature) bool {
 	signatureValueIds := m.getSignatureValueIds(signatures)
 	return !m.checkDuplicatesPresent(signatureValueIds)
 }
 
-func (m *ASiCSWithXAdESContainerMerger) getSignatureValueIds(signatures []*dssxades.XAdESSignature) []string {
+func (m *ASiCSWithXAdESContainerMerger) getSignatureValueIds(signatures []*dssxades.Signature) []string {
 	ids := make([]string, 0, len(signatures))
 	for _, xadesSignature := range signatures {
 		ids = append(ids, xadesSignature.SignatureValueId())
@@ -362,6 +362,6 @@ func (m *ASiCSWithXAdESContainerMerger) getMergedSignaturesXml(documentAnalyzers
 }
 
 // compile-time assertion that the AdvancedSignature interface stays wired to the validation
-// package, matching this package's other files that type-assert *dssxades.XAdESSignature out of
+// package, matching this package's other files that type-assert *dssxades.Signature out of
 // analyzer.Signatures().
-var _ validation.AdvancedSignature = (*dssxades.XAdESSignature)(nil)
+var _ validation.AdvancedSignature = (*dssxades.Signature)(nil)

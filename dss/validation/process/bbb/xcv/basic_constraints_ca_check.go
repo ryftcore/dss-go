@@ -20,8 +20,8 @@ type BasicConstraintsCACheck struct {
 }
 
 // NewBasicConstraintsCACheck is the default constructor. Port of
-// BasicConstraintsCACheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewBasicConstraintsCACheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// BasicConstraintsCACheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewBasicConstraintsCACheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *BasicConstraintsCACheck {
 	c := &BasicConstraintsCACheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

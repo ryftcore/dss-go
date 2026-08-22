@@ -26,8 +26,8 @@ type QWACDomainNameCheck struct {
 }
 
 // NewQWACDomainNameCheck is the default constructor. Port of
-// QWACDomainNameCheck(I18nProvider, XmlValidationQWACProcess, CertificateWrapper, String, LevelRule).
-func NewQWACDomainNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// QWACDomainNameCheck(Provider, XmlValidationQWACProcess, CertificateWrapper, String, LevelRule).
+func NewQWACDomainNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificate *diagnostic.CertificateWrapper, websiteUrl string, constraint policy.LevelRule) *QWACDomainNameCheck {
 	c := &QWACDomainNameCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

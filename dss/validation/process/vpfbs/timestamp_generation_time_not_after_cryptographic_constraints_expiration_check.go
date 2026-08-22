@@ -27,8 +27,8 @@ type TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T an
 
 // NewTimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck is
 // the default constructor. Port of
-// TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck(I18nProvider, T, TimestampWrapper, XmlCryptographicValidation, LevelRule).
-func NewTimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T any](i18nProvider *i18n.I18nProvider,
+// TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck(Provider, T, TimestampWrapper, XmlCryptographicValidation, LevelRule).
+func NewTimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T any](i18nProvider *i18n.Provider,
 	result *process.Result[T], contentTimestamp *diagnostic.TimestampWrapper,
 	cryptographicValidation *jaxb.XmlCryptographicValidation,
 	constraint policy.LevelRule) *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T] {

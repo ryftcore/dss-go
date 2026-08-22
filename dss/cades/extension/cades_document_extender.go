@@ -17,7 +17,7 @@ import (
 // CAdESDocumentExtender is the CAdES specific implementation of a
 // eu.europa.esig.dss.spi.augmentation.DocumentExtender.
 type CAdESDocumentExtender struct {
-	document.AbstractDocumentExtender[*cades.CAdESSignatureParameters, *cades.CAdESTimestampParameters]
+	document.AbstractDocumentExtender[*cades.SignatureParameters, *cades.TimestampParameters]
 }
 
 // newCAdESDocumentExtender is the package-private empty constructor, used by
@@ -42,11 +42,11 @@ func NewCAdESDocumentExtender(doc model.DSSDocument) *CAdESDocumentExtender {
 
 // CreateSignatureService ports the overridden protected createSignatureService(). Panics with
 // the Java message when no CertificateVerifier was provided (Objects.requireNonNull).
-func (e *CAdESDocumentExtender) CreateSignatureService() document.DocumentSignatureService[*cades.CAdESSignatureParameters, *cades.CAdESTimestampParameters] {
+func (e *CAdESDocumentExtender) CreateSignatureService() document.SignatureService[*cades.SignatureParameters, *cades.TimestampParameters] {
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding CAdESService!")
 	}
-	service := cades.NewCAdESService(e.CertificateVerifier)
+	service := cades.NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -57,21 +57,21 @@ func (e *CAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 }
 
 // EmptySignatureParameters ports the overridden protected emptySignatureParameters().
-func (e *CAdESDocumentExtender) EmptySignatureParameters() *cades.CAdESSignatureParameters {
-	return cades.NewCAdESSignatureParameters()
+func (e *CAdESDocumentExtender) EmptySignatureParameters() *cades.SignatureParameters {
+	return cades.NewSignatureParameters()
 }
 
 // IsSupportedParameters ports the overridden protected
 // isSupportedParameters(SerializableSignatureParameters).
 func (e *CAdESDocumentExtender) IsSupportedParameters(parameters model.SerializableSignatureParameters) bool {
-	_, ok := parameters.(*cades.CAdESSignatureParameters)
+	_, ok := parameters.(*cades.SignatureParameters)
 	return ok
 }
 
 // IsSupportedService ports the overridden protected
-// isSupportedService(DocumentSignatureService<?, ?>).
+// isSupportedService(SignatureService<?, ?>).
 func (e *CAdESDocumentExtender) IsSupportedService(service any) bool {
-	_, ok := service.(*cades.CAdESService)
+	_, ok := service.(*cades.Service)
 	return ok
 }
 
@@ -81,4 +81,4 @@ func (e *CAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.
-var _ document.AbstractDocumentExtenderOverrides[*cades.CAdESSignatureParameters, *cades.CAdESTimestampParameters] = (*CAdESDocumentExtender)(nil)
+var _ document.AbstractDocumentExtenderOverrides[*cades.SignatureParameters, *cades.TimestampParameters] = (*CAdESDocumentExtender)(nil)

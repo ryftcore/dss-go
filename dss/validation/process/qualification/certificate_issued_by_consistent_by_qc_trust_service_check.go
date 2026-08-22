@@ -24,8 +24,8 @@ type CertificateIssuedByConsistentByQCTrustServiceCheck struct {
 
 // NewCertificateIssuedByConsistentByQCTrustServiceCheck is the default
 // constructor. Port of
-// CertificateIssuedByConsistentByQCTrustServiceCheck(I18nProvider, XmlValidationCertificateQualification, List, LevelRule).
-func NewCertificateIssuedByConsistentByQCTrustServiceCheck(i18nProvider *i18n.I18nProvider,
+// CertificateIssuedByConsistentByQCTrustServiceCheck(Provider, XmlValidationCertificateQualification, List, LevelRule).
+func NewCertificateIssuedByConsistentByQCTrustServiceCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateQualification], trustServicesAtTime []*diagnostic.TrustServiceWrapper,
 	constraint policy.LevelRule) *CertificateIssuedByConsistentByQCTrustServiceCheck {
 	c := &CertificateIssuedByConsistentByQCTrustServiceCheck{

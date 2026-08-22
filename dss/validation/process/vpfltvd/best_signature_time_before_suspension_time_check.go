@@ -26,8 +26,8 @@ type BestSignatureTimeBeforeSuspensionTimeCheck struct {
 
 // NewBestSignatureTimeBeforeSuspensionTimeCheck is the default constructor.
 // Port of
-// BestSignatureTimeBeforeSuspensionTimeCheck(I18nProvider, XmlValidationProcessLongTermData, CertificateRevocationWrapper, Date, LevelRule).
-func NewBestSignatureTimeBeforeSuspensionTimeCheck(i18nProvider *i18n.I18nProvider,
+// BestSignatureTimeBeforeSuspensionTimeCheck(Provider, XmlValidationProcessLongTermData, CertificateRevocationWrapper, Date, LevelRule).
+func NewBestSignatureTimeBeforeSuspensionTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], certificateRevocation *diagnostic.CertificateRevocationWrapper,
 	bestSignatureTime *time.Time, constraint policy.LevelRule) *BestSignatureTimeBeforeSuspensionTimeCheck {
 	c := &BestSignatureTimeBeforeSuspensionTimeCheck{

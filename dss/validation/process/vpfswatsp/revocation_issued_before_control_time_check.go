@@ -26,8 +26,8 @@ type RevocationIssuedBeforeControlTimeCheck[T any] struct {
 }
 
 // NewRevocationIssuedBeforeControlTimeCheck is the default constructor. Port of
-// RevocationIssuedBeforeControlTimeCheck(I18nProvider, T, RevocationWrapper, Date, LevelRule).
-func NewRevocationIssuedBeforeControlTimeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationIssuedBeforeControlTimeCheck(Provider, T, RevocationWrapper, Date, LevelRule).
+func NewRevocationIssuedBeforeControlTimeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	revocation *diagnostic.RevocationWrapper, controlTime time.Time,
 	constraint policy.LevelRule) *RevocationIssuedBeforeControlTimeCheck[T] {
 	c := &RevocationIssuedBeforeControlTimeCheck[T]{

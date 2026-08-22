@@ -25,7 +25,7 @@ import (
 // concrete block registers itself through InitTimestampsValidationBlock; every
 // method it does not define is supplied by the embedded TimestampsValidationBlock
 // through ordinary Go method promotion. vpfswatsp/evidencerecord's
-// EvidenceRecordTimestampsValidationBlock overrides both.
+// TimestampsValidationBlock overrides both.
 type TimestampsValidationBlockOverrides interface {
 	// Timestamps returns a list of time-stamp tokens to be validated. Port of
 	// the protected getTimestamps().
@@ -39,7 +39,7 @@ type TimestampsValidationBlockOverrides interface {
 // timestamps, as well as to extract POE information for valid entries.
 type TimestampsValidationBlock struct {
 	// i18nProvider is the i18n provider.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 
 	// TimestampList is the list of time-stamps to be validated. Exported
 	// because Java declares the field protected; it cannot keep Java's name
@@ -51,8 +51,8 @@ type TimestampsValidationBlock struct {
 	// InitTimestampsValidationBlock.
 	overrides TimestampsValidationBlockOverrides
 
-	// diagnosticData is the DiagnosticData to use.
-	diagnosticData *diagnostic.DiagnosticData
+	// diagnosticData is the Data to use.
+	diagnosticData *diagnostic.Data
 
 	// Policy is the validation policy. Exported because Java declares the
 	// field protected.
@@ -79,9 +79,9 @@ type TimestampsValidationBlock struct {
 }
 
 // NewTimestampsValidationBlock is the default constructor. Port of
-// TimestampsValidationBlock(I18nProvider, List, DiagnosticData, ValidationPolicy, Date, Map, Map, List, ValidationLevel, POEExtraction).
-func NewTimestampsValidationBlock(i18nProvider *i18n.I18nProvider, timestamps []*diagnostic.TimestampWrapper,
-	diagnosticData *diagnostic.DiagnosticData, validationPolicy policy.ValidationPolicy, currentTime time.Time,
+// TimestampsValidationBlock(Provider, List, Data, ValidationPolicy, Date, Map, Map, List, ValidationLevel, POEExtraction).
+func NewTimestampsValidationBlock(i18nProvider *i18n.Provider, timestamps []*diagnostic.TimestampWrapper,
+	diagnosticData *diagnostic.Data, validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, evidenceRecordValidations map[string]*jaxb.XmlEvidenceRecord,
 	tlAnalysis []*jaxb.XmlTLAnalysis, validationLevel enumerations.ValidationLevel,
 	poe *vpfswatsp.POEExtraction) *TimestampsValidationBlock {
@@ -95,8 +95,8 @@ func NewTimestampsValidationBlock(i18nProvider *i18n.I18nProvider, timestamps []
 // InitTimestampsValidationBlockState wires the shared state, the way the Java
 // constructor body does. A subclass calls it before
 // InitTimestampsValidationBlock, in place of the Java super(...) call.
-func (b *TimestampsValidationBlock) InitTimestampsValidationBlockState(i18nProvider *i18n.I18nProvider,
-	timestamps []*diagnostic.TimestampWrapper, diagnosticData *diagnostic.DiagnosticData,
+func (b *TimestampsValidationBlock) InitTimestampsValidationBlockState(i18nProvider *i18n.Provider,
+	timestamps []*diagnostic.TimestampWrapper, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, evidenceRecordValidations map[string]*jaxb.XmlEvidenceRecord,
 	tlAnalysis []*jaxb.XmlTLAnalysis, validationLevel enumerations.ValidationLevel,
@@ -116,8 +116,8 @@ func (b *TimestampsValidationBlock) InitTimestampsValidationBlockState(i18nProvi
 // InitTimestampsValidationBlockStateWithoutPOE wires the shared state of the
 // protected Java constructor, which builds its own POEExtraction and leaves the
 // evidence-record validations empty.
-func (b *TimestampsValidationBlock) InitTimestampsValidationBlockStateWithoutPOE(i18nProvider *i18n.I18nProvider,
-	timestamps []*diagnostic.TimestampWrapper, diagnosticData *diagnostic.DiagnosticData,
+func (b *TimestampsValidationBlock) InitTimestampsValidationBlockStateWithoutPOE(i18nProvider *i18n.Provider,
+	timestamps []*diagnostic.TimestampWrapper, diagnosticData *diagnostic.Data,
 	validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tlAnalysis []*jaxb.XmlTLAnalysis,
 	validationLevel enumerations.ValidationLevel) {
@@ -147,9 +147,9 @@ func (b *TimestampsValidationBlock) blockOverrides() TimestampsValidationBlockOv
 
 // NewTimestampsValidationBlockWithoutPOE is the constructor without POE. Port
 // of the protected
-// TimestampsValidationBlock(I18nProvider, List, DiagnosticData, ValidationPolicy, Date, Map, List, ValidationLevel).
-func NewTimestampsValidationBlockWithoutPOE(i18nProvider *i18n.I18nProvider, timestamps []*diagnostic.TimestampWrapper,
-	diagnosticData *diagnostic.DiagnosticData, validationPolicy policy.ValidationPolicy, currentTime time.Time,
+// TimestampsValidationBlock(Provider, List, Data, ValidationPolicy, Date, Map, List, ValidationLevel).
+func NewTimestampsValidationBlockWithoutPOE(i18nProvider *i18n.Provider, timestamps []*diagnostic.TimestampWrapper,
+	diagnosticData *diagnostic.Data, validationPolicy policy.ValidationPolicy, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tlAnalysis []*jaxb.XmlTLAnalysis,
 	validationLevel enumerations.ValidationLevel) *TimestampsValidationBlock {
 	b := &TimestampsValidationBlock{}

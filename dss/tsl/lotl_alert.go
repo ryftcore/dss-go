@@ -19,6 +19,6 @@ type LOTLAlert struct {
 var _ alert.Alert[*tslmodel.LOTLInfo] = (*LOTLAlert)(nil)
 
 // NewLOTLAlert is the default constructor.
-func NewLOTLAlert(detection alert.AlertDetector[*tslmodel.LOTLInfo], handler alert.AlertHandler[*tslmodel.LOTLInfo]) *LOTLAlert {
+func NewLOTLAlert(detection alert.Detector[*tslmodel.LOTLInfo], handler alert.Handler[*tslmodel.LOTLInfo]) *LOTLAlert {
 	return &LOTLAlert{DocumentAlert: job.NewDocumentAlert(detection, handler)}
 }

@@ -6,8 +6,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// TimestampAnalyzer performs processing of a timestamp.
-type TimestampAnalyzer interface {
+// Analyzer performs processing of a timestamp.
+type Analyzer interface {
 	// Timestamp returns a single TimestampToken to be validated. Port of getTimestamp().
 	Timestamp() *validation.TimestampToken
 

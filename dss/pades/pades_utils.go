@@ -39,27 +39,27 @@ var pAdESUtilsPDFEOFString = []byte{'%', '%', 'E', 'O', 'F'}
 
 // PAdESUtilsGetOriginalPDF returns the original signed content for the padesSignature. Port of
 // #getOriginalPDF(PAdESSignature).
-func PAdESUtilsGetOriginalPDF(padesSignature *PAdESSignature) model.DSSDocument {
-	return PAdESUtilsGetOriginalPDFFromRevision(padesSignature.PdfRevision())
+func UtilsGetOriginalPDF(padesSignature *Signature) model.DSSDocument {
+	return UtilsGetOriginalPDFFromRevision(padesSignature.PdfRevision())
 }
 
-// PAdESUtilsGetOriginalPDFFromRevision returns the original signed content for the pdfRevision.
+// UtilsGetOriginalPDFFromRevision returns the original signed content for the pdfRevision.
 // Port of #getOriginalPDF(PdfCMSRevision).
-func PAdESUtilsGetOriginalPDFFromRevision(pdfRevision PdfCMSRevision) model.DSSDocument {
+func UtilsGetOriginalPDFFromRevision(pdfRevision PdfCMSRevision) model.DSSDocument {
 	return pdfRevision.PreviousRevision()
 }
 
-// PAdESUtilsGetRevisionContent returns the complete revision content according to the provided
+// UtilsGetRevisionContent returns the complete revision content according to the provided
 // byteRange ([0]-[3]). Panics with the Java messages when dssDocument or byteRange is nil
 // (Objects.requireNonNull). Port of #getRevisionContent.
-func PAdESUtilsGetRevisionContent(dssDocument model.DSSDocument, byteRange *ByteRange) model.DSSDocument {
+func UtilsGetRevisionContent(dssDocument model.DSSDocument, byteRange *ByteRange) model.DSSDocument {
 	if dssDocument == nil {
 		panic("DSSDocument cannot be null!")
 	}
 	if byteRange == nil {
 		panic("ByteRange cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(dssDocument)
+	UtilsAssertPdfDocument(dssDocument)
 
 	beginning := byteRange.FirstPartStart()
 	endSigValueContent := byteRange.SecondPartStart()
@@ -69,11 +69,11 @@ func PAdESUtilsGetRevisionContent(dssDocument model.DSSDocument, byteRange *Byte
 	return NewPdfByteRangeDocument(dssDocument, revisionByteRange)
 }
 
-// PAdESUtilsGetPreviousRevision returns the best previous revision from revisions corresponding
+// UtilsGetPreviousRevision returns the best previous revision from revisions corresponding
 // to the byteRange. Panics with the Java messages when byteRange or revisions is nil (Objects.
 // requireNonNull; a nil slice is treated as Java's non-null empty/absent collection would not be,
 // so callers pass a non-nil slice). Port of #getPreviousRevision.
-func PAdESUtilsGetPreviousRevision(byteRange *ByteRange, revisions []*PdfByteRangeDocument) model.DSSDocument {
+func UtilsGetPreviousRevision(byteRange *ByteRange, revisions []*PdfByteRangeDocument) model.DSSDocument {
 	if byteRange == nil {
 		panic("ByteRange cannot be null!")
 	}
@@ -96,21 +96,21 @@ func PAdESUtilsGetPreviousRevision(byteRange *ByteRange, revisions []*PdfByteRan
 	return model.CreateEmptyDocument()
 }
 
-// PAdESUtilsGetSignatureValue gets the SignatureValue from the dssDocument according to the
+// UtilsGetSignatureValue gets the SignatureValue from the dssDocument according to the
 // byteRange.
 //
 // Example: extracts bytes from 841 to 959. [0, 840, 960, 1200]
 //
 // Panics with the Java messages when dssDocument or byteRange is nil, or on a hex-decoding
 // failure (Java's unchecked exception path). Port of #getSignatureValue.
-func PAdESUtilsGetSignatureValue(dssDocument model.DSSDocument, byteRange *ByteRange) []byte {
+func UtilsGetSignatureValue(dssDocument model.DSSDocument, byteRange *ByteRange) []byte {
 	if dssDocument == nil {
 		panic("DSSDocument cannot be null!")
 	}
 	if byteRange == nil {
 		panic("ByteRange cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(dssDocument)
+	UtilsAssertPdfDocument(dssDocument)
 
 	startSigValueContent := byteRange.FirstPartStart() + byteRange.FirstPartEnd() + 1
 	endSigValueContent := byteRange.SecondPartStart() - 1
@@ -127,7 +127,7 @@ func PAdESUtilsGetSignatureValue(dssDocument model.DSSDocument, byteRange *ByteR
 	return value
 }
 
-// PAdESUtilsReplaceSignature replaces /Contents field value with the given cmsSignedData
+// UtilsReplaceSignature replaces /Contents field value with the given cmsSignedData
 // binaries.
 //
 // toBeSignedDocument represents a document to be signed with an empty signature value (Ex.:
@@ -135,7 +135,7 @@ func PAdESUtilsGetSignatureValue(dssDocument model.DSSDocument, byteRange *ByteR
 // PAdESUtilsDefaultResourcesHandlerBuilder is used.
 //
 // Returns the PDF document containing the inserted CMS signature. Port of #replaceSignature.
-func PAdESUtilsReplaceSignature(toBeSignedDocument model.DSSDocument, cmsSignedData []byte,
+func UtilsReplaceSignature(toBeSignedDocument model.DSSDocument, cmsSignedData []byte,
 	resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (result model.DSSDocument, err error) {
 	if toBeSignedDocument == nil {
 		panic("DSSDocument cannot be null!")
@@ -143,7 +143,7 @@ func PAdESUtilsReplaceSignature(toBeSignedDocument model.DSSDocument, cmsSignedD
 	if cmsSignedData == nil {
 		panic("cmsSignedData cannot be null!")
 	}
-	PAdESUtilsAssertPdfDocument(toBeSignedDocument)
+	UtilsAssertPdfDocument(toBeSignedDocument)
 
 	if resourcesHandlerBuilder == nil {
 		resourcesHandlerBuilder = PAdESUtilsDefaultResourcesHandlerBuilder
@@ -232,10 +232,10 @@ func PAdESUtilsReplaceSignature(toBeSignedDocument model.DSSDocument, cmsSignedD
 	return resourcesHandler.WriteToDSSDocument()
 }
 
-// PAdESUtilsExtractRevisions parses document and extracts all revisions based on the %%EOF
+// UtilsExtractRevisions parses document and extracts all revisions based on the %%EOF
 // string. Port of #extractRevisions.
-func PAdESUtilsExtractRevisions(document model.DSSDocument) []*PdfByteRangeDocument {
-	PAdESUtilsAssertPdfDocument(document)
+func UtilsExtractRevisions(document model.DSSDocument) []*PdfByteRangeDocument {
+	UtilsAssertPdfDocument(document)
 
 	var revisions []*PdfByteRangeDocument
 
@@ -298,9 +298,9 @@ func pAdESUtilsGetTwoIntegersByteRange(offset, position int) *ByteRange {
 	return NewByteRange([]int{offset, position - offset, position, 0})
 }
 
-// PAdESUtilsRevocationInfoArchival returns RevocationInfoArchival from the given encodable, nil
+// UtilsRevocationInfoArchival returns RevocationInfoArchival from the given encodable, nil
 // if the parsing failed or encodable is nil. Port of #getRevocationInfoArchival.
-func PAdESUtilsRevocationInfoArchival(encodable *asn1ber.Element) *RevocationInfoArchival {
+func UtilsRevocationInfoArchival(encodable *asn1ber.Element) *RevocationInfoArchival {
 	if encodable == nil {
 		return nil
 	}
@@ -313,9 +313,9 @@ func PAdESUtilsRevocationInfoArchival(encodable *asn1ber.Element) *RevocationInf
 	return archival
 }
 
-// PAdESUtilsIsPDFDocument checks if the given DSSDocument represents a PDF document. Panics with
+// UtilsIsPDFDocument checks if the given DSSDocument represents a PDF document. Panics with
 // the Java message on an I/O failure (Java's unchecked DSSException). Port of #isPDFDocument.
-func PAdESUtilsIsPDFDocument(document model.DSSDocument) bool {
+func UtilsIsPDFDocument(document model.DSSDocument) bool {
 	is, err := document.OpenStream()
 	if err != nil {
 		panic(model.NewDSSErrorMessageCause("Cannot read a sequence of bytes from the InputStream.", err))
@@ -329,28 +329,28 @@ func PAdESUtilsIsPDFDocument(document model.DSSDocument) bool {
 	return ok
 }
 
-// PAdESUtilsAssertPdfDocument verifies whether the provided document is a PDF. Panics with the
+// UtilsAssertPdfDocument verifies whether the provided document is a PDF. Panics with the
 // Java message when document is nil (Objects.requireNonNull), is a *model.DigestDocument, or is
 // not a PDF (Java's IllegalArgumentException / spi/exception.IllegalInputException). Port of
 // #assertPdfDocument.
-func PAdESUtilsAssertPdfDocument(document model.DSSDocument) {
+func UtilsAssertPdfDocument(document model.DSSDocument) {
 	if document == nil {
 		panic("DSSDocument cannot be null!")
 	}
 	if _, ok := document.(*model.DigestDocument); ok {
 		panic("DigestDocument cannot be used! PDF document is expected!")
 	}
-	if !PAdESUtilsIsPDFDocument(document) {
+	if !UtilsIsPDFDocument(document) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf(
 			"The document with name '%s' is not a PDF. PDF document is expected!", document.Name())))
 	}
 }
 
-// PAdESUtilsExtractPermissionsDictionary extracts SigFieldPermissions (for instance /Lock
+// UtilsExtractPermissionsDictionary extracts SigFieldPermissions (for instance /Lock
 // dictionary) from a wrapping dictionary. Panics on an unsupported /Action field value
 // (PdfLockActionForName's error, mirroring Java's unchecked IllegalArgumentException). Port of
 // #extractPermissionsDictionary.
-func PAdESUtilsExtractPermissionsDictionary(wrapper PdfDict) *SigFieldPermissions {
+func UtilsExtractPermissionsDictionary(wrapper PdfDict) *SigFieldPermissions {
 	sigFieldPermissions := NewSigFieldPermissions()
 
 	action := wrapper.NameValue(PAdESConstantsActionName)
@@ -387,14 +387,14 @@ func PAdESUtilsExtractPermissionsDictionary(wrapper PdfDict) *SigFieldPermission
 	return sigFieldPermissions
 }
 
-// PAdESUtilsVRIsWithName returns a list of VRI dictionaries, corresponding to the given
+// UtilsVRIsWithName returns a list of VRI dictionaries, corresponding to the given
 // signature (VRI) SHA-1 name.
 //
 // NOTE: vriName can be the empty string. In this case all /VRI dictionaries are returned (Java's
 // null vriName).
 //
 // Port of #getVRIsWithName.
-func PAdESUtilsVRIsWithName(pdfDssDict PdfDssDict, vriName string) []*PdfVriDict {
+func UtilsVRIsWithName(pdfDssDict PdfDssDict, vriName string) []*PdfVriDict {
 	vris := pdfDssDict.VRIs()
 	if utils.IsCollectionEmpty(vris) {
 		return nil
@@ -412,6 +412,6 @@ func PAdESUtilsVRIsWithName(pdfDssDict PdfDssDict, vriName string) []*PdfVriDict
 
 // PAdESUtilsInitializeDSSResourcesHandler initializes a new DSSResourcesHandler object. Port of
 // #initializeDSSResourcesHandler.
-func PAdESUtilsInitializeDSSResourcesHandler() resources.DSSResourcesHandler {
+func UtilsInitializeDSSResourcesHandler() resources.DSSResourcesHandler {
 	return PAdESUtilsDefaultResourcesHandlerBuilder.CreateResourcesHandler()
 }

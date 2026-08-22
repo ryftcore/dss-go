@@ -110,7 +110,7 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 
 	// DocumentTimestamps returns a list of document timestamps. Port of the public, overridable
 	// getDocumentTimestamps(), which the base answers with an empty list and only
-	// pades.PAdESTimestampSource overrides (a PDF /DocTimeStamp revision is not reachable through
+	// pades.TimestampSource overrides (a PDF /DocTimeStamp revision is not reachable through
 	// any CMS unsigned attribute, so no other format has one). Routed through this interface -
 	// rather than called on the embedded base directly - because the base's own
 	// AllTimestampsExceptLastArchiveTimestamp() below consults it, and Go embedding gives that
@@ -120,7 +120,7 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// See the identical rationale on AllTimestamps below.
 	DocumentTimestamps() []*validation.TimestampToken
 	// AllTimestamps returns a list of all incorporated timestamps. Port of the public,
-	// overridable getAllTimestamps(); pades.PAdESTimestampSource overrides it to append the
+	// overridable getAllTimestamps(); pades.TimestampSource overrides it to append the
 	// document and /VRI timestamps the base cannot know about. Routed through this interface for
 	// the same reason DocumentTimestamps above is: the base's own TimestampCertificateSources(),
 	// TimestampCRLSources(), TimestampOCSPSources(), getTimestampsCoveredByManifest() and
@@ -177,13 +177,13 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// Port of the abstract getArchiveTimestampType(SA).
 	GetArchiveTimestampType(unsignedAttribute SA) enumerations.ArchiveTimestampType
 
-	// GetTimestampMessageImprintDigestBuilderForAlgorithm returns a TimestampMessageDigestBuilder
+	// GetTimestampMessageImprintDigestBuilderForAlgorithm returns a MessageDigestBuilder
 	// to compute a message digest with the given DigestAlgorithm.
 	// Port of the abstract getTimestampMessageImprintDigestBuilder(DigestAlgorithm).
-	GetTimestampMessageImprintDigestBuilderForAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) TimestampMessageDigestBuilder
-	// GetTimestampMessageImprintDigestBuilderForToken returns the related TimestampMessageDigestBuilder.
+	GetTimestampMessageImprintDigestBuilderForAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) MessageDigestBuilder
+	// GetTimestampMessageImprintDigestBuilderForToken returns the related MessageDigestBuilder.
 	// Port of the abstract getTimestampMessageImprintDigestBuilder(TimestampToken).
-	GetTimestampMessageImprintDigestBuilderForToken(timestampToken *validation.TimestampToken) TimestampMessageDigestBuilder
+	GetTimestampMessageImprintDigestBuilderForToken(timestampToken *validation.TimestampToken) MessageDigestBuilder
 
 	// IncorporateArchiveTimestampReferences incorporates all the timestamped references for the
 	// given archive timestampToken. Port of the protected incorporateArchiveTimestampReferences
@@ -1055,16 +1055,16 @@ func (s *SignatureTimestampSource[AS, SA]) validateTimestamps() {
 	}
 }
 
-// GetTimestampMessageImprintDigestBuilder returns a TimestampMessageDigestBuilder to compute
+// GetTimestampMessageImprintDigestBuilder returns a MessageDigestBuilder to compute
 // message digest with the provided DigestAlgorithm. Port of the protected abstract
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm).
-func (s *SignatureTimestampSource[AS, SA]) GetTimestampMessageImprintDigestBuilder(digestAlgorithm enumerations.DigestAlgorithm) TimestampMessageDigestBuilder {
+func (s *SignatureTimestampSource[AS, SA]) GetTimestampMessageImprintDigestBuilder(digestAlgorithm enumerations.DigestAlgorithm) MessageDigestBuilder {
 	return s.overrides.GetTimestampMessageImprintDigestBuilderForAlgorithm(digestAlgorithm)
 }
 
-// getTimestampMessageImprintDigestBuilder returns a related TimestampMessageDigestBuilder.
+// getTimestampMessageImprintDigestBuilder returns a related MessageDigestBuilder.
 // Port of the protected abstract getTimestampMessageImprintDigestBuilder(TimestampToken).
-func (s *SignatureTimestampSource[AS, SA]) getTimestampMessageImprintDigestBuilder(timestampToken *validation.TimestampToken) TimestampMessageDigestBuilder {
+func (s *SignatureTimestampSource[AS, SA]) getTimestampMessageImprintDigestBuilder(timestampToken *validation.TimestampToken) MessageDigestBuilder {
 	return s.overrides.GetTimestampMessageImprintDigestBuilderForToken(timestampToken)
 }
 
@@ -1197,7 +1197,7 @@ func (s *SignatureTimestampSource[AS, SA]) isTimestamped(signature validation.Ad
 // Integer, when not found.
 //
 // Java writes `signatureAttribute.equals(property)`, which dispatches to the CONCRETE
-// attribute class's equals() override - CAdESAttribute, XAdESAttribute, JAdESAttribute and
+// attribute class's equals() override - Attribute, Attribute, Attribute and
 // CBAdESAttribute all override it as `Objects.equals(getIdentifier(), that.getIdentifier())`,
 // i.e. value equality on the SA-... identifier - not to Object's reference identity. Comparing
 // the Go pointers instead can never match: every SignatureProperties.Attributes()

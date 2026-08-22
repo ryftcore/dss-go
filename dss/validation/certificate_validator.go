@@ -64,7 +64,7 @@ func (v *CertificateValidator) DefaultValidationPolicyPath() string {
 // PrepareValidationContext is the port of the overridden
 // prepareValidationContext(CertificateVerifier).
 func (v *CertificateValidator) PrepareValidationContext(
-	certificateVerifier spivalidation.CertificateVerifier) spivalidation.ValidationContext {
+	certificateVerifier spivalidation.CertificateVerifier) spivalidation.Context {
 	svc := v.AbstractCertificateValidator.PrepareValidationContext(certificateVerifier)
 	svc.AddCertificateTokenForVerification(v.token)
 	return svc

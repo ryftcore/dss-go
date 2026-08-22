@@ -14,8 +14,8 @@ type ASiCWithCAdESSignatureManifestBuilder struct {
 var _ asic.AbstractASiCManifestBuilderOverrides = (*ASiCWithCAdESSignatureManifestBuilder)(nil)
 
 // NewASiCWithCAdESSignatureManifestBuilder is the default constructor. Ports
-// ASiCWithCAdESSignatureManifestBuilder(ASiCContent, DigestAlgorithm, String).
-func NewASiCWithCAdESSignatureManifestBuilder(asicContent *asic.ASiCContent,
+// ASiCWithCAdESSignatureManifestBuilder(Content, DigestAlgorithm, String).
+func NewASiCWithCAdESSignatureManifestBuilder(asicContent *asic.Content,
 	digestAlgorithm enumerations.DigestAlgorithm, signatureFilename string) *ASiCWithCAdESSignatureManifestBuilder {
 	builder := &ASiCWithCAdESSignatureManifestBuilder{}
 	builder.initASiCEWithCAdESManifestBuilder(builder, asicContent, signatureFilename, digestAlgorithm)
@@ -24,8 +24,8 @@ func NewASiCWithCAdESSignatureManifestBuilder(asicContent *asic.ASiCContent,
 
 // NewASiCWithCAdESSignatureManifestBuilderWithFilenameFactory is the constructor with filename
 // factory. Ports
-// ASiCWithCAdESSignatureManifestBuilder(ASiCContent, DigestAlgorithm, String, ASiCWithCAdESFilenameFactory).
-func NewASiCWithCAdESSignatureManifestBuilderWithFilenameFactory(asicContent *asic.ASiCContent,
+// ASiCWithCAdESSignatureManifestBuilder(Content, DigestAlgorithm, String, ASiCWithCAdESFilenameFactory).
+func NewASiCWithCAdESSignatureManifestBuilderWithFilenameFactory(asicContent *asic.Content,
 	digestAlgorithm enumerations.DigestAlgorithm, signatureFilename string,
 	asicFilenameFactory ASiCWithCAdESFilenameFactory) *ASiCWithCAdESSignatureManifestBuilder {
 	builder := &ASiCWithCAdESSignatureManifestBuilder{}
@@ -40,9 +40,9 @@ func (b *ASiCWithCAdESSignatureManifestBuilder) SigReferenceMimeType() enumerati
 }
 
 // SetAsicContentDocumentFilter ports the @Override covariant-return
-// setAsicContentDocumentFilter(ASiCContentDocumentFilter).
+// setAsicContentDocumentFilter(ContentDocumentFilter).
 func (b *ASiCWithCAdESSignatureManifestBuilder) SetAsicContentDocumentFilter(
-	asicContentDocumentFilter *asic.ASiCContentDocumentFilter) *ASiCWithCAdESSignatureManifestBuilder {
+	asicContentDocumentFilter *asic.ContentDocumentFilter) *ASiCWithCAdESSignatureManifestBuilder {
 	b.AbstractASiCManifestBuilder.SetAsicContentDocumentFilter(asicContentDocumentFilter)
 	return b
 }

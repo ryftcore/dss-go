@@ -20,7 +20,7 @@ type EAANotRevokedCheck struct {
 }
 
 // NewEAANotRevokedCheck is the default constructor.
-func NewEAANotRevokedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAANotRevokedCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationWrapper, constraint policy.LevelRule) *EAANotRevokedCheck {
 	c := &EAANotRevokedCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

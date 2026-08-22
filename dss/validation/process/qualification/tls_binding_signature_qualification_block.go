@@ -29,8 +29,8 @@ type TLSBindingSignatureQualificationBlock struct {
 
 // NewTLSBindingSignatureQualificationBlock is the default constructor. Port
 // of
-// TLSBindingSignatureQualificationBlock(I18nProvider, Map, XmlConstraintsConclusionWithProofOfExistence, SignatureWrapper, List, String).
-func NewTLSBindingSignatureQualificationBlock(i18nProvider *i18n.I18nProvider, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
+// TLSBindingSignatureQualificationBlock(Provider, Map, XmlConstraintsConclusionWithProofOfExistence, SignatureWrapper, List, String).
+func NewTLSBindingSignatureQualificationBlock(i18nProvider *i18n.Provider, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	etsi319102validation *jaxb.XmlConstraintsConclusionWithProofOfExistence, bindingSignature *diagnostic.SignatureWrapper,
 	tlAnalysis []*jaxb.XmlTLAnalysis, websiteUrl string) *TLSBindingSignatureQualificationBlock {
 	c := &TLSBindingSignatureQualificationBlock{

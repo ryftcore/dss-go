@@ -22,8 +22,8 @@ type EAACategoryForPubEAACheck struct {
 }
 
 // NewEAACategoryForPubEAACheck is the default constructor. Port of
-// EAACategoryForPubEAACheck(I18nProvider, XmlValidationEAAQualificationProcess, EAAWrapper, LevelRule).
-func NewEAACategoryForPubEAACheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
+// EAACategoryForPubEAACheck(Provider, XmlValidationEAAQualificationProcess, EAAWrapper, LevelRule).
+func NewEAACategoryForPubEAACheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
 	eaa *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAACategoryForPubEAACheck {
 	c := &EAACategoryForPubEAACheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

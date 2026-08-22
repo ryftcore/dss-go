@@ -38,7 +38,7 @@ type singleFCChain struct {
 	factory func(result *process.Result[*jaxb.XmlFC], rule policy.LevelRule) process.ChainItem[*jaxb.XmlFC]
 }
 
-func newSingleFCChain(i18nProvider *i18n.I18nProvider,
+func newSingleFCChain(i18nProvider *i18n.Provider,
 	factory func(result *process.Result[*jaxb.XmlFC], rule policy.LevelRule) process.ChainItem[*jaxb.XmlFC],
 ) *singleFCChain {
 	xmlFC := &jaxb.XmlFC{}
@@ -133,7 +133,7 @@ func TestFCDirectChecksAgainstJavaOracle(t *testing.T) {
 	if len(rows) == 0 {
 		t.Fatal("empty direct oracle")
 	}
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	// index by (file, token, check)
 	type key struct{ file, token, check string }
@@ -456,7 +456,7 @@ func signatureWithEcdsaKeySizeMismatch() *diagnostic.SignatureWrapper {
 
 // collidingByteRangeDiagnosticData mirrors the oracle's synthetic dump: two PAdES
 // signatures whose /ByteRange intervals overlap.
-func collidingByteRangeDiagnosticData() *diagnostic.DiagnosticData {
+func collidingByteRangeDiagnosticData() *diagnostic.Data {
 	jaxbData := &diagjaxb.XmlDiagnosticData{}
 	for i := 0; i < 2; i++ {
 		xml := &diagjaxb.XmlSignature{}
@@ -470,12 +470,12 @@ func collidingByteRangeDiagnosticData() *diagnostic.DiagnosticData {
 		}
 		jaxbData.Signatures = &diagjaxb.SignaturesWrapper{Items: append(jaxbData.Signatures.All(), xml)}
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // failingByteRangeDiagnosticData mirrors the oracle's dump whose single PAdES signature
 // carries an invalid /ByteRange.
-func failingByteRangeDiagnosticData() *diagnostic.DiagnosticData {
+func failingByteRangeDiagnosticData() *diagnostic.Data {
 	jaxbData := &diagjaxb.XmlDiagnosticData{}
 	xml := &diagjaxb.XmlSignature{}
 	id := diagjaxb.CollapsedString("S-BAD-BYTERANGE")
@@ -488,7 +488,7 @@ func failingByteRangeDiagnosticData() *diagnostic.DiagnosticData {
 		PDFSignatureDictionary: &diagjaxb.XmlPDFSignatureDictionary{SignatureByteRange: byteRange},
 	}
 	jaxbData.Signatures = &diagjaxb.SignaturesWrapper{Items: []*diagjaxb.XmlSignature{xml}}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 // signatureWithDuplicatedReference carries a duplicated digest-matcher reference.

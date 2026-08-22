@@ -34,7 +34,7 @@ type AbstractReportsBase struct {
 	// the protected validateXml field.
 	ValidateXml bool
 
-	diagnosticDataWrapper *diagnostic.DiagnosticData
+	diagnosticDataWrapper *diagnostic.Data
 	detailedReportWrapper *detailedreport.DetailedReport
 
 	xmlDiagnosticData string
@@ -51,7 +51,7 @@ type AbstractReportsBase struct {
 func NewAbstractReportsBase(diagnosticDataJaxb *diagnosticjaxb.XmlDiagnosticData,
 	detailedReport *detailedreportjaxb.XmlDetailedReport) AbstractReportsBase {
 	return AbstractReportsBase{
-		diagnosticDataWrapper: diagnostic.NewDiagnosticData(diagnosticDataJaxb),
+		diagnosticDataWrapper: diagnostic.NewData(diagnosticDataJaxb),
 		detailedReportWrapper: detailedreport.NewDetailedReport(detailedReport),
 	}
 }
@@ -80,7 +80,7 @@ func (a *AbstractReportsBase) SetValidateXml(validateXml bool) {
 
 // GetDiagnosticData returns the reference to the diagnostic data object
 // generated during the validation process. Port of getDiagnosticData().
-func (a *AbstractReportsBase) GetDiagnosticData() *diagnostic.DiagnosticData {
+func (a *AbstractReportsBase) GetDiagnosticData() *diagnostic.Data {
 	return a.diagnosticDataWrapper
 }
 
@@ -106,7 +106,7 @@ func (a *AbstractReportsBase) GetDetailedReportJaxb() *detailedreportjaxb.XmlDet
 // DiagnosticData string. Port of getXmlDiagnosticData().
 func (a *AbstractReportsBase) GetXmlDiagnosticData() (string, error) {
 	if a.xmlDiagnosticData == "" {
-		xml, err := diagnostic.NewDiagnosticDataFacade().Marshal(a.GetDiagnosticDataJaxb())
+		xml, err := diagnostic.NewDataFacade().Marshal(a.GetDiagnosticDataJaxb())
 		if err != nil {
 			return "", NewDSSReportExceptionMessageCause("An error occurred during marshalling of JAXB Diagnostic Data", err)
 		}
@@ -119,7 +119,7 @@ func (a *AbstractReportsBase) GetXmlDiagnosticData() (string, error) {
 // DetailedReport string. Port of getXmlDetailedReport().
 func (a *AbstractReportsBase) GetXmlDetailedReport() (string, error) {
 	if a.xmlDetailedReport == "" {
-		xml, err := detailedreport.NewDetailedReportFacade().Marshal(a.GetDetailedReportJaxb())
+		xml, err := detailedreport.NewFacade().Marshal(a.GetDetailedReportJaxb())
 		if err != nil {
 			return "", NewDSSReportExceptionMessageCause("An error occurred during marshalling of JAXB Detailed Report", err)
 		}

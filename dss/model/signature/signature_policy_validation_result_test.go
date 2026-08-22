@@ -9,7 +9,7 @@ import (
 )
 
 func TestSignaturePolicyValidationResult_RoundTrip(t *testing.T) {
-	r := NewSignaturePolicyValidationResult()
+	r := NewPolicyValidationResult()
 	r.SetIdentified(true)
 	r.SetAsn1Processable(true)
 	r.SetDigestAlgorithmsEqual(true)
@@ -29,7 +29,7 @@ func TestSignaturePolicyValidationResult_RoundTrip(t *testing.T) {
 }
 
 func TestSignaturePolicyValidationResult_ProcessingErrors(t *testing.T) {
-	r := NewSignaturePolicyValidationResult()
+	r := NewPolicyValidationResult()
 	r.AddError("step1", "digest mismatch")
 	r.AddError("step2", "unknown identifier")
 

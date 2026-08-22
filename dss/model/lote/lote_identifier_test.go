@@ -8,8 +8,8 @@ import (
 )
 
 func TestLoTEIdentifierDigestMatchesURL(t *testing.T) {
-	listInfo := NewLoTEInfo(nil, nil, nil, "https://example.org/lote.xml")
-	id := NewLoTEIdentifier(listInfo)
+	listInfo := NewInfo(nil, nil, nil, "https://example.org/lote.xml")
+	id := NewIdentifier(listInfo)
 
 	want := sha256.Sum256([]byte("https://example.org/lote.xml"))
 	if id.DigestID().HexValue() != model.NewDigest(model.IdentifierDigestAlgorithm, want[:]).HexValue() {
@@ -24,7 +24,7 @@ func TestLoTEIdentifierDigestMatchesURL(t *testing.T) {
 }
 
 func TestLoLoTEIdentifierPrefixAndClassName(t *testing.T) {
-	listInfo := NewLoTEInfo(nil, nil, nil, "https://example.org/lolote.xml")
+	listInfo := NewInfo(nil, nil, nil, "https://example.org/lolote.xml")
 	id := NewLoLoTEIdentifier(listInfo)
 
 	if got := id.AsXmlID(); got[:7] != "LoLoTE-" {
@@ -38,8 +38,8 @@ func TestLoLoTEIdentifierPrefixAndClassName(t *testing.T) {
 func TestLoTEAndLoLoTEIdentifiersOfSameURLAreNotEqual(t *testing.T) {
 	// Java's Identifier#equals() compares getClass(), so a LoTEIdentifier and a
 	// LoLoTEIdentifier built from the same URL must never be equal.
-	listInfo := NewLoTEInfo(nil, nil, nil, "https://example.org/same.xml")
-	lote := NewLoTEIdentifier(listInfo)
+	listInfo := NewInfo(nil, nil, nil, "https://example.org/same.xml")
+	lote := NewIdentifier(listInfo)
 	lolote := NewLoLoTEIdentifier(listInfo)
 
 	if lote.Equals(lolote) {

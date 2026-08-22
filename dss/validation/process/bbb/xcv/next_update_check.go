@@ -19,8 +19,8 @@ type NextUpdateCheck struct {
 }
 
 // NewNextUpdateCheck is the default constructor. Port of
-// NextUpdateCheck(I18nProvider, XmlRFC, RevocationWrapper, LevelRule).
-func NewNextUpdateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRFC],
+// NextUpdateCheck(Provider, XmlRFC, RevocationWrapper, LevelRule).
+func NewNextUpdateCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRFC],
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *NextUpdateCheck {
 	c := &NextUpdateCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

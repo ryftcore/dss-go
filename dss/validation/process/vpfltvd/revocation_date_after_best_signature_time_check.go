@@ -34,8 +34,8 @@ type RevocationDateAfterBestSignatureTimeCheck struct {
 
 // NewRevocationDateAfterBestSignatureTimeCheck is the default constructor.
 // Port of
-// RevocationDateAfterBestSignatureTimeCheck(I18nProvider, XmlValidationProcessLongTermData, CertificateRevocationWrapper, Date, LevelRule, SubContext).
-func NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider *i18n.I18nProvider,
+// RevocationDateAfterBestSignatureTimeCheck(Provider, XmlValidationProcessLongTermData, CertificateRevocationWrapper, Date, LevelRule, SubContext).
+func NewRevocationDateAfterBestSignatureTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], certificateRevocation *diagnostic.CertificateRevocationWrapper,
 	bestSignatureTime *time.Time, constraint policy.LevelRule, subContext enumerations.SubContext) *RevocationDateAfterBestSignatureTimeCheck {
 	c := &RevocationDateAfterBestSignatureTimeCheck{

@@ -36,7 +36,7 @@ func TestEvidenceRecordHashTreeRenewalTimestampCheckAgainstJavaOracle(t *testing
 // evidenceRecordDiagnosticData builds the diagnostic data the oracle drives the
 // check with: one evidence record covering "doc.xml" and one HashTree-renewal
 // archive time-stamp which does, or does not, cover it too.
-func evidenceRecordDiagnosticData(covered bool) *diagnostic.DiagnosticData {
+func evidenceRecordDiagnosticData(covered bool) *diagnostic.Data {
 	erMatcher := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
 	setDigestMatcherType(erMatcher, enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	erMatcher.DocumentName = ptr("doc.xml")
@@ -69,7 +69,7 @@ func evidenceRecordDiagnosticData(covered bool) *diagnostic.DiagnosticData {
 	}
 	evidenceRecord.Id = diagnosticjaxb.NewCollapsedString("ER-SYNTHETIC")
 
-	return diagnostic.NewDiagnosticData(&diagnosticjaxb.XmlDiagnosticData{
+	return diagnostic.NewData(&diagnosticjaxb.XmlDiagnosticData{
 		EvidenceRecords: &diagnosticjaxb.EvidenceRecordsWrapper{
 			Items: []*diagnosticjaxb.XmlEvidenceRecord{evidenceRecord},
 		},

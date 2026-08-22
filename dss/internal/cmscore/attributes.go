@@ -34,7 +34,7 @@ type Attribute struct {
 // nil the way it would be for a "no second value" built-vs-parsed asymmetry: every reader across
 // this codebase (DSSASN1UtilsAsn1Encodable and its many siblings) goes through Values, never
 // builtValues, so a signature this package built and never round-tripped through DER bytes -
-// exactly what CAdESLevelBaselineT/-LT/-LTA's extension step does to the CMS SignDocument just
+// exactly what LevelBaselineT/-LT/-LTA's extension step does to the CMS SignDocument just
 // produced, before ever serializing it - would otherwise read every one of its own signed
 // attributes (messageDigest included) as absent. Each value is a single complete DER TLV by
 // every caller's own construction (see e.g. cadesLevelBaselineBTime's return value), so a parse

@@ -22,7 +22,7 @@ type EAATypeCheck struct {
 }
 
 // NewEAATypeCheck is the default constructor.
-func NewEAATypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAATypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAATypeCheck {
 	c := &EAATypeCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

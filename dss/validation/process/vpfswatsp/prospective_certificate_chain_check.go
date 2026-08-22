@@ -22,8 +22,8 @@ type ProspectiveCertificateChainCheck struct {
 }
 
 // NewProspectiveCertificateChainCheck is the default constructor. Port of
-// ProspectiveCertificateChainCheck(I18nProvider, XmlPCV, TokenProxy, LevelRule).
-func NewProspectiveCertificateChainCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPCV],
+// ProspectiveCertificateChainCheck(Provider, XmlPCV, TokenProxy, LevelRule).
+func NewProspectiveCertificateChainCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPCV],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *ProspectiveCertificateChainCheck {
 	c := &ProspectiveCertificateChainCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

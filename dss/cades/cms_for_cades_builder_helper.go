@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/signature/CMSForCAdESBuilderHelper.java (DSS 6.5.RC1).
 //
 // The Java class is a thin assembly layer over the dss-cms builders, so the port is a thin layer
-// over the Go cms package: CMSBuilder, CMSSignerInfoGeneratorBuilder, SignerInfoGenerator and
+// over the Go cms package: Builder, SignerInfoGeneratorBuilder, SignerInfoGenerator and
 // ContentSigner keep their Java names there.
 //
 // Java's protected methods exist so that a subclass (dss-asic-cades has one) can override the
@@ -25,7 +25,7 @@ type CMSForCAdESBuilderHelper struct {
 	DocumentToSign model.DSSDocument
 
 	// SignatureParameters are the signature parameters used on the signature creation.
-	SignatureParameters *CAdESSignatureParameters
+	SignatureParameters *SignatureParameters
 
 	// ContentSigner is the content signer used for the signature creation.
 	ContentSigner cms.ContentSigner
@@ -42,17 +42,17 @@ type CMSForCAdESBuilderHelper struct {
 
 	// counterSignature marks the parameters as counter-signature parameters; see
 	// CAdESLevelBaselineB.counterSignature, which is where upstream's
-	// "parameters instanceof CAdESCounterSignatureParameters" test lives.
+	// "parameters instanceof CounterSignatureParameters" test lives.
 	counterSignature bool
 
 	// cadesProfile is the cached instance of a CAdES profile.
-	cadesProfile *CAdESLevelBaselineB
+	cadesProfile *LevelBaselineB
 }
 
 // NewCMSForCAdESBuilderHelper is the default constructor. Port of
-// CMSForCAdESBuilderHelper(DSSDocument, CAdESSignatureParameters, ContentSigner); a nil argument
+// CMSForCAdESBuilderHelper(DSSDocument, SignatureParameters, ContentSigner); a nil argument
 // panics with Java's Objects.requireNonNull message.
-func NewCMSForCAdESBuilderHelper(documentToSign model.DSSDocument, signatureParameters *CAdESSignatureParameters,
+func NewCMSForCAdESBuilderHelper(documentToSign model.DSSDocument, signatureParameters *SignatureParameters,
 	contentSigner cms.ContentSigner) *CMSForCAdESBuilderHelper {
 	if documentToSign == nil {
 		panic("documentToSign cannot be null!")
@@ -92,9 +92,9 @@ func (h *CMSForCAdESBuilderHelper) SetIncludeUnsignedAttributes(includeUnsignedA
 
 // SetCounterSignature marks the signature parameters as counter-signature parameters, which
 // suppresses the mime-type signed attribute. It has no upstream counterpart: Java tests
-// "signatureParameters instanceof CAdESCounterSignatureParameters" inside
+// "signatureParameters instanceof CounterSignatureParameters" inside
 // CAdESLevelBaselineB#addMimeType, and Go's embedding does not preserve that dynamic type across
-// the *CAdESSignatureParameters this helper is given. CAdESCounterSignatureBuilder is the sole
+// the *SignatureParameters this helper is given. CounterSignatureBuilder is the sole
 // caller.
 func (h *CMSForCAdESBuilderHelper) SetCounterSignature(counterSignature bool) *CMSForCAdESBuilderHelper {
 	h.counterSignature = counterSignature
@@ -149,28 +149,28 @@ func (h *CMSForCAdESBuilderHelper) InitUnsignedAttributesTable() cmscore.Attribu
 	return nil
 }
 
-// CAdESProfile gets the CAdESLevelBaselineB used for the signed and unsigned attributes table
+// CAdESProfile gets the LevelBaselineB used for the signed and unsigned attributes table
 // creation. Port of the protected #getCAdESProfile.
-func (h *CMSForCAdESBuilderHelper) CAdESProfile() *CAdESLevelBaselineB {
+func (h *CMSForCAdESBuilderHelper) CAdESProfile() *LevelBaselineB {
 	if h.cadesProfile == nil {
 		h.cadesProfile = h.InitCAdESProfile()
 	}
 	return h.cadesProfile
 }
 
-// InitCAdESProfile instantiates a new CAdESLevelBaselineB.
+// InitCAdESProfile instantiates a new LevelBaselineB.
 // Port of the protected #initCAdESProfile.
-func (h *CMSForCAdESBuilderHelper) InitCAdESProfile() *CAdESLevelBaselineB {
-	profile := NewCAdESLevelBaselineBWithDocument(h.DocumentToSign)
+func (h *CMSForCAdESBuilderHelper) InitCAdESProfile() *LevelBaselineB {
+	profile := NewLevelBaselineBWithDocument(h.DocumentToSign)
 	profile.SetCounterSignature(h.counterSignature)
 	return profile
 }
 
-// CreateCMSSignerInfoGeneratorBuilder creates and configures a CMSSignerInfoGeneratorBuilder to
+// CreateCMSSignerInfoGeneratorBuilder creates and configures a SignerInfoGeneratorBuilder to
 // be used for a SignerInfo creation.
 // Port of the protected #createCMSSignerInfoGeneratorBuilder.
 func (h *CMSForCAdESBuilderHelper) CreateCMSSignerInfoGeneratorBuilder(signedAttributes,
-	unsignedAttributes cmscore.Attributes) *cms.CMSSignerInfoGeneratorBuilder {
+	unsignedAttributes cmscore.Attributes) *cms.SignerInfoGeneratorBuilder {
 	return h.InitCMSSignerInfoGeneratorBuilder().
 		SetSigningCertificate(h.SignatureParameters.SigningCertificate()).
 		SetDigestAlgorithm(h.SignatureParameters.ReferenceDigestAlgorithm()).
@@ -178,10 +178,10 @@ func (h *CMSForCAdESBuilderHelper) CreateCMSSignerInfoGeneratorBuilder(signedAtt
 		SetUnsignedAttributes(unsignedAttributes)
 }
 
-// InitCMSSignerInfoGeneratorBuilder creates a new instance of CMSSignerInfoGeneratorBuilder.
+// InitCMSSignerInfoGeneratorBuilder creates a new instance of SignerInfoGeneratorBuilder.
 // Port of the protected #initCMSSignerInfoGeneratorBuilder.
-func (h *CMSForCAdESBuilderHelper) InitCMSSignerInfoGeneratorBuilder() *cms.CMSSignerInfoGeneratorBuilder {
-	return cms.NewCMSSignerInfoGeneratorBuilder()
+func (h *CMSForCAdESBuilderHelper) InitCMSSignerInfoGeneratorBuilder() *cms.SignerInfoGeneratorBuilder {
+	return cms.NewSignerInfoGeneratorBuilder()
 }
 
 // AssertSignatureParametersValid verifies the validity of the signature parameters
@@ -196,10 +196,10 @@ func (h *CMSForCAdESBuilderHelper) AssertSignatureParametersValid() error {
 	return nil
 }
 
-// InitCMSBuilder instantiates a CMSBuilder for the CMS creation.
+// InitCMSBuilder instantiates a Builder for the CMS creation.
 // Port of the protected #initCMSBuilder.
-func (h *CMSForCAdESBuilderHelper) InitCMSBuilder() *cms.CMSBuilder {
-	return cms.NewCMSBuilder().
+func (h *CMSForCAdESBuilderHelper) InitCMSBuilder() *cms.Builder {
+	return cms.NewBuilder().
 		SetSigningCertificate(h.SignatureParameters.SigningCertificate()).
 		SetCertificateChain(h.SignatureParameters.CertificateChain()).
 		SetGenerateWithoutCertificates(h.SignatureParameters.GenerateTBSWithoutCertificate()).

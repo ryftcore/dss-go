@@ -19,8 +19,8 @@ import (
 )
 
 // XAdESSignatureUtilsGetSignerDocuments returns the list of original signed documents. Ports
-// the final class XAdESSignatureUtils's static getSignerDocuments(XAdESSignature).
-func XAdESSignatureUtilsGetSignerDocuments(sig *XAdESSignature) []model.DSSDocument {
+// the final class XAdESSignatureUtils's static getSignerDocuments(Signature).
+func SignatureUtilsGetSignerDocuments(sig *Signature) []model.DSSDocument {
 	result := []model.DSSDocument{}
 
 	signatureCryptographicVerification := sig.SignatureCryptographicVerification()
@@ -45,8 +45,8 @@ func XAdESSignatureUtilsGetSignerDocuments(sig *XAdESSignature) []model.DSSDocum
 }
 
 // xadesSignatureUtilsGetReferenceDocument ports the private getReferenceDocument(Reference,
-// XAdESSignature).
-func xadesSignatureUtilsGetReferenceDocument(reference *xmldsig.Reference, sig *XAdESSignature) model.DSSDocument {
+// Signature).
+func xadesSignatureUtilsGetReferenceDocument(reference *xmldsig.Reference, sig *Signature) model.DSSDocument {
 	if document := xadesSignatureUtilsGetDSObject(reference, sig); document != nil {
 		return document
 	}
@@ -69,7 +69,7 @@ func xadesSignatureUtilsGetReferenceDocument(reference *xmldsig.Reference, sig *
 }
 
 // xadesSignatureUtilsGetDSObject ports the private getDSObject(Reference, XAdESSignature).
-func xadesSignatureUtilsGetDSObject(reference *xmldsig.Reference, sig *XAdESSignature) model.DSSDocument {
+func xadesSignatureUtilsGetDSObject(reference *xmldsig.Reference, sig *Signature) model.DSSDocument {
 	defer func() {
 		// Upstream catches a broad Exception here and logs "An error occurred during an attempt
 		// to extract signed object. Reason : {}"; a panic from a malformed same-document URI is
@@ -95,7 +95,7 @@ func xadesSignatureUtilsGetDSObject(reference *xmldsig.Reference, sig *XAdESSign
 }
 
 // xadesSignatureUtilsGetDSManifest ports the private getDSManifest(Reference, XAdESSignature).
-func xadesSignatureUtilsGetDSManifest(reference *xmldsig.Reference, sig *XAdESSignature) model.DSSDocument {
+func xadesSignatureUtilsGetDSManifest(reference *xmldsig.Reference, sig *Signature) model.DSSDocument {
 	defer func() {
 		// Upstream catches a broad Exception here and logs "An error occurred during an attempt
 		// to extract signed manifest. Reason : {}".
@@ -116,9 +116,9 @@ func xadesSignatureUtilsGetDSManifest(reference *xmldsig.Reference, sig *XAdESSi
 	return model.NewInMemoryDocumentWithMimeType(bytesValue, manifestId, enumerations.MimeTypeEnumXML)
 }
 
-// XAdESSignatureUtilsIsKeyInfoCovered verifies whether the ds:KeyInfo element is signed by the
+// SignatureUtilsIsKeyInfoCovered verifies whether the ds:KeyInfo element is signed by the
 // signature. Ports the static isKeyInfoCovered(XAdESSignature).
-func XAdESSignatureUtilsIsKeyInfoCovered(sig *XAdESSignature) bool {
+func SignatureUtilsIsKeyInfoCovered(sig *Signature) bool {
 	referenceValidations := sig.ReferenceValidations()
 	if utils.IsCollectionNotEmpty(referenceValidations) {
 		for _, referenceValidation := range referenceValidations {
@@ -131,10 +131,10 @@ func XAdESSignatureUtilsIsKeyInfoCovered(sig *XAdESSignature) bool {
 	return false
 }
 
-// XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute returns the latest
+// SignatureUtilsGetLastSealingEvidenceRecordAttribute returns the latest
 // "SealingEvidenceRecords" unsigned property, when present. Ports the static
-// getLastSealingEvidenceRecordAttribute(XAdESUnsignedSigProperties).
-func XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties *XAdESUnsignedSigProperties) *XAdESAttribute {
+// getLastSealingEvidenceRecordAttribute(UnsignedSigProperties).
+func SignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigProperties *UnsignedSigProperties) *Attribute {
 	// Execute in reverse order in order to change only last evidence-record, when applicable.
 	attributes := unsignedSigProperties.Attributes()
 	for i := len(attributes) - 1; i >= 0; i-- {

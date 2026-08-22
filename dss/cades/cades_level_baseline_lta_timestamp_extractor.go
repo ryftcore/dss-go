@@ -36,9 +36,9 @@
 //     Here it yields an empty SEQUENCE instead. The case cannot arise in the augmentation flow
 //     that calls it (an archive time-stamp is only ever added to a signature that already
 //     carries at least a signature-time-stamp), and no byte of a reachable output changes.
-//   - The extractor holds the narrow cadesLTASignature view of CAdESSignature rather than the
+//   - The extractor holds the narrow cadesLTASignature view of Signature rather than the
 //     concrete type, so that the byte-exact core can be driven by the Java-generated fixtures
-//     without a full document analyzer. *CAdESSignature is its only production implementation
+//     without a full document analyzer. *Signature is its only production implementation
 //     and the exported constructor still takes it.
 //   - slf4j logging is dropped (PORTING.md); the LOG.warn calls that accompany an
 //     ArchiveTimestampHashIndexStatus error message are covered by that message itself.
@@ -61,7 +61,7 @@ import (
 )
 
 // cadesLTASignature is the part of *CAdESSignature the extractor reads. Java holds the concrete
-// CAdESSignature; see the DEVIATION note in the file header for why this port names the subset.
+// Signature; see the DEVIATION note in the file header for why this port names the subset.
 type cadesLTASignature interface {
 	// CertificateSource gets the certificate source of the signature. Port of
 	// getCertificateSource().
@@ -83,7 +83,7 @@ type cadesLTASignature interface {
 	CMS() *cms.CMS
 }
 
-// CadesLevelBaselineLTATimestampExtractor extracts the necessary information to compute the
+// LevelBaselineLTATimestampExtractor extracts the necessary information to compute the
 // CAdES Archive Timestamp V3.
 //
 // See "5.5.2 The ats-hash-index-v3 attribute":
@@ -98,25 +98,25 @@ type cadesLTASignature interface {
 //     no octet stream resulting from concatenating one of the AttributeValue instances within
 //     field Attribute.attrValues and the corresponding Attribute.attrType within one Attribute
 //     instance in unsignedAttrs field of the SignerInfo.
-type CadesLevelBaselineLTATimestampExtractor struct {
-	// signature is the CAdESSignature.
+type LevelBaselineLTATimestampExtractor struct {
+	// signature is the Signature.
 	signature cadesLTASignature
 }
 
-// NewCadesLevelBaselineLTATimestampExtractor is the default constructor for the
-// CadesLevelBaselineLTATimestampExtractor, taking the CAdESSignature related to the archive
+// NewLevelBaselineLTATimestampExtractor is the default constructor for the
+// LevelBaselineLTATimestampExtractor, taking the Signature related to the archive
 // timestamp. Panics with the Java message when it is nil (Objects.requireNonNull upstream).
-func NewCadesLevelBaselineLTATimestampExtractor(cadesSignature *CAdESSignature) *CadesLevelBaselineLTATimestampExtractor {
+func NewLevelBaselineLTATimestampExtractor(cadesSignature *Signature) *LevelBaselineLTATimestampExtractor {
 	if cadesSignature == nil {
 		panic("CAdESSignature cannot be null!")
 	}
-	return newCadesLevelBaselineLTATimestampExtractor(cadesSignature)
+	return newLevelBaselineLTATimestampExtractor(cadesSignature)
 }
 
-// newCadesLevelBaselineLTATimestampExtractor builds the extractor over the narrow view of the
+// newLevelBaselineLTATimestampExtractor builds the extractor over the narrow view of the
 // signature; see the DEVIATION note in the file header.
-func newCadesLevelBaselineLTATimestampExtractor(signature cadesLTASignature) *CadesLevelBaselineLTATimestampExtractor {
-	return &CadesLevelBaselineLTATimestampExtractor{signature: signature}
+func newLevelBaselineLTATimestampExtractor(signature cadesLTASignature) *LevelBaselineLTATimestampExtractor {
+	return &LevelBaselineLTATimestampExtractor{signature: signature}
 }
 
 // AtsHashIndex builds the ats-hash-index unsigned attribute, which provides an unambiguous
@@ -133,7 +133,7 @@ func newCadesLevelBaselineLTATimestampExtractor(signature cadesLTASignature) *Ca
 //	    unsignedAttrsHashIndex SEQUENCE OF OCTET STRING }
 //
 // Port of getAtsHashIndex(SignerInformation, DigestAlgorithm, ASN1ObjectIdentifier).
-func (e *CadesLevelBaselineLTATimestampExtractor) AtsHashIndex(signerInformation *cmscore.SignerInfo,
+func (e *LevelBaselineLTATimestampExtractor) AtsHashIndex(signerInformation *cmscore.SignerInfo,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier) (*cmscore.Attribute, error) {
 	algorithmIdentifier, err := e.hashIndexDigestAlgorithmIdentifier(hashIndexDigestAlgorithm)
@@ -160,11 +160,11 @@ func (e *CadesLevelBaselineLTATimestampExtractor) AtsHashIndex(signerInformation
 // VerifiedAtsHashIndex re-builds the ats-hash-index for verification of the provided token, and
 // records what it found in the token's ArchiveTimestampHashIndexStatus.
 // Port of getVerifiedAtsHashIndex(SignerInformation, TimestampToken).
-func (e *CadesLevelBaselineLTATimestampExtractor) VerifiedAtsHashIndex(signerInformation *cmscore.SignerInfo,
+func (e *LevelBaselineLTATimestampExtractor) VerifiedAtsHashIndex(signerInformation *cmscore.SignerInfo,
 	timestampToken *validation.TimestampToken) (*cmscore.Attribute, error) {
 	unsignedAttributes := timestampToken.UnsignedAttributes()
-	atsHashIndexVersionIdentifier := CAdESUtilsAtsHashIndexVersionIdentifier(unsignedAttributes)
-	atsHashIndex := CAdESUtilsAtsHashIndexByVersion(unsignedAttributes, atsHashIndexVersionIdentifier)
+	atsHashIndexVersionIdentifier := UtilsAtsHashIndexVersionIdentifier(unsignedAttributes)
+	atsHashIndex := UtilsAtsHashIndexByVersion(unsignedAttributes, atsHashIndexVersionIdentifier)
 	// Upstream logs "A valid atsHashIndex [oid: {}] has not been found for a timestamp with id
 	// {}" when atsHashIndex is null; the status below carries the same finding.
 	atsHashIndexStatus := cadesLTAArchiveTimestampHashIndexStatus(atsHashIndexVersionIdentifier)
@@ -269,7 +269,7 @@ func cadesLTAComposedAtsHashIndex(algorithmIdentifiers *spi.AlgorithmIdentifier,
 // in certificatesHashIndex. No other hash value shall be included in this field.
 //
 // Port of the private getCertificatesHashIndex(DigestAlgorithm).
-func (e *CadesLevelBaselineLTATimestampExtractor) certificatesHashIndex(
+func (e *LevelBaselineLTATimestampExtractor) certificatesHashIndex(
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
 	var certificatesHashIndexVector []byte
 	signedDataCertificates := e.signature.CertificateSource().SignedDataCertificates()
@@ -289,10 +289,10 @@ func (e *CadesLevelBaselineLTATimestampExtractor) certificatesHashIndex(
 // certificate the signature knows of (lax processing).
 //
 // Port of the private getVerifiedCertificatesHashIndex.
-func (e *CadesLevelBaselineLTATimestampExtractor) verifiedCertificatesHashIndex(timestampHashIndex []byte,
+func (e *LevelBaselineLTATimestampExtractor) verifiedCertificatesHashIndex(timestampHashIndex []byte,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm,
 	atsHashIndexStatus *validation.ArchiveTimestampHashIndexStatus) ([]byte, error) {
-	certHashes := CAdESUtilsCertificatesHashIndex(timestampHashIndex)
+	certHashes := UtilsCertificatesHashIndex(timestampHashIndex)
 	certHashesList, err := spi.DSSASN1UtilsDEROctetStrings(certHashes)
 	if err != nil {
 		return nil, err
@@ -342,7 +342,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) verifiedCertificatesHashIndex(
 // No other hash values shall be included in this field.
 //
 // Port of the private getCRLsHashIndex(DigestAlgorithm).
-func (e *CadesLevelBaselineLTATimestampExtractor) crlsHashIndex(
+func (e *LevelBaselineLTATimestampExtractor) crlsHashIndex(
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
 	var crlsHashIndex []byte
 
@@ -396,10 +396,10 @@ func cadesLTADigestAndAddToList(encoded []byte,
 // knows of (lax processing).
 //
 // Port of the private getVerifiedCRLsHashIndex.
-func (e *CadesLevelBaselineLTATimestampExtractor) verifiedCRLsHashIndex(timestampHashIndex []byte,
+func (e *LevelBaselineLTATimestampExtractor) verifiedCRLsHashIndex(timestampHashIndex []byte,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm,
 	atsHashIndexStatus *validation.ArchiveTimestampHashIndexStatus) ([]byte, error) {
-	crlHashes := CAdESUtilsCRLHashIndex(timestampHashIndex)
+	crlHashes := UtilsCRLHashIndex(timestampHashIndex)
 	crlHashesList, err := spi.DSSASN1UtilsDEROctetStrings(crlHashes)
 	if err != nil {
 		return nil, err
@@ -440,7 +440,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) verifiedCRLsHashIndex(timestam
 // findCRLMatches removes from crlHashesList every hash matched by one of the provided
 // revocation binaries, and returns what is left. Port of the private findCRLMatches, whose
 // cmsSignedDataMode flag only selected a log message and is therefore dropped.
-func (e *CadesLevelBaselineLTATimestampExtractor) findCRLMatches(crlHashesList [][]byte,
+func (e *LevelBaselineLTATimestampExtractor) findCRLMatches(crlHashesList [][]byte,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm,
 	crlBinaries []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL],
 	ocspBinaries []spi.EncapsulatedRevocationTokenIdentifier[revocation.OCSP]) ([][]byte, error) {
@@ -519,7 +519,7 @@ func cadesLTACMSSignedDataRevocationBinaries[R revocation.Revocation](
 // DEROctetString of the digest.
 func cadesLTAOcspResponseDigest(binaries []byte, objectIdentifier asn1.ObjectIdentifier,
 	digestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
-	encoded, err := CAdESUtilsSignedDataEncodedOCSPResponse(binaries, objectIdentifier)
+	encoded, err := UtilsSignedDataEncodedOCSPResponse(binaries, objectIdentifier)
 	if err != nil {
 		return nil, err
 	}
@@ -538,7 +538,7 @@ func cadesLTAOcspResponseDigest(binaries []byte, objectIdentifier asn1.ObjectIde
 //
 // Port of the private getUnsignedAttributesHashIndex; see the DEVIATION note in the file header
 // on an absent unsignedAttrs field.
-func (e *CadesLevelBaselineLTATimestampExtractor) unsignedAttributesHashIndex(signerInformation *cmscore.SignerInfo,
+func (e *LevelBaselineLTATimestampExtractor) unsignedAttributesHashIndex(signerInformation *cmscore.SignerInfo,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
 	var unsignedAttributesHashIndex []byte
@@ -573,18 +573,18 @@ func (e *CadesLevelBaselineLTATimestampExtractor) unsignedAttributesHashIndex(si
 // didn't check anything.
 //
 // Port of the private getVerifiedUnsignedAttributesHashIndex.
-func (e *CadesLevelBaselineLTATimestampExtractor) verifiedUnsignedAttributesHashIndex(
+func (e *LevelBaselineLTATimestampExtractor) verifiedUnsignedAttributesHashIndex(
 	signerInformation *cmscore.SignerInfo, timestampHashIndex []byte,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier, hashIndexDigestAlgorithm enumerations.DigestAlgorithm,
 	atsHashIndexStatus *validation.ArchiveTimestampHashIndexStatus) ([]byte, error) {
 
-	unsignedAttributesHashes := CAdESUtilsUnsignedAttributesHashIndex(timestampHashIndex)
+	unsignedAttributesHashes := UtilsUnsignedAttributesHashIndex(timestampHashIndex)
 	timestampUnsignedAttributesHashesList, err := spi.DSSASN1UtilsDEROctetStrings(unsignedAttributesHashes)
 	if err != nil {
 		return nil, err
 	}
 
-	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+	unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 	for _, attribute := range cadesLTAAttributeTableOrder(unsignedAttributes) {
 		attributeDerOctetStringHashes, err := cadesLTAAttributeDerOctetStringHashes(
 			attribute, atsHashIndexVersionIdentifier, hashIndexDigestAlgorithm)
@@ -611,7 +611,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) verifiedUnsignedAttributesHash
 func cadesLTAAttributeDerOctetStringHashes(attribute *cmscore.Attribute,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier,
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm) ([][]byte, error) {
-	octets, err := CAdESUtilsOctetStringForAtsHashIndex(attribute, atsHashIndexVersionIdentifier)
+	octets, err := UtilsOctetStringForAtsHashIndex(attribute, atsHashIndexVersionIdentifier)
 	if err != nil {
 		return nil, err
 	}
@@ -632,7 +632,7 @@ func cadesLTAAttributeDerOctetStringHashes(attribute *cmscore.Attribute,
 
 // hashIndexDigestAlgorithmIdentifier ports the private
 // getHashIndexDigestAlgorithmIdentifier(DigestAlgorithm).
-func (e *CadesLevelBaselineLTATimestampExtractor) hashIndexDigestAlgorithmIdentifier(
+func (e *LevelBaselineLTATimestampExtractor) hashIndexDigestAlgorithmIdentifier(
 	hashIndexDigestAlgorithm enumerations.DigestAlgorithm) (*spi.AlgorithmIdentifier, error) {
 	// If the algorithm identifier in ATSHashIndex has the default value, then it can be omitted
 	if hashIndexDigestAlgorithm.OID() == CAdESUtilsDefaultArchiveTimestampHashAlgo.OID() {
@@ -644,7 +644,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) hashIndexDigestAlgorithmIdenti
 // ArchiveTimestampV3MessageImprint computes a message-imprint for an archive-time-stamp-v3.
 // Port of getArchiveTimestampV3MessageImprint(SignerInformation, Attribute, DSSDocument,
 // DigestAlgorithm).
-func (e *CadesLevelBaselineLTATimestampExtractor) ArchiveTimestampV3MessageImprint(
+func (e *LevelBaselineLTATimestampExtractor) ArchiveTimestampV3MessageImprint(
 	signerInformation *cmscore.SignerInfo, atsHashIndexAttribute *cmscore.Attribute,
 	originalDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) (model.DSSMessageDigest, error) {
 	/*
@@ -677,7 +677,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) ArchiveTimestampV3MessageImpri
 
 // encodedContentType returns 1) The SignedData.encapContentInfo.eContentType, DER encoded.
 // Port of the private getEncodedContentType().
-func (e *CadesLevelBaselineLTATimestampExtractor) encodedContentType() []byte {
+func (e *LevelBaselineLTATimestampExtractor) encodedContentType() []byte {
 	return asn1ber.EncodeOID(e.signature.CMS().SignedContentType())
 }
 
@@ -686,7 +686,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) encodedContentType() []byte {
 // corresponding to the signature being archive time-stamped, in their order of appearance.
 //
 // Port of the private writeSignedFields.
-func (e *CadesLevelBaselineLTATimestampExtractor) writeSignedFields(signerInformation *cmscore.SignerInfo,
+func (e *LevelBaselineLTATimestampExtractor) writeSignedFields(signerInformation *cmscore.SignerInfo,
 	digestCalculator *spi.DSSMessageDigestCalculator) error {
 	signerInfo := signerInformation
 
@@ -696,7 +696,7 @@ func (e *CadesLevelBaselineLTATimestampExtractor) writeSignedFields(signerInform
 
 	digestCalculator.Update(signerInfo.DigestAlgorithm.DER())
 
-	signedAttributes, err := CAdESUtilsDERSignedAttributes(signerInformation)
+	signedAttributes, err := UtilsDERSignedAttributes(signerInformation)
 	if err != nil {
 		return err
 	}

@@ -21,7 +21,7 @@ import (
 // trustedListFacade is the Go form of the eu.europa.esig.trustedlist.TrustedListFacade return
 // type of createTrustedListFacade(). Upstream, MRAFacade extends TrustedListFacade so that
 // LOTLParsingTask can substitute one for the other; the Go port of specs-trusted-list makes
-// trustedlist.TrustedListFacade and trustedlist.MRAFacade two independent structs (Go has no
+// trustedlist.Facade and trustedlist.MRAFacade two independent structs (Go has no
 // implementation inheritance), so the substitutability is expressed by this interface, which both
 // satisfy.
 //
@@ -130,9 +130,9 @@ func (t *AbstractParsingTaskBase) readDocument() ([]byte, error) {
 }
 
 // CreateTrustedListFacade loads a TrustedListFacade. Port of the protected
-// createTrustedListFacade(), whose body is `return TrustedListFacade.newFacade();`.
+// createTrustedListFacade(), whose body is `return Facade.newFacade();`.
 func (t *AbstractParsingTaskBase) CreateTrustedListFacade() trustedListFacade {
-	return trustedlist.NewTrustedListFacade()
+	return trustedlist.NewFacade()
 }
 
 // CommonParseSchemeInformation extracts the common values. Port of the protected

@@ -4,8 +4,8 @@
 // policy it claims, the production place and commitment types the signer
 // asserted, and the digest reference/cryptographic verification results.
 //
-// The main entry types are SignaturePolicy and
-// SignaturePolicyValidationResult, SignatureDigestReference,
-// SignatureCryptographicVerification, CommitmentTypeIndication, and
-// SignatureProductionPlace.
+// The main entry types are Policy and
+// PolicyValidationResult, DigestReference,
+// CryptographicVerification, CommitmentTypeIndication, and
+// ProductionPlace.
 package signature

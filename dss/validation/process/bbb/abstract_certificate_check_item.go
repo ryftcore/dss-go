@@ -21,8 +21,8 @@ type AbstractCertificateCheckItem[T any] struct {
 }
 
 // NewAbstractCertificateCheckItem is the default constructor. Port of
-// AbstractCertificateCheckItem(I18nProvider, T, CertificateApplicabilityRule).
-func NewAbstractCertificateCheckItem[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AbstractCertificateCheckItem(Provider, T, CertificateApplicabilityRule).
+func NewAbstractCertificateCheckItem[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	constraint policy.CertificateApplicabilityRule) *AbstractCertificateCheckItem[T] {
 	return &AbstractCertificateCheckItem[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
@@ -31,8 +31,8 @@ func NewAbstractCertificateCheckItem[T any](i18nProvider *i18n.I18nProvider, res
 }
 
 // NewAbstractCertificateCheckItemWithId is the default constructor with Id. Port
-// of AbstractCertificateCheckItem(I18nProvider, T, CertificateWrapper, CertificateApplicabilityRule).
-func NewAbstractCertificateCheckItemWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of AbstractCertificateCheckItem(Provider, T, CertificateWrapper, CertificateApplicabilityRule).
+func NewAbstractCertificateCheckItemWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper,
 	constraint policy.CertificateApplicabilityRule) *AbstractCertificateCheckItem[T] {
 	return &AbstractCertificateCheckItem[T]{
@@ -62,8 +62,8 @@ func (c *AbstractCertificateCheckItem[T]) ProcessCertificateCheck(certificate *d
 
 	return (utils.IsCollectionNotEmpty(expectedCertificateExtensions) &&
 		utils.IsCollectionNotEmpty(certificate.CertificateExtensionsOids()) &&
-		process.ProcessValuesCheck(certificate.CertificateExtensionsOids(), expectedCertificateExtensions)) ||
+		process.ValuesCheck(certificate.CertificateExtensionsOids(), expectedCertificateExtensions)) ||
 		(utils.IsCollectionNotEmpty(expectedCertificatePolicies) &&
 			utils.IsCollectionNotEmpty(certificate.CertificatePoliciesOids()) &&
-			process.ProcessValuesCheck(certificate.CertificatePoliciesOids(), expectedCertificatePolicies))
+			process.ValuesCheck(certificate.CertificatePoliciesOids(), expectedCertificatePolicies))
 }

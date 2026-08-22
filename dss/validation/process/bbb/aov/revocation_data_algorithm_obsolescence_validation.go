@@ -23,7 +23,7 @@ type RevocationDataAlgorithmObsolescenceValidation struct {
 
 // NewRevocationDataAlgorithmObsolescenceValidation is the default
 // constructor.
-func NewRevocationDataAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.RevocationWrapper,
+func NewRevocationDataAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.RevocationWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *RevocationDataAlgorithmObsolescenceValidation {
 	c := &RevocationDataAlgorithmObsolescenceValidation{}
 	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextRevocation, validationDate, validationPolicy, c)

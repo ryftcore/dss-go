@@ -28,8 +28,8 @@ type ExtendedKeyUsageCheck struct {
 }
 
 // NewExtendedKeyUsageCheck is the default constructor. Port of
-// ExtendedKeyUsageCheck(I18nProvider, XmlSubXCV, CertificateWrapper, Context, SubContext, MultiValuesRule).
-func NewExtendedKeyUsageCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// ExtendedKeyUsageCheck(Provider, XmlSubXCV, CertificateWrapper, Context, SubContext, MultiValuesRule).
+func NewExtendedKeyUsageCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, context enumerations.Context, subContext enumerations.SubContext,
 	constraint policy.MultiValuesRule) *ExtendedKeyUsageCheck {
 	c := &ExtendedKeyUsageCheck{
@@ -63,7 +63,7 @@ func (c *ExtendedKeyUsageCheck) extendedKeyUsageDescriptions() []string {
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo(): Arrays.toString(Object[]) prints a null XmlOID
 // description as the literal text "null" (not empty), which the []string
-// extendedKeyUsageDescriptions() feeds to Process()/ProcessValuesCheck
+// extendedKeyUsageDescriptions() feeds to Process()/ValuesCheck
 // cannot represent, so this walks the certificate's ExtendedKeyUsages() again
 // to render each entry the way Java's Object[] would.
 func (c *ExtendedKeyUsageCheck) BuildAdditionalInfo() *string {

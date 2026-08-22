@@ -12,8 +12,8 @@ import (
 )
 
 // CMSGenerator generates a CMS with the given input data. Port of the CMSGenerator interface;
-// *AbstractCMSGenerator is its (only) implementation.
-type CMSGenerator interface {
+// *AbstractGenerator is its (only) implementation.
+type Generator interface {
 	// SetSignerInfoGenerator adds a SignerInfoGenerator containing information about a new
 	// signer to be embedded within CMS. Port of #setSignerInfoGenerator.
 	SetSignerInfoGenerator(signerInfoGenerator *SignerInfoGenerator)
@@ -54,4 +54,4 @@ type CMSGenerator interface {
 	Generate() (*CMS, error)
 }
 
-var _ CMSGenerator = (*AbstractCMSGenerator)(nil)
+var _ Generator = (*AbstractGenerator)(nil)

@@ -36,7 +36,7 @@ func TestDataToSignASiCSWithCAdESFromArchive(t *testing.T) {
 		enumerations.MimeTypeEnumPKCS7)
 	signed := model.NewInMemoryDocumentWithName([]byte("data"), "test.txt")
 
-	asicContent := asic.NewASiCContent()
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	asicContent.SetSignatureDocuments([]model.DSSDocument{signature})
 	asicContent.SetSignedDocuments([]model.DSSDocument{signed})
@@ -68,7 +68,7 @@ func TestDataToSignASiCSWithCAdESFromArchive(t *testing.T) {
 // document and no detached content is reported (Collections.emptyList() upstream).
 func TestDataToSignASiCEWithCAdESHelper(t *testing.T) {
 	manifest := model.NewInMemoryDocumentWithName([]byte("<manifest/>"), "META-INF/ASiCManifest001.xml")
-	helper := NewDataToSignASiCEWithCAdESHelper(asic.NewASiCContent(), manifest)
+	helper := NewDataToSignASiCEWithCAdESHelper(asic.NewContent(), manifest)
 
 	if got := helper.ToBeSigned(); got != model.DSSDocument(manifest) {
 		t.Errorf("ToBeSigned() = %v, want the manifest document", got)
@@ -81,7 +81,7 @@ func TestDataToSignASiCEWithCAdESHelper(t *testing.T) {
 // TestDataToSignASiCSWithCAdESFromFiles pins the ASiC-S from-files helper.
 func TestDataToSignASiCSWithCAdESFromFiles(t *testing.T) {
 	signed := model.NewInMemoryDocumentWithName([]byte("data"), "test.txt")
-	asicContent := asic.NewASiCContent()
+	asicContent := asic.NewContent()
 	asicContent.SetSignedDocuments([]model.DSSDocument{signed})
 
 	helper := NewDataToSignASiCSWithCAdESFromFiles(asicContent)
@@ -142,7 +142,7 @@ func readManifest(t *testing.T, builder *asic.AbstractASiCManifestBuilder) strin
 // and #getExtensionProfile calls getLTAExtensionProfile, all three of which
 // ASiCWithCAdESLevelBaselineLTA overrides with different semantics.
 func TestSignatureExtensionOverridesDispatch(t *testing.T) {
-	parameters := dsscades.NewCAdESSignatureParameters()
+	parameters := dsscades.NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineT)
 
 	tspSource := noopTSPSource{}
@@ -172,11 +172,11 @@ func TestSignatureExtensionOverridesDispatch(t *testing.T) {
 
 	// The LTA extension profile of an LTA-level augmentation is an LT (not an LTA) profile:
 	// the archive timestamp lives in the ASiCArchiveManifest, not inside the CAdES signature.
-	if _, ok := base.requireOverrides().GetLTAExtensionProfile(tspSource, nil).(*dsscades.CAdESLevelBaselineLTA); !ok {
+	if _, ok := base.requireOverrides().GetLTAExtensionProfile(tspSource, nil).(*dsscades.LevelBaselineLTA); !ok {
 		t.Error("base GetLTAExtensionProfile did not return a CAdESLevelBaselineLTA")
 	}
 	if _, ok := lta.ASiCWithCAdESSignatureExtension.requireOverrides().
-		GetLTAExtensionProfile(tspSource, nil).(*dsscades.CAdESLevelBaselineLT); !ok {
+		GetLTAExtensionProfile(tspSource, nil).(*dsscades.LevelBaselineLT); !ok {
 		t.Error("LTA GetLTAExtensionProfile did not return a CAdESLevelBaselineLT - the override was not dispatched")
 	}
 }

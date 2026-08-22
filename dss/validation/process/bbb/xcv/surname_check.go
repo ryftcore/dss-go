@@ -20,8 +20,8 @@ type SurnameCheck struct {
 }
 
 // NewSurnameCheck is the default constructor. Port of
-// SurnameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewSurnameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// SurnameCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewSurnameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *SurnameCheck {
 	c := &SurnameCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

@@ -24,8 +24,8 @@ type CertificateNotOnHoldCheck struct {
 }
 
 // NewCertificateNotOnHoldCheck is the default constructor. Port of
-// CertificateNotOnHoldCheck(I18nProvider, XmlSubXCV, CertificateRevocationWrapper, Date, LevelRule).
-func NewCertificateNotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateNotOnHoldCheck(Provider, XmlSubXCV, CertificateRevocationWrapper, Date, LevelRule).
+func NewCertificateNotOnHoldCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificateRevocation *diagnostic.CertificateRevocationWrapper, currentTime time.Time,
 	constraint policy.LevelRule) *CertificateNotOnHoldCheck {
 	c := &CertificateNotOnHoldCheck{

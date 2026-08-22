@@ -33,7 +33,7 @@ type AlgorithmObsolescenceValidationCheckWithId[T any] struct {
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' BuildAdditionalInfo rather than the one
 // inherited from AlgorithmObsolescenceValidationCheck.
-func NewAlgorithmObsolescenceValidationCheckWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewAlgorithmObsolescenceValidationCheckWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	tokenId string) *AlgorithmObsolescenceValidationCheckWithId[T] {
 	c := &AlgorithmObsolescenceValidationCheckWithId[T]{

@@ -7,15 +7,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/model/signature"
 )
 
-// SignaturePolicyValidator performs a validation of a SignaturePolicy.
+// SignaturePolicyValidator performs a validation of a Policy.
 type SignaturePolicyValidator interface {
-	// CanValidate checks if the SignaturePolicy can be validated.
-	CanValidate(signaturePolicy *signature.SignaturePolicy) bool
+	// CanValidate checks if the Policy can be validated.
+	CanValidate(signaturePolicy *signature.Policy) bool
 
-	// Validate performs a SignaturePolicy validation.
-	Validate(signaturePolicy *signature.SignaturePolicy) *signature.SignaturePolicyValidationResult
+	// Validate performs a Policy validation.
+	Validate(signaturePolicy *signature.Policy) *signature.PolicyValidationResult
 
 	// GetComputedDigest returns the Digest computed on the given
-	// SignaturePolicy's content.
+	// Policy's content.
 	GetComputedDigest(policyDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) model.Digest
 }

@@ -20,8 +20,8 @@ type CommonNameCheck struct {
 }
 
 // NewCommonNameCheck is the default constructor. Port of
-// CommonNameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCommonNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CommonNameCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCommonNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CommonNameCheck {
 	c := &CommonNameCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

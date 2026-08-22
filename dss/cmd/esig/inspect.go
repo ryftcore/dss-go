@@ -101,7 +101,7 @@ const rfc3339Display = "2006-01-02T15:04:05Z07:00"
 
 // certificateSummary renders a one-line description of a certificate by its
 // diagnostic-data id.
-func certificateSummary(data *diagnostic.DiagnosticData, certID string) string {
+func certificateSummary(data *diagnostic.Data, certID string) string {
 	cert := data.UsedCertificateByIdNullSafe(certID)
 	if cert == nil {
 		return certID
@@ -111,7 +111,7 @@ func certificateSummary(data *diagnostic.DiagnosticData, certID string) string {
 
 // timestampSummary renders a one-line description of a timestamp by its
 // diagnostic-data id.
-func timestampSummary(data *diagnostic.DiagnosticData, tsID string) string {
+func timestampSummary(data *diagnostic.Data, tsID string) string {
 	ts := data.TimestampById(tsID)
 	if ts == nil {
 		return tsID

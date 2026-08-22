@@ -73,7 +73,7 @@ func (f *ASiCWithCAdESTimestampScopeFinder) getTimestampSignatureScopeForManifes
 	result := make([]mscope.SignatureScope, 0)
 	result = append(result, scope.NewManifestSignatureScope(manifestFile))
 	if utils.IsCollectionNotEmpty(f.containerDocuments) {
-		rootLevelDocuments := asic.ASiCUtilsRootLevelDocuments(f.containerDocuments)
+		rootLevelDocuments := asic.UtilsRootLevelDocuments(f.containerDocuments)
 		for _, manifestEntry := range manifestFile.Entries() {
 			result = append(result, f.getTimestampSignatureScopeForManifestEntry(manifestEntry, rootLevelDocuments)...)
 		}
@@ -125,6 +125,6 @@ func (f *ASiCWithCAdESTimestampScopeFinder) isASiCSContainer(document model.DSSD
 	if document.Name() == "" || strings.Contains(document.Name(), "/") {
 		return false
 	}
-	isZip, err := asic.ASiCUtilsIsZip(document)
+	isZip, err := asic.UtilsIsZip(document)
 	return err == nil && isZip
 }

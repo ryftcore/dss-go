@@ -23,8 +23,8 @@ type ControlTimeCheck struct {
 }
 
 // NewControlTimeCheck is the default constructor. Port of
-// ControlTimeCheck(I18nProvider, XmlVTS, Date, LevelRule).
-func NewControlTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVTS],
+// ControlTimeCheck(Provider, XmlVTS, Date, LevelRule).
+func NewControlTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVTS],
 	controlTime *time.Time, constraint policy.LevelRule) *ControlTimeCheck {
 	c := &ControlTimeCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -39,7 +39,7 @@ type DetailedReport struct {
 	jaxbDetailedReport *jaxb.XmlDetailedReport
 
 	// messageCollector collects messages of the validation process.
-	messageCollector *DetailedReportMessageCollector
+	messageCollector *MessageCollector
 }
 
 // NewDetailedReport is the default constructor.
@@ -962,10 +962,10 @@ func (r *DetailedReport) SigningCertificate(bbbId string) *jaxb.XmlSubXCV {
 	return nil
 }
 
-// MessageCollector gets the used DetailedReportMessageCollector.
-func (r *DetailedReport) MessageCollector() *DetailedReportMessageCollector {
+// MessageCollector gets the used MessageCollector.
+func (r *DetailedReport) MessageCollector() *MessageCollector {
 	if r.messageCollector == nil {
-		r.messageCollector = newDetailedReportMessageCollector(r)
+		r.messageCollector = newMessageCollector(r)
 	}
 	return r.messageCollector
 }

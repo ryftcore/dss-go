@@ -9,10 +9,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// XmlPolicyBuilder is used to validate a SignaturePolicy and build a XmlPolicy.
+// XmlPolicyBuilder is used to validate a Policy and build a XmlPolicy.
 type XmlPolicyBuilder struct {
-	// signaturePolicy is the SignaturePolicy to incorporate into the DiagnosticData.
-	signaturePolicy *signature.SignaturePolicy
+	// signaturePolicy is the Policy to incorporate into the Data.
+	signaturePolicy *signature.Policy
 
 	// signaturePolicyStore is the found SignaturePolicyStore from a signature.
 	signaturePolicyStore *model.SignaturePolicyStore
@@ -20,7 +20,7 @@ type XmlPolicyBuilder struct {
 
 // NewXmlPolicyBuilder is the port of the default constructor: panics (Java requireNonNull) if
 // signaturePolicy is nil.
-func NewXmlPolicyBuilder(signaturePolicy *signature.SignaturePolicy) *XmlPolicyBuilder {
+func NewXmlPolicyBuilder(signaturePolicy *signature.Policy) *XmlPolicyBuilder {
 	if signaturePolicy == nil {
 		panic("SignaturePolicy cannot be null!")
 	}

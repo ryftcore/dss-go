@@ -25,8 +25,8 @@ type RevocationIssuerValidityRangeCheck[T any] struct {
 }
 
 // NewRevocationIssuerValidityRangeCheck is the default constructor. Port of
-// RevocationIssuerValidityRangeCheck(I18nProvider, T, RevocationWrapper, Date, LevelRule).
-func NewRevocationIssuerValidityRangeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationIssuerValidityRangeCheck(Provider, T, RevocationWrapper, Date, LevelRule).
+func NewRevocationIssuerValidityRangeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	revocationWrapper *diagnostic.RevocationWrapper, currentTime time.Time, constraint policy.LevelRule) *RevocationIssuerValidityRangeCheck[T] {
 	c := &RevocationIssuerValidityRangeCheck[T]{
 		ChainItemBase:     process.NewChainItemBase(i18nProvider, result, constraint),

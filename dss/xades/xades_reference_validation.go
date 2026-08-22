@@ -9,7 +9,7 @@
 // LIMITATION worth flagging: Java overrides ReferenceValidation#getTransformationNames, so a
 // caller holding the value as a plain ReferenceValidation still gets the XAdES implementation.
 // Go has no virtual dispatch across embedding, so TransformationNames below is reached only
-// through the concrete *XAdESReferenceValidation. Every dss-xades call site that needs the
+// through the concrete *ReferenceValidation. Every dss-xades call site that needs the
 // XAdES behaviour holds the concrete type; a diagnostic-data builder that walks
 // []*model.ReferenceValidation would see the embedded (empty) list instead.
 package xades
@@ -21,21 +21,21 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// xadesReferenceValidationRegistry recovers the concrete *XAdESReferenceValidation from the
-// *model.ReferenceValidation pointer that XAdESSignature.ReferenceValidations() (frozen-shaped
+// xadesReferenceValidationRegistry recovers the concrete *ReferenceValidation from the
+// *model.ReferenceValidation pointer that Signature.ReferenceValidations() (frozen-shaped
 // interface method, spi/validation.AdvancedSignature) hands back. Go has no
 // instanceof/covariant-return equivalent through embedding, so a caller holding only the base
-// pointer - as XAdESSignatureScopeFinder, XAdESTimestampScopeFinder and XAdESTimestampSource all
+// pointer - as SignatureScopeFinder, TimestampScopeFinder and TimestampSource all
 // do via XAdESSignature.XAdESReferenceValidations() below - cannot downcast the way Java's
-// `(XAdESReferenceValidation) referenceValidation` does. Same pattern as
+// `(ReferenceValidation) referenceValidation` does. Same pattern as
 // xadesSignaturePolicyRegistry in xades_signature_policy.go and
-// XAdESSignatureBuilderRegisterPolicyTransforms in xades_signature_builder.go. Registered by
-// NewXAdESReferenceValidation; the key is the pointer identity of the embedded field, stable for
-// the lifetime of the enclosing *XAdESReferenceValidation.
-var xadesReferenceValidationRegistry sync.Map // map[*model.ReferenceValidation]*XAdESReferenceValidation
+// SignatureBuilderRegisterPolicyTransforms in xades_signature_builder.go. Registered by
+// NewReferenceValidation; the key is the pointer identity of the embedded field, stable for
+// the lifetime of the enclosing *ReferenceValidation.
+var xadesReferenceValidationRegistry sync.Map // map[*model.ReferenceValidation]*ReferenceValidation
 
-// XAdESReferenceValidationFor recovers the *XAdESReferenceValidation that produced rv, if any.
-func XAdESReferenceValidationFor(rv *model.ReferenceValidation) (*XAdESReferenceValidation, bool) {
+// ReferenceValidationFor recovers the *ReferenceValidation that produced rv, if any.
+func ReferenceValidationFor(rv *model.ReferenceValidation) (*ReferenceValidation, bool) {
 	if rv == nil {
 		return nil, false
 	}
@@ -43,11 +43,11 @@ func XAdESReferenceValidationFor(rv *model.ReferenceValidation) (*XAdESReference
 	if !ok {
 		return nil, false
 	}
-	return v.(*XAdESReferenceValidation), true
+	return v.(*ReferenceValidation), true
 }
 
-// XAdESReferenceValidation contains information about a XAdES reference validation.
-type XAdESReferenceValidation struct {
+// ReferenceValidation contains information about a XAdES reference validation.
+type ReferenceValidation struct {
 	model.ReferenceValidation
 
 	// reference is the Santuario reference this validation was built from.
@@ -55,8 +55,8 @@ type XAdESReferenceValidation struct {
 }
 
 // NewXAdESReferenceValidation ports XAdESReferenceValidation(Reference).
-func NewXAdESReferenceValidation(reference *xmldsig.Reference) *XAdESReferenceValidation {
-	v := &XAdESReferenceValidation{
+func NewReferenceValidation(reference *xmldsig.Reference) *ReferenceValidation {
+	v := &ReferenceValidation{
 		ReferenceValidation: *model.NewReferenceValidation(),
 		reference:           reference,
 	}
@@ -69,14 +69,14 @@ func NewXAdESReferenceValidation(reference *xmldsig.Reference) *XAdESReferenceVa
 
 // OriginalContentBytes returns the original bytes of the referenced document.
 // Ports getOriginalContentBytes().
-func (v *XAdESReferenceValidation) OriginalContentBytes() []byte {
+func (v *ReferenceValidation) OriginalContentBytes() []byte {
 	return DSSXMLUtilsGetReferenceOriginalContentBytes(v.reference)
 }
 
 // TransformationNames returns the user-friendly descriptions of the reference transforms,
 // computing them once and caching them in the embedded ReferenceValidation exactly as Java's
 // lazy `transforms` field does. Ports getTransformationNames().
-func (v *XAdESReferenceValidation) TransformationNames() []string {
+func (v *ReferenceValidation) TransformationNames() []string {
 	if v.ReferenceValidation.TransformationNames() == nil {
 		v.SetTransformationNames([]string{})
 		referenceTransforms := v.reference.TransformsElement()

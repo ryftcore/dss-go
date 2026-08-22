@@ -21,8 +21,8 @@ type RevocationInfoAccessPresentCheck struct {
 }
 
 // NewRevocationInfoAccessPresentCheck is the default constructor. Port of
-// RevocationInfoAccessPresentCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewRevocationInfoAccessPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// RevocationInfoAccessPresentCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewRevocationInfoAccessPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *RevocationInfoAccessPresentCheck {
 	c := &RevocationInfoAccessPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

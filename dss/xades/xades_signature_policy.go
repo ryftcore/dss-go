@@ -9,21 +9,21 @@ import (
 	"github.com/ryftcore/dss-go/dss/model/signature"
 )
 
-// xadesSignaturePolicyRegistry recovers the concrete *XAdESSignaturePolicy from the
+// xadesSignaturePolicyRegistry recovers the concrete *SignaturePolicy from the
 // *signature.SignaturePolicy pointer that spi/validation.AdvancedSignature#SignaturePolicy()
 // (frozen interface) hands back. Go has no virtual dispatch/covariant return through embedding,
 // so a caller holding only the base pointer cannot downcast the way Java's
-// `(XAdESSignaturePolicy) xadesSignature.getSignaturePolicy()` does in e.g.
+// `(SignaturePolicy) xadesSignature.getSignaturePolicy()` does in e.g.
 // SignaturePolicyStoreBuilder#checkDigest. Same pattern as
-// XAdESSignatureBuilderRegisterPolicyTransforms/XAdESSignatureBuilderPolicyTransforms in
+// SignatureBuilderRegisterPolicyTransforms/SignatureBuilderPolicyTransforms in
 // xades_signature_builder.go, which solves the analogous model.Policy/XmlPolicyWithTransforms
 // problem. Registered by both constructors below; the key is the exact pointer identity of the
-// embedded field, which is stable for the lifetime of the enclosing *XAdESSignaturePolicy.
-var xadesSignaturePolicyRegistry sync.Map // map[*signature.SignaturePolicy]*XAdESSignaturePolicy
+// embedded field, which is stable for the lifetime of the enclosing *SignaturePolicy.
+var xadesSignaturePolicyRegistry sync.Map // map[*signature.Policy]*SignaturePolicy
 
-// XAdESSignaturePolicyFor recovers the *XAdESSignaturePolicy that produced sp, if any. Used by
+// SignaturePolicyFor recovers the *SignaturePolicy that produced sp, if any. Used by
 // signature_policy_store_builder.go in place of Java's downcast.
-func XAdESSignaturePolicyFor(sp *signature.SignaturePolicy) (*XAdESSignaturePolicy, bool) {
+func SignaturePolicyFor(sp *signature.Policy) (*SignaturePolicy, bool) {
 	if sp == nil {
 		return nil, false
 	}
@@ -31,13 +31,13 @@ func XAdESSignaturePolicyFor(sp *signature.SignaturePolicy) (*XAdESSignaturePoli
 	if !ok {
 		return nil, false
 	}
-	return v.(*XAdESSignaturePolicy), true
+	return v.(*SignaturePolicy), true
 }
 
-// XAdESSignaturePolicy represents a signature policy extracted from a XAdES (XML) signature.
+// SignaturePolicy represents a signature policy extracted from a XAdES (XML) signature.
 // Port of the class XAdESSignaturePolicy, extending model/signature.SignaturePolicy.
-type XAdESSignaturePolicy struct {
-	signature.SignaturePolicy
+type SignaturePolicy struct {
+	signature.Policy
 
 	// transforms is the ds:Transforms element (used in XAdES).
 	transforms *xmldom.Node
@@ -45,28 +45,28 @@ type XAdESSignaturePolicy struct {
 
 // NewXAdESSignaturePolicy is the port of the default constructor XAdESSignaturePolicy(), which
 // represents the implied policy.
-func NewXAdESSignaturePolicy() *XAdESSignaturePolicy {
-	p := &XAdESSignaturePolicy{SignaturePolicy: *signature.NewSignaturePolicy()}
-	xadesSignaturePolicyRegistry.Store(&p.SignaturePolicy, p)
+func NewSignaturePolicy() *SignaturePolicy {
+	p := &SignaturePolicy{Policy: *signature.NewPolicy()}
+	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
 	return p
 }
 
 // NewXAdESSignaturePolicyWithIdentifier is the port of the constructor
-// XAdESSignaturePolicy(String).
-func NewXAdESSignaturePolicyWithIdentifier(identifier string) *XAdESSignaturePolicy {
-	p := &XAdESSignaturePolicy{SignaturePolicy: *signature.NewSignaturePolicyWithIdentifier(identifier)}
-	xadesSignaturePolicyRegistry.Store(&p.SignaturePolicy, p)
+// SignaturePolicy(String).
+func NewSignaturePolicyWithIdentifier(identifier string) *SignaturePolicy {
+	p := &SignaturePolicy{Policy: *signature.NewPolicyWithIdentifier(identifier)}
+	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
 	return p
 }
 
 // Transforms returns the ds:Transforms element if found. NOTE: XAdES only. Port of
 // getTransforms().
-func (p *XAdESSignaturePolicy) Transforms() *xmldom.Node {
+func (p *SignaturePolicy) Transforms() *xmldom.Node {
 	return p.transforms
 }
 
 // SetTransforms sets the ds:Transforms node. Port of setTransforms(Element).
-func (p *XAdESSignaturePolicy) SetTransforms(transforms *xmldom.Node) {
+func (p *SignaturePolicy) SetTransforms(transforms *xmldom.Node) {
 	p.transforms = transforms
 }
 
@@ -74,11 +74,11 @@ func (p *XAdESSignaturePolicy) SetTransforms(transforms *xmldom.Node) {
 // XAdES only. Port of the getTransformsDescription() override.
 //
 // DEVIATION: this override shadows, but does not virtually replace,
-// model/signature.SignaturePolicy.TransformsDescription() - Go has no virtual dispatch through
-// embedding, so a caller holding a plain *signature.SignaturePolicy (rather than this concrete
-// *XAdESSignaturePolicy) still sees the base's always-empty implementation. See
+// model/signature.Policy.TransformsDescription() - Go has no virtual dispatch through
+// embedding, so a caller holding a plain *signature.Policy (rather than this concrete
+// *SignaturePolicy) still sees the base's always-empty implementation. See
 // xades_signature.go's "Deviations" note for the one place this is already known to matter.
-func (p *XAdESSignaturePolicy) TransformsDescription() []string {
+func (p *SignaturePolicy) TransformsDescription() []string {
 	if p.transforms != nil {
 		return NewTransformsDescriptionBuilder(p.transforms).Build()
 	}

@@ -16,7 +16,7 @@ func asicContentTestDocument(name string) model.DSSDocument {
 // archive manifests, evidence record manifests, timestamps, evidence records, unsupported files and
 // finally folders.
 func TestASiCContentAllDocumentsOrder(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetMimeTypeDocument(asicContentTestDocument("mimetype"))
 	asicContent.SetSignedDocuments([]model.DSSDocument{asicContentTestDocument("test.txt")})
 	asicContent.SetSignatureDocuments([]model.DSSDocument{asicContentTestDocument("META-INF/signature001.p7s")})
@@ -61,7 +61,7 @@ func TestASiCContentAllDocumentsOrder(t *testing.T) {
 // TestASiCContentAllDocumentsSkipsEmptyGroups pins that an absent mimetype and empty groups simply
 // contribute nothing.
 func TestASiCContentAllDocumentsSkipsEmptyGroups(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	if documents := asicContent.AllDocuments(); len(documents) != 0 {
 		t.Fatalf("allDocuments = %v, want empty", modelNames(documents))
 	}
@@ -74,7 +74,7 @@ func TestASiCContentAllDocumentsSkipsEmptyGroups(t *testing.T) {
 // TestASiCContentAllManifestDocuments pins the three manifest groups getAllManifestDocuments()
 // concatenates, in order.
 func TestASiCContentAllManifestDocuments(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetManifestDocuments([]model.DSSDocument{asicContentTestDocument("META-INF/ASiCManifest001.xml")})
 	asicContent.SetArchiveManifestDocuments([]model.DSSDocument{asicContentTestDocument("META-INF/ASiCArchiveManifest001.xml")})
 	asicContent.SetEvidenceRecordManifestDocuments([]model.DSSDocument{asicContentTestDocument("META-INF/ASiCEvidenceRecordManifest001.xml")})
@@ -98,7 +98,7 @@ func TestASiCContentAllManifestDocuments(t *testing.T) {
 // TestASiCContentRootLevelSignedDocuments pins the root-level filter, which - unlike
 // ASiCUtils.getRootLevelDocuments - also rejects backslash-separated paths and keeps "mimetype".
 func TestASiCContentRootLevelSignedDocuments(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetSignedDocuments([]model.DSSDocument{
 		asicContentTestDocument("a.txt"),
 		asicContentTestDocument("folder/b.txt"),
@@ -110,7 +110,7 @@ func TestASiCContentRootLevelSignedDocuments(t *testing.T) {
 		t.Fatalf("rootLevelSignedDocuments = %v", got)
 	}
 
-	empty := NewASiCContent()
+	empty := NewContent()
 	if documents := empty.RootLevelSignedDocuments(); len(documents) != 0 {
 		t.Fatalf("rootLevelSignedDocuments = %v, want empty", modelNames(documents))
 	}
@@ -118,7 +118,7 @@ func TestASiCContentRootLevelSignedDocuments(t *testing.T) {
 
 // TestASiCContentScalarAccessors pins the plain getters/setters other chunks build on.
 func TestASiCContentScalarAccessors(t *testing.T) {
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	container := asicContentTestDocument("container.asice")
 	asicContent.SetAsicContainer(container)
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)

@@ -22,8 +22,8 @@ type IsAbleToSelectOneTrustService struct {
 }
 
 // NewIsAbleToSelectOneTrustService is the default constructor. Port of
-// IsAbleToSelectOneTrustService(I18nProvider, XmlValidationCertificateQualification, List, LevelRule).
-func NewIsAbleToSelectOneTrustService(i18nProvider *i18n.I18nProvider,
+// IsAbleToSelectOneTrustService(Provider, XmlValidationCertificateQualification, List, LevelRule).
+func NewIsAbleToSelectOneTrustService(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateQualification], trustServicesAtTime []*diagnostic.TrustServiceWrapper,
 	constraint policy.LevelRule) *IsAbleToSelectOneTrustService {
 	c := &IsAbleToSelectOneTrustService{

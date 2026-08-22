@@ -24,7 +24,7 @@ type SignatureAlgorithmReliableCheck struct {
 }
 
 // NewSignatureAlgorithmReliableCheck is the default constructor.
-func NewSignatureAlgorithmReliableCheck(i18nProvider *i18n.I18nProvider, signatureAlgorithm enumerations.SignatureAlgorithm,
+func NewSignatureAlgorithmReliableCheck(i18nProvider *i18n.Provider, signatureAlgorithm enumerations.SignatureAlgorithm,
 	result *process.Result[*jaxb.XmlCC], position i18n.MessageTag,
 	cryptographicSuite policy.CryptographicSuite) *SignatureAlgorithmReliableCheck {
 	c := &SignatureAlgorithmReliableCheck{

@@ -58,7 +58,7 @@ func (r *ResponseEnvelope) SetHeaders(headers map[string][]string) {
 	}
 }
 
-// TLSCertificates gets the TLS/SSL certificates used by the remote server
+// Certificates gets the TLS/SSL certificates used by the remote server
 // to establish a secure connection (e.g. for HTTPS).
 func (r *ResponseEnvelope) TLSCertificates() []*stdx509.Certificate { return r.tlsCertificates }
 

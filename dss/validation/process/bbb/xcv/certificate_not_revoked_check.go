@@ -27,8 +27,8 @@ type CertificateNotRevokedCheck struct {
 }
 
 // NewCertificateNotRevokedCheck is the default constructor. Port of
-// CertificateNotRevokedCheck(I18nProvider, XmlSubXCV, CertificateRevocationWrapper, Date, LevelRule, SubContext).
-func NewCertificateNotRevokedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateNotRevokedCheck(Provider, XmlSubXCV, CertificateRevocationWrapper, Date, LevelRule, SubContext).
+func NewCertificateNotRevokedCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificateRevocation *diagnostic.CertificateRevocationWrapper, currentTime time.Time,
 	constraint policy.LevelRule, subContext enumerations.SubContext) *CertificateNotRevokedCheck {
 	c := &CertificateNotRevokedCheck{

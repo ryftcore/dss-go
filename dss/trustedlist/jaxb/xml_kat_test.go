@@ -36,7 +36,7 @@ func testdataDir(t *testing.T) string {
 // against the Java facade's own canonical remarshal. Fixtures whose name
 // contains "mra" are MRA documents (round-tripped through MRAFacade's
 // namespace set, MarshalMRA); every other fixture is round-tripped through
-// Marshal (TrustedListFacade's).
+// Marshal (Facade's).
 func TestMarshalParity(t *testing.T) {
 	dir := testdataDir(t)
 	files, err := filepath.Glob(filepath.Join(dir, "*.xml"))

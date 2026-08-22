@@ -156,7 +156,7 @@ func (s *NativePDFSignatureService) LoadSignatureDrawer(imageParameters *Signatu
 // MessageDigest returns the message-digest computed on the PDF signature revision's ByteRange,
 // caching it in the parameters. Port of #messageDigest.
 func (s *NativePDFSignatureService) MessageDigest(toSignDocument model.DSSDocument,
-	parameters PAdESCommonParameters) model.DSSMessageDigest {
+	parameters CommonParameters) model.DSSMessageDigest {
 	if toSignDocument == nil {
 		panic("DSSDocument shall be provided!")
 	}
@@ -175,7 +175,7 @@ func (s *NativePDFSignatureService) MessageDigest(toSignDocument model.DSSDocume
 // describe, and caches the laid-out revision in the parameters' PdfSignatureCache.
 // Port of the abstract #computeDigest, implemented by PdfBoxSignatureService#computeDigest.
 func (s *NativePDFSignatureService) ComputeDigest(toSignDocument model.DSSDocument,
-	parameters PAdESCommonParameters) model.DSSMessageDigest {
+	parameters CommonParameters) model.DSSMessageDigest {
 	toBeSignedDocument, messageDigest := s.buildRevision(toSignDocument, nil, parameters, true)
 	// cache the computed document
 	parameters.PdfSignatureCache().SetToBeSignedDocument(toBeSignedDocument)
@@ -185,7 +185,7 @@ func (s *NativePDFSignatureService) ComputeDigest(toSignDocument model.DSSDocume
 // Sign signs a PDF document, reusing the cached to-be-signed revision when there is one.
 // Port of #sign.
 func (s *NativePDFSignatureService) Sign(toSignDocument model.DSSDocument, cmsSignedData []byte,
-	parameters PAdESCommonParameters) model.DSSDocument {
+	parameters CommonParameters) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("DSSDocument shall be provided!")
 	}
@@ -199,7 +199,7 @@ func (s *NativePDFSignatureService) Sign(toSignDocument model.DSSDocument, cmsSi
 	pdfSignatureCache := parameters.PdfSignatureCache()
 	var signedDocument model.DSSDocument
 	if pdfSignatureCache.ToBeSignedDocument() != nil {
-		replaced, err := PAdESUtilsReplaceSignature(pdfSignatureCache.ToBeSignedDocument(), cmsSignedData,
+		replaced, err := UtilsReplaceSignature(pdfSignatureCache.ToBeSignedDocument(), cmsSignedData,
 			s.ResourcesHandlerBuilder)
 		if err == nil {
 			signedDocument = replaced
@@ -220,7 +220,7 @@ func (s *NativePDFSignatureService) Sign(toSignDocument model.DSSDocument, cmsSi
 // revision enveloping the provided CMS signed data.
 // Port of the abstract #signDocument, implemented by PdfBoxSignatureService#signDocument.
 func (s *NativePDFSignatureService) SignDocument(toSignDocument model.DSSDocument, cmsSignedData []byte,
-	parameters PAdESCommonParameters) model.DSSDocument {
+	parameters CommonParameters) model.DSSDocument {
 	s.AssertContentSizeSufficient(cmsSignedData, parameters)
 	signedDocument, _ := s.buildRevision(toSignDocument, cmsSignedData, parameters, false)
 	return signedDocument
@@ -230,7 +230,7 @@ func (s *NativePDFSignatureService) SignDocument(toSignDocument model.DSSDocumen
 // two spans named by /ByteRange. It is PdfBoxSignatureService#signDocumentAndReturnDigest, with
 // PDDocument.addSignature + saveIncremental replaced by pdf.Updater.
 func (s *NativePDFSignatureService) buildRevision(toSignDocument model.DSSDocument, cmsSignedData []byte,
-	parameters PAdESCommonParameters, computeDigest bool) (model.DSSDocument, model.DSSMessageDigest) {
+	parameters CommonParameters, computeDigest bool) (model.DSSDocument, model.DSSMessageDigest) {
 	reader, err := NewNativePdfDocumentReader(toSignDocument, parameters.PasswordProtection())
 	if err != nil {
 		panic(err)
@@ -289,7 +289,7 @@ func (s *NativePDFSignatureService) buildRevision(toSignDocument model.DSSDocume
 // #signDocumentAndReturnDigest; the /Reference (FieldMDP, DocMDP) and /V wiring the two perform
 // by hand is internal/pdf's AddSignature (DESIGN.md §3.3).
 func (s *NativePDFSignatureService) signatureOptions(reader *NativePdfDocumentReader,
-	parameters PAdESCommonParameters, fieldParameters *SignatureFieldParameters) pdf.SignatureOptions {
+	parameters CommonParameters, fieldParameters *SignatureFieldParameters) pdf.SignatureOptions {
 	options := pdf.SignatureOptions{
 		Type:        pdf.Name(s.Type()),
 		ContentSize: parameters.ContentSize(),
@@ -308,7 +308,7 @@ func (s *NativePDFSignatureService) signatureOptions(reader *NativePdfDocumentRe
 	}
 
 	if !s.IsDocumentTimestampLayer() {
-		if signatureParameters, ok := parameters.(*PAdESSignatureParameters); ok {
+		if signatureParameters, ok := parameters.(*SignatureParameters); ok {
 			if utils.IsStringNotEmpty(signatureParameters.SignerName()) {
 				options.SignerName = signatureParameters.SignerName()
 			}
@@ -411,7 +411,7 @@ func (s *NativePDFSignatureService) Type() string {
 // extensions the signature's functionalities require.
 // Port of the protected #digitalSignatureEnhancement.
 func (s *NativePDFSignatureService) DigitalSignatureEnhancement(updater *pdf.Updater,
-	reader *NativePdfDocumentReader, parameters PAdESCommonParameters) {
+	reader *NativePdfDocumentReader, parameters CommonParameters) {
 	if s.IsDocumentTimestampLayer() {
 		s.EnsureESICDeveloperExtension1(updater, reader)
 	}
@@ -523,13 +523,13 @@ func nativePDFSignatureServiceDeveloperExtension(baseVersion string, extensionLe
 
 // IsCAdESDetached verifies whether the signature is created with the "ETSI.CAdES.detached"
 // SubFilter. Port of the protected #isCAdESDetached.
-func (s *NativePDFSignatureService) IsCAdESDetached(parameters PAdESCommonParameters) bool {
+func (s *NativePDFSignatureService) IsCAdESDetached(parameters CommonParameters) bool {
 	return PAdESConstantsSignatureDefaultSubFilter == parameters.SubFilter()
 }
 
 // IsISO32001 verifies whether the ISO 32001 developer extension shall be included.
 // Port of the protected #isISO_32001.
-func (s *NativePDFSignatureService) IsISO32001(parameters PAdESCommonParameters) bool {
+func (s *NativePDFSignatureService) IsISO32001(parameters CommonParameters) bool {
 	subFilter := parameters.SubFilter()
 	digestAlgorithm := parameters.DigestAlgorithm()
 	return (PAdESConstantsSignaturePKCS7SubFilter == subFilter ||
@@ -548,7 +548,7 @@ func (s *NativePDFSignatureService) IsISO32001(parameters PAdESCommonParameters)
 // refers to id-shake256 instead of id-shake256-len for Ed448
 // (https://github.com/pdf-association/pdf-issues/issues/404); the extension is not enforced for
 // id-shake256-len, to stay compliant with the current version of ISO 32002.
-func (s *NativePDFSignatureService) IsISO32002(parameters PAdESCommonParameters) bool {
+func (s *NativePDFSignatureService) IsISO32002(parameters CommonParameters) bool {
 	subFilter := parameters.SubFilter()
 	digestAlgorithm := parameters.DigestAlgorithm()
 	return (PAdESConstantsSignaturePKCS7SubFilter == subFilter ||
@@ -646,7 +646,7 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 	}
 
 	revisions := make([]PdfRevision, 0)
-	revisionDocuments := PAdESUtilsExtractRevisions(document)
+	revisionDocuments := UtilsExtractRevisions(document)
 
 	reader, err := NewNativePdfDocumentReader(document, pwd)
 	if err != nil {
@@ -695,7 +695,7 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 
 		signatureCoversWholeDocument := reader.IsSignatureCoversWholeDocument(signatureDictionary)
 
-		revisionContent := PAdESUtilsGetRevisionContent(document, byteRange)
+		revisionContent := UtilsGetRevisionContent(document, byteRange)
 		if revisionReader, err := NewNativePdfDocumentReader(revisionContent, pwd); err == nil {
 			// detect a modification within the signature dictionary itself (spoofing attack)
 			nativePDFSignatureServiceVerifyPdfSignatureDictionary(signatureDictionary, fieldNames, revisionReader)
@@ -707,7 +707,7 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 		}
 		// Upstream logs "Cannot read signature revision '{}' : {}" on failure and continues.
 
-		previousRevision := PAdESUtilsGetPreviousRevision(byteRange, revisionDocuments)
+		previousRevision := UtilsGetPreviousRevision(byteRange, revisionDocuments)
 		var newRevision PdfRevision
 		if s.IsDocTimestamp(signatureDictionary) {
 			newRevision = NewPdfDocTimestampRevision(signatureDictionary, fields, signedContent,
@@ -868,7 +868,7 @@ func (s *NativePDFSignatureService) ValidateByteRange(byteRange *ByteRange, docu
 // detection. Port of the private #isContentValueEqualsByteRangeExtraction.
 func nativePDFSignatureServiceIsContentValueEqualsByteRangeExtraction(byteRange *ByteRange,
 	document model.DSSDocument, cms []byte) bool {
-	cmsWithByteRange := PAdESUtilsGetSignatureValue(document, byteRange)
+	cmsWithByteRange := UtilsGetSignatureValue(document, byteRange)
 	match := bytes.Equal(cms, cmsWithByteRange)
 	if !match {
 		// Upstream logs "The value extracted according to /ByteRange '{}' does not match the
@@ -982,7 +982,7 @@ func (s *NativePDFSignatureService) BuildDSSDictionary(reader *NativePdfDocument
 		for _, signature := range signatures {
 			vriEntry := pdf.VRIEntry{}
 
-			validationDataToAdd := validation.NewValidationData()
+			validationDataToAdd := validation.NewData()
 			validationDataToAdd.AddValidationData(validationDataForInclusion.AllValidationDataForSignature(signature))
 
 			if !validationDataToAdd.IsEmpty() {
@@ -1019,7 +1019,7 @@ func (s *NativePDFSignatureService) BuildDSSDictionary(reader *NativePdfDocument
 				}
 
 				// We can't use the CMS signed data, the pdSignature content is trimmed (000000)
-				vriEntry.Name = signature.(*PAdESSignature).VRIKey()
+				vriEntry.Name = signature.(*Signature).VRIKey()
 				vriEntries = append(vriEntries, vriEntry)
 			}
 		}
@@ -1373,7 +1373,7 @@ func (s *NativePDFSignatureService) AnalyzePdfModifications(document model.DSSDo
 	defer func() { _ = finalRevisionReader.Close() }()
 
 	for _, signature := range signatures {
-		padesSignature := signature.(*PAdESSignature)
+		padesSignature := signature.(*Signature)
 		s.AnalyzeRevisionModifications(document, padesSignature.PdfRevision(), finalRevisionReader, pwd)
 	}
 	for _, timestampToken := range nativePDFSignatureServiceUniqueTimestamps(signatures) {
@@ -1422,7 +1422,7 @@ func (s *NativePDFSignatureService) AnalyzeTimestampPdfModifications(document mo
 // analyzePdfModifications(DSSDocument, PdfCMSRevision, PdfDocumentReader, char[]).
 func (s *NativePDFSignatureService) AnalyzeRevisionModifications(document model.DSSDocument,
 	pdfRevision PdfCMSRevision, finalRevisionReader *NativePdfDocumentReader, pwd []byte) {
-	revisionContent := PAdESUtilsGetRevisionContent(document, pdfRevision.ByteRange())
+	revisionContent := UtilsGetRevisionContent(document, pdfRevision.ByteRange())
 	modificationDetection := s.modificationDetection(finalRevisionReader, revisionContent, pwd)
 	if modificationDetection != nil {
 		pdfRevision.SetModificationDetection(modificationDetection)
@@ -1472,7 +1472,7 @@ func (s *NativePDFSignatureService) CheckPdfPermissions(documentReader PdfDocume
 // AssertContentSizeSufficient verifies whether the assigned /Contents size is sufficient to
 // encapsulate the CMS signed data. Port of the protected #assertContentSizeSufficient.
 func (s *NativePDFSignatureService) AssertContentSizeSufficient(cmsSignedData []byte,
-	parameters PAdESCommonParameters) {
+	parameters CommonParameters) {
 	csize := parameters.ContentSize()
 	if csize < len(cmsSignedData) {
 		panic(fmt.Sprintf("Unable to save a document. Reason : The signature size [%d] is too small "+
@@ -1484,14 +1484,14 @@ func (s *NativePDFSignatureService) AssertContentSizeSufficient(cmsSignedData []
 // PreviewPageWithVisualSignature is not supported; see ErrRasterisationNotSupported.
 // Port of PdfBoxSignatureService#previewPageWithVisualSignature.
 func (s *NativePDFSignatureService) PreviewPageWithVisualSignature(toSignDocument model.DSSDocument,
-	parameters PAdESCommonParameters) model.DSSDocument {
+	parameters CommonParameters) model.DSSDocument {
 	panic(ErrRasterisationNotSupported)
 }
 
 // PreviewSignatureField is not supported; see ErrRasterisationNotSupported.
 // Port of PdfBoxSignatureService#previewSignatureField.
 func (s *NativePDFSignatureService) PreviewSignatureField(toSignDocument model.DSSDocument,
-	parameters PAdESCommonParameters) model.DSSDocument {
+	parameters CommonParameters) model.DSSDocument {
 	panic(ErrRasterisationNotSupported)
 }
 

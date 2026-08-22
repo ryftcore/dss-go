@@ -14,8 +14,8 @@ import (
 )
 
 // XAdESCRLSource retrieves CRL values from an XAdES (-XL) signature. Port of the class
-// XAdESCRLSource, extending spi.OfflineCRLSourceBase.
-type XAdESCRLSource struct {
+// CRLSource, extending spi.OfflineCRLSourceBase.
+type CRLSource struct {
 	spi.OfflineCRLSourceBase
 
 	// signatureElement is the current signature element.
@@ -30,7 +30,7 @@ type XAdESCRLSource struct {
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESCRLSource {
+func NewCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CRLSource {
 	if signatureElement == nil {
 		panic("Signature element cannot be null")
 	}
@@ -38,7 +38,7 @@ func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdE
 		panic("XAdESPaths cannot be null")
 	}
 
-	s := &XAdESCRLSource{
+	s := &CRLSource{
 		OfflineCRLSourceBase: spi.NewOfflineCRLSourceBase(),
 		signatureElement:     signatureElement,
 		xadesPaths:           xadesPaths,
@@ -62,7 +62,7 @@ func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPaths definition.XAdE
 }
 
 // collectValues ports the private collectValues(XPathQuery, RevocationOrigin).
-func (s *XAdESCRLSource) collectValues(revocationValuesPath common.XPathQuery, revocationOrigin enumerations.RevocationOrigin) {
+func (s *CRLSource) collectValues(revocationValuesPath common.XPathQuery, revocationOrigin enumerations.RevocationOrigin) {
 	if revocationValuesPath == nil {
 		return
 	}
@@ -89,7 +89,7 @@ func (s *XAdESCRLSource) collectValues(revocationValuesPath common.XPathQuery, r
 }
 
 // collectRefs ports the private collectRefs(XPathQuery, RevocationRefOrigin).
-func (s *XAdESCRLSource) collectRefs(revocationRefsPath common.XPathQuery, revocationRefOrigin enumerations.RevocationRefOrigin) {
+func (s *CRLSource) collectRefs(revocationRefsPath common.XPathQuery, revocationRefOrigin enumerations.RevocationRefOrigin) {
 	if revocationRefsPath == nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (s *XAdESCRLSource) collectRefs(revocationRefsPath common.XPathQuery, revoc
 			continue
 		}
 		for _, crlRefNode := range crlRefNodes {
-			crlRef := XAdESRevocationRefExtractionUtilsCreateCRLRef(s.xadesPaths, crlRefNode)
+			crlRef := RevocationRefExtractionUtilsCreateCRLRef(s.xadesPaths, crlRefNode)
 			if crlRef != nil {
 				s.AddRevocationReference(crlRef, revocationRefOrigin)
 			}

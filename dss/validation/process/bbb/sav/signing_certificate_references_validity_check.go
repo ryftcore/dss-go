@@ -22,8 +22,8 @@ type SigningCertificateReferencesValidityCheck struct {
 }
 
 // NewSigningCertificateReferencesValidityCheck is the default constructor. Port
-// of SigningCertificateReferencesValidityCheck(I18nProvider, XmlSAV, TokenProxy, LevelRule).
-func NewSigningCertificateReferencesValidityCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// of SigningCertificateReferencesValidityCheck(Provider, XmlSAV, TokenProxy, LevelRule).
+func NewSigningCertificateReferencesValidityCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *SigningCertificateReferencesValidityCheck {
 	c := &SigningCertificateReferencesValidityCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

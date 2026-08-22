@@ -34,8 +34,8 @@ type TrustServiceStatusCheck struct {
 }
 
 // NewTrustServiceStatusCheck is the default constructor. Port of
-// TrustServiceStatusCheck(I18nProvider, XmlXCV, CertificateWrapper, Date, Context, MultiValuesRule).
-func NewTrustServiceStatusCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlXCV],
+// TrustServiceStatusCheck(Provider, XmlXCV, CertificateWrapper, Date, Context, MultiValuesRule).
+func NewTrustServiceStatusCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlXCV],
 	certificate *diagnostic.CertificateWrapper, usageTime *time.Time, context enumerations.Context,
 	constraint policy.MultiValuesRule) *TrustServiceStatusCheck {
 	c := &TrustServiceStatusCheck{

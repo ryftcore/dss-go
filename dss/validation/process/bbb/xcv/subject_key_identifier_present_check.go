@@ -21,8 +21,8 @@ type SubjectKeyIdentifierPresentCheck struct {
 }
 
 // NewSubjectKeyIdentifierPresentCheck is the default constructor. Port of
-// SubjectKeyIdentifierPresentCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewSubjectKeyIdentifierPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// SubjectKeyIdentifierPresentCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewSubjectKeyIdentifierPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *SubjectKeyIdentifierPresentCheck {
 	c := &SubjectKeyIdentifierPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -21,8 +21,8 @@ type OrganizationNameCheck struct {
 }
 
 // NewOrganizationNameCheck is the default constructor. Port of
-// OrganizationNameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewOrganizationNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// OrganizationNameCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewOrganizationNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *OrganizationNameCheck {
 	c := &OrganizationNameCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

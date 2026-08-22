@@ -107,7 +107,7 @@ func TestDigestDocumentAssertionsMatchJava(t *testing.T) {
 // TestDataIdentifierPropagatesDocumentDigestFailure pins that a failure to
 // digest the document is propagated as-is. Upstream's build() catches
 // IOException only, and getDigestValue raises a DSSException, so the
-// "Unable to build a JAdESAttributeIdentifier" wrapper never applies.
+// "Unable to build a AttributeIdentifier" wrapper never applies.
 func TestDataIdentifierPropagatesDocumentDigestFailure(t *testing.T) {
 	_, err := NewDataIdentifierForDocument("name", &documentContractFailingDocument{})
 	if err == nil {

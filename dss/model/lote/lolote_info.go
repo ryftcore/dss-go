@@ -9,46 +9,46 @@ import (
 // LoLoTEInfo computes a summary for a TS 119 602 List of Lists of Trusted Entities processing
 // result.
 //
-// Implements the assumed job.DocumentListInfo[LoLoTEInfo, LoTEInfo] interface
-// (getChildrenInfos, ported as ChildrenInfos()) on top of the fields/behaviour LoTEInfo already
-// provides for job.DocumentInfo. See the JUDGMENT CALL note on LoTEInfo for the
+// Implements the assumed job.DocumentListInfo[LoLoTEInfo, Info] interface
+// (getChildrenInfos, ported as ChildrenInfos()) on top of the fields/behaviour Info already
+// provides for job.DocumentInfo. See the JUDGMENT CALL note on Info for the
 // AbstractDocumentInfo flattening this depends on.
 type LoLoTEInfo struct {
-	LoTEInfo
+	Info
 
 	// childrenInfos is the list of summary for Lists found inside the current LoTE.
-	childrenInfos []*LoTEInfo
-	// identifier caches the value returned by DSSID, shadowing the embedded LoTEInfo's own
-	// cache so LoLoTEInfo's BuildIdentifier (not LoTEInfo's) is what gets cached and returned.
+	childrenInfos []*Info
+	// identifier caches the value returned by DSSID, shadowing the embedded Info's own
+	// cache so LoLoTEInfo's BuildIdentifier (not Info's) is what gets cached and returned.
 	identifier model.Identifier
 }
 
 // NewLoLoTEInfo is the default constructor.
-func NewLoLoTEInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo LoTEParsingInfoRecord,
+func NewLoLoTEInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo ParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string) *LoLoTEInfo {
 	return &LoLoTEInfo{
-		LoTEInfo: *NewLoTEInfo(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url),
+		Info: *NewInfo(downloadCacheInfo, parsingCacheInfo, validationCacheInfo, url),
 	}
 }
 
 // ChildrenInfos gets a list of processing information for other referenced LoTEs.
-func (l *LoLoTEInfo) ChildrenInfos() []*LoTEInfo {
+func (l *LoLoTEInfo) ChildrenInfos() []*Info {
 	return l.childrenInfos
 }
 
-// SetChildrenInfos sets a list of LoTEInfo summary for LoTE found in the LoLoTE.
-func (l *LoLoTEInfo) SetChildrenInfos(childrenInfos []*LoTEInfo) {
+// SetChildrenInfos sets a list of Info summary for LoTE found in the LoLoTE.
+func (l *LoLoTEInfo) SetChildrenInfos(childrenInfos []*Info) {
 	l.childrenInfos = childrenInfos
 }
 
 // BuildIdentifier builds the identifier of the current LoLoTE. Overrides (shadows) the
-// embedded LoTEInfo.BuildIdentifier for direct calls on *LoLoTEInfo.
+// embedded Info.BuildIdentifier for direct calls on *LoLoTEInfo.
 func (l *LoLoTEInfo) BuildIdentifier() model.Identifier {
-	return NewLoLoTEIdentifier(&l.LoTEInfo)
+	return NewLoLoTEIdentifier(&l.Info)
 }
 
 // DSSID returns the Identifier of the object, computing and caching it on first access.
-// Overrides (shadows) the embedded LoTEInfo.DSSID so the cached value is built from
+// Overrides (shadows) the embedded Info.DSSID so the cached value is built from
 // LoLoTEInfo's own BuildIdentifier.
 func (l *LoLoTEInfo) DSSID() model.Identifier {
 	if l.identifier == nil {

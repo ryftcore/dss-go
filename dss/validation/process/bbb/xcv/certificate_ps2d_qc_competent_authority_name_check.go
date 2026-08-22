@@ -22,7 +22,7 @@ type CertificatePS2DQcCompetentAuthorityNameCheck struct {
 
 // NewCertificatePS2DQcCompetentAuthorityNameCheck is the default constructor.
 // Port of CertificatePS2DQcCompetentAuthorityNameCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificatePS2DQcCompetentAuthorityNameCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+func NewCertificatePS2DQcCompetentAuthorityNameCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificatePS2DQcCompetentAuthorityNameCheck {
 	c := &CertificatePS2DQcCompetentAuthorityNameCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

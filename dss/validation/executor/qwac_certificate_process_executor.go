@@ -27,11 +27,11 @@ func NewQWACCertificateProcessExecutor() *QWACCertificateProcessExecutor {
 }
 
 // DetailedReportBuilderFor is the port of the overridden
-// getDetailedReportBuilder(DiagnosticData); it hands back the embedded
+// getDetailedReportBuilder(Data); it hands back the embedded
 // *DetailedReportForCertificateBuilder of the QWAC builder, which has
 // registered itself so Build() still dispatches onto the QWAC overrides.
 func (e *QWACCertificateProcessExecutor) DetailedReportBuilderFor(
-	diagnosticData *diagnostic.DiagnosticData) *DetailedReportForCertificateBuilder {
+	diagnosticData *diagnostic.Data) *DetailedReportForCertificateBuilder {
 	return &NewDetailedReportForQWACBuilder(e.I18nProvider(), diagnosticData, e.Policy,
 		e.CurrentTimeValue, e.CertificateId).DetailedReportForCertificateBuilder
 }

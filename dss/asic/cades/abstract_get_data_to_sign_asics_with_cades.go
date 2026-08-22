@@ -12,8 +12,8 @@ type AbstractGetDataToSignASiCSWithCAdES struct {
 }
 
 // NewAbstractGetDataToSignASiCSWithCAdES is the default constructor. Ports the protected
-// AbstractGetDataToSignASiCSWithCAdES(ASiCContent).
-func NewAbstractGetDataToSignASiCSWithCAdES(asicContent *asic.ASiCContent) AbstractGetDataToSignASiCSWithCAdES {
+// AbstractGetDataToSignASiCSWithCAdES(Content).
+func NewAbstractGetDataToSignASiCSWithCAdES(asicContent *asic.Content) AbstractGetDataToSignASiCSWithCAdES {
 	return AbstractGetDataToSignASiCSWithCAdES{
 		AbstractGetDataToSignASiCS: asic.NewAbstractGetDataToSignASiCS(asicContent),
 	}

@@ -2,7 +2,7 @@
 //
 // Java extends XAdESLevelX and overrides extendSignatures(List); the Go port embeds the -X level
 // (ported in the sibling chunk), and "super.extendSignatures(signatures)" is the explicit
-// xl.XAdESLevelX.ExtendSignatures call. XAdESLevelA embeds this type in turn.
+// xl.LevelX.ExtendSignatures call. LevelA embeds this type in turn.
 package xades
 
 import (
@@ -13,22 +13,22 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// XAdESLevelXL is the XL profile of a XAdES signature.
-type XAdESLevelXL struct {
-	XAdESLevelX
+// LevelXL is the XL profile of a XAdES signature.
+type LevelXL struct {
+	LevelX
 }
 
-// NewXAdESLevelXL is the default constructor for XAdESLevelXL.
+// NewLevelXL is the default constructor for LevelXL.
 // Port of XAdESLevelXL(CertificateVerifier).
-func NewXAdESLevelXL(certificateVerifier validation.CertificateVerifier) *XAdESLevelXL {
-	extension := &XAdESLevelXL{}
+func NewLevelXL(certificateVerifier validation.CertificateVerifier) *LevelXL {
+	extension := &LevelXL{}
 	extension.InitXAdESLevelXL(extension, certificateVerifier)
 	return extension
 }
 
 // InitXAdESLevelXL registers the concrete extension level with this base and forwards to the -X
 // level. Port of the super(certificateVerifier) call of XAdESLevelXL(CertificateVerifier).
-func (xl *XAdESLevelXL) InitXAdESLevelXL(self XAdESSignatureExtensionOverrides,
+func (xl *LevelXL) InitXAdESLevelXL(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	xl.InitXAdESLevelX(self, certificateVerifier)
 }
@@ -41,8 +41,8 @@ func (xl *XAdESLevelXL) InitXAdESLevelXL(self XAdESSignatureExtensionOverrides,
 // NOTE (upstream, kept verbatim): the guard below is computed over the signatures still
 // requiring an XL extension, but every subsequent loop and assertion runs over the full
 // signatures list, exactly as Java does.
-func (xl *XAdESLevelXL) ExtendSignatures(signatures []validation.AdvancedSignature) error {
-	if err := xl.XAdESLevelX.ExtendSignatures(signatures); err != nil {
+func (xl *LevelXL) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := xl.LevelX.ExtendSignatures(signatures); err != nil {
 		return err
 	}
 
@@ -52,7 +52,7 @@ func (xl *XAdESLevelXL) ExtendSignatures(signatures []validation.AdvancedSignatu
 	}
 
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -80,7 +80,7 @@ func (xl *XAdESLevelXL) ExtendSignatures(signatures []validation.AdvancedSignatu
 	}
 
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -128,7 +128,7 @@ func (xl *XAdESLevelXL) ExtendSignatures(signatures []validation.AdvancedSignatu
 }
 
 // extendToXLLevelSignatures ports the private getExtendToXLLevelSignatures.
-func (xl *XAdESLevelXL) extendToXLLevelSignatures(
+func (xl *LevelXL) extendToXLLevelSignatures(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	signaturesToExtend := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
@@ -140,6 +140,6 @@ func (xl *XAdESLevelXL) extendToXLLevelSignatures(
 }
 
 // xlLevelExtensionRequired ports the private xlLevelExtensionRequired.
-func (xl *XAdESLevelXL) xlLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+func (xl *LevelXL) xlLevelExtensionRequired(signature validation.AdvancedSignature) bool {
 	return enumerations.SignatureLevelXAdESXL == xl.Params.SignatureLevel() || !signature.HasAProfile()
 }

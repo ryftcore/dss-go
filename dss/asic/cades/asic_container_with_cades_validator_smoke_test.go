@@ -6,7 +6,7 @@
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // ASiC container extraction, the nested CAdES signature analyzers,
-// ASiCContainerDiagnosticDataBuilder/ASiCWithCAdESDiagnosticDataBuilder, the default validation
+// ContainerDiagnosticDataBuilder/ASiCWithCAdESDiagnosticDataBuilder, the default validation
 // policy, and the executor/report-builder tree - against real signed ASiC-CAdES fixtures already
 // committed under testdata/upstream.
 //

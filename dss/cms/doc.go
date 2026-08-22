@@ -4,16 +4,16 @@
 // # Layering
 //
 // Upstream splits the module in three: dss-cms declares the CMS interface and the builders
-// (CMSBuilder, CMSSignerInfoGeneratorBuilder, ...), while dss-cms-object (an in-memory
+// (Builder, SignerInfoGeneratorBuilder, ...), while dss-cms-object (an in-memory
 // BouncyCastle-backed CMSSignedData) and dss-cms-stream (a streaming BouncyCastle-backed
-// implementation, for large documents) are the two interchangeable ICMSUtils/CMSGenerator
+// implementation, for large documents) are the two interchangeable ICMSUtils/Generator
 // implementations an application picks between via ServiceLoader.
 //
 // Go has neither BouncyCastle nor a ServiceLoader, and internal/cmscore (see its own package
 // doc) already replaces BouncyCastle's CMS/TSP engine with a byte-exact, dependency-free one.
 // This package therefore has exactly ONE native implementation, built directly on
 // internal/cmscore, rather than two interchangeable BC-backed ones: every exported type below
-// (CMS, CMSBuilder, the CMSGenerator this package registers, CMSSignerInfoGeneratorBuilder, ...)
+// (CMS, Builder, the Generator this package registers, SignerInfoGeneratorBuilder, ...)
 // wraps cmscore's CMS/SignedData/SignerInfo builders instead of delegating to a pluggable
 // ICMSUtils. AbstractCMSGenerator and CMSGenerator keep their Java shape (a settable "recipe"
 // object with a Generate method) so a second implementation could still be added later, but
@@ -24,7 +24,7 @@
 // in memory; dss-cms-stream additionally supports streaming a large to-be-signed document and
 // writing the produced CMS through a caller-supplied DSSResourcesHandler rather than fully
 // materialising it. This port's single implementation follows the dss-cms-object behaviour
-// throughout: DSSResourcesHandlerBuilder is accepted for API parity (CMSUtilsResourcesHandlerBuilder,
+// throughout: DSSResourcesHandlerBuilder is accepted for API parity (UtilsResourcesHandlerBuilder,
 // CMSUtilsGetDSSResourcesHandlerBuilder) but is not consulted - every CMS document, signed or
 // parsed, is read and built fully in memory, exactly as dss-cms-object's CMSObjectUtils does
 // (its own writeToDSSDocument comment: "the 'dss-cms-object' implementation does not require

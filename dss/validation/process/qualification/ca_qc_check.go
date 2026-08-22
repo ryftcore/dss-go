@@ -29,8 +29,8 @@ type CaQcCheck struct {
 }
 
 // NewCaQcCheck is the default constructor. Port of
-// CaQcCheck(I18nProvider, XmlValidationCertificateQualification, List, LevelRule).
-func NewCaQcCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// CaQcCheck(Provider, XmlValidationCertificateQualification, List, LevelRule).
+func NewCaQcCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	trustServices []*diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *CaQcCheck {
 	c := &CaQcCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

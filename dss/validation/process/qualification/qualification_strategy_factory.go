@@ -3,27 +3,27 @@ package qualification
 
 import "github.com/ryftcore/dss-go/dss/diagnostic"
 
-// CreateQualificationFromCert creates a QualificationStrategy from the
+// CreateQualificationFromCert creates a Strategy from the
 // certificate. Port of createQualificationFromCert(CertificateWrapper).
-func CreateQualificationFromCert(signingCertificate *diagnostic.CertificateWrapper) QualificationStrategy {
+func CreateQualificationFromCert(signingCertificate *diagnostic.CertificateWrapper) Strategy {
 	if IsPostEIDAS(signingCertificate.NotBefore()) {
 		return newQualificationByCertificatePostEIDAS(signingCertificate)
 	}
 	return newQualificationByCertificatePreEIDAS(signingCertificate)
 }
 
-// CreateQualificationFromTL creates a QualificationStrategy from the Trusted
+// CreateQualificationFromTL creates a Strategy from the Trusted
 // Service. Port of
-// createQualificationFromTL(TrustServiceWrapper, QualificationStrategy).
-func CreateQualificationFromTL(trustService *diagnostic.TrustServiceWrapper, qualifiedInCert QualificationStrategy) QualificationStrategy {
+// createQualificationFromTL(TrustServiceWrapper, Strategy).
+func CreateQualificationFromTL(trustService *diagnostic.TrustServiceWrapper, qualifiedInCert Strategy) Strategy {
 	return newQualificationByTL(trustService, qualifiedInCert)
 }
 
-// CreateQualificationFromCertAndTL creates a QualificationStrategy from the
+// CreateQualificationFromCertAndTL creates a Strategy from the
 // certificate and Trusted Service. Port of
 // createQualificationFromCertAndTL(CertificateWrapper, TrustServiceWrapper).
 func CreateQualificationFromCertAndTL(signingCertificate *diagnostic.CertificateWrapper,
-	caQcTrustService *diagnostic.TrustServiceWrapper) QualificationStrategy {
+	caQcTrustService *diagnostic.TrustServiceWrapper) Strategy {
 	qcFromCert := CreateQualificationFromCert(signingCertificate)
 	return CreateQualificationFromTL(caQcTrustService, qcFromCert)
 }

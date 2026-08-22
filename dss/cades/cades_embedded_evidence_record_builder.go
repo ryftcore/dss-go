@@ -16,9 +16,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation/analyzer"
 )
 
-// CAdESEmbeddedEvidenceRecordBuilder is used to embed an existing ERS evidence record within a
+// EmbeddedEvidenceRecordBuilder is used to embed an existing ERS evidence record within a
 // CAdES signature as an unsigned property.
-type CAdESEmbeddedEvidenceRecordBuilder struct {
+type EmbeddedEvidenceRecordBuilder struct {
 	// certificateVerifier is the CertificateVerifier to be used for timestamps validation.
 	certificateVerifier validation.CertificateVerifier
 
@@ -26,15 +26,15 @@ type CAdESEmbeddedEvidenceRecordBuilder struct {
 	manifestFile *model.ManifestFile
 }
 
-// NewCAdESEmbeddedEvidenceRecordBuilder is the default constructor.
-func NewCAdESEmbeddedEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier) *CAdESEmbeddedEvidenceRecordBuilder {
-	return &CAdESEmbeddedEvidenceRecordBuilder{
+// NewEmbeddedEvidenceRecordBuilder is the default constructor.
+func NewEmbeddedEvidenceRecordBuilder(certificateVerifier validation.CertificateVerifier) *EmbeddedEvidenceRecordBuilder {
+	return &EmbeddedEvidenceRecordBuilder{
 		certificateVerifier: validation.NewCertificateVerifierBuilder(certificateVerifier).BuildOfflineCopy(),
 	}
 }
 
 // SetManifestFile sets a signed manifest file. NOTE: ASiC only. Port of #setManifestFile.
-func (b *CAdESEmbeddedEvidenceRecordBuilder) SetManifestFile(manifestFile *model.ManifestFile) {
+func (b *EmbeddedEvidenceRecordBuilder) SetManifestFile(manifestFile *model.ManifestFile) {
 	b.manifestFile = manifestFile
 }
 
@@ -44,8 +44,8 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) SetManifestFile(manifestFile *model
 //
 // Panics when signatureDocument, evidenceRecordDocument or parameters is nil (Java
 // Objects.requireNonNull).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
-	parameters *CAdESEvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
+func (b *EmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
+	parameters *EvidenceRecordIncorporationParameters) (model.DSSDocument, error) {
 	if signatureDocument == nil {
 		panic("Signature document must be provided!")
 	}
@@ -80,7 +80,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument
 
 	var newSignerInformationList []*cmscore.SignerInfo
 	for _, currentSignature := range documentAnalyzer.Signatures() {
-		cadesSignature, ok := currentSignature.(*CAdESSignature)
+		cadesSignature, ok := currentSignature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", currentSignature)
 		}
@@ -94,7 +94,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument
 			newSignerInformationList = append(newSignerInformationList, cadesSignature.SignerInformation())
 		}
 	}
-	newCMS, err := cms.CMSUtilsReplaceSigners(sig.CMS(), newSignerInformationList)
+	newCMS, err := cms.UtilsReplaceSigners(sig.CMS(), newSignerInformationList)
 	if err != nil {
 		return nil, err
 	}
@@ -103,13 +103,13 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) AddEvidenceRecord(signatureDocument
 
 // getCAdESSignature gets a signature to incorporate evidence record into. Port of the protected
 // #getCAdESSignature(DefaultDocumentAnalyzer, String).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getCAdESSignature(documentAnalyzer *CMSDocumentAnalyzer, signatureId string) (*CAdESSignature, error) {
+func (b *EmbeddedEvidenceRecordBuilder) getCAdESSignature(documentAnalyzer *CMSDocumentAnalyzer, signatureId string) (*Signature, error) {
 	if signatureId != "" {
 		sig := documentAnalyzer.SignatureByID(signatureId)
 		if sig == nil {
 			return nil, fmt.Errorf("unable to find a signature with Id : %s!", signatureId)
 		}
-		cadesSignature, ok := sig.(*CAdESSignature)
+		cadesSignature, ok := sig.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", sig)
 		}
@@ -125,7 +125,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getCAdESSignature(documentAnalyzer 
 			"Please provide a signatureId within the parameters", documentAnalyzer.Document().Name())
 	}
 	// if one signature
-	cadesSignature, ok := signatures[0].(*CAdESSignature)
+	cadesSignature, ok := signatures[0].(*Signature)
 	if !ok {
 		return nil, fmt.Errorf("unexpected signature type %T", signatures[0])
 	}
@@ -133,11 +133,11 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getCAdESSignature(documentAnalyzer 
 }
 
 // getUnsignedAttributeToEmbed ports the private
-// getUnsignedAttributeToEmbed(CAdESSignature, CAdESEvidenceRecordIncorporationParameters).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(sig *CAdESSignature,
-	parameters *CAdESEvidenceRecordIncorporationParameters) (*CAdESAttribute, error) {
+// getUnsignedAttributeToEmbed(Signature, EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(sig *Signature,
+	parameters *EvidenceRecordIncorporationParameters) (*Attribute, error) {
 	if parameters.IsParallelEvidenceRecord() {
-		unsignedAttributes := CAdESUnsignedAttributesBuild(sig.SignerInformation())
+		unsignedAttributes := UnsignedAttributesBuild(sig.SignerInformation())
 		if unsignedAttributes.IsExist() {
 			attributes := unsignedAttributes.Attributes()
 			lastUnsignedAttribute := attributes[len(attributes)-1]
@@ -152,21 +152,21 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(sig *CA
 			}
 		}
 	}
-	// new CAdESAttribute to be created
+	// new Attribute to be created
 	return nil, nil
 }
 
 // getEvidenceRecord ports the private getEvidenceRecord(DSSDocument, CAdESSignature,
-// CAdESAttribute, List<DSSDocument>).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, sig *CAdESSignature,
-	unsignedAttribute *CAdESAttribute, detachedContents []model.DSSDocument) (validation.EvidenceRecord, error) {
+// Attribute, List<DSSDocument>).
+func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDocument model.DSSDocument, sig *Signature,
+	unsignedAttribute *Attribute, detachedContents []model.DSSDocument) (validation.EvidenceRecord, error) {
 	evidenceRecordAnalyzer, err := analyzer.EvidenceRecordAnalyzerFromDocument(evidenceRecordDocument)
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause(
 			fmt.Sprintf("Unable to build an evidence record from the provided document. Reason : %s", err.Error()), err)
 	}
 
-	embeddedEvidenceRecordHelper := NewCAdESEmbeddedEvidenceRecordHelper(sig, unsignedAttribute)
+	embeddedEvidenceRecordHelper := NewEmbeddedEvidenceRecordHelper(sig, unsignedAttribute)
 	if len(detachedContents) > 0 {
 		evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(enumerations.EvidenceRecordIncorporationTypeExternalEvidenceRecord)
 		embeddedEvidenceRecordHelper.SetDetachedContents(detachedContents)
@@ -177,7 +177,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDoc
 }
 
 // validateTimestamps ports the private #validateTimestamps(EvidenceRecord).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord validation.EvidenceRecord) {
+func (b *EmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord validation.EvidenceRecord) {
 	validationContext := validation.NewSignatureValidationContext()
 	validationContext.Initialize(b.certificateVerifier)
 
@@ -194,7 +194,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord v
 }
 
 // initDocumentAnalyzer ports the private #initDocumentAnalyzer(DSSDocument, List<DSSDocument>).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) initDocumentAnalyzer(signatureDocument model.DSSDocument, detachedContents []model.DSSDocument) *CMSDocumentAnalyzer {
+func (b *EmbeddedEvidenceRecordBuilder) initDocumentAnalyzer(signatureDocument model.DSSDocument, detachedContents []model.DSSDocument) *CMSDocumentAnalyzer {
 	documentAnalyzer, err := NewCMSDocumentAnalyzerFromDocument(signatureDocument)
 	if err != nil {
 		panic(err)
@@ -206,8 +206,8 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) initDocumentAnalyzer(signatureDocum
 
 // addEvidenceRecordUnsignedProperty ports the private
 // #addEvidenceRecordUnsignedProperty(CAdESSignature, EvidenceRecord, CAdESAttribute).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) addEvidenceRecordUnsignedProperty(sig *CAdESSignature, evidenceRecord validation.EvidenceRecord,
-	unsignedAttribute *CAdESAttribute) (*cmscore.SignerInfo, error) {
+func (b *EmbeddedEvidenceRecordBuilder) addEvidenceRecordUnsignedProperty(sig *Signature, evidenceRecord validation.EvidenceRecord,
+	unsignedAttribute *Attribute) (*cmscore.SignerInfo, error) {
 	attributeOID := b.getEvidenceRecordUnsignedPropertyOID(sig)
 	evidenceRecordAttribute, err := b.getEvidenceRecordAttribute(evidenceRecord, attributeOID, unsignedAttribute)
 	if err != nil {
@@ -216,13 +216,13 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) addEvidenceRecordUnsignedProperty(s
 
 	signerInformation := sig.SignerInformation()
 	unsignedAttributesWithER := b.getUnsignedPropertiesTable(signerInformation, evidenceRecordAttribute, unsignedAttribute != nil)
-	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesWithER)
+	return cms.UtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributesWithER)
 }
 
 // getEvidenceRecordAttribute ports the private #getEvidenceRecordAttribute(EvidenceRecord,
-// ASN1ObjectIdentifier, CAdESAttribute).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecordAttribute(evidenceRecord validation.EvidenceRecord,
-	attributeOID asn1.ObjectIdentifier, unsignedAttribute *CAdESAttribute) (*cmscore.Attribute, error) {
+// ASN1ObjectIdentifier, Attribute).
+func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecordAttribute(evidenceRecord validation.EvidenceRecord,
+	attributeOID asn1.ObjectIdentifier, unsignedAttribute *Attribute) (*cmscore.Attribute, error) {
 	asn1EvidenceRecord, err := b.getASN1EvidenceRecord(evidenceRecord)
 	if err != nil {
 		return nil, err
@@ -242,9 +242,9 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecordAttribute(evidence
 
 // getUnsignedPropertiesTable ports the private #getUnsignedPropertiesTable(SignerInformation,
 // Attribute, boolean).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getUnsignedPropertiesTable(signerInformation *cmscore.SignerInfo,
+func (b *EmbeddedEvidenceRecordBuilder) getUnsignedPropertiesTable(signerInformation *cmscore.SignerInfo,
 	evidenceRecordAttribute *cmscore.Attribute, parallelER bool) cmscore.Attributes {
-	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+	unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 	originalAttributeTableLength := len(unsignedAttributes)
 	if parallelER {
 		originalAttributeTableLength--
@@ -259,7 +259,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getUnsignedPropertiesTable(signerIn
 }
 
 // getASN1EvidenceRecord ports the private #getASN1EvidenceRecord(EvidenceRecord).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getASN1EvidenceRecord(evidenceRecord validation.EvidenceRecord) ([]byte, error) {
+func (b *EmbeddedEvidenceRecordBuilder) getASN1EvidenceRecord(evidenceRecord validation.EvidenceRecord) ([]byte, error) {
 	element, rest, err := asn1ber.Parse(evidenceRecord.Encoded())
 	if err != nil {
 		return nil, err
@@ -272,7 +272,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getASN1EvidenceRecord(evidenceRecor
 
 // getEvidenceRecordUnsignedPropertyOID ports the private
 // #getEvidenceRecordUnsignedPropertyOID(CAdESSignature).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecordUnsignedPropertyOID(sig *CAdESSignature) asn1.ObjectIdentifier {
+func (b *EmbeddedEvidenceRecordBuilder) getEvidenceRecordUnsignedPropertyOID(sig *Signature) asn1.ObjectIdentifier {
 	if sig.CMS().IsDetachedSignature() {
 		return spi.OIDIdAaErExternal
 	}
@@ -280,9 +280,9 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecordUnsignedPropertyOI
 }
 
 // assertEvidenceRecordValid ports the private #assertEvidenceRecordValid(EvidenceRecord,
-// CAdESEvidenceRecordIncorporationParameters).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord validation.EvidenceRecord,
-	parameters *CAdESEvidenceRecordIncorporationParameters) error {
+// EvidenceRecordIncorporationParameters).
+func (b *EmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord validation.EvidenceRecord,
+	parameters *EvidenceRecordIncorporationParameters) error {
 	if enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord != evidenceRecord.EvidenceRecordType() {
 		return exception.NewIllegalInputException(fmt.Sprintf("Only RFC 4998 ERS type of Evidence Records is allowed "+
 			"for CAdES signatures! Identified type of evidence record: '%s'", evidenceRecord.EvidenceRecordType()))
@@ -315,16 +315,16 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceR
 
 // assertSignatureExtensionPossible ports the private
 // #assertSignatureExtensionPossible(CAdESSignature, CAdESEvidenceRecordIncorporationParameters).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) assertSignatureExtensionPossible(sig *CAdESSignature,
-	parameters *CAdESEvidenceRecordIncorporationParameters) error {
-	if err := cms.CMSUtilsAssertEvidenceRecordEmbeddingSupported(); err != nil {
+func (b *EmbeddedEvidenceRecordBuilder) assertSignatureExtensionPossible(sig *Signature,
+	parameters *EvidenceRecordIncorporationParameters) error {
+	if err := cms.UtilsAssertEvidenceRecordEmbeddingSupported(); err != nil {
 		return err
 	}
 	if err := b.assertNoEvidenceRecordsInOtherSignerInfos(sig); err != nil {
 		return err
 	}
 
-	if CAdESUtilsContainsATSTv2(sig.SignerInformation()) {
+	if UtilsContainsATSTv2(sig.SignerInformation()) {
 		return exception.NewIllegalInputException("Cannot add evidence record to a CAdES containing an archiveTimestampV2")
 	}
 	if sig.CMS().IsDetachedSignature() && len(parameters.DetachedContents()) != 1 {
@@ -335,9 +335,9 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) assertSignatureExtensionPossible(si
 
 // assertNoEvidenceRecordsInOtherSignerInfos ports the private
 // #assertNoEvidenceRecordsInOtherSignerInfos(CAdESSignature).
-func (b *CAdESEmbeddedEvidenceRecordBuilder) assertNoEvidenceRecordsInOtherSignerInfos(sig *CAdESSignature) error {
+func (b *EmbeddedEvidenceRecordBuilder) assertNoEvidenceRecordsInOtherSignerInfos(sig *Signature) error {
 	for _, signerInfo := range sig.CMS().SignerInfos() {
-		if sig.SignerInformation() != signerInfo && CAdESUtilsContainsEvidenceRecord(signerInfo) {
+		if sig.SignerInformation() != signerInfo && UtilsContainsEvidenceRecord(signerInfo) {
 			return exception.NewIllegalInputException("At most one of the SignerInfo instances within " +
 				"the SignedData instance shall contain evidence-records attributes! " +
 				"Please abolish the operation or provide another signature Id.")

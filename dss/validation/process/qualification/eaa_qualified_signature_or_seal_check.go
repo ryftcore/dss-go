@@ -23,8 +23,8 @@ type EAAQualifiedSignatureOrSealCheck struct {
 }
 
 // NewEAAQualifiedSignatureOrSealCheck is the default constructor. Port of
-// EAAQualifiedSignatureOrSealCheck(I18nProvider, XmlValidationEAAQualificationProcess, SignatureWrapper, SignatureQualification, LevelRule).
-func NewEAAQualifiedSignatureOrSealCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
+// EAAQualifiedSignatureOrSealCheck(Provider, XmlValidationEAAQualificationProcess, SignatureWrapper, SignatureQualification, LevelRule).
+func NewEAAQualifiedSignatureOrSealCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
 	signature *diagnostic.SignatureWrapper, signatureQualification enumerations.SignatureQualification,
 	constraint policy.LevelRule) *EAAQualifiedSignatureOrSealCheck {
 	c := &EAAQualifiedSignatureOrSealCheck{

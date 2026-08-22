@@ -17,7 +17,7 @@ type PDFAComplianceCheck struct {
 }
 
 // NewPDFAComplianceCheck is the default constructor.
-func NewPDFAComplianceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewPDFAComplianceCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfaCompliant bool, constraint policy.LevelRule) *PDFAComplianceCheck {
 	c := &PDFAComplianceCheck{pdfaCompliant: pdfaCompliant}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

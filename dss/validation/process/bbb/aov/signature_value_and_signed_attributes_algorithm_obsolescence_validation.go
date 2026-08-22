@@ -26,7 +26,7 @@ type SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T diagnost
 
 // NewSignatureValueAndSignedAttributesAlgorithmObsolescenceValidation is the
 // default constructor.
-func NewSignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.I18nProvider,
+func NewSignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.Provider,
 	token T, context enumerations.Context, validationDate time.Time,
 	validationPolicy policy.ValidationPolicy) *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T] {
 	c := &SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]{}

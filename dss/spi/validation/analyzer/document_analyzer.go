@@ -39,7 +39,7 @@ type DocumentAnalyzer interface {
 	SetCertificateVerifier(certificateVerifier validation.CertificateVerifier)
 
 	// SetValidationContextExecutor sets the ValidationContextExecutor for validation of the
-	// prepared ValidationContext. Default: executor.DefaultValidationContextExecutor (performs
+	// prepared Context. Default: executor.DefaultValidationContextExecutor (performs
 	// basic validation of tokens, including certificate chain building and revocation data
 	// extraction, without processing of validity checks). Port of
 	// setValidationContextExecutor(ValidationContextExecutor).
@@ -104,14 +104,14 @@ type DocumentAnalyzer interface {
 
 	// GetValidationData extracts a validation data for the provided collection of signatures.
 	// Port of the getValidationData(Collection) overload.
-	GetValidationData(signatures []validation.AdvancedSignature) (*validation.ValidationDataContainer, error)
+	GetValidationData(signatures []validation.AdvancedSignature) (*validation.DataContainer, error)
 
 	// GetValidationDataWithTimestamps extracts a validation data for the provided collection of
 	// signatures and/or timestamps. Port of the getValidationData(Collection, Collection)
 	// overload.
 	GetValidationDataWithTimestamps(signatures []validation.AdvancedSignature,
-		detachedTimestamps []*validation.TimestampToken) (*validation.ValidationDataContainer, error)
+		detachedTimestamps []*validation.TimestampToken) (*validation.DataContainer, error)
 
 	// Validate performs validation of the document. Port of validate().
-	Validate() validation.ValidationContext
+	Validate() validation.Context
 }

@@ -19,7 +19,7 @@ type EAAExpirationPresentCheck struct {
 }
 
 // NewEAAExpirationPresentCheck is the default constructor.
-func NewEAAExpirationPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAExpirationPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAAExpirationPresentCheck {
 	c := &EAAExpirationPresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

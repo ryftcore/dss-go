@@ -18,7 +18,7 @@ type ContainerTypeCheck struct {
 }
 
 // NewContainerTypeCheck is the default constructor.
-func NewContainerTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewContainerTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	containerType enumerations.ASiCContainerType, constraint policy.MultiValuesRule) *ContainerTypeCheck {
 	c := &ContainerTypeCheck{containerType: containerType}
 	c.AbstractMultiValuesCheckItem = bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint)

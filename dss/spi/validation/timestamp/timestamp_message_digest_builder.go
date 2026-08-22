@@ -3,8 +3,8 @@ package timestamp
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// TimestampMessageDigestBuilder builds message-imprint digest to be timestamped.
-type TimestampMessageDigestBuilder interface {
+// MessageDigestBuilder builds message-imprint digest to be timestamped.
+type MessageDigestBuilder interface {
 	// ContentTimestampMessageDigest returns the content timestamp message-imprint digest
 	// (timestamped or to be). Port of getContentTimestampMessageDigest().
 	ContentTimestampMessageDigest() model.DSSMessageDigest

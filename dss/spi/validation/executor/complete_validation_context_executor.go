@@ -3,7 +3,7 @@ package executor
 
 import "github.com/ryftcore/dss-go/dss/spi/validation"
 
-// CompleteValidationContextExecutor executes complete validation of the ValidationContext,
+// CompleteValidationContextExecutor executes complete validation of the Context,
 // including running of all checks with the alerts processing specified in CertificateVerifier.
 type CompleteValidationContextExecutor struct{}
 
@@ -15,7 +15,7 @@ var CompleteValidationContextExecutorInstance = &CompleteValidationContextExecut
 // (Objects.requireNonNull and the instanceof check both panic with Java's messages, matching
 // the UnsupportedOperationException/NullPointerException convention used throughout this port),
 // then runs the full validation + alerting sequence.
-func (e *CompleteValidationContextExecutor) Validate(validationContext validation.ValidationContext) {
+func (e *CompleteValidationContextExecutor) Validate(validationContext validation.Context) {
 	sigValidationContext := assertValidationContextSupported(validationContext)
 
 	validationContext.Validate()
@@ -25,7 +25,7 @@ func (e *CompleteValidationContextExecutor) Validate(validationContext validatio
 // assertValidationContextSupported ports the private static assertValidationContextSupported;
 // it additionally returns the asserted *SignatureValidationContext, which the Java version's
 // caller obtains from a separate cast at the call site.
-func assertValidationContextSupported(validationContext validation.ValidationContext) *validation.SignatureValidationContext {
+func assertValidationContextSupported(validationContext validation.Context) *validation.SignatureValidationContext {
 	if validationContext == nil {
 		panic("ValidationContext cannot be null!")
 	}

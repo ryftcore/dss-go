@@ -25,8 +25,8 @@ type EvidenceRecordValidationCheck[T any] struct {
 }
 
 // NewEvidenceRecordValidationCheck is the default constructor. Port of
-// EvidenceRecordValidationCheck(I18nProvider, T, EvidenceRecordWrapper, XmlValidationProcessEvidenceRecord, LevelRule).
-func NewEvidenceRecordValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// EvidenceRecordValidationCheck(Provider, T, EvidenceRecordWrapper, XmlValidationProcessEvidenceRecord, LevelRule).
+func NewEvidenceRecordValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, erValidationResult *jaxb.XmlValidationProcessEvidenceRecord,
 	constraint policy.LevelRule) *EvidenceRecordValidationCheck[T] {
 	c := &EvidenceRecordValidationCheck[T]{

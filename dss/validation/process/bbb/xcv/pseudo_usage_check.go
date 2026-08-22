@@ -23,8 +23,8 @@ type PseudoUsageCheck struct {
 }
 
 // NewPseudoUsageCheck is the default constructor. Port of
-// PseudoUsageCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewPseudoUsageCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// PseudoUsageCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewPseudoUsageCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *PseudoUsageCheck {
 	c := &PseudoUsageCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

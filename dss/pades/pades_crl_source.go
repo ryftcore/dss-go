@@ -19,8 +19,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// PAdESCRLSource is a CRLSource that will retrieve the CRL from a PAdES Signature.
-type PAdESCRLSource struct {
+// CRLSource is a CRLSource that will retrieve the CRL from a PAdES Signature.
+type CRLSource struct {
 	spi.OfflineCRLSourceBase
 
 	// cmsCrlSource is the CMS CRL source.
@@ -31,17 +31,17 @@ type PAdESCRLSource struct {
 }
 
 // NewPAdESCRLSource is the default constructor. Port of the constructor
-// PAdESCRLSource(PdfSignatureRevision, String, AttributeTable).
+// CRLSource(PdfSignatureRevision, String, AttributeTable).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
-func NewPAdESCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
-	signedAttributes cmscore.Attributes) *PAdESCRLSource {
+func NewCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+	signedAttributes cmscore.Attributes) *CRLSource {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")
 	}
 
-	source := &PAdESCRLSource{
+	source := &CRLSource{
 		OfflineCRLSourceBase: spi.NewOfflineCRLSourceBase(),
 		cmsCrlSource:         NewPdfCmsCRLSource(signedAttributes),
 		dssDictCrlSource: NewPdfDssDictCRLSourceWithVRIName(
@@ -56,7 +56,7 @@ func NewPAdESCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionary
 
 // RevocationTokens returns the CRL tokens found by both the CMS source and the DSS dictionary
 // source. Port of the getRevocationTokens(CertificateToken, CertificateToken) override.
-func (s *PAdESCRLSource) RevocationTokens(certificateToken, issuerToken *model.CertificateToken) ([]spi.RevocationToken[revocation.CRL], error) {
+func (s *CRLSource) RevocationTokens(certificateToken, issuerToken *model.CertificateToken) ([]spi.RevocationToken[revocation.CRL], error) {
 	revocationTokens := make([]spi.RevocationToken[revocation.CRL], 0)
 	cmsTokens, err := s.cmsCrlSource.RevocationTokens(certificateToken, issuerToken)
 	if err != nil {
@@ -83,9 +83,9 @@ func (s *PAdESCRLSource) RevocationTokens(certificateToken, issuerToken *model.C
 // dispatch, as in pades_certificate_source.go's DSSDictionaryCertValues) is required for every
 // caller reaching
 // this type through the spi.OfflineRevocationSource[R] interface (e.g.
-// PAdESSignature.CompleteCRLSource(), and thus BaselineRequirementsChecker.MinimalLTRequirement's
+// Signature.CompleteCRLSource(), and thus BaselineRequirementsChecker.MinimalLTRequirement's
 // LT-level revocation-presence check) to see the DSS dictionary's CRLs at all.
-func (s *PAdESCRLSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
+func (s *CRLSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
 	entries := s.AllRevocationBinariesWithOrigins()
 	result := make([]spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL], 0, len(entries))
 	for _, entry := range entries {
@@ -97,7 +97,7 @@ func (s *PAdESCRLSource) AllRevocationBinaries() []spi.EncapsulatedRevocationTok
 // AllRevocationTokens retrieves a slice of all found RevocationTokens. Port of the inherited
 // getAllRevocationTokens(); see AllRevocationBinaries's doc comment for why this needs the same
 // shadowing treatment (Java: getAllRevocationTokensWithOrigins().keySet()).
-func (s *PAdESCRLSource) AllRevocationTokens() []spi.RevocationToken[revocation.CRL] {
+func (s *CRLSource) AllRevocationTokens() []spi.RevocationToken[revocation.CRL] {
 	entries := s.AllRevocationTokensWithOrigins()
 	result := make([]spi.RevocationToken[revocation.CRL], 0, len(entries))
 	for _, entry := range entries {
@@ -112,7 +112,7 @@ func (s *PAdESCRLSource) AllRevocationTokens() []spi.RevocationToken[revocation.
 // Utils.isMapEmpty(getAllRevocationTokensWithOrigins()) &&
 // Utils.isMapEmpty(getRevocationReferencesWithOrigins()) - the last of which this port's base
 // still answers correctly, since PAdES neither overrides it nor ever populates references).
-func (s *PAdESCRLSource) IsEmpty() bool {
+func (s *CRLSource) IsEmpty() bool {
 	return len(s.AllRevocationBinariesWithOrigins()) == 0 &&
 		len(s.AllRevocationTokensWithOrigins()) == 0 &&
 		len(s.AllRevocationReferences()) == 0
@@ -120,50 +120,50 @@ func (s *PAdESCRLSource) IsEmpty() bool {
 
 // CrlMap returns a map of all CRL entries contained in DSS dictionary or into nested VRI
 // dictionaries. Port of getCrlMap().
-func (s *PAdESCRLSource) CrlMap() map[PdfObjectKey]*crlparser.CRLBinary {
+func (s *CRLSource) CrlMap() map[PdfObjectKey]*crlparser.CRLBinary {
 	return s.dssDictCrlSource.CrlMap()
 }
 
 // DSSDictionaryBinaries returns the CRL binaries of the /DSS dictionary. Port of the
 // getDSSDictionaryBinaries() override.
-func (s *PAdESCRLSource) DSSDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
+func (s *CRLSource) DSSDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
 	return s.dssDictCrlSource.DSSDictionaryBinaries()
 }
 
 // DSSDictionaryTokens returns the CRL tokens of the /DSS dictionary. Port of the
 // getDSSDictionaryTokens() override.
-func (s *PAdESCRLSource) DSSDictionaryTokens() []spi.RevocationToken[revocation.CRL] {
+func (s *CRLSource) DSSDictionaryTokens() []spi.RevocationToken[revocation.CRL] {
 	return s.dssDictCrlSource.DSSDictionaryTokens()
 }
 
 // VRIDictionaryBinaries returns the CRL binaries of the /VRI dictionaries. Port of the
 // getVRIDictionaryBinaries() override.
-func (s *PAdESCRLSource) VRIDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
+func (s *CRLSource) VRIDictionaryBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
 	return s.dssDictCrlSource.VRIDictionaryBinaries()
 }
 
 // VRIDictionaryTokens returns the CRL tokens of the /VRI dictionaries. Port of the
 // getVRIDictionaryTokens() override.
-func (s *PAdESCRLSource) VRIDictionaryTokens() []spi.RevocationToken[revocation.CRL] {
+func (s *CRLSource) VRIDictionaryTokens() []spi.RevocationToken[revocation.CRL] {
 	return s.dssDictCrlSource.VRIDictionaryTokens()
 }
 
 // ADBERevocationValuesBinaries returns the CRL binaries found in the ADBE revocation info
 // archival CMS attribute. Port of the getADBERevocationValuesBinaries() override.
-func (s *PAdESCRLSource) ADBERevocationValuesBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
+func (s *CRLSource) ADBERevocationValuesBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL] {
 	return s.cmsCrlSource.ADBERevocationValuesBinaries()
 }
 
 // ADBERevocationValuesTokens returns the CRL tokens found in the ADBE revocation info archival
 // CMS attribute. Port of the getADBERevocationValuesTokens() override.
-func (s *PAdESCRLSource) ADBERevocationValuesTokens() []spi.RevocationToken[revocation.CRL] {
+func (s *CRLSource) ADBERevocationValuesTokens() []spi.RevocationToken[revocation.CRL] {
 	return s.dssDictCrlSource.ADBERevocationValuesTokens()
 }
 
-// PAdESCRLSourceBinaryOriginsEntry pairs a CRL binary with the origins it has been found with,
+// CRLSourceBinaryOriginsEntry pairs a CRL binary with the origins it has been found with,
 // standing in for one entry of Java's
 // Map<EncapsulatedRevocationTokenIdentifier<CRL>, Set<RevocationOrigin>>.
-type PAdESCRLSourceBinaryOriginsEntry struct {
+type CRLSourceBinaryOriginsEntry struct {
 	Binary  spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL]
 	Origins []enumerations.RevocationOrigin
 }
@@ -171,8 +171,8 @@ type PAdESCRLSourceBinaryOriginsEntry struct {
 // AllRevocationBinariesWithOrigins returns a map of all revocation binaries with the
 // corresponding origins. Port of the getAllRevocationBinariesWithOrigins() override, together
 // with the private populateMapWithSet(Map, Map) helper it calls twice.
-func (s *PAdESCRLSource) AllRevocationBinariesWithOrigins() []PAdESCRLSourceBinaryOriginsEntry {
-	result := make([]PAdESCRLSourceBinaryOriginsEntry, 0)
+func (s *CRLSource) AllRevocationBinariesWithOrigins() []CRLSourceBinaryOriginsEntry {
+	result := make([]CRLSourceBinaryOriginsEntry, 0)
 	for _, entry := range s.cmsCrlSource.AllRevocationBinariesWithOrigins() {
 		result = padesCRLSourceMergeBinaryOrigins(result, entry.Binary, entry.Origins)
 	}
@@ -185,7 +185,7 @@ func (s *PAdESCRLSource) AllRevocationBinariesWithOrigins() []PAdESCRLSourceBina
 // AllRevocationTokensWithOrigins returns a map of all revocation tokens with the corresponding
 // origins. Port of the getAllRevocationTokensWithOrigins() override, together with the private
 // populateMapWithSet(Map, Map) helper it calls twice.
-func (s *PAdESCRLSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenOriginsEntry[revocation.CRL] {
+func (s *CRLSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenOriginsEntry[revocation.CRL] {
 	result := make([]spi.RevocationTokenOriginsEntry[revocation.CRL], 0)
 	for _, entry := range s.cmsCrlSource.AllRevocationTokensWithOrigins() {
 		result = padesCRLSourceMergeTokenOrigins(result, entry.Token, entry.Origins)
@@ -200,9 +200,9 @@ func (s *PAdESCRLSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenO
 // origins of an already-present entry for the same binary (matched on its DSS identifier,
 // AsXmlID()) rather than duplicating it - the Set<RevocationOrigin> semantics of the private
 // populateMapWithSet(Map, Map) helper's Map<..., Set<RevocationOrigin>> value.
-func padesCRLSourceMergeBinaryOrigins(result []PAdESCRLSourceBinaryOriginsEntry,
+func padesCRLSourceMergeBinaryOrigins(result []CRLSourceBinaryOriginsEntry,
 	binary spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL],
-	origins []enumerations.RevocationOrigin) []PAdESCRLSourceBinaryOriginsEntry {
+	origins []enumerations.RevocationOrigin) []CRLSourceBinaryOriginsEntry {
 	for i := range result {
 		if result[i].Binary.AsXmlID() == binary.AsXmlID() {
 			result[i].Origins = padesCRLSourceUnionOrigins(result[i].Origins, origins)
@@ -210,7 +210,7 @@ func padesCRLSourceMergeBinaryOrigins(result []PAdESCRLSourceBinaryOriginsEntry,
 		}
 	}
 	merged := append([]enumerations.RevocationOrigin{}, origins...)
-	return append(result, PAdESCRLSourceBinaryOriginsEntry{Binary: binary, Origins: merged})
+	return append(result, CRLSourceBinaryOriginsEntry{Binary: binary, Origins: merged})
 }
 
 // padesCRLSourceMergeTokenOrigins merges one (token, origins) pair into result, unioning the

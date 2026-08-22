@@ -13,9 +13,9 @@ import (
 func TestValidationDataContainerDetachedTimestampsDeterministic(t *testing.T) {
 	tokens := []*TimestampToken{{}, {}, {}, {}, {}}
 	build := func() []*TimestampToken {
-		container := NewValidationDataContainer()
+		container := NewDataContainer()
 		for _, tok := range tokens {
-			container.AddValidationDataForTimestamp(tok, NewValidationData())
+			container.AddValidationDataForTimestamp(tok, NewData())
 		}
 		return container.DetachedTimestamps()
 	}
@@ -35,9 +35,9 @@ func TestValidationDataContainerDetachedTimestampsDeterministic(t *testing.T) {
 // above: same file, same OrderedMap fix, keyed by the AdvancedSignature interface instead.
 func TestValidationDataContainerSignaturesDeterministic(t *testing.T) {
 	build := func() []string {
-		container := NewValidationDataContainer()
+		container := NewDataContainer()
 		for _, id := range []string{"delta", "alpha", "charlie", "echo", "bravo"} {
-			container.AddValidationDataForSignature(&signatureStatusDeterminismFakeSignature{id: id}, NewValidationData())
+			container.AddValidationDataForSignature(&signatureStatusDeterminismFakeSignature{id: id}, NewData())
 		}
 		signatures := container.Signatures()
 		ids := make([]string, len(signatures))

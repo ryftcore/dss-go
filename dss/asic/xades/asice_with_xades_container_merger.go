@@ -23,7 +23,7 @@ type ASiCEWithXAdESContainerMerger struct {
 }
 
 var _ asic.DefaultContainerMergerOverrides = (*ASiCEWithXAdESContainerMerger)(nil)
-var _ asic.ASiCContainerMerger = (*ASiCEWithXAdESContainerMerger)(nil)
+var _ asic.ContainerMerger = (*ASiCEWithXAdESContainerMerger)(nil)
 
 // newASiCEWithXAdESContainerMerger is the empty constructor. Port of the package-private empty
 // constructor.
@@ -45,7 +45,7 @@ func NewASiCEWithXAdESContainerMerger(containers ...model.DSSDocument) *ASiCEWit
 
 // NewASiCEWithXAdESContainerMergerFromContents creates an ASiC-E With XAdES from to given
 // ASiCContents. Ports ASiCEWithXAdESContainerMerger(ASiCContent...).
-func NewASiCEWithXAdESContainerMergerFromContents(asicContents ...*asic.ASiCContent) *ASiCEWithXAdESContainerMerger {
+func NewASiCEWithXAdESContainerMergerFromContents(asicContents ...*asic.Content) *ASiCEWithXAdESContainerMerger {
 	m := newASiCEWithXAdESContainerMerger()
 	m.InitFromASiCContents(asicContents...)
 	return m
@@ -56,7 +56,7 @@ func (m *ASiCEWithXAdESContainerMerger) IsSupportedDocument(container model.DSSD
 	if !m.AbstractASiCWithXAdESContainerMerger.IsSupportedDocument(container) {
 		return false
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainer(container)
+	isASiCS, err := asic.UtilsIsASiCSContainer(container)
 	if err != nil {
 		panic(err)
 	}
@@ -68,7 +68,7 @@ func (m *ASiCEWithXAdESContainerMerger) doesNotContainSignaturesDocument(contain
 	if err != nil {
 		panic(err)
 	}
-	return !asic.ASiCUtilsFilesContainSignatures(entryNames)
+	return !asic.UtilsFilesContainSignatures(entryNames)
 }
 
 func (m *ASiCEWithXAdESContainerMerger) doesNotContainEvidenceRecordsDocument(container model.DSSDocument) bool {
@@ -76,26 +76,26 @@ func (m *ASiCEWithXAdESContainerMerger) doesNotContainEvidenceRecordsDocument(co
 	if err != nil {
 		panic(err)
 	}
-	return !asic.ASiCUtilsFilesContainEvidenceRecords(entryNames)
+	return !asic.UtilsFilesContainEvidenceRecords(entryNames)
 }
 
 // IsSupportedContent ports the @Override protected isSupported(ASiCContent).
-func (m *ASiCEWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCEWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	if !m.AbstractASiCWithXAdESContainerMerger.IsSupportedContent(asicContent) {
 		return false
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
 	return !isASiCS || (m.doesNotContainSignaturesContent(asicContent) && m.doesNotContainEvidenceRecordsContent(asicContent))
 }
 
-func (m *ASiCEWithXAdESContainerMerger) doesNotContainSignaturesContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCEWithXAdESContainerMerger) doesNotContainSignaturesContent(asicContent *asic.Content) bool {
 	return len(asicContent.SignatureDocuments()) == 0
 }
 
-func (m *ASiCEWithXAdESContainerMerger) doesNotContainEvidenceRecordsContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCEWithXAdESContainerMerger) doesNotContainEvidenceRecordsContent(asicContent *asic.Content) bool {
 	return len(asicContent.EvidenceRecordDocuments()) == 0
 }
 
@@ -233,7 +233,7 @@ func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNames() []string {
 				panic(err)
 			}
 			for _, signature := range documentAnalyzer.Signatures() {
-				xadesSignature, ok := signature.(*dssxades.XAdESSignature)
+				xadesSignature, ok := signature.(*dssxades.Signature)
 				if !ok {
 					continue
 				}
@@ -241,7 +241,7 @@ func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNames() []string {
 			}
 		}
 		for _, manifestDocument := range asicContent.EvidenceRecordManifestDocuments() {
-			manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
+			manifestFile := asic.ManifestParserGetManifestFile(manifestDocument)
 			if manifestFile != nil {
 				for _, manifestEntry := range manifestFile.Entries() {
 					result = append(result, manifestEntry.Uri())
@@ -252,7 +252,7 @@ func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNames() []string {
 	return result
 }
 
-func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNamesFromSignature(signature *dssxades.XAdESSignature) []string {
+func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNamesFromSignature(signature *dssxades.Signature) []string {
 	result := make([]string, 0)
 	for _, reference := range signature.References() {
 		referenceURI := dssxades.DSSXMLUtilsGetReferenceURI(reference)
@@ -333,7 +333,7 @@ func (m *ASiCEWithXAdESContainerMerger) createNewManifest() model.DSSDocument {
 			}
 		}
 		signedDocuments := asicContent.SignedDocuments()
-		for _, entry := range asic.ASiCUtilsToSimpleManifestEntries(signedDocuments) {
+		for _, entry := range asic.UtilsToSimpleManifestEntries(signedDocuments) {
 			if !slices.Contains(addedFileNames, entry.Uri()) {
 				manifestEntries = append(manifestEntries, entry)
 				addedFileNames = append(addedFileNames, entry.Uri())
@@ -361,7 +361,7 @@ func (m *ASiCEWithXAdESContainerMerger) getManifestFileEntries(manifestDocuments
 	return manifest.Entries()
 }
 
-func (m *ASiCEWithXAdESContainerMerger) createNewManifestXml(manifestEntries []*model.ManifestEntry, asicContent *asic.ASiCContent) model.DSSDocument {
+func (m *ASiCEWithXAdESContainerMerger) createNewManifestXml(manifestEntries []*model.ManifestEntry, asicContent *asic.Content) model.DSSDocument {
 	document, err := NewASiCEWithXAdESManifestBuilder().
 		SetEntries(manifestEntries).
 		SetManifestFilename(m.asicFilenameFactory.ManifestFilename(asicContent)).
@@ -410,10 +410,10 @@ func (m *ASiCEWithXAdESContainerMerger) ensureEvidenceRecordManifestNamesDiffer(
 
 // createEmptyContainer exposes the embedded DefaultContainerMerger's unexported
 // createEmptyContainer via its already-exported constructor path: DefaultContainerMerger has no
-// exported equivalent, so this file builds the same shape directly (NewASiCContent +
+// exported equivalent, so this file builds the same shape directly (NewContent +
 // SetContainerType(getContainerType())), mirroring the asic/cades precedent.
-func (m *ASiCEWithXAdESContainerMerger) createEmptyContainer() *asic.ASiCContent {
-	asicContent := asic.NewASiCContent()
+func (m *ASiCEWithXAdESContainerMerger) createEmptyContainer() *asic.Content {
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(m.GetTargetASiCContainerType())
 	for _, ac := range m.AsicContents {
 		if ac.ContainerType() != "" {

@@ -19,8 +19,8 @@ type TLMRACheck struct {
 }
 
 // NewTLMRACheck is the default constructor. Port of
-// TLMRACheck(I18nProvider, XmlTLAnalysis, XmlTrustedList, LevelRule).
-func NewTLMRACheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlTLAnalysis],
+// TLMRACheck(Provider, XmlTLAnalysis, XmlTrustedList, LevelRule).
+func NewTLMRACheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlTLAnalysis],
 	currentTL *dssjaxb.XmlTrustedList, constraint policy.LevelRule) *TLMRACheck {
 	c := &TLMRACheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

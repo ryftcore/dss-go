@@ -52,8 +52,8 @@ func manifestKATBytes(t *testing.T, document model.DSSDocument) []byte {
 }
 
 // manifestKATASiCEContent mirrors ManifestOracle#asicEContent.
-func manifestKATASiCEContent() *asic.ASiCContent {
-	asicContent := asic.NewASiCContent()
+func manifestKATASiCEContent() *asic.Content {
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetMimeTypeDocument(model.NewInMemoryDocumentWithMimeType(
 		[]byte(enumerations.MimeTypeEnumASiCE.MimeTypeString()), "mimetype", enumerations.MimeTypeEnumBinary))
@@ -66,8 +66,8 @@ func manifestKATASiCEContent() *asic.ASiCContent {
 }
 
 // manifestKATEncodingContent mirrors ManifestOracle#encodingContent.
-func manifestKATEncodingContent() *asic.ASiCContent {
-	asicContent := asic.NewASiCContent()
+func manifestKATEncodingContent() *asic.Content {
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("a"), "document 2.txt", enumerations.MimeTypeEnumText),
@@ -79,8 +79,8 @@ func manifestKATEncodingContent() *asic.ASiCContent {
 }
 
 // manifestKATPercentContent mirrors ManifestOracle#percentContent.
-func manifestKATPercentContent() *asic.ASiCContent {
-	asicContent := asic.NewASiCContent()
+func manifestKATPercentContent() *asic.Content {
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetSignedDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("a"), "100%_done.txt", enumerations.MimeTypeEnumText),
@@ -90,7 +90,7 @@ func manifestKATPercentContent() *asic.ASiCContent {
 }
 
 // manifestKATArchiveContent mirrors ManifestOracle#archiveContent.
-func manifestKATArchiveContent() *asic.ASiCContent {
+func manifestKATArchiveContent() *asic.Content {
 	asicContent := manifestKATASiCEContent()
 	asicContent.SetSignatureDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("signature-bytes"),

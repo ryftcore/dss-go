@@ -7,30 +7,30 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// EAAPresentationAnalyzerFactory is used to load a specific EAAPresentationAnalyzer based on
+// PresentationAnalyzerFactory is used to load a specific PresentationAnalyzer based on
 // the format of the provided presentation of Electronic Attestation of Attributes.
-type EAAPresentationAnalyzerFactory interface {
-	// IsSupported tests if the current implementation of EAAPresentationAnalyzer supports the
+type PresentationAnalyzerFactory interface {
+	// IsSupported tests if the current implementation of PresentationAnalyzer supports the
 	// given document. Port of isSupported(DSSDocument).
 	IsSupported(document model.DSSDocument) bool
 
 	// Create instantiates an EAAPresentationAnalyzer with the given document. Port of
 	// create(DSSDocument).
-	Create(document model.DSSDocument) EAAPresentationAnalyzer
+	Create(document model.DSSDocument) PresentationAnalyzer
 }
 
-// eaaPresentationAnalyzerFactoryRegistry holds the EAAPresentationAnalyzerFactory
-// implementations registered via RegisterEAAPresentationAnalyzerFactory, consulted in
+// eaaPresentationAnalyzerFactoryRegistry holds the PresentationAnalyzerFactory
+// implementations registered via RegisterPresentationAnalyzerFactory, consulted in
 // registration order — the Go equivalent of Java's
-// ServiceLoader.load(EAAPresentationAnalyzerFactory.class) iteration (Go has no runtime
+// ServiceLoader.load(PresentationAnalyzerFactory.class) iteration (Go has no runtime
 // service-provider discovery). EAA-presentation-format-specific implementations register
 // themselves here in later phases.
-var eaaPresentationAnalyzerFactoryRegistry []EAAPresentationAnalyzerFactory
+var eaaPresentationAnalyzerFactoryRegistry []PresentationAnalyzerFactory
 
-// RegisterEAAPresentationAnalyzerFactory registers an EAAPresentationAnalyzerFactory to be
-// consulted by EAAPresentationAnalyzerIsSupportedDocument and
-// EAAPresentationAnalyzerFromDocument.
-func RegisterEAAPresentationAnalyzerFactory(f EAAPresentationAnalyzerFactory) {
+// RegisterPresentationAnalyzerFactory registers an PresentationAnalyzerFactory to be
+// consulted by PresentationAnalyzerIsSupportedDocument and
+// PresentationAnalyzerFromDocument.
+func RegisterPresentationAnalyzerFactory(f PresentationAnalyzerFactory) {
 	eaaPresentationAnalyzerFactoryRegistry = append(eaaPresentationAnalyzerFactoryRegistry, f)
 }
 
@@ -38,12 +38,12 @@ func RegisterEAAPresentationAnalyzerFactory(f EAAPresentationAnalyzerFactory) {
 // UnsupportedOperationException("Document format not recognized/handled").
 var errDocumentFormatNotRecognized = errors.New("document format not recognized/handled")
 
-// EAAPresentationAnalyzerIsSupportedDocument verifies if document is supported by one of the
+// PresentationAnalyzerIsSupportedDocument verifies if document is supported by one of the
 // registered EAAPresentationAnalyzerFactory implementations. Port of the static
 // isSupportedDocument(DSSDocument).
 //
 // Panics when document is nil (Objects.requireNonNull("DSSDocument is null")).
-func EAAPresentationAnalyzerIsSupportedDocument(document model.DSSDocument) bool {
+func PresentationAnalyzerIsSupportedDocument(document model.DSSDocument) bool {
 	if document == nil {
 		panic("DSSDocument is null")
 	}
@@ -55,7 +55,7 @@ func EAAPresentationAnalyzerIsSupportedDocument(document model.DSSDocument) bool
 	return false
 }
 
-// EAAPresentationAnalyzerFromDocument creates an EAAPresentationAnalyzer by finding a
+// PresentationAnalyzerFromDocument creates an PresentationAnalyzer by finding a
 // corresponding registered implementation. Port of the static fromDocument(DSSDocument).
 //
 // Panics when document is nil, matching EAAPresentationAnalyzerIsSupportedDocument. Java's
@@ -63,7 +63,7 @@ func EAAPresentationAnalyzerIsSupportedDocument(document model.DSSDocument) bool
 // registered implementation supports the document, is returned as an error: whether a document
 // format is recognized is data-dependent on which analyzer implementations happen to be
 // registered (loaded modules).
-func EAAPresentationAnalyzerFromDocument(document model.DSSDocument) (EAAPresentationAnalyzer, error) {
+func PresentationAnalyzerFromDocument(document model.DSSDocument) (PresentationAnalyzer, error) {
 	if document == nil {
 		panic("DSSDocument is null")
 	}

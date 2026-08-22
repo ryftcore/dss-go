@@ -12,21 +12,21 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESSignatureScopeFinder performs operations in order to find all signed data for a XAdES
+// SignatureScopeFinder performs operations in order to find all signed data for a XAdES
 // Signature. Port of the class XAdESSignatureScopeFinder, extending
-// spiscope.AbstractSignatureScopeFinder and implementing spiscope.SignatureScopeFinder[*XAdESSignature].
-type XAdESSignatureScopeFinder struct {
+// spiscope.AbstractSignatureScopeFinder and implementing spiscope.SignatureScopeFinder[*Signature].
+type SignatureScopeFinder struct {
 	spiscope.AbstractSignatureScopeFinder
 }
 
 // NewXAdESSignatureScopeFinder is the port of the default constructor.
-func NewXAdESSignatureScopeFinder() *XAdESSignatureScopeFinder {
-	return &XAdESSignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
+func NewSignatureScopeFinder() *SignatureScopeFinder {
+	return &SignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
 }
 
 // FindSignatureScope returns a list of SignatureScopes from a signature. Port of
-// findSignatureScope(XAdESSignature).
-func (f *XAdESSignatureScopeFinder) FindSignatureScope(xadesSignature *XAdESSignature) []mscope.SignatureScope {
+// findSignatureScope(Signature).
+func (f *SignatureScopeFinder) FindSignatureScope(xadesSignature *Signature) []mscope.SignatureScope {
 	result := make([]mscope.SignatureScope, 0)
 
 	for _, xadesReferenceValidation := range xadesSignature.XAdESReferenceValidations() {
@@ -131,7 +131,7 @@ func xadesSignatureScopeFinderReferenceName(referenceValidation *model.Reference
 
 // getFromDetachedContent ports the private getFromDetachedContent(XAdESSignature, List,
 // ReferenceValidation).
-func (f *XAdESSignatureScopeFinder) getFromDetachedContent(xadesSignature *XAdESSignature,
+func (f *SignatureScopeFinder) getFromDetachedContent(xadesSignature *Signature,
 	transformations []string, xadesReferenceValidation *model.ReferenceValidation) mscope.SignatureScope {
 	detachedDocument := xadesReferenceValidation.Document()
 	if detachedDocument == nil {
@@ -182,7 +182,7 @@ func xadesSignatureScopeFinderReferencedDocumentName(referenceValidation *model.
 }
 
 // isEverythingCovered ports the private isEverythingCovered(XAdESSignature, String).
-func (f *XAdESSignatureScopeFinder) isEverythingCovered(signature *XAdESSignature, coveredObjectId string) bool {
+func (f *SignatureScopeFinder) isEverythingCovered(signature *Signature, coveredObjectId string) bool {
 	parent := signature.SignatureElement().OwnerDocument().DocumentElement()
 	return parent != nil && xadesSignatureScopeFinderIsRelatedToUri(parent, coveredObjectId)
 }
@@ -208,8 +208,8 @@ func xadesSignatureScopeFinderMustGetNodeBytes(node *xmldom.Node) []byte {
 }
 
 // compile-time interface assertion.
-var _ spiscope.SignatureScopeFinder[*XAdESSignature] = (*XAdESSignatureScopeFinder)(nil)
+var _ spiscope.SignatureScopeFinder[*Signature] = (*SignatureScopeFinder)(nil)
 
-// compile-time assertion: XAdESSignature satisfies validation.AdvancedSignature, matching the
+// compile-time assertion: Signature satisfies validation.AdvancedSignature, matching the
 // MasterSignature()/DetachedContents()/ContainerContents() calls above.
-var _ validation.AdvancedSignature = (*XAdESSignature)(nil)
+var _ validation.AdvancedSignature = (*Signature)(nil)

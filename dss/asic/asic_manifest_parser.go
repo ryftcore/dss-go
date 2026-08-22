@@ -22,7 +22,7 @@ var asicManifestParserNamespacesRegistered = func() bool {
 // ASiCManifestParserGetManifestFile parses and converts a DSSDocument to a ManifestFile. Ports
 // the static getManifestFile(DSSDocument). Returns nil when the document isn't a valid ASiC
 // manifest, matching Java's null return.
-func ASiCManifestParserGetManifestFile(manifestDocument model.DSSDocument) *model.ManifestFile {
+func ManifestParserGetManifestFile(manifestDocument model.DSSDocument) *model.ManifestFile {
 	_ = asicManifestParserNamespacesRegistered
 	root := asicManifestParserGetManifestRootElement(manifestDocument)
 	if root == nil {
@@ -36,9 +36,9 @@ func ASiCManifestParserGetManifestFile(manifestDocument model.DSSDocument) *mode
 	return manifest
 }
 
-// ASiCManifestParserGetLinkedManifest returns the relative manifest for the given signature
+// ManifestParserGetLinkedManifest returns the relative manifest for the given signature
 // name. Ports the static getLinkedManifest(List, String).
-func ASiCManifestParserGetLinkedManifest(manifestDocuments []model.DSSDocument, signatureName string) model.DSSDocument {
+func ManifestParserGetLinkedManifest(manifestDocuments []model.DSSDocument, signatureName string) model.DSSDocument {
 	for _, manifest := range manifestDocuments {
 		manifestRoot := asicManifestParserGetManifestRootElement(manifest)
 		if manifestRoot != nil {
@@ -87,7 +87,7 @@ func asicManifestParserGetLinkedSignatureName(root *xmldom.Node) string {
 // mimetype string in some MimeType loader implementations that choose to throw; the Go port's
 // registered loaders do not).
 func asicManifestParserGetMimeType(element *xmldom.Node) enumerations.MimeType {
-	mimeTypeString := element.AttrValue("", ASiCManifestAttributeMIMEType.AttributeName())
+	mimeTypeString := element.AttrValue("", ManifestAttributeMIMEType.AttributeName())
 	if utils.IsStringNotBlank(mimeTypeString) {
 		return enumerations.MimeTypeFromMimeTypeString(mimeTypeString)
 	}
@@ -126,11 +126,11 @@ func asicManifestParserGetDigestValue(dataObjectReference *xmldom.Node) []byte {
 // Cross-chunk assumption (ZIPCORE): ASiCUtils exposes IsArchiveManifest,
 // IsEvidenceRecordManifest and IsManifest package functions taking a filename string.
 func asicManifestParserGetManifestType(manifestFilename string, root *xmldom.Node) enumerations.ASiCManifestTypeEnum {
-	if ASiCUtilsIsArchiveManifest(manifestFilename) {
+	if UtilsIsArchiveManifest(manifestFilename) {
 		return enumerations.ASiCManifestTypeEnumArchiveManifest
-	} else if ASiCUtilsIsEvidenceRecordManifest(manifestFilename) {
+	} else if UtilsIsEvidenceRecordManifest(manifestFilename) {
 		return enumerations.ASiCManifestTypeEnumEvidenceRecord
-	} else if ASiCUtilsIsManifest(manifestFilename) {
+	} else if UtilsIsManifest(manifestFilename) {
 		sigReference, err := xmlutils.XPathUtilsGetElement(root, ASiCManifestPathSigReferencePath)
 		if err == nil && sigReference != nil {
 			mimeType := asicManifestParserGetMimeType(sigReference)
@@ -153,7 +153,7 @@ func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.Manifest
 	}
 	for _, dataObjectReference := range dataObjectReferences {
 		entry := model.NewManifestEntry()
-		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ASiCManifestAttributeURI.AttributeName())))
+		entry.SetUri(spi.DSSUtilsDecodeURI(dataObjectReference.AttrValue("", ManifestAttributeURI.AttributeName())))
 		entry.SetMimeType(asicManifestParserGetMimeType(dataObjectReference))
 
 		digestAlgorithm := asicManifestParserGetDigestAlgorithm(dataObjectReference)
@@ -162,7 +162,7 @@ func asicManifestParserParseManifestEntries(root *xmldom.Node) []*model.Manifest
 			entry.SetDigest(model.NewDigest(digestAlgorithm, digestValueBinary))
 		}
 
-		attribute := dataObjectReference.AttrValue("", ASiCManifestAttributeRootFile.AttributeName())
+		attribute := dataObjectReference.AttrValue("", ManifestAttributeRootFile.AttributeName())
 		if utils.AreStringsEqualIgnoreCase("true", attribute) {
 			entry.SetRootfile(true)
 		}

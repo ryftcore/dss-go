@@ -23,8 +23,8 @@ type ContentTimestampBasicValidationCheck struct {
 }
 
 // NewContentTimestampBasicValidationCheck is the default constructor. Port of
-// ContentTimestampBasicValidationCheck(I18nProvider, XmlSAV, TimestampWrapper, XmlConclusion, LevelRule).
-func NewContentTimestampBasicValidationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ContentTimestampBasicValidationCheck(Provider, XmlSAV, TimestampWrapper, XmlConclusion, LevelRule).
+func NewContentTimestampBasicValidationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *ContentTimestampBasicValidationCheck {
 	c := &ContentTimestampBasicValidationCheck{

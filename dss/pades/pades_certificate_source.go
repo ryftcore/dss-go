@@ -3,7 +3,7 @@
 //
 // java.io.Serializable is dropped (no Go counterpart).
 //
-// cades.CAdESCertificateSource's constructor takes the CMS and the SignerInformation
+// cades.CertificateSource's constructor takes the CMS and the SignerInformation
 // directly (see cades/cades_certificate_source.go), matching
 // PdfSignatureRevision.getCMS()/PdfSignatureRevision itself not carrying a SignerInformation
 // of its own - the signerInformation constructor parameter is threaded through unchanged.
@@ -17,34 +17,34 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// PAdESCertificateSource is a CertificateSource that retrieves the certificate from a PAdES
+// CertificateSource is a CertificateSource that retrieves the certificate from a PAdES
 // Signature.
-type PAdESCertificateSource struct {
-	*cades.CAdESCertificateSource
+type CertificateSource struct {
+	*cades.CertificateSource
 
 	// dssDictionaryCertificateSource is the certificate source of the DSS dictionary.
 	dssDictionaryCertificateSource *PdfDssDictCertificateSource
 }
 
-// NewPAdESCertificateSource is the default constructor for PAdESCertificateSource.
+// NewCertificateSource is the default constructor for CertificateSource.
 // Port of the constructor PAdESCertificateSource(PdfSignatureRevision, String,
 // SignerInformation).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
 // empty string means no VRI-name filter, see pdf_dss_dict_certificate_source.go).
-func NewPAdESCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
-	signerInformation *cmscore.SignerInfo) (*PAdESCertificateSource, error) {
+func NewCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
+	signerInformation *cmscore.SignerInfo) (*CertificateSource, error) {
 	if vriDictionaryName == "" {
 		panic("vriDictionaryName cannot be null!")
 	}
 
-	base, err := cades.NewCAdESCertificateSource(pdfSignatureRevision.CMS(), signerInformation)
+	base, err := cades.NewCertificateSource(pdfSignatureRevision.CMS(), signerInformation)
 	if err != nil {
 		return nil, err
 	}
 
-	s := &PAdESCertificateSource{
-		CAdESCertificateSource: base,
+	s := &CertificateSource{
+		CertificateSource: base,
 		dssDictionaryCertificateSource: NewPdfDssDictCertificateSourceWithVRIName(
 			pdfSignatureRevision.CompositeDssDictionary().CertificateSource(),
 			pdfSignatureRevision.DssDictionary(), vriDictionaryName),
@@ -54,7 +54,7 @@ func NewPAdESCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDi
 }
 
 // extractFromDssDictSource ports the private extractFromDssDictSource().
-func (s *PAdESCertificateSource) extractFromDssDictSource() {
+func (s *CertificateSource) extractFromDssDictSource() {
 	for _, certToken := range s.DSSDictionaryCertValues() {
 		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOriginDSSDictionary)
 	}
@@ -65,24 +65,24 @@ func (s *PAdESCertificateSource) extractFromDssDictSource() {
 
 // CertificateMap gets the map of certificate PDF object ids and the certificateTokens.
 // Port of getCertificateMap().
-func (s *PAdESCertificateSource) CertificateMap() map[PdfObjectKey]*model.CertificateToken {
+func (s *CertificateSource) CertificateMap() map[PdfObjectKey]*model.CertificateToken {
 	return s.dssDictionaryCertificateSource.CertificateMap()
 }
 
 // CertificateValues is not applicable for PAdES. Port of the getCertificateValues() override.
-func (s *PAdESCertificateSource) CertificateValues() []*model.CertificateToken {
+func (s *CertificateSource) CertificateValues() []*model.CertificateToken {
 	return []*model.CertificateToken{}
 }
 
 // CompleteCertificateRefs is not applicable for PAdES. Port of the getCompleteCertificateRefs()
 // override.
-func (s *PAdESCertificateSource) CompleteCertificateRefs() []*spi.CertificateRef {
+func (s *CertificateSource) CompleteCertificateRefs() []*spi.CertificateRef {
 	return []*spi.CertificateRef{}
 }
 
 // AttributeCertificateRefs is not applicable for PAdES. Port of the
 // getAttributeCertificateRefs() override.
-func (s *PAdESCertificateSource) AttributeCertificateRefs() []*spi.CertificateRef {
+func (s *CertificateSource) AttributeCertificateRefs() []*spi.CertificateRef {
 	return []*spi.CertificateRef{}
 }
 
@@ -94,13 +94,13 @@ func (s *PAdESCertificateSource) AttributeCertificateRefs() []*spi.CertificateRe
 // CertificateSource() method returns get the base's origin-tagged-map lookup instead, which
 // extractFromDssDictSource above populates with the very same tokens this override answers, so
 // the two stay in agreement for every caller either way.
-func (s *PAdESCertificateSource) DSSDictionaryCertValues() []*model.CertificateToken {
+func (s *CertificateSource) DSSDictionaryCertValues() []*model.CertificateToken {
 	return s.dssDictionaryCertificateSource.DSSDictionaryCertValues()
 }
 
 // VRIDictionaryCertValues gets the list of the certificate tokens extracted from the VRI
 // dictionary. Port of the getVRIDictionaryCertValues() override. Shadows the embedded base's
 // method of the same name; see DSSDictionaryCertValues's doc comment.
-func (s *PAdESCertificateSource) VRIDictionaryCertValues() []*model.CertificateToken {
+func (s *CertificateSource) VRIDictionaryCertValues() []*model.CertificateToken {
 	return s.dssDictionaryCertificateSource.VRIDictionaryCertValues()
 }

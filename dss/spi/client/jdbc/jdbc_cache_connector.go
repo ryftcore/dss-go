@@ -5,21 +5,21 @@ import "database/sql"
 
 // JdbcCacheConnector executes calls to a *sql.DB (Java's
 // javax.sql.DataSource; the caller passes an already-configured *sql.DB).
-type JdbcCacheConnector struct {
+type CacheConnector struct {
 	// dataSource is the SQL data source to create connections with.
 	dataSource *sql.DB
 }
 
-// NewJdbcCacheConnector is the default constructor.
-func NewJdbcCacheConnector(dataSource *sql.DB) *JdbcCacheConnector {
-	return &JdbcCacheConnector{dataSource: dataSource}
+// NewCacheConnector is the default constructor.
+func NewCacheConnector(dataSource *sql.DB) *CacheConnector {
+	return &CacheConnector{dataSource: dataSource}
 }
 
 // Execute executes a query with a custom set of arguments, such as
 // UPDATE or DELETE, by handling the error. On failure the transaction is
 // rolled back and 0 is returned, mirroring
 // #execute(SqlQuery, Object...), which never propagates the SQLException.
-func (c *JdbcCacheConnector) Execute(query *SqlQuery, arguments ...any) int {
+func (c *CacheConnector) Execute(query *SqlQuery, arguments ...any) int {
 	if query == nil {
 		panic("Query cannot be null!")
 	}
@@ -51,7 +51,7 @@ func (c *JdbcCacheConnector) Execute(query *SqlQuery, arguments ...any) int {
 // rolls back and returns an empty (nil) collection rather than
 // propagating the error, matching the Java method's
 // Collections.emptySet() fallback.
-func (c *JdbcCacheConnector) Select(selectQuery SqlSelectQuery, arguments ...any) []SqlRecord {
+func (c *CacheConnector) Select(selectQuery SqlSelectQuery, arguments ...any) []SqlRecord {
 	tx, err := c.dataSource.Begin()
 	if err != nil {
 		return nil
@@ -85,7 +85,7 @@ func (c *JdbcCacheConnector) Select(selectQuery SqlSelectQuery, arguments ...any
 // a distinction database/sql's Exec does not expose. Callers of
 // tableQuery only rely on the success/failure signal (DDL and existence
 // probes), so this returns whether the statement executed without error.
-func (c *JdbcCacheConnector) TableQuery(query *SqlQuery) bool {
+func (c *CacheConnector) TableQuery(query *SqlQuery) bool {
 	tx, err := c.dataSource.Begin()
 	if err != nil {
 		return false
@@ -106,7 +106,7 @@ func (c *JdbcCacheConnector) TableQuery(query *SqlQuery) bool {
 
 // ExecuteThrowable allows executing INSERT, UPDATE or DELETE queries,
 // returning an error in case of failure. Ports #executeThrowable(SqlQuery).
-func (c *JdbcCacheConnector) ExecuteThrowable(query *SqlQuery) (int, error) {
+func (c *CacheConnector) ExecuteThrowable(query *SqlQuery) (int, error) {
 	tx, err := c.dataSource.Begin()
 	if err != nil {
 		return 0, err

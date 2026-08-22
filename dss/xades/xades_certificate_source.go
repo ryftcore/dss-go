@@ -16,9 +16,9 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESCertificateSource provides the mechanism to retrieve certificates contained in a XAdES
+// CertificateSource provides the mechanism to retrieve certificates contained in a XAdES
 // signature. Port of the class XAdESCertificateSource, extending spi.SignatureCertificateSource.
-type XAdESCertificateSource struct {
+type CertificateSource struct {
 	spi.SignatureCertificateSource
 
 	// signatureElement is the Signature element.
@@ -33,7 +33,7 @@ type XAdESCertificateSource struct {
 //
 // Panics with the Java messages when signatureElement or xadesPaths is missing
 // (Objects.requireNonNull).
-func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESCertificateSource {
+func NewCertificateSource(signatureElement *xmldom.Node, xadesPaths definition.XAdESPath) *CertificateSource {
 	if signatureElement == nil {
 		panic("Element signature must not be null")
 	}
@@ -41,7 +41,7 @@ func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPaths definit
 		panic("XAdESPaths must not be null")
 	}
 
-	s := &XAdESCertificateSource{
+	s := &CertificateSource{
 		signatureElement: signatureElement,
 		xadesPaths:       xadesPaths,
 	}
@@ -67,7 +67,7 @@ func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPaths definit
 }
 
 // extractCertificates ports the private extractCertificates(XPathQuery, CertificateOrigin).
-func (s *XAdESCertificateSource) extractCertificates(xPathQuery common.XPathQuery, origin enumerations.CertificateOrigin) {
+func (s *CertificateSource) extractCertificates(xPathQuery common.XPathQuery, origin enumerations.CertificateOrigin) {
 	if xPathQuery == nil {
 		return
 	}
@@ -89,7 +89,7 @@ func (s *XAdESCertificateSource) extractCertificates(xPathQuery common.XPathQuer
 
 // extractCertificateRefs ports the private extractCertificateRefs(XPathQuery, XPathQuery,
 // CertificateRefOrigin).
-func (s *XAdESCertificateSource) extractCertificateRefs(xpathV1, xpathV2 common.XPathQuery, origin enumerations.CertificateRefOrigin) {
+func (s *CertificateSource) extractCertificateRefs(xpathV1, xpathV2 common.XPathQuery, origin enumerations.CertificateRefOrigin) {
 	if xpathV1 != nil {
 		certRefNodeList, err := xmlutils.XPathUtilsGetNodeList(s.signatureElement, xpathV1)
 		if err == nil {
@@ -105,9 +105,9 @@ func (s *XAdESCertificateSource) extractCertificateRefs(xpathV1, xpathV2 common.
 }
 
 // extractXAdESCertsV1 ports the private extractXAdESCertsV1(NodeList, CertificateRefOrigin).
-func (s *XAdESCertificateSource) extractXAdESCertsV1(certNodeList []*xmldom.Node, origin enumerations.CertificateRefOrigin) {
+func (s *CertificateSource) extractXAdESCertsV1(certNodeList []*xmldom.Node, origin enumerations.CertificateRefOrigin) {
 	for _, certRefElement := range certNodeList {
-		certificateRef := XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV1(certRefElement, s.xadesPaths)
+		certificateRef := CertificateRefExtractionUtilsCreateCertificateRefFromV1(certRefElement, s.xadesPaths)
 		if certificateRef != nil {
 			s.AddCertificateRef(certificateRef, origin)
 		}
@@ -115,9 +115,9 @@ func (s *XAdESCertificateSource) extractXAdESCertsV1(certNodeList []*xmldom.Node
 }
 
 // extractXAdESCertsV2 ports the private extractXAdESCertsV2(NodeList, CertificateRefOrigin).
-func (s *XAdESCertificateSource) extractXAdESCertsV2(certNodeList []*xmldom.Node, origin enumerations.CertificateRefOrigin) {
+func (s *CertificateSource) extractXAdESCertsV2(certNodeList []*xmldom.Node, origin enumerations.CertificateRefOrigin) {
 	for _, certRefElement := range certNodeList {
-		certificateRef := XAdESCertificateRefExtractionUtilsCreateCertificateRefFromV2(certRefElement, s.xadesPaths)
+		certificateRef := CertificateRefExtractionUtilsCreateCertificateRefFromV2(certRefElement, s.xadesPaths)
 		if certificateRef != nil {
 			s.AddCertificateRef(certificateRef, origin)
 		}
@@ -130,7 +130,7 @@ func (s *XAdESCertificateSource) extractXAdESCertsV2(certNodeList []*xmldom.Node
 // 5.1.4.1 XAdES processing: candidates for the signing certificate extracted from ds:KeyInfo
 // shall be checked against all references present in the ds:SigningCertificate property, if
 // present, since one of these references shall be a reference to the signing certificate.
-func (s *XAdESCertificateSource) ExtractCandidatesForSigningCertificate(signingCertificateSource spi.CertificateSource) *spi.CandidatesForSigningCertificate {
+func (s *CertificateSource) ExtractCandidatesForSigningCertificate(signingCertificateSource spi.CertificateSource) *spi.CandidatesForSigningCertificate {
 	candidatesForSigningCertificate := spi.NewCandidatesForSigningCertificate()
 
 	for _, certificateToken := range s.KeyInfoCertificates() {
@@ -173,7 +173,7 @@ func (s *XAdESCertificateSource) ExtractCandidatesForSigningCertificate(signingC
 
 // resolveFromSource ports the private resolveFromSource(CertificateSource,
 // CandidatesForSigningCertificate).
-func (s *XAdESCertificateSource) resolveFromSource(certificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
+func (s *CertificateSource) resolveFromSource(certificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
 	signingCertificateRefs := s.SigningCertificateRefs()
 	if utils.IsCollectionNotEmpty(signingCertificateRefs) {
 		for _, certificateRef := range signingCertificateRefs {
@@ -191,7 +191,7 @@ func (s *XAdESCertificateSource) resolveFromSource(certificateSource spi.Certifi
 
 // resolveForReference ports the private resolveForReference(CertificateRef, CertificateSource,
 // CandidatesForSigningCertificate).
-func (s *XAdESCertificateSource) resolveForReference(certificateRef *spi.CertificateRef, certificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
+func (s *CertificateSource) resolveForReference(certificateRef *spi.CertificateRef, certificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
 	signerIdentifier := certificateRef.CertificateIdentifier()
 	if signerIdentifier != nil {
 		certificatesByIdentifier := certificateSource.BySignerIdentifier(signerIdentifier)
@@ -220,7 +220,7 @@ func (s *XAdESCertificateSource) resolveForReference(certificateRef *spi.Certifi
 // checkCandidatesAgainstSigningCertificateRef(CandidatesForSigningCertificate): checks the
 // protection of the certificates included within the signature (XAdES: KeyInfo) against the
 // substitution attack.
-func (s *XAdESCertificateSource) checkCandidatesAgainstSigningCertificateRef(candidates *spi.CandidatesForSigningCertificate) {
+func (s *CertificateSource) checkCandidatesAgainstSigningCertificateRef(candidates *spi.CandidatesForSigningCertificate) {
 	potentialSigningCertificates := s.SigningCertificateRefs()
 	if utils.IsCollectionNotEmpty(potentialSigningCertificates) {
 		// first reference shall be a reference to a signing certificate
@@ -243,7 +243,7 @@ func (s *XAdESCertificateSource) checkCandidatesAgainstSigningCertificateRef(can
 }
 
 // isValid ports the private isValid(CertificateValidity, CertificateRef).
-func (s *XAdESCertificateSource) isValid(certificateValidity *spi.CertificateValidity, signingCert *spi.CertificateRef) bool {
+func (s *CertificateSource) isValid(certificateValidity *spi.CertificateValidity, signingCert *spi.CertificateRef) bool {
 	certificateValidity.SetDigestPresent(!signingCert.CertDigest().IsEmpty())
 	certificateValidity.SetIssuerSerialPresent(signingCert.CertificateIdentifier() != nil)
 
@@ -257,5 +257,5 @@ func (s *XAdESCertificateSource) isValid(certificateValidity *spi.CertificateVal
 	return certificateValidity.IsValid()
 }
 
-// compile-time assertion: an XAdESCertificateSource satisfies its own overrides contract.
-var _ spi.SignatureCertificateSourceOverrides = (*XAdESCertificateSource)(nil)
+// compile-time assertion: an CertificateSource satisfies its own overrides contract.
+var _ spi.SignatureCertificateSourceOverrides = (*CertificateSource)(nil)

@@ -14,7 +14,7 @@
 // TimestampWrapper#getProductionTime() or RevocationWrapper#getProductionDate()).
 // The one Java value that is nominally nullable but cannot be null for a
 // schema-valid dump is CertificateWrapper#getNotBefore() as read for lastDate
-// below: DiagnosticData.xsd declares Certificate/NotBefore a required element,
+// below: Data.xsd declares Certificate/NotBefore a required element,
 // and Java would NPE on a null one further down in
 // ValidationProcessUtils#isTrustAnchor. The Go port passes the zero time there.
 //
@@ -59,9 +59,9 @@ type X509CertificateValidation struct {
 }
 
 // NewX509CertificateValidation is the default constructor with usage time. Port
-// of X509CertificateValidation(I18nProvider, CertificateWrapper, Date, Date,
+// of X509CertificateValidation(Provider, CertificateWrapper, Date, Date,
 // Context, XmlAOV, ValidationPolicy).
-func NewX509CertificateValidation(i18nProvider *i18n.I18nProvider,
+func NewX509CertificateValidation(i18nProvider *i18n.Provider,
 	currentCertificate *diagnostic.CertificateWrapper, currentTime time.Time, usageTime *time.Time,
 	context enumerations.Context, aov *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *X509CertificateValidation {
@@ -297,7 +297,7 @@ type trustAnchorCheckSubXCVResult struct {
 // newTrustAnchorCheckSubXCVResult builds the anonymous subclass and re-registers
 // the overrides with the outer type, so that the base's self-calls reach the
 // three methods overridden here rather than those of CheckSubXCVResult.
-func newTrustAnchorCheckSubXCVResult(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlXCV],
+func newTrustAnchorCheckSubXCVResult(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlXCV],
 	subXCVResult *jaxb.XmlSubXCV, constraint policy.LevelRule) *trustAnchorCheckSubXCVResult {
 	c := &trustAnchorCheckSubXCVResult{
 		CheckSubXCVResult: NewCheckSubXCVResult(i18nProvider, result, subXCVResult, constraint),

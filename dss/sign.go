@@ -173,31 +173,31 @@ func SignMultiple(docs []Document, signer *Signer, opts SignOptions) (Document, 
 		var runErr error
 		switch opts.Format {
 		case FormatCAdES:
-			parameters := cades.NewCAdESSignatureParameters()
+			parameters := cades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := cades.NewCAdESService(opts.certificateVerifier())
+			service := cades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatXAdES:
-			parameters := xades.NewXAdESSignatureParameters()
+			parameters := xades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := xades.NewXAdESService(opts.certificateVerifier())
+			service := xades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatPAdES:
-			parameters := pades.NewPAdESSignatureParameters()
+			parameters := pades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
-			service := pades.NewPAdESService(opts.certificateVerifier())
+			service := pades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
 		case FormatJAdES:
-			parameters := jades.NewJAdESSignatureParameters()
+			parameters := jades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
 			parameters.SetJwsSerializationType(opts.jwsSerialization())
-			service := jades.NewJAdESService(opts.certificateVerifier())
+			service := jades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
 
@@ -284,30 +284,30 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 	err = recovered("extend", func() error {
 		switch opts.Format {
 		case FormatCAdES:
-			parameters := cades.NewCAdESSignatureParameters()
+			parameters := cades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := cades.NewCAdESService(opts.certificateVerifier())
+			service := cades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatXAdES:
-			parameters := xades.NewXAdESSignatureParameters()
+			parameters := xades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := xades.NewXAdESService(opts.certificateVerifier())
+			service := xades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatPAdES:
-			parameters := pades.NewPAdESSignatureParameters()
+			parameters := pades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := pades.NewPAdESService(opts.certificateVerifier())
+			service := pades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
 		case FormatJAdES:
-			parameters := jades.NewJAdESSignatureParameters()
+			parameters := jades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
-			service := jades.NewJAdESService(opts.certificateVerifier())
+			service := jades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)
 
@@ -337,9 +337,9 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 }
 
 // signatureParameters is the slice of the ported signature-parameter types the
-// facade sets. Every concrete parameters type - CAdESSignatureParameters,
-// XAdESSignatureParameters, PAdESSignatureParameters,
-// JAdESSignatureParameters and the two ASiC ones - satisfies it, several of
+// facade sets. Every concrete parameters type - SignatureParameters,
+// SignatureParameters, SignatureParameters,
+// SignatureParameters and the two ASiC ones - satisfies it, several of
 // them with their own overriding SetSignatureLevel, which is why the facade
 // calls through this interface rather than through a shared embedded struct.
 type signatureParameters interface {
@@ -393,9 +393,9 @@ func applyTSPSource(service tspSourceSetter, opts SignOptions) {
 }
 
 // signOne runs the get-data-to-sign / sign / embed flow of
-// document.DocumentSignatureService.
+// document.SignatureService.
 func signOne[SP model.SerializableSignatureParameters, TP model.SerializableTimestampParameters](
-	service document.DocumentSignatureService[SP, TP], parameters SP, doc Document,
+	service document.SignatureService[SP, TP], parameters SP, doc Document,
 	signer *Signer, digestAlgorithm DigestAlgorithm) (Document, error) {
 	dataToSign := service.GetDataToSign(doc, parameters)
 	signatureValue, err := signer.conn.Sign(dataToSign, digestAlgorithm, signer.key)

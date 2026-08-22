@@ -21,34 +21,34 @@ func TestAbstractClaimStringMatchesJava(t *testing.T) {
 	}{
 		{
 			name:  "string claim",
-			claim: NewClaimStringWithName("given_name", "Alice"),
+			claim: NewStringWithName("given_name", "Alice"),
 			want:  "ClaimString {'given_name': Alice}",
 		},
 		{
 			name:  "selectively disclosable claim carries the disclosure marker",
-			claim: NewClaimStringWithDisclosable("family_name", "Smith", true),
+			claim: NewStringWithDisclosable("family_name", "Smith", true),
 			want:  "ClaimString {'family_name' (disclosure): Smith}",
 		},
 		{
 			name:  "boolean claim",
-			claim: NewClaimBooleanWithName("adult", &yes),
+			claim: NewBooleanWithName("adult", &yes),
 			want:  "ClaimBoolean {'adult': true}",
 		},
 		{
 			name:  "date claim uses the RFC 3339 value form",
-			claim: NewClaimDateWithName("birth_date", &date),
+			claim: NewDateWithName("birth_date", &date),
 			want:  "ClaimDate {'birth_date': 2024-03-05T06:07:08Z}",
 		},
 		{
 			// ClaimNull#getValueAsString returns the literal "null".
 			name:  "null claim",
-			claim: NewClaimNullWithName("nothing"),
+			claim: NewNullWithName("nothing"),
 			want:  "ClaimNull {'nothing': null}",
 		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			if got := AbstractClaimString(tc.claim); got != tc.want {
+			if got := AbstractString(tc.claim); got != tc.want {
 				t.Errorf("AbstractClaimString() = %q, want %q", got, tc.want)
 			}
 			// Every concrete claim's String() must forward to the same rendering.
@@ -68,8 +68,8 @@ func TestAbstractClaimStringMatchesJava(t *testing.T) {
 func TestEveryConcreteClaimImplementsString(t *testing.T) {
 	// The Java classes that extend AbstractClaim, and therefore inherit toString().
 	concrete := []any{
-		&ClaimArray{}, &ClaimBoolean{}, &ClaimByteString{}, &ClaimDate{},
-		&ClaimMap{}, &ClaimNull{}, &ClaimNumber{}, &ClaimString{},
+		&Array{}, &Boolean{}, &ByteString{}, &Date{},
+		&Map{}, &Null{}, &Number{}, &String{},
 	}
 	for _, c := range concrete {
 		if _, ok := c.(interface{ String() string }); !ok {

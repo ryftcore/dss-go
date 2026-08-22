@@ -12,13 +12,13 @@
 // Java's single `getIdAsString(IdentifierBasedObject)` dispatches on the object's runtime class
 // through a chain of `instanceof` checks (AdvancedSignature, Token, SignatureScope,
 // CertificateRef, RevocationRef<?>, EncapsulatedRevocationTokenIdentifier<?>, EvidenceRecord,
-// EAA, TLInfo, LoTEInfo - in that order, since e.g. a `TLInfo` also matches `instanceof TLInfo`
+// EAA, TLInfo, Info - in that order, since e.g. a `TLInfo` also matches `instanceof TLInfo`
 // whether its runtime class is TLInfo, LOTLInfo or PivotInfo). Go's type switch reproduces this:
 // a `case` naming an interface type matches any concrete value whose method set satisfies it,
 // including one reached only through embedding (LOTLInfo/PivotInfo promote TLInfo's methods,
 // EAARevocationToken's Token-shaped siblings promote model.TokenBase's, etc.), so the same
 // same-order chain below preserves the upstream dispatch precisely without needing a
-// TLInfo/LOTLInfo/PivotInfo (or LoTEInfo/LoLoTEInfo) common base type to exist in Go.
+// TLInfo/LOTLInfo/PivotInfo (or Info/LoLoTEInfo) common base type to exist in Go.
 package identifier
 
 import (
@@ -86,7 +86,7 @@ type tlInfoLike interface {
 // loteInfoLike is satisfied by *lote.LoTEInfo and *lote.LoLoTEInfo, matching Java's
 // `object instanceof LoTEInfo` catching both (LoLoTEInfo extends LoTEInfo upstream).
 type loteInfoLike interface {
-	ParsingCacheInfo() lote.LoTEParsingInfoRecord
+	ParsingCacheInfo() lote.ParsingInfoRecord
 	DSSIDAsString() string
 }
 
@@ -389,7 +389,7 @@ func (p *UserFriendlyIdentifierProvider) idAsStringForTL(tlInfo tlInfoLike) stri
 	return p.generateID(&sb, tlInfo.DSSIDAsString())
 }
 
-// idAsStringForLoTE gets a String identifier for a given LoTEInfo (or a LoLoTEInfo, which
+// idAsStringForLoTE gets a String identifier for a given Info (or a LoLoTEInfo, which
 // is-a LoTEInfo upstream). Port of the protected getIdAsStringForLoTE(LoTEInfo).
 func (p *UserFriendlyIdentifierProvider) idAsStringForLoTE(listInfo loteInfoLike) string {
 	var sb strings.Builder
@@ -635,7 +635,7 @@ func (p *UserFriendlyIdentifierProvider) tlInfoPrefix(tlInfo tlInfoLike) string 
 // loTEInfoPrefix ports the private getLoTEPrefix(LoTEInfo).
 //
 // NOTE: reproduced verbatim from an upstream bug: for a LoLoTEInfo this returns lotlPrefix
-// ("LOTL") rather than lolotePrefix ("LOLOTE"), and for a plain LoTEInfo it returns tlPrefix
+// ("LOTL") rather than lolotePrefix ("LOLOTE"), and for a plain Info it returns tlPrefix
 // ("TL") rather than lotePrefix ("LOTE") - upstream's getLoTEPrefix body is a byte-for-byte
 // copy of getTlPrefix with the type names changed but not the returned prefix fields, so
 // lolotePrefix/lotePrefix are unreachable dead fields (see their declarations above).

@@ -39,7 +39,7 @@ func (f *PdfSigDictWrapperFactory) Create() (*PdfSignatureDictionary, error) {
 	if err != nil {
 		return nil, err
 	}
-	cmsValue, err := cms.CMSUtilsParseToCMSBinaries(contents)
+	cmsValue, err := cms.UtilsParseToCMSBinaries(contents)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +163,7 @@ func (f *PdfSigDictWrapperFactory) fieldMDP() *SigFieldPermissions {
 			// validation!".
 			continue
 		}
-		return PAdESUtilsExtractPermissionsDictionary(transformParams)
+		return UtilsExtractPermissionsDictionary(transformParams)
 	}
 	return nil
 }

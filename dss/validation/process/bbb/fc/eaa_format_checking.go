@@ -13,7 +13,7 @@
 // The eaa-tagged import lands in
 // github.com/ryftcore/dss-go/dss/validation/process/eaa/checks - a dedicated
 // package split out from the eaa root package (which holds
-// EAAValidationBlock/EAAValidationProcess and imports qualification), so that
+// ValidationBlock/ValidationProcess and imports qualification), so that
 // this file's import doesn't close a
 // bbb/fc -> eaa -> qualification -> vpfswatsp -> bbb/sav -> eaa cycle. See
 // bbb/sav/eaa_acceptance_validation.go for the full rationale.
@@ -35,7 +35,7 @@ type EAAFormatChecking struct {
 }
 
 // NewEAAFormatChecking is the default constructor.
-func NewEAAFormatChecking(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+func NewEAAFormatChecking(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	eaaToken *diagnostic.EAAWrapper, context enumerations.Context, pol policy.ValidationPolicy) *EAAFormatChecking {
 	c := &EAAFormatChecking{}
 	c.InitAbstractFormatChecking(i18nProvider, diagnosticData, eaaToken, context, pol)

@@ -20,8 +20,8 @@ type RevocationDataAvailableCheck[T any] struct {
 }
 
 // NewRevocationDataAvailableCheck is the default constructor. Port of
-// RevocationDataAvailableCheck(I18nProvider, T, CertificateWrapper, LevelRule).
-func NewRevocationDataAvailableCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationDataAvailableCheck(Provider, T, CertificateWrapper, LevelRule).
+func NewRevocationDataAvailableCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *RevocationDataAvailableCheck[T] {
 	c := &RevocationDataAvailableCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
@@ -33,7 +33,7 @@ func NewRevocationDataAvailableCheck[T any](i18nProvider *i18n.I18nProvider, res
 
 // NewRevocationDataAvailableCheckWithId is the constructor with token id.
 // Port of RevocationDataAvailableCheck(I18nProvider, T, CertificateWrapper, LevelRule, String).
-func NewRevocationDataAvailableCheckWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewRevocationDataAvailableCheckWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule, tokenId string) *RevocationDataAvailableCheck[T] {
 	c := &RevocationDataAvailableCheck[T]{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, tokenId),

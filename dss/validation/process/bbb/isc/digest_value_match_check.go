@@ -21,8 +21,8 @@ type DigestValueMatchCheck struct {
 }
 
 // NewDigestValueMatchCheck is the default constructor. Port of
-// DigestValueMatchCheck(I18nProvider, XmlISC, TokenProxy, LevelRule).
-func NewDigestValueMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlISC],
+// DigestValueMatchCheck(Provider, XmlISC, TokenProxy, LevelRule).
+func NewDigestValueMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlISC],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *DigestValueMatchCheck {
 	c := &DigestValueMatchCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

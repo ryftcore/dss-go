@@ -22,7 +22,7 @@ func idsOf(doc *Node) []string {
 	return out
 }
 
-// TestRegisterIDsFollowsTheDSSRule pins XAdESDOMDocument.setIDIdentifier: per element,
+// TestRegisterIDsFollowsTheDSSRule pins DOMDocument.setIDIdentifier: per element,
 // in attribute order, the FIRST attribute whose local name equals "Id" case
 // insensitively, then break.
 func TestRegisterIDsFollowsTheDSSRule(t *testing.T) {

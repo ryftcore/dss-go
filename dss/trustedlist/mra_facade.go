@@ -6,9 +6,9 @@ import "github.com/ryftcore/dss-go/dss/trustedlist/jaxb"
 
 // MRAFacade performs marshalling/unmarshalling of a Trusted List XML with
 // applied MRA scheme, the way eu.europa.esig.trustedlist.mra.MRAFacade
-// (which extends TrustedListFacade, overriding its JAXBContext/Schema to
+// (which extends Facade, overriding its JAXBContext/Schema to
 // additionally register mra.ObjectFactory) does. Unmarshal is identical to
-// TrustedListFacade's - the model is the same regardless of which
+// Facade's - the model is the same regardless of which
 // JAXBContext parsed it - Marshal instead writes MRAFacade's own root
 // namespace set (see dss/trustedlist/jaxb's MarshalMRA).
 type MRAFacade struct{}

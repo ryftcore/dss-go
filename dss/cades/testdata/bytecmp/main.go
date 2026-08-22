@@ -1,5 +1,5 @@
 // Command bytecmp is the Go half of the CAdES-B byte-exactness harness
-// (cades_byte_exactness_test.go): it signs a fixed payload with this package's own CAdESService,
+// (cades_byte_exactness_test.go): it signs a fixed payload with this package's own Service,
 // with every input pinned - key store, signing certificate and chain, content, signing time,
 // digest algorithm - so the resulting CMS can be compared byte for byte against the one upstream
 // DSS's own CAdESService produces from the identical inputs (ByteExactnessFixtures.java).
@@ -62,7 +62,7 @@ func main() {
 	// attribute is part of the signed attributes, so it has to match Java's exactly.
 	signingDate := time.Date(year, 1, 15, 10, 30, 45, 0, time.UTC)
 
-	parameters := cades.NewCAdESSignatureParameters()
+	parameters := cades.NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
@@ -70,7 +70,7 @@ func main() {
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	parameters.BLevel().SetSigningDate(&signingDate)
 
-	service := cades.NewCAdESService(validation.NewCommonCertificateVerifier())
+	service := cades.NewService(validation.NewCommonCertificateVerifier())
 	document := model.NewInMemoryDocumentWithName(content, "probe.bin")
 
 	dataToSign := service.GetDataToSign(document, parameters)

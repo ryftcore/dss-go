@@ -185,11 +185,11 @@ type DocumentValidator interface {
 
 	// GetValidationData extracts the validation data for the provided
 	// signatures. Port of the getValidationData(Collection) overload.
-	GetValidationData(signatures []spivalidation.AdvancedSignature) (*spivalidation.ValidationDataContainer, error)
+	GetValidationData(signatures []spivalidation.AdvancedSignature) (*spivalidation.DataContainer, error)
 
 	// GetValidationDataWithTimestamps extracts the validation data for the
 	// provided signatures and detached timestamps. Port of the
 	// getValidationData(Collection, Collection) overload.
 	GetValidationDataWithTimestamps(signatures []spivalidation.AdvancedSignature,
-		detachedTimestamps []*spivalidation.TimestampToken) (*spivalidation.ValidationDataContainer, error)
+		detachedTimestamps []*spivalidation.TimestampToken) (*spivalidation.DataContainer, error)
 }

@@ -2,7 +2,7 @@
 //
 // Java's class is abstract and sits between XAdESSignatureBuilder and the two packagings that
 // place the signature by XPath (Enveloped, InternallyDetached). It overrides two of the hooks
-// collected in XAdESSignatureBuilderOverrides - getParentNodeOfSignature and
+// collected in SignatureBuilderOverrides - getParentNodeOfSignature and
 // incorporateSignatureDom(Node) - and adds assertOriginalXmlDocumentValid for its subclasses. Go
 // has no method overriding across embedding, so the concrete subclass embeds this type and
 // registers itself with InitXAdESSignatureBuilder; the two overridden methods are promoted to it
@@ -35,14 +35,14 @@ import (
 // XPathPlacementSignatureBuilder creates signatures that are enveloped into the parent document
 // based on the defined (if any) XPath location.
 type XPathPlacementSignatureBuilder struct {
-	XAdESSignatureBuilder
+	AbstractSignatureBuilder
 }
 
 // InitXPathPlacementSignatureBuilder registers the concrete builder with this intermediate base
 // and with XAdESSignatureBuilder. Port of the two protected XPathPlacementSignatureBuilder
 // constructors, which do nothing beyond delegating to super.
 func (b *XPathPlacementSignatureBuilder) InitXPathPlacementSignatureBuilder(
-	self XAdESSignatureBuilderOverrides, params *XAdESSignatureParameters,
+	self SignatureBuilderOverrides, params *SignatureParameters,
 	documents []model.DSSDocument, certificateVerifier validation.CertificateVerifier) {
 	b.InitXAdESSignatureBuilder(self, params, documents, certificateVerifier)
 }
@@ -177,7 +177,7 @@ func (b *XPathPlacementSignatureBuilder) ParentNodeOfSignature() *xmldom.Node {
 // Port of the overridden protected #incorporateSignatureDom(Node).
 func (b *XPathPlacementSignatureBuilder) IncorporateSignatureDomToParent(parentNodeOfSignature *xmldom.Node) {
 	if b.Params.XPathElementPlacement() == "" || utils.IsStringEmpty(b.Params.XPathLocationString()) {
-		b.XAdESSignatureBuilder.IncorporateSignatureDomToParent(parentNodeOfSignature)
+		b.AbstractSignatureBuilder.IncorporateSignatureDomToParent(parentNodeOfSignature)
 		return
 	}
 

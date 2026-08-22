@@ -5,17 +5,17 @@
 // # Package layout
 //
 // Java's PAdESTimestampSource extends dss-cades's CAdESTimestampSource<CAdESSignature,CAdESAttribute>
-// unparametrized (it never re-binds the type parameters to PAdESSignature/PAdESAttribute - there
-// is no PAdESAttribute), relying on virtual dispatch so that CAdESTimestampSource's own methods,
-// when invoked on a PAdESTimestampSource instance, still see the right overrides. This file
-// embeds cades.CAdESTimestampSource (concrete, itself embedding
-// timestamp.SignatureTimestampSource[*cades.CAdESSignature, *cades.CAdESAttribute]) the same
+// unparametrized (it never re-binds the type parameters to Signature/PAdESAttribute - there
+// is no PAdESAttribute), relying on virtual dispatch so that TimestampSource's own methods,
+// when invoked on a TimestampSource instance, still see the right overrides. This file
+// embeds cades.TimestampSource (concrete, itself embedding
+// timestamp.SignatureTimestampSource[*cades.Signature, *cades.Attribute]) the same
 // way, and re-targets InitSignatureTimestampSource(s) at construction - the InitTimestampIdentifierBuilder-
 // style override-registration pattern used for timestamp sources - so that every
 // SignatureTimestampSourceOverrides call the base machinery dispatches
 // through s.overrides (all the Is*/Make*/Get* checks in makeTimestampTokensFromUnsignedAttributes)
 // correctly reaches this type's own shadowed methods (IsCompleteCertificateRef and friends,
-// below) instead of CAdESTimestampSource's.
+// below) instead of TimestampSource's.
 //
 // # GAP flagged for integrator: two CAdES/base "concrete but overridable" hooks are unreachable
 // # from the base's own internal driver
@@ -30,7 +30,7 @@
 //     makeTimestampTokensFromUnsignedAttributes calls its *own* private copy, unqualified, when
 //     building references for a CMS-embedded "signature-timestamp" unsigned attribute (the
 //     mechanism PAdES-BASELINE-T itself uses). Java's override
-//     (PAdESTimestampSource.getSignatureTimestampReferences(), adding
+//     (TimestampSource.getSignatureTimestampReferences(), adding
 //     getAdbeRevocationInfoArchivalReferences() on top of super's result) is therefore never
 //     reached via that call site: a PAdES-BASELINE-T signature-timestamp's own reference set,
 //     when produced by the base's *own* CMS-embedded-attribute pass, will be missing the
@@ -44,9 +44,9 @@
 //     getTimestampScopes) is used the same unreachable way by the base's own validateTimestamps()
 //     for content-timestamp and archive-timestamp scope assignment (both PAdES-CMS corner cases:
 //     an ordinary PAdES-BASELINE-{B,T,LT,LTA} signature carries neither). Java's override (using
-//     PAdESTimestampScopeFinder instead of the default EncapsulatedTimestampScopeFinder) is
+//     TimestampScopeFinder instead of the default EncapsulatedTimestampScopeFinder) is
 //     reached correctly by this file's own document-timestamp loop below (which calls
-//     PAdESTimestampScopeFinder directly, exactly mirroring the override's body), just not from
+//     TimestampScopeFinder directly, exactly mirroring the override's body), just not from
 //     that one base call site.
 //
 // Both gaps are narrow (CMS-embedded content/archive timestamps are not part of the PAdES
@@ -68,7 +68,7 @@
 // time any of ContentTimestamps/SignatureTimestamps/.../ArchiveTimestamps is read - fully
 // reachable and correctly dispatched, per this header's opening paragraph) and then runs its own
 // self-contained loop below, calling GetSignatureTimestampReferences (this file's own,
-// reconstructed) and PAdESTimestampScopeFinder directly rather than through any base dispatch -
+// reconstructed) and TimestampScopeFinder directly rather than through any base dispatch -
 // exactly the two GAP-flagged call sites above, made reachable by not routing through the base
 // at all for this part.
 //
@@ -97,12 +97,12 @@ import (
 )
 
 // PAdESTimestampSource extracts timestamps from a PAdES document. Port of the class
-// PAdESTimestampSource, extending cades.CAdESTimestampSource.
-type PAdESTimestampSource struct {
-	cades.CAdESTimestampSource
+// TimestampSource, extending cades.TimestampSource.
+type TimestampSource struct {
+	cades.TimestampSource
 
-	// signature is the PAdESSignature this source extracts timestamps for.
-	signature *PAdESSignature
+	// signature is the Signature this source extracts timestamps for.
+	signature *Signature
 
 	// documentRevisions is a list of document PdfRevisions, in reverse (most recent first)
 	// order - Java's `this.documentRevisions = Utils.reverseList(documentRevisions);`.
@@ -117,22 +117,22 @@ type PAdESTimestampSource struct {
 	vriTimestamps []*validation.TimestampToken
 }
 
-// NewPAdESTimestampSource is the default constructor to extract timestamps for a signature.
+// NewTimestampSource is the default constructor to extract timestamps for a signature.
 // Port of the PAdESTimestampSource(PAdESSignature, List<PdfRevision>) constructor.
 //
 // Panics with the Java message when documentRevisions is nil (Objects.requireNonNull).
-func NewPAdESTimestampSource(signature *PAdESSignature, documentRevisions []PdfRevision) *PAdESTimestampSource {
+func NewTimestampSource(signature *Signature, documentRevisions []PdfRevision) *TimestampSource {
 	if documentRevisions == nil {
 		panic("List of Document revisions must be provided!")
 	}
-	cadesBase := cades.NewCAdESTimestampSource(signature.CAdESSignature)
-	s := &PAdESTimestampSource{
-		CAdESTimestampSource: *cadesBase,
-		signature:            signature,
-		documentRevisions:    utils.ReverseList(documentRevisions),
+	cadesBase := cades.NewTimestampSource(signature.Signature)
+	s := &TimestampSource{
+		TimestampSource:   *cadesBase,
+		signature:         signature,
+		documentRevisions: utils.ReverseList(documentRevisions),
 	}
 	// Re-targets the base's overrides registration at s (see this file's header): cadesBase's
-	// own InitSignatureTimestampSource(cadesBase) call, made inside cades.NewCAdESTimestampSource
+	// own InitSignatureTimestampSource(cadesBase) call, made inside cades.NewTimestampSource
 	// above, is superseded by this one.
 	s.InitSignatureTimestampSource(s)
 	return s
@@ -140,7 +140,7 @@ func NewPAdESTimestampSource(signature *PAdESSignature, documentRevisions []PdfR
 
 // DocumentTimestamps returns the list of embedded document timestamps, computing them (and the
 // /VRI timestamps) on first use. Port of the getDocumentTimestamps() override.
-func (s *PAdESTimestampSource) DocumentTimestamps() []*validation.TimestampToken {
+func (s *TimestampSource) DocumentTimestamps() []*validation.TimestampToken {
 	if s.documentTimestamps == nil {
 		s.populateAndValidateDocumentTimestamps()
 	}
@@ -149,7 +149,7 @@ func (s *PAdESTimestampSource) DocumentTimestamps() []*validation.TimestampToken
 
 // VriTimestamps returns a list of incorporated /VRI timestamps for the corresponding signature.
 // Port of getVriTimestamps().
-func (s *PAdESTimestampSource) VriTimestamps() []*validation.TimestampToken {
+func (s *TimestampSource) VriTimestamps() []*validation.TimestampToken {
 	if s.vriTimestamps == nil {
 		s.populateAndValidateDocumentTimestamps()
 	}
@@ -158,8 +158,8 @@ func (s *PAdESTimestampSource) VriTimestamps() []*validation.TimestampToken {
 
 // AllTimestamps returns a list of all incorporated timestamps. Port of the getAllTimestamps()
 // override.
-func (s *PAdESTimestampSource) AllTimestamps() []*validation.TimestampToken {
-	timestampTokens := s.CAdESTimestampSource.AllTimestamps()
+func (s *TimestampSource) AllTimestamps() []*validation.TimestampToken {
+	timestampTokens := s.TimestampSource.AllTimestamps()
 	timestampTokens = append(timestampTokens, s.DocumentTimestamps()...)
 	timestampTokens = append(timestampTokens, s.VriTimestamps()...)
 	return timestampTokens
@@ -167,61 +167,61 @@ func (s *PAdESTimestampSource) AllTimestamps() []*validation.TimestampToken {
 
 // IsCompleteCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isCompleteCertificateRef(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsCompleteCertificateRef(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsCompleteCertificateRef(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsAttributeCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isAttributeCertificateRef(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsAttributeCertificateRef(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsAttributeCertificateRef(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsCompleteRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isCompleteRevocationRef(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsCompleteRevocationRef(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsCompleteRevocationRef(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsAttributeRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isAttributeRevocationRef(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsAttributeRevocationRef(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsAttributeRevocationRef(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsRefsOnlyTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isRefsOnlyTimestamp(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsSigAndRefsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isSigAndRefsTimestamp(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsCertificateValues implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isCertificateValues(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsCertificateValues(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsCertificateValues(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isRevocationValues(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsRevocationValues(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsRevocationValues(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // IsArchiveTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not applicable for PAdES. Port of the isArchiveTimestamp(CAdESAttribute) override.
-func (s *PAdESTimestampSource) IsArchiveTimestamp(unsignedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) IsArchiveTimestamp(unsignedAttribute *cades.Attribute) bool {
 	return false
 }
 
 // GetCounterSignatures implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not supported in PAdES. Port of the getCounterSignatures(CAdESAttribute) override.
-func (s *PAdESTimestampSource) GetCounterSignatures(unsignedAttribute *cades.CAdESAttribute) []validation.AdvancedSignature {
+func (s *TimestampSource) GetCounterSignatures(unsignedAttribute *cades.Attribute) []validation.AdvancedSignature {
 	return []validation.AdvancedSignature{}
 }
 
@@ -230,7 +230,7 @@ func (s *PAdESTimestampSource) GetCounterSignatures(unsignedAttribute *cades.CAd
 // getSignatureTimestampReferences(), augmented with GetAdbeRevocationInfoArchivalReferences());
 // see this file's header GAP note for why it cannot be wired into the base's own internal
 // dispatch, and why it is instead called directly by populateAndValidateDocumentTimestamps below.
-func (s *PAdESTimestampSource) GetSignatureTimestampReferences() []*validation.TimestampedReference {
+func (s *TimestampSource) GetSignatureTimestampReferences() []*validation.TimestampedReference {
 	references := []*validation.TimestampedReference{}
 	padesTSAddReferences(&references, padesTSEncapsulatedReferencesFromTimestamps(s.ContentTimestamps(), s.CertificateSource(), s.CRLSource(), s.OCSPSource()))
 	padesTSAddReferences(&references, s.SignerDataReferences())
@@ -245,7 +245,7 @@ func (s *PAdESTimestampSource) GetSignatureTimestampReferences() []*validation.T
 // GetAdbeRevocationInfoArchivalReferences returns a list of revocation data TimestampedReferences
 // from the adbe-revocationInfoArchival signed attribute. Port of
 // getAdbeRevocationInfoArchivalReferences().
-func (s *PAdESTimestampSource) GetAdbeRevocationInfoArchivalReferences() []*validation.TimestampedReference {
+func (s *TimestampSource) GetAdbeRevocationInfoArchivalReferences() []*validation.TimestampedReference {
 	signedSignatureProperties := s.BuildSignedSignatureProperties()
 	// Upstream tests isExist() alone; BuildSignedSignatureProperties, like
 	// CAdESTimestampSource#buildSignedSignatureProperties, always returns a value.
@@ -255,7 +255,7 @@ func (s *PAdESTimestampSource) GetAdbeRevocationInfoArchivalReferences() []*vali
 	references := []*validation.TimestampedReference{}
 	for _, attribute := range signedSignatureProperties.Attributes() {
 		if s.isAdbeRevocationInfoArchival(attribute) {
-			revValues := PAdESUtilsRevocationInfoArchival(attribute.ASN1Object())
+			revValues := UtilsRevocationInfoArchival(attribute.ASN1Object())
 			if revValues != nil {
 				crlBinaries := padesTSBuildCRLIdentifiers(revValues.CrlVals())
 				padesTSAddReferences(&references, timestamp.CreateReferencesForCRLBinaries(crlBinaries))
@@ -273,7 +273,7 @@ func (s *PAdESTimestampSource) GetAdbeRevocationInfoArchivalReferences() []*vali
 
 // isAdbeRevocationInfoArchival checks if signedAttribute is an instance of type
 // adbe-revocationInfoArchival. Port of isAdbeRevocationInfoArchival(CAdESAttribute).
-func (s *PAdESTimestampSource) isAdbeRevocationInfoArchival(signedAttribute *cades.CAdESAttribute) bool {
+func (s *TimestampSource) isAdbeRevocationInfoArchival(signedAttribute *cades.Attribute) bool {
 	return spi.OIDAdbeRevocationInfoArchival.Equal(signedAttribute.ASN1Oid())
 }
 
@@ -281,8 +281,8 @@ func (s *PAdESTimestampSource) isAdbeRevocationInfoArchival(signedAttribute *cad
 // time-stamp, using a PAdESTimestampScopeFinder. Port of the getTimestampScopes(TimestampToken)
 // override; named distinctly since it is this file's own driver, not part of
 // SignatureTimestampSourceOverrides (see this file's header GAP note).
-func (s *PAdESTimestampSource) getTimestampScopesForDocumentTimestamp(timestampToken *validation.TimestampToken) []scope.SignatureScope {
-	timestampScopeFinder := NewPAdESTimestampScopeFinder()
+func (s *TimestampSource) getTimestampScopesForDocumentTimestamp(timestampToken *validation.TimestampToken) []scope.SignatureScope {
+	timestampScopeFinder := NewTimestampScopeFinder()
 	timestampScopeFinder.SetSignature(s.signature)
 	return timestampScopeFinder.FindTimestampScope(timestampToken)
 }
@@ -291,7 +291,7 @@ func (s *PAdESTimestampSource) getTimestampScopesForDocumentTimestamp(timestampT
 // Java's makeTimestampTokensFromUnsignedAttributes() override (the document/VRI-revision loop)
 // followed by the VRI-timestamp half of the validateTimestamps() override; see this file's
 // header for why the base's own internal population flow cannot reach these directly.
-func (s *PAdESTimestampSource) populateAndValidateDocumentTimestamps() {
+func (s *TimestampSource) populateAndValidateDocumentTimestamps() {
 	// Triggers the base's own (correctly-dispatched, per this file's header) CMS-embedded pass:
 	// content/signature/X1/X2/archive timestamps, and the merged certificate/CRL/OCSP sources
 	// this loop below reads through CertificateSource()/CRLSource()/OCSPSource().
@@ -386,7 +386,7 @@ func (s *PAdESTimestampSource) populateAndValidateDocumentTimestamps() {
 // padesTSPopulateSources allows populating the merged certificate/CRL/OCSP sources with data
 // extracted from timestampToken. Port of the inherited protected populateSources(TimestampToken);
 // see this file's header for why the base's own private populateSources is reproduced this way.
-func padesTSPopulateSources(s *PAdESTimestampSource, timestampToken *validation.TimestampToken) {
+func padesTSPopulateSources(s *TimestampSource, timestampToken *validation.TimestampToken) {
 	if timestampToken != nil {
 		s.CertificateSource().Add(timestampToken.CertificateSource())
 		s.CRLSource().Add(timestampToken.CRLSource())

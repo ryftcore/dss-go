@@ -38,8 +38,8 @@ type IsNoQualificationConflictDetectedCheck struct {
 }
 
 // NewIsNoQualificationConflictDetectedCheck is the default constructor. Port
-// of IsNoQualificationConflictDetectedCheck(I18nProvider, XmlValidationCertificateQualification, Set, LevelRule).
-func NewIsNoQualificationConflictDetectedCheck(i18nProvider *i18n.I18nProvider,
+// of IsNoQualificationConflictDetectedCheck(Provider, XmlValidationCertificateQualification, Set, LevelRule).
+func NewIsNoQualificationConflictDetectedCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	certificateQualificationsAtTime []enumerations.CertificateQualification,
 	constraint policy.LevelRule) *IsNoQualificationConflictDetectedCheck {

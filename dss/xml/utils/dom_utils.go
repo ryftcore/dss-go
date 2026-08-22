@@ -349,7 +349,7 @@ func DomUtilsCreateXMLGregorianCalendar(date time.Time) string {
 // since XMLGregorianCalendar's own no-offset handling is JVM-default-timezone-dependent and
 // therefore not a fixed target to match). This is every form DSS itself ever produces via
 // DomUtilsCreateXMLGregorianCalendar and every form actually exercised by
-// XAdESRevocationRefExtractionUtils/XAdESSignature callers.
+// XAdESRevocationRefExtractionUtils/Signature callers.
 //
 // The assumption above has been run against a DatatypeFactory oracle. It holds for
 // xsd:dateTime, with one correction applied here and one gap left open:
@@ -617,7 +617,7 @@ func DomUtilsCreateElementNS(documentDom *xmldom.Node, namespace *common.DSSName
 // an attribute node with a null namespaceURI, not one recognized as a real namespace
 // declaration by namespace-aware processing (Java DOM's own semantics require
 // setAttributeNS(XMLNS_URI, ...) for that). Since this method's only call sites
-// (dss-xades: XAdESSignatureBuilder/XAdESBuilder) use it to declare the very ds:/xades:
+// (dss-xades: AbstractSignatureBuilder/Builder) use it to declare the very ds:/xades:
 // prefixes those signature elements are built with - i.e., it must functionally act as a
 // real namespace declaration for serialization and canonicalization to be correct - this port
 // creates a genuine xmldom namespace-declaration attribute (Space=XMLNSNamespace,

@@ -37,8 +37,8 @@ type ValidationContextInitialization struct {
 }
 
 // NewValidationContextInitialization is the default constructor. Port of
-// ValidationContextInitialization(I18nProvider, SignatureWrapper, Context, ValidationPolicy).
-func NewValidationContextInitialization(i18nProvider *i18n.I18nProvider, signature *diagnostic.SignatureWrapper,
+// ValidationContextInitialization(Provider, SignatureWrapper, Context, ValidationPolicy).
+func NewValidationContextInitialization(i18nProvider *i18n.Provider, signature *diagnostic.SignatureWrapper,
 	context enumerations.Context, validationPolicy policy.ValidationPolicy) *ValidationContextInitialization {
 	xmlVCI := &jaxb.XmlVCI{}
 	c := &ValidationContextInitialization{

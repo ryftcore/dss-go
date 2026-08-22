@@ -10,9 +10,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// PAdESCommonParameters defines a list of common PAdES parameters between signature and
+// CommonParameters defines a list of common PAdES parameters between signature and
 // timestamps.
-type PAdESCommonParameters interface {
+type CommonParameters interface {
 	// SigningDate returns a claimed signing time. Port of #getSigningDate.
 	SigningDate() *time.Time
 

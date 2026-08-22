@@ -1,8 +1,8 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/signature/JAdESLevelBaselineLTA.java (DSS 6.5.RC1).
 //
-// This level embeds JAdESLevelBaselineLT and overrides its virtual ExtendSignatures; see the
+// This level embeds LevelBaselineLT and overrides its virtual ExtendSignatures; see the
 // header of jades_level_baseline_t.go for how the Java override chain is expressed. The "super"
-// call is the explicit lta.JAdESLevelBaselineLT.ExtendSignatures.
+// call is the explicit lta.LevelBaselineLT.ExtendSignatures.
 //
 // # The archive time-stamp message imprint
 //
@@ -34,24 +34,24 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESLevelBaselineLTA creates an LTA-level of a JAdES signature.
-type JAdESLevelBaselineLTA struct {
-	JAdESLevelBaselineLT
+// LevelBaselineLTA creates an LTA-level of a JAdES signature.
+type LevelBaselineLTA struct {
+	LevelBaselineLT
 }
 
-// NewJAdESLevelBaselineLTA is the default constructor.
+// NewLevelBaselineLTA is the default constructor.
 // Port of JAdESLevelBaselineLTA(CertificateVerifier).
-func NewJAdESLevelBaselineLTA(certificateVerifier validation.CertificateVerifier) *JAdESLevelBaselineLTA {
-	extension := &JAdESLevelBaselineLTA{}
+func NewLevelBaselineLTA(certificateVerifier validation.CertificateVerifier) *LevelBaselineLTA {
+	extension := &LevelBaselineLTA{}
 	extension.InitJAdESLevelBaselineT(extension, certificateVerifier)
 	return extension
 }
 
 // ExtendSignatures extends the signatures to the -LTA level.
 // Port of the protected, overridden #extendSignatures(List, JAdESSignatureParameters).
-func (lta *JAdESLevelBaselineLTA) ExtendSignatures(signatures []validation.AdvancedSignature,
-	params *JAdESSignatureParameters) error {
-	if err := lta.JAdESLevelBaselineLT.ExtendSignatures(signatures, params); err != nil {
+func (lta *LevelBaselineLTA) ExtendSignatures(signatures []validation.AdvancedSignature,
+	params *SignatureParameters) error {
+	if err := lta.LevelBaselineLT.ExtendSignatures(signatures, params); err != nil {
 		return err
 	}
 
@@ -61,7 +61,7 @@ func (lta *JAdESLevelBaselineLTA) ExtendSignatures(signatures []validation.Advan
 	addTimestampValidationData := false
 
 	for _, signature := range signatures {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -78,7 +78,7 @@ func (lta *JAdESLevelBaselineLTA) ExtendSignatures(signatures []validation.Advan
 	}
 
 	// Perform signature validation
-	var validationDataContainer *validation.ValidationDataContainer
+	var validationDataContainer *validation.DataContainer
 	if addTimestampValidationData {
 		container, err := lta.DocumentAnalyzer.GetValidationData(signatures)
 		if err != nil {
@@ -88,7 +88,7 @@ func (lta *JAdESLevelBaselineLTA) ExtendSignatures(signatures []validation.Advan
 	}
 
 	for _, signature := range signatures {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -121,12 +121,12 @@ func (lta *JAdESLevelBaselineLTA) ExtendSignatures(signatures []validation.Advan
 // timestamps validation, according to the chosen validation data encapsulation mechanism, and
 // returns the incorporated validation data.
 // Port of the private incorporateValidationDataForTimestamps(ValidationDataContainer,
-// AdvancedSignature, JAdESEtsiUHeader, JAdESSignatureParameters).
-func (lta *JAdESLevelBaselineLTA) ltaIncorporateValidationDataForTimestamps(
-	validationDataContainer *validation.ValidationDataContainer, signature validation.AdvancedSignature,
-	etsiUHeader *JAdESEtsiUHeader,
-	signatureParameters *JAdESSignatureParameters) (*validation.ValidationData, error) {
-	var validationData *validation.ValidationData
+// AdvancedSignature, EtsiUHeader, SignatureParameters).
+func (lta *LevelBaselineLTA) ltaIncorporateValidationDataForTimestamps(
+	validationDataContainer *validation.DataContainer, signature validation.AdvancedSignature,
+	etsiUHeader *EtsiUHeader,
+	signatureParameters *SignatureParameters) (*validation.Data, error) {
+	var validationData *validation.Data
 	validationDataEncapsulationStrategy := signatureParameters.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
@@ -145,7 +145,7 @@ func (lta *JAdESLevelBaselineLTA) ltaIncorporateValidationDataForTimestamps(
 
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData,
 		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
-		validationData = validation.NewValidationData()
+		validationData = validation.NewData()
 
 	default:
 		return nil, fmt.Errorf("The ValidationDataEncapsulationStrategy '%s' is not supported!",
@@ -157,12 +157,12 @@ func (lta *JAdESLevelBaselineLTA) ltaIncorporateValidationDataForTimestamps(
 // ltaIncorporateAnyValidationData incorporates the validation data for the signature validation,
 // according to the chosen validation data encapsulation mechanism.
 // Port of the private incorporateAnyValidationData(ValidationDataContainer, AdvancedSignature,
-// JAdESEtsiUHeader, JAdESSignatureParameters, ValidationData).
-func (lta *JAdESLevelBaselineLTA) ltaIncorporateAnyValidationData(
-	validationDataContainer *validation.ValidationDataContainer, signature validation.AdvancedSignature,
-	etsiUHeader *JAdESEtsiUHeader, signatureParameters *JAdESSignatureParameters,
-	validationDataToExclude *validation.ValidationData) error {
-	var validationData *validation.ValidationData
+// EtsiUHeader, SignatureParameters, Data).
+func (lta *LevelBaselineLTA) ltaIncorporateAnyValidationData(
+	validationDataContainer *validation.DataContainer, signature validation.AdvancedSignature,
+	etsiUHeader *EtsiUHeader, signatureParameters *SignatureParameters,
+	validationDataToExclude *validation.Data) error {
+	var validationData *validation.Data
 	validationDataEncapsulationStrategy := signatureParameters.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData:
@@ -195,8 +195,8 @@ func (lta *JAdESLevelBaselineLTA) ltaIncorporateAnyValidationData(
 }
 
 // incorporateArcTst ports the private incorporateArcTst.
-func (lta *JAdESLevelBaselineLTA) incorporateArcTst(signature *JAdESSignature,
-	etsiUHeader *JAdESEtsiUHeader, signatureParameters *JAdESSignatureParameters) error {
+func (lta *LevelBaselineLTA) incorporateArcTst(signature *Signature,
+	etsiUHeader *EtsiUHeader, signatureParameters *SignatureParameters) error {
 	timestampBinary, err := lta.archiveTimestamp(signature, signatureParameters)
 	if err != nil {
 		return err
@@ -211,8 +211,8 @@ func (lta *JAdESLevelBaselineLTA) incorporateArcTst(signature *JAdESSignature,
 }
 
 // archiveTimestamp ports the private getArchiveTimestamp.
-func (lta *JAdESLevelBaselineLTA) archiveTimestamp(jadesSignature *JAdESSignature,
-	params *JAdESSignatureParameters) (*model.TimestampBinary, error) {
+func (lta *LevelBaselineLTA) archiveTimestamp(jadesSignature *Signature,
+	params *SignatureParameters) (*model.TimestampBinary, error) {
 	archiveTimestampParameters := params.GetArchiveTimestampParameters()
 	digestAlgorithmForTimestampRequest := archiveTimestampParameters.DigestAlgorithm()
 	// TODO : Support canonicalization
@@ -229,8 +229,8 @@ func (lta *JAdESLevelBaselineLTA) archiveTimestamp(jadesSignature *JAdESSignatur
 
 // assertExtendSignatureToLTAPossible checks that the extension is possible.
 // Port of the private assertExtendSignatureToLTAPossible.
-func (lta *JAdESLevelBaselineLTA) assertExtendSignatureToLTAPossible(jadesSignature *JAdESSignature,
-	params *JAdESSignatureParameters) error {
+func (lta *LevelBaselineLTA) assertExtendSignatureToLTAPossible(jadesSignature *Signature,
+	params *SignatureParameters) error {
 	if err := jadesLevelBaselineLTACheckArchiveTimestampParameters(params); err != nil {
 		return err
 	}
@@ -242,7 +242,7 @@ func (lta *JAdESLevelBaselineLTA) assertExtendSignatureToLTAPossible(jadesSignat
 
 // jadesLevelBaselineLTACheckArchiveTimestampParameters ports the private
 // checkArchiveTimestampParameters.
-func jadesLevelBaselineLTACheckArchiveTimestampParameters(params *JAdESSignatureParameters) error {
+func jadesLevelBaselineLTACheckArchiveTimestampParameters(params *SignatureParameters) error {
 	archiveTimestampParameters := params.GetArchiveTimestampParameters()
 	if !utils.IsTrue(params.IsBase64UrlEncodedEtsiUComponents()) &&
 		utils.IsStringEmpty(archiveTimestampParameters.CanonicalizationMethod()) {
@@ -254,7 +254,7 @@ func jadesLevelBaselineLTACheckArchiveTimestampParameters(params *JAdESSignature
 
 // jadesLevelBaselineLTAAssertDetachedDocumentsContainBinaries ports the private
 // assertDetachedDocumentsContainBinaries.
-func jadesLevelBaselineLTAAssertDetachedDocumentsContainBinaries(params *JAdESSignatureParameters) error {
+func jadesLevelBaselineLTAAssertDetachedDocumentsContainBinaries(params *SignatureParameters) error {
 	detachedContents := params.DetachedContents()
 	if utils.IsCollectionNotEmpty(detachedContents) {
 		for _, detachedDocument := range detachedContents {
@@ -268,7 +268,7 @@ func jadesLevelBaselineLTAAssertDetachedDocumentsContainBinaries(params *JAdESSi
 }
 
 // jadesLevelBaselineLTACheckEtsiUContentUnicity ports the private checkEtsiUContentUnicity.
-func jadesLevelBaselineLTACheckEtsiUContentUnicity(jadesSignature *JAdESSignature) error {
+func jadesLevelBaselineLTACheckEtsiUContentUnicity(jadesSignature *Signature) error {
 	etsiU := DSSJsonUtilsEtsiU(jadesSignature.Jws())
 	if !DSSJsonUtilsCheckComponentsUnicity(etsiU) {
 		return exception.NewIllegalInputException(
@@ -277,5 +277,5 @@ func jadesLevelBaselineLTACheckEtsiUContentUnicity(jadesSignature *JAdESSignatur
 	return nil
 }
 
-// Compile-time assertion that *JAdESLevelBaselineLTA satisfies the extension contract.
-var _ JAdESLevelBaselineExtension = (*JAdESLevelBaselineLTA)(nil)
+// Compile-time assertion that *LevelBaselineLTA satisfies the extension contract.
+var _ LevelBaselineExtension = (*LevelBaselineLTA)(nil)

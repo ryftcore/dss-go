@@ -22,8 +22,8 @@ type RevocationDataAcceptableCheck[T any] struct {
 }
 
 // NewRevocationDataAcceptableCheck is the default constructor. Port of
-// RevocationDataAcceptableCheck(I18nProvider, T, String, XmlConclusion, LevelRule).
-func NewRevocationDataAcceptableCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RevocationDataAcceptableCheck(Provider, T, String, XmlConclusion, LevelRule).
+func NewRevocationDataAcceptableCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	revocationId string, xmlConclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *RevocationDataAcceptableCheck[T] {
 	c := &RevocationDataAcceptableCheck[T]{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, revocationId),

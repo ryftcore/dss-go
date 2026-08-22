@@ -3,8 +3,8 @@
 // AdvancedSignature.CompleteCRLSource()/CompleteOCSPSource() return
 // *spi.ListRevocationSource[R] (matching Java's getCompleteCRLSource(): ListRevocationSource<CRL>),
 // which - like its Java counterpart - does not implement OfflineRevocationSource<R>; it only
-// implements MultipleRevocationSource<R>. ValidationContext() below therefore calls the
-// ...FromList overload (matching ValidationContext's addDocumentCRLSource(ListRevocationSource)
+// implements MultipleRevocationSource<R>. Context() below therefore calls the
+// ...FromList overload (matching Context's addDocumentCRLSource(ListRevocationSource)
 // Java overload), not AddDocumentCRLSource/AddDocumentOCSPSource.
 //
 // Java's two addDocumentCertificateSource/addDocumentCRLSource/addDocumentOCSPSource overloads
@@ -87,7 +87,7 @@ type BaselineRequirementsCheckerContract interface {
 
 // BaselineRequirementsCheckerOverrides declares the single operation
 // BaselineRequirementsChecker calls back into virtually: a concrete checker (a future phase's
-// CAdESBaselineRequirementsChecker etc.) registers itself with InitBaselineRequirementsChecker
+// BaselineRequirementsChecker etc.) registers itself with InitBaselineRequirementsChecker
 // so the base can dispatch it, the way model.TokenBase dispatches to model.TokenOverrides via
 // InitToken. The five profile-detecting methods above (HasAdESProfile..HasBaselineLTAProfile)
 // are genuinely abstract in Java - never called from within BaselineRequirementsChecker itself -
@@ -104,12 +104,12 @@ type BaselineRequirementsCheckerOverrides interface {
 	// the one case: EN 319 122-1 (CAdES-BASELINE-B) requires it present (cardinality == 1),
 	// EN 319 142-1 (PAdES-BASELINE-B) requires it absent (cardinality == 0). Port of the
 	// protected getBaselineSignatureForm(), which upstream's CAdESBaselineRequirementsChecker
-	// (returning SignatureForm.CAdES) declares and both PAdESBaselineRequirementsChecker AND
+	// (returning SignatureForm.CAdES) declares and both BaselineRequirementsChecker AND
 	// CMSForPAdESBaselineRequirementsChecker override (returning SignatureForm.PAdES) purely
 	// through ordinary Java virtual dispatch - not part of upstream's own BaselineRequirements
 	// Checker base class at all. It is added to this type's cross-package override contract
-	// instead, because cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements() (the
-	// shared CMS-attribute check both cades.CAdESSignature and, through
+	// instead, because cades.BaselineRequirementsChecker.cmsBaselineBRequirements() (the
+	// shared CMS-attribute check both cades.Signature and, through
 	// pades.CMSForPAdESBaselineRequirementsChecker, PAdES signatures run) needs to resolve it
 	// virtually across the cades/pades package boundary the very same way MinimalLTRequirement
 	// above resolves ContainsLTLevelCertificates - Go has no cross-package method-override
@@ -133,9 +133,9 @@ type BaselineRequirementsChecker[AS BaselineRequirementsCheckerSignature] struct
 	// Port of the protected final CertificateVerifier offlineCertificateVerifier field.
 	offlineCertificateVerifier CertificateVerifier
 
-	// validationContext caches the ValidationContext so validation runs only once.
+	// validationContext caches the Context so validation runs only once.
 	// Port of the private ValidationContext validationContext field.
-	validationContext ValidationContext
+	validationContext Context
 }
 
 // NewBaselineRequirementsCheckerBase builds the base state a subclass embeds, without a
@@ -215,7 +215,7 @@ func (b *BaselineRequirementsChecker[AS]) ContainsLTLevelCertificates() bool { r
 
 // GetBaselineSignatureForm is the default, unset ("") signature form; see the
 // BaselineRequirementsCheckerOverrides doc comment on GetBaselineSignatureForm. Overridden by
-// cades.CAdESBaselineRequirementsChecker, pades.PAdESBaselineRequirementsChecker, and
+// cades.BaselineRequirementsChecker, pades.BaselineRequirementsChecker, and
 // pades.CMSForPAdESBaselineRequirementsChecker; never overridden (nor consulted) by XAdES/JAdES.
 func (b *BaselineRequirementsChecker[AS]) GetBaselineSignatureForm() enumerations.SignatureForm {
 	return ""
@@ -223,7 +223,7 @@ func (b *BaselineRequirementsChecker[AS]) GetBaselineSignatureForm() enumeration
 
 // BaselineSignatureForm resolves GetBaselineSignatureForm() through the registered overrides.
 // Exported (unlike baselineRequirementsCheckerOverrides itself) so cross-package call sites -
-// cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements(), reached directly from the
+// cades.BaselineRequirementsChecker.cmsBaselineBRequirements(), reached directly from the
 // cades package and, through embedding, from pades.CMSForPAdESBaselineRequirementsChecker too -
 // can consult it without reaching into this package's unexported overrides field/accessor.
 func (b *BaselineRequirementsChecker[AS]) BaselineSignatureForm() enumerations.SignatureForm {
@@ -313,7 +313,7 @@ func (b *BaselineRequirementsChecker[AS]) isAllRevocationDataPresent() bool {
 
 // ValidationContext returns a validated validation context. Port of the protected
 // getValidationContext().
-func (b *BaselineRequirementsChecker[AS]) ValidationContext() ValidationContext {
+func (b *BaselineRequirementsChecker[AS]) ValidationContext() Context {
 	if b.validationContext == nil {
 		b.validationContext = NewSignatureValidationContext()
 		b.validationContext.Initialize(b.offlineCertificateVerifier)
@@ -330,10 +330,10 @@ func (b *BaselineRequirementsChecker[AS]) ValidationContext() ValidationContext 
 }
 
 // baselineRequirementsCheckerAddSignatureForVerification is the private
-// addSignatureForVerification(ValidationContext, AdvancedSignature). It is a free function
+// addSignatureForVerification(Context, AdvancedSignature). It is a free function
 // (rather than a method) because Java declares the signature parameter as the AdvancedSignature
 // interface, not AS - it is always called with b.signature, but its logic does not depend on AS.
-func baselineRequirementsCheckerAddSignatureForVerification(validationContext ValidationContext, signatureValue AdvancedSignature) {
+func baselineRequirementsCheckerAddSignatureForVerification(validationContext Context, signatureValue AdvancedSignature) {
 	signingCertificate := signatureValue.SigningCertificateToken()
 	if signingCertificate != nil {
 		validationContext.AddCertificateTokenForVerification(signingCertificate)

@@ -13,12 +13,12 @@ type TrustService struct {
 	// certificates is a list of certificates.
 	certificates []*model.CertificateToken
 	// status holds statuses based on time.
-	status *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]
+	status *timedependent.Values[*TrustServiceStatusAndInformationExtensions]
 }
 
 // NewTrustService is the default constructor.
 func NewTrustService(certificates []*model.CertificateToken,
-	status *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]) *TrustService {
+	status *timedependent.Values[*TrustServiceStatusAndInformationExtensions]) *TrustService {
 	return &TrustService{certificates: certificates, status: status}
 }
 
@@ -28,7 +28,7 @@ func (t *TrustService) Certificates() []*model.CertificateToken {
 }
 
 // StatusAndInformationExtensions gets status based on time.
-func (t *TrustService) StatusAndInformationExtensions() *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions] {
+func (t *TrustService) StatusAndInformationExtensions() *timedependent.Values[*TrustServiceStatusAndInformationExtensions] {
 	return t.status
 }
 
@@ -37,7 +37,7 @@ type TrustServiceBuilder struct {
 	// certificates is a list of certificates.
 	certificates []*model.CertificateToken
 	// status holds statuses based on time.
-	status *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]
+	status *timedependent.Values[*TrustServiceStatusAndInformationExtensions]
 }
 
 // NewTrustServiceBuilder is the default constructor.
@@ -52,7 +52,7 @@ func (b *TrustServiceBuilder) SetCertificates(certificates []*model.CertificateT
 }
 
 // SetStatusAndInformationExtensions sets a status.
-func (b *TrustServiceBuilder) SetStatusAndInformationExtensions(status *timedependent.TimeDependentValues[*TrustServiceStatusAndInformationExtensions]) *TrustServiceBuilder {
+func (b *TrustServiceBuilder) SetStatusAndInformationExtensions(status *timedependent.Values[*TrustServiceStatusAndInformationExtensions]) *TrustServiceBuilder {
 	b.status = status
 	return b
 }

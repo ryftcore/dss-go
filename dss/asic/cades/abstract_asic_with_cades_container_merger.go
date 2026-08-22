@@ -57,7 +57,7 @@ func (m *AbstractASiCWithCAdESContainerMerger) SetAsicFilenameFactory(asicFilena
 //
 // NOTE: The DSSResourcesHandlerBuilder is supported only within the 'dss-cms-stream' module!
 func (m *AbstractASiCWithCAdESContainerMerger) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
-	m.ResourcesHandlerBuilder = cms.CMSUtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
+	m.ResourcesHandlerBuilder = cms.UtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
 }
 
 // IsSupportedDocument ports the @Override protected isSupported(DSSDocument).
@@ -66,13 +66,13 @@ func (m *AbstractASiCWithCAdESContainerMerger) IsSupportedDocument(container mod
 }
 
 // IsSupportedContent ports the @Override protected isSupported(ASiCContent).
-func (m *AbstractASiCWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *AbstractASiCWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	return NewASiCWithCAdESFormatDetector().IsSupportedZipContent(asicContent)
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (m *AbstractASiCWithCAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithCAdESContainerExtractor(container).DefaultASiCContainerExtractor
+func (m *AbstractASiCWithCAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultContainerExtractor {
+	return &NewASiCWithCAdESContainerExtractor(container).DefaultContainerExtractor
 }
 
 // MergeCmsSignatures merges signature documents representing CMS signatures into a single CMS
@@ -85,7 +85,7 @@ func (m *AbstractASiCWithCAdESContainerMerger) MergeCmsSignatures(signatureDocum
 	originalCMS := cmsList[0] // getFirstCMS
 
 	signerInformationStore := m.getSignerInformationStore(cmsList)
-	mergedCMS, err := cms.CMSUtilsReplaceSigners(originalCMS, signerInformationStore)
+	mergedCMS, err := cms.UtilsReplaceSigners(originalCMS, signerInformationStore)
 	if err != nil {
 		panic(fmt.Sprintf("Unable to merge ASiC-S with CAdES container. Reason : %s", err.Error()))
 	}
@@ -95,19 +95,19 @@ func (m *AbstractASiCWithCAdESContainerMerger) MergeCmsSignatures(signatureDocum
 	crlStore := m.getCRLStore(cmsList)
 	ocspResponsesStore := m.getOCSPResponsesStore(cmsList)
 	ocspBasicStore := m.getOCSPBasicStore(cmsList)
-	mergedCMS, err = cms.CMSUtilsReplaceCertificatesAndCRLs(mergedCMS,
+	mergedCMS, err = cms.UtilsReplaceCertificatesAndCRLs(mergedCMS,
 		certificatesStore, certAttributeStore, crlStore, ocspResponsesStore, ocspBasicStore)
 	if err != nil {
 		panic(fmt.Sprintf("Unable to merge ASiC-S with CAdES container. Reason : %s", err.Error()))
 	}
 
 	digestAlgorithms := m.getDigestAlgorithms(cmsList)
-	mergedCMS, err = cms.CMSUtilsPopulateDigestAlgorithmSet(mergedCMS, digestAlgorithms)
+	mergedCMS, err = cms.UtilsPopulateDigestAlgorithmSet(mergedCMS, digestAlgorithms)
 	if err != nil {
 		panic(fmt.Sprintf("Unable to merge ASiC-S with CAdES container. Reason : %s", err.Error()))
 	}
 
-	cmsDocument, err := cms.CMSUtilsWriteToDSSDocument(mergedCMS, m.ResourcesHandlerBuilder)
+	cmsDocument, err := cms.UtilsWriteToDSSDocument(mergedCMS, m.ResourcesHandlerBuilder)
 	if err != nil {
 		panic(fmt.Sprintf("Unable to merge ASiC-S with CAdES container. Reason : %s", err.Error()))
 	}
@@ -201,9 +201,9 @@ func (m *AbstractASiCWithCAdESContainerMerger) getSignatureDocumentName(signatur
 	panic(exception.NewIllegalInputException("At least one signature file shall be provided for merging!"))
 }
 
-// GetAllSignatureDocuments returns all signature documents extracted from the given ASiCContent
+// GetAllSignatureDocuments returns all signature documents extracted from the given Content
 // containers. Ports the protected getAllSignatureDocuments(ASiCContent...).
-func (m *AbstractASiCWithCAdESContainerMerger) GetAllSignatureDocuments(asicContents ...*asic.ASiCContent) []model.DSSDocument {
+func (m *AbstractASiCWithCAdESContainerMerger) GetAllSignatureDocuments(asicContents ...*asic.Content) []model.DSSDocument {
 	signatureDocuments := make([]model.DSSDocument, 0)
 	for _, asicContent := range asicContents {
 		signatureDocuments = append(signatureDocuments, asicContent.SignatureDocuments()...)

@@ -37,8 +37,8 @@ type AbstractTimeStampPresentCheck[T any] struct {
 }
 
 // NewAbstractTimeStampPresentCheck is the default constructor. Port of
-// AbstractTimeStampPresentCheck(I18nProvider, T, Map, Collection, LevelRule).
-func NewAbstractTimeStampPresentCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AbstractTimeStampPresentCheck(Provider, T, Map, Collection, LevelRule).
+func NewAbstractTimeStampPresentCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, xmlTimestamps []*jaxb.XmlTimestamp,
 	constraint policy.LevelRule) *AbstractTimeStampPresentCheck[T] {
 	return &AbstractTimeStampPresentCheck[T]{

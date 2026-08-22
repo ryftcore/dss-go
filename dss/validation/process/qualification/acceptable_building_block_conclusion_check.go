@@ -20,8 +20,8 @@ type AcceptableBuildingBlockConclusionCheck[T any] struct {
 }
 
 // NewAcceptableBuildingBlockConclusionCheck is the default constructor. Port
-// of AcceptableBuildingBlockConclusionCheck(I18nProvider, T, XmlConclusion, LevelRule).
-func NewAcceptableBuildingBlockConclusionCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of AcceptableBuildingBlockConclusionCheck(Provider, T, XmlConclusion, LevelRule).
+func NewAcceptableBuildingBlockConclusionCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	buildingBlockConclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *AcceptableBuildingBlockConclusionCheck[T] {
 	c := &AcceptableBuildingBlockConclusionCheck[T]{
 		ChainItemBase:           process.NewChainItemBase(i18nProvider, result, constraint),

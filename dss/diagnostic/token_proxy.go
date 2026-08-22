@@ -6,7 +6,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// TokenProxy provides a user-friendly API for dealing with JAXB objects from a DiagnosticData.
+// TokenProxy provides a user-friendly API for dealing with JAXB objects from a Data.
 // Every concrete wrapper (CertificateWrapper, SignatureWrapper, TimestampWrapper,
 // RevocationWrapper) satisfies this interface by embedding AbstractTokenProxyBase and
 // implementing its own Id/FoundCertificates/FoundRevocations/DigestMatchers overrides; see

@@ -53,7 +53,7 @@ type ValidationProcessForTimestampsWithArchivalData struct {
 
 // NewValidationProcessForTimestampsWithArchivalData is the default constructor.
 // Port of ValidationProcessForTimestampsWithArchivalData(I18nProvider, TimestampWrapper, XmlValidationProcessBasicTimestamp, Map, Map, Date, ValidationPolicy, POEExtraction).
-func NewValidationProcessForTimestampsWithArchivalData(i18nProvider *i18n.I18nProvider,
+func NewValidationProcessForTimestampsWithArchivalData(i18nProvider *i18n.Provider,
 	timestamp *diagnostic.TimestampWrapper, vpftspResult *jaxb.XmlValidationProcessBasicTimestamp,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, evidenceRecordValidations map[string]*jaxb.XmlEvidenceRecord,
 	currentTime time.Time, validationPolicy policy.ValidationPolicy,

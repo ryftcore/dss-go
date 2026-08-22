@@ -11,8 +11,8 @@ import (
 )
 
 // JAdESSignatureIntegrityValidator checks the integrity of a JAdES SignatureValue. Port of the
-// class JAdESSignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
-type JAdESSignatureIntegrityValidator struct {
+// class SignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
+type SignatureIntegrityValidator struct {
 	spi.SignatureIntegrityValidatorBase
 
 	// jws is the JWS signature to validate. Port of the private final JWS jws field.
@@ -20,9 +20,9 @@ type JAdESSignatureIntegrityValidator struct {
 }
 
 // NewJAdESSignatureIntegrityValidator is the default constructor. Port of the public
-// JAdESSignatureIntegrityValidator(JWS) constructor.
-func NewJAdESSignatureIntegrityValidator(jws *JWS) *JAdESSignatureIntegrityValidator {
-	v := &JAdESSignatureIntegrityValidator{jws: jws}
+// SignatureIntegrityValidator(JWS) constructor.
+func NewSignatureIntegrityValidator(jws *JWS) *SignatureIntegrityValidator {
+	v := &SignatureIntegrityValidator{jws: jws}
 	v.InitSignatureIntegrityValidator(v)
 	return v
 }
@@ -32,7 +32,7 @@ func NewJAdESSignatureIntegrityValidator(jws *JWS) *JAdESSignatureIntegrityValid
 // jose.JWS.VerifySignature() splits jose4j's boolean-result/thrown-JoseException verifySignature()
 // into a (bool, error) pair; the error branch here is what carries the DSSException Java wraps a
 // JoseException in.
-func (v *JAdESSignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
+func (v *SignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
 	var key crypto.PublicKey
 	if publicKey != nil {
 		key = publicKey.Key()
@@ -45,6 +45,6 @@ func (v *JAdESSignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (b
 	return valid, nil
 }
 
-// compile-time assertion: a JAdESSignatureIntegrityValidator satisfies
+// compile-time assertion: a SignatureIntegrityValidator satisfies
 // spi.SignatureIntegrityValidator.
-var _ spi.SignatureIntegrityValidator = (*JAdESSignatureIntegrityValidator)(nil)
+var _ spi.SignatureIntegrityValidator = (*SignatureIntegrityValidator)(nil)

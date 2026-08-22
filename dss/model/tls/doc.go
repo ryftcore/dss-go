@@ -3,5 +3,5 @@
 // chain presented by a TLS server, used when validating a Trusted List
 // fetched over HTTPS against its expected TLS identity.
 //
-// The main entry type is TLSCertificates.
+// The main entry type is Certificates.
 package tls

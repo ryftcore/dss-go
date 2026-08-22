@@ -28,8 +28,8 @@ type EAAQualificationProcessConclusiveCheck struct {
 
 // NewEAAQualificationProcessConclusiveCheck is the default constructor. Port
 // of
-// EAAQualificationProcessConclusiveCheck(I18nProvider, XmlValidationEAAQualification, Collection, LevelRule).
-func NewEAAQualificationProcessConclusiveCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualification],
+// EAAQualificationProcessConclusiveCheck(Provider, XmlValidationEAAQualification, Collection, LevelRule).
+func NewEAAQualificationProcessConclusiveCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualification],
 	qualificationProcesses []*jaxb.XmlConstraintsConclusionContent, constraint policy.LevelRule) *EAAQualificationProcessConclusiveCheck {
 	c := &EAAQualificationProcessConclusiveCheck{
 		ChainItemBase:          process.NewChainItemBase(i18nProvider, result, constraint),

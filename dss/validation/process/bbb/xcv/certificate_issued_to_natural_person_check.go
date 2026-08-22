@@ -20,8 +20,8 @@ type CertificateIssuedToNaturalPersonCheck struct {
 }
 
 // NewCertificateIssuedToNaturalPersonCheck is the default constructor. Port
-// of CertificateIssuedToNaturalPersonCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificateIssuedToNaturalPersonCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// of CertificateIssuedToNaturalPersonCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificateIssuedToNaturalPersonCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateIssuedToNaturalPersonCheck {
 	c := &CertificateIssuedToNaturalPersonCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

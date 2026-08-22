@@ -21,12 +21,12 @@ type KeyBindingSignatureValidationResultCheck struct {
 
 // NewKeyBindingSignatureValidationResultCheck is the default constructor.
 // Port of
-// KeyBindingSignatureValidationResultCheck(I18nProvider, XmlValidationProcessEAA, XmlConclusion, LevelRule).
+// KeyBindingSignatureValidationResultCheck(Provider, XmlValidationProcessEAA, XmlConclusion, LevelRule).
 //
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' MessageTag/ErrorMessageTag rather than
 // SignatureValidationResultCheck's.
-func NewKeyBindingSignatureValidationResultCheck(i18nProvider *i18n.I18nProvider,
+func NewKeyBindingSignatureValidationResultCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessEAA], basicValidationConclusion *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *KeyBindingSignatureValidationResultCheck {
 	c := &KeyBindingSignatureValidationResultCheck{

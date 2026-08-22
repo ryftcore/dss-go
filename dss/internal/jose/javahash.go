@@ -39,9 +39,9 @@ func javaHashMapSpread(key string) uint32 {
 // given that they were put in the order supplied and that none was ever removed.
 //
 // Why this is needed at all: JsonObject's no-argument constructor is `map = new HashMap<>()`, and
-// three DSS call sites build multi-member objects through it - JAdESLevelBaselineLT.getRVals
-// ({crlVals, ocspVals}), JAdESLevelBaselineLT.getTstVd ({xVals, rVals}) and, indirectly,
-// JAdESLevelBaselineB. Those objects are serialized into 'etsiU' components, which an archive
+// three DSS call sites build multi-member objects through it - LevelBaselineLT.getRVals
+// ({crlVals, ocspVals}), LevelBaselineLT.getTstVd ({xVals, rVals}) and, indirectly,
+// LevelBaselineB. Those objects are serialized into 'etsiU' components, which an archive
 // timestamp then covers. "Whatever order Go's map gives" would produce bytes upstream never
 // produces, so the order is reproduced instead of approximated.
 //

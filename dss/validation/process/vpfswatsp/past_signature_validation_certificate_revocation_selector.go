@@ -40,8 +40,8 @@ type PastSignatureValidationCertificateRevocationSelector struct {
 
 // NewPastSignatureValidationCertificateRevocationSelector is the default
 // constructor. Port of
-// PastSignatureValidationCertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, Map, String, POEExtraction, ValidationPolicy).
-func NewPastSignatureValidationCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
+// PastSignatureValidationCertificateRevocationSelector(Provider, CertificateWrapper, Date, Map, String, POEExtraction, ValidationPolicy).
+func NewPastSignatureValidationCertificateRevocationSelector(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string, poe *POEExtraction,
 	validationPolicy policy.ValidationPolicy) *PastSignatureValidationCertificateRevocationSelector {

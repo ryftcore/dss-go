@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/signature/EnvelopingSignatureBuilder.java (DSS 6.5.RC1).
 //
 // Java's class is package-private and overrides exactly one of the hooks collected in
-// XAdESSignatureBuilderOverrides - incorporateSignedObjects(). Go has no method overriding across
+// SignatureBuilderOverrides - incorporateSignedObjects(). Go has no method overriding across
 // embedding, so this builder registers itself with InitXAdESSignatureBuilder and every other hook
 // is promoted from the embedded base, the TokenBase.InitToken(self) convention of PORTING.md.
 //
@@ -22,13 +22,13 @@ import (
 
 // EnvelopingSignatureBuilder handles the specifics of the enveloping XML signature.
 type EnvelopingSignatureBuilder struct {
-	XAdESSignatureBuilder
+	AbstractSignatureBuilder
 }
 
 // NewEnvelopingSignatureBuilder is the constructor for a single-document signing. The enveloping
 // signature uses by default the inclusive method of canonicalization.
 // Port of EnvelopingSignatureBuilder(XAdESSignatureParameters, DSSDocument, CertificateVerifier).
-func NewEnvelopingSignatureBuilder(params *XAdESSignatureParameters, document model.DSSDocument,
+func NewEnvelopingSignatureBuilder(params *SignatureParameters, document model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *EnvelopingSignatureBuilder {
 	return NewEnvelopingSignatureBuilderForDocuments(params, []model.DSSDocument{document}, certificateVerifier)
 }
@@ -36,7 +36,7 @@ func NewEnvelopingSignatureBuilder(params *XAdESSignatureParameters, document mo
 // NewEnvelopingSignatureBuilderForDocuments is the constructor for signing multiple documents.
 // The enveloping signature uses by default the inclusive method of canonicalization.
 // Port of EnvelopingSignatureBuilder(XAdESSignatureParameters, List<DSSDocument>, CertificateVerifier).
-func NewEnvelopingSignatureBuilderForDocuments(params *XAdESSignatureParameters,
+func NewEnvelopingSignatureBuilderForDocuments(params *SignatureParameters,
 	documents []model.DSSDocument,
 	certificateVerifier validation.CertificateVerifier) *EnvelopingSignatureBuilder {
 	builder := &EnvelopingSignatureBuilder{}

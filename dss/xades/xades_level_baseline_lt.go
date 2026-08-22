@@ -3,10 +3,10 @@
 // Java extends XAdESLevelBaselineT and overrides extendSignatures(List); the Go port embeds the
 // -T level and registers itself with InitXAdESLevelBaselineLT so that the public
 // ExtendSignatures entry point dispatches here. "super.extendSignatures(signatures)" is the
-// explicit lt.XAdESLevelBaselineT.ExtendSignatures call.
+// explicit lt.LevelBaselineT.ExtendSignatures call.
 //
 // Java's private incorporateValidationDataForTimestamps(ValidationDataContainer, ...) collides
-// by name with the differently-shaped private method XAdESLevelBaselineLTA declares; since the
+// by name with the differently-shaped private method LevelBaselineLTA declares; since the
 // LTA type embeds this one, the Go port keeps them apart by name
 // (incorporateValidationDataForTimestamps here, ...FromContainer there) instead of relying on
 // shadowing.
@@ -20,23 +20,23 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// XAdESLevelBaselineLT is the LT profile of a XAdES signature.
-type XAdESLevelBaselineLT struct {
-	XAdESLevelBaselineT
+// LevelBaselineLT is the LT profile of a XAdES signature.
+type LevelBaselineLT struct {
+	LevelBaselineT
 }
 
-// NewXAdESLevelBaselineLT is the default constructor for XAdESLevelBaselineLT.
+// NewLevelBaselineLT is the default constructor for LevelBaselineLT.
 // Port of XAdESLevelBaselineLT(CertificateVerifier).
-func NewXAdESLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *XAdESLevelBaselineLT {
-	extension := &XAdESLevelBaselineLT{}
+func NewLevelBaselineLT(certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
+	extension := &LevelBaselineLT{}
 	extension.InitXAdESLevelBaselineLT(extension, certificateVerifier)
 	return extension
 }
 
 // InitXAdESLevelBaselineLT registers the concrete extension level with this base and forwards to
 // the -T level. Port of the super(certificateVerifier) call of
-// XAdESLevelBaselineLT(CertificateVerifier).
-func (lt *XAdESLevelBaselineLT) InitXAdESLevelBaselineLT(self XAdESSignatureExtensionOverrides,
+// LevelBaselineLT(CertificateVerifier).
+func (lt *LevelBaselineLT) InitXAdESLevelBaselineLT(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	lt.InitXAdESLevelBaselineT(self, certificateVerifier)
 }
@@ -45,8 +45,8 @@ func (lt *XAdESLevelBaselineLT) InitXAdESLevelBaselineLT(self XAdESSignatureExte
 // UnsignedSignatureProperties. An XML electronic signature MAY contain at most one
 // CertificateValues element and at most one RevocationValues element.
 // Port of the overridden protected #extendSignatures(List).
-func (lt *XAdESLevelBaselineLT) ExtendSignatures(signatures []validation.AdvancedSignature) error {
-	if err := lt.XAdESLevelBaselineT.ExtendSignatures(signatures); err != nil {
+func (lt *LevelBaselineLT) ExtendSignatures(signatures []validation.AdvancedSignature) error {
+	if err := lt.LevelBaselineT.ExtendSignatures(signatures); err != nil {
 		return err
 	}
 
@@ -57,7 +57,7 @@ func (lt *XAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 
 	// Reset sources
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -86,9 +86,9 @@ func (lt *XAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 		return err
 	}
 
-	// Append ValidationData
+	// Append Data
 	for _, signature := range signaturesToExtend {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -139,7 +139,7 @@ func (lt *XAdESLevelBaselineLT) ExtendSignatures(signatures []validation.Advance
 
 // ValidationDataEncapsulationStrategy returns the ValidationDataEncapsulationStrategy to be used.
 // Port of the protected #getValidationDataEncapsulationStrategy.
-func (lt *XAdESLevelBaselineLT) ValidationDataEncapsulationStrategy() enumerations.ValidationDataEncapsulationStrategy {
+func (lt *LevelBaselineLT) ValidationDataEncapsulationStrategy() enumerations.ValidationDataEncapsulationStrategy {
 	if lt.Params.IsEn319132() {
 		return lt.Params.ValidationDataEncapsulationStrategy()
 	}
@@ -150,10 +150,10 @@ func (lt *XAdESLevelBaselineLT) ValidationDataEncapsulationStrategy() enumeratio
 // incorporateValidationDataForSignature incorporates the validation data for the signature
 // validation, according to the chosen validation data encapsulation mechanism, and returns the
 // incorporated validation data. Port of the private incorporateValidationDataForSignature.
-func (lt *XAdESLevelBaselineLT) incorporateValidationDataForSignature(
-	validationDataContainer *validation.ValidationDataContainer,
-	signature validation.AdvancedSignature, indent string) (*validation.ValidationData, error) {
-	var validationDataForInclusion *validation.ValidationData
+func (lt *LevelBaselineLT) incorporateValidationDataForSignature(
+	validationDataContainer *validation.DataContainer,
+	signature validation.AdvancedSignature, indent string) (*validation.Data, error) {
+	var validationDataForInclusion *validation.Data
 	validationDataEncapsulationStrategy := lt.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
@@ -206,11 +206,11 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForSignature(
 // timestamps validation, according to the chosen validation data encapsulation mechanism,
 // excluding validationDataToExclude to avoid duplicates.
 // Port of the private incorporateValidationDataForTimestamps.
-func (lt *XAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
-	validationDataContainer *validation.ValidationDataContainer,
+func (lt *LevelBaselineLT) incorporateValidationDataForTimestamps(
+	validationDataContainer *validation.DataContainer,
 	signature validation.AdvancedSignature, indent string,
-	validationDataToExclude *validation.ValidationData) error {
-	var validationData *validation.ValidationData
+	validationDataToExclude *validation.Data) error {
+	var validationData *validation.Data
 	validationDataEncapsulationStrategy := lt.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
 	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated:
@@ -252,7 +252,7 @@ func (lt *XAdESLevelBaselineLT) incorporateValidationDataForTimestamps(
 }
 
 // extendToLTLevelSignatures ports the private getExtendToLTLevelSignatures.
-func (lt *XAdESLevelBaselineLT) extendToLTLevelSignatures(
+func (lt *LevelBaselineLT) extendToLTLevelSignatures(
 	signatures []validation.AdvancedSignature) []validation.AdvancedSignature {
 	toBeExtended := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
@@ -264,6 +264,6 @@ func (lt *XAdESLevelBaselineLT) extendToLTLevelSignatures(
 }
 
 // ltLevelExtensionRequired ports the private ltLevelExtensionRequired.
-func (lt *XAdESLevelBaselineLT) ltLevelExtensionRequired(signature validation.AdvancedSignature) bool {
+func (lt *LevelBaselineLT) ltLevelExtensionRequired(signature validation.AdvancedSignature) bool {
 	return enumerations.SignatureLevelXAdESBaselineLT == lt.Params.SignatureLevel() || !signature.HasLTAProfile()
 }

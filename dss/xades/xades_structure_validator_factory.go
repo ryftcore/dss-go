@@ -4,30 +4,30 @@
 // Upstream's assertXAdESStructureValidatorLoaded() uses Class.forName to detect, at runtime,
 // whether the optional 'dss-validation' module (which upstream bundles XAdESStructureValidator
 // in) is present on the classpath, raising ExceptionInInitializerError otherwise. Go has no
-// separate-module/classpath distinction - XAdESStructureValidator is compiled into this same
+// separate-module/classpath distinction - StructureValidator is compiled into this same
 // package unconditionally - so that runtime presence check has nothing left to check and is
-// dropped; XAdESStructureValidatorFactory reduces to the plain singleton + factory-method shape.
+// dropped; StructureValidatorFactory reduces to the plain singleton + factory-method shape.
 package xades
 
-// XAdESStructureValidatorFactory creates a relevant implementation of XAdESStructureValidator.
+// StructureValidatorFactory creates a relevant implementation of StructureValidator.
 // Port of the class XAdESStructureValidatorFactory.
-type XAdESStructureValidatorFactory struct{}
+type StructureValidatorFactory struct{}
 
 // xadesStructureValidatorFactorySingleton is the current factory instance. Port of the private
 // static singleton field.
-var xadesStructureValidatorFactorySingleton *XAdESStructureValidatorFactory
+var xadesStructureValidatorFactorySingleton *StructureValidatorFactory
 
-// XAdESStructureValidatorFactoryGetInstance gets the instance of XAdESStructureValidatorFactory.
+// StructureValidatorFactoryGetInstance gets the instance of StructureValidatorFactory.
 // Port of the static getInstance().
-func XAdESStructureValidatorFactoryGetInstance() *XAdESStructureValidatorFactory {
+func StructureValidatorFactoryGetInstance() *StructureValidatorFactory {
 	if xadesStructureValidatorFactorySingleton == nil {
-		xadesStructureValidatorFactorySingleton = &XAdESStructureValidatorFactory{}
+		xadesStructureValidatorFactorySingleton = &StructureValidatorFactory{}
 	}
 	return xadesStructureValidatorFactorySingleton
 }
 
 // FromXAdESSignature creates a XAdESStructureValidator for the given XAdESSignature. Port of
-// fromXAdESSignature(XAdESSignature).
-func (f *XAdESStructureValidatorFactory) FromXAdESSignature(signature *XAdESSignature) *XAdESStructureValidator {
-	return newXAdESStructureValidator(signature.SignatureElement(), signature.XAdESPaths())
+// fromXAdESSignature(Signature).
+func (f *StructureValidatorFactory) FromXAdESSignature(signature *Signature) *StructureValidator {
+	return newStructureValidator(signature.SignatureElement(), signature.XAdESPaths())
 }

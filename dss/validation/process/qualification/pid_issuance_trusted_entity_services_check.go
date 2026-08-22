@@ -23,8 +23,8 @@ type PIDIssuanceTrustedEntityServicesCheck struct {
 
 // NewPIDIssuanceTrustedEntityServicesCheck is the default constructor. Port
 // of
-// PIDIssuanceTrustedEntityServicesCheck(I18nProvider, XmlValidationPIDQualificationProcess, List, LevelRule).
-func NewPIDIssuanceTrustedEntityServicesCheck(i18nProvider *i18n.I18nProvider,
+// PIDIssuanceTrustedEntityServicesCheck(Provider, XmlValidationPIDQualificationProcess, List, LevelRule).
+func NewPIDIssuanceTrustedEntityServicesCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
 	pidIssuanceTrustedEntityServices []*diagnostic.TrustedEntityServiceWrapper,
 	constraint policy.LevelRule) *PIDIssuanceTrustedEntityServicesCheck {

@@ -14,20 +14,20 @@ import (
 )
 
 // CAdESSignatureScopeFinder finds SignatureScopes for a CAdES signature. Port of the class
-// CAdESSignatureScopeFinder, extending spiscope.AbstractSignatureScopeFinder and implementing
-// spiscope.SignatureScopeFinder[*CAdESSignature].
-type CAdESSignatureScopeFinder struct {
+// SignatureScopeFinder, extending spiscope.AbstractSignatureScopeFinder and implementing
+// spiscope.SignatureScopeFinder[*Signature].
+type SignatureScopeFinder struct {
 	spiscope.AbstractSignatureScopeFinder
 }
 
 // NewCAdESSignatureScopeFinder is the port of the default constructor.
-func NewCAdESSignatureScopeFinder() *CAdESSignatureScopeFinder {
-	return &CAdESSignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
+func NewSignatureScopeFinder() *SignatureScopeFinder {
+	return &SignatureScopeFinder{AbstractSignatureScopeFinder: spiscope.NewAbstractSignatureScopeFinder()}
 }
 
 // FindSignatureScope returns a list of SignatureScopes from a signature. Port of
-// findSignatureScope(CAdESSignature).
-func (f *CAdESSignatureScopeFinder) FindSignatureScope(cadesSignature *CAdESSignature) []scope.SignatureScope {
+// findSignatureScope(Signature).
+func (f *SignatureScopeFinder) FindSignatureScope(cadesSignature *Signature) []scope.SignatureScope {
 	originalDocument := f.getOriginalDocument(cadesSignature)
 	if originalDocument == nil {
 		return []scope.SignatureScope{}
@@ -70,7 +70,7 @@ func (f *CAdESSignatureScopeFinder) FindSignatureScope(cadesSignature *CAdESSign
 // getSignatureScopeFromOriginalDocument returns a list of SignatureScopes from the signed
 // document. Port of the protected getSignatureScopeFromOriginalDocument(CAdESSignature,
 // DSSDocument).
-func (f *CAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocument(cadesSignature *CAdESSignature,
+func (f *SignatureScopeFinder) getSignatureScopeFromOriginalDocument(cadesSignature *Signature,
 	originalDocument model.DSSDocument) []scope.SignatureScope {
 	result := make([]scope.SignatureScope, 0)
 	if originalDocument == nil {
@@ -94,7 +94,7 @@ func (f *CAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocument(cadesS
 // getSignatureScopeFromReferenceValidation gets a list of SignatureScopes from a
 // ReferenceValidation. Port of the protected getSignatureScopeFromReferenceValidation(
 // ReferenceValidation).
-func (f *CAdESSignatureScopeFinder) getSignatureScopeFromReferenceValidation(reference *model.ReferenceValidation) []scope.SignatureScope {
+func (f *SignatureScopeFinder) getSignatureScopeFromReferenceValidation(reference *model.ReferenceValidation) []scope.SignatureScope {
 	result := make([]scope.SignatureScope, 0)
 	digestDocument := f.CreateDigestDocument(reference.Digest())
 	if digestDocument != nil {
@@ -110,7 +110,7 @@ func (f *CAdESSignatureScopeFinder) getSignatureScopeFromReferenceValidation(ref
 // getOriginalDocument returns the original document for the given CAdES signature. Port of the
 // protected getOriginalDocument(CAdESSignature); the DSSException Java catches and logs around
 // is swallowed here the same way, since slf4j logging is dropped per PORTING.md.
-func (f *CAdESSignatureScopeFinder) getOriginalDocument(cadesSignature *CAdESSignature) model.DSSDocument {
+func (f *SignatureScopeFinder) getOriginalDocument(cadesSignature *Signature) model.DSSDocument {
 	document, err := cadesSignature.OriginalDocument()
 	if err != nil {
 		return nil
@@ -121,13 +121,13 @@ func (f *CAdESSignatureScopeFinder) getOriginalDocument(cadesSignature *CAdESSig
 // isASiCSArchive shadows spiscope.AbstractSignatureScopeFinder.IsASiCSArchive(): a CAdES
 // signature is only an ASiC-S archive when it is not also an ASiC-E archive. Port of the
 // protected isASiCSArchive(AdvancedSignature) override.
-func (f *CAdESSignatureScopeFinder) isASiCSArchive(advancedSignature validation.AdvancedSignature) bool {
+func (f *SignatureScopeFinder) isASiCSArchive(advancedSignature validation.AdvancedSignature) bool {
 	return f.AbstractSignatureScopeFinder.IsASiCSArchive(advancedSignature) && !f.AbstractSignatureScopeFinder.IsASiCEArchive(advancedSignature)
 }
 
 // getReferencedDocument returns a document referenced from manifestEntry. Port of the protected
 // getReferencedDocument(ManifestEntry, List).
-func (f *CAdESSignatureScopeFinder) getReferencedDocument(manifestEntry *model.ManifestEntry, detachedDocuments []model.DSSDocument) model.DSSDocument {
+func (f *SignatureScopeFinder) getReferencedDocument(manifestEntry *model.ManifestEntry, detachedDocuments []model.DSSDocument) model.DSSDocument {
 	document := spi.DSSUtilsDocumentWithName(detachedDocuments, manifestEntry.Uri())
 	if document == nil {
 		document = f.CreateDigestDocument(manifestEntry.Digest())
@@ -136,4 +136,4 @@ func (f *CAdESSignatureScopeFinder) getReferencedDocument(manifestEntry *model.M
 }
 
 // compile-time interface assertion.
-var _ spiscope.SignatureScopeFinder[*CAdESSignature] = (*CAdESSignatureScopeFinder)(nil)
+var _ spiscope.SignatureScopeFinder[*Signature] = (*SignatureScopeFinder)(nil)

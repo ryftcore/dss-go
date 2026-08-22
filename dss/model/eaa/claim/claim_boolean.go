@@ -3,9 +3,9 @@ package claim
 
 import "strconv"
 
-// ClaimBoolean represents a Boolean encoded (selectively) disclosable
+// Boolean represents a Boolean encoded (selectively) disclosable
 // claim.
-type ClaimBoolean struct {
+type Boolean struct {
 	AbstractClaim
 
 	// value is the boolean value of the claim (nil-able, mirrors Java's
@@ -14,44 +14,44 @@ type ClaimBoolean struct {
 }
 
 // NewClaimBoolean ports the default constructor.
-func NewClaimBoolean(value *bool) *ClaimBoolean {
-	return NewClaimBooleanWithName("", value)
+func NewBoolean(value *bool) *Boolean {
+	return NewBooleanWithName("", value)
 }
 
 // NewClaimBooleanWithName ports the constructor with claim name provided.
-func NewClaimBooleanWithName(name string, value *bool) *ClaimBoolean {
-	return NewClaimBooleanWithDisclosable(name, value, false)
+func NewBooleanWithName(name string, value *bool) *Boolean {
+	return NewBooleanWithDisclosable(name, value, false)
 }
 
 // NewClaimBooleanWithDisclosable ports the constructor with claim name and
 // selectively disclosable status provided.
-func NewClaimBooleanWithDisclosable(name string, value *bool, selectivelyDisclosable bool) *ClaimBoolean {
-	return NewClaimBooleanWithParent(name, value, selectivelyDisclosable, nil)
+func NewBooleanWithDisclosable(name string, value *bool, selectivelyDisclosable bool) *Boolean {
+	return NewBooleanWithParent(name, value, selectivelyDisclosable, nil)
 }
 
 // NewClaimBooleanWithParent ports the constructor with claim name,
 // selectively disclosable status and parent claim provided.
-func NewClaimBooleanWithParent(name string, value *bool, selectivelyDisclosable bool, parent Claim) *ClaimBoolean {
-	return NewClaimBooleanFull(name, "", value, selectivelyDisclosable, parent)
+func NewBooleanWithParent(name string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
+	return NewBooleanFull(name, "", value, selectivelyDisclosable, parent)
 }
 
 // NewClaimBooleanFull ports the constructor with claim name, namespace,
 // selectively disclosable status and parent claim provided.
-func NewClaimBooleanFull(name, namespace string, value *bool, selectivelyDisclosable bool, parent Claim) *ClaimBoolean {
-	return &ClaimBoolean{
+func NewBooleanFull(name, namespace string, value *bool, selectivelyDisclosable bool, parent Claim) *Boolean {
+	return &Boolean{
 		AbstractClaim: NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:         value,
 	}
 }
 
 // BooleanValue returns the boolean value of the claim.
-func (c *ClaimBoolean) BooleanValue() *bool { return c.value }
+func (c *Boolean) BooleanValue() *bool { return c.value }
 
 // IsBooleanValueType always returns true.
-func (c *ClaimBoolean) IsBooleanValueType() bool { return true }
+func (c *Boolean) IsBooleanValueType() bool { return true }
 
 // ValueAsString ports ClaimBoolean#getValueAsString.
-func (c *ClaimBoolean) ValueAsString() string {
+func (c *Boolean) ValueAsString() string {
 	if c.value == nil {
 		return ""
 	}
@@ -59,13 +59,13 @@ func (c *ClaimBoolean) ValueAsString() string {
 }
 
 // IsNullOrEmpty ports ClaimBoolean#isNullOrEmpty.
-func (c *ClaimBoolean) IsNullOrEmpty() bool { return c.value == nil }
+func (c *Boolean) IsNullOrEmpty() bool { return c.value == nil }
 
 // Equals ports ClaimBoolean#equals. NOTE upstream's override does not call
-// super.equals() (unlike its siblings ClaimByteString/ClaimDate/
-// ClaimNumber/ClaimString), so only the value field is compared here,
+// super.equals() (unlike its siblings ByteString/Date/
+// Number/String), so only the value field is compared here,
 // matching Java verbatim.
-func (c *ClaimBoolean) Equals(other *ClaimBoolean) bool {
+func (c *Boolean) Equals(other *Boolean) bool {
 	if c == other {
 		return true
 	}
@@ -79,4 +79,4 @@ func (c *ClaimBoolean) Equals(other *ClaimBoolean) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *ClaimBoolean) String() string { return AbstractClaimString(c) }
+func (c *Boolean) String() string { return AbstractString(c) }

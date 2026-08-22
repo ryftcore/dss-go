@@ -20,8 +20,8 @@ type RevocationAcceptanceValidation struct {
 }
 
 // NewRevocationAcceptanceValidation is the default constructor. Port of
-// RevocationAcceptanceValidation(I18nProvider, Date, RevocationWrapper, XmlAOV, ValidationPolicy).
-func NewRevocationAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// RevocationAcceptanceValidation(Provider, Date, RevocationWrapper, XmlAOV, ValidationPolicy).
+func NewRevocationAcceptanceValidation(i18nProvider *i18n.Provider, currentTime time.Time,
 	revocationWrapper *diagnostic.RevocationWrapper, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *RevocationAcceptanceValidation {
 	c := &RevocationAcceptanceValidation{

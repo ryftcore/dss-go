@@ -19,8 +19,8 @@ type ReferenceDataGroupCheck[T any] struct {
 }
 
 // NewReferenceDataGroupCheck is the default constructor. Port of
-// ReferenceDataGroupCheck(I18nProvider, T, List, LevelRule).
-func NewReferenceDataGroupCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ReferenceDataGroupCheck(Provider, T, List, LevelRule).
+func NewReferenceDataGroupCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher, constraint policy.LevelRule) *ReferenceDataGroupCheck[T] {
 	c := &ReferenceDataGroupCheck[T]{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

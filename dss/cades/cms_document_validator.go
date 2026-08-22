@@ -72,10 +72,10 @@ func (v *CMSDocumentValidator) CmsSignedData() *cms.CMS {
 //
 // Returns the base (non-covariant) type as required by
 // dssvalidation.SignedDocumentValidatorOverrides - Go has no covariant return types, so the
-// concrete *CAdESDiagnosticDataBuilder wiring is instead reached through its own
+// concrete *DiagnosticDataBuilder wiring is instead reached through its own
 // InitSignedDocumentDiagnosticDataBuilder virtual-dispatch registration (see
 // cades_diagnostic_data_builder.go).
 func (v *CMSDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := NewCAdESDiagnosticDataBuilder()
+	builder := NewDiagnosticDataBuilder()
 	return &builder.SignedDocumentDiagnosticDataBuilder
 }

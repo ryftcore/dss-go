@@ -24,7 +24,7 @@ type SignatureAlgorithmObsolescenceValidation[T diagnostic.TokenProxy] struct {
 }
 
 // NewSignatureAlgorithmObsolescenceValidation is the default constructor.
-func NewSignatureAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.I18nProvider, token T,
+func NewSignatureAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.Provider, token T,
 	context enumerations.Context, validationDate time.Time,
 	validationPolicy policy.ValidationPolicy) *SignatureAlgorithmObsolescenceValidation[T] {
 	c := &SignatureAlgorithmObsolescenceValidation[T]{}

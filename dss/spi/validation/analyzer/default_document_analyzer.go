@@ -123,21 +123,21 @@ type DefaultDocumentAnalyzerOverrides interface {
 	// of getAllSignatures().
 	GetAllSignatures() []validation.AdvancedSignature
 
-	// PrepareValidationContext initializes and fills a ValidationContext with the necessary
+	// PrepareValidationContext initializes and fills a Context with the necessary
 	// data sources. Port of prepareValidationContext(Collection, Collection, Collection,
 	// CertificateVerifier).
 	PrepareValidationContext(signatures []validation.AdvancedSignature, detachedTimestamps []*validation.TimestampToken,
-		detachedEvidenceRecords []validation.EvidenceRecord, certificateVerifier validation.CertificateVerifier) validation.ValidationContext
+		detachedEvidenceRecords []validation.EvidenceRecord, certificateVerifier validation.CertificateVerifier) validation.Context
 
-	// CreateValidationContext creates a new instance of ValidationContext performing
+	// CreateValidationContext creates a new instance of Context performing
 	// preparation of validation data, certificate chain building, revocation request, as well as
 	// custom validation checks execution. Default: a SignatureValidationContext at
 	// ValidationTime(). Port of createValidationContext().
-	CreateValidationContext() validation.ValidationContext
+	CreateValidationContext() validation.Context
 
-	// InstantiateValidationDataContainer creates a new instance of ValidationDataContainer.
+	// InstantiateValidationDataContainer creates a new instance of DataContainer.
 	// Port of instantiateValidationDataContainer().
-	InstantiateValidationDataContainer() *validation.ValidationDataContainer
+	InstantiateValidationDataContainer() *validation.DataContainer
 
 	// AppendExternalEvidenceRecords appends the detached evidence record provided to the
 	// validator to the corresponding signatures covered by the evidence record document.
@@ -182,7 +182,7 @@ type DefaultDocumentAnalyzer struct {
 	// the references to different sources used in the signature validation process.
 	certificateVerifier validation.CertificateVerifier
 
-	// validationContextExecutor performs validation of ValidationContext.
+	// validationContextExecutor performs validation of Context.
 	// Default: executor.DefaultValidationContextExecutorInstance.
 	validationContextExecutor executor.ValidationContextExecutor
 
@@ -444,7 +444,7 @@ func (a *DefaultDocumentAnalyzer) SetSignaturePolicyValidatorLoader(signaturePol
 // Validate performs validation of the document. Port of validate().
 //
 // Panics when certificateVerifier or document is missing (Objects.requireNonNull).
-func (a *DefaultDocumentAnalyzer) Validate() validation.ValidationContext {
+func (a *DefaultDocumentAnalyzer) Validate() validation.Context {
 	if a.certificateVerifier == nil {
 		panic("CertificateVerifier is not defined")
 	}
@@ -465,14 +465,14 @@ func (a *DefaultDocumentAnalyzer) Validate() validation.ValidationContext {
 	return validationContext
 }
 
-// prepareValidationContext initializes and fills a ValidationContext with the necessary data
+// prepareValidationContext initializes and fills a Context with the necessary data
 // sources. This is the default body dispatched to by
 // DefaultDocumentAnalyzerOverrides.PrepareValidationContext for concrete analyzers that do not
 // override it. Port of prepareValidationContext(Collection, Collection, Collection,
 // CertificateVerifier).
 func (a *DefaultDocumentAnalyzer) prepareValidationContext(signatures []validation.AdvancedSignature,
 	detachedTimestamps []*validation.TimestampToken, detachedEvidenceRecords []validation.EvidenceRecord,
-	certificateVerifier validation.CertificateVerifier) validation.ValidationContext {
+	certificateVerifier validation.CertificateVerifier) validation.Context {
 	overrides := a.defaultDocumentAnalyzerOverrides()
 	validationContext := overrides.CreateValidationContext()
 	validationContext.Initialize(certificateVerifier)
@@ -486,19 +486,19 @@ func (a *DefaultDocumentAnalyzer) prepareValidationContext(signatures []validati
 // prepareValidationContext.
 func (a *DefaultDocumentAnalyzer) PrepareValidationContext(signatures []validation.AdvancedSignature,
 	detachedTimestamps []*validation.TimestampToken, detachedEvidenceRecords []validation.EvidenceRecord,
-	certificateVerifier validation.CertificateVerifier) validation.ValidationContext {
+	certificateVerifier validation.CertificateVerifier) validation.Context {
 	return a.prepareValidationContext(signatures, detachedTimestamps, detachedEvidenceRecords, certificateVerifier)
 }
 
 // CreateValidationContext is DefaultDocumentAnalyzerOverrides' default body. Port of
 // createValidationContext().
-func (a *DefaultDocumentAnalyzer) CreateValidationContext() validation.ValidationContext {
+func (a *DefaultDocumentAnalyzer) CreateValidationContext() validation.Context {
 	return validation.NewSignatureValidationContextAtTime(a.ValidationTime())
 }
 
 // GetValidationData extracts a validation data for the provided collection of signatures. Port
 // of the getValidationData(Collection) overload.
-func (a *DefaultDocumentAnalyzer) GetValidationData(signatures []validation.AdvancedSignature) (*validation.ValidationDataContainer, error) {
+func (a *DefaultDocumentAnalyzer) GetValidationData(signatures []validation.AdvancedSignature) (*validation.DataContainer, error) {
 	return a.GetValidationDataWithTimestamps(signatures, nil)
 }
 
@@ -509,7 +509,7 @@ func (a *DefaultDocumentAnalyzer) GetValidationData(signatures []validation.Adva
 // validation data!") is data-dependent on the caller-supplied signatures/detachedTimestamps, so
 // it is returned as an error.
 func (a *DefaultDocumentAnalyzer) GetValidationDataWithTimestamps(signatures []validation.AdvancedSignature,
-	detachedTimestamps []*validation.TimestampToken) (*validation.ValidationDataContainer, error) {
+	detachedTimestamps []*validation.TimestampToken) (*validation.DataContainer, error) {
 	if utils.IsCollectionEmpty(signatures) && utils.IsCollectionEmpty(detachedTimestamps) {
 		return nil, model.NewDSSError("At least one signature or a timestamp shall be provided to extract the validation data!")
 	}
@@ -547,8 +547,8 @@ func (a *DefaultDocumentAnalyzer) GetValidationDataWithTimestamps(signatures []v
 
 // InstantiateValidationDataContainer is DefaultDocumentAnalyzerOverrides' default body. Port of
 // instantiateValidationDataContainer().
-func (a *DefaultDocumentAnalyzer) InstantiateValidationDataContainer() *validation.ValidationDataContainer {
-	return validation.NewValidationDataContainer()
+func (a *DefaultDocumentAnalyzer) InstantiateValidationDataContainer() *validation.DataContainer {
+	return validation.NewDataContainer()
 }
 
 // getAllEvidenceRecords returns a list of all found evidence records (embedded and detached).
@@ -566,7 +566,7 @@ func (a *DefaultDocumentAnalyzer) getAllEvidenceRecords(signatures []validation.
 
 // prepareSignatureValidationContext prepares validationContext for the signature validation
 // process. Port of prepareSignatureValidationContext(ValidationContext, Collection).
-func (a *DefaultDocumentAnalyzer) prepareSignatureValidationContext(validationContext validation.ValidationContext,
+func (a *DefaultDocumentAnalyzer) prepareSignatureValidationContext(validationContext validation.Context,
 	allSignatures []validation.AdvancedSignature) {
 	a.prepareSignatureForVerification(validationContext, allSignatures)
 	a.processSignaturesValidation(allSignatures)
@@ -574,7 +574,7 @@ func (a *DefaultDocumentAnalyzer) prepareSignatureValidationContext(validationCo
 
 // prepareSignatureForVerification prepares a SignatureValidationContext for signatures
 // validation. Port of prepareSignatureForVerification(ValidationContext, Collection).
-func (a *DefaultDocumentAnalyzer) prepareSignatureForVerification(validationContext validation.ValidationContext,
+func (a *DefaultDocumentAnalyzer) prepareSignatureForVerification(validationContext validation.Context,
 	allSignatureList []validation.AdvancedSignature) {
 	for _, sig := range allSignatureList {
 		validationContext.AddSignatureForVerification(sig)
@@ -584,7 +584,7 @@ func (a *DefaultDocumentAnalyzer) prepareSignatureForVerification(validationCont
 // prepareDetachedTimestampValidationContext prepares validationContext for a timestamp
 // validation process. Port of prepareDetachedTimestampValidationContext(ValidationContext,
 // Collection).
-func (a *DefaultDocumentAnalyzer) prepareDetachedTimestampValidationContext(validationContext validation.ValidationContext,
+func (a *DefaultDocumentAnalyzer) prepareDetachedTimestampValidationContext(validationContext validation.Context,
 	timestamps []*validation.TimestampToken) {
 	for _, timestampToken := range timestamps {
 		validationContext.AddTimestampTokenForVerification(timestampToken)
@@ -593,8 +593,8 @@ func (a *DefaultDocumentAnalyzer) prepareDetachedTimestampValidationContext(vali
 
 // prepareDetachedEvidenceRecordValidationContext prepares validationContext for the evidence
 // record validation process. Port of prepareDetachedEvidenceRecordValidationContext(
-// ValidationContext, Collection).
-func (a *DefaultDocumentAnalyzer) prepareDetachedEvidenceRecordValidationContext(validationContext validation.ValidationContext,
+// Context, Collection).
+func (a *DefaultDocumentAnalyzer) prepareDetachedEvidenceRecordValidationContext(validationContext validation.Context,
 	evidenceRecords []validation.EvidenceRecord) {
 	for _, evidenceRecord := range evidenceRecords {
 		validationContext.AddEvidenceRecordForVerification(evidenceRecord)
@@ -602,7 +602,7 @@ func (a *DefaultDocumentAnalyzer) prepareDetachedEvidenceRecordValidationContext
 }
 
 // validateContext processes the validation. Port of validateContext(ValidationContext).
-func (a *DefaultDocumentAnalyzer) validateContext(validationContext validation.ValidationContext) {
+func (a *DefaultDocumentAnalyzer) validateContext(validationContext validation.Context) {
 	a.validationContextExecutor.Validate(validationContext)
 }
 
@@ -731,7 +731,7 @@ func (a *DefaultDocumentAnalyzer) BuildDetachedTimestamps() []*validation.Timest
 // Deprecated: since DSS 6.5. To be removed. Port of the deprecated protected
 // getTimestampReaders(); unlike the methods above, no upstream subclass overrides this one, so
 // it is a concrete (non-virtual) method rather than part of DefaultDocumentAnalyzerOverrides.
-func (a *DefaultDocumentAnalyzer) TimestampReaders() []timestamp.TimestampAnalyzer {
+func (a *DefaultDocumentAnalyzer) TimestampReaders() []timestamp.Analyzer {
 	return nil
 }
 
@@ -908,7 +908,7 @@ func (a *DefaultDocumentAnalyzer) validateSignaturePolicy(sig validation.Advance
 
 // extractSignaturePolicyContent ports the private extractSignaturePolicyContent(SignaturePolicy,
 // SignaturePolicyStore).
-func (a *DefaultDocumentAnalyzer) extractSignaturePolicyContent(signaturePolicy *signature.SignaturePolicy,
+func (a *DefaultDocumentAnalyzer) extractSignaturePolicyContent(signaturePolicy *signature.Policy,
 	signaturePolicyStore *model.SignaturePolicyStore) model.DSSDocument {
 	if signaturePolicyStore != nil {
 		if signaturePolicyStore.SignaturePolicyContent() != nil {

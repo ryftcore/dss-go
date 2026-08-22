@@ -59,9 +59,9 @@ type AbstractAlgorithmCryptographicChecker struct {
 
 // InitAbstractAlgorithmCryptographicChecker wires the shared state; called by
 // the concrete constructor before InitChainBase. Port of the common
-// constructor AbstractAlgorithmCryptographicChecker(I18nProvider, Date,
+// constructor AbstractAlgorithmCryptographicChecker(Provider, Date,
 // MessageTag, CryptographicSuite).
-func (c *AbstractAlgorithmCryptographicChecker) InitAbstractAlgorithmCryptographicChecker(i18nProvider *i18n.I18nProvider,
+func (c *AbstractAlgorithmCryptographicChecker) InitAbstractAlgorithmCryptographicChecker(i18nProvider *i18n.Provider,
 	validationDate time.Time, position i18n.MessageTag, cryptographicSuite policy.CryptographicSuite,
 	overrides AbstractAlgorithmCryptographicCheckerOverrides) {
 	xmlCC := &jaxb.XmlCC{}

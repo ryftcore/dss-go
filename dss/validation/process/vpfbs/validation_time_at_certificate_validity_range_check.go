@@ -22,8 +22,8 @@ type ValidationTimeAtCertificateValidityRangeCheck[T any] struct {
 
 // NewValidationTimeAtCertificateValidityRangeCheck is the default constructor.
 // Port of
-// ValidationTimeAtCertificateValidityRangeCheck(I18nProvider, T, XmlXCV, TokenProxy, LevelRule).
-func NewValidationTimeAtCertificateValidityRangeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ValidationTimeAtCertificateValidityRangeCheck(Provider, T, XmlXCV, TokenProxy, LevelRule).
+func NewValidationTimeAtCertificateValidityRangeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlXCV *jaxb.XmlXCV, token diagnostic.TokenProxy, constraint policy.LevelRule) *ValidationTimeAtCertificateValidityRangeCheck[T] {
 	c := &ValidationTimeAtCertificateValidityRangeCheck[T]{
 		// X509 Certificate Validation building block suffix ("-XCV"), a

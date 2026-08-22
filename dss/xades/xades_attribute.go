@@ -30,7 +30,7 @@ var hashDataInfoTransformPath = common.FromCurrentPosition(
 
 // XAdESAttribute represents a XAdES attribute. Port of the class XAdESAttribute, implementing
 // spi/validation.SignatureAttribute.
-type XAdESAttribute struct {
+type Attribute struct {
 	// element is the corresponding element.
 	element *xmldom.Node
 
@@ -41,17 +41,17 @@ type XAdESAttribute struct {
 	localName string
 
 	// identifier identifies the instance, lazily computed.
-	identifier *XAdESAttributeIdentifier
+	identifier *AttributeIdentifier
 }
 
 // newXAdESAttribute is the port of the package-private XAdESAttribute(Element, XAdESPath)
 // constructor.
-func newXAdESAttribute(element *xmldom.Node, xadesPaths definition.XAdESPath) *XAdESAttribute {
-	return &XAdESAttribute{element: element, xadesPaths: xadesPaths}
+func newAttribute(element *xmldom.Node, xadesPaths definition.XAdESPath) *Attribute {
+	return &Attribute{element: element, xadesPaths: xadesPaths}
 }
 
 // Name returns the local name of the element. Port of getName().
-func (a *XAdESAttribute) Name() string {
+func (a *Attribute) Name() string {
 	if a.localName == "" {
 		a.localName = a.element.Name.Local
 	}
@@ -59,17 +59,17 @@ func (a *XAdESAttribute) Name() string {
 }
 
 // Element returns the current element. Port of getElement().
-func (a *XAdESAttribute) Element() *xmldom.Node {
+func (a *Attribute) Element() *xmldom.Node {
 	return a.element
 }
 
 // Namespace returns the namespace of the element. Port of getNamespace().
-func (a *XAdESAttribute) Namespace() string {
+func (a *Attribute) Namespace() string {
 	return a.element.Name.Space
 }
 
 // NodeList returns the node list found by the given XPath query. Port of getNodeList(XPathQuery).
-func (a *XAdESAttribute) NodeList(xPathQuery common.XPathQuery) []*xmldom.Node {
+func (a *Attribute) NodeList(xPathQuery common.XPathQuery) []*xmldom.Node {
 	nodes, err := xmlutils.XPathUtilsGetNodeList(a.element, xPathQuery)
 	if err != nil {
 		return nil
@@ -81,7 +81,7 @@ func (a *XAdESAttribute) NodeList(xPathQuery common.XPathQuery) []*xmldom.Node {
 // getTimestampCanonicalizationMethod().
 //
 // LOG.warn("Unable to retrieve the canonicalization algorithm") is dropped per PORTING.md.
-func (a *XAdESAttribute) TimestampCanonicalizationMethod() string {
+func (a *Attribute) TimestampCanonicalizationMethod() string {
 	canonicalizationMethod, err := xmlutils.XPathUtilsGetValue(a.element, common.XMLDSigPathCanonicalizationAlgorithmPath)
 	if err != nil {
 		canonicalizationMethod = ""
@@ -99,7 +99,7 @@ func (a *XAdESAttribute) TimestampCanonicalizationMethod() string {
 // TimestampIncludedReferences returns the list of TimestampIncludes in case of
 // IndividualDataObjectsTimestamp, nil if it does not contain any includes. Port of
 // getTimestampIncludedReferences().
-func (a *XAdESAttribute) TimestampIncludedReferences() []*validation.TimestampInclude {
+func (a *Attribute) TimestampIncludedReferences() []*validation.TimestampInclude {
 	currentIncludePath := a.xadesPaths.CurrentInclude()
 	if currentIncludePath == nil {
 		return nil
@@ -119,15 +119,15 @@ func (a *XAdESAttribute) TimestampIncludedReferences() []*validation.TimestampIn
 
 // Identifier gets the attribute identifier. Port of getIdentifier(), implementing
 // spi/validation.SignatureAttribute.
-func (a *XAdESAttribute) Identifier() identifier.SignatureAttributeIdentifier {
+func (a *Attribute) Identifier() identifier.SignatureAttributeIdentifier {
 	if a.identifier == nil {
-		a.identifier = XAdESAttributeIdentifierBuild(a.element)
+		a.identifier = AttributeIdentifierBuild(a.element)
 	}
 	return a.identifier.SignatureAttributeIdentifier
 }
 
 // Equals ports equals(Object): two XAdESAttributes are equal when their identifiers are equal.
-func (a *XAdESAttribute) Equals(other *XAdESAttribute) bool {
+func (a *Attribute) Equals(other *Attribute) bool {
 	if a == other {
 		return true
 	}
@@ -140,6 +140,6 @@ func (a *XAdESAttribute) Equals(other *XAdESAttribute) bool {
 }
 
 // String ports toString().
-func (a *XAdESAttribute) String() string {
+func (a *Attribute) String() string {
 	return a.Name()
 }

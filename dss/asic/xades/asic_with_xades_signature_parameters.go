@@ -13,31 +13,31 @@ import (
 // ASiCWithXAdESSignatureParameters defines SignatureParameters to deal with ASiC with XAdES
 // signature creation/extension.
 type ASiCWithXAdESSignatureParameters struct {
-	dssxades.XAdESSignatureParameters
+	dssxades.SignatureParameters
 
 	// asicParams is the object representing the parameters related to ASiC from of the
 	// signature.
-	asicParams *asic.ASiCParameters
+	asicParams *asic.Parameters
 }
 
 // NewASiCWithXAdESSignatureParameters instantiates object with default ASiCParameters. Port of
 // the default constructor.
 func NewASiCWithXAdESSignatureParameters() *ASiCWithXAdESSignatureParameters {
 	return &ASiCWithXAdESSignatureParameters{
-		XAdESSignatureParameters: *dssxades.NewXAdESSignatureParameters(),
-		asicParams:               asic.NewASiCParameters(),
+		SignatureParameters: *dssxades.NewSignatureParameters(),
+		asicParams:          asic.NewParameters(),
 	}
 }
 
 // ASiC ports the @Override aSiC().
-func (p *ASiCWithXAdESSignatureParameters) ASiC() *asic.ASiCParameters {
+func (p *ASiCWithXAdESSignatureParameters) ASiC() *asic.Parameters {
 	return p.asicParams
 }
 
 // String ports #toString.
 func (p *ASiCWithXAdESSignatureParameters) String() string {
 	return fmt.Sprintf("ASiCWithXAdESSignatureParameters [asicParams=%v] %s",
-		p.asicParams, p.XAdESSignatureParameters.String())
+		p.asicParams, p.SignatureParameters.String())
 }
 
 // Equals ports #equals.
@@ -48,7 +48,7 @@ func (p *ASiCWithXAdESSignatureParameters) Equals(other *ASiCWithXAdESSignatureP
 	if other == nil {
 		return false
 	}
-	if !p.XAdESSignatureParameters.Equals(&other.XAdESSignatureParameters) {
+	if !p.SignatureParameters.Equals(&other.SignatureParameters) {
 		return false
 	}
 	return asicWithXAdESSignatureParametersASiCParamsEquals(p.asicParams, other.asicParams)
@@ -56,7 +56,7 @@ func (p *ASiCWithXAdESSignatureParameters) Equals(other *ASiCWithXAdESSignatureP
 
 // asicWithXAdESSignatureParametersASiCParamsEquals ports the Objects.equals(asicParams,
 // that.asicParams) comparison, local to this file per PORTING.md (no cross-file shared helpers).
-func asicWithXAdESSignatureParametersASiCParamsEquals(a, b *asic.ASiCParameters) bool {
+func asicWithXAdESSignatureParametersASiCParamsEquals(a, b *asic.Parameters) bool {
 	if a == b {
 		return true
 	}

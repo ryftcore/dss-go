@@ -27,7 +27,7 @@ type EAARevocationTokenTypeCheck struct {
 }
 
 // NewEAARevocationTokenTypeCheck is the default constructor.
-func NewEAARevocationTokenTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlFC],
+func NewEAARevocationTokenTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlFC],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, constraint policy.MultiValuesRule) *EAARevocationTokenTypeCheck {
 	c := &EAARevocationTokenTypeCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

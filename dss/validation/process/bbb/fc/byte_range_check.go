@@ -18,7 +18,7 @@ type ByteRangeCheck struct {
 }
 
 // NewByteRangeCheck is the default constructor.
-func NewByteRangeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewByteRangeCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *ByteRangeCheck {
 	c := &ByteRangeCheck{pdfRevision: pdfRevision}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

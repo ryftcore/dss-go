@@ -35,8 +35,8 @@ type AbstractSignatureFormatChecking[S diagnostic.AbstractSignatureWrapperOverri
 
 // InitAbstractSignatureFormatChecking wires the shared state; called by the concrete
 // constructor before InitChain.
-func (c *AbstractSignatureFormatChecking[S]) InitAbstractSignatureFormatChecking(i18nProvider *i18n.I18nProvider,
-	diagnosticData *diagnostic.DiagnosticData, token S, context enumerations.Context, pol policy.ValidationPolicy,
+func (c *AbstractSignatureFormatChecking[S]) InitAbstractSignatureFormatChecking(i18nProvider *i18n.Provider,
+	diagnosticData *diagnostic.Data, token S, context enumerations.Context, pol policy.ValidationPolicy,
 	overrides AbstractSignatureFormatCheckingOverrides) {
 	c.InitAbstractFormatChecking(i18nProvider, diagnosticData, token, context, pol)
 	c.overrides = overrides

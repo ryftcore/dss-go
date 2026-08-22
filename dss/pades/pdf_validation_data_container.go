@@ -12,10 +12,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// PdfValidationDataContainer is a PDF implementation of ValidationDataContainer containing a
+// PdfValidationDataContainer is a PDF implementation of DataContainer containing a
 // validation data to be incorporated within a PDF document.
 type PdfValidationDataContainer struct {
-	validation.ValidationDataContainer
+	validation.DataContainer
 
 	// pdfDssRevisions is a list of PDF DSS revisions.
 	pdfDssRevisions []*PdfDocDssRevision
@@ -28,8 +28,8 @@ type PdfValidationDataContainer struct {
 // Port of the constructor PdfValidationDataContainer(Collection<PdfDocDssRevision>).
 func NewPdfValidationDataContainer(pdfDssRevisions []*PdfDocDssRevision) *PdfValidationDataContainer {
 	return &PdfValidationDataContainer{
-		ValidationDataContainer: *validation.NewValidationDataContainer(),
-		pdfDssRevisions:         pdfDssRevisions,
+		DataContainer:   *validation.NewDataContainer(),
+		pdfDssRevisions: pdfDssRevisions,
 	}
 }
 

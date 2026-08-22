@@ -26,7 +26,7 @@ type ETSI194721ConformanceCheck struct {
 }
 
 // NewETSI194721ConformanceCheck is the default constructor.
-func NewETSI194721ConformanceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewETSI194721ConformanceCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, validationTime time.Time, constraint policy.LevelRule) *ETSI194721ConformanceCheck {
 	c := &ETSI194721ConformanceCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

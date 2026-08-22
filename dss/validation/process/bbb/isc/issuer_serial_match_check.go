@@ -20,8 +20,8 @@ type IssuerSerialMatchCheck struct {
 }
 
 // NewIssuerSerialMatchCheck is the default constructor. Port of
-// IssuerSerialMatchCheck(I18nProvider, XmlISC, TokenProxy, LevelRule).
-func NewIssuerSerialMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlISC],
+// IssuerSerialMatchCheck(Provider, XmlISC, TokenProxy, LevelRule).
+func NewIssuerSerialMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlISC],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *IssuerSerialMatchCheck {
 	c := &IssuerSerialMatchCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

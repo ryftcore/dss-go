@@ -24,8 +24,8 @@ type QualifiedCheck struct {
 }
 
 // NewQualifiedCheck is the default constructor. Port of
-// QualifiedCheck(I18nProvider, XmlValidationCertificateQualification, CertificateQualifiedStatus, ValidationTime, LevelRule).
-func NewQualifiedCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// QualifiedCheck(Provider, XmlValidationCertificateQualification, CertificateQualifiedStatus, ValidationTime, LevelRule).
+func NewQualifiedCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	qualifiedStatus enumerations.CertificateQualifiedStatus, validationTime enumerations.ValidationTime,
 	constraint policy.LevelRule) *QualifiedCheck {
 	c := &QualifiedCheck{

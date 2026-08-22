@@ -13,12 +13,12 @@ type TrustedEntityService struct {
 	// certificates is a list of certificates.
 	certificates []*model.CertificateToken
 	// status holds statuses based on time.
-	status *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]
+	status *timedependent.Values[ServiceStatusAndInformationExtensions]
 }
 
 // NewTrustedEntityService is the default constructor.
 func NewTrustedEntityService(certificates []*model.CertificateToken,
-	status *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]) *TrustedEntityService {
+	status *timedependent.Values[ServiceStatusAndInformationExtensions]) *TrustedEntityService {
 	return &TrustedEntityService{certificates: certificates, status: status}
 }
 
@@ -28,7 +28,7 @@ func (t *TrustedEntityService) Certificates() []*model.CertificateToken {
 }
 
 // StatusAndInformationExtensions gets status based on time.
-func (t *TrustedEntityService) StatusAndInformationExtensions() *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions] {
+func (t *TrustedEntityService) StatusAndInformationExtensions() *timedependent.Values[ServiceStatusAndInformationExtensions] {
 	return t.status
 }
 
@@ -38,7 +38,7 @@ type TrustEntityServiceBuilder struct {
 	// certificates is a list of certificates.
 	certificates []*model.CertificateToken
 	// status holds statuses based on time.
-	status *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]
+	status *timedependent.Values[ServiceStatusAndInformationExtensions]
 }
 
 // NewTrustEntityServiceBuilder is the default constructor.
@@ -54,7 +54,7 @@ func (b *TrustEntityServiceBuilder) SetCertificates(certificates []*model.Certif
 
 // SetStatusAndInformationExtensions sets a status.
 func (b *TrustEntityServiceBuilder) SetStatusAndInformationExtensions(
-	status *timedependent.TimeDependentValues[ServiceStatusAndInformationExtensions]) *TrustEntityServiceBuilder {
+	status *timedependent.Values[ServiceStatusAndInformationExtensions]) *TrustEntityServiceBuilder {
 	b.status = status
 	return b
 }

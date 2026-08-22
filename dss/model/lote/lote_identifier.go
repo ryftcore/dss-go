@@ -5,20 +5,20 @@ package lote
 
 import "github.com/ryftcore/dss-go/dss/model"
 
-// loteIdentifierPrefix is the "LoTE-" prefix LoTEIdentifier passes to AbstractLoTEIdentifier.
+// loteIdentifierPrefix is the "LoTE-" prefix Identifier passes to AbstractIdentifier.
 const loteIdentifierPrefix = "LoTE-"
 
-// LoTEIdentifier is the identifier for a List of Trusted Entities.
-type LoTEIdentifier struct {
-	AbstractLoTEIdentifier
+// Identifier is the identifier for a List of Trusted Entities.
+type Identifier struct {
+	AbstractIdentifier
 }
 
-// NewLoTEIdentifier is the default constructor.
-func NewLoTEIdentifier(listInfo *LoTEInfo) *LoTEIdentifier {
-	return &LoTEIdentifier{
-		AbstractLoTEIdentifier: NewAbstractLoTEIdentifier("LoTEIdentifier", loteIdentifierPrefix, listInfo),
+// NewIdentifier is the default constructor.
+func NewIdentifier(listInfo *Info) *Identifier {
+	return &Identifier{
+		AbstractIdentifier: NewAbstractLoTEIdentifier("LoTEIdentifier", loteIdentifierPrefix, listInfo),
 	}
 }
 
 // compile-time interface assertion.
-var _ model.Identifier = (*LoTEIdentifier)(nil)
+var _ model.Identifier = (*Identifier)(nil)

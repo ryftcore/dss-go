@@ -1,5 +1,5 @@
 // Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness: it signs a
-// fixed sample document with this package's own XAdESService,
+// fixed sample document with this package's own Service,
 // producing XAdES-B enveloped, XAdES-B enveloping, XAdES-B detached, and XAdES-T enveloping
 // signatures with real crypto (an RSA PKCS#12 test key for the signer, an EC PKCS#12 test key as
 // a self-hosted TSA via spi/validation.KeyEntityTSPSource - the same two key stores
@@ -119,12 +119,12 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 	return signatureToken.KeyWithPassword(entry.Alias(), token.NewPasswordProtection([]byte(password)))
 }
 
-// newParameters builds the XAdESSignatureParameters shared by every generated signature: the
+// newParameters builds the SignatureParameters shared by every generated signature: the
 // digest algorithm, signing certificate/chain, and (for anything above baseline B) the TSP source
 // a XAdES-T needs to request its signature-timestamp.
 func newParameters(level enumerations.SignatureLevel, packaging enumerations.SignaturePackaging,
-	signerEntry token.DSSPrivateKeyEntry) *xades.XAdESSignatureParameters {
-	parameters := xades.NewXAdESSignatureParameters()
+	signerEntry token.DSSPrivateKeyEntry) *xades.SignatureParameters {
+	parameters := xades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetSignaturePackaging(packaging)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
@@ -138,7 +138,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, packaging, signerEntry)
 
-	service := xades.NewXAdESService(validation.NewCommonCertificateVerifier())
+	service := xades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.TspSource = tspSource
 	}
@@ -164,7 +164,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, packaging 
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
 	parameters := newParameters(enumerations.SignatureLevelXAdESBaselineB, enumerations.SignaturePackagingDetached, signerEntry)
 
-	service := xades.NewXAdESService(validation.NewCommonCertificateVerifier())
+	service := xades.NewService(validation.NewCommonCertificateVerifier())
 	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleXMLContent), "sample-detached.xml", enumerations.MimeTypeEnumXML)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)
@@ -183,7 +183,7 @@ func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error
 	return os.WriteFile(filepath.Join(outDir, "xades-b-detached-content.xml"), []byte(sampleXMLContent), 0o644)
 }
 
-// reopenSignatureToken opens the signer's key store afresh. XAdESSignatureParameters carries no
+// reopenSignatureToken opens the signer's key store afresh. SignatureParameters carries no
 // live token/session, only the certificate/chain, so signing always goes back through a
 // SignatureTokenConnection.
 func reopenSignatureToken() (*token.Pkcs12SignatureToken, error) {

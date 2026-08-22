@@ -35,8 +35,8 @@ type CertificateKnownToBeNotRevokedCheck[T any] struct {
 }
 
 // NewCertificateKnownToBeNotRevokedCheck is the default constructor. Port of
-// CertificateKnownToBeNotRevokedCheck(I18nProvider, T, CertificateWrapper, CertificateRevocationWrapper, boolean, Date, XmlConclusion, LevelRule).
-func NewCertificateKnownToBeNotRevokedCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateKnownToBeNotRevokedCheck(Provider, T, CertificateWrapper, CertificateRevocationWrapper, boolean, Date, XmlConclusion, LevelRule).
+func NewCertificateKnownToBeNotRevokedCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, revocationData *diagnostic.CertificateRevocationWrapper,
 	isRevocationDataIssuerTrusted bool, currentTime *time.Time, bsConclusion *jaxb.XmlConclusion,
 	constraint policy.LevelRule) *CertificateKnownToBeNotRevokedCheck[T] {

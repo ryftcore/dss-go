@@ -8,9 +8,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// SignatureDigestReference is a signature reference element referencing a specific
+// DigestReference is a signature reference element referencing a specific
 // electronic signature; contains the Digest of the referenced signature.
-type SignatureDigestReference struct {
+type DigestReference struct {
 	// canonicalizationMethod is the canonicalization method when applicable (i.e. XAdES).
 	canonicalizationMethod string
 
@@ -18,37 +18,37 @@ type SignatureDigestReference struct {
 	digest model.Digest
 }
 
-// NewSignatureDigestReference is the default constructor.
-func NewSignatureDigestReference(digest model.Digest) *SignatureDigestReference {
-	return &SignatureDigestReference{digest: digest}
+// NewDigestReference is the default constructor.
+func NewDigestReference(digest model.Digest) *DigestReference {
+	return &DigestReference{digest: digest}
 }
 
-// NewSignatureDigestReferenceWithCanonicalization is the constructor for the XAdES Signature
+// NewDigestReferenceWithCanonicalization is the constructor for the XAdES Signature
 // Digest Reference.
-func NewSignatureDigestReferenceWithCanonicalization(canonicalizationMethod string, digest model.Digest) *SignatureDigestReference {
-	return &SignatureDigestReference{canonicalizationMethod: canonicalizationMethod, digest: digest}
+func NewDigestReferenceWithCanonicalization(canonicalizationMethod string, digest model.Digest) *DigestReference {
+	return &DigestReference{canonicalizationMethod: canonicalizationMethod, digest: digest}
 }
 
 // CanonicalizationMethod returns the canonicalization method used to calculate the digest.
 // Port of getCanonicalizationMethod().
-func (s *SignatureDigestReference) CanonicalizationMethod() string {
+func (s *DigestReference) CanonicalizationMethod() string {
 	return s.canonicalizationMethod
 }
 
 // DigestAlgorithm returns the DigestAlgorithm used to calculate the digest value. Port of
 // getDigestAlgorithm().
-func (s *SignatureDigestReference) DigestAlgorithm() enumerations.DigestAlgorithm {
+func (s *DigestReference) DigestAlgorithm() enumerations.DigestAlgorithm {
 	return s.digest.Algorithm()
 }
 
 // DigestValue returns the calculated digest value. Port of getDigestValue().
-func (s *SignatureDigestReference) DigestValue() []byte {
+func (s *DigestReference) DigestValue() []byte {
 	return s.digest.Value()
 }
 
 // Equals reports whether both SignatureDigestReferences carry the same canonicalization
 // method and digest. Port of equals(Object).
-func (s *SignatureDigestReference) Equals(other *SignatureDigestReference) bool {
+func (s *DigestReference) Equals(other *DigestReference) bool {
 	if s == other {
 		return true
 	}
@@ -59,6 +59,6 @@ func (s *SignatureDigestReference) Equals(other *SignatureDigestReference) bool 
 }
 
 // String returns the Java toString() form. Port of toString().
-func (s *SignatureDigestReference) String() string {
+func (s *DigestReference) String() string {
 	return fmt.Sprintf("SignatureDigestReference [canonicalizationMethod='%s', digest=%s]", s.canonicalizationMethod, s.digest.String())
 }

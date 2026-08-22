@@ -27,8 +27,8 @@ type TimestampValidationCheck[T any] struct {
 }
 
 // NewTimestampValidationCheck is the default constructor. Port of
-// TimestampValidationCheck(I18nProvider, T, TimestampWrapper, XmlValidationProcessArchivalDataTimestamp, LevelRule).
-func NewTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampValidationCheck(Provider, T, TimestampWrapper, XmlValidationProcessArchivalDataTimestamp, LevelRule).
+func NewTimestampValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper,
 	timestampValidationResult *jaxb.XmlValidationProcessArchivalDataTimestamp,
 	constraint policy.LevelRule) *TimestampValidationCheck[T] {

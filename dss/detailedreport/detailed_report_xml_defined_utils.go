@@ -20,31 +20,31 @@ var ErrSecureTransformerFactoryNotSupported = errors.New("detailedreport: secure
 // XSD validator ships in the Go stdlib and none has been added to this port.
 var ErrSecureSchemaFactoryNotSupported = errors.New("detailedreport: secure SchemaFactory is not implemented in this port (deferred, see DetailedReportXmlDefinedUtils)")
 
-// DetailedReportXmlDefinedUtils provides access to XML Securities
+// XmlDefinedUtils provides access to XML Securities
 // configuration required for processing and building of the DSS XML Detailed
 // Report.
-type DetailedReportXmlDefinedUtils struct{}
+type XmlDefinedUtils struct{}
 
 // detailedReportXmlDefinedUtilsSingleton is the package-level singleton. Port
 // of the private static `singleton` field.
-var detailedReportXmlDefinedUtilsSingleton = &DetailedReportXmlDefinedUtils{}
+var detailedReportXmlDefinedUtilsSingleton = &XmlDefinedUtils{}
 
-// DetailedReportXmlDefinedUtilsInstance returns the DetailedReportXmlDefinedUtils
+// XmlDefinedUtilsInstance returns the XmlDefinedUtils
 // singleton. Port of getInstance().
-func DetailedReportXmlDefinedUtilsInstance() *DetailedReportXmlDefinedUtils {
+func XmlDefinedUtilsInstance() *XmlDefinedUtils {
 	return detailedReportXmlDefinedUtilsSingleton
 }
 
 // SecureTransformerFactory is a stub for a TransformerFactory with enabled
 // security features (disabled external DTD/XSD + secure processing). Port of
 // getSecureTransformerFactory(); see the DEFERRED note above.
-func (u *DetailedReportXmlDefinedUtils) SecureTransformerFactory() (struct{}, error) {
+func (u *XmlDefinedUtils) SecureTransformerFactory() (struct{}, error) {
 	return struct{}{}, ErrSecureTransformerFactoryNotSupported
 }
 
 // SecureSchemaFactory is a stub for a SchemaFactory with enabled security
 // features (disabled external DTD/XSD + secure processing). Port of
 // getSecureSchemaFactory(); see the DEFERRED note above.
-func (u *DetailedReportXmlDefinedUtils) SecureSchemaFactory() (struct{}, error) {
+func (u *XmlDefinedUtils) SecureSchemaFactory() (struct{}, error) {
 	return struct{}{}, ErrSecureSchemaFactoryNotSupported
 }

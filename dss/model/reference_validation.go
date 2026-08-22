@@ -145,7 +145,7 @@ func (r *ReferenceValidation) DependentValidations() []*ReferenceValidation {
 // "validation.getDependentValidations().addAll(...)", mutating the live List the lazy getter
 // hands back. A Go slice returned by value cannot be appended to through its caller, so the
 // getter alone leaves no way to populate the list - which is exactly what happened, in
-// XAdESSignature's ds:Reference[@Type=".../Manifest"] branch: the manifest entries were computed
+// Signature's ds:Reference[@Type=".../Manifest"] branch: the manifest entries were computed
 // and discarded, so every DataObjectFormat qualifying property pointing at a manifest entry
 // failed to find its reference and the whole signature was reported as XML_NOT_ETSI (confirmed
 // against testdata/upstream/Signature-X-CZ_SEF-5.xml, where upstream reports

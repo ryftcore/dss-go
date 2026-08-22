@@ -24,7 +24,7 @@ type SignatureSignedDataAlgorithmObsolescenceValidation struct {
 
 // NewSignatureSignedDataAlgorithmObsolescenceValidation is the default
 // constructor.
-func NewSignatureSignedDataAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.SignatureWrapper,
+func NewSignatureSignedDataAlgorithmObsolescenceValidation(i18nProvider *i18n.Provider, token *diagnostic.SignatureWrapper,
 	context enumerations.Context, validationDate time.Time,
 	validationPolicy policy.ValidationPolicy) *SignatureSignedDataAlgorithmObsolescenceValidation {
 	c := &SignatureSignedDataAlgorithmObsolescenceValidation{}

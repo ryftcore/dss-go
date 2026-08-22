@@ -5,6 +5,6 @@
 // effect at an arbitrary instant.
 //
 // The main entry types are the TimeDependent interface,
-// TimeDependentValues[T] (an ordered, queryable collection of TimeDependent
-// values), MutableTimeDependentValues[T], and BaseTimeDependent.
+// Values[T] (an ordered, queryable collection of TimeDependent
+// values), MutableValues[T], and BaseTimeDependent.
 package timedependent

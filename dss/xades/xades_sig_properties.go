@@ -7,8 +7,8 @@ import (
 )
 
 // XAdESSigProperties represents a list of XAdESAttributes. Port of the abstract class
-// XAdESSigProperties, implementing spi/validation.SignatureProperties[*XAdESAttribute].
-type XAdESSigProperties struct {
+// SigProperties, implementing spi/validation.SignatureProperties[*Attribute].
+type SigProperties struct {
 	// signaturePropertiesDom is the signature properties element.
 	signaturePropertiesDom *xmldom.Node
 
@@ -17,23 +17,23 @@ type XAdESSigProperties struct {
 }
 
 // newXAdESSigProperties is the port of the package-private
-// XAdESSigProperties(Element, XAdESPath) constructor.
-func newXAdESSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) XAdESSigProperties {
-	return XAdESSigProperties{signaturePropertiesDom: signatureProperties, xadesPaths: xadesPaths}
+// SigProperties(Element, XAdESPath) constructor.
+func newSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath) SigProperties {
+	return SigProperties{signaturePropertiesDom: signatureProperties, xadesPaths: xadesPaths}
 }
 
 // IsExist is the port of isExist().
-func (p *XAdESSigProperties) IsExist() bool {
+func (p *SigProperties) IsExist() bool {
 	return p.signaturePropertiesDom != nil
 }
 
 // Attributes is the port of getAttributes(). Elements() already restricts the traversal to
 // element children, which is what the Java loop's isElementNode(Node) guard achieves by hand.
-func (p *XAdESSigProperties) Attributes() []*XAdESAttribute {
-	unsignedAttributes := make([]*XAdESAttribute, 0)
+func (p *SigProperties) Attributes() []*Attribute {
+	unsignedAttributes := make([]*Attribute, 0)
 	if p.signaturePropertiesDom != nil {
 		for _, node := range p.signaturePropertiesDom.Elements() {
-			unsignedAttributes = append(unsignedAttributes, newXAdESAttribute(node, p.xadesPaths))
+			unsignedAttributes = append(unsignedAttributes, newAttribute(node, p.xadesPaths))
 		}
 	}
 	return unsignedAttributes

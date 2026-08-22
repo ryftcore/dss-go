@@ -23,8 +23,8 @@ type CertificateMinQcEuRetentionPeriodCheck struct {
 }
 
 // NewCertificateMinQcEuRetentionPeriodCheck is the default constructor. Port
-// of CertificateMinQcEuRetentionPeriodCheck(I18nProvider, XmlSubXCV, CertificateWrapper, NumericValueRule).
-func NewCertificateMinQcEuRetentionPeriodCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// of CertificateMinQcEuRetentionPeriodCheck(Provider, XmlSubXCV, CertificateWrapper, NumericValueRule).
+func NewCertificateMinQcEuRetentionPeriodCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.NumericValueRule) *CertificateMinQcEuRetentionPeriodCheck {
 	c := &CertificateMinQcEuRetentionPeriodCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -25,7 +25,7 @@ type EAANotExpiredCheck struct {
 }
 
 // NewEAANotExpiredCheck is the default constructor.
-func NewEAANotExpiredCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAANotExpiredCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, validationTime time.Time, constraint policy.LevelRule) *EAANotExpiredCheck {
 	c := &EAANotExpiredCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

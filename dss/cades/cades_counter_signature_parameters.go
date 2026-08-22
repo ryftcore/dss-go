@@ -7,47 +7,47 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// CAdESCounterSignatureParameters holds parameters for a CAdES counter-signature creation.
-type CAdESCounterSignatureParameters struct {
-	CAdESSignatureParameters
+// CounterSignatureParameters holds parameters for a CAdES counter-signature creation.
+type CounterSignatureParameters struct {
+	SignatureParameters
 
 	// signatureIdToCounterSign is the Signature Id to be counter-signed.
 	signatureIdToCounterSign string
 }
 
-var _ model.SerializableCounterSignatureParameters = (*CAdESCounterSignatureParameters)(nil)
+var _ model.SerializableCounterSignatureParameters = (*CounterSignatureParameters)(nil)
 
-// NewCAdESCounterSignatureParameters instantiates the object with an empty signature id to be
+// NewCounterSignatureParameters instantiates the object with an empty signature id to be
 // counter-signed. Port of the default constructor.
-func NewCAdESCounterSignatureParameters() *CAdESCounterSignatureParameters {
-	return &CAdESCounterSignatureParameters{CAdESSignatureParameters: *NewCAdESSignatureParameters()}
+func NewCounterSignatureParameters() *CounterSignatureParameters {
+	return &CounterSignatureParameters{SignatureParameters: *NewSignatureParameters()}
 }
 
 // SignatureIdToCounterSign ports #getSignatureIdToCounterSign.
-func (p *CAdESCounterSignatureParameters) SignatureIdToCounterSign() string {
+func (p *CounterSignatureParameters) SignatureIdToCounterSign() string {
 	return p.signatureIdToCounterSign
 }
 
 // SetSignatureIdToCounterSign ports #setSignatureIdToCounterSign.
-func (p *CAdESCounterSignatureParameters) SetSignatureIdToCounterSign(signatureId string) {
+func (p *CounterSignatureParameters) SetSignatureIdToCounterSign(signatureId string) {
 	p.signatureIdToCounterSign = signatureId
 }
 
 // String ports #toString.
-func (p *CAdESCounterSignatureParameters) String() string {
+func (p *CounterSignatureParameters) String() string {
 	return fmt.Sprintf("CAdESCounterSignatureParameters [signatureIdToCounterSign='%v'] %s",
-		p.signatureIdToCounterSign, p.CAdESSignatureParameters.String())
+		p.signatureIdToCounterSign, p.SignatureParameters.String())
 }
 
 // Equals ports #equals.
-func (p *CAdESCounterSignatureParameters) Equals(other *CAdESCounterSignatureParameters) bool {
+func (p *CounterSignatureParameters) Equals(other *CounterSignatureParameters) bool {
 	if p == other {
 		return true
 	}
 	if other == nil {
 		return false
 	}
-	if !p.CAdESSignatureParameters.Equals(&other.CAdESSignatureParameters) {
+	if !p.SignatureParameters.Equals(&other.SignatureParameters) {
 		return false
 	}
 	return p.signatureIdToCounterSign == other.signatureIdToCounterSign

@@ -11,7 +11,7 @@ import (
 // LogOJUrlChangeAlertHandler warns on the LOTL Official Journal URL change.
 type LogOJUrlChangeAlertHandler struct{}
 
-var _ alert.AlertHandler[*tslmodel.LOTLInfo] = (*LogOJUrlChangeAlertHandler)(nil)
+var _ alert.Handler[*tslmodel.LOTLInfo] = (*LogOJUrlChangeAlertHandler)(nil)
 
 // NewLogOJUrlChangeAlertHandler is the default constructor.
 func NewLogOJUrlChangeAlertHandler() *LogOJUrlChangeAlertHandler {

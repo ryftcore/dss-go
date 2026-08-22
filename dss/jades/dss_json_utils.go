@@ -461,8 +461,8 @@ func DSSJsonUtilsEtsiU(jws *JWS) []any {
 
 // DSSJsonUtilsUnsignedPropertiesWithHeaderName returns the unsigned 'etsiU' properties of
 // etsiUHeader whose name is headerName. Port of
-// getUnsignedPropertiesWithHeaderName(JAdESEtsiUHeader, String).
-func DSSJsonUtilsUnsignedPropertiesWithHeaderName(etsiUHeader *JAdESEtsiUHeader, headerName string) []*EtsiUComponent {
+// getUnsignedPropertiesWithHeaderName(EtsiUHeader, String).
+func DSSJsonUtilsUnsignedPropertiesWithHeaderName(etsiUHeader *EtsiUHeader, headerName string) []*EtsiUComponent {
 	if !etsiUHeader.IsExist() {
 		return nil
 	}
@@ -499,8 +499,8 @@ func DSSJsonUtilsIssuerSerial(value string) *spi.IssuerSerial {
 
 // DSSJsonUtilsExtractJAdESCounterSignature extracts a counter signature from a 'cSig' value with
 // respect to the found format. Port of
-// extractJAdESCounterSignature(EtsiUComponent, JAdESSignature).
-func DSSJsonUtilsExtractJAdESCounterSignature(cSigAttribute *EtsiUComponent, masterSignature *JAdESSignature) (*JAdESSignature, error) {
+// extractJAdESCounterSignature(EtsiUComponent, Signature).
+func DSSJsonUtilsExtractJAdESCounterSignature(cSigAttribute *EtsiUComponent, masterSignature *Signature) (*Signature, error) {
 	cSigObject := cSigAttribute.Value()
 
 	var cSigValue string
@@ -538,7 +538,7 @@ func DSSJsonUtilsExtractJAdESCounterSignature(cSigAttribute *EtsiUComponent, mas
 		// "{} counter signatures found in 'cSig' element. Only one is allowed!"
 		return nil, nil
 	}
-	signature, ok := signatures[0].(*JAdESSignature) // only one is considered
+	signature, ok := signatures[0].(*Signature) // only one is considered
 	if !ok {
 		return nil, nil
 	}

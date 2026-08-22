@@ -36,7 +36,7 @@ func NewASiCWithCAdESTimestampServiceWithFilenameFactory(tspSource validation.TS
 
 // TimestampDocuments timestamps a list of documents and returns the timestamped archive. Ports
 // timestamp(List, ASiCWithCAdESTimestampParameters); Go has no overloading, so the Java overload
-// set timestamp(List, ...) / timestamp(ASiCContent, ...) becomes TimestampDocuments / Timestamp.
+// set timestamp(List, ...) / timestamp(Content, ...) becomes TimestampDocuments / Timestamp.
 func (s *ASiCWithCAdESTimestampService) TimestampDocuments(documents []model.DSSDocument,
 	parameters *ASiCWithCAdESTimestampParameters) model.DSSDocument {
 	asicContent := NewASiCWithCAdESASiCContentBuilder().
@@ -49,11 +49,11 @@ func (s *ASiCWithCAdESTimestampService) TimestampDocuments(documents []model.DSS
 	return zipArchive
 }
 
-// Timestamp adds a timestamp to the given ASiCContent, returning the content with the timestamp
+// Timestamp adds a timestamp to the given Content, returning the content with the timestamp
 // and the related XML Manifest for an ASiC-E container. Ports
-// timestamp(ASiCContent, ASiCWithCAdESTimestampParameters).
-func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.ASiCContent,
-	parameters *ASiCWithCAdESTimestampParameters) *asic.ASiCContent {
+// timestamp(Content, ASiCWithCAdESTimestampParameters).
+func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.Content,
+	parameters *ASiCWithCAdESTimestampParameters) *asic.Content {
 	dataToSignHelper := NewASiCWithCAdESTimestampDataToSignHelperBuilder(s.asicFilenameFactory).
 		Build(asicContent, parameters)
 
@@ -79,7 +79,7 @@ func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.ASiCContent,
 	}
 	timestampToken := model.NewInMemoryDocumentWithMimeType(derEncoded,
 		s.asicFilenameFactory.TimestampFilename(asicContent), enumerations.MimeTypeEnumTST)
-	asicContent.SetTimestampDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), timestampToken))
+	asicContent.SetTimestampDocuments(asic.UtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), timestampToken))
 
 	return asicContent
 }

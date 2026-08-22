@@ -21,16 +21,16 @@
 //
 // INTEGRATOR NOTE (constructor parameter type conflict between two already-landed sibling
 // files): Java's constructor is CMSForPAdESBaselineRequirementsChecker(CAdESSignature) - the
-// *cades* base class, matched here as *cades.CAdESSignature (this is what
+// *cades* base class, matched here as *cades.Signature (this is what
 // pades_with_external_cms_service.go's landed call site at NewCMSForPAdESBaselineRequirements
-// Checker(cadesSignature) passes, cadesSignature being exactly a *cades.CAdESSignature built by
+// Checker(cadesSignature) passes, cadesSignature being exactly a *cades.Signature built by
 // padesWithExternalCMSServiceToCAdESSignature - so that call site compiles unchanged). However
 // pades_baseline_requirements_checker.go's header (line ~69) documents an assumed signature of
-// NewCMSForPAdESBaselineRequirementsChecker(signature *PAdESSignature) and its landed call site
-// (HasBaselineBProfile) passes b.Signature(), a *PAdESSignature - which does NOT satisfy a
+// NewCMSForPAdESBaselineRequirementsChecker(signature *Signature) and its landed call site
+// (HasBaselineBProfile) passes b.Signature(), a *Signature - which does NOT satisfy a
 // *cades.CAdESSignature parameter (embedding is not Java-style subtyping in Go). That call site
 // needs a one-line fix once this file lands: NewCMSForPAdESBaselineRequirementsChecker(
-// b.Signature().CAdESSignature) - passing the embedded *cades.CAdESSignature field, which is
+// b.Signature().Signature) - passing the embedded *cades.Signature field, which is
 // exactly the CAdESSignature Java's polymorphic call passes for a PAdESSignature receiver.
 package pades
 
@@ -41,38 +41,38 @@ import (
 
 // CMSForPAdESBaselineRequirementsChecker is used to verify conformance of a CMSSignedData to be
 // incorporated to a PDF as a PAdES signature. Port of the class
-// CMSForPAdESBaselineRequirementsChecker, extending cades.CAdESBaselineRequirementsChecker.
+// CMSForPAdESBaselineRequirementsChecker, extending cades.BaselineRequirementsChecker.
 type CMSForPAdESBaselineRequirementsChecker struct {
-	*cades.CAdESBaselineRequirementsChecker
+	*cades.BaselineRequirementsChecker
 }
 
 // NewCMSForPAdESBaselineRequirementsChecker is the default constructor, used to verify CMS of
-// CAdESSignature on conformance to PAdES Baseline-B format.
+// Signature on conformance to PAdES Baseline-B format.
 // Port of the constructor CMSForPAdESBaselineRequirementsChecker(CAdESSignature).
 //
 // Re-registers the override target as checker itself (not the embedded
-// *cades.CAdESBaselineRequirementsChecker cades.NewCAdESBaselineRequirementsChecker already
+// *cades.BaselineRequirementsChecker cades.NewBaselineRequirementsChecker already
 // self-registered) - exactly the same package-boundary re-registration
-// pades_baseline_requirements_checker.go's own NewPAdESBaselineRequirementsChecker performs and
+// pades_baseline_requirements_checker.go's own NewBaselineRequirementsChecker performs and
 // documents ("STRUCTURE DEVIATION"), needed here so GetBaselineSignatureForm() below (not
-// cades.CAdESBaselineRequirementsChecker's CAdES-returning one) is what
+// cades.BaselineRequirementsChecker's CAdES-returning one) is what
 // cmsBaselineBRequirements() resolves via BaselineSignatureForm() when it runs for a PDF's
 // embedded CMS - see spi/validation.BaselineRequirementsCheckerOverrides.GetBaselineSignatureForm.
-func NewCMSForPAdESBaselineRequirementsChecker(signature *cades.CAdESSignature) *CMSForPAdESBaselineRequirementsChecker {
+func NewCMSForPAdESBaselineRequirementsChecker(signature *cades.Signature) *CMSForPAdESBaselineRequirementsChecker {
 	checker := &CMSForPAdESBaselineRequirementsChecker{
-		CAdESBaselineRequirementsChecker: cades.NewCAdESBaselineRequirementsChecker(signature, nil),
+		BaselineRequirementsChecker: cades.NewBaselineRequirementsChecker(signature, nil),
 	}
 	checker.InitBaselineRequirementsChecker(checker)
 	return checker
 }
 
 // GetBaselineSignatureForm returns the signature form corresponding to the signature: PAdES,
-// even though the wrapped signature value is a plain *cades.CAdESSignature (see this file's
-// header "INTEGRATOR NOTE" on why b.Signature().CAdESSignature, not a *PAdESSignature, is what
+// even though the wrapped signature value is a plain *cades.Signature (see this file's
+// header "INTEGRATOR NOTE" on why b.Signature().Signature, not a *Signature, is what
 // gets passed in here). Port of the protected getBaselineSignatureForm() override upstream's
 // CMSForPAdESBaselineRequirementsChecker.java declares independently of
-// PAdESBaselineRequirementsChecker's own identical override, for exactly this reason: this
-// checker validates a PDF's embedded CMS on its own, without going through a PAdESSignature.
+// BaselineRequirementsChecker's own identical override, for exactly this reason: this
+// checker validates a PDF's embedded CMS on its own, without going through a Signature.
 func (c *CMSForPAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureFormPAdES
 }

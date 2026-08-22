@@ -36,12 +36,12 @@ func TestXmlPolicyBuilderOmitsAbsentMembers(t *testing.T) {
 		"a navaznych predpisu/This qualified system certificate was issued according to Law " +
 		"No 227/2000Coll. and related regulations")
 
-	validationResult := modelsignature.NewSignaturePolicyValidationResult()
+	validationResult := modelsignature.NewPolicyValidationResult()
 	validationResult.SetIdentified(true)
 	validationResult.SetAsn1Processable(false)
 	validationResult.SetDigestValid(true)
 
-	signaturePolicy := modelsignature.NewSignaturePolicyWithIdentifier("2.23.134.1.4.1.8.200")
+	signaturePolicy := modelsignature.NewPolicyWithIdentifier("2.23.134.1.4.1.8.200")
 	signaturePolicy.SetURI("http://www.postsignum.cz")
 	signaturePolicy.SetUserNotice(userNotice)
 	signaturePolicy.SetZeroHash(true)
@@ -81,8 +81,8 @@ func TestXmlPolicyBuilderOmitsAbsentMembers(t *testing.T) {
 // as <DocumentationReferences/> - the spelling the corpus carries in
 // jades-with-sigPSt-invalid.json.xml.
 func TestXmlPolicyBuilderKeepsEmptyDocumentationReferences(t *testing.T) {
-	validationResult := modelsignature.NewSignaturePolicyValidationResult()
-	signaturePolicy := modelsignature.NewSignaturePolicyWithIdentifier("1.2.3.4.5.6")
+	validationResult := modelsignature.NewPolicyValidationResult()
+	signaturePolicy := modelsignature.NewPolicyWithIdentifier("1.2.3.4.5.6")
 	signaturePolicy.SetDocumentationReferences([]string{})
 	signaturePolicy.SetValidationResult(validationResult)
 

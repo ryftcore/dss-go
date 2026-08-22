@@ -40,8 +40,8 @@ type PIDQualificationProcessBlock struct {
 }
 
 // NewPIDQualificationProcessBlock is the default constructor. Port of
-// PIDQualificationProcessBlock(I18nProvider, EAAWrapper, XmlConclusion, List, Date).
-func NewPIDQualificationProcessBlock(i18nProvider *i18n.I18nProvider, eaa *diagnostic.EAAWrapper,
+// PIDQualificationProcessBlock(Provider, EAAWrapper, XmlConclusion, List, Date).
+func NewPIDQualificationProcessBlock(i18nProvider *i18n.Provider, eaa *diagnostic.EAAWrapper,
 	eaaConclusion *jaxb.XmlConclusion, loteAnalysis []*jaxb.XmlLoTEAnalysis, currentTime time.Time) *PIDQualificationProcessBlock {
 	xmlResult := &jaxb.XmlValidationPIDQualificationProcess{}
 	c := &PIDQualificationProcessBlock{

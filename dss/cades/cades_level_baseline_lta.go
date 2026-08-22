@@ -14,32 +14,32 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// CAdESLevelBaselineLTA holds the CAdES-A signature profiles; it supports the later, over time
+// LevelBaselineLTA holds the CAdES-A signature profiles; it supports the later, over time
 // _extension_ of a signature with id-aa-ets-archiveTimestampV2 attributes as defined in
 // ETSI TS 101 733 V1.8.1, clause 6.4.1.
 //
 // "If the certificate-values and revocation-values attributes are not present in the CAdES-BES
 // or CAdES-EPES, then they shall be added to the electronic signature prior to computing the
 // archive time-stamp token." is the reason we extend from the XL profile.
-type CAdESLevelBaselineLTA struct {
-	CAdESLevelBaselineLT
+type LevelBaselineLTA struct {
+	LevelBaselineLT
 }
 
-// NewCAdESLevelBaselineLTA is the default constructor, taking the TSPSource to request a
+// NewLevelBaselineLTA is the default constructor, taking the TSPSource to request a
 // timestamp and the CertificateVerifier. Port of
-// CAdESLevelBaselineLTA(TSPSource, CertificateVerifier).
-func NewCAdESLevelBaselineLTA(tspSource validation.TSPSource,
-	certificateVerifier validation.CertificateVerifier) *CAdESLevelBaselineLTA {
-	extension := &CAdESLevelBaselineLTA{}
+// LevelBaselineLTA(TSPSource, CertificateVerifier).
+func NewLevelBaselineLTA(tspSource validation.TSPSource,
+	certificateVerifier validation.CertificateVerifier) *LevelBaselineLTA {
+	extension := &LevelBaselineLTA{}
 	extension.InitCAdESSignatureExtension(extension, tspSource, certificateVerifier)
 	return extension
 }
 
 // ExtendCMSSignaturesWithIds ports the overridden protected
-// extendCMSSignatures(CMS, CAdESSignatureParameters, List<String>).
-func (e *CAdESLevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
-	parameters *CAdESSignatureParameters, signatureIdsToExtend []string) (*cms.CMS, error) {
-	cmsToExtend, err := e.CAdESLevelBaselineLT.ExtendCMSSignaturesWithIds(cmsToExtend, parameters, signatureIdsToExtend)
+// extendCMSSignatures(CMS, SignatureParameters, List<String>).
+func (e *LevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
+	parameters *SignatureParameters, signatureIdsToExtend []string) (*cms.CMS, error) {
+	cmsToExtend, err := e.LevelBaselineLT.ExtendCMSSignaturesWithIds(cmsToExtend, parameters, signatureIdsToExtend)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (e *CAdESLevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 	// signature validity is checked within -LT augmentation
 
 	for _, sig := range signatures {
-		cadesSignature, ok := sig.(*CAdESSignature)
+		cadesSignature, ok := sig.(*Signature)
 		if !ok {
 			continue
 		}
@@ -71,13 +71,13 @@ func (e *CAdESLevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 		newSignerInformation := signerInformation
 
 		if cadesLTAContainsSignature(signaturesToExtend, cadesSignature) {
-			unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+			unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 			unsignedAttributes, err = e.addArchiveTimestampV3Attribute(
 				cadesSignature, signerInformation, parameters, unsignedAttributes)
 			if err != nil {
 				return nil, err
 			}
-			newSignerInformation, err = cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributes)
+			newSignerInformation, err = cms.UtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributes)
 			if err != nil {
 				return nil, err
 			}
@@ -92,7 +92,7 @@ func (e *CAdESLevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 			if err != nil {
 				return nil, err
 			}
-			cmsToExtend, err = cms.CMSUtilsPopulateDigestAlgorithmSet(cmsToExtend, []*spi.AlgorithmIdentifier{algorithmIdentifier})
+			cmsToExtend, err = cms.UtilsPopulateDigestAlgorithmSet(cmsToExtend, []*spi.AlgorithmIdentifier{algorithmIdentifier})
 			if err != nil {
 				return nil, err
 			}
@@ -122,11 +122,11 @@ func (e *CAdESLevelBaselineLTA) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 //  4. A single instance of ATSHashIndex type (created as specified in clause 6.4.2).
 //
 // Port of the private addArchiveTimestampV3Attribute.
-func (e *CAdESLevelBaselineLTA) addArchiveTimestampV3Attribute(cadesSignature *CAdESSignature,
-	signerInformation *cmscore.SignerInfo, parameters *CAdESSignatureParameters,
+func (e *LevelBaselineLTA) addArchiveTimestampV3Attribute(cadesSignature *Signature,
+	signerInformation *cmscore.SignerInfo, parameters *SignatureParameters,
 	unsignedAttributes cmscore.Attributes) (cmscore.Attributes, error) {
 
-	timestampExtractor := NewCadesLevelBaselineLTATimestampExtractor(cadesSignature)
+	timestampExtractor := NewLevelBaselineLTATimestampExtractor(cadesSignature)
 	timestampDigestAlgorithm := parameters.GetArchiveTimestampParameters().DigestAlgorithm()
 	originalDocument, err := cadesSignature.OriginalDocument()
 	if err != nil {
@@ -152,13 +152,13 @@ func (e *CAdESLevelBaselineLTA) addArchiveTimestampV3Attribute(cadesSignature *C
 		return nil, err
 	}
 
-	return CAdESUtilsAddAttribute(unsignedAttributes,
+	return UtilsAddAttribute(unsignedAttributes,
 		spi.OIDIdAaEtsArchiveTimestampV3, timeStampAttributeValue), nil
 }
 
 // cadesLTAAtsHashIndexTableIdentifier ports the private
-// getAtsHashIndexTableIdentifier(CAdESSignatureParameters).
-func cadesLTAAtsHashIndexTableIdentifier(signatureParameters *CAdESSignatureParameters) asn1.ObjectIdentifier {
+// getAtsHashIndexTableIdentifier(SignatureParameters).
+func cadesLTAAtsHashIndexTableIdentifier(signatureParameters *SignatureParameters) asn1.ObjectIdentifier {
 	if !signatureParameters.IsEn319122() {
 		return spi.OIDIdAaATSHashIndex
 	}
@@ -166,4 +166,4 @@ func cadesLTAAtsHashIndexTableIdentifier(signatureParameters *CAdESSignaturePara
 }
 
 // compile-time assertion that the LTA profile satisfies the abstract base's contract.
-var _ CAdESSignatureExtensionOverrides = (*CAdESLevelBaselineLTA)(nil)
+var _ SignatureExtensionOverrides = (*LevelBaselineLTA)(nil)

@@ -39,15 +39,15 @@ type CertificateValidityRangeCheck[T any] struct {
 
 // NewCertificateValidityRangeCheckMinimal is the minimal (protected)
 // constructor. Port of
-// CertificateValidityRangeCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule).
-func NewCertificateValidityRangeCheckMinimal[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateValidityRangeCheck(Provider, T, CertificateWrapper, Date, LevelRule).
+func NewCertificateValidityRangeCheckMinimal[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, constraint policy.LevelRule) *CertificateValidityRangeCheck[T] {
 	return NewCertificateValidityRangeCheck(i18nProvider, result, certificate, nil, false, false, false, currentTime, constraint)
 }
 
 // NewCertificateValidityRangeCheck is the default constructor. Port of
-// CertificateValidityRangeCheck(I18nProvider, T, CertificateWrapper, CertificateRevocationWrapper, boolean, boolean, boolean, Date, LevelRule).
-func NewCertificateValidityRangeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateValidityRangeCheck(Provider, T, CertificateWrapper, CertificateRevocationWrapper, boolean, boolean, boolean, Date, LevelRule).
+func NewCertificateValidityRangeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, usedCertificateRevocation *diagnostic.CertificateRevocationWrapper,
 	revocationDataRequired, revocationIssuerTrusted, revocationIssuerCheckEnforced bool,
 	currentTime time.Time, constraint policy.LevelRule) *CertificateValidityRangeCheck[T] {

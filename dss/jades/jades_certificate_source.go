@@ -3,7 +3,7 @@
 //
 // VIRTUAL-DISPATCH GAP (frozen package, flagged for integrator): Java's
 // TokenCertificateSource.findTokensFromRefs(refs) loops calling
-// `this.findTokensFromCertRef(ref)`, reaching JAdESCertificateSource's override via ordinary
+// `this.findTokensFromCertRef(ref)`, reaching CertificateSource's override via ordinary
 // Java virtual dispatch. spi.TokenCertificateSource.FindTokensFromRefs (frozen)
 // has no overrides-interface hook for FindTokensFromCertRef, so calling it here would statically
 // resolve to CommonCertificateSource's base implementation and silently drop the kid/x5u
@@ -32,8 +32,8 @@ import (
 )
 
 // JAdESCertificateSource extracts and stores certificates from a JAdES signature. Port of the
-// class JAdESCertificateSource, extending spi.SignatureCertificateSource.
-type JAdESCertificateSource struct {
+// class CertificateSource, extending spi.SignatureCertificateSource.
+type CertificateSource struct {
 	spi.SignatureCertificateSource
 
 	// jws is the JWS Signature to extract certificates from. Port of the private transient
@@ -41,8 +41,8 @@ type JAdESCertificateSource struct {
 	jws *JWS
 
 	// etsiUHeader represents the unsigned 'etsiU' header. Port of the private transient final
-	// JAdESEtsiUHeader etsiUHeader field.
-	etsiUHeader *JAdESEtsiUHeader
+	// EtsiUHeader etsiUHeader field.
+	etsiUHeader *EtsiUHeader
 
 	// kidMap holds 'kid' certificates, when present. Port of the private final Map<String,
 	// CertificateToken> kidMap field.
@@ -54,11 +54,11 @@ type JAdESCertificateSource struct {
 }
 
 // NewJAdESCertificateSource is the default constructor. Port of the public
-// JAdESCertificateSource(JWS, JAdESEtsiUHeader) constructor. All certificates are extracted
+// CertificateSource(JWS, EtsiUHeader) constructor. All certificates are extracted
 // during instantiation.
 //
 // Panics with the Java messages when jws or etsiUHeader is missing (Objects.requireNonNull).
-func NewJAdESCertificateSource(jws *JWS, etsiUHeader *JAdESEtsiUHeader) *JAdESCertificateSource {
+func NewCertificateSource(jws *JWS, etsiUHeader *EtsiUHeader) *CertificateSource {
 	if jws == nil {
 		panic("JSON Web signature cannot be null")
 	}
@@ -66,7 +66,7 @@ func NewJAdESCertificateSource(jws *JWS, etsiUHeader *JAdESEtsiUHeader) *JAdESCe
 		panic("etsiUHeader cannot be null")
 	}
 
-	s := &JAdESCertificateSource{
+	s := &CertificateSource{
 		jws:         jws,
 		etsiUHeader: etsiUHeader,
 		kidMap:      make(map[string]*model.CertificateToken),
@@ -93,19 +93,19 @@ func NewJAdESCertificateSource(jws *JWS, etsiUHeader *JAdESEtsiUHeader) *JAdESCe
 
 // KeyIdentifierCertificateRefs retrieves the list of CertificateRefs referenced within a 'kid'
 // (key identifier) header. Port of getKeyIdentifierCertificateRefs().
-func (s *JAdESCertificateSource) KeyIdentifierCertificateRefs() []*spi.CertificateRef {
+func (s *CertificateSource) KeyIdentifierCertificateRefs() []*spi.CertificateRef {
 	return s.CertificateRefsByOrigin(enumerations.CertificateRefOriginKeyIdentifier)
 }
 
 // KeyIdentifierCertificates retrieves the CertificateTokens according to a reference present
 // within a 'kid' (key identifier) header. Port of getKeyIdentifierCertificates().
-func (s *JAdESCertificateSource) KeyIdentifierCertificates() map[string]*model.CertificateToken {
+func (s *CertificateSource) KeyIdentifierCertificates() map[string]*model.CertificateToken {
 	return s.jadesCertificateSourceFindTokensFromRefs(s.KeyIdentifierCertificateRefs())
 }
 
 // jadesCertificateSourceFindTokensFromRefs is the local, virtual-dispatch-correct counterpart of
 // spi.TokenCertificateSource.FindTokensFromRefs; see the file header.
-func (s *JAdESCertificateSource) jadesCertificateSourceFindTokensFromRefs(certificateRefs []*spi.CertificateRef) map[string]*model.CertificateToken {
+func (s *CertificateSource) jadesCertificateSourceFindTokensFromRefs(certificateRefs []*spi.CertificateRef) map[string]*model.CertificateToken {
 	result := make(map[string]*model.CertificateToken)
 	for _, certificateRef := range certificateRefs {
 		for key, token := range s.FindTokensFromCertRef(certificateRef) {
@@ -115,7 +115,7 @@ func (s *JAdESCertificateSource) jadesCertificateSourceFindTokensFromRefs(certif
 	return result
 }
 
-func (s *JAdESCertificateSource) extractX5T() {
+func (s *CertificateSource) extractX5T() {
 	base64UrlSHA1Certificate := s.jws.ProtectedHeaderValueAsString(jose.HeaderX509CertificateThumbprint)
 	if utils.IsStringNotEmpty(base64UrlSHA1Certificate) { //nolint:staticcheck // mirrors upstream JAdESCertificateSource#extractX5T: the guard is kept because Java's body is `LOG.warn("Found {} with value {} but not supported by the JAdES standard", ...)` only.
 		// Upstream builds a Digest(SHA1, ...) purely to log "Found {} with value {} but not
@@ -124,7 +124,7 @@ func (s *JAdESCertificateSource) extractX5T() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractX5TS256() {
+func (s *CertificateSource) extractX5TS256() {
 	base64UrlSHA256Certificate := s.jws.ProtectedHeaderValueAsString(jose.HeaderX509CertificateSHA256Thumbprint)
 	if utils.IsStringNotEmpty(base64UrlSHA256Certificate) {
 		certRef := spi.NewCertificateRef()
@@ -133,11 +133,11 @@ func (s *JAdESCertificateSource) extractX5TS256() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractX5TO() {
+func (s *CertificateSource) extractX5TO() {
 	s.extractX5TOFromMap(s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesX5tO))
 }
 
-func (s *JAdESCertificateSource) extractX5TOFromMap(x5TO *jose.Object) {
+func (s *CertificateSource) extractX5TOFromMap(x5TO *jose.Object) {
 	if x5TO.Size() != 0 {
 		digest, ok := DSSJsonUtilsDigest(x5TO)
 		if ok {
@@ -148,14 +148,14 @@ func (s *JAdESCertificateSource) extractX5TOFromMap(x5TO *jose.Object) {
 	}
 }
 
-func (s *JAdESCertificateSource) extractSigX5Ts() {
+func (s *CertificateSource) extractSigX5Ts() {
 	sigX5tsList := s.jws.ProtectedHeaderValueAsList(JAdESHeaderParameterNamesSigX5tS)
 	for _, item := range sigX5tsList {
 		s.extractX5TOFromMap(DSSJsonUtilsToMap(item, JAdESHeaderParameterNamesX5tO))
 	}
 }
 
-func (s *JAdESCertificateSource) extractKid() {
+func (s *CertificateSource) extractKid() {
 	kid := s.jws.KeyIDHeaderValue()
 	if kid != "" {
 		certificateRef := spi.NewCertificateRef()
@@ -169,7 +169,7 @@ func (s *JAdESCertificateSource) extractKid() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractX509Url() {
+func (s *CertificateSource) extractX509Url() {
 	x5u := s.jws.ProtectedHeaderValueAsString(jose.HeaderX509URL)
 	if utils.IsStringNotEmpty(x5u) {
 		certificateRef := spi.NewCertificateRef()
@@ -178,7 +178,7 @@ func (s *JAdESCertificateSource) extractX509Url() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractX5C() {
+func (s *CertificateSource) extractX5C() {
 	x509CertChain := s.jws.ProtectedHeaderValueAsList(jose.HeaderX509CertificateChain)
 	for _, item := range x509CertChain {
 		certificateBase64 := DSSJsonUtilsToString(item)
@@ -193,7 +193,7 @@ func (s *JAdESCertificateSource) extractX5C() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractEtsiU() {
+func (s *CertificateSource) extractEtsiU() {
 	if !s.etsiUHeader.IsExist() {
 		return
 	}
@@ -209,29 +209,29 @@ func (s *JAdESCertificateSource) extractEtsiU() {
 	}
 }
 
-func (s *JAdESCertificateSource) extractCertificateValues(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractCertificateValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesXVals == attribute.HeaderName() {
 		s.extractCertificateValuesFromList(DSSJsonUtilsToList(attribute.Value(), JAdESHeaderParameterNamesXVals),
 			enumerations.CertificateOriginCertificateValues)
 	}
 }
 
-func (s *JAdESCertificateSource) extractAttrAuthoritiesCertValues(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractAttrAuthoritiesCertValues(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesAxVals == attribute.HeaderName() {
 		s.extractCertificateValuesFromList(DSSJsonUtilsToList(attribute.Value(), JAdESHeaderParameterNamesAxVals),
 			enumerations.CertificateOriginAttrAuthoritiesCertValues)
 	}
 }
 
-func (s *JAdESCertificateSource) extractTimestampValidationData(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractTimestampValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesTstVD, enumerations.CertificateOriginTimestampValidationData)
 }
 
-func (s *JAdESCertificateSource) extractAnyValidationData(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractAnyValidationData(attribute *EtsiUComponent) {
 	s.extractValidationData(attribute, JAdESHeaderParameterNamesAnyValData, enumerations.CertificateOriginAnyValidationData)
 }
 
-func (s *JAdESCertificateSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.CertificateOrigin) {
+func (s *CertificateSource) extractValidationData(attribute *EtsiUComponent, headerName string, origin enumerations.CertificateOrigin) {
 	if headerName == attribute.HeaderName() {
 		tstVd := DSSJsonUtilsToMap(attribute.Value(), headerName)
 		xVals := DSSJsonUtilsGetAsList(tstVd, JAdESHeaderParameterNamesXVals)
@@ -241,21 +241,21 @@ func (s *JAdESCertificateSource) extractValidationData(attribute *EtsiUComponent
 	}
 }
 
-func (s *JAdESCertificateSource) extractCompleteCertificateRefs(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractCompleteCertificateRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesXRefs == attribute.HeaderName() {
 		s.extractCertificateRefsFromList(DSSJsonUtilsToList(attribute.Value(), JAdESHeaderParameterNamesXRefs),
 			enumerations.CertificateRefOriginCompleteCertificateRefs)
 	}
 }
 
-func (s *JAdESCertificateSource) extractAttributeCertificateRefs(attribute *EtsiUComponent) {
+func (s *CertificateSource) extractAttributeCertificateRefs(attribute *EtsiUComponent) {
 	if JAdESHeaderParameterNamesAxRefs == attribute.HeaderName() {
 		s.extractCertificateRefsFromList(DSSJsonUtilsToList(attribute.Value(), JAdESHeaderParameterNamesAxRefs),
 			enumerations.CertificateRefOriginAttributeCertificateRefs)
 	}
 }
 
-func (s *JAdESCertificateSource) extractCertificateValuesFromList(xVals []any, origin enumerations.CertificateOrigin) {
+func (s *CertificateSource) extractCertificateValuesFromList(xVals []any, origin enumerations.CertificateOrigin) {
 	for _, item := range xVals {
 		xVal := DSSJsonUtilsToMapValue(item)
 		x509Cert := DSSJsonUtilsGetAsMap(xVal, JAdESHeaderParameterNamesX509Cert)
@@ -268,17 +268,17 @@ func (s *JAdESCertificateSource) extractCertificateValuesFromList(xVals []any, o
 	}
 }
 
-func (s *JAdESCertificateSource) extractCertificateRefsFromList(xRefs []any, origin enumerations.CertificateRefOrigin) {
+func (s *CertificateSource) extractCertificateRefsFromList(xRefs []any, origin enumerations.CertificateRefOrigin) {
 	for _, item := range xRefs {
 		xref := DSSJsonUtilsToMapValue(item)
-		certificateRef := JAdESCertificateRefExtractionUtilsCreateCertificateRef(xref)
+		certificateRef := CertificateRefExtractionUtilsCreateCertificateRef(xref)
 		if certificateRef != nil {
 			s.AddCertificateRef(certificateRef, origin)
 		}
 	}
 }
 
-func (s *JAdESCertificateSource) extractX509Cert(x509Cert *jose.Object, origin enumerations.CertificateOrigin) {
+func (s *CertificateSource) extractX509Cert(x509Cert *jose.Object, origin enumerations.CertificateOrigin) {
 	encoding := DSSJsonUtilsGetAsString(x509Cert, JAdESHeaderParameterNamesEncoding)
 	if utils.IsStringEmpty(encoding) || utils.AreStringsEqual(enumerations.PKIEncodingDER.URI(), encoding) {
 		val := DSSJsonUtilsGetAsString(x509Cert, JAdESHeaderParameterNamesVal)
@@ -297,7 +297,7 @@ func (s *JAdESCertificateSource) extractX509Cert(x509Cert *jose.Object, origin e
 
 // ExtractCandidatesForSigningCertificate implements spi.SignatureCertificateSourceOverrides.
 // Port of the protected extractCandidatesForSigningCertificate(CertificateSource) override.
-func (s *JAdESCertificateSource) ExtractCandidatesForSigningCertificate(signingCertificateSource spi.CertificateSource) *spi.CandidatesForSigningCertificate {
+func (s *CertificateSource) ExtractCandidatesForSigningCertificate(signingCertificateSource spi.CertificateSource) *spi.CandidatesForSigningCertificate {
 	candidatesForSigningCertificate := s.InitCandidatesList(signingCertificateSource)
 	if !candidatesForSigningCertificate.IsEmpty() {
 		return candidatesForSigningCertificate
@@ -332,7 +332,7 @@ func (s *JAdESCertificateSource) ExtractCandidatesForSigningCertificate(signingC
 	return candidatesForSigningCertificate
 }
 
-func (s *JAdESCertificateSource) resolveFromSource(signingCertificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
+func (s *CertificateSource) resolveFromSource(signingCertificateSource spi.CertificateSource, candidatesForSigningCertificate *spi.CandidatesForSigningCertificate) {
 	kidCandidate := s.resolveByKid(signingCertificateSource)
 	if kidCandidate != nil {
 		// Upstream logs "Resolved certificate by kid".
@@ -371,7 +371,7 @@ func (s *JAdESCertificateSource) resolveFromSource(signingCertificateSource spi.
 	}
 }
 
-func (s *JAdESCertificateSource) resolveByKid(signingCertificateSource spi.CertificateSource) *model.CertificateToken {
+func (s *CertificateSource) resolveByKid(signingCertificateSource spi.CertificateSource) *model.CertificateToken {
 	kidHeader := s.jws.KeyIDHeaderValue()
 	if utils.IsStringNotEmpty(kidHeader) {
 		if kidCertificateSource, ok := signingCertificateSource.(*spi.KidCertificateSource); ok {
@@ -387,7 +387,7 @@ func (s *JAdESCertificateSource) resolveByKid(signingCertificateSource spi.Certi
 	return nil
 }
 
-func (s *JAdESCertificateSource) resolveByUri(signingCertificateSource spi.CertificateSource) []*model.CertificateToken {
+func (s *CertificateSource) resolveByUri(signingCertificateSource spi.CertificateSource) []*model.CertificateToken {
 	x5uHeader := s.jws.ProtectedHeaderValueAsString(jose.HeaderX509URL)
 	if utils.IsStringNotEmpty(x5uHeader) {
 		if x509URLCertificateSource, ok := signingCertificateSource.(spi.X509URLCertificateSource); ok {
@@ -404,7 +404,7 @@ func (s *JAdESCertificateSource) resolveByUri(signingCertificateSource spi.Certi
 }
 
 // extractPublicKey ports the private extractPublicKey(); see the file header DEVIATION note.
-func (s *JAdESCertificateSource) extractPublicKey() *model.PublicKey {
+func (s *CertificateSource) extractPublicKey() *model.PublicKey {
 	key, err := s.jws.JwkHeader()
 	if err != nil {
 		// Upstream logs "Unable to extract the public key".
@@ -426,7 +426,7 @@ func jadesCertificateSourcePublicKey(key crypto.PublicKey) *model.PublicKey {
 	return model.NewPublicKeyFromEncoded(encoded, key)
 }
 
-func (s *JAdESCertificateSource) checkSigningCertificateRef(candidates *spi.CandidatesForSigningCertificate) {
+func (s *CertificateSource) checkSigningCertificateRef(candidates *spi.CandidatesForSigningCertificate) {
 	var signingCertRef *spi.CertificateRef
 	potentialSigningCertificates := s.SigningCertificateRefs()
 	if utils.IsCollectionNotEmpty(potentialSigningCertificates) {
@@ -455,7 +455,7 @@ func (s *JAdESCertificateSource) checkSigningCertificateRef(candidates *spi.Cand
 	}
 }
 
-func (s *JAdESCertificateSource) isValid(certificateValidity *spi.CertificateValidity, signingCertRef, kidCertRef *spi.CertificateRef) bool {
+func (s *CertificateSource) isValid(certificateValidity *spi.CertificateValidity, signingCertRef, kidCertRef *spi.CertificateRef) bool {
 	certificateValidity.SetDigestPresent(signingCertRef != nil && !signingCertRef.CertDigest().IsEmpty())
 	certificateValidity.SetIssuerSerialPresent(kidCertRef != nil && kidCertRef.CertificateIdentifier() != nil)
 
@@ -473,7 +473,7 @@ func (s *JAdESCertificateSource) isValid(certificateValidity *spi.CertificateVal
 	return certificateValidity.IsValid()
 }
 
-func (s *JAdESCertificateSource) signingCertificateDigest() *model.Digest {
+func (s *CertificateSource) signingCertificateDigest() *model.Digest {
 	signingCertificateRefs := s.SigningCertificateRefs()
 	if utils.IsCollectionNotEmpty(signingCertificateRefs) {
 		// must contain only one reference
@@ -487,7 +487,7 @@ func (s *JAdESCertificateSource) signingCertificateDigest() *model.Digest {
 // OrphanCertificateRefs returns the list of CertificateRefs left without a matched
 // CertificateToken, plus any 'x5u' hint refs not carried by the base implementation.
 // Port of the getOrphanCertificateRefs() override.
-func (s *JAdESCertificateSource) OrphanCertificateRefs() []*spi.CertificateRef {
+func (s *CertificateSource) OrphanCertificateRefs() []*spi.CertificateRef {
 	certRefs := s.SignatureCertificateSource.OrphanCertificateRefs()
 	x509CertUriRefs := s.CertificateRefsByOrigin(enumerations.CertificateRefOriginX509URL)
 	for _, certificateRef := range x509CertUriRefs {
@@ -515,7 +515,7 @@ func jadesCertificateSourceContainsRef(refs []*spi.CertificateRef, ref *spi.Cert
 // iteration order is already unspecified; iterating the Go maps below in Go's own (also
 // unspecified) order reproduces that same absence of an ordering guarantee rather than a
 // deviation from it.
-func (s *JAdESCertificateSource) ReferencesForCertificateToken(certificateToken *model.CertificateToken) []*spi.CertificateRef {
+func (s *CertificateSource) ReferencesForCertificateToken(certificateToken *model.CertificateToken) []*spi.CertificateRef {
 	result := s.SignatureCertificateSource.ReferencesForCertificateToken(certificateToken)
 	for kid, token := range s.kidMap {
 		if token.Equals(certificateToken) {
@@ -550,7 +550,7 @@ func jadesCertificateSourceContainsToken(tokens []*model.CertificateToken, certi
 // FindTokensFromCertRef returns the certificate tokens for the provided CertificateRef, keyed by
 // DSSIDAsString(), adding the 'kid'/'x5u' matches on top of the base lookup. Port of the
 // findTokensFromCertRef(CertificateRef) override.
-func (s *JAdESCertificateSource) FindTokensFromCertRef(certificateRef *spi.CertificateRef) map[string]*model.CertificateToken {
+func (s *CertificateSource) FindTokensFromCertRef(certificateRef *spi.CertificateRef) map[string]*model.CertificateToken {
 	certificates := s.SignatureCertificateSource.FindTokensFromCertRef(certificateRef)
 	if certificates == nil {
 		certificates = make(map[string]*model.CertificateToken)
@@ -568,5 +568,5 @@ func (s *JAdESCertificateSource) FindTokensFromCertRef(certificateRef *spi.Certi
 	return certificates
 }
 
-// compile-time assertion: a JAdESCertificateSource satisfies its own overrides contract.
-var _ spi.SignatureCertificateSourceOverrides = (*JAdESCertificateSource)(nil)
+// compile-time assertion: a CertificateSource satisfies its own overrides contract.
+var _ spi.SignatureCertificateSourceOverrides = (*CertificateSource)(nil)

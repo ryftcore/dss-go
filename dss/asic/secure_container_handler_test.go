@@ -26,7 +26,7 @@ import (
 //
 //   - testdata/zipcore-dss-oracle.json (testdata/gen/ZipCoreDssOracle.java) runs the REAL upstream
 //     DSS 6.5.RC1 classes - ASiCUtils, ZipUtils, SecureContainerHandler, DSSZipEntry,
-//     AbstractASiCFilenameFactory - and is the authority on behaviour.
+//     AbstractFilenameFactory - and is the authority on behaviour.
 //   - testdata/zipcore-oracle.json (testdata/gen/ZipCoreOracle.java) is a pure-JDK dump of what
 //     java.util.zip.ZipInputStream (local headers) and java.util.zip.ZipFile (central directory)
 //     each see, and is what proves the two views differ and which one this port must reproduce.
@@ -587,7 +587,7 @@ func TestSecureContainerHandlerRoundTripPreservesEntries(t *testing.T) {
 			if err != nil {
 				t.Fatalf("extract: %v", err)
 			}
-			zipComment, err := ASiCUtilsZipCommentFromArchiveContainer(source)
+			zipComment, err := UtilsZipCommentFromArchiveContainer(source)
 			if err != nil {
 				t.Fatalf("zip comment: %v", err)
 			}
@@ -596,7 +596,7 @@ func TestSecureContainerHandlerRoundTripPreservesEntries(t *testing.T) {
 			if err != nil {
 				t.Fatalf("createZipArchive: %v", err)
 			}
-			rebuiltComment, err := ASiCUtilsZipCommentFromArchiveContainer(rebuilt)
+			rebuiltComment, err := UtilsZipCommentFromArchiveContainer(rebuilt)
 			if err != nil {
 				t.Fatalf("zip comment of the rebuilt archive: %v", err)
 			}
@@ -685,14 +685,14 @@ func zipCoreParseFirstLocalHeader(t *testing.T, archive []byte) zipCoreLocalHead
 // no extra field, so that a reader can find the mimetype payload at a fixed offset.
 func TestSecureContainerHandlerMimetypeIsFirstStoredAndUndeferred(t *testing.T) {
 	mimetypeValue := "application/vnd.etsi.asic-e+zip"
-	asicContent := NewASiCContent()
+	asicContent := NewContent()
 	asicContent.SetMimeTypeDocument(asicUtilsCreateMimetypeDocument(zipCoreMimeType(mimetypeValue)))
 	asicContent.SetSignedDocuments([]model.DSSDocument{
 		model.NewInMemoryDocumentWithName([]byte("hello world, compress me please, please, please"), "test.txt"),
 	})
 
 	archive, err := NewSecureContainerHandler().CreateZipArchive(asicContent.AllDocuments(),
-		time.Date(2021, time.June, 15, 10, 30, 44, 0, time.UTC), ASiCUtilsZipCommentFromMimeTypeString(mimetypeValue))
+		time.Date(2021, time.June, 15, 10, 30, 44, 0, time.UTC), UtilsZipCommentFromMimeTypeString(mimetypeValue))
 	if err != nil {
 		t.Fatalf("createZipArchive: %v", err)
 	}
@@ -733,8 +733,8 @@ func TestSecureContainerHandlerMimetypeIsFirstStoredAndUndeferred(t *testing.T) 
 	if reader.File[1].Method != zip.Deflate {
 		t.Errorf("second entry method = %d, want DEFLATED (8)", reader.File[1].Method)
 	}
-	if reader.Comment != ASiCUtilsZipCommentFromMimeTypeString(mimetypeValue) {
-		t.Errorf("zip comment = %q, want %q", reader.Comment, ASiCUtilsZipCommentFromMimeTypeString(mimetypeValue))
+	if reader.Comment != UtilsZipCommentFromMimeTypeString(mimetypeValue) {
+		t.Errorf("zip comment = %q, want %q", reader.Comment, UtilsZipCommentFromMimeTypeString(mimetypeValue))
 	}
 }
 
@@ -754,7 +754,7 @@ func TestSecureContainerHandlerForcesStoredMimetype(t *testing.T) {
 }
 
 // TestSecureContainerHandlerEntryOrderIsWriteOrder pins that createZipArchive emits entries in the
-// order it is given, which is what ASiCContent.AllDocuments relies on to keep "mimetype" first.
+// order it is given, which is what Content.AllDocuments relies on to keep "mimetype" first.
 func TestSecureContainerHandlerEntryOrderIsWriteOrder(t *testing.T) {
 	want := []string{"mimetype", "b.txt", "a.txt", "META-INF/signatures001.xml", "0.txt"}
 	documents := make([]model.DSSDocument, 0, len(want))

@@ -5,12 +5,12 @@
 // signature to a higher level, and parsing an XML-signed document for the
 // validation engine.
 //
-// The main entry types are XAdESService (the signature/extension service
-// implementing document.DocumentSignatureService), XAdESSignatureParameters
-// and XAdESTimestampParameters (signing configuration), XAdESSignature (a
+// The main entry types are Service (the signature/extension service
+// implementing document.SignatureService), SignatureParameters
+// and TimestampParameters (signing configuration), Signature (a
 // parsed signature, implementing the validation engine's AdvancedSignature),
 // and XMLDocumentValidator/XMLDocumentAnalyzer (the validator entry point
 // for XML-signed documents). The DSSReference/DSSTransform builders and the
 // SignatureBuilder family assemble the underlying XML Signature structure;
-// most callers only need XAdESService and the parameter types.
+// most callers only need Service and the parameter types.
 package xades

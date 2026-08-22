@@ -40,17 +40,17 @@ type TimestampMessageImprintCheck[T any] struct {
 }
 
 // NewTimestampMessageImprintCheck is the default constructor. Port of
-// TimestampMessageImprintCheck(I18nProvider, T, TimestampWrapper, LevelRule).
-func NewTimestampMessageImprintCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampMessageImprintCheck(Provider, T, TimestampWrapper, LevelRule).
+func NewTimestampMessageImprintCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, constraint policy.LevelRule) *TimestampMessageImprintCheck[T] {
 	return NewTimestampMessageImprintCheckWithId(i18nProvider, result, timestamp, constraint, nil)
 }
 
 // NewTimestampMessageImprintCheckWithId is the constructor accepting an
 // explicit bbbId, for subclasses. Port of the protected
-// TimestampMessageImprintCheck(I18nProvider, T, TimestampWrapper, LevelRule, String).
+// TimestampMessageImprintCheck(Provider, T, TimestampWrapper, LevelRule, String).
 // A nil bbbId matches the Java null passed by the public constructor.
-func NewTimestampMessageImprintCheckWithId[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewTimestampMessageImprintCheckWithId[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, constraint policy.LevelRule, bbbId *string) *TimestampMessageImprintCheck[T] {
 	var base *process.ChainItemBase[T]
 	if bbbId != nil {

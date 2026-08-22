@@ -19,8 +19,8 @@ type EAAIssuerQcPSBPresentCheck struct {
 }
 
 // NewEAAIssuerQcPSBPresentCheck is the default constructor. Port of
-// EAAIssuerQcPSBPresentCheck(I18nProvider, XmlValidationEAAQualificationProcess, CertificateWrapper, LevelRule).
-func NewEAAIssuerQcPSBPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
+// EAAIssuerQcPSBPresentCheck(Provider, XmlValidationEAAQualificationProcess, CertificateWrapper, LevelRule).
+func NewEAAIssuerQcPSBPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
 	signingCertificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *EAAIssuerQcPSBPresentCheck {
 	c := &EAAIssuerQcPSBPresentCheck{
 		ChainItemBase:      process.NewChainItemBase(i18nProvider, result, constraint),

@@ -20,7 +20,7 @@ type EAARevocationExpirationTimeCheck struct {
 }
 
 // NewEAARevocationExpirationTimeCheck is the default constructor.
-func NewEAARevocationExpirationTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAARevocationExpirationTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, constraint policy.LevelRule) *EAARevocationExpirationTimeCheck {
 	c := &EAARevocationExpirationTimeCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

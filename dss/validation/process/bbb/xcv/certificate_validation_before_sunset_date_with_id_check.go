@@ -19,8 +19,8 @@ type CertificateValidationBeforeSunsetDateWithIdCheck[T any] struct {
 
 // NewCertificateValidationBeforeSunsetDateWithIdCheck is the default
 // constructor. Port of
-// CertificateValidationBeforeSunsetDateWithIdCheck(I18nProvider, T, CertificateWrapper, Date, LevelRule).
-func NewCertificateValidationBeforeSunsetDateWithIdCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateValidationBeforeSunsetDateWithIdCheck(Provider, T, CertificateWrapper, Date, LevelRule).
+func NewCertificateValidationBeforeSunsetDateWithIdCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, controlTime time.Time,
 	constraint policy.LevelRule) *CertificateValidationBeforeSunsetDateWithIdCheck[T] {
 	id := certificate.Id()

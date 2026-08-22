@@ -18,6 +18,6 @@ type TLAlert struct {
 var _ alert.Alert[*tslmodel.TLInfo] = (*TLAlert)(nil)
 
 // NewTLAlert is the default constructor.
-func NewTLAlert(detection alert.AlertDetector[*tslmodel.TLInfo], handler alert.AlertHandler[*tslmodel.TLInfo]) *TLAlert {
+func NewTLAlert(detection alert.Detector[*tslmodel.TLInfo], handler alert.Handler[*tslmodel.TLInfo]) *TLAlert {
 	return &TLAlert{DocumentAlert: job.NewDocumentAlert(detection, handler)}
 }

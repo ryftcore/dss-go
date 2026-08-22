@@ -92,6 +92,48 @@ conventions applied throughout.
 
 ### Changed
 
+- **Exported type and function names no longer repeat their package name.**
+  `alert.AlertHandler` is now `alert.Handler`, `asic.ASiCContent` is
+  `asic.Content`, `xades.XAdESSignature` is `xades.Signature`,
+  `cades.NewCAdESService` is `cades.NewService`. 403 types and functions
+  across 29 packages (248 types, 155 functions), plus 313 constructors,
+  `Abstract...` bases, `...Overrides` hooks and same-family constants that
+  follow them.
+
+  The rule, which is the one `revive`'s `exported` check applies: if the
+  package name is a case-insensitive prefix of an exported identifier and the
+  next character is `_` or upper-case, the prefix is dropped. **Put the
+  package name back and you have the Java class name** — the mapping in
+  `docs/migrating-from-java/` is updated, and `dss/PORTING.md` records the
+  rule for future ports.
+
+  Two kinds of name are deliberately left alone. A name identical to its
+  package name keeps it. So does a name whose next character is a **digit**,
+  which is why the XAdES version helpers are unchanged:
+  `xades.XAdES111XSDUtils`, `xades.XAdES122XSDUtils`,
+  `xades.XAdES319132XSDUtils`, `xades.Xades141Namespace`, plus
+  `evidencerecord.EvidenceRecordsValidationBlock` and seven
+  `timestamp.Timestamp*` methods (methods are never written `pkg.Name`, so
+  they never stuttered). Renaming those would mangle the version numbers.
+
+  Identifiers whose name merely *contains* a renamed type also keep their
+  names, because shortening them would lose meaning:
+  `lote.LoLoTEIdentifier` (a list *of* LoTE), the
+  `validation.SignatureValidationContext` family, and
+  `pades.CMSForPAdESBaselineRequirementsChecker`.
+
+  **Serialized output is unchanged.** Enum values, XML element and attribute
+  names, i18n keys, OIDs, MIME types and JSON keys are byte-identical
+  (verified by diffing all 53,707 Go string literals). One internal detail
+  moved to keep that promise: `model/eaa/claim` rendered
+  `AbstractClaim#toString()` from the Go type name via reflection, and now
+  prepends the dropped `Claim` prefix explicitly, so claim rendering is
+  character-for-character what it was.
+
+  Source-incompatible. It lands before the first tagged release, so no
+  deprecated aliases are provided; update call sites by deleting the package
+  name from the identifier.
+
 - **Exported constants renamed from Java enum style to Go MixedCaps.** The
   port originally spelled every enum constant `<TypeName>_<JAVA_NAME>`
   (e.g. `enumerations.DigestAlgorithm_SHA256`,

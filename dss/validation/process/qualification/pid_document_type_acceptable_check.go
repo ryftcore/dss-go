@@ -23,8 +23,8 @@ type PIDDocumentTypeAcceptableCheck struct {
 }
 
 // NewPIDDocumentTypeAcceptableCheck is the default constructor. Port of
-// PIDDocumentTypeAcceptableCheck(I18nProvider, XmlValidationPIDQualificationProcess, EAAWrapper, LevelRule).
-func NewPIDDocumentTypeAcceptableCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
+// PIDDocumentTypeAcceptableCheck(Provider, XmlValidationPIDQualificationProcess, EAAWrapper, LevelRule).
+func NewPIDDocumentTypeAcceptableCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
 	eaa *diagnostic.EAAWrapper, constraint policy.LevelRule) *PIDDocumentTypeAcceptableCheck {
 	c := &PIDDocumentTypeAcceptableCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

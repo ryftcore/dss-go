@@ -16,7 +16,7 @@
 // ValidationReportType). This was verified empirically against this
 // package's own oracle (a small Java program driving TrustedListFacade/MRAFacade
 // directly, run over the real fixtures this package's KATs use - see
-// xml_kat_test.go): TrustedListFacade.marshall always writes
+// xml_kat_test.go): Facade.marshall always writes
 //
 //	ns2 -> XMLDSig, ns3 -> XAdES 1.3.2, ns4 -> tslx, ns5 -> ecc, ns6 -> XAdES 1.4.1
 //
@@ -35,7 +35,7 @@
 // produce, this package always reproduces the FACADE's canonical bytes for
 // marshal-parity, never the original download's.
 //
-// Marshal (TrustedListFacade's set) and MarshalMRA (MRAFacade's) are
+// Marshal (Facade's set) and MarshalMRA (MRAFacade's) are
 // otherwise identical; wildcardElements (jaxb_common.go) dispatches
 // mra:MutualRecognitionAgreementInformation regardless of which one is
 // used, since the two facades' JAXBContext otherwise differ only in whether
@@ -75,7 +75,7 @@
 // and mra's TrustServiceEquivalenceStatusStartingTime are all plain
 // XMLGregorianCalendar/@XmlSchemaType(name="dateTime") properties - the
 // JAXB built-in xs:dateTime binding, not routed through a custom
-// XmlAdapter the way dss/diagnostic/jaxb's DiagnosticData.xsd is (see that
+// XmlAdapter the way dss/diagnostic/jaxb's Data.xsd is (see that
 // package's XSDateTime). javax.xml.datatype.XMLGregorianCalendar's
 // lexical round trip through DatatypeFactory is loss-and-reformat-free: it
 // preserves the exact digits (fractional seconds, timezone offset or its
@@ -97,7 +97,7 @@ import (
 // dss/diagnostic/jaxb/xml.go's identical constant.
 const xmlDeclaration = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` + "\n"
 
-// plainRootNamespaces is TrustedListFacade's fixed root xmlns:* set - see
+// plainRootNamespaces is Facade's fixed root xmlns:* set - see
 // this file's header.
 var plainRootNamespaces = []xml.Attr{
 	{Name: xml.Name{Local: "ns2"}, Value: NamespaceDSig},
@@ -134,8 +134,8 @@ type TrustStatusListType struct {
 	Id                       *string                       `xml:"Id,attr,omitempty"`
 }
 
-// Unmarshal parses a trusted-list document, the way TrustedListFacade's
-// unmarshall (used by both TrustedListFacade and MRAFacade - see
+// Unmarshal parses a trusted-list document, the way Facade's
+// unmarshall (used by both Facade and MRAFacade - see
 // dss/trustedlist) does.
 func Unmarshal(data []byte) (*TrustStatusListType, error) {
 	tsl := &TrustStatusListType{}
@@ -146,7 +146,7 @@ func Unmarshal(data []byte) (*TrustStatusListType, error) {
 }
 
 // Marshal writes a trusted-list document byte-for-byte the way
-// TrustedListFacade.marshall does: the XML declaration, four-space indented
+// Facade.marshall does: the XML declaration, four-space indented
 // output, a trailing newline, plainRootNamespaces at the root, and the JAXB
 // spellings jaxbCanonical restores.
 func Marshal(tsl *TrustStatusListType) ([]byte, error) {

@@ -61,7 +61,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStore(signatureDocument 
 	signatures := documentAnalyzer.Signatures()
 	signaturePolicyStoreAdded := false
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (XAdESSignature) cast; a non-XAdES signature would raise a ClassCastException.
 			return nil, fmt.Errorf("unexpected signature type %T", signature)
@@ -103,7 +103,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(
 		return nil, exception.NewIllegalInputException(
 			fmt.Sprintf("Unable to find a signature with Id : %s!", signatureId))
 	}
-	xadesSignature, ok := signature.(*XAdESSignature)
+	xadesSignature, ok := signature.(*Signature)
 	if !ok {
 		return nil, exception.NewIllegalInputException(
 			fmt.Sprintf("Unable to find a signature with Id : %s!", signatureId))
@@ -124,7 +124,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreForSignature(
 // and reports whether it has been added for the particular signature.
 // Port of the protected #addSignaturePolicyStoreIfDigestMatch.
 func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
-	xadesSignature *XAdESSignature, documentDom *xmldom.Node,
+	xadesSignature *Signature, documentDom *xmldom.Node,
 	signaturePolicyStore *model.SignaturePolicyStore) (bool, error) {
 	if err := b.AssertUnsignedPropertiesExtensionPossible(xadesSignature); err != nil {
 		return false, err
@@ -190,7 +190,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
 // CheckDigest verifies whether the digests computed in the provided SignaturePolicyStore match
 // the digest defined in the incorporated signature policy identifier, i.e. whether the
 // SignaturePolicyStore can be embedded. Port of the protected #checkDigest.
-func (b *SignaturePolicyStoreBuilder) CheckDigest(xadesSignature *XAdESSignature,
+func (b *SignaturePolicyStoreBuilder) CheckDigest(xadesSignature *Signature,
 	signaturePolicyStore *model.SignaturePolicyStore) (bool, error) {
 	// Upstream reports the signature Id in each of the warnings below.
 	signaturePolicy := xadesSignature.SignaturePolicy()
@@ -213,10 +213,10 @@ func (b *SignaturePolicyStoreBuilder) CheckDigest(xadesSignature *XAdESSignature
 	signaturePolicy.SetPolicyContent(signaturePolicyContent)
 
 	// Java downcasts xadesSignature.getSignaturePolicy() to XAdESSignaturePolicy here (its
-	// concrete runtime type). Go's SignaturePolicy() promotion returns the plain base pointer
+	// concrete runtime type). Go's Policy() promotion returns the plain base pointer
 	// (frozen spi/validation.AdvancedSignature interface), so recover the concrete value via
 	// the registry xades_signature_policy.go maintains for exactly this purpose.
-	xadesSignaturePolicy, _ := XAdESSignaturePolicyFor(signaturePolicy)
+	xadesSignaturePolicy, _ := SignaturePolicyFor(signaturePolicy)
 
 	computedDigest, err := b.computeSignaturePolicyDigest(signaturePolicy, xadesSignaturePolicy, digest, signaturePolicyContent)
 	if err != nil {
@@ -233,8 +233,8 @@ func (b *SignaturePolicyStoreBuilder) CheckDigest(xadesSignature *XAdESSignature
 // its catch-all: AbstractSignaturePolicyValidator.GetComputedDigest signals failure by panicking
 // (see spi/policy), which Java's `catch (Exception e)` would have caught, so it is recovered
 // here and turned into the error CheckDigest wraps.
-func (b *SignaturePolicyStoreBuilder) computeSignaturePolicyDigest(signaturePolicy *signature.SignaturePolicy,
-	xadesSignaturePolicy *XAdESSignaturePolicy,
+func (b *SignaturePolicyStoreBuilder) computeSignaturePolicyDigest(signaturePolicy *signature.Policy,
+	xadesSignaturePolicy *SignaturePolicy,
 	digest model.Digest, signaturePolicyContent model.DSSDocument) (computedDigest model.Digest, err error) {
 	defer func() {
 		if recovered := recover(); recovered != nil {

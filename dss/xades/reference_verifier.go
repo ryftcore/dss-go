@@ -25,13 +25,13 @@ const referenceVerifierReferenceWrongMessage = "Reference setting is not correct
 
 // ReferenceVerifier is used to verify the validity of the DSSReferences setup.
 type ReferenceVerifier struct {
-	// signatureParameters are the used XAdESSignatureParameters.
-	signatureParameters *XAdESSignatureParameters
+	// signatureParameters are the used SignatureParameters.
+	signatureParameters *SignatureParameters
 }
 
 // NewReferenceVerifier is the default constructor for a signature references verification.
 // Ports ReferenceVerifier(XAdESSignatureParameters).
-func NewReferenceVerifier(signatureParameters *XAdESSignatureParameters) *ReferenceVerifier {
+func NewReferenceVerifier(signatureParameters *SignatureParameters) *ReferenceVerifier {
 	return &ReferenceVerifier{signatureParameters: signatureParameters}
 }
 

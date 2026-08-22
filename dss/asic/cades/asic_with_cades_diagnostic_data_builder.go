@@ -10,17 +10,17 @@ import (
 	dssdiagnostic "github.com/ryftcore/dss-go/dss/validation/reports/diagnostic"
 )
 
-// ASiCWithCAdESDiagnosticDataBuilder is the DiagnosticData builder for an ASiC with CAdES
+// ASiCWithCAdESDiagnosticDataBuilder is the Data builder for an ASiC with CAdES
 // container. Port of the class ASiCWithCAdESDiagnosticDataBuilder, extending
-// asic.ASiCContainerDiagnosticDataBuilder.
+// asic.ContainerDiagnosticDataBuilder.
 type ASiCWithCAdESDiagnosticDataBuilder struct {
-	asic.ASiCContainerDiagnosticDataBuilder
+	asic.ContainerDiagnosticDataBuilder
 }
 
 // NewASiCWithCAdESDiagnosticDataBuilder is the port of the default constructor.
 func NewASiCWithCAdESDiagnosticDataBuilder() *ASiCWithCAdESDiagnosticDataBuilder {
 	b := &ASiCWithCAdESDiagnosticDataBuilder{
-		ASiCContainerDiagnosticDataBuilder: asic.ASiCContainerDiagnosticDataBuilder{
+		ContainerDiagnosticDataBuilder: asic.ContainerDiagnosticDataBuilder{
 			SignedDocumentDiagnosticDataBuilder: *dssdiagnostic.NewSignedDocumentDiagnosticDataBuilder(),
 		},
 	}
@@ -30,7 +30,7 @@ func NewASiCWithCAdESDiagnosticDataBuilder() *ASiCWithCAdESDiagnosticDataBuilder
 
 // BuildDetachedXmlSignature ports the @Override buildDetachedXmlSignature(AdvancedSignature).
 func (b *ASiCWithCAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature validation.AdvancedSignature) *jaxb.XmlSignature {
-	cadesDiagnosticDataBuilder := dsscades.NewCAdESDiagnosticDataBuilder()
+	cadesDiagnosticDataBuilder := dsscades.NewDiagnosticDataBuilder()
 	cadesDiagnosticDataBuilder.TokenExtractionStrategy(b.GetTokenExtractionStrategy())
 	cadesDiagnosticDataBuilder.TokenIdentifierProvider(b.GetTokenIdentifierProvider())
 	return cadesDiagnosticDataBuilder.BuildDetachedXmlSignature(signature)
@@ -38,7 +38,7 @@ func (b *ASiCWithCAdESDiagnosticDataBuilder) BuildDetachedXmlSignature(signature
 
 // BuildDetachedXmlTimestamp ports the @Override protected buildDetachedXmlTimestamp(TimestampToken).
 func (b *ASiCWithCAdESDiagnosticDataBuilder) BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp {
-	xmlTimestamp := b.ASiCContainerDiagnosticDataBuilder.BuildDetachedXmlTimestamp(timestampToken)
+	xmlTimestamp := b.ContainerDiagnosticDataBuilder.BuildDetachedXmlTimestamp(timestampToken)
 	atsHashIndexStatus := timestampToken.AtsHashIndexStatus()
 	if atsHashIndexStatus != nil {
 		xmlAtsHashIndex := &jaxb.XmlArchiveTimestampHashIndex{}

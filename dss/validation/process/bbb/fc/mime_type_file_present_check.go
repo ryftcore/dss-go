@@ -17,7 +17,7 @@ type MimeTypeFilePresentCheck struct {
 }
 
 // NewMimeTypeFilePresentCheck is the default constructor.
-func NewMimeTypeFilePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewMimeTypeFilePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	mimetypePresent bool, constraint policy.LevelRule) *MimeTypeFilePresentCheck {
 	c := &MimeTypeFilePresentCheck{mimetypePresent: mimetypePresent}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

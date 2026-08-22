@@ -20,8 +20,8 @@ type RelatedToMraEnactedTrustServiceCheck[T any] struct {
 }
 
 // NewRelatedToMraEnactedTrustServiceCheck is the default constructor. Port of
-// RelatedToMraEnactedTrustServiceCheck(I18nProvider, T, List, LevelRule).
-func NewRelatedToMraEnactedTrustServiceCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// RelatedToMraEnactedTrustServiceCheck(Provider, T, List, LevelRule).
+func NewRelatedToMraEnactedTrustServiceCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *RelatedToMraEnactedTrustServiceCheck[T] {
 	c := &RelatedToMraEnactedTrustServiceCheck[T]{
 		ChainItemBase:       process.NewChainItemBase(i18nProvider, result, constraint),

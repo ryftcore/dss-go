@@ -20,8 +20,8 @@ type CertificateQcTypeCheck struct {
 }
 
 // NewCertificateQcTypeCheck is the default constructor. Port of
-// CertificateQcTypeCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewCertificateQcTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificateQcTypeCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewCertificateQcTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *CertificateQcTypeCheck {
 	c := &CertificateQcTypeCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

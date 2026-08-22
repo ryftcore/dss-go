@@ -36,14 +36,14 @@ type ReferenceBuilder struct {
 	// referenceIdProvider creates an identifier for a signature reference.
 	referenceIdProvider *ReferenceIdProvider
 
-	// signatureParameters are the used XAdESSignatureParameters. Nil for the detached
+	// signatureParameters are the used SignatureParameters. Nil for the detached
 	// references constructor.
-	signatureParameters *XAdESSignatureParameters
+	signatureParameters *SignatureParameters
 }
 
 // NewReferenceBuilder is the default constructor for a signature references creation. Ports
-// ReferenceBuilder(List, XAdESSignatureParameters, ReferenceIdProvider).
-func NewReferenceBuilder(documents []model.DSSDocument, xadesSignatureParameters *XAdESSignatureParameters,
+// ReferenceBuilder(List, SignatureParameters, ReferenceIdProvider).
+func NewReferenceBuilder(documents []model.DSSDocument, xadesSignatureParameters *SignatureParameters,
 	referenceIdProvider *ReferenceIdProvider) *ReferenceBuilder {
 	if documents == nil {
 		panic("List of documents shall be provided!")

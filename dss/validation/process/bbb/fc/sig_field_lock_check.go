@@ -19,7 +19,7 @@ type SigFieldLockCheck struct {
 }
 
 // NewSigFieldLockCheck is the default constructor.
-func NewSigFieldLockCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewSigFieldLockCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfRevision *diagnostic.PDFRevisionWrapper, constraint policy.LevelRule) *SigFieldLockCheck {
 	c := &SigFieldLockCheck{}
 	c.InitAbstractPdfLockDictionaryCheck(i18nProvider, result, pdfRevision, pdfRevision.SigFieldLock(), constraint)

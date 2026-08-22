@@ -15,7 +15,7 @@
 // DSSXMLUtils.initManifestWithDetachedContent/initManifestDetachedContent; per
 // internal/xmldsig's doc.go table this is internal/xmldsig.Manifest/NewManifest plus a
 // DetachedSignatureResolver registered per distinct digest algorithm found in the manifest's
-// references - the same pattern XAdESSignature.initDetachedSignatureResolvers already uses for
+// references - the same pattern Signature.initDetachedSignatureResolvers already uses for
 // ds:SignedInfo (xades_signature.go).
 package xades
 
@@ -96,7 +96,7 @@ func (v *ManifestValidator) Validate() []*model.ReferenceValidation {
 
 	referenceValidations := make([]*model.ReferenceValidation, 0, len(references))
 	for _, reference := range references {
-		refValidation := NewXAdESReferenceValidation(reference)
+		refValidation := NewReferenceValidation(reference)
 		refValidation.SetType(enumerations.DigestMatcherTypeManifestEntry)
 
 		referenceValidations = append(referenceValidations, &refValidation.ReferenceValidation)

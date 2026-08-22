@@ -26,8 +26,8 @@ type TimestampMessageImprintWithIdCheck[T any] struct {
 }
 
 // NewTimestampMessageImprintWithIdCheck is the default constructor. Port of
-// TimestampMessageImprintWithIdCheck(I18nProvider, T, TimestampWrapper, LevelRule).
-func NewTimestampMessageImprintWithIdCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampMessageImprintWithIdCheck(Provider, T, TimestampWrapper, LevelRule).
+func NewTimestampMessageImprintWithIdCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, constraint policy.LevelRule) *TimestampMessageImprintWithIdCheck[T] {
 	tokenId := timestamp.Id()
 	c := &TimestampMessageImprintWithIdCheck[T]{

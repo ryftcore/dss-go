@@ -13,7 +13,7 @@ func TestMRARoundTrip(t *testing.T) {
 	m.SetPointingContractingPartyLegislation("pointing")
 	m.SetPointedContractingPartyLegislation("pointed")
 
-	equivalences := []*timedependent.MutableTimeDependentValues[*ServiceEquivalence]{}
+	equivalences := []*timedependent.MutableValues[*ServiceEquivalence]{}
 	m.SetServiceEquivalence(equivalences)
 
 	if m.TechnicalType() != "tech" {

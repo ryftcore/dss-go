@@ -7,20 +7,20 @@
 // purposes (the XSLT is not executed; nothing in scope consumes it), but
 // Schema()/SvgTemplates() are stubs returning an error: no Go stdlib XSD validator or XSLT
 // engine exists, and adding a third-party one is outside the stdlib-first dependency policy
-// without tech-lead sign-off (PORTING.md "Dependency policy"). DiagnosticDataFacade.Marshal/
+// without tech-lead sign-off (PORTING.md "Dependency policy"). DataFacade.Marshal/
 // Unmarshal (the half of this pair that the marshal-parity KAT actually exercises) does not
 // depend on either stub.
 package diagnostic
 
 import "errors"
 
-// DiagnosticDataSchemaLocation is the location of the DiagnosticData XSD, relative to the
+// DataSchemaLocation is the location of the Data XSD, relative to the
 // embedded/testdata resource root. Port of DIAGNOSTIC_DATA_SCHEMA_LOCATION.
-const DiagnosticDataSchemaLocation = "/xsd/DiagnosticData.xsd"
+const DataSchemaLocation = "/xsd/DiagnosticData.xsd"
 
-// DiagnosticDataXsltSvgLocation is the location of the DiagnosticData SVG XSLT template,
+// DataXsltSvgLocation is the location of the Data SVG XSLT template,
 // relative to the embedded/testdata resource root. Port of DIAGNOSTIC_DATA_XSLT_SVG_LOCATION.
-const DiagnosticDataXsltSvgLocation = "/xslt/svg/diagnostic-data.xslt"
+const DataXsltSvgLocation = "/xslt/svg/diagnostic-data.xslt"
 
 // ErrXSDSchemaNotSupported is returned by Schema(): no XSD validator ships in the Go stdlib and
 // none has been added to this port (see the file header).

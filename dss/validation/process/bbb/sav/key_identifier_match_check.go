@@ -21,8 +21,8 @@ type KeyIdentifierMatchCheck struct {
 }
 
 // NewKeyIdentifierMatchCheck is the default constructor. Port of
-// KeyIdentifierMatchCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewKeyIdentifierMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// KeyIdentifierMatchCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewKeyIdentifierMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *KeyIdentifierMatchCheck {
 	c := &KeyIdentifierMatchCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

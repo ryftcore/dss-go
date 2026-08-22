@@ -20,8 +20,8 @@ type FormatCheckingResultCheck[T any] struct {
 }
 
 // NewFormatCheckingResultCheck is the default constructor. Port of
-// FormatCheckingResultCheck(I18nProvider, T, XmlFC, TokenProxy, LevelRule).
-func NewFormatCheckingResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// FormatCheckingResultCheck(Provider, T, XmlFC, TokenProxy, LevelRule).
+func NewFormatCheckingResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlFC *jaxb.XmlFC, token diagnostic.TokenProxy, constraint policy.LevelRule) *FormatCheckingResultCheck[T] {
 	c := &FormatCheckingResultCheck[T]{
 		// Format Checking building block suffix ("-FC"), a per-class private

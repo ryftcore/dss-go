@@ -28,8 +28,8 @@ type TimestampDelayCheck[T any] struct {
 }
 
 // NewTimestampDelayCheck is the default constructor. Port of
-// TimestampDelayCheck(I18nProvider, T, SignatureWrapper, Date, DurationRule).
-func NewTimestampDelayCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampDelayCheck(Provider, T, SignatureWrapper, Date, DurationRule).
+func NewTimestampDelayCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	signature *diagnostic.SignatureWrapper, bestSignatureTime *time.Time,
 	durationRule policy.DurationRule) *TimestampDelayCheck[T] {
 	c := &TimestampDelayCheck[T]{

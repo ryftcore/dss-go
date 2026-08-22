@@ -13,7 +13,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/internal/corpustest"
 )
 
-// node is a generic XML element, enough to walk DiagnosticData.xsd.
+// node is a generic XML element, enough to walk Data.xsd.
 type node struct {
 	XMLName  xml.Name
 	Attrs    []xml.Attr `xml:",any,attr"`
@@ -112,7 +112,7 @@ func modelNames() (elements, attributes map[string]bool) {
 }
 
 // TestSchemaNamesCovered is the XSD-completeness sweep: every element and every
-// attribute declared by DiagnosticData.xsd must be bound somewhere in the model,
+// attribute declared by Data.xsd must be bound somewhere in the model,
 // and the model must not bind a name the schema does not declare.
 func TestSchemaNamesCovered(t *testing.T) {
 	root := loadSchema(t)
@@ -415,7 +415,7 @@ func TestSchemaTreeMatchesModel(t *testing.T) {
 }
 
 // TestOracleCorpusExercisesModel is the counterpart of the schema sweeps: they
-// prove the model binds exactly the names DiagnosticData.xsd declares, this one
+// prove the model binds exactly the names Data.xsd declares, this one
 // proves the marshal-parity corpus actually puts every one of those names
 // through the round trip. Without it a binding could be wrong in a way no dump
 // would ever reveal - the schema sweep only reads the struct tags, it never

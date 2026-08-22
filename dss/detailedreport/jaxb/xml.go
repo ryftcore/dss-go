@@ -13,7 +13,7 @@
 // All three are pure XML-syntax normalisations applied to the Go output only;
 // the Java oracle bytes in testdata/oracle are untouched.
 //
-// The oracle corpus is dumped through DetailedReportFacade (see
+// The oracle corpus is dumped through Facade (see
 // testdata/ReserializeDetailedReport.java), i.e. the exact call
 // AbstractReports.getXmlDetailedReport() makes. That matters: marshalling the
 // same tree into an OutputStream instead selects the RI's
@@ -99,7 +99,7 @@ func (l *StringList) UnmarshalText(text []byte) error {
 
 // --------------------------------------------------------------- entry points
 
-// Unmarshal parses a detailed-report document, the way DetailedReportFacade's
+// Unmarshal parses a detailed-report document, the way Facade's
 // unmarshalling does.
 func Unmarshal(data []byte) (*XmlDetailedReport, error) {
 	dr := &XmlDetailedReport{}
@@ -110,7 +110,7 @@ func Unmarshal(data []byte) (*XmlDetailedReport, error) {
 }
 
 // Marshal writes a detailed-report document byte-for-byte the way
-// DetailedReportFacade's marshalling does: the XML declaration, four-space
+// Facade's marshalling does: the XML declaration, four-space
 // indented output, a trailing newline, and the JAXB spellings jaxbCanonical
 // restores.
 func Marshal(dr *XmlDetailedReport) ([]byte, error) {

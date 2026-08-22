@@ -20,8 +20,8 @@ type CryptographicVerificationResultCheck[T any] struct {
 }
 
 // NewCryptographicVerificationResultCheck is the default constructor. Port of
-// CryptographicVerificationResultCheck(I18nProvider, T, XmlCV, TokenProxy, LevelRule).
-func NewCryptographicVerificationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CryptographicVerificationResultCheck(Provider, T, XmlCV, TokenProxy, LevelRule).
+func NewCryptographicVerificationResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlCV *jaxb.XmlCV, token diagnostic.TokenProxy, constraint policy.LevelRule) *CryptographicVerificationResultCheck[T] {
 	c := &CryptographicVerificationResultCheck[T]{
 		// Cryptographic Verification building block suffix ("-CV"), a per-class

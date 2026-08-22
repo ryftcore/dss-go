@@ -44,7 +44,7 @@ type AbstractTrustedListSignatureParametersBuilderOverrides interface {
 // AbstractTrustedListSignatureParametersBuilder contains common methods for signature
 // parameters creation for an XML Trusted List signature.
 type AbstractTrustedListSignatureParametersBuilder struct {
-	document.AbstractSignatureParametersBuilder[*xades.XAdESSignatureParameters]
+	document.AbstractSignatureParametersBuilder[*xades.SignatureParameters]
 
 	// overrides points back at the concrete builder; see
 	// InitAbstractTrustedListSignatureParametersBuilder.
@@ -70,8 +70,8 @@ func (b *AbstractTrustedListSignatureParametersBuilder) InitAbstractTrustedListS
 	if tlXmlDocument == nil {
 		panic("XML Trusted List document cannot be null!")
 	}
-	b.AbstractSignatureParametersBuilder = *document.NewAbstractSignatureParametersBuilder[*xades.XAdESSignatureParameters](signingCertificate)
-	b.AbstractSignatureParametersBuilder.InitParameters = xades.NewXAdESSignatureParameters
+	b.AbstractSignatureParametersBuilder = *document.NewAbstractSignatureParametersBuilder[*xades.SignatureParameters](signingCertificate)
+	b.AbstractSignatureParametersBuilder.InitParameters = xades.NewSignatureParameters
 	b.overrides = overrides
 	b.tlXmlDocument = tlXmlDocument
 	b.referenceDigestAlgorithm = enumerations.DigestAlgorithmSHA512
@@ -96,7 +96,7 @@ func (b *AbstractTrustedListSignatureParametersBuilder) SetReferenceDigestAlgori
 // this type's Build is its own method, not a Go embedding override - callers on this type reach
 // it directly, and V5/V6 subtypes do not need to redeclare it since they never change the
 // return type.
-func (b *AbstractTrustedListSignatureParametersBuilder) Build() *xades.XAdESSignatureParameters {
+func (b *AbstractTrustedListSignatureParametersBuilder) Build() *xades.SignatureParameters {
 	signatureParameters := b.AbstractSignatureParametersBuilder.Build()
 
 	signatureParameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)

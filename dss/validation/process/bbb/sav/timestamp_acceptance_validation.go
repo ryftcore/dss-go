@@ -21,8 +21,8 @@ type TimestampAcceptanceValidation struct {
 }
 
 // NewTimestampAcceptanceValidation is the default constructor. Port of
-// TimestampAcceptanceValidation(I18nProvider, Date, TimestampWrapper, XmlAOV, ValidationPolicy).
-func NewTimestampAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// TimestampAcceptanceValidation(Provider, Date, TimestampWrapper, XmlAOV, ValidationPolicy).
+func NewTimestampAcceptanceValidation(i18nProvider *i18n.Provider, currentTime time.Time,
 	timestamp *diagnostic.TimestampWrapper, aovResult *jaxb.XmlAOV,
 	validationPolicy policy.ValidationPolicy) *TimestampAcceptanceValidation {
 	c := &TimestampAcceptanceValidation{

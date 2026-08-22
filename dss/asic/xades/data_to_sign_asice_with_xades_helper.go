@@ -16,8 +16,8 @@ type DataToSignASiCEWithXAdESHelper struct {
 var _ GetDataToSignASiCWithXAdESHelper = (*DataToSignASiCEWithXAdESHelper)(nil)
 
 // NewDataToSignASiCEWithXAdESHelper is the default constructor. Ports
-// DataToSignASiCEWithXAdESHelper(ASiCContent).
-func NewDataToSignASiCEWithXAdESHelper(asicContent *asic.ASiCContent) *DataToSignASiCEWithXAdESHelper {
+// DataToSignASiCEWithXAdESHelper(Content).
+func NewDataToSignASiCEWithXAdESHelper(asicContent *asic.Content) *DataToSignASiCEWithXAdESHelper {
 	return &DataToSignASiCEWithXAdESHelper{
 		AbstractGetDataToSignHelper: asic.NewAbstractGetDataToSignHelper(asicContent),
 	}

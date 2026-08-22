@@ -4,11 +4,11 @@
 // CMSSignedData's encapsulated (or detached) content, which SignerInformation#verify uses
 // directly when the SignerInfo carries no signedAttrs - the signature then covers the content
 // itself rather than the DER SET OF the signed attributes. cmscore.SignerInfo, unlike BC's
-// type, holds no such back-reference, so NewCAdESSignatureIntegrityValidator takes the bytes to
+// type, holds no such back-reference, so NewSignatureIntegrityValidator takes the bytes to
 // verify against explicitly (signedContent): internal/cmscore.Attributes#DERSetEncoded() - "the
 // message digest is computed on the DER encoding of the SignedAttrs value, with the tag of SET
 // OF" (RFC 5652 clause 5.4) - when signed attributes are present (every CAdES baseline profile
-// requires them), or the signed content itself otherwise. The caller (CAdESSignature, a sibling
+// requires them), or the signed content itself otherwise. The caller (Signature, a sibling
 // chunk not in this manifest) is expected to compute it accordingly.
 package cades
 
@@ -21,8 +21,8 @@ import (
 )
 
 // CAdESSignatureIntegrityValidator validates integrity of a CAdES signature. Port of the class
-// CAdESSignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
-type CAdESSignatureIntegrityValidator struct {
+// SignatureIntegrityValidator, extending spi.SignatureIntegrityValidator.
+type SignatureIntegrityValidator struct {
 	spi.SignatureIntegrityValidatorBase
 
 	// signerInformation is the corresponding SignerInformation.
@@ -37,7 +37,7 @@ type CAdESSignatureIntegrityValidator struct {
 	// message-digest reference validation) and compares it against the message-digest signed
 	// attribute BEFORE checking the raw signature bytes against the public key, throwing
 	// CMSSignerDigestMismatchException on a mismatch. That failure does not depend on which
-	// candidate's public key is being tried, so the caller (CAdESSignature.CheckSignatureIntegrity)
+	// candidate's public key is being tried, so the caller (Signature.CheckSignatureIntegrity)
 	// computes it once, up front, and every Verify call below fails uniformly when set - exactly
 	// as every candidate would fail the same BC digest check in Java. Confirmed by
 	// pades/testdata/upstream/validation/pdf-byterange-overlap.pdf in the PAdES cross-validation
@@ -47,10 +47,10 @@ type CAdESSignatureIntegrityValidator struct {
 }
 
 // NewCAdESSignatureIntegrityValidator is the port of the constructor
-// CAdESSignatureIntegrityValidator(SignerInformation); see the file header on signedContent and
+// SignatureIntegrityValidator(SignerInformation); see the file header on signedContent and
 // the contentDigestMismatch field doc on the extra parameter.
-func NewCAdESSignatureIntegrityValidator(signerInformation *cmscore.SignerInfo, signedContent []byte, contentDigestMismatch bool) *CAdESSignatureIntegrityValidator {
-	v := &CAdESSignatureIntegrityValidator{
+func NewSignatureIntegrityValidator(signerInformation *cmscore.SignerInfo, signedContent []byte, contentDigestMismatch bool) *SignatureIntegrityValidator {
+	v := &SignatureIntegrityValidator{
 		signerInformation:     signerInformation,
 		signedContent:         signedContent,
 		contentDigestMismatch: contentDigestMismatch,
@@ -63,7 +63,7 @@ func NewCAdESSignatureIntegrityValidator(signerInformation *cmscore.SignerInfo, 
 //
 // The DSSException Java wraps a CMSSignerDigestMismatchException or any other verification
 // failure in is returned here as an error, its message built the same way.
-func (v *CAdESSignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
+func (v *SignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
 	if v.contentDigestMismatch {
 		return false, model.NewDSSError("Unable to validate CMS Signature : message-digest attribute does not match the digest of the provided content")
 	}

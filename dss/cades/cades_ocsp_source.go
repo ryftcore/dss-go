@@ -9,16 +9,16 @@ import (
 
 // CAdESOCSPSource is the OCSP source for a CAdES signature. Port of the class CAdESOCSPSource,
 // extending spi.CMSOCSPSource.
-type CAdESOCSPSource struct {
+type OCSPSource struct {
 	*spi.CMSOCSPSource
 }
 
-// NewCAdESOCSPSource creates a CAdES OCSP source from a CMS and the related
+// NewOCSPSource creates a CAdES OCSP source from a CMS and the related
 // unsignedAttributes of the signer. Port of the constructor CAdESOCSPSource(CMS, AttributeTable).
-func NewCAdESOCSPSource(cmsObj *cms.CMS, unsignedAttributes cmscore.Attributes) (*CAdESOCSPSource, error) {
+func NewOCSPSource(cmsObj *cms.CMS, unsignedAttributes cmscore.Attributes) (*OCSPSource, error) {
 	base, err := spi.NewCMSOCSPSource(cmsObj.OcspResponseStore(), cmsObj.OcspBasicStore(), unsignedAttributes)
 	if err != nil {
 		return nil, err
 	}
-	return &CAdESOCSPSource{CMSOCSPSource: base}, nil
+	return &OCSPSource{CMSOCSPSource: base}, nil
 }

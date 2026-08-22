@@ -25,9 +25,9 @@ type RevocationAfterCertificateIssuanceCheck struct {
 }
 
 // NewRevocationAfterCertificateIssuanceCheck is the default constructor. Port of
-// RevocationAfterCertificateIssuanceCheck(I18nProvider, XmlRAC, CertificateWrapper,
+// RevocationAfterCertificateIssuanceCheck(Provider, XmlRAC, CertificateWrapper,
 // RevocationWrapper, LevelRule).
-func NewRevocationAfterCertificateIssuanceCheck(i18nProvider *i18n.I18nProvider,
+func NewRevocationAfterCertificateIssuanceCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlRAC], certificate *diagnostic.CertificateWrapper,
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *RevocationAfterCertificateIssuanceCheck {
 	c := &RevocationAfterCertificateIssuanceCheck{

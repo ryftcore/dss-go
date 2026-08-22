@@ -3,8 +3,8 @@
 // Java's abstract methods (getExistingAIAKeys, findCertificates, insertCertificate,
 // removeCertificates) have no Go inheritance equivalent. Following the self-registration
 // pattern used elsewhere in this port (model.TokenBase.InitToken / TokenOverrides), a concrete
-// repository embeds RepositoryAIASource and must call InitRepositoryAIASource(self) from its
-// constructor so RepositoryAIASource's methods can dispatch to the concrete implementation;
+// repository embeds RepositorySource and must call InitRepositoryAIASource(self) from its
+// constructor so RepositorySource's methods can dispatch to the concrete implementation;
 // forgetting to do so panics, matching Token's contract.
 package aia
 
@@ -14,9 +14,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// RepositoryAIASourceOverrides declares the abstract methods a concrete repository AIA
-// source, embedding RepositoryAIASource, must implement.
-type RepositoryAIASourceOverrides interface {
+// RepositorySourceOverrides declares the abstract methods a concrete repository AIA
+// source, embedding RepositorySource, must implement.
+type RepositorySourceOverrides interface {
 	// ExistingAIAKeys returns a list of all existing AIA keys present in the DB.
 	ExistingAIAKeys() []string
 
@@ -30,25 +30,25 @@ type RepositoryAIASourceOverrides interface {
 	RemoveCertificates(aiaKey string)
 }
 
-// RepositoryAIASource is the abstract repository AIA source.
-type RepositoryAIASource struct {
+// RepositorySource is the abstract repository AIA source.
+type RepositorySource struct {
 	// ProxiedSource is used to access certificate tokens that are not present in the
 	// repository.
-	ProxiedSource AIASource
+	ProxiedSource Source
 
 	// overrides points back at the concrete repository; see InitRepositoryAIASource.
-	overrides RepositoryAIASourceOverrides
+	overrides RepositorySourceOverrides
 }
 
 // InitRepositoryAIASource registers the concrete repository with its base so that the base can
 // dispatch to the abstract methods. Must be called by every concrete repository's constructor.
-func (r *RepositoryAIASource) InitRepositoryAIASource(overrides RepositoryAIASourceOverrides) {
+func (r *RepositorySource) InitRepositoryAIASource(overrides RepositorySourceOverrides) {
 	r.overrides = overrides
 }
 
 // repositoryAIASourceOverrides returns the registered overrides, panicking when the concrete
 // repository forgot to call InitRepositoryAIASource.
-func (r *RepositoryAIASource) repositoryAIASourceOverrides() RepositoryAIASourceOverrides {
+func (r *RepositorySource) repositoryAIASourceOverrides() RepositorySourceOverrides {
 	if r.overrides == nil {
 		panic("RepositoryAIASource was not initialised: the concrete repository must call InitRepositoryAIASource in its constructor")
 	}
@@ -57,13 +57,13 @@ func (r *RepositoryAIASource) repositoryAIASourceOverrides() RepositoryAIASource
 
 // SetProxySource sets a source to access an AIA in case the requested certificates are not
 // present in the repository.
-func (r *RepositoryAIASource) SetProxySource(proxiedSource AIASource) {
+func (r *RepositorySource) SetProxySource(proxiedSource Source) {
 	r.ProxiedSource = proxiedSource
 }
 
 // CertificatesByAIA loads the AIA certificates for certificateToken, without forcing a
 // refresh.
-func (r *RepositoryAIASource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
+func (r *RepositorySource) CertificatesByAIA(certificateToken *model.CertificateToken) []*model.CertificateToken {
 	return r.CertificatesByAIAWithRefresh(certificateToken, false)
 }
 
@@ -71,7 +71,7 @@ func (r *RepositoryAIASource) CertificatesByAIA(certificateToken *model.Certific
 // from the proxied source, by forcing the refresh. Ports the public
 // getCertificatesByAIA(CertificateToken, boolean). Panics if certificateToken is nil (Java
 // Objects.requireNonNull).
-func (r *RepositoryAIASource) CertificatesByAIAWithRefresh(certificateToken *model.CertificateToken, forceRefresh bool) []*model.CertificateToken {
+func (r *RepositorySource) CertificatesByAIAWithRefresh(certificateToken *model.CertificateToken, forceRefresh bool) []*model.CertificateToken {
 	if certificateToken == nil {
 		panic("CertificateToken shall be provided!")
 	}
@@ -99,9 +99,9 @@ func (r *RepositoryAIASource) CertificatesByAIAWithRefresh(certificateToken *mod
 
 // extractAndInsertCertificatesFromProxiedSource extracts a set of CertificateTokens from
 // ProxiedSource and inserts/updates values in the cache source if required.
-func (r *RepositoryAIASource) extractAndInsertCertificatesFromProxiedSource(certificateToken *model.CertificateToken, aiaKeys []string) []*model.CertificateToken {
+func (r *RepositorySource) extractAndInsertCertificatesFromProxiedSource(certificateToken *model.CertificateToken, aiaKeys []string) []*model.CertificateToken {
 	if r.ProxiedSource == nil {
-		// "Proxied AIASource is not provided!" LOG.warn dropped, not load-bearing per
+		// "Proxied Source is not provided!" LOG.warn dropped, not load-bearing per
 		// PORTING.md.
 		return nil
 	}
@@ -110,7 +110,7 @@ func (r *RepositoryAIASource) extractAndInsertCertificatesFromProxiedSource(cert
 
 	existingAIAKeys := overrides.ExistingAIAKeys()
 	for _, aiaKey := range aiaKeys {
-		if repositoryAIASourceContainsString(existingAIAKeys, aiaKey) {
+		if repositorySourceContainsString(existingAIAKeys, aiaKey) {
 			// "AIA Certificates with key '{}' have been removed from DB" LOG.info dropped,
 			// not load-bearing per PORTING.md.
 			overrides.RemoveCertificates(aiaKey)
@@ -144,8 +144,8 @@ func (r *RepositoryAIASource) extractAndInsertCertificatesFromProxiedSource(cert
 	return result
 }
 
-// repositoryAIASourceContainsString reports whether values contains value.
-func repositoryAIASourceContainsString(values []string, value string) bool {
+// repositorySourceContainsString reports whether values contains value.
+func repositorySourceContainsString(values []string, value string) bool {
 	for _, v := range values {
 		if v == value {
 			return true
@@ -156,7 +156,7 @@ func repositoryAIASourceContainsString(values []string, value string) bool {
 
 // GetCertificateTokenAIAUrl returns a caIssuers access URL, preferring the certificate's own
 // recorded SourceURL. Returns "" (Java's null) if none can be found.
-func (r *RepositoryAIASource) GetCertificateTokenAIAUrl(certificateToken *model.CertificateToken) string {
+func (r *RepositorySource) GetCertificateTokenAIAUrl(certificateToken *model.CertificateToken) string {
 	sourceURL := certificateToken.SourceURL()
 	if sourceURL == "" {
 		aiaUrls := spi.CertificateExtensionsUtilsCAIssuersAccessUrls(certificateToken)
@@ -173,7 +173,7 @@ func (r *RepositoryAIASource) GetCertificateTokenAIAUrl(certificateToken *model.
 }
 
 // InitCertificateAIAKeys initializes a list of AIA certificate token keys from the given URLs.
-func (r *RepositoryAIASource) InitCertificateAIAKeys(aiaUrls []string) []string {
+func (r *RepositorySource) InitCertificateAIAKeys(aiaUrls []string) []string {
 	keys := make([]string, 0, len(aiaUrls))
 	for _, url := range aiaUrls {
 		keys = append(keys, r.GetAIAKey(url))
@@ -184,7 +184,7 @@ func (r *RepositoryAIASource) InitCertificateAIAKeys(aiaUrls []string) []string 
 // GetAIAKey creates a key corresponding to the given aiaURL. Panics wrapping the underlying
 // error on failure, mirroring Java's unchecked DSSException propagating out of a method with
 // no throws clause.
-func (r *RepositoryAIASource) GetAIAKey(aiaURL string) string {
+func (r *RepositorySource) GetAIAKey(aiaURL string) string {
 	key, err := spi.DSSUtilsSHA1Digest(aiaURL)
 	if err != nil {
 		panic(err)
@@ -194,7 +194,7 @@ func (r *RepositoryAIASource) GetAIAKey(aiaURL string) string {
 
 // GetUniqueCertificateAiaID generates a unique identifier for the certificateToken and aiaURL
 // pair. Panics wrapping the underlying error on failure; see GetAIAKey.
-func (r *RepositoryAIASource) GetUniqueCertificateAiaID(certificateToken *model.CertificateToken, aiaURL string) string {
+func (r *RepositorySource) GetUniqueCertificateAiaID(certificateToken *model.CertificateToken, aiaURL string) string {
 	key, err := spi.DSSUtilsSHA1Digest(certificateToken.DSSIDAsString() + aiaURL)
 	if err != nil {
 		panic(err)
@@ -204,7 +204,7 @@ func (r *RepositoryAIASource) GetUniqueCertificateAiaID(certificateToken *model.
 
 // extractAIAFromCacheSource ports the private extractAIAFromCacheSource(List<String>),
 // de-duplicating by DSSIDAsString() while preserving order (LinkedHashSet semantics).
-func (r *RepositoryAIASource) extractAIAFromCacheSource(aiaKeys []string) []*model.CertificateToken {
+func (r *RepositorySource) extractAIAFromCacheSource(aiaKeys []string) []*model.CertificateToken {
 	overrides := r.repositoryAIASourceOverrides()
 	seen := make(map[string]struct{})
 	var certificateTokens []*model.CertificateToken
@@ -220,4 +220,4 @@ func (r *RepositoryAIASource) extractAIAFromCacheSource(aiaKeys []string) []*mod
 	return certificateTokens
 }
 
-var _ AIASource = (*RepositoryAIASource)(nil)
+var _ Source = (*RepositorySource)(nil)

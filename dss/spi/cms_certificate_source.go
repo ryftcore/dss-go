@@ -418,7 +418,7 @@ func DSSASN1UtilsCertificateRef(otherCertID *OtherCertID) (*CertificateRef, erro
 // -----------------------------------------------------------------------------
 
 // CMSCertificateSource is a CMS certificate source. Port of the abstract class
-// CMSCertificateSource; the concrete sources of the later phases (CAdESCertificateSource,
+// CMSCertificateSource; the concrete sources of the later phases (CertificateSource,
 // TimestampCertificateSource) embed the *CMSCertificateSource NewCMSCertificateSource returns
 // and override only CertificateSourceType.
 //

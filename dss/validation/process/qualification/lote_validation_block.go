@@ -26,8 +26,8 @@ type LoTEValidationBlock struct {
 }
 
 // NewLoTEValidationBlock is the default constructor. Port of
-// LoTEValidationBlock(I18nProvider, XmlTrustSourceList, Date, ValidationPolicy).
-func NewLoTEValidationBlock(i18nProvider *i18n.I18nProvider, currentList *dssjaxb.XmlTrustSourceList, currentTime time.Time,
+// LoTEValidationBlock(Provider, XmlTrustSourceList, Date, ValidationPolicy).
+func NewLoTEValidationBlock(i18nProvider *i18n.Provider, currentList *dssjaxb.XmlTrustSourceList, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy) *LoTEValidationBlock {
 	xmlTLAnalysis := &jaxb.XmlTLAnalysis{}
 	b := &LoTEValidationBlock{

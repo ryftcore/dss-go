@@ -13,70 +13,70 @@ import (
 	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
-// DetachedTimestampValidator is a detached CMS TimestampToken validator.
-type DetachedTimestampValidator struct {
+// DetachedValidator is a detached CMS TimestampToken validator.
+type DetachedValidator struct {
 	dssvalidation.SignedDocumentValidatorBase
 }
 
 // compile-time interface assertion.
-var _ TimestampValidator = (*DetachedTimestampValidator)(nil)
+var _ Validator = (*DetachedValidator)(nil)
 
 // newDetachedTimestampValidator wires the wrapping shared by both exported constructors. Port of
 // the package-private DetachedTimestampValidator() constructor, which in Java delegates to
 // this(new DetachedTimestampAnalyzer()).
-func newDetachedTimestampValidator(detachedTimestampAnalyzer *DetachedTimestampAnalyzer) *DetachedTimestampValidator {
-	return &DetachedTimestampValidator{
+func newDetachedValidator(detachedTimestampAnalyzer *DetachedTimestampAnalyzer) *DetachedValidator {
+	return &DetachedValidator{
 		SignedDocumentValidatorBase: dssvalidation.NewSignedDocumentValidatorBase(detachedTimestampAnalyzer),
 	}
 }
 
 // NewDetachedTimestampValidator is the default constructor. Port of
-// DetachedTimestampValidator(DSSDocument).
-func NewDetachedTimestampValidator(timestampFile model.DSSDocument) *DetachedTimestampValidator {
-	return newDetachedTimestampValidator(NewDetachedTimestampAnalyzer(timestampFile))
+// DetachedValidator(DSSDocument).
+func NewDetachedValidator(timestampFile model.DSSDocument) *DetachedValidator {
+	return newDetachedValidator(NewDetachedTimestampAnalyzer(timestampFile))
 }
 
 // NewDetachedTimestampValidatorWithType is the default constructor with a type. Port of
-// DetachedTimestampValidator(DSSDocument, TimestampType).
-func NewDetachedTimestampValidatorWithType(timestampFile model.DSSDocument, timestampType enumerations.TimestampType) *DetachedTimestampValidator {
-	return newDetachedTimestampValidator(NewDetachedTimestampAnalyzerWithType(timestampFile, timestampType))
+// DetachedValidator(DSSDocument, TimestampType).
+func NewDetachedValidatorWithType(timestampFile model.DSSDocument, timestampType enumerations.TimestampType) *DetachedValidator {
+	return newDetachedValidator(NewDetachedTimestampAnalyzerWithType(timestampFile, timestampType))
 }
 
 // DocumentAnalyzer returns the wrapped DetachedTimestampAnalyzer. Port of the covariant-return
 // getDocumentAnalyzer() override.
-func (v *DetachedTimestampValidator) DocumentAnalyzer() *DetachedTimestampAnalyzer {
+func (v *DetachedValidator) DocumentAnalyzer() *DetachedTimestampAnalyzer {
 	return v.SignedDocumentValidatorBase.DocumentAnalyzer().(*DetachedTimestampAnalyzer)
 }
 
 // Timestamp returns a single TimestampToken to be validated. Port of getTimestamp().
-func (v *DetachedTimestampValidator) Timestamp() *validation.TimestampToken {
+func (v *DetachedValidator) Timestamp() *validation.TimestampToken {
 	return v.DocumentAnalyzer().Timestamp()
 }
 
 // SetTimestampedData sets the data that has been timestamped. Port of
 // setTimestampedData(DSSDocument).
-func (v *DetachedTimestampValidator) SetTimestampedData(document model.DSSDocument) {
+func (v *DetachedValidator) SetTimestampedData(document model.DSSDocument) {
 	v.DocumentAnalyzer().SetTimestampedData(document)
 }
 
 // TimestampedData returns the timestamped data. Port of getTimestampedData().
-func (v *DetachedTimestampValidator) TimestampedData() model.DSSDocument {
+func (v *DetachedValidator) TimestampedData() model.DSSDocument {
 	return v.DocumentAnalyzer().TimestampedData()
 }
 
-// OriginalDocuments always returns an error: not supported for a DetachedTimestampValidator.
+// OriginalDocuments always returns an error: not supported for a DetachedValidator.
 // Port of the getOriginalDocuments(String) override, which always throws.
 //
 // Java's UnsupportedOperationException becomes a panic, matching
 // DetachedTimestampAnalyzer.OriginalDocuments's identical deviation (see that method's doc
 // comment) for the same reason: both shadow a promoted base-type method that this type
 // deliberately never falls back to.
-func (v *DetachedTimestampValidator) OriginalDocuments(signatureId string) []model.DSSDocument {
+func (v *DetachedValidator) OriginalDocuments(signatureId string) []model.DSSDocument {
 	panic("getOriginalDocuments(signatureId) is not supported for DetachedTimestampValidator!")
 }
 
-// OriginalDocumentsForSignature always panics: not supported for a DetachedTimestampValidator.
+// OriginalDocumentsForSignature always panics: not supported for a DetachedValidator.
 // Port of the getOriginalDocuments(AdvancedSignature) override, which always throws.
-func (v *DetachedTimestampValidator) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
+func (v *DetachedValidator) OriginalDocumentsForSignature(advancedSignature validation.AdvancedSignature) []model.DSSDocument {
 	panic("getOriginalDocuments(AdvancedSignature) is not supported for DetachedTimestampValidator!")
 }

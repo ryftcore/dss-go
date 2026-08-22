@@ -20,8 +20,8 @@ type TLSCertificateBindingUrlPresentCheck struct {
 }
 
 // NewTLSCertificateBindingUrlPresentCheck is the default constructor. Port of
-// TLSCertificateBindingUrlPresentCheck(I18nProvider, XmlValidationQWACProcess, String, LevelRule).
-func NewTLSCertificateBindingUrlPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// TLSCertificateBindingUrlPresentCheck(Provider, XmlValidationQWACProcess, String, LevelRule).
+func NewTLSCertificateBindingUrlPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	tlsCertificateBindingUrl string, constraint policy.LevelRule) *TLSCertificateBindingUrlPresentCheck {
 	c := &TLSCertificateBindingUrlPresentCheck{
 		ChainItemBase:            process.NewChainItemBase(i18nProvider, result, constraint),

@@ -19,8 +19,8 @@ type RevocationCertHashMatchCheck struct {
 }
 
 // NewRevocationCertHashMatchCheck is the default constructor. Port of
-// RevocationCertHashMatchCheck(I18nProvider, XmlRAC, RevocationWrapper, LevelRule).
-func NewRevocationCertHashMatchCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRAC],
+// RevocationCertHashMatchCheck(Provider, XmlRAC, RevocationWrapper, LevelRule).
+func NewRevocationCertHashMatchCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRAC],
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *RevocationCertHashMatchCheck {
 	c := &RevocationCertHashMatchCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

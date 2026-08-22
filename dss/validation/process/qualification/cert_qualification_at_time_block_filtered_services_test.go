@@ -69,7 +69,7 @@ func TestCertQualificationAtTimeBlockFilteredServicesEmptyNotNil(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			block := NewCertQualificationAtTimeBlock(i18n.NewI18nProvider(),
+			block := NewCertQualificationAtTimeBlock(i18n.NewProvider(),
 				enumerations.ValidationTimeBESTSignatureTime, tc.date, cert, tc.services())
 			block.Execute()
 
@@ -90,7 +90,7 @@ func TestCertQualificationAtTimeBlockFilteredServicesEmptyNotNil(t *testing.T) {
 func TestCertQualificationAtTimeBlockFilteredServicesBeforeExecute(t *testing.T) {
 	postEIDAS := time.UnixMilli(1514764800000).UTC()
 	cert := buildQualCert(&qualCertInput{NotBefore: postEIDAS.UnixMilli()})
-	block := NewCertQualificationAtTimeBlock(i18n.NewI18nProvider(),
+	block := NewCertQualificationAtTimeBlock(i18n.NewProvider(),
 		enumerations.ValidationTimeBESTSignatureTime, &postEIDAS, cert, nil)
 
 	defer func() {

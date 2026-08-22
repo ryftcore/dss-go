@@ -3,7 +3,7 @@
 // (DSS 6.5.RC1).
 //
 // Java's `extends AbstractStatusAlert` with a lambda AlertHandler becomes embedding
-// *alert.AbstractStatusAlert built from an alert.AlertHandler[alert.Status] closure, per the
+// *alert.AbstractStatusAlert built from an alert.Handler[alert.Status] closure, per the
 // alert/exception_on_status_alert.go precedent.
 package alerts
 
@@ -18,7 +18,7 @@ type ProtectedDocumentExceptionOnStatusAlert struct {
 	*alert.AbstractStatusAlert
 }
 
-// protectedDocumentExceptionOnStatusAlertHandler is the AlertHandler counterpart of the
+// protectedDocumentExceptionOnStatusAlertHandler is the Handler counterpart of the
 // upstream lambda `object -> { throw new ProtectedDocumentException(object.getErrorString()); }`.
 type protectedDocumentExceptionOnStatusAlertHandler struct{}
 

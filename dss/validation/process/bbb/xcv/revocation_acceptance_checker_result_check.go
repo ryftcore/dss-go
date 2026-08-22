@@ -21,12 +21,12 @@ type RevocationAcceptanceCheckerResultCheck[T any] struct {
 }
 
 // NewRevocationAcceptanceCheckerResultCheck is the default constructor. Port of
-// RevocationAcceptanceCheckerResultCheck(I18nProvider, T, XmlRAC, LevelRule).
+// RevocationAcceptanceCheckerResultCheck(Provider, T, XmlRAC, LevelRule).
 //
 // Java always calls the ChainItem constructor that takes a bbbId, with the RAC
 // id, which is a nullable String; the Go port picks the id-less constructor for
 // a null one, the two being the same call there.
-func NewRevocationAcceptanceCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewRevocationAcceptanceCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	racResult *jaxb.XmlRAC, constraint policy.LevelRule) *RevocationAcceptanceCheckerResultCheck[T] {
 	var base *process.ChainItemBase[T]
 	if racResult.Id != nil {

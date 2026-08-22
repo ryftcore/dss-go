@@ -19,8 +19,8 @@ type LTALevelTimeStampCheck[T any] struct {
 }
 
 // NewLTALevelTimeStampCheck is the default constructor. Port of
-// LTALevelTimeStampCheck(I18nProvider, T, SignatureWrapper, Map, Collection, LevelRule).
-func NewLTALevelTimeStampCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// LTALevelTimeStampCheck(Provider, T, SignatureWrapper, Map, Collection, LevelRule).
+func NewLTALevelTimeStampCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	signature *diagnostic.SignatureWrapper, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	xmlTimestamps []*jaxb.XmlTimestamp, constraint policy.LevelRule) *LTALevelTimeStampCheck[T] {
 	c := &LTALevelTimeStampCheck[T]{

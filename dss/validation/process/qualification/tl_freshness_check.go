@@ -30,8 +30,8 @@ type TLFreshnessCheck struct {
 }
 
 // NewTLFreshnessCheck is the default constructor. Port of
-// TLFreshnessCheck(I18nProvider, XmlTLAnalysis, XmlTrustSourceList, Date, DurationRule).
-func NewTLFreshnessCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlTLAnalysis],
+// TLFreshnessCheck(Provider, XmlTLAnalysis, XmlTrustSourceList, Date, DurationRule).
+func NewTLFreshnessCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlTLAnalysis],
 	currentTL *dssjaxb.XmlTrustSourceListContent, currentTime time.Time,
 	durationRule policy.DurationRule) *TLFreshnessCheck {
 	c := &TLFreshnessCheck{

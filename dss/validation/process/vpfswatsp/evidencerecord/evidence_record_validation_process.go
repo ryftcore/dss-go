@@ -4,7 +4,7 @@
 //
 // Package placement deviation: Java's vpfswatsp.evidencerecord
 // is a package of its own, distinct from vpfswatsp. Everything else in the
-// vpfswatsp tree folds into one Go package, but EvidenceRecordTimestampsValidationBlock
+// vpfswatsp tree folds into one Go package, but TimestampsValidationBlock
 // extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
 // (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
 // therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
@@ -28,15 +28,15 @@ import (
 	"github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp"
 )
 
-// EvidenceRecordValidationProcess performs Evidence Record validation as per
+// ValidationProcess performs Evidence Record validation as per
 // clause 5.6.3 "Validation Process for Signatures providing Long Term
 // Availability and Integrity of Validation Material", step 1) 5.6.3.4
 // "Processing".
-type EvidenceRecordValidationProcess struct {
+type ValidationProcess struct {
 	*process.ChainBase[*jaxb.XmlValidationProcessEvidenceRecord]
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// evidenceRecord is the evidence record being validated.
 	evidenceRecord *diagnostic.EvidenceRecordWrapper
@@ -55,13 +55,13 @@ type EvidenceRecordValidationProcess struct {
 }
 
 // NewEvidenceRecordValidationProcess is the common constructor. Port of
-// EvidenceRecordValidationProcess(I18nProvider, DiagnosticData, EvidenceRecordWrapper, Collection, Map, ValidationPolicy, Date).
-func NewEvidenceRecordValidationProcess(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// ValidationProcess(Provider, Data, EvidenceRecordWrapper, Collection, Map, ValidationPolicy, Date).
+func NewValidationProcess(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, xmlTimestamps []*jaxb.XmlTimestamp,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, validationPolicy policy.ValidationPolicy,
-	currentTime time.Time) *EvidenceRecordValidationProcess {
+	currentTime time.Time) *ValidationProcess {
 	xmlResult := &jaxb.XmlValidationProcessEvidenceRecord{}
-	c := &EvidenceRecordValidationProcess{
+	c := &ValidationProcess{
 		ChainBase: process.NewChainBase(i18nProvider, process.NewResult(xmlResult,
 			&xmlResult.XmlConstraintsConclusionContent, &xmlResult.XmlConstraintsConclusionAttrs)),
 
@@ -77,14 +77,14 @@ func NewEvidenceRecordValidationProcess(i18nProvider *i18n.I18nProvider, diagnos
 }
 
 // Title returns the title of the process. Port of getTitle().
-func (c *EvidenceRecordValidationProcess) Title() i18n.MessageTag {
+func (c *ValidationProcess) Title() i18n.MessageTag {
 	return i18n.MessageTagVPER
 }
 
 // InitChain initializes the chain. Port of initChain(): the IllegalStateException
 // becomes a panic, initChain being called from the base Chain, which cannot
 // propagate an error.
-func (c *EvidenceRecordValidationProcess) InitChain() {
+func (c *ValidationProcess) InitChain() {
 
 	var item process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord]
 
@@ -254,50 +254,50 @@ func digestMatcherTypeOf(digestMatcher *diagnosticjaxb.XmlDigestMatcher) enumera
 }
 
 // referenceDataFound ports the private referenceDataFound(XmlDigestMatcher).
-func (c *EvidenceRecordValidationProcess) referenceDataFound(
+func (c *ValidationProcess) referenceDataFound(
 	digestMatcher *diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordDataObjectExistenceConstraint()
 	return cv.NewReferenceDataExistenceCheck(c.I18nProvider, c.Result, digestMatcher, constraint)
 }
 
 // referenceDataIntact ports the private referenceDataIntact(XmlDigestMatcher).
-func (c *EvidenceRecordValidationProcess) referenceDataIntact(
+func (c *ValidationProcess) referenceDataIntact(
 	digestMatcher *diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordDataObjectIntactConstraint()
 	return cv.NewReferenceDataIntactCheck(c.I18nProvider, c.Result, digestMatcher, constraint)
 }
 
 // atLeastOneDataObjectFound ports the private atLeastOneDataObjectFound(List).
-func (c *EvidenceRecordValidationProcess) atLeastOneDataObjectFound(
+func (c *ValidationProcess) atLeastOneDataObjectFound(
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordDataObjectFoundConstraint()
 	return cv.NewAtLeastOneReferenceDataObjectFoundCheck(c.I18nProvider, c.Result, digestMatchers, constraint)
 }
 
 // referenceDataGroup ports the private referenceDataGroup(List).
-func (c *EvidenceRecordValidationProcess) referenceDataGroup(
+func (c *ValidationProcess) referenceDataGroup(
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordDataObjectGroupConstraint()
 	return cv.NewReferenceDataGroupCheck(c.I18nProvider, c.Result, digestMatchers, constraint)
 }
 
 // signedFilesCoveredCheck ports the private signedFilesCoveredCheck().
-func (c *EvidenceRecordValidationProcess) signedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
+func (c *ValidationProcess) signedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordSignedFilesCoveredConstraint()
-	return NewEvidenceRecordSignedFilesCoveredCheck(c.I18nProvider, c.Result, c.evidenceRecord, constraint)
+	return NewSignedFilesCoveredCheck(c.I18nProvider, c.Result, c.evidenceRecord, constraint)
 }
 
 // signedAndTimestampedFilesCoveredCheck ports the private
 // signedAndTimestampedFilesCoveredCheck().
-func (c *EvidenceRecordValidationProcess) signedAndTimestampedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
+func (c *ValidationProcess) signedAndTimestampedFilesCoveredCheck() process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	constraint := c.policy.EvidenceRecordContainerSignedAndTimestampedFilesCoveredConstraint()
-	return NewEvidenceRecordSignedAndTimestampedFilesCoveredCheck(c.I18nProvider, c.Result, c.diagnosticData,
+	return NewSignedAndTimestampedFilesCoveredCheck(c.I18nProvider, c.Result, c.diagnosticData,
 		c.evidenceRecord, constraint)
 }
 
 // timestampValidationConclusive ports the private
 // timestampValidationConclusive(TimestampWrapper, XmlValidationProcessArchivalDataTimestamp).
-func (c *EvidenceRecordValidationProcess) timestampValidationConclusive(timestampWrapper *diagnostic.TimestampWrapper,
+func (c *ValidationProcess) timestampValidationConclusive(timestampWrapper *diagnostic.TimestampWrapper,
 	timestampValidationResult *jaxb.XmlValidationProcessArchivalDataTimestamp) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	return vpfswatsp.NewTimestampValidationCheck(c.I18nProvider, c.Result, timestampWrapper, timestampValidationResult,
 		c.FailLevelRule())
@@ -306,7 +306,7 @@ func (c *EvidenceRecordValidationProcess) timestampValidationConclusive(timestam
 // algorithmsObsolescenceValidation ports the private
 // algorithmsObsolescenceValidation(XmlAOV, Date): the unsupported-Context error
 // becomes a panic, the caller being initChain, which cannot propagate one.
-func (c *EvidenceRecordValidationProcess) algorithmsObsolescenceValidation(aovResult *jaxb.XmlAOV,
+func (c *ValidationProcess) algorithmsObsolescenceValidation(aovResult *jaxb.XmlAOV,
 	lowestPOETime time.Time) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
 	position, err := process.GetCryptoPosition(enumerations.ContextEvidenceRecord)
 	if err != nil {
@@ -319,7 +319,7 @@ func (c *EvidenceRecordValidationProcess) algorithmsObsolescenceValidation(aovRe
 // timestampValidation ports the private getTimestampValidation(TimestampWrapper):
 // the generated XmlTimestamp Id member is a *string, whose nil is Java's null,
 // and Utils.areStringsEqual(null, x) is false unless both are null.
-func (c *EvidenceRecordValidationProcess) timestampValidation(
+func (c *ValidationProcess) timestampValidation(
 	newestTimestamp *diagnostic.TimestampWrapper) *jaxb.XmlValidationProcessArchivalDataTimestamp {
 	for _, xmlTimestamp := range c.xmlTimestamps {
 		if xmlTimestamp.Id != nil && utils.AreStringsEqual(*xmlTimestamp.Id, newestTimestamp.Id()) {
@@ -353,7 +353,7 @@ func toXmlProofOfExistenceForTimestamp(timestampWrapper *diagnostic.TimestampWra
 
 // coversSignatureOrTimestampOrEvidenceRecord ports the private
 // coversSignatureOrTimestampOrEvidenceRecord(EvidenceRecordWrapper).
-func (c *EvidenceRecordValidationProcess) coversSignatureOrTimestampOrEvidenceRecord(
+func (c *ValidationProcess) coversSignatureOrTimestampOrEvidenceRecord(
 	evidenceRecord *diagnostic.EvidenceRecordWrapper) bool {
 	return utils.IsCollectionNotEmpty(evidenceRecord.CoveredSignatures()) ||
 		utils.IsCollectionNotEmpty(evidenceRecord.CoveredTimestamps()) ||

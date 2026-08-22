@@ -21,8 +21,8 @@ type ValidationContextInitializationResultCheck[T any] struct {
 
 // NewValidationContextInitializationResultCheck is the default constructor.
 // Port of
-// ValidationContextInitializationResultCheck(I18nProvider, T, XmlVCI, TokenProxy, LevelRule).
-func NewValidationContextInitializationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// ValidationContextInitializationResultCheck(Provider, T, XmlVCI, TokenProxy, LevelRule).
+func NewValidationContextInitializationResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlVCI *jaxb.XmlVCI, token diagnostic.TokenProxy, constraint policy.LevelRule) *ValidationContextInitializationResultCheck[T] {
 	c := &ValidationContextInitializationResultCheck[T]{
 		// Validation Context Initialization building block suffix ("-VCI"), a

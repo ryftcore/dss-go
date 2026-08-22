@@ -15,9 +15,9 @@ import (
 	xmlutils "github.com/ryftcore/dss-go/dss/xml/utils"
 )
 
-// XAdESRevocationRefExtractionUtilsCreateOCSPRef extracts an OCSPRef from an ocspRefElement.
+// RevocationRefExtractionUtilsCreateOCSPRef extracts an OCSPRef from an ocspRefElement.
 // Port of the public static createOCSPRef(XAdESPath, Element).
-func XAdESRevocationRefExtractionUtilsCreateOCSPRef(xadesPaths definition.XAdESPath, ocspRefElement *xmldom.Node) *spi.OCSPRef {
+func RevocationRefExtractionUtilsCreateOCSPRef(xadesPaths definition.XAdESPath, ocspRefElement *xmldom.Node) *spi.OCSPRef {
 	digestElement, _ := xmlutils.XPathUtilsGetElement(ocspRefElement, xadesPaths.CurrentDigestAlgAndValue())
 	digest := DSSXMLUtilsGetDigestAndValue(digestElement)
 
@@ -88,7 +88,7 @@ func xadesRevocationRefExtractionUtilsOCSPResponderID(xadesPaths definition.XAdE
 
 // XAdESRevocationRefExtractionUtilsCreateCRLRef extracts a CRLRef from a crlRefElement. Port of
 // the public static createCRLRef(XAdESPath, Element).
-func XAdESRevocationRefExtractionUtilsCreateCRLRef(xadesPaths definition.XAdESPath, crlRefElement *xmldom.Node) *spi.CRLRef {
+func RevocationRefExtractionUtilsCreateCRLRef(xadesPaths definition.XAdESPath, crlRefElement *xmldom.Node) *spi.CRLRef {
 	digestElement, _ := xmlutils.XPathUtilsGetElement(crlRefElement, xadesPaths.CurrentDigestAlgAndValue())
 	digest := DSSXMLUtilsGetDigestAndValue(digestElement)
 	if digest.IsEmpty() {

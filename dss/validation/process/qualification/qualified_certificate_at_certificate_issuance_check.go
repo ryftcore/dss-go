@@ -21,8 +21,8 @@ type QualifiedCertificateAtCertificateIssuanceCheck struct {
 
 // NewQualifiedCertificateAtCertificateIssuanceCheck is the default
 // constructor. Port of
-// QualifiedCertificateAtCertificateIssuanceCheck(I18nProvider, XmlValidationSignatureQualification, CertificateQualification, LevelRule).
-func NewQualifiedCertificateAtCertificateIssuanceCheck(i18nProvider *i18n.I18nProvider,
+// QualifiedCertificateAtCertificateIssuanceCheck(Provider, XmlValidationSignatureQualification, CertificateQualification, LevelRule).
+func NewQualifiedCertificateAtCertificateIssuanceCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationSignatureQualification],
 	qualificationAtIssuance enumerations.CertificateQualification, constraint policy.LevelRule) *QualifiedCertificateAtCertificateIssuanceCheck {
 	c := &QualifiedCertificateAtCertificateIssuanceCheck{

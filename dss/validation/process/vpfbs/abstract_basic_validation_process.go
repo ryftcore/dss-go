@@ -4,15 +4,15 @@
 // Signatures" process. Java subclasses: BasicSignatureValidationProcess
 // (unmodified initChain), vpftsp.TimestampBasicValidationProcess (unmodified
 // initChain), vpfltvd.RevocationBasicValidationProcess (unmodified initChain),
-// and eaa.EAAValidationProcess, which fully replaces initChain() rather than
+// and eaa.ValidationProcess, which fully replaces initChain() rather than
 // extending it. Only getContentTimestamps() and getTimestampValidation() are
 // genuinely virtually dispatched from this class' own InitChain (only
 // BasicSignatureValidationProcess overrides them), so only those two are
 // routed through AbstractBasicValidationProcessOverrides; every other
 // protected helper below is a plain method - nothing in this call graph ever
-// dispatches into a subclass override of them (EAAValidationProcess's own
+// dispatches into a subclass override of them (ValidationProcess's own
 // signatureAcceptanceValidation override is called only from
-// EAAValidationProcess's own initChain, on its own receiver, which Go's method
+// ValidationProcess's own initChain, on its own receiver, which Go's method
 // shadowing resolves correctly without any interface indirection).
 package vpfbs
 
@@ -54,7 +54,7 @@ type AbstractBasicValidationProcess[T any] struct {
 
 	// DiagnosticData is the diagnostic data. Exported because Java declares the
 	// field protected.
-	DiagnosticData *diagnostic.DiagnosticData
+	DiagnosticData *diagnostic.Data
 
 	// Token is the token to be validated. Exported because Java declares the
 	// field protected.
@@ -70,9 +70,9 @@ type AbstractBasicValidationProcess[T any] struct {
 }
 
 // NewAbstractBasicValidationProcess is the common constructor. Port of
-// AbstractBasicValidationProcess(I18nProvider, T, DiagnosticData, TokenProxy, Map).
-func NewAbstractBasicValidationProcess[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
-	diagnosticData *diagnostic.DiagnosticData, token diagnostic.TokenProxy,
+// AbstractBasicValidationProcess(Provider, T, Data, TokenProxy, Map).
+func NewAbstractBasicValidationProcess[T any](i18nProvider *i18n.Provider, result *process.Result[T],
+	diagnosticData *diagnostic.Data, token diagnostic.TokenProxy,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks) *AbstractBasicValidationProcess[T] {
 	return &AbstractBasicValidationProcess[T]{
 		ChainBase:      process.NewChainBase(i18nProvider, result),

@@ -24,49 +24,49 @@ import (
 // which extends CommonDocument; the Go port composes model.InMemoryDocument instead, which
 // gives it the OpenStream/WriteTo/Save/Digest/DigestValue/Name/MimeType behaviour Java inherits
 // from CommonDocument.
-type CMSSignedDocument struct {
+type SignedDocument struct {
 	*model.InMemoryDocument
 
 	// signedData is the CMS representing the document.
 	signedData *CMS
 }
 
-var _ model.DSSDocument = (*CMSSignedDocument)(nil)
+var _ model.DSSDocument = (*SignedDocument)(nil)
 
-// NewCMSSignedDocument is the default constructor for CMSSignedDocument.
+// NewSignedDocument is the default constructor for SignedDocument.
 // Port of CMSSignedDocument(CMS), i.e. CMSSignedDocument(data, null).
 //
 // Panics with the Java message when data is nil (Objects.requireNonNull).
-func NewCMSSignedDocument(data *CMS) *CMSSignedDocument {
-	return NewCMSSignedDocumentWithName(data, "")
+func NewSignedDocument(data *CMS) *SignedDocument {
+	return NewSignedDocumentWithName(data, "")
 }
 
-// NewCMSSignedDocumentWithName is the constructor for CMSSignedDocument with a custom document
+// NewSignedDocumentWithName is the constructor for SignedDocument with a custom document
 // name. Port of CMSSignedDocument(CMS, String).
 //
 // Panics with the Java message when data is nil (Objects.requireNonNull).
-func NewCMSSignedDocumentWithName(data *CMS, name string) *CMSSignedDocument {
+func NewSignedDocumentWithName(data *CMS, name string) *SignedDocument {
 	if data == nil {
 		panic("The CMSSignedData cannot be null")
 	}
 	inMemory := model.NewInMemoryDocumentWithMimeType(data.DEREncoded(), name, enumerations.MimeTypeEnumPKCS7)
-	return &CMSSignedDocument{InMemoryDocument: inMemory, signedData: data}
+	return &SignedDocument{InMemoryDocument: inMemory, signedData: data}
 }
 
 // CMSSignedData gets the CMS. Port of #getCMSSignedData.
-func (d *CMSSignedDocument) CMSSignedData() *CMS { return d.signedData }
+func (d *SignedDocument) CMSSignedData() *CMS { return d.signedData }
 
 // Bytes returns the encoded binaries of the CMS. Port of #getBytes.
-func (d *CMSSignedDocument) Bytes() []byte { return d.InMemoryDocument.Bytes() }
+func (d *SignedDocument) Bytes() []byte { return d.InMemoryDocument.Bytes() }
 
 // OpenStream ports #openStream (inherited effect: opens a stream on Bytes()).
-func (d *CMSSignedDocument) OpenStream() (io.ReadCloser, error) {
+func (d *SignedDocument) OpenStream() (io.ReadCloser, error) {
 	return d.InMemoryDocument.OpenStream()
 }
 
 // Equals ports #equals: same mimeType/name (CommonDocument#equals) and the same
 // SignedData.toASN1Structure(), which for this port means the same DER encoding.
-func (d *CMSSignedDocument) Equals(other *CMSSignedDocument) bool {
+func (d *SignedDocument) Equals(other *SignedDocument) bool {
 	if d == other {
 		return true
 	}

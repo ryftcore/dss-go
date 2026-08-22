@@ -23,8 +23,8 @@ type ServiceConsistencyCheck struct {
 }
 
 // NewServiceConsistencyCheck is the default constructor. Port of
-// ServiceConsistencyCheck(I18nProvider, XmlValidationCertificateQualification, TrustServiceWrapper, LevelRule).
-func NewServiceConsistencyCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
+// ServiceConsistencyCheck(Provider, XmlValidationCertificateQualification, TrustServiceWrapper, LevelRule).
+func NewServiceConsistencyCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationCertificateQualification],
 	trustService *diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *ServiceConsistencyCheck {
 	c := &ServiceConsistencyCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

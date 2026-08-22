@@ -20,8 +20,8 @@ type SignaturePolicyHashValidCheck struct {
 }
 
 // NewSignaturePolicyHashValidCheck is the default constructor. Port of
-// SignaturePolicyHashValidCheck(I18nProvider, XmlVCI, SignatureWrapper, LevelRule).
-func NewSignaturePolicyHashValidCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVCI],
+// SignaturePolicyHashValidCheck(Provider, XmlVCI, SignatureWrapper, LevelRule).
+func NewSignaturePolicyHashValidCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVCI],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *SignaturePolicyHashValidCheck {
 	c := &SignaturePolicyHashValidCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

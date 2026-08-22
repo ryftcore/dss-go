@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // QWACCertificateProcessExecutor overrides the protected
-// getDetailedReportBuilder(DiagnosticData), which execute() self-calls, so the
+// getDetailedReportBuilder(Data), which execute() self-calls, so the
 // call is routed through DefaultCertificateProcessExecutorOverrides,
 // registered by every constructor via InitDefaultCertificateProcessExecutor -
 // the same arrangement as process/chain_item.go's InitChainItem. The override
@@ -22,8 +22,8 @@ import (
 // QWACCertificateProcessExecutor overrides and that execute() self-calls.
 type DefaultCertificateProcessExecutorOverrides interface {
 	// DetailedReportBuilderFor gets the Detailed report builder. Port of the
-	// protected getDetailedReportBuilder(DiagnosticData).
-	DetailedReportBuilderFor(diagnosticData *diagnostic.DiagnosticData) *DetailedReportForCertificateBuilder
+	// protected getDetailedReportBuilder(Data).
+	DetailedReportBuilderFor(diagnosticData *diagnostic.Data) *DetailedReportForCertificateBuilder
 }
 
 // DefaultCertificateProcessExecutor executes a certificate validation. Port of
@@ -100,14 +100,14 @@ func (e *DefaultCertificateProcessExecutor) Execute() *reports.CertificateReport
 
 // DiagnosticData gets the Diagnostic Data. Port of the protected
 // getDiagnosticData().
-func (e *DefaultCertificateProcessExecutor) DiagnosticData() *diagnostic.DiagnosticData {
-	return diagnostic.NewDiagnosticData(e.JaxbDiagnosticData)
+func (e *DefaultCertificateProcessExecutor) DiagnosticData() *diagnostic.Data {
+	return diagnostic.NewData(e.JaxbDiagnosticData)
 }
 
 // DetailedReportBuilderFor gets the Detailed report builder. Port of the
-// protected getDetailedReportBuilder(DiagnosticData).
+// protected getDetailedReportBuilder(Data).
 func (e *DefaultCertificateProcessExecutor) DetailedReportBuilderFor(
-	diagnosticData *diagnostic.DiagnosticData) *DetailedReportForCertificateBuilder {
+	diagnosticData *diagnostic.Data) *DetailedReportForCertificateBuilder {
 	return NewDetailedReportForCertificateBuilder(e.I18nProvider(), diagnosticData, e.Policy,
 		e.CurrentTimeValue, e.CertificateId)
 }
@@ -115,7 +115,7 @@ func (e *DefaultCertificateProcessExecutor) DetailedReportBuilderFor(
 // SimpleReportBuilderFor gets the Simple report builder. Port of the protected
 // getSimpleReportBuilder(DiagnosticData, DetailedReport). No upstream subclass
 // overrides it, so it is not routed through the overrides interface.
-func (e *DefaultCertificateProcessExecutor) SimpleReportBuilderFor(diagnosticData *diagnostic.DiagnosticData,
+func (e *DefaultCertificateProcessExecutor) SimpleReportBuilderFor(diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport) *SimpleReportForCertificateBuilder {
 	return NewSimpleReportForCertificateBuilder(diagnosticData, detailedReport, e.Policy,
 		e.CurrentTimeValue, e.CertificateId)

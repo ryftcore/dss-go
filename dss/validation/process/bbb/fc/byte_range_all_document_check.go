@@ -14,12 +14,12 @@ import (
 type ByteRangeAllDocumentCheck struct {
 	*process.ChainItemBase[*drjaxb.XmlFC]
 
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 }
 
 // NewByteRangeAllDocumentCheck is the default constructor.
-func NewByteRangeAllDocumentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	diagnosticData *diagnostic.DiagnosticData, constraint policy.LevelRule) *ByteRangeAllDocumentCheck {
+func NewByteRangeAllDocumentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	diagnosticData *diagnostic.Data, constraint policy.LevelRule) *ByteRangeAllDocumentCheck {
 	c := &ByteRangeAllDocumentCheck{diagnosticData: diagnosticData}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)
 	c.InitChainItem(c)

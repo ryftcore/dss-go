@@ -115,8 +115,8 @@ func baselineBDate(year, month, day, hour, minute, second int) *time.Time {
 func baselineBDefaultSigningDate() *time.Time { return baselineBDate(2021, 1, 15, 10, 30, 45) }
 
 // baselineBEmptyParameters ports the generator's empty().
-func baselineBEmptyParameters() *CAdESSignatureParameters {
-	parameters := NewCAdESSignatureParameters()
+func baselineBEmptyParameters() *SignatureParameters {
+	parameters := NewSignatureParameters()
 	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.BLevel().SetSigningDate(baselineBDefaultSigningDate())
@@ -124,7 +124,7 @@ func baselineBEmptyParameters() *CAdESSignatureParameters {
 }
 
 // baselineBParameters ports the generator's base(DigestAlgorithm, Date).
-func baselineBParameters(t *testing.T, digestAlgorithm enumerations.DigestAlgorithm, signingDate *time.Time) *CAdESSignatureParameters {
+func baselineBParameters(t *testing.T, digestAlgorithm enumerations.DigestAlgorithm, signingDate *time.Time) *SignatureParameters {
 	parameters := baselineBEmptyParameters()
 	parameters.SetDigestAlgorithm(digestAlgorithm)
 	parameters.SetSigningCertificate(baselineBSigningCertificate(t))
@@ -188,29 +188,29 @@ func baselineBPDFDocument() model.DSSDocument {
 // baselineBCase is one row of the table below: the profile and the parameters to feed it.
 type baselineBCase struct {
 	name  string
-	build func(t *testing.T) (*CAdESLevelBaselineB, *CAdESSignatureParameters)
+	build func(t *testing.T) (*LevelBaselineB, *SignatureParameters)
 }
 
 // baselineBCases mirrors, one for one, the cases BaselineBFixtures.java emits.
 func baselineBCases() []baselineBCase {
-	withoutDocument := func(build func(t *testing.T) *CAdESSignatureParameters) func(*testing.T) (*CAdESLevelBaselineB, *CAdESSignatureParameters) {
-		return func(t *testing.T) (*CAdESLevelBaselineB, *CAdESSignatureParameters) {
-			return NewCAdESLevelBaselineB(), build(t)
+	withoutDocument := func(build func(t *testing.T) *SignatureParameters) func(*testing.T) (*LevelBaselineB, *SignatureParameters) {
+		return func(t *testing.T) (*LevelBaselineB, *SignatureParameters) {
+			return NewLevelBaselineB(), build(t)
 		}
 	}
 	withDocument := func(document func() model.DSSDocument,
-		build func(t *testing.T) *CAdESSignatureParameters) func(*testing.T) (*CAdESLevelBaselineB, *CAdESSignatureParameters) {
-		return func(t *testing.T) (*CAdESLevelBaselineB, *CAdESSignatureParameters) {
-			return NewCAdESLevelBaselineBWithDocument(document()), build(t)
+		build func(t *testing.T) *SignatureParameters) func(*testing.T) (*LevelBaselineB, *SignatureParameters) {
+		return func(t *testing.T) (*LevelBaselineB, *SignatureParameters) {
+			return NewLevelBaselineBWithDocument(document()), build(t)
 		}
 	}
-	base := func(digestAlgorithm enumerations.DigestAlgorithm, signingDate *time.Time) func(t *testing.T) *CAdESSignatureParameters {
-		return func(t *testing.T) *CAdESSignatureParameters {
+	base := func(digestAlgorithm enumerations.DigestAlgorithm, signingDate *time.Time) func(t *testing.T) *SignatureParameters {
+		return func(t *testing.T) *SignatureParameters {
 			return baselineBParameters(t, digestAlgorithm, signingDate)
 		}
 	}
-	sha256 := func(configure func(t *testing.T, parameters *CAdESSignatureParameters)) func(t *testing.T) *CAdESSignatureParameters {
-		return func(t *testing.T) *CAdESSignatureParameters {
+	sha256 := func(configure func(t *testing.T, parameters *SignatureParameters)) func(t *testing.T) *SignatureParameters {
+		return func(t *testing.T) *SignatureParameters {
 			parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 			configure(t, parameters)
 			return parameters
@@ -223,7 +223,7 @@ func baselineBCases() []baselineBCase {
 		{"signing-certificate-sha1", withoutDocument(base(enumerations.DigestAlgorithmSHA1, nil))},
 		{"signing-certificate-sha512", withoutDocument(base(enumerations.DigestAlgorithmSHA512, nil))},
 		{"signing-certificate-sha3-256", withoutDocument(base(enumerations.DigestAlgorithmSHA3256, nil))},
-		{"no-signing-certificate", withoutDocument(func(t *testing.T) *CAdESSignatureParameters {
+		{"no-signing-certificate", withoutDocument(func(t *testing.T) *SignatureParameters {
 			parameters := baselineBEmptyParameters()
 			parameters.SetGenerateTBSWithoutCertificate(true)
 			parameters.BLevel().SetSigningDate(baselineBDate(2021, 1, 15, 10, 30, 45))
@@ -238,50 +238,50 @@ func baselineBCases() []baselineBCase {
 		{"signing-time-1949", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(1949, 12, 31, 23, 59, 59)))},
 
 		// ------------------------------------------------------------ signer attributes
-		{"claimed-roles-en319122", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"claimed-roles-en319122", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetClaimedSignerRoles([]string{"Manager", "Head of Unit"})
 		}))},
-		{"claimed-roles-ts101733", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"claimed-roles-ts101733", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetEn319122(false)
 			parameters.BLevel().SetClaimedSignerRoles([]string{"Manager", "Head of Unit"})
 		}))},
-		{"signed-assertions", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"signed-assertions", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignedAssertions([]string{"assertion-one", "assertion-two"})
 		}))},
-		{"signed-assertions-ts101733", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"signed-assertions-ts101733", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetEn319122(false)
 			parameters.BLevel().SetSignedAssertions([]string{"assertion-one"})
 		}))},
-		{"claimed-roles-and-assertions", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"claimed-roles-and-assertions", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetClaimedSignerRoles([]string{"Manager"})
 			parameters.BLevel().SetSignedAssertions([]string{"assertion-one"})
 		}))},
 
 		// ------------------------------------------------------------ signature policy
-		{"policy-implicit", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-implicit", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(model.NewPolicy())
 		}))},
-		{"policy-explicit", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-explicit", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(false, false, false))
 		}))},
-		{"policy-spuri", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-spuri", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(true, false, false))
 		}))},
-		{"policy-user-notice", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-user-notice", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(false, true, false))
 		}))},
-		{"policy-doc-specification", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-doc-specification", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(false, false, true))
 		}))},
-		{"policy-all-qualifiers", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-all-qualifiers", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(true, true, true))
 		}))},
-		{"policy-doc-specification-uri", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-doc-specification-uri", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			policy := baselineBPolicy(false, false, true)
 			policy.SpDocSpecification().SetId("http://spec.example.org/policy")
 			parameters.BLevel().SetSignaturePolicy(policy)
 		}))},
-		{"policy-user-notice-text-only", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"policy-user-notice-text-only", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			policy := baselineBPolicy(false, false, false)
 			notice := model.NewUserNotice()
 			notice.SetExplicitText("Only an explicit text")
@@ -290,26 +290,26 @@ func baselineBCases() []baselineBCase {
 		}))},
 
 		// ------------------------------------------------------------ content hints
-		{"content-hints", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"content-hints", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetContentHintsType("1.2.840.113549.1.7.1")
 			parameters.SetContentHintsDescription("text/plain")
 		}))},
-		{"content-hints-no-description", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"content-hints-no-description", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetContentHintsType("1.2.840.113549.1.7.1")
 		}))},
 
 		// ------------------------------------------------------------ content identifier
-		{"content-identifier", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"content-identifier", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetContentIdentifierPrefix("DSS-")
 			parameters.SetContentIdentifierSuffix("20210115103045Z-4242")
 		}))},
 
 		// ------------------------------------------------------------ commitment type
-		{"commitment-type", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"commitment-type", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetCommitmentTypeIndications([]enumerations.CommitmentType{
 				enumerations.CommitmentTypeEnumProofOfOrigin, enumerations.CommitmentTypeEnumProofOfReceipt})
 		}))},
-		{"commitment-type-qualifiers", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"commitment-type-qualifiers", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			qualified := model.NewCommonCommitmentType()
 			qualified.SetOid("1.2.840.113549.1.9.16.6.1")
 			asn1Qualifier := model.NewCommitmentQualifier()
@@ -325,15 +325,15 @@ func baselineBCases() []baselineBCase {
 		}))},
 
 		// ------------------------------------------------------------ signer location
-		{"signer-location", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"signer-location", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.BLevel().SetSignerLocation(baselineBSignerLocation())
 		}))},
-		{"signer-location-country-only", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"signer-location-country-only", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			countryOnly := model.NewSignerLocation()
 			countryOnly.SetCountry("LU")
 			parameters.BLevel().SetSignerLocation(countryOnly)
 		}))},
-		{"signer-location-address-only", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"signer-location-address-only", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			addressOnly := model.NewSignerLocation()
 			addressOnly.SetPostalAddress([]string{"Only a postal address"})
 			parameters.BLevel().SetSignerLocation(addressOnly)
@@ -346,12 +346,12 @@ func baselineBCases() []baselineBCase {
 		{"mime-type-pdf", withDocument(baselineBPDFDocument, base(enumerations.DigestAlgorithmSHA256, nil))},
 
 		// ------------------------------------------------------------ content timestamp
-		{"content-timestamp", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+		{"content-timestamp", withoutDocument(sha256(func(t *testing.T, parameters *SignatureParameters) {
 			parameters.SetContentTimestamps([]*validation.TimestampToken{baselineBContentTimestamp(t)})
 		}))},
 
 		// ------------------------------------------------------------ everything at once
-		{"everything", withDocument(baselineBPDFDocument, func(t *testing.T) *CAdESSignatureParameters {
+		{"everything", withDocument(baselineBPDFDocument, func(t *testing.T) *SignatureParameters {
 			parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA512, baselineBDate(2021, 1, 15, 10, 30, 45))
 			parameters.BLevel().SetClaimedSignerRoles([]string{"Manager"})
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(true, true, true))
@@ -364,7 +364,7 @@ func baselineBCases() []baselineBCase {
 			return parameters
 		})},
 		{"content-hints-suppress-mime-type", withDocument(baselineBPDFDocument,
-			sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
+			sha256(func(t *testing.T, parameters *SignatureParameters) {
 				parameters.SetContentHintsType("1.2.840.113549.1.7.1")
 				parameters.SetContentHintsDescription("text/plain")
 			}))},
@@ -441,7 +441,7 @@ func TestCAdESLevelBaselineBUserNoticeWithoutExplicitText(t *testing.T) {
 	policy.SetUserNotice(notice)
 	parameters.BLevel().SetSignaturePolicy(policy)
 
-	if _, err := NewCAdESLevelBaselineB().SignedAttributes(parameters); err == nil {
+	if _, err := NewLevelBaselineB().SignedAttributes(parameters); err == nil {
 		t.Fatal("expected an error for a UserNotice without an explicit text")
 	}
 }
@@ -455,7 +455,7 @@ func TestCAdESLevelBaselineBExplicitSignedData(t *testing.T) {
 	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 	parameters.SetSignedData(fixture.set)
 
-	attributes, err := NewCAdESLevelBaselineB().SignedAttributes(parameters)
+	attributes, err := NewLevelBaselineB().SignedAttributes(parameters)
 	if err != nil {
 		t.Fatalf("SignedAttributes: %v", err)
 	}
@@ -467,17 +467,17 @@ func TestCAdESLevelBaselineBExplicitSignedData(t *testing.T) {
 
 // TestCAdESLevelBaselineBUnsignedAttributes checks that level B produces no unsigned attribute.
 func TestCAdESLevelBaselineBUnsignedAttributes(t *testing.T) {
-	if unsigned := NewCAdESLevelBaselineB().UnsignedAttributes(); len(unsigned) != 0 {
+	if unsigned := NewLevelBaselineB().UnsignedAttributes(); len(unsigned) != 0 {
 		t.Errorf("UnsignedAttributes() = %v, want empty", unsigned)
 	}
 }
 
 // TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType checks the stand-in for upstream's
-// "parameters instanceof CAdESCounterSignatureParameters" test.
+// "parameters instanceof CounterSignatureParameters" test.
 func TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType(t *testing.T) {
 	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 
-	profile := NewCAdESLevelBaselineBWithDocument(baselineBPDFDocument())
+	profile := NewLevelBaselineBWithDocument(baselineBPDFDocument())
 	profile.SetCounterSignature(true)
 	attributes, err := profile.SignedAttributes(parameters)
 	if err != nil {

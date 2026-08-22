@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-// ClaimMap represents a Map encoded (selectively) disclosable claim. It is
+// Map represents a Map encoded (selectively) disclosable claim. It is
 // designed for embedding by concrete subtypes: Java's abstract
 // `getKeyAsString(Object)` and `createClaim(String, Object)` methods are
 // ported as the GetKeyAsString and CreateClaim function fields, which
 // embedders MUST set (typically from their own constructor) before
 // calling MapValue/Keys/Get/ValueAsString and friends.
-type ClaimMap struct {
+type Map struct {
 	AbstractClaim
 
 	// value is the map value of the claim (mirrors Java's Map<?,?>).
@@ -29,14 +29,14 @@ type ClaimMap struct {
 }
 
 // NewClaimMap ports the protected default constructor.
-func NewClaimMap(value map[any]any, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *ClaimMap {
-	return NewClaimMapWithParent("", value, false, nil, getKeyAsString, createClaim)
+func NewMap(value map[any]any, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+	return NewMapWithParent("", value, false, nil, getKeyAsString, createClaim)
 }
 
 // NewClaimMapWithParent ports the constructor with claim name, value,
 // selectively disclosable status and parent claim provided.
-func NewClaimMapWithParent(name string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *ClaimMap {
-	return &ClaimMap{
+func NewMapWithParent(name string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+	return &Map{
 		AbstractClaim:  NewAbstractClaimWithParent(name, selectivelyDisclosable, parent),
 		value:          value,
 		GetKeyAsString: getKeyAsString,
@@ -46,8 +46,8 @@ func NewClaimMapWithParent(name string, value map[any]any, selectivelyDisclosabl
 
 // NewClaimMapFull ports the constructor with claim name, namespace, value,
 // selectively disclosable status and parent claim provided.
-func NewClaimMapFull(name, namespace string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *ClaimMap {
-	return &ClaimMap{
+func NewMapFull(name, namespace string, value map[any]any, selectivelyDisclosable bool, parent Claim, getKeyAsString func(key any) string, createClaim func(name string, value any) Claim) *Map {
+	return &Map{
 		AbstractClaim:  NewAbstractClaimFull(name, namespace, selectivelyDisclosable, parent),
 		value:          value,
 		GetKeyAsString: getKeyAsString,
@@ -57,7 +57,7 @@ func NewClaimMapFull(name, namespace string, value map[any]any, selectivelyDiscl
 
 // MapValue converts every map entry into a Claim, keyed by
 // GetKeyAsString(key). Ports ClaimMap#getMapValue.
-func (c *ClaimMap) MapValue() map[string]Claim {
+func (c *Map) MapValue() map[string]Claim {
 	if len(c.value) == 0 {
 		return map[string]Claim{}
 	}
@@ -73,7 +73,7 @@ func (c *ClaimMap) MapValue() map[string]Claim {
 // NOTE: Java returns a java.util.Set<String> (unordered); Keys returns
 // an unordered []string built by ranging the underlying map, so
 // iteration order is likewise unspecified between calls.
-func (c *ClaimMap) Keys() []string {
+func (c *Map) Keys() []string {
 	keys := make([]string, 0, len(c.value))
 	for k := range c.value {
 		keys = append(keys, c.GetKeyAsString(k))
@@ -85,7 +85,7 @@ func (c *ClaimMap) Keys() []string {
 // deterministic key order (Java's own iteration order over its Map<?,?>
 // is likewise implementation-defined, so this is a best-effort rendering
 // aid, not a fidelity requirement).
-func (c *ClaimMap) sortedKeys() []string {
+func (c *Map) sortedKeys() []string {
 	keys := c.Keys()
 	sort.Strings(keys)
 	return keys
@@ -93,21 +93,21 @@ func (c *ClaimMap) sortedKeys() []string {
 
 // Get gets the claim for the corresponding header name key. Ports
 // ClaimMap#get.
-func (c *ClaimMap) Get(headerName string) Claim {
+func (c *Map) Get(headerName string) Claim {
 	return c.MapValue()[headerName]
 }
 
 // GetAsMap gets the claim value that is a map from the current map using
 // headerName as a key. Ports ClaimMap#getAsMap(String).
-func (c *ClaimMap) GetAsMap(headerName string) *ClaimMap {
+func (c *Map) GetAsMap(headerName string) *Map {
 	return c.getAsMap(c.Get(headerName))
 }
 
 // getAsMap checks if claim is of map type and returns its value as
 // *ClaimMap. Ports ClaimMap#getAsMap(Claim) (protected).
-func (c *ClaimMap) getAsMap(claim Claim) *ClaimMap {
+func (c *Map) getAsMap(claim Claim) *Map {
 	if claim != nil && claim.IsMapValueType() {
-		if cm, ok := claim.(*ClaimMap); ok {
+		if cm, ok := claim.(*Map); ok {
 			return cm
 		}
 	}
@@ -116,15 +116,15 @@ func (c *ClaimMap) getAsMap(claim Claim) *ClaimMap {
 
 // GetAsArray gets the claim value that is an array from the current map
 // using headerName as a key. Ports ClaimMap#getAsArray(String).
-func (c *ClaimMap) GetAsArray(headerName string) *ClaimArray {
+func (c *Map) GetAsArray(headerName string) *Array {
 	return c.getAsArray(c.Get(headerName))
 }
 
 // getAsArray checks if claim is of array type and returns its value as
 // *ClaimArray. Ports ClaimMap#getAsArray(Claim) (protected).
-func (c *ClaimMap) getAsArray(claim Claim) *ClaimArray {
+func (c *Map) getAsArray(claim Claim) *Array {
 	if claim != nil && claim.IsArrayValueType() {
-		if ca, ok := claim.(*ClaimArray); ok {
+		if ca, ok := claim.(*Array); ok {
 			return ca
 		}
 	}
@@ -133,15 +133,15 @@ func (c *ClaimMap) getAsArray(claim Claim) *ClaimArray {
 
 // GetAsNumber gets the claim value that is a number from the current map
 // using headerName as a key. Ports ClaimMap#getAsNumber(String).
-func (c *ClaimMap) GetAsNumber(headerName string) *ClaimNumber {
+func (c *Map) GetAsNumber(headerName string) *Number {
 	return c.getAsNumber(c.Get(headerName))
 }
 
 // getAsNumber checks if claim is of number type and returns its value as
 // *ClaimNumber. Ports ClaimMap#getAsNumber(Claim) (protected).
-func (c *ClaimMap) getAsNumber(claim Claim) *ClaimNumber {
+func (c *Map) getAsNumber(claim Claim) *Number {
 	if claim != nil && claim.IsNumberValueType() {
-		if cn, ok := claim.(*ClaimNumber); ok {
+		if cn, ok := claim.(*Number); ok {
 			return cn
 		}
 	}
@@ -150,15 +150,15 @@ func (c *ClaimMap) getAsNumber(claim Claim) *ClaimNumber {
 
 // GetAsString gets the claim value that is a string from the current map
 // using headerName as a key. Ports ClaimMap#getAsString(String).
-func (c *ClaimMap) GetAsString(headerName string) *ClaimString {
+func (c *Map) GetAsString(headerName string) *String {
 	return c.getAsString(c.Get(headerName))
 }
 
 // getAsString checks if claim is of string type and returns its value as
 // *ClaimString. Ports ClaimMap#getAsString(Claim) (protected).
-func (c *ClaimMap) getAsString(claim Claim) *ClaimString {
+func (c *Map) getAsString(claim Claim) *String {
 	if claim != nil && claim.IsStringValueType() {
-		if cs, ok := claim.(*ClaimString); ok {
+		if cs, ok := claim.(*String); ok {
 			return cs
 		}
 	}
@@ -167,15 +167,15 @@ func (c *ClaimMap) getAsString(claim Claim) *ClaimString {
 
 // GetAsBoolean gets the claim value that is a boolean from the current map
 // using headerName as a key. Ports ClaimMap#getAsBoolean(String).
-func (c *ClaimMap) GetAsBoolean(headerName string) *ClaimBoolean {
+func (c *Map) GetAsBoolean(headerName string) *Boolean {
 	return c.getAsBoolean(c.Get(headerName))
 }
 
 // getAsBoolean checks if claim is of boolean type and returns its value as
 // *ClaimBoolean. Ports ClaimMap#getAsBoolean(Claim) (protected).
-func (c *ClaimMap) getAsBoolean(claim Claim) *ClaimBoolean {
+func (c *Map) getAsBoolean(claim Claim) *Boolean {
 	if claim != nil && claim.IsBooleanValueType() {
-		if cb, ok := claim.(*ClaimBoolean); ok {
+		if cb, ok := claim.(*Boolean); ok {
 			return cb
 		}
 	}
@@ -184,15 +184,15 @@ func (c *ClaimMap) getAsBoolean(claim Claim) *ClaimBoolean {
 
 // GetAsNull gets the claim value that is null from the current map using
 // headerName as a key. Ports ClaimMap#getAsNull(String).
-func (c *ClaimMap) GetAsNull(headerName string) *ClaimNull {
+func (c *Map) GetAsNull(headerName string) *Null {
 	return c.getAsNull(c.Get(headerName))
 }
 
 // getAsNull checks if claim is of null type and returns its value as
 // *ClaimNull. Ports ClaimMap#getAsNull(Claim) (protected).
-func (c *ClaimMap) getAsNull(claim Claim) *ClaimNull {
+func (c *Map) getAsNull(claim Claim) *Null {
 	if claim != nil && claim.IsNullValueType() {
-		if cn, ok := claim.(*ClaimNull); ok {
+		if cn, ok := claim.(*Null); ok {
 			return cn
 		}
 	}
@@ -200,13 +200,13 @@ func (c *ClaimMap) getAsNull(claim Claim) *ClaimNull {
 }
 
 // IsMapValueType always returns true.
-func (c *ClaimMap) IsMapValueType() bool { return true }
+func (c *Map) IsMapValueType() bool { return true }
 
 // IsNullOrEmpty ports ClaimMap#isNullOrEmpty.
-func (c *ClaimMap) IsNullOrEmpty() bool { return len(c.value) == 0 }
+func (c *Map) IsNullOrEmpty() bool { return len(c.value) == 0 }
 
 // Size gets the number of entries within the map. Ports ClaimMap#getSize.
-func (c *ClaimMap) Size() int {
+func (c *Map) Size() int {
 	if c.IsNullOrEmpty() {
 		return 0
 	}
@@ -214,7 +214,7 @@ func (c *ClaimMap) Size() int {
 }
 
 // ValueAsString ports ClaimMap#getValueAsString.
-func (c *ClaimMap) ValueAsString() string {
+func (c *Map) ValueAsString() string {
 	var sb strings.Builder
 	sb.WriteString("{")
 	keys := c.sortedKeys()
@@ -240,7 +240,7 @@ func (c *ClaimMap) ValueAsString() string {
 
 // Equals ports ClaimMap#equals (including the AbstractClaim
 // super.equals() comparison).
-func (c *ClaimMap) Equals(other *ClaimMap) bool {
+func (c *Map) Equals(other *Map) bool {
 	if c == other {
 		return true
 	}
@@ -254,4 +254,4 @@ func (c *ClaimMap) Equals(other *ClaimMap) bool {
 }
 
 // String ports AbstractClaim#toString, inherited by this claim.
-func (c *ClaimMap) String() string { return AbstractClaimString(c) }
+func (c *Map) String() string { return AbstractString(c) }

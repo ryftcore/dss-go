@@ -35,8 +35,8 @@ type AbstractTimeStampTypeCheck struct {
 }
 
 // NewAbstractTimeStampTypeCheck is the default constructor. Port of
-// AbstractTimeStampTypeCheck(I18nProvider, XmlSAV, SignatureWrapper, LevelRule).
-func NewAbstractTimeStampTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// AbstractTimeStampTypeCheck(Provider, XmlSAV, SignatureWrapper, LevelRule).
+func NewAbstractTimeStampTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *AbstractTimeStampTypeCheck {
 	return &AbstractTimeStampTypeCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -20,8 +20,8 @@ type SigningTimeAttributePresentCheck struct {
 }
 
 // NewSigningTimeAttributePresentCheck is the default constructor. Port of
-// SigningTimeAttributePresentCheck(I18nProvider, XmlValidationProcessLongTermData, SignatureWrapper, LevelRule).
-func NewSigningTimeAttributePresentCheck(i18nProvider *i18n.I18nProvider,
+// SigningTimeAttributePresentCheck(Provider, XmlValidationProcessLongTermData, SignatureWrapper, LevelRule).
+func NewSigningTimeAttributePresentCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData], signature *diagnostic.SignatureWrapper,
 	constraint policy.LevelRule) *SigningTimeAttributePresentCheck {
 	c := &SigningTimeAttributePresentCheck{

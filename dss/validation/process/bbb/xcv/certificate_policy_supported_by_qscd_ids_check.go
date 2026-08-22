@@ -21,7 +21,7 @@ type CertificatePolicySupportedByQSCDIdsCheck struct {
 
 // NewCertificatePolicySupportedByQSCDIdsCheck is the default constructor.
 // Port of CertificatePolicySupportedByQSCDIdsCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificatePolicySupportedByQSCDIdsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+func NewCertificatePolicySupportedByQSCDIdsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificatePolicySupportedByQSCDIdsCheck {
 	c := &CertificatePolicySupportedByQSCDIdsCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

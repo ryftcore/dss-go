@@ -11,7 +11,7 @@ import (
 // TLExpirationDetection detects an expiration of a TrustedList.
 type TLExpirationDetection struct{}
 
-var _ alert.AlertDetector[*tslmodel.TLInfo] = (*TLExpirationDetection)(nil)
+var _ alert.Detector[*tslmodel.TLInfo] = (*TLExpirationDetection)(nil)
 
 // NewTLExpirationDetection is the default constructor.
 func NewTLExpirationDetection() *TLExpirationDetection {

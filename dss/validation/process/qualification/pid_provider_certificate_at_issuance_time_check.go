@@ -22,8 +22,8 @@ type PIDProviderCertificateAtIssuanceTimeCheck struct {
 
 // NewPIDProviderCertificateAtIssuanceTimeCheck is the default constructor.
 // Port of
-// PIDProviderCertificateAtIssuanceTimeCheck(I18nProvider, XmlValidationPIDQualificationProcess, CertificateApprovalStatus, LevelRule).
-func NewPIDProviderCertificateAtIssuanceTimeCheck(i18nProvider *i18n.I18nProvider,
+// PIDProviderCertificateAtIssuanceTimeCheck(Provider, XmlValidationPIDQualificationProcess, CertificateApprovalStatus, LevelRule).
+func NewPIDProviderCertificateAtIssuanceTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
 	certificateApprovalStatusAtIssuanceTime enumerations.CertificateApprovalStatus,
 	constraint policy.LevelRule) *PIDProviderCertificateAtIssuanceTimeCheck {

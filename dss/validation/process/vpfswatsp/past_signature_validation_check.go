@@ -18,8 +18,8 @@ type PastSignatureValidationCheck struct {
 }
 
 // NewPastSignatureValidationCheck is the default constructor. Port of
-// PastSignatureValidationCheck(I18nProvider, XmlValidationProcessArchivalData, SignatureWrapper, XmlPSV, LevelRule).
-func NewPastSignatureValidationCheck(i18nProvider *i18n.I18nProvider,
+// PastSignatureValidationCheck(Provider, XmlValidationProcessArchivalData, SignatureWrapper, XmlPSV, LevelRule).
+func NewPastSignatureValidationCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessArchivalData], signature *diagnostic.SignatureWrapper,
 	xmlPSV *jaxb.XmlPSV, constraint policy.LevelRule) *PastSignatureValidationCheck {
 	c := &PastSignatureValidationCheck{

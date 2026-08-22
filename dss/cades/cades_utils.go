@@ -99,7 +99,7 @@ var cadesUtilsEvidenceRecordOids = []asn1.ObjectIdentifier{
 	spi.OIDIdAaErExternal,
 }
 
-// CAdESUtilsDERSignedAttributes gets the DER SignedAttributes table from the given
+// UtilsDERSignedAttributes gets the DER SignedAttributes table from the given
 // SignerInformation, as the [0] IMPLICIT field of a SignerInfo.
 // Port of getDERSignedAttributes(SignerInformation).
 //
@@ -110,14 +110,14 @@ var cadesUtilsEvidenceRecordOids = []asn1.ObjectIdentifier{
 // DSSException("Unable to extract SignedAttributes. Reason : ..."), which wraps the IOException
 // getEncodedSignedAttributes may raise; re-encoding parsed attributes cannot fail here, so it is
 // nil today.
-func CAdESUtilsDERSignedAttributes(signerInformation *cmscore.SignerInfo) ([]byte, error) {
+func UtilsDERSignedAttributes(signerInformation *cmscore.SignerInfo) ([]byte, error) {
 	if signerInformation == nil || !signerInformation.HasSignedAttributes() {
 		return nil, nil
 	}
 	return signerInformation.SignedAttributes.DERImplicitTagged(0), nil
 }
 
-// CAdESUtilsAddAttribute returns a new attribute table holding an additional attribute of the
+// UtilsAddAttribute returns a new attribute table holding an additional attribute of the
 // given type and value. It has no CAdESUtils counterpart upstream: it is
 // org.bouncycastle.asn1.cms.AttributeTable#add(ASN1ObjectIdentifier, ASN1Encodable), which every
 // CAdES augmentation calls and which cmscore.Attributes - a slice, not a Hashtable - does not
@@ -125,38 +125,38 @@ func CAdESUtilsDERSignedAttributes(signerInformation *cmscore.SignerInfo) ([]byt
 //
 // AttributeTable#add appends a *separate* Attribute of that type rather than merging the value
 // into an existing one, and leaves the receiver untouched; both are reproduced here.
-func CAdESUtilsAddAttribute(attributeTable cmscore.Attributes, attrType asn1.ObjectIdentifier,
+func UtilsAddAttribute(attributeTable cmscore.Attributes, attrType asn1.ObjectIdentifier,
 	attrValue []byte) cmscore.Attributes {
 	extended := make(cmscore.Attributes, 0, len(attributeTable)+1)
 	extended = append(extended, attributeTable...)
 	return append(extended, cmscore.NewAttribute(attrType, attrValue))
 }
 
-// CAdESUtilsUnsignedAttributes returns the existing unsigned attributes, or an empty table.
+// UtilsUnsignedAttributes returns the existing unsigned attributes, or an empty table.
 // Port of getUnsignedAttributes(SignerInformation).
-func CAdESUtilsUnsignedAttributes(signerInformation *cmscore.SignerInfo) cmscore.Attributes {
+func UtilsUnsignedAttributes(signerInformation *cmscore.SignerInfo) cmscore.Attributes {
 	if signerInformation == nil {
 		return spi.DSSASN1UtilsEmptyIfNull(nil)
 	}
 	return spi.DSSASN1UtilsEmptyIfNull(signerInformation.UnsignedAttributes)
 }
 
-// CAdESUtilsSignedAttributes returns the existing signed attributes, or an empty table.
+// UtilsSignedAttributes returns the existing signed attributes, or an empty table.
 // Port of getSignedAttributes(SignerInformation).
-func CAdESUtilsSignedAttributes(signerInformation *cmscore.SignerInfo) cmscore.Attributes {
+func UtilsSignedAttributes(signerInformation *cmscore.SignerInfo) cmscore.Attributes {
 	if signerInformation == nil {
 		return spi.DSSASN1UtilsEmptyIfNull(nil)
 	}
 	return spi.DSSASN1UtilsEmptyIfNull(signerInformation.SignedAttributes)
 }
 
-// CAdESUtilsAttributesFromByteArray returns an attribute table parsed from its ASN.1 encoded
+// UtilsAttributesFromByteArray returns an attribute table parsed from its ASN.1 encoded
 // representation. Port of getAttributesFromByteArray(byte[]).
 //
 // Java casts the parsed object to a DLSet and builds an AttributeTable, whose Hashtable loses
 // the order of the members; the Go table is a slice and keeps it. The difference is invisible
 // downstream, since every re-encoding of an attribute set is a DER SET OF and therefore sorted.
-func CAdESUtilsAttributesFromByteArray(encodedAttributes []byte) (cmscore.Attributes, error) {
+func UtilsAttributesFromByteArray(encodedAttributes []byte) (cmscore.Attributes, error) {
 	element, _, err := asn1ber.Parse(encodedAttributes)
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause("Error while reading ASN.1 encoded attributes", err)
@@ -175,14 +175,14 @@ func CAdESUtilsAttributesFromByteArray(encodedAttributes []byte) (cmscore.Attrib
 	return attributes, nil
 }
 
-// CAdESUtilsAddSigningCertificateAttribute appends the signing certificate to the ASN.1 DER
+// UtilsAddSigningCertificateAttribute appends the signing certificate to the ASN.1 DER
 // encoded signed attributes. The certificate is added as either a signing-certificate or a
 // signing-certificate-v2 attribute, depending on the digest algorithm being used.
 // Port of addSigningCertificateAttribute(ASN1EncodableVector, DigestAlgorithm, CertificateToken).
 //
 // Java mutates the caller's ASN1EncodableVector; the Go port appends to and returns the
 // attribute slice, which is the same operation on the representation this port uses.
-func CAdESUtilsAddSigningCertificateAttribute(signedAttributes cmscore.Attributes,
+func UtilsAddSigningCertificateAttribute(signedAttributes cmscore.Attributes,
 	digestAlgorithm enumerations.DigestAlgorithm, signingToken *model.CertificateToken) (cmscore.Attributes, error) {
 	issuerSerial := spi.DSSASN1UtilsIssuerSerialForCertificate(signingToken)
 
@@ -252,20 +252,20 @@ func cadesUtilsESSCertIDv2(hashAlgorithm *spi.AlgorithmIdentifier, certHash []by
 // {algorithm id-sha256} without parameters - BouncyCastle's ESSCertIDv2.DEFAULT_ALG_ID.
 var cadesUtilsESSCertIDv2DefaultAlgorithm = spi.NewAlgorithmIdentifier(asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 1})
 
-// CAdESUtilsIsCMSSignedDataEqual compares two CMS documents by their encoded binaries.
+// UtilsIsCMSSignedDataEqual compares two CMS documents by their encoded binaries.
 // Port of isCMSSignedDataEqual(CMSSignedData, CMSSignedData), whose declared IOException cannot
 // be raised here: the encoding is the one the document was parsed from or built with.
-func CAdESUtilsIsCMSSignedDataEqual(signedData, signedDataToCompare *cmscore.CMS) bool {
+func UtilsIsCMSSignedDataEqual(signedData, signedDataToCompare *cmscore.CMS) bool {
 	return bytes.Equal(signedData.Encoded(), signedDataToCompare.Encoded())
 }
 
-// CAdESUtilsSignedAttribute returns the signed attribute with the given oid, when present and
+// UtilsSignedAttribute returns the signed attribute with the given oid, when present and
 // unique. Port of getSignedAttribute(SignerInformation, ASN1ObjectIdentifier).
 //
-// Use CAdESUtilsSignedAttributesOfType when several attributes are expected: this method
+// Use UtilsSignedAttributesOfType when several attributes are expected: this method
 // answers nil - as Java does - when the table carries more than one.
-func CAdESUtilsSignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) *cmscore.Attribute {
-	attributes := CAdESUtilsSignedAttributesOfType(signerInformation, oid)
+func UtilsSignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) *cmscore.Attribute {
+	attributes := UtilsSignedAttributesOfType(signerInformation, oid)
 	if utils.IsArrayEmpty(attributes) {
 		return nil
 	}
@@ -277,17 +277,17 @@ func CAdESUtilsSignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1.O
 	return attributes[0]
 }
 
-// CAdESUtilsSignedAttributesOfType returns the signed attributes matching the given oid, or an
+// UtilsSignedAttributesOfType returns the signed attributes matching the given oid, or an
 // empty slice. Port of the (SignerInformation, ASN1ObjectIdentifier) overload of
 // getSignedAttributes.
-func CAdESUtilsSignedAttributesOfType(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) []*cmscore.Attribute {
-	return spi.DSSASN1UtilsAsn1Attributes(CAdESUtilsSignedAttributes(signerInformation), oid)
+func UtilsSignedAttributesOfType(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) []*cmscore.Attribute {
+	return spi.DSSASN1UtilsAsn1Attributes(UtilsSignedAttributes(signerInformation), oid)
 }
 
-// CAdESUtilsUnsignedAttribute returns the unsigned attribute with the given oid, when present
+// UtilsUnsignedAttribute returns the unsigned attribute with the given oid, when present
 // and unique. Port of getUnsignedAttribute(SignerInformation, ASN1ObjectIdentifier).
-func CAdESUtilsUnsignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) *cmscore.Attribute {
-	attributes := CAdESUtilsUnsignedAttributesOfType(signerInformation, oid)
+func UtilsUnsignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) *cmscore.Attribute {
+	attributes := UtilsUnsignedAttributesOfType(signerInformation, oid)
 	if utils.IsArrayEmpty(attributes) {
 		return nil
 	}
@@ -299,16 +299,16 @@ func CAdESUtilsUnsignedAttribute(signerInformation *cmscore.SignerInfo, oid asn1
 	return attributes[0]
 }
 
-// CAdESUtilsUnsignedAttributesOfType returns the unsigned attributes matching the given oid, or
+// UtilsUnsignedAttributesOfType returns the unsigned attributes matching the given oid, or
 // an empty slice. Port of the (SignerInformation, ASN1ObjectIdentifier) overload of
 // getUnsignedAttributes.
-func CAdESUtilsUnsignedAttributesOfType(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) []*cmscore.Attribute {
-	return spi.DSSASN1UtilsAsn1Attributes(CAdESUtilsUnsignedAttributes(signerInformation), oid)
+func UtilsUnsignedAttributesOfType(signerInformation *cmscore.SignerInfo, oid asn1.ObjectIdentifier) []*cmscore.Attribute {
+	return spi.DSSASN1UtilsAsn1Attributes(UtilsUnsignedAttributes(signerInformation), oid)
 }
 
-// CAdESUtilsOriginalDocument returns the original document of the provided CMS.
+// UtilsOriginalDocument returns the original document of the provided CMS.
 // Port of getOriginalDocument(CMS, List<DSSDocument>).
-func CAdESUtilsOriginalDocument(cmsDocument *cms.CMS, detachedDocuments []model.DSSDocument) (model.DSSDocument, error) {
+func UtilsOriginalDocument(cmsDocument *cms.CMS, detachedDocuments []model.DSSDocument) (model.DSSDocument, error) {
 	if cmsDocument == nil {
 		panic("CMS shall be provided!")
 	}
@@ -326,11 +326,11 @@ func CAdESUtilsOriginalDocument(cmsDocument *cms.CMS, detachedDocuments []model.
 	return nil, model.NewDSSError("Detached content is not provided or cannot be identified (only one document shall be provided)!")
 }
 
-// CAdESUtilsContainsATSTv2 reports whether the SignerInformation's unsigned properties contain
+// UtilsContainsATSTv2 reports whether the SignerInformation's unsigned properties contain
 // an archive-time-stamp (ATSv2) element.
 // Port of containsATSTv2(SignerInformation).
-func CAdESUtilsContainsATSTv2(signerInformation *cmscore.SignerInfo) bool {
-	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+func UtilsContainsATSTv2(signerInformation *cmscore.SignerInfo) bool {
+	unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 	for _, attribute := range unsignedAttributes {
 		if spi.DSSASN1UtilsIsAttributeOfType(attribute, spi.OIDIdAaEtsArchiveTimestampV2) {
 			return true
@@ -339,11 +339,11 @@ func CAdESUtilsContainsATSTv2(signerInformation *cmscore.SignerInfo) bool {
 	return false
 }
 
-// CAdESUtilsReadSigningDate reads the signing date with respect to RFC 3852, returning the zero
+// UtilsReadSigningDate reads the signing date with respect to RFC 3852, returning the zero
 // time.Time (Java: null) when the value is not a date, or is a date encoded against the rule
 // below. Port of readSigningDate(ASN1Encodable), whose argument is here the encoding of the
 // attribute value.
-func CAdESUtilsReadSigningDate(attrValue []byte) time.Time {
+func UtilsReadSigningDate(attrValue []byte) time.Time {
 	if attrValue != nil {
 		signingDate := spi.DSSASN1UtilsDate(attrValue)
 		if !signingDate.IsZero() {
@@ -371,16 +371,16 @@ func cadesUtilsIsUTCTime(encoded []byte) bool {
 	return err == nil && len(rest) == 0 && element.IsUniversal(asn1ber.TagUTCTime)
 }
 
-// CAdESUtilsFindArchiveTimeStampTokens finds the archive time-stamp tokens of an unsigned
+// UtilsFindArchiveTimeStampTokens finds the archive time-stamp tokens of an unsigned
 // attribute table. Port of findArchiveTimeStampTokens(AttributeTable).
 //
 // A token that cannot be built is logged and skipped upstream, and skipped here too; the error
 // return mirrors the one every other CAdESUtils accessor has and is nil today.
-func CAdESUtilsFindArchiveTimeStampTokens(unsignedAttributes cmscore.Attributes) ([]*cmscore.TimeStampToken, error) {
+func UtilsFindArchiveTimeStampTokens(unsignedAttributes cmscore.Attributes) ([]*cmscore.TimeStampToken, error) {
 	timeStamps := make([]*cmscore.TimeStampToken, 0)
 	for _, attribute := range unsignedAttributes {
-		if CAdESUtilsIsArchiveTimeStampToken(attribute) {
-			timeStampToken := CAdESUtilsTimeStampToken(attribute)
+		if UtilsIsArchiveTimeStampToken(attribute) {
+			timeStampToken := UtilsTimeStampToken(attribute)
 			if timeStampToken != nil {
 				timeStamps = append(timeStamps, timeStampToken)
 			}
@@ -389,25 +389,25 @@ func CAdESUtilsFindArchiveTimeStampTokens(unsignedAttributes cmscore.Attributes)
 	return timeStamps, nil
 }
 
-// CAdESUtilsTimestampOids returns a list of all CMS timestamp identifiers.
+// UtilsTimestampOids returns a list of all CMS timestamp identifiers.
 // Port of getTimestampOids().
-func CAdESUtilsTimestampOids() []asn1.ObjectIdentifier {
+func UtilsTimestampOids() []asn1.ObjectIdentifier {
 	return cadesUtilsTimestampOids
 }
 
-// CAdESUtilsIsArchiveTimeStampToken reports whether the attribute is of an allowed archive
+// UtilsIsArchiveTimeStampToken reports whether the attribute is of an allowed archive
 // timestamp type. Port of isArchiveTimeStampToken(Attribute).
-func CAdESUtilsIsArchiveTimeStampToken(attribute *cmscore.Attribute) bool {
+func UtilsIsArchiveTimeStampToken(attribute *cmscore.Attribute) bool {
 	if attribute != nil && attribute.Type != nil {
-		return enumerations.TimestampTypeArchiveTimestamp == CAdESUtilsTimestampTypeByOid(attribute.Type)
+		return enumerations.TimestampTypeArchiveTimestamp == UtilsTimestampTypeByOid(attribute.Type)
 	}
 	return false
 }
 
-// CAdESUtilsTimestampTypeByOid returns the TimestampType matching the given CMS attribute oid,
+// UtilsTimestampTypeByOid returns the TimestampType matching the given CMS attribute oid,
 // or the empty TimestampType (Java: null) when the OID is not recognised.
 // Port of getTimestampTypeByOid(ASN1ObjectIdentifier).
-func CAdESUtilsTimestampTypeByOid(oid asn1.ObjectIdentifier) enumerations.TimestampType {
+func UtilsTimestampTypeByOid(oid asn1.ObjectIdentifier) enumerations.TimestampType {
 	switch {
 	case OIDIdAaEtsContentTimestamp.Equal(oid):
 		return enumerations.TimestampTypeContentTimestamp
@@ -423,28 +423,28 @@ func CAdESUtilsTimestampTypeByOid(oid asn1.ObjectIdentifier) enumerations.Timest
 	return ""
 }
 
-// CAdESUtilsAtsHashIndex returns the ats-hash-index table found in the timestamp's unsigned
+// UtilsAtsHashIndex returns the ats-hash-index table found in the timestamp's unsigned
 // properties, whichever version it carries. Port of getAtsHashIndex(AttributeTable).
-func CAdESUtilsAtsHashIndex(timestampUnsignedAttributes cmscore.Attributes) []byte {
-	atsHashIndexVersionIdentifier := CAdESUtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes)
-	return CAdESUtilsAtsHashIndexByVersion(timestampUnsignedAttributes, atsHashIndexVersionIdentifier)
+func UtilsAtsHashIndex(timestampUnsignedAttributes cmscore.Attributes) []byte {
+	atsHashIndexVersionIdentifier := UtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes)
+	return UtilsAtsHashIndexByVersion(timestampUnsignedAttributes, atsHashIndexVersionIdentifier)
 }
 
-// CAdESUtilsCertificatesHashIndex extracts the certificates hash index of an ats-hash-index
+// UtilsCertificatesHashIndex extracts the certificates hash index of an ats-hash-index
 // value. Port of getCertificatesHashIndex(ASN1Sequence).
-func CAdESUtilsCertificatesHashIndex(atsHashIndexValue []byte) []byte {
+func UtilsCertificatesHashIndex(atsHashIndexValue []byte) []byte {
 	return cadesUtilsHashIndexMember(atsHashIndexValue, 0)
 }
 
-// CAdESUtilsCRLHashIndex extracts the CRL hash index of an ats-hash-index value.
+// UtilsCRLHashIndex extracts the CRL hash index of an ats-hash-index value.
 // Port of getCRLHashIndex(ASN1Sequence).
-func CAdESUtilsCRLHashIndex(atsHashIndexValue []byte) []byte {
+func UtilsCRLHashIndex(atsHashIndexValue []byte) []byte {
 	return cadesUtilsHashIndexMember(atsHashIndexValue, 1)
 }
 
-// CAdESUtilsUnsignedAttributesHashIndex extracts the unsigned-attributes hash index of an
+// UtilsUnsignedAttributesHashIndex extracts the unsigned-attributes hash index of an
 // ats-hash-index value. Port of getUnsignedAttributesHashIndex(ASN1Sequence).
-func CAdESUtilsUnsignedAttributesHashIndex(atsHashIndexValue []byte) []byte {
+func UtilsUnsignedAttributesHashIndex(atsHashIndexValue []byte) []byte {
 	return cadesUtilsHashIndexMember(atsHashIndexValue, 2)
 }
 
@@ -474,10 +474,10 @@ func cadesUtilsHashIndexMember(atsHashIndexValue []byte, index int) []byte {
 	return member.Encoded()
 }
 
-// CAdESUtilsAtsHashIndexByVersion returns the ats-hash-index table of the requested version
+// UtilsAtsHashIndexByVersion returns the ats-hash-index table of the requested version
 // found in the timestamp's unsigned properties, nil when there is none.
 // Port of getAtsHashIndexByVersion(AttributeTable, ASN1ObjectIdentifier).
-func CAdESUtilsAtsHashIndexByVersion(timestampUnsignedAttributes cmscore.Attributes,
+func UtilsAtsHashIndexByVersion(timestampUnsignedAttributes cmscore.Attributes,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier) []byte {
 	if timestampUnsignedAttributes != nil && atsHashIndexVersionIdentifier != nil {
 		attributes := spi.DSSASN1UtilsAsn1Attributes(timestampUnsignedAttributes, atsHashIndexVersionIdentifier)
@@ -492,10 +492,10 @@ func CAdESUtilsAtsHashIndexByVersion(timestampUnsignedAttributes cmscore.Attribu
 	return nil
 }
 
-// CAdESUtilsAtsHashIndexVersionIdentifier returns the OID of the AtsHashIndex found in the
+// UtilsAtsHashIndexVersionIdentifier returns the OID of the AtsHashIndex found in the
 // timestamp's unsigned attributes, nil when there is none.
 // Port of getAtsHashIndexVersionIdentifier(AttributeTable).
-func CAdESUtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes cmscore.Attributes) asn1.ObjectIdentifier {
+func UtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes cmscore.Attributes) asn1.ObjectIdentifier {
 	if timestampUnsignedAttributes != nil {
 		for _, attribute := range timestampUnsignedAttributes {
 			attrType := attribute.Type
@@ -510,10 +510,10 @@ func CAdESUtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes cmscore
 	return nil
 }
 
-// CAdESUtilsOctetStringForAtsHashIndex returns the octets of the given attribute, as the
+// UtilsOctetStringForAtsHashIndex returns the octets of the given attribute, as the
 // ats-hash-index version in use defines them.
 // Port of getOctetStringForAtsHashIndex(Attribute, ASN1ObjectIdentifier).
-func CAdESUtilsOctetStringForAtsHashIndex(attribute *cmscore.Attribute,
+func UtilsOctetStringForAtsHashIndex(attribute *cmscore.Attribute,
 	atsHashIndexVersionIdentifier asn1.ObjectIdentifier) ([][]byte, error) {
 	/*
 	 *  id_aa_ATSHashIndexV3 (EN 319 122-1 v1.1.1) -> Each one shall contain the hash
@@ -523,7 +523,7 @@ func CAdESUtilsOctetStringForAtsHashIndex(attribute *cmscore.Attribute,
 	 *  unsignedAttrsHashIndex
 	 */
 	if spi.OIDIdAaATSHashIndexV3.Equal(atsHashIndexVersionIdentifier) {
-		return CAdESUtilsATSHashIndexV3OctetString(attribute.Type, attribute.ValueEncodings())
+		return UtilsATSHashIndexV3OctetString(attribute.Type, attribute.ValueEncodings())
 	}
 	/*
 	 * id_aa_ATSHashIndex (TS 101 733 v2.2.1) and id_aa_ATSHashIndexV2 (EN 319 122-1 v1.0.0) ->
@@ -533,11 +533,11 @@ func CAdESUtilsOctetStringForAtsHashIndex(attribute *cmscore.Attribute,
 	return [][]byte{attribute.DER()}, nil
 }
 
-// CAdESUtilsATSHashIndexV3OctetString returns the octets of the given attribute for an
+// UtilsATSHashIndexV3OctetString returns the octets of the given attribute for an
 // ATS-Hash-Index-v3 table, i.e. the DER of the attribute type concatenated with the DER of each
 // attribute value. Port of getATSHashIndexV3OctetString(ASN1ObjectIdentifier, ASN1Set), whose
 // ASN1Set argument is here the encodings of the set's members.
-func CAdESUtilsATSHashIndexV3OctetString(attributeIdentifier asn1.ObjectIdentifier,
+func UtilsATSHashIndexV3OctetString(attributeIdentifier asn1.ObjectIdentifier,
 	attributeValues [][]byte) ([][]byte, error) {
 	octets := make([][]byte, 0, len(attributeValues))
 	attrType := asn1ber.EncodeOID(attributeIdentifier)
@@ -554,18 +554,18 @@ func CAdESUtilsATSHashIndexV3OctetString(attributeIdentifier asn1.ObjectIdentifi
 	return octets, nil
 }
 
-// CAdESUtilsEvidenceRecordOids returns a list of all CMS evidence record identifiers.
+// UtilsEvidenceRecordOids returns a list of all CMS evidence record identifiers.
 // Port of getEvidenceRecordOids().
-func CAdESUtilsEvidenceRecordOids() []asn1.ObjectIdentifier {
+func UtilsEvidenceRecordOids() []asn1.ObjectIdentifier {
 	return cadesUtilsEvidenceRecordOids
 }
 
-// CAdESUtilsEvidenceRecordIncorporationType returns the evidence record incorporation type of
+// UtilsEvidenceRecordIncorporationType returns the evidence record incorporation type of
 // the given unsigned attribute OID.
 // Port of getEvidenceRecordIncorporationType(ASN1ObjectIdentifier), whose
 // UnsupportedOperationException - unchecked, and raised on an OID the caller chose - becomes a
 // panic carrying the same message.
-func CAdESUtilsEvidenceRecordIncorporationType(unsignedAttributeOID asn1.ObjectIdentifier) enumerations.EvidenceRecordIncorporationType {
+func UtilsEvidenceRecordIncorporationType(unsignedAttributeOID asn1.ObjectIdentifier) enumerations.EvidenceRecordIncorporationType {
 	switch {
 	case spi.OIDIdAaErInternal.Equal(unsignedAttributeOID):
 		return enumerations.EvidenceRecordIncorporationTypeInternalEvidenceRecord
@@ -576,9 +576,9 @@ func CAdESUtilsEvidenceRecordIncorporationType(unsignedAttributeOID asn1.ObjectI
 		"for the evidence record incorporation!", unsignedAttributeOID))
 }
 
-// CAdESUtilsContainsEvidenceRecord reports whether the signer carries an evidence record
+// UtilsContainsEvidenceRecord reports whether the signer carries an evidence record
 // unsigned attribute. Port of containsEvidenceRecord(SignerInformation).
-func CAdESUtilsContainsEvidenceRecord(signerInformation *cmscore.SignerInfo) bool {
+func UtilsContainsEvidenceRecord(signerInformation *cmscore.SignerInfo) bool {
 	if signerInformation != nil && signerInformation.HasUnsignedAttributes() {
 		return signerInformation.UnsignedAttributes.Get(spi.OIDIdAaErInternal) != nil ||
 			signerInformation.UnsignedAttributes.Get(spi.OIDIdAaErExternal) != nil
@@ -586,7 +586,7 @@ func CAdESUtilsContainsEvidenceRecord(signerInformation *cmscore.SignerInfo) boo
 	return false
 }
 
-// CAdESUtilsEvidenceRecordGenerationTime returns the generation time of an evidence record, as
+// UtilsEvidenceRecordGenerationTime returns the generation time of an evidence record, as
 // indicated by the generation time of its first archive time-stamp; the zero time.Time (Java:
 // null) when the record carries none.
 // Port of getEvidenceRecordGenerationTime(org.bouncycastle.asn1.tsp.EvidenceRecord).
@@ -601,7 +601,7 @@ func CAdESUtilsContainsEvidenceRecord(signerInformation *cmscore.SignerInfo) boo
 //	ArchiveTimeStampSequence ::= SEQUENCE OF ArchiveTimeStampChain
 //	ArchiveTimeStampChain    ::= SEQUENCE OF ArchiveTimeStamp
 //	ArchiveTimeStamp         ::= SEQUENCE { ..., timeStamp ContentInfo }
-func CAdESUtilsEvidenceRecordGenerationTime(evidenceRecord []byte) (time.Time, error) {
+func UtilsEvidenceRecordGenerationTime(evidenceRecord []byte) (time.Time, error) {
 	if evidenceRecord == nil {
 		return time.Time{}, nil
 	}
@@ -646,10 +646,10 @@ func cadesUtilsToTimeStampToken(contentInfo *asn1ber.Element) (*cmscore.TimeStam
 	return timeStampToken, nil
 }
 
-// CAdESUtilsTimeStampToken creates a TimeStampToken from the provided attribute, nil when it
+// UtilsTimeStampToken creates a TimeStampToken from the provided attribute, nil when it
 // cannot be built. Port of getTimeStampToken(Attribute).
-func CAdESUtilsTimeStampToken(attribute *cmscore.Attribute) *cmscore.TimeStampToken {
-	signedData, err := CAdESUtilsCMSSignedData(attribute)
+func UtilsTimeStampToken(attribute *cmscore.Attribute) *cmscore.TimeStampToken {
+	signedData, err := UtilsCMSSignedData(attribute)
 	if err == nil && signedData != nil {
 		timeStampToken, tokenErr := cmscore.TimeStampTokenFromCMS(signedData)
 		if tokenErr == nil {
@@ -660,10 +660,10 @@ func CAdESUtilsTimeStampToken(attribute *cmscore.Attribute) *cmscore.TimeStampTo
 	return nil
 }
 
-// CAdESUtilsCMSSignedData creates a CMS document from the provided attribute, nil when the
+// UtilsCMSSignedData creates a CMS document from the provided attribute, nil when the
 // attribute value is an OCTET STRING (which CMS forbids here).
 // Port of getCMSSignedData(Attribute).
-func CAdESUtilsCMSSignedData(attribute *cmscore.Attribute) (*cmscore.CMS, error) {
+func UtilsCMSSignedData(attribute *cmscore.Attribute) (*cmscore.CMS, error) {
 	value := spi.DSSASN1UtilsAsn1Encodable(attribute)
 	if value == nil {
 		return nil, nil
@@ -676,13 +676,13 @@ func CAdESUtilsCMSSignedData(attribute *cmscore.Attribute) (*cmscore.CMS, error)
 	return cmscore.ParseCMS(value.Encoded())
 }
 
-// CAdESUtilsEncodedValue returns the encoded value of the attribute.
+// UtilsEncodedValue returns the encoded value of the attribute.
 // Port of getEncodedValue(Attribute).
 //
 // Java re-encodes the parsed value; the Go port hands out the octets the value arrived in, which
 // is what an identity or a digest computed over it depends on and what BouncyCastle's default
 // (BER) re-encoding of a parsed object reproduces.
-func CAdESUtilsEncodedValue(attribute *cmscore.Attribute) ([]byte, error) {
+func UtilsEncodedValue(attribute *cmscore.Attribute) ([]byte, error) {
 	value := spi.DSSASN1UtilsAsn1Encodable(attribute)
 	if value == nil {
 		return nil, model.NewDSSError("The attribute carries no value!")
@@ -690,10 +690,10 @@ func CAdESUtilsEncodedValue(attribute *cmscore.Attribute) ([]byte, error) {
 	return value.Encoded(), nil
 }
 
-// CAdESUtilsSignedDataEncodedOCSPResponse returns the encoded binaries used for an OCSP token
+// UtilsSignedDataEncodedOCSPResponse returns the encoded binaries used for an OCSP token
 // incorporation within a SignedData.crls attribute.
 // Port of getSignedDataEncodedOCSPResponse(byte[], ASN1ObjectIdentifier).
-func CAdESUtilsSignedDataEncodedOCSPResponse(binaries []byte, objectIdentifier asn1.ObjectIdentifier) ([]byte, error) {
+func UtilsSignedDataEncodedOCSPResponse(binaries []byte, objectIdentifier asn1.ObjectIdentifier) ([]byte, error) {
 	// Compute the tagged object with the same algorithm BouncyCastle used to create it,
 	// see org.bouncycastle.cms.CMSUtils getOthersFromStore().
 	//

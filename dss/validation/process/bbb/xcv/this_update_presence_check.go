@@ -20,8 +20,8 @@ type ThisUpdatePresenceCheck struct {
 }
 
 // NewThisUpdatePresenceCheck is the default constructor. Port of
-// ThisUpdatePresenceCheck(I18nProvider, XmlRAC, RevocationWrapper, LevelRule).
-func NewThisUpdatePresenceCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRAC],
+// ThisUpdatePresenceCheck(Provider, XmlRAC, RevocationWrapper, LevelRule).
+func NewThisUpdatePresenceCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRAC],
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *ThisUpdatePresenceCheck {
 	c := &ThisUpdatePresenceCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

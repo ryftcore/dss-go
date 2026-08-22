@@ -3,7 +3,7 @@
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // ASiC container extraction, the nested XAdES signature analyzers, the base
-// ASiCContainerDiagnosticDataBuilder (XAdES ships no format-specific override - see
+// ContainerDiagnosticDataBuilder (XAdES ships no format-specific override - see
 // asic_container_with_xades_validator.go's file header), the default validation policy, and the
 // executor/report-builder tree - against real signed ASiC-XAdES fixtures already committed
 // under testdata/upstream.

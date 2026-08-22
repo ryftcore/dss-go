@@ -9,11 +9,11 @@ import (
 // ASiCWithCAdESContainerExtractor is used to extract the content (documents) embedded into an
 // ASiC with CAdES container.
 type ASiCWithCAdESContainerExtractor struct {
-	asic.DefaultASiCContainerExtractor
+	asic.DefaultContainerExtractor
 }
 
-var _ asic.ASiCContainerExtractor = (*ASiCWithCAdESContainerExtractor)(nil)
-var _ asic.DefaultASiCContainerExtractorOverrides = (*ASiCWithCAdESContainerExtractor)(nil)
+var _ asic.ContainerExtractor = (*ASiCWithCAdESContainerExtractor)(nil)
+var _ asic.DefaultContainerExtractorOverrides = (*ASiCWithCAdESContainerExtractor)(nil)
 
 // NewASiCWithCAdESContainerExtractor is the default constructor. Ports
 // ASiCWithCAdESContainerExtractor(DSSDocument).
@@ -29,36 +29,36 @@ func (e *ASiCWithCAdESContainerExtractor) IsSupportedContainerFormat() bool {
 	if err != nil {
 		return false
 	}
-	return asic.ASiCUtilsIsAsicFileContent(filenames)
+	return asic.UtilsIsAsicFileContent(filenames)
 }
 
 // IsAllowedManifest ports the @Override protected isAllowedManifest(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedManifest(entryName string) bool {
-	return asic.ASiCUtilsIsManifest(entryName)
+	return asic.UtilsIsManifest(entryName)
 }
 
 // IsAllowedArchiveManifest ports the @Override protected isAllowedArchiveManifest(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedArchiveManifest(entryName string) bool {
-	return asic.ASiCUtilsIsArchiveManifest(entryName)
+	return asic.UtilsIsArchiveManifest(entryName)
 }
 
 // IsAllowedEvidenceRecordManifest ports the @Override protected
 // isAllowedEvidenceRecordManifest(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedEvidenceRecordManifest(entryName string) bool {
-	return asic.ASiCUtilsIsEvidenceRecordManifest(entryName)
+	return asic.UtilsIsEvidenceRecordManifest(entryName)
 }
 
 // IsAllowedSignature ports the @Override protected isAllowedSignature(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedSignature(entryName string) bool {
-	return asic.ASiCUtilsIsCAdES(entryName)
+	return asic.UtilsIsCAdES(entryName)
 }
 
 // IsAllowedTimestamp ports the @Override protected isAllowedTimestamp(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedTimestamp(entryName string) bool {
-	return asic.ASiCUtilsIsTimestamp(entryName)
+	return asic.UtilsIsTimestamp(entryName)
 }
 
 // IsAllowedEvidenceRecord ports the @Override protected isAllowedEvidenceRecord(String).
 func (e *ASiCWithCAdESContainerExtractor) IsAllowedEvidenceRecord(entryName string) bool {
-	return asic.ASiCUtilsIsEvidenceRecord(entryName)
+	return asic.UtilsIsEvidenceRecord(entryName)
 }

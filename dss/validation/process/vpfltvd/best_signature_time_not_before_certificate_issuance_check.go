@@ -28,8 +28,8 @@ type BestSignatureTimeNotBeforeCertificateIssuanceCheck[T any] struct {
 
 // NewBestSignatureTimeNotBeforeCertificateIssuanceCheck is the default
 // constructor. Port of
-// BestSignatureTimeNotBeforeCertificateIssuanceCheck(I18nProvider, T, Date, CertificateWrapper, LevelRule).
-func NewBestSignatureTimeNotBeforeCertificateIssuanceCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// BestSignatureTimeNotBeforeCertificateIssuanceCheck(Provider, T, Date, CertificateWrapper, LevelRule).
+func NewBestSignatureTimeNotBeforeCertificateIssuanceCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	bestSignatureTime *time.Time, signingCertificate *diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T] {
 	c := &BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]{

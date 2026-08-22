@@ -3,7 +3,7 @@
 // entries in a List of Trusted Entities (LoTE, used by EUDI Wallet-style
 // trust schemes) and its constituent services.
 //
-// The main entry types are LoTEIdentifier/LoTEInfo and
+// The main entry types are Identifier/Info and
 // LoLoTEIdentifier/LoLoTEInfo (a List of Lists of Trusted Entities entry),
-// built on AbstractLoTEIdentifier.
+// built on AbstractIdentifier.
 package lote

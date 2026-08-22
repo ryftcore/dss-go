@@ -10,11 +10,11 @@
 // would have added indirection with no second implementation to justify it.
 //
 // DEVIATION (in-memory only, accepted for now - see doc.go): every function that takes a
-// DSSResourcesHandlerBuilder accepts it for API parity but never consults it - CMSUtilsWriteToDSSDocument
+// DSSResourcesHandlerBuilder accepts it for API parity but never consults it - UtilsWriteToDSSDocument
 // always builds its result fully in memory, exactly as dss-cms-object's CMSObjectUtils does
 // ("the 'dss-cms-object' implementation does not require using of resourcesHandlerBuilder");
 // unlike dss-cms-object, this port does not reject a caller-supplied builder either
-// (CMSUtilsResourcesHandlerBuilder is a pass-through, not dss-cms-object's
+// (UtilsResourcesHandlerBuilder is a pass-through, not dss-cms-object's
 // UnsupportedOperationException), since accepting one costs nothing and keeps the door open for
 // a later streaming implementation to honour it.
 package cms
@@ -33,21 +33,21 @@ import (
 )
 
 // CMSUtilsParseToCMS parses the given DSSDocument to a CMS object. Port of #parseToCMS(DSSDocument),
-// specialised to CMSSignedDataObject's behaviour: a *CMSSignedDocument hands back the CMS it
+// specialised to CMSSignedDataObject's behaviour: a *SignedDocument hands back the CMS it
 // already wraps rather than being re-parsed from its bytes.
 //
 // A malformed document is an *exception.IllegalInputException, matching Java's own
 // IllegalInputException("Not a valid CAdES file. ..."); an I/O failure reading document is a
 // *model.DSSError, matching Java's DSSException.
-func CMSUtilsParseToCMS(document model.DSSDocument) (*CMS, error) {
-	if signedDocument, ok := document.(*CMSSignedDocument); ok {
+func UtilsParseToCMS(document model.DSSDocument) (*CMS, error) {
+	if signedDocument, ok := document.(*SignedDocument); ok {
 		return signedDocument.CMSSignedData(), nil
 	}
 	binaries, err := spi.DSSUtilsToByteArrayOfDocument(document)
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause("Unable to read a document.", err)
 	}
-	return CMSUtilsParseToCMSBinaries(binaries)
+	return UtilsParseToCMSBinaries(binaries)
 }
 
 // CMSUtilsParseToCMSBinaries parses the given byte array to a CMS object. Port of
@@ -58,7 +58,7 @@ func CMSUtilsParseToCMS(document model.DSSDocument) (*CMS, error) {
 // cmscore.ParseCMSTolerateTrailingBytes rather than the plain, trailing-bytes-rejecting
 // cmscore.ParseCMS: see that function's doc comment for why the two differ, and for the real
 // fixture (DSS-1188) that depends on the tolerance.
-func CMSUtilsParseToCMSBinaries(binaries []byte) (*CMS, error) {
+func UtilsParseToCMSBinaries(binaries []byte) (*CMS, error) {
 	core, err := cmscore.ParseCMSTolerateTrailingBytes(binaries)
 	if err != nil {
 		return nil, exception.NewIllegalInputExceptionWithCause("Not a valid CAdES file.", err)
@@ -69,16 +69,16 @@ func CMSUtilsParseToCMSBinaries(binaries []byte) (*CMS, error) {
 // CMSUtilsWriteToDSSDocument creates a DSSDocument from the given CMS. Port of
 // #writeToDSSDocument(CMS, DSSResourcesHandlerBuilder); see the file header for
 // resourcesHandlerBuilder.
-func CMSUtilsWriteToDSSDocument(cms *CMS, resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (model.DSSDocument, error) {
-	return NewCMSSignedDocument(cms), nil
+func UtilsWriteToDSSDocument(cms *CMS, resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (model.DSSDocument, error) {
+	return NewSignedDocument(cms), nil
 }
 
 // cmsUtilsCertificatesAndCRLs returns signedData's certificates/CRLs as the plain slices
 // cmscore.SignedDataBuilder takes, nil for either that is absent rather than panicking: both
 // Certificates and CRLs are themselves pointers (SignedData.Certificates *CertificateSet,
 // SignedData.CRLs *RevocationInfoChoices), nil exactly when RFC 5652's OPTIONAL field was not
-// present, which every rebuild of a SignedData (CMSUtilsReplaceSigners,
-// CMSUtilsPopulateDigestAlgorithmSet) has to carry forward without dereferencing.
+// present, which every rebuild of a SignedData (UtilsReplaceSigners,
+// UtilsPopulateDigestAlgorithmSet) has to carry forward without dereferencing.
 func cmsUtilsCertificatesAndCRLs(signedData *cmscore.SignedData) (certificates []cmscore.CertificateChoice, crls []cmscore.RevocationInfoChoice) {
 	if signedData.Certificates != nil {
 		certificates = signedData.Certificates.Choices
@@ -104,7 +104,7 @@ func cmsUtilsCertificatesAndCRLs(signedData *cmscore.SignedData) (certificates [
 // enveloping signature carrying no CRLs at all is exactly the ordinary case (revocation data
 // only shows up from -LT on). Both are guarded here (via cmsUtilsCertificatesAndCRLs) rather
 // than dereferenced directly.
-func CMSUtilsReplaceSigners(cms *CMS, newSignerStore []*cmscore.SignerInfo) (*CMS, error) {
+func UtilsReplaceSigners(cms *CMS, newSignerStore []*cmscore.SignerInfo) (*CMS, error) {
 	original := cms.Core().SignedData()
 	certificates, crls := cmsUtilsCertificatesAndCRLs(original)
 	builder := &cmscore.SignedDataBuilder{
@@ -123,7 +123,7 @@ func CMSUtilsReplaceSigners(cms *CMS, newSignerStore []*cmscore.SignerInfo) (*CM
 	return newCMS(cmscore.NewCMS(signedData)), nil
 }
 
-// CMSUtilsRecomputeSignerInformation looks up the SignerInfo of cmsDoc identified by signerId.
+// UtilsRecomputeSignerInformation looks up the SignerInfo of cmsDoc identified by signerId.
 // Port of #recomputeSignerInformation(CMS, SignerId, DigestCalculatorProvider,
 // DSSResourcesHandlerBuilder), specialised to dss-cms-object's implementation:
 // `new CMSSignedDataParser(digestCalculatorProvider, cms.getDEREncoded()).getSignerInfos().get(signerId)`.
@@ -134,18 +134,18 @@ func CMSUtilsReplaceSigners(cms *CMS, newSignerStore []*cmscore.SignerInfo) (*CM
 // caller's digestCalculatorProvider wraps (CAdESSignature#recreateSignerInformation feeds it a
 // PrecomputedDigestCalculatorProvider(detachedContents.get(0)) for exactly this reason).
 // internal/cmscore.SignerInfo has no such cache (see its doc comment) - every caller in this
-// port that needs to check a signature against real content (CAdESSignature.
+// port that needs to check a signature against real content (Signature.
 // signedContentForIntegrityCheck / ReferenceValidationsForSignerInformation) computes and
 // compares the digest itself rather than reading it back off the SignerInformation, so a
 // recomputed content digest has nothing to attach to. This function therefore reduces to the
 // SignerId lookup alone; digestCalculatorProvider and resourcesHandlerBuilder are accepted for
-// API parity (the same "accepted but not consulted" convention CMSUtilsWriteToDSSDocument's
+// API parity (the same "accepted but not consulted" convention UtilsWriteToDSSDocument's
 // resourcesHandlerBuilder already uses, see this file's header) and never consulted.
 //
 // A signerId with no match returns an error - matching BC's Store#get, which upstream never
 // observes returning null because getSignerId() is always derived from the very cms being
 // searched.
-func CMSUtilsRecomputeSignerInformation(cmsDoc *CMS, signerId *cmscore.SignerIdentifier,
+func UtilsRecomputeSignerInformation(cmsDoc *CMS, signerId *cmscore.SignerIdentifier,
 	digestCalculatorProvider DigestCalculatorProvider, resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) (*cmscore.SignerInfo, error) {
 	target := signerId.DER()
 	for _, signerInformation := range cmsDoc.SignerInfos() {
@@ -166,16 +166,16 @@ func digestAlgorithmsOfSigners(signers []*cmscore.SignerInfo) []*asn1ber.Algorit
 	return identifiers
 }
 
-// CMSUtilsReplaceCertificatesAndCRLs replaces SignedData content within cms with the provided
+// UtilsReplaceCertificatesAndCRLs replaces SignedData content within cms with the provided
 // values. Port of #replaceCertificatesAndCRLs(CMS, Store<X509CertificateHolder>,
 // Store<X509AttributeCertificateHolder>, Store<X509CRLHolder>, Store<?>, Store<?>); the last
 // two Store<?> parameters are, per doc.go's convention, the id-ri-ocsp-response and
 // id-pkix-ocsp-basic members of SignedData.crls respectively.
 //
-// DEVIATION: as CMSUtilsReplaceSigners, SignedData.version is kept from the original rather
+// DEVIATION: as UtilsReplaceSigners, SignedData.version is kept from the original rather
 // than recomputed, matching BouncyCastle's CMSSignedData#replaceCertificatesAndCRLs (a
 // low-level field swap, not a full rebuild).
-func CMSUtilsReplaceCertificatesAndCRLs(cms *CMS, certificates, attributeCertificates, crls,
+func UtilsReplaceCertificatesAndCRLs(cms *CMS, certificates, attributeCertificates, crls,
 	ocspResponses, ocspBasicResponses [][]byte) (*CMS, error) {
 	original := cms.Core().SignedData()
 	builder := &cmscore.SignedDataBuilder{
@@ -196,7 +196,7 @@ func CMSUtilsReplaceCertificatesAndCRLs(cms *CMS, certificates, attributeCertifi
 
 // CMSUtilsPopulateDigestAlgorithmSet adds digest algorithms to cms. Port of
 // #populateDigestAlgorithmSet(CMS, Collection<AlgorithmIdentifier>).
-func CMSUtilsPopulateDigestAlgorithmSet(cms *CMS, digestAlgorithmsToAdd []*asn1ber.AlgorithmIdentifier) (*CMS, error) {
+func UtilsPopulateDigestAlgorithmSet(cms *CMS, digestAlgorithmsToAdd []*asn1ber.AlgorithmIdentifier) (*CMS, error) {
 	original := cms.Core().SignedData()
 	certificates, crls := cmsUtilsCertificatesAndCRLs(original)
 	builder := &cmscore.SignedDataBuilder{
@@ -219,26 +219,26 @@ func CMSUtilsPopulateDigestAlgorithmSet(cms *CMS, digestAlgorithmsToAdd []*asn1b
 // argument is *cmscore.TimeStampToken (internal/cmscore's RFC 3161 replacement of
 // BouncyCastle's org.bouncycastle.tsp.TimeStampToken - see PORTING.md), whose own #CMS() answers
 // exactly the *cmscore.CMS BouncyCastle's timeStampToken.toCMSSignedData() would build.
-func CMSUtilsToCMS(timeStampToken *cmscore.TimeStampToken) (*CMS, error) {
+func UtilsToCMS(timeStampToken *cmscore.TimeStampToken) (*CMS, error) {
 	return newCMS(timeStampToken.CMS()), nil
 }
 
-// CMSUtilsContentInfoEncoding gets encoding of the ContentInfo of cms: "DL" for
+// UtilsContentInfoEncoding gets encoding of the ContentInfo of cms: "DL" for
 // definite-length, "BER" otherwise. Port of #getContentInfoEncoding.
-func CMSUtilsContentInfoEncoding(cms *CMS) string {
+func UtilsContentInfoEncoding(cms *CMS) string {
 	if cms.core.IsDefiniteLength() {
 		return "DL"
 	}
 	return "BER"
 }
 
-// CMSUtilsWriteSignedDataDigestAlgorithmsEncoded writes the encoded binaries of the
+// UtilsWriteSignedDataDigestAlgorithmsEncoded writes the encoded binaries of the
 // SignedData.digestAlgorithms field to w. Port of #writeSignedDataDigestAlgorithmsEncoded.
 //
 // NOTE: used for evidence record hash computation (a later phase); the DER SET OF encoding
 // written here is internal/cmscore's, i.e. it normalises a BER length to DER but otherwise
 // preserves the original ordering when cms was parsed.
-func CMSUtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error {
+func UtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error {
 	element := cms.core.SignedData().DigestAlgorithmsElement()
 	if element != nil {
 		_, err := w.Write(element.DEREncoded())
@@ -253,7 +253,7 @@ func CMSUtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error
 	return err
 }
 
-// CMSUtilsWriteContentInfoEncoded writes the encoded binaries of the ContentInfo element to w.
+// UtilsWriteContentInfoEncoded writes the encoded binaries of the ContentInfo element to w.
 // Port of #writeContentInfoEncoded.
 //
 // NOTE: used for archive-time-stamp-v2 message-imprint computation.
@@ -268,7 +268,7 @@ func CMSUtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error
 // Upstream picks the encoding from the eContent's own form - BER when the OCTET STRING is
 // constructed (BouncyCastle hands such an eContent back as a BEROctetString), DER otherwise -
 // which is what the two branches below reproduce.
-func CMSUtilsWriteContentInfoEncoded(cms *CMS, w io.Writer) error {
+func UtilsWriteContentInfoEncoded(cms *CMS, w io.Writer) error {
 	encapsulatedContentInfo := cms.core.SignedData().EncapContentInfo
 	contentElement := encapsulatedContentInfo.ContentElement()
 	var encoded []byte
@@ -286,12 +286,12 @@ func CMSUtilsWriteContentInfoEncoded(cms *CMS, w io.Writer) error {
 	return err
 }
 
-// CMSUtilsWriteSignedDataCertificatesEncoded writes the encoded binaries of the
+// UtilsWriteSignedDataCertificatesEncoded writes the encoded binaries of the
 // SignedData.certificates field to w. Port of #writeSignedDataCertificatesEncoded.
 //
 // NOTE: used for archive-time-stamp-v2 message-imprint computation. Absent when
 // SignedData.certificates is absent, matching Java's "Certificates are not present" no-op.
-func CMSUtilsWriteSignedDataCertificatesEncoded(cms *CMS, w io.Writer) error {
+func UtilsWriteSignedDataCertificatesEncoded(cms *CMS, w io.Writer) error {
 	encoded := cms.core.SignedData().Certificates.Encoded()
 	if encoded == nil {
 		return nil
@@ -300,12 +300,12 @@ func CMSUtilsWriteSignedDataCertificatesEncoded(cms *CMS, w io.Writer) error {
 	return err
 }
 
-// CMSUtilsWriteSignedDataCRLsEncoded writes the encoded binaries of the SignedData.crls field to
+// UtilsWriteSignedDataCRLsEncoded writes the encoded binaries of the SignedData.crls field to
 // w. Port of #writeSignedDataCRLsEncoded.
 //
 // NOTE: used for archive-time-stamp-v2 message-imprint computation. Absent when
 // SignedData.crls is absent, matching Java's "CRLs are not present" no-op.
-func CMSUtilsWriteSignedDataCRLsEncoded(cms *CMS, w io.Writer) error {
+func UtilsWriteSignedDataCRLsEncoded(cms *CMS, w io.Writer) error {
 	encoded := cms.core.SignedData().CRLs.Encoded()
 	if encoded == nil {
 		return nil
@@ -314,11 +314,11 @@ func CMSUtilsWriteSignedDataCRLsEncoded(cms *CMS, w io.Writer) error {
 	return err
 }
 
-// CMSUtilsWriteSignedDataSignerInfosEncoded writes the encoded binaries of the
+// UtilsWriteSignedDataSignerInfosEncoded writes the encoded binaries of the
 // SignedData.signerInfos field to w. Port of #writeSignedDataSignerInfosEncoded.
 //
 // NOTE: used for evidence record hash computation.
-func CMSUtilsWriteSignedDataSignerInfosEncoded(cms *CMS, w io.Writer) error {
+func UtilsWriteSignedDataSignerInfosEncoded(cms *CMS, w io.Writer) error {
 	element := cms.core.SignedData().SignerInfosElement()
 	if element != nil {
 		_, err := w.Write(element.DEREncoded())
@@ -333,7 +333,7 @@ func CMSUtilsWriteSignedDataSignerInfosEncoded(cms *CMS, w io.Writer) error {
 	return err
 }
 
-// CMSUtilsToCMSEncapsulatedContent converts a DSSDocument to the octets its SignedData.encapContentInfo.eContent
+// UtilsToCMSEncapsulatedContent converts a DSSDocument to the octets its SignedData.encapContentInfo.eContent
 // would carry, nil for a *model.DigestDocument (whose content is not available - BouncyCastle's
 // CMSAbsentContent). Port of #toCMSEncapsulatedContent(DSSDocument), minus the CMSTypedData
 // wrapping: that BC type has no Go replacement, callers here only ever need the octets
@@ -341,7 +341,7 @@ func CMSUtilsWriteSignedDataSignerInfosEncoded(cms *CMS, w io.Writer) error {
 // "only if encapsulating" choice this function - like Java's - does not make).
 //
 // Panics with the Java message when document is nil (Objects.requireNonNull).
-func CMSUtilsToCMSEncapsulatedContent(document model.DSSDocument) ([]byte, error) {
+func UtilsToCMSEncapsulatedContent(document model.DSSDocument) ([]byte, error) {
 	if document == nil {
 		panic("Document to be signed is missing")
 	}
@@ -351,18 +351,18 @@ func CMSUtilsToCMSEncapsulatedContent(document model.DSSDocument) ([]byte, error
 	return spi.DSSUtilsToByteArrayOfDocument(document)
 }
 
-// CMSUtilsResourcesHandlerBuilder verifies whether dssResourcesHandlerBuilder is supported by
+// UtilsResourcesHandlerBuilder verifies whether dssResourcesHandlerBuilder is supported by
 // the current implementation, returning it unchanged on success. Port of
 // #getDSSResourcesHandlerBuilder; see the file header for why this never rejects one.
-func CMSUtilsResourcesHandlerBuilder(dssResourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) resources.DSSResourcesHandlerBuilder {
+func UtilsResourcesHandlerBuilder(dssResourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) resources.DSSResourcesHandlerBuilder {
 	return dssResourcesHandlerBuilder
 }
 
-// CMSUtilsReplaceUnsignedAttributes replaces unsignedAttributes within the given signerInformation.
+// UtilsReplaceUnsignedAttributes replaces unsignedAttributes within the given signerInformation.
 // Port of #replaceUnsignedAttributes(SignerInformation, AttributeTable); BouncyCastle's
 // SignerInformation#replaceUnsignedAttributes keeps every other field of the SignerInfo (its
 // version, sid, digestAlgorithm, signedAttrs and signature) untouched.
-func CMSUtilsReplaceUnsignedAttributes(signerInformation *cmscore.SignerInfo, unsignedAttributes cmscore.Attributes) (*cmscore.SignerInfo, error) {
+func UtilsReplaceUnsignedAttributes(signerInformation *cmscore.SignerInfo, unsignedAttributes cmscore.Attributes) (*cmscore.SignerInfo, error) {
 	builder := &cmscore.SignerInfoBuilder{
 		SID:                signerInformation.SID,
 		DigestAlgorithm:    signerInformation.DigestAlgorithm,
@@ -382,22 +382,22 @@ func CMSUtilsReplaceUnsignedAttributes(signerInformation *cmscore.SignerInfo, un
 	return updated, nil
 }
 
-// CMSUtilsAssertATSv2AugmentationSupported reports whether the augmentation of signatures with
+// UtilsAssertATSv2AugmentationSupported reports whether the augmentation of signatures with
 // an archive-time-stamp-v2 is supported by the current implementation. Port of
 // #assertATSv2AugmentationSupported; this native implementation always supports it (Java's
 // dss-cms-object answers "supported, do nothing" too - only a future streaming implementation
 // might not).
-func CMSUtilsAssertATSv2AugmentationSupported() error { return nil }
+func UtilsAssertATSv2AugmentationSupported() error { return nil }
 
-// CMSUtilsAssertEvidenceRecordEmbeddingSupported reports whether the embedding of existing
+// UtilsAssertEvidenceRecordEmbeddingSupported reports whether the embedding of existing
 // Evidence Records within CMS is supported by the current implementation. Port of
 // #assertEvidenceRecordEmbeddingSupported; always supported, as CMSUtilsAssertATSv2AugmentationSupported.
-func CMSUtilsAssertEvidenceRecordEmbeddingSupported() error { return nil }
+func UtilsAssertEvidenceRecordEmbeddingSupported() error { return nil }
 
 // cmscoreDERSetOf writes a universal SET OF from its already DER-encoded members, X.690
 // clause 11.6 order (members compared as unsigned octet strings). A local copy of
 // internal/cmscore's unexported derSetOf(setIdentifier, members), needed here because
-// CMSUtilsWriteSignedDataDigestAlgorithmsEncoded/-SignerInfosEncoded are the only two write-*
+// UtilsWriteSignedDataDigestAlgorithmsEncoded/-SignerInfosEncoded are the only two write-*
 // functions whose field cmscore does not already keep pre-encoded as a SET (see
 // SignedData.DigestAlgorithmsElement/SignerInfosElement, populated only when cms was parsed).
 func cmscoreDERSetOf(members [][]byte) []byte {

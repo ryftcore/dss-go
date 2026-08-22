@@ -66,10 +66,10 @@ type DetailedReportForCertificateBuilder struct {
 }
 
 // NewDetailedReportForCertificateBuilder is the default constructor. Port of
-// DetailedReportForCertificateBuilder(I18nProvider, DiagnosticData,
+// DetailedReportForCertificateBuilder(Provider, Data,
 // ValidationPolicy, Date, String).
-func NewDetailedReportForCertificateBuilder(i18nProvider *i18n.I18nProvider,
-	diagnosticData *diagnostic.DiagnosticData, validationPolicy policy.ValidationPolicy,
+func NewDetailedReportForCertificateBuilder(i18nProvider *i18n.Provider,
+	diagnosticData *diagnostic.Data, validationPolicy policy.ValidationPolicy,
 	currentTime time.Time, certificateId string) *DetailedReportForCertificateBuilder {
 	b := &DetailedReportForCertificateBuilder{
 		AbstractDetailedReportBuilder: NewAbstractDetailedReportBuilder(i18nProvider, currentTime, validationPolicy, diagnosticData),

@@ -110,10 +110,10 @@ func tvjCertificateSource(t *testing.T, base64Certificates ...string) spi.Certif
 	return &source
 }
 
-// tvjURLRecorder is an alert.AlertHandler[T] for any T carrying a Url() string, recording the url
-// instead of logging (matching the shape of the production Log*AlertHandler types it replaces) -
+// tvjURLRecorder is an alert.Handler[T] for any T carrying a Url() string, recording the url
+// instead of logging (matching the shape of the production Log*Handler types it replaces) -
 // this harness cares about WHETHER an alert fired, not what a log line says. Generic (rather than
-// a single interface-typed Process) because alert.AlertHandler[T]'s Process(T) needs an EXACT
+// a single interface-typed Process) because alert.Handler[T]'s Process(T) needs an EXACT
 // type match for each concrete D/L instantiation (*tslmodel.TLInfo, *tslmodel.LOTLInfo).
 type tvjURLRecorder[T interface{ Url() string }] struct {
 	fired *[]string
@@ -293,7 +293,7 @@ func tvjRunJob(t *testing.T) tvjDump {
 	// Wire the four detection strategies for real, with a recording handler each - see this
 	// file's header on why re-evaluating after the fact would not observe the same firings.
 	//
-	// TLSignatureErrorDetection/TLParsingErrorDetection are AlertDetector[*TLInfo]: per
+	// TLSignatureErrorDetection/TLParsingErrorDetection are Detector[*TLInfo]: per
 	// ValidationJobAlerter.DetectChanges (validation/job/validation_job_alerter.go), a
 	// documentAlerts (TLAlert) entry runs over a document LIST's ChildrenInfos() (the LOTL's own
 	// auto-discovered child TLs - none here, tvjNoChildTLs above keeps that list empty) and over
@@ -301,7 +301,7 @@ func tvjRunJob(t *testing.T) tvjDump {
 	// the LOTL's own cache entry, which is why they are wired as TLAlerts, not LOTLAlerts, and
 	// why this harness's LOTL (configured with its real, cross-validated signing certificate) has
 	// no signature-error alert to observe. LOTLLocationChangeDetection/OJUrlChangeDetection are
-	// the LOTL-specific counterparts, AlertDetector[*LOTLInfo], and run over documentListAlerts.
+	// the LOTL-specific counterparts, Detector[*LOTLInfo], and run over documentListAlerts.
 	var locationFired, ojUrlFired []string
 	var tlSigFired, tlParseFired []string
 	tlValidationJob.SetLOTLAlerts([]*tsl.LOTLAlert{

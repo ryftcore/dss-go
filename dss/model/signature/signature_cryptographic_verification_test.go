@@ -4,7 +4,7 @@ package signature
 import "testing"
 
 func TestSignatureCryptographicVerification_RoundTrip(t *testing.T) {
-	v := NewSignatureCryptographicVerification()
+	v := NewCryptographicVerification()
 	if v.IsSignatureValid() {
 		t.Fatalf("a fresh SignatureCryptographicVerification should not be valid")
 	}
@@ -21,7 +21,7 @@ func TestSignatureCryptographicVerification_RoundTrip(t *testing.T) {
 }
 
 func TestSignatureCryptographicVerification_ErrorMessages(t *testing.T) {
-	v := NewSignatureCryptographicVerification()
+	v := NewCryptographicVerification()
 	v.SetErrorMessage("first error")
 	v.SetErrorMessages([]string{"second error", "third error"})
 

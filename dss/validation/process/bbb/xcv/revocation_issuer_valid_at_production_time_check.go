@@ -20,9 +20,9 @@ type RevocationIssuerValidAtProductionTimeCheck struct {
 }
 
 // NewRevocationIssuerValidAtProductionTimeCheck is the default constructor. Port
-// of RevocationIssuerValidAtProductionTimeCheck(I18nProvider, XmlRAC,
+// of RevocationIssuerValidAtProductionTimeCheck(Provider, XmlRAC,
 // RevocationWrapper, LevelRule).
-func NewRevocationIssuerValidAtProductionTimeCheck(i18nProvider *i18n.I18nProvider,
+func NewRevocationIssuerValidAtProductionTimeCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlRAC], revocationData *diagnostic.RevocationWrapper,
 	constraint policy.LevelRule) *RevocationIssuerValidAtProductionTimeCheck {
 	c := &RevocationIssuerValidAtProductionTimeCheck{

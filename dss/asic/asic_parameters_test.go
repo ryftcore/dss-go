@@ -12,7 +12,7 @@ import (
 
 // TestASiCParametersAccessors pins the defaults and the round trip of every field.
 func TestASiCParametersAccessors(t *testing.T) {
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	if parameters.IsZipComment() || parameters.MimeType() != "" || parameters.ContainerType() != "" {
 		t.Fatalf("defaults are not the Java ones: %+v", parameters)
 	}
@@ -28,8 +28,8 @@ func TestASiCParametersAccessors(t *testing.T) {
 
 // TestASiCParametersEquals pins the three fields equals() compares.
 func TestASiCParametersEquals(t *testing.T) {
-	build := func() *ASiCParameters {
-		parameters := NewASiCParameters()
+	build := func() *Parameters {
+		parameters := NewParameters()
 		parameters.SetZipComment(true)
 		parameters.SetMimeType("application/vnd.etsi.asic-e+zip")
 		parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
@@ -39,10 +39,10 @@ func TestASiCParametersEquals(t *testing.T) {
 	if !first.Equals(second) || !first.Equals(first) || first.Equals(nil) {
 		t.Fatal("equals is not reflexive/consistent")
 	}
-	for _, mutate := range []func(*ASiCParameters){
-		func(p *ASiCParameters) { p.SetZipComment(false) },
-		func(p *ASiCParameters) { p.SetMimeType("other") },
-		func(p *ASiCParameters) { p.SetContainerType(enumerations.ASiCContainerTypeASiCS) },
+	for _, mutate := range []func(*Parameters){
+		func(p *Parameters) { p.SetZipComment(false) },
+		func(p *Parameters) { p.SetMimeType("other") },
+		func(p *Parameters) { p.SetContainerType(enumerations.ASiCContainerTypeASiCS) },
 	} {
 		mutated := build()
 		mutate(mutated)
@@ -52,24 +52,24 @@ func TestASiCParametersEquals(t *testing.T) {
 	}
 }
 
-// TestASiCParametersMimeTypeResolution pins getMimeType(ASiCParameters): an explicit mimetype wins,
+// TestASiCParametersMimeTypeResolution pins getMimeType(Parameters): an explicit mimetype wins,
 // otherwise the container type decides.
 func TestASiCParametersMimeTypeResolution(t *testing.T) {
-	parameters := NewASiCParameters()
+	parameters := NewParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCS)
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCS) {
+	if got := UtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCS) {
 		t.Errorf("mimeType = %v, want ASICS", got)
 	}
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCE) {
+	if got := UtilsMimeTypeFromParameters(parameters); got != enumerations.MimeType(enumerations.MimeTypeEnumASiCE) {
 		t.Errorf("mimeType = %v, want ASICE", got)
 	}
 	parameters.SetMimeType("application/vnd.oasis.opendocument.text")
-	if got := ASiCUtilsMimeTypeFromParameters(parameters); got.MimeTypeString() != "application/vnd.oasis.opendocument.text" {
+	if got := UtilsMimeTypeFromParameters(parameters); got.MimeTypeString() != "application/vnd.oasis.opendocument.text" {
 		t.Errorf("an explicit mimetype must win, got %q", got.MimeTypeString())
 	}
 
-	if !ASiCUtilsIsASiCE(parameters) || ASiCUtilsIsASiCS(parameters) {
+	if !UtilsIsASiCE(parameters) || UtilsIsASiCS(parameters) {
 		t.Error("isASiCE/isASiCS disagree with the container type")
 	}
 	defer func() {
@@ -77,13 +77,13 @@ func TestASiCParametersMimeTypeResolution(t *testing.T) {
 			t.Fatalf("panic = %v, want the Java message", recovered)
 		}
 	}()
-	ASiCUtilsIsASiCE(NewASiCParameters())
+	UtilsIsASiCE(NewParameters())
 }
 
 // TestASiCContainerEvidenceRecordParametersEmbedsASiCParameters pins the inheritance: the base
 // accessors are promoted and equals() compares both halves.
 func TestASiCContainerEvidenceRecordParametersEmbedsASiCParameters(t *testing.T) {
-	parameters := NewASiCContainerEvidenceRecordParameters()
+	parameters := NewContainerEvidenceRecordParameters()
 	parameters.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	if parameters.ContainerType() != enumerations.ASiCContainerTypeASiCE {
 		t.Error("the promoted base accessor did not work")
@@ -95,7 +95,7 @@ func TestASiCContainerEvidenceRecordParametersEmbedsASiCParameters(t *testing.T)
 		t.Error("the manifest did not round trip")
 	}
 
-	other := NewASiCContainerEvidenceRecordParameters()
+	other := NewContainerEvidenceRecordParameters()
 	other.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	if parameters.Equals(other) {
 		t.Error("parameters differing in the manifest must not be equal")

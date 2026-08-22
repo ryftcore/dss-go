@@ -7,8 +7,8 @@ import (
 	dssvalidation "github.com/ryftcore/dss-go/dss/validation"
 )
 
-// EvidenceRecordValidator is the interface to be used for evidence record validation.
-type EvidenceRecordValidator interface {
+// Validator is the interface to be used for evidence record validation.
+type Validator interface {
 	dssvalidation.DocumentValidator
 
 	// EvidenceRecord returns a single EvidenceRecord to be validated. Port of getEvidenceRecord().

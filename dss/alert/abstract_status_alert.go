@@ -8,7 +8,7 @@ type AbstractStatusAlert struct {
 
 // NewAbstractStatusAlert creates an AbstractStatusAlert running handler when a non-empty
 // Status is detected.
-func NewAbstractStatusAlert(handler AlertHandler[Status]) *AbstractStatusAlert {
+func NewAbstractStatusAlert(handler Handler[Status]) *AbstractStatusAlert {
 	return &AbstractStatusAlert{
 		AbstractAlert: NewAbstractAlert[Status](NewStatusDetector(), handler),
 	}

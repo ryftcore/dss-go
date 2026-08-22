@@ -7,10 +7,10 @@
 //
 // The main entry types are AbstractSignatureService and
 // AbstractDocumentExtender (the generic bases per-format services embed),
-// the DocumentSignatureService/CounterSignatureService/
+// the SignatureService/CounterSignatureService/
 // MultipleDocumentsSignatureService/EvidenceRecordIncorporationService
 // interfaces those services implement, AbstractSignatureParameters (the
-// parameter base type extended by e.g. CAdESSignatureParameters), and the
+// parameter base type extended by e.g. SignatureParameters), and the
 // ResourcesHandler family (InMemoryResourcesHandler, TempFileResourcesHandler)
 // used to materialize large intermediate signing artifacts.
 //

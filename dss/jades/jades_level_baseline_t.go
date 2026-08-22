@@ -4,16 +4,16 @@
 //
 // Upstream builds the JAdES augmentation ladder out of one overridden protected method:
 //
-//	JAdESLevelBaselineT.extendSignatures(List<AdvancedSignature>, JAdESSignatureParameters)
-//	  <- JAdESLevelBaselineLT  <- JAdESLevelBaselineLTA
+//	LevelBaselineT.extendSignatures(List<AdvancedSignature>, SignatureParameters)
+//	  <- LevelBaselineLT  <- LevelBaselineLTA
 //
 // each override calling super.extendSignatures(...) first. Go has no method overriding across
 // embedding, so - per the TokenBase.InitToken(self) convention of PORTING.md, and exactly as
-// xades.XAdESLevelBaselineT does - every level embeds the level below it, registers itself with
+// xades.LevelBaselineT does - every level embeds the level below it, registers itself with
 // InitJAdESLevelBaselineT(self, certificateVerifier), and the public entry point
 // ExtendSignaturesDocument dispatches into the most-derived override via t.overrides. A "super"
 // call is then the plain, explicit embedded-field call, e.g.
-// lt.JAdESLevelBaselineT.ExtendSignatures.
+// lt.LevelBaselineT.ExtendSignatures.
 //
 // Java's two extendSignatures overloads get two Go names:
 //
@@ -38,18 +38,18 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// JAdESSignatureExtensionOverrides declares the operation every JAdES extension level overrides
-// and that JAdESLevelBaselineT.ExtendSignaturesDocument dispatches into. Every level satisfies it
+// SignatureExtensionOverrides declares the operation every JAdES extension level overrides
+// and that LevelBaselineT.ExtendSignaturesDocument dispatches into. Every level satisfies it
 // through its embedded ancestors.
-type JAdESSignatureExtensionOverrides interface {
+type SignatureExtensionOverrides interface {
 	// ExtendSignatures extends the given signatures to the level of the concrete
 	// implementation. Port of the protected, overridden #extendSignatures(List, params).
-	ExtendSignatures(signatures []validation.AdvancedSignature, params *JAdESSignatureParameters) error
+	ExtendSignatures(signatures []validation.AdvancedSignature, params *SignatureParameters) error
 }
 
-// JAdESLevelBaselineT creates a T-level of a JAdES signature.
-type JAdESLevelBaselineT struct {
-	JAdESExtensionBuilder
+// LevelBaselineT creates a T-level of a JAdES signature.
+type LevelBaselineT struct {
+	ExtensionBuilder
 
 	// CertificateVerifier is the CertificateVerifier to use. Port of the protected final
 	// `certificateVerifier`.
@@ -68,20 +68,20 @@ type JAdESLevelBaselineT struct {
 	operationKind enumerations.SigningOperation
 
 	// overrides points back at the most-derived level; see InitJAdESLevelBaselineT.
-	overrides JAdESSignatureExtensionOverrides
+	overrides SignatureExtensionOverrides
 }
 
-// NewJAdESLevelBaselineT is the default constructor.
+// NewLevelBaselineT is the default constructor.
 // Port of JAdESLevelBaselineT(CertificateVerifier).
-func NewJAdESLevelBaselineT(certificateVerifier validation.CertificateVerifier) *JAdESLevelBaselineT {
-	extension := &JAdESLevelBaselineT{}
+func NewLevelBaselineT(certificateVerifier validation.CertificateVerifier) *LevelBaselineT {
+	extension := &LevelBaselineT{}
 	extension.InitJAdESLevelBaselineT(extension, certificateVerifier)
 	return extension
 }
 
 // InitJAdESLevelBaselineT registers the concrete extension level with this base and stores the
 // CertificateVerifier. Port of the JAdESLevelBaselineT(CertificateVerifier) constructor body.
-func (t *JAdESLevelBaselineT) InitJAdESLevelBaselineT(self JAdESSignatureExtensionOverrides,
+func (t *LevelBaselineT) InitJAdESLevelBaselineT(self SignatureExtensionOverrides,
 	certificateVerifier validation.CertificateVerifier) {
 	t.overrides = self
 	t.CertificateVerifier = certificateVerifier
@@ -89,20 +89,20 @@ func (t *JAdESLevelBaselineT) InitJAdESLevelBaselineT(self JAdESSignatureExtensi
 
 // SetTspSource sets the TSP source to be used when extending the digital signature.
 // Port of #setTspSource.
-func (t *JAdESLevelBaselineT) SetTspSource(tspSource validation.TSPSource) {
+func (t *LevelBaselineT) SetTspSource(tspSource validation.TSPSource) {
 	t.TspSource = tspSource
 }
 
 // SetOperationKind sets the signing operation. Port of the overridden #setOperationKind.
-func (t *JAdESLevelBaselineT) SetOperationKind(signingOperation enumerations.SigningOperation) {
+func (t *LevelBaselineT) SetOperationKind(signingOperation enumerations.SigningOperation) {
 	t.operationKind = signingOperation
 }
 
 // ExtendSignaturesDocument extends every signature of the given document to the level of the
 // concrete implementation.
 // Port of the overridden #extendSignatures(DSSDocument, JAdESSignatureParameters).
-func (t *JAdESLevelBaselineT) ExtendSignaturesDocument(doc model.DSSDocument,
-	params *JAdESSignatureParameters) (model.DSSDocument, error) {
+func (t *LevelBaselineT) ExtendSignaturesDocument(doc model.DSSDocument,
+	params *SignatureParameters) (model.DSSDocument, error) {
 	if doc == nil {
 		panic("The document cannot be null")
 	}
@@ -144,8 +144,8 @@ func (t *JAdESLevelBaselineT) ExtendSignaturesDocument(doc model.DSSDocument,
 // it, a signature time-stamp is obtained from the TSP source over the signature timestamp data
 // and appended to the 'etsiU' unsigned header as a 'sigTst' component.
 // Port of the protected #extendSignatures(List, JAdESSignatureParameters).
-func (t *JAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedSignature,
-	params *JAdESSignatureParameters) error {
+func (t *LevelBaselineT) ExtendSignatures(signatures []validation.AdvancedSignature,
+	params *SignatureParameters) error {
 	signaturesToExtend := t.extendToTLevelSignatures(signatures, params)
 	if utils.IsCollectionEmpty(signaturesToExtend) {
 		return nil
@@ -158,7 +158,7 @@ func (t *JAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedS
 	signatureRequirementsChecker.AssertSigningCertificatesAreValid(signaturesToExtend)
 
 	for _, signature := range signaturesToExtend {
-		jadesSignature, ok := signature.(*JAdESSignature)
+		jadesSignature, ok := signature.(*Signature)
 		if !ok {
 			// Java's (JAdESSignature) cast; a non-JAdES signature would raise a ClassCastException.
 			return fmt.Errorf("unexpected signature type %T", signature)
@@ -198,15 +198,15 @@ func (t *JAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedS
 
 // SignatureRequirementsChecker instantiates a SignatureRequirementsChecker.
 // Port of the protected #getSignatureRequirementsChecker.
-func (t *JAdESLevelBaselineT) SignatureRequirementsChecker(
-	parameters *JAdESSignatureParameters) *document.SignatureRequirementsChecker[*JAdESTimestampParameters] {
-	return document.NewSignatureRequirementsChecker[*JAdESTimestampParameters](t.CertificateVerifier,
+func (t *LevelBaselineT) SignatureRequirementsChecker(
+	parameters *SignatureParameters) *document.SignatureRequirementsChecker[*TimestampParameters] {
+	return document.NewSignatureRequirementsChecker[*TimestampParameters](t.CertificateVerifier,
 		&parameters.AbstractSignatureParameters)
 }
 
 // extendToTLevelSignatures ports the private getExtendToTLevelSignatures.
-func (t *JAdESLevelBaselineT) extendToTLevelSignatures(signatures []validation.AdvancedSignature,
-	parameters *JAdESSignatureParameters) []validation.AdvancedSignature {
+func (t *LevelBaselineT) extendToTLevelSignatures(signatures []validation.AdvancedSignature,
+	parameters *SignatureParameters) []validation.AdvancedSignature {
 	toBeExtended := make([]validation.AdvancedSignature, 0)
 	for _, signature := range signatures {
 		if jadesLevelBaselineTTLevelExtensionRequired(signature, parameters) {
@@ -218,23 +218,23 @@ func (t *JAdESLevelBaselineT) extendToTLevelSignatures(signatures []validation.A
 
 // jadesLevelBaselineTTLevelExtensionRequired ports the private tLevelExtensionRequired.
 func jadesLevelBaselineTTLevelExtensionRequired(jadesSignature validation.AdvancedSignature,
-	parameters *JAdESSignatureParameters) bool {
+	parameters *SignatureParameters) bool {
 	return enumerations.SignatureLevelJAdESBaselineT == parameters.SignatureLevel() ||
 		!jadesSignature.HasTProfile()
 }
 
 // jadesLevelBaselineTTimestampSource narrows the signature's timestamp source to the JAdES one.
 // Java's JAdESSignature#getTimestampSource() is a covariant override returning
-// JAdESTimestampSource, which Go cannot express: AdvancedSignature already declares
+// TimestampSource, which Go cannot express: AdvancedSignature already declares
 // TimestampSource() validation.TimestampSource, so the JAdES source is recovered by assertion
 // here - the same technique, and the same reason, as xades.xadesLevelBaselineTTimestampSource.
 // jades_level_baseline_lta.go reuses this helper rather than duplicating the assertion.
-func jadesLevelBaselineTTimestampSource(source any) (*JAdESTimestampSource, error) {
-	if timestampSource, ok := source.(*JAdESTimestampSource); ok {
+func jadesLevelBaselineTTimestampSource(source any) (*TimestampSource, error) {
+	if timestampSource, ok := source.(*TimestampSource); ok {
 		return timestampSource, nil
 	}
 	return nil, fmt.Errorf("the signature timestamp source is not a JAdESTimestampSource, but %T", source)
 }
 
-// Compile-time assertion that *JAdESLevelBaselineT satisfies the extension contract.
-var _ JAdESLevelBaselineExtension = (*JAdESLevelBaselineT)(nil)
+// Compile-time assertion that *LevelBaselineT satisfies the extension contract.
+var _ LevelBaselineExtension = (*LevelBaselineT)(nil)

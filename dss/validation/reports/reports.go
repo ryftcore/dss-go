@@ -3,8 +3,8 @@
 //
 // This file depends on the specs-validation-report module's Go port
 // (dss/validationreport + dss/validationreport/jaxb, exposing
-// ValidationReportFacade and jaxb.ValidationReportType). The import path and
-// API shape below mirror ValidationReportFacade.newFacade().marshall(T,
+// Facade and jaxb.ValidationReportType). The import path and
+// API shape below mirror Facade.newFacade().marshall(T,
 // boolean) as a Marshal(T) (string, error) method, the same shape every
 // other report facade in this package uses.
 
@@ -70,7 +70,7 @@ func (r *Reports) GetEtsiValidationReportJaxb() *validationreportjaxb.Validation
 // SimpleReport String. Port of getXmlSimpleReport().
 func (r *Reports) GetXmlSimpleReport() (string, error) {
 	if r.xmlSimpleReport == "" {
-		xml, err := simplereport.NewSimpleReportFacade().Marshal(r.GetSimpleReportJaxb())
+		xml, err := simplereport.NewFacade().Marshal(r.GetSimpleReportJaxb())
 		if err != nil {
 			return "", NewDSSReportExceptionMessageCause("An error occurred during marshalling of JAXB Simple Report", err)
 		}
@@ -83,7 +83,7 @@ func (r *Reports) GetXmlSimpleReport() (string, error) {
 // Validation Report String. Port of getXmlValidationReport().
 func (r *Reports) GetXmlValidationReport() (string, error) {
 	if r.xmlEtsiValidationReport == "" {
-		xml, err := validationreport.NewValidationReportFacade().Marshal(r.GetEtsiValidationReportJaxb())
+		xml, err := validationreport.NewFacade().Marshal(r.GetEtsiValidationReportJaxb())
 		if err != nil {
 			return "", NewDSSReportExceptionMessageCause("An error occurred during marshalling of JAXB Etsi Validation Report", err)
 		}

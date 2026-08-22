@@ -48,7 +48,7 @@ it - as the same human summary "esig validate" prints by default.
 	}
 	defer f.Close()
 
-	jaxbReport, err := simplereport.NewSimpleReportFacade().Unmarshal(f)
+	jaxbReport, err := simplereport.NewFacade().Unmarshal(f)
 	if err != nil {
 		fmt.Fprintf(stderr, "esig report: parsing %s as a SimpleReport: %v\n", file, err)
 		return exitRuntime

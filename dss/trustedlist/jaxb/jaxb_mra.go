@@ -13,7 +13,7 @@
 // MRAEquivalenceContext's own .URI() (matching Java's MRAStatus.getUri()/
 // MRAEquivalenceContext.getUri()) rather than importing dss/trustedlist's
 // MRAStatusParser/MRAEquivalenceContextParser: this package sits BELOW
-// dss/trustedlist (which wraps it into the TrustedListFacade/MRAFacade
+// dss/trustedlist (which wraps it into the Facade/MRAFacade
 // API), so importing back up would cycle - the parse/print logic itself is
 // a two-line loop, cheaply duplicated on both sides of that boundary
 // exactly as jaxb_ecc.go already does for dss-jaxb-parsers'

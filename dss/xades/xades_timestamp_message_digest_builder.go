@@ -50,8 +50,8 @@ import (
 )
 
 // XAdESTimestampMessageDigestBuilder builds a message-imprint for XAdES timestamps. Port of the
-// class XAdESTimestampMessageDigestBuilder, implementing timestamp.TimestampMessageDigestBuilder.
-type XAdESTimestampMessageDigestBuilder struct {
+// class TimestampMessageDigestBuilder, implementing timestamp.MessageDigestBuilder.
+type TimestampMessageDigestBuilder struct {
 	// references is the list of XAdES signature references.
 	references []*xmldsig.Reference
 
@@ -76,18 +76,18 @@ type XAdESTimestampMessageDigestBuilder struct {
 	en319132 bool
 
 	// timestampAttribute is a signature attribute corresponding to the time-stamp.
-	timestampAttribute *XAdESAttribute
+	timestampAttribute *Attribute
 }
 
-// NewXAdESTimestampMessageDigestBuilder is the default constructor to be used for a new
+// NewTimestampMessageDigestBuilder is the default constructor to be used for a new
 // timestamp creation. This constructor requires certain properties to be provided for
 // message-digest computation (see available setters). Port of the (XAdESSignature,
 // DigestAlgorithm) constructor.
 //
 // Panics with the Java message when digestAlgorithm is empty (Objects.requireNonNull).
-func NewXAdESTimestampMessageDigestBuilder(signature *XAdESSignature,
-	digestAlgorithm enumerations.DigestAlgorithm) *XAdESTimestampMessageDigestBuilder {
-	b := newXAdESTimestampMessageDigestBuilderBase(signature)
+func NewTimestampMessageDigestBuilder(signature *Signature,
+	digestAlgorithm enumerations.DigestAlgorithm) *TimestampMessageDigestBuilder {
+	b := newTimestampMessageDigestBuilderBase(signature)
 	if digestAlgorithm == "" {
 		panic("DigestAlgorithm cannot be null!")
 	}
@@ -95,14 +95,14 @@ func NewXAdESTimestampMessageDigestBuilder(signature *XAdESSignature,
 	return b
 }
 
-// NewXAdESTimestampMessageDigestBuilderForToken is the constructor to be used for existing
+// NewTimestampMessageDigestBuilderForToken is the constructor to be used for existing
 // timestamp message-imprint computation. Port of the (XAdESSignature, TimestampToken)
 // constructor.
 //
 // Panics with the Java message when timestampToken is nil (Objects.requireNonNull).
-func NewXAdESTimestampMessageDigestBuilderForToken(signature *XAdESSignature,
-	timestampToken *validation.TimestampToken) *XAdESTimestampMessageDigestBuilder {
-	b := newXAdESTimestampMessageDigestBuilderBase(signature)
+func NewTimestampMessageDigestBuilderForToken(signature *Signature,
+	timestampToken *validation.TimestampToken) *TimestampMessageDigestBuilder {
+	b := newTimestampMessageDigestBuilderBase(signature)
 	if timestampToken == nil {
 		panic("TimestampToken cannot be null!")
 	}
@@ -112,15 +112,15 @@ func NewXAdESTimestampMessageDigestBuilderForToken(signature *XAdESSignature,
 	return b
 }
 
-// newXAdESTimestampMessageDigestBuilderBase is the internal constructor to instantiate required
+// newTimestampMessageDigestBuilderBase is the internal constructor to instantiate required
 // values from a signature object. Port of the private (XAdESSignature) constructor.
 //
 // Panics with the Java message when signature is nil (Objects.requireNonNull).
-func newXAdESTimestampMessageDigestBuilderBase(signature *XAdESSignature) *XAdESTimestampMessageDigestBuilder {
+func newTimestampMessageDigestBuilderBase(signature *Signature) *TimestampMessageDigestBuilder {
 	if signature == nil {
 		panic("Signature cannot be null!")
 	}
-	return &XAdESTimestampMessageDigestBuilder{
+	return &TimestampMessageDigestBuilder{
 		signature:  signature.SignatureElement(),
 		references: signature.References(),
 		xadesPaths: signature.XAdESPaths(),
@@ -129,22 +129,22 @@ func newXAdESTimestampMessageDigestBuilderBase(signature *XAdESSignature) *XAdES
 
 // SetCanonicalizationAlgorithm sets the canonicalization algorithm to be used for message-digest
 // computation. Port of setCanonicalizationAlgorithm(String).
-func (b *XAdESTimestampMessageDigestBuilder) SetCanonicalizationAlgorithm(canonicalizationAlgorithm string) *XAdESTimestampMessageDigestBuilder {
+func (b *TimestampMessageDigestBuilder) SetCanonicalizationAlgorithm(canonicalizationAlgorithm string) *TimestampMessageDigestBuilder {
 	b.canonicalizationAlgorithm = canonicalizationAlgorithm
 	return b
 }
 
 // SetEn319132 sets whether the message-digest should be computed for an EN 319 132-1 standard
 // timestamp token. Port of setEn319132(boolean).
-func (b *XAdESTimestampMessageDigestBuilder) SetEn319132(en319132 bool) *XAdESTimestampMessageDigestBuilder {
+func (b *TimestampMessageDigestBuilder) SetEn319132(en319132 bool) *TimestampMessageDigestBuilder {
 	b.en319132 = en319132
 	return b
 }
 
 // SetTimestampAttribute sets a signature attribute corresponding to the time-stamp token.
 // Defines also en319132 based on the provided timestamp attribute. Port of
-// setTimestampAttribute(XAdESAttribute).
-func (b *XAdESTimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttribute *XAdESAttribute) *XAdESTimestampMessageDigestBuilder {
+// setTimestampAttribute(Attribute).
+func (b *TimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttribute *Attribute) *TimestampMessageDigestBuilder {
 	b.timestampAttribute = timestampAttribute
 	if timestampAttribute != nil {
 		b.en319132 = xadesTimestampMessageDigestBuilderIsEn319132TimestampToken(timestampAttribute)
@@ -152,13 +152,13 @@ func (b *XAdESTimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttr
 	return b
 }
 
-// ContentTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// ContentTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getContentTimestampMessageDigest().
 //
 // Panics with the Java message when checkSignatureIntegrity (i.e. References()) has not been
 // invoked first (IllegalStateException), or with an UnsupportedOperationException-equivalent
 // message for a content timestamp type this method does not support.
-func (b *XAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
 	// all data timestamp is considered by default
 	timeStampType := enumerations.TimestampTypeAllDataObjectsTimestamp
 	if b.timestampToken != nil {
@@ -181,7 +181,7 @@ func (b *XAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() mod
 // allDataObjectsTimestampMessageDigest returns the computed message-imprint digest for
 // xades132:AllDataObjectsTimestamp token. Port of the protected
 // getAllDataObjectsTimestampMessageDigest().
-func (b *XAdESTimestampMessageDigestBuilder) allDataObjectsTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) allDataObjectsTimestampMessageDigest() model.DSSMessageDigest {
 	digestCalculator, err := spi.NewDSSMessageDigestCalculator(b.digestAlgorithm)
 	if err == nil {
 		for _, reference := range b.references {
@@ -206,7 +206,7 @@ func (b *XAdESTimestampMessageDigestBuilder) allDataObjectsTimestampMessageDiges
 //
 // Panics with the Java message when the Included referencedData attribute is either not present
 // or set to false (IllegalArgumentException).
-func (b *XAdESTimestampMessageDigestBuilder) individualDataObjectsTimestampMessageDigest() model.DSSMessageDigest {
+func (b *TimestampMessageDigestBuilder) individualDataObjectsTimestampMessageDigest() model.DSSMessageDigest {
 	if !xadesTimestampMessageDigestBuilderCheckTimestampTokenIncludes(b.timestampToken) {
 		panic("The Included referencedData attribute is either not present or set to false!")
 	}
@@ -237,7 +237,7 @@ func (b *XAdESTimestampMessageDigestBuilder) individualDataObjectsTimestampMessa
 // reference-processing model of XMLDSIG [1] clause 4.4.3.2, and if the result is an XML node
 // set, canonicalizes it as specified in clause 4.5. Port of the private writeReferenceBytes
 // (DSSMessageDigestCalculator, Reference, String).
-func (b *XAdESTimestampMessageDigestBuilder) writeReferenceBytes(digestCalculator *spi.DSSMessageDigestCalculator,
+func (b *TimestampMessageDigestBuilder) writeReferenceBytes(digestCalculator *spi.DSSMessageDigestCalculator,
 	reference *xmldsig.Reference, canonicalizationMethod string) error {
 	if ReferenceOutputTypeNodeSet == DSSXMLUtilsGetReferenceOutputType(reference) {
 		referencedBytes, err := reference.ReferencedBytes()
@@ -289,9 +289,9 @@ func xadesTimestampMessageDigestBuilderCorrespondingReference(timestampInclude *
 	return nil
 }
 
-// SignatureTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// SignatureTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getSignatureTimestampMessageDigest().
-func (b *XAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() (result model.DSSMessageDigest) {
+func (b *TimestampMessageDigestBuilder) SignatureTimestampMessageDigest() (result model.DSSMessageDigest) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs MESSAGE_IMPRINT_ERROR/MESSAGE_IMPRINT_ERROR_WITH_ID.
@@ -304,7 +304,7 @@ func (b *XAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() (
 	return digestCalculator.MessageDigest(b.digestAlgorithm)
 }
 
-// TimestampX1MessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// TimestampX1MessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getTimestampX1MessageDigest().
 //
 // A.1.5.1 The SigAndRefsTimeStampV2 qualifying property (A.1.5.1.2 Not distributed case)
@@ -312,7 +312,7 @@ func (b *XAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() (
 // The input to the electronic time-stamp's message imprint computation input shall be the result
 // of taking in order each of the XAdES components listed below, canonicalizing each one as
 // specified in clause 4.5, and concatenating the resulting octet streams.
-func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result model.DSSMessageDigest) {
+func (b *TimestampMessageDigestBuilder) TimestampX1MessageDigest() (result model.DSSMessageDigest) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs MESSAGE_IMPRINT_ERROR/MESSAGE_IMPRINT_ERROR_WITH_ID.
@@ -333,7 +333,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
 
-	xadesUnsignedSigProperties := NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	xadesUnsignedSigProperties := NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 	for _, xadesAttribute := range xadesUnsignedSigProperties.Attributes() {
 		if b.timestampAttribute != nil && b.timestampAttribute.Equals(xadesAttribute) {
 			break
@@ -380,7 +380,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 	return digestCalculator.MessageDigest(b.digestAlgorithm)
 }
 
-// TimestampX2MessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// TimestampX2MessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getTimestampX2MessageDigest().
 //
 // A.1.5.2 The RefsOnlyTimeStampV2 qualifying property (A.1.5.2.2 Not distributed case)
@@ -390,7 +390,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 // RefsOnlyTimeStampV2 in their order of appearance within the UnsignedSignatureProperties
 // element, canonicalizing each one as specified in clause 4.5, and concatenating the resulting
 // octet streams.
-func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result model.DSSMessageDigest) {
+func (b *TimestampMessageDigestBuilder) TimestampX2MessageDigest() (result model.DSSMessageDigest) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs MESSAGE_IMPRINT_ERROR/MESSAGE_IMPRINT_ERROR_WITH_ID.
@@ -406,7 +406,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result 
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
 
-	xadesUnsignedSigProperties := NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	xadesUnsignedSigProperties := NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 	for _, xadesAttribute := range xadesUnsignedSigProperties.Attributes() {
 		if b.timestampAttribute != nil && b.timestampAttribute.Equals(xadesAttribute) {
 			break
@@ -447,7 +447,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result 
 	return digestCalculator.MessageDigest(b.digestAlgorithm)
 }
 
-// ArchiveTimestampMessageDigest implements timestamp.TimestampMessageDigestBuilder.
+// ArchiveTimestampMessageDigest implements timestamp.MessageDigestBuilder.
 // Port of getArchiveTimestampMessageDigest().
 //
 // 8.2.1 Not distributed case
@@ -458,7 +458,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result 
 // follows:
 //
 //  1. Initialize the final octet stream as an empty octet stream.
-func (b *XAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() (result model.DSSMessageDigest) {
+func (b *TimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() (result model.DSSMessageDigest) {
 	defer func() {
 		if recover() != nil {
 			// Upstream logs MESSAGE_IMPRINT_ERROR/MESSAGE_IMPRINT_ERROR_WITH_ID.
@@ -524,7 +524,7 @@ func (b *XAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() (re
 // XPathQuery, String) overload. Panics (via
 // xadesTimestampMessageDigestBuilderWriteDigestValueOnCanonicalizedNode) on a canonicalization
 // failure, caught by the defer/recover of the four broader callers above.
-func (b *XAdESTimestampMessageDigestBuilder) writeCanonicalizedValue(digestCalculator *spi.DSSMessageDigestCalculator,
+func (b *TimestampMessageDigestBuilder) writeCanonicalizedValue(digestCalculator *spi.DSSMessageDigestCalculator,
 	xPathQuery common.XPathQuery, canonicalizationMethod string) {
 	element, err := xmlutils.XPathUtilsGetElement(b.signature, xPathQuery)
 	if err != nil || element == nil {
@@ -534,10 +534,10 @@ func (b *XAdESTimestampMessageDigestBuilder) writeCanonicalizedValue(digestCalcu
 }
 
 // writeCanonicalizedAttribute ports the private writeCanonicalizedValue(DSSMessageDigestCalculator,
-// XAdESAttribute, String) overload; named distinctly from writeCanonicalizedValue since Go has no
+// Attribute, String) overload; named distinctly from writeCanonicalizedValue since Go has no
 // overloading.
-func (b *XAdESTimestampMessageDigestBuilder) writeCanonicalizedAttribute(digestCalculator *spi.DSSMessageDigestCalculator,
-	attribute *XAdESAttribute, canonicalizationMethod string) {
+func (b *TimestampMessageDigestBuilder) writeCanonicalizedAttribute(digestCalculator *spi.DSSMessageDigestCalculator,
+	attribute *Attribute, canonicalizationMethod string) {
 	xadesTimestampMessageDigestBuilderWriteDigestValueOnCanonicalizedNode(digestCalculator, attribute.Element(), canonicalizationMethod)
 }
 
@@ -582,7 +582,7 @@ func xadesTimestampMessageDigestBuilderWriteDigestValueOnCanonicalizedNode(diges
 }
 
 // unsignedSignaturePropertiesDom ports the private getUnsignedSignaturePropertiesDom().
-func (b *XAdESTimestampMessageDigestBuilder) unsignedSignaturePropertiesDom() *xmldom.Node {
+func (b *TimestampMessageDigestBuilder) unsignedSignaturePropertiesDom() *xmldom.Node {
 	element, err := xmlutils.XPathUtilsGetElement(b.signature, b.xadesPaths.UnsignedSignaturePropertiesPath())
 	if err != nil {
 		return nil
@@ -593,7 +593,7 @@ func (b *XAdESTimestampMessageDigestBuilder) unsignedSignaturePropertiesDom() *x
 // unsignedSignaturePropertiesCanonicalizationCopy ports the private
 // getUnsignedSignaturePropertiesCanonicalizationCopy(). Panics on failure, folding into the same
 // broader-catch defer/recover as writeCanonicalizedValue.
-func (b *XAdESTimestampMessageDigestBuilder) unsignedSignaturePropertiesCanonicalizationCopy() *xmldom.Node {
+func (b *TimestampMessageDigestBuilder) unsignedSignaturePropertiesCanonicalizationCopy() *xmldom.Node {
 	signatureID := DSSXMLUtilsGetIDIdentifier(b.signature)
 	node, err := DSSXMLUtilsEnsureNamespacesDefinedWithQuery(b.signature.OwnerDocument(), signatureID, b.xadesPaths.UnsignedSignaturePropertiesPath())
 	if err != nil {
@@ -609,7 +609,7 @@ func (b *XAdESTimestampMessageDigestBuilder) unsignedSignaturePropertiesCanonica
 // missing data (CertificateValues/RevocationValues/AttrAuthoritiesCertValues/
 // AttributeRevocationValues MUST-be-added rules from the spec); to do so the signature must be
 // extended - matching upstream's commented-out branches, reproduced here only as comments.
-func (b *XAdESTimestampMessageDigestBuilder) writeTimestampedUnsignedProperties(digestCalculator *spi.DSSMessageDigestCalculator,
+func (b *TimestampMessageDigestBuilder) writeTimestampedUnsignedProperties(digestCalculator *spi.DSSMessageDigestCalculator,
 	timestampToken *validation.TimestampToken, canonicalizationMethod string) {
 	xadesUnsignedSigProperties := b.xadesUnsignedSignatureProperties(timestampToken)
 	for _, xadesAttribute := range xadesUnsignedSigProperties.Attributes() {
@@ -623,7 +623,7 @@ func (b *XAdESTimestampMessageDigestBuilder) writeTimestampedUnsignedProperties(
 // xadesUnsignedSignatureProperties ports the private getXAdESUnsignedSignatureProperties
 // (TimestampToken). Panics with the Java message when UnsignedSignatureProperties are not
 // initialized (IllegalStateException).
-func (b *XAdESTimestampMessageDigestBuilder) xadesUnsignedSignatureProperties(timestampToken *validation.TimestampToken) *XAdESUnsignedSigProperties {
+func (b *TimestampMessageDigestBuilder) xadesUnsignedSignatureProperties(timestampToken *validation.TimestampToken) *UnsignedSigProperties {
 	var unsignedProperties *xmldom.Node
 	if timestampToken == nil {
 		// timestamp creation
@@ -634,12 +634,12 @@ func (b *XAdESTimestampMessageDigestBuilder) xadesUnsignedSignatureProperties(ti
 	if unsignedProperties == nil {
 		panic("UnsignedSignatureProperties are not initialized!")
 	}
-	return NewXAdESUnsignedSigProperties(unsignedProperties, b.xadesPaths)
+	return NewUnsignedSigProperties(unsignedProperties, b.xadesPaths)
 }
 
 // xadesTimestampMessageDigestBuilderIsEn319132TimestampToken ports the private
-// isEn319132TimestampToken(XAdESAttribute).
-func xadesTimestampMessageDigestBuilderIsEn319132TimestampToken(timestampAttribute *XAdESAttribute) bool {
+// isEn319132TimestampToken(Attribute).
+func xadesTimestampMessageDigestBuilderIsEn319132TimestampToken(timestampAttribute *Attribute) bool {
 	return xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(timestampAttribute,
 		definition.XAdES132ElementAllDataObjectsTimestamp, definition.XAdES132ElementIndividualDataObjectsTimestamp,
 		definition.XAdES132ElementSignatureTimestamp, definition.XAdES141ElementRefsOnlyTimestampV2,
@@ -647,8 +647,8 @@ func xadesTimestampMessageDigestBuilderIsEn319132TimestampToken(timestampAttribu
 }
 
 // xadesTimestampMessageDigestBuilderCheckAttributeNameMatches ports the private
-// checkAttributeNameMatches(XAdESAttribute, DSSElement...).
-func xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(attribute *XAdESAttribute, elements ...common.DSSElement) bool {
+// checkAttributeNameMatches(Attribute, DSSElement...).
+func xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(attribute *Attribute, elements ...common.DSSElement) bool {
 	if attribute == nil {
 		return false
 	}
@@ -662,7 +662,7 @@ func xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(attribute *XAdE
 
 // objects returns the list of ds:Object elements for the current signature element. Port of the
 // private getObjects().
-func (b *XAdESTimestampMessageDigestBuilder) objects() []*xmldom.Node {
+func (b *TimestampMessageDigestBuilder) objects() []*xmldom.Node {
 	nodeList, err := xmlutils.XPathUtilsGetNodeList(b.signature, common.XMLDSigPathObjectPath)
 	if err != nil {
 		return nil
@@ -672,7 +672,7 @@ func (b *XAdESTimestampMessageDigestBuilder) objects() []*xmldom.Node {
 
 // writeObjectBytes ports the private writeObjectBytes(DSSMessageDigestCalculator, NodeList,
 // Set<String>, String).
-func (b *XAdESTimestampMessageDigestBuilder) writeObjectBytes(digestCalculator *spi.DSSMessageDigestCalculator,
+func (b *TimestampMessageDigestBuilder) writeObjectBytes(digestCalculator *spi.DSSMessageDigestCalculator,
 	objects []*xmldom.Node, referenceURIs map[string]struct{}, canonicalizationMethod string) {
 	xades141 := b.timestampToken == nil || enumerations.ArchiveTimestampTypeXAdES != b.timestampToken.ArchiveTimestampType()
 	for _, node := range objects {
@@ -713,6 +713,6 @@ func xadesTimestampMessageDigestBuilderMustNewCalculator(digestAlgorithm enumera
 	return digestCalculator
 }
 
-// compile-time assertion: *XAdESTimestampMessageDigestBuilder satisfies
+// compile-time assertion: *TimestampMessageDigestBuilder satisfies
 // timestamp.TimestampMessageDigestBuilder, matching Java's "implements TimestampMessageDigestBuilder".
-var _ timestamp.TimestampMessageDigestBuilder = (*XAdESTimestampMessageDigestBuilder)(nil)
+var _ timestamp.MessageDigestBuilder = (*TimestampMessageDigestBuilder)(nil)

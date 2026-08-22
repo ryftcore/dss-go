@@ -21,8 +21,8 @@ type QEAACheck struct {
 }
 
 // NewQEAACheck is the default constructor. Port of
-// QEAACheck(I18nProvider, XmlValidationEAAQualificationProcess, List, LevelRule).
-func NewQEAACheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
+// QEAACheck(Provider, XmlValidationEAAQualificationProcess, List, LevelRule).
+func NewQEAACheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationEAAQualificationProcess],
 	trustServicesAtTime []*diagnostic.TrustServiceWrapper, constraint policy.LevelRule) *QEAACheck {
 	c := &QEAACheck{
 		ChainItemBase:       process.NewChainItemBase(i18nProvider, result, constraint),

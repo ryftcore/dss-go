@@ -16,14 +16,14 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi"
 )
 
-// PAdESTimestampParametersDefaultContentSize is the default length of a reserved space for the
+// TimestampParametersDefaultContentSize is the default length of a reserved space for the
 // timestamp inside a /Contents attribute (9472, from PDFBox). Port of the default timestampSize
 // field value.
-const PAdESTimestampParametersDefaultContentSize = 9472
+const TimestampParametersDefaultContentSize = 9472
 
-// PAdESTimestampParameters holds parameters for a PAdES timestamp creation.
-type PAdESTimestampParameters struct {
-	cades.CAdESTimestampParameters
+// TimestampParameters holds parameters for a PAdES timestamp creation.
+type TimestampParameters struct {
+	cades.TimestampParameters
 
 	// pdfSignatureCache is the internal signature processing variable.
 	pdfSignatureCache *PdfSignatureCache
@@ -57,71 +57,71 @@ type PAdESTimestampParameters struct {
 	passwordProtection []byte
 }
 
-// NewPAdESTimestampParameters is the empty constructor.
-func NewPAdESTimestampParameters() *PAdESTimestampParameters {
+// NewTimestampParameters is the empty constructor.
+func NewTimestampParameters() *TimestampParameters {
 	now := time.Now()
-	return &PAdESTimestampParameters{
-		CAdESTimestampParameters: *cades.NewCAdESTimestampParameters(),
-		timestampDate:            &now,
-		timestampSize:            PAdESTimestampParametersDefaultContentSize,
-		timestampFilter:          PAdESConstantsTimestampDefaultFilter,
-		timestampSubFilter:       PAdESConstantsTimestampDefaultSubFilter,
+	return &TimestampParameters{
+		TimestampParameters: *cades.NewTimestampParameters(),
+		timestampDate:       &now,
+		timestampSize:       TimestampParametersDefaultContentSize,
+		timestampFilter:     PAdESConstantsTimestampDefaultFilter,
+		timestampSubFilter:  PAdESConstantsTimestampDefaultSubFilter,
 	}
 }
 
 // NewPAdESTimestampParametersWithDigestAlgorithm is the default constructor. Port of
-// PAdESTimestampParameters(DigestAlgorithm).
-func NewPAdESTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *PAdESTimestampParameters {
-	p := NewPAdESTimestampParameters()
+// TimestampParameters(DigestAlgorithm).
+func NewTimestampParametersWithDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *TimestampParameters {
+	p := NewTimestampParameters()
 	p.SetDigestAlgorithm(digestAlgorithm)
 	return p
 }
 
-// newPAdESTimestampParametersFromCAdES is used internally to recreate parameters from CAdES
+// newTimestampParametersFromCAdES is used internally to recreate parameters from CAdES
 // Timestamp Parameters. Package-private port of the package-private constructor
-// PAdESTimestampParameters(CAdESTimestampParameters).
-func newPAdESTimestampParametersFromCAdES(cadesTimestampParameters *cades.CAdESTimestampParameters) *PAdESTimestampParameters {
-	return NewPAdESTimestampParametersWithDigestAlgorithm(cadesTimestampParameters.DigestAlgorithm())
+// TimestampParameters(TimestampParameters).
+func newTimestampParametersFromCAdES(cadesTimestampParameters *cades.TimestampParameters) *TimestampParameters {
+	return NewTimestampParametersWithDigestAlgorithm(cadesTimestampParameters.DigestAlgorithm())
 }
 
 // Filter ports the overridden #getFilter.
-func (p *PAdESTimestampParameters) Filter() string {
+func (p *TimestampParameters) Filter() string {
 	return p.timestampFilter
 }
 
 // SetFilter sets the filter. Port of #setFilter.
-func (p *PAdESTimestampParameters) SetFilter(timestampFilter string) {
+func (p *TimestampParameters) SetFilter(timestampFilter string) {
 	p.timestampFilter = timestampFilter
 }
 
 // SubFilter ports the overridden #getSubFilter.
-func (p *PAdESTimestampParameters) SubFilter() string {
+func (p *TimestampParameters) SubFilter() string {
 	return p.timestampSubFilter
 }
 
 // SetSubFilter sets the sub filter. Port of #setSubFilter.
-func (p *PAdESTimestampParameters) SetSubFilter(timestampSubFilter string) {
+func (p *TimestampParameters) SetSubFilter(timestampSubFilter string) {
 	p.timestampSubFilter = timestampSubFilter
 }
 
 // AppName ports the overridden #getAppName.
-func (p *PAdESTimestampParameters) AppName() string {
+func (p *TimestampParameters) AppName() string {
 	return p.appName
 }
 
 // SetAppName sets signing application name. Port of #setAppName.
-func (p *PAdESTimestampParameters) SetAppName(appName string) {
+func (p *TimestampParameters) SetAppName(appName string) {
 	p.appName = appName
 }
 
 // EncryptionAlgorithm ports the overridden #getEncryptionAlgorithm (not implemented; returns the
 // zero value, mirroring Java's `return null`).
-func (p *PAdESTimestampParameters) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
+func (p *TimestampParameters) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
 	return ""
 }
 
 // ImageParameters ports the overridden #getImageParameters, lazily instantiating it.
-func (p *PAdESTimestampParameters) ImageParameters() *SignatureImageParameters {
+func (p *TimestampParameters) ImageParameters() *SignatureImageParameters {
 	if p.timestampImageParameters == nil {
 		p.timestampImageParameters = NewSignatureImageParameters()
 	}
@@ -130,12 +130,12 @@ func (p *PAdESTimestampParameters) ImageParameters() *SignatureImageParameters {
 
 // SetImageParameters sets the SignatureImageParameters for a visual timestamp creation. Port of
 // #setImageParameters.
-func (p *PAdESTimestampParameters) SetImageParameters(timestampImageParameters *SignatureImageParameters) {
+func (p *TimestampParameters) SetImageParameters(timestampImageParameters *SignatureImageParameters) {
 	p.timestampImageParameters = timestampImageParameters
 }
 
 // ContentSize ports the overridden #getContentSize.
-func (p *PAdESTimestampParameters) ContentSize() int {
+func (p *TimestampParameters) ContentSize() int {
 	return p.timestampSize
 }
 
@@ -144,28 +144,28 @@ func (p *PAdESTimestampParameters) ContentSize() int {
 // Default : 9472 bytes
 //
 // Port of #setContentSize.
-func (p *PAdESTimestampParameters) SetContentSize(timestampSize int) {
+func (p *TimestampParameters) SetContentSize(timestampSize int) {
 	p.timestampSize = timestampSize
 }
 
 // SigningDate ports the overridden #getSigningDate.
-func (p *PAdESTimestampParameters) SigningDate() *time.Time {
+func (p *TimestampParameters) SigningDate() *time.Time {
 	return p.timestampDate
 }
 
 // PasswordProtection ports the overridden #getPasswordProtection.
-func (p *PAdESTimestampParameters) PasswordProtection() []byte {
+func (p *TimestampParameters) PasswordProtection() []byte {
 	return p.passwordProtection
 }
 
 // SetPasswordProtection sets password to the document. Port of #setPasswordProtection.
-func (p *PAdESTimestampParameters) SetPasswordProtection(passwordProtection []byte) {
+func (p *TimestampParameters) SetPasswordProtection(passwordProtection []byte) {
 	p.passwordProtection = passwordProtection
 }
 
 // DeterministicId ports the overridden #getDeterministicId. Panics on the (practically
 // unreachable) MD5 failure path, matching Java's unchecked DSSException.
-func (p *PAdESTimestampParameters) DeterministicId() string {
+func (p *TimestampParameters) DeterministicId() string {
 	var signingTime time.Time
 	if p.timestampDate != nil {
 		signingTime = *p.timestampDate
@@ -178,7 +178,7 @@ func (p *PAdESTimestampParameters) DeterministicId() string {
 }
 
 // PdfSignatureCache ports the overridden #getPdfSignatureCache, lazily instantiating it.
-func (p *PAdESTimestampParameters) PdfSignatureCache() *PdfSignatureCache {
+func (p *TimestampParameters) PdfSignatureCache() *PdfSignatureCache {
 	if p.pdfSignatureCache == nil {
 		p.pdfSignatureCache = NewPdfSignatureCache()
 	}
@@ -186,28 +186,31 @@ func (p *PAdESTimestampParameters) PdfSignatureCache() *PdfSignatureCache {
 }
 
 // Reinit ports the overridden #reinit.
-func (p *PAdESTimestampParameters) Reinit() {
+func (p *TimestampParameters) Reinit() {
 	p.pdfSignatureCache = nil
 }
 
 // String ports #toString.
-func (p *PAdESTimestampParameters) String() string {
+func (p *TimestampParameters) String() string {
 	return fmt.Sprintf("PAdESTimestampParameters [pdfSignatureCache=%v, timestampDate=%v, timestampSize=%v, "+
 		"timestampFilter='%s', timestampSubFilter='%s', appName='%s', timestampImageParameters=%v, "+
 		"passwordProtection=%v] %s",
 		p.pdfSignatureCache, p.timestampDate, p.timestampSize, p.timestampFilter, p.timestampSubFilter,
-		p.appName, p.timestampImageParameters, p.passwordProtection, p.CAdESTimestampParameters.String())
+		p.appName, p.timestampImageParameters, p.passwordProtection, p.TimestampParameters.String())
 }
 
 // Equals ports #equals.
-func (p *PAdESTimestampParameters) Equals(other *PAdESTimestampParameters) bool {
+func (p *TimestampParameters) Equals(other *TimestampParameters) bool {
 	if p == other {
 		return true
 	}
 	if other == nil {
 		return false
 	}
-	if !p.TimestampParameters.Equals(&other.TimestampParameters) {
+	// Written out in full: this type now embeds cades.TimestampParameters, whose own
+	// embedded model.TimestampParameters is what upstream's equals compares. The short
+	// form p.TimestampParameters would select the cades field at depth 1 instead.
+	if !p.TimestampParameters.TimestampParameters.Equals(&other.TimestampParameters.TimestampParameters) {
 		return false
 	}
 	return p.timestampSize == other.timestampSize &&
@@ -229,4 +232,4 @@ func pAdESTimestampParametersTimeEquals(a, b *time.Time) bool {
 	return a.Equal(*b)
 }
 
-var _ PAdESCommonParameters = (*PAdESTimestampParameters)(nil)
+var _ CommonParameters = (*TimestampParameters)(nil)

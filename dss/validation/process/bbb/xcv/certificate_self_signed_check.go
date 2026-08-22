@@ -18,8 +18,8 @@ type CertificateSelfSignedCheck[T any] struct {
 }
 
 // NewCertificateSelfSignedCheck is the default constructor. Port of
-// CertificateSelfSignedCheck(I18nProvider, T, CertificateWrapper, LevelRule).
-func NewCertificateSelfSignedCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateSelfSignedCheck(Provider, T, CertificateWrapper, LevelRule).
+func NewCertificateSelfSignedCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificateSelfSignedCheck[T] {
 	c := &CertificateSelfSignedCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

@@ -30,14 +30,14 @@ type AcceptableBasicSignatureValidationCheck struct {
 
 // NewAcceptableBasicSignatureValidationCheck is the default constructor. Port
 // of
-// AcceptableBasicSignatureValidationCheck(I18nProvider, XmlValidationProcessLongTermData, XmlConstraintsConclusion, LevelRule).
+// AcceptableBasicSignatureValidationCheck(Provider, XmlValidationProcessLongTermData, XmlConstraintsConclusion, LevelRule).
 //
 // basicSignatureValidation is passed as the embedded
 // XmlConstraintsConclusionContent directly (the Go stand-in for Java's
 // XmlConstraintsConclusion supertype reference - see chain.go's Result type),
 // since the concrete result type varies by caller (XmlValidationProcessBasicSignature
 // here).
-func NewAcceptableBasicSignatureValidationCheck(i18nProvider *i18n.I18nProvider,
+func NewAcceptableBasicSignatureValidationCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationProcessLongTermData],
 	basicSignatureValidation *jaxb.XmlConstraintsConclusionContent,
 	constraint policy.LevelRule) *AcceptableBasicSignatureValidationCheck {

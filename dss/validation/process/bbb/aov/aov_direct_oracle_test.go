@@ -30,7 +30,7 @@ type singleAovSAVChain struct {
 
 type aovCheckFactory func(result *process.Result[*jaxb.XmlSAV]) process.ChainItem[*jaxb.XmlSAV]
 
-func newSingleAovSAVChain(i18nProvider *i18n.I18nProvider, factory aovCheckFactory) *singleAovSAVChain {
+func newSingleAovSAVChain(i18nProvider *i18n.Provider, factory aovCheckFactory) *singleAovSAVChain {
 	xmlSAV := &jaxb.XmlSAV{}
 	c := &singleAovSAVChain{
 		ChainBase: process.NewChainBase(i18nProvider, process.NewResult(xmlSAV,

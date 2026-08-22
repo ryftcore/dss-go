@@ -19,8 +19,8 @@ type SignaturePolicyStoreCheck struct {
 }
 
 // NewSignaturePolicyStoreCheck is the default constructor. Port of
-// SignaturePolicyStoreCheck(I18nProvider, XmlVCI, SignatureWrapper, LevelRule).
-func NewSignaturePolicyStoreCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlVCI],
+// SignaturePolicyStoreCheck(Provider, XmlVCI, SignatureWrapper, LevelRule).
+func NewSignaturePolicyStoreCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlVCI],
 	signature *diagnostic.SignatureWrapper, constraint policy.LevelRule) *SignaturePolicyStoreCheck {
 	c := &SignaturePolicyStoreCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

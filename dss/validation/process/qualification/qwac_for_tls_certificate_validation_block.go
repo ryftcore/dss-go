@@ -18,7 +18,7 @@ type QWACForTLSCertificateValidationBlock struct {
 	*process.ChainBase[*jaxb.XmlQWACProcess]
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// certificate is the certificate to determine qualification for.
 	certificate *diagnostic.CertificateWrapper
@@ -41,8 +41,8 @@ type QWACForTLSCertificateValidationBlock struct {
 
 // NewQWACForTLSCertificateValidationBlock is the default constructor. Port
 // of
-// QWACForTLSCertificateValidationBlock(I18nProvider, DiagnosticData, CertificateWrapper, Map, XmlCertificateQualificationProcess, QWACProfile, String).
-func NewQWACForTLSCertificateValidationBlock(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+// QWACForTLSCertificateValidationBlock(Provider, Data, CertificateWrapper, Map, XmlCertificateQualificationProcess, QWACProfile, String).
+func NewQWACForTLSCertificateValidationBlock(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	certificate *diagnostic.CertificateWrapper, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	certificateQualification *jaxb.XmlCertificateQualificationProcess, bindingCertificateProfile enumerations.QWACProfile,
 	websiteUrl string) *QWACForTLSCertificateValidationBlock {

@@ -22,8 +22,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// ASiCContent contains grouped documents representing an ASiC container's content.
-type ASiCContent struct {
+// Content contains grouped documents representing an ASiC container's content.
+type Content struct {
 	// asicContainer is the original ASiC container.
 	asicContainer model.DSSDocument
 
@@ -73,8 +73,8 @@ type ASiCContent struct {
 
 // NewASiCContent instantiates an object with null values and empty lists of documents. Port of the
 // default constructor (Java's field initializers included).
-func NewASiCContent() *ASiCContent {
-	return &ASiCContent{
+func NewContent() *Content {
+	return &Content{
 		signedDocuments:                 []model.DSSDocument{},
 		signatureDocuments:              []model.DSSDocument{},
 		manifestDocuments:               []model.DSSDocument{},
@@ -89,130 +89,130 @@ func NewASiCContent() *ASiCContent {
 }
 
 // AsicContainer gets the original ASiC container. Port of getAsicContainer().
-func (c *ASiCContent) AsicContainer() model.DSSDocument { return c.asicContainer }
+func (c *Content) AsicContainer() model.DSSDocument { return c.asicContainer }
 
 // SetAsicContainer sets the original ASiC container. Port of setAsicContainer(DSSDocument).
-func (c *ASiCContent) SetAsicContainer(asicContainer model.DSSDocument) {
+func (c *Content) SetAsicContainer(asicContainer model.DSSDocument) {
 	c.asicContainer = asicContainer
 }
 
 // ContainerType gets the container type. Port of getContainerType().
-func (c *ASiCContent) ContainerType() enumerations.ASiCContainerType { return c.containerType }
+func (c *Content) ContainerType() enumerations.ASiCContainerType { return c.containerType }
 
 // SetContainerType sets the container type. Port of setContainerType(ASiCContainerType).
-func (c *ASiCContent) SetContainerType(containerType enumerations.ASiCContainerType) {
+func (c *Content) SetContainerType(containerType enumerations.ASiCContainerType) {
 	c.containerType = containerType
 }
 
 // ZipComment gets the zip comment. Port of getZipComment().
-func (c *ASiCContent) ZipComment() string { return c.zipComment }
+func (c *Content) ZipComment() string { return c.zipComment }
 
 // SetZipComment sets the zip comment. Port of setZipComment(String).
-func (c *ASiCContent) SetZipComment(zipComment string) { c.zipComment = zipComment }
+func (c *Content) SetZipComment(zipComment string) { c.zipComment = zipComment }
 
 // MimeTypeDocument gets the mimetype document. Port of getMimeTypeDocument().
-func (c *ASiCContent) MimeTypeDocument() model.DSSDocument { return c.mimeTypeDocument }
+func (c *Content) MimeTypeDocument() model.DSSDocument { return c.mimeTypeDocument }
 
 // SetMimeTypeDocument sets the mimetype document. Port of setMimeTypeDocument(DSSDocument).
-func (c *ASiCContent) SetMimeTypeDocument(mimeTypeDocument model.DSSDocument) {
+func (c *Content) SetMimeTypeDocument(mimeTypeDocument model.DSSDocument) {
 	c.mimeTypeDocument = mimeTypeDocument
 }
 
 // SignatureDocuments gets the signature documents. Port of getSignatureDocuments().
-func (c *ASiCContent) SignatureDocuments() []model.DSSDocument { return c.signatureDocuments }
+func (c *Content) SignatureDocuments() []model.DSSDocument { return c.signatureDocuments }
 
 // SetSignatureDocuments sets the signature documents. Port of setSignatureDocuments(List).
-func (c *ASiCContent) SetSignatureDocuments(signatureDocuments []model.DSSDocument) {
+func (c *Content) SetSignatureDocuments(signatureDocuments []model.DSSDocument) {
 	c.signatureDocuments = signatureDocuments
 }
 
 // ManifestDocuments gets the manifest documents. Port of getManifestDocuments().
-func (c *ASiCContent) ManifestDocuments() []model.DSSDocument { return c.manifestDocuments }
+func (c *Content) ManifestDocuments() []model.DSSDocument { return c.manifestDocuments }
 
 // SetManifestDocuments sets the manifest documents. Port of setManifestDocuments(List).
-func (c *ASiCContent) SetManifestDocuments(manifestDocuments []model.DSSDocument) {
+func (c *Content) SetManifestDocuments(manifestDocuments []model.DSSDocument) {
 	c.manifestDocuments = manifestDocuments
 }
 
 // ArchiveManifestDocuments gets the archive manifest documents (ASiC with CAdES only). Port of
 // getArchiveManifestDocuments().
-func (c *ASiCContent) ArchiveManifestDocuments() []model.DSSDocument {
+func (c *Content) ArchiveManifestDocuments() []model.DSSDocument {
 	return c.archiveManifestDocuments
 }
 
 // SetArchiveManifestDocuments sets the archive manifest documents (ASiC with CAdES only). Port of
 // setArchiveManifestDocuments(List).
-func (c *ASiCContent) SetArchiveManifestDocuments(archiveManifestDocuments []model.DSSDocument) {
+func (c *Content) SetArchiveManifestDocuments(archiveManifestDocuments []model.DSSDocument) {
 	c.archiveManifestDocuments = archiveManifestDocuments
 }
 
 // EvidenceRecordManifestDocuments gets the evidence record manifest documents. Port of
 // getEvidenceRecordManifestDocuments().
-func (c *ASiCContent) EvidenceRecordManifestDocuments() []model.DSSDocument {
+func (c *Content) EvidenceRecordManifestDocuments() []model.DSSDocument {
 	return c.evidenceRecordManifestDocuments
 }
 
 // SetEvidenceRecordManifestDocuments sets a list of evidence record manifest documents. Port of
 // setEvidenceRecordManifestDocuments(List).
-func (c *ASiCContent) SetEvidenceRecordManifestDocuments(evidenceRecordManifestDocuments []model.DSSDocument) {
+func (c *Content) SetEvidenceRecordManifestDocuments(evidenceRecordManifestDocuments []model.DSSDocument) {
 	c.evidenceRecordManifestDocuments = evidenceRecordManifestDocuments
 }
 
 // TimestampDocuments gets the timestamp documents (ASiC with CAdES only). Port of
 // getTimestampDocuments().
-func (c *ASiCContent) TimestampDocuments() []model.DSSDocument { return c.timestampDocuments }
+func (c *Content) TimestampDocuments() []model.DSSDocument { return c.timestampDocuments }
 
 // SetTimestampDocuments sets the timestamp documents (ASiC with CAdES only). Port of
 // setTimestampDocuments(List).
-func (c *ASiCContent) SetTimestampDocuments(timestampDocuments []model.DSSDocument) {
+func (c *Content) SetTimestampDocuments(timestampDocuments []model.DSSDocument) {
 	c.timestampDocuments = timestampDocuments
 }
 
 // EvidenceRecordDocuments gets the evidence record documents. Port of
 // getEvidenceRecordDocuments().
-func (c *ASiCContent) EvidenceRecordDocuments() []model.DSSDocument {
+func (c *Content) EvidenceRecordDocuments() []model.DSSDocument {
 	return c.evidenceRecordDocuments
 }
 
 // SetEvidenceRecordDocuments sets a list of evidence record documents. Port of
 // setEvidenceRecordDocuments(List).
-func (c *ASiCContent) SetEvidenceRecordDocuments(evidenceRecordDocuments []model.DSSDocument) {
+func (c *Content) SetEvidenceRecordDocuments(evidenceRecordDocuments []model.DSSDocument) {
 	c.evidenceRecordDocuments = evidenceRecordDocuments
 }
 
 // SignedDocuments gets the signed documents. Port of getSignedDocuments().
-func (c *ASiCContent) SignedDocuments() []model.DSSDocument { return c.signedDocuments }
+func (c *Content) SignedDocuments() []model.DSSDocument { return c.signedDocuments }
 
 // SetSignedDocuments sets the signed documents. Port of setSignedDocuments(List).
-func (c *ASiCContent) SetSignedDocuments(signedDocuments []model.DSSDocument) {
+func (c *Content) SetSignedDocuments(signedDocuments []model.DSSDocument) {
 	c.signedDocuments = signedDocuments
 }
 
 // UnsupportedDocuments gets the unsupported documents. Port of getUnsupportedDocuments().
-func (c *ASiCContent) UnsupportedDocuments() []model.DSSDocument { return c.unsupportedDocuments }
+func (c *Content) UnsupportedDocuments() []model.DSSDocument { return c.unsupportedDocuments }
 
 // SetUnsupportedDocuments sets the unsupported documents. Port of setUnsupportedDocuments(List).
-func (c *ASiCContent) SetUnsupportedDocuments(unsupportedDocuments []model.DSSDocument) {
+func (c *Content) SetUnsupportedDocuments(unsupportedDocuments []model.DSSDocument) {
 	c.unsupportedDocuments = unsupportedDocuments
 }
 
 // Folders returns a list of folders present within the container. Port of getFolders().
-func (c *ASiCContent) Folders() []model.DSSDocument { return c.folders }
+func (c *Content) Folders() []model.DSSDocument { return c.folders }
 
 // SetFolders sets a list of folders present within an archive. Port of setFolders(List).
-func (c *ASiCContent) SetFolders(folders []model.DSSDocument) { c.folders = folders }
+func (c *Content) SetFolders(folders []model.DSSDocument) { c.folders = folders }
 
 // ContainerDocuments gets the "package.zip" documents. Port of getContainerDocuments().
-func (c *ASiCContent) ContainerDocuments() []model.DSSDocument { return c.containerDocuments }
+func (c *Content) ContainerDocuments() []model.DSSDocument { return c.containerDocuments }
 
 // SetContainerDocuments sets the "package.zip" documents. Port of setContainerDocuments(List).
-func (c *ASiCContent) SetContainerDocuments(containerDocuments []model.DSSDocument) {
+func (c *Content) SetContainerDocuments(containerDocuments []model.DSSDocument) {
 	c.containerDocuments = containerDocuments
 }
 
 // RootLevelSignedDocuments returns a list of documents at the root level within the container.
 // Port of getRootLevelSignedDocuments().
-func (c *ASiCContent) RootLevelSignedDocuments() []model.DSSDocument {
+func (c *Content) RootLevelSignedDocuments() []model.DSSDocument {
 	if utils.IsCollectionEmpty(c.SignedDocuments()) {
 		return []model.DSSDocument{}
 	}
@@ -227,7 +227,7 @@ func (c *ASiCContent) RootLevelSignedDocuments() []model.DSSDocument {
 
 // AllManifestDocuments returns a list of all found manifest documents. Port of
 // getAllManifestDocuments().
-func (c *ASiCContent) AllManifestDocuments() []model.DSSDocument {
+func (c *Content) AllManifestDocuments() []model.DSSDocument {
 	allManifestsList := make([]model.DSSDocument, 0)
 	allManifestsList = append(allManifestsList, c.ManifestDocuments()...)
 	allManifestsList = append(allManifestsList, c.ArchiveManifestDocuments()...)
@@ -236,7 +236,7 @@ func (c *ASiCContent) AllManifestDocuments() []model.DSSDocument {
 }
 
 // AllDocuments gets all documents. Port of getAllDocuments().
-func (c *ASiCContent) AllDocuments() []model.DSSDocument {
+func (c *Content) AllDocuments() []model.DSSDocument {
 	allDocuments := make([]model.DSSDocument, 0)
 	// "mimetype" shall be the first file in the ASiC container;
 	if c.mimeTypeDocument != nil {

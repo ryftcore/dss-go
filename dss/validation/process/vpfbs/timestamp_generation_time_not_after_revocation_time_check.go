@@ -28,8 +28,8 @@ type TimestampGenerationTimeNotAfterRevocationTimeCheck[T any] struct {
 
 // NewTimestampGenerationTimeNotAfterRevocationTimeCheck is the default
 // constructor. Port of
-// TimestampGenerationTimeNotAfterRevocationTimeCheck(I18nProvider, T, TimestampWrapper, Date, LevelRule).
-func NewTimestampGenerationTimeNotAfterRevocationTimeCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampGenerationTimeNotAfterRevocationTimeCheck(Provider, T, TimestampWrapper, Date, LevelRule).
+func NewTimestampGenerationTimeNotAfterRevocationTimeCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	contentTimestamp *diagnostic.TimestampWrapper, signingCertificateRevocationTime *time.Time,
 	constraint policy.LevelRule) *TimestampGenerationTimeNotAfterRevocationTimeCheck[T] {
 	c := &TimestampGenerationTimeNotAfterRevocationTimeCheck[T]{

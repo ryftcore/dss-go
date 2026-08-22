@@ -18,8 +18,8 @@ type CheckSubXCVResult struct {
 }
 
 // NewCheckSubXCVResult is the default constructor. Port of
-// CheckSubXCVResult(I18nProvider, XmlXCV, XmlSubXCV, LevelRule).
-func NewCheckSubXCVResult(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlXCV],
+// CheckSubXCVResult(Provider, XmlXCV, XmlSubXCV, LevelRule).
+func NewCheckSubXCVResult(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlXCV],
 	subResult *jaxb.XmlSubXCV, constraint policy.LevelRule) *CheckSubXCVResult {
 	c := &CheckSubXCVResult{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, subResult.Id),

@@ -30,8 +30,8 @@ type SignatureIntactCheck[T any] struct {
 }
 
 // NewSignatureIntactCheck is the default constructor. Port of
-// SignatureIntactCheck(I18nProvider, T, TokenProxy, Context, LevelRule).
-func NewSignatureIntactCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// SignatureIntactCheck(Provider, T, TokenProxy, Context, LevelRule).
+func NewSignatureIntactCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	token diagnostic.TokenProxy, context enumerations.Context, constraint policy.LevelRule) *SignatureIntactCheck[T] {
 	c := &SignatureIntactCheck[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

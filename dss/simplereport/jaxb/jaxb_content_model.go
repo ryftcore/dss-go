@@ -3,7 +3,7 @@
 // express on its own (see xml.go's "self-closing tags" quirk).
 //
 // dss/diagnostic/jaxb derives this table by reflection over the model
-// (jaxb_content_model.go there) because DiagnosticData.xsd is too large to
+// (jaxb_content_model.go there) because Data.xsd is too large to
 // hand-verify and reuses a handful of element names across genuinely
 // different content models. SimpleReport.xsd is small enough to enumerate
 // directly and, checked against the schema, binds every element name to

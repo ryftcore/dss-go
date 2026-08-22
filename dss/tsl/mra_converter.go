@@ -30,7 +30,7 @@ func (c *MRAConverter) Apply(t *jaxb.MutualRecognitionAgreementInformationType) 
 	result.SetPointingContractingPartyLegislation(t.PointingContractingPartyLegislation)
 	result.SetPointedContractingPartyLegislation(t.PointedContractingPartyLegislation)
 
-	var serviceEquivalences []*timedependent.MutableTimeDependentValues[*tslmodel.ServiceEquivalence]
+	var serviceEquivalences []*timedependent.MutableValues[*tslmodel.ServiceEquivalence]
 	for _, trustServiceEquivalenceInformationType := range t.TrustServiceEquivalenceInformation {
 		serviceEquivalences = append(serviceEquivalences, c.converter.Apply(trustServiceEquivalenceInformationType))
 	}

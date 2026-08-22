@@ -1,11 +1,11 @@
 // Ported from dss-enumerations/.../TokenExtractionStrategy.java (DSS 6.5.RC1).
 //
-// Defines a representation of tokens in the DiagnosticData (as binaries or
+// Defines a representation of tokens in the Data (as binaries or
 // digests).
 package enumerations
 
 // TokenExtractionStrategy defines which token types get extracted into the
-// DiagnosticData.
+// Data.
 type TokenExtractionStrategy string
 
 const (

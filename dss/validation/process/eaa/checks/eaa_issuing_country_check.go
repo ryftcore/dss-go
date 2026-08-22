@@ -21,7 +21,7 @@ type EAAIssuingCountryCheck struct {
 }
 
 // NewEAAIssuingCountryCheck is the default constructor.
-func NewEAAIssuingCountryCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAIssuingCountryCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAAIssuingCountryCheck {
 	c := &EAAIssuingCountryCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

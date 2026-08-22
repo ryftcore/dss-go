@@ -31,8 +31,8 @@ type TLSCertificateBindingSignatureExpiryDateCheck struct {
 
 // NewTLSCertificateBindingSignatureExpiryDateCheck is the default
 // constructor. Port of
-// TLSCertificateBindingSignatureExpiryDateCheck(I18nProvider, XmlValidationQWACProcess, Date, SignatureWrapper, List, LevelRule).
-func NewTLSCertificateBindingSignatureExpiryDateCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// TLSCertificateBindingSignatureExpiryDateCheck(Provider, XmlValidationQWACProcess, Date, SignatureWrapper, List, LevelRule).
+func NewTLSCertificateBindingSignatureExpiryDateCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	currentTime time.Time, signature *diagnostic.SignatureWrapper, certificates []*diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *TLSCertificateBindingSignatureExpiryDateCheck {
 	c := &TLSCertificateBindingSignatureExpiryDateCheck{

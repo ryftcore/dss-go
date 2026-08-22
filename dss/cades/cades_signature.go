@@ -39,7 +39,7 @@
 //     sets only when it extracts a SignerInformation from another SignerInfo's countersignature
 //     unsigned attribute (SignerInformationStore#getCounterSignatures) - not derivable from the
 //     encoded SignerInfo itself, and cmscore.SignerInfo (frozen) carries no such flag. Every
-//     code path that builds a counter-signature CAdESSignature (CounterSignatures below) calls
+//     code path that builds a counter-signature Signature (CounterSignatures below) calls
 //     SetMasterSignature immediately, and nothing observes IsCounterSignature before that call
 //     completes, so DefaultAdvancedSignature's own masterSignature-based IsCounterSignature() is
 //     behaviourally equivalent here; IsCounterSignature is still redefined explicitly below
@@ -95,7 +95,7 @@ import (
 
 // The PKCS#9 attribute types this file reads that no other landed file of this package has
 // already declared (see cades_utils.go / cades_level_baseline_b.go for the rest), i.e. the
-// org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers constants CAdESSignature static-imports.
+// org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers constants Signature static-imports.
 // They keep their exact Java field name behind the "OID_" prefix, the convention every other
 // file of this package already established.
 var (
@@ -112,7 +112,7 @@ var (
 // CAdESSignature is the CAdES Signature class helper. Port of the CAdESSignature class.
 //
 // serialVersionUID and java.io.Serializable are dropped (no Go counterpart).
-type CAdESSignature struct {
+type Signature struct {
 	validation.DefaultAdvancedSignature
 
 	// cmsDocument is the CMS of the signature. Port of the private final CMS cms field.
@@ -131,24 +131,24 @@ type CAdESSignature struct {
 	// replacement for reading the (inaccessible, base-package-private)
 	// signatureCryptographicVerification field directly the way Java's own method does for its
 	// "already computed" early-return check. It is set to the same
-	// *signature.SignatureCryptographicVerification value handed to
+	// *signature.CryptographicVerification value handed to
 	// SetSignatureCryptographicVerification, so the two never disagree.
-	cachedCryptoVerification *signature.SignatureCryptographicVerification
+	cachedCryptoVerification *signature.CryptographicVerification
 }
 
-// NewCAdESSignature is the default constructor for CAdESSignature.
+// NewSignature is the default constructor for Signature.
 // Port of the public CAdESSignature(CMS, SignerInformation) constructor.
 //
 // Panics with the Java message when cmsDocument or signerInformation is missing
 // (Objects.requireNonNull).
-func NewCAdESSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerInfo) *CAdESSignature {
+func NewSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerInfo) *Signature {
 	if cmsDocument == nil {
 		panic("CMS cannot be null!")
 	}
 	if signerInformation == nil {
 		panic("SignerInformation must be provided!")
 	}
-	s := &CAdESSignature{
+	s := &Signature{
 		DefaultAdvancedSignature: validation.NewDefaultAdvancedSignatureBase(),
 		cmsDocument:              cmsDocument,
 		signerInformation:        signerInformation,
@@ -158,7 +158,7 @@ func NewCAdESSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerIn
 }
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
-func (s *CAdESSignature) SignatureForm() enumerations.SignatureForm {
+func (s *Signature) SignatureForm() enumerations.SignatureForm {
 	return enumerations.SignatureFormCAdES
 }
 
@@ -168,9 +168,9 @@ func (s *CAdESSignature) SignatureForm() enumerations.SignatureForm {
 // Panics with the underlying error's message when the source cannot be built: the Java
 // constructor call is not guarded by a try/catch, so an unchecked exception here would
 // propagate out of the Java getter uncaught.
-func (s *CAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
+func (s *Signature) CertificateSource() *spi.SignatureCertificateSource {
 	if s.OfflineCertificateSource() == nil {
-		cadesCertificateSource, err := NewCAdESCertificateSource(s.cmsDocument, s.signerInformation)
+		cadesCertificateSource, err := NewCertificateSource(s.cmsDocument, s.signerInformation)
 		if err != nil {
 			panic(err)
 		}
@@ -181,9 +181,9 @@ func (s *CAdESSignature) CertificateSource() *spi.SignatureCertificateSource {
 
 // CRLSource gets a CRL source which contains ALL CRLs embedded in the signature.
 // Port of getCRLSource().
-func (s *CAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
+func (s *Signature) CRLSource() spi.OfflineRevocationSource[revocation.CRL] {
 	if s.SignatureCRLSource() == nil {
-		crlSource, err := NewCAdESCRLSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
+		crlSource, err := NewCRLSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
 		if err != nil {
 			// Upstream logs "Error in computing or in format of the algorithm: just
 			// continue..." and leaves signatureCRLSource null (will try to get online
@@ -201,9 +201,9 @@ func (s *CAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL]
 // Panics with the underlying error's message when the source cannot be built: the Java
 // constructor call is not guarded by a try/catch, so an unchecked exception here would
 // propagate out of the Java getter uncaught.
-func (s *CAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
+func (s *Signature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP] {
 	if s.SignatureOCSPSource() == nil {
-		ocspSource, err := NewCAdESOCSPSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
+		ocspSource, err := NewOCSPSource(s.cmsDocument, s.signerInformation.UnsignedAttributes)
 		if err != nil {
 			panic(err)
 		}
@@ -217,28 +217,28 @@ func (s *CAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCS
 // Go interface satisfaction needs the exact validation.TimestampSource return type, so CAdES
 // callers needing the concrete type assert on the result (as counterSignatureTimestampSource
 // already does in cades_timestamp_source.go via the plain AdvancedSignature.TimestampSource()).
-func (s *CAdESSignature) TimestampSource() validation.TimestampSource {
+func (s *Signature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
-		s.SetSignatureTimestampSource(NewCAdESTimestampSource(s))
+		s.SetSignatureTimestampSource(NewTimestampSource(s))
 	}
 	return s.SignatureTimestampSource()
 }
 
 // SignerId returns the SignerIdentifier of the related signerInformation.
 // Port of the public SignerId getSignerId().
-func (s *CAdESSignature) SignerId() *cmscore.SignerIdentifier {
+func (s *Signature) SignerId() *cmscore.SignerIdentifier {
 	return s.signerInformation.SID
 }
 
 // FindSignatureScopes finds signature scopes. Port of the protected findSignatureScopes().
-func (s *CAdESSignature) FindSignatureScopes() []scope.SignatureScope {
-	return NewCAdESSignatureScopeFinder().FindSignatureScope(s)
+func (s *Signature) FindSignatureScopes() []scope.SignatureScope {
+	return NewSignatureScopeFinder().FindSignatureScope(s)
 }
 
 // BuildSignaturePolicy extracts a signature policy from a signature and builds the object.
 // Port of the protected buildSignaturePolicy().
-func (s *CAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSigPolicyId)
+func (s *Signature) BuildSignaturePolicy() *signature.Policy {
+	attribute := UtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSigPolicyId)
 	if attribute == nil {
 		return nil
 	}
@@ -251,7 +251,7 @@ func (s *CAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
 	}
 
 	if attrValue.IsUniversal(asn1ber.TagNull) {
-		return signature.NewSignaturePolicy()
+		return signature.NewPolicy()
 	}
 
 	// SignaturePolicyIdentifier ::= CHOICE {
@@ -270,7 +270,7 @@ func (s *CAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
 	if err != nil {
 		return nil
 	}
-	sigPolicy := signature.NewSignaturePolicyWithIdentifier(policyIdOID.String())
+	sigPolicy := signature.NewPolicyWithIdentifier(policyIdOID.String())
 
 	// OtherHashAlgAndValue ::= SEQUENCE { hashAlgorithm AlgorithmIdentifier, hashValue OCTET STRING }
 	sigPolicyHash := children[1]
@@ -305,7 +305,7 @@ func (s *CAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
 // Every entry is processed independently: a malformed SigPolicyQualifierInfo is skipped, as
 // Java's per-entry try/catch(Exception) skips it (LOG.warn "Unable to read SigPolicyQualifierInfo
 // {} : {}" dropped).
-func (s *CAdESSignature) buildSigPolicyQualifiers(sigPolicy *signature.SignaturePolicy, sigPolicyQualifiers *asn1ber.Element) {
+func (s *Signature) buildSigPolicyQualifiers(sigPolicy *signature.Policy, sigPolicyQualifiers *asn1ber.Element) {
 	if !sigPolicyQualifiers.IsUniversal(asn1ber.TagSequence) || !sigPolicyQualifiers.IsConstructed() {
 		return
 	}
@@ -317,7 +317,7 @@ func (s *CAdESSignature) buildSigPolicyQualifiers(sigPolicy *signature.Signature
 // buildSigPolicyQualifierInfo ports one iteration's try body: SigPolicyQualifierInfo ::=
 // SEQUENCE { sigPolicyQualifierId SigPolicyQualifierId, sigQualifier ANY DEFINED BY
 // sigPolicyQualifierId }.
-func (s *CAdESSignature) buildSigPolicyQualifierInfo(sigPolicy *signature.SignaturePolicy, qualifierInfo *asn1ber.Element) {
+func (s *Signature) buildSigPolicyQualifierInfo(sigPolicy *signature.Policy, qualifierInfo *asn1ber.Element) {
 	if !qualifierInfo.IsUniversal(asn1ber.TagSequence) || !qualifierInfo.IsConstructed() || len(qualifierInfo.Children()) != 2 {
 		return
 	}
@@ -402,8 +402,8 @@ func cadesIsZeroHash(hashValue []byte) bool {
 
 // SignaturePolicyStore returns the Signature Policy Store from the signature.
 // Port of getSignaturePolicyStore().
-func (s *CAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
-	sigPolicyStore := CAdESUtilsUnsignedAttribute(s.signerInformation, spi.OIDIdAaEtsSigPolicyStore)
+func (s *Signature) SignaturePolicyStore() *model.SignaturePolicyStore {
+	sigPolicyStore := UtilsUnsignedAttribute(s.signerInformation, spi.OIDIdAaEtsSigPolicyStore)
 	if sigPolicyStore == nil || len(sigPolicyStore.Values) == 0 {
 		return nil
 	}
@@ -445,8 +445,8 @@ func (s *CAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
 
 // SigningTime returns the signing time included within the signature, or nil.
 // Port of getSigningTime().
-func (s *CAdESSignature) SigningTime() *time.Time {
-	attr := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtSigningTime)
+func (s *Signature) SigningTime() *time.Time {
+	attr := UtilsSignedAttribute(s.signerInformation, OIDPkcs9AtSigningTime)
 	if attr == nil {
 		return nil
 	}
@@ -455,7 +455,7 @@ func (s *CAdESSignature) SigningTime() *time.Time {
 		// Upstream logs "Invalid encoding for a signing-time attribute. Skip processing.".
 		return nil
 	}
-	signingDate := CAdESUtilsReadSigningDate(attrValue.Encoded())
+	signingDate := UtilsReadSigningDate(attrValue.Encoded())
 	if signingDate.IsZero() {
 		return nil
 	}
@@ -463,14 +463,14 @@ func (s *CAdESSignature) SigningTime() *time.Time {
 }
 
 // CMS gets the CMS. Port of the public CMS getCMS().
-func (s *CAdESSignature) CMS() *cms.CMS {
+func (s *Signature) CMS() *cms.CMS {
 	return s.cmsDocument
 }
 
-// SignatureProductionPlace returns information about the place where the signature was
+// ProductionPlace returns information about the place where the signature was
 // generated. Port of getSignatureProductionPlace().
-func (s *CAdESSignature) SignatureProductionPlace() *signature.SignatureProductionPlace {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerLocation)
+func (s *Signature) SignatureProductionPlace() *signature.ProductionPlace {
+	attribute := UtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerLocation)
 	if attribute == nil {
 		return nil
 	}
@@ -507,7 +507,7 @@ func (s *CAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 		}
 	}
 
-	signatureProductionPlace := signature.NewSignatureProductionPlace()
+	signatureProductionPlace := signature.NewProductionPlace()
 	if countryName != "" {
 		signatureProductionPlace.SetCountryName(countryName)
 	}
@@ -529,8 +529,8 @@ func (s *CAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 
 // CommitmentTypeIndications obtains the information concerning commitment type indication
 // linked to the signature. Port of getCommitmentTypeIndications().
-func (s *CAdESSignature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsCommitmentType)
+func (s *Signature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
+	attribute := UtilsSignedAttribute(s.signerInformation, OIDIdAaEtsCommitmentType)
 	if attribute == nil {
 		return []*signature.CommitmentTypeIndication{}
 	}
@@ -567,7 +567,7 @@ func (s *CAdESSignature) CommitmentTypeIndications() []*signature.CommitmentType
 
 // SignedAssertions returns the list of embedded signed assertions.
 // Port of getSignedAssertions().
-func (s *CAdESSignature) SignedAssertions() []*signature.SignerRole {
+func (s *Signature) SignedAssertions() []*signature.SignerRole {
 	var result []*signature.SignerRole
 	signerAttrV2 := s.signerAttributeV2()
 	if signerAttrV2 != nil && signerAttrV2.SignedAssertions() != nil {
@@ -579,7 +579,7 @@ func (s *CAdESSignature) SignedAssertions() []*signature.SignerRole {
 }
 
 // ClaimedSignerRoles returns the claimed roles of the signer. Port of getClaimedSignerRoles().
-func (s *CAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
+func (s *Signature) ClaimedSignerRoles() []*signature.SignerRole {
 	signerAttr := s.signerAttributeV1()
 	signerAttrV2 := s.signerAttributeV2()
 
@@ -623,7 +623,7 @@ func cadesClaimedSignerRolesFromAttribute(attributeDER []byte) []*signature.Sign
 
 // CertifiedSignerRoles returns the certified roles of the signer.
 // Port of getCertifiedSignerRoles().
-func (s *CAdESSignature) CertifiedSignerRoles() []*signature.SignerRole {
+func (s *Signature) CertifiedSignerRoles() []*signature.SignerRole {
 	signerAttr := s.signerAttributeV1()
 	signerAttrV2 := s.signerAttributeV2()
 
@@ -785,8 +785,8 @@ func cadesGeneralizedTime(element *asn1ber.Element) time.Time {
 // ClaimedAttributes ::= SEQUENCE OF Attribute, CertifiedAttributes ::= AttributeCertificate (a
 // single value, per RFC 5126) - i.e. org.bouncycastle.asn1.esf.SignerAttribute, which has no DSS
 // port; see cadesLevelBaselineBSignerAttribute for the matching write side.
-func (s *CAdESSignature) signerAttributeV1() *cadesSignerAttributeV1 {
-	idAaEtsSignerAttr := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerAttr)
+func (s *Signature) signerAttributeV1() *cadesSignerAttributeV1 {
+	idAaEtsSignerAttr := UtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerAttr)
 	if idAaEtsSignerAttr == nil {
 		return nil
 	}
@@ -850,8 +850,8 @@ func parseCadesSignerAttributeV1(encoded []byte) (*cadesSignerAttributeV1, error
 }
 
 // signerAttributeV2 ports the private getSignerAttributeV2().
-func (s *CAdESSignature) signerAttributeV2() *cms.SignerAttributeV2 {
-	idAaEtsSignerAttrV2 := CAdESUtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsSignerAttrV2)
+func (s *Signature) signerAttributeV2() *cms.SignerAttributeV2 {
+	idAaEtsSignerAttrV2 := UtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsSignerAttrV2)
 	if idAaEtsSignerAttrV2 == nil {
 		return nil
 	}
@@ -871,7 +871,7 @@ func (s *CAdESSignature) signerAttributeV2() *cms.SignerAttributeV2 {
 
 // EncryptionAlgorithm retrieves the encryption algorithm used for generating the signature.
 // Port of getEncryptionAlgorithm().
-func (s *CAdESSignature) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
+func (s *Signature) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
 	oid := s.encryptionAlgOID()
 	if encryptionAlgorithm, err := enumerations.EncryptionAlgorithmForOID(oid); err == nil {
 		return encryptionAlgorithm
@@ -886,7 +886,7 @@ func (s *CAdESSignature) EncryptionAlgorithm() enumerations.EncryptionAlgorithm 
 
 // DigestAlgorithm retrieves the digest algorithm used for generating the signature.
 // Port of getDigestAlgorithm().
-func (s *CAdESSignature) DigestAlgorithm() enumerations.DigestAlgorithm {
+func (s *Signature) DigestAlgorithm() enumerations.DigestAlgorithm {
 	signatureAlgorithm := s.encryptedDigestAlgo()
 	if signatureAlgorithm != "" {
 		if enumerations.EncryptionAlgorithmRSASSAPSS == signatureAlgorithm.EncryptionAlgorithm() {
@@ -898,7 +898,7 @@ func (s *CAdESSignature) DigestAlgorithm() enumerations.DigestAlgorithm {
 }
 
 // encryptedDigestAlgo ports the private getEncryptedDigestAlgo().
-func (s *CAdESSignature) encryptedDigestAlgo() enumerations.SignatureAlgorithm {
+func (s *Signature) encryptedDigestAlgo() enumerations.SignatureAlgorithm {
 	signatureAlgorithm, err := enumerations.SignatureAlgorithmForOID(s.encryptionAlgOID())
 	if err != nil {
 		return ""
@@ -907,7 +907,7 @@ func (s *CAdESSignature) encryptedDigestAlgo() enumerations.SignatureAlgorithm {
 }
 
 // pssHashAlgorithm ports the private getPSSHashAlgorithm().
-func (s *CAdESSignature) pssHashAlgorithm() enumerations.DigestAlgorithm {
+func (s *Signature) pssHashAlgorithm() enumerations.DigestAlgorithm {
 	encryptionAlgParams := s.encryptionAlgParams()
 	if utils.IsArrayNotEmpty(encryptionAlgParams) && !bytes.Equal(asn1ber.DERNull, encryptionAlgParams) {
 		hashAlgorithm, err := cadesRSASSAPSSParamsHashAlgorithm(encryptionAlgParams)
@@ -952,18 +952,18 @@ func cadesRSASSAPSSParamsHashAlgorithm(encoded []byte) (*asn1ber.AlgorithmIdenti
 // encryptionAlgOID ports SignerInformation#getEncryptionAlgOID(): the OID of the
 // signatureAlgorithm field, exactly as encoded (RFC 3852: "a 'signature algorithm' (encryption
 // + digest algorithms)").
-func (s *CAdESSignature) encryptionAlgOID() string {
+func (s *Signature) encryptionAlgOID() string {
 	return s.signerInformation.SignatureAlgorithm.Algorithm.String()
 }
 
 // digestAlgOID ports SignerInformation#getDigestAlgOID(): the OID of the digestAlgorithm field.
-func (s *CAdESSignature) digestAlgOID() string {
+func (s *Signature) digestAlgOID() string {
 	return s.signerInformation.DigestAlgorithm.Algorithm.String()
 }
 
 // encryptionAlgParams ports SignerInformation#getEncryptionAlgParams(): the DER encoding of the
 // signatureAlgorithm's parameters, nil when absent.
-func (s *CAdESSignature) encryptionAlgParams() []byte {
+func (s *Signature) encryptionAlgParams() []byte {
 	return s.signerInformation.SignatureAlgorithm.Parameters
 }
 
@@ -984,7 +984,7 @@ func cadesDigestAlgorithmForOID(oid string) enumerations.DigestAlgorithm {
 
 // SignatureAlgorithm retrieves the signature algorithm (or cipher) used for generating the
 // signature. Port of getSignatureAlgorithm().
-func (s *CAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
+func (s *Signature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 	return enumerations.SignatureAlgorithmGetAlgorithm(s.EncryptionAlgorithm(), s.DigestAlgorithm())
 }
 
@@ -994,11 +994,11 @@ func (s *CAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 // The early "already computed" return reads s.cachedCryptoVerification rather than the base's
 // own (inaccessible, cross-package-private) signatureCryptographicVerification field, the way
 // Java's own method reads its protected field directly; see that field's doc comment.
-func (s *CAdESSignature) CheckSignatureIntegrity() {
+func (s *Signature) CheckSignatureIntegrity() {
 	if s.cachedCryptoVerification != nil {
 		return
 	}
-	verification := signature.NewSignatureCryptographicVerification()
+	verification := signature.NewCryptographicVerification()
 	s.cachedCryptoVerification = verification
 	s.SetSignatureCryptographicVerification(verification)
 
@@ -1028,12 +1028,12 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 		return
 	}
 
-	// Computed up front (and reused below) so it can gate CAdESSignatureIntegrityValidator.Verify
+	// Computed up front (and reused below) so it can gate SignatureIntegrityValidator.Verify
 	// the way BouncyCastle's SignerInformation#verify itself does: BC recomputes the digest of
 	// the associated content and compares it against the message-digest signed attribute BEFORE
 	// checking the raw signature bytes, throwing CMSSignerDigestMismatchException - and thus
 	// failing every candidate uniformly - on a mismatch. See the contentDigestMismatch field doc
-	// on CAdESSignatureIntegrityValidator for the fixture this fixes.
+	// on SignatureIntegrityValidator for the fixture this fixes.
 	refValidations := s.ReferenceValidationsForSignerInformation(signerInformationToCheck)
 	contentDigestMismatch := false
 	for _, referenceValidation := range refValidations {
@@ -1043,7 +1043,7 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 		}
 	}
 
-	signingCertificateValidator := NewCAdESSignatureIntegrityValidator(signerInformationToCheck, signedContent, contentDigestMismatch)
+	signingCertificateValidator := NewSignatureIntegrityValidator(signerInformationToCheck, signedContent, contentDigestMismatch)
 	certificateValidity := signingCertificateValidator.Validate(candidatesForSigningCertificate)
 	if certificateValidity != nil {
 		if err := candidatesForSigningCertificate.SetTheCertificateValidity(certificateValidity); err != nil {
@@ -1064,14 +1064,14 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 	verification.SetReferenceDataIntact(referenceDataIntact)
 }
 
-// signedContentForIntegrityCheck computes the bytes CAdESSignatureIntegrityValidator.Verify
+// signedContentForIntegrityCheck computes the bytes SignatureIntegrityValidator.Verify
 // checks the signature against, matching that file's own documented contract (see
 // cades_signature_integrity_validator.go's header): the DER encoding of the SignedAttrs value
 // as a SET OF (RFC 5652 clause 5.4) when signerInformationToCheck carries signed attributes -
 // every CAdES baseline profile requires them - or the signed content itself otherwise (BC's
 // SignerInformation#verify falls back to the CMSSignedData's own encapsulated/detached content
 // in that case, a back-reference cmscore.SignerInfo does not carry).
-func (s *CAdESSignature) signedContentForIntegrityCheck(signerInformationToCheck *cmscore.SignerInfo) ([]byte, error) {
+func (s *Signature) signedContentForIntegrityCheck(signerInformationToCheck *cmscore.SignerInfo) ([]byte, error) {
 	if signerInformationToCheck.HasSignedAttributes() {
 		return signerInformationToCheck.SignedAttributes.DERSetEncoded(), nil
 	}
@@ -1087,7 +1087,7 @@ func (s *CAdESSignature) signedContentForIntegrityCheck(signerInformationToCheck
 
 // ReferenceValidationsForSignerInformation returns the reference validation.
 // Port of the public getReferenceValidations(SignerInformation).
-func (s *CAdESSignature) ReferenceValidationsForSignerInformation(signerInformationToCheck *cmscore.SignerInfo) []*model.ReferenceValidation {
+func (s *Signature) ReferenceValidationsForSignerInformation(signerInformationToCheck *cmscore.SignerInfo) []*model.ReferenceValidation {
 	if s.CachedReferenceValidations() == nil {
 		originalDocument, err := s.SignerDocumentContent()
 		if err != nil {
@@ -1114,13 +1114,13 @@ func (s *CAdESSignature) ReferenceValidationsForSignerInformation(signerInformat
 // NOTE: Some differences are possible with PAdES.
 //
 // Port of the protected getSignerDocumentContent().
-func (s *CAdESSignature) SignerDocumentContent() (model.DSSDocument, error) {
+func (s *Signature) SignerDocumentContent() (model.DSSDocument, error) {
 	return s.OriginalDocument()
 }
 
 // verifyDigestAlgorithm ports the private verifyDigestAlgorithm(DSSDocument,
 // Set<DigestAlgorithm>, Digest).
-func (s *CAdESSignature) verifyDigestAlgorithm(originalDocument model.DSSDocument, messageDigestAlgorithms []enumerations.DigestAlgorithm, messageDigest *model.Digest) bool {
+func (s *Signature) verifyDigestAlgorithm(originalDocument model.DSSDocument, messageDigestAlgorithms []enumerations.DigestAlgorithm, messageDigest *model.Digest) bool {
 	if utils.IsCollectionNotEmpty(messageDigestAlgorithms) {
 		for _, digestAlgorithm := range messageDigestAlgorithms {
 			base64Digest, err := originalDocument.DigestValue(digestAlgorithm)
@@ -1140,7 +1140,7 @@ func (s *CAdESSignature) verifyDigestAlgorithm(originalDocument model.DSSDocumen
 }
 
 // getManifestEntryValidation ports the private getManifestEntryValidation().
-func (s *CAdESSignature) getManifestEntryValidation() []*model.ReferenceValidation {
+func (s *Signature) getManifestEntryValidation() []*model.ReferenceValidation {
 	manifestEntryValidations := []*model.ReferenceValidation{}
 	manifestFile := s.ManifestFile()
 	if manifestFile == nil {
@@ -1162,7 +1162,7 @@ func (s *CAdESSignature) getManifestEntryValidation() []*model.ReferenceValidati
 
 // ReferenceValidations returns individual validation for each reference (XAdES, JAdES) or for
 // the message-imprint (CAdES). Port of getReferenceValidations().
-func (s *CAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
+func (s *Signature) ReferenceValidations() []*model.ReferenceValidation {
 	s.CheckSignatureIntegrity()
 	return s.CachedReferenceValidations()
 }
@@ -1177,7 +1177,7 @@ func (s *CAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 // value type with no such aliasing, so SetDigest is called again after every mutation that must
 // be observable afterward, reproducing the same externally-visible state at each point Java's
 // object graph would show it.
-func (s *CAdESSignature) messageDigestReferenceValidation(originalDocument model.DSSDocument, messageDigestValue []byte) *model.ReferenceValidation {
+func (s *Signature) messageDigestReferenceValidation(originalDocument model.DSSDocument, messageDigestValue []byte) *model.ReferenceValidation {
 	messageDigestValidation := model.NewReferenceValidation()
 	messageDigestValidation.SetType(enumerations.DigestMatcherTypeMessageDigest)
 
@@ -1258,7 +1258,7 @@ func cadesAppendDigestAlgorithm(candidates []enumerations.DigestAlgorithm, diges
 //
 // See the file header DEVIATION note: this port has no equivalent of BC's
 // SignerInformation#getContentDigest() and always reports "not found" here.
-func (s *CAdESSignature) contentReferenceValidation(_ model.DSSDocument, _ *cmscore.SignerInfo) *model.ReferenceValidation {
+func (s *Signature) contentReferenceValidation(_ model.DSSDocument, _ *cmscore.SignerInfo) *model.ReferenceValidation {
 	contentValidation := model.NewReferenceValidation()
 	contentValidation.SetType(enumerations.DigestMatcherTypeContentDigest)
 	return contentValidation
@@ -1269,18 +1269,18 @@ func (s *CAdESSignature) contentReferenceValidation(_ model.DSSDocument, _ *cmsc
 // component: in case of CAdES signatures, the input to the digest value computation shall be
 // one of the DER-encoded instances of SignedInfo type present within the CMS structure.
 // Port of buildSignatureDigestReference(DigestAlgorithm).
-func (s *CAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.SignatureDigestReference {
+func (s *Signature) BuildSignatureDigestReference(digestAlgorithm enumerations.DigestAlgorithm) *signature.DigestReference {
 	derEncodedSignerInfo := s.signerInformation.DER()
 	digestValue, err := spi.DSSUtilsDigest(digestAlgorithm, derEncodedSignerInfo)
 	if err != nil {
 		panic(err)
 	}
-	return signature.NewSignatureDigestReference(model.NewDigest(digestAlgorithm, digestValue))
+	return signature.NewDigestReference(model.NewDigest(digestAlgorithm, digestValue))
 }
 
 // DataToBeSignedRepresentation returns the DTBSR, which is then used to create the signature.
 // Port of getDataToBeSignedRepresentation().
-func (s *CAdESSignature) DataToBeSignedRepresentation() model.Digest {
+func (s *Signature) DataToBeSignedRepresentation() model.Digest {
 	referenceValidations := s.ReferenceValidations()
 	// only one is allowed for CMS
 	referenceValidation := referenceValidations[0]
@@ -1288,7 +1288,7 @@ func (s *CAdESSignature) DataToBeSignedRepresentation() model.Digest {
 	case enumerations.DigestMatcherTypeMessageDigest:
 		digestAlgorithm := s.DigestAlgorithm()
 		if digestAlgorithm != "" {
-			signedAttributes := CAdESUtilsSignedAttributes(s.signerInformation)
+			signedAttributes := UtilsSignedAttributes(s.signerInformation)
 			derEncoded := signedAttributes.DERSetEncoded()
 			digestValue, err := spi.DSSUtilsDigest(digestAlgorithm, derEncoded)
 			if err != nil {
@@ -1307,15 +1307,15 @@ func (s *CAdESSignature) DataToBeSignedRepresentation() model.Digest {
 
 // recreateSignerInformation recreates a SignerInformation with the content using a CMSParser.
 // Port of the private recreateSignerInformation(), declared "throws CMSException".
-func (s *CAdESSignature) recreateSignerInformation() (*cmscore.SignerInfo, error) {
+func (s *Signature) recreateSignerInformation() (*cmscore.SignerInfo, error) {
 	dssDocument := s.DetachedContents()[0] // only one element for CAdES Signature
 	digestCalculatorProvider := cms.NewPrecomputedDigestCalculatorProvider(dssDocument)
-	return cms.CMSUtilsRecomputeSignerInformation(s.cmsDocument, s.SignerId(), digestCalculatorProvider, CAdESUtilsDefaultResourcesHandlerBuilder)
+	return cms.UtilsRecomputeSignerInformation(s.cmsDocument, s.SignerId(), digestCalculatorProvider, CAdESUtilsDefaultResourcesHandlerBuilder)
 }
 
 // MessageDigestAlgorithms returns a set of used DigestAlgorithms incorporated into the CMS.
 // Port of the public getMessageDigestAlgorithms().
-func (s *CAdESSignature) MessageDigestAlgorithms() []enumerations.DigestAlgorithm {
+func (s *Signature) MessageDigestAlgorithms() []enumerations.DigestAlgorithm {
 	var result []enumerations.DigestAlgorithm
 	for _, algorithmIdentifier := range s.cmsDocument.DigestAlgorithmIDs() {
 		digestAlgorithm := cadesDigestAlgorithmForOID(algorithmIdentifier.Algorithm.String())
@@ -1328,8 +1328,8 @@ func (s *CAdESSignature) MessageDigestAlgorithms() []enumerations.DigestAlgorith
 
 // MessageDigestValue returns a digest value incorporated in an attribute "message-digest" in
 // CMS Signed Data. Port of the public getMessageDigestValue().
-func (s *CAdESSignature) MessageDigestValue() []byte {
-	messageDigestAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtMessageDigest)
+func (s *Signature) MessageDigestValue() []byte {
+	messageDigestAttribute := UtilsSignedAttribute(s.signerInformation, OIDPkcs9AtMessageDigest)
 	if messageDigestAttribute == nil {
 		return nil
 	}
@@ -1348,8 +1348,8 @@ func (s *CAdESSignature) MessageDigestValue() []byte {
 
 // ContentType returns the value of the signed attribute content-type.
 // Port of getContentType().
-func (s *CAdESSignature) ContentType() string {
-	contentTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtContentType)
+func (s *Signature) ContentType() string {
+	contentTypeAttribute := UtilsSignedAttribute(s.signerInformation, OIDPkcs9AtContentType)
 	if contentTypeAttribute == nil {
 		return ""
 	}
@@ -1371,8 +1371,8 @@ func (s *CAdESSignature) ContentType() string {
 }
 
 // MimeType returns the value of the signed attribute mime-type. Port of getMimeType().
-func (s *CAdESSignature) MimeType() string {
-	mimeTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsMimeType)
+func (s *Signature) MimeType() string {
+	mimeTypeAttribute := UtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsMimeType)
 	if mimeTypeAttribute == nil {
 		return ""
 	}
@@ -1386,13 +1386,13 @@ func (s *CAdESSignature) MimeType() string {
 
 // SignatureType returns the value of the signature type protected header (JAdES, CB-AdES).
 // Port of getSignatureType(); not supported for CAdES.
-func (s *CAdESSignature) SignatureType() string {
+func (s *Signature) SignatureType() string {
 	return ""
 }
 
 // ContentIdentifier gets ContentIdentifier String. Port of the public getContentIdentifier().
-func (s *CAdESSignature) ContentIdentifier() string {
-	contentIdentifierAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaContentIdentifier)
+func (s *Signature) ContentIdentifier() string {
+	contentIdentifierAttribute := UtilsSignedAttribute(s.signerInformation, OIDIdAaContentIdentifier)
 	if contentIdentifierAttribute == nil {
 		return ""
 	}
@@ -1411,8 +1411,8 @@ func (s *CAdESSignature) ContentIdentifier() string {
 }
 
 // ContentHints gets Content Hints. Port of the public getContentHints().
-func (s *CAdESSignature) ContentHints() string {
-	contentHintAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaContentHint)
+func (s *Signature) ContentHints() string {
+	contentHintAttribute := UtilsSignedAttribute(s.signerInformation, OIDIdAaContentHint)
 	if contentHintAttribute == nil {
 		return ""
 	}
@@ -1459,31 +1459,31 @@ func (s *CAdESSignature) ContentHints() string {
 }
 
 // SignerInformation gets a SignedInformation. Port of the public getSignerInformation().
-func (s *CAdESSignature) SignerInformation() *cmscore.SignerInfo {
+func (s *Signature) SignerInformation() *cmscore.SignerInfo {
 	return s.signerInformation
 }
 
 // SignatureValue returns the digital signature value. Port of getSignatureValue().
-func (s *CAdESSignature) SignatureValue() []byte {
+func (s *Signature) SignatureValue() []byte {
 	return s.signerInformation.Signature
 }
 
 // IsCounterSignature checks if the current signature is a counter signature (i.e. has a master
 // signature). Port of isCounterSignature(); see the file header DEVIATION note.
-func (s *CAdESSignature) IsCounterSignature() bool {
+func (s *Signature) IsCounterSignature() bool {
 	return s.MasterSignature() != nil
 }
 
 // CounterSignatures returns a list of counter signatures applied to this signature.
 // Port of getCounterSignatures().
-func (s *CAdESSignature) CounterSignatures() []validation.AdvancedSignature {
+func (s *Signature) CounterSignatures() []validation.AdvancedSignature {
 	if s.CachedCounterSignatures() != nil {
 		return s.CachedCounterSignatures()
 	}
 
 	var counterSignatures []validation.AdvancedSignature
 	for _, counterSignerInformation := range s.CounterSignatureStore().SignerInfos() {
-		counterSignature := NewCAdESSignature(s.cmsDocument, counterSignerInformation)
+		counterSignature := NewSignature(s.cmsDocument, counterSignerInformation)
 		counterSignature.SetFilename(s.Filename())
 		counterSignature.SetMasterSignature(s)
 		counterSignatures = append(counterSignatures, counterSignature)
@@ -1492,25 +1492,25 @@ func (s *CAdESSignature) CounterSignatures() []validation.AdvancedSignature {
 	return counterSignatures
 }
 
-// CAdESSignerInformationStore is this port's counterpart of BC's SignerInformationStore for the
+// SignerInformationStore is this port's counterpart of BC's SignerInformationStore for the
 // narrow purpose CounterSignatureStore below serves: a collection of SignerInfos exposing the
-// single SignerInfos() accessor CAdESSignatureIdentifierBuilder needs. Building a full *cms.CMS
+// single SignerInfos() accessor SignatureIdentifierBuilder needs. Building a full *cms.CMS
 // instead would need a complete SignedData this counter-signature list does not have, exactly as
 // Java's own SignerInformationStore carries no CMSSignedData of its own either; sharing the
-// SignerInfos() method name is what CAdESSignatureIdentifierBuilder actually needs, so it is
+// SignerInfos() method name is what SignatureIdentifierBuilder actually needs, so it is
 // reproduced here on a lightweight named slice type instead.
-type CAdESSignerInformationStore []*cmscore.SignerInfo
+type SignerInformationStore []*cmscore.SignerInfo
 
 // SignerInfos returns the underlying SignerInfo slice. Port of SignerInformationStore#getSigners().
-func (st CAdESSignerInformationStore) SignerInfos() []*cmscore.SignerInfo { return st }
+func (st SignerInformationStore) SignerInfos() []*cmscore.SignerInfo { return st }
 
 // CounterSignatureStore returns a SignerInformationStore containing counter signatures.
 // Port of the protected getCounterSignatureStore().
-func (s *CAdESSignature) CounterSignatureStore() CAdESSignerInformationStore {
+func (s *Signature) CounterSignatureStore() SignerInformationStore {
 	if s.counterSignaturesStore == nil {
 		s.counterSignaturesStore = cadesCounterSignaturesOf(s.signerInformation)
 	}
-	return CAdESSignerInformationStore(s.counterSignaturesStore)
+	return SignerInformationStore(s.counterSignaturesStore)
 }
 
 // cadesCounterSignaturesOf ports SignerInformationStore SignerInformation#getCounterSignatures():
@@ -1541,29 +1541,29 @@ func cadesCounterSignaturesOf(signerInformation *cmscore.SignerInfo) []*cmscore.
 // Panics with the underlying error's message on failure: Java's DSSException is unchecked and
 // AdvancedSignature has no accessor named getOriginalDocument that could return an error; the
 // only caller within this file (SignerDocumentContent) already forwards the error instead.
-func (s *CAdESSignature) OriginalDocument() (model.DSSDocument, error) {
+func (s *Signature) OriginalDocument() (model.DSSDocument, error) {
 	// RFC 5652 ch 11.4.
 	if s.IsCounterSignature() {
 		return model.NewInMemoryDocument(s.MasterSignature().SignatureValue()), nil
 	}
-	return CAdESUtilsOriginalDocument(s.cmsDocument, s.DetachedContents())
+	return UtilsOriginalDocument(s.cmsDocument, s.DetachedContents())
 }
 
 // SignatureIdentifierBuilder returns a builder to define and build a signature Id.
 // Port of the protected getSignatureIdentifierBuilder().
-func (s *CAdESSignature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
-	return NewCAdESSignatureIdentifierBuilder(s)
+func (s *Signature) SignatureIdentifierBuilder() validation.SignatureIdentifierBuilder {
+	return NewSignatureIdentifierBuilder(s)
 }
 
 // DAIdentifier returns an identifier provided by the Driving Application (DA); not applicable
 // for CAdES. Port of getDAIdentifier().
-func (s *CAdESSignature) DAIdentifier() string {
+func (s *Signature) DAIdentifier() string {
 	return ""
 }
 
 // SignerInformationStoreInfos returns a Set of CertificateIdentifier extracted from a
 // SignerInformationStore of CMS Signed Data. Port of the public getSignerInformationStoreInfos().
-func (s *CAdESSignature) SignerInformationStoreInfos() []*spi.SignerIdentifier {
+func (s *Signature) SignerInformationStoreInfos() []*spi.SignerIdentifier {
 	return s.CertificateSource().AllCertificateIdentifiers()
 }
 
@@ -1573,7 +1573,7 @@ func (s *CAdESSignature) SignerInformationStoreInfos() []*spi.SignerIdentifier {
 //
 // Panics with the Java message when the timestamp was not validated first (Java's DSSException
 // is unchecked and AddExternalTimestamp has no error return per the AdvancedSignature interface).
-func (s *CAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
+func (s *Signature) AddExternalTimestamp(timestamp *validation.TimestampToken) {
 	if !timestamp.IsProcessed() {
 		panic("Timestamp token must be validated first !")
 	}
@@ -1581,7 +1581,7 @@ func (s *CAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampTok
 }
 
 // DataFoundUpToLevel returns the signature level. Port of getDataFoundUpToLevel().
-func (s *CAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
+func (s *Signature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	if !s.HasBESProfile() {
 		return enumerations.SignatureLevelCMSNotETSI
 	}
@@ -1642,14 +1642,14 @@ func (s *CAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	return enumerations.SignatureLevelCAdEST
 }
 
-// BaselineRequirementsChecker returns the cached instance of the CAdESBaselineRequirementsChecker.
+// BaselineRequirementsChecker returns the cached instance of the BaselineRequirementsChecker.
 // Port of the protected covariant-return override getBaselineRequirementsChecker().
-func (s *CAdESSignature) BaselineRequirementsChecker() *CAdESBaselineRequirementsChecker {
-	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*CAdESBaselineRequirementsChecker)
+func (s *Signature) BaselineRequirementsChecker() *BaselineRequirementsChecker {
+	return s.DefaultAdvancedSignature.BaselineRequirementsChecker().(*BaselineRequirementsChecker)
 }
 
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the
 // signature format. Port of the protected createBaselineRequirementsChecker(CertificateVerifier).
-func (s *CAdESSignature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
-	return NewCAdESBaselineRequirementsChecker(s, certificateVerifier)
+func (s *Signature) CreateBaselineRequirementsChecker(certificateVerifier validation.CertificateVerifier) validation.BaselineRequirementsCheckerContract {
+	return NewBaselineRequirementsChecker(s, certificateVerifier)
 }

@@ -52,8 +52,8 @@ type CertificateAlgorithmObsolescenceValidationCheck[T any] struct {
 
 // NewCertificateAlgorithmObsolescenceValidationCheck is the default
 // constructor. Port of
-// CertificateAlgorithmObsolescenceValidationCheck(I18nProvider, T, XmlAOV, Date, MessageTag, String).
-func NewCertificateAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// CertificateAlgorithmObsolescenceValidationCheck(Provider, T, XmlAOV, Date, MessageTag, String).
+func NewCertificateAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	certificateId string) *CertificateAlgorithmObsolescenceValidationCheck[T] {
 	c := &CertificateAlgorithmObsolescenceValidationCheck[T]{

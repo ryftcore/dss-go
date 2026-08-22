@@ -20,8 +20,8 @@ type OtherTrustAnchorExistsCheck struct {
 }
 
 // NewOtherTrustAnchorExistsCheck is the default constructor. Port of
-// OtherTrustAnchorExistsCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewOtherTrustAnchorExistsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// OtherTrustAnchorExistsCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewOtherTrustAnchorExistsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *OtherTrustAnchorExistsCheck {
 	c := &OtherTrustAnchorExistsCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

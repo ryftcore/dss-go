@@ -56,8 +56,8 @@ func NewPOEExtraction() *POEExtraction {
 }
 
 // Init instantiates a controlTime POE for all used tokens. Port of
-// init(DiagnosticData, Date).
-func (p *POEExtraction) Init(diagnosticData *diagnostic.DiagnosticData, controlTime time.Time) {
+// init(Data, Date).
+func (p *POEExtraction) Init(diagnosticData *diagnostic.Data, controlTime time.Time) {
 
 	controlTimePoe := NewPOE(controlTime)
 

@@ -1,9 +1,9 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/signature/CAdESService.java (DSS 6.5.RC1).
 //
 // Java extends AbstractSignatureService<CAdESSignatureParameters, CAdESTimestampParameters> and
-// implements DocumentSignatureService, CounterSignatureService and
+// implements SignatureService, CounterSignatureService and
 // EvidenceRecordIncorporationService; the Go port embeds
-// document.AbstractSignatureService[*CAdESSignatureParameters, *CAdESTimestampParameters] and
+// document.AbstractSignatureService[*SignatureParameters, *TimestampParameters] and
 // satisfies the three interfaces with the methods below - the compile-time assertions at the end
 // of the file check that it does.
 //
@@ -34,14 +34,14 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// CAdESSignatureExtender is the slice of the abstract CAdESSignatureExtension that
+// SignatureExtender is the slice of the abstract SignatureExtension that
 // getExtensionProfile's local variable is typed with upstream. Java assigns a
-// CAdESLevelBaselineT, a CAdESLevelBaselineLT or a CAdESLevelBaselineLTA to a
-// CAdESSignatureExtension variable; the three are distinct Go types embedding
-// CAdESSignatureExtension, so the switch below needs an interface value, and Go's structural
-// interfaces let this one name exactly the three operations CAdESService then performs. Every
-// CAdES extension satisfies it through its embedded CAdESSignatureExtension.
-type CAdESSignatureExtender interface {
+// LevelBaselineT, a LevelBaselineLT or a LevelBaselineLTA to a
+// SignatureExtension variable; the three are distinct Go types embedding
+// SignatureExtension, so the switch below needs an interface value, and Go's structural
+// interfaces let this one name exactly the three operations Service then performs. Every
+// CAdES extension satisfies it through its embedded SignatureExtension.
+type SignatureExtender interface {
 	// SetResourcesHandlerBuilder sets the DSSResourcesHandlerBuilder used while extending.
 	// Port of CAdESSignatureExtension#setResourcesHandlerBuilder.
 	SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder)
@@ -49,30 +49,30 @@ type CAdESSignatureExtender interface {
 	// ExtendSignatures extends every signature of the given document.
 	// Port of CAdESSignatureExtension#extendSignatures(DSSDocument, CAdESSignatureParameters).
 	ExtendSignatures(signatureToExtend model.DSSDocument,
-		parameters *CAdESSignatureParameters) (model.DSSDocument, error)
+		parameters *SignatureParameters) (model.DSSDocument, error)
 
 	// ExtendCMSSignaturesWithSigner extends the given SignerInformation of a CMS, leaving the
 	// other signers untouched. Port of
 	// CAdESSignatureExtension#extendCMSSignatures(CMS, SignerInformation, CAdESSignatureParameters).
 	ExtendCMSSignaturesWithSigner(cmsToExtend *cms.CMS, signerInformation *cmscore.SignerInfo,
-		parameters *CAdESSignatureParameters) (*cms.CMS, error)
+		parameters *SignatureParameters) (*cms.CMS, error)
 }
 
-// CAdESService is the CAdES implementation of DocumentSignatureService.
-type CAdESService struct {
-	document.AbstractSignatureService[*CAdESSignatureParameters, *CAdESTimestampParameters]
+// Service is the CAdES implementation of SignatureService.
+type Service struct {
+	document.AbstractSignatureService[*SignatureParameters, *TimestampParameters]
 
 	// ResourcesHandlerBuilder is used to create data container objects such as an OutputStream
 	// or a DSSDocument.
 	ResourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESService creates an instance of the CAdESService. A certificate verifier must be
+// NewService creates an instance of the Service. A certificate verifier must be
 // provided. Port of CAdESService(CertificateVerifier).
-func NewCAdESService(certificateVerifier validation.CertificateVerifier) *CAdESService {
+func NewService(certificateVerifier validation.CertificateVerifier) *Service {
 	// Upstream logs "+ CAdESService created".
-	return &CAdESService{
-		AbstractSignatureService: document.NewAbstractSignatureService[*CAdESSignatureParameters, *CAdESTimestampParameters](certificateVerifier),
+	return &Service{
+		AbstractSignatureService: document.NewAbstractSignatureService[*SignatureParameters, *TimestampParameters](certificateVerifier),
 		ResourcesHandlerBuilder:  CAdESUtilsDefaultResourcesHandlerBuilder,
 	}
 }
@@ -81,14 +81,14 @@ func NewCAdESService(certificateVerifier validation.CertificateVerifier) *CAdESS
 // internal objects during the signature creation procedure.
 // NOTE: The DSSResourcesHandlerBuilder is supported only within the 'dss-cms-stream' module!
 // Port of #setResourcesHandlerBuilder.
-func (s *CAdESService) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
-	s.ResourcesHandlerBuilder = cms.CMSUtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
+func (s *Service) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
+	s.ResourcesHandlerBuilder = cms.UtilsResourcesHandlerBuilder(resourcesHandlerBuilder)
 }
 
 // GetContentTimestamp requests a content time-stamp for the document to be signed.
 // Port of #getContentTimestamp.
-func (s *CAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
-	parameters *CAdESSignatureParameters) *validation.TimestampToken {
+func (s *Service) GetContentTimestamp(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *validation.TimestampToken {
 	if s.TspSource == nil {
 		panic("A TSPSource is required !")
 	}
@@ -111,8 +111,8 @@ func (s *CAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
 }
 
 // GetDataToSign retrieves the data to be signed. Port of #getDataToSign.
-func (s *CAdESService) GetDataToSign(toSignDocument model.DSSDocument,
-	parameters *CAdESSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToSign(toSignDocument model.DSSDocument,
+	parameters *SignatureParameters) *model.ToBeSigned {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
 	}
@@ -140,7 +140,7 @@ func (s *CAdESService) GetDataToSign(toSignDocument model.DSSDocument,
 }
 
 // SignDocument signs the document with the provided signature value. Port of #signDocument.
-func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters *CAdESSignatureParameters,
+func (s *Service) SignDocument(toSignDocument model.DSSDocument, parameters *SignatureParameters,
 	signatureValue *model.SignatureValue) model.DSSDocument {
 	if toSignDocument == nil {
 		panic("toSignDocument cannot be null!")
@@ -191,7 +191,7 @@ func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 		}
 	}
 
-	signature, err := cms.CMSUtilsWriteToDSSDocument(signedCMS, s.ResourcesHandlerBuilder)
+	signature, err := cms.UtilsWriteToDSSDocument(signedCMS, s.ResourcesHandlerBuilder)
 	if err != nil {
 		panic(err)
 	}
@@ -207,8 +207,8 @@ func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 
 // ExtendDocument extends the signatures of the given document. All signatures are extended.
 // Port of #extendDocument.
-func (s *CAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
-	parameters *CAdESSignatureParameters) model.DSSDocument {
+func (s *Service) ExtendDocument(toExtendDocument model.DSSDocument,
+	parameters *SignatureParameters) model.DSSDocument {
 	if toExtendDocument == nil {
 		panic("toExtendDocument is not defined!")
 	}
@@ -232,7 +232,7 @@ func (s *CAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 
 // cadesServiceContentToSign retrieves the data to be signed. If this data is located within a
 // signature then it is extracted. Port of the private getContentToSign.
-func cadesServiceContentToSign(toSignDocument model.DSSDocument, parameters *CAdESSignatureParameters,
+func cadesServiceContentToSign(toSignDocument model.DSSDocument, parameters *SignatureParameters,
 	originalCMS *cms.CMS) model.DSSDocument {
 	detachedContents := parameters.DetachedContents()
 	if originalCMS == nil {
@@ -288,19 +288,19 @@ func cadesServiceContainsSignerInfo(signedCMS *cms.CMS, signerInformationToFind 
 
 // extensionProfile returns the extension profile to be used for a CAdES signature augmentation.
 // Port of the private getExtensionProfile.
-func (s *CAdESService) extensionProfile(parameters *CAdESSignatureParameters) CAdESSignatureExtender {
+func (s *Service) extensionProfile(parameters *SignatureParameters) SignatureExtender {
 	signatureLevel := parameters.SignatureLevel()
 	if signatureLevel == "" {
 		panic("SignatureLevel must be defined!")
 	}
-	var cadesSignatureExtension CAdESSignatureExtender
+	var cadesSignatureExtension SignatureExtender
 	switch signatureLevel {
 	case enumerations.SignatureLevelCAdESBaselineT:
-		cadesSignatureExtension = NewCAdESLevelBaselineT(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineT(s.TspSource, s.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLT:
-		cadesSignatureExtension = NewCAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineLT(s.TspSource, s.CertificateVerifier)
 	case enumerations.SignatureLevelCAdESBaselineLTA:
-		cadesSignatureExtension = NewCAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier)
+		cadesSignatureExtension = NewLevelBaselineLTA(s.TspSource, s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
 	}
@@ -310,11 +310,11 @@ func (s *CAdESService) extensionProfile(parameters *CAdESSignatureParameters) CA
 
 // originalCMS returns the CMS of the document when it is a CMS signed message and a parallel
 // signature is requested, nil otherwise. Port of the private getOriginalCMS.
-func (s *CAdESService) originalCMS(dssDocument model.DSSDocument, parameters *CAdESSignatureParameters) *cms.CMS {
+func (s *Service) originalCMS(dssDocument model.DSSDocument, parameters *SignatureParameters) *cms.CMS {
 	var originalCMS *cms.CMS
 	_, isDigestDocument := dssDocument.(*model.DigestDocument)
 	if parameters.IsParallelSignature() && !isDigestDocument && cadesServiceStartsWithSequenceTag(dssDocument) {
-		if parsed, err := cms.CMSUtilsParseToCMS(dssDocument); err == nil {
+		if parsed, err := cms.UtilsParseToCMS(dssDocument); err == nil {
 			originalCMS = parsed
 		}
 		// otherwise: not a parallel signature
@@ -337,13 +337,13 @@ func cadesServiceStartsWithSequenceTag(dssDocument model.DSSDocument) bool {
 }
 
 // cadesServiceAssertSignaturePossible ports the private assertSignaturePossible.
-func cadesServiceAssertSignaturePossible(originalCMS *cms.CMS, parameters *CAdESSignatureParameters) {
+func cadesServiceAssertSignaturePossible(originalCMS *cms.CMS, parameters *SignatureParameters) {
 	if originalCMS.IsDetachedSignature() != (enumerations.SignaturePackagingDetached == parameters.SignaturePackaging()) {
 		panic(fmt.Sprintf("Unable to create a parallel signature with packaging '%s'"+
 			" which is different than the one used in the original signature!", parameters.SignaturePackaging()))
 	}
 	for _, signerInformation := range originalCMS.SignerInfos() {
-		if CAdESUtilsContainsEvidenceRecord(signerInformation) {
+		if UtilsContainsEvidenceRecord(signerInformation) {
 			panic(exception.NewIllegalInputException(
 				"Signature is not possible due to the CMS containing an evidence record unsigned attribute."))
 		}
@@ -352,8 +352,8 @@ func cadesServiceAssertSignaturePossible(originalCMS *cms.CMS, parameters *CAdES
 
 // InitCMSBuilderHelper instantiates a CMSForCAdESBuilderHelper.
 // Port of the protected #initCMSBuilderHelper.
-func (s *CAdESService) InitCMSBuilderHelper(contentToSign model.DSSDocument,
-	signatureParameters *CAdESSignatureParameters, contentSigner cms.ContentSigner) *CMSForCAdESBuilderHelper {
+func (s *Service) InitCMSBuilderHelper(contentToSign model.DSSDocument,
+	signatureParameters *SignatureParameters, contentSigner cms.ContentSigner) *CMSForCAdESBuilderHelper {
 	return NewCMSForCAdESBuilderHelper(contentToSign, signatureParameters, contentSigner).
 		SetTrustedCertificateSource(s.CertificateVerifier.TrustedCertSources())
 }
@@ -368,7 +368,7 @@ func cadesServiceAssertSignaturePackaging(packaging enumerations.SignaturePackag
 
 // AddSignaturePolicyStore incorporates a Signature Policy Store as an unsigned property into the
 // CAdES Signature. Port of #addSignaturePolicyStore.
-func (s *CAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
+func (s *Service) AddSignaturePolicyStore(doc model.DSSDocument,
 	signaturePolicyStore *model.SignaturePolicyStore) model.DSSDocument {
 	if doc == nil {
 		panic("The document cannot be null")
@@ -390,10 +390,10 @@ func (s *CAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
 	return documentWithPolicyStore
 }
 
-// CAdESSignaturePolicyStoreBuilder loads the relevant CAdESSignaturePolicyStoreBuilder.
+// SignaturePolicyStoreBuilder loads the relevant SignaturePolicyStoreBuilder.
 // Port of the protected #getCAdESSignaturePolicyStoreBuilder.
-func (s *CAdESService) CAdESSignaturePolicyStoreBuilder() *CAdESSignaturePolicyStoreBuilder {
-	builder := NewCAdESSignaturePolicyStoreBuilder()
+func (s *Service) CAdESSignaturePolicyStoreBuilder() *SignaturePolicyStoreBuilder {
+	builder := NewSignaturePolicyStoreBuilder()
 	builder.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
 	return builder
 }
@@ -401,8 +401,8 @@ func (s *CAdESService) CAdESSignaturePolicyStoreBuilder() *CAdESSignaturePolicyS
 // GetDataToBeCounterSigned returns the data to be counter-signed for the signature identified by
 // the parameters.
 // Port of the (DSSDocument, CAdESCounterSignatureParameters) #getDataToBeCounterSigned.
-func (s *CAdESService) GetDataToBeCounterSigned(signatureDocument model.DSSDocument,
-	parameters *CAdESCounterSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToBeCounterSigned(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters) *model.ToBeSigned {
 	if signatureDocument == nil {
 		panic("signatureDocument cannot be null!")
 	}
@@ -421,14 +421,14 @@ func (s *CAdESService) GetDataToBeCounterSigned(signatureDocument model.DSSDocum
 		panic(err)
 	}
 
-	return s.GetDataToBeCounterSignedForSigner(signerInfoToCounterSign, &parameters.CAdESSignatureParameters)
+	return s.GetDataToBeCounterSignedForSigner(signerInfoToCounterSign, &parameters.SignatureParameters)
 }
 
 // GetDataToBeCounterSignedForSigner returns the data toBeSigned for a counter signature on the
 // given signerInfoToCounterSign.
 // Port of the (SignerInformation, CAdESSignatureParameters) #getDataToBeCounterSigned.
-func (s *CAdESService) GetDataToBeCounterSignedForSigner(signerInfoToCounterSign *cmscore.SignerInfo,
-	parameters *CAdESSignatureParameters) *model.ToBeSigned {
+func (s *Service) GetDataToBeCounterSignedForSigner(signerInfoToCounterSign *cmscore.SignerInfo,
+	parameters *SignatureParameters) *model.ToBeSigned {
 	signatureAlgorithm := parameters.SignatureAlgorithm()
 	customContentSigner, err := cms.NewCustomContentSignerBuilder().Build(signatureAlgorithm)
 	if err != nil {
@@ -446,8 +446,8 @@ func (s *CAdESService) GetDataToBeCounterSignedForSigner(signerInfoToCounterSign
 
 // CounterSignSignature counter-signs the signature identified by the parameters.
 // Port of #counterSignSignature.
-func (s *CAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
-	parameters *CAdESCounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
+func (s *Service) CounterSignSignature(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters, signatureValue *model.SignatureValue) model.DSSDocument {
 	if signatureDocument == nil {
 		panic("signatureDocument cannot be null!")
 	}
@@ -467,7 +467,7 @@ func (s *CAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 		panic(err)
 	}
 
-	originalCMS, err := cms.CMSUtilsParseToCMS(signatureDocument)
+	originalCMS, err := cms.UtilsParseToCMS(signatureDocument)
 	if err != nil {
 		panic(err)
 	}
@@ -488,18 +488,18 @@ func (s *CAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 	return counterSigned
 }
 
-// CAdESCounterSignatureBuilder loads the relevant CAdESCounterSignatureBuilder.
+// CounterSignatureBuilder loads the relevant CounterSignatureBuilder.
 // Port of the protected #getCAdESCounterSignatureBuilder.
-func (s *CAdESService) CAdESCounterSignatureBuilder() *CAdESCounterSignatureBuilder {
-	counterSignatureBuilder := NewCAdESCounterSignatureBuilder(s.CertificateVerifier)
+func (s *Service) CAdESCounterSignatureBuilder() *CounterSignatureBuilder {
+	counterSignatureBuilder := NewCounterSignatureBuilder(s.CertificateVerifier)
 	counterSignatureBuilder.SetResourcesHandlerBuilder(s.ResourcesHandlerBuilder)
 	return counterSignatureBuilder
 }
 
 // AddSignatureEvidenceRecord incorporates an evidence record into the signature document.
 // Port of #addSignatureEvidenceRecord.
-func (s *CAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
-	parameters *CAdESEvidenceRecordIncorporationParameters) model.DSSDocument {
+func (s *Service) AddSignatureEvidenceRecord(signatureDocument, evidenceRecordDocument model.DSSDocument,
+	parameters *EvidenceRecordIncorporationParameters) model.DSSDocument {
 	if signatureDocument == nil {
 		panic("The signature document cannot be null")
 	}
@@ -507,7 +507,7 @@ func (s *CAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 		panic("The evidence record document cannot be null")
 	}
 
-	builder := NewCAdESEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
+	builder := NewEmbeddedEvidenceRecordBuilder(s.CertificateVerifier)
 	signatureWithEvidenceRecord, err := builder.AddEvidenceRecord(signatureDocument, evidenceRecordDocument, parameters)
 	if err != nil {
 		panic(err)
@@ -522,7 +522,7 @@ func (s *CAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 }
 
 // cadesServiceAssertCounterSignaturePossible ports the private assertCounterSignaturePossible.
-func cadesServiceAssertCounterSignaturePossible(parameters *CAdESCounterSignatureParameters) {
+func cadesServiceAssertCounterSignaturePossible(parameters *CounterSignatureParameters) {
 	if enumerations.SignatureLevelCAdESBaselineB != parameters.SignatureLevel() {
 		panic(fmt.Sprintf("A counter signature with a level '%s' is not supported! "+
 			"Please, use CAdES-BASELINE-B", parameters.SignatureLevel()))
@@ -532,7 +532,7 @@ func cadesServiceAssertCounterSignaturePossible(parameters *CAdESCounterSignatur
 // Compile-time interface assertions, standing in for Java's "extends AbstractSignatureService
 // ... implements CounterSignatureService, EvidenceRecordIncorporationService".
 var (
-	_ document.DocumentSignatureService[*CAdESSignatureParameters, *CAdESTimestampParameters]  = (*CAdESService)(nil)
-	_ document.CounterSignatureService[*CAdESCounterSignatureParameters]                       = (*CAdESService)(nil)
-	_ document.EvidenceRecordIncorporationService[*CAdESEvidenceRecordIncorporationParameters] = (*CAdESService)(nil)
+	_ document.SignatureService[*SignatureParameters, *TimestampParameters]               = (*Service)(nil)
+	_ document.CounterSignatureService[*CounterSignatureParameters]                       = (*Service)(nil)
+	_ document.EvidenceRecordIncorporationService[*EvidenceRecordIncorporationParameters] = (*Service)(nil)
 )

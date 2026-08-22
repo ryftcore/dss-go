@@ -55,7 +55,7 @@ type ETSIValidationReportBuilder struct {
 	currentTime time.Time
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// detailedReport is the detailed report.
 	detailedReport *detailedreport.DetailedReport
@@ -70,8 +70,8 @@ type ETSIValidationReportBuilder struct {
 }
 
 // NewETSIValidationReportBuilder is the default constructor. Port of
-// ETSIValidationReportBuilder(Date, DiagnosticData, DetailedReport).
-func NewETSIValidationReportBuilder(currentTime time.Time, diagnosticData *diagnostic.DiagnosticData,
+// ETSIValidationReportBuilder(Date, Data, DetailedReport).
+func NewETSIValidationReportBuilder(currentTime time.Time, diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport) *ETSIValidationReportBuilder {
 	return &ETSIValidationReportBuilder{
 		currentTime:            currentTime,
@@ -1233,7 +1233,7 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeIndividualDataObjectsTimestamp)
 	// <element name="SigPolicyIdentifier" type="SASigPolicyIdentifierType"/>
 	b.addSigPolicyIdentifier(sigAttributes, sigWrapper)
-	// <element name="SignatureProductionPlace" type="SASignatureProductionPlaceType"/>
+	// <element name="ProductionPlace" type="SASignatureProductionPlaceType"/>
 	b.addProductionPlace(sigAttributes, sigWrapper)
 	// <element name="SignerRole" type="SASignerRoleType"/>
 	b.addSignerRoles(sigAttributes, sigWrapper)

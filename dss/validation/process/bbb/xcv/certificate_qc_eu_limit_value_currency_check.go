@@ -21,8 +21,8 @@ type CertificateQcEuLimitValueCurrencyCheck struct {
 }
 
 // NewCertificateQcEuLimitValueCurrencyCheck is the default constructor. Port
-// of CertificateQcEuLimitValueCurrencyCheck(I18nProvider, XmlSubXCV, CertificateWrapper, ValueRule).
-func NewCertificateQcEuLimitValueCurrencyCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// of CertificateQcEuLimitValueCurrencyCheck(Provider, XmlSubXCV, CertificateWrapper, ValueRule).
+func NewCertificateQcEuLimitValueCurrencyCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.ValueRule) *CertificateQcEuLimitValueCurrencyCheck {
 	c := &CertificateQcEuLimitValueCurrencyCheck{
 		AbstractValueCheckItem: bbb.NewAbstractValueCheckItem(i18nProvider, result, constraint),

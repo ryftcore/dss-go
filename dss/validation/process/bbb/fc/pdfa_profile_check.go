@@ -18,7 +18,7 @@ type PDFAProfileCheck struct {
 }
 
 // NewPDFAProfileCheck is the default constructor.
-func NewPDFAProfileCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewPDFAProfileCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	pdfaProfile string, constraint policy.MultiValuesRule) *PDFAProfileCheck {
 	c := &PDFAProfileCheck{pdfaProfile: pdfaProfile}
 	c.AbstractMultiValuesCheckItem = bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint)

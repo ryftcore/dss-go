@@ -46,7 +46,7 @@ type LongTermValidationCertificateRevocationSelector struct {
 	ltvOverrides LongTermValidationCertificateRevocationSelectorOverrides
 
 	// diagnosticData is the diagnostic data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// BBBs is the map of BasicBuildingBlocks. Exported because Java declares
 	// the field protected.
@@ -59,9 +59,9 @@ type LongTermValidationCertificateRevocationSelector struct {
 
 // NewLongTermValidationCertificateRevocationSelector is the default
 // constructor. Port of
-// LongTermValidationCertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, DiagnosticData, Map, String, ValidationPolicy).
-func NewLongTermValidationCertificateRevocationSelector(i18nProvider *i18n.I18nProvider,
-	certificate *diagnostic.CertificateWrapper, currentTime time.Time, diagnosticData *diagnostic.DiagnosticData,
+// LongTermValidationCertificateRevocationSelector(Provider, CertificateWrapper, Date, Data, Map, String, ValidationPolicy).
+func NewLongTermValidationCertificateRevocationSelector(i18nProvider *i18n.Provider,
+	certificate *diagnostic.CertificateWrapper, currentTime time.Time, diagnosticData *diagnostic.Data,
 	bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
 	validationPolicy policy.ValidationPolicy) *LongTermValidationCertificateRevocationSelector {
 	c := &LongTermValidationCertificateRevocationSelector{}
@@ -76,8 +76,8 @@ func NewLongTermValidationCertificateRevocationSelector(i18nProvider *i18n.I18nP
 // InitLongTermValidationCertificateRevocationSelector, in place of the Java
 // super(...) call.
 func (c *LongTermValidationCertificateRevocationSelector) InitLongTermValidationCertificateRevocationSelectorState(
-	i18nProvider *i18n.I18nProvider, certificate *diagnostic.CertificateWrapper, currentTime time.Time,
-	diagnosticData *diagnostic.DiagnosticData, bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
+	i18nProvider *i18n.Provider, certificate *diagnostic.CertificateWrapper, currentTime time.Time,
+	diagnosticData *diagnostic.Data, bbbs map[string]*jaxb.XmlBasicBuildingBlocks, tokenId string,
 	validationPolicy policy.ValidationPolicy) {
 	base := &xcv.CertificateRevocationSelector{}
 	base.InitCertificateRevocationSelectorState(i18nProvider, certificate, currentTime, validationPolicy, make(map[string]struct{}))
@@ -109,8 +109,8 @@ func (c *LongTermValidationCertificateRevocationSelector) ltvSelectorOverrides()
 
 // NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData is
 // the protected constructor. Port of
-// LongTermValidationCertificateRevocationSelector(I18nProvider, CertificateWrapper, Date, Map, String, ValidationPolicy).
-func NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData(i18nProvider *i18n.I18nProvider,
+// LongTermValidationCertificateRevocationSelector(Provider, CertificateWrapper, Date, Map, String, ValidationPolicy).
+func NewLongTermValidationCertificateRevocationSelectorWithoutDiagnosticData(i18nProvider *i18n.Provider,
 	certificate *diagnostic.CertificateWrapper, currentTime time.Time, bbbs map[string]*jaxb.XmlBasicBuildingBlocks,
 	tokenId string, validationPolicy policy.ValidationPolicy) *LongTermValidationCertificateRevocationSelector {
 	return NewLongTermValidationCertificateRevocationSelector(i18nProvider, certificate, currentTime, nil, bbbs, tokenId, validationPolicy)
@@ -205,7 +205,7 @@ type longTermAcceptableRevocationDataAvailableCheck struct {
 // subclass and re-registers the overrides with the outer type, so that the
 // base's self-calls reach the overridden method here rather than
 // AcceptableRevocationDataAvailableCheck's.
-func newLongTermAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlCRS],
+func newLongTermAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlCRS],
 	acceptableRevocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule,
 	selector *LongTermValidationCertificateRevocationSelector) *longTermAcceptableRevocationDataAvailableCheck {
 	c := &longTermAcceptableRevocationDataAvailableCheck{

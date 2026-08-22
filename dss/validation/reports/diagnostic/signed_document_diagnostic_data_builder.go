@@ -10,7 +10,7 @@
 // DiagnosticDataBuilders (in the CAdES/PAdES/JAdES/ASiC packages, BuildDetachedXmlSignature and
 // BuildDetachedXmlTimestamp) - so all three are collected into
 // SignedDocumentDiagnosticDataBuilderOverrides, following the same Init<TypeName> pattern as
-// DiagnosticDataBuilderOverrides.
+// DataBuilderOverrides.
 //
 // # Revocation-source wildcard types
 //
@@ -62,21 +62,21 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// BuildDetachedXmlTimestamp builds the XmlTimestamp from a TimestampToken. Port of the
 	// protected buildDetachedXmlTimestamp(TimestampToken).
 	BuildDetachedXmlTimestamp(timestampToken *validation.TimestampToken) *jaxb.XmlTimestamp
-	// AssertConfigurationValid verifies the configuration is valid to build a DiagnosticData.
+	// AssertConfigurationValid verifies the configuration is valid to build a Data.
 	// Port of the protected assertConfigurationValid().
 	AssertConfigurationValid()
 	// BuildXmlOrphanTokens builds a list of XmlOrphanTokens. Port of the protected
-	// buildXmlOrphanTokens(), overridden by PAdESDiagnosticDataBuilder (in the PAdES package) to
+	// buildXmlOrphanTokens(), overridden by DiagnosticDataBuilder (in the PAdES package) to
 	// collect orphan tokens from the PDF document's own DSS dictionaries first. Added to this
-	// interface, rather than left a direct call to the embedded DiagnosticDataBuilder's method
+	// interface, rather than left a direct call to the embedded DataBuilder's method
 	// (as CertificateDiagnosticDataBuilder.Build() still does, which has no such override) -
-	// see DiagnosticDataBuilder.IsKnownCertificate's doc comment for the same
+	// see DataBuilder.IsKnownCertificate's doc comment for the same
 	// cross-package-virtual-dispatch rationale. Every existing implementer (CAdES, JAdES, QWAC)
 	// keeps its current behavior unchanged: none define their own BuildXmlOrphanTokens, so Go
-	// embedding promotes DiagnosticDataBuilder's concrete implementation for them automatically.
+	// embedding promotes DataBuilder's concrete implementation for them automatically.
 	BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens
 	// Build builds the XmlDiagnosticData. Port of the public @Override build(), overridden by
-	// ASiCContainerDiagnosticDataBuilder (in the ASiC package) to add the container's
+	// ContainerDiagnosticDataBuilder (in the ASiC package) to add the container's
 	// XmlContainerInfo. Added to this interface so
 	// XmlDiagnosticDataFactory.Create() (this package, statically typed against the base
 	// *SignedDocumentDiagnosticDataBuilder) can reach the override - see BuildXmlOrphanTokens's
@@ -86,10 +86,10 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	Build() *jaxb.XmlDiagnosticData
 }
 
-// SignedDocumentDiagnosticDataBuilder is the common builder for DiagnosticData creation from a
+// SignedDocumentDiagnosticDataBuilder is the common builder for Data creation from a
 // signed/timestamped document.
 type SignedDocumentDiagnosticDataBuilder struct {
-	DiagnosticDataBuilder
+	DataBuilder
 
 	// signedDocument is the signed document.
 	signedDocument model.DSSDocument
@@ -136,7 +136,7 @@ type SignedDocumentDiagnosticDataBuilder struct {
 // maps. Port of the public default constructor.
 func NewSignedDocumentDiagnosticDataBuilder() *SignedDocumentDiagnosticDataBuilder {
 	b := &SignedDocumentDiagnosticDataBuilder{
-		DiagnosticDataBuilder:     *NewDiagnosticDataBuilder(),
+		DataBuilder:               *NewDataBuilder(),
 		documentCertificateSource: spi.NewListCertificateSource(),
 		documentCRLSource:         spi.NewListRevocationSource[revocation.CRL](),
 		documentOCSPSource:        spi.NewListRevocationSource[revocation.OCSP](),
@@ -151,11 +151,11 @@ func NewSignedDocumentDiagnosticDataBuilder() *SignedDocumentDiagnosticDataBuild
 
 // InitSignedDocumentDiagnosticDataBuilder registers the concrete/intermediate builder with the
 // base so it can dispatch to SignedDocumentDiagnosticDataBuilderOverrides, and re-registers it
-// as the DiagnosticDataBuilderOverrides (LinkSigningCertificateAndChains) since this type
+// as the DataBuilderOverrides (LinkSigningCertificateAndChains) since this type
 // overrides that method too. Every constructor for a type in this family must call this once.
 func (b *SignedDocumentDiagnosticDataBuilder) InitSignedDocumentDiagnosticDataBuilder(overrides SignedDocumentDiagnosticDataBuilderOverrides) {
 	b.overrides = overrides
-	b.DiagnosticDataBuilder.InitDiagnosticDataBuilder(b)
+	b.DataBuilder.InitDiagnosticDataBuilder(b)
 }
 
 func (b *SignedDocumentDiagnosticDataBuilder) signedDocumentDiagnosticDataBuilderOverrides() SignedDocumentDiagnosticDataBuilderOverrides {
@@ -165,7 +165,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) signedDocumentDiagnosticDataBuilde
 	return b.overrides
 }
 
-// LinkSigningCertificateAndChains overrides DiagnosticDataBuilder's default (the certificate
+// LinkSigningCertificateAndChains overrides DataBuilder's default (the certificate
 // chain is built based on provided tokens instead). Port of the protected
 // @Override linkSigningCertificateAndChains(Set<CertificateToken>).
 func (b *SignedDocumentDiagnosticDataBuilder) LinkSigningCertificateAndChains(certificates []*model.CertificateToken) {
@@ -175,28 +175,28 @@ func (b *SignedDocumentDiagnosticDataBuilder) LinkSigningCertificateAndChains(ce
 // UsedCertificates re-declares the fluent setter with the SignedDocumentDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override usedCertificates(Set<CertificateToken>).
 func (b *SignedDocumentDiagnosticDataBuilder) UsedCertificates(usedCertificates []*model.CertificateToken) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.UsedCertificates(usedCertificates)
+	b.DataBuilder.UsedCertificates(usedCertificates)
 	return b
 }
 
 // UsedRevocations re-declares the fluent setter with the SignedDocumentDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override usedRevocations(Set<RevocationToken<?>>).
 func (b *SignedDocumentDiagnosticDataBuilder) UsedRevocations(usedRevocations []validation.AnyRevocationToken) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.UsedRevocations(usedRevocations)
+	b.DataBuilder.UsedRevocations(usedRevocations)
 	return b
 }
 
 // AllCertificateSources re-declares the fluent setter with the SignedDocumentDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override allCertificateSources(ListCertificateSource).
 func (b *SignedDocumentDiagnosticDataBuilder) AllCertificateSources(allCertificateSources *spi.ListCertificateSource) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.AllCertificateSources(allCertificateSources)
+	b.DataBuilder.AllCertificateSources(allCertificateSources)
 	return b
 }
 
 // ValidationDate re-declares the fluent setter with the SignedDocumentDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override validationDate(Date).
 func (b *SignedDocumentDiagnosticDataBuilder) ValidationDate(validationDate time.Time) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.ValidationDate(validationDate)
+	b.DataBuilder.ValidationDate(validationDate)
 	return b
 }
 
@@ -204,21 +204,21 @@ func (b *SignedDocumentDiagnosticDataBuilder) ValidationDate(validationDate time
 // SignedDocumentDiagnosticDataBuilder return type. Port of the covariant-return @Override
 // tokenExtractionStrategy(TokenExtractionStrategy).
 func (b *SignedDocumentDiagnosticDataBuilder) TokenExtractionStrategy(tokenExtractionStrategy enumerations.TokenExtractionStrategy) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.TokenExtractionStrategy(tokenExtractionStrategy)
+	b.DataBuilder.TokenExtractionStrategy(tokenExtractionStrategy)
 	return b
 }
 
 // DefaultDigestAlgorithm re-declares the fluent setter with the SignedDocumentDiagnosticDataBuilder
 // return type. Port of the covariant-return @Override defaultDigestAlgorithm(DigestAlgorithm).
 func (b *SignedDocumentDiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.DefaultDigestAlgorithm(digestAlgorithm)
+	b.DataBuilder.DefaultDigestAlgorithm(digestAlgorithm)
 	return b
 }
 
 // TokenIdentifierProvider re-declares the fluent setter (not overridden in Java, but exposed
 // here at the concrete-return level so XmlDiagnosticDataFactory's chain compiles cleanly).
 func (b *SignedDocumentDiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model.TokenIdentifierProvider) *SignedDocumentDiagnosticDataBuilder {
-	b.DiagnosticDataBuilder.TokenIdentifierProvider(identifierProvider)
+	b.DataBuilder.TokenIdentifierProvider(identifierProvider)
 	return b
 }
 
@@ -271,8 +271,8 @@ func (b *SignedDocumentDiagnosticDataBuilder) DocumentOCSPSource(documentOCSPSou
 
 // GetDocumentCertificateSource returns the document Certificate Source set via
 // DocumentCertificateSource. Cross-package accessor for
-// PAdESDiagnosticDataBuilder.buildOrphanTokensFromDocumentSources() - see
-// DiagnosticDataBuilder.IsKnownCertificate's doc comment for why it is needed. Purely additive;
+// DiagnosticDataBuilder.buildOrphanTokensFromDocumentSources() - see
+// DataBuilder.IsKnownCertificate's doc comment for why it is needed. Purely additive;
 // does not change DocumentCertificateSource's existing fluent-setter behavior.
 func (b *SignedDocumentDiagnosticDataBuilder) GetDocumentCertificateSource() *spi.ListCertificateSource {
 	return b.documentCertificateSource
@@ -295,7 +295,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	overrides := b.signedDocumentDiagnosticDataBuilderOverrides()
 	overrides.AssertConfigurationValid()
 
-	diagnosticData := b.DiagnosticDataBuilder.Build() // fill certificates and revocation data
+	diagnosticData := b.DataBuilder.Build() // fill certificates and revocation data
 	if b.signedDocument != nil {
 		documentName := b.removeSpecialCharsForXml(b.signedDocument.Name())
 		diagnosticData.DocumentName = &documentName
@@ -326,7 +326,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) Build() *jaxb.XmlDiagnosticData {
 	}
 
 	// link the rest certificates
-	b.DiagnosticDataBuilder.LinkSigningCertificateAndChains(b.usedCertificates)
+	b.DataBuilder.LinkSigningCertificateAndChains(b.usedCertificates)
 
 	diagnosticData.OrphanTokens = overrides.BuildXmlOrphanTokens()
 
@@ -488,7 +488,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) checkDuplicatesSignature(xmlSignat
 
 func (b *SignedDocumentDiagnosticDataBuilder) hasDuplicateSignature(currentSignature validation.AdvancedSignature) bool {
 	// NOTE: with DSS-3847 we introduce a stricter verification of the signature duplication,
-	// verifying by DSS and DA identifiers across all signature files, as well as a SignatureDigestReference
+	// verifying by DSS and DA identifiers across all signature files, as well as a DigestReference
 	for _, sig := range b.signatures {
 		if currentSignature != sig {
 			sameID := currentSignature.ID() == sig.ID()
@@ -579,7 +579,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) GetXmlStructuralValidationForSigna
 	return b.GetXmlStructuralValidation(sig.StructureValidationResult())
 }
 
-func (b *SignedDocumentDiagnosticDataBuilder) getXmlSignatureProductionPlace(place *signature.SignatureProductionPlace) *jaxb.XmlSignatureProductionPlace {
+func (b *SignedDocumentDiagnosticDataBuilder) getXmlSignatureProductionPlace(place *signature.ProductionPlace) *jaxb.XmlSignatureProductionPlace {
 	if place != nil {
 		xmlSignatureProductionPlace := &jaxb.XmlSignatureProductionPlace{}
 		xmlSignatureProductionPlace.CountryName = b.emptyToNilPtr(place.CountryName())

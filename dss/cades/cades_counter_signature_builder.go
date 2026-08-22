@@ -29,8 +29,8 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/validation"
 )
 
-// CAdESCounterSignatureBuilder builds a CAdES counter signature.
-type CAdESCounterSignatureBuilder struct {
+// CounterSignatureBuilder builds a CAdES counter signature.
+type CounterSignatureBuilder struct {
 	// certificateVerifier is the CertificateVerifier to use.
 	certificateVerifier validation.CertificateVerifier
 
@@ -42,26 +42,26 @@ type CAdESCounterSignatureBuilder struct {
 	resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder
 }
 
-// NewCAdESCounterSignatureBuilder is the default constructor.
-func NewCAdESCounterSignatureBuilder(certificateVerifier validation.CertificateVerifier) *CAdESCounterSignatureBuilder {
-	return &CAdESCounterSignatureBuilder{certificateVerifier: certificateVerifier}
+// NewCounterSignatureBuilder is the default constructor.
+func NewCounterSignatureBuilder(certificateVerifier validation.CertificateVerifier) *CounterSignatureBuilder {
+	return &CounterSignatureBuilder{certificateVerifier: certificateVerifier}
 }
 
 // SetManifestFile sets a signed manifest file. NOTE: ASiC only. Port of #setManifestFile.
-func (b *CAdESCounterSignatureBuilder) SetManifestFile(manifestFile *model.ManifestFile) {
+func (b *CounterSignatureBuilder) SetManifestFile(manifestFile *model.ManifestFile) {
 	b.manifestFile = manifestFile
 }
 
 // SetResourcesHandlerBuilder sets a DSSResourcesHandlerBuilder to be used for operating with
 // internal objects during the signature creation procedure. Port of
 // #setResourcesHandlerBuilder.
-func (b *CAdESCounterSignatureBuilder) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
+func (b *CounterSignatureBuilder) SetResourcesHandlerBuilder(resourcesHandlerBuilder resources.DSSResourcesHandlerBuilder) {
 	b.resourcesHandlerBuilder = resourcesHandlerBuilder
 }
 
 // AddCounterSignature adds a counter signature to the provided CMS. Port of
 // #addCounterSignature(CMS, CAdESCounterSignatureParameters, SignatureValue).
-func (b *CAdESCounterSignatureBuilder) AddCounterSignature(originalCMS *cms.CMS, parameters *CAdESCounterSignatureParameters,
+func (b *CounterSignatureBuilder) AddCounterSignature(originalCMS *cms.CMS, parameters *CounterSignatureParameters,
 	signatureValue *model.SignatureValue) (model.DSSDocument, error) {
 
 	updatedSignerInfo, err := b.getUpdatedSignerInformations(originalCMS, originalCMS.SignerInfos(), parameters, signatureValue, nil)
@@ -69,11 +69,11 @@ func (b *CAdESCounterSignatureBuilder) AddCounterSignature(originalCMS *cms.CMS,
 		return nil, err
 	}
 
-	updatedCMS, err := cms.CMSUtilsReplaceSigners(originalCMS, updatedSignerInfo)
+	updatedCMS, err := cms.UtilsReplaceSigners(originalCMS, updatedSignerInfo)
 	if err != nil {
 		return nil, err
 	}
-	updatedCMS, err = cms.CMSUtilsPopulateDigestAlgorithmSet(updatedCMS, originalCMS.DigestAlgorithmIDs())
+	updatedCMS, err = cms.UtilsPopulateDigestAlgorithmSet(updatedCMS, originalCMS.DigestAlgorithmIDs())
 	if err != nil {
 		return nil, err
 	}
@@ -81,18 +81,18 @@ func (b *CAdESCounterSignatureBuilder) AddCounterSignature(originalCMS *cms.CMS,
 	if err != nil {
 		return nil, err
 	}
-	return cms.CMSUtilsWriteToDSSDocument(updatedCMS, b.resourcesHandlerBuilder)
+	return cms.UtilsWriteToDSSDocument(updatedCMS, b.resourcesHandlerBuilder)
 }
 
 // getUpdatedSignerInformations ports the private
-// getUpdatedSignerInformations(CMS, SignerInformationStore, CAdESCounterSignatureParameters,
-// SignatureValue, CAdESSignature).
-func (b *CAdESCounterSignatureBuilder) getUpdatedSignerInformations(originalCMS *cms.CMS, signerInformationStore []*cmscore.SignerInfo,
-	parameters *CAdESCounterSignatureParameters, signatureValue *model.SignatureValue, masterSignature *CAdESSignature) ([]*cmscore.SignerInfo, error) {
+// getUpdatedSignerInformations(CMS, SignerInformationStore, CounterSignatureParameters,
+// SignatureValue, Signature).
+func (b *CounterSignatureBuilder) getUpdatedSignerInformations(originalCMS *cms.CMS, signerInformationStore []*cmscore.SignerInfo,
+	parameters *CounterSignatureParameters, signatureValue *model.SignatureValue, masterSignature *Signature) ([]*cmscore.SignerInfo, error) {
 
 	var result []*cmscore.SignerInfo
 	for _, signerInformation := range signerInformationStore {
-		cadesSignature := NewCAdESSignature(originalCMS, signerInformation)
+		cadesSignature := NewSignature(originalCMS, signerInformation)
 		cadesSignature.SetMasterSignature(cadesCounterSignatureBuilderAsAdvancedSignature(masterSignature))
 		cadesSignature.SetDetachedContents(parameters.DetachedContents())
 		cadesSignature.SetManifestFile(b.manifestFile)
@@ -135,11 +135,11 @@ func (b *CAdESCounterSignatureBuilder) getUpdatedSignerInformations(originalCMS 
 	return result, nil
 }
 
-// cadesCounterSignatureBuilderAsAdvancedSignature converts a nilable *CAdESSignature into a
+// cadesCounterSignatureBuilderAsAdvancedSignature converts a nilable *Signature into a
 // validation.AdvancedSignature, mapping a nil pointer to a true nil interface value (avoiding
 // the classic Go typed-nil-in-interface trap: a naive interface conversion of a nil
-// *CAdESSignature would make MasterSignature() != nil true even though there is no signature).
-func cadesCounterSignatureBuilderAsAdvancedSignature(s *CAdESSignature) validation.AdvancedSignature {
+// *Signature would make MasterSignature() != nil true even though there is no signature).
+func cadesCounterSignatureBuilderAsAdvancedSignature(s *Signature) validation.AdvancedSignature {
 	if s == nil {
 		return nil
 	}
@@ -171,7 +171,7 @@ func cadesCounterSignatureBuilderAddCounterSigners(signerInformation *cmscore.Si
 		attrs = append(attrs, counterSignatureAttribute)
 	}
 
-	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, attrs)
+	return cms.UtilsReplaceUnsignedAttributes(signerInformation, attrs)
 }
 
 // replaceCounterSigners ports the private
@@ -179,7 +179,7 @@ func cadesCounterSignatureBuilderAddCounterSigners(signerInformation *cmscore.Si
 // id-countersignature unsigned attribute's value set with updatedCounterSigners (used on the
 // recursive branch, where the attribute already exists and every existing counter-signer -
 // updated or not - is passed back in).
-func (b *CAdESCounterSignatureBuilder) replaceCounterSigners(signerInformation *cmscore.SignerInfo, updatedCounterSigners []*cmscore.SignerInfo) (*cmscore.SignerInfo, error) {
+func (b *CounterSignatureBuilder) replaceCounterSigners(signerInformation *cmscore.SignerInfo, updatedCounterSigners []*cmscore.SignerInfo) (*cmscore.SignerInfo, error) {
 	counterSignatureAttribute := cadesCounterSignatureBuilderCounterSignatureAttribute(updatedCounterSigners)
 
 	var attrs cmscore.Attributes
@@ -191,7 +191,7 @@ func (b *CAdESCounterSignatureBuilder) replaceCounterSigners(signerInformation *
 		}
 	}
 
-	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, attrs)
+	return cms.UtilsReplaceUnsignedAttributes(signerInformation, attrs)
 }
 
 // cadesCounterSignatureBuilderCounterSignatureAttribute ports the private
@@ -205,7 +205,7 @@ func cadesCounterSignatureBuilderCounterSignatureAttribute(counterSigners []*cms
 }
 
 // addNewCertificates ports the private addNewCertificates(CMS, CAdESCounterSignatureParameters).
-func (b *CAdESCounterSignatureBuilder) addNewCertificates(updatedCMS *cms.CMS, parameters *CAdESCounterSignatureParameters) (*cms.CMS, error) {
+func (b *CounterSignatureBuilder) addNewCertificates(updatedCMS *cms.CMS, parameters *CounterSignatureParameters) (*cms.CMS, error) {
 	selector := spi.NewBaselineBCertificateSelector(parameters.SigningCertificate(), parameters.CertificateChain()).
 		SetTrustedCertificateSource(b.certificateVerifier.TrustedCertSources()).
 		SetTrustAnchorBPPolicy(parameters.BLevel().IsTrustAnchorBPPolicy())
@@ -214,27 +214,27 @@ func (b *CAdESCounterSignatureBuilder) addNewCertificates(updatedCMS *cms.CMS, p
 		return nil, err
 	}
 
-	cmsBuilder := cms.NewCMSBuilder().SetOriginalCMS(updatedCMS)
+	cmsBuilder := cms.NewBuilder().SetOriginalCMS(updatedCMS)
 	return cmsBuilder.ExtendCMSSignedData(newCertificates, nil, nil)
 }
 
 // generateCounterSignatureFromSignatureValue ports the private
-// generateCounterSignature(SignerInformation, CAdESCounterSignatureParameters, SignatureValue).
-func (b *CAdESCounterSignatureBuilder) generateCounterSignatureFromSignatureValue(signerInformation *cmscore.SignerInfo,
-	parameters *CAdESCounterSignatureParameters, signatureValue *model.SignatureValue) ([]*cmscore.SignerInfo, error) {
+// generateCounterSignature(SignerInformation, CounterSignatureParameters, SignatureValue).
+func (b *CounterSignatureBuilder) generateCounterSignatureFromSignatureValue(signerInformation *cmscore.SignerInfo,
+	parameters *CounterSignatureParameters, signatureValue *model.SignatureValue) ([]*cmscore.SignerInfo, error) {
 	signatureAlgorithm := parameters.SignatureAlgorithm()
 	customContentSigner, err := cms.NewCustomContentSignerWithSignature(signatureAlgorithm.JCEID(), signatureValue.Value())
 	if err != nil {
 		return nil, err
 	}
-	return b.GenerateCounterSignature(signerInformation, &parameters.CAdESSignatureParameters, customContentSigner)
+	return b.GenerateCounterSignature(signerInformation, &parameters.SignatureParameters, customContentSigner)
 }
 
 // GenerateCounterSignature generates a counter-signature SignerInformationStore (here: the
 // []*cmscore.SignerInfo it would contain - see the file header). Port of
 // #generateCounterSignature(SignerInformation, CAdESSignatureParameters, CustomContentSigner).
-func (b *CAdESCounterSignatureBuilder) GenerateCounterSignature(signerInformation *cmscore.SignerInfo,
-	parameters *CAdESSignatureParameters, customContentSigner *cms.CustomContentSigner) ([]*cmscore.SignerInfo, error) {
+func (b *CounterSignatureBuilder) GenerateCounterSignature(signerInformation *cmscore.SignerInfo,
+	parameters *SignatureParameters, customContentSigner *cms.CustomContentSigner) ([]*cmscore.SignerInfo, error) {
 
 	toSignDocument := model.NewInMemoryDocument(signerInformation.Signature)
 	cmsBuilderHelper := b.InitCMSBuilderHelper(toSignDocument, parameters, customContentSigner)
@@ -256,8 +256,8 @@ func (b *CAdESCounterSignatureBuilder) GenerateCounterSignature(signerInformatio
 
 // GetSignerInformationToBeCounterSigned returns a SignerInformation to be counter-signed. Port
 // of #getSignerInformationToBeCounterSigned(DSSDocument, CAdESCounterSignatureParameters).
-func (b *CAdESCounterSignatureBuilder) GetSignerInformationToBeCounterSigned(signatureDocument model.DSSDocument,
-	parameters *CAdESCounterSignatureParameters) (*cmscore.SignerInfo, error) {
+func (b *CounterSignatureBuilder) GetSignerInformationToBeCounterSigned(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters) (*cmscore.SignerInfo, error) {
 	cadesSignature, err := b.getSignatureById(signatureDocument, parameters)
 	if err != nil {
 		return nil, err
@@ -271,8 +271,8 @@ func (b *CAdESCounterSignatureBuilder) GetSignerInformationToBeCounterSigned(sig
 // getSignatureById ports the private getSignatureById(DSSDocument, CAdESCounterSignatureParameters).
 //
 // Panics when SignatureIdToCounterSign is empty (Java Objects.requireNonNull).
-func (b *CAdESCounterSignatureBuilder) getSignatureById(signatureDocument model.DSSDocument,
-	parameters *CAdESCounterSignatureParameters) (*CAdESSignature, error) {
+func (b *CounterSignatureBuilder) getSignatureById(signatureDocument model.DSSDocument,
+	parameters *CounterSignatureParameters) (*Signature, error) {
 	if parameters.SignatureIdToCounterSign() == "" {
 		panic("The Id of a signature to be counter signed shall be defined! " +
 			"Please use SerializableCounterSignatureParameters.setSignatureIdToCounterSign(signatureId) method.")
@@ -291,10 +291,10 @@ func (b *CAdESCounterSignatureBuilder) getSignatureById(signatureDocument model.
 
 // findSignatureRecursive ports the private
 // findSignatureRecursive(List<AdvancedSignature>, String).
-func (b *CAdESCounterSignatureBuilder) findSignatureRecursive(signatures []validation.AdvancedSignature, signatureId string) (*CAdESSignature, error) {
+func (b *CounterSignatureBuilder) findSignatureRecursive(signatures []validation.AdvancedSignature, signatureId string) (*Signature, error) {
 	for _, advancedSignature := range signatures {
 		if signatureId == advancedSignature.ID() {
-			cadesSignature, ok := advancedSignature.(*CAdESSignature)
+			cadesSignature, ok := advancedSignature.(*Signature)
 			if !ok {
 				return nil, nil
 			}
@@ -318,11 +318,11 @@ func (b *CAdESCounterSignatureBuilder) findSignatureRecursive(signatures []valid
 
 // assertCounterSignaturePossible ports the private
 // assertCounterSignaturePossible(SignerInformation).
-func (b *CAdESCounterSignatureBuilder) assertCounterSignaturePossible(signerInformation *cmscore.SignerInfo) error {
-	if CAdESUtilsContainsATSTv2(signerInformation) {
+func (b *CounterSignatureBuilder) assertCounterSignaturePossible(signerInformation *cmscore.SignerInfo) error {
+	if UtilsContainsATSTv2(signerInformation) {
 		return exception.NewIllegalInputException("Cannot add a counter signature to a CAdES containing an archiveTimestampV2")
 	}
-	if CAdESUtilsContainsEvidenceRecord(signerInformation) {
+	if UtilsContainsEvidenceRecord(signerInformation) {
 		return exception.NewIllegalInputException("Cannot add a counter signature to a CMS containing an evidence record unsigned attribute.")
 	}
 	return nil
@@ -330,7 +330,7 @@ func (b *CAdESCounterSignatureBuilder) assertCounterSignaturePossible(signerInfo
 
 // InitCMSBuilderHelper instantiates a CMSForCAdESBuilderHelper. Port of
 // #initCMSBuilderHelper(DSSDocument, CAdESSignatureParameters, ContentSigner).
-func (b *CAdESCounterSignatureBuilder) InitCMSBuilderHelper(contentToSign model.DSSDocument, signatureParameters *CAdESSignatureParameters,
+func (b *CounterSignatureBuilder) InitCMSBuilderHelper(contentToSign model.DSSDocument, signatureParameters *SignatureParameters,
 	contentSigner cms.ContentSigner) *CMSForCAdESBuilderHelper {
 	helper := NewCMSForCAdESBuilderHelper(contentToSign, signatureParameters, contentSigner)
 	helper.SetTrustedCertificateSource(b.certificateVerifier.TrustedCertSources())

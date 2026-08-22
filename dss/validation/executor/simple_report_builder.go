@@ -52,7 +52,7 @@ import (
 // and detailed validation report. Port of SimpleReportBuilder.
 type SimpleReportBuilder struct {
 	// i18nProvider is the i18n provider.
-	i18nProvider *i18n.I18nProvider
+	i18nProvider *i18n.Provider
 
 	// includeSemantics defines if the semantics shall be included.
 	includeSemantics bool
@@ -63,8 +63,8 @@ type SimpleReportBuilder struct {
 	// policy is the validation policy.
 	policy policy.ValidationPolicy
 
-	// diagnosticData is the DiagnosticData to use.
-	diagnosticData *diagnostic.DiagnosticData
+	// diagnosticData is the Data to use.
+	diagnosticData *diagnostic.Data
 
 	// detailedReport is the detailed report.
 	detailedReport *detailedreport.DetailedReport
@@ -88,10 +88,10 @@ type SimpleReportBuilder struct {
 }
 
 // NewSimpleReportBuilder is the default constructor. Port of
-// SimpleReportBuilder(I18nProvider, Date, ValidationPolicy, DiagnosticData,
+// SimpleReportBuilder(Provider, Date, ValidationPolicy, Data,
 // DetailedReport, boolean).
-func NewSimpleReportBuilder(i18nProvider *i18n.I18nProvider, currentTime time.Time,
-	validationPolicy policy.ValidationPolicy, diagnosticData *diagnostic.DiagnosticData,
+func NewSimpleReportBuilder(i18nProvider *i18n.Provider, currentTime time.Time,
+	validationPolicy policy.ValidationPolicy, diagnosticData *diagnostic.Data,
 	detailedReport *detailedreport.DetailedReport, includeSemantics bool) *SimpleReportBuilder {
 	return &SimpleReportBuilder{
 		currentTime:         currentTime,
@@ -243,7 +243,7 @@ func (b *SimpleReportBuilder) addDocumentName(report *jaxb.XmlSimpleReport) {
 	// Java reads the raw String off the JAXB model, which distinguishes an
 	// ABSENT <DocumentName> (null - element omitted) from a PRESENT EMPTY one
 	// (written back as <DocumentName></DocumentName>); the ported
-	// DiagnosticData.DocumentName() flattens both to "". Both spellings occur
+	// Data.DocumentName() flattens both to "". Both spellings occur
 	// in the upstream corpus, so the JAXB field is read directly here.
 	report.DocumentName = b.diagnosticData.JaxbModel().DocumentName
 }

@@ -5,7 +5,7 @@
 // Java's protected members are exported here: the concrete subclasses live in the
 // dss/asic/{cades,xades} packages, so Go visibility rules leave no narrower option.
 //
-// Every self-called protected method is routed through AbstractASiCFilenameFactoryOverrides (the
+// Every self-called protected method is routed through AbstractFilenameFactoryOverrides (the
 // Overrides + Init pattern used throughout the ported tree), because static Go dispatch would
 // otherwise drop a subclass override silently.
 //
@@ -23,9 +23,9 @@ import (
 	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
-// AbstractASiCFilenameFactoryOverrides captures the protected methods of
-// AbstractASiCFilenameFactory that the class calls on itself and a subclass may override.
-type AbstractASiCFilenameFactoryOverrides interface {
+// AbstractFilenameFactoryOverrides captures the protected methods of
+// AbstractFilenameFactory that the class calls on itself and a subclass may override.
+type AbstractFilenameFactoryOverrides interface {
 	// IsAvailableName verifies whether the filename is not present within restrictedNames.
 	// Port of the protected isAvailableName(String, Collection).
 	IsAvailableName(filename string, restrictedNames []string) bool
@@ -39,21 +39,21 @@ type AbstractASiCFilenameFactoryOverrides interface {
 	AssertFilenameValid(filename string, documentsOfType []model.DSSDocument) error
 }
 
-// AbstractASiCFilenameFactory contains common methods for ASiC filename factory.
-type AbstractASiCFilenameFactory struct {
+// AbstractFilenameFactory contains common methods for ASiC filename factory.
+type AbstractFilenameFactory struct {
 	// overrides points back at the concrete factory; see InitAbstractASiCFilenameFactory.
-	overrides AbstractASiCFilenameFactoryOverrides
+	overrides AbstractFilenameFactoryOverrides
 }
 
 // InitAbstractASiCFilenameFactory wires the self-call dispatch to the concrete factory. Port of
 // the protected default constructor, extended with the overrides argument Go needs.
-func (f *AbstractASiCFilenameFactory) InitAbstractASiCFilenameFactory(overrides AbstractASiCFilenameFactoryOverrides) {
+func (f *AbstractFilenameFactory) InitAbstractASiCFilenameFactory(overrides AbstractFilenameFactoryOverrides) {
 	f.overrides = overrides
 }
 
 // abstractASiCFilenameFactoryOverrides returns the dispatch target, defaulting to this struct's own
 // implementations when a subclass never called InitAbstractASiCFilenameFactory.
-func (f *AbstractASiCFilenameFactory) abstractASiCFilenameFactoryOverrides() AbstractASiCFilenameFactoryOverrides {
+func (f *AbstractFilenameFactory) abstractASiCFilenameFactoryOverrides() AbstractFilenameFactoryOverrides {
 	if f.overrides != nil {
 		return f.overrides
 	}
@@ -67,7 +67,7 @@ func (f *AbstractASiCFilenameFactory) abstractASiCFilenameFactoryOverrides() Abs
 // signature file creation with a name "META-INF/signature003.xml".
 //
 // Port of the protected getNextAvailableDocumentName(String, Collection).
-func (f *AbstractASiCFilenameFactory) NextAvailableDocumentName(nameTemplate string, existingDocumentNames []string) string {
+func (f *AbstractFilenameFactory) NextAvailableDocumentName(nameTemplate string, existingDocumentNames []string) string {
 	// Use set to exclude duplicated names
 	seen := make(map[string]struct{}, len(existingDocumentNames))
 	distinct := make([]string, 0, len(existingDocumentNames))
@@ -82,7 +82,7 @@ func (f *AbstractASiCFilenameFactory) NextAvailableDocumentName(nameTemplate str
 
 // documentNameRecursively is the port of the private getDocumentNameRecursively(String,
 // Collection).
-func (f *AbstractASiCFilenameFactory) documentNameRecursively(nameTemplate string, existingDocumentNames []string) string {
+func (f *AbstractFilenameFactory) documentNameRecursively(nameTemplate string, existingDocumentNames []string) string {
 	number := len(existingDocumentNames) + 1
 	numberStr := strconv.Itoa(number)
 	zeroPad := "000"
@@ -103,7 +103,7 @@ func (f *AbstractASiCFilenameFactory) documentNameRecursively(nameTemplate strin
 
 // IsAvailableName verifies whether the filename is not present within restrictedNames. Port of the
 // protected isAvailableName(String, Collection).
-func (f *AbstractASiCFilenameFactory) IsAvailableName(filename string, restrictedNames []string) bool {
+func (f *AbstractFilenameFactory) IsAvailableName(filename string, restrictedNames []string) bool {
 	for _, restrictedName := range restrictedNames {
 		if restrictedName == filename {
 			return false
@@ -114,7 +114,7 @@ func (f *AbstractASiCFilenameFactory) IsAvailableName(filename string, restricte
 
 // WithMetaInfFolder appends a "META-INF/" string to the filename, when required. Port of the
 // protected getWithMetaInfFolder(String).
-func (f *AbstractASiCFilenameFactory) WithMetaInfFolder(filename string) string {
+func (f *AbstractFilenameFactory) WithMetaInfFolder(filename string) string {
 	if !strings.HasPrefix(filename, ASiCUtilsMetaInfFolder) {
 		filename = ASiCUtilsMetaInfFolder + filename
 	}
@@ -129,7 +129,7 @@ func (f *AbstractASiCFilenameFactory) WithMetaInfFolder(filename string) string 
 // (IllegalArgumentException).
 //
 // Port of the protected assertASiCContentIsValid(ASiCContent).
-func (f *AbstractASiCFilenameFactory) AssertASiCContentIsValid(asicContent *ASiCContent) error {
+func (f *AbstractFilenameFactory) AssertASiCContentIsValid(asicContent *Content) error {
 	if asicContent == nil {
 		panic("ASiCContent shall be provided!")
 	}
@@ -145,7 +145,7 @@ func (f *AbstractASiCFilenameFactory) AssertASiCContentIsValid(asicContent *ASiC
 
 // AssertFilenameValid verifies whether the given filename represents a valid document name within a
 // container. Port of the protected assertFilenameValid(String, List).
-func (f *AbstractASiCFilenameFactory) AssertFilenameValid(filename string, documentsOfType []model.DSSDocument) error {
+func (f *AbstractFilenameFactory) AssertFilenameValid(filename string, documentsOfType []model.DSSDocument) error {
 	if !f.abstractASiCFilenameFactoryOverrides().IsAvailableName(filename, spi.DSSUtilsDocumentNames(documentsOfType)) {
 		return exception.NewIllegalInputException(fmt.Sprintf(
 			"The filename '%s' cannot be used, as a document of the same name is already present within the container!",
@@ -155,8 +155,8 @@ func (f *AbstractASiCFilenameFactory) AssertFilenameValid(filename string, docum
 }
 
 // ValidDataPackageFilename returns a valid data package filename. Port of the protected
-// getValidDataPackageFilename(String, ASiCContent).
-func (f *AbstractASiCFilenameFactory) ValidDataPackageFilename(dataPackageFilename string, asicContent *ASiCContent) (string, error) {
+// getValidDataPackageFilename(String, Content).
+func (f *AbstractFilenameFactory) ValidDataPackageFilename(dataPackageFilename string, asicContent *Content) (string, error) {
 	if err := f.abstractASiCFilenameFactoryOverrides().AssertFilenameValid(dataPackageFilename, asicContent.SignedDocuments()); err != nil {
 		return "", err
 	}
@@ -174,7 +174,7 @@ func (f *AbstractASiCFilenameFactory) ValidDataPackageFilename(dataPackageFilena
 // optional.
 //
 // Port of the protected getValidEvidenceRecordManifestFilename(String, ASiCContent).
-func (f *AbstractASiCFilenameFactory) ValidEvidenceRecordManifestFilename(evidenceRecordManifestFilename string, asicContent *ASiCContent) (string, error) {
+func (f *AbstractFilenameFactory) ValidEvidenceRecordManifestFilename(evidenceRecordManifestFilename string, asicContent *Content) (string, error) {
 	evidenceRecordManifestFilename = f.abstractASiCFilenameFactoryOverrides().WithMetaInfFolder(evidenceRecordManifestFilename)
 	if err := f.abstractASiCFilenameFactoryOverrides().AssertFilenameValid(evidenceRecordManifestFilename, asicContent.EvidenceRecordManifestDocuments()); err != nil {
 		return "", err

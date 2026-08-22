@@ -37,8 +37,8 @@ type EAAQualificationBlock struct {
 }
 
 // NewEAAQualificationBlock is the default constructor. Port of
-// EAAQualificationBlock(I18nProvider, EAAWrapper, XmlConclusion, Map, List, List, Date).
-func NewEAAQualificationBlock(i18nProvider *i18n.I18nProvider, eaa *diagnostic.EAAWrapper, eaaConclusion *jaxb.XmlConclusion,
+// EAAQualificationBlock(Provider, EAAWrapper, XmlConclusion, Map, List, List, Date).
+func NewEAAQualificationBlock(i18nProvider *i18n.Provider, eaa *diagnostic.EAAWrapper, eaaConclusion *jaxb.XmlConclusion,
 	signatureMap map[string]*jaxb.XmlSignature, tlAnalysis []*jaxb.XmlTLAnalysis, loteAnalysis []*jaxb.XmlLoTEAnalysis,
 	currentTime time.Time) *EAAQualificationBlock {
 	xmlResult := &jaxb.XmlValidationEAAQualification{}

@@ -30,8 +30,8 @@ type SignatureAcceptanceValidationResultCheck[T any] struct {
 
 // NewSignatureAcceptanceValidationResultCheck is the default constructor.
 // Port of
-// SignatureAcceptanceValidationResultCheck(I18nProvider, T, XmlSAV, TokenProxy, LevelRule).
-func NewSignatureAcceptanceValidationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// SignatureAcceptanceValidationResultCheck(Provider, T, XmlSAV, TokenProxy, LevelRule).
+func NewSignatureAcceptanceValidationResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	xmlSAV *jaxb.XmlSAV, token diagnostic.TokenProxy, constraint policy.LevelRule) *SignatureAcceptanceValidationResultCheck[T] {
 	c := &SignatureAcceptanceValidationResultCheck[T]{
 		// Signature Acceptance Validation building block suffix ("-SAV"), a

@@ -11,7 +11,7 @@ import (
 // LogTLExpirationAlertHandler warns on the TL expiration.
 type LogTLExpirationAlertHandler struct{}
 
-var _ alert.AlertHandler[*tslmodel.TLInfo] = (*LogTLExpirationAlertHandler)(nil)
+var _ alert.Handler[*tslmodel.TLInfo] = (*LogTLExpirationAlertHandler)(nil)
 
 // NewLogTLExpirationAlertHandler is the default constructor.
 func NewLogTLExpirationAlertHandler() *LogTLExpirationAlertHandler {

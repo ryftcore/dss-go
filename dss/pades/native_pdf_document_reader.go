@@ -346,7 +346,7 @@ func (r *NativePdfDocumentReader) CreatePdfArray() PdfArray {
 // /ID entries from it with MD5. internal/pdf takes the second /ID element verbatim, so the same
 // deterministic seed is hashed here instead. Nothing in PAdES reads /ID - it only has to be
 // stable between the message-digest pass and the signing pass, which it is.
-func (r *NativePdfDocumentReader) GenerateDocumentID(parameters PAdESCommonParameters) []byte {
+func (r *NativePdfDocumentReader) GenerateDocumentID(parameters CommonParameters) []byte {
 	deterministicID := parameters.DeterministicId()
 	if r.dssDocument != nil && r.dssDocument.Name() != "" {
 		deterministicID = deterministicID + "-" + r.dssDocument.Name()

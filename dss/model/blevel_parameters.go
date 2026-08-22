@@ -68,7 +68,7 @@ func (b *BLevelParameters) SetTrustAnchorBPPolicy(trustAnchorBPPolicy bool) {
 	b.trustAnchorBPPolicy = trustAnchorBPPolicy
 }
 
-// SignaturePolicy gets the signature policy to use during the signature
+// Policy gets the signature policy to use during the signature
 // creation process.
 func (b *BLevelParameters) SignaturePolicy() *Policy { return b.signaturePolicy }
 

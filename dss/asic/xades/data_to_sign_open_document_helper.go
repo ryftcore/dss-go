@@ -22,8 +22,8 @@ type DataToSignOpenDocumentHelper struct {
 var _ GetDataToSignASiCWithXAdESHelper = (*DataToSignOpenDocumentHelper)(nil)
 
 // NewDataToSignOpenDocumentHelper is the default constructor. Ports
-// DataToSignOpenDocumentHelper(ASiCContent).
-func NewDataToSignOpenDocumentHelper(asicContent *asic.ASiCContent) *DataToSignOpenDocumentHelper {
+// DataToSignOpenDocumentHelper(Content).
+func NewDataToSignOpenDocumentHelper(asicContent *asic.Content) *DataToSignOpenDocumentHelper {
 	return &DataToSignOpenDocumentHelper{
 		DataToSignASiCEWithXAdESHelper: *NewDataToSignASiCEWithXAdESHelper(asicContent),
 	}

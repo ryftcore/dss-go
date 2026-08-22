@@ -54,7 +54,7 @@ func NewRevocationInfoArchival(crlVals, ocspVals [][]byte, otherRevVals *asn1ber
 
 // RevocationInfoArchivalGetInstance gets the RevocationInfoArchival object from a parsed ASN.1
 // SEQUENCE. Port of the static getInstance(Object); Go has no dual-type instanceof/getInstance
-// bridge, so the caller (PAdESUtilsRevocationInfoArchival) is expected to have already turned
+// bridge, so the caller (UtilsRevocationInfoArchival) is expected to have already turned
 // the attribute value into a parsed *asn1ber.Element before calling this. obj == nil ports the
 // "obj != null" guard, returning (nil, nil) as Java's getInstance(null) does.
 func RevocationInfoArchivalGetInstance(obj *asn1ber.Element) (*RevocationInfoArchival, error) {

@@ -20,8 +20,8 @@ type DataToSignASiCEWithCAdESHelper struct {
 var _ GetDataToSignASiCWithCAdESHelper = (*DataToSignASiCEWithCAdESHelper)(nil)
 
 // NewDataToSignASiCEWithCAdESHelper is the default constructor. Ports
-// DataToSignASiCEWithCAdESHelper(ASiCContent, DSSDocument).
-func NewDataToSignASiCEWithCAdESHelper(asicContent *asic.ASiCContent, toBeSigned model.DSSDocument) *DataToSignASiCEWithCAdESHelper {
+// DataToSignASiCEWithCAdESHelper(Content, DSSDocument).
+func NewDataToSignASiCEWithCAdESHelper(asicContent *asic.Content, toBeSigned model.DSSDocument) *DataToSignASiCEWithCAdESHelper {
 	return &DataToSignASiCEWithCAdESHelper{
 		AbstractGetDataToSignHelper: asic.NewAbstractGetDataToSignHelper(asicContent),
 		toBeSigned:                  toBeSigned,

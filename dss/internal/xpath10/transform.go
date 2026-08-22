@@ -220,7 +220,7 @@ func qname(n *xmldom.Node) string {
 // evalID is id(object). A node-set argument is the union of id() over the string-value of
 // each of its nodes; anything else converts to a string that is split on XML whitespace, each
 // token naming one unique ID. The index consulted is the one xmldom builds, which is the one
-// DSS registers through XAdESDOMDocument.recursiveIdBrowse - the same index doc.getElementById
+// DSS registers through DOMDocument.recursiveIdBrowse - the same index doc.getElementById
 // answers from in upstream.
 func (e *evaluator) evalID(v value, ctx *xmldom.Node) nodeSet {
 	doc := rootOf(ctx)

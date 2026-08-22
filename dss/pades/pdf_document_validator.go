@@ -68,7 +68,7 @@ func (v *PDFDocumentValidator) SetPasswordProtection(passwordProtection []byte) 
 
 // InitializeDiagnosticDataBuilder is the port of the initializeDiagnosticDataBuilder() override.
 func (v *PDFDocumentValidator) InitializeDiagnosticDataBuilder() *dssdiagnostic.SignedDocumentDiagnosticDataBuilder {
-	builder := NewPAdESDiagnosticDataBuilder()
+	builder := NewDiagnosticDataBuilder()
 	return &builder.SignedDocumentDiagnosticDataBuilder
 }
 

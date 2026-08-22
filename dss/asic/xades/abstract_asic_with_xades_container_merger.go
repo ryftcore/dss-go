@@ -47,11 +47,11 @@ func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedDocument(container mod
 }
 
 // IsSupportedContent ports the @Override protected isSupported(ASiCContent).
-func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *AbstractASiCWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	return NewASiCWithXAdESFormatDetector().IsSupportedZipContent(asicContent)
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (m *AbstractASiCWithXAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultASiCContainerExtractor {
-	return &NewASiCWithXAdESContainerExtractor(container).DefaultASiCContainerExtractor
+func (m *AbstractASiCWithXAdESContainerMerger) GetContainerExtractor(container model.DSSDocument) *asic.DefaultContainerExtractor {
+	return &NewASiCWithXAdESContainerExtractor(container).DefaultContainerExtractor
 }

@@ -35,7 +35,7 @@ func (c *TrustServiceConverter) extractCertificates(serviceInformation *jaxb.TSP
 	return converter.Apply(serviceInformation.ServiceDigitalIdentity)
 }
 
-func (c *TrustServiceConverter) extractStatusAndHistory(original *jaxb.TSPServiceType) *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions] {
+func (c *TrustServiceConverter) extractStatusAndHistory(original *jaxb.TSPServiceType) *timedependent.Values[*tslmodel.TrustServiceStatusAndInformationExtensions] {
 	statusHistoryList := timedependent.NewMutableTimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions]()
 
 	serviceInfo := original.ServiceInformation
@@ -74,7 +74,7 @@ func (c *TrustServiceConverter) extractStatusAndHistory(original *jaxb.TSPServic
 		}
 	}
 
-	return &statusHistoryList.TimeDependentValues
+	return &statusHistoryList.Values
 }
 
 func (c *TrustServiceConverter) parseExtensionsList(serviceInformationExtensions *jaxb.ExtensionsListType,

@@ -3,25 +3,25 @@
 // SCC flattening: Java's eu.europa.esig.dss.jades.validation.timestamp package is flattened into
 // this one Go package.
 //
-// # DEVIATION: SA generic parameter is *EtsiUComponent, not *JAdESAttribute
+// # DEVIATION: SA generic parameter is *EtsiUComponent, not *Attribute
 //
 // Java's JAdESTimestampSource extends SignatureTimestampSource<JAdESSignature, JAdESAttribute>:
-// buildUnsignedSignatureProperties() returns the JAdESEtsiUHeader itself, via an unchecked raw-type
-// cast `(SignatureProperties) signature.getEtsiUHeader()` - JAdESEtsiUHeader actually implements
+// buildUnsignedSignatureProperties() returns the EtsiUHeader itself, via an unchecked raw-type
+// cast `(SignatureProperties) signature.getEtsiUHeader()` - EtsiUHeader actually implements
 // SignatureProperties<EtsiUComponent>, and Java's type erasure lets that pass at runtime, later
 // relying on getCounterSignatures' own `unsignedAttribute instanceof EtsiUComponent` guard to
 // recover the concrete type.
 //
 // Go generics are invariant with no type erasure: timestamp.SignatureTimestampSource[AS, SA] can
-// only be instantiated with ONE SA for both signed and unsigned properties, and *JAdESEtsiUHeader
+// only be instantiated with ONE SA for both signed and unsigned properties, and *EtsiUHeader
 // already satisfies validation.SignatureProperties[*EtsiUComponent] exactly (see
 // jades_etsi_u_header.go) - there is no unchecked-cast escape hatch to pretend it is
-// SignatureProperties[*JAdESAttribute] instead. This file therefore instantiates the generic base
+// SignatureProperties[*Attribute] instead. This file therefore instantiates the generic base
 // with SA = *EtsiUComponent (a strict widening: every *EtsiUComponent already satisfies
-// validation.SignatureAttribute via its embedded JAdESAttribute), and BuildSignedSignatureProperties
-// wraps the *JAdESAttribute-typed JAdESSignedProperties in the small
+// validation.SignatureAttribute via its embedded Attribute), and BuildSignedSignatureProperties
+// wraps the *Attribute-typed SignedProperties in the small
 // jadesSignedPropertiesAsEtsiUComponents adapter below so both sides of the interface line up.
-// Every signed-attribute predicate this file implements only ever reads promoted JAdESAttribute
+// Every signed-attribute predicate this file implements only ever reads promoted Attribute
 // state (HeaderName/Value), never EtsiUComponent-specific state (Component/IsBase64UrlEncoded), so
 // the adapter's synthetic EtsiUComponent wrapping (Component=nil, base64UrlEncoded=false) is never
 // observed. GetCounterSignatures below is simpler than Java's for this same reason: unsignedAttribute
@@ -39,12 +39,12 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// jadesSignedPropertiesAsEtsiUComponents adapts a validation.SignatureProperties[*JAdESAttribute]
-// (JAdESSignedProperties) to validation.SignatureProperties[*EtsiUComponent], boxing each
-// *JAdESAttribute the wrapped value returns into a synthetic *EtsiUComponent. See the file
+// jadesSignedPropertiesAsEtsiUComponents adapts a validation.SignatureProperties[*Attribute]
+// (SignedProperties) to validation.SignatureProperties[*EtsiUComponent], boxing each
+// *Attribute the wrapped value returns into a synthetic *EtsiUComponent. See the file
 // header's "DEVIATION" note.
 type jadesSignedPropertiesAsEtsiUComponents struct {
-	signedProperties validation.SignatureProperties[*JAdESAttribute]
+	signedProperties validation.SignatureProperties[*Attribute]
 
 	// components caches the boxed attributes so that repeated Attributes() calls hand back the
 	// SAME pointers. This is load-bearing, not an optimization: the frozen base's
@@ -55,7 +55,7 @@ type jadesSignedPropertiesAsEtsiUComponents struct {
 	// SignatureTimestampIdentifierBuilder got orderOfAttribute=null instead of the attribute's
 	// real index, and every content time-stamp in the corpus came out with a different DSS-Id
 	// than upstream's (visible as a diverging TIMESTAMP: reference inside the signature
-	// time-stamp that covers it). JAdESEtsiUHeader.Attributes() caches for the unsigned side
+	// time-stamp that covers it). EtsiUHeader.Attributes() caches for the unsigned side
 	// already, which is why only signed (content-time-stamp) attributes were affected.
 	components []*EtsiUComponent
 }
@@ -65,14 +65,14 @@ func (p *jadesSignedPropertiesAsEtsiUComponents) IsExist() bool {
 	return p.signedProperties.IsExist()
 }
 
-// Attributes implements validation.SignatureProperties, boxing each *JAdESAttribute. The boxed
+// Attributes implements validation.SignatureProperties, boxing each *Attribute. The boxed
 // slice is cached: see the components field's own comment for why pointer stability matters.
 func (p *jadesSignedPropertiesAsEtsiUComponents) Attributes() []*EtsiUComponent {
 	if p.components == nil {
 		attributes := p.signedProperties.Attributes()
 		components := make([]*EtsiUComponent, len(attributes))
 		for i, a := range attributes {
-			components[i] = &EtsiUComponent{JAdESAttribute: *a}
+			components[i] = &EtsiUComponent{Attribute: *a}
 		}
 		p.components = components
 	}
@@ -80,26 +80,26 @@ func (p *jadesSignedPropertiesAsEtsiUComponents) Attributes() []*EtsiUComponent 
 }
 
 // JAdESTimestampSource extracts timestamps from a JAdES signature. Port of the class
-// JAdESTimestampSource, extending timestamp.SignatureTimestampSource[*JAdESSignature,
+// TimestampSource, extending timestamp.SignatureTimestampSource[*Signature,
 // *EtsiUComponent] (see the file header's DEVIATION note on the SA parameter).
 //
 // @SuppressWarnings("serial")/java.io.Serializable is dropped (no Go counterpart).
-type JAdESTimestampSource struct {
-	timestamp.SignatureTimestampSource[*JAdESSignature, *EtsiUComponent]
+type TimestampSource struct {
+	timestamp.SignatureTimestampSource[*Signature, *EtsiUComponent]
 
 	// signature is being validated. See cades_timestamp_source.go's identical precedent (the
 	// embedded base keeps its own private copy; this file needs its own reference too, since Go
 	// has no protected field access across packages).
-	signature *JAdESSignature
+	signature *Signature
 
 	// timestampAttributeMap maps time-stamp tokens to corresponding JAdES attributes.
 	timestampAttributeMap map[*validation.TimestampToken]*EtsiUComponent
 }
 
 // NewJAdESTimestampSource is the default constructor. Port of the (JAdESSignature) constructor.
-func NewJAdESTimestampSource(signature *JAdESSignature) *JAdESTimestampSource {
-	source := &JAdESTimestampSource{
-		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*JAdESSignature, *EtsiUComponent](signature),
+func NewTimestampSource(signature *Signature) *TimestampSource {
+	source := &TimestampSource{
+		SignatureTimestampSource: timestamp.NewSignatureTimestampSourceBase[*Signature, *EtsiUComponent](signature),
 		signature:                signature,
 		timestampAttributeMap:    make(map[*validation.TimestampToken]*EtsiUComponent),
 	}
@@ -109,93 +109,93 @@ func NewJAdESTimestampSource(signature *JAdESSignature) *JAdESTimestampSource {
 
 // BuildSignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides. Port of
 // buildSignedSignatureProperties(). See the file header's DEVIATION note.
-func (s *JAdESTimestampSource) BuildSignedSignatureProperties() validation.SignatureProperties[*EtsiUComponent] {
-	return &jadesSignedPropertiesAsEtsiUComponents{signedProperties: NewJAdESSignedProperties(s.signature.Jws().Headers())}
+func (s *TimestampSource) BuildSignedSignatureProperties() validation.SignatureProperties[*EtsiUComponent] {
+	return &jadesSignedPropertiesAsEtsiUComponents{signedProperties: NewSignedProperties(s.signature.Jws().Headers())}
 }
 
 // BuildUnsignedSignatureProperties implements timestamp.SignatureTimestampSourceOverrides. Port
 // of buildUnsignedSignatureProperties(). See the file header's DEVIATION note: no cast is needed,
 // unlike Java's unchecked raw-type cast, since *JAdESEtsiUHeader already implements
 // validation.SignatureProperties[*EtsiUComponent] exactly.
-func (s *JAdESTimestampSource) BuildUnsignedSignatureProperties() validation.SignatureProperties[*EtsiUComponent] {
+func (s *TimestampSource) BuildUnsignedSignatureProperties() validation.SignatureProperties[*EtsiUComponent] {
 	return s.signature.EtsiUHeader()
 }
 
 // IsContentTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isContentTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsContentTimestamp(signedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsContentTimestamp(signedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesAdoTst == signedAttribute.HeaderName()
 }
 
 // IsAllDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not supported. Port of isAllDataObjectsTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAllDataObjectsTimestamp(signedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAllDataObjectsTimestamp(signedAttribute *EtsiUComponent) bool {
 	return false
 }
 
 // IsIndividualDataObjectsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not supported. Port of isIndividualDataObjectsTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsIndividualDataObjectsTimestamp(signedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsIndividualDataObjectsTimestamp(signedAttribute *EtsiUComponent) bool {
 	return false
 }
 
 // IsSignatureTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignatureTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsSignatureTimestamp(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsSignatureTimestamp(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesSigTst == unsignedAttribute.HeaderName()
 }
 
 // IsCompleteCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteCertificateRef(JAdESAttribute).
-func (s *JAdESTimestampSource) IsCompleteCertificateRef(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsCompleteCertificateRef(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesXRefs == unsignedAttribute.HeaderName()
 }
 
 // IsAttributeCertificateRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeCertificateRef(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAttributeCertificateRef(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAttributeCertificateRef(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesAxRefs == unsignedAttribute.HeaderName()
 }
 
 // IsCompleteRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCompleteRevocationRef(JAdESAttribute).
-func (s *JAdESTimestampSource) IsCompleteRevocationRef(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsCompleteRevocationRef(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesRRefs == unsignedAttribute.HeaderName()
 }
 
 // IsAttributeRevocationRef implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeRevocationRef(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAttributeRevocationRef(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAttributeRevocationRef(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesArRefs == unsignedAttribute.HeaderName()
 }
 
 // IsRefsOnlyTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRefsOnlyTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsRefsOnlyTimestamp(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesRfsTst == unsignedAttribute.HeaderName()
 }
 
 // IsSigAndRefsTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSigAndRefsTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsSigAndRefsTimestamp(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesSigRTst == unsignedAttribute.HeaderName()
 }
 
 // IsCertificateValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCertificateValues(JAdESAttribute).
-func (s *JAdESTimestampSource) IsCertificateValues(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsCertificateValues(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesXVals == unsignedAttribute.HeaderName()
 }
 
 // IsRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isRevocationValues(JAdESAttribute).
-func (s *JAdESTimestampSource) IsRevocationValues(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsRevocationValues(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesRVals == unsignedAttribute.HeaderName()
 }
 
 // IsArchiveTimestamp implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isArchiveTimestamp(JAdESAttribute).
-func (s *JAdESTimestampSource) IsArchiveTimestamp(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsArchiveTimestamp(unsignedAttribute *EtsiUComponent) bool {
 	return jadesTimestampSourceIsArchiveTimestamp(unsignedAttribute.HeaderName())
 }
 
@@ -206,49 +206,49 @@ func jadesTimestampSourceIsArchiveTimestamp(headerName string) bool {
 
 // IsTimeStampValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isTimeStampValidationData(JAdESAttribute).
-func (s *JAdESTimestampSource) IsTimeStampValidationData(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsTimeStampValidationData(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesTstVd == unsignedAttribute.HeaderName()
 }
 
 // IsAnyValidationData implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAnyValidationData(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAnyValidationData(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAnyValidationData(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesAnyValData == unsignedAttribute.HeaderName()
 }
 
 // IsValidationDataReferences implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not supported. Port of isValidationDataReferences(JAdESAttribute).
-func (s *JAdESTimestampSource) IsValidationDataReferences(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsValidationDataReferences(unsignedAttribute *EtsiUComponent) bool {
 	return false
 }
 
 // IsCounterSignature implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isCounterSignature(JAdESAttribute).
-func (s *JAdESTimestampSource) IsCounterSignature(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsCounterSignature(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesCSig == unsignedAttribute.HeaderName()
 }
 
 // IsSignaturePolicyStore implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isSignaturePolicyStore(JAdESAttribute).
-func (s *JAdESTimestampSource) IsSignaturePolicyStore(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsSignaturePolicyStore(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesSigPst == unsignedAttribute.HeaderName()
 }
 
 // IsAttrAuthoritiesCertValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttrAuthoritiesCertValues(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAttrAuthoritiesCertValues(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAttrAuthoritiesCertValues(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesAxVals == unsignedAttribute.HeaderName()
 }
 
 // IsAttributeRevocationValues implements timestamp.SignatureTimestampSourceOverrides.
 // Port of isAttributeRevocationValues(JAdESAttribute).
-func (s *JAdESTimestampSource) IsAttributeRevocationValues(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsAttributeRevocationValues(unsignedAttribute *EtsiUComponent) bool {
 	return JAdESHeaderParameterNamesArVals == unsignedAttribute.HeaderName()
 }
 
 // IsEvidenceRecord implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: not supported. Port of isEvidenceRecord(JAdESAttribute).
-func (s *JAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *EtsiUComponent) bool {
+func (s *TimestampSource) IsEvidenceRecord(unsignedAttribute *EtsiUComponent) bool {
 	return false
 }
 
@@ -279,7 +279,7 @@ func (s *JAdESTimestampSource) IsEvidenceRecord(unsignedAttribute *EtsiUComponen
 // the actually-observable behaviour Java's virtual dispatch produces even though
 // JAdESTimestampSource.java itself declares no such IncorporateArchiveTimestampReferences
 // override.
-func (s *JAdESTimestampSource) IncorporateArchiveTimestampReferences(timestampToken *validation.TimestampToken,
+func (s *TimestampSource) IncorporateArchiveTimestampReferences(timestampToken *validation.TimestampToken,
 	previousTimestamps []*validation.TimestampToken) {
 	jadesTSTimestampAddReferences(timestampToken, s.archiveTimestampReferences(previousTimestamps))
 }
@@ -288,7 +288,7 @@ func (s *JAdESTimestampSource) IncorporateArchiveTimestampReferences(timestampTo
 // which this file cannot call directly, from exported base accessors. Port of the base's own
 // getArchiveTimestampReferences(List<TimestampToken>) body (JAdES adds nothing beyond what
 // signatureTimestampReferences below already folds in).
-func (s *JAdESTimestampSource) archiveTimestampReferences(previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
+func (s *TimestampSource) archiveTimestampReferences(previousTimestamps []*validation.TimestampToken) []*validation.TimestampedReference {
 	var timestampedReferences []*validation.TimestampedReference
 	jadesTSAddReferences(&timestampedReferences, s.signatureTimestampReferences())
 	jadesTSAddReferences(&timestampedReferences, s.encapsulatedReferencesFromTimestamps(previousTimestamps))
@@ -300,7 +300,7 @@ func (s *JAdESTimestampSource) archiveTimestampReferences(previousTimestamps []*
 // signatureTimestampReferences reimplements the base's private getSignatureTimestampReferences(),
 // then applies JAdES's own getKeyInfoReferences() addition. Port of the protected
 // getSignatureTimestampReferences() override.
-func (s *JAdESTimestampSource) signatureTimestampReferences() []*validation.TimestampedReference {
+func (s *TimestampSource) signatureTimestampReferences() []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	jadesTSAddReferences(&references, s.encapsulatedReferencesFromTimestamps(s.ContentTimestamps()))
 	jadesTSAddReferences(&references, s.SignerDataReferences())
@@ -312,7 +312,7 @@ func (s *JAdESTimestampSource) signatureTimestampReferences() []*validation.Time
 
 // signingCertificateTimestampReferences reimplements the base's private
 // getSigningCertificateTimestampReferences().
-func (s *JAdESTimestampSource) signingCertificateTimestampReferences() []*validation.TimestampedReference {
+func (s *TimestampSource) signingCertificateTimestampReferences() []*validation.TimestampedReference {
 	signatureCertificateSource := s.signature.CertificateSource()
 	return timestamp.CreateReferencesForCertificateRefs(
 		signatureCertificateSource.SigningCertificateRefs(), signatureCertificateSource, s.CertificateSource())
@@ -321,7 +321,7 @@ func (s *JAdESTimestampSource) signingCertificateTimestampReferences() []*valida
 // encapsulatedReferencesFromTimestamps reimplements the base's private
 // getEncapsulatedReferencesFromTimestamps(List), from the exported timestamp.ReferencesFromTimestamp
 // and this file's merged-source accessors.
-func (s *JAdESTimestampSource) encapsulatedReferencesFromTimestamps(timestampTokens []*validation.TimestampToken) []*validation.TimestampedReference {
+func (s *TimestampSource) encapsulatedReferencesFromTimestamps(timestampTokens []*validation.TimestampToken) []*validation.TimestampedReference {
 	var references []*validation.TimestampedReference
 	for _, timestampToken := range timestampTokens {
 		refs, err := timestamp.ReferencesFromTimestamp(timestampToken, s.CertificateSource(), s.CRLSource(), s.OCSPSource())
@@ -373,14 +373,14 @@ func jadesTSTimestampAddReferences(timestampToken *validation.TimestampToken, re
 
 // GetCertificateRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCertificateRefs(JAdESAttribute).
-func (s *JAdESTimestampSource) GetCertificateRefs(unsignedAttribute *EtsiUComponent) []*spi.CertificateRef {
+func (s *TimestampSource) GetCertificateRefs(unsignedAttribute *EtsiUComponent) []*spi.CertificateRef {
 	var result []*spi.CertificateRef
 	certRefs := DSSJsonUtilsToListValue(unsignedAttribute.Value())
 	if utils.IsCollectionNotEmpty(certRefs) {
 		for _, item := range certRefs {
 			certId := DSSJsonUtilsToMap(item, JAdESHeaderParameterNamesCertId)
 			if certId != nil && certId.Size() != 0 {
-				if certificateRef := JAdESCertificateRefExtractionUtilsCreateCertificateRef(certId); certificateRef != nil {
+				if certificateRef := CertificateRefExtractionUtilsCreateCertificateRef(certId); certificateRef != nil {
 					result = append(result, certificateRef)
 				}
 			}
@@ -391,7 +391,7 @@ func (s *JAdESTimestampSource) GetCertificateRefs(unsignedAttribute *EtsiUCompon
 
 // GetCRLRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCRLRefs(JAdESAttribute).
-func (s *JAdESTimestampSource) GetCRLRefs(unsignedAttribute *EtsiUComponent) []*spi.CRLRef {
+func (s *TimestampSource) GetCRLRefs(unsignedAttribute *EtsiUComponent) []*spi.CRLRef {
 	var result []*spi.CRLRef
 	refsValueMap := DSSJsonUtilsToMapValue(unsignedAttribute.Value())
 	if refsValueMap != nil && refsValueMap.Size() != 0 {
@@ -399,7 +399,7 @@ func (s *JAdESTimestampSource) GetCRLRefs(unsignedAttribute *EtsiUComponent) []*
 		for _, item := range crlRefs {
 			crlRefMap := DSSJsonUtilsToMapValue(item)
 			if crlRefMap != nil && crlRefMap.Size() != 0 {
-				if crlRef := JAdESRevocationRefExtractionUtilsCreateCRLRef(crlRefMap); crlRef != nil {
+				if crlRef := RevocationRefExtractionUtilsCreateCRLRef(crlRefMap); crlRef != nil {
 					result = append(result, crlRef)
 				}
 			}
@@ -410,7 +410,7 @@ func (s *JAdESTimestampSource) GetCRLRefs(unsignedAttribute *EtsiUComponent) []*
 
 // GetOCSPRefs implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getOCSPRefs(JAdESAttribute).
-func (s *JAdESTimestampSource) GetOCSPRefs(unsignedAttribute *EtsiUComponent) []*spi.OCSPRef {
+func (s *TimestampSource) GetOCSPRefs(unsignedAttribute *EtsiUComponent) []*spi.OCSPRef {
 	var result []*spi.OCSPRef
 	refsValueMap := DSSJsonUtilsToMapValue(unsignedAttribute.Value())
 	if refsValueMap != nil && refsValueMap.Size() != 0 {
@@ -418,7 +418,7 @@ func (s *JAdESTimestampSource) GetOCSPRefs(unsignedAttribute *EtsiUComponent) []
 		for _, item := range ocsp {
 			ocspRefMap := DSSJsonUtilsToMapValue(item)
 			if ocspRefMap != nil && ocspRefMap.Size() != 0 {
-				if ocspRef := JAdESRevocationRefExtractionUtilsCreateOCSPRef(ocspRefMap); ocspRef != nil {
+				if ocspRef := RevocationRefExtractionUtilsCreateOCSPRef(ocspRefMap); ocspRef != nil {
 					result = append(result, ocspRef)
 				}
 			}
@@ -429,7 +429,7 @@ func (s *JAdESTimestampSource) GetOCSPRefs(unsignedAttribute *EtsiUComponent) []
 
 // GetEncapsulatedCertificateIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedCertificateIdentifiers(JAdESAttribute).
-func (s *JAdESTimestampSource) GetEncapsulatedCertificateIdentifiers(unsignedAttribute *EtsiUComponent) []model.Identifier {
+func (s *TimestampSource) GetEncapsulatedCertificateIdentifiers(unsignedAttribute *EtsiUComponent) []model.Identifier {
 	var xVals []any
 	switch {
 	case s.IsTimeStampValidationData(unsignedAttribute):
@@ -492,7 +492,7 @@ func jadesTimestampSourceToCertificateToken(encapsulatedCert any) (result *model
 
 // GetEncapsulatedCRLIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedCRLIdentifiers(JAdESAttribute).
-func (s *JAdESTimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *EtsiUComponent) []*crlparser.CRLBinary {
+func (s *TimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *EtsiUComponent) []*crlparser.CRLBinary {
 	rVals := jadesTimestampSourceRVals(s, unsignedAttribute)
 	if rVals == nil {
 		return nil
@@ -509,7 +509,7 @@ func (s *JAdESTimestampSource) GetEncapsulatedCRLIdentifiers(unsignedAttribute *
 
 // jadesTimestampSourceRVals ports the `rVals` local-variable computation shared by
 // getEncapsulatedCRLIdentifiers/getEncapsulatedOCSPIdentifiers.
-func jadesTimestampSourceRVals(s *JAdESTimestampSource, unsignedAttribute *EtsiUComponent) *jose.Object {
+func jadesTimestampSourceRVals(s *TimestampSource, unsignedAttribute *EtsiUComponent) *jose.Object {
 	switch {
 	case s.IsTimeStampValidationData(unsignedAttribute):
 		tstVd := DSSJsonUtilsToMap(unsignedAttribute.Value(), JAdESHeaderParameterNamesTstVd)
@@ -550,7 +550,7 @@ func jadesTimestampSourceToCRLBinary(crlVal any) *crlparser.CRLBinary {
 
 // GetEncapsulatedOCSPIdentifiers implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getEncapsulatedOCSPIdentifiers(JAdESAttribute).
-func (s *JAdESTimestampSource) GetEncapsulatedOCSPIdentifiers(unsignedAttribute *EtsiUComponent) []*spi.OCSPResponseBinary {
+func (s *TimestampSource) GetEncapsulatedOCSPIdentifiers(unsignedAttribute *EtsiUComponent) []*spi.OCSPResponseBinary {
 	rVals := jadesTimestampSourceRVals(s, unsignedAttribute)
 	if rVals == nil {
 		return nil
@@ -593,33 +593,33 @@ func jadesTimestampSourceToOCSPResponseBinary(ocspVal any) *spi.OCSPResponseBina
 // GetTimestampMessageImprintDigestBuilderForToken implements
 // timestamp.SignatureTimestampSourceOverrides. Port of the
 // getTimestampMessageImprintDigestBuilder(TimestampToken) override.
-func (s *JAdESTimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
-	timestampToken *validation.TimestampToken) timestamp.TimestampMessageDigestBuilder {
-	var timestampAttribute *JAdESAttribute
+func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForToken(
+	timestampToken *validation.TimestampToken) timestamp.MessageDigestBuilder {
+	var timestampAttribute *Attribute
 	if etsiUComponent := s.timestampAttributeMap[timestampToken]; etsiUComponent != nil {
-		timestampAttribute = &etsiUComponent.JAdESAttribute
+		timestampAttribute = &etsiUComponent.Attribute
 	}
-	return NewJAdESTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
+	return NewTimestampMessageDigestBuilderForToken(s.signature, timestampToken).
 		SetTimestampAttribute(timestampAttribute)
 }
 
 // GetTimestampMessageImprintDigestBuilderForAlgorithm implements
 // timestamp.SignatureTimestampSourceOverrides. Port of the
 // getTimestampMessageImprintDigestBuilder(DigestAlgorithm) override.
-func (s *JAdESTimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
-	digestAlgorithm enumerations.DigestAlgorithm) timestamp.TimestampMessageDigestBuilder {
-	return NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
+func (s *TimestampSource) GetTimestampMessageImprintDigestBuilderForAlgorithm(
+	digestAlgorithm enumerations.DigestAlgorithm) timestamp.MessageDigestBuilder {
+	return NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
 }
 
 // GetCounterSignatures implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getCounterSignatures(JAdESAttribute). See the file header's DEVIATION note: no
 // `instanceof EtsiUComponent` check is needed, unsignedAttribute already is one.
-func (s *JAdESTimestampSource) GetCounterSignatures(unsignedAttribute *EtsiUComponent) []validation.AdvancedSignature {
+func (s *TimestampSource) GetCounterSignatures(unsignedAttribute *EtsiUComponent) []validation.AdvancedSignature {
 	counterSignatures := s.signature.CounterSignatures()
 	for _, counterSignature := range counterSignatures {
 		// Java casts unconditionally: `(JAdESSignature) counterSignature`. Every concrete
-		// AdvancedSignature a JAdES source's CounterSignatures() hands out is a *JAdESSignature.
-		jadesCounterSignature := counterSignature.(*JAdESSignature)
+		// AdvancedSignature a JAdES source's CounterSignatures() hands out is a *Signature.
+		jadesCounterSignature := counterSignature.(*Signature)
 		if unsignedAttribute == jadesCounterSignature.MasterCSigComponent() {
 			// NOTE: only one counter signature is allowed within the CounterSignature unprotected
 			// header.
@@ -631,37 +631,37 @@ func (s *JAdESTimestampSource) GetCounterSignatures(unsignedAttribute *EtsiUComp
 
 // GetSignatureTimestampData returns the message-imprint digest for a SignatureTimestamp
 // (BASE64URL(JWS Signature Value)). Port of the public getSignatureTimestampData(DigestAlgorithm).
-func (s *JAdESTimestampSource) GetSignatureTimestampData(digestAlgorithm enumerations.DigestAlgorithm) model.DSSMessageDigest {
-	builder := NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
+func (s *TimestampSource) GetSignatureTimestampData(digestAlgorithm enumerations.DigestAlgorithm) model.DSSMessageDigest {
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm)
 	return builder.SignatureTimestampMessageDigest()
 }
 
 // GetArchiveTimestampData returns the message-imprint digest for an ArchiveTimestamp. Port of the
 // public getArchiveTimestampData(DigestAlgorithm, String).
-func (s *JAdESTimestampSource) GetArchiveTimestampData(digestAlgorithm enumerations.DigestAlgorithm,
+func (s *TimestampSource) GetArchiveTimestampData(digestAlgorithm enumerations.DigestAlgorithm,
 	canonicalizationMethod string) model.DSSMessageDigest {
-	builder := NewJAdESTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
+	builder := NewTimestampMessageDigestBuilder(s.signature, digestAlgorithm).
 		SetCanonicalizationAlgorithm(canonicalizationMethod)
 	return builder.ArchiveTimestampMessageDigest()
 }
 
 // MakeTimestampToken implements timestamp.SignatureTimestampSourceOverrides. Port of
-// makeTimestampToken(JAdESAttribute, TimestampType, List): unconditionally unsupported, since an
+// makeTimestampToken(Attribute, TimestampType, List): unconditionally unsupported, since an
 // 'etsiU' timestamp-container attribute can contain more than one timestamp token - see
 // MakeTimestampTokens (plural) below, which JAdES uses instead.
-func (s *JAdESTimestampSource) MakeTimestampToken(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
+func (s *TimestampSource) MakeTimestampToken(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) *validation.TimestampToken {
 	panic("Attribute can contain more than one timestamp")
 }
 
 // MakeTimestampTokens is JAdES's own plural timestamp-token factory. Port of the protected
-// makeTimestampTokens(JAdESAttribute, TimestampType, List) override.
+// makeTimestampTokens(Attribute, TimestampType, List) override.
 //
 // The SIGNATURE_TIMESTAMP branch additionally folds in GetKeyInfoReferences(): see the GAP note
 // above on getSignatureTimestampReferences. Java's base builds a signature time-stamp's reference
 // list as makeTimestampTokens(attr, SIGNATURE_TIMESTAMP, getSignatureTimestampReferences()) - the
 // single call site that feeds getSignatureTimestampReferences() into a token - so virtual dispatch
-// reaches JAdESTimestampSource's override there and appends getKeyInfoReferences(). The Go base's
+// reaches TimestampSource's override there and appends getKeyInfoReferences(). The Go base's
 // getSignatureTimestampReferences is unexported and hookless, so it statically returns the base
 // list; appending the same references here, at the only affected call site, reproduces the exact
 // reference set Java's dispatch produces. Verified against upstream on the whole
@@ -670,7 +670,7 @@ func (s *JAdESTimestampSource) MakeTimestampToken(signatureAttribute *EtsiUCompo
 // (testdata/broadgen/README.md). The other three call sites need nothing: RefsOnly/SigAndRefs
 // build their own lists in the base, and the ARCHIVE_TIMESTAMP path already routes through
 // IncorporateArchiveTimestampReferences -> archiveTimestampReferences -> signatureTimestampReferences.
-func (s *JAdESTimestampSource) MakeTimestampTokens(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
+func (s *TimestampSource) MakeTimestampTokens(signatureAttribute *EtsiUComponent, timestampType enumerations.TimestampType,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
 	if enumerations.TimestampTypeArchiveTimestamp == timestampType {
 		return s.extractArchiveTimestampTokens(signatureAttribute, references)
@@ -688,7 +688,7 @@ func (s *JAdESTimestampSource) MakeTimestampTokens(signatureAttribute *EtsiUComp
 
 // extractTimestampTokens ports the private extractTimestampTokens(JAdESAttribute, Map,
 // TimestampType, List).
-func (s *JAdESTimestampSource) extractTimestampTokens(signatureAttribute *EtsiUComponent, tstContainer *jose.Object,
+func (s *TimestampSource) extractTimestampTokens(signatureAttribute *EtsiUComponent, tstContainer *jose.Object,
 	timestampType enumerations.TimestampType, references []*validation.TimestampedReference) []*validation.TimestampToken {
 	var result []*validation.TimestampToken
 	if tstContainer != nil && tstContainer.Size() != 0 {
@@ -710,7 +710,7 @@ func (s *JAdESTimestampSource) extractTimestampTokens(signatureAttribute *EtsiUC
 
 // toTimestampToken ports the private toTimestampToken(Object, JAdESAttribute, Integer,
 // TimestampType, List).
-func (s *JAdESTimestampSource) toTimestampToken(tstToken any, signatureAttribute *EtsiUComponent, orderWithinAttribute int,
+func (s *TimestampSource) toTimestampToken(tstToken any, signatureAttribute *EtsiUComponent, orderWithinAttribute int,
 	timestampType enumerations.TimestampType, references []*validation.TimestampedReference) *validation.TimestampToken {
 	tstTokenMap := DSSJsonUtilsToMapValue(tstToken)
 	if tstTokenMap == nil || tstTokenMap.Size() == 0 {
@@ -744,7 +744,7 @@ func (s *JAdESTimestampSource) toTimestampToken(tstToken any, signatureAttribute
 
 // extractArchiveTimestampTokens ports the private extractArchiveTimestampTokens(JAdESAttribute,
 // List).
-func (s *JAdESTimestampSource) extractArchiveTimestampTokens(signatureAttribute *EtsiUComponent,
+func (s *TimestampSource) extractArchiveTimestampTokens(signatureAttribute *EtsiUComponent,
 	references []*validation.TimestampedReference) []*validation.TimestampToken {
 	arcTst := DSSJsonUtilsToMap(signatureAttribute.Value(), JAdESHeaderParameterNamesArcTst)
 	return s.extractTimestampTokens(signatureAttribute, arcTst, enumerations.TimestampTypeArchiveTimestamp, references)
@@ -752,21 +752,21 @@ func (s *JAdESTimestampSource) extractArchiveTimestampTokens(signatureAttribute 
 
 // GetArchiveTimestampType implements timestamp.SignatureTimestampSourceOverrides.
 // Port of getArchiveTimestampType(JAdESAttribute).
-func (s *JAdESTimestampSource) GetArchiveTimestampType(unsignedAttribute *EtsiUComponent) enumerations.ArchiveTimestampType {
+func (s *TimestampSource) GetArchiveTimestampType(unsignedAttribute *EtsiUComponent) enumerations.ArchiveTimestampType {
 	return enumerations.ArchiveTimestampTypeJAdES
 }
 
 // MakeEvidenceRecords implements timestamp.SignatureTimestampSourceOverrides.
 // NOTE: embedded evidence records are not supported within JAdES format. Port of
-// makeEvidenceRecords(JAdESAttribute, List).
-func (s *JAdESTimestampSource) MakeEvidenceRecords(signatureAttribute *EtsiUComponent,
+// makeEvidenceRecords(Attribute, List).
+func (s *TimestampSource) MakeEvidenceRecords(signatureAttribute *EtsiUComponent,
 	references []*validation.TimestampedReference) []validation.EvidenceRecord {
 	// Upstream logs "Embedded evidence records are not supported within JAdES format! The
 	// unsigned attribute is skipped." when signatureAttribute != nil.
 	return nil
 }
 
-// compile-time assertion: *JAdESTimestampSource implements
-// timestamp.SignatureTimestampSourceOverrides[*JAdESSignature, *EtsiUComponent] (see the file
+// compile-time assertion: *TimestampSource implements
+// timestamp.SignatureTimestampSourceOverrides[*Signature, *EtsiUComponent] (see the file
 // header's DEVIATION note on why the SA parameter differs from Java's literal type argument).
-var _ timestamp.SignatureTimestampSourceOverrides[*JAdESSignature, *EtsiUComponent] = (*JAdESTimestampSource)(nil)
+var _ timestamp.SignatureTimestampSourceOverrides[*Signature, *EtsiUComponent] = (*TimestampSource)(nil)

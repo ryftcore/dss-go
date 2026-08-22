@@ -3,10 +3,10 @@ package claim
 
 import "github.com/ryftcore/dss-go/dss/enumerations"
 
-// ClaimIntegrity represents a claim integrity definition, when
+// Integrity represents a claim integrity definition, when
 // applicable. This definition is based on W3C Subresource Integrity
 // (https://www.w3.org/TR/2016/REC-SRI-20160623/).
-type ClaimIntegrity interface {
+type Integrity interface {
 	Claim
 
 	// DigestAlgorithm gets the Digest Algorithm used to compute claim

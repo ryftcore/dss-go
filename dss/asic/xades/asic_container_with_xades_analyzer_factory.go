@@ -31,9 +31,9 @@ func (f *ASiCContainerWithXAdESAnalyzerFactory) IsSupported(document model.DSSDo
 	return validator.IsSupported(document)
 }
 
-// IsSupportedContent verifies whether the provided ASiCContent is supported by the underlying
+// IsSupportedContent verifies whether the provided Content is supported by the underlying
 // validator's class. Ports isSupported(ASiCContent).
-func (f *ASiCContainerWithXAdESAnalyzerFactory) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (f *ASiCContainerWithXAdESAnalyzerFactory) IsSupportedContent(asicContent *asic.Content) bool {
 	validator := newASiCContainerWithXAdESAnalyzer()
 	return validator.IsSupportedASiCContent(asicContent)
 }
@@ -44,8 +44,8 @@ func (f *ASiCContainerWithXAdESAnalyzerFactory) Create(document model.DSSDocumen
 }
 
 // CreateFromContent creates a DocumentAnalyzer for the given asicContent. Ports
-// create(ASiCContent).
-func (f *ASiCContainerWithXAdESAnalyzerFactory) CreateFromContent(asicContent *asic.ASiCContent) analyzer.DocumentAnalyzer {
+// create(Content).
+func (f *ASiCContainerWithXAdESAnalyzerFactory) CreateFromContent(asicContent *asic.Content) analyzer.DocumentAnalyzer {
 	return NewASiCContainerWithXAdESAnalyzerFromContent(asicContent)
 }
 

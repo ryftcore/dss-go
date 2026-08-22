@@ -12,7 +12,7 @@ import (
 )
 
 // XMLSignature is a ds:Signature. Port of XMLSignature(Element, String, boolean), the
-// constructor XAdESSignature.getSantuarioSignature calls with secure validation off.
+// constructor Signature.getSantuarioSignature calls with secure validation off.
 type XMLSignature struct {
 	element   *xmldom.Node
 	baseURI   string
@@ -110,8 +110,8 @@ func (s *XMLSignature) CheckSignatureValue(pub crypto.PublicKey) (bool, error) {
 // ds:SignedInfo and nothing else.
 //
 // It has no Santuario counterpart because Santuario never separates the two halves, but DSS
-// does: XAdESSignature.checkSignatureIntegrity reports "signature intact" and "reference data
-// intact" as two independent flags of SignatureCryptographicVerification, and it can only fill
+// does: Signature.checkSignatureIntegrity reports "signature intact" and "reference data
+// intact" as two independent flags of CryptographicVerification, and it can only fill
 // them in separately if the two checks can be run separately. Upstream gets there by calling
 // checkSignatureValue (which does both) and then reading the reference validations back out of
 // its own ReferenceValidation list; splitting the call is the same information without

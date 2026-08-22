@@ -22,7 +22,7 @@ type EAARevocationFormatChecking struct {
 }
 
 // NewEAARevocationFormatChecking is the default constructor.
-func NewEAARevocationFormatChecking(i18nProvider *i18n.I18nProvider, diagnosticData *diagnostic.DiagnosticData,
+func NewEAARevocationFormatChecking(i18nProvider *i18n.Provider, diagnosticData *diagnostic.Data,
 	eaaStatusToken *diagnostic.EAARevocationTokenWrapper, context enumerations.Context,
 	pol policy.ValidationPolicy) *EAARevocationFormatChecking {
 	c := &EAARevocationFormatChecking{}

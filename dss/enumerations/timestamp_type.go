@@ -126,7 +126,7 @@ func (t TimestampType) CoversSignature() bool {
 }
 
 // Compare compares this TimestampType with the provided timestampType.
-// Must be in the order: Content - Signature - ValidationData - Archival.
+// Must be in the order: Content - Signature - Data - Archival.
 func (t TimestampType) Compare(timestampType TimestampType) int {
 	a := timestampTypeData[t].order
 	b := timestampTypeData[timestampType].order

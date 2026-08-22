@@ -139,13 +139,13 @@ type CertificateVerifier interface {
 	// setAdjunctCertSources(ListCertificateSource) overload.
 	SetAdjunctCertSourcesFromList(adjunctListCertificateSource *spi.ListCertificateSource)
 
-	// AIASource gets the AIASource used to load a model.CertificateToken's issuer by defined
+	// Source gets the Source used to load a model.CertificateToken's issuer by defined
 	// AIA URI(s) within the token. Port of getAIASource().
-	AIASource() aia.AIASource
+	AIASource() aia.Source
 
-	// SetAIASource sets the AIASource used to load a model.CertificateToken's issuer by
+	// SetAIASource sets the Source used to load a model.CertificateToken's issuer by
 	// defined AIA URI(s) within the token. Port of setAIASource(...).
-	SetAIASource(aiaSource aia.AIASource)
+	SetAIASource(aiaSource aia.Source)
 
 	// SetAlertOnInvalidSignature allows to change the behavior on invalid signature (T/LT/LTA
 	// augmentation). Nil provides a possibility to skip check execution. Default:

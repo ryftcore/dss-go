@@ -33,16 +33,16 @@ type TimestampQualificationAtTimeBlock struct {
 
 // NewTimestampQualificationAtTimeBlockAtGenerationTime is the constructor
 // for validation at the timestamp generation time. Port of
-// TimestampQualificationAtTimeBlock(I18nProvider, ValidationTime, TimestampWrapper, List).
-func NewTimestampQualificationAtTimeBlockAtGenerationTime(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime,
+// TimestampQualificationAtTimeBlock(Provider, ValidationTime, TimestampWrapper, List).
+func NewTimestampQualificationAtTimeBlockAtGenerationTime(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime,
 	timestamp *diagnostic.TimestampWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *TimestampQualificationAtTimeBlock {
 	return NewTimestampQualificationAtTimeBlock(i18nProvider, validationTime, nil, timestamp, acceptableServices)
 }
 
 // NewTimestampQualificationAtTimeBlock is the constructor with a custom
 // validation date. Port of
-// TimestampQualificationAtTimeBlock(I18nProvider, ValidationTime, Date, TimestampWrapper, List).
-func NewTimestampQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, validationTime enumerations.ValidationTime, date *time.Time,
+// TimestampQualificationAtTimeBlock(Provider, ValidationTime, Date, TimestampWrapper, List).
+func NewTimestampQualificationAtTimeBlock(i18nProvider *i18n.Provider, validationTime enumerations.ValidationTime, date *time.Time,
 	timestamp *diagnostic.TimestampWrapper, acceptableServices []*diagnostic.TrustServiceWrapper) *TimestampQualificationAtTimeBlock {
 	xmlResult := &jaxb.XmlValidationTimestampQualificationAtTime{}
 	c := &TimestampQualificationAtTimeBlock{

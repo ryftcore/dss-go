@@ -23,7 +23,7 @@ type DigestAlgorithmCryptographicCheckerResultCheck[T any] struct {
 
 // NewDigestAlgorithmCryptographicCheckerResultCheck is the default
 // constructor.
-func NewDigestAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewDigestAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	validationDate time.Time, position i18n.MessageTag, ccResult *jaxb.XmlCC,
 	constraint policy.LevelRule) *DigestAlgorithmCryptographicCheckerResultCheck[T] {
 	c := &DigestAlgorithmCryptographicCheckerResultCheck[T]{validationDate: validationDate}

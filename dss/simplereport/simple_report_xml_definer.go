@@ -11,7 +11,7 @@
 // error: no Go stdlib XSD validator or XSLT engine exists, and adding a
 // third-party one is outside the stdlib-first dependency policy without
 // tech-lead sign-off (PORTING.md "Dependency policy").
-// SimpleReportFacade.Marshal/Unmarshal (the half of this pair that the
+// Facade.Marshal/Unmarshal (the half of this pair that the
 // marshal-parity KAT actually exercises, via jaxb.Marshal/Unmarshal) does
 // not depend on any of the three.
 package simplereport
@@ -39,13 +39,13 @@ const SimpleReportXsltPdfLocation = "/xslt/pdf/simple-report.xslt"
 var ErrXSDSchemaNotSupported = errors.New("simplereport: SimpleReport.xsd schema validation is not implemented in this port (deferred, see SimpleReportXmlDefiner)")
 
 // ErrHtmlTemplatesNotSupported is returned by HtmlBootstrap4Templates()
-// (and SimpleReportFacade's HTML report generators): no XSLT engine ships
+// (and Facade's HTML report generators): no XSLT engine ships
 // in the Go stdlib and none has been added to this port (see the file
 // header).
 var ErrHtmlTemplatesNotSupported = errors.New("simplereport: simple-report-bootstrap4.xslt HTML rendering is not implemented in this port (deferred, see SimpleReportXmlDefiner)")
 
 // ErrPdfTemplatesNotSupported is returned by PdfTemplates() (and
-// SimpleReportFacade's PDF report generators): no XSLT engine ships in the
+// Facade's PDF report generators): no XSLT engine ships in the
 // Go stdlib and none has been added to this port (see the file header).
 var ErrPdfTemplatesNotSupported = errors.New("simplereport: simple-report.xslt PDF rendering is not implemented in this port (deferred, see SimpleReportXmlDefiner)")
 

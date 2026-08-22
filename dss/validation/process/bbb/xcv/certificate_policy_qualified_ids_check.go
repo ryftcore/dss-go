@@ -20,8 +20,8 @@ type CertificatePolicyQualifiedIdsCheck struct {
 }
 
 // NewCertificatePolicyQualifiedIdsCheck is the default constructor. Port of
-// CertificatePolicyQualifiedIdsCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewCertificatePolicyQualifiedIdsCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// CertificatePolicyQualifiedIdsCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewCertificatePolicyQualifiedIdsCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *CertificatePolicyQualifiedIdsCheck {
 	c := &CertificatePolicyQualifiedIdsCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

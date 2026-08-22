@@ -20,12 +20,12 @@ type BasicTimestampValidationWithIdCheck[T any] struct {
 }
 
 // NewBasicTimestampValidationWithIdCheck is the default constructor. Port of
-// BasicTimestampValidationWithIdCheck(I18nProvider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule).
+// BasicTimestampValidationWithIdCheck(Provider, T, TimestampWrapper, XmlValidationProcessBasicTimestamp, LevelRule).
 //
 // The constructor re-registers the overrides with the outer type, so that the
 // base's self-calls reach this class' BuildAdditionalInfo rather than the one
 // inherited from ChainItemBase.
-func NewBasicTimestampValidationWithIdCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewBasicTimestampValidationWithIdCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, timestampValidationResult *jaxb.XmlValidationProcessBasicTimestamp,
 	constraint policy.LevelRule) *BasicTimestampValidationWithIdCheck[T] {
 	c := &BasicTimestampValidationWithIdCheck[T]{

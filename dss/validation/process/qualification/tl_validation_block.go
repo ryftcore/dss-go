@@ -27,8 +27,8 @@ type TLValidationBlock struct {
 }
 
 // NewTLValidationBlock is the default constructor. Port of
-// TLValidationBlock(I18nProvider, XmlTrustedList, Date, ValidationPolicy).
-func NewTLValidationBlock(i18nProvider *i18n.I18nProvider, currentTL *dssjaxb.XmlTrustedList, currentTime time.Time,
+// TLValidationBlock(Provider, XmlTrustedList, Date, ValidationPolicy).
+func NewTLValidationBlock(i18nProvider *i18n.Provider, currentTL *dssjaxb.XmlTrustedList, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy) *TLValidationBlock {
 	xmlTLAnalysis := &jaxb.XmlTLAnalysis{}
 	b := &TLValidationBlock{

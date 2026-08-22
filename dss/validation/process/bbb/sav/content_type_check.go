@@ -26,8 +26,8 @@ type ContentTypeCheck struct {
 }
 
 // NewContentTypeCheck is the default constructor. Port of
-// ContentTypeCheck(I18nProvider, XmlSAV, SignatureWrapper, MultiValuesRule).
-func NewContentTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// ContentTypeCheck(Provider, XmlSAV, SignatureWrapper, MultiValuesRule).
+func NewContentTypeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	signature *diagnostic.SignatureWrapper, constraint policy.MultiValuesRule) *ContentTypeCheck {
 	c := &ContentTypeCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

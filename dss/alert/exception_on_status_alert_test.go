@@ -23,7 +23,7 @@ func TestExceptionOnStatusAlert_ReturnsAlertErrorWhenStatusNotEmpty(t *testing.T
 		t.Fatalf("Alert() error = nil, want AlertError")
 	}
 
-	var alertErr *AlertError
+	var alertErr *Error
 	if !errors.As(err, &alertErr) {
 		t.Fatalf("Alert() error type = %T, want *AlertError", err)
 	}

@@ -25,7 +25,7 @@ type EAAAdministrativePeriodNotExpiredCheck struct {
 }
 
 // NewEAAAdministrativePeriodNotExpiredCheck is the default constructor.
-func NewEAAAdministrativePeriodNotExpiredCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAAdministrativePeriodNotExpiredCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, validationTime time.Time, constraint policy.LevelRule) *EAAAdministrativePeriodNotExpiredCheck {
 	c := &EAAAdministrativePeriodNotExpiredCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

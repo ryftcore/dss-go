@@ -62,7 +62,7 @@ func (a *JWSSerializationAnalyzerValidator) BuildSignatures() []validation.Advan
 	foundSignatures := jwsJsonSerializationObject.Signatures()
 	// Upstream logs "{} signature(s) found".
 	for _, jws := range foundSignatures {
-		jadesSignature := NewJAdESSignature(jws)
+		jadesSignature := NewSignature(jws)
 		jadesSignature.SetFilename(a.Document().Name())
 		jadesSignature.SetSigningCertificateSource(a.SigningCertificateSource())
 		jadesSignature.SetDetachedContents(a.DetachedContents())

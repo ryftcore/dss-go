@@ -19,8 +19,8 @@ type PIDProviderListCheck struct {
 }
 
 // NewPIDProviderListCheck is the default constructor. Port of
-// PIDProviderListCheck(I18nProvider, XmlValidationPIDQualificationProcess, String, LevelRule).
-func NewPIDProviderListCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
+// PIDProviderListCheck(Provider, XmlValidationPIDQualificationProcess, String, LevelRule).
+func NewPIDProviderListCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationPIDQualificationProcess],
 	listTypeUri string, constraint policy.LevelRule) *PIDProviderListCheck {
 	c := &PIDProviderListCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

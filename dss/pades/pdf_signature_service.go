@@ -32,12 +32,12 @@ import (
 type PDFSignatureService interface {
 	// MessageDigest returns the message-digest computed on the PDF signature revision's
 	// ByteRange. Port of #messageDigest.
-	MessageDigest(toSignDocument model.DSSDocument, parameters PAdESCommonParameters) model.DSSMessageDigest
+	MessageDigest(toSignDocument model.DSSDocument, parameters CommonParameters) model.DSSMessageDigest
 
 	// Sign signs a PDF document, enveloping the encoded CMS signed data in a new revision.
 	// Port of #sign.
 	Sign(toSignDocument model.DSSDocument, cmsSignedData []byte,
-		parameters PAdESCommonParameters) model.DSSDocument
+		parameters CommonParameters) model.DSSDocument
 
 	// GetRevisions retrieves the revisions from a PDF document. pwd is nil for a document that
 	// is not encrypted. Port of #getRevisions.
@@ -91,12 +91,12 @@ type PDFSignatureService interface {
 	// PreviewPageWithVisualSignature returns a page preview with the visual signature, as a
 	// document containing a PNG picture. Port of #previewPageWithVisualSignature.
 	PreviewPageWithVisualSignature(toSignDocument model.DSSDocument,
-		parameters PAdESCommonParameters) model.DSSDocument
+		parameters CommonParameters) model.DSSDocument
 
 	// PreviewSignatureField returns a preview of the signature field, as a document containing a
 	// PNG picture. Port of #previewSignatureField.
 	PreviewSignatureField(toSignDocument model.DSSDocument,
-		parameters PAdESCommonParameters) model.DSSDocument
+		parameters CommonParameters) model.DSSDocument
 
 	// SetResourcesHandlerBuilder sets the DSSResourcesHandlerBuilder used to create a
 	// DSSResourcesHandler in internal methods, which defines how OutputStreams are operated and

@@ -20,7 +20,7 @@ type SignedFilesPresentCheck struct {
 }
 
 // NewSignedFilesPresentCheck is the default constructor.
-func NewSignedFilesPresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewSignedFilesPresentCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	containerInfo *diagjaxb.XmlContainerInfo, constraint policy.LevelRule) *SignedFilesPresentCheck {
 	c := &SignedFilesPresentCheck{containerInfo: containerInfo}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

@@ -131,8 +131,8 @@ type ChainBase[T any] struct {
 	// the JAXB base structs it embeds.
 	Result *Result[T]
 
-	// I18nProvider is the internationalization provider.
-	I18nProvider *i18n.I18nProvider
+	// Provider is the internationalization provider.
+	I18nProvider *i18n.Provider
 
 	// FirstItem is the first item to execute the chain.
 	FirstItem ChainItem[T]
@@ -145,7 +145,7 @@ type ChainBase[T any] struct {
 // Chain(I18nProvider, T newInstance): the Java constructor takes the new
 // instance of the result object, this one takes it bound to its JAXB base
 // structs (see Result).
-func NewChainBase[T any](i18nProvider *i18n.I18nProvider, newInstance *Result[T]) *ChainBase[T] {
+func NewChainBase[T any](i18nProvider *i18n.Provider, newInstance *Result[T]) *ChainBase[T] {
 	return &ChainBase[T]{
 		I18nProvider: i18nProvider,
 		Result:       newInstance,

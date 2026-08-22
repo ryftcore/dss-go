@@ -22,7 +22,7 @@ func NewTrustServiceEquivalenceConverter() *TrustServiceEquivalenceConverter {
 }
 
 // Apply ports apply(TrustServiceEquivalenceInformationType).
-func (c *TrustServiceEquivalenceConverter) Apply(t *jaxb.TrustServiceEquivalenceInformationType) *timedependent.MutableTimeDependentValues[*tslmodel.ServiceEquivalence] {
+func (c *TrustServiceEquivalenceConverter) Apply(t *jaxb.TrustServiceEquivalenceInformationType) *timedependent.MutableValues[*tslmodel.ServiceEquivalence] {
 	result := timedependent.NewMutableTimeDependentValues[*tslmodel.ServiceEquivalence]()
 
 	var status enumerations.MRAStatus

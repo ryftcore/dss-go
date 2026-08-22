@@ -27,8 +27,8 @@ type PastCertificateValidationAcceptableCheck struct {
 }
 
 // NewPastCertificateValidationAcceptableCheck is the default constructor. Port
-// of PastCertificateValidationAcceptableCheck(I18nProvider, XmlPSV, XmlPCV, String, Indication, SubIndication, LevelRule).
-func NewPastCertificateValidationAcceptableCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPSV],
+// of PastCertificateValidationAcceptableCheck(Provider, XmlPSV, XmlPCV, String, Indication, SubIndication, LevelRule).
+func NewPastCertificateValidationAcceptableCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPSV],
 	pcv *jaxb.XmlPCV, tokenId string, currentIndication enumerations.Indication,
 	currentSubIndication enumerations.SubIndication,
 	constraint policy.LevelRule) *PastCertificateValidationAcceptableCheck {

@@ -20,7 +20,7 @@ type EvidenceRecordHashTreeRenewalTimestampCheck struct {
 	*process.ChainItemBase[*jaxb.XmlCV]
 
 	// diagnosticData is the Diagnostic Data.
-	diagnosticData *diagnostic.DiagnosticData
+	diagnosticData *diagnostic.Data
 
 	// timestampWrapper is the time-stamp token to check.
 	timestampWrapper *diagnostic.TimestampWrapper
@@ -28,9 +28,9 @@ type EvidenceRecordHashTreeRenewalTimestampCheck struct {
 
 // NewEvidenceRecordHashTreeRenewalTimestampCheck is the default constructor.
 // Port of
-// EvidenceRecordHashTreeRenewalTimestampCheck(I18nProvider, XmlCV, DiagnosticData, TimestampWrapper, LevelRule).
-func NewEvidenceRecordHashTreeRenewalTimestampCheck(i18nProvider *i18n.I18nProvider,
-	result *process.Result[*jaxb.XmlCV], diagnosticData *diagnostic.DiagnosticData,
+// EvidenceRecordHashTreeRenewalTimestampCheck(Provider, XmlCV, Data, TimestampWrapper, LevelRule).
+func NewEvidenceRecordHashTreeRenewalTimestampCheck(i18nProvider *i18n.Provider,
+	result *process.Result[*jaxb.XmlCV], diagnosticData *diagnostic.Data,
 	timestampWrapper *diagnostic.TimestampWrapper,
 	constraint policy.LevelRule) *EvidenceRecordHashTreeRenewalTimestampCheck {
 	c := &EvidenceRecordHashTreeRenewalTimestampCheck{

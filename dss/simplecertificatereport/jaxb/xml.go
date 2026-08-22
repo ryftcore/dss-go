@@ -87,7 +87,7 @@ func NewXSDateTime(t time.Time) *XSDateTime {
 // --------------------------------------------------------------- entry points
 
 // Unmarshal parses a simple-certificate-report document, the way
-// SimpleCertificateReportFacade's underlying AbstractJaxbFacade.unmarshall
+// Facade's underlying AbstractJaxbFacade.unmarshall
 // does.
 func Unmarshal(data []byte) (*XmlSimpleCertificateReport, error) {
 	scr := &XmlSimpleCertificateReport{}
@@ -98,7 +98,7 @@ func Unmarshal(data []byte) (*XmlSimpleCertificateReport, error) {
 }
 
 // Marshal writes a simple-certificate-report document byte-for-byte the way
-// SimpleCertificateReportFacade's underlying AbstractJaxbFacade.marshall
+// Facade's underlying AbstractJaxbFacade.marshall
 // does: the XML declaration, four-space indented output, a trailing
 // newline, and the JAXB spellings jaxbCanonical/jaxbRootNamespaceLast
 // restore.

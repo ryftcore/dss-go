@@ -20,8 +20,8 @@ type SigningCertificateAttributePresentCheck struct {
 }
 
 // NewSigningCertificateAttributePresentCheck is the default constructor. Port of
-// SigningCertificateAttributePresentCheck(I18nProvider, XmlSAV, TokenProxy, LevelRule).
-func NewSigningCertificateAttributePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+// SigningCertificateAttributePresentCheck(Provider, XmlSAV, TokenProxy, LevelRule).
+func NewSigningCertificateAttributePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *SigningCertificateAttributePresentCheck {
 	c := &SigningCertificateAttributePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

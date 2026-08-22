@@ -27,8 +27,8 @@ type PastSignatureValidationCertificateRevocationSelectorResultCheck struct {
 
 // NewPastSignatureValidationCertificateRevocationSelectorResultCheck is the
 // default constructor. Port of
-// PastSignatureValidationCertificateRevocationSelectorResultCheck(I18nProvider, XmlPSV, XmlCRS, LevelRule).
-func NewPastSignatureValidationCertificateRevocationSelectorResultCheck(i18nProvider *i18n.I18nProvider,
+// PastSignatureValidationCertificateRevocationSelectorResultCheck(Provider, XmlPSV, XmlCRS, LevelRule).
+func NewPastSignatureValidationCertificateRevocationSelectorResultCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlPSV], crsResult *jaxb.XmlCRS,
 	constraint policy.LevelRule) *PastSignatureValidationCertificateRevocationSelectorResultCheck {
 	c := &PastSignatureValidationCertificateRevocationSelectorResultCheck{

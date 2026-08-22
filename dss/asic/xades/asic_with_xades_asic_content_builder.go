@@ -8,29 +8,29 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
-// ASiCWithXAdESASiCContentBuilder builds an ASiCContent for an ASiC with XAdES container.
+// ASiCWithXAdESASiCContentBuilder builds an Content for an ASiC with XAdES container.
 //
 // Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
 // InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
 // embedding, so the base dispatches getContainerExtractor through
-// asic.AbstractASiCContentBuilderOverrides.
+// asic.AbstractContentBuilderOverrides.
 type ASiCWithXAdESASiCContentBuilder struct {
-	*asic.AbstractASiCContentBuilder
+	*asic.AbstractContentBuilder
 }
 
-var _ asic.AbstractASiCContentBuilderOverrides = (*ASiCWithXAdESASiCContentBuilder)(nil)
+var _ asic.AbstractContentBuilderOverrides = (*ASiCWithXAdESASiCContentBuilder)(nil)
 
 // NewASiCWithXAdESASiCContentBuilder is the default constructor. Ports the empty
 // ASiCWithXAdESASiCContentBuilder().
 func NewASiCWithXAdESASiCContentBuilder() *ASiCWithXAdESASiCContentBuilder {
 	builder := &ASiCWithXAdESASiCContentBuilder{
-		AbstractASiCContentBuilder: asic.NewAbstractASiCContentBuilderBase(),
+		AbstractContentBuilder: asic.NewAbstractASiCContentBuilderBase(),
 	}
 	builder.InitAbstractASiCContentBuilder(builder)
 	return builder
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-func (b *ASiCWithXAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ASiCContainerExtractor {
+func (b *ASiCWithXAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ContainerExtractor {
 	return NewASiCWithXAdESContainerExtractor(archiveDocument)
 }

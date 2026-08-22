@@ -7,10 +7,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/document"
 )
 
-// CAdESSignatureParameters defines SignatureParameters to deal with CAdES signature
+// SignatureParameters defines SignatureParameters to deal with CAdES signature
 // creation/extension.
-type CAdESSignatureParameters struct {
-	document.AbstractSignatureParameters[*CAdESTimestampParameters]
+type SignatureParameters struct {
+	document.AbstractSignatureParameters[*TimestampParameters]
 
 	// en319122 defines if the signature shall be created according to ETSI EN 319 122.
 	en319122 bool
@@ -34,9 +34,9 @@ type CAdESSignatureParameters struct {
 
 // NewCAdESSignatureParameters instantiates object with null values. Port of the default
 // constructor.
-func NewCAdESSignatureParameters() *CAdESSignatureParameters {
-	return &CAdESSignatureParameters{
-		AbstractSignatureParameters: document.NewAbstractSignatureParameters[*CAdESTimestampParameters](),
+func NewSignatureParameters() *SignatureParameters {
+	return &SignatureParameters{
+		AbstractSignatureParameters: document.NewAbstractSignatureParameters[*TimestampParameters](),
 		en319122:                    true,
 		parallelSignature:           true,
 	}
@@ -44,7 +44,7 @@ func NewCAdESSignatureParameters() *CAdESSignatureParameters {
 
 // IsEn319122 returns if the signature shall be created according to ETSI EN 319 122, otherwise as
 // an old format. Port of #isEn319122.
-func (p *CAdESSignatureParameters) IsEn319122() bool {
+func (p *SignatureParameters) IsEn319122() bool {
 	return p.en319122
 }
 
@@ -52,28 +52,28 @@ func (p *CAdESSignatureParameters) IsEn319122() bool {
 // be created with respect to the old standard.
 //
 // Default: true. Port of #setEn319122.
-func (p *CAdESSignatureParameters) SetEn319122(en319122 bool) {
+func (p *SignatureParameters) SetEn319122(en319122 bool) {
 	p.en319122 = en319122
 }
 
 // ContentHintsType gets content hints type. Port of #getContentHintsType.
-func (p *CAdESSignatureParameters) ContentHintsType() string {
+func (p *SignatureParameters) ContentHintsType() string {
 	return p.contentHintsType
 }
 
 // SetContentHintsType sets content hints type. Port of #setContentHintsType.
-func (p *CAdESSignatureParameters) SetContentHintsType(contentHintsType string) {
+func (p *SignatureParameters) SetContentHintsType(contentHintsType string) {
 	p.contentHintsType = contentHintsType
 }
 
 // ContentHintsDescription gets content hints description. Port of #getContentHintsDescription.
-func (p *CAdESSignatureParameters) ContentHintsDescription() string {
+func (p *SignatureParameters) ContentHintsDescription() string {
 	return p.contentHintsDescription
 }
 
 // SetContentHintsDescription sets content hints description. Port of
 // #setContentHintsDescription.
-func (p *CAdESSignatureParameters) SetContentHintsDescription(contentHintsDescription string) {
+func (p *SignatureParameters) SetContentHintsDescription(contentHintsDescription string) {
 	p.contentHintsDescription = contentHintsDescription
 }
 
@@ -93,7 +93,7 @@ func (p *CAdESSignatureParameters) SetContentHintsDescription(contentHintsDescri
 // information), a GeneralizedTime string, and a random number.
 //
 // Port of #getContentIdentifierSuffix.
-func (p *CAdESSignatureParameters) ContentIdentifierSuffix() string {
+func (p *SignatureParameters) ContentIdentifierSuffix() string {
 	return p.contentIdentifierSuffix
 }
 
@@ -102,25 +102,25 @@ func (p *CAdESSignatureParameters) ContentIdentifierSuffix() string {
 // NOTE: THIS VALUE WILL BE SET AUTOMATICALLY IF LEFT BLANK
 //
 // Port of #setContentIdentifierSuffix.
-func (p *CAdESSignatureParameters) SetContentIdentifierSuffix(contentIdentifierSuffix string) {
+func (p *SignatureParameters) SetContentIdentifierSuffix(contentIdentifierSuffix string) {
 	p.contentIdentifierSuffix = contentIdentifierSuffix
 }
 
 // ContentIdentifierPrefix returns the content identifier prefix. See ContentIdentifierSuffix's
 // doc. Port of #getContentIdentifierPrefix.
-func (p *CAdESSignatureParameters) ContentIdentifierPrefix() string {
+func (p *SignatureParameters) ContentIdentifierPrefix() string {
 	return p.contentIdentifierPrefix
 }
 
 // SetContentIdentifierPrefix sets content identifier prefix. Port of #setContentIdentifierPrefix.
-func (p *CAdESSignatureParameters) SetContentIdentifierPrefix(contentIdentifierPrefix string) {
+func (p *SignatureParameters) SetContentIdentifierPrefix(contentIdentifierPrefix string) {
 	p.contentIdentifierPrefix = contentIdentifierPrefix
 }
 
 // IsParallelSignature returns whether a parallel signature should be created when an original
 // document is represented by a CMSSignedData (i.e. another CMS signature document). Port of
 // #isParallelSignature.
-func (p *CAdESSignatureParameters) IsParallelSignature() bool {
+func (p *SignatureParameters) IsParallelSignature() bool {
 	return p.parallelSignature
 }
 
@@ -135,46 +135,46 @@ func (p *CAdESSignatureParameters) IsParallelSignature() bool {
 //
 // Default: TRUE (creates a parallel signature, when applicable). Port of
 // #setParallelSignature.
-func (p *CAdESSignatureParameters) SetParallelSignature(parallelSignature bool) {
+func (p *SignatureParameters) SetParallelSignature(parallelSignature bool) {
 	p.parallelSignature = parallelSignature
 }
 
 // GetContentTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating CAdESTimestampParameters. Port of #getContentTimestampParameters.
-func (p *CAdESSignatureParameters) GetContentTimestampParameters() *CAdESTimestampParameters {
+func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
-		p.ContentTimestampParameters = NewCAdESTimestampParameters()
+		p.ContentTimestampParameters = NewTimestampParameters()
 	}
 	return p.ContentTimestampParameters
 }
 
 // GetSignatureTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating CAdESTimestampParameters. Port of #getSignatureTimestampParameters.
-func (p *CAdESSignatureParameters) GetSignatureTimestampParameters() *CAdESTimestampParameters {
+func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
-		p.SignatureTimestampParameters = NewCAdESTimestampParameters()
+		p.SignatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.SignatureTimestampParameters
 }
 
 // GetArchiveTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating CAdESTimestampParameters. Port of #getArchiveTimestampParameters.
-func (p *CAdESSignatureParameters) GetArchiveTimestampParameters() *CAdESTimestampParameters {
+func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
-		p.ArchiveTimestampParameters = NewCAdESTimestampParameters()
+		p.ArchiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.ArchiveTimestampParameters
 }
 
 // String ports #toString.
-func (p *CAdESSignatureParameters) String() string {
+func (p *SignatureParameters) String() string {
 	return fmt.Sprintf("CAdESSignatureParameters [en319122=%v, contentHintsType='%v', contentHintsDescription='%v', contentIdentifierPrefix='%v', contentIdentifierSuffix='%v', parallelSignature=%v] %s",
 		p.en319122, p.contentHintsType, p.contentHintsDescription, p.contentIdentifierPrefix, p.contentIdentifierSuffix, p.parallelSignature,
 		p.AbstractSignatureParameters.String())
 }
 
 // Equals ports #equals.
-func (p *CAdESSignatureParameters) Equals(other *CAdESSignatureParameters) bool {
+func (p *SignatureParameters) Equals(other *SignatureParameters) bool {
 	if p == other {
 		return true
 	}

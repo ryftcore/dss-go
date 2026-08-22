@@ -43,10 +43,10 @@ type DetailedReportForQWACBuilder struct {
 }
 
 // NewDetailedReportForQWACBuilder is the default constructor. Port of
-// DetailedReportForQWACBuilder(I18nProvider, DiagnosticData, ValidationPolicy,
+// DetailedReportForQWACBuilder(Provider, Data, ValidationPolicy,
 // Date, String).
-func NewDetailedReportForQWACBuilder(i18nProvider *i18n.I18nProvider,
-	diagnosticData *diagnostic.DiagnosticData, validationPolicy policy.ValidationPolicy,
+func NewDetailedReportForQWACBuilder(i18nProvider *i18n.Provider,
+	diagnosticData *diagnostic.Data, validationPolicy policy.ValidationPolicy,
 	currentTime time.Time, certificateId string) *DetailedReportForQWACBuilder {
 	b := &DetailedReportForQWACBuilder{
 		DetailedReportForCertificateBuilder: *NewDetailedReportForCertificateBuilder(

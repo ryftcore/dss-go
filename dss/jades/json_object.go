@@ -19,7 +19,7 @@ import "github.com/ryftcore/dss-go/dss/internal/jose"
 //	NewJsonObjectFromMap(m)  wraps whatever m is, normally a LinkedHashMap built in code order
 //
 // That asymmetry is upstream's (`map = new HashMap<>()` versus `map = m`) and it is visible in
-// signed bytes: JAdESLevelBaselineLT builds 'rVals' and 'tstVd' through the no-argument
+// signed bytes: LevelBaselineLT builds 'rVals' and 'tstVd' through the no-argument
 // constructor, so their members are serialized in HashMap order and an archive timestamp covers
 // exactly those bytes.
 type JsonObject struct {

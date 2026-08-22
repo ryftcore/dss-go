@@ -108,9 +108,9 @@ func xadesSignABuilderSigner(t *testing.T) *model.CertificateToken {
 }
 
 // xadesSignABuilderBaseParams mirrors SignABuilderOracle.baseParams().
-func xadesSignABuilderBaseParams(t *testing.T) *XAdESSignatureParameters {
+func xadesSignABuilderBaseParams(t *testing.T) *SignatureParameters {
 	t.Helper()
-	params := NewXAdESSignatureParameters()
+	params := NewSignatureParameters()
 	signer := xadesSignABuilderSigner(t)
 	params.SetSigningCertificate(signer)
 	params.SetCertificateChain([]*model.CertificateToken{signer})
@@ -121,25 +121,25 @@ func xadesSignABuilderBaseParams(t *testing.T) *XAdESSignatureParameters {
 	return params
 }
 
-func xadesSignABuilderEnvelopingParams(t *testing.T) *XAdESSignatureParameters {
+func xadesSignABuilderEnvelopingParams(t *testing.T) *SignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
 	params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	return params
 }
 
-func xadesSignABuilderEnvelopedParams(t *testing.T) *XAdESSignatureParameters {
+func xadesSignABuilderEnvelopedParams(t *testing.T) *SignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
 	params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)
 	return params
 }
 
-func xadesSignABuilderDetachedParams(t *testing.T) *XAdESSignatureParameters {
+func xadesSignABuilderDetachedParams(t *testing.T) *SignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
 	params.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	return params
 }
 
-func xadesSignABuilderInternallyDetachedParams(t *testing.T) *XAdESSignatureParameters {
+func xadesSignABuilderInternallyDetachedParams(t *testing.T) *SignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
 	params.SetSignaturePackaging(enumerations.SignaturePackagingInternallyDetached)
 	return params
@@ -203,10 +203,10 @@ func xadesSignABuilderAssertBytes(t *testing.T, caseName, key string, want, got 
 // runBuildCase is the body every signing case shares: build, compare the three intermediate
 // blobs, sign, compare the document.
 func xadesSignABuilderRunBuildCase(t *testing.T, oracle xadesSignABuilderOracle, caseName string,
-	params *XAdESSignatureParameters, documents []model.DSSDocument) {
+	params *SignatureParameters, documents []model.DSSDocument) {
 	t.Helper()
 
-	builderRef, err := XAdESSignatureBuilderGetSignatureBuilderForDocuments(params, documents,
+	builderRef, err := SignatureBuilderGetSignatureBuilderForDocuments(params, documents,
 		xadesSignABuilderVerifier())
 	if err != nil {
 		t.Fatalf("case %s: building the signature builder: %v", caseName, err)
@@ -244,19 +244,19 @@ func xadesSignABuilderRunBuildCase(t *testing.T, oracle xadesSignABuilderOracle,
 		xadesSignABuilderReadAll(t, signed))
 }
 
-// xadesSignABuilderBaseOf recovers the embedded XAdESSignatureBuilder of whichever packaging
+// xadesSignABuilderBaseOf recovers the embedded AbstractSignatureBuilder of whichever packaging
 // builder the factory returned, so the test can read the cached DOM elements the oracle dumps.
-func xadesSignABuilderBaseOf(t *testing.T, ref XAdESSignatureBuilderRef) *XAdESSignatureBuilder {
+func xadesSignABuilderBaseOf(t *testing.T, ref SignatureBuilderRef) *AbstractSignatureBuilder {
 	t.Helper()
 	switch builder := ref.(type) {
 	case *EnvelopingSignatureBuilder:
-		return &builder.XAdESSignatureBuilder
+		return &builder.AbstractSignatureBuilder
 	case *EnvelopedSignatureBuilder:
-		return &builder.XAdESSignatureBuilder
+		return &builder.AbstractSignatureBuilder
 	case *DetachedSignatureBuilder:
-		return &builder.XAdESSignatureBuilder
+		return &builder.AbstractSignatureBuilder
 	case *InternallyDetachedSignatureBuilder:
-		return &builder.XAdESSignatureBuilder
+		return &builder.AbstractSignatureBuilder
 	}
 	t.Fatalf("unexpected builder type %T", ref)
 	return nil
@@ -424,7 +424,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleKeyInfo(t *testing.T) {
 	})
 
 	t.Run("enveloping-no-signing-certificate", func(t *testing.T) {
-		params := NewXAdESSignatureParameters()
+		params := NewSignatureParameters()
 		signingDate := xadesSignABuilderSigningDate
 		params.BLevel().SetSigningDate(&signingDate)
 		params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
@@ -644,7 +644,7 @@ func TestXAdESSignatureBuilderExplicitSignedData(t *testing.T) {
 	oracle := loadXAdESSignABuilderOracle(t)
 
 	sourceParams := xadesSignABuilderEnvelopingParams(t)
-	sourceRef, err := XAdESSignatureBuilderGetSignatureBuilder(sourceParams,
+	sourceRef, err := SignatureBuilderGetSignatureBuilder(sourceParams,
 		xadesSignABuilderTextDocument(), xadesSignABuilderVerifier())
 	if err != nil {
 		t.Fatalf("building the source builder: %v", err)

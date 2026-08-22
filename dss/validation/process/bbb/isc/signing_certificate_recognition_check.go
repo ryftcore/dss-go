@@ -20,8 +20,8 @@ type SigningCertificateRecognitionCheck struct {
 }
 
 // NewSigningCertificateRecognitionCheck is the default constructor. Port of
-// SigningCertificateRecognitionCheck(I18nProvider, XmlISC, TokenProxy, LevelRule).
-func NewSigningCertificateRecognitionCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlISC],
+// SigningCertificateRecognitionCheck(Provider, XmlISC, TokenProxy, LevelRule).
+func NewSigningCertificateRecognitionCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlISC],
 	token diagnostic.TokenProxy, constraint policy.LevelRule) *SigningCertificateRecognitionCheck {
 	c := &SigningCertificateRecognitionCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

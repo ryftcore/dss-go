@@ -26,8 +26,8 @@ type ValidationTimeSlidingCheck struct {
 }
 
 // NewValidationTimeSlidingCheck is the default constructor. Port of
-// ValidationTimeSlidingCheck(I18nProvider, XmlPCV, XmlVTS, String, CertificateWrapper, LevelRule).
-func NewValidationTimeSlidingCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPCV],
+// ValidationTimeSlidingCheck(Provider, XmlPCV, XmlVTS, String, CertificateWrapper, LevelRule).
+func NewValidationTimeSlidingCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPCV],
 	vts *jaxb.XmlVTS, tokenId string, trustedCertificate *diagnostic.CertificateWrapper,
 	constraint policy.LevelRule) *ValidationTimeSlidingCheck {
 	c := &ValidationTimeSlidingCheck{

@@ -1,7 +1,7 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/signature/CounterSignatureBuilder.java (DSS 6.5.RC1).
 //
 // Java extends ExtensionBuilder and overrides nothing; it registers itself with
-// InitExtensionBuilderWithVerifier so the three XAdESBuilder hooks resolve through this concrete
+// InitExtensionBuilderWithVerifier so the three Builder hooks resolve through this concrete
 // type, the TokenBase.InitToken(self) convention of PORTING.md.
 //
 // # javax.xml.crypto.dsig.XMLSignature.XMLNS and getElementsByTagNameNS
@@ -16,12 +16,12 @@
 // # Deterministic Id priming (DEVIATION, flagged for the integrator)
 //
 // Java's XAdESCounterSignatureParameters overrides getDeterministicId(), and every call reaching
-// it through an XAdESSignatureParameters reference dispatches virtually to the counter-signature
-// value. Go has no such dispatch: a *XAdESSignatureParameters holding the embedded base of an
-// XAdESCounterSignatureParameters answers the base implementation. Both implementations cache
-// their result in the shared XAdESProfileParameters, so each public method here that receives the
-// concrete *XAdESCounterSignatureParameters calls its GetDeterministicId() once up front; every
-// later base-typed read - inside ReferenceIdProvider, XAdESSignatureBuilder and this file - then
+// it through an SignatureParameters reference dispatches virtually to the counter-signature
+// value. Go has no such dispatch: a *SignatureParameters holding the embedded base of an
+// CounterSignatureParameters answers the base implementation. Both implementations cache
+// their result in the shared ProfileParameters, so each public method here that receives the
+// concrete *CounterSignatureParameters calls its GetDeterministicId() once up front; every
+// later base-typed read - inside ReferenceIdProvider, AbstractSignatureBuilder and this file - then
 // returns that same cached counter-signature Id, exactly as Java's virtual call would. The value
 // is identical to Java's and computed at the same point in the flow, since Java's first virtual
 // call also happens inside these methods.
@@ -57,7 +57,7 @@ type CounterSignatureBuilder struct {
 // NewCounterSignatureBuilder is the default constructor.
 // Port of the protected CounterSignatureBuilder(CertificateVerifier) constructor; the type is
 // exported (see detached_signature_builder.go for the package-private deviation note), and so is
-// its constructor, because XAdESService builds one.
+// its constructor, because Service builds one.
 func NewCounterSignatureBuilder(certificateVerifier validation.CertificateVerifier) *CounterSignatureBuilder {
 	builder := &CounterSignatureBuilder{}
 	builder.InitExtensionBuilderWithVerifier(builder, certificateVerifier)
@@ -67,10 +67,10 @@ func NewCounterSignatureBuilder(certificateVerifier validation.CertificateVerifi
 // GetCanonicalizedSignatureValue extracts a canonicalized ds:SignatureValue element from the
 // provided XAdES signature. Port of #getCanonicalizedSignatureValue.
 func (b *CounterSignatureBuilder) GetCanonicalizedSignatureValue(signatureDocument model.DSSDocument,
-	parameters *XAdESCounterSignatureParameters) (model.DSSDocument, error) {
+	parameters *CounterSignatureParameters) (model.DSSDocument, error) {
 	// See the file header: prime the counter-signature deterministic Id in the shared context.
 	parameters.GetDeterministicId()
-	b.Params = &parameters.XAdESSignatureParameters
+	b.Params = &parameters.SignatureParameters
 
 	documentAnalyzer, err := NewXMLDocumentAnalyzer(signatureDocument)
 	if err != nil {
@@ -110,7 +110,7 @@ func (b *CounterSignatureBuilder) GetCanonicalizedSignatureValue(signatureDocume
 // BuildCounterSignatureDSSReference builds a DSSReference for the ds:SignatureValue to
 // counter sign. Port of #buildCounterSignatureDSSReference.
 func (b *CounterSignatureBuilder) BuildCounterSignatureDSSReference(signatureDocument model.DSSDocument,
-	parameters *XAdESCounterSignatureParameters) (*DSSReference, error) {
+	parameters *CounterSignatureParameters) (*DSSReference, error) {
 	// See the file header: prime the counter-signature deterministic Id in the shared context.
 	parameters.GetDeterministicId()
 
@@ -133,7 +133,7 @@ func (b *CounterSignatureBuilder) BuildCounterSignatureDSSReference(signatureDoc
 	reference := NewDSSReference()
 
 	referenceIdProvider := NewReferenceIdProvider()
-	referenceIdProvider.SetSignatureParameters(&parameters.XAdESSignatureParameters)
+	referenceIdProvider.SetSignatureParameters(&parameters.SignatureParameters)
 	reference.SetId(referenceIdProvider.ReferenceId())
 
 	signatureElementBinaries, err := xmlutils.DomUtilsSerializeNode(b.XadesSignature.SignatureElement())
@@ -142,7 +142,7 @@ func (b *CounterSignatureBuilder) BuildCounterSignatureDSSReference(signatureDoc
 	}
 	reference.SetContents(model.NewInMemoryDocument(signatureElementBinaries))
 	reference.SetDigestMethodAlgorithm(
-		DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(&parameters.XAdESSignatureParameters))
+		DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(&parameters.SignatureParameters))
 	reference.SetType(b.XadesPath.CounterSignatureUri())
 
 	signatureValueId := b.XadesSignature.SignatureValueId()
@@ -165,10 +165,10 @@ func (b *CounterSignatureBuilder) BuildCounterSignatureDSSReference(signatureDoc
 // Port of #buildEmbeddedCounterSignature.
 func (b *CounterSignatureBuilder) BuildEmbeddedCounterSignature(signatureDocument model.DSSDocument,
 	counterSignature model.DSSDocument,
-	parameters *XAdESCounterSignatureParameters) (model.DSSDocument, error) {
+	parameters *CounterSignatureParameters) (model.DSSDocument, error) {
 	// See the file header: prime the counter-signature deterministic Id in the shared context.
 	parameters.GetDeterministicId()
-	b.Params = &parameters.XAdESSignatureParameters
+	b.Params = &parameters.SignatureParameters
 
 	documentAnalyzer, err := NewXMLDocumentAnalyzer(signatureDocument)
 	if err != nil {
@@ -252,7 +252,7 @@ func counterSignatureBuilderElementsByTagNameNS(root *xmldom.Node, uri, localNam
 
 // extractSignatureById ports the private extractSignatureById.
 func (b *CounterSignatureBuilder) extractSignatureById(
-	parameters *XAdESCounterSignatureParameters) (*XAdESSignature, error) {
+	parameters *CounterSignatureParameters) (*Signature, error) {
 	if parameters.SignatureIdToCounterSign() == "" {
 		panic("The Id of a signature to be counter signed shall be defined! " +
 			"Please use SerializableCounterSignatureParameters.setSignatureIdToCounterSign(signatureId) method.")
@@ -260,7 +260,7 @@ func (b *CounterSignatureBuilder) extractSignatureById(
 
 	signatures := b.DocumentAnalyzer.Signatures()
 	for _, signature := range signatures {
-		xadesSignature, ok := signature.(*XAdESSignature)
+		xadesSignature, ok := signature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", signature)
 		}
@@ -280,14 +280,14 @@ func (b *CounterSignatureBuilder) extractSignatureById(
 
 // counterSignatureBuilderSignatureOrItsCounterSignatureById ports the private
 // getSignatureOrItsCounterSignatureById.
-func counterSignatureBuilderSignatureOrItsCounterSignatureById(signature *XAdESSignature,
-	signatureId string) (*XAdESSignature, error) {
+func counterSignatureBuilderSignatureOrItsCounterSignatureById(signature *Signature,
+	signatureId string) (*Signature, error) {
 	if signatureId == signature.DAIdentifier() || signatureId == signature.ID() {
 		return signature, nil
 	}
 
 	for _, counterSignature := range signature.CounterSignatures() {
-		xadesCounterSignature, ok := counterSignature.(*XAdESSignature)
+		xadesCounterSignature, ok := counterSignature.(*Signature)
 		if !ok {
 			return nil, fmt.Errorf("unexpected signature type %T", counterSignature)
 		}
@@ -312,7 +312,7 @@ func counterSignatureBuilderSignatureOrItsCounterSignatureById(signature *XAdESS
 }
 
 // counterSignatureBuilderSignatureValueElement ports the private getSignatureValueElement.
-func counterSignatureBuilderSignatureValueElement(xadesSignature *XAdESSignature) (*xmldom.Node, error) {
+func counterSignatureBuilderSignatureValueElement(xadesSignature *Signature) (*xmldom.Node, error) {
 	signatureElement := xadesSignature.SignatureElement()
 
 	signatureValueElement, err := xmlutils.XPathUtilsGetElement(signatureElement,

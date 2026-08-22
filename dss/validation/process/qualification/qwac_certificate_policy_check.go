@@ -26,8 +26,8 @@ type QWACCertificatePolicyCheck struct {
 }
 
 // NewQWACCertificatePolicyCheck is the default constructor. Port of
-// QWACCertificatePolicyCheck(I18nProvider, XmlValidationQWACProcess, CertificateWrapper, QWACProfile, LevelRule).
-func NewQWACCertificatePolicyCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// QWACCertificatePolicyCheck(Provider, XmlValidationQWACProcess, CertificateWrapper, QWACProfile, LevelRule).
+func NewQWACCertificatePolicyCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificate *diagnostic.CertificateWrapper, qwacProfile enumerations.QWACProfile,
 	constraint policy.LevelRule) *QWACCertificatePolicyCheck {
 	c := &QWACCertificatePolicyCheck{

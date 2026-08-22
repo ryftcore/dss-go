@@ -1,5 +1,5 @@
 // Tests for the jdbc package. There is no upstream JUnit for
-// JdbcCacheConnector/SqlQuery/SqlSelectQuery to port test vectors from
+// CacheConnector/SqlQuery/SqlSelectQuery to port test vectors from
 // (see dss-spi client/jdbc upstream), so behavior is
 // verified against a lightweight in-process database/sql/driver fake
 // registered below, exercising the same success/rollback contracts the
@@ -238,10 +238,10 @@ func TestGetRecordsPropagatesGetRecordError(t *testing.T) {
 	}
 }
 
-// ---- JdbcCacheConnector.Execute --------------------------------------------
+// ---- CacheConnector.Execute --------------------------------------------
 
 func TestJdbcCacheConnectorExecuteNilQueryPanics(t *testing.T) {
-	c := NewJdbcCacheConnector(openFakeDB(t, &fakeBehavior{}))
+	c := NewCacheConnector(openFakeDB(t, &fakeBehavior{}))
 	defer func() {
 		if recover() == nil {
 			t.Fatal("expected panic for nil query")
@@ -259,7 +259,7 @@ func TestJdbcCacheConnectorExecuteSuccess(t *testing.T) {
 			return fakeResult{rowsAffected: 5}, nil
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	got := c.Execute(NewSqlQuery("UPDATE t SET a=1"))
 	if got != 5 {
 		t.Fatalf("Execute() = %d, want 5", got)
@@ -268,7 +268,7 @@ func TestJdbcCacheConnectorExecuteSuccess(t *testing.T) {
 
 func TestJdbcCacheConnectorExecuteBeginError(t *testing.T) {
 	b := &fakeBehavior{beginErr: errors.New("no conn")}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if got := c.Execute(NewSqlQuery("UPDATE t")); got != 0 {
 		t.Fatalf("Execute() = %d, want 0", got)
 	}
@@ -280,7 +280,7 @@ func TestJdbcCacheConnectorExecuteExecErrorRollsBack(t *testing.T) {
 			return nil, errors.New("exec failed")
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if got := c.Execute(NewSqlQuery("UPDATE t")); got != 0 {
 		t.Fatalf("Execute() = %d, want 0", got)
 	}
@@ -293,13 +293,13 @@ func TestJdbcCacheConnectorExecuteCommitError(t *testing.T) {
 		},
 		commitErr: errors.New("commit failed"),
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if got := c.Execute(NewSqlQuery("UPDATE t")); got != 0 {
 		t.Fatalf("Execute() = %d, want 0", got)
 	}
 }
 
-// ---- JdbcCacheConnector.Select --------------------------------------------
+// ---- CacheConnector.Select --------------------------------------------
 
 func TestJdbcCacheConnectorSelectSuccess(t *testing.T) {
 	b := &fakeBehavior{
@@ -307,7 +307,7 @@ func TestJdbcCacheConnectorSelectSuccess(t *testing.T) {
 			return &fakeRows{cols: []string{"v"}, data: [][]driver.Value{{int64(7)}, {int64(8)}}}, nil
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	records := c.Select(newFakeSelectQuery("SELECT v"))
 	if len(records) != 2 {
 		t.Fatalf("len(records) = %d, want 2", len(records))
@@ -316,7 +316,7 @@ func TestJdbcCacheConnectorSelectSuccess(t *testing.T) {
 
 func TestJdbcCacheConnectorSelectBeginError(t *testing.T) {
 	b := &fakeBehavior{beginErr: errors.New("no conn")}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if records := c.Select(newFakeSelectQuery("SELECT v")); records != nil {
 		t.Fatalf("Select() = %v, want nil", records)
 	}
@@ -328,7 +328,7 @@ func TestJdbcCacheConnectorSelectQueryErrorRollsBack(t *testing.T) {
 			return nil, errors.New("query failed")
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if records := c.Select(newFakeSelectQuery("SELECT v")); records != nil {
 		t.Fatalf("Select() = %v, want nil", records)
 	}
@@ -341,13 +341,13 @@ func TestJdbcCacheConnectorSelectCommitError(t *testing.T) {
 		},
 		commitErr: errors.New("commit failed"),
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if records := c.Select(newFakeSelectQuery("SELECT v")); records != nil {
 		t.Fatalf("Select() = %v, want nil", records)
 	}
 }
 
-// ---- JdbcCacheConnector.TableQuery -----------------------------------------
+// ---- CacheConnector.TableQuery -----------------------------------------
 
 func TestJdbcCacheConnectorTableQuerySuccess(t *testing.T) {
 	b := &fakeBehavior{
@@ -355,7 +355,7 @@ func TestJdbcCacheConnectorTableQuerySuccess(t *testing.T) {
 			return fakeResult{}, nil
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if !c.TableQuery(NewSqlQuery("CREATE TABLE t (a int)")) {
 		t.Fatal("TableQuery() = false, want true")
 	}
@@ -363,7 +363,7 @@ func TestJdbcCacheConnectorTableQuerySuccess(t *testing.T) {
 
 func TestJdbcCacheConnectorTableQueryBeginError(t *testing.T) {
 	b := &fakeBehavior{beginErr: errors.New("no conn")}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if c.TableQuery(NewSqlQuery("CREATE TABLE t (a int)")) {
 		t.Fatal("TableQuery() = true, want false")
 	}
@@ -375,7 +375,7 @@ func TestJdbcCacheConnectorTableQueryExecError(t *testing.T) {
 			return nil, errors.New("exec failed")
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if c.TableQuery(NewSqlQuery("DROP TABLE t")) {
 		t.Fatal("TableQuery() = true, want false")
 	}
@@ -388,13 +388,13 @@ func TestJdbcCacheConnectorTableQueryCommitError(t *testing.T) {
 		},
 		commitErr: errors.New("commit failed"),
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if c.TableQuery(NewSqlQuery("DROP TABLE t")) {
 		t.Fatal("TableQuery() = true, want false")
 	}
 }
 
-// ---- JdbcCacheConnector.ExecuteThrowable -----------------------------------
+// ---- CacheConnector.ExecuteThrowable -----------------------------------
 
 func TestJdbcCacheConnectorExecuteThrowableSuccess(t *testing.T) {
 	b := &fakeBehavior{
@@ -402,7 +402,7 @@ func TestJdbcCacheConnectorExecuteThrowableSuccess(t *testing.T) {
 			return fakeResult{rowsAffected: 3}, nil
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	n, err := c.ExecuteThrowable(NewSqlQuery("UPDATE t"))
 	if err != nil {
 		t.Fatalf("ExecuteThrowable() error = %v", err)
@@ -415,7 +415,7 @@ func TestJdbcCacheConnectorExecuteThrowableSuccess(t *testing.T) {
 func TestJdbcCacheConnectorExecuteThrowableBeginError(t *testing.T) {
 	wantErr := errors.New("no conn")
 	b := &fakeBehavior{beginErr: wantErr}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if _, err := c.ExecuteThrowable(NewSqlQuery("UPDATE t")); err == nil {
 		t.Fatal("expected error")
 	}
@@ -428,7 +428,7 @@ func TestJdbcCacheConnectorExecuteThrowableExecErrorRollsBack(t *testing.T) {
 			return nil, wantErr
 		},
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if _, err := c.ExecuteThrowable(NewSqlQuery("UPDATE t")); err == nil {
 		t.Fatal("expected error")
 	}
@@ -442,7 +442,7 @@ func TestJdbcCacheConnectorExecuteThrowableCommitError(t *testing.T) {
 		},
 		commitErr: wantErr,
 	}
-	c := NewJdbcCacheConnector(openFakeDB(t, b))
+	c := NewCacheConnector(openFakeDB(t, b))
 	if _, err := c.ExecuteThrowable(NewSqlQuery("UPDATE t")); err == nil {
 		t.Fatal("expected error")
 	}

@@ -40,7 +40,7 @@ type ProcessExecutor[R any] interface {
 
 	// SetLocale allows to set a language setting for generated Reports.
 	// Port of setLocale(Locale); Java's Locale is represented by its
-	// language tag, matching i18n.NewI18nProviderForLocale.
+	// language tag, matching i18n.NewProviderForLocale.
 	SetLocale(locale string)
 
 	// Execute allows to run the validation process. Port of execute().

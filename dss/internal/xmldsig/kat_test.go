@@ -126,7 +126,7 @@ func loadFixture(t *testing.T, name string, detachedNames []string) *fixtureStat
 	if err != nil {
 		t.Fatalf("parse fixture %s: %v", name, err)
 	}
-	// XAdESSignature.getSantuarioSignature: recursiveIdBrowse before anything else, or no
+	// Signature.getSantuarioSignature: recursiveIdBrowse before anything else, or no
 	// "#id" reference resolves.
 	doc.RegisterIDs()
 
@@ -149,7 +149,7 @@ func loadFixture(t *testing.T, name string, detachedNames []string) *fixtureStat
 	return st
 }
 
-// newSignature builds the XMLSignature exactly as XAdESSignature does: secure validation off,
+// newSignature builds the XMLSignature exactly as Signature does: secure validation off,
 // the DSS resolver set, and one detached resolver per distinct reference digest algorithm.
 func newSignature(t *testing.T, st *fixtureState, sigEl *xmldom.Node) *xmldsig.XMLSignature {
 	t.Helper()

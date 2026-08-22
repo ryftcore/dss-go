@@ -20,7 +20,7 @@ type AcceptableEAARevocationFoundCheck struct {
 }
 
 // NewAcceptableEAARevocationFoundCheck is the default constructor.
-func NewAcceptableEAARevocationFoundCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewAcceptableEAARevocationFoundCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaStatusToken *diagnostic.EAARevocationWrapper, constraint policy.LevelRule) *AcceptableEAARevocationFoundCheck {
 	c := &AcceptableEAARevocationFoundCheck{
 		eaaStatusToken: eaaStatusToken,

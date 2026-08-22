@@ -21,7 +21,7 @@ type EAASignatureUnicityCheck struct {
 }
 
 // NewEAASignatureUnicityCheck is the default constructor.
-func NewEAASignatureUnicityCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlFC],
+func NewEAASignatureUnicityCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlFC],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *EAASignatureUnicityCheck {
 	c := &EAASignatureUnicityCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

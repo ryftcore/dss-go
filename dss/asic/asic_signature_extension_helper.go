@@ -11,13 +11,13 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// ASiCSignatureExtensionHelperOverrides declares the operations ASiCSignatureExtensionHelper
+// SignatureExtensionHelperOverrides declares the operations SignatureExtensionHelper
 // calls back into virtually. Every concrete helper must call InitASiCSignatureExtensionHelper
 // with itself before use - including from within its own constructor, since the base
 // constructor logic (extraction from a raw container document)
 // itself needs GetASiCContainerExtractor and is split into InitFromDocument/InitFromContent for
 // that reason (see those methods' doc comments).
-type ASiCSignatureExtensionHelperOverrides interface {
+type SignatureExtensionHelperOverrides interface {
 	// GetDetachedDocuments returns a list of detached documents for a signature with a given
 	// filename. Port of the public abstract getDetachedDocuments(String).
 	GetDetachedDocuments(signatureFilename string) []model.DSSDocument
@@ -29,39 +29,39 @@ type ASiCSignatureExtensionHelperOverrides interface {
 
 	// GetASiCContainerExtractor gets an ASiC container extractor relative to the current
 	// implementation. Port of the protected abstract getASiCContainerExtractor(DSSDocument).
-	GetASiCContainerExtractor(asicContainer model.DSSDocument) ASiCContainerExtractor
+	GetASiCContainerExtractor(asicContainer model.DSSDocument) ContainerExtractor
 
 	// GetDocumentAnalyzer gets a Document Analyzer relative to the current implementation.
 	// Port of the protected abstract getDocumentAnalyzer(DSSDocument).
 	GetDocumentAnalyzer(signatureDocument model.DSSDocument) analyzer.DocumentAnalyzer
 }
 
-// ASiCSignatureExtensionHelper contains methods for document extraction in order to expand the
+// SignatureExtensionHelper contains methods for document extraction in order to expand the
 // signature with additional elements.
-type ASiCSignatureExtensionHelper struct {
+type SignatureExtensionHelper struct {
 	// overrides points back at the concrete helper; see InitASiCSignatureExtensionHelper.
-	overrides ASiCSignatureExtensionHelperOverrides
+	overrides SignatureExtensionHelperOverrides
 
 	// asicContent represents a cached instance of ASiC container extraction result.
-	asicContent *ASiCContent
+	asicContent *Content
 }
 
 // NewASiCSignatureExtensionHelperBase builds the empty base state a subclass embeds. Port of
 // the shared construction logic; the subclass constructor must follow it with
 // InitASiCSignatureExtensionHelper and then InitFromDocument or InitFromContent.
-func NewASiCSignatureExtensionHelperBase() *ASiCSignatureExtensionHelper {
-	return &ASiCSignatureExtensionHelper{}
+func NewSignatureExtensionHelperBase() *SignatureExtensionHelper {
+	return &SignatureExtensionHelper{}
 }
 
 // InitASiCSignatureExtensionHelper registers the concrete helper with its base so the base can
 // dispatch GetDetachedDocuments/GetManifestFile/GetASiCContainerExtractor/GetDocumentAnalyzer.
 // Every concrete helper constructor must call this once, before InitFromDocument (which calls
 // back into GetASiCContainerExtractor).
-func (h *ASiCSignatureExtensionHelper) InitASiCSignatureExtensionHelper(overrides ASiCSignatureExtensionHelperOverrides) {
+func (h *SignatureExtensionHelper) InitASiCSignatureExtensionHelper(overrides SignatureExtensionHelperOverrides) {
 	h.overrides = overrides
 }
 
-func (h *ASiCSignatureExtensionHelper) requireOverrides() ASiCSignatureExtensionHelperOverrides {
+func (h *SignatureExtensionHelper) requireOverrides() SignatureExtensionHelperOverrides {
 	if h.overrides == nil {
 		panic("ASiCSignatureExtensionHelper was not initialised: the concrete helper must call InitASiCSignatureExtensionHelper in its constructor")
 	}
@@ -73,8 +73,8 @@ func (h *ASiCSignatureExtensionHelper) requireOverrides() ASiCSignatureExtension
 // InitASiCSignatureExtensionHelper's doc comment.
 //
 // Panics with an *exception.IllegalInputException when asicContainer is not an ASiC container.
-func (h *ASiCSignatureExtensionHelper) InitFromDocument(asicContainer model.DSSDocument) {
-	isASiC, err := ASiCUtilsIsASiC(asicContainer)
+func (h *SignatureExtensionHelper) InitFromDocument(asicContainer model.DSSDocument) {
+	isASiC, err := UtilsIsASiC(asicContainer)
 	if err != nil {
 		panic(err)
 	}
@@ -90,12 +90,12 @@ func (h *ASiCSignatureExtensionHelper) InitFromDocument(asicContainer model.DSSD
 }
 
 // InitFromContent ports the protected ASiCSignatureExtensionHelper(ASiCContent) constructor.
-func (h *ASiCSignatureExtensionHelper) InitFromContent(asicContent *ASiCContent) {
+func (h *SignatureExtensionHelper) InitFromContent(asicContent *Content) {
 	h.asicContent = asicContent
 }
 
 // GetAsicContent returns the ASiCContent. Ports getAsicContent().
-func (h *ASiCSignatureExtensionHelper) GetAsicContent() *ASiCContent {
+func (h *SignatureExtensionHelper) GetAsicContent() *Content {
 	return h.asicContent
 }
 
@@ -104,7 +104,7 @@ func (h *ASiCSignatureExtensionHelper) GetAsicContent() *ASiCContent {
 //
 // Panics with an *exception.IllegalInputException / Java's IllegalArgumentException message on
 // invalid input, matching Java's thrown exceptions.
-func (h *ASiCSignatureExtensionHelper) ExtractSignatureDocument(signatureId string) model.DSSDocument {
+func (h *SignatureExtensionHelper) ExtractSignatureDocument(signatureId string) model.DSSDocument {
 	signatureDocuments := h.asicContent.SignatureDocuments()
 	if utils.IsCollectionEmpty(signatureDocuments) {
 		panic(exception.NewIllegalInputException("No signatures found to be extended!"))
@@ -137,7 +137,7 @@ func (h *ASiCSignatureExtensionHelper) ExtractSignatureDocument(signatureId stri
 // of the signature file, whether its extension is possible. Panics with an
 // *exception.IllegalInputException in case of invalid extension configuration. Ports
 // getSignatureDocuments().
-func (h *ASiCSignatureExtensionHelper) GetSignatureDocuments() []model.DSSDocument {
+func (h *SignatureExtensionHelper) GetSignatureDocuments() []model.DSSDocument {
 	signatureDocuments := h.asicContent.SignatureDocuments()
 	if utils.IsCollectionEmpty(signatureDocuments) {
 		panic(exception.NewIllegalInputException("No supported signature documents found! Unable to extend the container."))
@@ -151,7 +151,7 @@ func (h *ASiCSignatureExtensionHelper) GetSignatureDocuments() []model.DSSDocume
 // containsSignatureWithId ports the private containsSignatureWithId(DSSDocument, String,
 // boolean). Logging (LOG.warn) is dropped per PORTING.md; the caught exception is swallowed
 // exactly as Java swallows it (returns false), matching the original control flow.
-func (h *ASiCSignatureExtensionHelper) containsSignatureWithId(signatureDocument model.DSSDocument, signatureId string, acceptSingleSignature bool) (result bool) {
+func (h *SignatureExtensionHelper) containsSignatureWithId(signatureDocument model.DSSDocument, signatureId string, acceptSingleSignature bool) (result bool) {
 	defer func() {
 		if recover() != nil {
 			result = false
@@ -177,7 +177,7 @@ func (h *ASiCSignatureExtensionHelper) containsSignatureWithId(signatureDocument
 
 // containsSignatureWithIdRecursive ports the private containsSignatureWithId(AdvancedSignature,
 // String).
-func (h *ASiCSignatureExtensionHelper) containsSignatureWithIdRecursive(signature validation.AdvancedSignature, signatureId string) bool {
+func (h *SignatureExtensionHelper) containsSignatureWithIdRecursive(signature validation.AdvancedSignature, signatureId string) bool {
 	if signatureId == signature.ID() || signatureId == signature.DAIdentifier() {
 		return true
 	}
@@ -192,8 +192,8 @@ func (h *ASiCSignatureExtensionHelper) containsSignatureWithIdRecursive(signatur
 // CheckSignatureExtensionPossible verifies if a signatureDocument can be modified. Panics with
 // an *exception.IllegalInputException when an extension is not possible. Ports
 // checkSignatureExtensionPossible(DSSDocument).
-func (h *ASiCSignatureExtensionHelper) CheckSignatureExtensionPossible(signatureDocument model.DSSDocument) {
-	if ASiCUtilsIsCoveredByManifest(h.GetAsicContent().AllManifestDocuments(), signatureDocument.Name()) {
+func (h *SignatureExtensionHelper) CheckSignatureExtensionPossible(signatureDocument model.DSSDocument) {
+	if UtilsIsCoveredByManifest(h.GetAsicContent().AllManifestDocuments(), signatureDocument.Name()) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("The modification of the signature is not possible! "+
 			"Reason : a signature with a filename '%s' is covered by another manifest.", signatureDocument.Name())))
 	}

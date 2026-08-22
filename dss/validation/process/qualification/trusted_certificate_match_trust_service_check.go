@@ -27,8 +27,8 @@ type TrustedCertificateMatchTrustServiceCheck struct {
 
 // NewTrustedCertificateMatchTrustServiceCheck is the default constructor.
 // Port of
-// TrustedCertificateMatchTrustServiceCheck(I18nProvider, XmlValidationCertificateQualification, TrustServiceWrapper, LevelRule).
-func NewTrustedCertificateMatchTrustServiceCheck(i18nProvider *i18n.I18nProvider,
+// TrustedCertificateMatchTrustServiceCheck(Provider, XmlValidationCertificateQualification, TrustServiceWrapper, LevelRule).
+func NewTrustedCertificateMatchTrustServiceCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateQualification], trustService *diagnostic.TrustServiceWrapper,
 	constraint policy.LevelRule) *TrustedCertificateMatchTrustServiceCheck {
 	c := &TrustedCertificateMatchTrustServiceCheck{

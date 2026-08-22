@@ -19,8 +19,8 @@ type RevocationFreshnessCheckerResultCheck[T any] struct {
 }
 
 // NewRevocationFreshnessCheckerResultCheck is the default constructor. Port
-// of RevocationFreshnessCheckerResultCheck(I18nProvider, T, XmlRFC, LevelRule).
-func NewRevocationFreshnessCheckerResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// of RevocationFreshnessCheckerResultCheck(Provider, T, XmlRFC, LevelRule).
+func NewRevocationFreshnessCheckerResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	rfcResult *jaxb.XmlRFC, constraint policy.LevelRule) *RevocationFreshnessCheckerResultCheck[T] {
 	var chainItemBase *process.ChainItemBase[T]
 	if rfcResult.Id != nil {

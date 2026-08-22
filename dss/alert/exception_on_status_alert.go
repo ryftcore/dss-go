@@ -1,7 +1,7 @@
 // Ported from dss-alert/src/main/java/eu/europa/esig/dss/alert/ExceptionOnStatusAlert.java (DSS 6.5.RC1).
 package alert
 
-// ExceptionOnStatusAlert returns an AlertError on a Status event.
+// ExceptionOnStatusAlert returns an Error on a Status event.
 type ExceptionOnStatusAlert struct {
 	*AbstractStatusAlert
 }

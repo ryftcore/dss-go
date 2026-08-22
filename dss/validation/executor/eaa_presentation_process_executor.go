@@ -27,11 +27,11 @@ func NewEAAPresentationProcessExecutor() *EAAPresentationProcessExecutor {
 }
 
 // DetailedReportBuilderFor is the port of the overridden
-// getDetailedReportBuilder(DiagnosticData); it hands back the embedded
+// getDetailedReportBuilder(Data); it hands back the embedded
 // *DetailedReportBuilder of the EAA builder, which has registered itself so
 // Build() still dispatches onto the EAA overrides.
 func (e *EAAPresentationProcessExecutor) DetailedReportBuilderFor(
-	diagnosticData *diagnostic.DiagnosticData) *DetailedReportBuilder {
+	diagnosticData *diagnostic.Data) *DetailedReportBuilder {
 	return &NewDetailedReportForEAAPresentationBuilder(e.I18nProvider(), e.CurrentTimeValue, e.Policy,
 		diagnosticData, e.IncludeSemantics).DetailedReportBuilder
 }

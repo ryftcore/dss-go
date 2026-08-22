@@ -5,7 +5,7 @@
 // valid") and their positive/negative variants, keyed by MessageTag and
 // resolved from an embedded copy of dss-messages.properties.
 //
-// The main entry types are I18nProvider (looks up and formats a message for
+// The main entry types are Provider (looks up and formats a message for
 // a MessageTag) and MessageTag itself (one constant per message key defined
 // in dss-messages.properties).
 package i18n

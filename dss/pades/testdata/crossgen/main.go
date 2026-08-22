@@ -1,7 +1,7 @@
 // Command crossgen is the GO -> UPSTREAM direction of the PAdES cross-validation harness (task
 // #12, PAdES extension): it signs three corpus PDFs of different xref styles (a classic-xref-
 // table document, and two cross-reference-stream documents from different producers) with this
-// package's own PAdESService, producing invisible PAdES-B and PAdES-T signatures with real crypto
+// package's own Service, producing invisible PAdES-B and PAdES-T signatures with real crypto
 // (an RSA PKCS#12 test key for the signer, an EC PKCS#12 test key as a self-hosted TSA via
 // spi/validation.KeyEntityTSPSource - the same pattern dss/cades and dss/xades's own crossgen
 // generators use), and writes them to files. The point is a real, independently-verifiable
@@ -114,12 +114,12 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 	return signatureToken.KeyWithPassword(entry.Alias(), token.NewPasswordProtection([]byte(password)))
 }
 
-// newParameters builds the PAdESSignatureParameters shared by every generated signature: the
+// newParameters builds the SignatureParameters shared by every generated signature: the
 // digest algorithm and signing certificate/chain. No SignatureImageParameters are set, so every
 // generated signature is invisible (no visible signature appearance is drawn on the page) - the
 // native engine has no rasteriser to draw one with anyway (internal/pdf/DESIGN.md §0.2).
-func newParameters(level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry) *pades.PAdESSignatureParameters {
-	parameters := pades.NewPAdESSignatureParameters()
+func newParameters(level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry) *pades.SignatureParameters {
+	parameters := pades.NewSignatureParameters()
 	parameters.SetSignatureLevel(level)
 	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
@@ -133,7 +133,7 @@ func generate(inputPath, outputPath string, level enumerations.SignatureLevel,
 	signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := newParameters(level, signerEntry)
 
-	service := pades.NewPAdESService(validation.NewCommonCertificateVerifier())
+	service := pades.NewService(validation.NewCommonCertificateVerifier())
 	if tspSource != nil {
 		service.SetTspSource(tspSource)
 	}
@@ -156,7 +156,7 @@ func generate(inputPath, outputPath string, level enumerations.SignatureLevel,
 	return writeDocument(signedDocument, outputPath)
 }
 
-// reopenSignatureToken opens the signer's key store afresh. PAdESSignatureParameters carries no
+// reopenSignatureToken opens the signer's key store afresh. SignatureParameters carries no
 // live token/session, only the certificate/chain, so signing always goes back through a
 // SignatureTokenConnection - the same reason cades/testdata/crossgen/main.go's own
 // reopenSignatureToken exists.

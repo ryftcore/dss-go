@@ -10,10 +10,10 @@ import (
 )
 
 // ASiCWithXAdESContainerExtractorFactory is used to load a corresponding
-// asic.ASiCContainerExtractor for an ASiC with XAdES container.
+// asic.ContainerExtractor for an ASiC with XAdES container.
 type ASiCWithXAdESContainerExtractorFactory struct{}
 
-var _ asic.ASiCContainerExtractorFactory = (*ASiCWithXAdESContainerExtractorFactory)(nil)
+var _ asic.ContainerExtractorFactory = (*ASiCWithXAdESContainerExtractorFactory)(nil)
 
 // NewASiCWithXAdESContainerExtractorFactory is the default constructor.
 func NewASiCWithXAdESContainerExtractorFactory() *ASiCWithXAdESContainerExtractorFactory {
@@ -34,7 +34,7 @@ func (f *ASiCWithXAdESContainerExtractorFactory) IsSupported(asicContainer model
 //
 // Panics with the Java message when asicContainer is nil (Objects.requireNonNull), or when the
 // container is not supported (UnsupportedOperationException).
-func (f *ASiCWithXAdESContainerExtractorFactory) Create(asicContainer model.DSSDocument) asic.ASiCContainerExtractor {
+func (f *ASiCWithXAdESContainerExtractorFactory) Create(asicContainer model.DSSDocument) asic.ContainerExtractor {
 	if asicContainer == nil {
 		panic("ASiC container cannot be null!")
 	}
@@ -45,5 +45,5 @@ func (f *ASiCWithXAdESContainerExtractorFactory) Create(asicContainer model.DSSD
 }
 
 func init() {
-	asic.RegisterASiCContainerExtractorFactory(NewASiCWithXAdESContainerExtractorFactory())
+	asic.RegisterContainerExtractorFactory(NewASiCWithXAdESContainerExtractorFactory())
 }

@@ -14,12 +14,12 @@ type qualificationByTL struct {
 	trustService *diagnostic.TrustServiceWrapper
 
 	// qualifiedInCert is the qualification strategy to be used.
-	qualifiedInCert QualificationStrategy
+	qualifiedInCert Strategy
 }
 
 // newQualificationByTL is the default constructor. Port of
-// QualificationByTL(TrustServiceWrapper, QualificationStrategy).
-func newQualificationByTL(trustService *diagnostic.TrustServiceWrapper, qualifiedInCert QualificationStrategy) *qualificationByTL {
+// QualificationByTL(TrustServiceWrapper, Strategy).
+func newQualificationByTL(trustService *diagnostic.TrustServiceWrapper, qualifiedInCert Strategy) *qualificationByTL {
 	return &qualificationByTL{trustService: trustService, qualifiedInCert: qualifiedInCert}
 }
 

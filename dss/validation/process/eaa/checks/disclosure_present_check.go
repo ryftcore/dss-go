@@ -21,7 +21,7 @@ type DisclosurePresentCheck struct {
 }
 
 // NewDisclosurePresentCheck is the default constructor.
-func NewDisclosurePresentCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlFC],
+func NewDisclosurePresentCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlFC],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.LevelRule) *DisclosurePresentCheck {
 	c := &DisclosurePresentCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

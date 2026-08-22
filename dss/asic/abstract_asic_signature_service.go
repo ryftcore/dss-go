@@ -38,12 +38,12 @@ type AbstractASiCSignatureServiceOverrides[SP model.SerializableSignatureParamet
 
 	// GetArchiveExtractor returns a relevant ASiC container extractor for the given format.
 	// Port of the protected abstract getArchiveExtractor(DSSDocument).
-	GetArchiveExtractor(archive model.DSSDocument) *DefaultASiCContainerExtractor
+	GetArchiveExtractor(archive model.DSSDocument) *DefaultContainerExtractor
 
 	// AddContainerEvidenceRecordMultiple creates a new ASiC container with the
 	// evidenceRecordDocument applied to documents. Port of the public abstract
-	// addContainerEvidenceRecord(List, DSSDocument, ASiCContainerEvidenceRecordParameters).
-	AddContainerEvidenceRecordMultiple(documents []model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ASiCContainerEvidenceRecordParameters) model.DSSDocument
+	// addContainerEvidenceRecord(List, DSSDocument, ContainerEvidenceRecordParameters).
+	AddContainerEvidenceRecordMultiple(documents []model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ContainerEvidenceRecordParameters) model.DSSDocument
 }
 
 // AbstractASiCSignatureService contains the main methods for ASiC signature creation/extension,
@@ -128,7 +128,7 @@ func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) SignatureTimestamp(toTi
 // evidenceRecordDocument applied to the document. If the provided original document is an
 // existing ASiC container, then the evidenceRecordDocument will be evaluated against the
 // container files and places within the container. Ports
-// addContainerEvidenceRecord(DSSDocument, DSSDocument, ASiCContainerEvidenceRecordParameters).
+// addContainerEvidenceRecord(DSSDocument, DSSDocument, ContainerEvidenceRecordParameters).
 //
 // Named AddContainerEvidenceRecordSingle (not AddContainerEvidenceRecord) since Go cannot
 // overload by parameter type against the abstract multi-document
@@ -137,7 +137,7 @@ func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) SignatureTimestamp(toTi
 // method has no body).
 //
 // Panics with Java's message when document is nil.
-func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AddContainerEvidenceRecordSingle(doc model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ASiCContainerEvidenceRecordParameters) model.DSSDocument {
+func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AddContainerEvidenceRecordSingle(doc model.DSSDocument, evidenceRecordDocument model.DSSDocument, parameters *ContainerEvidenceRecordParameters) model.DSSDocument {
 	if doc == nil {
 		panic("Document cannot be null!")
 	}
@@ -146,7 +146,7 @@ func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AddContainerEvidenceRec
 
 // ExtractCurrentArchive extracts the content (documents) of the ASiC container. Ports the
 // protected extractCurrentArchive(DSSDocument).
-func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) ExtractCurrentArchive(archive model.DSSDocument) *ASiCContent {
+func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) ExtractCurrentArchive(archive model.DSSDocument) *Content {
 	extractor := s.requireOverrides().GetArchiveExtractor(archive)
 	content, err := extractor.Extract()
 	if err != nil {
@@ -157,19 +157,19 @@ func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) ExtractCurrentArchive(a
 
 // BuildASiCContainer creates a ZIP-Archive by copying the provided documents to the new
 // container using the current time as ZIP creation time. Ports the protected
-// buildASiCContainer(ASiCContent).
-func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) BuildASiCContainer(asicContent *ASiCContent) model.DSSDocument {
+// buildASiCContainer(Content).
+func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) BuildASiCContainer(asicContent *Content) model.DSSDocument {
 	return s.BuildASiCContainerAt(asicContent, time.Now())
 }
 
 // BuildASiCContainerAt creates a ZIP-Archive by copying the provided documents to the new
 // container. Ports the protected buildASiCContainer(ASiCContent, Date).
-func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) BuildASiCContainerAt(asicContent *ASiCContent, creationTime time.Time) model.DSSDocument {
+func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) BuildASiCContainerAt(asicContent *Content, creationTime time.Time) model.DSSDocument {
 	zipArchive, err := ZipUtilsInstance().CreateZipArchiveAt(asicContent, creationTime)
 	if err != nil {
 		panic(err)
 	}
-	mimeType, err := ASiCUtilsMimeTypeFromDocument(asicContent.MimeTypeDocument())
+	mimeType, err := UtilsMimeTypeFromDocument(asicContent.MimeTypeDocument())
 	if err != nil {
 		panic(err)
 	}
@@ -208,7 +208,7 @@ func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AssertCounterSignatureP
 //
 // Panics with Java's UnsupportedOperationException message when no matching signature
 // documents are found.
-func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AssertAddSignaturePolicyStorePossible(asicContent *ASiCContent) {
+func (s *AbstractASiCSignatureService[SP, TP, CSP, ERP]) AssertAddSignaturePolicyStorePossible(asicContent *Content) {
 	if utils.IsCollectionEmpty(asicContent.SignatureDocuments()) {
 		panic("Signature documents of the expected format are not found in the provided ASiC Container! " +
 			"Add a SignaturePolicyStore is not possible!")

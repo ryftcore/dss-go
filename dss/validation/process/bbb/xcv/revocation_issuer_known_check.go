@@ -20,8 +20,8 @@ type RevocationIssuerKnownCheck struct {
 }
 
 // NewRevocationIssuerKnownCheck is the default constructor. Port of
-// RevocationIssuerKnownCheck(I18nProvider, XmlRAC, RevocationWrapper, LevelRule).
-func NewRevocationIssuerKnownCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRAC],
+// RevocationIssuerKnownCheck(Provider, XmlRAC, RevocationWrapper, LevelRule).
+func NewRevocationIssuerKnownCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRAC],
 	revocationData *diagnostic.RevocationWrapper, constraint policy.LevelRule) *RevocationIssuerKnownCheck {
 	c := &RevocationIssuerKnownCheck{
 		ChainItemBase:  process.NewChainItemBase(i18nProvider, result, constraint),

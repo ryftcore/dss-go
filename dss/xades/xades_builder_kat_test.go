@@ -43,19 +43,19 @@ type xadesBuilderKATCase struct {
 	XmlIdentifier       string `json:"xmlIdentifier"`
 }
 
-// xadesBuilderKATBuilder is the concrete XAdESBuilder the KAT drives, mirroring the anonymous
+// xadesBuilderKATBuilder is the concrete Builder the KAT drives, mirroring the anonymous
 // subclass the Java oracle uses: XAdESBuilder is abstract only in AlignNodes, and the KAT never
 // reaches CreateXmlDocument.
 type xadesBuilderKATBuilder struct {
-	XAdESBuilder
+	Builder
 }
 
 func (b *xadesBuilderKATBuilder) AlignNodes() {
 	// never reached: the KAT never calls CreateXmlDocument
 }
 
-func newXAdESBuilderKATBuilder(namespace *common.DSSNamespace, en319132 bool) (*xadesBuilderKATBuilder, *xmldom.Node) {
-	params := NewXAdESSignatureParameters()
+func newBuilderKATBuilder(namespace *common.DSSNamespace, en319132 bool) (*xadesBuilderKATBuilder, *xmldom.Node) {
+	params := NewSignatureParameters()
 	params.SetXadesNamespace(namespace)
 	params.SetEn319132(en319132)
 
@@ -129,7 +129,7 @@ func TestXAdESBuilderDOMMatchesJavaOracle(t *testing.T) {
 
 		t.Run(name, func(t *testing.T) {
 			namespace := xadesBuilderKATNamespace(t, testCase.XadesNamespaceUri)
-			builder, root := newXAdESBuilderKATBuilder(namespace, testCase.En319132)
+			builder, root := newBuilderKATBuilder(namespace, testCase.En319132)
 			digestAlgorithm := enumerations.DigestAlgorithm(testCase.DigestAlgorithm)
 
 			err := xadesBuilderKATRun(builder, root, testCase.Operation, certificate, digestAlgorithm)
@@ -215,7 +215,7 @@ func TestXAdESBuilderToXmlIdentifierMatchesJavaOracle(t *testing.T) {
 			t.Fatalf("Identifier.AsXmlID() = %q, oracle says %q", got, testCase.AsXmlID)
 		}
 
-		builder, _ := newXAdESBuilderKATBuilder(definition.XAdESNamespaceXAdES132, false)
+		builder, _ := newBuilderKATBuilder(definition.XAdESNamespaceXAdES132, false)
 		got, err := builder.ToXmlIdentifier(certificate.DSSID())
 		if err != nil {
 			t.Fatalf("ToXmlIdentifier: %v", err)

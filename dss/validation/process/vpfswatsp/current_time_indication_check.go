@@ -26,8 +26,8 @@ type CurrentTimeIndicationCheck struct {
 }
 
 // NewCurrentTimeIndicationCheck is the default constructor. Port of
-// CurrentTimeIndicationCheck(I18nProvider, XmlPSV, Indication, SubIndication, List, LevelRule).
-func NewCurrentTimeIndicationCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlPSV],
+// CurrentTimeIndicationCheck(Provider, XmlPSV, Indication, SubIndication, List, LevelRule).
+func NewCurrentTimeIndicationCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlPSV],
 	indication enumerations.Indication, subIndication enumerations.SubIndication, errors []*jaxb.XmlMessage,
 	constraint policy.LevelRule) *CurrentTimeIndicationCheck {
 	c := &CurrentTimeIndicationCheck{

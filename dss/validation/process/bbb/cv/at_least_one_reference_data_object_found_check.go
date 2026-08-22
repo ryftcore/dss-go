@@ -19,8 +19,8 @@ type AtLeastOneReferenceDataObjectFoundCheck[T any] struct {
 }
 
 // NewAtLeastOneReferenceDataObjectFoundCheck is the default constructor. Port of
-// AtLeastOneReferenceDataObjectFoundCheck(I18nProvider, T, List, LevelRule).
-func NewAtLeastOneReferenceDataObjectFoundCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AtLeastOneReferenceDataObjectFoundCheck(Provider, T, List, LevelRule).
+func NewAtLeastOneReferenceDataObjectFoundCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher,
 	constraint policy.LevelRule) *AtLeastOneReferenceDataObjectFoundCheck[T] {
 	c := &AtLeastOneReferenceDataObjectFoundCheck[T]{

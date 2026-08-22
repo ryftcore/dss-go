@@ -15,7 +15,7 @@ import (
 // containers.
 type ASiCWithXAdESContainerMergerFactory struct{}
 
-var _ asic.ASiCContainerMergerFactory = (*ASiCWithXAdESContainerMergerFactory)(nil)
+var _ asic.ContainerMergerFactory = (*ASiCWithXAdESContainerMergerFactory)(nil)
 
 // NewASiCWithXAdESContainerMergerFactory is the default constructor.
 func NewASiCWithXAdESContainerMergerFactory() *ASiCWithXAdESContainerMergerFactory {
@@ -47,7 +47,7 @@ func (f *ASiCWithXAdESContainerMergerFactory) IsSupportedDocuments(containers ..
 //
 // Panics with Java's NullPointerException/UnsupportedOperationException messages on invalid or
 // unsupported input.
-func (f *ASiCWithXAdESContainerMergerFactory) CreateFromDocuments(containers ...model.DSSDocument) asic.ASiCContainerMerger {
+func (f *ASiCWithXAdESContainerMergerFactory) CreateFromDocuments(containers ...model.DSSDocument) asic.ContainerMerger {
 	if len(containers) == 0 {
 		panic("At least one container shall be provided!")
 	}
@@ -84,7 +84,7 @@ func (f *ASiCWithXAdESContainerMergerFactory) CreateFromDocuments(containers ...
 //
 // Panics with Java's NullPointerException messages when asicContents is empty or contains a nil
 // entry.
-func (f *ASiCWithXAdESContainerMergerFactory) IsSupportedContents(asicContents ...*asic.ASiCContent) bool {
+func (f *ASiCWithXAdESContainerMergerFactory) IsSupportedContents(asicContents ...*asic.Content) bool {
 	if len(asicContents) == 0 {
 		panic("At least one ASiCContent shall be provided!")
 	}
@@ -105,7 +105,7 @@ func (f *ASiCWithXAdESContainerMergerFactory) IsSupportedContents(asicContents .
 //
 // Panics with Java's NullPointerException/UnsupportedOperationException messages on invalid or
 // unsupported input.
-func (f *ASiCWithXAdESContainerMergerFactory) CreateFromContents(asicContents ...*asic.ASiCContent) asic.ASiCContainerMerger {
+func (f *ASiCWithXAdESContainerMergerFactory) CreateFromContents(asicContents ...*asic.Content) asic.ContainerMerger {
 	if len(asicContents) == 0 {
 		panic("At least one ASiCContent shall be provided!")
 	}
@@ -139,5 +139,5 @@ func (f *ASiCWithXAdESContainerMergerFactory) CreateFromContents(asicContents ..
 }
 
 func init() {
-	asic.RegisterASiCContainerMergerFactory(NewASiCWithXAdESContainerMergerFactory())
+	asic.RegisterContainerMergerFactory(NewASiCWithXAdESContainerMergerFactory())
 }

@@ -14,7 +14,7 @@ type ASiCSWithCAdESContainerMerger struct {
 }
 
 var _ asic.DefaultContainerMergerOverrides = (*ASiCSWithCAdESContainerMerger)(nil)
-var _ asic.ASiCContainerMerger = (*ASiCSWithCAdESContainerMerger)(nil)
+var _ asic.ContainerMerger = (*ASiCSWithCAdESContainerMerger)(nil)
 
 // newASiCSWithCAdESContainerMerger is the empty constructor. Port of the package-private empty
 // constructor.
@@ -36,7 +36,7 @@ func NewASiCSWithCAdESContainerMerger(containers ...model.DSSDocument) *ASiCSWit
 
 // NewASiCSWithCAdESContainerMergerFromContents creates an ASiC-S with CAdES container merger
 // from the given ASiCContents. Ports ASiCSWithCAdESContainerMerger(ASiCContent...).
-func NewASiCSWithCAdESContainerMergerFromContents(asicContents ...*asic.ASiCContent) *ASiCSWithCAdESContainerMerger {
+func NewASiCSWithCAdESContainerMergerFromContents(asicContents ...*asic.Content) *ASiCSWithCAdESContainerMerger {
 	m := newASiCSWithCAdESContainerMerger()
 	m.InitFromASiCContents(asicContents...)
 	return m
@@ -47,7 +47,7 @@ func (m *ASiCSWithCAdESContainerMerger) IsSupportedDocument(container model.DSSD
 	if !m.AbstractASiCWithCAdESContainerMerger.IsSupportedDocument(container) {
 		return false
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainer(container)
+	isASiCE, err := asic.UtilsIsASiCEContainer(container)
 	if err != nil {
 		panic(err)
 	}
@@ -55,11 +55,11 @@ func (m *ASiCSWithCAdESContainerMerger) IsSupportedDocument(container model.DSSD
 }
 
 // IsSupportedContent ports the @Override public isSupported(ASiCContent).
-func (m *ASiCSWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCSWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	if !m.AbstractASiCWithCAdESContainerMerger.IsSupportedContent(asicContent) {
 		return false
 	}
-	isASiCE, err := asic.ASiCUtilsIsASiCEContainerContent(asicContent)
+	isASiCE, err := asic.UtilsIsASiCEContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}

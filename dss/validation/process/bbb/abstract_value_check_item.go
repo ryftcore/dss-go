@@ -22,8 +22,8 @@ type AbstractValueCheckItem[T any] struct {
 }
 
 // NewAbstractValueCheckItem is the default constructor. Port of
-// AbstractValueCheckItem(I18nProvider, T, ValueRule).
-func NewAbstractValueCheckItem[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// AbstractValueCheckItem(Provider, T, ValueRule).
+func NewAbstractValueCheckItem[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	constraint policy.ValueRule) *AbstractValueCheckItem[T] {
 	return &AbstractValueCheckItem[T]{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
@@ -31,7 +31,7 @@ func NewAbstractValueCheckItem[T any](i18nProvider *i18n.I18nProvider, result *p
 	}
 }
 
-// ProcessValueCheck processes the value check, returning TRUE if the value
+// ValueCheck processes the value check, returning TRUE if the value
 // matches the expected one. Port of processValueCheck(String).
 func (c *AbstractValueCheckItem[T]) ProcessValueCheck(value string) bool {
 	if utils.IsStringEmpty(value) {

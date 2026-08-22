@@ -20,8 +20,8 @@ type EmailCheck struct {
 }
 
 // NewEmailCheck is the default constructor. Port of
-// EmailCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewEmailCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// EmailCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewEmailCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *EmailCheck {
 	c := &EmailCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

@@ -91,7 +91,7 @@ func loadFCRows(t *testing.T, path string) []*fcOracleRow {
 
 // loadFCDiagnosticData reads a dump through jaxb.Unmarshal, which links the IDREF
 // graph the wrappers navigate.
-func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData {
+func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.Data {
 	t.Helper()
 	data, err := os.ReadFile(corpustest.RootPath(t, filepath.Join(fcCorpusRoot, name)))
 	if err != nil {
@@ -101,7 +101,7 @@ func loadFCDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData 
 	if err != nil {
 		t.Fatalf("unmarshal %s: %v", name, err)
 	}
-	return diagnostic.NewDiagnosticData(jaxbData)
+	return diagnostic.NewData(jaxbData)
 }
 
 func toFCRow(file, token string, context enumerations.Context, block string,
@@ -187,7 +187,7 @@ func TestFormatCheckingAgainstJavaOracle(t *testing.T) {
 		t.Fatal("empty oracle")
 	}
 	validationPolicy := policy.NewEtsiValidationPolicyFactory().LoadDefaultValidationPolicy()
-	i18nProvider := i18n.NewI18nProvider()
+	i18nProvider := i18n.NewProvider()
 
 	byFile := map[string]map[string]*fcOracleRow{}
 	var files []string

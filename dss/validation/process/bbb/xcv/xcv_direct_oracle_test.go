@@ -289,7 +289,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			expectedByToken := byFile[name]
 
-			var diagnosticData *diagnostic.DiagnosticData
+			var diagnosticData *diagnostic.Data
 			if name != "synthetic" {
 				diagnosticData = loadXcvaDiagnosticData(t, name)
 			}

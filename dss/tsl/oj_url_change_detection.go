@@ -12,7 +12,7 @@ type OJUrlChangeDetection struct {
 	lotlSource *LOTLSource
 }
 
-var _ alert.AlertDetector[*tslmodel.LOTLInfo] = (*OJUrlChangeDetection)(nil)
+var _ alert.Detector[*tslmodel.LOTLInfo] = (*OJUrlChangeDetection)(nil)
 
 // NewOJUrlChangeDetection is the default constructor.
 func NewOJUrlChangeDetection(lotlSource *LOTLSource) *OJUrlChangeDetection {

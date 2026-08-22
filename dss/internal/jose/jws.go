@@ -44,7 +44,7 @@ type JWS struct {
 	//
 	// It exists because eu.europa.esig.dss.jades.validation.JWS overrides checkCrit() to do
 	// nothing at all ("separate structure validation and cryptographic check"), deferring the
-	// work to JAdESBaselineRequirementsChecker - and verifySignature calls checkCrit on itself,
+	// work to BaselineRequirementsChecker - and verifySignature calls checkCrit on itself,
 	// i.e. through Java's virtual dispatch. Go dispatches statically, so an embedded base type
 	// would silently keep calling its own default and start rejecting every JAdES signature
 	// whose 'crit' names a JAdES header. Routing the self-call through this field is what keeps
@@ -220,7 +220,7 @@ func (j *JWS) SetKey(key crypto.PublicKey) {
 func (j *JWS) IsDoKeyValidation() bool { return j.doKeyValidation }
 
 // SetDoKeyValidation turns the key checks on or off. Port of setDoKeyValidation(boolean).
-// JAdESSignature turns them off before validating ("restrict on key size,..."), so a signature
+// Signature turns them off before validating ("restrict on key size,..."), so a signature
 // made with, say, a 1024-bit RSA key is still reported as cryptographically intact and is left
 // for the policy layer to reject.
 func (j *JWS) SetDoKeyValidation(doKeyValidation bool) { j.doKeyValidation = doKeyValidation }

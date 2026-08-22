@@ -31,7 +31,7 @@
 // XSD-completeness sweep in xml_schema_test.go checks the model against
 // SimpleReport.xsd element by element and attribute by attribute.
 //
-// Deferred: SimpleReportFacade.generateHtmlReport/generatePdfReport apply
+// Deferred: Facade.generateHtmlReport/generatePdfReport apply
 // dss-simple-report-jaxb's xslt/html and xslt/pdf stylesheets to a
 // simple-report document. The stylesheets are copied to testdata/xslt for
 // the record, but no XSLT engine is ported and nothing in scope consumes

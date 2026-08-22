@@ -36,7 +36,7 @@ func TestSilentOnAlert_UsesProvidedDetector(t *testing.T) {
 	}
 }
 
-// detectorFunc adapts a function to the AlertDetector interface for tests.
+// detectorFunc adapts a function to the Detector interface for tests.
 type detectorFunc[T any] func(T) bool
 
 func (f detectorFunc[T]) Detect(object T) bool { return f(object) }

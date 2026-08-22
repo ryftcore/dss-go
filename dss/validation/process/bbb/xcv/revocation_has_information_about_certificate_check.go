@@ -42,7 +42,7 @@ type RevocationHasInformationAboutCertificateCheck struct {
 // NewRevocationHasInformationAboutCertificateCheck is the default constructor.
 // Port of RevocationHasInformationAboutCertificateCheck(I18nProvider, XmlRAC,
 // CertificateWrapper, RevocationWrapper, LevelRule).
-func NewRevocationHasInformationAboutCertificateCheck(i18nProvider *i18n.I18nProvider,
+func NewRevocationHasInformationAboutCertificateCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlRAC], certificate *diagnostic.CertificateWrapper,
 	revocationData *diagnostic.RevocationWrapper,
 	constraint policy.LevelRule) *RevocationHasInformationAboutCertificateCheck {

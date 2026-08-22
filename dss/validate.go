@@ -114,7 +114,7 @@ func (o ValidateOptions) certificateVerifier() CertificateVerifier {
 		verifier.SetTrustedCertSources(sources...)
 	}
 	if o.EnableAIA {
-		verifier.SetAIASource(aia.NewDefaultAIASource())
+		verifier.SetAIASource(aia.NewDefaultSource())
 	}
 	return verifier
 }

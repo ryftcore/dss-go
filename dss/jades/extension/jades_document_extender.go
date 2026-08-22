@@ -20,7 +20,7 @@ import (
 // JAdESDocumentExtender is the JAdES specific implementation of a
 // eu.europa.esig.dss.spi.augmentation.DocumentExtender.
 type JAdESDocumentExtender struct {
-	document.AbstractDocumentExtender[*jades.JAdESSignatureParameters, *jades.JAdESTimestampParameters]
+	document.AbstractDocumentExtender[*jades.SignatureParameters, *jades.TimestampParameters]
 }
 
 // newJAdESDocumentExtender is the package-private empty constructor, used by
@@ -45,11 +45,11 @@ func NewJAdESDocumentExtender(doc model.DSSDocument) *JAdESDocumentExtender {
 
 // CreateSignatureService ports the overridden protected createSignatureService(). Panics with
 // the Java message when no CertificateVerifier was provided (Objects.requireNonNull).
-func (e *JAdESDocumentExtender) CreateSignatureService() document.DocumentSignatureService[*jades.JAdESSignatureParameters, *jades.JAdESTimestampParameters] {
+func (e *JAdESDocumentExtender) CreateSignatureService() document.SignatureService[*jades.SignatureParameters, *jades.TimestampParameters] {
 	if e.CertificateVerifier == nil {
 		panic("Please provide CertificateVerifier or corresponding JAdESService!")
 	}
-	service := jades.NewJAdESService(e.CertificateVerifier)
+	service := jades.NewService(e.CertificateVerifier)
 	service.SetTspSource(e.TspSource)
 	return service
 }
@@ -63,8 +63,8 @@ func (e *JAdESDocumentExtender) IsSupported(dssDocument model.DSSDocument) bool 
 // back to JWSSerializationType.JSON_SERIALIZATION when no JAdES specific parameters were found,
 // logging the fallback at INFO level; the log statement carried no other behaviour and is
 // dropped per PORTING.md.
-func (e *JAdESDocumentExtender) EmptySignatureParameters() *jades.JAdESSignatureParameters {
-	emptyParameters := jades.NewJAdESSignatureParameters()
+func (e *JAdESDocumentExtender) EmptySignatureParameters() *jades.SignatureParameters {
+	emptyParameters := jades.NewSignatureParameters()
 	emptyParameters.SetJwsSerializationType(enumerations.JWSSerializationTypeJSONSerialization)
 	return emptyParameters
 }
@@ -72,14 +72,14 @@ func (e *JAdESDocumentExtender) EmptySignatureParameters() *jades.JAdESSignature
 // IsSupportedParameters ports the overridden protected
 // isSupportedParameters(SerializableSignatureParameters).
 func (e *JAdESDocumentExtender) IsSupportedParameters(parameters model.SerializableSignatureParameters) bool {
-	_, ok := parameters.(*jades.JAdESSignatureParameters)
+	_, ok := parameters.(*jades.SignatureParameters)
 	return ok
 }
 
 // IsSupportedService ports the overridden protected
-// isSupportedService(DocumentSignatureService<?, ?>).
+// isSupportedService(SignatureService<?, ?>).
 func (e *JAdESDocumentExtender) IsSupportedService(service any) bool {
-	_, ok := service.(*jades.JAdESService)
+	_, ok := service.(*jades.Service)
 	return ok
 }
 
@@ -89,4 +89,4 @@ func (e *JAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.
-var _ document.AbstractDocumentExtenderOverrides[*jades.JAdESSignatureParameters, *jades.JAdESTimestampParameters] = (*JAdESDocumentExtender)(nil)
+var _ document.AbstractDocumentExtenderOverrides[*jades.SignatureParameters, *jades.TimestampParameters] = (*JAdESDocumentExtender)(nil)

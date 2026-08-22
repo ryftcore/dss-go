@@ -81,11 +81,11 @@ type DetailedReportBuilder struct {
 }
 
 // NewDetailedReportBuilder is the default constructor. Port of
-// DetailedReportBuilder(I18nProvider, Date, ValidationPolicy,
-// ValidationLevel, DiagnosticData, boolean).
-func NewDetailedReportBuilder(i18nProvider *i18n.I18nProvider, currentTime time.Time,
+// DetailedReportBuilder(Provider, Date, ValidationPolicy,
+// ValidationLevel, Data, boolean).
+func NewDetailedReportBuilder(i18nProvider *i18n.Provider, currentTime time.Time,
 	validationPolicy policy.ValidationPolicy, validationLevel enumerations.ValidationLevel,
-	diagnosticData *diagnostic.DiagnosticData, includeSemantics bool) *DetailedReportBuilder {
+	diagnosticData *diagnostic.Data, includeSemantics bool) *DetailedReportBuilder {
 	b := &DetailedReportBuilder{
 		AbstractDetailedReportBuilder: NewAbstractDetailedReportBuilder(i18nProvider, currentTime, validationPolicy, diagnosticData),
 		validationLevel:               validationLevel,

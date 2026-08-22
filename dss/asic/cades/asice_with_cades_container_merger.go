@@ -21,7 +21,7 @@ type ASiCEWithCAdESContainerMerger struct {
 }
 
 var _ asic.DefaultContainerMergerOverrides = (*ASiCEWithCAdESContainerMerger)(nil)
-var _ asic.ASiCContainerMerger = (*ASiCEWithCAdESContainerMerger)(nil)
+var _ asic.ContainerMerger = (*ASiCEWithCAdESContainerMerger)(nil)
 
 // newASiCEWithCAdESContainerMerger is the empty constructor. Port of the package-private empty
 // constructor.
@@ -43,7 +43,7 @@ func NewASiCEWithCAdESContainerMerger(containers ...model.DSSDocument) *ASiCEWit
 
 // NewASiCEWithCAdESContainerMergerFromContents creates an ASiC-E with CAdES container merger
 // from the given ASiCContents. Ports ASiCEWithCAdESContainerMerger(ASiCContent...).
-func NewASiCEWithCAdESContainerMergerFromContents(asicContents ...*asic.ASiCContent) *ASiCEWithCAdESContainerMerger {
+func NewASiCEWithCAdESContainerMergerFromContents(asicContents ...*asic.Content) *ASiCEWithCAdESContainerMerger {
 	m := newASiCEWithCAdESContainerMerger()
 	m.InitFromASiCContents(asicContents...)
 	return m
@@ -54,7 +54,7 @@ func (m *ASiCEWithCAdESContainerMerger) IsSupportedDocument(container model.DSSD
 	if !m.AbstractASiCWithCAdESContainerMerger.IsSupportedDocument(container) {
 		return false
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainer(container)
+	isASiCS, err := asic.UtilsIsASiCSContainer(container)
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +67,7 @@ func (m *ASiCEWithCAdESContainerMerger) doesNotContainSignaturesDocument(contain
 	if err != nil {
 		panic(err)
 	}
-	return !asic.ASiCUtilsFilesContainSignatures(entryNames)
+	return !asic.UtilsFilesContainSignatures(entryNames)
 }
 
 func (m *ASiCEWithCAdESContainerMerger) doesNotContainTimestampsDocument(container model.DSSDocument) bool {
@@ -75,7 +75,7 @@ func (m *ASiCEWithCAdESContainerMerger) doesNotContainTimestampsDocument(contain
 	if err != nil {
 		panic(err)
 	}
-	return !asic.ASiCUtilsFilesContainTimestamps(entryNames)
+	return !asic.UtilsFilesContainTimestamps(entryNames)
 }
 
 func (m *ASiCEWithCAdESContainerMerger) doesNotContainEvidenceRecordsDocument(container model.DSSDocument) bool {
@@ -83,15 +83,15 @@ func (m *ASiCEWithCAdESContainerMerger) doesNotContainEvidenceRecordsDocument(co
 	if err != nil {
 		panic(err)
 	}
-	return !asic.ASiCUtilsFilesContainEvidenceRecords(entryNames)
+	return !asic.UtilsFilesContainEvidenceRecords(entryNames)
 }
 
 // IsSupportedContent ports the @Override protected isSupported(ASiCContent).
-func (m *ASiCEWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.ASiCContent) bool {
+func (m *ASiCEWithCAdESContainerMerger) IsSupportedContent(asicContent *asic.Content) bool {
 	if !m.AbstractASiCWithCAdESContainerMerger.IsSupportedContent(asicContent) {
 		return false
 	}
-	isASiCS, err := asic.ASiCUtilsIsASiCSContainerContent(asicContent)
+	isASiCS, err := asic.UtilsIsASiCSContainerContent(asicContent)
 	if err != nil {
 		panic(err)
 	}
@@ -132,7 +132,7 @@ func (m *ASiCEWithCAdESContainerMerger) EnsureSignaturesAllowMerge() {
 
 func (m *ASiCEWithCAdESContainerMerger) ensureSignatureDocumentsValid() {
 	mergedSignatureNames := make([]string, 0)
-	asicContentsToProcess := append([]*asic.ASiCContent{}, m.AsicContents...)
+	asicContentsToProcess := append([]*asic.Content{}, m.AsicContents...)
 
 	for len(asicContentsToProcess) > 0 {
 		asicContent := asicContentsToProcess[0]
@@ -156,12 +156,12 @@ func (m *ASiCEWithCAdESContainerMerger) ensureSignatureDocumentsValid() {
 	}
 }
 
-func (m *ASiCEWithCAdESContainerMerger) getSignatureDocumentsToBeMerged(currentASiCContent *asic.ASiCContent,
-	currentSignatureDocument model.DSSDocument, asicContentList []*asic.ASiCContent) []model.DSSDocument {
+func (m *ASiCEWithCAdESContainerMerger) getSignatureDocumentsToBeMerged(currentASiCContent *asic.Content,
+	currentSignatureDocument model.DSSDocument, asicContentList []*asic.Content) []model.DSSDocument {
 	if currentSignatureDocument.Name() == "" {
 		panic("Name shall be provided for a document!")
 	}
-	manifest := asic.ASiCManifestParserGetLinkedManifest(currentASiCContent.AllManifestDocuments(), currentSignatureDocument.Name())
+	manifest := asic.ManifestParserGetLinkedManifest(currentASiCContent.AllManifestDocuments(), currentSignatureDocument.Name())
 	if manifest == nil {
 		panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 			"A signature with filename '%s' does not have a corresponding manifest file!", currentSignatureDocument.Name()))
@@ -172,13 +172,13 @@ func (m *ASiCEWithCAdESContainerMerger) getSignatureDocumentsToBeMerged(currentA
 	for _, asicContentToCompare := range asicContentList {
 		signatureToCompare := spi.DSSUtilsDocumentWithName(asicContentToCompare.SignatureDocuments(), currentSignatureDocument.Name())
 		if signatureToCompare != nil {
-			manifestToCompare := asic.ASiCManifestParserGetLinkedManifest(asicContentToCompare.AllManifestDocuments(), signatureToCompare.Name())
+			manifestToCompare := asic.ManifestParserGetLinkedManifest(asicContentToCompare.AllManifestDocuments(), signatureToCompare.Name())
 			if manifestToCompare == nil {
 				panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 					"A signature with filename '%s' does not have a corresponding manifest file!", signatureToCompare.Name()))
 
-			} else if asic.ASiCUtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentSignatureDocument.Name()) ||
-				asic.ASiCUtilsIsCoveredByManifest(asicContentToCompare.AllManifestDocuments(), signatureToCompare.Name()) {
+			} else if asic.UtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentSignatureDocument.Name()) ||
+				asic.UtilsIsCoveredByManifest(asicContentToCompare.AllManifestDocuments(), signatureToCompare.Name()) {
 				panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 					"A signature with name '%s' in a container is covered by a manifest!", currentSignatureDocument.Name()))
 
@@ -198,7 +198,7 @@ func (m *ASiCEWithCAdESContainerMerger) getSignatureDocumentsToBeMerged(currentA
 func (m *ASiCEWithCAdESContainerMerger) updateMergedSignatureInContainers(mergedCmsSignature model.DSSDocument) {
 	for _, asicContent := range m.AsicContents {
 		if slices.Contains(spi.DSSUtilsDocumentNames(asicContent.SignatureDocuments()), mergedCmsSignature.Name()) {
-			asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), mergedCmsSignature))
+			asicContent.SetSignatureDocuments(asic.UtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), mergedCmsSignature))
 		}
 	}
 }
@@ -211,7 +211,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureManifestDocumentsValid() {
 		mergedASiCContent.SetEvidenceRecordManifestDocuments(append(mergedASiCContent.EvidenceRecordManifestDocuments(), asicContent.EvidenceRecordManifestDocuments()...))
 	}
 
-	asicContentsToProcess := append([]*asic.ASiCContent{}, m.AsicContents...)
+	asicContentsToProcess := append([]*asic.Content{}, m.AsicContents...)
 	for len(asicContentsToProcess) > 0 {
 		asicContent := asicContentsToProcess[0]
 		asicContentsToProcess = asicContentsToProcess[1:]
@@ -221,7 +221,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureManifestDocumentsValid() {
 	}
 }
 
-func (m *ASiCEWithCAdESContainerMerger) ensureSimpleManifestDocumentsValid(mergedASiCContent *asic.ASiCContent, asicContentsToProcess []*asic.ASiCContent, asicContent *asic.ASiCContent) {
+func (m *ASiCEWithCAdESContainerMerger) ensureSimpleManifestDocumentsValid(mergedASiCContent *asic.Content, asicContentsToProcess []*asic.Content, asicContent *asic.Content) {
 	for _, manifest := range asicContent.ManifestDocuments() {
 		for _, currentASiCContent := range asicContentsToProcess {
 			for _, currentManifest := range currentASiCContent.ManifestDocuments() {
@@ -229,8 +229,8 @@ func (m *ASiCEWithCAdESContainerMerger) ensureSimpleManifestDocumentsValid(merge
 					if digestEquals(manifest, currentManifest) {
 						// continue
 
-					} else if asic.ASiCUtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
-						asic.ASiCUtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
+					} else if asic.UtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
+						asic.UtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
 						panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 							"A manifest with name '%s' in a container is covered by another manifest!", currentManifest.Name()))
 
@@ -244,7 +244,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureSimpleManifestDocumentsValid(merge
 	}
 }
 
-func (m *ASiCEWithCAdESContainerMerger) ensureArchiveManifestDocumentsValid(mergedASiCContent *asic.ASiCContent, asicContentsToProcess []*asic.ASiCContent, asicContent *asic.ASiCContent) {
+func (m *ASiCEWithCAdESContainerMerger) ensureArchiveManifestDocumentsValid(mergedASiCContent *asic.Content, asicContentsToProcess []*asic.Content, asicContent *asic.Content) {
 	for _, manifest := range asicContent.ArchiveManifestDocuments() {
 		for _, currentASiCContent := range asicContentsToProcess {
 			for _, currentManifest := range currentASiCContent.ArchiveManifestDocuments() {
@@ -252,8 +252,8 @@ func (m *ASiCEWithCAdESContainerMerger) ensureArchiveManifestDocumentsValid(merg
 					if digestEquals(manifest, currentManifest) {
 						// continue
 
-					} else if asic.ASiCUtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
-						asic.ASiCUtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
+					} else if asic.UtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
+						asic.UtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
 						panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 							"A manifest with name '%s' in a container is covered by another manifest!", currentManifest.Name()))
 
@@ -267,7 +267,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureArchiveManifestDocumentsValid(merg
 	}
 }
 
-func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordManifestDocumentsValid(mergedASiCContent *asic.ASiCContent, asicContentsToProcess []*asic.ASiCContent, asicContent *asic.ASiCContent) {
+func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordManifestDocumentsValid(mergedASiCContent *asic.Content, asicContentsToProcess []*asic.Content, asicContent *asic.Content) {
 	for _, manifest := range asicContent.EvidenceRecordManifestDocuments() {
 		for _, currentASiCContent := range asicContentsToProcess {
 			for _, currentManifest := range currentASiCContent.EvidenceRecordManifestDocuments() {
@@ -275,8 +275,8 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordManifestDocumentsVal
 					if digestEquals(manifest, currentManifest) {
 						// continue
 
-					} else if asic.ASiCUtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
-						asic.ASiCUtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
+					} else if asic.UtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), manifest.Name()) ||
+						asic.UtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentManifest.Name()) {
 						panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 							"A manifest with name '%s' in a container is covered by another manifest!", currentManifest.Name()))
 
@@ -297,7 +297,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordDocumentsValid() {
 		mergedASiCContent.SetEvidenceRecordManifestDocuments(append(mergedASiCContent.EvidenceRecordManifestDocuments(), asicContent.EvidenceRecordManifestDocuments()...))
 	}
 
-	asicContentsToProcess := append([]*asic.ASiCContent{}, m.AsicContents...)
+	asicContentsToProcess := append([]*asic.Content{}, m.AsicContents...)
 	for len(asicContentsToProcess) > 0 {
 		asicContent := asicContentsToProcess[0]
 		asicContentsToProcess = asicContentsToProcess[1:]
@@ -308,13 +308,13 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordDocumentsValid() {
 						if digestEquals(evidenceRecord, currentEvidenceRecord) {
 							// continue
 
-						} else if asic.ASiCUtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), evidenceRecord.Name()) ||
-							asic.ASiCUtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentEvidenceRecord.Name()) {
+						} else if asic.UtilsIsCoveredByManifest(asicContent.AllManifestDocuments(), evidenceRecord.Name()) ||
+							asic.UtilsIsCoveredByManifest(currentASiCContent.AllManifestDocuments(), currentEvidenceRecord.Name()) {
 							panic(fmt.Sprintf("Unable to merge ASiC-E with CAdES containers. "+
 								"An evidence record with name '%s' in a container is covered by a manifest!", currentEvidenceRecord.Name()))
 
 						} else {
-							currentEvidenceRecordManifest := asic.ASiCManifestParserGetLinkedManifest(
+							currentEvidenceRecordManifest := asic.ManifestParserGetLinkedManifest(
 								currentASiCContent.EvidenceRecordManifestDocuments(), currentEvidenceRecord.Name())
 							if currentEvidenceRecordManifest == nil {
 								panic(fmt.Sprintf(
@@ -328,7 +328,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordDocumentsValid() {
 
 							currentEvidenceRecordManifest = m.replaceSigReferenceDocumentName(currentEvidenceRecordManifest, newEvidenceRecordName)
 							currentASiCContent.SetEvidenceRecordManifestDocuments(
-								asic.ASiCUtilsAddOrReplaceDocument(currentASiCContent.EvidenceRecordManifestDocuments(), currentEvidenceRecordManifest))
+								asic.UtilsAddOrReplaceDocument(currentASiCContent.EvidenceRecordManifestDocuments(), currentEvidenceRecordManifest))
 						}
 					}
 				}
@@ -338,9 +338,9 @@ func (m *ASiCEWithCAdESContainerMerger) ensureEvidenceRecordDocumentsValid() {
 }
 
 func (m *ASiCEWithCAdESContainerMerger) getEvidenceRecordType(evidenceRecordFilename string) enumerations.EvidenceRecordTypeEnum {
-	if asic.ASiCUtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
+	if asic.UtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
 		return enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord
-	} else if asic.ASiCUtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
+	} else if asic.UtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
 		return enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord
 	}
 	panic(fmt.Sprintf("The evidence record with filename '%s' is not supported!", evidenceRecordFilename))
@@ -359,7 +359,7 @@ func (m *ASiCEWithCAdESContainerMerger) replaceSigReferenceDocumentName(evidence
 	if err != nil || sigReferenceElement == nil {
 		panic(fmt.Sprintf("Invalid structure of ASiCEvidenceRecordManifest with name '%s'.", evidenceRecordManifest.Name()))
 	}
-	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ASiCManifestAttributeURI.AttributeName()}, newEvidenceRecordName)
+	sigReferenceElement.SetAttr(xmldom.Name{Local: asic.ManifestAttributeURI.AttributeName()}, newEvidenceRecordName)
 	serializedBytes, err := xmlutils.DomUtilsSerializeNode(manifestDocumentDom)
 	if err != nil {
 		panic(err)
@@ -378,10 +378,10 @@ func digestEquals(a, b model.DSSDocument) bool {
 
 // createEmptyContainer exposes the embedded DefaultContainerMerger's unexported
 // createEmptyContainer via its already-exported constructor path: DefaultContainerMerger has no
-// exported equivalent, so this file builds the same shape directly (NewASiCContent +
+// exported equivalent, so this file builds the same shape directly (NewContent +
 // SetContainerType(getContainerType())), mirroring createMergedResult's own use of it.
-func (m *ASiCEWithCAdESContainerMerger) createEmptyContainer() *asic.ASiCContent {
-	asicContent := asic.NewASiCContent()
+func (m *ASiCEWithCAdESContainerMerger) createEmptyContainer() *asic.Content {
+	asicContent := asic.NewContent()
 	asicContent.SetContainerType(m.GetTargetASiCContainerType())
 	for _, ac := range m.AsicContents {
 		if ac.ContainerType() != "" {

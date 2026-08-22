@@ -3,7 +3,7 @@
 // xades_upstream_cross_validation_test.go. It runs testdata/crossgen (a standalone `go run`
 // program - see its own doc comment) to sign XAdES-B enveloped, XAdES-B enveloping, and
 // XAdES-B detached documents plus a XAdES-T enveloping document with this package's own
-// XAdESService and a real PKCS#12 test key, then hands the output to
+// Service and a real PKCS#12 test key, then hands the output to
 // testdata/crossgen/CrossGenValidator.java, which loads each file with upstream DSS 6.5.RC1's own
 // SignedDocumentValidator/SignedDocumentDiagnosticDataBuilder and asserts the signature is
 // intact, the signing certificate is identified, and the level is recognized. Upstream DSS

@@ -1,6 +1,6 @@
 // Cross-validation harness, direction UPSTREAM -> GO: parses the
 // XAdES signatures checked into testdata/upstream/ with this package's own
-// XMLDocumentAnalyzer/XAdESSignature and compares the result against
+// XMLDocumentAnalyzer/Signature and compares the result against
 // testdata/upstream-cross-validation.json, ground truth dumped straight from upstream DSS
 // 6.5.RC1's own XMLDocumentAnalyzer/XAdESSignature (see testdata/gen/CrossValidationOracle.java
 // for how to regenerate it, and its header for exactly what it asserts and why). This is the
@@ -146,13 +146,13 @@ func TestUpstreamCrossValidation(t *testing.T) {
 				// Top-level signatures are already initialized by XMLDocumentAnalyzer's own
 				// BuildSignatures(); only recursed-into counter signatures need it (see
 				// checkXvalSignature's isCounterSig parameter).
-				checkXvalSignature(t, sig.(*XAdESSignature), gf.Signatures[i], i, false)
+				checkXvalSignature(t, sig.(*Signature), gf.Signatures[i], i, false)
 			}
 		})
 	}
 }
 
-func checkXvalSignature(t *testing.T, sig *XAdESSignature, want xvalSignature, index int, isCounterSig bool) {
+func checkXvalSignature(t *testing.T, sig *Signature, want xvalSignature, index int, isCounterSig bool) {
 	t.Helper()
 
 	// A nested counter signature is not initialized by XMLDocumentAnalyzer's BuildSignatures()
@@ -253,7 +253,7 @@ func checkXvalSignature(t *testing.T, sig *XAdESSignature, want xvalSignature, i
 		t.Fatalf("signature[%d]: golden carries %d counter-signature entries for a count of %d", index, len(want.CounterSignatures), want.CounterSignatureCount)
 	}
 	for i, cs := range counterSignatures {
-		checkXvalSignature(t, cs.(*XAdESSignature), want.CounterSignatures[i], i, true)
+		checkXvalSignature(t, cs.(*Signature), want.CounterSignatures[i], i, true)
 	}
 }
 

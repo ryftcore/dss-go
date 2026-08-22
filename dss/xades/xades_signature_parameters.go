@@ -5,7 +5,7 @@
 //
 // Java's getContext() override lazily instantiates and returns an XAdESSignatureParameters
 // through the SAME protected `context` field AbstractSignatureParameters declares (statically
-// typed ProfileParameters there, but the concrete runtime object is the XAdESProfileParameters
+// typed ProfileParameters there, but the concrete runtime object is the ProfileParameters
 // this override created and assigned) - so every base method that reads `context` (getContext()
 // itself, getDeterministicId(), getDetachedContents(), reinit()) transparently sees the XAdES
 // object once this override has run.
@@ -13,12 +13,12 @@
 // Go has neither field-level covariance nor virtual dispatch across embedding: the private
 // `context` field document.AbstractSignatureParameters declares belongs to package document and
 // cannot be written from here even if its static type were changed. This type therefore keeps
-// its own separate `context *XAdESProfileParameters` field (shadowing the embedded field's NAME
+// its own separate `context *ProfileParameters` field (shadowing the embedded field's NAME
 // only, not its storage) and shadows every base method whose Java behaviour depends on that
-// field being the XAdES one: GetContext (returns *XAdESProfileParameters, the type every XAdES
+// field being the XAdES one: GetContext (returns *ProfileParameters, the type every XAdES
 // call site in this package already assumes), GetDeterministicId (re-implemented against this
 // shadowed GetContext so
-// XAdESCounterSignatureParameters's own override - see xades_counter_signature_parameters.go's
+// CounterSignatureParameters's own override - see xades_counter_signature_parameters.go's
 // "Deterministic Id priming" section - and every base-typed reader agree on one cached value),
 // DetachedContents (checks the shadowed context first, exactly like the base, then falls back to
 // the promoted AbstractSignatureParameters.DetachedContents() for the base's own instance-field
@@ -59,14 +59,14 @@ const (
 	XPathElementPlacementXPathFirstChildOf XPathElementPlacement = "XPathFirstChildOf"
 )
 
-// XAdESSignatureParameters defines SignatureParameters to deal with XAdES signature
+// SignatureParameters defines SignatureParameters to deal with XAdES signature
 // creation/extension.
-type XAdESSignatureParameters struct {
-	document.AbstractSignatureParameters[*XAdESTimestampParameters]
+type SignatureParameters struct {
+	document.AbstractSignatureParameters[*TimestampParameters]
 
 	// context is the XAdES-specific signature creation context; see the file header for why
 	// this shadows, rather than reuses, the embedded base's own private context field.
-	context *XAdESProfileParameters
+	context *ProfileParameters
 
 	// addX509SubjectName allows adding an optional X509SubjectName in the tag X509Data.
 	addX509SubjectName bool
@@ -152,14 +152,14 @@ type XAdESSignatureParameters struct {
 	dataObjectFormatList []*DSSDataObjectFormat
 }
 
-// NewXAdESSignatureParameters instantiates the object with null values, including the
+// NewSignatureParameters instantiates the object with null values, including the
 // en319132, keyInfoCanonicalizationMethod, signedInfoCanonicalizationMethod,
 // signedPropertiesCanonicalizationMethod, signingCertificateDigestMethod, xmldsigNamespace,
 // xadesNamespace, xades141Namespace and tokenReferencesDigestAlgorithm field initializers. Port
 // of the default constructor.
-func NewXAdESSignatureParameters() *XAdESSignatureParameters {
-	return &XAdESSignatureParameters{
-		AbstractSignatureParameters:            document.NewAbstractSignatureParameters[*XAdESTimestampParameters](),
+func NewSignatureParameters() *SignatureParameters {
+	return &SignatureParameters{
+		AbstractSignatureParameters:            document.NewAbstractSignatureParameters[*TimestampParameters](),
 		en319132:                               true,
 		keyInfoCanonicalizationMethod:          xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 		signedInfoCanonicalizationMethod:       xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
@@ -175,7 +175,7 @@ func NewXAdESSignatureParameters() *XAdESSignatureParameters {
 // SetSignatureLevel overrides AbstractSerializableSignatureParameters#setSignatureLevel,
 // restricting the value to the XAdES form. Panics with the Java message when signatureLevel is
 // empty or not a XAdES level (IllegalArgumentException upstream).
-func (p *XAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
+func (p *SignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
 	if signatureLevel == "" || err != nil || enumerations.SignatureFormXAdES != form {
 		panic("Only XAdES form is allowed !")
@@ -185,7 +185,7 @@ func (p *XAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations
 
 // SigningCertificateDigestMethod sees SetSigningCertificateDigestMethod. Ports
 // getSigningCertificateDigestMethod().
-func (p *XAdESSignatureParameters) SigningCertificateDigestMethod() enumerations.DigestAlgorithm {
+func (p *SignatureParameters) SigningCertificateDigestMethod() enumerations.DigestAlgorithm {
 	return p.signingCertificateDigestMethod
 }
 
@@ -195,7 +195,7 @@ func (p *XAdESSignatureParameters) SigningCertificateDigestMethod() enumerations
 // referenced in the sequence. Default: SHA512 (DigestAlgorithm.SHA512). Panics with the Java
 // message when signingCertificateDigestMethod is empty (Objects.requireNonNull upstream). Ports
 // setSigningCertificateDigestMethod(DigestAlgorithm).
-func (p *XAdESSignatureParameters) SetSigningCertificateDigestMethod(signingCertificateDigestMethod enumerations.DigestAlgorithm) {
+func (p *SignatureParameters) SetSigningCertificateDigestMethod(signingCertificateDigestMethod enumerations.DigestAlgorithm) {
 	if signingCertificateDigestMethod == "" {
 		panic("SigningCertificateDigestMethod cannot be null!")
 	}
@@ -204,39 +204,39 @@ func (p *XAdESSignatureParameters) SetSigningCertificateDigestMethod(signingCert
 
 // SignedInfoCanonicalizationMethod gets the SignedInfo canonicalization algorithm. Ports
 // getSignedInfoCanonicalizationMethod().
-func (p *XAdESSignatureParameters) SignedInfoCanonicalizationMethod() string {
+func (p *SignatureParameters) SignedInfoCanonicalizationMethod() string {
 	return p.signedInfoCanonicalizationMethod
 }
 
 // SetSignedInfoCanonicalizationMethod sets the canonicalization algorithm to be used when
 // dealing with SignedInfo. Ports setSignedInfoCanonicalizationMethod(String).
-func (p *XAdESSignatureParameters) SetSignedInfoCanonicalizationMethod(signedInfoCanonicalizationMethod string) {
+func (p *SignatureParameters) SetSignedInfoCanonicalizationMethod(signedInfoCanonicalizationMethod string) {
 	xadesSignatureParametersAssertCanonicalizationNotEmpty(signedInfoCanonicalizationMethod)
 	p.signedInfoCanonicalizationMethod = signedInfoCanonicalizationMethod
 }
 
 // SignedPropertiesCanonicalizationMethod gets the SignedProperties canonicalization algorithm.
 // Ports getSignedPropertiesCanonicalizationMethod().
-func (p *XAdESSignatureParameters) SignedPropertiesCanonicalizationMethod() string {
+func (p *SignatureParameters) SignedPropertiesCanonicalizationMethod() string {
 	return p.signedPropertiesCanonicalizationMethod
 }
 
 // SetSignedPropertiesCanonicalizationMethod sets the canonicalization algorithm to be used when
 // dealing with SignedProperties. Ports setSignedPropertiesCanonicalizationMethod(String).
-func (p *XAdESSignatureParameters) SetSignedPropertiesCanonicalizationMethod(signedPropertiesCanonicalizationMethod string) {
+func (p *SignatureParameters) SetSignedPropertiesCanonicalizationMethod(signedPropertiesCanonicalizationMethod string) {
 	xadesSignatureParametersAssertCanonicalizationNotEmpty(signedPropertiesCanonicalizationMethod)
 	p.signedPropertiesCanonicalizationMethod = signedPropertiesCanonicalizationMethod
 }
 
 // KeyInfoCanonicalizationMethod returns the canonicalization algorithm used for dealing with
 // KeyInfo. Ports getKeyInfoCanonicalizationMethod().
-func (p *XAdESSignatureParameters) KeyInfoCanonicalizationMethod() string {
+func (p *SignatureParameters) KeyInfoCanonicalizationMethod() string {
 	return p.keyInfoCanonicalizationMethod
 }
 
 // SetKeyInfoCanonicalizationMethod sets the canonicalization algorithm used for dealing with
 // KeyInfo. Ports setKeyInfoCanonicalizationMethod(String).
-func (p *XAdESSignatureParameters) SetKeyInfoCanonicalizationMethod(keyInfoCanonicalizationMethod string) {
+func (p *SignatureParameters) SetKeyInfoCanonicalizationMethod(keyInfoCanonicalizationMethod string) {
 	xadesSignatureParametersAssertCanonicalizationNotEmpty(keyInfoCanonicalizationMethod)
 	p.keyInfoCanonicalizationMethod = keyInfoCanonicalizationMethod
 }
@@ -251,20 +251,20 @@ func xadesSignatureParametersAssertCanonicalizationNotEmpty(canonicalizationMeth
 }
 
 // IsSignKeyInfo returns whether the "KeyInfo" element must be signed. Ports isSignKeyInfo().
-func (p *XAdESSignatureParameters) IsSignKeyInfo() bool {
+func (p *SignatureParameters) IsSignKeyInfo() bool {
 	return p.signKeyInfo
 }
 
 // SetSignKeyInfo sets the parameter SignKeyInfo defining if the "KeyInfo" element must be
 // signed and its reference must be included to "SignedInfo" element. The value is FALSE by
 // default. Ports setSignKeyInfo(boolean).
-func (p *XAdESSignatureParameters) SetSignKeyInfo(signKeyInfo bool) {
+func (p *SignatureParameters) SetSignKeyInfo(signKeyInfo bool) {
 	p.signKeyInfo = signKeyInfo
 }
 
 // References returns a list of references to be incorporated to the signature. Ports
 // getReferences().
-func (p *XAdESSignatureParameters) References() []*DSSReference {
+func (p *SignatureParameters) References() []*DSSReference {
 	context := p.GetContext()
 	if context != nil && utils.IsCollectionNotEmpty(context.References()) {
 		return context.References()
@@ -278,43 +278,43 @@ func (p *XAdESSignatureParameters) References() []*DSSReference {
 // SetReferences sets a list of references to be incorporated into the signature. NOTE: This
 // method overwrites a default behavior on ds:Reference's creation. It should be used only by
 // experienced users. Ports setReferences(List<DSSReference>).
-func (p *XAdESSignatureParameters) SetReferences(references []*DSSReference) {
+func (p *SignatureParameters) SetReferences(references []*DSSReference) {
 	p.dssReferences = references
 }
 
 // XPathLocationString gets the xPath signature location string (ENVELOPED only). Ports
 // getXPathLocationString().
-func (p *XAdESSignatureParameters) XPathLocationString() string {
+func (p *SignatureParameters) XPathLocationString() string {
 	return p.xPathLocationString
 }
 
 // SetXPathLocationString defines the position where the signature will be added (XAdES
 // Enveloped). Ports setXPathLocationString(String).
-func (p *XAdESSignatureParameters) SetXPathLocationString(xPathLocationString string) {
+func (p *SignatureParameters) SetXPathLocationString(xPathLocationString string) {
 	p.xPathLocationString = xPathLocationString
 }
 
 // XPathElementPlacement returns the XPath element placement for Enveloped signature creation.
 // Ports getXPathElementPlacement().
-func (p *XAdESSignatureParameters) XPathElementPlacement() XPathElementPlacement {
+func (p *SignatureParameters) XPathElementPlacement() XPathElementPlacement {
 	return p.xPathElementPlacement
 }
 
 // SetXPathElementPlacement defines the relation to the element referenced by the XPath where
 // the signature will be added (XAdES Enveloped). Ports setXPathElementPlacement(XPathElementPlacement).
-func (p *XAdESSignatureParameters) SetXPathElementPlacement(xPathElementPlacement XPathElementPlacement) {
+func (p *SignatureParameters) SetXPathElementPlacement(xPathElementPlacement XPathElementPlacement) {
 	p.xPathElementPlacement = xPathElementPlacement
 }
 
 // RootDocument returns the root document for INTERNALLY_DETACHED signature creation. Ports
 // getRootDocument().
-func (p *XAdESSignatureParameters) RootDocument() *xmldom.Node {
+func (p *SignatureParameters) RootDocument() *xmldom.Node {
 	return p.rootDocument
 }
 
 // SetRootDocument sets the root document for INTERNALLY_DETACHED signature creation. Ports the
 // Document overload of setRootDocument.
-func (p *XAdESSignatureParameters) SetRootDocument(rootDocument *xmldom.Node) {
+func (p *SignatureParameters) SetRootDocument(rootDocument *xmldom.Node) {
 	p.rootDocument = rootDocument
 }
 
@@ -327,7 +327,7 @@ func (p *XAdESSignatureParameters) SetRootDocument(rootDocument *xmldom.Node) {
 // the "valid XML document" message below rather than clearing rootDocument and returning -
 // exactly as DomUtils.isDOM(null) safely answers false in Java (broad catch) and this port's
 // DomUtilsIsDOM does too (recover-based). Ports the DSSDocument overload of setRootDocument.
-func (p *XAdESSignatureParameters) SetRootDocumentFromDSSDocument(rootDocument model.DSSDocument) {
+func (p *SignatureParameters) SetRootDocumentFromDSSDocument(rootDocument model.DSSDocument) {
 	if rootDocument == nil {
 		p.SetRootDocument(nil)
 	}
@@ -344,19 +344,19 @@ func (p *XAdESSignatureParameters) SetRootDocumentFromDSSDocument(rootDocument m
 // GetContext gets the signature creation context (internal variable). Ports the overridden
 // getContext(). See the file header for why this shadows, rather than reuses, the promoted
 // AbstractSignatureParameters.GetContext.
-func (p *XAdESSignatureParameters) GetContext() *XAdESProfileParameters {
+func (p *SignatureParameters) GetContext() *ProfileParameters {
 	if p.context == nil {
-		p.context = NewXAdESProfileParameters()
+		p.context = NewProfileParameters()
 	}
 	return p.context
 }
 
 // GetDeterministicId returns the deterministic identifier used for unique identification of a
 // created signature, built through the shadowed GetContext so every reader of it (including
-// XAdESCounterSignatureParameters's own override) observes the same cached value. See the file
+// CounterSignatureParameters's own override) observes the same cached value. See the file
 // header. Ports the inherited AbstractSignatureParameters#getDeterministicId as reached through
 // Java's virtual getContext() dispatch.
-func (p *XAdESSignatureParameters) GetDeterministicId() string {
+func (p *SignatureParameters) GetDeterministicId() string {
 	deterministicId := p.GetContext().DeterministicId()
 	if deterministicId == "" {
 		var identifier *model.TokenIdentifier
@@ -381,7 +381,7 @@ func (p *XAdESSignatureParameters) GetDeterministicId() string {
 // falling back to the promoted base behaviour. See the file header. Ports the inherited
 // AbstractSignatureParameters#getDetachedContents as reached through Java's virtual getContext()
 // dispatch.
-func (p *XAdESSignatureParameters) DetachedContents() []model.DSSDocument {
+func (p *SignatureParameters) DetachedContents() []model.DSSDocument {
 	if detachedContents := p.GetContext().DetachedContents(); len(detachedContents) > 0 {
 		return detachedContents
 	}
@@ -390,77 +390,77 @@ func (p *XAdESSignatureParameters) DetachedContents() []model.DSSDocument {
 
 // IsEn319132 gets if the signature shall be created according to ETSI EN 319 132. Ports
 // isEn319132().
-func (p *XAdESSignatureParameters) IsEn319132() bool {
+func (p *SignatureParameters) IsEn319132() bool {
 	return p.en319132
 }
 
 // SetEn319132 sets if the signature shall be created according to ETSI EN 319 132-1. Default:
 // true. Ports setEn319132(boolean).
-func (p *XAdESSignatureParameters) SetEn319132(en319132 bool) {
+func (p *SignatureParameters) SetEn319132(en319132 bool) {
 	p.en319132 = en319132
 }
 
 // IsEmbedXML gets if the signed content shall be incorporated as XML (used for ENVELOPING).
 // Ports isEmbedXML().
-func (p *XAdESSignatureParameters) IsEmbedXML() bool {
+func (p *SignatureParameters) IsEmbedXML() bool {
 	return p.embedXML
 }
 
 // SetEmbedXML sets if the signed content shall be incorporated as XML (used for ENVELOPING). If
 // false, incorporates the document content in its base64 encoded representation. Default:
 // false. Ports setEmbedXML(boolean).
-func (p *XAdESSignatureParameters) SetEmbedXML(embedXML bool) {
+func (p *SignatureParameters) SetEmbedXML(embedXML bool) {
 	p.embedXML = embedXML
 }
 
 // IsManifestSignature gets if the signature signs a manifest. Ports isManifestSignature().
-func (p *XAdESSignatureParameters) IsManifestSignature() bool {
+func (p *SignatureParameters) IsManifestSignature() bool {
 	return p.manifestSignature
 }
 
 // SetManifestSignature sets if the signature signs a manifest. Ports
 // setManifestSignature(boolean).
-func (p *XAdESSignatureParameters) SetManifestSignature(manifestSignature bool) {
+func (p *SignatureParameters) SetManifestSignature(manifestSignature bool) {
 	p.manifestSignature = manifestSignature
 }
 
 // IsAddX509SubjectName gets if the ds:X509Data element shall be added. Ports
 // isAddX509SubjectName().
-func (p *XAdESSignatureParameters) IsAddX509SubjectName() bool {
+func (p *SignatureParameters) IsAddX509SubjectName() bool {
 	return p.addX509SubjectName
 }
 
 // SetAddX509SubjectName sets if the ds:X509Data element shall be added. Default: false. Ports
 // setAddX509SubjectName(boolean).
-func (p *XAdESSignatureParameters) SetAddX509SubjectName(addX509SubjectName bool) {
+func (p *SignatureParameters) SetAddX509SubjectName(addX509SubjectName bool) {
 	p.addX509SubjectName = addX509SubjectName
 }
 
 // SignedAdESObject gets a custom XAdES Object content. Ports getSignedAdESObject().
-func (p *XAdESSignatureParameters) SignedAdESObject() []byte {
+func (p *SignatureParameters) SignedAdESObject() []byte {
 	return p.signedAdESObject
 }
 
 // SetSignedAdESObject sets a custom XAdES Object content to incorporate into the signature.
 // Ports setSignedAdESObject(byte[]).
-func (p *XAdESSignatureParameters) SetSignedAdESObject(signedAdESObject []byte) {
+func (p *SignatureParameters) SetSignedAdESObject(signedAdESObject []byte) {
 	p.signedAdESObject = signedAdESObject
 }
 
 // IsPrettyPrint gets if the signature shall be pretty-printed. Ports isPrettyPrint().
-func (p *XAdESSignatureParameters) IsPrettyPrint() bool {
+func (p *SignatureParameters) IsPrettyPrint() bool {
 	return p.prettyPrint
 }
 
 // SetPrettyPrint sets if the signature shall be pretty-printed. Default: false. Ports
 // setPrettyPrint(boolean).
-func (p *XAdESSignatureParameters) SetPrettyPrint(prettyPrint bool) {
+func (p *SignatureParameters) SetPrettyPrint(prettyPrint bool) {
 	p.prettyPrint = prettyPrint
 }
 
 // XmldsigNamespace returns the current used XMLDSig namespace. Never returns nil. Ports
 // getXmldsigNamespace().
-func (p *XAdESSignatureParameters) XmldsigNamespace() *common.DSSNamespace {
+func (p *SignatureParameters) XmldsigNamespace() *common.DSSNamespace {
 	return p.xmldsigNamespace
 }
 
@@ -468,7 +468,7 @@ func (p *XAdESSignatureParameters) XmldsigNamespace() *common.DSSNamespace {
 // Panics with the Java message when xmldsigNamespace is nil (Objects.requireNonNull upstream) or
 // its URI is not accepted (IllegalArgumentException upstream). Ports
 // setXmldsigNamespace(DSSNamespace).
-func (p *XAdESSignatureParameters) SetXmldsigNamespace(xmldsigNamespace *common.DSSNamespace) {
+func (p *SignatureParameters) SetXmldsigNamespace(xmldsigNamespace *common.DSSNamespace) {
 	if xmldsigNamespace == nil {
 		panic("xmldsigNamespace must not be null")
 	}
@@ -481,7 +481,7 @@ func (p *XAdESSignatureParameters) SetXmldsigNamespace(xmldsigNamespace *common.
 
 // XadesNamespace returns the current used XAdES namespace. Never returns nil. Ports
 // getXadesNamespace().
-func (p *XAdESSignatureParameters) XadesNamespace() *common.DSSNamespace {
+func (p *SignatureParameters) XadesNamespace() *common.DSSNamespace {
 	return p.xadesNamespace
 }
 
@@ -489,7 +489,7 @@ func (p *XAdESSignatureParameters) XadesNamespace() *common.DSSNamespace {
 // Panics with the Java message when xadesNamespace is nil (Objects.requireNonNull upstream) or
 // its URI is not accepted (IllegalArgumentException upstream). Ports
 // setXadesNamespace(DSSNamespace).
-func (p *XAdESSignatureParameters) SetXadesNamespace(xadesNamespace *common.DSSNamespace) {
+func (p *SignatureParameters) SetXadesNamespace(xadesNamespace *common.DSSNamespace) {
 	if xadesNamespace == nil {
 		panic("xadesNamespace must not be null")
 	}
@@ -505,7 +505,7 @@ func (p *XAdESSignatureParameters) SetXadesNamespace(xadesNamespace *common.DSSN
 
 // Xades141Namespace returns the current used XAdES 1.4.1 namespace. Never returns nil. Ports
 // getXades141Namespace().
-func (p *XAdESSignatureParameters) Xades141Namespace() *common.DSSNamespace {
+func (p *SignatureParameters) Xades141Namespace() *common.DSSNamespace {
 	return p.xades141Namespace
 }
 
@@ -513,7 +513,7 @@ func (p *XAdESSignatureParameters) Xades141Namespace() *common.DSSNamespace {
 // xades141:http://uri.etsi.org/01903/v1.4.1#. Panics with the Java message when
 // xades141Namespace is nil (Objects.requireNonNull upstream) or its URI is not accepted
 // (IllegalArgumentException upstream). Ports setXades141Namespace(DSSNamespace).
-func (p *XAdESSignatureParameters) SetXades141Namespace(xades141Namespace *common.DSSNamespace) {
+func (p *SignatureParameters) SetXades141Namespace(xades141Namespace *common.DSSNamespace) {
 	if xades141Namespace == nil {
 		panic("xades141Namespace must not be null")
 	}
@@ -525,20 +525,20 @@ func (p *XAdESSignatureParameters) SetXades141Namespace(xades141Namespace *commo
 }
 
 // Objects gets the list of custom ds:Object elements. Ports getObjects().
-func (p *XAdESSignatureParameters) Objects() []*DSSObject {
+func (p *SignatureParameters) Objects() []*DSSObject {
 	return p.objects
 }
 
 // SetObjects sets the list of custom ds:Object elements to be incorporated within the
 // ds:Signature. Ports setObjects(List<DSSObject>).
-func (p *XAdESSignatureParameters) SetObjects(objects []*DSSObject) {
+func (p *SignatureParameters) SetObjects(objects []*DSSObject) {
 	p.objects = objects
 }
 
 // TokenReferencesDigestAlgorithm gets a DigestAlgorithm to create
 // CompleteCertificateRefs/CompleteRevocationRefs with. Ports
 // getTokenReferencesDigestAlgorithm().
-func (p *XAdESSignatureParameters) TokenReferencesDigestAlgorithm() enumerations.DigestAlgorithm {
+func (p *SignatureParameters) TokenReferencesDigestAlgorithm() enumerations.DigestAlgorithm {
 	return p.tokenReferencesDigestAlgorithm
 }
 
@@ -546,7 +546,7 @@ func (p *XAdESSignatureParameters) TokenReferencesDigestAlgorithm() enumerations
 // CompleteCertificateRefs/CompleteRevocationRefs for -C level. Default: SHA512. Panics with the
 // Java message when tokenReferencesDigestAlgorithm is empty (Objects.requireNonNull upstream).
 // Ports setTokenReferencesDigestAlgorithm(DigestAlgorithm).
-func (p *XAdESSignatureParameters) SetTokenReferencesDigestAlgorithm(tokenReferencesDigestAlgorithm enumerations.DigestAlgorithm) {
+func (p *SignatureParameters) SetTokenReferencesDigestAlgorithm(tokenReferencesDigestAlgorithm enumerations.DigestAlgorithm) {
 	if tokenReferencesDigestAlgorithm == "" {
 		panic("TokenReferencesDigestAlgorithm cannot be null!")
 	}
@@ -555,7 +555,7 @@ func (p *XAdESSignatureParameters) SetTokenReferencesDigestAlgorithm(tokenRefere
 
 // DataObjectFormatList gets a list of custom xades:DataObjectFormat elements. Ports
 // getDataObjectFormatList().
-func (p *XAdESSignatureParameters) DataObjectFormatList() []*DSSDataObjectFormat {
+func (p *SignatureParameters) DataObjectFormatList() []*DSSDataObjectFormat {
 	return p.dataObjectFormatList
 }
 
@@ -563,33 +563,33 @@ func (p *XAdESSignatureParameters) DataObjectFormatList() []*DSSDataObjectFormat
 // incorporated within xades:SignedDataObjectProperties element of the signature. NOTE: this
 // method overwrites default behavior on xades:DataObjectFormat creation. It should be used only
 // by experienced users. Ports setDataObjectFormatList(List<DSSDataObjectFormat>).
-func (p *XAdESSignatureParameters) SetDataObjectFormatList(dataObjectFormatList []*DSSDataObjectFormat) {
+func (p *SignatureParameters) SetDataObjectFormatList(dataObjectFormatList []*DSSDataObjectFormat) {
 	p.dataObjectFormatList = dataObjectFormatList
 }
 
 // GetContentTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating XAdESTimestampParameters. Ports the overridden #getContentTimestampParameters.
-func (p *XAdESSignatureParameters) GetContentTimestampParameters() *XAdESTimestampParameters {
+func (p *SignatureParameters) GetContentTimestampParameters() *TimestampParameters {
 	if p.ContentTimestampParameters == nil {
-		p.ContentTimestampParameters = NewXAdESTimestampParameters()
+		p.ContentTimestampParameters = NewTimestampParameters()
 	}
 	return p.ContentTimestampParameters
 }
 
 // GetSignatureTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating XAdESTimestampParameters. Ports the overridden #getSignatureTimestampParameters.
-func (p *XAdESSignatureParameters) GetSignatureTimestampParameters() *XAdESTimestampParameters {
+func (p *SignatureParameters) GetSignatureTimestampParameters() *TimestampParameters {
 	if p.SignatureTimestampParameters == nil {
-		p.SignatureTimestampParameters = NewXAdESTimestampParameters()
+		p.SignatureTimestampParameters = NewTimestampParameters()
 	}
 	return p.SignatureTimestampParameters
 }
 
 // GetArchiveTimestampParameters overrides AbstractSerializableSignatureParameters, lazily
 // instantiating XAdESTimestampParameters. Ports the overridden #getArchiveTimestampParameters.
-func (p *XAdESSignatureParameters) GetArchiveTimestampParameters() *XAdESTimestampParameters {
+func (p *SignatureParameters) GetArchiveTimestampParameters() *TimestampParameters {
 	if p.ArchiveTimestampParameters == nil {
-		p.ArchiveTimestampParameters = NewXAdESTimestampParameters()
+		p.ArchiveTimestampParameters = NewTimestampParameters()
 	}
 	return p.ArchiveTimestampParameters
 }
@@ -597,13 +597,13 @@ func (p *XAdESSignatureParameters) GetArchiveTimestampParameters() *XAdESTimesta
 // Reinit ports the overridden #reinit, delegating to the promoted base Reinit (harmless: it
 // clears the base's own separate, otherwise-unused context field) and clearing the shadowed
 // XAdES context. See the file header.
-func (p *XAdESSignatureParameters) Reinit() {
+func (p *SignatureParameters) Reinit() {
 	p.AbstractSignatureParameters.Reinit()
 	p.context = nil
 }
 
 // String ports toString().
-func (p *XAdESSignatureParameters) String() string {
+func (p *SignatureParameters) String() string {
 	return fmt.Sprintf("XAdESSignatureParameters [addX509SubjectName=%v, dssReferences=%v, embedXML=%v, "+
 		"en319132=%v, keyInfoCanonicalizationMethod='%s', signedInfoCanonicalizationMethod='%s', "+
 		"signedPropertiesCanonicalizationMethod='%s', manifestSignature=%v, rootDocument=%v, "+
@@ -619,7 +619,7 @@ func (p *XAdESSignatureParameters) String() string {
 }
 
 // Equals ports equals(Object).
-func (p *XAdESSignatureParameters) Equals(other *XAdESSignatureParameters) bool {
+func (p *SignatureParameters) Equals(other *SignatureParameters) bool {
 	if p == other {
 		return true
 	}

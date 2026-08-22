@@ -24,8 +24,8 @@ type AbstractTrustedListCheck[T any] struct {
 }
 
 // NewAbstractTrustedListCheck is the default constructor. Port of the
-// protected AbstractTrustedListCheck(I18nProvider, T, XmlTLAnalysis, LevelRule).
-func NewAbstractTrustedListCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// protected AbstractTrustedListCheck(Provider, T, XmlTLAnalysis, LevelRule).
+func NewAbstractTrustedListCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	tlAnalysis *jaxb.XmlTLAnalysis, constraint policy.LevelRule) *AbstractTrustedListCheck[T] {
 	c := &AbstractTrustedListCheck[T]{
 		ChainItemBase: process.NewChainItemBaseWithId(i18nProvider, result, constraint, tlAnalysis.Id),

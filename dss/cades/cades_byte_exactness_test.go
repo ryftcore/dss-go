@@ -1,6 +1,6 @@
 // CAdES-B byte-exactness against upstream: the BUILD chunk's core contract.
 //
-// testdata/bytecmp holds two generators - main.go (this port's CAdESService) and
+// testdata/bytecmp holds two generators - main.go (this port's Service) and
 // ByteExactnessFixtures.java (upstream DSS 6.5.RC1's CAdESService) - fed byte-identical inputs:
 // the same PKCS#12 key store, signing certificate and chain, payload, signing time and digest
 // algorithm. RSA PKCS#1 v1.5 is deterministic, so the two CMS documents must agree byte for byte
@@ -10,7 +10,7 @@
 // Two assertions come out of that, and they are deliberately different in strength:
 //
 //   - The DER SET OF signed attributes (getDataToSign's output, the bytes the signature is
-//     computed over) must be byte-identical for both fixtures. This is the CAdESLevelBaselineB
+//     computed over) must be byte-identical for both fixtures. This is the LevelBaselineB
 //     contract, checked here end-to-end through the real service rather than attribute by
 //     attribute the way cades_level_baseline_b_kat_test.go does it.
 //   - The complete CMS must be byte-identical too, except that the SignedData certificates SET
@@ -47,7 +47,7 @@ type byteExactnessFixture struct {
 	keyStore string
 	password string
 	// signingYear must fall inside the signing certificate's validity window, since
-	// CAdESService refuses to sign with a certificate that is not yet valid or has expired.
+	// Service refuses to sign with a certificate that is not yet valid or has expired.
 	signingYear string
 	// certificateCount is how many certificates the key entry's chain carries, and therefore how
 	// many the SignedData certificates SET holds.

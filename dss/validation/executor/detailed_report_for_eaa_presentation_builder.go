@@ -27,11 +27,11 @@ type DetailedReportForEAAPresentationBuilder struct {
 }
 
 // NewDetailedReportForEAAPresentationBuilder is the default constructor. Port
-// of DetailedReportForEAAPresentationBuilder(I18nProvider, Date,
-// ValidationPolicy, DiagnosticData, boolean), which hardwires
+// of DetailedReportForEAAPresentationBuilder(Provider, Date,
+// ValidationPolicy, Data, boolean), which hardwires
 // ValidationLevel.BASIC_SIGNATURES.
-func NewDetailedReportForEAAPresentationBuilder(i18nProvider *i18n.I18nProvider, currentTime time.Time,
-	validationPolicy policy.ValidationPolicy, diagnosticData *diagnostic.DiagnosticData,
+func NewDetailedReportForEAAPresentationBuilder(i18nProvider *i18n.Provider, currentTime time.Time,
+	validationPolicy policy.ValidationPolicy, diagnosticData *diagnostic.Data,
 	includeSemantics bool) *DetailedReportForEAAPresentationBuilder {
 	b := &DetailedReportForEAAPresentationBuilder{
 		DetailedReportBuilder: *NewDetailedReportBuilder(i18nProvider, currentTime, validationPolicy,
@@ -61,7 +61,7 @@ func (b *DetailedReportForEAAPresentationBuilder) executeEAAValidations(
 	for _, entry := range loteAnalysis {
 		unwrappedLoteAnalysis = append(unwrappedLoteAnalysis, entry.XmlLoTEAnalysis)
 	}
-	eaaValidationBlock := eaa.NewEAAValidationBlock(
+	eaaValidationBlock := eaa.NewValidationBlock(
 		b.I18nProvider, b.DiagnosticData, b.Policy, b.CurrentTime, bbbs, tlAnalysis, unwrappedLoteAnalysis)
 	return eaaValidationBlock.Execute()
 }

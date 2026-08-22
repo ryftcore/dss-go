@@ -3,7 +3,7 @@
 //
 // Java builds an org.bouncycastle.cms.SignerInfoGenerator, a "recipe" object BouncyCastle's
 // CMSSignedDataGenerator.generate(content, encapsulate) later calls generate(contentType) on,
-// once the real content-type and content bytes are known (see AbstractCMSGenerator's own
+// once the real content-type and content bytes are known (see AbstractGenerator's own
 // comment and CMSGenerator.java). SignerInfoGenerator below is this port's replacement: a
 // struct capturing the same recipe (SignerIdentifier, digest/signature algorithm identifiers,
 // the not-yet-content-type/message-digest/algorithm-protection-completed signed attributes,
@@ -28,7 +28,7 @@
 // from the ContentSigner's own signature algorithm identifier
 // (DefaultDigestAlgorithmIdentifierFinder#find(sigAlgId)), not from the digestAlgorithm this
 // builder was configured with - the two are independent inputs in BC's generic API. DEVIATION:
-// DSS always keeps them consistent (CAdESSignatureParameters derives its SignatureAlgorithm
+// DSS always keeps them consistent (SignatureParameters derives its SignatureAlgorithm
 // from its DigestAlgorithm, see CMSForCAdESBuilderHelper), so this port derives
 // SignerInfo.digestAlgorithm from the configured digestAlgorithm field directly when one was
 // set, falling back to the digest algorithm the ContentSigner's signature algorithm implies
@@ -49,14 +49,14 @@ import (
 )
 
 // SignerInfoGenerator is the not-yet-finalised recipe for a SignerInfo, replacing
-// org.bouncycastle.cms.SignerInfoGenerator. AbstractCMSGenerator's native Generate (see
+// org.bouncycastle.cms.SignerInfoGenerator. AbstractGenerator's native Generate (see
 // abstract_cms_generator.go) is the only caller of Generate for a top-level CMS signature; a
 // counter-signature builder (a later phase) calls it directly with a nil contentType.
 type SignerInfoGenerator struct {
 	// sid identifies the signing certificate.
 	sid *cmscore.SignerIdentifier
 	// digestAlgorithm is the digest algorithm identifier, i.e. what SignerInfoGenerator#getDigestAlgorithm
-	// answers and what CMSBuilder unions into SignedData.digestAlgorithms.
+	// answers and what Builder unions into SignedData.digestAlgorithms.
 	digestAlgorithm *asn1ber.AlgorithmIdentifier
 	// messageDigest is the pre-computed message-digest attribute value.
 	messageDigest []byte
@@ -94,7 +94,7 @@ func (g *SignerInfoGenerator) DigestAlgorithm() *asn1ber.AlgorithmIdentifier {
 // SignerInfo builder needs a signature"). Rather than construct a SignerInfo cmscore refuses to
 // build, Generate still writes the signed-attributes DER SET to the ContentSigner's
 // OutputStream (the only side effect getDataToSign needs) and returns (nil, nil) - "evaluated,
-// but no real SignerInfo exists yet" - which AbstractCMSGenerator.Generate propagates the same
+// but no real SignerInfo exists yet" - which AbstractGenerator.Generate propagates the same
 // way (a nil, no-error CMS), matching every known call site's actual usage: CAdES discards the
 // CMS this path produces and checks only that no error occurred.
 func (g *SignerInfoGenerator) Generate(contentType asn1.ObjectIdentifier) (*cmscore.SignerInfo, error) {
@@ -125,9 +125,9 @@ func (g *SignerInfoGenerator) Generate(contentType asn1.ObjectIdentifier) (*cmsc
 	return builder.Build()
 }
 
-// CMSSignerInfoGeneratorBuilder is used to build a SignerInfoGenerator.
+// SignerInfoGeneratorBuilder is used to build a SignerInfoGenerator.
 // Port of the CMSSignerInfoGeneratorBuilder class.
-type CMSSignerInfoGeneratorBuilder struct {
+type SignerInfoGeneratorBuilder struct {
 	// signingCertificate is the signing-certificate of the signer.
 	signingCertificate *model.CertificateToken
 	// digestAlgorithm is the digest algorithm to be used on message-digest computation.
@@ -139,31 +139,31 @@ type CMSSignerInfoGeneratorBuilder struct {
 }
 
 // NewCMSSignerInfoGeneratorBuilder is the default constructor. Port of the no-arg constructor.
-func NewCMSSignerInfoGeneratorBuilder() *CMSSignerInfoGeneratorBuilder {
-	return &CMSSignerInfoGeneratorBuilder{}
+func NewSignerInfoGeneratorBuilder() *SignerInfoGeneratorBuilder {
+	return &SignerInfoGeneratorBuilder{}
 }
 
 // SetSigningCertificate sets the signing-certificate of the signer. Port of #setSigningCertificate.
-func (b *CMSSignerInfoGeneratorBuilder) SetSigningCertificate(signingCertificate *model.CertificateToken) *CMSSignerInfoGeneratorBuilder {
+func (b *SignerInfoGeneratorBuilder) SetSigningCertificate(signingCertificate *model.CertificateToken) *SignerInfoGeneratorBuilder {
 	b.signingCertificate = signingCertificate
 	return b
 }
 
 // SetDigestAlgorithm sets the Digest Algorithm to be used on message-digest computation.
 // Port of #setDigestAlgorithm.
-func (b *CMSSignerInfoGeneratorBuilder) SetDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *CMSSignerInfoGeneratorBuilder {
+func (b *SignerInfoGeneratorBuilder) SetDigestAlgorithm(digestAlgorithm enumerations.DigestAlgorithm) *SignerInfoGeneratorBuilder {
 	b.digestAlgorithm = digestAlgorithm
 	return b
 }
 
 // SetSignedAttributes sets the signed attributes. Port of #setSignedAttributes.
-func (b *CMSSignerInfoGeneratorBuilder) SetSignedAttributes(signedAttributes cmscore.Attributes) *CMSSignerInfoGeneratorBuilder {
+func (b *SignerInfoGeneratorBuilder) SetSignedAttributes(signedAttributes cmscore.Attributes) *SignerInfoGeneratorBuilder {
 	b.signedAttributes = signedAttributes
 	return b
 }
 
 // SetUnsignedAttributes sets the unsigned attributes. Port of #setUnsignedAttributes.
-func (b *CMSSignerInfoGeneratorBuilder) SetUnsignedAttributes(unsignedAttributes cmscore.Attributes) *CMSSignerInfoGeneratorBuilder {
+func (b *SignerInfoGeneratorBuilder) SetUnsignedAttributes(unsignedAttributes cmscore.Attributes) *SignerInfoGeneratorBuilder {
 	b.unsignedAttributes = unsignedAttributes
 	return b
 }
@@ -177,18 +177,18 @@ func (b *CMSSignerInfoGeneratorBuilder) SetUnsignedAttributes(unsignedAttributes
 // header): with one configured, Java's toSignDocument.getDigestValue(digestAlgorithm) would
 // raise a NullPointerException against the null toSignDocument, which this port reproduces as
 // a panic, matching Java's own uncaught-exception behaviour for that programmer error.
-func (b *CMSSignerInfoGeneratorBuilder) BuildWithoutDocument(contentSigner ContentSigner) (*SignerInfoGenerator, error) {
+func (b *SignerInfoGeneratorBuilder) BuildWithoutDocument(contentSigner ContentSigner) (*SignerInfoGenerator, error) {
 	return b.build(nil, contentSigner)
 }
 
 // Build builds a SignerInfoGenerator for signing toSignDocument.
 // Port of #build(DSSDocument, ContentSigner).
-func (b *CMSSignerInfoGeneratorBuilder) Build(toSignDocument model.DSSDocument, contentSigner ContentSigner) (*SignerInfoGenerator, error) {
+func (b *SignerInfoGeneratorBuilder) Build(toSignDocument model.DSSDocument, contentSigner ContentSigner) (*SignerInfoGenerator, error) {
 	return b.build(toSignDocument, contentSigner)
 }
 
 // build ports the shared body of both build() overloads.
-func (b *CMSSignerInfoGeneratorBuilder) build(toSignDocument model.DSSDocument, contentSigner ContentSigner) (*SignerInfoGenerator, error) {
+func (b *SignerInfoGeneratorBuilder) build(toSignDocument model.DSSDocument, contentSigner ContentSigner) (*SignerInfoGenerator, error) {
 	digestAlgorithm, err := b.resolveDigestAlgorithm(contentSigner)
 	if err != nil {
 		return nil, err
@@ -232,7 +232,7 @@ func (b *CMSSignerInfoGeneratorBuilder) build(toSignDocument model.DSSDocument, 
 // field (and the message-digest computation) uses: b.digestAlgorithm when one was configured,
 // otherwise the digest algorithm the content signer's signature algorithm implies. See the
 // file header ("SignerInfo.digestAlgorithm derivation").
-func (b *CMSSignerInfoGeneratorBuilder) resolveDigestAlgorithm(contentSigner ContentSigner) (enumerations.DigestAlgorithm, error) {
+func (b *SignerInfoGeneratorBuilder) resolveDigestAlgorithm(contentSigner ContentSigner) (enumerations.DigestAlgorithm, error) {
 	if b.digestAlgorithm != "" {
 		return b.digestAlgorithm, nil
 	}
@@ -257,7 +257,7 @@ func (b *CMSSignerInfoGeneratorBuilder) resolveDigestAlgorithm(contentSigner Con
 //     logs a warning and falls back to DSSUtils.EMPTY_BYTE_ARRAY).
 //   - otherwise (BcDigestCalculatorProvider, a genuine BouncyCastle class with no DSS port):
 //     the real digest of the document's bytes for the resolved algorithm.
-func (b *CMSSignerInfoGeneratorBuilder) messageDigest(toSignDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
+func (b *SignerInfoGeneratorBuilder) messageDigest(toSignDocument model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm) ([]byte, error) {
 	if b.digestAlgorithm != "" {
 		return toSignDocument.DigestValue(b.digestAlgorithm)
 	}
@@ -277,7 +277,7 @@ func (b *CMSSignerInfoGeneratorBuilder) messageDigest(toSignDocument model.DSSDo
 // signingCertificate when one is set, otherwise the empty subjectKeyIdentifier of
 // `new SignerId(DSSUtils.EMPTY_BYTE_ARRAY)` - used to generate data-to-be-signed without a
 // signing certificate (CAdESSignatureParameters#isGenerateTBSWithoutCertificate).
-func (b *CMSSignerInfoGeneratorBuilder) signerIdentifier() (*cmscore.SignerIdentifier, error) {
+func (b *SignerInfoGeneratorBuilder) signerIdentifier() (*cmscore.SignerIdentifier, error) {
 	if b.signingCertificate == nil {
 		return cmscore.NewSubjectKeyIdentifierSID([]byte{}), nil
 	}

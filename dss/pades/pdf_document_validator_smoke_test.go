@@ -2,7 +2,7 @@
 // pdf_document_validator_factory.go, pades_diagnostic_data_builder.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
-// PDFDocumentAnalyzer, PAdESDiagnosticDataBuilder (including its PDFRevision/orphan-token
+// PDFDocumentAnalyzer, DiagnosticDataBuilder (including its PDFRevision/orphan-token
 // overrides), the default validation policy, and the executor/report-builder tree - against real
 // signed PAdES fixtures already committed under testdata/upstream.
 //

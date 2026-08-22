@@ -19,7 +19,7 @@ type RevocationDataFreshCheckWithNullConstraint struct {
 
 // NewRevocationDataFreshCheckWithNullConstraint is the default constructor.
 // Port of RevocationDataFreshCheckWithNullConstraint(I18nProvider, XmlRFC, RevocationWrapper, Date, LevelRule).
-func NewRevocationDataFreshCheckWithNullConstraint(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlRFC],
+func NewRevocationDataFreshCheckWithNullConstraint(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlRFC],
 	revocationData *diagnostic.RevocationWrapper, validationDate time.Time, constraint policy.LevelRule) *RevocationDataFreshCheckWithNullConstraint {
 	c := &RevocationDataFreshCheckWithNullConstraint{
 		AbstractRevocationFreshCheck: NewAbstractRevocationFreshCheck(i18nProvider, result, revocationData, validationDate, constraint),

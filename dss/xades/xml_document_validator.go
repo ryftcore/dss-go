@@ -6,7 +6,7 @@
 //
 // Java's XMLDocumentValidator overrides no other SignedDocumentValidator member besides the
 // covariant getDocumentAnalyzer() - unlike dss-cades, dss-xades ships no
-// XAdES-specific DiagnosticDataBuilder subclass, so this validator relies entirely on the base's
+// XAdES-specific DataBuilder subclass, so this validator relies entirely on the base's
 // default initializeDiagnosticDataBuilder() and never registers itself via
 // InitSignedDocumentValidator.
 package xades

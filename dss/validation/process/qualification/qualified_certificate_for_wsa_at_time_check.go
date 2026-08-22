@@ -23,8 +23,8 @@ type QualifiedCertificateForWSAAtTimeCheck struct {
 
 // NewQualifiedCertificateForWSAAtTimeCheck is the default constructor. Port
 // of
-// QualifiedCertificateForWSAAtTimeCheck(I18nProvider, XmlValidationQWACProcess, XmlValidationCertificateQualification, LevelRule).
-func NewQualifiedCertificateForWSAAtTimeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlValidationQWACProcess],
+// QualifiedCertificateForWSAAtTimeCheck(Provider, XmlValidationQWACProcess, XmlValidationCertificateQualification, LevelRule).
+func NewQualifiedCertificateForWSAAtTimeCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlValidationQWACProcess],
 	certificateQualification *jaxb.XmlValidationCertificateQualification, constraint policy.LevelRule) *QualifiedCertificateForWSAAtTimeCheck {
 	c := &QualifiedCertificateForWSAAtTimeCheck{
 		ChainItemBase:            process.NewChainItemBase(i18nProvider, result, constraint),

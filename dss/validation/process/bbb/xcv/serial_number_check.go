@@ -20,8 +20,8 @@ type SerialNumberCheck struct {
 }
 
 // NewSerialNumberCheck is the default constructor. Port of
-// SerialNumberCheck(I18nProvider, XmlSubXCV, CertificateWrapper, LevelRule).
-func NewSerialNumberCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// SerialNumberCheck(Provider, XmlSubXCV, CertificateWrapper, LevelRule).
+func NewSerialNumberCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.LevelRule) *SerialNumberCheck {
 	c := &SerialNumberCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),

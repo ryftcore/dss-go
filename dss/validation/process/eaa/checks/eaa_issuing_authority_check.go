@@ -21,7 +21,7 @@ type EAAIssuingAuthorityCheck struct {
 }
 
 // NewEAAIssuingAuthorityCheck is the default constructor.
-func NewEAAIssuingAuthorityCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAAIssuingAuthorityCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAAIssuingAuthorityCheck {
 	c := &EAAIssuingAuthorityCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

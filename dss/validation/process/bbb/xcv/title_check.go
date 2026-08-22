@@ -20,8 +20,8 @@ type TitleCheck struct {
 }
 
 // NewTitleCheck is the default constructor. Port of
-// TitleCheck(I18nProvider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
-func NewTitleCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSubXCV],
+// TitleCheck(Provider, XmlSubXCV, CertificateWrapper, MultiValuesRule).
+func NewTitleCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSubXCV],
 	certificate *diagnostic.CertificateWrapper, constraint policy.MultiValuesRule) *TitleCheck {
 	c := &TitleCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

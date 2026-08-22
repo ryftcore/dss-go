@@ -20,7 +20,7 @@ type CertificateRevocationSelectorResultCheck[T any] struct {
 
 // NewCertificateRevocationSelectorResultCheck is the default constructor.
 // Port of CertificateRevocationSelectorResultCheck(I18nProvider, T, XmlCRS, LevelRule).
-func NewCertificateRevocationSelectorResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+func NewCertificateRevocationSelectorResultCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	crsResult *jaxb.XmlCRS, constraint policy.LevelRule) *CertificateRevocationSelectorResultCheck[T] {
 	var chainItemBase *process.ChainItemBase[T]
 	if crsResult.Id != nil {

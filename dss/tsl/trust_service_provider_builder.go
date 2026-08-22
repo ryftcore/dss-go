@@ -198,10 +198,10 @@ func (b *TrustServiceProviderBuilder) unmodifiableTrustServices(originalTrustSer
 }
 
 // unmodifiableTimeDependentValues ports the private
-// getUnmodifiableTimeDependentValues(TimeDependentValues<TrustServiceStatusAndInformationExtensions>).
+// getUnmodifiableTimeDependentValues(Values<TrustServiceStatusAndInformationExtensions>).
 func (b *TrustServiceProviderBuilder) unmodifiableTimeDependentValues(
-	timeDependentValues *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions],
-) *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions] {
+	timeDependentValues *timedependent.Values[*tslmodel.TrustServiceStatusAndInformationExtensions],
+) *timedependent.Values[*tslmodel.TrustServiceStatusAndInformationExtensions] {
 	var copyTSSAndIEs []*tslmodel.TrustServiceStatusAndInformationExtensions
 
 	for status := range timeDependentValues.Iterator() {
@@ -220,7 +220,7 @@ func (b *TrustServiceProviderBuilder) unmodifiableTimeDependentValues(
 		copyTSSAndIEs = append(copyTSSAndIEs, copyStatus)
 	}
 
-	return timedependent.NewTimeDependentValuesFrom(copyTSSAndIEs)
+	return timedependent.NewValuesFrom(copyTSSAndIEs)
 }
 
 // unmodifiableCertificateTokenList returns a defensive copy of a CertificateToken slice.

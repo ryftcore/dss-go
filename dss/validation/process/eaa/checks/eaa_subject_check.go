@@ -20,7 +20,7 @@ type EAASubjectCheck struct {
 }
 
 // NewEAASubjectCheck is the default constructor.
-func NewEAASubjectCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*jaxb.XmlSAV],
+func NewEAASubjectCheck(i18nProvider *i18n.Provider, result *process.Result[*jaxb.XmlSAV],
 	eaaWrapper *diagnostic.EAAWrapper, constraint policy.MultiValuesRule) *EAASubjectCheck {
 	c := &EAASubjectCheck{
 		AbstractMultiValuesCheckItem: bbb.NewAbstractMultiValuesCheckItem(i18nProvider, result, constraint),

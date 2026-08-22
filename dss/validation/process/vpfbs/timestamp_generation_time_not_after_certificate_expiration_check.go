@@ -28,8 +28,8 @@ type TimestampGenerationTimeNotAfterCertificateExpirationCheck[T any] struct {
 
 // NewTimestampGenerationTimeNotAfterCertificateExpirationCheck is the default
 // constructor. Port of
-// TimestampGenerationTimeNotAfterCertificateExpirationCheck(I18nProvider, T, TimestampWrapper, Date, LevelRule).
-func NewTimestampGenerationTimeNotAfterCertificateExpirationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// TimestampGenerationTimeNotAfterCertificateExpirationCheck(Provider, T, TimestampWrapper, Date, LevelRule).
+func NewTimestampGenerationTimeNotAfterCertificateExpirationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	contentTimestamp *diagnostic.TimestampWrapper, signingCertificateNotAfter *time.Time,
 	constraint policy.LevelRule) *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T] {
 	c := &TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]{

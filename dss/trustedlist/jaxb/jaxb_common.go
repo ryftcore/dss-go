@@ -23,7 +23,7 @@
 // specs-trusted-list only), and TLValidatorTask's actual
 // signature verification runs the frozen xades/xmldsig validator over the
 // ORIGINAL document bytes, never through this JAXB tree (mirroring upstream:
-// TrustedListFacade's unmarshalled ds:Signature is not what TLValidatorTask
+// Facade's unmarshalled ds:Signature is not what TLValidatorTask
 // verifies either) - so nothing downstream needs these five properties
 // interpreted, only round-tripped. Each is therefore modelled as a
 // raw-capture stand-in (own attributes plus a captured, replayed token
@@ -34,7 +34,7 @@
 // SignatureType - hard-code their own "ns2:" element name rather than leave
 // it to encoding/xml's field-tag namespace handling; see jaxb_tsl_root.go's
 // header for why "ns2:" is the right, empirically-pinned prefix for both
-// TrustedListFacade and MRAFacade documents.
+// Facade and MRAFacade documents.
 //
 // Known (accepted) over-preservation: because dsigSignature captures every
 // token of ds:Signature's subtree verbatim rather than parsing it through

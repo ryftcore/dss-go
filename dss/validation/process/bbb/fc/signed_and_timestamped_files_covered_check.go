@@ -16,8 +16,8 @@ type SignedAndTimestampedFilesCoveredCheck struct {
 }
 
 // NewSignedAndTimestampedFilesCoveredCheck is the default constructor.
-func NewSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
-	diagnosticData *diagnostic.DiagnosticData, timestampWrapper *diagnostic.TimestampWrapper,
+func NewSignedAndTimestampedFilesCoveredCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
+	diagnosticData *diagnostic.Data, timestampWrapper *diagnostic.TimestampWrapper,
 	constraint policy.LevelRule) *SignedAndTimestampedFilesCoveredCheck {
 	c := &SignedAndTimestampedFilesCoveredCheck{}
 	c.InitAbstractSignedAndTimestampedFilesCoveredCheck(i18nProvider, result, diagnosticData,

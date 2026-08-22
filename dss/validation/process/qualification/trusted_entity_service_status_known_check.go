@@ -19,8 +19,8 @@ type TrustedEntityServiceStatusKnownCheck struct {
 }
 
 // NewTrustedEntityServiceStatusKnownCheck is the default constructor. Port of
-// TrustedEntityServiceStatusKnownCheck(I18nProvider, XmlValidationCertificateApprovalStatus, String, LevelRule).
-func NewTrustedEntityServiceStatusKnownCheck(i18nProvider *i18n.I18nProvider,
+// TrustedEntityServiceStatusKnownCheck(Provider, XmlValidationCertificateApprovalStatus, String, LevelRule).
+func NewTrustedEntityServiceStatusKnownCheck(i18nProvider *i18n.Provider,
 	result *process.Result[*jaxb.XmlValidationCertificateApprovalStatus], serviceStatusUri string,
 	constraint policy.LevelRule) *TrustedEntityServiceStatusKnownCheck {
 	c := &TrustedEntityServiceStatusKnownCheck{

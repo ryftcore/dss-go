@@ -23,7 +23,7 @@ type TokenCertificateChainAlgorithmObsolescenceValidation[T diagnostic.TokenProx
 
 // NewTokenCertificateChainAlgorithmObsolescenceValidation is the default
 // constructor.
-func NewTokenCertificateChainAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.I18nProvider,
+func NewTokenCertificateChainAlgorithmObsolescenceValidation[T diagnostic.TokenProxy](i18nProvider *i18n.Provider,
 	token T, context enumerations.Context, validationDate time.Time,
 	validationPolicy policy.ValidationPolicy) *TokenCertificateChainAlgorithmObsolescenceValidation[T] {
 	c := &TokenCertificateChainAlgorithmObsolescenceValidation[T]{}

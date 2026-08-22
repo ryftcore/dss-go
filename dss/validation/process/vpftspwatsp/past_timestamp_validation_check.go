@@ -22,8 +22,8 @@ type PastTimestampValidationCheck[T any] struct {
 }
 
 // NewPastTimestampValidationCheck is the default constructor. Port of
-// PastTimestampValidationCheck(I18nProvider, T, TimestampWrapper, XmlPSV, LevelRule).
-func NewPastTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
+// PastTimestampValidationCheck(Provider, T, TimestampWrapper, XmlPSV, LevelRule).
+func NewPastTimestampValidationCheck[T any](i18nProvider *i18n.Provider, result *process.Result[T],
 	timestamp *diagnostic.TimestampWrapper, xmlPSV *jaxb.XmlPSV,
 	constraint policy.LevelRule) *PastTimestampValidationCheck[T] {
 	c := &PastTimestampValidationCheck[T]{

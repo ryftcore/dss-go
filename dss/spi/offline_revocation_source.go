@@ -7,7 +7,7 @@
 // InitOfflineRevocationSource "directly when it overrides RevocationTokens, with the base value
 // otherwise" - neither constructor actually calls it, since OfflineCRLSourceBase/
 // OfflineOCSPSourceBase are themselves bases: the eventual leaf source (a concrete
-// format-specific CRL/OCSP source, e.g. jades.JAdESCRLSource, pades.PAdESOCSPSource, embedding
+// format-specific CRL/OCSP source, e.g. jades.CRLSource, pades.OCSPSource, embedding
 // OfflineCRLSourceBase/OfflineOCSPSourceBase) is the one that calls
 // InitOfflineRevocationSource(leafSource) in its own constructor, exactly the way
 // InitToken/InitRevocationToken are always called by the outermost concrete type.

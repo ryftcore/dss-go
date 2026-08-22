@@ -9,7 +9,7 @@
 // for byte:
 //
 //   - protectedHeader: the serialized JWS protected header, i.e. the insertion order of the
-//     JAdESLevelBaselineB properties and the exact JSON jose4j writes for them. It is checked
+//     LevelBaselineB properties and the exact JSON jose4j writes for them. It is checked
 //     against the first segment of the signing input, so a divergence in a single member order,
 //     a stripped "application/" prefix or an int-vs-string rendering fails here.
 //   - payloadBase64: the JWS payload each SignaturePackaging / 'sigD' mechanism / 'b64'
@@ -120,8 +120,8 @@ func jadesSignKATLoad(t *testing.T) *jadesSignKATFixture {
 }
 
 // baseParameters mirrors JAdESSignOracle#baseParameters.
-func (f *jadesSignKATFixture) baseParameters() *JAdESSignatureParameters {
-	parameters := NewJAdESSignatureParameters()
+func (f *jadesSignKATFixture) baseParameters() *SignatureParameters {
+	parameters := NewSignatureParameters()
 	parameters.SetSigningCertificate(f.signingCertificate)
 	parameters.SetCertificateChainFromTokens(f.signingCertificate)
 	parameters.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
@@ -133,7 +133,7 @@ func (f *jadesSignKATFixture) baseParameters() *JAdESSignatureParameters {
 }
 
 func (f *jadesSignKATFixture) enveloping(
-	serializationType enumerations.JWSSerializationType) *JAdESSignatureParameters {
+	serializationType enumerations.JWSSerializationType) *SignatureParameters {
 	parameters := f.baseParameters()
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetJwsSerializationType(serializationType)
@@ -141,7 +141,7 @@ func (f *jadesSignKATFixture) enveloping(
 }
 
 func (f *jadesSignKATFixture) detached(serializationType enumerations.JWSSerializationType,
-	mechanism enumerations.SigDMechanism) *JAdESSignatureParameters {
+	mechanism enumerations.SigDMechanism) *SignatureParameters {
 	parameters := f.baseParameters()
 	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	parameters.SetJwsSerializationType(serializationType)
@@ -178,7 +178,7 @@ func jadesSignKATHTTPHeaderDocuments(t *testing.T) []model.DSSDocument {
 }
 
 // full mirrors JAdESSignOracle#full.
-func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
+func (f *jadesSignKATFixture) full(t *testing.T) *SignatureParameters {
 	t.Helper()
 	parameters := f.enveloping(enumerations.JWSSerializationTypeJSONSerialization)
 
@@ -239,7 +239,7 @@ func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
 // JAdESSignOracle#cases() used. A name the Go side does not know fails the test rather than
 // silently skipping a golden row.
 func (f *jadesSignKATFixture) configure(t *testing.T,
-	name string) (*JAdESSignatureParameters, []model.DSSDocument) {
+	name string) (*SignatureParameters, []model.DSSDocument) {
 	t.Helper()
 	switch name {
 	case "compact-enveloping-default":
@@ -302,12 +302,12 @@ func (f *jadesSignKATFixture) configure(t *testing.T,
 
 	case "compact-enveloping-sigt":
 		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeSigT)
+		parameters.SetJadesSigningTimeType(SigningTimeTypeSigT)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-no-signing-time":
 		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeNone)
+		parameters.SetJadesSigningTimeType(SigningTimeTypeNone)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-x5to":
@@ -343,16 +343,16 @@ func (f *jadesSignKATFixture) configure(t *testing.T,
 }
 
 // jadesSignKATBuilder mirrors JAdESSignOracle#builder.
-func jadesSignKATBuilder(t *testing.T, parameters *JAdESSignatureParameters,
-	documents []model.DSSDocument) JAdESBuilder {
+func jadesSignKATBuilder(t *testing.T, parameters *SignatureParameters,
+	documents []model.DSSDocument) Builder {
 	t.Helper()
 	certificateVerifier := validation.NewCommonCertificateVerifier()
-	var builder JAdESBuilder
+	var builder Builder
 	var err error
 	if parameters.JwsSerializationType() == enumerations.JWSSerializationTypeCompactSerialization {
-		builder, err = NewJAdESCompactBuilder(certificateVerifier, parameters, documents)
+		builder, err = NewCompactBuilder(certificateVerifier, parameters, documents)
 	} else {
-		builder, err = NewJAdESSerializationBuilder(certificateVerifier, parameters, documents)
+		builder, err = NewSerializationBuilder(certificateVerifier, parameters, documents)
 	}
 	if err != nil {
 		t.Fatalf("cannot build the JAdESBuilder: %v", err)
@@ -371,7 +371,7 @@ func TestJAdESSignKATProtectedHeaderAndPayload(t *testing.T) {
 			parameters, documents := fixture.configure(t, oracleCase.Name)
 			certificateVerifier := validation.NewCommonCertificateVerifier()
 
-			levelBaselineB, err := NewJAdESLevelBaselineB(certificateVerifier, parameters, documents)
+			levelBaselineB, err := NewLevelBaselineB(certificateVerifier, parameters, documents)
 			if err != nil {
 				t.Fatalf("cannot build JAdESLevelBaselineB: %v", err)
 			}

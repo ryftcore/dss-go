@@ -3,7 +3,7 @@
 // Java's `extends CAdESLevelBaselineT` becomes embedding, and the `super.extendCMSSignatures(...)`
 // call becomes an explicit call on the embedded base. The subclass registers itself with
 // InitCAdESSignatureExtension so that the abstract base dispatches into
-// CAdESLevelBaselineLT.ExtendCMSSignaturesWithIds rather than into CAdESLevelBaselineT's.
+// LevelBaselineLT.ExtendCMSSignaturesWithIds rather than into LevelBaselineT's.
 //
 // slf4j logging is dropped (PORTING.md).
 package cades
@@ -21,26 +21,26 @@ import (
 	"github.com/ryftcore/dss-go/dss/utils"
 )
 
-// CAdESLevelBaselineLT holds the CAdES-LT signature profiles.
-type CAdESLevelBaselineLT struct {
-	CAdESLevelBaselineT
+// LevelBaselineLT holds the CAdES-LT signature profiles.
+type LevelBaselineLT struct {
+	LevelBaselineT
 }
 
-// NewCAdESLevelBaselineLT is the default constructor, taking the TSPSource for a timestamp
+// NewLevelBaselineLT is the default constructor, taking the TSPSource for a timestamp
 // creation and the CertificateVerifier. Port of
-// CAdESLevelBaselineLT(TSPSource, CertificateVerifier).
-func NewCAdESLevelBaselineLT(tspSource validation.TSPSource,
-	certificateVerifier validation.CertificateVerifier) *CAdESLevelBaselineLT {
-	extension := &CAdESLevelBaselineLT{}
+// LevelBaselineLT(TSPSource, CertificateVerifier).
+func NewLevelBaselineLT(tspSource validation.TSPSource,
+	certificateVerifier validation.CertificateVerifier) *LevelBaselineLT {
+	extension := &LevelBaselineLT{}
 	extension.InitCAdESSignatureExtension(extension, tspSource, certificateVerifier)
 	return extension
 }
 
 // ExtendCMSSignaturesWithIds ports the overridden protected
-// extendCMSSignatures(CMS, CAdESSignatureParameters, List<String>).
-func (e *CAdESLevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
-	parameters *CAdESSignatureParameters, signatureIdsToExtend []string) (*cms.CMS, error) {
-	cmsToExtend, err := e.CAdESLevelBaselineT.ExtendCMSSignaturesWithIds(cmsToExtend, parameters, signatureIdsToExtend)
+// extendCMSSignatures(CMS, SignatureParameters, List<String>).
+func (e *LevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
+	parameters *SignatureParameters, signatureIdsToExtend []string) (*cms.CMS, error) {
+	cmsToExtend, err := e.LevelBaselineT.ExtendCMSSignaturesWithIds(cmsToExtend, parameters, signatureIdsToExtend)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (e *CAdESLevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 	 * versions of ETSI TS 101 733 [1], have already been added to the SignedData:
 	 */
 	if e.IncludesATSv2(cmsToExtend) {
-		if err := cms.CMSUtilsAssertATSv2AugmentationSupported(); err != nil {
+		if err := cms.UtilsAssertATSv2AugmentationSupported(); err != nil {
 			return nil, err
 		}
 		/*
@@ -92,7 +92,7 @@ func (e *CAdESLevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 		 */
 		newSignerInformationList := make([]*cmscore.SignerInfo, 0, len(signatures))
 		for _, sig := range signatures {
-			cadesSignature, ok := sig.(*CAdESSignature)
+			cadesSignature, ok := sig.(*Signature)
 			if !ok {
 				continue
 			}
@@ -137,25 +137,25 @@ func (e *CAdESLevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 }
 
 // extendSignerInformation ports the private extendSignerInformation(SignerInformation, ValidationData).
-func (e *CAdESLevelBaselineLT) extendSignerInformation(signerInformation *cmscore.SignerInfo,
-	validationData *validation.ValidationData) (*cmscore.SignerInfo, error) {
-	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
+func (e *LevelBaselineLT) extendSignerInformation(signerInformation *cmscore.SignerInfo,
+	validationData *validation.Data) (*cmscore.SignerInfo, error) {
+	unsignedAttributes := UtilsUnsignedAttributes(signerInformation)
 	unsignedAttributes, err := e.addValidationData(unsignedAttributes, validationData)
 	if err != nil {
 		return nil, err
 	}
-	return cms.CMSUtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributes)
+	return cms.UtilsReplaceUnsignedAttributes(signerInformation, unsignedAttributes)
 }
 
 // addValidationData ports the private addValidationData(AttributeTable, ValidationData).
-func (e *CAdESLevelBaselineLT) addValidationData(unsignedAttributes cmscore.Attributes,
-	validationData *validation.ValidationData) (cmscore.Attributes, error) {
+func (e *LevelBaselineLT) addValidationData(unsignedAttributes cmscore.Attributes,
+	validationData *validation.Data) (cmscore.Attributes, error) {
 	timestampTokenToExtend, err := e.lastArchiveTimestamp(unsignedAttributes)
 	if err != nil {
 		return nil, err
 	}
 	if timestampTokenToExtend != nil {
-		timestampCMS, err := cms.CMSUtilsToCMS(timestampTokenToExtend)
+		timestampCMS, err := cms.UtilsToCMS(timestampTokenToExtend)
 		if err != nil {
 			return nil, err
 		}
@@ -170,10 +170,10 @@ func (e *CAdESLevelBaselineLT) addValidationData(unsignedAttributes cmscore.Attr
 }
 
 // lastArchiveTimestamp ports the private getLastArchiveTimestamp(AttributeTable).
-func (e *CAdESLevelBaselineLT) lastArchiveTimestamp(unsignedAttributes cmscore.Attributes) (*cmscore.TimeStampToken, error) {
+func (e *LevelBaselineLT) lastArchiveTimestamp(unsignedAttributes cmscore.Attributes) (*cmscore.TimeStampToken, error) {
 	var lastTimeStampToken *cmscore.TimeStampToken
 	comparator := NewTimeStampTokenProductionComparator()
-	timeStampTokens, err := CAdESUtilsFindArchiveTimeStampTokens(unsignedAttributes)
+	timeStampTokens, err := UtilsFindArchiveTimeStampTokens(unsignedAttributes)
 	if err != nil {
 		return nil, err
 	}
@@ -188,14 +188,14 @@ func (e *CAdESLevelBaselineLT) lastArchiveTimestamp(unsignedAttributes cmscore.A
 // replaceTimeStampAttribute returns a new attribute table with attributeToReplace replaced by
 // attributeToAdd. Port of the private
 // replaceTimeStampAttribute(AttributeTable, CMS, CMS).
-func (e *CAdESLevelBaselineLT) replaceTimeStampAttribute(attributeTable cmscore.Attributes,
+func (e *LevelBaselineLT) replaceTimeStampAttribute(attributeTable cmscore.Attributes,
 	attributeToReplace, attributeToAdd *cms.CMS) cmscore.Attributes {
 	newAsn1EncodableVector := make(cmscore.Attributes, 0, len(attributeTable))
 	for _, attribute := range cadesLTAAttributeTableOrder(attributeTable) {
 		newAttribute := attribute
-		if CAdESUtilsIsArchiveTimeStampToken(attribute) {
+		if UtilsIsArchiveTimeStampToken(attribute) {
 			// ContentInfo binaries have to be compared, therefore CMS creation is required
-			attributeValue, err := CAdESUtilsEncodedValue(attribute)
+			attributeValue, err := UtilsEncodedValue(attribute)
 			if err == nil && bytes.Equal(attributeToReplace.DEREncoded(), attributeValue) {
 				newAttribute = cmscore.NewAttribute(attribute.Type, attributeToAdd.DEREncoded())
 			}
@@ -210,18 +210,18 @@ func (e *CAdESLevelBaselineLT) replaceTimeStampAttribute(attributeTable cmscore.
 
 // extendWithValidationData extends the cms with the LT-level (validation data).
 // Port of the private extendWithValidationData(CMS, ValidationData).
-func (e *CAdESLevelBaselineLT) extendWithValidationData(cmsToExtend *cms.CMS,
-	validationDataForInclusion *validation.ValidationData) (*cms.CMS, error) {
-	cmsBuilder := cms.NewCMSBuilder().SetOriginalCMS(cmsToExtend)
+func (e *LevelBaselineLT) extendWithValidationData(cmsToExtend *cms.CMS,
+	validationDataForInclusion *validation.Data) (*cms.CMS, error) {
+	cmsBuilder := cms.NewBuilder().SetOriginalCMS(cmsToExtend)
 	return cmsBuilder.ExtendCMSSignedData(validationDataForInclusion.CertificateTokens(),
 		validationDataForInclusion.CrlTokens(), validationDataForInclusion.OcspTokens())
 }
 
 // IncludesATSv2 verifies whether the CMS contains an ATSTv2.
 // Port of the protected includesATSv2(CMS).
-func (e *CAdESLevelBaselineLT) IncludesATSv2(cmsToCheck *cms.CMS) bool {
+func (e *LevelBaselineLT) IncludesATSv2(cmsToCheck *cms.CMS) bool {
 	for _, signerInformation := range cmsToCheck.SignerInfos() {
-		if CAdESUtilsContainsATSTv2(signerInformation) {
+		if UtilsContainsATSTv2(signerInformation) {
 			return true
 		}
 	}
@@ -231,7 +231,7 @@ func (e *CAdESLevelBaselineLT) IncludesATSv2(cmsToCheck *cms.CMS) bool {
 // ExtendToLTLevelSignatures returns the signatures to be extended according to the list of
 // signatureIdsToExtend. Port of the protected
 // getExtendToLTLevelSignatures(List<AdvancedSignature>, List<String>).
-func (e *CAdESLevelBaselineLT) ExtendToLTLevelSignatures(signatures []validation.AdvancedSignature,
+func (e *LevelBaselineLT) ExtendToLTLevelSignatures(signatures []validation.AdvancedSignature,
 	signatureIdsToExtend []string) []validation.AdvancedSignature {
 	toBeExtended := make([]validation.AdvancedSignature, 0, len(signatures))
 	for _, sig := range signatures {
@@ -276,4 +276,4 @@ func cadesLTAContainsSignature(signatures []validation.AdvancedSignature, signat
 }
 
 // compile-time assertion that the LT profile satisfies the abstract base's contract.
-var _ CAdESSignatureExtensionOverrides = (*CAdESLevelBaselineLT)(nil)
+var _ SignatureExtensionOverrides = (*LevelBaselineLT)(nil)

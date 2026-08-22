@@ -19,7 +19,7 @@ type CAdESV3HashIndexCheck struct {
 }
 
 // NewCAdESV3HashIndexCheck is the default constructor.
-func NewCAdESV3HashIndexCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*drjaxb.XmlFC],
+func NewCAdESV3HashIndexCheck(i18nProvider *i18n.Provider, result *process.Result[*drjaxb.XmlFC],
 	timestamp *diagnostic.TimestampWrapper, constraint policy.LevelRule) *CAdESV3HashIndexCheck {
 	c := &CAdESV3HashIndexCheck{timestamp: timestamp}
 	c.ChainItemBase = process.NewChainItemBase(i18nProvider, result, constraint)

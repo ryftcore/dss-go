@@ -1,5 +1,5 @@
 // End-to-end round-trip test exercising the whole CMSAPI wrap-layer against internal/cmscore:
-// CustomContentSignerBuilder -> CMSSignerInfoGeneratorBuilder -> CMSBuilder -> CMSGenerator's
+// CustomContentSignerBuilder -> SignerInfoGeneratorBuilder -> Builder -> Generator's
 // native Generate, mirroring the two-step DSS signing flow (empty-signature "data to sign",
 // then a real signature) CAdESService drives in the cades package. Not a KAT (no Java oracle
 // output is compared byte for byte here - that is cades' BUILD chunk's job for the CAdES
@@ -56,7 +56,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	document := model.NewInMemoryDocument([]byte("hello CMS"))
 
 	buildSignerInfoGenerator := func(contentSigner *CustomContentSigner) *SignerInfoGenerator {
-		generator, err := NewCMSSignerInfoGeneratorBuilder().
+		generator, err := NewSignerInfoGeneratorBuilder().
 			SetSigningCertificate(signingCertificate).
 			SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 			Build(document, contentSigner)
@@ -73,7 +73,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	}
 	generator1 := buildSignerInfoGenerator(dataToSignSigner)
 
-	builder := NewCMSBuilder().
+	builder := NewBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetTrustAnchorBPPolicy(false)
 	if _, err := builder.CreateCMS(generator1, document); err != nil {
@@ -104,7 +104,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	}
 
 	// The final CMS parses back cleanly and holds one signer, one certificate, and an
-	// encapsulated (non-detached) content, per CMSBuilder's SetEncapsulate default.
+	// encapsulated (non-detached) content, per Builder's SetEncapsulate default.
 	if signedCMS.IsDetachedSignature() {
 		t.Error("expected an encapsulated signature (SetEncapsulate defaults to true)")
 	}
@@ -118,7 +118,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 		t.Error("the embedded certificate does not match the signing certificate")
 	}
 
-	reparsed, err := CMSUtilsParseToCMSBinaries(signedCMS.DEREncoded())
+	reparsed, err := UtilsParseToCMSBinaries(signedCMS.DEREncoded())
 	if err != nil {
 		t.Fatalf("re-parse: %s", err)
 	}
@@ -164,7 +164,7 @@ func TestCMSBuilderDetached(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build content signer: %s", err)
 	}
-	generator, err := NewCMSSignerInfoGeneratorBuilder().
+	generator, err := NewSignerInfoGeneratorBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 		Build(document, contentSigner)
@@ -172,7 +172,7 @@ func TestCMSBuilderDetached(t *testing.T) {
 		t.Fatalf("Build: %s", err)
 	}
 
-	cms, err := NewCMSBuilder().
+	cms, err := NewBuilder().
 		SetSigningCertificate(signingCertificate).
 		SetTrustAnchorBPPolicy(false).
 		SetEncapsulate(false).
