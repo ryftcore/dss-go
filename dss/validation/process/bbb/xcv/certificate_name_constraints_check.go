@@ -1,6 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/xcv/sub/checks/CertificateNameConstraintsCheck.java (DSS 6.5.RC1).
 //
-// slf4j logging (LOG.debug/LOG.warn) is dropped per PORTING.md.
+// Java's slf4j logging (LOG.debug/LOG.warn) has no Go equivalent and is not ported.
 package xcv
 
 import (
@@ -378,8 +378,9 @@ func unionNameConstraints(originalConstraints, currentConstraints map[enumeratio
 	return result
 }
 
-// generalNameTypesOf returns the keys of a general-name-type map in a stable,
-// deterministic order (PORTING.md: no map ranging into output).
+// generalNameTypesOf returns the keys of a general-name-type map in a
+// stable, deterministic order (avoiding Go's randomized map-iteration order
+// in the output).
 func generalNameTypesOf(m map[enumerations.GeneralNameType][]*diagjaxb.XmlGeneralName) []enumerations.GeneralNameType {
 	order := []enumerations.GeneralNameType{
 		enumerations.GeneralNameTypeOtherName, enumerations.GeneralNameTypeRFC822Name,

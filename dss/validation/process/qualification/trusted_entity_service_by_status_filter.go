@@ -19,7 +19,10 @@ func NewTrustedEntityServiceByStatusFilter(statusUri string) *TrustedEntityServi
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustedEntityServiceWrapper).
+// IsAcceptable reports whether the service's status URI matches the
+// configured status URI (an absent configured status accepts only services
+// with no status history). Port of the overridden
+// isAcceptable(TrustedEntityServiceWrapper).
 func (f *TrustedEntityServiceByStatusFilter) IsAcceptable(service *diagnostic.TrustedEntityServiceWrapper) bool {
 	// if Status is NULL, it means no history entries are present, thus all services are valid
 	if f.statusUri == "" {

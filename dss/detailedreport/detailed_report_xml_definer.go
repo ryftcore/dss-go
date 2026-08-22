@@ -5,8 +5,7 @@
 // singletons built by javax.xml.validation/javax.xml.transform machinery that
 // has no Go stdlib equivalent: an XSD Schema (for marshaller/unmarshaller
 // validation) and two sets of XSLT Templates (Bootstrap 4 HTML and PDF report
-// rendering). Per dss/diagnostic/jaxb's DiagnosticDataXmlDefiner precedent,
-// this port keeps the schema/XSLT resource-location constants for
+// rendering). This port keeps the schema/XSLT resource-location constants for
 // documentation/testdata purposes, but Schema()/HtmlBootstrap4Templates()/
 // PdfTemplates() are stubs returning an error: no Go stdlib XSD validator or
 // XSLT engine exists, and adding a third-party one is outside the

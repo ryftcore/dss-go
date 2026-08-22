@@ -3,12 +3,10 @@
 //
 // Java's AbstractReports declares getXmlSimpleReport() abstract and Print()
 // calls it (virtual dispatch onto the concrete Reports/CertificateReports
-// subclass). Go has no inheritance, so - following the dss/diagnostic
-// AbstractTokenProxyBase precedent (Phase 8a) - the shared state and
-// concrete methods live on AbstractReportsBase, the subclass-supplied
-// members are captured by the AbstractReportsOverrides interface, and each
-// concrete wrapper registers itself via InitAbstractReports in its
-// constructor.
+// subclass). Go has no inheritance, so the shared state and concrete
+// methods live on AbstractReportsBase, the subclass-supplied members are
+// captured by the AbstractReportsOverrides interface, and each concrete
+// wrapper registers itself via InitAbstractReports in its constructor.
 
 package reports
 
@@ -66,8 +64,7 @@ func (a *AbstractReportsBase) InitAbstractReports(overrides AbstractReportsOverr
 }
 
 // reportsOverrides returns the registered overrides, panicking when the
-// concrete wrapper failed to call InitAbstractReports - mirrors the
-// dss/diagnostic AbstractTokenProxyBase precedent.
+// concrete wrapper failed to call InitAbstractReports.
 func (a *AbstractReportsBase) reportsOverrides() AbstractReportsOverrides {
 	if a.overrides == nil {
 		panic("reports: AbstractReportsBase used without InitAbstractReports")

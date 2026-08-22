@@ -1,60 +1,5 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/timestamp/CAdESTimestampSource.java (DSS 6.5.RC1).
 //
-// # FORWARD DEPENDENCY: CAdESSignature, CAdESAttribute, CAdESSignedAttributes, CAdESUnsignedAttributes
-//
-// *CAdESSignature (Java eu.europa.esig.dss.cades.validation.CAdESSignature) is assigned to a
-// sibling chunk of this manifest, per PORTING.md item 18 implementing spi/validation.AdvancedSignature
-// in full; every other landed file in this package already forward-references it the same way
-// (see cades_level_baseline_lta_timestamp_extractor.go). This file additionally calls:
-//
-//	func (s *CAdESSignature) SignerInformation() *cmscore.SignerInfo // getSignerInformation()
-//	func (s *CAdESSignature) CMS() *cms.CMS                          // getCMS()
-//	func (s *CAdESSignature) DetachedContents() []model.DSSDocument  // getDetachedContents()
-//	func (s *CAdESSignature) CertificateSource() *spi.SignatureCertificateSource
-//	func (s *CAdESSignature) CRLSource() spi.OfflineRevocationSource[revocation.CRL]
-//	func (s *CAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCSP]
-//	func (s *CAdESSignature) CounterSignatures() []validation.AdvancedSignature
-//	func (s *CAdESSignature) ID() string
-//
-// all already part of validation.AdvancedSignature (frozen) or already assumed by this package's
-// landed files.
-//
-// CAdESAttribute (Java eu.europa.esig.dss.cades.validation.CAdESAttribute) is likewise assigned
-// to a sibling chunk (the same one owning CAdESSignature), and satisfies
-// validation.SignatureAttribute + comparable, per SignatureTimestampSource's SA constraint. The
-// subset of its API this file calls, inferred from every CAdESAttribute call in the ported Java
-// source:
-//
-//	func (a *CAdESAttribute) ASN1Oid() asn1.ObjectIdentifier      // getASN1Oid()
-//	func (a *CAdESAttribute) ASN1Object() *asn1ber.Element        // getASN1Object()
-//	func (a *CAdESAttribute) AttrValues() []*asn1ber.Element      // getAttrValues() (ASN1Set)
-//	func (a *CAdESAttribute) Attribute() *cmscore.Attribute       // getAttribute()
-//	func (a *CAdESAttribute) ToTimeStampToken() *cmscore.TimeStampToken // toTimeStampToken()
-//	func (a *CAdESAttribute) IsTimeStampToken() bool              // isTimeStampToken()
-//	func (a *CAdESAttribute) IsEvidenceRecord() bool              // isEvidenceRecord()
-//
-// plus Identifier() identifier.SignatureAttributeIdentifier from validation.SignatureAttribute
-// itself. ASN1Object()/AttrValues() are assumed to hand back *asn1ber.Element (the same
-// representation DSSASN1Utils.getAsn1Encodable(Attribute) already resolves to for a single-valued
-// attribute, see spi.DSSASN1UtilsAsn1Encodable), not a re-parsed byte slice: the callers below
-// need DER-normalised re-encoding (asn1ber.Element#DEREncoded()), not just raw octets.
-//
-// CAdESSignedAttributes.build(SignerInformation) / CAdESUnsignedAttributes.build(SignerInformation)
-// are Java static factories on two more sibling-chunk classes (eu.europa.esig.dss.cades.validation),
-// flattened per PORTING.md's "<JavaClass><MethodName>" convention for static factories:
-//
-//	func CAdESSignedAttributesBuild(signerInformation *cmscore.SignerInfo) validation.SignatureProperties[*CAdESAttribute]
-//	func CAdESUnsignedAttributesBuild(signerInformation *cmscore.SignerInfo) validation.SignatureProperties[*CAdESAttribute]
-//
-// CAdESEmbeddedEvidenceRecordHelper (Java eu.europa.esig.dss.cades.evidencerecord.
-// CAdESEmbeddedEvidenceRecordHelper) is a further sibling-chunk type (a different dss-cades
-// subpackage, also flattened into this same Go package per PORTING.md's cades layout), assumed
-// to embed validation.AbstractEmbeddedEvidenceRecordHelper (see spi/validation/
-// abstract_embedded_evidence_record_helper.go) and therefore promote SetDetachedContents,
-// SetOrderOfAttribute and SetOrderWithinAttribute:
-//
-//	func NewCAdESEmbeddedEvidenceRecordHelper(signature *CAdESSignature, unsignedAttribute *CAdESAttribute) *CAdESEmbeddedEvidenceRecordHelper
-//
 // # GAP flagged for integrator: SignatureTimestampSource needs four additive accessors
 //
 // This file needs read access to the merged certificate/CRL/OCSP sources
@@ -1041,7 +986,5 @@ func cadesTSMust[T any](value T, err error) T {
 
 // compile-time assertion: *CAdESTimestampSource implements
 // timestamp.SignatureTimestampSourceOverrides[*CAdESSignature, *CAdESAttribute], matching Java's
-// "extends SignatureTimestampSource<CAdESSignature, CAdESAttribute>". Will not compile until
-// *CAdESSignature/*CAdESAttribute land (forward dependency of a sibling chunk); see PORTING.md's
-// "cades chunks may NOT build mid-port" note.
+// "extends SignatureTimestampSource<CAdESSignature, CAdESAttribute>".
 var _ timestamp.SignatureTimestampSourceOverrides[*CAdESSignature, *CAdESAttribute] = (*CAdESTimestampSource)(nil)

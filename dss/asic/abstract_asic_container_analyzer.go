@@ -2,6 +2,8 @@
 package asic
 
 import (
+	"strings"
+
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/model/scope"
@@ -15,7 +17,7 @@ import (
 // AbstractASiCContainerAnalyzerOverrides declares the ASiC-specific abstract operations
 // AbstractASiCContainerAnalyzer calls back into virtually, distinct from (but composed
 // alongside) analyzer.DefaultDocumentAnalyzerOverrides - see this type's doc comment for the
-// two-tier composition contract every concrete analyzer (CADSIGN/XADSIGN chunks) must follow.
+// two-tier composition contract every concrete analyzer must follow.
 type AbstractASiCContainerAnalyzerOverrides interface {
 	// IsSupportedASiCContent checks if the ASiCContent is supported by the current validator.
 	// Port of the public abstract isSupported(ASiCContent).
@@ -46,7 +48,7 @@ type AbstractASiCContainerAnalyzerOverrides interface {
 // AbstractASiCContainerAnalyzer is the abstract class for an ASiC container validation. Ports
 // the Java class extending analyzer.DefaultDocumentAnalyzer.
 //
-// Two-tier virtual dispatch (per S7_BRIEF.md's warning): AbstractASiCContainerAnalyzer itself
+// Two-tier virtual dispatch: AbstractASiCContainerAnalyzer itself
 // overrides 5 of analyzer.DefaultDocumentAnalyzerOverrides' methods (BuildSignatures,
 // BuildDetachedEvidenceRecords, CoversSignature, AddReference, GetAllSignatures - defined
 // directly below, shadowing the embedded DefaultDocumentAnalyzer's default bodies) while
@@ -119,8 +121,8 @@ func (a *AbstractASiCContainerAnalyzer) requireOverrides() AbstractASiCContainer
 	return a.overrides
 }
 
-// AbstractASiCContainerAnalyzerBase returns the receiver itself. Cross-package accessor added
-// during phase 8f un-gating: AbstractASiCContainerValidator (abstract_asic_container_validator.go,
+// AbstractASiCContainerAnalyzerBase returns the receiver itself. Cross-package accessor:
+// AbstractASiCContainerValidator (abstract_asic_container_validator.go,
 // same package) needs to recover this base pointer from the analyzer.DocumentAnalyzer interface
 // value SignedDocumentValidatorBase.DocumentAnalyzer() returns, whose dynamic type is a concrete
 // leaf analyzer (e.g. asic/cades.ASiCContainerWithCAdESAnalyzer) embedding
@@ -429,22 +431,16 @@ func (a *AbstractASiCContainerAnalyzer) getEvidenceRecordAnalyzer(evidenceRecord
 func (a *AbstractASiCContainerAnalyzer) assertEvidenceRecordDocumentExtensionMatch(evidenceRecordDocument model.DSSDocument, evidenceRecordTypeEnum enumerations.EvidenceRecordTypeEnum) {
 	switch evidenceRecordTypeEnum {
 	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
-		if evidenceRecordDocument.Name() != "" && !hasSuffix(evidenceRecordDocument.Name(), ".xml") {
+		if evidenceRecordDocument.Name() != "" && !strings.HasSuffix(evidenceRecordDocument.Name(), ".xml") {
 			panic(model.NewDSSError("Document containing an XMLERS evidence record shall end with '.xml' extension!"))
 		}
 	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
-		if evidenceRecordDocument.Name() != "" && !hasSuffix(evidenceRecordDocument.Name(), ".ers") {
+		if evidenceRecordDocument.Name() != "" && !strings.HasSuffix(evidenceRecordDocument.Name(), ".ers") {
 			panic(model.NewDSSError("Document containing an ERS evidence record shall end with '.ers' extension!"))
 		}
 	default:
 		panic("The evidence record type '" + string(evidenceRecordTypeEnum) + "' is not supported!")
 	}
-}
-
-// hasSuffix is a tiny local helper avoiding an extra "strings" import for a single call site
-// used twice in this file (not a cross-file shared helper, per PORTING.md).
-func hasSuffix(s, suffix string) bool {
-	return len(s) >= len(suffix) && s[len(s)-len(suffix):] == suffix
 }
 
 // CoversSignature ports the @Override protected coversSignature(AdvancedSignature,

@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/alerts/TLAlert.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see lotl_alert.go's header): extends
-// job.DocumentAlert[*tslmodel.TLInfo, *tslmodel.LOTLInfo].
+// Extends job.DocumentAlert[*tslmodel.TLInfo, *tslmodel.LOTLInfo] (see lotl_alert.go's header
+// for the wider job.* convention).
 package tsl
 
 import (

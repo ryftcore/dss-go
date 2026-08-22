@@ -1,8 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/aov/cc/AbstractAlgorithmCryptographicChecker.java (DSS 6.5.RC1).
 //
 // Package placement deviation: Java's eu.europa.esig.dss.validation.process.bbb.aov.cc
-// package (the CryptographicChecker family) is flattened into this pkg aov,
-// per the phase 8d porter brief ("cc + both checks subpackages flattened").
+// package (the CryptographicChecker family) is flattened into this pkg aov.
 package aov
 
 import (
@@ -84,12 +83,12 @@ func (c *AbstractAlgorithmCryptographicChecker) Title() i18n.MessageTag {
 // protected void addAdditionalInfo(). Java's super.addAdditionalInfo() call is
 // the Chain default, which is empty, and is therefore not ported.
 func (c *AbstractAlgorithmCryptographicChecker) AddAdditionalInfo() {
-	c.Result.Value.CryptographicValidation = c.getCryptographicValidation()
+	c.Result.Value.CryptographicValidation = c.cryptographicValidation()
 }
 
-// getCryptographicValidation builds a XmlCryptographicValidation information.
+// cryptographicValidation builds a XmlCryptographicValidation information.
 // Port of the protected XmlCryptographicValidation getCryptographicValidation().
-func (c *AbstractAlgorithmCryptographicChecker) getCryptographicValidation() *jaxb.XmlCryptographicValidation {
+func (c *AbstractAlgorithmCryptographicChecker) cryptographicValidation() *jaxb.XmlCryptographicValidation {
 	xmlCryptographicValidation := &jaxb.XmlCryptographicValidation{}
 	xmlCryptographicValidation.Algorithm = c.overrides.Algorithm()
 	if notAfter := c.overrides.NotAfter(); notAfter != nil {

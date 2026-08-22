@@ -1,7 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/status/TokenStatus.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.validation.status.TokenStatus lands in this same Go package per
-// S2B_BRIEF.md's package layout table.
+// SCC flattening: Java spi.validation.status.TokenStatus lands in this same Go package.
 package validation
 
 import (

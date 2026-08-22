@@ -52,8 +52,7 @@ func NewLoTEValidationBlock(i18nProvider *i18n.I18nProvider, currentList *dssjax
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle(): Java's
 // java.text.MessageFormat renders a null getCountryCode() as the literal "null", so a nil
-// CountryCode is rendered as the string "null" here rather than being dropped, matching
-// the BasicValidationProcessCheck.BuildAdditionalInfo precedent.
+// CountryCode is rendered as the string "null" here rather than being dropped.
 func (b *LoTEValidationBlock) BuildChainTitle() string {
 	countryCode := "null"
 	if b.currentList.CountryCode != nil {

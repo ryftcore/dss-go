@@ -9,4 +9,4 @@ package validation
 // implementations satisfy it structurally without needing to reference this type at all.
 // It is kept as a named type for signature fidelity with call sites elsewhere that accept
 // an EAAValidationParameters.
-type EAAValidationParameters interface{}
+type EAAValidationParameters any

@@ -1,8 +1,8 @@
 // Ported from dss-jaxb-parsers/src/main/java/eu/europa/esig/dss/jaxb/object/Message.java
 // (DSS 6.5.RC1).
 //
-// dss-jaxb-parsers is outside S8B_BRIEF.md's manifest; see
-// dss/simplereport/message.go, which collapses the same class for the same
+// dss-jaxb-parsers has not been ported as its own package; see
+// dss/simplereport/message.go, which implements the same class for the same
 // reason (SimpleCertificateReport's public method surface returns
 // []Message too).
 package simplecertificatereport

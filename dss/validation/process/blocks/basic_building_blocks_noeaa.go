@@ -1,8 +1,7 @@
 //go:build !eaa
 
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/BasicBuildingBlocks.java (DSS 6.5.RC1) -
-// !eaa stub counterpart of basic_building_blocks_eaa.go; see that file's
-// header for STRUCTURAL FIX B's rationale.
+// !eaa stub counterpart of basic_building_blocks_eaa.go.
 //
 // Without the "eaa" build tag, none of the four EAA-specific constructors
 // (fc.NewEAAFormatChecking, fc.NewEAARevocationFormatChecking,

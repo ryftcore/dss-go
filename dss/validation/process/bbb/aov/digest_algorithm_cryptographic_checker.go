@@ -59,7 +59,7 @@ func (c *DigestAlgorithmCryptographicChecker) Algorithm() *jaxb.XmlCryptographic
 		if c.digestAlgorithm != "" {
 			// if DigestAlgorithm is defined
 			c.cryptographicAlgorithm.Name = c.digestAlgorithm.Name()
-			c.cryptographicAlgorithm.Uri = c.getDigestAlgorithmUri(c.digestAlgorithm)
+			c.cryptographicAlgorithm.Uri = c.digestAlgorithmURI(c.digestAlgorithm)
 
 		} else {
 			// if DigestAlgorithm is not found (unable to build either SignatureAlgorithm nor DigestAlgorithm)
@@ -70,8 +70,8 @@ func (c *DigestAlgorithmCryptographicChecker) Algorithm() *jaxb.XmlCryptographic
 	return c.cryptographicAlgorithm
 }
 
-// getDigestAlgorithmUri ports the private getDigestAlgorithmUri(DigestAlgorithm).
-func (c *DigestAlgorithmCryptographicChecker) getDigestAlgorithmUri(digestAlgorithm enumerations.DigestAlgorithm) string {
+// digestAlgorithmURI ports the private getDigestAlgorithmUri(DigestAlgorithm).
+func (c *DigestAlgorithmCryptographicChecker) digestAlgorithmURI(digestAlgorithm enumerations.DigestAlgorithm) string {
 	if digestAlgorithm != "" {
 		if digestAlgorithm.URI() != "" {
 			return digestAlgorithm.URI()

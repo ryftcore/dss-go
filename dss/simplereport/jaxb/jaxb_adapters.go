@@ -5,7 +5,7 @@
 // encoding/xml can marshal it through encoding.TextMarshaler with the exact
 // lexical form the parser prints, and reject any other lexical form on the
 // way in. Pattern and naming convention match dss/diagnostic/jaxb's
-// jaxb_adapters.go (Phase 8a).
+// jaxb_adapters.go.
 package jaxb
 
 import (

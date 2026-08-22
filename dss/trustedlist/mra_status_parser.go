@@ -6,7 +6,7 @@ import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // MRAStatusParserParse parses the string and returns a MRAStatus, the empty
 // value if v does not match any known URI. slf4j's LOG.warn on an
-// unresolved value is dropped per PORTING.md/S9_BRIEF.md's hard rules.
+// unresolved value is dropped per PORTING.md.
 func MRAStatusParserParse(v string) enumerations.MRAStatus {
 	for _, m := range enumerations.MRAStatusValues() {
 		if m.URI() == v {

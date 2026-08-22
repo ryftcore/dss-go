@@ -15,7 +15,8 @@ func NewQEAAServiceFilter() *QEAAServiceFilter {
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the service's type identifier is 'EAA/Q'.
+// Port of the overridden isAcceptable(TrustServiceWrapper).
 func (f *QEAAServiceFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	return ServiceTypeIdentifierIsQEAA(service.Type)
 }

@@ -1,7 +1,7 @@
 // Ported from dss-simple-certificate-report-jaxb/src/main/java/eu/europa/esig/dss/simplecertificatereport/SimpleCertificateReport.java
 // (DSS 6.5.RC1).
 //
-// Several accessors below call getFirstCertificate() (Certificate is
+// Several accessors below call firstCertificate() (Certificate is
 // minOccurs="0" in the schema, so it can be nil) without a nil check before
 // dereferencing it, exactly as the Java source does (XmlChainItem
 // cert = getFirstCertificate(); return cert.getQwacProfile(); - no null
@@ -54,7 +54,7 @@ func (r *SimpleCertificateReport) GetCertificateIds() []string {
 // GetCertificateNotBefore returns the notBefore date for a given
 // certificate. Port of getCertificateNotBefore(String).
 func (r *SimpleCertificateReport) GetCertificateNotBefore(certificateID string) *time.Time {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil {
 		return xsTime(cert.NotBefore)
 	}
@@ -64,7 +64,7 @@ func (r *SimpleCertificateReport) GetCertificateNotBefore(certificateID string) 
 // GetCertificateNotAfter returns the notAfter date for a given certificate.
 // Port of getCertificateNotAfter(String).
 func (r *SimpleCertificateReport) GetCertificateNotAfter(certificateID string) *time.Time {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil {
 		return xsTime(cert.NotAfter)
 	}
@@ -74,7 +74,7 @@ func (r *SimpleCertificateReport) GetCertificateNotAfter(certificateID string) *
 // GetCertificateAiaUrls returns the list of AIA urls (caIssuers) for a
 // given certificate. Port of getCertificateAiaUrls(String).
 func (r *SimpleCertificateReport) GetCertificateAiaUrls(certificateID string) []string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.AiaUrls != nil {
 		return cert.AiaUrls.AiaUrl
 	}
@@ -85,7 +85,7 @@ func (r *SimpleCertificateReport) GetCertificateAiaUrls(certificateID string) []
 // Statements) urls for a given certificate. Port of
 // getCertificateCpsUrls(String).
 func (r *SimpleCertificateReport) GetCertificateCpsUrls(certificateID string) []string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CpsUrls != nil {
 		return cert.CpsUrls.CpsUrl
 	}
@@ -95,7 +95,7 @@ func (r *SimpleCertificateReport) GetCertificateCpsUrls(certificateID string) []
 // GetCertificateCrlUrls returns the list of CRL (Certificate Revocation
 // List) urls for a given certificate. Port of getCertificateCrlUrls(String).
 func (r *SimpleCertificateReport) GetCertificateCrlUrls(certificateID string) []string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CrlUrls != nil {
 		return cert.CrlUrls.CrlUrl
 	}
@@ -106,7 +106,7 @@ func (r *SimpleCertificateReport) GetCertificateCrlUrls(certificateID string) []
 // Status Protocol) urls for a given certificate. Port of
 // getCertificateOcspUrls(String).
 func (r *SimpleCertificateReport) GetCertificateOcspUrls(certificateID string) []string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.OcspUrls != nil {
 		return cert.OcspUrls.OcspUrl
 	}
@@ -116,7 +116,7 @@ func (r *SimpleCertificateReport) GetCertificateOcspUrls(certificateID string) [
 // GetCertificatePdsUrls returns the list of PDS (PKI Disclosure Statements)
 // urls for a given certificate. Port of getCertificatePdsUrls(String).
 func (r *SimpleCertificateReport) GetCertificatePdsUrls(certificateID string) []string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.PdsUrls != nil {
 		return cert.PdsUrls.PdsUrl
 	}
@@ -188,12 +188,12 @@ func (r *SimpleCertificateReport) GetCertificateSurname(certificateID string) st
 // subjectField reads a field of a certificate's Subject, mirroring the
 // direct cert.getSubject().getXxx() chain the Java getters use (an
 // unchecked NPE risk when the certificate has no Subject; see the file
-// header - this port preserves it, since getCertificate never returns a
+// header - this port preserves it, since certificate never returns a
 // XmlChainItem with a nil Subject in any real report, only when
 // certificateId itself does not resolve to a certificate, in which case
 // there is no method call to make at all).
 func (r *SimpleCertificateReport) subjectField(certificateID string, get func(*jaxb.XmlSubject) *string) *string {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert == nil {
 		return nil
 	}
@@ -203,7 +203,7 @@ func (r *SimpleCertificateReport) subjectField(certificateID string, get func(*j
 // GetCertificateIndication returns the Indication (result of validation)
 // for a given certificate. Port of getCertificateIndication(String).
 func (r *SimpleCertificateReport) GetCertificateIndication(certificateID string) enumerations.Indication {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil {
 		return cert.Indication.Indication()
 	}
@@ -214,7 +214,7 @@ func (r *SimpleCertificateReport) GetCertificateIndication(certificateID string)
 // validation) for a given certificate. Port of
 // getCertificateSubIndication(String).
 func (r *SimpleCertificateReport) GetCertificateSubIndication(certificateID string) enumerations.SubIndication {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.SubIndication != nil {
 		return cert.SubIndication.SubIndication()
 	}
@@ -224,7 +224,7 @@ func (r *SimpleCertificateReport) GetCertificateSubIndication(certificateID stri
 // GetCertificateRevocationDate returns the revocation date for a given
 // certificate, or nil. Port of getCertificateRevocationDate(String).
 func (r *SimpleCertificateReport) GetCertificateRevocationDate(certificateID string) *time.Time {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.Revocation != nil {
 		return xsTime(cert.Revocation.RevocationDate)
 	}
@@ -234,7 +234,7 @@ func (r *SimpleCertificateReport) GetCertificateRevocationDate(certificateID str
 // GetCertificateRevocationReason returns the revocation reason for a given
 // certificate, or "". Port of getCertificateRevocationReason(String).
 func (r *SimpleCertificateReport) GetCertificateRevocationReason(certificateID string) enumerations.RevocationReason {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.Revocation != nil && cert.Revocation.RevocationReason != nil {
 		return cert.Revocation.RevocationReason.RevocationReason()
 	}
@@ -245,7 +245,7 @@ func (r *SimpleCertificateReport) GetCertificateRevocationReason(certificateID s
 // validation errors for a given certificate by id. Port of
 // getX509ValidationErrors(String).
 func (r *SimpleCertificateReport) GetX509ValidationErrors(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.X509ValidationDetails != nil {
 		return convertMessages(cert.X509ValidationDetails.Error)
 	}
@@ -256,7 +256,7 @@ func (r *SimpleCertificateReport) GetX509ValidationErrors(certificateID string) 
 // certificate validation warnings for a given certificate by id. Port of
 // getX509ValidationWarnings(String).
 func (r *SimpleCertificateReport) GetX509ValidationWarnings(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.X509ValidationDetails != nil {
 		return convertMessages(cert.X509ValidationDetails.Warning)
 	}
@@ -267,7 +267,7 @@ func (r *SimpleCertificateReport) GetX509ValidationWarnings(certificateID string
 // validation information messages for a given certificate by id. Port of
 // getX509ValidationInfo(String).
 func (r *SimpleCertificateReport) GetX509ValidationInfo(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.X509ValidationDetails != nil {
 		return convertMessages(cert.X509ValidationDetails.Info)
 	}
@@ -278,7 +278,7 @@ func (r *SimpleCertificateReport) GetX509ValidationInfo(certificateID string) []
 // process's errors for a given certificate by id at issuance time. Port of
 // getQualificationErrorsAtIssuanceTime(String).
 func (r *SimpleCertificateReport) GetQualificationErrorsAtIssuanceTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtIssuance != nil {
 		return convertMessages(cert.QualificationDetailsAtIssuance.Error)
 	}
@@ -289,7 +289,7 @@ func (r *SimpleCertificateReport) GetQualificationErrorsAtIssuanceTime(certifica
 // process's warnings for a given certificate by id at issuance time. Port
 // of getQualificationWarningsAtIssuanceTime(String).
 func (r *SimpleCertificateReport) GetQualificationWarningsAtIssuanceTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtIssuance != nil {
 		return convertMessages(cert.QualificationDetailsAtIssuance.Warning)
 	}
@@ -300,7 +300,7 @@ func (r *SimpleCertificateReport) GetQualificationWarningsAtIssuanceTime(certifi
 // information messages for a given certificate by id at issuance time. Port
 // of getQualificationInfoAtIssuanceTime(String).
 func (r *SimpleCertificateReport) GetQualificationInfoAtIssuanceTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtIssuance != nil {
 		return convertMessages(cert.QualificationDetailsAtIssuance.Info)
 	}
@@ -311,7 +311,7 @@ func (r *SimpleCertificateReport) GetQualificationInfoAtIssuanceTime(certificate
 // process's errors for a given certificate by id at validation time. Port
 // of getQualificationErrorsAtValidationTime(String).
 func (r *SimpleCertificateReport) GetQualificationErrorsAtValidationTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtValidation != nil {
 		return convertMessages(cert.QualificationDetailsAtValidation.Error)
 	}
@@ -322,7 +322,7 @@ func (r *SimpleCertificateReport) GetQualificationErrorsAtValidationTime(certifi
 // process's warnings for a given certificate by id at validation time. Port
 // of getQualificationWarningsAtValidationTime(String).
 func (r *SimpleCertificateReport) GetQualificationWarningsAtValidationTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtValidation != nil {
 		return convertMessages(cert.QualificationDetailsAtValidation.Warning)
 	}
@@ -333,7 +333,7 @@ func (r *SimpleCertificateReport) GetQualificationWarningsAtValidationTime(certi
 // process's information messages for a given certificate by id at
 // validation time. Port of getQualificationInfoAtValidationTime(String).
 func (r *SimpleCertificateReport) GetQualificationInfoAtValidationTime(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QualificationDetailsAtValidation != nil {
 		return convertMessages(cert.QualificationDetailsAtValidation.Info)
 	}
@@ -343,7 +343,7 @@ func (r *SimpleCertificateReport) GetQualificationInfoAtValidationTime(certifica
 // GetQWACValidationErrors retrieves the QWAC validation process's errors
 // for a given certificate by id. Port of getQWACValidationErrors(String).
 func (r *SimpleCertificateReport) GetQWACValidationErrors(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QwacDetails != nil {
 		return convertMessages(cert.QwacDetails.Error)
 	}
@@ -354,7 +354,7 @@ func (r *SimpleCertificateReport) GetQWACValidationErrors(certificateID string) 
 // warnings for a given certificate by id. Port of
 // getQWACValidationWarnings(String).
 func (r *SimpleCertificateReport) GetQWACValidationWarnings(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QwacDetails != nil {
 		return convertMessages(cert.QwacDetails.Warning)
 	}
@@ -365,7 +365,7 @@ func (r *SimpleCertificateReport) GetQWACValidationWarnings(certificateID string
 // messages for a given certificate by id. Port of
 // getQWACValidationInfo(String).
 func (r *SimpleCertificateReport) GetQWACValidationInfo(certificateID string) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.QwacDetails != nil {
 		return convertMessages(cert.QwacDetails.Info)
 	}
@@ -378,9 +378,9 @@ func (r *SimpleCertificateReport) GetQWACValidationInfo(certificateID string) []
 // Port of getCertificateApprovalStatusErrorsAtIssuanceTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusErrorsAtIssuanceTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtIssuanceTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Error)
 		}
@@ -394,9 +394,9 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusErrorsAtIssuanceTi
 // Port of getCertificateApprovalStatusWarningsAtIssuanceTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusWarningsAtIssuanceTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtIssuanceTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Warning)
 		}
@@ -411,9 +411,9 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusWarningsAtIssuance
 // getCertificateApprovalStatusInfoAtIssuanceTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusInfoAtIssuanceTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtIssuanceTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtIssuanceTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Info)
 		}
@@ -428,9 +428,9 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusInfoAtIssuanceTime
 // getCertificateApprovalStatusErrorsAtValidationTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusErrorsAtValidationTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtValidationTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Error)
 		}
@@ -445,9 +445,9 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusErrorsAtValidation
 // getCertificateApprovalStatusWarningsAtValidationTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusWarningsAtValidationTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtValidationTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Warning)
 		}
@@ -462,9 +462,9 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusWarningsAtValidati
 // getCertificateApprovalStatusInfoAtValidationTime(String,
 // CertificateApprovalStatus).
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusInfoAtValidationTime(certificateID string, status enumerations.CertificateApprovalStatus) []Message {
-	cert := r.getCertificate(certificateID)
+	cert := r.certificate(certificateID)
 	if cert != nil && cert.CertificateApprovalStatusAtValidationTime != nil {
-		x := getXmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
+		x := xmlCertificateApprovalStatus(&cert.CertificateApprovalStatusAtValidationTime.XmlCertificateApprovalStatusAtTime, status)
 		if x != nil && x.Details != nil {
 			return convertMessages(x.Details.Info)
 		}
@@ -476,7 +476,7 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusInfoAtValidationTi
 // first certificate at its issuance. Port of
 // getQualificationAtCertificateIssuance().
 func (r *SimpleCertificateReport) GetQualificationAtCertificateIssuance() enumerations.CertificateQualification {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	if cert.QualificationAtIssuance == nil {
 		return ""
 	}
@@ -487,7 +487,7 @@ func (r *SimpleCertificateReport) GetQualificationAtCertificateIssuance() enumer
 // certificate at the validation time. Port of
 // getQualificationAtValidationTime().
 func (r *SimpleCertificateReport) GetQualificationAtValidationTime() enumerations.CertificateQualification {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	if cert.QualificationAtValidation == nil {
 		return ""
 	}
@@ -498,7 +498,7 @@ func (r *SimpleCertificateReport) GetQualificationAtValidationTime() enumeration
 // qualification of the first certificate at its issuance. Port of
 // getCertificateApprovalStatusAtCertificateIssuance().
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusAtCertificateIssuance() []enumerations.CertificateApprovalStatus {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	if cert.CertificateApprovalStatusAtIssuanceTime == nil {
 		return nil
 	}
@@ -509,7 +509,7 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusAtCertificateIssua
 // the first certificate at the validation time. Port of
 // getCertificateApprovalStatusAtValidationTime().
 func (r *SimpleCertificateReport) GetCertificateApprovalStatusAtValidationTime() []enumerations.CertificateApprovalStatus {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	if cert.CertificateApprovalStatusAtValidationTime == nil {
 		return nil
 	}
@@ -520,7 +520,7 @@ func (r *SimpleCertificateReport) GetCertificateApprovalStatusAtValidationTime()
 // 411-5. NOTE: Applicable only when validation process is executed using
 // the QWACValidator. Port of getQWACProfile().
 func (r *SimpleCertificateReport) GetQWACProfile() enumerations.QWACProfile {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	if cert.QwacProfile == nil {
 		return ""
 	}
@@ -531,7 +531,7 @@ func (r *SimpleCertificateReport) GetQWACProfile() enumerations.QWACProfile {
 // Applicable only when validation process is executed using the
 // QWACValidator. Port of getTLSBindingSignature().
 func (r *SimpleCertificateReport) GetTLSBindingSignature() *jaxb.XmlSignature {
-	cert := r.getFirstCertificate()
+	cert := r.firstCertificate()
 	return cert.TLSBindingSignature
 }
 
@@ -611,7 +611,7 @@ func (r *SimpleCertificateReport) GetTLSBindingSignatureIssuerCertificateQWACPro
 // string, the closest Go stand-in.
 func (r *SimpleCertificateReport) GetTrustAnchorVATNumbers() map[string]struct{} {
 	result := map[string]struct{}{}
-	cert := r.getTrustAnchorCertificate()
+	cert := r.trustAnchorCertificate()
 	if cert != nil && cert.TrustAnchors != nil {
 		for _, ta := range cert.TrustAnchors.TrustAnchor {
 			result[derefStr(ta.TrustServiceProviderRegistrationId)] = struct{}{}
@@ -620,8 +620,8 @@ func (r *SimpleCertificateReport) GetTrustAnchorVATNumbers() map[string]struct{}
 	return result
 }
 
-// getTrustAnchorCertificate returns the private getTrustAnchorCertificate().
-func (r *SimpleCertificateReport) getTrustAnchorCertificate() *jaxb.XmlChainItem {
+// trustAnchorCertificate returns the private getTrustAnchorCertificate().
+func (r *SimpleCertificateReport) trustAnchorCertificate() *jaxb.XmlChainItem {
 	cert := r.simpleReport.Certificate
 	if cert == nil {
 		return nil
@@ -641,13 +641,13 @@ func isTrustAnchor(item *jaxb.XmlChainItem) bool {
 	return item != nil && item.TrustAnchors != nil && len(item.TrustAnchors.TrustAnchor) > 0
 }
 
-// getFirstCertificate is the port of the private getFirstCertificate().
-func (r *SimpleCertificateReport) getFirstCertificate() *jaxb.XmlChainItem {
+// firstCertificate is the port of the private getFirstCertificate().
+func (r *SimpleCertificateReport) firstCertificate() *jaxb.XmlChainItem {
 	return r.simpleReport.Certificate
 }
 
-// getCertificate is the port of the private getCertificate(String).
-func (r *SimpleCertificateReport) getCertificate(certificateID string) *jaxb.XmlChainItem {
+// certificate is the port of the private getCertificate(String).
+func (r *SimpleCertificateReport) certificate(certificateID string) *jaxb.XmlChainItem {
 	if certificateID == "" {
 		return nil
 	}
@@ -751,12 +751,12 @@ func toCertificateApprovalStatus(x *jaxb.XmlCertificateApprovalStatus) enumerati
 		enumerations.CertificateApprovalStatusEnumCertForUnknown.Label(), lt, sti, status)
 }
 
-// getXmlCertificateApprovalStatus finds the XmlCertificateApprovalStatus of
+// xmlCertificateApprovalStatus finds the XmlCertificateApprovalStatus of
 // at whose ListType/ServiceTypeIdentifier URIs match certificateApprovalStatus.
 // Port of the private
 // getXmlCertificateApprovalStatus(XmlCertificateApprovalStatusAtTime,
 // CertificateApprovalStatus).
-func getXmlCertificateApprovalStatus(at *jaxb.XmlCertificateApprovalStatusAtTime, certificateApprovalStatus enumerations.CertificateApprovalStatus) *jaxb.XmlCertificateApprovalStatus {
+func xmlCertificateApprovalStatus(at *jaxb.XmlCertificateApprovalStatusAtTime, certificateApprovalStatus enumerations.CertificateApprovalStatus) *jaxb.XmlCertificateApprovalStatus {
 	if at == nil || certificateApprovalStatus == nil {
 		return nil
 	}

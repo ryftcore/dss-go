@@ -3,11 +3,11 @@
 // AttachExternalTimestamps below is reached virtually: asic.AbstractASiCContainerAnalyzer's
 // GetAllSignatures self-calls it through AbstractASiCContainerAnalyzerOverrides, which the
 // method is a member of precisely so this leaf's override is not lost to Go's static dispatch
-// (the "virtual-dispatch warning" bug class S7_BRIEF.md calls out). Analyzers that do not
+// (the "virtual-dispatch warning" bug class). Analyzers that do not
 // override it - ASiCContainerWithXAdESAnalyzer - inherit the base's empty body by promotion,
 // matching Java's non-abstract protected default.
 //
-// FLAGGED CROSS-CHUNK GAP: Java's getSignatureAnalyzers() forwards
+// Java's getSignatureAnalyzers() forwards
 // `this.getSignaturePolicyProvider()` (a protected accessor on the frozen
 // analyzer.DefaultDocumentAnalyzer, unexported in the Go port as
 // signaturePolicyProviderOrDefault and not reachable from another package) into each nested
@@ -15,10 +15,14 @@
 // so this propagation is dropped here: each nested CMSDocumentAnalyzer instead lazily
 // instantiates its own default SignaturePolicyProvider. This only differs observably when a
 // caller has set a *custom* SignaturePolicyProvider on the outer analyzer via
-// SetSignaturePolicyProvider - flagging for the integrator to add an exported getter upstream.
+// SetSignaturePolicyProvider.
+//
+// TODO: add an exported SignaturePolicyProvider accessor on analyzer.DefaultDocumentAnalyzer.
 package cades
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/asic"
 	dsscades "github.com/ryftcore/dss-go/dss/cades"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -203,22 +207,12 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetArchiveDocuments() []model.DSSDocume
 	// in case of Manifest file (ASiC-E CAdES signature) add signed documents
 	if utils.IsCollectionNotEmpty(a.GetManifestDocuments()) {
 		for _, document := range a.GetAllDocuments() {
-			if !containsDocument(archiveContents, document) {
+			if !slices.Contains(archiveContents, document) {
 				archiveContents = append(archiveContents, document)
 			}
 		}
 	}
 	return archiveContents
-}
-
-// containsDocument ports the List.contains(document) check, local to this file per PORTING.md.
-func containsDocument(documents []model.DSSDocument, target model.DSSDocument) bool {
-	for _, document := range documents {
-		if document == target {
-			return true
-		}
-	}
-	return false
 }
 
 // AttachExternalTimestamps ports the @Override protected attachExternalTimestamps(List). It is

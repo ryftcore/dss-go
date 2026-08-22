@@ -124,7 +124,7 @@ func (c *CompositeCondition) String() string {
 // Equals ports equals(Object): same concrete type, same indicator and equal child lists.
 //
 // Java compares the children with List#equals, which delegates to each element's equals();
-// this port therefore compares each child through its own Equals where the child provides one
+// each child is therefore compared through its own Equals where the child provides one
 // (every condition in this package does), falling back to interface comparison otherwise.
 func (c *CompositeCondition) Equals(object any) bool {
 	that, ok := object.(*CompositeCondition)

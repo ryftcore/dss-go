@@ -1,6 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/IsNoQualificationConflictDetectedCheck.java (DSS 6.5.RC1).
 //
-// FLAGGED HASH-ORDER SITE: Java collects the simulated per-TrustService
+// Java collects the simulated per-TrustService
 // qualification outcomes into a Set<CertificateQualification> (a HashSet);
 // CertificateQualification is a plain Java enum with no overridden
 // hashCode(), so its HashSet iteration order is JVM-identity-hash dependent
@@ -11,7 +11,7 @@
 // the RESULTS additional-info text (rendered only on the >1 branch, which
 // aborts the qualification chain into CertificateQualificationNA regardless
 // of the exact set of values) may list the conflicting values in a different
-// order than upstream. See the porter brief's hard rule on hash-order leaks.
+// order than upstream.
 package qualification
 
 import (

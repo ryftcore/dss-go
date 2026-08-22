@@ -50,8 +50,7 @@ func (c *RevocationIssuedBeforeControlTimeCheck[T]) Process() bool {
 //
 // Java hands java.text.MessageFormat a literal null for a missing thisUpdate -
 // not the empty string getFormattedDate(null) would produce - which renders as
-// the four characters "null"; the Go argument is that text (the same
-// precedent as bbb/xcv's RevocationAfterCertificateIssuanceCheck).
+// the four characters "null"; the Go argument is that text.
 func (c *RevocationIssuedBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
 	thisUpdate := c.revocation.ThisUpdate()
 	thisUpdateStr := "null"

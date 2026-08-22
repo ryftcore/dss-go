@@ -371,7 +371,7 @@ func assertQualBlockConstraints(t *testing.T, got []*jaxb.XmlConstraint, want []
 			t.Errorf("constraint[%d].Info = %q, want %q", i, keyOf(g.Info), strOrEmpty(w.Info))
 		}
 		if keyOf(g.Name) == "QUAL_HAS_CONF" {
-			// FLAGGED HASH-ORDER SITE. IsNoQualificationConflictDetectedCheck's
+			// IsNoQualificationConflictDetectedCheck's
 			// additional info renders Java's Set<CertificateQualification>, a
 			// HashSet of a plain enum: its iteration order is JVM
 			// identity-hash-bucket order (the corpus carries both

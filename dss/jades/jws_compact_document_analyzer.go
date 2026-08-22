@@ -1,12 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWSCompactDocumentAnalyzer.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: *JAdESSignature - see abstract_jws_document_analyzer.go's file header. This
-// file additionally needs:
-//
-//	func NewJAdESSignature(jws *JWS) *JAdESSignature // JAdESSignature(JWS)
-//
-// package jades (the Java eu.europa.esig.dss.jades.validation package folds into this one Go
-// package per the phase-6 package layout).
+// package jades (the Java eu.europa.esig.dss.jades.validation package is flattened into this one
+// Go package).
 package jades
 
 import (

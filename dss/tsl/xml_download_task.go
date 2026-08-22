@@ -1,9 +1,9 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/download/XmlDownloadTask.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY: implements eu.europa.esig.dss.validation.job.download.DownloadTask
+// Implements eu.europa.esig.dss.validation.job.download.DownloadTask
 // (job.DownloadTask, a Supplier<DownloadResult> - ported here as a Get() DownloadResult, error
 // method, replacing Java's unchecked-exception-throwing get() per PORTING.md's throw->error
-// rule) - see xml_download_result.go's header for the wider job.* cross-chunk convention.
+// rule) - see xml_download_result.go's header for the wider job.* convention.
 package tsl
 
 import (

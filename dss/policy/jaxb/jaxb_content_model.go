@@ -17,10 +17,10 @@
 //
 // A complexType with simpleContent (Algo) counts as character data, not as
 // complex: the RI writes <X></X> for one whose value is the empty string.
-// This port has no such deviation to record: unlike DiagnosticData.xsd's
+// There is no such deviation to record here: unlike DiagnosticData.xsd's
 // XmlOID et al., policy.xsd's only simpleContent type (Algo) is always
-// non-empty in every upstream policy resource this chunk ports, so the
-// "RI writes <X/> for a null simpleContent value" case documented in
+// non-empty in every upstream policy resource, so the "RI writes <X/> for
+// a null simpleContent value" case documented in
 // dss/diagnostic/jaxb/jaxb_content_model.go does not arise here.
 package jaxb
 

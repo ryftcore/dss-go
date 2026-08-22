@@ -14,7 +14,7 @@ import (
 // Java's `extends ASiCSignatureExtensionHelper` becomes embedding plus the
 // InitASiCSignatureExtensionHelper(self) registration; the base's two constructors are split
 // into InitFromDocument/InitFromContent because the document one calls back into
-// getASiCContainerExtractor (S7_BRIEF.md's virtual-dispatch warning).
+// getASiCContainerExtractor.
 type ASiCWithCAdESSignatureExtensionHelper struct {
 	*asic.ASiCSignatureExtensionHelper
 }

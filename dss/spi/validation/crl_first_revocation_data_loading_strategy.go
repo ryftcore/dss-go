@@ -1,32 +1,11 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/CRLFirstRevocationDataLoadingStrategy.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (flagged per S2B_BRIEF.md, not invented lightly):
-//
-//  1. Java declares `RevocationToken getRevocationToken(...)` using the raw type, i.e. a
-//     wildcard RevocationToken<?> — the concrete CRL-vs-OCSP kind is erased. Go generics
-//     cannot express an existential/wildcard instantiation of spi.RevocationToken[R], so this
-//     file introduces AnyRevocationToken, a non-generic interface capturing every
-//     RevocationToken[R] member whose signature does not depend on R (everything except
-//     Equals). *spi.CRLToken and *spi.OCSPToken already satisfy it with no changes since Go
-//     interface satisfaction is structural. Sibling chunks needing the same wildcard
-//     capability should reuse this type rather than redeclare an equivalent one.
-//
-//  2. RevocationDataLoadingStrategy (Java abstract class, owned by sibling chunk VAL-D) has
-//     the same shape as model.TokenBase/spi.RevocationTokenBase: concrete protected state plus
-//     one abstract method. Per the phase 2a handoff fact "every concrete Token constructor
-//     calls the Init pattern... TimestampToken must do the same", this file assumes VAL-D
-//     followed the same Init/overrides idiom:
-//     - type RevocationDataLoadingStrategyOverrides interface {
-//     RevocationToken(certificateToken, issuerToken *model.CertificateToken) AnyRevocationToken
-//     }
-//     - type RevocationDataLoadingStrategy struct{ overrides RevocationDataLoadingStrategyOverrides; crlSource spi.RevocationSource[revocation.CRL]; ocspSource spi.RevocationSource[revocation.OCSP]; revocationDataVerifier *RevocationDataVerifier; fallbackEnabled bool }
-//     - (*RevocationDataLoadingStrategy).InitRevocationDataLoadingStrategy(overrides) registers the concrete strategy
-//     - (*RevocationDataLoadingStrategy).RevocationToken(...) forwards to overrides.RevocationToken(...), so a factory
-//     can return *RevocationDataLoadingStrategy uniformly (see
-//     ocsp_first_revocation_data_loading_strategy_factory.go)
-//     - (*RevocationDataLoadingStrategy).checkCRL/.checkOCSP/.isAcceptableToken/.getControlTime carry the concrete
-//     Java protected method bodies; setCrlSource/setOcspSource/setRevocationDataVerifier/setFallbackEnabled are
-//     unexported (package-private in Java, same-package accessible in Go).
+// Java declares `RevocationToken getRevocationToken(...)` using the raw type, i.e. a wildcard
+// RevocationToken<?> — the concrete CRL-vs-OCSP kind is erased. Go generics cannot express an
+// existential/wildcard instantiation of spi.RevocationToken[R], so this file introduces
+// AnyRevocationToken, a non-generic interface capturing every RevocationToken[R] member whose
+// signature does not depend on R (everything except Equals). *spi.CRLToken and *spi.OCSPToken
+// already satisfy it with no changes since Go interface satisfaction is structural.
 package validation
 
 import (

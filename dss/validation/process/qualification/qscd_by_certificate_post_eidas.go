@@ -19,7 +19,8 @@ func newQSCDByCertificatePostEIDAS(certificate *diagnostic.CertificateWrapper) *
 	return &qscdByCertificatePostEIDAS{certificate: certificate}
 }
 
-// QSCDStatus is the port of the overridden getQSCDStatus().
+// QSCDStatus reports QSCD from the certificate's QC-statement QSCD flag
+// only. Port of the overridden getQSCDStatus().
 func (q *qscdByCertificatePostEIDAS) QSCDStatus() enumerations.QSCDStatus {
 	// checks only in QC statement extension
 	if q.certificate.IsSupportedByQSCD() {

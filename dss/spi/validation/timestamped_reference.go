@@ -37,7 +37,7 @@ func (r *TimestampedReference) ObjectId() string {
 // Port of equals(Object).
 //
 // NOTE: hashCode() has no Go counterpart; upstream needs it only to key the JDK hash
-// collections, which this port replaces with slices keyed on Equals.
+// collections, which are implemented here as slices keyed on Equals.
 func (r *TimestampedReference) Equals(other *TimestampedReference) bool {
 	if r == other {
 		return true

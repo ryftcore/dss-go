@@ -6,8 +6,8 @@
 // getTspTradeNames()/setTspTradeNames() are trivial aliases of the inherited
 // getEntityNames()/setEntityNames() and getTradeNames()/setTradeNames() pairs (both read/write
 // the single inherited "entityNames"/"tradeNames" field) - ported here as the TspNames/
-// TspTradeNames fields (matching the names DIAGWRAP_A's certificate_wrapper.go already relies
-// on), with EntityNames()/TradeNames()/SetEntityNames()/SetTradeNames() as thin delegating
+// TspTradeNames fields (matching the names certificate_wrapper.go already relies on), with
+// EntityNames()/TradeNames()/SetEntityNames()/SetTradeNames() as thin delegating
 // methods standing in for the inherited accessor names.
 package diagnostic
 

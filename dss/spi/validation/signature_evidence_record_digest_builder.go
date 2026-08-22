@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/evidencerecord/SignatureEvidenceRecordDigestBuilder.java (DSS 6.5.RC1).
 //
 // SCC flattening: Java spi.validation.evidencerecord.SignatureEvidenceRecordDigestBuilder lands
-// in this same Go package per S2B_BRIEF.md's package layout table.
+// in this same Go package.
 package validation
 
 import "github.com/ryftcore/dss-go/dss/model"

@@ -58,12 +58,12 @@ func (c *AbstractTimeStampPresentCheck[T]) InitAbstractTimeStampPresentCheck(ove
 // Process performs the check. Port of process().
 func (c *AbstractTimeStampPresentCheck[T]) Process() bool {
 	for _, timestamp := range c.overrides.Timestamps() {
-		timestampBasicValidation := c.getTimestampBasicValidation(timestamp)
+		timestampBasicValidation := c.timestampBasicValidation(timestamp)
 		if timestampBasicValidation != nil && process.IsAllowedBasicTimestampValidation(timestampBasicValidation.Conclusion) {
 			if c.IsValidConclusion(timestampBasicValidation.Conclusion) {
 				return true
 			}
-			tstPSV := c.getPastSignatureValidationForTimestamp(timestamp)
+			tstPSV := c.pastSignatureValidationForTimestamp(timestamp)
 			if tstPSV != nil && c.IsValidConclusion(tstPSV.Conclusion) {
 				return true
 			}
@@ -72,9 +72,9 @@ func (c *AbstractTimeStampPresentCheck[T]) Process() bool {
 	return false
 }
 
-// getTimestampBasicValidation ports the private
+// timestampBasicValidation ports the private
 // getTimestampBasicValidation(TimestampWrapper).
-func (c *AbstractTimeStampPresentCheck[T]) getTimestampBasicValidation(timestamp *diagnostic.TimestampWrapper) *jaxb.XmlValidationProcessBasicTimestamp {
+func (c *AbstractTimeStampPresentCheck[T]) timestampBasicValidation(timestamp *diagnostic.TimestampWrapper) *jaxb.XmlValidationProcessBasicTimestamp {
 	for _, xmlTimestamp := range c.xmlTimestamps {
 		if xmlTimestamp.Id != nil && timestamp.Id() == *xmlTimestamp.Id {
 			return xmlTimestamp.ValidationProcessBasicTimestamp
@@ -83,9 +83,9 @@ func (c *AbstractTimeStampPresentCheck[T]) getTimestampBasicValidation(timestamp
 	return nil
 }
 
-// getPastSignatureValidationForTimestamp ports the private
+// pastSignatureValidationForTimestamp ports the private
 // getPastSignatureValidationForTimestamp(TimestampWrapper).
-func (c *AbstractTimeStampPresentCheck[T]) getPastSignatureValidationForTimestamp(timestampWrapper *diagnostic.TimestampWrapper) *jaxb.XmlPSV {
+func (c *AbstractTimeStampPresentCheck[T]) pastSignatureValidationForTimestamp(timestampWrapper *diagnostic.TimestampWrapper) *jaxb.XmlPSV {
 	tstBBB := c.bbbs[timestampWrapper.Id()]
 	if tstBBB != nil {
 		return tstBBB.PSV

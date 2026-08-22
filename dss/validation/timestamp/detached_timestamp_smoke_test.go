@@ -2,9 +2,8 @@
 // raw CMS TimeStampToken fixture already ported (byte-identical) for
 // spi/validation/timestamp_token_kat_test.go: DER-encoded PKCS#7 SignedData with an
 // id-ct-TSTInfo encapsulated content, SHA-256 message imprint, SHA-512 signature, TSA and CA
-// certificates embedded, no timestamped (message-imprint) content attached. Covers the format
-// detection this batch's porter brief calls out as unblocking the ASiC CAdES timestamp analyzer
-// (IsSupported on both the analyzer and the validator, plus their ServiceLoader-registry
+// certificates embedded, no timestamped (message-imprint) content attached. Covers format
+// detection (IsSupported on both the analyzer and the validator, plus their ServiceLoader-registry
 // stand-in factories) and basic TimestampToken construction.
 package timestamp
 

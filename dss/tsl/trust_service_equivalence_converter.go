@@ -33,10 +33,10 @@ func (c *TrustServiceEquivalenceConverter) Apply(t *jaxb.TrustServiceEquivalence
 		SetLegalInfoIdentifier(t.TrustServiceLegalIdentifier).
 		SetStartDate(abstractParsingTaskConvertToDate(t.TrustServiceEquivalenceStatusStartingTime)).
 		SetStatus(status).
-		SetTypeAsiEquivalence(c.getTypeASiEquivalence(t.TrustServiceTSLTypeEquivalenceList)).
-		SetStatusEquivalence(c.getStatusEquivalence(t.TrustServiceTSLStatusEquivalenceList)).
-		SetCertificateContentEquivalences(c.getCertificateEquivalence(t.CertificateContentReferencesEquivalenceList)).
-		SetQualifierEquivalence(c.getQualifierEquivalence(t.TrustServiceTSLQualificationExtensionEquivalenceList)).
+		SetTypeAsiEquivalence(c.typeASiEquivalence(t.TrustServiceTSLTypeEquivalenceList)).
+		SetStatusEquivalence(c.statusEquivalence(t.TrustServiceTSLStatusEquivalenceList)).
+		SetCertificateContentEquivalences(c.certificateEquivalence(t.CertificateContentReferencesEquivalenceList)).
+		SetQualifierEquivalence(c.qualifierEquivalence(t.TrustServiceTSLQualificationExtensionEquivalenceList)).
 		Build()
 	result.AddOldest(serviceEquivalence)
 
@@ -54,10 +54,10 @@ func (c *TrustServiceEquivalenceConverter) Apply(t *jaxb.TrustServiceEquivalence
 				SetStartDate(abstractParsingTaskConvertToDate(h.TrustServiceEquivalenceStatusStartingTime)).
 				SetEndDate(oldestStartDate).
 				SetStatus(historyStatus).
-				SetTypeAsiEquivalence(c.getTypeASiEquivalence(h.TrustServiceTSLTypeEquivalenceList)).
-				SetStatusEquivalence(c.getStatusEquivalence(h.TrustServiceTSLStatusEquivalenceList)).
-				SetCertificateContentEquivalences(c.getCertificateEquivalence(h.CertificateContentReferencesEquivalenceList)).
-				SetQualifierEquivalence(c.getQualifierEquivalence(h.TrustServiceTSLQualificationExtensionEquivalenceList)).
+				SetTypeAsiEquivalence(c.typeASiEquivalence(h.TrustServiceTSLTypeEquivalenceList)).
+				SetStatusEquivalence(c.statusEquivalence(h.TrustServiceTSLStatusEquivalenceList)).
+				SetCertificateContentEquivalences(c.certificateEquivalence(h.CertificateContentReferencesEquivalenceList)).
+				SetQualifierEquivalence(c.qualifierEquivalence(h.TrustServiceTSLQualificationExtensionEquivalenceList)).
 				Build()
 			result.AddOldest(historyServiceEquivalence)
 
@@ -68,7 +68,7 @@ func (c *TrustServiceEquivalenceConverter) Apply(t *jaxb.TrustServiceEquivalence
 	return result
 }
 
-func (c *TrustServiceEquivalenceConverter) getTypeASiEquivalence(
+func (c *TrustServiceEquivalenceConverter) typeASiEquivalence(
 	serviceTSLTypeEquivalenceList *jaxb.TrustServiceTSLTypeEquivalenceListType) map[tslmodel.ServiceTypeASi]tslmodel.ServiceTypeASi {
 	typeAsiEquivalence := make(map[tslmodel.ServiceTypeASi]tslmodel.ServiceTypeASi)
 	if serviceTSLTypeEquivalenceList != nil {
@@ -78,9 +78,9 @@ func (c *TrustServiceEquivalenceConverter) getTypeASiEquivalence(
 			return typeAsiEquivalence
 		}
 		for _, expectedTypeASI := range expected.TrustServiceTSLType {
-			staExpected := c.getServiceTypeASi(expectedTypeASI)
+			staExpected := c.serviceTypeASi(expectedTypeASI)
 			for _, substituteTypeASI := range substitute.TrustServiceTSLType {
-				staSubstitute := c.getServiceTypeASi(substituteTypeASI)
+				staSubstitute := c.serviceTypeASi(substituteTypeASI)
 				typeAsiEquivalence[staExpected] = staSubstitute
 			}
 		}
@@ -88,7 +88,7 @@ func (c *TrustServiceEquivalenceConverter) getTypeASiEquivalence(
 	return typeAsiEquivalence
 }
 
-func (c *TrustServiceEquivalenceConverter) getServiceTypeASi(expectedTypeASI *jaxb.TrustServiceTSLTypeType) tslmodel.ServiceTypeASi {
+func (c *TrustServiceEquivalenceConverter) serviceTypeASi(expectedTypeASI *jaxb.TrustServiceTSLTypeType) tslmodel.ServiceTypeASi {
 	sta := tslmodel.NewServiceTypeASi()
 	sta.SetType(expectedTypeASI.ServiceTypeIdentifier)
 	additionalServiceInformation := expectedTypeASI.AdditionalServiceInformation
@@ -98,7 +98,7 @@ func (c *TrustServiceEquivalenceConverter) getServiceTypeASi(expectedTypeASI *ja
 	return *sta
 }
 
-func (c *TrustServiceEquivalenceConverter) getStatusEquivalence(
+func (c *TrustServiceEquivalenceConverter) statusEquivalence(
 	serviceTSLStatusEquivalenceList *jaxb.TrustServiceTSLStatusEquivalenceListType) []tslmodel.StatusEquivalenceMapping {
 	var statusEquivalence []tslmodel.StatusEquivalenceMapping
 	if serviceTSLStatusEquivalenceList == nil {
@@ -125,7 +125,7 @@ func (c *TrustServiceEquivalenceConverter) extractEquivalences(statusEquivalence
 	})
 }
 
-func (c *TrustServiceEquivalenceConverter) getCertificateEquivalence(
+func (c *TrustServiceEquivalenceConverter) certificateEquivalence(
 	certificateContentEquivalenceList *jaxb.CertificateContentReferencesEquivalenceListType) []*tslmodel.CertificateContentEquivalence {
 	var certificateContentEquivalences []*tslmodel.CertificateContentEquivalence
 	if certificateContentEquivalenceList != nil && utils.IsCollectionNotEmpty(certificateContentEquivalenceList.CertificateContentReferenceEquivalence) {
@@ -137,7 +137,7 @@ func (c *TrustServiceEquivalenceConverter) getCertificateEquivalence(
 			equiv := tslmodel.NewCertificateContentEquivalence()
 			equiv.SetContext(enumerations.MRAEquivalenceContext(certEquiv.CertificateContentReferenceEquivalenceContext))
 			equiv.SetCondition(c.criteriaConverter.Apply(expected))
-			equiv.SetContentReplacement(c.getQCStatementOids(condition))
+			equiv.SetContentReplacement(c.qCStatementOids(condition))
 
 			certificateContentEquivalences = append(certificateContentEquivalences, equiv)
 		}
@@ -145,8 +145,8 @@ func (c *TrustServiceEquivalenceConverter) getCertificateEquivalence(
 	return certificateContentEquivalences
 }
 
-// getQCStatementOids ports the private getQCStatementOids(Condition).
-func (c *TrustServiceEquivalenceConverter) getQCStatementOids(condition tslmodel.Condition) *tslmodel.QCStatementOids {
+// qCStatementOids ports the private getQCStatementOids(Condition).
+func (c *TrustServiceEquivalenceConverter) qCStatementOids(condition tslmodel.Condition) *tslmodel.QCStatementOids {
 	result := tslmodel.NewQCStatementOids()
 
 	var qcStatementIds, qcTypeIds, qcCClegislations []string
@@ -203,7 +203,7 @@ func (c *TrustServiceEquivalenceConverter) getQCStatementOids(condition tslmodel
 func (c *TrustServiceEquivalenceConverter) populateFromChild(condition tslmodel.Condition,
 	qcStatementIds, qcTypeIds, qcCClegislations, qcStatementIdsToRemove, qcTypeIdsToRemove, qcCClegislationsToRemove []string) (
 	[]string, []string, []string, []string, []string, []string) {
-	conditionResult := c.getQCStatementOids(condition)
+	conditionResult := c.qCStatementOids(condition)
 	qcStatementIds = appendUnique(qcStatementIds, conditionResult.QcStatementIds()...)
 	qcTypeIds = appendUnique(qcTypeIds, conditionResult.QcTypeIds()...)
 	qcCClegislations = appendUnique(qcCClegislations, conditionResult.QcCClegislations()...)
@@ -231,7 +231,7 @@ func appendUnique(list []string, values ...string) []string {
 	return list
 }
 
-func (c *TrustServiceEquivalenceConverter) getQualifierEquivalence(
+func (c *TrustServiceEquivalenceConverter) qualifierEquivalence(
 	qualificationExtensionEquivalenceListType *jaxb.TrustServiceTSLQualificationExtensionEquivalenceListType) map[string]string {
 	qualifierEquivalenceMap := make(map[string]string)
 	if qualificationExtensionEquivalenceListType != nil && utils.IsCollectionNotEmpty(qualificationExtensionEquivalenceListType.QualifierEquivalenceList) {

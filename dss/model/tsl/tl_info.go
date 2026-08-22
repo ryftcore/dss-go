@@ -8,21 +8,17 @@ import (
 
 // TLInfo computes a summary for a single Trusted List processing result.
 //
-// JUDGMENT CALL: Java's AbstractDocumentInfo<P> (package model.job, out of this manifest) is a
-// generic abstract base with a self-referential type parameter and a protected
-// buildIdentifier() hook invoked polymorphically from its getDSSId(). Go has no virtual
-// dispatch through embedding and Go generics do not make self-referential bounds pleasant, so
-// this port inlines AbstractDocumentInfo's fields/behaviour directly into TLInfo instead of
-// depending on a generic job.AbstractDocumentInfo type. LOTLInfo (same package) embeds TLInfo
-// by value and defines its own BuildIdentifier/DSSID pair that shadows these for direct calls
-// on a *LOTLInfo; pivot_info.go (already ported) further shadows BuildIdentifier on *PivotInfo
-// but does not redefine DSSID, so a caller holding only a *LOTLInfo-shaped or job.DocumentInfo
-// value gets LOTLInfo's identifier, not PivotInfo's - the same known deviation pivot_info.go
-// documents on its own BuildIdentifier. The integrator should confirm the actual job package
-// interfaces (assumed here: DownloadCacheInfo() job.DownloadInfoRecord,
-// ParsingCacheInfo() job.ParsingInfoRecord, ValidationCacheInfo() job.ValidationInfoRecord,
-// Url() string, Parent() P, DSSID() model.Identifier, DSSIDAsString() string) match what this
-// type structurally provides.
+// JUDGMENT CALL: Java's AbstractDocumentInfo<P> (package model.job) is a generic abstract base
+// with a self-referential type parameter and a protected buildIdentifier() hook invoked
+// polymorphically from its getDSSId(). Go has no virtual dispatch through embedding and Go
+// generics do not make self-referential bounds pleasant, so TLInfo inlines
+// AbstractDocumentInfo's fields/behaviour directly instead of depending on the
+// generic job.AbstractDocumentInfoBase type. LOTLInfo (same package) embeds TLInfo by value and
+// defines its own BuildIdentifier/DSSID pair that shadows these for direct calls on a
+// *LOTLInfo; pivot_info.go further shadows BuildIdentifier on *PivotInfo but does not redefine
+// DSSID, so a caller holding only a *LOTLInfo-shaped or job.DocumentInfo value gets LOTLInfo's
+// identifier, not PivotInfo's - the same known deviation pivot_info.go documents on its own
+// BuildIdentifier.
 type TLInfo struct {
 	// downloadCacheInfo is the download result record.
 	downloadCacheInfo job.DownloadInfoRecord

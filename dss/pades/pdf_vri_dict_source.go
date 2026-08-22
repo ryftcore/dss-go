@@ -1,8 +1,5 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/dss/PdfVriDictSource.java (DSS 6.5.RC1).
 //
-// The forward dependencies this file shares with the rest of the chunk (PdfDssDict, PdfVriDict,
-// PAdESUtilsVRIsWithName) are documented in pdf_composite_dss_dict_certificate_source.go.
-//
 // slf4j is dropped, per PORTING.md; the two upstream log statements are kept as comments where
 // they fired.
 package pades

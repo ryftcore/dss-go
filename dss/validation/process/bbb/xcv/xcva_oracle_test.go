@@ -186,7 +186,7 @@ func xcvaDefaultPolicy(t *testing.T) modelpolicy.ValidationPolicy {
 }
 
 // passedAOV is the PASSED Algorithm Obsolescence Validation result the oracle fed
-// the blocks, the way the phase 8c sav corpus does.
+// the blocks.
 func passedAOV() *jaxb.XmlAOV {
 	aov := &jaxb.XmlAOV{}
 	aov.Conclusion = &jaxb.XmlConclusion{
@@ -332,7 +332,7 @@ func xcvaSafeExecute(fn func()) (panicked bool) {
 	return false
 }
 
-func mustXcvaJSON(t *testing.T, value interface{}) string {
+func mustXcvaJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

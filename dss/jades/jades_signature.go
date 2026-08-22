@@ -1,30 +1,17 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESSignature.java
 // (DSS 6.5.RC1).
 //
-// JAdESEtsiUHeader/EtsiUComponent, JAdESTimestampSource and JAdESSignatureScopeFinder (Java
-// packages jades.validation.timestamp/jades.validation.scope, folded into this same Go package
-// `jades` per S6_BRIEF.md's phase-6 layout) had already landed, from sibling chunks of this same
-// phase, by the time this file was written; their APIs are consumed as found rather than assumed.
-// Three of THIS file's own methods were shaped to match what those already-landed siblings
-// expect of *JAdESSignature (see each method's own doc comment for the specific deviation from a
-// literal Java-signature port): Jws() (not JWS()), SigDMechanism() *enumerations.SigDMechanism
-// (a pointer, not the plain value + "" sentinel convention used elsewhere in this port), and
-// OriginalDocuments() ([]model.DSSDocument, error) (Java's unchecked exception surfaced as an
-// error rather than left to propagate as a panic).
+// JAdESEtsiUHeader/EtsiUComponent, JAdESTimestampSource and JAdESSignatureScopeFinder consume
+// *JAdESSignature's API as implemented below. Three of this file's own methods deliberately
+// deviate from conventions used elsewhere in this port to match what those siblings expect:
+// Jws() (not JWS()), SigDMechanism() returning *enumerations.SigDMechanism (a pointer, not the
+// plain-value+"" sentinel convention used elsewhere), and OriginalDocuments() returning
+// ([]model.DSSDocument, error) (Java's unchecked exception surfaced as an error here rather than
+// a panic).
 //
-// JAdESHeaderParameterNames* additions this file needs beyond what dss_json_utils.go /
-// jades_level_baseline_*.go / jades_certificate_source.go already established:
-// JAdESHeaderParameterNamesCertifiedAttrs ("certifiedAttrs"), JAdESHeaderParameterNamesX509AttrCert
-// ("x509AttrCert"), JAdESHeaderParameterNamesOtherAttrCert ("otherAttrCert"),
-// JAdESHeaderParameterNamesSigPQual ("sigPQual", the singular of the already-landed
-// JAdESHeaderParameterNamesSigPQuals) - all simple, unambiguous camelCase values under the same
-// "capitalize the JSON value's first letter" convention the landed constants use.
-//
-// slf4j logging is dropped per PORTING.md; every LOG.warn/LOG.debug call site is called out in
-// the surrounding comment instead. A Java try/catch with no realistic Go panic source in its
-// translated body (every operation inside is nil/zero-value-safe) is not reproduced with a
-// recover(); one is called out explicitly at getSignaturePolicyStore's doc comment as the one
-// case where this applies.
+// slf4j logging is dropped; every LOG.warn/LOG.debug call site is called out in the surrounding
+// comment instead, except for one try/catch with no realistic Go panic source (see
+// getSignaturePolicyStore's doc comment).
 package jades
 
 import (
@@ -804,8 +791,8 @@ func (s *JAdESSignature) detachedReferenceValidations() []*model.ReferenceValida
 // absent. Port of the public SigDMechanism getSigDMechanism().
 //
 // Returns a pointer (not the plain enumerations.SigDMechanism value every other enum accessor in
-// this port uses, with "" as the null sentinel) to match the surface an already-landed sibling
-// file depends on (jades_timestamp_message_digest_builder.go's forward-dependency header).
+// this port uses, with "" as the null sentinel) to match the surface
+// jades_timestamp_message_digest_builder.go depends on.
 func (s *JAdESSignature) SigDMechanism() *enumerations.SigDMechanism {
 	signatureDetached := s.jws.ProtectedHeaderValueAsMap(JAdESHeaderParameterNamesSigD)
 	if signatureDetached.Size() != 0 {
@@ -1263,9 +1250,8 @@ func (s *JAdESSignature) unsignedPropertyAsMap(headerName string) *jose.Object {
 //
 // Java lets SignedDocumentsByHTTPHeaderName/SignedDocumentsForObjectIdByUriMechanism's unchecked
 // IllegalArgumentException (a named detached document not found) propagate out of this method;
-// this port instead reports it as an error, matching the (documents, error) contract an
-// already-landed sibling file's forward-dependency header documents
-// (abstract_jws_document_analyzer.go) and its own caller's err != nil handling.
+// this port instead reports it as an error, matching the (documents, error) contract
+// abstract_jws_document_analyzer.go relies on and its own caller's err != nil handling.
 func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err error) {
 	defer func() {
 		if r := recover(); r != nil {

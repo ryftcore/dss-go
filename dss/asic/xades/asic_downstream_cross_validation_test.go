@@ -1,4 +1,4 @@
-// Cross-validation harness, direction GO -> UPSTREAM (task #12, ASiC-with-XAdES extension): runs
+// Cross-validation harness, direction GO -> UPSTREAM, ASiC-with-XAdES: runs
 // testdata/crossgen (a standalone `go run` program - see its own doc comment) to build ASiC-S and
 // ASiC-E containers at XAdES baseline B and T with this package's own ASiCWithXAdESService and a
 // real PKCS#12 test key, then hands the output to testdata/crossgen/CrossGenValidator.java, which

@@ -1,4 +1,4 @@
-// Cross-validation harness, direction UPSTREAM -> GO (task #12): parses the CAdES signatures
+// Cross-validation harness, direction UPSTREAM -> GO: parses the CAdES signatures
 // checked into testdata/upstream/ with this package's own CMSDocumentAnalyzer/CAdESSignature
 // and compares the result against testdata/upstream-cross-validation.json, ground truth dumped
 // straight from upstream DSS 6.5.RC1's CMSDocumentAnalyzer/CAdESSignature (see
@@ -61,8 +61,7 @@ var xvalDetachedContent = map[string]string{
 
 // NOTE ON THE FORMER LEVEL-DETECTION GAP: six fixtures here used to report a lower
 // DataFoundUpToLevel() than upstream (CAdES-BASELINE-T instead of -LTA, CAdES-T instead of
-// CAdES-A, CAdES-C instead of CAdES-A), which was first written off as a Phase-8
-// revocation-matching difference. It was in fact a one-line mis-port in spi/validation:
+// CAdES-A, CAdES-C instead of CAdES-A). It was a one-line mis-port in spi/validation:
 // SignatureValidationContext's membership test for processedRevocations compared DSS Ids only,
 // while Java's RevocationToken#equals compares the DSS Id *and* the related certificate, so a
 // single CRL covering several certificates of a chain collapsed into one entry and every

@@ -1,21 +1,14 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CommonCertificateSource.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: this file references CertificateRef and CertificateTokenRefMatcher, two
-// spi.x509 types flattened into this package and ported in a sibling chunk of phase 2a.
-// CertificateTokenRefMatcher's assumed shape, inferred from the Java signature actually called
-// below, is a struct with a default constructor NewCertificateTokenRefMatcher() and a method
-// Match(*model.CertificateToken, *CertificateRef) bool.
-//
 // Java's synchronized blocks around the entitiesByEntityKey/entitiesByPublicKey/tokensBySubject
-// mutations exist only to make concurrent AddCertificate/removeCertificate calls safe; per
-// PORTING.md this is not the lazy-init-caching case that earns a mutex, so the port is not
+// mutations exist only to make concurrent AddCertificate/removeCertificate calls safe; this is
+// not a lazy-init-caching case, so no mutex is needed here - CommonCertificateSource is not
 // goroutine-safe, matching the rest of this package.
 //
 // Java's Map<EntityIdentifier, ...>/Map<KeyIdentifier, ...>/Map<X500NameIdentifier, ...> rely on
 // hashCode()/equals(); since these identifiers wrap a Digest (a []byte-backed, non-comparable
-// Go struct), they cannot be used directly as Go map keys. The port keys on AsXmlID() instead -
-// the same problem equivalent_certificates_entity.go (chunk X509-B) already solved for
-// Set<CertificateToken>.
+// Go struct), they cannot be used directly as Go map keys. This file keys on AsXmlID() instead -
+// the same problem equivalent_certificates_entity.go already solved for Set<CertificateToken>.
 package spi
 
 import (

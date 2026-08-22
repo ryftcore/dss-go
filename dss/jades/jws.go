@@ -1,7 +1,6 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWS.java (DSS 6.5.RC1).
 //
-// The Java package eu.europa.esig.dss.jades.validation is folded into this one Go package, per
-// the phase-6 package layout.
+// The Java package eu.europa.esig.dss.jades.validation is flattened into this one Go package.
 //
 // Upstream JWS extends org.jose4j.jws.JsonWebSignature. There is no jose4j in Go, so the
 // superclass is internal/jose's own JWS - a port of exactly the JsonWebSignature/JsonWebStructure

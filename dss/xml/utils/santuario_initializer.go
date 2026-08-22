@@ -4,9 +4,9 @@
 // third-party XML-DSig/XML-Security library, registering its global (process-wide) transform,
 // signature-algorithm, canonicalizer and key-resolver tables before first use. The Go port
 // depends on no such third-party library and keeps no equivalent process-global registry:
-// internal/xmlc14n's seven canonicalizers are plain functions requiring no registration step
-// (XML_DESIGN.md's review checklist: "Canonicalization allocates all state per call; no
-// package-level mutable state"), and the transform/signature-algorithm registries the future
+// internal/xmlc14n's seven canonicalizers are plain functions requiring no registration step -
+// canonicalization allocates all state per call, with no package-level mutable state - and the
+// transform/signature-algorithm registries the future
 // xmldsig layer needs are constructed per call site, not process-global. There is therefore
 // nothing for SantuarioInitializerInit to do; it and SantuarioInitializerIsInitialized are
 // kept only so call sites ported unchanged from Java compile and behave inertly.

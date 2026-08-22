@@ -2,36 +2,31 @@
 //
 // See doc.go for why this file lives in its own package instead of dss/validation/qwac.
 //
-// FORWARD DEPENDENCY (narrow, flagged for the integrator): executor.QWACCertificateProcessExecutor
-// and its constructor are part of this same phase 8f batch's EXEC chunk manifest
-// (dss-validation/src/main/java/.../executor/certificate/qwac/QWACCertificateProcessExecutor.java,
-// flattened into dss/validation/executor per that chunk's own manifest note) and had not landed
-// at the time this file was written; DefaultProcessExecutor below is the only call site that
-// needs it. Every other type this file touches (AbstractCertificateValidator,
-// SignedDocumentValidator, CertificateProcessExecutor, CertificateReports,
-// QWACCertificateDiagnosticDataBuilder, ...) is confirmed landed and used against its real
-// signature.
+// createQWACDiagnosticDataBuilder needs to call initializeDiagnosticDataBuilder()
+// on an arbitrary SignedDocumentValidator obtained from
+// dssvalidation.SignedDocumentValidatorFromDocument (the TLS Certificate Binding
+// signature's own validator - CAdES, XAdES, JAdES, whichever format the binding
+// signature happens to use). The exported dssvalidation.SignedDocumentValidator
+// interface deliberately omits this method (see signed_document_validator.go's
+// file header: format validators override it with a covariant return type,
+// which Go cannot express in the interface's method set). This file reaches it
+// through the exported dssvalidation.SignedDocumentValidatorOverrides interface
+// instead (the same method Java calls, at its base, non-covariant, return type -
+// which is all this call site ever needs, since the result is only fed to
+// QWACCertificateDiagnosticDataBuilder.SetSignatureDiagnosticDataBuilder, itself
+// base-typed).
 //
-// CROSS-CHUNK GAP (flagged for the integrator): createQWACDiagnosticDataBuilder needs to call
-// initializeDiagnosticDataBuilder() on an arbitrary SignedDocumentValidator obtained from
-// dssvalidation.SignedDocumentValidatorFromDocument (the TLS Certificate Binding signature's
-// own validator - CAdES, XAdES, JAdES, whichever format the binding signature happens to use).
-// The exported dssvalidation.SignedDocumentValidator interface deliberately omits this method
-// (see signed_document_validator.go's file header: format validators override it with a
-// covariant return type, which Go cannot express in the interface's method set). This file
-// reaches it through the exported dssvalidation.SignedDocumentValidatorOverrides interface
-// instead (the same method Java calls, at its base, non-covariant, return type - which is all
-// this call site ever needs, since the result is only fed to
-// QWACCertificateDiagnosticDataBuilder.SetSignatureDiagnosticDataBuilder, itself base-typed).
-// This assumes every concrete per-format validator (still gated behind UNGATE_A/UNGATE_B at the
-// time of writing) registers an adapter satisfying SignedDocumentValidatorOverrides verbatim, as
-// SignedDocumentValidatorBase.InitSignedDocumentValidator's own doc comment prescribes; if a
-// concrete validator's own covariant-return method instead shadows the name without also
-// exposing a base-typed adapter, the type assertion below fails and this port falls back to
-// Java's other reachable behavior for a null diagnostic data builder (an empty signature
-// section), which is a very close approximation - never a nil pointer panic downstream. Revisit
-// once UNGATE lands the concrete validators, and drop the type assertion here for a direct
-// interface call if SignedDocumentValidatorOverrides is folded into the public interface later.
+// CAdES (cades.CMSDocumentValidator), PAdES (pades.PDFDocumentValidator), JAdES
+// (jades.AbstractJWSDocumentValidator, embedded by both JWS serializations) and
+// both ASiC validators (via asic.AbstractASiCContainerValidator) register a
+// base-typed adapter through SignedDocumentValidatorBase.InitSignedDocumentValidator,
+// so the type assertion below succeeds for those formats.
+// xades.XMLDocumentValidator does not implement SignedDocumentValidatorOverrides
+// at all (see that type's own header: unlike the other formats, XAdES ships no
+// format-specific DiagnosticDataBuilder subclass), so for a bare XAdES TLS
+// Certificate Binding signature the assertion below fails and this port falls
+// back to Java's other reachable behavior for a null diagnostic data builder (an
+// empty signature section) - never a nil-pointer panic downstream.
 package qwacvalidator
 
 import (
@@ -229,7 +224,7 @@ func (v *QWACValidator) getTLSCertificateBindingSignature(signedDocumentValidato
 		if len(signatures) == 1 {
 			return signatures[0]
 		}
-		// Java: LOG.warn when more than one signature is found; dropped per PORTING.md.
+		// Java logs (LOG.warn) when more than one signature is found; this port returns nil silently.
 	}
 	return nil
 }
@@ -243,8 +238,8 @@ func (v *QWACValidator) toCertificateTokenList(certificates []*stdx509.Certifica
 	for _, certificate := range certificates {
 		token, err := model.NewCertificateToken(certificate)
 		if err != nil {
-			// Java: LOG.warn("Unable to load certificate : ...") and skip; dropped per
-			// PORTING.md, the entry is still skipped.
+			// Java logs (LOG.warn "Unable to load certificate : ...") and skips; this port
+			// skips silently.
 			continue
 		}
 		result = append(result, token)

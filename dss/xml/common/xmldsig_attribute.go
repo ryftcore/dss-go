@@ -2,9 +2,8 @@
 package common
 
 // XMLDSigAttribute is an attribute defined in https://www.w3.org/TR/xmldsig-core1/. Ports
-// the Java enum per PORTING.md's enum convention: a typed string whose value is the Java
-// name(), with the actual attribute name (which differs from the Go/Java constant name for
-// MIME_TYPE) held in a lookup table.
+// the Java enum: a typed string whose value is the Java name(), with the actual attribute
+// name (which differs from the Go/Java constant name for MIME_TYPE) held in a lookup table.
 type XMLDSigAttribute string
 
 // XMLDSigAttribute constants, one per XMLDSig schema attribute name.

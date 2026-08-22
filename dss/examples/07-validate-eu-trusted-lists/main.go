@@ -1,5 +1,5 @@
-// Command 07-validate-eu-trusted-lists runs the TSL validation job (Phase 9
-// of the port: dss/tsl and dss/validation/job) against the real European
+// Command 07-validate-eu-trusted-lists runs the TSL validation job
+// (dss/tsl and dss/validation/job) against the real European
 // List Of Trusted Lists (LOTL) and reports what it found. This is the piece
 // that turns "the signature verifies" into "the signature is eIDAS
 // qualified": qualification is determined from trusted-list content, which

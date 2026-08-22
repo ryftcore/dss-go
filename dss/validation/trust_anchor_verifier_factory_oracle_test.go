@@ -15,8 +15,7 @@
 // factory must produce, and the Go side asserts what is reachable (that the
 // factory builds a verifier for every policy without failing). Closing that gap
 // needs behavioural assertions through IsRevocationDataSkip /
-// IsRevocationDataFresh, which in turn need real revocation tokens; see the
-// phase-8f porter notes.
+// IsRevocationDataFresh, which in turn need real revocation tokens.
 
 package validation
 

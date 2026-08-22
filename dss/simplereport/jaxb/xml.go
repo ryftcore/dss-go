@@ -5,7 +5,7 @@
 // This file holds the runtime the generated model needs: the XML Schema
 // simple type JAXB binds by hand (dateTime), and the Marshal/Unmarshal entry
 // points. It reproduces the pattern documented in
-// dss/diagnostic/jaxb/xml.go (Phase 8a); see that file for the full
+// dss/diagnostic/jaxb/xml.go; see that file for the full
 // rationale of jaxbCanonical. Unlike DiagnosticData.xsd, this schema declares
 // no @XmlID/@XmlIDREF attributes, so the IDREF object-graph linking that file
 // performs (Link/walk/resolveRefs) has no counterpart here.

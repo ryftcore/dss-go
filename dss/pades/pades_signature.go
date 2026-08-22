@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // PAdESSignature extends cades.CAdESSignature across a package boundary (dss-cades ->
-// dss-pades in Java; cades -> pades in this port, per the phase 5b layout). Go has no protected
+// dss-pades in Java; cades -> pades in this port). Go has no protected
 // field visibility across packages, so every Java protected field this class reads/writes
 // (offlineCertificateSource, signatureCRLSource, signatureOCSPSource, signatureTimestampSource,
 // detachedContents) is reached instead through the accessor pairs
@@ -16,33 +16,6 @@
 // itself define keeps resolving, unchanged, to *cades.CAdESSignature's implementation (Go method
 // promotion standing in for Java's single-dispatch inheritance), while every method PAdESSignature
 // does define below shadows it.
-//
-// FORWARD DEPENDENCIES: most of this file's dependencies are sibling chunks of this same phase
-// that have already landed - pades_certificate_source.go (NewPAdESCertificateSource), pades_crl_
-// source.go (NewPAdESCRLSource), pades_ocsp_source.go (NewPAdESOCSPSource), pades_signature_
-// identifier_builder.go (NewPAdESSignatureIdentifierBuilder), pades_baseline_requirements_
-// checker.go (NewPAdESBaselineRequirementsChecker, HasExtendedLTVProfile, HasPKCS7*Profile,
-// HasExtendedAProfile) and pdf_vri_dict_source.go (NewPdfVriDictSource/VRICreationTime) - and
-// this file is written against their exact landed signatures. The two still missing (assumed
-// shapes, following the cades_signature.go "VAL-B chunk" precedent for how such a header
-// documents them):
-//
-//	// pades/dss (flattened into this package)
-//	type PdfSignatureRevision struct { ... }               // implements PdfRevision
-//	func (r *PdfSignatureRevision) CMS() *cms.CMS
-//	func (r *PdfSignatureRevision) SignedData() model.DSSDocument
-//	func (r *PdfSignatureRevision) SigningDate() time.Time
-//	func (r *PdfSignatureRevision) DssDictionary() PdfDssDict
-//
-//	// pades/timestamp (flattened into this package)
-//	func NewPAdESTimestampSource(signature *PAdESSignature, documentRevisions []PdfRevision) *PAdESTimestampSource
-//	type PAdESTimestampSource struct { validation.TimestampSource }
-//	func (s *PAdESTimestampSource) DocumentTimestamps() []*validation.TimestampToken
-//	func (s *PAdESTimestampSource) VriTimestamps() []*validation.TimestampToken
-//
-//	// pades/scope (flattened into this package)
-//	func NewPAdESSignatureScopeFinder() *PAdESSignatureScopeFinder
-//	func (f *PAdESSignatureScopeFinder) FindSignatureScope(signature *PAdESSignature) []scope.SignatureScope
 package pades
 
 import (
@@ -228,7 +201,7 @@ func (s *PAdESSignature) CompleteOCSPSource() *spi.ListRevocationSource[revocati
 // TimestampSource gets a Signature Timestamp source which contains ALL timestamps embedded in
 // the signature. Port of getTimestampSource(), covariant in Java (returns
 // PAdESTimestampSource); Go has no covariant return, so PAdES-specific callers assert on the
-// result, following the cades_signature.go TimestampSource() precedent.
+// result, as in cades_signature.go's TimestampSource().
 func (s *PAdESSignature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
 		s.SetSignatureTimestampSource(NewPAdESTimestampSource(s, s.documentRevisions))

@@ -39,11 +39,11 @@ func NewContentTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Result
 
 // Process performs the check. Port of process().
 func (c *ContentTypeCheck) Process() bool {
-	return c.ProcessValuesCheck(c.getContentType())
+	return c.ProcessValuesCheck(c.contentTypes())
 }
 
-// getContentType ports the private getContentType().
-func (c *ContentTypeCheck) getContentType() []string {
+// contentTypes ports the private getContentType().
+func (c *ContentTypeCheck) contentTypes() []string {
 	contentTypes := make([]string, 0)
 	if c.signature.ContentType() != "" {
 		contentTypes = append(contentTypes, c.signature.ContentType())
@@ -55,17 +55,17 @@ func (c *ContentTypeCheck) getContentType() []string {
 		panic(err)
 	}
 	if enumerations.SignatureFormJAdES == signatureForm && c.signature.MimeType() != "" {
-		contentTypes = append(contentTypes, c.getRFC7515ContentType(c.signature.MimeType()))
+		contentTypes = append(contentTypes, c.rfc7515ContentType(c.signature.MimeType()))
 	}
 	return contentTypes
 }
 
-// getRFC7515ContentType ports the private getRFC7515ContentType(String).
+// rfc7515ContentType ports the private getRFC7515ContentType(String).
 //
 // RFC 7515 requires to handle the ContentType, as it has an omitted
 // "application/" prefix. Therefore, we add additional value to ensure its
 // correct processing.
-func (c *ContentTypeCheck) getRFC7515ContentType(mimeType string) string {
+func (c *ContentTypeCheck) rfc7515ContentType(mimeType string) string {
 	if mimeType == "" {
 		return ""
 	}

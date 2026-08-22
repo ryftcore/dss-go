@@ -1,24 +1,10 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JAdESCertificateSource.java
 // (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (sibling chunks of the same package, not in this manifest - see
-// S6_BRIEF.md's VAL chunk split):
-//
-//	JAdESEtsiUHeader with IsExist() bool and Attributes() []*EtsiUComponent (already assumed,
-//	  identically, by dss_json_utils.go's DSSJsonUtilsUnsignedPropertiesWithHeaderName)
-//	EtsiUComponent, embedding JAdESAttribute (see jades_attribute.go's header), so
-//	  HeaderName()/Value() reach it through promotion
-//	JWSHeaderParameterNames* additions this file needs beyond what dss_json_utils.go /
-//	  jades_level_baseline_*.go already established: JAdESHeaderParameterNamesAxVals ("axVals"),
-//	  JAdESHeaderParameterNamesXRefs ("xRefs"), JAdESHeaderParameterNamesAxRefs ("axRefs"),
-//	  JAdESHeaderParameterNamesOtherCert ("otherCert") - following the same "capitalize the JSON
-//	  value's first letter" convention already visible in the landed constants (XVals, RVals,
-//	  TstVD, Encoding, ...).
-//
-// VIRTUAL-DISPATCH GAP (frozen package, flagged for integrator - see PORTING.md "no edits to
-// frozen packages"): Java's TokenCertificateSource.findTokensFromRefs(refs) loops calling
+// VIRTUAL-DISPATCH GAP (frozen package, flagged for integrator): Java's
+// TokenCertificateSource.findTokensFromRefs(refs) loops calling
 // `this.findTokensFromCertRef(ref)`, reaching JAdESCertificateSource's override via ordinary
-// Java virtual dispatch. spi.TokenCertificateSource.FindTokensFromRefs (already landed, frozen)
+// Java virtual dispatch. spi.TokenCertificateSource.FindTokensFromRefs (frozen)
 // has no overrides-interface hook for FindTokensFromCertRef, so calling it here would statically
 // resolve to CommonCertificateSource's base implementation and silently drop the kid/x5u
 // resolution FindTokensFromCertRef adds below. KeyIdentifierCertificates therefore reimplements

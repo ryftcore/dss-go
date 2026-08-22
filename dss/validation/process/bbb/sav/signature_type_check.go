@@ -40,11 +40,11 @@ func NewSignatureTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Resu
 
 // Process performs the check. Port of process().
 func (c *SignatureTypeCheck) Process() bool {
-	return c.ProcessValuesCheck(c.getSignatureType())
+	return c.ProcessValuesCheck(c.signatureTypes())
 }
 
-// getSignatureType ports the private getSignatureType().
-func (c *SignatureTypeCheck) getSignatureType() []string {
+// signatureTypes ports the private getSignatureType().
+func (c *SignatureTypeCheck) signatureTypes() []string {
 	signatureTypes := make([]string, 0)
 	if c.signature.SignatureType() != "" {
 		signatureTypes = append(signatureTypes, c.signature.SignatureType())
@@ -54,12 +54,12 @@ func (c *SignatureTypeCheck) getSignatureType() []string {
 		panic(err)
 	}
 	if enumerations.SignatureFormJAdES == signatureForm && c.signature.SignatureType() != "" {
-		signatureTypes = append(signatureTypes, c.getRFC7515SignatureType(c.signature.SignatureType()))
+		signatureTypes = append(signatureTypes, c.rfc7515SignatureType(c.signature.SignatureType()))
 	}
 	return signatureTypes
 }
 
-// getRFC7515SignatureType ports the private getRFC7515SignatureType(String).
+// rfc7515SignatureType ports the private getRFC7515SignatureType(String).
 //
 // RFC 7515 "4.1.9. "typ" (Type) Header Parameter": To keep messages compact in
 // common situations, it is RECOMMENDED that producers omit an "application/"
@@ -67,7 +67,7 @@ func (c *SignatureTypeCheck) getSignatureType() []string {
 // appears in the media type value. A recipient using the media type value MUST
 // treat it as if "application/" were prepended to any "typ" value not
 // containing a '/'.
-func (c *SignatureTypeCheck) getRFC7515SignatureType(signatureType string) string {
+func (c *SignatureTypeCheck) rfc7515SignatureType(signatureType string) string {
 	if signatureType == "" {
 		return ""
 	}

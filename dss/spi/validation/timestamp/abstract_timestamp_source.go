@@ -19,30 +19,13 @@
 // Java's "extends AbstractTimestampSource" for structural/diff fidelity; no method is promoted
 // through the embedding since none of the functions below are methods.
 //
-// # FORWARD DEPENDENCY: EvidenceRecord
+// # EvidenceRecord's revocation-source types
 //
-// EvidenceRecord (Java spi.x509.evidencerecord.EvidenceRecord, an interface) is flattened into
-// the sibling dss/spi/validation package by another chunk of phase 2b and is referenced here as
-// validation.EvidenceRecord, following the precedent set by validation/timestamp_source.go's own
-// EvidenceRecord forward dependency. This file additionally *calls methods* on it (the other
-// already-landed forward-dependency sites only pass it through opaquely), so its required shape,
-// inferred from every EvidenceRecord call in this manifest (this file, detached_timestamp_source.go
-// and signature_timestamp_source.go), is:
-//
-//	type EvidenceRecord interface {
-//		model.IdentifierBasedObject
-//		Id() string                                                     // getId()
-//		TimestampedReferences() []*TimestampedReference                 // getTimestampedReferences()
-//		SetTimestampedReferences(references []*TimestampedReference)    // see below
-//		Timestamps() []*TimestampToken                                  // getTimestamps()
-//		CertificateSource() *spi.TokenCertificateSource                 // getCertificateSource()
-//		CRLSource() evidenceRecordRevocationSource[revocation.CRL]      // getCRLSource()
-//		OCSPSource() evidenceRecordRevocationSource[revocation.OCSP]    // getOCSPSource()
-//		DetachedEvidenceRecords() []EvidenceRecord                      // getDetachedEvidenceRecords()
-//		ManifestFile() *model.ManifestFile                              // getManifestFile()
-//	}
-//
-// Three judgment calls in that shape, all flagged for integrator awareness:
+// This file, detached_timestamp_source.go and signature_timestamp_source.go call a subset of
+// validation.EvidenceRecord's methods: Id(), TimestampedReferences(),
+// SetTimestampedReferences(...), Timestamps(), CertificateSource(), CRLSource(), OCSPSource(),
+// DetachedEvidenceRecords(), ManifestFile(). Two judgment calls about that subset, flagged for
+// integrator awareness:
 //
 //   - CRLSource()/OCSPSource() are typed as evidenceRecordRevocationSource[R] (defined below in
 //     this file), not the spi.OfflineRevocationSource[R] interface Java's getCRLSource()/
@@ -50,17 +33,14 @@
 //     *spi.ListRevocationSource[R] (needing the full spi.OfflineRevocationSource[R] contract)
 //     and reads AllRevocationReferences() off it directly (which spi.OfflineRevocationSource[R]
 //     does not expose - see revocationBinaryLookup's doc comment below), so it needs both at
-//     once. TimestampToken.CRLSource()/OCSPSource() (already landed, dss/spi/validation/
-//     timestamp_crl_source.go) hit a related problem and resolved it by returning a concrete
-//     type instead of the interface; evidenceRecordRevocationSource generalizes that to an
-//     interface combining both needs, since a concrete EvidenceRecord's revocation source type
-//     is not yet known.
+//     once. TimestampToken.CRLSource()/OCSPSource() (dss/spi/validation/timestamp_crl_source.go)
+//     hit a related problem and resolved it by returning a concrete type instead of the
+//     interface; evidenceRecordRevocationSource generalizes that to an interface combining both
+//     needs, since a concrete EvidenceRecord's revocation source type is not known here.
 //   - SetTimestampedReferences has no Java counterpart: Java mutates the List<TimestampedReference>
 //     getTimestampedReferences() returns in place (List reference semantics). Go slices returned
-//     by value do not alias the field they came from, so an explicit setter is the only way to
-//     make such a mutation observable to later callers; TimestampToken (dss/spi/validation,
-//     already ported and frozen, outside this manifest) needs the equivalent addition - see the
-//     GAP note in signature_timestamp_source.go.
+//     by value do not alias the field they came from, so TimestampToken.SetTimestampedReferences
+//     (dss/spi/validation) exists purely to make such a mutation observable to later callers.
 package timestamp
 
 import (
@@ -105,20 +85,20 @@ type AbstractTimestampSource struct{}
 // Narrowing to this shape (rather than requiring the full spi.OfflineRevocationSource[R]
 // interface) is also what makes both call sites of these two functions compile: the merged
 // ListRevocationSource-backed sources (*validation.TimestampCRLSource et al.) satisfy the full
-// interface, but the EvidenceRecord.CRLSource()/OCSPSource() forward dependency (see this
-// file's package doc comment) is typed as the concrete *spi.OfflineRevocationSourceBase[R],
+// interface, but EvidenceRecord.CRLSource()/OCSPSource() (see this file's package doc comment)
+// is typed as the concrete *spi.OfflineRevocationSourceBase[R],
 // which does not - it only ever gets RevocationTokens (plural) once a concrete leaf source
 // embeds it and provides an override, which is not the case for a bare base value.
 type revocationBinaryLookup[R revocation.Revocation] interface {
 	FindBinaryForReference(reference spi.RevocationRef[R]) spi.EncapsulatedRevocationTokenIdentifier[R]
 }
 
-// evidenceRecordRevocationSource is what EvidenceRecord.CRLSource()/OCSPSource() (see this
-// file's FORWARD DEPENDENCY comment) is assumed to return: the full spi.OfflineRevocationSource[R]
-// contract, so it can be folded into this package's merged *spi.ListRevocationSource[R] via
-// .Add(), plus AllRevocationReferences() (which spi.OfflineRevocationSource[R] itself does not
-// expose - see revocationBinaryLookup above - but which every concrete offline revocation source
-// built on spi.OfflineRevocationSourceBase[R], e.g. TimestampCRLSource, provides).
+// evidenceRecordRevocationSource is what EvidenceRecord.CRLSource()/OCSPSource() returns: the
+// full spi.OfflineRevocationSource[R] contract, so it can be folded into this package's merged
+// *spi.ListRevocationSource[R] via .Add(), plus AllRevocationReferences() (which
+// spi.OfflineRevocationSource[R] itself does not expose - see revocationBinaryLookup above - but
+// which every concrete offline revocation source built on spi.OfflineRevocationSourceBase[R],
+// e.g. TimestampCRLSource, provides).
 type evidenceRecordRevocationSource[R revocation.Revocation] interface {
 	spi.OfflineRevocationSource[R]
 	AllRevocationReferences() []spi.RevocationRef[R]
@@ -503,12 +483,10 @@ func mergeReferences(base []*validation.TimestampedReference, additional []*vali
 
 // timestampAddReferences enriches timestampToken's TimestampedReferences with referencesToAdd,
 // without duplicates. Port of the `addReferences(timestampToken.getTimestampedReferences(), ...)`
-// call sites throughout this manifest, which upstream rely on Java's List reference semantics to
-// mutate the TimestampToken's own list in place. TimestampToken.TimestampedReferences() (already
-// ported, dss/spi/validation/timestamp_token.go, frozen outside this manifest) returns its slice
-// by value, so this package can only make the mutation observable to later
-// TimestampedReferences() calls through a setter; see the GAP note in signature_timestamp_source.go
-// for the (not yet landed) TimestampToken.SetTimestampedReferences this function calls.
+// call sites, which upstream rely on Java's List reference semantics to mutate the
+// TimestampToken's own list in place. TimestampToken.TimestampedReferences() returns its slice
+// by value, so the mutation is made observable to later TimestampedReferences() calls through
+// TimestampToken.SetTimestampedReferences instead.
 func timestampAddReferences(timestampToken *validation.TimestampToken, referencesToAdd []*validation.TimestampedReference) {
 	timestampToken.SetTimestampedReferences(mergeReferences(timestampToken.TimestampedReferences(), referencesToAdd))
 }

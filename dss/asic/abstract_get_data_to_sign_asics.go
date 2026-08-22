@@ -1,7 +1,7 @@
 // Ported from dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/signature/asics/AbstractGetDataToSignASiCS.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.common.signature.asics lands in
-// this same Go package (dss/asic) per S7_BRIEF.md's package layout table.
+// Package flattening: Java's eu.europa.esig.dss.asic.common.signature.asics lands in
+// this same Go package (dss/asic).
 package asic
 
 // AbstractGetDataToSignASiCS is used to get DataToSign for an ASiC-S container.

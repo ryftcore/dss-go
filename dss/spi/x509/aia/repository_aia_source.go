@@ -2,7 +2,7 @@
 //
 // Java's abstract methods (getExistingAIAKeys, findCertificates, insertCertificate,
 // removeCertificates) have no Go inheritance equivalent. Following the self-registration
-// pattern established in Phase 1b (model.TokenBase.InitToken / TokenOverrides), a concrete
+// pattern used elsewhere in this port (model.TokenBase.InitToken / TokenOverrides), a concrete
 // repository embeds RepositoryAIASource and must call InitRepositoryAIASource(self) from its
 // constructor so RepositoryAIASource's methods can dispatch to the concrete implementation;
 // forgetting to do so panics, matching Token's contract.

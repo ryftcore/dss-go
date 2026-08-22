@@ -4,13 +4,11 @@
 // XSDAbstractUtils base) validates a document against rfc5698.xsd +
 // 19322algocatxmlschema.xsd (plus xmldsig-core-schema.xsd, transitively).
 // No XSD validator ships in the Go stdlib and none has been added to this
-// port without tech-lead sign-off (PORTING.md "Dependency policy"),
-// following the precedent set by
-// dss/diagnostic/diagnostic_data_xml_definer.go's deferred Schema() stub
-// and this chunk's own cryptojson.ValidateAgainstSchema. This file keeps
+// port without tech-lead sign-off (PORTING.md "Dependency policy"), the
+// same way dss/diagnostic/diagnostic_data_xml_definer.go's deferred
+// Schema() stub and cryptojson.ValidateAgainstSchema do. This file keeps
 // the schema locations and embeds both schema documents for
-// documentation/testdata purposes, per S8A_BRIEF.md's "Schema/suite
-// resources embedded" instruction, but ValidateAgainstSchema is a stub
+// documentation/testdata purposes, but ValidateAgainstSchema is a stub
 // returning an error. getJAXBContext() has no port: it exists purely to
 // drive JAXB's own (un)marshaller, which this package's
 // CryptographicSuiteXmlFacade replaces directly with encoding/xml (see

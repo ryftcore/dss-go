@@ -1,20 +1,12 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/merge/ASiCEWithXAdESContainerMerger.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.xades.merge lands in this same Go
-// package (dss/asic/xades) per S7_BRIEF.md's package layout table.
-//
-// FORWARD DEPENDENCIES (XADSIGN chunk, same package per S7_BRIEF.md's package layout table -
-// signature/asice.ASiCEWithXAdESManifestBuilder flattens into dss/asic/xades too):
-//
-//	type ASiCEWithXAdESManifestBuilder struct { ... }
-//	func NewASiCEWithXAdESManifestBuilder() *ASiCEWithXAdESManifestBuilder
-//	func (b *ASiCEWithXAdESManifestBuilder) SetEntries(entries []*model.ManifestEntry) *ASiCEWithXAdESManifestBuilder
-//	func (b *ASiCEWithXAdESManifestBuilder) SetManifestFilename(name string) *ASiCEWithXAdESManifestBuilder
-//	func (b *ASiCEWithXAdESManifestBuilder) Build() (model.DSSDocument, error)
+// Package flattening: Java's eu.europa.esig.dss.asic.xades.merge lands in this same Go
+// package (dss/asic/xades).
 package xades
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/ryftcore/dss-go/dss/asic"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -186,7 +178,7 @@ func (m *ASiCEWithXAdESContainerMerger) EnsureSignaturesAllowMerge() {
 	conflictingSignatureDocumentNames := m.getConflictingDocumentNames(signatureNames)
 	if len(conflictingSignatureDocumentNames) != 0 {
 		for _, signatureDocumentName := range conflictingSignatureDocumentNames {
-			if containsStringXades(coveredDocumentNames, signatureDocumentName) && !m.isSameDocumentContent(signatureDocumentName) {
+			if slices.Contains(coveredDocumentNames, signatureDocumentName) && !m.isSameDocumentContent(signatureDocumentName) {
 				panic("Unable to merge ASiC-E with XAdES containers. " +
 					"A signature is covered by another document, while having same signature names in both containers!")
 			}
@@ -198,7 +190,7 @@ func (m *ASiCEWithXAdESContainerMerger) EnsureSignaturesAllowMerge() {
 	conflictingEvidenceRecordManifestNames := m.getConflictingDocumentNames(evidenceRecordManifestDocumentNames)
 	if len(conflictingEvidenceRecordManifestNames) != 0 {
 		for _, evidenceRecordManifestName := range conflictingEvidenceRecordManifestNames {
-			if containsStringXades(coveredDocumentNames, evidenceRecordManifestName) && !m.isSameDocumentContent(evidenceRecordManifestName) {
+			if slices.Contains(coveredDocumentNames, evidenceRecordManifestName) && !m.isSameDocumentContent(evidenceRecordManifestName) {
 				panic("Unable to merge ASiC-E with XAdES containers. " +
 					"An evidence record manifest is covered by another document, while having same signature names in both containers!")
 			}
@@ -272,7 +264,7 @@ func (m *ASiCEWithXAdESContainerMerger) getCoveredDocumentNamesFromSignature(sig
 }
 
 func (m *ASiCEWithXAdESContainerMerger) doCoverManifest(documentNames []string) bool {
-	return containsStringXades(documentNames, asic.ASiCUtilsASiCEMetaInfManifest)
+	return slices.Contains(documentNames, asic.ASiCUtilsASiCEMetaInfManifest)
 }
 
 func (m *ASiCEWithXAdESContainerMerger) sameSignedDocuments() bool {
@@ -335,14 +327,14 @@ func (m *ASiCEWithXAdESContainerMerger) createNewManifest() model.DSSDocument {
 		mergedContent.SetManifestDocuments(append(mergedContent.ManifestDocuments(), manifestDocuments...))
 
 		for _, entry := range m.getManifestFileEntries(manifestDocuments) {
-			if !containsStringXades(addedFileNames, entry.Uri()) {
+			if !slices.Contains(addedFileNames, entry.Uri()) {
 				manifestEntries = append(manifestEntries, entry)
 				addedFileNames = append(addedFileNames, entry.Uri())
 			}
 		}
 		signedDocuments := asicContent.SignedDocuments()
 		for _, entry := range asic.ASiCUtilsToSimpleManifestEntries(signedDocuments) {
-			if !containsStringXades(addedFileNames, entry.Uri()) {
+			if !slices.Contains(addedFileNames, entry.Uri()) {
 				manifestEntries = append(manifestEntries, entry)
 				addedFileNames = append(addedFileNames, entry.Uri())
 			}
@@ -430,18 +422,6 @@ func (m *ASiCEWithXAdESContainerMerger) createEmptyContainer() *asic.ASiCContent
 		}
 	}
 	return asicContent
-}
-
-// containsStringXades ports the repeated List.contains(String) idiom used in this file; not a
-// cross-file shared helper, per PORTING.md (also used by asics_with_xades_container_merger.go
-// under its own name to keep files independent).
-func containsStringXades(items []string, target string) bool {
-	for _, item := range items {
-		if item == target {
-			return true
-		}
-	}
-	return false
 }
 
 // stringSetsEqualXades ports the repeated Set<String>.equals(Set<String>) idiom used above.

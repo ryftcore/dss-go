@@ -20,9 +20,9 @@ func NewFoundCertificatesProxy(foundCertificates *jaxb.XmlFoundCertificates) *Fo
 	return &FoundCertificatesProxy{foundCertificates: foundCertificates}
 }
 
-// getFoundCertificates lazily instantiates the wrapped object. Port of the private
+// ensureFoundCertificates lazily instantiates the wrapped object. Port of the private
 // getFoundCertificates().
-func (p *FoundCertificatesProxy) getFoundCertificates() *jaxb.XmlFoundCertificates {
+func (p *FoundCertificatesProxy) ensureFoundCertificates() *jaxb.XmlFoundCertificates {
 	if p.foundCertificates == nil {
 		p.foundCertificates = &jaxb.XmlFoundCertificates{}
 	}
@@ -33,7 +33,7 @@ func (p *FoundCertificatesProxy) getFoundCertificates() *jaxb.XmlFoundCertificat
 // getRelatedCertificates().
 func (p *FoundCertificatesProxy) RelatedCertificates() []*RelatedCertificateWrapper {
 	var certificateWrappers []*RelatedCertificateWrapper
-	for _, relatedCertificate := range p.getFoundCertificates().RelatedCertificate {
+	for _, relatedCertificate := range p.ensureFoundCertificates().RelatedCertificate {
 		certificateWrappers = append(certificateWrappers, NewRelatedCertificateWrapper(relatedCertificate))
 	}
 	return certificateWrappers
@@ -42,7 +42,7 @@ func (p *FoundCertificatesProxy) RelatedCertificates() []*RelatedCertificateWrap
 // OrphanCertificates returns a list of orphan certificates. Port of getOrphanCertificates().
 func (p *FoundCertificatesProxy) OrphanCertificates() []*OrphanCertificateWrapper {
 	var orphanTokens []*OrphanCertificateWrapper
-	for _, orphanCertificate := range p.getFoundCertificates().OrphanCertificate {
+	for _, orphanCertificate := range p.ensureFoundCertificates().OrphanCertificate {
 		orphanTokens = append(orphanTokens, NewOrphanCertificateWrapper(orphanCertificate))
 	}
 	return orphanTokens

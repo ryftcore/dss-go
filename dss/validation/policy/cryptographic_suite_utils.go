@@ -1,12 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/policy/CryptographicSuiteUtils.java (DSS 6.5.RC1).
 //
-// Out-of-manifest dependency (phase 8d AOV porter note - flagged per porter
-// brief rather than silently added): this static Java utility class is not
-// itself listed in the phase 8d AOV manifest, but every file in
-// eu.europa.esig.dss.validation.process.bbb.aov.cc.checks (all manifest
-// files) calls it directly, so it cannot be left unported without leaving the
-// aov package uncompilable. Its Go home is dss/validation/policy, matching the
-// dss-validation module's package mapping.
+// CryptographicSuiteUtils backs the cryptographic-suite checks in
+// dss/validation/process/bbb/aov. Its Go home is dss/validation/policy,
+// matching the dss-validation module's package mapping.
 //
 // Java's static methods become package-level functions; the two overloaded
 // pairs Go cannot express by argument type alone
@@ -350,8 +346,8 @@ func getMinKeyLength(algorithm enumerations.EncryptionAlgorithm, evaluation *pol
 }
 
 // isSupported ports the private static isSupported(EncryptionAlgorithm, CryptographicSuiteParameter).
-// slf4j logging (the "Unknown Algorithms Parameter type" debug record) is
-// dropped per PORTING.md.
+// Java's slf4j debug logging ("Unknown Algorithms Parameter type") has no
+// Go equivalent and is not ported.
 func isSupported(encryptionAlgorithm enumerations.EncryptionAlgorithm, parameter *policy.CryptographicSuiteParameter) bool {
 	parameterName := parameter.Name()
 	// first come, first served logic

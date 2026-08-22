@@ -1,9 +1,8 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfDocDssRevision.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Shape (NewPdfDocDssRevision(*PdfCompositeDssDictionary, PdfDssDict))
-// confirmed against pdf_validation_data_container.go's already-landed forward-dependency header
-// and native_pdf_signature_service.go's call sites.
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// Its shape (NewPdfDocDssRevision(*PdfCompositeDssDictionary, PdfDssDict)) is used by
+// pdf_validation_data_container.go and native_pdf_signature_service.go's call sites.
 package pades
 
 // PdfDocDssRevision represents an LT-level PDF revision containing a DSS dictionary.

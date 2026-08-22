@@ -16,8 +16,7 @@ import (
 // src/main/resources/policy/constraint.xml, embedded because
 // EtsiValidationPolicyFactory#loadDefaultValidationPolicy loads it from the
 // classpath at runtime (DEFAULT_VALIDATION_POLICY_LOCATION =
-// "/policy/constraint.xml") - per S8A_BRIEF.md's "embedded where upstream
-// loads them at runtime" instruction, unlike policy.xsd (see
+// "/policy/constraint.xml"), unlike policy.xsd (see
 // validation_policy_xml_definer.go), whose loader is a deferred stub that
 // never reads it.
 //

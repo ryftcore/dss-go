@@ -1,5 +1,4 @@
-// THE PHASE 8 EXIT CRITERION - executor-level verdict parity, item (A) of the
-// s8f harness brief.
+// Executor-level verdict parity oracle: full-corpus byte compare.
 //
 // testdata/oracle/full_corpus.jsonl is a pure Java dump, produced by
 // testdata/oracle/gen/FullCorpusOracle.java, over EVERY file (273, no
@@ -407,7 +406,7 @@ func compareBBB(t *testing.T, label string, want []fcBBB, got []*detailedreportj
 // like Java (or starts failing on both sides), the assertions above turn
 // into a hard failure so the entry cannot silently rot.
 //
-// It is EMPTY. The phase-8f audit closed both entries it used to hold:
+// It is EMPTY. Both entries it used to hold have been closed:
 //
 //   - F1, diagnostic/jaxb binding java.math.BigInteger properties to a bare
 //     *big.Int, whose stdlib UnmarshalText parses with base 0 and so read a

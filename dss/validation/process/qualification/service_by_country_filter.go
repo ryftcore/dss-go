@@ -35,7 +35,9 @@ func NewServiceByCountryFilterWithCodes(countryCodes map[string]struct{}) *Servi
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the service's country code is one of the
+// configured country codes. Port of the overridden
+// isAcceptable(TrustServiceWrapper).
 func (f *ServiceByCountryFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	for countryCode := range f.countryCodes {
 		if utils.AreStringsEqualIgnoreCase(countryCode, service.CountryCode) {

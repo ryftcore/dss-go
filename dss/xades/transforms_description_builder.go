@@ -1,10 +1,9 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/TransformsDescriptionBuilder.java
 // (DSS 6.5.RC1).
 //
-// Builds a user-friendly description for a provided ds:Transforms element. Already relied upon
-// by the landed xades_reference_validation.go (NewTransformsDescriptionBuilder(...).Build()) and
-// by the XAdESSignaturePolicy forward dependency (see xades_signature.go's header) for
-// SignaturePolicy#getTransformsDescription().
+// Builds a user-friendly description for a provided ds:Transforms element, used by
+// xades_reference_validation.go (NewTransformsDescriptionBuilder(...).Build()) and by
+// XAdESSignaturePolicy (xades_signature_policy.go) for SignaturePolicy#getTransformsDescription().
 //
 // org.apache.xml.security.transforms.Transforms / org.apache.xml.security.c14n.Canonicalizer
 // algorithm URI constants have no Go class to mirror one-to-one; their string values are the

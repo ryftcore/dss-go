@@ -42,7 +42,7 @@ var katOrderDeviation = map[string]bool{
 }
 
 // katKnownDeviation lists the certificates the port cannot yet reproduce at all, with the
-// reason. Each is a pre-existing frozen-package gap, not a phase 8c regression; the list is
+// reason. Each is a pre-existing gap; the list is
 // asserted to be exactly this set so a new failure cannot hide inside it.
 var katKnownDeviation = map[string]string{
 	// RIPEMD160withRSA: crypto/x509 has no signature-algorithm binding for it, so

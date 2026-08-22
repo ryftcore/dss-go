@@ -11,8 +11,8 @@
 // embeds cades.CAdESTimestampSource (concrete, itself embedding
 // timestamp.SignatureTimestampSource[*cades.CAdESSignature, *cades.CAdESAttribute]) the same
 // way, and re-targets InitSignatureTimestampSource(s) at construction - the InitTimestampIdentifierBuilder-
-// style override-registration pattern PORTING.md's phase 5b brief calls out for timestamp
-// sources - so that every SignatureTimestampSourceOverrides call the base machinery dispatches
+// style override-registration pattern used for timestamp sources - so that every
+// SignatureTimestampSourceOverrides call the base machinery dispatches
 // through s.overrides (all the Is*/Make*/Get* checks in makeTimestampTokensFromUnsignedAttributes)
 // correctly reaches this type's own shadowed methods (IsCompleteCertificateRef and friends,
 // below) instead of CAdESTimestampSource's.
@@ -78,13 +78,9 @@
 // live pointers to those same merged sources, so calling .Add(...) on the returned pointers
 // mutates the exact state populateSources would have - see padesTSPopulateSources below.
 //
-// FORWARD DEPENDENCIES:
-//   - PdfSignatureRevision (eu.europa.esig.dss.pdf.PdfSignatureRevision) - pades_signature.go's
-//     header already assumes this type; s.signature.PdfRevision() (also already landed,
-//     pades_signature.go) returns *PdfSignatureRevision, compared here by pointer identity
-//     against each documentRevisions entry, exactly as Java's `padesSignature.getPdfRevision()
-//     == pdfRevision` reference comparison does.
-//   - PdfDocDssRevision/PdfDocTimestampRevision - see pdf_revision_timestamp_source.go's header.
+// s.signature.PdfRevision() returns *PdfSignatureRevision, compared here by pointer identity
+// against each documentRevisions entry, exactly as Java's `padesSignature.getPdfRevision() ==
+// pdfRevision` reference comparison does.
 package pades
 
 import (

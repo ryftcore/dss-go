@@ -29,9 +29,9 @@ type OtherTSLPointerConverter struct {
 //
 // Named ...Default (rather than the bare NewOtherTSLPointerConverter PORTING.md's overload
 // convention would otherwise give this zero-arg constructor) because tsl/lotl_parsing_task.go
-// (TSLCORE, frozen, out of this manifest) already calls NewOtherTSLPointerConverter(bool) for the
-// single-arg constructor below - this file conforms to that frozen call site instead of the
-// reverse, since the zero-arg constructor has no callers anywhere in this module.
+// already calls NewOtherTSLPointerConverter(bool) for the single-arg constructor below - this
+// file conforms to that call site instead of the reverse, since the zero-arg constructor has no
+// callers anywhere in this module.
 func NewOtherTSLPointerConverterDefault() *OtherTSLPointerConverter {
 	return &OtherTSLPointerConverter{}
 }
@@ -46,18 +46,18 @@ func NewOtherTSLPointerConverter(mraSupport bool) *OtherTSLPointerConverter {
 // Apply ports apply(OtherTSLPointerType).
 func (c *OtherTSLPointerConverter) Apply(original *jaxb.OtherTSLPointerType) *tslmodel.OtherTSLPointer {
 	return tslmodel.NewOtherTSLPointerBuilder().
-		SetSdiCertificates(c.getCertificates(original.ServiceDigitalIdentities)).
+		SetSdiCertificates(c.certificates(original.ServiceDigitalIdentities)).
 		SetTslLocation(original.TSLLocation).
-		SetSchemeTerritory(c.getSchemeTerritory(original.AdditionalInformation)).
-		SetTslType(c.getTSLType(original.AdditionalInformation)).
-		SetMimeType(c.getMimeType(original.AdditionalInformation)).
-		SetSchemeOperatorNames(c.getSchemeOperatorNames(original.AdditionalInformation)).
-		SetSchemeTypeCommunityRules(c.getSchemeTypeCommunityRules(original.AdditionalInformation)).
-		SetMra(c.getMRA(original.AdditionalInformation)).
+		SetSchemeTerritory(c.schemeTerritory(original.AdditionalInformation)).
+		SetTslType(c.tSLType(original.AdditionalInformation)).
+		SetMimeType(c.mimeType(original.AdditionalInformation)).
+		SetSchemeOperatorNames(c.schemeOperatorNames(original.AdditionalInformation)).
+		SetSchemeTypeCommunityRules(c.schemeTypeCommunityRules(original.AdditionalInformation)).
+		SetMra(c.mRA(original.AdditionalInformation)).
 		Build()
 }
 
-func (c *OtherTSLPointerConverter) getCertificates(serviceDigitalIdentities *jaxb.ServiceDigitalIdentityListType) []*model.CertificateToken {
+func (c *OtherTSLPointerConverter) certificates(serviceDigitalIdentities *jaxb.ServiceDigitalIdentityListType) []*model.CertificateToken {
 	var certificates []*model.CertificateToken
 	if serviceDigitalIdentities != nil && utils.IsCollectionNotEmpty(serviceDigitalIdentities.ServiceDigitalIdentity) {
 		converter := NewDigitalIdentityListTypeConverter()
@@ -68,7 +68,7 @@ func (c *OtherTSLPointerConverter) getCertificates(serviceDigitalIdentities *jax
 	return certificates
 }
 
-func (c *OtherTSLPointerConverter) getSchemeTerritory(additionalInformation *jaxb.AdditionalInformationType) string {
+func (c *OtherTSLPointerConverter) schemeTerritory(additionalInformation *jaxb.AdditionalInformationType) string {
 	v, _ := otherTSLPointerConverterOtherInformationValue[*string](additionalInformation, otherTSLPointerConverterSchemeTerritory)
 	if v == nil {
 		return ""
@@ -76,7 +76,7 @@ func (c *OtherTSLPointerConverter) getSchemeTerritory(additionalInformation *jax
 	return *v
 }
 
-func (c *OtherTSLPointerConverter) getTSLType(additionalInformation *jaxb.AdditionalInformationType) string {
+func (c *OtherTSLPointerConverter) tSLType(additionalInformation *jaxb.AdditionalInformationType) string {
 	v, _ := otherTSLPointerConverterOtherInformationValue[*string](additionalInformation, otherTSLPointerConverterTSLType)
 	if v == nil {
 		return ""
@@ -84,7 +84,7 @@ func (c *OtherTSLPointerConverter) getTSLType(additionalInformation *jaxb.Additi
 	return *v
 }
 
-func (c *OtherTSLPointerConverter) getMimeType(additionalInformation *jaxb.AdditionalInformationType) string {
+func (c *OtherTSLPointerConverter) mimeType(additionalInformation *jaxb.AdditionalInformationType) string {
 	v, _ := otherTSLPointerConverterOtherInformationValue[*string](additionalInformation, otherTSLPointerConverterMimeType)
 	if v == nil {
 		return ""
@@ -92,7 +92,7 @@ func (c *OtherTSLPointerConverter) getMimeType(additionalInformation *jaxb.Addit
 	return *v
 }
 
-func (c *OtherTSLPointerConverter) getSchemeOperatorNames(additionalInformation *jaxb.AdditionalInformationType) map[string][]string {
+func (c *OtherTSLPointerConverter) schemeOperatorNames(additionalInformation *jaxb.AdditionalInformationType) map[string][]string {
 	schemeOperatorNames, ok := otherTSLPointerConverterOtherInformationValue[*jaxb.InternationalNamesType](additionalInformation, otherTSLPointerConverterSchemeOperatorName)
 	if ok && schemeOperatorNames != nil {
 		return NewInternationalNamesTypeConverter().Apply(schemeOperatorNames)
@@ -100,7 +100,7 @@ func (c *OtherTSLPointerConverter) getSchemeOperatorNames(additionalInformation 
 	return nil
 }
 
-func (c *OtherTSLPointerConverter) getSchemeTypeCommunityRules(additionalInformation *jaxb.AdditionalInformationType) map[string][]string {
+func (c *OtherTSLPointerConverter) schemeTypeCommunityRules(additionalInformation *jaxb.AdditionalInformationType) map[string][]string {
 	schemeTypeCommunityRules, ok := otherTSLPointerConverterOtherInformationValue[*jaxb.NonEmptyMultiLangURIListType](additionalInformation, otherTSLPointerConverterSchemeTypeCommunityRules)
 	if ok && schemeTypeCommunityRules != nil {
 		return NewNonEmptyMultiLangURIListTypeConverter().Apply(schemeTypeCommunityRules)
@@ -108,7 +108,7 @@ func (c *OtherTSLPointerConverter) getSchemeTypeCommunityRules(additionalInforma
 	return nil
 }
 
-func (c *OtherTSLPointerConverter) getMRA(additionalInformation *jaxb.AdditionalInformationType) *tslmodel.MRA {
+func (c *OtherTSLPointerConverter) mRA(additionalInformation *jaxb.AdditionalInformationType) *tslmodel.MRA {
 	if !c.mraSupport {
 		return nil
 	}

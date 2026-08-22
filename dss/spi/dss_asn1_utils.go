@@ -107,7 +107,7 @@ func ParseAlgorithmIdentifier(der []byte) (*AlgorithmIdentifier, error) {
 
 // DSSASN1UtilsToASN1Primitive validates that the given bytes hold exactly one ASN.1 element
 // and returns that element's encoding. Port of toASN1Primitive(byte[]); an ASN1Primitive is
-// represented by its bytes in this port, so the method degenerates to a parse-and-return.
+// represented by its bytes here, so the method degenerates to a parse-and-return.
 func DSSASN1UtilsToASN1Primitive(bytes []byte) ([]byte, error) {
 	element, rest, err := asn1ber.Parse(bytes)
 	if err != nil {
@@ -456,12 +456,10 @@ func DSSASN1UtilsIsSkiEqual(ski []byte, certificateToken *model.CertificateToken
 	return bytes.Equal(certSki, ski)
 }
 
-// TODO(phase-3): getX509CertificateHolder(CertificateToken) and
-// getCertificate(X509CertificateHolder) only convert to and from BouncyCastle's
-// X509CertificateHolder, which the CMS layer needs and which has no Go counterpart: a
-// CertificateToken already carries the certificate's DER (CertificateToken.Encoded()).
-
-// TODO(phase-3): toSignerIdentifier(SignerId) reads a CMS SignerIdentifier.
+// getX509CertificateHolder(CertificateToken) is not ported: it only converts to BouncyCastle's
+// X509CertificateHolder, which has no Go counterpart (CertificateToken.Encoded() already
+// carries the DER). The reverse direction is ported as DSSASN1UtilsCertificate in
+// cms_certificate_source.go.
 
 // DSSASN1UtilsToX500Principal converts a DER-encoded X.501 Name into an X500Principal.
 // Port of toX500Principal(X500Name).
@@ -760,11 +758,6 @@ func DSSASN1UtilsDate(encodable []byte) time.Time {
 // TSPValidationException the Java overload catches around TimeStampToken construction has no
 // counterpart here, since ParseTimeStampToken already rejected an unreadable token before this
 // is ever reached.
-//
-// Completes the TODO(phase-3) marker this used to carry (getRevocationValues(ASN1Encodable)
-// and getCertificateRef(OtherCertID), the other two methods it named, were completed earlier
-// in cms_crl_source.go and cms_certificate_source.go as DSSASN1UtilsRevocationValues and
-// DSSASN1UtilsCertificateRef).
 func DSSASN1UtilsTimeStampTokenGenerationTime(timeStampToken *cmscore.TimeStampToken) time.Time {
 	return timeStampToken.TSTInfo().GenTime
 }

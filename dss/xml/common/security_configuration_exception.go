@@ -3,7 +3,7 @@ package common
 
 // SecurityConfigurationException is raised to catch and re-throw an exception caused by a
 // security feature/attribute definition failure. Ports the checked Exception(Exception)
-// class; callers in this package match it with errors.As per PORTING.md.
+// class; callers in this package match it with errors.As.
 type SecurityConfigurationException struct {
 	Cause error
 }

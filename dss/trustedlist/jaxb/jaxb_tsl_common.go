@@ -1,11 +1,11 @@
 // Ported from ts_119612v020401_xsd.xsd (DSS 6.5.RC1) via the JAXB classes
-// generated into eu.europa.esig.trustedlist.jaxb.tsl. Per the phase-8a
-// generated-JAXB rule the generated classes are grouped into schema-area
-// files rather than one file per class; every Java class keeps its name and
-// its exact field order so that encoding/xml reproduces the JAXB element
-// sequence byte for byte. This file holds the scheme-information leaf types
-// and the extensibility list types every TSL area (SchemeExtensions,
-// TSPInformationExtensions, ServiceInformationExtensions) shares.
+// generated into eu.europa.esig.trustedlist.jaxb.tsl. The generated classes
+// are grouped into schema-area files rather than one file per class; every
+// Java class keeps its name and its exact field order so that encoding/xml
+// reproduces the JAXB element sequence byte for byte. This file holds the
+// scheme-information leaf types and the extensibility list types every TSL
+// area (SchemeExtensions, TSPInformationExtensions,
+// ServiceInformationExtensions) shares.
 package jaxb
 
 import "encoding/xml"
@@ -22,7 +22,7 @@ type MultiLangStringType struct {
 // MultiLangStringType but bound through NormalizedStringAdapter, which only
 // replaces literal tab/CR/LF with a space and does not otherwise change the
 // lexical form the RI writes back - a plain xs:string round-trips it
-// unchanged for every value this port marshals (values it only reads back
+// unchanged for every value marshalled here (values are only read back
 // from an already-normalized document).
 type MultiLangNormStringType struct {
 	Value string `xml:",chardata"`

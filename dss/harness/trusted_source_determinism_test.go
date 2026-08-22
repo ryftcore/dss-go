@@ -1,4 +1,4 @@
-// Phase 9 cross-validation harness, determinism guard for the trusted-source assembly.
+// Cross-validation harness: determinism guard for the trusted-source assembly.
 //
 // TLValidationJob's synchronization step accumulates certificates into maps that Java keys by
 // CertificateToken (whose equals/hashCode is the certificate's DSS id) and drains through

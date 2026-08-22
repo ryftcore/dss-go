@@ -23,7 +23,9 @@ func NewTrustedEntityServiceByDateFilter(date *time.Time) *TrustedEntityServiceB
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustedEntityServiceWrapper).
+// IsAcceptable reports whether the given service was valid at the
+// configured date. Port of the overridden
+// isAcceptable(TrustedEntityServiceWrapper).
 func (f *TrustedEntityServiceByDateFilter) IsAcceptable(service *diagnostic.TrustedEntityServiceWrapper) bool {
 	startDate := service.StartDate
 	endDate := service.EndDate

@@ -165,7 +165,7 @@ func toMessage(message *jaxb.XmlMessage) *oracleMessage {
 	return &oracleMessage{Key: message.Key, Value: &value}
 }
 
-func mustJSON(t *testing.T, value interface{}) string {
+func mustJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

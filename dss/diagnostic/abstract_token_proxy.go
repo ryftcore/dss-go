@@ -200,7 +200,7 @@ func (a *AbstractTokenProxyBase) SigningCertificateReference() *CertificateRefWr
 		// return a reference matching a signing certificate
 		signingCertificate := a.SigningCertificate()
 		if signingCertificate != nil {
-			return a.getCertificateReferenceOfReferenceOriginType(signingCertificate, enumerations.CertificateRefOriginSigningCertificate)
+			return a.certificateReferenceOfReferenceOriginType(signingCertificate, enumerations.CertificateRefOriginSigningCertificate)
 		}
 	} else {
 		orphanSigningCertificateReferences := a.tokenProxyOverrides().FoundCertificates().
@@ -212,7 +212,7 @@ func (a *AbstractTokenProxyBase) SigningCertificateReference() *CertificateRefWr
 	return nil
 }
 
-func (a *AbstractTokenProxyBase) getCertificateReferenceOfReferenceOriginType(certificate *CertificateWrapper, refOrigin enumerations.CertificateRefOrigin) *CertificateRefWrapper {
+func (a *AbstractTokenProxyBase) certificateReferenceOfReferenceOriginType(certificate *CertificateWrapper, refOrigin enumerations.CertificateRefOrigin) *CertificateRefWrapper {
 	for _, relatedCertificate := range a.tokenProxyOverrides().FoundCertificates().RelatedCertificates() {
 		signCertRefs := relatedCertificate.References()
 		if certificate.Id() == relatedCertificate.Id() && len(signCertRefs) != 0 {

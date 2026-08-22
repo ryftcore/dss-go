@@ -4,32 +4,6 @@
 // #getRevocationInfoArchival) is kept as a comment where it fired. java.io.BufferedInputStream
 // buffering is not reproduced: Go's bufio wrapping is unnecessary here since InMemoryDocument's
 // OpenStream already returns an in-memory reader.
-//
-// FORWARD DEPENDENCIES (not in this chunk's manifest, flattened into this same package pades by
-// sibling chunks, per internal/pdf/doc.go's Layering section - every function below was written
-// against these shapes, already assumed by the landed call sites named per function):
-//   - PdfCMSRevision (eu.europa.esig.dss.pdf.PdfCMSRevision) - an interface with
-//     PreviousRevision() model.DSSDocument, satisfied by *PdfSignatureRevision (see
-//     pades_signature.go's forward-dependency comment).
-//   - PdfDict (eu.europa.esig.dss.pdf.PdfDict), already landed by the SIGN chunk
-//     (pades/native_pdf_dict.go implements it) - NameValue(name string) string and
-//     AsArray(name string) PdfArray.
-//   - PdfArray (eu.europa.esig.dss.pdf.PdfArray), already landed - Size() int and
-//     String(i int) string.
-//   - SigFieldPermissions (eu.europa.esig.dss.pdf.SigFieldPermissions) - a struct with
-//     SetAction(enumerations.PdfLockAction), SetFields([]string) and
-//     SetCertificationPermission(enumerations.CertificationPermission), per
-//     pdf_signature_field.go's forward-dependency comment.
-//   - PdfDssDict / PdfVriDict (eu.europa.esig.dss.pdf) - per
-//     pdf_composite_dss_dict_certificate_source.go's forward-dependency comment:
-//     PdfDssDict.VRIs() []*PdfVriDict, PdfVriDict.Name() string.
-//   - PAdESConstants<Name> (eu.europa.esig.dss.pdf.PAdESConstants), flattened into this package,
-//     following the naming already observed in native_pdf_signature_service.go /
-//     pades_baseline_requirements_checker.go / pdf_signature_field.go.
-//   - PdfMemoryUsageSetting (eu.europa.esig.dss.pdf.PdfMemoryUsageSetting) - a value type;
-//     PdfMemoryUsageSettingMemoryFull() PdfMemoryUsageSetting is its flattened static factory
-//     eu.europa.esig.dss.pdf.PdfMemoryUsageSetting#memoryFull, following the PAdESUtils<Method>
-//     naming precedent (pdf_composite_dss_dict_certificate_source.go) for a flattened static.
 package pades
 
 import (

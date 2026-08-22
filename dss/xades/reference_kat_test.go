@@ -1015,10 +1015,10 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 
 // ------------------------------------------------------------ 7. ds:SignedInfo, end to end
 
-// TestSignedInfoWithReferencesAgainstJavaOracle is the chunk's mandated SignedInfo byte KAT: for
+// TestSignedInfoWithReferencesAgainstJavaOracle is the mandated SignedInfo byte KAT: for
 // fixed inputs, the ds:SignedInfo element upstream's XAdESSignatureBuilder produces - before and
 // after canonicalization - and the signature document built from it, across every reference and
-// transform configuration this chunk is responsible for.
+// transform configuration this package is responsible for.
 func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 	oracle := loadXAdESRefsOracle(t)
 

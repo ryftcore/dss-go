@@ -1,7 +1,5 @@
-// Smoke test for the un-gated PAdES validator pair (pdf_document_validator.go,
-// pdf_document_validator_factory.go, pades_diagnostic_data_builder.go), now that the phase 8
-// validation engine (dss/validation, dss/validation/executor, dss/validation/policy,
-// dss/simplereport, dss/policy) has landed and their `phase8` build tags were removed.
+// Smoke test for the PAdES validator pair (pdf_document_validator.go,
+// pdf_document_validator_factory.go, pades_diagnostic_data_builder.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // PDFDocumentAnalyzer, PAdESDiagnosticDataBuilder (including its PDFRevision/orphan-token

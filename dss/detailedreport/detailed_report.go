@@ -2,8 +2,8 @@
 // (DSS 6.5.RC1).
 //
 // DetailedReport wraps the generated jaxb.XmlDetailedReport with the
-// block/constraint navigation logic later phases (8c-8f) drive validation
-// reporting through: locating a token's Basic Building Block, its highest
+// block/constraint navigation logic the validation reporting stack drives
+// through: locating a token's Basic Building Block, its highest
 // completed validation level, its qualification, and the messages attached to
 // each. Every public method here is a direct port of the same-named Java
 // method; order and null-propagation follow the Java source line for line
@@ -15,6 +15,7 @@
 package detailedreport
 
 import (
+	"slices"
 	"time"
 
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
@@ -199,7 +200,7 @@ func (r *DetailedReport) FirstEvidenceRecordId() string {
 
 // EvidenceRecordIds returns a list of all evidence record ids.
 //
-// NOTE: faithfully ports a copy-paste artifact in the upstream Java: the final
+// NOTE: reproduces a copy-paste artifact in the upstream Java: the final
 // loop filters BasicBuildingBlocks by Context.TIMESTAMP, not
 // Context.EVIDENCE_RECORD, so it never contributes an id in practice - see
 // getTimestampIds for the loop it appears to have been copied from.
@@ -862,7 +863,7 @@ func (r *DetailedReport) CertificateXCVConclusion(certificateId string) *jaxb.Xm
 	signatureIds := r.SignatureIds()
 	basicBuildingBlocks := r.jaxbDetailedReport.BasicBuildingBlocks
 	for _, xmlBasicBuildingBlocks := range basicBuildingBlocks {
-		if !containsString(signatureIds, xmlBasicBuildingBlocks.Id) {
+		if !slices.Contains(signatureIds, xmlBasicBuildingBlocks.Id) {
 			continue // skip for signature
 		}
 
@@ -878,7 +879,7 @@ func (r *DetailedReport) CertificateXCVConclusion(certificateId string) *jaxb.Xm
 
 	// process other certificates (certificate validation only)
 	for _, xmlBasicBuildingBlocks := range basicBuildingBlocks {
-		if containsString(signatureIds, xmlBasicBuildingBlocks.Id) {
+		if slices.Contains(signatureIds, xmlBasicBuildingBlocks.Id) {
 			continue // skip for signature
 		}
 
@@ -1132,14 +1133,4 @@ func derefString(s *string) string {
 		return ""
 	}
 	return *s
-}
-
-// containsString reports whether list contains s.
-func containsString(list []string, s string) bool {
-	for _, v := range list {
-		if v == s {
-			return true
-		}
-	}
-	return false
 }

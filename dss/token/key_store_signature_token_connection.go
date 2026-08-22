@@ -1,15 +1,16 @@
 // Ported from dss-token/src/main/java/eu/europa/esig/dss/token/KeyStoreSignatureTokenConnection.java (DSS 6.5.RC1).
 //
 // DEVIATION - java.security.KeyStore: upstream defers entirely to the JCA/JCE KeyStore SPI, which
-// dispatches on ksType ("PKCS12", "JKS", ...) to a registered provider. Go has no such SPI. Of the
-// two ksType values this port's own callers use (JKSSignatureToken, Pkcs12SignatureToken), only
-// PKCS12 has a usable implementation. JKS's proprietary binary format has no Go implementation
+// dispatches on ksType ("PKCS12", "JKS", ...) to a registered provider. Go has no such SPI. Of
+// the two ksType values in use by this package's own callers (JKSSignatureToken,
+// Pkcs12SignatureToken), only PKCS12 has a usable implementation. JKS's proprietary binary
+// format has no Go implementation
 // either in the standard library or under golang.org/x/... (PORTING.md's dependency policy), so
 // every other ksType, including "JKS", reports that gap from keyStoreSignatureTokenConnectionLoad.
 //
 // DEVIATION - chain preservation: PORTING.md's brief calls for "ToPEM or DecodeChain". Neither
-// exists in a form that preserves both a certificate chain and every key type: this port used to
-// be pinned to golang.org/x/crypto/pkcs12, whose ToPEM re-encodes a private key through
+// exists in a form that preserves both a certificate chain and every key type: this package
+// used to be pinned to golang.org/x/crypto/pkcs12, whose ToPEM re-encodes a private key through
 // x509.MarshalPKCS1PrivateKey/MarshalECPrivateKey and therefore rejects any key type that isn't
 // RSA or ECDSA (Ed25519 and DSA both fail this way), and whose Decode is chain-agnostic but
 // refuses a PFX PDU holding anything but exactly one key bag and one cert bag. Both gaps closed

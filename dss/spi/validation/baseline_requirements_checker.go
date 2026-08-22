@@ -1,32 +1,11 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/signature/BaselineRequirementsChecker.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: CertificateVerifier, ValidationContext and SignatureValidationContext
-// (Java spi.validation.*) are flattened into this same Go package by a sibling chunk of phase
-// 2b and are therefore referenced unqualified, following the precedent set by
-// timestamp_source.go's EvidenceRecord forward dependency. Their assumed shapes, inferred from
-// the Java calls this file makes, are:
-//
-//	type CertificateVerifier interface { /* opaque; only passed through */ }
-//
-//	type ValidationContext interface {
-//	    Initialize(certificateVerifier CertificateVerifier)
-//	    AddDocumentCertificateSource(certificateSource spi.CertificateSource)
-//	    AddDocumentCRLSourceFromList(crlSource *spi.ListRevocationSource[revocation.CRL])
-//	    AddDocumentOCSPSourceFromList(ocspSource *spi.ListRevocationSource[revocation.OCSP])
-//	    AddCertificateTokenForVerification(certificateToken *model.CertificateToken)
-//	    AddTimestampTokenForVerification(timestampToken *TimestampToken)
-//	    Validate()
-//	    CheckAllRequiredRevocationDataPresent() bool
-//	}
-//
-// Integration note: AdvancedSignature.CompleteCRLSource()/CompleteOCSPSource() return
+// AdvancedSignature.CompleteCRLSource()/CompleteOCSPSource() return
 // *spi.ListRevocationSource[R] (matching Java's getCompleteCRLSource(): ListRevocationSource<CRL>),
 // which - like its Java counterpart - does not implement OfflineRevocationSource<R>; it only
 // implements MultipleRevocationSource<R>. ValidationContext() below therefore calls the
 // ...FromList overload (matching ValidationContext's addDocumentCRLSource(ListRevocationSource)
 // Java overload), not AddDocumentCRLSource/AddDocumentOCSPSource.
-//
-//	func NewSignatureValidationContext() ValidationContext { ... }
 //
 // Java's two addDocumentCertificateSource/addDocumentCRLSource/addDocumentOCSPSource overloads
 // (one taking the plural interface, one taking the List* aggregate) collapse to a single Go
@@ -128,7 +107,7 @@ type BaselineRequirementsCheckerOverrides interface {
 	// (returning SignatureForm.CAdES) declares and both PAdESBaselineRequirementsChecker AND
 	// CMSForPAdESBaselineRequirementsChecker override (returning SignatureForm.PAdES) purely
 	// through ordinary Java virtual dispatch - not part of upstream's own BaselineRequirements
-	// Checker base class at all. It is added to this port's cross-package override contract
+	// Checker base class at all. It is added to this type's cross-package override contract
 	// instead, because cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements() (the
 	// shared CMS-attribute check both cades.CAdESSignature and, through
 	// pades.CMSForPAdESBaselineRequirementsChecker, PAdES signatures run) needs to resolve it

@@ -1,7 +1,7 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/EvidenceRecordProductionComparator.java (DSS 6.5.RC1).
 //
-// OUT-OF-MANIFEST DEPENDENCY (flagged per S3_BRIEF.md): see time_stamp_token_production_comparator.go's
-// header - CAdESUnsignedAttributes needs this sibling comparator too.
+// See time_stamp_token_production_comparator.go's header - CAdESUnsignedAttributes needs this
+// sibling comparator too.
 package cades
 
 import "github.com/ryftcore/dss-go/dss/internal/asn1ber"

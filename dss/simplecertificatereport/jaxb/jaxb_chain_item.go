@@ -1,7 +1,7 @@
 // Ported from SimpleCertificateReport.xsd (DSS 6.5.RC1) via the JAXB class
 // generated into eu.europa.esig.dss.simplecertificatereport.jaxb.XmlChainItem.
-// Per the phase-8a generated-JAXB rule the generated classes are grouped
-// into schema-area files rather than one file per class.
+// The generated classes are grouped into schema-area files rather than one
+// file per class.
 //
 // xjc eagerly initialises every @XmlElementWrapper collection field of
 // XmlChainItem (keyUsages, extendedKeyUsages, ocspUrls, crlUrls, aiaUrls,

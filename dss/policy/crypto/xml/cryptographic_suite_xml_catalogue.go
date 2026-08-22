@@ -105,7 +105,7 @@ func buildXMLAlgorithmList(securitySuitabilityPolicy *SecuritySuitabilityPolicyT
 //
 // Java catches any exception raised while processing a single algorithm
 // entry, logs it (slf4j dropped, per PORTING.md), and skips the entry
-// (returning null). This port's accessors never panic on the XSD-shaped
+// (returning null). The accessors here never panic on the XSD-shaped
 // input this package's Go structs already constrain (see xml_types.go),
 // so there is nothing to recover from here - unlike buildJSONAlgorithm's
 // counterpart, whose input shape (a generic jsonObject) is not statically

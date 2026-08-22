@@ -2,6 +2,8 @@
 package fc
 
 import (
+	"slices"
+
 	drjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 	"github.com/ryftcore/dss-go/dss/diagnostic"
 	diagjaxb "github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
@@ -31,7 +33,7 @@ func NewAllFilesSignedCheck(i18nProvider *i18n.I18nProvider, result *process.Res
 
 func coversAllOriginalFiles(coveredFiles, originalFiles []string) bool {
 	for _, file := range originalFiles {
-		if !containsString(coveredFiles, file) {
+		if !slices.Contains(coveredFiles, file) {
 			return false
 		}
 	}

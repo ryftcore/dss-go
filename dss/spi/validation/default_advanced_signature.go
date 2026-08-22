@@ -1,13 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/signature/DefaultAdvancedSignature.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: CertificateVerifier and CertificateVerifierBuilder (Java spi.validation.*)
-// are flattened into this same Go package by a sibling chunk of phase 2b; see
-// baseline_requirements_checker.go's header for the assumed CertificateVerifier/ValidationContext
-// shapes. CertificateVerifierBuilder is additionally assumed to expose, matching
-// dss-spi/.../spi/validation/CertificateVerifierBuilder.java:
-//
-//	func NewCertificateVerifierBuilder(certificateVerifier CertificateVerifier) *CertificateVerifierBuilder
-//	func (b *CertificateVerifierBuilder) BuildOfflineAndSilentCopy() CertificateVerifier
 package validation
 
 import (

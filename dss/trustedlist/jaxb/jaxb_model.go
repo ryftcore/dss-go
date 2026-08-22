@@ -13,8 +13,8 @@
 // written inside it, but as <X></X> once character data - even the empty
 // string - was written. encoding/xml always writes the pair form, so
 // Marshal collapses empty pairs to the self-closing form for the elements
-// whose content is complex - derived, as in the diagnostic-data precedent,
-// by reflection over the tagged struct fields in modelTypes.
+// whose content is complex - derived, as in dss/diagnostic/jaxb, by
+// reflection over the tagged struct fields in modelTypes.
 //
 // # Custom-marshaled elements
 //

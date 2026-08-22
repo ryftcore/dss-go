@@ -1,8 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationSourceAlternateUrlsSupport.java (DSS 6.5.RC1).
 //
-// AlternateUrlsSourceAdapter (chunk X509-B/CertSource, a sibling of this phase 2a chunk)
-// already implements this interface, calling RevocationTokenWithAlternativeURLs; this file
-// defines it to match that shape.
+// AlternateUrlsSourceAdapter implements this interface, calling
+// RevocationTokenWithAlternativeURLs; this file defines it to match that shape.
 package spi
 
 import (

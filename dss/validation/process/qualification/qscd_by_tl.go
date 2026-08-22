@@ -26,7 +26,10 @@ func newQSCDByTL(trustService *diagnostic.TrustServiceWrapper, qualified enumera
 	return &qscdByTL{trustService: trustService, qualified: qualified, qscdFromCertificate: qscdFromCertificate}
 }
 
-// QSCDStatus is the port of the overridden getQSCDStatus().
+// QSCDStatus extracts the QSCD status from the Trusted Service's captured
+// qualifiers, falling back to the certificate-derived strategy when the
+// service defers to the certificate. Port of the overridden
+// getQSCDStatus().
 func (q *qscdByTL) QSCDStatus() enumerations.QSCDStatus {
 	if q.trustService == nil || !enumerations.CertificateQualifiedStatusIsQC(q.qualified) {
 		return enumerations.QSCDStatusNotQSCD

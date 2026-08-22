@@ -107,10 +107,10 @@ func (p *AbstractSignatureParameters[TP]) SetSigningCertificate(signingCertifica
 }
 
 // documentEncryptionAlgorithmForKey ports EncryptionAlgorithm#forKey(Key), the sole call site of
-// which lives in this manifest's SetSigningCertificate. forKey delegates to forName(key.
-// getAlgorithm()); enumerations.EncryptionAlgorithmForName (already landed in phase 1a) is that
-// forName, and model.PublicKey#Algorithm is the Go port of Key#getAlgorithm - so this local
-// helper reproduces forKey's one-line body without needing forKey itself ported out-of-manifest.
+// which is SetSigningCertificate. forKey delegates to forName(key.getAlgorithm());
+// enumerations.EncryptionAlgorithmForName is that forName, and model.PublicKey#Algorithm is the
+// Go port of Key#getAlgorithm - so this local helper reproduces forKey's one-line body without
+// needing forKey itself ported.
 func documentEncryptionAlgorithmForKey(publicKey *model.PublicKey) (enumerations.EncryptionAlgorithm, error) {
 	return enumerations.EncryptionAlgorithmForName(publicKey.Algorithm())
 }

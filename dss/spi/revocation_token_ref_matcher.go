@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationTokenRefMatcher.java (DSS 6.5.RC1).
 //
-// CRLTokenRefMatcher and OCSPTokenRefMatcher (chunk CRLOCSP, a sibling of this phase 2a chunk)
-// already implement this interface and reference EncapsulatedRevocationTokenIdentifier[R]
-// unqualified, so both are defined here to match the shape those files were written against.
+// CRLTokenRefMatcher and OCSPTokenRefMatcher implement this interface and reference
+// EncapsulatedRevocationTokenIdentifier[R] unqualified, so both are defined here to match the
+// shape those files were written against.
 package spi
 
 import (
@@ -12,17 +12,16 @@ import (
 )
 
 // EncapsulatedRevocationTokenIdentifier is the Go-only interface counterpart of the dss-model
-// class eu.europa.esig.dss.model.identifier.EncapsulatedRevocationTokenIdentifier<R> (already
-// ported as the concrete generic struct model.EncapsulatedRevocationTokenIdentifier[R] in
-// phase 1b). Java's abstract-class polymorphism lets OfflineRevocationSource and this matcher
-// hold either a CRLBinary or an OCSPResponseBinary through one supertype; Go structs cannot be
-// referenced polymorphically that way, so this package-local interface - satisfied structurally
-// by any type embedding model.EncapsulatedRevocationTokenIdentifier[R], such as CRLBinary
-// (crlparser chunk) and OCSPResponseBinary (this package) - stands in for it. Judgment call: it
-// is declared here, next to the matcher whose match(EncapsulatedRevocationTokenIdentifier<R>,
-// RevocationRef<R>) overload is the most direct Java consumer of the type; flagged in the
-// report for integrator awareness since OfflineRevocationSource.java (this chunk) and
-// ListRevocationSource.java (this chunk) both use it just as heavily.
+// class eu.europa.esig.dss.model.identifier.EncapsulatedRevocationTokenIdentifier<R>, ported as
+// the concrete generic struct model.EncapsulatedRevocationTokenIdentifier[R]. Java's
+// abstract-class polymorphism lets OfflineRevocationSource and this matcher hold either a
+// CRLBinary or an OCSPResponseBinary through one supertype; Go structs cannot be referenced
+// polymorphically that way, so this package-local interface - satisfied structurally by any type
+// embedding model.EncapsulatedRevocationTokenIdentifier[R], such as CRLBinary (crlparser
+// package) and OCSPResponseBinary (this package) - stands in for it. It is declared here, next
+// to the matcher whose match(EncapsulatedRevocationTokenIdentifier<R>, RevocationRef<R>)
+// overload is the most direct Java consumer of the type, though OfflineRevocationSource.java and
+// ListRevocationSource.java both use it just as heavily.
 type EncapsulatedRevocationTokenIdentifier[R revocation.Revocation] interface {
 	model.IdentifierBasedObject
 

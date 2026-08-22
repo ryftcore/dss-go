@@ -6,11 +6,11 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// TestDigestDocumentExistingDigestDeterministic guards against defect #2 of the Phase 2b audit
-// ("Nondeterministic output ordering"): ExistingDigest() picks an arbitrary entry out of
-// digestMap; ranging a bare Go map for a "first" pick is randomized on every run, unlike
-// Java's HashMap.entrySet().iterator().next() (arbitrary but stable within a JVM run), so
-// digestMap is now insertion-ordered and ExistingDigest() picks the first-added algorithm.
+// TestDigestDocumentExistingDigestDeterministic verifies that ExistingDigest() is stable
+// across runs: it picks an arbitrary entry out of digestMap, and ranging a bare Go map for a
+// "first" pick is randomized on every run, unlike Java's HashMap.entrySet().iterator().next()
+// (arbitrary but stable within a JVM run), so digestMap is now insertion-ordered and
+// ExistingDigest() picks the first-added algorithm.
 func TestDigestDocumentExistingDigestDeterministic(t *testing.T) {
 	build := func() enumerations.DigestAlgorithm {
 		d := NewDigestDocument()

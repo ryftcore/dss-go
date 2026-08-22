@@ -1,18 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/usage/CertificateApprovalStatusAtTimeBlock.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK ASSUMPTION: TrustedEntityServiceFilter and the
-// TrustedEntitiesFilterFactory static factory methods (Java package
-// qualification.trust.filter) are owned by a sibling porter of this shared
-// package and were not present on disk while this file was written; their
-// call sites here follow this package's established "Factory" static-method
-// flattening convention (TrustedEntitiesFilterFactoryCreateXxx package
-// functions returning a TrustedEntityServiceFilter with a
-// Filter([]*TrustedEntityServiceWrapper) []*TrustedEntityServiceWrapper
-// method) but must be reconciled against the sibling porter's actual
-// signatures once available.
-//
-// slf4j logging (the service-type-identifier / service-status conflict
-// warnings) is dropped per PORTING.md.
+// Java's slf4j logging (the service-type-identifier / service-status
+// conflict warnings) has no Go equivalent and is not ported.
 package qualification
 
 import (
@@ -223,8 +212,7 @@ func distinctSingleValue(services []*diagnostic.TrustedEntityServiceWrapper, fie
 				// TrustedEntityServiceStatusKnownCheck depends on the
 				// difference: with a non-nil "" it appended a
 				// CERT_USAGE_STATUS_KNOWN WARNING constraint upstream never
-				// emits. Found by the phase-8f full-corpus report byte-parity
-				// run on eaa-validation/diag_data_pid.xml.
+				// emits.
 				return nil
 			}
 			return &v

@@ -1,18 +1,7 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCEWithXAdESManifestParser.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
-// same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
-//
-// FORWARD CROSS-CHUNK DEPENDENCY (flagged per S7_BRIEF.md's "flag needs in notes" rule):
-// dss-asic-xades/.../definition/ManifestPath.java is NOT in this manifest (S7_XADVAL) - it is
-// needed by no other file in this manifest either, so its ownership is left to whichever chunk
-// ports the `definition` package (ManifestElement.java, needed by the XADSIGN manifest builder,
-// most likely lands there too). Assumed shape, following the asic/asic_manifest_path.go and
-// manifest_attribute.go precedents already in this package:
-//
-//	var ManifestPathFileEntryPath common.XPathQuery                                       // ManifestPath.FILE_ENTRY_PATH
-//	func ManifestPathGetFullPathAttribute(manifestNamespace *common.DSSNamespace) string      // ManifestPath.getFullPathAttribute(DSSNamespace)
-//	func ManifestPathGetMediaTypeAttribute(manifestNamespace *common.DSSNamespace) string     // ManifestPath.getMediaTypeAttribute(DSSNamespace)
+// Package flattening: Java's eu.europa.esig.dss.asic.xades.validation lands in this
+// same Go package (dss/asic/xades).
 package xades
 
 import (

@@ -30,10 +30,10 @@ func buildCommonCertificateSourceCertificates(t *testing.T) []string {
 	return certificatesOrder(source.Certificates())
 }
 
-// TestCommonCertificateSourceCertificatesDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): CommonCertificateSource.Certificates() (and, by
-// the same fix, Entities()) must return the same order every run, matching Java's HashMap
-// contract of "arbitrary but stable", not Go's randomized-per-run map iteration.
+// TestCommonCertificateSourceCertificatesDeterministic verifies that
+// CommonCertificateSource.Certificates() (and, by the same fix, Entities()) returns the same
+// order every run, matching Java's HashMap contract of "arbitrary but stable", not Go's
+// randomized-per-run map iteration.
 func TestCommonCertificateSourceCertificatesDeterministic(t *testing.T) {
 	want := buildCommonCertificateSourceCertificates(t)
 	if len(want) != 6 {

@@ -28,7 +28,10 @@ func NewServiceByCertificateTypeFilter(certificate *diagnostic.CertificateWrappe
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the trust service's additional service info
+// / captured qualifiers are an allowed match for the configured
+// certificate's type. Port of the overridden
+// isAcceptable(TrustServiceWrapper).
 func (f *ServiceByCertificateTypeFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	issuance := f.certificate.NotBefore()
 

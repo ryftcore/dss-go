@@ -1,7 +1,6 @@
 // Extracted from ASiCWithCAdESService.isLtaExtensionPossible(ASiCContent)
 // (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
-// ASiCWithCAdESService.java, DSS 6.5.RC1) during Phase 7/8 integration; un-gated in phase 8f now
-// that dss/validation has landed.
+// ASiCWithCAdESService.java, DSS 6.5.RC1).
 package cades
 
 import (

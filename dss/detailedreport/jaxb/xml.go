@@ -5,7 +5,7 @@
 // This file holds the runtime the generated model needs: the XML Schema simple
 // types JAXB binds by hand (dateTime, xs:list of strings), and the
 // Marshal/Unmarshal entry points. It replicates the pattern established by
-// dss/diagnostic/jaxb/xml.go (phase 8a) exactly - see that file's header for
+// dss/diagnostic/jaxb/xml.go exactly - see that file's header for
 // the full account of the two JAXB-RI quirks encoding/xml cannot reproduce on
 // its own (self-closing tags, character-escaping spelling) that jaxbCanonical
 // below normalises, plus quirk 3: the RI writes the document element's xmlns

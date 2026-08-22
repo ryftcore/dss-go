@@ -1,11 +1,11 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/timestamp/TimestampQualificationBlock.java (DSS 6.5.RC1).
 //
-// HASH-ORDER (closed in phase 8f): as in CertificateQualificationBlock and
-// SignatureQualificationBlock, Java iterates HashSet<String>
-// listOfTrustedListUrls/trustedListUrls directly, feeding report Constraint
-// order. This port sorts the equivalent Go map[string]struct{} sets by URL
-// via orderedURLSet.iterate(), which reproduces java.util.HashSet's own
-// identical) result. See the porter brief's hard rule.
+// Java iterates HashSet<String> listOfTrustedListUrls/trustedListUrls
+// directly, feeding report Constraint order, as in
+// CertificateQualificationBlock and SignatureQualificationBlock. This port
+// reproduces that HashSet iteration order via orderedURLSet (see
+// certificate_qualification_block.go), whose iterate() calls
+// utils.JavaHashMapStringKeyOrder.
 package qualification
 
 import (

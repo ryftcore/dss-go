@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationToken.java (DSS 6.5.RC1).
 //
-// RevocationToken<R> is the abstract superclass CRLToken and OCSPToken (chunk CRLOCSP, a
-// sibling of this phase 2a chunk) already embed via RevocationTokenBase[R] and register with
-// InitRevocationToken, following the same self-registration pattern as model.TokenBase.InitToken.
+// RevocationToken<R> is the abstract superclass CRLToken and OCSPToken embed via
+// RevocationTokenBase[R] and register with InitRevocationToken, following the same
+// self-registration pattern as model.TokenBase.InitToken.
 package spi
 
 import (
@@ -33,8 +33,8 @@ type RevocationToken[R revocation.Revocation] interface {
 	// SetRelatedCertificate sets the certificate token the current revocation data has been
 	// issued for. Java writes the protected field directly from subclasses in a different
 	// Java package (eu.europa.esig.dss.spi.x509.revocation.crl/.ocsp); the Go port flattens
-	// those into this same package but keeps the setter for symmetry
-	// with the rest of this port's Init/Set pattern.
+	// those into this same package but keeps the setter for symmetry with the rest of the
+	// Init/Set pattern used throughout this package.
 	SetRelatedCertificate(certificate *model.CertificateToken)
 	// RelatedCertificateID gets the DSS String Id of the related certificate, "" when there is
 	// none (Java returns null). Port of getRelatedCertificateId().

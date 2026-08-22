@@ -66,7 +66,7 @@ func (c *DigestAlgorithmObsolescenceValidation[T]) buildDigestMatchersValidation
 				if cryptographicValidation == nil || (c.isValid(cryptographicValidation) &&
 					enumerations.IndicationPassed != dacResult.Conclusion.Indication.Indication()) {
 					cryptographicValidation = dacResult.CryptographicValidation
-					cryptographicValidation.ConcernedMaterialDescription = c.getMaterialDescription(digestMatchersGroup)
+					cryptographicValidation.ConcernedMaterialDescription = c.materialDescription(digestMatchersGroup)
 				}
 			}
 		}
@@ -166,8 +166,8 @@ func (c *DigestAlgorithmObsolescenceValidation[T]) digestAlgorithmCheckResult(di
 		getReferenceNames(digestMatchers), ccResult, constraint)
 }
 
-// getMaterialDescription ports the private getMaterialDescription(List).
-func (c *DigestAlgorithmObsolescenceValidation[T]) getMaterialDescription(digestMatchers []*diagnosticjaxb.XmlDigestMatcher) *string {
+// materialDescription ports the private getMaterialDescription(List).
+func (c *DigestAlgorithmObsolescenceValidation[T]) materialDescription(digestMatchers []*diagnosticjaxb.XmlDigestMatcher) *string {
 	referenceNames := getReferenceNames(digestMatchers)
 	var message string
 	if utils.IsCollectionNotEmpty(referenceNames) {

@@ -18,8 +18,8 @@
 //   - ASiCContainerWithXAdESAnalyzer, one layer higher: which containers it claims, the container
 //     type, the ManifestFile descriptions it derives and, per signature, the DSS signature
 //     identifier, the signature filename and the original documents the signature is resolved to
-//     cover. Its CAdES sibling cannot be compared before Phase 8 (it needs dss/validation's
-//     DetachedTimestampAnalyzer to compile at all); the XAdES one has no such dependency.
+//     cover. Only the XAdES flavor is compared here; the CAdES analyzer has no equivalent oracle
+//     dump.
 //
 // testdata/broad-asic-oracle.json.gz is the Java side, produced by testdata/gen/BroadASiCOracle.java
 // run against a built upstream DSS 6.5.RC1. Failure paths are part of the contract: where upstream
@@ -304,11 +304,8 @@ func TestBroadCorpusLinkedManifestMatchesUpstream(t *testing.T) {
 // TestBroadCorpusXAdESSignatureAnalysisMatchesUpstream pins the layer ABOVE extraction for the
 // XAdES flavor: ASiCContainerWithXAdESAnalyzer turning a container's entries into signatures.
 //
-// This is the surface the Phase 7 hand-off called a scoping gap ("no cross-validation golden
-// exists at that layer yet"). For the CAdES flavor that is forced - its analyzer needs
-// ASiCWithCAdESTimestampAnalyzer, which extends dss/validation's DetachedTimestampAnalyzer and so
-// cannot compile before Phase 8. The XAdES analyzer has no such dependency, is live in the default
-// build, and is compared here over the whole corpus: which containers the analyzer claims,
+// Only the XAdES flavor is compared here; the CAdES analyzer has no equivalent oracle dump. The
+// XAdES analyzer is compared over the whole corpus: which containers the analyzer claims,
 // container type, the ManifestFile descriptions it derives, and per signature the DSS signature
 // identifier, the signature filename, and the original documents the signature is resolved to
 // cover. The identifier is a digest over the signature's own canonical properties, so a divergence

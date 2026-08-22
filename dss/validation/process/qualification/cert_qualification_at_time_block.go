@@ -1,14 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/CertQualificationAtTimeBlock.java (DSS 6.5.RC1).
-//
-// CROSS-CHUNK ASSUMPTION: TrustServiceFilter and the TrustServicesFilterFactory
-// static factory methods (Java package qualification.trust.filter) are
-// owned by a sibling porter of this shared package and were not present on
-// disk while this file was written; their call sites here follow this
-// package's established "Factory" static-method flattening convention
-// (TrustServicesFilterFactoryCreateXxx package functions returning a
-// TrustServiceFilter with a Filter([]*TrustServiceWrapper) []*TrustServiceWrapper
-// method) but must be reconciled against the sibling porter's actual
-// signatures once available.
 package qualification
 
 import (

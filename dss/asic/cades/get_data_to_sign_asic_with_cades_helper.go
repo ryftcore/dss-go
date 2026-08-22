@@ -3,7 +3,7 @@
 // Package layout: the Java packages eu.europa.esig.dss.asic.cades,
 // eu.europa.esig.dss.asic.cades.signature{,.asice,.asics,.manifest},
 // eu.europa.esig.dss.asic.cades.timestamp, .extract, .merge, .evidencerecord and .validation all
-// land in this single Go package (dss/asic/cades) per S7_BRIEF.md's package layout table. Use
+// land in this single Go package (dss/asic/cades). Use
 // sites outside it import it as `asiccades "github.com/ryftcore/dss-go/dss/asic/cades"` to avoid
 // clashing with the top-level dss/cades package; inside it, the top-level CAdES package is
 // imported as `dsscades`.

@@ -44,7 +44,7 @@
 // # Errors
 //
 // Java throws DSSException from both methods; those become returned errors carrying the same
-// messages (PORTING.md: throw -> (T, error)). Santuario raises InvalidTransformException from
+// messages. Santuario raises InvalidTransformException from
 // the constructor when the algorithm URI has no registered TransformSpi - which is how
 // CanonicalizationTransform(physical c14n) fails, since XMLCanonicalizer can canonicalize with
 // the Santuario "physical" method but Santuario never registers it as a TRANSFORM - so the

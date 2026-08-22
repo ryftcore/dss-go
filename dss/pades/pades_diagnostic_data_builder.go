@@ -3,13 +3,11 @@
 //
 // Virtual dispatch: buildDetachedXmlTimestamp() and buildXmlOrphanTokens() are both called back
 // into from the base SignedDocumentDiagnosticDataBuilder/DiagnosticDataBuilder rather than
-// invoked directly on a concretely-typed receiver, so - following
-// cades/cades_diagnostic_data_builder.go's precedent for buildDetachedXmlSignature - both are
-// exported here (BuildDetachedXmlTimestamp, BuildXmlOrphanTokens) to satisfy
-// dssdiagnostic.SignedDocumentDiagnosticDataBuilderOverrides, which the phase 8f un-gating pass
-// extended with a BuildXmlOrphanTokens hook (validation/reports/diagnostic/
-// signed_document_diagnostic_data_builder.go) specifically so this override could reach it; see
-// that file's doc comment.
+// invoked directly on a concretely-typed receiver, so both are exported here
+// (BuildDetachedXmlTimestamp, BuildXmlOrphanTokens) to satisfy
+// dssdiagnostic.SignedDocumentDiagnosticDataBuilderOverrides, which includes a
+// BuildXmlOrphanTokens hook (validation/reports/diagnostic/signed_document_diagnostic_data_builder.go)
+// so this override can reach it; see that file's doc comment.
 package pades
 
 import (

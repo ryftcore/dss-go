@@ -44,15 +44,15 @@ func NewEvidenceRecordHashTreeRenewalTimestampCheck(i18nProvider *i18n.I18nProvi
 
 // Process performs the check. Port of process().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) Process() bool {
-	evidenceRecord := c.getRelatedEvidenceRecord(c.timestampWrapper)
+	evidenceRecord := c.relatedEvidenceRecord(c.timestampWrapper)
 	return c.timestampCoversAllOriginalDocuments(evidenceRecord, c.timestampWrapper)
 }
 
-// getRelatedEvidenceRecord ports the private
+// relatedEvidenceRecord ports the private
 // getRelatedEvidenceRecord(TimestampWrapper), whose IllegalStateException is a
 // panic here: it reports a diagnostic-data inconsistency, not a validation
 // outcome, and process() has no error channel.
-func (c *EvidenceRecordHashTreeRenewalTimestampCheck) getRelatedEvidenceRecord(
+func (c *EvidenceRecordHashTreeRenewalTimestampCheck) relatedEvidenceRecord(
 	timestampWrapper *diagnostic.TimestampWrapper) *diagnostic.EvidenceRecordWrapper {
 	for _, evidenceRecordWrapper := range c.diagnosticData.EvidenceRecords() {
 		// List#contains uses AbstractTokenProxy#equals, i.e. same wrapper type
@@ -68,8 +68,8 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) getRelatedEvidenceRecord(
 		timestampWrapper.Id()))
 }
 
-// getCoveredDocuments ports the private getCoveredDocuments(List).
-func (c *EvidenceRecordHashTreeRenewalTimestampCheck) getCoveredDocuments(
+// coveredDocuments ports the private getCoveredDocuments(List).
+func (c *EvidenceRecordHashTreeRenewalTimestampCheck) coveredDocuments(
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher) []string {
 	var documentNames []string
 	for _, d := range digestMatchers {
@@ -84,8 +84,8 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) getCoveredDocuments(
 // timestampCoversAllOriginalDocuments(EvidenceRecordWrapper, TimestampWrapper).
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) timestampCoversAllOriginalDocuments(
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, timestampWrapper *diagnostic.TimestampWrapper) bool {
-	evidenceRecordCoveredDocuments := c.getCoveredDocuments(evidenceRecord.DigestMatchers())
-	timestampCoveredDocuments := c.getCoveredDocuments(timestampWrapper.DigestMatchers())
+	evidenceRecordCoveredDocuments := c.coveredDocuments(evidenceRecord.DigestMatchers())
+	timestampCoveredDocuments := c.coveredDocuments(timestampWrapper.DigestMatchers())
 	for _, originalDataObject := range evidenceRecordCoveredDocuments {
 		index := -1
 		for i, covered := range timestampCoveredDocuments {

@@ -1,14 +1,12 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/GrantedStatusCheck.java (DSS 6.5.RC1).
 //
-// FLAGGED HASH-ORDER SITE: Java's getStatusList() collects into a
+// Java's getStatusList() collects into a
 // HashSet<String>, whose iteration order (bucket order, not insertion order)
 // feeds the multi-value error message via Set#toString() when more than one
 // distinct status is found. That bucket order is not reproducible statically
 // in Go. This port sorts the identifiers lexicographically instead of using
 // insertion order, for a deterministic (if not necessarily Java-bucket-
-// identical) result; the oracle corpus must be checked for any dump that
-// exercises the multi-status branch (see the porter brief's hard rule on
-// hash-order leaks).
+// identical) result.
 package qualification
 
 import (

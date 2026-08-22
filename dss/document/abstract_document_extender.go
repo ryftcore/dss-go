@@ -28,8 +28,8 @@ type AbstractDocumentExtenderTarget interface {
 // AbstractDocumentExtender class declares abstract, or expects a subclass to override, and that
 // the base implementation itself calls back into. Concrete format extenders (CAdES, XAdES, ...
 // ported in later phases) satisfy this and pass themselves to InitAbstractDocumentExtender,
-// mirroring the TokenBase.InitToken(self) convention documented in PORTING.md (Phase 1b) for
-// base types that must call back into the concrete subclass across an embedded base - Go has no
+// mirroring the TokenBase.InitToken(self) convention documented in PORTING.md for base types
+// that must call back into the concrete subclass across an embedded base - Go has no
 // method overriding across embedding, so this "overrides" interface stands in for Java's virtual
 // dispatch onto the abstract methods below.
 type AbstractDocumentExtenderOverrides[SP AbstractDocumentExtenderTarget, TP model.SerializableTimestampParameters] interface {

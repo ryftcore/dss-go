@@ -11,7 +11,7 @@ import (
 // AbstractSignatureWrapperOverrides declares the operations Java's abstract class
 // AbstractSignatureWrapper leaves abstract (getFilename(), getPDFRevision()), on top of the
 // AbstractTokenProxy overrides it also requires. Concrete wrappers (SignatureWrapper,
-// TimestampWrapper, in DIAGWRAP_B) implement the full interface and register themselves with
+// TimestampWrapper) implement the full interface and register themselves with
 // InitSignatureWrapper.
 type AbstractSignatureWrapperOverrides interface {
 	AbstractTokenProxyOverrides

@@ -1,9 +1,9 @@
 // Ported from ts_119612v020401_sie_xsd.xsd (DSS 6.5.RC1) via the JAXB
 // classes generated into eu.europa.esig.trustedlist.jaxb.ecc (Qualified
-// Certificate qualifiers / "SvcInfoExt" extension). Per the phase-8a
-// generated-JAXB rule the generated classes are grouped into one file per
-// Java package; every Java class keeps its name and its exact field order
-// so that encoding/xml reproduces the JAXB element sequence byte for byte.
+// Certificate qualifiers / "SvcInfoExt" extension). The generated classes
+// are grouped into one file per Java package; every Java class keeps its
+// name and its exact field order so that encoding/xml reproduces the JAXB
+// element sequence byte for byte.
 //
 // ecc's XmlAdapter classes (Adapter1/Adapter2, generated from the
 // KeyUsageBitType.name/CriteriaListType.assert attributes' xs:string ->

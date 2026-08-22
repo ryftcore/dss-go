@@ -3,6 +3,7 @@ package fc
 
 import (
 	"fmt"
+	"slices"
 
 	drjaxb "github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 	"github.com/ryftcore/dss-go/dss/diagnostic"
@@ -54,14 +55,14 @@ func (c *AbstractPdfLockDictionaryCheck) Process() bool {
 			return false
 		case enumerations.PdfLockActionExclude:
 			for _, fieldName := range modifiedFieldNames {
-				if !containsString(lockedFields, fieldName) {
+				if !slices.Contains(lockedFields, fieldName) {
 					return false
 				}
 			}
 			return true
 		case enumerations.PdfLockActionInclude:
 			for _, fieldName := range modifiedFieldNames {
-				if containsString(lockedFields, fieldName) {
+				if slices.Contains(lockedFields, fieldName) {
 					return false
 				}
 			}
@@ -71,13 +72,4 @@ func (c *AbstractPdfLockDictionaryCheck) Process() bool {
 		}
 	}
 	return true
-}
-
-func containsString(values []string, value string) bool {
-	for _, v := range values {
-		if v == value {
-			return true
-		}
-	}
-	return false
 }

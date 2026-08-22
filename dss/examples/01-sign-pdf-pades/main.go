@@ -58,7 +58,7 @@ func main() {
 	fmt.Println("PAdES-BASELINE-B:", signedB.Name())
 
 	// Level T adds a time-stamp over the signature value, so it needs a
-	// TSPSource. The port ships no HTTP TSA client (see the dss package
+	// TSPSource. esig ships no HTTP TSA client (see the dss package
 	// doc's "Network access" section) - only
 	// spi/validation.KeyEntityTSPSource, which issues RFC 3161 tokens from a
 	// local key. That is exactly what a real deployment does NOT want: here

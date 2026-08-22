@@ -1,9 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpftspwatsp/ValidationProcessForTimestampsWithArchivalData.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK NOTE (phase 8e): Java's BasicTimestampValidationCheck lives in
-// vpftsp.checks; the vpftsp chunk relocated it into package vpfbs (see
-// vpfbs/basic_timestamp_validation_check.go) to break the vpfbs<->vpftsp import
-// cycle, so it is imported from there.
+// Java's BasicTimestampValidationCheck lives in vpftsp.checks; it is
+// relocated into package vpfbs (see vpfbs/basic_timestamp_validation_check.go)
+// to break the vpfbs<->vpftsp import cycle, so it is imported from there.
 //
 // PACKAGE-BOUNDARY NOTE: TimestampMessageImprintCheck, the fourth class of
 // Java's vpftspwatsp.checks, stayed in its own Go package

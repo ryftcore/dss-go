@@ -1,10 +1,9 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/sync/AcceptAllStrategy.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see xml_download_result.go's header for the wider job.* convention):
-// implements job.SynchronizationStrategy[*tslmodel.TLInfo, *tslmodel.LOTLInfo]. Java overloads
-// canBeSynchronized(D)/canBeSynchronized(L); Go has no overloading, so the assumed interface
-// (like ExpirationAndSignatureCheckStrategy.java's, see expiration_and_signature_check_strategy.go)
-// spells the two methods CanBeSynchronizedDocument(D) bool / CanBeSynchronizedDocumentList(L) bool.
+// Implements job.SynchronizationStrategy[*tslmodel.TLInfo, *tslmodel.LOTLInfo]. Java overloads
+// canBeSynchronized(D)/canBeSynchronized(L); Go has no overloading, so the interface (like
+// ExpirationAndSignatureCheckStrategy's, see expiration_and_signature_check_strategy.go) spells
+// the two methods CanBeSynchronizedDocument(D) bool / CanBeSynchronizedDocumentList(L) bool.
 package tsl
 
 import (

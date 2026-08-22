@@ -17,7 +17,9 @@ func newTrustServiceQualifierAndAdditionalServiceInfoPreEIDASConsistency() *trus
 	return &trustServiceQualifierAndAdditionalServiceInfoPreEIDASConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether type qualifiers and additional service
+// information are consistent for a pre-eIDAS trust service. Port of the
+// overridden isConsistent(TrustServiceWrapper).
 func (c *trustServiceQualifierAndAdditionalServiceInfoPreEIDASConsistency) IsConsistent(
 	trustService *diagnostic.TrustServiceWrapper) bool {
 	startDate := trustService.StartDate

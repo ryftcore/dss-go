@@ -4,9 +4,8 @@
 //
 // The Java class extends bbb.xcv.sub.checks.CertificateRevocationSelectorResultCheck
 // and reads that base's protected `crsResult` field in buildAdditionalInfo. The
-// Go base keeps the field unexported (it is a frozen package, not to be edited
-// for this batch), so the same XmlCRS the constructor already receives is held
-// here too - one pointer, two references, no copy.
+// Go base keeps the field unexported, so the same XmlCRS the constructor
+// already receives is held here too - one pointer, two references, no copy.
 package vpfswatsp
 
 import (

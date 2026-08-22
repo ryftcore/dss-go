@@ -1,14 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/AlternateUrlsSourceAdapter.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: this file references the generic interfaces RevocationSourceAlternateUrlsSupport[R]
-// and RevocationToken[R] (spi.x509.revocation, flattened into this package, ported in a sibling
-// chunk of phase 2a). RevocationSourceAlternateUrlsSupport[R]'s assumed shape, inferred from the
-// Java signature actually called below, embeds RevocationSource[R] (see composite_revocation_source.go
-// for that interface's assumed RevocationToken(cert, issuer) method) and adds
-// RevocationTokenWithAlternativeURLs(certificateToken, issuerCertificateToken *model.CertificateToken,
-// alternativeUrls []string) RevocationToken[R] - Go's lack of overloading means the
-// getRevocationToken(CertificateToken, CertificateToken, List<String>) overload needs a
-// distinct name from the 2-argument one.
 package spi
 
 import (

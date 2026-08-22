@@ -13,8 +13,8 @@
 // prefix assigned by the RI's own internal ordering, REGARDLESS of whether
 // that namespace's elements actually appear in a given document (the same
 // behaviour dss/validationreport/jaxb/jaxb_root.go documents for
-// ValidationReportType). This was verified empirically against this port's
-// own oracle (a small Java program driving TrustedListFacade/MRAFacade
+// ValidationReportType). This was verified empirically against this
+// package's own oracle (a small Java program driving TrustedListFacade/MRAFacade
 // directly, run over the real fixtures this package's KATs use - see
 // xml_kat_test.go): TrustedListFacade.marshall always writes
 //
@@ -45,7 +45,7 @@
 // # Known deviation: JAXB RI indentation desync around list/xs:any content
 //
 // eclipse-ee4j jaxb-ri 3.0.2's indenting output writer tracks nesting depth
-// with a counter that this port's own oracle (see xml_kat_test.go) shows
+// with a counter that this package's own oracle (see xml_kat_test.go) shows
 // getting thrown off, for a stretch of following elements whose length
 // varies per document, by array-valued properties (List<T>, i.e. every
 // repeatable element) and even more so by @XmlAnyElement/@XmlMixed content
@@ -66,8 +66,7 @@
 // consistently depth-indented output instead of reproducing the RI's own
 // desync, and xml_kat_test.go's marshal-parity KAT compares the two
 // canonically (ignoring insignificant whitespace) rather than byte-for-byte
-// for this reason - flagged here per S9_BRIEF.md's hard rules for the
-// harness/integration stage to weigh.
+// for this reason.
 //
 // # xs:dateTime properties
 //
@@ -85,7 +84,7 @@
 // `*string`: the raw xs:dateTime lexical form, unparsed and
 // unreformatted. Downstream time semantics (parsing into time.Time,
 // comparing against now for cache/expiry decisions) belong to dss/tsl's
-// definition/parsing package (TSLCORE), not this structural model.
+// parsing tasks, not this structural model.
 package jaxb
 
 import (

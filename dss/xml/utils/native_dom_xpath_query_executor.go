@@ -3,18 +3,15 @@
 // ASSUMPTION/DEVIATION (flagged prominently for integrator review): upstream implements this
 // class - marked "(Experimental)" in its own Javadoc - as a hand-rolled DOM walk over the
 // XPathQueryItem chain (XPathQueryItem#matchNode/isElementRelated/isAttributeRelated), never
-// compiling an XPath string at all. xml/common/doc.go, written by this phase's xml/common
-// implementer, explicitly anticipates that design: "consumed by dss-xml-utils's
-// NativeDOMXPathQueryExecutor - a later phase - which is why this package already depends on
-// internal/xmldom rather than leaving matchNode unported."
+// compiling an XPath string at all. xml/common/doc.go explicitly anticipates that design:
+// "consumed by dss-xml-utils's NativeDOMXPathQueryExecutor - a later phase - which is why
+// this package already depends on internal/xmldom rather than leaving matchNode unported."
 //
-// This phase's task brief instead directs collapsing JavaXmlXPathQueryExecutor and
-// NativeDOMXPathQueryExecutor into "a single native executor on xpath10", so this type is a
-// thin embedding of JavaXmlXPathQueryExecutor rather than an independent MatchNode-based
-// walker: Go has no second XPath backend to mirror Xalan-vs-hand-rolled-walker with, and
-// internal/xpath10 was purpose-built (per its doc.go) to evaluate exactly the expressions
-// XPathQueryBuilder emits, so routing both executors through it avoids maintaining two
-// query engines for one behaviour. The XPathQueryItem.MatchNode chain in package
+// This type is a thin embedding of JavaXmlXPathQueryExecutor rather than an independent
+// MatchNode-based walker: Go has no second XPath backend to mirror Xalan-vs-hand-rolled-walker
+// with, and internal/xpath10 was purpose-built (per its doc.go) to evaluate exactly the
+// expressions XPathQueryBuilder emits, so routing both executors through it avoids maintaining
+// two query engines for one behaviour. The XPathQueryItem.MatchNode chain in package
 // xml/common remains fully ported and unused by this package; it is available intact should
 // a later phase prefer a native (non-xpath10) walker - e.g. to avoid a full XPath grammar on
 // a hot path. Reconcile with the tech lead if the MatchNode-based design was intended

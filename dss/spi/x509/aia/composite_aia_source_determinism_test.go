@@ -22,10 +22,10 @@ func (f *compositeAIASourceDeterminismFakeSource) CertificatesByAIA(_ *model.Cer
 
 var _ AIASource = (*compositeAIASourceDeterminismFakeSource)(nil)
 
-// TestCompositeAIASourceOrderedKeysDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): compositeAIASourceOrderedKeys used to range
-// directly over the aiaSources map - randomized by Go on every run, unlike Java's HashMap
-// (arbitrary but stable within a JVM run) - so the try order is now sorted lexically instead.
+// TestCompositeAIASourceOrderedKeysDeterministic verifies that compositeAIASourceOrderedKeys'
+// try order is stable across runs: it used to range directly over the aiaSources map -
+// randomized by Go on every run, unlike Java's HashMap (arbitrary but stable within a JVM run)
+// - so the try order is now sorted lexically instead.
 func TestCompositeAIASourceOrderedKeysDeterministic(t *testing.T) {
 	build := func() []string {
 		var log []string

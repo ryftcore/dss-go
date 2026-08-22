@@ -1,13 +1,4 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/SignatureCertificateSource.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: this file references TokenCertificateSource, CertificateSource,
-// CertificateRef, CertificateValidity, CandidatesForSigningCertificate, ListCertificateSource
-// and ProofOfPossessionCertificateSource - all eu.europa.esig.dss.spi.x509 types that flatten
-// into this package per PORTING.md - none of which are in this manifest. Per the porting
-// brief's "types outside your manifest but in 2a scope: assume they exist" rule, they are used
-// here unqualified and are NOT (re)declared in this file; this file does not compile in
-// isolation until the sibling files defining them land. Their assumed shapes, inferred from the
-// Java signatures actually called below, are documented next to each call site.
 package spi
 
 import (

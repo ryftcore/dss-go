@@ -1,8 +1,7 @@
 // KAT test for xmldsig_path.go: every XMLDSigPath_* query string below is dumped verbatim
 // from a Java oracle run over dss-xml-common 6.5.RC1 + dss-alert 6.5.RC1
 // (java.lang.reflect over XMLDSigPath.class.getDeclaredFields(), each XPathQuery field's
-// getQueryString() printed), per PORTING.md's "exhaustive table test" rule for
-// registry-like tables and this phase's explicit KAT requirement for AbstractPath's output.
+// getQueryString() printed).
 package common
 
 import "testing"

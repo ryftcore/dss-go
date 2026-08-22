@@ -1,9 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/qwac/QWACUtils.java (DSS 6.5.RC1).
 //
-// Completed in phase 8f (S8F_BRIEF.md): GetTLSCertificateBindingUrl/isTLSCertificateBindingRel
-// (parsing an HTTP "Link" response header) were previously left unported for lack of a
-// LinkHeaderParser port to check them against (see link_header_parser.go, now ported alongside
-// this completion).
+// GetTLSCertificateBindingUrl/isTLSCertificateBindingRel (parsing an HTTP
+// "Link" response header) depend on link_header_parser.go's
+// LinkHeaderParser, in this same package.
 package qwac
 
 import (
@@ -27,9 +26,9 @@ const tlsCertificateBinding = "tls-certificate-binding"
 // value from a "Link" header if found. If no matching value is found, the function returns an
 // empty string. Port of getTLSCertificateBindingUrl(Map<String, List<String>>).
 //
-// Java logs and swallows any parse error per Link header value candidate (LOG.debug); dropped
-// per PORTING.md's "slf4j dropped unless load-bearing" - the loop simply moves on to the next
-// candidate value on a parse error, exactly as Java's catch block did.
+// Java logs and swallows any parse error per Link header value candidate (LOG.debug); this port
+// has no Go equivalent for the logging - the loop simply moves on to the next candidate value on
+// a parse error, exactly as Java's catch block did.
 func GetTLSCertificateBindingUrl(headers map[string][]string) string {
 	if headers == nil {
 		return ""

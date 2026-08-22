@@ -52,8 +52,7 @@ func EvidenceRecordAnalyzerIsSupportedDocument(document model.DSSDocument) bool 
 // UnsupportedOperationException("Document format not recognized/handled"), thrown when no
 // registered implementation supports the document, is returned as an error instead: whether a
 // document format is recognized is data-dependent on which analyzer implementations happen to
-// be registered (loaded modules), matching the "not supported in the Go port" precedent used
-// for similarly optional runtime capabilities elsewhere in this port.
+// be registered (loaded modules).
 func EvidenceRecordAnalyzerFromDocument(document model.DSSDocument) (EvidenceRecordAnalyzer, error) {
 	if document == nil {
 		panic("DSSDocument is null")

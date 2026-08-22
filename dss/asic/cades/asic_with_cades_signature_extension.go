@@ -17,7 +17,7 @@ import (
 
 // ASiCWithCAdESSignatureExtensionOverrides declares the operations
 // ASiCWithCAdESSignatureExtension calls back into virtually and ASiCWithCAdESLevelBaselineLTA
-// overrides. Per S7_BRIEF.md's virtual-dispatch warning, every instance must be registered with
+// overrides. Every instance must be registered with
 // InitASiCWithCAdESSignatureExtension before use - NewASiCWithCAdESSignatureExtension does it
 // for the base itself, and the LTA constructor re-registers with the subclass.
 type ASiCWithCAdESSignatureExtensionOverrides interface {

@@ -2,11 +2,6 @@
 //
 // eu.europa.esig.dss.pades.validation.dss flattens into the Go package pades,
 // so the type keeps its Java name unqualified.
-//
-// FORWARD DEPENDENCY (not in this chunk's manifest): PdfDssDict, the Java interface
-// eu.europa.esig.dss.pdf.PdfDssDict, which flattens into this same package. The shape every
-// file of this chunk was written against is documented in
-// pdf_composite_dss_dict_certificate_source.go.
 package pades
 
 // PdfCompositeDssDictionary represents a merged result of all /DSS dictionaries' content

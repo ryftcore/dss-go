@@ -2,14 +2,12 @@
 //
 // See poe.go for the package-flattening note.
 //
-// CROSS-CHUNK NOTE (phase 8e): the Java base class
-// eu.europa.esig.dss.validation.process.vpftsp.TimestampsValidationBlock belongs
-// to the vpftsp chunk. It is subclassed here through the
-// InitTimestampsValidationBlockStateWithoutPOE / InitTimestampsValidationBlock
-// pair (the state-then-register shape this port uses everywhere a Java class is
-// designed for extension); the overrides interface that routes getTimestamps()
-// and getPoe() back to this type was added to that file as part of this batch -
-// see the notes.
+// The base class lives in package vpftsp
+// (eu.europa.esig.dss.validation.process.vpftsp.TimestampsValidationBlock). It
+// is subclassed here through the InitTimestampsValidationBlockStateWithoutPOE
+// / InitTimestampsValidationBlock pair (the state-then-register shape this
+// port uses everywhere a Java class is designed for extension); the overrides
+// interface routes getTimestamps() and getPoe() back to this type.
 //
 // Java's override of getTimestamps() reads the base's protected `timestamps`
 // field, which holds exactly what this class's constructor passed up -

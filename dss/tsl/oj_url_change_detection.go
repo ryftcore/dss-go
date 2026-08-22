@@ -28,7 +28,7 @@ func (d *OJUrlChangeDetection) Detect(info *tslmodel.LOTLInfo) bool {
 	parsingCacheInfo, ok := info.TLParsingCacheInfo()
 	if ok && parsingCacheInfo.IsDesynchronized() {
 		signingCertificatesAnnouncementPredicate := d.lotlSource.SigningCertificatesAnnouncementPredicate()
-		// JUDGMENT CALL: Java's instanceof OfficialJournalSchemeInformationURI check always
+		// Java's instanceof OfficialJournalSchemeInformationURI check always
 		// holds here - see lotl_signing_certificates_announcement_scheme_information_uri.go's
 		// header, which collapses that interface and its only implementer into one type.
 		if signingCertificatesAnnouncementPredicate != nil {

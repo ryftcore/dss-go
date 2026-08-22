@@ -1,13 +1,11 @@
-// Accessor behavior tests vs Java-dumped answers, per PORTING.md/S8A_BRIEF.md's
-// "POLICY: ... ValidationPolicy accessor behavior tests vs Java-dumped
-// answers" requirement.
+// Accessor behavior tests vs Java-dumped answers.
 //
 // testdata/oracle/constraint.accessors.txt is a tab-separated "key<TAB>value"
 // dump produced by running upstream's real EtsiValidationPolicy (loaded
 // through ValidationPolicyFacade) over jaxb/testdata's own copy of upstream's
 // src/main/resources/policy/constraint.xml, and calling this package's own
 // PolicyAccessorOracle.java (not checked into this repository - see
-// jaxb/doc.go for the sibling PolicyOracle.java precedent) against a broad
+// jaxb/doc.go for PolicyOracle.java) against a broad
 // sample of ValidationPolicy accessors across every enumerations.Context and
 // enumerations.SubContext value. Each test below replays the identical call
 // sequence against the Go EtsiValidationPolicy and asserts byte-identical

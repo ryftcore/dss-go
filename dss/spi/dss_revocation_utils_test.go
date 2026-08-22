@@ -100,8 +100,8 @@ func dssRevocationUtilsTestCertificate(t *testing.T, name string) *model.Certifi
 }
 
 // TestDSSRevocationUtilsLoadOCSP walks both fixture responses - one identifying the
-// responder by name, one by key hash - and compares every field the port exposes against
-// what BouncyCastle reports for the same bytes.
+// responder by name, one by key hash - and compares every exposed field against what
+// BouncyCastle reports for the same bytes.
 func TestDSSRevocationUtilsLoadOCSP(t *testing.T) {
 	answers := dssRevocationUtilsTestKAT(t)
 	for _, name := range []string{"byname", "bykey"} {
@@ -462,7 +462,7 @@ func TestDSSRevocationUtilsRevocationKeys(t *testing.T) {
 }
 
 // dssRevocationUtilsTestRevocation is a minimal revocation token, standing in for the
-// RevocationToken the revocation chunk defines.
+// concrete RevocationToken types (CRLToken, OCSPToken).
 type dssRevocationUtilsTestRevocation struct {
 	productionDate time.Time
 }

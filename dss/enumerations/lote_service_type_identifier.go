@@ -23,9 +23,8 @@ func LoTEServiceTypeIdentifierFromURI(uri string) LoTEServiceTypeIdentifier {
 	// into the certificate-approval-status report as a stray
 	// <ServiceStatus></ServiceStatus> and, through
 	// CertificateApprovalStatusFromDefinition, as the label "Certificate for
-	// Unknown usage" where upstream reports "PID Provider". Found by the
-	// phase-8f full-corpus report byte-parity run on
-	// eaa-validation/diag_data_pid.xml.
+	// Unknown usage" where upstream reports "PID Provider". Found by a full-corpus report
+	// byte-parity run on eaa-validation/diag_data_pid.xml.
 	if uri == "" {
 		return nil
 	}

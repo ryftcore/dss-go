@@ -1,13 +1,8 @@
-// OrderedMap is a small helper for the "slice + index map" pattern PORTING.md's Collections
-// section calls for wherever upstream Java iterates a HashMap/HashSet-backed collection: Java's
-// HashMap iteration order is arbitrary but stable within a JVM run; Go's map iteration order is
-// randomized on every run. A bare Go map is therefore the wrong port whenever the iteration
-// order of a map-backed field can leak into an observable, ordered result (a returned slice, a
-// formatted string, a "first match wins" search). OrderedMap keeps O(1) key lookup (the backing
-// map) alongside deterministic, insertion-ordered iteration (the parallel key slice), so a
-// range over it always produces the same sequence for the same sequence of insertions -
-// matching the "arbitrary but stable" contract Java's callers already depend on, without
-// claiming to reproduce Java's specific (and unspecified) HashMap bucket order.
+// OrderedMap provides deterministic, insertion-ordered iteration for cases where a
+// map's iteration order would otherwise leak into an observable result (a returned
+// slice, a formatted string, a first-match-wins search). Go's map iteration order is
+// randomized on every run; OrderedMap keeps O(1) key lookup alongside a parallel key
+// slice so the same insertion sequence always iterates the same way.
 package utils
 
 // OrderedMap is an insertion-ordered map: Set/Get/Delete are O(1) amortized (Delete is O(n) in

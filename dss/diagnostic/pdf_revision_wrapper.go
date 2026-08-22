@@ -41,7 +41,7 @@ func (w *PDFRevisionWrapper) ArePdfModificationsDetected() bool {
 func (w *PDFRevisionWrapper) PdfAnnotationsOverlapConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
-		return getConcernedPages(modificationDetection.AnnotationOverlap)
+		return concernedPages(modificationDetection.AnnotationOverlap)
 	}
 	return nil
 }
@@ -51,7 +51,7 @@ func (w *PDFRevisionWrapper) PdfAnnotationsOverlapConcernedPages() []*big.Int {
 func (w *PDFRevisionWrapper) PdfVisualDifferenceConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
-		return getConcernedPages(modificationDetection.VisualDifference)
+		return concernedPages(modificationDetection.VisualDifference)
 	}
 	return nil
 }
@@ -61,7 +61,7 @@ func (w *PDFRevisionWrapper) PdfVisualDifferenceConcernedPages() []*big.Int {
 func (w *PDFRevisionWrapper) PdfPageDifferenceConcernedPages() []*big.Int {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
-		return getConcernedPages(modificationDetection.PageDifference)
+		return concernedPages(modificationDetection.PageDifference)
 	}
 	return nil
 }
@@ -69,14 +69,14 @@ func (w *PDFRevisionWrapper) PdfPageDifferenceConcernedPages() []*big.Int {
 // ArePdfObjectModificationsDetected checks whether object modifications are present after the
 // current PDF revisions. Port of arePdfObjectModificationsDetected().
 func (w *PDFRevisionWrapper) ArePdfObjectModificationsDetected() bool {
-	return w.getPdfObjectModifications() != nil
+	return w.pdfObjectModifications() != nil
 }
 
 // PdfExtensionChanges returns a list of changes occurred in a PDF after the current
 // signature's revision associated with a signature/document extension. Port of
 // getPdfExtensionChanges().
 func (w *PDFRevisionWrapper) PdfExtensionChanges() []*jaxb.XmlObjectModification {
-	pdfObjectModifications := w.getPdfObjectModifications()
+	pdfObjectModifications := w.pdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.ExtensionChange
 	}
@@ -87,7 +87,7 @@ func (w *PDFRevisionWrapper) PdfExtensionChanges() []*jaxb.XmlObjectModification
 // current signature's revision associated with a signature creation, form filling. Port of
 // getPdfSignatureOrFormFillChanges().
 func (w *PDFRevisionWrapper) PdfSignatureOrFormFillChanges() []*jaxb.XmlObjectModification {
-	pdfObjectModifications := w.getPdfObjectModifications()
+	pdfObjectModifications := w.pdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.SignatureOrFormFill
 	}
@@ -98,7 +98,7 @@ func (w *PDFRevisionWrapper) PdfSignatureOrFormFillChanges() []*jaxb.XmlObjectMo
 // signature's revision associated with annotation(s) modification. Port of
 // getPdfAnnotationChanges().
 func (w *PDFRevisionWrapper) PdfAnnotationChanges() []*jaxb.XmlObjectModification {
-	pdfObjectModifications := w.getPdfObjectModifications()
+	pdfObjectModifications := w.pdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.AnnotationChange
 	}
@@ -108,7 +108,7 @@ func (w *PDFRevisionWrapper) PdfAnnotationChanges() []*jaxb.XmlObjectModificatio
 // PdfUndefinedChanges returns a list of undefined changes occurred in a PDF after the
 // current signature's revision. Port of getPdfUndefinedChanges().
 func (w *PDFRevisionWrapper) PdfUndefinedChanges() []*jaxb.XmlObjectModification {
-	pdfObjectModifications := w.getPdfObjectModifications()
+	pdfObjectModifications := w.pdfObjectModifications()
 	if pdfObjectModifications != nil {
 		return pdfObjectModifications.Undefined
 	}
@@ -119,12 +119,12 @@ func (w *PDFRevisionWrapper) PdfUndefinedChanges() []*jaxb.XmlObjectModification
 // revision. Port of getModifiedFieldNames().
 func (w *PDFRevisionWrapper) ModifiedFieldNames() []string {
 	var names []string
-	pdfObjectModifications := w.getPdfObjectModifications()
+	pdfObjectModifications := w.pdfObjectModifications()
 	if pdfObjectModifications != nil {
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.ExtensionChange)...)
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.SignatureOrFormFill)...)
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.AnnotationChange)...)
-		names = append(names, getModifiedFieldNames(pdfObjectModifications.Undefined)...)
+		names = append(names, modifiedFieldNames(pdfObjectModifications.ExtensionChange)...)
+		names = append(names, modifiedFieldNames(pdfObjectModifications.SignatureOrFormFill)...)
+		names = append(names, modifiedFieldNames(pdfObjectModifications.AnnotationChange)...)
+		names = append(names, modifiedFieldNames(pdfObjectModifications.Undefined)...)
 	}
 	return names
 }
@@ -214,7 +214,7 @@ func (w *PDFRevisionWrapper) Reason() string {
 // SignatureByteRange returns the PDF signature dictionary /ByteRange value. Port of
 // getSignatureByteRange().
 func (w *PDFRevisionWrapper) SignatureByteRange() []*big.Int {
-	byteRange := w.getXmlByteRange()
+	byteRange := w.xmlByteRange()
 	if byteRange != nil {
 		return byteRange.Value
 	}
@@ -224,14 +224,14 @@ func (w *PDFRevisionWrapper) SignatureByteRange() []*big.Int {
 // IsSignatureByteRangeValid returns whether the PDF signature dictionary /ByteRange is found
 // and valid. Port of isSignatureByteRangeValid().
 func (w *PDFRevisionWrapper) IsSignatureByteRangeValid() bool {
-	byteRange := w.getXmlByteRange()
+	byteRange := w.xmlByteRange()
 	if byteRange != nil {
 		return byteRange.Valid
 	}
 	return false
 }
 
-func (w *PDFRevisionWrapper) getXmlByteRange() *jaxb.XmlByteRange {
+func (w *PDFRevisionWrapper) xmlByteRange() *jaxb.XmlByteRange {
 	return w.pdfRevision.PDFSignatureDictionary.SignatureByteRange
 }
 
@@ -266,7 +266,7 @@ func (w *PDFRevisionWrapper) SigFieldLock() *jaxb.XmlPDFLockDictionary {
 	return nil
 }
 
-func getConcernedPages(xmlModifications []*jaxb.XmlModification) []*big.Int {
+func concernedPages(xmlModifications []*jaxb.XmlModification) []*big.Int {
 	var pages []*big.Int
 	for _, modification := range xmlModifications {
 		pages = append(pages, modification.Page.BigInt())
@@ -274,7 +274,7 @@ func getConcernedPages(xmlModifications []*jaxb.XmlModification) []*big.Int {
 	return pages
 }
 
-func (w *PDFRevisionWrapper) getPdfObjectModifications() *jaxb.XmlObjectModifications {
+func (w *PDFRevisionWrapper) pdfObjectModifications() *jaxb.XmlObjectModifications {
 	modificationDetection := w.pdfRevision.ModificationDetection
 	if modificationDetection != nil {
 		return modificationDetection.ObjectModifications
@@ -282,7 +282,7 @@ func (w *PDFRevisionWrapper) getPdfObjectModifications() *jaxb.XmlObjectModifica
 	return nil
 }
 
-func getModifiedFieldNames(objectModifications []*jaxb.XmlObjectModification) []string {
+func modifiedFieldNames(objectModifications []*jaxb.XmlObjectModification) []string {
 	var names []string
 	for _, objectModification := range objectModifications {
 		fieldName := objectModification.FieldName

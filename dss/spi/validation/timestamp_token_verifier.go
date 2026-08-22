@@ -1,15 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/TimestampTokenVerifier.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY (flagged per S2B_BRIEF.md): TrustAnchorVerifier (Java
-// spi.validation.TrustAnchorVerifier) is assigned to sibling chunk VAL-C (s2b_VAL-C.txt),
-// which lands it in this same package. It is referenced here by name only, using the shape
-// already documented by certificate_verifier.go's and revocation_data_verifier.go's header
-// comments: NewDefaultTrustAnchorVerifier() *TrustAnchorVerifier and
-// IsTrustedCertificateChain(certChain []*model.CertificateToken, controlTime time.Time,
-// context enumerations.Context) bool.
-//
-// slf4j logging is dropped per the phase 2a handoff fact ("slf4j dropped unless
-// load-bearing").
+// Java's slf4j logging has no Go equivalent and is not ported.
 package validation
 
 import (

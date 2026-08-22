@@ -63,7 +63,7 @@ func TestUnmarshalMarshalIdempotent(t *testing.T) {
 
 // TestUnmarshalRejectsGarbage checks that Unmarshal reports an error rather
 // than panicking or silently succeeding on non-XML/malformed input - the
-// structural-model counterpart to TSLCORE's parseable/not-parseable
+// structural-model counterpart to dss/tsl's parseable/not-parseable
 // classification (which additionally covers well-formed-but-schema-invalid
 // documents, outside this package's scope - see doc.go's header).
 func TestUnmarshalRejectsGarbage(t *testing.T) {

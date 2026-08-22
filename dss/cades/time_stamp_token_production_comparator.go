@@ -1,11 +1,9 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/TimeStampTokenProductionComparator.java (DSS 6.5.RC1).
 //
-// OUT-OF-MANIFEST DEPENDENCY (flagged per S3_BRIEF.md's "flag needs in notes" rule): this class
-// lives in eu.europa.esig.dss.cades, not .cades.validation, so it is not itself in this
-// manifest, but CAdESUnsignedAttributes (in-manifest) needs it to sort timestamp/evidence-record
-// unsigned attributes by production time, and an earlier chunk's cades_level_baseline_lt.go
-// already calls NewTimeStampTokenProductionComparator() without it existing anywhere in the
-// tree. Porting it here resolves both.
+// This class lives in eu.europa.esig.dss.cades, not .cades.validation, but it is ported into
+// this same Go package because CAdESUnsignedAttributes needs it to sort timestamp/evidence-record
+// unsigned attributes by production time, and cades_level_baseline_lt.go calls
+// NewTimeStampTokenProductionComparator().
 package cades
 
 import (

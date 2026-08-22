@@ -1,8 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationSource.java (DSS 6.5.RC1).
 //
-// CompositeRevocationSource (chunk X509-B/CertSource, a sibling of this phase 2a chunk) already
-// references this interface, calling RevocationToken(cert, issuer) with no error return; this
-// file defines it to match that shape.
+// CompositeRevocationSource references this interface, calling RevocationToken(cert, issuer)
+// with no error return; this file defines it to match that shape.
 package spi
 
 import (

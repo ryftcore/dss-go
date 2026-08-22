@@ -1,28 +1,10 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/dss/PdfCompositeDssDictCertificateSource.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (not in this chunk's manifest, ported by sibling chunks into this same
-// flattened pades package). Every file of this chunk was written against these shapes:
-//
-//   - PdfObjectKey (eu.europa.esig.dss.pades.validation.PdfObjectKey) - an interface with
-//     Value() any, Number() int64, Generation() int. Java uses it as a HashMap key, so its
-//     implementations carry equals/hashCode over the (object number, generation) pair; the Go
-//     port therefore uses it directly as a Go map key, which requires the implementing type to
-//     be comparable (it is: a PDF object key is a number plus a generation).
-//   - PdfDssDict (eu.europa.esig.dss.pdf.PdfDssDict) - an interface with
-//     CRLs() map[PdfObjectKey]*crlparser.CRLBinary, OCSPs() map[PdfObjectKey]*spi.OCSPResponseBinary,
-//     CERTs() map[PdfObjectKey]*model.CertificateToken and VRIs() []*PdfVriDict.
-//   - PdfVriDict (eu.europa.esig.dss.pdf.PdfVriDict) - a concrete struct implementing PdfDssDict
-//     and additionally exposing Name() string, TUTime() *time.Time and TSStream() []byte.
-//   - PAdESUtilsVRIsWithName(pdfDssDict PdfDssDict, vriName string) []*PdfVriDict - the
-//     flattened static PAdESUtils.getVRIsWithName(PdfDssDict, String); Java's null vriName
-//     ("every VRI dictionary") is the empty string here, which is unambiguous since a VRI name
-//     is the base-16 SHA-1 of a signature and never empty.
-//
 // DETERMINISM: upstream walks java.util.HashMaps keyed by PdfObjectKey whenever it materialises
 // a List of tokens; Go's map iteration order is randomised rather than merely unspecified, so
-// every such walk in this chunk is performed in ascending (object number, generation) order.
-// This is the determinism normalisation the port applies elsewhere for the same reason, and it
-// only fixes an order Java leaves arbitrary.
+// every such walk here is performed in ascending (object number, generation) order. This is the
+// determinism normalisation the port applies elsewhere for the same reason, and it only fixes an
+// order Java leaves arbitrary.
 package pades
 
 import (

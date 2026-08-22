@@ -3,7 +3,7 @@
 //
 // These two decide whether a trusted list's certificates reach the TrustedListsCertificateSource
 // at all, so a flipped comparison here silently trusts an expired or invalidly-signed list, or
-// silently drops a good one - the exact "gate" this batch's Criticals live in.
+// silently drops a good one - the exact "gate" the Criticals live in.
 // ExpirationAndSignatureCheckStrategy has no dedicated JUnit suite upstream; its expected
 // behaviour below is read off the Java source (isSyncSupported(TLInfo, boolean, boolean)) as a
 // full truth table, and the two rows upstream's own

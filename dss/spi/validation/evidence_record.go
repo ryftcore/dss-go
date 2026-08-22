@@ -1,25 +1,19 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/evidencerecord/EvidenceRecord.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.x509.evidencerecord.EvidenceRecord lands in this same Go package
-// per S2B_BRIEF.md's package layout table ("spi.x509.evidencerecord" is one of the packages
-// flattened into dss/spi/validation).
+// Java spi.x509.evidencerecord.EvidenceRecord lands in this same Go package.
 //
-// This interface's shape is additionally constrained by two already-landed sibling files that
-// forward-reference it opaquely (dss/spi/validation/timestamp_source.go) and by name
-// (dss/spi/validation/timestamp/abstract_timestamp_source.go's "FORWARD DEPENDENCY:
-// EvidenceRecord" header comment, which documents the exact subset of methods it calls:
+// This interface's shape is additionally constrained by two sibling files that reference it:
+// timestamp_source.go (opaquely) and dss/spi/validation/timestamp/abstract_timestamp_source.go's
+// header comment, which documents the exact subset of methods it calls:
 // Id(), TimestampedReferences(), SetTimestampedReferences(...), Timestamps(),
-// CertificateSource(), CRLSource(), OCSPSource(), DetachedEvidenceRecords(), ManifestFile()).
+// CertificateSource(), CRLSource(), OCSPSource(), DetachedEvidenceRecords(), ManifestFile().
 // The full interface below matches that subset verbatim while adding every other Java-declared
 // method, translated 1:1 with get/is dropped.
 //
-// FORWARD DEPENDENCIES (flagged per S2B_BRIEF.md): SignatureAttribute (Java
-// spi.validation.SignatureAttribute) and EmbeddedEvidenceRecordHelper (Java
-// spi.validation.evidencerecord.EmbeddedEvidenceRecordHelper) are both SCC-flattened into this
-// same package by other chunks of phase 2b and are referenced here unqualified, opaquely (this
-// file never calls a method on either - it only carries them through the interface, following
-// the precedent of the already-landed AdvancedSignature/TimestampToken opaque forward
-// references in timestamp_source.go).
+// SignatureAttribute (Java spi.validation.SignatureAttribute) and EmbeddedEvidenceRecordHelper
+// (Java spi.validation.evidencerecord.EmbeddedEvidenceRecordHelper) are SCC-flattened into this
+// same package and are referenced here unqualified, opaquely: this file never calls a method on
+// either, it only carries them through the interface.
 package validation
 
 import (
@@ -59,11 +53,10 @@ type EvidenceRecord interface {
 	// spi.OfflineRevocationSource[R] (missing RevocationTokens) nor
 	// spi.MultipleRevocationSource[R] on its own. OfflineCRLSourceBase embeds it AND supplies a
 	// concrete RevocationTokens, so it alone satisfies the full spi.OfflineRevocationSource[R]
-	// contract plus AllRevocationReferences() (which abstract_timestamp_source.go's forward
-	// dependency on this method needs) via promotion. TimestampToken.CRLSource() (already landed,
-	// timestamp_crl_source.go) hit the identical problem and resolved it by returning a type built
-	// the same way (*TimestampCRLSource, embedding *spi.CMSCRLSource, itself embedding
-	// spi.OfflineCRLSourceBase).
+	// contract plus AllRevocationReferences() (which abstract_timestamp_source.go needs) via
+	// promotion. TimestampToken.CRLSource() (timestamp_crl_source.go) hit the identical problem
+	// and resolved it by returning a type built the same way (*TimestampCRLSource, embedding
+	// *spi.CMSCRLSource, itself embedding spi.OfflineCRLSourceBase).
 	CRLSource() *spi.OfflineCRLSourceBase
 
 	// OCSPSource gets an OCSP source which contains ALL OCSP responses embedded in the evidence

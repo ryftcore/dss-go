@@ -1,11 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/usage/CertificateApprovalStatusBlock.java (DSS 6.5.RC1).
-//
-// CROSS-CHUNK ASSUMPTION: TrustedEntityServiceFilter and
-// TrustedEntitiesFilterFactoryCreateFilterByListUrls (Java package
-// qualification.trust.filter) are owned by a sibling porter of this shared
-// package and were not present on disk while this file was written; see
-// cert_qualification_at_time_block.go's header for the established
-// flattening convention this file's call sites follow.
 package qualification
 
 import (
@@ -69,7 +62,7 @@ func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
 
 // InitChain initializes the chain. Port of initChain().
 //
-// HASH-ORDER (closed in phase 8f): Java builds listsOfLists/lotes as
+// Java builds listsOfLists/lotes as
 // HashSet<XmlTrustSourceList> (identity hashCode/equals) and listsBYType as
 // a HashMap<String, List<XmlTrustSourceList>>, iterating both directly to
 // append checks to the report / to decide the order sub-blocks execute in -
@@ -78,7 +71,7 @@ func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
 // order is randomized per the language spec) in a deterministic surrogate
 // order instead - sorted by each list's URL - which is stable across runs
 // but not necessarily identical to the upstream HashSet/HashMap bucket
-// order. See the porter brief's hard rule on hash-order leaks.
+// order.
 func (c *CertificateApprovalStatusBlock) InitChain() {
 	// cover incomplete cert chain / expired/ revoked certs
 	item := c.isAcceptableBuildingBlockConclusion(c.BuildingBlocksConclusion)

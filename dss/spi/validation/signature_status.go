@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/status/SignatureStatus.java (DSS 6.5.RC1).
 //
 // SCC flattening: Java's spi.validation.status package is flattened into this package (see
-// PORTING.md / S2B_BRIEF.md); the sibling status types (TokenStatus, RevocationFreshnessStatus)
-// are ported by other chunks of phase 2b into the same package.
+// PORTING.md); the sibling status types (TokenStatus, RevocationFreshnessStatus) are ported
+// into the same package.
 package validation
 
 import (

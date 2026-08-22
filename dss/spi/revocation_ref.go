@@ -1,8 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationRef.java (DSS 6.5.RC1).
 //
-// RevocationRef<R> is the abstract superclass CRLRef and OCSPRef (chunk CRLOCSP, a sibling of
-// this phase 2a chunk) already embed via RevocationRefBase[R] and register with
-// InitRevocationRef, mirroring the InitToken self-registration pattern.
+// RevocationRef<R> is the abstract superclass CRLRef and OCSPRef embed via RevocationRefBase[R]
+// and register with InitRevocationRef, mirroring the InitToken self-registration pattern.
 package spi
 
 import (

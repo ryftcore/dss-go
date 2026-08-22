@@ -1,17 +1,12 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/tsl/TLStructureVerifier.java (DSS 6.5.RC1).
 //
-// BLOCKED FORWARD DEPENDENCY (flagged per S4D_BRIEF.md's "flag needs in notes" rule, for the
-// integrator to arbitrate): upstream's XSD validation (TrustedListUtils.getInstance() /
-// TrustedList211Utils.getInstance(), both eu.europa.esig.dss.jaxb.common.XSDAbstractUtils
-// implementations bundling the TL V5/V6 XSD schemas as JAXB resources) has no landed Go home,
-// mirroring xades_structure_validator.go's identical BLOCKED FORWARD DEPENDENCY note for the
-// XAdES schema family. That file's XAdESStructureXSDUtils marker type and
-// DSSXMLUtilsValidateAgainstXSD(xsdUtils, source) helper are reused verbatim here (both already
-// resolve to an untyped interface{} + a single wrapping call, so no new machinery is needed);
-// this file only adds the two TL-specific singleton getters:
-//
-//	func TrustedListXSDUtils() xades.XAdESStructureXSDUtils    // eu.europa.esig.trustedlist.TrustedListUtils#getInstance() (TL V6)
-//	func TrustedList211XSDUtils() xades.XAdESStructureXSDUtils // eu.europa.esig.trustedlist211.TrustedList211Utils#getInstance() (TL V5)
+// XSD structure validation is a permanent no-op in this port. Upstream validates against the
+// TL V5/V6 XSD schemas bundled as JAXB resources (eu.europa.esig.trustedlist.TrustedListUtils /
+// trustedlist211.TrustedList211Utils, both eu.europa.esig.dss.jaxb.common.XSDAbstractUtils
+// implementations); this port has no bundled-schema or XML-Schema-validator package. The two
+// TL-specific getters below (TrustedListXSDUtils, TrustedList211XSDUtils) return the same opaque
+// placeholder xades_structure_validator.go's XAdES getters do, and
+// xades.DSSXMLUtilsValidateAgainstXSD always reports no errors - see dss_xml_utils.go.
 package tsl
 
 import (
@@ -154,10 +149,10 @@ func (v *TLStructureVerifier) validateAgainstXSD(documentDom *xmldom.Node, xsdUt
 
 // trustedListXSDUtils and trustedList211XSDUtils are opaque placeholders standing in for
 // eu.europa.esig.trustedlist.TrustedListUtils#getInstance() (TL V6) and
-// eu.europa.esig.trustedlist211.TrustedList211Utils#getInstance() (TL V5). See the file header's
-// BLOCKED FORWARD DEPENDENCY note: no bundled TL XSD schema resources exist anywhere in this
-// port yet, so xades.DSSXMLUtilsValidateAgainstXSD (which never inspects its xsdUtils argument)
-// always reports no errors; these placeholders are never dereferenced.
+// eu.europa.esig.trustedlist211.TrustedList211Utils#getInstance() (TL V5). See the file header:
+// no bundled TL XSD schema resources exist anywhere in this port, so
+// xades.DSSXMLUtilsValidateAgainstXSD (which never inspects its xsdUtils argument) always reports
+// no errors; these placeholders are never dereferenced.
 var (
 	trustedListXSDUtils    xades.XAdESStructureXSDUtils = struct{}{}
 	trustedList211XSDUtils xades.XAdESStructureXSDUtils = struct{}{}

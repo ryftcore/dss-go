@@ -1,4 +1,4 @@
-// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness (task #12):
+// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness:
 // it signs a fixed sample document with this package's own CAdESService, producing CAdES-B and
 // CAdES-T signatures with real crypto (an RSA PKCS#12 test key for the signer, an EC PKCS#12 test
 // key as a self-hosted TSA via spi/validation.KeyEntityTSPSource), and writes them to files. The

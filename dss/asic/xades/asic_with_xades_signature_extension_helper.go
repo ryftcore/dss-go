@@ -16,7 +16,7 @@ import (
 // Java's `extends ASiCSignatureExtensionHelper` becomes embedding plus the
 // InitASiCSignatureExtensionHelper(self) registration; the base's two constructors are split
 // into InitFromDocument/InitFromContent because the document one calls back into
-// getASiCContainerExtractor (S7_BRIEF.md's virtual-dispatch warning).
+// getASiCContainerExtractor.
 type ASiCWithXAdESSignatureExtensionHelper struct {
 	*asic.ASiCSignatureExtensionHelper
 }
@@ -47,10 +47,6 @@ func NewASiCWithXAdESSignatureExtensionHelperFromContent(asicContent *asic.ASiCC
 
 // GetASiCContainerExtractor ports the @Override protected
 // getASiCContainerExtractor(DSSDocument).
-//
-// Cross-chunk assumption (XADVAL): NewASiCWithXAdESContainerExtractor(model.DSSDocument)
-// mirrors `new ASiCWithXAdESContainerExtractor(asicContainer)`, ported alongside
-// ASiCWithXAdESSignatureParameters in the sibling XADVAL manifest (S7_BRIEF.md).
 func (h *ASiCWithXAdESSignatureExtensionHelper) GetASiCContainerExtractor(asicContainer model.DSSDocument) asic.ASiCContainerExtractor {
 	return NewASiCWithXAdESContainerExtractor(asicContainer)
 }

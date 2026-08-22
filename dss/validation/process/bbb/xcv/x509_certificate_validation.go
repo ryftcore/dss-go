@@ -18,7 +18,7 @@
 // and Java would NPE on a null one further down in
 // ValidationProcessUtils#isTrustAnchor. The Go port passes the zero time there.
 //
-// slf4j logging is dropped per PORTING.md.
+// Java's slf4j logging statements have no Go equivalent and are not ported.
 package xcv
 
 import (

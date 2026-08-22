@@ -1,9 +1,9 @@
 // Ported from SimpleCertificateReport.xsd (DSS 6.5.RC1) via the JAXB
 // classes generated into eu.europa.esig.dss.simplecertificatereport.jaxb.
-// Per the phase-8a generated-JAXB rule the generated classes are grouped
-// into schema-area files rather than one file per class; every Java class
-// keeps its name and its exact field order so that encoding/xml reproduces
-// the JAXB element sequence byte for byte.
+// The generated classes are grouped into schema-area files rather than one
+// file per class; every Java class keeps its name and its exact field
+// order so that encoding/xml reproduces the JAXB element sequence byte for
+// byte.
 
 package jaxb
 

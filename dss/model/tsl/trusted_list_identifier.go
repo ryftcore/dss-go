@@ -1,7 +1,6 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/tsl/identifier/TrustedListIdentifier.java (DSS 6.5.RC1).
 //
-// Java package eu.europa.esig.dss.model.tsl.identifier is flattened into this tsl package per
-// the Phase 1b cycle-driven flattening table.
+// Java package eu.europa.esig.dss.model.tsl.identifier is flattened into this tsl package.
 package tsl
 
 import "github.com/ryftcore/dss-go/dss/model"

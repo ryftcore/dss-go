@@ -1,10 +1,10 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/modifications/PdfObjectModifications.java
 // (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf module that landed
-// in no s5b manifest (see pdf_object.go's header). java.io.Serializable is dropped, as elsewhere.
-// Used by value (not pointer) throughout, matching pdf_signature_dictionary.go's already-landed
-// forward-dependency assumption (`func (m PdfObjectModifications) UndefinedChanges() []ObjectModification`).
+// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf package implemented
+// here (see pdf_object.go's header). java.io.Serializable is dropped, as elsewhere. Used by
+// value (not pointer) throughout, matching pdf_signature_dictionary.go's usage
+// (`func (m PdfObjectModifications) UndefinedChanges() []ObjectModification`).
 package pades
 
 // PdfObjectModifications contains a collection of ObjectModifications categorized by different

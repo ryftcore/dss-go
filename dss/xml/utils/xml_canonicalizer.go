@@ -2,15 +2,14 @@
 //
 // Upstream wraps a single org.apache.xml.security.c14n.Canonicalizer instance obtained once
 // at construction time (Canonicalizer.getInstance(method)) and reused across every
-// canonicalize(...) overload. internal/xmlc14n is deliberately stateless per call instead
-// (XML_DESIGN.md's "one-canonicalization-per-call" decision, working around SANTUARIO-463),
-// so XMLCanonicalizer here stores only the resolved algorithm and calls internal/xmlc14n
-// fresh on every method - functionally equivalent for upstream's own call pattern, since
-// every DSS call site already does XMLCanonicalizer.createInstance(m).canonicalize(...)
-// inline rather than reusing an instance across canonicalizations (verified by XML_DESIGN.md
-// against a grep over dss-xades).
+// canonicalize(...) overload. internal/xmlc14n is deliberately stateless per call instead,
+// working around upstream's SANTUARIO-463, so XMLCanonicalizer here stores only the resolved
+// algorithm and calls internal/xmlc14n fresh on every method - functionally equivalent for
+// upstream's own call pattern, since every DSS call site already does
+// XMLCanonicalizer.createInstance(m).canonicalize(...) inline rather than reusing an instance
+// across canonicalizations.
 //
-// Java throw-in-constructor becomes a (T, error)-returning constructor func per PORTING.md:
+// Java throw-in-constructor becomes a (T, error)-returning constructor func:
 // XMLCanonicalizerCreateInstance(WithMethod) returns an error instead of throwing
 // IllegalArgumentException/DSSException.
 package utils

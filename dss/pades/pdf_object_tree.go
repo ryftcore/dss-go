@@ -1,11 +1,10 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/modifications/PdfObjectTree.java
 // (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf module that landed
-// in no s5b manifest (see pdf_object.go's header). This file names the type PdfObjectTree
-// (Java's own name), rather than the bare "ObjectTree" a landed sibling's forward-dependency
-// header speculatively assumed (pdf_signature_dictionary.go); see that file's comment, updated
-// during integration to match.
+// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf package implemented
+// here (see pdf_object.go's header). This file names the type PdfObjectTree (Java's own name);
+// see pdf_signature_dictionary.go's comment for the earlier placeholder name "ObjectTree" this
+// replaced.
 package pades
 
 import (

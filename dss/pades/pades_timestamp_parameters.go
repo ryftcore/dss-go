@@ -5,12 +5,6 @@
 // (rather than reuses) its own Content/Signature/ArchiveTimestampParameters storage with this
 // type - see pades_signature_parameters.go's file header for why (Go has no field-level
 // covariance across embedding).
-//
-// FORWARD DEPENDENCY (eu.europa.esig.dss.pdf.PAdESConstants, dss-pdf module - not in this
-// chunk's manifest, flattened into this same package pades by a sibling chunk): the
-// PAdESConstantsTimestampDefaultFilter / PAdESConstantsTimestampDefaultSubFilter constants,
-// following the PAdESConstants<Name> naming already observed in the landed
-// pades/native_pdf_signature_service.go and pades/pades_baseline_requirements_checker.go.
 package pades
 
 import (

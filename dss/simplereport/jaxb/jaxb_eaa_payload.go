@@ -1,9 +1,8 @@
 // Ported from SimpleReport.xsd (DSS 6.5.RC1) via the JAXB classes generated
-// into eu.europa.esig.dss.simplereport.jaxb. Per the phase-8a generated-JAXB
-// rule the generated classes are grouped into schema-area files rather than
-// one file per class; every Java class keeps its name and its exact field
-// order so that encoding/xml reproduces the JAXB element sequence byte for
-// byte.
+// into eu.europa.esig.dss.simplereport.jaxb. The generated classes are
+// grouped into schema-area files rather than one file per class; every Java
+// class keeps its name and its exact field order so that encoding/xml
+// reproduces the JAXB element sequence byte for byte.
 //
 // EAAPayload carries every ETSI TS 119 472-1 / OpenID4VC / mdoc claim the
 // simple report can present, one optional element per claim, all bound to

@@ -32,9 +32,9 @@ func NewCAdESDiagnosticDataBuilder() *CAdESDiagnosticDataBuilder {
 // concrete-type assertion to *CAdESSignature panics for it. Asserting to this interface instead
 // - which *CAdESSignature satisfies directly and *PAdESSignature satisfies via its own
 // ContentIdentifier/ContentHints overrides plus the embedded *CAdESSignature's promoted
-// SignerInformationStoreInfos - lets both signature families reach this method. Added during
-// phase 8f un-gating (pades/pades_diagnostic_data_builder.go's smoke test caught the panic);
-// purely additive, no existing CAdES-only behavior changes.
+// SignerInformationStoreInfos - lets both signature families reach this method. Added because
+// pades/pades_diagnostic_data_builder.go's smoke test caught the panic; purely additive, no
+// existing CAdES-only behavior changes.
 type cadesLikeSignature interface {
 	ContentIdentifier() string
 	ContentHints() string

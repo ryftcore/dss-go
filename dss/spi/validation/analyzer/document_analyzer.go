@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/analyzer/DocumentAnalyzer.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.validation.analyzer lands in this Go package per S2B_BRIEF.md's
-// package layout table; spi.validation.analyzer.evidencerecord (EvidenceRecordAnalyzer,
-// EvidenceRecordAnalyzerFactory) flattens into it too.
+// SCC flattening: Java spi.validation.analyzer lands in this Go package;
+// spi.validation.analyzer.evidencerecord (EvidenceRecordAnalyzer, EvidenceRecordAnalyzerFactory)
+// flattens into it too.
 package analyzer
 
 import (

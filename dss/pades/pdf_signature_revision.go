@@ -1,10 +1,9 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfSignatureRevision.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Shape (embeds/satisfies PdfCMSRevision, CompositeDssDictionary(),
-// DssDictionary()) confirmed against pades_certificate_source.go's / pades_signature.go's already-
-// landed forward-dependency headers, and the constructor's exact argument order against
-// native_pdf_signature_service.go's already-landed call site.
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// Its shape (embeds/satisfies PdfCMSRevision, CompositeDssDictionary(), DssDictionary()) is used
+// by pades_certificate_source.go and pades_signature.go, and its constructor's exact argument
+// order matches native_pdf_signature_service.go's call site.
 package pades
 
 import "github.com/ryftcore/dss-go/dss/model"

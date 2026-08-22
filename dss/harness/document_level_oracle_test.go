@@ -1,5 +1,4 @@
-// THE PHASE 8 EXIT CRITERION - document-level end-to-end parity, item (B) of
-// the s8f harness brief.
+// Document-level end-to-end parity against a Java oracle dump.
 //
 // testdata/oracle/document_level.jsonl is a pure Java dump, produced by
 // testdata/oracle/gen/DocumentLevelOracle.java, for the 60 real signed

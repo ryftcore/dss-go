@@ -1,9 +1,9 @@
 // Ported from mra_schema_v2_19612v020401.xsd (DSS 6.5.RC1) via the JAXB
 // classes generated into eu.europa.esig.trustedlist.jaxb.mra (Mutual
-// Recognition Agreement extension). Per the phase-8a generated-JAXB rule
-// the generated classes are grouped into one file per Java package; every
-// Java class keeps its name and its exact field order so that encoding/xml
-// reproduces the JAXB element sequence byte for byte.
+// Recognition Agreement extension). The generated classes are grouped into
+// one file per Java package; every Java class keeps its name and its exact
+// field order so that encoding/xml reproduces the JAXB element sequence
+// byte for byte.
 //
 // mra's XmlAdapter classes (Adapter1/Adapter3, both MRAStatus; Adapter2,
 // MRAEquivalenceContext) have no file of their own - see doc.go's header -

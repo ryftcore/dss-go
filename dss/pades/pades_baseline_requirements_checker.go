@@ -26,51 +26,6 @@
 // this signature's embedded CAdES CMS handling (see cadesChecker() below); this is faithful for
 // every CMS-attribute-only accessor those six methods use, with one narrow, documented exception
 // (HasExtendedXLProfile's internal MinimalLTRequirement call - see cadesChecker()'s comment).
-//
-// FORWARD DEPENDENCIES (not in this chunk's manifest, owned by sibling chunks):
-//
-//   - PAdESSignature (eu.europa.esig.dss.pades.validation.PAdESSignature). Per this phase's
-//     layout note ("PAdESSignature embeds CAdES-like CMS handling"), it is assumed to embed
-//     *cades.CAdESSignature (a promoted field literally named CAdESSignature), and to expose:
-//
-//     func (s *PAdESSignature) PdfSignatureDictionary() *PdfSignatureDictionary
-//     func (s *PAdESSignature) DssDictionary() PdfDssDict
-//     func (s *PAdESSignature) MessageDigestValue() []byte
-//     func (s *PAdESSignature) CMS() *cms.CMS                     // promoted from *cades.CAdESSignature
-//     func (s *PAdESSignature) SignerInformation() *cmscore.SignerInfo // promoted
-//     func (s *PAdESSignature) ContentType() string                // promoted (AdvancedSignature)
-//
-//     with CertificateSource()/CompleteCertificateSource()/CompleteCRLSource()/CompleteOCSPSource()
-//     etc. shadowed on *PAdESSignature itself (not merely promoted) to satisfy AdvancedSignature
-//     with PAdES-aware (DSS-dictionary-including) sources - see the STRUCTURE DEVIATION note.
-//
-//   - PdfSignatureDictionary (eu.europa.esig.dss.pdf.PdfSignatureDictionary), already used as a
-//     forward dependency by the landed SIGN chunk (native_pdf_signature_service.go), confirming
-//     Type()/SubFilter()/ByteRange()/Contents(); this file additionally uses
-//     SigningDate() time.Time (the zero value stands for Java's null), Filter() string and
-//     Reason() string.
-//
-//   - PdfTimestampToken (eu.europa.esig.dss.pades.validation.timestamp.PdfTimestampToken) and
-//     PdfDocTimestampRevision (eu.europa.esig.dss.pdf.PdfDocTimestampRevision). Java
-//     distinguishes a PDF document-timestamp's TimestampToken from any other with
-//     "instanceof PdfTimestampToken"; validation.TimestampToken is a concrete struct (not an
-//     interface), so a *validation.TimestampToken value carries no Go-visible tag for which
-//     wrapper (if any) built it. PdfTimestampTokenOf below is assumed to be the sibling chunk's
-//     answer to that gap - a lookup that succeeds exactly when timestampToken was produced by
-//     the PAdES timestamp source:
-//
-//     func PdfTimestampTokenOf(timestampToken *validation.TimestampToken) (*PdfTimestampToken, bool)
-//     func (t *PdfTimestampToken) PdfRevision() *PdfDocTimestampRevision
-//     func (r *PdfDocTimestampRevision) PdfSigDictInfo() *PdfSignatureDictionary
-//
-//   - CMSForPAdESBaselineRequirementsChecker
-//     (eu.europa.esig.dss.pades.signature.CMSForPAdESBaselineRequirementsChecker, not in this
-//     chunk's manifest; landed as cms_for_pades_baseline_requirements_checker.go, confirming the
-//     shape below - its constructor takes *cades.CAdESSignature, not *PAdESSignature, hence
-//     b.Signature().CAdESSignature at the one call site below):
-//
-//     func NewCMSForPAdESBaselineRequirementsChecker(signature *cades.CAdESSignature) *CMSForPAdESBaselineRequirementsChecker
-//     func (c *CMSForPAdESBaselineRequirementsChecker) IsValidForPAdESBaselineBProfile() bool
 package pades
 
 import (

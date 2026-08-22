@@ -1,9 +1,9 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfswatsp/checks/vts/ValidationTimeSlidingCertificateRevocationSelector.java (DSS 6.5.RC1).
 //
 // See poe.go for the package-flattening note, and
-// past_signature_validation_certificate_revocation_selector.go for the assumed
-// Go shape of the cross-chunk base class
-// vpfltvd.LongTermValidationCertificateRevocationSelector.
+// past_signature_validation_certificate_revocation_selector.go for the base
+// class vpfltvd.LongTermValidationCertificateRevocationSelector this file
+// also subclasses.
 package vpfswatsp
 
 import (

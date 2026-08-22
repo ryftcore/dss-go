@@ -1,7 +1,7 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/asice/DataToSignASiCEWithCAdESHelper.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.cades.signature.asice lands in
-// this same Go package (dss/asic/cades) per S7_BRIEF.md's package layout table.
+// Package flattening: Java's eu.europa.esig.dss.asic.cades.signature.asice lands in
+// this same Go package (dss/asic/cades).
 package cades
 
 import (

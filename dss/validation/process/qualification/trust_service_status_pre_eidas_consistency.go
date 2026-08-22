@@ -12,7 +12,9 @@ func newTrustServiceStatusPreEIDASConsistency() *trustServiceStatusPreEIDASConsi
 	return &trustServiceStatusPreEIDASConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether a pre-eIDAS trust service's status is
+// neither GRANTED nor WITHDRAWN. Port of the overridden
+// isConsistent(TrustServiceWrapper).
 func (c *trustServiceStatusPreEIDASConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	startDate := trustService.StartDate
 	if IsPreEIDAS(startDate) {

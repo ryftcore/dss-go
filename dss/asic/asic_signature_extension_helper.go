@@ -12,9 +12,9 @@ import (
 )
 
 // ASiCSignatureExtensionHelperOverrides declares the operations ASiCSignatureExtensionHelper
-// calls back into virtually. Per S7_BRIEF.md's virtual-dispatch warning, every concrete helper
-// must call InitASiCSignatureExtensionHelper with itself before use - including from within its
-// own constructor, since the base constructor logic (extraction from a raw container document)
+// calls back into virtually. Every concrete helper must call InitASiCSignatureExtensionHelper
+// with itself before use - including from within its own constructor, since the base
+// constructor logic (extraction from a raw container document)
 // itself needs GetASiCContainerExtractor and is split into InitFromDocument/InitFromContent for
 // that reason (see those methods' doc comments).
 type ASiCSignatureExtensionHelperOverrides interface {

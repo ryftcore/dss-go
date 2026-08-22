@@ -1,10 +1,9 @@
 // Ported from dss-xml-common/src/main/java/eu/europa/esig/dss/xml/common/definition/xmldsig/XMLDSigElement.java (DSS 6.5.RC1).
 package common
 
-// XMLDSigElement is an element defined in the XMLDSig schema. Ports the Java enum per
-// PORTING.md's enum convention: a typed string whose value is the Java name(), with the
-// wire tag name (which differs from the Go/Java constant name for most entries) held in a
-// lookup table.
+// XMLDSigElement is an element defined in the XMLDSig schema. Ports the Java enum: a typed
+// string whose value is the Java name(), with the wire tag name (which differs from the
+// Go/Java constant name for most entries) held in a lookup table.
 type XMLDSigElement string
 
 // XMLDSigElement constants, one per XMLDSig schema element name.

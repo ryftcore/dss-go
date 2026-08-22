@@ -2,14 +2,10 @@
 // (DSS 6.5.RC1).
 //
 // java.io.Serializable is dropped (no Go counterpart). Java's Map<..., Set<RevocationOrigin>>
-// return values become slices of pairs, mirroring pades_crl_source.go's
-// PAdESCRLSourceBinaryOriginsEntry precedent for the sibling PAdESCRLSource (see that file's
-// header for why getAllRevocationBinariesWithOrigins()/getAllRevocationTokensWithOrigins() are
-// each source's own method rather than an override of a base one in this port).
-//
-// FORWARD DEPENDENCY: PdfSignatureRevision (eu.europa.esig.dss.pdf.PdfSignatureRevision); see
-// pades_certificate_source.go's header for its full assumed shape - this file additionally uses
-// CompositeDssDictionary().OcspSource() and DssDictionary().
+// return values become slices of pairs, as in pades_crl_source.go's
+// PAdESCRLSourceBinaryOriginsEntry for the sibling PAdESCRLSource (see that file's header for
+// why getAllRevocationBinariesWithOrigins()/getAllRevocationTokensWithOrigins() are each
+// source's own method rather than an override of a base one in this port).
 package pades
 
 import (
@@ -35,7 +31,7 @@ type PAdESOCSPSource struct {
 // PAdESOCSPSource(PdfSignatureRevision, String, AttributeTable).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
-// empty string stands for Java's null throughout this port, see pdf_dss_dict_crl_source.go).
+// empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
 func NewPAdESOCSPSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signedAttributes cmscore.Attributes) *PAdESOCSPSource {
 	if vriDictionaryName == "" {

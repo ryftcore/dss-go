@@ -258,8 +258,8 @@ func TestDOMRoundTrip(t *testing.T) {
 // TestParseRejectsNegativeCorpus asserts that every document Java's parsers refuse is refused
 // here too. manifest.txt records what Java made of each, including the one deliberate
 // divergence: Xerces accepts <?xml version="1.1"?> and applies XML 1.1 line-ending
-// normalization, which would silently change canonical bytes, so xmldom rejects it (design
-// decision D4, recorded as an accepted gap in docs/compatibility/known-gaps.md).
+// normalization, which would silently change canonical bytes, so xmldom rejects it (recorded as
+// an accepted gap in docs/compatibility/known-gaps.md).
 func TestParseRejectsNegativeCorpus(t *testing.T) {
 	dir := corpustest.Path(t, filepath.Join("corpus", "negative"))
 	entries, err := os.ReadDir(dir)

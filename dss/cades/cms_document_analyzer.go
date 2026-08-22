@@ -1,12 +1,4 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/CMSDocumentAnalyzer.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY (flagged per S3_BRIEF.md): *CAdESSignature is owned by a sibling chunk not
-// in this manifest. Its shape is inferred from every call this file makes to it, beyond the
-// spi/validation.AdvancedSignature interface it is expected to implement:
-//
-//	func NewCAdESSignature(cms *cms.CMS, signerInformation *cmscore.SignerInfo) *CAdESSignature
-//	func (s *CAdESSignature) CMS() *cms.CMS
-//	func (s *CAdESSignature) OriginalDocument() (model.DSSDocument, error) // Java: getOriginalDocument() throws DSSException
 package cades
 
 import (
@@ -84,9 +76,8 @@ func (a *CMSDocumentAnalyzer) IsSupported(dssDocument model.DSSDocument) bool {
 //
 // NOT PORTED IN spi/dss_utils.go: that file's header defers isTimestampToken(DSSDocument) to
 // "the CMS phase" as a CMS-shaped method, the same way dss_asn1_utils.go defers its own
-// CMS-shaped TODOs (see S3_BRIEF.md's handoff facts). It is completed here rather than in
-// spi/dss_utils.go itself because S3_BRIEF.md's import direction rule ("cades imports cms,
-// spi, ...; nothing already-ported imports cades or cms") forbids spi from importing cms, which
+// CMS-shaped TODOs. It is completed here rather than in spi/dss_utils.go itself because cades
+// imports cms and spi, while nothing in spi imports cades or cms - spi cannot import cms, which
 // this check needs to parse the document.
 func cmsDocumentAnalyzerIsTimestampToken(document model.DSSDocument) bool {
 	parsedCMS, err := cms.CMSUtilsParseToCMS(document)

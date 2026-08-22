@@ -6,7 +6,7 @@ import "time"
 // WebTokenPayload represents a payload of a web token (e.g. RFC 7519 token or RFC 8392 CWT).
 //
 // Java's Date-typed claims (ExpirationTime, NotBefore, IssuedAt) become time.Time; an absent
-// claim is the zero time.Time, matching the convention used elsewhere in this port (e.g.
+// claim is the zero time.Time, matching the convention used elsewhere in this codebase (e.g.
 // model.CertificateToken.IsValidOn).
 type WebTokenPayload interface {
 	// Issuer gets the value of the Issuer claim identifying the principal that issued the

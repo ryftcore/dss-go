@@ -1,5 +1,5 @@
-// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness (task #12,
-// ASiC-with-CAdES extension): it builds ASiC-S and ASiC-E containers with this package's own
+// Command crossgen is the GO -> UPSTREAM direction of the cross-validation harness,
+// ASiC-with-CAdES: it builds ASiC-S and ASiC-E containers with this package's own
 // ASiCWithCAdESService, at both baseline B and T, using real crypto (an RSA PKCS#12 test key for
 // the signer, an EC PKCS#12 test key as a self-hosted TSA via
 // spi/validation.KeyEntityTSPSource - the same two key stores cades/testdata/crossgen already

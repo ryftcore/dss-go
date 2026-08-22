@@ -1,5 +1,4 @@
-// Marshal-parity KATs for the policy validation model (DSS 6.5.RC1), per
-// PORTING.md/S8A_BRIEF.md's "POLICY round-trip KATs" requirement.
+// Marshal-parity KATs for the policy validation model (DSS 6.5.RC1).
 //
 // testdata/oracle/*.remarshal.xml are byte-exact JAXB RI output: each is
 // `new JAXBContext(ObjectFactory.class)` unmarshalling the corresponding

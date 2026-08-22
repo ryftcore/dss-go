@@ -1,14 +1,14 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/summary/TLValidationJobSummaryBuilder.java (DSS 6.5.RC1).
 //
-// FLAG (pre-existing, model/tsl frozen package - out of this manifest): the header of
+// FLAG: the header of
 // model/tsl/tl_validation_job_summary.go claims *TLValidationJobSummary "implements the assumed
 // job.ValidationJobSummary[TLInfo, LOTLInfo] interface (getDocumentListInfos/getOtherDocumentInfos,
 // ported as DocumentListInfos()/OtherDocumentInfos())", but the type's actual accessors are named
 // LOTLInfos()/OtherTLInfos() - they do NOT satisfy modeljob.ValidationJobSummary[TLInfo, LOTLInfo]
 // (github.com/ryftcore/dss-go/dss/model/job, requiring exactly DocumentListInfos()/OtherDocumentInfos())
-// by name, which the now-landed validation/job package's ValidationJobSummaryBuilder[D, L]
+// by name, which the validation/job package's ValidationJobSummaryBuilder[D, L]
 // interface (Build() modeljob.ValidationJobSummary[D, L]) requires verbatim. Rather than editing
-// the frozen model/tsl file, tlValidationJobSummaryAdapter below (this file, package tsl) wraps a
+// model/tsl, tlValidationJobSummaryAdapter below (this file, package tsl) wraps a
 // built *TLValidationJobSummary and supplies the two missing names by delegation; BuildTyped()
 // returns it as the interface job.ValidationJobSummaryBuilder[TLInfo, LOTLInfo].Build() needs,
 // while Build() keeps returning the concrete *TLValidationJobSummary Java's covariant build()
@@ -85,8 +85,8 @@ func (b *TLValidationJobSummaryBuilder) BuildTyped() validationjob.ValidationJob
 // Build builds the TLValidationJobSummary. Port of build().
 //
 // Java's IllegalArgumentException, raised by the TLValidationJobSummary constructor when both
-// lists end up empty, becomes NewTLValidationJobSummary's returned error; this port panics with
-// that error's message to keep Build()'s signature aligned with the assumed
+// lists end up empty, becomes NewTLValidationJobSummary's returned error; Build() panics with
+// that error's message to keep its signature aligned with the
 // job.ValidationJobSummaryBuilder[D, L] contract's non-erroring Build() D (see this file's FLAG
 // header) - a data-dependent condition upstream never actually allowed a caller to recover from
 // either (the constructor threw an unchecked exception).
@@ -108,7 +108,7 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 			var tlInfos []*tslmodel.TLInfo
 			currentTLSources := b.extractTLSources(lotlParsingResult)
 			for _, tlSource := range currentTLSources {
-				otherTSLPointer := b.getOtherTSLPointer(lotlParsingResult.TlOtherPointers(), tlSource.Url())
+				otherTSLPointer := b.otherTSLPointer(lotlParsingResult.TlOtherPointers(), tlSource.Url())
 				tlInfos = append(tlInfos, b.buildTLInfoWithParent(tlSource, &lotlInfo, otherTSLPointer))
 			}
 			lotlInfo.SetTlInfos(tlInfos)
@@ -116,14 +116,14 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 			if lotlSource.IsPivotSupport() {
 				var pivotInfos []*tslmodel.PivotInfo
 
-				currentCertificates := b.getLOTLKeystoreCertificates(lotlSource)
+				currentCertificates := b.lOTLKeystoreCertificates(lotlSource)
 
 				pivotSources := b.extractPivotSources(lotlParsingResult)
 				for _, pivotSource := range pivotSources {
 					pivotParsingCacheDTO := b.readOnlyCacheAccess.GetParsingInfoRecordTyped(pivotSource.CacheKey())
-					pivotCertificateTokens := b.getPivotCertificateTokens(pivotParsingCacheDTO)
-					certificateChangesMap := b.getCertificateChangesMap(pivotCertificateTokens, currentCertificates)
-					associatedLOTLLocation := b.getAssociatedLOTLLocation(pivotParsingCacheDTO)
+					pivotCertificateTokens := b.pivotCertificateTokens(pivotParsingCacheDTO)
+					certificateChangesMap := b.certificateChangesMap(pivotCertificateTokens, currentCertificates)
+					associatedLOTLLocation := b.associatedLOTLLocation(pivotParsingCacheDTO)
 					pivotInfos = append(pivotInfos, b.buildPivotInfo(pivotSource, certificateChangesMap, associatedLOTLLocation))
 
 					currentCertificates = pivotCertificateTokens
@@ -179,7 +179,7 @@ func (b *TLValidationJobSummaryBuilder) buildPivotInfo(pivotSource *LOTLSource, 
 		certificateChangesMap, associatedLOTLLocation)
 }
 
-func (b *TLValidationJobSummaryBuilder) getOtherTSLPointer(tlOtherPointers []*tslmodel.OtherTSLPointer, tslPointerLocation string) *tslmodel.OtherTSLPointer {
+func (b *TLValidationJobSummaryBuilder) otherTSLPointer(tlOtherPointers []*tslmodel.OtherTSLPointer, tslPointerLocation string) *tslmodel.OtherTSLPointer {
 	for _, otherTSLPointer := range tlOtherPointers {
 		if tslPointerLocation == otherTSLPointer.TSLLocation() {
 			return otherTSLPointer
@@ -200,7 +200,7 @@ func (b *TLValidationJobSummaryBuilder) extractTLSources(lotlParsingResult *TLPa
 	return result
 }
 
-func (b *TLValidationJobSummaryBuilder) getLOTLKeystoreCertificates(lotlSource *LOTLSource) []*model.CertificateToken {
+func (b *TLValidationJobSummaryBuilder) lOTLKeystoreCertificates(lotlSource *LOTLSource) []*model.CertificateToken {
 	certificateSource := lotlSource.CertificateSource()
 	if certificateSource != nil {
 		return certificateSource.Certificates()
@@ -220,7 +220,7 @@ func (b *TLValidationJobSummaryBuilder) extractPivotSources(lotlParsingResult *T
 	return utils.ReverseList(result)
 }
 
-func (b *TLValidationJobSummaryBuilder) getPivotCertificateTokens(parsingCacheDTO *TLParsingCacheDTO) []*model.CertificateToken {
+func (b *TLValidationJobSummaryBuilder) pivotCertificateTokens(parsingCacheDTO *TLParsingCacheDTO) []*model.CertificateToken {
 	lotlOtherPointers := parsingCacheDTO.LotlOtherPointers()
 	if len(lotlOtherPointers) == 1 {
 		return lotlOtherPointers[0].SdiCertificates()
@@ -228,7 +228,7 @@ func (b *TLValidationJobSummaryBuilder) getPivotCertificateTokens(parsingCacheDT
 	return nil
 }
 
-func (b *TLValidationJobSummaryBuilder) getCertificateChangesMap(pivotSourceCertificates, currentCertificates []*model.CertificateToken) map[*model.CertificateToken]tslmodel.CertificatePivotStatus {
+func (b *TLValidationJobSummaryBuilder) certificateChangesMap(pivotSourceCertificates, currentCertificates []*model.CertificateToken) map[*model.CertificateToken]tslmodel.CertificatePivotStatus {
 	certificateChangesMap := make(map[*model.CertificateToken]tslmodel.CertificatePivotStatus)
 
 	var commonCertificates []*model.CertificateToken
@@ -260,7 +260,7 @@ func (b *TLValidationJobSummaryBuilder) getCertificateChangesMap(pivotSourceCert
 	return certificateChangesMap
 }
 
-func (b *TLValidationJobSummaryBuilder) getAssociatedLOTLLocation(parsingCacheDTO *TLParsingCacheDTO) string {
+func (b *TLValidationJobSummaryBuilder) associatedLOTLLocation(parsingCacheDTO *TLParsingCacheDTO) string {
 	xmllotlPointer := ParsingUtilsXMLLOTLPointer(parsingCacheDTO)
 	if xmllotlPointer != nil {
 		return xmllotlPointer.TSLLocation()

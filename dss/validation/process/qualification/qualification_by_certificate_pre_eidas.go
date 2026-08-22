@@ -21,7 +21,9 @@ func newQualificationByCertificatePreEIDAS(signingCertificate *diagnostic.Certif
 	return &qualificationByCertificatePreEIDAS{signingCertificate: signingCertificate}
 }
 
-// QualifiedStatus is the port of the overridden getQualifiedStatus().
+// QualifiedStatus reports QC when the certificate is QcCompliant or matches
+// QCP/QCP+ and carries no QC legislation country codes. Port of the
+// overridden getQualifiedStatus().
 func (q *qualificationByCertificatePreEIDAS) QualifiedStatus() enumerations.CertificateQualifiedStatus {
 	if (q.signingCertificate.IsQcCompliance() || process.IsQCP(q.signingCertificate) ||
 		process.IsQCPPlus(q.signingCertificate)) &&

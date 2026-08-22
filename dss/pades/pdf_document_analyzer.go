@@ -1,43 +1,9 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PDFDocumentAnalyzer.java
 // (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (sibling chunks of this same phase; assumed shapes, following the
-// cms_document_analyzer.go / pades_signature.go precedent for how such a header documents
-// them):
-//
-//	func PAdESUtilsIsPDFDocument(document model.DSSDocument) bool  // PAdESUtils.isPDFDocument
-//	func PAdESUtilsGetOriginalPDF(padesSignature *PAdESSignature) model.DSSDocument
-//
-//	// pades/dss (flattened into this package)
-//	type PdfDocDssRevision struct { ... }                    // implements PdfRevision
-//	func (r *PdfDocDssRevision) CertificateSource() *PdfDssDictCertificateSource
-//	func (r *PdfDocDssRevision) CRLSource() *PdfDssDictCRLSource
-//	func (r *PdfDocDssRevision) OCSPSource() *PdfDssDictOCSPSource
-//	func (r *PdfDocDssRevision) DssDictionary() PdfDssDict
-//
-//	// pades root (flattened into this package)
-//	type PdfDocTimestampRevision struct { ... }              // implements PdfRevision
-//	func (r *PdfDocTimestampRevision) TimestampToken() *PdfTimestampToken
-//	func (r *PdfDocTimestampRevision) ByteRange() *ByteRange
-//
-//	// pades/timestamp (flattened into this package)
-//	// INTEGRATION CORRECTION: the actually-landed pdf_timestamp_token.go embeds
-//	// *validation.TimestampToken (by pointer), not validation.TimestampToken (by value) as
-//	// speculated below - so timestampToken.TimestampToken already IS *validation.TimestampToken;
-//	// this file's two call sites that used to read &timestampToken.TimestampToken were fixed to
-//	// drop the &, and the append() feeding a []*validation.TimestampToken was fixed to append
-//	// timestampToken.TimestampToken instead of the *PdfTimestampToken wrapper.
-//	type PdfTimestampToken struct { *validation.TimestampToken }
-//	func NewPAdESTimestampScopeFinder() *PAdESTimestampScopeFinder
-//	func (f *PAdESTimestampScopeFinder) FindTimestampScope(timestampToken *validation.TimestampToken) []scope.SignatureScope
-//	func NewPdfRevisionTimestampSource(pdfRevision PdfRevision, certificateSource *spi.ListCertificateSource,
-//	    crlSource *spi.ListRevocationSource[revocation.CRL], ocspSource *spi.ListRevocationSource[revocation.OCSP]) *PdfRevisionTimestampSource
-//	func (s *PdfRevisionTimestampSource) IncorporatedReferences() []*validation.TimestampedReference
-//
-// java.util.Objects.requireNonNull("Document to be validated cannot be null!") stays a panic
-// (matching CMSDocumentAnalyzer's NewCMSDocumentAnalyzerFromDocument precedent), while the
-// IllegalInputException("Not supported document") thrown for an unsupported document becomes a
-// returned error, following the same precedent.
+// java.util.Objects.requireNonNull("Document to be validated cannot be null!") stays a panic,
+// while the IllegalInputException("Not supported document") thrown for an unsupported document
+// becomes a returned error.
 package pades
 
 import (

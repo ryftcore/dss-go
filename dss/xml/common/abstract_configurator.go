@@ -18,11 +18,8 @@ type SecurityAttributeSetter[F any] func(factory F, attribute string, value any)
 
 // AbstractConfigurator holds util methods helping to configure a Factory or a Validator.
 type AbstractConfigurator[F any] struct {
-	// featureNames/attributeNames record insertion order. Java's HashMap has no defined
-	// iteration order; per PORTING.md's determinism guidance ("Map<K,V> ... order-sensitive
-	// upstream iteration -> slice of pairs or explicit sort"), applying features/attributes
-	// in a fixed, deterministic order is the Go-appropriate substitute for Java's (already
-	// unspecified) HashMap order, rather than Go's randomized map iteration.
+	// featureNames/attributeNames record insertion order so features/attributes apply
+	// deterministically (Go map iteration order is randomized).
 	featureNames []string
 	features     map[string]bool
 

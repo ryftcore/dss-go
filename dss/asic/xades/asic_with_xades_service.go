@@ -7,8 +7,8 @@
 // Java's `extends AbstractASiCSignatureService<...>` becomes embedding plus the
 // InitAbstractASiCSignatureService(self) registration; the base's single-document convenience
 // wrappers (promoted here as this type's plain-named GetContentTimestamp/GetDataToSign/
-// SignDocument/Timestamp) dispatch into the *Multiple methods below (S7_BRIEF.md's
-// virtual-dispatch warning), which carry the real, multi-document implementation. ExtendDocument
+// SignDocument/Timestamp) dispatch into the *Multiple methods below, which carry the real,
+// multi-document implementation. ExtendDocument
 // has only ever one Java overload (single DSSDocument, shared by DocumentSignatureService and
 // MultipleDocumentsSignatureService) so it needs no Multiple companion.
 //
@@ -18,8 +18,7 @@
 // This port keeps the plain names for the single-document shape - so *ASiCWithXAdESService
 // satisfies document.DocumentSignatureService - and MultipleDocumentsService() below returns a
 // thin adapter satisfying document.MultipleDocumentsSignatureService by forwarding to the
-// *Multiple methods, matching the precedent in xades/xades_service.go and jades/jades_service.go
-// (dss/xades and dss/jades, the top-level packages).
+// *Multiple methods.
 package xades
 
 import (
@@ -496,11 +495,6 @@ func (s *ASiCWithXAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 //
 // Panics with Java's messages when a required argument is nil, undefined, or the document list
 // is empty.
-//
-// Cross-chunk assumption (XADVAL): NewASiCWithXAdESContainerEvidenceRecordBuilder(CertificateVerifier,
-// ASiCWithXAdESFilenameFactory) mirrors `new ASiCWithXAdESContainerEvidenceRecordBuilder(certificateVerifier,
-// asicFilenameFactory)`, ported alongside ASiCWithXAdESSignatureParameters in the sibling XADVAL
-// manifest (S7_BRIEF.md).
 func (s *ASiCWithXAdESService) AddContainerEvidenceRecord(documents []model.DSSDocument,
 	evidenceRecordDocument model.DSSDocument, parameters *asic.ASiCContainerEvidenceRecordParameters) model.DSSDocument {
 	if evidenceRecordDocument == nil {

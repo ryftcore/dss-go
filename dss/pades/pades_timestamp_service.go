@@ -1,6 +1,6 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/timestamp/PAdESTimestampService.java (DSS 6.5.RC1).
 //
-// Java's timestamp package is flattened into the single pades package (see the phase 5b layout).
+// Java's timestamp package is flattened into the single pades package.
 // Java's two constructors become two constructor funcs, since Go has no overloading:
 //
 //	PAdESTimestampService(TSPSource)                       -> NewPAdESTimestampService

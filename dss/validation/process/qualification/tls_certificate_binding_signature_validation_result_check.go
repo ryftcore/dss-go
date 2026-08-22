@@ -1,14 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/qwac/sub/checks/TLSCertificateBindingSignatureValidationResultCheck.java (DSS 6.5.RC1).
-//
-// CROSS-CHUNK ASSUMPTION: SignatureValidationResultCheck (Java package
-// qualification.signature.checks) is owned by a sibling porter of this
-// shared package and was not present on disk while this file was written;
-// its constructor is assumed to follow this port's usual generic-[T any]
-// ChainItem shape (NewSignatureValidationResultCheck[T any](I18nProvider,
-// *process.Result[T], *jaxb.XmlConclusion, policy.LevelRule)
-// *SignatureValidationResultCheck[T]), matching the Java constructor's
-// parameter order, but must be reconciled against the sibling porter's
-// actual signature once available.
 package qualification
 
 import (

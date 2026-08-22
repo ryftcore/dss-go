@@ -1,7 +1,7 @@
 // Ported from SimpleReport.xsd (DSS 6.5.RC1) via the JAXB class generated
-// into eu.europa.esig.dss.simplereport.jaxb.XmlSimpleReport. Per the
-// phase-8a generated-JAXB rule the generated classes are grouped into
-// schema-area files rather than one file per class.
+// into eu.europa.esig.dss.simplereport.jaxb.XmlSimpleReport. The
+// generated classes are grouped into schema-area files rather than one
+// file per class.
 //
 // The SimpleReport complexType's Signature/Timestamp/EvidenceRecord/EAA
 // choice sits directly in its element sequence (no wrapping element), so

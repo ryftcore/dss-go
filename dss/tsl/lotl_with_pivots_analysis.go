@@ -58,12 +58,12 @@ func (a *LOTLWithPivotsAnalysis) GetCurrentCertificateSource() spi.CertificateSo
 		if utils.IsCollectionEmpty(pivotURLs) {
 			return initialCertificateSource
 		}
-		return a.getCurrentCertificateSourceFromPivots(initialCertificateSource, pivotURLs)
+		return a.currentCertificateSourceFromPivots(initialCertificateSource, pivotURLs)
 	}
 	return initialCertificateSource
 }
 
-func (a *LOTLWithPivotsAnalysis) getCurrentCertificateSourceFromPivots(initialCertificateSource spi.CertificateSource, pivotURLs []string) spi.CertificateSource {
+func (a *LOTLWithPivotsAnalysis) currentCertificateSourceFromPivots(initialCertificateSource spi.CertificateSource, pivotURLs []string) spi.CertificateSource {
 	/*-
 	 * current 																						-> Signed with pivot 226 certificates
 	 * https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-pivot-226-mp.xml	-> Signed with pivot 191 certificates

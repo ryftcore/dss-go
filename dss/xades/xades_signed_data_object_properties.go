@@ -1,9 +1,8 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/validation/XAdESSignedDataObjectProperties.java
 // (DSS 6.5.RC1).
 //
-// XAdESSigProperties (Java eu.europa.esig.dss.xades.validation.XAdESSigProperties, same
-// "validation" SCC as this file per S4D_BRIEF.md's package-layout rule, hence the same Go
-// package xades) is landed alongside this file as xades_sig_properties.go: abstract in Java,
+// XAdESSigProperties (Java eu.europa.esig.dss.xades.validation.XAdESSigProperties, the same Go
+// package xades) lives alongside this file as xades_sig_properties.go: abstract in Java,
 // implementing spi.validation.SignatureProperties[XAdESAttribute] over a signature-properties DOM
 // element and an XAdESPath. Its constructor is the package-private
 // newXAdESSigProperties(signatureProperties *xmldom.Node, xadesPaths definition.XAdESPath)

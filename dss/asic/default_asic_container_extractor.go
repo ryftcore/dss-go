@@ -2,7 +2,7 @@
 // dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/extract/DefaultASiCContainerExtractor.java
 // (DSS 6.5.RC1).
 //
-// The Java extract sub-package flattens into this Go package per the phase-7 package layout.
+// The Java extract sub-package flattens into this Go package.
 //
 // Java's six abstract isAllowed*(String) predicates - the whole reason this class is abstract - are
 // carried by DefaultASiCContainerExtractorOverrides. Routing zipParsing's calls through that

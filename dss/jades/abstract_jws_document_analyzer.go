@@ -1,13 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/AbstractJWSDocumentAnalyzer.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: *JAdESSignature (Java eu.europa.esig.dss.jades.validation.JAdESSignature)
-// is assigned to a sibling chunk of phase 6 (VALA) not in this manifest. The subset of its API
-// this file calls, inferred from the Java method body:
-//
-//	func (s *JAdESSignature) OriginalDocuments() ([]model.DSSDocument, error) // getOriginalDocuments(), throws DSSException
-//
-// package jades (the Java eu.europa.esig.dss.jades.validation package folds into this one Go
-// package per the phase-6 package layout).
+// package jades (the Java eu.europa.esig.dss.jades.validation package is flattened into this one
+// Go package).
 package jades
 
 import (

@@ -1,15 +1,14 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfltvd/checks/TimestampMessageImprintWithIdCheck.java (DSS 6.5.RC1).
 //
-// This is a deliberately minimal slice of Java's
-// eu.europa.esig.dss.validation.process.vpfltvd package tree. Only this one
-// check class is ported here, plus its immediate base
-// vpftspwatsp/checks.TimestampMessageImprintCheck (see that package's header) - the
-// two-level forward dependency the SAV porter flagged. It is the sole caller
-// of both classes anywhere:
-// bbb/sav's SignatureAcceptanceValidation.contentTimestampMessageImprint().
-// Everything else in the real vpfltvd package (RevocationBasicValidationProcess,
-// ValidationProcessForSignaturesWithLongTermValidationData, and the rest of
-// vpfltvd/checks) remains unported and is left for 8e.
+// This check class's immediate base,
+// vpftspwatsp/checks.TimestampMessageImprintCheck (see that package's
+// header), is a two-level dependency. This is the sole caller of both
+// classes: bbb/sav's SignatureAcceptanceValidation.contentTimestampMessageImprint().
+// Everything else in the real vpfltvd package tree
+// (RevocationBasicValidationProcess and the rest of vpfltvd/checks) also
+// lives in this same Go package; ValidationProcessForSignaturesWithLongTermValidationData
+// is filed under the sibling package vpfltvdsig instead - see that
+// package's header for why.
 package vpfltvd
 
 import (

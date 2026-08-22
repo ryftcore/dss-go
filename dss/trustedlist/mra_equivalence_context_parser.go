@@ -6,9 +6,8 @@ import "github.com/ryftcore/dss-go/dss/enumerations"
 
 // MRAEquivalenceContextParserParse parses the string and returns a
 // MRAEquivalenceContext, the empty value if v does not match any known URI.
-// slf4j's LOG.warn on an unresolved value is dropped per PORTING.md/
-// S9_BRIEF.md's hard rules (slf4j dropped except job alerting semantics,
-// which do not apply here).
+// slf4j's LOG.warn on an unresolved value is dropped per PORTING.md
+// (slf4j dropped except job alerting semantics, which do not apply here).
 func MRAEquivalenceContextParserParse(v string) enumerations.MRAEquivalenceContext {
 	for _, m := range enumerations.MRAEquivalenceContextValues() {
 		if m.URI() == v {

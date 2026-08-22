@@ -16,7 +16,9 @@ func NewGrantedServiceFilter() *GrantedServiceFilter {
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the service's status is an acceptable
+// 'granted' status (before or after eIDAS). Port of the overridden
+// isAcceptable(TrustServiceWrapper).
 func (f *GrantedServiceFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	if IsPostEIDAS(service.StartDate) {
 		return TrustServiceStatusIsAcceptableStatusAfterEIDAS(service.Status)

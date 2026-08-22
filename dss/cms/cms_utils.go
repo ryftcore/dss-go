@@ -261,10 +261,9 @@ func CMSUtilsWriteSignedDataDigestAlgorithmsEncoded(cms *CMS, w io.Writer) error
 // The "ContentInfo" of upstream's method name is SignedData.encapContentInfo - the eContentType
 // and eContent of the SIGNED content (CMSObjectUtils#writeContentInfoEncoded:
 // `signedData.getEncapContentInfo()`) - NOT the outer CMS ContentInfo that wraps the whole
-// SignedData. Writing the outer one instead (this port's first reading of the name) fed the
-// entire signature - certificates, SignerInfos and all - into the archive-timestamp-v2 message
-// imprint, so every CAdES archive-timestamp-v2 verified as FAILED/HASH_FAILURE; found by the
-// phase-8f document-level harness on Signature-C-B-LTA-10.p7m.
+// SignedData. Writing the outer one instead fed the entire signature - certificates,
+// SignerInfos and all - into the archive-timestamp-v2 message imprint, so every CAdES
+// archive-timestamp-v2 verified as FAILED/HASH_FAILURE.
 //
 // Upstream picks the encoding from the eContent's own form - BER when the OCTET STRING is
 // constructed (BouncyCastle hands such an eContent back as a BEROctetString), DER otherwise -

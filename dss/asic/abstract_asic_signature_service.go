@@ -12,7 +12,7 @@ import (
 )
 
 // AbstractASiCSignatureServiceOverrides declares the operations AbstractASiCSignatureService
-// calls back into virtually. Per S7_BRIEF.md's virtual-dispatch warning: the single-document
+// calls back into virtually. The single-document
 // convenience wrappers (GetContentTimestamp, GetDataToSign, SignDocument, Timestamp) each
 // delegate to their multi-document counterpart, which is what the concrete, format-specific
 // ASiC service (CADSIGN/XADSIGN chunks) implements to satisfy

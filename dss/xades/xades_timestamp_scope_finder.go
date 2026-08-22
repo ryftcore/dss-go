@@ -24,12 +24,8 @@
 // validateTimestamps's call site is changed to go through it. Flagged prominently in the porter
 // report; the integrator arbitrates.
 //
-// # FORWARD DEPENDENCY
-//
-// This file type-asserts spiscope.EncapsulatedTimestampScopeFinder's embedded Signature field
-// (validation.AdvancedSignature) down to the concrete *XAdESSignature, then calls its
-// XAdESReferenceValidations() accessor - the same GAP-flagged additive method
-// xades_signature_scope_finder.go's file header already documents in full.
+// Type-asserts the embedded AdvancedSignature to *XAdESSignature to call its
+// XAdESReferenceValidations() (see xades_signature_scope_finder.go).
 package xades
 
 import (

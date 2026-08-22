@@ -6,12 +6,12 @@
 // EU list of the lists, TSLType EUlistofthelists, sequence 248) and sk-tl.xml (a country TL,
 // TSLType EUgeneric, sequence 59). Every expected value below is read straight out of those
 // documents, i.e. it is what the Java AbstractParsingTask#commonParseSchemeInformation stores into
-// the AbstractTLParsingResult for the same bytes. This is the TSLCORE half of harness contract
-// (A): the whole-TLInfo dump comparison lives in the harness stage.
+// the AbstractTLParsingResult for the same bytes. The whole-TLInfo dump comparison this
+// complements lives in the harness stage.
 //
 // The task built here is the minimal concrete AbstractParsingTask a test can make - the two real
-// subclasses (TLParsingTask, LOTLParsingTask) additionally need the TSLJOB chunk's converters and
-// predicates, so they are exercised by the harness rather than here.
+// subclasses (TLParsingTask, LOTLParsingTask) additionally need converters and predicates from
+// elsewhere in this package, so they are exercised by the harness rather than here.
 package tsl
 
 import (

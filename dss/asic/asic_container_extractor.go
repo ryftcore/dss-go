@@ -2,7 +2,7 @@
 // dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/extract/ASiCContainerExtractor.java
 // (DSS 6.5.RC1).
 //
-// The Java extract sub-package flattens into this Go package per the phase-7 package layout.
+// The Java extract sub-package flattens into this Go package.
 package asic
 
 // ASiCContainerExtractor extracts documents from a provided ZIP archive and produces an

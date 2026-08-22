@@ -1,9 +1,8 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/scope/ASiCWithCAdESTimestampScopeFinder.java (DSS 6.5.RC1).
 //
-// The Java `validation.scope` sub-package flattens into this Go package per the phase-7 package
-// layout (S7_BRIEF.md).
+// The Java `validation.scope` sub-package flattens into this Go package.
 //
-// Virtual-dispatch note (per S7_BRIEF.md's warning): Java's findTimestampScope() and
+// Virtual-dispatch note: Java's findTimestampScope() and
 // getTimestampSignatureScopeForDocument() are both @Override'd here, and findTimestampScope()
 // self-calls getTimestampSignatureScopeForDocument() expecting the override to be reached. The
 // embedded scope.DetachedTimestampScopeFinder has no overrides-field indirection (unlike the

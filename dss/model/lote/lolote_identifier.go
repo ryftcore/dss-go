@@ -1,7 +1,6 @@
 // Ported from dss-model/src/main/java/eu/europa/esig/dss/model/lote/identifier/LoLoTEIdentifier.java (DSS 6.5.RC1).
 //
-// Java package eu.europa.esig.dss.model.lote.identifier is flattened into this lote package
-// per the Phase 1b cycle-driven flattening table.
+// Java package eu.europa.esig.dss.model.lote.identifier is flattened into this lote package.
 package lote
 
 import "github.com/ryftcore/dss-go/dss/model"

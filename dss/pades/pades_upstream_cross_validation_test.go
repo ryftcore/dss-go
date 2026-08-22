@@ -1,4 +1,4 @@
-// Cross-validation harness, direction UPSTREAM -> GO (task #12, PAdES extension): parses the
+// Cross-validation harness, direction UPSTREAM -> GO: parses the
 // PAdES signatures checked into testdata/upstream/ with this package's own
 // PDFDocumentAnalyzer/PAdESSignature and compares the result against
 // testdata/upstream-cross-validation.json, ground truth dumped straight from upstream DSS

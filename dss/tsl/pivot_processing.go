@@ -2,12 +2,13 @@
 //
 // DEVIATION: Java extends validation.job.runnable.AbstractAnalysis to reuse its
 // download()/parsing()/expireCache() bodies (protected methods a Java subclass reaches through
-// inheritance). The landed dss/validation/job.AbstractAnalysis keeps those same methods
+// inheritance). dss/validation/job.AbstractAnalysis keeps those same methods
 // unexported (package-private to Go's "job" package, matching their Java "protected" intent
 // against every OTHER package), so a type in package tsl cannot call them through embedding.
-// This port therefore inlines the small amount of logic those private methods perform - the
-// same shape as AbstractAnalysis's own download()/parsing()/expireCache() bodies - directly
-// against the *TLCacheAccessByKey this type already receives, rather than through the base.
+// The small amount of logic those private methods perform - the same shape as
+// AbstractAnalysis's own download()/parsing()/expireCache() bodies - is therefore inlined
+// directly against the *TLCacheAccessByKey this type already receives, rather than through the
+// base.
 package tsl
 
 import (
@@ -47,7 +48,7 @@ func NewPivotProcessing(pivotSource *LOTLSource, pivotCacheAccess *TLCacheAccess
 	}
 }
 
-// Call ports call(). Java declares `throws Exception`; this port returns error instead - though,
+// Call ports call(). Java declares `throws Exception`; this returns error instead - though,
 // matching Java's own behaviour (every internal error is routed to the corresponding
 // cacheAccess.*Error and swallowed, never rethrown from call()), the error return here is always
 // nil; a caller only needs the *PivotProcessingResult (nil when no XML LOTL pointer is found).

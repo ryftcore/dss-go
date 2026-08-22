@@ -1,14 +1,9 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/AbstractAcceptanceValidation.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): cryptographic()/algorithmObsolescenceValidationCheck()
-// need eu.europa.esig.dss.validation.process.bbb.aov.checks.AlgorithmObsolescenceValidationCheck,
-// which the porter flagged as unported (bbb/aov is not part of the phase 8c
-// package layout). That one check class - the sole consumer of an
-// already-built XmlAOV result, with no dependency on the rest of the aov
-// tree - has since been ported minimally into
+// cryptographic()/algorithmObsolescenceValidationCheck() depend on
+// AlgorithmObsolescenceValidationCheck, which lives in
 // github.com/ryftcore/dss-go/dss/validation/process/bbb/aov (see that package's
-// header for the exact scope), so this file now builds as originally
-// written.
+// header for its scope).
 package sav
 
 import (

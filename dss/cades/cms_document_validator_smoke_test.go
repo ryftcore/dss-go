@@ -1,20 +1,16 @@
-// Smoke test for the un-gated CAdES validation trio (cms_document_validator.go,
-// cms_document_validator_factory.go, cades_diagnostic_data_builder.go), now that the phase 8
-// validation engine (dss/validation, dss/validation/executor, dss/validation/policy,
-// dss/simplereport, dss/policy) has landed and their `phase8` build tags were removed.
+// Smoke test for the CAdES validation trio (cms_document_validator.go,
+// cms_document_validator_factory.go, cades_diagnostic_data_builder.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidatorFromDocument dispatch, the
 // CMSDocumentAnalyzer, CAdESDiagnosticDataBuilder's virtual-dispatch override of
 // BuildDetachedXmlSignature/BuildDetachedXmlTimestamp, the default validation policy, and the
 // executor/report-builder tree - against real signed CAdES fixtures already committed under
-// testdata/upstream/validation for the (still-gated, at the time these were copied) validation
-// tests.
+// testdata/upstream/validation.
 //
 // Test-local ServiceLoader wiring: dss-policy-jaxb's default-policy factory and dss-policy-jaxb's
 // XML cryptographic-suite factory are separate modules Java loads via the classpath/ServiceLoader,
 // mirrored here exactly as validation/policy/validation_policy_loader_test.go's own init() does
-// (this chunk's manifest does not include, and PORTING.md forbids editing, those frozen factory
-// packages).
+// (those factory packages are not edited here).
 package cades
 
 import (

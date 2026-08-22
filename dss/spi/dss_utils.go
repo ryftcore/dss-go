@@ -353,7 +353,7 @@ func dssUtilsRunLength(runes []rune, i int, c rune) int {
 // NOTE: the upstream javadoc claims the result "is converted to uppercase", but the method
 // body just delegates to Utils.toHex(byte[]), which - like utils.ToHex here - is lowercase
 // (commons-codec Hex.encodeHexString semantics). The doc comment does not match upstream's own
-// code, so this port follows the code, per PORTING.md's behavioural-fidelity mandate.
+// code; this implementation follows the code.
 func DSSUtilsToHex(value []byte) string {
 	if value != nil {
 		return utils.ToHex(value)

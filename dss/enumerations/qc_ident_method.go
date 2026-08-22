@@ -30,7 +30,7 @@ func (q *qcIdentMethodUnknown) OID() string         { return q.oid }
 // matches a known QCIdentMethodEnum constant. Otherwise, a QCIdentMethod
 // with QCIdentMethodUnknownMethod as its Description and the given oid is
 // returned (Java logged this case at debug level via SLF4J; that logging
-// side-effect is not ported — see PORTER_BRIEF notes).
+// side-effect is not ported).
 func QCIdentMethodFromOID(oid string) QCIdentMethod {
 	for _, t := range QCIdentMethodEnumValues() {
 		if t.OID() == oid {

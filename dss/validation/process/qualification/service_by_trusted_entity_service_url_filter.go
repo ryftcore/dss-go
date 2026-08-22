@@ -30,9 +30,9 @@ func NewServiceByTrustedEntityServiceUrlFilterWithUrls(tlUrls []string) *Service
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustedEntityServiceWrapper).
-// Java dereferences getTrustedSourceList() unguarded; a nil TrustedSourceList panics here
-// the same way.
+// IsAcceptable reports whether the service's Trusted Source List URL is one
+// of the configured URLs. Java dereferences getTrustedSourceList()
+// unguarded; a nil TrustedSourceList panics here the same way.
 func (f *ServiceByTrustedEntityServiceUrlFilter) IsAcceptable(service *diagnostic.TrustedEntityServiceWrapper) bool {
 	var serviceURL string
 	if service.TrustedSourceList.Url != nil {

@@ -2,14 +2,14 @@
 //
 // DEFERRED: Java's DiagnosticDataXmlDefiner centers on three thread-safe singletons built by
 // javax.xml.validation/javax.xml.transform machinery that has no Go stdlib equivalent: an XSD
-// Schema (for marshaller/unmarshaller validation) and XSLT Templates (for SVG rendering). Per
-// S8A_BRIEF.md ("DiagnosticData.xsd + xslt resources copied to testdata/ (xslt not executed —
-// document as deferred; nothing in scope consumes it)"), this port keeps the schema location
-// constant and the resource paths for documentation/testdata purposes, but Schema()/SvgTemplates()
-// are stubs returning an error: no Go stdlib XSD validator or XSLT engine exists, and adding a
-// third-party one is outside the stdlib-first dependency policy without tech-lead sign-off
-// (PORTING.md "Dependency policy"). DiagnosticDataFacade.Marshal/Unmarshal (the half of this
-// pair that the marshal-parity KAT actually exercises) does not depend on either stub.
+// Schema (for marshaller/unmarshaller validation) and XSLT Templates (for SVG rendering). This
+// port keeps the schema location constant and the resource paths for documentation/testdata
+// purposes (the XSLT is not executed; nothing in scope consumes it), but
+// Schema()/SvgTemplates() are stubs returning an error: no Go stdlib XSD validator or XSLT
+// engine exists, and adding a third-party one is outside the stdlib-first dependency policy
+// without tech-lead sign-off (PORTING.md "Dependency policy"). DiagnosticDataFacade.Marshal/
+// Unmarshal (the half of this pair that the marshal-parity KAT actually exercises) does not
+// depend on either stub.
 package diagnostic
 
 import "errors"

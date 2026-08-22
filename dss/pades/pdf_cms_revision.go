@@ -1,10 +1,9 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfCMSRevision.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Interface shape (embedding PdfRevision, plus ByteRange(),
-// AreAllOriginalBytesCovered() and SetModificationDetection()) confirmed against
-// pdf_revision_scope_finder.go's already-landed, exhaustively-gathered forward-dependency
-// header, which cites every call site across the package.
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// Its interface shape (embedding PdfRevision, plus ByteRange(), AreAllOriginalBytesCovered() and
+// SetModificationDetection()) is exercised by every call site across the package; see
+// pdf_revision_scope_finder.go.
 //
 // STRUCTURE DEVIATION: Java's PdfCMSRevision is an abstract class carrying the state and
 // behaviour shared by its two subclasses, PdfSignatureRevision and PdfDocTimestampRevision. Go

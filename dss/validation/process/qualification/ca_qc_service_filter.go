@@ -15,7 +15,8 @@ func NewCaQcServiceFilter() *CaQcServiceFilter {
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the service's type identifier is 'CA/QC'.
+// Port of the overridden isAcceptable(TrustServiceWrapper).
 func (f *CaQcServiceFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	return ServiceTypeIdentifierIsCaQc(service.Type)
 }

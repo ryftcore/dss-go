@@ -1,20 +1,19 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/status/RevocationFreshnessStatus.java (DSS 6.5.RC1).
 //
 // SCC flattening: Java spi.validation.status.RevocationFreshnessStatus lands in this same Go
-// package per S2B_BRIEF.md's package layout table; the sibling status type TokenStatus (Java
-// spi.validation.status.TokenStatus) is already landed in this same package by another chunk of
-// phase 2b.
+// package; the sibling status type TokenStatus (Java spi.validation.status.TokenStatus) is
+// landed in this same package too.
 //
-// This type is a load-bearing cross-chunk dependency: signature_validation_context.go (sibling,
-// already landed) embeds *TokenStatus by address (`&status.TokenStatus`) when calling into
-// shared checking logic, and type-asserts the result back to *RevocationFreshnessStatus - which
-// requires RevocationFreshnessStatus to embed TokenStatus as an unnamed value field (exactly
-// mirroring Java's "extends TokenStatus"), so `status.TokenStatus` resolves to the embedded
-// field by promotion. (Note: that type assertion, `any(status).(*RevocationFreshnessStatus)`
-// against a variable statically typed *TokenStatus and passed as `&status.TokenStatus`, can
-// never succeed in Go regardless of how this type is shaped - Go does not recover an enclosing
-// struct from a promoted field's address. This is a latent no-op in the already-landed sibling
-// file, outside this chunk's manifest; flagged here rather than silently worked around.)
+// This type is load-bearing: signature_validation_context.go embeds *TokenStatus by address
+// (`&status.TokenStatus`) when calling into shared checking logic, and type-asserts the result
+// back to *RevocationFreshnessStatus - which requires RevocationFreshnessStatus to embed
+// TokenStatus as an unnamed value field (exactly mirroring Java's "extends TokenStatus"), so
+// `status.TokenStatus` resolves to the embedded field by promotion. (Note: that type assertion,
+// `any(status).(*RevocationFreshnessStatus)` against a variable statically typed *TokenStatus
+// and passed as `&status.TokenStatus`, can never succeed in Go regardless of how this type is
+// shaped - Go does not recover an enclosing struct from a promoted field's address. This is a
+// latent no-op in signature_validation_context.go, flagged here rather than silently worked
+// around.)
 //
 // Go has no virtual dispatch through embedding: alert.ObjectStatus.String() (promoted via
 // TokenStatus's embedded *alert.ObjectStatus) calls its own receiver's ErrorString(), not this

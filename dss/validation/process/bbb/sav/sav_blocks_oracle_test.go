@@ -109,7 +109,7 @@ func loadSAVDiagnosticData(t *testing.T, name string) *diagnostic.DiagnosticData
 
 // passedAOV is the PASSED Algorithm Obsolescence Validation result the oracle fed
 // the chains: AlgorithmObsolescenceValidationCheck reads its conclusion to pick
-// its own Level and to decide process(). Producing an XmlAOV is phase 8d work.
+// its own Level and to decide process().
 func passedAOV() *jaxb.XmlAOV {
 	aov := &jaxb.XmlAOV{}
 	aov.Conclusion = &jaxb.XmlConclusion{
@@ -174,7 +174,7 @@ func toSAVMessage(message *jaxb.XmlMessage) *savOracleMessage {
 	return &savOracleMessage{Key: message.Key, Value: &value}
 }
 
-func mustSAVJSON(t *testing.T, value interface{}) string {
+func mustSAVJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

@@ -14,9 +14,8 @@
 //     crl_ref.go and ocsp_ref.go already do for the ESF structures - they live next to their
 //     consumer rather than being invented as a new shared package.
 //
-// This file also carries the DSSASN1Utils methods dss_asn1_utils.go deferred with a
-// "TODO(phase-3)" marker because they take a BouncyCastle CMS/ESS type this port only
-// introduces here: toSignerIdentifier(SignerId), getCertificate(X509CertificateHolder),
+// This file also carries the DSSASN1Utils methods that take a BouncyCastle CMS/ESS type this
+// port only introduces here: toSignerIdentifier(SignerId), getCertificate(X509CertificateHolder),
 // getAsn1Attributes(AttributeTable, ASN1ObjectIdentifier), getAsn1Encodable(Attribute) and
 // getCertificateRef(OtherCertID). They keep the flattened static-utility naming
 // (DSSASN1Utils<MethodName>, "get" dropped) so that folding them back into dss_asn1_utils.go

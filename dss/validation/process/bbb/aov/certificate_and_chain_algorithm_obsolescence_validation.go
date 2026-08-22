@@ -35,11 +35,11 @@ func NewCertificateAndChainAlgorithmObsolescenceValidation(i18nProvider *i18n.I1
 // BuildChain builds a chain of checks to be executed during the process. Port
 // of the overridden protected ChainItem<XmlAOV> buildChain().
 func (c *CertificateAndChainAlgorithmObsolescenceValidation) BuildChain() process.ChainItem[*jaxb.XmlAOV] {
-	return c.buildCertificateChainValidationChain(c.FirstItem, c.token, c.getFullCertificateChain())
+	return c.buildCertificateChainValidationChain(c.FirstItem, c.token, c.fullCertificateChain())
 }
 
-// getFullCertificateChain ports the private getFullCertificateChain().
-func (c *CertificateAndChainAlgorithmObsolescenceValidation) getFullCertificateChain() []*diagnostic.CertificateWrapper {
+// fullCertificateChain ports the private getFullCertificateChain().
+func (c *CertificateAndChainAlgorithmObsolescenceValidation) fullCertificateChain() []*diagnostic.CertificateWrapper {
 	var certificateChain []*diagnostic.CertificateWrapper
 	if c.token != nil {
 		certificateChain = append(certificateChain, c.token)

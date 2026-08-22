@@ -12,7 +12,7 @@ import (
 // are represented by nodeSet, string and bool directly: with three cases the conversion rules
 // of XPath 1.0 clause 3.4 are a type switch either way, and a wrapper type would only hide
 // which conversions actually happen.
-type value interface{}
+type value any
 
 // nodeSet is a node-set. Order and uniqueness are only guaranteed where XPath makes them
 // observable, which is the result of Evaluate; intermediate sets are deduplicated by pointer

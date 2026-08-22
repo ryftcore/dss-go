@@ -1,10 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/ValidationDataContainer.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: ValidationData (Java spi.validation.ValidationData) is owned by sibling
-// chunk VAL-D (per signature_validation_context.go's "ValidationData (VAL-D): NewValidationData()
-// *ValidationData, AddToken(token model.Token) bool" header entry, already landed in this
-// package). This file additionally needs the members below, inferred from every ValidationData
-// call this Java source makes:
+// ValidationData (Java spi.validation.ValidationData) is defined in
+// signature_validation_context.go. This file additionally needs the members below, inferred
+// from every ValidationData call this Java source makes:
 //
 //	func NewValidationData() *ValidationData
 //	func (d *ValidationData) AddValidationData(other *ValidationData)

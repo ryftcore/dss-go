@@ -5,8 +5,7 @@
 // singletons built by javax.xml.validation/javax.xml.transform machinery
 // that has no Go stdlib equivalent: an XSD Schema (for
 // marshaller/unmarshaller validation) and XSLT Templates (for Bootstrap 4
-// HTML and PDF report rendering). Per S8B_BRIEF.md ("xslt not executed -
-// documented deferral, 8a precedent"), this port keeps the schema/XSLT
+// HTML and PDF report rendering). This port keeps the schema/XSLT
 // resource location constants for documentation/testdata purposes, but
 // Schema()/HtmlBootstrap4Templates()/PdfTemplates() are stubs returning an
 // error: no Go stdlib XSD validator or XSLT engine exists, and adding a

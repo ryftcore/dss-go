@@ -2,7 +2,7 @@
 // (DSS 6.5.RC1).
 //
 // XAdESSignature implements spi/validation.AdvancedSignature (all interface methods, real
-// logic), the XAdES counterpart of cades.CAdESSignature (Phase 3). It embeds
+// logic), the XAdES counterpart of cades.CAdESSignature. It embeds
 // validation.DefaultAdvancedSignature and registers itself via InitDefaultAdvancedSignature,
 // satisfying the DefaultAdvancedSignatureOverrides interface with real per-format logic; the
 // remaining AdvancedSignature methods this base does not cover (SigningTime,
@@ -14,104 +14,16 @@
 // # Santuario replacement
 //
 // org.apache.xml.security.signature.{XMLSignature,SignedInfo,Reference,Manifest} are replaced
-// wholesale by internal/xmldsig per its doc.go mapping table (frozen; see S4D_BRIEF.md's
-// "Santuario-replacement rules"). getSantuarioSignature() below builds an *xmldsig.XMLSignature
-// the same way Java's private method builds an org.apache.xml.security.signature.XMLSignature:
-// registering the document's ID attributes first (xmldom's RegisterIDs via
-// XAdESDOMDocument.RecursiveIdBrowse, the same precondition internal/xmldsig/signature.go's
-// NewXMLSignature documents), then wiring detached-content and counter-signature resolvers when
-// DetachedContents is non-empty. The static block's SantuarioInitializer.init(), JCEMapper
-// provider/algorithm registration and ResourceResolver.register(...) calls have no Go
-// counterpart: internal/xmldsig has no JCE-style registry to initialize, RSA-RIPEMD160 is
-// dispatched directly in its sigalg.go (see signature_rsaripemd160_at.go's header), and
-// EnforcedResolverFragment/ResolverXPointer are already internal/xmldsig's DefaultResolvers()
-// (per its doc.go table). Only DSSXMLUtils.registerXAdESNamespaces() has an observable Go
-// counterpart (namespace-prefix registration for XPath evaluation), reused here via init().
-//
-// dss-xades's own CounterSignatureResolver is explicitly NOT part of internal/xmldsig (see that
-// package's doc.go, "What is out of scope" section: it needs DomUtils.serializeNode and
-// XPathUtils, which live in DSS packages internal/ may not import) and is therefore a forward
-// dependency of this file too, assumed below.
-//
-// # FORWARD DEPENDENCIES (sibling chunks of this same "validation" SCC, landing in this same Go
-// # package per S4D_BRIEF.md's package-layout rule; this file does not build in isolation until
-// # they land - see PORTING.md's "chunks may NOT build mid-port" rule)
-//
-// dss/xades/dom (Java eu.europa.esig.dss.xades.dom):
-//
-//	type XAdESDOMDocument struct { ... }
-//	func NewXAdESDOMDocument(document *xmldom.Node, xadesPathsHolders []definition.XAdESPath) *XAdESDOMDocument
-//	func (d *XAdESDOMDocument) Document() *xmldom.Node                      // getDocument()
-//	func (d *XAdESDOMDocument) XAdESPathHolders() []definition.XAdESPath    // getXAdESPathHolders()
-//	func (d *XAdESDOMDocument) SignatureNodes() []*xmldom.Node              // getSignatureNodes()
-//	func (d *XAdESDOMDocument) RecursiveIdBrowse()                         // recursiveIdBrowse()
-//	func (d *XAdESDOMDocument) AddXAdESPathHolder(p definition.XAdESPath)  // getXAdESPathHolders().add(p);
-//	  the deprecated registerXAdESPaths(XAdESPath)/addXAdESPathsHolder(XAdESPath) (this file and
-//	  the sibling XMLDocumentAnalyzer.java) both rely on XAdESDOMDocument#getXAdESPathHolders()
-//	  returning a stable, mutable list reference (a plain `final List<XAdESPath>` field) that
-//	  `.add(...)` mutates in place; Go's XAdESPathHolders() returning a `[]definition.XAdESPath`
-//	  value has no such in-place-append guarantee, so this explicit mutator is assumed instead.
-//	type XAdESDOMElement struct { ... }
-//	func NewXAdESDOMElement(element *xmldom.Node, ownerDocument *XAdESDOMDocument) *XAdESDOMElement
-//	func (e *XAdESDOMElement) Element() *xmldom.Node                       // getElement()
-//	func (e *XAdESDOMElement) OwnerDocument() *XAdESDOMDocument            // getOwnerDocument()
-//	func (e *XAdESDOMElement) XAdESPathHolders() []definition.XAdESPath    // getXAdESPathHolders()
-//
-// Same "validation" SCC (eu.europa.esig.dss.xades.validation, sibling porter chunks):
-//
-//	func NewXAdESCertificateSource(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *XAdESCertificateSource
-//	  - embeds spi.SignatureCertificateSource by value (CertificateSource() returns
-//	    &x.SignatureCertificateSource, the CAdESCertificateSource convention).
-//	func NewXAdESCRLSource(signatureElement *xmldom.Node, xadesPath definition.XAdESPath) *XAdESCRLSource
-//	  - embeds spi.OfflineCRLSourceBase, satisfies spi.OfflineRevocationSource[revocation.CRL].
-//	func NewXAdESTimestampSource(s *XAdESSignature) *XAdESTimestampSource
-//	  - satisfies validation.TimestampSource; already assumed by the landed xades_level_baseline_t.go
-//	    and xades_level_x.go (type-asserting TimestampSource() results to *XAdESTimestampSource).
-//	func NewXAdESSignatureScopeFinder() *XAdESSignatureScopeFinder with
-//	func (f *XAdESSignatureScopeFinder) FindSignatureScope(s *XAdESSignature) []scope.SignatureScope
-//	func NewXAdESSignatureIdentifierBuilder(s *XAdESSignature) *XAdESSignatureIdentifierBuilder
-//	  - satisfies validation.SignatureIdentifierBuilder.
-//	func NewXAdESBaselineRequirementsChecker(s *XAdESSignature, certificateVerifier validation.CertificateVerifier) *XAdESBaselineRequirementsChecker
-//	  - satisfies validation.BaselineRequirementsCheckerContract (the CAdESBaselineRequirementsChecker
-//	    precedent, cades_baseline_requirements_checker.go).
-//	type XAdESSignaturePolicy struct { signature.SignaturePolicy; transforms *xmldom.Node }
-//	func NewXAdESSignaturePolicy() *XAdESSignaturePolicy                          // implied policy
-//	func NewXAdESSignaturePolicyWithIdentifier(identifier string) *XAdESSignaturePolicy
-//	func (p *XAdESSignaturePolicy) SetTransforms(t *xmldom.Node)
-//	func (p *XAdESSignaturePolicy) TransformsDescription() []string               // overrides the base
-//	  - see the DEVIATION note below: this override is unreachable through the plain
-//	    *signature.SignaturePolicy this file hands back (Go has no virtual dispatch across
-//	    embedding), exactly the limitation xades_reference_validation.go already documents for
-//	    XAdESReferenceValidation.TransformationNames.
-//	type ManifestValidator struct { ... }
-//	func NewManifestValidator(manifestElement *xmldom.Node, detachedContents []model.DSSDocument) *ManifestValidator
-//	func (v *ManifestValidator) Validate() []*model.ReferenceValidation
-//	type CounterSignatureResolver struct { Document model.DSSDocument }
-//	func NewCounterSignatureResolver(document model.DSSDocument) *CounterSignatureResolver
-//	  - satisfies xmldsig.URIResolver; per internal/xmldsig/doc.go, this is explicitly the XAdES
-//	    port's own responsibility (serializes the ds:SignatureValue document and answers the
-//	    xadesPath.getCounterSignatureUri() reference), not something internal/xmldsig provides.
-//
-// Root package (eu.europa.esig.dss.xades, Java DSSXMLUtils - not in this manifest, same
-// "DSSXMLUtils"-prefixed forward-dependency convention already established by the landed
-// reference_builder.go/reference_processor.go/xades_reference_validation.go/
-// xades_signature_builder.go/xades_structure_validator.go of sibling chunks):
-//
-//	func DSSXMLUtilsRegisterXAdESNamespaces()                                             // already assumed (xades_service.go)
-//	func DSSXMLUtilsGetIDIdentifier(element *xmldom.Node) string                          // already assumed (reference_builder.go)
-//	func DSSXMLUtilsGetDigestOnCanonicalizedNode(node *xmldom.Node, digestAlgorithm enumerations.DigestAlgorithm, canonicalizationMethod string) (model.DSSMessageDigest, error) // already assumed (xades_signature_builder.go)
-//	func DSSXMLUtilsGetDigestAndValue(element *xmldom.Node) model.Digest                  // nil-Digest (IsEmpty()) on a malformed/absent element
-//	func DSSXMLUtilsGetReferenceDigest(reference *xmldsig.Reference) model.Digest
-//	func DSSXMLUtilsIsAbleToDeReferenceContent(reference *xmldsig.Reference) bool
-//	func DSSXMLUtilsIsReferencedContentAmbiguous(document *xmldom.Node, uri string) bool
-//	func DSSXMLUtilsIsSignedProperties(reference *xmldsig.Reference, xadesPath definition.XAdESPath) bool
-//	func DSSXMLUtilsIsKeyInfoReference(reference *xmldsig.Reference, signatureElement *xmldom.Node) bool
-//	func DSSXMLUtilsIsSignaturePropertiesReference(reference *xmldsig.Reference, signatureElement *xmldom.Node) bool
-//	func DSSXMLUtilsGetManifestById(signatureElement *xmldom.Node, uri string) *xmldom.Node
-//	func DSSXMLUtilsIsCounterSignatureReference(reference *xmldsig.Reference, signature *XAdESSignature) bool
-//	func DSSXMLUtilsGetReferenceDigestAlgos(signedInfo *xmldom.Node) []enumerations.DigestAlgorithm
-//	func DSSXMLUtilsGetReferenceTypes(signedInfo *xmldom.Node) []string
-//	func DSSXMLUtilsCreateCounterSignature(counterSignatureElement *xmldom.Node, masterSignature *XAdESSignature) validation.AdvancedSignature // nil on failure
+// wholesale by internal/xmldsig (frozen). getSantuarioSignature() below builds an
+// *xmldsig.XMLSignature the same way Java's private method builds an
+// org.apache.xml.security.signature.XMLSignature: registering the document's ID attributes first
+// (xmldom's RegisterIDs via XAdESDOMDocument.RecursiveIdBrowse - required before
+// internal/xmldsig/signature.go's NewXMLSignature is called), then wiring detached-content and
+// counter-signature resolvers when DetachedContents is non-empty. internal/xmldsig has no
+// JCE-style registry to initialize (RSA-RIPEMD160 is dispatched directly in its sigalg.go), and
+// EnforcedResolverFragment/ResolverXPointer are already covered by internal/xmldsig's own
+// DefaultResolvers(). Only DSSXMLUtils.registerXAdESNamespaces() has an observable Go counterpart
+// (namespace-prefix registration for XPath evaluation), reused here via init().
 //
 // # Deviations
 //
@@ -142,7 +54,7 @@
 //     cannot express. Before that setter landed the entries were computed and dropped, and every
 //     DataObjectFormat pointing into a signed ds:Manifest failed to resolve - see the setter's
 //     own doc comment in dss-model for the fixture that caught it.
-//   - slf4j logging is dropped per PORTING.md; every LOG.warn/LOG.trace/LOG.debug call site is
+//   - slf4j logging is dropped; every LOG.warn/LOG.trace/LOG.debug call site is
 //     called out in the surrounding comment instead, and a Java catch-and-log-and-continue
 //     becomes a Go catch-and-continue (best effort), matching every other file of this port.
 package xades
@@ -396,8 +308,8 @@ func (s *XAdESSignature) OCSPSource() spi.OfflineRevocationSource[revocation.OCS
 
 // TimestampSource gets a Signature Timestamp source which contains ALL timestamps embedded in
 // the signature. Port of getTimestampSource(), covariant in Java (returns XAdESTimestampSource);
-// Go callers needing the concrete type type-assert, matching cades.CAdESSignature's precedent
-// (already relied upon by the landed xades_level_baseline_t.go/xades_level_x.go).
+// Go callers needing the concrete type type-assert instead (xades_level_baseline_t.go and
+// xades_level_x.go both do this).
 func (s *XAdESSignature) TimestampSource() validation.TimestampSource {
 	if s.SignatureTimestampSource() == nil {
 		s.SetSignatureTimestampSource(NewXAdESTimestampSource(s))
@@ -1504,10 +1416,8 @@ func (s *XAdESSignature) getObjectReferences(commitmentObjectReferencesNodeList 
 
 // References gets a list of found references. Port of the public getReferences().
 //
-// Unlike DSSXMLUtils.extractReferences(Manifest) - which this port does not need as a separate
-// forward dependency, since internal/xmldsig's own Manifest.Length()/Item(i) already give the
-// identical per-index, skip-on-error loop - a reference that fails to parse is skipped (Java
-// logs "Unable to retrieve reference #{} : {}" and continues).
+// A reference that fails to parse is skipped, matching Java's behavior (which logs "Unable to
+// retrieve reference #{} : {}" and continues).
 func (s *XAdESSignature) References() []*xmldsig.Reference {
 	if s.references == nil {
 		xmlSignature := s.mustGetSantuarioSignature()

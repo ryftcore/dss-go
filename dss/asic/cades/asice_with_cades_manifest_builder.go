@@ -1,14 +1,14 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/manifest/ASiCEWithCAdESManifestBuilder.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.cades.signature.manifest lands in
-// this same Go package (dss/asic/cades) per S7_BRIEF.md's package layout table.
+// Package flattening: Java's eu.europa.esig.dss.asic.cades.signature.manifest lands in
+// this same Go package (dss/asic/cades).
 //
 // Java's `extends AbstractASiCManifestBuilder` becomes embedding plus the
 // InitAbstractASiCManifestBuilderWithDigestAlgorithm(self, ...) registration, so the base
 // dispatches getSigReferenceMimeType() / initDefaultAsicContentDocumentFilter() /
-// getManifestFilename() / isRootfile() into the concrete builder instead of into itself
-// (S7_BRIEF.md's virtual-dispatch warning). Since this class is abstract in Java, the
-// registration happens in the leaf constructors (signature / timestamp manifest builders).
+// getManifestFilename() / isRootfile() into the concrete builder instead of into itself. Since
+// this class is abstract in Java, the registration happens in the leaf constructors (signature /
+// timestamp manifest builders).
 package cades
 
 import (

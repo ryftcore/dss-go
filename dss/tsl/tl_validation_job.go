@@ -1,11 +1,11 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/job/TLValidationJob.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY: TLValidationJob extends the generic
-// github.com/ryftcore/dss-go/dss/validation/job.ValidationJob[D, L, C] (dss-validation-job, VALJOB
-// chunk, now landed - see validation_job.go, abstract_analysis.go and
-// abstract_runnable_analysis.go there for the base's exact API this file relies on).
+// TLValidationJob extends the generic
+// github.com/ryftcore/dss-go/dss/validation/job.ValidationJob[D, L, C] - see validation_job.go,
+// abstract_analysis.go and abstract_runnable_analysis.go there for the base's exact API this
+// file relies on.
 //
-// JUDGMENT CALL - recovering TLSource/LOTLSource identity: job.ValidationJob stores document
+// Recovering TLSource/LOTLSource identity: job.ValidationJob stores document
 // sources as []*job.DocumentSource (the concrete base struct TLSource/LOTLSource embed by value,
 // not a polymorphic reference the way Java's covariant TLSource[]/LOTLSource[] arrays preserve
 // object identity through the base DocumentSource[] type). GetDocumentAnalysis/
@@ -39,7 +39,7 @@ type TLValidationJob struct {
 	trustPropertiesCertificateSource tslmodel.TrustPropertiesCertificateSource
 
 	// tlSourcesByCacheKey/lotlSourcesByCacheKey recover the concrete *TLSource/*LOTLSource for a
-	// *job.DocumentSource the base hands back - see this file's header JUDGMENT CALL.
+	// *job.DocumentSource the base hands back - see this file's header.
 	tlSourcesByCacheKey   map[job.CacheKey]*TLSource
 	lotlSourcesByCacheKey map[job.CacheKey]*LOTLSource
 }

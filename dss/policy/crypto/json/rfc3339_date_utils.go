@@ -29,7 +29,7 @@ var rfc3339DateTimeLayouts = []string{
 // unparseable dateString becomes a returned error per PORTING.md, and a
 // nil error/zero time.Time is returned for an empty dateString per Java's
 // null-string short-circuit (see this package's callers, which only
-// invoke this on a non-empty string obtained from getAsString - see
+// invoke this on a non-empty string obtained from asString - see
 // json_object.go's doc comment on why "" is otherwise the not-present
 // sentinel).
 func rfc3339GetDate(dateString string) (time.Time, error) {

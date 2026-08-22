@@ -3,7 +3,7 @@
 // Upstream builds a org.bouncycastle.cms.SignerInformationVerifier bound to a CertificateToken
 // or PublicKey, later passed to CMS SignerInformation#verify(SignerInformationVerifier).
 //
-// Forward-declared for phase-2b: the CMS phase (which owns SignerInformation) is the actual
+// Structural stand-in: the CMS package (which owns SignerInformation) is the actual
 // consumer. As with DSSContentVerifierProviderSecurityFactory (this package's sibling file),
 // SignerInformationVerifier.Verify is implemented now rather than left a stub, using the same
 // crypto/x509.Certificate#CheckSignature technique - see that file's header for the rationale
@@ -112,8 +112,9 @@ var dssSignerInformationVerifierSecurityFactoryPKCS1v15RSAAlgorithms = map[enume
 // BouncyCastle's org.bouncycastle.crypto.signers.RSADigestSigner#verifySignature accepts as its
 // documented "NULL left out" fallback - so upstream DSS, which verifies CMS SignerInfos through
 // that class, treats those signatures as intact. Go's crypto/rsa.VerifyPKCS1v15 hardcodes the
-// NULL-bearing prefix and rejects them, which made this port report a valid signature as broken.
-// Reproducing BouncyCastle's fallback keeps validation results identical to upstream's.
+// NULL-bearing prefix and rejects them, which without the fallback below would report a valid
+// signature as broken. Reproducing BouncyCastle's fallback keeps validation results identical
+// to upstream's.
 //
 // This does NOT relax the padding check: the full EM block is still rebuilt and compared in
 // whole by crypto/rsa (called with crypto.Hash(0), which means "the caller supplies the complete

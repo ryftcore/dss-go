@@ -5,13 +5,13 @@
 // to that verifier's OutputStream, and compare the digest against a supplied signature - the
 // generic BC machinery behind CMS SignerInformation#verify and TimeStampToken validation.
 //
-// Forward-declared for phase-2b: the CMS/timestamp phase (which owns SignerInformation and
-// TimeStampToken) is the actual consumer of this factory. Rather than leave an empty
-// placeholder, ContentVerifier.Verify below is implemented now on crypto/x509, mirroring the
-// verification technique ocspTokenVerifySignature (dss_asn1_utils.go's OCSP neighbour) already
-// uses: build a throwaway *x509.Certificate carrying only the PublicKey and call CheckSignature
-// with the crypto/x509.SignatureAlgorithm the SignatureAlgorithm resolves to. This gives the
-// CMS phase a working verifier now instead of a type it must still implement from scratch.
+// Structural stand-in: the CMS/timestamp code (which owns SignerInformation and TimeStampToken)
+// is the actual consumer of this factory. Rather than leave an empty placeholder,
+// ContentVerifier.Verify below is implemented now on crypto/x509, mirroring the verification
+// technique ocspTokenVerifySignature (dss_asn1_utils.go's OCSP neighbour) already uses: build a
+// throwaway *x509.Certificate carrying only the PublicKey and call CheckSignature with the
+// crypto/x509.SignatureAlgorithm the SignatureAlgorithm resolves to. This gives consumers a
+// working verifier now instead of a type they must still implement from scratch.
 //
 // DEVIATION: no JCA provider registry to retry against, same as the sibling factories in this
 // package (see dss_security_factory.go).

@@ -17,10 +17,10 @@ func (f *signatureStatusDeterminismFakeSignature) ID() string { return f.id }
 
 var _ AdvancedSignature = (*signatureStatusDeterminismFakeSignature)(nil)
 
-// TestSignatureStatusRelatedSignaturesDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): RelatedSignatures() used to range directly over
-// a bare relatedSignatures map - randomized by Go on every run, unlike Java's HashMap
-// (arbitrary but stable within a JVM run) - and is now insertion-ordered instead.
+// TestSignatureStatusRelatedSignaturesDeterministic verifies that RelatedSignatures() is
+// stable across runs: it used to range directly over a bare relatedSignatures map - randomized
+// by Go on every run, unlike Java's HashMap (arbitrary but stable within a JVM run) - and is
+// now insertion-ordered instead.
 func TestSignatureStatusRelatedSignaturesDeterministic(t *testing.T) {
 	build := func() []string {
 		status := NewSignatureStatus()

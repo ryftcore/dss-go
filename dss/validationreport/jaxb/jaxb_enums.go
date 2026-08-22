@@ -9,7 +9,7 @@
 //
 // # Why these hand-written classes live in jaxb, not dss/validationreport
 //
-// S8B_BRIEF.md's package layout places enums/ and parsers/ in the parent
+// Package layout places enums/ and parsers/ in the parent
 // dss/validationreport package (flattened with the root type and the
 // facade). But every ConstraintStatusType/POEType/SignatureValidationProcessType/
 // ValidationObjectType field these enums back is a generated model field
@@ -21,9 +21,8 @@
 // extraction solves with a type alias, applied in the other direction: the
 // concrete types and the parser logic live here where the generated model
 // can reach them, and dss/validationreport/object_type.go (etc.) re-exports
-// each one as a type alias plus forwarding functions, so callers who only
-// know the manifest's stated package still get working, identical types.
-// This is flagged in the porting notes as a cross-chunk assumption.
+// each one as a type alias plus forwarding functions, so callers still get
+// working, identical types.
 //
 // # URI-adapted dss/enumerations wrappers
 //

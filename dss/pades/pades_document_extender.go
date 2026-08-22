@@ -3,11 +3,11 @@
 //
 // Java's `extends AbstractDocumentExtender<PAdESSignatureParameters, PAdESTimestampParameters>`
 // becomes embedding plus the InitAbstractDocumentExtender(self) registration documented in
-// dss-document's abstract_document_extender.go, per the cades/extension/cades_document_extender.go
-// precedent this file mirrors.
+// dss-document's abstract_document_extender.go, as in
+// cades/extension/cades_document_extender.go.
 //
-// eu.europa.esig.dss.pades.extension flattens into the Go package pades, per this chunk's
-// layout (root+signature+timestamp+validation+dss+scope+timestamp+extension all flatten into one
+// eu.europa.esig.dss.pades.extension flattens into the Go package pades
+// (root+signature+timestamp+validation+dss+scope+timestamp+extension all flatten into one
 // package), unlike CAdES/XAdES which keep a separate extension subpackage.
 package pades
 

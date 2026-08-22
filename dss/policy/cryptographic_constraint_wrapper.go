@@ -340,7 +340,7 @@ func cryptographicConstraintWrapperToEncryptionAlgorithm(algorithmName string) (
 // list if an equal (by CryptographicSuiteEvaluation#Equals) entry is not
 // already present, mirroring java.util.HashSet#add semantics for the
 // Set<CryptographicSuiteEvaluation> Java uses (see this file's header for
-// why a slice, not a map, backs the "Set" in this port).
+// why a slice, not a map, backs this "Set").
 func cryptographicConstraintWrapperAddUniqueEvaluation(list []*modelpolicy.CryptographicSuiteEvaluation, evaluation *modelpolicy.CryptographicSuiteEvaluation) []*modelpolicy.CryptographicSuiteEvaluation {
 	for _, e := range list {
 		if e.Equals(evaluation) {
@@ -447,7 +447,7 @@ func (w *CryptographicConstraintWrapper) AcceptableSignatureAlgorithmsLevel() en
 	if w.constraint == nil {
 		return ""
 	}
-	return w.getCryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.AcceptableEncryptionAlgo))
+	return w.cryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.AcceptableEncryptionAlgo))
 }
 
 // SetAcceptableSignatureAlgorithmsLevel sets the execution level for the
@@ -466,7 +466,7 @@ func (w *CryptographicConstraintWrapper) AcceptableSignatureAlgorithmsMiniKeySiz
 	if w.constraint == nil {
 		return ""
 	}
-	return w.getCryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.MiniPublicKeySize))
+	return w.cryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.MiniPublicKeySize))
 }
 
 // SetAcceptableSignatureAlgorithmsMiniKeySizeLevel sets the execution level
@@ -485,7 +485,7 @@ func (w *CryptographicConstraintWrapper) AcceptableDigestAlgorithmsLevel() enume
 	if w.constraint == nil {
 		return ""
 	}
-	return w.getCryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.AcceptableDigestAlgo))
+	return w.cryptographicLevel(cryptographicConstraintWrapperListAlgoBase(w.constraint.AcceptableDigestAlgo))
 }
 
 // SetAcceptableDigestAlgorithmsLevel sets the execution level for the
@@ -508,7 +508,7 @@ func (w *CryptographicConstraintWrapper) AlgorithmsExpirationDateLevel() enumera
 	if w.constraint.AlgoExpirationDate != nil {
 		base = &w.constraint.AlgoExpirationDate.LevelConstraint
 	}
-	return w.getCryptographicLevel(base)
+	return w.cryptographicLevel(base)
 }
 
 // SetAlgorithmsExpirationDateLevel sets the execution level for checking
@@ -535,7 +535,7 @@ func (w *CryptographicConstraintWrapper) AlgorithmsExpirationDateAfterUpdateLeve
 	if aed != nil {
 		base = &aed.LevelConstraint
 	}
-	return w.getCryptographicLevel(base)
+	return w.cryptographicLevel(base)
 }
 
 // SetAlgorithmsExpirationTimeAfterPolicyUpdateLevel sets the execution level
@@ -561,7 +561,7 @@ func (w *CryptographicConstraintWrapper) CryptographicSuiteUpdateDate() *time.Ti
 // cryptographicConstraintWrapperListAlgoBase extracts the embedded
 // LevelConstraint of a *jaxb.ListAlgo, or nil if listAlgo is nil - the Go
 // stand-in for Java's implicit upcast of ListAlgo (and its AlgoExpirationDate
-// subtype) to LevelConstraint when calling getCryptographicLevel.
+// subtype) to LevelConstraint when calling cryptographicLevel.
 func cryptographicConstraintWrapperListAlgoBase(listAlgo *jaxb.ListAlgo) *jaxb.LevelConstraint {
 	if listAlgo == nil {
 		return nil
@@ -569,9 +569,9 @@ func cryptographicConstraintWrapperListAlgoBase(listAlgo *jaxb.ListAlgo) *jaxb.L
 	return &listAlgo.LevelConstraint
 }
 
-// getCryptographicLevel ports the private getCryptographicLevel(LevelConstraint)
+// cryptographicLevel ports the private getCryptographicLevel(LevelConstraint)
 // helper.
-func (w *CryptographicConstraintWrapper) getCryptographicLevel(cryptoConstraint *jaxb.LevelConstraint) enumerations.Level {
+func (w *CryptographicConstraintWrapper) cryptographicLevel(cryptoConstraint *jaxb.LevelConstraint) enumerations.Level {
 	if cryptoConstraint != nil && cryptoConstraint.Level.Level() != "" {
 		return cryptoConstraint.Level.Level()
 	}

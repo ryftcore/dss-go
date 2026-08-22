@@ -5,10 +5,10 @@ import (
 	"testing"
 )
 
-// TestListCertificateSourceCertificatesDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): ListCertificateSource.Certificates() dedups
-// across several embedded sources through a map; a bare Go map would make the returned order
-// vary run to run for the exact same set of embedded sources and certificates.
+// TestListCertificateSourceCertificatesDeterministic verifies that
+// ListCertificateSource.Certificates() output is stable across runs: it dedups across several
+// embedded sources through a map, which must not make the returned order vary for the same set
+// of embedded sources and certificates.
 func TestListCertificateSourceCertificatesDeterministic(t *testing.T) {
 	build := func(t *testing.T) []string {
 		t.Helper()

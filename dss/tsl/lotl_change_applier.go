@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/job/LOTLChangeApplier.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see xml_download_result.go's header): uses job.CacheKey and
-// job.ChangesCacheAccess.
+// Uses job.CacheKey and job.ChangesCacheAccess (see xml_download_result.go's header for the
+// wider job.* convention).
 package tsl
 
 import (
@@ -31,17 +31,17 @@ func NewLOTLChangeApplier(cacheAccess *validationjob.ChangesCacheAccess,
 // AnalyzeAndApply applies changes for all defined records. Port of analyzeAndApply().
 func (a *LOTLChangeApplier) AnalyzeAndApply() {
 	for oldKey, oldValue := range a.oldValues {
-		oldUrlCerts := a.getTLPointers(oldValue)
-		newUrlCerts := a.getTLPointers(a.newValues[oldKey])
+		oldUrlCerts := a.tLPointers(oldValue)
+		newUrlCerts := a.tLPointers(a.newValues[oldKey])
 
 		a.detectUrlChanges(oldUrlCerts, newUrlCerts)
 		a.detectSigCertsChanges(oldUrlCerts, newUrlCerts)
 	}
 }
 
-// getTLPointers ports the private getTLPointers(ParsingInfoRecord). Panics with the Java message
+// tLPointers ports the private getTLPointers(ParsingInfoRecord). Panics with the Java message
 // when the record exists but is not a *TLParsingCacheDTO.
-func (a *LOTLChangeApplier) getTLPointers(parsingCache job.ParsingInfoRecord) map[string][]*model.CertificateToken {
+func (a *LOTLChangeApplier) tLPointers(parsingCache job.ParsingInfoRecord) map[string][]*model.CertificateToken {
 	if parsingCache == nil || !parsingCache.IsResultExist() {
 		return nil
 	}

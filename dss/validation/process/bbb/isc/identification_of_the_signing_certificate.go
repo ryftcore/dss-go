@@ -10,6 +10,8 @@
 package isc
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
 	"github.com/ryftcore/dss-go/dss/diagnostic"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -127,9 +129,9 @@ func (c *IdentificationOfTheSigningCertificate) AddAdditionalInfo() {
 			chainItem := &jaxb.XmlChainItem{}
 			chainItem.Id = certificate.Id()
 			sources := certificate.Sources()
-			if containsSource(sources, enumerations.CertificateSourceTypeTrustedList) {
+			if slices.Contains(sources, enumerations.CertificateSourceTypeTrustedList) {
 				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceTypeTrustedList)
-			} else if containsSource(sources, enumerations.CertificateSourceTypeTrustedStore) {
+			} else if slices.Contains(sources, enumerations.CertificateSourceTypeTrustedStore) {
 				chainItem.Source = jaxb.CertificateSourceTypeValue(enumerations.CertificateSourceTypeTrustedStore)
 			} else {
 				chainItem.Source = jaxb.CertificateSourceTypeValue(sources[0])
@@ -138,16 +140,6 @@ func (c *IdentificationOfTheSigningCertificate) AddAdditionalInfo() {
 		}
 		c.Result.Value.CertificateChain = certificateChain
 	}
-}
-
-// containsSource ports java.util.List#contains(Object) over the source list.
-func containsSource(sources []enumerations.CertificateSourceType, source enumerations.CertificateSourceType) bool {
-	for _, s := range sources {
-		if s == source {
-			return true
-		}
-	}
-	return false
 }
 
 // signingCertificateRecognition ports the private signingCertificateRecognition().

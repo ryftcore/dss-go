@@ -7,10 +7,9 @@
 // which ValidationReportFacade.go replaces with encoding/xml) and an XSD
 // Schema assembled from 1910202xmlSchema.xsd plus the trusted-list, XAdES
 // and XMLDSig schemas it imports (via TrustedList211Utils.getXSDSources()).
-// Per S8B_BRIEF.md ("XSD + xslt resources copied under each module's
-// testdata/") the schema location constant is kept for documentation/
-// testdata purposes, but Schema() is a stub returning an error: no Go
-// stdlib XSD validator exists, and adding a third-party one is outside the
+// The schema location constant is kept for documentation/testdata
+// purposes, but Schema() is a stub returning an error: no Go stdlib XSD
+// validator exists, and adding a third-party one is outside the
 // stdlib-first dependency policy without tech-lead sign-off (PORTING.md
 // "Dependency policy") - the same deferral dss/simplereport's
 // SimpleReportXmlDefiner documents for SimpleReport.xsd.

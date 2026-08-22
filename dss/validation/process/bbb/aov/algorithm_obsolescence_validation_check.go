@@ -1,29 +1,16 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/aov/checks/AlgorithmObsolescenceValidationCheck.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): this is a deliberately minimal slice of
-// Java's eu.europa.esig.dss.validation.process.bbb.aov package tree. Only
-// AlgorithmObsolescenceValidationCheck is ported here - the sole consumer-side
-// check that reads an already-built XmlAOV result, which is exactly what
-// AbstractAcceptanceValidation.cryptographic() (bbb/sav) needs and is the only
-// call site anywhere in the phase 8c chunks. It has no dependency on the rest
-// of the Java aov tree: not on AlgorithmObsolescenceValidation.java or its
-// Certificate/Digest/Signature/Timestamp/EvidenceRecord/EAA subclasses (the
-// classes that *produce* an XmlAOV by orchestrating bbb/xcv + the aov/cc
-// cryptographic-checker family), and not on the aov/cc package itself. Those
-// were genuinely out of phase 8c scope and were added by phase 8d to this same
-// package - along with AlgorithmObsolescenceValidationCheckWithId.java, the
-// sibling class in the same Java package, which likewise had no caller in
-// phase 8c. (The dispatcher this paragraph called "FRAME's
-// basic_building_blocks.go, gated behind //go:build phase8d" is now the
-// un-tagged dss/validation/process/blocks package; no phase8d build tag
-// remains anywhere in the tree.)
-//
-// Every dependency this file does use - jaxb.XmlAOV/XmlConclusion/
-// XmlCryptographicValidation/XmlCryptographicAlgorithm/XmlMessage/XmlBlockType,
-// process.ChainItemBase/Result, process.GetFormattedDate/
-// GetPrimaryCryptographicValidation/GetLevelRule, and the ACCM/ACCM_ANS/
-// CRYPTOGRAPHIC_CHECK_* message tags - already existed untagged in the tree
-// before this pass; nothing new was invented to support it.
+// This is a deliberately minimal slice of Java's
+// eu.europa.esig.dss.validation.process.bbb.aov package tree: only
+// AlgorithmObsolescenceValidationCheck is ported in this file, as the sole
+// consumer-side check that reads an already-built XmlAOV result, which is
+// what AbstractAcceptanceValidation.cryptographic() (bbb/sav) needs. It has
+// no dependency on the rest of the Java aov tree (AlgorithmObsolescenceValidation
+// and its Certificate/Digest/Signature/Timestamp/EvidenceRecord/EAA
+// subclasses, which *produce* an XmlAOV by orchestrating bbb/xcv and the
+// aov/cc cryptographic-checker family, or the aov/cc package itself) - those
+// live alongside AlgorithmObsolescenceValidationCheckWithId in this same
+// package.
 package aov
 
 import (
@@ -131,7 +118,7 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo() *string 
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.getErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.errorMessage(), dateTime)
 	return &message
 }
 
@@ -161,9 +148,9 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlM
 	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
-// getErrorMessage returns the first error/warning/info message value, or the
+// errorMessage returns the first error/warning/info message value, or the
 // empty string if the check succeeded. Port of getErrorMessage().
-func (c *AlgorithmObsolescenceValidationCheck[T]) getErrorMessage() string {
+func (c *AlgorithmObsolescenceValidationCheck[T]) errorMessage() string {
 	conclusion := c.aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
 		return conclusion.Errors[0].Value

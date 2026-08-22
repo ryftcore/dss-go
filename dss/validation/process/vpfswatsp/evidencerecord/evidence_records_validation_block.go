@@ -1,10 +1,10 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfswatsp/evidencerecord/EvidenceRecordsValidationBlock.java (DSS 6.5.RC1).
 //
 // See poe.go for the package-flattening note, and
-// evidence_record_timestamps_validation_block.go for the cross-chunk vpftsp
+// evidence_record_timestamps_validation_block.go for the vpftsp
 // dependency and the import cycle it exposes.
 //
-// HASH-ORDER (closed in phase 8f, see Execute()). Java fills
+// HASH-ORDER (see Execute()). Java fills
 // XmlEvidenceRecord#getTimestamps() from currentTimestampValidations.values(),
 // where currentTimestampValidations is the java.util.HashMap that
 // TimestampsValidationBlock#execute() returns. That iteration order is the
@@ -17,10 +17,11 @@
 //
 // The other two maps (timestampValidations, evidenceRecordValidations) are read
 // by DetailedReportBuilder through get(id) and keySet() only, so their iteration
-// order never reaches an output and a plain Go map is faithful.//
-// PACKAGE-BOUNDARY DEVIATION (LTVA, phase 8e): Java's vpfswatsp.evidencerecord
-// is a package of its own, distinct from vpfswatsp; the phase 8e layout folds
-// the whole vpfswatsp tree into one Go package, but EvidenceRecordTimestampsValidationBlock
+// order never reaches an output and a plain Go map is faithful.
+//
+// Package placement deviation: Java's vpfswatsp.evidencerecord
+// is a package of its own, distinct from vpfswatsp. Everything else in the
+// vpfswatsp tree folds into one Go package, but EvidenceRecordTimestampsValidationBlock
 // extends vpftsp.TimestampsValidationBlock while vpftsp imports vpfswatsp
 // (POEExtraction) - an import cycle Go forbids. The five evidence-record classes
 // therefore keep Java's own vpfswatsp/evidencerecord package boundary; nothing
@@ -119,9 +120,7 @@ func (b *EvidenceRecordsValidationBlock) Execute() {
 		// sequence of the marshalled detailed report, so it is byte-compared
 		// output and has to be REPRODUCED, not substituted: walk the same
 		// insertion order and reorder it the way a java.util.HashMap keyed by
-		// those ids iterates. Found by the phase-8f full-corpus report
-		// byte-parity run on er-validation/er-valid.xml and
-		// er-validation/sig-with-er-valid.xml.
+		// those ids iterates.
 		var timestampInsertionOrder []string
 		for _, timestamp := range allTimestampValidationBlock.Timestamps() {
 			timestampInsertionOrder = append(timestampInsertionOrder, timestamp.Id())

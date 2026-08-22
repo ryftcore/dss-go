@@ -59,9 +59,8 @@ func loadSmokeCertificates(t *testing.T) []*model.CertificateToken {
 // it, every certificate-extension builder in diagnostic_data_builder.go) over the real
 // certificate corpus spi's own KAT test uses, verifying the builder never panics and that the
 // resulting XmlDiagnosticData round-trips through Marshal without an error - a structural smoke
-// test standing in for the full byte-compare oracle harness the S8C_BRIEF RPTDIAG chunk calls
-// for (see the porter notes: building the Java-side dumper for the full oracle was out of
-// budget for this pass).
+// test standing in for a full byte-compare oracle harness, which does not exist yet for this
+// builder.
 func TestCertificateDiagnosticDataBuilderSmoke(t *testing.T) {
 	tokens := loadSmokeCertificates(t)
 

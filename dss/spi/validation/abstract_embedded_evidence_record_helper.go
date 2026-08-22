@@ -1,16 +1,15 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/evidencerecord/AbstractEmbeddedEvidenceRecordHelper.java (DSS 6.5.RC1).
 //
 // SCC flattening: Java spi.validation.evidencerecord.AbstractEmbeddedEvidenceRecordHelper lands
-// in this same Go package per S2B_BRIEF.md's package layout table.
+// in this same Go package.
 //
 // Java's protected abstract getDigestBuilder(...)/setDEREncoding(...) methods become the
-// Overrides interface + Init pattern established in phase 1b/2a and already used throughout
-// this package (see DefaultAdvancedSignatureOverrides in default_advanced_signature.go for the
-// precedent this file follows).
+// Overrides interface + Init pattern used throughout this package; see
+// DefaultAdvancedSignatureOverrides in default_advanced_signature.go for another example.
 //
-// slf4j LOG.warn calls in buildDigest are dropped per phase 2a handoff fact "slf4j dropped
-// unless load-bearing" - the swallow-error-and-return-empty-Digest behavior itself is preserved
-// exactly, only the logging side effect is dropped.
+// Java logs (LOG.warn calls in buildDigest) and swallows the error, returning an empty Digest;
+// this port drops the logging but preserves the swallow-and-return-empty-Digest behavior
+// exactly.
 package validation
 
 import (

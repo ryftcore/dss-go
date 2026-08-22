@@ -10,7 +10,7 @@ import (
 
 // CertificateRevocationWrapper is a complete revocation wrapper, containing detailed
 // certificate revocation and common information. Port of CertificateRevocationWrapper, which
-// extends RevocationWrapper (DIAGWRAP_B).
+// extends RevocationWrapper.
 type CertificateRevocationWrapper struct {
 	RevocationWrapper
 

@@ -4,4 +4,4 @@ package job
 // CachedResult is used to define a cached result for a single job. Java's empty marker
 // interface becomes Go's empty interface; every cached result type (DownloadResult,
 // ParsingResult, ValidationResult) trivially satisfies it.
-type CachedResult interface{}
+type CachedResult any

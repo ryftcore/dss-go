@@ -40,8 +40,7 @@ const xmlDeclaration = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>`
 
 // Unmarshal parses a validation-policy document. Ports
 // AbstractJaxbFacade#unmarshall(InputStream, boolean) (schema validation is
-// out of scope for this port - see the porter brief's marshal-parity
-// contract, which scopes 8a to the model and round-trip, not XSD validation).
+// not implemented; see ValidationPolicyXmlDefiner's deferred Schema()).
 func Unmarshal(data []byte) (*ConstraintsParameters, error) {
 	cp := &ConstraintsParameters{}
 	if err := xml.Unmarshal(data, cp); err != nil {
@@ -126,8 +125,8 @@ func jaxbRootNamespaceLast(in []byte) []byte {
 // unexported helpers below) - PORTING.md's "no cross-file shared helpers"
 // rule and the two packages' independent generated-JAXB provenance argue for
 // keeping each package self-contained rather than factoring this out into a
-// new shared package, matching the precedent already set by dss/diagnostic/jaxb
-// carrying its own copy instead of depending on a hypothetical common one.
+// new shared package; dss/diagnostic/jaxb carries its own copy for the same
+// reason instead of depending on a hypothetical common one.
 func jaxbCanonical(in []byte) []byte {
 	var out bytes.Buffer
 	out.Grow(len(in))

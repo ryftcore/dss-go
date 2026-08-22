@@ -1,13 +1,12 @@
-// Accessor behavior tests vs Java-dumped answers, per PORTING.md/S8A_BRIEF.md's
-// crypto-suite KAT requirement.
+// Accessor behavior tests vs Java-dumped answers.
 //
 // testdata/oracle/dss-crypto-suite.accessors.txt is a tab-separated
 // "key<TAB>value" dump produced by running upstream's real
 // CryptographicSuiteJsonFactory/CryptographicSuiteCatalogue over this
 // package's own copy of upstream's src/main/resources/suite/dss-crypto-suite.json,
 // calling this package's own CryptoJsonOracle.java (not checked into this
-// repository - see policy/jaxb/doc.go for the sibling PolicyOracle.java
-// precedent) against every public CryptographicSuiteCatalogue accessor this
+// repository - see policy/jaxb/doc.go for PolicyOracle.java) against every
+// public CryptographicSuiteCatalogue accessor this
 // package exercises. Set<CryptographicSuiteEvaluation> has no defined
 // iteration order; both the oracle and this file canonicalize each
 // evaluation set and digest/signature algorithm key set the same way

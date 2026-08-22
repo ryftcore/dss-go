@@ -1,12 +1,4 @@
 // Ported from dss-cades/src/main/java/eu/europa/esig/dss/cades/validation/CAdESSignatureIdentifierBuilder.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY (flagged per S3_BRIEF.md): *CAdESSignature is owned by a sibling chunk not
-// in this manifest (see cades_certificate_source.go and friends for the same situation with
-// spi.CMSCertificateSource). Its shape is inferred from every call this file makes to it:
-//
-//	func (s *CAdESSignature) CMS() *cms.CMS
-//	func (s *CAdESSignature) SignerInformation() *cmscore.SignerInfo
-//	func (s *CAdESSignature) CounterSignatureStore() *cms.CMS  // the counter-signature CMS, whose SignerInfos() gives the enclosing signers
 package cades
 
 import (

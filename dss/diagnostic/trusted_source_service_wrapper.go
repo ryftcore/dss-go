@@ -1,14 +1,13 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/TrustedSourceServiceWrapper.java (DSS 6.5.RC1).
 //
-// Java's TrustedSourceServiceWrapper is an abstract JavaBean: private fields with matched
-// getX()/setX() pairs, no computed logic beyond CapturedQualifierUris. Every one of its
-// getX()/setX() pairs is trivial field access, so - per PORTING.md's "minus get/set prefixes
-// where un-idiomatic" rule - each becomes a single exported Go field rather than a method pair;
-// an exported field already serves as both getter (read) and setter (assign) with no loss of
-// capability, and this port's two concrete subclasses (TrustServiceWrapper,
-// TrustedEntityServiceWrapper, both DIAGWRAP_B) are already relied upon elsewhere in the port
-// (dss/diagnostic/certificate_wrapper.go, DIAGWRAP_A) as plain struct literals with these exact
-// exported field names.
+// Java's TrustedSourceServiceWrapper is an abstract JavaBean: private fields with matched getX()/setX()
+// pairs, no computed logic beyond CapturedQualifierUris. Every one of its getX()/setX() pairs is trivial
+// field access, so - per PORTING.md's "minus get/set prefixes where un-idiomatic" rule - each becomes a
+// single exported Go field rather than a method pair; an exported field already serves as both getter
+// (read) and setter (assign) with no loss of capability, and this port's two concrete subclasses
+// (TrustServiceWrapper, TrustedEntityServiceWrapper) are already relied upon elsewhere
+// (dss/diagnostic/certificate_wrapper.go) as plain struct literals with these exact exported field
+// names.
 //
 // Because Go composite literals can only set a field through the struct that directly declares
 // it - never through an anonymous embedded field's promoted name - and CertificateWrapper's

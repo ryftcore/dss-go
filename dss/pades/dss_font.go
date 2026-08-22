@@ -6,7 +6,7 @@
 // native_signature_drawer.go's ErrVisualSignatureRenderingNotSupported for the same boundary
 // applied to visible-signature painting). #getJavaFont therefore returns *NativeJavaFont, a small
 // data-only placeholder carrying the same identity java.awt.Font exposed (name, style, size)
-// without any glyph outline, metric or rendering capability - "pure data" per this chunk's remit.
+// without any glyph outline, metric or rendering capability - "pure data".
 package pades
 
 // NativeJavaFont is a minimal stand-in for java.awt.Font: name, style and size only, with no

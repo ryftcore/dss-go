@@ -1,7 +1,7 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/extract/ASiCWithXAdESContainerExtractorFactory.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.xades.extract lands in this same
-// Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
+// Package flattening: Java's eu.europa.esig.dss.asic.xades.extract lands in this same
+// Go package (dss/asic/xades).
 package xades
 
 import (

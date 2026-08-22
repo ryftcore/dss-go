@@ -24,8 +24,7 @@ type DSSErrorHandlerAlert struct {
 	*alert.AbstractAlert[*DSSErrorHandler]
 
 	// enableWarnings indicates whether warning messages are reported within the error list.
-	// Default: false (warnings are dropped, not logged - see the doc comment on
-	// process/getWarnings below for why the Java "else log" branch has no port).
+	// Default: false (warnings are dropped, not logged).
 	enableWarnings bool
 
 	// enablePosition indicates whether the position (line and column number) of the failed

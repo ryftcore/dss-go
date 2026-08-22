@@ -2,7 +2,7 @@
 //
 // eu.europa.esig.dss.spi.x509 flattens into the Go package spi. The Java
 // class has default (package) visibility, so the Go type stays unexported: it is an internal
-// detail of CommonCertificateSource (ported separately, chunk X509-B) and its subclasses.
+// detail of CommonCertificateSource and its subclasses.
 package spi
 
 import (

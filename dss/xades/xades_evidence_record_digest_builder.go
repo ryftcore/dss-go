@@ -1,17 +1,10 @@
 // Ported from dss-xades/src/main/java/eu/europa/esig/dss/xades/evidencerecord/XAdESEvidenceRecordDigestBuilder.java (DSS 6.5.RC1).
 //
 // Santuario replacement: every org.apache.xml.security call site (Reference,
-// Manifest/ManifestValidator resource-resolver wiring) maps to internal/xmldsig per its doc.go
-// table; the resolver-per-digest-algorithm wiring below mirrors manifest_validator.go's
-// manifestValidatorInitDetachedContent (same package, not reused directly per PORTING.md's
-// no-shared-cross-file-helpers rule for unexported helpers).
-//
-// FORWARD DEPENDENCY (root package eu.europa.esig.dss.xades, DSSXMLUtils-prefixed
-// forward-dependency convention already established by xades_signature.go /
-// manifest_validator.go; this file's one addition to that assumed set):
-//
-//	func DSSXMLUtilsGetDigestOnCanonicalizedBytes(bytes []byte, digestAlgorithm enumerations.DigestAlgorithm, canonicalizationMethod string) (model.DSSMessageDigest, error)
-//	  // DSSXMLUtils.getDigestOnCanonicalizedBytes(byte[], DigestAlgorithm, String)
+// Manifest/ManifestValidator resource-resolver wiring) maps to internal/xmldsig; the
+// resolver-per-digest-algorithm wiring below mirrors manifest_validator.go's
+// manifestValidatorInitDetachedContent (same package, kept as its own unexported copy rather than
+// shared across files, since Java declares its own private copy in each class).
 package xades
 
 import (
@@ -489,8 +482,8 @@ func (b *XAdESEvidenceRecordDigestBuilder) getManifestReferences(signature *XAdE
 // xadesEvidenceRecordDigestBuilderInitManifestDetachedContent registers one
 // DetachedSignatureResolver per distinct digest algorithm found among the manifest's
 // ds:Reference/ds:DigestMethod elements, mirroring manifest_validator.go's
-// manifestValidatorInitDetachedContent (this file's own copy, per PORTING.md's
-// no-shared-cross-file-helpers rule for unexported helpers).
+// manifestValidatorInitDetachedContent (this file's own copy, since Go has no shared cross-file
+// helper for these unexported, per-type methods).
 func xadesEvidenceRecordDigestBuilderInitManifestDetachedContent(manifest *xmldsig.Manifest, detachedContents []model.DSSDocument) {
 	if utils.IsCollectionEmpty(detachedContents) {
 		return

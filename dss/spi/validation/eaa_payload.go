@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/eaa/EAAPayload.java (DSS 6.5.RC1).
 //
-// SCC flattening: Java spi.eaa.EAAPayload lands in this same Go package per S2B_BRIEF.md's
-// package layout table ("spi.eaa" is one of the packages flattened into dss/spi/validation).
+// SCC flattening: Java spi.eaa.EAAPayload lands in this same Go package ("spi.eaa" is one of
+// the packages flattened into dss/spi/validation).
 package validation
 
 import "github.com/ryftcore/dss-go/dss/model/eaa/claim"

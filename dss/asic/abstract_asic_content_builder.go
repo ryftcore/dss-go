@@ -16,8 +16,9 @@ import (
 const abstractASiCContentBuilderZipEntryDetachedFile = "detached-file"
 
 // AbstractASiCContentBuilderOverrides declares the operation AbstractASiCContentBuilder calls
-// back into virtually from Build(). Per S7_BRIEF.md's virtual-dispatch warning, every concrete
-// builder must call InitAbstractASiCContentBuilder with itself before use.
+// back into virtually from Build(). Every concrete builder must call
+// InitAbstractASiCContentBuilder with itself before use, or the base's virtual calls will not
+// reach the override.
 type AbstractASiCContentBuilderOverrides interface {
 	// GetContainerExtractor returns an instance of a corresponding container extractor class.
 	// Port of the protected abstract getContainerExtractor(DSSDocument).

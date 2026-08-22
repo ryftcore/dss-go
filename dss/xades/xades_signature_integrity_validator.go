@@ -33,7 +33,7 @@ func NewXAdESSignatureIntegrityValidator(santuarioSignature *xmldsig.XMLSignatur
 // The DSSException Java wraps an XMLSignatureException in is returned here as an error, its
 // message built the same way.
 func (v *XAdESSignatureIntegrityValidator) Verify(publicKey *model.PublicKey) (bool, error) {
-	var key interface{}
+	var key any
 	if publicKey != nil {
 		key = publicKey.Key()
 	}

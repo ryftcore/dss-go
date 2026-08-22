@@ -8,8 +8,8 @@
 //   - CRL source;
 //   - AIA source to give access to the certificates through AIA.
 //
-// slf4j logging (LOG.info on construction, LOG.warn in assertNotTrusted) is dropped per the
-// phase 2a handoff fact ("slf4j dropped unless load-bearing").
+// Java's slf4j logging (LOG.info on construction, LOG.warn in assertNotTrusted) has no Go
+// equivalent and is not ported.
 package validation
 
 import (

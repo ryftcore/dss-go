@@ -1,22 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/SignatureAcceptanceValidation.java (DSS 6.5.RC1).
-//
-// UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the
-// contentTimestampMessageImprint() method wires
-// eu.europa.esig.dss.validation.process.vpfltvd.checks.TimestampMessageImprintWithIdCheck,
-// which lives in the Java package eu.europa.esig.dss.validation.process.vpfltvd,
-// NOT part of the phase 8c package layout (bbb/{isc,vci,cv,fc,sav} only) and not
-// present anywhere in the repository at port time - it in turn extends
-// eu.europa.esig.dss.validation.process.vpftspwatsp.checks.TimestampMessageImprintCheck,
-// another unported package, so this is a two-level forward dependency. This
-// file assumes vpfltvd will land in a sibling package
-// "github.com/ryftcore/dss-go/dss/validation/process/vpfltvd" with a generic
-// constructor
-// NewTimestampMessageImprintWithIdCheck[T any](i18nProvider *i18n.I18nProvider,
-// result *process.Result[T], timestamp *diagnostic.TimestampWrapper,
-// constraint policy.LevelRule) *TimestampMessageImprintWithIdCheck[T]
-// returning a process.ChainItem[T], mirroring every other check constructor in
-// this port. See porter notes: this file does not build until that package
-// exists.
 package sav
 
 import (
@@ -284,7 +266,7 @@ func (c *SignatureAcceptanceValidation) contentTimeStamp() process.ChainItem[*ja
 func (c *SignatureAcceptanceValidation) contentTimestampBasicValidation(timestamp *diagnostic.TimestampWrapper,
 	xmlConclusion *jaxb.XmlConclusion) process.ChainItem[*jaxb.XmlSAV] {
 	return NewContentTimestampBasicValidationCheck(c.I18nProvider, c.Result, timestamp, xmlConclusion,
-		c.getTimestampBasicValidationConstraintLevel())
+		c.timestampBasicValidationConstraintLevel())
 }
 
 func (c *SignatureAcceptanceValidation) contentTimestampMessageImprint(contentTimestamp *diagnostic.TimestampWrapper) process.ChainItem[*jaxb.XmlSAV] {
@@ -332,9 +314,9 @@ func (c *SignatureAcceptanceValidation) documentTimeStamp() process.ChainItem[*j
 	return NewDocumentTimeStampCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
-// getTimestampBasicValidationConstraintLevel ports the private
+// timestampBasicValidationConstraintLevel ports the private
 // getTimestampBasicValidationConstraintLevel().
-func (c *SignatureAcceptanceValidation) getTimestampBasicValidationConstraintLevel() policy.LevelRule {
+func (c *SignatureAcceptanceValidation) timestampBasicValidationConstraintLevel() policy.LevelRule {
 	constraint := c.validationPolicy.TimestampValidConstraint()
 	// continue if LTA is present
 	if constraint == nil || process.IsLongTermAvailabilityAndIntegrityMaterialPresent(c.token) {

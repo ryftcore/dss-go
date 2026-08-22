@@ -13,10 +13,8 @@
 //	java.lang.Boolean                    ->  *bool         (Java's null third state)
 //	java.util.Date                       ->  time.Time     (absent is the zero Time)
 //
-// FORWARD DEPENDENCIES on sibling phase-6 chunks, all of which land in this same Go package:
-// JAdESHeaderParameterNames* (ROOT), HTTPHeader (ROOT), EtsiUComponent / JAdESEtsiUHeader /
-// JAdESSignature / JWSDocumentAnalyzerFactory (VAL). The specs module is reached through the
-// dss/jades/specs package. slf4j logging is dropped throughout, per PORTING.md.
+// The specs module is reached through the dss/jades/specs package. Java's slf4j logging is not
+// ported anywhere in this file.
 package jades
 
 import (

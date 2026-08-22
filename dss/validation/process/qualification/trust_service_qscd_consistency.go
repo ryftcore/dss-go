@@ -15,7 +15,9 @@ func newTrustServiceQSCDConsistency() *trustServiceQSCDConsistency {
 	return &trustServiceQSCDConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether the trust service does not carry both QSCD
+// and NoQSCD qualifiers for the same certificate. Port of the overridden
+// isConsistent(TrustServiceWrapper).
 func (c *trustServiceQSCDConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	capturedQualifiers := trustService.CapturedQualifierUris()
 

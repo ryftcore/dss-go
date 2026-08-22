@@ -21,18 +21,14 @@ type PivotInfo struct {
 // certificates maps CertificateToken to CertificatePivotStatus (map between certificates and
 // their statuses in the current pivot); lotlLocation is the associated LOTL location.
 //
-// JUDGMENT CALL: LOTLInfo/NewLOTLInfo are out of this manifest (owned by whichever chunk ports
-// tsl/LOTLInfo.java and tsl/TLInfo.java, same target package). Java's PivotInfo overrides the
-// protected virtual method buildIdentifier(), invoked polymorphically from deep inside the
-// AbstractDocumentInfo constructor chain so the identifier is built with the most-derived
-// class's logic. Go embedding gives no such virtual dispatch: LOTLInfo's own construction
-// cannot call back into PivotInfo.BuildIdentifier. This port defines BuildIdentifier/IsPivot as
-// ordinary methods that shadow the embedded LOTLInfo ones for direct calls on a *PivotInfo, but
-// any code that holds a value only as a LOTLInfo (or relies on identifier construction
-// happening inside NewLOTLInfo) will get LOTLInfo's behavior, not PivotInfo's. The integrator
-// owning LOTLInfo must decide how identifier construction is actually wired (e.g. a
-// buildIdentifier function/interface passed into NewLOTLInfo, or lazy computation on first
-// access) and this constructor may need to change accordingly.
+// JUDGMENT CALL: Java's PivotInfo overrides the protected virtual method buildIdentifier(),
+// invoked polymorphically from deep inside the AbstractDocumentInfo constructor chain so the
+// identifier is built with the most-derived class's logic. Go embedding gives no such virtual
+// dispatch: LOTLInfo's own construction cannot call back into PivotInfo.BuildIdentifier. This
+// port defines BuildIdentifier/IsPivot as ordinary methods that shadow the embedded LOTLInfo
+// ones for direct calls on a *PivotInfo, but does not redefine DSSID - so any code that holds a
+// value only as a LOTLInfo gets LOTLInfo's identifier, not PivotInfo's. This is the same known
+// deviation tl_info.go documents.
 func NewPivotInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo TLParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string,
 	certificates map[*model.CertificateToken]CertificatePivotStatus, lotlLocation string) *PivotInfo {

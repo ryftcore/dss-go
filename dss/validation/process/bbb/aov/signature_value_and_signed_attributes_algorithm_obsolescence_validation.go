@@ -64,12 +64,10 @@ func (c *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]) bu
 	// <Constraint> elements are marshalled in, and - because the loop keeps the
 	// FIRST invalid (else the first) cryptographic validation result - it also
 	// decides which digest algorithm the <SignedAttributesValidation><Algorithm>
-	// of the detailed report reports. Substituting first-seen order (this
-	// port's earlier reading, and PORTING.md's default) therefore broke byte
-	// parity AND reported a different algorithm than upstream on multi-
-	// reference signatures; utils.JavaHashMapComputeIfAbsentKeyOrder reproduces the real
-	// HashMap key order instead. Found by the phase-8f full-corpus report
-	// byte-parity run on DSS-2115/dss-2115-valid.xml and -additional-ref.xml.
+	// of the detailed report reports. utils.JavaHashMapComputeIfAbsentKeyOrder
+	// reproduces the real java.util.HashMap key order on multi-reference
+	// signatures so that both the constraint order and the reported algorithm
+	// match upstream exactly.
 	signCertRefsMap := make(map[string][]*diagnostic.CertificateRefWrapper)
 	var insertionOrder []string
 	for _, r := range signingCertificateReferences {

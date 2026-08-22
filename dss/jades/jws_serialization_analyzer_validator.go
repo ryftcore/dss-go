@@ -1,8 +1,5 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/validation/JWSSerializationAnalyzerValidator.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: *JAdESSignature - see abstract_jws_document_analyzer.go's and
-// jws_compact_document_analyzer.go's file headers.
-//
 // {
 //
 // "payload":"payload contents",

@@ -60,9 +60,9 @@ func TestSimpleReportWrapper(t *testing.T) {
 	}
 
 	// Counter-signature specific fields.
-	sig := r.getSignatureByID(counterSig)
+	sig := r.signatureByID(counterSig)
 	if sig == nil {
-		t.Fatal("getSignatureByID(counterSig) = nil")
+		t.Fatal("signatureByID(counterSig) = nil")
 	}
 	if sig.CounterSignature == nil || !*sig.CounterSignature {
 		t.Error("counter-signature's CounterSignature attribute is not true")
@@ -72,9 +72,9 @@ func TestSimpleReportWrapper(t *testing.T) {
 	}
 
 	// Embedded timestamp lookup by id must descend into Signature.Timestamps.
-	tst := r.getTimestampByID(parentTst)
+	tst := r.timestampByID(parentTst)
 	if tst == nil {
-		t.Fatalf("getTimestampByID(%q) = nil", parentTst)
+		t.Fatalf("timestampByID(%q) = nil", parentTst)
 	}
 	if got := r.GetProducedBy(parentTst); got != "EST-COUNTER-SIGNATURE1-OK-EE" {
 		t.Errorf("GetProducedBy(timestamp) = %q", got)

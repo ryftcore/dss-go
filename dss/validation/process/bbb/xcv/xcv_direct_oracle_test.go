@@ -24,8 +24,8 @@ import (
 // The 75-check KAT: every row of testdata/oracle/xcv_direct.jsonl is the
 // XmlSubXCV/XmlXCV/XmlRFC upstream produces when one of the 75 directly
 // instantiable eu.europa.esig.dss.validation.process.bbb.xcv.checks /
-// sub.checks / sub.checks.pseudo / rfc.checks classes of the phase 8d XCVB
-// manifest is run alone, at Level.FAIL, through a chain of exactly one item -
+// sub.checks / sub.checks.pseudo / rfc.checks classes
+// is run alone, at Level.FAIL, through a chain of exactly one item -
 // see testdata/gen/XcvOracle.java. This test replays the same drive.
 //
 // Unlike xcva_direct_oracle_test.go's twelve rac/checks classes (all sharing
@@ -37,7 +37,7 @@ import (
 
 // xcvDirectRow is one line of testdata/oracle/xcv_direct.jsonl: just the
 // title/conclusion/constraints body XcvOracle's row() writes (no nesting - the
-// 83-file manifest's checks/sub.checks/rfc.checks classes produce a single
+// checks/sub.checks/rfc.checks classes produce a single
 // flat ConstraintsConclusion, never a tree).
 type xcvDirectRow struct {
 	File        string            `json:"file"`
@@ -680,8 +680,7 @@ func recordMatch(statuses map[string]map[string]int, matched *int, want, got *xc
 		}
 	}
 	if want.Title == nil {
-		// Known mapping (same as the phase 8c direct corpora and XCVA's
-		// xcva_direct_oracle_test.go): a single-item chain defines no title
+		// Known mapping: a single-item chain defines no title
 		// MessageTag, so Java leaves the attribute null where the generated
 		// non-pointer Go member spells it "".
 		empty := ""

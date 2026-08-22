@@ -31,7 +31,7 @@ func dssPKUtilsTestPublicKey(t *testing.T, key any) *model.PublicKey {
 	return publicKey
 }
 
-// TestDSSPKUtilsPublicKeySize checks the key sizes for every key type the port recognises.
+// TestDSSPKUtilsPublicKeySize checks the key sizes for every recognised key type.
 func TestDSSPKUtilsPublicKeySize(t *testing.T) {
 	// The fixture CA carries a 2048-bit RSA key.
 	der, err := os.ReadFile(filepath.Join("testdata", "asn1", "ocsp_ca.der"))
@@ -168,7 +168,7 @@ func TestDSSPKUtilsPublicKeySizeOfDSA(t *testing.T) {
 	}
 }
 
-// TestDSSPKUtilsUnknownKey checks the "?" reported for a key the port cannot size.
+// TestDSSPKUtilsUnknownKey checks the "?" reported for a key that cannot be sized.
 func TestDSSPKUtilsUnknownKey(t *testing.T) {
 	if got := DSSPKUtilsStringPublicKeySize(nil); got != "?" {
 		t.Errorf("a missing key must be reported as \"?\", got %q", got)

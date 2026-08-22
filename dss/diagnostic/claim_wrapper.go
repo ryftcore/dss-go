@@ -9,19 +9,17 @@
 // wrapper in this package (AddressClaimWrapper, BirthdateClaimWrapper, ...) therefore embeds
 // ClaimWrapper as its own base - constructed over a synthetic *jaxb.XmlClaim assembled from the
 // wrapped type's embedded content/attrs via claimBase (defined in eaa_payload_proxy.go,
-// DIAGWRAP_A, and used here as an ordinary same-package function) - and exposes
+// and used here as an ordinary same-package function) - and exposes
 // AsClaim() *ClaimWrapper to view itself as the Java base type for contexts needing a homogeneous
 // []*ClaimWrapper the way Java's covariant upcast provides for free (see the same convention
 // documented in eaa_payload_proxy.go and eaa_wrapper.go).
 //
 // A child claim's Parent() is set to the plain embedded &w.ClaimWrapper (never w.AsClaim()) by
-// every overriding subtype's own getters: AsClaim() computes Map()/List() by calling those same
-// getters, so a getter that itself called w.AsClaim() to build its child's parent link would
-// recurse into AsClaim() again. The one place this could matter - a caller chasing
-// child.Parent().Map()/.List() back up and expecting the override - is not exercised by any
-// consumer in this port (DIAGWRAP_A's eaa_wrapper.go/eaa_payload_proxy.go read Parent() nowhere);
-// Parent() otherwise behaves identically to Java, including for the leaf accessors that are not
-// overridden and so never risk this recursion.
+// every overriding subtype's own getters, to avoid recursion: AsClaim() computes Map()/List() by
+// calling those same getters, so a getter that itself called w.AsClaim() to build its child's
+// parent link would recurse into AsClaim() again. Parent() otherwise behaves identically to
+// Java, including for the leaf accessors that are not overridden and so never risk this
+// recursion.
 //
 // A subtype that overrides isList()/getList() or isMap()/getMap() in Java (AddressClaimWrapper,
 // CredentialSubjectClaimWrapper, DrivingPrivilege(s|Codes)ClaimWrapper, StatusClaimWrapper, ...)
@@ -371,9 +369,9 @@ func claimMapDisplayValue(entries map[string]*ClaimWrapper) string {
 // Java's, only less visibly.
 //
 // The rendering therefore sorts by key: a documented, stable order that differs from Java's
-// arbitrary-but-fixed one. Nothing in the port depends on the order - DisplayValue is a
-// diagnostic string and is not part of the marshal-parity surface - whereas ranging over the Go
-// map, which is what this replaced, made the string differ from one call to the next.
+// arbitrary-but-fixed one. DisplayValue is a diagnostic string, not part of the marshal-parity
+// surface, whereas ranging over the Go map, which is what this replaced, made the string differ
+// from one call to the next.
 func claimMapKeyOrder(entries map[string]*ClaimWrapper) []string {
 	keys := make([]string, 0, len(entries))
 	for key := range entries {
@@ -402,8 +400,7 @@ func claimEmbedValueWithEnvelope(sb *strings.Builder, claim *ClaimWrapper) {
 // Equals reports whether other wraps a claim with the same name, disclosability, and value.
 // Port of equals(Object): the initial `this == o` / instanceof checks become the pointer-equal
 // and nil checks below; hashCode() has no Go equivalent (nothing here keys a hash-based
-// collection on a ClaimWrapper) and is dropped, matching the omission pattern documented
-// elsewhere in this port (see model/certificate_token.go).
+// collection on a ClaimWrapper) and is omitted.
 func (c *ClaimWrapper) Equals(other *ClaimWrapper) bool {
 	if c == other {
 		return true

@@ -2,7 +2,7 @@
 // documents use, standing in for javax.xml.datatype.XMLGregorianCalendar
 // (which the JAXB RI binds xs:date/xs:dateTime to) - see
 // CryptographicSuiteXmlCatalogue#toDate(XMLGregorianCalendar), collapsed
-// into xsdDateToTime/xsdDateTimeToTime below since this port has no
+// into xsdDateToTime/xsdDateTimeToTime below since Go has no
 // XMLGregorianCalendar equivalent to convert from.
 package cryptoxml
 
@@ -31,7 +31,7 @@ var xsdDateTimeLayouts = []string{
 // xsdDateToTime parses an xs:date lexical value. Ports the date-only half
 // of toDate(XMLGregorianCalendar); returns (zero, false) for an empty or
 // unparseable value, mirroring toDate's null-in/null-out short-circuit
-// (see json_object.go's doc comment on why "" is otherwise this port's
+// (see json_object.go's doc comment on why "" is otherwise the
 // not-present sentinel for optional string fields).
 func xsdDateToTime(value string) (time.Time, bool) {
 	if value == "" {

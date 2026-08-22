@@ -7,7 +7,7 @@ import (
 )
 
 // RelatedRevocationWrapper wraps an XmlRelatedRevocation object. Port of
-// RelatedRevocationWrapper, which extends RevocationWrapper (DIAGWRAP_B).
+// RelatedRevocationWrapper, which extends RevocationWrapper.
 type RelatedRevocationWrapper struct {
 	RevocationWrapper
 

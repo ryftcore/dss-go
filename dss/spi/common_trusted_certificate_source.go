@@ -2,12 +2,6 @@
 //
 // eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the
 // type keeps its Java name unqualified.
-//
-// ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns
-// CommonCertificateSource and CertificateSource): CommonCertificateSource is assumed to embed
-// cleanly and expose AddCertificate(*model.CertificateToken) *model.CertificateToken and
-// IsKnown(*model.CertificateToken) bool, and CertificateSource is assumed to expose
-// Certificates() []*model.CertificateToken, matching the Java interfaces they flatten from.
 package spi
 
 import (

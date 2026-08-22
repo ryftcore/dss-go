@@ -931,9 +931,7 @@ func (t *TimestampToken) TimestampedReferences() []*TimestampedReference {
 // getTimestampedReferences() returns in place (List reference semantics) at several call sites
 // in AbstractTimestampSource (incorporateArchiveTimestampReferences, processExternalTimestamp,
 // ...). Go slices returned by value do not alias the field they came from, so this setter is
-// the only way to make such a mutation observable to later callers; added during phase 2b
-// integration per the GAP flagged by dss/spi/validation/timestamp's abstract_timestamp_source.go
-// and signature_timestamp_source.go header comments. Additive/non-breaking.
+// the only way to make such a mutation observable to later callers.
 func (t *TimestampToken) SetTimestampedReferences(timestampedReferences []*TimestampedReference) {
 	t.timestampedReferences = timestampedReferences
 }

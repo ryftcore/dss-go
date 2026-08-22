@@ -1,9 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/ValidationContext.java (DSS 6.5.RC1).
 //
-// This interface is implemented by the already-landed SignatureValidationContext (sibling
-// chunk); every method below is named to match SignatureValidationContext's actual exported
-// method set exactly (confirmed by reading signature_validation_context.go directly, not only
-// its header-comment assumptions - see the CROSS-CHUNK CONFLICT note below) so that
+// This interface is implemented by SignatureValidationContext; every method below is named to
+// match SignatureValidationContext's actual exported method set exactly (confirmed by reading
+// signature_validation_context.go directly, not only its header-comment) so that
 // *SignatureValidationContext continues to satisfy this interface, which is required for
 // signature_validation_context.go:264's `c.revocationDataVerifier.SetValidationContext(c)` and
 // baseline_requirements_checker.go's `b.validationContext = NewSignatureValidationContext()`
@@ -11,29 +10,18 @@
 //
 // Per the Java 6.2+ behavior change documented in the javadoc of every checkXxx() method below
 // ("returning only the boolean validation result, without alerts handling"), these methods
-// return bool - not TokenStatus/SignatureStatus - matching SignatureValidationContext's already
-// -landed CheckXxx() bool methods exactly.
+// return bool - not TokenStatus/SignatureStatus - matching SignatureValidationContext's
+// CheckXxx() bool methods exactly.
 //
 // getValidationData has two Java overloads (AdvancedSignature, TimestampToken); Go has no
-// overloading, and SignatureValidationContext already landed them as GetValidationData
-// (signature overload) and GetValidationDataForTimestamp (timestamp overload) - both are
-// included here under those exact names.
+// overloading, so SignatureValidationContext exposes GetValidationData (signature overload) and
+// GetValidationDataForTimestamp (timestamp overload) - both are included here under those exact
+// names.
 //
-// CROSS-CHUNK CONFLICT (flagged per S2B_BRIEF.md, not silently resolved): sibling chunk VAL-B's
-// already-landed revocation_data_verifier.go assumes (in its own header comment and in its
-// method body at line 685) that this interface exposes getRevocationData(CertificateToken) as
-// `RevocationData(certificateToken *model.CertificateToken) []AnyRevocationToken` (get-prefix
-// dropped, per PORTING.md's stated convention). However SignatureValidationContext - which must
-// satisfy this interface for the reasons above - already landed the same accessor as
-// `GetRevocationData` (get-prefix kept, consistent with every other exported getter on that
-// type: GetCurrentTime, GetProcessedSignatures, GetAllCertificateSources,
-// GetDocumentCertificateSource, GetValidationData, ...). This file defines the interface method
-// as GetRevocationData to match the real, already-compiling implementation (the authoritative
-// source of truth for what SignatureValidationContext actually exports); this leaves
-// revocation_data_verifier.go's `v.validationContext.RevocationData(certificateToken)` call
-// referencing a method the interface does not declare. That call site is outside this chunk's
-// manifest (owned by VAL-B) and is NOT edited here - flagging for the tech lead / next
-// integration pass to rename that call to GetRevocationData.
+// getRevocationData(CertificateToken) is exposed as GetRevocationData (get-prefix kept, unlike
+// most of this port's dropped getters, for consistency with SignatureValidationContext's other
+// exported getters: GetCurrentTime, GetProcessedSignatures, GetAllCertificateSources,
+// GetDocumentCertificateSource, GetValidationData, ...).
 package validation
 
 import (
@@ -205,6 +193,5 @@ type ValidationContext interface {
 	GetRevocationData(certificateToken *model.CertificateToken) []AnyRevocationToken
 }
 
-// compile-time assertion: *SignatureValidationContext satisfies ValidationContext (both types
-// are owned by phase 2b, SignatureValidationContext by a sibling chunk).
+// compile-time assertion: *SignatureValidationContext satisfies ValidationContext.
 var _ ValidationContext = (*SignatureValidationContext)(nil)

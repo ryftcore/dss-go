@@ -11,12 +11,11 @@
 // alongside ResolverXPointer (per internal/xmldsig's doc.go), which is how every landed XAdES
 // signature-building/validating call site gets its XPath-injection protection - see
 // xades_signature.go's file header, which documents this instead of assuming a
-// package-`xades`-local EnforcedResolverFragment forward dependency.
+// package-`xades`-local EnforcedResolverFragment implementation.
 //
 // PORTING.md forbids editing frozen packages, and internal/xmldsig is frozen; declaring a second,
 // unused eu.europa.esig.dss.xades.EnforcedResolverFragment type in package xades here would only
-// shadow-duplicate that already-landed, already-wired implementation with dead code, so this file
+// shadow-duplicate that already-wired implementation with dead code, so this file
 // intentionally carries no Go declarations of its own - it exists to preserve the "one Go file
-// per Java class" mapping and to record where the port actually lives, per S4D_BRIEF.md's
-// instruction to flag frozen-package situations for the integrator instead of duplicating them.
+// per Java class" mapping and to record where the port actually lives.
 package xades

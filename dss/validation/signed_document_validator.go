@@ -4,10 +4,9 @@
 // Shape notes (all forced by the target language):
 //
 //   - Java's SignedDocumentValidator is an abstract class the format modules
-//     extend. Go has no inheritance, so - following the
-//     AbstractReportsBase/InitAbstractReports precedent used across this port -
-//     the shared state and concrete methods live on SignedDocumentValidatorBase,
-//     the one method the format validators actually override
+//     extend. Go has no inheritance, so the shared state and concrete
+//     methods live on SignedDocumentValidatorBase, the one method the
+//     format validators actually override
 //     (initializeDiagnosticDataBuilder()) is captured by
 //     SignedDocumentValidatorOverrides, and a concrete validator registers
 //     itself with InitSignedDocumentValidator in its constructor. Unlike the

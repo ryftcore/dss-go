@@ -20,9 +20,9 @@ func NewFoundRevocationsProxy(foundRevocations *jaxb.XmlFoundRevocations) *Found
 	return &FoundRevocationsProxy{foundRevocations: foundRevocations}
 }
 
-// getFoundRevocations lazily instantiates the wrapped object. Port of the private
+// ensureFoundRevocations lazily instantiates the wrapped object. Port of the private
 // getFoundRevocations().
-func (p *FoundRevocationsProxy) getFoundRevocations() *jaxb.XmlFoundRevocations {
+func (p *FoundRevocationsProxy) ensureFoundRevocations() *jaxb.XmlFoundRevocations {
 	if p.foundRevocations == nil {
 		p.foundRevocations = &jaxb.XmlFoundRevocations{}
 	}
@@ -33,7 +33,7 @@ func (p *FoundRevocationsProxy) getFoundRevocations() *jaxb.XmlFoundRevocations 
 // getRelatedRevocationData().
 func (p *FoundRevocationsProxy) RelatedRevocationData() []*RelatedRevocationWrapper {
 	var revocationWrappers []*RelatedRevocationWrapper
-	for _, relatedRevocation := range p.getFoundRevocations().RelatedRevocation {
+	for _, relatedRevocation := range p.ensureFoundRevocations().RelatedRevocation {
 		revocationWrappers = append(revocationWrappers, NewRelatedRevocationWrapper(relatedRevocation))
 	}
 	return revocationWrappers
@@ -43,7 +43,7 @@ func (p *FoundRevocationsProxy) RelatedRevocationData() []*RelatedRevocationWrap
 // getOrphanRevocationData().
 func (p *FoundRevocationsProxy) OrphanRevocationData() []*OrphanRevocationWrapper {
 	var orphanTokens []*OrphanRevocationWrapper
-	for _, orphanRevocation := range p.getFoundRevocations().OrphanRevocation {
+	for _, orphanRevocation := range p.ensureFoundRevocations().OrphanRevocation {
 		orphanTokens = append(orphanTokens, NewOrphanRevocationWrapper(orphanRevocation))
 	}
 	return orphanTokens

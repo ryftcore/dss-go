@@ -3,13 +3,13 @@
 // 5.5 Validation process for Signatures with Time and Signatures with
 // Long-Term Validation Data.
 //
-// PACKAGE-BOUNDARY DEVIATION (LTVB, phase 8e): Java's ValidationProcessForSignaturesWithLongTermValidationData
+// Package placement deviation: Java's ValidationProcessForSignaturesWithLongTermValidationData
 // lives in eu.europa.esig.dss.validation.process.vpfltvd, the same package as
 // its checks and as LongTermValidationCertificateRevocationSelector /
 // RevocationBasicValidationProcess. It is filed in this separate package
 // instead, because it is the only vpfltvd-family class that also needs
 // bbb/sav.TLevelTimeStampCheck and LTALevelTimeStampCheck (tLevelTimeStamp()
-// / ltaLevelTimeStamp() below) - and bbb/sav (frozen, phase 8c) already
+// / ltaLevelTimeStamp() below) - and bbb/sav already
 // imports package vpfltvd unconditionally for
 // vpfltvd.NewTimestampMessageImprintWithIdCheck (see
 // bbb/sav/signature_acceptance_validation.go's own header). Since Go forbids

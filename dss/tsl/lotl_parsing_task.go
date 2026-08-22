@@ -1,10 +1,10 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/parsing/LOTLParsingTask.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): OtherTSLPointerConverter,
-// PivotSchemeInformationURI and LOTLSigningCertificatesAnnouncementSchemeInformationURI live in
-// dss-tsl-validation's "function" package, which the TSLJOB chunk ports into this same Go package
-// (tsl). They are referenced here by their Java names, with this codebase's constructor
-// (New<Name>) and functional-interface (Test / Apply) spellings.
+// OtherTSLPointerConverter, PivotSchemeInformationURI and
+// LOTLSigningCertificatesAnnouncementSchemeInformationURI live in dss-tsl-validation's
+// "function" package, ported into this same Go package (tsl). They are referenced here by their
+// Java names, with this codebase's constructor (New<Name>) and functional-interface (Test /
+// Apply) spellings.
 package tsl
 
 import (

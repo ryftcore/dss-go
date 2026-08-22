@@ -1,12 +1,10 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/parsing/AbstractTLParsingResult.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): this file embeds
-// eu.europa.esig.dss.validation.job.parsing.AbstractParsingResult, ported by the dss-validation-job
-// chunk into Go package dss/validation/job, which had not landed when this file was written. The
-// embedded name, its constructor and its two members below follow PORTING.md's "exported Go
-// identifiers keep the Java name" rule literally (AbstractParsingResult /
-// NewAbstractParsingResult / StructureValidationMessages / SetStructureValidationMessages); if
-// that chunk chose different spellings, the fix is a mechanical rename here.
+// Embeds job.AbstractParsingResult (Java
+// eu.europa.esig.dss.validation.job.parsing.AbstractParsingResult). The embedded name, its
+// constructor and its two members below follow PORTING.md's "exported Go identifiers keep the
+// Java name" rule literally (AbstractParsingResult / NewAbstractParsingResult /
+// StructureValidationMessages / SetStructureValidationMessages).
 package tsl
 
 import (

@@ -1,26 +1,5 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpftsp/TimestampsValidationBlock.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY (LTVB, phase 8e): this file uses three packages ported by
-// sibling porters in the same phase, not yet present when this file was
-// written:
-//
-//   - github.com/ryftcore/dss-go/dss/validation/process/vpfswatsp for POEExtraction
-//     (LTVA). This one IS already present with the assumed shape:
-//     NewPOEExtraction(), Init(*diagnostic.DiagnosticData, time.Time),
-//     ExtractPOE(*diagnostic.TimestampWrapper).
-//   - github.com/ryftcore/dss-go/dss/validation/process/qualification (shared
-//     QCERT/QTRUST/QSIG porters) for TimestampQualificationBlock, assumed to
-//     have the shape
-//     NewTimestampQualificationBlock(*i18n.I18nProvider, *diagnostic.TimestampWrapper, []*jaxb.XmlTLAnalysis, *vpfswatsp.POEExtraction) *TimestampQualificationBlock
-//     with an Execute() *jaxb.XmlValidationTimestampQualification method,
-//     mirroring Java's TimestampQualificationBlock(I18nProvider, TimestampWrapper, List<XmlTLAnalysis>, POEExtraction).
-//   - github.com/ryftcore/dss-go/dss/validation/process/vpftspwatsp (LTVA) for
-//     ValidationProcessForTimestampsWithArchivalData, assumed to have the shape
-//     NewValidationProcessForTimestampsWithArchivalData(*i18n.I18nProvider, *diagnostic.TimestampWrapper, *jaxb.XmlValidationProcessBasicTimestamp, map[string]*jaxb.XmlBasicBuildingBlocks, map[string]*jaxb.XmlEvidenceRecord, time.Time, policy.ValidationPolicy, *vpfswatsp.POEExtraction) *ValidationProcessForTimestampsWithArchivalData
-//     with an Execute() *jaxb.XmlValidationProcessArchivalDataTimestamp method,
-//     mirroring Java's
-//     ValidationProcessForTimestampsWithArchivalData(I18nProvider, TimestampWrapper, XmlValidationProcessBasicTimestamp, Map, Map, Date, ValidationPolicy, POEExtraction).
-//
 // Evidence-record support: Java's protected constructor defaults
 // evidenceRecordValidations to Collections.emptyMap() with a "TODO: implement
 // support" comment; the Go port keeps the same gap (see

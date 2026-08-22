@@ -89,7 +89,7 @@ type InformationType struct {
 // dssc:EvaluationType complexType.
 //
 // Java's `Object any` (the wildcard xs:any this element declares, holding
-// the etsi19322:MoreDetails extension in every document this chunk ports -
+// the etsi19322:MoreDetails extension in every document this package ports -
 // see CryptographicSuiteXmlCatalogue#getExtensionType's
 // JAXBElement/instanceof/getName().getLocalPart().equals("MoreDetails")
 // dance) becomes a plain namespace-and-name-tagged field: encoding/xml

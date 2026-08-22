@@ -9,10 +9,10 @@
 // SKIPPED (no Go equivalent, flagged for integrator): getSecureDocumentBuilderFactory,
 // getSecureTransformerFactory and getSecureTransformer return javax.xml.parsers /
 // javax.xml.transform factory/transformer objects. internal/xmldom.Parse already applies the
-// equivalent secure posture internally (no DOCTYPE, no external entities - see
-// XML_DESIGN.md §1.5) with no factory object to obtain first, and internal/xmldom.Serialize
-// has no pluggable Transformer to configure either. There is nothing for a Go port of these
-// three methods to usefully return, so they are omitted rather than stubbed.
+// equivalent secure posture internally (no DOCTYPE, no external entities) with no factory
+// object to obtain first, and internal/xmldom.Serialize has no pluggable Transformer to
+// configure either. There is nothing for a Go port of these three methods to usefully
+// return, so they are omitted rather than stubbed.
 package utils
 
 import (
@@ -340,7 +340,7 @@ func DomUtilsCreateXMLGregorianCalendar(date time.Time) string {
 // DomUtilsGetDate converts text (an XML xsd:dateTime representation) to a time.Time. Returns
 // the zero Time on failure (Java: LOG.warn then return null; logging dropped per PORTING.md).
 //
-// ASSUMPTION (flagged for integrator, no Java oracle run against this yet): upstream delegates
+// ASSUMPTION (flagged for integrator): upstream delegates
 // to javax.xml.datatype.DatatypeFactory#newXMLGregorianCalendar(String), which lenently
 // accepts any of the eight W3C XML Schema date/time lexical forms. This port only handles
 // xsd:dateTime, with or without a fractional-second component, with a "Z" or "+HH:MM"/"-HH:MM"
@@ -349,10 +349,10 @@ func DomUtilsCreateXMLGregorianCalendar(date time.Time) string {
 // since XMLGregorianCalendar's own no-offset handling is JVM-default-timezone-dependent and
 // therefore not a fixed target to match). This is every form DSS itself ever produces via
 // DomUtilsCreateXMLGregorianCalendar and every form actually exercised by
-// XAdESRevocationRefExtractionUtils/XAdESSignature callers (dss-xades, phase 4c).
+// XAdESRevocationRefExtractionUtils/XAdESSignature callers.
 //
-// The assumption above has now been run against a DatatypeFactory oracle (phase 4b audit).
-// It holds for xsd:dateTime, with one correction applied here and one gap left open:
+// The assumption above has been run against a DatatypeFactory oracle. It holds for
+// xsd:dateTime, with one correction applied here and one gap left open:
 //
 //   - CORRECTED: time.Parse accepts a COMMA as the fractional-second separator, so
 //     "2024-01-15T10:30:00,5Z" parsed to 10:30:00.5 while DatatypeFactory rejects it - the
@@ -622,7 +622,7 @@ func DomUtilsCreateElementNS(documentDom *xmldom.Node, namespace *common.DSSName
 // real namespace declaration for serialization and canonicalization to be correct - this port
 // creates a genuine xmldom namespace-declaration attribute (Space=XMLNSNamespace,
 // Prefix="xmlns"), resolving the ambiguity in favour of runtime correctness rather than a
-// literal quirk-for-quirk port. Reconcile against the phase-4c XAdES KAT once available.
+// literal quirk-for-quirk port. Reconcile against the XAdES KAT.
 // Ports addNamespaceAttribute(Element, DSSNamespace).
 func DomUtilsAddNamespaceAttribute(element *xmldom.Node, namespace *common.DSSNamespace) {
 	name := xmldom.Name{Space: xmldom.XMLNSNamespace, Local: namespace.Prefix(), Prefix: "xmlns"}

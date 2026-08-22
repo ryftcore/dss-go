@@ -11,8 +11,8 @@ import (
 
 // ASiCWithCAdESDataToSignHelperBuilderOverrides declares the operation Java's abstract
 // ASiCWithCAdESDataToSignHelperBuilder leaves to its subclasses and calls back into from
-// Build(). Per S7_BRIEF.md's virtual-dispatch warning, every concrete builder must call
-// InitASiCWithCAdESDataToSignHelperBuilder with itself before use.
+// Build(). Every concrete builder must call InitASiCWithCAdESDataToSignHelperBuilder with itself
+// before use, or the base's virtual calls will not reach the override.
 type ASiCWithCAdESDataToSignHelperBuilderOverrides interface {
 	// GetManifestBuilder returns an AbstractASiCManifestBuilder to be used for a
 	// signed/timestamped manifest creation. Port of the protected abstract

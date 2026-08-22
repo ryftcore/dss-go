@@ -2,6 +2,8 @@
 package scope
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/model"
 	mscope "github.com/ryftcore/dss-go/dss/model/scope"
@@ -93,7 +95,9 @@ func (f *EvidenceRecordScopeFinder) FindEvidenceRecordScopeForReferences(referen
 				} else {
 					detachedDocument = f.getDetachedDocument(referenceValidation, detachedContents)
 				}
-				if detachedDocument != nil && !containsDocument(coveredDocuments, detachedDocument) {
+				if detachedDocument != nil && !slices.ContainsFunc(coveredDocuments, func(d model.DSSDocument) bool {
+					return documentsEqual(d, detachedDocument)
+				}) {
 					fileName := detachedDocument.Name()
 					signatureScopes = append(signatureScopes, NewFullSignatureScope(fileName, detachedDocument))
 					coveredDocuments = append(coveredDocuments, detachedDocument) // do not add documents with the same digests
@@ -143,13 +147,4 @@ func documentsEqual(a, b model.DSSDocument) bool {
 	default:
 		return a == b
 	}
-}
-
-func containsDocument(documents []model.DSSDocument, target model.DSSDocument) bool {
-	for _, d := range documents {
-		if documentsEqual(d, target) {
-			return true
-		}
-	}
-	return false
 }

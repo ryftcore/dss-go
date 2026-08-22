@@ -10,7 +10,7 @@ import (
 // result.
 //
 // JUDGMENT CALL: mirrors the AbstractDocumentInfo flattening already documented on
-// tsl.TLInfo/tsl.LOTLInfo (Phase 1b, same reasoning applies here): Java's
+// tsl.TLInfo/tsl.LOTLInfo (same reasoning applies here): Java's
 // model.job.AbstractDocumentInfo<P> (out of this manifest) is a generic abstract base with a
 // self-referential type parameter and a protected buildIdentifier() hook invoked
 // polymorphically from its getDSSId(). Go has no virtual dispatch through embedding and Go

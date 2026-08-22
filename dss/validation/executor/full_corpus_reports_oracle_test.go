@@ -1,4 +1,4 @@
-// THE PHASE 8 EXIT CRITERION - report BYTE parity beyond the harness subset.
+// Report BYTE parity beyond the marshal-parity subset.
 //
 // TestReportBuildersOracle (report_builders_oracle_test.go) compares marshalled
 // report bytes on the 50-document marshal-parity corpus. This test does the
@@ -24,7 +24,7 @@
 // asserts the unmarshal outcome of all 273 files on both sides.
 //
 // It admits NO tolerances. Five separate parity defects were found by exactly
-// this comparison during the phase-8f audit and fixed rather than recorded:
+// this comparison and fixed rather than recorded:
 // AOV_XCV constraint order and the digest algorithm reported for the signed
 // attributes (dss/validation/process/bbb/aov), <Timestamp> order under
 // <EvidenceRecord> (dss/validation/process/vpfswatsp/evidencerecord), trusted-

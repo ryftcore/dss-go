@@ -21,8 +21,8 @@
 //   - buildAdditionalInfo() null -> (*string)(nil)  : the AdditionalInfo element
 //     stays absent, which is observable, hence the pointer.
 //
-// slf4j logging (the "Check skipped", "Unknown level" and undefined-MessageTag
-// records) is dropped per PORTING.md.
+// Java's slf4j logging ("Check skipped", "Unknown level", undefined-MessageTag
+// records) has no Go equivalent and is not ported.
 package process
 
 import (
@@ -362,7 +362,7 @@ func (c *ChainItemBase[T]) addConstraint(constraint *jaxb.XmlConstraint) {
 // instead of filling the message in; I18nProvider#getMessage never returns null
 // (an undefined key resolves to the tag id itself), so the guard is unreachable
 // and only its taken branch is ported.
-func (c *ChainItemBase[T]) BuildXmlMessage(messageTag i18n.MessageTag, args ...interface{}) *jaxb.XmlMessage {
+func (c *ChainItemBase[T]) BuildXmlMessage(messageTag i18n.MessageTag, args ...any) *jaxb.XmlMessage {
 	xmlMessage := &jaxb.XmlMessage{}
 	message := c.I18nProvider.GetMessage(messageTag, args...)
 	key := messageTag.Id()

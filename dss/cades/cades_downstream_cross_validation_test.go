@@ -1,4 +1,4 @@
-// Cross-validation harness, direction GO -> UPSTREAM (task #12): the first end-to-end
+// Cross-validation harness, direction GO -> UPSTREAM: the first end-to-end
 // compatibility proof in the other direction from cades_upstream_cross_validation_test.go. It
 // runs testdata/crossgen (a standalone `go run` program - see its own doc comment) to sign CAdES-B
 // and CAdES-T documents with this package's own CAdESService and a real PKCS#12 test key, then

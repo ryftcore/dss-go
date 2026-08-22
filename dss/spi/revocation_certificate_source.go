@@ -1,9 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationCertificateSource.java (DSS 6.5.RC1).
 //
-// OCSPCertificateSource (chunk CRLOCSP, a sibling of this phase 2a chunk) already embeds
-// RevocationCertificateSourceBase (built with NewRevocationCertificateSourceBase()) and is
-// asserted to satisfy the RevocationCertificateSource interface; this file defines both to
-// match that shape.
+// OCSPCertificateSource embeds RevocationCertificateSourceBase (built with
+// NewRevocationCertificateSourceBase()) and is asserted to satisfy the
+// RevocationCertificateSource interface; this file defines both to match that shape.
 package spi
 
 // RevocationCertificateSource represents a certificate source present into a revocation token.

@@ -30,7 +30,7 @@ func (r *SimpleReport) GetValidationTime() *time.Time {
 // GetIndication returns the indication obtained after the validation of a
 // token with the given DSS unique identifier. Port of getIndication(String).
 func (r *SimpleReport) GetIndication(tokenID string) enumerations.Indication {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc == nil {
 		return ""
 	}
@@ -40,7 +40,7 @@ func (r *SimpleReport) GetIndication(tokenID string) enumerations.Indication {
 // GetSubIndication returns the sub-indication obtained after the validation
 // of the token. Port of getSubIndication(String).
 func (r *SimpleReport) GetSubIndication(tokenID string) enumerations.SubIndication {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc == nil || tc.SubIndication == nil {
 		return ""
 	}
@@ -152,7 +152,7 @@ func (r *SimpleReport) GetDocumentFilename() string {
 // GetTokenFilename returns a file name for a given tokenId. Port of
 // getTokenFilename(String).
 func (r *SimpleReport) GetTokenFilename(tokenID string) string {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.Filename != nil {
 		return *tc.Filename
 	}
@@ -162,7 +162,7 @@ func (r *SimpleReport) GetTokenFilename(tokenID string) string {
 // GetCertificateChain returns a certificate chain for a given tokenId. Port
 // of getCertificateChain(String).
 func (r *SimpleReport) GetCertificateChain(tokenID string) *jaxb.XmlCertificateChain {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil {
 		return tc.CertificateChain
 	}
@@ -172,7 +172,7 @@ func (r *SimpleReport) GetCertificateChain(tokenID string) *jaxb.XmlCertificateC
 // GetAdESValidationErrors retrieves the ETSI EN 319 102-1 AdES validation
 // errors for a given token by id. Port of getAdESValidationErrors(String).
 func (r *SimpleReport) GetAdESValidationErrors(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.AdESValidationDetails != nil {
 		return convertMessages(tc.AdESValidationDetails.Error)
 	}
@@ -182,7 +182,7 @@ func (r *SimpleReport) GetAdESValidationErrors(tokenID string) []Message {
 // GetAdESValidationWarnings retrieves the ETSI EN 319 102-1 AdES validation
 // warnings for a given token by id. Port of getAdESValidationWarnings(String).
 func (r *SimpleReport) GetAdESValidationWarnings(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.AdESValidationDetails != nil {
 		return convertMessages(tc.AdESValidationDetails.Warning)
 	}
@@ -192,7 +192,7 @@ func (r *SimpleReport) GetAdESValidationWarnings(tokenID string) []Message {
 // GetAdESValidationInfo retrieves the ETSI EN 319 102-1 AdES validation
 // information for a given token by id. Port of getAdESValidationInfo(String).
 func (r *SimpleReport) GetAdESValidationInfo(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.AdESValidationDetails != nil {
 		return convertMessages(tc.AdESValidationDetails.Info)
 	}
@@ -202,7 +202,7 @@ func (r *SimpleReport) GetAdESValidationInfo(tokenID string) []Message {
 // GetQualificationErrors retrieves the qualification process's errors for a
 // given token by id. Port of getQualificationErrors(String).
 func (r *SimpleReport) GetQualificationErrors(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.QualificationDetails != nil {
 		return convertMessages(tc.QualificationDetails.Error)
 	}
@@ -212,7 +212,7 @@ func (r *SimpleReport) GetQualificationErrors(tokenID string) []Message {
 // GetQualificationWarnings retrieves the qualification process's warnings
 // for a given token by id. Port of getQualificationWarnings(String).
 func (r *SimpleReport) GetQualificationWarnings(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.QualificationDetails != nil {
 		return convertMessages(tc.QualificationDetails.Warning)
 	}
@@ -222,7 +222,7 @@ func (r *SimpleReport) GetQualificationWarnings(tokenID string) []Message {
 // GetQualificationInfo retrieves the qualification process's information
 // for a given token by id. Port of getQualificationInfo(String).
 func (r *SimpleReport) GetQualificationInfo(tokenID string) []Message {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil && tc.QualificationDetails != nil {
 		return convertMessages(tc.QualificationDetails.Info)
 	}
@@ -233,7 +233,7 @@ func (r *SimpleReport) GetQualificationInfo(tokenID string) []Message {
 // NA. Port of getSignatureQualification(String).
 func (r *SimpleReport) GetSignatureQualification(signatureID string) enumerations.SignatureQualification {
 	qualif := enumerations.SignatureQualificationNA
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil && sig.SignatureLevel != nil {
 		qualif = sig.SignatureLevel.Value.SignatureQualification()
 	}
@@ -243,7 +243,7 @@ func (r *SimpleReport) GetSignatureQualification(signatureID string) enumeration
 // GetSignatureFormat returns the signature format (XAdES_BASELINE_B...).
 // Port of getSignatureFormat(String).
 func (r *SimpleReport) GetSignatureFormat(signatureID string) enumerations.SignatureLevel {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil {
 		return sig.SignatureFormat.SignatureLevel()
 	}
@@ -253,7 +253,7 @@ func (r *SimpleReport) GetSignatureFormat(signatureID string) enumerations.Signa
 // GetBestSignatureTime returns the best-signature-time. Port of
 // getBestSignatureTime(String).
 func (r *SimpleReport) GetBestSignatureTime(signatureID string) *time.Time {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil {
 		return xsTime(sig.BestSignatureTime)
 	}
@@ -262,7 +262,7 @@ func (r *SimpleReport) GetBestSignatureTime(signatureID string) *time.Time {
 
 // GetSigningTime returns the signature time. Port of getSigningTime(String).
 func (r *SimpleReport) GetSigningTime(signatureID string) *time.Time {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil {
 		return xsTime(sig.SigningTime)
 	}
@@ -273,7 +273,7 @@ func (r *SimpleReport) GetSigningTime(signatureID string) *time.Time {
 // extension, when the token validation is TOTAL_PASSED or PASSED. Port of
 // getExtensionPeriodMin(String).
 func (r *SimpleReport) GetExtensionPeriodMin(tokenID string) *time.Time {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil {
 		return xsTime(tc.ExtensionPeriodMin)
 	}
@@ -284,7 +284,7 @@ func (r *SimpleReport) GetExtensionPeriodMin(tokenID string) *time.Time {
 // extension, when the token validation is TOTAL_PASSED or PASSED. Port of
 // getExtensionPeriodMax(String).
 func (r *SimpleReport) GetExtensionPeriodMax(tokenID string) *time.Time {
-	tc := tokenContent(r.getTokenByID(tokenID))
+	tc := tokenContent(r.tokenByID(tokenID))
 	if tc != nil {
 		return xsTime(tc.ExtensionPeriodMax)
 	}
@@ -294,7 +294,7 @@ func (r *SimpleReport) GetExtensionPeriodMax(tokenID string) *time.Time {
 // GetSignedBy returns the signature's signer name. Port of
 // getSignedBy(String).
 func (r *SimpleReport) GetSignedBy(signatureID string) string {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil && sig.SignedBy != nil {
 		return *sig.SignedBy
 	}
@@ -316,7 +316,7 @@ func (r *SimpleReport) GetValidSignaturesCount() int {
 // GetProductionTime returns the timestamp production time. Port of
 // getProductionTime(String).
 func (r *SimpleReport) GetProductionTime(timestampID string) *time.Time {
-	ts := r.getTimestampByID(timestampID)
+	ts := r.timestampByID(timestampID)
 	if ts != nil {
 		return xsTime(ts.ProductionTime)
 	}
@@ -326,7 +326,7 @@ func (r *SimpleReport) GetProductionTime(timestampID string) *time.Time {
 // GetProducedBy returns the timestamp's producer name. Port of
 // getProducedBy(String).
 func (r *SimpleReport) GetProducedBy(timestampID string) string {
-	ts := r.getTimestampByID(timestampID)
+	ts := r.timestampByID(timestampID)
 	if ts != nil && ts.ProducedBy != nil {
 		return *ts.ProducedBy
 	}
@@ -336,7 +336,7 @@ func (r *SimpleReport) GetProducedBy(timestampID string) string {
 // GetTimestampQualification returns the timestamp's qualification. Port of
 // getTimestampQualification(String).
 func (r *SimpleReport) GetTimestampQualification(timestampID string) enumerations.TimestampQualification {
-	ts := r.getTimestampByID(timestampID)
+	ts := r.timestampByID(timestampID)
 	if ts != nil && ts.TimestampLevel != nil {
 		return ts.TimestampLevel.Value.TimestampQualification()
 	}
@@ -373,25 +373,25 @@ func (r *SimpleReport) GetEAAQualifications(eaaPresentationID string) []enumerat
 	return out
 }
 
-// getTokenByID returns a wrapper for the given token id. Port of the
+// tokenByID returns a wrapper for the given token id. Port of the
 // private getTokenById(String).
-func (r *SimpleReport) getTokenByID(tokenID string) jaxb.XmlTokenItem {
-	return getEmbeddedTokenByID(r.wrapped.SignatureOrTimestampOrEvidenceRecord, tokenID)
+func (r *SimpleReport) tokenByID(tokenID string) jaxb.XmlTokenItem {
+	return embeddedTokenByID(r.wrapped.SignatureOrTimestampOrEvidenceRecord, tokenID)
 }
 
-// getSignatureByID returns a wrapper for the given signature. Port of the
+// signatureByID returns a wrapper for the given signature. Port of the
 // private getSignatureById(String).
-func (r *SimpleReport) getSignatureByID(signatureID string) *jaxb.XmlSignature {
-	if sig, ok := r.getTokenByID(signatureID).(*jaxb.XmlSignature); ok {
+func (r *SimpleReport) signatureByID(signatureID string) *jaxb.XmlSignature {
+	if sig, ok := r.tokenByID(signatureID).(*jaxb.XmlSignature); ok {
 		return sig
 	}
 	return nil
 }
 
-// getTimestampByID returns a wrapper for the given timestamp. Port of the
+// timestampByID returns a wrapper for the given timestamp. Port of the
 // private getTimestampById(String).
-func (r *SimpleReport) getTimestampByID(timestampID string) *jaxb.XmlTimestamp {
-	if ts, ok := r.getTokenByID(timestampID).(*jaxb.XmlTimestamp); ok {
+func (r *SimpleReport) timestampByID(timestampID string) *jaxb.XmlTimestamp {
+	if ts, ok := r.tokenByID(timestampID).(*jaxb.XmlTimestamp); ok {
 		return ts
 	}
 	return nil
@@ -400,7 +400,7 @@ func (r *SimpleReport) getTimestampByID(timestampID string) *jaxb.XmlTimestamp {
 // GetEvidenceRecordById returns a wrapper for the given evidence record.
 // Port of getEvidenceRecordById(String).
 func (r *SimpleReport) GetEvidenceRecordById(evidenceRecordID string) *jaxb.XmlEvidenceRecord {
-	if er, ok := r.getTokenByID(evidenceRecordID).(*jaxb.XmlEvidenceRecord); ok {
+	if er, ok := r.tokenByID(evidenceRecordID).(*jaxb.XmlEvidenceRecord); ok {
 		return er
 	}
 	return nil
@@ -408,7 +408,7 @@ func (r *SimpleReport) GetEvidenceRecordById(evidenceRecordID string) *jaxb.XmlE
 
 // GetEAAById returns a wrapper for the given EAA. Port of getEAAById(String).
 func (r *SimpleReport) GetEAAById(eaaID string) *jaxb.XmlEAA {
-	if eaa, ok := r.getTokenByID(eaaID).(*jaxb.XmlEAA); ok {
+	if eaa, ok := r.tokenByID(eaaID).(*jaxb.XmlEAA); ok {
 		return eaa
 	}
 	return nil
@@ -417,7 +417,7 @@ func (r *SimpleReport) GetEAAById(eaaID string) *jaxb.XmlEAA {
 // GetSignatureTimestamps returns a list of timestamps for a signature with
 // the given id. Port of getSignatureTimestamps(String).
 func (r *SimpleReport) GetSignatureTimestamps(signatureID string) []*jaxb.XmlTimestamp {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil && sig.Timestamps != nil {
 		return sig.Timestamps.Timestamp
 	}
@@ -427,7 +427,7 @@ func (r *SimpleReport) GetSignatureTimestamps(signatureID string) []*jaxb.XmlTim
 // GetSignatureEvidenceRecords returns a list of evidence records for a
 // signature with the given id. Port of getSignatureEvidenceRecords(String).
 func (r *SimpleReport) GetSignatureEvidenceRecords(signatureID string) []*jaxb.XmlEvidenceRecord {
-	sig := r.getSignatureByID(signatureID)
+	sig := r.signatureByID(signatureID)
 	if sig != nil && sig.EvidenceRecords != nil {
 		return sig.EvidenceRecords.EvidenceRecord
 	}
@@ -437,7 +437,7 @@ func (r *SimpleReport) GetSignatureEvidenceRecords(signatureID string) []*jaxb.X
 // GetTimestampEvidenceRecords returns a list of evidence records for a
 // time-stamp with the given id. Port of getTimestampEvidenceRecords(String).
 func (r *SimpleReport) GetTimestampEvidenceRecords(timestampID string) []*jaxb.XmlEvidenceRecord {
-	ts := r.getTimestampByID(timestampID)
+	ts := r.timestampByID(timestampID)
 	if ts != nil && ts.EvidenceRecords != nil {
 		return ts.EvidenceRecords.EvidenceRecord
 	}
@@ -491,7 +491,7 @@ func (r *SimpleReport) GetEvidenceRecordPOE(evidenceRecordID string) *time.Time 
 // getSignatureScopes(String); panics for a token class the port does not
 // recognise, mirroring the UnsupportedOperationException Java throws.
 func (r *SimpleReport) GetSignatureScopes(tokenID string) []*jaxb.XmlSignatureScope {
-	switch t := r.getTokenByID(tokenID).(type) {
+	switch t := r.tokenByID(tokenID).(type) {
 	case *jaxb.XmlSignature:
 		return t.SignatureScope
 	case *jaxb.XmlTimestamp:
@@ -578,32 +578,32 @@ func tokenContent(item jaxb.XmlTokenItem) *jaxb.XmlTokenContent {
 	}
 }
 
-// getEmbeddedTokenByID searches tokens and their embedded
+// embeddedTokenByID searches tokens and their embedded
 // timestamps/evidence-records/signatures for a token with the given id.
 // Port of the private getEmbeddedTokenById(List, String).
-func getEmbeddedTokenByID(tokens []jaxb.XmlTokenItem, tokenIDWanted string) jaxb.XmlTokenItem {
+func embeddedTokenByID(tokens []jaxb.XmlTokenItem, tokenIDWanted string) jaxb.XmlTokenItem {
 	for _, token := range tokens {
 		if tokenID(token) == tokenIDWanted {
 			return token
 		}
 		switch t := token.(type) {
 		case *jaxb.XmlSignature:
-			if found := getSignatureTimestampByID(t, tokenIDWanted); found != nil {
+			if found := signatureTimestampByID(t, tokenIDWanted); found != nil {
 				return found
 			}
-			if found := getSignatureEvidenceRecordByID(t, tokenIDWanted); found != nil {
+			if found := signatureEvidenceRecordByID(t, tokenIDWanted); found != nil {
 				return found
 			}
 		case *jaxb.XmlTimestamp:
-			if found := getTimestampEvidenceRecordByID(t, tokenIDWanted); found != nil {
+			if found := timestampEvidenceRecordByID(t, tokenIDWanted); found != nil {
 				return found
 			}
 		case *jaxb.XmlEvidenceRecord:
-			if found := getEvidenceRecordTimestampByID(t, tokenIDWanted); found != nil {
+			if found := evidenceRecordTimestampByID(t, tokenIDWanted); found != nil {
 				return found
 			}
 		case *jaxb.XmlEAA:
-			if found := getEAASignatureByID(t, tokenIDWanted); found != nil {
+			if found := eAASignatureByID(t, tokenIDWanted); found != nil {
 				return found
 			}
 		}
@@ -611,42 +611,42 @@ func getEmbeddedTokenByID(tokens []jaxb.XmlTokenItem, tokenIDWanted string) jaxb
 	return nil
 }
 
-func getSignatureTimestampByID(sig *jaxb.XmlSignature, tokenIDWanted string) jaxb.XmlTokenItem {
+func signatureTimestampByID(sig *jaxb.XmlSignature, tokenIDWanted string) jaxb.XmlTokenItem {
 	if sig.Timestamps == nil {
 		return nil
 	}
-	return getEmbeddedTokenByID(timestampsToItems(sig.Timestamps.Timestamp), tokenIDWanted)
+	return embeddedTokenByID(timestampsToItems(sig.Timestamps.Timestamp), tokenIDWanted)
 }
 
-func getSignatureEvidenceRecordByID(sig *jaxb.XmlSignature, tokenIDWanted string) jaxb.XmlTokenItem {
+func signatureEvidenceRecordByID(sig *jaxb.XmlSignature, tokenIDWanted string) jaxb.XmlTokenItem {
 	if sig.EvidenceRecords == nil {
 		return nil
 	}
-	return getEmbeddedTokenByID(evidenceRecordsToItems(sig.EvidenceRecords.EvidenceRecord), tokenIDWanted)
+	return embeddedTokenByID(evidenceRecordsToItems(sig.EvidenceRecords.EvidenceRecord), tokenIDWanted)
 }
 
-func getTimestampEvidenceRecordByID(ts *jaxb.XmlTimestamp, tokenIDWanted string) jaxb.XmlTokenItem {
+func timestampEvidenceRecordByID(ts *jaxb.XmlTimestamp, tokenIDWanted string) jaxb.XmlTokenItem {
 	if ts.EvidenceRecords == nil {
 		return nil
 	}
-	return getEmbeddedTokenByID(evidenceRecordsToItems(ts.EvidenceRecords.EvidenceRecord), tokenIDWanted)
+	return embeddedTokenByID(evidenceRecordsToItems(ts.EvidenceRecords.EvidenceRecord), tokenIDWanted)
 }
 
-func getEvidenceRecordTimestampByID(er *jaxb.XmlEvidenceRecord, tokenIDWanted string) jaxb.XmlTokenItem {
+func evidenceRecordTimestampByID(er *jaxb.XmlEvidenceRecord, tokenIDWanted string) jaxb.XmlTokenItem {
 	if er.Timestamps == nil {
 		return nil
 	}
-	return getEmbeddedTokenByID(timestampsToItems(er.Timestamps.Timestamp), tokenIDWanted)
+	return embeddedTokenByID(timestampsToItems(er.Timestamps.Timestamp), tokenIDWanted)
 }
 
-func getEAASignatureByID(eaa *jaxb.XmlEAA, tokenIDWanted string) jaxb.XmlTokenItem {
+func eAASignatureByID(eaa *jaxb.XmlEAA, tokenIDWanted string) jaxb.XmlTokenItem {
 	if len(eaa.EAASignature) > 0 {
-		if found := getEmbeddedTokenByID(signaturesToItems(eaa.EAASignature), tokenIDWanted); found != nil {
+		if found := embeddedTokenByID(signaturesToItems(eaa.EAASignature), tokenIDWanted); found != nil {
 			return found
 		}
 	}
 	if eaa.KeyBindingSignature != nil {
-		if found := getEmbeddedTokenByID([]jaxb.XmlTokenItem{eaa.KeyBindingSignature}, tokenIDWanted); found != nil {
+		if found := embeddedTokenByID([]jaxb.XmlTokenItem{eaa.KeyBindingSignature}, tokenIDWanted); found != nil {
 			return found
 		}
 	}

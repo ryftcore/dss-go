@@ -20,7 +20,7 @@ import (
 // InitAbstractASiCDataToSignHelperBuilder(self) registration; the base dispatches
 // GetDataPackageName (implemented right here, since Java's class is concrete - there is no
 // intermediate abstract subclass the way dss-asic-cades has one) through
-// asic.AbstractASiCDataToSignHelperBuilderOverrides (S7_BRIEF.md's virtual-dispatch warning).
+// asic.AbstractASiCDataToSignHelperBuilderOverrides.
 type ASiCWithXAdESDataToSignHelperBuilder struct {
 	asic.AbstractASiCDataToSignHelperBuilder
 

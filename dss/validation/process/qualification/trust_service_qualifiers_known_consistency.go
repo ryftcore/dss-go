@@ -15,7 +15,9 @@ func newTrustServiceQualifiersKnownConsistency() *trustServiceQualifiersKnownCon
 	return &trustServiceQualifiersKnownConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether every qualifier captured for the trust
+// service is a known/supported qualifier URI. Port of the overridden
+// isConsistent(TrustServiceWrapper).
 func (c *trustServiceQualifiersKnownConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	capturedQualifiers := trustService.CapturedQualifierUris()
 	for _, qualifier := range capturedQualifiers {

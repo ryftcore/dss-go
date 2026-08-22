@@ -28,7 +28,10 @@ func newTypeByTL(trustService *diagnostic.TrustServiceWrapper, qualified enumera
 	return &typeByTL{trustService: trustService, qualified: qualified, typeInCert: typeInCert}
 }
 
-// Type is the port of the overridden getType().
+// Type reports the certificate's usage type derived from the Trusted
+// Service's captured qualifiers, falling back to the certificate-derived
+// strategy where the service does not override it. Port of the overridden
+// getType().
 func (t *typeByTL) Type() enumerations.CertificateType {
 
 	// overrules are only applicable when the certificate is qualified (cert + TL)

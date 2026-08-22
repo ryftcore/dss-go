@@ -19,15 +19,15 @@
 //     (XMLSignatureInput -> DSSDocumentXMLSignatureInput -> getDocument()) has no Go equivalent
 //     against the frozen internal/xmldsig.Data type, which carries no DSSDocument backreference.
 //   - DSSXMLUtilsValidateAgainstXSD always returns nil (no errors): xades_structure_validator.go's
-//     file header already documents the same blocked forward dependency (no bundled-schema or
-//     javax.xml.validation-equivalent Go package exists yet in this port).
+//     file header already documents the same permanent gap (no bundled-schema or
+//     javax.xml.validation-equivalent Go package exists in this port).
 //   - DSSXMLUtilsGetKeyInfoSigningCertificatePublicKey supports ds:X509Data/ds:X509Certificate and
 //     ds:KeyValue/ds:RSAKeyValue only; DSAKeyValue and ECKeyValue extraction (upstream's
 //     org.apache.xml.security.keys.KeyInfo#getPublicKey covers all three) are out of scope for
 //     this pass - a signature whose KeyInfo carries only a DSA/EC KeyValue (no certificate) will
 //     not resolve its signing-certificate candidate through this path.
 //
-// slf4j logging is dropped per PORTING.md; every LOG.warn/LOG.debug call site noted in a comment
+// slf4j logging is dropped; every LOG.warn/LOG.debug call site noted in a comment
 // becomes a Go catch-and-continue (best effort), matching every other file of this port.
 package xades
 
@@ -239,7 +239,7 @@ func dssXMLUtilsChildNodes(node *xmldom.Node) []*xmldom.Node {
 // node for its new UnsignedSignatureProperties location, rather than `importedSignature`; the
 // second lookup can only ever find the untouched, pre-indentation node inside the detached
 // subtree, making the whole `if (unsignedSignatureProperties != null)` branch a no-op against
-// the live document. Reproduced exactly rather than fixed, per PORTING.md.
+// the live document. Reproduced exactly rather than fixed.
 func DSSXMLUtilsGetDocWithIndentedSignature(documentDom *xmldom.Node, signatureId string, noIndentObjectIds []string) (*xmldom.Node, error) {
 	signatures, err := xmlutils.XPathUtilsGetNodeList(documentDom, common.XMLDSigPathAllSignaturesPath)
 	if err != nil {
@@ -446,9 +446,9 @@ func DSSXMLUtilsValidateAgainstXSD(xsdUtils XAdESStructureXSDUtils, source *xmld
 
 // XAdES111XSDUtils, XAdES122XSDUtils and XAdES319132XSDUtils stand in for
 // eu.europa.esig.xades.XAdES111Utils#getInstance(), XAdES122Utils#getInstance() and
-// XAdES319132Utils#getInstance(). Per xades_structure_validator.go's file header BLOCKED
-// FORWARD DEPENDENCY note, no bundled XAdES XSD schema resources or javax.xml.validation
-// equivalent exists anywhere in this port yet, so these return an opaque placeholder value;
+// XAdES319132Utils#getInstance(). Per xades_structure_validator.go's file header, no bundled
+// XAdES XSD schema resources or javax.xml.validation equivalent exists anywhere in this port
+// yet, so these return an opaque placeholder value;
 // DSSXMLUtilsValidateAgainstXSD above never inspects it (it always reports no errors), so the
 // placeholder is never dereferenced. XAdESStructureValidator.getUtils's namespace dispatch -
 // including its UnsupportedOperationException panic for unrecognized namespaces - is still

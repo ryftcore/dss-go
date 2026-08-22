@@ -9,8 +9,8 @@ import (
 
 // TestNamespaceDSigProvenance pins namespaceDSig (jaxb_crossns.go) against
 // dss/internal/xmldsig.NamespaceDSig, the constant already ported for the
-// CAdES/XAdES signing stack, per jaxb_crossns.go's header ("reusing xml/
-// common definitions where they exist ONLY for constants" - S8B_BRIEF.md).
+// CAdES/XAdES signing stack (see jaxb_crossns.go's header: "reusing xml/
+// common definitions where they exist ONLY for constants").
 func TestNamespaceDSigProvenance(t *testing.T) {
 	if namespaceDSig != xmldsig.NamespaceDSig {
 		t.Fatalf("namespaceDSig = %q, want dss/internal/xmldsig.NamespaceDSig = %q", namespaceDSig, xmldsig.NamespaceDSig)

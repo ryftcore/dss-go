@@ -4,8 +4,8 @@
 // it replays a precomputed byte block instead of drawing entropy, and once the block is
 // exhausted, re-derives the next block by re-hashing the previous one with digestAlgorithm.
 // FixedSecureRandom itself is nothing more than "hand out these bytes sequentially, then
-// report exhausted" - a plain byte-buffer cursor - so this port drops the BouncyCastle type
-// and keeps only that cursor behaviour directly on dssFixedSecureRandom.
+// report exhausted" - a plain byte-buffer cursor - so the BouncyCastle type is dropped and only
+// that cursor behaviour is kept, directly on dssFixedSecureRandom.
 package random
 
 import (

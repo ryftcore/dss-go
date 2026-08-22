@@ -1,10 +1,9 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/SigFieldPermissions.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Shape (SetAction/SetFields/SetCertificationPermission plus their
-// getter counterparts) confirmed against the already-landed call sites' forward-dependency
-// headers (pades_utils.go, pdf_signature_field.go, pdf_signature_dictionary.go,
-// pades_diagnostic_data_builder.go).
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// Its shape (SetAction/SetFields/SetCertificationPermission plus their getter counterparts) is
+// used by pades_utils.go, pdf_signature_field.go, pdf_signature_dictionary.go and
+// pades_diagnostic_data_builder.go.
 package pades
 
 import "github.com/ryftcore/dss-go/dss/enumerations"

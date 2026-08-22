@@ -32,8 +32,9 @@ func NewServiceByTLUrlFilterWithUrls(tlUrls map[string]struct{}) *ServiceByTLUrl
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper). Java
-// dereferences getTrustedList() unguarded; a nil TrustedList panics here the same way.
+// IsAcceptable reports whether the service's Trusted List URL is one of the
+// configured URLs. Java dereferences getTrustedList() unguarded; a nil
+// TrustedList panics here the same way.
 func (f *ServiceByTLUrlFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	var serviceURL string
 	if service.TrustedList.Url != nil {

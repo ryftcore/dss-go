@@ -6,15 +6,6 @@
 // overloads (getZipComment x4, getMimeType x3, getContainerType x3, isASiC{S,E}Container x2) cannot
 // share a name in Go and carry a suffix naming the argument they take.
 //
-// FORWARD DEPENDENCY (same Go package, different chunk): IsCoveredByManifest calls
-// ASiCManifestParserGetManifestFile, the port of
-// eu.europa.esig.dss.asic.common.validation.ASiCManifestParser#getManifestFile(DSSDocument), which
-// the dss-asic-common validation chunk contributes to this same package. Assumed shape:
-//
-//	func ASiCManifestParserGetManifestFile(manifestDocument model.DSSDocument) *model.ManifestFile
-//
-// (upstream returns null rather than throwing when the document is not a parsable manifest).
-//
 // slf4j LOG calls are dropped per PORTING.md; the branches they sit in are preserved.
 package asic
 

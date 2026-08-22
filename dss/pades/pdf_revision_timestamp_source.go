@@ -1,16 +1,6 @@
 // Ported from
 // dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/timestamp/PdfRevisionTimestampSource.java
 // (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCIES:
-//   - PdfDocDssRevision (eu.europa.esig.dss.pdf.PdfDocDssRevision) - pdf_document_analyzer.go's
-//     header already assumes CertificateSource() *PdfDssDictCertificateSource,
-//     CRLSource() *PdfDssDictCRLSource, OCSPSource() *PdfDssDictOCSPSource,
-//     DssDictionary() PdfDssDict; it implements PdfRevision directly (not PdfCMSRevision, per
-//     upstream's `class PdfDocDssRevision implements PdfRevision`).
-//   - PdfDocTimestampRevision (eu.europa.esig.dss.pdf.PdfDocTimestampRevision) -
-//     pdf_document_analyzer.go's header already assumes TimestampToken() *PdfTimestampToken.
-//     PdfTimestampToken is landed by this same chunk (pdf_timestamp_token.go).
 package pades
 
 import (

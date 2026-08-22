@@ -1,7 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpftsp/checks/BasicTimestampValidationCheck.java (DSS 6.5.RC1).
 //
-// PACKAGE-BOUNDARY DEVIATION (LTVB, phase 8e): the manifest places this file's
-// goTargetDir at .../vpftsp, matching Java's
+// Package placement deviation: Java places this class in
 // eu.europa.esig.dss.validation.process.vpftsp.checks. It is filed under
 // package vpfbs instead, alongside BasicTimestampValidationWithIdCheck, to
 // break a Go import cycle the literal placement would create: Java's
