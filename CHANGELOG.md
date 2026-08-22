@@ -194,6 +194,74 @@ conventions applied throughout.
   `dss/PORTING.md`. No document in the corpus is affected: the one
   AES-256 fixture validates cleanly.
 
+- **An encrypted PDF whose cipher cannot be identified is now refused
+  instead of silently decrypted with RC4, and `/V 0` is refused too.**
+  `internal/pdf`'s Standard security handler set its AES flag from
+  `/CF … /CFM` alone, with no `else` and no `default:`, inside `case 4,
+  5:` of `setupEncryption`. A `/V 5` document whose `/CF` was missing,
+  whose `/CF` had no entry under the selected filter name, or whose
+  `/CFM` was `/V2`, `/None` or anything this handler does not implement,
+  therefore kept `useAES` false and handed the 32 bytes unwrapped from
+  `/UE` to RC4-128 — on both the read path (`decryptBytes`) and the
+  write path (`encryptForWrite`, which mirrors it) — while
+  `Encryption()` reported `/CFM /None`. A document naming two different
+  crypt filters for streams and strings (`/StmF`/`/StrF`) was worse: only
+  one of the two was ever resolved, so the other's declared cipher was
+  silently overruled.
+
+  `internal/pdf` now validates every crypt filter the document actually
+  *selects* (`checkCryptFilters` in `crypt.go`, called from
+  `setupEncryption` before the password check): each of `/StmF` and
+  `/StrF`, when not `/Identity`, must resolve through `/CF` to an
+  implemented `/CFM`; both must resolve to the *same* one; for `/V 5` the
+  crypt filter must be `/AESV3`; and `/AESV3` and `/V 5` must each be
+  paired with `/R 5` or `/R 6` (ISO 32000-2 defines no other pairing).
+  Both halves of that last rule are load-bearing: `/AESV3` promises a
+  32-byte key and only the `/UE`/`/OE` unwrap produces one, so
+  constraining `/V 5` alone left the identical downgrade one `/V` value
+  away — a `/V 4`/`/R 4` document naming `/CFM /AESV3` reported
+  `/AESV3` with `/KeyLength 256` and applied AES-128 under an MD5 key. `/StmF` and `/StrF` are now resolved through
+  an indirect reference, as `PDEncryption.getStreamFilterName`/
+  `getStringFilterName` do, so a `/StmF` or `/StrF` written as `n 0 R`
+  is honoured (and checked) rather than silently read as absent and
+  falling back to `/Identity`. A setup that still recovers a 32-byte
+  `/R 5`/`/R 6` file key without selecting AES — the `/V 4`/`/R 6`
+  crossbreed `checkCryptFilters` alone cannot see, since `/CFM /V2` is a
+  legitimate `/V 4` declaration on its own — is refused by an explicit
+  postcondition just before the handler is published; that same
+  postcondition's comment now also notes the one shape that remains and
+  is parity, not a bug: `/V 4` with `/R 5`/`/R 6` and `/CFM /AESV2`
+  opens reporting `{CFM: AESV2, KeyLength: 128}` while the file key's
+  32-byte length still routes it through the AES-256 fast path, exactly
+  as pdfbox's own `useAES && encryptionKey.length == 32` branch does.
+  Separately, `computeEncryptionKey` now requires `/UE` and `/OE` to be
+  exactly the 32 bytes ISO 32000-2 fixes them at — rejected with
+  `ErrUnsupportedSecurityHandler`, not `ErrInvalidPassword`, since a
+  malformed `/UE`/`/OE` is not a wrong password — closing a route where
+  a padded entry's first two AES-CBC blocks still recovered the genuine
+  key inside a longer, `len(key) == 32`-defeating slice. `/V 0` — ISO
+  32000-1 Table 20's "an algorithm that is undocumented … shall not be
+  used", which is also what an `/Encrypt` with no `/V` reads as — is
+  refused rather than folded into the same key-length arm as `/V 1`.
+
+  **These are intentional divergences from upstream.** Apache PDFBox
+  3.0.7's `StandardSecurityHandler` reads the crypt filter as a
+  hardcoded `/StdCF` and sets its AES flag only inside an
+  `if (stdCryptFilterDictionary != null)` with no `else`; on three
+  tampered copies of the AES-256 corpus fixture it cleared the password
+  check, applied RC4, and surfaced only as an unrelated downstream parse
+  error, never a security-handler verdict. `/V 0` is accepted by pdfbox
+  as `/Length`/8 RC4. pdfbox derives its key and cipher from `/R`
+  (`dicRevision`) rather than `/V`, so a `/V 5`/`/R 4` document is exact
+  pdfbox parity too — this port refuses it anyway, because it is the
+  last surviving "declares AES-256, applies AES-128" shape issue #33
+  exists to close. The divergences are documented on
+  `checkCryptFilters` and `computeEncryptionKey` in
+  `dss/internal/pdf/crypt.go`, in `dss/internal/pdf/DESIGN.md` §2.6 and
+  in `dss/PORTING.md`. No document in the corpus is affected: every
+  vendored `/V 4`/`/V 5` fixture names `/StdCF` and resolves to
+  `/AESV2` or `/AESV3`.
+
 ### Documentation
 
 - **Porting-era planning documents removed.** `PORTING_PLAN.md` — the

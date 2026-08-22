@@ -328,6 +328,28 @@ supported DSS feature**, not an edge case.
 | 4 | 4 | `/CF /StdCF /CFM` ∈ {`/V2` (RC4), `/AESV2` (AES-128-CBC)}, `/StmF`/`/StrF` ∈ {`/StdCF`, `/Identity`} | 6 docs |
 | 5 | 5, 6 | `/AESV3` AES-256-CBC, SHA-256/384/512 key derivation (R6 hardened hash) | 1 doc |
 
+**These sets are closed, and `crypt.go`'s `checkCryptFilters` is what closes them.** The table is the
+whole of what the handler implements, not a list of what it has been seen to do: a `/V` outside
+{1, 2, 4, 5}, a `/V 5` paired with an `/R` other than 5 or 6 (the `/V 5` row's "5, 6" is enforced, not
+descriptive — `checkCryptFilters` rejects any other pairing, because `computeEncryptionKey` and the
+postcondition guard below both key off `/R` alone and would otherwise derive and apply an AES-128-shaped
+key to a document declaring `/AESV3`), or a crypt filter a `/V 4`/`/V 5` document actually *selects*
+(named by `/StmF` or `/StrF`, and not `/Identity`) that does not resolve through `/CF` to one of the
+listed `/CFM` values, is refused rather than approximated. There is no `/V 0` row because ISO 32000-1
+Table 20 says `/V 0` "shall not be used"; `/V` is optional with default 0, so an `/Encrypt` that omits
+it lands in the same place.
+
+Closing those sets closes every "declares one cipher, applies a different one" *shape*, but the
+`/CFM` and `KeyLength` a conforming document reports through `Encryption()` are still what the
+document *declares*, not always a description of the cipher width `objectKeyFor` actually applies:
+`/V 4` with `/R 5` or `/R 6` and `/CFM /AESV2`, given a genuine `/UE`/`/OE` unwrap, opens reporting
+`{CFM: AESV2, KeyLength: 128}` while `objectKeyFor`'s `useAES && len(h.key) == 32` fast path
+(Algorithm 1.A) applies the 32-byte file key directly, i.e. AES-256 — exact parity with
+`SecurityHandler.encryptData`'s own `if (useAES && encryptionKey.length == 32)` branch
+(`SecurityHandler.java:221`), not a bug. `useAES` plus the file key's length are the only fields that
+settle which cipher width is actually used; see the postcondition guard's comment in `setupEncryption`
+(`crypt.go`).
+
 **Rejected**, with a typed error that `pades` maps onto `InvalidPasswordException` /
 `ProtectedDocumentException`:
 
@@ -346,6 +368,42 @@ supported DSS feature**, not an edge case.
   defeated by a one-byte edit. See the `// DIVERGENCE, deliberate:` note on `validatePerms` in
   `crypt.go`.
 * `/EncryptMetadata false` is honoured (metadata streams left in the clear).
+* **A crypt filter a `/V 4` or `/V 5` document selects and that this handler cannot identify** →
+  `ErrUnsupportedSecurityHandler`. "Selects" means named by `/StmF` or `/StrF` and not `/Identity`.
+  Each such name must resolve through `/CF` to a `/CFM` of `/V2`, `/AESV2` or `/AESV3`; both selected
+  filters must resolve to the **same** one (the handler carries one key and one AES flag, so it
+  cannot honour two — ISO 32000-1 itself permits distinct filters for streams and strings, this is a
+  limitation of *this* implementation, not a pdfbox divergence); and for `/V 5` that one must be
+  `/AESV3`. Both filters `/Identity` selects nothing and stays legal. **Deliberate divergence** —
+  pdfbox keeps `useAES` false and RC4s the 32 bytes unwrapped from `/UE`, surfacing only as an
+  unrelated parse error downstream; see `checkCryptFilters`'s `// DIVERGENCE, deliberate:` note in
+  `crypt.go`.
+* **`/AESV3` under an `/R` other than 5 or 6, and `/V 5` under an `/R` other than 5 or 6** →
+  `ErrUnsupportedSecurityHandler`. ISO 32000-2 defines no other pairing. Both halves are needed:
+  `/AESV3` promises a 32-byte key, and the only derivation that produces one is the `/UE`/`/OE`
+  unwrap, which `computeEncryptionKey` selects on `/R` alone. Constraining `/V 5` alone would leave
+  the identical downgrade one `/V` value away — a `/V 4` `/R 4` document naming `/CFM /AESV3` reports
+  `/AESV3` with `/KeyLength 256` and applies AES-128 under an MD5 key, on read and on write.
+  Not a new divergence in itself: such a document takes `computeEncryptionKey`'s `/R`-keyed
+  `computeKeyRev234` (MD5) path exactly as pdfbox's `dicRevision`-keyed `prepareForDecryption` does,
+  deriving and applying the same short key both implementations would — but it is the last surviving
+  "declares AES-256, applies AES-128" shape issue #33 exists to close, and this port refuses it
+  rather than reproduce it. See `checkCryptFilters`'s `// DIVERGENCE, deliberate:` note.
+* **`/V 0`, including an `/Encrypt` with no `/V` at all** → `ErrUnsupportedSecurityHandler`.
+  **Deliberate divergence** — pdfbox accepts it as `/Length`/8 RC4 (except for `dicLength`, where it
+  uses 5 bytes only for `/V 1`, so pdfbox's own `/V 0` key length already disagreed with this port's
+  pre-existing `case 0, 1: keyLenBytes = 5`; rejecting `/V 0` retires that silent disagreement too).
+  See the `// DIVERGENCE, deliberate:` note opening the `default:` arm of `setupEncryption` (`crypt.go`).
+* **`/UE` or `/OE` that is not exactly 32 bytes**, for `/R 5`/`/R 6` → `ErrUnsupportedSecurityHandler`
+  (a malformed `/UE`/`/OE` is not a wrong password, so it is not `ErrInvalidPassword`). ISO 32000-2
+  §8.7.4.1 fixes both at exactly 32 bytes (the wrapped AES-256 file key, two whole AES blocks).
+  **Deliberate divergence** — pdfbox hands `fileKeyEnc` straight to `Cipher.getInstance("AES/CBC/
+  NoPadding").doFinal(fileKeyEnc)`, which is equally lenient only over lengths that are already a
+  whole multiple of the AES block size (any other length throws `IllegalBlockSizeException`, rethrown
+  as `IOException`); this port cannot afford even that narrower leniency, because AES-CBC decrypts
+  each block independent of the ones after it, so a padded `/UE` still recovers the genuine 32-byte
+  key in its first two blocks, defeating every `len(key) == 32` check downstream by the padding
+  length alone. See `computeEncryptionKey`'s `// DIVERGENCE, deliberate:` note in `crypt.go`.
 
 Never-encrypted objects, matching `SecurityHandler.decrypt`:
 
@@ -416,8 +474,10 @@ single most important repair path, and it is what saves `validation/pdf-signed-c
 
 **Pages** (`COSParser`, l.1440): a `/Kids` entry that resolves to null is removed with a warning.
 
-**The one thing pdfbox does *not* recover from**, and neither do we: a `/Root` that is missing or
-whose `/Pages` is not a dictionary. `EmptyPage-corrupted.pdf` and `EmptyPage-corrupted2.pdf` throw
+**The one *parsing* defect pdfbox does *not* recover from**, and neither do we: a `/Root` that is
+missing or whose `/Pages` is not a dictionary. (§2.6 lists the encryption inputs this port refuses
+where pdfbox does not; those are policy, not parsing.) `EmptyPage-corrupted.pdf` and
+`EmptyPage-corrupted2.pdf` throw
 `IOException: Page tree root must be a dictionary`. Our `Open` returns `ErrBrokenCatalog` for these
 two, and the KAT asserts *failure on both sides* — a Go-side success where Java fails is a test
 failure, exactly as in the `xmldom` oracle contract.
@@ -934,7 +994,7 @@ type Encryption struct {
     KeyLength int
     StmF      Name // "StdCF" | "Identity"
     StrF      Name
-    CFM       Name // "V2" | "AESV2" | "AESV3" | "None"
+    CFM       Name // "V2" | "AESV2" | "AESV3"; "None" only when both filters are /Identity
 }
 
 type Permissions struct {

@@ -192,7 +192,7 @@ func (d *Document) setupEncryption() error {
 	h.enc.StmF, h.enc.StrF, h.enc.CFM = "Identity", "Identity", "None"
 
 	switch h.enc.V {
-	case 0, 1:
+	case 1:
 		keyLenBytes = 5
 		h.enc.StmF, h.enc.StrF, h.enc.CFM = "StdCF", "StdCF", "V2"
 	case 2:
@@ -201,8 +201,13 @@ func (d *Document) setupEncryption() error {
 		}
 		h.enc.StmF, h.enc.StrF, h.enc.CFM = "StdCF", "StdCF", "V2"
 	case 4, 5:
-		stmf, _ := encDict.GetRaw("StmF").(Name)
-		strf, _ := encDict.GetRaw("StrF").(Name)
+		// PDEncryption.getStreamFilterName/getStringFilterName ->
+		// COSDictionary.getCOSName -> getDictionaryObject follow a reference;
+		// resolve here rather than reading GetRaw directly, so an indirect or
+		// otherwise-typed /StmF or /StrF is not silently read as absent (and
+		// therefore /Identity) the way a bare type assertion on GetRaw would.
+		stmf, _ := d.Resolve(encDict.GetRaw("StmF")).(Name)
+		strf, _ := d.Resolve(encDict.GetRaw("StrF")).(Name)
 		if stmf == "" {
 			stmf = "Identity"
 		}
@@ -240,7 +245,32 @@ func (d *Document) setupEncryption() error {
 				keyLenBytes = l / 8
 			}
 		}
+		// Runs before the password branch, so a document whose crypt filter
+		// cannot be identified is refused with ErrUnsupportedSecurityHandler
+		// rather than ErrInvalidPassword: the password was never the problem.
+		if err := d.checkCryptFilters(encDict, h.enc); err != nil {
+			return err
+		}
 	default:
+		// DIVERGENCE, deliberate: pdfbox opens /V 0 - and, since /V is optional
+		// with default 0 (dictInt(encDict, "V", 0) above), an /Encrypt that
+		// omits /V altogether lands here too - as plain RC4 keyed by
+		// /Length/8. StandardSecurityHandler.java:173 is
+		// `int dicLength = encryptionVersion == 1 ? 5 : encryption.getLength() / 8;`,
+		// so /V 0 takes the ternary's else, not the /V 1 special case; and
+		// prepareForDecryption's `if (encryptionVersion >= REVISION_4)`
+		// (line 157) is false for /V 0, so streamFilterName and
+		// stringFilterName are never set away from null.
+		// SecurityHandler.decryptStream/decryptString (lines 497, 628) test
+		// `COSName.IDENTITY.equals(streamFilterName)` - false for a null
+		// name - so both proceed and apply RC4 rather than leaving the bytes
+		// alone. ISO 32000-1 Table 20 says of /V 0 only "An algorithm that is
+		// undocumented ... shall not be used", so this port refuses it
+		// instead of guessing at a key length pdfbox itself does not derive
+		// consistently: the `keyLenBytes = 5` this arm used to share with
+		// /V 1 under `case 0, 1:` was already a divergence from pdfbox's own
+		// ternary, which gives /V 0 /Length/8 like every other unlisted /V,
+		// not 5 - rejecting outright retires that silent disagreement too.
 		return fmt.Errorf("%w: /V %d", ErrUnsupportedSecurityHandler, h.enc.V)
 	}
 	h.enc.KeyLength = keyLenBytes * 8
@@ -299,6 +329,32 @@ func (d *Document) setupEncryption() error {
 		if err := validatePerms(stringBytes(d.Resolve(encDict.GetRaw("Perms"))), h.key, p, h.encryptMeta); err != nil {
 			return err
 		}
+	}
+	// checkCryptFilters rejects an unidentifiable crypt filter, but it does not
+	// - and, being a single-key single-useAES handler, cannot - stop a /V 4
+	// document from legitimately declaring /CFM /V2 while /R 6 still hands over
+	// the 32-byte file key unwrapped from /UE or /OE (issue #33's /V 4 //R 6
+	// crossbreed). computeEncryptionKey now fixes that key at exactly 32 bytes
+	// for /R 5 and /R 6 and at <=16 bytes for every other revision
+	// (computeKeyRev234 slices an MD5 digest, never more than its 16 bytes), so
+	// len(h.key) == 32 is an exact test for "this key came out of the /R 5//R 6
+	// /UE or /OE unwrap" - asserted here, rather than left emergent, because
+	// rc4Apply on both the read path (decryptBytes) and the write path
+	// (encryptForWrite) trusts it never fires on such a key. Both filters
+	// /Identity is exempt: decryptValue, decryptStream and encryptForWrite all
+	// return before either sink is reached, so no cipher is chosen at all.
+	//
+	// This guard leaves one shape standing, and it is parity rather than a bug:
+	// /V 4 with /R 5 or /R 6 and /CFM /AESV2, with a genuine 32-byte /UE//OE
+	// unwrap, opens reporting {CFM: AESV2, KeyLength: 128} - the declaration is
+	// honest AES-128 - while objectKeyFor's `useAES && len(h.key) == 32` fast
+	// path (Algorithm 1.A) applies the file key directly as AES-256, exactly as
+	// SecurityHandler.encryptData does at line 221. CFM and KeyLength describe
+	// what the document declares, not always what cipher width is actually
+	// applied; useAES and len(h.key) are what settle that, same as pdfbox.
+	if !h.useAES && len(h.key) == 32 && (h.enc.StmF != "Identity" || h.enc.StrF != "Identity") {
+		return fmt.Errorf("%w: /V %d /R %d recovers a 32-byte AES key but /CFM /%s selects RC4",
+			ErrUnsupportedSecurityHandler, h.enc.V, h.enc.R, h.enc.CFM)
 	}
 	d.sec = h
 	return nil
@@ -373,6 +429,136 @@ func stringBytes(o Object) []byte {
 		return s.Bytes
 	}
 	return nil
+}
+
+// checkCryptFilters is the acceptance boundary of the /V 4 and /V 5 crypt-filter
+// path: /V 5 must pair with /R 5 or /R 6 (ISO 32000-2 defines no other
+// combination), every crypt filter the document actually *selects* (named by
+// /StmF or /StrF, and not /Identity) must resolve through /CF to a /CFM this
+// handler implements, every selected filter must resolve to the *same* one
+// (the handler carries a single key and a single useAES flag, so it cannot
+// honour two), for /V 5 that one must be /AESV3, and /AESV3 must itself pair
+// with /R 5 or /R 6.
+//
+// DIVERGENCE, deliberate: pdfbox reads the crypt filter as a hardcoded /StdCF
+// (PDEncryption.getStdCryptFilterDictionary) and only calls setAES(true) for
+// /CFM /AESV2 or /AESV3, inside an `if (stdCryptFilterDictionary != null)` that
+// has no else and no default - so a /V 5 document whose /CF is missing, whose
+// /CF has no entry under the selected name, or whose /CFM is /V2, /None or
+// anything unknown keeps useAES false, and SecurityHandler.encryptData then RC4s
+// the 32 bytes unwrapped from /UE. Executed against real pdfbox 3.0.7 on three
+// byte-edits of the corpus AES-256 fixture (/CF -> /XF, /StdCF -> /ZtdCF, /CFM
+// /AESV3 -> /CFM /V2): all three cleared the R6 password check, applied RC4, and
+// died downstream as "Page tree root must be a dictionary" - undefined,
+// layout-dependent garbage that a differently laid out document would not
+// produce, never a security-handler verdict. The bytes reaching this reader come
+// off a document under signature validation, and this package is also the
+// writer (encryptForWrite mirrors decryptBytes), so a silent RC4 fallback would
+// both mis-report the cipher through Encryption() and re-emit a signed increment
+// under RC4-128 in a file that declares AES-256. This port turns that undefined
+// case into a defined rejection, which is the cheapest kind to justify. No
+// corpus document is affected: the three /V 4 //V 5 fixtures all name /StdCF and
+// resolve to /AESV2 or /AESV3; the fourth vendored encrypted file is /V 2 and
+// never reaches this path.
+//
+// The /V 5-pairs-only-with-/R-5-or-6 check closes a shape none of the above
+// catches: computeEncryptionKey and the postcondition guard both key off /R,
+// not /V, so a /V 5 /R 4 document whose /CF resolves /StmF and /StrF to
+// /AESV3 - a perfectly legitimate /V 5 crypt filter by every rule above -
+// still takes computeKeyRev234's MD5 path (r == 4, not 5 or 6) and derives a
+// <=16-byte key the way a genuine /V 4 /R 4 document would, while /Encrypt
+// /CFM /AESV3 and useAES == true both say AES-256. That is exact pdfbox
+// parity (dicRevision, not encryptionVersion, drives StandardSecurityHandler
+// past prepareForDecryption:175), not a new divergence: pdfbox derives the
+// same MD5-based key for the same bytes and, since useAES is true, also
+// applies AES rather than RC4 to it - but at whatever length keyLenBytes came
+// out to (16, in the /Length 128 case), not the 32 bytes /AESV3 promises. It
+// is nonetheless the last surviving "declares AES-256, applies AES-128" shape
+// issue #33 exists to close, so this port refuses it rather than reproduce
+// it.
+//
+// checkCryptFilters is a lookup only: it does not feed back into which name
+// setupEncryption derives its own CFM, useAES and key length from - that is
+// still /StmF, falling back to /StrF only when /StmF is /Identity, the
+// pre-existing divergence from pdfbox's hardcoded /StdCF noted above. This check
+// neither widens nor narrows it; it only adds the "every selected filter must
+// agree" refusal, which is a limitation of *this* implementation (one key, one
+// useAES flag) rather than a pdfbox divergence - ISO 32000-1 permits distinct
+// crypt filters for streams and strings, pdfbox just never notices because it
+// never resolves the one it did not pick.
+func (d *Document) checkCryptFilters(encDict *Dict, enc Encryption) error {
+	// ISO 32000-2 pairs /V 5 with /R 5 or /R 6 only. Checked unconditionally,
+	// not just when a crypt filter is selected: computeEncryptionKey and the
+	// postcondition guard in setupEncryption both key off /R alone, so a /V 5
+	// /R 4 document - even one whose /CF resolves to a legitimate /AESV3 -
+	// would derive its key and choose its cipher length as if it were /V 4
+	// /R 4, applying AES-128 to a document declaring AES-256.
+	if enc.V == 5 && enc.R != 5 && enc.R != 6 {
+		return fmt.Errorf("%w: /V 5 /R %d, and /V 5 pairs only with /R 5 or /R 6",
+			ErrUnsupportedSecurityHandler, enc.R)
+	}
+	var selected Name
+	for _, f := range []struct {
+		entry Name // "StmF" or "StrF"
+		name  Name // the crypt filter it names
+	}{{"StmF", enc.StmF}, {"StrF", enc.StrF}} {
+		// ISO 32000-2 Table 20: /Identity is the default for both entries and
+		// means "leave the bytes alone". No cipher is selected, so there is
+		// nothing to identify.
+		if f.name == "Identity" {
+			continue
+		}
+		cfm := d.cryptFilterMethod(encDict, f.name)
+		if cfm == "" {
+			return fmt.Errorf("%w: /%s names the crypt filter /%s, which does not resolve through /CF to a /CFM",
+				ErrUnsupportedSecurityHandler, f.entry, f.name)
+		}
+		switch cfm {
+		case "V2", "AESV2", "AESV3":
+		default:
+			return fmt.Errorf("%w: /%s /%s declares /CFM /%s",
+				ErrUnsupportedSecurityHandler, f.entry, f.name, cfm)
+		}
+		if enc.V == 5 && cfm != "AESV3" {
+			return fmt.Errorf("%w: /V 5 /%s /%s declares /CFM /%s, and /V 5 is /AESV3 only",
+				ErrUnsupportedSecurityHandler, f.entry, f.name, cfm)
+		}
+		// The converse, and for the same reason as the /V 5 /R check above:
+		// /AESV3 promises a 32-byte key, and the only derivation that produces
+		// one is the /UE //OE unwrap, which computeEncryptionKey selects on /R
+		// alone. A /V 4 /R 4 document naming /CFM /AESV3 therefore reports
+		// /AESV3 with /KeyLength 256 while applying AES-128 under an MD5 key.
+		// Without this rule the /V 5 check above is one-directional and the
+		// same "declares AES-256, applies AES-128" shape simply moves to /V 4.
+		if cfm == "AESV3" && enc.R != 5 && enc.R != 6 {
+			return fmt.Errorf("%w: /%s /%s declares /CFM /AESV3 under /R %d, and /AESV3 needs the 32-byte key only /R 5 or /R 6 derives",
+				ErrUnsupportedSecurityHandler, f.entry, f.name, enc.R)
+		}
+		if selected == "" {
+			selected = cfm
+		} else if cfm != selected {
+			return fmt.Errorf("%w: /StmF and /StrF select different crypt filter methods, /%s and /%s",
+				ErrUnsupportedSecurityHandler, selected, cfm)
+		}
+	}
+	return nil
+}
+
+// cryptFilterMethod resolves one crypt filter name through /CF to its /CFM,
+// returning "" when /CF, the named entry or /CFM is missing. It is a lookup
+// only; see checkCryptFilters's doc comment for why that is what keeps the
+// pre-existing /StmF-then-/StrF divergence from widening.
+func (d *Document) cryptFilterMethod(encDict *Dict, name Name) Name {
+	cf, _ := d.Resolve(encDict.GetRaw("CF")).(*Dict)
+	if cf == nil {
+		return ""
+	}
+	sub, _ := d.Resolve(cf.GetRaw(name)).(*Dict)
+	if sub == nil {
+		return ""
+	}
+	cfm, _ := sub.GetRaw("CFM").(Name)
+	return cfm
 }
 
 // --- password checks -------------------------------------------------------
@@ -512,10 +698,38 @@ func computeEncryptionKey(pw, o, u, oe, ue []byte, p int32, id []byte, r, keyLen
 	if err != nil {
 		return nil, err
 	}
-	if len(fileKeyEnc)%aes.BlockSize != 0 {
-		return nil, fmt.Errorf("%w: /UE or /OE is not a multiple of the AES block size", ErrInvalidPassword)
+	// DIVERGENCE, deliberate: ISO 32000-2 8.7.4.1 fixes /UE and /OE at exactly
+	// 32 bytes - the wrapped AES-256 file key, two whole AES blocks and nothing
+	// else. pdfbox is equally lenient here only over lengths that are already a
+	// whole multiple of the AES block size: StandardSecurityHandler hands
+	// fileKeyEnc straight to `Cipher.getInstance("AES/CBC/NoPadding").doFinal
+	// (fileKeyEnc)` (line 827), and AES/CBC/NoPadding throws
+	// IllegalBlockSizeException for anything else, caught at line 829 and
+	// rethrown as IOException - so pdfbox does reject a 33-byte /UE, just not a
+	// 48-byte one. This port cannot afford even that narrower leniency:
+	// AES-CBC decryption of one block never depends on the ciphertext blocks
+	// after it, so a /UE padded past 32 bytes with further whole blocks still
+	// decrypts its first two blocks unchanged, and out[0:32] is still the
+	// genuine 32-byte file key sitting inside a longer slice. Every
+	// len(h.key) == 32 fast path downstream - objectKeyFor's AES-256 branch, and
+	// the postcondition guard setupEncryption asserts just before d.sec is
+	// published - assumes 32 bytes means "the R5/R6 AES unwrap", and only a
+	// hard length check here makes that assumption sound rather than bypassable
+	// by padding or truncating /UE or /OE by exactly one AES block.
+	//
+	// The error is ErrUnsupportedSecurityHandler, not ErrInvalidPassword: a
+	// malformed /UE or /OE is not a wrong password (validatePerms's own
+	// aes.NewCipher failure, above in this file, is the "password was accepted
+	// but the recovered key is unusable" case, and stays ErrInvalidPassword for
+	// that reason), and pades maps the two onto different exceptions
+	// (InvalidPasswordException vs ProtectedDocumentException) - a caller
+	// retrying passwords against ErrInvalidPassword would otherwise spin on a
+	// document no password can ever open.
+	if len(fileKeyEnc) != 32 {
+		return nil, fmt.Errorf("%w: /UE or /OE is %d bytes, ISO 32000-2 fixes it at exactly 32",
+			ErrUnsupportedSecurityHandler, len(fileKeyEnc))
 	}
-	out := make([]byte, len(fileKeyEnc))
+	out := make([]byte, 32)
 	cipher.NewCBCDecrypter(block, make([]byte, 16)).CryptBlocks(out, fileKeyEnc)
 	return out, nil
 }
@@ -671,6 +885,10 @@ func (h *securityHandler) decryptBytes(data []byte, num int64, gen uint16) []byt
 	}
 	key := h.objectKeyFor(num, gen)
 	if !h.useAES {
+		// The read half of issue #33's sink. checkCryptFilters and the
+		// postcondition guard in setupEncryption are what keep a 32-byte
+		// AES-256 file key out of here; nothing on this per-object path
+		// re-checks it.
 		return rc4Apply(key, data)
 	}
 	if len(data) < aes.BlockSize {
