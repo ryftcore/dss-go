@@ -5,9 +5,9 @@
 // golang.org/x/crypto/ocsp only models a single-response, by-key-hash reply and drops the
 // raw bytes - so the RFC 6960 structures and the BasicOCSPResp/OCSPResp/SingleResp/
 // CertificateID/RespID wrappers they are used through are defined HERE, next to the code
-// that builds and converts them. Everything that consumes OCSP in phase 2a (OCSPToken,
-// OCSPRef, OfflineOCSPSource, OCSPCertificateSource, ...) must consume these types rather
-// than declare its own.
+// that builds and converts them. Everything that consumes OCSP (OCSPToken, OCSPRef,
+// OfflineOCSPSource, OCSPCertificateSource, ...) must consume these types rather than declare
+// its own.
 //
 // The raw encoding of every parsed structure is retained (Encoded()/ASN1Structure()), since
 // the revocation identifiers digest the response bytes.
@@ -852,7 +852,7 @@ func DSSRevocationUtilsDigest(otherHash *OtherHash) (model.Digest, error) {
 
 // dssRevocationUtilsProducedRevocation is the slice of the RevocationToken contract
 // checkIssuerValidAtRevocationProductionTime relies on. It is declared structurally so the
-// method accepts whichever concrete revocation token the revocation chunk defines.
+// method accepts whichever concrete revocation token type (CRLToken, OCSPToken) is passed.
 type dssRevocationUtilsProducedRevocation interface {
 	// ProductionDate returns the time at which the revocation data was produced.
 	ProductionDate() time.Time

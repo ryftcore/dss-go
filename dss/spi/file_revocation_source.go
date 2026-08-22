@@ -46,7 +46,7 @@ type FileRevocationSourceOverrides[R revocation.Revocation] interface {
 // functionality for revocation data. A concrete source embeds it and registers itself with
 // InitFileRevocationSource; the outstanding RepositoryRevocationSourceOverrides methods
 // (InitRevocationTokenKeys, RevocationAccessURLs, RevocationTokenKey) still need to come from
-// that concrete source, since FileRevocationSource itself is abstract on those in Java too.
+// that concrete source, since FileRevocationSource itself is abstract on those.
 type FileRevocationSourceBase[R revocation.Revocation] struct {
 	RepositoryRevocationSourceBase[R]
 
@@ -145,9 +145,8 @@ func (s *FileRevocationSourceBase[R]) FileCacheDirectory() string {
 // findRevocations(String, CertificateToken, CertificateToken) override.
 //
 // Java wraps the reconstruction in a try/catch that logs and swallows any Exception; the Go
-// port lets a panicking ReconstructTokenFromEncodedData propagate instead, matching the
-// "a source that panics is left to propagate" convention used throughout this port (see
-// composite_revocation_source.go).
+// port lets a panicking ReconstructTokenFromEncodedData propagate instead: a source that
+// panics is left to propagate (see composite_revocation_source.go).
 func (s *FileRevocationSourceBase[R]) FindRevocations(key string, certificateToken, issuerCertToken *model.CertificateToken) []RevocationToken[R] {
 	revocationCache := s.revocationCache(key)
 	if revocationCache.Exists() {

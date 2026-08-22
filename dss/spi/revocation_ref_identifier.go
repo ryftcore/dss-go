@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/RevocationRefIdentifier.java (DSS 6.5.RC1).
 //
-// OCSPRefIdentifier (chunk CRLOCSP, a sibling of this phase 2a chunk) already embeds this type
-// by value and calls NewRevocationRefIdentifierFromDigest("OCSPRefIdentifier", ...); this file
-// defines it to match that shape.
+// OCSPRefIdentifier embeds this type by value and calls
+// NewRevocationRefIdentifierFromDigest("OCSPRefIdentifier", ...); this file defines it to match
+// that shape.
 package spi
 
 import (

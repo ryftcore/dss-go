@@ -142,9 +142,7 @@ type DefaultDocumentAnalyzerOverrides interface {
 	// AppendExternalEvidenceRecords appends the detached evidence record provided to the
 	// validator to the corresponding signatures covered by the evidence record document.
 	// Default: see DefaultDocumentAnalyzer.AppendExternalEvidenceRecords. Port of
-	// appendExternalEvidenceRecords(List). ADDITIVE (see that method's doc comment): promoted
-	// into this interface in phase 3 (S3_BRIEF.md) once dss-cades.CMSDocumentAnalyzer surfaced
-	// a real override this port had not yet accounted for.
+	// appendExternalEvidenceRecords(List).
 	AppendExternalEvidenceRecords(allSignatureList []validation.AdvancedSignature) []validation.AdvancedSignature
 }
 
@@ -342,8 +340,7 @@ func (a *DefaultDocumentAnalyzer) SetDetachedContents(detachedContents []model.D
 // DetachedContents returns the signed documents, in case of a detached signature. Exported
 // accessor for the protected `detachedContents` field: Java lets a subclass in another package
 // read a protected field through inheritance, which a Go subclass in another package reaches
-// only through a getter (ADDITIVE, S3_BRIEF.md porter, phase 3 - see
-// AppendExternalEvidenceRecords's doc comment on why dss-cades surfaces gaps like this one).
+// only through a getter.
 func (a *DefaultDocumentAnalyzer) DetachedContents() []model.DSSDocument {
 	return a.detachedContents
 }
@@ -652,18 +649,9 @@ func (a *DefaultDocumentAnalyzer) appendCounterSignatures(allSignatureList []val
 	return allSignatureList
 }
 
-// AppendExternalEvidenceRecords is DefaultDocumentAnalyzerOverrides' default body: appends the
-// detached evidence record provided to the validator to the corresponding signatures covered by
-// the evidence record document. Port of appendExternalEvidenceRecords(List).
-//
-// ADDITIVE FIX (S3_BRIEF.md porter, phase 3): this method was originally ported as a concrete,
-// non-virtual method (unexported appendExternalEvidenceRecords), on the survey in this file's
-// header of upstream subclasses known to override protected DefaultDocumentAnalyzer methods at
-// the time of that port - a survey that could not yet include dss-cades's
-// CMSDocumentAnalyzer.appendExternalEvidenceRecords(List), a real override phase 3 needs to
-// reproduce. Promoted into DefaultDocumentAnalyzerOverrides/GetAllSignatures's dispatch so a
-// concrete analyzer registered via InitDefaultDocumentAnalyzer can override it; every other
-// analyzer's behaviour is unchanged since this is exactly its former body.
+// AppendExternalEvidenceRecords is DefaultDocumentAnalyzerOverrides' default body: it appends
+// each detached evidence record to the signatures it covers. Concrete analyzers may override it
+// to customize evidence-record association.
 func (a *DefaultDocumentAnalyzer) AppendExternalEvidenceRecords(allSignatureList []validation.AdvancedSignature) []validation.AdvancedSignature {
 	overrides := a.defaultDocumentAnalyzerOverrides()
 	detachedEvidenceRecords := a.DetachedEvidenceRecords()

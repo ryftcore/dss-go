@@ -500,28 +500,28 @@ func (s *SignatureTimestampSource[AS, SA]) UnsignedPropertiesReferences() []*val
 }
 
 // CertificateSource returns the merged certificate source built from the signature and its
-// timestamps. Additive accessor (integration-time, Phase 3) for the `certificateSource` field
-// Java's subclasses reach through protected field access; every format-specific
-// SignatureTimestampSourceOverrides implementation needs it the same way
-// SignerDataReferences/UnsignedPropertiesReferences already expose their own state.
+// timestamps. Additive accessor for the `certificateSource` field Java's subclasses reach
+// through protected field access; every format-specific SignatureTimestampSourceOverrides
+// implementation needs it the same way SignerDataReferences/UnsignedPropertiesReferences
+// already expose their own state.
 func (s *SignatureTimestampSource[AS, SA]) CertificateSource() *spi.ListCertificateSource {
 	return s.certificateSource
 }
 
 // CRLSource returns the merged CRL revocation source built from the signature and its
-// timestamps. Additive accessor (integration-time, Phase 3); see CertificateSource's comment.
+// timestamps. Additive accessor; see CertificateSource's comment.
 func (s *SignatureTimestampSource[AS, SA]) CRLSource() *spi.ListRevocationSource[revocation.CRL] {
 	return s.crlSource
 }
 
 // OCSPSource returns the merged OCSP revocation source built from the signature and its
-// timestamps. Additive accessor (integration-time, Phase 3); see CertificateSource's comment.
+// timestamps. Additive accessor; see CertificateSource's comment.
 func (s *SignatureTimestampSource[AS, SA]) OCSPSource() *spi.ListRevocationSource[revocation.OCSP] {
 	return s.ocspSource
 }
 
 // GetAttributeOrder exposes getAttributeOrder(SA) to format-specific overrides. Additive
-// accessor (integration-time, Phase 3); see CertificateSource's comment.
+// accessor; see CertificateSource's comment.
 func (s *SignatureTimestampSource[AS, SA]) GetAttributeOrder(signatureAttribute SA) *int {
 	return s.getAttributeOrder(signatureAttribute)
 }
@@ -926,8 +926,8 @@ func (s *SignatureTimestampSource[AS, SA]) getArchiveTimestampReferences(previou
 // getSignatureSignedDataReferences(), empty by default.
 //
 // Java subclasses may override this concrete (non-abstract) method; wired into
-// SignatureTimestampSourceOverrides (integration-time fix, Phase 3) so that the base's own
-// internal callers (processExternalTimestamp, processExternalEvidenceRecord) reach a
+// SignatureTimestampSourceOverrides so that the base's own internal callers
+// (processExternalTimestamp, processExternalEvidenceRecord) reach a
 // format-specific override through s.overrides rather than statically binding to this body -
 // the same virtual-dispatch gap every other override above is routed around. This is the
 // default (empty) body for an override with nothing format-specific to add.
@@ -1200,14 +1200,14 @@ func (s *SignatureTimestampSource[AS, SA]) isTimestamped(signature validation.Ad
 // attribute class's equals() override - CAdESAttribute, XAdESAttribute, JAdESAttribute and
 // CBAdESAttribute all override it as `Objects.equals(getIdentifier(), that.getIdentifier())`,
 // i.e. value equality on the SA-... identifier - not to Object's reference identity. Comparing
-// the Go pointers instead (the file header's original assumption) can never match: every
-// SignatureProperties.Attributes() implementation REBUILDS a fresh attribute list on each call
-// (see cades/cades_sig_properties.go, xades/xades_sig_properties.go), so the SA handed in here
-// - produced by an earlier Attributes() call inside populateTimestampTokens - is never the same
+// the Go pointers instead can never match: every SignatureProperties.Attributes()
+// implementation REBUILDS a fresh attribute list on each call (see
+// cades/cades_sig_properties.go, xades/xades_sig_properties.go), so the SA handed in here -
+// produced by an earlier Attributes() call inside populateTimestampTokens - is never the same
 // pointer as any element of the list re-read below. The result was a silent, always-nil order,
 // dropping the "-OOA-<n>" component from every embedded timestamp's position string and so from
-// every encapsulated TimestampToken's T-... identifier (found by the phase-8f document-level
-// harness: 30 of its 60 CAdES/XAdES/PAdES/ASiC fixtures).
+// every encapsulated TimestampToken's T-... identifier (confirmed against 30 of 60
+// CAdES/XAdES/PAdES/ASiC fixtures in a full-corpus run).
 func (s *SignatureTimestampSource[AS, SA]) getAttributeOrder(signatureAttribute SA) *int {
 	target := signatureAttribute.Identifier()
 	signedAttributes := s.getSignedSignatureProperties().Attributes()

@@ -2,16 +2,6 @@
 //
 // eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the
 // type keeps its Java name unqualified.
-//
-// ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns
-// CertificateReorderer and CertificateSource): CertificateReorderer is assumed to expose
-//
-//	func NewCertificateReordererWithSigningCertificate(signingCertificate *model.CertificateToken, certificateChain []*model.CertificateToken) CertificateReorderer
-//	func (r CertificateReorderer) OrderedCertificates() ([]*model.CertificateToken, error)
-//
-// and CertificateSource is assumed to expose IsTrusted(*model.CertificateToken) bool, matching
-// the Java interface it flattens from. If X509-B's actual signatures differ, this file's
-// embedding and calls need to be adjusted accordingly.
 package spi
 
 import (

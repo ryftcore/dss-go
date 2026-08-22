@@ -181,8 +181,8 @@ func signerIdentifierSerialToString(serialNumber *big.Int) string {
 // Equals reports whether both identifiers carry the same issuer name, serial number and SKI.
 // Port of equals(Object).
 //
-// NOTE: hashCode() has no Go counterpart; upstream needs it only to key the JDK hash collections,
-// which the port replaces with slices keyed on Equals.
+// NOTE: hashCode() has no Go counterpart; upstream needs it only to key the JDK hash
+// collections, which are implemented here as slices compared with Equals.
 func (s *SignerIdentifier) Equals(other *SignerIdentifier) bool {
 	if s == other {
 		return true

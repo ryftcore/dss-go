@@ -1,16 +1,16 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/OfflineRevocationSource.java (DSS 6.5.RC1).
 //
-// OfflineCRLSourceBase and OfflineOCSPSourceBase (chunk CRLOCSP, a sibling of this phase 2a
-// chunk) already embed OfflineRevocationSourceBase[R] (built with
-// NewOfflineRevocationSourceBase[R](tokenRefMatcher)) and call AllRevocationBinaries() and
+// OfflineCRLSourceBase and OfflineOCSPSourceBase embed OfflineRevocationSourceBase[R] (built
+// with NewOfflineRevocationSourceBase[R](tokenRefMatcher)) and call AllRevocationBinaries() and
 // AddRevocationWithBinary(token, binary); this file defines OfflineRevocationSourceBase to
 // match that shape. Their doc comments describe a concrete source registering itself with
 // InitOfflineRevocationSource "directly when it overrides RevocationTokens, with the base value
-// otherwise" - neither constructor actually calls it, which is consistent with OfflineCRLSource/
-// OfflineOCSPSource still being abstract-ish bases themselves in this phase: the eventual leaf
-// source (a future phase's SignatureCRLSource et al., embedding OfflineCRLSourceBase) is the one
-// expected to call InitOfflineRevocationSource(leafSource) in its own constructor, exactly the
-// way InitToken/InitRevocationToken are always called by the outermost concrete type.
+// otherwise" - neither constructor actually calls it, since OfflineCRLSourceBase/
+// OfflineOCSPSourceBase are themselves bases: the eventual leaf source (a concrete
+// format-specific CRL/OCSP source, e.g. jades.JAdESCRLSource, pades.PAdESOCSPSource, embedding
+// OfflineCRLSourceBase/OfflineOCSPSourceBase) is the one that calls
+// InitOfflineRevocationSource(leafSource) in its own constructor, exactly the way
+// InitToken/InitRevocationToken are always called by the outermost concrete type.
 package spi
 
 import (

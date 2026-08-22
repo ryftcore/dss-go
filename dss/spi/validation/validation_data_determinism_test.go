@@ -29,11 +29,10 @@ func validationDataDeterminismTestToken(t *testing.T, name string) *model.Certif
 	return token
 }
 
-// TestValidationDataCertificateTokensDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): CertificateTokens() (and, by the identical fix
-// in the same file, CrlTokens()/OcspTokens()) used to range directly over a bare map - randomized
-// by Go on every run, unlike Java's HashMap (arbitrary but stable within a JVM run) - and is
-// now insertion-ordered instead.
+// TestValidationDataCertificateTokensDeterministic verifies that CertificateTokens() (and, by
+// the identical fix in the same file, CrlTokens()/OcspTokens()) is stable across runs: it used
+// to range directly over a bare map - randomized by Go on every run, unlike Java's HashMap
+// (arbitrary but stable within a JVM run) - and is now insertion-ordered instead.
 func TestValidationDataCertificateTokensDeterministic(t *testing.T) {
 	build := func() []string {
 		vd := NewValidationData()

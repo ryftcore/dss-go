@@ -10,7 +10,7 @@ import (
 
 // The expectations below are transcribed verbatim from upstream's
 // dss-spi/src/test/java/eu/europa/esig/dss/spi/CertificateExtensionUtilsTest.java and
-// QcStatementsUtilsTest.java, so that the fidelity of the port stays legible without decoding
+// QcStatementsUtilsTest.java, so that fidelity to upstream stays legible without decoding
 // testdata/certificate_extensions/kat.tsv. Each certificate is named by its fixture file; the
 // files are stable, and the mechanical known-answer tests cover the whole corpus anyway.
 const (

@@ -70,8 +70,8 @@ func (c *ClaimMap) MapValue() map[string]Claim {
 }
 
 // Keys gets a set of map keys, as a String. Ports ClaimMap#getKeys.
-// NOTE: Java returns a java.util.Set<String> (unordered); this port
-// returns an unordered []string built by ranging the underlying map, so
+// NOTE: Java returns a java.util.Set<String> (unordered); Keys returns
+// an unordered []string built by ranging the underlying map, so
 // iteration order is likewise unspecified between calls.
 func (c *ClaimMap) Keys() []string {
 	keys := make([]string, 0, len(c.value))

@@ -74,7 +74,7 @@ func (l *LoTEEnumLoader) CertificateApprovalStatusFromLabel(label string) Certif
 // and && without full parenthesization, so && binds tighter than ||
 // (identically in Java and Go), producing the same non-obvious matching
 // behavior in both languages. This is flagged upstream behavior, not
-// something this port "corrects" — see PORTER_BRIEF notes.
+// something this port "corrects".
 func (l *LoTEEnumLoader) CertificateApprovalStatusFromDefinition(listType ListType, sti LoTEServiceTypeIdentifier, status LoTEServiceStatus) CertificateApprovalStatus {
 	for _, certApprovalStatus := range CertificateApprovalStatusEnumValues() {
 		if (listType == nil && certApprovalStatus.ListType() == nil) ||

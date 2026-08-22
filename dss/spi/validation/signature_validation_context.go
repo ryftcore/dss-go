@@ -1,48 +1,14 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/SignatureValidationContext.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCIES (flagged per S2B_BRIEF.md): this type is the central consumer of
-// almost every other spi/validation chunk landing in phase 2b. It assumes the following
-// contracts from sibling chunks, matched here by Java-derived Go names (get/is dropped, Set
-// kept as SetX):
+// This type is the central consumer of most other types in this package: CertificateVerifier,
+// RevocationDataLoadingStrategyFactory, RevocationDataVerifier, TimestampTokenVerifier,
+// TrustAnchorVerifier, ValidationContext (the interface this type implements), ValidationData,
+// TokenStatus, RevocationFreshnessStatus and EvidenceRecord. Every exported method below is
+// named to match those types' actual Java-derived Go names (get/is dropped, Set kept as SetX).
 //
-//   - CertificateVerifier (VAL-D): CrlSource() spi.RevocationSource[revocation.CRL],
-//     OcspSource() spi.RevocationSource[revocation.OCSP], AIASource() aia.AIASource,
-//     AdjunctCertSources()/TrustedCertSources() *spi.ListCertificateSource,
-//     IsCheckRevocationForUntrustedChains() bool,
-//     RevocationDataLoadingStrategyFactory() RevocationDataLoadingStrategyFactory,
-//     RevocationDataVerifier() *RevocationDataVerifier, IsRevocationFallback() bool,
-//     TimestampTokenVerifier() *TimestampTokenVerifier, TrustAnchorVerifier() *TrustAnchorVerifier.
-//   - RevocationDataLoadingStrategyFactory (VAL-B): Create() *RevocationDataLoadingStrategy (see
-//     crl_first_revocation_data_loading_strategy.go / ocsp_first_revocation_data_loading_strategy_factory.go).
-//   - RevocationDataVerifier (VAL-B): NewDefaultRevocationDataVerifier() *RevocationDataVerifier,
-//     TrustAnchorVerifier()/SetTrustAnchorVerifier(*TrustAnchorVerifier),
-//     SetValidationContext(ValidationContext), IsAcceptable(token AnyRevocationToken, controlTime time.Time) bool,
-//     CheckCertificateNotRevoked(token AnyRevocationToken, controlTime time.Time) bool,
-//     IsRevocationDataSkip(cert *model.CertificateToken, controlTime time.Time) bool,
-//     IsRevocationDataFresh(token AnyRevocationToken, refreshTime time.Time, context enumerations.Context) bool,
-//     IsAcceptableForChain(revocation AnyRevocationToken, issuer *model.CertificateToken, chain []*model.CertificateToken, controlTime time.Time) bool,
-//     IsAfterThisUpdateAndBeforeNextUpdate(token AnyRevocationToken, poeTime time.Time) bool.
-//   - TimestampTokenVerifier (VAL-D): NewDefaultTimestampTokenVerifier() *TimestampTokenVerifier,
-//     TrustAnchorVerifier()/SetTrustAnchorVerifier, RevocationDataVerifier()/SetRevocationDataVerifier,
-//     IsAcceptableWithChainAt(timestampToken *TimestampToken, certChain []*model.CertificateToken,
-//     lowestPOETime time.Time) bool. (Integration note: the landed TimestampTokenVerifier splits
-//     Java's 4 isAcceptable(...) overloads into 4 distinctly-named methods - IsAcceptable,
-//     IsAcceptableAt, IsAcceptableWithChain, IsAcceptableWithChainAt; this file originally assumed
-//     the 3-arg overload kept the bare `IsAcceptable` name, which does not compile against Go's
-//     lack of overloading - corrected to call IsAcceptableWithChainAt.)
-//   - TrustAnchorVerifier (VAL-C): NewDefaultTrustAnchorVerifier() *TrustAnchorVerifier,
-//     TrustedCertificateSource()/SetTrustedCertificateSource(*spi.ListCertificateSource),
-//     IsTrustedAtTime(cert *model.CertificateToken, controlTime time.Time, context enumerations.Context) bool.
-//   - ValidationContext (VAL-C): the interface this type implements; every exported method below
-//     is named to match its expected Java-derived signature.
-//   - ValidationData (VAL-D): NewValidationData() *ValidationData, AddToken(token model.Token) bool.
-//   - TokenStatus (VAL-B): NewTokenStatus() *TokenStatus, AddRelatedTokenAndErrorMessage(model.Token, string),
-//     IsEmpty() bool, SetMessage(string) (promoted from alert.ObjectStatus/MessageStatus).
-//   - RevocationFreshnessStatus (VAL-C): embeds TokenStatus, adds
-//     AddTokenAndRevocationNextUpdateTime(cert *model.CertificateToken, nextUpdate time.Time).
-//   - EvidenceRecord (VAL-B): CertificateSource()/CRLSource()/OCSPSource() sources,
-//     Timestamps() []*TimestampToken (forward-referenced already by advanced_signature.go /
-//     timestamp_source.go under this same package).
+// TimestampTokenVerifier splits Java's 4 isAcceptable(...) overloads into 4 distinctly-named
+// methods - IsAcceptable, IsAcceptableAt, IsAcceptableWithChain, IsAcceptableWithChainAt; the
+// 3-argument overload used below calls IsAcceptableWithChainAt.
 //
 // Sets are ported as append-if-absent slices (mirroring Java's LinkedHashSet insertion-order
 // iteration) rather than Go maps keyed by pointer, because CertificateToken/Token equality in

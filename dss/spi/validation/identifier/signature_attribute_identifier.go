@@ -2,11 +2,10 @@
 //
 // Java's abstract Identifier resolves each instance's report-visible simple class name via
 // getClass().getSimpleName() at runtime; Go has no such reflection, so the concrete class name
-// is threaded through explicitly, per the phase 2a handoff convention ("Identifier subclasses
-// pass their Java simple class name to identifier constructors (report-visible)"). Concrete
-// subclasses of SignatureAttributeIdentifier (signature-format-specific unsigned-attribute
-// identifiers, ported in later phases) call NewSignatureAttributeIdentifierBase with their own
-// Java simple class name.
+// is threaded through explicitly: Identifier subclasses pass their Java simple class name to
+// identifier constructors (report-visible). Concrete subclasses of SignatureAttributeIdentifier
+// (signature-format-specific unsigned-attribute identifiers) call
+// NewSignatureAttributeIdentifierBase with their own Java simple class name.
 package identifier
 
 import "github.com/ryftcore/dss-go/dss/model"

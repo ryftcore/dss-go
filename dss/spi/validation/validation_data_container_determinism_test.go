@@ -5,12 +5,11 @@ import (
 	"testing"
 )
 
-// TestValidationDataContainerDetachedTimestampsDeterministic guards against defect #2 of the
-// Phase 2b audit ("Nondeterministic output ordering"): DetachedTimestamps() used to range
-// directly over a bare map keyed by *TimestampToken - randomized by Go on every run, unlike
-// Java's HashMap (arbitrary but stable within a JVM run) - and is now insertion-ordered
-// instead. The map keys only need pointer identity here, so zero-value *TimestampToken
-// placeholders are enough; no field on them is ever read.
+// TestValidationDataContainerDetachedTimestampsDeterministic verifies that DetachedTimestamps()
+// is stable across runs: it used to range directly over a bare map keyed by *TimestampToken -
+// randomized by Go on every run, unlike Java's HashMap (arbitrary but stable within a JVM run)
+// - and is now insertion-ordered instead. The map keys only need pointer identity here, so
+// zero-value *TimestampToken placeholders are enough; no field on them is ever read.
 func TestValidationDataContainerDetachedTimestampsDeterministic(t *testing.T) {
 	tokens := []*TimestampToken{{}, {}, {}, {}, {}}
 	build := func() []*TimestampToken {

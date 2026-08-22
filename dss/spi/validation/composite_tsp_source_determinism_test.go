@@ -24,11 +24,11 @@ func (f *compositeTSPSourceDeterminismFakeSource) TimeStampResponse(enumerations
 
 var _ TSPSource = (*compositeTSPSourceDeterminismFakeSource)(nil)
 
-// TestCompositeTSPSourceNilSourceKeysDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): when SetTspSources is called with a nil
-// sourceKeys (no explicit try order requested), the fallback used to range directly over the
-// tspSources map - randomized by Go on every run, unlike Java's HashMap (arbitrary but stable
-// within a JVM run) - so the fallback now sorts lexically instead.
+// TestCompositeTSPSourceNilSourceKeysDeterministic verifies that when SetTspSources is called
+// with a nil sourceKeys (no explicit try order requested), the fallback is stable across runs:
+// it used to range directly over the tspSources map - randomized by Go on every run, unlike
+// Java's HashMap (arbitrary but stable within a JVM run) - so the fallback now sorts lexically
+// instead.
 func TestCompositeTSPSourceNilSourceKeysDeterministic(t *testing.T) {
 	build := func() []string {
 		var log []string

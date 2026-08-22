@@ -27,12 +27,12 @@ func (f *compositeRevocationSourceDeterminismFakeSource) RevocationToken(_, _ *m
 
 var _ RevocationSource[compositeRevocationSourceDeterminismFakeRevocation] = (*compositeRevocationSourceDeterminismFakeSource)(nil)
 
-// TestCompositeRevocationSourceNilSourceKeysDeterministic guards against defect #2 of the
-// Phase 2b audit ("Nondeterministic output ordering"): when SetSources is called with a nil
-// sourceKeys (no explicit try order requested), the fallback used to range directly over the
-// sources map, which - unlike Java's HashMap (arbitrary but stable within a JVM run) - is
-// randomized by Go on every run. The fallback now sorts lexically, so the try order (and, for
-// sources that could each answer differently, the winning result) is stable across runs.
+// TestCompositeRevocationSourceNilSourceKeysDeterministic verifies that when SetSources is
+// called with a nil sourceKeys (no explicit try order requested), the fallback is stable
+// across runs: it used to range directly over the sources map, which - unlike Java's HashMap
+// (arbitrary but stable within a JVM run) - is randomized by Go on every run. The fallback now
+// sorts lexically, so the try order (and, for sources that could each answer differently, the
+// winning result) is stable across runs.
 func TestCompositeRevocationSourceNilSourceKeysDeterministic(t *testing.T) {
 	build := func() []string {
 		var log []string

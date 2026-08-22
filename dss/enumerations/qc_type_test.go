@@ -13,7 +13,7 @@ func TestQCTypeUnknownFallback(t *testing.T) {
 	// Exercises the fallback value shape directly (qcTypeUnknown), since
 	// QCTypeFromOID's "no match" path additionally depends on
 	// QCTypeEnumValues(), which is defined outside this manifest and is not
-	// available to test in isolation — see PORTER_BRIEF notes.
+	// available to test in isolation.
 	fallback := &qcTypeUnknown{oid: "1.2.3.4"}
 	if fallback.OID() != "1.2.3.4" {
 		t.Errorf("OID() = %q, want %q", fallback.OID(), "1.2.3.4")

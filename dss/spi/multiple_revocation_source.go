@@ -1,8 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/MultipleRevocationSource.java (DSS 6.5.RC1).
 //
-// OfflineCRLSourceBase and OfflineOCSPSourceBase (chunk CRLOCSP, a sibling of this phase 2a
-// chunk) already implement this interface's RevocationTokens method returning
-// ([]RevocationToken[R], error); this file defines it to match that shape.
+// OfflineCRLSourceBase and OfflineOCSPSourceBase implement this interface's RevocationTokens
+// method returning ([]RevocationToken[R], error); this file defines it to match that shape.
 package spi
 
 import (

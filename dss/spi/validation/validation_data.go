@@ -5,8 +5,8 @@
 // spi.ListCertificateSource (Set<T> -> map[T]struct{}/map[string]*T behind small helpers, see
 // PORTING.md's Collections section and dss-model's CertificateToken.Equals).
 //
-// slf4j logging is dropped per the phase 2a handoff fact ("slf4j dropped unless
-// load-bearing"); the TRACE-level messages here carry no behaviour.
+// Java's slf4j logging has no Go equivalent and is not ported; the TRACE-level messages here
+// carry no behaviour.
 package validation
 
 import (

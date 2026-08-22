@@ -1,8 +1,7 @@
 // Ported from dss-cms/src/main/java/eu/europa/esig/dss/cms/AbstractCMSGenerator.java
 // (DSS 6.5.RC1), plus - since this package has one native CMSGenerator rather than the
 // dss-cms-object/dss-cms-stream pair Java's ServiceLoader chooses between (see doc.go) - the
-// generation logic Java splits out into dss-cms-object's CMSObjectGenerator (not part of this
-// port's manifest; read as behavioural reference per the porter brief) and CMSObjectUtils'
+// generation logic Java splits out into dss-cms-object's CMSObjectGenerator and CMSObjectUtils'
 // populateDigestAlgorithmSet, folded into Generate below.
 //
 // # What Generate replaces
@@ -22,7 +21,7 @@
 //     steps (generate(), then CMSUtils.populateDigestAlgorithmSet); Generate does it in one.
 //   - SignedData.certificates/crls ordering is DER-sorted (internal/cmscore's CertificateSet/
 //     RevocationInfoChoices always sort), where BC's generator preserves insertion order via
-//     BERSet. This is the "KNOWN cmscore deviation" the porter brief blesses for CAdES signing:
+//     BERSet. This is a known, deliberate cmscore deviation for CAdES signing:
 //     the SignerInfo bytes it does not affect are what has to be byte-exact.
 package cms
 

@@ -2,7 +2,7 @@
 //
 // Deviation: Java's URLConnection separates a connect timeout from a
 // read timeout on the same connection. net/http does not expose that split
-// cleanly; this port uses connectTimeout as the dial timeout
+// cleanly; connectTimeout is used as the dial timeout
 // (http.Transport.DialContext / net.Dialer.Timeout) and readTimeout as the
 // overall per-request timeout (http.Client.Timeout, which bounds connection,
 // any redirects, and reading the response body). When both are zero the

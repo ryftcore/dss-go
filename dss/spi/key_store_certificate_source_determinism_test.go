@@ -5,10 +5,9 @@ import (
 	"testing"
 )
 
-// TestKeyStoreCertificateSourceStoreDeterministic guards against defect #2 of the Phase 2b
-// audit ("Nondeterministic output ordering"): Store() writes PEM CERTIFICATE blocks in the
-// entries map's iteration order, so a bare Go map would make the written bytes vary run to
-// run even for the exact same set of added certificates.
+// TestKeyStoreCertificateSourceStoreDeterministic verifies that Store() output is stable
+// across runs: it writes PEM CERTIFICATE blocks in the entries map's iteration order, which
+// must not vary for the same set of added certificates.
 func TestKeyStoreCertificateSourceStoreDeterministic(t *testing.T) {
 	build := func(t *testing.T) []byte {
 		t.Helper()

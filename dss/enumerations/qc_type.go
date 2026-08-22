@@ -26,8 +26,7 @@ func (q *qcTypeUnknown) OID() string         { return q.oid }
 // QCTypeFromOID returns a QCType by the given OID, if it matches a known
 // QCTypeEnum constant. Otherwise, a QCType with QCTypeUnknownType as its
 // Description and the given oid is returned (Java logged this case at debug
-// level via SLF4J; that logging side-effect is not ported — see
-// PORTER_BRIEF notes).
+// level via SLF4J; that logging side-effect is not ported).
 func QCTypeFromOID(oid string) QCType {
 	for _, t := range QCTypeEnumValues() {
 		if t.OID() == oid {

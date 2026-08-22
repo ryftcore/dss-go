@@ -3,21 +3,10 @@
 // eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the
 // type keeps its Java name unqualified.
 //
-// Java's abstract protected verify(PublicKey) is implemented by concrete validators defined
-// outside this chunk (e.g. CAdES/XAdES signature validators, ported in later phases). This
-// follows the same override-registration pattern as model.TokenBase.InitToken: a concrete
-// validator embeds SignatureIntegrityValidator and registers itself via
-// InitSignatureIntegrityValidator before Validate is called.
-//
-// ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns
-// CandidatesForSigningCertificate and CertificateValidity): they are assumed to expose
-//
-//	func (c *CandidatesForSigningCertificate) IsEmpty() bool
-//	func (c *CandidatesForSigningCertificate) TheBestCandidate() *CertificateValidity
-//	func (c *CandidatesForSigningCertificate) CertificateValidityList() []*CertificateValidity
-//	func (v *CertificateValidity) PublicKey() *model.PublicKey
-//	func (v *CertificateValidity) IsValid() bool
-//	func (v *CertificateValidity) CertificateToken() *model.CertificateToken
+// Java's abstract protected verify(PublicKey) is implemented by concrete validators (e.g.
+// CAdES/XAdES signature validators). This follows the same override-registration pattern as
+// model.TokenBase.InitToken: a concrete validator embeds SignatureIntegrityValidator and
+// registers itself via InitSignatureIntegrityValidator before Validate is called.
 package spi
 
 import (

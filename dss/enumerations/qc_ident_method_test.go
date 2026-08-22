@@ -13,7 +13,7 @@ func TestQCIdentMethodUnknownFallback(t *testing.T) {
 	// Exercises the fallback value shape directly (qcIdentMethodUnknown),
 	// since QCIdentMethodFromOID's "no match" path additionally depends on
 	// QCIdentMethodEnumValues(), which is defined outside this manifest and
-	// is not available to test in isolation — see PORTER_BRIEF notes.
+	// is not available to test in isolation.
 	fallback := &qcIdentMethodUnknown{oid: "1.2.3.4"}
 	if fallback.OID() != "1.2.3.4" {
 		t.Errorf("OID() = %q, want %q", fallback.OID(), "1.2.3.4")

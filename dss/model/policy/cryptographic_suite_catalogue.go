@@ -14,10 +14,9 @@ import (
 // validation scopes, when applicable.
 //
 // Java's protected abstract methods buildMetadata()/buildAlgorithmList()
-// (implemented by concrete catalogue subclasses outside this manifest)
-// become constructor-supplied function fields, since Go embedding does
-// not support virtual dispatch back into an outer type. A subclass in a
-// future chunk constructs its catalogue via
+// (implemented by concrete catalogue subclasses) become constructor-supplied
+// function fields, since Go embedding does not support virtual dispatch back
+// into an outer type. A concrete catalogue constructs itself via
 // NewCryptographicSuiteCatalogue(buildMetadata, buildAlgorithmList) and
 // embeds *CryptographicSuiteCatalogue for the exported accessors below.
 type CryptographicSuiteCatalogue struct {

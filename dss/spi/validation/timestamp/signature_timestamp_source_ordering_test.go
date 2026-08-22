@@ -5,7 +5,7 @@
 // upstream (AllTimestampsExceptLastArchiveTimestamp,
 // containsTimestampsCoveringOtherTimestamps, the filterSignatureTimestamps use in
 // makeTimestampTokensFromUnsignedAttributes, and getTimestampsCoveredByManifest respectively).
-// These are exactly the standalone functions the SIG-chunk generic machinery (the
+// These are exactly the standalone functions SignatureTimestampSource's generic machinery (the
 // SignatureTimestampSourceOverrides dispatch) is not required to exercise, since none of them
 // touch the overrides interface.
 package timestamp

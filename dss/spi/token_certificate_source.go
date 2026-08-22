@@ -10,11 +10,6 @@
 // pointer identity). They are ported as insertion-ordered slices of pairs, searched with the
 // key type's own Equals, which preserves both the value-equality lookup semantics and the
 // deterministic iteration order LinkedHashMap provides.
-//
-// ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns
-// CommonCertificateSource): CommonCertificateSource.FindTokensFromCertRef(*CertificateRef) is
-// assumed to return map[string]*model.CertificateToken, matching this package's established
-// Set<CertificateToken> convention.
 package spi
 
 import (
@@ -70,7 +65,7 @@ func NewTokenCertificateSource() TokenCertificateSource {
 // InitTokenCertificateSource resets a TokenCertificateSource to its default (empty) state.
 // Port of the protected default constructor; Go has no automatic superclass constructor
 // chaining, so embedders should call this from their own constructor. It exists mainly for
-// symmetry with the InitToken pattern used elsewhere in this port; the zero value of
+// symmetry with the InitToken pattern used elsewhere in this codebase; the zero value of
 // TokenCertificateSource is already usable, calling it is not required.
 func (s *TokenCertificateSource) InitTokenCertificateSource() {
 	s.certificateIdentifierOrigins = nil

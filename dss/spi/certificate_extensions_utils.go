@@ -473,7 +473,7 @@ func CertificateExtensionsUtilsAuthorityKeyIdentifier(certificateToken *model.Ce
 // CertificateExtensionsUtilsSubjectKeyIdentifier returns the subject key identifier, when present.
 // Port of getSubjectKeyIdentifier(CertificateToken).
 //
-// As for the authority key identifier, the Java DSSException becomes a returned model.DSSError.
+// As for the authority key identifier, errors are returned as a model.DSSError.
 func CertificateExtensionsUtilsSubjectKeyIdentifier(certificateToken *model.CertificateToken) (*extension.SubjectKeyIdentifier, error) {
 	certificate := certificateToken.Certificate()
 	oid := enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID()

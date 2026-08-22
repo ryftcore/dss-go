@@ -16,7 +16,7 @@ import (
 // are exported (Salt/Claim) so embedders can assign them directly, per
 // PORTING.md's "protected fields → exported fields" rule.
 //
-// Java's abstract `computeDigest(DigestAlgorithm)` method is ported as
+// Java's abstract `computeDigest(DigestAlgorithm)` method becomes
 // the ComputeDigest function field, which embedders MUST set (typically
 // from their own constructor) before calling Digest. Likewise,
 // Namespace/DigestId are overridable in Java (default nil, mdoc-only);

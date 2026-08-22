@@ -23,8 +23,8 @@ func oidRepositoryAdd[T enumerations.OidDescription](repo map[string]string, val
 
 // OidRepositoryGetDescription gets the description corresponding to the
 // given OID. Ports OidRepository#getDescription (the class is a static
-// utility in Java; the Go port drops the private constructor / no-instance
-// idiom in favor of a package-level function).
+// utility in Java, replaced here by a package-level function; no instance
+// is needed).
 func OidRepositoryGetDescription(oid string) string {
 	return oidRepository[oid]
 }

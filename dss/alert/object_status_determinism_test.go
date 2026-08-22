@@ -5,11 +5,10 @@ import (
 	"testing"
 )
 
-// TestObjectStatusRelatedObjectIdsDeterministic guards against defect #2 of the Phase 2b audit
-// ("Nondeterministic output ordering"): RelatedObjectIds() used to range directly over a bare
-// relatedObjectMap - randomized by Go on every run, unlike Java's HashMap (arbitrary but
-// stable within a JVM run) - and is now sorted, matching the treatment objectMapToString
-// already applied to the same map.
+// TestObjectStatusRelatedObjectIdsDeterministic verifies that RelatedObjectIds() is stable
+// across runs: it used to range directly over a bare relatedObjectMap - randomized by Go on
+// every run, unlike Java's HashMap (arbitrary but stable within a JVM run) - and is now sorted,
+// matching the treatment objectMapToString applies to the same map.
 func TestObjectStatusRelatedObjectIdsDeterministic(t *testing.T) {
 	build := func() []string {
 		status := NewObjectStatus()

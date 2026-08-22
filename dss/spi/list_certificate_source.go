@@ -2,31 +2,6 @@
 //
 // eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the
 // type keeps its Java name unqualified.
-//
-// ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns the
-// CertificateSource interface): CertificateSource is assumed to expose, using this package's
-// established Set<CertificateToken> -> map[string]*model.CertificateToken convention (see
-// dss-model's CertificateToken.Equals, which keys such maps on DSSIDAsString()):
-//
-//	AddCertificate(*model.CertificateToken) *model.CertificateToken
-//	CertificateSourceType() enumerations.CertificateSourceType
-//	Certificates() []*model.CertificateToken
-//	IsTrusted(*model.CertificateToken) bool
-//	IsTrustedAtTime(*model.CertificateToken, time.Time) bool
-//	IsKnown(*model.CertificateToken) bool
-//	BySubject(*model.X500PrincipalHelper) map[string]*model.CertificateToken
-//	BySignerIdentifier(*SignerIdentifier) map[string]*model.CertificateToken
-//	ByCertificateDigest(model.Digest) map[string]*model.CertificateToken
-//	ByPublicKey(*model.PublicKey) map[string]*model.CertificateToken
-//	ByEntityKey(*model.EntityIdentifier) map[string]*model.CertificateToken
-//	BySki([]byte) map[string]*model.CertificateToken
-//	FindTokensFromCertRef(*CertificateRef) map[string]*model.CertificateToken
-//	Entities() []CertificateSourceEntity
-//	IsAllSelfSigned() bool
-//	IsCertificateSourceEqual(CertificateSource) bool
-//	IsCertificateSourceEquivalent(CertificateSource) bool
-//
-// If X509-B's actual signatures differ, this file's calls need to be adjusted accordingly.
 package spi
 
 import (

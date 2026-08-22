@@ -55,10 +55,7 @@ var revocationDataVerifierDefaultRevocationSkipCertificateExtensions = []string{
 // information and applicability of the used cryptographic constraints used to create this
 // token.
 //
-// NOTE: It is not recommended to use a single instance of RevocationDataVerifier within
-// different CertificateVerifiers, as it may lead to concurrency issues during the execution in
-// multi-threaded environments (Go: this port is not goroutine-safe, matching the rest of the
-// value objects in this package). Please use a new RevocationDataVerifier per each
+// RevocationDataVerifier is not safe for concurrent use; create one instance per
 // CertificateVerifier.
 type RevocationDataVerifier struct {
 	// acceptableDigestAlgorithms is a collection of Digest Algorithms to accept from CRL/OCSP

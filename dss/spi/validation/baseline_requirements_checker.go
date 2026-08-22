@@ -107,7 +107,7 @@ type BaselineRequirementsCheckerOverrides interface {
 	// (returning SignatureForm.CAdES) declares and both PAdESBaselineRequirementsChecker AND
 	// CMSForPAdESBaselineRequirementsChecker override (returning SignatureForm.PAdES) purely
 	// through ordinary Java virtual dispatch - not part of upstream's own BaselineRequirements
-	// Checker base class at all. It is added to this port's cross-package override contract
+	// Checker base class at all. It is added to this type's cross-package override contract
 	// instead, because cades.CAdESBaselineRequirementsChecker.cmsBaselineBRequirements() (the
 	// shared CMS-attribute check both cades.CAdESSignature and, through
 	// pades.CMSForPAdESBaselineRequirementsChecker, PAdES signatures run) needs to resolve it

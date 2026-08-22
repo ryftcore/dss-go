@@ -2,8 +2,8 @@
 //
 // Java's Set<CertificateToken> return values are ported as map[string]*model.CertificateToken
 // keyed by the token's DSSIDAsString(), matching the convention equivalent_certificates_entity.go
-// (chunk X509-B) already established for the same Java Set<CertificateToken>-over-hashCode
-// problem: CertificateToken has no comparable Go representation usable directly as a map key
+// already established for the same Java Set<CertificateToken>-over-hashCode problem:
+// CertificateToken has no comparable Go representation usable directly as a map key
 // (its identity digest is a []byte), so callers needing equals()-based deduplication key on the
 // identifier string instead of on the pointer.
 package spi

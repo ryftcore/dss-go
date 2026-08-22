@@ -9,24 +9,10 @@
 // error channel to propagate that through, a non-nil error from Alert(status) is repanicked,
 // reproducing Java's unchecked-exception propagation out of a void method.
 //
-// CROSS-CHUNK DEPENDENCY: CertificateVerifier (Java spi.validation.CertificateVerifier) is
-// already forward-declared opaquely by five sibling files in this package (see e.g.
-// advanced_signature.go, signature_validation_context.go). This file additionally requires the
-// seven getAlertOnXxx() accessors below, none of which any already-landed file documents;
-// they're spelled out here, matched 1:1 to the Java getters (get-prefix dropped per
-// PORTING.md), for CertificateVerifier's owning chunk (VAL-D) to supply:
-//
-//	AlertOnMissingRevocationData() alert.StatusAlert
-//	AlertOnUncoveredPOE() alert.StatusAlert
-//	AlertOnInvalidTimestamp() alert.StatusAlert
-//	AlertOnRevokedCertificate() alert.StatusAlert
-//	AlertOnNoRevocationAfterBestSignatureTime() alert.StatusAlert
-//	AlertOnExpiredCertificate() alert.StatusAlert
-//	AlertOnNotYetValidCertificate() alert.StatusAlert
-//
-// getCertificateVerifier() on SignatureValidationContext is already landed as the unexported
-// method of that exact name (signature_validation_context.go), callable here since both files
-// share this package.
+// This file calls CertificateVerifier's seven getAlertOnXxx() accessors (get-prefix dropped per
+// PORTING.md, see certificate_verifier.go), plus getCertificateVerifier() on
+// SignatureValidationContext, the unexported method of that exact name
+// (signature_validation_context.go), callable here since both files share this package.
 package validation
 
 import (

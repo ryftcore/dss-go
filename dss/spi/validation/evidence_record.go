@@ -53,11 +53,10 @@ type EvidenceRecord interface {
 	// spi.OfflineRevocationSource[R] (missing RevocationTokens) nor
 	// spi.MultipleRevocationSource[R] on its own. OfflineCRLSourceBase embeds it AND supplies a
 	// concrete RevocationTokens, so it alone satisfies the full spi.OfflineRevocationSource[R]
-	// contract plus AllRevocationReferences() (which abstract_timestamp_source.go's forward
-	// dependency on this method needs) via promotion. TimestampToken.CRLSource() (already landed,
-	// timestamp_crl_source.go) hit the identical problem and resolved it by returning a type built
-	// the same way (*TimestampCRLSource, embedding *spi.CMSCRLSource, itself embedding
-	// spi.OfflineCRLSourceBase).
+	// contract plus AllRevocationReferences() (which abstract_timestamp_source.go needs) via
+	// promotion. TimestampToken.CRLSource() (timestamp_crl_source.go) hit the identical problem
+	// and resolved it by returning a type built the same way (*TimestampCRLSource, embedding
+	// *spi.CMSCRLSource, itself embedding spi.OfflineCRLSourceBase).
 	CRLSource() *spi.OfflineCRLSourceBase
 
 	// OCSPSource gets an OCSP source which contains ALL OCSP responses embedded in the evidence

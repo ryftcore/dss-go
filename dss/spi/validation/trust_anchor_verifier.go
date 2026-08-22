@@ -1,8 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/TrustAnchorVerifier.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY: two already-landed sibling files (spi/validation/revocation_data_verifier.go
-// and spi/validation/signature_validation_context.go) forward-declare their expectation of this
-// type's shape as:
+// revocation_data_verifier.go and signature_validation_context.go call this type as:
 //
 //	NewDefaultTrustAnchorVerifier() *TrustAnchorVerifier
 //	TrustedCertificateSource() / SetTrustedCertificateSource(*spi.ListCertificateSource)
@@ -19,7 +17,7 @@
 //
 // Java's setTrustedCertificateSource(CertificateSource) takes the interface type; the two call
 // sites above pass a *spi.ListCertificateSource (which satisfies spi.CertificateSource
-// structurally, per the "compile-time assertion" precedent noted throughout this package), so
+// structurally - see the "compile-time assertion" comments used throughout this package), so
 // the parameter here is kept as the interface spi.CertificateSource for Java fidelity - this
 // remains source-compatible with both existing call sites.
 package validation

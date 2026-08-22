@@ -42,7 +42,7 @@ func (c *CandidatesForSigningCertificate) Add(certificateValidity *CertificateVa
 // candidates. Port of setTheCertificateValidity(CertificateValidity).
 //
 // Panics with the Java message when theCertificateValidity is missing (Objects.requireNonNull)
-// and returns the Java DSSException as an error when it is not part of the candidates.
+// and returns an error when it is not part of the candidates.
 func (c *CandidatesForSigningCertificate) SetTheCertificateValidity(theCertificateValidity *CertificateValidity) error {
 	if theCertificateValidity == nil {
 		panic("The CertificateValidity cannot be null")

@@ -11,13 +11,12 @@
 // Java's abstract class + "protected abstract RevocationToken getRevocationToken(...)" become
 // the Init/overrides idiom used throughout this port (see model.TokenBase): a
 // RevocationDataLoadingStrategyOverrides interface carries the one abstract method, concrete
-// strategies (CRLFirstRevocationDataLoadingStrategy, already landed; sibling chunk VAL-C's
-// OCSPFirstRevocationDataLoadingStrategy) embed RevocationDataLoadingStrategy and call
-// InitRevocationDataLoadingStrategy(self) in their constructor, matching the shape already
-// assumed by crl_first_revocation_data_loading_strategy.go's header comment and consumed by
-// ocsp_first_revocation_data_loading_strategy_factory.go.
+// strategies (CRLFirstRevocationDataLoadingStrategy, OCSPFirstRevocationDataLoadingStrategy)
+// embed RevocationDataLoadingStrategy and call InitRevocationDataLoadingStrategy(self) in their
+// constructor; see ocsp_first_revocation_data_loading_strategy_factory.go for how a factory
+// hands out the result.
 //
-// slf4j logging is dropped per the phase 2a handoff fact ("slf4j dropped unless load-bearing").
+// Java's slf4j logging has no Go equivalent and is not ported.
 package validation
 
 import (

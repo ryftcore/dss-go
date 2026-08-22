@@ -186,7 +186,7 @@ func certificateRefIdentifierString(identifier model.Identifier) string {
 // Id, kid, X.509 URL and public key. Port of equals(Object).
 //
 // NOTE: hashCode() has no Go counterpart; upstream needs it only to key the JDK hash
-// collections, which the port replaces with slices/maps keyed on Equals or DSSIDAsString().
+// collections, which are implemented here as slices/maps keyed on Equals or DSSIDAsString().
 func (r *CertificateRef) Equals(other *CertificateRef) bool {
 	if r == other {
 		return true

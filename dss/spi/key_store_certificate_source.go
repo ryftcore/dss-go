@@ -55,8 +55,7 @@ import (
 type KeyStoreCertificateSourceType string
 
 const (
-	// KeyStoreCertificateSourceTypePKCS12 is a PKCS#12 keystore ("PKCS12" in Java), read-only
-	// in this port.
+	// KeyStoreCertificateSourceTypePKCS12 is a PKCS#12 keystore ("PKCS12" in Java), read-only.
 	KeyStoreCertificateSourceTypePKCS12 KeyStoreCertificateSourceType = "PKCS12"
 	// KeyStoreCertificateSourceTypePEM is a plain concatenated PEM (or raw concatenated DER)
 	// certificate collection; not a Java KeyStore type, added to satisfy the "PEM/DER cert
@@ -284,8 +283,8 @@ func (k *KeyStoreCertificateSource) ClearAllCertificates() {
 
 // Store writes the keystore to w. Port of store(OutputStream).
 //
-// PKCS12 has no counterpart to Java's KeyStore#store in this port (golang.org/x/crypto/pkcs12
-// only decodes in the vendored version) and returns an error; a PEM-typed source is written as
+// PKCS12 has no counterpart to Java's KeyStore#store here (golang.org/x/crypto/pkcs12 only
+// decodes in the vendored version) and returns an error; a PEM-typed source is written as
 // concatenated PEM CERTIFICATE blocks.
 func (k *KeyStoreCertificateSource) Store(w io.Writer) error {
 	switch k.ksType {

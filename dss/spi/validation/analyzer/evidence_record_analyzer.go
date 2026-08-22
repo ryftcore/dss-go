@@ -1,7 +1,7 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/validation/analyzer/evidencerecord/EvidenceRecordAnalyzer.java (DSS 6.5.RC1).
 //
 // SCC flattening: Java spi.validation.analyzer.evidencerecord lands in this same Go package
-// (dss/spi/validation/analyzer) per S2B_BRIEF.md's package layout table.
+// (dss/spi/validation/analyzer).
 package analyzer
 
 import (

@@ -12,10 +12,9 @@
 //     attributes (RevocationValues.ocspVals and CrlOcspRef.ocspids), so they live here, next
 //     to the first of their two consumers, the way crl_ref.go already hosts CrlValidatedID.
 //
-// This file also carries DSSASN1Utils.getRevocationValues(ASN1Encodable), which
-// dss_asn1_utils.go deferred with a "TODO(phase-3)" marker because it takes an ESF type only
-// this phase introduces; it keeps the flattened static-utility naming so that folding it back
-// into dss_asn1_utils.go later is a pure move.
+// This file also carries DSSASN1Utils.getRevocationValues(ASN1Encodable), which takes an ESF
+// type only this file introduces; it keeps the flattened static-utility naming so that folding
+// it back into dss_asn1_utils.go later is a pure move.
 package spi
 
 import (

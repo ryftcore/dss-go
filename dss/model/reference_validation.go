@@ -147,8 +147,8 @@ func (r *ReferenceValidation) DependentValidations() []*ReferenceValidation {
 // getter alone leaves no way to populate the list - which is exactly what happened, in
 // XAdESSignature's ds:Reference[@Type=".../Manifest"] branch: the manifest entries were computed
 // and discarded, so every DataObjectFormat qualifying property pointing at a manifest entry
-// failed to find its reference and the whole signature was reported as XML_NOT_ETSI (found by
-// the Phase 4d audit on testdata/upstream/Signature-X-CZ_SEF-5.xml, where upstream reports
+// failed to find its reference and the whole signature was reported as XML_NOT_ETSI (confirmed
+// against testdata/upstream/Signature-X-CZ_SEF-5.xml, where upstream reports
 // XAdES_BASELINE_LT). This is the additive setter that closes it.
 func (r *ReferenceValidation) AddDependentValidations(dependentValidations ...*ReferenceValidation) {
 	r.dependentReferenceValidations = append(r.DependentValidations(), dependentValidations...)

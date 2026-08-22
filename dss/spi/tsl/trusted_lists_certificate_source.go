@@ -1,9 +1,9 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/tsl/TrustedListsCertificateSource.java (DSS 6.5.RC1).
 //
 // Deviation: see the equivalent note in spi/lote/trusted_entities_certificate_source.go
-// (this package's sibling chunk) regarding the inability to call spi.CommonCertificateSource's
-// unexported reset() from a different Go package; reset()'s effect is reproduced here the same
-// way, by replacing the embedded CommonTrustedCertificateSource with a fresh one.
+// regarding the inability to call spi.CommonCertificateSource's unexported reset() from a
+// different Go package; reset()'s effect is reproduced here the same way, by replacing the
+// embedded CommonTrustedCertificateSource with a fresh one.
 package tsl
 
 import (
