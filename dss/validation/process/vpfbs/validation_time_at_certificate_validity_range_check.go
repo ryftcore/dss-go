@@ -46,9 +46,9 @@ func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) Process() bool {
 	if conclusion.SubIndication != nil {
 		subIndication = conclusion.SubIndication.SubIndication()
 	}
-	return !(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-		(enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndication ||
-			enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndication))
+	return !(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+		(enumerations.SubIndicationOutOfBoundsNoPOE == subIndication ||
+			enumerations.SubIndicationOutOfBoundsNotRevoked == subIndication))
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -68,11 +68,11 @@ func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) FailedSubIndicationFo
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVTAVRSC
+	return i18n.MessageTagBSVIVTAVRSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVTAVRSC_ANS
+	return i18n.MessageTagBSVIVTAVRSCANS
 }

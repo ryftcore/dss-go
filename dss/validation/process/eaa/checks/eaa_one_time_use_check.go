@@ -37,23 +37,23 @@ func (c *EAAOneTimeUseCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAOneTimeUseCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_OTU
+	return i18n.MessageTagEAAOTU
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAOneTimeUseCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_OTU_ANS
+	return i18n.MessageTagEAAOTUANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAOneTimeUseCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAOneTimeUseCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

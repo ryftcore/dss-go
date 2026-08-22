@@ -22,7 +22,7 @@ func NewFreshestCRL() *FreshestCRL {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_FRESHEST_CRL.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumFreshestCRL.OID()),
 	}
 }
 

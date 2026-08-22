@@ -38,20 +38,20 @@ func (c *SignatureValidationResultCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureValidationResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPSC
+	return i18n.MessageTagADESTIBSVPSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *SignatureValidationResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPSC_ANS
+	return i18n.MessageTagADESTIBSVPSCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SignatureValidationResultCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
 	indication := c.signatureBasicValidationConclusion.Indication.Indication()
-	if enumerations.Indication_TOTAL_FAILED == indication {
-		return enumerations.Indication_FAILED
+	if enumerations.IndicationTotalFailed == indication {
+		return enumerations.IndicationFailed
 	}
 	return indication
 }

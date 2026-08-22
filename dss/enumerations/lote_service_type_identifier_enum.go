@@ -8,30 +8,30 @@ import "fmt"
 type LoTEServiceTypeIdentifierEnum string
 
 const (
-	// LoTEServiceTypeIdentifierEnum_PID_ISSUANCE identifies the PID Issuance service type.
-	LoTEServiceTypeIdentifierEnum_PID_ISSUANCE LoTEServiceTypeIdentifierEnum = "PID_ISSUANCE"
-	// LoTEServiceTypeIdentifierEnum_PID_REVOCATION identifies the PID Revocation service type.
-	LoTEServiceTypeIdentifierEnum_PID_REVOCATION LoTEServiceTypeIdentifierEnum = "PID_REVOCATION"
-	// LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE identifies the Wallet Solution
+	// LoTEServiceTypeIdentifierEnumPIDIssuance identifies the PID Issuance service type.
+	LoTEServiceTypeIdentifierEnumPIDIssuance LoTEServiceTypeIdentifierEnum = "PID_ISSUANCE"
+	// LoTEServiceTypeIdentifierEnumPIDRevocation identifies the PID Revocation service type.
+	LoTEServiceTypeIdentifierEnumPIDRevocation LoTEServiceTypeIdentifierEnum = "PID_REVOCATION"
+	// LoTEServiceTypeIdentifierEnumWalletIssuance identifies the Wallet Solution
 	// Issuance service type.
-	LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE LoTEServiceTypeIdentifierEnum = "WALLET_ISSUANCE"
-	// LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION identifies the Wallet Solution
+	LoTEServiceTypeIdentifierEnumWalletIssuance LoTEServiceTypeIdentifierEnum = "WALLET_ISSUANCE"
+	// LoTEServiceTypeIdentifierEnumWalletRevocation identifies the Wallet Solution
 	// Revocation service type.
-	LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION LoTEServiceTypeIdentifierEnum = "WALLET_REVOCATION"
-	// LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE identifies the WRPAC Issuance service type.
-	LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE LoTEServiceTypeIdentifierEnum = "WRPAC_ISSUANCE"
-	// LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION identifies the WRPAC Revocation service type.
-	LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION LoTEServiceTypeIdentifierEnum = "WRPAC_REVOCATION"
-	// LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE identifies the WRPRC Issuance service type.
-	LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE LoTEServiceTypeIdentifierEnum = "WRPRC_ISSUANCE"
-	// LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION identifies the WRPRC Revocation service type.
-	LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION LoTEServiceTypeIdentifierEnum = "WRPRC_REVOCATION"
-	// LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE identifies the Pub-EAA Issuance service type.
-	LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE LoTEServiceTypeIdentifierEnum = "PUB_EAA_ISSUANCE"
-	// LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION identifies the Pub-EAA Revocation service type.
-	LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION LoTEServiceTypeIdentifierEnum = "PUB_EAA_REVOCATION"
-	// LoTEServiceTypeIdentifierEnum_REGISTER identifies the Register service type.
-	LoTEServiceTypeIdentifierEnum_REGISTER LoTEServiceTypeIdentifierEnum = "REGISTER"
+	LoTEServiceTypeIdentifierEnumWalletRevocation LoTEServiceTypeIdentifierEnum = "WALLET_REVOCATION"
+	// LoTEServiceTypeIdentifierEnumWRPACIssuance identifies the WRPAC Issuance service type.
+	LoTEServiceTypeIdentifierEnumWRPACIssuance LoTEServiceTypeIdentifierEnum = "WRPAC_ISSUANCE"
+	// LoTEServiceTypeIdentifierEnumWRPACRevocation identifies the WRPAC Revocation service type.
+	LoTEServiceTypeIdentifierEnumWRPACRevocation LoTEServiceTypeIdentifierEnum = "WRPAC_REVOCATION"
+	// LoTEServiceTypeIdentifierEnumWRPRCIssuance identifies the WRPRC Issuance service type.
+	LoTEServiceTypeIdentifierEnumWRPRCIssuance LoTEServiceTypeIdentifierEnum = "WRPRC_ISSUANCE"
+	// LoTEServiceTypeIdentifierEnumWRPRCRevocation identifies the WRPRC Revocation service type.
+	LoTEServiceTypeIdentifierEnumWRPRCRevocation LoTEServiceTypeIdentifierEnum = "WRPRC_REVOCATION"
+	// LoTEServiceTypeIdentifierEnumPubEAAIssuance identifies the Pub-EAA Issuance service type.
+	LoTEServiceTypeIdentifierEnumPubEAAIssuance LoTEServiceTypeIdentifierEnum = "PUB_EAA_ISSUANCE"
+	// LoTEServiceTypeIdentifierEnumPubEAARevocation identifies the Pub-EAA Revocation service type.
+	LoTEServiceTypeIdentifierEnumPubEAARevocation LoTEServiceTypeIdentifierEnum = "PUB_EAA_REVOCATION"
+	// LoTEServiceTypeIdentifierEnumRegister identifies the Register service type.
+	LoTEServiceTypeIdentifierEnumRegister LoTEServiceTypeIdentifierEnum = "REGISTER"
 )
 
 type loteServiceTypeIdentifierEnumFields struct {
@@ -41,33 +41,33 @@ type loteServiceTypeIdentifierEnumFields struct {
 
 // loteServiceTypeIdentifierEnumData holds the (stiUri, label) pair for each constant.
 var loteServiceTypeIdentifierEnumData = map[LoTEServiceTypeIdentifierEnum]loteServiceTypeIdentifierEnumFields{
-	LoTEServiceTypeIdentifierEnum_PID_ISSUANCE:       {"http://uri.etsi.org/19602/SvcType/PID/Issuance", "PID Issuance"},
-	LoTEServiceTypeIdentifierEnum_PID_REVOCATION:     {"http://uri.etsi.org/19602/SvcType/PID/Revocation", "PID Revocation"},
-	LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE:    {"http://uri.etsi.org/19602/SvcType/WalletSolution/Issuance", "Wallet Solution Issuance"},
-	LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION:  {"http://uri.etsi.org/19602/SvcType/WalletSolution/Revocation", "Wallet Solution Revocation"},
-	LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE:     {"http://uri.etsi.org/19602/SvcType/WRPAC/Issuance", "WRPAC Issuance"},
-	LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION:   {"http://uri.etsi.org/19602/SvcType/WRPAC/Revocation", "WRPAC Revocation"},
-	LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE:     {"http://uri.etsi.org/19602/SvcType/WRPRC/Issuance", "WRPRC Issuance"},
-	LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION:   {"http://uri.etsi.org/19602/SvcType/WRPRC/Revocation", "WRPRC Revocation"},
-	LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE:   {"http://uri.etsi.org/19602/SvcType/PubEAA/Issuance", "Pub-EAA Issuance"},
-	LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION: {"http://uri.etsi.org/19602/SvcType/PubEAA/Revocation", "Pub-EAA Revocation"},
-	LoTEServiceTypeIdentifierEnum_REGISTER:           {"http://uri.etsi.org/19602/SvcType/Register", "Register"},
+	LoTEServiceTypeIdentifierEnumPIDIssuance:      {"http://uri.etsi.org/19602/SvcType/PID/Issuance", "PID Issuance"},
+	LoTEServiceTypeIdentifierEnumPIDRevocation:    {"http://uri.etsi.org/19602/SvcType/PID/Revocation", "PID Revocation"},
+	LoTEServiceTypeIdentifierEnumWalletIssuance:   {"http://uri.etsi.org/19602/SvcType/WalletSolution/Issuance", "Wallet Solution Issuance"},
+	LoTEServiceTypeIdentifierEnumWalletRevocation: {"http://uri.etsi.org/19602/SvcType/WalletSolution/Revocation", "Wallet Solution Revocation"},
+	LoTEServiceTypeIdentifierEnumWRPACIssuance:    {"http://uri.etsi.org/19602/SvcType/WRPAC/Issuance", "WRPAC Issuance"},
+	LoTEServiceTypeIdentifierEnumWRPACRevocation:  {"http://uri.etsi.org/19602/SvcType/WRPAC/Revocation", "WRPAC Revocation"},
+	LoTEServiceTypeIdentifierEnumWRPRCIssuance:    {"http://uri.etsi.org/19602/SvcType/WRPRC/Issuance", "WRPRC Issuance"},
+	LoTEServiceTypeIdentifierEnumWRPRCRevocation:  {"http://uri.etsi.org/19602/SvcType/WRPRC/Revocation", "WRPRC Revocation"},
+	LoTEServiceTypeIdentifierEnumPubEAAIssuance:   {"http://uri.etsi.org/19602/SvcType/PubEAA/Issuance", "Pub-EAA Issuance"},
+	LoTEServiceTypeIdentifierEnumPubEAARevocation: {"http://uri.etsi.org/19602/SvcType/PubEAA/Revocation", "Pub-EAA Revocation"},
+	LoTEServiceTypeIdentifierEnumRegister:         {"http://uri.etsi.org/19602/SvcType/Register", "Register"},
 }
 
 // LoTEServiceTypeIdentifierEnumValues returns all constants in declaration order.
 func LoTEServiceTypeIdentifierEnumValues() []LoTEServiceTypeIdentifierEnum {
 	return []LoTEServiceTypeIdentifierEnum{
-		LoTEServiceTypeIdentifierEnum_PID_ISSUANCE,
-		LoTEServiceTypeIdentifierEnum_PID_REVOCATION,
-		LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE,
-		LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION,
-		LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE,
-		LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION,
-		LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE,
-		LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION,
-		LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE,
-		LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION,
-		LoTEServiceTypeIdentifierEnum_REGISTER,
+		LoTEServiceTypeIdentifierEnumPIDIssuance,
+		LoTEServiceTypeIdentifierEnumPIDRevocation,
+		LoTEServiceTypeIdentifierEnumWalletIssuance,
+		LoTEServiceTypeIdentifierEnumWalletRevocation,
+		LoTEServiceTypeIdentifierEnumWRPACIssuance,
+		LoTEServiceTypeIdentifierEnumWRPACRevocation,
+		LoTEServiceTypeIdentifierEnumWRPRCIssuance,
+		LoTEServiceTypeIdentifierEnumWRPRCRevocation,
+		LoTEServiceTypeIdentifierEnumPubEAAIssuance,
+		LoTEServiceTypeIdentifierEnumPubEAARevocation,
+		LoTEServiceTypeIdentifierEnumRegister,
 	}
 }
 

@@ -9,19 +9,19 @@ import "fmt"
 type QSCDStatus string
 
 const (
-	// QSCDStatus_QSCD: certificate to be used with Qualified Electronic
+	// QSCDStatusQSCD: certificate to be used with Qualified Electronic
 	// Signature Creation Device.
-	QSCDStatus_QSCD QSCDStatus = "QSCD"
-	// QSCDStatus_NOT_QSCD: not a certificate to be used with Qualified
+	QSCDStatusQSCD QSCDStatus = "QSCD"
+	// QSCDStatusNotQSCD: not a certificate to be used with Qualified
 	// Electronic Signature Creation Device.
-	QSCDStatus_NOT_QSCD QSCDStatus = "NOT_QSCD"
+	QSCDStatusNotQSCD QSCDStatus = "NOT_QSCD"
 )
 
 // QSCDStatusValues returns all constants in declaration order.
 func QSCDStatusValues() []QSCDStatus {
 	return []QSCDStatus{
-		QSCDStatus_QSCD,
-		QSCDStatus_NOT_QSCD,
+		QSCDStatusQSCD,
+		QSCDStatusNotQSCD,
 	}
 }
 
@@ -37,5 +37,5 @@ func QSCDStatusValueOf(name string) (QSCDStatus, error) {
 
 // QSCDStatusIsQSCD checks if the certificate is a QSCD.
 func QSCDStatusIsQSCD(status QSCDStatus) bool {
-	return QSCDStatus_QSCD == status
+	return QSCDStatusQSCD == status
 }

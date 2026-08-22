@@ -38,18 +38,18 @@ func (c *TLSCertificateBindingUrlPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingUrlPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_URL
+	return i18n.MessageTagTLSCertBindingURL
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingUrlPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_URL_ANS
+	return i18n.MessageTagTLSCertBindingURLANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingUrlPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

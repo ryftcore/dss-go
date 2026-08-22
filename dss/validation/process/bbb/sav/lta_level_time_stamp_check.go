@@ -40,11 +40,11 @@ func (c *LTALevelTimeStampCheck[T]) Timestamps() []*diagnostic.TimestampWrapper 
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LTALevelTimeStampCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IVLTATSTP
+	return i18n.MessageTagBBBSAVIVLTATSTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *LTALevelTimeStampCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IVLTATSTP_ANS
+	return i18n.MessageTagBBBSAVIVLTATSTPANS
 }

@@ -9,23 +9,23 @@ import "fmt"
 type EvidenceRecordOrigin string
 
 const (
-	// EvidenceRecordOrigin_CONTAINER defines an evidence record extracted
+	// EvidenceRecordOriginContainer defines an evidence record extracted
 	// from an ASiC container.
-	EvidenceRecordOrigin_CONTAINER EvidenceRecordOrigin = "CONTAINER"
-	// EvidenceRecordOrigin_SIGNATURE defines an evidence record embedded in
+	EvidenceRecordOriginContainer EvidenceRecordOrigin = "CONTAINER"
+	// EvidenceRecordOriginSignature defines an evidence record embedded in
 	// electronic signature.
-	EvidenceRecordOrigin_SIGNATURE EvidenceRecordOrigin = "SIGNATURE"
-	// EvidenceRecordOrigin_EXTERNAL is an evidence record provided
+	EvidenceRecordOriginSignature EvidenceRecordOrigin = "SIGNATURE"
+	// EvidenceRecordOriginExternal is an evidence record provided
 	// externally to the validation.
-	EvidenceRecordOrigin_EXTERNAL EvidenceRecordOrigin = "EXTERNAL"
+	EvidenceRecordOriginExternal EvidenceRecordOrigin = "EXTERNAL"
 )
 
 // EvidenceRecordOriginValues returns all constants in declaration order.
 func EvidenceRecordOriginValues() []EvidenceRecordOrigin {
 	return []EvidenceRecordOrigin{
-		EvidenceRecordOrigin_CONTAINER,
-		EvidenceRecordOrigin_SIGNATURE,
-		EvidenceRecordOrigin_EXTERNAL,
+		EvidenceRecordOriginContainer,
+		EvidenceRecordOriginSignature,
+		EvidenceRecordOriginExternal,
 	}
 }
 

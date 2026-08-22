@@ -224,15 +224,15 @@ func (a *SignatureValidationAlerter) populateMessage(status signatureValidationA
 	}
 	originalMessage := status.Message()
 	switch a.signingOperation {
-	case enumerations.SigningOperation_SIGN, enumerations.SigningOperation_COUNTER_SIGN:
+	case enumerations.SigningOperationSign, enumerations.SigningOperationCounterSign:
 		status.SetMessage(fmt.Sprintf("Error on signature creation : %s", originalMessage))
-	case enumerations.SigningOperation_EXTEND:
+	case enumerations.SigningOperationExtend:
 		status.SetMessage(fmt.Sprintf("Error on signature augmentation : %s", originalMessage))
-	case enumerations.SigningOperation_TIMESTAMP:
+	case enumerations.SigningOperationTimestamp:
 		status.SetMessage(fmt.Sprintf("Error on timestamp : %s", originalMessage))
-	case enumerations.SigningOperation_ADD_EVIDENCE_RECORD:
+	case enumerations.SigningOperationAddEvidenceRecord:
 		status.SetMessage(fmt.Sprintf("Error on evidence record incorporation : %s", originalMessage))
-	case enumerations.SigningOperation_ADD_SIG_POLICY_STORE:
+	case enumerations.SigningOperationAddSigPolicyStore:
 		status.SetMessage(fmt.Sprintf("Error on signature policy store incorporation : %s", originalMessage))
 	default:
 		panic(fmt.Sprintf("The operation '%s' is not supported!", a.signingOperation))

@@ -97,9 +97,9 @@ func (t *XAdESLevelBaselineT) SetTspSource(tspSource validation.TSPSource) {
 // <ds:CanonicalizationMethod Algorithm="..."/> to parentDom.
 func (t *XAdESLevelBaselineT) incorporateC14nMethod(parentDom *xmldom.Node, signedInfoC14nMethod string) {
 	canonicalizationMethodDom := xmlutils.DomUtilsCreateElementNS(t.DocumentDom,
-		t.XmldsigNamespace(), common.XMLDSigElement_CANONICALIZATION_METHOD)
+		t.XmldsigNamespace(), common.XMLDSigElementCanonicalizationMethod)
 	canonicalizationMethodDom.SetAttr(
-		xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, signedInfoC14nMethod)
+		xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, signedInfoC14nMethod)
 	parentDom.AppendChild(canonicalizationMethodDom)
 }
 
@@ -140,7 +140,7 @@ func (t *XAdESLevelBaselineT) ExtendSignaturesDocument(dssDocument model.DSSDocu
 	signaturesToExtend := signatures
 
 	operationKind := context.OperationKind()
-	if enumerations.SigningOperation_SIGN == operationKind {
+	if enumerations.SigningOperationSign == operationKind {
 		signatureID := params.GetDeterministicId()
 
 		for _, signature := range signatures {
@@ -185,8 +185,8 @@ func xadesLevelBaselineTAssertNoEmbeddedSignaturesPresent(
 func xadesLevelBaselineTHasSignatureAsParent(element *xmldom.Node) bool {
 	parent := element.Parent
 	for parent != nil {
-		if common.XMLDSigElement_SIGNATURE.IsSameTagName(parent.Name.Local) &&
-			common.XMLDSigElement_SIGNATURE.URI() == parent.Name.Space {
+		if common.XMLDSigElementSignature.IsSameTagName(parent.Name.Local) &&
+			common.XMLDSigElementSignature.URI() == parent.Name.Space {
 			return true
 		}
 		parent = parent.Parent
@@ -233,7 +233,7 @@ func (t *XAdESLevelBaselineT) ExtendSignatures(signatures []validation.AdvancedS
 		}
 		messageDigest := timestampSource.GetSignatureTimestampMessageDigest(digestAlgorithm,
 			canonicalizationMethod)
-		if err := t.CreateXAdESTimeStampType(enumerations.TimestampType_SIGNATURE_TIMESTAMP,
+		if err := t.CreateXAdESTimeStampType(enumerations.TimestampTypeSignatureTimestamp,
 			canonicalizationMethod, messageDigest); err != nil {
 			return err
 		}
@@ -268,7 +268,7 @@ func (t *XAdESLevelBaselineT) extendToTLevelSignatures(
 
 // tLevelExtensionRequired ports the private tLevelExtensionRequired.
 func (t *XAdESLevelBaselineT) tLevelExtensionRequired(signature validation.AdvancedSignature) bool {
-	return enumerations.SignatureLevel_XAdES_BASELINE_T == t.Params.SignatureLevel() || !signature.HasTProfile()
+	return enumerations.SignatureLevelXAdESBaselineT == t.Params.SignatureLevel() || !signature.HasTProfile()
 }
 
 // IncorporateCertificateValues incorporates all certificates passed as parameter:
@@ -457,8 +457,8 @@ func (t *XAdESLevelBaselineT) RemoveOldRevocationValues() error {
 // indent of the last removed element, nil when none was present.
 // Port of the protected #removeLastTimestampAndAnyValidationData.
 func (t *XAdESLevelBaselineT) RemoveLastTimestampAndAnyValidationData() (string, error) {
-	toRemove, err := t.lastElementIfPresent(definition.XAdES141Element_TIMESTAMP_VALIDATION_DATA,
-		definition.XAdES141Element_ANY_VALIDATION_DATA)
+	toRemove, err := t.lastElementIfPresent(definition.XAdES141ElementTimestampValidationData,
+		definition.XAdES141ElementAnyValidationData)
 	if err != nil {
 		return "", err
 	}
@@ -468,8 +468,8 @@ func (t *XAdESLevelBaselineT) RemoveLastTimestampAndAnyValidationData() (string,
 	intent := ""
 	for toRemove != nil {
 		intent = t.RemoveNode(toRemove)
-		toRemove, err = t.lastElementIfPresent(definition.XAdES141Element_TIMESTAMP_VALIDATION_DATA,
-			definition.XAdES141Element_ANY_VALIDATION_DATA)
+		toRemove, err = t.lastElementIfPresent(definition.XAdES141ElementTimestampValidationData,
+			definition.XAdES141ElementAnyValidationData)
 		if err != nil {
 			return "", err
 		}
@@ -514,7 +514,7 @@ func (t *XAdESLevelBaselineT) lastElementIfPresent(xadesElements ...common.DSSEl
 func (t *XAdESLevelBaselineT) IncorporateTimestampValidationData(
 	validationDataForInclusion *validation.ValidationData, indent string) error {
 	return t.IncorporateValidationData(validationDataForInclusion, indent,
-		definition.XAdES141Element_TIMESTAMP_VALIDATION_DATA, xadesBuilderTstVdPrefix)
+		definition.XAdES141ElementTimestampValidationData, xadesBuilderTstVdPrefix)
 }
 
 // IncorporateAnyValidationData incorporates the AnyValidationData in the signature.
@@ -522,7 +522,7 @@ func (t *XAdESLevelBaselineT) IncorporateTimestampValidationData(
 func (t *XAdESLevelBaselineT) IncorporateAnyValidationData(
 	validationDataForInclusion *validation.ValidationData, indent string) error {
 	return t.IncorporateValidationData(validationDataForInclusion, indent,
-		definition.XAdES141Element_ANY_VALIDATION_DATA, xadesBuilderAnyVdPrefix)
+		definition.XAdES141ElementAnyValidationData, xadesBuilderAnyVdPrefix)
 }
 
 // IncorporateValidationData incorporates the given validation data in the signature, under the
@@ -582,7 +582,7 @@ func (t *XAdESLevelBaselineT) IncorporateArchiveTimestamp() error {
 		return err
 	}
 	messageDigest := timestampSource.GetArchiveTimestampData(digestAlgorithm, canonicalizationMethod)
-	return t.CreateXAdESTimeStampType(enumerations.TimestampType_ARCHIVE_TIMESTAMP,
+	return t.CreateXAdESTimeStampType(enumerations.TimestampTypeArchiveTimestamp,
 		canonicalizationMethod, messageDigest)
 }
 
@@ -592,9 +592,9 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 	timestampC14nMethod string, messageDigest model.DSSMessageDigest) error {
 
 	xadesURI := t.XadesNamespace().Uri()
-	if (definition.XAdESNamespace_XADES_111.IsSameUri(xadesURI) ||
-		definition.XAdESNamespace_XADES_122.IsSameUri(xadesURI)) &&
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP != timestampType {
+	if (definition.XAdESNamespaceXAdES111.IsSameUri(xadesURI) ||
+		definition.XAdESNamespaceXAdES122.IsSameUri(xadesURI)) &&
+		enumerations.TimestampTypeSignatureTimestamp != timestampType {
 		return fmt.Errorf("Signature Timestamp creation is only supported for XAdES 1.1.1 and 1.2.2")
 	}
 
@@ -608,32 +608,32 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 
 	var timeStampDom *xmldom.Node
 	switch timestampType {
-	case enumerations.TimestampType_SIGNATURE_TIMESTAMP:
+	case enumerations.TimestampTypeSignatureTimestamp:
 		// <xades:SignatureTimeStamp Id="time-stamp-1dee38c4-8388-40d1-8880-9eeda853fe60">
 		timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
 			t.XadesNamespace(), currentElements.ElementSignatureTimeStamp())
-	case enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP:
+	case enumerations.TimestampTypeValidationDataTimestamp:
 		// <xades:SigAndRefsTimeStamp Id="time-stamp-a762ab0e-e05c-4cc8-a804-cf2c4ffb5516">
 		if t.Params.IsEn319132() {
 			timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
-				t.Xades141Namespace(), definition.XAdES141Element_SIG_AND_REFS_TIMESTAMP_V2)
+				t.Xades141Namespace(), definition.XAdES141ElementSigAndRefsTimestampV2)
 		} else {
 			timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
 				t.XadesNamespace(), currentElements.ElementSigAndRefsTimeStamp())
 		}
-	case enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP:
+	case enumerations.TimestampTypeValidationDataRefsOnlyTimestamp:
 		// <xades:RefsOnlyTimeStamp Id="time-stamp-a762ab0e-e05c-4cc8-a804-cf2c4ffb5516">
 		if t.Params.IsEn319132() {
 			timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
-				t.Xades141Namespace(), definition.XAdES141Element_REFS_ONLY_TIMESTAMP_V2)
+				t.Xades141Namespace(), definition.XAdES141ElementRefsOnlyTimestampV2)
 		} else {
 			timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
 				t.XadesNamespace(), currentElements.ElementRefsOnlyTimeStamp())
 		}
-	case enumerations.TimestampType_ARCHIVE_TIMESTAMP:
+	case enumerations.TimestampTypeArchiveTimestamp:
 		// <xades141:ArchiveTimeStamp Id="time-stamp-a762ab0e-e05c-4cc8-a804-cf2c4ffb5516">
 		timeStampDom = xmlutils.DomUtilsAddElement(t.DocumentDom, t.UnsignedSignaturePropertiesDom,
-			t.Xades141Namespace(), definition.XAdES141Element_ARCHIVE_TIMESTAMP)
+			t.Xades141Namespace(), definition.XAdES141ElementArchiveTimestamp)
 		timestampDigestAlgorithm = t.Params.GetArchiveTimestampParameters().DigestAlgorithm()
 	default:
 		// Content timestamps need to be generated before the signature itself
@@ -651,10 +651,10 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 	}
 	base64EncodedTimeStampToken := utils.ToBase64(derEncoded)
 
-	if definition.XAdESNamespace_XADES_122.IsSameUri(xadesURI) {
+	if definition.XAdESNamespaceXAdES122.IsSameUri(xadesURI) {
 		t.incorporateXAdES122Include(timeStampDom)
 	}
-	if definition.XAdESNamespace_XADES_111.IsSameUri(xadesURI) {
+	if definition.XAdESNamespaceXAdES111.IsSameUri(xadesURI) {
 		t.incorporateHashDataInfo(timeStampDom, timestampC14nMethod)
 	} else {
 		// <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
@@ -667,16 +667,16 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 	xmlutils.DomUtilsSetTextNode(t.DocumentDom, encapsulatedTimeStampDom, base64EncodedTimeStampToken)
 
 	// Id="..." attribute is not allowed in XAdES 1.1.1
-	if !definition.XAdESNamespace_XADES_111.IsSameUri(xadesURI) {
+	if !definition.XAdESNamespaceXAdES111.IsSameUri(xadesURI) {
 		// Add Id after the element is constructed
 		attributeIdentifier := XAdESAttributeIdentifierBuild(timeStampDom)
 		timestampID, err := t.ToXmlIdentifier(attributeIdentifier)
 		if err != nil {
 			return err
 		}
-		timeStampDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+		timeStampDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 			xadesBuilderTimestampPrefix+timestampID)
-		encapsulatedTimeStampDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+		encapsulatedTimeStampDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 			xadesBuilderEncapsulatedTimestampPrefix+timestampID)
 	}
 	return nil
@@ -693,22 +693,22 @@ func (t *XAdESLevelBaselineT) CreateXAdESTimeStampType(timestampType enumeration
 // Port of the private incorporateHashDataInfo.
 func (t *XAdESLevelBaselineT) incorporateHashDataInfo(timeStampDom *xmldom.Node, timestampC14nMethod string) {
 	hashDataInfoDom := xmlutils.DomUtilsAddElement(t.DocumentDom, timeStampDom,
-		t.XadesNamespace(), definition.XAdES111Element_HASH_DATA_INFO)
-	hashDataInfoDom.SetAttr(xmldom.Name{Local: definition.XAdES111Attribute_URI.AttributeName()},
+		t.XadesNamespace(), definition.XAdES111ElementHashDataInfo)
+	hashDataInfoDom.SetAttr(xmldom.Name{Local: definition.XAdES111AttributeURI.AttributeName()},
 		"#"+t.XadesSignature.ID())
 	transformsDom := xmlutils.DomUtilsAddElement(t.DocumentDom, hashDataInfoDom,
-		t.XadesNamespace(), definition.XAdES111Element_TRANSFORMS)
+		t.XadesNamespace(), definition.XAdES111ElementTransforms)
 	transformDom := xmlutils.DomUtilsAddElement(t.DocumentDom, transformsDom,
-		t.XmldsigNamespace(), common.XMLDSigElement_TRANSFORM)
-	transformDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()},
+		t.XmldsigNamespace(), common.XMLDSigElementTransform)
+	transformDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()},
 		timestampC14nMethod)
 }
 
 // incorporateXAdES122Include ports the private incorporateXAdES122Include.
 func (t *XAdESLevelBaselineT) incorporateXAdES122Include(timeStampDom *xmldom.Node) {
 	includeDom := xmlutils.DomUtilsAddElement(t.DocumentDom, timeStampDom, t.XadesNamespace(),
-		definition.XAdES122Element_INCLUDE)
-	includeDom.SetAttr(xmldom.Name{Local: definition.XAdES122Attribute_URI.AttributeName()},
+		definition.XAdES122ElementInclude)
+	includeDom.SetAttr(xmldom.Name{Local: definition.XAdES122AttributeURI.AttributeName()},
 		"#"+t.XadesSignature.SignatureValueId())
 }
 

@@ -10,7 +10,7 @@
 // most likely lands there too). Assumed shape, following the asic/asic_manifest_path.go and
 // manifest_attribute.go precedents already in this package:
 //
-//	var ManifestPath_FILE_ENTRY_PATH common.XPathQuery                                       // ManifestPath.FILE_ENTRY_PATH
+//	var ManifestPathFileEntryPath common.XPathQuery                                       // ManifestPath.FILE_ENTRY_PATH
 //	func ManifestPathGetFullPathAttribute(manifestNamespace *common.DSSNamespace) string      // ManifestPath.getFullPathAttribute(DSSNamespace)
 //	func ManifestPathGetMediaTypeAttribute(manifestNamespace *common.DSSNamespace) string     // ManifestPath.getMediaTypeAttribute(DSSNamespace)
 package xades
@@ -89,7 +89,7 @@ func (p *ASiCEWithXAdESManifestParser) getEntries() (result []*model.ManifestEnt
 	}
 	manifestNamespace := p.getManifestNamespace(manifestDom)
 
-	nodeList, err := xmlutils.XPathUtilsGetNodeList(manifestDom, ManifestPath_FILE_ENTRY_PATH)
+	nodeList, err := xmlutils.XPathUtilsGetNodeList(manifestDom, ManifestPathFileEntryPath)
 	if err != nil {
 		return []*model.ManifestEntry{}
 	}

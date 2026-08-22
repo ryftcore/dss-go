@@ -41,10 +41,10 @@ func newSpec(level enumerations.Level, valid bool) spec {
 	return spec{
 		level:               level,
 		valid:               valid,
-		messageTag:          i18n.MessageTag_BBB_ICS_ISCI,
-		errorMessageTag:     i18n.MessageTag_BBB_ICS_ISCI_ANS,
-		failedIndication:    enumerations.Indication_INDETERMINATE,
-		failedSubIndication: enumerations.SubIndication_NO_SIGNING_CERTIFICATE_FOUND,
+		messageTag:          i18n.MessageTagBBBICSISCI,
+		errorMessageTag:     i18n.MessageTagBBBICSISCIANS,
+		failedIndication:    enumerations.IndicationIndeterminate,
+		failedSubIndication: enumerations.SubIndicationNoSigningCertificateFound,
 	}
 }
 
@@ -231,76 +231,76 @@ type scenario struct {
 
 func chainScenarios() []scenario {
 	return []scenario{
-		{"fail-level-valid", i18n.MessageTag_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE, []spec{
-			newSpec(enumerations.Level_FAIL, true),
+		{"fail-level-valid", i18n.MessageTagIdentificationOfTheSigningCertificate, []spec{
+			newSpec(enumerations.LevelFail, true),
 		}},
-		{"fail-level-invalid", i18n.MessageTag_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE, []spec{
-			newSpec(enumerations.Level_FAIL, false),
+		{"fail-level-invalid", i18n.MessageTagIdentificationOfTheSigningCertificate, []spec{
+			newSpec(enumerations.LevelFail, false),
 		}},
-		{"fail-level-short-circuit", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_FAIL, false),
-			newSpec(enumerations.Level_FAIL, true).tags(i18n.MessageTag_BBB_CV_ISI, i18n.MessageTag_BBB_CV_ISI_ANS),
+		{"fail-level-short-circuit", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelFail, false),
+			newSpec(enumerations.LevelFail, true).tags(i18n.MessageTagBBBCVISI, i18n.MessageTagBBBCVISIANS),
 		}},
-		{"fail-level-valid-then-invalid", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_FAIL, true),
-			newSpec(enumerations.Level_FAIL, false).
-				tags(i18n.MessageTag_BBB_CV_ISI, i18n.MessageTag_BBB_CV_ISI_ANS).
-				failure(enumerations.Indication_FAILED, enumerations.SubIndication_SIG_CRYPTO_FAILURE),
+		{"fail-level-valid-then-invalid", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelFail, true),
+			newSpec(enumerations.LevelFail, false).
+				tags(i18n.MessageTagBBBCVISI, i18n.MessageTagBBBCVISIANS).
+				failure(enumerations.IndicationFailed, enumerations.SubIndicationSigCryptoFailure),
 		}},
-		{"warn-level-invalid", i18n.MessageTag_VALIDATION_CONTEXT_INITIALIZATION, []spec{
-			newSpec(enumerations.Level_WARN, false).
-				tags(i18n.MessageTag_BBB_VCI_IZHSP, i18n.MessageTag_BBB_VCI_IZHSP_ANS),
+		{"warn-level-invalid", i18n.MessageTagValidationContextInitialization, []spec{
+			newSpec(enumerations.LevelWarn, false).
+				tags(i18n.MessageTagBBBVCIIZHSP, i18n.MessageTagBBBVCIIZHSPANS),
 		}},
-		{"warn-level-valid", i18n.MessageTag_VALIDATION_CONTEXT_INITIALIZATION, []spec{
-			newSpec(enumerations.Level_WARN, true).
-				tags(i18n.MessageTag_BBB_VCI_IZHSP, i18n.MessageTag_BBB_VCI_IZHSP_ANS),
+		{"warn-level-valid", i18n.MessageTagValidationContextInitialization, []spec{
+			newSpec(enumerations.LevelWarn, true).
+				tags(i18n.MessageTagBBBVCIIZHSP, i18n.MessageTagBBBVCIIZHSPANS),
 		}},
-		{"inform-level-invalid", i18n.MessageTag_VALIDATION_CONTEXT_INITIALIZATION, []spec{
-			newSpec(enumerations.Level_INFORM, false).
-				tags(i18n.MessageTag_BBB_VCI_ISPSUPP, i18n.MessageTag_BBB_VCI_ISPSUPP_ANS),
+		{"inform-level-invalid", i18n.MessageTagValidationContextInitialization, []spec{
+			newSpec(enumerations.LevelInform, false).
+				tags(i18n.MessageTagBBBVCIISPSUPP, i18n.MessageTagBBBVCIISPSUPPANS),
 		}},
-		{"ignore-level-invalid", i18n.MessageTag_VALIDATION_CONTEXT_INITIALIZATION, []spec{
-			newSpec(enumerations.Level_IGNORE, false).withAdditionalInfo(i18n.MessageTag_TOKEN_ID),
-			newSpec(enumerations.Level_FAIL, true).tags(i18n.MessageTag_BBB_CV_ISI, i18n.MessageTag_BBB_CV_ISI_ANS),
+		{"ignore-level-invalid", i18n.MessageTagValidationContextInitialization, []spec{
+			newSpec(enumerations.LevelIgnore, false).withAdditionalInfo(i18n.MessageTagTokenID),
+			newSpec(enumerations.LevelFail, true).tags(i18n.MessageTagBBBCVISI, i18n.MessageTagBBBCVISIANS),
 		}},
 		{"undefined-constraint", "", []spec{
 			newSpec("", false),
-			newSpec(enumerations.Level_FAIL, true).tags(i18n.MessageTag_BBB_CV_ISI, i18n.MessageTag_BBB_CV_ISI_ANS),
+			newSpec(enumerations.LevelFail, true).tags(i18n.MessageTagBBBCVISI, i18n.MessageTagBBBCVISIANS),
 		}},
-		{"warn-info-then-fail", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_WARN, false).
-				tags(i18n.MessageTag_BBB_VCI_IZHSP, i18n.MessageTag_BBB_VCI_IZHSP_ANS),
-			newSpec(enumerations.Level_INFORM, false).
-				tags(i18n.MessageTag_BBB_VCI_ISPSUPP, i18n.MessageTag_BBB_VCI_ISPSUPP_ANS),
-			newSpec(enumerations.Level_FAIL, false).
-				tags(i18n.MessageTag_BBB_CV_IRDOF, i18n.MessageTag_BBB_CV_IRDOF_ANS).
-				failure(enumerations.Indication_INDETERMINATE, enumerations.SubIndication_SIGNED_DATA_NOT_FOUND),
+		{"warn-info-then-fail", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelWarn, false).
+				tags(i18n.MessageTagBBBVCIIZHSP, i18n.MessageTagBBBVCIIZHSPANS),
+			newSpec(enumerations.LevelInform, false).
+				tags(i18n.MessageTagBBBVCIISPSUPP, i18n.MessageTagBBBVCIISPSUPPANS),
+			newSpec(enumerations.LevelFail, false).
+				tags(i18n.MessageTagBBBCVIRDOF, i18n.MessageTagBBBCVIRDOFANS).
+				failure(enumerations.IndicationIndeterminate, enumerations.SubIndicationSignedDataNotFound),
 		}},
-		{"uninterrupted-continues-on-fail", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_FAIL, false).asUninterrupted().
-				tags(i18n.MessageTag_BBB_CV_IRDOF, i18n.MessageTag_BBB_CV_IRDOF_ANS),
-			newSpec(enumerations.Level_FAIL, false).asUninterrupted().
-				tags(i18n.MessageTag_BBB_CV_IRDOI, i18n.MessageTag_BBB_CV_IRDOI_ANS).
-				failure(enumerations.Indication_FAILED, enumerations.SubIndication_HASH_FAILURE),
-			newSpec(enumerations.Level_WARN, false).
-				tags(i18n.MessageTag_BBB_VCI_IZHSP, i18n.MessageTag_BBB_VCI_IZHSP_ANS),
+		{"uninterrupted-continues-on-fail", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelFail, false).asUninterrupted().
+				tags(i18n.MessageTagBBBCVIRDOF, i18n.MessageTagBBBCVIRDOFANS),
+			newSpec(enumerations.LevelFail, false).asUninterrupted().
+				tags(i18n.MessageTagBBBCVIRDOI, i18n.MessageTagBBBCVIRDOIANS).
+				failure(enumerations.IndicationFailed, enumerations.SubIndicationHashFailure),
+			newSpec(enumerations.LevelWarn, false).
+				tags(i18n.MessageTagBBBVCIIZHSP, i18n.MessageTagBBBVCIIZHSPANS),
 		}},
-		{"custom-success-conclusion", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_FAIL, true).
-				success(enumerations.Indication_PASSED, enumerations.SubIndication_NO_POE),
-			newSpec(enumerations.Level_FAIL, false).tags(i18n.MessageTag_BBB_CV_ISI, i18n.MessageTag_BBB_CV_ISI_ANS),
+		{"custom-success-conclusion", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelFail, true).
+				success(enumerations.IndicationPassed, enumerations.SubIndicationNoPOE),
+			newSpec(enumerations.LevelFail, false).tags(i18n.MessageTagBBBCVISI, i18n.MessageTagBBBCVISIANS),
 		}},
-		{"previous-errors", i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION, []spec{
-			newSpec(enumerations.Level_FAIL, false).
-				tags(i18n.MessageTag_BBB_CV_IRDOF, i18n.MessageTag_BBB_CV_IRDOF_ANS).
-				withPreviousErrors(i18n.MessageTag_BBB_CV_ISI_ANS, i18n.MessageTag_BBB_ICS_ISCI_ANS),
+		{"previous-errors", i18n.MessageTagCryptographicVerification, []spec{
+			newSpec(enumerations.LevelFail, false).
+				tags(i18n.MessageTagBBBCVIRDOF, i18n.MessageTagBBBCVIRDOFANS).
+				withPreviousErrors(i18n.MessageTagBBBCVISIANS, i18n.MessageTagBBBICSISCIANS),
 		}},
-		{"constraint-members-populated", i18n.MessageTag_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE, []spec{
-			newSpec(enumerations.Level_FAIL, false).withBbbId("S-1234").
-				withBlockType(jaxb.XmlBlockType_SIG_BBB).withAdditionalInfo(i18n.MessageTag_EMPTY),
+		{"constraint-members-populated", i18n.MessageTagIdentificationOfTheSigningCertificate, []spec{
+			newSpec(enumerations.LevelFail, false).withBbbId("S-1234").
+				withBlockType(jaxb.XmlBlockTypeSigBBB).withAdditionalInfo(i18n.MessageTagEmpty),
 		}},
 		{"no-title-passed", "", []spec{
-			newSpec(enumerations.Level_IGNORE, true),
+			newSpec(enumerations.LevelIgnore, true),
 		}},
 	}
 }

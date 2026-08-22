@@ -45,29 +45,29 @@ func (c *SigningCertificateNotRevokedCheck[T]) Process() bool {
 	if conclusion.SubIndication != nil {
 		subIndication = conclusion.SubIndication.SubIndication()
 	}
-	return !(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-		enumerations.SubIndication_REVOKED_NO_POE == subIndication)
+	return !(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+		enumerations.SubIndicationRevokedNoPOE == subIndication)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SigningCertificateNotRevokedCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *SigningCertificateNotRevokedCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_REVOKED_NO_POE
+	return enumerations.SubIndicationRevokedNoPOE
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningCertificateNotRevokedCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCRAVTC
+	return i18n.MessageTagBSVISCRAVTC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningCertificateNotRevokedCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCRAVTC_ANS
+	return i18n.MessageTagBSVISCRAVTCANS
 }

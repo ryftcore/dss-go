@@ -19,7 +19,7 @@ import (
 
 // xmlDownloadTaskDefaultDigestAlgorithm is the default digest algorithm used for document
 // integrity identification.
-const xmlDownloadTaskDefaultDigestAlgorithm = enumerations.DigestAlgorithm_SHA256
+const xmlDownloadTaskDefaultDigestAlgorithm = enumerations.DigestAlgorithmSHA256
 
 // xmlDownloadTaskDefaultCanonicalizationMethod is the default canonicalization method to be used
 // on a document's digest computation.

@@ -43,11 +43,11 @@ func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) GetASiCContentBuilder() *a
 func (b *ASiCWithCAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *asic.ASiCContent) {
 	b.AbstractASiCContainerEvidenceRecordBuilder.AssertEvidenceRecordFilenameValid(evidenceRecordFilename, evidenceRecordType, asicContent)
 
-	if enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD == evidenceRecordType &&
+	if enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord == evidenceRecordType &&
 		!asic.ASiCUtilsIsAsn1EvidenceRecord(evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 4998 Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with CAdES filename convention!", evidenceRecordFilename)))
-	} else if enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD == evidenceRecordType &&
+	} else if enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord == evidenceRecordType &&
 		!asic.ASiCUtilsIsXmlEvidenceRecord(evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 6283 XML Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with CAdES filename convention!", evidenceRecordFilename)))

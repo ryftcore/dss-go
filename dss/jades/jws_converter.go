@@ -54,14 +54,14 @@ func JWSConverterFromJWSCompactToJSONFlattenedSerialization(document model.DSSDo
 
 	jwsJsonSerializationObject := DSSJsonUtilsToJWSJsonSerializationObject(jws)
 	generator := NewJWSJsonSerializationGenerator(jwsJsonSerializationObject,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION)
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization)
 
 	signatureDocument, err := generator.Generate()
 	if err != nil {
 		return nil, err
 	}
 	signatureDocument.SetName(jwsConverterFlattenedSerializationDocumentName)
-	signatureDocument.SetMimeType(enumerations.MimeTypeEnum_JSON)
+	signatureDocument.SetMimeType(enumerations.MimeTypeEnumJSON)
 	return signatureDocument, nil
 }
 
@@ -76,14 +76,14 @@ func JWSConverterFromJWSCompactToJSONSerialization(document model.DSSDocument) (
 
 	jwsJsonSerializationObject := DSSJsonUtilsToJWSJsonSerializationObject(jws)
 	generator := NewJWSJsonSerializationGenerator(jwsJsonSerializationObject,
-		enumerations.JWSSerializationType_JSON_SERIALIZATION)
+		enumerations.JWSSerializationTypeJSONSerialization)
 
 	signatureDocument, err := generator.Generate()
 	if err != nil {
 		return nil, err
 	}
 	signatureDocument.SetName(jwsConverterSerializationDocumentName)
-	signatureDocument.SetMimeType(enumerations.MimeTypeEnum_JSON)
+	signatureDocument.SetMimeType(enumerations.MimeTypeEnumJSON)
 	return signatureDocument, nil
 }
 
@@ -125,7 +125,7 @@ func JWSConverterFromEtsiUWithBase64UrlToClearJSONIncorporation(document model.D
 		return nil, err
 	}
 	signatureDocument.SetName(jwsConverterClearEtsiUDocumentName)
-	signatureDocument.SetMimeType(enumerations.MimeTypeEnum_JSON)
+	signatureDocument.SetMimeType(enumerations.MimeTypeEnumJSON)
 	return signatureDocument, nil
 }
 
@@ -193,7 +193,7 @@ func JWSConverterFromEtsiUWithClearJSONToBase64UrlIncorporation(document model.D
 		return nil, err
 	}
 	signatureDocument.SetName(jwsConverterBase64UrlEtsiUDocumentName)
-	signatureDocument.SetMimeType(enumerations.MimeTypeEnum_JSON)
+	signatureDocument.SetMimeType(enumerations.MimeTypeEnumJSON)
 	return signatureDocument, nil
 }
 

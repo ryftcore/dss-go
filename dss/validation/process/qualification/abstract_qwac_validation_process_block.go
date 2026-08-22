@@ -73,7 +73,7 @@ func (c *AbstractQWACValidationProcessBlock) InitAbstractQWACValidationProcessBl
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *AbstractQWACValidationProcessBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_QWAC_VALIDATION_PROFILE
+	message := i18n.MessageTagQWACValidationProfile
 	param, err := process.GetQWACValidationMessageTag(c.overrides.QWACProfile())
 	if err != nil {
 		panic(err)
@@ -130,7 +130,7 @@ func (c *AbstractQWACValidationProcessBlock) InitChain() {
 	// 4.2.1 of the present document, except as described below:
 	// - the extKeyUsage value shall only assert the extendedKeyUsage
 	// purpose of id-kp-tls-binding as specified in Annex A.
-	if enumerations.QWACProfile_QWAC_2 == c.overrides.QWACProfile() {
+	if enumerations.QWACProfileQWAC2 == c.overrides.QWACProfile() {
 		item = item.SetNextItem(c.qwac2ExtKeyUsage())
 	}
 

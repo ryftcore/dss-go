@@ -48,7 +48,7 @@ func NewEvidenceRecordSignedFilesCoveredCheck(i18nProvider *i18n.I18nProvider,
 // Process performs the check. Port of process(): the two nested Stream#allMatch
 // / Stream#anyMatch predicates become plain loops.
 func (c *EvidenceRecordSignedFilesCoveredCheck) Process() bool {
-	if enumerations.EvidenceRecordOrigin_SIGNATURE == c.evidenceRecord.Origin() {
+	if enumerations.EvidenceRecordOriginSignature == c.evidenceRecord.Origin() {
 		// embedded signature covers all original documents
 		return true
 	}
@@ -88,23 +88,23 @@ func signedFileCovered(signatureDigestMatcher *diagnosticjaxb.XmlDigestMatcher,
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EvidenceRecordSignedFilesCoveredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_HASSDOC
+	return i18n.MessageTagBBBCVERHasSDoc
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EvidenceRecordSignedFilesCoveredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_HASSDOC_ANS
+	return i18n.MessageTagBBBCVERHasSDocANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EvidenceRecordSignedFilesCoveredCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EvidenceRecordSignedFilesCoveredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

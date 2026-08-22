@@ -52,13 +52,13 @@ func newSingleFCChain(i18nProvider *i18n.I18nProvider,
 }
 
 func (c *singleFCChain) InitChain() {
-	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.Level_FAIL))
+	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.LevelFail))
 }
 
 // multiValuesRule is the oracle's ANY / NONE MultiValuesRule at Level.FAIL.
 type fcMultiValuesRule struct{ values []string }
 
-func (r fcMultiValuesRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (r fcMultiValuesRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (r fcMultiValuesRule) Values() []string          { return r.values }
 
 var (
@@ -370,7 +370,7 @@ func TestFCDirectChecksAgainstJavaOracle(t *testing.T) {
 			})
 	}
 	emptyContainer := &diagjaxb.XmlContainerInfo{}
-	containerType := diagjaxb.ASiCContainerTypeValue(enumerations.ASiCContainerType_ASiC_E)
+	containerType := diagjaxb.ASiCContainerTypeValue(enumerations.ASiCContainerTypeASiCE)
 	emptyContainer.ContainerType = &containerType
 	run("synthetic", "no-content-files", "SignedFilesPresentCheck",
 		func(r *process.Result[*jaxb.XmlFC], rule policy.LevelRule) process.ChainItem[*jaxb.XmlFC] {
@@ -444,8 +444,8 @@ func signatureWithEcdsaKeySizeMismatch() *diagnostic.SignatureWrapper {
 	id := diagjaxb.CollapsedString("S-SYNTHETIC")
 	xml.Id = &id
 	keyLength := "256"
-	encryption := diagjaxb.EncryptionAlgorithmValue(enumerations.EncryptionAlgorithm_ECDSA)
-	digest := diagjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithm_SHA512)
+	encryption := diagjaxb.EncryptionAlgorithmValue(enumerations.EncryptionAlgorithmECDSA)
+	digest := diagjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithmSHA512)
 	xml.BasicSignature = &diagjaxb.XmlBasicSignature{
 		EncryptionAlgoUsedToSignThisToken: &encryption,
 		DigestAlgoUsedToSignThisToken:     &digest,
@@ -498,7 +498,7 @@ func signatureWithDuplicatedReference() *diagnostic.SignatureWrapper {
 	xml.Id = &id
 	uri := "#r-id"
 	duplicated := true
-	matcherType := diagjaxb.DigestMatcherTypeValue(enumerations.DigestMatcherType_REFERENCE)
+	matcherType := diagjaxb.DigestMatcherTypeValue(enumerations.DigestMatcherTypeReference)
 	xml.DigestMatchers = &diagjaxb.DigestMatchersWrapper{Items: []*diagjaxb.XmlDigestMatcher{
 		{Type: &matcherType, Uri: &uri, Duplicated: &duplicated},
 	}}
@@ -518,8 +518,8 @@ func signatureWithDuplicatedSignature() *diagnostic.SignatureWrapper {
 // failingPdfRevision mirrors the oracle's revision that fails every lock / consistency /
 // overlap check.
 func failingPdfRevision() *diagnostic.PDFRevisionWrapper {
-	permissions := diagjaxb.CertificationPermissionValue(enumerations.CertificationPermission_NO_CHANGE_PERMITTED)
-	action := diagjaxb.PdfLockActionValue(enumerations.PdfLockAction_ALL)
+	permissions := diagjaxb.CertificationPermissionValue(enumerations.CertificationPermissionNoChangePermitted)
+	action := diagjaxb.PdfLockActionValue(enumerations.PdfLockActionAll)
 	lock := &diagjaxb.XmlPDFLockDictionary{Action: &action, Permissions: &permissions}
 
 	fieldName := "field-1"

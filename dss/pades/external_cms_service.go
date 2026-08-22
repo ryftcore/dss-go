@@ -167,7 +167,7 @@ func (s *ExternalCMSService) BuildCMS(messageDigest model.DSSMessageDigest,
 		return nil, err
 	}
 
-	if enumerations.SignatureLevel_PAdES_BASELINE_B != signatureLevel {
+	if enumerations.SignatureLevelPAdESBaselineB != signatureLevel {
 		if s.tspSource == nil {
 			panic("TSPSource shall be provided for T-level creation!")
 		}
@@ -192,8 +192,8 @@ func (s *ExternalCMSService) AssertConfigurationValid(messageDigest model.DSSMes
 	if signatureLevel == "" {
 		panic("SignatureLevel shall be defined!")
 	}
-	if enumerations.SignatureLevel_PAdES_BASELINE_B != signatureLevel &&
-		enumerations.SignatureLevel_PAdES_BASELINE_T != signatureLevel {
+	if enumerations.SignatureLevelPAdESBaselineB != signatureLevel &&
+		enumerations.SignatureLevelPAdESBaselineT != signatureLevel {
 		panic(fmt.Sprintf("SignatureLevel '%s' is not supported within PAdESCMSGeneratorService!",
 			signatureLevel))
 	}

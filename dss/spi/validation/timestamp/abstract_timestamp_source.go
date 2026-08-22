@@ -179,7 +179,7 @@ func ReferencesFromTimestamp(timestampToken *validation.TimestampToken, certific
 	crlSource *spi.ListRevocationSource[revocation.CRL], ocspSource *spi.ListRevocationSource[revocation.OCSP]) (
 	[]*validation.TimestampedReference, error) {
 	references := []*validation.TimestampedReference{}
-	addReference(&references, validation.NewTimestampedReference(timestampToken.DSSIDAsString(), enumerations.TimestampedObjectType_TIMESTAMP))
+	addReference(&references, validation.NewTimestampedReference(timestampToken.DSSIDAsString(), enumerations.TimestampedObjectTypeTimestamp))
 	addReferences(&references, timestampToken.TimestampedReferences())
 	encapsulated, err := EncapsulatedValuesFromTimestamp(timestampToken, certificateSource, crlSource, ocspSource)
 	if err != nil {
@@ -230,7 +230,7 @@ func ReferencesFromEvidenceRecord(evidenceRecord validation.EvidenceRecord, cert
 	crlSource *spi.ListRevocationSource[revocation.CRL], ocspSource *spi.ListRevocationSource[revocation.OCSP]) (
 	[]*validation.TimestampedReference, error) {
 	references := []*validation.TimestampedReference{}
-	addReference(&references, validation.NewTimestampedReference(evidenceRecord.Id(), enumerations.TimestampedObjectType_EVIDENCE_RECORD))
+	addReference(&references, validation.NewTimestampedReference(evidenceRecord.Id(), enumerations.TimestampedObjectTypeEvidenceRecord))
 	addReferences(&references, evidenceRecord.TimestampedReferences())
 	encapsulated, err := EncapsulatedValuesFromEvidenceRecord(evidenceRecord, certificateSource, crlSource, ocspSource)
 	if err != nil {
@@ -287,7 +287,7 @@ func EncapsulatedValuesFromEvidenceRecord(evidenceRecord validation.EvidenceReco
 func SignerDataTimestampedReferences(signatureScopes []scope.SignatureScope) []*validation.TimestampedReference {
 	references := []*validation.TimestampedReference{}
 	for _, signatureScope := range signatureScopes {
-		addReference(&references, validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectType_SIGNED_DATA))
+		addReference(&references, validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectTypeSignedData))
 		if children := signatureScope.Children(); len(children) > 0 {
 			addReferences(&references, SignerDataTimestampedReferences(children))
 		}
@@ -308,7 +308,7 @@ func CreateReferencesForCertificates(certificates []*model.CertificateToken) []*
 // CreateReferenceForCertificate creates a TimestampedReference for the provided CertificateToken.
 // Port of createReferenceForCertificate(CertificateToken).
 func CreateReferenceForCertificate(certificateToken *model.CertificateToken) *validation.TimestampedReference {
-	return CreateReferenceForIdentifier(certificateToken.DSSID(), enumerations.TimestampedObjectType_CERTIFICATE)
+	return CreateReferenceForIdentifier(certificateToken.DSSID(), enumerations.TimestampedObjectTypeCertificate)
 }
 
 // CreateReferencesForIdentifiers creates a list of TimestampedReferences from the identifiers of
@@ -332,7 +332,7 @@ func CreateReferenceForIdentifier(identifier xmlIdentifiable, timestampedObjectT
 // CreateReferencesForCRLBinaries creates a list of TimestampedReferences from a collection of
 // CRL binaries. Port of createReferencesForCRLBinaries(Collection).
 func CreateReferencesForCRLBinaries[T xmlIdentifiable](crlBinaryIdentifiers []T) []*validation.TimestampedReference {
-	return CreateReferencesForIdentifiers(crlBinaryIdentifiers, enumerations.TimestampedObjectType_REVOCATION)
+	return CreateReferencesForIdentifiers(crlBinaryIdentifiers, enumerations.TimestampedObjectTypeRevocation)
 }
 
 // CreateReferencesForOCSPBinaries creates a list of TimestampedReferences from a collection of
@@ -371,7 +371,7 @@ func CreateReferencesForOCSPBinary(ocspResponseBinary *spi.OCSPResponseBinary, c
 	[]*validation.TimestampedReference, error) {
 	references := []*validation.TimestampedReference{}
 
-	addReference(&references, CreateReferenceForIdentifier(ocspResponseBinary, enumerations.TimestampedObjectType_REVOCATION))
+	addReference(&references, CreateReferenceForIdentifier(ocspResponseBinary, enumerations.TimestampedObjectTypeRevocation))
 
 	ocspCertificateSource, err := spi.NewOCSPCertificateSource(ocspResponseBinary.BasicOCSPResp())
 	if err != nil {
@@ -398,7 +398,7 @@ func CreateReferencesForCertificateRefs(certificateRefs []*spi.CertificateRef, c
 		if len(certificateTokens) > 0 {
 			addReferences(&timestampedReferences, CreateReferencesForCertificates(certificateTokenMapValues(certificateTokens)))
 		} else {
-			addReference(&timestampedReferences, validation.NewTimestampedReference(certRef.DSSIDAsString(), enumerations.TimestampedObjectType_CERTIFICATE))
+			addReference(&timestampedReferences, validation.NewTimestampedReference(certRef.DSSIDAsString(), enumerations.TimestampedObjectTypeCertificate))
 		}
 	}
 	return timestampedReferences
@@ -432,9 +432,9 @@ func CreateReferencesForCRLRefs[T spi.RevocationRef[revocation.CRL]](crlRefs []T
 			token = listCRLSource.FindBinaryForReference(crlRef)
 		}
 		if token != nil {
-			addReference(&timestampedReferences, validation.NewTimestampedReference(token.AsXmlID(), enumerations.TimestampedObjectType_REVOCATION))
+			addReference(&timestampedReferences, validation.NewTimestampedReference(token.AsXmlID(), enumerations.TimestampedObjectTypeRevocation))
 		} else {
-			addReference(&timestampedReferences, validation.NewTimestampedReference(crlRef.DSSIDAsString(), enumerations.TimestampedObjectType_REVOCATION))
+			addReference(&timestampedReferences, validation.NewTimestampedReference(crlRef.DSSIDAsString(), enumerations.TimestampedObjectTypeRevocation))
 		}
 	}
 	return timestampedReferences
@@ -466,7 +466,7 @@ func CreateReferencesForOCSPRefs[T spi.RevocationRef[revocation.OCSP]](ocspRefs 
 			}
 			addReferences(&timestampedReferences, binaryReferences)
 		} else {
-			addReference(&timestampedReferences, validation.NewTimestampedReference(ocspRef.DSSIDAsString(), enumerations.TimestampedObjectType_REVOCATION))
+			addReference(&timestampedReferences, validation.NewTimestampedReference(ocspRef.DSSIDAsString(), enumerations.TimestampedObjectTypeRevocation))
 		}
 	}
 	return timestampedReferences, nil
@@ -522,7 +522,7 @@ func ensureOnlyDataTimestampReferencesPresent(timestampToken *validation.Timesta
 	current := timestampToken.TimestampedReferences()
 	filtered := make([]*validation.TimestampedReference, 0, len(current))
 	for _, timestampedReference := range current {
-		remove := timestampedReference.Category() == enumerations.TimestampedObjectType_SIGNED_DATA &&
+		remove := timestampedReference.Category() == enumerations.TimestampedObjectTypeSignedData &&
 			!containsEqualReference(referencesToCheck, timestampedReference)
 		if !remove {
 			filtered = append(filtered, timestampedReference)

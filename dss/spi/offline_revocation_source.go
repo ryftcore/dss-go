@@ -288,115 +288,115 @@ func (s *OfflineRevocationSourceBase[R]) RevocationToken(certificateToken, issue
 // present in the CMS SignedData. NOTE: applicable only for CAdES revocation sources. Port of
 // getCMSSignedDataRevocationBinaries().
 func (s *OfflineRevocationSourceBase[R]) CMSSignedDataRevocationBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_CMS_SIGNED_DATA)
+	return s.binariesByOrigin(enumerations.RevocationOriginCMSSignedData)
 }
 
 // CMSSignedDataRevocationTokens retrieves the list of all RevocationTokens present in the CMS
 // SignedData. NOTE: applicable only for CAdES revocation sources. Port of
 // getCMSSignedDataRevocationTokens().
 func (s *OfflineRevocationSourceBase[R]) CMSSignedDataRevocationTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_CMS_SIGNED_DATA)
+	return s.tokensByOrigin(enumerations.RevocationOriginCMSSignedData)
 }
 
 // RevocationValuesBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers
 // present in the 'RevocationValues' element. Port of getRevocationValuesBinaries().
 func (s *OfflineRevocationSourceBase[R]) RevocationValuesBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_REVOCATION_VALUES)
+	return s.binariesByOrigin(enumerations.RevocationOriginRevocationValues)
 }
 
 // RevocationValuesTokens retrieves the list of all RevocationTokens present in the
 // 'RevocationValues' element. Port of getRevocationValuesTokens().
 func (s *OfflineRevocationSourceBase[R]) RevocationValuesTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_REVOCATION_VALUES)
+	return s.tokensByOrigin(enumerations.RevocationOriginRevocationValues)
 }
 
 // AttributeRevocationValuesBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers
 // present in the 'AttributeRevocationValues' element. Port of getAttributeRevocationValuesBinaries().
 func (s *OfflineRevocationSourceBase[R]) AttributeRevocationValuesBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES)
+	return s.binariesByOrigin(enumerations.RevocationOriginAttributeRevocationValues)
 }
 
 // AttributeRevocationValuesTokens retrieves the list of all RevocationTokens present in the
 // 'AttributeRevocationValues' element. Port of getAttributeRevocationValuesTokens().
 func (s *OfflineRevocationSourceBase[R]) AttributeRevocationValuesTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES)
+	return s.tokensByOrigin(enumerations.RevocationOriginAttributeRevocationValues)
 }
 
 // TimestampValidationDataBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers
 // present in the 'TimestampValidationData' element. Port of getTimestampValidationDataBinaries().
 func (s *OfflineRevocationSourceBase[R]) TimestampValidationDataBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA)
+	return s.binariesByOrigin(enumerations.RevocationOriginTimestampValidationData)
 }
 
 // TimestampValidationDataTokens retrieves the list of all RevocationTokens present in the
 // 'TimestampValidationData' element. Port of getTimestampValidationDataTokens().
 func (s *OfflineRevocationSourceBase[R]) TimestampValidationDataTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA)
+	return s.tokensByOrigin(enumerations.RevocationOriginTimestampValidationData)
 }
 
 // AnyValidationDataBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers
 // present in the 'AnyValidationData' element. Port of getAnyValidationDataBinaries().
 func (s *OfflineRevocationSourceBase[R]) AnyValidationDataBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_ANY_VALIDATION_DATA)
+	return s.binariesByOrigin(enumerations.RevocationOriginAnyValidationData)
 }
 
 // AnyValidationDataTokens retrieves the list of all RevocationTokens present in the
 // 'AnyValidationData' element. Port of getAnyValidationDataTokens().
 func (s *OfflineRevocationSourceBase[R]) AnyValidationDataTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_ANY_VALIDATION_DATA)
+	return s.tokensByOrigin(enumerations.RevocationOriginAnyValidationData)
 }
 
 // DSSDictionaryBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers present
 // in 'DSS' dictionary. NOTE: applicable only for PAdES revocation source. Port of
 // getDSSDictionaryBinaries().
 func (s *OfflineRevocationSourceBase[R]) DSSDictionaryBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_DSS_DICTIONARY)
+	return s.binariesByOrigin(enumerations.RevocationOriginDSSDictionary)
 }
 
 // DSSDictionaryTokens retrieves the list of all RevocationTokens present in 'DSS' dictionary.
 // NOTE: applicable only for PAdES revocation source. Port of getDSSDictionaryTokens().
 func (s *OfflineRevocationSourceBase[R]) DSSDictionaryTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_DSS_DICTIONARY)
+	return s.tokensByOrigin(enumerations.RevocationOriginDSSDictionary)
 }
 
 // VRIDictionaryBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers present
 // in 'VRI' dictionary. NOTE: applicable only for PAdES revocation source. Port of
 // getVRIDictionaryBinaries().
 func (s *OfflineRevocationSourceBase[R]) VRIDictionaryBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_VRI_DICTIONARY)
+	return s.binariesByOrigin(enumerations.RevocationOriginVRIDictionary)
 }
 
 // VRIDictionaryTokens retrieves the list of all RevocationTokens present in 'VRI' dictionary.
 // NOTE: applicable only for PAdES revocation source. Port of getVRIDictionaryTokens().
 func (s *OfflineRevocationSourceBase[R]) VRIDictionaryTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_VRI_DICTIONARY)
+	return s.tokensByOrigin(enumerations.RevocationOriginVRIDictionary)
 }
 
 // ADBERevocationValuesBinaries retrieves the list of all EncapsulatedRevocationTokenIdentifiers
 // present in the ADBE signed attribute. Port of getADBERevocationValuesBinaries().
 func (s *OfflineRevocationSourceBase[R]) ADBERevocationValuesBinaries() []EncapsulatedRevocationTokenIdentifier[R] {
-	return s.binariesByOrigin(enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL)
+	return s.binariesByOrigin(enumerations.RevocationOriginAdbeRevocationInfoArchival)
 }
 
 // ADBERevocationValuesTokens retrieves the list of all RevocationTokens present in the ADBE
 // signed attribute. NOTE: applicable only for PAdES revocation source. Port of
 // getADBERevocationValuesTokens().
 func (s *OfflineRevocationSourceBase[R]) ADBERevocationValuesTokens() []RevocationToken[R] {
-	return s.tokensByOrigin(enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL)
+	return s.tokensByOrigin(enumerations.RevocationOriginAdbeRevocationInfoArchival)
 }
 
 // CompleteRevocationRefs retrieves the list of all RevocationRefs present in the signature
 // 'complete-revocation-references' attribute (used in CAdES and XAdES). Port of
 // getCompleteRevocationRefs().
 func (s *OfflineRevocationSourceBase[R]) CompleteRevocationRefs() []RevocationRef[R] {
-	return s.referencesByOrigin(enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
+	return s.referencesByOrigin(enumerations.RevocationRefOriginCompleteRevocationRefs)
 }
 
 // AttributeRevocationRefs retrieves the list of all RevocationRefs present in the signature
 // 'attribute-revocation-references' attribute (used in CAdES and XAdES). Port of
 // getAttributeRevocationRefs().
 func (s *OfflineRevocationSourceBase[R]) AttributeRevocationRefs() []RevocationRef[R] {
-	return s.referencesByOrigin(enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+	return s.referencesByOrigin(enumerations.RevocationRefOriginAttributeRevocationRefs)
 }
 
 // FindRefsAndOriginsForRevocationToken retrieves the RevocationRefs with their origins found for

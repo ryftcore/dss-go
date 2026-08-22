@@ -26,7 +26,7 @@ func (q *qualificationByCertificatePreEIDAS) QualifiedStatus() enumerations.Cert
 	if (q.signingCertificate.IsQcCompliance() || process.IsQCP(q.signingCertificate) ||
 		process.IsQCPPlus(q.signingCertificate)) &&
 		utils.IsCollectionEmpty(q.signingCertificate.QcLegislationCountryCodes()) {
-		return enumerations.CertificateQualifiedStatus_QC
+		return enumerations.CertificateQualifiedStatusQC
 	}
-	return enumerations.CertificateQualifiedStatus_NOT_QC
+	return enumerations.CertificateQualifiedStatusNotQC
 }

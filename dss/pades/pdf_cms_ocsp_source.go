@@ -54,7 +54,7 @@ func NewPdfCmsOCSPSource(signedAttributes cmscore.Attributes) *PdfCmsOCSPSource 
 // extractOCSPArchivalValues ports the private extractOCSPArchivalValues(AttributeTable).
 func (s *PdfCmsOCSPSource) extractOCSPArchivalValues(signedAttributes cmscore.Attributes) {
 	if signedAttributes != nil {
-		attributes := spi.DSSASN1UtilsAsn1Attributes(signedAttributes, spi.OID_adbe_revocationInfoArchival)
+		attributes := spi.DSSASN1UtilsAsn1Attributes(signedAttributes, spi.OIDAdbeRevocationInfoArchival)
 		for _, attribute := range attributes {
 			for _, attrValue := range attribute.Values {
 				s.extractRevocationInfoArchival(attrValue)
@@ -85,7 +85,7 @@ func (s *PdfCmsOCSPSource) extractRevocationInfoArchival(attrValue *asn1ber.Elem
 			if err != nil {
 				continue
 			}
-			s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL)
+			s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOriginAdbeRevocationInfoArchival)
 		}
 	}
 }
@@ -105,7 +105,7 @@ type PdfCmsOCSPSourceBinaryOriginsEntry struct {
 // binaryOrigins bookkeeping map directly, but that generic bookkeeping was not carried over into
 // spi.OfflineRevocationSourceBase (see pdf_dss_dict_crl_source.go's header for the same gap and
 // pades_crl_source.go/pades_ocsp_source.go for the composing callers). This class only ever
-// calls AddBinary with a single origin (RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL, see
+// calls AddBinary with a single origin (RevocationOriginAdbeRevocationInfoArchival, see
 // extractRevocationInfoArchival above), so the exported ADBERevocationValuesBinaries() - which
 // spi.OfflineRevocationSourceBase does carry, filtered on exactly that origin - answers the
 // identical binary set the generic bookkeeping map would, each paired with that single origin.
@@ -115,7 +115,7 @@ func (s *PdfCmsOCSPSource) AllRevocationBinariesWithOrigins() []PdfCmsOCSPSource
 	for _, binary := range binaries {
 		result = append(result, PdfCmsOCSPSourceBinaryOriginsEntry{
 			Binary:  binary,
-			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL},
+			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOriginAdbeRevocationInfoArchival},
 		})
 	}
 	return result
@@ -132,7 +132,7 @@ func (s *PdfCmsOCSPSource) AllRevocationTokensWithOrigins() []spi.RevocationToke
 	for _, token := range tokens {
 		result = append(result, spi.RevocationTokenOriginsEntry[revocation.OCSP]{
 			Token:   token,
-			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL},
+			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOriginAdbeRevocationInfoArchival},
 		})
 	}
 	return result

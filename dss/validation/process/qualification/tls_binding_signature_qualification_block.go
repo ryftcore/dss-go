@@ -61,7 +61,7 @@ func (c *TLSBindingSignatureQualificationBlock) getCertificateQualification() *j
 	xmlCertificateQualificationProcess.ValidationCertificateQualification = append(
 		xmlCertificateQualificationProcess.ValidationCertificateQualification, c.Result.Value.ValidationCertificateQualification...)
 	if utils.IsCollectionEmpty(c.Result.Value.ValidationCertificateQualification) {
-		xmlCertificateQualificationProcess.Conclusion = getConclusionByIndication(enumerations.Indication_FAILED)
+		xmlCertificateQualificationProcess.Conclusion = getConclusionByIndication(enumerations.IndicationFailed)
 		return xmlCertificateQualificationProcess
 	}
 
@@ -71,7 +71,7 @@ func (c *TLSBindingSignatureQualificationBlock) getCertificateQualification() *j
 			return xmlCertificateQualificationProcess
 		}
 	}
-	xmlCertificateQualificationProcess.Conclusion = getConclusionByIndication(enumerations.Indication_PASSED)
+	xmlCertificateQualificationProcess.Conclusion = getConclusionByIndication(enumerations.IndicationPassed)
 	return xmlCertificateQualificationProcess
 }
 
@@ -99,7 +99,7 @@ func getConclusionFrom(conclusion *jaxb.XmlConclusion) *jaxb.XmlConclusion {
 func (c *TLSBindingSignatureQualificationBlock) CertQualificationAtIssuanceTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
 	return NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(c.I18nProvider,
-		enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME, c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
+		enumerations.ValidationTimeCertificateIssuanceTime, c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
 }
 
 // CertQualificationAtSigningTimeBlock gets a certificate qualification
@@ -107,6 +107,6 @@ func (c *TLSBindingSignatureQualificationBlock) CertQualificationAtIssuanceTimeB
 // Port of the overridden getCertQualificationAtSigningTimeBlock(List, Date).
 func (c *TLSBindingSignatureQualificationBlock) CertQualificationAtSigningTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper, signingTime time.Time) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeForQWACBlock(c.I18nProvider, enumerations.ValidationTime_VALIDATION_TIME, &signingTime,
+	return NewCertQualificationAtTimeForQWACBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &signingTime,
 		c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
 }

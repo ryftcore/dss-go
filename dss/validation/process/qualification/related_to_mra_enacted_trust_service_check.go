@@ -38,18 +38,18 @@ func (c *RelatedToMraEnactedTrustServiceCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RelatedToMraEnactedTrustServiceCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_METS
+	return i18n.MessageTagQualHasMETS
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RelatedToMraEnactedTrustServiceCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_METS_ANS
+	return i18n.MessageTagQualHasMETSANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *RelatedToMraEnactedTrustServiceCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

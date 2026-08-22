@@ -74,9 +74,9 @@ func newXAdESBuilderKATBuilder(namespace *common.DSSNamespace, en319132 bool) (*
 func xadesBuilderKATNamespace(t *testing.T, uri string) *common.DSSNamespace {
 	t.Helper()
 	for _, namespace := range []*common.DSSNamespace{
-		definition.XAdESNamespace_XADES_132,
-		definition.XAdESNamespace_XADES_122,
-		definition.XAdESNamespace_XADES_111,
+		definition.XAdESNamespaceXAdES132,
+		definition.XAdESNamespaceXAdES122,
+		definition.XAdESNamespaceXAdES111,
 	} {
 		if namespace.Uri() == uri {
 			return namespace
@@ -184,7 +184,7 @@ func xadesBuilderKATRun(builder *xadesBuilderKATBuilder, root *xmldom.Node, oper
 	case "incorporateSPDocSpecification":
 		spDocSpecification := model.NewSpDocSpecification()
 		spDocSpecification.SetId("1.2.3.4.5")
-		spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+		spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 		spDocSpecification.SetDescription("DSS Go port oracle policy")
 		spDocSpecification.SetDocumentationReferences("http://nowina.lu/ref1", "http://nowina.lu/ref2")
 		return builder.IncorporateSPDocSpecification(root, spDocSpecification)
@@ -215,7 +215,7 @@ func TestXAdESBuilderToXmlIdentifierMatchesJavaOracle(t *testing.T) {
 			t.Fatalf("Identifier.AsXmlID() = %q, oracle says %q", got, testCase.AsXmlID)
 		}
 
-		builder, _ := newXAdESBuilderKATBuilder(definition.XAdESNamespace_XADES_132, false)
+		builder, _ := newXAdESBuilderKATBuilder(definition.XAdESNamespaceXAdES132, false)
 		got, err := builder.ToXmlIdentifier(certificate.DSSID())
 		if err != nil {
 			t.Fatalf("ToXmlIdentifier: %v", err)

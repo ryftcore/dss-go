@@ -10,9 +10,9 @@ type QCType interface {
 	OidDescription
 }
 
-// QCType_UNKNOWN_TYPE defines a description for a type unknown by the
+// QCTypeUnknownType defines a description for a type unknown by the
 // current implementation.
-const QCType_UNKNOWN_TYPE = "type-unknown"
+const QCTypeUnknownType = "type-unknown"
 
 // qcTypeUnknown is a plain QCType implementation backing the fallback
 // branch of QCTypeFromOID (Java's QCType.fromOid anonymous class).
@@ -20,11 +20,11 @@ type qcTypeUnknown struct {
 	oid string
 }
 
-func (q *qcTypeUnknown) Description() string { return QCType_UNKNOWN_TYPE }
+func (q *qcTypeUnknown) Description() string { return QCTypeUnknownType }
 func (q *qcTypeUnknown) OID() string         { return q.oid }
 
 // QCTypeFromOID returns a QCType by the given OID, if it matches a known
-// QCTypeEnum constant. Otherwise, a QCType with QCType_UNKNOWN_TYPE as its
+// QCTypeEnum constant. Otherwise, a QCType with QCTypeUnknownType as its
 // Description and the given oid is returned (Java logged this case at debug
 // level via SLF4J; that logging side-effect is not ported — see
 // PORTER_BRIEF notes).

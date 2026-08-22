@@ -36,7 +36,7 @@ var _ SignatureScope = (*fakeSignatureScope)(nil)
 
 func TestSignatureScope_NameDefaultsToDocumentName(t *testing.T) {
 	doc := model.NewInMemoryDocumentWithName([]byte("hello world"), "doc.txt")
-	s := newFakeSignatureScope(doc, "a full scope", enumerations.SignatureScopeType_FULL)
+	s := newFakeSignatureScope(doc, "a full scope", enumerations.SignatureScopeTypeFull)
 
 	if got, want := s.DocumentName(), "doc.txt"; got != want {
 		t.Fatalf("DocumentName() = %q, want %q", got, want)
@@ -47,7 +47,7 @@ func TestSignatureScope_NameDefaultsToDocumentName(t *testing.T) {
 	if got, want := s.Description(nil), "a full scope"; got != want {
 		t.Fatalf("Description(nil) = %q, want %q", got, want)
 	}
-	if got, want := s.Type(), enumerations.SignatureScopeType_FULL; got != want {
+	if got, want := s.Type(), enumerations.SignatureScopeTypeFull; got != want {
 		t.Fatalf("Type() = %v, want %v", got, want)
 	}
 	if got := s.Transformations(); got != nil {
@@ -57,13 +57,13 @@ func TestSignatureScope_NameDefaultsToDocumentName(t *testing.T) {
 
 func TestSignatureScope_DigestOfPlainDocument(t *testing.T) {
 	doc := model.NewInMemoryDocumentWithName([]byte("hello world"), "doc.txt")
-	s := newFakeSignatureScope(doc, "", enumerations.SignatureScopeType_FULL)
+	s := newFakeSignatureScope(doc, "", enumerations.SignatureScopeTypeFull)
 
-	digest, err := s.Digest(enumerations.DigestAlgorithm_SHA256)
+	digest, err := s.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("Digest() error = %v", err)
 	}
-	want, err := doc.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	want, err := doc.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue() error = %v", err)
 	}
@@ -73,14 +73,14 @@ func TestSignatureScope_DigestOfPlainDocument(t *testing.T) {
 }
 
 func TestSignatureScope_DigestOfDigestDocumentReturnsExistingDigest(t *testing.T) {
-	digestDoc := model.NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithm_SHA256, []byte("precomputed"), "doc.txt")
-	s := newFakeSignatureScope(digestDoc, "", enumerations.SignatureScopeType_DIGEST)
+	digestDoc := model.NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithmSHA256, []byte("precomputed"), "doc.txt")
+	s := newFakeSignatureScope(digestDoc, "", enumerations.SignatureScopeTypeDigest)
 
-	digest, err := s.Digest(enumerations.DigestAlgorithm_SHA1)
+	digest, err := s.Digest(enumerations.DigestAlgorithmSHA1)
 	if err != nil {
 		t.Fatalf("Digest() error = %v", err)
 	}
-	if digest.Algorithm() != enumerations.DigestAlgorithm_SHA256 {
+	if digest.Algorithm() != enumerations.DigestAlgorithmSHA256 {
 		t.Fatalf("Digest().Algorithm() = %v, want the existing SHA256 digest's algorithm, not the requested SHA1", digest.Algorithm())
 	}
 	if string(digest.Value()) != "precomputed" {
@@ -94,9 +94,9 @@ func TestSignatureScope_DigestOfNilDocumentIsEmpty(t *testing.T) {
 	// which cannot be done on a nil document (matching Java's NullPointerException there).
 	s := &fakeSignatureScope{
 		SignatureScopeBase: NewSignatureScopeBaseWithName("", nil),
-		scopeType:          enumerations.SignatureScopeType_FULL,
+		scopeType:          enumerations.SignatureScopeTypeFull,
 	}
-	digest, err := s.Digest(enumerations.DigestAlgorithm_SHA256)
+	digest, err := s.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("Digest() error = %v", err)
 	}
@@ -107,8 +107,8 @@ func TestSignatureScope_DigestOfNilDocumentIsEmpty(t *testing.T) {
 
 func TestSignatureScope_ChildrenAndEquals(t *testing.T) {
 	doc := model.NewInMemoryDocumentWithName([]byte("hello world"), "doc.txt")
-	parent := newFakeSignatureScope(doc, "", enumerations.SignatureScopeType_FULL)
-	child := newFakeSignatureScope(doc, "", enumerations.SignatureScopeType_PARTIAL)
+	parent := newFakeSignatureScope(doc, "", enumerations.SignatureScopeTypeFull)
+	child := newFakeSignatureScope(doc, "", enumerations.SignatureScopeTypePartial)
 
 	if got := len(parent.Children()); got != 0 {
 		t.Fatalf("Children() = %d entries, want 0 before adding any", got)
@@ -119,12 +119,12 @@ func TestSignatureScope_ChildrenAndEquals(t *testing.T) {
 		t.Fatalf("Children() = %v, want [%v]", children, child)
 	}
 
-	sameDoc := newFakeSignatureScope(doc, "different description", enumerations.SignatureScopeType_FULL)
+	sameDoc := newFakeSignatureScope(doc, "different description", enumerations.SignatureScopeTypeFull)
 	if !parent.Equals(sameDoc) {
 		t.Fatalf("Equals() = false for two scopes over the same document and name")
 	}
 	otherDoc := model.NewInMemoryDocumentWithName([]byte("other content"), "other.txt")
-	different := newFakeSignatureScope(otherDoc, "", enumerations.SignatureScopeType_FULL)
+	different := newFakeSignatureScope(otherDoc, "", enumerations.SignatureScopeTypeFull)
 	if parent.Equals(different) {
 		t.Fatalf("Equals() = true for two scopes over different documents")
 	}
@@ -135,7 +135,7 @@ func TestSignatureScope_ChildrenAndEquals(t *testing.T) {
 
 func TestSignatureScope_DSSIDAsString(t *testing.T) {
 	doc := model.NewInMemoryDocumentWithName([]byte("hello world"), "doc.txt")
-	s := newFakeSignatureScope(doc, "", enumerations.SignatureScopeType_FULL)
+	s := newFakeSignatureScope(doc, "", enumerations.SignatureScopeTypeFull)
 
 	want, err := model.NewDataIdentifierForDocument("doc.txt", doc)
 	if err != nil {

@@ -103,7 +103,7 @@ func TestASiCContainerWithXAdESValidator_Smoke(t *testing.T) {
 			}
 
 			validator.SetCertificateVerifier(permissiveCertificateVerifier())
-			validator.SetValidationLevel(enumerations.ValidationLevel_BASIC_SIGNATURES)
+			validator.SetValidationLevel(enumerations.ValidationLevelBasicSignatures)
 			validator.SetLocale("en")
 
 			reports, err := validator.ValidateDocument()

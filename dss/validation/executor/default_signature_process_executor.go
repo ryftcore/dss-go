@@ -58,7 +58,7 @@ var _ DocumentProcessExecutor = (*DefaultSignatureProcessExecutor)(nil)
 func NewDefaultSignatureProcessExecutor() *DefaultSignatureProcessExecutor {
 	e := &DefaultSignatureProcessExecutor{
 		AbstractProcessExecutor:    NewAbstractProcessExecutor(),
-		ValidationLevel:            enumerations.ValidationLevel_ARCHIVAL_DATA,
+		ValidationLevel:            enumerations.ValidationLevelArchivalData,
 		EnableEtsiValidationReport: true,
 		IncludeSemantics:           false,
 	}

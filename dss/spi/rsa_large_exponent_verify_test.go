@@ -66,11 +66,11 @@ func TestRSALargeExponentVerifyAcceptsValidRejectsForged(t *testing.T) {
 	tampered := []byte("the quick brown fox jumps over the lazy cog")
 
 	t.Run("PKCS1v15 valid signature is accepted", func(t *testing.T) {
-		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, content)
+		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, content)
 		if err != nil {
 			t.Fatal(err)
 		}
-		digestInfo, err := rsaPKCS1DigestInfo(enumerations.DigestAlgorithm_SHA256, digest)
+		digestInfo, err := rsaPKCS1DigestInfo(enumerations.DigestAlgorithmSHA256, digest)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -84,41 +84,41 @@ func TestRSALargeExponentVerifyAcceptsValidRejectsForged(t *testing.T) {
 		copy(encodedMessage[3+padding:], digestInfo)
 		signature := rawSign(publicKey, d, encodedMessage)
 
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SHA256, content, signature); err != nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASHA256, content, signature); err != nil {
 			t.Fatalf("valid PKCS#1 v1.5 signature rejected: %v", err)
 		}
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SHA256, tampered, signature); err == nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASHA256, tampered, signature); err == nil {
 			t.Fatal("signature accepted over tampered content")
 		}
 		// A single flipped byte anywhere in the signature must break it.
 		forged := append([]byte(nil), signature...)
 		forged[len(forged)/2] ^= 0x01
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SHA256, content, forged); err == nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASHA256, content, forged); err == nil {
 			t.Fatal("tampered signature accepted")
 		}
 		// A signature of the wrong length must be rejected outright.
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SHA256, content, signature[1:]); err == nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASHA256, content, signature[1:]); err == nil {
 			t.Fatal("truncated signature accepted")
 		}
 	})
 
 	t.Run("PSS valid signature is accepted", func(t *testing.T) {
-		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, content)
+		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, content)
 		if err != nil {
 			t.Fatal(err)
 		}
 		encodedMessage := buildPSSEncodedMessage(t, publicKey.N.BitLen()-1, crypto.SHA256, digest)
 		signature := rawSign(publicKey, d, encodedMessage)
 
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1, content, signature); err != nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1, content, signature); err != nil {
 			t.Fatalf("valid RSASSA-PSS signature rejected: %v", err)
 		}
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1, tampered, signature); err == nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1, tampered, signature); err == nil {
 			t.Fatal("signature accepted over tampered content")
 		}
 		forged := append([]byte(nil), signature...)
 		forged[len(forged)/2] ^= 0x01
-		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1, content, forged); err == nil {
+		if err := rsaLargeExponentVerify(publicKey, enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1, content, forged); err == nil {
 			t.Fatal("tampered signature accepted")
 		}
 	})
@@ -128,7 +128,7 @@ func TestRSALargeExponentVerifyAcceptsValidRejectsForged(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, content)
+		digest, err := DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, content)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -138,7 +138,7 @@ func TestRSALargeExponentVerifyAcceptsValidRejectsForged(t *testing.T) {
 		}
 		// Even for a perfectly VALID signature, the fallback must decline: crypto/rsa already
 		// has an opinion on this key and the fallback must never override or second-guess it.
-		if err := rsaLargeExponentVerify(&ordinaryKey.PublicKey, enumerations.SignatureAlgorithm_RSA_SHA256, content, signature); err == nil {
+		if err := rsaLargeExponentVerify(&ordinaryKey.PublicKey, enumerations.SignatureAlgorithmRSASHA256, content, signature); err == nil {
 			t.Fatal("fallback answered for a key crypto/rsa can handle")
 		}
 	})

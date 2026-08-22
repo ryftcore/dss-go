@@ -55,22 +55,22 @@ func (c *CertificateMinQcTransactionLimitCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateMinQcTransactionLimitCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCLVA
+	return i18n.MessageTagBBBXCVCMDCICQCLVA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateMinQcTransactionLimitCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCLVA_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCLVAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateMinQcTransactionLimitCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateMinQcTransactionLimitCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

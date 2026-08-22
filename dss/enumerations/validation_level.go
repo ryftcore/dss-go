@@ -10,27 +10,27 @@ import "fmt"
 type ValidationLevel string
 
 const (
-	// ValidationLevel_BASIC_SIGNATURES: validation as per "5.3 Validation process for
+	// ValidationLevelBasicSignatures: validation as per "5.3 Validation process for
 	// Basic Signatures".
-	ValidationLevel_BASIC_SIGNATURES ValidationLevel = "BASIC_SIGNATURES"
-	// ValidationLevel_TIMESTAMPS: validation as per "5.4 Time-stamp validation
+	ValidationLevelBasicSignatures ValidationLevel = "BASIC_SIGNATURES"
+	// ValidationLevelTimestamps: validation as per "5.4 Time-stamp validation
 	// building block".
-	ValidationLevel_TIMESTAMPS ValidationLevel = "TIMESTAMPS"
-	// ValidationLevel_LONG_TERM_DATA: validation as per "5.5 Validation process for
+	ValidationLevelTimestamps ValidationLevel = "TIMESTAMPS"
+	// ValidationLevelLongTermData: validation as per "5.5 Validation process for
 	// Signatures with Time and Signatures with Long-Term Validation Material".
-	ValidationLevel_LONG_TERM_DATA ValidationLevel = "LONG_TERM_DATA"
-	// ValidationLevel_ARCHIVAL_DATA: validation as per "5.6 Validation process for
+	ValidationLevelLongTermData ValidationLevel = "LONG_TERM_DATA"
+	// ValidationLevelArchivalData: validation as per "5.6 Validation process for
 	// Signatures providing Long Term Availability and Integrity of Validation Material".
-	ValidationLevel_ARCHIVAL_DATA ValidationLevel = "ARCHIVAL_DATA"
+	ValidationLevelArchivalData ValidationLevel = "ARCHIVAL_DATA"
 )
 
 // ValidationLevelValues returns all ValidationLevel constants in declaration order.
 func ValidationLevelValues() []ValidationLevel {
 	return []ValidationLevel{
-		ValidationLevel_BASIC_SIGNATURES,
-		ValidationLevel_TIMESTAMPS,
-		ValidationLevel_LONG_TERM_DATA,
-		ValidationLevel_ARCHIVAL_DATA,
+		ValidationLevelBasicSignatures,
+		ValidationLevelTimestamps,
+		ValidationLevelLongTermData,
+		ValidationLevelArchivalData,
 	}
 }
 

@@ -43,18 +43,18 @@ func (c *CertificateIssuedByConsistentByQCTrustServiceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateIssuedByConsistentByQCTrustServiceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONSISTENT_BY_QC
+	return i18n.MessageTagQualHasConsistentByQC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateIssuedByConsistentByQCTrustServiceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONSISTENT_BY_QC_ANS
+	return i18n.MessageTagQualHasConsistentByQCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateIssuedByConsistentByQCTrustServiceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

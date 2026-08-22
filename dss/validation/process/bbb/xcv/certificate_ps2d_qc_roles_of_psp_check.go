@@ -46,22 +46,22 @@ func (c *CertificatePS2DQcRolesOfPSPCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificatePS2DQcRolesOfPSPCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCRA
+	return i18n.MessageTagBBBXCVCMDCICQCRA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificatePS2DQcRolesOfPSPCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCRA_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCRAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificatePS2DQcRolesOfPSPCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificatePS2DQcRolesOfPSPCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

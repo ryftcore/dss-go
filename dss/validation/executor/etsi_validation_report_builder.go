@@ -133,7 +133,7 @@ func (b *ETSIValidationReportBuilder) noSignatureFoundReport() *jaxb.SignatureVa
 // noSignatureFoundValidationStatus().
 func (b *ETSIValidationReportBuilder) noSignatureFoundValidationStatus() *jaxb.ValidationStatusType {
 	validationStatus := &jaxb.ValidationStatusType{}
-	validationStatus.MainIndication = jaxb.URIIndication(enumerations.Indication_NO_SIGNATURE_FOUND)
+	validationStatus.MainIndication = jaxb.URIIndication(enumerations.IndicationNoSignatureFound)
 	return validationStatus
 }
 
@@ -166,12 +166,12 @@ func (b *ETSIValidationReportBuilder) validationConstraintsEvaluationReport(
 		xcv = &bbbResults.XCV.XmlConstraintsConclusionContent
 	}
 
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_FORMAT_CHECKING, fc)
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE, isc)
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_VALIDATION_CONTEXT_INITIALIZATION, vci)
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_CRYPTOGRAPHIC_VERIFICATION, cv)
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_SIGNATURE_ACCEPTANCE_VALIDATION, sav)
-	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_X509_CERTIFICATE_VALIDATION, xcv)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionFormatChecking, fc)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionIdentificationOfTheSigningCertificate, isc)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionValidationContextInitialization, vci)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionCryptographicVerification, cv)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionSignatureAcceptanceValidation, sav)
+	b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionX509CertificateValidation, xcv)
 	switch token.(type) {
 	case *diagnostic.SignatureWrapper, *diagnostic.TimestampWrapper:
 		if bbbResults.PSV != nil {
@@ -183,9 +183,9 @@ func (b *ETSIValidationReportBuilder) validationConstraintsEvaluationReport(
 		if bbbResults.VTS != nil {
 			vts = &bbbResults.VTS.XmlConstraintsConclusionContent
 		}
-		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_PAST_SIGNATURE_VALIDATION, psv)
-		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_PAST_CERTIFICATE_VALIDATION, pcv)
-		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinition_VALIDATION_TIME_SLIDING, vts)
+		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionPastSignatureValidation, psv)
+		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionPastCertificateValidation, pcv)
+		b.addBBB(validationConstraintsEvaluationReport, process.BasicBuildingBlockDefinitionValidationTimeSliding, vts)
 	}
 	return validationConstraintsEvaluationReport
 }
@@ -224,12 +224,12 @@ func (b *ETSIValidationReportBuilder) individualValidationConstraintReport(bbbUr
 
 // applied is the port of the private applied().
 func (b *ETSIValidationReportBuilder) applied() *jaxb.ConstraintStatusType {
-	return b.constraintStatus(jaxb.ConstraintStatus_APPLIED)
+	return b.constraintStatus(jaxb.ConstraintStatusApplied)
 }
 
 // disabled is the port of the private disabled().
 func (b *ETSIValidationReportBuilder) disabled() *jaxb.ConstraintStatusType {
-	return b.constraintStatus(jaxb.ConstraintStatus_DISABLED)
+	return b.constraintStatus(jaxb.ConstraintStatusDisabled)
 }
 
 // constraintStatus is the port of the private
@@ -273,7 +273,7 @@ func (b *ETSIValidationReportBuilder) validationTimeInfo(sigWrapper *diagnostic.
 	proofOfExistence := b.detailedReport.BestProofOfExistence(sigWrapper.Id())
 	poeType := &jaxb.POEType{}
 	poeType.POETime = jaxb.XSDateTime(time.Time(proofOfExistence.Time))
-	poeType.TypeOfProof = jaxb.TypeOfProof_VALIDATION
+	poeType.TypeOfProof = jaxb.TypeOfProofValidation
 
 	timestampId := ""
 	if proofOfExistence.TimestampId != nil {
@@ -330,7 +330,7 @@ func (b *ETSIValidationReportBuilder) pseudoUseStatus(token diagnostic.TokenProx
 
 // isPseudoUse is the port of the private isPseudoUse(XmlStatus).
 func (b *ETSIValidationReportBuilder) isPseudoUse(status drjaxb.XmlStatus) bool {
-	return status != drjaxb.XmlStatus_OK && status != drjaxb.XmlStatus_IGNORED
+	return status != drjaxb.XmlStatusOK && status != drjaxb.XmlStatusIgnored
 }
 
 // signatureQuality is the port of the private
@@ -382,13 +382,13 @@ func (b *ETSIValidationReportBuilder) signatureValidationProcess(sigWrapper *dia
 // currentProcessId is the port of the private
 // getCurrentProcessId(SignatureWrapper).
 func (b *ETSIValidationReportBuilder) currentProcessId(sigWrapper *diagnostic.SignatureWrapper) jaxb.SignatureValidationProcessID {
-	processId := jaxb.SignatureValidationProcessID_BASIC
+	processId := jaxb.SignatureValidationProcessIDBasic
 	indicationLTA := b.detailedReport.ArchiveDataValidationIndication(sigWrapper.Id())
 	indicationLTVM := b.detailedReport.LongTermValidationIndication(sigWrapper.Id())
 	if indicationLTA != "" {
-		processId = jaxb.SignatureValidationProcessID_LTA
+		processId = jaxb.SignatureValidationProcessIDLTA
 	} else if indicationLTVM != "" {
-		processId = jaxb.SignatureValidationProcessID_LTVM
+		processId = jaxb.SignatureValidationProcessIDLTVM
 	}
 	return processId
 }
@@ -404,7 +404,7 @@ func (b *ETSIValidationReportBuilder) signatureValidationObjects() *jaxb.Validat
 	// 1. Extract POEs
 	evidenceRecords := b.diagnosticData.EvidenceRecords()
 	for _, evidenceRecord := range evidenceRecords {
-		if enumerations.Indication_PASSED == b.detailedReport.EvidenceRecordValidationIndication(evidenceRecord.Id()) {
+		if enumerations.IndicationPassed == b.detailedReport.EvidenceRecordValidationIndication(evidenceRecord.Id()) {
 			poeExtraction.ExtractEvidenceRecordPOE(evidenceRecord)
 		}
 	}
@@ -473,7 +473,7 @@ func (b *ETSIValidationReportBuilder) certificateValidationObject(certificate *d
 		b.validationObjectMap[certificate.Id()] = validationObject
 
 		validationObject.Id = certificate.Id()
-		validationObject.ObjectType = jaxb.ObjectType_CERTIFICATE
+		validationObject.ObjectType = jaxb.ObjectTypeCertificate
 		representation := jaxb.ValidationObjectRepresentationType{}
 		if len(certificate.Binaries()) > 0 {
 			representation.Items = append(representation.Items, base64Item(certificate.Binaries()))
@@ -526,7 +526,7 @@ func (b *ETSIValidationReportBuilder) poe(tokenId string, poeExtraction *vpfswat
 			poeType.POEObject = b.voReferenceOfObject(b.evidenceRecordValidationObject(evidenceRecord))
 		}
 	}
-	poeType.TypeOfProof = jaxb.TypeOfProof_VALIDATION
+	poeType.TypeOfProof = jaxb.TypeOfProofValidation
 	return poeType
 }
 
@@ -540,7 +540,7 @@ func (b *ETSIValidationReportBuilder) evidenceRecordValidationObject(
 		b.validationObjectMap[evidenceRecord.Id()] = validationObject
 
 		validationObject.Id = evidenceRecord.Id()
-		validationObject.ObjectType = jaxb.ObjectType_EVIDENCE_RECORD
+		validationObject.ObjectType = jaxb.ObjectTypeEvidenceRecord
 		representation := jaxb.ValidationObjectRepresentationType{}
 		if len(evidenceRecord.Binaries()) > 0 {
 			representation.Items = append(representation.Items, base64Item(evidenceRecord.Binaries()))
@@ -623,7 +623,7 @@ func (b *ETSIValidationReportBuilder) eaaValidationObject(eaa *diagnostic.EAAWra
 
 		validationObject.Id = eaa.Id()
 		// TODO (upstream) : no EAA specific type is available
-		validationObject.ObjectType = jaxb.ObjectType_OTHER
+		validationObject.ObjectType = jaxb.ObjectTypeOther
 		representation := jaxb.ValidationObjectRepresentationType{}
 		// TODO (upstream) : fill representation (base64/digest) ?
 		representation.Items = append(representation.Items, uriItem(b.uri(eaa)))
@@ -671,9 +671,9 @@ func (b *ETSIValidationReportBuilder) evidenceRecordValidationStatus(
 func (b *ETSIValidationReportBuilder) addEvidenceRecordValidationReportData(validationStatus *jaxb.ValidationStatusType,
 	evidenceRecord *diagnostic.EvidenceRecordWrapper) {
 	validationReportData := b.associatedValidationReportData(validationStatus)
-	if enumerations.Indication_PASSED != b.detailedReport.EvidenceRecordValidationIndication(evidenceRecord.Id()) {
+	if enumerations.IndicationPassed != b.detailedReport.EvidenceRecordValidationIndication(evidenceRecord.Id()) {
 		for _, timestampWrapper := range evidenceRecord.TimestampList() {
-			if enumerations.Indication_PASSED != b.detailedReport.FinalIndication(timestampWrapper.Id()) {
+			if enumerations.IndicationPassed != b.detailedReport.FinalIndication(timestampWrapper.Id()) {
 				timestampValidationObject := b.timestampValidationObject(timestampWrapper)
 				validationReportData.RelatedValidationObject = append(validationReportData.RelatedValidationObject,
 					b.voReferenceOfObject(timestampValidationObject))
@@ -696,7 +696,7 @@ func (b *ETSIValidationReportBuilder) fillEvidenceRecordCryptographicInfo(valida
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, cryptographicValidation *drjaxb.XmlCryptographicValidation) {
 	cryptoInformationType := &jaxb.CryptoInformationType{}
 	cryptoInformationType.ValidationObjectId = *b.voReferenceOfObject(b.evidenceRecordValidationObject(evidenceRecord))
-	cryptoInformationType.SecureAlgorithm = enumerations.Indication_PASSED == cryptographicValidation.Conclusion.Indication.Indication()
+	cryptoInformationType.SecureAlgorithm = enumerations.IndicationPassed == cryptographicValidation.Conclusion.Indication.Indication()
 	algorithm := cryptographicValidation.Algorithm
 	if algorithm != nil {
 		cryptoInformationType.Algorithm = algorithm.Uri
@@ -748,7 +748,7 @@ func (b *ETSIValidationReportBuilder) timestampValidationObject(timestamp *diagn
 		b.validationObjectMap[timestamp.Id()] = validationObject
 
 		validationObject.Id = timestamp.Id()
-		validationObject.ObjectType = jaxb.ObjectType_TIMESTAMP
+		validationObject.ObjectType = jaxb.ObjectTypeTimestamp
 		representation := jaxb.ValidationObjectRepresentationType{}
 		if len(timestamp.Binaries()) > 0 {
 			representation.Items = append(representation.Items, base64Item(timestamp.Binaries()))
@@ -849,7 +849,7 @@ func (b *ETSIValidationReportBuilder) signerDataValidationObject(signedData *dia
 		b.validationObjectMap[signedData.Id()] = validationObject
 
 		validationObject.Id = signedData.Id()
-		validationObject.ObjectType = jaxb.ObjectType_SIGNED_DATA
+		validationObject.ObjectType = jaxb.ObjectTypeSignedData
 		representation := jaxb.ValidationObjectRepresentationType{}
 		representation.Items = append(representation.Items, digestAlgAndValueItem(b.digestAlgAndValueType(signedData.DigestAlgoAndValue())))
 		validationObject.ValidationObjectRepresentation = representation
@@ -866,10 +866,10 @@ func (b *ETSIValidationReportBuilder) revocationValidationObject(revocationData 
 		b.validationObjectMap[revocationData.Id()] = validationObject
 
 		validationObject.Id = revocationData.Id()
-		if enumerations.RevocationType_CRL == revocationData.RevocationType() {
-			validationObject.ObjectType = jaxb.ObjectType_CRL
+		if enumerations.RevocationTypeCRL == revocationData.RevocationType() {
+			validationObject.ObjectType = jaxb.ObjectTypeCRL
 		} else {
-			validationObject.ObjectType = jaxb.ObjectType_OCSP_RESPONSE
+			validationObject.ObjectType = jaxb.ObjectTypeOCSPResponse
 		}
 		representation := jaxb.ValidationObjectRepresentationType{}
 		if len(revocationData.Binaries()) > 0 {
@@ -890,16 +890,16 @@ func (b *ETSIValidationReportBuilder) revocationValidationObject(revocationData 
 func (b *ETSIValidationReportBuilder) orphanCertificateValidationObject(
 	orphanCertificate *diagnostic.OrphanCertificateTokenWrapper) *jaxb.ValidationObjectType {
 	return b.createOrphanToken(orphanCertificate.Id(), orphanCertificate.Binaries(),
-		orphanCertificate.DigestAlgoAndValue(), jaxb.ObjectType_CERTIFICATE)
+		orphanCertificate.DigestAlgoAndValue(), jaxb.ObjectTypeCertificate)
 }
 
 // orphanRevocationValidationObject is the port of the private
 // getOrphanRevocationValidationObject(OrphanRevocationTokenWrapper).
 func (b *ETSIValidationReportBuilder) orphanRevocationValidationObject(
 	orphanRevocation *diagnostic.OrphanRevocationTokenWrapper) *jaxb.ValidationObjectType {
-	objectType := jaxb.ObjectType_OCSP_RESPONSE
-	if enumerations.RevocationType_CRL == orphanRevocation.RevocationType() {
-		objectType = jaxb.ObjectType_CRL
+	objectType := jaxb.ObjectTypeOCSPResponse
+	if enumerations.RevocationTypeCRL == orphanRevocation.RevocationType() {
+		objectType = jaxb.ObjectTypeCRL
 	}
 	return b.createOrphanToken(orphanRevocation.Id(), orphanRevocation.Binaries(),
 		orphanRevocation.DigestAlgoAndValue(), objectType)
@@ -955,9 +955,9 @@ func (b *ETSIValidationReportBuilder) fillIndicationSubIndication(validationStat
 // fillMessages is the port of the private
 // fillMessages(ValidationStatusType, String).
 func (b *ETSIValidationReportBuilder) fillMessages(validationStatus *jaxb.ValidationStatusType, tokenId string) {
-	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationErrors(tokenId)), enumerations.MessageType_ERROR)
-	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationWarnings(tokenId)), enumerations.MessageType_WARN)
-	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationInfos(tokenId)), enumerations.MessageType_INFO)
+	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationErrors(tokenId)), enumerations.MessageTypeError)
+	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationWarnings(tokenId)), enumerations.MessageTypeWarn)
+	b.fillMessagesOfType(validationStatus, messageValues(b.detailedReport.AdESValidationInfos(tokenId)), enumerations.MessageTypeInfo)
 }
 
 // conclusionValidationStatus is the port of the private
@@ -986,9 +986,9 @@ func (b *ETSIValidationReportBuilder) fillIndicationSubIndicationFromConclusion(
 // fillMessages(ValidationStatusType, XmlConclusion).
 func (b *ETSIValidationReportBuilder) fillMessagesFromConclusion(validationStatus *jaxb.ValidationStatusType,
 	conclusion *drjaxb.XmlConclusion) {
-	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Errors), enumerations.MessageType_ERROR)
-	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Warnings), enumerations.MessageType_WARN)
-	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Infos), enumerations.MessageType_INFO)
+	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Errors), enumerations.MessageTypeError)
+	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Warnings), enumerations.MessageTypeWarn)
+	b.fillMessagesOfType(validationStatus, xmlMessageValues(conclusion.Infos), enumerations.MessageTypeInfo)
 }
 
 // fillMessagesOfType is the port of the private
@@ -1076,7 +1076,7 @@ func (b *ETSIValidationReportBuilder) fillTokenCryptographicInfo(validationRepor
 	default:
 		panic(fmt.Sprintf("Unsupported class %T", token))
 	}
-	cryptoInformationType.SecureAlgorithm = enumerations.Indication_PASSED == cryptographicValidation.Conclusion.Indication.Indication()
+	cryptoInformationType.SecureAlgorithm = enumerations.IndicationPassed == cryptographicValidation.Conclusion.Indication.Indication()
 	algorithm := cryptographicValidation.Algorithm
 	if algorithm != nil {
 		cryptoInformationType.Algorithm = algorithm.Uri
@@ -1226,11 +1226,11 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	// <element name="CommitmentTypeIndication" type="SACommitmentTypeIndicationType"/>
 	b.addCommitmentTypeIndications(sigAttributes, sigWrapper)
 	// <element name="AllDataObjectsTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeAllDataObjectsTimestamp)
 	// see TS 119 102-2 - V1.2.1 A.6.3 CAdES
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_CONTENT_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeContentTimestamp)
 	// <element name="IndividualDataObjectsTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeIndividualDataObjectsTimestamp)
 	// <element name="SigPolicyIdentifier" type="SASigPolicyIdentifierType"/>
 	b.addSigPolicyIdentifier(sigAttributes, sigWrapper)
 	// <element name="SignatureProductionPlace" type="SASignatureProductionPlaceType"/>
@@ -1240,7 +1240,7 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	// <element name="CounterSignature" type="SACounterSignatureType"/>
 	b.addCounterSignatures(sigAttributes, sigWrapper)
 	// <element name="SignatureTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeSignatureTimestamp)
 	// <element name="CompleteCertificateRefs" type="SACertIDListType"/>
 	b.addCompleteCertificateRefs(sigAttributes, sigWrapper.FoundCertificates())
 	// <element name="CompleteRevocationRefs" type="SARevIDListType"/>
@@ -1250,9 +1250,9 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	// <element name="AttributeRevocationRefs" type="SARevIDListType"/>
 	b.addAttributeRevocationRefs(sigAttributes, sigWrapper.FoundRevocations())
 	// <element name="SigAndRefsTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeValidationDataTimestamp)
 	// <element name="RefsOnlyTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeValidationDataRefsOnlyTimestamp)
 	// <element name="CertificateValues" type="AttributeBaseType"/>
 	b.addCertificateValues(sigAttributes, sigWrapper.FoundCertificates())
 	// <element name="RevocationValues" type="AttributeBaseType"/>
@@ -1264,7 +1264,7 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	// <element name="TimeStampValidationData" type="AttributeBaseType"/>
 	b.addTimeStampValidationData(sigAttributes, sigWrapper.FoundCertificates(), sigWrapper.FoundRevocations())
 	// <element name="ArchiveTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeArchiveTimestamp)
 	// <element name="RenewedDigests" type="SAListOfIntegersType"/>
 	// <element name="MessageDigest" type="SAMessageDigestType"/>
 	b.addMessageDigest(sigAttributes, sigWrapper)
@@ -1273,7 +1273,7 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 	// <element name="VRI" type="SAVRIType"/>
 	b.addVRI(sigAttributes, sigWrapper)
 	// <element name="DocTimeStamp" type="SATimestampType"/>
-	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampType_DOCUMENT_TIMESTAMP)
+	b.addTimestampsByType(sigAttributes, sigWrapper, enumerations.TimestampTypeDocumentTimestamp)
 	// <element name="Reason" type="SAReasonType"/>
 	b.addReason(sigAttributes, sigWrapper)
 	// <element name="Name" type="SANameType"/>
@@ -1294,10 +1294,10 @@ func (b *ETSIValidationReportBuilder) signatureAttributes(sigWrapper *diagnostic
 func (b *ETSIValidationReportBuilder) addAttrAuthoritiesCertValues(sigAttributes *jaxb.SignatureAttributesType,
 	foundCertificates *diagnostic.FoundCertificatesProxy) {
 	var validationObjectTypes []*jaxb.ValidationObjectType
-	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES) {
+	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOriginAttrAuthoritiesCertValues) {
 		validationObjectTypes = append(validationObjectTypes, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES) {
+	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOriginAttrAuthoritiesCertValues) {
 		validationObjectTypes = append(validationObjectTypes, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
 	if len(validationObjectTypes) > 0 {
@@ -1312,16 +1312,16 @@ func (b *ETSIValidationReportBuilder) addAttrAuthoritiesCertValues(sigAttributes
 func (b *ETSIValidationReportBuilder) addTimeStampValidationData(sigAttributes *jaxb.SignatureAttributesType,
 	foundCertificates *diagnostic.FoundCertificatesProxy, foundRevocations *diagnostic.FoundRevocationsProxy) {
 	var validationObjectTypes []*jaxb.ValidationObjectType
-	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA) {
+	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOriginTimestampValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA) {
+	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOriginTimestampValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
-	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA) {
+	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOriginTimestampValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOrigin_TIMESTAMP_VALIDATION_DATA) {
+	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOriginTimestampValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 
@@ -1336,17 +1336,17 @@ func (b *ETSIValidationReportBuilder) addTimeStampValidationData(sigAttributes *
 func (b *ETSIValidationReportBuilder) addCertificateValues(sigAttributes *jaxb.SignatureAttributesType,
 	foundCertificates *diagnostic.FoundCertificatesProxy) {
 	var validationObjectTypes []*jaxb.ValidationObjectType
-	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOrigin_CERTIFICATE_VALUES) {
+	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOriginCertificateValues) {
 		validationObjectTypes = append(validationObjectTypes, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOrigin_CERTIFICATE_VALUES) {
+	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOriginCertificateValues) {
 		validationObjectTypes = append(validationObjectTypes, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
 	// TODO (upstream) : temporary handling for AnyValidationData -> embed in CertificateValues
-	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOrigin_ANY_VALIDATION_DATA) {
+	for _, certificateWrapper := range foundCertificates.RelatedCertificatesByOrigin(enumerations.CertificateOriginAnyValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOrigin_ANY_VALIDATION_DATA) {
+	for _, orphanCertificate := range foundCertificates.OrphanCertificatesByOrigin(enumerations.CertificateOriginAnyValidationData) {
 		validationObjectTypes = append(validationObjectTypes, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
 
@@ -1360,8 +1360,8 @@ func (b *ETSIValidationReportBuilder) addCertificateValues(sigAttributes *jaxb.S
 // addAttributeCertificateRefs(SignatureAttributesType, FoundCertificatesProxy).
 func (b *ETSIValidationReportBuilder) addAttributeCertificateRefs(sigAttributes *jaxb.SignatureAttributesType,
 	foundCertificates *diagnostic.FoundCertificatesProxy) {
-	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS)
-	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS)
+	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginAttributeCertificateRefs)
+	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOriginAttributeCertificateRefs)
 
 	if len(relatedCerts) > 0 || len(orphanCerts) > 0 {
 		sigAttributes.Items = append(sigAttributes.Items,
@@ -1373,8 +1373,8 @@ func (b *ETSIValidationReportBuilder) addAttributeCertificateRefs(sigAttributes 
 // addCompleteCertificateRefs(SignatureAttributesType, FoundCertificatesProxy).
 func (b *ETSIValidationReportBuilder) addCompleteCertificateRefs(sigAttributes *jaxb.SignatureAttributesType,
 	foundCertificates *diagnostic.FoundCertificatesProxy) {
-	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS)
-	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS)
+	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginCompleteCertificateRefs)
+	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOriginCompleteCertificateRefs)
 
 	if len(relatedCerts) > 0 || len(orphanCerts) > 0 {
 		sigAttributes.Items = append(sigAttributes.Items,
@@ -1387,8 +1387,8 @@ func (b *ETSIValidationReportBuilder) addCompleteCertificateRefs(sigAttributes *
 func (b *ETSIValidationReportBuilder) addSigningCertificate(sigAttributes *jaxb.SignatureAttributesType,
 	sigWrapper *diagnostic.SignatureWrapper) {
 	foundCertificates := sigWrapper.FoundCertificates()
-	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
-	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	relatedCerts := foundCertificates.RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
+	orphanCerts := foundCertificates.OrphanCertificatesByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
 
 	if len(relatedCerts) > 0 || len(orphanCerts) > 0 {
 		signingCertAttribute := b.buildCertIDListType(relatedCerts, orphanCerts)
@@ -1473,8 +1473,8 @@ func (b *ETSIValidationReportBuilder) buildCertIDType(digestAlgoAndValue *diagno
 // addCompleteRevocationRefs(SignatureAttributesType, FoundRevocationsProxy).
 func (b *ETSIValidationReportBuilder) addCompleteRevocationRefs(sigAttributes *jaxb.SignatureAttributesType,
 	revocationsProxy *diagnostic.FoundRevocationsProxy) {
-	relatedRevs := revocationsProxy.RelatedRevocationsByRefOrigin(enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
-	orphanRevs := revocationsProxy.OrphanRevocationsByRefOrigin(enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS)
+	relatedRevs := revocationsProxy.RelatedRevocationsByRefOrigin(enumerations.RevocationRefOriginCompleteRevocationRefs)
+	orphanRevs := revocationsProxy.OrphanRevocationsByRefOrigin(enumerations.RevocationRefOriginCompleteRevocationRefs)
 
 	if len(relatedRevs) > 0 || len(orphanRevs) > 0 {
 		sigAttributes.Items = append(sigAttributes.Items,
@@ -1486,8 +1486,8 @@ func (b *ETSIValidationReportBuilder) addCompleteRevocationRefs(sigAttributes *j
 // addAttributeRevocationRefs(SignatureAttributesType, FoundRevocationsProxy).
 func (b *ETSIValidationReportBuilder) addAttributeRevocationRefs(sigAttributes *jaxb.SignatureAttributesType,
 	revocationsProxy *diagnostic.FoundRevocationsProxy) {
-	relatedRevs := revocationsProxy.RelatedRevocationsByRefOrigin(enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
-	orphanRevs := revocationsProxy.OrphanRevocationsByRefOrigin(enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS)
+	relatedRevs := revocationsProxy.RelatedRevocationsByRefOrigin(enumerations.RevocationRefOriginAttributeRevocationRefs)
+	orphanRevs := revocationsProxy.OrphanRevocationsByRefOrigin(enumerations.RevocationRefOriginAttributeRevocationRefs)
 
 	if len(relatedRevs) > 0 || len(orphanRevs) > 0 {
 		sigAttributes.Items = append(sigAttributes.Items,
@@ -1515,7 +1515,7 @@ func (b *ETSIValidationReportBuilder) buildRevIDListType(relatedRevs []*diagnost
 				if len(orphanRev.References()) > 0 && !containsOrphanRevocationId(allOrphanRevocations, orphanRev.Id()) {
 					for _, revRef := range orphanRev.References() {
 						var revID *jaxb.SARevIDItem
-						if enumerations.RevocationType_CRL == orphanRev.RevocationType() {
+						if enumerations.RevocationTypeCRL == orphanRev.RevocationType() {
 							revID = &jaxb.SARevIDItem{CRLID: b.buildCRLID(revRef.DigestAlgoAndValue())}
 						} else {
 							if ocspID := b.buildOCSPID(revRef); ocspID != nil {
@@ -1581,17 +1581,17 @@ func (b *ETSIValidationReportBuilder) digestMethodType(digestAlgorithm enumerati
 func (b *ETSIValidationReportBuilder) addRevocationValues(sigAttributes *jaxb.SignatureAttributesType,
 	foundRevocations *diagnostic.FoundRevocationsProxy) {
 	var validationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOrigin_REVOCATION_VALUES) {
+	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOriginRevocationValues) {
 		validationObjects = append(validationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOrigin_REVOCATION_VALUES) {
+	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOriginRevocationValues) {
 		validationObjects = append(validationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 	// TODO (upstream) : temporary handling for AnyValidationData -> embed in RevocationValues
-	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOrigin_ANY_VALIDATION_DATA) {
+	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOriginAnyValidationData) {
 		validationObjects = append(validationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOrigin_ANY_VALIDATION_DATA) {
+	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOriginAnyValidationData) {
 		validationObjects = append(validationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 	if len(validationObjects) > 0 {
@@ -1605,10 +1605,10 @@ func (b *ETSIValidationReportBuilder) addRevocationValues(sigAttributes *jaxb.Si
 func (b *ETSIValidationReportBuilder) addAttributeRevocationValues(sigAttributes *jaxb.SignatureAttributesType,
 	foundRevocations *diagnostic.FoundRevocationsProxy) {
 	var validationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES) {
+	for _, revocationWrapper := range foundRevocations.RelatedRevocationsByOrigin(enumerations.RevocationOriginAttributeRevocationValues) {
 		validationObjects = append(validationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOrigin_ATTRIBUTE_REVOCATION_VALUES) {
+	for _, orphanRevocation := range foundRevocations.OrphanRevocationsByOrigin(enumerations.RevocationOriginAttributeRevocationValues) {
 		validationObjects = append(validationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 	if len(validationObjects) > 0 {
@@ -1665,19 +1665,19 @@ func (b *ETSIValidationReportBuilder) saTimestampType(timestampWrapper *diagnost
 // returned instead.
 func (b *ETSIValidationReportBuilder) wrap(timestampType enumerations.TimestampType) string {
 	switch timestampType {
-	case enumerations.TimestampType_SIGNATURE_TIMESTAMP:
+	case enumerations.TimestampTypeSignatureTimestamp:
 		return "SignatureTimeStamp"
-	case enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP:
+	case enumerations.TimestampTypeIndividualDataObjectsTimestamp:
 		return "IndividualDataObjectsTimeStamp"
-	case enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP, enumerations.TimestampType_CONTENT_TIMESTAMP:
+	case enumerations.TimestampTypeAllDataObjectsTimestamp, enumerations.TimestampTypeContentTimestamp:
 		return "AllDataObjectsTimeStamp"
-	case enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP:
+	case enumerations.TimestampTypeValidationDataRefsOnlyTimestamp:
 		return "RefsOnlyTimeStamp"
-	case enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP:
+	case enumerations.TimestampTypeValidationDataTimestamp:
 		return "SigAndRefsTimeStamp"
-	case enumerations.TimestampType_ARCHIVE_TIMESTAMP:
+	case enumerations.TimestampTypeArchiveTimestamp:
 		return "ArchiveTimeStamp"
-	case enumerations.TimestampType_DOCUMENT_TIMESTAMP:
+	case enumerations.TimestampTypeDocumentTimestamp:
 		return "DocTimeStamp"
 	default:
 		panic(fmt.Sprintf("Unsupported timestamp type %s", timestampType))
@@ -1690,7 +1690,7 @@ func (b *ETSIValidationReportBuilder) addSigPolicyIdentifier(sigAttributes *jaxb
 	sigWrapper *diagnostic.SignatureWrapper) {
 	policyId := sigWrapper.PolicyId()
 	// exclude empty and default values
-	if policyId != "" && string(enumerations.SignaturePolicyType_IMPLICIT_POLICY) != policyId {
+	if policyId != "" && string(enumerations.SignaturePolicyTypeImplicitPolicy) != policyId {
 		saSigPolicyIdentifierType := &jaxb.SASigPolicyIdentifierType{}
 		saSigPolicyIdentifierType.SigPolicyId = policyId
 		b.setSignedIfValid(sigWrapper, &saSigPolicyIdentifierType.AttributeBaseType)
@@ -1919,26 +1919,26 @@ func (b *ETSIValidationReportBuilder) addSignatureByteRange(sigAttributes *jaxb.
 func (b *ETSIValidationReportBuilder) addDSS(sigAttributes *jaxb.SignatureAttributesType,
 	sigWrapper *diagnostic.SignatureWrapper) {
 	var certificateValidationObjects []*jaxb.ValidationObjectType
-	for _, certificateWrapper := range sigWrapper.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOrigin_DSS_DICTIONARY) {
+	for _, certificateWrapper := range sigWrapper.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOriginDSSDictionary) {
 		certificateValidationObjects = append(certificateValidationObjects, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range sigWrapper.FoundCertificates().OrphanCertificatesByOrigin(enumerations.CertificateOrigin_DSS_DICTIONARY) {
+	for _, orphanCertificate := range sigWrapper.FoundCertificates().OrphanCertificatesByOrigin(enumerations.CertificateOriginDSSDictionary) {
 		certificateValidationObjects = append(certificateValidationObjects, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
 
 	var crlValidationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationType_CRL, enumerations.RevocationOrigin_DSS_DICTIONARY) {
+	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationTypeCRL, enumerations.RevocationOriginDSSDictionary) {
 		crlValidationObjects = append(crlValidationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationType_CRL, enumerations.RevocationOrigin_DSS_DICTIONARY) {
+	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationTypeCRL, enumerations.RevocationOriginDSSDictionary) {
 		crlValidationObjects = append(crlValidationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 
 	var ocspValidationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationType_OCSP, enumerations.RevocationOrigin_DSS_DICTIONARY) {
+	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationTypeOCSP, enumerations.RevocationOriginDSSDictionary) {
 		ocspValidationObjects = append(ocspValidationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationType_OCSP, enumerations.RevocationOrigin_DSS_DICTIONARY) {
+	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationTypeOCSP, enumerations.RevocationOriginDSSDictionary) {
 		ocspValidationObjects = append(ocspValidationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 
@@ -1961,26 +1961,26 @@ func (b *ETSIValidationReportBuilder) addDSS(sigAttributes *jaxb.SignatureAttrib
 func (b *ETSIValidationReportBuilder) addVRI(sigAttributes *jaxb.SignatureAttributesType,
 	sigWrapper *diagnostic.SignatureWrapper) {
 	var certificateValidationObjects []*jaxb.ValidationObjectType
-	for _, certificateWrapper := range sigWrapper.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOrigin_VRI_DICTIONARY) {
+	for _, certificateWrapper := range sigWrapper.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOriginVRIDictionary) {
 		certificateValidationObjects = append(certificateValidationObjects, b.certificateValidationObject(&certificateWrapper.CertificateWrapper))
 	}
-	for _, orphanCertificate := range sigWrapper.FoundCertificates().OrphanCertificatesByOrigin(enumerations.CertificateOrigin_VRI_DICTIONARY) {
+	for _, orphanCertificate := range sigWrapper.FoundCertificates().OrphanCertificatesByOrigin(enumerations.CertificateOriginVRIDictionary) {
 		certificateValidationObjects = append(certificateValidationObjects, b.orphanCertificateValidationObject(&orphanCertificate.OrphanCertificateTokenWrapper))
 	}
 
 	var crlValidationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationType_CRL, enumerations.RevocationOrigin_VRI_DICTIONARY) {
+	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationTypeCRL, enumerations.RevocationOriginVRIDictionary) {
 		crlValidationObjects = append(crlValidationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationType_CRL, enumerations.RevocationOrigin_VRI_DICTIONARY) {
+	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationTypeCRL, enumerations.RevocationOriginVRIDictionary) {
 		crlValidationObjects = append(crlValidationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 
 	var ocspValidationObjects []*jaxb.ValidationObjectType
-	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationType_OCSP, enumerations.RevocationOrigin_VRI_DICTIONARY) {
+	for _, revocationWrapper := range sigWrapper.FoundRevocations().RelatedRevocationsByTypeAndOrigin(enumerations.RevocationTypeOCSP, enumerations.RevocationOriginVRIDictionary) {
 		ocspValidationObjects = append(ocspValidationObjects, b.revocationValidationObject(&revocationWrapper.RevocationWrapper))
 	}
-	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationType_OCSP, enumerations.RevocationOrigin_VRI_DICTIONARY) {
+	for _, orphanRevocation := range sigWrapper.FoundRevocations().OrphanRevocationsByTypeAndOrigin(enumerations.RevocationTypeOCSP, enumerations.RevocationOriginVRIDictionary) {
 		ocspValidationObjects = append(ocspValidationObjects, b.orphanRevocationValidationObject(&orphanRevocation.OrphanRevocationTokenWrapper))
 	}
 

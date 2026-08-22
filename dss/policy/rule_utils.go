@@ -11,11 +11,11 @@ import (
 // nanoseconds) for each jaxb.TimeUnit constant, mirroring the ratios
 // java.util.concurrent.TimeUnit itself is defined with.
 var ruleUtilsNanosPerUnit = map[jaxb.TimeUnit]int64{
-	jaxb.TimeUnit_DAYS:         86400_000_000_000,
-	jaxb.TimeUnit_HOURS:        3600_000_000_000,
-	jaxb.TimeUnit_MINUTES:      60_000_000_000,
-	jaxb.TimeUnit_SECONDS:      1_000_000_000,
-	jaxb.TimeUnit_MILLISECONDS: 1_000_000,
+	jaxb.TimeUnitDays:         86400_000_000_000,
+	jaxb.TimeUnitHours:        3600_000_000_000,
+	jaxb.TimeUnitMinutes:      60_000_000_000,
+	jaxb.TimeUnitSeconds:      1_000_000_000,
+	jaxb.TimeUnitMilliseconds: 1_000_000,
 }
 
 // RuleUtilsConvertDuration converts the TimeConstraint to the corresponding
@@ -30,7 +30,7 @@ func RuleUtilsConvertDuration(timeConstraint *jaxb.TimeConstraint) int64 {
 		if timeConstraint.Value != nil {
 			value = *timeConstraint.Value
 		}
-		return RuleUtilsConvertDurationBetweenUnits(timeConstraint.Unit, jaxb.TimeUnit_MILLISECONDS, value)
+		return RuleUtilsConvertDurationBetweenUnits(timeConstraint.Unit, jaxb.TimeUnitMilliseconds, value)
 	}
 	return math.MaxInt64
 }

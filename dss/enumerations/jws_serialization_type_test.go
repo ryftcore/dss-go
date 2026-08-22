@@ -4,9 +4,9 @@ import "testing"
 
 func TestJWSSerializationTypeValues(t *testing.T) {
 	want := []JWSSerializationType{
-		JWSSerializationType_COMPACT_SERIALIZATION,
-		JWSSerializationType_JSON_SERIALIZATION,
-		JWSSerializationType_FLATTENED_JSON_SERIALIZATION,
+		JWSSerializationTypeCompactSerialization,
+		JWSSerializationTypeJSONSerialization,
+		JWSSerializationTypeFlattenedJSONSerialization,
 	}
 	got := JWSSerializationTypeValues()
 	if len(got) != len(want) {
@@ -18,9 +18,9 @@ func TestJWSSerializationTypeValues(t *testing.T) {
 		}
 	}
 	names := map[JWSSerializationType]string{
-		JWSSerializationType_COMPACT_SERIALIZATION:        "COMPACT_SERIALIZATION",
-		JWSSerializationType_JSON_SERIALIZATION:           "JSON_SERIALIZATION",
-		JWSSerializationType_FLATTENED_JSON_SERIALIZATION: "FLATTENED_JSON_SERIALIZATION",
+		JWSSerializationTypeCompactSerialization:       "COMPACT_SERIALIZATION",
+		JWSSerializationTypeJSONSerialization:          "JSON_SERIALIZATION",
+		JWSSerializationTypeFlattenedJSONSerialization: "FLATTENED_JSON_SERIALIZATION",
 	}
 	for v, name := range names {
 		if string(v) != name {

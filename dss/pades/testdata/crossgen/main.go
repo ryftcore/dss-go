@@ -76,14 +76,14 @@ func main() {
 
 		bName := stem + "-b.pdf"
 		if err := generate(inputPath, filepath.Join(outDir, bName),
-			enumerations.SignatureLevel_PAdES_BASELINE_B, signerEntry, nil); err != nil {
+			enumerations.SignatureLevelPAdESBaselineB, signerEntry, nil); err != nil {
 			fail(fmt.Errorf("generating %s: %w", bName, err))
 		}
 		fmt.Println("wrote", filepath.Join(outDir, bName))
 
 		tName := stem + "-t.pdf"
 		if err := generate(inputPath, filepath.Join(outDir, tName),
-			enumerations.SignatureLevel_PAdES_BASELINE_T, signerEntry, tspSource); err != nil {
+			enumerations.SignatureLevelPAdESBaselineT, signerEntry, tspSource); err != nil {
 			fail(fmt.Errorf("generating %s: %w", tName, err))
 		}
 		fmt.Println("wrote", filepath.Join(outDir, tName))
@@ -121,7 +121,7 @@ func loadKeyEntry(path, password string) (token.DSSPrivateKeyEntry, error) {
 func newParameters(level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry) *pades.PAdESSignatureParameters {
 	parameters := pades.NewPAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	return parameters

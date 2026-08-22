@@ -57,7 +57,7 @@ func (e *CAdESLevelBaselineLT) ExtendCMSSignaturesWithIds(cmsToExtend *cms.CMS,
 	}
 
 	signatureRequirementsChecker := e.SignatureRequirementsChecker(parameters)
-	if enumerations.SignatureLevel_CAdES_BASELINE_LT == parameters.SignatureLevel() {
+	if enumerations.SignatureLevelCAdESBaselineLT == parameters.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToLTLevelPossible(signaturesToExtend)
 	}
 

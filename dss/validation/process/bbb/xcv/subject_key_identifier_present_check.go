@@ -39,22 +39,22 @@ func (c *SubjectKeyIdentifierPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SubjectKeyIdentifierPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISKIP
+	return i18n.MessageTagBBBXCVISKIP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *SubjectKeyIdentifierPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISKIP_ANS
+	return i18n.MessageTagBBBXCVISKIPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SubjectKeyIdentifierPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *SubjectKeyIdentifierPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

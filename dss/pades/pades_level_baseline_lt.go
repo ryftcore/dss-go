@@ -42,7 +42,7 @@ func (lt *PAdESLevelBaselineLT) ExtendSignaturesWithAnalyzer(signedDocument mode
 	signatures := pdfDocumentAnalyzer.Signatures()
 
 	signatureRequirementsChecker := NewPAdESSignatureRequirementsChecker(lt.CertificateVerifier, parameters)
-	if !tLevelAdded && enumerations.SignatureLevel_PAdES_BASELINE_LT == parameters.SignatureLevel() {
+	if !tLevelAdded && enumerations.SignatureLevelPAdESBaselineLT == parameters.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToLTLevelPossible(signatures)
 	}
 	signatureRequirementsChecker.AssertSignaturesValid(signatures)

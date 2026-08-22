@@ -39,9 +39,9 @@ func (c *AdESAcceptableCheck) Process() bool {
 	valid := c.IsValidConclusion(c.etsi319102Conclusion)
 	if !valid {
 		if c.IsIndeterminateConclusion(c.etsi319102Conclusion) {
-			c.error = i18n.MessageTag_QUAL_IS_ADES_IND
+			c.error = i18n.MessageTagQualIsAdESInd
 		} else if c.IsInvalidConclusion(c.etsi319102Conclusion) {
-			c.error = i18n.MessageTag_QUAL_IS_ADES_INV
+			c.error = i18n.MessageTagQualIsAdESINV
 		}
 		return false
 	}
@@ -50,7 +50,7 @@ func (c *AdESAcceptableCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AdESAcceptableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_IS_ADES
+	return i18n.MessageTagQualIsAdES
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().

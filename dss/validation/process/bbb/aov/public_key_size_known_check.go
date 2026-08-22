@@ -38,11 +38,11 @@ func (c *PublicKeySizeKnownCheck) Process() bool {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *PublicKeySizeKnownCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_PKSK)
+	return c.BuildXmlMessage(i18n.MessageTagASCCMPKSK)
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *PublicKeySizeKnownCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_PKSK_ANS, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagASCCMPKSKANS, c.position)
 }

@@ -34,7 +34,7 @@ func NewRevocationBasicValidationProcess(i18nProvider *i18n.I18nProvider, diagno
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *RevocationBasicValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPFRVC
+	return i18n.MessageTagVPFRVC
 }
 
 // AddAdditionalInfo adds additional info to the chain. Port of

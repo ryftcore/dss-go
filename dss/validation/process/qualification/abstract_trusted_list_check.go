@@ -42,14 +42,14 @@ func (c *AbstractTrustedListCheck[T]) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *AbstractTrustedListCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TRUSTED_LIST, c.tlAnalysis.URL)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTrustedList, c.tlAnalysis.URL)
 	return &message
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *AbstractTrustedListCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -11,18 +11,18 @@ type eaaQualificationCase struct {
 
 func eaaQualificationCases() []eaaQualificationCase {
 	return []eaaQualificationCase{
-		{EAAQualification_QEAA, "QEAA", "Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:QEAA"},
-		{EAAQualification_EAA, "EAA", "Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:EAA"},
-		{EAAQualification_PUBEAA, "PuB-EAA", "Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:PUBEAA"},
-		{EAAQualification_PID, "PID", "Personal Identification Data", "urn:cef:dss:eaaQualification:PID"},
-		{EAAQualification_UNKNOWN, "Unknown", "Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:Unknown"},
-		{EAAQualification_INDETERMINATE_QEAA, "Indeterminate QEAA", "Indeterminate Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateQEAA"},
-		{EAAQualification_INDETERMINATE_EAA, "Indeterminate EAA", "Indeterminate Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateEAA"},
-		{EAAQualification_INDETERMINATE_PUBEAA, "Indeterminate Pub-EAA", "Indeterminate Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:indeterminatePUBEAA"},
-		{EAAQualification_INDETERMINATE_PID, "Indeterminate PID", "Indeterminate Personal Identification Data", "urn:cef:dss:eaaQualification:indeterminatePID"},
-		{EAAQualification_INDETERMINATE_UNKNOWN, "Indeterminate Unknown", "Indeterminate Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:indeterminateUnknown"},
-		{EAAQualification_NOT_EAA, "Not EAA", "Not Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:NOTEAA"},
-		{EAAQualification_NA, "N/A", "Not applicable", "urn:cef:dss:eaaQualification:NA"},
+		{EAAQualificationQEAA, "QEAA", "Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:QEAA"},
+		{EAAQualificationEAA, "EAA", "Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:EAA"},
+		{EAAQualificationPubEAA, "PuB-EAA", "Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:PUBEAA"},
+		{EAAQualificationPID, "PID", "Personal Identification Data", "urn:cef:dss:eaaQualification:PID"},
+		{EAAQualificationUnknown, "Unknown", "Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:Unknown"},
+		{EAAQualificationIndeterminateQEAA, "Indeterminate QEAA", "Indeterminate Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateQEAA"},
+		{EAAQualificationIndeterminateEAA, "Indeterminate EAA", "Indeterminate Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateEAA"},
+		{EAAQualificationIndeterminatePubEAA, "Indeterminate Pub-EAA", "Indeterminate Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:indeterminatePUBEAA"},
+		{EAAQualificationIndeterminatePID, "Indeterminate PID", "Indeterminate Personal Identification Data", "urn:cef:dss:eaaQualification:indeterminatePID"},
+		{EAAQualificationIndeterminateUnknown, "Indeterminate Unknown", "Indeterminate Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:indeterminateUnknown"},
+		{EAAQualificationNotEAA, "Not EAA", "Not Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:NOTEAA"},
+		{EAAQualificationNA, "N/A", "Not applicable", "urn:cef:dss:eaaQualification:NA"},
 	}
 }
 

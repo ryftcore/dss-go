@@ -97,7 +97,7 @@ func baselineBContentTimestamp(t *testing.T) *validation.TimestampToken {
 	if err != nil {
 		t.Fatalf("cannot read the content timestamp: %v", err)
 	}
-	token, err := validation.NewTimestampToken(binaries, enumerations.TimestampType_CONTENT_TIMESTAMP)
+	token, err := validation.NewTimestampToken(binaries, enumerations.TimestampTypeContentTimestamp)
 	if err != nil {
 		t.Fatalf("cannot parse the content timestamp: %v", err)
 	}
@@ -117,8 +117,8 @@ func baselineBDefaultSigningDate() *time.Time { return baselineBDate(2021, 1, 15
 // baselineBEmptyParameters ports the generator's empty().
 func baselineBEmptyParameters() *CAdESSignatureParameters {
 	parameters := NewCAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_B)
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineB)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.BLevel().SetSigningDate(baselineBDefaultSigningDate())
 	return parameters
 }
@@ -147,7 +147,7 @@ func baselineBDigestValue() []byte {
 func baselineBPolicy(spuri, userNotice, docSpecification bool) *model.Policy {
 	policy := model.NewPolicy()
 	policy.SetId("1.2.3.4.5.6")
-	policy.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	policy.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	policy.SetDigestValue(baselineBDigestValue())
 	if spuri {
 		policy.SetSpuri("http://policy.example.org/policy.der")
@@ -162,7 +162,7 @@ func baselineBPolicy(spuri, userNotice, docSpecification bool) *model.Policy {
 	if docSpecification {
 		spDocSpecification := model.NewSpDocSpecification()
 		spDocSpecification.SetId("1.2.3.4.5.7")
-		spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+		spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 		policy.SetSpDocSpecification(spDocSpecification)
 	}
 	return policy
@@ -181,7 +181,7 @@ func baselineBSignerLocation() *model.SignerLocation {
 // baselineBPDFDocument is the "content.pdf" document the mime-type cases sign.
 func baselineBPDFDocument() model.DSSDocument {
 	pdf := model.NewInMemoryDocumentWithName([]byte("content"), "content.pdf")
-	pdf.SetMimeType(enumerations.MimeTypeEnum_PDF)
+	pdf.SetMimeType(enumerations.MimeTypeEnumPDF)
 	return pdf
 }
 
@@ -211,7 +211,7 @@ func baselineBCases() []baselineBCase {
 	}
 	sha256 := func(configure func(t *testing.T, parameters *CAdESSignatureParameters)) func(t *testing.T) *CAdESSignatureParameters {
 		return func(t *testing.T) *CAdESSignatureParameters {
-			parameters := baselineBParameters(t, enumerations.DigestAlgorithm_SHA256, nil)
+			parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 			configure(t, parameters)
 			return parameters
 		}
@@ -219,10 +219,10 @@ func baselineBCases() []baselineBCase {
 
 	return []baselineBCase{
 		// ------------------------------------------------------------ signing certificate
-		{"signing-certificate-sha256", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, nil))},
-		{"signing-certificate-sha1", withoutDocument(base(enumerations.DigestAlgorithm_SHA1, nil))},
-		{"signing-certificate-sha512", withoutDocument(base(enumerations.DigestAlgorithm_SHA512, nil))},
-		{"signing-certificate-sha3-256", withoutDocument(base(enumerations.DigestAlgorithm_SHA3_256, nil))},
+		{"signing-certificate-sha256", withoutDocument(base(enumerations.DigestAlgorithmSHA256, nil))},
+		{"signing-certificate-sha1", withoutDocument(base(enumerations.DigestAlgorithmSHA1, nil))},
+		{"signing-certificate-sha512", withoutDocument(base(enumerations.DigestAlgorithmSHA512, nil))},
+		{"signing-certificate-sha3-256", withoutDocument(base(enumerations.DigestAlgorithmSHA3256, nil))},
 		{"no-signing-certificate", withoutDocument(func(t *testing.T) *CAdESSignatureParameters {
 			parameters := baselineBEmptyParameters()
 			parameters.SetGenerateTBSWithoutCertificate(true)
@@ -231,11 +231,11 @@ func baselineBCases() []baselineBCase {
 		})},
 
 		// ------------------------------------------------------------ signing time
-		{"signing-time-utc", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, baselineBDate(2021, 1, 15, 10, 30, 45)))},
-		{"signing-time-1950", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, baselineBDate(1950, 1, 1, 0, 0, 0)))},
-		{"signing-time-2049", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, baselineBDate(2049, 12, 31, 23, 59, 59)))},
-		{"signing-time-2050", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, baselineBDate(2050, 1, 1, 0, 0, 0)))},
-		{"signing-time-1949", withoutDocument(base(enumerations.DigestAlgorithm_SHA256, baselineBDate(1949, 12, 31, 23, 59, 59)))},
+		{"signing-time-utc", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(2021, 1, 15, 10, 30, 45)))},
+		{"signing-time-1950", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(1950, 1, 1, 0, 0, 0)))},
+		{"signing-time-2049", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(2049, 12, 31, 23, 59, 59)))},
+		{"signing-time-2050", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(2050, 1, 1, 0, 0, 0)))},
+		{"signing-time-1949", withoutDocument(base(enumerations.DigestAlgorithmSHA256, baselineBDate(1949, 12, 31, 23, 59, 59)))},
 
 		// ------------------------------------------------------------ signer attributes
 		{"claimed-roles-en319122", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
@@ -307,7 +307,7 @@ func baselineBCases() []baselineBCase {
 		// ------------------------------------------------------------ commitment type
 		{"commitment-type", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
 			parameters.BLevel().SetCommitmentTypeIndications([]enumerations.CommitmentType{
-				enumerations.CommitmentTypeEnum_ProofOfOrigin, enumerations.CommitmentTypeEnum_ProofOfReceipt})
+				enumerations.CommitmentTypeEnumProofOfOrigin, enumerations.CommitmentTypeEnumProofOfReceipt})
 		}))},
 		{"commitment-type-qualifiers", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
 			qualified := model.NewCommonCommitmentType()
@@ -342,8 +342,8 @@ func baselineBCases() []baselineBCase {
 		// ------------------------------------------------------------ mime type
 		{"mime-type-binary", withDocument(func() model.DSSDocument {
 			return model.NewInMemoryDocumentWithName([]byte("content"), "content.bin")
-		}, base(enumerations.DigestAlgorithm_SHA256, nil))},
-		{"mime-type-pdf", withDocument(baselineBPDFDocument, base(enumerations.DigestAlgorithm_SHA256, nil))},
+		}, base(enumerations.DigestAlgorithmSHA256, nil))},
+		{"mime-type-pdf", withDocument(baselineBPDFDocument, base(enumerations.DigestAlgorithmSHA256, nil))},
 
 		// ------------------------------------------------------------ content timestamp
 		{"content-timestamp", withoutDocument(sha256(func(t *testing.T, parameters *CAdESSignatureParameters) {
@@ -352,11 +352,11 @@ func baselineBCases() []baselineBCase {
 
 		// ------------------------------------------------------------ everything at once
 		{"everything", withDocument(baselineBPDFDocument, func(t *testing.T) *CAdESSignatureParameters {
-			parameters := baselineBParameters(t, enumerations.DigestAlgorithm_SHA512, baselineBDate(2021, 1, 15, 10, 30, 45))
+			parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA512, baselineBDate(2021, 1, 15, 10, 30, 45))
 			parameters.BLevel().SetClaimedSignerRoles([]string{"Manager"})
 			parameters.BLevel().SetSignaturePolicy(baselineBPolicy(true, true, true))
 			parameters.BLevel().SetCommitmentTypeIndications([]enumerations.CommitmentType{
-				enumerations.CommitmentTypeEnum_ProofOfOrigin})
+				enumerations.CommitmentTypeEnumProofOfOrigin})
 			parameters.BLevel().SetSignerLocation(baselineBSignerLocation())
 			parameters.SetContentIdentifierPrefix("DSS-")
 			parameters.SetContentIdentifierSuffix("20210115103045Z-4242")
@@ -433,7 +433,7 @@ func baselineBHexList(encodings [][]byte) string {
 // org.bouncycastle.asn1.x509.UserNotice(NoticeReference, (String) null), which raises a
 // NullPointerException inside DisplayText. The Go port reports it instead.
 func TestCAdESLevelBaselineBUserNoticeWithoutExplicitText(t *testing.T) {
-	parameters := baselineBParameters(t, enumerations.DigestAlgorithm_SHA256, nil)
+	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 	policy := baselineBPolicy(false, false, false)
 	notice := model.NewUserNotice()
 	notice.SetOrganization("DSS Go Port")
@@ -452,7 +452,7 @@ func TestCAdESLevelBaselineBExplicitSignedData(t *testing.T) {
 	fixtures := baselineBFixtures(t)
 	fixture := fixtures["signing-certificate-sha256"]
 
-	parameters := baselineBParameters(t, enumerations.DigestAlgorithm_SHA256, nil)
+	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 	parameters.SetSignedData(fixture.set)
 
 	attributes, err := NewCAdESLevelBaselineB().SignedAttributes(parameters)
@@ -475,7 +475,7 @@ func TestCAdESLevelBaselineBUnsignedAttributes(t *testing.T) {
 // TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType checks the stand-in for upstream's
 // "parameters instanceof CAdESCounterSignatureParameters" test.
 func TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType(t *testing.T) {
-	parameters := baselineBParameters(t, enumerations.DigestAlgorithm_SHA256, nil)
+	parameters := baselineBParameters(t, enumerations.DigestAlgorithmSHA256, nil)
 
 	profile := NewCAdESLevelBaselineBWithDocument(baselineBPDFDocument())
 	profile.SetCounterSignature(true)
@@ -483,7 +483,7 @@ func TestCAdESLevelBaselineBCounterSignatureSuppressesMimeType(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SignedAttributes: %v", err)
 	}
-	if attribute := attributes.Get(spi.OID_id_aa_ets_mimeType); attribute != nil {
+	if attribute := attributes.Get(spi.OIDIdAaEtsMimeType); attribute != nil {
 		t.Error("a counter signature shall carry no mime-type attribute")
 	}
 }

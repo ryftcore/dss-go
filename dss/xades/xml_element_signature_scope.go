@@ -33,7 +33,7 @@ func (s *XmlElementSignatureScope) Description(tokenIdentifierProvider model.Tok
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *XmlElementSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_PARTIAL
+	return enumerations.SignatureScopeTypePartial
 }
 
 // compile-time interface assertion.

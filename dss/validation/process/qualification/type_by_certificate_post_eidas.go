@@ -37,11 +37,11 @@ func (t *typeByCertificatePostEIDAS) Type() enumerations.CertificateType {
 	onlyOne := count == 1
 
 	if (noneType && t.signingCertificate.IsQcCompliance()) || (esign && onlyOne) {
-		return enumerations.CertificateType_ESIGN
+		return enumerations.CertificateTypeESign
 	} else if eseal && onlyOne {
-		return enumerations.CertificateType_ESEAL
+		return enumerations.CertificateTypeESeal
 	} else if web && onlyOne {
-		return enumerations.CertificateType_WSA
+		return enumerations.CertificateTypeWSA
 	}
-	return enumerations.CertificateType_UNKNOWN
+	return enumerations.CertificateTypeUnknown
 }

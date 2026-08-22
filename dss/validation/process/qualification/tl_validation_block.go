@@ -60,9 +60,9 @@ func (b *TLValidationBlock) BuildChainTitle() string {
 	if b.currentTL.CountryCode != nil {
 		countryCode = *b.currentTL.CountryCode
 	}
-	tag := i18n.MessageTag_TL
+	tag := i18n.MessageTagTL
 	if utils.IsTrue(b.currentTL.LOTL) {
-		tag = i18n.MessageTag_LOTL
+		tag = i18n.MessageTagLOTL
 	}
 	if title := process.BuildStringMessage(b.I18nProvider, tag, countryCode); title != nil {
 		return *title

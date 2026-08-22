@@ -48,23 +48,23 @@ func (c *DisclosureListExhaustiveCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DisclosureListExhaustiveCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_DLEEAAP
+	return i18n.MessageTagEAADLEEAAP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DisclosureListExhaustiveCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_DLEEAAP_ANS
+	return i18n.MessageTagEAADLEEAAPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *DisclosureListExhaustiveCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *DisclosureListExhaustiveCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

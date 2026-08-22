@@ -9,15 +9,15 @@ func TestGeneralNameType(t *testing.T) {
 		index int
 		label string
 	}{
-		{GeneralNameType_OTHER_NAME, 0, "otherName"},
-		{GeneralNameType_RFC822_NAME, 1, "rfc822Name"},
-		{GeneralNameType_DNS_NAME, 2, "dNSName"},
-		{GeneralNameType_X400_ADDRESS, 3, "x400Address"},
-		{GeneralNameType_DIRECTORY_NAME, 4, "directoryName"},
-		{GeneralNameType_EDI_PARTY_NAME, 5, "ediPartyName"},
-		{GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER, 6, "uniformResourceIdentifier"},
-		{GeneralNameType_IP_ADDRESS, 7, "iPAddress"},
-		{GeneralNameType_REGISTERED_ID, 8, "registeredID"},
+		{GeneralNameTypeOtherName, 0, "otherName"},
+		{GeneralNameTypeRFC822Name, 1, "rfc822Name"},
+		{GeneralNameTypeDNSName, 2, "dNSName"},
+		{GeneralNameTypeX400Address, 3, "x400Address"},
+		{GeneralNameTypeDirectoryName, 4, "directoryName"},
+		{GeneralNameTypeEDIPartyName, 5, "ediPartyName"},
+		{GeneralNameTypeUniformResourceIdentifier, 6, "uniformResourceIdentifier"},
+		{GeneralNameTypeIPAddress, 7, "iPAddress"},
+		{GeneralNameTypeRegisteredID, 8, "registeredID"},
 	}
 	if len(GeneralNameTypeValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(GeneralNameTypeValues()))

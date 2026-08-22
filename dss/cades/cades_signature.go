@@ -136,14 +136,14 @@ import (
 // They keep their exact Java field name behind the "OID_" prefix, the convention every other
 // file of this package already established.
 var (
-	// OID_pkcs_9_at_contentType is 1.2.840.113549.1.9.3.
-	OID_pkcs_9_at_contentType = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 3}
+	// OIDPkcs9AtContentType is 1.2.840.113549.1.9.3.
+	OIDPkcs9AtContentType = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 3}
 
-	// OID_pkcs_9_at_messageDigest is 1.2.840.113549.1.9.4.
-	OID_pkcs_9_at_messageDigest = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 4}
+	// OIDPkcs9AtMessageDigest is 1.2.840.113549.1.9.4.
+	OIDPkcs9AtMessageDigest = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 4}
 
-	// OID_id_aa_contentReference is 1.2.840.113549.1.9.16.2.10.
-	OID_id_aa_contentReference = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 10}
+	// OIDIdAaContentReference is 1.2.840.113549.1.9.16.2.10.
+	OIDIdAaContentReference = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 10}
 )
 
 // CAdESSignature is the CAdES Signature class helper. Port of the CAdESSignature class.
@@ -196,7 +196,7 @@ func NewCAdESSignature(cmsDocument *cms.CMS, signerInformation *cmscore.SignerIn
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
 func (s *CAdESSignature) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_CAdES
+	return enumerations.SignatureFormCAdES
 }
 
 // CertificateSource gets a certificate source which contains ALL certificates embedded in the
@@ -275,7 +275,7 @@ func (s *CAdESSignature) FindSignatureScopes() []scope.SignatureScope {
 // BuildSignaturePolicy extracts a signature policy from a signature and builds the object.
 // Port of the protected buildSignaturePolicy().
 func (s *CAdESSignature) BuildSignaturePolicy() *signature.SignaturePolicy {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_ets_sigPolicyId)
+	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSigPolicyId)
 	if attribute == nil {
 		return nil
 	}
@@ -365,16 +365,16 @@ func (s *CAdESSignature) buildSigPolicyQualifierInfo(sigPolicy *signature.Signat
 	sigQualifier := qualifierInfo.Children()[1]
 
 	switch {
-	case OID_id_spq_ets_uri.Equal(policyQualifierInfoID):
+	case OIDIdSpqEtsUri.Equal(policyQualifierInfoID):
 		sigPolicy.SetURI(asn1ber.ASN1ToString(sigQualifier))
 
-	case OID_id_spq_ets_unotice.Equal(policyQualifierInfoID):
+	case OIDIdSpqEtsUnotice.Equal(policyQualifierInfoID):
 		userNotice := cadesBuildSPUserNotice(sigQualifier)
 		if userNotice != nil {
 			sigPolicy.SetUserNotice(userNotice)
 		}
 
-	case spi.OID_id_sp_doc_specification.Equal(policyQualifierInfoID):
+	case spi.OIDIdSpDocSpecification.Equal(policyQualifierInfoID):
 		spDocSpecification := model.NewSpDocSpecification()
 		spDocSpecification.SetId(asn1ber.ASN1ToString(sigQualifier))
 		sigPolicy.SetDocSpecification(spDocSpecification)
@@ -440,7 +440,7 @@ func cadesIsZeroHash(hashValue []byte) bool {
 // SignaturePolicyStore returns the Signature Policy Store from the signature.
 // Port of getSignaturePolicyStore().
 func (s *CAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
-	sigPolicyStore := CAdESUtilsUnsignedAttribute(s.signerInformation, spi.OID_id_aa_ets_sigPolicyStore)
+	sigPolicyStore := CAdESUtilsUnsignedAttribute(s.signerInformation, spi.OIDIdAaEtsSigPolicyStore)
 	if sigPolicyStore == nil || len(sigPolicyStore.Values) == 0 {
 		return nil
 	}
@@ -483,7 +483,7 @@ func (s *CAdESSignature) SignaturePolicyStore() *model.SignaturePolicyStore {
 // SigningTime returns the signing time included within the signature, or nil.
 // Port of getSigningTime().
 func (s *CAdESSignature) SigningTime() *time.Time {
-	attr := CAdESUtilsSignedAttribute(s.signerInformation, OID_pkcs_9_at_signingTime)
+	attr := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtSigningTime)
 	if attr == nil {
 		return nil
 	}
@@ -507,7 +507,7 @@ func (s *CAdESSignature) CMS() *cms.CMS {
 // SignatureProductionPlace returns information about the place where the signature was
 // generated. Port of getSignatureProductionPlace().
 func (s *CAdESSignature) SignatureProductionPlace() *signature.SignatureProductionPlace {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_ets_signerLocation)
+	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerLocation)
 	if attribute == nil {
 		return nil
 	}
@@ -567,7 +567,7 @@ func (s *CAdESSignature) SignatureProductionPlace() *signature.SignatureProducti
 // CommitmentTypeIndications obtains the information concerning commitment type indication
 // linked to the signature. Port of getCommitmentTypeIndications().
 func (s *CAdESSignature) CommitmentTypeIndications() []*signature.CommitmentTypeIndication {
-	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_ets_commitmentType)
+	attribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsCommitmentType)
 	if attribute == nil {
 		return []*signature.CommitmentTypeIndication{}
 	}
@@ -609,7 +609,7 @@ func (s *CAdESSignature) SignedAssertions() []*signature.SignerRole {
 	signerAttrV2 := s.signerAttributeV2()
 	if signerAttrV2 != nil && signerAttrV2.SignedAssertions() != nil {
 		for _, sa := range signerAttrV2.SignedAssertions().Assertions() {
-			result = append(result, signature.NewSignerRole(sa.String(), enumerations.EndorsementType_SIGNED))
+			result = append(result, signature.NewSignerRole(sa.String(), enumerations.EndorsementTypeSigned))
 		}
 	}
 	return result
@@ -652,7 +652,7 @@ func cadesClaimedSignerRolesFromAttribute(attributeDER []byte) []*signature.Sign
 	}
 	for _, value := range values.Children() {
 		if value.IsASN1String() {
-			claimedRoles = append(claimedRoles, signature.NewSignerRole(value.AsString(), enumerations.EndorsementType_CLAIMED))
+			claimedRoles = append(claimedRoles, signature.NewSignerRole(value.AsString(), enumerations.EndorsementTypeClaimed))
 		}
 	}
 	return claimedRoles
@@ -720,7 +720,7 @@ func cadesCertifiedSignerRolesFromAttributeCertificate(attributeCertificateDER [
 		if !ok {
 			continue
 		}
-		certifiedRole := signature.NewSignerRole(roleName, enumerations.EndorsementType_CERTIFIED)
+		certifiedRole := signature.NewSignerRole(roleName, enumerations.EndorsementTypeCertified)
 		certifiedRole.SetNotBefore(cadesGeneralizedTime(notBefore))
 		certifiedRole.SetNotAfter(cadesGeneralizedTime(notAfter))
 		roles = append(roles, certifiedRole)
@@ -823,7 +823,7 @@ func cadesGeneralizedTime(element *asn1ber.Element) time.Time {
 // single value, per RFC 5126) - i.e. org.bouncycastle.asn1.esf.SignerAttribute, which has no DSS
 // port; see cadesLevelBaselineBSignerAttribute for the matching write side.
 func (s *CAdESSignature) signerAttributeV1() *cadesSignerAttributeV1 {
-	idAaEtsSignerAttr := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_ets_signerAttr)
+	idAaEtsSignerAttr := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaEtsSignerAttr)
 	if idAaEtsSignerAttr == nil {
 		return nil
 	}
@@ -888,7 +888,7 @@ func parseCadesSignerAttributeV1(encoded []byte) (*cadesSignerAttributeV1, error
 
 // signerAttributeV2 ports the private getSignerAttributeV2().
 func (s *CAdESSignature) signerAttributeV2() *cms.SignerAttributeV2 {
-	idAaEtsSignerAttrV2 := CAdESUtilsSignedAttribute(s.signerInformation, spi.OID_id_aa_ets_signerAttrV2)
+	idAaEtsSignerAttrV2 := CAdESUtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsSignerAttrV2)
 	if idAaEtsSignerAttrV2 == nil {
 		return nil
 	}
@@ -926,7 +926,7 @@ func (s *CAdESSignature) EncryptionAlgorithm() enumerations.EncryptionAlgorithm 
 func (s *CAdESSignature) DigestAlgorithm() enumerations.DigestAlgorithm {
 	signatureAlgorithm := s.encryptedDigestAlgo()
 	if signatureAlgorithm != "" {
-		if enumerations.EncryptionAlgorithm_RSASSA_PSS == signatureAlgorithm.EncryptionAlgorithm() {
+		if enumerations.EncryptionAlgorithmRSASSAPSS == signatureAlgorithm.EncryptionAlgorithm() {
 			return s.pssHashAlgorithm()
 		}
 		return signatureAlgorithm.DigestAlgorithm()
@@ -983,7 +983,7 @@ func cadesRSASSAPSSParamsHashAlgorithm(encoded []byte) (*asn1ber.AlgorithmIdenti
 			return asn1ber.AlgorithmIdentifierFromElement(child.Children()[0])
 		}
 	}
-	return spi.DSSASN1UtilsAlgorithmIdentifierForDigest(enumerations.DigestAlgorithm_SHA1)
+	return spi.DSSASN1UtilsAlgorithmIdentifierForDigest(enumerations.DigestAlgorithmSHA1)
 }
 
 // encryptionAlgOID ports SignerInformation#getEncryptionAlgOID(): the OID of the
@@ -1074,7 +1074,7 @@ func (s *CAdESSignature) CheckSignatureIntegrity() {
 	refValidations := s.ReferenceValidationsForSignerInformation(signerInformationToCheck)
 	contentDigestMismatch := false
 	for _, referenceValidation := range refValidations {
-		if referenceValidation.Type() == enumerations.DigestMatcherType_MESSAGE_DIGEST &&
+		if referenceValidation.Type() == enumerations.DigestMatcherTypeMessageDigest &&
 			referenceValidation.IsFound() && !referenceValidation.IsIntact() {
 			contentDigestMismatch = true
 		}
@@ -1186,7 +1186,7 @@ func (s *CAdESSignature) getManifestEntryValidation() []*model.ReferenceValidati
 	}
 	for _, entry := range manifestFile.Entries() {
 		entryValidation := model.NewReferenceValidation()
-		entryValidation.SetType(enumerations.DigestMatcherType_MANIFEST_ENTRY)
+		entryValidation.SetType(enumerations.DigestMatcherTypeManifestEntry)
 		entryValidation.SetUri(entry.Uri())
 		entryValidation.SetDocument(entry.Document())
 		entryValidation.SetDigest(entry.Digest())
@@ -1216,7 +1216,7 @@ func (s *CAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 // object graph would show it.
 func (s *CAdESSignature) messageDigestReferenceValidation(originalDocument model.DSSDocument, messageDigestValue []byte) *model.ReferenceValidation {
 	messageDigestValidation := model.NewReferenceValidation()
-	messageDigestValidation.SetType(enumerations.DigestMatcherType_MESSAGE_DIGEST)
+	messageDigestValidation.SetType(enumerations.DigestMatcherTypeMessageDigest)
 
 	messageDigest := model.NewDigest("", messageDigestValue)
 
@@ -1297,7 +1297,7 @@ func cadesAppendDigestAlgorithm(candidates []enumerations.DigestAlgorithm, diges
 // SignerInformation#getContentDigest() and always reports "not found" here.
 func (s *CAdESSignature) contentReferenceValidation(_ model.DSSDocument, _ *cmscore.SignerInfo) *model.ReferenceValidation {
 	contentValidation := model.NewReferenceValidation()
-	contentValidation.SetType(enumerations.DigestMatcherType_CONTENT_DIGEST)
+	contentValidation.SetType(enumerations.DigestMatcherTypeContentDigest)
 	return contentValidation
 }
 
@@ -1322,7 +1322,7 @@ func (s *CAdESSignature) DataToBeSignedRepresentation() model.Digest {
 	// only one is allowed for CMS
 	referenceValidation := referenceValidations[0]
 	switch referenceValidation.Type() {
-	case enumerations.DigestMatcherType_MESSAGE_DIGEST:
+	case enumerations.DigestMatcherTypeMessageDigest:
 		digestAlgorithm := s.DigestAlgorithm()
 		if digestAlgorithm != "" {
 			signedAttributes := CAdESUtilsSignedAttributes(s.signerInformation)
@@ -1334,7 +1334,7 @@ func (s *CAdESSignature) DataToBeSignedRepresentation() model.Digest {
 			return model.NewDigest(digestAlgorithm, digestValue)
 		}
 		return model.Digest{}
-	case enumerations.DigestMatcherType_CONTENT_DIGEST:
+	case enumerations.DigestMatcherTypeContentDigest:
 		return referenceValidation.Digest()
 	default:
 		panic(model.NewDSSError(fmt.Sprintf("The found referenceValidation type '%s' is not supported! "+
@@ -1366,7 +1366,7 @@ func (s *CAdESSignature) MessageDigestAlgorithms() []enumerations.DigestAlgorith
 // MessageDigestValue returns a digest value incorporated in an attribute "message-digest" in
 // CMS Signed Data. Port of the public getMessageDigestValue().
 func (s *CAdESSignature) MessageDigestValue() []byte {
-	messageDigestAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_pkcs_9_at_messageDigest)
+	messageDigestAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtMessageDigest)
 	if messageDigestAttribute == nil {
 		return nil
 	}
@@ -1386,7 +1386,7 @@ func (s *CAdESSignature) MessageDigestValue() []byte {
 // ContentType returns the value of the signed attribute content-type.
 // Port of getContentType().
 func (s *CAdESSignature) ContentType() string {
-	contentTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_pkcs_9_at_contentType)
+	contentTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDPkcs9AtContentType)
 	if contentTypeAttribute == nil {
 		return ""
 	}
@@ -1409,7 +1409,7 @@ func (s *CAdESSignature) ContentType() string {
 
 // MimeType returns the value of the signed attribute mime-type. Port of getMimeType().
 func (s *CAdESSignature) MimeType() string {
-	mimeTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, spi.OID_id_aa_ets_mimeType)
+	mimeTypeAttribute := CAdESUtilsSignedAttribute(s.signerInformation, spi.OIDIdAaEtsMimeType)
 	if mimeTypeAttribute == nil {
 		return ""
 	}
@@ -1429,7 +1429,7 @@ func (s *CAdESSignature) SignatureType() string {
 
 // ContentIdentifier gets ContentIdentifier String. Port of the public getContentIdentifier().
 func (s *CAdESSignature) ContentIdentifier() string {
-	contentIdentifierAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_contentIdentifier)
+	contentIdentifierAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaContentIdentifier)
 	if contentIdentifierAttribute == nil {
 		return ""
 	}
@@ -1449,7 +1449,7 @@ func (s *CAdESSignature) ContentIdentifier() string {
 
 // ContentHints gets Content Hints. Port of the public getContentHints().
 func (s *CAdESSignature) ContentHints() string {
-	contentHintAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OID_id_aa_contentHint)
+	contentHintAttribute := CAdESUtilsSignedAttribute(s.signerInformation, OIDIdAaContentHint)
 	if contentHintAttribute == nil {
 		return ""
 	}
@@ -1621,63 +1621,63 @@ func (s *CAdESSignature) AddExternalTimestamp(timestamp *validation.TimestampTok
 // DataFoundUpToLevel returns the signature level. Port of getDataFoundUpToLevel().
 func (s *CAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	if !s.HasBESProfile() {
-		return enumerations.SignatureLevel_CMS_NOT_ETSI
+		return enumerations.SignatureLevelCMSNotETSI
 	}
 
 	baselineProfile := s.HasBProfile()
 
 	if !s.HasExtendedTProfile() {
 		if baselineProfile {
-			return enumerations.SignatureLevel_CAdES_BASELINE_B
+			return enumerations.SignatureLevelCAdESBaselineB
 		} else if s.HasEPESProfile() {
-			return enumerations.SignatureLevel_CAdES_EPES
+			return enumerations.SignatureLevelCAdESEPES
 		}
-		return enumerations.SignatureLevel_CAdES_BES
+		return enumerations.SignatureLevelCAdESBES
 	}
 
 	baselineProfile = baselineProfile && s.HasTProfile()
 
 	if baselineProfile && s.HasLTProfile() {
 		if s.HasERSProfile() {
-			return enumerations.SignatureLevel_CAdES_ERS
+			return enumerations.SignatureLevelCAdESERS
 		}
 		if s.HasLTAProfile() {
-			return enumerations.SignatureLevel_CAdES_BASELINE_LTA
+			return enumerations.SignatureLevelCAdESBaselineLTA
 		}
-		return enumerations.SignatureLevel_CAdES_BASELINE_LT
+		return enumerations.SignatureLevelCAdESBaselineLT
 
 	} else if s.HasCProfile() {
 		if s.HasXLProfile() {
 			if s.HasERSProfile() {
-				return enumerations.SignatureLevel_CAdES_ERS
+				return enumerations.SignatureLevelCAdESERS
 			}
 			if s.HasAProfile() {
-				return enumerations.SignatureLevel_CAdES_A
+				return enumerations.SignatureLevelCAdESA
 			}
 			if s.HasXProfile() {
-				return enumerations.SignatureLevel_CAdES_XL
+				return enumerations.SignatureLevelCAdESXL
 			}
 		}
 		if s.HasXProfile() {
-			return enumerations.SignatureLevel_CAdES_X
+			return enumerations.SignatureLevelCAdESX
 		}
-		return enumerations.SignatureLevel_CAdES_C
+		return enumerations.SignatureLevelCAdESC
 
 	} else if s.HasXLProfile() {
 		if s.HasERSProfile() {
-			return enumerations.SignatureLevel_CAdES_ERS
+			return enumerations.SignatureLevelCAdESERS
 		}
 		if s.HasAProfile() {
 			// CAdES-E-A can be built on CAdES-E-T directly
-			return enumerations.SignatureLevel_CAdES_A
+			return enumerations.SignatureLevelCAdESA
 		}
-		return enumerations.SignatureLevel_CAdES_LT
+		return enumerations.SignatureLevelCAdESLT
 	}
 
 	if baselineProfile {
-		return enumerations.SignatureLevel_CAdES_BASELINE_T
+		return enumerations.SignatureLevelCAdESBaselineT
 	}
-	return enumerations.SignatureLevel_CAdES_T
+	return enumerations.SignatureLevelCAdEST
 }
 
 // BaselineRequirementsChecker returns the cached instance of the CAdESBaselineRequirementsChecker.

@@ -78,7 +78,7 @@ func newBasicTimestampValidationCheck[T any](i18nProvider *i18n.I18nProvider, re
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *BasicTimestampValidationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_TST_BBB
+	return jaxb.XmlBlockTypeTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -88,13 +88,13 @@ func (c *BasicTimestampValidationCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BasicTimestampValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTC
+	return i18n.MessageTagADESTIBSVPTC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BasicTimestampValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTC_ANS
+	return i18n.MessageTagADESTIBSVPTCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

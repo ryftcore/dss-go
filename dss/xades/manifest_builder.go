@@ -134,8 +134,8 @@ func (b *ManifestBuilder) Build() (model.DSSDocument, error) {
 	documentDom := xmlutils.DomUtilsBuildDOMEmpty()
 
 	manifestDom := xmlutils.DomUtilsCreateElementNS(documentDom, b.xmldsigNamespace,
-		common.XMLDSigElement_MANIFEST)
-	manifestDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, b.manifestId)
+		common.XMLDSigElementManifest)
+	manifestDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, b.manifestId)
 	documentDom.AppendChild(manifestDom)
 
 	referenceProcessor := NewReferenceProcessorEmpty()

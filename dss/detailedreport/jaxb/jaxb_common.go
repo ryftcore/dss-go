@@ -16,11 +16,11 @@ type XmlStatus string
 
 // The Status values, with the exact lexical form of the schema.
 const (
-	XmlStatus_OK          XmlStatus = "OK"
-	XmlStatus_NOT_OK      XmlStatus = "NOT OK"
-	XmlStatus_IGNORED     XmlStatus = "IGNORED"
-	XmlStatus_INFORMATION XmlStatus = "INFORMATION"
-	XmlStatus_WARNING     XmlStatus = "WARNING"
+	XmlStatusOK          XmlStatus = "OK"
+	XmlStatusNotOK       XmlStatus = "NOT OK"
+	XmlStatusIgnored     XmlStatus = "IGNORED"
+	XmlStatusInformation XmlStatus = "INFORMATION"
+	XmlStatusWarning     XmlStatus = "WARNING"
 )
 
 // MarshalText writes the enum value, as the generated value() method does.
@@ -29,7 +29,7 @@ func (v XmlStatus) MarshalText() ([]byte, error) { return []byte(v), nil }
 // UnmarshalText resolves the lexical form, mirroring fromValue().
 func (v *XmlStatus) UnmarshalText(text []byte) error {
 	switch s := XmlStatus(text); s {
-	case XmlStatus_OK, XmlStatus_NOT_OK, XmlStatus_IGNORED, XmlStatus_INFORMATION, XmlStatus_WARNING:
+	case XmlStatusOK, XmlStatusNotOK, XmlStatusIgnored, XmlStatusInformation, XmlStatusWarning:
 		*v = s
 		return nil
 	default:
@@ -43,39 +43,39 @@ type XmlBlockType string
 // The BlockType values, with the exact lexical form of the schema. The schema
 // enumerates "ER" twice; the duplicate collapses to one Go constant.
 const (
-	XmlBlockType_SIG_BBB     XmlBlockType = "SIG_BBB"
-	XmlBlockType_REV_BBB     XmlBlockType = "REV_BBB"
-	XmlBlockType_TST_BBB     XmlBlockType = "TST_BBB"
-	XmlBlockType_CNT_TST_BBB XmlBlockType = "CNT_TST_BBB"
-	XmlBlockType_AOV         XmlBlockType = "AOV"
-	XmlBlockType_AOV_XCV     XmlBlockType = "AOV_XCV"
-	XmlBlockType_CRS         XmlBlockType = "CRS"
-	XmlBlockType_PSV_CRS     XmlBlockType = "PSV_CRS"
-	XmlBlockType_RAC         XmlBlockType = "RAC"
-	XmlBlockType_RAC_SUB_XCV XmlBlockType = "RAC_SUB_XCV"
-	XmlBlockType_RFC         XmlBlockType = "RFC"
-	XmlBlockType_SUB_XCV     XmlBlockType = "SUB_XCV"
-	XmlBlockType_SUB_XCV_TA  XmlBlockType = "SUB_XCV_TA"
-	XmlBlockType_REV_CC      XmlBlockType = "REV_CC"
-	XmlBlockType_ER          XmlBlockType = "ER"
-	XmlBlockType_PSV         XmlBlockType = "PSV"
-	XmlBlockType_PCV         XmlBlockType = "PCV"
-	XmlBlockType_VTS         XmlBlockType = "VTS"
-	XmlBlockType_TST_PSV     XmlBlockType = "TST_PSV"
-	XmlBlockType_TST         XmlBlockType = "TST"
-	XmlBlockType_LTV         XmlBlockType = "LTV"
-	XmlBlockType_LTV_SUB_XCV XmlBlockType = "LTV_SUB_XCV"
-	XmlBlockType_LTA         XmlBlockType = "LTA"
+	XmlBlockTypeSigBBB    XmlBlockType = "SIG_BBB"
+	XmlBlockTypeRevBBB    XmlBlockType = "REV_BBB"
+	XmlBlockTypeTSTBBB    XmlBlockType = "TST_BBB"
+	XmlBlockTypeCNTTSTBBB XmlBlockType = "CNT_TST_BBB"
+	XmlBlockTypeAOV       XmlBlockType = "AOV"
+	XmlBlockTypeAOVXCV    XmlBlockType = "AOV_XCV"
+	XmlBlockTypeCRS       XmlBlockType = "CRS"
+	XmlBlockTypePSVCRS    XmlBlockType = "PSV_CRS"
+	XmlBlockTypeRAC       XmlBlockType = "RAC"
+	XmlBlockTypeRACSubXCV XmlBlockType = "RAC_SUB_XCV"
+	XmlBlockTypeRFC       XmlBlockType = "RFC"
+	XmlBlockTypeSubXCV    XmlBlockType = "SUB_XCV"
+	XmlBlockTypeSubXCVTA  XmlBlockType = "SUB_XCV_TA"
+	XmlBlockTypeRevCC     XmlBlockType = "REV_CC"
+	XmlBlockTypeER        XmlBlockType = "ER"
+	XmlBlockTypePSV       XmlBlockType = "PSV"
+	XmlBlockTypePCV       XmlBlockType = "PCV"
+	XmlBlockTypeVTS       XmlBlockType = "VTS"
+	XmlBlockTypeTSTPSV    XmlBlockType = "TST_PSV"
+	XmlBlockTypeTST       XmlBlockType = "TST"
+	XmlBlockTypeLTV       XmlBlockType = "LTV"
+	XmlBlockTypeLTVSubXCV XmlBlockType = "LTV_SUB_XCV"
+	XmlBlockTypeLTA       XmlBlockType = "LTA"
 )
 
 // blockTypeValues lists every constant once, for UnmarshalText validation.
 var blockTypeValues = []XmlBlockType{
-	XmlBlockType_SIG_BBB, XmlBlockType_REV_BBB, XmlBlockType_TST_BBB, XmlBlockType_CNT_TST_BBB,
-	XmlBlockType_AOV, XmlBlockType_AOV_XCV, XmlBlockType_CRS, XmlBlockType_PSV_CRS,
-	XmlBlockType_RAC, XmlBlockType_RAC_SUB_XCV, XmlBlockType_RFC, XmlBlockType_SUB_XCV,
-	XmlBlockType_SUB_XCV_TA, XmlBlockType_REV_CC, XmlBlockType_ER, XmlBlockType_PSV,
-	XmlBlockType_PCV, XmlBlockType_VTS, XmlBlockType_TST_PSV, XmlBlockType_TST,
-	XmlBlockType_LTV, XmlBlockType_LTV_SUB_XCV, XmlBlockType_LTA,
+	XmlBlockTypeSigBBB, XmlBlockTypeRevBBB, XmlBlockTypeTSTBBB, XmlBlockTypeCNTTSTBBB,
+	XmlBlockTypeAOV, XmlBlockTypeAOVXCV, XmlBlockTypeCRS, XmlBlockTypePSVCRS,
+	XmlBlockTypeRAC, XmlBlockTypeRACSubXCV, XmlBlockTypeRFC, XmlBlockTypeSubXCV,
+	XmlBlockTypeSubXCVTA, XmlBlockTypeRevCC, XmlBlockTypeER, XmlBlockTypePSV,
+	XmlBlockTypePCV, XmlBlockTypeVTS, XmlBlockTypeTSTPSV, XmlBlockTypeTST,
+	XmlBlockTypeLTV, XmlBlockTypeLTVSubXCV, XmlBlockTypeLTA,
 }
 
 // MarshalText writes the enum value, as the generated value() method does.

@@ -70,8 +70,8 @@ func TestUriBasedEnumParserRoundTrip(t *testing.T) {
 
 	// Print mirrors UriBasedEnumParser.print: the URI of a non-nil value, ""
 	// for a nil interface.
-	if got := Print(enumerations.Indication_TOTAL_PASSED); got != enumerations.Indication_TOTAL_PASSED.URI() {
-		t.Errorf("Print(TOTAL_PASSED) = %q, want %q", got, enumerations.Indication_TOTAL_PASSED.URI())
+	if got := Print(enumerations.IndicationTotalPassed); got != enumerations.IndicationTotalPassed.URI() {
+		t.Errorf("Print(TOTAL_PASSED) = %q, want %q", got, enumerations.IndicationTotalPassed.URI())
 	}
 	if got := Print(nil); got != "" {
 		t.Errorf("Print(nil) = %q, want \"\"", got)

@@ -84,8 +84,8 @@ func TestMessageTagValueOf(t *testing.T) {
 	if err != nil {
 		t.Fatalf("MessageTagValueOf: %v", err)
 	}
-	if got != MessageTag_BBB_XCV_CCCBB {
-		t.Fatalf("MessageTagValueOf(BBB_XCV_CCCBB) = %v, want %v", got, MessageTag_BBB_XCV_CCCBB)
+	if got != MessageTagBBBXCVCCCBB {
+		t.Fatalf("MessageTagValueOf(BBB_XCV_CCCBB) = %v, want %v", got, MessageTagBBBXCVCCCBB)
 	}
 	if _, err := MessageTagValueOf("NOT_A_REAL_TAG"); err == nil {
 		t.Fatal("expected error for unknown MessageTag name")
@@ -93,7 +93,7 @@ func TestMessageTagValueOf(t *testing.T) {
 }
 
 func TestMessageTagId(t *testing.T) {
-	if got, want := MessageTag_BBB_XCV_CCCBB.Id(), "BBB_XCV_CCCBB"; got != want {
+	if got, want := MessageTagBBBXCVCCCBB.Id(), "BBB_XCV_CCCBB"; got != want {
 		t.Fatalf("Id() = %q, want %q", got, want)
 	}
 }

@@ -6,20 +6,20 @@ package enumerations
 type SignerTextHorizontalAlignment string
 
 const (
-	// SignerTextHorizontalAlignment_LEFT aligns the text to left.
-	SignerTextHorizontalAlignment_LEFT SignerTextHorizontalAlignment = "LEFT"
-	// SignerTextHorizontalAlignment_CENTER centers the text.
-	SignerTextHorizontalAlignment_CENTER SignerTextHorizontalAlignment = "CENTER"
-	// SignerTextHorizontalAlignment_RIGHT aligns the text to right.
-	SignerTextHorizontalAlignment_RIGHT SignerTextHorizontalAlignment = "RIGHT"
+	// SignerTextHorizontalAlignmentLeft aligns the text to left.
+	SignerTextHorizontalAlignmentLeft SignerTextHorizontalAlignment = "LEFT"
+	// SignerTextHorizontalAlignmentCenter centers the text.
+	SignerTextHorizontalAlignmentCenter SignerTextHorizontalAlignment = "CENTER"
+	// SignerTextHorizontalAlignmentRight aligns the text to right.
+	SignerTextHorizontalAlignmentRight SignerTextHorizontalAlignment = "RIGHT"
 )
 
 // SignerTextHorizontalAlignmentValues returns all constants in declaration
 // order.
 func SignerTextHorizontalAlignmentValues() []SignerTextHorizontalAlignment {
 	return []SignerTextHorizontalAlignment{
-		SignerTextHorizontalAlignment_LEFT,
-		SignerTextHorizontalAlignment_CENTER,
-		SignerTextHorizontalAlignment_RIGHT,
+		SignerTextHorizontalAlignmentLeft,
+		SignerTextHorizontalAlignmentCenter,
+		SignerTextHorizontalAlignmentRight,
 	}
 }

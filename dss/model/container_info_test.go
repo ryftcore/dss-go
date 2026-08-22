@@ -9,14 +9,14 @@ import (
 
 func TestContainerInfoRoundTrip(t *testing.T) {
 	ci := NewContainerInfo()
-	ci.SetContainerType(enumerations.ASiCContainerType_ASiC_S)
+	ci.SetContainerType(enumerations.ASiCContainerTypeASiCS)
 	ci.SetZipComment("comment")
 	ci.SetMimeTypeContent("application/vnd.etsi.asic-s+zip")
 	ci.SetSignedDocumentFilenames([]string{"a.txt", "b.txt"})
 	mf := NewManifestFile()
 	ci.SetManifestFiles([]*ManifestFile{mf})
 
-	if ci.ContainerType() != enumerations.ASiCContainerType_ASiC_S {
+	if ci.ContainerType() != enumerations.ASiCContainerTypeASiCS {
 		t.Fatalf("ContainerType() = %v", ci.ContainerType())
 	}
 	if !ci.IsMimeTypeFilePresent() {

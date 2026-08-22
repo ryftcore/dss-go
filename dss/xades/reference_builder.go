@@ -96,13 +96,13 @@ func (b *ReferenceBuilder) createDSSReferenceForDocument(document model.DSSDocum
 			panic("SignaturePackaging must be defined!")
 		}
 		switch b.signatureParameters.SignaturePackaging() {
-		case enumerations.SignaturePackaging_ENVELOPED:
+		case enumerations.SignaturePackagingEnveloped:
 			return b.envelopedDSSReference(document)
-		case enumerations.SignaturePackaging_ENVELOPING:
+		case enumerations.SignaturePackagingEnveloping:
 			return b.envelopingDSSReference(document)
-		case enumerations.SignaturePackaging_DETACHED:
+		case enumerations.SignaturePackagingDetached:
 			return b.detachedDSSReference(document), nil
-		case enumerations.SignaturePackaging_INTERNALLY_DETACHED:
+		case enumerations.SignaturePackagingInternallyDetached:
 			return b.internallyDetachedDSSReference(document)
 		default:
 			return nil, model.NewDSSError(fmt.Sprintf("The given signature packaging %s is not supported!",
@@ -159,7 +159,7 @@ func (b *ReferenceBuilder) assertEnvelopedSignaturePossible(document model.DSSDo
 		return err
 	}
 	documentElement := dom.DocumentElement()
-	if common.XMLDSigElement_SIGNATURE.IsSameTagName(documentElement.Name.Local) {
+	if common.XMLDSigElementSignature.IsSameTagName(documentElement.Name.Local) {
 		return exception.NewIllegalInputException(
 			"Unable to create an enveloped signature for another XML signature document!")
 	}
@@ -201,9 +201,9 @@ func (b *ReferenceBuilder) envelopingDSSReference(document model.DSSDocument) (*
 			return nil, err
 		}
 
-		reference.SetType(common.XMLDSigPath_MANIFEST_TYPE)
+		reference.SetType(common.XMLDSigPathManifestType)
 		reference.SetUri(xmlutils.DomUtilsToElementReference(
-			manifestElement.AttrValue("", common.XMLDSigAttribute_ID.AttributeName())))
+			manifestElement.AttrValue("", common.XMLDSigAttributeID.AttributeName())))
 		var xmlTransform DSSTransform = NewCanonicalizationTransformWithNamespace(
 			b.signatureParameters.XmldsigNamespace(), xmlutils.XMLCanonicalizerDefaultDSSC14NMethod)
 		reference.SetTransforms([]DSSTransform{xmlTransform})
@@ -213,7 +213,7 @@ func (b *ReferenceBuilder) envelopingDSSReference(document model.DSSDocument) (*
 			return nil, err
 		}
 
-		reference.SetType(common.XMLDSigPath_OBJECT_TYPE)
+		reference.SetType(common.XMLDSigPathObjectType)
 		reference.SetUri(xmlutils.DomUtilsToElementReference(referenceBuilderObjectIdPrefix + refId))
 
 		var xmlTransform DSSTransform = NewCanonicalizationTransformWithNamespace(
@@ -221,7 +221,7 @@ func (b *ReferenceBuilder) envelopingDSSReference(document model.DSSDocument) (*
 		reference.SetTransforms([]DSSTransform{xmlTransform})
 
 	default:
-		reference.SetType(common.XMLDSigPath_OBJECT_TYPE)
+		reference.SetType(common.XMLDSigPathObjectType)
 		reference.SetUri(xmlutils.DomUtilsToElementReference(referenceBuilderObjectIdPrefix + refId))
 
 		var base64Transform DSSTransform = NewBase64TransformWithNamespace(
@@ -234,7 +234,7 @@ func (b *ReferenceBuilder) envelopingDSSReference(document model.DSSDocument) (*
 // assertXmlManifestSignaturePossible ports the private
 // assertXmlManifestSignaturePossible(Element).
 func (b *ReferenceBuilder) assertXmlManifestSignaturePossible(manifestElement *xmldom.Node) error {
-	idAttr := manifestElement.AttrValue("", common.XMLDSigAttribute_ID.AttributeName())
+	idAttr := manifestElement.AttrValue("", common.XMLDSigAttributeID.AttributeName())
 	if utils.IsStringBlank(idAttr) {
 		return exception.NewIllegalInputException(
 			"Manifest signature is not possible for an XML file without Id attribute in the root element!")

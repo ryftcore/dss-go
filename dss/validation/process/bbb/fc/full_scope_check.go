@@ -29,7 +29,7 @@ func NewFullScopeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*
 // Process performs the check.
 func (c *FullScopeCheck) Process() bool {
 	for _, sigScope := range c.signatureScopes {
-		if sigScope.Scope == nil || sigScope.Scope.SignatureScopeType() != enumerations.SignatureScopeType_FULL {
+		if sigScope.Scope == nil || sigScope.Scope.SignatureScopeType() != enumerations.SignatureScopeTypeFull {
 			return false
 		}
 	}
@@ -37,17 +37,17 @@ func (c *FullScopeCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *FullScopeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ICFD }
+func (c *FullScopeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCICFD }
 
 // ErrorMessageTag returns the error message i18n key.
-func (c *FullScopeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ICFD_ANS }
+func (c *FullScopeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCICFDANS }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *FullScopeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *FullScopeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

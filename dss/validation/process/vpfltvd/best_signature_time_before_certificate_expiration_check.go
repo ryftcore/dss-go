@@ -58,29 +58,29 @@ func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) BuildAdditionalIn
 	if c.signingCertificate.NotAfter() != nil {
 		certNotAfter = process.GetFormattedDate(c.signingCertificate.NotAfter())
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_BEST_SIGNATURE_TIME_CERT_NOT_AFTER, bestSignatureTimeStr, certNotAfter)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagBESTSignatureTimeCertNotAfter, bestSignatureTimeStr, certNotAfter)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_IBSTBCEC
+	return i18n.MessageTagTSVIBSTBCEC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_IBSTBCEC_ANS
+	return i18n.MessageTagTSVIBSTBCECANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *BestSignatureTimeBeforeCertificateExpirationCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED
+	return enumerations.SubIndicationOutOfBoundsNotRevoked
 }

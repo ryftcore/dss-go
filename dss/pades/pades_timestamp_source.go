@@ -238,7 +238,7 @@ func (s *PAdESTimestampSource) GetSignatureTimestampReferences() []*validation.T
 	references := []*validation.TimestampedReference{}
 	padesTSAddReferences(&references, padesTSEncapsulatedReferencesFromTimestamps(s.ContentTimestamps(), s.CertificateSource(), s.CRLSource(), s.OCSPSource()))
 	padesTSAddReferences(&references, s.SignerDataReferences())
-	padesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectType_SIGNATURE))
+	padesTSAddReference(&references, validation.NewTimestampedReference(s.signature.ID(), enumerations.TimestampedObjectTypeSignature))
 	signatureCertificateSource := s.signature.CertificateSource()
 	padesTSAddReferences(&references, timestamp.CreateReferencesForCertificateRefs(signatureCertificateSource.SigningCertificateRefs(),
 		signatureCertificateSource, s.CertificateSource()))
@@ -278,7 +278,7 @@ func (s *PAdESTimestampSource) GetAdbeRevocationInfoArchivalReferences() []*vali
 // isAdbeRevocationInfoArchival checks if signedAttribute is an instance of type
 // adbe-revocationInfoArchival. Port of isAdbeRevocationInfoArchival(CAdESAttribute).
 func (s *PAdESTimestampSource) isAdbeRevocationInfoArchival(signedAttribute *cades.CAdESAttribute) bool {
-	return spi.OID_adbe_revocationInfoArchival.Equal(signedAttribute.ASN1Oid())
+	return spi.OIDAdbeRevocationInfoArchival.Equal(signedAttribute.ASN1Oid())
 }
 
 // getTimestampScopesForDocumentTimestamp generates timestamp token scopes for a document/VRI
@@ -324,7 +324,7 @@ func (s *PAdESTimestampSource) populateAndValidateDocumentTimestamps() {
 			padesTSAddReferences(&individualTimestampReferences, timestamp.SignerDataTimestampedReferences(timestampScopes))
 
 			if dssRevisionReached {
-				timestampToken.SetArchiveTimestampType(enumerations.ArchiveTimestampType_PAdES)
+				timestampToken.SetArchiveTimestampType(enumerations.ArchiveTimestampTypePAdES)
 			}
 			if signatureRevisionReached {
 				padesTSAddReferences(&individualTimestampReferences, s.GetSignatureTimestampReferences())

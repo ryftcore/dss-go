@@ -35,23 +35,23 @@ func NewEAACategoryForPubEAACheck(i18nProvider *i18n.I18nProvider, result *proce
 
 // Process performs the check. Port of process().
 func (c *EAACategoryForPubEAACheck) Process() bool {
-	return enumerations.EAACategory_EU_PUBEAA.URN() == c.eaa.EAACategory()
+	return enumerations.EAACategoryEUPubEAA.URN() == c.eaa.EAACategory()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAACategoryForPubEAACheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CAT_PUBEAA
+	return i18n.MessageTagEAACATPubEAA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *EAACategoryForPubEAACheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CAT_PUBEAA_ANS
+	return i18n.MessageTagEAACATPubEAAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAACategoryForPubEAACheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

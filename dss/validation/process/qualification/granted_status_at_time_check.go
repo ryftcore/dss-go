@@ -50,7 +50,7 @@ func (c *GrantedStatusAtTimeCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage 
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QUAL_HAS_GRANTED_AT, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQualHasGrantedAt, tag)
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -59,13 +59,13 @@ func (c *GrantedStatusAtTimeCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QUAL_HAS_GRANTED_AT_ANS, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQualHasGrantedAtANS, tag)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *GrantedStatusAtTimeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

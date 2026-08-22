@@ -53,23 +53,23 @@ func (c *GrantedStatusCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *GrantedStatusCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_GRANTED
+	return i18n.MessageTagQualHasGranted
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *GrantedStatusCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_GRANTED_ANS
+	return i18n.MessageTagQualHasGrantedANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *GrantedStatusCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
 	statusList := c.getStatusList()
-	errorTag := i18n.MessageTag_QUAL_HAS_GRANTED_ANS
+	errorTag := i18n.MessageTagQualHasGrantedANS
 	var argument string
 	if len(statusList) == 1 {
 		argument = statusList[0]
 	} else {
-		errorTag = i18n.MessageTag_QUAL_HAS_GRANTED_ANS_2
+		errorTag = i18n.MessageTagQualHasGrantedANS2
 		// Java's Set<String>#toString(). Kept file-local (no cross-file
 		// helpers) rather than factored out, per the porting hard rules.
 		argument = "[" + strings.Join(statusList, ", ") + "]"
@@ -101,7 +101,7 @@ func (c *GrantedStatusCheck[T]) getStatusList() []string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *GrantedStatusCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

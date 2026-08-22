@@ -38,22 +38,22 @@ func (c *CountryCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CountryCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGCOUN
+	return i18n.MessageTagBBBXCVISCGCOUN
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CountryCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGCOUN_ANS
+	return i18n.MessageTagBBBXCVISCGCOUNANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CountryCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CountryCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

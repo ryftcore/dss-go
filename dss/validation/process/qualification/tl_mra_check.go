@@ -37,7 +37,7 @@ func (c *TLMRACheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLMRACheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_IMRA
+	return i18n.MessageTagQualTLIMRA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
@@ -46,21 +46,21 @@ func (c *TLMRACheck) ErrorMessageTag() i18n.MessageTag {
 	if parentTL != nil {
 		tslType := parentTL.Type
 		if tslType != nil {
-			if enumerations.TSLTypeEnum_EUlistofthelists.URI() == *tslType {
-				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V1
-			} else if enumerations.TSLTypeEnum_AdESlistofthelists.URI() == *tslType {
-				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V2
+			if enumerations.TSLTypeEnumEUlistofthelists.URI() == *tslType {
+				return i18n.MessageTagQualTLIMRAANSV1
+			} else if enumerations.TSLTypeEnumAdESlistofthelists.URI() == *tslType {
+				return i18n.MessageTagQualTLIMRAANSV2
 			}
 		}
 	}
 	// default
-	return i18n.MessageTag_QUAL_TL_IMRA_ANS
+	return i18n.MessageTagQualTLIMRAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLMRACheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port of

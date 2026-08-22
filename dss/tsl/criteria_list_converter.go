@@ -97,7 +97,7 @@ func (c *CriteriaListConverter) addOtherCriteriaListConditionsIfPresent(tokens [
 		case "QcStatementSet":
 			var v jaxb.QcStatementListType
 			if err := decodeTokenSubtree(tokens[start.index:], &v); err == nil {
-				composite := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+				composite := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 				for _, qcStatementType := range v.QcStatement {
 					var oid, legislation, typ string
 					if id, ok := objectIdentifierTypeValue(qcStatementType.QcStatementId); ok {

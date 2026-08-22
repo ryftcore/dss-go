@@ -96,18 +96,18 @@ func (d *ValidationCacheDTO) SetPotentialSigners(potentialSigners []*model.Certi
 
 // IsValid reports whether the indication is TOTAL_PASSED. Port of isValid().
 func (d *ValidationCacheDTO) IsValid() bool {
-	return enumerations.Indication_TOTAL_PASSED == d.indication
+	return enumerations.IndicationTotalPassed == d.indication
 }
 
 // IsIndeterminate reports whether the indication is INDETERMINATE. Port of
 // isIndeterminate().
 func (d *ValidationCacheDTO) IsIndeterminate() bool {
-	return enumerations.Indication_INDETERMINATE == d.indication
+	return enumerations.IndicationIndeterminate == d.indication
 }
 
 // IsInvalid reports whether the indication is TOTAL_FAILED. Port of isInvalid().
 func (d *ValidationCacheDTO) IsInvalid() bool {
-	return enumerations.Indication_TOTAL_FAILED == d.indication
+	return enumerations.IndicationTotalFailed == d.indication
 }
 
 var _ modeljob.ValidationInfoRecord = (*ValidationCacheDTO)(nil)

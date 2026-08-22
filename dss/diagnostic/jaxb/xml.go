@@ -273,8 +273,8 @@ type XmlEncapsulationType string
 
 // The EncapsulationType values, with the exact lexical form of the schema.
 const (
-	XmlEncapsulationType_BINARIES  XmlEncapsulationType = "BINARIES"
-	XmlEncapsulationType_REFERENCE XmlEncapsulationType = "REFERENCE"
+	XmlEncapsulationTypeBinaries  XmlEncapsulationType = "BINARIES"
+	XmlEncapsulationTypeReference XmlEncapsulationType = "REFERENCE"
 )
 
 // MarshalText writes the enum value, as the generated value() method does.
@@ -283,7 +283,7 @@ func (e XmlEncapsulationType) MarshalText() ([]byte, error) { return []byte(e), 
 // UnmarshalText resolves the lexical form, mirroring fromValue().
 func (e *XmlEncapsulationType) UnmarshalText(text []byte) error {
 	switch v := XmlEncapsulationType(text); v {
-	case XmlEncapsulationType_BINARIES, XmlEncapsulationType_REFERENCE:
+	case XmlEncapsulationTypeBinaries, XmlEncapsulationTypeReference:
 		*e = v
 		return nil
 	default:

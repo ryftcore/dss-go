@@ -187,11 +187,11 @@ const (
 
 func xadesRefsTextDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesRefsTextContent), "hello.txt",
-		enumerations.MimeTypeEnum_TEXT)
+		enumerations.MimeTypeEnumText)
 }
 
 func xadesRefsSecondDocument() model.DSSDocument {
-	return model.NewInMemoryDocumentWithMimeType([]byte("second"), "second.txt", enumerations.MimeTypeEnum_TEXT)
+	return model.NewInMemoryDocumentWithMimeType([]byte("second"), "second.txt", enumerations.MimeTypeEnumText)
 }
 
 func xadesRefsUnnamedDocument() model.DSSDocument {
@@ -200,22 +200,22 @@ func xadesRefsUnnamedDocument() model.DSSDocument {
 
 func xadesRefsXMLDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesRefsXMLContent), "sample.xml",
-		enumerations.MimeTypeEnum_XML)
+		enumerations.MimeTypeEnumXML)
 }
 
 func xadesRefsSignedXMLDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesRefsXMLSignedContent), "signed.xml",
-		enumerations.MimeTypeEnum_XML)
+		enumerations.MimeTypeEnumXML)
 }
 
 func xadesRefsXMLWithoutIDDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesRefsXMLWithoutIDContent), "no-id.xml",
-		enumerations.MimeTypeEnum_XML)
+		enumerations.MimeTypeEnumXML)
 }
 
 func xadesRefsManifestDocument(t *testing.T) model.DSSDocument {
 	t.Helper()
-	builder, err := NewManifestBuilder(enumerations.DigestAlgorithm_SHA256,
+	builder, err := NewManifestBuilder(enumerations.DigestAlgorithmSHA256,
 		[]model.DSSDocument{xadesRefsTextDocument()})
 	if err != nil {
 		t.Fatalf("NewManifestBuilder: %v", err)
@@ -229,11 +229,11 @@ func xadesRefsManifestDocument(t *testing.T) model.DSSDocument {
 
 func xadesRefsDigestDocument(t *testing.T) model.DSSDocument {
 	t.Helper()
-	digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, []byte(xadesRefsTextContent))
+	digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, []byte(xadesRefsTextContent))
 	if err != nil {
 		t.Fatalf("digesting: %v", err)
 	}
-	return model.NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithm_SHA256, digest, "digest.bin")
+	return model.NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithmSHA256, digest, "digest.bin")
 }
 
 func xadesRefsSignedXMLDOM(t *testing.T) *xmldom.Node {
@@ -266,8 +266,8 @@ func xadesRefsBaseParams(t *testing.T) *XAdESSignatureParameters {
 	params.SetCertificateChain([]*model.CertificateToken{signer})
 	signingDate := xadesRefsSigningDate
 	params.BLevel().SetSigningDate(&signingDate)
-	params.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
-	params.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
+	params.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	return params
 }
 
@@ -390,7 +390,7 @@ func TestDSSTransformCreateTransformAgainstJavaOracle(t *testing.T) {
 
 			document := xmlutils.DomUtilsBuildDOMEmpty()
 			referenceDom := xmlutils.DomUtilsCreateElementNS(document, testCase.namespace,
-				common.XMLDSigElement_REFERENCE)
+				common.XMLDSigElementReference)
 			document.AppendChild(referenceDom)
 			DSSXMLUtilsIncorporateTransforms(referenceDom, transforms, testCase.namespace)
 
@@ -565,7 +565,7 @@ func TestReferenceIdProviderAgainstJavaOracle(t *testing.T) {
 	})
 
 	t.Run("refid-with-parameters", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		xadesRefsAssertString(t, "refid-with-parameters", "deterministic-id",
 			oracle.expectString(t, "refid-with-parameters", "deterministic-id"), params.GetDeterministicId())
 
@@ -649,34 +649,34 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 		documents func(t *testing.T) []model.DSSDocument
 	}{
 		{"refbuild-enveloped", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
 		{"refbuild-enveloping", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
 		{"refbuild-detached", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
 		// The document has no name, so upstream leaves the URI null - not empty.
 		{"refbuild-detached-unnamed", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsUnnamedDocument()} }},
 
 		{"refbuild-internally-detached", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_INTERNALLY_DETACHED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
 		{"refbuild-enveloping-embed-xml", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			return params
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
 
 		{"refbuild-enveloping-manifest", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			return params
 		}, func(t *testing.T) []model.DSSDocument {
@@ -684,7 +684,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 		}},
 
 		{"refbuild-two-documents", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 		}, func(t *testing.T) []model.DSSDocument {
 			return []model.DSSDocument{xadesRefsTextDocument(), xadesRefsSecondDocument()}
 		}},
@@ -704,7 +704,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 	t.Run("refbuild-no-parameters", func(t *testing.T) {
 		references, err := NewReferenceBuilderWithDigestAlgorithm(
 			[]model.DSSDocument{xadesRefsTextDocument(), xadesRefsXMLDocument()},
-			enumerations.DigestAlgorithm_SHA256, NewReferenceIdProvider()).Build()
+			enumerations.DigestAlgorithmSHA256, NewReferenceIdProvider()).Build()
 		if err != nil {
 			t.Fatalf("Build: %v", err)
 		}
@@ -718,11 +718,11 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 		documents func(t *testing.T) []model.DSSDocument
 	}{
 		{"refbuild-enveloped-not-xml", func(t *testing.T) *XAdESSignatureParameters {
-			return xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+			return xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 
 		{"refbuild-manifest-without-id", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			return params
 		}, func(t *testing.T) []model.DSSDocument {
@@ -730,7 +730,7 @@ func TestReferenceBuilderAgainstJavaOracle(t *testing.T) {
 		}},
 
 		{"refbuild-embed-xml-not-xml", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			return params
 		}, func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
@@ -767,7 +767,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 		references []*DSSReference, namespace *common.DSSNamespace) {
 		t.Helper()
 		document := xmlutils.DomUtilsBuildDOMEmpty()
-		signedInfoDom := xmlutils.DomUtilsCreateElementNS(document, namespace, common.XMLDSigElement_SIGNED_INFO)
+		signedInfoDom := xmlutils.DomUtilsCreateElementNS(document, namespace, common.XMLDSigElementSignedInfo)
 		document.AppendChild(signedInfoDom)
 		if err := processor.IncorporateReferences(signedInfoDom, references, namespace); err != nil {
 			t.Fatalf("case %s: IncorporateReferences: %v", name, err)
@@ -785,7 +785,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 				t.Fatalf("case %s: ReferenceOutput(%d): %v", name, i, err)
 			}
 			if digest, isDigestOnly := oracle[name][key+"-digest"]; isDigestOnly {
-				got, err := output.DigestValue(enumerations.DigestAlgorithm_SHA256)
+				got, err := output.DigestValue(enumerations.DigestAlgorithmSHA256)
 				if err != nil {
 					t.Fatalf("case %s: digesting the reference output: %v", name, err)
 				}
@@ -810,53 +810,53 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 
 	t.Run("incorporate-enveloped", func(t *testing.T) {
 		incorporate(t, "incorporate-enveloped",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped),
 			[]model.DSSDocument{xadesRefsXMLDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-enveloping", func(t *testing.T) {
 		incorporate(t, "incorporate-enveloping",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping),
 			[]model.DSSDocument{xadesRefsTextDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-detached", func(t *testing.T) {
 		incorporate(t, "incorporate-detached",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached),
 			[]model.DSSDocument{xadesRefsTextDocument()}, xadesRefsDSNamespace)
 	})
 	// The URI is null here, so no URI attribute is written at all.
 	t.Run("incorporate-detached-unnamed", func(t *testing.T) {
 		incorporate(t, "incorporate-detached-unnamed",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached),
 			[]model.DSSDocument{xadesRefsUnnamedDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-internally-detached", func(t *testing.T) {
 		incorporate(t, "incorporate-internally-detached",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_INTERNALLY_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached),
 			[]model.DSSDocument{xadesRefsXMLDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-two-documents", func(t *testing.T) {
 		incorporate(t, "incorporate-two-documents",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached),
 			[]model.DSSDocument{xadesRefsTextDocument(), xadesRefsSecondDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-enveloped-dsig-prefix", func(t *testing.T) {
 		incorporate(t, "incorporate-enveloped-dsig-prefix",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped),
 			[]model.DSSDocument{xadesRefsXMLDocument()}, xadesRefsDsigNamespace)
 	})
 	t.Run("incorporate-enveloped-default-prefix", func(t *testing.T) {
 		incorporate(t, "incorporate-enveloped-default-prefix",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped),
 			[]model.DSSDocument{xadesRefsXMLDocument()}, xadesRefsDefaultNamespace)
 	})
 	t.Run("incorporate-embed-xml", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		params.SetEmbedXML(true)
 		incorporate(t, "incorporate-embed-xml", params,
 			[]model.DSSDocument{xadesRefsXMLDocument()}, xadesRefsDSNamespace)
 	})
 	t.Run("incorporate-manifest", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		params.SetManifestSignature(true)
 		incorporate(t, "incorporate-manifest", params,
 			[]model.DSSDocument{xadesRefsManifestDocument(t)}, xadesRefsDSNamespace)
@@ -866,7 +866,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 	t.Run("incorporate-no-parameters", func(t *testing.T) {
 		references, err := NewReferenceBuilderWithDigestAlgorithm(
 			[]model.DSSDocument{xadesRefsTextDocument(), xadesRefsXMLDocument()},
-			enumerations.DigestAlgorithm_SHA256, NewReferenceIdProvider()).Build()
+			enumerations.DigestAlgorithmSHA256, NewReferenceIdProvider()).Build()
 		if err != nil {
 			t.Fatalf("Build: %v", err)
 		}
@@ -880,7 +880,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 		reference := NewDSSReference()
 		reference.SetId("r-digest")
 		reference.SetUri("digest.bin")
-		reference.SetDigestMethodAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		reference.SetDigestMethodAlgorithm(enumerations.DigestAlgorithmSHA256)
 		reference.SetContents(xadesRefsDigestDocument(t))
 		assertIncorporated(t, "incorporate-digest-document", NewReferenceProcessorEmpty(),
 			[]*DSSReference{reference}, xadesRefsDSNamespace)
@@ -892,7 +892,7 @@ func TestReferenceProcessorAgainstJavaOracle(t *testing.T) {
 		reference := NewDSSReference()
 		reference.SetId("r-filtered")
 		reference.SetUri("")
-		reference.SetDigestMethodAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		reference.SetDigestMethodAlgorithm(enumerations.DigestAlgorithmSHA256)
 		reference.SetContents(xadesRefsSignedXMLDocument())
 		reference.SetTransforms([]DSSTransform{
 			NewXPath2FilterEnvelopedSignatureTransform(),
@@ -914,7 +914,7 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 			built.SetId(id)
 		}
 		built.SetUri(uri)
-		built.SetDigestMethodAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		built.SetDigestMethodAlgorithm(enumerations.DigestAlgorithmSHA256)
 		built.SetContents(contents)
 		built.SetTransforms(transforms)
 		return built
@@ -926,11 +926,11 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 		packaging enumerations.SignaturePackaging
 		documents func(t *testing.T) []model.DSSDocument
 	}{
-		{"verify-enveloped-ok", enumerations.SignaturePackaging_ENVELOPED,
+		{"verify-enveloped-ok", enumerations.SignaturePackagingEnveloped,
 			func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsXMLDocument()} }},
-		{"verify-enveloping-ok", enumerations.SignaturePackaging_ENVELOPING,
+		{"verify-enveloping-ok", enumerations.SignaturePackagingEnveloping,
 			func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
-		{"verify-detached-ok", enumerations.SignaturePackaging_DETACHED,
+		{"verify-detached-ok", enumerations.SignaturePackagingDetached,
 			func(t *testing.T) []model.DSSDocument { return []model.DSSDocument{xadesRefsTextDocument()} }},
 	}
 	for _, testCase := range built {
@@ -953,32 +953,32 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 		params func(t *testing.T) *XAdESSignatureParameters
 	}{
 		{"verify-enveloped-without-transform", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 			params.SetReferences([]*DSSReference{reference("r-1", "", xadesRefsXMLDocument(), nil)})
 			return params
 		}},
 		{"verify-base64-embed-xml", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetEmbedXML(true)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsXMLDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
 		{"verify-base64-manifest", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetManifestSignature(true)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsXMLDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
 		{"verify-base64-detached", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached)
 			params.SetReferences([]*DSSReference{reference("r-1", "hello.txt", xadesRefsTextDocument(),
 				[]DSSTransform{NewBase64Transform()})})
 			return params
 		}},
 		{"verify-base64-with-other-transform", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 			params.SetReferences([]*DSSReference{reference("r-1", "#o-r-1", xadesRefsTextDocument(),
 				[]DSSTransform{
 					NewBase64Transform(),
@@ -987,7 +987,7 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 			return params
 		}},
 		{"verify-missing-element-id", func(t *testing.T) *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_INTERNALLY_DETACHED)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached)
 			params.SetReferences([]*DSSReference{reference("r-1", "#absent-id", xadesRefsXMLDocument(),
 				[]DSSTransform{NewCanonicalizationTransform(xadesRefsC14NExclusive)})})
 			return params
@@ -1002,7 +1002,7 @@ func TestReferenceVerifierAgainstJavaOracle(t *testing.T) {
 
 	// A reference without an Id is given a deterministic one IN PLACE.
 	t.Run("verify-generates-missing-id", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		withoutId := reference("", "#o-r-1", xadesRefsTextDocument(),
 			[]DSSTransform{NewBase64Transform()})
 		params.SetReferences([]*DSSReference{withoutId})
@@ -1051,38 +1051,38 @@ func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 	}
 
 	t.Run("si-enveloped", func(t *testing.T) {
-		run(t, "si-enveloped", xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED),
+		run(t, "si-enveloped", xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped),
 			[]model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-enveloping", func(t *testing.T) {
-		run(t, "si-enveloping", xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING),
+		run(t, "si-enveloping", xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping),
 			[]model.DSSDocument{xadesRefsTextDocument()})
 	})
 	t.Run("si-detached", func(t *testing.T) {
-		run(t, "si-detached", xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED),
+		run(t, "si-detached", xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached),
 			[]model.DSSDocument{xadesRefsTextDocument()})
 	})
 	t.Run("si-internally-detached", func(t *testing.T) {
 		run(t, "si-internally-detached",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_INTERNALLY_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingInternallyDetached),
 			[]model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-enveloping-embed-xml", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		params.SetEmbedXML(true)
 		run(t, "si-enveloping-embed-xml", params, []model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-enveloping-manifest", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPING)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloping)
 		params.SetManifestSignature(true)
 		run(t, "si-enveloping-manifest", params, []model.DSSDocument{xadesRefsManifestDocument(t)})
 	})
 	t.Run("si-enveloped-xpath-transform", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		explicit := NewDSSReference()
 		explicit.SetId("r-1")
 		explicit.SetUri("")
-		explicit.SetDigestMethodAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		explicit.SetDigestMethodAlgorithm(enumerations.DigestAlgorithmSHA256)
 		explicit.SetContents(xadesRefsXMLDocument())
 		explicit.SetTransforms([]DSSTransform{
 			NewXPathEnvelopedSignatureTransform(),
@@ -1092,18 +1092,18 @@ func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 		run(t, "si-enveloped-xpath-transform", params, []model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-enveloped-dsig-prefix", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		params.SetXmldsigNamespace(xadesRefsDsigNamespace)
 		run(t, "si-enveloped-dsig-prefix", params, []model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-enveloped-default-prefix", func(t *testing.T) {
-		params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+		params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 		params.SetXmldsigNamespace(xadesRefsDefaultNamespace)
 		run(t, "si-enveloped-default-prefix", params, []model.DSSDocument{xadesRefsXMLDocument()})
 	})
 	t.Run("si-detached-two-documents", func(t *testing.T) {
 		run(t, "si-detached-two-documents",
-			xadesRefsParamsFor(t, enumerations.SignaturePackaging_DETACHED),
+			xadesRefsParamsFor(t, enumerations.SignaturePackagingDetached),
 			[]model.DSSDocument{xadesRefsTextDocument(), xadesRefsSecondDocument()})
 	})
 
@@ -1112,11 +1112,11 @@ func TestSignedInfoWithReferencesAgainstJavaOracle(t *testing.T) {
 	// diagnosis and the internal/xmldsig fix. Asserted outright, never skipped.
 	t.Run("si-enveloped-enveloped-transform", func(t *testing.T) {
 		newParams := func() *XAdESSignatureParameters {
-			params := xadesRefsParamsFor(t, enumerations.SignaturePackaging_ENVELOPED)
+			params := xadesRefsParamsFor(t, enumerations.SignaturePackagingEnveloped)
 			explicit := NewDSSReference()
 			explicit.SetId("r-1")
 			explicit.SetUri("")
-			explicit.SetDigestMethodAlgorithm(enumerations.DigestAlgorithm_SHA256)
+			explicit.SetDigestMethodAlgorithm(enumerations.DigestAlgorithmSHA256)
 			explicit.SetContents(xadesRefsXMLDocument())
 			explicit.SetTransforms([]DSSTransform{
 				NewEnvelopedSignatureTransform(),

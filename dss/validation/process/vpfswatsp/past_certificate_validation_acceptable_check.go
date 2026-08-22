@@ -44,7 +44,7 @@ func NewPastCertificateValidationAcceptableCheck(i18nProvider *i18n.I18nProvider
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *PastCertificateValidationAcceptableCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PCV
+	return jaxb.XmlBlockTypePCV
 }
 
 // Process performs the check. Port of process().
@@ -59,25 +59,25 @@ func (c *PastCertificateValidationAcceptableCheck) Process() bool {
 		}
 
 		// INDETERMINATE cases are treated in following steps depending on POE
-		return enumerations.Indication_PASSED == pcvIndication ||
-			(enumerations.Indication_INDETERMINATE == pcvIndication &&
-				(enumerations.SubIndication_REVOKED_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_REVOKED_CA_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == pcvSubIndication ||
-					enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == pcvSubIndication))
+		return enumerations.IndicationPassed == pcvIndication ||
+			(enumerations.IndicationIndeterminate == pcvIndication &&
+				(enumerations.SubIndicationRevokedNoPOE == pcvSubIndication ||
+					enumerations.SubIndicationRevokedCANoPOE == pcvSubIndication ||
+					enumerations.SubIndicationOutOfBoundsNoPOE == pcvSubIndication ||
+					enumerations.SubIndicationCryptoConstraintsFailureNoPOE == pcvSubIndication))
 	}
 	return false
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastCertificateValidationAcceptableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVA
+	return i18n.MessageTagPSVIPCVA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastCertificateValidationAcceptableCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVA_ANS
+	return i18n.MessageTagPSVIPCVAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -97,7 +97,7 @@ func (c *PastCertificateValidationAcceptableCheck) FailedSubIndicationForConclus
 func (c *PastCertificateValidationAcceptableCheck) BuildAdditionalInfo() *string {
 	if c.pcv != nil && c.pcv.ControlTime != nil {
 		controlTime := c.pcv.ControlTime.Time()
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_ALONE,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeAlone,
 			process.GetFormattedDate(&controlTime))
 		return &message
 	}

@@ -14,7 +14,7 @@ import (
 
 // certificateRefIdentifierSkiDigestAlgorithm is the digest algorithm used to compute SKI, by
 // RFC 6960. Port of the private static SKI_DIGEST_ALGO constant.
-const certificateRefIdentifierSkiDigestAlgorithm = enumerations.DigestAlgorithm_SHA1
+const certificateRefIdentifierSkiDigestAlgorithm = enumerations.DigestAlgorithmSHA1
 
 // CertificateRefIdentifier is an identifier for a certificate token reference.
 type CertificateRefIdentifier struct {

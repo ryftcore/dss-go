@@ -5,29 +5,29 @@ package enumerations
 type ValidationTime string
 
 const (
-	// ValidationTime_CERTIFICATE_ISSUANCE_TIME is the not-before date of
+	// ValidationTimeCertificateIssuanceTime is the not-before date of
 	// the certificate.
-	ValidationTime_CERTIFICATE_ISSUANCE_TIME ValidationTime = "CERTIFICATE_ISSUANCE_TIME"
-	// ValidationTime_BEST_SIGNATURE_TIME is the lowest time at which
+	ValidationTimeCertificateIssuanceTime ValidationTime = "CERTIFICATE_ISSUANCE_TIME"
+	// ValidationTimeBESTSignatureTime is the lowest time at which
 	// there exists a POE for the signature.
-	ValidationTime_BEST_SIGNATURE_TIME ValidationTime = "BEST_SIGNATURE_TIME"
-	// ValidationTime_VALIDATION_TIME is the date of the validation.
-	ValidationTime_VALIDATION_TIME ValidationTime = "VALIDATION_TIME"
-	// ValidationTime_TIMESTAMP_GENERATION_TIME is the time of the
+	ValidationTimeBESTSignatureTime ValidationTime = "BEST_SIGNATURE_TIME"
+	// ValidationTimeValidationTime is the date of the validation.
+	ValidationTimeValidationTime ValidationTime = "VALIDATION_TIME"
+	// ValidationTimeTimestampGenerationTime is the time of the
 	// timestamp generation.
-	ValidationTime_TIMESTAMP_GENERATION_TIME ValidationTime = "TIMESTAMP_GENERATION_TIME"
-	// ValidationTime_TIMESTAMP_POE_TIME is the time when the timestamp is
+	ValidationTimeTimestampGenerationTime ValidationTime = "TIMESTAMP_GENERATION_TIME"
+	// ValidationTimeTimestampPOETime is the time when the timestamp is
 	// proved to exist.
-	ValidationTime_TIMESTAMP_POE_TIME ValidationTime = "TIMESTAMP_POE_TIME"
+	ValidationTimeTimestampPOETime ValidationTime = "TIMESTAMP_POE_TIME"
 )
 
 // ValidationTimeValues returns all constants in declaration order.
 func ValidationTimeValues() []ValidationTime {
 	return []ValidationTime{
-		ValidationTime_CERTIFICATE_ISSUANCE_TIME,
-		ValidationTime_BEST_SIGNATURE_TIME,
-		ValidationTime_VALIDATION_TIME,
-		ValidationTime_TIMESTAMP_GENERATION_TIME,
-		ValidationTime_TIMESTAMP_POE_TIME,
+		ValidationTimeCertificateIssuanceTime,
+		ValidationTimeBESTSignatureTime,
+		ValidationTimeValidationTime,
+		ValidationTimeTimestampGenerationTime,
+		ValidationTimeTimestampPOETime,
 	}
 }

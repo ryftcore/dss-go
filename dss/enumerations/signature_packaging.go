@@ -8,24 +8,24 @@ import "fmt"
 type SignaturePackaging string
 
 const (
-	// SignaturePackaging_ENVELOPED: the signature is enveloped to the signed document.
-	SignaturePackaging_ENVELOPED SignaturePackaging = "ENVELOPED"
-	// SignaturePackaging_ENVELOPING: the signature envelops the signed document.
-	SignaturePackaging_ENVELOPING SignaturePackaging = "ENVELOPING"
-	// SignaturePackaging_DETACHED: the signature is detached from the signed document.
-	SignaturePackaging_DETACHED SignaturePackaging = "DETACHED"
-	// SignaturePackaging_INTERNALLY_DETACHED: the signature file contains the signed
+	// SignaturePackagingEnveloped: the signature is enveloped to the signed document.
+	SignaturePackagingEnveloped SignaturePackaging = "ENVELOPED"
+	// SignaturePackagingEnveloping: the signature envelops the signed document.
+	SignaturePackagingEnveloping SignaturePackaging = "ENVELOPING"
+	// SignaturePackagingDetached: the signature is detached from the signed document.
+	SignaturePackagingDetached SignaturePackaging = "DETACHED"
+	// SignaturePackagingInternallyDetached: the signature file contains the signed
 	// document (XAdES only).
-	SignaturePackaging_INTERNALLY_DETACHED SignaturePackaging = "INTERNALLY_DETACHED"
+	SignaturePackagingInternallyDetached SignaturePackaging = "INTERNALLY_DETACHED"
 )
 
 // SignaturePackagingValues returns all SignaturePackaging constants in declaration order.
 func SignaturePackagingValues() []SignaturePackaging {
 	return []SignaturePackaging{
-		SignaturePackaging_ENVELOPED,
-		SignaturePackaging_ENVELOPING,
-		SignaturePackaging_DETACHED,
-		SignaturePackaging_INTERNALLY_DETACHED,
+		SignaturePackagingEnveloped,
+		SignaturePackagingEnveloping,
+		SignaturePackagingDetached,
+		SignaturePackagingInternallyDetached,
 	}
 }
 

@@ -103,7 +103,7 @@ func (v *ValidationData) addCertificateToken(certificateToken *model.Certificate
 
 func (v *ValidationData) addRevocationToken(revocationToken AnyRevocationToken) bool {
 	switch revocationToken.RevocationType() {
-	case enumerations.RevocationType_CRL:
+	case enumerations.RevocationTypeCRL:
 		crlToken, ok := revocationToken.(*spi.CRLToken)
 		if !ok {
 			panic(model.NewDSSError(fmt.Sprintf("Unexpected RevocationToken with Id '%s'", revocationToken.DSSIDAsString())))
@@ -112,7 +112,7 @@ func (v *ValidationData) addRevocationToken(revocationToken AnyRevocationToken) 
 			v.crlTokens.Set(crlToken.DSSIDAsString(), crlToken)
 			return true
 		}
-	case enumerations.RevocationType_OCSP:
+	case enumerations.RevocationTypeOCSP:
 		ocspToken, ok := revocationToken.(*spi.OCSPToken)
 		if !ok {
 			panic(model.NewDSSError(fmt.Sprintf("Unexpected RevocationToken with Id '%s'", revocationToken.DSSIDAsString())))

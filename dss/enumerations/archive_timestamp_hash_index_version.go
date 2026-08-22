@@ -6,20 +6,20 @@ package enumerations
 type ArchiveTimestampHashIndexVersion string
 
 const (
-	// ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX is the deprecated
+	// ArchiveTimestampHashIndexVersionATSHashIndex is the deprecated
 	// ats-hash-index Attribute. See TS 101-733, ch. "6.4.2 ats-hash-index
 	// Attribute".
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX"
+	ArchiveTimestampHashIndexVersionATSHashIndex ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX"
 
-	// ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2 is the deprecated
+	// ArchiveTimestampHashIndexVersionATSHashIndexV2 is the deprecated
 	// ats-hash-index-v2 Attribute. See ETSI EN 319 122-1 v1.0.0, ch. "5.5.2
 	// The ats-hash-index-v2 attribute".
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2 ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX_V2"
+	ArchiveTimestampHashIndexVersionATSHashIndexV2 ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX_V2"
 
-	// ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3 is the
+	// ArchiveTimestampHashIndexVersionATSHashIndexV3 is the
 	// ats-hash-index-v3 Attribute. See ETSI EN 319 122-1 v1.1.0, ch. "5.5.2
 	// The ats-hash-index-v3 attribute".
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3 ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX_V3"
+	ArchiveTimestampHashIndexVersionATSHashIndexV3 ArchiveTimestampHashIndexVersion = "ATS_HASH_INDEX_V3"
 )
 
 type archiveTimestampHashIndexVersionFields struct {
@@ -29,17 +29,17 @@ type archiveTimestampHashIndexVersionFields struct {
 
 // archiveTimestampHashIndexVersionData holds the (label, oid) pair for each constant.
 var archiveTimestampHashIndexVersionData = map[ArchiveTimestampHashIndexVersion]archiveTimestampHashIndexVersionFields{
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX:    {"ats-hash-index", "0.4.0.1733.2.5"},
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2: {"ats-hash-index-v2", "0.4.0.19122.1.4"},
-	ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3: {"ats-hash-index-v3", "0.4.0.19122.1.5"},
+	ArchiveTimestampHashIndexVersionATSHashIndex:   {"ats-hash-index", "0.4.0.1733.2.5"},
+	ArchiveTimestampHashIndexVersionATSHashIndexV2: {"ats-hash-index-v2", "0.4.0.19122.1.4"},
+	ArchiveTimestampHashIndexVersionATSHashIndexV3: {"ats-hash-index-v3", "0.4.0.19122.1.5"},
 }
 
 // ArchiveTimestampHashIndexVersionValues returns all constants in declaration order.
 func ArchiveTimestampHashIndexVersionValues() []ArchiveTimestampHashIndexVersion {
 	return []ArchiveTimestampHashIndexVersion{
-		ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX,
-		ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2,
-		ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3,
+		ArchiveTimestampHashIndexVersionATSHashIndex,
+		ArchiveTimestampHashIndexVersionATSHashIndexV2,
+		ArchiveTimestampHashIndexVersionATSHashIndexV3,
 	}
 }
 

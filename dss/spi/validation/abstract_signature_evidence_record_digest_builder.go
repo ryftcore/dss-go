@@ -43,7 +43,7 @@ type AbstractSignatureEvidenceRecordDigestBuilder struct {
 // digest algorithm. Port of the AbstractSignatureEvidenceRecordDigestBuilder(DSSDocument)
 // constructor; Java's Objects.requireNonNull becomes a panic.
 func NewAbstractSignatureEvidenceRecordDigestBuilder(signatureDocument model.DSSDocument) *AbstractSignatureEvidenceRecordDigestBuilder {
-	return NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument, enumerations.DigestAlgorithm_SHA256)
+	return NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm(signatureDocument, enumerations.DigestAlgorithmSHA256)
 }
 
 // NewAbstractSignatureEvidenceRecordDigestBuilderWithAlgorithm instantiates the builder with a

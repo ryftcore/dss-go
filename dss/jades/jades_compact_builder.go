@@ -47,7 +47,7 @@ func (b *JAdESCompactBuilder) Build(signatureValue *model.SignatureValue) (model
 	if err := b.IncorporateHeader(jws); err != nil {
 		return nil, err
 	}
-	if enumerations.SignaturePackaging_DETACHED != b.Parameters.SignaturePackaging() {
+	if enumerations.SignaturePackagingDetached != b.Parameters.SignaturePackaging() {
 		if err := b.IncorporatePayload(jws); err != nil {
 			return nil, err
 		}
@@ -71,7 +71,7 @@ func (b *JAdESCompactBuilder) Build(signatureValue *model.SignatureValue) (model
 
 // MimeType returns the MimeType of the produced signature. Port of #getMimeType.
 func (b *JAdESCompactBuilder) MimeType() enumerations.MimeType {
-	return enumerations.MimeTypeEnum_JOSE
+	return enumerations.MimeTypeEnumJOSE
 }
 
 // AssertConfigurationValidity verifies that the configured signature packaging and level are
@@ -87,12 +87,12 @@ func (b *JAdESCompactBuilder) AssertConfigurationValidity(
 	}
 
 	packaging := signatureParameters.SignaturePackaging()
-	if enumerations.SignaturePackaging_ENVELOPING != packaging &&
-		enumerations.SignaturePackaging_DETACHED != packaging {
+	if enumerations.SignaturePackagingEnveloping != packaging &&
+		enumerations.SignaturePackagingDetached != packaging {
 		return fmt.Errorf("Unsupported signature packaging for JAdES Compact Signature: %s", packaging)
 	}
 	signatureLevel := signatureParameters.SignatureLevel()
-	if enumerations.SignatureLevel_JAdES_BASELINE_B != signatureLevel {
+	if enumerations.SignatureLevelJAdESBaselineB != signatureLevel {
 		return fmt.Errorf("Only JAdES_BASELINE_B level is allowed for JAdES Compact Signature! " +
 			"Change JwsSerializationType in JAdESSignatureParameters in order to support extension!")
 	}

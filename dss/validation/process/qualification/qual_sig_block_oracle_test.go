@@ -190,19 +190,19 @@ func qualSigTLAnalyses(label string) []*jaxb.XmlTLAnalysis {
 	case "none":
 		return nil
 	case "tl-ok":
-		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.Indication_PASSED, false, false)}
+		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.IndicationPassed, false, false)}
 	case "tl-failed":
-		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.Indication_FAILED, true, false)}
+		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.IndicationFailed, true, false)}
 	case "tl-warn":
-		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.Indication_PASSED, false, true)}
+		return []*jaxb.XmlTLAnalysis{qualSigTLAnalysis(qualSigTLUrl, enumerations.IndicationPassed, false, true)}
 	case "lotl-and-tl-ok":
 		return []*jaxb.XmlTLAnalysis{
-			qualSigTLAnalysis(qualSigLOTLUrl, enumerations.Indication_PASSED, false, false),
-			qualSigTLAnalysis(qualSigTLUrl, enumerations.Indication_PASSED, false, false)}
+			qualSigTLAnalysis(qualSigLOTLUrl, enumerations.IndicationPassed, false, false),
+			qualSigTLAnalysis(qualSigTLUrl, enumerations.IndicationPassed, false, false)}
 	case "lotl-failed":
 		return []*jaxb.XmlTLAnalysis{
-			qualSigTLAnalysis(qualSigLOTLUrl, enumerations.Indication_FAILED, true, false),
-			qualSigTLAnalysis(qualSigTLUrl, enumerations.Indication_PASSED, false, false)}
+			qualSigTLAnalysis(qualSigLOTLUrl, enumerations.IndicationFailed, true, false),
+			qualSigTLAnalysis(qualSigTLUrl, enumerations.IndicationPassed, false, false)}
 	}
 	panic("unknown tl-analysis label " + label)
 }
@@ -232,14 +232,14 @@ func qualSigEtsiResult(label string, bestSignatureTime int64) *jaxb.XmlConstrain
 	conclusion := &jaxb.XmlConclusion{}
 	switch label {
 	case "passed":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	case "indeterminate":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		sub := jaxb.SubIndicationValue(enumerations.SubIndication_TRY_LATER)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		sub := jaxb.SubIndicationValue(enumerations.SubIndicationTryLater)
 		conclusion.SubIndication = &sub
 	default:
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_TOTAL_FAILED)
-		sub := jaxb.SubIndicationValue(enumerations.SubIndication_HASH_FAILURE)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationTotalFailed)
+		sub := jaxb.SubIndicationValue(enumerations.SubIndicationHashFailure)
 		conclusion.SubIndication = &sub
 	}
 	result.Conclusion = conclusion

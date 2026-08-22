@@ -10,41 +10,41 @@ package enumerations
 type CertificateQualification string
 
 const (
-	// CertificateQualification_QCERT_FOR_ESIG_QSCD is a Qualified Certificate
+	// CertificateQualificationQCERTForESigQSCD is a Qualified Certificate
 	// for Electronic Signatures with private key on QSCD.
-	CertificateQualification_QCERT_FOR_ESIG_QSCD CertificateQualification = "QCERT_FOR_ESIG_QSCD"
-	// CertificateQualification_QCERT_FOR_ESEAL_QSCD is a Qualified
+	CertificateQualificationQCERTForESigQSCD CertificateQualification = "QCERT_FOR_ESIG_QSCD"
+	// CertificateQualificationQCERTForESealQSCD is a Qualified
 	// Certificate for Electronic Seals with private key on QSCD.
-	CertificateQualification_QCERT_FOR_ESEAL_QSCD CertificateQualification = "QCERT_FOR_ESEAL_QSCD"
-	// CertificateQualification_QCERT_FOR_UNKNOWN_QSCD is a Qualified
+	CertificateQualificationQCERTForESealQSCD CertificateQualification = "QCERT_FOR_ESEAL_QSCD"
+	// CertificateQualificationQCERTForUnknownQSCD is a Qualified
 	// Certificate for unidentified type with private key in a QSCD.
-	CertificateQualification_QCERT_FOR_UNKNOWN_QSCD CertificateQualification = "QCERT_FOR_UNKNOWN_QSCD"
-	// CertificateQualification_QCERT_FOR_ESIG is a Qualified Certificate
+	CertificateQualificationQCERTForUnknownQSCD CertificateQualification = "QCERT_FOR_UNKNOWN_QSCD"
+	// CertificateQualificationQCERTForESig is a Qualified Certificate
 	// for Electronic Signatures.
-	CertificateQualification_QCERT_FOR_ESIG CertificateQualification = "QCERT_FOR_ESIG"
-	// CertificateQualification_QCERT_FOR_ESEAL is a Qualified Certificate
+	CertificateQualificationQCERTForESig CertificateQualification = "QCERT_FOR_ESIG"
+	// CertificateQualificationQCERTForESeal is a Qualified Certificate
 	// for Electronic Seals.
-	CertificateQualification_QCERT_FOR_ESEAL CertificateQualification = "QCERT_FOR_ESEAL"
-	// CertificateQualification_QCERT_FOR_WSA is a Qualified Certificate
+	CertificateQualificationQCERTForESeal CertificateQualification = "QCERT_FOR_ESEAL"
+	// CertificateQualificationQCERTForWSA is a Qualified Certificate
 	// for Web Site Authentications.
-	CertificateQualification_QCERT_FOR_WSA CertificateQualification = "QCERT_FOR_WSA"
-	// CertificateQualification_QCERT_FOR_UNKNOWN is a Qualified Certificate
+	CertificateQualificationQCERTForWSA CertificateQualification = "QCERT_FOR_WSA"
+	// CertificateQualificationQCERTForUnknown is a Qualified Certificate
 	// for unidentified type.
-	CertificateQualification_QCERT_FOR_UNKNOWN CertificateQualification = "QCERT_FOR_UNKNOWN"
-	// CertificateQualification_CERT_FOR_ESIG is a Certificate for
+	CertificateQualificationQCERTForUnknown CertificateQualification = "QCERT_FOR_UNKNOWN"
+	// CertificateQualificationCertForESig is a Certificate for
 	// Electronic Signatures.
-	CertificateQualification_CERT_FOR_ESIG CertificateQualification = "CERT_FOR_ESIG"
-	// CertificateQualification_CERT_FOR_ESEAL is a Certificate for
+	CertificateQualificationCertForESig CertificateQualification = "CERT_FOR_ESIG"
+	// CertificateQualificationCertForESeal is a Certificate for
 	// Electronic Seals.
-	CertificateQualification_CERT_FOR_ESEAL CertificateQualification = "CERT_FOR_ESEAL"
-	// CertificateQualification_CERT_FOR_WSA is a Certificate for Web Site
+	CertificateQualificationCertForESeal CertificateQualification = "CERT_FOR_ESEAL"
+	// CertificateQualificationCertForWSA is a Certificate for Web Site
 	// Authentications.
-	CertificateQualification_CERT_FOR_WSA CertificateQualification = "CERT_FOR_WSA"
-	// CertificateQualification_CERT_FOR_UNKNOWN is a Certificate for
+	CertificateQualificationCertForWSA CertificateQualification = "CERT_FOR_WSA"
+	// CertificateQualificationCertForUnknown is a Certificate for
 	// unidentified type.
-	CertificateQualification_CERT_FOR_UNKNOWN CertificateQualification = "CERT_FOR_UNKNOWN"
-	// CertificateQualification_NA is Not Applicable.
-	CertificateQualification_NA CertificateQualification = "NA"
+	CertificateQualificationCertForUnknown CertificateQualification = "CERT_FOR_UNKNOWN"
+	// CertificateQualificationNA is Not Applicable.
+	CertificateQualificationNA CertificateQualification = "NA"
 )
 
 type certificateQualificationFields struct {
@@ -58,71 +58,71 @@ type certificateQualificationFields struct {
 // certificateQualificationData holds the (readable, label, qualifiedStatus,
 // type, qscdStatus) tuple for each constant.
 var certificateQualificationData = map[CertificateQualification]certificateQualificationFields{
-	CertificateQualification_QCERT_FOR_ESIG_QSCD: {
+	CertificateQualificationQCERTForESigQSCD: {
 		"QC for eSig with QSCD", "Qualified Certificate for Electronic Signatures with private key on QSCD",
-		CertificateQualifiedStatus_QC, CertificateType_ESIGN, QSCDStatus_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeESign, QSCDStatusQSCD,
 	},
-	CertificateQualification_QCERT_FOR_ESEAL_QSCD: {
+	CertificateQualificationQCERTForESealQSCD: {
 		"QC for eSeal with QSCD", "Qualified Certificate for Electronic Seals with private key on QSCD",
-		CertificateQualifiedStatus_QC, CertificateType_ESEAL, QSCDStatus_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeESeal, QSCDStatusQSCD,
 	},
-	CertificateQualification_QCERT_FOR_UNKNOWN_QSCD: {
+	CertificateQualificationQCERTForUnknownQSCD: {
 		"QC for unknown type with QSCD", "Qualified Certificate for unknown type with its private key residing in a QSCD",
-		CertificateQualifiedStatus_QC, CertificateType_UNKNOWN, QSCDStatus_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeUnknown, QSCDStatusQSCD,
 	},
-	CertificateQualification_QCERT_FOR_ESIG: {
+	CertificateQualificationQCERTForESig: {
 		"QC for eSig", "Qualified Certificate for Electronic Signatures",
-		CertificateQualifiedStatus_QC, CertificateType_ESIGN, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeESign, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_QCERT_FOR_ESEAL: {
+	CertificateQualificationQCERTForESeal: {
 		"QC for eSeal", "Qualified Certificate for Electronic Seals",
-		CertificateQualifiedStatus_QC, CertificateType_ESEAL, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeESeal, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_QCERT_FOR_WSA: {
+	CertificateQualificationQCERTForWSA: {
 		"QC for WSA", "Qualified Certificate for Web Site Authentications",
-		CertificateQualifiedStatus_QC, CertificateType_WSA, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeWSA, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_QCERT_FOR_UNKNOWN: {
+	CertificateQualificationQCERTForUnknown: {
 		"QC for unknown type", "Qualified Certificate for unknown type",
-		CertificateQualifiedStatus_QC, CertificateType_UNKNOWN, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusQC, CertificateTypeUnknown, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_CERT_FOR_ESIG: {
+	CertificateQualificationCertForESig: {
 		"Cert for eSig", "Certificate for Electronic Signatures",
-		CertificateQualifiedStatus_NOT_QC, CertificateType_ESIGN, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusNotQC, CertificateTypeESign, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_CERT_FOR_ESEAL: {
+	CertificateQualificationCertForESeal: {
 		"Cert for eSeal", "Certificate for Electronic Seals",
-		CertificateQualifiedStatus_NOT_QC, CertificateType_ESEAL, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusNotQC, CertificateTypeESeal, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_CERT_FOR_WSA: {
+	CertificateQualificationCertForWSA: {
 		"Cert for WSA", "Certificate for Web Site Authentications",
-		CertificateQualifiedStatus_NOT_QC, CertificateType_WSA, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusNotQC, CertificateTypeWSA, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_CERT_FOR_UNKNOWN: {
+	CertificateQualificationCertForUnknown: {
 		"Cert for unknown type", "Certificate for unknown type",
-		CertificateQualifiedStatus_NOT_QC, CertificateType_UNKNOWN, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusNotQC, CertificateTypeUnknown, QSCDStatusNotQSCD,
 	},
-	CertificateQualification_NA: {
+	CertificateQualificationNA: {
 		"N/A", "Not applicable",
-		CertificateQualifiedStatus_NOT_QC, CertificateType_UNKNOWN, QSCDStatus_NOT_QSCD,
+		CertificateQualifiedStatusNotQC, CertificateTypeUnknown, QSCDStatusNotQSCD,
 	},
 }
 
 // CertificateQualificationValues returns all constants in declaration order.
 func CertificateQualificationValues() []CertificateQualification {
 	return []CertificateQualification{
-		CertificateQualification_QCERT_FOR_ESIG_QSCD,
-		CertificateQualification_QCERT_FOR_ESEAL_QSCD,
-		CertificateQualification_QCERT_FOR_UNKNOWN_QSCD,
-		CertificateQualification_QCERT_FOR_ESIG,
-		CertificateQualification_QCERT_FOR_ESEAL,
-		CertificateQualification_QCERT_FOR_WSA,
-		CertificateQualification_QCERT_FOR_UNKNOWN,
-		CertificateQualification_CERT_FOR_ESIG,
-		CertificateQualification_CERT_FOR_ESEAL,
-		CertificateQualification_CERT_FOR_WSA,
-		CertificateQualification_CERT_FOR_UNKNOWN,
-		CertificateQualification_NA,
+		CertificateQualificationQCERTForESigQSCD,
+		CertificateQualificationQCERTForESealQSCD,
+		CertificateQualificationQCERTForUnknownQSCD,
+		CertificateQualificationQCERTForESig,
+		CertificateQualificationQCERTForESeal,
+		CertificateQualificationQCERTForWSA,
+		CertificateQualificationQCERTForUnknown,
+		CertificateQualificationCertForESig,
+		CertificateQualificationCertForESeal,
+		CertificateQualificationCertForWSA,
+		CertificateQualificationCertForUnknown,
+		CertificateQualificationNA,
 	}
 }
 
@@ -159,18 +159,18 @@ func (c CertificateQualification) IsQc() bool {
 
 // IsForEsig returns if the certificate can be used for an electronic signature.
 func (c CertificateQualification) IsForEsig() bool {
-	return CertificateType_ESIGN == certificateQualificationData[c].certType
+	return CertificateTypeESign == certificateQualificationData[c].certType
 }
 
 // IsForEseal returns if the certificate can be used for an electronic seal.
 func (c CertificateQualification) IsForEseal() bool {
-	return CertificateType_ESEAL == certificateQualificationData[c].certType
+	return CertificateTypeESeal == certificateQualificationData[c].certType
 }
 
 // IsQscd returns if the certificate is used on a Qualified Signature
 // Creation Device.
 func (c CertificateQualification) IsQscd() bool {
-	return QSCDStatus_QSCD == certificateQualificationData[c].qscdStatus
+	return QSCDStatusQSCD == certificateQualificationData[c].qscdStatus
 }
 
 // CertificateQualificationForName converts the given qualification name to

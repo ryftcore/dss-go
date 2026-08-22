@@ -13,38 +13,38 @@ import "fmt"
 type DigestAlgorithm string
 
 const (
-	// DigestAlgorithm_SHA1 is SHA-1.
-	DigestAlgorithm_SHA1 DigestAlgorithm = "SHA1"
-	// DigestAlgorithm_SHA224 is SHA-224.
-	DigestAlgorithm_SHA224 DigestAlgorithm = "SHA224"
-	// DigestAlgorithm_SHA256 is SHA-256.
-	DigestAlgorithm_SHA256 DigestAlgorithm = "SHA256"
-	// DigestAlgorithm_SHA384 is SHA-384.
-	DigestAlgorithm_SHA384 DigestAlgorithm = "SHA384"
-	// DigestAlgorithm_SHA512 is SHA-512.
-	DigestAlgorithm_SHA512 DigestAlgorithm = "SHA512"
-	// DigestAlgorithm_SHA3_224 is SHA3-224. See https://tools.ietf.org/html/rfc6931
-	DigestAlgorithm_SHA3_224 DigestAlgorithm = "SHA3_224"
-	// DigestAlgorithm_SHA3_256 is SHA3-256.
-	DigestAlgorithm_SHA3_256 DigestAlgorithm = "SHA3_256"
-	// DigestAlgorithm_SHA3_384 is SHA3-384.
-	DigestAlgorithm_SHA3_384 DigestAlgorithm = "SHA3_384"
-	// DigestAlgorithm_SHA3_512 is SHA3-512.
-	DigestAlgorithm_SHA3_512 DigestAlgorithm = "SHA3_512"
-	// DigestAlgorithm_SHAKE128 is SHAKE-128.
-	DigestAlgorithm_SHAKE128 DigestAlgorithm = "SHAKE128"
-	// DigestAlgorithm_SHAKE256 is SHAKE-256.
-	DigestAlgorithm_SHAKE256 DigestAlgorithm = "SHAKE256"
-	// DigestAlgorithm_SHAKE256_512 is SHAKE-256 with output 512 bits.
-	DigestAlgorithm_SHAKE256_512 DigestAlgorithm = "SHAKE256_512"
-	// DigestAlgorithm_RIPEMD160 is RIPEMD160.
-	DigestAlgorithm_RIPEMD160 DigestAlgorithm = "RIPEMD160"
-	// DigestAlgorithm_MD2 is MD2.
-	DigestAlgorithm_MD2 DigestAlgorithm = "MD2"
-	// DigestAlgorithm_MD5 is MD5.
-	DigestAlgorithm_MD5 DigestAlgorithm = "MD5"
-	// DigestAlgorithm_WHIRLPOOL is WHIRLPOOL.
-	DigestAlgorithm_WHIRLPOOL DigestAlgorithm = "WHIRLPOOL"
+	// DigestAlgorithmSHA1 is SHA-1.
+	DigestAlgorithmSHA1 DigestAlgorithm = "SHA1"
+	// DigestAlgorithmSHA224 is SHA-224.
+	DigestAlgorithmSHA224 DigestAlgorithm = "SHA224"
+	// DigestAlgorithmSHA256 is SHA-256.
+	DigestAlgorithmSHA256 DigestAlgorithm = "SHA256"
+	// DigestAlgorithmSHA384 is SHA-384.
+	DigestAlgorithmSHA384 DigestAlgorithm = "SHA384"
+	// DigestAlgorithmSHA512 is SHA-512.
+	DigestAlgorithmSHA512 DigestAlgorithm = "SHA512"
+	// DigestAlgorithmSHA3224 is SHA3-224. See https://tools.ietf.org/html/rfc6931
+	DigestAlgorithmSHA3224 DigestAlgorithm = "SHA3_224"
+	// DigestAlgorithmSHA3256 is SHA3-256.
+	DigestAlgorithmSHA3256 DigestAlgorithm = "SHA3_256"
+	// DigestAlgorithmSHA3384 is SHA3-384.
+	DigestAlgorithmSHA3384 DigestAlgorithm = "SHA3_384"
+	// DigestAlgorithmSHA3512 is SHA3-512.
+	DigestAlgorithmSHA3512 DigestAlgorithm = "SHA3_512"
+	// DigestAlgorithmSHAKE128 is SHAKE-128.
+	DigestAlgorithmSHAKE128 DigestAlgorithm = "SHAKE128"
+	// DigestAlgorithmSHAKE256 is SHAKE-256.
+	DigestAlgorithmSHAKE256 DigestAlgorithm = "SHAKE256"
+	// DigestAlgorithmSHAKE256512 is SHAKE-256 with output 512 bits.
+	DigestAlgorithmSHAKE256512 DigestAlgorithm = "SHAKE256_512"
+	// DigestAlgorithmRIPEMD160 is RIPEMD160.
+	DigestAlgorithmRIPEMD160 DigestAlgorithm = "RIPEMD160"
+	// DigestAlgorithmMD2 is MD2.
+	DigestAlgorithmMD2 DigestAlgorithm = "MD2"
+	// DigestAlgorithmMD5 is MD5.
+	DigestAlgorithmMD5 DigestAlgorithm = "MD5"
+	// DigestAlgorithmWHIRLPOOL is WHIRLPOOL.
+	DigestAlgorithmWHIRLPOOL DigestAlgorithm = "WHIRLPOOL"
 )
 
 // digestAlgorithmFields holds all per-constant attributes of DigestAlgorithm,
@@ -68,64 +68,64 @@ func int64p(v int64) *int64 { return &v }
 // digestAlgorithmData holds the full field tuple for each constant, copied
 // verbatim from the Java enum constructors.
 var digestAlgorithmData = map[DigestAlgorithm]digestAlgorithmFields{
-	DigestAlgorithm_SHA1: {
+	DigestAlgorithmSHA1: {
 		name: "SHA1", javaName: "SHA-1", oid: "1.3.14.3.2.26", xmlID: "http://www.w3.org/2000/09/xmldsig#sha1",
 		jadesID: "", httpHeaderID: "SHA", sdJwtID: "", srIntegrityID: "", coseID: int64p(-14), msoID: "", saltLength: 20,
 	},
-	DigestAlgorithm_SHA224: {
+	DigestAlgorithmSHA224: {
 		name: "SHA224", javaName: "SHA-224", oid: "2.16.840.1.101.3.4.2.4", xmlID: "http://www.w3.org/2001/04/xmldsig-more#sha224",
 		jadesID: "S224", saltLength: 28,
 	},
-	DigestAlgorithm_SHA256: {
+	DigestAlgorithmSHA256: {
 		name: "SHA256", javaName: "SHA-256", oid: "2.16.840.1.101.3.4.2.1", xmlID: "http://www.w3.org/2001/04/xmlenc#sha256",
 		jadesID: "S256", httpHeaderID: "SHA-256", sdJwtID: "sha-256", srIntegrityID: "sha256", coseID: int64p(-16), msoID: "SHA-256", saltLength: 32,
 	},
-	DigestAlgorithm_SHA384: {
+	DigestAlgorithmSHA384: {
 		name: "SHA384", javaName: "SHA-384", oid: "2.16.840.1.101.3.4.2.2", xmlID: "http://www.w3.org/2001/04/xmldsig-more#sha384",
 		jadesID: "S384", httpHeaderID: "", sdJwtID: "sha-384", srIntegrityID: "sha384", coseID: int64p(-43), msoID: "SHA-384", saltLength: 48,
 	},
-	DigestAlgorithm_SHA512: {
+	DigestAlgorithmSHA512: {
 		name: "SHA512", javaName: "SHA-512", oid: "2.16.840.1.101.3.4.2.3", xmlID: "http://www.w3.org/2001/04/xmlenc#sha512",
 		jadesID: "S512", httpHeaderID: "SHA-512", sdJwtID: "sha-512", srIntegrityID: "sha512", coseID: int64p(-44), msoID: "SHA-512", saltLength: 64,
 	},
-	DigestAlgorithm_SHA3_224: {
+	DigestAlgorithmSHA3224: {
 		name: "SHA3-224", javaName: "SHA3-224", oid: "2.16.840.1.101.3.4.2.7", xmlID: "http://www.w3.org/2007/05/xmldsig-more#sha3-224",
 		jadesID: "", httpHeaderID: "", sdJwtID: "sha3-224", saltLength: 28,
 	},
-	DigestAlgorithm_SHA3_256: {
+	DigestAlgorithmSHA3256: {
 		name: "SHA3-256", javaName: "SHA3-256", oid: "2.16.840.1.101.3.4.2.8", xmlID: "http://www.w3.org/2007/05/xmldsig-more#sha3-256",
 		jadesID: "S3-256", httpHeaderID: "", sdJwtID: "sha3-256", saltLength: 32,
 	},
-	DigestAlgorithm_SHA3_384: {
+	DigestAlgorithmSHA3384: {
 		name: "SHA3-384", javaName: "SHA3-384", oid: "2.16.840.1.101.3.4.2.9", xmlID: "http://www.w3.org/2007/05/xmldsig-more#sha3-384",
 		jadesID: "S3-384", httpHeaderID: "", sdJwtID: "sha3-384", saltLength: 48,
 	},
-	DigestAlgorithm_SHA3_512: {
+	DigestAlgorithmSHA3512: {
 		name: "SHA3-512", javaName: "SHA3-512", oid: "2.16.840.1.101.3.4.2.10", xmlID: "http://www.w3.org/2007/05/xmldsig-more#sha3-512",
 		jadesID: "S3-512", httpHeaderID: "", sdJwtID: "sha3-512", saltLength: 64,
 	},
-	DigestAlgorithm_SHAKE128: {
+	DigestAlgorithmSHAKE128: {
 		name: "SHAKE-128", javaName: "SHAKE-128", oid: "2.16.840.1.101.3.4.2.11", xmlID: "",
 		coseID: int64p(-18),
 	},
-	DigestAlgorithm_SHAKE256: {
+	DigestAlgorithmSHAKE256: {
 		name: "SHAKE-256", javaName: "SHAKE-256", oid: "2.16.840.1.101.3.4.2.12", xmlID: "",
 	},
-	DigestAlgorithm_SHAKE256_512: {
+	DigestAlgorithmSHAKE256512: {
 		name: "SHAKE256-512", javaName: "SHAKE256-512", oid: "2.16.840.1.101.3.4.2.18", xmlID: "",
 		coseID: int64p(-45),
 	},
-	DigestAlgorithm_RIPEMD160: {
+	DigestAlgorithmRIPEMD160: {
 		name: "RIPEMD160", javaName: "RIPEMD160", oid: "1.3.36.3.2.1", xmlID: "http://www.w3.org/2001/04/xmlenc#ripemd160",
 	},
-	DigestAlgorithm_MD2: {
+	DigestAlgorithmMD2: {
 		name: "MD2", javaName: "MD2", oid: "1.2.840.113549.2.2", xmlID: "http://www.w3.org/2001/04/xmldsig-more#md2",
 	},
-	DigestAlgorithm_MD5: {
+	DigestAlgorithmMD5: {
 		name: "MD5", javaName: "MD5", oid: "1.2.840.113549.2.5", xmlID: "http://www.w3.org/2001/04/xmldsig-more#md5",
 		jadesID: "", httpHeaderID: "MD5",
 	},
-	DigestAlgorithm_WHIRLPOOL: {
+	DigestAlgorithmWHIRLPOOL: {
 		name: "WHIRLPOOL", javaName: "WHIRLPOOL", oid: "1.0.10118.3.0.55", xmlID: "http://www.w3.org/2007/05/xmldsig-more#whirlpool",
 	},
 }
@@ -133,22 +133,22 @@ var digestAlgorithmData = map[DigestAlgorithm]digestAlgorithmFields{
 // DigestAlgorithmValues returns all constants in declaration order.
 func DigestAlgorithmValues() []DigestAlgorithm {
 	return []DigestAlgorithm{
-		DigestAlgorithm_SHA1,
-		DigestAlgorithm_SHA224,
-		DigestAlgorithm_SHA256,
-		DigestAlgorithm_SHA384,
-		DigestAlgorithm_SHA512,
-		DigestAlgorithm_SHA3_224,
-		DigestAlgorithm_SHA3_256,
-		DigestAlgorithm_SHA3_384,
-		DigestAlgorithm_SHA3_512,
-		DigestAlgorithm_SHAKE128,
-		DigestAlgorithm_SHAKE256,
-		DigestAlgorithm_SHAKE256_512,
-		DigestAlgorithm_RIPEMD160,
-		DigestAlgorithm_MD2,
-		DigestAlgorithm_MD5,
-		DigestAlgorithm_WHIRLPOOL,
+		DigestAlgorithmSHA1,
+		DigestAlgorithmSHA224,
+		DigestAlgorithmSHA256,
+		DigestAlgorithmSHA384,
+		DigestAlgorithmSHA512,
+		DigestAlgorithmSHA3224,
+		DigestAlgorithmSHA3256,
+		DigestAlgorithmSHA3384,
+		DigestAlgorithmSHA3512,
+		DigestAlgorithmSHAKE128,
+		DigestAlgorithmSHAKE256,
+		DigestAlgorithmSHAKE256512,
+		DigestAlgorithmRIPEMD160,
+		DigestAlgorithmMD2,
+		DigestAlgorithmMD5,
+		DigestAlgorithmWHIRLPOOL,
 	}
 }
 

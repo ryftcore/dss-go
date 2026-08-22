@@ -40,7 +40,7 @@ func NewBasicSignatureValidationProcess(i18nProvider *i18n.I18nProvider, diagnos
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *BasicSignatureValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPBS
+	return i18n.MessageTagVPBS
 }
 
 // getCurrentTime ports the private getCurrentTime(DiagnosticData).

@@ -23,10 +23,10 @@ import (
 	"github.com/ryftcore/dss-go/dss/internal/cmscore"
 )
 
-// OID_id_aa_cmsAlgorithmProtect is id-aa-cmsAlgorithmProtect OBJECT IDENTIFIER ::= {iso(1)
+// OIDIdAaCmsAlgorithmProtect is id-aa-cmsAlgorithmProtect OBJECT IDENTIFIER ::= {iso(1)
 // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9) 52}, RFC 6211 - BouncyCastle's
 // CMSAttributes.cmsAlgorithmProtect.
-var OID_id_aa_cmsAlgorithmProtect = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 52}
+var OIDIdAaCmsAlgorithmProtect = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 52}
 
 // cmsSignedAttributeTableGenerate creates a standard attribute table: normally including
 // contentType, messageDigest and cms-algorithm-protection. Entries already present in
@@ -49,8 +49,8 @@ func cmsSignedAttributeTableGenerate(initialAttributes cmscore.Attributes, conte
 	if table.Get(cmscore.OIDMessageDigest) == nil {
 		table = append(table, cmscore.NewAttribute(cmscore.OIDMessageDigest, asn1ber.WriteTLV(asn1ber.TagOctetString, messageDigest)))
 	}
-	if table.Get(OID_id_aa_cmsAlgorithmProtect) == nil {
-		table = append(table, cmscore.NewAttribute(OID_id_aa_cmsAlgorithmProtect,
+	if table.Get(OIDIdAaCmsAlgorithmProtect) == nil {
+		table = append(table, cmscore.NewAttribute(OIDIdAaCmsAlgorithmProtect,
 			cmsAlgorithmProtectionDER(digestAlgorithmIdentifier, signatureAlgorithmIdentifier)))
 	}
 	return table

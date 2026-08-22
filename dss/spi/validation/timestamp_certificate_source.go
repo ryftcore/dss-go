@@ -36,5 +36,5 @@ func NewTimestampCertificateSource(timestampToken *cmscore.TimeStampToken) (*Tim
 
 // CertificateSourceType returns TIMESTAMP. Port of the getCertificateSourceType() override.
 func (s *TimestampCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_TIMESTAMP
+	return enumerations.CertificateSourceTypeTimestamp
 }

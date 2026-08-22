@@ -148,7 +148,7 @@ func (v *TimestampTokenVerifier) containsTrustAnchor(certChain []*model.Certific
 	if currentTrustAnchorVerifier == nil {
 		return false
 	}
-	return currentTrustAnchorVerifier.IsTrustedCertificateChain(certChain, controlTime, enumerations.Context_TIMESTAMP)
+	return currentTrustAnchorVerifier.IsTrustedCertificateChain(certChain, controlTime, enumerations.ContextTimestamp)
 }
 
 // isCryptographicallyValid verifies whether the timestampToken is cryptographically valid
@@ -171,5 +171,5 @@ func (v *TimestampTokenVerifier) isCertificateChainValid(certificateChain []*mod
 	if v.revocationDataVerifier == nil {
 		return true
 	}
-	return currentRevocationDataVerifier.IsCertificateChainValid(certificateChain, controlTime, enumerations.Context_TIMESTAMP)
+	return currentRevocationDataVerifier.IsCertificateChainValid(certificateChain, controlTime, enumerations.ContextTimestamp)
 }

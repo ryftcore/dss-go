@@ -21,7 +21,7 @@
 // base's default map-field getter) but were not carried over into spi.OfflineRevocationSourceBase
 // (see pdf_dss_dict_crl_source.go's header for the same gap, and pades_crl_source.go's header
 // for the landed sibling chunk that already assumes this file defines them). Every binary this
-// source ever adds carries the single RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL origin
+// source ever adds carries the single RevocationOriginAdbeRevocationInfoArchival origin
 // (extractRevocationInfoArchival below is the only AddBinary call site), so the two methods
 // below reproduce the base's default behaviour by pairing spi.OfflineRevocationSourceBase's
 // already-ported origin-filtered accessors (ADBERevocationValuesBinaries/ADBERevocationValuesTokens,
@@ -67,7 +67,7 @@ func NewPdfCmsCRLSource(signedAttributes cmscore.Attributes) *PdfCmsCRLSource {
 // extractCRLArchivalValues ports the private extractCRLArchivalValues(AttributeTable).
 func (s *PdfCmsCRLSource) extractCRLArchivalValues(signedAttributes cmscore.Attributes) {
 	if signedAttributes != nil {
-		attributes := spi.DSSASN1UtilsAsn1Attributes(signedAttributes, spi.OID_adbe_revocationInfoArchival)
+		attributes := spi.DSSASN1UtilsAsn1Attributes(signedAttributes, spi.OIDAdbeRevocationInfoArchival)
 		for _, attribute := range attributes {
 			for _, attrValue := range attribute.Values {
 				s.extractRevocationInfoArchival(attrValue)
@@ -90,7 +90,7 @@ func (s *PdfCmsCRLSource) extractRevocationInfoArchival(attrValue *asn1ber.Eleme
 			if err != nil {
 				continue
 			}
-			s.AddBinary(crlBinary, enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL)
+			s.AddBinary(crlBinary, enumerations.RevocationOriginAdbeRevocationInfoArchival)
 		}
 	}
 }
@@ -104,7 +104,7 @@ func (s *PdfCmsCRLSource) AllRevocationBinariesWithOrigins() []PdfCmsCRLSourceBi
 	for _, binary := range binaries {
 		result = append(result, PdfCmsCRLSourceBinaryOriginsEntry{
 			Binary:  binary,
-			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL},
+			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOriginAdbeRevocationInfoArchival},
 		})
 	}
 	return result
@@ -119,7 +119,7 @@ func (s *PdfCmsCRLSource) AllRevocationTokensWithOrigins() []spi.RevocationToken
 	for _, token := range tokens {
 		result = append(result, spi.RevocationTokenOriginsEntry[revocation.CRL]{
 			Token:   token,
-			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOrigin_ADBE_REVOCATION_INFO_ARCHIVAL},
+			Origins: []enumerations.RevocationOrigin{enumerations.RevocationOriginAdbeRevocationInfoArchival},
 		})
 	}
 	return result

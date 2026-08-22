@@ -83,14 +83,14 @@ func NewCertQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, validation
 		validationTime:           validationTime,
 		signingCertificate:       signingCertificate,
 		acceptableServices:       append([]*diagnostic.TrustServiceWrapper{}, acceptableServices...),
-		certificateQualification: enumerations.CertificateQualification_NA,
+		certificateQualification: enumerations.CertificateQualificationNA,
 	}
 	c.Result.Value.Id = signingCertificate.Id()
 
 	switch validationTime {
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+	case enumerations.ValidationTimeCertificateIssuanceTime:
 		c.date = signingCertificate.NotBefore()
-	case enumerations.ValidationTime_VALIDATION_TIME, enumerations.ValidationTime_BEST_SIGNATURE_TIME:
+	case enumerations.ValidationTimeValidationTime, enumerations.ValidationTimeBESTSignatureTime:
 		c.date = date
 	default:
 		panic(fmt.Sprintf("Unknown qualification time : %s", validationTime))
@@ -110,7 +110,7 @@ func (c *CertQualificationAtTimeBlock) InitCertQualificationAtTimeBlock(override
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *CertQualificationAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_CERT_QUALIFICATION_AT_TIME
+	message := i18n.MessageTagCertQualificationAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (c *CertQualificationAtTimeBlock) InitChain() {
 
 		// interrupt in case of conflict
 		if len(results) > 1 {
-			c.certificateQualification = enumerations.CertificateQualification_NA
+			c.certificateQualification = enumerations.CertificateQualificationNA
 			return
 		}
 	}

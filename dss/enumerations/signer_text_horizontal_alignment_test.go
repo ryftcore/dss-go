@@ -4,9 +4,9 @@ import "testing"
 
 func TestSignerTextHorizontalAlignmentValues(t *testing.T) {
 	want := []SignerTextHorizontalAlignment{
-		SignerTextHorizontalAlignment_LEFT,
-		SignerTextHorizontalAlignment_CENTER,
-		SignerTextHorizontalAlignment_RIGHT,
+		SignerTextHorizontalAlignmentLeft,
+		SignerTextHorizontalAlignmentCenter,
+		SignerTextHorizontalAlignmentRight,
 	}
 	got := SignerTextHorizontalAlignmentValues()
 	if len(got) != len(want) {

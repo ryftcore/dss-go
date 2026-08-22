@@ -58,9 +58,9 @@ func xadesCounterSignatureParams(t *testing.T,
 	params.SetCertificateChain([]*model.CertificateToken{signer})
 	signingDate := xadesSignABuilderSigningDate
 	params.BLevel().SetSigningDate(&signingDate)
-	params.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
-	params.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPED)
-	params.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
+	params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)
+	params.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	params.SetSignatureIdToCounterSign(signatureIdToCounterSign)
 	return params
 }

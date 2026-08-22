@@ -13,30 +13,30 @@ import "fmt"
 type SemanticsIdentifier string
 
 const (
-	// SemanticsIdentifier_qcsSemanticsIdNatural is the semantics identifier for
+	// SemanticsIdentifierQcsSemanticsIdNatural is the semantics identifier for
 	// natural person identifier.
 	//
 	//	id-etsi-qcs-semanticsId-Natural OBJECT IDENTIFIER ::= {
 	//	id-etsi-qcs-semantics-identifiers 1 }
-	SemanticsIdentifier_qcsSemanticsIdNatural SemanticsIdentifier = "qcsSemanticsIdNatural"
-	// SemanticsIdentifier_qcsSemanticsIdLegal is the semantics identifier for legal
+	SemanticsIdentifierQcsSemanticsIdNatural SemanticsIdentifier = "qcsSemanticsIdNatural"
+	// SemanticsIdentifierQcsSemanticsIdLegal is the semantics identifier for legal
 	// person identifier.
 	//
 	//	id-etsi-qcs-SemanticsId-Legal OBJECT IDENTIFIER ::= {
 	//	id-etsi-qcs-semantics-identifiers 2 }
-	SemanticsIdentifier_qcsSemanticsIdLegal SemanticsIdentifier = "qcsSemanticsIdLegal"
-	// SemanticsIdentifier_qcsSemanticsIdEIDASNatural is the semantics identifier for
+	SemanticsIdentifierQcsSemanticsIdLegal SemanticsIdentifier = "qcsSemanticsIdLegal"
+	// SemanticsIdentifierQcsSemanticsIdEIDASNatural is the semantics identifier for
 	// eIDAS natural person identifier.
 	//
 	//	id-etsi-qcs-semanticsId-eIDASNatural OBJECT IDENTIFIER ::= {
 	//	id-etsi-qcs-semantics-identifiers 3 }
-	SemanticsIdentifier_qcsSemanticsIdEIDASNatural SemanticsIdentifier = "qcsSemanticsIdEIDASNatural"
-	// SemanticsIdentifier_qcsSemanticsIdEIDASLegal is the semantics identifier for
+	SemanticsIdentifierQcsSemanticsIdEIDASNatural SemanticsIdentifier = "qcsSemanticsIdEIDASNatural"
+	// SemanticsIdentifierQcsSemanticsIdEIDASLegal is the semantics identifier for
 	// eIDAS legal person identifier.
 	//
 	//	id-etsi-qcs-semanticsId-eIDASNatural OBJECT IDENTIFIER ::= {
 	//	id-etsi-qcs-semantics-identifiers 4 }
-	SemanticsIdentifier_qcsSemanticsIdEIDASLegal SemanticsIdentifier = "qcsSemanticsIdEIDASLegal"
+	SemanticsIdentifierQcsSemanticsIdEIDASLegal SemanticsIdentifier = "qcsSemanticsIdEIDASLegal"
 )
 
 type semanticsIdentifierFields struct {
@@ -47,19 +47,19 @@ type semanticsIdentifierFields struct {
 
 // semanticsIdentifierData holds the (name, oid, description) triple for each constant.
 var semanticsIdentifierData = map[SemanticsIdentifier]semanticsIdentifierFields{
-	SemanticsIdentifier_qcsSemanticsIdNatural:      {"qcs-semanticsId-Natural", "0.4.0.194121.1.1", "Semantics identifier for natural person"},
-	SemanticsIdentifier_qcsSemanticsIdLegal:        {"qcs-SemanticsId-Legal", "0.4.0.194121.1.2", "Semantics identifier for legal person"},
-	SemanticsIdentifier_qcsSemanticsIdEIDASNatural: {"qcs-semanticsId-eIDASNatural", "0.4.0.194121.1.3", "Semantics identifier for eIDAS natural person"},
-	SemanticsIdentifier_qcsSemanticsIdEIDASLegal:   {"qcs-SemanticsId-eIDASLegal", "0.4.0.194121.1.4", "Semantics identifier for eIDAS legal person"},
+	SemanticsIdentifierQcsSemanticsIdNatural:      {"qcs-semanticsId-Natural", "0.4.0.194121.1.1", "Semantics identifier for natural person"},
+	SemanticsIdentifierQcsSemanticsIdLegal:        {"qcs-SemanticsId-Legal", "0.4.0.194121.1.2", "Semantics identifier for legal person"},
+	SemanticsIdentifierQcsSemanticsIdEIDASNatural: {"qcs-semanticsId-eIDASNatural", "0.4.0.194121.1.3", "Semantics identifier for eIDAS natural person"},
+	SemanticsIdentifierQcsSemanticsIdEIDASLegal:   {"qcs-SemanticsId-eIDASLegal", "0.4.0.194121.1.4", "Semantics identifier for eIDAS legal person"},
 }
 
 // SemanticsIdentifierValues returns all SemanticsIdentifier constants in declaration order.
 func SemanticsIdentifierValues() []SemanticsIdentifier {
 	return []SemanticsIdentifier{
-		SemanticsIdentifier_qcsSemanticsIdNatural,
-		SemanticsIdentifier_qcsSemanticsIdLegal,
-		SemanticsIdentifier_qcsSemanticsIdEIDASNatural,
-		SemanticsIdentifier_qcsSemanticsIdEIDASLegal,
+		SemanticsIdentifierQcsSemanticsIdNatural,
+		SemanticsIdentifierQcsSemanticsIdLegal,
+		SemanticsIdentifierQcsSemanticsIdEIDASNatural,
+		SemanticsIdentifierQcsSemanticsIdEIDASLegal,
 	}
 }
 

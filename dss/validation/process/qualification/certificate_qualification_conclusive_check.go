@@ -39,18 +39,18 @@ func (c *CertificateQualificationConclusiveCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQualificationConclusiveCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_CERT_QUAL_CONCLUSIVE
+	return i18n.MessageTagQWACCertQualConclusive
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQualificationConclusiveCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_CERT_QUAL_CONCLUSIVE_ANS
+	return i18n.MessageTagQWACCertQualConclusiveANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateQualificationConclusiveCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

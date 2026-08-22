@@ -13,7 +13,7 @@ import "strings"
 //
 // NOTE: LoTETypeEnum, LoTEServiceTypeIdentifierEnum, LoTEServiceStatusEnum
 // and CertificateApprovalStatusEnum (with their *Values() accessors and the
-// CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN constant) are defined
+// CertificateApprovalStatusEnumCertForUnknown constant) are defined
 // outside this file's manifest and are assumed to exist per the porting
 // brief.
 type LoTEEnumLoader struct{}
@@ -86,7 +86,7 @@ func (l *LoTEEnumLoader) CertificateApprovalStatusFromDefinition(listType ListTy
 			return certApprovalStatus
 		}
 	}
-	return CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN
+	return CertificateApprovalStatusEnumCertForUnknown
 }
 
 // compile-time interface assertion.

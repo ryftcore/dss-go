@@ -30,7 +30,7 @@ func NewPartialPdfByteRangeSignatureScope(byteRange *ByteRange, document model.D
 
 // Type returns the type of the signature scope. Port of the getType() override.
 func (s *PartialPdfByteRangeSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_PARTIAL
+	return enumerations.SignatureScopeTypePartial
 }
 
 // compile-time interface assertion.

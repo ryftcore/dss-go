@@ -30,16 +30,16 @@ func NewArchiveTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.R
 // TimestampType returns the associated TimestampType. Port of
 // getTimestampType().
 func (c *ArchiveTimeStampCheck) TimestampType() enumerations.TimestampType {
-	return enumerations.TimestampType_ARCHIVE_TIMESTAMP
+	return enumerations.TimestampTypeArchiveTimestamp
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ArchiveTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPATSP
+	return i18n.MessageTagBBBSAVIUQPATSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ArchiveTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPATSP_ANS
+	return i18n.MessageTagBBBSAVIUQPATSPANS
 }

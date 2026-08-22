@@ -39,22 +39,22 @@ func (c *CertificatePolicyIdsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificatePolicyIdsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCIPI
+	return i18n.MessageTagBBBXCVCMDCIPI
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificatePolicyIdsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCIPI_ANS
+	return i18n.MessageTagBBBXCVCMDCIPIANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificatePolicyIdsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificatePolicyIdsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

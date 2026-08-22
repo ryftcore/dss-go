@@ -40,18 +40,18 @@ func (c *TrustServicesByCertificateTypeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustServicesByCertificateTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_TS_CERT_TYPE
+	return i18n.MessageTagQualHasTSCertType
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustServicesByCertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_TS_CERT_TYPE_ANS
+	return i18n.MessageTagQualHasTSCertTypeANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustServicesByCertificateTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

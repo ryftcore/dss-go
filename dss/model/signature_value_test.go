@@ -7,8 +7,8 @@ import (
 )
 
 func TestSignatureValueRoundTrip(t *testing.T) {
-	sv := NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, []byte{1, 2, 3})
-	if sv.Algorithm() != enumerations.SignatureAlgorithm_RSA_SHA256 {
+	sv := NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, []byte{1, 2, 3})
+	if sv.Algorithm() != enumerations.SignatureAlgorithmRSASHA256 {
 		t.Fatalf("Algorithm() = %v", sv.Algorithm())
 	}
 	if len(sv.Value()) != 3 {
@@ -17,7 +17,7 @@ func TestSignatureValueRoundTrip(t *testing.T) {
 }
 
 func TestSignatureValueString(t *testing.T) {
-	sv := NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, []byte("hi"))
+	sv := NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, []byte("hi"))
 	want := "SignatureValue [algorithm=RSA_SHA256, value=aGk=]"
 	if got := sv.String(); got != want {
 		t.Fatalf("String() = %q, want %q", got, want)
@@ -30,8 +30,8 @@ func TestSignatureValueString(t *testing.T) {
 }
 
 func TestSignatureValueEquals(t *testing.T) {
-	a := NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, []byte{1, 2, 3})
-	b := NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, []byte{1, 2, 3})
+	a := NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, []byte{1, 2, 3})
+	b := NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, []byte{1, 2, 3})
 	if !a.Equals(b) {
 		t.Fatal("expected equal SignatureValues to be Equals()")
 	}

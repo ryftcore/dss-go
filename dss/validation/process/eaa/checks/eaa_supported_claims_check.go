@@ -47,29 +47,29 @@ func (c *EAASupportedClaimsCheck) BuildAdditionalInfo() *string {
 			unsupportedClaims = append(unsupportedClaims, cl)
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_UNSUPPORTED_CLAIMS, utils.JoinStrings(unsupportedClaims, ", "))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagEAAUnsupportedClaims, utils.JoinStrings(unsupportedClaims, ", "))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAASupportedClaimsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUPPORTED_CLAIMS
+	return i18n.MessageTagEAASupportedClaims
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAASupportedClaimsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUPPORTED_CLAIMS_ANS
+	return i18n.MessageTagEAASupportedClaimsANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAASupportedClaimsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAASupportedClaimsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

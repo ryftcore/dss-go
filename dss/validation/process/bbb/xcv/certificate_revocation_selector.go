@@ -151,7 +151,7 @@ func (c *CertificateRevocationSelector) crsOverrides() CertificateRevocationSele
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *CertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_CRS
+	return i18n.MessageTagCRS
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -266,7 +266,7 @@ func (c *CertificateRevocationSelector) CollectMessages(conclusion *jaxb.XmlConc
 	// collect all messages from not RAC checks, collect from RAC only when all of them failed
 	// XmlBlockType.RAC.equals(getBlockType()): the generated Go BlockType member
 	// is a *XmlBlockType, whose nil is Java's null.
-	if !(constraint.BlockType != nil && jaxb.XmlBlockType_RAC == *constraint.BlockType) ||
+	if !(constraint.BlockType != nil && jaxb.XmlBlockTypeRAC == *constraint.BlockType) ||
 		!c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
 		c.ChainBase.CollectMessages(conclusion, constraint)
 	}

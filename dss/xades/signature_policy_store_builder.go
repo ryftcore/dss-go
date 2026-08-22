@@ -150,11 +150,11 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
 	if digestMatch {
 		signaturePolicyStoreElement := xmlutils.DomUtilsAddElement(documentDom,
 			b.UnsignedSignaturePropertiesDom, b.Xades141Namespace(),
-			definition.XAdES141Element_SIGNATURE_POLICY_STORE)
+			definition.XAdES141ElementSignaturePolicyStore)
 
 		if signaturePolicyStore.Id() != "" {
 			signaturePolicyStoreElement.SetAttr(
-				xmldom.Name{Local: definition.XAdES141Attribute_ID.AttributeName()},
+				xmldom.Name{Local: definition.XAdES141AttributeID.AttributeName()},
 				signaturePolicyStore.Id())
 		}
 
@@ -166,7 +166,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
 		signaturePolicyContent := signaturePolicyStore.SignaturePolicyContent()
 		if signaturePolicyContent != nil {
 			policyDocElement := xmlutils.DomUtilsAddElement(documentDom, signaturePolicyStoreElement,
-				b.Xades141Namespace(), definition.XAdES141Element_SIGNATURE_POLICY_DOCUMENT)
+				b.Xades141Namespace(), definition.XAdES141ElementSignaturePolicyDocument)
 
 			policyBytes, err := spi.DSSUtilsToByteArrayOfDocument(signaturePolicyContent)
 			if err != nil {
@@ -178,7 +178,7 @@ func (b *SignaturePolicyStoreBuilder) AddSignaturePolicyStoreIfDigestMatch(
 		sigPolDocLocalURI := signaturePolicyStore.SigPolDocLocalURI()
 		if utils.IsStringNotEmpty(sigPolDocLocalURI) {
 			xmlutils.DomUtilsAddTextElement(documentDom, signaturePolicyStoreElement,
-				b.Xades141Namespace(), definition.XAdES141Element_SIG_POL_DOC_LOCAL_URI, sigPolDocLocalURI)
+				b.Xades141Namespace(), definition.XAdES141ElementSigPolDocLocalURI, sigPolDocLocalURI)
 		}
 
 		return true, nil

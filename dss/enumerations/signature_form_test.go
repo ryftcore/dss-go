@@ -20,12 +20,12 @@ func TestSignatureFormValueOf(t *testing.T) {
 
 func TestSignatureFormValues(t *testing.T) {
 	want := []SignatureForm{
-		SignatureForm_XAdES,
-		SignatureForm_CAdES,
-		SignatureForm_JAdES,
-		SignatureForm_CBAdES,
-		SignatureForm_PAdES,
-		SignatureForm_PKCS7,
+		SignatureFormXAdES,
+		SignatureFormCAdES,
+		SignatureFormJAdES,
+		SignatureFormCBAdES,
+		SignatureFormPAdES,
+		SignatureFormPKCS7,
 	}
 	got := SignatureFormValues()
 	if len(got) != len(want) {

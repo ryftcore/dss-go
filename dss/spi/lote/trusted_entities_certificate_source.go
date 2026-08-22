@@ -56,9 +56,9 @@ func (s *TrustedEntitiesCertificateSource) SetSummary(summary *lote.LoTEValidati
 	s.summary = summary
 }
 
-// CertificateSourceType returns CertificateSourceType_TRUSTED_ENTITIES.
+// CertificateSourceType returns CertificateSourceTypeTrustedEntities.
 func (s *TrustedEntitiesCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_TRUSTED_ENTITIES
+	return enumerations.CertificateSourceTypeTrustedEntities
 }
 
 // AddCertificate is not applicable for this kind of certificate source: it panics. You should

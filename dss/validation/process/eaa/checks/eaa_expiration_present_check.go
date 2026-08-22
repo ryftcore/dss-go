@@ -36,23 +36,23 @@ func (c *EAAExpirationPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAExpirationPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_EXP_PRESENT
+	return i18n.MessageTagEAAExpPresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAExpirationPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_EXP_PRESENT_ANS
+	return i18n.MessageTagEAAExpPresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAExpirationPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAExpirationPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

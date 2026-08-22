@@ -54,61 +54,61 @@ func (s *SignatureCertificateSource) InitSignatureCertificateSource(overrides Si
 // SignedDataCertificates retrieves the list of all certificates present in a signed element
 // (i.e. the CMS Signed data (CAdES)). Port of getSignedDataCertificates().
 func (s *SignatureCertificateSource) SignedDataCertificates() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_SIGNED_DATA)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginSignedData)
 }
 
 // KeyInfoCertificates retrieves the list of all certificates present in the KeyInfo element
 // (XAdES) (can be unsigned). Port of getKeyInfoCertificates().
 func (s *SignatureCertificateSource) KeyInfoCertificates() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_KEY_INFO)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginKeyInfo)
 }
 
 // CertificateValues retrieves the list of all certificates from CertificateValues
 // (XAdES/CAdES). Port of getCertificateValues().
 func (s *SignatureCertificateSource) CertificateValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_CERTIFICATE_VALUES)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginCertificateValues)
 }
 
 // AttrAuthoritiesCertValues retrieves the list of all certificates from the
 // AttrAuthoritiesCertValues (XAdES). Port of getAttrAuthoritiesCertValues().
 func (s *SignatureCertificateSource) AttrAuthoritiesCertValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_ATTR_AUTHORITIES_CERT_VALUES)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginAttrAuthoritiesCertValues)
 }
 
 // TimeStampValidationDataCertValues retrieves the list of all certificates from the
 // TimeStampValidationData. Port of getTimeStampValidationDataCertValues().
 func (s *SignatureCertificateSource) TimeStampValidationDataCertValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_TIMESTAMP_VALIDATION_DATA)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginTimestampValidationData)
 }
 
 // AnyValidationDataCertValues retrieves the list of all certificates from the
 // AnyValidationData element. Port of getAnyValidationDataCertValues().
 func (s *SignatureCertificateSource) AnyValidationDataCertValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_ANY_VALIDATION_DATA)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginAnyValidationData)
 }
 
 // DSSDictionaryCertValues retrieves the list of all certificates from the DSS dictionary
 // (PAdES). Port of getDSSDictionaryCertValues().
 func (s *SignatureCertificateSource) DSSDictionaryCertValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_DSS_DICTIONARY)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginDSSDictionary)
 }
 
 // VRIDictionaryCertValues retrieves the list of all certificates from the VRI dictionary
 // (PAdES). Port of getVRIDictionaryCertValues().
 func (s *SignatureCertificateSource) VRIDictionaryCertValues() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_VRI_DICTIONARY)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginVRIDictionary)
 }
 
 // UnprotectedHeaderCertificates retrieves the list of all certificates present in the
 // unprotected header parameters (JWS, COSE). Port of getUnprotectedHeaderCertificates().
 func (s *SignatureCertificateSource) UnprotectedHeaderCertificates() []*model.CertificateToken {
-	return s.CertificateTokensByOrigin(enumerations.CertificateOrigin_UNPROTECTED_HEADER)
+	return s.CertificateTokensByOrigin(enumerations.CertificateOriginUnprotectedHeader)
 }
 
 // SigningCertificateRefs retrieves the list of CertificateRefs for the signing certificate
 // (V1/V2). Port of getSigningCertificateRefs().
 func (s *SignatureCertificateSource) SigningCertificateRefs() []*CertificateRef {
-	return s.CertificateRefsByOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	return s.CertificateRefsByOrigin(enumerations.CertificateRefOriginSigningCertificate)
 }
 
 // CompleteCertificateRefs retrieves the list of CertificateRefs included in the attribute
@@ -116,7 +116,7 @@ func (s *SignatureCertificateSource) SigningCertificateRefs() []*CertificateRef 
 // CompleteCertificateRefs/CompleteCertificateRefsV2 (XAdES). Port of
 // getCompleteCertificateRefs().
 func (s *SignatureCertificateSource) CompleteCertificateRefs() []*CertificateRef {
-	return s.CertificateRefsByOrigin(enumerations.CertificateRefOrigin_COMPLETE_CERTIFICATE_REFS)
+	return s.CertificateRefsByOrigin(enumerations.CertificateRefOriginCompleteCertificateRefs)
 }
 
 // AttributeCertificateRefs retrieves the list of CertificateRefs included in the attribute
@@ -124,7 +124,7 @@ func (s *SignatureCertificateSource) CompleteCertificateRefs() []*CertificateRef
 // AttributeCertificateRefs/AttributeCertificateRefsV2 (XAdES). Port of
 // getAttributeCertificateRefs().
 func (s *SignatureCertificateSource) AttributeCertificateRefs() []*CertificateRef {
-	return s.CertificateRefsByOrigin(enumerations.CertificateRefOrigin_ATTRIBUTE_CERTIFICATE_REFS)
+	return s.CertificateRefsByOrigin(enumerations.CertificateRefOriginAttributeCertificateRefs)
 }
 
 // SigningCertificates retrieves the Set of CertificateTokens for the signing certificate
@@ -214,5 +214,5 @@ func (s *SignatureCertificateSource) InitCandidatesList(signingCertificateSource
 // CertificateSourceType returns the certificate source type associated with this
 // implementation. Port of the getCertificateSourceType() override.
 func (s *SignatureCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_SIGNATURE
+	return enumerations.CertificateSourceTypeSignature
 }

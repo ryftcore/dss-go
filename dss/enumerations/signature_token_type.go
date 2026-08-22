@@ -5,28 +5,28 @@ package enumerations
 type SignatureTokenType string
 
 const (
-	// SignatureTokenType_PKCS11 is a PKCS11 keystore token.
-	SignatureTokenType_PKCS11 SignatureTokenType = "PKCS11"
-	// SignatureTokenType_PKCS12 is a PKCS12 keystore token.
-	SignatureTokenType_PKCS12 SignatureTokenType = "PKCS12"
-	// SignatureTokenType_MSCAPI is a Windows keystore token.
-	SignatureTokenType_MSCAPI SignatureTokenType = "MSCAPI"
-	// SignatureTokenType_APPLE is a MacOS keystore token.
-	SignatureTokenType_APPLE SignatureTokenType = "APPLE"
-	// SignatureTokenType_JKS is a Java keystore token.
-	SignatureTokenType_JKS SignatureTokenType = "JKS"
-	// SignatureTokenType_MOCCA is a MOCCA-implementation keystore token.
-	SignatureTokenType_MOCCA SignatureTokenType = "MOCCA"
+	// SignatureTokenTypePKCS11 is a PKCS11 keystore token.
+	SignatureTokenTypePKCS11 SignatureTokenType = "PKCS11"
+	// SignatureTokenTypePKCS12 is a PKCS12 keystore token.
+	SignatureTokenTypePKCS12 SignatureTokenType = "PKCS12"
+	// SignatureTokenTypeMSCAPI is a Windows keystore token.
+	SignatureTokenTypeMSCAPI SignatureTokenType = "MSCAPI"
+	// SignatureTokenTypeApple is a MacOS keystore token.
+	SignatureTokenTypeApple SignatureTokenType = "APPLE"
+	// SignatureTokenTypeJKS is a Java keystore token.
+	SignatureTokenTypeJKS SignatureTokenType = "JKS"
+	// SignatureTokenTypeMOCCA is a MOCCA-implementation keystore token.
+	SignatureTokenTypeMOCCA SignatureTokenType = "MOCCA"
 )
 
 // SignatureTokenTypeValues returns all constants in declaration order.
 func SignatureTokenTypeValues() []SignatureTokenType {
 	return []SignatureTokenType{
-		SignatureTokenType_PKCS11,
-		SignatureTokenType_PKCS12,
-		SignatureTokenType_MSCAPI,
-		SignatureTokenType_APPLE,
-		SignatureTokenType_JKS,
-		SignatureTokenType_MOCCA,
+		SignatureTokenTypePKCS11,
+		SignatureTokenTypePKCS12,
+		SignatureTokenTypeMSCAPI,
+		SignatureTokenTypeApple,
+		SignatureTokenTypeJKS,
+		SignatureTokenTypeMOCCA,
 	}
 }

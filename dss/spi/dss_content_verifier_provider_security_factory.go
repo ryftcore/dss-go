@@ -31,21 +31,21 @@ import (
 // crypto/x509 cannot verify (SHA-224, SHA-3, RIPEMD-160, PLAIN-ECDSA and Ed448 flavours) are
 // deliberately absent: they yield a verification error rather than a silent success.
 var dssContentVerifierProviderSecurityFactorySignatureAlgorithms = map[enumerations.SignatureAlgorithm]stdx509.SignatureAlgorithm{
-	enumerations.SignatureAlgorithm_RSA_MD5:                 stdx509.MD5WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA1:                stdx509.SHA1WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA256:              stdx509.SHA256WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA384:              stdx509.SHA384WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SHA512:              stdx509.SHA512WithRSA,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1: stdx509.SHA256WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1: stdx509.SHA384WithRSAPSS,
-	enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1: stdx509.SHA512WithRSAPSS,
-	enumerations.SignatureAlgorithm_ECDSA_SHA1:              stdx509.ECDSAWithSHA1,
-	enumerations.SignatureAlgorithm_ECDSA_SHA256:            stdx509.ECDSAWithSHA256,
-	enumerations.SignatureAlgorithm_ECDSA_SHA384:            stdx509.ECDSAWithSHA384,
-	enumerations.SignatureAlgorithm_ECDSA_SHA512:            stdx509.ECDSAWithSHA512,
-	enumerations.SignatureAlgorithm_DSA_SHA1:                stdx509.DSAWithSHA1,
-	enumerations.SignatureAlgorithm_DSA_SHA256:              stdx509.DSAWithSHA256,
-	enumerations.SignatureAlgorithm_ED25519:                 stdx509.PureEd25519,
+	enumerations.SignatureAlgorithmRSAMD5:              stdx509.MD5WithRSA,
+	enumerations.SignatureAlgorithmRSASHA1:             stdx509.SHA1WithRSA,
+	enumerations.SignatureAlgorithmRSASHA256:           stdx509.SHA256WithRSA,
+	enumerations.SignatureAlgorithmRSASHA384:           stdx509.SHA384WithRSA,
+	enumerations.SignatureAlgorithmRSASHA512:           stdx509.SHA512WithRSA,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1: stdx509.SHA256WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA384MGF1: stdx509.SHA384WithRSAPSS,
+	enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1: stdx509.SHA512WithRSAPSS,
+	enumerations.SignatureAlgorithmECDSASHA1:           stdx509.ECDSAWithSHA1,
+	enumerations.SignatureAlgorithmECDSASHA256:         stdx509.ECDSAWithSHA256,
+	enumerations.SignatureAlgorithmECDSASHA384:         stdx509.ECDSAWithSHA384,
+	enumerations.SignatureAlgorithmECDSASHA512:         stdx509.ECDSAWithSHA512,
+	enumerations.SignatureAlgorithmDSASHA1:             stdx509.DSAWithSHA1,
+	enumerations.SignatureAlgorithmDSASHA256:           stdx509.DSAWithSHA256,
+	enumerations.SignatureAlgorithmED25519:             stdx509.PureEd25519,
 }
 
 // ContentVerifier is the minimal replacement for BouncyCastle's ContentVerifier/

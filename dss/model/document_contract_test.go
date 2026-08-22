@@ -48,13 +48,13 @@ func TestDigestDocumentMessagesMatchJava(t *testing.T) {
 		t.Errorf("Save() error = %q, want %q", err.Error(), want)
 	}
 
-	if _, err := document.DigestValue(enumerations.DigestAlgorithm_SHA256); err == nil {
+	if _, err := document.DigestValue(enumerations.DigestAlgorithmSHA256); err == nil {
 		t.Fatalf("DigestValue() on an empty document must fail")
 	} else if want := "The digest document does not contain a digest value for the algorithm : SHA256"; err.Error() != want {
 		t.Errorf("DigestValue() error = %q, want %q", err.Error(), want)
 	}
 
-	err := document.AddDigestBase64(enumerations.DigestAlgorithm_SHA256, "not base64!!")
+	err := document.AddDigestBase64(enumerations.DigestAlgorithmSHA256, "not base64!!")
 	if err == nil {
 		t.Fatalf("AddDigestBase64() must reject invalid base64")
 	}
@@ -79,7 +79,7 @@ func TestDigestDocumentAssertionsMatchJava(t *testing.T) {
 		},
 		{
 			name: "missing value",
-			call: func(d *DigestDocument) { d.AddDigestValue(enumerations.DigestAlgorithm_SHA256, nil) },
+			call: func(d *DigestDocument) { d.AddDigestValue(enumerations.DigestAlgorithmSHA256, nil) },
 			want: "The digest value is not defined",
 		},
 		{

@@ -40,11 +40,11 @@ func (c *TLevelTimeStampCheck[T]) Timestamps() []*diagnostic.TimestampWrapper {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLevelTimeStampCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IVTTSTP
+	return i18n.MessageTagBBBSAVIVTTSTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TLevelTimeStampCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IVTTSTP_ANS
+	return i18n.MessageTagBBBSAVIVTTSTPANS
 }

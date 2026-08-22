@@ -81,8 +81,8 @@ func TestDefaultLoTELoaders_MatchUpstreamServiceRegistration(t *testing.T) {
 // LoTEEmptyLoader, which echoes the URI back with an empty label rather than returning nil.
 func TestDefaultLoTELoaders_Behavior(t *testing.T) {
 	lt := ListTypeFromURI("http://uri.etsi.org/19602/LoTEType/EUPIDProvidersList")
-	if got, ok := lt.(LoTETypeEnum); !ok || got != LoTETypeEnum_EUPIDProvidersList {
-		t.Errorf("ListTypeFromURI(known) = %#v, want LoTETypeEnum_EUPIDProvidersList", lt)
+	if got, ok := lt.(LoTETypeEnum); !ok || got != LoTETypeEnumEUPIDProvidersList {
+		t.Errorf("ListTypeFromURI(known) = %#v, want LoTETypeEnumEUPIDProvidersList", lt)
 	}
 	unknown := ListTypeFromURI("bogus")
 	if unknown == nil {
@@ -93,18 +93,18 @@ func TestDefaultLoTELoaders_Behavior(t *testing.T) {
 	}
 
 	sti := LoTEServiceTypeIdentifierFromURI("http://uri.etsi.org/19602/SvcType/Register")
-	if got, ok := sti.(LoTEServiceTypeIdentifierEnum); !ok || got != LoTEServiceTypeIdentifierEnum_REGISTER {
+	if got, ok := sti.(LoTEServiceTypeIdentifierEnum); !ok || got != LoTEServiceTypeIdentifierEnumRegister {
 		t.Errorf("LoTEServiceTypeIdentifierFromURI(known) = %#v, want REGISTER", sti)
 	}
 	status := LoTEServiceStatusFromURI("http://uri.etsi.org/19602/PubEAAProvidersList/SvcStatus/notified")
-	if got, ok := status.(LoTEServiceStatusEnum); !ok || got != LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED {
+	if got, ok := status.(LoTEServiceStatusEnum); !ok || got != LoTEServiceStatusEnumPubEAAProviderNotified {
 		t.Errorf("LoTEServiceStatusFromURI(known) = %#v, want PUB_EAA_PROVIDER_NOTIFIED", status)
 	}
 
 	// LoTEEnumLoader returns CERT_FOR_UNKNOWN rather than nil, so LoTEEmptyLoader (whose
 	// fromDefinition is unsupported and returns nil) is never consulted here.
 	cas := CertificateApprovalStatusFromDefinition(nil, nil, nil)
-	if got, ok := cas.(CertificateApprovalStatusEnum); !ok || got != CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN {
+	if got, ok := cas.(CertificateApprovalStatusEnum); !ok || got != CertificateApprovalStatusEnumCertForUnknown {
 		t.Errorf("CertificateApprovalStatusFromDefinition(nil,nil,nil) = %#v, want CERT_FOR_UNKNOWN", cas)
 	}
 }

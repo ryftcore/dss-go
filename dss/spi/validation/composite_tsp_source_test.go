@@ -37,7 +37,7 @@ func TestCompositeTSPSourceTriesSourcesInOrder(t *testing.T) {
 		"failing": failing, "empty": empty, "answering": answering, "unused": unused,
 	}, []string{"failing", "empty", "answering", "unused"})
 
-	binary, err := composite.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, make([]byte, 32))
+	binary, err := composite.TimeStampResponse(enumerations.DigestAlgorithmSHA256, make([]byte, 32))
 	if err != nil {
 		t.Fatalf("TimeStampResponse() failed: %v", err)
 	}
@@ -61,7 +61,7 @@ func TestCompositeTSPSourceExhausted(t *testing.T) {
 		"second": &compositeTSPSourceTestSource{},
 	}, []string{"first", "second"})
 
-	_, err := composite.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, make([]byte, 32))
+	_, err := composite.TimeStampResponse(enumerations.DigestAlgorithmSHA256, make([]byte, 32))
 	if err == nil {
 		t.Fatal("TimeStampResponse() succeeded, want an error")
 	}
@@ -81,7 +81,7 @@ func TestCompositeTSPSourceUnorderedSources(t *testing.T) {
 	composite := NewCompositeTSPSource()
 	composite.SetTspSources(map[string]TSPSource{"only": only}, nil)
 
-	binary, err := composite.TimeStampResponse(enumerations.DigestAlgorithm_SHA512, make([]byte, 64))
+	binary, err := composite.TimeStampResponse(enumerations.DigestAlgorithmSHA512, make([]byte, 64))
 	if err != nil {
 		t.Fatalf("TimeStampResponse() failed: %v", err)
 	}

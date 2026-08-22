@@ -10,15 +10,15 @@ func TestEncryptionAlgorithm(t *testing.T) {
 		oid     string
 		padding string
 	}{
-		{EncryptionAlgorithm_RSA, "RSA", "1.2.840.113549.1.1.1", "RSA/ECB/PKCS1Padding"},
-		{EncryptionAlgorithm_RSASSA_PSS, "RSASSA-PSS", "1.2.840.113549.1.1.10", "RSA/ECB/OAEPPadding"},
-		{EncryptionAlgorithm_DSA, "DSA", "1.2.840.10040.4.1", "DSA"},
-		{EncryptionAlgorithm_ECDSA, "ECDSA", "1.2.840.10045.2.1", "ECDSA"},
-		{EncryptionAlgorithm_PLAIN_ECDSA, "PLAIN-ECDSA", "0.4.0.127.0.7.1.1.4.1", "PLAIN-ECDSA"},
-		{EncryptionAlgorithm_X25519, "X25519", "1.3.101.110", "X25519"},
-		{EncryptionAlgorithm_X448, "X448", "1.3.101.111", "X448"},
-		{EncryptionAlgorithm_EDDSA, "EdDSA", "", "EdDSA"},
-		{EncryptionAlgorithm_HMAC, "HMAC", "", ""},
+		{EncryptionAlgorithmRSA, "RSA", "1.2.840.113549.1.1.1", "RSA/ECB/PKCS1Padding"},
+		{EncryptionAlgorithmRSASSAPSS, "RSASSA-PSS", "1.2.840.113549.1.1.10", "RSA/ECB/OAEPPadding"},
+		{EncryptionAlgorithmDSA, "DSA", "1.2.840.10040.4.1", "DSA"},
+		{EncryptionAlgorithmECDSA, "ECDSA", "1.2.840.10045.2.1", "ECDSA"},
+		{EncryptionAlgorithmPlainECDSA, "PLAIN-ECDSA", "0.4.0.127.0.7.1.1.4.1", "PLAIN-ECDSA"},
+		{EncryptionAlgorithmX25519, "X25519", "1.3.101.110", "X25519"},
+		{EncryptionAlgorithmX448, "X448", "1.3.101.111", "X448"},
+		{EncryptionAlgorithmEDDSA, "EdDSA", "", "EdDSA"},
+		{EncryptionAlgorithmHMAC, "HMAC", "", ""},
 	}
 	if len(EncryptionAlgorithmValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(EncryptionAlgorithmValues()))
@@ -48,13 +48,13 @@ func TestEncryptionAlgorithm(t *testing.T) {
 		oid string
 		v   EncryptionAlgorithm
 	}{
-		{"1.2.840.113549.1.1.1", EncryptionAlgorithm_RSA},
-		{"1.2.840.113549.1.1.10", EncryptionAlgorithm_RSASSA_PSS},
-		{"1.2.840.10040.4.1", EncryptionAlgorithm_DSA},
-		{"1.2.840.10045.2.1", EncryptionAlgorithm_ECDSA},
-		{"0.4.0.127.0.7.1.1.4.1", EncryptionAlgorithm_PLAIN_ECDSA},
-		{"1.3.101.110", EncryptionAlgorithm_X25519},
-		{"1.3.101.111", EncryptionAlgorithm_X448},
+		{"1.2.840.113549.1.1.1", EncryptionAlgorithmRSA},
+		{"1.2.840.113549.1.1.10", EncryptionAlgorithmRSASSAPSS},
+		{"1.2.840.10040.4.1", EncryptionAlgorithmDSA},
+		{"1.2.840.10045.2.1", EncryptionAlgorithmECDSA},
+		{"0.4.0.127.0.7.1.1.4.1", EncryptionAlgorithmPlainECDSA},
+		{"1.3.101.110", EncryptionAlgorithmX25519},
+		{"1.3.101.111", EncryptionAlgorithmX448},
 	}
 	for _, c := range oidCases {
 		got, err := EncryptionAlgorithmForOID(c.oid)
@@ -68,47 +68,47 @@ func TestEncryptionAlgorithm(t *testing.T) {
 	// EDDSA and HMAC share the "" OID and are not resolvable by forOID
 	// (Java's registry map also keeps only the last "" entry inserted:
 	// HMAC, since it is declared after EDDSA).
-	if got, err := EncryptionAlgorithmForOID(""); err != nil || got != EncryptionAlgorithm_HMAC {
-		t.Errorf("EncryptionAlgorithmForOID(\"\") = %v, %v; want %v, nil", got, err, EncryptionAlgorithm_HMAC)
+	if got, err := EncryptionAlgorithmForOID(""); err != nil || got != EncryptionAlgorithmHMAC {
+		t.Errorf("EncryptionAlgorithmForOID(\"\") = %v, %v; want %v, nil", got, err, EncryptionAlgorithmHMAC)
 	}
 
 	if _, err := EncryptionAlgorithmForName("nope"); err == nil {
 		t.Error("expected error for unknown name")
 	}
-	if got := EncryptionAlgorithmForNameDefault("nope", EncryptionAlgorithm_RSA); got != EncryptionAlgorithm_RSA {
-		t.Errorf("EncryptionAlgorithmForNameDefault(nope) = %v, want %v", got, EncryptionAlgorithm_RSA)
+	if got := EncryptionAlgorithmForNameDefault("nope", EncryptionAlgorithmRSA); got != EncryptionAlgorithmRSA {
+		t.Errorf("EncryptionAlgorithmForNameDefault(nope) = %v, want %v", got, EncryptionAlgorithmRSA)
 	}
-	if got, err := EncryptionAlgorithmForName("EC"); err != nil || got != EncryptionAlgorithm_ECDSA {
-		t.Errorf("EncryptionAlgorithmForName(EC) = %v, %v; want %v, nil", got, err, EncryptionAlgorithm_ECDSA)
+	if got, err := EncryptionAlgorithmForName("EC"); err != nil || got != EncryptionAlgorithmECDSA {
+		t.Errorf("EncryptionAlgorithmForName(EC) = %v, %v; want %v, nil", got, err, EncryptionAlgorithmECDSA)
 	}
-	if got, err := EncryptionAlgorithmForName("ECC"); err != nil || got != EncryptionAlgorithm_ECDSA {
-		t.Errorf("EncryptionAlgorithmForName(ECC) = %v, %v; want %v, nil", got, err, EncryptionAlgorithm_ECDSA)
+	if got, err := EncryptionAlgorithmForName("ECC"); err != nil || got != EncryptionAlgorithmECDSA {
+		t.Errorf("EncryptionAlgorithmForName(ECC) = %v, %v; want %v, nil", got, err, EncryptionAlgorithmECDSA)
 	}
-	if got, err := EncryptionAlgorithmForName("Ed25519"); err != nil || got != EncryptionAlgorithm_EDDSA {
-		t.Errorf("EncryptionAlgorithmForName(Ed25519) = %v, %v; want %v, nil", got, err, EncryptionAlgorithm_EDDSA)
+	if got, err := EncryptionAlgorithmForName("Ed25519"); err != nil || got != EncryptionAlgorithmEDDSA {
+		t.Errorf("EncryptionAlgorithmForName(Ed25519) = %v, %v; want %v, nil", got, err, EncryptionAlgorithmEDDSA)
 	}
-	if got, err := EncryptionAlgorithmForName("Ed448"); err != nil || got != EncryptionAlgorithm_EDDSA {
-		t.Errorf("EncryptionAlgorithmForName(Ed448) = %v, %v; want %v, nil", got, err, EncryptionAlgorithm_EDDSA)
+	if got, err := EncryptionAlgorithmForName("Ed448"); err != nil || got != EncryptionAlgorithmEDDSA {
+		t.Errorf("EncryptionAlgorithmForName(Ed448) = %v, %v; want %v, nil", got, err, EncryptionAlgorithmEDDSA)
 	}
 }
 
 func TestEncryptionAlgorithm_IsEquivalent(t *testing.T) {
-	if !EncryptionAlgorithm_RSA.IsEquivalent(EncryptionAlgorithm_RSASSA_PSS) {
+	if !EncryptionAlgorithmRSA.IsEquivalent(EncryptionAlgorithmRSASSAPSS) {
 		t.Error("expected RSA equivalent to RSASSA_PSS")
 	}
-	if !EncryptionAlgorithm_ECDSA.IsEquivalent(EncryptionAlgorithm_PLAIN_ECDSA) {
+	if !EncryptionAlgorithmECDSA.IsEquivalent(EncryptionAlgorithmPlainECDSA) {
 		t.Error("expected ECDSA equivalent to PLAIN_ECDSA")
 	}
-	if !EncryptionAlgorithm_X25519.IsEquivalent(EncryptionAlgorithm_EDDSA) {
+	if !EncryptionAlgorithmX25519.IsEquivalent(EncryptionAlgorithmEDDSA) {
 		t.Error("expected X25519 equivalent to EDDSA")
 	}
-	if EncryptionAlgorithm_RSA.IsEquivalent(EncryptionAlgorithm_ECDSA) {
+	if EncryptionAlgorithmRSA.IsEquivalent(EncryptionAlgorithmECDSA) {
 		t.Error("expected RSA not equivalent to ECDSA")
 	}
-	if EncryptionAlgorithm_RSA.IsEquivalent("") {
+	if EncryptionAlgorithmRSA.IsEquivalent("") {
 		t.Error("expected RSA not equivalent to empty/nil")
 	}
-	if !EncryptionAlgorithm_HMAC.IsEquivalent(EncryptionAlgorithm_HMAC) {
+	if !EncryptionAlgorithmHMAC.IsEquivalent(EncryptionAlgorithmHMAC) {
 		t.Error("expected HMAC equivalent to itself")
 	}
 }

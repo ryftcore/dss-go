@@ -20,24 +20,24 @@ import "fmt"
 type KeyUsageBit string
 
 const (
-	// KeyUsageBit_DIGITAL_SIGNATURE is digitalSignature.
-	KeyUsageBit_DIGITAL_SIGNATURE KeyUsageBit = "DIGITAL_SIGNATURE"
-	// KeyUsageBit_NON_REPUDIATION is nonRepudiation.
-	KeyUsageBit_NON_REPUDIATION KeyUsageBit = "NON_REPUDIATION"
-	// KeyUsageBit_KEY_ENCIPHERMENT is keyEncipherment.
-	KeyUsageBit_KEY_ENCIPHERMENT KeyUsageBit = "KEY_ENCIPHERMENT"
-	// KeyUsageBit_DATA_ENCIPHERMENT is dataEncipherment.
-	KeyUsageBit_DATA_ENCIPHERMENT KeyUsageBit = "DATA_ENCIPHERMENT"
-	// KeyUsageBit_KEY_AGREEMENT is keyAgreement.
-	KeyUsageBit_KEY_AGREEMENT KeyUsageBit = "KEY_AGREEMENT"
-	// KeyUsageBit_KEY_CERT_SIGN is keyCertSign.
-	KeyUsageBit_KEY_CERT_SIGN KeyUsageBit = "KEY_CERT_SIGN"
-	// KeyUsageBit_CRL_SIGN is crlSign.
-	KeyUsageBit_CRL_SIGN KeyUsageBit = "CRL_SIGN"
-	// KeyUsageBit_ENCIPHER_ONLY is encipherOnly.
-	KeyUsageBit_ENCIPHER_ONLY KeyUsageBit = "ENCIPHER_ONLY"
-	// KeyUsageBit_DECIPHER_ONLY is decipherOnly.
-	KeyUsageBit_DECIPHER_ONLY KeyUsageBit = "DECIPHER_ONLY"
+	// KeyUsageBitDigitalSignature is digitalSignature.
+	KeyUsageBitDigitalSignature KeyUsageBit = "DIGITAL_SIGNATURE"
+	// KeyUsageBitNonRepudiation is nonRepudiation.
+	KeyUsageBitNonRepudiation KeyUsageBit = "NON_REPUDIATION"
+	// KeyUsageBitKeyEncipherment is keyEncipherment.
+	KeyUsageBitKeyEncipherment KeyUsageBit = "KEY_ENCIPHERMENT"
+	// KeyUsageBitDataEncipherment is dataEncipherment.
+	KeyUsageBitDataEncipherment KeyUsageBit = "DATA_ENCIPHERMENT"
+	// KeyUsageBitKeyAgreement is keyAgreement.
+	KeyUsageBitKeyAgreement KeyUsageBit = "KEY_AGREEMENT"
+	// KeyUsageBitKeyCertSign is keyCertSign.
+	KeyUsageBitKeyCertSign KeyUsageBit = "KEY_CERT_SIGN"
+	// KeyUsageBitCRLSign is crlSign.
+	KeyUsageBitCRLSign KeyUsageBit = "CRL_SIGN"
+	// KeyUsageBitEncipherOnly is encipherOnly.
+	KeyUsageBitEncipherOnly KeyUsageBit = "ENCIPHER_ONLY"
+	// KeyUsageBitDecipherOnly is decipherOnly.
+	KeyUsageBitDecipherOnly KeyUsageBit = "DECIPHER_ONLY"
 )
 
 type keyUsageBitFields struct {
@@ -48,29 +48,29 @@ type keyUsageBitFields struct {
 
 // keyUsageBitData holds the (value, index, bit) triple for each KeyUsageBit.
 var keyUsageBitData = map[KeyUsageBit]keyUsageBitFields{
-	KeyUsageBit_DIGITAL_SIGNATURE: {"digitalSignature", 0, 128},
-	KeyUsageBit_NON_REPUDIATION:   {"nonRepudiation", 1, 64},
-	KeyUsageBit_KEY_ENCIPHERMENT:  {"keyEncipherment", 2, 32},
-	KeyUsageBit_DATA_ENCIPHERMENT: {"dataEncipherment", 3, 16},
-	KeyUsageBit_KEY_AGREEMENT:     {"keyAgreement", 4, 8},
-	KeyUsageBit_KEY_CERT_SIGN:     {"keyCertSign", 5, 4},
-	KeyUsageBit_CRL_SIGN:          {"crlSign", 6, 2},
-	KeyUsageBit_ENCIPHER_ONLY:     {"encipherOnly", 7, 1},
-	KeyUsageBit_DECIPHER_ONLY:     {"decipherOnly", 8, 32768},
+	KeyUsageBitDigitalSignature: {"digitalSignature", 0, 128},
+	KeyUsageBitNonRepudiation:   {"nonRepudiation", 1, 64},
+	KeyUsageBitKeyEncipherment:  {"keyEncipherment", 2, 32},
+	KeyUsageBitDataEncipherment: {"dataEncipherment", 3, 16},
+	KeyUsageBitKeyAgreement:     {"keyAgreement", 4, 8},
+	KeyUsageBitKeyCertSign:      {"keyCertSign", 5, 4},
+	KeyUsageBitCRLSign:          {"crlSign", 6, 2},
+	KeyUsageBitEncipherOnly:     {"encipherOnly", 7, 1},
+	KeyUsageBitDecipherOnly:     {"decipherOnly", 8, 32768},
 }
 
 // KeyUsageBitValues returns all KeyUsageBit constants in declaration order.
 func KeyUsageBitValues() []KeyUsageBit {
 	return []KeyUsageBit{
-		KeyUsageBit_DIGITAL_SIGNATURE,
-		KeyUsageBit_NON_REPUDIATION,
-		KeyUsageBit_KEY_ENCIPHERMENT,
-		KeyUsageBit_DATA_ENCIPHERMENT,
-		KeyUsageBit_KEY_AGREEMENT,
-		KeyUsageBit_KEY_CERT_SIGN,
-		KeyUsageBit_CRL_SIGN,
-		KeyUsageBit_ENCIPHER_ONLY,
-		KeyUsageBit_DECIPHER_ONLY,
+		KeyUsageBitDigitalSignature,
+		KeyUsageBitNonRepudiation,
+		KeyUsageBitKeyEncipherment,
+		KeyUsageBitDataEncipherment,
+		KeyUsageBitKeyAgreement,
+		KeyUsageBitKeyCertSign,
+		KeyUsageBitCRLSign,
+		KeyUsageBitEncipherOnly,
+		KeyUsageBitDecipherOnly,
 	}
 }
 

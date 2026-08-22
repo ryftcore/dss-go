@@ -3,5 +3,5 @@ package definition
 
 import "github.com/ryftcore/dss-go/dss/xml/common"
 
-// TrustedListNamespace_NS is the Trusted List XSD namespace.
-var TrustedListNamespace_NS = common.NewDSSNamespace("http://uri.etsi.org/02231/v2#", "tl")
+// TrustedListNamespaceNS is the Trusted List XSD namespace.
+var TrustedListNamespaceNS = common.NewDSSNamespace("http://uri.etsi.org/02231/v2#", "tl")

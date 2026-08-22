@@ -160,7 +160,7 @@ func (e *ASiCWithCAdESSignatureExtension) extendSignatureDocument(signature mode
 // slice holding a nil DSSDocument) rather than "fixing" it.
 func (e *ASiCWithCAdESSignatureExtension) getDetachedContents(signatureDocument model.DSSDocument,
 	asicContent *asic.ASiCContent) []model.DSSDocument {
-	if enumerations.ASiCContainerType_ASiC_E == asicContent.ContainerType() {
+	if enumerations.ASiCContainerTypeASiCE == asicContent.ContainerType() {
 		manifests := asicContent.ManifestDocuments()
 		linkedManifest := asic.ASiCManifestParserGetLinkedManifest(manifests, signatureDocument.Name())
 		return []model.DSSDocument{linkedManifest}
@@ -191,11 +191,11 @@ func (e *ASiCWithCAdESSignatureExtension) getExtensionProfile(
 	}
 	var cadesSignatureExtension dsscades.CAdESSignatureExtender
 	switch signatureLevel {
-	case enumerations.SignatureLevel_CAdES_BASELINE_T:
+	case enumerations.SignatureLevelCAdESBaselineT:
 		cadesSignatureExtension = dsscades.NewCAdESLevelBaselineT(e.TspSource, e.CertificateVerifier)
-	case enumerations.SignatureLevel_CAdES_BASELINE_LT:
+	case enumerations.SignatureLevelCAdESBaselineLT:
 		cadesSignatureExtension = dsscades.NewCAdESLevelBaselineLT(e.TspSource, e.CertificateVerifier)
-	case enumerations.SignatureLevel_CAdES_BASELINE_LTA:
+	case enumerations.SignatureLevelCAdESBaselineLTA:
 		cadesSignatureExtension = e.requireOverrides().GetLTAExtensionProfile(e.TspSource, e.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
@@ -216,8 +216,8 @@ func (e *ASiCWithCAdESSignatureExtension) GetLTAExtensionProfile(tspSource valid
 func (e *ASiCWithCAdESSignatureExtension) ExtensionRequired(parameters *dsscades.CAdESSignatureParameters,
 	coveredByManifest bool) bool {
 	signatureLevel := parameters.SignatureLevel()
-	return enumerations.SignatureLevel_CAdES_BASELINE_T == signatureLevel ||
-		enumerations.SignatureLevel_CAdES_BASELINE_LT == signatureLevel || !coveredByManifest
+	return enumerations.SignatureLevelCAdESBaselineT == signatureLevel ||
+		enumerations.SignatureLevelCAdESBaselineLT == signatureLevel || !coveredByManifest
 }
 
 // AssertExtendSignaturePossible checks if the signature extension is possible. Ports the
@@ -228,8 +228,8 @@ func (e *ASiCWithCAdESSignatureExtension) ExtensionRequired(parameters *dsscades
 func (e *ASiCWithCAdESSignatureExtension) AssertExtendSignaturePossible(
 	parameters *dsscades.CAdESSignatureParameters, coveredByManifest bool) {
 	signatureLevel := parameters.SignatureLevel()
-	if (enumerations.SignatureLevel_CAdES_BASELINE_T == signatureLevel ||
-		enumerations.SignatureLevel_CAdES_BASELINE_LT == signatureLevel) && coveredByManifest {
+	if (enumerations.SignatureLevelCAdESBaselineT == signatureLevel ||
+		enumerations.SignatureLevelCAdESBaselineLT == signatureLevel) && coveredByManifest {
 		panic(exception.NewIllegalInputException(fmt.Sprintf(
 			"Cannot extend signature to '%s'. The signature is already covered by a manifest file.", signatureLevel)))
 	}

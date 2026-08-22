@@ -89,7 +89,7 @@ func (s *ExternalResourcesCRLSource) addCRLToken(reader io.Reader) error {
 	if err != nil {
 		return model.NewDSSErrorMessageCause("Unable to parse the stream (CRL is expected)", err)
 	}
-	s.AddBinary(crlBinary, enumerations.RevocationOrigin_EXTERNAL)
+	s.AddBinary(crlBinary, enumerations.RevocationOriginExternal)
 	return nil
 }
 
@@ -102,7 +102,7 @@ func (s *ExternalResourcesCRLSource) RevocationTokens(certificate *model.Certifi
 		return nil, err
 	}
 	for _, revocationToken := range revocationTokens {
-		revocationToken.SetExternalOrigin(enumerations.RevocationOrigin_EXTERNAL)
+		revocationToken.SetExternalOrigin(enumerations.RevocationOriginExternal)
 	}
 	return revocationTokens, nil
 }

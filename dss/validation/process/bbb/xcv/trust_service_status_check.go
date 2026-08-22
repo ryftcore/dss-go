@@ -77,7 +77,7 @@ func (c *TrustServiceStatusCheck) Process() bool {
 // buildAdditionalInfo().
 func (c *TrustServiceStatusCheck) BuildAdditionalInfo() *string {
 	if utils.IsStringNotEmpty(c.serviceStatusStr) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_TRUSTED_SERVICE_STATUS, c.serviceStatusStr)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagTrustedServiceStatus, c.serviceStatusStr)
 		return &message
 	}
 	return nil
@@ -85,31 +85,31 @@ func (c *TrustServiceStatusCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustServiceStatusCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_XCV_TSL_ESP
+	return i18n.MessageTagXCVTSLESP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustServiceStatusCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE, enumerations.Context_KEY_BINDING_SIGNATURE:
-		return i18n.MessageTag_XCV_TSL_ESP_SIG_ANS
-	case enumerations.Context_TIMESTAMP:
-		return i18n.MessageTag_XCV_TSL_ESP_TSP_ANS
-	case enumerations.Context_REVOCATION:
-		return i18n.MessageTag_XCV_TSL_ESP_REV_ANS
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature, enumerations.ContextKeyBindingSignature:
+		return i18n.MessageTagXCVTSLESPSigANS
+	case enumerations.ContextTimestamp:
+		return i18n.MessageTagXCVTSLESPTSPANS
+	case enumerations.ContextRevocation:
+		return i18n.MessageTagXCVTSLESPRevANS
 	default:
-		return i18n.MessageTag_XCV_TSL_ESP_ANS
+		return i18n.MessageTagXCVTSLESPANS
 	}
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustServiceStatusCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TrustServiceStatusCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND
+	return enumerations.SubIndicationNoCertificateChainFound
 }

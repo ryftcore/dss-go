@@ -124,7 +124,7 @@ func TestDomUtilsAddNamespaceAttributeDeclarationForm(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ns := common.NewDSSNamespace(tc.uri, tc.prefix)
 			doc := DomUtilsBuildDOMEmpty()
-			el := DomUtilsCreateElementNS(doc, ns, common.XMLDSigElement_SIGNATURE)
+			el := DomUtilsCreateElementNS(doc, ns, common.XMLDSigElementSignature)
 			doc.AppendChild(el)
 			DomUtilsAddNamespaceAttribute(el, ns)
 

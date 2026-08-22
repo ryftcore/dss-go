@@ -25,16 +25,16 @@ func TestSignatureProfileValueByName(t *testing.T) {
 	if err != nil {
 		t.Fatalf("SignatureProfileValueByName unexpected error: %v", err)
 	}
-	if got != SignatureProfile_BASELINE_LTA {
-		t.Errorf("SignatureProfileValueByName(BASELINE-LTA) = %q, want %q", got, SignatureProfile_BASELINE_LTA)
+	if got != SignatureProfileBaselineLTA {
+		t.Errorf("SignatureProfileValueByName(BASELINE-LTA) = %q, want %q", got, SignatureProfileBaselineLTA)
 	}
 }
 
 func TestSignatureProfileString(t *testing.T) {
-	if got := SignatureProfile_BASELINE_LTA.String(); got != "BASELINE-LTA" {
-		t.Errorf("SignatureProfile_BASELINE_LTA.String() = %q, want %q", got, "BASELINE-LTA")
+	if got := SignatureProfileBaselineLTA.String(); got != "BASELINE-LTA" {
+		t.Errorf("SignatureProfileBaselineLTA.String() = %q, want %q", got, "BASELINE-LTA")
 	}
-	if got := SignatureProfile_AdES.String(); got != "AdES" {
-		t.Errorf("SignatureProfile_AdES.String() = %q, want %q", got, "AdES")
+	if got := SignatureProfileAdES.String(); got != "AdES" {
+		t.Errorf("SignatureProfileAdES.String() = %q, want %q", got, "AdES")
 	}
 }

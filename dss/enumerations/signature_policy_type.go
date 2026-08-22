@@ -8,23 +8,23 @@ import "fmt"
 type SignaturePolicyType string
 
 const (
-	// SignaturePolicyType_NO_POLICY: the validation process accepts no policy. No
+	// SignaturePolicyTypeNoPolicy: the validation process accepts no policy. No
 	// particular treatment is done.
-	SignaturePolicyType_NO_POLICY SignaturePolicyType = "NO_POLICY"
-	// SignaturePolicyType_ANY_POLICY: the validation process accepts any policy. The
+	SignaturePolicyTypeNoPolicy SignaturePolicyType = "NO_POLICY"
+	// SignaturePolicyTypeAnyPolicy: the validation process accepts any policy. The
 	// used policy is only showed, no particular treatment is done.
-	SignaturePolicyType_ANY_POLICY SignaturePolicyType = "ANY_POLICY"
-	// SignaturePolicyType_IMPLICIT_POLICY: indicate that the data object(s) being
+	SignaturePolicyTypeAnyPolicy SignaturePolicyType = "ANY_POLICY"
+	// SignaturePolicyTypeImplicitPolicy: indicate that the data object(s) being
 	// signed and other external data imply the signature policy.
-	SignaturePolicyType_IMPLICIT_POLICY SignaturePolicyType = "IMPLICIT_POLICY"
+	SignaturePolicyTypeImplicitPolicy SignaturePolicyType = "IMPLICIT_POLICY"
 )
 
 // SignaturePolicyTypeValues returns all SignaturePolicyType constants in declaration order.
 func SignaturePolicyTypeValues() []SignaturePolicyType {
 	return []SignaturePolicyType{
-		SignaturePolicyType_NO_POLICY,
-		SignaturePolicyType_ANY_POLICY,
-		SignaturePolicyType_IMPLICIT_POLICY,
+		SignaturePolicyTypeNoPolicy,
+		SignaturePolicyTypeAnyPolicy,
+		SignaturePolicyTypeImplicitPolicy,
 	}
 }
 

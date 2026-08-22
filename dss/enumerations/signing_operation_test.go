@@ -4,13 +4,13 @@ import "testing"
 
 func TestSigningOperationValues(t *testing.T) {
 	want := []SigningOperation{
-		SigningOperation_SIGN,
-		SigningOperation_COUNTER_SIGN,
-		SigningOperation_TIMESTAMP,
-		SigningOperation_EXTEND,
-		SigningOperation_ADD_SIG_POLICY_STORE,
-		SigningOperation_ADD_EVIDENCE_RECORD,
-		SigningOperation_EAA_PRESENTATION,
+		SigningOperationSign,
+		SigningOperationCounterSign,
+		SigningOperationTimestamp,
+		SigningOperationExtend,
+		SigningOperationAddSigPolicyStore,
+		SigningOperationAddEvidenceRecord,
+		SigningOperationEAAPresentation,
 	}
 	got := SigningOperationValues()
 	if len(got) != len(want) {

@@ -66,11 +66,11 @@ func (c *SignatureAcceptanceValidationResultCheck[T]) FailedSubIndicationForConc
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureAcceptanceValidationResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISAVRC
+	return i18n.MessageTagBSVISAVRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureAcceptanceValidationResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISAVRC_ANS
+	return i18n.MessageTagBSVISAVRCANS
 }

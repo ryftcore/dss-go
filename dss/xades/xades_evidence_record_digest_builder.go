@@ -205,19 +205,19 @@ func (b *XAdESEvidenceRecordDigestBuilder) getXmlSignatureMessageImprint(signatu
 	 * - The ds:SignatureValue element.
 	 * - The ds:KeyInfo element, if present.
 	 */
-	digestValue, err := b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPath_SIGNED_INFO_PATH, canonicalizationAlgorithm)
+	digestValue, err := b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPathSignedInfoPath, canonicalizationAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, fmt.Errorf("unable to compute message-imprint for an evidence-record. Reason : %s", err.Error())
 	}
 	digestObjectsGroup = append(digestObjectsGroup, digestValue)
 
-	digestValue, err = b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPath_SIGNATURE_VALUE_PATH, canonicalizationAlgorithm)
+	digestValue, err = b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPathSignatureValuePath, canonicalizationAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, fmt.Errorf("unable to compute message-imprint for an evidence-record. Reason : %s", err.Error())
 	}
 	digestObjectsGroup = append(digestObjectsGroup, digestValue)
 
-	digestValue, err = b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPath_KEY_INFO_PATH, canonicalizationAlgorithm)
+	digestValue, err = b.getDigestValueOnCanonicalizedNodeByQuery(signature, common.XMLDSigPathKeyInfoPath, canonicalizationAlgorithm)
 	if err != nil {
 		return model.DSSMessageDigest{}, fmt.Errorf("unable to compute message-imprint for an evidence-record. Reason : %s", err.Error())
 	}
@@ -293,7 +293,7 @@ func (b *XAdESEvidenceRecordDigestBuilder) getCanonicalizationAlgorithm(signatur
 	if signedInfo == nil {
 		return "", fmt.Errorf("ds:SignedInfo element shall be defined within a signature")
 	}
-	canonicalizationMethod, err := xmlutils.XPathUtilsGetValue(signedInfo, common.XMLDSigPath_CANONICALIZATION_ALGORITHM_PATH)
+	canonicalizationMethod, err := xmlutils.XPathUtilsGetValue(signedInfo, common.XMLDSigPathCanonicalizationAlgorithmPath)
 	if err != nil {
 		return "", err
 	}
@@ -505,7 +505,7 @@ func xadesEvidenceRecordDigestBuilderInitManifestDetachedContent(manifest *xmlds
 
 // isResultXmlNodeSet ports the private isResultXmlNodeSet(Reference).
 func (b *XAdESEvidenceRecordDigestBuilder) isResultXmlNodeSet(reference *xmldsig.Reference) bool {
-	return ReferenceOutputType_NODE_SET == DSSXMLUtilsGetReferenceOutputType(reference)
+	return ReferenceOutputTypeNodeSet == DSSXMLUtilsGetReferenceOutputType(reference)
 }
 
 // computeDigestValueGroupHash ports the private computeDigestValueGroupHash(List<byte[]>).

@@ -27,11 +27,11 @@ func NewAcceptableListOfTrustedListsCheck[T any](i18nProvider *i18n.I18nProvider
 
 // MessageTag returns the check's message tag. Port of the overridden getMessageTag().
 func (c *AcceptableListOfTrustedListsCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_LIST_OF_TRUSTED_LISTS_ACCEPT
+	return i18n.MessageTagQualListOfTrustedListsAccept
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *AcceptableListOfTrustedListsCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_LIST_OF_TRUSTED_LISTS_ACCEPT_ANS
+	return i18n.MessageTagQualListOfTrustedListsAcceptANS
 }

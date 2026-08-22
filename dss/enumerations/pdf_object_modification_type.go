@@ -5,22 +5,22 @@ package enumerations
 type PdfObjectModificationType string
 
 const (
-	// PdfObjectModificationType_CREATION represents an object addition to a
+	// PdfObjectModificationTypeCreation represents an object addition to a
 	// final revision.
-	PdfObjectModificationType_CREATION PdfObjectModificationType = "CREATION"
-	// PdfObjectModificationType_DELETION represents an object deletion from
+	PdfObjectModificationTypeCreation PdfObjectModificationType = "CREATION"
+	// PdfObjectModificationTypeDeletion represents an object deletion from
 	// a final revision.
-	PdfObjectModificationType_DELETION PdfObjectModificationType = "DELETION"
-	// PdfObjectModificationType_MODIFICATION represents an object change in
+	PdfObjectModificationTypeDeletion PdfObjectModificationType = "DELETION"
+	// PdfObjectModificationTypeModification represents an object change in
 	// a final revision.
-	PdfObjectModificationType_MODIFICATION PdfObjectModificationType = "MODIFICATION"
+	PdfObjectModificationTypeModification PdfObjectModificationType = "MODIFICATION"
 )
 
 // PdfObjectModificationTypeValues returns all constants in declaration order.
 func PdfObjectModificationTypeValues() []PdfObjectModificationType {
 	return []PdfObjectModificationType{
-		PdfObjectModificationType_CREATION,
-		PdfObjectModificationType_DELETION,
-		PdfObjectModificationType_MODIFICATION,
+		PdfObjectModificationTypeCreation,
+		PdfObjectModificationTypeDeletion,
+		PdfObjectModificationTypeModification,
 	}
 }

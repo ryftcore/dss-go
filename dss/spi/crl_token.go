@@ -93,14 +93,14 @@ func (t *CRLToken) setRevocationStatus(certificateToken *model.CertificateToken)
 
 	crlEntry := crlparser.CRLUtilsRevocationInfo(t.crlValidity, certificateToken.SerialNumber())
 	if crlEntry != nil {
-		t.SetStatus(enumerations.CertificateStatus_REVOKED)
+		t.SetStatus(enumerations.CertificateStatusRevoked)
 		t.SetRevocationDate(crlEntry.RevocationDate())
 		if revocationReason := crlEntry.RevocationReason(); revocationReason != nil {
 			// java.security.cert.CRLReason#ordinal() is the RFC 5280 reasonCode value.
 			t.SetReason(enumerations.RevocationReasonFromInt(*revocationReason))
 		}
 	} else {
-		t.SetStatus(enumerations.CertificateStatus_GOOD)
+		t.SetStatus(enumerations.CertificateStatusGood)
 	}
 	return nil
 }
@@ -165,7 +165,7 @@ func (t *CRLToken) IsValid() bool {
 
 // RevocationType returns CRL. Port of the getRevocationType() override.
 func (t *CRLToken) RevocationType() enumerations.RevocationType {
-	return enumerations.RevocationType_CRL
+	return enumerations.RevocationTypeCRL
 }
 
 // Abbreviation returns the DSS abbreviation of the token, used for debugging.

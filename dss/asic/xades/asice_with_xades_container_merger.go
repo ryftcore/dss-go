@@ -109,7 +109,7 @@ func (m *ASiCEWithXAdESContainerMerger) doesNotContainEvidenceRecordsContent(asi
 
 // GetTargetASiCContainerType ports the @Override protected getTargetASiCContainerType().
 func (m *ASiCEWithXAdESContainerMerger) GetTargetASiCContainerType() enumerations.ASiCContainerType {
-	return enumerations.ASiCContainerType_ASiC_E
+	return enumerations.ASiCContainerTypeASiCE
 }
 
 // EnsureContainerContentAllowMerge ports the @Override protected

@@ -39,23 +39,23 @@ func (c *X509UrlPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *X509UrlPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAX509UP
+	return i18n.MessageTagBBBICSISAX509UP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *X509UrlPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAX509UP_ANS
+	return i18n.MessageTagBBBICSISAX509UPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *X509UrlPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *X509UrlPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

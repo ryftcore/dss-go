@@ -48,21 +48,21 @@ func (c *MRACertificateEquivalenceApplied[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *MRACertificateEquivalenceApplied[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_METS_HCCECBA
+	return i18n.MessageTagQualHasMETSHCCECBA
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *MRACertificateEquivalenceApplied[T]) BuildErrorMessage() *jaxb.XmlMessage {
 	if !c.certificateWrapper.IsEnactedMRA() {
-		return c.BuildXmlMessage(i18n.MessageTag_QUAL_HAS_METS_HCCECBA_ANS)
+		return c.BuildXmlMessage(i18n.MessageTagQualHasMETSHCCECBAANS)
 	}
 	uriList := c.getFailedCertificateEquivalenceContextUris()
-	errorTag := i18n.MessageTag_QUAL_HAS_METS_HCCECBA_ANS_2
+	errorTag := i18n.MessageTagQualHasMETSHCCECBAANS2
 	var argument string
 	if len(uriList) == 1 {
 		argument = uriList[0]
 	} else {
-		errorTag = i18n.MessageTag_QUAL_HAS_METS_HCCECBA_ANS_3
+		errorTag = i18n.MessageTagQualHasMETSHCCECBAANS3
 		argument = "[" + strings.Join(uriList, ", ") + "]"
 	}
 	return c.BuildXmlMessage(errorTag, argument)
@@ -87,7 +87,7 @@ func (c *MRACertificateEquivalenceApplied[T]) getFailedCertificateEquivalenceCon
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *MRACertificateEquivalenceApplied[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

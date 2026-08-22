@@ -43,7 +43,7 @@ func (p *ASiCWithCAdESSignatureParameters) ASiC() *asic.ASiCParameters {
 // (IllegalArgumentException).
 func (p *ASiCWithCAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
-	if signatureLevel == "" || err != nil || enumerations.SignatureForm_CAdES != form {
+	if signatureLevel == "" || err != nil || enumerations.SignatureFormCAdES != form {
 		panic("Only CAdES form is allowed !")
 	}
 	p.CAdESSignatureParameters.SetSignatureLevel(signatureLevel)

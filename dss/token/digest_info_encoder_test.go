@@ -20,7 +20,7 @@ func TestDigestInfoEncoderEncodeKAT(t *testing.T) {
 		t.Fatalf("bad hex fixture: %v", err)
 	}
 
-	got, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithm_SHA256.OID(), digest[:])
+	got, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithmSHA256.OID(), digest[:])
 	if err != nil {
 		t.Fatalf("Encode: %v", err)
 	}
@@ -35,7 +35,7 @@ func TestDigestInfoEncoderEncodeKAT(t *testing.T) {
 
 func TestDigestInfoEncoderIsEncoded(t *testing.T) {
 	digest := sha256.Sum256([]byte("abc"))
-	encoded, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithm_SHA1.OID(), digest[:20])
+	encoded, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithmSHA1.OID(), digest[:20])
 	if err != nil {
 		t.Fatalf("Encode: %v", err)
 	}
@@ -76,7 +76,7 @@ func TestDigestInfoEncoderEncodePanicsOnNilInputs(t *testing.T) {
 				t.Fatal("expected panic")
 			}
 		}()
-		_, _ = DigestInfoEncoderEncode(enumerations.DigestAlgorithm_SHA256.OID(), nil)
+		_, _ = DigestInfoEncoderEncode(enumerations.DigestAlgorithmSHA256.OID(), nil)
 	})
 }
 

@@ -37,7 +37,7 @@ func NewSuccessfulValidationTimeSlidingFoundCheck(i18nProvider *i18n.I18nProvide
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_VTS
+	return jaxb.XmlBlockTypeVTS
 }
 
 // Process performs the check. Port of process().
@@ -47,25 +47,25 @@ func (c *SuccessfulValidationTimeSlidingFoundCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_ICCSVTSF
+	return i18n.MessageTagPCVICCSVTSF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_ICCSVTSF_ANS
+	return i18n.MessageTagPCVICCSVTSFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_POE
+	return enumerations.SubIndicationNoPOE
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -88,7 +88,7 @@ func (c *SuccessfulValidationTimeSlidingFoundCheck) BuildAdditionalInfo() *strin
 			t := c.vts.ControlTime.Time()
 			controlTime = &t
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_WITH_TRUST_ANCHOR, trustAnchor,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeWithTrustAnchor, trustAnchor,
 			process.GetFormattedDate(controlTime))
 		return &message
 	}

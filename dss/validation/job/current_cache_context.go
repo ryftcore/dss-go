@@ -26,7 +26,7 @@ type CurrentCacheContext struct {
 // of the default constructor.
 func NewCurrentCacheContext() *CurrentCacheContext {
 	c := &CurrentCacheContext{}
-	c.State(CacheStateEnum_REFRESH_NEEDED)
+	c.State(CacheStateEnumRefreshNeeded)
 	return c
 }
 
@@ -67,7 +67,7 @@ func (c *CurrentCacheContext) SyncUpdateDate() {
 // Error marks the context as ERROR and stores the exception, bypassing the CacheState
 // transition table. Port of error(CachedExceptionWrapper).
 func (c *CurrentCacheContext) Error(cachedException *CachedExceptionWrapper) {
-	c.state = CacheStateEnum_ERROR
+	c.state = CacheStateEnumError
 	c.exception = cachedException
 }
 
@@ -104,12 +104,12 @@ func (c *CurrentCacheContext) ToBeDeleted() {
 // IsRefreshNeeded returns true when the current state is REFRESH_NEEDED. Port of
 // isRefreshNeeded().
 func (c *CurrentCacheContext) IsRefreshNeeded() bool {
-	return CacheStateEnum_REFRESH_NEEDED == c.state
+	return CacheStateEnumRefreshNeeded == c.state
 }
 
 // IsError returns true when the current state is ERROR. Port of isError().
 func (c *CurrentCacheContext) IsError() bool {
-	return CacheStateEnum_ERROR == c.state
+	return CacheStateEnumError == c.state
 }
 
 // Exception returns the stored exception, if any. Port of getException().
@@ -120,10 +120,10 @@ func (c *CurrentCacheContext) Exception() *CachedExceptionWrapper {
 // IsToBeDeleted returns true when the current state is TO_BE_DELETED. Port of
 // isToBeDeleted().
 func (c *CurrentCacheContext) IsToBeDeleted() bool {
-	return CacheStateEnum_TO_BE_DELETED == c.state
+	return CacheStateEnumToBEDeleted == c.state
 }
 
 // IsDesync returns true when the current state is DESYNCHRONIZED. Port of isDesync().
 func (c *CurrentCacheContext) IsDesync() bool {
-	return CacheStateEnum_DESYNCHRONIZED == c.state
+	return CacheStateEnumDesynchronized == c.state
 }

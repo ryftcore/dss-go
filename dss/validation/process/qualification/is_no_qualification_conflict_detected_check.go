@@ -9,7 +9,7 @@
 // CertQualificationAtTimeBlock, is also ported in this package); the size
 // check (>1 distinct values) is order-independent and therefore exact, but
 // the RESULTS additional-info text (rendered only on the >1 branch, which
-// aborts the qualification chain into CertificateQualification_NA regardless
+// aborts the qualification chain into CertificateQualificationNA regardless
 // of the exact set of values) may list the conflicting values in a different
 // order than upstream. See the porter brief's hard rule on hash-order leaks.
 package qualification
@@ -63,7 +63,7 @@ func (c *IsNoQualificationConflictDetectedCheck) BuildAdditionalInfo() *string {
 		for _, v := range c.certificateQualificationsAtTime {
 			values = append(values, string(v))
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_RESULTS, "["+strings.Join(values, ", ")+"]")
+		message := c.I18nProvider.GetMessage(i18n.MessageTagResults, "["+strings.Join(values, ", ")+"]")
 		return &message
 	}
 	return nil
@@ -71,18 +71,18 @@ func (c *IsNoQualificationConflictDetectedCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *IsNoQualificationConflictDetectedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONF
+	return i18n.MessageTagQualHasConf
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *IsNoQualificationConflictDetectedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONF_ANS
+	return i18n.MessageTagQualHasConfANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *IsNoQualificationConflictDetectedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

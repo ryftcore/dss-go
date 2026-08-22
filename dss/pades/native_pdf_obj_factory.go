@@ -33,25 +33,25 @@ func NewDefaultPdfObjFactory() *NativePdfObjFactory {
 // NewPAdESSignatureService returns the service used for a signature creation.
 // Port of PdfBoxDefaultObjectFactory#newPAdESSignatureService.
 func (f *NativePdfObjFactory) NewPAdESSignatureService() PDFSignatureService {
-	return f.configure(NewNativePDFSignatureService(PDFServiceMode_SIGNATURE, f.signatureDrawerFactory()))
+	return f.configure(NewNativePDFSignatureService(PDFServiceModeSignature, f.signatureDrawerFactory()))
 }
 
 // NewContentTimestampService returns the service used for a content timestamp creation.
 // Port of PdfBoxDefaultObjectFactory#newContentTimestampService.
 func (f *NativePdfObjFactory) NewContentTimestampService() PDFSignatureService {
-	return f.configure(NewNativePDFSignatureService(PDFServiceMode_CONTENT_TIMESTAMP, f.signatureDrawerFactory()))
+	return f.configure(NewNativePDFSignatureService(PDFServiceModeContentTimestamp, f.signatureDrawerFactory()))
 }
 
 // NewSignatureTimestampService returns the service used for a signature timestamp creation.
 // Port of PdfBoxDefaultObjectFactory#newSignatureTimestampService.
 func (f *NativePdfObjFactory) NewSignatureTimestampService() PDFSignatureService {
-	return f.configure(NewNativePDFSignatureService(PDFServiceMode_SIGNATURE_TIMESTAMP, f.signatureDrawerFactory()))
+	return f.configure(NewNativePDFSignatureService(PDFServiceModeSignatureTimestamp, f.signatureDrawerFactory()))
 }
 
 // NewArchiveTimestampService returns the service used for an archive timestamp creation.
 // Port of PdfBoxDefaultObjectFactory#newArchiveTimestampService.
 func (f *NativePdfObjFactory) NewArchiveTimestampService() PDFSignatureService {
-	return f.configure(NewNativePDFSignatureService(PDFServiceMode_ARCHIVE_TIMESTAMP, f.signatureDrawerFactory()))
+	return f.configure(NewNativePDFSignatureService(PDFServiceModeArchiveTimestamp, f.signatureDrawerFactory()))
 }
 
 // signatureDrawerFactory ports PdfBoxDefaultObjectFactory#getSignatureDrawerFactory.

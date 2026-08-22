@@ -39,23 +39,23 @@ func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_REG_ID
+	return i18n.MessageTagEAAISSRegID
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_REG_ID_ANS
+	return i18n.MessageTagEAAISSRegIDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAIssuingAuthorityRegistrationIdentifierCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

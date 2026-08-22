@@ -11,23 +11,23 @@ import "fmt"
 type SignerTextPosition string
 
 const (
-	// SignerTextPosition_TOP: the text on the top of the picture.
-	SignerTextPosition_TOP SignerTextPosition = "TOP"
-	// SignerTextPosition_BOTTOM: the text on the bottom of the picture.
-	SignerTextPosition_BOTTOM SignerTextPosition = "BOTTOM"
-	// SignerTextPosition_RIGHT: the text on the right of the picture.
-	SignerTextPosition_RIGHT SignerTextPosition = "RIGHT"
-	// SignerTextPosition_LEFT: the text on the left of the picture.
-	SignerTextPosition_LEFT SignerTextPosition = "LEFT"
+	// SignerTextPositionTop: the text on the top of the picture.
+	SignerTextPositionTop SignerTextPosition = "TOP"
+	// SignerTextPositionBottom: the text on the bottom of the picture.
+	SignerTextPositionBottom SignerTextPosition = "BOTTOM"
+	// SignerTextPositionRight: the text on the right of the picture.
+	SignerTextPositionRight SignerTextPosition = "RIGHT"
+	// SignerTextPositionLeft: the text on the left of the picture.
+	SignerTextPositionLeft SignerTextPosition = "LEFT"
 )
 
 // SignerTextPositionValues returns all constants in declaration order.
 func SignerTextPositionValues() []SignerTextPosition {
 	return []SignerTextPosition{
-		SignerTextPosition_TOP,
-		SignerTextPosition_BOTTOM,
-		SignerTextPosition_RIGHT,
-		SignerTextPosition_LEFT,
+		SignerTextPositionTop,
+		SignerTextPositionBottom,
+		SignerTextPositionRight,
+		SignerTextPositionLeft,
 	}
 }
 

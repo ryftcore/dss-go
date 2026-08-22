@@ -51,7 +51,7 @@ func NewCAdESBaselineRequirementsChecker(sig *CAdESSignature, offlineCertificate
 // pades.PAdESBaselineRequirementsChecker/pades.CMSForPAdESBaselineRequirementsChecker's own
 // override across the cades/pades package boundary, and this is the only mechanism available).
 func (b *CAdESBaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_CAdES
+	return enumerations.SignatureFormCAdES
 }
 
 // cmsBaselineBRequirements checks if BASELINE-B requirements satisfy for a CMS signature.
@@ -94,9 +94,9 @@ func (b *CAdESBaselineRequirementsChecker) cmsBaselineBRequirements() bool {
 	// pades.CMSForPAdESBaselineRequirementsChecker (PAdES), that checker's own override. See
 	// this port's spi/validation.BaselineRequirementsCheckerOverrides.GetBaselineSignatureForm
 	// for the cross-package plumbing this needs in Go.
-	signingTimeAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OID_pkcs_9_at_signingTime)
+	signingTimeAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OIDPkcs9AtSigningTime)
 	signingTimePresent := cadesBaselineAttributeValuesSize(signingTimeAttrs) == 1
-	isCAdESForm := b.BaselineSignatureForm() == enumerations.SignatureForm_CAdES
+	isCAdESForm := b.BaselineSignatureForm() == enumerations.SignatureFormCAdES
 	if signingTimePresent != isCAdESForm {
 		// Upstream logs "signing-time attribute shall be present for {}-BASELINE-B signature
 		// (cardinality == 1})!" (CAdES) or "signing-time attribute shall not be present for
@@ -104,14 +104,14 @@ func (b *CAdESBaselineRequirementsChecker) cmsBaselineBRequirements() bool {
 		return false
 	}
 	// signer-attributes (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_signerAttr))+
-		utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_signerAttrV2)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSignerAttr))+
+		utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSignerAttrV2)) > 1 {
 		// Upstream logs "signer-attributes(-v2) attribute shall not be present multiple times
 		// for {}-BASELINE-B signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// signature-policy-identifier (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_sigPolicyId)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSigPolicyId)) > 1 {
 		// Upstream logs "signature-policy-identifier attribute shall not be present multiple
 		// times for {}-BASELINE-B signature (cardinality == 0 or 1)!".
 		return false
@@ -184,31 +184,31 @@ func (b *CAdESBaselineRequirementsChecker) HasBaselineLTProfile() bool {
 	}
 	signerInformation := b.Signature().SignerInformation()
 	// certificate-values (Cardinality == 0)
-	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_certValues)) {
+	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsCertValues)) {
 		// Upstream logs "certificate-values attribute shall not be present for
 		// CAdES-BASELINE-LT signature (cardinality == 0)!".
 		return false
 	}
 	// complete-certificate-references (Cardinality == 0)
-	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_certificateRefs)) {
+	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsCertificateRefs)) {
 		// Upstream logs "complete-certificate-references attribute shall not be present for
 		// CAdES-BASELINE-LT signature (cardinality == 0)!".
 		return false
 	}
 	// revocation-values (Cardinality == 0)
-	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_revocationValues)) {
+	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsRevocationValues)) {
 		// Upstream logs "revocation-values attribute shall not be present for
 		// CAdES-BASELINE-LT signature (cardinality == 0)!".
 		return false
 	}
 	// complete-revocation-references (Cardinality == 0)
-	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_revocationRefs)) {
+	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsRevocationRefs)) {
 		// Upstream logs "complete-revocation-references attribute shall not be present for
 		// CAdES-BASELINE-LT signature (cardinality == 0)!".
 		return false
 	}
 	// time-stamped-certs-crls-references (Cardinality == 0)
-	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, OID_id_aa_ets_certCRLTimestamp)) {
+	if utils.IsArrayNotEmpty(CAdESUtilsUnsignedAttributesOfType(signerInformation, OIDIdAaEtsCertCRLTimestamp)) {
 		// Upstream logs "time-stamped-certs-crls-references attribute shall not be present
 		// for CAdES-BASELINE-LT signature (cardinality == 0)!".
 		return false
@@ -290,7 +290,7 @@ func (b *CAdESBaselineRequirementsChecker) HasBaselineLTAProfile() bool {
 	// archive-time-stamp-v3 / detached timestamps (Cardinality >= 1)
 	validArcTstFound := false
 	for _, timestampToken := range timestampTokens {
-		if enumerations.ArchiveTimestampType_CAdES_V3 == timestampToken.ArchiveTimestampType() ||
+		if enumerations.ArchiveTimestampTypeCAdESV3 == timestampToken.ArchiveTimestampType() ||
 			timestampToken.TimeStampType().IsContainerTimestamp() {
 			validArcTstFound = true
 			break
@@ -313,91 +313,91 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedBESProfile() bool {
 	signerInformation := b.Signature().SignerInformation()
 
 	// signing-time (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_pkcs_9_at_signingTime)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDPkcs9AtSigningTime)) > 1 {
 		// Upstream logs "signing-time attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// commitment-time-indication (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_commitmentType)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsCommitmentType)) > 1 {
 		// Upstream logs "commitment-time-indication attribute shall not be present multiple
 		// times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// content-hints (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_contentHint)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaContentHint)) > 1 {
 		// Upstream logs "content-hints attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// mime-type (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_mimeType)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsMimeType)) > 1 {
 		// Upstream logs "mime-type attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// signer-location (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_signerLocation)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSignerLocation)) > 1 {
 		// Upstream logs "signer-location attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// signature-policy-identifier (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_sigPolicyId)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSigPolicyId)) > 1 {
 		// Upstream logs "signature-policy-identifier attribute shall not be present multiple
 		// times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// signature-policy-store (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_sigPolicyStore)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSigPolicyStore)) > 1 {
 		// Upstream logs "signature-policy-store attribute shall not be present multiple times
 		// for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// content-reference (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_contentReference)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaContentReference)) > 1 {
 		// Upstream logs "content-reference attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// content-identifier (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_contentIdentifier)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaContentIdentifier)) > 1 {
 		// Upstream logs "content-identifier attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// complete-certificate-references (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_certificateRefs)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsCertificateRefs)) > 1 {
 		// Upstream logs "complete-certificate-references attribute shall not be present
 		// multiple times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// complete-revocation-references (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_revocationRefs)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsRevocationRefs)) > 1 {
 		// Upstream logs "complete-revocation-references attribute shall not be present
 		// multiple times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// attribute-certificate-references (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_attributeCertificateRefsOid)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDAttributeCertificateRefsOid)) > 1 {
 		// Upstream logs "attribute-certificate-references attribute shall not be present
 		// multiple times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// attribute-revocation-references (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_attributeRevocationRefsOid)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDAttributeRevocationRefsOid)) > 1 {
 		// Upstream logs "attribute-revocation-references attribute shall not be present
 		// multiple times for {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// certificate-values (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_certValues)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsCertValues)) > 1 {
 		// Upstream logs "certificate-values attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
 	}
 	// revocation-values (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_revocationValues)) > 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsRevocationValues)) > 1 {
 		// Upstream logs "revocation-values attribute shall not be present multiple times for
 		// {}-BES signature (cardinality == 0 or 1)!".
 		return false
@@ -436,8 +436,8 @@ func (b *CAdESBaselineRequirementsChecker) cmsExtendedBESRequirements() bool {
 		return false
 	}
 	// signer-attributes (Cardinality == 0 or 1)
-	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_signerAttr))+
-		utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_signerAttrV2)) > 1 {
+	if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSignerAttr))+
+		utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaEtsSignerAttrV2)) > 1 {
 		// Upstream logs "signer-attributes(-v2) attribute shall not be present multiple times
 		// for {}-BES signature (cardinality == 0 or 1)!".
 		return false
@@ -452,7 +452,7 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedEPESProfile() bool {
 	signerInformation := sig.SignerInformation()
 
 	// signature-policy-identifier (Cardinality == 1)
-	sigPolicyIdAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OID_id_aa_ets_sigPolicyId)
+	sigPolicyIdAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OIDIdAaEtsSigPolicyId)
 	if cadesBaselineAttributeValuesSize(sigPolicyIdAttrs) == 0 {
 		// Upstream logs "signature-policy-identifier attribute shall be present for {}-EPES
 		// signature (cardinality == 1)!".
@@ -491,7 +491,7 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
 	// NOTE: at least complete-certificate-references shall be present for all self-signed
 	// certificates
 	// complete-certificate-references
-	certificateRefAttrs := CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_certificateRefs)
+	certificateRefAttrs := CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsCertificateRefs)
 	completeCertificateRefsNumberOfOccurrences := cadesBaselineAttributeValuesSize(certificateRefAttrs)
 	if completeCertificateRefsNumberOfOccurrences > 1 || completeCertificateRefsNumberOfOccurrences == 0 {
 		// Upstream logs "complete-certificate-references attribute shall be present for
@@ -504,7 +504,7 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
 	allSelfSigned := certificateFound && certificateSources.IsAllSelfSigned()
 
 	// complete-revocation-references
-	revocationRefAttrs := CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_ets_revocationRefs)
+	revocationRefAttrs := CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaEtsRevocationRefs)
 	completeRevocationRefsNumberOfOccurrences := cadesBaselineAttributeValuesSize(revocationRefAttrs)
 	if completeRevocationRefsNumberOfOccurrences > 1 || (!allSelfSigned && completeRevocationRefsNumberOfOccurrences == 0) {
 		// Upstream logs "complete-revocation-references attribute shall be present for
@@ -518,8 +518,8 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedCProfile() bool {
 // Port of hasExtendedXProfile().
 func (b *CAdESBaselineRequirementsChecker) HasExtendedXProfile() bool {
 	signerInformation := b.Signature().SignerInformation()
-	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, OID_id_aa_ets_certCRLTimestamp))+
-		utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, OID_id_aa_ets_escTimeStamp)) != 1 {
+	if utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, OIDIdAaEtsCertCRLTimestamp))+
+		utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, OIDIdAaEtsEscTimeStamp)) != 1 {
 		// Upstream logs "CAdES-C-timestamp or time-stamped-certs-crls-references attribute
 		// shall be present for CAdES-X signature (cardinality == 1)!".
 		return false
@@ -556,9 +556,9 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedERSProfile() bool {
 	signerERSFound := false
 	for _, signerInformation := range sig.CMS().SignerInfos() {
 		// internal-evidence-record
-		internalERNumber := utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_er_internal))
+		internalERNumber := utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaErInternal))
 		// external-evidence-record
-		externalERNumber := utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OID_id_aa_er_external))
+		externalERNumber := utils.ArraySize(CAdESUtilsUnsignedAttributesOfType(signerInformation, spi.OIDIdAaErExternal))
 		if internalERNumber+externalERNumber == 0 {
 			// Upstream logs "internal-evidence-records or external-evidence-records
 			// attribute shall be present for CAdES-ERS signature (cardinality >= 1)!".
@@ -586,7 +586,7 @@ func (b *CAdESBaselineRequirementsChecker) HasExtendedERSProfile() bool {
 // isContentTypeValid verifies whether the presence of content-type attribute is conformant to
 // the given signature type. Port of the private isContentTypeValid(SignerInformation).
 func (b *CAdESBaselineRequirementsChecker) isContentTypeValid(signerInformation *cmscore.SignerInfo) bool {
-	contentTypeAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OID_pkcs_9_at_contentType)
+	contentTypeAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OIDPkcs9AtContentType)
 	numberOfOccurrences := cadesBaselineAttributeValuesSize(contentTypeAttrs)
 	if b.Signature().IsCounterSignature() && numberOfOccurrences == 0 {
 		return true
@@ -597,15 +597,15 @@ func (b *CAdESBaselineRequirementsChecker) isContentTypeValid(signerInformation 
 // cadesBaselineIsMessageDigestPresent verifies the presence of a message-digest attribute.
 // Port of the private isMessageDigestPresent(SignerInformation).
 func cadesBaselineIsMessageDigestPresent(signerInformation *cmscore.SignerInfo) bool {
-	messageDigestAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OID_pkcs_9_at_messageDigest)
+	messageDigestAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, OIDPkcs9AtMessageDigest)
 	return cadesBaselineAttributeValuesSize(messageDigestAttrs) == 1
 }
 
 // cadesBaselineIsOneSigningCertificatePresent ports the private
 // isOneSigningCertificatePresent(SignerInformation).
 func cadesBaselineIsOneSigningCertificatePresent(signerInformation *cmscore.SignerInfo) bool {
-	signingCertAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificate)
-	signingCertV2Attrs := CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificateV2)
+	signingCertAttrs := CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificate)
+	signingCertV2Attrs := CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificateV2)
 	return cadesBaselineAttributeValuesSize(signingCertAttrs)+cadesBaselineAttributeValuesSize(signingCertV2Attrs) == 1
 }
 
@@ -618,12 +618,12 @@ func (b *CAdESBaselineRequirementsChecker) isSigningCertificateAttributeValid(si
 		certDigest := signingCertificateRef.CertDigest()
 		if certDigest.Algorithm() != "" {
 			digestAlgorithm := certDigest.Algorithm()
-			if enumerations.DigestAlgorithm_SHA1 == digestAlgorithm {
-				if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificate)) == 0 {
+			if enumerations.DigestAlgorithmSHA1 == digestAlgorithm {
+				if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificate)) == 0 {
 					return false
 				}
 			} else {
-				if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OID_id_aa_signingCertificateV2)) == 0 {
+				if utils.ArraySize(CAdESUtilsSignedAttributesOfType(signerInformation, spi.OIDIdAaSigningCertificateV2)) == 0 {
 					return false
 				}
 			}

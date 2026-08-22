@@ -92,7 +92,7 @@ func TestTimestampIdentifierBuilderIdentifiers(t *testing.T) {
 
 	// A token built with an explicit builder takes its identifier from it.
 	token, err := NewTimestampTokenWithIdentifierBuilder(binaries,
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP, nil,
+		enumerations.TimestampTypeSignatureTimestamp, nil,
 		newTimestampIdentifierBuilderTestSubclass(binaries, "-OOA-1"))
 	if err != nil {
 		t.Fatalf("NewTimestampTokenWithIdentifierBuilder() failed: %v", err)
@@ -102,7 +102,7 @@ func TestTimestampIdentifierBuilderIdentifiers(t *testing.T) {
 	}
 
 	// Without one, the token builds the format-independent builder over its own filename.
-	detached, err := NewTimestampToken(binaries, enumerations.TimestampType_CONTAINER_TIMESTAMP)
+	detached, err := NewTimestampToken(binaries, enumerations.TimestampTypeContainerTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}

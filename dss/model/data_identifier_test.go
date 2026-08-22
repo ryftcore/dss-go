@@ -79,7 +79,7 @@ func TestDataIdentifierUsesAnExistingDigestForDigestDocuments(t *testing.T) {
 	for i := range value {
 		value[i] = byte(i + 1)
 	}
-	document := NewDigestDocumentFromValue(enumerations.DigestAlgorithm_SHA256, value)
+	document := NewDigestDocumentFromValue(enumerations.DigestAlgorithmSHA256, value)
 
 	identifier, err := NewDataIdentifierForDocument("", document)
 	if err != nil {

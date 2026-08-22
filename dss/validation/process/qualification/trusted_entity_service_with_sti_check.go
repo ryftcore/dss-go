@@ -45,7 +45,7 @@ func (c *TrustedEntityServiceWithStiCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustedEntityServiceWithStiCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STI
+	return i18n.MessageTagCertUsageSti
 }
 
 // BuildConstraintMessage builds a constraint message. Port of
@@ -56,7 +56,7 @@ func (c *TrustedEntityServiceWithStiCheck) BuildConstraintMessage() *jaxb.XmlMes
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustedEntityServiceWithStiCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STI_ANS
+	return i18n.MessageTagCertUsageStiANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -76,7 +76,7 @@ func (c *TrustedEntityServiceWithStiCheck) getStiUserFriendlyLabel() string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedEntityServiceWithStiCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

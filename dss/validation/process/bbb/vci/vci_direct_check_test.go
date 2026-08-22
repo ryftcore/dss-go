@@ -40,7 +40,7 @@ func newSingleCheckChain(
 }
 
 func (c *singleCheckChain) InitChain() {
-	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.Level_FAIL))
+	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.LevelFail))
 }
 
 // assertDirectRow runs the single-item chain and compares it against the named
@@ -65,7 +65,7 @@ func assertDirectRow(t *testing.T, name string,
 		expected.Title = &empty
 	}
 	result := newSingleCheckChain(factory).Execute()
-	actual := toRow("synthetic", name, enumerations.Context_SIGNATURE, "VCI",
+	actual := toRow("synthetic", name, enumerations.ContextSignature, "VCI",
 		&result.XmlConstraintsConclusionContent, result.Title)
 	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("%s: mismatch\nexpected: %s\nactual:   %s", name, mustJSON(t, expected), mustJSON(t, actual))
@@ -76,7 +76,7 @@ func assertDirectRow(t *testing.T, name string,
 // SignaturePolicyIdentifierCheck with.
 type anyPolicyRule struct{}
 
-func (anyPolicyRule) Level() enumerations.Level { return enumerations.Level_FAIL }
+func (anyPolicyRule) Level() enumerations.Level { return enumerations.LevelFail }
 func (anyPolicyRule) Values() []string          { return []string{"ANY_POLICY"} }
 
 // policySignature builds a signature carrying a signature policy with the
@@ -87,7 +87,7 @@ func policySignature(policyId *string, identified, digestMatch, zeroHash *bool,
 	xmlSignature := &diagnosticjaxb.XmlSignature{}
 	xmlSignature.Id = diagnosticjaxb.NewCollapsedString("S-SYNTHETIC-POLICY")
 
-	digestMethod := diagnosticjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithm_SHA256)
+	digestMethod := diagnosticjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithmSHA256)
 	digestValue := diagnosticjaxb.Base64Binary{7, 8, 9}
 	digest := &diagnosticjaxb.XmlPolicyDigestAlgoAndValue{}
 	digest.DigestMethod = &digestMethod

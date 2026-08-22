@@ -1,7 +1,7 @@
 // Ported from dss-jades/src/main/java/eu/europa/esig/dss/jades/HTTPHeader.java (DSS 6.5.RC1).
 //
 // The class represents an HTTP Header to be signed, per ETSI TS 119 182-1 "5.2.8.2 Mechanism
-// HttpHeaders". It shall be used only for JAdES detached SigDMechanism_HTTP_HEADERS mechanism.
+// HttpHeaders". It shall be used only for JAdES detached SigDMechanismHTTPHeaders mechanism.
 package jades
 
 import (

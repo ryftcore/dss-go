@@ -35,12 +35,12 @@ func (c *PdfVisualDifferenceCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *PdfVisualDifferenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IVDBSFR
+	return i18n.MessageTagBBBFCIVDBSFR
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfVisualDifferenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IVDBSFR_ANS
+	return i18n.MessageTagBBBFCIVDBSFRANS
 }
 
 // BuildErrorMessage overrides the default to include the concerned pages. Port of the
@@ -52,12 +52,12 @@ func (c *PdfVisualDifferenceCheck) BuildErrorMessage() *drjaxb.XmlMessage {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *PdfVisualDifferenceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *PdfVisualDifferenceCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }
 
 // bigIntSlicePrint mirrors Java's List<BigInteger>.toString() lexical form

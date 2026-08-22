@@ -81,7 +81,7 @@ func (v *ReferenceVerifier) CheckReferencesValidity() error {
 						case v.signatureParameters.IsManifestSignature():
 							return errors.New(referenceVerifierReferenceWrongMessage +
 								"Manifest signature is not compatible with base64 transform.")
-						case enumerations.SignaturePackaging_ENVELOPING != v.signatureParameters.SignaturePackaging():
+						case enumerations.SignaturePackagingEnveloping != v.signatureParameters.SignaturePackaging():
 							return fmt.Errorf("%sBase64 transform is not compatible with %s signature format.",
 								referenceVerifierReferenceWrongMessage, v.signatureParameters.SignaturePackaging())
 						}
@@ -95,7 +95,7 @@ func (v *ReferenceVerifier) CheckReferencesValidity() error {
 
 		} else {
 			uri := reference.Uri()
-			if enumerations.SignaturePackaging_ENVELOPED == v.signatureParameters.SignaturePackaging() &&
+			if enumerations.SignaturePackagingEnveloped == v.signatureParameters.SignaturePackaging() &&
 				utils.IsStringBlank(uri) {
 				return errors.New(referenceVerifierReferenceWrongMessage +
 					"Enveloped signature must have an enveloped transformation!")

@@ -166,7 +166,7 @@ func (w *TimestampWrapper) ProductionTime() *time.Time {
 // MessageImprint returns message-imprint jaxb.XmlDigestMatcher. Port of getMessageImprint().
 func (w *TimestampWrapper) MessageImprint() *jaxb.XmlDigestMatcher {
 	for _, digestMatcher := range w.DigestMatchers() {
-		if digestMatcher.Type != nil && enumerations.DigestMatcherType_MESSAGE_IMPRINT == enumerations.DigestMatcherType(*digestMatcher.Type) {
+		if digestMatcher.Type != nil && enumerations.DigestMatcherTypeMessageImprint == enumerations.DigestMatcherType(*digestMatcher.Type) {
 			return digestMatcher
 		}
 	}
@@ -214,10 +214,10 @@ func (w *TimestampWrapper) TimestampedObjects() []*jaxb.XmlTimestampedObject {
 // Port of getTimestampedSignatures().
 func (w *TimestampWrapper) TimestampedSignatures() []*SignatureWrapper {
 	var signatures []*SignatureWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_SIGNATURE) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeSignature) {
 		xmlSignature, ok := token.(*jaxb.XmlSignature)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_SIGNATURE))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeSignature))
 		}
 		signatures = append(signatures, NewSignatureWrapper(xmlSignature))
 	}
@@ -228,10 +228,10 @@ func (w *TimestampWrapper) TimestampedSignatures() []*SignatureWrapper {
 // Port of getTimestampedCertificates().
 func (w *TimestampWrapper) TimestampedCertificates() []*CertificateWrapper {
 	var certificates []*CertificateWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_CERTIFICATE) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeCertificate) {
 		xmlCertificate, ok := token.(*jaxb.XmlCertificate)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_CERTIFICATE))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeCertificate))
 		}
 		certificates = append(certificates, NewCertificateWrapper(xmlCertificate))
 	}
@@ -242,10 +242,10 @@ func (w *TimestampWrapper) TimestampedCertificates() []*CertificateWrapper {
 // Port of getTimestampedRevocations().
 func (w *TimestampWrapper) TimestampedRevocations() []*RevocationWrapper {
 	var revocations []*RevocationWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_REVOCATION) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeRevocation) {
 		xmlRevocation, ok := token.(*jaxb.XmlRevocation)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_REVOCATION))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeRevocation))
 		}
 		revocations = append(revocations, NewRevocationWrapper(xmlRevocation))
 	}
@@ -256,10 +256,10 @@ func (w *TimestampWrapper) TimestampedRevocations() []*RevocationWrapper {
 // getTimestampedTimestamps().
 func (w *TimestampWrapper) TimestampedTimestamps() []*TimestampWrapper {
 	var timestamps []*TimestampWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_TIMESTAMP) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeTimestamp) {
 		xmlTimestamp, ok := token.(*jaxb.XmlTimestamp)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_TIMESTAMP))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeTimestamp))
 		}
 		timestamps = append(timestamps, NewTimestampWrapper(xmlTimestamp))
 	}
@@ -270,10 +270,10 @@ func (w *TimestampWrapper) TimestampedTimestamps() []*TimestampWrapper {
 // timestamp. Port of getTimestampedEvidenceRecords().
 func (w *TimestampWrapper) TimestampedEvidenceRecords() []*EvidenceRecordWrapper {
 	var evidenceRecords []*EvidenceRecordWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_EVIDENCE_RECORD) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeEvidenceRecord) {
 		xmlEvidenceRecord, ok := token.(*jaxb.XmlEvidenceRecord)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_EVIDENCE_RECORD))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeEvidenceRecord))
 		}
 		evidenceRecords = append(evidenceRecords, NewEvidenceRecordWrapper(xmlEvidenceRecord))
 	}
@@ -284,10 +284,10 @@ func (w *TimestampWrapper) TimestampedEvidenceRecords() []*EvidenceRecordWrapper
 // of getTimestampedSignedData().
 func (w *TimestampWrapper) TimestampedSignedData() []*SignerDataWrapper {
 	var signerData []*SignerDataWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_SIGNED_DATA) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeSignedData) {
 		xmlSignerData, ok := token.(*jaxb.XmlSignerData)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_SIGNED_DATA))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeSignedData))
 		}
 		signerData = append(signerData, NewSignerDataWrapper(xmlSignerData))
 	}
@@ -337,10 +337,10 @@ func (w *TimestampWrapper) AllTimestampedOrphanTokens() []OrphanTokenWrapperOver
 // getTimestampedOrphanCertificates().
 func (w *TimestampWrapper) TimestampedOrphanCertificates() []*OrphanCertificateTokenWrapper {
 	var orphanCertificates []*OrphanCertificateTokenWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_ORPHAN_CERTIFICATE) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeOrphanCertificate) {
 		xmlOrphanCertificateToken, ok := token.(*jaxb.XmlOrphanCertificateToken)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_ORPHAN_CERTIFICATE))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeOrphanCertificate))
 		}
 		orphanCertificates = append(orphanCertificates, NewOrphanCertificateTokenWrapper(xmlOrphanCertificateToken))
 	}
@@ -351,10 +351,10 @@ func (w *TimestampWrapper) TimestampedOrphanCertificates() []*OrphanCertificateT
 // getTimestampedOrphanRevocations().
 func (w *TimestampWrapper) TimestampedOrphanRevocations() []*OrphanRevocationTokenWrapper {
 	var orphanRevocations []*OrphanRevocationTokenWrapper
-	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectType_ORPHAN_REVOCATION) {
+	for _, token := range w.timestampedObjectsByCategory(enumerations.TimestampedObjectTypeOrphanRevocation) {
 		xmlOrphanRevocationToken, ok := token.(*jaxb.XmlOrphanRevocationToken)
 		if !ok {
-			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectType_ORPHAN_REVOCATION))
+			panic(fmt.Sprintf("Unexpected token of type [%T] found. Expected : %s", token, enumerations.TimestampedObjectTypeOrphanRevocation))
 		}
 		orphanRevocations = append(orphanRevocations, NewOrphanRevocationTokenWrapper(xmlOrphanRevocationToken))
 	}

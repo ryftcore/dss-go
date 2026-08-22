@@ -182,7 +182,7 @@ func (a *CMSDocumentAnalyzer) addSignatureScope(evidenceRecord validation.Eviden
 func cmsDocumentAnalyzerAddTimestampedReferences(references []*validation.TimestampedReference,
 	signatureScopes []mscope.SignatureScope) []*validation.TimestampedReference {
 	for _, signatureScope := range signatureScopes {
-		timestampedReference := validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectType_SIGNED_DATA)
+		timestampedReference := validation.NewTimestampedReference(signatureScope.DSSIDAsString(), enumerations.TimestampedObjectTypeSignedData)
 		if !cmsDocumentAnalyzerContainsTimestampedReference(references, timestampedReference) {
 			references = append(references, timestampedReference)
 		}

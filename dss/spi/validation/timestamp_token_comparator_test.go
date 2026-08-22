@@ -33,8 +33,8 @@ func timestampTokenComparatorTestToken(t *testing.T, timestampType enumerations.
 // TimestampToken reads its generation time from the signed TSTInfo, which no setter can move.
 func TestTimestampTokenComparatorByGenerationTime(t *testing.T) {
 	comparator := NewTimestampTokenComparator()
-	first := timestampTokenComparatorTestToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	second := timestampTokenComparatorTestToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	first := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	second := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
 	if got := comparator.Compare(first, second); got != 0 {
 		t.Errorf("Compare(same, same) = %d, want 0", got)
@@ -48,7 +48,7 @@ func TestTimestampTokenComparatorByGenerationTime(t *testing.T) {
 
 	// A token generated later sorts after one generated earlier, whichever their other state.
 	later, err := NewTimestampToken(timestampTokenKATFile(t, "timestamp-token-sha512.tst"),
-		enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+		enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("NewTimestampToken() failed: %v", err)
 	}
@@ -61,8 +61,8 @@ func TestTimestampTokenComparatorByGenerationTime(t *testing.T) {
 // sorts after a signature time-stamp generated at the same instant.
 func TestTimestampTokenComparatorByTokenType(t *testing.T) {
 	comparator := NewTimestampTokenComparator()
-	signature := timestampTokenComparatorTestToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	archive := timestampTokenComparatorTestToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	signature := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	archive := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeArchiveTimestamp)
 
 	if got := comparator.Compare(signature, archive); got >= 0 {
 		t.Errorf("Compare(signature, archive) = %d, want a negative value", got)
@@ -85,9 +85,9 @@ func TestTimestampTokenComparatorByTokenType(t *testing.T) {
 // the other one's file sorts after it.
 func TestTimestampTokenComparatorByManifest(t *testing.T) {
 	comparator := NewTimestampTokenComparator()
-	covered := timestampTokenComparatorTestToken(t, enumerations.TimestampType_CONTAINER_TIMESTAMP)
+	covered := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeContainerTimestamp)
 	covered.SetFilename("META-INF/timestamp001.tst")
-	covering := timestampTokenComparatorTestToken(t, enumerations.TimestampType_CONTAINER_TIMESTAMP)
+	covering := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeContainerTimestamp)
 
 	entry := model.NewManifestEntry()
 	entry.SetUri("META-INF/timestamp001.tst")
@@ -108,9 +108,9 @@ func TestTimestampTokenComparatorByManifest(t *testing.T) {
 // another sorts before it.
 func TestTimestampTokenComparatorByCoverage(t *testing.T) {
 	comparator := NewTimestampTokenComparator()
-	covered := timestampTokenComparatorTestToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
-	covering := timestampTokenComparatorTestToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP,
-		NewTimestampedReference(covered.DSSIDAsString(), enumerations.TimestampedObjectType_TIMESTAMP))
+	covered := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeArchiveTimestamp)
+	covering := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeArchiveTimestamp,
+		NewTimestampedReference(covered.DSSIDAsString(), enumerations.TimestampedObjectTypeTimestamp))
 
 	if got := comparator.Compare(covered, covering); got != -1 {
 		t.Errorf("Compare(covered, covering) = %d, want -1", got)
@@ -124,11 +124,11 @@ func TestTimestampTokenComparatorByCoverage(t *testing.T) {
 // references sorts first.
 func TestTimestampTokenComparatorByReferenceCount(t *testing.T) {
 	comparator := NewTimestampTokenComparator()
-	fewer := timestampTokenComparatorTestToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP,
-		NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE))
-	more := timestampTokenComparatorTestToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP,
-		NewTimestampedReference("a", enumerations.TimestampedObjectType_CERTIFICATE),
-		NewTimestampedReference("b", enumerations.TimestampedObjectType_REVOCATION))
+	fewer := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeArchiveTimestamp,
+		NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate))
+	more := timestampTokenComparatorTestToken(t, enumerations.TimestampTypeArchiveTimestamp,
+		NewTimestampedReference("a", enumerations.TimestampedObjectTypeCertificate),
+		NewTimestampedReference("b", enumerations.TimestampedObjectTypeRevocation))
 
 	if got := comparator.Compare(fewer, more); got != -1 {
 		t.Errorf("Compare(fewer, more) = %d, want -1", got)

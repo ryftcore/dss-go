@@ -97,7 +97,7 @@ func (v *ManifestValidator) Validate() []*model.ReferenceValidation {
 	referenceValidations := make([]*model.ReferenceValidation, 0, len(references))
 	for _, reference := range references {
 		refValidation := NewXAdESReferenceValidation(reference)
-		refValidation.SetType(enumerations.DigestMatcherType_MANIFEST_ENTRY)
+		refValidation.SetType(enumerations.DigestMatcherTypeManifestEntry)
 
 		referenceValidations = append(referenceValidations, &refValidation.ReferenceValidation)
 
@@ -123,12 +123,12 @@ func (v *ManifestValidator) Validate() []*model.ReferenceValidation {
 // manifestValidatorGetTransformNames ports the private getTransformNames(Element).
 func manifestValidatorGetTransformNames(refNode *xmldom.Node) []string {
 	transformNames := make([]string, 0)
-	nodeList, err := xmlutils.XPathUtilsGetNodeList(refNode, common.XMLDSigPath_TRANSFORMS_TRANSFORM_PATH)
+	nodeList, err := xmlutils.XPathUtilsGetNodeList(refNode, common.XMLDSigPathTransformsTransformPath)
 	if err != nil {
 		return transformNames
 	}
 	for _, transformElement := range nodeList {
-		algorithm := transformElement.AttrValue("", common.XMLDSigAttribute_ALGORITHM.AttributeName())
+		algorithm := transformElement.AttrValue("", common.XMLDSigAttributeAlgorithm.AttributeName())
 		if utils.IsStringNotBlank(algorithm) {
 			transformNames = append(transformNames, algorithm)
 		}

@@ -45,7 +45,7 @@ func (s *ManifestEntrySignatureScope) Description(tokenIdentifierProvider model.
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *ManifestEntrySignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_FULL
+	return enumerations.SignatureScopeTypeFull
 }
 
 // String ports toString().

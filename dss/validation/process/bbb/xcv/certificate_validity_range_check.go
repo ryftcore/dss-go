@@ -100,24 +100,24 @@ func (c *CertificateValidityRangeCheck[T]) BuildAdditionalInfo() *string {
 	}
 	currentTime := c.currentTime
 	validationTime := process.GetFormattedDate(&currentTime)
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_VALIDITY, validationTime, notBeforeStr, notAfterStr)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateValidity, validationTime, notBeforeStr, notAfterStr)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICTIVRSC
+	return i18n.MessageTagBBBXCVICTIVRSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICTIVRSC_ANS
+	return i18n.MessageTagBBBXCVICTIVRSCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateValidityRangeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -126,7 +126,7 @@ func (c *CertificateValidityRangeCheck[T]) FailedSubIndicationForConclusion() en
 	certificateIsKnownToNotBeRevoked := c.usedCertificateRevocation != nil &&
 		!c.usedCertificateRevocation.IsRevoked() && c.isRevocationDataValid()
 	if !c.revocationDataRequired || certificateIsKnownToNotBeRevoked {
-		return enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED
+		return enumerations.SubIndicationOutOfBoundsNotRevoked
 	}
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE
+	return enumerations.SubIndicationOutOfBoundsNoPOE
 }

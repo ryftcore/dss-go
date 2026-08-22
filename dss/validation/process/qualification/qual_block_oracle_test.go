@@ -199,11 +199,11 @@ func init() {
 // javaStatusToGo maps the Java XmlStatus enum CONSTANT NAME (what the oracle
 // dumps) to the lexical value the Go port carries.
 var javaStatusToGo = map[string]jaxb.XmlStatus{
-	"OK":          jaxb.XmlStatus_OK,
-	"NOT_OK":      jaxb.XmlStatus_NOT_OK,
-	"IGNORED":     jaxb.XmlStatus_IGNORED,
-	"INFORMATION": jaxb.XmlStatus_INFORMATION,
-	"WARNING":     jaxb.XmlStatus_WARNING,
+	"OK":          jaxb.XmlStatusOK,
+	"NOT_OK":      jaxb.XmlStatusNotOK,
+	"IGNORED":     jaxb.XmlStatusIgnored,
+	"INFORMATION": jaxb.XmlStatusInformation,
+	"WARNING":     jaxb.XmlStatusWarning,
 }
 
 func readQualBlockOracle(t *testing.T) []*qualBlockRow {
@@ -259,7 +259,7 @@ func TestQualBlockOracle(t *testing.T) {
 
 			validationTime := enumerations.ValidationTime(row.ValidationTime)
 			var block *CertQualificationAtTimeBlock
-			if validationTime == enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME {
+			if validationTime == enumerations.ValidationTimeCertificateIssuanceTime {
 				block = NewCertQualificationAtTimeBlockAtIssuanceTime(provider, validationTime, cert, services)
 			} else {
 				block = NewCertQualificationAtTimeBlock(provider, validationTime, millisPtr(row.Date), cert, services)

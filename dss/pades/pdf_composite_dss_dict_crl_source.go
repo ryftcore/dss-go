@@ -87,7 +87,7 @@ func (s *PdfCompositeDssDictCRLSource) ExtractDSSCRLs(dssDictionary PdfDssDict) 
 	dssCrlMap := dssDictionary.CRLs()
 	s.populateObjectsMap(dssCrlMap)
 	for _, key := range pdfCompositeDssDictCRLSourceSortedKeys(dssCrlMap) {
-		s.AddBinary(dssCrlMap[key], enumerations.RevocationOrigin_DSS_DICTIONARY)
+		s.AddBinary(dssCrlMap[key], enumerations.RevocationOriginDSSDictionary)
 	}
 }
 
@@ -111,7 +111,7 @@ func (s *PdfCompositeDssDictCRLSource) ExtractVRICRLsFromVRIDictionary(vriDictio
 	if vriDictionary != nil {
 		crlMap := vriDictionary.CRLs()
 		for _, key := range pdfCompositeDssDictCRLSourceSortedKeys(crlMap) {
-			s.AddBinary(crlMap[key], enumerations.RevocationOrigin_VRI_DICTIONARY)
+			s.AddBinary(crlMap[key], enumerations.RevocationOriginVRIDictionary)
 		}
 	}
 }

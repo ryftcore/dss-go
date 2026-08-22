@@ -10,9 +10,9 @@ import (
 
 func TestDSSMessageDigestRoundTripAndString(t *testing.T) {
 	value := []byte{0x1, 0x2, 0x3}
-	md := NewDSSMessageDigestWithValue(enumerations.DigestAlgorithm_SHA256, value)
+	md := NewDSSMessageDigestWithValue(enumerations.DigestAlgorithmSHA256, value)
 
-	if md.Algorithm() != enumerations.DigestAlgorithm_SHA256 {
+	if md.Algorithm() != enumerations.DigestAlgorithmSHA256 {
 		t.Fatalf("Algorithm() = %v", md.Algorithm())
 	}
 	if !bytes.Equal(md.Value(), value) {

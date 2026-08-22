@@ -65,29 +65,29 @@ func (c *AbstractRevocationFreshCheck) BuildAdditionalInfo() *string {
 		}
 	}
 	validationDate := c.validationDate
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CHECK,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationCheck,
 		process.GetFormattedDate(&validationDate), thisUpdateString, nextUpdateString)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AbstractRevocationFreshCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_RFC_IRIF
+	return i18n.MessageTagBBBRFCIRIF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *AbstractRevocationFreshCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_RFC_IRIF_ANS
+	return i18n.MessageTagBBBRFCIRIFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *AbstractRevocationFreshCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *AbstractRevocationFreshCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }

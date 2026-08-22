@@ -30,7 +30,7 @@ func NewSubjectAlternativeNames() *SubjectAlternativeNames {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumSubjectAlternativeName.OID()),
 	}
 }
 

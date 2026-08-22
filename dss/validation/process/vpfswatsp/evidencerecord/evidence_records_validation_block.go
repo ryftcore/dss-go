@@ -147,7 +147,7 @@ func (b *EvidenceRecordsValidationBlock) Execute() {
 		conclusion := validationProcessEvidenceRecord.Conclusion
 		evidenceRecordAnalysis.Conclusion = conclusion
 
-		if conclusion != nil && enumerations.Indication_PASSED == conclusion.Indication.Indication() {
+		if conclusion != nil && enumerations.IndicationPassed == conclusion.Indication.Indication() {
 			b.poe.ExtractEvidenceRecordPOE(evidenceRecord)
 		}
 

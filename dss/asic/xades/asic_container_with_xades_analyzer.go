@@ -104,7 +104,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 			isOpenDocument, err := asic.ASiCUtilsIsOpenDocument(a.GetMimeTypeDocument())
 			if err == nil && isOpenDocument {
 				documentAnalyzer.SetDetachedContents(OpenDocumentSupportUtilsGetOpenDocumentCoverage(a.AsicContent))
-			} else if enumerations.ASiCContainerType_ASiC_S == a.GetContainerType() {
+			} else if enumerations.ASiCContainerTypeASiCS == a.GetContainerType() {
 				documentAnalyzer.SetDetachedContents(a.GetSignedDocuments())
 				documentAnalyzer.SetContainerContents(a.GetArchiveDocuments())
 			} else {
@@ -135,7 +135,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetManifestFilesDescriptions() []*model
 	for _, manifestDocument := range a.GetEvidenceRecordManifestDocuments() {
 		manifestFile := asic.ASiCManifestParserGetManifestFile(manifestDocument)
 		if manifestFile != nil {
-			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnum_EVIDENCE_RECORD)
+			manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
 			manifestValidator := asic.NewASiCManifestValidator(manifestFile, a.GetAllDocuments())
 			manifestValidator.ValidateEntries()
 			descriptions = append(descriptions, manifestFile)
@@ -156,7 +156,7 @@ func (a *ASiCContainerWithXAdESAnalyzer) OriginalDocumentsForSignature(advancedS
 }
 
 func (a *ASiCContainerWithXAdESAnalyzer) extractArchiveDocuments(retrievedDocs []model.DSSDocument) []model.DSSDocument {
-	if enumerations.ASiCContainerType_ASiC_S == a.GetContainerType() {
+	if enumerations.ASiCContainerTypeASiCS == a.GetContainerType() {
 		return a.GetSignedDocumentsASiCS(retrievedDocs)
 	}
 	return retrievedDocs

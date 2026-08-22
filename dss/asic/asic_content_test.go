@@ -121,13 +121,13 @@ func TestASiCContentScalarAccessors(t *testing.T) {
 	asicContent := NewASiCContent()
 	container := asicContentTestDocument("container.asice")
 	asicContent.SetAsicContainer(container)
-	asicContent.SetContainerType(enumerations.ASiCContainerType_ASiC_E)
+	asicContent.SetContainerType(enumerations.ASiCContainerTypeASiCE)
 	asicContent.SetZipComment("mimetype=application/vnd.etsi.asic-e+zip")
 
 	if asicContent.AsicContainer() != container {
 		t.Error("asicContainer round trip failed")
 	}
-	if asicContent.ContainerType() != enumerations.ASiCContainerType_ASiC_E {
+	if asicContent.ContainerType() != enumerations.ASiCContainerTypeASiCE {
 		t.Errorf("containerType = %q", asicContent.ContainerType())
 	}
 	if asicContent.ZipComment() != "mimetype=application/vnd.etsi.asic-e+zip" {

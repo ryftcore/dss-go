@@ -27,12 +27,12 @@ type TrustedListWithSha2Predicate interface {
 
 // sha2Algorithm is the default sha2 digest algorithm defined in ETSI TS 119 612. Port of the
 // protected constant SHA2_ALGORITHM.
-const sha2Algorithm = enumerations.DigestAlgorithm_SHA256
+const sha2Algorithm = enumerations.DigestAlgorithmSHA256
 
 // init ports the class's static initialiser, which registers the Trusted List namespace with
 // the XPath resolver so that TrustedListPath queries can be evaluated.
 func init() {
-	xmlutils.XPathUtilsRegisterNamespace(xadesdefinition.TrustedListNamespace_NS)
+	xmlutils.XPathUtilsRegisterNamespace(xadesdefinition.TrustedListNamespaceNS)
 }
 
 // AbstractTrustedListWithSha2PredicateBase carries the concrete behaviour of the Java abstract
@@ -103,7 +103,7 @@ func (p *AbstractTrustedListWithSha2PredicateBase) NextUpdate(tlDocument model.D
 		return time.Time{}
 	}
 	nextUpdateElement, err := xmlutils.XPathUtilsGetElement(documentElement,
-		xadesdefinition.TrustedListPath_NEXT_UPDATE_PATH)
+		xadesdefinition.TrustedListPathNextUpdatePath)
 	if err != nil {
 		return time.Time{}
 	}

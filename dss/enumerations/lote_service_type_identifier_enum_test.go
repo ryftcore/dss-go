@@ -8,17 +8,17 @@ func TestLoTEServiceTypeIdentifierEnumFields(t *testing.T) {
 		uri   string
 		label string
 	}{
-		{LoTEServiceTypeIdentifierEnum_PID_ISSUANCE, "http://uri.etsi.org/19602/SvcType/PID/Issuance", "PID Issuance"},
-		{LoTEServiceTypeIdentifierEnum_PID_REVOCATION, "http://uri.etsi.org/19602/SvcType/PID/Revocation", "PID Revocation"},
-		{LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE, "http://uri.etsi.org/19602/SvcType/WalletSolution/Issuance", "Wallet Solution Issuance"},
-		{LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION, "http://uri.etsi.org/19602/SvcType/WalletSolution/Revocation", "Wallet Solution Revocation"},
-		{LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE, "http://uri.etsi.org/19602/SvcType/WRPAC/Issuance", "WRPAC Issuance"},
-		{LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION, "http://uri.etsi.org/19602/SvcType/WRPAC/Revocation", "WRPAC Revocation"},
-		{LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE, "http://uri.etsi.org/19602/SvcType/WRPRC/Issuance", "WRPRC Issuance"},
-		{LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION, "http://uri.etsi.org/19602/SvcType/WRPRC/Revocation", "WRPRC Revocation"},
-		{LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE, "http://uri.etsi.org/19602/SvcType/PubEAA/Issuance", "Pub-EAA Issuance"},
-		{LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION, "http://uri.etsi.org/19602/SvcType/PubEAA/Revocation", "Pub-EAA Revocation"},
-		{LoTEServiceTypeIdentifierEnum_REGISTER, "http://uri.etsi.org/19602/SvcType/Register", "Register"},
+		{LoTEServiceTypeIdentifierEnumPIDIssuance, "http://uri.etsi.org/19602/SvcType/PID/Issuance", "PID Issuance"},
+		{LoTEServiceTypeIdentifierEnumPIDRevocation, "http://uri.etsi.org/19602/SvcType/PID/Revocation", "PID Revocation"},
+		{LoTEServiceTypeIdentifierEnumWalletIssuance, "http://uri.etsi.org/19602/SvcType/WalletSolution/Issuance", "Wallet Solution Issuance"},
+		{LoTEServiceTypeIdentifierEnumWalletRevocation, "http://uri.etsi.org/19602/SvcType/WalletSolution/Revocation", "Wallet Solution Revocation"},
+		{LoTEServiceTypeIdentifierEnumWRPACIssuance, "http://uri.etsi.org/19602/SvcType/WRPAC/Issuance", "WRPAC Issuance"},
+		{LoTEServiceTypeIdentifierEnumWRPACRevocation, "http://uri.etsi.org/19602/SvcType/WRPAC/Revocation", "WRPAC Revocation"},
+		{LoTEServiceTypeIdentifierEnumWRPRCIssuance, "http://uri.etsi.org/19602/SvcType/WRPRC/Issuance", "WRPRC Issuance"},
+		{LoTEServiceTypeIdentifierEnumWRPRCRevocation, "http://uri.etsi.org/19602/SvcType/WRPRC/Revocation", "WRPRC Revocation"},
+		{LoTEServiceTypeIdentifierEnumPubEAAIssuance, "http://uri.etsi.org/19602/SvcType/PubEAA/Issuance", "Pub-EAA Issuance"},
+		{LoTEServiceTypeIdentifierEnumPubEAARevocation, "http://uri.etsi.org/19602/SvcType/PubEAA/Revocation", "Pub-EAA Revocation"},
+		{LoTEServiceTypeIdentifierEnumRegister, "http://uri.etsi.org/19602/SvcType/Register", "Register"},
 	}
 	for _, c := range cases {
 		if got := c.v.URI(); got != c.uri {

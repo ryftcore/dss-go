@@ -57,19 +57,19 @@ func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_ISCNVABST
+	return i18n.MessageTagTSVISCNVABST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_ISCNVABST_ANS
+	return i18n.MessageTagTSVISCNVABSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpirationCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -90,6 +90,6 @@ func (c *BestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration
 		notAfterStr = process.GetFormattedDate(c.certificate.NotAfter())
 	}
 	validationTime := process.GetFormattedDate(&c.controlTime)
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_VALIDITY, validationTime, notBeforeStr, notAfterStr)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateValidity, validationTime, notBeforeStr, notAfterStr)
 	return &message
 }

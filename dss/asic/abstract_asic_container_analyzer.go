@@ -410,7 +410,7 @@ func (a *AbstractASiCContainerAnalyzer) getEvidenceRecordAnalyzer(evidenceRecord
 	evidenceRecordAnalyzer.SetDetachedContents(detachedContents)
 	evidenceRecordAnalyzer.SetManifestFile(manifestFile)
 	evidenceRecordAnalyzer.SetCertificateVerifier(a.CertificateVerifier())
-	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOrigin_CONTAINER)
+	evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOriginContainer)
 	return evidenceRecordAnalyzer
 }
 
@@ -428,11 +428,11 @@ func (a *AbstractASiCContainerAnalyzer) getEvidenceRecordAnalyzer(evidenceRecord
 // UnsupportedOperationException message for an unrecognized evidenceRecordTypeEnum.
 func (a *AbstractASiCContainerAnalyzer) assertEvidenceRecordDocumentExtensionMatch(evidenceRecordDocument model.DSSDocument, evidenceRecordTypeEnum enumerations.EvidenceRecordTypeEnum) {
 	switch evidenceRecordTypeEnum {
-	case enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord:
 		if evidenceRecordDocument.Name() != "" && !hasSuffix(evidenceRecordDocument.Name(), ".xml") {
 			panic(model.NewDSSError("Document containing an XMLERS evidence record shall end with '.xml' extension!"))
 		}
-	case enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD:
+	case enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord:
 		if evidenceRecordDocument.Name() != "" && !hasSuffix(evidenceRecordDocument.Name(), ".ers") {
 			panic(model.NewDSSError("Document containing an ERS evidence record shall end with '.ers' extension!"))
 		}

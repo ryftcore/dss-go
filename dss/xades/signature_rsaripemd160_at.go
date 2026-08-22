@@ -17,7 +17,7 @@
 // engineSign/engineVerify are internal/xmldsig's own RSA verification code.
 package xades
 
-// SignatureRSARIPEMD160AT_XML_ID is the non-standard RSA-RIPEMD160 signature algorithm URI used
+// SignatureRSARIPEMD160ATXMLID is the non-standard RSA-RIPEMD160 signature algorithm URI used
 // by some AT (Austrian) signature providers. Port of the public static final String XML_ID
 // field.
-const SignatureRSARIPEMD160AT_XML_ID = "http://www.w3.org/2001/04/xmldsig-more/rsa-ripemd160"
+const SignatureRSARIPEMD160ATXMLID = "http://www.w3.org/2001/04/xmldsig-more/rsa-ripemd160"

@@ -7,8 +7,8 @@ func TestASiCContainerTypeValueOf(t *testing.T) {
 		name string
 		want ASiCContainerType
 	}{
-		{"ASiC_S", ASiCContainerType_ASiC_S},
-		{"ASiC_E", ASiCContainerType_ASiC_E},
+		{"ASiC_S", ASiCContainerTypeASiCS},
+		{"ASiC_E", ASiCContainerTypeASiCE},
 	}
 	for _, c := range cases {
 		got, err := ASiCContainerTypeValueOf(c.name)
@@ -30,9 +30,9 @@ func TestASiCContainerTypeValueByName(t *testing.T) {
 		name string
 		want ASiCContainerType
 	}{
-		{"ASiC-S", ASiCContainerType_ASiC_S},
-		{"ASiC-E", ASiCContainerType_ASiC_E},
-		{"ASiC_S", ASiCContainerType_ASiC_S},
+		{"ASiC-S", ASiCContainerTypeASiCS},
+		{"ASiC-E", ASiCContainerTypeASiCE},
+		{"ASiC_S", ASiCContainerTypeASiCS},
 	}
 	for _, c := range cases {
 		got, err := ASiCContainerTypeValueByName(c.name)
@@ -50,16 +50,16 @@ func TestASiCContainerTypeValueByName(t *testing.T) {
 }
 
 func TestASiCContainerTypeString(t *testing.T) {
-	if got := ASiCContainerType_ASiC_S.String(); got != "ASiC-S" {
+	if got := ASiCContainerTypeASiCS.String(); got != "ASiC-S" {
 		t.Errorf("ASiC_S.String() = %q, want %q", got, "ASiC-S")
 	}
-	if got := ASiCContainerType_ASiC_E.String(); got != "ASiC-E" {
+	if got := ASiCContainerTypeASiCE.String(); got != "ASiC-E" {
 		t.Errorf("ASiC_E.String() = %q, want %q", got, "ASiC-E")
 	}
 }
 
 func TestASiCContainerTypeValues(t *testing.T) {
-	want := []ASiCContainerType{ASiCContainerType_ASiC_S, ASiCContainerType_ASiC_E}
+	want := []ASiCContainerType{ASiCContainerTypeASiCS, ASiCContainerTypeASiCE}
 	got := ASiCContainerTypeValues()
 	if len(got) != len(want) {
 		t.Fatalf("ASiCContainerTypeValues() length = %d, want %d", len(got), len(want))

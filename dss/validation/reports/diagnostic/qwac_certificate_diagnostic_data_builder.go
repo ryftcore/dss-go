@@ -116,7 +116,7 @@ func (b *QWACCertificateDiagnosticDataBuilder) BuildDetachedXmlSignature(sig val
 
 func (b *QWACCertificateDiagnosticDataBuilder) identifyTLSCertificates(xmlSignature *jaxb.XmlSignature) {
 	for _, digestMatcher := range xmlSignature.DigestMatchers.All() {
-		if digestMatcher.Type != nil && enumerations.DigestMatcherType_SIG_D_ENTRY == digestMatcher.Type.DigestMatcherType() &&
+		if digestMatcher.Type != nil && enumerations.DigestMatcherTypeSigDEntry == digestMatcher.Type.DigestMatcherType() &&
 			digestMatcher.DataFound && digestMatcher.DataIntact {
 			tlsCertificate := b.getMatchingTLSCertificate(digestMatcher)
 			if tlsCertificate != nil {

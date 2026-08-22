@@ -7,10 +7,10 @@ func TestQWACProfile(t *testing.T) {
 		v        QWACProfile
 		readable string
 	}{
-		{QWACProfile_QWAC_1, "1-QWAC"},
-		{QWACProfile_QWAC_2, "2-QWAC"},
-		{QWACProfile_TLS_BY_QWAC_2, "TLS certificate supported by 2-QWAC"},
-		{QWACProfile_NOT_QWAC, "Not QWAC"},
+		{QWACProfileQWAC1, "1-QWAC"},
+		{QWACProfileQWAC2, "2-QWAC"},
+		{QWACProfileTLSByQWAC2, "TLS certificate supported by 2-QWAC"},
+		{QWACProfileNotQWAC, "Not QWAC"},
 	}
 	if len(QWACProfileValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(QWACProfileValues()))

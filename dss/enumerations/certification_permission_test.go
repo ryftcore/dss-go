@@ -8,9 +8,9 @@ func TestCertificationPermission(t *testing.T) {
 		v    CertificationPermission
 		code int
 	}{
-		{CertificationPermission_NO_CHANGE_PERMITTED, 1},
-		{CertificationPermission_MINIMAL_CHANGES_PERMITTED, 2},
-		{CertificationPermission_CHANGES_PERMITTED, 3},
+		{CertificationPermissionNoChangePermitted, 1},
+		{CertificationPermissionMinimalChangesPermitted, 2},
+		{CertificationPermissionChangesPermitted, 3},
 	}
 	if len(CertificationPermissionValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(CertificationPermissionValues()))

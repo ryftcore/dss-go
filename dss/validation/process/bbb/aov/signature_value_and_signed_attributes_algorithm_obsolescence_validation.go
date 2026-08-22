@@ -86,9 +86,9 @@ func (c *SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation[T]) bu
 
 		var subContext enumerations.SubContext
 		if signingCertificateReference != nil && signingCertificateReference.CertificateId() == certificateId {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		} else {
-			subContext = enumerations.SubContext_CA_CERTIFICATE
+			subContext = enumerations.SubContextCACertificate
 		}
 
 		signCertCheck := c.signingCertificateRefDigestAlgoCheckResult(certificateRefWrappers, certificateId, subContext)

@@ -40,27 +40,27 @@ var ErrMalformedSignatureValue = errors.New("xmldsig: malformed ds:SignatureValu
 func cryptoHashFor(alg enumerations.DigestAlgorithm) (crypto.Hash, error) {
 	var h crypto.Hash
 	switch alg {
-	case enumerations.DigestAlgorithm_MD5:
+	case enumerations.DigestAlgorithmMD5:
 		h = crypto.MD5
-	case enumerations.DigestAlgorithm_SHA1:
+	case enumerations.DigestAlgorithmSHA1:
 		h = crypto.SHA1
-	case enumerations.DigestAlgorithm_SHA224:
+	case enumerations.DigestAlgorithmSHA224:
 		h = crypto.SHA224
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		h = crypto.SHA256
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		h = crypto.SHA384
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		h = crypto.SHA512
-	case enumerations.DigestAlgorithm_SHA3_224:
+	case enumerations.DigestAlgorithmSHA3224:
 		h = crypto.SHA3_224
-	case enumerations.DigestAlgorithm_SHA3_256:
+	case enumerations.DigestAlgorithmSHA3256:
 		h = crypto.SHA3_256
-	case enumerations.DigestAlgorithm_SHA3_384:
+	case enumerations.DigestAlgorithmSHA3384:
 		h = crypto.SHA3_384
-	case enumerations.DigestAlgorithm_SHA3_512:
+	case enumerations.DigestAlgorithmSHA3512:
 		h = crypto.SHA3_512
-	case enumerations.DigestAlgorithm_RIPEMD160:
+	case enumerations.DigestAlgorithmRIPEMD160:
 		h = crypto.RIPEMD160
 	default:
 		return 0, fmt.Errorf("%w: digest %s", ErrUnsupportedSignatureAlgorithm, alg)
@@ -87,7 +87,7 @@ func verifySignature(uri string, pub crypto.PublicKey, signedContent, signatureV
 	encryption := alg.EncryptionAlgorithm()
 
 	switch encryption {
-	case enumerations.EncryptionAlgorithm_RSA, enumerations.EncryptionAlgorithm_RSASSA_PSS:
+	case enumerations.EncryptionAlgorithmRSA, enumerations.EncryptionAlgorithmRSASSAPSS:
 		key, ok := pub.(*rsa.PublicKey)
 		if !ok {
 			return false, fmt.Errorf("%w: RSA method with a %T key", ErrKeyMismatch, pub)
@@ -115,7 +115,7 @@ func verifySignature(uri string, pub crypto.PublicKey, signedContent, signatureV
 		if err != nil {
 			return false, err
 		}
-		if encryption == enumerations.EncryptionAlgorithm_RSASSA_PSS {
+		if encryption == enumerations.EncryptionAlgorithmRSASSAPSS {
 			// SignatureBaseRSAPSS builds a PSSParameterSpec whose salt length is the digest
 			// length and whose trailer field is 1, which is exactly PSSSaltLengthEqualsHash
 			// with MGF1 over the same digest - the RSASSA-PSS profile XMLDSIG 1.1 defines.
@@ -128,7 +128,7 @@ func verifySignature(uri string, pub crypto.PublicKey, signedContent, signatureV
 		}
 		return cryptoVerdict(err)
 
-	case enumerations.EncryptionAlgorithm_ECDSA, enumerations.EncryptionAlgorithm_PLAIN_ECDSA:
+	case enumerations.EncryptionAlgorithmECDSA, enumerations.EncryptionAlgorithmPlainECDSA:
 		key, ok := pub.(*ecdsa.PublicKey)
 		if !ok {
 			return false, fmt.Errorf("%w: ECDSA method with a %T key", ErrKeyMismatch, pub)
@@ -143,7 +143,7 @@ func verifySignature(uri string, pub crypto.PublicKey, signedContent, signatureV
 		}
 		return ecdsa.Verify(key, digest, r, s), nil
 
-	case enumerations.EncryptionAlgorithm_DSA:
+	case enumerations.EncryptionAlgorithmDSA:
 		key, ok := pub.(*dsa.PublicKey)
 		if !ok {
 			return false, fmt.Errorf("%w: DSA method with a %T key", ErrKeyMismatch, pub)
@@ -163,12 +163,12 @@ func verifySignature(uri string, pub crypto.PublicKey, signedContent, signatureV
 		s := new(big.Int).SetBytes(signatureValue[size:])
 		return dsa.Verify(key, digest, r, s), nil
 
-	case enumerations.EncryptionAlgorithm_EDDSA:
+	case enumerations.EncryptionAlgorithmEDDSA:
 		key, ok := pub.(ed25519.PublicKey)
 		if !ok {
 			return false, fmt.Errorf("%w: EdDSA method with a %T key", ErrKeyMismatch, pub)
 		}
-		if alg != enumerations.SignatureAlgorithm_ED25519 {
+		if alg != enumerations.SignatureAlgorithmED25519 {
 			return false, fmt.Errorf("%w: %s", ErrUnsupportedSignatureAlgorithm, alg)
 		}
 		return ed25519.Verify(key, signedContent, signatureValue), nil

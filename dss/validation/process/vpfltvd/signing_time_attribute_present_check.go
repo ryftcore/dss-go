@@ -39,23 +39,23 @@ func (c *SigningTimeAttributePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningTimeAttributePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTP
+	return i18n.MessageTagBBBSAVISQPSTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningTimeAttributePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_VFDTAOCST_ANS
+	return i18n.MessageTagADESTVFDTAOCSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SigningTimeAttributePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *SigningTimeAttributePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

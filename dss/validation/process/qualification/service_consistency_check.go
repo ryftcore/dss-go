@@ -39,53 +39,53 @@ func (c *ServiceConsistencyCheck) Process() bool {
 
 	if c.trustService == nil {
 
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS0
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS0
 		return false
 
 	}
 
 	if !TrustServiceCheckerIsQCStatementConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS1
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS1
 		return false
 	}
 
 	if !TrustServiceCheckerIsQSCDConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS3
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS3
 		return false
 	}
 
 	if !TrustServiceCheckerIsQSCDStatusAsInCertConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS3A
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS3A
 		return false
 	}
 
 	if !TrustServiceCheckerIsPostEIDASQSCDConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS3B
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS3B
 		return false
 	}
 
 	if !TrustServiceCheckerIsQualifiersListKnownConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS3C
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS3C
 		return false
 	}
 
 	if !TrustServiceCheckerIsUsageConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS4
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS4
 		return false
 	}
 
 	if !TrustServiceCheckerIsPreEIDASStatusConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS5
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS5
 		return false
 	}
 
 	if !TrustServiceCheckerIsPreEIDASQualifierAndAdditionalServiceInfoConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS6
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS6
 		return false
 	}
 
 	if !TrustServiceCheckerIsQualifierAndAdditionalServiceInfoConsistent(c.trustService) {
-		c.errorMessage = i18n.MessageTag_QUAL_TL_SERV_CONS_ANS7
+		c.errorMessage = i18n.MessageTagQualTLServCONSANS7
 		return false
 	}
 
@@ -94,7 +94,7 @@ func (c *ServiceConsistencyCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ServiceConsistencyCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_SERV_CONS
+	return i18n.MessageTagQualTLServCONS
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
@@ -105,7 +105,7 @@ func (c *ServiceConsistencyCheck) ErrorMessageTag() i18n.MessageTag {
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *ServiceConsistencyCheck) BuildAdditionalInfo() *string {
 	if c.trustService != nil && utils.IsCollectionNotEmpty(c.trustService.ServiceNames) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_TRUST_SERVICE_NAME, c.trustService.ServiceNames[0])
+		message := c.I18nProvider.GetMessage(i18n.MessageTagTrustServiceName, c.trustService.ServiceNames[0])
 		return &message
 	}
 	return nil
@@ -114,7 +114,7 @@ func (c *ServiceConsistencyCheck) BuildAdditionalInfo() *string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ServiceConsistencyCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

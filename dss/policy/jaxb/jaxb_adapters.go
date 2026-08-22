@@ -85,21 +85,21 @@ func (v *ValidationModelValue) UnmarshalText(text []byte) error {
 type TimeUnit string
 
 const (
-	TimeUnit_DAYS         TimeUnit = "DAYS"
-	TimeUnit_HOURS        TimeUnit = "HOURS"
-	TimeUnit_MINUTES      TimeUnit = "MINUTES"
-	TimeUnit_SECONDS      TimeUnit = "SECONDS"
-	TimeUnit_MILLISECONDS TimeUnit = "MILLISECONDS"
+	TimeUnitDays         TimeUnit = "DAYS"
+	TimeUnitHours        TimeUnit = "HOURS"
+	TimeUnitMinutes      TimeUnit = "MINUTES"
+	TimeUnitSeconds      TimeUnit = "SECONDS"
+	TimeUnitMilliseconds TimeUnit = "MILLISECONDS"
 )
 
 // TimeUnitValues returns all TimeUnit constants in declaration order.
 func TimeUnitValues() []TimeUnit {
 	return []TimeUnit{
-		TimeUnit_DAYS,
-		TimeUnit_HOURS,
-		TimeUnit_MINUTES,
-		TimeUnit_SECONDS,
-		TimeUnit_MILLISECONDS,
+		TimeUnitDays,
+		TimeUnitHours,
+		TimeUnitMinutes,
+		TimeUnitSeconds,
+		TimeUnitMilliseconds,
 	}
 }
 

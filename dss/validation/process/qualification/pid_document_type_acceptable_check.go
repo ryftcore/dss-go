@@ -41,9 +41,9 @@ func (c *PIDDocumentTypeAcceptableCheck) Process() bool {
 		return false
 	}
 	switch c.eaa.EAAType() {
-	case enumerations.EAAType_SD_JWT_VC:
+	case enumerations.EAATypeSDJWTVC:
 		return strings.HasPrefix(documentType, "urn:eudi:pid:")
-	case enumerations.EAAType_ISO_IEC_MDOC:
+	case enumerations.EAATypeISOIECMDoc:
 		// TODO : not clear what element is to be checked
 		// The attestation type for person identification data in ISO/IEC mdoc format
 		// shall be "eu.europa.ec.eudi.pid.1".
@@ -56,9 +56,9 @@ func (c *PIDDocumentTypeAcceptableCheck) Process() bool {
 // getClaimedDocumentType ports the private getClaimedDocumentType().
 func (c *PIDDocumentTypeAcceptableCheck) getClaimedDocumentType() string {
 	switch c.eaa.EAAType() {
-	case enumerations.EAAType_SD_JWT_VC:
+	case enumerations.EAATypeSDJWTVC:
 		return c.eaa.EAAVerifiableCredentialsTypeUri()
-	case enumerations.EAAType_ISO_IEC_MDOC:
+	case enumerations.EAATypeISOIECMDoc:
 		// TODO : not clear what element is to be checked
 		// The attestation type for person identification data in ISO/IEC mdoc format
 		// shall be "eu.europa.ec.eudi.pid.1".
@@ -70,18 +70,18 @@ func (c *PIDDocumentTypeAcceptableCheck) getClaimedDocumentType() string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PIDDocumentTypeAcceptableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_DOCUMENT_TYPE
+	return i18n.MessageTagPIDDocumentType
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *PIDDocumentTypeAcceptableCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_PID_DOCUMENT_TYPE_ANS, c.getClaimedDocumentType())
+	return c.BuildXmlMessage(i18n.MessageTagPIDDocumentTypeANS, c.getClaimedDocumentType())
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PIDDocumentTypeAcceptableCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

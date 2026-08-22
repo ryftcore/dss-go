@@ -31,14 +31,14 @@ func TestCachedEntry_UpdatePanicsOnNil(t *testing.T) {
 func TestCachedEntry_UpdateThenSync(t *testing.T) {
 	e := NewCachedEntry[*fakeResult]()
 	e.Update(&fakeResult{v: 1})
-	if e.CurrentState() != CacheStateEnum_DESYNCHRONIZED {
+	if e.CurrentState() != CacheStateEnumDesynchronized {
 		t.Fatalf("after update want DESYNCHRONIZED, got %s", e.CurrentState())
 	}
 	if e.IsEmpty() {
 		t.Fatal("entry should no longer be empty")
 	}
 	e.Sync()
-	if e.CurrentState() != CacheStateEnum_SYNCHRONIZED {
+	if e.CurrentState() != CacheStateEnumSynchronized {
 		t.Fatalf("after sync want SYNCHRONIZED, got %s", e.CurrentState())
 	}
 	if e.LastSuccessSynchronizationTime().IsZero() {

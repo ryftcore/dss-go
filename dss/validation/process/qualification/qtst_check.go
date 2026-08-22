@@ -39,18 +39,18 @@ func (c *QTSTCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QTSTCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_QTST
+	return i18n.MessageTagQualHasQTST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QTSTCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_QTST_ANS
+	return i18n.MessageTagQualHasQTSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QTSTCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -40,19 +40,19 @@ func NewTLSCertificateBindingSignatureValidationResultCheck(i18nProvider *i18n.I
 
 // MessageTag returns the check's message tag. Port of the overridden getMessageTag().
 func (c *TLSCertificateBindingSignatureValidationResultCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_VALID
+	return i18n.MessageTagTLSCertBindingSigValid
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *TLSCertificateBindingSignatureValidationResultCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_VALID_ANS
+	return i18n.MessageTagTLSCertBindingSigValidANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the overridden getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingSignatureValidationResultCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

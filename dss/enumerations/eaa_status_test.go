@@ -8,11 +8,11 @@ func TestEAAStatusBitValue(t *testing.T) {
 		want   int
 		wantOK bool
 	}{
-		{EAAStatus_VALID, 0x00, true},
-		{EAAStatus_INVALID, 0x01, true},
-		{EAAStatus_SUSPENDED, 0x02, true},
-		{EAAStatus_APPLICATION_SPECIFIC, 0x03, true},
-		{EAAStatus_UNKNOWN, 0, false},
+		{EAAStatusValid, 0x00, true},
+		{EAAStatusInvalid, 0x01, true},
+		{EAAStatusSuspended, 0x02, true},
+		{EAAStatusApplicationSpecific, 0x03, true},
+		{EAAStatusUnknown, 0, false},
 	}
 	for _, c := range cases {
 		got, ok := c.v.BitValue()
@@ -23,11 +23,11 @@ func TestEAAStatusBitValue(t *testing.T) {
 }
 
 func TestEAAStatusIsValid(t *testing.T) {
-	if !EAAStatus_VALID.IsValid() {
+	if !EAAStatusValid.IsValid() {
 		t.Error("VALID.IsValid() = false, want true")
 	}
 	for _, v := range EAAStatusValues() {
-		if v == EAAStatus_VALID {
+		if v == EAAStatusValid {
 			continue
 		}
 		if v.IsValid() {
@@ -41,10 +41,10 @@ func TestEAAStatusForBitValue(t *testing.T) {
 		bitValue int
 		want     EAAStatus
 	}{
-		{0x00, EAAStatus_VALID},
-		{0x01, EAAStatus_INVALID},
-		{0x02, EAAStatus_SUSPENDED},
-		{0x03, EAAStatus_APPLICATION_SPECIFIC},
+		{0x00, EAAStatusValid},
+		{0x01, EAAStatusInvalid},
+		{0x02, EAAStatusSuspended},
+		{0x03, EAAStatusApplicationSpecific},
 	}
 	for _, c := range cases {
 		got, err := EAAStatusForBitValue(c.bitValue)

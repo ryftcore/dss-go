@@ -31,20 +31,20 @@ func (c *AcceptableZipCommentCheck) Process() bool { return c.ProcessValueCheck(
 
 // MessageTag returns the constraint message i18n key.
 func (c *AcceptableZipCommentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ITEZCF
+	return i18n.MessageTagBBBFCITEZCF
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *AcceptableZipCommentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ITEZCF_ANS
+	return i18n.MessageTagBBBFCITEZCFANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *AcceptableZipCommentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *AcceptableZipCommentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

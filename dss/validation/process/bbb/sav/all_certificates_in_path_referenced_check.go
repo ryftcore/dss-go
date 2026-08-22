@@ -33,7 +33,7 @@ func NewAllCertificatesInPathReferencedCheck(i18nProvider *i18n.I18nProvider, re
 
 // Process performs the check. Port of process().
 func (c *AllCertificatesInPathReferencedCheck) Process() bool {
-	relatedSigningCertificates := c.token.FoundCertificates().RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	relatedSigningCertificates := c.token.FoundCertificates().RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
 	signingCertificateIds := make(map[string]struct{}, len(relatedSigningCertificates))
 	for _, cert := range relatedSigningCertificates {
 		signingCertificateIds[cert.Id()] = struct{}{}
@@ -50,23 +50,23 @@ func (c *AllCertificatesInPathReferencedCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AllCertificatesInPathReferencedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ACPCCRSCA
+	return i18n.MessageTagBBBSAVACPCCRSCA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AllCertificatesInPathReferencedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ACPCCRSCA_ANS
+	return i18n.MessageTagBBBSAVACPCCRSCAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *AllCertificatesInPathReferencedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *AllCertificatesInPathReferencedCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

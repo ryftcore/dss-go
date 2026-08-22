@@ -159,7 +159,7 @@ func (b *BasicBuildingBlocks) Execute() *jaxb.XmlBasicBuildingBlocks {
 	}
 
 	if result.Conclusion.Indication.Indication() == "" {
-		result.Conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		result.Conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	}
 
 	return result
@@ -173,7 +173,7 @@ func (b *BasicBuildingBlocks) updateFinalConclusion(result *jaxb.XmlBasicBuildin
 	currentConclusion *jaxb.XmlConclusion) {
 	finalConclusion := result.Conclusion
 
-	if enumerations.Indication_PASSED != currentConclusion.Indication.Indication() {
+	if enumerations.IndicationPassed != currentConclusion.Indication.Indication() {
 		finalConclusion.Indication = currentConclusion.Indication
 		finalConclusion.SubIndication = currentConclusion.SubIndication
 		finalConclusion.Errors = append(finalConclusion.Errors, currentConclusion.Errors...)
@@ -184,19 +184,19 @@ func (b *BasicBuildingBlocks) updateFinalConclusion(result *jaxb.XmlBasicBuildin
 
 // executeFormatChecking ports the private executeFormatChecking().
 func (b *BasicBuildingBlocks) executeFormatChecking() *jaxb.XmlFC {
-	if enumerations.Context_SIGNATURE == b.context || enumerations.Context_COUNTER_SIGNATURE == b.context ||
-		enumerations.Context_KEY_BINDING_SIGNATURE == b.context {
+	if enumerations.ContextSignature == b.context || enumerations.ContextCounterSignature == b.context ||
+		enumerations.ContextKeyBindingSignature == b.context {
 		block := fc.NewSignatureFormatChecking(b.i18nProvider, b.diagnosticData,
 			b.token.(*diagnostic.SignatureWrapper), b.context, b.policy)
 		return block.Execute()
-	} else if enumerations.Context_TIMESTAMP == b.context {
+	} else if enumerations.ContextTimestamp == b.context {
 		block := fc.NewTimestampFormatChecking(b.i18nProvider, b.diagnosticData,
 			b.token.(*diagnostic.TimestampWrapper), b.context, b.policy)
 		xmlFC := block.Execute()
 		if utils.IsCollectionNotEmpty(xmlFC.Constraint) {
 			return xmlFC
 		}
-	} else if enumerations.Context_EAA == b.context || enumerations.Context_EAA_REVOCATION == b.context {
+	} else if enumerations.ContextEAA == b.context || enumerations.ContextEAARevocation == b.context {
 		return b.executeEAAFormatChecking()
 	}
 	return nil
@@ -205,7 +205,7 @@ func (b *BasicBuildingBlocks) executeFormatChecking() *jaxb.XmlFC {
 // executeIdentificationOfTheSigningCertificate ports the private
 // executeIdentificationOfTheSigningCertificate().
 func (b *BasicBuildingBlocks) executeIdentificationOfTheSigningCertificate() *jaxb.XmlISC {
-	if enumerations.Context_CERTIFICATE != b.context && enumerations.Context_EAA != b.context {
+	if enumerations.ContextCertificate != b.context && enumerations.ContextEAA != b.context {
 		block := isc.NewIdentificationOfTheSigningCertificate(b.i18nProvider, b.token, b.context, b.policy)
 		return block.Execute()
 	} else {
@@ -216,8 +216,8 @@ func (b *BasicBuildingBlocks) executeIdentificationOfTheSigningCertificate() *ja
 // executeValidationContextInitialization ports the private
 // executeValidationContextInitialization().
 func (b *BasicBuildingBlocks) executeValidationContextInitialization() *jaxb.XmlVCI {
-	if enumerations.Context_SIGNATURE == b.context || enumerations.Context_COUNTER_SIGNATURE == b.context ||
-		enumerations.Context_KEY_BINDING_SIGNATURE == b.context {
+	if enumerations.ContextSignature == b.context || enumerations.ContextCounterSignature == b.context ||
+		enumerations.ContextKeyBindingSignature == b.context {
 		block := vci.NewValidationContextInitialization(b.i18nProvider,
 			b.token.(*diagnostic.SignatureWrapper), b.context, b.policy)
 		return block.Execute()
@@ -229,23 +229,23 @@ func (b *BasicBuildingBlocks) executeValidationContextInitialization() *jaxb.Xml
 // executeAlgorithmObsolescenceValidation().
 func (b *BasicBuildingBlocks) executeAlgorithmObsolescenceValidation() *jaxb.XmlAOV {
 	var block aovBlock
-	if enumerations.Context_SIGNATURE == b.context || enumerations.Context_COUNTER_SIGNATURE == b.context ||
-		enumerations.Context_KEY_BINDING_SIGNATURE == b.context {
+	if enumerations.ContextSignature == b.context || enumerations.ContextCounterSignature == b.context ||
+		enumerations.ContextKeyBindingSignature == b.context {
 		block = aov.NewSignatureAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.SignatureWrapper), b.context, b.currentTime, b.policy)
-	} else if enumerations.Context_TIMESTAMP == b.context {
+	} else if enumerations.ContextTimestamp == b.context {
 		block = aov.NewTimestampAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.TimestampWrapper), b.currentTime, b.policy)
-	} else if enumerations.Context_REVOCATION == b.context {
+	} else if enumerations.ContextRevocation == b.context {
 		block = aov.NewRevocationDataAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.RevocationWrapper), b.currentTime, b.policy)
-	} else if enumerations.Context_CERTIFICATE == b.context {
+	} else if enumerations.ContextCertificate == b.context {
 		block = aov.NewCertificateAndChainAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.CertificateWrapper), b.context, b.currentTime, b.policy)
-	} else if enumerations.Context_EAA == b.context {
+	} else if enumerations.ContextEAA == b.context {
 		block = aov.NewEAAAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.EAAWrapper), b.currentTime, b.policy)
-	} else if enumerations.Context_EAA_REVOCATION == b.context {
+	} else if enumerations.ContextEAARevocation == b.context {
 		block = aov.NewEAARevocationAlgorithmObsolescenceValidation(
 			b.i18nProvider, b.token.(*diagnostic.EAARevocationTokenWrapper), b.currentTime, b.policy)
 	}
@@ -267,7 +267,7 @@ func (b *BasicBuildingBlocks) executeX509CertificateValidation(xmlAOV *jaxb.XmlA
 
 // getX509CertificateValidation ports the private getX509CertificateValidation(XmlAOV).
 func (b *BasicBuildingBlocks) getX509CertificateValidation(xmlAOV *jaxb.XmlAOV) *xcv.X509CertificateValidation {
-	if enumerations.Context_CERTIFICATE == b.context {
+	if enumerations.ContextCertificate == b.context {
 		certificate := b.token.(*diagnostic.CertificateWrapper)
 		return xcv.NewX509CertificateValidation(b.i18nProvider, certificate, b.currentTime,
 			certificate.NotBefore(), b.context, xmlAOV, b.policy)
@@ -275,20 +275,20 @@ func (b *BasicBuildingBlocks) getX509CertificateValidation(xmlAOV *jaxb.XmlAOV) 
 	} else {
 		signingCertificate := b.token.SigningCertificate()
 		if signingCertificate != nil {
-			if enumerations.Context_SIGNATURE == b.context || enumerations.Context_COUNTER_SIGNATURE == b.context ||
-				enumerations.Context_KEY_BINDING_SIGNATURE == b.context {
+			if enumerations.ContextSignature == b.context || enumerations.ContextCounterSignature == b.context ||
+				enumerations.ContextKeyBindingSignature == b.context {
 				return xcv.NewX509CertificateValidation(b.i18nProvider, signingCertificate, b.currentTime,
 					signingCertificate.NotBefore(), b.context, xmlAOV, b.policy)
 
-			} else if enumerations.Context_TIMESTAMP == b.context {
+			} else if enumerations.ContextTimestamp == b.context {
 				return xcv.NewX509CertificateValidation(b.i18nProvider, signingCertificate, b.currentTime,
 					b.token.(*diagnostic.TimestampWrapper).ProductionTime(), b.context, xmlAOV, b.policy)
 
-			} else if enumerations.Context_REVOCATION == b.context {
+			} else if enumerations.ContextRevocation == b.context {
 				return xcv.NewX509CertificateValidation(b.i18nProvider, signingCertificate, b.currentTime,
 					b.token.(*diagnostic.RevocationWrapper).ProductionDate(), b.context, xmlAOV, b.policy)
 
-			} else if enumerations.Context_EAA_REVOCATION == b.context {
+			} else if enumerations.ContextEAARevocation == b.context {
 				return xcv.NewX509CertificateValidation(b.i18nProvider, signingCertificate, b.currentTime,
 					b.token.(*diagnostic.EAARevocationTokenWrapper).IssuedAt(), b.context, xmlAOV, b.policy)
 			}
@@ -401,7 +401,7 @@ func getOrphanCertificateWrapperIds(tokens []*diagnostic.OrphanCertificateTokenW
 
 // executeCryptographicVerification ports the private executeCryptographicVerification().
 func (b *BasicBuildingBlocks) executeCryptographicVerification() *jaxb.XmlCV {
-	if enumerations.Context_CERTIFICATE != b.context {
+	if enumerations.ContextCertificate != b.context {
 		block := cv.NewCryptographicVerification(b.i18nProvider, b.diagnosticData, b.token, b.context, b.policy)
 		return block.Execute()
 	} else {
@@ -413,17 +413,17 @@ func (b *BasicBuildingBlocks) executeCryptographicVerification() *jaxb.XmlCV {
 // executeSignatureAcceptanceValidation(XmlAOV).
 func (b *BasicBuildingBlocks) executeSignatureAcceptanceValidation(xmlAOV *jaxb.XmlAOV) *jaxb.XmlSAV {
 	var block savBlock
-	if enumerations.Context_SIGNATURE == b.context || enumerations.Context_COUNTER_SIGNATURE == b.context ||
-		enumerations.Context_KEY_BINDING_SIGNATURE == b.context {
+	if enumerations.ContextSignature == b.context || enumerations.ContextCounterSignature == b.context ||
+		enumerations.ContextKeyBindingSignature == b.context {
 		block = sav.NewSignatureAcceptanceValidation(b.i18nProvider, b.diagnosticData, b.currentTime,
 			b.token.(*diagnostic.SignatureWrapper), b.context, b.bbbs, xmlAOV, b.policy)
-	} else if enumerations.Context_TIMESTAMP == b.context {
+	} else if enumerations.ContextTimestamp == b.context {
 		block = sav.NewTimestampAcceptanceValidation(b.i18nProvider, b.currentTime,
 			b.token.(*diagnostic.TimestampWrapper), xmlAOV, b.policy)
-	} else if enumerations.Context_REVOCATION == b.context {
+	} else if enumerations.ContextRevocation == b.context {
 		block = sav.NewRevocationAcceptanceValidation(b.i18nProvider, b.currentTime,
 			b.token.(*diagnostic.RevocationWrapper), xmlAOV, b.policy)
-	} else if enumerations.Context_EAA == b.context || enumerations.Context_EAA_REVOCATION == b.context {
+	} else if enumerations.ContextEAA == b.context || enumerations.ContextEAARevocation == b.context {
 		block = b.eaaAcceptanceValidationBlock(xmlAOV)
 	}
 	if block != nil {

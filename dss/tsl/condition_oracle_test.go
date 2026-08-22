@@ -91,20 +91,20 @@ func TestCertSubjectDNAttributeCondition_Oracle(t *testing.T) {
 func TestCertSubjectDNAttributeCondition_OracleDSS1911(t *testing.T) {
 	certificate := conditionTestCertificate(t, skTLCertificate)
 
-	allNones := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+	allNones := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 
-	none42 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	none42 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	none42.AddChild(NewCertSubjectDNAttributeCondition([]string{"2.5.4.42"}))
 
-	none65 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	none65 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	none65.AddChild(NewCertSubjectDNAttributeCondition([]string{"2.5.4.65"}))
 
-	none4 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	none4 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	// not present
 	subject4 := NewCertSubjectDNAttributeCondition([]string{"2.5.4.4"})
 	none4.AddChild(subject4)
 
-	none10 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	none10 := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	// present in cert (organizationName)
 	subject10 := NewCertSubjectDNAttributeCondition([]string{conditionTestOIDOrganization})
 	none10.AddChild(subject10)
@@ -130,7 +130,7 @@ func TestCertSubjectDNAttributeCondition_OracleDSS1911(t *testing.T) {
 		t.Error("allNones should not match")
 	}
 
-	allTL := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+	allTL := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 	allTL.AddChild(none42)
 	allTL.AddChild(none65)
 	allTL.AddChild(none4)
@@ -146,7 +146,7 @@ func TestCompositeCondition_Oracle(t *testing.T) {
 
 	t.Run("default", func(t *testing.T) {
 		condition := NewCompositeCondition()
-		if got := condition.MatchingCriteriaIndicator(); got != enumerations.Assert_ALL {
+		if got := condition.MatchingCriteriaIndicator(); got != enumerations.AssertAll {
 			t.Errorf("default indicator = %q, want ALL", got)
 		}
 		condition.AddChild(NewCertSubjectDNAttributeCondition([]string{conditionTestOIDCountry}))
@@ -160,7 +160,7 @@ func TestCompositeCondition_Oracle(t *testing.T) {
 	})
 
 	t.Run("all", func(t *testing.T) {
-		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 		condition.AddChild(NewCertSubjectDNAttributeCondition([]string{conditionTestOIDCountry}))
 		if !condition.Check(certificate) {
 			t.Error("should match")
@@ -172,7 +172,7 @@ func TestCompositeCondition_Oracle(t *testing.T) {
 	})
 
 	t.Run("atLeastOne", func(t *testing.T) {
-		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_AT_LEAST_ONE)
+		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAtLeastOne)
 		condition.AddChild(NewCertSubjectDNAttributeCondition([]string{conditionTestOIDCountry}))
 		if !condition.Check(certificate) {
 			t.Error("should match")
@@ -184,7 +184,7 @@ func TestCompositeCondition_Oracle(t *testing.T) {
 	})
 
 	t.Run("none", func(t *testing.T) {
-		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 		condition.AddChild(NewCertSubjectDNAttributeCondition([]string{conditionTestOIDCountry}))
 		if condition.Check(certificate) {
 			t.Error("should not match")
@@ -196,13 +196,13 @@ func TestCompositeCondition_Oracle(t *testing.T) {
 	})
 
 	t.Run("multiComposites", func(t *testing.T) {
-		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+		condition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 		condition.AddChild(NewCertSubjectDNAttributeCondition([]string{conditionTestOIDCountry}))
 
-		subCondition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+		subCondition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 		subCondition.AddChild(NewExtendedKeyUsageCondition([]string{conditionTestOIDOCSPSigning}))
 
-		subSubCondition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+		subSubCondition := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 		subSubCondition.AddChild(NewExtendedKeyUsageCondition([]string{"1.3.1"}))
 
 		subCondition.AddChild(subSubCondition)
@@ -249,7 +249,7 @@ func TestExtendedKeyUsageCondition_Oracle(t *testing.T) {
 func TestKeyUsageCondition_Oracle(t *testing.T) {
 	certificate := conditionTestCertificate(t, estonianESTEIDCertificate)
 
-	condition := NewKeyUsageCondition(enumerations.KeyUsageBit_DIGITAL_SIGNATURE, true)
+	condition := NewKeyUsageCondition(enumerations.KeyUsageBitDigitalSignature, true)
 	if condition.Check(certificate) {
 		t.Error("KeyUsage(DIGITAL_SIGNATURE=true) should not match")
 	}
@@ -257,7 +257,7 @@ func TestKeyUsageCondition_Oracle(t *testing.T) {
 		t.Errorf("String() = %q, want %q", got, want)
 	}
 
-	condition2 := NewKeyUsageCondition(enumerations.KeyUsageBit_NON_REPUDIATION, true)
+	condition2 := NewKeyUsageCondition(enumerations.KeyUsageBitNonRepudiation, true)
 	if !condition2.Check(certificate) {
 		t.Error("KeyUsage(NON_REPUDIATION=true) should match")
 	}
@@ -352,14 +352,14 @@ func TestConditionEquality(t *testing.T) {
 		t.Error("a null OID list must not equal an empty one")
 	}
 
-	left := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	left := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	left.AddChild(NewPolicyIdCondition("1.2.3"))
-	right := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_NONE)
+	right := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertNone)
 	right.AddChild(NewPolicyIdCondition("1.2.3"))
 	if !left.Equals(right) {
 		t.Error("composites with equal children should compare equal (by value, not by reference)")
 	}
-	other := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.Assert_ALL)
+	other := NewCompositeConditionWithMatchingCriteriaIndicator(enumerations.AssertAll)
 	other.AddChild(NewPolicyIdCondition("1.2.3"))
 	if left.Equals(other) {
 		t.Error("composites with different indicators should not compare equal")

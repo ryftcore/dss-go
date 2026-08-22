@@ -29,7 +29,7 @@ func (q *qscdByCertificatePreEIDAS) QSCDStatus() enumerations.QSCDStatus {
 	qcStatementSupportedByQSCD := q.certificate.IsSupportedByQSCD()
 
 	if policyIdSupportedByQSCD || qcStatementSupportedByQSCD {
-		return enumerations.QSCDStatus_QSCD
+		return enumerations.QSCDStatusQSCD
 	}
-	return enumerations.QSCDStatus_NOT_QSCD
+	return enumerations.QSCDStatusNotQSCD
 }

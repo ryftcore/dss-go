@@ -27,21 +27,21 @@ type ObjectModification struct {
 // Port of the static #create.
 func NewObjectModificationCreate(objectTree *PdfObjectTree, finalObject PdfObject) ObjectModification {
 	return ObjectModification{objectTree: objectTree, finalObject: finalObject,
-		objectModificationType: enumerations.PdfObjectModificationType_CREATION}
+		objectModificationType: enumerations.PdfObjectModificationTypeCreation}
 }
 
 // NewObjectModificationDelete creates an ObjectModification for an object removal change.
 // Port of the static #delete.
 func NewObjectModificationDelete(objectTree *PdfObjectTree, originalObject PdfObject) ObjectModification {
 	return ObjectModification{objectTree: objectTree, originalObject: originalObject,
-		objectModificationType: enumerations.PdfObjectModificationType_DELETION}
+		objectModificationType: enumerations.PdfObjectModificationTypeDeletion}
 }
 
 // NewObjectModificationModify creates an ObjectModification for an object modification change.
 // Port of the static #modify.
 func NewObjectModificationModify(objectTree *PdfObjectTree, originalObject, finalObject PdfObject) ObjectModification {
 	return ObjectModification{objectTree: objectTree, originalObject: originalObject, finalObject: finalObject,
-		objectModificationType: enumerations.PdfObjectModificationType_MODIFICATION}
+		objectModificationType: enumerations.PdfObjectModificationTypeModification}
 }
 
 // ObjectTree returns the object tree. Port of #getObjectTree.

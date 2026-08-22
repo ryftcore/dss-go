@@ -19,6 +19,6 @@ func TestSignatureIntactCheckAgainstJavaOracle(t *testing.T) {
 	assertDirectRow(t, "signature-intact-certificate-context",
 		func(result *process.Result[*jaxb.XmlCV], rule policy.LevelRule) process.ChainItem[*jaxb.XmlCV] {
 			return NewSignatureIntactCheck(i18nProviderForTests, result, signature,
-				enumerations.Context_CERTIFICATE, rule)
+				enumerations.ContextCertificate, rule)
 		})
 }

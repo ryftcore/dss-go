@@ -77,7 +77,7 @@ func (e *XAdESDocumentExtender) IsSupportedService(service any) bool {
 
 // SignatureForm ports the overridden getSignatureForm().
 func (e *XAdESDocumentExtender) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_XAdES
+	return enumerations.SignatureFormXAdES
 }
 
 // compile-time assertion that the extender satisfies the abstract base's contract.

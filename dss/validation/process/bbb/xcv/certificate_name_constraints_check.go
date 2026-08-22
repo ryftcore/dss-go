@@ -97,7 +97,7 @@ func (c *CertificateNameConstraintsCheck) Process() bool {
 			}
 
 			if permittedSubtrees != nil {
-				dnGeneralNames := permittedSubtrees[enumerations.GeneralNameType_DIRECTORY_NAME]
+				dnGeneralNames := permittedSubtrees[enumerations.GeneralNameTypeDirectoryName]
 				if dnGeneralNames != nil && !isWithinDNSubtrees(certDN, dnGeneralNames) {
 					return false
 				}
@@ -118,7 +118,7 @@ func (c *CertificateNameConstraintsCheck) Process() bool {
 			 * within any of the excluded_subtrees for that name type.
 			 */
 			if excludedSubtrees != nil {
-				dnGeneralNames := excludedSubtrees[enumerations.GeneralNameType_DIRECTORY_NAME]
+				dnGeneralNames := excludedSubtrees[enumerations.GeneralNameTypeDirectoryName]
 				if dnGeneralNames != nil && isWithinDNSubtrees(certDN, dnGeneralNames) {
 					return false
 				}
@@ -185,7 +185,7 @@ func (c *CertificateNameConstraintsCheck) Process() bool {
 // containsRFC822SubjectAlternativeName(List).
 func containsRFC822SubjectAlternativeName(subAltNames []*diagjaxb.XmlGeneralName) bool {
 	for _, n := range subAltNames {
-		if generalNameTypeOf(n) == enumerations.GeneralNameType_RFC822_NAME {
+		if generalNameTypeOf(n) == enumerations.GeneralNameTypeRFC822Name {
 			return true
 		}
 	}
@@ -199,7 +199,7 @@ func emailAddressDNIfPresent(certDN string) []*diagjaxb.XmlGeneralName {
 
 	var result []*diagjaxb.XmlGeneralName
 	for emailAddress := range emailAddressValues {
-		generalNameType := diagjaxb.GeneralNameTypeValue(enumerations.GeneralNameType_RFC822_NAME)
+		generalNameType := diagjaxb.GeneralNameTypeValue(enumerations.GeneralNameTypeRFC822Name)
 		result = append(result, &diagjaxb.XmlGeneralName{
 			XmlGeneralNameContent: diagjaxb.XmlGeneralNameContent{Value: emailAddress},
 			XmlGeneralNameAttrs:   diagjaxb.XmlGeneralNameAttrs{Type: &generalNameType},
@@ -382,11 +382,11 @@ func unionNameConstraints(originalConstraints, currentConstraints map[enumeratio
 // deterministic order (PORTING.md: no map ranging into output).
 func generalNameTypesOf(m map[enumerations.GeneralNameType][]*diagjaxb.XmlGeneralName) []enumerations.GeneralNameType {
 	order := []enumerations.GeneralNameType{
-		enumerations.GeneralNameType_OTHER_NAME, enumerations.GeneralNameType_RFC822_NAME,
-		enumerations.GeneralNameType_DNS_NAME, enumerations.GeneralNameType_X400_ADDRESS,
-		enumerations.GeneralNameType_DIRECTORY_NAME, enumerations.GeneralNameType_EDI_PARTY_NAME,
-		enumerations.GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER, enumerations.GeneralNameType_IP_ADDRESS,
-		enumerations.GeneralNameType_REGISTERED_ID,
+		enumerations.GeneralNameTypeOtherName, enumerations.GeneralNameTypeRFC822Name,
+		enumerations.GeneralNameTypeDNSName, enumerations.GeneralNameTypeX400Address,
+		enumerations.GeneralNameTypeDirectoryName, enumerations.GeneralNameTypeEDIPartyName,
+		enumerations.GeneralNameTypeUniformResourceIdentifier, enumerations.GeneralNameTypeIPAddress,
+		enumerations.GeneralNameTypeRegisteredID,
 	}
 	var types []enumerations.GeneralNameType
 	for _, t := range order {
@@ -403,24 +403,24 @@ func isWithinSubtree(generalName, subtreeGeneralName *diagjaxb.XmlGeneralName) b
 		return false
 	}
 	generalNameType := generalNameTypeOf(generalName)
-	if generalNameType != enumerations.GeneralNameType_IP_ADDRESS &&
+	if generalNameType != enumerations.GeneralNameTypeIPAddress &&
 		len(subtreeGeneralName.Value) > len(generalName.Value) {
 		return false
 	}
 
 	switch generalNameType {
-	case enumerations.GeneralNameType_UNIFORM_RESOURCE_IDENTIFIER:
+	case enumerations.GeneralNameTypeUniformResourceIdentifier:
 		return isWithinURISubtree(generalName.Value, subtreeGeneralName.Value)
-	case enumerations.GeneralNameType_RFC822_NAME:
+	case enumerations.GeneralNameTypeRFC822Name:
 		return isWithinEmailSubtree(generalName.Value, subtreeGeneralName.Value)
-	case enumerations.GeneralNameType_DNS_NAME:
+	case enumerations.GeneralNameTypeDNSName:
 		return isWithinDNSSubtree(generalName.Value, subtreeGeneralName.Value)
-	case enumerations.GeneralNameType_DIRECTORY_NAME:
+	case enumerations.GeneralNameTypeDirectoryName:
 		return isWithinDNSubtree(generalName.Value, subtreeGeneralName.Value)
-	case enumerations.GeneralNameType_IP_ADDRESS:
+	case enumerations.GeneralNameTypeIPAddress:
 		return isWithinIPAddressSubtree(generalName.Value, subtreeGeneralName.Value)
-	case enumerations.GeneralNameType_OTHER_NAME, enumerations.GeneralNameType_X400_ADDRESS,
-		enumerations.GeneralNameType_EDI_PARTY_NAME, enumerations.GeneralNameType_REGISTERED_ID:
+	case enumerations.GeneralNameTypeOtherName, enumerations.GeneralNameTypeX400Address,
+		enumerations.GeneralNameTypeEDIPartyName, enumerations.GeneralNameTypeRegisteredID:
 		// The NameConstraint of this type is not supported. Full comparison is executed.
 		return isWithinOtherNameSubtree(generalName.Value, subtreeGeneralName.Value)
 	}
@@ -592,22 +592,22 @@ func generalSubtreeTypeOf(generalSubtree *diagjaxb.XmlGeneralSubtree) enumeratio
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateNameConstraintsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCSBSINC
+	return i18n.MessageTagBBBXCVDCSBSINC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateNameConstraintsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCSBSINC_ANS
+	return i18n.MessageTagBBBXCVDCSBSINCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateNameConstraintsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateNameConstraintsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

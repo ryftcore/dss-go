@@ -8,12 +8,12 @@ func TestCommitmentTypeEnumFields(t *testing.T) {
 		uri string
 		oid string
 	}{
-		{CommitmentTypeEnum_ProofOfOrigin, "http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin", "1.2.840.113549.1.9.16.6.1"},
-		{CommitmentTypeEnum_ProofOfReceipt, "http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt", "1.2.840.113549.1.9.16.6.2"},
-		{CommitmentTypeEnum_ProofOfDelivery, "http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery", "1.2.840.113549.1.9.16.6.3"},
-		{CommitmentTypeEnum_ProofOfSender, "http://uri.etsi.org/01903/v1.2.2#ProofOfSender", "1.2.840.113549.1.9.16.6.4"},
-		{CommitmentTypeEnum_ProofOfApproval, "http://uri.etsi.org/01903/v1.2.2#ProofOfApproval", "1.2.840.113549.1.9.16.6.5"},
-		{CommitmentTypeEnum_ProofOfCreation, "http://uri.etsi.org/01903/v1.2.2#ProofOfCreation", "1.2.840.113549.1.9.16.6.6"},
+		{CommitmentTypeEnumProofOfOrigin, "http://uri.etsi.org/01903/v1.2.2#ProofOfOrigin", "1.2.840.113549.1.9.16.6.1"},
+		{CommitmentTypeEnumProofOfReceipt, "http://uri.etsi.org/01903/v1.2.2#ProofOfReceipt", "1.2.840.113549.1.9.16.6.2"},
+		{CommitmentTypeEnumProofOfDelivery, "http://uri.etsi.org/01903/v1.2.2#ProofOfDelivery", "1.2.840.113549.1.9.16.6.3"},
+		{CommitmentTypeEnumProofOfSender, "http://uri.etsi.org/01903/v1.2.2#ProofOfSender", "1.2.840.113549.1.9.16.6.4"},
+		{CommitmentTypeEnumProofOfApproval, "http://uri.etsi.org/01903/v1.2.2#ProofOfApproval", "1.2.840.113549.1.9.16.6.5"},
+		{CommitmentTypeEnumProofOfCreation, "http://uri.etsi.org/01903/v1.2.2#ProofOfCreation", "1.2.840.113549.1.9.16.6.6"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.URI(); got != tt.uri {
@@ -53,4 +53,4 @@ func TestCommitmentTypeEnumValueOfUnknown(t *testing.T) {
 }
 
 // Compile-time assertion that CommitmentTypeEnum implements CommitmentType.
-var _ CommitmentType = CommitmentTypeEnum_ProofOfOrigin
+var _ CommitmentType = CommitmentTypeEnumProofOfOrigin

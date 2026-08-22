@@ -10,26 +10,26 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 // query string is reproduced in the comment above it - see trusted_list_path_test.go.
 var (
 	// ADDITIONAL_SERVICE_INFORMATION_PATH = "./tl:AdditionalServiceInformation"
-	TrustedListPath_ADDITIONAL_SERVICE_INFORMATION_PATH = common.FromCurrentPosition(TrustedListElement_ADDITIONAL_SERVICE_INFORMATION)
+	TrustedListPathAdditionalServiceInformationPath = common.FromCurrentPosition(TrustedListElementAdditionalServiceInformation)
 
 	// NEXT_UPDATE_PATH = "./tl:SchemeInformation/tl:NextUpdate"
-	TrustedListPath_NEXT_UPDATE_PATH = common.FromCurrentPosition(TrustedListElement_SCHEME_INFORMATION, TrustedListElement_NEXT_UPDATE)
+	TrustedListPathNextUpdatePath = common.FromCurrentPosition(TrustedListElementSchemeInformation, TrustedListElementNextUpdate)
 
 	// OTHER_TSL_POINTER_PATH = "./tl:SchemeInformation/tl:PointersToOtherTSL/tl:OtherTSLPointer"
-	TrustedListPath_OTHER_TSL_POINTER_PATH = common.FromCurrentPosition(TrustedListElement_SCHEME_INFORMATION,
-		TrustedListElement_POINTERS_TO_OTHER_TSL, TrustedListElement_OTHER_TSL_POINTER)
+	TrustedListPathOtherTSLPointerPath = common.FromCurrentPosition(TrustedListElementSchemeInformation,
+		TrustedListElementPointersToOtherTSL, TrustedListElementOtherTSLPointer)
 
 	// SERVICE_DIGITAL_IDENTITY_PATH = "./tl:ServiceDigitalIdentity"
-	TrustedListPath_SERVICE_DIGITAL_IDENTITY_PATH = common.FromCurrentPosition(TrustedListElement_SERVICE_DIGITAL_IDENTITY)
+	TrustedListPathServiceDigitalIdentityPath = common.FromCurrentPosition(TrustedListElementServiceDigitalIdentity)
 
 	// TSL_VERSION_IDENTIFIER_PATH = "./tl:SchemeInformation/tl:TSLVersionIdentifier"
-	TrustedListPath_TSL_VERSION_IDENTIFIER_PATH = common.FromCurrentPosition(TrustedListElement_SCHEME_INFORMATION, TrustedListElement_TSL_VERSION_IDENTIFIER)
+	TrustedListPathTSLVersionIdentifierPath = common.FromCurrentPosition(TrustedListElementSchemeInformation, TrustedListElementTSLVersionIdentifier)
 
 	// X509_CERTIFICATE_PATH = "./tl:ServiceDigitalIdentities/tl:ServiceDigitalIdentity/tl:DigitalId/tl:X509Certificate"
-	TrustedListPath_X509_CERTIFICATE_PATH = common.FromCurrentPosition(TrustedListElement_SERVICE_DIGITAL_IDENTITIES,
-		TrustedListElement_SERVICE_DIGITAL_IDENTITY, TrustedListElement_DIGITAL_ID, TrustedListElement_X509_CERTIFICATE)
+	TrustedListPathX509CertificatePath = common.FromCurrentPosition(TrustedListElementServiceDigitalIdentities,
+		TrustedListElementServiceDigitalIdentity, TrustedListElementDigitalID, TrustedListElementX509Certificate)
 
 	// TSP_SERVICE_INFORMATION_PATH = "./tl:TrustServiceProviderList/tl:TrustServiceProvider/tl:TSPServices/tl:TSPService/tl:ServiceInformation"
-	TrustedListPath_TSP_SERVICE_INFORMATION_PATH = common.FromCurrentPosition(TrustedListElement_TRUST_SERVICE_PROVIDER_LIST,
-		TrustedListElement_TRUST_SERVICE_PROVIDER, TrustedListElement_TSP_SERVICES, TrustedListElement_TSP_SERVICE, TrustedListElement_SERVICE_INFORMATION)
+	TrustedListPathTSPServiceInformationPath = common.FromCurrentPosition(TrustedListElementTrustServiceProviderList,
+		TrustedListElementTrustServiceProvider, TrustedListElementTSPServices, TrustedListElementTSPService, TrustedListElementServiceInformation)
 )

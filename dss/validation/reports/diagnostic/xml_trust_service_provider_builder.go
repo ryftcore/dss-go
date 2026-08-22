@@ -384,7 +384,7 @@ func (b *XmlTrustServiceProviderBuilder) checkCertTypeAsiEquivalence(certToken *
 			}
 		} else if qcCompliance {
 			// qcCompliance + no type -> foreSign
-			if b.isQcTypeMatch(enumerations.QCTypeEnum_QCT_ESIGN, serviceTypeASi) {
+			if b.isQcTypeMatch(enumerations.QCTypeEnumQCTESign, serviceTypeASi) {
 				return true
 			}
 		} else {
@@ -398,11 +398,11 @@ func (b *XmlTrustServiceProviderBuilder) checkCertTypeAsiEquivalence(certToken *
 func (b *XmlTrustServiceProviderBuilder) isQcTypeMatch(qcType enumerations.QCType, serviceTypeASi tsl.ServiceTypeASi) bool {
 	asi := serviceTypeASi.Asi()
 	switch qcType.OID() {
-	case enumerations.QCTypeEnum_QCT_ESIGN.OID():
+	case enumerations.QCTypeEnumQCTESign.OID():
 		return enumerations.AdditionalServiceInformationIsForeSignatures(asi)
-	case enumerations.QCTypeEnum_QCT_ESEAL.OID():
+	case enumerations.QCTypeEnumQCTESeal.OID():
 		return enumerations.AdditionalServiceInformationIsForeSeals(asi)
-	case enumerations.QCTypeEnum_QCT_WEB.OID():
+	case enumerations.QCTypeEnumQCTWeb.OID():
 		return enumerations.AdditionalServiceInformationIsForWebAuth(asi)
 	}
 	return false
@@ -625,13 +625,13 @@ func (b *XmlTrustServiceProviderBuilder) applyCertContentEquivalence(certToken *
 
 				contentReplacement := certificateContentEquivalence.ContentReplacement()
 				switch equivalenceContext {
-				case enumerations.MRAEquivalenceContext_QC_COMPLIANCE:
+				case enumerations.MRAEquivalenceContextQCCompliance:
 					b.replaceCompliance(qcStatements, contentReplacement)
 					xmlCertificateContentEquivalence.Enacted = true
-				case enumerations.MRAEquivalenceContext_QC_TYPE:
+				case enumerations.MRAEquivalenceContextQCType:
 					b.replaceType(qcStatements, contentReplacement)
 					xmlCertificateContentEquivalence.Enacted = true
-				case enumerations.MRAEquivalenceContext_QC_QSCD:
+				case enumerations.MRAEquivalenceContextQCQSCD:
 					b.replaceQSCD(qcStatements, contentReplacement)
 					xmlCertificateContentEquivalence.Enacted = true
 				default:
@@ -659,7 +659,7 @@ func (b *XmlTrustServiceProviderBuilder) assertCertificateContentEquivalenceList
 func (b *XmlTrustServiceProviderBuilder) getQcStatements(xmlCertificate *jaxb.XmlCertificate) *jaxb.XmlQcStatements {
 	for _, certificateExtension := range xmlCertificate.CertificateExtensions.All() {
 		if qc, ok := certificateExtension.(*jaxb.XmlQcStatements); ok && qc.ExtensionOID() != nil &&
-			enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID() == *qc.ExtensionOID() {
+			enumerations.CertificateExtensionEnumQCStatements.OID() == *qc.ExtensionOID() {
 			return b.qcStatementsBuilder.Copy(qc)
 		}
 	}
@@ -674,7 +674,7 @@ func (b *XmlTrustServiceProviderBuilder) setQcStatements(xmlCertificate *jaxb.Xm
 	filtered := make([]jaxb.XmlCertificateExtensionItem, 0, len(items)+1)
 	for _, certificateExtension := range items {
 		if qc, ok := certificateExtension.(*jaxb.XmlQcStatements); ok && qc.ExtensionOID() != nil &&
-			enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID() == *qc.ExtensionOID() {
+			enumerations.CertificateExtensionEnumQCStatements.OID() == *qc.ExtensionOID() {
 			continue
 		}
 		filtered = append(filtered, certificateExtension)

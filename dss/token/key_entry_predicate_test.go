@@ -29,7 +29,7 @@ type fakePrivateKeyEntry struct {
 func (f *fakePrivateKeyEntry) Certificate() *model.CertificateToken        { return f.certificate }
 func (f *fakePrivateKeyEntry) CertificateChain() []*model.CertificateToken { return nil }
 func (f *fakePrivateKeyEntry) EncryptionAlgorithm() enumerations.EncryptionAlgorithm {
-	return enumerations.EncryptionAlgorithm_RSA
+	return enumerations.EncryptionAlgorithmRSA
 }
 
 func mustLoadCertificateToken(t *testing.T, path string) *model.CertificateToken {
@@ -64,23 +64,23 @@ func TestAllKeyEntryPredicate(t *testing.T) {
 func TestKeyUsageKeyEntryPredicate(t *testing.T) {
 	entry := &fakePrivateKeyEntry{certificate: mustLoadCertificateToken(t, "testdata/generated/eku.crt")}
 
-	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBit_DIGITAL_SIGNATURE); !predicate(entry) {
+	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBitDigitalSignature); !predicate(entry) {
 		t.Error("expected DIGITAL_SIGNATURE to match: the certificate carries it")
 	}
-	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBit_KEY_CERT_SIGN); !predicate(entry) {
+	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBitKeyCertSign); !predicate(entry) {
 		t.Error("expected KEY_CERT_SIGN to match: the certificate carries it")
 	}
-	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBit_CRL_SIGN); predicate(entry) {
+	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBitCRLSign); predicate(entry) {
 		t.Error("expected CRL_SIGN not to match: the certificate does not carry it")
 	}
 	// Matches if ANY of the requested bits is present.
-	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBit_CRL_SIGN, enumerations.KeyUsageBit_KEY_CERT_SIGN); !predicate(entry) {
+	if predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBitCRLSign, enumerations.KeyUsageBitKeyCertSign); !predicate(entry) {
 		t.Error("expected a match: one of the two requested bits is present")
 	}
 }
 
 func TestKeyUsageKeyEntryPredicateNoCertificate(t *testing.T) {
-	predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBit_DIGITAL_SIGNATURE)
+	predicate := NewKeyUsageKeyEntryPredicate(enumerations.KeyUsageBitDigitalSignature)
 	if predicate(&fakePrivateKeyEntry{certificate: nil}) {
 		t.Error("expected false for a nil certificate")
 	}
@@ -99,13 +99,13 @@ func TestKeyUsageKeyEntryPredicatePanicsOnNil(t *testing.T) {
 func TestExtendedKeyUsageKeyEntryPredicate(t *testing.T) {
 	entry := &fakePrivateKeyEntry{certificate: mustLoadCertificateToken(t, "testdata/generated/eku.crt")}
 
-	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsage_CLIENT_AUTH); !predicate(entry) {
+	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsageClientAuth); !predicate(entry) {
 		t.Error("expected CLIENT_AUTH to match: the certificate carries it")
 	}
-	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsage_CODE_SIGNING); !predicate(entry) {
+	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsageCodeSigning); !predicate(entry) {
 		t.Error("expected CODE_SIGNING to match: the certificate carries it")
 	}
-	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsage_SERVER_AUTH); predicate(entry) {
+	if predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsageServerAuth); predicate(entry) {
 		t.Error("expected SERVER_AUTH not to match: the certificate does not carry it")
 	}
 }
@@ -137,7 +137,7 @@ func TestExtendedKeyUsageKeyEntryPredicateNoExtension(t *testing.T) {
 		t.Fatalf("Keys: %v (len=%d)", err, len(keys))
 	}
 
-	predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsage_CLIENT_AUTH)
+	predicate := NewExtendedKeyUsageKeyEntryPredicate(enumerations.ExtendedKeyUsageClientAuth)
 	if predicate(keys[0]) {
 		t.Error("expected no match: the certificate carries no ExtendedKeyUsage extension")
 	}

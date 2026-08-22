@@ -40,22 +40,22 @@ func (c *CertificateIssuedToNaturalPersonCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateIssuedToNaturalPersonCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCIITNP
+	return i18n.MessageTagBBBXCVCMDCIITNP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateIssuedToNaturalPersonCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCIITNP_ANS
+	return i18n.MessageTagBBBXCVCMDCIITNPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateIssuedToNaturalPersonCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateIssuedToNaturalPersonCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

@@ -39,20 +39,20 @@ func NewEAAQualifiedSignatureOrSealCheck(i18nProvider *i18n.I18nProvider, result
 // Process performs the check. Port of process().
 func (c *EAAQualifiedSignatureOrSealCheck) Process() bool {
 	// Indeterminate statuses are handled separately
-	return enumerations.SignatureQualification_QESIG == c.signatureQualification ||
-		enumerations.SignatureQualification_QESEAL == c.signatureQualification ||
-		enumerations.SignatureQualification_INDETERMINATE_QESIG == c.signatureQualification ||
-		enumerations.SignatureQualification_INDETERMINATE_QESEAL == c.signatureQualification
+	return enumerations.SignatureQualificationQESig == c.signatureQualification ||
+		enumerations.SignatureQualificationQESeal == c.signatureQualification ||
+		enumerations.SignatureQualificationIndeterminateQESig == c.signatureQualification ||
+		enumerations.SignatureQualificationIndeterminateQESeal == c.signatureQualification
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAQualifiedSignatureOrSealCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_QUAL
+	return i18n.MessageTagEAASigQual
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *EAAQualifiedSignatureOrSealCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_QUAL_ANS
+	return i18n.MessageTagEAASigQualANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -62,14 +62,14 @@ func (c *EAAQualifiedSignatureOrSealCheck) BuildErrorMessage() *jaxb.XmlMessage 
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *EAAQualifiedSignatureOrSealCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_SIGNATURE_ID, c.signature.Id())
+	message := c.I18nProvider.GetMessage(i18n.MessageTagSignatureID, c.signature.Id())
 	return &message
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAQualifiedSignatureOrSealCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -9,22 +9,22 @@ import "fmt"
 type SignatureValidity string
 
 const (
-	// SignatureValidity_VALID: the signature of the token is valid
+	// SignatureValidityValid: the signature of the token is valid
 	// (signing certificate found successfully).
-	SignatureValidity_VALID SignatureValidity = "VALID"
-	// SignatureValidity_INVALID: the signature of the token is invalid.
-	SignatureValidity_INVALID SignatureValidity = "INVALID"
-	// SignatureValidity_NOT_EVALUATED: the signature of the token is not
+	SignatureValidityValid SignatureValidity = "VALID"
+	// SignatureValidityInvalid: the signature of the token is invalid.
+	SignatureValidityInvalid SignatureValidity = "INVALID"
+	// SignatureValidityNotEvaluated: the signature of the token is not
 	// evaluated yet.
-	SignatureValidity_NOT_EVALUATED SignatureValidity = "NOT_EVALUATED"
+	SignatureValidityNotEvaluated SignatureValidity = "NOT_EVALUATED"
 )
 
 // SignatureValidityValues returns all constants in declaration order.
 func SignatureValidityValues() []SignatureValidity {
 	return []SignatureValidity{
-		SignatureValidity_VALID,
-		SignatureValidity_INVALID,
-		SignatureValidity_NOT_EVALUATED,
+		SignatureValidityValid,
+		SignatureValidityInvalid,
+		SignatureValidityNotEvaluated,
 	}
 }
 
@@ -40,12 +40,12 @@ func SignatureValidityValueOf(name string) (SignatureValidity, error) {
 
 // SignatureValidityGet returns the SignatureValidity type matching the given
 // value. isValid is a pointer to mirror Java's nullable Boolean: a nil
-// pointer maps to SignatureValidity_NOT_EVALUATED.
+// pointer maps to SignatureValidityNotEvaluated.
 func SignatureValidityGet(isValid *bool) SignatureValidity {
 	if isValid == nil {
-		return SignatureValidity_NOT_EVALUATED
+		return SignatureValidityNotEvaluated
 	} else if *isValid {
-		return SignatureValidity_VALID
+		return SignatureValidityValid
 	}
-	return SignatureValidity_INVALID
+	return SignatureValidityInvalid
 }

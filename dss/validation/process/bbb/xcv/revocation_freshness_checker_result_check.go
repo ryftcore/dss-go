@@ -38,7 +38,7 @@ func NewRevocationFreshnessCheckerResultCheck[T any](i18nProvider *i18n.I18nProv
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *RevocationFreshnessCheckerResultCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_RFC
+	return jaxb.XmlBlockTypeRFC
 }
 
 // Process performs the check. Port of process().
@@ -48,12 +48,12 @@ func (c *RevocationFreshnessCheckerResultCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationFreshnessCheckerResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_RFC
+	return i18n.MessageTagBBBXCVRFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RevocationFreshnessCheckerResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_RFC_ANS
+	return i18n.MessageTagBBBXCVRFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -81,7 +81,7 @@ func (c *RevocationFreshnessCheckerResultCheck[T]) PreviousErrors() []*jaxb.XmlM
 // buildAdditionalInfo().
 func (c *RevocationFreshnessCheckerResultCheck[T]) BuildAdditionalInfo() *string {
 	if c.rfcResult.Id != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_TOKEN_ID, *c.rfcResult.Id)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagTokenID, *c.rfcResult.Id)
 		return &message
 	}
 	return nil

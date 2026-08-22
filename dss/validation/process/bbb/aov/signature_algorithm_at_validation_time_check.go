@@ -67,16 +67,16 @@ func (c *SignatureAlgorithmAtValidationTimeCheck) Level() enumerations.Level {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *SignatureAlgorithmAtValidationTimeCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_AR, c.SignatureAlgorithmName(c.signatureAlgorithm))
+	return c.BuildXmlMessage(i18n.MessageTagASCCMAR, c.SignatureAlgorithmName(c.signatureAlgorithm))
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *SignatureAlgorithmAtValidationTimeCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	messageTag := i18n.MessageTag_ASCCM_AR_ANS_AKSNR_2 // other cases
+	messageTag := i18n.MessageTagASCCMARANSAKSNR2 // other cases
 	algoExpirationDate := vpolicy.GetExpirationDateForSignatureAlgorithm(c.cryptographicSuite, c.signatureAlgorithm, c.keyLength)
 	if algoExpirationDate != nil && algoExpirationDate.Before(c.validationDate) {
-		messageTag = i18n.MessageTag_ASCCM_AR_ANS_AKSNR // expired case
+		messageTag = i18n.MessageTagASCCMARANSAKSNR // expired case
 	}
 	return c.BuildXmlMessage(messageTag, c.SignatureAlgorithmName(c.signatureAlgorithm), c.keyLength, c.position)
 }

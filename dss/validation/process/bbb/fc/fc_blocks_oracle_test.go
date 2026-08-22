@@ -237,9 +237,9 @@ func TestFormatCheckingAgainstJavaOracle(t *testing.T) {
 			}
 
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				sig := signature
 				compare(sig.Id(), context, func() *jaxb.XmlFC {
@@ -248,9 +248,9 @@ func TestFormatCheckingAgainstJavaOracle(t *testing.T) {
 			}
 			for _, timestamp := range diagnosticData.TimestampList() {
 				tst := timestamp
-				compare(tst.Id(), enumerations.Context_TIMESTAMP, func() *jaxb.XmlFC {
+				compare(tst.Id(), enumerations.ContextTimestamp, func() *jaxb.XmlFC {
 					return NewTimestampFormatChecking(i18nProvider, diagnosticData, tst,
-						enumerations.Context_TIMESTAMP, validationPolicy).Execute()
+						enumerations.ContextTimestamp, validationPolicy).Execute()
 				})
 			}
 		})

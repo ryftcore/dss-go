@@ -92,7 +92,7 @@ func TestNewContainerEntryDocumentPanicsOnMissingInput(t *testing.T) {
 // own copy of, including its caching.
 func TestContainerEntryDocumentDigest(t *testing.T) {
 	entryDocument := NewContainerEntryDocument(model.NewInMemoryDocumentWithName([]byte("hello"), "a.txt"))
-	first, err := entryDocument.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	first, err := entryDocument.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("digestValue: %v", err)
 	}
@@ -101,7 +101,7 @@ func TestContainerEntryDocumentDigest(t *testing.T) {
 	if got := hexString(first); got != want {
 		t.Fatalf("digest = %s, want %s", got, want)
 	}
-	second, err := entryDocument.Digest(enumerations.DigestAlgorithm_SHA256)
+	second, err := entryDocument.Digest(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("digest: %v", err)
 	}

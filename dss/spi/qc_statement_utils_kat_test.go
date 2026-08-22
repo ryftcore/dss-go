@@ -262,10 +262,10 @@ func TestQcStatementUtilsPresence(t *testing.T) {
 	if QcStatementUtilsIsQcQSCDlegislationPresent(qcStatements, "XX") {
 		t.Errorf("IsQcQSCDlegislationPresent(XX) = true, want false")
 	}
-	if !QcStatementUtilsIsQcStatementPresent(qcStatements, enumerations.QCStatement_QC_QSCD_LEGISLATION.OID()) {
+	if !QcStatementUtilsIsQcStatementPresent(qcStatements, enumerations.QCStatementQCQSCDLegislation.OID()) {
 		t.Errorf("IsQcStatementPresent(QC_QSCD_LEGISLATION) = false, want true")
 	}
-	if !QcStatementUtilsIsQcStatementPresent(qcStatements, enumerations.QCStatement_QC_COMPLIANCE.OID()) {
+	if !QcStatementUtilsIsQcStatementPresent(qcStatements, enumerations.QCStatementQCCompliance.OID()) {
 		t.Errorf("IsQcStatementPresent(QC_COMPLIANCE) = false, want true")
 	}
 	if QcStatementUtilsIsQcStatementPresent(qcStatements, "1.2.3.4.5") {
@@ -273,13 +273,13 @@ func TestQcStatementUtilsPresence(t *testing.T) {
 	}
 
 	qcStatements = QcStatementUtilsQcStatements(withPsd2)
-	if !QcStatementUtilsIsQcStatementPresent(qcStatements, OID_psd2_qcStatement.String()) {
+	if !QcStatementUtilsIsQcStatementPresent(qcStatements, OIDPsd2QcStatement.String()) {
 		t.Errorf("IsQcStatementPresent(psd2) = false, want true")
 	}
-	if !QcStatementUtilsIsQcTypePresent(qcStatements, enumerations.QCTypeEnum_QCT_WEB.OID()) {
+	if !QcStatementUtilsIsQcTypePresent(qcStatements, enumerations.QCTypeEnumQCTWeb.OID()) {
 		t.Errorf("IsQcTypePresent(qc-type-web) = false, want true")
 	}
-	if QcStatementUtilsIsQcTypePresent(qcStatements, enumerations.QCTypeEnum_QCT_ESEAL.OID()) {
+	if QcStatementUtilsIsQcTypePresent(qcStatements, enumerations.QCTypeEnumQCTESeal.OID()) {
 		t.Errorf("IsQcTypePresent(qc-type-eseal) = true, want false")
 	}
 	if QcStatementUtilsIsQcLegislationPresent(qcStatements, "CZ") {
@@ -291,18 +291,18 @@ func TestQcStatementUtilsPresence(t *testing.T) {
 // OIDs included.
 func TestQcStatementUtilsQcTypesForOIDs(t *testing.T) {
 	qcTypes := QcStatementUtilsQcTypesForOIDs([]string{
-		enumerations.QCTypeEnum_QCT_ESIGN.OID(), "", "   ", "1.2.3.4",
+		enumerations.QCTypeEnumQCTESign.OID(), "", "   ", "1.2.3.4",
 	})
 	if len(qcTypes) != 2 {
 		t.Fatalf("QcTypesForOIDs returned %d types, want 2", len(qcTypes))
 	}
-	if got := qcTypes[0].OID(); got != enumerations.QCTypeEnum_QCT_ESIGN.OID() {
-		t.Errorf("qcTypes[0].OID() = %q, want %q", got, enumerations.QCTypeEnum_QCT_ESIGN.OID())
+	if got := qcTypes[0].OID(); got != enumerations.QCTypeEnumQCTESign.OID() {
+		t.Errorf("qcTypes[0].OID() = %q, want %q", got, enumerations.QCTypeEnumQCTESign.OID())
 	}
 	if got := qcTypes[1].OID(); got != "1.2.3.4" {
 		t.Errorf("qcTypes[1].OID() = %q, want %q", got, "1.2.3.4")
 	}
-	if got := qcTypes[1].Description(); got != enumerations.QCType_UNKNOWN_TYPE {
-		t.Errorf("qcTypes[1].Description() = %q, want %q", got, enumerations.QCType_UNKNOWN_TYPE)
+	if got := qcTypes[1].Description(); got != enumerations.QCTypeUnknownType {
+		t.Errorf("qcTypes[1].Description() = %q, want %q", got, enumerations.QCTypeUnknownType)
 	}
 }

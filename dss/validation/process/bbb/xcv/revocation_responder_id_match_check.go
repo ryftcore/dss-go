@@ -36,7 +36,7 @@ func NewRevocationResponderIdMatchCheck(i18nProvider *i18n.I18nProvider, result 
 func (c *RevocationResponderIdMatchCheck) Process() bool {
 	// ResponderId is returned as a SIGNING_CERTIFICATE for OCSP token
 	relatedSigningCertificates := c.revocationData.FoundCertificates().
-		RelatedCertificatesByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+		RelatedCertificatesByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
 	signingCertificate := c.revocationData.SigningCertificate()
 	if utils.CollectionSize(relatedSigningCertificates) == 1 && signingCertificate != nil {
 		return relatedSigningCertificates[0].Id() == signingCertificate.Id()
@@ -46,23 +46,23 @@ func (c *RevocationResponderIdMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationResponderIdMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_RESPID_MATCH
+	return i18n.MessageTagBBBXCVRevocRespIDMatch
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationResponderIdMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_RESPID_MATCH_ANS
+	return i18n.MessageTagBBBXCVRevocRespIDMatchANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *RevocationResponderIdMatchCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *RevocationResponderIdMatchCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

@@ -38,23 +38,23 @@ func (c *EAAIssuingCountryCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAIssuingCountryCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_COUN
+	return i18n.MessageTagEAAISSCOUN
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAIssuingCountryCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_COUN_ANS
+	return i18n.MessageTagEAAISSCOUNANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAIssuingCountryCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAIssuingCountryCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

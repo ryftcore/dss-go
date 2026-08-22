@@ -219,14 +219,14 @@ func newLongTermAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.I18nPr
 // FailedIndicationForConclusion gets an Indication in case of failure. Port
 // of the overridden getFailedIndicationForConclusion().
 func (c *longTermAcceptableRevocationDataAvailableCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of the overridden getFailedSubIndicationForConclusion().
 func (c *longTermAcceptableRevocationDataAvailableCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
 	if c.selector.isTryLater() {
-		return enumerations.SubIndication_TRY_LATER
+		return enumerations.SubIndicationTryLater
 	}
 	return c.AcceptableRevocationDataAvailableCheck.FailedSubIndicationForConclusion()
 }
@@ -242,8 +242,8 @@ func (c *LongTermValidationCertificateRevocationSelector) isTryLater() bool {
 		if conclusion.SubIndication != nil {
 			subIndication = conclusion.SubIndication.SubIndication()
 		}
-		if enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-			enumerations.SubIndication_TRY_LATER == subIndication {
+		if enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+			enumerations.SubIndicationTryLater == subIndication {
 			return true
 		}
 	}
@@ -254,10 +254,10 @@ func (c *LongTermValidationCertificateRevocationSelector) isTryLater() bool {
 // given conclusion. Port of the overridden
 // collectMessages(XmlConclusion, XmlConstraint).
 func (c *LongTermValidationCertificateRevocationSelector) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType != nil && jaxb.XmlBlockType_REV_BBB == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeRevBBB == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
 		c.collectMessagesForBBB(conclusion, constraint)
 	}
-	if constraint.BlockType != nil && jaxb.XmlBlockType_RAC == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeRAC == *constraint.BlockType && !c.IsValid(&c.Result.Value.XmlConstraintsConclusionContent) {
 		if constraint.Id != nil {
 			xmlRAC := c.getRevocationAcceptanceValidationResultById(*constraint.Id)
 			if xmlRAC != nil {

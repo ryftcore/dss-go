@@ -34,7 +34,7 @@ func NewManifestEntryExistenceCheck(i18nProvider *i18n.I18nProvider, result *pro
 // Process performs the check. Port of process().
 func (c *ManifestEntryExistenceCheck) Process() bool {
 	for _, xmlDigestMatcher := range c.digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(xmlDigestMatcher) &&
+		if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(xmlDigestMatcher) &&
 			xmlDigestMatcher.DataFound {
 			return true
 		}
@@ -44,7 +44,7 @@ func (c *ManifestEntryExistenceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ManifestEntryExistenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ISMEC
+	return i18n.MessageTagBBBCVISMEC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
@@ -52,14 +52,14 @@ func (c *ManifestEntryExistenceCheck) MessageTag() i18n.MessageTag {
 func (c *ManifestEntryExistenceCheck) ErrorMessageTag() i18n.MessageTag {
 	var manifestEntries []*diagnosticjaxb.XmlDigestMatcher
 	for _, d := range c.digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(d) {
+		if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(d) {
 			manifestEntries = append(manifestEntries, d)
 		}
 	}
 	if utils.IsCollectionNotEmpty(manifestEntries) && noneDataFound(manifestEntries) {
-		return i18n.MessageTag_BBB_CV_ISMEC_ANS_2
+		return i18n.MessageTagBBBCVISMECANS2
 	}
-	return i18n.MessageTag_BBB_CV_ISMEC_ANS
+	return i18n.MessageTagBBBCVISMECANS
 }
 
 // noneDataFound ports Stream#noneMatch(XmlDigestMatcher::isDataFound).
@@ -75,11 +75,11 @@ func noneDataFound(digestMatchers []*diagnosticjaxb.XmlDigestMatcher) bool {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ManifestEntryExistenceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ManifestEntryExistenceCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }

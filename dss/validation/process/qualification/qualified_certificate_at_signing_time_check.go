@@ -40,18 +40,18 @@ func (c *QualifiedCertificateAtSigningTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QualifiedCertificateAtSigningTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_QC_AT_ST
+	return i18n.MessageTagQualQCAtST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QualifiedCertificateAtSigningTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_QC_AT_ST_ANS
+	return i18n.MessageTagQualQCAtSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QualifiedCertificateAtSigningTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

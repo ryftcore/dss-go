@@ -54,7 +54,7 @@ func (c *ContentTypeCheck) getContentType() []string {
 	if err != nil {
 		panic(err)
 	}
-	if enumerations.SignatureForm_JAdES == signatureForm && c.signature.MimeType() != "" {
+	if enumerations.SignatureFormJAdES == signatureForm && c.signature.MimeType() != "" {
 		contentTypes = append(contentTypes, c.getRFC7515ContentType(c.signature.MimeType()))
 	}
 	return contentTypes
@@ -82,23 +82,23 @@ func (c *ContentTypeCheck) getRFC7515ContentType(mimeType string) string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ContentTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCTP
+	return i18n.MessageTagBBBSAVISQPCTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ContentTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCTP_ANS
+	return i18n.MessageTagBBBSAVISQPCTPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ContentTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ContentTypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

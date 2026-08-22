@@ -35,6 +35,6 @@ func NewSignatureIntactWithIdCheck[T any](i18nProvider *i18n.I18nProvider, resul
 // BuildAdditionalInfo builds an additional information. Port of the overridden
 // buildAdditionalInfo().
 func (c *SignatureIntactWithIdCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TOKEN_ID, c.Token.Id())
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTokenID, c.Token.Id())
 	return &message
 }

@@ -53,7 +53,7 @@ func TestXmlDefinerUtils_Singleton(t *testing.T) {
 }
 
 func TestXPathQueryBuilderFromXPathQuery_RoundTrips(t *testing.T) {
-	original := FromCurrentPositionAttribute(XMLDSigElement_SIGNATURE, XMLDSigAttribute_ID)
+	original := FromCurrentPositionAttribute(XMLDSigElementSignature, XMLDSigAttributeID)
 	rebuilt := XPathQueryBuilderFromXPathQuery(original).Build()
 	if got, want := rebuilt.QueryString(), original.QueryString(); got != want {
 		t.Errorf("rebuilt QueryString() = %q, want %q", got, want)

@@ -80,9 +80,9 @@ func keyEntityTSPSourceTestCertificates(t *testing.T, names ...string) []*x509.C
 // requires the bytes to be identical to the ones BouncyCastle produced.
 func TestKeyEntityTSPSourceKAT_MatchesBouncyCastle(t *testing.T) {
 	source := keyEntityTSPSourceTestSource(t, keyEntityTSPSourceTestCertificates(t, "tsa.crt"),
-		enumerations.DigestAlgorithm_SHA256)
+		enumerations.DigestAlgorithmSHA256)
 
-	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithm_SHA512,
+	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithmSHA512,
 		sha512Sum(timestampTokenKATFile(t, "content.bin")))
 	if err != nil {
 		t.Fatalf("TimeStampResponse() failed: %v", err)
@@ -101,9 +101,9 @@ func TestKeyEntityTSPSourceKAT_MatchesBouncyCastle(t *testing.T) {
 func TestKeyEntityTSPSourceKAT_TwoCertificateChain(t *testing.T) {
 	oracle := timestampTokenKATOracle(t)
 	source := keyEntityTSPSourceTestSource(t, keyEntityTSPSourceTestCertificates(t, "tsa.crt", "ca.crt"),
-		enumerations.DigestAlgorithm_SHA512)
+		enumerations.DigestAlgorithmSHA512)
 
-	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithm_SHA256,
+	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithmSHA256,
 		sha256Sum(timestampTokenKATFile(t, "content.bin")))
 	if err != nil {
 		t.Fatalf("TimeStampResponse() failed: %v", err)
@@ -145,14 +145,14 @@ func TestKeyEntityTSPSourceKAT_TwoCertificateChain(t *testing.T) {
 // has to parse, to match the data it was issued over and to verify against the TSA certificate.
 func TestKeyEntityTSPSourceIssuedTokenValidates(t *testing.T) {
 	certificates := keyEntityTSPSourceTestCertificates(t, "tsa.crt", "ca.crt")
-	source := keyEntityTSPSourceTestSource(t, certificates, enumerations.DigestAlgorithm_SHA256)
+	source := keyEntityTSPSourceTestSource(t, certificates, enumerations.DigestAlgorithmSHA256)
 	digest := sha256Sum(timestampTokenKATFile(t, "content.bin"))
 
-	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, digest)
+	binary, err := source.TimeStampResponse(enumerations.DigestAlgorithmSHA256, digest)
 	if err != nil {
 		t.Fatalf("TimeStampResponse() failed: %v", err)
 	}
-	token, err := NewTimestampToken(binary.Bytes(), enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token, err := NewTimestampToken(binary.Bytes(), enumerations.TimestampTypeSignatureTimestamp)
 	if err != nil {
 		t.Fatalf("the issued token is not a TimestampToken: %v", err)
 	}
@@ -172,7 +172,7 @@ func TestKeyEntityTSPSourceIssuedTokenValidates(t *testing.T) {
 	if got := token.GenerationTime().UnixMilli(); got != 1609556645000 {
 		t.Errorf("GenerationTime() = %d, want the pinned production time", got)
 	}
-	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithm_RSA_SHA256 {
+	if got := token.SignatureAlgorithm(); got != enumerations.SignatureAlgorithmRSASHA256 {
 		t.Errorf("SignatureAlgorithm() = %s, want RSA_SHA256", got)
 	}
 }
@@ -181,17 +181,17 @@ func TestKeyEntityTSPSourceIssuedTokenValidates(t *testing.T) {
 // the default set upstream ships with.
 func TestKeyEntityTSPSourceRejectsUnacceptedAlgorithm(t *testing.T) {
 	source := keyEntityTSPSourceTestSource(t, keyEntityTSPSourceTestCertificates(t, "tsa.crt"),
-		enumerations.DigestAlgorithm_SHA256)
+		enumerations.DigestAlgorithmSHA256)
 
-	if _, err := source.TimeStampResponse(enumerations.DigestAlgorithm_SHA1, make([]byte, 20)); err == nil {
+	if _, err := source.TimeStampResponse(enumerations.DigestAlgorithmSHA1, make([]byte, 20)); err == nil {
 		t.Error("TimeStampResponse(SHA1) succeeded, want the unsupported-algorithm error")
 	} else if got, want := err.Error(),
 		"DigestAlgorithm 'SHA1' is not supported by the KeyEntityTSPSource implementation!"; got != want {
 		t.Errorf("error = %q, want %q", got, want)
 	}
 
-	source.SetAcceptedDigestAlgorithms([]enumerations.DigestAlgorithm{enumerations.DigestAlgorithm_SHA1})
-	if _, err := source.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, make([]byte, 32)); err == nil {
+	source.SetAcceptedDigestAlgorithms([]enumerations.DigestAlgorithm{enumerations.DigestAlgorithmSHA1})
+	if _, err := source.TimeStampResponse(enumerations.DigestAlgorithmSHA256, make([]byte, 32)); err == nil {
 		t.Error("TimeStampResponse(SHA256) succeeded after narrowing the accepted set, want an error")
 	}
 }
@@ -220,14 +220,14 @@ func TestKeyEntityTSPSourceMissingProperties(t *testing.T) {
 	}
 	for name, testCase := range cases {
 		t.Run(name, func(t *testing.T) {
-			source := keyEntityTSPSourceTestSource(t, certificates, enumerations.DigestAlgorithm_SHA256)
+			source := keyEntityTSPSourceTestSource(t, certificates, enumerations.DigestAlgorithmSHA256)
 			testCase.configure(source)
 			defer func() {
 				if recovered := recover(); recovered != testCase.message {
 					t.Errorf("recover() = %v, want %q", recovered, testCase.message)
 				}
 			}()
-			_, _ = source.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, make([]byte, 32))
+			_, _ = source.TimeStampResponse(enumerations.DigestAlgorithmSHA256, make([]byte, 32))
 			t.Error("TimeStampResponse() returned, want a panic")
 		})
 	}
@@ -237,17 +237,17 @@ func TestKeyEntityTSPSourceMissingProperties(t *testing.T) {
 // getSignatureAlgorithm().
 func TestKeyEntityTSPSourceSignatureAlgorithm(t *testing.T) {
 	source := keyEntityTSPSourceTestSource(t, keyEntityTSPSourceTestCertificates(t, "tsa.crt"),
-		enumerations.DigestAlgorithm_SHA384)
+		enumerations.DigestAlgorithmSHA384)
 
 	algorithm, err := source.SignatureAlgorithm()
 	if err != nil {
 		t.Fatalf("SignatureAlgorithm() failed: %v", err)
 	}
-	if algorithm != enumerations.SignatureAlgorithm_RSA_SHA384 {
+	if algorithm != enumerations.SignatureAlgorithmRSASHA384 {
 		t.Errorf("SignatureAlgorithm() = %s, want RSA_SHA384", algorithm)
 	}
 
-	source.SetEncryptionAlgorithm(enumerations.EncryptionAlgorithm_ECDSA)
+	source.SetEncryptionAlgorithm(enumerations.EncryptionAlgorithmECDSA)
 	if _, err := source.SignatureAlgorithm(); err == nil {
 		t.Error("SignatureAlgorithm() accepted ECDSA for an RSA key, want an error")
 	}

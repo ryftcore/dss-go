@@ -29,8 +29,8 @@ func NewCAdESV3HashIndexCheck(i18nProvider *i18n.I18nProvider, result *process.R
 
 // Process performs the check.
 func (c *CAdESV3HashIndexCheck) Process() bool {
-	if c.timestamp.Type() == enumerations.TimestampType_ARCHIVE_TIMESTAMP &&
-		c.timestamp.ArchiveTimestampType() == enumerations.ArchiveTimestampType_CAdES_V3 {
+	if c.timestamp.Type() == enumerations.TimestampTypeArchiveTimestamp &&
+		c.timestamp.ArchiveTimestampType() == enumerations.ArchiveTimestampTypeCAdESV3 {
 		return c.timestamp.IsAtsHashIndexValid()
 	}
 	// accept for other timestamp types
@@ -38,19 +38,19 @@ func (c *CAdESV3HashIndexCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *CAdESV3HashIndexCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IAHIV }
+func (c *CAdESV3HashIndexCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIAHIV }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *CAdESV3HashIndexCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IAHIV_ANS
+	return i18n.MessageTagBBBFCIAHIVANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *CAdESV3HashIndexCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *CAdESV3HashIndexCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

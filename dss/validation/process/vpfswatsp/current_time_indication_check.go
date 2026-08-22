@@ -42,18 +42,18 @@ func NewCurrentTimeIndicationCheck(i18nProvider *i18n.I18nProvider, result *proc
 
 // Process performs the check. Port of process().
 func (c *CurrentTimeIndicationCheck) Process() bool {
-	return enumerations.Indication_PASSED == c.indication
+	return enumerations.IndicationPassed == c.indication
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CurrentTimeIndicationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVC
+	return i18n.MessageTagPSVIPCVC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *CurrentTimeIndicationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVC_ANS
+	return i18n.MessageTagPSVIPCVCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

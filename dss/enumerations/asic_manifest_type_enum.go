@@ -6,27 +6,27 @@ package enumerations
 type ASiCManifestTypeEnum string
 
 const (
-	// ASiCManifestTypeEnum_SIGNATURE is the ASiCManifest associated with a
+	// ASiCManifestTypeEnumSignature is the ASiCManifest associated with a
 	// signature document.
-	ASiCManifestTypeEnum_SIGNATURE ASiCManifestTypeEnum = "SIGNATURE"
-	// ASiCManifestTypeEnum_TIMESTAMP is the ASiCManifest associated with a
+	ASiCManifestTypeEnumSignature ASiCManifestTypeEnum = "SIGNATURE"
+	// ASiCManifestTypeEnumTimestamp is the ASiCManifest associated with a
 	// time-stamp document.
-	ASiCManifestTypeEnum_TIMESTAMP ASiCManifestTypeEnum = "TIMESTAMP"
-	// ASiCManifestTypeEnum_EVIDENCE_RECORD is the ASiCEvidenceRecordManifest
+	ASiCManifestTypeEnumTimestamp ASiCManifestTypeEnum = "TIMESTAMP"
+	// ASiCManifestTypeEnumEvidenceRecord is the ASiCEvidenceRecordManifest
 	// associated with an evidence record document.
-	ASiCManifestTypeEnum_EVIDENCE_RECORD ASiCManifestTypeEnum = "EVIDENCE_RECORD"
-	// ASiCManifestTypeEnum_ARCHIVE_MANIFEST is the ASiCArchiveManifest
+	ASiCManifestTypeEnumEvidenceRecord ASiCManifestTypeEnum = "EVIDENCE_RECORD"
+	// ASiCManifestTypeEnumArchiveManifest is the ASiCArchiveManifest
 	// associated with an archival time-stamp document.
-	ASiCManifestTypeEnum_ARCHIVE_MANIFEST ASiCManifestTypeEnum = "ARCHIVE_MANIFEST"
+	ASiCManifestTypeEnumArchiveManifest ASiCManifestTypeEnum = "ARCHIVE_MANIFEST"
 )
 
 // ASiCManifestTypeEnumValues returns all constants in declaration order.
 func ASiCManifestTypeEnumValues() []ASiCManifestTypeEnum {
 	return []ASiCManifestTypeEnum{
-		ASiCManifestTypeEnum_SIGNATURE,
-		ASiCManifestTypeEnum_TIMESTAMP,
-		ASiCManifestTypeEnum_EVIDENCE_RECORD,
-		ASiCManifestTypeEnum_ARCHIVE_MANIFEST,
+		ASiCManifestTypeEnumSignature,
+		ASiCManifestTypeEnumTimestamp,
+		ASiCManifestTypeEnumEvidenceRecord,
+		ASiCManifestTypeEnumArchiveManifest,
 	}
 }
 

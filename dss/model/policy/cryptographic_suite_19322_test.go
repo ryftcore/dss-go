@@ -25,22 +25,22 @@ func TestCryptographicSuite19322_PolicyNameAndUpdateDate(t *testing.T) {
 
 func TestCryptographicSuite19322_Defaults(t *testing.T) {
 	suite := NewCryptographicSuite19322(NewCryptographicSuiteMetadata(), []*CryptographicSuiteAlgorithm{})
-	if suite.Level() != enumerations.Level_FAIL {
+	if suite.Level() != enumerations.LevelFail {
 		t.Fatalf("Level() = %v, want FAIL", suite.Level())
 	}
-	if suite.AlgorithmsExpirationDateAfterUpdateLevel() != enumerations.Level_WARN {
+	if suite.AlgorithmsExpirationDateAfterUpdateLevel() != enumerations.LevelWarn {
 		t.Fatalf("AlgorithmsExpirationDateAfterUpdateLevel() = %v, want WARN", suite.AlgorithmsExpirationDateAfterUpdateLevel())
 	}
 	// unset sub-levels fall back to the global level
-	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.Level_FAIL {
+	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.LevelFail {
 		t.Fatalf("AcceptableDigestAlgorithmsLevel() = %v, want FAIL fallback", suite.AcceptableDigestAlgorithmsLevel())
 	}
-	suite.SetLevel(enumerations.Level_WARN)
-	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.Level_WARN {
+	suite.SetLevel(enumerations.LevelWarn)
+	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.LevelWarn {
 		t.Fatalf("AcceptableDigestAlgorithmsLevel() did not track updated global level")
 	}
-	suite.SetAcceptableDigestAlgorithmsLevel(enumerations.Level_INFORM)
-	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.Level_INFORM {
+	suite.SetAcceptableDigestAlgorithmsLevel(enumerations.LevelInform)
+	if suite.AcceptableDigestAlgorithmsLevel() != enumerations.LevelInform {
 		t.Fatalf("AcceptableDigestAlgorithmsLevel() = %v, want explicit INFORM", suite.AcceptableDigestAlgorithmsLevel())
 	}
 }
@@ -49,22 +49,22 @@ func TestCryptographicSuite19322_AcceptableDigestAlgorithms_ByOID(t *testing.T) 
 	algo := NewCryptographicSuiteAlgorithm()
 	algo.SetAlgorithmIdentifierOIDs([]string{"2.16.840.1.101.3.4.2.1"}) // SHA-256
 	eval := NewCryptographicSuiteEvaluation()
-	eval.SetRecommendation(enumerations.CryptographicSuiteRecommendation_RECOMMENDED)
+	eval.SetRecommendation(enumerations.CryptographicSuiteRecommendationRecommended)
 	algo.SetEvaluationList([]*CryptographicSuiteEvaluation{eval})
 
 	suite := NewCryptographicSuite19322(NewCryptographicSuiteMetadata(), []*CryptographicSuiteAlgorithm{algo})
 	digests := suite.AcceptableDigestAlgorithms()
-	evaluations, ok := digests[enumerations.DigestAlgorithm_SHA256]
+	evaluations, ok := digests[enumerations.DigestAlgorithmSHA256]
 	if !ok || len(evaluations) != 1 {
 		t.Fatalf("AcceptableDigestAlgorithms() = %v, want SHA256 with 1 evaluation", digests)
 	}
-	if evaluations[0].Recommendation() != enumerations.CryptographicSuiteRecommendation_RECOMMENDED {
+	if evaluations[0].Recommendation() != enumerations.CryptographicSuiteRecommendationRecommended {
 		t.Fatalf("evaluation recommendation mismatch: %v", evaluations[0].Recommendation())
 	}
 
 	// cached: mutating the returned map's backing slice must observe the
 	// same cached result on a second call.
-	if again := suite.AcceptableDigestAlgorithms(); len(again[enumerations.DigestAlgorithm_SHA256]) != 1 {
+	if again := suite.AcceptableDigestAlgorithms(); len(again[enumerations.DigestAlgorithmSHA256]) != 1 {
 		t.Fatalf("second call did not return cached map: %v", again)
 	}
 }
@@ -78,7 +78,7 @@ func TestCryptographicSuite19322_AcceptableSignatureAlgorithms_DirectOID(t *test
 
 	suite := NewCryptographicSuite19322(NewCryptographicSuiteMetadata(), []*CryptographicSuiteAlgorithm{algo})
 	sigs := suite.AcceptableSignatureAlgorithms()
-	if _, ok := sigs[enumerations.SignatureAlgorithm_RSA_SHA256]; !ok {
+	if _, ok := sigs[enumerations.SignatureAlgorithmRSASHA256]; !ok {
 		t.Fatalf("AcceptableSignatureAlgorithms() = %v, want RSA_SHA256 present", sigs)
 	}
 }
@@ -103,7 +103,7 @@ func TestCryptographicSuite19322_AcceptableSignatureAlgorithms_DerivedFromEncryp
 
 	suite := NewCryptographicSuite19322(NewCryptographicSuiteMetadata(), []*CryptographicSuiteAlgorithm{rsaAlgo, sha256Algo})
 	sigs := suite.AcceptableSignatureAlgorithms()
-	evaluations, ok := sigs[enumerations.SignatureAlgorithm_RSA_SHA256]
+	evaluations, ok := sigs[enumerations.SignatureAlgorithmRSASHA256]
 	if !ok || len(evaluations) == 0 {
 		t.Fatalf("AcceptableSignatureAlgorithms() = %v, want derived RSA_SHA256", sigs)
 	}

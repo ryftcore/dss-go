@@ -99,7 +99,7 @@ func (c *AlgorithmObsolescenceValidation[T]) InitAlgorithmObsolescenceValidation
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *AlgorithmObsolescenceValidation[T]) Title() i18n.MessageTag {
-	return i18n.MessageTag_AOV
+	return i18n.MessageTagAOV
 }
 
 // InitChain initializes the chain. Port of the overridden protected void
@@ -136,7 +136,7 @@ func (c *AlgorithmObsolescenceValidation[T]) CryptographicSuite() policy.Cryptog
 // validation result. Port of protected boolean isValid(XmlCryptographicValidation).
 func (c *AlgorithmObsolescenceValidation[T]) isValid(cryptographicValidation *jaxb.XmlCryptographicValidation) bool {
 	return cryptographicValidation != nil && cryptographicValidation.Conclusion != nil &&
-		enumerations.Indication_PASSED == cryptographicValidation.Conclusion.Indication.Indication()
+		enumerations.IndicationPassed == cryptographicValidation.Conclusion.Indication.Indication()
 }
 
 // AddAdditionalInfo adds additional info to the chain. Port of the overridden

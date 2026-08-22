@@ -4,8 +4,8 @@ package enumerations
 import "testing"
 
 func TestQCType_UNKNOWN_TYPE_Value(t *testing.T) {
-	if QCType_UNKNOWN_TYPE != "type-unknown" {
-		t.Errorf("QCType_UNKNOWN_TYPE = %q, want %q", QCType_UNKNOWN_TYPE, "type-unknown")
+	if QCTypeUnknownType != "type-unknown" {
+		t.Errorf("QCTypeUnknownType = %q, want %q", QCTypeUnknownType, "type-unknown")
 	}
 }
 
@@ -18,7 +18,7 @@ func TestQCTypeUnknownFallback(t *testing.T) {
 	if fallback.OID() != "1.2.3.4" {
 		t.Errorf("OID() = %q, want %q", fallback.OID(), "1.2.3.4")
 	}
-	if fallback.Description() != QCType_UNKNOWN_TYPE {
-		t.Errorf("Description() = %q, want %q", fallback.Description(), QCType_UNKNOWN_TYPE)
+	if fallback.Description() != QCTypeUnknownType {
+		t.Errorf("Description() = %q, want %q", fallback.Description(), QCTypeUnknownType)
 	}
 }

@@ -56,7 +56,7 @@ func (t *XPathTransform) xPathTransform() *XPathTransform { return t }
 func (t *XPathTransform) CreateTransform(document, parentNode *xmldom.Node) *xmldom.Node {
 	transform := t.AbstractTransform.CreateTransform(document, parentNode)
 	return xmlutils.DomUtilsAddTextElement(document, transform, t.namespace,
-		common.XMLDSigElement_XPATH, t.xPathExpression)
+		common.XMLDSigElementXPATH, t.xPathExpression)
 }
 
 // Equals ports equals(Object): everything AbstractTransform#equals compares, plus the XPath

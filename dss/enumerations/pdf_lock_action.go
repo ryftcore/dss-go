@@ -8,28 +8,28 @@ import "fmt"
 type PdfLockAction string
 
 const (
-	// PdfLockAction_ALL means all form fields do not permit changes.
-	PdfLockAction_ALL PdfLockAction = "ALL"
-	// PdfLockAction_INCLUDE means only those form fields specified in
+	// PdfLockActionAll means all form fields do not permit changes.
+	PdfLockActionAll PdfLockAction = "ALL"
+	// PdfLockActionInclude means only those form fields specified in
 	// fields do not permit changes.
-	PdfLockAction_INCLUDE PdfLockAction = "INCLUDE"
-	// PdfLockAction_EXCLUDE means only those form fields not specified in
+	PdfLockActionInclude PdfLockAction = "INCLUDE"
+	// PdfLockActionExclude means only those form fields not specified in
 	// fields do not permit changes.
-	PdfLockAction_EXCLUDE PdfLockAction = "EXCLUDE"
+	PdfLockActionExclude PdfLockAction = "EXCLUDE"
 )
 
 var pdfLockActionName = map[PdfLockAction]string{
-	PdfLockAction_ALL:     "All",
-	PdfLockAction_INCLUDE: "Include",
-	PdfLockAction_EXCLUDE: "Exclude",
+	PdfLockActionAll:     "All",
+	PdfLockActionInclude: "Include",
+	PdfLockActionExclude: "Exclude",
 }
 
 // PdfLockActionValues returns all constants in declaration order.
 func PdfLockActionValues() []PdfLockAction {
 	return []PdfLockAction{
-		PdfLockAction_ALL,
-		PdfLockAction_INCLUDE,
-		PdfLockAction_EXCLUDE,
+		PdfLockActionAll,
+		PdfLockActionInclude,
+		PdfLockActionExclude,
 	}
 }
 

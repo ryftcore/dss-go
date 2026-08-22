@@ -16,7 +16,7 @@ import (
 
 // DefaultContainerMergerDefaultDigestAlgorithm is the digest algorithm used for internal
 // documents comparison. Port of the protected static final DEFAULT_DIGEST_ALGORITHM.
-const DefaultContainerMergerDefaultDigestAlgorithm = enumerations.DigestAlgorithm_SHA256
+const DefaultContainerMergerDefaultDigestAlgorithm = enumerations.DigestAlgorithmSHA256
 
 // DefaultContainerMergerOverrides declares the operations DefaultContainerMerger calls back
 // into virtually - the base's Merge()/MergeToASiCContent() dispatch to these, the way
@@ -217,10 +217,10 @@ func (m *DefaultContainerMerger) Merge() model.DSSDocument {
 		panic(err)
 	}
 	containerDocument.SetName(m.getFinalContainerName(mergeResult.ContainerType()))
-	if enumerations.ASiCContainerType_ASiC_S == mergeResult.ContainerType() {
-		containerDocument.SetMimeType(enumerations.MimeTypeEnum_ASICS)
+	if enumerations.ASiCContainerTypeASiCS == mergeResult.ContainerType() {
+		containerDocument.SetMimeType(enumerations.MimeTypeEnumASiCS)
 	} else {
-		containerDocument.SetMimeType(enumerations.MimeTypeEnum_ASICE)
+		containerDocument.SetMimeType(enumerations.MimeTypeEnumASiCE)
 	}
 	return containerDocument
 }
@@ -405,10 +405,10 @@ func (m *DefaultContainerMerger) getFinalExtension(asicContainerType enumeration
 	if utils.IsStringNotEmpty(originalExtension) {
 		return originalExtension
 	} else if asicContainerType != "" {
-		if enumerations.ASiCContainerType_ASiC_S == asicContainerType {
-			return enumerations.MimeTypeEnum_ASICS.Extension()
+		if enumerations.ASiCContainerTypeASiCS == asicContainerType {
+			return enumerations.MimeTypeEnumASiCS.Extension()
 		}
-		return enumerations.MimeTypeEnum_ASICE.Extension()
+		return enumerations.MimeTypeEnumASiCE.Extension()
 	}
 	return "zip"
 }

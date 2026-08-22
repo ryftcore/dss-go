@@ -42,10 +42,10 @@ func NewQWACCertificatePolicyCheck(i18nProvider *i18n.I18nProvider, result *proc
 // Process performs the check. Port of process().
 func (c *QWACCertificatePolicyCheck) Process() bool {
 	switch c.qwacProfile {
-	case enumerations.QWACProfile_QWAC_1:
-		return c.certificatePolicyMatch(enumerations.CertificatePolicy_QCP_WEB, enumerations.CertificatePolicy_QNCP_WEB)
-	case enumerations.QWACProfile_QWAC_2:
-		return c.certificatePolicyMatch(enumerations.CertificatePolicy_QNCP_WEB_GEN)
+	case enumerations.QWACProfileQWAC1:
+		return c.certificatePolicyMatch(enumerations.CertificatePolicyQCPWeb, enumerations.CertificatePolicyQNCPWeb)
+	case enumerations.QWACProfileQWAC2:
+		return c.certificatePolicyMatch(enumerations.CertificatePolicyQNCPWebGen)
 	default:
 		panic(fmt.Sprintf("The QWAC profile '%s' is not supported!", c.qwacProfile))
 	}
@@ -74,7 +74,7 @@ func (c *QWACCertificatePolicyCheck) BuildConstraintMessage() *jaxb.XmlMessage {
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_CERT_POLICY, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQWACCertPolicy, tag)
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -83,13 +83,13 @@ func (c *QWACCertificatePolicyCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_CERT_POLICY_ANS, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQWACCertPolicyANS, tag)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QWACCertificatePolicyCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -227,7 +227,7 @@ func runSignatureExecutorSafely(dd *diagnosticjaxb.XmlDiagnosticData, policy mod
 	signatureExecutor.SetDiagnosticData(dd)
 	signatureExecutor.SetValidationPolicy(policy)
 	signatureExecutor.SetCurrentTime(fullCorpusValidationTime)
-	signatureExecutor.SetValidationLevel(enumerations.ValidationLevel_ARCHIVAL_DATA)
+	signatureExecutor.SetValidationLevel(enumerations.ValidationLevelArchivalData)
 	signatureExecutor.SetEnableEtsiValidationReport(false)
 	signatureExecutor.SetLocale("en")
 	reports := signatureExecutor.Execute()

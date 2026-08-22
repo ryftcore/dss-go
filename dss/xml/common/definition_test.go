@@ -56,16 +56,16 @@ func TestDSSAttributeFromDefinition(t *testing.T) {
 }
 
 func TestXMLDSigElement_AttributeNames(t *testing.T) {
-	if XMLDSigElement_SIGNATURE.TagName() != "Signature" {
-		t.Errorf("SIGNATURE.TagName() = %q, want %q", XMLDSigElement_SIGNATURE.TagName(), "Signature")
+	if XMLDSigElementSignature.TagName() != "Signature" {
+		t.Errorf("SIGNATURE.TagName() = %q, want %q", XMLDSigElementSignature.TagName(), "Signature")
 	}
-	if XMLDSigElement_SIGNATURE.URI() != "http://www.w3.org/2000/09/xmldsig#" {
-		t.Errorf("SIGNATURE.URI() = %q", XMLDSigElement_SIGNATURE.URI())
+	if XMLDSigElementSignature.URI() != "http://www.w3.org/2000/09/xmldsig#" {
+		t.Errorf("SIGNATURE.URI() = %q", XMLDSigElementSignature.URI())
 	}
-	if !XMLDSigElement_SIGNATURE.IsSameTagName("Signature") {
+	if !XMLDSigElementSignature.IsSameTagName("Signature") {
 		t.Errorf("IsSameTagName(Signature) = false, want true")
 	}
-	if XMLDSigAttribute_MIME_TYPE.AttributeName() != "MimeType" {
-		t.Errorf("MIME_TYPE.AttributeName() = %q, want %q", XMLDSigAttribute_MIME_TYPE.AttributeName(), "MimeType")
+	if XMLDSigAttributeMIMEType.AttributeName() != "MimeType" {
+		t.Errorf("MIME_TYPE.AttributeName() = %q, want %q", XMLDSigAttributeMIMEType.AttributeName(), "MimeType")
 	}
 }

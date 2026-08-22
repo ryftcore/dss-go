@@ -44,22 +44,22 @@ func (c *CertificatePS2DQcCompetentAuthorityNameCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificatePS2DQcCompetentAuthorityNameCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCNA
+	return i18n.MessageTagBBBXCVCMDCICQCNA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificatePS2DQcCompetentAuthorityNameCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCNA_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCNAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificatePS2DQcCompetentAuthorityNameCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificatePS2DQcCompetentAuthorityNameCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

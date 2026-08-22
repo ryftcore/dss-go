@@ -43,7 +43,7 @@ func NewTimestampGenerationTimeNotAfterCertificateExpirationCheck[T any](i18nPro
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_CNT_TST_BBB
+	return jaxb.XmlBlockTypeCNTTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -55,24 +55,24 @@ func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) Process()
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EXPIRED
+	return enumerations.SubIndicationExpired
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCET
+	return i18n.MessageTagBSVICTGTNASCET
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCET_ANS
+	return i18n.MessageTagBSVICTGTNASCETANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -86,6 +86,6 @@ func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) BuildAddi
 	if c.signingCertificateNotAfter != nil {
 		certificateNotAfter = process.GetFormattedDate(c.signingCertificateNotAfter)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_AND_REVOCATION_TIME, c.contentTimestamp.Id(), tstGenerationTime, certificateNotAfter)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampAndRevocationTime, c.contentTimestamp.Id(), tstGenerationTime, certificateNotAfter)
 	return &message
 }

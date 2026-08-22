@@ -61,7 +61,7 @@ func NewPastSignatureValidationCertificateRevocationSelector(i18nProvider *i18n.
 // Title returns the title of the building block. Port of the overridden
 // getTitle().
 func (c *PastSignatureValidationCertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_PSV_CRS
+	return i18n.MessageTagPSVCRS
 }
 
 // VerifyRevocationData verifies the given revocation data and returns the
@@ -140,7 +140,7 @@ func (c *PastSignatureValidationCertificateRevocationSelector) RevocationBBBConc
 func (c *PastSignatureValidationCertificateRevocationSelector) revocationDataIssuerTrusted(
 	revocationIssuer *diagnostic.CertificateWrapper) process.ChainItem[*jaxb.XmlCRS] {
 	sunsetDateConstraint := c.ValidationPolicy.CertificateSunsetDateConstraint(
-		enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+		enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return xcv.NewRevocationIssuerTrustedCheck(c.I18nProvider, c.Result, revocationIssuer, c.CurrentTime,
 		sunsetDateConstraint, c.WarnLevelRule())
 }
@@ -165,7 +165,7 @@ func (c *PastSignatureValidationCertificateRevocationSelector) AcceptableRevocat
 func (c *PastSignatureValidationCertificateRevocationSelector) isRevocationIssuerTrusted(
 	certificateWrapper *diagnostic.CertificateWrapper) bool {
 	constraint := c.ValidationPolicy.CertificateSunsetDateConstraint(
-		enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+		enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return process.IsTrustAnchor(certificateWrapper, c.CurrentTime, constraint)
 }
 

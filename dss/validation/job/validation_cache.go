@@ -13,7 +13,7 @@ func NewValidationCache() *ValidationCache {
 	return c
 }
 
-// CacheType returns CacheType_VALIDATION. Port of getCacheType().
+// CacheType returns CacheTypeValidation. Port of getCacheType().
 func (c *ValidationCache) CacheType() CacheType {
-	return CacheType_VALIDATION
+	return CacheTypeValidation
 }

@@ -54,7 +54,7 @@ type SignaturePolicy struct {
 // NewSignaturePolicy is the default constructor for SignaturePolicy: it represents the
 // implied policy.
 func NewSignaturePolicy() *SignaturePolicy {
-	return &SignaturePolicy{identifier: string(enumerations.SignaturePolicyType_IMPLICIT_POLICY)}
+	return &SignaturePolicy{identifier: string(enumerations.SignaturePolicyTypeImplicitPolicy)}
 }
 
 // NewSignaturePolicyWithIdentifier is the default constructor for SignaturePolicy with the

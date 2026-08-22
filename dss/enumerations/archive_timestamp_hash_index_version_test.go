@@ -8,9 +8,9 @@ func TestArchiveTimestampHashIndexVersion(t *testing.T) {
 		label string
 		oid   string
 	}{
-		{ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX, "ats-hash-index", "0.4.0.1733.2.5"},
-		{ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V2, "ats-hash-index-v2", "0.4.0.19122.1.4"},
-		{ArchiveTimestampHashIndexVersion_ATS_HASH_INDEX_V3, "ats-hash-index-v3", "0.4.0.19122.1.5"},
+		{ArchiveTimestampHashIndexVersionATSHashIndex, "ats-hash-index", "0.4.0.1733.2.5"},
+		{ArchiveTimestampHashIndexVersionATSHashIndexV2, "ats-hash-index-v2", "0.4.0.19122.1.4"},
+		{ArchiveTimestampHashIndexVersionATSHashIndexV3, "ats-hash-index-v3", "0.4.0.19122.1.5"},
 	}
 	if len(ArchiveTimestampHashIndexVersionValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(ArchiveTimestampHashIndexVersionValues()))

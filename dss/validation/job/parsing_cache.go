@@ -13,7 +13,7 @@ func NewParsingCache() *ParsingCache {
 	return c
 }
 
-// CacheType returns CacheType_PARSING. Port of getCacheType().
+// CacheType returns CacheTypeParsing. Port of getCacheType().
 func (c *ParsingCache) CacheType() CacheType {
-	return CacheType_PARSING
+	return CacheTypeParsing
 }

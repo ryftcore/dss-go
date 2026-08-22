@@ -42,7 +42,7 @@ func (c *EllipticCurveKeySizeCheck) isKeySizeKnown() bool {
 func (c *EllipticCurveKeySizeCheck) isDigestAlgorithmAuthorized() bool {
 	// Only three DigestAlgorithms are authorized to be used with ECDSA/PLAIN-ECDSA in RFC 7518
 	switch c.signature.DigestAlgorithm() {
-	case enumerations.DigestAlgorithm_SHA256, enumerations.DigestAlgorithm_SHA384, enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA256, enumerations.DigestAlgorithmSHA384, enumerations.DigestAlgorithmSHA512:
 		return true
 	default:
 		return false
@@ -51,11 +51,11 @@ func (c *EllipticCurveKeySizeCheck) isDigestAlgorithmAuthorized() bool {
 
 func correspondingKeySize(digestAlgorithm enumerations.DigestAlgorithm) string {
 	switch digestAlgorithm {
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		return "256"
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		return "384"
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		return "521"
 	default:
 		return ""
@@ -72,28 +72,28 @@ func (c *EllipticCurveKeySizeCheck) Process() bool {
 	if !c.isEncryptionAlgorithmKnown() || !c.isDigestAlgorithmKnown() || !c.isKeySizeKnown() {
 		return false
 	}
-	return !c.signature.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithm_ECDSA) ||
+	return !c.signature.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithmECDSA) ||
 		(c.isDigestAlgorithmAuthorized() && c.keySizeCorrespondsDigestAlgorithm())
 }
 
 // MessageTag returns the constraint message i18n key.
 func (c *EllipticCurveKeySizeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IECKSCDA
+	return i18n.MessageTagBBBFCIECKSCDA
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *EllipticCurveKeySizeCheck) ErrorMessageTag() i18n.MessageTag {
 	switch {
 	case !c.isEncryptionAlgorithmKnown():
-		return i18n.MessageTag_BBB_FC_IECKSCDA_ANS1
+		return i18n.MessageTagBBBFCIECKSCDAANS1
 	case !c.isDigestAlgorithmKnown():
-		return i18n.MessageTag_BBB_FC_IECKSCDA_ANS2
+		return i18n.MessageTagBBBFCIECKSCDAANS2
 	case !c.isKeySizeKnown():
-		return i18n.MessageTag_BBB_FC_IECKSCDA_ANS3
+		return i18n.MessageTagBBBFCIECKSCDAANS3
 	case !c.isDigestAlgorithmAuthorized():
-		return i18n.MessageTag_BBB_FC_IECKSCDA_ANS4
+		return i18n.MessageTagBBBFCIECKSCDAANS4
 	case !c.keySizeCorrespondsDigestAlgorithm():
-		return i18n.MessageTag_BBB_FC_IECKSCDA_ANS5
+		return i18n.MessageTagBBBFCIECKSCDAANS5
 	default:
 		return ""
 	}
@@ -103,7 +103,7 @@ func (c *EllipticCurveKeySizeCheck) ErrorMessageTag() i18n.MessageTag {
 // protected String buildAdditionalInfo().
 func (c *EllipticCurveKeySizeCheck) BuildAdditionalInfo() *string {
 	if c.isEncryptionAlgorithmKnown() && c.isDigestAlgorithmKnown() && c.isKeySizeKnown() {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_SIGNATURE_ALGORITHM_WITH_KEY_SIZE,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagSignatureAlgorithmWithKeySize,
 			c.signature.SignatureAlgorithm().Name(), c.signature.KeyLengthUsedToSignThisToken())
 		return &message
 	}
@@ -112,10 +112,10 @@ func (c *EllipticCurveKeySizeCheck) BuildAdditionalInfo() *string {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *EllipticCurveKeySizeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *EllipticCurveKeySizeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

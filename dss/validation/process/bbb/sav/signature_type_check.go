@@ -53,7 +53,7 @@ func (c *SignatureTypeCheck) getSignatureType() []string {
 	if err != nil {
 		panic(err)
 	}
-	if enumerations.SignatureForm_JAdES == signatureForm && c.signature.SignatureType() != "" {
+	if enumerations.SignatureFormJAdES == signatureForm && c.signature.SignatureType() != "" {
 		signatureTypes = append(signatureTypes, c.getRFC7515SignatureType(c.signature.SignatureType()))
 	}
 	return signatureTypes
@@ -84,23 +84,23 @@ func (c *SignatureTypeCheck) getRFC7515SignatureType(signatureType string) strin
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTYPP
+	return i18n.MessageTagBBBSAVISQPSTYPP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTYPP_ANS
+	return i18n.MessageTagBBBSAVISQPSTYPPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SignatureTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SignatureTypeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

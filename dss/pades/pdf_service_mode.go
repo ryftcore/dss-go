@@ -3,9 +3,10 @@
 // eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
 // (see pdf_object.go's header). This enum's four constants are exactly what
 // native_pdf_obj_factory.go / native_pdf_signature_service.go were already written against
-// (PDFServiceMode_SIGNATURE, _CONTENT_TIMESTAMP, _SIGNATURE_TIMESTAMP, _ARCHIVE_TIMESTAMP -
-// Java_ENUM_CASE kept verbatim after the type name, as is this port's convention for Go-ported
-// Java enum constants). A string base (matching the enumerations package's convention, rather
+// (PDFServiceModeSignature, PDFServiceModeContentTimestamp, PDFServiceModeSignatureTimestamp,
+// PDFServiceModeArchiveTimestamp - the type name prefixes the Java constant name rendered in Go
+// MixedCaps, as is this port's convention for Go-ported Java enum constants; the string VALUES
+// stay Java's name() verbatim). A string base (matching the enumerations package's convention, rather
 // than an int/iota), because native_pdf_signature_service.go's already-landed constructor
 // zero-checks it with `serviceMode == ""`.
 package pades
@@ -14,29 +15,29 @@ package pades
 type PDFServiceMode string
 
 const (
-	// PDFServiceMode_CONTENT_TIMESTAMP is used for independent timestamp creation.
-	PDFServiceMode_CONTENT_TIMESTAMP PDFServiceMode = "CONTENT_TIMESTAMP"
+	// PDFServiceModeContentTimestamp is used for independent timestamp creation.
+	PDFServiceModeContentTimestamp PDFServiceMode = "CONTENT_TIMESTAMP"
 
-	// PDFServiceMode_SIGNATURE is used for signature creation.
-	PDFServiceMode_SIGNATURE PDFServiceMode = "SIGNATURE"
+	// PDFServiceModeSignature is used for signature creation.
+	PDFServiceModeSignature PDFServiceMode = "SIGNATURE"
 
-	// PDFServiceMode_SIGNATURE_TIMESTAMP is used for signature timestamp creation.
-	PDFServiceMode_SIGNATURE_TIMESTAMP PDFServiceMode = "SIGNATURE_TIMESTAMP"
+	// PDFServiceModeSignatureTimestamp is used for signature timestamp creation.
+	PDFServiceModeSignatureTimestamp PDFServiceMode = "SIGNATURE_TIMESTAMP"
 
-	// PDFServiceMode_ARCHIVE_TIMESTAMP is used for document timestamp creation.
-	PDFServiceMode_ARCHIVE_TIMESTAMP PDFServiceMode = "ARCHIVE_TIMESTAMP"
+	// PDFServiceModeArchiveTimestamp is used for document timestamp creation.
+	PDFServiceModeArchiveTimestamp PDFServiceMode = "ARCHIVE_TIMESTAMP"
 )
 
 // String ports the implicit Enum#name/toString.
 func (m PDFServiceMode) String() string {
 	switch m {
-	case PDFServiceMode_CONTENT_TIMESTAMP:
+	case PDFServiceModeContentTimestamp:
 		return "CONTENT_TIMESTAMP"
-	case PDFServiceMode_SIGNATURE:
+	case PDFServiceModeSignature:
 		return "SIGNATURE"
-	case PDFServiceMode_SIGNATURE_TIMESTAMP:
+	case PDFServiceModeSignatureTimestamp:
 		return "SIGNATURE_TIMESTAMP"
-	case PDFServiceMode_ARCHIVE_TIMESTAMP:
+	case PDFServiceModeArchiveTimestamp:
 		return "ARCHIVE_TIMESTAMP"
 	default:
 		return "UNKNOWN"

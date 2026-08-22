@@ -77,7 +77,7 @@ func NewValidationProcessForTimestampsWithArchivalData(i18nProvider *i18n.I18nPr
 
 // Title returns the title of the process. Port of getTitle().
 func (c *ValidationProcessForTimestampsWithArchivalData) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPFTSPWATSP
+	return i18n.MessageTagVpftspwatsp
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -172,7 +172,7 @@ func (c *ValidationProcessForTimestampsWithArchivalData) InitChain() {
 			 */
 
 			psv := vpfswatsp.NewPastSignatureValidation(c.I18nProvider, c.timestamp, c.bbbs,
-				basicTimestampConclusion, c.poe, c.currentTime, c.policy, enumerations.Context_TIMESTAMP)
+				basicTimestampConclusion, c.poe, c.currentTime, c.policy, enumerations.ContextTimestamp)
 			psvResult := psv.Execute()
 
 			tstBBB := c.bbbs[c.timestamp.Id()]
@@ -298,7 +298,7 @@ func (c *ValidationProcessForTimestampsWithArchivalData) timestampDigestAlgorith
 // which cannot propagate one.
 func (c *ValidationProcessForTimestampsWithArchivalData) timestampIsAcceptable(aovResult *jaxb.XmlAOV,
 	lowestPOE time.Time) process.ChainItem[*jaxb.XmlValidationProcessArchivalDataTimestamp] {
-	position, err := process.GetCryptoPosition(enumerations.Context_TIMESTAMP)
+	position, err := process.GetCryptoPosition(enumerations.ContextTimestamp)
 	if err != nil {
 		panic(err)
 	}
@@ -326,7 +326,7 @@ func (c *ValidationProcessForTimestampsWithArchivalData) CollectMessages(conclus
 	if constraint.BlockType != nil {
 		blockType = *constraint.BlockType
 	}
-	if (jaxb.XmlBlockType_TST_BBB == blockType || jaxb.XmlBlockType_TST_PSV == blockType) &&
+	if (jaxb.XmlBlockTypeTSTBBB == blockType || jaxb.XmlBlockTypeTSTPSV == blockType) &&
 		c.policy.TimestampValidConstraint() == nil {
 		// skip propagating of validation messages for TSTs in default processing
 	} else {

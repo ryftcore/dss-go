@@ -174,9 +174,9 @@ func (t *TrustAnchorVerifier) IsTrustedCertificateChain(certChain []*model.Certi
 // isAcceptUntrustedCertificateChains is the port of the private isAcceptUntrustedCertificateChains(Context).
 func (t *TrustAnchorVerifier) isAcceptUntrustedCertificateChains(context enumerations.Context) bool {
 	switch context {
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		return t.acceptTimestampUntrustedCertificateChains
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		return t.acceptRevocationUntrustedCertificateChains
 	default:
 		return false // continue in other cases

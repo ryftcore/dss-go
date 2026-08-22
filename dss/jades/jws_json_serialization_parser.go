@@ -63,13 +63,13 @@ func (p *JWSJsonSerializationParser) Parse() (*JWSJsonSerializationObject, error
 	// try to extract complete JWS JSON Serialization signatures
 	signaturesObject := rootStructure.Value(JWSConstantsSignatures)
 	if signaturesObject != nil {
-		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationType_JSON_SERIALIZATION)
+		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationTypeJSONSerialization)
 		if err := p.extractSignatures(jwsJsonSerializationObject, signaturesObject); err != nil {
 			return nil, err
 		}
 	} else {
 		// otherwise extract flattened JWS JSON Serialization signature
-		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION)
+		jwsJsonSerializationObject.SetJWSSerializationType(enumerations.JWSSerializationTypeFlattenedJSONSerialization)
 		if err := p.extractAndAddJWSSignature(jwsJsonSerializationObject, rootStructure); err != nil {
 			return nil, err
 		}

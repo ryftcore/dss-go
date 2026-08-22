@@ -115,9 +115,9 @@ func NewJAdESSignatureParameters() *JAdESSignatureParameters {
 		includeSignatureType:           true,
 		includeKeyIdentifier:           true,
 		base64UrlEncodedPayload:        true,
-		signingCertificateDigestMethod: enumerations.DigestAlgorithm_SHA512,
-		jwsSerializationType:           enumerations.JWSSerializationType_COMPACT_SERIALIZATION,
-		jadesSigningTimeType:           JAdESSigningTimeType_IAT,
+		signingCertificateDigestMethod: enumerations.DigestAlgorithmSHA512,
+		jwsSerializationType:           enumerations.JWSSerializationTypeCompactSerialization,
+		jadesSigningTimeType:           JAdESSigningTimeTypeIAT,
 	}
 }
 
@@ -126,7 +126,7 @@ func NewJAdESSignatureParameters() *JAdESSignatureParameters {
 // empty or not a JAdES level (IllegalArgumentException upstream).
 func (p *JAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
-	if signatureLevel == "" || err != nil || enumerations.SignatureForm_JAdES != form {
+	if signatureLevel == "" || err != nil || enumerations.SignatureFormJAdES != form {
 		panic("Only JAdES form is allowed !")
 	}
 	p.AbstractSignatureParameters.SetSignatureLevel(signatureLevel)

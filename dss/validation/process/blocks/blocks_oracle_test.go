@@ -139,22 +139,22 @@ func TestBasicBuildingBlocksAgainstJavaOracle(t *testing.T) {
 			}
 
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				compare("SIG|"+signature.Id(), signature, context)
 			}
 			for _, timestamp := range diagnosticData.TimestampList() {
-				compare("TST|"+timestamp.Id(), timestamp, enumerations.Context_TIMESTAMP)
+				compare("TST|"+timestamp.Id(), timestamp, enumerations.ContextTimestamp)
 			}
 			revocations := append([]*diagnostic.RevocationWrapper(nil), diagnosticData.AllRevocationData()...)
 			sort.SliceStable(revocations, func(i, j int) bool { return revocations[i].Id() < revocations[j].Id() })
 			for _, revocation := range revocations {
-				compare("REV|"+revocation.Id(), revocation, enumerations.Context_REVOCATION)
+				compare("REV|"+revocation.Id(), revocation, enumerations.ContextRevocation)
 			}
 			for _, certificate := range diagnosticData.UsedCertificates() {
-				compare("CERT|"+certificate.Id(), certificate, enumerations.Context_CERTIFICATE)
+				compare("CERT|"+certificate.Id(), certificate, enumerations.ContextCertificate)
 			}
 		})
 	}

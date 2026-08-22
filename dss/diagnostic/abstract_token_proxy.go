@@ -195,16 +195,16 @@ func (a *AbstractTokenProxyBase) IsSigningCertificateReferenceUnique() bool {
 // found. Port of getSigningCertificateReference().
 func (a *AbstractTokenProxyBase) SigningCertificateReference() *CertificateRefWrapper {
 	signingCertificateReferences := a.tokenProxyOverrides().FoundCertificates().
-		RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+		RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
 	if len(signingCertificateReferences) != 0 {
 		// return a reference matching a signing certificate
 		signingCertificate := a.SigningCertificate()
 		if signingCertificate != nil {
-			return a.getCertificateReferenceOfReferenceOriginType(signingCertificate, enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+			return a.getCertificateReferenceOfReferenceOriginType(signingCertificate, enumerations.CertificateRefOriginSigningCertificate)
 		}
 	} else {
 		orphanSigningCertificateReferences := a.tokenProxyOverrides().FoundCertificates().
-			OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+			OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)
 		if len(orphanSigningCertificateReferences) != 0 {
 			return orphanSigningCertificateReferences[0]
 		}
@@ -231,9 +231,9 @@ func (a *AbstractTokenProxyBase) getCertificateReferenceOfReferenceOriginType(ce
 func (a *AbstractTokenProxyBase) SigningCertificateReferences() []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
 	certificateRefs = append(certificateRefs, a.tokenProxyOverrides().FoundCertificates().
-		RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)...)
+		RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)...)
 	certificateRefs = append(certificateRefs, a.tokenProxyOverrides().FoundCertificates().
-		OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)...)
+		OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOriginSigningCertificate)...)
 	return certificateRefs
 }
 
@@ -254,7 +254,7 @@ func (a *AbstractTokenProxyBase) IsTrustedChain() bool {
 func (a *AbstractTokenProxyBase) IsCertificateChainFromTrustedStore() bool {
 	for _, certificate := range a.CertificateChain() {
 		for _, source := range certificate.Sources() {
-			if source == enumerations.CertificateSourceType_TRUSTED_STORE {
+			if source == enumerations.CertificateSourceTypeTrustedStore {
 				return true
 			}
 		}

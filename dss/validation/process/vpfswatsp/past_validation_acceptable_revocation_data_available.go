@@ -50,28 +50,28 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC
+	return i18n.MessageTagBBBXCVIARDPFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC_ANS
+	return i18n.MessageTagBBBXCVIARDPFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
 	if c.isCryptoFailure() {
-		return enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE
+		return enumerations.SubIndicationCryptoConstraintsFailureNoPOE
 	}
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }
 
 // isCryptoFailure ports the private isCryptoFailure().
@@ -83,8 +83,8 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) isCryptoFailure() b
 		if xmlRAC.Conclusion.SubIndication != nil {
 			subIndication = xmlRAC.Conclusion.SubIndication.SubIndication()
 		}
-		if enumerations.Indication_INDETERMINATE == xmlRAC.Conclusion.Indication.Indication() &&
-			enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndication {
+		if enumerations.IndicationIndeterminate == xmlRAC.Conclusion.Indication.Indication() &&
+			enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndication {
 			return true
 		}
 	}
@@ -102,7 +102,7 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) BuildAdditionalInfo
 		for _, revocation := range c.revocationData {
 			revocationDataIds = append(revocationDataIds, revocation.Id())
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCEPTABLE_REVOCATION,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagAcceptableRevocation,
 			"["+strings.Join(revocationDataIds, ", ")+"]")
 		return &message
 	}

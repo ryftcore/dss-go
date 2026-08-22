@@ -49,29 +49,29 @@ func (c *EAAClaimsCheck) BuildAdditionalInfo() *string {
 			notPresentClaims = append(notPresentClaims, v)
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_CLAIMS_INFO, utils.JoinStrings(notPresentClaims, ", "))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagEAAClaimsInfo, utils.JoinStrings(notPresentClaims, ", "))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAClaimsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CLAIMS
+	return i18n.MessageTagEAAClaims
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAClaimsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CLAIMS_ANS
+	return i18n.MessageTagEAAClaimsANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAClaimsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAClaimsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

@@ -351,12 +351,12 @@ func (b *SimpleReportBuilder) signature(signature *diagnostic.SignatureWrapper, 
 
 	indication := b.detailedReport.FinalIndication(signatureId)
 	subIndication := b.detailedReport.FinalSubIndication(signatureId)
-	if indication == enumerations.Indication_TOTAL_PASSED {
+	if indication == enumerations.IndicationTotalPassed {
 		b.determineSignatureExtensionPeriod(xmlSignature)
 		b.validSignatureCount++
 
-	} else if indication == enumerations.Indication_INDETERMINATE &&
-		subIndication == enumerations.SubIndication_TRY_LATER {
+	} else if indication == enumerations.IndicationIndeterminate &&
+		subIndication == enumerations.SubIndicationTryLater {
 		// indication is temporary, execute when applicable
 		b.determineSignatureExtensionPeriod(xmlSignature)
 	}
@@ -1128,7 +1128,7 @@ func (b *SimpleReportBuilder) ensureMaxExtensionTimeIsAfterValidationTime(maxExt
 // isValidConclusion is the port of the private isValidConclusion(String).
 func (b *SimpleReportBuilder) isValidConclusion(tokenId string) bool {
 	finalIndication := b.detailedReport.FinalIndication(tokenId)
-	return enumerations.Indication_TOTAL_PASSED == finalIndication || enumerations.Indication_PASSED == finalIndication
+	return enumerations.IndicationTotalPassed == finalIndication || enumerations.IndicationPassed == finalIndication
 }
 
 // containObjectWithId is the port of the private

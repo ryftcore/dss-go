@@ -58,9 +58,9 @@ func (s *XPointerSignatureScope) Description(tokenIdentifierProvider model.Token
 // Type returns the type of the signature scope. Port of getType().
 func (s *XPointerSignatureScope) Type() enumerations.SignatureScopeType {
 	if xmlutils.DomUtilsIsRootXPointer(s.uri) {
-		return enumerations.SignatureScopeType_FULL
+		return enumerations.SignatureScopeTypeFull
 	}
-	return enumerations.SignatureScopeType_PARTIAL
+	return enumerations.SignatureScopeTypePartial
 }
 
 // String ports toString().

@@ -45,18 +45,18 @@ func (c *QWACValidationResultCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QWACValidationResultCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VALID
+	return i18n.MessageTagQWACValid
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QWACValidationResultCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VALID_ANS
+	return i18n.MessageTagQWACValidANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *QWACValidationResultCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -122,7 +122,7 @@ func TestFullCorpusReportsByteParity(t *testing.T) {
 			signatureExecutor.SetDiagnosticData(diagnosticData)
 			signatureExecutor.SetValidationPolicy(validationpolicy.FromDefaultValidationPolicy().Create())
 			signatureExecutor.SetCurrentTime(fullCorpusValidationTime)
-			signatureExecutor.SetValidationLevel(enumerations.ValidationLevel_ARCHIVAL_DATA)
+			signatureExecutor.SetValidationLevel(enumerations.ValidationLevelArchivalData)
 			signatureExecutor.SetEnableEtsiValidationReport(true)
 			signatureExecutor.SetLocale("en")
 			reports := signatureExecutor.Execute()

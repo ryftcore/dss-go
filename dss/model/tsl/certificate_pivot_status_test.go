@@ -4,9 +4,9 @@ import "testing"
 
 func TestCertificatePivotStatusJavaNames(t *testing.T) {
 	cases := map[CertificatePivotStatus]string{
-		CertificatePivotStatus_ADDED:       "ADDED",
-		CertificatePivotStatus_NOT_CHANGED: "NOT_CHANGED",
-		CertificatePivotStatus_REMOVED:     "REMOVED",
+		CertificatePivotStatusAdded:      "ADDED",
+		CertificatePivotStatusNotChanged: "NOT_CHANGED",
+		CertificatePivotStatusRemoved:    "REMOVED",
 	}
 	for constant, javaName := range cases {
 		if string(constant) != javaName {

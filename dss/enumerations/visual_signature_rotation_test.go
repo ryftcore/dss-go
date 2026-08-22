@@ -4,11 +4,11 @@ import "testing"
 
 func TestVisualSignatureRotationValues(t *testing.T) {
 	want := []VisualSignatureRotation{
-		VisualSignatureRotation_NONE,
-		VisualSignatureRotation_AUTOMATIC,
-		VisualSignatureRotation_ROTATE_90,
-		VisualSignatureRotation_ROTATE_180,
-		VisualSignatureRotation_ROTATE_270,
+		VisualSignatureRotationNone,
+		VisualSignatureRotationAutomatic,
+		VisualSignatureRotationRotate90,
+		VisualSignatureRotationRotate180,
+		VisualSignatureRotationRotate270,
 	}
 	got := VisualSignatureRotationValues()
 	if len(got) != len(want) {

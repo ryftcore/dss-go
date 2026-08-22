@@ -58,7 +58,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	buildSignerInfoGenerator := func(contentSigner *CustomContentSigner) *SignerInfoGenerator {
 		generator, err := NewCMSSignerInfoGeneratorBuilder().
 			SetSigningCertificate(signingCertificate).
-			SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256).
+			SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 			Build(document, contentSigner)
 		if err != nil {
 			t.Fatalf("Build: %s", err)
@@ -67,7 +67,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	}
 
 	// Step 1: data to sign, an empty-signature ContentSigner capturing the bytes-to-be-signed.
-	dataToSignSigner, err := NewCustomContentSignerBuilder().Build(enumerations.SignatureAlgorithm_RSA_SHA256)
+	dataToSignSigner, err := NewCustomContentSignerBuilder().Build(enumerations.SignatureAlgorithmRSASHA256)
 	if err != nil {
 		t.Fatalf("Build content signer: %s", err)
 	}
@@ -92,7 +92,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	}
 
 	realSigner, err := NewCustomContentSignerBuilder().BuildWithSignatureValue(
-		enumerations.SignatureAlgorithm_RSA_SHA256, model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, signatureValue))
+		enumerations.SignatureAlgorithmRSASHA256, model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, signatureValue))
 	if err != nil {
 		t.Fatalf("BuildWithSignatureValue: %s", err)
 	}
@@ -141,7 +141,7 @@ func TestCMSBuilderRoundTrip(t *testing.T) {
 	if string(gotDigestElement.Octets()) != string(wantDigest[:]) {
 		t.Errorf("message-digest = %x, want %x", gotDigestElement.Octets(), wantDigest)
 	}
-	if signerInfo.SignedAttributes.Get(OID_id_aa_cmsAlgorithmProtect) == nil {
+	if signerInfo.SignedAttributes.Get(OIDIdAaCmsAlgorithmProtect) == nil {
 		t.Error("missing cms-algorithm-protection attribute")
 	}
 
@@ -159,14 +159,14 @@ func TestCMSBuilderDetached(t *testing.T) {
 	_, signingCertificate := generateTestCertificate(t)
 	document := model.NewInMemoryDocument([]byte("detached content"))
 
-	contentSigner, err := NewCustomContentSignerBuilder().BuildWithSignatureValue(enumerations.SignatureAlgorithm_RSA_SHA256,
-		model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256, []byte{1, 2, 3, 4}))
+	contentSigner, err := NewCustomContentSignerBuilder().BuildWithSignatureValue(enumerations.SignatureAlgorithmRSASHA256,
+		model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256, []byte{1, 2, 3, 4}))
 	if err != nil {
 		t.Fatalf("Build content signer: %s", err)
 	}
 	generator, err := NewCMSSignerInfoGeneratorBuilder().
 		SetSigningCertificate(signingCertificate).
-		SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256).
+		SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
 		Build(document, contentSigner)
 	if err != nil {
 		t.Fatalf("Build: %s", err)

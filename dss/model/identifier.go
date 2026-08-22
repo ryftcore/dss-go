@@ -16,7 +16,7 @@ import (
 
 // IdentifierDigestAlgorithm is the DigestAlgorithm every Identifier is computed with.
 // Port of the protected constant Identifier.DIGEST_ALGO.
-const IdentifierDigestAlgorithm = enumerations.DigestAlgorithm_SHA256
+const IdentifierDigestAlgorithm = enumerations.DigestAlgorithmSHA256
 
 // Identifier is the contract of the abstract Java class
 // eu.europa.esig.dss.model.identifier.Identifier. Java's covariant overrides
@@ -164,27 +164,27 @@ func (i *IdentifierBase) identifierBase() *IdentifierBase {
 // be produced for a token or an identifier, as it can in Java.
 func identifierMessageDigest(digestAlgorithm enumerations.DigestAlgorithm) (hash.Hash, error) {
 	switch digestAlgorithm {
-	case enumerations.DigestAlgorithm_RIPEMD160:
+	case enumerations.DigestAlgorithmRIPEMD160:
 		return ripemd160.New(), nil
-	case enumerations.DigestAlgorithm_SHA1:
+	case enumerations.DigestAlgorithmSHA1:
 		return sha1.New(), nil
-	case enumerations.DigestAlgorithm_SHA224:
+	case enumerations.DigestAlgorithmSHA224:
 		return sha256.New224(), nil
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		return sha256.New(), nil
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		return sha512.New384(), nil
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		return sha512.New(), nil
-	case enumerations.DigestAlgorithm_SHA3_224:
+	case enumerations.DigestAlgorithmSHA3224:
 		return sha3.New224(), nil
-	case enumerations.DigestAlgorithm_SHA3_256:
+	case enumerations.DigestAlgorithmSHA3256:
 		return sha3.New256(), nil
-	case enumerations.DigestAlgorithm_SHA3_384:
+	case enumerations.DigestAlgorithmSHA3384:
 		return sha3.New384(), nil
-	case enumerations.DigestAlgorithm_SHA3_512:
+	case enumerations.DigestAlgorithmSHA3512:
 		return sha3.New512(), nil
-	case enumerations.DigestAlgorithm_MD5:
+	case enumerations.DigestAlgorithmMD5:
 		return md5.New(), nil
 	}
 	// Upstream chains the JCA NoSuchAlgorithmException as the DSSException cause.

@@ -39,18 +39,18 @@ func NewCertificateTypeCheck(i18nProvider *i18n.I18nProvider, result *process.Re
 
 // Process performs the check. Port of process().
 func (c *CertificateTypeCheck) Process() bool {
-	return enumerations.CertificateType_UNKNOWN != c.certType
+	return enumerations.CertificateTypeUnknown != c.certType
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateTypeCheck) MessageTag() i18n.MessageTag {
 	switch c.validationTime {
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC
-	case enumerations.ValidationTime_VALIDATION_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT
+	case enumerations.ValidationTimeBESTSignatureTime:
+		return i18n.MessageTagQualCertTypeAtST
+	case enumerations.ValidationTimeCertificateIssuanceTime:
+		return i18n.MessageTagQualCertTypeAtCC
+	case enumerations.ValidationTimeValidationTime:
+		return i18n.MessageTagQualCertTypeAtVT
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}
@@ -59,12 +59,12 @@ func (c *CertificateTypeCheck) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.validationTime {
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST_ANS
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC_ANS
-	case enumerations.ValidationTime_VALIDATION_TIME:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT_ANS
+	case enumerations.ValidationTimeBESTSignatureTime:
+		return i18n.MessageTagQualCertTypeAtSTANS
+	case enumerations.ValidationTimeCertificateIssuanceTime:
+		return i18n.MessageTagQualCertTypeAtCCANS
+	case enumerations.ValidationTimeValidationTime:
+		return i18n.MessageTagQualCertTypeAtVTANS
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}
@@ -72,8 +72,8 @@ func (c *CertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *CertificateTypeCheck) BuildAdditionalInfo() *string {
-	if enumerations.CertificateType_UNKNOWN != c.certType {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_TYPE, c.certType.Label())
+	if enumerations.CertificateTypeUnknown != c.certType {
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateType, c.certType.Label())
 		return &message
 	}
 	return nil
@@ -82,7 +82,7 @@ func (c *CertificateTypeCheck) BuildAdditionalInfo() *string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

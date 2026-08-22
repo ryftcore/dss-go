@@ -161,14 +161,14 @@ func (c *CertificateToken) IsSelfSigned() bool {
 		if selfSigned {
 			if err := certificateTokenVerify(c.x509Certificate, c.PublicKey()); err == nil {
 				selfSigned = true
-				c.SetSignatureValidity(enumerations.SignatureValidity_VALID)
+				c.SetSignatureValidity(enumerations.SignatureValidityValid)
 			} else {
 				selfSigned = false
 			}
 		}
 		c.selfSigned = &selfSigned
 	} else if *c.selfSigned {
-		c.SetSignatureValidity(enumerations.SignatureValidity_VALID)
+		c.SetSignatureValidity(enumerations.SignatureValidityValid)
 	}
 	return *c.selfSigned
 }
@@ -229,10 +229,10 @@ func (c *CertificateToken) IssuerX500Principal() *X500Principal {
 // mechanism, so that branch is absent and an unsupported algorithm is reported as an
 // invalidity reason like any other verification failure.
 func (c *CertificateToken) CheckIsSignedBy(publicKey *PublicKey) enumerations.SignatureValidity {
-	result := enumerations.SignatureValidity_INVALID
+	result := enumerations.SignatureValidityInvalid
 	c.SetInvalidityReason("")
 	if err := certificateTokenVerify(c.x509Certificate, publicKey); err == nil {
-		result = enumerations.SignatureValidity_VALID
+		result = enumerations.SignatureValidityValid
 	} else {
 		c.SetInvalidityReason(certificateTokenInvalidityReason(err))
 	}

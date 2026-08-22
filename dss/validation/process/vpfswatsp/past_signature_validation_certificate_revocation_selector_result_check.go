@@ -45,7 +45,7 @@ func NewPastSignatureValidationCertificateRevocationSelectorResultCheck(i18nProv
 // BlockType returns the validating block type. Port of the overridden
 // getBlockType().
 func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_PSV_CRS
+	return jaxb.XmlBlockTypePSVCRS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden
@@ -56,7 +56,7 @@ func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BlockT
 func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BuildAdditionalInfo() *string {
 	acceptableRevocationId := acceptableRevocationIds(c.crsResult)
 	if utils.IsCollectionNotEmpty(acceptableRevocationId) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCEPTABLE_REVOCATION,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagAcceptableRevocation,
 			"["+strings.Join(acceptableRevocationId, ", ")+"]")
 		return &message
 	}

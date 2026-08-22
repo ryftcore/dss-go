@@ -43,23 +43,23 @@ func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_IODOF
+	return i18n.MessageTagBBBCVERIODOF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_IODOF_ANS
+	return i18n.MessageTagBBBCVERIODOFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }

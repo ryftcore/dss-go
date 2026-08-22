@@ -57,10 +57,10 @@ func NewPdfCompositeDssDictCertificateSource() *PdfCompositeDssDictCertificateSo
 // Port of populateFromDssDictionary(PdfDssDict).
 func (s *PdfCompositeDssDictCertificateSource) PopulateFromDssDictionary(dssDictionary PdfDssDict) {
 	for _, certToken := range s.dssDictionaryCertValues(dssDictionary) {
-		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOrigin_DSS_DICTIONARY)
+		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOriginDSSDictionary)
 	}
 	for _, certToken := range s.vriDictionaryCertValues(dssDictionary) {
-		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOrigin_VRI_DICTIONARY)
+		s.AddCertificateWithOrigin(certToken, enumerations.CertificateOriginVRIDictionary)
 	}
 }
 

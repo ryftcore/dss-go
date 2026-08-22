@@ -76,7 +76,7 @@ func (m *ASiCSWithXAdESContainerMerger) IsSupportedContent(asicContent *asic.ASi
 
 // GetTargetASiCContainerType ports the @Override protected getTargetASiCContainerType().
 func (m *ASiCSWithXAdESContainerMerger) GetTargetASiCContainerType() enumerations.ASiCContainerType {
-	return enumerations.ASiCContainerType_ASiC_S
+	return enumerations.ASiCContainerTypeASiCS
 }
 
 // EnsureContainerContentAllowMerge ports the @Override protected
@@ -358,7 +358,7 @@ func (m *ASiCSWithXAdESContainerMerger) getMergedSignaturesXml(documentAnalyzers
 	if err != nil {
 		panic(err)
 	}
-	return model.NewInMemoryDocumentWithMimeType(bytes, asic.ASiCUtilsSignaturesXML, enumerations.MimeTypeEnum_XML)
+	return model.NewInMemoryDocumentWithMimeType(bytes, asic.ASiCUtilsSignaturesXML, enumerations.MimeTypeEnumXML)
 }
 
 // compile-time assertion that the AdvancedSignature interface stays wired to the validation

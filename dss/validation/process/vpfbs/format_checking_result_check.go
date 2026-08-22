@@ -42,22 +42,22 @@ func (c *FormatCheckingResultCheck[T]) Process() bool {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *FormatCheckingResultCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *FormatCheckingResultCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *FormatCheckingResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IFCRC
+	return i18n.MessageTagBSVIFCRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *FormatCheckingResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IFCRC_ANS
+	return i18n.MessageTagBSVIFCRCANS
 }

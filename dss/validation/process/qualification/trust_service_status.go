@@ -7,37 +7,37 @@ package qualification
 type TrustServiceStatus string
 
 const (
-	// TrustServiceStatus_UNDER_SUPERVISION is the before-eIDAS 'undersupervision' status.
-	TrustServiceStatus_UNDER_SUPERVISION TrustServiceStatus = "UNDER_SUPERVISION"
-	// TrustServiceStatus_SUPERVISION_OF_SERVICE_IN_CESSATION is the before-eIDAS
+	// TrustServiceStatusUnderSupervision is the before-eIDAS 'undersupervision' status.
+	TrustServiceStatusUnderSupervision TrustServiceStatus = "UNDER_SUPERVISION"
+	// TrustServiceStatusSupervisionOfServiceInCessation is the before-eIDAS
 	// 'supervisionincessation' status.
-	TrustServiceStatus_SUPERVISION_OF_SERVICE_IN_CESSATION TrustServiceStatus = "SUPERVISION_OF_SERVICE_IN_CESSATION"
-	// TrustServiceStatus_SUPERVISION_CEASED is the before-eIDAS 'supervisionceased' status.
-	TrustServiceStatus_SUPERVISION_CEASED TrustServiceStatus = "SUPERVISION_CEASED"
-	// TrustServiceStatus_SUPERVISION_REVOKED is the before-eIDAS 'supervisionrevoked' status.
-	TrustServiceStatus_SUPERVISION_REVOKED TrustServiceStatus = "SUPERVISION_REVOKED"
-	// TrustServiceStatus_ACCREDITED is the before-eIDAS 'accredited' status.
-	TrustServiceStatus_ACCREDITED TrustServiceStatus = "ACCREDITED"
-	// TrustServiceStatus_ACCREDITATION_CEASED is the before-eIDAS 'accreditationceased' status.
-	TrustServiceStatus_ACCREDITATION_CEASED TrustServiceStatus = "ACCREDITATION_CEASED"
-	// TrustServiceStatus_ACCREDITATION_REVOKED is the before-eIDAS 'accreditationrevoked' status.
-	TrustServiceStatus_ACCREDITATION_REVOKED TrustServiceStatus = "ACCREDITATION_REVOKED"
+	TrustServiceStatusSupervisionOfServiceInCessation TrustServiceStatus = "SUPERVISION_OF_SERVICE_IN_CESSATION"
+	// TrustServiceStatusSupervisionCeased is the before-eIDAS 'supervisionceased' status.
+	TrustServiceStatusSupervisionCeased TrustServiceStatus = "SUPERVISION_CEASED"
+	// TrustServiceStatusSupervisionRevoked is the before-eIDAS 'supervisionrevoked' status.
+	TrustServiceStatusSupervisionRevoked TrustServiceStatus = "SUPERVISION_REVOKED"
+	// TrustServiceStatusAccredited is the before-eIDAS 'accredited' status.
+	TrustServiceStatusAccredited TrustServiceStatus = "ACCREDITED"
+	// TrustServiceStatusAccreditationCeased is the before-eIDAS 'accreditationceased' status.
+	TrustServiceStatusAccreditationCeased TrustServiceStatus = "ACCREDITATION_CEASED"
+	// TrustServiceStatusAccreditationRevoked is the before-eIDAS 'accreditationrevoked' status.
+	TrustServiceStatusAccreditationRevoked TrustServiceStatus = "ACCREDITATION_REVOKED"
 
-	// TrustServiceStatus_GRANTED is the after-eIDAS 'granted' status.
-	TrustServiceStatus_GRANTED TrustServiceStatus = "GRANTED"
-	// TrustServiceStatus_WITHDRAWN is the after-eIDAS 'withdrawn' status.
-	TrustServiceStatus_WITHDRAWN TrustServiceStatus = "WITHDRAWN"
-	// TrustServiceStatus_SET_BY_NATIONAL_LAW is the after-eIDAS 'setbynationallaw' status.
-	TrustServiceStatus_SET_BY_NATIONAL_LAW TrustServiceStatus = "SET_BY_NATIONAL_LAW"
-	// TrustServiceStatus_RECONIZED_AT_NATIONAL_LEVEL is the after-eIDAS
+	// TrustServiceStatusGranted is the after-eIDAS 'granted' status.
+	TrustServiceStatusGranted TrustServiceStatus = "GRANTED"
+	// TrustServiceStatusWithdrawn is the after-eIDAS 'withdrawn' status.
+	TrustServiceStatusWithdrawn TrustServiceStatus = "WITHDRAWN"
+	// TrustServiceStatusSetByNationalLaw is the after-eIDAS 'setbynationallaw' status.
+	TrustServiceStatusSetByNationalLaw TrustServiceStatus = "SET_BY_NATIONAL_LAW"
+	// TrustServiceStatusReconizedAtNationalLevel is the after-eIDAS
 	// 'recognisedatnationallevel' status.
-	TrustServiceStatus_RECONIZED_AT_NATIONAL_LEVEL TrustServiceStatus = "RECONIZED_AT_NATIONAL_LEVEL"
-	// TrustServiceStatus_DEPRECATED_BY_NATIONAL_LAW is the after-eIDAS
+	TrustServiceStatusReconizedAtNationalLevel TrustServiceStatus = "RECONIZED_AT_NATIONAL_LEVEL"
+	// TrustServiceStatusDeprecatedByNationalLaw is the after-eIDAS
 	// 'deprecatedbynationallaw' status.
-	TrustServiceStatus_DEPRECATED_BY_NATIONAL_LAW TrustServiceStatus = "DEPRECATED_BY_NATIONAL_LAW"
-	// TrustServiceStatus_DEPRECATED_AT_NATIONAL_LEVEL is the after-eIDAS
+	TrustServiceStatusDeprecatedByNationalLaw TrustServiceStatus = "DEPRECATED_BY_NATIONAL_LAW"
+	// TrustServiceStatusDeprecatedAtNationalLevel is the after-eIDAS
 	// 'deprecatedatnationallevel' status.
-	TrustServiceStatus_DEPRECATED_AT_NATIONAL_LEVEL TrustServiceStatus = "DEPRECATED_AT_NATIONAL_LEVEL"
+	TrustServiceStatusDeprecatedAtNationalLevel TrustServiceStatus = "DEPRECATED_AT_NATIONAL_LEVEL"
 )
 
 // trustServiceStatusFields holds the (shortName, uri, postEidas, valid) tuple for each constant.
@@ -50,50 +50,50 @@ type trustServiceStatusFields struct {
 
 // trustServiceStatusData holds the fields for each constant, in declaration order.
 var trustServiceStatusData = map[TrustServiceStatus]trustServiceStatusFields{
-	TrustServiceStatus_UNDER_SUPERVISION: {"under supervision",
+	TrustServiceStatusUnderSupervision: {"under supervision",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/undersupervision", false, true},
-	TrustServiceStatus_SUPERVISION_OF_SERVICE_IN_CESSATION: {"supervision in cessation",
+	TrustServiceStatusSupervisionOfServiceInCessation: {"supervision in cessation",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/supervisionincessation", false, true},
-	TrustServiceStatus_SUPERVISION_CEASED: {"supervision ceased",
+	TrustServiceStatusSupervisionCeased: {"supervision ceased",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/supervisionceased", false, false},
-	TrustServiceStatus_SUPERVISION_REVOKED: {"supervision revoked",
+	TrustServiceStatusSupervisionRevoked: {"supervision revoked",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/supervisionrevoked", false, false},
-	TrustServiceStatus_ACCREDITED: {"accredited",
+	TrustServiceStatusAccredited: {"accredited",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accredited", false, true},
-	TrustServiceStatus_ACCREDITATION_CEASED: {"accreditation ceased",
+	TrustServiceStatusAccreditationCeased: {"accreditation ceased",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accreditationceased", false, false},
-	TrustServiceStatus_ACCREDITATION_REVOKED: {"accreditation revoked",
+	TrustServiceStatusAccreditationRevoked: {"accreditation revoked",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/accreditationrevoked", false, false},
-	TrustServiceStatus_GRANTED: {"granted",
+	TrustServiceStatusGranted: {"granted",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/granted", true, true},
-	TrustServiceStatus_WITHDRAWN: {"withdrawn",
+	TrustServiceStatusWithdrawn: {"withdrawn",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/withdrawn", true, false},
-	TrustServiceStatus_SET_BY_NATIONAL_LAW: {"set by national law",
+	TrustServiceStatusSetByNationalLaw: {"set by national law",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/setbynationallaw", true, false},
-	TrustServiceStatus_RECONIZED_AT_NATIONAL_LEVEL: {"recognised at national level",
+	TrustServiceStatusReconizedAtNationalLevel: {"recognised at national level",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/recognisedatnationallevel", true, false},
-	TrustServiceStatus_DEPRECATED_BY_NATIONAL_LAW: {"deprecated by national law",
+	TrustServiceStatusDeprecatedByNationalLaw: {"deprecated by national law",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/deprecatedbynationallaw", true, false},
-	TrustServiceStatus_DEPRECATED_AT_NATIONAL_LEVEL: {"deprecated at national level",
+	TrustServiceStatusDeprecatedAtNationalLevel: {"deprecated at national level",
 		"http://uri.etsi.org/TrstSvc/TrustedList/Svcstatus/deprecatedatnationallevel", true, false},
 }
 
 // trustServiceStatusValues returns all constants in declaration order.
 func trustServiceStatusValues() []TrustServiceStatus {
 	return []TrustServiceStatus{
-		TrustServiceStatus_UNDER_SUPERVISION,
-		TrustServiceStatus_SUPERVISION_OF_SERVICE_IN_CESSATION,
-		TrustServiceStatus_SUPERVISION_CEASED,
-		TrustServiceStatus_SUPERVISION_REVOKED,
-		TrustServiceStatus_ACCREDITED,
-		TrustServiceStatus_ACCREDITATION_CEASED,
-		TrustServiceStatus_ACCREDITATION_REVOKED,
-		TrustServiceStatus_GRANTED,
-		TrustServiceStatus_WITHDRAWN,
-		TrustServiceStatus_SET_BY_NATIONAL_LAW,
-		TrustServiceStatus_RECONIZED_AT_NATIONAL_LEVEL,
-		TrustServiceStatus_DEPRECATED_BY_NATIONAL_LAW,
-		TrustServiceStatus_DEPRECATED_AT_NATIONAL_LEVEL,
+		TrustServiceStatusUnderSupervision,
+		TrustServiceStatusSupervisionOfServiceInCessation,
+		TrustServiceStatusSupervisionCeased,
+		TrustServiceStatusSupervisionRevoked,
+		TrustServiceStatusAccredited,
+		TrustServiceStatusAccreditationCeased,
+		TrustServiceStatusAccreditationRevoked,
+		TrustServiceStatusGranted,
+		TrustServiceStatusWithdrawn,
+		TrustServiceStatusSetByNationalLaw,
+		TrustServiceStatusReconizedAtNationalLevel,
+		TrustServiceStatusDeprecatedByNationalLaw,
+		TrustServiceStatusDeprecatedAtNationalLevel,
 	}
 }
 
@@ -140,7 +140,7 @@ func TrustServiceStatusIsAcceptableStatusAfterEIDAS(uri string) bool {
 // by national law after eIDAS. Port of isSetByNationalLawAfterEIDAS(String).
 func TrustServiceStatusIsSetByNationalLawAfterEIDAS(uri string) bool {
 	tss := TrustServiceStatusFromUri(uri)
-	return TrustServiceStatus_SET_BY_NATIONAL_LAW == tss
+	return TrustServiceStatusSetByNationalLaw == tss
 }
 
 // TrustServiceStatusIsRecognizedAtNationalLevelAfterEIDAS gets whether the given status
@@ -148,7 +148,7 @@ func TrustServiceStatusIsSetByNationalLawAfterEIDAS(uri string) bool {
 // isRecognizedAtNationalLevelAfterEIDAS(String).
 func TrustServiceStatusIsRecognizedAtNationalLevelAfterEIDAS(uri string) bool {
 	tss := TrustServiceStatusFromUri(uri)
-	return TrustServiceStatus_RECONIZED_AT_NATIONAL_LEVEL == tss
+	return TrustServiceStatusReconizedAtNationalLevel == tss
 }
 
 // TrustServiceStatusFromUri returns a corresponding TrustServiceStatus by the given

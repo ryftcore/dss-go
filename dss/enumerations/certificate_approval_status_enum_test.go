@@ -11,21 +11,21 @@ func TestCertificateApprovalStatusEnum(t *testing.T) {
 		sti      LoTEServiceTypeIdentifier
 		status   LoTEServiceStatus
 	}{
-		{CertificateApprovalStatusEnum_PID_PROVIDER, "PID Provider", LoTETypeEnum_EUPIDProvidersList, LoTEServiceTypeIdentifierEnum_PID_ISSUANCE, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_PID_REVOCATION, "Certificate for PID Revocation", LoTETypeEnum_EUPIDProvidersList, LoTEServiceTypeIdentifierEnum_PID_REVOCATION, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WALLET_ISSUANCE, "Certificate for Wallet Solution Issuance", LoTETypeEnum_EUWalletProvidersList, LoTEServiceTypeIdentifierEnum_WALLET_ISSUANCE, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WALLET_REVOCATION, "Certificate for Wallet Solution Revocation", LoTETypeEnum_EUWalletProvidersList, LoTEServiceTypeIdentifierEnum_WALLET_REVOCATION, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WRPAC_ISSUANCE, "Certificate for WRPAC Issuance", LoTETypeEnum_EUWRPACProvidersList, LoTEServiceTypeIdentifierEnum_WRPAC_ISSUANCE, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WRPAC_REVOCATION, "Certificate for WRPAC Revocation", LoTETypeEnum_EUWRPACProvidersList, LoTEServiceTypeIdentifierEnum_WRPAC_REVOCATION, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WRPRC_ISSUANCE, "Certificate for WRPRC Issuance", LoTETypeEnum_EUWRPRCProvidersList, LoTEServiceTypeIdentifierEnum_WRPRC_ISSUANCE, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_WRPRC_REVOCATION, "Certificate for WRPRC Revocation", LoTETypeEnum_EUWRPRCProvidersList, LoTEServiceTypeIdentifierEnum_WRPRC_REVOCATION, nil},
-		{CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_ISSUANCE, "Notified Certificate for Pub-EAA Issuance", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED},
-		{CertificateApprovalStatusEnum_NOTIFIED_CERT_FOR_PUB_EAA_REVOCATION, "Notified Certificate for Pub-EAA Revocation", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_NOTIFIED},
-		{CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_ISSUANCE, "Notified Certificate for Pub-EAA Issuance", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_ISSUANCE, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_WITHDRAWN},
-		{CertificateApprovalStatusEnum_WITHDRAWN_CERT_FOR_PUB_EAA_REVOCATION, "Notified Certificate for Pub-EAA Revocation", LoTETypeEnum_EUPubEAAProvidersList, LoTEServiceTypeIdentifierEnum_PUB_EAA_REVOCATION, LoTEServiceStatusEnum_PUB_EAA_PROVIDER_WITHDRAWN},
-		{CertificateApprovalStatusEnum_CERT_FOR_REGISTER, "Certificate for Register", LoTETypeEnum_EURegistrarsAndRegistersList, LoTEServiceTypeIdentifierEnum_REGISTER, nil},
-		{CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN, "Certificate for Unknown usage", nil, nil, nil},
-		{CertificateApprovalStatusEnum_NA, "Not applicable", nil, nil, nil},
+		{CertificateApprovalStatusEnumPIDProvider, "PID Provider", LoTETypeEnumEUPIDProvidersList, LoTEServiceTypeIdentifierEnumPIDIssuance, nil},
+		{CertificateApprovalStatusEnumCertForPIDRevocation, "Certificate for PID Revocation", LoTETypeEnumEUPIDProvidersList, LoTEServiceTypeIdentifierEnumPIDRevocation, nil},
+		{CertificateApprovalStatusEnumCertForWalletIssuance, "Certificate for Wallet Solution Issuance", LoTETypeEnumEUWalletProvidersList, LoTEServiceTypeIdentifierEnumWalletIssuance, nil},
+		{CertificateApprovalStatusEnumCertForWalletRevocation, "Certificate for Wallet Solution Revocation", LoTETypeEnumEUWalletProvidersList, LoTEServiceTypeIdentifierEnumWalletRevocation, nil},
+		{CertificateApprovalStatusEnumCertForWRPACIssuance, "Certificate for WRPAC Issuance", LoTETypeEnumEUWRPACProvidersList, LoTEServiceTypeIdentifierEnumWRPACIssuance, nil},
+		{CertificateApprovalStatusEnumCertForWRPACRevocation, "Certificate for WRPAC Revocation", LoTETypeEnumEUWRPACProvidersList, LoTEServiceTypeIdentifierEnumWRPACRevocation, nil},
+		{CertificateApprovalStatusEnumCertForWRPRCIssuance, "Certificate for WRPRC Issuance", LoTETypeEnumEUWRPRCProvidersList, LoTEServiceTypeIdentifierEnumWRPRCIssuance, nil},
+		{CertificateApprovalStatusEnumCertForWRPRCRevocation, "Certificate for WRPRC Revocation", LoTETypeEnumEUWRPRCProvidersList, LoTEServiceTypeIdentifierEnumWRPRCRevocation, nil},
+		{CertificateApprovalStatusEnumNotifiedCertForPubEAAIssuance, "Notified Certificate for Pub-EAA Issuance", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAAIssuance, LoTEServiceStatusEnumPubEAAProviderNotified},
+		{CertificateApprovalStatusEnumNotifiedCertForPubEAARevocation, "Notified Certificate for Pub-EAA Revocation", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAARevocation, LoTEServiceStatusEnumPubEAAProviderNotified},
+		{CertificateApprovalStatusEnumWithdrawnCertForPubEAAIssuance, "Notified Certificate for Pub-EAA Issuance", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAAIssuance, LoTEServiceStatusEnumPubEAAProviderWithdrawn},
+		{CertificateApprovalStatusEnumWithdrawnCertForPubEAARevocation, "Notified Certificate for Pub-EAA Revocation", LoTETypeEnumEUPubEAAProvidersList, LoTEServiceTypeIdentifierEnumPubEAARevocation, LoTEServiceStatusEnumPubEAAProviderWithdrawn},
+		{CertificateApprovalStatusEnumCertForRegister, "Certificate for Register", LoTETypeEnumEURegistrarsAndRegistersList, LoTEServiceTypeIdentifierEnumRegister, nil},
+		{CertificateApprovalStatusEnumCertForUnknown, "Certificate for Unknown usage", nil, nil, nil},
+		{CertificateApprovalStatusEnumNA, "Not applicable", nil, nil, nil},
 	}
 	if len(CertificateApprovalStatusEnumValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(CertificateApprovalStatusEnumValues()))

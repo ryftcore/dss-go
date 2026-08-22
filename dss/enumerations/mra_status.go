@@ -10,23 +10,23 @@ import "fmt"
 type MRAStatus string
 
 const (
-	// MRAStatus_ENACTED is used to denote a valid status.
-	MRAStatus_ENACTED MRAStatus = "ENACTED"
-	// MRAStatus_REPEALED is used to denote an invalid status.
-	MRAStatus_REPEALED MRAStatus = "REPEALED"
+	// MRAStatusEnacted is used to denote a valid status.
+	MRAStatusEnacted MRAStatus = "ENACTED"
+	// MRAStatusRepealed is used to denote an invalid status.
+	MRAStatusRepealed MRAStatus = "REPEALED"
 )
 
 // mraStatusURIs holds the URI for each constant.
 var mraStatusURIs = map[MRAStatus]string{
-	MRAStatus_ENACTED:  "http://ec.europa.eu/tools/lotl/mra/enacted",
-	MRAStatus_REPEALED: "http://ec.europa.eu/tools/lotl/mra/repealed",
+	MRAStatusEnacted:  "http://ec.europa.eu/tools/lotl/mra/enacted",
+	MRAStatusRepealed: "http://ec.europa.eu/tools/lotl/mra/repealed",
 }
 
 // MRAStatusValues returns all constants in declaration order.
 func MRAStatusValues() []MRAStatus {
 	return []MRAStatus{
-		MRAStatus_ENACTED,
-		MRAStatus_REPEALED,
+		MRAStatusEnacted,
+		MRAStatusRepealed,
 	}
 }
 
@@ -48,7 +48,7 @@ func (m MRAStatus) URI() string {
 // IsEnacted returns whether the MRA Status corresponds to the enacted Trust
 // Service equivalence schema.
 func (m MRAStatus) IsEnacted() bool {
-	return m == MRAStatus_ENACTED
+	return m == MRAStatusEnacted
 }
 
 // compile-time interface assertion.

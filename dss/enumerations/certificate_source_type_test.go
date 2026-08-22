@@ -5,17 +5,17 @@ import "testing"
 
 func TestCertificateSourceType_IsTrusted(t *testing.T) {
 	trusted := map[CertificateSourceType]bool{
-		CertificateSourceType_TRUSTED_STORE:    true,
-		CertificateSourceType_TRUSTED_LIST:     true,
-		CertificateSourceType_TRUSTED_ENTITIES: true,
-		CertificateSourceType_SIGNATURE:        false,
-		CertificateSourceType_OCSP_RESPONSE:    false,
-		CertificateSourceType_OTHER:            false,
-		CertificateSourceType_AIA:              false,
-		CertificateSourceType_TIMESTAMP:        false,
-		CertificateSourceType_EVIDENCE_RECORD:  false,
-		CertificateSourceType_EAA:              false,
-		CertificateSourceType_UNKNOWN:          false,
+		CertificateSourceTypeTrustedStore:    true,
+		CertificateSourceTypeTrustedList:     true,
+		CertificateSourceTypeTrustedEntities: true,
+		CertificateSourceTypeSignature:       false,
+		CertificateSourceTypeOCSPResponse:    false,
+		CertificateSourceTypeOther:           false,
+		CertificateSourceTypeAIA:             false,
+		CertificateSourceTypeTimestamp:       false,
+		CertificateSourceTypeEvidenceRecord:  false,
+		CertificateSourceTypeEAA:             false,
+		CertificateSourceTypeUnknown:         false,
 	}
 	if len(trusted) != len(CertificateSourceTypeValues()) {
 		t.Fatalf("expected %d values, got %d", len(trusted), len(CertificateSourceTypeValues()))

@@ -7,12 +7,12 @@ func TestIndicationURI(t *testing.T) {
 		v    Indication
 		want string
 	}{
-		{Indication_TOTAL_PASSED, "urn:etsi:019102:mainindication:total-passed"},
-		{Indication_TOTAL_FAILED, "urn:etsi:019102:mainindication:total-failed"},
-		{Indication_INDETERMINATE, "urn:etsi:019102:mainindication:indeterminate"},
-		{Indication_PASSED, "urn:etsi:019102:mainindication:passed"},
-		{Indication_FAILED, "urn:etsi:019102:mainindication:failed"},
-		{Indication_NO_SIGNATURE_FOUND, "urn:cef:dss:mainindication:noSignatureFound"},
+		{IndicationTotalPassed, "urn:etsi:019102:mainindication:total-passed"},
+		{IndicationTotalFailed, "urn:etsi:019102:mainindication:total-failed"},
+		{IndicationIndeterminate, "urn:etsi:019102:mainindication:indeterminate"},
+		{IndicationPassed, "urn:etsi:019102:mainindication:passed"},
+		{IndicationFailed, "urn:etsi:019102:mainindication:failed"},
+		{IndicationNoSignatureFound, "urn:cef:dss:mainindication:noSignatureFound"},
 	}
 	for _, c := range cases {
 		if got := c.v.URI(); got != c.want {
@@ -38,12 +38,12 @@ func TestIndicationValueOf(t *testing.T) {
 
 func TestIndicationValues(t *testing.T) {
 	want := []Indication{
-		Indication_TOTAL_PASSED,
-		Indication_TOTAL_FAILED,
-		Indication_INDETERMINATE,
-		Indication_PASSED,
-		Indication_FAILED,
-		Indication_NO_SIGNATURE_FOUND,
+		IndicationTotalPassed,
+		IndicationTotalFailed,
+		IndicationIndeterminate,
+		IndicationPassed,
+		IndicationFailed,
+		IndicationNoSignatureFound,
 	}
 	got := IndicationValues()
 	if len(got) != len(want) {

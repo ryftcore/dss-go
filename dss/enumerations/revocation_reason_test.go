@@ -9,16 +9,16 @@ func TestRevocationReason(t *testing.T) {
 		uri       string
 		value     int
 	}{
-		{RevocationReason_UNSPECIFIED, "unspecified", "urn:etsi:019102:revocationReason:unspecified", 0},
-		{RevocationReason_KEY_COMPROMISE, "keyCompromise", "urn:etsi:019102:revocationReason:keyCompromise", 1},
-		{RevocationReason_CA_COMPROMISE, "cACompromise", "urn:etsi:019102:revocationReason:cACompromise", 2},
-		{RevocationReason_AFFILIATION_CHANGED, "affiliationChanged", "urn:etsi:019102:revocationReason:affiliationChanged", 3},
-		{RevocationReason_SUPERSEDED, "superseded", "urn:etsi:019102:revocationReason:superseded", 4},
-		{RevocationReason_CESSATION_OF_OPERATION, "cessationOfOperation", "urn:etsi:019102:revocationReason:cessationOfOperation", 5},
-		{RevocationReason_CERTIFICATE_HOLD, "certificateHold", "urn:etsi:019102:revocationReason:certificateHold", 6},
-		{RevocationReason_REMOVE_FROM_CRL, "removeFromCRL", "urn:etsi:019102:revocationReason:removeFromCRL", 8},
-		{RevocationReason_PRIVILEGE_WITHDRAWN, "privilegeWithdrawn", "urn:etsi:019102:revocationReason:privilegeWithdrawn", 9},
-		{RevocationReason_AA_COMPROMISE, "aACompromise", "urn:etsi:019102:revocationReason:aACompromise", 10},
+		{RevocationReasonUnspecified, "unspecified", "urn:etsi:019102:revocationReason:unspecified", 0},
+		{RevocationReasonKeyCompromise, "keyCompromise", "urn:etsi:019102:revocationReason:keyCompromise", 1},
+		{RevocationReasonCACompromise, "cACompromise", "urn:etsi:019102:revocationReason:cACompromise", 2},
+		{RevocationReasonAffiliationChanged, "affiliationChanged", "urn:etsi:019102:revocationReason:affiliationChanged", 3},
+		{RevocationReasonSuperseded, "superseded", "urn:etsi:019102:revocationReason:superseded", 4},
+		{RevocationReasonCessationOfOperation, "cessationOfOperation", "urn:etsi:019102:revocationReason:cessationOfOperation", 5},
+		{RevocationReasonCertificateHold, "certificateHold", "urn:etsi:019102:revocationReason:certificateHold", 6},
+		{RevocationReasonRemoveFromCRL, "removeFromCRL", "urn:etsi:019102:revocationReason:removeFromCRL", 8},
+		{RevocationReasonPrivilegeWithdrawn, "privilegeWithdrawn", "urn:etsi:019102:revocationReason:privilegeWithdrawn", 9},
+		{RevocationReasonAACompromise, "aACompromise", "urn:etsi:019102:revocationReason:aACompromise", 10},
 	}
 	if len(RevocationReasonValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(RevocationReasonValues()))

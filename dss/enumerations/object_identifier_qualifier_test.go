@@ -7,8 +7,8 @@ func TestObjectIdentifierQualifierValue(t *testing.T) {
 		v    ObjectIdentifierQualifier
 		want string
 	}{
-		{ObjectIdentifierQualifier_OID_AS_URI, "OIDAsURI"},
-		{ObjectIdentifierQualifier_OID_AS_URN, "OIDAsURN"},
+		{ObjectIdentifierQualifierOIDAsURI, "OIDAsURI"},
+		{ObjectIdentifierQualifierOIDAsURN, "OIDAsURN"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Value(); got != tt.want {

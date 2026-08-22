@@ -37,138 +37,138 @@ import (
 type SignatureAlgorithm string
 
 const (
-	// SignatureAlgorithm_RSA_RAW is RSA without digest algorithm.
-	SignatureAlgorithm_RSA_RAW SignatureAlgorithm = "RSA_RAW"
-	// SignatureAlgorithm_RSA_SHA1 is RSA with SHA-1.
-	SignatureAlgorithm_RSA_SHA1 SignatureAlgorithm = "RSA_SHA1"
-	// SignatureAlgorithm_RSA_SHA224 is RSA with SHA-224.
-	SignatureAlgorithm_RSA_SHA224 SignatureAlgorithm = "RSA_SHA224"
-	// SignatureAlgorithm_RSA_SHA256 is RSA with SHA-256.
-	SignatureAlgorithm_RSA_SHA256 SignatureAlgorithm = "RSA_SHA256"
-	// SignatureAlgorithm_RSA_SHA384 is RSA with SHA-384.
-	SignatureAlgorithm_RSA_SHA384 SignatureAlgorithm = "RSA_SHA384"
-	// SignatureAlgorithm_RSA_SHA512 is RSA with SHA-512.
-	SignatureAlgorithm_RSA_SHA512 SignatureAlgorithm = "RSA_SHA512"
-	// SignatureAlgorithm_RSA_SHA3_224 is RSA with SHA3-224.
-	SignatureAlgorithm_RSA_SHA3_224 SignatureAlgorithm = "RSA_SHA3_224"
-	// SignatureAlgorithm_RSA_SHA3_256 is RSA with SHA3-256.
-	SignatureAlgorithm_RSA_SHA3_256 SignatureAlgorithm = "RSA_SHA3_256"
-	// SignatureAlgorithm_RSA_SHA3_384 is RSA with SHA3-384.
-	SignatureAlgorithm_RSA_SHA3_384 SignatureAlgorithm = "RSA_SHA3_384"
-	// SignatureAlgorithm_RSA_SHA3_512 is RSA with SHA3-512.
-	SignatureAlgorithm_RSA_SHA3_512 SignatureAlgorithm = "RSA_SHA3_512"
-	// SignatureAlgorithm_RSA_SSA_PSS_RAW_MGF1 is RSA with MGF1 without digest algorithm.
-	SignatureAlgorithm_RSA_SSA_PSS_RAW_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_RAW_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1 is RSA with MGF1 with SHA-1.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA1_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1 is RSA with MGF1 with SHA-224.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA224_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1 is RSA with MGF1 with SHA-256.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA256_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1 is RSA with MGF1 with SHA-384.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA384_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1 is RSA with MGF1 with SHA-512.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA512_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1 is RSA with MGF1 with SHA3-224.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_224_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1 is RSA with MGF1 with SHA3-256.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_256_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1 is RSA with MGF1 with SHA3-384.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_384_MGF1"
-	// SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1 is RSA with MGF1 with SHA3-512.
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_512_MGF1"
-	// SignatureAlgorithm_RSA_RIPEMD160 is RSA with RIPEMD160.
-	SignatureAlgorithm_RSA_RIPEMD160 SignatureAlgorithm = "RSA_RIPEMD160"
-	// SignatureAlgorithm_RSA_MD2 is RSA with MD2.
-	SignatureAlgorithm_RSA_MD2 SignatureAlgorithm = "RSA_MD2"
-	// SignatureAlgorithm_RSA_MD5 is RSA with MD5.
-	SignatureAlgorithm_RSA_MD5 SignatureAlgorithm = "RSA_MD5"
-	// SignatureAlgorithm_ECDSA_RAW is ECDSA without digest algorithm.
-	SignatureAlgorithm_ECDSA_RAW SignatureAlgorithm = "ECDSA_RAW"
-	// SignatureAlgorithm_ECDSA_SHA1 is ECDSA with SHA-1.
-	SignatureAlgorithm_ECDSA_SHA1 SignatureAlgorithm = "ECDSA_SHA1"
-	// SignatureAlgorithm_ECDSA_SHA224 is ECDSA with SHA-224.
-	SignatureAlgorithm_ECDSA_SHA224 SignatureAlgorithm = "ECDSA_SHA224"
-	// SignatureAlgorithm_ECDSA_SHA256 is ECDSA with SHA-256.
-	SignatureAlgorithm_ECDSA_SHA256 SignatureAlgorithm = "ECDSA_SHA256"
-	// SignatureAlgorithm_ECDSA_SHA384 is ECDSA with SHA-384.
-	SignatureAlgorithm_ECDSA_SHA384 SignatureAlgorithm = "ECDSA_SHA384"
-	// SignatureAlgorithm_ECDSA_SHA512 is ECDSA with SHA-512.
-	SignatureAlgorithm_ECDSA_SHA512 SignatureAlgorithm = "ECDSA_SHA512"
-	// SignatureAlgorithm_ECDSA_SHA3_224 is ECDSA with SHA3-224.
-	SignatureAlgorithm_ECDSA_SHA3_224 SignatureAlgorithm = "ECDSA_SHA3_224"
-	// SignatureAlgorithm_ECDSA_SHA3_256 is ECDSA with SHA3-256.
-	SignatureAlgorithm_ECDSA_SHA3_256 SignatureAlgorithm = "ECDSA_SHA3_256"
-	// SignatureAlgorithm_ECDSA_SHA3_384 is ECDSA with SHA3-384.
-	SignatureAlgorithm_ECDSA_SHA3_384 SignatureAlgorithm = "ECDSA_SHA3_384"
-	// SignatureAlgorithm_ECDSA_SHA3_512 is ECDSA with SHA3-512.
-	SignatureAlgorithm_ECDSA_SHA3_512 SignatureAlgorithm = "ECDSA_SHA3_512"
-	// SignatureAlgorithm_ECDSA_RIPEMD160 is ECDSA with RIPEMD160.
-	SignatureAlgorithm_ECDSA_RIPEMD160 SignatureAlgorithm = "ECDSA_RIPEMD160"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA1 is PLAIN-ECDSA with SHA-1.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA1 SignatureAlgorithm = "PLAIN_ECDSA_SHA1"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA224 is PLAIN-ECDSA with SHA-224.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA224 SignatureAlgorithm = "PLAIN_ECDSA_SHA224"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA256 is PLAIN-ECDSA with SHA-256.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA256 SignatureAlgorithm = "PLAIN_ECDSA_SHA256"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA384 is PLAIN-ECDSA with SHA-384.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA384 SignatureAlgorithm = "PLAIN_ECDSA_SHA384"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA512 is PLAIN-ECDSA with SHA-512.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA512 SignatureAlgorithm = "PLAIN_ECDSA_SHA512"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA3_224 is PLAIN-ECDSA with SHA3-224.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_224 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_224"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA3_256 is PLAIN-ECDSA with SHA3-256.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_256 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_256"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA3_384 is PLAIN-ECDSA with SHA3-384.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_384 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_384"
-	// SignatureAlgorithm_PLAIN_ECDSA_SHA3_512 is PLAIN-ECDSA with SHA3-512.
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_512 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_512"
-	// SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160 is PLAIN-ECDSA with RIPEMD160.
-	SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160 SignatureAlgorithm = "PLAIN_ECDSA_RIPEMD160"
-	// SignatureAlgorithm_DSA_RAW is DSA without digest algorithm.
-	SignatureAlgorithm_DSA_RAW SignatureAlgorithm = "DSA_RAW"
-	// SignatureAlgorithm_DSA_SHA1 is DSA with SHA-1.
-	SignatureAlgorithm_DSA_SHA1 SignatureAlgorithm = "DSA_SHA1"
-	// SignatureAlgorithm_DSA_SHA224 is DSA with SHA-224.
-	SignatureAlgorithm_DSA_SHA224 SignatureAlgorithm = "DSA_SHA224"
-	// SignatureAlgorithm_DSA_SHA256 is DSA with SHA-256.
-	SignatureAlgorithm_DSA_SHA256 SignatureAlgorithm = "DSA_SHA256"
-	// SignatureAlgorithm_DSA_SHA384 is DSA with SHA-384.
-	SignatureAlgorithm_DSA_SHA384 SignatureAlgorithm = "DSA_SHA384"
-	// SignatureAlgorithm_DSA_SHA512 is DSA with SHA-512.
-	SignatureAlgorithm_DSA_SHA512 SignatureAlgorithm = "DSA_SHA512"
-	// SignatureAlgorithm_DSA_SHA3_224 is DSA with SHA3-224.
-	SignatureAlgorithm_DSA_SHA3_224 SignatureAlgorithm = "DSA_SHA3_224"
-	// SignatureAlgorithm_DSA_SHA3_256 is DSA with SHA3-256.
-	SignatureAlgorithm_DSA_SHA3_256 SignatureAlgorithm = "DSA_SHA3_256"
-	// SignatureAlgorithm_DSA_SHA3_384 is DSA with SHA3-384.
-	SignatureAlgorithm_DSA_SHA3_384 SignatureAlgorithm = "DSA_SHA3_384"
-	// SignatureAlgorithm_DSA_SHA3_512 is DSA with SHA3-512.
-	SignatureAlgorithm_DSA_SHA3_512 SignatureAlgorithm = "DSA_SHA3_512"
-	// SignatureAlgorithm_HMAC_SHA1 is HMAC with SHA-1.
-	SignatureAlgorithm_HMAC_SHA1 SignatureAlgorithm = "HMAC_SHA1"
-	// SignatureAlgorithm_HMAC_SHA224 is HMAC with SHA-224.
-	SignatureAlgorithm_HMAC_SHA224 SignatureAlgorithm = "HMAC_SHA224"
-	// SignatureAlgorithm_HMAC_SHA256 is HMAC with SHA-256.
-	SignatureAlgorithm_HMAC_SHA256 SignatureAlgorithm = "HMAC_SHA256"
-	// SignatureAlgorithm_HMAC_SHA384 is HMAC with SHA-384.
-	SignatureAlgorithm_HMAC_SHA384 SignatureAlgorithm = "HMAC_SHA384"
-	// SignatureAlgorithm_HMAC_SHA512 is HMAC with SHA-512.
-	SignatureAlgorithm_HMAC_SHA512 SignatureAlgorithm = "HMAC_SHA512"
-	// SignatureAlgorithm_HMAC_SHA3_224 is HMAC with SHA3-224.
-	SignatureAlgorithm_HMAC_SHA3_224 SignatureAlgorithm = "HMAC_SHA3_224"
-	// SignatureAlgorithm_HMAC_SHA3_256 is HMAC with SHA3-256.
-	SignatureAlgorithm_HMAC_SHA3_256 SignatureAlgorithm = "HMAC_SHA3_256"
-	// SignatureAlgorithm_HMAC_SHA3_384 is HMAC with SHA3-384.
-	SignatureAlgorithm_HMAC_SHA3_384 SignatureAlgorithm = "HMAC_SHA3_384"
-	// SignatureAlgorithm_HMAC_SHA3_512 is HMAC with SHA3-512.
-	SignatureAlgorithm_HMAC_SHA3_512 SignatureAlgorithm = "HMAC_SHA3_512"
-	// SignatureAlgorithm_HMAC_RIPEMD160 is HMAC with RIPEMD160.
-	SignatureAlgorithm_HMAC_RIPEMD160 SignatureAlgorithm = "HMAC_RIPEMD160"
-	// SignatureAlgorithm_ED25519 is EDDSA with SHA512 (RFC 8419 section 3.1).
-	SignatureAlgorithm_ED25519 SignatureAlgorithm = "ED25519"
-	// SignatureAlgorithm_ED448 is EDDSA with SHAKE256-512.
-	SignatureAlgorithm_ED448 SignatureAlgorithm = "ED448"
+	// SignatureAlgorithmRSARaw is RSA without digest algorithm.
+	SignatureAlgorithmRSARaw SignatureAlgorithm = "RSA_RAW"
+	// SignatureAlgorithmRSASHA1 is RSA with SHA-1.
+	SignatureAlgorithmRSASHA1 SignatureAlgorithm = "RSA_SHA1"
+	// SignatureAlgorithmRSASHA224 is RSA with SHA-224.
+	SignatureAlgorithmRSASHA224 SignatureAlgorithm = "RSA_SHA224"
+	// SignatureAlgorithmRSASHA256 is RSA with SHA-256.
+	SignatureAlgorithmRSASHA256 SignatureAlgorithm = "RSA_SHA256"
+	// SignatureAlgorithmRSASHA384 is RSA with SHA-384.
+	SignatureAlgorithmRSASHA384 SignatureAlgorithm = "RSA_SHA384"
+	// SignatureAlgorithmRSASHA512 is RSA with SHA-512.
+	SignatureAlgorithmRSASHA512 SignatureAlgorithm = "RSA_SHA512"
+	// SignatureAlgorithmRSASHA3224 is RSA with SHA3-224.
+	SignatureAlgorithmRSASHA3224 SignatureAlgorithm = "RSA_SHA3_224"
+	// SignatureAlgorithmRSASHA3256 is RSA with SHA3-256.
+	SignatureAlgorithmRSASHA3256 SignatureAlgorithm = "RSA_SHA3_256"
+	// SignatureAlgorithmRSASHA3384 is RSA with SHA3-384.
+	SignatureAlgorithmRSASHA3384 SignatureAlgorithm = "RSA_SHA3_384"
+	// SignatureAlgorithmRSASHA3512 is RSA with SHA3-512.
+	SignatureAlgorithmRSASHA3512 SignatureAlgorithm = "RSA_SHA3_512"
+	// SignatureAlgorithmRSASSAPSSRawMGF1 is RSA with MGF1 without digest algorithm.
+	SignatureAlgorithmRSASSAPSSRawMGF1 SignatureAlgorithm = "RSA_SSA_PSS_RAW_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA1MGF1 is RSA with MGF1 with SHA-1.
+	SignatureAlgorithmRSASSAPSSSHA1MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA1_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA224MGF1 is RSA with MGF1 with SHA-224.
+	SignatureAlgorithmRSASSAPSSSHA224MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA224_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA256MGF1 is RSA with MGF1 with SHA-256.
+	SignatureAlgorithmRSASSAPSSSHA256MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA256_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA384MGF1 is RSA with MGF1 with SHA-384.
+	SignatureAlgorithmRSASSAPSSSHA384MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA384_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA512MGF1 is RSA with MGF1 with SHA-512.
+	SignatureAlgorithmRSASSAPSSSHA512MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA512_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA3224MGF1 is RSA with MGF1 with SHA3-224.
+	SignatureAlgorithmRSASSAPSSSHA3224MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_224_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA3256MGF1 is RSA with MGF1 with SHA3-256.
+	SignatureAlgorithmRSASSAPSSSHA3256MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_256_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA3384MGF1 is RSA with MGF1 with SHA3-384.
+	SignatureAlgorithmRSASSAPSSSHA3384MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_384_MGF1"
+	// SignatureAlgorithmRSASSAPSSSHA3512MGF1 is RSA with MGF1 with SHA3-512.
+	SignatureAlgorithmRSASSAPSSSHA3512MGF1 SignatureAlgorithm = "RSA_SSA_PSS_SHA3_512_MGF1"
+	// SignatureAlgorithmRSARIPEMD160 is RSA with RIPEMD160.
+	SignatureAlgorithmRSARIPEMD160 SignatureAlgorithm = "RSA_RIPEMD160"
+	// SignatureAlgorithmRSAMD2 is RSA with MD2.
+	SignatureAlgorithmRSAMD2 SignatureAlgorithm = "RSA_MD2"
+	// SignatureAlgorithmRSAMD5 is RSA with MD5.
+	SignatureAlgorithmRSAMD5 SignatureAlgorithm = "RSA_MD5"
+	// SignatureAlgorithmECDSARaw is ECDSA without digest algorithm.
+	SignatureAlgorithmECDSARaw SignatureAlgorithm = "ECDSA_RAW"
+	// SignatureAlgorithmECDSASHA1 is ECDSA with SHA-1.
+	SignatureAlgorithmECDSASHA1 SignatureAlgorithm = "ECDSA_SHA1"
+	// SignatureAlgorithmECDSASHA224 is ECDSA with SHA-224.
+	SignatureAlgorithmECDSASHA224 SignatureAlgorithm = "ECDSA_SHA224"
+	// SignatureAlgorithmECDSASHA256 is ECDSA with SHA-256.
+	SignatureAlgorithmECDSASHA256 SignatureAlgorithm = "ECDSA_SHA256"
+	// SignatureAlgorithmECDSASHA384 is ECDSA with SHA-384.
+	SignatureAlgorithmECDSASHA384 SignatureAlgorithm = "ECDSA_SHA384"
+	// SignatureAlgorithmECDSASHA512 is ECDSA with SHA-512.
+	SignatureAlgorithmECDSASHA512 SignatureAlgorithm = "ECDSA_SHA512"
+	// SignatureAlgorithmECDSASHA3224 is ECDSA with SHA3-224.
+	SignatureAlgorithmECDSASHA3224 SignatureAlgorithm = "ECDSA_SHA3_224"
+	// SignatureAlgorithmECDSASHA3256 is ECDSA with SHA3-256.
+	SignatureAlgorithmECDSASHA3256 SignatureAlgorithm = "ECDSA_SHA3_256"
+	// SignatureAlgorithmECDSASHA3384 is ECDSA with SHA3-384.
+	SignatureAlgorithmECDSASHA3384 SignatureAlgorithm = "ECDSA_SHA3_384"
+	// SignatureAlgorithmECDSASHA3512 is ECDSA with SHA3-512.
+	SignatureAlgorithmECDSASHA3512 SignatureAlgorithm = "ECDSA_SHA3_512"
+	// SignatureAlgorithmECDSARIPEMD160 is ECDSA with RIPEMD160.
+	SignatureAlgorithmECDSARIPEMD160 SignatureAlgorithm = "ECDSA_RIPEMD160"
+	// SignatureAlgorithmPlainECDSASHA1 is PLAIN-ECDSA with SHA-1.
+	SignatureAlgorithmPlainECDSASHA1 SignatureAlgorithm = "PLAIN_ECDSA_SHA1"
+	// SignatureAlgorithmPlainECDSASHA224 is PLAIN-ECDSA with SHA-224.
+	SignatureAlgorithmPlainECDSASHA224 SignatureAlgorithm = "PLAIN_ECDSA_SHA224"
+	// SignatureAlgorithmPlainECDSASHA256 is PLAIN-ECDSA with SHA-256.
+	SignatureAlgorithmPlainECDSASHA256 SignatureAlgorithm = "PLAIN_ECDSA_SHA256"
+	// SignatureAlgorithmPlainECDSASHA384 is PLAIN-ECDSA with SHA-384.
+	SignatureAlgorithmPlainECDSASHA384 SignatureAlgorithm = "PLAIN_ECDSA_SHA384"
+	// SignatureAlgorithmPlainECDSASHA512 is PLAIN-ECDSA with SHA-512.
+	SignatureAlgorithmPlainECDSASHA512 SignatureAlgorithm = "PLAIN_ECDSA_SHA512"
+	// SignatureAlgorithmPlainECDSASHA3224 is PLAIN-ECDSA with SHA3-224.
+	SignatureAlgorithmPlainECDSASHA3224 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_224"
+	// SignatureAlgorithmPlainECDSASHA3256 is PLAIN-ECDSA with SHA3-256.
+	SignatureAlgorithmPlainECDSASHA3256 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_256"
+	// SignatureAlgorithmPlainECDSASHA3384 is PLAIN-ECDSA with SHA3-384.
+	SignatureAlgorithmPlainECDSASHA3384 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_384"
+	// SignatureAlgorithmPlainECDSASHA3512 is PLAIN-ECDSA with SHA3-512.
+	SignatureAlgorithmPlainECDSASHA3512 SignatureAlgorithm = "PLAIN_ECDSA_SHA3_512"
+	// SignatureAlgorithmPlainECDSARIPEMD160 is PLAIN-ECDSA with RIPEMD160.
+	SignatureAlgorithmPlainECDSARIPEMD160 SignatureAlgorithm = "PLAIN_ECDSA_RIPEMD160"
+	// SignatureAlgorithmDSARaw is DSA without digest algorithm.
+	SignatureAlgorithmDSARaw SignatureAlgorithm = "DSA_RAW"
+	// SignatureAlgorithmDSASHA1 is DSA with SHA-1.
+	SignatureAlgorithmDSASHA1 SignatureAlgorithm = "DSA_SHA1"
+	// SignatureAlgorithmDSASHA224 is DSA with SHA-224.
+	SignatureAlgorithmDSASHA224 SignatureAlgorithm = "DSA_SHA224"
+	// SignatureAlgorithmDSASHA256 is DSA with SHA-256.
+	SignatureAlgorithmDSASHA256 SignatureAlgorithm = "DSA_SHA256"
+	// SignatureAlgorithmDSASHA384 is DSA with SHA-384.
+	SignatureAlgorithmDSASHA384 SignatureAlgorithm = "DSA_SHA384"
+	// SignatureAlgorithmDSASHA512 is DSA with SHA-512.
+	SignatureAlgorithmDSASHA512 SignatureAlgorithm = "DSA_SHA512"
+	// SignatureAlgorithmDSASHA3224 is DSA with SHA3-224.
+	SignatureAlgorithmDSASHA3224 SignatureAlgorithm = "DSA_SHA3_224"
+	// SignatureAlgorithmDSASHA3256 is DSA with SHA3-256.
+	SignatureAlgorithmDSASHA3256 SignatureAlgorithm = "DSA_SHA3_256"
+	// SignatureAlgorithmDSASHA3384 is DSA with SHA3-384.
+	SignatureAlgorithmDSASHA3384 SignatureAlgorithm = "DSA_SHA3_384"
+	// SignatureAlgorithmDSASHA3512 is DSA with SHA3-512.
+	SignatureAlgorithmDSASHA3512 SignatureAlgorithm = "DSA_SHA3_512"
+	// SignatureAlgorithmHMACSHA1 is HMAC with SHA-1.
+	SignatureAlgorithmHMACSHA1 SignatureAlgorithm = "HMAC_SHA1"
+	// SignatureAlgorithmHMACSHA224 is HMAC with SHA-224.
+	SignatureAlgorithmHMACSHA224 SignatureAlgorithm = "HMAC_SHA224"
+	// SignatureAlgorithmHMACSHA256 is HMAC with SHA-256.
+	SignatureAlgorithmHMACSHA256 SignatureAlgorithm = "HMAC_SHA256"
+	// SignatureAlgorithmHMACSHA384 is HMAC with SHA-384.
+	SignatureAlgorithmHMACSHA384 SignatureAlgorithm = "HMAC_SHA384"
+	// SignatureAlgorithmHMACSHA512 is HMAC with SHA-512.
+	SignatureAlgorithmHMACSHA512 SignatureAlgorithm = "HMAC_SHA512"
+	// SignatureAlgorithmHMACSHA3224 is HMAC with SHA3-224.
+	SignatureAlgorithmHMACSHA3224 SignatureAlgorithm = "HMAC_SHA3_224"
+	// SignatureAlgorithmHMACSHA3256 is HMAC with SHA3-256.
+	SignatureAlgorithmHMACSHA3256 SignatureAlgorithm = "HMAC_SHA3_256"
+	// SignatureAlgorithmHMACSHA3384 is HMAC with SHA3-384.
+	SignatureAlgorithmHMACSHA3384 SignatureAlgorithm = "HMAC_SHA3_384"
+	// SignatureAlgorithmHMACSHA3512 is HMAC with SHA3-512.
+	SignatureAlgorithmHMACSHA3512 SignatureAlgorithm = "HMAC_SHA3_512"
+	// SignatureAlgorithmHMACRIPEMD160 is HMAC with RIPEMD160.
+	SignatureAlgorithmHMACRIPEMD160 SignatureAlgorithm = "HMAC_RIPEMD160"
+	// SignatureAlgorithmED25519 is EDDSA with SHA512 (RFC 8419 section 3.1).
+	SignatureAlgorithmED25519 SignatureAlgorithm = "ED25519"
+	// SignatureAlgorithmED448 is EDDSA with SHAKE256-512.
+	SignatureAlgorithmED448 SignatureAlgorithm = "ED448"
 )
 
 // signatureAlgorithmOIDNamespacePrefix is the OID URI prefix (RFC 3061).
@@ -184,143 +184,143 @@ type signatureAlgorithmFields struct {
 // signatureAlgorithmData holds the (encryptionAlgorithm, digestAlgorithm) pair for every
 // SignatureAlgorithm, in the exact combinations declared by the Java enum constructors.
 var signatureAlgorithmData = map[SignatureAlgorithm]signatureAlgorithmFields{
-	SignatureAlgorithm_RSA_RAW:                   {EncryptionAlgorithm_RSA, ""},
-	SignatureAlgorithm_RSA_SHA1:                  {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_RSA_SHA224:                {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_RSA_SHA256:                {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_RSA_SHA384:                {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_RSA_SHA512:                {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_RSA_SHA3_224:              {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_RSA_SHA3_256:              {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_RSA_SHA3_384:              {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_RSA_SHA3_512:              {EncryptionAlgorithm_RSA, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_RSA_SSA_PSS_RAW_MGF1:      {EncryptionAlgorithm_RSASSA_PSS, ""},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1:     {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1:   {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1:   {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1:   {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1:   {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1: {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1: {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1: {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1: {EncryptionAlgorithm_RSASSA_PSS, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_RSA_RIPEMD160:             {EncryptionAlgorithm_RSA, DigestAlgorithm_RIPEMD160},
-	SignatureAlgorithm_RSA_MD2:                   {EncryptionAlgorithm_RSA, DigestAlgorithm_MD2},
-	SignatureAlgorithm_RSA_MD5:                   {EncryptionAlgorithm_RSA, DigestAlgorithm_MD5},
-	SignatureAlgorithm_ECDSA_RAW:                 {EncryptionAlgorithm_ECDSA, ""},
-	SignatureAlgorithm_ECDSA_SHA1:                {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_ECDSA_SHA224:              {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_ECDSA_SHA256:              {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_ECDSA_SHA384:              {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_ECDSA_SHA512:              {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_ECDSA_SHA3_224:            {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_ECDSA_SHA3_256:            {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_ECDSA_SHA3_384:            {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_ECDSA_SHA3_512:            {EncryptionAlgorithm_ECDSA, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_ECDSA_RIPEMD160:           {EncryptionAlgorithm_ECDSA, DigestAlgorithm_RIPEMD160},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA1:          {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA224:        {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA256:        {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA384:        {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA512:        {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_224:      {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_256:      {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_384:      {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_PLAIN_ECDSA_SHA3_512:      {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160:     {EncryptionAlgorithm_PLAIN_ECDSA, DigestAlgorithm_RIPEMD160},
-	SignatureAlgorithm_DSA_RAW:                   {EncryptionAlgorithm_DSA, ""},
-	SignatureAlgorithm_DSA_SHA1:                  {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_DSA_SHA224:                {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_DSA_SHA256:                {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_DSA_SHA384:                {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_DSA_SHA512:                {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_DSA_SHA3_224:              {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_DSA_SHA3_256:              {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_DSA_SHA3_384:              {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_DSA_SHA3_512:              {EncryptionAlgorithm_DSA, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_HMAC_SHA1:                 {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA1},
-	SignatureAlgorithm_HMAC_SHA224:               {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA224},
-	SignatureAlgorithm_HMAC_SHA256:               {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA256},
-	SignatureAlgorithm_HMAC_SHA384:               {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA384},
-	SignatureAlgorithm_HMAC_SHA512:               {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_HMAC_SHA3_224:             {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA3_224},
-	SignatureAlgorithm_HMAC_SHA3_256:             {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA3_256},
-	SignatureAlgorithm_HMAC_SHA3_384:             {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA3_384},
-	SignatureAlgorithm_HMAC_SHA3_512:             {EncryptionAlgorithm_HMAC, DigestAlgorithm_SHA3_512},
-	SignatureAlgorithm_HMAC_RIPEMD160:            {EncryptionAlgorithm_HMAC, DigestAlgorithm_RIPEMD160},
-	SignatureAlgorithm_ED25519:                   {EncryptionAlgorithm_EDDSA, DigestAlgorithm_SHA512},
-	SignatureAlgorithm_ED448:                     {EncryptionAlgorithm_EDDSA, DigestAlgorithm_SHAKE256_512},
+	SignatureAlgorithmRSARaw:               {EncryptionAlgorithmRSA, ""},
+	SignatureAlgorithmRSASHA1:              {EncryptionAlgorithmRSA, DigestAlgorithmSHA1},
+	SignatureAlgorithmRSASHA224:            {EncryptionAlgorithmRSA, DigestAlgorithmSHA224},
+	SignatureAlgorithmRSASHA256:            {EncryptionAlgorithmRSA, DigestAlgorithmSHA256},
+	SignatureAlgorithmRSASHA384:            {EncryptionAlgorithmRSA, DigestAlgorithmSHA384},
+	SignatureAlgorithmRSASHA512:            {EncryptionAlgorithmRSA, DigestAlgorithmSHA512},
+	SignatureAlgorithmRSASHA3224:           {EncryptionAlgorithmRSA, DigestAlgorithmSHA3224},
+	SignatureAlgorithmRSASHA3256:           {EncryptionAlgorithmRSA, DigestAlgorithmSHA3256},
+	SignatureAlgorithmRSASHA3384:           {EncryptionAlgorithmRSA, DigestAlgorithmSHA3384},
+	SignatureAlgorithmRSASHA3512:           {EncryptionAlgorithmRSA, DigestAlgorithmSHA3512},
+	SignatureAlgorithmRSASSAPSSRawMGF1:     {EncryptionAlgorithmRSASSAPSS, ""},
+	SignatureAlgorithmRSASSAPSSSHA1MGF1:    {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA1},
+	SignatureAlgorithmRSASSAPSSSHA224MGF1:  {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA224},
+	SignatureAlgorithmRSASSAPSSSHA256MGF1:  {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA256},
+	SignatureAlgorithmRSASSAPSSSHA384MGF1:  {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA384},
+	SignatureAlgorithmRSASSAPSSSHA512MGF1:  {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA512},
+	SignatureAlgorithmRSASSAPSSSHA3224MGF1: {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA3224},
+	SignatureAlgorithmRSASSAPSSSHA3256MGF1: {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA3256},
+	SignatureAlgorithmRSASSAPSSSHA3384MGF1: {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA3384},
+	SignatureAlgorithmRSASSAPSSSHA3512MGF1: {EncryptionAlgorithmRSASSAPSS, DigestAlgorithmSHA3512},
+	SignatureAlgorithmRSARIPEMD160:         {EncryptionAlgorithmRSA, DigestAlgorithmRIPEMD160},
+	SignatureAlgorithmRSAMD2:               {EncryptionAlgorithmRSA, DigestAlgorithmMD2},
+	SignatureAlgorithmRSAMD5:               {EncryptionAlgorithmRSA, DigestAlgorithmMD5},
+	SignatureAlgorithmECDSARaw:             {EncryptionAlgorithmECDSA, ""},
+	SignatureAlgorithmECDSASHA1:            {EncryptionAlgorithmECDSA, DigestAlgorithmSHA1},
+	SignatureAlgorithmECDSASHA224:          {EncryptionAlgorithmECDSA, DigestAlgorithmSHA224},
+	SignatureAlgorithmECDSASHA256:          {EncryptionAlgorithmECDSA, DigestAlgorithmSHA256},
+	SignatureAlgorithmECDSASHA384:          {EncryptionAlgorithmECDSA, DigestAlgorithmSHA384},
+	SignatureAlgorithmECDSASHA512:          {EncryptionAlgorithmECDSA, DigestAlgorithmSHA512},
+	SignatureAlgorithmECDSASHA3224:         {EncryptionAlgorithmECDSA, DigestAlgorithmSHA3224},
+	SignatureAlgorithmECDSASHA3256:         {EncryptionAlgorithmECDSA, DigestAlgorithmSHA3256},
+	SignatureAlgorithmECDSASHA3384:         {EncryptionAlgorithmECDSA, DigestAlgorithmSHA3384},
+	SignatureAlgorithmECDSASHA3512:         {EncryptionAlgorithmECDSA, DigestAlgorithmSHA3512},
+	SignatureAlgorithmECDSARIPEMD160:       {EncryptionAlgorithmECDSA, DigestAlgorithmRIPEMD160},
+	SignatureAlgorithmPlainECDSASHA1:       {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA1},
+	SignatureAlgorithmPlainECDSASHA224:     {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA224},
+	SignatureAlgorithmPlainECDSASHA256:     {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA256},
+	SignatureAlgorithmPlainECDSASHA384:     {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA384},
+	SignatureAlgorithmPlainECDSASHA512:     {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA512},
+	SignatureAlgorithmPlainECDSASHA3224:    {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA3224},
+	SignatureAlgorithmPlainECDSASHA3256:    {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA3256},
+	SignatureAlgorithmPlainECDSASHA3384:    {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA3384},
+	SignatureAlgorithmPlainECDSASHA3512:    {EncryptionAlgorithmPlainECDSA, DigestAlgorithmSHA3512},
+	SignatureAlgorithmPlainECDSARIPEMD160:  {EncryptionAlgorithmPlainECDSA, DigestAlgorithmRIPEMD160},
+	SignatureAlgorithmDSARaw:               {EncryptionAlgorithmDSA, ""},
+	SignatureAlgorithmDSASHA1:              {EncryptionAlgorithmDSA, DigestAlgorithmSHA1},
+	SignatureAlgorithmDSASHA224:            {EncryptionAlgorithmDSA, DigestAlgorithmSHA224},
+	SignatureAlgorithmDSASHA256:            {EncryptionAlgorithmDSA, DigestAlgorithmSHA256},
+	SignatureAlgorithmDSASHA384:            {EncryptionAlgorithmDSA, DigestAlgorithmSHA384},
+	SignatureAlgorithmDSASHA512:            {EncryptionAlgorithmDSA, DigestAlgorithmSHA512},
+	SignatureAlgorithmDSASHA3224:           {EncryptionAlgorithmDSA, DigestAlgorithmSHA3224},
+	SignatureAlgorithmDSASHA3256:           {EncryptionAlgorithmDSA, DigestAlgorithmSHA3256},
+	SignatureAlgorithmDSASHA3384:           {EncryptionAlgorithmDSA, DigestAlgorithmSHA3384},
+	SignatureAlgorithmDSASHA3512:           {EncryptionAlgorithmDSA, DigestAlgorithmSHA3512},
+	SignatureAlgorithmHMACSHA1:             {EncryptionAlgorithmHMAC, DigestAlgorithmSHA1},
+	SignatureAlgorithmHMACSHA224:           {EncryptionAlgorithmHMAC, DigestAlgorithmSHA224},
+	SignatureAlgorithmHMACSHA256:           {EncryptionAlgorithmHMAC, DigestAlgorithmSHA256},
+	SignatureAlgorithmHMACSHA384:           {EncryptionAlgorithmHMAC, DigestAlgorithmSHA384},
+	SignatureAlgorithmHMACSHA512:           {EncryptionAlgorithmHMAC, DigestAlgorithmSHA512},
+	SignatureAlgorithmHMACSHA3224:          {EncryptionAlgorithmHMAC, DigestAlgorithmSHA3224},
+	SignatureAlgorithmHMACSHA3256:          {EncryptionAlgorithmHMAC, DigestAlgorithmSHA3256},
+	SignatureAlgorithmHMACSHA3384:          {EncryptionAlgorithmHMAC, DigestAlgorithmSHA3384},
+	SignatureAlgorithmHMACSHA3512:          {EncryptionAlgorithmHMAC, DigestAlgorithmSHA3512},
+	SignatureAlgorithmHMACRIPEMD160:        {EncryptionAlgorithmHMAC, DigestAlgorithmRIPEMD160},
+	SignatureAlgorithmED25519:              {EncryptionAlgorithmEDDSA, DigestAlgorithmSHA512},
+	SignatureAlgorithmED448:                {EncryptionAlgorithmEDDSA, DigestAlgorithmSHAKE256512},
 }
 
 // SignatureAlgorithmValues returns all SignatureAlgorithm constants in declaration order.
 func SignatureAlgorithmValues() []SignatureAlgorithm {
 	return []SignatureAlgorithm{
-		SignatureAlgorithm_RSA_RAW,
-		SignatureAlgorithm_RSA_SHA1,
-		SignatureAlgorithm_RSA_SHA224,
-		SignatureAlgorithm_RSA_SHA256,
-		SignatureAlgorithm_RSA_SHA384,
-		SignatureAlgorithm_RSA_SHA512,
-		SignatureAlgorithm_RSA_SHA3_224,
-		SignatureAlgorithm_RSA_SHA3_256,
-		SignatureAlgorithm_RSA_SHA3_384,
-		SignatureAlgorithm_RSA_SHA3_512,
-		SignatureAlgorithm_RSA_SSA_PSS_RAW_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1,
-		SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1,
-		SignatureAlgorithm_RSA_RIPEMD160,
-		SignatureAlgorithm_RSA_MD2,
-		SignatureAlgorithm_RSA_MD5,
-		SignatureAlgorithm_ECDSA_RAW,
-		SignatureAlgorithm_ECDSA_SHA1,
-		SignatureAlgorithm_ECDSA_SHA224,
-		SignatureAlgorithm_ECDSA_SHA256,
-		SignatureAlgorithm_ECDSA_SHA384,
-		SignatureAlgorithm_ECDSA_SHA512,
-		SignatureAlgorithm_ECDSA_SHA3_224,
-		SignatureAlgorithm_ECDSA_SHA3_256,
-		SignatureAlgorithm_ECDSA_SHA3_384,
-		SignatureAlgorithm_ECDSA_SHA3_512,
-		SignatureAlgorithm_ECDSA_RIPEMD160,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA1,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA224,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA256,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA384,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA512,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA3_224,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA3_256,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA3_384,
-		SignatureAlgorithm_PLAIN_ECDSA_SHA3_512,
-		SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160,
-		SignatureAlgorithm_DSA_RAW,
-		SignatureAlgorithm_DSA_SHA1,
-		SignatureAlgorithm_DSA_SHA224,
-		SignatureAlgorithm_DSA_SHA256,
-		SignatureAlgorithm_DSA_SHA384,
-		SignatureAlgorithm_DSA_SHA512,
-		SignatureAlgorithm_DSA_SHA3_224,
-		SignatureAlgorithm_DSA_SHA3_256,
-		SignatureAlgorithm_DSA_SHA3_384,
-		SignatureAlgorithm_DSA_SHA3_512,
-		SignatureAlgorithm_HMAC_SHA1,
-		SignatureAlgorithm_HMAC_SHA224,
-		SignatureAlgorithm_HMAC_SHA256,
-		SignatureAlgorithm_HMAC_SHA384,
-		SignatureAlgorithm_HMAC_SHA512,
-		SignatureAlgorithm_HMAC_SHA3_224,
-		SignatureAlgorithm_HMAC_SHA3_256,
-		SignatureAlgorithm_HMAC_SHA3_384,
-		SignatureAlgorithm_HMAC_SHA3_512,
-		SignatureAlgorithm_HMAC_RIPEMD160,
-		SignatureAlgorithm_ED25519,
-		SignatureAlgorithm_ED448,
+		SignatureAlgorithmRSARaw,
+		SignatureAlgorithmRSASHA1,
+		SignatureAlgorithmRSASHA224,
+		SignatureAlgorithmRSASHA256,
+		SignatureAlgorithmRSASHA384,
+		SignatureAlgorithmRSASHA512,
+		SignatureAlgorithmRSASHA3224,
+		SignatureAlgorithmRSASHA3256,
+		SignatureAlgorithmRSASHA3384,
+		SignatureAlgorithmRSASHA3512,
+		SignatureAlgorithmRSASSAPSSRawMGF1,
+		SignatureAlgorithmRSASSAPSSSHA1MGF1,
+		SignatureAlgorithmRSASSAPSSSHA224MGF1,
+		SignatureAlgorithmRSASSAPSSSHA256MGF1,
+		SignatureAlgorithmRSASSAPSSSHA384MGF1,
+		SignatureAlgorithmRSASSAPSSSHA512MGF1,
+		SignatureAlgorithmRSASSAPSSSHA3224MGF1,
+		SignatureAlgorithmRSASSAPSSSHA3256MGF1,
+		SignatureAlgorithmRSASSAPSSSHA3384MGF1,
+		SignatureAlgorithmRSASSAPSSSHA3512MGF1,
+		SignatureAlgorithmRSARIPEMD160,
+		SignatureAlgorithmRSAMD2,
+		SignatureAlgorithmRSAMD5,
+		SignatureAlgorithmECDSARaw,
+		SignatureAlgorithmECDSASHA1,
+		SignatureAlgorithmECDSASHA224,
+		SignatureAlgorithmECDSASHA256,
+		SignatureAlgorithmECDSASHA384,
+		SignatureAlgorithmECDSASHA512,
+		SignatureAlgorithmECDSASHA3224,
+		SignatureAlgorithmECDSASHA3256,
+		SignatureAlgorithmECDSASHA3384,
+		SignatureAlgorithmECDSASHA3512,
+		SignatureAlgorithmECDSARIPEMD160,
+		SignatureAlgorithmPlainECDSASHA1,
+		SignatureAlgorithmPlainECDSASHA224,
+		SignatureAlgorithmPlainECDSASHA256,
+		SignatureAlgorithmPlainECDSASHA384,
+		SignatureAlgorithmPlainECDSASHA512,
+		SignatureAlgorithmPlainECDSASHA3224,
+		SignatureAlgorithmPlainECDSASHA3256,
+		SignatureAlgorithmPlainECDSASHA3384,
+		SignatureAlgorithmPlainECDSASHA3512,
+		SignatureAlgorithmPlainECDSARIPEMD160,
+		SignatureAlgorithmDSARaw,
+		SignatureAlgorithmDSASHA1,
+		SignatureAlgorithmDSASHA224,
+		SignatureAlgorithmDSASHA256,
+		SignatureAlgorithmDSASHA384,
+		SignatureAlgorithmDSASHA512,
+		SignatureAlgorithmDSASHA3224,
+		SignatureAlgorithmDSASHA3256,
+		SignatureAlgorithmDSASHA3384,
+		SignatureAlgorithmDSASHA3512,
+		SignatureAlgorithmHMACSHA1,
+		SignatureAlgorithmHMACSHA224,
+		SignatureAlgorithmHMACSHA256,
+		SignatureAlgorithmHMACSHA384,
+		SignatureAlgorithmHMACSHA512,
+		SignatureAlgorithmHMACSHA3224,
+		SignatureAlgorithmHMACSHA3256,
+		SignatureAlgorithmHMACSHA3384,
+		SignatureAlgorithmHMACSHA3512,
+		SignatureAlgorithmHMACRIPEMD160,
+		SignatureAlgorithmED25519,
+		SignatureAlgorithmED448,
 	}
 }
 
@@ -444,10 +444,10 @@ func signatureAlgorithmReverse[K comparable](pairs []signatureAlgorithmPair[K], 
 		if !plainECDSA {
 			continue
 		}
-		if signatureAlgorithmData[algo].encryption != EncryptionAlgorithm_ECDSA {
+		if signatureAlgorithmData[algo].encryption != EncryptionAlgorithmECDSA {
 			continue
 		}
-		if plain := signatureAlgorithmGetAlgorithm(EncryptionAlgorithm_PLAIN_ECDSA, signatureAlgorithmData[algo].digest); plain != "" {
+		if plain := signatureAlgorithmGetAlgorithm(EncryptionAlgorithmPlainECDSA, signatureAlgorithmData[algo].digest); plain != "" {
 			m[plain] = k
 		}
 	}
@@ -475,45 +475,45 @@ func SignatureAlgorithmGetAlgorithm(encryptionAlgorithm EncryptionAlgorithm, dig
 // signatureAlgorithmXMLPairs lists the XML algorithm URIs
 // (http://www.w3.org/TR/2013/NOTE-xmlsec-algorithms-20130411/) in upstream declaration order.
 var signatureAlgorithmXMLPairs = []signatureAlgorithmPair[string]{
-	{"http://www.w3.org/2000/09/xmldsig#rsa-sha1", SignatureAlgorithm_RSA_SHA1},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha224", SignatureAlgorithm_RSA_SHA224},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", SignatureAlgorithm_RSA_SHA256},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha384", SignatureAlgorithm_RSA_SHA384},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512", SignatureAlgorithm_RSA_SHA512},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha224-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha256-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha384-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha512-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha3-224-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha3-256-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha3-384-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1},
-	{"http://www.w3.org/2007/05/xmldsig-more#sha3-512-rsa-MGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-ripemd160", SignatureAlgorithm_RSA_RIPEMD160},
+	{"http://www.w3.org/2000/09/xmldsig#rsa-sha1", SignatureAlgorithmRSASHA1},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha224", SignatureAlgorithmRSASHA224},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", SignatureAlgorithmRSASHA256},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha384", SignatureAlgorithmRSASHA384},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512", SignatureAlgorithmRSASHA512},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha1-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA1MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha224-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA224MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha256-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA256MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha384-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA384MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha512-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA512MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha3-224-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA3224MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha3-256-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA3256MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha3-384-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA3384MGF1},
+	{"http://www.w3.org/2007/05/xmldsig-more#sha3-512-rsa-MGF1", SignatureAlgorithmRSASSAPSSSHA3512MGF1},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-ripemd160", SignatureAlgorithmRSARIPEMD160},
 	// Support of not standard AT algorithm name; see
 	// http://www.rfc-editor.org/errata_search.php?rfc=4051
-	{"http://www.w3.org/2001/04/xmldsig-more/rsa-ripemd160", SignatureAlgorithm_RSA_RIPEMD160},
-	{"http://www.w3.org/2001/04/xmldsig-more#rsa-md5", SignatureAlgorithm_RSA_MD5},
-	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1", SignatureAlgorithm_ECDSA_SHA1},
-	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha224", SignatureAlgorithm_ECDSA_SHA224},
-	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256", SignatureAlgorithm_ECDSA_SHA256},
-	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384", SignatureAlgorithm_ECDSA_SHA384},
-	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512", SignatureAlgorithm_ECDSA_SHA512},
-	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-224", SignatureAlgorithm_ECDSA_SHA3_224},
-	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-256", SignatureAlgorithm_ECDSA_SHA3_256},
-	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-384", SignatureAlgorithm_ECDSA_SHA3_384},
-	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-512", SignatureAlgorithm_ECDSA_SHA3_512},
-	{"http://www.w3.org/2007/05/xmldsig-more#ecdsa-ripemd160", SignatureAlgorithm_ECDSA_RIPEMD160},
-	{"http://www.w3.org/2021/04/xmldsig-more#eddsa-ed25519", SignatureAlgorithm_ED25519},
-	{"http://www.w3.org/2021/04/xmldsig-more#eddsa-ed448", SignatureAlgorithm_ED448},
-	{"http://www.w3.org/2000/09/xmldsig#dsa-sha1", SignatureAlgorithm_DSA_SHA1},
-	{"http://www.w3.org/2009/xmldsig11#dsa-sha256", SignatureAlgorithm_DSA_SHA256},
-	{"http://www.w3.org/2000/09/xmldsig#hmac-sha1", SignatureAlgorithm_HMAC_SHA1},
-	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha224", SignatureAlgorithm_HMAC_SHA224},
-	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha256", SignatureAlgorithm_HMAC_SHA256},
-	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha384", SignatureAlgorithm_HMAC_SHA384},
-	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha512", SignatureAlgorithm_HMAC_SHA512},
-	{"http://www.w3.org/2001/04/xmldsig-more#hmac-ripemd160", SignatureAlgorithm_HMAC_RIPEMD160},
+	{"http://www.w3.org/2001/04/xmldsig-more/rsa-ripemd160", SignatureAlgorithmRSARIPEMD160},
+	{"http://www.w3.org/2001/04/xmldsig-more#rsa-md5", SignatureAlgorithmRSAMD5},
+	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1", SignatureAlgorithmECDSASHA1},
+	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha224", SignatureAlgorithmECDSASHA224},
+	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256", SignatureAlgorithmECDSASHA256},
+	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384", SignatureAlgorithmECDSASHA384},
+	{"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512", SignatureAlgorithmECDSASHA512},
+	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-224", SignatureAlgorithmECDSASHA3224},
+	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-256", SignatureAlgorithmECDSASHA3256},
+	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-384", SignatureAlgorithmECDSASHA3384},
+	{"http://www.w3.org/2021/04/xmldsig-more#ecdsa-sha3-512", SignatureAlgorithmECDSASHA3512},
+	{"http://www.w3.org/2007/05/xmldsig-more#ecdsa-ripemd160", SignatureAlgorithmECDSARIPEMD160},
+	{"http://www.w3.org/2021/04/xmldsig-more#eddsa-ed25519", SignatureAlgorithmED25519},
+	{"http://www.w3.org/2021/04/xmldsig-more#eddsa-ed448", SignatureAlgorithmED448},
+	{"http://www.w3.org/2000/09/xmldsig#dsa-sha1", SignatureAlgorithmDSASHA1},
+	{"http://www.w3.org/2009/xmldsig11#dsa-sha256", SignatureAlgorithmDSASHA256},
+	{"http://www.w3.org/2000/09/xmldsig#hmac-sha1", SignatureAlgorithmHMACSHA1},
+	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha224", SignatureAlgorithmHMACSHA224},
+	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha256", SignatureAlgorithmHMACSHA256},
+	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha384", SignatureAlgorithmHMACSHA384},
+	{"http://www.w3.org/2001/04/xmldsig-more#hmac-sha512", SignatureAlgorithmHMACSHA512},
+	{"http://www.w3.org/2001/04/xmldsig-more#hmac-ripemd160", SignatureAlgorithmHMACRIPEMD160},
 }
 
 var signatureAlgorithmXMLForward = signatureAlgorithmForward(signatureAlgorithmXMLPairs)
@@ -525,62 +525,62 @@ var signatureAlgorithmXMLReverse = func() map[SignatureAlgorithm]string {
 // order, including the upstream ECDSA_RIPEMD160/PLAIN_ECDSA_RIPEMD160 OID collision
 // documented in the file header.
 var signatureAlgorithmOIDPairs = []signatureAlgorithmPair[string]{
-	{"1.2.840.113549.1.1.5", SignatureAlgorithm_RSA_SHA1},
-	{"1.3.14.3.2.29", SignatureAlgorithm_RSA_SHA1},
-	{"1.2.840.113549.1.1.14", SignatureAlgorithm_RSA_SHA224},
-	{"1.2.840.113549.1.1.11", SignatureAlgorithm_RSA_SHA256},
-	{"1.2.840.113549.1.1.12", SignatureAlgorithm_RSA_SHA384},
-	{"1.2.840.113549.1.1.13", SignatureAlgorithm_RSA_SHA512},
-	{"1.3.36.3.3.1.2", SignatureAlgorithm_RSA_RIPEMD160},
-	{"2.16.840.1.101.3.4.3.13", SignatureAlgorithm_RSA_SHA3_224},
-	{"2.16.840.1.101.3.4.3.14", SignatureAlgorithm_RSA_SHA3_256},
-	{"2.16.840.1.101.3.4.3.15", SignatureAlgorithm_RSA_SHA3_384},
-	{"2.16.840.1.101.3.4.3.16", SignatureAlgorithm_RSA_SHA3_512},
-	{"1.2.840.113549.1.1.4", SignatureAlgorithm_RSA_MD5},
-	{"1.2.840.113549.1.1.2", SignatureAlgorithm_RSA_MD2},
-	{"1.2.840.10045.4.1", SignatureAlgorithm_ECDSA_SHA1},
-	{"1.2.840.10045.4.3.1", SignatureAlgorithm_ECDSA_SHA224},
-	{"1.2.840.10045.4.3.2", SignatureAlgorithm_ECDSA_SHA256},
-	{"1.2.840.10045.4.3.3", SignatureAlgorithm_ECDSA_SHA384},
-	{"1.2.840.10045.4.3.4", SignatureAlgorithm_ECDSA_SHA512},
-	{"0.4.0.127.0.7.1.1.4.1.6", SignatureAlgorithm_ECDSA_RIPEMD160},
-	{"2.16.840.1.101.3.4.3.9", SignatureAlgorithm_ECDSA_SHA3_224},
-	{"2.16.840.1.101.3.4.3.10", SignatureAlgorithm_ECDSA_SHA3_256},
-	{"2.16.840.1.101.3.4.3.11", SignatureAlgorithm_ECDSA_SHA3_384},
-	{"2.16.840.1.101.3.4.3.12", SignatureAlgorithm_ECDSA_SHA3_512},
-	{"0.4.0.127.0.7.1.1.4.1.1", SignatureAlgorithm_PLAIN_ECDSA_SHA1},
-	{"0.4.0.127.0.7.1.1.4.1.2", SignatureAlgorithm_PLAIN_ECDSA_SHA224},
-	{"0.4.0.127.0.7.1.1.4.1.3", SignatureAlgorithm_PLAIN_ECDSA_SHA256},
-	{"0.4.0.127.0.7.1.1.4.1.4", SignatureAlgorithm_PLAIN_ECDSA_SHA384},
-	{"0.4.0.127.0.7.1.1.4.1.5", SignatureAlgorithm_PLAIN_ECDSA_SHA512},
-	{"0.4.0.127.0.7.1.1.4.1.6", SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160},
-	{"0.4.0.127.0.7.1.1.4.1.8", SignatureAlgorithm_PLAIN_ECDSA_SHA3_224},
-	{"0.4.0.127.0.7.1.1.4.1.9", SignatureAlgorithm_PLAIN_ECDSA_SHA3_256},
-	{"0.4.0.127.0.7.1.1.4.1.10", SignatureAlgorithm_PLAIN_ECDSA_SHA3_384},
-	{"0.4.0.127.0.7.1.1.4.1.11", SignatureAlgorithm_PLAIN_ECDSA_SHA3_512},
-	{"1.3.101.112", SignatureAlgorithm_ED25519},
-	{"1.3.101.113", SignatureAlgorithm_ED448},
-	{"1.2.840.10040.4.3", SignatureAlgorithm_DSA_SHA1},
-	{"1.2.14888.3.0.1", SignatureAlgorithm_DSA_SHA1},
-	{"2.16.840.1.101.3.4.3.1", SignatureAlgorithm_DSA_SHA224},
-	{"2.16.840.1.101.3.4.3.2", SignatureAlgorithm_DSA_SHA256},
-	{"2.16.840.1.101.3.4.3.3", SignatureAlgorithm_DSA_SHA384},
-	{"2.16.840.1.101.3.4.3.4", SignatureAlgorithm_DSA_SHA512},
-	{"2.16.840.1.101.3.4.3.5", SignatureAlgorithm_DSA_SHA3_224},
-	{"2.16.840.1.101.3.4.3.6", SignatureAlgorithm_DSA_SHA3_256},
-	{"2.16.840.1.101.3.4.3.7", SignatureAlgorithm_DSA_SHA3_384},
-	{"2.16.840.1.101.3.4.3.8", SignatureAlgorithm_DSA_SHA3_512},
-	{"1.2.840.113549.2.7", SignatureAlgorithm_HMAC_SHA1},
-	{"1.2.840.113549.2.8", SignatureAlgorithm_HMAC_SHA224},
-	{"1.2.840.113549.2.9", SignatureAlgorithm_HMAC_SHA256},
-	{"1.2.840.113549.2.10", SignatureAlgorithm_HMAC_SHA384},
-	{"1.2.840.113549.2.11", SignatureAlgorithm_HMAC_SHA512},
-	{"1.3.6.1.5.5.8.1.4", SignatureAlgorithm_HMAC_RIPEMD160},
-	{"2.16.840.1.101.3.4.2.13", SignatureAlgorithm_HMAC_SHA3_224},
-	{"2.16.840.1.101.3.4.2.14", SignatureAlgorithm_HMAC_SHA3_256},
-	{"2.16.840.1.101.3.4.2.15", SignatureAlgorithm_HMAC_SHA3_384},
-	{"2.16.840.1.101.3.4.2.16", SignatureAlgorithm_HMAC_SHA3_512},
-	{"1.2.840.113549.1.1.10", SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1},
+	{"1.2.840.113549.1.1.5", SignatureAlgorithmRSASHA1},
+	{"1.3.14.3.2.29", SignatureAlgorithmRSASHA1},
+	{"1.2.840.113549.1.1.14", SignatureAlgorithmRSASHA224},
+	{"1.2.840.113549.1.1.11", SignatureAlgorithmRSASHA256},
+	{"1.2.840.113549.1.1.12", SignatureAlgorithmRSASHA384},
+	{"1.2.840.113549.1.1.13", SignatureAlgorithmRSASHA512},
+	{"1.3.36.3.3.1.2", SignatureAlgorithmRSARIPEMD160},
+	{"2.16.840.1.101.3.4.3.13", SignatureAlgorithmRSASHA3224},
+	{"2.16.840.1.101.3.4.3.14", SignatureAlgorithmRSASHA3256},
+	{"2.16.840.1.101.3.4.3.15", SignatureAlgorithmRSASHA3384},
+	{"2.16.840.1.101.3.4.3.16", SignatureAlgorithmRSASHA3512},
+	{"1.2.840.113549.1.1.4", SignatureAlgorithmRSAMD5},
+	{"1.2.840.113549.1.1.2", SignatureAlgorithmRSAMD2},
+	{"1.2.840.10045.4.1", SignatureAlgorithmECDSASHA1},
+	{"1.2.840.10045.4.3.1", SignatureAlgorithmECDSASHA224},
+	{"1.2.840.10045.4.3.2", SignatureAlgorithmECDSASHA256},
+	{"1.2.840.10045.4.3.3", SignatureAlgorithmECDSASHA384},
+	{"1.2.840.10045.4.3.4", SignatureAlgorithmECDSASHA512},
+	{"0.4.0.127.0.7.1.1.4.1.6", SignatureAlgorithmECDSARIPEMD160},
+	{"2.16.840.1.101.3.4.3.9", SignatureAlgorithmECDSASHA3224},
+	{"2.16.840.1.101.3.4.3.10", SignatureAlgorithmECDSASHA3256},
+	{"2.16.840.1.101.3.4.3.11", SignatureAlgorithmECDSASHA3384},
+	{"2.16.840.1.101.3.4.3.12", SignatureAlgorithmECDSASHA3512},
+	{"0.4.0.127.0.7.1.1.4.1.1", SignatureAlgorithmPlainECDSASHA1},
+	{"0.4.0.127.0.7.1.1.4.1.2", SignatureAlgorithmPlainECDSASHA224},
+	{"0.4.0.127.0.7.1.1.4.1.3", SignatureAlgorithmPlainECDSASHA256},
+	{"0.4.0.127.0.7.1.1.4.1.4", SignatureAlgorithmPlainECDSASHA384},
+	{"0.4.0.127.0.7.1.1.4.1.5", SignatureAlgorithmPlainECDSASHA512},
+	{"0.4.0.127.0.7.1.1.4.1.6", SignatureAlgorithmPlainECDSARIPEMD160},
+	{"0.4.0.127.0.7.1.1.4.1.8", SignatureAlgorithmPlainECDSASHA3224},
+	{"0.4.0.127.0.7.1.1.4.1.9", SignatureAlgorithmPlainECDSASHA3256},
+	{"0.4.0.127.0.7.1.1.4.1.10", SignatureAlgorithmPlainECDSASHA3384},
+	{"0.4.0.127.0.7.1.1.4.1.11", SignatureAlgorithmPlainECDSASHA3512},
+	{"1.3.101.112", SignatureAlgorithmED25519},
+	{"1.3.101.113", SignatureAlgorithmED448},
+	{"1.2.840.10040.4.3", SignatureAlgorithmDSASHA1},
+	{"1.2.14888.3.0.1", SignatureAlgorithmDSASHA1},
+	{"2.16.840.1.101.3.4.3.1", SignatureAlgorithmDSASHA224},
+	{"2.16.840.1.101.3.4.3.2", SignatureAlgorithmDSASHA256},
+	{"2.16.840.1.101.3.4.3.3", SignatureAlgorithmDSASHA384},
+	{"2.16.840.1.101.3.4.3.4", SignatureAlgorithmDSASHA512},
+	{"2.16.840.1.101.3.4.3.5", SignatureAlgorithmDSASHA3224},
+	{"2.16.840.1.101.3.4.3.6", SignatureAlgorithmDSASHA3256},
+	{"2.16.840.1.101.3.4.3.7", SignatureAlgorithmDSASHA3384},
+	{"2.16.840.1.101.3.4.3.8", SignatureAlgorithmDSASHA3512},
+	{"1.2.840.113549.2.7", SignatureAlgorithmHMACSHA1},
+	{"1.2.840.113549.2.8", SignatureAlgorithmHMACSHA224},
+	{"1.2.840.113549.2.9", SignatureAlgorithmHMACSHA256},
+	{"1.2.840.113549.2.10", SignatureAlgorithmHMACSHA384},
+	{"1.2.840.113549.2.11", SignatureAlgorithmHMACSHA512},
+	{"1.3.6.1.5.5.8.1.4", SignatureAlgorithmHMACRIPEMD160},
+	{"2.16.840.1.101.3.4.2.13", SignatureAlgorithmHMACSHA3224},
+	{"2.16.840.1.101.3.4.2.14", SignatureAlgorithmHMACSHA3256},
+	{"2.16.840.1.101.3.4.2.15", SignatureAlgorithmHMACSHA3384},
+	{"2.16.840.1.101.3.4.2.16", SignatureAlgorithmHMACSHA3512},
+	{"1.2.840.113549.1.1.10", SignatureAlgorithmRSASSAPSSSHA1MGF1},
 }
 
 var signatureAlgorithmOIDForward = signatureAlgorithmForward(signatureAlgorithmOIDPairs)
@@ -589,72 +589,72 @@ var signatureAlgorithmOIDReverse = signatureAlgorithmReverse(signatureAlgorithmO
 // signatureAlgorithmJCEPairs lists the JAVA JCE signature algorithm names in upstream
 // declaration order.
 var signatureAlgorithmJCEPairs = []signatureAlgorithmPair[string]{
-	{"NONEwithRSA", SignatureAlgorithm_RSA_RAW},
-	{"SHA1withRSA", SignatureAlgorithm_RSA_SHA1},
-	{"SHA224withRSA", SignatureAlgorithm_RSA_SHA224},
-	{"SHA256withRSA", SignatureAlgorithm_RSA_SHA256},
-	{"SHA384withRSA", SignatureAlgorithm_RSA_SHA384},
-	{"SHA512withRSA", SignatureAlgorithm_RSA_SHA512},
-	{"SHA3-224withRSA", SignatureAlgorithm_RSA_SHA3_224},
-	{"SHA3-256withRSA", SignatureAlgorithm_RSA_SHA3_256},
-	{"SHA3-384withRSA", SignatureAlgorithm_RSA_SHA3_384},
-	{"SHA3-512withRSA", SignatureAlgorithm_RSA_SHA3_512},
-	{"NONEwithRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_RAW_MGF1},
-	{"SHA1withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA1_MGF1},
-	{"SHA224withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA224_MGF1},
-	{"SHA256withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1},
-	{"SHA384withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
-	{"SHA512withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
-	{"SHA3-224withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_224_MGF1},
-	{"SHA3-256withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_256_MGF1},
-	{"SHA3-384withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_384_MGF1},
-	{"SHA3-512withRSAandMGF1", SignatureAlgorithm_RSA_SSA_PSS_SHA3_512_MGF1},
-	{"RIPEMD160withRSA", SignatureAlgorithm_RSA_RIPEMD160},
-	{"MD5withRSA", SignatureAlgorithm_RSA_MD5},
-	{"MD2withRSA", SignatureAlgorithm_RSA_MD2},
-	{"NONEwithECDSA", SignatureAlgorithm_ECDSA_RAW},
-	{"SHA1withECDSA", SignatureAlgorithm_ECDSA_SHA1},
-	{"SHA224withECDSA", SignatureAlgorithm_ECDSA_SHA224},
-	{"SHA256withECDSA", SignatureAlgorithm_ECDSA_SHA256},
-	{"SHA384withECDSA", SignatureAlgorithm_ECDSA_SHA384},
-	{"SHA512withECDSA", SignatureAlgorithm_ECDSA_SHA512},
-	{"RIPEMD160withECDSA", SignatureAlgorithm_ECDSA_RIPEMD160},
-	{"SHA3-224withECDSA", SignatureAlgorithm_ECDSA_SHA3_224},
-	{"SHA3-256withECDSA", SignatureAlgorithm_ECDSA_SHA3_256},
-	{"SHA3-384withECDSA", SignatureAlgorithm_ECDSA_SHA3_384},
-	{"SHA3-512withECDSA", SignatureAlgorithm_ECDSA_SHA3_512},
-	{"SHA1withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA1},
-	{"SHA224withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA224},
-	{"SHA256withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA256},
-	{"SHA384withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA384},
-	{"SHA512withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA512},
-	{"RIPEMD160withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_RIPEMD160},
-	{"SHA3-224withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA3_224},
-	{"SHA3-256withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA3_256},
-	{"SHA3-384withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA3_384},
-	{"SHA3-512withPLAIN-ECDSA", SignatureAlgorithm_PLAIN_ECDSA_SHA3_512},
-	{"Ed25519", SignatureAlgorithm_ED25519},
-	{"Ed448", SignatureAlgorithm_ED448},
-	{"NONEwithDSA", SignatureAlgorithm_DSA_RAW},
-	{"SHA1withDSA", SignatureAlgorithm_DSA_SHA1},
-	{"SHA224withDSA", SignatureAlgorithm_DSA_SHA224},
-	{"SHA256withDSA", SignatureAlgorithm_DSA_SHA256},
-	{"SHA384withDSA", SignatureAlgorithm_DSA_SHA384},
-	{"SHA512withDSA", SignatureAlgorithm_DSA_SHA512},
-	{"SHA3-224withDSA", SignatureAlgorithm_DSA_SHA3_224},
-	{"SHA3-256withDSA", SignatureAlgorithm_DSA_SHA3_256},
-	{"SHA3-384withDSA", SignatureAlgorithm_DSA_SHA3_384},
-	{"SHA3-512withDSA", SignatureAlgorithm_DSA_SHA3_512},
-	{"SHA1withHMAC", SignatureAlgorithm_HMAC_SHA1},
-	{"SHA224withHMAC", SignatureAlgorithm_HMAC_SHA224},
-	{"SHA256withHMAC", SignatureAlgorithm_HMAC_SHA256},
-	{"SHA384withHMAC", SignatureAlgorithm_HMAC_SHA384},
-	{"SHA512withHMAC", SignatureAlgorithm_HMAC_SHA512},
-	{"SHA3-224withHMAC", SignatureAlgorithm_HMAC_SHA3_224},
-	{"SHA3-256withHMAC", SignatureAlgorithm_HMAC_SHA3_256},
-	{"SHA3-384withHMAC", SignatureAlgorithm_HMAC_SHA3_384},
-	{"SHA3-512withHMAC", SignatureAlgorithm_HMAC_SHA3_512},
-	{"RIPEMD160withHMAC", SignatureAlgorithm_HMAC_RIPEMD160},
+	{"NONEwithRSA", SignatureAlgorithmRSARaw},
+	{"SHA1withRSA", SignatureAlgorithmRSASHA1},
+	{"SHA224withRSA", SignatureAlgorithmRSASHA224},
+	{"SHA256withRSA", SignatureAlgorithmRSASHA256},
+	{"SHA384withRSA", SignatureAlgorithmRSASHA384},
+	{"SHA512withRSA", SignatureAlgorithmRSASHA512},
+	{"SHA3-224withRSA", SignatureAlgorithmRSASHA3224},
+	{"SHA3-256withRSA", SignatureAlgorithmRSASHA3256},
+	{"SHA3-384withRSA", SignatureAlgorithmRSASHA3384},
+	{"SHA3-512withRSA", SignatureAlgorithmRSASHA3512},
+	{"NONEwithRSAandMGF1", SignatureAlgorithmRSASSAPSSRawMGF1},
+	{"SHA1withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA1MGF1},
+	{"SHA224withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA224MGF1},
+	{"SHA256withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA256MGF1},
+	{"SHA384withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA384MGF1},
+	{"SHA512withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA512MGF1},
+	{"SHA3-224withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA3224MGF1},
+	{"SHA3-256withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA3256MGF1},
+	{"SHA3-384withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA3384MGF1},
+	{"SHA3-512withRSAandMGF1", SignatureAlgorithmRSASSAPSSSHA3512MGF1},
+	{"RIPEMD160withRSA", SignatureAlgorithmRSARIPEMD160},
+	{"MD5withRSA", SignatureAlgorithmRSAMD5},
+	{"MD2withRSA", SignatureAlgorithmRSAMD2},
+	{"NONEwithECDSA", SignatureAlgorithmECDSARaw},
+	{"SHA1withECDSA", SignatureAlgorithmECDSASHA1},
+	{"SHA224withECDSA", SignatureAlgorithmECDSASHA224},
+	{"SHA256withECDSA", SignatureAlgorithmECDSASHA256},
+	{"SHA384withECDSA", SignatureAlgorithmECDSASHA384},
+	{"SHA512withECDSA", SignatureAlgorithmECDSASHA512},
+	{"RIPEMD160withECDSA", SignatureAlgorithmECDSARIPEMD160},
+	{"SHA3-224withECDSA", SignatureAlgorithmECDSASHA3224},
+	{"SHA3-256withECDSA", SignatureAlgorithmECDSASHA3256},
+	{"SHA3-384withECDSA", SignatureAlgorithmECDSASHA3384},
+	{"SHA3-512withECDSA", SignatureAlgorithmECDSASHA3512},
+	{"SHA1withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA1},
+	{"SHA224withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA224},
+	{"SHA256withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA256},
+	{"SHA384withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA384},
+	{"SHA512withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA512},
+	{"RIPEMD160withPLAIN-ECDSA", SignatureAlgorithmPlainECDSARIPEMD160},
+	{"SHA3-224withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA3224},
+	{"SHA3-256withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA3256},
+	{"SHA3-384withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA3384},
+	{"SHA3-512withPLAIN-ECDSA", SignatureAlgorithmPlainECDSASHA3512},
+	{"Ed25519", SignatureAlgorithmED25519},
+	{"Ed448", SignatureAlgorithmED448},
+	{"NONEwithDSA", SignatureAlgorithmDSARaw},
+	{"SHA1withDSA", SignatureAlgorithmDSASHA1},
+	{"SHA224withDSA", SignatureAlgorithmDSASHA224},
+	{"SHA256withDSA", SignatureAlgorithmDSASHA256},
+	{"SHA384withDSA", SignatureAlgorithmDSASHA384},
+	{"SHA512withDSA", SignatureAlgorithmDSASHA512},
+	{"SHA3-224withDSA", SignatureAlgorithmDSASHA3224},
+	{"SHA3-256withDSA", SignatureAlgorithmDSASHA3256},
+	{"SHA3-384withDSA", SignatureAlgorithmDSASHA3384},
+	{"SHA3-512withDSA", SignatureAlgorithmDSASHA3512},
+	{"SHA1withHMAC", SignatureAlgorithmHMACSHA1},
+	{"SHA224withHMAC", SignatureAlgorithmHMACSHA224},
+	{"SHA256withHMAC", SignatureAlgorithmHMACSHA256},
+	{"SHA384withHMAC", SignatureAlgorithmHMACSHA384},
+	{"SHA512withHMAC", SignatureAlgorithmHMACSHA512},
+	{"SHA3-224withHMAC", SignatureAlgorithmHMACSHA3224},
+	{"SHA3-256withHMAC", SignatureAlgorithmHMACSHA3256},
+	{"SHA3-384withHMAC", SignatureAlgorithmHMACSHA3384},
+	{"SHA3-512withHMAC", SignatureAlgorithmHMACSHA3512},
+	{"RIPEMD160withHMAC", SignatureAlgorithmHMACRIPEMD160},
 }
 
 var signatureAlgorithmJCEForward = signatureAlgorithmForward(signatureAlgorithmJCEPairs)
@@ -663,19 +663,19 @@ var signatureAlgorithmJCEReverse = signatureAlgorithmReverse(signatureAlgorithmJ
 // signatureAlgorithmJWAPairs lists the JWA algorithm identifiers (RFC 7518 section 3.1)
 // in upstream declaration order.
 var signatureAlgorithmJWAPairs = []signatureAlgorithmPair[string]{
-	{"HS256", SignatureAlgorithm_HMAC_SHA256},
-	{"HS384", SignatureAlgorithm_HMAC_SHA384},
-	{"HS512", SignatureAlgorithm_HMAC_SHA512},
-	{"RS256", SignatureAlgorithm_RSA_SHA256},
-	{"RS384", SignatureAlgorithm_RSA_SHA384},
-	{"RS512", SignatureAlgorithm_RSA_SHA512},
-	{"ES256", SignatureAlgorithm_ECDSA_SHA256},
-	{"ES384", SignatureAlgorithm_ECDSA_SHA384},
-	{"ES512", SignatureAlgorithm_ECDSA_SHA512},
-	{"PS256", SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1},
-	{"PS384", SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
-	{"PS512", SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
-	{"EdDSA", SignatureAlgorithm_ED25519},
+	{"HS256", SignatureAlgorithmHMACSHA256},
+	{"HS384", SignatureAlgorithmHMACSHA384},
+	{"HS512", SignatureAlgorithmHMACSHA512},
+	{"RS256", SignatureAlgorithmRSASHA256},
+	{"RS384", SignatureAlgorithmRSASHA384},
+	{"RS512", SignatureAlgorithmRSASHA512},
+	{"ES256", SignatureAlgorithmECDSASHA256},
+	{"ES384", SignatureAlgorithmECDSASHA384},
+	{"ES512", SignatureAlgorithmECDSASHA512},
+	{"PS256", SignatureAlgorithmRSASSAPSSSHA256MGF1},
+	{"PS384", SignatureAlgorithmRSASSAPSSSHA384MGF1},
+	{"PS512", SignatureAlgorithmRSASSAPSSSHA512MGF1},
+	{"EdDSA", SignatureAlgorithmED25519},
 }
 
 var signatureAlgorithmJWAForward = signatureAlgorithmForward(signatureAlgorithmJWAPairs)
@@ -683,23 +683,23 @@ var signatureAlgorithmJWAReverse = func() map[SignatureAlgorithm]string {
 	r := signatureAlgorithmReverse(signatureAlgorithmJWAPairs, signatureAlgorithmJWAForward, javaStringHashCode, true)
 	// Explicit upstream override: ED448 also reports "EdDSA" as its JWA id, though
 	// "EdDSA" only resolves back to ED25519 on the forward lookup.
-	r[SignatureAlgorithm_ED448] = "EdDSA"
+	r[SignatureAlgorithmED448] = "EdDSA"
 	return r
 }()
 
 // signatureAlgorithmCOSEPairs lists the COSE algorithm keys (https://www.iana.org/assignments/cose/cose.xml)
 // in upstream declaration order.
 var signatureAlgorithmCOSEPairs = []signatureAlgorithmPair[int64]{
-	{-257, SignatureAlgorithm_RSA_SHA256},
-	{-258, SignatureAlgorithm_RSA_SHA384},
-	{-259, SignatureAlgorithm_RSA_SHA512},
-	{-37, SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1},
-	{-38, SignatureAlgorithm_RSA_SSA_PSS_SHA384_MGF1},
-	{-39, SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1},
-	{-7, SignatureAlgorithm_ECDSA_SHA256},
-	{-35, SignatureAlgorithm_ECDSA_SHA384},
-	{-36, SignatureAlgorithm_ECDSA_SHA512},
-	{-8, SignatureAlgorithm_ED25519},
+	{-257, SignatureAlgorithmRSASHA256},
+	{-258, SignatureAlgorithmRSASHA384},
+	{-259, SignatureAlgorithmRSASHA512},
+	{-37, SignatureAlgorithmRSASSAPSSSHA256MGF1},
+	{-38, SignatureAlgorithmRSASSAPSSSHA384MGF1},
+	{-39, SignatureAlgorithmRSASSAPSSSHA512MGF1},
+	{-7, SignatureAlgorithmECDSASHA256},
+	{-35, SignatureAlgorithmECDSASHA384},
+	{-36, SignatureAlgorithmECDSASHA512},
+	{-8, SignatureAlgorithmED25519},
 }
 
 var signatureAlgorithmCOSEForward = signatureAlgorithmForward(signatureAlgorithmCOSEPairs)
@@ -707,7 +707,7 @@ var signatureAlgorithmCOSEReverse = func() map[SignatureAlgorithm]int64 {
 	r := signatureAlgorithmReverse(signatureAlgorithmCOSEPairs, signatureAlgorithmCOSEForward, javaLongHashCode, true)
 	// Explicit upstream override: ED448 also reports -8 as its COSE key, though -8
 	// only resolves back to ED25519 on the forward lookup.
-	r[SignatureAlgorithm_ED448] = -8
+	r[SignatureAlgorithmED448] = -8
 	return r
 }()
 
@@ -754,7 +754,7 @@ func SignatureAlgorithmForOIDAndParams(oid string, sigAlgParams []byte) (Signatu
 	if !ok {
 		return "", fmt.Errorf("unsupported algorithm: %s", oid)
 	}
-	if EncryptionAlgorithm_RSASSA_PSS == algorithm.EncryptionAlgorithm() && sigAlgParams != nil {
+	if EncryptionAlgorithmRSASSAPSS == algorithm.EncryptionAlgorithm() && sigAlgParams != nil {
 		digestAlgorithm, err := signatureAlgorithmPSSDigestAlgorithm(sigAlgParams)
 		if err != nil {
 			return "", fmt.Errorf("Unable to initialize PSS: %w", err)
@@ -844,7 +844,7 @@ func signatureAlgorithmPSSDigestAlgorithm(sigAlgParams []byte) (DigestAlgorithm,
 
 	if !hashAlgorithmPresent {
 		// hashAlgorithm DEFAULT sha1
-		return DigestAlgorithm_SHA1, nil
+		return DigestAlgorithmSHA1, nil
 	}
 	var algorithmIdentifier cryptobyte.String
 	if !hashAlgorithm.ReadASN1(&algorithmIdentifier, cryptobyte_asn1.SEQUENCE) {

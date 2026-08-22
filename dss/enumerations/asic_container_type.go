@@ -11,15 +11,15 @@ import (
 type ASiCContainerType string
 
 const (
-	// ASiCContainerType_ASiC_S is the Associated Signature Container Simple.
-	ASiCContainerType_ASiC_S ASiCContainerType = "ASiC_S"
-	// ASiCContainerType_ASiC_E is the Associated Signature Container Extended.
-	ASiCContainerType_ASiC_E ASiCContainerType = "ASiC_E"
+	// ASiCContainerTypeASiCS is the Associated Signature Container Simple.
+	ASiCContainerTypeASiCS ASiCContainerType = "ASiC_S"
+	// ASiCContainerTypeASiCE is the Associated Signature Container Extended.
+	ASiCContainerTypeASiCE ASiCContainerType = "ASiC_E"
 )
 
 // ASiCContainerTypeValues returns all ASiCContainerType constants in declaration order.
 func ASiCContainerTypeValues() []ASiCContainerType {
-	return []ASiCContainerType{ASiCContainerType_ASiC_S, ASiCContainerType_ASiC_E}
+	return []ASiCContainerType{ASiCContainerTypeASiCS, ASiCContainerTypeASiCE}
 }
 
 // ASiCContainerTypeValueByName returns the ASiCContainerType based on the name (String),

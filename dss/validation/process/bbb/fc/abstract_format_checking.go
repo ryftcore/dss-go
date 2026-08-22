@@ -37,4 +37,4 @@ func (c *AbstractFormatChecking[S]) InitAbstractFormatChecking(i18nProvider *i18
 }
 
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
-func (c *AbstractFormatChecking[S]) Title() i18n.MessageTag { return i18n.MessageTag_FORMAT_CHECKING }
+func (c *AbstractFormatChecking[S]) Title() i18n.MessageTag { return i18n.MessageTagFormatChecking }

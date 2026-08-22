@@ -38,18 +38,18 @@ func (c *TrustedListReachedForCertificateChainCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustedListReachedForCertificateChainCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_CERT_TRUSTED_LIST_REACHED
+	return i18n.MessageTagQualCertTrustedListReached
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustedListReachedForCertificateChainCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_CERT_TRUSTED_LIST_REACHED_ANS
+	return i18n.MessageTagQualCertTrustedListReachedANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedListReachedForCertificateChainCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

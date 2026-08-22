@@ -16,7 +16,7 @@ type ZipContentEvidenceRecordDigestBuilder struct {
 	documents []model.DSSDocument
 
 	// DigestAlgorithm is the digest algorithm to be used on hash computation. Default:
-	// DigestAlgorithm_SHA256.
+	// DigestAlgorithmSHA256.
 	DigestAlgorithm enumerations.DigestAlgorithm
 
 	// DataObjectDigestBuilderFactory is the factory to be used to instantiate a new
@@ -39,7 +39,7 @@ func newZipContentEvidenceRecordDigestBuilderBase(digestAlgorithm enumerations.D
 // build hashes from a DSSDocument, represented by a ZIP container, using a default SHA-256
 // digest algorithm. Ports ZipContentEvidenceRecordDigestBuilder(DSSDocument).
 func NewZipContentEvidenceRecordDigestBuilder(zipContainer model.DSSDocument) *ZipContentEvidenceRecordDigestBuilder {
-	return NewZipContentEvidenceRecordDigestBuilderAlgo(zipContainer, enumerations.DigestAlgorithm_SHA256)
+	return NewZipContentEvidenceRecordDigestBuilderAlgo(zipContainer, enumerations.DigestAlgorithmSHA256)
 }
 
 // NewZipContentEvidenceRecordDigestBuilderAlgo creates a ZipContentEvidenceRecordDigestBuilder

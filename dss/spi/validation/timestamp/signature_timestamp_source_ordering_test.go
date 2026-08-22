@@ -24,8 +24,8 @@ import (
 // timestamp-token-sha512.tst share a pinned generation time), so ordering is driven purely by
 // TimestampTokenComparator's later criteria (token type) rather than by wall-clock time.
 func TestTimestampTokenSliceSortStableOrdersByType(t *testing.T) {
-	archive := loadFixtureTimestampToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
-	signature := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	archive := loadFixtureTimestampToken(t, enumerations.TimestampTypeArchiveTimestamp)
+	signature := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
 	tokens := []*validation.TimestampToken{archive, signature}
 	timestampTokenSliceSortStable(tokens, validation.NewTimestampTokenComparator())
@@ -41,8 +41,8 @@ func TestTimestampTokenSliceSortStableIsStableForEqualElements(t *testing.T) {
 	// every one of TimestampTokenComparator's criteria (generation time, type, and whatever
 	// further tie-breaks it applies), so the comparator has no basis to reorder them - the
 	// only way a stable sort can be told apart from an unstable one here.
-	first := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	second := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	first := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	second := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	comparator := validation.NewTimestampTokenComparator()
 	if comparator.Compare(first, second) != 0 {
 		t.Fatal("two tokens built from identical bytes/type must compare equal, invalidating this test's premise")
@@ -60,7 +60,7 @@ func TestTimestampTokenSliceSortStableEmptyAndSingleton(t *testing.T) {
 	var empty []*validation.TimestampToken
 	timestampTokenSliceSortStable(empty, validation.NewTimestampTokenComparator()) // must not panic
 
-	solo := []*validation.TimestampToken{loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)}
+	solo := []*validation.TimestampToken{loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)}
 	original := solo[0]
 	timestampTokenSliceSortStable(solo, validation.NewTimestampTokenComparator())
 	if solo[0] != original {
@@ -71,9 +71,9 @@ func TestTimestampTokenSliceSortStableEmptyAndSingleton(t *testing.T) {
 // ---- containsTimestampsCoveringOtherTimestamps -----------------------------------------------
 
 func TestContainsTimestampsCoveringOtherTimestampsTrueWhenTimestampReferencePresent(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeArchiveTimestamp)
 	token.SetTimestampedReferences([]*validation.TimestampedReference{
-		validation.NewTimestampedReference("other-timestamp-id", enumerations.TimestampedObjectType_TIMESTAMP),
+		validation.NewTimestampedReference("other-timestamp-id", enumerations.TimestampedObjectTypeTimestamp),
 	})
 
 	if !containsTimestampsCoveringOtherTimestamps([]*validation.TimestampToken{token}) {
@@ -82,9 +82,9 @@ func TestContainsTimestampsCoveringOtherTimestampsTrueWhenTimestampReferencePres
 }
 
 func TestContainsTimestampsCoveringOtherTimestampsFalseWithoutTimestampReferences(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeArchiveTimestamp)
 	token.SetTimestampedReferences([]*validation.TimestampedReference{
-		validation.NewTimestampedReference("cert-id", enumerations.TimestampedObjectType_CERTIFICATE),
+		validation.NewTimestampedReference("cert-id", enumerations.TimestampedObjectTypeCertificate),
 	})
 
 	if containsTimestampsCoveringOtherTimestamps([]*validation.TimestampToken{token}) {
@@ -101,9 +101,9 @@ func TestContainsTimestampsCoveringOtherTimestampsEmptySlice(t *testing.T) {
 // ---- filterSignatureTimestamps -----------------------------------------------------------------
 
 func TestFilterSignatureTimestampsKeepsOnlySignatureType(t *testing.T) {
-	sigToken := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	archiveToken := loadFixtureTimestampToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
-	contentToken := loadFixtureTimestampToken(t, enumerations.TimestampType_CONTENT_TIMESTAMP)
+	sigToken := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	archiveToken := loadFixtureTimestampToken(t, enumerations.TimestampTypeArchiveTimestamp)
+	contentToken := loadFixtureTimestampToken(t, enumerations.TimestampTypeContentTimestamp)
 
 	got := filterSignatureTimestamps([]*validation.TimestampToken{archiveToken, sigToken, contentToken})
 
@@ -125,11 +125,11 @@ func TestFilterSignatureTimestampsEmptyInputReturnsEmptyNonNil(t *testing.T) {
 // ---- timestampTokenSliceContains (pointer identity, not TimestampToken value equality) --------
 
 func TestTimestampTokenSliceContainsPointerIdentity(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	// A distinct TimestampToken built from the identical bytes/type is a different pointer, and
 	// must NOT be considered "contained" - this helper is documented as identity-based, mirroring
 	// Java's default (reference) equals() on TimestampToken.
-	lookalike := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	lookalike := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
 	list := []*validation.TimestampToken{token}
 	if !timestampTokenSliceContains(list, token) {

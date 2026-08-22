@@ -239,8 +239,8 @@ func cadesLTAComposedAtsHashIndex(algorithmIdentifiers *spi.AlgorithmIdentifier,
 	var vector []byte
 	if algorithmIdentifiers != nil {
 		vector = append(vector, algorithmIdentifiers.DER()...)
-	} else if spi.OID_id_aa_ATSHashIndexV2.Equal(atsHashIndexVersionIdentifier) ||
-		spi.OID_id_aa_ATSHashIndexV3.Equal(atsHashIndexVersionIdentifier) {
+	} else if spi.OIDIdAaATSHashIndexV2.Equal(atsHashIndexVersionIdentifier) ||
+		spi.OIDIdAaATSHashIndexV3.Equal(atsHashIndexVersionIdentifier) {
 		// for id_aa_ATSHashIndexV2 and id_aa_ATSHashIndexV3, the algorithmIdentifier is required
 		//
 		// NOTE: this is `new AlgorithmIdentifier(oid)` upstream, i.e. an AlgorithmIdentifier

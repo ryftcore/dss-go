@@ -5,27 +5,27 @@ package enumerations
 type Assert string
 
 const (
-	// Assert_ALL applies if all of the assertion shall be met.
-	Assert_ALL Assert = "ALL"
-	// Assert_AT_LEAST_ONE applies if at least one of the assertion shall
+	// AssertAll applies if all of the assertion shall be met.
+	AssertAll Assert = "ALL"
+	// AssertAtLeastOne applies if at least one of the assertion shall
 	// be met.
-	Assert_AT_LEAST_ONE Assert = "AT_LEAST_ONE"
-	// Assert_NONE applies if all of the assertion shall be met.
-	Assert_NONE Assert = "NONE"
+	AssertAtLeastOne Assert = "AT_LEAST_ONE"
+	// AssertNone applies if all of the assertion shall be met.
+	AssertNone Assert = "NONE"
 )
 
 var assertValueTable = map[Assert]string{
-	Assert_ALL:          "all",
-	Assert_AT_LEAST_ONE: "atLeastOne",
-	Assert_NONE:         "none",
+	AssertAll:        "all",
+	AssertAtLeastOne: "atLeastOne",
+	AssertNone:       "none",
 }
 
 // AssertValues returns all constants in declaration order.
 func AssertValues() []Assert {
 	return []Assert{
-		Assert_ALL,
-		Assert_AT_LEAST_ONE,
-		Assert_NONE,
+		AssertAll,
+		AssertAtLeastOne,
+		AssertNone,
 	}
 }
 

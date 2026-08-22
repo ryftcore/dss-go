@@ -110,7 +110,7 @@ func TestAbstractSignatureServiceIsValidSignatureValueRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sign: %s", err)
 	}
-	signatureValue := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_ECDSA_SHA256, sigBytes)
+	signatureValue := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmECDSASHA256, sigBytes)
 
 	if !s.IsValidSignatureValue(toBeSigned, signatureValue, cert) {
 		t.Fatal("IsValidSignatureValue() = false, want true for a genuine signature")
@@ -118,7 +118,7 @@ func TestAbstractSignatureServiceIsValidSignatureValueRoundTrip(t *testing.T) {
 
 	tampered := append([]byte(nil), sigBytes...)
 	tampered[len(tampered)-1] ^= 0xFF
-	tamperedValue := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_ECDSA_SHA256, tampered)
+	tamperedValue := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmECDSASHA256, tampered)
 	if s.IsValidSignatureValue(toBeSigned, tamperedValue, cert) {
 		t.Fatal("IsValidSignatureValue() = true for a tampered signature, want false")
 	}
@@ -128,7 +128,7 @@ func TestAbstractSignatureServiceGetFinalFileNameVariants(t *testing.T) {
 	s := newTestAbstractSignatureService(t)
 	doc := model.NewInMemoryDocumentWithName([]byte("x"), "original.txt")
 
-	name1, err := s.GetFinalFileName(doc, enumerations.SigningOperation_SIGN)
+	name1, err := s.GetFinalFileName(doc, enumerations.SigningOperationSign)
 	if err != nil {
 		t.Fatalf("GetFinalFileName: %s", err)
 	}
@@ -136,7 +136,7 @@ func TestAbstractSignatureServiceGetFinalFileNameVariants(t *testing.T) {
 		t.Fatal("GetFinalFileName() returned empty name")
 	}
 
-	name2, err := s.GetFinalFileNameWithLevel(doc, enumerations.SigningOperation_SIGN, enumerations.SignatureLevel_XAdES_BASELINE_B)
+	name2, err := s.GetFinalFileNameWithLevel(doc, enumerations.SigningOperationSign, enumerations.SignatureLevelXAdESBaselineB)
 	if err != nil {
 		t.Fatalf("GetFinalFileNameWithLevel: %s", err)
 	}
@@ -144,7 +144,7 @@ func TestAbstractSignatureServiceGetFinalFileNameVariants(t *testing.T) {
 		t.Fatal("GetFinalFileNameWithLevel() returned empty name")
 	}
 
-	name3, err := s.GetFinalFileNameWithPackaging(doc, enumerations.SigningOperation_SIGN, enumerations.SignatureLevel_XAdES_BASELINE_B, enumerations.SignaturePackaging_ENVELOPING)
+	name3, err := s.GetFinalFileNameWithPackaging(doc, enumerations.SigningOperationSign, enumerations.SignatureLevelXAdESBaselineB, enumerations.SignaturePackagingEnveloping)
 	if err != nil {
 		t.Fatalf("GetFinalFileNameWithPackaging: %s", err)
 	}
@@ -152,7 +152,7 @@ func TestAbstractSignatureServiceGetFinalFileNameVariants(t *testing.T) {
 		t.Fatal("GetFinalFileNameWithPackaging() returned empty name")
 	}
 
-	name4, err := s.GetFinalDocumentNameWithMimeType(doc, enumerations.SigningOperation_SIGN, enumerations.SignatureLevel_XAdES_BASELINE_B, enumerations.MimeTypeEnum_BINARY)
+	name4, err := s.GetFinalDocumentNameWithMimeType(doc, enumerations.SigningOperationSign, enumerations.SignatureLevelXAdESBaselineB, enumerations.MimeTypeEnumBinary)
 	if err != nil {
 		t.Fatalf("GetFinalDocumentNameWithMimeType: %s", err)
 	}
@@ -163,8 +163,8 @@ func TestAbstractSignatureServiceGetFinalFileNameVariants(t *testing.T) {
 
 func TestAbstractSignatureServiceEnsureSignatureValueMatchingAlgorithmPassesThrough(t *testing.T) {
 	s := newTestAbstractSignatureService(t)
-	sv := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_ECDSA_SHA256, []byte{1, 2, 3})
-	got, err := s.EnsureSignatureValue(enumerations.SignatureAlgorithm_ECDSA_SHA256, sv)
+	sv := model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmECDSASHA256, []byte{1, 2, 3})
+	got, err := s.EnsureSignatureValue(enumerations.SignatureAlgorithmECDSASHA256, sv)
 	if err != nil {
 		t.Fatalf("EnsureSignatureValue: %s", err)
 	}

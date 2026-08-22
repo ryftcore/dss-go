@@ -119,7 +119,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) initASiCContent(documents [
 // (LOG.info) is dropped per PORTING.md.
 func (b *AbstractASiCContainerEvidenceRecordBuilder) getASiCEvidenceRecordManifest(parameters *ASiCContainerEvidenceRecordParameters) model.DSSDocument {
 	if parameters.AsicEvidenceRecordManifest() != nil {
-		if enumerations.ASiCContainerType_ASiC_E == parameters.ContainerType() {
+		if enumerations.ASiCContainerTypeASiCE == parameters.ContainerType() {
 			return parameters.AsicEvidenceRecordManifest()
 		}
 	}
@@ -133,7 +133,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecord(evidenceR
 	if err == nil {
 		evidenceRecordAnalyzer.SetManifestFile(manifestFile)
 		evidenceRecordAnalyzer.SetDetachedContents(asicContent.AllDocuments())
-		evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOrigin_CONTAINER)
+		evidenceRecordAnalyzer.SetEvidenceRecordOrigin(enumerations.EvidenceRecordOriginContainer)
 		return evidenceRecordAnalyzer.EvidenceRecord()
 	}
 	panic(exception.NewIllegalInputException(fmt.Sprintf(
@@ -158,7 +158,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceR
 	if manifestFile == nil {
 		panic(exception.NewIllegalInputException("Unable to parse the provided ASiCEvidenceRecordManifest document! More detail in logs."))
 	}
-	manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnum_EVIDENCE_RECORD)
+	manifestFile.SetManifestType(enumerations.ASiCManifestTypeEnumEvidenceRecord)
 	return manifestFile
 }
 
@@ -230,7 +230,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getEvidenceRecordFilename(e
 // based on a list of coveredDocuments when required. Ports the protected
 // buildEvidenceRecordManifest(ASiCContent, List, DigestAlgorithm, String).
 func (b *AbstractASiCContainerEvidenceRecordBuilder) buildEvidenceRecordManifest(asicContent *ASiCContent, coveredDocuments []model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm, evidenceRecordFilename string) model.DSSDocument {
-	if enumerations.ASiCContainerType_ASiC_E == asicContent.ContainerType() {
+	if enumerations.ASiCContainerTypeASiCE == asicContent.ContainerType() {
 		names := spi.DSSUtilsDocumentNames(coveredDocuments)
 		manifestDocument, err := NewASiCEvidenceRecordManifestBuilder(asicContent, digestAlgorithm, evidenceRecordFilename).
 			SetAsicContentDocumentFilter(AllowedFilenamesFilter(names...)).
@@ -256,10 +256,10 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCContentValid(asic
 
 	asice := ASiCUtilsIsASiCE(&parameters.ASiCParameters)
 	switch {
-	case asice && enumerations.ASiCContainerType_ASiC_E == currentContainerType:
+	case asice && enumerations.ASiCContainerTypeASiCE == currentContainerType:
 		// ok
 
-	case !asice && enumerations.ASiCContainerType_ASiC_S == currentContainerType:
+	case !asice && enumerations.ASiCContainerTypeASiCS == currentContainerType:
 		if utils.CollectionSize(asicContent.SignedDocuments()) != 1 {
 			panic("Only one original document is expected for the ASiC-S container type! If required, " +
 				"please create a 'package.zip' and provide it directly as a parameter. " +
@@ -339,7 +339,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertEvidenceRecordValid(e
 		"the digest computed on the provided content!"
 	signedDataFound := false
 	for _, referenceValidation := range evidenceRecord.ReferenceValidation() {
-		if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE != referenceValidation.Type() {
+		if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference != referenceValidation.Type() {
 			if !referenceValidation.IsIntact() {
 				if referenceValidation.Document() != nil {
 					panic(exception.NewIllegalInputException(fmt.Sprintf("The digest of document '%s' has not been found "+
@@ -383,6 +383,6 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) validateTimestamps(evidence
 	validationContext.Validate()
 
 	signatureValidationAlerter := validation.NewSignatureValidationAlerter(validationContext)
-	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperation_ADD_EVIDENCE_RECORD)
+	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperationAddEvidenceRecord)
 	signatureValidationAlerter.AssertAllTimestampsValid()
 }

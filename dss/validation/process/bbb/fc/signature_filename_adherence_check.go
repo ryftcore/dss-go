@@ -47,21 +47,21 @@ func (c *SignatureFilenameAdherenceCheck) Process() bool {
 		panic(err)
 	}
 	switch c.DiagnosticData.ContainerType() {
-	case enumerations.ASiCContainerType_ASiC_S:
+	case enumerations.ASiCContainerTypeASiCS:
 		switch signatureForm {
-		case enumerations.SignatureForm_XAdES:
+		case enumerations.SignatureFormXAdES:
 			return signaturesXML == filename
-		case enumerations.SignatureForm_CAdES:
+		case enumerations.SignatureFormCAdES:
 			return signatureP7S == filename
 		default:
 			panic(fmt.Sprintf("Only XAdES and CAdES ASiC container types are supported! Found : %s", signatureForm))
 		}
-	case enumerations.ASiCContainerType_ASiC_E:
+	case enumerations.ASiCContainerTypeASiCE:
 		switch signatureForm {
-		case enumerations.SignatureForm_XAdES:
+		case enumerations.SignatureFormXAdES:
 			return strings.HasPrefix(filename, MetaInfFolder) && strings.Contains(filename, signaturesFilename) &&
 				strings.HasSuffix(filename, XMLExtension)
-		case enumerations.SignatureForm_CAdES:
+		case enumerations.SignatureFormCAdES:
 			return strings.HasPrefix(filename, MetaInfFolder) && strings.Contains(filename, SignatureFilename) &&
 				strings.HasSuffix(filename, cadesSignatureExtension)
 		default:
@@ -74,10 +74,10 @@ func (c *SignatureFilenameAdherenceCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *SignatureFilenameAdherenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFCS
+	return i18n.MessageTagBBBFCISFCS
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignatureFilenameAdherenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFCS_ANS
+	return i18n.MessageTagBBBFCISFCSANS
 }

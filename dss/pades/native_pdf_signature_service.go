@@ -212,7 +212,7 @@ func (s *NativePDFSignatureService) Sign(toSignDocument model.DSSDocument, cmsSi
 	if signedDocument == nil {
 		signedDocument = s.SignDocument(toSignDocument, cmsSignedData, parameters)
 	}
-	signedDocument.SetMimeType(enumerations.MimeTypeEnum_PDF)
+	signedDocument.SetMimeType(enumerations.MimeTypeEnumPDF)
 	return signedDocument
 }
 
@@ -280,7 +280,7 @@ func (s *NativePDFSignatureService) buildRevision(toSignDocument model.DSSDocume
 	}
 
 	signedDocument := model.NewInMemoryDocument(result.Bytes)
-	signedDocument.SetMimeType(enumerations.MimeTypeEnum_PDF)
+	signedDocument.SetMimeType(enumerations.MimeTypeEnumPDF)
 	return signedDocument, messageDigest
 }
 
@@ -395,8 +395,8 @@ func (s *NativePDFSignatureService) applyPendingVersion(updater *pdf.Updater, re
 // mode; a CONTENT_TIMESTAMP is part of the signature. Port of the protected
 // #isDocumentTimestampLayer.
 func (s *NativePDFSignatureService) IsDocumentTimestampLayer() bool {
-	return PDFServiceMode_SIGNATURE_TIMESTAMP == s.serviceMode ||
-		PDFServiceMode_ARCHIVE_TIMESTAMP == s.serviceMode
+	return PDFServiceModeSignatureTimestamp == s.serviceMode ||
+		PDFServiceModeArchiveTimestamp == s.serviceMode
 }
 
 // Type returns the /Type of the signature dictionary. Port of the protected #getType.
@@ -535,10 +535,10 @@ func (s *NativePDFSignatureService) IsISO32001(parameters PAdESCommonParameters)
 	return (PAdESConstantsSignaturePKCS7SubFilter == subFilter ||
 		PAdESConstantsSignatureDefaultSubFilter == subFilter ||
 		PAdESConstantsTimestampDefaultSubFilter == subFilter) &&
-		(enumerations.DigestAlgorithm_SHA3_256 == digestAlgorithm ||
-			enumerations.DigestAlgorithm_SHA3_384 == digestAlgorithm ||
-			enumerations.DigestAlgorithm_SHA3_512 == digestAlgorithm ||
-			enumerations.DigestAlgorithm_SHAKE256 == digestAlgorithm)
+		(enumerations.DigestAlgorithmSHA3256 == digestAlgorithm ||
+			enumerations.DigestAlgorithmSHA3384 == digestAlgorithm ||
+			enumerations.DigestAlgorithmSHA3512 == digestAlgorithm ||
+			enumerations.DigestAlgorithmSHAKE256 == digestAlgorithm)
 }
 
 // IsISO32002 verifies whether the ISO 32002 developer extension shall be included.
@@ -554,9 +554,9 @@ func (s *NativePDFSignatureService) IsISO32002(parameters PAdESCommonParameters)
 	return (PAdESConstantsSignaturePKCS7SubFilter == subFilter ||
 		PAdESConstantsSignatureDefaultSubFilter == subFilter ||
 		PAdESConstantsTimestampDefaultSubFilter == subFilter) &&
-		enumerations.EncryptionAlgorithm_EDDSA == parameters.EncryptionAlgorithm() &&
-		(enumerations.DigestAlgorithm_SHA512 == digestAlgorithm ||
-			enumerations.DigestAlgorithm_SHAKE256 == digestAlgorithm)
+		enumerations.EncryptionAlgorithmEDDSA == parameters.EncryptionAlgorithm() &&
+		(enumerations.DigestAlgorithmSHA512 == digestAlgorithm ||
+			enumerations.DigestAlgorithmSHAKE256 == digestAlgorithm)
 }
 
 // IsDeveloperExtensionPresent verifies whether the specified developer extension is present in
@@ -962,7 +962,7 @@ func (s *NativePDFSignatureService) AddDssDictionary(document model.DSSDocument,
 	}
 
 	extendedDocument := model.NewInMemoryDocument(result.Bytes)
-	extendedDocument.SetMimeType(enumerations.MimeTypeEnum_PDF)
+	extendedDocument.SetMimeType(enumerations.MimeTypeEnumPDF)
 	return extendedDocument
 }
 
@@ -1192,7 +1192,7 @@ func (s *NativePDFSignatureService) AddNewSignatureField(document model.DSSDocum
 
 	updatedDocument := model.NewInMemoryDocument(result.Bytes)
 	updatedDocument.SetName("new-document.pdf")
-	updatedDocument.SetMimeType(enumerations.MimeTypeEnum_PDF)
+	updatedDocument.SetMimeType(enumerations.MimeTypeEnumPDF)
 	return updatedDocument
 }
 

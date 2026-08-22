@@ -38,20 +38,20 @@ func TestEvidenceRecordHashTreeRenewalTimestampCheckAgainstJavaOracle(t *testing
 // archive time-stamp which does, or does not, cover it too.
 func evidenceRecordDiagnosticData(covered bool) *diagnostic.DiagnosticData {
 	erMatcher := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
-	setDigestMatcherType(erMatcher, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	setDigestMatcherType(erMatcher, enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	erMatcher.DocumentName = ptr("doc.xml")
 
 	tstMatcher := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
-	setDigestMatcherType(tstMatcher, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	setDigestMatcherType(tstMatcher, enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	if covered {
 		tstMatcher.DocumentName = ptr("doc.xml")
 	} else {
 		tstMatcher.DocumentName = ptr("other.xml")
 	}
 
-	timestampType := diagnosticjaxb.TimestampTypeValue(enumerations.TimestampType_EVIDENCE_RECORD_TIMESTAMP)
+	timestampType := diagnosticjaxb.TimestampTypeValue(enumerations.TimestampTypeEvidenceRecordTimestamp)
 	erTimestampType := diagnosticjaxb.EvidenceRecordTimestampTypeValue(
-		enumerations.EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP)
+		enumerations.EvidenceRecordTimestampTypeHashTreeRenewalArchiveTimestamp)
 	timestamp := &diagnosticjaxb.XmlTimestamp{
 		Type:                        &timestampType,
 		EvidenceRecordTimestampType: &erTimestampType,

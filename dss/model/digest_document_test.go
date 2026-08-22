@@ -11,9 +11,9 @@ import (
 func TestDigestDocumentAddAndGetDigestValue(t *testing.T) {
 	d := NewDigestDocument()
 	value := []byte{0x01, 0x02, 0x03}
-	d.AddDigestValue(enumerations.DigestAlgorithm_SHA256, value)
+	d.AddDigestValue(enumerations.DigestAlgorithmSHA256, value)
 
-	got, err := d.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	got, err := d.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}
@@ -24,7 +24,7 @@ func TestDigestDocumentAddAndGetDigestValue(t *testing.T) {
 
 func TestDigestDocumentMissingAlgorithmErrors(t *testing.T) {
 	d := NewDigestDocument()
-	if _, err := d.DigestValue(enumerations.DigestAlgorithm_SHA256); err == nil {
+	if _, err := d.DigestValue(enumerations.DigestAlgorithmSHA256); err == nil {
 		t.Fatal("expected error for missing digest algorithm")
 	}
 }
@@ -34,10 +34,10 @@ func TestDigestDocumentAddDigestBase64(t *testing.T) {
 	encoded := base64.StdEncoding.EncodeToString(value)
 
 	d := NewDigestDocument()
-	if err := d.AddDigestBase64(enumerations.DigestAlgorithm_SHA1, encoded); err != nil {
+	if err := d.AddDigestBase64(enumerations.DigestAlgorithmSHA1, encoded); err != nil {
 		t.Fatalf("AddDigestBase64: %v", err)
 	}
-	got, err := d.DigestValue(enumerations.DigestAlgorithm_SHA1)
+	got, err := d.DigestValue(enumerations.DigestAlgorithmSHA1)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}
@@ -48,13 +48,13 @@ func TestDigestDocumentAddDigestBase64(t *testing.T) {
 
 func TestDigestDocumentAddDigestBase64Invalid(t *testing.T) {
 	d := NewDigestDocument()
-	if err := d.AddDigestBase64(enumerations.DigestAlgorithm_SHA1, "not-valid-base64!!"); err == nil {
+	if err := d.AddDigestBase64(enumerations.DigestAlgorithmSHA1, "not-valid-base64!!"); err == nil {
 		t.Fatal("expected error for invalid base64 digest")
 	}
 }
 
 func TestDigestDocumentOpenStreamUnsupported(t *testing.T) {
-	d := NewDigestDocumentFromValue(enumerations.DigestAlgorithm_SHA256, []byte{0xAA})
+	d := NewDigestDocumentFromValue(enumerations.DigestAlgorithmSHA256, []byte{0xAA})
 	if _, err := d.OpenStream(); err == nil {
 		t.Fatal("expected OpenStream to error on a digest-only document")
 	}
@@ -70,12 +70,12 @@ func TestDigestDocumentExistingDigest(t *testing.T) {
 	}
 
 	value := []byte{0x9, 0x8, 0x7}
-	d := NewDigestDocumentFromValue(enumerations.DigestAlgorithm_SHA256, value)
+	d := NewDigestDocumentFromValue(enumerations.DigestAlgorithmSHA256, value)
 	digest, err := d.ExistingDigest()
 	if err != nil {
 		t.Fatalf("ExistingDigest: %v", err)
 	}
-	if digest.Algorithm() != enumerations.DigestAlgorithm_SHA256 {
+	if digest.Algorithm() != enumerations.DigestAlgorithmSHA256 {
 		t.Fatalf("Algorithm() = %v, want SHA256", digest.Algorithm())
 	}
 	if !bytes.Equal(digest.Value(), value) {
@@ -84,7 +84,7 @@ func TestDigestDocumentExistingDigest(t *testing.T) {
 }
 
 func TestDigestDocumentFromValueWithNameDerivesMimeType(t *testing.T) {
-	d := NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithm_SHA256, []byte{0x1}, "file.txt")
+	d := NewDigestDocumentFromValueWithName(enumerations.DigestAlgorithmSHA256, []byte{0x1}, "file.txt")
 	if d.Name() != "file.txt" {
 		t.Fatalf("Name() = %q, want file.txt", d.Name())
 	}

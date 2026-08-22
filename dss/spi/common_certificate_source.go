@@ -338,7 +338,7 @@ func (s *CommonCertificateSource) NumberOfEntities() int {
 // CertificateSourceType returns the certificate source type associated with the
 // implementation. Port of getCertificateSourceType().
 func (s *CommonCertificateSource) CertificateSourceType() enumerations.CertificateSourceType {
-	return enumerations.CertificateSourceType_OTHER
+	return enumerations.CertificateSourceTypeOther
 }
 
 // IsTrusted checks if a given certificate is trusted. Port of isTrusted(CertificateToken).

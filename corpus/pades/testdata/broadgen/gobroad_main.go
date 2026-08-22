@@ -150,7 +150,7 @@ func dumpSignature(json *strings.Builder, sig *pades.PAdESSignature, cv validati
 	json.WriteString("        {\n")
 	fmt.Fprintf(json, "          \"signingCertificateFound\": %v,\n", signingCertificate != nil)
 	if signingCertificate != nil {
-		d, _ := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, signingCertificate.Encoded())
+		d, _ := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, signingCertificate.Encoded())
 		json.WriteString("          \"signingCertificateSHA256\": " + str(hexs(d)) + ",\n")
 	} else {
 		json.WriteString("          \"signingCertificateSHA256\": null,\n")

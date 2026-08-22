@@ -32,28 +32,28 @@ func NewEAANotRevokedCheck(i18nProvider *i18n.I18nProvider, result *process.Resu
 
 // Process performs the check. Port of process().
 func (c *EAANotRevokedCheck) Process() bool {
-	return c.eaaStatusToken == nil || enumerations.EAAStatus_INVALID != c.eaaStatusToken.Status()
+	return c.eaaStatusToken == nil || enumerations.EAAStatusInvalid != c.eaaStatusToken.Status()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAANotRevokedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_REV
+	return i18n.MessageTagEAARevNotRev
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAANotRevokedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_REV_ANS
+	return i18n.MessageTagEAARevNotRevANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAANotRevokedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAANotRevokedCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_REVOKED
+	return enumerations.SubIndicationRevoked
 }

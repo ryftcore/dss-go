@@ -53,7 +53,7 @@ func (w *SignatureWrapper) DigestMatchers() []*jaxb.XmlDigestMatcher {
 // MessageDigest returns the message-digest for a CMS signature. Port of getMessageDigest().
 func (w *SignatureWrapper) MessageDigest() *jaxb.XmlDigestMatcher {
 	for _, digestMatcher := range w.DigestMatchers() {
-		if digestMatcher.Type != nil && enumerations.DigestMatcherType_MESSAGE_DIGEST == enumerations.DigestMatcherType(*digestMatcher.Type) {
+		if digestMatcher.Type != nil && enumerations.DigestMatcherTypeMessageDigest == enumerations.DigestMatcherType(*digestMatcher.Type) {
 			return digestMatcher
 		}
 	}
@@ -488,8 +488,8 @@ func (w *SignatureWrapper) IsXLevelTechnicallyValid() bool {
 // TimestampLevelX returns a list of validation-data-refs-only- and validation-data-
 // time-stamps for the signature. Port of getTimestampLevelX().
 func (w *SignatureWrapper) TimestampLevelX() []*TimestampWrapper {
-	timestamps := w.TimestampListByType(enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP)
-	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP)...)
+	timestamps := w.TimestampListByType(enumerations.TimestampTypeValidationDataRefsOnlyTimestamp)
+	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampTypeValidationDataTimestamp)...)
 	return timestamps
 }
 
@@ -516,7 +516,7 @@ func (w *SignatureWrapper) ALevelTimestamps() []*TimestampWrapper {
 // ArchiveTimestamps returns a list of archive timestamps for the signature. Port of
 // getArchiveTimestamps().
 func (w *SignatureWrapper) ArchiveTimestamps() []*TimestampWrapper {
-	return w.TimestampListByType(enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	return w.TimestampListByType(enumerations.TimestampTypeArchiveTimestamp)
 }
 
 // IsThereTLevel returns if there is the T-Level within the signature. Port of isThereTLevel().
@@ -541,9 +541,9 @@ func (w *SignatureWrapper) TLevelTimestamps() []*TimestampWrapper {
 // ContentTimestamps returns a list of content timestamps of the signature. Port of
 // getContentTimestamps().
 func (w *SignatureWrapper) ContentTimestamps() []*TimestampWrapper {
-	timestamps := w.TimestampListByType(enumerations.TimestampType_CONTENT_TIMESTAMP)
-	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP)...)
-	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP)...)
+	timestamps := w.TimestampListByType(enumerations.TimestampTypeContentTimestamp)
+	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampTypeIndividualDataObjectsTimestamp)...)
+	timestamps = append(timestamps, w.TimestampListByType(enumerations.TimestampTypeAllDataObjectsTimestamp)...)
 	return timestamps
 }
 
@@ -561,24 +561,24 @@ func (w *SignatureWrapper) AllTimestampsProducedAfterSignatureCreation() []*Time
 
 // SignatureTimestamps returns all signature timestamps. Port of getSignatureTimestamps().
 func (w *SignatureWrapper) SignatureTimestamps() []*TimestampWrapper {
-	return w.TimestampListByType(enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	return w.TimestampListByType(enumerations.TimestampTypeSignatureTimestamp)
 }
 
 // DocumentTimestamps returns all PDF document timestamps. Port of getDocumentTimestamps().
 func (w *SignatureWrapper) DocumentTimestamps() []*TimestampWrapper {
-	return w.TimestampListByType(enumerations.TimestampType_DOCUMENT_TIMESTAMP)
+	return w.TimestampListByType(enumerations.TimestampTypeDocumentTimestamp)
 }
 
 // ContainerTimestamps returns all container detached timestamps (used for ASiC containers).
 // Port of getContainerTimestamps().
 func (w *SignatureWrapper) ContainerTimestamps() []*TimestampWrapper {
-	return w.TimestampListByType(enumerations.TimestampType_CONTAINER_TIMESTAMP)
+	return w.TimestampListByType(enumerations.TimestampTypeContainerTimestamp)
 }
 
 // VRITimestamps returns all corresponding VRI timestamps (PAdES only). Port of
 // getVRITimestamps().
 func (w *SignatureWrapper) VRITimestamps() []*TimestampWrapper {
-	return w.TimestampListByType(enumerations.TimestampType_VRI_TIMESTAMP)
+	return w.TimestampListByType(enumerations.TimestampTypeVRITimestamp)
 }
 
 // documentTimestamps is the private helper backing ALevelTimestamps/TLevelTimestamps. Port of
@@ -596,7 +596,7 @@ func (w *SignatureWrapper) documentTimestamps(coversLTLevel bool) []*TimestampWr
 // coversLTLevel is the private helper backing documentTimestamps. Port of the private
 // coversLTLevel(TimestampWrapper).
 func (w *SignatureWrapper) coversLTLevel(timestampWrapper *TimestampWrapper) bool {
-	if enumerations.ArchiveTimestampType_PAdES == timestampWrapper.ArchiveTimestampType() {
+	if enumerations.ArchiveTimestampTypePAdES == timestampWrapper.ArchiveTimestampType() {
 		signatureCertificateChain := w.CertificateChain()
 		relatedRevocationData := w.FoundRevocations().RelatedRevocationData()
 		if len(relatedRevocationData) == 0 {
@@ -613,10 +613,10 @@ func (w *SignatureWrapper) coversLTLevel(timestampWrapper *TimestampWrapper) boo
 // List<CertificateWrapper>).
 func (w *SignatureWrapper) coversDSSCertificateDataForCertificateChain(timestampWrapper *TimestampWrapper, certificateChain []*CertificateWrapper) bool {
 	var dssCertificates []*CertificateWrapper
-	for _, c := range w.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOrigin_DSS_DICTIONARY) {
+	for _, c := range w.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOriginDSSDictionary) {
 		dssCertificates = append(dssCertificates, &c.CertificateWrapper)
 	}
-	for _, c := range w.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOrigin_VRI_DICTIONARY) {
+	for _, c := range w.FoundCertificates().RelatedCertificatesByOrigin(enumerations.CertificateOriginVRIDictionary) {
 		dssCertificates = append(dssCertificates, &c.CertificateWrapper)
 	}
 	if len(dssCertificates) != 0 {
@@ -745,8 +745,8 @@ func (w *SignatureWrapper) IsThereERSLevel() bool {
 // (used in JAdES, CB-AdES). Port of getKeyIdentifierReference().
 func (w *SignatureWrapper) KeyIdentifierReference() *CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	certificateRefs = append(certificateRefs, w.FoundCertificates().RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_KEY_IDENTIFIER)...)
-	certificateRefs = append(certificateRefs, w.FoundCertificates().OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_KEY_IDENTIFIER)...)
+	certificateRefs = append(certificateRefs, w.FoundCertificates().RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOriginKeyIdentifier)...)
+	certificateRefs = append(certificateRefs, w.FoundCertificates().OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOriginKeyIdentifier)...)
 	if len(certificateRefs) != 0 {
 		// only one shall be present
 		return certificateRefs[0]
@@ -758,8 +758,8 @@ func (w *SignatureWrapper) KeyIdentifierReference() *CertificateRefWrapper {
 // (used in JAdES, CB-AdES). Port of getX509UrlReferences().
 func (w *SignatureWrapper) X509UrlReferences() []*CertificateRefWrapper {
 	var certificateRefs []*CertificateRefWrapper
-	certificateRefs = append(certificateRefs, w.FoundCertificates().RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_X509_URL)...)
-	certificateRefs = append(certificateRefs, w.FoundCertificates().OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOrigin_X509_URL)...)
+	certificateRefs = append(certificateRefs, w.FoundCertificates().RelatedCertificateRefsByRefOrigin(enumerations.CertificateRefOriginX509URL)...)
+	certificateRefs = append(certificateRefs, w.FoundCertificates().OrphanCertificateRefsByRefOrigin(enumerations.CertificateRefOriginX509URL)...)
 	return certificateRefs
 }
 
@@ -783,17 +783,17 @@ func (w *SignatureWrapper) SignerRoles() []*jaxb.XmlSignerRole {
 
 // ClaimedRoles returns list of found ClaimedRoles. Port of getClaimedRoles().
 func (w *SignatureWrapper) ClaimedRoles() []*jaxb.XmlSignerRole {
-	return w.signerRolesByCategory(enumerations.EndorsementType_CLAIMED)
+	return w.signerRolesByCategory(enumerations.EndorsementTypeClaimed)
 }
 
 // CertifiedRoles returns list of found CertifiedRoles. Port of getCertifiedRoles().
 func (w *SignatureWrapper) CertifiedRoles() []*jaxb.XmlSignerRole {
-	return w.signerRolesByCategory(enumerations.EndorsementType_CERTIFIED)
+	return w.signerRolesByCategory(enumerations.EndorsementTypeCertified)
 }
 
 // SignedAssertions returns list of all found SignedAssertions. Port of getSignedAssertions().
 func (w *SignatureWrapper) SignedAssertions() []*jaxb.XmlSignerRole {
-	return w.signerRolesByCategory(enumerations.EndorsementType_SIGNED)
+	return w.signerRolesByCategory(enumerations.EndorsementTypeSigned)
 }
 
 // SignerRoleDetails returns a list of strings describing the role for the given

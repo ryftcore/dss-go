@@ -47,23 +47,23 @@ func (c *DigestValueMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DigestValueMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ICDVV
+	return i18n.MessageTagBBBICSICDVV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DigestValueMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ICDVV_ANS
+	return i18n.MessageTagBBBICSICDVVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *DigestValueMatchCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *DigestValueMatchCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_SIGNING_CERTIFICATE_FOUND
+	return enumerations.SubIndicationNoSigningCertificateFound
 }

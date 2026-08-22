@@ -49,12 +49,12 @@ func (c *RevocationIssuerTrustedCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationIssuerTrustedCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ICRDIT
+	return i18n.MessageTagPSVICRDIT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RevocationIssuerTrustedCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ICRDIT_ANS
+	return i18n.MessageTagPSVICRDITANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -73,7 +73,7 @@ func (c *RevocationIssuerTrustedCheck[T]) FailedSubIndicationForConclusion() enu
 // buildAdditionalInfo().
 func (c *RevocationIssuerTrustedCheck[T]) BuildAdditionalInfo() *string {
 	if c.certificate != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_ID, c.certificate.Id())
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateID, c.certificate.Id())
 		return &message
 	}
 	return nil

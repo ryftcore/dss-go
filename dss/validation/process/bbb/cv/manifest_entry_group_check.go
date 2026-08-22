@@ -35,7 +35,7 @@ func NewManifestEntryGroupCheck(i18nProvider *i18n.I18nProvider, result *process
 // Process performs the check. Port of process().
 func (c *ManifestEntryGroupCheck) Process() bool {
 	for _, d := range c.digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(d) && !d.DataFound {
+		if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(d) && !d.DataFound {
 			return false
 		}
 	}
@@ -47,36 +47,36 @@ func (c *ManifestEntryGroupCheck) Process() bool {
 func (c *ManifestEntryGroupCheck) BuildAdditionalInfo() *string {
 	var notFoundNames []string
 	for _, d := range c.digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(d) && !d.DataFound {
+		if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(d) && !d.DataFound {
 			if d.Uri != nil {
 				notFoundNames = append(notFoundNames, *d.Uri)
 			}
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCES_WITH_NAMES,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReferencesWithNames,
 		utils.JoinStrings(notFoundNames, ", "))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ManifestEntryGroupCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_AAMEF
+	return i18n.MessageTagBBBCVAAMEF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ManifestEntryGroupCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_AAMEF_ANS
+	return i18n.MessageTagBBBCVAAMEFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ManifestEntryGroupCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ManifestEntryGroupCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }

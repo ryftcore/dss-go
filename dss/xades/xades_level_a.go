@@ -115,7 +115,7 @@ func (a *XAdESLevelA) ExtendSignatures(signatures []validation.AdvancedSignature
 
 // assertExtendSignatureToAPossible ports the private assertExtendSignatureToAPossible.
 func (a *XAdESLevelA) assertExtendSignatureToAPossible() error {
-	if enumerations.SignatureLevel_XAdES_A == a.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESA == a.Params.SignatureLevel() {
 		return a.AssertDetachedDocumentsContainBinaries()
 	}
 	return nil

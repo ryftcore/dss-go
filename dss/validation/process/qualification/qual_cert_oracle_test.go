@@ -162,7 +162,7 @@ func buildQualCertXml(in *qualCertInput) *diagnosticjaxb.XmlCertificate {
 	var extensions []diagnosticjaxb.XmlCertificateExtensionItem
 	if in.QcStatementsPresent {
 		qcStatements := &diagnosticjaxb.XmlQcStatements{}
-		oid := enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID()
+		oid := enumerations.CertificateExtensionEnumQCStatements.OID()
 		qcStatements.OID = &oid
 		if in.QcCompliance != nil {
 			qcStatements.QcCompliance = &diagnosticjaxb.XmlQcCompliance{Present: *in.QcCompliance}
@@ -187,7 +187,7 @@ func buildQualCertXml(in *qualCertInput) *diagnosticjaxb.XmlCertificate {
 	}
 	if in.Policies != nil {
 		policies := &diagnosticjaxb.XmlCertificatePolicies{}
-		oid := enumerations.CertificateExtensionEnum_CERTIFICATE_POLICIES.OID()
+		oid := enumerations.CertificateExtensionEnumCertificatePolicies.OID()
 		policies.OID = &oid
 		for _, o := range in.Policies {
 			policy := &diagnosticjaxb.XmlCertificatePolicy{}

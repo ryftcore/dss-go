@@ -31,7 +31,7 @@ func NewSignatureManifestFilenameAdherenceCheck(i18nProvider *i18n.I18nProvider,
 
 // Process performs the check.
 func (c *SignatureManifestFilenameAdherenceCheck) Process() bool {
-	if c.DiagnosticData.ContainerType() == enumerations.ASiCContainerType_ASiC_S {
+	if c.DiagnosticData.ContainerType() == enumerations.ASiCContainerTypeASiCS {
 		// 4.3.3.2 Contents of the container: the META-INF folder may contain other
 		// application specific information - can be of any format.
 		return true
@@ -43,7 +43,7 @@ func (c *SignatureManifestFilenameAdherenceCheck) Process() bool {
 	}
 	if manifestFile == nil {
 		// optional for XAdES, required for CAdES
-		return signatureForm == enumerations.SignatureForm_XAdES
+		return signatureForm == enumerations.SignatureFormXAdES
 	}
 
 	manifestFilename := ""
@@ -54,9 +54,9 @@ func (c *SignatureManifestFilenameAdherenceCheck) Process() bool {
 		return false
 	}
 	switch signatureForm {
-	case enumerations.SignatureForm_XAdES:
+	case enumerations.SignatureFormXAdES:
 		return AsiceMetainfManifest == manifestFilename
-	case enumerations.SignatureForm_CAdES:
+	case enumerations.SignatureFormCAdES:
 		return c.IsASiCManifest(manifestFilename)
 	default:
 		panic(fmt.Sprintf("Only XAdES and CAdES ASiC container types are supported! Found : %s", signatureForm))
@@ -65,10 +65,10 @@ func (c *SignatureManifestFilenameAdherenceCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *SignatureManifestFilenameAdherenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFCS
+	return i18n.MessageTagBBBFCIMFCS
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignatureManifestFilenameAdherenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFCS_ANS
+	return i18n.MessageTagBBBFCIMFCSANS
 }

@@ -55,7 +55,7 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) Process() bool {
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME, c.token.Id(),
+	message := c.I18nProvider.GetMessage(i18n.MessageTagControlTime, c.token.Id(),
 		process.GetFormattedDate(&c.controlTime))
 	return &message
 }
@@ -64,10 +64,10 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
 // IllegalStateException becomes a panic - the method is called from the base
 // ChainItem, which cannot propagate an error.
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
-	if enumerations.TimestampedObjectType_CERTIFICATE == c.referenceCategory {
-		return i18n.MessageTag_PSV_ITPOCOBCT
-	} else if enumerations.TimestampedObjectType_REVOCATION == c.referenceCategory {
-		return i18n.MessageTag_PSV_ITPORDAOBCT
+	if enumerations.TimestampedObjectTypeCertificate == c.referenceCategory {
+		return i18n.MessageTagPSVITPOCOBCT
+	} else if enumerations.TimestampedObjectTypeRevocation == c.referenceCategory {
+		return i18n.MessageTagPSVITPORDAOBCT
 	}
 	panic("Problem VTS")
 }
@@ -75,17 +75,17 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPOOBCT_ANS
+	return i18n.MessageTagPSVITPOOBCTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_POE
+	return enumerations.SubIndicationNoPOE
 }

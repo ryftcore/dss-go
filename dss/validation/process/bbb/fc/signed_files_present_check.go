@@ -30,7 +30,7 @@ func NewSignedFilesPresentCheck(i18nProvider *i18n.I18nProvider, result *process
 
 func (c *SignedFilesPresentCheck) isASiCS() bool {
 	return c.containerInfo.ContainerType != nil &&
-		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerType_ASiC_S
+		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerTypeASiCS
 }
 
 func isRootDirectoryFile(fileName string) bool {
@@ -62,25 +62,25 @@ func (c *SignedFilesPresentCheck) Process() bool {
 // MessageTag returns the constraint message i18n key.
 func (c *SignedFilesPresentCheck) MessageTag() i18n.MessageTag {
 	if c.isASiCS() {
-		return i18n.MessageTag_BBB_FC_ISFP_ASICS
+		return i18n.MessageTagBBBFCISFPASiCS
 	}
-	return i18n.MessageTag_BBB_FC_ISFP_ASICE
+	return i18n.MessageTagBBBFCISFPASiCE
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignedFilesPresentCheck) ErrorMessageTag() i18n.MessageTag {
 	if c.isASiCS() {
-		return i18n.MessageTag_BBB_FC_ISFP_ASICS_ANS
+		return i18n.MessageTagBBBFCISFPASiCSANS
 	}
-	return i18n.MessageTag_BBB_FC_ISFP_ASICE_ANS
+	return i18n.MessageTagBBBFCISFPASiCEANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *SignedFilesPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *SignedFilesPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

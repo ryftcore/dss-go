@@ -9,14 +9,14 @@ import (
 
 func TestReferenceValidationRoundTrip(t *testing.T) {
 	rv := NewReferenceValidation()
-	rv.SetType(enumerations.DigestMatcherType_REFERENCE)
+	rv.SetType(enumerations.DigestMatcherTypeReference)
 	rv.SetFound(true)
 	rv.SetIntact(true)
 	rv.SetId("r-id")
 	rv.SetUri("#r-id")
 	rv.SetTransformationNames([]string{"http://www.w3.org/TR/2001/REC-xml-c14n-20010315"})
 
-	if rv.Type() != enumerations.DigestMatcherType_REFERENCE {
+	if rv.Type() != enumerations.DigestMatcherTypeReference {
 		t.Fatalf("Type() = %v", rv.Type())
 	}
 	if !rv.IsFound() || !rv.IsIntact() {

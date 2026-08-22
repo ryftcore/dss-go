@@ -161,7 +161,7 @@ func (b *XAdESTimestampMessageDigestBuilder) SetTimestampAttribute(timestampAttr
 // message for a content timestamp type this method does not support.
 func (b *XAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() model.DSSMessageDigest {
 	// all data timestamp is considered by default
-	timeStampType := enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP
+	timeStampType := enumerations.TimestampTypeAllDataObjectsTimestamp
 	if b.timestampToken != nil {
 		timeStampType = b.timestampToken.TimeStampType()
 	}
@@ -170,9 +170,9 @@ func (b *XAdESTimestampMessageDigestBuilder) ContentTimestampMessageDigest() mod
 	}
 
 	switch timeStampType {
-	case enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP:
+	case enumerations.TimestampTypeAllDataObjectsTimestamp:
 		return b.allDataObjectsTimestampMessageDigest()
-	case enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP:
+	case enumerations.TimestampTypeIndividualDataObjectsTimestamp:
 		return b.individualDataObjectsTimestampMessageDigest()
 	default:
 		panic(fmt.Sprintf("The content timestamp of type '%s' is not supported!", timeStampType))
@@ -240,7 +240,7 @@ func (b *XAdESTimestampMessageDigestBuilder) individualDataObjectsTimestampMessa
 // (DSSMessageDigestCalculator, Reference, String).
 func (b *XAdESTimestampMessageDigestBuilder) writeReferenceBytes(digestCalculator *spi.DSSMessageDigestCalculator,
 	reference *xmldsig.Reference, canonicalizationMethod string) error {
-	if ReferenceOutputType_NODE_SET == DSSXMLUtilsGetReferenceOutputType(reference) {
+	if ReferenceOutputTypeNodeSet == DSSXMLUtilsGetReferenceOutputType(reference) {
 		referencedBytes, err := reference.ReferencedBytes()
 		if err != nil {
 			return err
@@ -301,7 +301,7 @@ func (b *XAdESTimestampMessageDigestBuilder) SignatureTimestampMessageDigest() (
 	}()
 
 	digestCalculator := xadesTimestampMessageDigestBuilderMustNewCalculator(b.digestAlgorithm)
-	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPath_SIGNATURE_VALUE_PATH, b.canonicalizationAlgorithm)
+	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPathSignatureValuePath, b.canonicalizationAlgorithm)
 	return digestCalculator.MessageDigest(b.digestAlgorithm)
 }
 
@@ -324,7 +324,7 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 	digestCalculator := xadesTimestampMessageDigestBuilderMustNewCalculator(b.digestAlgorithm)
 
 	// 1) The ds:SignatureValue element.
-	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPath_SIGNATURE_VALUE_PATH, b.canonicalizationAlgorithm)
+	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPathSignatureValuePath, b.canonicalizationAlgorithm)
 
 	// 2) Those among the following unsigned qualifying properties that appear before
 	// SigAndRefsTimeStampV2, in their order of appearance within the UnsignedSignatureProperties
@@ -349,9 +349,9 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 			 * - The AttributeRevocationRefs qualifying property if it is present.
 			 */
 			if xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(xadesAttribute,
-				definition.XAdES132Element_SIGNATURE_TIMESTAMP, definition.XAdES141Element_COMPLETE_CERTIFICATE_REFS_V2,
-				definition.XAdES132Element_COMPLETE_REVOCATION_REFS, definition.XAdES141Element_ATTRIBUTE_CERTIFICATE_REFS_V2,
-				definition.XAdES132Element_ATTRIBUTE_REVOCATION_REFS) {
+				definition.XAdES132ElementSignatureTimestamp, definition.XAdES141ElementCompleteCertificateRefsV2,
+				definition.XAdES132ElementCompleteRevocationRefs, definition.XAdES141ElementAttributeCertificateRefsV2,
+				definition.XAdES132ElementAttributeRevocationRefs) {
 				b.writeCanonicalizedAttribute(digestCalculator, xadesAttribute, b.canonicalizationAlgorithm)
 			}
 
@@ -370,9 +370,9 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX1MessageDigest() (result 
 			 * - The AttributeRevocationRefs element if this property is present.
 			 */
 			if xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(xadesAttribute,
-				definition.XAdES132Element_SIGNATURE_TIMESTAMP, definition.XAdES132Element_COMPLETE_CERTIFICATE_REFS,
-				definition.XAdES132Element_COMPLETE_REVOCATION_REFS, definition.XAdES132Element_ATTRIBUTE_CERTIFICATE_REFS,
-				definition.XAdES132Element_ATTRIBUTE_REVOCATION_REFS) {
+				definition.XAdES132ElementSignatureTimestamp, definition.XAdES132ElementCompleteCertificateRefs,
+				definition.XAdES132ElementCompleteRevocationRefs, definition.XAdES132ElementAttributeCertificateRefs,
+				definition.XAdES132ElementAttributeRevocationRefs) {
 				b.writeCanonicalizedAttribute(digestCalculator, xadesAttribute, b.canonicalizationAlgorithm)
 			}
 		}
@@ -422,8 +422,8 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result 
 			 * - The AttributeRevocationRefs qualifying property if it is present.
 			 */
 			if xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(xadesAttribute,
-				definition.XAdES141Element_COMPLETE_CERTIFICATE_REFS_V2, definition.XAdES132Element_COMPLETE_REVOCATION_REFS,
-				definition.XAdES141Element_ATTRIBUTE_CERTIFICATE_REFS_V2, definition.XAdES132Element_ATTRIBUTE_REVOCATION_REFS) {
+				definition.XAdES141ElementCompleteCertificateRefsV2, definition.XAdES132ElementCompleteRevocationRefs,
+				definition.XAdES141ElementAttributeCertificateRefsV2, definition.XAdES132ElementAttributeRevocationRefs) {
 				b.writeCanonicalizedAttribute(digestCalculator, xadesAttribute, b.canonicalizationAlgorithm)
 			}
 
@@ -438,8 +438,8 @@ func (b *XAdESTimestampMessageDigestBuilder) TimestampX2MessageDigest() (result 
 			 * - The AttributeRevocationRefs element if this property is present.
 			 */
 			if xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(xadesAttribute,
-				definition.XAdES132Element_COMPLETE_CERTIFICATE_REFS, definition.XAdES132Element_COMPLETE_REVOCATION_REFS,
-				definition.XAdES132Element_ATTRIBUTE_CERTIFICATE_REFS, definition.XAdES132Element_ATTRIBUTE_REVOCATION_REFS) {
+				definition.XAdES132ElementCompleteCertificateRefs, definition.XAdES132ElementCompleteRevocationRefs,
+				definition.XAdES132ElementAttributeCertificateRefs, definition.XAdES132ElementAttributeRevocationRefs) {
 				b.writeCanonicalizedAttribute(digestCalculator, xadesAttribute, b.canonicalizationAlgorithm)
 			}
 		}
@@ -497,9 +497,9 @@ func (b *XAdESTimestampMessageDigestBuilder) ArchiveTimestampMessageDigest() (re
 	 * - The ds:SignatureValue element.
 	 * - The ds:KeyInfo element, if present.
 	 */
-	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPath_SIGNED_INFO_PATH, b.canonicalizationAlgorithm)
-	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPath_SIGNATURE_VALUE_PATH, b.canonicalizationAlgorithm)
-	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPath_KEY_INFO_PATH, b.canonicalizationAlgorithm)
+	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPathSignedInfoPath, b.canonicalizationAlgorithm)
+	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPathSignatureValuePath, b.canonicalizationAlgorithm)
+	b.writeCanonicalizedValue(digestCalculator, common.XMLDSigPathKeyInfoPath, b.canonicalizationAlgorithm)
 
 	/*
 	 * 4) Take the unsigned signature properties that appear before the current
@@ -642,9 +642,9 @@ func (b *XAdESTimestampMessageDigestBuilder) xadesUnsignedSignatureProperties(ti
 // isEn319132TimestampToken(XAdESAttribute).
 func xadesTimestampMessageDigestBuilderIsEn319132TimestampToken(timestampAttribute *XAdESAttribute) bool {
 	return xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(timestampAttribute,
-		definition.XAdES132Element_ALL_DATA_OBJECTS_TIMESTAMP, definition.XAdES132Element_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP,
-		definition.XAdES132Element_SIGNATURE_TIMESTAMP, definition.XAdES141Element_REFS_ONLY_TIMESTAMP_V2,
-		definition.XAdES141Element_SIG_AND_REFS_TIMESTAMP_V2, definition.XAdES141Element_ARCHIVE_TIMESTAMP)
+		definition.XAdES132ElementAllDataObjectsTimestamp, definition.XAdES132ElementIndividualDataObjectsTimestamp,
+		definition.XAdES132ElementSignatureTimestamp, definition.XAdES141ElementRefsOnlyTimestampV2,
+		definition.XAdES141ElementSigAndRefsTimestampV2, definition.XAdES141ElementArchiveTimestamp)
 }
 
 // xadesTimestampMessageDigestBuilderCheckAttributeNameMatches ports the private
@@ -664,7 +664,7 @@ func xadesTimestampMessageDigestBuilderCheckAttributeNameMatches(attribute *XAdE
 // objects returns the list of ds:Object elements for the current signature element. Port of the
 // private getObjects().
 func (b *XAdESTimestampMessageDigestBuilder) objects() []*xmldom.Node {
-	nodeList, err := xmlutils.XPathUtilsGetNodeList(b.signature, common.XMLDSigPath_OBJECT_PATH)
+	nodeList, err := xmlutils.XPathUtilsGetNodeList(b.signature, common.XMLDSigPathObjectPath)
 	if err != nil {
 		return nil
 	}
@@ -675,7 +675,7 @@ func (b *XAdESTimestampMessageDigestBuilder) objects() []*xmldom.Node {
 // Set<String>, String).
 func (b *XAdESTimestampMessageDigestBuilder) writeObjectBytes(digestCalculator *spi.DSSMessageDigestCalculator,
 	objects []*xmldom.Node, referenceURIs map[string]struct{}, canonicalizationMethod string) {
-	xades141 := b.timestampToken == nil || enumerations.ArchiveTimestampType_XAdES != b.timestampToken.ArchiveTimestampType()
+	xades141 := b.timestampToken == nil || enumerations.ArchiveTimestampTypeXAdES != b.timestampToken.ArchiveTimestampType()
 	for _, node := range objects {
 		qualifyingProperties, err := xmlutils.XPathUtilsGetElement(node, b.xadesPaths.CurrentQualifyingPropertiesPath())
 		if err == nil && qualifyingProperties != nil {

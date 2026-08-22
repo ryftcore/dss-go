@@ -48,23 +48,23 @@ func (c *SelfIssuedOCSPCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SelfIssuedOCSPCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_SELF_ISSUED_OCSP
+	return i18n.MessageTagBBBXCVRevocSelfIssuedOCSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SelfIssuedOCSPCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_SELF_ISSUED_OCSP_ANS
+	return i18n.MessageTagBBBXCVRevocSelfIssuedOCSPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SelfIssuedOCSPCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SelfIssuedOCSPCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

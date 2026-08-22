@@ -33,7 +33,7 @@ func NewOtherTrustAnchorExistsCheck(i18nProvider *i18n.I18nProvider, result *pro
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *OtherTrustAnchorExistsCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_SUB_XCV_TA
+	return jaxb.XmlBlockTypeSubXCVTA
 }
 
 // Process performs the check. Port of process().
@@ -43,22 +43,22 @@ func (c *OtherTrustAnchorExistsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *OtherTrustAnchorExistsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IOTAA
+	return i18n.MessageTagBBBXCVIOTAA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *OtherTrustAnchorExistsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IOTAA_ANS
+	return i18n.MessageTagBBBXCVIOTAAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *OtherTrustAnchorExistsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *OtherTrustAnchorExistsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE
+	return enumerations.SubIndicationNoCertificateChainFoundNoPOE
 }

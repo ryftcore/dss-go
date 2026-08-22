@@ -38,23 +38,23 @@ func (c *ThisUpdatePresenceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ThisUpdatePresenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_THIS_UPDATE_PRESENT
+	return i18n.MessageTagBBBXCVRevocThisUpdatePresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ThisUpdatePresenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_THIS_UPDATE_PRESENT_ANS
+	return i18n.MessageTagBBBXCVRevocThisUpdatePresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ThisUpdatePresenceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ThisUpdatePresenceCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

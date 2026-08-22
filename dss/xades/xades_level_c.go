@@ -80,7 +80,7 @@ func (c *XAdESLevelC) ExtendSignatures(signatures []validation.AdvancedSignature
 	}
 
 	signatureRequirementsChecker := c.SignatureRequirementsChecker()
-	if enumerations.SignatureLevel_XAdES_C == c.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESC == c.Params.SignatureLevel() {
 		signatureRequirementsChecker.AssertExtendToCLevelPossible(signaturesToExtend)
 	}
 	signatureRequirementsChecker.AssertSignaturesValid(signaturesToExtend)
@@ -173,8 +173,8 @@ func (c *XAdESLevelC) extendToCLevelSignatures(
 
 // cLevelExtensionRequired ports the private cLevelExtensionRequired.
 func (c *XAdESLevelC) cLevelExtensionRequired(signature validation.AdvancedSignature) bool {
-	return enumerations.SignatureLevel_XAdES_C == c.Params.SignatureLevel() ||
-		enumerations.SignatureLevel_XAdES_XL == c.Params.SignatureLevel() ||
+	return enumerations.SignatureLevelXAdESC == c.Params.SignatureLevel() ||
+		enumerations.SignatureLevelXAdESXL == c.Params.SignatureLevel() ||
 		!signature.HasXProfile()
 }
 
@@ -249,7 +249,7 @@ func (c *XAdESLevelC) incorporateCertificateRefs(parentDom *xmldom.Node,
 func (c *XAdESLevelC) createCompleteCertificateRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
 	if c.Params.IsEn319132() {
 		return xmlutils.DomUtilsAddElement(c.DocumentDom, parentDom, c.Xades141Namespace(),
-			definition.XAdES141Element_COMPLETE_CERTIFICATE_REFS_V2), nil
+			definition.XAdES141ElementCompleteCertificateRefsV2), nil
 	}
 	currentElements, err := c.CurrentXAdESElements()
 	if err != nil {
@@ -263,7 +263,7 @@ func (c *XAdESLevelC) createCompleteCertificateRefsDom(parentDom *xmldom.Node) (
 func (c *XAdESLevelC) createCertRefsDom(parentDom *xmldom.Node) (*xmldom.Node, error) {
 	if c.Params.IsEn319132() {
 		return xmlutils.DomUtilsAddElement(c.DocumentDom, parentDom, c.Xades141Namespace(),
-			definition.XAdES141Element_CERT_REFS), nil
+			definition.XAdES141ElementCertRefs), nil
 	}
 	currentElements, err := c.CurrentXAdESElements()
 	if err != nil {

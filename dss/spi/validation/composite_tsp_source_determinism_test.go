@@ -40,7 +40,7 @@ func TestCompositeTSPSourceNilSourceKeysDeterministic(t *testing.T) {
 			"echo":    &compositeTSPSourceDeterminismFakeSource{name: "echo", log: &log},
 			"bravo":   &compositeTSPSourceDeterminismFakeSource{name: "bravo", log: &log},
 		}, nil)
-		_, _ = source.TimeStampResponse(enumerations.DigestAlgorithm_SHA256, []byte("digest"))
+		_, _ = source.TimeStampResponse(enumerations.DigestAlgorithmSHA256, []byte("digest"))
 		return log
 	}
 	want := build()

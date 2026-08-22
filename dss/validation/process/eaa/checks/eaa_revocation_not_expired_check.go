@@ -47,19 +47,19 @@ func (c *EAARevocationNotExpiredCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationNotExpiredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_EXP
+	return i18n.MessageTagEAARevNotExp
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationNotExpiredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_EXP_ANS
+	return i18n.MessageTagEAARevNotExpANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the
 // overridden buildAdditionalInfo().
 func (c *EAARevocationNotExpiredCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_REV_TIME, process.GetFormattedDate(&c.validationTime),
+	message := c.I18nProvider.GetMessage(i18n.MessageTagEAARevTime, process.GetFormattedDate(&c.validationTime),
 		process.GetFormattedDate(c.eaaStatusToken.IssuedAt()), process.GetFormattedDate(c.eaaStatusToken.ExpirationTime()))
 	return &message
 }
@@ -67,11 +67,11 @@ func (c *EAARevocationNotExpiredCheck) BuildAdditionalInfo() *string {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAARevocationNotExpiredCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAARevocationNotExpiredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

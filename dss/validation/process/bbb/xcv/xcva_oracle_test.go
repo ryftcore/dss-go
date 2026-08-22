@@ -190,7 +190,7 @@ func xcvaDefaultPolicy(t *testing.T) modelpolicy.ValidationPolicy {
 func passedAOV() *jaxb.XmlAOV {
 	aov := &jaxb.XmlAOV{}
 	aov.Conclusion = &jaxb.XmlConclusion{
-		Indication: jaxb.IndicationValue(enumerations.Indication_PASSED),
+		Indication: jaxb.IndicationValue(enumerations.IndicationPassed),
 	}
 	return aov
 }

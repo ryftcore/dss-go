@@ -90,6 +90,30 @@ conventions applied throughout.
   *interfaces* still erase to the constraint's base type: Go forbids type
   parameters on interface methods. See `dss/PORTING.md`.
 
+### Changed
+
+- **Exported constants renamed from Java enum style to Go MixedCaps.** The
+  port originally spelled every enum constant `<TypeName>_<JAVA_NAME>`
+  (e.g. `enumerations.DigestAlgorithm_SHA256`,
+  `i18n.MessageTag_BBB_XCV_CCCBB`); they are now idiomatic Go
+  (`enumerations.DigestAlgorithmSHA256`, `i18n.MessageTagBBBXCVCCCBB`).
+  2,835 identifiers across 23 packages — every exported constant and
+  package-level variable whose name contained an underscore.
+
+  **Serialized values are unchanged.** Only Go identifiers moved: every
+  enum *value*, XML element and attribute name, i18n message key, OID,
+  URI, MIME type and JSON key is byte-identical (verified by diffing all
+  53,687 Go string literals before and after). Reports, signatures and
+  trusted-list parsing produce exactly the same output.
+
+  This is a source-incompatible change. It lands before the first tagged
+  release, so no deprecated aliases are provided; update call sites
+  mechanically. `dss/PORTING.md`'s "Enums" section documents the new
+  naming rule, and `docs/migrating-from-java/` shows the Java → Go
+  mapping.
+
+  `Test*`/`Example*` function names keep their underscores (idiomatic Go).
+
 ### Documentation
 
 - **Porting-era planning documents removed.** `PORTING_PLAN.md` — the

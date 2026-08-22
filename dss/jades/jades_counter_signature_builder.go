@@ -153,9 +153,9 @@ func jadesCounterSignatureBuilderCSig(counterSignature model.DSSDocument,
 	}
 	signatureString := string(binaries)
 	switch jwsSerializationType {
-	case enumerations.JWSSerializationType_COMPACT_SERIALIZATION:
+	case enumerations.JWSSerializationTypeCompactSerialization:
 		return signatureString, nil
-	case enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION:
+	case enumerations.JWSSerializationTypeFlattenedJSONSerialization:
 		parsed, err := DSSJsonUtilsParseJSONStringToMap(signatureString)
 		if err != nil {
 			return nil, exception.NewIllegalInputExceptionWithCause(
@@ -227,7 +227,7 @@ func (b *JAdESCounterSignatureBuilder) signatureOrItsCounterSignature(signature 
 
 			// check timestamp before incorporating a new property
 			if signature.TimestampSource().IsTimestamped(signatureId,
-				enumerations.TimestampedObjectType_SIGNATURE) {
+				enumerations.TimestampedObjectTypeSignature) {
 				return nil, exception.NewIllegalInputException(fmt.Sprintf(
 					"Unable to counter sign a signature with Id '%s'. "+
 						"The signature is timestamped by a master signature!", signatureId))

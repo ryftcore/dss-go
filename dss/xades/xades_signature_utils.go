@@ -91,7 +91,7 @@ func xadesSignatureUtilsGetDSObject(reference *xmldsig.Reference, sig *XAdESSign
 			buf.Write(nodeBytes)
 		}
 	}
-	return model.NewInMemoryDocumentWithMimeType(buf.Bytes(), objectId, enumerations.MimeTypeEnum_XML)
+	return model.NewInMemoryDocumentWithMimeType(buf.Bytes(), objectId, enumerations.MimeTypeEnumXML)
 }
 
 // xadesSignatureUtilsGetDSManifest ports the private getDSManifest(Reference, XAdESSignature).
@@ -113,7 +113,7 @@ func xadesSignatureUtilsGetDSManifest(reference *xmldsig.Reference, sig *XAdESSi
 	if err != nil || bytesValue == nil {
 		return nil
 	}
-	return model.NewInMemoryDocumentWithMimeType(bytesValue, manifestId, enumerations.MimeTypeEnum_XML)
+	return model.NewInMemoryDocumentWithMimeType(bytesValue, manifestId, enumerations.MimeTypeEnumXML)
 }
 
 // XAdESSignatureUtilsIsKeyInfoCovered verifies whether the ds:KeyInfo element is signed by the
@@ -122,7 +122,7 @@ func XAdESSignatureUtilsIsKeyInfoCovered(sig *XAdESSignature) bool {
 	referenceValidations := sig.ReferenceValidations()
 	if utils.IsCollectionNotEmpty(referenceValidations) {
 		for _, referenceValidation := range referenceValidations {
-			if enumerations.DigestMatcherType_KEY_INFO == referenceValidation.Type() &&
+			if enumerations.DigestMatcherTypeKeyInfo == referenceValidation.Type() &&
 				referenceValidation.IsFound() && referenceValidation.IsIntact() {
 				return true
 			}
@@ -139,7 +139,7 @@ func XAdESSignatureUtilsGetLastSealingEvidenceRecordAttribute(unsignedSigPropert
 	attributes := unsignedSigProperties.Attributes()
 	for i := len(attributes) - 1; i >= 0; i-- {
 		attribute := attributes[i]
-		if definition.XAdESEvidencerecordNamespaceElement_SEALING_EVIDENCE_RECORDS.IsSameTagName(attribute.Name()) {
+		if definition.XAdESEvidencerecordNamespaceElementSealingEvidenceRecords.IsSameTagName(attribute.Name()) {
 			return attribute
 		}
 	}

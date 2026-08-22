@@ -58,7 +58,7 @@ func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.ASiCContent,
 		Build(asicContent, parameters)
 
 	toBeTimestamped := dataToSignHelper.ToBeSigned()
-	if enumerations.ASiCContainerType_ASiC_E == parameters.ASiC().ContainerType() {
+	if enumerations.ASiCContainerTypeASiCE == parameters.ASiC().ContainerType() {
 		// XML Document in case of ASiC-E container
 		asicContent.SetManifestDocuments(append(asicContent.ManifestDocuments(), toBeTimestamped))
 	}
@@ -78,7 +78,7 @@ func (s *ASiCWithCAdESTimestampService) Timestamp(asicContent *asic.ASiCContent,
 		panic(err)
 	}
 	timestampToken := model.NewInMemoryDocumentWithMimeType(derEncoded,
-		s.asicFilenameFactory.TimestampFilename(asicContent), enumerations.MimeTypeEnum_TST)
+		s.asicFilenameFactory.TimestampFilename(asicContent), enumerations.MimeTypeEnumTST)
 	asicContent.SetTimestampDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), timestampToken))
 
 	return asicContent

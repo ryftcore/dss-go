@@ -25,40 +25,40 @@ func TestXAdESNamespace_KAT(t *testing.T) {
 		}
 	}
 	// Direct field checks (also exercises Uri()/Prefix()).
-	if got := XAdESNamespace_XMLDSIG_FILTER2.Uri(); got != "http://www.w3.org/2002/06/xmldsig-filter2" {
+	if got := XAdESNamespaceXMLDSIGFilter2.Uri(); got != "http://www.w3.org/2002/06/xmldsig-filter2" {
 		t.Errorf("XMLDSIG_FILTER2.Uri() = %q, want %q", got, "http://www.w3.org/2002/06/xmldsig-filter2")
 	}
-	if got := XAdESNamespace_XMLDSIG_FILTER2.Prefix(); got != "dsig-filter2" {
+	if got := XAdESNamespaceXMLDSIGFilter2.Prefix(); got != "dsig-filter2" {
 		t.Errorf("XMLDSIG_FILTER2.Prefix() = %q, want %q", got, "dsig-filter2")
 	}
-	if got := XAdESNamespace_XADES_111.Uri(); got != "http://uri.etsi.org/01903/v1.1.1#" {
+	if got := XAdESNamespaceXAdES111.Uri(); got != "http://uri.etsi.org/01903/v1.1.1#" {
 		t.Errorf("XADES_111.Uri() = %q, want %q", got, "http://uri.etsi.org/01903/v1.1.1#")
 	}
-	if got := XAdESNamespace_XADES_111.Prefix(); got != "xades111" {
+	if got := XAdESNamespaceXAdES111.Prefix(); got != "xades111" {
 		t.Errorf("XADES_111.Prefix() = %q, want %q", got, "xades111")
 	}
-	if got := XAdESNamespace_XADES_122.Uri(); got != "http://uri.etsi.org/01903/v1.2.2#" {
+	if got := XAdESNamespaceXAdES122.Uri(); got != "http://uri.etsi.org/01903/v1.2.2#" {
 		t.Errorf("XADES_122.Uri() = %q, want %q", got, "http://uri.etsi.org/01903/v1.2.2#")
 	}
-	if got := XAdESNamespace_XADES_122.Prefix(); got != "xades122" {
+	if got := XAdESNamespaceXAdES122.Prefix(); got != "xades122" {
 		t.Errorf("XADES_122.Prefix() = %q, want %q", got, "xades122")
 	}
-	if got := XAdESNamespace_XADES_132.Uri(); got != "http://uri.etsi.org/01903/v1.3.2#" {
+	if got := XAdESNamespaceXAdES132.Uri(); got != "http://uri.etsi.org/01903/v1.3.2#" {
 		t.Errorf("XADES_132.Uri() = %q, want %q", got, "http://uri.etsi.org/01903/v1.3.2#")
 	}
-	if got := XAdESNamespace_XADES_132.Prefix(); got != "xades132" {
+	if got := XAdESNamespaceXAdES132.Prefix(); got != "xades132" {
 		t.Errorf("XADES_132.Prefix() = %q, want %q", got, "xades132")
 	}
-	if got := XAdESNamespace_XADES_141.Uri(); got != "http://uri.etsi.org/01903/v1.4.1#" {
+	if got := XAdESNamespaceXAdES141.Uri(); got != "http://uri.etsi.org/01903/v1.4.1#" {
 		t.Errorf("XADES_141.Uri() = %q, want %q", got, "http://uri.etsi.org/01903/v1.4.1#")
 	}
-	if got := XAdESNamespace_XADES_141.Prefix(); got != "xades141" {
+	if got := XAdESNamespaceXAdES141.Prefix(); got != "xades141" {
 		t.Errorf("XADES_141.Prefix() = %q, want %q", got, "xades141")
 	}
-	if got := XAdESNamespace_XADES_EVIDENCERECORD_NAMESPACE.Uri(); got != "http://uri.etsi.org/19132/v1.1.1#" {
+	if got := XAdESNamespaceXAdESEvidencerecordNamespace.Uri(); got != "http://uri.etsi.org/19132/v1.1.1#" {
 		t.Errorf("XADES_EVIDENCERECORD_NAMESPACE.Uri() = %q, want %q", got, "http://uri.etsi.org/19132/v1.1.1#")
 	}
-	if got := XAdESNamespace_XADES_EVIDENCERECORD_NAMESPACE.Prefix(); got != "xadesen" {
+	if got := XAdESNamespaceXAdESEvidencerecordNamespace.Prefix(); got != "xadesen" {
 		t.Errorf("XADES_EVIDENCERECORD_NAMESPACE.Prefix() = %q, want %q", got, "xadesen")
 	}
 }

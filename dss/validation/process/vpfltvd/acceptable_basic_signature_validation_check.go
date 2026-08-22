@@ -64,13 +64,13 @@ func (c *AcceptableBasicSignatureValidationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AcceptableBasicSignatureValidationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_LTV_ABSV
+	return i18n.MessageTagLTVABSV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AcceptableBasicSignatureValidationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_LTV_ABSV_ANS
+	return i18n.MessageTagLTVABSVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

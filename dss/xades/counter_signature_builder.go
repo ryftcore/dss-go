@@ -8,7 +8,7 @@
 //
 // incorporateCounterSignature looks the counter signature up with
 // getElementsByTagNameNS(XMLNS, "Signature") - XMLNS being the XMLDSig namespace URI, which
-// common.XMLDSigElement_SIGNATURE.URI() already carries, so the JSR-105 constant does not need a
+// common.XMLDSigElementSignature.URI() already carries, so the JSR-105 constant does not need a
 // separate home. xmldom has no getElementsByTagNameNS, so the document-order preorder walk that
 // method performs is spelled out in a file-local helper; the only property the caller depends on
 // is that walk order and the count.
@@ -213,7 +213,7 @@ func (b *CounterSignatureBuilder) incorporateCounterSignature(counterSignature m
 	}
 
 	signatureNodeList := counterSignatureBuilderElementsByTagNameNS(counterSignatureDom,
-		common.XMLDSigElement_SIGNATURE.URI(), common.XMLDSigElement_SIGNATURE.TagName())
+		common.XMLDSigElementSignature.URI(), common.XMLDSigElementSignature.TagName())
 	if len(signatureNodeList) != 1 {
 		return exception.NewIllegalInputException(fmt.Sprintf(
 			"The counterSignature document shall have one counter signature, when %d signatures found!",
@@ -230,7 +230,7 @@ func (b *CounterSignatureBuilder) incorporateCounterSignature(counterSignature m
 	counterSignatureElement := xmlutils.DomUtilsAddElement(b.DocumentDom, b.UnsignedSignaturePropertiesDom,
 		b.overrides.XadesNamespace(), currentElements.ElementCounterSignature())
 	counterSignatureElement.SetAttr(
-		xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+		xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 		counterSignatureBuilderCounterSignaturePrefix+b.Params.GetDeterministicId())
 	counterSignatureElement.AppendChild(adopted)
 	return nil
@@ -299,7 +299,7 @@ func counterSignatureBuilderSignatureOrItsCounterSignatureById(signature *XAdESS
 		if counterSignatureById != nil {
 			// check if not timestamped
 			if signature.TimestampSource().IsTimestamped(signatureId,
-				enumerations.TimestampedObjectType_SIGNATURE) {
+				enumerations.TimestampedObjectTypeSignature) {
 				return nil, exception.NewIllegalInputException(fmt.Sprintf(
 					"Unable to counter sign a signature with Id '%s'. "+
 						"The signature is timestamped by a master signature!", signatureId))
@@ -316,7 +316,7 @@ func counterSignatureBuilderSignatureValueElement(xadesSignature *XAdESSignature
 	signatureElement := xadesSignature.SignatureElement()
 
 	signatureValueElement, err := xmlutils.XPathUtilsGetElement(signatureElement,
-		common.XMLDSigPath_SIGNATURE_VALUE_PATH)
+		common.XMLDSigPathSignatureValuePath)
 	if err != nil {
 		return nil, err
 	}

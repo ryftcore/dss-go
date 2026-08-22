@@ -46,7 +46,7 @@ func TestCmsSignedAttributeTableGenerate(t *testing.T) {
 		if attributes.Get(cmscore.OIDMessageDigest) == nil {
 			t.Error("missing message-digest attribute")
 		}
-		if attributes.Get(OID_id_aa_cmsAlgorithmProtect) == nil {
+		if attributes.Get(OIDIdAaCmsAlgorithmProtect) == nil {
 			t.Error("missing cms-algorithm-protection attribute")
 		}
 	})

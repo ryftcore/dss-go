@@ -38,23 +38,23 @@ func (c *SigningCertificateAttributePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningCertificateAttributePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISASCP
+	return i18n.MessageTagBBBICSISASCP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningCertificateAttributePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISASCP_ANS
+	return i18n.MessageTagBBBICSISASCPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SigningCertificateAttributePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SigningCertificateAttributePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

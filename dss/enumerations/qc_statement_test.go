@@ -10,16 +10,16 @@ type qcStatementCase struct {
 
 func qcStatementCases() []qcStatementCase {
 	return []qcStatementCase{
-		{QCStatement_QC_COMPLIANCE, "qc-compliance", "0.4.0.1862.1.1"},
-		{QCStatement_QC_LIMIT_VALUE, "qc-limit-value", "0.4.0.1862.1.2"},
-		{QCStatement_QC_RETENTION_PERIOD, "qc-retention-period", "0.4.0.1862.1.3"},
-		{QCStatement_QC_SSCD, "qc-sscd", "0.4.0.1862.1.4"},
-		{QCStatement_QC_PDS, "qc-pds", "0.4.0.1862.1.5"},
-		{QCStatement_QC_TYPE, "qc-type", "0.4.0.1862.1.6"},
-		{QCStatement_QC_CCLEGISLATION, "qc-cclegislation", "0.4.0.1862.1.7"},
-		{QCStatement_QC_IDENT_METHOD, "qc-identMethod", "0.4.0.1862.1.8"},
-		{QCStatement_QC_QSCD_LEGISLATION, "qc-qscdLegislation", "0.4.0.1862.1.9"},
-		{QCStatement_QC_PSB, "qc-psb", "0.4.0.194126.1.3"},
+		{QCStatementQCCompliance, "qc-compliance", "0.4.0.1862.1.1"},
+		{QCStatementQCLimitValue, "qc-limit-value", "0.4.0.1862.1.2"},
+		{QCStatementQCRetentionPeriod, "qc-retention-period", "0.4.0.1862.1.3"},
+		{QCStatementQCSSCD, "qc-sscd", "0.4.0.1862.1.4"},
+		{QCStatementQCPDS, "qc-pds", "0.4.0.1862.1.5"},
+		{QCStatementQCType, "qc-type", "0.4.0.1862.1.6"},
+		{QCStatementQCCCLegislation, "qc-cclegislation", "0.4.0.1862.1.7"},
+		{QCStatementQCIdentMethod, "qc-identMethod", "0.4.0.1862.1.8"},
+		{QCStatementQCQSCDLegislation, "qc-qscdLegislation", "0.4.0.1862.1.9"},
+		{QCStatementQCPSB, "qc-psb", "0.4.0.194126.1.3"},
 	}
 }
 

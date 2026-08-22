@@ -35,23 +35,23 @@ func NewTLSCertificateBindingSignatureSerializationTypeCheck(i18nProvider *i18n.
 
 // Process performs the check. Port of process().
 func (c *TLSCertificateBindingSignatureSerializationTypeCheck) Process() bool {
-	return enumerations.JWSSerializationType_COMPACT_SERIALIZATION == c.signature.JWSSerializationType()
+	return enumerations.JWSSerializationTypeCompactSerialization == c.signature.JWSSerializationType()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingSignatureSerializationTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_SER
+	return i18n.MessageTagTLSCertBindingSigSer
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingSignatureSerializationTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_SER_ANS
+	return i18n.MessageTagTLSCertBindingSigSerANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TLSCertificateBindingSignatureSerializationTypeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

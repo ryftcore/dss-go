@@ -10,12 +10,12 @@ func TestXAdES111Attribute_KAT(t *testing.T) {
 		got  string
 		want string
 	}{
-		{"ID", XAdES111Attribute_ID.AttributeName(), "Id"},
-		{"OBJECT_REFERENCE", XAdES111Attribute_OBJECT_REFERENCE.AttributeName(), "ObjectReference"},
-		{"QUALIFIER", XAdES111Attribute_QUALIFIER.AttributeName(), "Qualifier"},
-		{"TARGET", XAdES111Attribute_TARGET.AttributeName(), "Target"},
-		{"URI", XAdES111Attribute_URI.AttributeName(), "uri"},
-		{"URI2", XAdES111Attribute_URI2.AttributeName(), "URI"},
+		{"ID", XAdES111AttributeID.AttributeName(), "Id"},
+		{"OBJECT_REFERENCE", XAdES111AttributeObjectReference.AttributeName(), "ObjectReference"},
+		{"QUALIFIER", XAdES111AttributeQualifier.AttributeName(), "Qualifier"},
+		{"TARGET", XAdES111AttributeTarget.AttributeName(), "Target"},
+		{"URI", XAdES111AttributeURI.AttributeName(), "uri"},
+		{"URI2", XAdES111AttributeURI2.AttributeName(), "URI"},
 	}
 	for _, c := range cases {
 		if c.got != c.want {

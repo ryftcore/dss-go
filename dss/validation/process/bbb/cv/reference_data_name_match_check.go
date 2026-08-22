@@ -41,37 +41,37 @@ func (c *ReferenceDataNameMatchCheck[T]) Process() bool {
 // NullPointerException on a typeless digest matcher; the Go zero value simply
 // takes the non-MANIFEST_ENTRY branch.
 func (c *ReferenceDataNameMatchCheck[T]) MessageTag() i18n.MessageTag {
-	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherType_MANIFEST_ENTRY {
-		return i18n.MessageTag_BBB_CV_DMENMND
+	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
+		return i18n.MessageTagBBBCVDMENMND
 	}
-	return i18n.MessageTag_BBB_CV_DRNMND
+	return i18n.MessageTagBBBCVDRNMND
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ReferenceDataNameMatchCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherType_MANIFEST_ENTRY {
-		return i18n.MessageTag_BBB_CV_DMENMND_ANS
+	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
+		return i18n.MessageTagBBBCVDMENMNDANS
 	}
-	return i18n.MessageTag_BBB_CV_DRNMND_ANS
+	return i18n.MessageTagBBBCVDRNMNDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ReferenceDataNameMatchCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ReferenceDataNameMatchCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+	return enumerations.SubIndicationSignedDataNotFound
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden
 // buildAdditionalInfo().
 func (c *ReferenceDataNameMatchCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE_NAME_CHECK,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReferenceNameCheck,
 		digestMatcherUri(c.digestMatcher), digestMatcherDocumentName(c.digestMatcher))
 	return &message
 }

@@ -75,25 +75,25 @@ func main() {
 	// "1.2.3.4.5.6.7.8.9" style placeholders play in DSS's own KeyEntityTSPSource unit tests.
 	tspSource.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
 
-	// JWSSerializationType_COMPACT_SERIALIZATION only ever carries JAdES-BASELINE-B: compact has
+	// JWSSerializationTypeCompactSerialization only ever carries JAdES-BASELINE-B: compact has
 	// no unprotected-header slot to hold the 'etsiU' array a -T signature-timestamp (or any
 	// higher level) needs, exactly what JAdESService.GetDataToSign itself panics with
 	// ("Only JAdES_BASELINE_B level is allowed for JAdES Compact Signature!") if asked to do
 	// otherwise - so, unlike XAdES/CAdES, there is no compact -T fixture here.
-	if err := generate(outDir, "jades-b-compact.json", enumerations.SignatureLevel_JAdES_BASELINE_B,
-		enumerations.JWSSerializationType_COMPACT_SERIALIZATION, signerEntry, nil); err != nil {
+	if err := generate(outDir, "jades-b-compact.json", enumerations.SignatureLevelJAdESBaselineB,
+		enumerations.JWSSerializationTypeCompactSerialization, signerEntry, nil); err != nil {
 		fail(fmt.Errorf("generating JAdES-B compact: %w", err))
 	}
-	if err := generate(outDir, "jades-b-flattened.json", enumerations.SignatureLevel_JAdES_BASELINE_B,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION, signerEntry, nil); err != nil {
+	if err := generate(outDir, "jades-b-flattened.json", enumerations.SignatureLevelJAdESBaselineB,
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization, signerEntry, nil); err != nil {
 		fail(fmt.Errorf("generating JAdES-B flattened: %w", err))
 	}
-	if err := generate(outDir, "jades-t-flattened.json", enumerations.SignatureLevel_JAdES_BASELINE_T,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION, signerEntry, tspSource); err != nil {
+	if err := generate(outDir, "jades-t-flattened.json", enumerations.SignatureLevelJAdESBaselineT,
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization, signerEntry, tspSource); err != nil {
 		fail(fmt.Errorf("generating JAdES-T flattened: %w", err))
 	}
-	if err := generate(outDir, "jades-t-full.json", enumerations.SignatureLevel_JAdES_BASELINE_T,
-		enumerations.JWSSerializationType_JSON_SERIALIZATION, signerEntry, tspSource); err != nil {
+	if err := generate(outDir, "jades-t-full.json", enumerations.SignatureLevelJAdESBaselineT,
+		enumerations.JWSSerializationTypeJSONSerialization, signerEntry, tspSource); err != nil {
 		fail(fmt.Errorf("generating JAdES-T full JSON serialization: %w", err))
 	}
 	if err := generateDetached(outDir, signerEntry); err != nil {
@@ -139,9 +139,9 @@ func newParameters(level enumerations.SignatureLevel, serializationType enumerat
 	signerEntry token.DSSPrivateKeyEntry) *jades.JAdESSignatureParameters {
 	parameters := jades.NewJAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetJwsSerializationType(serializationType)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	return parameters
@@ -158,7 +158,7 @@ func generate(outDir, name string, level enumerations.SignatureLevel, serializat
 		service.TspSource = tspSource
 	}
 
-	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleJSONContent), "sample.json", enumerations.MimeTypeEnum_JSON)
+	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleJSONContent), "sample.json", enumerations.MimeTypeEnumJSON)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)
 	signatureToken, err := reopenSignatureToken()
@@ -180,16 +180,16 @@ func generate(outDir, name string, level enumerations.SignatureLevel, serializat
 // reference/message-digest intactness).
 func generateDetached(outDir string, signerEntry token.DSSPrivateKeyEntry) error {
 	parameters := jades.NewJAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_JAdES_BASELINE_B)
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
-	parameters.SetSigDMechanism(enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH)
-	parameters.SetJwsSerializationType(enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
+	parameters.SetSigDMechanism(enumerations.SigDMechanismObjectIDByURIHash)
+	parameters.SetJwsSerializationType(enumerations.JWSSerializationTypeFlattenedJSONSerialization)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 
 	service := jades.NewJAdESService(validation.NewCommonCertificateVerifier())
-	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleJSONContent), detachedContentName, enumerations.MimeTypeEnum_JSON)
+	toSignDocument := model.NewInMemoryDocumentWithMimeType([]byte(sampleJSONContent), detachedContentName, enumerations.MimeTypeEnumJSON)
 
 	dataToSign := service.GetDataToSign(toSignDocument, parameters)
 	signatureToken, err := reopenSignatureToken()

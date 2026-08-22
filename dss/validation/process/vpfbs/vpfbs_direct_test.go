@@ -46,10 +46,10 @@ func conclusionWith(indication enumerations.Indication, subIndication enumeratio
 }
 
 func passedConclusion() *jaxb.XmlConclusion {
-	return conclusionWith(enumerations.Indication_PASSED, "")
+	return conclusionWith(enumerations.IndicationPassed, "")
 }
 
-func failLevel() *fixedLevelRule { return &fixedLevelRule{level: enumerations.Level_FAIL} }
+func failLevel() *fixedLevelRule { return &fixedLevelRule{level: enumerations.LevelFail} }
 
 type fixedLevelRule struct{ level enumerations.Level }
 
@@ -92,10 +92,10 @@ func TestFormatCheckingResultCheck(t *testing.T) {
 		if c.Process() {
 			t.Fatalf("expected Process() to be false for a nil XmlFC")
 		}
-		if got := c.FailedIndicationForConclusion(); got != enumerations.Indication_FAILED {
+		if got := c.FailedIndicationForConclusion(); got != enumerations.IndicationFailed {
 			t.Errorf("FailedIndicationForConclusion() = %v, want FAILED", got)
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_FORMAT_FAILURE {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationFormatFailure {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want FORMAT_FAILURE", got)
 		}
 	})
@@ -111,10 +111,10 @@ func TestIdentificationOfSigningCertificateResultCheck(t *testing.T) {
 		if c.Process() {
 			t.Fatalf("expected Process() to be false for a nil XmlISC")
 		}
-		if got := c.FailedIndicationForConclusion(); got != enumerations.Indication_INDETERMINATE {
+		if got := c.FailedIndicationForConclusion(); got != enumerations.IndicationIndeterminate {
 			t.Errorf("FailedIndicationForConclusion() = %v, want INDETERMINATE", got)
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_NO_SIGNING_CERTIFICATE_FOUND {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationNoSigningCertificateFound {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want NO_SIGNING_CERTIFICATE_FOUND", got)
 		}
 	})
@@ -136,12 +136,12 @@ func TestSigningCertificateNotRevokedCheck(t *testing.T) {
 		}(), true},
 		{"REVOKED_NO_POE fails the check", func() *jaxb.XmlXCV {
 			x := &jaxb.XmlXCV{}
-			x.Conclusion = conclusionWith(enumerations.Indication_INDETERMINATE, enumerations.SubIndication_REVOKED_NO_POE)
+			x.Conclusion = conclusionWith(enumerations.IndicationIndeterminate, enumerations.SubIndicationRevokedNoPOE)
 			return x
 		}(), false},
 		{"other indeterminate sub-indication passes the check", func() *jaxb.XmlXCV {
 			x := &jaxb.XmlXCV{}
-			x.Conclusion = conclusionWith(enumerations.Indication_INDETERMINATE, enumerations.SubIndication_TRY_LATER)
+			x.Conclusion = conclusionWith(enumerations.IndicationIndeterminate, enumerations.SubIndicationTryLater)
 			return x
 		}(), true},
 	}
@@ -199,10 +199,10 @@ func TestTimestampGenerationTimeNotAfterRevocationTimeCheck(t *testing.T) {
 		if c.Process() {
 			t.Fatalf("expected Process() to be false when the timestamp is after the revocation time")
 		}
-		if got := c.FailedIndicationForConclusion(); got != enumerations.Indication_FAILED {
+		if got := c.FailedIndicationForConclusion(); got != enumerations.IndicationFailed {
 			t.Errorf("FailedIndicationForConclusion() = %v, want FAILED", got)
 		}
-		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndication_REVOKED {
+		if got := c.FailedSubIndicationForConclusion(); got != enumerations.SubIndicationRevoked {
 			t.Errorf("FailedSubIndicationForConclusion() = %v, want REVOKED", got)
 		}
 	})
@@ -225,7 +225,7 @@ func TestBasicValidationProcessCheck(t *testing.T) {
 
 	t.Run("invalid conclusion fails and builds additional info", func(t *testing.T) {
 		_, result := newTestResult()
-		conclusion := conclusionWith(enumerations.Indication_INDETERMINATE, enumerations.SubIndication_TRY_LATER)
+		conclusion := conclusionWith(enumerations.IndicationIndeterminate, enumerations.SubIndicationTryLater)
 		c := NewBasicValidationProcessCheck(i18nProvider, result, conclusion, token, failLevel())
 		if c.Process() {
 			t.Fatalf("expected Process() to be false for an INDETERMINATE conclusion")

@@ -33,7 +33,7 @@ func NewCertificateQualificationForQWACBlock(i18nProvider *i18n.I18nProvider, bu
 // getCertQualificationAtIssuanceTimeBlock(List).
 func (c *CertificateQualificationForQWACBlock) CertQualificationAtIssuanceTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME,
+	return NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
 		c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
 }
 
@@ -41,6 +41,6 @@ func (c *CertificateQualificationForQWACBlock) CertQualificationAtIssuanceTimeBl
 // getCertQualificationAtValidationTimeBlock(List).
 func (c *CertificateQualificationForQWACBlock) CertQualificationAtValidationTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeForQWACBlock(c.I18nProvider, enumerations.ValidationTime_VALIDATION_TIME, &c.ValidationTime,
+	return NewCertQualificationAtTimeForQWACBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &c.ValidationTime,
 		c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
 }

@@ -29,13 +29,13 @@ func TestAbstractSerializableSignatureParametersDefaultsMatchJava(t *testing.T) 
 	if p.GenerateTBSWithoutCertificate() {
 		t.Errorf("generateTBSWithoutCertificate must default to false")
 	}
-	if got, want := p.SignatureAlgorithm(), enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1; got != want {
+	if got, want := p.SignatureAlgorithm(), enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1; got != want {
 		t.Errorf("SignatureAlgorithm() = %q, want %q", got, want)
 	}
-	if got, want := p.DigestAlgorithm(), enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1.DigestAlgorithm(); got != want {
+	if got, want := p.DigestAlgorithm(), enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1.DigestAlgorithm(); got != want {
 		t.Errorf("DigestAlgorithm() = %q, want %q", got, want)
 	}
-	if got, want := p.EncryptionAlgorithm(), enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA512_MGF1.EncryptionAlgorithm(); got != want {
+	if got, want := p.EncryptionAlgorithm(), enumerations.SignatureAlgorithmRSASSAPSSSHA512MGF1.EncryptionAlgorithm(); got != want {
 		t.Errorf("EncryptionAlgorithm() = %q, want %q", got, want)
 	}
 	if p.BLevel() == nil {
@@ -62,16 +62,16 @@ func TestAbstractSerializableSignatureParametersEqualsMatchesJava(t *testing.T) 
 			p.SetGenerateTBSWithoutCertificate(true)
 		}},
 		{"signatureLevel", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
-			p.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
+			p.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
 		}},
 		{"signaturePackaging", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
-			p.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPED)
+			p.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)
 		}},
 		{"digestAlgorithm", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
-			p.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+			p.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 		}},
 		{"referenceDigestAlgorithm", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
-			p.SetReferenceDigestAlgorithm(enumerations.DigestAlgorithm_SHA512)
+			p.SetReferenceDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
 		}},
 		{"bLevelParams", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
 			bLevel := NewBLevelParameters()
@@ -80,7 +80,7 @@ func TestAbstractSerializableSignatureParametersEqualsMatchesJava(t *testing.T) 
 			p.SetBLevelParams(bLevel)
 		}},
 		{"contentTimestampParameters", func(p *AbstractSerializableSignatureParameters[*TimestampParameters]) {
-			tsp := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithm_SHA512)
+			tsp := NewTimestampParametersWithDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
 			p.SetContentTimestampParameters(&tsp)
 		}},
 	}
@@ -97,7 +97,7 @@ func TestAbstractSerializableSignatureParametersEqualsMatchesJava(t *testing.T) 
 	// Upstream leaves validationDataEncapsulationStrategy out of equals(),
 	// hashCode() and toString(); the omission is reproduced, not "fixed".
 	ignored := abstractSerializableSignatureParametersNew(t)
-	ignored.SetValidationDataEncapsulationStrategy(enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY)
+	ignored.SetValidationDataEncapsulationStrategy(enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly)
 	if !ignored.Equals(abstractSerializableSignatureParametersNew(t)) {
 		t.Errorf("validationDataEncapsulationStrategy must NOT take part in Equals (upstream omits it)")
 	}

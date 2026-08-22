@@ -22,7 +22,7 @@ type TimestampAlgorithmObsolescenceValidation struct {
 func NewTimestampAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.TimestampWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *TimestampAlgorithmObsolescenceValidation {
 	c := &TimestampAlgorithmObsolescenceValidation{}
-	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.Context_TIMESTAMP, validationDate, validationPolicy, c)
+	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextTimestamp, validationDate, validationPolicy, c)
 	c.InitChainBase(c)
 	return c
 }

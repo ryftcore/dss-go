@@ -42,7 +42,7 @@ func TestNewDetachedTimestampSourceDefaults(t *testing.T) {
 }
 
 func TestNewDetachedTimestampSourceWithTimestamp(t *testing.T) {
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	source := NewDetachedTimestampSourceWithTimestamp(token)
 	got := source.DetachedTimestamps()
 	if len(got) != 1 || got[0] != token {
@@ -52,7 +52,7 @@ func TestNewDetachedTimestampSourceWithTimestamp(t *testing.T) {
 
 func TestAddExternalTimestampAppendsAndPopulatesCertificateSource(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 
 	if err := source.AddExternalTimestamp(token); err != nil {
 		t.Fatalf("AddExternalTimestamp: %v", err)
@@ -72,8 +72,8 @@ func TestAddExternalTimestampAppendsAndPopulatesCertificateSource(t *testing.T) 
 
 func TestAddExternalTimestampAccumulates(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	first := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
-	second := loadFixtureTimestampToken(t, enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+	first := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
+	second := loadFixtureTimestampToken(t, enumerations.TimestampTypeArchiveTimestamp)
 
 	if err := source.AddExternalTimestamp(first); err != nil {
 		t.Fatalf("AddExternalTimestamp(first): %v", err)
@@ -104,7 +104,7 @@ func TestAddExternalEvidenceRecordAppends(t *testing.T) {
 
 func TestIsCoveredTimestampNilManifestAlwaysCovered(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	er := &fakeEvidenceRecord{id: "er-1"} // ManifestFile() returns nil
 
 	if !source.isCoveredTimestamp(er, token) {
@@ -114,7 +114,7 @@ func TestIsCoveredTimestampNilManifestAlwaysCovered(t *testing.T) {
 
 func TestIsCoveredTimestampManifestCoversByFilename(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	token.SetFilename("token.tst")
 
 	entry := model.NewManifestEntry()
@@ -130,7 +130,7 @@ func TestIsCoveredTimestampManifestCoversByFilename(t *testing.T) {
 
 func TestIsCoveredTimestampManifestDoesNotCover(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	token.SetFilename("token.tst")
 
 	entry := model.NewManifestEntry()
@@ -146,7 +146,7 @@ func TestIsCoveredTimestampManifestDoesNotCover(t *testing.T) {
 
 func TestIsCoveredTimestampManifestEmptyFilenameNeverMatches(t *testing.T) {
 	source := NewDetachedTimestampSource()
-	token := loadFixtureTimestampToken(t, enumerations.TimestampType_SIGNATURE_TIMESTAMP)
+	token := loadFixtureTimestampToken(t, enumerations.TimestampTypeSignatureTimestamp)
 	// token.Filename() left empty on purpose.
 
 	entry := model.NewManifestEntry()

@@ -49,7 +49,7 @@ func (s *CounterSignatureScope) masterSignatureID(tokenIdentifierProvider model.
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *CounterSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_COUNTER_SIGNATURE
+	return enumerations.SignatureScopeTypeCounterSignature
 }
 
 // compile-time interface assertion.

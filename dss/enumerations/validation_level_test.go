@@ -20,10 +20,10 @@ func TestValidationLevelValueOf(t *testing.T) {
 
 func TestValidationLevelValues(t *testing.T) {
 	want := []ValidationLevel{
-		ValidationLevel_BASIC_SIGNATURES,
-		ValidationLevel_TIMESTAMPS,
-		ValidationLevel_LONG_TERM_DATA,
-		ValidationLevel_ARCHIVAL_DATA,
+		ValidationLevelBasicSignatures,
+		ValidationLevelTimestamps,
+		ValidationLevelLongTermData,
+		ValidationLevelArchivalData,
 	}
 	got := ValidationLevelValues()
 	if len(got) != len(want) {

@@ -51,7 +51,7 @@ import (
 
 // CAdESUtilsDefaultArchiveTimestampHashAlgo is the default DigestAlgorithm for an
 // ArchiveTimestamp. Port of DEFAULT_ARCHIVE_TIMESTAMP_HASH_ALGO.
-const CAdESUtilsDefaultArchiveTimestampHashAlgo = enumerations.DigestAlgorithm_SHA256
+const CAdESUtilsDefaultArchiveTimestampHashAlgo = enumerations.DigestAlgorithmSHA256
 
 // CAdESUtilsDefaultResourcesHandlerBuilder is the default resources handler builder to be used
 // across the code. Port of DEFAULT_RESOURCES_HANDLER_BUILDER.
@@ -68,35 +68,35 @@ var (
 // org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers constants upstream and keep their exact Java
 // field name behind the "OID_" prefix, the convention spi/oid.go established.
 var (
-	// OID_id_aa_ets_contentTimestamp is 1.2.840.113549.1.9.16.2.20.
-	OID_id_aa_ets_contentTimestamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 20}
+	// OIDIdAaEtsContentTimestamp is 1.2.840.113549.1.9.16.2.20.
+	OIDIdAaEtsContentTimestamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 20}
 
-	// OID_id_aa_signatureTimeStampToken is 1.2.840.113549.1.9.16.2.14.
-	OID_id_aa_signatureTimeStampToken = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 14}
+	// OIDIdAaSignatureTimeStampToken is 1.2.840.113549.1.9.16.2.14.
+	OIDIdAaSignatureTimeStampToken = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 14}
 
-	// OID_id_aa_ets_certCRLTimestamp is 1.2.840.113549.1.9.16.2.26.
-	OID_id_aa_ets_certCRLTimestamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 26}
+	// OIDIdAaEtsCertCRLTimestamp is 1.2.840.113549.1.9.16.2.26.
+	OIDIdAaEtsCertCRLTimestamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 26}
 
-	// OID_id_aa_ets_escTimeStamp is 1.2.840.113549.1.9.16.2.25.
-	OID_id_aa_ets_escTimeStamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 25}
+	// OIDIdAaEtsEscTimeStamp is 1.2.840.113549.1.9.16.2.25.
+	OIDIdAaEtsEscTimeStamp = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 9, 16, 2, 25}
 )
 
 // cadesUtilsTimestampOids contains a list of all CAdES timestamp OIDs, in the order the static
 // initialiser fills it. Port of the private timestampOids field.
 var cadesUtilsTimestampOids = []asn1.ObjectIdentifier{
-	OID_id_aa_ets_contentTimestamp,
-	spi.OID_id_aa_ets_archiveTimestampV2,
-	spi.OID_id_aa_ets_archiveTimestampV3,
-	OID_id_aa_ets_certCRLTimestamp,
-	OID_id_aa_ets_escTimeStamp,
-	OID_id_aa_signatureTimeStampToken,
+	OIDIdAaEtsContentTimestamp,
+	spi.OIDIdAaEtsArchiveTimestampV2,
+	spi.OIDIdAaEtsArchiveTimestampV3,
+	OIDIdAaEtsCertCRLTimestamp,
+	OIDIdAaEtsEscTimeStamp,
+	OIDIdAaSignatureTimeStampToken,
 }
 
 // cadesUtilsEvidenceRecordOids contains a list of all CAdES evidence record OIDs. Port of the
 // private evidenceRecordOids field.
 var cadesUtilsEvidenceRecordOids = []asn1.ObjectIdentifier{
-	spi.OID_id_aa_er_internal,
-	spi.OID_id_aa_er_external,
+	spi.OIDIdAaErInternal,
+	spi.OIDIdAaErExternal,
 }
 
 // CAdESUtilsDERSignedAttributes gets the DER SignedAttributes table from the given
@@ -193,13 +193,13 @@ func CAdESUtilsAddSigningCertificateAttribute(signedAttributes cmscore.Attribute
 	// Upstream logs "Adding Certificate Hash {} with algorithm {}".
 
 	var attribute *cmscore.Attribute
-	if digestAlgorithm == enumerations.DigestAlgorithm_SHA1 {
+	if digestAlgorithm == enumerations.DigestAlgorithmSHA1 {
 		essCertID := cadesUtilsESSCertID(certHash, issuerSerial)
 		signingCertificate := asn1ber.WriteSequence(asn1ber.WriteSequence(essCertID))
-		attribute = cmscore.NewAttribute(spi.OID_id_aa_signingCertificate, signingCertificate)
+		attribute = cmscore.NewAttribute(spi.OIDIdAaSigningCertificate, signingCertificate)
 	} else {
 		var hashAlgorithm *spi.AlgorithmIdentifier
-		if enumerations.DigestAlgorithm_SHA256 != digestAlgorithm {
+		if enumerations.DigestAlgorithmSHA256 != digestAlgorithm {
 			// SHA-256 is the ESSCertIDv2 DEFAULT and is left out; see cadesUtilsESSCertIDv2.
 			hashAlgorithm, err = spi.DSSASN1UtilsAlgorithmIdentifierForDigest(digestAlgorithm)
 			if err != nil {
@@ -208,7 +208,7 @@ func CAdESUtilsAddSigningCertificateAttribute(signedAttributes cmscore.Attribute
 		}
 		essCertIDv2 := cadesUtilsESSCertIDv2(hashAlgorithm, certHash, issuerSerial)
 		signingCertificateV2 := asn1ber.WriteSequence(asn1ber.WriteSequence(essCertIDv2))
-		attribute = cmscore.NewAttribute(spi.OID_id_aa_signingCertificateV2, signingCertificateV2)
+		attribute = cmscore.NewAttribute(spi.OIDIdAaSigningCertificateV2, signingCertificateV2)
 	}
 	return append(signedAttributes, attribute), nil
 }
@@ -332,7 +332,7 @@ func CAdESUtilsOriginalDocument(cmsDocument *cms.CMS, detachedDocuments []model.
 func CAdESUtilsContainsATSTv2(signerInformation *cmscore.SignerInfo) bool {
 	unsignedAttributes := CAdESUtilsUnsignedAttributes(signerInformation)
 	for _, attribute := range unsignedAttributes {
-		if spi.DSSASN1UtilsIsAttributeOfType(attribute, spi.OID_id_aa_ets_archiveTimestampV2) {
+		if spi.DSSASN1UtilsIsAttributeOfType(attribute, spi.OIDIdAaEtsArchiveTimestampV2) {
 			return true
 		}
 	}
@@ -399,7 +399,7 @@ func CAdESUtilsTimestampOids() []asn1.ObjectIdentifier {
 // timestamp type. Port of isArchiveTimeStampToken(Attribute).
 func CAdESUtilsIsArchiveTimeStampToken(attribute *cmscore.Attribute) bool {
 	if attribute != nil && attribute.Type != nil {
-		return enumerations.TimestampType_ARCHIVE_TIMESTAMP == CAdESUtilsTimestampTypeByOid(attribute.Type)
+		return enumerations.TimestampTypeArchiveTimestamp == CAdESUtilsTimestampTypeByOid(attribute.Type)
 	}
 	return false
 }
@@ -409,16 +409,16 @@ func CAdESUtilsIsArchiveTimeStampToken(attribute *cmscore.Attribute) bool {
 // Port of getTimestampTypeByOid(ASN1ObjectIdentifier).
 func CAdESUtilsTimestampTypeByOid(oid asn1.ObjectIdentifier) enumerations.TimestampType {
 	switch {
-	case OID_id_aa_ets_contentTimestamp.Equal(oid):
-		return enumerations.TimestampType_CONTENT_TIMESTAMP
-	case OID_id_aa_signatureTimeStampToken.Equal(oid):
-		return enumerations.TimestampType_SIGNATURE_TIMESTAMP
-	case OID_id_aa_ets_certCRLTimestamp.Equal(oid):
-		return enumerations.TimestampType_VALIDATION_DATA_REFSONLY_TIMESTAMP
-	case OID_id_aa_ets_escTimeStamp.Equal(oid):
-		return enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP
-	case spi.OID_id_aa_ets_archiveTimestampV2.Equal(oid) || spi.OID_id_aa_ets_archiveTimestampV3.Equal(oid):
-		return enumerations.TimestampType_ARCHIVE_TIMESTAMP
+	case OIDIdAaEtsContentTimestamp.Equal(oid):
+		return enumerations.TimestampTypeContentTimestamp
+	case OIDIdAaSignatureTimeStampToken.Equal(oid):
+		return enumerations.TimestampTypeSignatureTimestamp
+	case OIDIdAaEtsCertCRLTimestamp.Equal(oid):
+		return enumerations.TimestampTypeValidationDataRefsOnlyTimestamp
+	case OIDIdAaEtsEscTimeStamp.Equal(oid):
+		return enumerations.TimestampTypeValidationDataTimestamp
+	case spi.OIDIdAaEtsArchiveTimestampV2.Equal(oid) || spi.OIDIdAaEtsArchiveTimestampV3.Equal(oid):
+		return enumerations.TimestampTypeArchiveTimestamp
 	}
 	return ""
 }
@@ -499,8 +499,8 @@ func CAdESUtilsAtsHashIndexVersionIdentifier(timestampUnsignedAttributes cmscore
 	if timestampUnsignedAttributes != nil {
 		for _, attribute := range timestampUnsignedAttributes {
 			attrType := attribute.Type
-			if spi.OID_id_aa_ATSHashIndex.Equal(attrType) || spi.OID_id_aa_ATSHashIndexV2.Equal(attrType) ||
-				spi.OID_id_aa_ATSHashIndexV3.Equal(attrType) {
+			if spi.OIDIdAaATSHashIndex.Equal(attrType) || spi.OIDIdAaATSHashIndexV2.Equal(attrType) ||
+				spi.OIDIdAaATSHashIndexV3.Equal(attrType) {
 				// Upstream logs "Unsigned attribute of type [{}] found in the timestamp.".
 				return attrType
 			}
@@ -522,7 +522,7 @@ func CAdESUtilsOctetStringForAtsHashIndex(attribute *cmscore.Attribute,
 	 *  operation shall be performed as indicated above, and the hash value of the obtained result included in
 	 *  unsignedAttrsHashIndex
 	 */
-	if spi.OID_id_aa_ATSHashIndexV3.Equal(atsHashIndexVersionIdentifier) {
+	if spi.OIDIdAaATSHashIndexV3.Equal(atsHashIndexVersionIdentifier) {
 		return CAdESUtilsATSHashIndexV3OctetString(attribute.Type, attribute.ValueEncodings())
 	}
 	/*
@@ -567,10 +567,10 @@ func CAdESUtilsEvidenceRecordOids() []asn1.ObjectIdentifier {
 // panic carrying the same message.
 func CAdESUtilsEvidenceRecordIncorporationType(unsignedAttributeOID asn1.ObjectIdentifier) enumerations.EvidenceRecordIncorporationType {
 	switch {
-	case spi.OID_id_aa_er_internal.Equal(unsignedAttributeOID):
-		return enumerations.EvidenceRecordIncorporationType_INTERNAL_EVIDENCE_RECORD
-	case spi.OID_id_aa_er_external.Equal(unsignedAttributeOID):
-		return enumerations.EvidenceRecordIncorporationType_EXTERNAL_EVIDENCE_RECORD
+	case spi.OIDIdAaErInternal.Equal(unsignedAttributeOID):
+		return enumerations.EvidenceRecordIncorporationTypeInternalEvidenceRecord
+	case spi.OIDIdAaErExternal.Equal(unsignedAttributeOID):
+		return enumerations.EvidenceRecordIncorporationTypeExternalEvidenceRecord
 	}
 	panic(fmt.Sprintf("The unsigned attribute with OID '%s' is not supported "+
 		"for the evidence record incorporation!", unsignedAttributeOID))
@@ -580,8 +580,8 @@ func CAdESUtilsEvidenceRecordIncorporationType(unsignedAttributeOID asn1.ObjectI
 // unsigned attribute. Port of containsEvidenceRecord(SignerInformation).
 func CAdESUtilsContainsEvidenceRecord(signerInformation *cmscore.SignerInfo) bool {
 	if signerInformation != nil && signerInformation.HasUnsignedAttributes() {
-		return signerInformation.UnsignedAttributes.Get(spi.OID_id_aa_er_internal) != nil ||
-			signerInformation.UnsignedAttributes.Get(spi.OID_id_aa_er_external) != nil
+		return signerInformation.UnsignedAttributes.Get(spi.OIDIdAaErInternal) != nil ||
+			signerInformation.UnsignedAttributes.Get(spi.OIDIdAaErExternal) != nil
 	}
 	return false
 }

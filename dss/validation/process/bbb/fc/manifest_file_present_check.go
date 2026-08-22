@@ -29,7 +29,7 @@ func NewManifestFilePresentCheck(i18nProvider *i18n.I18nProvider, result *proces
 // Process performs the check.
 func (c *ManifestFilePresentCheck) Process() bool {
 	if c.containerInfo.ContainerType != nil &&
-		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerType_ASiC_E {
+		c.containerInfo.ContainerType.ASiCContainerType() == enumerations.ASiCContainerTypeASiCE {
 		return len(c.containerInfo.ManifestFiles.All()) > 0
 	}
 	// ASiC-S container may contain a manifest file
@@ -38,20 +38,20 @@ func (c *ManifestFilePresentCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *ManifestFilePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFP_ASICE
+	return i18n.MessageTagBBBFCIMFPASiCE
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ManifestFilePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFP_ASICE_ANS
+	return i18n.MessageTagBBBFCIMFPASiCEANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *ManifestFilePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *ManifestFilePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

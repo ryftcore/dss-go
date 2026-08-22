@@ -31,7 +31,7 @@ const qcStatementUtilsOIDIdQcsPkixQCSyntaxV2 = "1.3.6.1.5.5.7.11.2"
 // QcStatementUtilsQcStatements extracts the QCStatements from a certificate token, or nil when the
 // extension is absent or cannot be read. Port of getQcStatements(CertificateToken).
 func QcStatementUtilsQcStatements(certToken *model.CertificateToken) *extension.QcStatements {
-	oid := enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID()
+	oid := enumerations.CertificateExtensionEnumQCStatements.OID()
 	qcStatementsExtension := qcStatementUtilsExtensionContent(certToken, oid)
 	if len(qcStatementsExtension) == 0 {
 		return nil
@@ -106,43 +106,43 @@ func QcStatementUtilsQcStatementsFromSequence(qcStatementsSeq []byte) *extension
 // QcStatementUtilsIsQcCompliance reports whether the given OID is a QcCompliance statement.
 // Port of isQcCompliance(String).
 func QcStatementUtilsIsQcCompliance(oid string) bool {
-	return enumerations.QCStatement_QC_COMPLIANCE.OID() == oid
+	return enumerations.QCStatementQCCompliance.OID() == oid
 }
 
 // QcStatementUtilsIsQcLimitValue reports whether the given OID is a QcLimitValue statement.
 // Port of isQcLimitValue(String).
 func QcStatementUtilsIsQcLimitValue(oid string) bool {
-	return enumerations.QCStatement_QC_LIMIT_VALUE.OID() == oid
+	return enumerations.QCStatementQCLimitValue.OID() == oid
 }
 
 // QcStatementUtilsIsQcRetentionPeriod reports whether the given OID is a QcRetentionPeriod
 // statement. Port of isQcRetentionPeriod(String).
 func QcStatementUtilsIsQcRetentionPeriod(oid string) bool {
-	return enumerations.QCStatement_QC_RETENTION_PERIOD.OID() == oid
+	return enumerations.QCStatementQCRetentionPeriod.OID() == oid
 }
 
 // QcStatementUtilsIsQcSSCD reports whether the given OID is a QcSSCD statement.
 // Port of isQcSSCD(String).
 func QcStatementUtilsIsQcSSCD(oid string) bool {
-	return enumerations.QCStatement_QC_SSCD.OID() == oid
+	return enumerations.QCStatementQCSSCD.OID() == oid
 }
 
 // QcStatementUtilsIsQcPds reports whether the given OID is a QcPds statement.
 // Port of isQcPds(String).
 func QcStatementUtilsIsQcPds(oid string) bool {
-	return enumerations.QCStatement_QC_PDS.OID() == oid
+	return enumerations.QCStatementQCPDS.OID() == oid
 }
 
 // QcStatementUtilsIsQcType reports whether the given OID is a QcType statement.
 // Port of isQcType(String).
 func QcStatementUtilsIsQcType(oid string) bool {
-	return enumerations.QCStatement_QC_TYPE.OID() == oid
+	return enumerations.QCStatementQCType.OID() == oid
 }
 
 // QcStatementUtilsIsQcCClegislation reports whether the given OID is a QcCClegislation statement.
 // Port of isQcCClegislation(String).
 func QcStatementUtilsIsQcCClegislation(oid string) bool {
-	return enumerations.QCStatement_QC_CCLEGISLATION.OID() == oid
+	return enumerations.QCStatementQCCCLegislation.OID() == oid
 }
 
 // QcStatementUtilsIsQcSemanticsIdentifier reports whether the given OID is a QcSemanticsIdentifier
@@ -154,25 +154,25 @@ func QcStatementUtilsIsQcSemanticsIdentifier(oid string) bool {
 // QcStatementUtilsIsPsd2QcType reports whether the given OID is a Psd2QcType statement.
 // Port of isPsd2QcType(String).
 func QcStatementUtilsIsPsd2QcType(oid string) bool {
-	return OID_psd2_qcStatement.String() == oid
+	return OIDPsd2QcStatement.String() == oid
 }
 
 // QcStatementUtilsIsQcIdentMethod reports whether the given OID is a QcIdentMethod statement.
 // Port of isQcIdentMethod(String).
 func QcStatementUtilsIsQcIdentMethod(oid string) bool {
-	return enumerations.QCStatement_QC_IDENT_METHOD.OID() == oid
+	return enumerations.QCStatementQCIdentMethod.OID() == oid
 }
 
 // QcStatementUtilsIsQcQSCDlegislation reports whether the given OID is a QcQSCDlegislation
 // statement. Port of isQcQSCDlegislation(String).
 func QcStatementUtilsIsQcQSCDlegislation(oid string) bool {
-	return enumerations.QCStatement_QC_QSCD_LEGISLATION.OID() == oid
+	return enumerations.QCStatementQCQSCDLegislation.OID() == oid
 }
 
 // QcStatementUtilsIsCertForPSB reports whether the given OID identifies a Public Sector Body's
 // Electronic Attestation of Attributes (PSBEAA) provider certificate. Port of isCertForPSB(String).
 func QcStatementUtilsIsCertForPSB(oid string) bool {
-	return enumerations.QCStatement_QC_PSB.OID() == oid
+	return enumerations.QCStatementQCPSB.OID() == oid
 }
 
 // qcStatementUtilsQcLimitValue ports the private getQcLimitValue(ASN1Encodable) over

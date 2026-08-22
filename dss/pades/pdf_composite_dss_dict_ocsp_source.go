@@ -80,7 +80,7 @@ func (s *PdfCompositeDssDictOCSPSource) ExtractDSSOCSPs(dssDictionary PdfDssDict
 	dssOCSPMap := dssDictionary.OCSPs()
 	s.populateObjectsMap(dssOCSPMap)
 	for _, key := range pdfCompositeDssDictOCSPSourceSortedKeys(dssOCSPMap) {
-		s.AddBinary(dssOCSPMap[key], enumerations.RevocationOrigin_DSS_DICTIONARY)
+		s.AddBinary(dssOCSPMap[key], enumerations.RevocationOriginDSSDictionary)
 	}
 }
 
@@ -104,7 +104,7 @@ func (s *PdfCompositeDssDictOCSPSource) ExtractVRIOCSPsFromVRIDictionary(vriDict
 	if vriDictionary != nil {
 		ocspMap := vriDictionary.OCSPs()
 		for _, key := range pdfCompositeDssDictOCSPSourceSortedKeys(ocspMap) {
-			s.AddBinary(ocspMap[key], enumerations.RevocationOrigin_VRI_DICTIONARY)
+			s.AddBinary(ocspMap[key], enumerations.RevocationOriginVRIDictionary)
 		}
 	}
 }

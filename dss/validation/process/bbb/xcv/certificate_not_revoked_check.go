@@ -44,7 +44,7 @@ func NewCertificateNotRevokedCheck(i18nProvider *i18n.I18nProvider, result *proc
 // Process performs the check. Port of process().
 func (c *CertificateNotRevokedCheck) Process() bool {
 	isRevoked := c.certificateRevocation != nil && c.certificateRevocation.IsRevoked() &&
-		enumerations.RevocationReason_CERTIFICATE_HOLD != c.certificateRevocation.Reason()
+		enumerations.RevocationReasonCertificateHold != c.certificateRevocation.Reason()
 	if isRevoked {
 		revocationDate := c.certificateRevocation.RevocationDate()
 		isRevoked = revocationDate != nil && !c.currentTime.Before(*revocationDate)
@@ -63,7 +63,7 @@ func (c *CertificateNotRevokedCheck) BuildAdditionalInfo() *string {
 		if r := c.certificateRevocation.Reason(); r != "" {
 			reason = string(r)
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_REASON, reason, revocationDateStr)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationReason, reason, revocationDateStr)
 		return &message
 	}
 	return nil
@@ -71,25 +71,25 @@ func (c *CertificateNotRevokedCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateNotRevokedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCR
+	return i18n.MessageTagBBBXCVISCR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateNotRevokedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCR_ANS
+	return i18n.MessageTagBBBXCVISCRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateNotRevokedCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateNotRevokedCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	if enumerations.SubContext_SIGNING_CERT == c.subContext {
-		return enumerations.SubIndication_REVOKED_NO_POE
+	if enumerations.SubContextSigningCert == c.subContext {
+		return enumerations.SubIndicationRevokedNoPOE
 	}
-	return enumerations.SubIndication_REVOKED_CA_NO_POE
+	return enumerations.SubIndicationRevokedCANoPOE
 }

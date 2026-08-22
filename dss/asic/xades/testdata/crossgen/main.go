@@ -86,10 +86,10 @@ func main() {
 		level         enumerations.SignatureLevel
 		tsp           validation.TSPSource
 	}{
-		{"asics-xades-b.scs", singleDoc, enumerations.ASiCContainerType_ASiC_S, enumerations.SignatureLevel_XAdES_BASELINE_B, nil},
-		{"asics-xades-t.scs", singleDoc, enumerations.ASiCContainerType_ASiC_S, enumerations.SignatureLevel_XAdES_BASELINE_T, tspSource},
-		{"asice-xades-b.sce", multiDocs, enumerations.ASiCContainerType_ASiC_E, enumerations.SignatureLevel_XAdES_BASELINE_B, nil},
-		{"asice-xades-t.sce", multiDocs, enumerations.ASiCContainerType_ASiC_E, enumerations.SignatureLevel_XAdES_BASELINE_T, tspSource},
+		{"asics-xades-b.scs", singleDoc, enumerations.ASiCContainerTypeASiCS, enumerations.SignatureLevelXAdESBaselineB, nil},
+		{"asics-xades-t.scs", singleDoc, enumerations.ASiCContainerTypeASiCS, enumerations.SignatureLevelXAdESBaselineT, tspSource},
+		{"asice-xades-b.sce", multiDocs, enumerations.ASiCContainerTypeASiCE, enumerations.SignatureLevelXAdESBaselineB, nil},
+		{"asice-xades-t.sce", multiDocs, enumerations.ASiCContainerTypeASiCE, enumerations.SignatureLevelXAdESBaselineT, tspSource},
 	}
 
 	for _, testCase := range cases {
@@ -131,7 +131,7 @@ func generate(outDir, name string, documents []model.DSSDocument, containerType 
 	level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := asicxades.NewASiCWithXAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	parameters.ASiC().SetContainerType(containerType)

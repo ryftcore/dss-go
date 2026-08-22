@@ -36,7 +36,7 @@ const imageRotationUtilsSupportedAnglesErrorMessage = "rotation angle must be 90
 // imageRotationUtilsNeedRotation reports whether a rotation is requested at all.
 // Port of the private needRotation(VisualSignatureRotation).
 func imageRotationUtilsNeedRotation(visualSignatureRotation enumerations.VisualSignatureRotation) bool {
-	return visualSignatureRotation != "" && visualSignatureRotation != enumerations.VisualSignatureRotation_NONE
+	return visualSignatureRotation != "" && visualSignatureRotation != enumerations.VisualSignatureRotationNone
 }
 
 // ImageRotationUtilsRotation returns the rotation based on the page's default rotation
@@ -45,13 +45,13 @@ func ImageRotationUtilsRotation(visualSignatureRotation enumerations.VisualSigna
 	rotate := ImageRotationUtilsAngle360
 	if imageRotationUtilsNeedRotation(visualSignatureRotation) {
 		switch visualSignatureRotation {
-		case enumerations.VisualSignatureRotation_AUTOMATIC:
+		case enumerations.VisualSignatureRotationAutomatic:
 			rotate = ImageRotationUtilsAngle360 - pageRotation
-		case enumerations.VisualSignatureRotation_ROTATE_90:
+		case enumerations.VisualSignatureRotationRotate90:
 			rotate = ImageRotationUtilsAngle90
-		case enumerations.VisualSignatureRotation_ROTATE_180:
+		case enumerations.VisualSignatureRotationRotate180:
 			rotate = ImageRotationUtilsAngle180
-		case enumerations.VisualSignatureRotation_ROTATE_270:
+		case enumerations.VisualSignatureRotationRotate270:
 			rotate = ImageRotationUtilsAngle270
 		default:
 			panic(imageRotationUtilsSupportedAnglesErrorMessage)

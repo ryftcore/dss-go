@@ -102,7 +102,7 @@ func jadesSignKATLoad(t *testing.T) *jadesSignKATFixture {
 		t.Fatalf("cannot read the content timestamp: %v", err)
 	}
 	contentTimestamp, err := validation.NewTimestampToken(timestampBinaries,
-		enumerations.TimestampType_CONTENT_TIMESTAMP)
+		enumerations.TimestampTypeContentTimestamp)
 	if err != nil {
 		t.Fatalf("cannot load the content timestamp: %v", err)
 	}
@@ -110,7 +110,7 @@ func jadesSignKATLoad(t *testing.T) *jadesSignKATFixture {
 	return &jadesSignKATFixture{
 		oracle:             oracle,
 		signingCertificate: signingCertificate,
-		signatureValue: model.NewSignatureValueWithValue(enumerations.SignatureAlgorithm_RSA_SHA256,
+		signatureValue: model.NewSignatureValueWithValue(enumerations.SignatureAlgorithmRSASHA256,
 			signatureValueBytes),
 		payload:          []byte(oracle.Payload),
 		signingDate:      time.UnixMilli(oracle.SigningDateMillis).UTC(),
@@ -124,9 +124,9 @@ func (f *jadesSignKATFixture) baseParameters() *JAdESSignatureParameters {
 	parameters := NewJAdESSignatureParameters()
 	parameters.SetSigningCertificate(f.signingCertificate)
 	parameters.SetCertificateChainFromTokens(f.signingCertificate)
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_JAdES_BASELINE_B)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
-	parameters.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelJAdESBaselineB)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+	parameters.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithmSHA256)
 	signingDate := f.signingDate
 	parameters.BLevel().SetSigningDate(&signingDate)
 	return parameters
@@ -135,7 +135,7 @@ func (f *jadesSignKATFixture) baseParameters() *JAdESSignatureParameters {
 func (f *jadesSignKATFixture) enveloping(
 	serializationType enumerations.JWSSerializationType) *JAdESSignatureParameters {
 	parameters := f.baseParameters()
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	parameters.SetJwsSerializationType(serializationType)
 	return parameters
 }
@@ -143,7 +143,7 @@ func (f *jadesSignKATFixture) enveloping(
 func (f *jadesSignKATFixture) detached(serializationType enumerations.JWSSerializationType,
 	mechanism enumerations.SigDMechanism) *JAdESSignatureParameters {
 	parameters := f.baseParameters()
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	parameters.SetJwsSerializationType(serializationType)
 	parameters.SetSigDMechanism(mechanism)
 	return parameters
@@ -151,16 +151,16 @@ func (f *jadesSignKATFixture) detached(serializationType enumerations.JWSSeriali
 
 // payloadDocument mirrors JAdESSignOracle#payloadDocument.
 func (f *jadesSignKATFixture) payloadDocument() model.DSSDocument {
-	return model.NewInMemoryDocumentWithMimeType(f.payload, "payload.txt", enumerations.MimeTypeEnum_TEXT)
+	return model.NewInMemoryDocumentWithMimeType(f.payload, "payload.txt", enumerations.MimeTypeEnumText)
 }
 
 // detachedDocuments mirrors JAdESSignOracle#detachedDocuments.
 func jadesSignKATDetachedDocuments() []model.DSSDocument {
 	return []model.DSSDocument{
 		model.NewInMemoryDocumentWithMimeType([]byte("first detached"), "first.txt",
-			enumerations.MimeTypeEnum_TEXT),
+			enumerations.MimeTypeEnumText),
 		model.NewInMemoryDocumentWithMimeType([]byte("second detached"), "second.bin",
-			enumerations.MimeTypeEnum_BINARY),
+			enumerations.MimeTypeEnumBinary),
 	}
 }
 
@@ -168,7 +168,7 @@ func jadesSignKATDetachedDocuments() []model.DSSDocument {
 func jadesSignKATHTTPHeaderDocuments(t *testing.T) []model.DSSDocument {
 	t.Helper()
 	digestHeader := NewHTTPHeaderDigest(
-		model.NewInMemoryDocument([]byte(`{"hello":"world"}`)), enumerations.DigestAlgorithm_SHA256)
+		model.NewInMemoryDocument([]byte(`{"hello":"world"}`)), enumerations.DigestAlgorithmSHA256)
 	return []model.DSSDocument{
 		NewHTTPHeader("content-type", "application/json"),
 		NewHTTPHeader("x-example", " leading and trailing "),
@@ -180,7 +180,7 @@ func jadesSignKATHTTPHeaderDocuments(t *testing.T) []model.DSSDocument {
 // full mirrors JAdESSignOracle#full.
 func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
 	t.Helper()
-	parameters := f.enveloping(enumerations.JWSSerializationType_JSON_SERIALIZATION)
+	parameters := f.enveloping(enumerations.JWSSerializationTypeJSONSerialization)
 
 	signerLocation := model.NewSignerLocation()
 	signerLocation.SetCountry("LU")
@@ -204,10 +204,10 @@ func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
 	textQualifier.SetContent(model.NewInMemoryDocument([]byte("plain qualifier")))
 	commitment.SetCommitmentTypeQualifiers(jsonQualifier, textQualifier)
 	parameters.BLevel().SetCommitmentTypeIndications([]enumerations.CommitmentType{
-		enumerations.CommitmentTypeEnum_ProofOfReceipt, commitment,
+		enumerations.CommitmentTypeEnumProofOfReceipt, commitment,
 	})
 
-	policyDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, []byte("policy"))
+	policyDigest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, []byte("policy"))
 	if err != nil {
 		t.Fatalf("cannot compute the policy digest: %v", err)
 	}
@@ -215,7 +215,7 @@ func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
 	policy.SetId("urn:oid:1.2.3.4.5")
 	policy.SetDescription("Oracle test policy")
 	policy.SetDocumentationReferences("https://example.org/policy.pdf")
-	policy.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	policy.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	policy.SetDigestValue(policyDigest)
 	policy.SetSpuri("https://example.org/policy")
 	userNotice := model.NewUserNotice()
@@ -227,7 +227,7 @@ func (f *jadesSignKATFixture) full(t *testing.T) *JAdESSignatureParameters {
 	spDocSpecification.SetId("urn:oid:1.2.3.4.6")
 	spDocSpecification.SetDescription("Policy document specification")
 	spDocSpecification.SetDocumentationReferences("https://example.org/spec")
-	spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+	spDocSpecification.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 	policy.SetSpDocSpecification(spDocSpecification)
 	parameters.BLevel().SetSignaturePolicy(policy)
 
@@ -243,80 +243,80 @@ func (f *jadesSignKATFixture) configure(t *testing.T,
 	t.Helper()
 	switch name {
 	case "compact-enveloping-default":
-		return f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION),
+		return f.enveloping(enumerations.JWSSerializationTypeCompactSerialization),
 			[]model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-b64false":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
 		parameters.SetBase64UrlEncodedPayload(false)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "json-enveloping-default":
-		return f.enveloping(enumerations.JWSSerializationType_JSON_SERIALIZATION),
+		return f.enveloping(enumerations.JWSSerializationTypeJSONSerialization),
 			[]model.DSSDocument{f.payloadDocument()}
 
 	case "flattened-enveloping-default":
-		return f.enveloping(enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION),
+		return f.enveloping(enumerations.JWSSerializationTypeFlattenedJSONSerialization),
 			[]model.DSSDocument{f.payloadDocument()}
 
 	case "flattened-enveloping-b64false":
-		parameters := f.enveloping(enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeFlattenedJSONSerialization)
 		parameters.SetBase64UrlEncodedPayload(false)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-detached-nosigd":
-		return f.detached(enumerations.JWSSerializationType_COMPACT_SERIALIZATION,
-			enumerations.SigDMechanism_NO_SIG_D), []model.DSSDocument{f.payloadDocument()}
+		return f.detached(enumerations.JWSSerializationTypeCompactSerialization,
+			enumerations.SigDMechanismNoSigD), []model.DSSDocument{f.payloadDocument()}
 
 	case "json-detached-objectidbyuri":
-		return f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_OBJECT_ID_BY_URI), jadesSignKATDetachedDocuments()
+		return f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismObjectIDByURI), jadesSignKATDetachedDocuments()
 
 	case "json-detached-objectidbyuri-b64false":
-		parameters := f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_OBJECT_ID_BY_URI)
+		parameters := f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismObjectIDByURI)
 		parameters.SetBase64UrlEncodedPayload(false)
 		return parameters, jadesSignKATDetachedDocuments()
 
 	case "json-detached-objectidbyurihash":
-		return f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH), jadesSignKATDetachedDocuments()
+		return f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismObjectIDByURIHash), jadesSignKATDetachedDocuments()
 
 	case "json-detached-objectidbyurihash-b64false":
-		parameters := f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH)
+		parameters := f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismObjectIDByURIHash)
 		parameters.SetBase64UrlEncodedPayload(false)
 		return parameters, jadesSignKATDetachedDocuments()
 
 	case "json-detached-objectidbyurihash-sha512":
-		parameters := f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH)
-		parameters.SetReferenceDigestAlgorithm(enumerations.DigestAlgorithm_SHA512)
+		parameters := f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismObjectIDByURIHash)
+		parameters.SetReferenceDigestAlgorithm(enumerations.DigestAlgorithmSHA512)
 		return parameters, jadesSignKATDetachedDocuments()
 
 	case "json-detached-httpheaders":
-		parameters := f.detached(enumerations.JWSSerializationType_JSON_SERIALIZATION,
-			enumerations.SigDMechanism_HTTP_HEADERS)
+		parameters := f.detached(enumerations.JWSSerializationTypeJSONSerialization,
+			enumerations.SigDMechanismHTTPHeaders)
 		parameters.SetBase64UrlEncodedPayload(false)
 		return parameters, jadesSignKATHTTPHeaderDocuments(t)
 
 	case "compact-enveloping-sigt":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeType_SIG_T)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
+		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeSigT)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-no-signing-time":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
-		parameters.SetJadesSigningTimeType(JAdESSigningTimeType_NONE)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
+		parameters.SetJadesSigningTimeType(JAdESSigningTimeTypeNone)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-x5to":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
-		parameters.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithm_SHA512)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
+		parameters.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithmSHA512)
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-minimal":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
 		parameters.SetIncludeKeyIdentifier(false)
 		parameters.SetIncludeCertificateChain(false)
 		parameters.SetIncludeSignatureType(false)
@@ -324,7 +324,7 @@ func (f *jadesSignKATFixture) configure(t *testing.T,
 		return parameters, []model.DSSDocument{f.payloadDocument()}
 
 	case "compact-enveloping-kid-x5u-typ-exp":
-		parameters := f.enveloping(enumerations.JWSSerializationType_COMPACT_SERIALIZATION)
+		parameters := f.enveloping(enumerations.JWSSerializationTypeCompactSerialization)
 		parameters.SetKeyIdentifier("my-key-identifier")
 		parameters.SetX509Url("https://example.org/certs/signer.pem")
 		parameters.SetSignatureType("application/jose+json")
@@ -349,7 +349,7 @@ func jadesSignKATBuilder(t *testing.T, parameters *JAdESSignatureParameters,
 	certificateVerifier := validation.NewCommonCertificateVerifier()
 	var builder JAdESBuilder
 	var err error
-	if parameters.JwsSerializationType() == enumerations.JWSSerializationType_COMPACT_SERIALIZATION {
+	if parameters.JwsSerializationType() == enumerations.JWSSerializationTypeCompactSerialization {
 		builder, err = NewJAdESCompactBuilder(certificateVerifier, parameters, documents)
 	} else {
 		builder, err = NewJAdESSerializationBuilder(certificateVerifier, parameters, documents)

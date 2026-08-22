@@ -39,23 +39,23 @@ func (c *SigningCertificateRecognitionCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningCertificateRecognitionCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISCI
+	return i18n.MessageTagBBBICSISCI
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningCertificateRecognitionCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISCI_ANS
+	return i18n.MessageTagBBBICSISCIANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SigningCertificateRecognitionCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SigningCertificateRecognitionCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_SIGNING_CERTIFICATE_FOUND
+	return enumerations.SubIndicationNoSigningCertificateFound
 }

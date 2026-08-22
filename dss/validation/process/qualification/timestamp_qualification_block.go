@@ -49,7 +49,7 @@ func NewTimestampQualificationBlock(i18nProvider *i18n.I18nProvider, timestamp *
 		timestamp:        timestamp,
 		tlAnalysis:       tlAnalysis,
 		poe:              poe,
-		tstQualification: enumerations.TimestampQualification_NA,
+		tstQualification: enumerations.TimestampQualificationNA,
 	}
 	c.InitChainBase(c)
 	return c
@@ -58,7 +58,7 @@ func NewTimestampQualificationBlock(i18nProvider *i18n.I18nProvider, timestamp *
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *TimestampQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_TST_QUALIFICATION
+	return i18n.MessageTagTSTQualification
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -134,14 +134,14 @@ func (c *TimestampQualificationBlock) InitChain() {
 			acceptableServices := filter.Filter(originalTSPs)
 
 			tstQualificationAtGenerationTimeBlock := NewTimestampQualificationAtTimeBlockAtGenerationTime(
-				c.I18nProvider, enumerations.ValidationTime_TIMESTAMP_GENERATION_TIME, c.timestamp, acceptableServices)
+				c.I18nProvider, enumerations.ValidationTimeTimestampGenerationTime, c.timestamp, acceptableServices)
 			conclusionAtGenerationTime := tstQualificationAtGenerationTimeBlock.Execute()
 			c.Result.Value.ValidationTimestampQualificationAtTime = append(
 				c.Result.Value.ValidationTimestampQualificationAtTime, conclusionAtGenerationTime)
 
 			timestampPOE := c.poe.GetLowestPOETime(c.timestamp.Id())
 			tstQualificationAtPOETimeBlock := NewTimestampQualificationAtTimeBlock(
-				c.I18nProvider, enumerations.ValidationTime_TIMESTAMP_POE_TIME, &timestampPOE, c.timestamp, acceptableServices)
+				c.I18nProvider, enumerations.ValidationTimeTimestampPOETime, &timestampPOE, c.timestamp, acceptableServices)
 			conclusionAtPOETime := tstQualificationAtPOETimeBlock.Execute()
 			c.Result.Value.ValidationTimestampQualificationAtTime = append(
 				c.Result.Value.ValidationTimestampQualificationAtTime, conclusionAtPOETime)
@@ -165,10 +165,10 @@ func (c *TimestampQualificationBlock) getTlAnalysis(url string) *jaxb.XmlTLAnaly
 // determineFinalQualification ports the private
 // determineFinalQualification(TimestampQualification, TimestampQualification).
 func (c *TimestampQualificationBlock) determineFinalQualification(qualAtGenerationTime, qualAtPOETime enumerations.TimestampQualification) {
-	if enumerations.TimestampQualification_QTSA == qualAtGenerationTime && enumerations.TimestampQualification_QTSA == qualAtPOETime {
-		c.tstQualification = enumerations.TimestampQualification_QTSA
+	if enumerations.TimestampQualificationQTSA == qualAtGenerationTime && enumerations.TimestampQualificationQTSA == qualAtPOETime {
+		c.tstQualification = enumerations.TimestampQualificationQTSA
 	} else {
-		c.tstQualification = enumerations.TimestampQualification_TSA
+		c.tstQualification = enumerations.TimestampQualificationTSA
 	}
 }
 
@@ -185,11 +185,11 @@ func (c *TimestampQualificationBlock) setIndication() {
 	if conclusion == nil {
 		return
 	}
-	indication := jaxb.IndicationValue(enumerations.Indication_PASSED)
+	indication := jaxb.IndicationValue(enumerations.IndicationPassed)
 	if len(conclusion.Errors) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
+		indication = jaxb.IndicationValue(enumerations.IndicationFailed)
 	} else if len(conclusion.Warnings) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
+		indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
 	}
 	conclusion.Indication = indication
 }

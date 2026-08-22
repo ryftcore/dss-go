@@ -74,7 +74,7 @@ func (c *CryptographicSuiteCatalogue) AlgorithmList() []*CryptographicSuiteAlgor
 // CryptographicSuite gets the global CryptographicSuite.
 func (c *CryptographicSuiteCatalogue) CryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }
@@ -90,8 +90,8 @@ func (c *CryptographicSuiteCatalogue) SignatureCryptographicSuite() Cryptographi
 // validation of signature certificates.
 func (c *CryptographicSuiteCatalogue) SignatureCertificatesCryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_CERTIFICATES, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_CERTIFICATES,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
+		enumerations.CryptographicSuiteAlgorithmUsageSignCertificates, enumerations.CryptographicSuiteAlgorithmUsageValidateCertificates,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }
@@ -129,8 +129,8 @@ func (c *CryptographicSuiteCatalogue) KeyBindingSignatureCertificatesCryptograph
 // of a revocation data.
 func (c *CryptographicSuiteCatalogue) RevocationCryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_OCSP, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_OCSP,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
+		enumerations.CryptographicSuiteAlgorithmUsageSignOCSP, enumerations.CryptographicSuiteAlgorithmUsageValidateOCSP,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }
@@ -139,9 +139,9 @@ func (c *CryptographicSuiteCatalogue) RevocationCryptographicSuite() Cryptograph
 // for validation of revocation data certificates.
 func (c *CryptographicSuiteCatalogue) RevocationCertificatesCryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_OCSP, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_OCSP,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_CERTIFICATES, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_CERTIFICATES,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
+		enumerations.CryptographicSuiteAlgorithmUsageSignOCSP, enumerations.CryptographicSuiteAlgorithmUsageValidateOCSP,
+		enumerations.CryptographicSuiteAlgorithmUsageSignCertificates, enumerations.CryptographicSuiteAlgorithmUsageValidateCertificates,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }
@@ -150,8 +150,8 @@ func (c *CryptographicSuiteCatalogue) RevocationCertificatesCryptographicSuite()
 // of a timestamp.
 func (c *CryptographicSuiteCatalogue) TimestampCryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_TIMESTAMPS, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_TIMESTAMPS,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
+		enumerations.CryptographicSuiteAlgorithmUsageSignTimestamps, enumerations.CryptographicSuiteAlgorithmUsageValidateTimestamps,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }
@@ -160,9 +160,9 @@ func (c *CryptographicSuiteCatalogue) TimestampCryptographicSuite() Cryptographi
 // validation of timestamp data certificates.
 func (c *CryptographicSuiteCatalogue) TimestampCertificatesCryptographicSuite() CryptographicSuite {
 	algorithms := c.filterByAlgorithmUsage(c.AlgorithmList(), []enumerations.CryptographicSuiteAlgorithmUsage{
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_DATA, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_DATA,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_TIMESTAMPS, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_TIMESTAMPS,
-		enumerations.CryptographicSuiteAlgorithmUsage_SIGN_CERTIFICATES, enumerations.CryptographicSuiteAlgorithmUsage_VALIDATE_CERTIFICATES,
+		enumerations.CryptographicSuiteAlgorithmUsageSignData, enumerations.CryptographicSuiteAlgorithmUsageValidateData,
+		enumerations.CryptographicSuiteAlgorithmUsageSignTimestamps, enumerations.CryptographicSuiteAlgorithmUsageValidateTimestamps,
+		enumerations.CryptographicSuiteAlgorithmUsageSignCertificates, enumerations.CryptographicSuiteAlgorithmUsageValidateCertificates,
 	})
 	return c.cryptographicSuiteFor(c.Metadata(), algorithms)
 }

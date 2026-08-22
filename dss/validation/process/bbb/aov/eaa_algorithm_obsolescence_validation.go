@@ -25,7 +25,7 @@ type EAAAlgorithmObsolescenceValidation struct {
 func NewEAAAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.EAAWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *EAAAlgorithmObsolescenceValidation {
 	c := &EAAAlgorithmObsolescenceValidation{}
-	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.Context_EAA, validationDate, validationPolicy, c)
+	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextEAA, validationDate, validationPolicy, c)
 	c.InitChainBase(c)
 	return c
 }

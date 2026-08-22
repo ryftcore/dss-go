@@ -32,19 +32,19 @@ func NewQWACValidityPeriodCheck(i18nProvider *i18n.I18nProvider, result *process
 
 // MessageTag returns the check's message tag. Port of the overridden getMessageTag().
 func (c *QWACValidityPeriodCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VAL_PERIOD
+	return i18n.MessageTagQWACValPeriod
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *QWACValidityPeriodCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VAL_PERIOD_ANS
+	return i18n.MessageTagQWACValPeriodANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the overridden getFailedIndicationForConclusion().
 func (c *QWACValidityPeriodCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

@@ -223,19 +223,19 @@ func TestIdentificationOfTheSigningCertificateAgainstJavaOracle(t *testing.T) {
 			}
 
 			for _, signature := range diagnosticData.Signatures() {
-				context := enumerations.Context_SIGNATURE
+				context := enumerations.ContextSignature
 				if signature.IsCounterSignature() {
-					context = enumerations.Context_COUNTER_SIGNATURE
+					context = enumerations.ContextCounterSignature
 				}
 				appendRow(signature, context)
 			}
 			for _, timestamp := range diagnosticData.TimestampList() {
-				appendRow(timestamp, enumerations.Context_TIMESTAMP)
+				appendRow(timestamp, enumerations.ContextTimestamp)
 			}
 			revocations := diagnosticData.AllRevocationData()
 			sort.SliceStable(revocations, func(i, j int) bool { return revocations[i].Id() < revocations[j].Id() })
 			for _, revocation := range revocations {
-				appendRow(revocation, enumerations.Context_REVOCATION)
+				appendRow(revocation, enumerations.ContextRevocation)
 			}
 
 			if len(produced) != len(expected) {

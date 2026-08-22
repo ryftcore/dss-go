@@ -46,7 +46,7 @@ func NewLongTermValidationCheck(i18nProvider *i18n.I18nProvider,
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *LongTermValidationCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_LTV
+	return jaxb.XmlBlockTypeLTV
 }
 
 // Process performs the check. Port of process().
@@ -68,13 +68,13 @@ func (c *LongTermValidationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LongTermValidationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTVV
+	return i18n.MessageTagArchLTVV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *LongTermValidationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTVV_ANS
+	return i18n.MessageTagArchLTVVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

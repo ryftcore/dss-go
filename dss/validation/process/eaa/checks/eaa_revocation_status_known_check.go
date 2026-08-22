@@ -32,30 +32,30 @@ func NewEAARevocationStatusKnownCheck(i18nProvider *i18n.I18nProvider, result *p
 
 // Process performs the check. Port of process().
 func (c *EAARevocationStatusKnownCheck) Process() bool {
-	return enumerations.EAAStatus_VALID == c.eaaStatus.Status() ||
-		enumerations.EAAStatus_INVALID == c.eaaStatus.Status() ||
-		enumerations.EAAStatus_SUSPENDED == c.eaaStatus.Status()
+	return enumerations.EAAStatusValid == c.eaaStatus.Status() ||
+		enumerations.EAAStatusInvalid == c.eaaStatus.Status() ||
+		enumerations.EAAStatusSuspended == c.eaaStatus.Status()
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationStatusKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_KNOWN
+	return i18n.MessageTagEAARevKnown
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationStatusKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_KNOWN_ANS
+	return i18n.MessageTagEAARevKnownANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAARevocationStatusKnownCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAARevocationStatusKnownCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

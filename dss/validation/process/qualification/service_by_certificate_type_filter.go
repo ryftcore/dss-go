@@ -67,13 +67,13 @@ func (f *ServiceByCertificateTypeFilter) IsAcceptable(service *diagnostic.TrustS
 		overruleForWSA := asiWsa && qcForWSA && onlyOneQcForXXX
 
 		switch certType {
-		case enumerations.CertificateType_ESIGN:
+		case enumerations.CertificateTypeESign:
 			return asiEsign || overruleForEseals || overruleForWSA
-		case enumerations.CertificateType_ESEAL:
+		case enumerations.CertificateTypeESeal:
 			return asiEseals || overruleForEsign || overruleForWSA
-		case enumerations.CertificateType_WSA:
+		case enumerations.CertificateTypeWSA:
 			return asiWsa || overruleForEseals || overruleForEsign
-		case enumerations.CertificateType_UNKNOWN:
+		case enumerations.CertificateTypeUnknown:
 			// continue to identify qualification (keeping unknown type)
 			return true
 		default:

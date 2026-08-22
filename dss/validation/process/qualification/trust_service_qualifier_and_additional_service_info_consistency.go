@@ -10,9 +10,9 @@ import (
 // trustServiceQualifierAndAdditionalServiceInfoCorrespondenceMap is the correspondence
 // map. Port of the static CORRESPONDENCE_MAP_QUALIFIER_ASI.
 var trustServiceQualifierAndAdditionalServiceInfoCorrespondenceMap = map[enumerations.ServiceQualification]enumerations.AdditionalServiceInformation{
-	enumerations.ServiceQualification_QC_FOR_ESIG:  enumerations.AdditionalServiceInformation_FOR_ESIGNATURES,
-	enumerations.ServiceQualification_QC_FOR_ESEAL: enumerations.AdditionalServiceInformation_FOR_ESEALS,
-	enumerations.ServiceQualification_QC_FOR_WSA:   enumerations.AdditionalServiceInformation_FOR_WEB_AUTHENTICATION,
+	enumerations.ServiceQualificationQCForESig:  enumerations.AdditionalServiceInformationForESignatures,
+	enumerations.ServiceQualificationQCForESeal: enumerations.AdditionalServiceInformationForESeals,
+	enumerations.ServiceQualificationQCForWSA:   enumerations.AdditionalServiceInformationForWebAuthentication,
 }
 
 // trustServiceQualifierAndAdditionalServiceInfoConsistency verifies consistency of the

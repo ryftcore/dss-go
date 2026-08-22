@@ -159,9 +159,9 @@ func (s *PAdESSignature) SetDssOCSPSource(dssOCSPSource *spi.ListRevocationSourc
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
 func (s *PAdESSignature) SignatureForm() enumerations.SignatureForm {
 	if s.hasPKCS7SubFilter() {
-		return enumerations.SignatureForm_PKCS7
+		return enumerations.SignatureFormPKCS7
 	}
-	return enumerations.SignatureForm_PAdES
+	return enumerations.SignatureFormPAdES
 }
 
 // CertificateSource gets a certificate source which contains ALL certificates embedded in the
@@ -292,7 +292,7 @@ func (s *PAdESSignature) SignerDocumentContent() (model.DSSDocument, error) {
 	}
 	if signerDocument != nil && s.PdfSignatureDictionary() != nil &&
 		PAdESConstantsSignaturePKCS7SHA1SubFilter == s.PdfSignatureDictionary().SubFilter() {
-		digestValue, err := signerDocument.DigestValue(enumerations.DigestAlgorithm_SHA1)
+		digestValue, err := signerDocument.DigestValue(enumerations.DigestAlgorithmSHA1)
 		if err != nil {
 			return nil, err
 		}
@@ -330,41 +330,41 @@ func (s *PAdESSignature) HasLTVProfile() bool {
 // Port of getDataFoundUpToLevel().
 func (s *PAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	signatureForm := s.SignatureForm()
-	if enumerations.SignatureForm_PAdES == signatureForm && s.HasBESProfile() {
+	if enumerations.SignatureFormPAdES == signatureForm && s.HasBESProfile() {
 		if !s.HasBProfile() {
 			if s.HasLTVProfile() {
-				return enumerations.SignatureLevel_PAdES_LTV
+				return enumerations.SignatureLevelPAdESLTV
 			}
 			if s.HasEPESProfile() {
-				return enumerations.SignatureLevel_PAdES_EPES
+				return enumerations.SignatureLevelPAdESEPES
 			}
-			return enumerations.SignatureLevel_PAdES_BES
+			return enumerations.SignatureLevelPAdESBES
 		}
 		if !s.HasTProfile() {
-			return enumerations.SignatureLevel_PAdES_BASELINE_B
+			return enumerations.SignatureLevelPAdESBaselineB
 		}
 		if !s.HasLTProfile() {
-			return enumerations.SignatureLevel_PAdES_BASELINE_T
+			return enumerations.SignatureLevelPAdESBaselineT
 		}
 		if s.HasLTAProfile() {
-			return enumerations.SignatureLevel_PAdES_BASELINE_LTA
+			return enumerations.SignatureLevelPAdESBaselineLTA
 		}
-		return enumerations.SignatureLevel_PAdES_BASELINE_LT
+		return enumerations.SignatureLevelPAdESBaselineLT
 
-	} else if enumerations.SignatureForm_PKCS7 == signatureForm && s.HasPKCS7Profile() {
+	} else if enumerations.SignatureFormPKCS7 == signatureForm && s.HasPKCS7Profile() {
 		if !s.HasPKCS7TProfile() {
-			return enumerations.SignatureLevel_PKCS7_B
+			return enumerations.SignatureLevelPKCS7B
 		}
 		if !s.HasPKCS7LTProfile() {
-			return enumerations.SignatureLevel_PKCS7_T
+			return enumerations.SignatureLevelPKCS7T
 		}
 		if s.HasPKCS7LTAProfile() {
-			return enumerations.SignatureLevel_PKCS7_LTA
+			return enumerations.SignatureLevelPKCS7LTA
 		}
-		return enumerations.SignatureLevel_PKCS7_LT
+		return enumerations.SignatureLevelPKCS7LT
 
 	}
-	return enumerations.SignatureLevel_PDF_NOT_ETSI
+	return enumerations.SignatureLevelPDFNotETSI
 }
 
 // BaselineRequirementsChecker narrows the return type of the promoted
@@ -441,7 +441,7 @@ func (s *PAdESSignature) VRIKey() string {
 	if s.vriKey == "" {
 		// By ETSI EN 319 142-1 V1.1.1, VRI dictionary's name is the base-16-encoded (uppercase)
 		// SHA1 digest of the signature to which it applies
-		digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA1, s.PdfSignatureDictionary().Contents())
+		digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA1, s.PdfSignatureDictionary().Contents())
 		if err != nil {
 			panic(err)
 		}

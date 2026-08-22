@@ -30,16 +30,16 @@ func NewDocumentTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process.
 // TimestampType returns the associated TimestampType. Port of
 // getTimestampType().
 func (c *DocumentTimeStampCheck) TimestampType() enumerations.TimestampType {
-	return enumerations.TimestampType_DOCUMENT_TIMESTAMP
+	return enumerations.TimestampTypeDocumentTimestamp
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DocumentTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IDTSP
+	return i18n.MessageTagBBBSAVIDTSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DocumentTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IDTSP_ANS
+	return i18n.MessageTagBBBSAVIDTSPANS
 }

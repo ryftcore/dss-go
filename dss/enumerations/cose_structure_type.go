@@ -9,17 +9,17 @@ import "fmt"
 type COSEStructureType string
 
 const (
-	// COSEStructureType_COSE_SIGN is the COSE_Sign structure: signing with one or more
+	// COSEStructureTypeCoseSign is the COSE_Sign structure: signing with one or more
 	// signers (RFC 9052 4.1).
-	COSEStructureType_COSE_SIGN COSEStructureType = "COSE_SIGN"
-	// COSEStructureType_COSE_SIGN1 is the COSE_Sign1 structure: signing with one
+	COSEStructureTypeCoseSign COSEStructureType = "COSE_SIGN"
+	// COSEStructureTypeCoseSign1 is the COSE_Sign1 structure: signing with one
 	// signer (RFC 9052 4.2).
-	COSEStructureType_COSE_SIGN1 COSEStructureType = "COSE_SIGN1"
+	COSEStructureTypeCoseSign1 COSEStructureType = "COSE_SIGN1"
 )
 
 // COSEStructureTypeValues returns all COSEStructureType constants in declaration order.
 func COSEStructureTypeValues() []COSEStructureType {
-	return []COSEStructureType{COSEStructureType_COSE_SIGN, COSEStructureType_COSE_SIGN1}
+	return []COSEStructureType{COSEStructureTypeCoseSign, COSEStructureTypeCoseSign1}
 }
 
 // COSEStructureTypeValueOf returns the COSEStructureType matching the given Java enum name.

@@ -338,7 +338,7 @@ func (d *DiagnosticData) CertificateRevocationStatus(dssCertificateId string) en
 	if certificate.IsRevocationDataAvailable() {
 		return d.LatestRevocationDataForCertificate(certificate).Status()
 	}
-	return enumerations.CertificateStatus_UNKNOWN
+	return enumerations.CertificateStatusUnknown
 }
 
 // CertificateRevocationReason returns the revocation reason for the given certificate. Port
@@ -458,7 +458,7 @@ func (d *DiagnosticData) AllOrphanCertificateObjects() []*OrphanCertificateToken
 	if d.wrapped.OrphanTokens != nil {
 		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificate {
 			orphanCertificate := NewOrphanCertificateTokenWrapper(orphanToken)
-			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES &&
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationTypeBinaries &&
 				!containsOrphanCertificate(orphanCertificateValues, orphanCertificate) {
 				orphanCertificateValues = append(orphanCertificateValues, orphanCertificate)
 			}
@@ -474,7 +474,7 @@ func (d *DiagnosticData) AllOrphanCertificateReferences() []*OrphanCertificateTo
 	if d.wrapped.OrphanTokens != nil {
 		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanCertificate {
 			orphanCertificate := NewOrphanCertificateTokenWrapper(orphanToken)
-			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE &&
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationTypeReference &&
 				!containsOrphanCertificate(orphanCertificateRefs, orphanCertificate) {
 				orphanCertificateRefs = append(orphanCertificateRefs, orphanCertificate)
 			}
@@ -499,7 +499,7 @@ func (d *DiagnosticData) AllOrphanRevocationObjects() []*OrphanRevocationTokenWr
 	if d.wrapped.OrphanTokens != nil {
 		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocation {
 			orphanRevocation := NewOrphanRevocationTokenWrapper(orphanToken)
-			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_BINARIES &&
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationTypeBinaries &&
 				!containsOrphanRevocation(orphanRevocationValues, orphanRevocation) {
 				orphanRevocationValues = append(orphanRevocationValues, orphanRevocation)
 			}
@@ -515,7 +515,7 @@ func (d *DiagnosticData) AllOrphanRevocationReferences() []*OrphanRevocationToke
 	if d.wrapped.OrphanTokens != nil {
 		for _, orphanToken := range d.wrapped.OrphanTokens.OrphanRevocation {
 			orphanRevocation := NewOrphanRevocationTokenWrapper(orphanToken)
-			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationType_REFERENCE &&
+			if orphanToken.EncapsulationType != nil && *orphanToken.EncapsulationType == jaxb.XmlEncapsulationTypeReference &&
 				!containsOrphanRevocation(orphanRevocationRefs, orphanRevocation) {
 				orphanRevocationRefs = append(orphanRevocationRefs, orphanRevocation)
 			}

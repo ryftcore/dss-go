@@ -42,12 +42,12 @@ func (c *CertificateForbiddenExtensionsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateForbiddenExtensionsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCCFCE
+	return i18n.MessageTagBBBXCVDCCFCE
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateForbiddenExtensionsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCCFCE_ANS
+	return i18n.MessageTagBBBXCVDCCFCEANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage(): the
@@ -80,11 +80,11 @@ func (c *CertificateForbiddenExtensionsCheck) usedForbiddenCertificateExtensions
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateForbiddenExtensionsCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateForbiddenExtensionsCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	return enumerations.SubIndicationCertificateChainGeneralFailure
 }

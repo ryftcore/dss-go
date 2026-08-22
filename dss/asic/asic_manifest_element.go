@@ -9,24 +9,24 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 type ASiCManifestElement string
 
 const (
-	ASiCManifestElement_XADES_SIGNATURES                 ASiCManifestElement = "XADES_SIGNATURES"
-	ASiCManifestElement_ASIC_MANIFEST                    ASiCManifestElement = "ASIC_MANIFEST"
-	ASiCManifestElement_SIG_REFERENCE                    ASiCManifestElement = "SIG_REFERENCE"
-	ASiCManifestElement_EXTENSION                        ASiCManifestElement = "EXTENSION"
-	ASiCManifestElement_DATA_OBJECT_REFERENCE            ASiCManifestElement = "DATA_OBJECT_REFERENCE"
-	ASiCManifestElement_ASIC_MANIFEST_EXTENSIONS         ASiCManifestElement = "ASIC_MANIFEST_EXTENSIONS"
-	ASiCManifestElement_DATA_OBJECT_REFERENCE_EXTENSIONS ASiCManifestElement = "DATA_OBJECT_REFERENCE_EXTENSIONS"
+	ASiCManifestElementXAdESSignatures               ASiCManifestElement = "XADES_SIGNATURES"
+	ASiCManifestElementASiCManifest                  ASiCManifestElement = "ASIC_MANIFEST"
+	ASiCManifestElementSigReference                  ASiCManifestElement = "SIG_REFERENCE"
+	ASiCManifestElementExtension                     ASiCManifestElement = "EXTENSION"
+	ASiCManifestElementDataObjectReference           ASiCManifestElement = "DATA_OBJECT_REFERENCE"
+	ASiCManifestElementASiCManifestExtensions        ASiCManifestElement = "ASIC_MANIFEST_EXTENSIONS"
+	ASiCManifestElementDataObjectReferenceExtensions ASiCManifestElement = "DATA_OBJECT_REFERENCE_EXTENSIONS"
 )
 
 // asicManifestElementTagNames maps each constant to its wire tag name (getTagName()).
 var asicManifestElementTagNames = map[ASiCManifestElement]string{
-	ASiCManifestElement_XADES_SIGNATURES:                 "XAdESSignatures",
-	ASiCManifestElement_ASIC_MANIFEST:                    "ASiCManifest",
-	ASiCManifestElement_SIG_REFERENCE:                    "SigReference",
-	ASiCManifestElement_EXTENSION:                        "Extension",
-	ASiCManifestElement_DATA_OBJECT_REFERENCE:            "DataObjectReference",
-	ASiCManifestElement_ASIC_MANIFEST_EXTENSIONS:         "ASiCManifestExtensions",
-	ASiCManifestElement_DATA_OBJECT_REFERENCE_EXTENSIONS: "DataObjectReferenceExtensions",
+	ASiCManifestElementXAdESSignatures:               "XAdESSignatures",
+	ASiCManifestElementASiCManifest:                  "ASiCManifest",
+	ASiCManifestElementSigReference:                  "SigReference",
+	ASiCManifestElementExtension:                     "Extension",
+	ASiCManifestElementDataObjectReference:           "DataObjectReference",
+	ASiCManifestElementASiCManifestExtensions:        "ASiCManifestExtensions",
+	ASiCManifestElementDataObjectReferenceExtensions: "DataObjectReferenceExtensions",
 }
 
 // TagName implements common.DSSElement. Ports getTagName().

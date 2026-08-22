@@ -37,10 +37,10 @@ func (f *TrustAnchorVerifierFactory) Create() *spivalidation.TrustAnchorVerifier
 // instantiateAcceptUntrustedCertificateChains(TrustAnchorVerifier, ValidationPolicy).
 func (f *TrustAnchorVerifierFactory) instantiateAcceptUntrustedCertificateChains(
 	trustAnchorVerifier *spivalidation.TrustAnchorVerifier, validationPolicy modelpolicy.ValidationPolicy) {
-	acceptUntrustedCertificateChains := f.acceptUntrustedCertificateChains(validationPolicy, enumerations.Context_REVOCATION)
+	acceptUntrustedCertificateChains := f.acceptUntrustedCertificateChains(validationPolicy, enumerations.ContextRevocation)
 	trustAnchorVerifier.SetAcceptRevocationUntrustedCertificateChains(acceptUntrustedCertificateChains)
 
-	acceptUntrustedCertificateChains = f.acceptUntrustedCertificateChains(validationPolicy, enumerations.Context_TIMESTAMP)
+	acceptUntrustedCertificateChains = f.acceptUntrustedCertificateChains(validationPolicy, enumerations.ContextTimestamp)
 	trustAnchorVerifier.SetAcceptTimestampUntrustedCertificateChains(acceptUntrustedCertificateChains)
 }
 
@@ -49,18 +49,18 @@ func (f *TrustAnchorVerifierFactory) instantiateAcceptUntrustedCertificateChains
 func (f *TrustAnchorVerifierFactory) acceptUntrustedCertificateChains(validationPolicy modelpolicy.ValidationPolicy,
 	context enumerations.Context) bool {
 	constraint := validationPolicy.ProspectiveCertificateChainConstraint(context)
-	return constraint == nil || enumerations.Level_FAIL != constraint.Level()
+	return constraint == nil || enumerations.LevelFail != constraint.Level()
 }
 
 // instantiateUseSunsetDate is the port of the private
 // instantiateUseSunsetDate(TrustAnchorVerifier, ValidationPolicy).
 func (f *TrustAnchorVerifierFactory) instantiateUseSunsetDate(
 	trustAnchorVerifier *spivalidation.TrustAnchorVerifier, validationPolicy modelpolicy.ValidationPolicy) {
-	useSunsetDate := f.useSunsetDate(validationPolicy, enumerations.Context_SIGNATURE)
-	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.Context_COUNTER_SIGNATURE)
-	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.Context_KEY_BINDING_SIGNATURE)
-	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.Context_TIMESTAMP)
-	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.Context_REVOCATION)
+	useSunsetDate := f.useSunsetDate(validationPolicy, enumerations.ContextSignature)
+	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.ContextCounterSignature)
+	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.ContextKeyBindingSignature)
+	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.ContextTimestamp)
+	useSunsetDate = useSunsetDate || f.useSunsetDate(validationPolicy, enumerations.ContextRevocation)
 	trustAnchorVerifier.SetUseSunsetDate(useSunsetDate)
 }
 
@@ -68,12 +68,12 @@ func (f *TrustAnchorVerifierFactory) instantiateUseSunsetDate(
 // Context).
 func (f *TrustAnchorVerifierFactory) useSunsetDate(validationPolicy modelpolicy.ValidationPolicy,
 	context enumerations.Context) bool {
-	constraint := validationPolicy.CertificateSunsetDateConstraint(context, enumerations.SubContext_SIGNING_CERT)
-	if constraint != nil && enumerations.Level_FAIL == constraint.Level() {
+	constraint := validationPolicy.CertificateSunsetDateConstraint(context, enumerations.SubContextSigningCert)
+	if constraint != nil && enumerations.LevelFail == constraint.Level() {
 		return true
 	}
-	constraint = validationPolicy.CertificateSunsetDateConstraint(context, enumerations.SubContext_CA_CERTIFICATE)
-	if constraint != nil && enumerations.Level_FAIL == constraint.Level() {
+	constraint = validationPolicy.CertificateSunsetDateConstraint(context, enumerations.SubContextCACertificate)
+	if constraint != nil && enumerations.LevelFail == constraint.Level() {
 		return true
 	}
 	return false

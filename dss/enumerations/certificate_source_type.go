@@ -8,52 +8,52 @@ import "fmt"
 type CertificateSourceType string
 
 const (
-	// CertificateSourceType_TRUSTED_STORE defines a pre-defined trusted source.
-	CertificateSourceType_TRUSTED_STORE CertificateSourceType = "TRUSTED_STORE"
-	// CertificateSourceType_TRUSTED_LIST defines a certificate source
+	// CertificateSourceTypeTrustedStore defines a pre-defined trusted source.
+	CertificateSourceTypeTrustedStore CertificateSourceType = "TRUSTED_STORE"
+	// CertificateSourceTypeTrustedList defines a certificate source
 	// populated by a TLValidationJob.
-	CertificateSourceType_TRUSTED_LIST CertificateSourceType = "TRUSTED_LIST"
-	// CertificateSourceType_TRUSTED_ENTITIES defines a certificate source
+	CertificateSourceTypeTrustedList CertificateSourceType = "TRUSTED_LIST"
+	// CertificateSourceTypeTrustedEntities defines a certificate source
 	// populated by processing List(s) of Trusted Entities.
-	CertificateSourceType_TRUSTED_ENTITIES CertificateSourceType = "TRUSTED_ENTITIES"
-	// CertificateSourceType_SIGNATURE: certificate source extracted from a
+	CertificateSourceTypeTrustedEntities CertificateSourceType = "TRUSTED_ENTITIES"
+	// CertificateSourceTypeSignature: certificate source extracted from a
 	// signature.
-	CertificateSourceType_SIGNATURE CertificateSourceType = "SIGNATURE"
-	// CertificateSourceType_OCSP_RESPONSE: certificate source extracted
+	CertificateSourceTypeSignature CertificateSourceType = "SIGNATURE"
+	// CertificateSourceTypeOCSPResponse: certificate source extracted
 	// from an OCSP response.
-	CertificateSourceType_OCSP_RESPONSE CertificateSourceType = "OCSP_RESPONSE"
-	// CertificateSourceType_OTHER: other types of certificate sources.
-	CertificateSourceType_OTHER CertificateSourceType = "OTHER"
-	// CertificateSourceType_AIA: the certificate source has been obtained
+	CertificateSourceTypeOCSPResponse CertificateSourceType = "OCSP_RESPONSE"
+	// CertificateSourceTypeOther: other types of certificate sources.
+	CertificateSourceTypeOther CertificateSourceType = "OTHER"
+	// CertificateSourceTypeAIA: the certificate source has been obtained
 	// by AIA.
-	CertificateSourceType_AIA CertificateSourceType = "AIA"
-	// CertificateSourceType_TIMESTAMP: certificate source extracted from a
+	CertificateSourceTypeAIA CertificateSourceType = "AIA"
+	// CertificateSourceTypeTimestamp: certificate source extracted from a
 	// timestamp.
-	CertificateSourceType_TIMESTAMP CertificateSourceType = "TIMESTAMP"
-	// CertificateSourceType_EVIDENCE_RECORD: certificate source extracted
+	CertificateSourceTypeTimestamp CertificateSourceType = "TIMESTAMP"
+	// CertificateSourceTypeEvidenceRecord: certificate source extracted
 	// from an Evidence record.
-	CertificateSourceType_EVIDENCE_RECORD CertificateSourceType = "EVIDENCE_RECORD"
-	// CertificateSourceType_EAA: certificate source extracted from an EAA
+	CertificateSourceTypeEvidenceRecord CertificateSourceType = "EVIDENCE_RECORD"
+	// CertificateSourceTypeEAA: certificate source extracted from an EAA
 	// token's claims.
-	CertificateSourceType_EAA CertificateSourceType = "EAA"
-	// CertificateSourceType_UNKNOWN: the unknown origin of a certificate source.
-	CertificateSourceType_UNKNOWN CertificateSourceType = "UNKNOWN"
+	CertificateSourceTypeEAA CertificateSourceType = "EAA"
+	// CertificateSourceTypeUnknown: the unknown origin of a certificate source.
+	CertificateSourceTypeUnknown CertificateSourceType = "UNKNOWN"
 )
 
 // CertificateSourceTypeValues returns all constants in declaration order.
 func CertificateSourceTypeValues() []CertificateSourceType {
 	return []CertificateSourceType{
-		CertificateSourceType_TRUSTED_STORE,
-		CertificateSourceType_TRUSTED_LIST,
-		CertificateSourceType_TRUSTED_ENTITIES,
-		CertificateSourceType_SIGNATURE,
-		CertificateSourceType_OCSP_RESPONSE,
-		CertificateSourceType_OTHER,
-		CertificateSourceType_AIA,
-		CertificateSourceType_TIMESTAMP,
-		CertificateSourceType_EVIDENCE_RECORD,
-		CertificateSourceType_EAA,
-		CertificateSourceType_UNKNOWN,
+		CertificateSourceTypeTrustedStore,
+		CertificateSourceTypeTrustedList,
+		CertificateSourceTypeTrustedEntities,
+		CertificateSourceTypeSignature,
+		CertificateSourceTypeOCSPResponse,
+		CertificateSourceTypeOther,
+		CertificateSourceTypeAIA,
+		CertificateSourceTypeTimestamp,
+		CertificateSourceTypeEvidenceRecord,
+		CertificateSourceTypeEAA,
+		CertificateSourceTypeUnknown,
 	}
 }
 
@@ -69,5 +69,5 @@ func CertificateSourceTypeValueOf(name string) (CertificateSourceType, error) {
 
 // IsTrusted gets whether the certificate source is trusted.
 func (c CertificateSourceType) IsTrusted() bool {
-	return c == CertificateSourceType_TRUSTED_STORE || c == CertificateSourceType_TRUSTED_LIST || c == CertificateSourceType_TRUSTED_ENTITIES
+	return c == CertificateSourceTypeTrustedStore || c == CertificateSourceTypeTrustedList || c == CertificateSourceTypeTrustedEntities
 }

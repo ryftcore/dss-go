@@ -174,7 +174,7 @@ func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 	xadesServiceAssertMultiDocumentsAllowed(toSignDocuments, parameters)
 	xadesServiceAssertDocumentsValid(toSignDocuments)
 
-	parameters.GetContext().SetOperationKind(enumerations.SigningOperation_SIGN)
+	parameters.GetContext().SetOperationKind(enumerations.SigningOperationSign)
 	var profile XAdESSignatureProfile
 	context := parameters.GetContext()
 	if context.Profile() != nil {
@@ -189,7 +189,7 @@ func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 	}
 	extension := s.extensionProfile(parameters)
 	if extension != nil {
-		if enumerations.SignaturePackaging_DETACHED == parameters.SignaturePackaging() {
+		if enumerations.SignaturePackagingDetached == parameters.SignaturePackaging() {
 			parameters.GetContext().SetDetachedContents(toSignDocuments)
 		}
 		if result, err = extension.ExtendSignaturesDocument(result, parameters); err != nil {
@@ -200,7 +200,7 @@ func (s *XAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 	// The internal parameters (e.g. deterministic Id) are reset between two consecutive signing
 	// operations. It prevents sharing two signatures the same cached data.
 	parameters.Reinit()
-	name, err := s.GetFinalFileNameWithLevel(toSignDocuments[0], enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(toSignDocuments[0], enumerations.SigningOperationSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -222,14 +222,14 @@ func (s *XAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 		panic("SignatureLevel must be defined!")
 	}
 
-	parameters.GetContext().SetOperationKind(enumerations.SigningOperation_EXTEND)
+	parameters.GetContext().SetOperationKind(enumerations.SigningOperationExtend)
 	extension := s.extensionProfile(parameters)
 	if extension != nil {
 		dssDocument, err := extension.ExtendSignaturesDocument(toExtendDocument, parameters)
 		if err != nil {
 			panic(err)
 		}
-		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperation_EXTEND,
+		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperationExtend,
 			parameters.SignatureLevel())
 		if err != nil {
 			panic(err)
@@ -252,21 +252,21 @@ func (s *XAdESService) TimestampDocuments(toTimestampDocuments []model.DSSDocume
 func (s *XAdESService) extensionProfile(parameters *XAdESSignatureParameters) XAdESSignatureExtender {
 	var extension XAdESSignatureExtender
 	switch parameters.SignatureLevel() {
-	case enumerations.SignatureLevel_XAdES_BASELINE_B:
+	case enumerations.SignatureLevelXAdESBaselineB:
 		return nil
-	case enumerations.SignatureLevel_XAdES_BASELINE_T:
+	case enumerations.SignatureLevelXAdESBaselineT:
 		extension = NewXAdESLevelBaselineT(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_C:
+	case enumerations.SignatureLevelXAdESC:
 		extension = NewXAdESLevelC(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_X:
+	case enumerations.SignatureLevelXAdESX:
 		extension = NewXAdESLevelX(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_XL:
+	case enumerations.SignatureLevelXAdESXL:
 		extension = NewXAdESLevelXL(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_A:
+	case enumerations.SignatureLevelXAdESA:
 		extension = NewXAdESLevelA(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_BASELINE_LT:
+	case enumerations.SignatureLevelXAdESBaselineLT:
 		extension = NewXAdESLevelBaselineLT(s.CertificateVerifier)
-	case enumerations.SignatureLevel_XAdES_BASELINE_LTA:
+	case enumerations.SignatureLevelXAdESBaselineLTA:
 		extension = NewXAdESLevelBaselineLTA(s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
@@ -288,7 +288,7 @@ func xadesServiceAssertMultiDocumentsAllowed(toSignDocuments []model.DSSDocument
 
 	} else if utils.CollectionSize(toSignDocuments) > 1 {
 		signaturePackaging := parameters.SignaturePackaging()
-		if signaturePackaging == "" || enumerations.SignaturePackaging_ENVELOPED == signaturePackaging {
+		if signaturePackaging == "" || enumerations.SignaturePackagingEnveloped == signaturePackaging {
 			panic("Not supported operation (only DETACHED or ENVELOPING are allowed)")
 		}
 	}
@@ -331,7 +331,7 @@ func (s *XAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileName(doc, enumerations.SigningOperation_ADD_SIG_POLICY_STORE)
+	name, err := s.GetFinalFileName(doc, enumerations.SigningOperationAddSigPolicyStore)
 	if err != nil {
 		panic(err)
 	}
@@ -406,7 +406,7 @@ func (s *XAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 	}
 
 	parameters.Reinit()
-	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperation_COUNTER_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperationCounterSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -434,7 +434,7 @@ func (s *XAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileName(signatureDocument, enumerations.SigningOperation_ADD_EVIDENCE_RECORD)
+	name, err := s.GetFinalFileName(signatureDocument, enumerations.SigningOperationAddEvidenceRecord)
 	if err != nil {
 		panic(err)
 	}
@@ -447,8 +447,8 @@ func (s *XAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 // verifyAndSetCounterSignatureParameters.
 func xadesServiceVerifyAndSetCounterSignatureParameters(parameters *XAdESCounterSignatureParameters) {
 	if parameters.SignaturePackaging() == "" {
-		parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
-	} else if enumerations.SignaturePackaging_DETACHED != parameters.SignaturePackaging() {
+		parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
+	} else if enumerations.SignaturePackagingDetached != parameters.SignaturePackaging() {
 		panic(fmt.Sprintf("The SignaturePackaging '%s' is not supported by XAdES Counter Signature!",
 			parameters.SignaturePackaging()))
 	}

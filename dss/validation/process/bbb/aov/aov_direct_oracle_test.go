@@ -50,8 +50,8 @@ func TestAovDirectChecksAgainstJavaOracle(t *testing.T) {
 	if len(rows) == 0 {
 		t.Fatal("empty oracle")
 	}
-	fail := process.GetLevelRule(enumerations.Level_FAIL)
-	position := i18n.MessageTag_ACCM_POS_SIG_SIG
+	fail := process.GetLevelRule(enumerations.LevelFail)
+	position := i18n.MessageTagACCMPosSigSig
 
 	classes := map[string]map[string]int{}
 	matched := 0
@@ -78,7 +78,7 @@ func TestAovDirectChecksAgainstJavaOracle(t *testing.T) {
 			if certificateContext {
 				factory = func(r *process.Result[*jaxb.XmlSAV]) process.ChainItem[*jaxb.XmlSAV] {
 					return NewSignatureAlgorithmCryptographicCheckerResultCheckWithContext(aovI18n(), r, aovCurrentTime,
-						enumerations.Context_CERTIFICATE, position, ccResult, fail, "C-1")
+						enumerations.ContextCertificate, position, ccResult, fail, "C-1")
 				}
 			} else {
 				factory = func(r *process.Result[*jaxb.XmlSAV]) process.ChainItem[*jaxb.XmlSAV] {
@@ -149,9 +149,9 @@ func aovOfShape(shape string) *jaxb.XmlAOV {
 	conclusion := &jaxb.XmlConclusion{}
 	switch shape {
 	case "passed":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	case "passed-with-algo":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		keyLength := "2048"
 		validation := &jaxb.XmlCryptographicValidation{
 			Algorithm: &jaxb.XmlCryptographicAlgorithm{
@@ -159,21 +159,21 @@ func aovOfShape(shape string) *jaxb.XmlAOV {
 				Uri:       "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256",
 				KeyLength: &keyLength,
 			},
-			Conclusion: &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(enumerations.Indication_PASSED)},
+			Conclusion: &jaxb.XmlConclusion{Indication: jaxb.IndicationValue(enumerations.IndicationPassed)},
 		}
 		result.SignatureCryptographicValidation = validation
 	case "error":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationCryptoConstraintsFailureNoPOE)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors,
 			aovXmlMessage("BBB_SAV_ASCCM_ANS", "the algorithm is no longer reliable"))
 	case "warning":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		conclusion.Warnings = append(conclusion.Warnings,
 			aovXmlMessage("BBB_SAV_ASCCM_ANS", "the algorithm is about to expire"))
 	case "info":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		conclusion.Infos = append(conclusion.Infos,
 			aovXmlMessage("BBB_SAV_ASCCM_ANS", "informative note"))
 	default:
@@ -193,14 +193,14 @@ func ccOfShape(shape string) *jaxb.XmlCC {
 	}
 	switch shape {
 	case "passed":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		keyLength := "2048"
 		algorithm.KeyLength = &keyLength
 	case "passed-no-keylength":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	case "failed":
-		conclusion.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE)
+		conclusion.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationCryptoConstraintsFailureNoPOE)
 		conclusion.SubIndication = &subIndication
 		conclusion.Errors = append(conclusion.Errors, aovXmlMessage("ASCCM_AR_ANS_ANR", "SHA1 is not reliable"))
 	default:
@@ -224,4 +224,4 @@ func aovXmlMessage(key, value string) *jaxb.XmlMessage {
 	return &jaxb.XmlMessage{Key: &id, Value: value}
 }
 
-var _ policy.LevelRule = process.GetLevelRule(enumerations.Level_FAIL)
+var _ policy.LevelRule = process.GetLevelRule(enumerations.LevelFail)

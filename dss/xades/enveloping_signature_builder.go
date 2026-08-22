@@ -64,19 +64,19 @@ func (b *EnvelopingSignatureBuilder) IncorporateSignedObjects() error {
 			}
 			root := doc.DocumentElement()
 			referencesNodes := root.Children()
-			idAttribute := root.AttrValue("", common.XMLDSigAttribute_ID.AttributeName())
+			idAttribute := root.AttrValue("", common.XMLDSigAttributeID.AttributeName())
 
 			// rebuild manifest element to avoid namespace duplication
 			manifestDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-				common.XMLDSigElement_MANIFEST)
-			manifestDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, idAttribute)
+				common.XMLDSigElementManifest)
+			manifestDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, idAttribute)
 			for _, referenceNode := range referencesNodes {
 				copyNode := b.DocumentDom.Import(referenceNode, true)
 				manifestDom.AppendChild(copyNode)
 			}
 
 			dom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-				common.XMLDSigElement_OBJECT)
+				common.XMLDSigElementObject)
 			dom.AppendChild(manifestDom)
 			b.SignatureDom.AppendChild(dom)
 

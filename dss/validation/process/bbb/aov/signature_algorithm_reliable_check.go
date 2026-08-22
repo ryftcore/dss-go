@@ -45,11 +45,11 @@ func (c *SignatureAlgorithmReliableCheck) Process() bool {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *SignatureAlgorithmReliableCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_CAA, c.SignatureAlgorithmName(c.signatureAlgorithm))
+	return c.BuildXmlMessage(i18n.MessageTagASCCMCAA, c.SignatureAlgorithmName(c.signatureAlgorithm))
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *SignatureAlgorithmReliableCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_CAA_ANS, c.SignatureAlgorithmName(c.signatureAlgorithm), c.position)
+	return c.BuildXmlMessage(i18n.MessageTagASCCMCAAANS, c.SignatureAlgorithmName(c.signatureAlgorithm), c.position)
 }

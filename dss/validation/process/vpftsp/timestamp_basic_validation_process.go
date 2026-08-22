@@ -38,7 +38,7 @@ func NewTimestampBasicValidationProcess(i18nProvider *i18n.I18nProvider, diagnos
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *TimestampBasicValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPFTSP
+	return i18n.MessageTagVpftsp
 }
 
 // AddAdditionalInfo adds additional info to the chain. Port of

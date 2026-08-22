@@ -58,11 +58,11 @@ func (b *ASiCWithXAdESContainerEvidenceRecordBuilder) AssertEvidenceRecordFilena
 		}
 	}
 
-	if enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD == evidenceRecordType &&
+	if enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord == evidenceRecordType &&
 		asic.ASiCUtilsEvidenceRecordERS != evidenceRecordFilename {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 4998 Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with XAdES filename convention!", evidenceRecordFilename)))
-	} else if enumerations.EvidenceRecordTypeEnum_XML_EVIDENCE_RECORD == evidenceRecordType &&
+	} else if enumerations.EvidenceRecordTypeEnumXMLEvidenceRecord == evidenceRecordType &&
 		asic.ASiCUtilsEvidenceRecordXML != evidenceRecordFilename {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("RFC 6283 XML Evidence Record's filename '%s' is "+
 			"not compliant to the ASiC with XAdES filename convention!", evidenceRecordFilename)))

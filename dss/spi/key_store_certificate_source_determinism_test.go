@@ -12,7 +12,7 @@ import (
 func TestKeyStoreCertificateSourceStoreDeterministic(t *testing.T) {
 	build := func(t *testing.T) []byte {
 		t.Helper()
-		source, err := NewKeyStoreCertificateSource(KeyStoreCertificateSourceType_PEM, nil)
+		source, err := NewKeyStoreCertificateSource(KeyStoreCertificateSourceTypePEM, nil)
 		if err != nil {
 			t.Fatalf("NewKeyStoreCertificateSource: %v", err)
 		}

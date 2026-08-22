@@ -20,7 +20,7 @@ func TestZipCommentPresentCheck_Process(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			c := NewZipCommentPresentCheck(testI18nProvider(t), newTestFCResult(), tt.zipComment,
-				process.GetLevelRule(enumerations.Level_FAIL))
+				process.GetLevelRule(enumerations.LevelFail))
 			if got := c.Process(); got != tt.want {
 				t.Errorf("Process() = %v, want %v", got, tt.want)
 			}

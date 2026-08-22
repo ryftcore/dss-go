@@ -116,32 +116,32 @@ func xadesSignABuilderBaseParams(t *testing.T) *XAdESSignatureParameters {
 	params.SetCertificateChain([]*model.CertificateToken{signer})
 	signingDate := xadesSignABuilderSigningDate
 	params.BLevel().SetSigningDate(&signingDate)
-	params.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
-	params.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
+	params.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	return params
 }
 
 func xadesSignABuilderEnvelopingParams(t *testing.T) *XAdESSignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
-	params.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+	params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	return params
 }
 
 func xadesSignABuilderEnvelopedParams(t *testing.T) *XAdESSignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
-	params.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPED)
+	params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloped)
 	return params
 }
 
 func xadesSignABuilderDetachedParams(t *testing.T) *XAdESSignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
-	params.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
+	params.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	return params
 }
 
 func xadesSignABuilderInternallyDetachedParams(t *testing.T) *XAdESSignatureParameters {
 	params := xadesSignABuilderBaseParams(t)
-	params.SetSignaturePackaging(enumerations.SignaturePackaging_INTERNALLY_DETACHED)
+	params.SetSignaturePackaging(enumerations.SignaturePackagingInternallyDetached)
 	return params
 }
 
@@ -153,12 +153,12 @@ const (
 
 func xadesSignABuilderTextDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesSignABuilderTextContent), "hello.txt",
-		enumerations.MimeTypeEnum_TEXT)
+		enumerations.MimeTypeEnumText)
 }
 
 func xadesSignABuilderXMLDocument() model.DSSDocument {
 	return model.NewInMemoryDocumentWithMimeType([]byte(xadesSignABuilderXMLContent), "sample.xml",
-		enumerations.MimeTypeEnum_XML)
+		enumerations.MimeTypeEnumXML)
 }
 
 // xadesSignABuilderSignatureValue is the constant dummy ds:SignatureValue the oracle uses:
@@ -284,7 +284,7 @@ func TestXAdESSignatureBuilderAgainstJavaOraclePackaging(t *testing.T) {
 	})
 
 	second := model.NewInMemoryDocumentWithMimeType([]byte("second"), "second.txt",
-		enumerations.MimeTypeEnum_TEXT)
+		enumerations.MimeTypeEnumText)
 	t.Run("enveloping-two-documents", func(t *testing.T) {
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-two-documents",
 			xadesSignABuilderEnvelopingParams(t),
@@ -310,7 +310,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleEnvelopingObjects(t *testing.T) {
 	t.Run("enveloping-manifest", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		params.SetManifestSignature(true)
-		manifestBuilder, err := NewManifestBuilder(enumerations.DigestAlgorithm_SHA256,
+		manifestBuilder, err := NewManifestBuilder(enumerations.DigestAlgorithmSHA256,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 		if err != nil {
 			t.Fatalf("NewManifestBuilder: %v", err)
@@ -330,12 +330,12 @@ func TestXAdESSignatureBuilderAgainstJavaOracleEnvelopingObjects(t *testing.T) {
 		xmlObject.SetContent(model.NewInMemoryDocument(
 			[]byte(`<data xmlns="http://sample.com">object-content</data>`)))
 		xmlObject.SetId("custom-xml-object")
-		xmlObject.SetMimeType(enumerations.MimeTypeEnum_XML.MimeTypeString())
+		xmlObject.SetMimeType(enumerations.MimeTypeEnumXML.MimeTypeString())
 
 		textObject := NewDSSObject()
 		textObject.SetContent(model.NewInMemoryDocument([]byte("plain object")))
 		textObject.SetId("custom-text-object")
-		textObject.SetMimeType(enumerations.MimeTypeEnum_TEXT.MimeTypeString())
+		textObject.SetMimeType(enumerations.MimeTypeEnumText.MimeTypeString())
 		textObject.SetEncodingAlgorithm("http://www.w3.org/2000/09/xmldsig#base64")
 
 		params.SetObjects([]*DSSObject{xmlObject, textObject})
@@ -350,7 +350,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleXPathPlacement(t *testing.T) {
 	t.Run("enveloped-xpath-after", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopedParams(t)
 		params.SetXPathLocationString("//*[local-name()='child']")
-		params.SetXPathElementPlacement(XPathElementPlacement_XPathAfter)
+		params.SetXPathElementPlacement(XPathElementPlacementXPathAfter)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloped-xpath-after", params,
 			[]model.DSSDocument{xadesSignABuilderXMLDocument()})
 	})
@@ -358,7 +358,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleXPathPlacement(t *testing.T) {
 	t.Run("enveloped-xpath-first-child", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopedParams(t)
 		params.SetXPathLocationString("//*[local-name()='root']")
-		params.SetXPathElementPlacement(XPathElementPlacement_XPathFirstChildOf)
+		params.SetXPathElementPlacement(XPathElementPlacementXPathFirstChildOf)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloped-xpath-first-child", params,
 			[]model.DSSDocument{xadesSignABuilderXMLDocument()})
 	})
@@ -384,14 +384,14 @@ func TestXAdESSignatureBuilderAgainstJavaOracleNamespaces(t *testing.T) {
 	t.Run("enveloping-same-prefix", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		params.SetXmldsigNamespace(common.NewDSSNamespace(common.XMLDSigNS.Uri(), "ns"))
-		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespace_XADES_132.Uri(), "ns"))
+		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespaceXAdES132.Uri(), "ns"))
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-same-prefix", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 	})
 
 	t.Run("enveloping-xades111", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
-		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespace_XADES_111.Uri(), "xades111"))
+		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespaceXAdES111.Uri(), "xades111"))
 		params.SetEn319132(false)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-xades111", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
@@ -399,7 +399,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleNamespaces(t *testing.T) {
 
 	t.Run("enveloping-xades122", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
-		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespace_XADES_122.Uri(), "xades122"))
+		params.SetXadesNamespace(common.NewDSSNamespace(definition.XAdESNamespaceXAdES122.Uri(), "xades122"))
 		params.SetEn319132(false)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-xades122", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
@@ -427,18 +427,18 @@ func TestXAdESSignatureBuilderAgainstJavaOracleKeyInfo(t *testing.T) {
 		params := NewXAdESSignatureParameters()
 		signingDate := xadesSignABuilderSigningDate
 		params.BLevel().SetSigningDate(&signingDate)
-		params.SetSignatureLevel(enumerations.SignatureLevel_XAdES_BASELINE_B)
-		params.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+		params.SetSignatureLevel(enumerations.SignatureLevelXAdESBaselineB)
+		params.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 		params.SetGenerateTBSWithoutCertificate(true)
-		params.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
-		params.SetEncryptionAlgorithm(enumerations.EncryptionAlgorithm_RSA)
+		params.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
+		params.SetEncryptionAlgorithm(enumerations.EncryptionAlgorithmRSA)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-no-signing-certificate", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 	})
 
 	t.Run("enveloping-signing-cert-sha1", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
-		params.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithm_SHA1)
+		params.SetSigningCertificateDigestMethod(enumerations.DigestAlgorithmSHA1)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-signing-cert-sha1", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 	})
@@ -467,7 +467,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleSignedProperties(t *testing.T) {
 		policy.SetId("http://spuri.test/policy")
 		policy.SetDescription("Test policy description")
 		policy.SetDocumentationReferences("http://doc.ref/1", "http://doc.ref/2")
-		policy.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		policy.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 		policy.SetDigestValue([]byte{1, 2, 3, 4})
 		policy.SetSpuri("http://spuri.test")
 		userNotice := model.NewUserNotice()
@@ -489,8 +489,8 @@ func TestXAdESSignatureBuilderAgainstJavaOracleSignedProperties(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		policy := model.NewPolicy()
 		policy.SetId("1.2.3.4.5")
-		policy.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
-		policy.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+		policy.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
+		policy.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 		policy.SetDigestValue(make([]byte, 32))
 		params.BLevel().SetSignaturePolicy(policy)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-policy-urn-oid", params,
@@ -532,7 +532,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleSignedProperties(t *testing.T) {
 	t.Run("enveloping-commitment-enum", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		params.BLevel().SetCommitmentTypeIndications(
-			[]enumerations.CommitmentType{enumerations.CommitmentTypeEnum_ProofOfOrigin})
+			[]enumerations.CommitmentType{enumerations.CommitmentTypeEnumProofOfOrigin})
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-commitment-enum", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 	})
@@ -541,7 +541,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleSignedProperties(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		commitmentType := model.NewCommonCommitmentType()
 		commitmentType.SetOid("1.2.840.113549.1.9.16.6.1")
-		commitmentType.SetQualifier(enumerations.ObjectIdentifierQualifier_OID_AS_URN)
+		commitmentType.SetQualifier(enumerations.ObjectIdentifierQualifierOIDAsURN)
 		commitmentType.SetDescription("Commitment description")
 		commitmentType.SetDocumentationReferences("http://commitment.ref/1")
 		commitmentType.SetSignedDataObjects("r-id-1", "#r-id-2")
@@ -561,7 +561,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleSignedProperties(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		dataObjectFormat := NewDSSDataObjectFormat()
 		dataObjectFormat.SetDescription("Custom description")
-		dataObjectFormat.SetMimeType(enumerations.MimeTypeEnum_TEXT.MimeTypeString())
+		dataObjectFormat.SetMimeType(enumerations.MimeTypeEnumText.MimeTypeString())
 		dataObjectFormat.SetEncoding("http://www.w3.org/2000/09/xmldsig#base64")
 		dataObjectFormat.SetObjectReference("#r-id-1")
 		params.SetDataObjectFormatList([]*DSSDataObjectFormat{dataObjectFormat})
@@ -591,7 +591,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleContentTimestamps(t *testing.T) {
 	t.Run("enveloping-content-timestamp", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		token, err := validation.NewTimestampToken(der,
-			enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP)
+			enumerations.TimestampTypeAllDataObjectsTimestamp)
 		if err != nil {
 			t.Fatalf("parsing the content timestamp: %v", err)
 		}
@@ -604,7 +604,7 @@ func TestXAdESSignatureBuilderAgainstJavaOracleContentTimestamps(t *testing.T) {
 	t.Run("enveloping-individual-content-timestamp", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		token, err := validation.NewTimestampToken(der,
-			enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP)
+			enumerations.TimestampTypeIndividualDataObjectsTimestamp)
 		if err != nil {
 			t.Fatalf("parsing the content timestamp: %v", err)
 		}
@@ -623,7 +623,7 @@ func TestXAdESSignatureBuilderAgainstJavaOraclePrettyPrint(t *testing.T) {
 	t.Run("enveloping-pretty-print", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopingParams(t)
 		params.SetPrettyPrint(true)
-		params.GetContext().SetOperationKind(enumerations.SigningOperation_SIGN)
+		params.GetContext().SetOperationKind(enumerations.SigningOperationSign)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloping-pretty-print", params,
 			[]model.DSSDocument{xadesSignABuilderTextDocument()})
 	})
@@ -631,7 +631,7 @@ func TestXAdESSignatureBuilderAgainstJavaOraclePrettyPrint(t *testing.T) {
 	t.Run("enveloped-pretty-print", func(t *testing.T) {
 		params := xadesSignABuilderEnvelopedParams(t)
 		params.SetPrettyPrint(true)
-		params.GetContext().SetOperationKind(enumerations.SigningOperation_SIGN)
+		params.GetContext().SetOperationKind(enumerations.SigningOperationSign)
 		xadesSignABuilderRunBuildCase(t, oracle, "enveloped-pretty-print", params,
 			[]model.DSSDocument{xadesSignABuilderXMLDocument()})
 	})

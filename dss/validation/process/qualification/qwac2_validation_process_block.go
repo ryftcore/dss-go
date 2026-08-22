@@ -31,5 +31,5 @@ func NewQWAC2ValidationProcessBlock(i18nProvider *i18n.I18nProvider, validationT
 // QWACProfile gets the current QWAC profile. Port of the overridden public
 // QWACProfile getQWACProfile().
 func (c *QWAC2ValidationProcessBlock) QWACProfile() enumerations.QWACProfile {
-	return enumerations.QWACProfile_QWAC_2
+	return enumerations.QWACProfileQWAC2
 }

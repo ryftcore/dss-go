@@ -43,10 +43,10 @@ func TestSimpleReportWrapper(t *testing.T) {
 	if got := r.GetFirstSignatureId(); got != parentSig {
 		t.Errorf("GetFirstSignatureId() = %q, want %q", got, parentSig)
 	}
-	if got, want := r.GetIndication(parentSig), enumerations.Indication_INDETERMINATE; got != want {
+	if got, want := r.GetIndication(parentSig), enumerations.IndicationIndeterminate; got != want {
 		t.Errorf("GetIndication(parent) = %q, want %q", got, want)
 	}
-	if got, want := r.GetSubIndication(parentSig), enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND; got != want {
+	if got, want := r.GetSubIndication(parentSig), enumerations.SubIndicationNoCertificateChainFound; got != want {
 		t.Errorf("GetSubIndication(parent) = %q, want %q", got, want)
 	}
 	if r.IsValid(parentSig) {
@@ -55,7 +55,7 @@ func TestSimpleReportWrapper(t *testing.T) {
 	if got := r.GetSignedBy(parentSig); got != "EST-COUNTER-SIGNATURE1-OK-EE" {
 		t.Errorf("GetSignedBy(parent) = %q", got)
 	}
-	if got, want := r.GetSignatureFormat(parentSig), enumerations.SignatureLevel_CAdES_T; got != want {
+	if got, want := r.GetSignatureFormat(parentSig), enumerations.SignatureLevelCAdEST; got != want {
 		t.Errorf("GetSignatureFormat(parent) = %q, want %q", got, want)
 	}
 
@@ -123,22 +123,22 @@ func TestSimpleReportWrapper_EAA(t *testing.T) {
 	if len(ids) != 1 || ids[0] != eaaID {
 		t.Fatalf("GetEAAIdList() = %v", ids)
 	}
-	if got, want := r.GetEAAQualification(eaaID), enumerations.EAAQualification_QEAA; got != want {
+	if got, want := r.GetEAAQualification(eaaID), enumerations.EAAQualificationQEAA; got != want {
 		t.Errorf("GetEAAQualification() = %q, want %q", got, want)
 	}
 	quals := r.GetEAAQualifications(eaaID)
-	if len(quals) != 1 || quals[0] != enumerations.EAAQualification_QEAA {
+	if len(quals) != 1 || quals[0] != enumerations.EAAQualificationQEAA {
 		t.Errorf("GetEAAQualifications() = %v", quals)
 	}
 	sigs := r.GetEAASignatures(eaaID)
 	if len(sigs) != 1 {
 		t.Fatalf("GetEAASignatures() = %v", sigs)
 	}
-	if got, want := sigs[0].SignatureFormat.SignatureLevel(), enumerations.SignatureLevel_JAdES_BASELINE_B; got != want {
+	if got, want := sigs[0].SignatureFormat.SignatureLevel(), enumerations.SignatureLevelJAdESBaselineB; got != want {
 		t.Errorf("EAA signature format = %q, want %q", got, want)
 	}
 	eaa := r.GetEAAById(eaaID)
-	if eaa == nil || eaa.Indication.Indication() != enumerations.Indication_PASSED {
+	if eaa == nil || eaa.Indication.Indication() != enumerations.IndicationPassed {
 		t.Errorf("EAA indication = %v", eaa)
 	}
 }

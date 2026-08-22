@@ -191,13 +191,13 @@ func XAdESSignatureBuilderGetSignatureBuilderForDocuments(params *XAdESSignature
 	}
 
 	switch params.SignaturePackaging() {
-	case enumerations.SignaturePackaging_ENVELOPED:
+	case enumerations.SignaturePackagingEnveloped:
 		return NewEnvelopedSignatureBuilderForDocuments(params, documents, certificateVerifier), nil
-	case enumerations.SignaturePackaging_ENVELOPING:
+	case enumerations.SignaturePackagingEnveloping:
 		return NewEnvelopingSignatureBuilderForDocuments(params, documents, certificateVerifier), nil
-	case enumerations.SignaturePackaging_DETACHED:
+	case enumerations.SignaturePackagingDetached:
 		return NewDetachedSignatureBuilderForDocuments(params, documents, certificateVerifier), nil
-	case enumerations.SignaturePackaging_INTERNALLY_DETACHED:
+	case enumerations.SignaturePackagingInternallyDetached:
 		return NewInternallyDetachedSignatureBuilderForDocuments(params, documents, certificateVerifier), nil
 	default:
 		return nil, model.NewDSSError("Unsupported packaging " + string(params.SignaturePackaging()))
@@ -343,7 +343,7 @@ func (b *XAdESSignatureBuilder) initReferenceBuilder() *ReferenceBuilder {
 
 // checkSignaturePackagingValidity ports the private checkSignaturePackagingValidity.
 func (b *XAdESSignatureBuilder) checkSignaturePackagingValidity() error {
-	if enumerations.SignaturePackaging_ENVELOPING != b.Params.SignaturePackaging() {
+	if enumerations.SignaturePackagingEnveloping != b.Params.SignaturePackaging() {
 		if b.Params.IsManifestSignature() {
 			return fmt.Errorf(
 				"The signature packaging %s is not compatible with manifestSignature(true) configuration!",
@@ -382,9 +382,9 @@ func (b *XAdESSignatureBuilder) BuildRootDocumentDom() *xmldom.Node {
 // into its parent node. Port of the public #incorporateSignatureDom().
 func (b *XAdESSignatureBuilder) IncorporateSignatureDom() {
 	b.SignatureDom = xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_SIGNATURE)
+		common.XMLDSigElementSignature)
 	xmlutils.DomUtilsAddNamespaceAttribute(b.SignatureDom, b.overrides.XmldsigNamespace())
-	b.SignatureDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, b.DeterministicId)
+	b.SignatureDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, b.DeterministicId)
 
 	parentNodeOfSignature := b.overrides.ParentNodeOfSignature()
 	b.overrides.IncorporateSignatureDomToParent(parentNodeOfSignature)
@@ -424,19 +424,19 @@ func (b *XAdESSignatureBuilder) IncorporateSignedInfo() error {
 	}
 
 	b.SignedInfoDom = xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_SIGNED_INFO)
+		common.XMLDSigElementSignedInfo)
 	b.SignatureDom.AppendChild(b.SignedInfoDom)
 	b.incorporateCanonicalizationMethod(b.SignedInfoDom, b.SignedInfoCanonicalizationMethod)
 
 	signatureMethod := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_SIGNATURE_METHOD)
+		common.XMLDSigElementSignatureMethod)
 	b.SignedInfoDom.AppendChild(signatureMethod)
 	signatureAlgorithm := b.Params.SignatureAlgorithm()
 	signatureAlgorithmXMLId := signatureAlgorithm.URI()
 	if utils.IsStringBlank(signatureAlgorithmXMLId) {
 		return errors.New("Unsupported signature algorithm " + string(signatureAlgorithm))
 	}
-	signatureMethod.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()},
+	signatureMethod.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()},
 		signatureAlgorithmXMLId)
 	return nil
 }
@@ -449,10 +449,10 @@ func (b *XAdESSignatureBuilder) IncorporateSignedInfo() error {
 func (b *XAdESSignatureBuilder) incorporateCanonicalizationMethod(parentDom *xmldom.Node,
 	signedInfoCanonicalizationMethod string) {
 	canonicalizationMethodDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom,
-		b.overrides.XmldsigNamespace(), common.XMLDSigElement_CANONICALIZATION_METHOD)
+		b.overrides.XmldsigNamespace(), common.XMLDSigElementCanonicalizationMethod)
 	parentDom.AppendChild(canonicalizationMethodDom)
 	canonicalizationMethodDom.SetAttr(
-		xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()},
+		xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()},
 		signedInfoCanonicalizationMethod)
 }
 
@@ -485,10 +485,10 @@ func (b *XAdESSignatureBuilder) IncorporateKeyInfo() error {
 
 	// <ds:KeyInfo>
 	keyInfoElement := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_KEY_INFO)
+		common.XMLDSigElementKeyInfo)
 	b.SignatureDom.AppendChild(keyInfoElement)
 	if b.Params.IsSignKeyInfo() {
-		keyInfoElement.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+		keyInfoElement.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 			XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId)
 	}
 	certificates, err := spi.NewBaselineBCertificateSelector(b.Params.SigningCertificate(),
@@ -504,14 +504,14 @@ func (b *XAdESSignatureBuilder) IncorporateKeyInfo() error {
 		for _, token := range certificates {
 			// <ds:X509Data>
 			x509DataDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-				common.XMLDSigElement_X509_DATA)
+				common.XMLDSigElementX509Data)
 			keyInfoElement.AppendChild(x509DataDom)
 			b.addSubjectAndCertificate(x509DataDom, token)
 		}
 	} else {
 		// <ds:X509Data>
 		x509DataDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-			common.XMLDSigElement_X509_DATA)
+			common.XMLDSigElementX509Data)
 		keyInfoElement.AppendChild(x509DataDom)
 		for _, token := range certificates {
 			b.addCertificate(x509DataDom, token)
@@ -527,7 +527,7 @@ func (b *XAdESSignatureBuilder) IncorporateKeyInfo() error {
 func (b *XAdESSignatureBuilder) addSubjectAndCertificate(x509DataDom *xmldom.Node,
 	token *model.CertificateToken) {
 	xmlutils.DomUtilsAddTextElement(b.DocumentDom, x509DataDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_X509_SUBJECT_NAME, token.Subject().RFC2253())
+		common.XMLDSigElementX509SubjectName, token.Subject().RFC2253())
 	b.addCertificate(x509DataDom, token)
 }
 
@@ -535,7 +535,7 @@ func (b *XAdESSignatureBuilder) addSubjectAndCertificate(x509DataDom *xmldom.Nod
 // Port of the private addCertificate.
 func (b *XAdESSignatureBuilder) addCertificate(x509DataDom *xmldom.Node, token *model.CertificateToken) {
 	xmlutils.DomUtilsAddTextElement(b.DocumentDom, x509DataDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_X509_CERTIFICATE, utils.ToBase64(token.Encoded()))
+		common.XMLDSigElementX509Certificate, utils.ToBase64(token.Encoded()))
 }
 
 // IncorporateObjects incorporates the ds:Object tags.
@@ -582,7 +582,7 @@ func (b *XAdESSignatureBuilder) IncorporateQualifyingProperties() error {
 	}
 
 	objectDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_OBJECT)
+		common.XMLDSigElementObject)
 	b.SignatureDom.AppendChild(objectDom)
 
 	b.QualifyingPropertiesDom = xmlutils.DomUtilsAddElement(b.DocumentDom, objectDom,
@@ -633,7 +633,7 @@ func (b *XAdESSignatureBuilder) IncorporateObject(object *DSSObject) error {
 
 	// incorporate ds:Object dom
 	objectDom := xmlutils.DomUtilsAddElement(b.DocumentDom, b.SignatureDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_OBJECT)
+		common.XMLDSigElementObject)
 
 	// incorporate content
 	if xmlutils.DomUtilsIsDOM(object.Content()) {
@@ -652,18 +652,18 @@ func (b *XAdESSignatureBuilder) IncorporateObject(object *DSSObject) error {
 
 	// incorporate Id attribute
 	if utils.IsStringNotBlank(object.Id()) {
-		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, object.Id())
+		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, object.Id())
 	}
 
 	// incorporate MimeType attribute
 	if utils.IsStringNotBlank(object.MimeType()) {
-		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_MIME_TYPE.AttributeName()},
+		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeMIMEType.AttributeName()},
 			object.MimeType())
 	}
 
 	// incorporate Encoding attribute
 	if utils.IsStringNotBlank(object.EncodingAlgorithm()) {
-		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ENCODING.AttributeName()},
+		objectDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeEncoding.AttributeName()},
 			object.EncodingAlgorithm())
 	}
 
@@ -684,20 +684,20 @@ func (b *XAdESSignatureBuilder) IncorporateObject(object *DSSObject) error {
 // Port of the protected #incorporateReferenceSignedProperties.
 func (b *XAdESSignatureBuilder) IncorporateReferenceSignedProperties() error {
 	reference := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_REFERENCE)
+		common.XMLDSigElementReference)
 	b.SignedInfoDom.AppendChild(reference)
-	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_TYPE.AttributeName()},
+	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeType.AttributeName()},
 		b.XadesPath.SignedPropertiesUri())
-	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_URI.AttributeName()},
+	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeURI.AttributeName()},
 		xmlutils.DomUtilsToElementReference(XAdESSignatureBuilderXAdESPrefix+b.DeterministicId))
 
 	transforms := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_TRANSFORMS)
+		common.XMLDSigElementTransforms)
 	reference.AppendChild(transforms)
 	transform := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_TRANSFORM)
+		common.XMLDSigElementTransform)
 	transforms.AppendChild(transform)
-	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()},
+	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()},
 		b.SignedPropertiesCanonicalizationMethod)
 
 	digestAlgorithm := DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(b.Params)
@@ -746,20 +746,20 @@ func (b *XAdESSignatureBuilder) IncorporateReferenceKeyInfo() error {
 	}
 
 	reference := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_REFERENCE)
+		common.XMLDSigElementReference)
 	b.SignedInfoDom.AppendChild(reference)
-	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 		XAdESSignatureBuilderReferencePrefix+XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId)
-	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_URI.AttributeName()},
+	reference.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeURI.AttributeName()},
 		xmlutils.DomUtilsToElementReference(XAdESSignatureBuilderKeyInfoPrefix+b.DeterministicId))
 
 	transforms := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_TRANSFORMS)
+		common.XMLDSigElementTransforms)
 	reference.AppendChild(transforms)
 	transform := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_TRANSFORM)
+		common.XMLDSigElementTransform)
 	transforms.AppendChild(transform)
-	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()},
+	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()},
 		b.KeyInfoCanonicalizationMethod)
 
 	digestAlgorithm := DSSXMLUtilsGetReferenceDigestAlgorithmOrDefault(b.Params)
@@ -785,7 +785,7 @@ func (b *XAdESSignatureBuilder) IncorporateReferenceKeyInfo() error {
 func (b *XAdESSignatureBuilder) incorporateDigestValueOfReference(referenceDom *xmldom.Node,
 	digestValue []byte) {
 	digestValueDom := xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_DIGEST_VALUE)
+		common.XMLDSigElementDigestValue)
 	base64EncodedDigestBytes := utils.ToBase64(digestValue)
 	textNode := xmldom.NewText(base64EncodedDigestBytes)
 	digestValueDom.AppendChild(textNode)
@@ -796,9 +796,9 @@ func (b *XAdESSignatureBuilder) incorporateDigestValueOfReference(referenceDom *
 // Port of the protected #incorporateSignatureValue.
 func (b *XAdESSignatureBuilder) IncorporateSignatureValue() {
 	b.SignatureValueDom = xmlutils.DomUtilsCreateElementNS(b.DocumentDom, b.overrides.XmldsigNamespace(),
-		common.XMLDSigElement_SIGNATURE_VALUE)
+		common.XMLDSigElementSignatureValue)
 	b.SignatureDom.AppendChild(b.SignatureValueDom)
-	b.SignatureValueDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+	b.SignatureValueDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 		XAdESSignatureBuilderValuePrefix+b.DeterministicId)
 }
 
@@ -814,7 +814,7 @@ func (b *XAdESSignatureBuilder) IncorporateSignedProperties() error {
 	}
 	b.SignedPropertiesDom = xmlutils.DomUtilsAddElement(b.DocumentDom, b.QualifyingPropertiesDom,
 		b.overrides.XadesNamespace(), currentElements.ElementSignedProperties())
-	b.SignedPropertiesDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+	b.SignedPropertiesDom.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 		XAdESSignatureBuilderXAdESPrefix+b.DeterministicId)
 
 	if err := b.IncorporateSignedSignatureProperties(); err != nil {
@@ -889,7 +889,7 @@ func (b *XAdESSignatureBuilder) incorporatePolicy() error {
 	qualifier := signaturePolicy.Qualifier()
 	if qualifier != "" {
 		identifierDom.SetAttr(
-			xmldom.Name{Local: definition.XAdES132Attribute_QUALIFIER.AttributeName()}, qualifier.Value())
+			xmldom.Name{Local: definition.XAdES132AttributeQualifier.AttributeName()}, qualifier.Value())
 	}
 
 	description := signaturePolicy.Description()
@@ -1171,7 +1171,7 @@ func (b *XAdESSignatureBuilder) incorporateDataObjectFormat() error {
 		// add xades:DataObjectFormat@ObjectReference
 		if dataObjectFormat.ObjectReference() != "" {
 			dataObjectFormatDom.SetAttr(
-				xmldom.Name{Local: definition.XAdES132Attribute_OBJECT_REFERENCE.AttributeName()},
+				xmldom.Name{Local: definition.XAdES132AttributeObjectReference.AttributeName()},
 				dataObjectFormat.ObjectReference())
 		}
 	}
@@ -1183,7 +1183,7 @@ func (b *XAdESSignatureBuilder) keyInfoDataObjectFormat() *DSSDataObjectFormat {
 	keyInfoDataObjectFormat := NewDSSDataObjectFormat()
 	keyInfoDataObjectFormat.SetObjectReference(xmlutils.DomUtilsToElementReference(
 		XAdESSignatureBuilderReferencePrefix + XAdESSignatureBuilderKeyInfoPrefix + b.DeterministicId))
-	keyInfoDataObjectFormat.SetMimeType(enumerations.MimeTypeEnum_XML.MimeTypeString())
+	keyInfoDataObjectFormat.SetMimeType(enumerations.MimeTypeEnumXML.MimeTypeString())
 	return keyInfoDataObjectFormat
 }
 
@@ -1225,14 +1225,14 @@ func (b *XAdESSignatureBuilder) incorporateContentTimestamps() error {
 		timeStampType := contentTimestamp.TimeStampType()
 		var timestampDom *xmldom.Node
 		switch {
-		case enumerations.TimestampType_ALL_DATA_OBJECTS_TIMESTAMP == timeStampType:
+		case enumerations.TimestampTypeAllDataObjectsTimestamp == timeStampType:
 			signedDataObjectPropertiesDom, err := b.signedDataObjectPropertiesDom()
 			if err != nil {
 				return err
 			}
 			timestampDom = xmlutils.DomUtilsAddElement(b.DocumentDom, signedDataObjectPropertiesDom,
 				b.overrides.XadesNamespace(), currentElements.ElementAllDataObjectsTimeStamp())
-		case enumerations.TimestampType_INDIVIDUAL_DATA_OBJECTS_TIMESTAMP == timeStampType:
+		case enumerations.TimestampTypeIndividualDataObjectsTimestamp == timeStampType:
 			signedDataObjectPropertiesDom, err := b.signedDataObjectPropertiesDom()
 			if err != nil {
 				return err
@@ -1547,14 +1547,14 @@ func (b *XAdESSignatureBuilder) incorporateIdentifier(parentDom *xmldom.Node,
 		}
 
 		switch qualifier {
-		case enumerations.ObjectIdentifierQualifier_OID_AS_URI:
+		case enumerations.ObjectIdentifierQualifierOIDAsURI:
 			if spi.DSSUtilsIsUrnOid(oid) {
 				return fmt.Errorf(
 					"Qualifier '%s' shall not be used for URN encoded OID! "+
 						"See EN 319 132-1 for more details.", qualifier)
 			}
 
-		case enumerations.ObjectIdentifierQualifier_OID_AS_URN:
+		case enumerations.ObjectIdentifierQualifierOIDAsURN:
 			if !spi.DSSUtilsIsUrnOid(oid) {
 				oid = spi.DSSUtilsToUrnOid(oid)
 			}
@@ -1579,7 +1579,7 @@ func (b *XAdESSignatureBuilder) incorporateIdentifier(parentDom *xmldom.Node,
 	// add xades:Identifier@Qualifier
 	if qualifier != "" {
 		identifierDom.SetAttr(
-			xmldom.Name{Local: definition.XAdES132Attribute_QUALIFIER.AttributeName()}, qualifier.Value())
+			xmldom.Name{Local: definition.XAdES132AttributeQualifier.AttributeName()}, qualifier.Value())
 	}
 	return nil
 }
@@ -1648,9 +1648,9 @@ func (b *XAdESSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Nod
 	canonicalizationMethod := token.CanonicalizationMethod()
 	if utils.IsStringNotEmpty(canonicalizationMethod) {
 		canonicalizationMethodElement := xmlutils.DomUtilsCreateElementNS(b.DocumentDom,
-			b.overrides.XmldsigNamespace(), common.XMLDSigElement_CANONICALIZATION_METHOD)
+			b.overrides.XmldsigNamespace(), common.XMLDSigElementCanonicalizationMethod)
 		canonicalizationMethodElement.SetAttr(
-			xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, canonicalizationMethod)
+			xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, canonicalizationMethod)
 		timestampElement.AppendChild(canonicalizationMethodElement)
 	} else {
 		return errors.New("Unable to create a timestamp with empty canonicalization method. " +
@@ -1669,9 +1669,9 @@ func (b *XAdESSignatureBuilder) AddContentTimestamp(timestampElement *xmldom.Nod
 		return err
 	}
 	timestampId := xadesBuilderTimestampPrefix + xmlIdentifier
-	timestampElement.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()}, timestampId)
+	timestampElement.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()}, timestampId)
 	encapsulatedTimestampElement.SetAttr(
-		xmldom.Name{Local: common.XMLDSigAttribute_ID.AttributeName()},
+		xmldom.Name{Local: common.XMLDSigAttributeID.AttributeName()},
 		xadesBuilderEncapsulatedTimestampPrefix+timestampId)
 	return nil
 }

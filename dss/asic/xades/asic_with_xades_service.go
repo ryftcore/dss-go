@@ -182,7 +182,7 @@ func (s *ASiCWithXAdESService) SignDocumentMultiple(toSignDocuments []model.DSSD
 		signingDate = *bLevelSigningDate
 	}
 	asicSignature := s.BuildASiCContainerAt(asicContent, signingDate)
-	name, err := s.GetFinalDocumentNameWithMimeType(asicSignature, enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalDocumentNameWithMimeType(asicSignature, enumerations.SigningOperationSign,
 		parameters.SignatureLevel(), asicSignature.MimeType())
 	if err != nil {
 		panic(err)
@@ -228,7 +228,7 @@ func (s *ASiCWithXAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 		panic(err)
 	}
 
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 	parameters.GetContext().SetDetachedContents(s.GetDetachedContents(asicContent, isOpenDocument))
 
 	for _, signature := range signatureDocuments {
@@ -243,7 +243,7 @@ func (s *ASiCWithXAdESService) ExtendDocument(toExtendDocument model.DSSDocument
 		signingDate = *bLevelSigningDate
 	}
 	extensionResult := s.BuildASiCContainerAt(asicContent, signingDate)
-	name, err := s.GetFinalDocumentNameWithMimeType(toExtendDocument, enumerations.SigningOperation_EXTEND,
+	name, err := s.GetFinalDocumentNameWithMimeType(toExtendDocument, enumerations.SigningOperationExtend,
 		parameters.SignatureLevel(), toExtendDocument.MimeType())
 	if err != nil {
 		panic(err)
@@ -290,13 +290,13 @@ func (s *ASiCWithXAdESService) GetXAdESService() *dssxades.XAdESService {
 // for an ASiC-S/OpenDocument container, or when the existing signature file is not valid XML.
 func (s *ASiCWithXAdESService) getXAdESParameters(parameters *ASiCWithXAdESSignatureParameters,
 	signatureDocuments []model.DSSDocument, openDocument bool) *dssxades.XAdESSignatureParameters {
-	parameters.SetSignaturePackaging(enumerations.SignaturePackaging_DETACHED)
+	parameters.SetSignaturePackaging(enumerations.SignaturePackagingDetached)
 
 	var rootDocument *xmldom.Node
 	// If already existing signature file and ASiC-S OR OpenDocument type, we re-use the same
 	// signature file
 	if utils.IsCollectionNotEmpty(signatureDocuments) &&
-		(enumerations.ASiCContainerType_ASiC_S == parameters.ASiC().ContainerType() || openDocument) {
+		(enumerations.ASiCContainerTypeASiCS == parameters.ASiC().ContainerType() || openDocument) {
 		if utils.CollectionSize(signatureDocuments) > 1 {
 			panic(exception.NewIllegalInputException("Unable to choose signature file to add a new signature into! " +
 				"Only one signature file shall be present for the particular container format."))
@@ -328,11 +328,11 @@ func (s *ASiCWithXAdESService) buildDomRoot(openDocument bool) *xmldom.Node {
 	var xadesSignatures *xmldom.Node
 	if openDocument {
 		xadesSignatures = xmldom.NewElement(xmldom.Name{
-			Space: asic.ASiCManifestNamespace_LIBREOFFICE_NS,
-			Local: asic.ASiCManifestNamespace_LIBREOFFICE_SIGNATURES,
+			Space: asic.ASiCManifestNamespaceLibreOfficeNS,
+			Local: asic.ASiCManifestNamespaceLibreOfficeSignatures,
 		})
 	} else {
-		xadesSignatures = xmlutils.DomUtilsCreateElementNS(rootDocument, asic.ASiCManifestNS, asic.ASiCManifestElement_XADES_SIGNATURES)
+		xadesSignatures = xmlutils.DomUtilsCreateElementNS(rootDocument, asic.ASiCManifestNS, asic.ASiCManifestElementXAdESSignatures)
 	}
 	rootDocument.AppendChild(xadesSignatures)
 	return rootDocument
@@ -382,7 +382,7 @@ func (s *ASiCWithXAdESService) AddSignaturePolicyStore(asicContainer model.DSSDo
 	// Java passes a null Date here; the zero time is what the ZIP container handler treats as
 	// "not specified" (see ZipUtils#CreateZipArchiveFromEntriesAt).
 	resultArchive := s.BuildASiCContainerAt(asicContent, time.Time{})
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_SIG_POLICY_STORE,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddSigPolicyStore,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -444,7 +444,7 @@ func (s *ASiCWithXAdESService) CounterSignSignature(asicContainer model.DSSDocum
 		signingDate = *bLevelSigningDate
 	}
 	resultArchive := s.BuildASiCContainerAt(asicContent, signingDate)
-	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperation_COUNTER_SIGN,
+	name, err := s.GetFinalDocumentNameWithMimeType(asicContainer, enumerations.SigningOperationCounterSign,
 		parameters.SignatureLevel(), asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -482,7 +482,7 @@ func (s *ASiCWithXAdESService) AddSignatureEvidenceRecord(asicContainer model.DS
 	asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), signatureWithEvidenceRecord))
 
 	resultArchive := s.BuildASiCContainer(asicContent)
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_EVIDENCE_RECORD,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddEvidenceRecord,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)
@@ -522,7 +522,7 @@ func (s *ASiCWithXAdESService) AddContainerEvidenceRecord(documents []model.DSSD
 		panic(err)
 	}
 	asicContainer := s.BuildASiCContainer(asicContent)
-	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperation_ADD_EVIDENCE_RECORD,
+	name, err := s.GetFinalArchiveName(asicContainer, enumerations.SigningOperationAddEvidenceRecord,
 		asicContainer.MimeType())
 	if err != nil {
 		panic(err)

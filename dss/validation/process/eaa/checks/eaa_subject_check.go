@@ -37,23 +37,23 @@ func (c *EAASubjectCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAASubjectCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUB
+	return i18n.MessageTagEAASub
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAASubjectCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUB_ANS
+	return i18n.MessageTagEAASubANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAASubjectCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAASubjectCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

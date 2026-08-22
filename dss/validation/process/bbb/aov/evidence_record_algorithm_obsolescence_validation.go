@@ -26,7 +26,7 @@ type EvidenceRecordAlgorithmObsolescenceValidation struct {
 func NewEvidenceRecordAlgorithmObsolescenceValidation(i18nProvider *i18n.I18nProvider, token *diagnostic.EvidenceRecordWrapper,
 	validationDate time.Time, validationPolicy policy.ValidationPolicy) *EvidenceRecordAlgorithmObsolescenceValidation {
 	c := &EvidenceRecordAlgorithmObsolescenceValidation{}
-	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.Context_EVIDENCE_RECORD, validationDate, validationPolicy, c)
+	c.InitAlgorithmObsolescenceValidation(i18nProvider, token, enumerations.ContextEvidenceRecord, validationDate, validationPolicy, c)
 	c.InitChainBase(c)
 	return c
 }

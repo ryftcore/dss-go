@@ -28,12 +28,12 @@ func TestXPathQueryElementItem_MatchNode(t *testing.T) {
 	doc := parseMatchNodeTestDoc(t)
 	root := doc.DocumentElement()
 
-	sigItem := NewXPathQueryElementItem(XMLDSigElement_SIGNATURE)
+	sigItem := NewXPathQueryElementItem(XMLDSigElementSignature)
 	if !sigItem.MatchNode(root) {
 		t.Errorf("SIGNATURE item should match the ds:Signature root element")
 	}
 
-	objItem := NewXPathQueryElementItem(XMLDSigElement_OBJECT)
+	objItem := NewXPathQueryElementItem(XMLDSigElementObject)
 	if objItem.MatchNode(root) {
 		t.Errorf("OBJECT item should not match the ds:Signature root element")
 	}
@@ -69,7 +69,7 @@ func TestXPathQueryAnyItem_MatchNode(t *testing.T) {
 func TestXPathQueryAttributeItem_MatchNode(t *testing.T) {
 	doc := parseMatchNodeTestDoc(t)
 	root := doc.DocumentElement()
-	idItem := NewXPathQueryAttributeItem(XMLDSigAttribute_ID)
+	idItem := NewXPathQueryAttributeItem(XMLDSigAttributeID)
 
 	idAttr := root.Attr("", "Id")
 	if idAttr == nil {
@@ -82,7 +82,7 @@ func TestXPathQueryAttributeItem_MatchNode(t *testing.T) {
 		t.Errorf("attribute item should not match an element node")
 	}
 
-	uriItem := NewXPathQueryAttributeItem(XMLDSigAttribute_URI)
+	uriItem := NewXPathQueryAttributeItem(XMLDSigAttributeURI)
 	if uriItem.MatchNode(idAttr) {
 		t.Errorf("URI attribute item should not match the Id attribute node")
 	}
@@ -94,12 +94,12 @@ func TestXPathQueryAttributeParameter_MatchNode(t *testing.T) {
 	signedInfo := root.Elements()[0]
 	reference := signedInfo.Elements()[0]
 
-	typeParam := NewXPathQueryAttributeParameter(XMLDSigAttribute_TYPE, XMLDSigPath_OBJECT_TYPE)
+	typeParam := NewXPathQueryAttributeParameter(XMLDSigAttributeType, XMLDSigPathObjectType)
 	if !typeParam.MatchNode(reference) {
 		t.Errorf("Type attribute parameter should match ds:Reference with the expected Type value")
 	}
 
-	wrongValueParam := NewXPathQueryAttributeParameter(XMLDSigAttribute_TYPE, XMLDSigPath_MANIFEST_TYPE)
+	wrongValueParam := NewXPathQueryAttributeParameter(XMLDSigAttributeType, XMLDSigPathManifestType)
 	if wrongValueParam.MatchNode(reference) {
 		t.Errorf("Type attribute parameter with a mismatched value should not match")
 	}
@@ -128,7 +128,7 @@ func TestXPathQueryNotChildOfParameter_MatchNode(t *testing.T) {
 	reference := signedInfo.Elements()[0]
 	object := root.Elements()[1]
 
-	notChildOfSignedInfo := NewXPathQueryNotChildOfParameter(XMLDSigElement_SIGNED_INFO)
+	notChildOfSignedInfo := NewXPathQueryNotChildOfParameter(XMLDSigElementSignedInfo)
 	if notChildOfSignedInfo.MatchNode(reference) {
 		t.Errorf("ds:Reference is a child of ds:SignedInfo, so notChildOf(SIGNED_INFO) should be false")
 	}
@@ -136,7 +136,7 @@ func TestXPathQueryNotChildOfParameter_MatchNode(t *testing.T) {
 		t.Errorf("ds:Object is not a child of ds:SignedInfo, so notChildOf(SIGNED_INFO) should be true")
 	}
 
-	notChildOfManifest := NewXPathQueryNotChildOfParameter(XMLDSigElement_MANIFEST)
+	notChildOfManifest := NewXPathQueryNotChildOfParameter(XMLDSigElementManifest)
 	if !notChildOfManifest.MatchNode(object) {
 		t.Errorf("ds:Object's parent is ds:Signature, not ds:Manifest, so notChildOf(MANIFEST) should be true")
 	}

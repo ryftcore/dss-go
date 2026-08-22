@@ -61,7 +61,7 @@ func NewEAAAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime tim
 	validationPolicy policy.ValidationPolicy) *EAAAcceptanceValidation {
 	c := &EAAAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, eaaWrapper, currentTime,
-			enumerations.Context_EAA, aovResult, validationPolicy),
+			enumerations.ContextEAA, aovResult, validationPolicy),
 		bbbs: bbbs,
 	}
 	c.InitChainBase(c)
@@ -70,7 +70,7 @@ func NewEAAAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentTime tim
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *EAAAcceptanceValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIGNATURE_ACCEPTANCE_VALIDATION
+	return i18n.MessageTagSignatureAcceptanceValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -79,11 +79,11 @@ func (c *EAAAcceptanceValidation) InitChain() {
 	c.FirstItem = item
 
 	item = item.SetNextItem(c.eaaType())
-	if enumerations.EAAType_SD_JWT_VC == c.token.EAAType() {
+	if enumerations.EAATypeSDJWTVC == c.token.EAAType() {
 		item = item.SetNextItem(c.typeIntegrityPresent())
 	}
 
-	if enumerations.EAAType_ISO_IEC_MDOC == c.token.EAAType() {
+	if enumerations.EAATypeISOIECMDoc == c.token.EAAType() {
 		item = item.SetNextItem(c.issuanceDatePresent())
 	}
 
@@ -332,7 +332,7 @@ func (c *EAAAcceptanceValidation) supportedClaims() process.ChainItem[*jaxb.XmlS
 // CollectMessages collects required messages from the given constraint to the
 // given conclusion. Port of collectMessages(XmlConclusion, XmlConstraint).
 func (c *EAAAcceptanceValidation) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.Name == nil || constraint.Name.Key == nil || *constraint.Name.Key != i18n.MessageTag_EAA_REV_ACC.Id() {
+	if constraint.Name == nil || constraint.Name.Key == nil || *constraint.Name.Key != i18n.MessageTagEAARevACC.Id() {
 		c.ChainBase.CollectMessages(conclusion, constraint)
 	}
 }

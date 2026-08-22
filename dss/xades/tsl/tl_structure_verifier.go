@@ -31,7 +31,7 @@ import (
 const trustedListParentElement = "TrustServiceStatusList"
 
 func init() {
-	xmlutils.XPathUtilsRegisterNamespace(definition.TrustedListNamespace_NS)
+	xmlutils.XPathUtilsRegisterNamespace(definition.TrustedListNamespaceNS)
 }
 
 // TLStructureVerifier verifies conformity of a TL to the defined TLVersion.
@@ -179,9 +179,9 @@ func TrustedList211XSDUtils() xades.XAdESStructureXSDUtils {
 func (v *TLStructureVerifier) validateNamespace(documentDom *xmldom.Node) []string {
 	documentElement := documentDom.DocumentElement()
 	if trustedListParentElement != documentElement.Name.Local ||
-		definition.TrustedListNamespace_NS.Uri() != documentElement.Name.Space {
+		definition.TrustedListNamespaceNS.Uri() != documentElement.Name.Space {
 		return []string{fmt.Sprintf("The root of XML Trusted List shall be %s:%s element!",
-			definition.TrustedListNamespace_NS.Prefix(), trustedListParentElement)}
+			definition.TrustedListNamespaceNS.Prefix(), trustedListParentElement)}
 	}
 	return nil
 }
@@ -189,7 +189,7 @@ func (v *TLStructureVerifier) validateNamespace(documentDom *xmldom.Node) []stri
 // getSignatureElement ports the private getSignatureElement(Document).
 func (v *TLStructureVerifier) getSignatureElement(documentDom *xmldom.Node) *xmldom.Node {
 	documentElement := documentDom.DocumentElement()
-	return v.getChildElement(documentElement, common.XMLDSigElement_SIGNATURE)
+	return v.getChildElement(documentElement, common.XMLDSigElementSignature)
 }
 
 // verifySignatureElementPresence ports the private verifySignatureElementPresence(Element).
@@ -212,7 +212,7 @@ func (v *TLStructureVerifier) validateSignatureElement(dsSignature *xmldom.Node,
 	}
 
 	// NOTE: manual parsing is used for performance reasons
-	objects := v.getChildElements(dsSignature, common.XMLDSigElement_OBJECT)
+	objects := v.getChildElements(dsSignature, common.XMLDSigElementObject)
 	if utils.IsCollectionEmpty(objects) {
 		return []string{"No ds:Object elements are present!"}
 	}
@@ -220,11 +220,11 @@ func (v *TLStructureVerifier) validateSignatureElement(dsSignature *xmldom.Node,
 	if qualifyingProperties == nil {
 		return []string{"No xades:QualifyingProperties element has been found!"}
 	}
-	signedProperties := v.getChildElement(qualifyingProperties, definition.XAdES132Element_SIGNED_PROPERTIES)
+	signedProperties := v.getChildElement(qualifyingProperties, definition.XAdES132ElementSignedProperties)
 	if signedProperties == nil {
 		return []string{"No xades:SignedProperties element has been found!"}
 	}
-	signedSignatureProperties := v.getChildElement(signedProperties, definition.XAdES132Element_SIGNED_SIGNATURE_PROPERTIES)
+	signedSignatureProperties := v.getChildElement(signedProperties, definition.XAdES132ElementSignedSignatureProperties)
 	if signedSignatureProperties == nil {
 		return []string{"No xades:SignedSignatureProperties element has been found!"}
 	}
@@ -232,10 +232,10 @@ func (v *TLStructureVerifier) validateSignatureElement(dsSignature *xmldom.Node,
 	var errorMessages []string
 
 	signingCertificateElements := v.getMultipleElements(signedSignatureProperties,
-		definition.XAdES132Element_SIGNING_CERTIFICATE, definition.XAdES132Element_SIGNING_CERTIFICATE_V2)
+		definition.XAdES132ElementSigningCertificate, definition.XAdES132ElementSigningCertificateV2)
 	if utils.IsCollectionNotEmpty(signingCertificateElements) {
 		for _, signingCertificate := range signingCertificateElements {
-			if v2Expected != v.doesMatch(signingCertificate, definition.XAdES132Element_SIGNING_CERTIFICATE_V2) {
+			if v2Expected != v.doesMatch(signingCertificate, definition.XAdES132ElementSigningCertificateV2) {
 				errorMessages = append(errorMessages, fmt.Sprintf("%s element shall not be present!", signingCertificate.Name.Local))
 			}
 		}
@@ -248,20 +248,20 @@ func (v *TLStructureVerifier) validateSignatureElement(dsSignature *xmldom.Node,
 	}
 
 	signatureProductionPlaceElements := v.getMultipleElements(signedSignatureProperties,
-		definition.XAdES132Element_SIGNATURE_PRODUCTION_PLACE, definition.XAdES132Element_SIGNATURE_PRODUCTION_PLACE_V2)
+		definition.XAdES132ElementSignatureProductionPlace, definition.XAdES132ElementSignatureProductionPlaceV2)
 	if utils.IsCollectionNotEmpty(signatureProductionPlaceElements) {
 		for _, signatureProductionPlace := range signatureProductionPlaceElements {
-			if v2Expected != v.doesMatch(signatureProductionPlace, definition.XAdES132Element_SIGNATURE_PRODUCTION_PLACE_V2) {
+			if v2Expected != v.doesMatch(signatureProductionPlace, definition.XAdES132ElementSignatureProductionPlaceV2) {
 				errorMessages = append(errorMessages, fmt.Sprintf("%s element shall not be present!", signatureProductionPlace.Name.Local))
 			}
 		}
 	}
 
 	signerRoleElements := v.getMultipleElements(signedSignatureProperties,
-		definition.XAdES132Element_SIGNER_ROLE, definition.XAdES132Element_SIGNER_ROLE_V2)
+		definition.XAdES132ElementSignerRole, definition.XAdES132ElementSignerRoleV2)
 	if utils.IsCollectionNotEmpty(signerRoleElements) {
 		for _, signerRole := range signerRoleElements {
-			if v2Expected != v.doesMatch(signerRole, definition.XAdES132Element_SIGNER_ROLE_V2) {
+			if v2Expected != v.doesMatch(signerRole, definition.XAdES132ElementSignerRoleV2) {
 				errorMessages = append(errorMessages, fmt.Sprintf("%s element shall not be present!", signerRole.Name.Local))
 			}
 		}
@@ -273,7 +273,7 @@ func (v *TLStructureVerifier) validateSignatureElement(dsSignature *xmldom.Node,
 // getQualifyingPropertiesElement ports the private getQualifyingPropertiesElement(List<Element>).
 func (v *TLStructureVerifier) getQualifyingPropertiesElement(objects []*xmldom.Node) *xmldom.Node {
 	for _, object := range objects {
-		qualifyingProperties := v.getChildElement(object, definition.XAdES132Element_QUALIFYING_PROPERTIES)
+		qualifyingProperties := v.getChildElement(object, definition.XAdES132ElementQualifyingProperties)
 		if qualifyingProperties != nil {
 			return qualifyingProperties
 		}

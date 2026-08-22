@@ -54,7 +54,7 @@ func NewValidationTimeSlidingCertificateRevocationSelector(i18nProvider *i18n.I1
 // Title returns the title of the building block. Port of the overridden
 // getTitle().
 func (c *ValidationTimeSlidingCertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_VTS_CRS
+	return i18n.MessageTagVTSCRS
 }
 
 // CertificateRevocationData returns available certificate revocation data to be
@@ -85,10 +85,10 @@ func (c *ValidationTimeSlidingCertificateRevocationSelector) VerifyRevocationDat
 		if validity {
 
 			item = item.SetNextItem(c.poeExistsAtOrBeforeControlTime(
-				c.Certificate, enumerations.TimestampedObjectType_CERTIFICATE, c.CurrentTime))
+				c.Certificate, enumerations.TimestampedObjectTypeCertificate, c.CurrentTime))
 
 			item = item.SetNextItem(c.poeExistsAtOrBeforeControlTime(
-				revocationWrapper, enumerations.TimestampedObjectType_REVOCATION, c.CurrentTime))
+				revocationWrapper, enumerations.TimestampedObjectTypeRevocation, c.CurrentTime))
 
 			validity = c.poe.IsPOEExists(c.Certificate.Id(), c.CurrentTime) &&
 				c.poe.IsPOEExists(revocationWrapper.Id(), c.CurrentTime)
@@ -162,11 +162,11 @@ func newVTSAcceptableRevocationDataAvailableCheck(i18nProvider *i18n.I18nProvide
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the anonymous subclass's getFailedIndicationForConclusion().
 func (c *vtsAcceptableRevocationDataAvailableCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of the anonymous subclass's getFailedSubIndicationForConclusion().
 func (c *vtsAcceptableRevocationDataAvailableCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_POE
+	return enumerations.SubIndicationNoPOE
 }

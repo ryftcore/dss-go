@@ -67,8 +67,8 @@ func newSignatureAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i
 // BlockType returns the validating block type. Port of the overridden
 // getBlockType().
 func (c *SignatureAlgorithmCryptographicCheckerResultCheck[T]) BlockType() jaxb.XmlBlockType {
-	if enumerations.Context_CERTIFICATE == c.context {
-		return jaxb.XmlBlockType_AOV_XCV
+	if enumerations.ContextCertificate == c.context {
+		return jaxb.XmlBlockTypeAOVXCV
 	}
 	return ""
 }
@@ -82,13 +82,13 @@ func (c *SignatureAlgorithmCryptographicCheckerResultCheck[T]) BuildAdditionalIn
 		algorithm := cryptographicValidation.Algorithm
 		var message string
 		if algorithm.KeyLength != nil && utils.IsStringNotEmpty(*algorithm.KeyLength) {
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_KEY_SIZE,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessKeySize,
 				algorithm.Name, *algorithm.KeyLength, dateTime)
 		} else {
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS, algorithm.Name, dateTime)
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccess, algorithm.Name, dateTime)
 		}
 		return &message
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE, c.ErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.ErrorMessage(), dateTime)
 	return &message
 }

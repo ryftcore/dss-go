@@ -60,23 +60,23 @@ func (c *TimestampDelayCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampDelayCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ISTPTDABST
+	return i18n.MessageTagADESTISTPTDABST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampDelayCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ISTPTDABST_ANS
+	return i18n.MessageTagADESTISTPTDABSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TimestampDelayCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TimestampDelayCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

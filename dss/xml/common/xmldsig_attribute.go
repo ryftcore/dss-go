@@ -9,24 +9,24 @@ type XMLDSigAttribute string
 
 // XMLDSigAttribute constants, one per XMLDSig schema attribute name.
 const (
-	XMLDSigAttribute_ALGORITHM XMLDSigAttribute = "ALGORITHM"
-	XMLDSigAttribute_ENCODING  XMLDSigAttribute = "ENCODING"
-	XMLDSigAttribute_ID        XMLDSigAttribute = "ID"
-	XMLDSigAttribute_MIME_TYPE XMLDSigAttribute = "MIME_TYPE"
-	XMLDSigAttribute_TARGET    XMLDSigAttribute = "TARGET"
-	XMLDSigAttribute_TYPE      XMLDSigAttribute = "TYPE"
-	XMLDSigAttribute_URI       XMLDSigAttribute = "URI"
+	XMLDSigAttributeAlgorithm XMLDSigAttribute = "ALGORITHM"
+	XMLDSigAttributeEncoding  XMLDSigAttribute = "ENCODING"
+	XMLDSigAttributeID        XMLDSigAttribute = "ID"
+	XMLDSigAttributeMIMEType  XMLDSigAttribute = "MIME_TYPE"
+	XMLDSigAttributeTarget    XMLDSigAttribute = "TARGET"
+	XMLDSigAttributeType      XMLDSigAttribute = "TYPE"
+	XMLDSigAttributeURI       XMLDSigAttribute = "URI"
 )
 
 // xmldsigAttributeNames maps each constant to its wire attribute name (getAttributeName()).
 var xmldsigAttributeNames = map[XMLDSigAttribute]string{
-	XMLDSigAttribute_ALGORITHM: "Algorithm",
-	XMLDSigAttribute_ENCODING:  "Encoding",
-	XMLDSigAttribute_ID:        "Id",
-	XMLDSigAttribute_MIME_TYPE: "MimeType",
-	XMLDSigAttribute_TARGET:    "Target",
-	XMLDSigAttribute_TYPE:      "Type",
-	XMLDSigAttribute_URI:       "URI",
+	XMLDSigAttributeAlgorithm: "Algorithm",
+	XMLDSigAttributeEncoding:  "Encoding",
+	XMLDSigAttributeID:        "Id",
+	XMLDSigAttributeMIMEType:  "MimeType",
+	XMLDSigAttributeTarget:    "Target",
+	XMLDSigAttributeType:      "Type",
+	XMLDSigAttributeURI:       "URI",
 }
 
 // AttributeName implements DSSAttribute. Ports getAttributeName().

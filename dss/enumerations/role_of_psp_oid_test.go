@@ -9,10 +9,10 @@ func TestRoleOfPspOid(t *testing.T) {
 		description string
 		oid         string
 	}{
-		{RoleOfPspOid_PSP_AS, "psp-as", "0.4.0.19495.1.1"},
-		{RoleOfPspOid_PSP_PI, "psp-pi", "0.4.0.19495.1.2"},
-		{RoleOfPspOid_PSP_AI, "psp-ai", "0.4.0.19495.1.3"},
-		{RoleOfPspOid_PSP_IC, "psp-ic", "0.4.0.19495.1.4"},
+		{RoleOfPspOidPSPAs, "psp-as", "0.4.0.19495.1.1"},
+		{RoleOfPspOidPSPPI, "psp-pi", "0.4.0.19495.1.2"},
+		{RoleOfPspOidPSPAI, "psp-ai", "0.4.0.19495.1.3"},
+		{RoleOfPspOidPSPIC, "psp-ic", "0.4.0.19495.1.4"},
 	}
 	if len(RoleOfPspOidValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(RoleOfPspOidValues()))

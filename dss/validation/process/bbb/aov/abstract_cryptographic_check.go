@@ -37,13 +37,13 @@ func NewAbstractCryptographicCheck(i18nProvider *i18n.I18nProvider, result *proc
 // FailedIndicationForConclusion gets an Indication in case of failure. Port
 // of the overridden getFailedIndicationForConclusion().
 func (c *AbstractCryptographicCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of the overridden getFailedSubIndicationForConclusion().
 func (c *AbstractCryptographicCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE
+	return enumerations.SubIndicationCryptoConstraintsFailureNoPOE
 }
 
 // Name returns name for a DigestAlgorithm safely. Port of the overloaded

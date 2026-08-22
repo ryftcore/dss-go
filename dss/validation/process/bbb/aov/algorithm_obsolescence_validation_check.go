@@ -56,13 +56,13 @@ type AlgorithmObsolescenceValidationCheck[T any] struct {
 }
 
 // NewAlgorithmObsolescenceValidationCheck is the convenience constructor,
-// defaulting the block type to XmlBlockType_AOV. Port of
+// defaulting the block type to XmlBlockTypeAOV. Port of
 // AlgorithmObsolescenceValidationCheck(I18nProvider, T, XmlAOV, Date, MessageTag, String).
 func NewAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
 	aovResult *jaxb.XmlAOV, validationDate time.Time, position i18n.MessageTag,
 	tokenId string) *AlgorithmObsolescenceValidationCheck[T] {
 	return NewAlgorithmObsolescenceValidationCheckWithBlockType(i18nProvider, result, aovResult, validationDate,
-		position, jaxb.XmlBlockType_AOV, tokenId)
+		position, jaxb.XmlBlockTypeAOV, tokenId)
 }
 
 // NewAlgorithmObsolescenceValidationCheckWithBlockType is the full constructor.
@@ -86,13 +86,13 @@ func NewAlgorithmObsolescenceValidationCheckWithBlockType[T any](i18nProvider *i
 func getLevelRule(aovResult *jaxb.XmlAOV) policy.LevelRule {
 	conclusion := aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
-		return process.GetLevelRule(enumerations.Level_FAIL)
+		return process.GetLevelRule(enumerations.LevelFail)
 	} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-		return process.GetLevelRule(enumerations.Level_WARN)
+		return process.GetLevelRule(enumerations.LevelWarn)
 	} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-		return process.GetLevelRule(enumerations.Level_INFORM)
+		return process.GetLevelRule(enumerations.LevelInform)
 	}
-	return process.GetLevelRule(enumerations.Level_FAIL) // default
+	return process.GetLevelRule(enumerations.LevelFail) // default
 }
 
 // BlockType returns the validating block type. Port of getBlockType().
@@ -122,16 +122,16 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo() *string 
 			algorithm := cryptographicValidation.Algorithm
 			var message string
 			if algorithm.KeyLength != nil && *algorithm.KeyLength != "" {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_KEY_SIZE,
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessKeySize,
 					algorithm.Name, *algorithm.KeyLength, dateTime)
 			} else {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS, algorithm.Name, dateTime)
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccess, algorithm.Name, dateTime)
 			}
 			return &message
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE, c.getErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.getErrorMessage(), dateTime)
 	return &message
 }
 
@@ -153,12 +153,12 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) FailedSubIndicationForConclusi
 // BuildConstraintMessage builds a constraint message. Port of
 // buildConstraintMessage().
 func (c *AlgorithmObsolescenceValidationCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, c.position)
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *AlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM_ANS, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
 // getErrorMessage returns the first error/warning/info message value, or the

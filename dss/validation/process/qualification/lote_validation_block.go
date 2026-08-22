@@ -59,7 +59,7 @@ func (b *LoTEValidationBlock) BuildChainTitle() string {
 	if b.currentList.CountryCode != nil {
 		countryCode = *b.currentList.CountryCode
 	}
-	if title := process.BuildStringMessage(b.I18nProvider, i18n.MessageTag_LOTE, countryCode); title != nil {
+	if title := process.BuildStringMessage(b.I18nProvider, i18n.MessageTagLoTE, countryCode); title != nil {
 		return *title
 	}
 	return ""

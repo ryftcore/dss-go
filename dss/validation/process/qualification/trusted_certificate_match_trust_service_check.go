@@ -34,7 +34,7 @@ func NewTrustedCertificateMatchTrustServiceCheck(i18nProvider *i18n.I18nProvider
 	c := &TrustedCertificateMatchTrustServiceCheck{
 		ChainItemBase: process.NewChainItemBase(i18nProvider, result, constraint),
 		trustService:  trustService,
-		errorMessage:  i18n.MessageTag_EMPTY,
+		errorMessage:  i18n.MessageTagEmpty,
 	}
 	c.InitChainItem(c)
 	return c
@@ -44,18 +44,18 @@ func NewTrustedCertificateMatchTrustServiceCheck(i18nProvider *i18n.I18nProvider
 func (c *TrustedCertificateMatchTrustServiceCheck) Process() bool {
 	trustedCert := c.trustService.ServiceDigitalIdentifier
 	if trustedCert == nil {
-		c.errorMessage = i18n.MessageTag_QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS0
+		c.errorMessage = i18n.MessageTagQualIsTrustCertMatchServiceANS0
 		return false
 	}
 
 	organizationName := trustedCert.OrganizationName()
 	if utils.IsStringBlank(organizationName) {
-		c.errorMessage = i18n.MessageTag_QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS1
+		c.errorMessage = i18n.MessageTagQualIsTrustCertMatchServiceANS1
 		return false
 	}
 
 	if !c.isMatch(trustedCert) {
-		c.errorMessage = i18n.MessageTag_QUAL_IS_TRUST_CERT_MATCH_SERVICE_ANS2
+		c.errorMessage = i18n.MessageTagQualIsTrustCertMatchServiceANS2
 		return false
 	}
 
@@ -88,7 +88,7 @@ func (c *TrustedCertificateMatchTrustServiceCheck) isMatch(trustedCert *diagnost
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustedCertificateMatchTrustServiceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_IS_TRUST_CERT_MATCH_SERVICE
+	return i18n.MessageTagQualIsTrustCertMatchService
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
@@ -99,7 +99,7 @@ func (c *TrustedCertificateMatchTrustServiceCheck) ErrorMessageTag() i18n.Messag
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedCertificateMatchTrustServiceCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

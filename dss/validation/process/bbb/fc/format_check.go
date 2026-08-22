@@ -37,17 +37,17 @@ func (c *FormatCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *FormatCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IEFF }
+func (c *FormatCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIEFF }
 
 // ErrorMessageTag returns the error message i18n key.
-func (c *FormatCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IEFF_ANS }
+func (c *FormatCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIEFFANS }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *FormatCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *FormatCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

@@ -32,19 +32,19 @@ func (c *UndefinedChangesCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *UndefinedChangesCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_DSCNUOM }
+func (c *UndefinedChangesCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCDSCNUOM }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *UndefinedChangesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DSCNUOM_ANS
+	return i18n.MessageTagBBBFCDSCNUOMANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *UndefinedChangesCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *UndefinedChangesCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

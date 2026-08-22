@@ -5,58 +5,58 @@ package enumerations
 type MimeTypeEnum string
 
 const (
-	// MimeTypeEnum_BINARY is octet-stream.
-	MimeTypeEnum_BINARY MimeTypeEnum = "BINARY"
-	// MimeTypeEnum_TEXT is plain text.
-	MimeTypeEnum_TEXT MimeTypeEnum = "TEXT"
-	// MimeTypeEnum_XML is xml.
-	MimeTypeEnum_XML MimeTypeEnum = "XML"
-	// MimeTypeEnum_HTML is html.
-	MimeTypeEnum_HTML MimeTypeEnum = "HTML"
-	// MimeTypeEnum_PDF is pdf.
-	MimeTypeEnum_PDF MimeTypeEnum = "PDF"
-	// MimeTypeEnum_JSON is json.
-	MimeTypeEnum_JSON MimeTypeEnum = "JSON"
-	// MimeTypeEnum_JOSE is jose.
-	MimeTypeEnum_JOSE MimeTypeEnum = "JOSE"
-	// MimeTypeEnum_JOSE_JSON is jose+json.
-	MimeTypeEnum_JOSE_JSON MimeTypeEnum = "JOSE_JSON"
-	// MimeTypeEnum_SD_JWT_VC is dc+sd-jwt.
-	MimeTypeEnum_SD_JWT_VC MimeTypeEnum = "SD_JWT_VC"
-	// MimeTypeEnum_KB_JWT is kb+jwt.
-	MimeTypeEnum_KB_JWT MimeTypeEnum = "KB_JWT"
-	// MimeTypeEnum_PKCS7 is pkcs7-signature.
-	MimeTypeEnum_PKCS7 MimeTypeEnum = "PKCS7"
-	// MimeTypeEnum_CBOR is cbor.
-	MimeTypeEnum_CBOR MimeTypeEnum = "CBOR"
-	// MimeTypeEnum_COSE is cose-sign or cose-sign1.
-	MimeTypeEnum_COSE MimeTypeEnum = "COSE"
-	// MimeTypeEnum_TST is timestamp-token.
-	MimeTypeEnum_TST MimeTypeEnum = "TST"
-	// MimeTypeEnum_CRL is crl.
-	MimeTypeEnum_CRL MimeTypeEnum = "CRL"
-	// MimeTypeEnum_CER is certificate.
-	MimeTypeEnum_CER MimeTypeEnum = "CER"
-	// MimeTypeEnum_ZIP is zip.
-	MimeTypeEnum_ZIP MimeTypeEnum = "ZIP"
-	// MimeTypeEnum_ASICS is asic-s.
-	MimeTypeEnum_ASICS MimeTypeEnum = "ASICS"
-	// MimeTypeEnum_ASICE is asic-e.
-	MimeTypeEnum_ASICE MimeTypeEnum = "ASICE"
-	// MimeTypeEnum_ODT is opendocument text.
-	MimeTypeEnum_ODT MimeTypeEnum = "ODT"
-	// MimeTypeEnum_ODS is opendocument spreadsheet.
-	MimeTypeEnum_ODS MimeTypeEnum = "ODS"
-	// MimeTypeEnum_ODP is opendocument presentation.
-	MimeTypeEnum_ODP MimeTypeEnum = "ODP"
-	// MimeTypeEnum_ODG is opendocument graphics.
-	MimeTypeEnum_ODG MimeTypeEnum = "ODG"
-	// MimeTypeEnum_PNG is png.
-	MimeTypeEnum_PNG MimeTypeEnum = "PNG"
-	// MimeTypeEnum_JPEG is jpeg.
-	MimeTypeEnum_JPEG MimeTypeEnum = "JPEG"
-	// MimeTypeEnum_SVG is svg.
-	MimeTypeEnum_SVG MimeTypeEnum = "SVG"
+	// MimeTypeEnumBinary is octet-stream.
+	MimeTypeEnumBinary MimeTypeEnum = "BINARY"
+	// MimeTypeEnumText is plain text.
+	MimeTypeEnumText MimeTypeEnum = "TEXT"
+	// MimeTypeEnumXML is xml.
+	MimeTypeEnumXML MimeTypeEnum = "XML"
+	// MimeTypeEnumHTML is html.
+	MimeTypeEnumHTML MimeTypeEnum = "HTML"
+	// MimeTypeEnumPDF is pdf.
+	MimeTypeEnumPDF MimeTypeEnum = "PDF"
+	// MimeTypeEnumJSON is json.
+	MimeTypeEnumJSON MimeTypeEnum = "JSON"
+	// MimeTypeEnumJOSE is jose.
+	MimeTypeEnumJOSE MimeTypeEnum = "JOSE"
+	// MimeTypeEnumJOSEJSON is jose+json.
+	MimeTypeEnumJOSEJSON MimeTypeEnum = "JOSE_JSON"
+	// MimeTypeEnumSDJWTVC is dc+sd-jwt.
+	MimeTypeEnumSDJWTVC MimeTypeEnum = "SD_JWT_VC"
+	// MimeTypeEnumKBJWT is kb+jwt.
+	MimeTypeEnumKBJWT MimeTypeEnum = "KB_JWT"
+	// MimeTypeEnumPKCS7 is pkcs7-signature.
+	MimeTypeEnumPKCS7 MimeTypeEnum = "PKCS7"
+	// MimeTypeEnumCBOR is cbor.
+	MimeTypeEnumCBOR MimeTypeEnum = "CBOR"
+	// MimeTypeEnumCose is cose-sign or cose-sign1.
+	MimeTypeEnumCose MimeTypeEnum = "COSE"
+	// MimeTypeEnumTST is timestamp-token.
+	MimeTypeEnumTST MimeTypeEnum = "TST"
+	// MimeTypeEnumCRL is crl.
+	MimeTypeEnumCRL MimeTypeEnum = "CRL"
+	// MimeTypeEnumCER is certificate.
+	MimeTypeEnumCER MimeTypeEnum = "CER"
+	// MimeTypeEnumZIP is zip.
+	MimeTypeEnumZIP MimeTypeEnum = "ZIP"
+	// MimeTypeEnumASiCS is asic-s.
+	MimeTypeEnumASiCS MimeTypeEnum = "ASICS"
+	// MimeTypeEnumASiCE is asic-e.
+	MimeTypeEnumASiCE MimeTypeEnum = "ASICE"
+	// MimeTypeEnumODT is opendocument text.
+	MimeTypeEnumODT MimeTypeEnum = "ODT"
+	// MimeTypeEnumODS is opendocument spreadsheet.
+	MimeTypeEnumODS MimeTypeEnum = "ODS"
+	// MimeTypeEnumODP is opendocument presentation.
+	MimeTypeEnumODP MimeTypeEnum = "ODP"
+	// MimeTypeEnumODG is opendocument graphics.
+	MimeTypeEnumODG MimeTypeEnum = "ODG"
+	// MimeTypeEnumPNG is png.
+	MimeTypeEnumPNG MimeTypeEnum = "PNG"
+	// MimeTypeEnumJPEG is jpeg.
+	MimeTypeEnumJPEG MimeTypeEnum = "JPEG"
+	// MimeTypeEnumSVG is svg.
+	MimeTypeEnumSVG MimeTypeEnum = "SVG"
 )
 
 type mimeTypeEnumFields struct {
@@ -67,63 +67,63 @@ type mimeTypeEnumFields struct {
 // mimeTypeEnumData holds the (mimeTypeString, extensions) tuple for each
 // constant, copied verbatim from the Java enum constructors.
 var mimeTypeEnumData = map[MimeTypeEnum]mimeTypeEnumFields{
-	MimeTypeEnum_BINARY:    {"application/octet-stream", nil},
-	MimeTypeEnum_TEXT:      {"text/plain", []string{"txt"}},
-	MimeTypeEnum_XML:       {"text/xml", []string{"xml"}},
-	MimeTypeEnum_HTML:      {"text/html", []string{"html"}},
-	MimeTypeEnum_PDF:       {"application/pdf", []string{"pdf"}},
-	MimeTypeEnum_JSON:      {"application/json", []string{"json"}},
-	MimeTypeEnum_JOSE:      {"application/jose", []string{"jose"}},
-	MimeTypeEnum_JOSE_JSON: {"application/jose+json", []string{"json"}},
-	MimeTypeEnum_SD_JWT_VC: {"application/dc+sd-jwt", []string{"json"}},
-	MimeTypeEnum_KB_JWT:    {"application/kb+jwt", []string{"json"}},
-	MimeTypeEnum_PKCS7:     {"application/pkcs7-signature", []string{"pkcs7", "p7m", "p7s"}},
-	MimeTypeEnum_CBOR:      {"application/cbor", []string{"cbor"}},
-	MimeTypeEnum_COSE:      {"application/cose", []string{"cose"}},
-	MimeTypeEnum_TST:       {"application/vnd.etsi.timestamp-token", []string{"tst"}},
-	MimeTypeEnum_CRL:       {"application/pkix-crl", []string{"crl"}},
-	MimeTypeEnum_CER:       {"application/pkix-cert", []string{"cer", "crt"}},
-	MimeTypeEnum_ZIP:       {"application/zip", []string{"zip"}},
-	MimeTypeEnum_ASICS:     {"application/vnd.etsi.asic-s+zip", []string{"scs", "asics"}},
-	MimeTypeEnum_ASICE:     {"application/vnd.etsi.asic-e+zip", []string{"sce", "asice", "bdoc"}},
-	MimeTypeEnum_ODT:       {"application/vnd.oasis.opendocument.text", []string{"odt"}},
-	MimeTypeEnum_ODS:       {"application/vnd.oasis.opendocument.spreadsheet", []string{"ods"}},
-	MimeTypeEnum_ODP:       {"application/vnd.oasis.opendocument.presentation", []string{"odp"}},
-	MimeTypeEnum_ODG:       {"application/vnd.oasis.opendocument.graphics", []string{"odg"}},
-	MimeTypeEnum_PNG:       {"image/png", []string{"png"}},
-	MimeTypeEnum_JPEG:      {"image/jpeg", []string{"jpg", "jpeg"}},
-	MimeTypeEnum_SVG:       {"image/svg+xml", []string{"svg"}},
+	MimeTypeEnumBinary:   {"application/octet-stream", nil},
+	MimeTypeEnumText:     {"text/plain", []string{"txt"}},
+	MimeTypeEnumXML:      {"text/xml", []string{"xml"}},
+	MimeTypeEnumHTML:     {"text/html", []string{"html"}},
+	MimeTypeEnumPDF:      {"application/pdf", []string{"pdf"}},
+	MimeTypeEnumJSON:     {"application/json", []string{"json"}},
+	MimeTypeEnumJOSE:     {"application/jose", []string{"jose"}},
+	MimeTypeEnumJOSEJSON: {"application/jose+json", []string{"json"}},
+	MimeTypeEnumSDJWTVC:  {"application/dc+sd-jwt", []string{"json"}},
+	MimeTypeEnumKBJWT:    {"application/kb+jwt", []string{"json"}},
+	MimeTypeEnumPKCS7:    {"application/pkcs7-signature", []string{"pkcs7", "p7m", "p7s"}},
+	MimeTypeEnumCBOR:     {"application/cbor", []string{"cbor"}},
+	MimeTypeEnumCose:     {"application/cose", []string{"cose"}},
+	MimeTypeEnumTST:      {"application/vnd.etsi.timestamp-token", []string{"tst"}},
+	MimeTypeEnumCRL:      {"application/pkix-crl", []string{"crl"}},
+	MimeTypeEnumCER:      {"application/pkix-cert", []string{"cer", "crt"}},
+	MimeTypeEnumZIP:      {"application/zip", []string{"zip"}},
+	MimeTypeEnumASiCS:    {"application/vnd.etsi.asic-s+zip", []string{"scs", "asics"}},
+	MimeTypeEnumASiCE:    {"application/vnd.etsi.asic-e+zip", []string{"sce", "asice", "bdoc"}},
+	MimeTypeEnumODT:      {"application/vnd.oasis.opendocument.text", []string{"odt"}},
+	MimeTypeEnumODS:      {"application/vnd.oasis.opendocument.spreadsheet", []string{"ods"}},
+	MimeTypeEnumODP:      {"application/vnd.oasis.opendocument.presentation", []string{"odp"}},
+	MimeTypeEnumODG:      {"application/vnd.oasis.opendocument.graphics", []string{"odg"}},
+	MimeTypeEnumPNG:      {"image/png", []string{"png"}},
+	MimeTypeEnumJPEG:     {"image/jpeg", []string{"jpg", "jpeg"}},
+	MimeTypeEnumSVG:      {"image/svg+xml", []string{"svg"}},
 }
 
 // MimeTypeEnumValues returns all constants in declaration order.
 func MimeTypeEnumValues() []MimeTypeEnum {
 	return []MimeTypeEnum{
-		MimeTypeEnum_BINARY,
-		MimeTypeEnum_TEXT,
-		MimeTypeEnum_XML,
-		MimeTypeEnum_HTML,
-		MimeTypeEnum_PDF,
-		MimeTypeEnum_JSON,
-		MimeTypeEnum_JOSE,
-		MimeTypeEnum_JOSE_JSON,
-		MimeTypeEnum_SD_JWT_VC,
-		MimeTypeEnum_KB_JWT,
-		MimeTypeEnum_PKCS7,
-		MimeTypeEnum_CBOR,
-		MimeTypeEnum_COSE,
-		MimeTypeEnum_TST,
-		MimeTypeEnum_CRL,
-		MimeTypeEnum_CER,
-		MimeTypeEnum_ZIP,
-		MimeTypeEnum_ASICS,
-		MimeTypeEnum_ASICE,
-		MimeTypeEnum_ODT,
-		MimeTypeEnum_ODS,
-		MimeTypeEnum_ODP,
-		MimeTypeEnum_ODG,
-		MimeTypeEnum_PNG,
-		MimeTypeEnum_JPEG,
-		MimeTypeEnum_SVG,
+		MimeTypeEnumBinary,
+		MimeTypeEnumText,
+		MimeTypeEnumXML,
+		MimeTypeEnumHTML,
+		MimeTypeEnumPDF,
+		MimeTypeEnumJSON,
+		MimeTypeEnumJOSE,
+		MimeTypeEnumJOSEJSON,
+		MimeTypeEnumSDJWTVC,
+		MimeTypeEnumKBJWT,
+		MimeTypeEnumPKCS7,
+		MimeTypeEnumCBOR,
+		MimeTypeEnumCose,
+		MimeTypeEnumTST,
+		MimeTypeEnumCRL,
+		MimeTypeEnumCER,
+		MimeTypeEnumZIP,
+		MimeTypeEnumASiCS,
+		MimeTypeEnumASiCE,
+		MimeTypeEnumODT,
+		MimeTypeEnumODS,
+		MimeTypeEnumODP,
+		MimeTypeEnumODG,
+		MimeTypeEnumPNG,
+		MimeTypeEnumJPEG,
+		MimeTypeEnumSVG,
 	}
 }
 

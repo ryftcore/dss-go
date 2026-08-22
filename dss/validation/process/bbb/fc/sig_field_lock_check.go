@@ -42,17 +42,17 @@ func (c *SigFieldLockCheck) Process() bool {
 	// optional
 	if c.PdfLockDictionary.Permissions != nil {
 		switch c.PdfLockDictionary.Permissions.CertificationPermission() {
-		case enumerations.CertificationPermission_NO_CHANGE_PERMITTED:
+		case enumerations.CertificationPermissionNoChangePermitted:
 			if len(c.PdfRevision.PdfSignatureOrFormFillChanges()) > 0 ||
 				len(c.PdfRevision.PdfAnnotationChanges()) > 0 ||
 				len(c.PdfRevision.PdfUndefinedChanges()) > 0 {
 				return false
 			}
-		case enumerations.CertificationPermission_MINIMAL_CHANGES_PERMITTED:
+		case enumerations.CertificationPermissionMinimalChangesPermitted:
 			if len(c.PdfRevision.PdfAnnotationChanges()) > 0 || len(c.PdfRevision.PdfUndefinedChanges()) > 0 {
 				return false
 			}
-		case enumerations.CertificationPermission_CHANGES_PERMITTED:
+		case enumerations.CertificationPermissionChangesPermitted:
 			if len(c.PdfRevision.PdfUndefinedChanges()) > 0 {
 				return false
 			}
@@ -64,19 +64,19 @@ func (c *SigFieldLockCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *SigFieldLockCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISVASFLD }
+func (c *SigFieldLockCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISVASFLD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SigFieldLockCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISVASFLD_ANS
+	return i18n.MessageTagBBBFCISVASFLDANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *SigFieldLockCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *SigFieldLockCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

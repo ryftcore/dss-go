@@ -31,16 +31,16 @@ func NewValidationDataTimeStampCheck(i18nProvider *i18n.I18nProvider, result *pr
 // TimestampType returns the associated TimestampType. Port of
 // getTimestampType().
 func (c *ValidationDataTimeStampCheck) TimestampType() enumerations.TimestampType {
-	return enumerations.TimestampType_VALIDATION_DATA_TIMESTAMP
+	return enumerations.TimestampTypeValidationDataTimestamp
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ValidationDataTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPVDTSP
+	return i18n.MessageTagBBBSAVIUQPVDTSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ValidationDataTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPVDTSP_ANS
+	return i18n.MessageTagBBBSAVIUQPVDTSPANS
 }

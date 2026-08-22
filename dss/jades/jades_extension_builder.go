@@ -102,8 +102,8 @@ func (b *JAdESExtensionBuilder) AssertJSONSerializationObjectMayBeExtended(
 	}
 
 	jwsSerializationType := jwsJsonSerializationObject.JWSSerializationType()
-	if enumerations.JWSSerializationType_JSON_SERIALIZATION != jwsSerializationType &&
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION != jwsSerializationType {
+	if enumerations.JWSSerializationTypeJSONSerialization != jwsSerializationType &&
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization != jwsSerializationType {
 		return exception.NewIllegalInputException(
 			"The extended signature shall have JSON Serialization (or Flattened) type! " +
 				"Use JWSConverter to convert the signature.")

@@ -15,20 +15,31 @@ become Go packages by the mapping in the table below.
 as noise. Where upstream's own naming is load-bearing, it is kept. When in
 doubt, `go doc` the package.
 
-**3. Enum constants are `Type_JAVA_NAME`, and their value is Java's `name()`.**
-Java's class-scoped constants share one namespace in Go, so:
+**3. Enum constants are `TypeJavaName` in MixedCaps, and their value is still
+Java's `name()`.** Java's class-scoped constants share one namespace in Go, so
+the type name is a prefix; the underscores of the Java name are dropped and each
+part is MixedCased, with acronyms kept upper-case:
 
 ```java
 SignatureLevel.XAdES_BASELINE_LTA   // Java
 ```
 ```go
-enumerations.SignatureLevel_XAdES_BASELINE_LTA  // Go
+enumerations.SignatureLevelXAdESBaselineLTA  // Go
 ```
 
-The *value* is the string `"XAdES_BASELINE_LTA"` — exactly Java's `name()` —
-which is what makes serialized output interchangeable. `valueOf` becomes
-`SignatureLevelValueOf(string) (SignatureLevel, error)`; `forOid` / `forUri`
-become `…ForOID` / `…ForURI`.
+The *value* is unchanged — the string `"XAdES_BASELINE_LTA"`, exactly Java's
+`name()` — which is what makes serialized output interchangeable. Only the Go
+spelling of the identifier differs from Java's. Some more mappings:
+
+| Java | Go |
+| --- | --- |
+| `DigestAlgorithm.SHA256` | `enumerations.DigestAlgorithmSHA256` |
+| `SignaturePackaging.ENVELOPED` | `enumerations.SignaturePackagingEnveloped` |
+| `AdditionalServiceInformation.FOR_ESIGNATURES` | `enumerations.AdditionalServiceInformationForESignatures` |
+| `MessageTag.BBB_XCV_CCCBB` | `i18n.MessageTagBBBXCVCCCBB` |
+
+`valueOf` becomes `SignatureLevelValueOf(string) (SignatureLevel, error)`;
+`forOid` / `forUri` become `…ForOID` / `…ForURI`.
 
 **4. Exceptions become errors — except where they become panics.** Checked and
 meaningful exceptions are `error` returns, matchable with `errors.As` against

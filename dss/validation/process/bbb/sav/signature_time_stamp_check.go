@@ -30,16 +30,16 @@ func NewSignatureTimeStampCheck(i18nProvider *i18n.I18nProvider, result *process
 // TimestampType returns the associated TimestampType. Port of
 // getTimestampType().
 func (c *SignatureTimeStampCheck) TimestampType() enumerations.TimestampType {
-	return enumerations.TimestampType_SIGNATURE_TIMESTAMP
+	return enumerations.TimestampTypeSignatureTimestamp
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPSTSP
+	return i18n.MessageTagBBBSAVIUQPSTSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPSTSP_ANS
+	return i18n.MessageTagBBBSAVIUQPSTSPANS
 }

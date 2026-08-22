@@ -38,23 +38,23 @@ func (c *EAAIssuingAuthorityCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAIssuingAuthorityCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_AUTH
+	return i18n.MessageTagEAAISSAuth
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAIssuingAuthorityCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ISS_AUTH_ANS
+	return i18n.MessageTagEAAISSAuthANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAIssuingAuthorityCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAIssuingAuthorityCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

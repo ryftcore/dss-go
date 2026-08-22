@@ -54,7 +54,7 @@ func NewValidationContextInitialization(i18nProvider *i18n.I18nProvider, signatu
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *ValidationContextInitialization) Title() i18n.MessageTag {
-	return i18n.MessageTag_VALIDATION_CONTEXT_INITIALIZATION
+	return i18n.MessageTagValidationContextInitialization
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -64,7 +64,7 @@ func (c *ValidationContextInitialization) InitChain() {
 	c.FirstItem = item
 
 	if c.signature.IsPolicyPresent() &&
-		string(enumerations.SignaturePolicyType_IMPLICIT_POLICY) != c.signature.PolicyId() {
+		string(enumerations.SignaturePolicyTypeImplicitPolicy) != c.signature.PolicyId() {
 
 		item = item.SetNextItem(c.signaturePolicyIdentified())
 

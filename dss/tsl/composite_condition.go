@@ -29,7 +29,7 @@ type CompositeCondition struct {
 // behaves identically for append and len, but getChildren() must not hand back nil where Java
 // hands back an empty list, so Children() normalises (see below).
 func NewCompositeCondition() *CompositeCondition {
-	return &CompositeCondition{matchingCriteriaIndicator: enumerations.Assert_ALL}
+	return &CompositeCondition{matchingCriteriaIndicator: enumerations.AssertAll}
 }
 
 // NewCompositeConditionWithMatchingCriteriaIndicator is the constructor for
@@ -71,21 +71,21 @@ func (c *CompositeCondition) MatchingCriteriaIndicator() enumerations.Assert {
 // except by explicitly passing the empty Assert.
 func (c *CompositeCondition) Check(certificateToken *model.CertificateToken) bool {
 	switch c.matchingCriteriaIndicator {
-	case enumerations.Assert_ALL:
+	case enumerations.AssertAll:
 		for _, condition := range c.children {
 			if !condition.Check(certificateToken) {
 				return false
 			}
 		}
 		return true
-	case enumerations.Assert_AT_LEAST_ONE:
+	case enumerations.AssertAtLeastOne:
 		for _, condition := range c.children {
 			if condition.Check(certificateToken) {
 				return true
 			}
 		}
 		return false
-	case enumerations.Assert_NONE:
+	case enumerations.AssertNone:
 		for _, condition := range c.children {
 			if condition.Check(certificateToken) {
 				return false

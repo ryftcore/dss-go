@@ -49,13 +49,13 @@ func (c *TimestampDigestAlgorithmValidationCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampDigestAlgorithmValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_ICHFCRLPOET
+	return i18n.MessageTagArchICHFCRLPOET
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampDigestAlgorithmValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_ICHFCRLPOET_ANS
+	return i18n.MessageTagArchICHFCRLPOETANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -71,11 +71,11 @@ func (c *TimestampDigestAlgorithmValidationCheck[T]) BuildAdditionalInfo() *stri
 	}
 	var message string
 	if c.Process() {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM_WITH_ID,
-			digestMethod, dateTime, i18n.MessageTag_ACCM_POS_MESS_IMP, c.timestamp.Id())
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDMWithID,
+			digestMethod, dateTime, i18n.MessageTagACCMPosMessImp, c.timestamp.Id())
 	} else {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_ID,
-			digestMethod, dateTime, i18n.MessageTag_ACCM_POS_MESS_IMP, c.timestamp.Id())
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithID,
+			digestMethod, dateTime, i18n.MessageTagACCMPosMessImp, c.timestamp.Id())
 	}
 	return &message
 }

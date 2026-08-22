@@ -175,15 +175,15 @@ func TestFindSignatureAlgorithmIdentifierNeverPanics(t *testing.T) {
 
 func allSignatureAlgorithmsForTest() []enumerations.SignatureAlgorithm {
 	return []enumerations.SignatureAlgorithm{
-		enumerations.SignatureAlgorithm_RSA_SHA1,
-		enumerations.SignatureAlgorithm_RSA_SHA256,
-		enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1,
-		enumerations.SignatureAlgorithm_ECDSA_SHA256,
-		enumerations.SignatureAlgorithm_PLAIN_ECDSA_SHA256,
-		enumerations.SignatureAlgorithm_ED25519,
-		enumerations.SignatureAlgorithm_ED448,
-		enumerations.SignatureAlgorithm_DSA_SHA256,
-		enumerations.SignatureAlgorithm_HMAC_SHA256,
+		enumerations.SignatureAlgorithmRSASHA1,
+		enumerations.SignatureAlgorithmRSASHA256,
+		enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1,
+		enumerations.SignatureAlgorithmECDSASHA256,
+		enumerations.SignatureAlgorithmPlainECDSASHA256,
+		enumerations.SignatureAlgorithmED25519,
+		enumerations.SignatureAlgorithmED448,
+		enumerations.SignatureAlgorithmDSASHA256,
+		enumerations.SignatureAlgorithmHMACSHA256,
 	}
 }
 

@@ -98,10 +98,10 @@ func main() {
 		level         enumerations.SignatureLevel
 		tsp           validation.TSPSource
 	}{
-		{"asics-cades-b.scs", singleDoc, enumerations.ASiCContainerType_ASiC_S, enumerations.SignatureLevel_CAdES_BASELINE_B, nil},
-		{"asics-cades-t.scs", singleDoc, enumerations.ASiCContainerType_ASiC_S, enumerations.SignatureLevel_CAdES_BASELINE_T, tspSource},
-		{"asice-cades-b.sce", multiDocs, enumerations.ASiCContainerType_ASiC_E, enumerations.SignatureLevel_CAdES_BASELINE_B, nil},
-		{"asice-cades-t.sce", multiDocs, enumerations.ASiCContainerType_ASiC_E, enumerations.SignatureLevel_CAdES_BASELINE_T, tspSource},
+		{"asics-cades-b.scs", singleDoc, enumerations.ASiCContainerTypeASiCS, enumerations.SignatureLevelCAdESBaselineB, nil},
+		{"asics-cades-t.scs", singleDoc, enumerations.ASiCContainerTypeASiCS, enumerations.SignatureLevelCAdESBaselineT, tspSource},
+		{"asice-cades-b.sce", multiDocs, enumerations.ASiCContainerTypeASiCE, enumerations.SignatureLevelCAdESBaselineB, nil},
+		{"asice-cades-t.sce", multiDocs, enumerations.ASiCContainerTypeASiCE, enumerations.SignatureLevelCAdESBaselineT, tspSource},
 	}
 
 	for _, testCase := range cases {
@@ -143,7 +143,7 @@ func generate(outDir, name string, documents []model.DSSDocument, containerType 
 	level enumerations.SignatureLevel, signerEntry token.DSSPrivateKeyEntry, tspSource validation.TSPSource) error {
 	parameters := asiccades.NewASiCWithCAdESSignatureParameters()
 	parameters.SetSignatureLevel(level)
-	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithm_SHA256)
+	parameters.SetDigestAlgorithm(enumerations.DigestAlgorithmSHA256)
 	parameters.SetSigningCertificate(signerEntry.Certificate())
 	parameters.SetCertificateChainFromTokens(signerEntry.CertificateChain()...)
 	parameters.ASiC().SetContainerType(containerType)
@@ -211,7 +211,7 @@ func extendToT(inputPath, outputPath string) error {
 	tspSource.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
 
 	parameters := asiccades.NewASiCWithCAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_T)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineT)
 
 	service := asiccades.NewASiCWithCAdESService(validation.NewCommonCertificateVerifier())
 	service.TspSource = tspSource

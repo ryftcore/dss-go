@@ -160,7 +160,7 @@ func newSignature(t *testing.T, st *fixtureState, sigEl *xmldom.Node) *xmldsig.X
 	if len(st.detached) > 0 {
 		sig.AddResourceResolver(&xmldsig.DetachedSignatureResolver{
 			Documents:       st.detached,
-			DigestAlgorithm: enumerations.DigestAlgorithm_SHA256,
+			DigestAlgorithm: enumerations.DigestAlgorithmSHA256,
 		})
 	}
 	return sig
@@ -327,7 +327,7 @@ func reference(t *testing.T, st *fixtureState, sigIndex int, row katRow) *xmldsi
 	if len(st.detached) > 0 {
 		man.AddResourceResolver(&xmldsig.DetachedSignatureResolver{
 			Documents:       st.detached,
-			DigestAlgorithm: enumerations.DigestAlgorithm_SHA256,
+			DigestAlgorithm: enumerations.DigestAlgorithmSHA256,
 		})
 	}
 	ref, err := man.Item(idx)

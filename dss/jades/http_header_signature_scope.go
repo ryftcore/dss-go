@@ -35,5 +35,5 @@ func (s *HTTPHeaderSignatureScope) Description(tokenIdentifierProvider model.Tok
 
 // Type returns the type of the signature scope. Port of getType().
 func (s *HTTPHeaderSignatureScope) Type() enumerations.SignatureScopeType {
-	return enumerations.SignatureScopeType_FULL
+	return enumerations.SignatureScopeTypeFull
 }

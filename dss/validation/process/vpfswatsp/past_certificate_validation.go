@@ -66,7 +66,7 @@ func NewPastCertificateValidation(i18nProvider *i18n.I18nProvider, token diagnos
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *PastCertificateValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_PAST_CERTIFICATE_VALIDATION
+	return i18n.MessageTagPastCertificateValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -263,7 +263,7 @@ func (c *PastCertificateValidation) AddAdditionalInfo() {
 // collectMessages(XmlConclusion, XmlConstraint): the generated BlockType member
 // is a *XmlBlockType, whose nil is Java's null.
 func (c *PastCertificateValidation) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType != nil && jaxb.XmlBlockType_VTS == *constraint.BlockType {
+	if constraint.BlockType != nil && jaxb.XmlBlockTypeVTS == *constraint.BlockType {
 		// skip validation for VTS
 	} else {
 		c.ChainBase.CollectMessages(conclusion, constraint)

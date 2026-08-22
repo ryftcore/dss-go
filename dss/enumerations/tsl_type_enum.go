@@ -6,12 +6,12 @@ package enumerations
 type TSLTypeEnum string
 
 const (
-	// TSLTypeEnum_EUlistofthelists is the EU List of the Trusted Lists.
-	TSLTypeEnum_EUlistofthelists TSLTypeEnum = "EUlistofthelists"
-	// TSLTypeEnum_EUgeneric is the EU Trusted Lists.
-	TSLTypeEnum_EUgeneric TSLTypeEnum = "EUgeneric"
-	// TSLTypeEnum_AdESlistofthelists is the AdES List of the Trusted Lists.
-	TSLTypeEnum_AdESlistofthelists TSLTypeEnum = "AdESlistofthelists"
+	// TSLTypeEnumEUlistofthelists is the EU List of the Trusted Lists.
+	TSLTypeEnumEUlistofthelists TSLTypeEnum = "EUlistofthelists"
+	// TSLTypeEnumEUgeneric is the EU Trusted Lists.
+	TSLTypeEnumEUgeneric TSLTypeEnum = "EUgeneric"
+	// TSLTypeEnumAdESlistofthelists is the AdES List of the Trusted Lists.
+	TSLTypeEnumAdESlistofthelists TSLTypeEnum = "AdESlistofthelists"
 )
 
 type tslTypeEnumFields struct {
@@ -21,17 +21,17 @@ type tslTypeEnumFields struct {
 
 // tslTypeEnumData holds the (uri, label) tuple for each constant.
 var tslTypeEnumData = map[TSLTypeEnum]tslTypeEnumFields{
-	TSLTypeEnum_EUlistofthelists:   {"http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists", "EU List of the Trusted Lists"},
-	TSLTypeEnum_EUgeneric:          {"http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric", "EU Trusted List"},
-	TSLTypeEnum_AdESlistofthelists: {"http://ec.europa.eu/tools/lotl/mra/ades-lotl-tsl-type", "AdES List of the Trusted Lists"},
+	TSLTypeEnumEUlistofthelists:   {"http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists", "EU List of the Trusted Lists"},
+	TSLTypeEnumEUgeneric:          {"http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric", "EU Trusted List"},
+	TSLTypeEnumAdESlistofthelists: {"http://ec.europa.eu/tools/lotl/mra/ades-lotl-tsl-type", "AdES List of the Trusted Lists"},
 }
 
 // TSLTypeEnumValues returns all constants in declaration order.
 func TSLTypeEnumValues() []TSLTypeEnum {
 	return []TSLTypeEnum{
-		TSLTypeEnum_EUlistofthelists,
-		TSLTypeEnum_EUgeneric,
-		TSLTypeEnum_AdESlistofthelists,
+		TSLTypeEnumEUlistofthelists,
+		TSLTypeEnumEUgeneric,
+		TSLTypeEnumAdESlistofthelists,
 	}
 }
 
@@ -65,4 +65,4 @@ func (e *tslTypeEnumInvalidValueError) Error() string {
 }
 
 // Compile-time assertion that TSLTypeEnum implements TSLType.
-var _ TSLType = TSLTypeEnum_EUgeneric
+var _ TSLType = TSLTypeEnumEUgeneric

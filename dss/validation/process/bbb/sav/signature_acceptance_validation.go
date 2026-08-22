@@ -63,7 +63,7 @@ func NewSignatureAcceptanceValidation(i18nProvider *i18n.I18nProvider, diagnosti
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *SignatureAcceptanceValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIGNATURE_ACCEPTANCE_VALIDATION
+	return i18n.MessageTagSignatureAcceptanceValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -107,7 +107,7 @@ func (c *SignatureAcceptanceValidation) InitChain() {
 		}
 
 		// verification for JAdES / CB-AdES
-		if enumerations.SignatureForm_JAdES == signatureForm || enumerations.SignatureForm_CBAdES == signatureForm {
+		if enumerations.SignatureFormJAdES == signatureForm || enumerations.SignatureFormCBAdES == signatureForm {
 
 			item = item.SetNextItem(c.keyIdentifierPresent())
 
@@ -132,7 +132,7 @@ func (c *SignatureAcceptanceValidation) InitChain() {
 		item = item.SetNextItem(c.signingTimeInCertificateValidityRange())
 	}
 
-	if enumerations.SignatureForm_JAdES == signatureForm {
+	if enumerations.SignatureFormJAdES == signatureForm {
 		item = item.SetNextItem(c.signatureType())
 	}
 
@@ -143,7 +143,7 @@ func (c *SignatureAcceptanceValidation) InitChain() {
 	item = item.SetNextItem(c.contentHints())
 
 	// message-digest for CAdES/PAdES and SignedProperties for XAdES are present
-	if enumerations.SignatureForm_JAdES != signatureForm && enumerations.SignatureForm_CBAdES != signatureForm {
+	if enumerations.SignatureFormJAdES != signatureForm && enumerations.SignatureFormCBAdES != signatureForm {
 		item = item.SetNextItem(c.messageDigestOrSignedProperties())
 	}
 
@@ -198,7 +198,7 @@ func (c *SignatureAcceptanceValidation) InitChain() {
 	item = item.SetNextItem(c.archiveTimeStamp())
 
 	// document-time-stamp (PAdES only)
-	if enumerations.SignatureForm_PAdES == signatureForm {
+	if enumerations.SignatureFormPAdES == signatureForm {
 		item = item.SetNextItem(c.documentTimeStamp())
 	}
 
@@ -346,7 +346,7 @@ func (c *SignatureAcceptanceValidation) getTimestampBasicValidationConstraintLev
 // CollectMessages collects required messages from the given constraint to the
 // given conclusion. Port of collectMessages(XmlConclusion, XmlConstraint).
 func (c *SignatureAcceptanceValidation) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraintBlockType(constraint) == jaxb.XmlBlockType_TST_BBB &&
+	if constraintBlockType(constraint) == jaxb.XmlBlockTypeTSTBBB &&
 		(c.validationPolicy.TimestampValidConstraint() == nil ||
 			process.IsLongTermAvailabilityAndIntegrityMaterialPresent(c.token)) {
 		// skip validation messages for content TSTs

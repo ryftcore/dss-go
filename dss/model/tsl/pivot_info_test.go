@@ -9,12 +9,12 @@ import (
 func TestPivotInfoRoundTrip(t *testing.T) {
 	cert := &model.CertificateToken{}
 	statusMap := map[*model.CertificateToken]CertificatePivotStatus{
-		cert: CertificatePivotStatus_ADDED,
+		cert: CertificatePivotStatusAdded,
 	}
 
 	p := NewPivotInfo(nil, nil, nil, "https://example.org/lotl.xml", statusMap, "https://example.org/lotl-location.xml")
 
-	if len(p.CertificateStatusMap()) != 1 || p.CertificateStatusMap()[cert] != CertificatePivotStatus_ADDED {
+	if len(p.CertificateStatusMap()) != 1 || p.CertificateStatusMap()[cert] != CertificatePivotStatusAdded {
 		t.Fatalf("unexpected CertificateStatusMap: %v", p.CertificateStatusMap())
 	}
 	if p.LOTLLocation() != "https://example.org/lotl-location.xml" {

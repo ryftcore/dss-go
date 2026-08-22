@@ -88,9 +88,9 @@ func (t *TLValidatorTask) validateTL() (*reports.Reports, error) {
 	}
 
 	xmlDocumentValidator.SetCertificateVerifier(certificateVerifier)
-	xmlDocumentValidator.SetTokenExtractionStrategy(enumerations.TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY)
-	xmlDocumentValidator.SetEnableEtsiValidationReport(false)                              // Ignore ETSI VR
-	xmlDocumentValidator.SetValidationLevel(enumerations.ValidationLevel_BASIC_SIGNATURES) // Timestamps,... are ignored
+	xmlDocumentValidator.SetTokenExtractionStrategy(enumerations.TokenExtractionStrategyExtractCertificatesOnly)
+	xmlDocumentValidator.SetEnableEtsiValidationReport(false)                            // Ignore ETSI VR
+	xmlDocumentValidator.SetValidationLevel(enumerations.ValidationLevelBasicSignatures) // Timestamps,... are ignored
 	// Only need to validate against the trusted certificate source
 	xmlDocumentValidator.SetValidationContextExecutor(spiexecutor.SkipValidationContextExecutorInstance)
 	xmlDocumentValidator.SetSignaturePolicyProvider(spipolicy.NewSignaturePolicyProvider()) // ignore signature policy loading

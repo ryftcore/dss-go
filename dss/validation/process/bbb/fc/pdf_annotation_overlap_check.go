@@ -32,11 +32,11 @@ func (c *PdfAnnotationOverlapCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *PdfAnnotationOverlapCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IAOD }
+func (c *PdfAnnotationOverlapCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIAOD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfAnnotationOverlapCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IAOD_ANS
+	return i18n.MessageTagBBBFCIAODANS
 }
 
 // BuildErrorMessage overrides the default to include the concerned pages. Port of the
@@ -48,10 +48,10 @@ func (c *PdfAnnotationOverlapCheck) BuildErrorMessage() *drjaxb.XmlMessage {
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *PdfAnnotationOverlapCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *PdfAnnotationOverlapCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

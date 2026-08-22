@@ -59,31 +59,31 @@ func (c *KeyUsageCheck) BuildAdditionalInfo() *string {
 	for _, keyUsageBit := range c.certificate.KeyUsages() {
 		names = append(names, string(keyUsageBit))
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_KEY_USAGE, "["+strings.Join(names, ", ")+"]")
+	message := c.I18nProvider.GetMessage(i18n.MessageTagKeyUsage, "["+strings.Join(names, ", ")+"]")
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *KeyUsageCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGKU
+	return i18n.MessageTagBBBXCVISCGKU
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *KeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	if enumerations.Context_CERTIFICATE == c.context {
-		return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGKU_ANS_CERT)
+	if enumerations.ContextCertificate == c.context {
+		return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGKUANSCert)
 	}
 	position, err := process.GetSubContextPosition(c.context, c.subContext)
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGKU_ANS, position)
+	return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGKUANS, position)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *KeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
@@ -91,8 +91,8 @@ func (c *KeyUsageCheck) FailedIndicationForConclusion() enumerations.Indication 
 // CA keyCertSign is a part of RFC 5280, while check of sign-cert falls under
 // AdES validation process. Port of getFailedSubIndicationForConclusion().
 func (c *KeyUsageCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	if enumerations.SubContext_CA_CERTIFICATE == c.subContext {
-		return enumerations.SubIndication_CERTIFICATE_CHAIN_GENERAL_FAILURE
+	if enumerations.SubContextCACertificate == c.subContext {
+		return enumerations.SubIndicationCertificateChainGeneralFailure
 	}
-	return enumerations.SubIndication_CHAIN_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationChainConstraintsFailure
 }

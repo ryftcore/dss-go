@@ -41,7 +41,7 @@ func newSingleCheckChain(
 }
 
 func (c *singleCheckChain) InitChain() {
-	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.Level_FAIL))
+	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.LevelFail))
 }
 
 // assertDirectRow runs the single-item chain and compares it against the named
@@ -66,7 +66,7 @@ func assertDirectRow(t *testing.T, name string,
 		expected.Title = &empty
 	}
 	result := newSingleCheckChain(factory).Execute()
-	actual := toRow("synthetic", name, enumerations.Context_SIGNATURE, "ISC",
+	actual := toRow("synthetic", name, enumerations.ContextSignature, "ISC",
 		&result.XmlConstraintsConclusionContent, result.Title)
 	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("%s: mismatch\nexpected: %s\nactual:   %s", name, mustJSON(t, expected), mustJSON(t, actual))
@@ -83,10 +83,10 @@ func syntheticSignature(digestPresent, digestMatch, issuerSerialPresent, issuerS
 	xmlCertificate := &diagnosticjaxb.XmlCertificate{}
 	xmlCertificate.Id = diagnosticjaxb.NewCollapsedString("C-SYNTHETIC")
 
-	origin := diagnosticjaxb.CertificateRefOriginValue(enumerations.CertificateRefOrigin_SIGNING_CERTIFICATE)
+	origin := diagnosticjaxb.CertificateRefOriginValue(enumerations.CertificateRefOriginSigningCertificate)
 	ref := &diagnosticjaxb.XmlCertificateRef{Origin: &origin}
 	if digestPresent {
-		digestMethod := diagnosticjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithm_SHA256)
+		digestMethod := diagnosticjaxb.DigestAlgorithmValue(enumerations.DigestAlgorithmSHA256)
 		digestValue := diagnosticjaxb.Base64Binary{1, 2, 3}
 		match := digestMatch
 		digest := &diagnosticjaxb.XmlDigestAlgoAndValue{}

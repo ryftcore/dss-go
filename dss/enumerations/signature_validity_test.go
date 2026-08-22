@@ -6,14 +6,14 @@ import "testing"
 func TestSignatureValidityGet(t *testing.T) {
 	trueVal := true
 	falseVal := false
-	if got := SignatureValidityGet(nil); got != SignatureValidity_NOT_EVALUATED {
-		t.Errorf("SignatureValidityGet(nil) = %v, want %v", got, SignatureValidity_NOT_EVALUATED)
+	if got := SignatureValidityGet(nil); got != SignatureValidityNotEvaluated {
+		t.Errorf("SignatureValidityGet(nil) = %v, want %v", got, SignatureValidityNotEvaluated)
 	}
-	if got := SignatureValidityGet(&trueVal); got != SignatureValidity_VALID {
-		t.Errorf("SignatureValidityGet(true) = %v, want %v", got, SignatureValidity_VALID)
+	if got := SignatureValidityGet(&trueVal); got != SignatureValidityValid {
+		t.Errorf("SignatureValidityGet(true) = %v, want %v", got, SignatureValidityValid)
 	}
-	if got := SignatureValidityGet(&falseVal); got != SignatureValidity_INVALID {
-		t.Errorf("SignatureValidityGet(false) = %v, want %v", got, SignatureValidity_INVALID)
+	if got := SignatureValidityGet(&falseVal); got != SignatureValidityInvalid {
+		t.Errorf("SignatureValidityGet(false) = %v, want %v", got, SignatureValidityInvalid)
 	}
 }
 

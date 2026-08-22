@@ -7,9 +7,9 @@ func TestPdfLockActionForName(t *testing.T) {
 		v    PdfLockAction
 		name string
 	}{
-		{PdfLockAction_ALL, "All"},
-		{PdfLockAction_INCLUDE, "Include"},
-		{PdfLockAction_EXCLUDE, "Exclude"},
+		{PdfLockActionAll, "All"},
+		{PdfLockActionInclude, "Include"},
+		{PdfLockActionExclude, "Exclude"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Name(); got != tt.name {

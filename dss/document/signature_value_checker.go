@@ -46,7 +46,7 @@ func (c *SignatureValueChecker) EnsureSignatureValue(signatureValue *model.Signa
 			signatureDigestAlgorithm, targetDigestAlgorithm))
 	}
 
-	if enumerations.EncryptionAlgorithm_ECDSA.IsEquivalent(targetSignatureAlgorithm.EncryptionAlgorithm()) {
+	if enumerations.EncryptionAlgorithmECDSA.IsEquivalent(targetSignatureAlgorithm.EncryptionAlgorithm()) {
 		newSignatureValue, err := spi.DSSUtilsConvertECSignatureValue(targetSignatureAlgorithm, signatureValue)
 		if err != nil {
 			return nil, err

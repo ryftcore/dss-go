@@ -43,18 +43,18 @@ func (c *PIDIssuanceTrustedEntityServicesCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PIDIssuanceTrustedEntityServicesCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_STI_PID_ISSUANCE
+	return i18n.MessageTagPIDStiPIDIssuance
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *PIDIssuanceTrustedEntityServicesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_STI_PID_ISSUANCE_ANS
+	return i18n.MessageTagPIDStiPIDIssuanceANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PIDIssuanceTrustedEntityServicesCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

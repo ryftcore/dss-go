@@ -56,29 +56,29 @@ func (c *BestSignatureTimeBeforeSuspensionTimeCheck) BuildAdditionalInfo() *stri
 	if c.certificateRevocation.RevocationDate() != nil {
 		revocationTime = process.GetFormattedDate(c.certificateRevocation.RevocationDate())
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_BEST_SIGNATURE_TIME_CERT_SUSPENSION, bestSignatureTimeStr, revocationTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagBESTSignatureTimeCertSuspension, bestSignatureTimeStr, revocationTime)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BestSignatureTimeBeforeSuspensionTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ISTPTBST
+	return i18n.MessageTagADESTISTPTBST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BestSignatureTimeBeforeSuspensionTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ISTPTBST_ANS
+	return i18n.MessageTagADESTISTPTBSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *BestSignatureTimeBeforeSuspensionTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *BestSignatureTimeBeforeSuspensionTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }

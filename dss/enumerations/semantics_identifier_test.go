@@ -9,10 +9,10 @@ func TestSemanticsIdentifierFields(t *testing.T) {
 		oid         string
 		description string
 	}{
-		{SemanticsIdentifier_qcsSemanticsIdNatural, "qcs-semanticsId-Natural", "0.4.0.194121.1.1", "Semantics identifier for natural person"},
-		{SemanticsIdentifier_qcsSemanticsIdLegal, "qcs-SemanticsId-Legal", "0.4.0.194121.1.2", "Semantics identifier for legal person"},
-		{SemanticsIdentifier_qcsSemanticsIdEIDASNatural, "qcs-semanticsId-eIDASNatural", "0.4.0.194121.1.3", "Semantics identifier for eIDAS natural person"},
-		{SemanticsIdentifier_qcsSemanticsIdEIDASLegal, "qcs-SemanticsId-eIDASLegal", "0.4.0.194121.1.4", "Semantics identifier for eIDAS legal person"},
+		{SemanticsIdentifierQcsSemanticsIdNatural, "qcs-semanticsId-Natural", "0.4.0.194121.1.1", "Semantics identifier for natural person"},
+		{SemanticsIdentifierQcsSemanticsIdLegal, "qcs-SemanticsId-Legal", "0.4.0.194121.1.2", "Semantics identifier for legal person"},
+		{SemanticsIdentifierQcsSemanticsIdEIDASNatural, "qcs-semanticsId-eIDASNatural", "0.4.0.194121.1.3", "Semantics identifier for eIDAS natural person"},
+		{SemanticsIdentifierQcsSemanticsIdEIDASLegal, "qcs-SemanticsId-eIDASLegal", "0.4.0.194121.1.4", "Semantics identifier for eIDAS legal person"},
 	}
 	for _, c := range cases {
 		if got := c.v.Name(); got != c.name {

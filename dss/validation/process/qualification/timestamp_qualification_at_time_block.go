@@ -50,13 +50,13 @@ func NewTimestampQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, valid
 			&xmlResult.XmlConstraintsConclusionContent, &xmlResult.XmlConstraintsConclusionAttrs)),
 		validationTime:     validationTime,
 		acceptableServices: acceptableServices,
-		tstQualif:          enumerations.TimestampQualification_NA,
+		tstQualif:          enumerations.TimestampQualificationNA,
 	}
 
 	switch validationTime {
-	case enumerations.ValidationTime_TIMESTAMP_GENERATION_TIME:
+	case enumerations.ValidationTimeTimestampGenerationTime:
 		c.date = timestamp.ProductionTime()
-	case enumerations.ValidationTime_TIMESTAMP_POE_TIME:
+	case enumerations.ValidationTimeTimestampPOETime:
 		c.date = date
 	default:
 		panic(fmt.Sprintf("Unsupported time-stamp qualification time : %s", validationTime))
@@ -68,7 +68,7 @@ func NewTimestampQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, valid
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *TimestampQualificationAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_TST_QUALIFICATION_AT_TIME
+	message := i18n.MessageTagTSTQualificationAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)
@@ -119,9 +119,9 @@ func (c *TimestampQualificationAtTimeBlock) InitChain() {
 
 	// Determine qualification status
 	if utils.IsCollectionNotEmpty(grantedAtDateServices) {
-		c.tstQualif = enumerations.TimestampQualification_QTSA
+		c.tstQualif = enumerations.TimestampQualificationQTSA
 	} else {
-		c.tstQualif = enumerations.TimestampQualification_TSA
+		c.tstQualif = enumerations.TimestampQualificationTSA
 	}
 }
 

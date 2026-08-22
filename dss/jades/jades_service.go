@@ -99,7 +99,7 @@ func (s *JAdESService) GetContentTimestampForDocuments(toSignDocuments []model.D
 
 	var messageImprint []byte
 	var err error
-	if enumerations.SigDMechanism_HTTP_HEADERS == parameters.SigDMechanism() {
+	if enumerations.SigDMechanismHTTPHeaders == parameters.SigDMechanism() {
 		httpHeadersPayloadBuilder := NewHttpHeadersPayloadBuilder(toSignDocuments, true)
 		messageImprint, err = httpHeadersPayloadBuilder.Build()
 	} else {
@@ -120,7 +120,7 @@ func (s *JAdESService) GetContentTimestampForDocuments(toSignDocuments []model.D
 		panic(err)
 	}
 	timestampToken, err := validation.NewTimestampToken(timeStampResponse.Bytes(),
-		enumerations.TimestampType_CONTENT_TIMESTAMP)
+		enumerations.TimestampTypeContentTimestamp)
 	if err != nil {
 		panic(fmt.Errorf("Cannot create a content TimestampToken: %w", err))
 	}
@@ -190,11 +190,11 @@ func jadesServiceAssertMultiDocumentsAllowed(toSignDocuments []model.DSSDocument
 		return fmt.Errorf("The documents to sign must be provided!")
 	}
 	signaturePackaging := parameters.SignaturePackaging()
-	if enumerations.SignaturePackaging_DETACHED != signaturePackaging && len(toSignDocuments) > 1 {
+	if enumerations.SignaturePackagingDetached != signaturePackaging && len(toSignDocuments) > 1 {
 		return fmt.Errorf("Not supported operation (only DETACHED are allowed for multiple document signing)!")
 	}
-	if enumerations.SignaturePackaging_DETACHED == signaturePackaging &&
-		enumerations.SigDMechanism_NO_SIG_D == parameters.SigDMechanism() && len(toSignDocuments) > 1 {
+	if enumerations.SignaturePackagingDetached == signaturePackaging &&
+		enumerations.SigDMechanismNoSigD == parameters.SigDMechanism() && len(toSignDocuments) > 1 {
 		return fmt.Errorf("NO_SIG_D mechanism is not allowed for multiple documents!")
 	}
 	return nil
@@ -239,11 +239,11 @@ func (s *JAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 
 	signatureExtension := s.extensionProfile(parameters)
 	if signatureExtension != nil {
-		if enumerations.SignaturePackaging_DETACHED == parameters.SignaturePackaging() &&
+		if enumerations.SignaturePackagingDetached == parameters.SignaturePackaging() &&
 			utils.IsCollectionEmpty(parameters.DetachedContents()) {
 			parameters.GetContext().SetDetachedContents(toSignDocuments)
 		}
-		signatureExtension.SetOperationKind(enumerations.SigningOperation_SIGN)
+		signatureExtension.SetOperationKind(enumerations.SigningOperationSign)
 		if signedDocument, err = signatureExtension.ExtendSignaturesDocument(signedDocument,
 			parameters); err != nil {
 			panic(err)
@@ -251,7 +251,7 @@ func (s *JAdESService) SignDocuments(toSignDocuments []model.DSSDocument,
 	}
 
 	parameters.Reinit()
-	name, err := s.GetFinalFileNameWithLevel(toSignDocuments[0], enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(toSignDocuments[0], enumerations.SigningOperationSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -277,10 +277,10 @@ func (s *JAdESService) JAdESBuilder(parameters *JAdESSignatureParameters,
 	}
 
 	switch parameters.JwsSerializationType() {
-	case enumerations.JWSSerializationType_COMPACT_SERIALIZATION:
+	case enumerations.JWSSerializationTypeCompactSerialization:
 		return NewJAdESCompactBuilder(s.CertificateVerifier, parameters, documentsToSign)
-	case enumerations.JWSSerializationType_JSON_SERIALIZATION,
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION:
+	case enumerations.JWSSerializationTypeJSONSerialization,
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization:
 		return NewJAdESSerializationBuilder(s.CertificateVerifier, parameters, documentsToSign)
 	default:
 		return nil, fmt.Errorf("The requested JWS Serialization Type '%s' is not supported!",
@@ -327,18 +327,18 @@ func (s *JAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 
 	signatureExtension := s.extensionProfile(parameters)
 	if signatureExtension != nil {
-		signatureExtension.SetOperationKind(enumerations.SigningOperation_EXTEND)
+		signatureExtension.SetOperationKind(enumerations.SigningOperationExtend)
 		dssDocument, err := signatureExtension.ExtendSignaturesDocument(toExtendDocument, parameters)
 		if err != nil {
 			panic(err)
 		}
-		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperation_EXTEND,
+		name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperationExtend,
 			parameters.SignatureLevel())
 		if err != nil {
 			panic(err)
 		}
 		dssDocument.SetName(name)
-		dssDocument.SetMimeType(enumerations.MimeTypeEnum_JOSE_JSON)
+		dssDocument.SetMimeType(enumerations.MimeTypeEnumJOSEJSON)
 		return dssDocument
 	}
 	panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
@@ -346,8 +346,8 @@ func (s *JAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 
 // jadesServiceAssertExtensionPossible ports the private assertExtensionPossible.
 func jadesServiceAssertExtensionPossible(parameters *JAdESSignatureParameters) error {
-	if enumerations.JWSSerializationType_JSON_SERIALIZATION != parameters.JwsSerializationType() &&
-		enumerations.JWSSerializationType_FLATTENED_JSON_SERIALIZATION != parameters.JwsSerializationType() {
+	if enumerations.JWSSerializationTypeJSONSerialization != parameters.JwsSerializationType() &&
+		enumerations.JWSSerializationTypeFlattenedJSONSerialization != parameters.JwsSerializationType() {
 		return fmt.Errorf("The type '%s' does not support signature extension!",
 			parameters.JwsSerializationType())
 	}
@@ -359,13 +359,13 @@ func jadesServiceAssertExtensionPossible(parameters *JAdESSignatureParameters) e
 func (s *JAdESService) extensionProfile(parameters *JAdESSignatureParameters) JAdESSignatureExtender {
 	var extension JAdESSignatureExtender
 	switch parameters.SignatureLevel() {
-	case enumerations.SignatureLevel_JAdES_BASELINE_B:
+	case enumerations.SignatureLevelJAdESBaselineB:
 		return nil
-	case enumerations.SignatureLevel_JAdES_BASELINE_T:
+	case enumerations.SignatureLevelJAdESBaselineT:
 		extension = NewJAdESLevelBaselineT(s.CertificateVerifier)
-	case enumerations.SignatureLevel_JAdES_BASELINE_LT:
+	case enumerations.SignatureLevelJAdESBaselineLT:
 		extension = NewJAdESLevelBaselineLT(s.CertificateVerifier)
-	case enumerations.SignatureLevel_JAdES_BASELINE_LTA:
+	case enumerations.SignatureLevelJAdESBaselineLTA:
 		extension = NewJAdESLevelBaselineLTA(s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", parameters.SignatureLevel()))
@@ -409,7 +409,7 @@ func (s *JAdESService) AddSignaturePolicyStoreWithEncoding(doc model.DSSDocument
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileName(doc, enumerations.SigningOperation_ADD_SIG_POLICY_STORE)
+	name, err := s.GetFinalFileName(doc, enumerations.SigningOperationAddSigPolicyStore)
 	if err != nil {
 		panic(err)
 	}
@@ -475,7 +475,7 @@ func (s *JAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 	}
 
 	parameters.Reinit()
-	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperation_COUNTER_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperationCounterSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -492,16 +492,16 @@ func jadesServiceVerifyAndSetCounterSignatureParameters(
 	parameters *JAdESCounterSignatureParameters) error {
 	if parameters.SignaturePackaging() == "" {
 		// attached counter signature is created by default
-		parameters.SetSignaturePackaging(enumerations.SignaturePackaging_ENVELOPING)
+		parameters.SetSignaturePackaging(enumerations.SignaturePackagingEnveloping)
 	}
 
 	switch parameters.SignaturePackaging() {
-	case enumerations.SignaturePackaging_ENVELOPING:
+	case enumerations.SignaturePackagingEnveloping:
 		// nothing to do
-	case enumerations.SignaturePackaging_DETACHED:
+	case enumerations.SignaturePackagingDetached:
 		if parameters.SigDMechanism() == "" {
-			parameters.SetSigDMechanism(enumerations.SigDMechanism_NO_SIG_D)
-		} else if enumerations.SigDMechanism_NO_SIG_D != parameters.SigDMechanism() {
+			parameters.SetSigDMechanism(enumerations.SigDMechanismNoSigD)
+		} else if enumerations.SigDMechanismNoSigD != parameters.SigDMechanism() {
 			return fmt.Errorf("The SigDMechanism '%s' is not supported by JAdES Counter Signature!",
 				parameters.SigDMechanism())
 		}
@@ -510,7 +510,7 @@ func jadesServiceVerifyAndSetCounterSignatureParameters(
 			parameters.SignaturePackaging())
 	}
 
-	if enumerations.JWSSerializationType_JSON_SERIALIZATION == parameters.JwsSerializationType() {
+	if enumerations.JWSSerializationTypeJSONSerialization == parameters.JwsSerializationType() {
 		return fmt.Errorf("The JWSSerializationType.JSON_SERIALIZATION parameter " +
 			"is not supported for a JAdES Counter Signature!")
 	}
@@ -560,22 +560,22 @@ func jadesServiceAssertSigningCertificateValidForAlgorithm(
 	signatureAlgorithm enumerations.SignatureAlgorithm,
 	signingCertificate *model.CertificateToken) error {
 	if signatureAlgorithm.EncryptionAlgorithm() == "" || signatureAlgorithm.DigestAlgorithm() == "" ||
-		!signatureAlgorithm.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithm_ECDSA) ||
+		!signatureAlgorithm.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithmECDSA) ||
 		signingCertificate == nil {
 		return nil
 	}
 	errorMessage := "For ECDSA with %s a key with P-%s curve shall be used for a JWS! See RFC 7518."
 	keySize := spi.DSSPKUtilsPublicKeySize(signingCertificate.PublicKey())
 	switch signatureAlgorithm.DigestAlgorithm() {
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		if keySize != 256 {
 			return fmt.Errorf(errorMessage, signatureAlgorithm.DigestAlgorithm(), "256")
 		}
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		if keySize != 384 {
 			return fmt.Errorf(errorMessage, signatureAlgorithm.DigestAlgorithm(), "384")
 		}
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		if keySize != 521 {
 			return fmt.Errorf(errorMessage, signatureAlgorithm.DigestAlgorithm(), "521")
 		}
@@ -588,7 +588,7 @@ func jadesServiceAssertSigningCertificateValidForAlgorithm(
 // jadesServiceAssertSignatureValueValid ports the private assertSignatureValueValid.
 func jadesServiceAssertSignatureValueValid(targetSignatureAlgorithm enumerations.SignatureAlgorithm,
 	signatureValue *model.SignatureValue) error {
-	if !targetSignatureAlgorithm.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithm_ECDSA) {
+	if !targetSignatureAlgorithm.EncryptionAlgorithm().IsEquivalent(enumerations.EncryptionAlgorithmECDSA) {
 		return nil
 	}
 	errorMessage := "Invalid SignatureValue obtained! " +
@@ -598,16 +598,16 @@ func jadesServiceAssertSignatureValueValid(targetSignatureAlgorithm enumerations
 		return err
 	}
 	switch targetSignatureAlgorithm.DigestAlgorithm() {
-	case enumerations.DigestAlgorithm_SHA256:
+	case enumerations.DigestAlgorithmSHA256:
 		if bitLength != 256 {
 			return exception.NewIllegalInputException(fmt.Sprintf(errorMessage,
 				targetSignatureAlgorithm.DigestAlgorithm(), "256"))
 		}
-	case enumerations.DigestAlgorithm_SHA384:
+	case enumerations.DigestAlgorithmSHA384:
 		if bitLength != 384 {
 			return fmt.Errorf(errorMessage, targetSignatureAlgorithm.DigestAlgorithm(), "384")
 		}
-	case enumerations.DigestAlgorithm_SHA512:
+	case enumerations.DigestAlgorithmSHA512:
 		if bitLength != 520 && bitLength != 528 {
 			return fmt.Errorf(errorMessage, targetSignatureAlgorithm.DigestAlgorithm(), "521")
 		}

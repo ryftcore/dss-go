@@ -58,20 +58,20 @@ func (c *RevocationIssuedBeforeControlTimeCheck[T]) BuildAdditionalInfo() *strin
 	if thisUpdate != nil {
 		thisUpdateStr = process.GetFormattedDate(thisUpdate)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_THIS_UPDATE_CONTROL_TIME, c.revocation.Id(),
+	message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationThisUpdateControlTime, c.revocation.Id(),
 		thisUpdateStr, process.GetFormattedDate(&c.controlTime))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationIssuedBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_HRDBIBCT
+	return i18n.MessageTagPSVHRDBIBCT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationIssuedBeforeControlTimeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_HRDBIBCT_ANS
+	return i18n.MessageTagPSVHRDBIBCTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -66,9 +66,9 @@ func NewCertificateApprovalStatusAtTimeBlock(i18nProvider *i18n.I18nProvider, va
 	c.Result.Value.Id = signingCertificate.Id()
 
 	switch validationTime {
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
+	case enumerations.ValidationTimeCertificateIssuanceTime:
 		c.date = signingCertificate.NotBefore()
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME, enumerations.ValidationTime_VALIDATION_TIME:
+	case enumerations.ValidationTimeBESTSignatureTime, enumerations.ValidationTimeValidationTime:
 		c.date = date
 	default:
 		panic(fmt.Sprintf("Unknown qualification time : %s", validationTime))
@@ -80,7 +80,7 @@ func NewCertificateApprovalStatusAtTimeBlock(i18nProvider *i18n.I18nProvider, va
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *CertificateApprovalStatusAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_CERT_USAGE_AT_TIME
+	message := i18n.MessageTagCertUsageAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)
@@ -154,7 +154,7 @@ func (c *CertificateApprovalStatusAtTimeBlock) AddAdditionalInfo() {
 
 	certApprovalStatus := enumerations.CertificateApprovalStatusFromDefinition(listType, sti, status)
 	if certApprovalStatus == nil {
-		certApprovalStatus = enumerations.CertificateApprovalStatusEnum_CERT_FOR_UNKNOWN
+		certApprovalStatus = enumerations.CertificateApprovalStatusEnumCertForUnknown
 	}
 	label := certApprovalStatus.Label()
 	certificateApprovalStatus.Label = &label

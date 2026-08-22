@@ -57,6 +57,6 @@ func (c *AlgorithmObsolescenceValidationCheckWithId[T]) BuildAdditionalInfo() *s
 	if base != nil {
 		baseStr = *base
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCM_DESC_WITH_ID_RESULT, baseStr, c.tokenId)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagACCMDescWithIDResult, baseStr, c.tokenId)
 	return &message
 }

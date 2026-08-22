@@ -37,20 +37,20 @@ func (c *SignerInformationStoreCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *SignerInformationStoreCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IOSIP
+	return i18n.MessageTagBBBFCIOSIP
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignerInformationStoreCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IOSIP_ANS
+	return i18n.MessageTagBBBFCIOSIPANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *SignerInformationStoreCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *SignerInformationStoreCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

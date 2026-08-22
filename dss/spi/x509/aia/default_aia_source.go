@@ -14,11 +14,11 @@ import (
 // defaultAIASourceAllProtocols lists every dsshttp.Protocol value, standing in for
 // Protocol.values(); used as the default acceptedProtocols.
 var defaultAIASourceAllProtocols = []dsshttp.Protocol{
-	dsshttp.Protocol_FILE,
-	dsshttp.Protocol_HTTP,
-	dsshttp.Protocol_HTTPS,
-	dsshttp.Protocol_LDAP,
-	dsshttp.Protocol_FTP,
+	dsshttp.ProtocolFile,
+	dsshttp.ProtocolHTTP,
+	dsshttp.ProtocolHTTPS,
+	dsshttp.ProtocolLDAP,
+	dsshttp.ProtocolFTP,
 }
 
 // DefaultAIASource is used to download issuer certificates by AIA from remote sources.

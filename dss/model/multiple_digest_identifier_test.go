@@ -20,10 +20,10 @@ func TestMultipleDigestIdentifierComputesAndCachesDigests(t *testing.T) {
 
 	// Known answers for "abc".
 	tests := map[enumerations.DigestAlgorithm]string{
-		enumerations.DigestAlgorithm_SHA224: "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7",
-		enumerations.DigestAlgorithm_SHA256: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
-		enumerations.DigestAlgorithm_SHA384: "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7",
-		enumerations.DigestAlgorithm_SHA512: "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
+		enumerations.DigestAlgorithmSHA224: "23097d223405d8228642a477bda255b32aadbce4bda0b3f7e36c9da7",
+		enumerations.DigestAlgorithmSHA256: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+		enumerations.DigestAlgorithmSHA384: "cb00753f45a35e8bb5a03d699ac65007272c32ab0eded1631a8b605a43ff5bed8086072ba1e7cc2358baeca134c825a7",
+		enumerations.DigestAlgorithmSHA512: "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f",
 	}
 	for algorithm, want := range tests {
 		value, err := identifier.DigestValue(algorithm)
@@ -43,7 +43,7 @@ func TestMultipleDigestIdentifierComputesAndCachesDigests(t *testing.T) {
 		}
 	}
 
-	if _, err := identifier.DigestValue(enumerations.DigestAlgorithm_WHIRLPOOL); err == nil {
+	if _, err := identifier.DigestValue(enumerations.DigestAlgorithmWHIRLPOOL); err == nil {
 		t.Error("an algorithm without a Go implementation must be reported")
 	}
 }
@@ -52,7 +52,7 @@ func TestMultipleDigestIdentifierIsMatch(t *testing.T) {
 	identifier := NewMultipleDigestIdentifier("TimestampTokenIdentifier", "T-", []byte("abc"))
 
 	sha512, _ := hex.DecodeString("ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f")
-	match, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithm_SHA512, sha512))
+	match, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithmSHA512, sha512))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestMultipleDigestIdentifierIsMatch(t *testing.T) {
 		t.Error("the SHA-512 digest of the binaries must match")
 	}
 
-	match, err = identifier.IsMatch(NewDigest(enumerations.DigestAlgorithm_SHA512, []byte{0x00}))
+	match, err = identifier.IsMatch(NewDigest(enumerations.DigestAlgorithmSHA512, []byte{0x00}))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -68,7 +68,7 @@ func TestMultipleDigestIdentifierIsMatch(t *testing.T) {
 		t.Error("a different digest must not match")
 	}
 
-	if _, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithm_MD2, []byte{0x00})); err == nil {
+	if _, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithmMD2, []byte{0x00})); err == nil {
 		t.Error("an algorithm without a Go implementation must be reported")
 	}
 }

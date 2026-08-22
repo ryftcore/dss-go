@@ -136,8 +136,8 @@ func (f *AbstractASiCFilenameFactory) AssertASiCContentIsValid(asicContent *ASiC
 	if asicContent.ContainerType() == "" {
 		panic("Type of ASiC Container shall be defined!")
 	}
-	if enumerations.ASiCContainerType_ASiC_S != asicContent.ContainerType() &&
-		enumerations.ASiCContainerType_ASiC_E != asicContent.ContainerType() {
+	if enumerations.ASiCContainerTypeASiCS != asicContent.ContainerType() &&
+		enumerations.ASiCContainerTypeASiCE != asicContent.ContainerType() {
 		return fmt.Errorf("The type of the ASiCContent shall be one of ASiC-S or ASiC-E!")
 	}
 	return nil

@@ -54,10 +54,10 @@ func TestSimpleCertificateReportWrapper(t *testing.T) {
 	if got := r.GetCertificateCountry(certID); got != "LU" {
 		t.Errorf("GetCertificateCountry() = %q", got)
 	}
-	if got, want := r.GetCertificateIndication(certID), enumerations.Indication_INDETERMINATE; got != want {
+	if got, want := r.GetCertificateIndication(certID), enumerations.IndicationIndeterminate; got != want {
 		t.Errorf("GetCertificateIndication() = %q, want %q", got, want)
 	}
-	if got, want := r.GetCertificateSubIndication(certID), enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND; got != want {
+	if got, want := r.GetCertificateSubIndication(certID), enumerations.SubIndicationNoCertificateChainFound; got != want {
 		t.Errorf("GetCertificateSubIndication() = %q, want %q", got, want)
 	}
 	if got := r.GetCertificateOcspUrls(certID); len(got) != 1 || got[0] != "http://dss.nowina.lu/pki-factory/ocsp/good-ca" {

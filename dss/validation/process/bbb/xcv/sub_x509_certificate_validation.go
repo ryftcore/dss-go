@@ -80,7 +80,7 @@ func NewSubX509CertificateValidation(i18nProvider *i18n.I18nProvider, currentCer
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *SubX509CertificateValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_SUB_XCV
+	return i18n.MessageTagSubXCV
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -280,7 +280,7 @@ func (c *SubX509CertificateValidation) InitChain() {
 		item = item.SetNextItem(c.revocationCryptographic(latestCertificateRevocation))
 	}
 
-	if enumerations.SubContext_SIGNING_CERT == c.subContext {
+	if enumerations.SubContextSigningCert == c.subContext {
 
 		item = item.SetNextItem(c.certificateValidityRange(c.currentCertificate,
 			latestCertificateRevocation, isRevocationDataRequired, c.subContext, c.currentTime))
@@ -288,7 +288,7 @@ func (c *SubX509CertificateValidation) InitChain() {
 		if latestCertificateRevocation != nil {
 			revocationIssuerCertificate := latestCertificateRevocation.SigningCertificate()
 			if revocationIssuerCertificate != nil {
-				if c.isTrustAnchor(revocationIssuerCertificate, enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT) {
+				if c.isTrustAnchor(revocationIssuerCertificate, enumerations.ContextRevocation, enumerations.SubContextSigningCert) {
 					item = item.SetNextItem(c.revocationDataIssuerTrusted(revocationIssuerCertificate)) //nolint:staticcheck // mirrors upstream SubX509CertificateValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 				} else {
 					item = item.SetNextItem(c.revocationIssuerValidityRange(latestCertificateRevocation, c.subContext, c.currentTime)) //nolint:staticcheck // mirrors upstream SubX509CertificateValidation#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
@@ -318,7 +318,7 @@ func (c *SubX509CertificateValidation) attachRevocationInformation(certificateRe
 func (c *SubX509CertificateValidation) validationBeforeSunsetDate(certificate *diagnostic.CertificateWrapper,
 	subContext enumerations.SubContext, validationTime time.Time) process.ChainItem[*jaxb.XmlSubXCV] {
 	constraint := c.validationPolicy.CertificateSunsetDateConstraint(c.context, subContext)
-	level, err := process.GetConstraintOrMaxLevel(constraint, enumerations.Level_WARN)
+	level, err := process.GetConstraintOrMaxLevel(constraint, enumerations.LevelWarn)
 	if err != nil {
 		panic(err)
 	}
@@ -336,7 +336,7 @@ func (c *SubX509CertificateValidation) certificateValidityRange(certificate *dia
 	subContext enumerations.SubContext, validationTime time.Time) process.ChainItem[*jaxb.XmlSubXCV] {
 	constraint := c.validationPolicy.CertificateNotExpiredConstraint(c.context, subContext)
 	isRevocationIssuerTrusted := usedCertificateRevocation != nil && usedCertificateRevocation.SigningCertificate() != nil &&
-		c.isTrustAnchor(usedCertificateRevocation.SigningCertificate(), enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+		c.isTrustAnchor(usedCertificateRevocation.SigningCertificate(), enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	revocationIssuerCheckEnforced := c.revocationIssuerCheckEnforced(c.context, subContext)
 	return NewCertificateValidityRangeCheck(c.I18nProvider, c.Result, certificate, usedCertificateRevocation,
 		revocationDataRequired, isRevocationIssuerTrusted, revocationIssuerCheckEnforced, validationTime, constraint)
@@ -344,11 +344,11 @@ func (c *SubX509CertificateValidation) certificateValidityRange(certificate *dia
 
 func (c *SubX509CertificateValidation) revocationIssuerCheckEnforced(context enumerations.Context, subContext enumerations.SubContext) bool {
 	constraint := c.validationPolicy.RevocationIssuerNotExpiredConstraint(context, subContext)
-	return constraint != nil && enumerations.Level_FAIL == constraint.Level()
+	return constraint != nil && enumerations.LevelFail == constraint.Level()
 }
 
 func (c *SubX509CertificateValidation) revocationDataIssuerTrusted(revocationIssuer *diagnostic.CertificateWrapper) process.ChainItem[*jaxb.XmlSubXCV] {
-	revocationDataSunsetDate := c.validationPolicy.CertificateSunsetDateConstraint(enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+	revocationDataSunsetDate := c.validationPolicy.CertificateSunsetDateConstraint(enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 	return NewRevocationIssuerTrustedCheck(c.I18nProvider, c.Result, revocationIssuer, c.currentTime, revocationDataSunsetDate, c.WarnLevelRule())
 }
 
@@ -656,7 +656,7 @@ func (c *SubX509CertificateValidation) certificateQcPSBLegislationIdentification
 }
 
 func (c *SubX509CertificateValidation) certificateCryptographic() process.ChainItem[*jaxb.XmlSubXCV] {
-	certificatePosition, err := process.GetSubContextPosition(enumerations.Context_CERTIFICATE, c.subContext)
+	certificatePosition, err := process.GetSubContextPosition(enumerations.ContextCertificate, c.subContext)
 	if err != nil {
 		panic(err)
 	}
@@ -666,7 +666,7 @@ func (c *SubX509CertificateValidation) certificateCryptographic() process.ChainI
 func (c *SubX509CertificateValidation) revocationCryptographic(revocationData *diagnostic.CertificateRevocationWrapper) process.ChainItem[*jaxb.XmlSubXCV] {
 	// NOTE: we need to execute it explicitly in order to avoid a circular reference on revocation data validation
 	revocationAOV := aov.NewRevocationDataAlgorithmObsolescenceValidation(c.I18nProvider, &revocationData.RevocationWrapper, c.currentTime, c.validationPolicy)
-	position, err := process.GetCryptoPosition(enumerations.Context_REVOCATION)
+	position, err := process.GetCryptoPosition(enumerations.ContextRevocation)
 	if err != nil {
 		panic(err)
 	}
@@ -702,7 +702,7 @@ func (c *SubX509CertificateValidation) CollectAdditionalMessages(conclusion *jax
 // CollectMessages collects required messages from the given xmlConstraint to
 // the given conclusion. Port of collectMessages(XmlConclusion, XmlConstraint).
 func (c *SubX509CertificateValidation) CollectMessages(conclusion *jaxb.XmlConclusion, constraint *jaxb.XmlConstraint) {
-	if constraint.BlockType == nil || jaxb.XmlBlockType_AOV != *constraint.BlockType {
+	if constraint.BlockType == nil || jaxb.XmlBlockTypeAOV != *constraint.BlockType {
 		c.ChainBase.CollectMessages(conclusion, constraint)
 	}
 }

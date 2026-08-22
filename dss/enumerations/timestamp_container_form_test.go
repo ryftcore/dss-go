@@ -7,9 +7,9 @@ func TestTimestampContainerFormReadable(t *testing.T) {
 		v    TimestampContainerForm
 		want string
 	}{
-		{TimestampContainerForm_PDF, "PDF"},
-		{TimestampContainerForm_ASiC_E, "ASiC-E"},
-		{TimestampContainerForm_ASiC_S, "ASiC-S"},
+		{TimestampContainerFormPDF, "PDF"},
+		{TimestampContainerFormASiCE, "ASiC-E"},
+		{TimestampContainerFormASiCS, "ASiC-S"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.Readable(); got != tt.want {

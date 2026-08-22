@@ -12,19 +12,19 @@ type serviceQualificationCase struct {
 
 func serviceQualificationCases() []serviceQualificationCase {
 	return []serviceQualificationCase{
-		{ServiceQualification_QC_STATEMENT, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"},
-		{ServiceQualification_NOT_QUALIFIED, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/NotQualified"},
-		{ServiceQualification_QC_WITH_SSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCWithSSCD"},
-		{ServiceQualification_QC_WITH_QSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCWithQSCD"},
-		{ServiceQualification_QC_NO_SSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCNoSSCD"},
-		{ServiceQualification_QC_NO_QSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCNoQSCD"},
-		{ServiceQualification_QC_SSCD_STATUS_AS_IN_CERT, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"},
-		{ServiceQualification_QC_QSCD_STATUS_AS_IN_CERT, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCQSCDStatusAsInCert"},
-		{ServiceQualification_QC_QSCD_MANAGED_ON_BEHALF, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCQSCDManagedOnBehalf"},
-		{ServiceQualification_QC_FOR_LEGAL_PERSON, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForLegalPerson"},
-		{ServiceQualification_QC_FOR_ESIG, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForESig"},
-		{ServiceQualification_QC_FOR_ESEAL, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForESeal"},
-		{ServiceQualification_QC_FOR_WSA, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForWSA"},
+		{ServiceQualificationQCStatement, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCStatement"},
+		{ServiceQualificationNotQualified, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/NotQualified"},
+		{ServiceQualificationQCWithSSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCWithSSCD"},
+		{ServiceQualificationQCWithQSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCWithQSCD"},
+		{ServiceQualificationQCNoSSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCNoSSCD"},
+		{ServiceQualificationQCNoQSCD, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCNoQSCD"},
+		{ServiceQualificationQCSSCDStatusAsInCert, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCSSCDStatusAsInCert"},
+		{ServiceQualificationQCQSCDStatusAsInCert, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCQSCDStatusAsInCert"},
+		{ServiceQualificationQCQSCDManagedOnBehalf, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCQSCDManagedOnBehalf"},
+		{ServiceQualificationQCForLegalPerson, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForLegalPerson"},
+		{ServiceQualificationQCForESig, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForESig"},
+		{ServiceQualificationQCForESeal, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForESeal"},
+		{ServiceQualificationQCForWSA, "http://uri.etsi.org/TrstSvc/TrustedList/SvcInfoExt/QCForWSA"},
 	}
 }
 
@@ -56,19 +56,19 @@ func TestServiceQualificationGetByUri(t *testing.T) {
 
 func TestServiceQualificationPredicates(t *testing.T) {
 	predicates := map[ServiceQualification]func([]string) bool{
-		ServiceQualification_QC_STATEMENT:              ServiceQualificationIsQcStatement,
-		ServiceQualification_NOT_QUALIFIED:             ServiceQualificationIsNotQualified,
-		ServiceQualification_QC_NO_QSCD:                ServiceQualificationIsQcNoQSCD,
-		ServiceQualification_QC_NO_SSCD:                ServiceQualificationIsQcNoSSCD,
-		ServiceQualification_QC_FOR_LEGAL_PERSON:       ServiceQualificationIsQcForLegalPerson,
-		ServiceQualification_QC_QSCD_STATUS_AS_IN_CERT: ServiceQualificationIsQcQSCDStatusAsInCert,
-		ServiceQualification_QC_SSCD_STATUS_AS_IN_CERT: ServiceQualificationIsQcSSCDStatusAsInCert,
-		ServiceQualification_QC_QSCD_MANAGED_ON_BEHALF: ServiceQualificationIsQcQSCDManagedOnBehalf,
-		ServiceQualification_QC_WITH_QSCD:              ServiceQualificationIsQcWithQSCD,
-		ServiceQualification_QC_WITH_SSCD:              ServiceQualificationIsQcWithSSCD,
-		ServiceQualification_QC_FOR_ESIG:               ServiceQualificationIsQcForEsig,
-		ServiceQualification_QC_FOR_ESEAL:              ServiceQualificationIsQcForEseal,
-		ServiceQualification_QC_FOR_WSA:                ServiceQualificationIsQcForWSA,
+		ServiceQualificationQCStatement:           ServiceQualificationIsQcStatement,
+		ServiceQualificationNotQualified:          ServiceQualificationIsNotQualified,
+		ServiceQualificationQCNoQSCD:              ServiceQualificationIsQcNoQSCD,
+		ServiceQualificationQCNoSSCD:              ServiceQualificationIsQcNoSSCD,
+		ServiceQualificationQCForLegalPerson:      ServiceQualificationIsQcForLegalPerson,
+		ServiceQualificationQCQSCDStatusAsInCert:  ServiceQualificationIsQcQSCDStatusAsInCert,
+		ServiceQualificationQCSSCDStatusAsInCert:  ServiceQualificationIsQcSSCDStatusAsInCert,
+		ServiceQualificationQCQSCDManagedOnBehalf: ServiceQualificationIsQcQSCDManagedOnBehalf,
+		ServiceQualificationQCWithQSCD:            ServiceQualificationIsQcWithQSCD,
+		ServiceQualificationQCWithSSCD:            ServiceQualificationIsQcWithSSCD,
+		ServiceQualificationQCForESig:             ServiceQualificationIsQcForEsig,
+		ServiceQualificationQCForESeal:            ServiceQualificationIsQcForEseal,
+		ServiceQualificationQCForWSA:              ServiceQualificationIsQcForWSA,
 	}
 	for v, pred := range predicates {
 		if !pred([]string{v.URI()}) {
@@ -85,11 +85,11 @@ func TestServiceQualificationPredicates(t *testing.T) {
 
 func TestServiceQualificationGetUsageQualifiers(t *testing.T) {
 	in := []string{
-		ServiceQualification_QC_FOR_WSA.URI(),
-		ServiceQualification_QC_STATEMENT.URI(),
-		ServiceQualification_QC_FOR_ESIG.URI(),
+		ServiceQualificationQCForWSA.URI(),
+		ServiceQualificationQCStatement.URI(),
+		ServiceQualificationQCForESig.URI(),
 	}
-	want := []string{ServiceQualification_QC_FOR_ESIG.URI(), ServiceQualification_QC_FOR_WSA.URI()}
+	want := []string{ServiceQualificationQCForESig.URI(), ServiceQualificationQCForWSA.URI()}
 	got := ServiceQualificationGetUsageQualifiers(in)
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("ServiceQualificationGetUsageQualifiers(%v) = %v, want %v", in, got, want)

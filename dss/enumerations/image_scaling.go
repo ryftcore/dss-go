@@ -6,23 +6,23 @@ package enumerations
 type ImageScaling string
 
 const (
-	// ImageScaling_STRETCH stretches the image in both directions in order
+	// ImageScalingStretch stretches the image in both directions in order
 	// to fill the signature field box.
-	ImageScaling_STRETCH ImageScaling = "STRETCH"
-	// ImageScaling_ZOOM_AND_CENTER zooms the image to the closest dimension
+	ImageScalingStretch ImageScaling = "STRETCH"
+	// ImageScalingZoomAndCenter zooms the image to the closest dimension
 	// without stretching and centers the image in other direction.
-	ImageScaling_ZOOM_AND_CENTER ImageScaling = "ZOOM_AND_CENTER"
-	// ImageScaling_CENTER keeps the original image size and centers the
+	ImageScalingZoomAndCenter ImageScaling = "ZOOM_AND_CENTER"
+	// ImageScalingCenter keeps the original image size and centers the
 	// image in both directions.
-	ImageScaling_CENTER ImageScaling = "CENTER"
+	ImageScalingCenter ImageScaling = "CENTER"
 )
 
 // ImageScalingValues returns all constants in declaration order.
 func ImageScalingValues() []ImageScaling {
 	return []ImageScaling{
-		ImageScaling_STRETCH,
-		ImageScaling_ZOOM_AND_CENTER,
-		ImageScaling_CENTER,
+		ImageScalingStretch,
+		ImageScalingZoomAndCenter,
+		ImageScalingCenter,
 	}
 }
 

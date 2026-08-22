@@ -28,5 +28,5 @@ func NewQWAC2ValidationResultCheck(i18nProvider *i18n.I18nProvider, result *proc
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *QWAC2ValidationResultCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VALID_ANS_2
+	return i18n.MessageTagQWACValidANS2
 }

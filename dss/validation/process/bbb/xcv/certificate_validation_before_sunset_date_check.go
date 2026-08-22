@@ -55,7 +55,7 @@ func newCertificateValidationBeforeSunsetDateCheck[T any](i18nProvider *i18n.I18
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_SUB_XCV_TA
+	return jaxb.XmlBlockTypeSubXCVTA
 }
 
 // Process performs the check. Port of process().
@@ -69,24 +69,24 @@ func (c *CertificateValidationBeforeSunsetDateCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IVTBCTSD
+	return i18n.MessageTagBBBXCVIVTBCTSD
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IVTBCTSD_ANS
+	return i18n.MessageTagBBBXCVIVTBCTSDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE
+	return enumerations.SubIndicationNoCertificateChainFoundNoPOE
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -95,10 +95,10 @@ func (c *CertificateValidationBeforeSunsetDateCheck[T]) BuildAdditionalInfo() *s
 	var message string
 	if c.certificate.TrustSunsetDate() != nil {
 		controlTime := c.controlTime
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_SUNSET_DATE,
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateSunsetDate,
 			process.GetFormattedDate(&controlTime), process.GetFormattedDate(c.certificate.TrustSunsetDate()))
 	} else {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_SUNSET_DATE_VALID)
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateSunsetDateValid)
 	}
 	return &message
 }

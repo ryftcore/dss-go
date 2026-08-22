@@ -24,7 +24,7 @@ func newQualificationByCertificatePostEIDAS(signingCertificate *diagnostic.Certi
 func (q *qualificationByCertificatePostEIDAS) QualifiedStatus() enumerations.CertificateQualifiedStatus {
 	if q.signingCertificate.IsQcCompliance() &&
 		utils.IsCollectionEmpty(q.signingCertificate.QcLegislationCountryCodes()) {
-		return enumerations.CertificateQualifiedStatus_QC
+		return enumerations.CertificateQualifiedStatusQC
 	}
-	return enumerations.CertificateQualifiedStatus_NOT_QC
+	return enumerations.CertificateQualifiedStatusNotQC
 }

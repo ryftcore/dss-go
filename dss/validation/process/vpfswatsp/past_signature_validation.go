@@ -76,7 +76,7 @@ func NewPastSignatureValidation(i18nProvider *i18n.I18nProvider, token diagnosti
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *PastSignatureValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_PAST_SIGNATURE_VALIDATION
+	return i18n.MessageTagPastSignatureValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -105,7 +105,7 @@ func (c *PastSignatureValidation) InitChain() {
 	sigCertRevocationPoeStatus := &jaxb.XmlConclusion{}
 	var signingCertificateRevocations []*diagnostic.CertificateRevocationWrapper
 
-	if c.isRevocationDataRequired(signingCertificate, enumerations.SubContext_SIGNING_CERT) {
+	if c.isRevocationDataRequired(signingCertificate, enumerations.SubContextSigningCert) {
 		certificateRevocationSelector := NewPastSignatureValidationCertificateRevocationSelector(
 			c.I18nProvider, signingCertificate, c.currentTime, c.bbbs, c.token.Id(), c.poe, c.policy)
 
@@ -117,10 +117,10 @@ func (c *PastSignatureValidation) InitChain() {
 
 		signingCertificateRevocations = certificateRevocationSelector.AcceptableCertificateRevocations()
 		if utils.IsCollectionNotEmpty(signingCertificateRevocations) {
-			sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+			sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 		} else {
-			sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-			subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE)
+			sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+			subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationRevocationOutOfBoundsNoPOE)
 			sigCertRevocationPoeStatus.SubIndication = &subIndication
 			// keep all revocation data if none of the valid instances found
 			signingCertificateRevocations = signingCertificate.CertificateRevocationData()
@@ -128,7 +128,7 @@ func (c *PastSignatureValidation) InitChain() {
 
 	} else {
 		// revocation check is not required
-		sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		sigCertRevocationPoeStatus.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 	}
 
 	/*
@@ -181,8 +181,8 @@ func (c *PastSignatureValidation) InitChain() {
 	/*
 	 * - If current time indication/sub indication is INDETERMINATE/NO_CERTIFICATE_CHAIN_FOUND_NO_POE:
 	 */
-	if poeExists && enumerations.Indication_INDETERMINATE == currentIndication &&
-		enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE == currentSubIndication {
+	if poeExists && enumerations.IndicationIndeterminate == currentIndication &&
+		enumerations.SubIndicationNoCertificateChainFoundNoPOE == currentSubIndication {
 		/*
 		 * a) If best-signature-time is before the issuance date of the signing certificate (notBefore field), the
 		 *    building block shall return the indication FAILED with the sub-indication NOT_YET_VALID.
@@ -194,12 +194,12 @@ func (c *PastSignatureValidation) InitChain() {
 		item = item.SetNextItem(c.bestSignatureTimeNotBeforeCertificateIssuance(bestSignatureTime, signingCertificate))
 
 		item = item.SetNextItem(c.bestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration(
-			bestSignatureTime, signingCertificate, enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE))
+			bestSignatureTime, signingCertificate, enumerations.SubIndicationOutOfBoundsNoPOE))
 
-	} else if poeExists && enumerations.Indication_INDETERMINATE == currentIndication &&
-		(enumerations.SubIndication_REVOKED_NO_POE == currentSubIndication ||
-			enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE == currentSubIndication ||
-			(enumerations.SubIndication_TRY_LATER == currentSubIndication && c.isCertificateSuspended())) {
+	} else if poeExists && enumerations.IndicationIndeterminate == currentIndication &&
+		(enumerations.SubIndicationRevokedNoPOE == currentSubIndication ||
+			enumerations.SubIndicationRevocationOutOfBoundsNoPOE == currentSubIndication ||
+			(enumerations.SubIndicationTryLater == currentSubIndication && c.isCertificateSuspended())) {
 		/*
 		 * - If current time indication/sub-indication is INDETERMINATE/REVOKED_NO_POE,
 		 *   INDETERMINATE/REVOCATION_OUT_OF_BOUNDS_NO_POE or INDETERMINATE/TRY_LATER
@@ -216,10 +216,10 @@ func (c *PastSignatureValidation) InitChain() {
 		item = item.SetNextItem(c.bestSignatureTimeNotBeforeCertificateIssuance(bestSignatureTime, signingCertificate))
 
 		item = item.SetNextItem(c.bestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration(
-			bestSignatureTime, signingCertificate, enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED))
+			bestSignatureTime, signingCertificate, enumerations.SubIndicationOutOfBoundsNotRevoked))
 
-	} else if poeExists && enumerations.Indication_INDETERMINATE == currentIndication &&
-		enumerations.SubIndication_REVOKED_CA_NO_POE == currentSubIndication {
+	} else if poeExists && enumerations.IndicationIndeterminate == currentIndication &&
+		enumerations.SubIndicationRevokedCANoPOE == currentSubIndication {
 		/*
 		 * - If current time indication/sub-indication is INDETERMINATE/REVOKED_CA_NO_POE then:
 		 *
@@ -249,11 +249,11 @@ func (c *PastSignatureValidation) InitChain() {
 		item = item.SetNextItem(c.bestSignatureTimeNotBeforeCertificateIssuance(bestSignatureTime, signingCertificate))
 
 		item = item.SetNextItem(c.bestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration(
-			bestSignatureTime, signingCertificate, enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED))
+			bestSignatureTime, signingCertificate, enumerations.SubIndicationOutOfBoundsNotRevoked))
 
-	} else if poeExists && enumerations.Indication_INDETERMINATE == currentIndication &&
-		(enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == currentSubIndication ||
-			enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == currentSubIndication) {
+	} else if poeExists && enumerations.IndicationIndeterminate == currentIndication &&
+		(enumerations.SubIndicationOutOfBoundsNoPOE == currentSubIndication ||
+			enumerations.SubIndicationOutOfBoundsNotRevoked == currentSubIndication) {
 		/*
 		 * - If current time indication/sub-indication is INDETERMINATE/OUT_OF_BOUNDS_NO_POE or OUT_OF_BOUNDS_NOT_REVOKED:
 		 *
@@ -271,8 +271,8 @@ func (c *PastSignatureValidation) InitChain() {
 		item = item.SetNextItem(c.bestSignatureTimeAfterCertificateIssuanceAndBeforeCertificateExpiration(
 			bestSignatureTime, signingCertificate, currentSubIndication))
 
-	} else if enumerations.Indication_INDETERMINATE == currentIndication &&
-		enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == currentSubIndication {
+	} else if enumerations.IndicationIndeterminate == currentIndication &&
+		enumerations.SubIndicationCryptoConstraintsFailureNoPOE == currentSubIndication {
 		/*
 		 * 4) If current time indication/ sub-indication is INDETERMINATE/CRYPTO_CONSTRAINTS_FAILURE_NO_POE and for
 		 * each algorithm (or key size) in the list concerned by the failure, there is a POE for the material that
@@ -284,8 +284,8 @@ func (c *PastSignatureValidation) InitChain() {
 
 		item = c.revocationDataAlgorithmsObsolescenceValidation(item, signingCertificateRevocations)
 
-	} else if enumerations.Indication_INDETERMINATE == currentIndication &&
-		enumerations.SubIndication_TRY_LATER == currentSubIndication && !c.isCertificateSuspended() {
+	} else if enumerations.IndicationIndeterminate == currentIndication &&
+		enumerations.SubIndicationTryLater == currentSubIndication && !c.isCertificateSuspended() {
 		/*
 		 * 5) If current time indication/sub indication is INDETERMINATE/TRY_LATER because
 		 * the revocation information of the target certificate was not fresh enough:
@@ -379,8 +379,8 @@ func (c *PastSignatureValidation) poeExistNotAfterCARevocationTimeCheck(
 func (c *PastSignatureValidation) pastRevocationDataValidationConclusive(
 	currentConclusion *jaxb.XmlConclusion) process.ChainItem[*jaxb.XmlPSV] {
 	constraint, err := process.GetConstraintOrMaxLevel(
-		c.policy.RevocationIssuerNotExpiredConstraint(c.context, enumerations.SubContext_SIGNING_CERT),
-		enumerations.Level_FAIL)
+		c.policy.RevocationIssuerNotExpiredConstraint(c.context, enumerations.SubContextSigningCert),
+		enumerations.LevelFail)
 	if err != nil {
 		panic(err)
 	}
@@ -448,9 +448,9 @@ func (c *PastSignatureValidation) revocationDataAlgorithmsObsolescenceValidation
 	signingCertificateRevocations []*diagnostic.CertificateRevocationWrapper, context enumerations.Context,
 	checkedTokens *[]string) process.ChainItem[*jaxb.XmlPSV] {
 	for _, certificate := range certificateChain {
-		subContext := enumerations.SubContext_CA_CERTIFICATE
+		subContext := enumerations.SubContextCACertificate
 		if c.token.SigningCertificate().Id() == certificate.Id() {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		}
 		certificatePoeTime := c.lowestPoeTime(certificate)
 		if c.isTrustAnchor(certificate, certificatePoeTime, context, subContext) {
@@ -462,7 +462,7 @@ func (c *PastSignatureValidation) revocationDataAlgorithmsObsolescenceValidation
 		*checkedTokens = append(*checkedTokens, certificate.Id())
 
 		var revocationData []*diagnostic.CertificateRevocationWrapper
-		if enumerations.SubContext_SIGNING_CERT == subContext {
+		if enumerations.SubContextSigningCert == subContext {
 			revocationData = signingCertificateRevocations
 		} else {
 			revocationData = certificate.CertificateRevocationData()
@@ -479,7 +479,7 @@ func (c *PastSignatureValidation) revocationDataAlgorithmsObsolescenceValidation
 				c.I18nProvider, &latestAcceptableRevocation.RevocationWrapper, revocationPoeTime, c.policy)
 			aovResult := algorithmObsolescenceValidation.Execute()
 
-			position, err := process.GetCryptoPosition(enumerations.Context_REVOCATION)
+			position, err := process.GetCryptoPosition(enumerations.ContextRevocation)
 			if err != nil {
 				panic(err)
 			}
@@ -489,7 +489,7 @@ func (c *PastSignatureValidation) revocationDataAlgorithmsObsolescenceValidation
 
 			item = c.revocationDataAlgorithmsObsolescenceValidationRecursive(item,
 				latestAcceptableRevocation.CertificateChain(), signingCertificateRevocations,
-				enumerations.Context_REVOCATION, checkedTokens)
+				enumerations.ContextRevocation, checkedTokens)
 
 		}
 
@@ -553,9 +553,9 @@ func (c *PastSignatureValidation) revocationIsFresh(item process.ChainItem[*jaxb
 func (c *PastSignatureValidation) subContext(
 	certificateWrapper *diagnostic.CertificateWrapper) enumerations.SubContext {
 	if c.token.SigningCertificate().Id() == certificateWrapper.Id() {
-		return enumerations.SubContext_SIGNING_CERT
+		return enumerations.SubContextSigningCert
 	}
-	return enumerations.SubContext_CA_CERTIFICATE
+	return enumerations.SubContextCACertificate
 }
 
 // checkRevocationFreshnessCheckerResult ports the private
@@ -589,13 +589,13 @@ func newPSVRevocationFreshnessCheckerResultCheck(i18nProvider *i18n.I18nProvider
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the anonymous subclass's getFailedIndicationForConclusion().
 func (c *psvRevocationFreshnessCheckerResultCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of the anonymous subclass's getFailedSubIndicationForConclusion().
 func (c *psvRevocationFreshnessCheckerResultCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }
 
 // lowestPoeTime ports the private getLowestPoeTime(TokenProxy).
@@ -606,9 +606,9 @@ func (c *PastSignatureValidation) lowestPoeTime(token diagnostic.TokenProxy) tim
 // isCertificateSuspended ports the private isCertificateSuspended().
 func (c *PastSignatureValidation) isCertificateSuspended() bool {
 	for _, certificate := range c.token.CertificateChain() {
-		subContext := enumerations.SubContext_CA_CERTIFICATE
+		subContext := enumerations.SubContextCACertificate
 		if c.token.SigningCertificate().Id() == certificate.Id() {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		}
 		if c.isTrustAnchor(certificate, c.currentTime, c.context, subContext) {
 			break
@@ -617,7 +617,7 @@ func (c *PastSignatureValidation) isCertificateSuspended() bool {
 		latestRevocationData := process.GetLatestAcceptableRevocationData(c.token, certificate, revocationData,
 			c.currentTime, c.bbbs, c.poe)
 		if latestRevocationData != nil && latestRevocationData.IsRevoked() &&
-			enumerations.RevocationReason_CERTIFICATE_HOLD == latestRevocationData.Reason() {
+			enumerations.RevocationReasonCertificateHold == latestRevocationData.Reason() {
 			return true
 		}
 	}
@@ -633,9 +633,9 @@ func (c *PastSignatureValidation) CollectMessages(conclusion *jaxb.XmlConclusion
 	if constraint.BlockType != nil {
 		blockType = *constraint.BlockType
 	}
-	if jaxb.XmlBlockType_PCV == blockType {
+	if jaxb.XmlBlockTypePCV == blockType {
 		// skip PCV POE message extraction
-	} else if jaxb.XmlBlockType_PSV_CRS == blockType {
+	} else if jaxb.XmlBlockTypePSVCRS == blockType {
 		// skip acceptable revocation message extraction
 	} else {
 		c.ChainBase.CollectMessages(conclusion, constraint)

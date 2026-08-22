@@ -11,9 +11,9 @@ type ConstraintStatus = jaxb.ConstraintStatus
 
 // The ConstraintStatus values, re-exported from jaxb.
 const (
-	ConstraintStatus_APPLIED    = jaxb.ConstraintStatus_APPLIED
-	ConstraintStatus_DISABLED   = jaxb.ConstraintStatus_DISABLED
-	ConstraintStatus_OVERRIDDEN = jaxb.ConstraintStatus_OVERRIDDEN
+	ConstraintStatusApplied    = jaxb.ConstraintStatusApplied
+	ConstraintStatusDisabled   = jaxb.ConstraintStatusDisabled
+	ConstraintStatusOverridden = jaxb.ConstraintStatusOverridden
 )
 
 // ConstraintStatusValues returns all ConstraintStatus constants in declaration order.

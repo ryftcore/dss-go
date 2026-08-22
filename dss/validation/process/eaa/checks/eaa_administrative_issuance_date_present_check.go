@@ -37,23 +37,23 @@ func (c *EAAAdministrativeIssuanceDatePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAAdministrativeIssuanceDatePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_AID_PRESENT
+	return i18n.MessageTagEAAAIDPresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAAdministrativeIssuanceDatePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_AID_PRESENT_ANS
+	return i18n.MessageTagEAAAIDPresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAAdministrativeIssuanceDatePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAAdministrativeIssuanceDatePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

@@ -39,23 +39,23 @@ func (c *EAARevocationPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_PR
+	return i18n.MessageTagEAARevPR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_PR_ANS
+	return i18n.MessageTagEAARevPRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAARevocationPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAARevocationPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_EAA_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationEAAConstraintsFailure
 }

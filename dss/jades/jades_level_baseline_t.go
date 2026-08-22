@@ -128,7 +128,7 @@ func (t *JAdESLevelBaselineT) ExtendSignaturesDocument(doc model.DSSDocument,
 
 	signaturesToExtend := signatures
 	// this method allows extension of only the current signature on creation
-	if enumerations.SigningOperation_SIGN == t.operationKind {
+	if enumerations.SigningOperationSign == t.operationKind {
 		signaturesToExtend = []validation.AdvancedSignature{signatures[len(signatures)-1]}
 	}
 
@@ -219,7 +219,7 @@ func (t *JAdESLevelBaselineT) extendToTLevelSignatures(signatures []validation.A
 // jadesLevelBaselineTTLevelExtensionRequired ports the private tLevelExtensionRequired.
 func jadesLevelBaselineTTLevelExtensionRequired(jadesSignature validation.AdvancedSignature,
 	parameters *JAdESSignatureParameters) bool {
-	return enumerations.SignatureLevel_JAdES_BASELINE_T == parameters.SignatureLevel() ||
+	return enumerations.SignatureLevelJAdESBaselineT == parameters.SignatureLevel() ||
 		!jadesSignature.HasTProfile()
 }
 

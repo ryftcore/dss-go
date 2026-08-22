@@ -57,11 +57,11 @@ func (c *ValidationContextInitializationResultCheck[T]) FailedSubIndicationForCo
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ValidationContextInitializationResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVCIRC
+	return i18n.MessageTagBSVIVCIRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ValidationContextInitializationResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVCIRC_ANS
+	return i18n.MessageTagBSVIVCIRCANS
 }

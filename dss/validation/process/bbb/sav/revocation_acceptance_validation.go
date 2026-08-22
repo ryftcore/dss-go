@@ -26,7 +26,7 @@ func NewRevocationAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentT
 	validationPolicy policy.ValidationPolicy) *RevocationAcceptanceValidation {
 	c := &RevocationAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, revocationWrapper, currentTime,
-			enumerations.Context_REVOCATION, aovResult, validationPolicy),
+			enumerations.ContextRevocation, aovResult, validationPolicy),
 	}
 	c.InitChainBase(c)
 	return c
@@ -34,7 +34,7 @@ func NewRevocationAcceptanceValidation(i18nProvider *i18n.I18nProvider, currentT
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *RevocationAcceptanceValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIGNATURE_ACCEPTANCE_VALIDATION
+	return i18n.MessageTagSignatureAcceptanceValidation
 }
 
 // InitChain initializes the chain. Port of initChain().

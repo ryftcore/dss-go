@@ -26,12 +26,12 @@ func newQualificationByTL(trustService *diagnostic.TrustServiceWrapper, qualifie
 // QualifiedStatus is the port of the overridden getQualifiedStatus().
 func (q *qualificationByTL) QualifiedStatus() enumerations.CertificateQualifiedStatus {
 	if q.trustService == nil {
-		return enumerations.CertificateQualifiedStatus_NOT_QC
+		return enumerations.CertificateQualifiedStatusNotQC
 	}
 
 	grantedFilter := NewGrantedServiceFilter()
 	if !grantedFilter.IsAcceptable(q.trustService) {
-		return enumerations.CertificateQualifiedStatus_NOT_QC
+		return enumerations.CertificateQualifiedStatusNotQC
 	}
 
 	capturedQualifiers := q.trustService.CapturedQualifierUris()
@@ -39,10 +39,10 @@ func (q *qualificationByTL) QualifiedStatus() enumerations.CertificateQualifiedS
 	// If overrules
 	if utils.IsCollectionNotEmpty(capturedQualifiers) {
 		if enumerations.ServiceQualificationIsNotQualified(capturedQualifiers) {
-			return enumerations.CertificateQualifiedStatus_NOT_QC
+			return enumerations.CertificateQualifiedStatusNotQC
 		}
 		if enumerations.ServiceQualificationIsQcStatement(capturedQualifiers) {
-			return enumerations.CertificateQualifiedStatus_QC
+			return enumerations.CertificateQualifiedStatusQC
 		}
 	}
 

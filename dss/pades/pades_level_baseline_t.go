@@ -166,7 +166,7 @@ func padesLevelBaselineTIsTLevelExtensionRequired(parameters *PAdESSignaturePara
 // padesLevelBaselineTRequiresDocumentTimestamp ports the private #requiresDocumentTimestamp.
 func padesLevelBaselineTRequiresDocumentTimestamp(signature *PAdESSignature,
 	signatureParameters *PAdESSignatureParameters) bool {
-	return enumerations.SignatureLevel_PAdES_BASELINE_T == signatureParameters.SignatureLevel() ||
+	return enumerations.SignatureLevelPAdESBaselineT == signatureParameters.SignatureLevel() ||
 		!signature.HasTProfile()
 }
 

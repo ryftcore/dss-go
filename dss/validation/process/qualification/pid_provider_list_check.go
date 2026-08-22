@@ -33,29 +33,29 @@ func NewPIDProviderListCheck(i18nProvider *i18n.I18nProvider, result *process.Re
 // Process performs the check. Port of process().
 func (c *PIDProviderListCheck) Process() bool {
 	listType := enumerations.ListTypeFromURI(c.listTypeUri)
-	return enumerations.LoTETypeEnum_EUPIDProvidersList == listType
+	return enumerations.LoTETypeEnumEUPIDProvidersList == listType
 }
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *PIDProviderListCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_USAGE_LIST_TYPE, c.listTypeUri)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateUsageListType, c.listTypeUri)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PIDProviderListCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_LOTE_TYPE_PID_PROVIDERS
+	return i18n.MessageTagPIDLoTETypePIDProviders
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *PIDProviderListCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_LOTE_TYPE_PID_PROVIDERS_ANS
+	return i18n.MessageTagPIDLoTETypePIDProvidersANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *PIDProviderListCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

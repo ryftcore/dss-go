@@ -43,7 +43,7 @@ func NewTimestampGenerationTimeNotAfterRevocationTimeCheck[T any](i18nProvider *
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_CNT_TST_BBB
+	return jaxb.XmlBlockTypeCNTTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -56,24 +56,24 @@ func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) Process() bool {
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_REVOKED
+	return enumerations.SubIndicationRevoked
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCRT
+	return i18n.MessageTagBSVICTGTNASCRT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCRT_ANS
+	return i18n.MessageTagBSVICTGTNASCRTANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -87,6 +87,6 @@ func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) BuildAdditionalI
 	if c.signingCertificateRevocationTime != nil {
 		revocationTime = process.GetFormattedDate(c.signingCertificateRevocationTime)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_AND_REVOCATION_TIME, c.contentTimestamp.Id(), tstGenerationTime, revocationTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampAndRevocationTime, c.contentTimestamp.Id(), tstGenerationTime, revocationTime)
 	return &message
 }

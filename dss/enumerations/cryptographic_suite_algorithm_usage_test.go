@@ -9,14 +9,14 @@ type cryptographicSuiteAlgorithmUsageCase struct {
 
 func cryptographicSuiteAlgorithmUsageCases() []cryptographicSuiteAlgorithmUsageCase {
 	return []cryptographicSuiteAlgorithmUsageCase{
-		{CryptographicSuiteAlgorithmUsage_SIGN_DATA, "http://uri.etsi.org/19322/sign_data"},
-		{CryptographicSuiteAlgorithmUsage_SIGN_CERTIFICATES, "http://uri.etsi.org/19322/sign_data/sign_certificates"},
-		{CryptographicSuiteAlgorithmUsage_SIGN_OCSP, "http://uri.etsi.org/19322/sign_data/sign_ocsp"},
-		{CryptographicSuiteAlgorithmUsage_SIGN_TIMESTAMPS, "http://uri.etsi.org/19322/sign_data/sign_timestamps"},
-		{CryptographicSuiteAlgorithmUsage_VALIDATE_DATA, "http://uri.etsi.org/19322/sign_data/validate_data"},
-		{CryptographicSuiteAlgorithmUsage_VALIDATE_CERTIFICATES, "http://uri.etsi.org/19322/sign_data/validate_data/validate_certificates"},
-		{CryptographicSuiteAlgorithmUsage_VALIDATE_OCSP, "http://uri.etsi.org/19322/sign_data/validate_data/validate_ocsp"},
-		{CryptographicSuiteAlgorithmUsage_VALIDATE_TIMESTAMPS, "http://uri.etsi.org/19322/sign_data/validate_data/validate_timestamps"},
+		{CryptographicSuiteAlgorithmUsageSignData, "http://uri.etsi.org/19322/sign_data"},
+		{CryptographicSuiteAlgorithmUsageSignCertificates, "http://uri.etsi.org/19322/sign_data/sign_certificates"},
+		{CryptographicSuiteAlgorithmUsageSignOCSP, "http://uri.etsi.org/19322/sign_data/sign_ocsp"},
+		{CryptographicSuiteAlgorithmUsageSignTimestamps, "http://uri.etsi.org/19322/sign_data/sign_timestamps"},
+		{CryptographicSuiteAlgorithmUsageValidateData, "http://uri.etsi.org/19322/sign_data/validate_data"},
+		{CryptographicSuiteAlgorithmUsageValidateCertificates, "http://uri.etsi.org/19322/sign_data/validate_data/validate_certificates"},
+		{CryptographicSuiteAlgorithmUsageValidateOCSP, "http://uri.etsi.org/19322/sign_data/validate_data/validate_ocsp"},
+		{CryptographicSuiteAlgorithmUsageValidateTimestamps, "http://uri.etsi.org/19322/sign_data/validate_data/validate_timestamps"},
 	}
 }
 

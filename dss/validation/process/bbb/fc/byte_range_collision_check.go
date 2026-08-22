@@ -73,19 +73,19 @@ func secondByteRangePartLength(byteRange []*big.Int) int64 {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *ByteRangeCollisionCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_DBTOOST }
+func (c *ByteRangeCollisionCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCDBTOOST }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ByteRangeCollisionCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DBTOOST_ANS
+	return i18n.MessageTagBBBFCDBTOOSTANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *ByteRangeCollisionCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *ByteRangeCollisionCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

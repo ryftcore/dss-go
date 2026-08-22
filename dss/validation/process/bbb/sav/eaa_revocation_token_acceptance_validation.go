@@ -39,7 +39,7 @@ func NewEAARevocationTokenAcceptanceValidation(i18nProvider *i18n.I18nProvider, 
 	validationPolicy policy.ValidationPolicy) *EAARevocationTokenAcceptanceValidation {
 	c := &EAARevocationTokenAcceptanceValidation{
 		AbstractAcceptanceValidation: NewAbstractAcceptanceValidation(i18nProvider, eaaRevocationTokenWrapper,
-			currentTime, enumerations.Context_EAA_REVOCATION, aovResult, validationPolicy),
+			currentTime, enumerations.ContextEAARevocation, aovResult, validationPolicy),
 	}
 	c.InitChainBase(c)
 	return c
@@ -47,7 +47,7 @@ func NewEAARevocationTokenAcceptanceValidation(i18nProvider *i18n.I18nProvider, 
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *EAARevocationTokenAcceptanceValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIGNATURE_ACCEPTANCE_VALIDATION
+	return i18n.MessageTagSignatureAcceptanceValidation
 }
 
 // InitChain initializes the chain. Port of initChain().

@@ -60,7 +60,7 @@ func (r *CounterSignatureResolver) createFromNode(node *xmldom.Node) *xmldsig.Da
 		panic(fmt.Sprintf("Unable to serialize node : %s", err.Error()))
 	}
 	result := xmldsig.NewOctetData(serialized)
-	result.SetMIMEType(enumerations.MimeTypeEnum_XML.MimeTypeString())
+	result.SetMIMEType(enumerations.MimeTypeEnumXML.MimeTypeString())
 	return result
 }
 
@@ -93,9 +93,9 @@ func (r *CounterSignatureResolver) resolveNode(uriValue string) *xmldom.Node {
 	if err != nil {
 		return nil
 	}
-	node := xmlutils.XPathUtilsGetElementByIdWithQuery(documentDom, common.XMLDSigPath_ALL_SIGNATURE_VALUES_PATH, uriValue)
+	node := xmlutils.XPathUtilsGetElementByIdWithQuery(documentDom, common.XMLDSigPathAllSignatureValuesPath, uriValue)
 
-	if node == nil && r.isXPointerSlash(uriValue) && common.XMLDSigElement_SIGNATURE_VALUE.IsSameTagName(documentDom.Name.Local) {
+	if node == nil && r.isXPointerSlash(uriValue) && common.XMLDSigElementSignatureValue.IsSameTagName(documentDom.Name.Local) {
 		node = documentDom
 	}
 

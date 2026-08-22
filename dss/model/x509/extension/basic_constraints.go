@@ -25,7 +25,7 @@ func NewBasicConstraints() *BasicConstraints {
 		// OID-only CertificateExtension(String) constructor - NOT
 		// CertificateExtension(CertificateExtensionEnum). The description therefore stays
 		// null, and the diagnostic-data builder emits no description attribute for it.
-		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnum_BASIC_CONSTRAINTS.OID()),
+		CertificateExtension: NewCertificateExtension(enumerations.CertificateExtensionEnumBasicConstraints.OID()),
 	}
 }
 

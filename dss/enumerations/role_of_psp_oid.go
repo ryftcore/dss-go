@@ -13,15 +13,15 @@ import "fmt"
 type RoleOfPspOid string
 
 const (
-	// RoleOfPspOid_PSP_AS: Account Servicing Payment Service Provider role.
-	RoleOfPspOid_PSP_AS RoleOfPspOid = "PSP_AS"
-	// RoleOfPspOid_PSP_PI: Payment Initiation Service Provider role.
-	RoleOfPspOid_PSP_PI RoleOfPspOid = "PSP_PI"
-	// RoleOfPspOid_PSP_AI: Account Information Service Provider role.
-	RoleOfPspOid_PSP_AI RoleOfPspOid = "PSP_AI"
-	// RoleOfPspOid_PSP_IC: Payment Service Provider issuing card-based
+	// RoleOfPspOidPSPAs: Account Servicing Payment Service Provider role.
+	RoleOfPspOidPSPAs RoleOfPspOid = "PSP_AS"
+	// RoleOfPspOidPSPPI: Payment Initiation Service Provider role.
+	RoleOfPspOidPSPPI RoleOfPspOid = "PSP_PI"
+	// RoleOfPspOidPSPAI: Account Information Service Provider role.
+	RoleOfPspOidPSPAI RoleOfPspOid = "PSP_AI"
+	// RoleOfPspOidPSPIC: Payment Service Provider issuing card-based
 	// payment instruments role.
-	RoleOfPspOid_PSP_IC RoleOfPspOid = "PSP_IC"
+	RoleOfPspOidPSPIC RoleOfPspOid = "PSP_IC"
 )
 
 // roleOfPspOidFields holds the (description, oid) pair for each constant.
@@ -33,19 +33,19 @@ type roleOfPspOidFields struct {
 // roleOfPspOidData holds the full field tuple for each constant, copied
 // verbatim from the Java enum constructors.
 var roleOfPspOidData = map[RoleOfPspOid]roleOfPspOidFields{
-	RoleOfPspOid_PSP_AS: {"psp-as", "0.4.0.19495.1.1"},
-	RoleOfPspOid_PSP_PI: {"psp-pi", "0.4.0.19495.1.2"},
-	RoleOfPspOid_PSP_AI: {"psp-ai", "0.4.0.19495.1.3"},
-	RoleOfPspOid_PSP_IC: {"psp-ic", "0.4.0.19495.1.4"},
+	RoleOfPspOidPSPAs: {"psp-as", "0.4.0.19495.1.1"},
+	RoleOfPspOidPSPPI: {"psp-pi", "0.4.0.19495.1.2"},
+	RoleOfPspOidPSPAI: {"psp-ai", "0.4.0.19495.1.3"},
+	RoleOfPspOidPSPIC: {"psp-ic", "0.4.0.19495.1.4"},
 }
 
 // RoleOfPspOidValues returns all constants in declaration order.
 func RoleOfPspOidValues() []RoleOfPspOid {
 	return []RoleOfPspOid{
-		RoleOfPspOid_PSP_AS,
-		RoleOfPspOid_PSP_PI,
-		RoleOfPspOid_PSP_AI,
-		RoleOfPspOid_PSP_IC,
+		RoleOfPspOidPSPAs,
+		RoleOfPspOidPSPPI,
+		RoleOfPspOidPSPAI,
+		RoleOfPspOidPSPIC,
 	}
 }
 

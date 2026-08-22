@@ -8,24 +8,24 @@ import "fmt"
 type EAACategory string
 
 const (
-	// EAACategory_EU_QEAA: indication that the attestation has been issued as a
+	// EAACategoryEUQEAA: indication that the attestation has been issued as a
 	// qualified electronic attestation of attributes.
-	EAACategory_EU_QEAA EAACategory = "EU_QEAA"
-	// EAACategory_EU_PUBEAA: indication that the attestation has been issued as an
+	EAACategoryEUQEAA EAACategory = "EU_QEAA"
+	// EAACategoryEUPubEAA: indication that the attestation has been issued as an
 	// electronic attestation of attributes issued by or on behalf of a public body
 	// responsible for an authentic source.
-	EAACategory_EU_PUBEAA EAACategory = "EU_PUBEAA"
+	EAACategoryEUPubEAA EAACategory = "EU_PUBEAA"
 )
 
 // eaaCategoryURN maps each EAACategory to its defined URN.
 var eaaCategoryURN = map[EAACategory]string{
-	EAACategory_EU_QEAA:   "urn:etsi:esi:eaa:eu:qualified",
-	EAACategory_EU_PUBEAA: "urn:etsi:esi:eaa:eu:pub",
+	EAACategoryEUQEAA:   "urn:etsi:esi:eaa:eu:qualified",
+	EAACategoryEUPubEAA: "urn:etsi:esi:eaa:eu:pub",
 }
 
 // EAACategoryValues returns all EAACategory constants in declaration order.
 func EAACategoryValues() []EAACategory {
-	return []EAACategory{EAACategory_EU_QEAA, EAACategory_EU_PUBEAA}
+	return []EAACategory{EAACategoryEUQEAA, EAACategoryEUPubEAA}
 }
 
 // EAACategoryValueOf returns the EAACategory matching the given Java enum name.

@@ -25,7 +25,7 @@ func TestDOMDocumentOpenStreamAndMimeType(t *testing.T) {
 	if d.Name() != "signature.xml" {
 		t.Errorf("Name() = %q", d.Name())
 	}
-	if d.MimeType() != enumerations.MimeTypeEnum_XML {
+	if d.MimeType() != enumerations.MimeTypeEnumXML {
 		t.Errorf("expected the default MimeType to be XML, got %v", d.MimeType())
 	}
 
@@ -52,11 +52,11 @@ func TestDOMDocumentDigestIsCached(t *testing.T) {
 	}
 	d := NewDOMDocument(doc)
 
-	v1, err := d.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	v1, err := d.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	v2, err := d.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	v2, err := d.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

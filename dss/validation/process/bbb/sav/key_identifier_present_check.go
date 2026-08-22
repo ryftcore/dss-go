@@ -38,23 +38,23 @@ func (c *KeyIdentifierPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *KeyIdentifierPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAKIDP
+	return i18n.MessageTagBBBICSISAKIDP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *KeyIdentifierPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAKIDP_ANS
+	return i18n.MessageTagBBBICSISAKIDPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *KeyIdentifierPresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *KeyIdentifierPresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

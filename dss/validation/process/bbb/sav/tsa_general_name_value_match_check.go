@@ -38,23 +38,23 @@ func (c *TSAGeneralNameValueMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TSAGeneralNameValueMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_TAV_DTSAVM
+	return i18n.MessageTagBBBTavDTSAVM
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TSAGeneralNameValueMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_TAV_DTSAVM_ANS
+	return i18n.MessageTagBBBTavDTSAVMANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TSAGeneralNameValueMatchCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *TSAGeneralNameValueMatchCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

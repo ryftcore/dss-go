@@ -8,16 +8,16 @@ type XAdES141Attribute string
 
 // XAdES141Attribute constants, one per XAdES 1.4.1 schema attribute name.
 const (
-	XAdES141Attribute_ID    XAdES141Attribute = "ID"
-	XAdES141Attribute_ORDER XAdES141Attribute = "ORDER"
-	XAdES141Attribute_URI   XAdES141Attribute = "URI"
+	XAdES141AttributeID    XAdES141Attribute = "ID"
+	XAdES141AttributeOrder XAdES141Attribute = "ORDER"
+	XAdES141AttributeURI   XAdES141Attribute = "URI"
 )
 
 // xades141attributeNames maps each constant to its wire attribute name (getAttributeName()).
 var xades141attributeNames = map[XAdES141Attribute]string{
-	XAdES141Attribute_ID:    "Id",
-	XAdES141Attribute_ORDER: "Order",
-	XAdES141Attribute_URI:   "URI",
+	XAdES141AttributeID:    "Id",
+	XAdES141AttributeOrder: "Order",
+	XAdES141AttributeURI:   "URI",
 }
 
 // AttributeName implements common.DSSAttribute. Ports getAttributeName().

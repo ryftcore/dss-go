@@ -30,17 +30,17 @@ func NewByteRangeCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*
 func (c *ByteRangeCheck) Process() bool { return c.pdfRevision.IsSignatureByteRangeValid() }
 
 // MessageTag returns the constraint message i18n key.
-func (c *ByteRangeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IBRV }
+func (c *ByteRangeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIBRV }
 
 // ErrorMessageTag returns the error message i18n key.
-func (c *ByteRangeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IBRV_ANS }
+func (c *ByteRangeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIBRVANS }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *ByteRangeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion returns the SubIndication on failure.
 func (c *ByteRangeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

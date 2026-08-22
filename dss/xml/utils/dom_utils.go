@@ -429,7 +429,7 @@ func DomUtilsCreateDssDocumentFromDomDocument(document *xmldom.Node, name string
 	if err := DomUtilsWriteDocumentTo(document, &buf); err != nil {
 		return nil, model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to create a DSSDocument from DOM document : %s", err.Error()), err)
 	}
-	return model.NewInMemoryDocumentWithMimeType(buf.Bytes(), name, enumerations.MimeTypeEnum_XML), nil
+	return model.NewInMemoryDocumentWithMimeType(buf.Bytes(), name, enumerations.MimeTypeEnumXML), nil
 }
 
 // DomUtilsXmlToString converts an XML Node to a string. Ports xmlToString(Node).

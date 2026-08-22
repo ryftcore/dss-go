@@ -108,7 +108,7 @@ type timestampTokenCertID struct {
 // signing-certificate or signing-certificate-v2 signed attribute. Port of the tail of the
 // BouncyCastle TimeStampToken(ContentInfo) constructor.
 func timestampTokenParseCertID(signerInfo *cmscore.SignerInfo) (*timestampTokenCertID, error) {
-	if attribute := signerInfo.SignedAttributes.Get(spi.OID_id_aa_signingCertificate); attribute != nil {
+	if attribute := signerInfo.SignedAttributes.Get(spi.OIDIdAaSigningCertificate); attribute != nil {
 		values := attribute.ValueEncodings()
 		if len(values) == 0 {
 			return nil, timestampTokenTSPValidationError("no signing certificate attribute found, time stamp invalid.")
@@ -128,7 +128,7 @@ func timestampTokenParseCertID(signerInfo *cmscore.SignerInfo) (*timestampTokenC
 		}, nil
 	}
 
-	attribute := signerInfo.SignedAttributes.Get(spi.OID_id_aa_signingCertificateV2)
+	attribute := signerInfo.SignedAttributes.Get(spi.OIDIdAaSigningCertificateV2)
 	if attribute == nil {
 		return nil, timestampTokenTSPValidationError("no signing certificate attribute found, time stamp invalid.")
 	}
@@ -630,7 +630,7 @@ func (t *TimestampToken) IsValid() bool {
 func (t *TimestampToken) IsSignedByToken(certificateToken *model.CertificateToken) bool {
 	if publicKeyOfTheSigner := t.PublicKeyOfTheSigner(); publicKeyOfTheSigner != nil {
 		return publicKeyOfTheSigner.Equals(certificateToken.PublicKey())
-	} else if enumerations.SignatureValidity_VALID == t.CheckIsSignedByToken(certificateToken) {
+	} else if enumerations.SignatureValidityValid == t.CheckIsSignedByToken(certificateToken) {
 		if !t.IsSelfSigned() {
 			t.SetPublicKeyOfTheSigner(certificateToken.PublicKey())
 		}
@@ -654,16 +654,16 @@ func (t *TimestampToken) IsSignedBy(publicKey *model.PublicKey) bool {
 func (t *TimestampToken) CheckIsSignedByToken(candidate *model.CertificateToken) enumerations.SignatureValidity {
 	signerIdentifier, err := spi.DSSASN1UtilsToSignerIdentifierFromSignerID(t.tsaSignerInfo.SID)
 	if err != nil {
-		return enumerations.SignatureValidity_INVALID
+		return enumerations.SignatureValidityInvalid
 	}
 	related, err := signerIdentifier.IsRelatedToCertificate(candidate)
 	if err != nil || !related {
-		return enumerations.SignatureValidity_INVALID
+		return enumerations.SignatureValidityInvalid
 	}
 
 	verifier, err := spi.DSSSignerInformationVerifierSecurityFactoryCertificateTokenInstance.Build(candidate)
 	if err != nil {
-		t.SetSignatureValidity(enumerations.SignatureValidity_INVALID)
+		t.SetSignatureValidity(enumerations.SignatureValidityInvalid)
 		t.SetInvalidityReason(err.Error())
 		return t.SignatureValidity()
 	}
@@ -674,14 +674,14 @@ func (t *TimestampToken) CheckIsSignedByToken(candidate *model.CertificateToken)
 	if algorithmError == nil &&
 		(t.isValidTimestamp(candidate, verifier, signatureAlgorithm) ||
 			t.isValidCMSSignedData(candidate, verifier, signatureAlgorithm)) {
-		t.SetSignatureValidity(enumerations.SignatureValidity_VALID)
+		t.SetSignatureValidity(enumerations.SignatureValidityValid)
 		t.tsaX500Principal = candidate.Subject().Principal()
 		t.SetSignatureAlgorithm(signatureAlgorithm)
 	} else {
 		if algorithmError != nil {
 			t.SetInvalidityReason(algorithmError.Error())
 		}
-		t.SetSignatureValidity(enumerations.SignatureValidity_INVALID)
+		t.SetSignatureValidity(enumerations.SignatureValidityInvalid)
 	}
 	return t.SignatureValidity()
 }
@@ -692,7 +692,7 @@ func (t *TimestampToken) CheckIsSignedByToken(candidate *model.CertificateToken)
 // otherwise.
 func (t *TimestampToken) signatureAlgorithm(candidate *model.CertificateToken) (enumerations.SignatureAlgorithm, error) {
 	signatureAlgorithmOID := t.tsaSignerInfo.SignatureAlgorithm.Algorithm.String()
-	if enumerations.EncryptionAlgorithm_RSASSA_PSS.OID() == signatureAlgorithmOID {
+	if enumerations.EncryptionAlgorithmRSASSAPSS.OID() == signatureAlgorithmOID {
 		return enumerations.SignatureAlgorithmForOIDAndParams(signatureAlgorithmOID,
 			t.tsaSignerInfo.SignatureAlgorithm.Parameters)
 	}
@@ -1010,7 +1010,7 @@ func (t *TimestampToken) SetReferenceValidations(referenceValidations []*model.R
 func (t *TimestampToken) AreReferenceValidationsValid() bool {
 	if utils.IsCollectionNotEmpty(t.referenceValidations) {
 		for _, referenceValidation := range t.referenceValidations {
-			if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE != referenceValidation.Type() &&
+			if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference != referenceValidation.Type() &&
 				(!referenceValidation.IsFound() || !referenceValidation.IsIntact()) {
 				return false
 			}

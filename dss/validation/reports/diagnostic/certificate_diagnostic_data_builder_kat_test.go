@@ -99,8 +99,8 @@ func TestCertificateDiagnosticDataBuilderKAT(t *testing.T) {
 			diagnosticData := NewCertificateDiagnosticDataBuilder().
 				UsedCertificates([]*model.CertificateToken{token}).
 				UsedRevocations([]validation.AnyRevocationToken{}).
-				DefaultDigestAlgorithm(enumerations.DigestAlgorithm_SHA256).
-				TokenExtractionStrategy(enumerations.TokenExtractionStrategy_NONE).
+				DefaultDigestAlgorithm(enumerations.DigestAlgorithmSHA256).
+				TokenExtractionStrategy(enumerations.TokenExtractionStrategyNone).
 				ValidationDate(katValidationDate).
 				Build()
 

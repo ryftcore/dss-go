@@ -41,7 +41,7 @@ func NewProspectiveCertificateChainAtValidationTimeCheck(i18nProvider *i18n.I18n
 
 // failLevelRule ports the private getFailLevelRule().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) failLevelRule() policy.LevelRule {
-	return process.GetLevelRule(enumerations.Level_FAIL)
+	return process.GetLevelRule(enumerations.LevelFail)
 }
 
 // Process performs the check. Port of process().
@@ -60,30 +60,30 @@ func (c *ProspectiveCertificateChainAtValidationTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_HPCCVVT
+	return i18n.MessageTagBBBXCVHPCCVVT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_HPCCVVT_ANS
+	return i18n.MessageTagBBBXCVHPCCVVTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE
+	return enumerations.SubIndicationNoCertificateChainFoundNoPOE
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) BuildAdditionalInfo() *string {
 	controlTime := c.controlTime
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_VALIDATION_TIME, process.GetFormattedDate(&controlTime))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagValidationTime, process.GetFormattedDate(&controlTime))
 	return &message
 }

@@ -133,7 +133,7 @@ func (b *DetailedReportForCertificateBuilder) Certificate() *diagnostic.Certific
 func (b *DetailedReportForCertificateBuilder) ExecuteAllBasicBuildingBlocks() map[string]*jaxb.XmlBasicBuildingBlocks {
 	bbbs := make(map[string]*jaxb.XmlBasicBuildingBlocks)
 	b.process([]*diagnostic.CertificateWrapper{b.Certificate()},
-		enumerations.Context_CERTIFICATE, bbbs)
+		enumerations.ContextCertificate, bbbs)
 	return bbbs
 }
 

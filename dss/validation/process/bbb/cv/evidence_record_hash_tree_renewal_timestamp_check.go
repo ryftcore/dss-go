@@ -73,7 +73,7 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) getCoveredDocuments(
 	digestMatchers []*diagnosticjaxb.XmlDigestMatcher) []string {
 	var documentNames []string
 	for _, d := range digestMatchers {
-		if enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT == digestMatcherType(d) && d.DataFound {
+		if enumerations.DigestMatcherTypeEvidenceRecordArchiveObject == digestMatcherType(d) && d.DataFound {
 			documentNames = append(documentNames, digestMatcherDocumentName(d))
 		}
 	}
@@ -105,16 +105,16 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) timestampCoversAllOriginal
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_TST_RN
+	return i18n.MessageTagBBBCVERTSTRN
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) ErrorMessageTag() i18n.MessageTag {
 	if c.containsOtherDigests() {
-		return i18n.MessageTag_BBB_CV_ER_TST_RN_ANS_2
+		return i18n.MessageTagBBBCVERTSTRNANS2
 	} else {
-		return i18n.MessageTag_BBB_CV_ER_TST_RN_ANS_1
+		return i18n.MessageTagBBBCVERTSTRNANS1
 	}
 }
 
@@ -122,9 +122,9 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) ErrorMessageTag() i18n.Mes
 // getFailedIndicationForConclusion().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) FailedIndicationForConclusion() enumerations.Indication {
 	if c.containsOtherDigests() {
-		return enumerations.Indication_FAILED
+		return enumerations.IndicationFailed
 	} else {
-		return enumerations.Indication_INDETERMINATE
+		return enumerations.IndicationIndeterminate
 	}
 }
 
@@ -132,16 +132,16 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) FailedIndicationForConclus
 // of getFailedSubIndicationForConclusion().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
 	if c.containsOtherDigests() {
-		return enumerations.SubIndication_HASH_FAILURE
+		return enumerations.SubIndicationHashFailure
 	} else {
-		return enumerations.SubIndication_SIGNED_DATA_NOT_FOUND
+		return enumerations.SubIndicationSignedDataNotFound
 	}
 }
 
 // containsOtherDigests ports the private containsOtherDigests().
 func (c *EvidenceRecordHashTreeRenewalTimestampCheck) containsOtherDigests() bool {
 	for _, d := range c.timestampWrapper.DigestMatchers() {
-		if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE == digestMatcherType(d) {
+		if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference == digestMatcherType(d) {
 			return true
 		}
 	}

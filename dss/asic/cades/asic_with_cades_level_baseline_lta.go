@@ -130,7 +130,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendWithDigestAlgorithms(asicContent *
 	if err != nil {
 		panic(err)
 	}
-	timestamp := model.NewInMemoryDocumentWithMimeType(derEncoded, timestampFilename, enumerations.MimeTypeEnum_TST)
+	timestamp := model.NewInMemoryDocumentWithMimeType(derEncoded, timestampFilename, enumerations.MimeTypeEnumTST)
 	asicContent.SetTimestampDocuments(append(asicContent.TimestampDocuments(), timestamp))
 
 	return asicContent
@@ -188,13 +188,13 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendTimestamp(archiveTimestamp model.D
 	if err != nil {
 		panic(err)
 	}
-	return model.NewInMemoryDocumentWithMimeType(extendedCMS.DEREncoded(), archiveTimestamp.Name(), enumerations.MimeTypeEnum_TST)
+	return model.NewInMemoryDocumentWithMimeType(extendedCMS.DEREncoded(), archiveTimestamp.Name(), enumerations.MimeTypeEnumTST)
 }
 
 // getEmptyLTLevelSignatureParameters ports the private getEmptyLTLevelSignatureParameters().
 func (e *ASiCWithCAdESLevelBaselineLTA) getEmptyLTLevelSignatureParameters() *dsscades.CAdESSignatureParameters {
 	parameters := dsscades.NewCAdESSignatureParameters()
-	parameters.SetSignatureLevel(enumerations.SignatureLevel_CAdES_BASELINE_LT)
+	parameters.SetSignatureLevel(enumerations.SignatureLevelCAdESBaselineLT)
 	return parameters
 }
 
@@ -221,7 +221,7 @@ func (e *ASiCWithCAdESLevelBaselineLTA) AssertExtendSignaturePossible(
 	parameters *dsscades.CAdESSignatureParameters, coveredByManifest bool) {
 	if coveredByManifest {
 		panic(exception.NewIllegalInputException(
-			"Cannot extend signature to '" + string(enumerations.SignatureLevel_CAdES_BASELINE_LTA) +
+			"Cannot extend signature to '" + string(enumerations.SignatureLevelCAdESBaselineLTA) +
 				"'. The signature is already covered by a manifest file."))
 	}
 }

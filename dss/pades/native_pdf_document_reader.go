@@ -360,7 +360,7 @@ func (r *NativePdfDocumentReader) GenerateDocumentID(parameters PAdESCommonParam
 		documentID += (int64(c) & 0xFF) << (uint(8*i) & 63)
 	}
 	seed := fmt.Sprintf("%d", documentID)
-	digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_MD5, []byte(seed))
+	digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmMD5, []byte(seed))
 	if err != nil {
 		panic(err)
 	}

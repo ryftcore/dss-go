@@ -72,18 +72,18 @@ func NewCertificateAlgorithmObsolescenceValidationCheck[T any](i18nProvider *i18
 func certificateAOVLevelRule(aovResult *jaxb.XmlAOV) policy.LevelRule {
 	conclusion := aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
-		return process.GetLevelRule(enumerations.Level_FAIL)
+		return process.GetLevelRule(enumerations.LevelFail)
 	} else if utils.IsCollectionNotEmpty(conclusion.Warnings) {
-		return process.GetLevelRule(enumerations.Level_WARN)
+		return process.GetLevelRule(enumerations.LevelWarn)
 	} else if utils.IsCollectionNotEmpty(conclusion.Infos) {
-		return process.GetLevelRule(enumerations.Level_INFORM)
+		return process.GetLevelRule(enumerations.LevelInform)
 	}
-	return process.GetLevelRule(enumerations.Level_FAIL) // default
+	return process.GetLevelRule(enumerations.LevelFail) // default
 }
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_AOV_XCV
+	return jaxb.XmlBlockTypeAOVXCV
 }
 
 // Process performs the check. Port of process().
@@ -111,21 +111,21 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) getCertificateCrypt
 // passed conclusion carrying neither warnings nor infos.
 func isValidAOVCryptographicConclusion(conclusion *jaxb.XmlConclusion) bool {
 	return conclusion != nil &&
-		(enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-			enumerations.Indication_TOTAL_PASSED == conclusion.Indication.Indication()) &&
+		(enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+			enumerations.IndicationTotalPassed == conclusion.Indication.Indication()) &&
 		utils.IsCollectionEmpty(conclusion.Warnings) && utils.IsCollectionEmpty(conclusion.Infos)
 }
 
 // BuildConstraintMessage builds a constraint message. Port of
 // AlgorithmObsolescenceValidationCheck#buildConstraintMessage().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, c.position)
 }
 
 // BuildErrorMessage builds an error message. Port of
 // AlgorithmObsolescenceValidationCheck#buildErrorMessage().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM_ANS, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -158,7 +158,7 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo
 	if base != nil {
 		baseStr = *base
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCM_DESC_WITH_ID_RESULT, baseStr, c.tokenID)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagACCMDescWithIDResult, baseStr, c.tokenID)
 	return &message
 }
 
@@ -176,16 +176,16 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) baseAdditionalInfo(
 			algorithm := cryptographicValidation.Algorithm
 			var message string
 			if algorithm.KeyLength != nil && *algorithm.KeyLength != "" {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_KEY_SIZE,
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessKeySize,
 					algorithm.Name, *algorithm.KeyLength, dateTime)
 			} else {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS, algorithm.Name, dateTime)
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccess, algorithm.Name, dateTime)
 			}
 			return &message
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE, c.overallErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.overallErrorMessage(), dateTime)
 	return &message
 }
 

@@ -86,7 +86,7 @@ func NewCryptographicVerification(i18nProvider *i18n.I18nProvider, diagnosticDat
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *CryptographicVerification) Title() i18n.MessageTag {
-	return i18n.MessageTag_CRYPTOGRAPHIC_VERIFICATION
+	return i18n.MessageTagCryptographicVerification
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -108,13 +108,13 @@ func (c *CryptographicVerification) InitChain() {
 
 	if utils.IsCollectionNotEmpty(digestMatchers) {
 		for _, digestMatcher := range digestMatchers {
-			if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE == digestMatcherType(digestMatcher) ||
-				enumerations.DigestMatcherType_EAA_ORPHAN_SELECTIVELY_DISCLOSABLE_CLAIM == digestMatcherType(digestMatcher) {
+			if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference == digestMatcherType(digestMatcher) ||
+				enumerations.DigestMatcherTypeEAAOrphanSelectivelyDisclosableClaim == digestMatcherType(digestMatcher) {
 				// Evidence Records optionally allow additional digests to be present within first data group
 				// EAAs allow non-disclosed hashes
 				continue
 			}
-			if containsManifest && enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(digestMatcher) {
+			if containsManifest && enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(digestMatcher) {
 				// move XML Manifest entries validation to a separate validation block
 				continue
 			}
@@ -177,7 +177,7 @@ func (c *CryptographicVerification) InitChain() {
 			item = item.SetNextItem(c.manifestEntryGroup(digestMatchers))
 
 			for _, digestMatcher := range digestMatchers {
-				if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(digestMatcher) {
+				if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(digestMatcher) {
 
 					if digestMatcher.DataFound {
 						item = item.SetNextItem(c.manifestEntryIntact(digestMatcher))
@@ -217,7 +217,7 @@ func (c *CryptographicVerification) InitChain() {
 // containsManifest ports the private containsManifest(List).
 func (c *CryptographicVerification) containsManifest(digestMatchers []*diagnosticjaxb.XmlDigestMatcher) bool {
 	for _, d := range digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST == digestMatcherType(d) {
+		if enumerations.DigestMatcherTypeManifest == digestMatcherType(d) {
 			return true
 		}
 	}
@@ -227,7 +227,7 @@ func (c *CryptographicVerification) containsManifest(digestMatchers []*diagnosti
 // containsManifestEntries ports the private containsManifestEntries(List).
 func (c *CryptographicVerification) containsManifestEntries(digestMatchers []*diagnosticjaxb.XmlDigestMatcher) bool {
 	for _, d := range digestMatchers {
-		if enumerations.DigestMatcherType_MANIFEST_ENTRY == digestMatcherType(d) && d.DataFound {
+		if enumerations.DigestMatcherTypeManifestEntry == digestMatcherType(d) && d.DataFound {
 			return true
 		}
 	}
@@ -237,7 +237,7 @@ func (c *CryptographicVerification) containsManifestEntries(digestMatchers []*di
 // referenceDataFound ports the private referenceDataFound(XmlDigestMatcher).
 func (c *CryptographicVerification) referenceDataFound(digestMatcher *diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlCV] {
 	var constraint policy.LevelRule
-	if enumerations.Context_EAA == c.context {
+	if enumerations.ContextEAA == c.context {
 		constraint = c.validationPolicy.EAADisclosureFoundConstraint()
 	} else {
 		constraint = c.validationPolicy.ReferenceDataExistenceConstraint(c.context)
@@ -248,7 +248,7 @@ func (c *CryptographicVerification) referenceDataFound(digestMatcher *diagnostic
 // referenceDataIntact ports the private referenceDataIntact(XmlDigestMatcher).
 func (c *CryptographicVerification) referenceDataIntact(digestMatcher *diagnosticjaxb.XmlDigestMatcher) process.ChainItem[*jaxb.XmlCV] {
 	var constraint policy.LevelRule
-	if enumerations.Context_EAA == c.context {
+	if enumerations.ContextEAA == c.context {
 		constraint = c.validationPolicy.EAADisclosureIntactConstraint()
 	} else {
 		constraint = c.validationPolicy.ReferenceDataIntactConstraint(c.context)
@@ -297,7 +297,7 @@ func (c *CryptographicVerification) signatureIntact() process.ChainItem[*jaxb.Xm
 func (c *CryptographicVerification) isEvidenceRecordHashTreeRenewalTimestamp() bool {
 	if timestampWrapper, ok := c.token.(*diagnostic.TimestampWrapper); ok {
 		return timestampWrapper.Type().IsEvidenceRecordTimestamp() &&
-			enumerations.EvidenceRecordTimestampType_HASH_TREE_RENEWAL_ARCHIVE_TIMESTAMP ==
+			enumerations.EvidenceRecordTimestampTypeHashTreeRenewalArchiveTimestamp ==
 				timestampWrapper.EvidenceRecordTimestampType()
 	}
 	return false

@@ -38,7 +38,7 @@ func NewContentTimestampBasicValidationCheck(i18nProvider *i18n.I18nProvider, re
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *ContentTimestampBasicValidationCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_TST_BBB
+	return jaxb.XmlBlockTypeTSTBBB
 }
 
 // Process performs the check. Port of process().
@@ -48,25 +48,25 @@ func (c *ContentTimestampBasicValidationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ContentTimestampBasicValidationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ICTVS
+	return i18n.MessageTagBBBSAVICTVS
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ContentTimestampBasicValidationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ICTVS_ANS
+	return i18n.MessageTagBBBSAVICTVSANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *ContentTimestampBasicValidationCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *ContentTimestampBasicValidationCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the overridden
@@ -77,6 +77,6 @@ func (c *ContentTimestampBasicValidationCheck) BuildAdditionalInfo() *string {
 	if err != nil {
 		panic(err)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_VALIDATION, timestampTypeMessageTag, c.timestamp.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampValidation, timestampTypeMessageTag, c.timestamp.Id(), date)
 	return &message
 }

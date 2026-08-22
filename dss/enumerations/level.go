@@ -5,26 +5,26 @@ package enumerations
 type Level string
 
 const (
-	// Level_FAIL stops the validation process and reports as error.
-	Level_FAIL Level = "FAIL"
-	// Level_WARN continues the validation process and adds a warning
+	// LevelFail stops the validation process and reports as error.
+	LevelFail Level = "FAIL"
+	// LevelWarn continues the validation process and adds a warning
 	// message.
-	Level_WARN Level = "WARN"
-	// Level_INFORM continues the validation process and adds an
+	LevelWarn Level = "WARN"
+	// LevelInform continues the validation process and adds an
 	// informative message.
-	Level_INFORM Level = "INFORM"
-	// Level_IGNORE continues the validation process and skips the current
+	LevelInform Level = "INFORM"
+	// LevelIgnore continues the validation process and skips the current
 	// check (equals to not present check).
-	Level_IGNORE Level = "IGNORE"
+	LevelIgnore Level = "IGNORE"
 )
 
 // LevelValues returns all constants in declaration order.
 func LevelValues() []Level {
 	return []Level{
-		Level_FAIL,
-		Level_WARN,
-		Level_INFORM,
-		Level_IGNORE,
+		LevelFail,
+		LevelWarn,
+		LevelInform,
+		LevelIgnore,
 	}
 }
 

@@ -61,7 +61,7 @@ func (c *EAAAdministrativePeriodNotExpiredCheck) notAdministrativePeriodAtOrAfte
 // overridden buildAdditionalInfo().
 func (c *EAAAdministrativePeriodNotExpiredCheck) BuildAdditionalInfo() *string {
 	if !c.notAdministrativePeriodBefore() || !c.notAdministrativePeriodAtOrAfter() {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_VT_IAVR_VALIDITY,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagEAAVTIAVRValidity,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.AdministrativeIssuanceDate()),
 			process.GetFormattedDate(c.eaa.AdministrativeExpirationDate()))
 		return &message
@@ -71,23 +71,23 @@ func (c *EAAAdministrativePeriodNotExpiredCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAAdministrativePeriodNotExpiredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_VT_IAVR
+	return i18n.MessageTagEAAVTIAVR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAAdministrativePeriodNotExpiredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_VT_IAVR_ANS
+	return i18n.MessageTagEAAVTIAVRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *EAAAdministrativePeriodNotExpiredCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *EAAAdministrativePeriodNotExpiredCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE
+	return enumerations.SubIndicationOutOfBoundsNoPOE
 }

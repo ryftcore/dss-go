@@ -241,19 +241,19 @@ func (b *TLValidationJobSummaryBuilder) getCertificateChangesMap(pivotSourceCert
 	// added certificates
 	for _, certificateToken := range pivotSourceCertificates {
 		if !certificateTokenListContains(commonCertificates, certificateToken) {
-			certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatus_ADDED
+			certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatusAdded
 		}
 	}
 
 	// common certificates
 	for _, certificateToken := range commonCertificates {
-		certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatus_NOT_CHANGED
+		certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatusNotChanged
 	}
 
 	// removed certificates
 	for _, certificateToken := range currentCertificates {
 		if !certificateTokenListContains(commonCertificates, certificateToken) {
-			certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatus_REMOVED
+			certificateChangesMap[certificateToken] = tslmodel.CertificatePivotStatusRemoved
 		}
 	}
 

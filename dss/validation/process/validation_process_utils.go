@@ -42,14 +42,14 @@ var domainNamePattern = regexp.MustCompile(`(^.*://)|(www\.)|([?=:#/].*)`)
 // a basic signature validation in order to continue the validation process with
 // Long-Term Validation Data. Port of isAllowedBasicSignatureValidation(XmlConclusion).
 func IsAllowedBasicSignatureValidation(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-		(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-			(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOKED_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOKED_CA_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_TRY_LATER == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndicationOf(conclusion))))
+	return conclusion != nil && (enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+		(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+			(enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevokedNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevokedCANoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationTryLater == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNotRevoked == subIndicationOf(conclusion))))
 }
 
 // IsAllowedBasicRevocationDataValidation checks if the given conclusion is
@@ -57,30 +57,30 @@ func IsAllowedBasicSignatureValidation(conclusion *jaxb.XmlConclusion) bool {
 // process with Long-Term Validation Data. Port of
 // isAllowedBasicRevocationDataValidation(XmlConclusion).
 func IsAllowedBasicRevocationDataValidation(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-		(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-			(enumerations.SubIndication_REVOKED_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOKED_CA_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE == subIndicationOf(conclusion))))
+	return conclusion != nil && (enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+		(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+			(enumerations.SubIndicationRevokedNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevokedCANoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNotRevoked == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevocationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationNoCertificateChainFoundNoPOE == subIndicationOf(conclusion))))
 }
 
 // IsAllowedBasicTimestampValidation checks if the given conclusion is allowed as
 // a basic timestamp validation in order to continue the validation process with
 // Archival Data. Port of isAllowedBasicTimestampValidation(XmlConclusion).
 func IsAllowedBasicTimestampValidation(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-		(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-			(enumerations.SubIndication_REVOKED_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOKED_CA_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE == subIndicationOf(conclusion))))
+	return conclusion != nil && (enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+		(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+			(enumerations.SubIndicationRevokedNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevokedCANoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNotRevoked == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevocationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationNoCertificateChainFoundNoPOE == subIndicationOf(conclusion))))
 }
 
 // IsAllowedValidationWithLongTermData checks if the given conclusion is allowed
@@ -88,17 +88,17 @@ func IsAllowedBasicTimestampValidation(conclusion *jaxb.XmlConclusion) bool {
 // the validation process with Archival Data. Port of
 // isAllowedValidationWithLongTermData(XmlConclusion).
 func IsAllowedValidationWithLongTermData(conclusion *jaxb.XmlConclusion) bool {
-	return conclusion != nil && (enumerations.Indication_PASSED == conclusion.Indication.Indication() ||
-		(enumerations.Indication_INDETERMINATE == conclusion.Indication.Indication() &&
-			(enumerations.SubIndication_REVOKED_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOKED_CA_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_OUT_OF_BOUNDS_NOT_REVOKED == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_REVOCATION_OUT_OF_BOUNDS_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE == subIndicationOf(conclusion) ||
-				enumerations.SubIndication_TRY_LATER == subIndicationOf(conclusion))))
+	return conclusion != nil && (enumerations.IndicationPassed == conclusion.Indication.Indication() ||
+		(enumerations.IndicationIndeterminate == conclusion.Indication.Indication() &&
+			(enumerations.SubIndicationRevokedNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevokedCANoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationOutOfBoundsNotRevoked == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationCryptoConstraintsFailureNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationRevocationOutOfBoundsNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationNoCertificateChainFoundNoPOE == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationSigConstraintsFailure == subIndicationOf(conclusion) ||
+				enumerations.SubIndicationTryLater == subIndicationOf(conclusion))))
 }
 
 // subIndicationOf reads XmlConclusion#getSubIndication(): the generated member
@@ -123,7 +123,7 @@ func IsTrustAnchor(certificateWrapper *diagnostic.CertificateWrapper, currentTim
 // certificateSunsetDateCheckEnforced ports the private
 // certificateSunsetDateCheckEnforced(LevelRule).
 func certificateSunsetDateCheckEnforced(constraint policy.LevelRule) bool {
-	return constraint != nil && enumerations.Level_FAIL == constraint.Level()
+	return constraint != nil && enumerations.LevelFail == constraint.Level()
 }
 
 // IsRevocationDataAcceptable verifies if a revocation data is acceptable for the
@@ -133,7 +133,7 @@ func IsRevocationDataAcceptable(bbb *jaxb.XmlBasicBuildingBlocks, certificate *d
 	revocationData *diagnostic.RevocationWrapper) bool {
 	xmlRAC := GetRevocationAcceptanceCheckerResult(bbb, certificate.Id(), revocationData.Id())
 	return xmlRAC != nil && xmlRAC.Conclusion != nil &&
-		enumerations.Indication_PASSED == xmlRAC.Conclusion.Indication.Indication()
+		enumerations.IndicationPassed == xmlRAC.Conclusion.Indication.Indication()
 }
 
 // IsLongTermAvailabilityAndIntegrityMaterialPresent verifies if the signature
@@ -237,21 +237,21 @@ func BuildStringMessage(i18nProvider *i18n.I18nProvider, messageTag i18n.Message
 // creation,...). Port of getCryptoPosition(Context).
 func GetCryptoPosition(context enumerations.Context) (i18n.MessageTag, error) {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE,
-		enumerations.Context_KEY_BINDING_SIGNATURE:
-		return i18n.MessageTag_ACCM_POS_SIG_SIG, nil
-	case enumerations.Context_TIMESTAMP:
-		return i18n.MessageTag_ACCM_POS_TST_SIG, nil
-	case enumerations.Context_REVOCATION:
-		return i18n.MessageTag_ACCM_POS_REVOC_SIG, nil
-	case enumerations.Context_CERTIFICATE:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN, nil
-	case enumerations.Context_EVIDENCE_RECORD:
-		return i18n.MessageTag_ACCM_POS_EV_RECORD, nil
-	case enumerations.Context_EAA:
-		return i18n.MessageTag_ACCM_POS_EAA, nil
-	case enumerations.Context_EAA_REVOCATION:
-		return i18n.MessageTag_ACCM_POS_EAA, nil
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature,
+		enumerations.ContextKeyBindingSignature:
+		return i18n.MessageTagACCMPosSigSig, nil
+	case enumerations.ContextTimestamp:
+		return i18n.MessageTagACCMPosTSTSig, nil
+	case enumerations.ContextRevocation:
+		return i18n.MessageTagACCMPosRevocSig, nil
+	case enumerations.ContextCertificate:
+		return i18n.MessageTagACCMPosCertChain, nil
+	case enumerations.ContextEvidenceRecord:
+		return i18n.MessageTagACCMPosEVRecord, nil
+	case enumerations.ContextEAA:
+		return i18n.MessageTagACCMPosEAA, nil
+	case enumerations.ContextEAARevocation:
+		return i18n.MessageTagACCMPosEAA, nil
 	default:
 		return "", fmt.Errorf("Unsupported context %s", context)
 	}
@@ -261,17 +261,17 @@ func GetCryptoPosition(context enumerations.Context) (i18n.MessageTag, error) {
 // chain of the given context. Port of getCertificateChainCryptoPosition(Context).
 func GetCertificateChainCryptoPosition(context enumerations.Context) (i18n.MessageTag, error) {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE,
-		enumerations.Context_KEY_BINDING_SIGNATURE:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN_SIG, nil
-	case enumerations.Context_TIMESTAMP:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN_TST, nil
-	case enumerations.Context_REVOCATION:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN_REVOC, nil
-	case enumerations.Context_EAA_REVOCATION:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN_EAA_REV, nil
-	case enumerations.Context_CERTIFICATE:
-		return i18n.MessageTag_ACCM_POS_CERT_CHAIN, nil
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature,
+		enumerations.ContextKeyBindingSignature:
+		return i18n.MessageTagACCMPosCertChainSig, nil
+	case enumerations.ContextTimestamp:
+		return i18n.MessageTagACCMPosCertChainTST, nil
+	case enumerations.ContextRevocation:
+		return i18n.MessageTagACCMPosCertChainRevoc, nil
+	case enumerations.ContextEAARevocation:
+		return i18n.MessageTagACCMPosCertChainEAARev, nil
+	case enumerations.ContextCertificate:
+		return i18n.MessageTagACCMPosCertChain, nil
 	default:
 		return "", fmt.Errorf("Unsupported context %s", context)
 	}
@@ -284,52 +284,52 @@ func GetCertificateChainCryptoPosition(context enumerations.Context) (i18n.Messa
 // NullPointerException in the switch - falls into the unsupported-type error.
 func GetDigestMatcherCryptoPosition(digestMatcher *diagnosticjaxb.XmlDigestMatcher) (i18n.MessageTag, error) {
 	switch digestMatcherTypeOf(digestMatcher) {
-	case enumerations.DigestMatcherType_OBJECT, enumerations.DigestMatcherType_REFERENCE,
-		enumerations.DigestMatcherType_XPOINTER:
-		return i18n.MessageTag_ACCM_POS_REF, nil
-	case enumerations.DigestMatcherType_MANIFEST:
-		return i18n.MessageTag_ACCM_POS_MAN, nil
-	case enumerations.DigestMatcherType_MANIFEST_ENTRY:
-		return i18n.MessageTag_ACCM_POS_MAN_ENT, nil
-	case enumerations.DigestMatcherType_SIGNED_PROPERTIES:
-		return i18n.MessageTag_ACCM_POS_SIGND_PRT, nil
-	case enumerations.DigestMatcherType_KEY_INFO:
-		return i18n.MessageTag_ACCM_POS_KEY, nil
-	case enumerations.DigestMatcherType_SIGNATURE_PROPERTIES:
-		return i18n.MessageTag_ACCM_POS_SIGNTR_PRT, nil
-	case enumerations.DigestMatcherType_COUNTER_SIGNATURE,
-		enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
-		return i18n.MessageTag_ACCM_POS_CNTR_SIG, nil
-	case enumerations.DigestMatcherType_MESSAGE_DIGEST:
-		return i18n.MessageTag_ACCM_POS_MES_DIG, nil
-	case enumerations.DigestMatcherType_CONTENT_DIGEST:
-		return i18n.MessageTag_ACCM_POS_CON_DIG, nil
-	case enumerations.DigestMatcherType_JWS_SIGNING_INPUT:
-		return i18n.MessageTag_ACCM_POS_JWS, nil
-	case enumerations.DigestMatcherType_COSE_SIG_STRUCTURE:
-		return i18n.MessageTag_ACCM_POS_COSE, nil
-	case enumerations.DigestMatcherType_SIG_D_ENTRY:
-		return i18n.MessageTag_ACCM_POS_SIG_D_ENT, nil
-	case enumerations.DigestMatcherType_MESSAGE_IMPRINT:
-		return i18n.MessageTag_ACCM_POS_MESS_IMP, nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT:
-		return i18n.MessageTag_ACCM_POS_ER_ADO, nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE:
-		return i18n.MessageTag_ACCM_POS_ER_OR, nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP:
-		return i18n.MessageTag_ACCM_POS_ER_TST, nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_TIME_STAMP_SEQUENCE:
-		return i18n.MessageTag_ACCM_POS_ER_TST_SEQ, nil
-	case enumerations.DigestMatcherType_EVIDENCE_RECORD_MASTER_SIGNATURE:
-		return i18n.MessageTag_ACCM_POS_ER_MST_SIG, nil
-	case enumerations.DigestMatcherType_EAA_DISCLOSURE:
-		return i18n.MessageTag_ACCM_POS_EAA_SD, nil
-	case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
-		return i18n.MessageTag_ACCM_POS_EAA_NSD, nil
-	case enumerations.DigestMatcherType_EAA_ORPHAN_SELECTIVELY_DISCLOSABLE_CLAIM:
-		return i18n.MessageTag_ACCM_POS_EAA_OSDC, nil
-	case enumerations.DigestMatcherType_EAA_KEY_BINDING:
-		return i18n.MessageTag_ACCM_POS_EAA_KB, nil
+	case enumerations.DigestMatcherTypeObject, enumerations.DigestMatcherTypeReference,
+		enumerations.DigestMatcherTypeXPointer:
+		return i18n.MessageTagACCMPosRef, nil
+	case enumerations.DigestMatcherTypeManifest:
+		return i18n.MessageTagACCMPosMan, nil
+	case enumerations.DigestMatcherTypeManifestEntry:
+		return i18n.MessageTagACCMPosManENT, nil
+	case enumerations.DigestMatcherTypeSignedProperties:
+		return i18n.MessageTagACCMPosSIGNDPrt, nil
+	case enumerations.DigestMatcherTypeKeyInfo:
+		return i18n.MessageTagACCMPosKey, nil
+	case enumerations.DigestMatcherTypeSignatureProperties:
+		return i18n.MessageTagACCMPosSigntrPrt, nil
+	case enumerations.DigestMatcherTypeCounterSignature,
+		enumerations.DigestMatcherTypeCounterSignedSignatureValue:
+		return i18n.MessageTagACCMPosCNTRSig, nil
+	case enumerations.DigestMatcherTypeMessageDigest:
+		return i18n.MessageTagACCMPosMesDig, nil
+	case enumerations.DigestMatcherTypeContentDigest:
+		return i18n.MessageTagACCMPosConDig, nil
+	case enumerations.DigestMatcherTypeJWSSigningInput:
+		return i18n.MessageTagACCMPosJWS, nil
+	case enumerations.DigestMatcherTypeCoseSigStructure:
+		return i18n.MessageTagACCMPosCose, nil
+	case enumerations.DigestMatcherTypeSigDEntry:
+		return i18n.MessageTagACCMPosSigDENT, nil
+	case enumerations.DigestMatcherTypeMessageImprint:
+		return i18n.MessageTagACCMPosMessImp, nil
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveObject:
+		return i18n.MessageTagACCMPosERADO, nil
+	case enumerations.DigestMatcherTypeEvidenceRecordOrphanReference:
+		return i18n.MessageTagACCMPosEROr, nil
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
+		return i18n.MessageTagACCMPosERTST, nil
+	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
+		return i18n.MessageTagACCMPosERTSTSeq, nil
+	case enumerations.DigestMatcherTypeEvidenceRecordMasterSignature:
+		return i18n.MessageTagACCMPosERMSTSig, nil
+	case enumerations.DigestMatcherTypeEAADisclosure:
+		return i18n.MessageTagACCMPosEAASD, nil
+	case enumerations.DigestMatcherTypeEAANestedDisclosure:
+		return i18n.MessageTagACCMPosEAANSD, nil
+	case enumerations.DigestMatcherTypeEAAOrphanSelectivelyDisclosableClaim:
+		return i18n.MessageTagACCMPosEAAOSDC, nil
+	case enumerations.DigestMatcherTypeEAAKeyBinding:
+		return i18n.MessageTagACCMPosEAAKB, nil
 	default:
 		return "", fmt.Errorf("The provided DigestMatcherType '%s' is not supported!",
 			digestMatcherTypeOf(digestMatcher))
@@ -349,36 +349,36 @@ func GetDigestMatchersCryptoPosition(digestMatchers []*diagnosticjaxb.XmlDigestM
 		// if more than 1 digest matcher
 		digestMatcherType := getDigestMatcherType(digestMatchers)
 		switch digestMatcherType {
-		case enumerations.DigestMatcherType_OBJECT, enumerations.DigestMatcherType_REFERENCE,
-			enumerations.DigestMatcherType_XPOINTER:
-			return i18n.MessageTag_ACCM_POS_REF_PL, nil
-		case enumerations.DigestMatcherType_MANIFEST:
-			return i18n.MessageTag_ACCM_POS_MAN_PL, nil
-		case enumerations.DigestMatcherType_MANIFEST_ENTRY:
-			return i18n.MessageTag_ACCM_POS_MAN_ENT_PL, nil
-		case enumerations.DigestMatcherType_SIGNED_PROPERTIES:
-			return i18n.MessageTag_ACCM_POS_SIGND_PRT, nil
-		case enumerations.DigestMatcherType_KEY_INFO:
-			return i18n.MessageTag_ACCM_POS_KEY_PL, nil
-		case enumerations.DigestMatcherType_SIGNATURE_PROPERTIES:
-			return i18n.MessageTag_ACCM_POS_SIGNTR_PRT, nil
-		case enumerations.DigestMatcherType_COUNTER_SIGNATURE,
-			enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE:
-			return i18n.MessageTag_ACCM_POS_CNTR_SIG_PL, nil
-		case enumerations.DigestMatcherType_SIG_D_ENTRY:
-			return i18n.MessageTag_ACCM_POS_SIG_D_ENT_PL, nil
-		case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT:
-			return i18n.MessageTag_ACCM_POS_ER_ADO_PL, nil
-		case enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE:
-			return i18n.MessageTag_ACCM_POS_ER_OR_PL, nil
-		case enumerations.DigestMatcherType_EAA_DISCLOSURE:
-			return i18n.MessageTag_ACCM_POS_EAA_SD_PL, nil
-		case enumerations.DigestMatcherType_EAA_NESTED_DISCLOSURE:
-			return i18n.MessageTag_ACCM_POS_EAA_NSD_PL, nil
-		case enumerations.DigestMatcherType_EAA_ORPHAN_SELECTIVELY_DISCLOSABLE_CLAIM:
-			return i18n.MessageTag_ACCM_POS_EAA_OSDC_PL, nil
-		case enumerations.DigestMatcherType_EAA_KEY_BINDING:
-			return i18n.MessageTag_ACCM_POS_EAA_KB, nil
+		case enumerations.DigestMatcherTypeObject, enumerations.DigestMatcherTypeReference,
+			enumerations.DigestMatcherTypeXPointer:
+			return i18n.MessageTagACCMPosRefPL, nil
+		case enumerations.DigestMatcherTypeManifest:
+			return i18n.MessageTagACCMPosManPL, nil
+		case enumerations.DigestMatcherTypeManifestEntry:
+			return i18n.MessageTagACCMPosManENTPL, nil
+		case enumerations.DigestMatcherTypeSignedProperties:
+			return i18n.MessageTagACCMPosSIGNDPrt, nil
+		case enumerations.DigestMatcherTypeKeyInfo:
+			return i18n.MessageTagACCMPosKeyPL, nil
+		case enumerations.DigestMatcherTypeSignatureProperties:
+			return i18n.MessageTagACCMPosSigntrPrt, nil
+		case enumerations.DigestMatcherTypeCounterSignature,
+			enumerations.DigestMatcherTypeCounterSignedSignatureValue:
+			return i18n.MessageTagACCMPosCNTRSigPL, nil
+		case enumerations.DigestMatcherTypeSigDEntry:
+			return i18n.MessageTagACCMPosSigDENTPL, nil
+		case enumerations.DigestMatcherTypeEvidenceRecordArchiveObject:
+			return i18n.MessageTagACCMPosERADOPL, nil
+		case enumerations.DigestMatcherTypeEvidenceRecordOrphanReference:
+			return i18n.MessageTagACCMPosEROrPL, nil
+		case enumerations.DigestMatcherTypeEAADisclosure:
+			return i18n.MessageTagACCMPosEAASDPL, nil
+		case enumerations.DigestMatcherTypeEAANestedDisclosure:
+			return i18n.MessageTagACCMPosEAANSDPL, nil
+		case enumerations.DigestMatcherTypeEAAOrphanSelectivelyDisclosableClaim:
+			return i18n.MessageTagACCMPosEAAOSDCPL, nil
+		case enumerations.DigestMatcherTypeEAAKeyBinding:
+			return i18n.MessageTagACCMPosEAAKB, nil
 		default:
 			return "", fmt.Errorf("The provided DigestMatcherType '%s' is not supported for multiple digest matchers!",
 				digestMatcherType)
@@ -404,19 +404,19 @@ func digestMatcherTypeOf(digestMatcher *diagnosticjaxb.XmlDigestMatcher) enumera
 // timestamp type. Port of getTimestampTypeMessageTag(TimestampType).
 func GetTimestampTypeMessageTag(timestampType enumerations.TimestampType) (i18n.MessageTag, error) {
 	if timestampType.IsContentTimestamp() {
-		return i18n.MessageTag_TST_TYPE_CONTENT_TST, nil
+		return i18n.MessageTagTSTTypeContentTST, nil
 	} else if timestampType.IsSignatureTimestamp() {
-		return i18n.MessageTag_TST_TYPE_SIGNATURE_TST, nil
+		return i18n.MessageTagTSTTypeSignatureTST, nil
 	} else if timestampType.IsValidationDataTimestamp() {
-		return i18n.MessageTag_TST_TYPE_VD_TST, nil
+		return i18n.MessageTagTSTTypeVDTST, nil
 	} else if timestampType.IsDocumentTimestamp() {
-		return i18n.MessageTag_TST_TYPE_DOC_TST, nil
+		return i18n.MessageTagTSTTypeDocTST, nil
 	} else if timestampType.IsContainerTimestamp() {
-		return i18n.MessageTag_TST_TYPE_CONTAINER_TST, nil
+		return i18n.MessageTagTSTTypeContainerTST, nil
 	} else if timestampType.IsArchivalTimestamp() {
-		return i18n.MessageTag_TST_TYPE_ARCHIVE_TST, nil
+		return i18n.MessageTagTSTTypeArchiveTST, nil
 	} else if timestampType.IsEvidenceRecordTimestamp() {
-		return i18n.MessageTag_TST_TYPE_ER_TST, nil
+		return i18n.MessageTagTSTTypeERTST, nil
 	} else {
 		return "", fmt.Errorf("The TimestampType '%s' is not supported!", timestampType)
 	}
@@ -428,13 +428,13 @@ func GetTimestampTypeMessageTag(timestampType enumerations.TimestampType) (i18n.
 // Deprecated: since DSS 6.5. To be removed.
 func GetContextPosition(context enumerations.Context) (i18n.MessageTag, error) {
 	switch context {
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE,
-		enumerations.Context_KEY_BINDING_SIGNATURE, enumerations.Context_CERTIFICATE:
-		return i18n.MessageTag_SIGNATURE, nil
-	case enumerations.Context_TIMESTAMP:
-		return i18n.MessageTag_TIMESTAMP, nil
-	case enumerations.Context_REVOCATION:
-		return i18n.MessageTag_REVOCATION, nil
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature,
+		enumerations.ContextKeyBindingSignature, enumerations.ContextCertificate:
+		return i18n.MessageTagSignature, nil
+	case enumerations.ContextTimestamp:
+		return i18n.MessageTagTimestamp, nil
+	case enumerations.ContextRevocation:
+		return i18n.MessageTagRevocation, nil
 	default:
 		return "", fmt.Errorf("Unsupported context %s", context)
 	}
@@ -444,42 +444,42 @@ func GetContextPosition(context enumerations.Context) (i18n.MessageTag, error) {
 // of getSubContextPosition(Context, SubContext).
 func GetSubContextPosition(context enumerations.Context, subContext enumerations.SubContext) (i18n.MessageTag, error) {
 	switch context {
-	case enumerations.Context_CERTIFICATE:
-		return i18n.MessageTag_CERTIFICATE, nil
-	case enumerations.Context_SIGNATURE, enumerations.Context_COUNTER_SIGNATURE,
-		enumerations.Context_KEY_BINDING_SIGNATURE:
+	case enumerations.ContextCertificate:
+		return i18n.MessageTagCertificate, nil
+	case enumerations.ContextSignature, enumerations.ContextCounterSignature,
+		enumerations.ContextKeyBindingSignature:
 		switch subContext {
-		case enumerations.SubContext_SIGNING_CERT:
-			return i18n.MessageTag_SIGNING_CERTIFICATE, nil
-		case enumerations.SubContext_CA_CERTIFICATE:
-			return i18n.MessageTag_CA_CERTIFICATE, nil
+		case enumerations.SubContextSigningCert:
+			return i18n.MessageTagSigningCertificate, nil
+		case enumerations.SubContextCACertificate:
+			return i18n.MessageTagCACertificate, nil
 		default:
 			return "", fmt.Errorf("Unsupported subContext %s", subContext)
 		}
-	case enumerations.Context_TIMESTAMP:
+	case enumerations.ContextTimestamp:
 		switch subContext {
-		case enumerations.SubContext_SIGNING_CERT:
-			return i18n.MessageTag_TIMESTAMP_SIG_CERT, nil
-		case enumerations.SubContext_CA_CERTIFICATE:
-			return i18n.MessageTag_TIMESTAMP_CA_CERT, nil
+		case enumerations.SubContextSigningCert:
+			return i18n.MessageTagTimestampSigCert, nil
+		case enumerations.SubContextCACertificate:
+			return i18n.MessageTagTimestampCACert, nil
 		default:
 			return "", fmt.Errorf("Unsupported subContext %s", subContext)
 		}
-	case enumerations.Context_REVOCATION:
+	case enumerations.ContextRevocation:
 		switch subContext {
-		case enumerations.SubContext_SIGNING_CERT:
-			return i18n.MessageTag_REVOCATION_SIG_CERT, nil
-		case enumerations.SubContext_CA_CERTIFICATE:
-			return i18n.MessageTag_REVOCATION_CA_CERT, nil
+		case enumerations.SubContextSigningCert:
+			return i18n.MessageTagRevocationSigCert, nil
+		case enumerations.SubContextCACertificate:
+			return i18n.MessageTagRevocationCACert, nil
 		default:
 			return "", fmt.Errorf("Unsupported subContext %s", subContext)
 		}
-	case enumerations.Context_EAA_REVOCATION:
+	case enumerations.ContextEAARevocation:
 		switch subContext {
-		case enumerations.SubContext_SIGNING_CERT:
-			return i18n.MessageTag_EAA_REV_SIG_CERT, nil
-		case enumerations.SubContext_CA_CERTIFICATE:
-			return i18n.MessageTag_EAA_REV_CA_CERT, nil
+		case enumerations.SubContextSigningCert:
+			return i18n.MessageTagEAARevSigCert, nil
+		case enumerations.SubContextCACertificate:
+			return i18n.MessageTagEAARevCACert, nil
 		default:
 			return "", fmt.Errorf("Unsupported subContext %s", subContext)
 		}
@@ -492,16 +492,16 @@ func GetSubContextPosition(context enumerations.Context, subContext enumerations
 // ValidationTime type. Port of getValidationTimeMessageTag(ValidationTime).
 func GetValidationTimeMessageTag(validationTime enumerations.ValidationTime) (i18n.MessageTag, error) {
 	switch validationTime {
-	case enumerations.ValidationTime_BEST_SIGNATURE_TIME:
-		return i18n.MessageTag_VT_BEST_SIGNATURE_TIME, nil
-	case enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME:
-		return i18n.MessageTag_VT_CERTIFICATE_ISSUANCE_TIME, nil
-	case enumerations.ValidationTime_VALIDATION_TIME:
-		return i18n.MessageTag_VT_VALIDATION_TIME, nil
-	case enumerations.ValidationTime_TIMESTAMP_GENERATION_TIME:
-		return i18n.MessageTag_VT_TST_GENERATION_TIME, nil
-	case enumerations.ValidationTime_TIMESTAMP_POE_TIME:
-		return i18n.MessageTag_VT_TST_POE_TIME, nil
+	case enumerations.ValidationTimeBESTSignatureTime:
+		return i18n.MessageTagVTBESTSignatureTime, nil
+	case enumerations.ValidationTimeCertificateIssuanceTime:
+		return i18n.MessageTagVTCertificateIssuanceTime, nil
+	case enumerations.ValidationTimeValidationTime:
+		return i18n.MessageTagVTValidationTime, nil
+	case enumerations.ValidationTimeTimestampGenerationTime:
+		return i18n.MessageTagVTTSTGenerationTime, nil
+	case enumerations.ValidationTimeTimestampPOETime:
+		return i18n.MessageTagVTTSTPOETime, nil
 	default:
 		return "", fmt.Errorf("The validation time [%s] is not supported", validationTime)
 	}
@@ -511,12 +511,12 @@ func GetValidationTimeMessageTag(validationTime enumerations.ValidationTime) (i1
 // QWACProfile. Port of getQWACValidationMessageTag(QWACProfile).
 func GetQWACValidationMessageTag(qwacProfile enumerations.QWACProfile) (i18n.MessageTag, error) {
 	switch qwacProfile {
-	case enumerations.QWACProfile_QWAC_1:
-		return i18n.MessageTag_QWAC1_PROFILE, nil
-	case enumerations.QWACProfile_QWAC_2:
-		return i18n.MessageTag_QWAC2_PROFILE, nil
-	case enumerations.QWACProfile_TLS_BY_QWAC_2:
-		return i18n.MessageTag_TLS_BY_QWAC2_PROFILE, nil
+	case enumerations.QWACProfileQWAC1:
+		return i18n.MessageTagQWAC1Profile, nil
+	case enumerations.QWACProfileQWAC2:
+		return i18n.MessageTagQWAC2Profile, nil
+	case enumerations.QWACProfileTLSByQWAC2:
+		return i18n.MessageTagTLSByQWAC2Profile, nil
 	default:
 		return "", fmt.Errorf("The QWAC profile  [%s] is not supported", qwacProfile)
 	}
@@ -618,7 +618,7 @@ func GetFinalCryptographicValidation(aov *jaxb.XmlAOV) *jaxb.XmlCryptographicVal
 	if aov == nil || aov.Conclusion == nil {
 		return nil
 	}
-	if enumerations.Indication_PASSED == aov.Conclusion.Indication.Indication() {
+	if enumerations.IndicationPassed == aov.Conclusion.Indication.Indication() {
 		return GetPrimaryCryptographicValidation(aov)
 	} else {
 		return GetFailCryptographicValidation(aov)
@@ -639,13 +639,13 @@ func GetFailCryptographicValidation(aov *jaxb.XmlAOV) *jaxb.XmlCryptographicVali
 		result = aov.SignatureCryptographicValidation
 	}
 	if aov.SignedAttributesValidation != nil &&
-		(result == nil || (enumerations.Indication_PASSED == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
+		(result == nil || (enumerations.IndicationPassed == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
 			(aov.SignedAttributesValidation.NotAfter != nil && result.NotAfter != nil &&
 				result.NotAfter.Time().After(aov.SignedAttributesValidation.NotAfter.Time()))) {
 		result = aov.SignedAttributesValidation
 	}
 	if aov.DigestMatchersValidation != nil &&
-		(result == nil || (enumerations.Indication_PASSED == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
+		(result == nil || (enumerations.IndicationPassed == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
 			(aov.DigestMatchersValidation.NotAfter != nil && result.NotAfter != nil &&
 				result.NotAfter.Time().After(aov.DigestMatchersValidation.NotAfter.Time()))) {
 		result = aov.DigestMatchersValidation
@@ -654,7 +654,7 @@ func GetFailCryptographicValidation(aov *jaxb.XmlAOV) *jaxb.XmlCryptographicVali
 		utils.IsCollectionNotEmpty(aov.CertificateChainCryptographicValidation.CertificateCryptographicValidation) {
 		for _, cryptographicValidation := range aov.CertificateChainCryptographicValidation.CertificateCryptographicValidation {
 			if cryptographicValidation != nil &&
-				(result == nil || (enumerations.Indication_PASSED == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
+				(result == nil || (enumerations.IndicationPassed == result.Conclusion.Indication.Indication() && result.NotAfter == nil) ||
 					(cryptographicValidation.NotAfter != nil && result.NotAfter != nil &&
 						result.NotAfter.Time().After(cryptographicValidation.NotAfter.Time()))) {
 				result = cryptographicValidation
@@ -701,27 +701,27 @@ func GetConstraintOrMaxLevel(constraint policy.LevelRule, maxLevel enumerations.
 	}
 	var level enumerations.Level
 	switch constraint.Level() {
-	case enumerations.Level_FAIL:
-		if enumerations.Level_FAIL == maxLevel {
-			level = enumerations.Level_FAIL
+	case enumerations.LevelFail:
+		if enumerations.LevelFail == maxLevel {
+			level = enumerations.LevelFail
 			break
 		}
 		fallthrough
-	case enumerations.Level_WARN:
-		if enumerations.Level_WARN == maxLevel {
-			level = enumerations.Level_WARN
+	case enumerations.LevelWarn:
+		if enumerations.LevelWarn == maxLevel {
+			level = enumerations.LevelWarn
 			break
 		}
 		fallthrough
-	case enumerations.Level_INFORM:
-		if enumerations.Level_INFORM == maxLevel {
-			level = enumerations.Level_INFORM
+	case enumerations.LevelInform:
+		if enumerations.LevelInform == maxLevel {
+			level = enumerations.LevelInform
 			break
 		}
 		fallthrough
-	case enumerations.Level_IGNORE:
-		if enumerations.Level_IGNORE == maxLevel {
-			level = enumerations.Level_IGNORE
+	case enumerations.LevelIgnore:
+		if enumerations.LevelIgnore == maxLevel {
+			level = enumerations.LevelIgnore
 			break
 		}
 		level = constraint.Level()

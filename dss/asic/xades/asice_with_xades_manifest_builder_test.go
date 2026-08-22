@@ -17,9 +17,9 @@ import (
 
 func TestASiCEWithXAdESManifestBuilder_KAT(t *testing.T) {
 	documents := []model.DSSDocument{
-		model.NewInMemoryDocumentWithMimeType([]byte("Hello World !"), "test.text", enumerations.MimeTypeEnum_TEXT),
-		model.NewInMemoryDocumentWithMimeType([]byte("<root/>"), "data.xml", enumerations.MimeTypeEnum_XML),
-		model.NewInMemoryDocumentWithMimeType([]byte{0x00, 0x01, 0x02, 0x03}, "binary.bin", enumerations.MimeTypeEnum_BINARY),
+		model.NewInMemoryDocumentWithMimeType([]byte("Hello World !"), "test.text", enumerations.MimeTypeEnumText),
+		model.NewInMemoryDocumentWithMimeType([]byte("<root/>"), "data.xml", enumerations.MimeTypeEnumXML),
+		model.NewInMemoryDocumentWithMimeType([]byte{0x00, 0x01, 0x02, 0x03}, "binary.bin", enumerations.MimeTypeEnumBinary),
 		// No MimeType at all - exercises the builder's "no MimeType defined" default-to-BINARY
 		// fallback, matching the Java oracle input's explicit `(MimeType) null` third argument.
 		model.NewInMemoryDocumentWithMimeType([]byte("no-mimetype"), "no-mime.dat", nil),
@@ -82,7 +82,7 @@ func TestASiCEWithXAdESManifestBuilder_EntriesVsDocumentsConflict(t *testing.T) 
 				t.Errorf("panic = %v, want %q", r, "Either DSSDocuments or ManifestEntries shall be provided!")
 			}
 		}()
-		documents := []model.DSSDocument{model.NewInMemoryDocumentWithMimeType([]byte("a"), "a.txt", enumerations.MimeTypeEnum_TEXT)}
+		documents := []model.DSSDocument{model.NewInMemoryDocumentWithMimeType([]byte("a"), "a.txt", enumerations.MimeTypeEnumText)}
 		entries := []*model.ManifestEntry{{}}
 		entries[0].SetUri("a.txt")
 		_, _ = NewASiCEWithXAdESManifestBuilder().

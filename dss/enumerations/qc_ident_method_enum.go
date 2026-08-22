@@ -7,19 +7,19 @@ package enumerations
 type QCIdentMethodEnum string
 
 const (
-	// QCIdentMethodEnum_QCT_EIDAS2_ACD is:
+	// QCIdentMethodEnumQCTEIDAS2ACD is:
 	//
 	//	id-etsi-qct-eIDAS2-acd OBJECT IDENTIFIER ::= { id-etsi-qcs-QcIdentMethod 3 }
 	//
 	// -- Identification according to eIDAS2 Article 24. paragraph 1a a) or
 	// c) or d).
-	QCIdentMethodEnum_QCT_EIDAS2_ACD QCIdentMethodEnum = "QCT_EIDAS2_ACD"
-	// QCIdentMethodEnum_QCT_EIDAS2_B is:
+	QCIdentMethodEnumQCTEIDAS2ACD QCIdentMethodEnum = "QCT_EIDAS2_ACD"
+	// QCIdentMethodEnumQCTEIDAS2B is:
 	//
 	//	id-etsi-qct-eIDAS2-b OBJECT IDENTIFIER ::= { id-etsi-qcs-QcIdentMethod 4 }
 	//
 	// -- Identification according to eIDAS2 Article 24. paragraph 1a b).
-	QCIdentMethodEnum_QCT_EIDAS2_B QCIdentMethodEnum = "QCT_EIDAS2_B"
+	QCIdentMethodEnumQCTEIDAS2B QCIdentMethodEnum = "QCT_EIDAS2_B"
 )
 
 type qcIdentMethodEnumFields struct {
@@ -34,15 +34,15 @@ type qcIdentMethodEnumFields struct {
 // like an upstream copy-paste bug but is preserved per the porting brief's
 // "copy verbatim" rule.
 var qcIdentMethodEnumData = map[QCIdentMethodEnum]qcIdentMethodEnumFields{
-	QCIdentMethodEnum_QCT_EIDAS2_ACD: {"qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.3"},
-	QCIdentMethodEnum_QCT_EIDAS2_B:   {"qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.4"},
+	QCIdentMethodEnumQCTEIDAS2ACD: {"qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.3"},
+	QCIdentMethodEnumQCTEIDAS2B:   {"qc-ident-method-eIDAS2-acd", "0.4.0.1862.1.8.4"},
 }
 
 // QCIdentMethodEnumValues returns all constants in declaration order.
 func QCIdentMethodEnumValues() []QCIdentMethodEnum {
 	return []QCIdentMethodEnum{
-		QCIdentMethodEnum_QCT_EIDAS2_ACD,
-		QCIdentMethodEnum_QCT_EIDAS2_B,
+		QCIdentMethodEnumQCTEIDAS2ACD,
+		QCIdentMethodEnumQCTEIDAS2B,
 	}
 }
 
@@ -77,4 +77,4 @@ func QCIdentMethodEnumForLabel(description string) QCIdentMethodEnum {
 }
 
 // Compile-time assertion that QCIdentMethodEnum implements QCIdentMethod.
-var _ QCIdentMethod = QCIdentMethodEnum_QCT_EIDAS2_ACD
+var _ QCIdentMethod = QCIdentMethodEnumQCTEIDAS2ACD

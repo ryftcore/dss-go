@@ -20,9 +20,9 @@ func TestSignaturePolicyTypeValueOf(t *testing.T) {
 
 func TestSignaturePolicyTypeValues(t *testing.T) {
 	want := []SignaturePolicyType{
-		SignaturePolicyType_NO_POLICY,
-		SignaturePolicyType_ANY_POLICY,
-		SignaturePolicyType_IMPLICIT_POLICY,
+		SignaturePolicyTypeNoPolicy,
+		SignaturePolicyTypeAnyPolicy,
+		SignaturePolicyTypeImplicitPolicy,
 	}
 	got := SignaturePolicyTypeValues()
 	if len(got) != len(want) {

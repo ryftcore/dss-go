@@ -40,7 +40,7 @@ func NewCertificateNotOnHoldCheck(i18nProvider *i18n.I18nProvider, result *proce
 // Process performs the check. Port of process().
 func (c *CertificateNotOnHoldCheck) Process() bool {
 	isOnHold := c.certificateRevocation != nil && c.certificateRevocation.IsRevoked() &&
-		enumerations.RevocationReason_CERTIFICATE_HOLD == c.certificateRevocation.Reason()
+		enumerations.RevocationReasonCertificateHold == c.certificateRevocation.Reason()
 	if isOnHold {
 		revocationDate := c.certificateRevocation.RevocationDate()
 		isOnHold = revocationDate != nil && !c.currentTime.Before(*revocationDate)
@@ -59,7 +59,7 @@ func (c *CertificateNotOnHoldCheck) BuildAdditionalInfo() *string {
 		if r := c.certificateRevocation.Reason(); r != "" {
 			reason = string(r)
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_REASON, reason, revocationDateStr)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationReason, reason, revocationDateStr)
 		return &message
 	}
 	return nil
@@ -67,22 +67,22 @@ func (c *CertificateNotOnHoldCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateNotOnHoldCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCOH
+	return i18n.MessageTagBBBXCVISCOH
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateNotOnHoldCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCOH_ANS
+	return i18n.MessageTagBBBXCVISCOHANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *CertificateNotOnHoldCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *CertificateNotOnHoldCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_TRY_LATER
+	return enumerations.SubIndicationTryLater
 }

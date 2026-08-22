@@ -82,7 +82,7 @@ func NewX509CertificateValidation(i18nProvider *i18n.I18nProvider,
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *X509CertificateValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_X509_CERTIFICATE_VALIDATION
+	return i18n.MessageTagX509CertificateValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -117,7 +117,7 @@ func (c *X509CertificateValidation) InitChain() {
 	item := c.prospectiveCertificateChain(c.currentCertificate)
 	c.FirstItem = item
 
-	subContext := enumerations.SubContext_SIGNING_CERT
+	subContext := enumerations.SubContextSigningCert
 	// Java holds an Iterator over the certificate chain, or null when the chain
 	// is empty; the Go port walks the same slice by index, so
 	// "certChainIt != null && certChainIt.hasNext()" is the bounds test below -
@@ -149,7 +149,7 @@ func (c *X509CertificateValidation) InitChain() {
 		} else {
 			trustAnchorCandidate = nil
 		}
-		subContext = enumerations.SubContext_CA_CERTIFICATE
+		subContext = enumerations.SubContextCACertificate
 
 		if trustAnchorCandidate == nil {
 			break
@@ -170,7 +170,7 @@ func (c *X509CertificateValidation) InitChain() {
 		item = item.SetNextItem(c.trustServiceWithExpectedStatus(c.currentCertificate))
 
 		certificateValidation := NewSubX509CertificateValidation(c.I18nProvider,
-			c.currentCertificate, c.currentTime, c.currentTime, c.context, enumerations.SubContext_SIGNING_CERT, c.aov, c.validationPolicy)
+			c.currentCertificate, c.currentTime, c.currentTime, c.context, enumerations.SubContextSigningCert, c.aov, c.validationPolicy)
 		subXCV := certificateValidation.Execute()
 		c.Result.Value.SubXCV = append(c.Result.Value.SubXCV, subXCV)
 
@@ -188,7 +188,7 @@ func (c *X509CertificateValidation) InitChain() {
 
 		// Check CA_CERTIFICATEs
 		var lastDate time.Time
-		if enumerations.ValidationModel_SHELL == model {
+		if enumerations.ValidationModelShell == model {
 			lastDate = c.currentTime
 		} else if notBefore := c.currentCertificate.NotBefore(); notBefore != nil {
 			lastDate = *notBefore
@@ -196,7 +196,7 @@ func (c *X509CertificateValidation) InitChain() {
 		if utils.IsCollectionNotEmpty(certificateChain) {
 			for _, certificate := range certificateChain {
 				certificateValidation = NewSubX509CertificateValidation(c.I18nProvider,
-					certificate, lastDate, c.currentTime, c.context, enumerations.SubContext_CA_CERTIFICATE, c.aov, c.validationPolicy)
+					certificate, lastDate, c.currentTime, c.context, enumerations.SubContextCACertificate, c.aov, c.validationPolicy)
 				subXCV = certificateValidation.Execute()
 				c.Result.Value.SubXCV = append(c.Result.Value.SubXCV, subXCV)
 
@@ -206,7 +206,7 @@ func (c *X509CertificateValidation) InitChain() {
 					item = item.SetNextItem(c.checkSubXCVResult(subXCV))
 				}
 
-				if enumerations.ValidationModel_CHAIN == model {
+				if enumerations.ValidationModelChain == model {
 					if notBefore := certificate.NotBefore(); notBefore != nil {
 						lastDate = *notBefore
 					} else {
@@ -242,7 +242,7 @@ func (c *X509CertificateValidation) prospectiveCertificateChain(
 func (c *X509CertificateValidation) validationBeforeSunsetDate(certificate *diagnostic.CertificateWrapper,
 	subContext enumerations.SubContext, validationTime time.Time) process.ChainItem[*jaxb.XmlXCV] {
 	constraint := c.validationPolicy.CertificateSunsetDateConstraint(c.context, subContext)
-	levelRule, err := process.GetConstraintOrMaxLevel(constraint, enumerations.Level_WARN)
+	levelRule, err := process.GetConstraintOrMaxLevel(constraint, enumerations.LevelWarn)
 	if err != nil {
 		panic(err)
 	}
@@ -309,26 +309,26 @@ func newTrustAnchorCheckSubXCVResult(i18nProvider *i18n.I18nProvider, result *pr
 // ErrorMessageTag returns an i18n key of an error message to get. Port of the
 // overridden getErrorMessageTag().
 func (c *trustAnchorCheckSubXCVResult) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_SUB_ANS_2
+	return i18n.MessageTagBBBXCVSubANS2
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // the overridden getFailedIndicationForConclusion().
 func (c *trustAnchorCheckSubXCVResult) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of the overridden getFailedSubIndicationForConclusion().
 func (c *trustAnchorCheckSubXCVResult) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND_NO_POE
+	return enumerations.SubIndicationNoCertificateChainFoundNoPOE
 }
 
 // prospectiveCertificateChainCheckEnforced ports the private
 // prospectiveCertificateChainCheckEnforced().
 func (c *X509CertificateValidation) prospectiveCertificateChainCheckEnforced() bool {
 	constraint := c.validationPolicy.ProspectiveCertificateChainConstraint(c.context)
-	return constraint != nil && enumerations.Level_FAIL == constraint.Level()
+	return constraint != nil && enumerations.LevelFail == constraint.Level()
 }
 
 // isTrustAnchor ports the private
@@ -354,7 +354,7 @@ func (c *X509CertificateValidation) CollectMessages(conclusion *jaxb.XmlConclusi
 	// collect all messages, except prospective certificate chain expiration warning (only final message should be returned)
 	// XmlBlockType.SUB_XCV_TA.equals(getBlockType()): the generated Go BlockType
 	// member is a *XmlBlockType, whose nil is Java's null.
-	if !(constraint.BlockType != nil && jaxb.XmlBlockType_SUB_XCV_TA == *constraint.BlockType) {
+	if !(constraint.BlockType != nil && jaxb.XmlBlockTypeSubXCVTA == *constraint.BlockType) {
 		c.ChainBase.CollectMessages(conclusion, constraint)
 	}
 }
@@ -365,7 +365,7 @@ func (c *X509CertificateValidation) CollectAdditionalMessages(conclusion *jaxb.X
 	for _, subXCV := range c.Result.Value.SubXCV {
 		c.CollectAllMessages(conclusion, subXCV.Conclusion)
 		for _, constraint := range subXCV.Constraint {
-			if constraint.BlockType != nil && jaxb.XmlBlockType_SUB_XCV_TA == *constraint.BlockType {
+			if constraint.BlockType != nil && jaxb.XmlBlockTypeSubXCVTA == *constraint.BlockType {
 				if constraint.Error != nil {
 					conclusion.Errors = c.removeMessage(conclusion.Errors, constraint.Error.Key)
 				}

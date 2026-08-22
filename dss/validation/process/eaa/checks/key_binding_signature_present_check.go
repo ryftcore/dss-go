@@ -37,23 +37,23 @@ func (c *KeyBindingSignaturePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *KeyBindingSignaturePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_KBSP
+	return i18n.MessageTagEAAKBSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *KeyBindingSignaturePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_KBSP_ANS
+	return i18n.MessageTagEAAKBSPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *KeyBindingSignaturePresentCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.
 // Port of getFailedSubIndicationForConclusion().
 func (c *KeyBindingSignaturePresentCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_FORMAT_FAILURE
+	return enumerations.SubIndicationFormatFailure
 }

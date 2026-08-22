@@ -170,9 +170,9 @@ func TestEtsiValidationPolicyAccessorsMatchOracle(t *testing.T) {
 	checkDuration(t, golden, seen, "TimestampDelayConstraint", policy.TimestampDelayConstraint())
 	check(t, golden, seen, "TimestampValidConstraint", levelRuleString(policy.TimestampValidConstraint()))
 	check(t, golden, seen, "RevocationDataAvailableConstraint(SIGNATURE,SIGNING_CERT)",
-		levelRuleString(policy.RevocationDataAvailableConstraint(enumerations.Context_SIGNATURE, enumerations.SubContext_SIGNING_CERT)))
+		levelRuleString(policy.RevocationDataAvailableConstraint(enumerations.ContextSignature, enumerations.SubContextSigningCert)))
 	checkDuration(t, golden, seen, "RevocationFreshnessConstraint(SIGNATURE,SIGNING_CERT)",
-		policy.RevocationFreshnessConstraint(enumerations.Context_SIGNATURE, enumerations.SubContext_SIGNING_CERT))
+		policy.RevocationFreshnessConstraint(enumerations.ContextSignature, enumerations.SubContextSigningCert))
 	check(t, golden, seen, "AcceptedContainerTypesConstraint", multiValuesRuleString(policy.AcceptedContainerTypesConstraint()))
 	check(t, golden, seen, "PDFACompliantConstraint", levelRuleString(policy.PDFACompliantConstraint()))
 	check(t, golden, seen, "AcceptablePDFAProfilesConstraint", multiValuesRuleString(policy.AcceptablePDFAProfilesConstraint()))
@@ -220,21 +220,21 @@ func TestEtsiValidationPolicyNameAndDescriptionMatchOracle(t *testing.T) {
 // key is looked up by name), but is kept faithful to the oracle for
 // readability.
 var allContexts = []enumerations.Context{
-	enumerations.Context_SIGNATURE,
-	enumerations.Context_COUNTER_SIGNATURE,
-	enumerations.Context_KEY_BINDING_SIGNATURE,
-	enumerations.Context_TIMESTAMP,
-	enumerations.Context_EVIDENCE_RECORD,
-	enumerations.Context_REVOCATION,
-	enumerations.Context_CERTIFICATE,
-	enumerations.Context_EAA,
-	enumerations.Context_EAA_REVOCATION,
+	enumerations.ContextSignature,
+	enumerations.ContextCounterSignature,
+	enumerations.ContextKeyBindingSignature,
+	enumerations.ContextTimestamp,
+	enumerations.ContextEvidenceRecord,
+	enumerations.ContextRevocation,
+	enumerations.ContextCertificate,
+	enumerations.ContextEAA,
+	enumerations.ContextEAARevocation,
 }
 
 // allSubContexts mirrors Java's SubContext.values() enumeration order.
 var allSubContexts = []enumerations.SubContext{
-	enumerations.SubContext_SIGNING_CERT,
-	enumerations.SubContext_CA_CERTIFICATE,
+	enumerations.SubContextSigningCert,
+	enumerations.SubContextCACertificate,
 }
 
 func levelRuleString(r modelpolicy.LevelRule) string {
@@ -330,9 +330,9 @@ func checkCryptoSuite(t *testing.T, golden map[string]string, seen map[string]bo
 
 	sigAlgos := suite.AcceptableSignatureAlgorithms()
 	for _, sa := range []enumerations.SignatureAlgorithm{
-		enumerations.SignatureAlgorithm_RSA_SHA256,
-		enumerations.SignatureAlgorithm_RSA_SHA1,
-		enumerations.SignatureAlgorithm_ECDSA_SHA256,
+		enumerations.SignatureAlgorithmRSASHA256,
+		enumerations.SignatureAlgorithmRSASHA1,
+		enumerations.SignatureAlgorithmECDSASHA256,
 	} {
 		check(t, golden, seen, prefix+"."+string(sa)+".evaluations", evaluationsCanonical(sigAlgos[sa]))
 	}

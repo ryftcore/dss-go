@@ -12,24 +12,24 @@ import "fmt"
 type EncryptionAlgorithm string
 
 const (
-	// EncryptionAlgorithm_RSA is RSA.
-	EncryptionAlgorithm_RSA EncryptionAlgorithm = "RSA"
-	// EncryptionAlgorithm_RSASSA_PSS is RSASSA-PSS.
-	EncryptionAlgorithm_RSASSA_PSS EncryptionAlgorithm = "RSASSA_PSS"
-	// EncryptionAlgorithm_DSA is DSA.
-	EncryptionAlgorithm_DSA EncryptionAlgorithm = "DSA"
-	// EncryptionAlgorithm_ECDSA is ECDSA.
-	EncryptionAlgorithm_ECDSA EncryptionAlgorithm = "ECDSA"
-	// EncryptionAlgorithm_PLAIN_ECDSA is PLAIN-ECDSA.
-	EncryptionAlgorithm_PLAIN_ECDSA EncryptionAlgorithm = "PLAIN_ECDSA"
-	// EncryptionAlgorithm_X25519 is X25519.
-	EncryptionAlgorithm_X25519 EncryptionAlgorithm = "X25519"
-	// EncryptionAlgorithm_X448 is X448.
-	EncryptionAlgorithm_X448 EncryptionAlgorithm = "X448"
-	// EncryptionAlgorithm_EDDSA is EdDSA.
-	EncryptionAlgorithm_EDDSA EncryptionAlgorithm = "EDDSA"
-	// EncryptionAlgorithm_HMAC is HMAC.
-	EncryptionAlgorithm_HMAC EncryptionAlgorithm = "HMAC"
+	// EncryptionAlgorithmRSA is RSA.
+	EncryptionAlgorithmRSA EncryptionAlgorithm = "RSA"
+	// EncryptionAlgorithmRSASSAPSS is RSASSA-PSS.
+	EncryptionAlgorithmRSASSAPSS EncryptionAlgorithm = "RSASSA_PSS"
+	// EncryptionAlgorithmDSA is DSA.
+	EncryptionAlgorithmDSA EncryptionAlgorithm = "DSA"
+	// EncryptionAlgorithmECDSA is ECDSA.
+	EncryptionAlgorithmECDSA EncryptionAlgorithm = "ECDSA"
+	// EncryptionAlgorithmPlainECDSA is PLAIN-ECDSA.
+	EncryptionAlgorithmPlainECDSA EncryptionAlgorithm = "PLAIN_ECDSA"
+	// EncryptionAlgorithmX25519 is X25519.
+	EncryptionAlgorithmX25519 EncryptionAlgorithm = "X25519"
+	// EncryptionAlgorithmX448 is X448.
+	EncryptionAlgorithmX448 EncryptionAlgorithm = "X448"
+	// EncryptionAlgorithmEDDSA is EdDSA.
+	EncryptionAlgorithmEDDSA EncryptionAlgorithm = "EDDSA"
+	// EncryptionAlgorithmHMAC is HMAC.
+	EncryptionAlgorithmHMAC EncryptionAlgorithm = "HMAC"
 )
 
 // encryptionAlgorithmFields holds the (name, oid, padding) tuple for each constant.
@@ -42,15 +42,15 @@ type encryptionAlgorithmFields struct {
 // encryptionAlgorithmData holds the full field tuple for each constant,
 // copied verbatim from the Java enum constructors.
 var encryptionAlgorithmData = map[EncryptionAlgorithm]encryptionAlgorithmFields{
-	EncryptionAlgorithm_RSA:         {"RSA", "1.2.840.113549.1.1.1", "RSA/ECB/PKCS1Padding"},
-	EncryptionAlgorithm_RSASSA_PSS:  {"RSASSA-PSS", "1.2.840.113549.1.1.10", "RSA/ECB/OAEPPadding"},
-	EncryptionAlgorithm_DSA:         {"DSA", "1.2.840.10040.4.1", "DSA"},
-	EncryptionAlgorithm_ECDSA:       {"ECDSA", "1.2.840.10045.2.1", "ECDSA"},
-	EncryptionAlgorithm_PLAIN_ECDSA: {"PLAIN-ECDSA", "0.4.0.127.0.7.1.1.4.1", "PLAIN-ECDSA"},
-	EncryptionAlgorithm_X25519:      {"X25519", "1.3.101.110", "X25519"},
-	EncryptionAlgorithm_X448:        {"X448", "1.3.101.111", "X448"},
-	EncryptionAlgorithm_EDDSA:       {"EdDSA", "", "EdDSA"},
-	EncryptionAlgorithm_HMAC:        {"HMAC", "", ""},
+	EncryptionAlgorithmRSA:        {"RSA", "1.2.840.113549.1.1.1", "RSA/ECB/PKCS1Padding"},
+	EncryptionAlgorithmRSASSAPSS:  {"RSASSA-PSS", "1.2.840.113549.1.1.10", "RSA/ECB/OAEPPadding"},
+	EncryptionAlgorithmDSA:        {"DSA", "1.2.840.10040.4.1", "DSA"},
+	EncryptionAlgorithmECDSA:      {"ECDSA", "1.2.840.10045.2.1", "ECDSA"},
+	EncryptionAlgorithmPlainECDSA: {"PLAIN-ECDSA", "0.4.0.127.0.7.1.1.4.1", "PLAIN-ECDSA"},
+	EncryptionAlgorithmX25519:     {"X25519", "1.3.101.110", "X25519"},
+	EncryptionAlgorithmX448:       {"X448", "1.3.101.111", "X448"},
+	EncryptionAlgorithmEDDSA:      {"EdDSA", "", "EdDSA"},
+	EncryptionAlgorithmHMAC:       {"HMAC", "", ""},
 }
 
 // encryptionAlgorithmOIDLookup maps OIDs to their EncryptionAlgorithm,
@@ -66,15 +66,15 @@ var encryptionAlgorithmOIDLookup = func() map[string]EncryptionAlgorithm {
 // EncryptionAlgorithmValues returns all constants in declaration order.
 func EncryptionAlgorithmValues() []EncryptionAlgorithm {
 	return []EncryptionAlgorithm{
-		EncryptionAlgorithm_RSA,
-		EncryptionAlgorithm_RSASSA_PSS,
-		EncryptionAlgorithm_DSA,
-		EncryptionAlgorithm_ECDSA,
-		EncryptionAlgorithm_PLAIN_ECDSA,
-		EncryptionAlgorithm_X25519,
-		EncryptionAlgorithm_X448,
-		EncryptionAlgorithm_EDDSA,
-		EncryptionAlgorithm_HMAC,
+		EncryptionAlgorithmRSA,
+		EncryptionAlgorithmRSASSAPSS,
+		EncryptionAlgorithmDSA,
+		EncryptionAlgorithmECDSA,
+		EncryptionAlgorithmPlainECDSA,
+		EncryptionAlgorithmX25519,
+		EncryptionAlgorithmX448,
+		EncryptionAlgorithmEDDSA,
+		EncryptionAlgorithmHMAC,
 	}
 }
 
@@ -92,12 +92,12 @@ func EncryptionAlgorithmForOID(oid string) (EncryptionAlgorithm, error) {
 func EncryptionAlgorithmForName(name string) (EncryptionAlgorithm, error) {
 	// To be checked if ECC exists also.
 	if name == "EC" || name == "ECC" {
-		return EncryptionAlgorithm_ECDSA, nil
+		return EncryptionAlgorithmECDSA, nil
 	}
 
 	// Since JDK 15.
 	if name == "Ed25519" || name == "Ed448" {
-		return EncryptionAlgorithm_EDDSA, nil
+		return EncryptionAlgorithmEDDSA, nil
 	}
 
 	for _, v := range EncryptionAlgorithmValues() {
@@ -157,15 +157,15 @@ func (e EncryptionAlgorithm) IsEquivalent(encryptionAlgorithm EncryptionAlgorith
 }
 
 func (e EncryptionAlgorithm) isRSAFamily() bool {
-	return e == EncryptionAlgorithm_RSA || e == EncryptionAlgorithm_RSASSA_PSS
+	return e == EncryptionAlgorithmRSA || e == EncryptionAlgorithmRSASSAPSS
 }
 
 func (e EncryptionAlgorithm) isEcDSAFamily() bool {
-	return e == EncryptionAlgorithm_ECDSA || e == EncryptionAlgorithm_PLAIN_ECDSA
+	return e == EncryptionAlgorithmECDSA || e == EncryptionAlgorithmPlainECDSA
 }
 
 func (e EncryptionAlgorithm) isEdDSAFamily() bool {
-	return e == EncryptionAlgorithm_X25519 || e == EncryptionAlgorithm_X448 || e == EncryptionAlgorithm_EDDSA
+	return e == EncryptionAlgorithmX25519 || e == EncryptionAlgorithmX448 || e == EncryptionAlgorithmEDDSA
 }
 
 // compile-time interface assertion.

@@ -75,7 +75,7 @@ func TestCadesLevelBaselineLTATimestampExtractorOracle(t *testing.T) {
 		case "SIGNERINFO":
 			signerInfo = nil
 			for _, candidate := range document.SignerInfos() {
-				digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, candidate.DER())
+				digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, candidate.DER())
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -311,12 +311,12 @@ func (s *cadesLTAOracleSignature) CMS() *cms.CMS { return s.cms }
 func cadesLTAOracleArchiveTimestamp(t *testing.T, signerInfo *cmscore.SignerInfo, id string) *validation.TimestampToken {
 	t.Helper()
 	for _, attribute := range signerInfo.UnsignedAttributes {
-		if !spi.OID_id_aa_ets_archiveTimestampV2.Equal(attribute.Type) &&
-			!spi.OID_id_aa_ets_archiveTimestampV3.Equal(attribute.Type) {
+		if !spi.OIDIdAaEtsArchiveTimestampV2.Equal(attribute.Type) &&
+			!spi.OIDIdAaEtsArchiveTimestampV3.Equal(attribute.Type) {
 			continue
 		}
 		for _, value := range attribute.Values {
-			digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithm_SHA256, value.Encoded())
+			digest, err := spi.DSSUtilsDigest(enumerations.DigestAlgorithmSHA256, value.Encoded())
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -324,7 +324,7 @@ func cadesLTAOracleArchiveTimestamp(t *testing.T, signerInfo *cmscore.SignerInfo
 				continue
 			}
 			token, err := validation.NewTimestampToken(value.Encoded(),
-				enumerations.TimestampType_ARCHIVE_TIMESTAMP)
+				enumerations.TimestampTypeArchiveTimestamp)
 			if err != nil {
 				t.Fatal(err)
 			}

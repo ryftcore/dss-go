@@ -10,145 +10,145 @@ type ServiceTypeIdentifier string
 const (
 	// ---- 5.5.1.1 Regulation (EU) No 910/2014 qualified trust service types
 
-	// ServiceTypeIdentifier_CA_QC is a qualified certificate issuing trust service.
-	ServiceTypeIdentifier_CA_QC ServiceTypeIdentifier = "CA_QC"
-	// ServiceTypeIdentifier_OCSP_QC is a qualified OCSP certificate status service.
-	ServiceTypeIdentifier_OCSP_QC ServiceTypeIdentifier = "OCSP_QC"
-	// ServiceTypeIdentifier_CRL_QC is a qualified CRL certificate status service.
-	ServiceTypeIdentifier_CRL_QC ServiceTypeIdentifier = "CRL_QC"
-	// ServiceTypeIdentifier_TSA_QTST is a qualified electronic time stamp generation service.
-	ServiceTypeIdentifier_TSA_QTST ServiceTypeIdentifier = "TSA_QTST"
-	// ServiceTypeIdentifier_EDS_Q is a qualified electronic delivery service.
-	ServiceTypeIdentifier_EDS_Q ServiceTypeIdentifier = "EDS_Q"
-	// ServiceTypeIdentifier_EDS_REM_Q is a qualified electronic registered mail delivery
+	// ServiceTypeIdentifierCAQC is a qualified certificate issuing trust service.
+	ServiceTypeIdentifierCAQC ServiceTypeIdentifier = "CA_QC"
+	// ServiceTypeIdentifierOCSPQC is a qualified OCSP certificate status service.
+	ServiceTypeIdentifierOCSPQC ServiceTypeIdentifier = "OCSP_QC"
+	// ServiceTypeIdentifierCRLQC is a qualified CRL certificate status service.
+	ServiceTypeIdentifierCRLQC ServiceTypeIdentifier = "CRL_QC"
+	// ServiceTypeIdentifierTSAQTST is a qualified electronic time stamp generation service.
+	ServiceTypeIdentifierTSAQTST ServiceTypeIdentifier = "TSA_QTST"
+	// ServiceTypeIdentifierEDSQ is a qualified electronic delivery service.
+	ServiceTypeIdentifierEDSQ ServiceTypeIdentifier = "EDS_Q"
+	// ServiceTypeIdentifierEDSREMQ is a qualified electronic registered mail delivery
 	// service.
-	ServiceTypeIdentifier_EDS_REM_Q ServiceTypeIdentifier = "EDS_REM_Q"
-	// ServiceTypeIdentifier_PSES_Q is a qualified preservation service.
-	ServiceTypeIdentifier_PSES_Q ServiceTypeIdentifier = "PSES_Q"
-	// ServiceTypeIdentifier_QESVALIDATION_Q is a qualified validation service.
-	ServiceTypeIdentifier_QESVALIDATION_Q ServiceTypeIdentifier = "QESVALIDATION_Q"
-	// ServiceTypeIdentifier_REMOTE_QSIG_CD_MANAGEMENT_Q is the management of remote qualified
+	ServiceTypeIdentifierEDSREMQ ServiceTypeIdentifier = "EDS_REM_Q"
+	// ServiceTypeIdentifierPSESQ is a qualified preservation service.
+	ServiceTypeIdentifierPSESQ ServiceTypeIdentifier = "PSES_Q"
+	// ServiceTypeIdentifierQESValidationQ is a qualified validation service.
+	ServiceTypeIdentifierQESValidationQ ServiceTypeIdentifier = "QESVALIDATION_Q"
+	// ServiceTypeIdentifierRemoteQSigCDManagementQ is the management of remote qualified
 	// electronic signature creation devices as a qualified trust service.
-	ServiceTypeIdentifier_REMOTE_QSIG_CD_MANAGEMENT_Q ServiceTypeIdentifier = "REMOTE_QSIG_CD_MANAGEMENT_Q"
-	// ServiceTypeIdentifier_REMOTE_QSEAL_CD_MANAGEMENT_Q is the management of remote
+	ServiceTypeIdentifierRemoteQSigCDManagementQ ServiceTypeIdentifier = "REMOTE_QSIG_CD_MANAGEMENT_Q"
+	// ServiceTypeIdentifierRemoteQSealCDManagementQ is the management of remote
 	// qualified electronic seal creation devices as a qualified trust service.
-	ServiceTypeIdentifier_REMOTE_QSEAL_CD_MANAGEMENT_Q ServiceTypeIdentifier = "REMOTE_QSEAL_CD_MANAGEMENT_Q"
-	// ServiceTypeIdentifier_EAA_Q is the issuance of qualified electronic attestations of
+	ServiceTypeIdentifierRemoteQSealCDManagementQ ServiceTypeIdentifier = "REMOTE_QSEAL_CD_MANAGEMENT_Q"
+	// ServiceTypeIdentifierEAAQ is the issuance of qualified electronic attestations of
 	// attributes.
-	ServiceTypeIdentifier_EAA_Q ServiceTypeIdentifier = "EAA_Q"
-	// ServiceTypeIdentifier_ELECTRONIC_ARCHIVING_Q is a qualified electronic archiving
+	ServiceTypeIdentifierEAAQ ServiceTypeIdentifier = "EAA_Q"
+	// ServiceTypeIdentifierElectronicArchivingQ is a qualified electronic archiving
 	// service.
-	ServiceTypeIdentifier_ELECTRONIC_ARCHIVING_Q ServiceTypeIdentifier = "ELECTRONIC_ARCHIVING_Q"
-	// ServiceTypeIdentifier_LEDGERS_Q is a qualified trust service for the recording of
+	ServiceTypeIdentifierElectronicArchivingQ ServiceTypeIdentifier = "ELECTRONIC_ARCHIVING_Q"
+	// ServiceTypeIdentifierLedgersQ is a qualified trust service for the recording of
 	// electronic data in qualified electronic ledgers.
-	ServiceTypeIdentifier_LEDGERS_Q ServiceTypeIdentifier = "LEDGERS_Q"
+	ServiceTypeIdentifierLedgersQ ServiceTypeIdentifier = "LEDGERS_Q"
 
 	// ---- 5.5.1.2 Regulation (EU) No 910/2014 non qualified trust service types
 
-	// ServiceTypeIdentifier_CA_PKC is a non-qualified certificate generation service.
-	ServiceTypeIdentifier_CA_PKC ServiceTypeIdentifier = "CA_PKC"
-	// ServiceTypeIdentifier_OCSP is a non-qualified OCSP certificate status service.
-	ServiceTypeIdentifier_OCSP ServiceTypeIdentifier = "OCSP"
-	// ServiceTypeIdentifier_CRL is a non-qualified CRL certificate status service.
-	ServiceTypeIdentifier_CRL ServiceTypeIdentifier = "CRL"
-	// ServiceTypeIdentifier_TSA is a non-qualified time-stamping generation service.
-	ServiceTypeIdentifier_TSA ServiceTypeIdentifier = "TSA"
-	// ServiceTypeIdentifier_TSA_TSS_QC is a non-qualified time-stamping service part of a
+	// ServiceTypeIdentifierCAPKC is a non-qualified certificate generation service.
+	ServiceTypeIdentifierCAPKC ServiceTypeIdentifier = "CA_PKC"
+	// ServiceTypeIdentifierOCSP is a non-qualified OCSP certificate status service.
+	ServiceTypeIdentifierOCSP ServiceTypeIdentifier = "OCSP"
+	// ServiceTypeIdentifierCRL is a non-qualified CRL certificate status service.
+	ServiceTypeIdentifierCRL ServiceTypeIdentifier = "CRL"
+	// ServiceTypeIdentifierTSA is a non-qualified time-stamping generation service.
+	ServiceTypeIdentifierTSA ServiceTypeIdentifier = "TSA"
+	// ServiceTypeIdentifierTSATSSQC is a non-qualified time-stamping service part of a
 	// service issuing qualified certificates.
-	ServiceTypeIdentifier_TSA_TSS_QC ServiceTypeIdentifier = "TSA_TSS_QC"
-	// ServiceTypeIdentifier_TSA_TSS_ADESQC_AND_QES is a non-qualified time-stamping service.
-	ServiceTypeIdentifier_TSA_TSS_ADESQC_AND_QES ServiceTypeIdentifier = "TSA_TSS_ADESQC_AND_QES"
-	// ServiceTypeIdentifier_EDS is a non-qualified electronic delivery service.
-	ServiceTypeIdentifier_EDS ServiceTypeIdentifier = "EDS"
-	// ServiceTypeIdentifier_EDS_REM is a non-qualified Registered Electronic Mail delivery
+	ServiceTypeIdentifierTSATSSQC ServiceTypeIdentifier = "TSA_TSS_QC"
+	// ServiceTypeIdentifierTSATSSAdESQCAndQES is a non-qualified time-stamping service.
+	ServiceTypeIdentifierTSATSSAdESQCAndQES ServiceTypeIdentifier = "TSA_TSS_ADESQC_AND_QES"
+	// ServiceTypeIdentifierEDS is a non-qualified electronic delivery service.
+	ServiceTypeIdentifierEDS ServiceTypeIdentifier = "EDS"
+	// ServiceTypeIdentifierEDSREM is a non-qualified Registered Electronic Mail delivery
 	// service.
-	ServiceTypeIdentifier_EDS_REM ServiceTypeIdentifier = "EDS_REM"
-	// ServiceTypeIdentifier_PSES is a non-qualified preservation service.
-	ServiceTypeIdentifier_PSES ServiceTypeIdentifier = "PSES"
-	// ServiceTypeIdentifier_ADES_VALIDATION is a non-qualified validation service.
-	ServiceTypeIdentifier_ADES_VALIDATION ServiceTypeIdentifier = "ADES_VALIDATION"
-	// ServiceTypeIdentifier_ADES_GENERATION is a non-qualified generation service.
-	ServiceTypeIdentifier_ADES_GENERATION ServiceTypeIdentifier = "ADES_GENERATION"
-	// ServiceTypeIdentifier_REMOTE_SIG_CD_MANAGEMENT is a non-qualified trust service for the
+	ServiceTypeIdentifierEDSREM ServiceTypeIdentifier = "EDS_REM"
+	// ServiceTypeIdentifierPSES is a non-qualified preservation service.
+	ServiceTypeIdentifierPSES ServiceTypeIdentifier = "PSES"
+	// ServiceTypeIdentifierAdESValidation is a non-qualified validation service.
+	ServiceTypeIdentifierAdESValidation ServiceTypeIdentifier = "ADES_VALIDATION"
+	// ServiceTypeIdentifierAdESGeneration is a non-qualified generation service.
+	ServiceTypeIdentifierAdESGeneration ServiceTypeIdentifier = "ADES_GENERATION"
+	// ServiceTypeIdentifierRemoteSigCDManagement is a non-qualified trust service for the
 	// management of remote electronic signature creation devices.
-	ServiceTypeIdentifier_REMOTE_SIG_CD_MANAGEMENT ServiceTypeIdentifier = "REMOTE_SIG_CD_MANAGEMENT"
-	// ServiceTypeIdentifier_REMOTE_SEAL_CD_MANAGEMENT is a non-qualified trust service for
+	ServiceTypeIdentifierRemoteSigCDManagement ServiceTypeIdentifier = "REMOTE_SIG_CD_MANAGEMENT"
+	// ServiceTypeIdentifierRemoteSealCDManagement is a non-qualified trust service for
 	// the management of remote electronic seal creation devices.
-	ServiceTypeIdentifier_REMOTE_SEAL_CD_MANAGEMENT ServiceTypeIdentifier = "REMOTE_SEAL_CD_MANAGEMENT"
-	// ServiceTypeIdentifier_EAA is the issuance of non-qualified electronic attestations of
+	ServiceTypeIdentifierRemoteSealCDManagement ServiceTypeIdentifier = "REMOTE_SEAL_CD_MANAGEMENT"
+	// ServiceTypeIdentifierEAA is the issuance of non-qualified electronic attestations of
 	// attributes.
-	ServiceTypeIdentifier_EAA ServiceTypeIdentifier = "EAA"
-	// ServiceTypeIdentifier_ELECTRONIC_ARCHIVING is a non-qualified electronic archiving
+	ServiceTypeIdentifierEAA ServiceTypeIdentifier = "EAA"
+	// ServiceTypeIdentifierElectronicArchiving is a non-qualified electronic archiving
 	// service.
-	ServiceTypeIdentifier_ELECTRONIC_ARCHIVING ServiceTypeIdentifier = "ELECTRONIC_ARCHIVING"
-	// ServiceTypeIdentifier_LEDGERS is a non-qualified trust service for the recording of
+	ServiceTypeIdentifierElectronicArchiving ServiceTypeIdentifier = "ELECTRONIC_ARCHIVING"
+	// ServiceTypeIdentifierLedgers is a non-qualified trust service for the recording of
 	// electronic data in non-qualified electronic ledgers.
-	ServiceTypeIdentifier_LEDGERS ServiceTypeIdentifier = "LEDGERS"
-	// ServiceTypeIdentifier_PKC_VALIDATION is a non-qualified trust service for the
+	ServiceTypeIdentifierLedgers ServiceTypeIdentifier = "LEDGERS"
+	// ServiceTypeIdentifierPKCValidation is a non-qualified trust service for the
 	// validation of certificates for electronic signatures/seals/website authentication.
-	ServiceTypeIdentifier_PKC_VALIDATION ServiceTypeIdentifier = "PKC_VALIDATION"
-	// ServiceTypeIdentifier_PKC_PRESERVATION is a non-qualified trust service for the
+	ServiceTypeIdentifierPKCValidation ServiceTypeIdentifier = "PKC_VALIDATION"
+	// ServiceTypeIdentifierPKCPreservation is a non-qualified trust service for the
 	// preservation of certificates for electronic signatures/seals.
-	ServiceTypeIdentifier_PKC_PRESERVATION ServiceTypeIdentifier = "PKC_PRESERVATION"
-	// ServiceTypeIdentifier_EAA_VALIDATION is a non-qualified trust service for the
+	ServiceTypeIdentifierPKCPreservation ServiceTypeIdentifier = "PKC_PRESERVATION"
+	// ServiceTypeIdentifierEAAValidation is a non-qualified trust service for the
 	// validation of electronic attestation of attributes.
-	ServiceTypeIdentifier_EAA_VALIDATION ServiceTypeIdentifier = "EAA_VALIDATION"
-	// ServiceTypeIdentifier_TST_VALIDATION is a non-qualified trust service for the
+	ServiceTypeIdentifierEAAValidation ServiceTypeIdentifier = "EAA_VALIDATION"
+	// ServiceTypeIdentifierTSTValidation is a non-qualified trust service for the
 	// validation of electronic timestamps.
-	ServiceTypeIdentifier_TST_VALIDATION ServiceTypeIdentifier = "TST_VALIDATION"
-	// ServiceTypeIdentifier_EDS_VALIDATION is a non-qualified trust service for the
+	ServiceTypeIdentifierTSTValidation ServiceTypeIdentifier = "TST_VALIDATION"
+	// ServiceTypeIdentifierEDSValidation is a non-qualified trust service for the
 	// validation of data transmitted through electronic registered delivery services.
-	ServiceTypeIdentifier_EDS_VALIDATION ServiceTypeIdentifier = "EDS_VALIDATION"
-	// ServiceTypeIdentifier_EAA_PUBEAA is the issuance of non-qualified electronic
+	ServiceTypeIdentifierEDSValidation ServiceTypeIdentifier = "EDS_VALIDATION"
+	// ServiceTypeIdentifierEAAPubEAA is the issuance of non-qualified electronic
 	// attestation of attributes by or on behalf of a public sector body.
-	ServiceTypeIdentifier_EAA_PUBEAA ServiceTypeIdentifier = "EAA_PUBEAA"
-	// ServiceTypeIdentifier_CA_PKC_CERTSOFOTHERTYPESOFTS is a non-qualified certificate
+	ServiceTypeIdentifierEAAPubEAA ServiceTypeIdentifier = "EAA_PUBEAA"
+	// ServiceTypeIdentifierCAPKCCertsOfOtherTypesOfTS is a non-qualified certificate
 	// generation service for certificates of other trust service types.
-	ServiceTypeIdentifier_CA_PKC_CERTSOFOTHERTYPESOFTS ServiceTypeIdentifier = "CA_PKC_CERTSOFOTHERTYPESOFTS"
-	// ServiceTypeIdentifier_PKC_VALIDATION_CERTSOFOTHERTYPESOFTS is a non-qualified trust
+	ServiceTypeIdentifierCAPKCCertsOfOtherTypesOfTS ServiceTypeIdentifier = "CA_PKC_CERTSOFOTHERTYPESOFTS"
+	// ServiceTypeIdentifierPKCValidationCertsOfOtherTypesOfTS is a non-qualified trust
 	// service for the validation of certificates for other trust service types.
-	ServiceTypeIdentifier_PKC_VALIDATION_CERTSOFOTHERTYPESOFTS ServiceTypeIdentifier = "PKC_VALIDATION_CERTSOFOTHERTYPESOFTS"
+	ServiceTypeIdentifierPKCValidationCertsOfOtherTypesOfTS ServiceTypeIdentifier = "PKC_VALIDATION_CERTSOFOTHERTYPESOFTS"
 
 	// ---- 5.5.1.3 Trust service types not defined in Regulation (EU) No 910/2014 but
 	// nationally defined
 
-	// ServiceTypeIdentifier_RA is a registration service.
-	ServiceTypeIdentifier_RA ServiceTypeIdentifier = "RA"
-	// ServiceTypeIdentifier_RA_NOTHAVINGPKIID is a registration service not identified by a
+	// ServiceTypeIdentifierRA is a registration service.
+	ServiceTypeIdentifierRA ServiceTypeIdentifier = "RA"
+	// ServiceTypeIdentifierRANotHavingPKIID is a registration service not identified by a
 	// PKI-based public key.
-	ServiceTypeIdentifier_RA_NOTHAVINGPKIID ServiceTypeIdentifier = "RA_NOTHAVINGPKIID"
-	// ServiceTypeIdentifier_ACA is an attribute certificate generation service.
-	ServiceTypeIdentifier_ACA ServiceTypeIdentifier = "ACA"
-	// ServiceTypeIdentifier_SIGNATUREPOLICYAUTHORITY is a signature policy authority
+	ServiceTypeIdentifierRANotHavingPKIID ServiceTypeIdentifier = "RA_NOTHAVINGPKIID"
+	// ServiceTypeIdentifierACA is an attribute certificate generation service.
+	ServiceTypeIdentifierACA ServiceTypeIdentifier = "ACA"
+	// ServiceTypeIdentifierSignaturePolicyAuthority is a signature policy authority
 	// service.
-	ServiceTypeIdentifier_SIGNATUREPOLICYAUTHORITY ServiceTypeIdentifier = "SIGNATUREPOLICYAUTHORITY"
-	// ServiceTypeIdentifier_ARCHIV is an archival service.
-	ServiceTypeIdentifier_ARCHIV ServiceTypeIdentifier = "ARCHIV"
-	// ServiceTypeIdentifier_ARCHIV_NOTHAVINGPKIID is an archival service not identified by a
+	ServiceTypeIdentifierSignaturePolicyAuthority ServiceTypeIdentifier = "SIGNATUREPOLICYAUTHORITY"
+	// ServiceTypeIdentifierArchiv is an archival service.
+	ServiceTypeIdentifierArchiv ServiceTypeIdentifier = "ARCHIV"
+	// ServiceTypeIdentifierArchivNotHavingPKIID is an archival service not identified by a
 	// PKI-based public key.
-	ServiceTypeIdentifier_ARCHIV_NOTHAVINGPKIID ServiceTypeIdentifier = "ARCHIV_NOTHAVINGPKIID"
-	// ServiceTypeIdentifier_IDV is an identity verification service.
-	ServiceTypeIdentifier_IDV ServiceTypeIdentifier = "IDV"
-	// ServiceTypeIdentifier_IDV_NOTHAVINGPKIID is an identity verification service not
+	ServiceTypeIdentifierArchivNotHavingPKIID ServiceTypeIdentifier = "ARCHIV_NOTHAVINGPKIID"
+	// ServiceTypeIdentifierIDV is an identity verification service.
+	ServiceTypeIdentifierIDV ServiceTypeIdentifier = "IDV"
+	// ServiceTypeIdentifierIDVNotHavingPKIID is an identity verification service not
 	// identified by a PKI-based public key.
-	ServiceTypeIdentifier_IDV_NOTHAVINGPKIID ServiceTypeIdentifier = "IDV_NOTHAVINGPKIID"
-	// ServiceTypeIdentifier_KESCROW is a key escrow service.
-	ServiceTypeIdentifier_KESCROW ServiceTypeIdentifier = "KESCROW"
-	// ServiceTypeIdentifier_KESCROW_NOTHAVINGPKIID is a key escrow service not identified by
+	ServiceTypeIdentifierIDVNotHavingPKIID ServiceTypeIdentifier = "IDV_NOTHAVINGPKIID"
+	// ServiceTypeIdentifierKEscrow is a key escrow service.
+	ServiceTypeIdentifierKEscrow ServiceTypeIdentifier = "KESCROW"
+	// ServiceTypeIdentifierKEscrowNotHavingPKIID is a key escrow service not identified by
 	// a PKI-based public key.
-	ServiceTypeIdentifier_KESCROW_NOTHAVINGPKIID ServiceTypeIdentifier = "KESCROW_NOTHAVINGPKIID"
-	// ServiceTypeIdentifier_PPWD is an issuer of PIN- or password-based identity
+	ServiceTypeIdentifierKEscrowNotHavingPKIID ServiceTypeIdentifier = "KESCROW_NOTHAVINGPKIID"
+	// ServiceTypeIdentifierPPWD is an issuer of PIN- or password-based identity
 	// credentials.
-	ServiceTypeIdentifier_PPWD ServiceTypeIdentifier = "PPWD"
-	// ServiceTypeIdentifier_PPWD_NOTHAVINGPKIID is an issuer of PIN- or password-based
+	ServiceTypeIdentifierPPWD ServiceTypeIdentifier = "PPWD"
+	// ServiceTypeIdentifierPPWDNotHavingPKIID is an issuer of PIN- or password-based
 	// identity credentials not identified by a PKI-based public key.
-	ServiceTypeIdentifier_PPWD_NOTHAVINGPKIID ServiceTypeIdentifier = "PPWD_NOTHAVINGPKIID"
-	// ServiceTypeIdentifier_TLISSUER is a service issuing trusted lists.
-	ServiceTypeIdentifier_TLISSUER ServiceTypeIdentifier = "TLISSUER"
-	// ServiceTypeIdentifier_NATIONALROOTCA_QC is a national root signing CA.
-	ServiceTypeIdentifier_NATIONALROOTCA_QC ServiceTypeIdentifier = "NATIONALROOTCA_QC"
-	// ServiceTypeIdentifier_UNSPECIFIED is a trust service of an unspecified type.
-	ServiceTypeIdentifier_UNSPECIFIED ServiceTypeIdentifier = "UNSPECIFIED"
+	ServiceTypeIdentifierPPWDNotHavingPKIID ServiceTypeIdentifier = "PPWD_NOTHAVINGPKIID"
+	// ServiceTypeIdentifierTLIssuer is a service issuing trusted lists.
+	ServiceTypeIdentifierTLIssuer ServiceTypeIdentifier = "TLISSUER"
+	// ServiceTypeIdentifierNationalRootCAQC is a national root signing CA.
+	ServiceTypeIdentifierNationalRootCAQC ServiceTypeIdentifier = "NATIONALROOTCA_QC"
+	// ServiceTypeIdentifierUnspecified is a trust service of an unspecified type.
+	ServiceTypeIdentifierUnspecified ServiceTypeIdentifier = "UNSPECIFIED"
 )
 
 // serviceTypeIdentifierFields holds the (shortName, uri, qualified, national) tuple for
@@ -165,140 +165,140 @@ type serviceTypeIdentifierFields struct {
 // NOTE: Java's ServiceTypeIdentifier.EAA constant is declared with the shortName
 // "RemoteSealCDManagement" (a copy-paste artifact in upstream); reproduced as-is.
 var serviceTypeIdentifierData = map[ServiceTypeIdentifier]serviceTypeIdentifierFields{
-	ServiceTypeIdentifier_CA_QC:     {"CA/QC", "http://uri.etsi.org/TrstSvc/Svctype/CA/QC", true, false},
-	ServiceTypeIdentifier_OCSP_QC:   {"OCSP/QC", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/OCSP/QC", true, false},
-	ServiceTypeIdentifier_CRL_QC:    {"CRL/QC", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/CRL/QC", true, false},
-	ServiceTypeIdentifier_TSA_QTST:  {"TSA/QTST", "http://uri.etsi.org/TrstSvc/Svctype/TSA/QTST", true, false},
-	ServiceTypeIdentifier_EDS_Q:     {"EDS/Q", "http://uri.etsi.org/TrstSvc/Svctype/EDS/Q", true, false},
-	ServiceTypeIdentifier_EDS_REM_Q: {"EDS/REM/Q", "http://uri.etsi.org/TrstSvc/Svctype/EDS/REM/Q", true, false},
-	ServiceTypeIdentifier_PSES_Q:    {"PSES/Q", "http://uri.etsi.org/TrstSvc/Svctype/PSES/Q", true, false},
-	ServiceTypeIdentifier_QESVALIDATION_Q: {"QESValidation/Q",
+	ServiceTypeIdentifierCAQC:    {"CA/QC", "http://uri.etsi.org/TrstSvc/Svctype/CA/QC", true, false},
+	ServiceTypeIdentifierOCSPQC:  {"OCSP/QC", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/OCSP/QC", true, false},
+	ServiceTypeIdentifierCRLQC:   {"CRL/QC", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/CRL/QC", true, false},
+	ServiceTypeIdentifierTSAQTST: {"TSA/QTST", "http://uri.etsi.org/TrstSvc/Svctype/TSA/QTST", true, false},
+	ServiceTypeIdentifierEDSQ:    {"EDS/Q", "http://uri.etsi.org/TrstSvc/Svctype/EDS/Q", true, false},
+	ServiceTypeIdentifierEDSREMQ: {"EDS/REM/Q", "http://uri.etsi.org/TrstSvc/Svctype/EDS/REM/Q", true, false},
+	ServiceTypeIdentifierPSESQ:   {"PSES/Q", "http://uri.etsi.org/TrstSvc/Svctype/PSES/Q", true, false},
+	ServiceTypeIdentifierQESValidationQ: {"QESValidation/Q",
 		"http://uri.etsi.org/TrstSvc/Svctype/QESValidation/Q", true, false},
-	ServiceTypeIdentifier_REMOTE_QSIG_CD_MANAGEMENT_Q: {"RemoteQSigCDManagement/Q",
+	ServiceTypeIdentifierRemoteQSigCDManagementQ: {"RemoteQSigCDManagement/Q",
 		"http://uri.etsi.org/TrstSvc/Svctype/RemoteQSigCDManagement/Q", true, false},
-	ServiceTypeIdentifier_REMOTE_QSEAL_CD_MANAGEMENT_Q: {"RemoteQSealCDManagement/Q",
+	ServiceTypeIdentifierRemoteQSealCDManagementQ: {"RemoteQSealCDManagement/Q",
 		"http://uri.etsi.org/TrstSvc/Svctype/RemoteQSealCDManagement/Q", true, false},
-	ServiceTypeIdentifier_EAA_Q: {"EAA/Q", "http://uri.etsi.org/TrstSvc/Svctype/EAA/Q", true, false},
-	ServiceTypeIdentifier_ELECTRONIC_ARCHIVING_Q: {"ElectronicArchiving/Q",
+	ServiceTypeIdentifierEAAQ: {"EAA/Q", "http://uri.etsi.org/TrstSvc/Svctype/EAA/Q", true, false},
+	ServiceTypeIdentifierElectronicArchivingQ: {"ElectronicArchiving/Q",
 		"http://uri.etsi.org/TrstSvc/Svctype/ElectronicArchiving/Q", true, false},
-	ServiceTypeIdentifier_LEDGERS_Q: {"Ledgers/Q", "http://uri.etsi.org/TrstSvc/Svctype/Ledgers/Q", true, false},
+	ServiceTypeIdentifierLedgersQ: {"Ledgers/Q", "http://uri.etsi.org/TrstSvc/Svctype/Ledgers/Q", true, false},
 
-	ServiceTypeIdentifier_CA_PKC: {"CA/PKC", "http://uri.etsi.org/TrstSvc/Svctype/CA/PKC", false, false},
-	ServiceTypeIdentifier_OCSP:   {"OCSP", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/OCSP", false, false},
-	ServiceTypeIdentifier_CRL:    {"CRL", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/CRL", false, false},
-	ServiceTypeIdentifier_TSA:    {"TSA", "http://uri.etsi.org/TrstSvc/Svctype/TSA", false, false},
-	ServiceTypeIdentifier_TSA_TSS_QC: {"TSA/TSS-QC", "http://uri.etsi.org/TrstSvc/Svctype/TSA/TSS-QC",
+	ServiceTypeIdentifierCAPKC: {"CA/PKC", "http://uri.etsi.org/TrstSvc/Svctype/CA/PKC", false, false},
+	ServiceTypeIdentifierOCSP:  {"OCSP", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/OCSP", false, false},
+	ServiceTypeIdentifierCRL:   {"CRL", "http://uri.etsi.org/TrstSvc/Svctype/Certstatus/CRL", false, false},
+	ServiceTypeIdentifierTSA:   {"TSA", "http://uri.etsi.org/TrstSvc/Svctype/TSA", false, false},
+	ServiceTypeIdentifierTSATSSQC: {"TSA/TSS-QC", "http://uri.etsi.org/TrstSvc/Svctype/TSA/TSS-QC",
 		false, false},
-	ServiceTypeIdentifier_TSA_TSS_ADESQC_AND_QES: {"TSA/TSS-AdESQCandQES",
+	ServiceTypeIdentifierTSATSSAdESQCAndQES: {"TSA/TSS-AdESQCandQES",
 		"http://uri.etsi.org/TrstSvc/Svctype/TSA/TSS-AdESQCandQES", false, false},
-	ServiceTypeIdentifier_EDS:             {"EDS", "http://uri.etsi.org/TrstSvc/Svctype/EDS", false, false},
-	ServiceTypeIdentifier_EDS_REM:         {"EDS/REM", "http://uri.etsi.org/TrstSvc/Svctype/EDS/REM", false, false},
-	ServiceTypeIdentifier_PSES:            {"PSES", "http://uri.etsi.org/TrstSvc/Svctype/PSES", false, false},
-	ServiceTypeIdentifier_ADES_VALIDATION: {"AdESValidation", "http://uri.etsi.org/TrstSvc/Svctype/AdESValidation", false, false},
-	ServiceTypeIdentifier_ADES_GENERATION: {"AdESGeneration", "http://uri.etsi.org/TrstSvc/Svctype/AdESGeneration", false, false},
-	ServiceTypeIdentifier_REMOTE_SIG_CD_MANAGEMENT: {"RemoteSigCDManagement",
+	ServiceTypeIdentifierEDS:            {"EDS", "http://uri.etsi.org/TrstSvc/Svctype/EDS", false, false},
+	ServiceTypeIdentifierEDSREM:         {"EDS/REM", "http://uri.etsi.org/TrstSvc/Svctype/EDS/REM", false, false},
+	ServiceTypeIdentifierPSES:           {"PSES", "http://uri.etsi.org/TrstSvc/Svctype/PSES", false, false},
+	ServiceTypeIdentifierAdESValidation: {"AdESValidation", "http://uri.etsi.org/TrstSvc/Svctype/AdESValidation", false, false},
+	ServiceTypeIdentifierAdESGeneration: {"AdESGeneration", "http://uri.etsi.org/TrstSvc/Svctype/AdESGeneration", false, false},
+	ServiceTypeIdentifierRemoteSigCDManagement: {"RemoteSigCDManagement",
 		"http://uri.etsi.org/TrstSvc/Svctype/RemoteSigCDManagement", false, false},
-	ServiceTypeIdentifier_REMOTE_SEAL_CD_MANAGEMENT: {"RemoteSealCDManagement",
+	ServiceTypeIdentifierRemoteSealCDManagement: {"RemoteSealCDManagement",
 		"http://uri.etsi.org/TrstSvc/Svctype/RemoteSealCDManagement", false, false},
-	ServiceTypeIdentifier_EAA: {"RemoteSealCDManagement", "http://uri.etsi.org/TrstSvc/Svctype/EAA", false, false},
-	ServiceTypeIdentifier_ELECTRONIC_ARCHIVING: {"ElectronicArchiving",
+	ServiceTypeIdentifierEAA: {"RemoteSealCDManagement", "http://uri.etsi.org/TrstSvc/Svctype/EAA", false, false},
+	ServiceTypeIdentifierElectronicArchiving: {"ElectronicArchiving",
 		"http://uri.etsi.org/TrstSvc/Svctype/ElectronicArchiving", false, false},
-	ServiceTypeIdentifier_LEDGERS: {"Ledgers", "http://uri.etsi.org/TrstSvc/Svctype/Ledgers", false, false},
-	ServiceTypeIdentifier_PKC_VALIDATION: {"PKCValidation", "http://uri.etsi.org/TrstSvc/Svctype/PKCValidation",
+	ServiceTypeIdentifierLedgers: {"Ledgers", "http://uri.etsi.org/TrstSvc/Svctype/Ledgers", false, false},
+	ServiceTypeIdentifierPKCValidation: {"PKCValidation", "http://uri.etsi.org/TrstSvc/Svctype/PKCValidation",
 		false, false},
-	ServiceTypeIdentifier_PKC_PRESERVATION: {"PKCPreservation", "http://uri.etsi.org/TrstSvc/Svctype/PKCPreservation",
+	ServiceTypeIdentifierPKCPreservation: {"PKCPreservation", "http://uri.etsi.org/TrstSvc/Svctype/PKCPreservation",
 		false, false},
-	ServiceTypeIdentifier_EAA_VALIDATION: {"EAAValidation", "http://uri.etsi.org/TrstSvc/Svctype/EAAValidation",
+	ServiceTypeIdentifierEAAValidation: {"EAAValidation", "http://uri.etsi.org/TrstSvc/Svctype/EAAValidation",
 		false, false},
-	ServiceTypeIdentifier_TST_VALIDATION: {"TSTValidation", "http://uri.etsi.org/TrstSvc/Svctype/TSTValidation",
+	ServiceTypeIdentifierTSTValidation: {"TSTValidation", "http://uri.etsi.org/TrstSvc/Svctype/TSTValidation",
 		false, false},
-	ServiceTypeIdentifier_EDS_VALIDATION: {"TSTValidatiEDSValidationon",
+	ServiceTypeIdentifierEDSValidation: {"TSTValidatiEDSValidationon",
 		"http://uri.etsi.org/TrstSvc/Svctype/EDSValidation", false, false},
-	ServiceTypeIdentifier_EAA_PUBEAA: {"EAA/Pub-EAA", "http://uri.etsi.org/TrstSvc/Svctype/EAA/Pub-EAA", false, false},
-	ServiceTypeIdentifier_CA_PKC_CERTSOFOTHERTYPESOFTS: {"CA/PKC/CertsforOtherTypesOfTS",
+	ServiceTypeIdentifierEAAPubEAA: {"EAA/Pub-EAA", "http://uri.etsi.org/TrstSvc/Svctype/EAA/Pub-EAA", false, false},
+	ServiceTypeIdentifierCAPKCCertsOfOtherTypesOfTS: {"CA/PKC/CertsforOtherTypesOfTS",
 		"http://uri.etsi.org/TrstSvc/Svctype/CA/PKC/CertsforOtherTypesOfTS", false, false},
-	ServiceTypeIdentifier_PKC_VALIDATION_CERTSOFOTHERTYPESOFTS: {"PKCValidation/CertsforOtherTypesOfTS",
+	ServiceTypeIdentifierPKCValidationCertsOfOtherTypesOfTS: {"PKCValidation/CertsforOtherTypesOfTS",
 		"http://uri.etsi.org/TrstSvc/Svctype/PKCValidation/CertsforOtherTypesOfTS", false, false},
 
-	ServiceTypeIdentifier_RA: {"RA", "http://uri.etsi.org/TrstSvc/Svctype/RA", false, true},
-	ServiceTypeIdentifier_RA_NOTHAVINGPKIID: {"RA/nothavingPKIid",
+	ServiceTypeIdentifierRA: {"RA", "http://uri.etsi.org/TrstSvc/Svctype/RA", false, true},
+	ServiceTypeIdentifierRANotHavingPKIID: {"RA/nothavingPKIid",
 		"http://uri.etsi.org/TrstSvc/Svctype/RA/nothavingPKIid", false, true},
-	ServiceTypeIdentifier_ACA: {"ACA", "http://uri.etsi.org/TrstSvc/Svctype/ACA", false, true},
-	ServiceTypeIdentifier_SIGNATUREPOLICYAUTHORITY: {"SignaturePolicyAuthority",
+	ServiceTypeIdentifierACA: {"ACA", "http://uri.etsi.org/TrstSvc/Svctype/ACA", false, true},
+	ServiceTypeIdentifierSignaturePolicyAuthority: {"SignaturePolicyAuthority",
 		"http://uri.etsi.org/TrstSvc/Svctype/SignaturePolicyAuthority", false, true},
-	ServiceTypeIdentifier_ARCHIV: {"Archiv", "http://uri.etsi.org/TrstSvc/Svctype/Archiv", false, true},
-	ServiceTypeIdentifier_ARCHIV_NOTHAVINGPKIID: {"Archiv/nothavingPKIid",
+	ServiceTypeIdentifierArchiv: {"Archiv", "http://uri.etsi.org/TrstSvc/Svctype/Archiv", false, true},
+	ServiceTypeIdentifierArchivNotHavingPKIID: {"Archiv/nothavingPKIid",
 		"http://uri.etsi.org/TrstSvc/Svctype/Archiv/nothavingPKIid", false, true},
-	ServiceTypeIdentifier_IDV: {"IdV", "http://uri.etsi.org/TrstSvc/Svctype/IdV", false, true},
-	ServiceTypeIdentifier_IDV_NOTHAVINGPKIID: {"IdV/nothavingPKIid",
+	ServiceTypeIdentifierIDV: {"IdV", "http://uri.etsi.org/TrstSvc/Svctype/IdV", false, true},
+	ServiceTypeIdentifierIDVNotHavingPKIID: {"IdV/nothavingPKIid",
 		"http://uri.etsi.org/TrstSvc/Svctype/IdV/nothavingPKIid", false, true},
-	ServiceTypeIdentifier_KESCROW: {"KEscrow", "http://uri.etsi.org/TrstSvc/Svctype/KEscrow", false, true},
-	ServiceTypeIdentifier_KESCROW_NOTHAVINGPKIID: {"KEscrow/nothavingPKIid",
+	ServiceTypeIdentifierKEscrow: {"KEscrow", "http://uri.etsi.org/TrstSvc/Svctype/KEscrow", false, true},
+	ServiceTypeIdentifierKEscrowNotHavingPKIID: {"KEscrow/nothavingPKIid",
 		"http://uri.etsi.org/TrstSvc/Svctype/KEscrow/nothavingPKIid", false, true},
-	ServiceTypeIdentifier_PPWD: {"PPwd", "http://uri.etsi.org/TrstSvc/Svctype/PPwd", false, true},
-	ServiceTypeIdentifier_PPWD_NOTHAVINGPKIID: {"PPwd/nothavingPKIid",
+	ServiceTypeIdentifierPPWD: {"PPwd", "http://uri.etsi.org/TrstSvc/Svctype/PPwd", false, true},
+	ServiceTypeIdentifierPPWDNotHavingPKIID: {"PPwd/nothavingPKIid",
 		"http://uri.etsi.org/TrstSvc/Svctype/PPwd/nothavingPKIid", false, true},
-	ServiceTypeIdentifier_TLISSUER: {"TLIssuer", "http://uri.etsi.org/TrstSvd/Svctype/TLIssuer", false, true},
-	ServiceTypeIdentifier_NATIONALROOTCA_QC: {"NationalRootCA-QC",
+	ServiceTypeIdentifierTLIssuer: {"TLIssuer", "http://uri.etsi.org/TrstSvd/Svctype/TLIssuer", false, true},
+	ServiceTypeIdentifierNationalRootCAQC: {"NationalRootCA-QC",
 		"http://uri.etsi.org/TrstSvc/Svctype/NationalRootCA-QC", false, true},
-	ServiceTypeIdentifier_UNSPECIFIED: {"unspecified", "http://uri.etsi.org/TrstSvc/Svctype/unspecified", false, true},
+	ServiceTypeIdentifierUnspecified: {"unspecified", "http://uri.etsi.org/TrstSvc/Svctype/unspecified", false, true},
 }
 
 // serviceTypeIdentifierValues returns all constants in declaration order.
 func serviceTypeIdentifierValues() []ServiceTypeIdentifier {
 	return []ServiceTypeIdentifier{
-		ServiceTypeIdentifier_CA_QC,
-		ServiceTypeIdentifier_OCSP_QC,
-		ServiceTypeIdentifier_CRL_QC,
-		ServiceTypeIdentifier_TSA_QTST,
-		ServiceTypeIdentifier_EDS_Q,
-		ServiceTypeIdentifier_EDS_REM_Q,
-		ServiceTypeIdentifier_PSES_Q,
-		ServiceTypeIdentifier_QESVALIDATION_Q,
-		ServiceTypeIdentifier_REMOTE_QSIG_CD_MANAGEMENT_Q,
-		ServiceTypeIdentifier_REMOTE_QSEAL_CD_MANAGEMENT_Q,
-		ServiceTypeIdentifier_EAA_Q,
-		ServiceTypeIdentifier_ELECTRONIC_ARCHIVING_Q,
-		ServiceTypeIdentifier_LEDGERS_Q,
-		ServiceTypeIdentifier_CA_PKC,
-		ServiceTypeIdentifier_OCSP,
-		ServiceTypeIdentifier_CRL,
-		ServiceTypeIdentifier_TSA,
-		ServiceTypeIdentifier_TSA_TSS_QC,
-		ServiceTypeIdentifier_TSA_TSS_ADESQC_AND_QES,
-		ServiceTypeIdentifier_EDS,
-		ServiceTypeIdentifier_EDS_REM,
-		ServiceTypeIdentifier_PSES,
-		ServiceTypeIdentifier_ADES_VALIDATION,
-		ServiceTypeIdentifier_ADES_GENERATION,
-		ServiceTypeIdentifier_REMOTE_SIG_CD_MANAGEMENT,
-		ServiceTypeIdentifier_REMOTE_SEAL_CD_MANAGEMENT,
-		ServiceTypeIdentifier_EAA,
-		ServiceTypeIdentifier_ELECTRONIC_ARCHIVING,
-		ServiceTypeIdentifier_LEDGERS,
-		ServiceTypeIdentifier_PKC_VALIDATION,
-		ServiceTypeIdentifier_PKC_PRESERVATION,
-		ServiceTypeIdentifier_EAA_VALIDATION,
-		ServiceTypeIdentifier_TST_VALIDATION,
-		ServiceTypeIdentifier_EDS_VALIDATION,
-		ServiceTypeIdentifier_EAA_PUBEAA,
-		ServiceTypeIdentifier_CA_PKC_CERTSOFOTHERTYPESOFTS,
-		ServiceTypeIdentifier_PKC_VALIDATION_CERTSOFOTHERTYPESOFTS,
-		ServiceTypeIdentifier_RA,
-		ServiceTypeIdentifier_RA_NOTHAVINGPKIID,
-		ServiceTypeIdentifier_ACA,
-		ServiceTypeIdentifier_SIGNATUREPOLICYAUTHORITY,
-		ServiceTypeIdentifier_ARCHIV,
-		ServiceTypeIdentifier_ARCHIV_NOTHAVINGPKIID,
-		ServiceTypeIdentifier_IDV,
-		ServiceTypeIdentifier_IDV_NOTHAVINGPKIID,
-		ServiceTypeIdentifier_KESCROW,
-		ServiceTypeIdentifier_KESCROW_NOTHAVINGPKIID,
-		ServiceTypeIdentifier_PPWD,
-		ServiceTypeIdentifier_PPWD_NOTHAVINGPKIID,
-		ServiceTypeIdentifier_TLISSUER,
-		ServiceTypeIdentifier_NATIONALROOTCA_QC,
-		ServiceTypeIdentifier_UNSPECIFIED,
+		ServiceTypeIdentifierCAQC,
+		ServiceTypeIdentifierOCSPQC,
+		ServiceTypeIdentifierCRLQC,
+		ServiceTypeIdentifierTSAQTST,
+		ServiceTypeIdentifierEDSQ,
+		ServiceTypeIdentifierEDSREMQ,
+		ServiceTypeIdentifierPSESQ,
+		ServiceTypeIdentifierQESValidationQ,
+		ServiceTypeIdentifierRemoteQSigCDManagementQ,
+		ServiceTypeIdentifierRemoteQSealCDManagementQ,
+		ServiceTypeIdentifierEAAQ,
+		ServiceTypeIdentifierElectronicArchivingQ,
+		ServiceTypeIdentifierLedgersQ,
+		ServiceTypeIdentifierCAPKC,
+		ServiceTypeIdentifierOCSP,
+		ServiceTypeIdentifierCRL,
+		ServiceTypeIdentifierTSA,
+		ServiceTypeIdentifierTSATSSQC,
+		ServiceTypeIdentifierTSATSSAdESQCAndQES,
+		ServiceTypeIdentifierEDS,
+		ServiceTypeIdentifierEDSREM,
+		ServiceTypeIdentifierPSES,
+		ServiceTypeIdentifierAdESValidation,
+		ServiceTypeIdentifierAdESGeneration,
+		ServiceTypeIdentifierRemoteSigCDManagement,
+		ServiceTypeIdentifierRemoteSealCDManagement,
+		ServiceTypeIdentifierEAA,
+		ServiceTypeIdentifierElectronicArchiving,
+		ServiceTypeIdentifierLedgers,
+		ServiceTypeIdentifierPKCValidation,
+		ServiceTypeIdentifierPKCPreservation,
+		ServiceTypeIdentifierEAAValidation,
+		ServiceTypeIdentifierTSTValidation,
+		ServiceTypeIdentifierEDSValidation,
+		ServiceTypeIdentifierEAAPubEAA,
+		ServiceTypeIdentifierCAPKCCertsOfOtherTypesOfTS,
+		ServiceTypeIdentifierPKCValidationCertsOfOtherTypesOfTS,
+		ServiceTypeIdentifierRA,
+		ServiceTypeIdentifierRANotHavingPKIID,
+		ServiceTypeIdentifierACA,
+		ServiceTypeIdentifierSignaturePolicyAuthority,
+		ServiceTypeIdentifierArchiv,
+		ServiceTypeIdentifierArchivNotHavingPKIID,
+		ServiceTypeIdentifierIDV,
+		ServiceTypeIdentifierIDVNotHavingPKIID,
+		ServiceTypeIdentifierKEscrow,
+		ServiceTypeIdentifierKEscrowNotHavingPKIID,
+		ServiceTypeIdentifierPPWD,
+		ServiceTypeIdentifierPPWDNotHavingPKIID,
+		ServiceTypeIdentifierTLIssuer,
+		ServiceTypeIdentifierNationalRootCAQC,
+		ServiceTypeIdentifierUnspecified,
 	}
 }
 
@@ -327,19 +327,19 @@ func (s ServiceTypeIdentifier) IsNational() bool {
 // ServiceTypeIdentifierIsCaQc checks whether the serviceTypeIdentifier is CA/QC. Port of
 // isCaQc(String).
 func ServiceTypeIdentifierIsCaQc(serviceTypeIdentifier string) bool {
-	return ServiceTypeIdentifier_CA_QC.URI() == serviceTypeIdentifier
+	return ServiceTypeIdentifierCAQC.URI() == serviceTypeIdentifier
 }
 
 // ServiceTypeIdentifierIsQTST checks whether the serviceTypeIdentifier is TSA/QTST. Port
 // of isQTST(String).
 func ServiceTypeIdentifierIsQTST(serviceTypeIdentifier string) bool {
-	return ServiceTypeIdentifier_TSA_QTST.URI() == serviceTypeIdentifier
+	return ServiceTypeIdentifierTSAQTST.URI() == serviceTypeIdentifier
 }
 
 // ServiceTypeIdentifierIsQEAA checks whether the serviceTypeIdentifier is EAA/Q. Port of
 // isQEAA(String).
 func ServiceTypeIdentifierIsQEAA(serviceTypeIdentifier string) bool {
-	return ServiceTypeIdentifier_EAA_Q.URI() == serviceTypeIdentifier
+	return ServiceTypeIdentifierEAAQ.URI() == serviceTypeIdentifier
 }
 
 // ServiceTypeIdentifierFromUri returns a corresponding ServiceTypeIdentifier by the given

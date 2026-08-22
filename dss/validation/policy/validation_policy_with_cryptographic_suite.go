@@ -74,12 +74,12 @@ func (p *ValidationPolicyWithCryptographicSuite) SetCryptographicSuiteForContext
 // combination of a Context and a SubContext. The provided cryptographic suite will overwrite the
 // current settings only for the defined applicability scope.
 //
-// Returns an error when context is Context_EVIDENCE_RECORD and subContext is not empty (Java's
+// Returns an error when context is ContextEvidenceRecord and subContext is not empty (Java's
 // thrown IllegalArgumentException("Please use a NULL SubContext for the Context.EVIDENCE_RECORD
 // or use #setCryptographicSuite(cryptographicSuite, context) method.")).
 func (p *ValidationPolicyWithCryptographicSuite) SetCryptographicSuiteForContextAndSubContext(cryptographicSuite modelpolicy.CryptographicSuite,
 	context enumerations.Context, subContext enumerations.SubContext) error {
-	if enumerations.Context_EVIDENCE_RECORD == context && subContext != "" {
+	if enumerations.ContextEvidenceRecord == context && subContext != "" {
 		return fmt.Errorf("please use a NULL SubContext for the Context.EVIDENCE_RECORD or " +
 			"use #setCryptographicSuite(cryptographicSuite, context) method")
 	}
@@ -108,7 +108,7 @@ func (p *ValidationPolicyWithCryptographicSuite) CertificateCryptographicConstra
 // EvidenceRecordCryptographicConstraint returns cryptographic constraints for validation of an
 // Evidence Record.
 func (p *ValidationPolicyWithCryptographicSuite) EvidenceRecordCryptographicConstraint() modelpolicy.CryptographicSuite {
-	if cryptographicSuite := p.cryptographicSuite(enumerations.Context_EVIDENCE_RECORD, ""); cryptographicSuite != nil {
+	if cryptographicSuite := p.cryptographicSuite(enumerations.ContextEvidenceRecord, ""); cryptographicSuite != nil {
 		return cryptographicSuite
 	}
 	return p.ValidationPolicy.EvidenceRecordCryptographicConstraint()
@@ -116,7 +116,7 @@ func (p *ValidationPolicyWithCryptographicSuite) EvidenceRecordCryptographicCons
 
 // EAACryptographicConstraint returns cryptographic constraints for validation of an EAA.
 func (p *ValidationPolicyWithCryptographicSuite) EAACryptographicConstraint() modelpolicy.CryptographicSuite {
-	if cryptographicSuite := p.cryptographicSuite(enumerations.Context_EAA, ""); cryptographicSuite != nil {
+	if cryptographicSuite := p.cryptographicSuite(enumerations.ContextEAA, ""); cryptographicSuite != nil {
 		return cryptographicSuite
 	}
 	return p.ValidationPolicy.EAACryptographicConstraint()

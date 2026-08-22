@@ -37,23 +37,23 @@ func (c *SignaturePolicyStoreCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignaturePolicyStoreCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPSUPP
+	return i18n.MessageTagBBBVCIISPSUPP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignaturePolicyStoreCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPSUPP_ANS
+	return i18n.MessageTagBBBVCIISPSUPPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *SignaturePolicyStoreCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *SignaturePolicyStoreCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIGNATURE_POLICY_NOT_AVAILABLE
+	return enumerations.SubIndicationSignaturePolicyNotAvailable
 }

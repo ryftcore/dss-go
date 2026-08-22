@@ -8,65 +8,65 @@ import "github.com/ryftcore/dss-go/dss/enumerations"
 type BasicBuildingBlockDefinition string
 
 const (
-	// BasicBuildingBlockDefinition_FORMAT_CHECKING: 5.2.2 Format Checking.
-	BasicBuildingBlockDefinition_FORMAT_CHECKING BasicBuildingBlockDefinition = "FORMAT_CHECKING"
-	// BasicBuildingBlockDefinition_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE:
+	// BasicBuildingBlockDefinitionFormatChecking: 5.2.2 Format Checking.
+	BasicBuildingBlockDefinitionFormatChecking BasicBuildingBlockDefinition = "FORMAT_CHECKING"
+	// BasicBuildingBlockDefinitionIdentificationOfTheSigningCertificate:
 	// 5.2.3 Identification of the signing certificate.
-	BasicBuildingBlockDefinition_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE BasicBuildingBlockDefinition = "IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE"
-	// BasicBuildingBlockDefinition_VALIDATION_CONTEXT_INITIALIZATION: 5.2.4
+	BasicBuildingBlockDefinitionIdentificationOfTheSigningCertificate BasicBuildingBlockDefinition = "IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE"
+	// BasicBuildingBlockDefinitionValidationContextInitialization: 5.2.4
 	// Validation context initialization.
-	BasicBuildingBlockDefinition_VALIDATION_CONTEXT_INITIALIZATION BasicBuildingBlockDefinition = "VALIDATION_CONTEXT_INITIALIZATION"
-	// BasicBuildingBlockDefinition_REVOCATION_FRESHNESS_CHECKER: 5.2.5
+	BasicBuildingBlockDefinitionValidationContextInitialization BasicBuildingBlockDefinition = "VALIDATION_CONTEXT_INITIALIZATION"
+	// BasicBuildingBlockDefinitionRevocationFreshnessChecker: 5.2.5
 	// Revocation freshness checker.
-	BasicBuildingBlockDefinition_REVOCATION_FRESHNESS_CHECKER BasicBuildingBlockDefinition = "REVOCATION_FRESHNESS_CHECKER"
-	// BasicBuildingBlockDefinition_X509_CERTIFICATE_VALIDATION: 5.2.6 X.509
+	BasicBuildingBlockDefinitionRevocationFreshnessChecker BasicBuildingBlockDefinition = "REVOCATION_FRESHNESS_CHECKER"
+	// BasicBuildingBlockDefinitionX509CertificateValidation: 5.2.6 X.509
 	// certificate validation.
-	BasicBuildingBlockDefinition_X509_CERTIFICATE_VALIDATION BasicBuildingBlockDefinition = "X509_CERTIFICATE_VALIDATION"
-	// BasicBuildingBlockDefinition_CRYPTOGRAPHIC_VERIFICATION: 5.2.7
+	BasicBuildingBlockDefinitionX509CertificateValidation BasicBuildingBlockDefinition = "X509_CERTIFICATE_VALIDATION"
+	// BasicBuildingBlockDefinitionCryptographicVerification: 5.2.7
 	// Cryptographic verification.
-	BasicBuildingBlockDefinition_CRYPTOGRAPHIC_VERIFICATION BasicBuildingBlockDefinition = "CRYPTOGRAPHIC_VERIFICATION"
-	// BasicBuildingBlockDefinition_SIGNATURE_ACCEPTANCE_VALIDATION: 5.2.8
+	BasicBuildingBlockDefinitionCryptographicVerification BasicBuildingBlockDefinition = "CRYPTOGRAPHIC_VERIFICATION"
+	// BasicBuildingBlockDefinitionSignatureAcceptanceValidation: 5.2.8
 	// Signature Acceptance Validation (SAV).
-	BasicBuildingBlockDefinition_SIGNATURE_ACCEPTANCE_VALIDATION BasicBuildingBlockDefinition = "SIGNATURE_ACCEPTANCE_VALIDATION"
-	// BasicBuildingBlockDefinition_PAST_CERTIFICATE_VALIDATION: 5.6.2.1 Past
+	BasicBuildingBlockDefinitionSignatureAcceptanceValidation BasicBuildingBlockDefinition = "SIGNATURE_ACCEPTANCE_VALIDATION"
+	// BasicBuildingBlockDefinitionPastCertificateValidation: 5.6.2.1 Past
 	// certificate validation.
-	BasicBuildingBlockDefinition_PAST_CERTIFICATE_VALIDATION BasicBuildingBlockDefinition = "PAST_CERTIFICATE_VALIDATION"
-	// BasicBuildingBlockDefinition_VALIDATION_TIME_SLIDING: 5.6.2.2 Validation
+	BasicBuildingBlockDefinitionPastCertificateValidation BasicBuildingBlockDefinition = "PAST_CERTIFICATE_VALIDATION"
+	// BasicBuildingBlockDefinitionValidationTimeSliding: 5.6.2.2 Validation
 	// time sliding process.
-	BasicBuildingBlockDefinition_VALIDATION_TIME_SLIDING BasicBuildingBlockDefinition = "VALIDATION_TIME_SLIDING"
-	// BasicBuildingBlockDefinition_PAST_SIGNATURE_VALIDATION: 5.6.2.4 Past
+	BasicBuildingBlockDefinitionValidationTimeSliding BasicBuildingBlockDefinition = "VALIDATION_TIME_SLIDING"
+	// BasicBuildingBlockDefinitionPastSignatureValidation: 5.6.2.4 Past
 	// signature validation building block.
-	BasicBuildingBlockDefinition_PAST_SIGNATURE_VALIDATION BasicBuildingBlockDefinition = "PAST_SIGNATURE_VALIDATION"
+	BasicBuildingBlockDefinitionPastSignatureValidation BasicBuildingBlockDefinition = "PAST_SIGNATURE_VALIDATION"
 )
 
 // basicBuildingBlockDefinitionURIs holds the URI identifying each
 // BasicBuildingBlock.
 var basicBuildingBlockDefinitionURIs = map[BasicBuildingBlockDefinition]string{
-	BasicBuildingBlockDefinition_FORMAT_CHECKING:                           "urn:cef:dss:bbb:formatChecking",
-	BasicBuildingBlockDefinition_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE: "urn:cef:dss:bbb:identificationOfTheSigningCertificate",
-	BasicBuildingBlockDefinition_VALIDATION_CONTEXT_INITIALIZATION:         "urn:cef:dss:bbb:validationContextInitialization",
-	BasicBuildingBlockDefinition_REVOCATION_FRESHNESS_CHECKER:              "urn:cef:dss:bbb:revocationFreshnessChecker",
-	BasicBuildingBlockDefinition_X509_CERTIFICATE_VALIDATION:               "urn:cef:dss:bbb:x509CertificateValidation",
-	BasicBuildingBlockDefinition_CRYPTOGRAPHIC_VERIFICATION:                "urn:cef:dss:bbb:cryptographicVerification",
-	BasicBuildingBlockDefinition_SIGNATURE_ACCEPTANCE_VALIDATION:           "urn:cef:dss:bbb:signatureAcceptanceValidation",
-	BasicBuildingBlockDefinition_PAST_CERTIFICATE_VALIDATION:               "urn:cef:dss:bbb:pastCertificateValidation",
-	BasicBuildingBlockDefinition_VALIDATION_TIME_SLIDING:                   "urn:cef:dss:bbb:validationTimeSliding",
-	BasicBuildingBlockDefinition_PAST_SIGNATURE_VALIDATION:                 "urn:cef:dss:bbb:pastSignatureValidation",
+	BasicBuildingBlockDefinitionFormatChecking:                        "urn:cef:dss:bbb:formatChecking",
+	BasicBuildingBlockDefinitionIdentificationOfTheSigningCertificate: "urn:cef:dss:bbb:identificationOfTheSigningCertificate",
+	BasicBuildingBlockDefinitionValidationContextInitialization:       "urn:cef:dss:bbb:validationContextInitialization",
+	BasicBuildingBlockDefinitionRevocationFreshnessChecker:            "urn:cef:dss:bbb:revocationFreshnessChecker",
+	BasicBuildingBlockDefinitionX509CertificateValidation:             "urn:cef:dss:bbb:x509CertificateValidation",
+	BasicBuildingBlockDefinitionCryptographicVerification:             "urn:cef:dss:bbb:cryptographicVerification",
+	BasicBuildingBlockDefinitionSignatureAcceptanceValidation:         "urn:cef:dss:bbb:signatureAcceptanceValidation",
+	BasicBuildingBlockDefinitionPastCertificateValidation:             "urn:cef:dss:bbb:pastCertificateValidation",
+	BasicBuildingBlockDefinitionValidationTimeSliding:                 "urn:cef:dss:bbb:validationTimeSliding",
+	BasicBuildingBlockDefinitionPastSignatureValidation:               "urn:cef:dss:bbb:pastSignatureValidation",
 }
 
 // BasicBuildingBlockDefinitionValues returns all constants in declaration order.
 func BasicBuildingBlockDefinitionValues() []BasicBuildingBlockDefinition {
 	return []BasicBuildingBlockDefinition{
-		BasicBuildingBlockDefinition_FORMAT_CHECKING,
-		BasicBuildingBlockDefinition_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE,
-		BasicBuildingBlockDefinition_VALIDATION_CONTEXT_INITIALIZATION,
-		BasicBuildingBlockDefinition_REVOCATION_FRESHNESS_CHECKER,
-		BasicBuildingBlockDefinition_X509_CERTIFICATE_VALIDATION,
-		BasicBuildingBlockDefinition_CRYPTOGRAPHIC_VERIFICATION,
-		BasicBuildingBlockDefinition_SIGNATURE_ACCEPTANCE_VALIDATION,
-		BasicBuildingBlockDefinition_PAST_CERTIFICATE_VALIDATION,
-		BasicBuildingBlockDefinition_VALIDATION_TIME_SLIDING,
-		BasicBuildingBlockDefinition_PAST_SIGNATURE_VALIDATION,
+		BasicBuildingBlockDefinitionFormatChecking,
+		BasicBuildingBlockDefinitionIdentificationOfTheSigningCertificate,
+		BasicBuildingBlockDefinitionValidationContextInitialization,
+		BasicBuildingBlockDefinitionRevocationFreshnessChecker,
+		BasicBuildingBlockDefinitionX509CertificateValidation,
+		BasicBuildingBlockDefinitionCryptographicVerification,
+		BasicBuildingBlockDefinitionSignatureAcceptanceValidation,
+		BasicBuildingBlockDefinitionPastCertificateValidation,
+		BasicBuildingBlockDefinitionValidationTimeSliding,
+		BasicBuildingBlockDefinitionPastSignatureValidation,
 	}
 }
 

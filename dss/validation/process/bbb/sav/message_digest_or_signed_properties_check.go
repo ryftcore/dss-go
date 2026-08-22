@@ -40,10 +40,10 @@ func (c *MessageDigestOrSignedPropertiesCheck) Process() bool {
 		panic(err)
 	}
 	switch signatureForm {
-	case enumerations.SignatureForm_XAdES:
-		return c.isRequiredDigestMatcherPresent(enumerations.DigestMatcherType_SIGNED_PROPERTIES)
-	case enumerations.SignatureForm_CAdES, enumerations.SignatureForm_PAdES, enumerations.SignatureForm_PKCS7:
-		return c.isRequiredDigestMatcherPresent(enumerations.DigestMatcherType_MESSAGE_DIGEST)
+	case enumerations.SignatureFormXAdES:
+		return c.isRequiredDigestMatcherPresent(enumerations.DigestMatcherTypeSignedProperties)
+	case enumerations.SignatureFormCAdES, enumerations.SignatureFormPAdES, enumerations.SignatureFormPKCS7:
+		return c.isRequiredDigestMatcherPresent(enumerations.DigestMatcherTypeMessageDigest)
 	default:
 		// JAdES/CB-AdES shall be skipped
 		return false
@@ -75,23 +75,23 @@ func messageDigestMatcherType(digestMatcher *diagnosticjaxb.XmlDigestMatcher) en
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *MessageDigestOrSignedPropertiesCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPMDOSPP
+	return i18n.MessageTagBBBSAVISQPMDOSPP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *MessageDigestOrSignedPropertiesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPMDOSPP_ANS
+	return i18n.MessageTagBBBSAVISQPMDOSPPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *MessageDigestOrSignedPropertiesCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_INDETERMINATE
+	return enumerations.IndicationIndeterminate
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure. Port
 // of getFailedSubIndicationForConclusion().
 func (c *MessageDigestOrSignedPropertiesCheck) FailedSubIndicationForConclusion() enumerations.SubIndication {
-	return enumerations.SubIndication_SIG_CONSTRAINTS_FAILURE
+	return enumerations.SubIndicationSigConstraintsFailure
 }

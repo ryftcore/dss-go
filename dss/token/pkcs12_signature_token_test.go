@@ -90,7 +90,7 @@ func TestPkcs12SignatureTokenLoadAndSign(t *testing.T) {
 	}
 
 	toBeSigned := model.NewToBeSignedWithBytes([]byte("Hello world"))
-	signValue, err := signatureToken.Sign(toBeSigned, enumerations.DigestAlgorithm_SHA256, entry)
+	signValue, err := signatureToken.Sign(toBeSigned, enumerations.DigestAlgorithmSHA256, entry)
 	if err != nil {
 		t.Fatalf("Sign: %v", err)
 	}
@@ -149,7 +149,7 @@ func TestPkcs12SignatureTokenChainPreserved(t *testing.T) {
 				i, chain[i].Issuer().Canonical(), i+1, chain[i+1].Subject().Canonical())
 		}
 	}
-	if keys[0].EncryptionAlgorithm() != enumerations.EncryptionAlgorithm_ECDSA {
+	if keys[0].EncryptionAlgorithm() != enumerations.EncryptionAlgorithmECDSA {
 		t.Errorf("EncryptionAlgorithm() = %s, want ECDSA", keys[0].EncryptionAlgorithm())
 	}
 }
@@ -202,7 +202,7 @@ func verifySignatureValue(t *testing.T, publicKey any, message, signature []byte
 // DigestInfo-encoded digest (see AbstractSignatureTokenConnection), so verification must build
 // the same DigestInfo before the padding check.
 func appendDigestInfoPrefixSHA256(digest []byte) []byte {
-	encoded, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithm_SHA256.OID(), digest)
+	encoded, err := DigestInfoEncoderEncode(enumerations.DigestAlgorithmSHA256.OID(), digest)
 	if err != nil {
 		panic(err)
 	}
@@ -228,7 +228,7 @@ func TestPkcs12SignatureTokenRoundTripRSA(t *testing.T) {
 		t.Fatalf("expected an RSA key, got %T", entryPublicKey(keys[0]))
 	}
 
-	signVerifyRoundTrip(t, signatureToken, keys[0], enumerations.DigestAlgorithm_SHA256)
+	signVerifyRoundTrip(t, signatureToken, keys[0], enumerations.DigestAlgorithmSHA256)
 }
 
 func TestPkcs12SignatureTokenRoundTripECDSA(t *testing.T) {
@@ -250,7 +250,7 @@ func TestPkcs12SignatureTokenRoundTripECDSA(t *testing.T) {
 		t.Fatalf("expected an ECDSA key, got %T", entryPublicKey(keys[0]))
 	}
 
-	signVerifyRoundTrip(t, signatureToken, keys[0], enumerations.DigestAlgorithm_SHA256)
+	signVerifyRoundTrip(t, signatureToken, keys[0], enumerations.DigestAlgorithmSHA256)
 }
 
 // TestPkcs12SignatureTokenRoundTripRSAPSS exercises the RSASSA-PSS branch of
@@ -275,13 +275,13 @@ func TestPkcs12SignatureTokenRoundTripRSAPSS(t *testing.T) {
 
 	message := []byte("PSS round trip message")
 	toBeSigned := model.NewToBeSignedWithBytes(message)
-	signValue, err := signatureToken.SignWithSignatureAlgorithm(toBeSigned, enumerations.SignatureAlgorithm_RSA_SSA_PSS_SHA256_MGF1, entry)
+	signValue, err := signatureToken.SignWithSignatureAlgorithm(toBeSigned, enumerations.SignatureAlgorithmRSASSAPSSSHA256MGF1, entry)
 	if err != nil {
 		t.Fatalf("SignWithSignatureAlgorithm: %v", err)
 	}
 
 	sum := sha256.Sum256(message)
-	opts := &rsa.PSSOptions{SaltLength: enumerations.DigestAlgorithm_SHA256.SaltLength(), Hash: crypto.SHA256}
+	opts := &rsa.PSSOptions{SaltLength: enumerations.DigestAlgorithmSHA256.SaltLength(), Hash: crypto.SHA256}
 	if err := rsa.VerifyPSS(rsaPub, crypto.SHA256, sum[:], signValue.Value(), opts); err != nil {
 		t.Errorf("rsa.VerifyPSS: %v", err)
 	}
@@ -326,8 +326,8 @@ func TestKeyStoreLegacyKeyTypeFixtures(t *testing.T) {
 		wantEncryptionAlgo  enumerations.EncryptionAlgorithm
 		wantPublicKeyGoType string
 	}{
-		{"Ed25519-good-user.p12", "ks-password", enumerations.EncryptionAlgorithm_EDDSA, "ed25519.PublicKey"},
-		{"good-dsa-user.p12", "ks-password", enumerations.EncryptionAlgorithm_DSA, "*dsa.PublicKey"},
+		{"Ed25519-good-user.p12", "ks-password", enumerations.EncryptionAlgorithmEDDSA, "ed25519.PublicKey"},
+		{"good-dsa-user.p12", "ks-password", enumerations.EncryptionAlgorithmDSA, "*dsa.PublicKey"},
 	} {
 		t.Run(testCase.fixture, func(t *testing.T) {
 			data := mustReadFixture(t, "testdata/dss-token/src/test/resources/"+testCase.fixture)
@@ -390,7 +390,7 @@ func TestPkcs12SignatureTokenEd25519RoundTrip(t *testing.T) {
 	// (see abstractSignatureTokenConnectionPrepareMessage's EDDSA branch).
 	message := []byte("The quick brown fox jumps over the lazy dog")
 	toBeSigned := model.NewToBeSignedWithBytes(message)
-	signValue, err := signatureToken.SignWithSignatureAlgorithm(toBeSigned, enumerations.SignatureAlgorithm_ED25519, entry)
+	signValue, err := signatureToken.SignWithSignatureAlgorithm(toBeSigned, enumerations.SignatureAlgorithmED25519, entry)
 	if err != nil {
 		t.Fatalf("SignWithSignatureAlgorithm: %v", err)
 	}
@@ -425,7 +425,7 @@ func TestPkcs12SignatureTokenDSARoundTrip(t *testing.T) {
 
 	message := []byte("The quick brown fox jumps over the lazy dog")
 	toBeSigned := model.NewToBeSignedWithBytes(message)
-	signValue, err := signatureToken.Sign(toBeSigned, enumerations.DigestAlgorithm_SHA256, entry)
+	signValue, err := signatureToken.Sign(toBeSigned, enumerations.DigestAlgorithmSHA256, entry)
 	if err != nil {
 		t.Fatalf("Sign: %v", err)
 	}

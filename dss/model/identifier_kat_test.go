@@ -59,7 +59,7 @@ func TestDigestHexValueMatchesJava(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			digest := NewDigest(enumerations.DigestAlgorithm_SHA256, tc.value)
+			digest := NewDigest(enumerations.DigestAlgorithmSHA256, tc.value)
 			if got := digest.HexValue(); got != tc.want {
 				t.Errorf("HexValue() = %q, want %q", got, tc.want)
 			}
@@ -69,7 +69,7 @@ func TestDigestHexValueMatchesJava(t *testing.T) {
 
 // TestDigestBase64AndStringMatchJava pins Digest#getBase64Value and Digest#toString.
 func TestDigestBase64AndStringMatchJava(t *testing.T) {
-	digest := NewDigest(enumerations.DigestAlgorithm_SHA256, identifierKATSHA256(t, "hello"))
+	digest := NewDigest(enumerations.DigestAlgorithmSHA256, identifierKATSHA256(t, "hello"))
 	if got, want := digest.Base64Value(), "LPJNul+wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCQ="; got != want {
 		t.Errorf("Base64Value() = %q, want %q", got, want)
 	}
@@ -110,7 +110,7 @@ func TestIdentifierPrefixesAndXmlIDMatchJava(t *testing.T) {
 			if got, want := tc.identifier.String(), tc.className+":SHA256:#"+helloHex; got != want {
 				t.Errorf("String() = %q, want %q", got, want)
 			}
-			if got, want := tc.identifier.DigestID().Algorithm(), enumerations.DigestAlgorithm_SHA256; got != want {
+			if got, want := tc.identifier.DigestID().Algorithm(), enumerations.DigestAlgorithmSHA256; got != want {
 				t.Errorf("DigestID().Algorithm() = %q, want %q", got, want)
 			}
 		})
@@ -126,7 +126,7 @@ func TestX500NameIdentifierPrefixMatchesJava(t *testing.T) {
 		t.Fatalf("NewX500Principal: %v", err)
 	}
 	identifier := NewX500NameIdentifier(principal)
-	digest := NewDigest(enumerations.DigestAlgorithm_SHA256, identifierKATSHA256Bytes(t, der))
+	digest := NewDigest(enumerations.DigestAlgorithmSHA256, identifierKATSHA256Bytes(t, der))
 	if got, want := identifier.AsXmlID(), "RDN-"+digest.HexValue(); got != want {
 		t.Errorf("AsXmlID() = %q, want %q", got, want)
 	}
@@ -193,7 +193,7 @@ func TestDataIdentifierDocumentBytesMatchJava(t *testing.T) {
 // instead of streaming its (absent) content.
 func TestDataIdentifierUsesDigestDocumentExistingDigest(t *testing.T) {
 	contentDigest := identifierKATSHA256(t, "content")
-	document := NewDigestDocumentFromValue(enumerations.DigestAlgorithm_SHA256, contentDigest)
+	document := NewDigestDocumentFromValue(enumerations.DigestAlgorithmSHA256, contentDigest)
 	identifier, err := NewDataIdentifierForDocument("abc", document)
 	if err != nil {
 		t.Fatalf("NewDataIdentifierForDocument: %v", err)
@@ -208,24 +208,24 @@ func TestDataIdentifierUsesDigestDocumentExistingDigest(t *testing.T) {
 // entry MultipleDigestIdentifier's constructor installs, and the on-demand digests.
 func TestMultipleDigestIdentifierCachesTheIdentifierDigest(t *testing.T) {
 	identifier := NewEncapsulatedRevocationTokenIdentifier[identifierKATRevocation]([]byte("hello"))
-	sha256Value, err := identifier.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	sha256Value, err := identifier.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue(SHA256): %v", err)
 	}
-	if got, want := NewDigest(enumerations.DigestAlgorithm_SHA256, sha256Value).HexValue(),
+	if got, want := NewDigest(enumerations.DigestAlgorithmSHA256, sha256Value).HexValue(),
 		"2CF24DBA5FB0A30E26E83B2AC5B9E29E1B161E5C1FA7425E73043362938B9824"; got != want {
 		t.Errorf("SHA-256 DigestValue = %q, want %q", got, want)
 	}
 	// SHA-1 of "hello", computed independently.
-	sha1Value, err := identifier.DigestValue(enumerations.DigestAlgorithm_SHA1)
+	sha1Value, err := identifier.DigestValue(enumerations.DigestAlgorithmSHA1)
 	if err != nil {
 		t.Fatalf("DigestValue(SHA1): %v", err)
 	}
-	if got, want := NewDigest(enumerations.DigestAlgorithm_SHA1, sha1Value).HexValue(),
+	if got, want := NewDigest(enumerations.DigestAlgorithmSHA1, sha1Value).HexValue(),
 		"AAF4C61DDCC5E8A2DABEDE0F3B482CD9AEA9434D"; got != want {
 		t.Errorf("SHA-1 DigestValue = %q, want %q", got, want)
 	}
-	matched, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithm_SHA1, sha1Value))
+	matched, err := identifier.IsMatch(NewDigest(enumerations.DigestAlgorithmSHA1, sha1Value))
 	if err != nil {
 		t.Fatalf("IsMatch: %v", err)
 	}
@@ -261,7 +261,7 @@ func TestEntityIdentifierBuilderBinaryLayoutMatchesJava(t *testing.T) {
 		t.Errorf("two nil inputs must produce empty binaries")
 	}
 	identifier := NewEntityIdentifierBuilder(key, principal).Build()
-	digest := NewDigest(enumerations.DigestAlgorithm_SHA256, identifierKATSHA256Bytes(t, both))
+	digest := NewDigest(enumerations.DigestAlgorithmSHA256, identifierKATSHA256Bytes(t, both))
 	if got, want := identifier.AsXmlID(), "EK-"+digest.HexValue(); got != want {
 		t.Errorf("AsXmlID() = %q, want %q", got, want)
 	}

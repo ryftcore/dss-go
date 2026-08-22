@@ -51,7 +51,7 @@ func NewLongTermAvailabilityAndIntegrityValidationMaterialCheck(i18nProvider *i1
 
 // BlockType returns the validating block type. Port of getBlockType().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) BlockType() jaxb.XmlBlockType {
-	return jaxb.XmlBlockType_LTA
+	return jaxb.XmlBlockTypeLTA
 }
 
 // Process performs the check. Port of process().
@@ -71,13 +71,13 @@ func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) Process() bool
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTAIVMP
+	return i18n.MessageTagArchLTAIVMP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTAIVMP_ANS
+	return i18n.MessageTagArchLTAIVMPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -356,22 +356,22 @@ func DSSASN1UtilsAlgorithmIdentifierFromATSHashIndex(atsHashIndexValue []byte) *
 // The table is a known-answer capture of that finder (bcpkix 1.78.1): the NIST OIDs (SHA-2,
 // SHA-3, SHAKE) and WHIRLPOOL carry no parameters, the older OIDs carry DERNull.
 var dssASN1UtilsDigestAlgorithmIdentifierParameters = map[enumerations.DigestAlgorithm]bool{
-	enumerations.DigestAlgorithm_SHA1:         true,
-	enumerations.DigestAlgorithm_SHA224:       false,
-	enumerations.DigestAlgorithm_SHA256:       false,
-	enumerations.DigestAlgorithm_SHA384:       false,
-	enumerations.DigestAlgorithm_SHA512:       false,
-	enumerations.DigestAlgorithm_SHA3_224:     false,
-	enumerations.DigestAlgorithm_SHA3_256:     false,
-	enumerations.DigestAlgorithm_SHA3_384:     false,
-	enumerations.DigestAlgorithm_SHA3_512:     false,
-	enumerations.DigestAlgorithm_SHAKE128:     false,
-	enumerations.DigestAlgorithm_SHAKE256:     false,
-	enumerations.DigestAlgorithm_SHAKE256_512: false,
-	enumerations.DigestAlgorithm_RIPEMD160:    true,
-	enumerations.DigestAlgorithm_MD2:          true,
-	enumerations.DigestAlgorithm_MD5:          true,
-	enumerations.DigestAlgorithm_WHIRLPOOL:    false,
+	enumerations.DigestAlgorithmSHA1:        true,
+	enumerations.DigestAlgorithmSHA224:      false,
+	enumerations.DigestAlgorithmSHA256:      false,
+	enumerations.DigestAlgorithmSHA384:      false,
+	enumerations.DigestAlgorithmSHA512:      false,
+	enumerations.DigestAlgorithmSHA3224:     false,
+	enumerations.DigestAlgorithmSHA3256:     false,
+	enumerations.DigestAlgorithmSHA3384:     false,
+	enumerations.DigestAlgorithmSHA3512:     false,
+	enumerations.DigestAlgorithmSHAKE128:    false,
+	enumerations.DigestAlgorithmSHAKE256:    false,
+	enumerations.DigestAlgorithmSHAKE256512: false,
+	enumerations.DigestAlgorithmRIPEMD160:   true,
+	enumerations.DigestAlgorithmMD2:         true,
+	enumerations.DigestAlgorithmMD5:         true,
+	enumerations.DigestAlgorithmWHIRLPOOL:   false,
 }
 
 // DSSASN1UtilsAlgorithmIdentifierForDigest returns the ASN.1 algorithm identifier structure
@@ -385,7 +385,7 @@ func DSSASN1UtilsAlgorithmIdentifierForDigest(digestAlgorithm enumerations.Diges
 	if err != nil {
 		return nil, err
 	}
-	if enumerations.DigestAlgorithm_SHAKE256_512 == digestAlgorithm {
+	if enumerations.DigestAlgorithmSHAKE256512 == digestAlgorithm {
 		// Special case, requiring the parameter definition.
 		return NewAlgorithmIdentifierWithParameters(oid, asn1ber.EncodeInteger(big.NewInt(512))), nil
 	}
@@ -443,7 +443,7 @@ func DSSASN1UtilsComputeSkiFromCertPublicKey(publicKey *model.PublicKey) ([]byte
 	if !item.IsUniversal(asn1ber.TagBitString) {
 		return nil, model.NewDSSError("Unable to compute ski from public key : subjectPublicKey is not a BIT STRING")
 	}
-	return dssASN1UtilsDigest(enumerations.DigestAlgorithm_SHA1, item.BitStringOctets())
+	return dssASN1UtilsDigest(enumerations.DigestAlgorithmSHA1, item.BitStringOctets())
 }
 
 // DSSASN1UtilsIsSkiEqual reports whether the provided ski matches the one computed from the
@@ -793,8 +793,8 @@ func DSSASN1UtilsIsAsn1EncodedSignatureValue(binaries []byte) bool {
 // concatenated (plain) R || S format when the encryption algorithm calls for it.
 // NOTE: used in XAdES and JAdES. Port of ensurePlainSignatureValue(EncryptionAlgorithm, byte[]).
 func DSSASN1UtilsEnsurePlainSignatureValue(algorithm enumerations.EncryptionAlgorithm, signatureValue []byte) ([]byte, error) {
-	if (enumerations.EncryptionAlgorithm_ECDSA == algorithm || enumerations.EncryptionAlgorithm_PLAIN_ECDSA == algorithm ||
-		enumerations.EncryptionAlgorithm_DSA == algorithm) && DSSASN1UtilsIsAsn1EncodedSignatureValue(signatureValue) {
+	if (enumerations.EncryptionAlgorithmECDSA == algorithm || enumerations.EncryptionAlgorithmPlainECDSA == algorithm ||
+		enumerations.EncryptionAlgorithmDSA == algorithm) && DSSASN1UtilsIsAsn1EncodedSignatureValue(signatureValue) {
 		return DSSASN1UtilsToPlainDSASignatureValue(signatureValue)
 	}
 	return signatureValue, nil

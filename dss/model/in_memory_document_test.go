@@ -52,7 +52,7 @@ func TestInMemoryDocumentDigestValueMatchesSHA256AndCaches(t *testing.T) {
 	doc := NewInMemoryDocument(data)
 
 	want := sha256.Sum256(data)
-	got, err := doc.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	got, err := doc.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}
@@ -61,7 +61,7 @@ func TestInMemoryDocumentDigestValueMatchesSHA256AndCaches(t *testing.T) {
 	}
 
 	// Second call must hit the cache and return the identical bytes.
-	got2, err := doc.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	got2, err := doc.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue (cached): %v", err)
 	}
@@ -72,7 +72,7 @@ func TestInMemoryDocumentDigestValueMatchesSHA256AndCaches(t *testing.T) {
 
 func TestInMemoryDocumentDigestUnsupportedAlgorithm(t *testing.T) {
 	doc := NewInMemoryDocument([]byte("data"))
-	if _, err := doc.DigestValue(enumerations.DigestAlgorithm_MD2); err == nil {
+	if _, err := doc.DigestValue(enumerations.DigestAlgorithmMD2); err == nil {
 		t.Fatal("expected error for unsupported digest algorithm MD2")
 	}
 }

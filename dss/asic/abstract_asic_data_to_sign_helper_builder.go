@@ -76,6 +76,6 @@ func (b *AbstractASiCDataToSignHelperBuilder) CreatePackageZip(documents []model
 	asicContent.SetContainerDocuments(documents)
 	packageZip.SetName(b.requireOverrides().GetDataPackageName(asicContent))
 
-	packageZip.SetMimeType(enumerations.MimeTypeEnum_ZIP)
+	packageZip.SetMimeType(enumerations.MimeTypeEnumZIP)
 	return packageZip
 }

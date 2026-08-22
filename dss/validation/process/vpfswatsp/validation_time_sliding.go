@@ -72,7 +72,7 @@ func NewValidationTimeSliding(i18nProvider *i18n.I18nProvider, token diagnostic.
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *ValidationTimeSliding) Title() i18n.MessageTag {
-	return i18n.MessageTag_VALIDATION_TIME_SLIDING
+	return i18n.MessageTagValidationTimeSliding
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -156,9 +156,9 @@ func (c *ValidationTimeSliding) InitChain() {
 			revocationDataRequired := revocationDataRequiredCheck.Process()
 			if revocationDataRequired {
 				revocationIssuerSunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(
-					enumerations.Context_REVOCATION, enumerations.SubContext_SIGNING_CERT)
+					enumerations.ContextRevocation, enumerations.SubContextSigningCert)
 				var certificateRevocationData []*diagnostic.CertificateRevocationWrapper
-				if enumerations.SubContext_SIGNING_CERT == subContext {
+				if enumerations.SubContextSigningCert == subContext {
 					certificateRevocationData = process.GetAcceptableRevocationDataForPSVIfExistOrReturnAll(
 						c.token, certificate, c.currentTime, c.bbbs, c.poe, revocationIssuerSunsetDateConstraint)
 				} else {
@@ -208,11 +208,11 @@ func (c *ValidationTimeSliding) InitChain() {
 				validationModel := c.policy.ValidationModel()
 				revocationReason := latestCompliantRevocation.Reason()
 				// NOTE : HYBRID model is treated as CHAIN for Signing Cert and as SHELL for CAs
-				if enumerations.ValidationModel_SHELL == validationModel ||
-					(enumerations.ValidationModel_HYBRID == validationModel &&
-						enumerations.SubContext_CA_CERTIFICATE == subContext) ||
-					enumerations.RevocationReason_KEY_COMPROMISE == revocationReason ||
-					enumerations.RevocationReason_UNSPECIFIED == revocationReason {
+				if enumerations.ValidationModelShell == validationModel ||
+					(enumerations.ValidationModelHybrid == validationModel &&
+						enumerations.SubContextCACertificate == subContext) ||
+					enumerations.RevocationReasonKeyCompromise == revocationReason ||
+					enumerations.RevocationReasonUnspecified == revocationReason {
 					c.controlTime = latestCompliantRevocation.RevocationDate()
 				}
 			} else {
@@ -230,7 +230,7 @@ func (c *ValidationTimeSliding) InitChain() {
 					*c.controlTime, c.context, subContext, c.policy)
 				execute := rfc.Execute()
 				if execute.Conclusion != nil &&
-					enumerations.Indication_FAILED == execute.Conclusion.Indication.Indication() {
+					enumerations.IndicationFailed == execute.Conclusion.Indication.Indication() {
 					thisUpdate := latestCompliantRevocation.ThisUpdate()
 					if thisUpdate.Before(*c.controlTime) {
 						c.controlTime = thisUpdate
@@ -304,9 +304,9 @@ func (c *ValidationTimeSliding) AddAdditionalInfo() {
 // subContext ports the private getSubContext(CertificateWrapper).
 func (c *ValidationTimeSliding) subContext(certificate *diagnostic.CertificateWrapper) enumerations.SubContext {
 	if c.token.SigningCertificate().Id() == certificate.Id() {
-		return enumerations.SubContext_SIGNING_CERT
+		return enumerations.SubContextSigningCert
 	}
-	return enumerations.SubContext_CA_CERTIFICATE
+	return enumerations.SubContextCACertificate
 }
 
 // reduceChainUntilFirstTrustAnchor ports the private

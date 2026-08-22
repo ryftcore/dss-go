@@ -19,7 +19,7 @@ func TestSignaturePolicy_DefaultConstructorIsImplicit(t *testing.T) {
 func TestSignaturePolicy_RoundTrip(t *testing.T) {
 	p := NewSignaturePolicyWithIdentifier("1.2.3.4")
 	doc := model.NewInMemoryDocument([]byte("policy"))
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte{1, 2, 3})
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3})
 	userNotice := model.NewUserNotice()
 	userNotice.SetExplicitText("read me")
 	docSpec := model.NewSpDocSpecification()

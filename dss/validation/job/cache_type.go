@@ -5,10 +5,10 @@ package job
 type CacheType string
 
 const (
-	// CacheType_DOWNLOAD is the download task cache.
-	CacheType_DOWNLOAD CacheType = "DOWNLOAD"
-	// CacheType_PARSING is the parsing task cache.
-	CacheType_PARSING CacheType = "PARSING"
-	// CacheType_VALIDATION is the validation task cache.
-	CacheType_VALIDATION CacheType = "VALIDATION"
+	// CacheTypeDownload is the download task cache.
+	CacheTypeDownload CacheType = "DOWNLOAD"
+	// CacheTypeParsing is the parsing task cache.
+	CacheTypeParsing CacheType = "PARSING"
+	// CacheTypeValidation is the validation task cache.
+	CacheTypeValidation CacheType = "VALIDATION"
 )

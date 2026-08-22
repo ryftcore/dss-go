@@ -283,7 +283,7 @@ func newSha2LoaderUnderTest(t *testing.T, urlMap map[string]model.DSSDocument) (
 
 func sha2TestDigest(t *testing.T, document model.DSSDocument) string {
 	t.Helper()
-	digest, err := document.DigestValue(enumerations.DigestAlgorithm_SHA256)
+	digest, err := document.DigestValue(enumerations.DigestAlgorithmSHA256)
 	if err != nil {
 		t.Fatalf("DigestValue: %v", err)
 	}

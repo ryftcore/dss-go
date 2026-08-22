@@ -47,79 +47,79 @@ var eaaQualifs = func() [3][5][4]enumerations.EAAQualification {
 
 	// Passed
 
-	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_QEAA
-	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_QEAA
-	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_EAA
-	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationQEAA
+	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateQEAA
+	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationEAA
+	q[eaaQualPassedEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_PUBEAA
-	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_PUBEAA
-	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_EAA
-	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationPubEAA
+	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminatePubEAA
+	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationEAA
+	q[eaaQualPassedEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualPassedEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_EAA
-	q[eaaQualPassedEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualPassedEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_EAA
-	q[eaaQualPassedEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualPassedEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationEAA
+	q[eaaQualPassedEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualPassedEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationEAA
+	q[eaaQualPassedEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_UNKNOWN
-	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_UNKNOWN
-	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_UNKNOWN
-	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationUnknown
+	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateUnknown
+	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationUnknown
+	q[eaaQualPassedEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
 	// Indeterminate EAA
 
-	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_QEAA
-	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_QEAA
-	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationIndeterminateQEAA
+	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateQEAA
+	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualIndeterminateEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_PUBEAA
-	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_PUBEAA
-	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationIndeterminatePubEAA
+	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminatePubEAA
+	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualIndeterminateEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_EAA
-	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationIndeterminateEAA
+	q[eaaQualIndeterminateEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_UNKNOWN
-	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_UNKNOWN
-	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_INDETERMINATE_UNKNOWN
-	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationIndeterminateUnknown
+	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationIndeterminateUnknown
+	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationIndeterminateUnknown
+	q[eaaQualIndeterminateEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualIndeterminateEAA][eaaQualNotEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
 	// Not EAA
 
-	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualQEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualPUBEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualFailedEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualUnknownEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualIndeterminateQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualNotQualSigSeal] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualNotEAA][eaaQualNA] = enumerations.EAAQualificationNA
 
 	return q
 }()
@@ -130,17 +130,17 @@ var eaaQualifs = func() [3][5][4]enumerations.EAAQualification {
 var eaaPidQualifs = func() [3][3]enumerations.EAAQualification {
 	var q [3][3]enumerations.EAAQualification
 
-	q[eaaQualPassedEAA][eaaQualCertUsagePID] = enumerations.EAAQualification_PID
-	q[eaaQualPassedEAA][eaaQualCertUsageOther] = enumerations.EAAQualification_UNKNOWN
-	q[eaaQualPassedEAA][eaaQualCertUsageNA] = enumerations.EAAQualification_NA
+	q[eaaQualPassedEAA][eaaQualCertUsagePID] = enumerations.EAAQualificationPID
+	q[eaaQualPassedEAA][eaaQualCertUsageOther] = enumerations.EAAQualificationUnknown
+	q[eaaQualPassedEAA][eaaQualCertUsageNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualIndeterminateEAA][eaaQualCertUsagePID] = enumerations.EAAQualification_INDETERMINATE_PID
-	q[eaaQualIndeterminateEAA][eaaQualCertUsageOther] = enumerations.EAAQualification_INDETERMINATE_UNKNOWN
-	q[eaaQualIndeterminateEAA][eaaQualCertUsageNA] = enumerations.EAAQualification_NA
+	q[eaaQualIndeterminateEAA][eaaQualCertUsagePID] = enumerations.EAAQualificationIndeterminatePID
+	q[eaaQualIndeterminateEAA][eaaQualCertUsageOther] = enumerations.EAAQualificationIndeterminateUnknown
+	q[eaaQualIndeterminateEAA][eaaQualCertUsageNA] = enumerations.EAAQualificationNA
 
-	q[eaaQualFailedEAA][eaaQualCertUsagePID] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualCertUsageOther] = enumerations.EAAQualification_NOT_EAA
-	q[eaaQualFailedEAA][eaaQualCertUsageNA] = enumerations.EAAQualification_NA
+	q[eaaQualFailedEAA][eaaQualCertUsagePID] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualCertUsageOther] = enumerations.EAAQualificationNotEAA
+	q[eaaQualFailedEAA][eaaQualCertUsageNA] = enumerations.EAAQualificationNA
 
 	return q
 }()
@@ -165,11 +165,11 @@ func EAAQualificationMatrixGetPIDQualification(indication enumerations.Indicatio
 // getInt(Indication).
 func eaaQualificationMatrixGetIndicationInt(indication enumerations.Indication) int {
 	switch indication {
-	case enumerations.Indication_FAILED, enumerations.Indication_TOTAL_FAILED:
+	case enumerations.IndicationFailed, enumerations.IndicationTotalFailed:
 		return eaaQualFailedEAA
-	case enumerations.Indication_PASSED, enumerations.Indication_TOTAL_PASSED:
+	case enumerations.IndicationPassed, enumerations.IndicationTotalPassed:
 		return eaaQualPassedEAA
-	case enumerations.Indication_INDETERMINATE:
+	case enumerations.IndicationIndeterminate:
 		return eaaQualIndeterminateEAA
 	default:
 		panic(fmt.Sprintf("Unsupported indication %s", indication))
@@ -180,15 +180,15 @@ func eaaQualificationMatrixGetIndicationInt(indication enumerations.Indication) 
 // getInt(EAAQualification).
 func eaaQualificationMatrixGetEAAQualificationInt(eaaQualification enumerations.EAAQualification) int {
 	switch eaaQualification {
-	case enumerations.EAAQualification_QEAA:
+	case enumerations.EAAQualificationQEAA:
 		return eaaQualQEAA
-	case enumerations.EAAQualification_PUBEAA:
+	case enumerations.EAAQualificationPubEAA:
 		return eaaQualPUBEAA
-	case enumerations.EAAQualification_EAA:
+	case enumerations.EAAQualificationEAA:
 		return eaaQualEAA
-	case enumerations.EAAQualification_UNKNOWN:
+	case enumerations.EAAQualificationUnknown:
 		return eaaQualUnknownEAA
-	case enumerations.EAAQualification_NOT_EAA:
+	case enumerations.EAAQualificationNotEAA:
 		return eaaQualNotEAA
 	default:
 		panic(fmt.Sprintf("Unsupported EAA qualification %s", eaaQualification))
@@ -199,11 +199,11 @@ func eaaQualificationMatrixGetEAAQualificationInt(eaaQualification enumerations.
 // static getInt(SignatureQualification).
 func eaaQualificationMatrixGetSignatureQualificationInt(signatureQualification enumerations.SignatureQualification) int {
 	switch signatureQualification {
-	case enumerations.SignatureQualification_QESIG, enumerations.SignatureQualification_QESEAL:
+	case enumerations.SignatureQualificationQESig, enumerations.SignatureQualificationQESeal:
 		return eaaQualQualSigSeal
-	case enumerations.SignatureQualification_INDETERMINATE_QESIG, enumerations.SignatureQualification_INDETERMINATE_QESEAL:
+	case enumerations.SignatureQualificationIndeterminateQESig, enumerations.SignatureQualificationIndeterminateQESeal:
 		return eaaQualIndeterminateQualSigSeal
-	case enumerations.SignatureQualification_NA:
+	case enumerations.SignatureQualificationNA:
 		return eaaQualNA
 	default:
 		return eaaQualNotQualSigSeal
@@ -213,9 +213,9 @@ func eaaQualificationMatrixGetSignatureQualificationInt(signatureQualification e
 // eaaQualificationMatrixGetCertificateApprovalStatusInt ports the private
 // static getInt(CertificateApprovalStatus).
 func eaaQualificationMatrixGetCertificateApprovalStatusInt(certificateApprovalStatus enumerations.CertificateApprovalStatus) int {
-	if enumerations.CertificateApprovalStatusEnum_PID_PROVIDER == certificateApprovalStatus {
+	if enumerations.CertificateApprovalStatusEnumPIDProvider == certificateApprovalStatus {
 		return eaaQualCertUsagePID
-	} else if enumerations.CertificateApprovalStatusEnum_NA == certificateApprovalStatus {
+	} else if enumerations.CertificateApprovalStatusEnumNA == certificateApprovalStatus {
 		return eaaQualCertUsageNA
 	}
 	return eaaQualCertUsageOther

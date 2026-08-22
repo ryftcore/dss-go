@@ -5,30 +5,30 @@ package enumerations
 type CertificateType string
 
 const (
-	// CertificateType_ESIGN is for electronic signature.
-	CertificateType_ESIGN CertificateType = "ESIGN"
-	// CertificateType_ESEAL is for electronic seal.
-	CertificateType_ESEAL CertificateType = "ESEAL"
-	// CertificateType_WSA is for Web authentication.
-	CertificateType_WSA CertificateType = "WSA"
-	// CertificateType_UNKNOWN is unknown.
-	CertificateType_UNKNOWN CertificateType = "UNKNOWN"
+	// CertificateTypeESign is for electronic signature.
+	CertificateTypeESign CertificateType = "ESIGN"
+	// CertificateTypeESeal is for electronic seal.
+	CertificateTypeESeal CertificateType = "ESEAL"
+	// CertificateTypeWSA is for Web authentication.
+	CertificateTypeWSA CertificateType = "WSA"
+	// CertificateTypeUnknown is unknown.
+	CertificateTypeUnknown CertificateType = "UNKNOWN"
 )
 
 var certificateTypeLabel = map[CertificateType]string{
-	CertificateType_ESIGN:   "eSig",
-	CertificateType_ESEAL:   "eSeal",
-	CertificateType_WSA:     "WSA",
-	CertificateType_UNKNOWN: "unknown",
+	CertificateTypeESign:   "eSig",
+	CertificateTypeESeal:   "eSeal",
+	CertificateTypeWSA:     "WSA",
+	CertificateTypeUnknown: "unknown",
 }
 
 // CertificateTypeValues returns all constants in declaration order.
 func CertificateTypeValues() []CertificateType {
 	return []CertificateType{
-		CertificateType_ESIGN,
-		CertificateType_ESEAL,
-		CertificateType_WSA,
-		CertificateType_UNKNOWN,
+		CertificateTypeESign,
+		CertificateTypeESeal,
+		CertificateTypeWSA,
+		CertificateTypeUnknown,
 	}
 }
 

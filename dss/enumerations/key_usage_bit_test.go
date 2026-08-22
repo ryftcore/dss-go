@@ -8,15 +8,15 @@ func TestKeyUsageBitFields(t *testing.T) {
 		value      string
 		index, bit int
 	}{
-		{KeyUsageBit_DIGITAL_SIGNATURE, "digitalSignature", 0, 128},
-		{KeyUsageBit_NON_REPUDIATION, "nonRepudiation", 1, 64},
-		{KeyUsageBit_KEY_ENCIPHERMENT, "keyEncipherment", 2, 32},
-		{KeyUsageBit_DATA_ENCIPHERMENT, "dataEncipherment", 3, 16},
-		{KeyUsageBit_KEY_AGREEMENT, "keyAgreement", 4, 8},
-		{KeyUsageBit_KEY_CERT_SIGN, "keyCertSign", 5, 4},
-		{KeyUsageBit_CRL_SIGN, "crlSign", 6, 2},
-		{KeyUsageBit_ENCIPHER_ONLY, "encipherOnly", 7, 1},
-		{KeyUsageBit_DECIPHER_ONLY, "decipherOnly", 8, 32768},
+		{KeyUsageBitDigitalSignature, "digitalSignature", 0, 128},
+		{KeyUsageBitNonRepudiation, "nonRepudiation", 1, 64},
+		{KeyUsageBitKeyEncipherment, "keyEncipherment", 2, 32},
+		{KeyUsageBitDataEncipherment, "dataEncipherment", 3, 16},
+		{KeyUsageBitKeyAgreement, "keyAgreement", 4, 8},
+		{KeyUsageBitKeyCertSign, "keyCertSign", 5, 4},
+		{KeyUsageBitCRLSign, "crlSign", 6, 2},
+		{KeyUsageBitEncipherOnly, "encipherOnly", 7, 1},
+		{KeyUsageBitDecipherOnly, "decipherOnly", 8, 32768},
 	}
 	for _, c := range cases {
 		if got := c.v.Value(); got != c.value {

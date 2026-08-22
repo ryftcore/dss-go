@@ -217,12 +217,12 @@ func (s *PdfDssDictOCSPSource) revocationDataOriginsForBinary(
 	result := make([]enumerations.RevocationOrigin, 0)
 	tokenBinaryObjectIDs := s.compositeOCSPSource.TokenBinaryObjectIDs(ocspBinary)
 	if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(s.dssDictionary.OCSPs()), tokenBinaryObjectIDs) {
-		result = append(result, enumerations.RevocationOrigin_DSS_DICTIONARY)
+		result = append(result, enumerations.RevocationOriginDSSDictionary)
 	}
 	for _, vriDict := range PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
 		if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(vriDict.OCSPs()), tokenBinaryObjectIDs) {
-			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOrigin_VRI_DICTIONARY) {
-				result = append(result, enumerations.RevocationOrigin_VRI_DICTIONARY)
+			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOriginVRIDictionary) {
+				result = append(result, enumerations.RevocationOriginVRIDictionary)
 			}
 		}
 	}
@@ -253,12 +253,12 @@ func (s *PdfDssDictOCSPSource) revocationDataOriginsForToken(
 	result := make([]enumerations.RevocationOrigin, 0)
 	tokenObjectIDs := s.compositeOCSPSource.RevocationTokenIDs(ocspToken)
 	if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(s.dssDictionary.OCSPs()), tokenObjectIDs) {
-		result = append(result, enumerations.RevocationOrigin_DSS_DICTIONARY)
+		result = append(result, enumerations.RevocationOriginDSSDictionary)
 	}
 	for _, vriDict := range PAdESUtilsVRIsWithName(s.dssDictionary, s.relatedVRIDictionaryName) {
 		if utils.ContainsAny(pdfDssDictOCSPSourceSortedKeys(vriDict.OCSPs()), tokenObjectIDs) {
-			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOrigin_VRI_DICTIONARY) {
-				result = append(result, enumerations.RevocationOrigin_VRI_DICTIONARY)
+			if !pdfDssDictOCSPSourceContainsOrigin(result, enumerations.RevocationOriginVRIDictionary) {
+				result = append(result, enumerations.RevocationOriginVRIDictionary)
 			}
 		}
 	}

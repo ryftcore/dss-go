@@ -9,22 +9,22 @@ func TestCertificatePolicy(t *testing.T) {
 		description string
 		oid         string
 	}{
-		{CertificatePolicy_QCP_PUBLIC, "qcp-public", "0.4.0.1456.1.2"},
-		{CertificatePolicy_QCP_PUBLIC_WITH_SSCD, "qcp-public-with-sscd", "0.4.0.1456.1.1"},
-		{CertificatePolicy_NCP, "normalized-certificate-policy", "0.4.0.2042.1.1"},
-		{CertificatePolicy_NCPP, "normalized-certificate-policy-sscd", "0.4.0.2042.1.2"},
-		{CertificatePolicy_LCP, "lightweight-certificate-policy", "0.4.0.2042.1.3"},
-		{CertificatePolicy_EVCP, "extended-validation-certificate-policy", "0.4.0.2042.1.4"},
-		{CertificatePolicy_DVCP, "domain-validation-certificate-policy", "0.4.0.2042.1.6"},
-		{CertificatePolicy_OVCP, "organizational-validation-certificate-policy", "0.4.0.2042.1.7"},
-		{CertificatePolicy_IVCP, "individual-validation-certificate-policy", "0.4.0.2042.1.8"},
-		{CertificatePolicy_QCP_NATURAL, "qcp-natural", "0.4.0.194112.1.0"},
-		{CertificatePolicy_QCP_LEGAL, "qcp-legal", "0.4.0.194112.1.1"},
-		{CertificatePolicy_QCP_NATURAL_QSCD, "qcp-natural-qscd", "0.4.0.194112.1.2"},
-		{CertificatePolicy_QCP_LEGAL_QSCD, "qcp-legal-qscd", "0.4.0.194112.1.3"},
-		{CertificatePolicy_QCP_WEB, "qcp-web", "0.4.0.194112.1.4"},
-		{CertificatePolicy_QNCP_WEB, "qncp-web", "0.4.0.194112.1.5"},
-		{CertificatePolicy_QNCP_WEB_GEN, "qncp-web-gen", "0.4.0.194112.1.6"},
+		{CertificatePolicyQCPPublic, "qcp-public", "0.4.0.1456.1.2"},
+		{CertificatePolicyQCPPublicWithSSCD, "qcp-public-with-sscd", "0.4.0.1456.1.1"},
+		{CertificatePolicyNCP, "normalized-certificate-policy", "0.4.0.2042.1.1"},
+		{CertificatePolicyNCPP, "normalized-certificate-policy-sscd", "0.4.0.2042.1.2"},
+		{CertificatePolicyLCP, "lightweight-certificate-policy", "0.4.0.2042.1.3"},
+		{CertificatePolicyEVCP, "extended-validation-certificate-policy", "0.4.0.2042.1.4"},
+		{CertificatePolicyDVCP, "domain-validation-certificate-policy", "0.4.0.2042.1.6"},
+		{CertificatePolicyOVCP, "organizational-validation-certificate-policy", "0.4.0.2042.1.7"},
+		{CertificatePolicyIVCP, "individual-validation-certificate-policy", "0.4.0.2042.1.8"},
+		{CertificatePolicyQCPNatural, "qcp-natural", "0.4.0.194112.1.0"},
+		{CertificatePolicyQCPLegal, "qcp-legal", "0.4.0.194112.1.1"},
+		{CertificatePolicyQCPNaturalQSCD, "qcp-natural-qscd", "0.4.0.194112.1.2"},
+		{CertificatePolicyQCPLegalQSCD, "qcp-legal-qscd", "0.4.0.194112.1.3"},
+		{CertificatePolicyQCPWeb, "qcp-web", "0.4.0.194112.1.4"},
+		{CertificatePolicyQNCPWeb, "qncp-web", "0.4.0.194112.1.5"},
+		{CertificatePolicyQNCPWebGen, "qncp-web-gen", "0.4.0.194112.1.6"},
 	}
 	if len(CertificatePolicyValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(CertificatePolicyValues()))

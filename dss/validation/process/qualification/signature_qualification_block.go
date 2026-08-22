@@ -101,7 +101,7 @@ func (c *SignatureQualificationBlock) InitSignatureQualificationBlock(overrides 
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *SignatureQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIG_QUALIFICATION
+	return i18n.MessageTagSigQualification
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -240,7 +240,7 @@ func (c *SignatureQualificationBlock) InitChain() {
 // Port of getCertQualificationAtIssuanceTimeBlock(List).
 func (c *SignatureQualificationBlock) CertQualificationAtIssuanceTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME,
+	return NewCertQualificationAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
 		c.SigningCertificate, acceptableServices)
 }
 
@@ -249,7 +249,7 @@ func (c *SignatureQualificationBlock) CertQualificationAtIssuanceTimeBlock(
 // Port of getCertQualificationAtSigningTimeBlock(List, Date).
 func (c *SignatureQualificationBlock) CertQualificationAtSigningTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper, signingTime time.Time) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeBlock(c.I18nProvider, enumerations.ValidationTime_BEST_SIGNATURE_TIME, &signingTime,
+	return NewCertQualificationAtTimeBlock(c.I18nProvider, enumerations.ValidationTimeBESTSignatureTime, &signingTime,
 		c.SigningCertificate, acceptableServices)
 }
 
@@ -284,7 +284,7 @@ func (c *SignatureQualificationBlock) CollectAdditionalMessages(conclusion *jaxb
 
 // determineFinalQualification ports the private determineFinalQualification().
 func (c *SignatureQualificationBlock) determineFinalQualification() {
-	sigQualif := enumerations.SignatureQualification_NA
+	sigQualif := enumerations.SignatureQualificationNA
 
 	if c.Etsi319102Conclusion != nil && c.qualificationAtIssuanceTime != "" && c.qualificationAtSigningTime != "" {
 		certificateQualificationCalculator := NewFinalCertificateQualificationCalculator(
@@ -302,11 +302,11 @@ func (c *SignatureQualificationBlock) setIndication() {
 	if conclusion == nil {
 		return
 	}
-	indication := jaxb.IndicationValue(enumerations.Indication_PASSED)
+	indication := jaxb.IndicationValue(enumerations.IndicationPassed)
 	if len(conclusion.Errors) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
+		indication = jaxb.IndicationValue(enumerations.IndicationFailed)
 	} else if len(conclusion.Warnings) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
+		indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
 	}
 	conclusion.Indication = indication
 }

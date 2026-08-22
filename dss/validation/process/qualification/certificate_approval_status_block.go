@@ -64,7 +64,7 @@ func NewCertificateApprovalStatusBlock(i18nProvider *i18n.I18nProvider, building
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGES
+	return i18n.MessageTagCertUsages
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -173,7 +173,7 @@ func (c *CertificateApprovalStatusBlock) InitChain() {
 // Port of getCertUsageAtIssuanceTimeBlock(String, String, List).
 func (c *CertificateApprovalStatusBlock) getCertUsageAtIssuanceTimeBlock(listTypeUri, stiUri string,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
-	return NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME,
+	return NewCertificateApprovalStatusAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
 		c.SigningCertificate, listTypeUri, stiUri, acceptableServices)
 }
 
@@ -182,7 +182,7 @@ func (c *CertificateApprovalStatusBlock) getCertUsageAtIssuanceTimeBlock(listTyp
 // getCertUsageAtValidationTimeBlock(String, String, List).
 func (c *CertificateApprovalStatusBlock) getCertUsageAtValidationTimeBlock(listTypeUri, stiUri string,
 	acceptableServices []*diagnostic.TrustedEntityServiceWrapper) *CertificateApprovalStatusAtTimeBlock {
-	return NewCertificateApprovalStatusAtTimeBlock(c.I18nProvider, enumerations.ValidationTime_VALIDATION_TIME, &c.ValidationTime,
+	return NewCertificateApprovalStatusAtTimeBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &c.ValidationTime,
 		c.SigningCertificate, listTypeUri, stiUri, acceptableServices)
 }
 
@@ -281,11 +281,11 @@ func (c *CertificateApprovalStatusBlock) setIndication() {
 	if conclusion == nil {
 		return
 	}
-	indication := jaxb.IndicationValue(enumerations.Indication_PASSED)
+	indication := jaxb.IndicationValue(enumerations.IndicationPassed)
 	if len(conclusion.Errors) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
+		indication = jaxb.IndicationValue(enumerations.IndicationFailed)
 	} else if len(conclusion.Warnings) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
+		indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
 	}
 	conclusion.Indication = indication
 }

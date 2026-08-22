@@ -98,8 +98,8 @@ func (s *CMSOCSPSource) appendContainedOCSPResponses() error {
 		   ocspVals [1] SEQUENCE OF BasicOCSPResponse OPTIONAL,
 		   otherRevVals [2] OtherRevVals OPTIONAL}
 		*/
-		s.collectRevocationValues(s.UnsignedAttributes, OID_id_aa_ets_revocationValues,
-			enumerations.RevocationOrigin_REVOCATION_VALUES)
+		s.collectRevocationValues(s.UnsignedAttributes, OIDIdAaEtsRevocationValues,
+			enumerations.RevocationOriginRevocationValues)
 
 		/*
 		 * ETSI TS 101 733 V2.2.1 (2013-04) pages 39,41
@@ -115,16 +115,16 @@ func (s *CMSOCSPSource) appendContainedOCSPResponses() error {
 		 * AttributeRevocationRefs ::= SEQUENCE OF CrlOcspRef (the same as for
 		 * CompleteRevocationRefs)
 		 */
-		if err := s.collectRevocationRefs(s.UnsignedAttributes, OID_id_aa_ets_revocationRefs,
-			enumerations.RevocationRefOrigin_COMPLETE_REVOCATION_REFS); err != nil {
+		if err := s.collectRevocationRefs(s.UnsignedAttributes, OIDIdAaEtsRevocationRefs,
+			enumerations.RevocationRefOriginCompleteRevocationRefs); err != nil {
 			return err
 		}
 		/*
 		 * id-aa-ets-attrRevocationRefs OBJECT IDENTIFIER ::= { iso(1) member-body(2)
 		 * us(840) rsadsi(113549) pkcs(1) pkcs-9(9) smime(16) id-aa(2) 45}
 		 */
-		if err := s.collectRevocationRefs(s.UnsignedAttributes, OID_attributeRevocationRefsOid,
-			enumerations.RevocationRefOrigin_ATTRIBUTE_REVOCATION_REFS); err != nil {
+		if err := s.collectRevocationRefs(s.UnsignedAttributes, OIDAttributeRevocationRefsOid,
+			enumerations.RevocationRefOriginAttributeRevocationRefs); err != nil {
 			return err
 		}
 	}
@@ -174,7 +174,7 @@ func (s *CMSOCSPSource) addBasicOcspRespFromIDRIOcspResponse() error {
 			return err
 		}
 		ocspResponseIdentifier.SetASN1ObjectIdentifier(CMSObjectIdentifierIDRIOcspResponse)
-		s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOrigin_CMS_SIGNED_DATA)
+		s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOriginCMSSignedData)
 	}
 	return nil
 }
@@ -198,7 +198,7 @@ func (s *CMSOCSPSource) addBasicOcspRespFromIDPkixOcspBasic() error {
 				return err
 			}
 			ocspResponseIdentifier.SetASN1ObjectIdentifier(OCSPObjectIdentifierIDPkixOcspBasic)
-			s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOrigin_CMS_SIGNED_DATA)
+			s.AddBinary(ocspResponseIdentifier, enumerations.RevocationOriginCMSSignedData)
 		}
 		// Upstream logs "Unable to create an OCSP response from an objects. The entry is
 		// skipped." otherwise.

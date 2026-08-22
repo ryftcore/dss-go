@@ -100,7 +100,7 @@ type TokenBase struct {
 // Port of the protected Token() constructor. The concrete token must still call InitToken.
 func NewTokenBase() TokenBase {
 	return TokenBase{
-		signatureValidity:         enumerations.SignatureValidity_NOT_EVALUATED,
+		signatureValidity:         enumerations.SignatureValidityNotEvaluated,
 		signatureInvalidityReason: "",
 	}
 }
@@ -164,7 +164,7 @@ func (t *TokenBase) IsSignedByToken(token *CertificateToken) bool {
 func (t *TokenBase) IsSignedBy(publicKey *PublicKey) bool {
 	if t.publicKeyOfTheSigner != nil {
 		return t.publicKeyOfTheSigner.Equals(publicKey)
-	} else if enumerations.SignatureValidity_VALID == t.tokenBaseOverrides().CheckIsSignedBy(publicKey) {
+	} else if enumerations.SignatureValidityValid == t.tokenBaseOverrides().CheckIsSignedBy(publicKey) {
 		if !t.tokenBaseOverrides().IsSelfSigned() {
 			t.publicKeyOfTheSigner = publicKey
 		}
@@ -206,7 +206,7 @@ func (t *TokenBase) SetSignatureAlgorithm(signatureAlgorithm enumerations.Signat
 // been called first; the method returns false both when the check has not run and when the
 // signer's public key does not match. Port of isSignatureIntact().
 func (t *TokenBase) IsSignatureIntact() bool {
-	return enumerations.SignatureValidity_VALID == t.signatureValidity
+	return enumerations.SignatureValidityValid == t.signatureValidity
 }
 
 // IsValid reports whether the conditions corresponding to the token validity are met.

@@ -27,9 +27,9 @@ func TestManifestAttribute_KAT(t *testing.T) {
 		attr ManifestAttribute
 		name string
 	}{
-		{ManifestAttribute_VERSION, "version"},
-		{ManifestAttribute_FULL_PATH, "full-path"},
-		{ManifestAttribute_MEDIA_TYPE, "media-type"},
+		{ManifestAttributeVersion, "version"},
+		{ManifestAttributeFullPath, "full-path"},
+		{ManifestAttributeMediaType, "media-type"},
 	}
 	for _, c := range cases {
 		if got := c.attr.AttributeName(); got != c.name {
@@ -45,8 +45,8 @@ func TestManifestElement_KAT(t *testing.T) {
 		uri    string
 		prefix string
 	}{
-		{ManifestElement_MANIFEST, "manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0", "manifest"},
-		{ManifestElement_FILE_ENTRY, "file-entry", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0", "manifest"},
+		{ManifestElementManifest, "manifest", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0", "manifest"},
+		{ManifestElementFileEntry, "file-entry", "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0", "manifest"},
 	}
 	for _, c := range cases {
 		if got := c.elem.TagName(); got != c.tag {
@@ -69,15 +69,15 @@ func TestManifestElement_KAT(t *testing.T) {
 
 func TestManifestPath_KAT(t *testing.T) {
 	// FILE_ENTRY_PATH.getQueryString() = "./manifest:manifest/manifest:file-entry"
-	if got := ManifestPath_FILE_ENTRY_PATH.QueryString(); got != "./manifest:manifest/manifest:file-entry" {
-		t.Errorf("ManifestPath_FILE_ENTRY_PATH.QueryString() = %q, want %q",
+	if got := ManifestPathFileEntryPath.QueryString(); got != "./manifest:manifest/manifest:file-entry" {
+		t.Errorf("ManifestPathFileEntryPath.QueryString() = %q, want %q",
 			got, "./manifest:manifest/manifest:file-entry")
 	}
-	if ManifestPath_FILE_ENTRY_PATH.IsAll() {
-		t.Error("ManifestPath_FILE_ENTRY_PATH.IsAll() = true, want false")
+	if ManifestPathFileEntryPath.IsAll() {
+		t.Error("ManifestPathFileEntryPath.IsAll() = true, want false")
 	}
-	if !ManifestPath_FILE_ENTRY_PATH.IsFromCurrentPosition() {
-		t.Error("ManifestPath_FILE_ENTRY_PATH.IsFromCurrentPosition() = false, want true")
+	if !ManifestPathFileEntryPath.IsFromCurrentPosition() {
+		t.Error("ManifestPathFileEntryPath.IsFromCurrentPosition() = false, want true")
 	}
 
 	// getFullPathAttribute(NS) = "manifest:full-path"

@@ -40,13 +40,13 @@ func (c *PastRevocationDataValidationConclusiveCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastRevocationDataValidationConclusiveCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_DIURDSCHPVR
+	return i18n.MessageTagPSVDIURDSCHPVR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastRevocationDataValidationConclusiveCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_DIURDSCHPVR_ANS
+	return i18n.MessageTagPSVDIURDSCHPVRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

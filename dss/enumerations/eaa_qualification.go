@@ -6,44 +6,44 @@ package enumerations
 type EAAQualification string
 
 const (
-	// EAAQualification_QEAA is a Qualified electronic attestation of
+	// EAAQualificationQEAA is a Qualified electronic attestation of
 	// attributes as defined in Regulation EU 2024/1183, Article 45d.
-	EAAQualification_QEAA EAAQualification = "QEAA"
-	// EAAQualification_EAA is an Electronic attestation of attributes as
+	EAAQualificationQEAA EAAQualification = "QEAA"
+	// EAAQualificationEAA is an Electronic attestation of attributes as
 	// defined in Regulation EU 2024/1183, without a qualified status.
-	EAAQualification_EAA EAAQualification = "EAA"
-	// EAAQualification_PUBEAA is an Electronic attestation of attributes
+	EAAQualificationEAA EAAQualification = "EAA"
+	// EAAQualificationPubEAA is an Electronic attestation of attributes
 	// issued by or on behalf of a public sector body responsible for an
 	// authentic source as defined in Regulation EU 2024/1183, Article 45f.
-	EAAQualification_PUBEAA EAAQualification = "PUBEAA"
-	// EAAQualification_PID is Personal Identification Data (PID).
-	EAAQualification_PID EAAQualification = "PID"
-	// EAAQualification_UNKNOWN is an Electronic attestation of attributes
+	EAAQualificationPubEAA EAAQualification = "PUBEAA"
+	// EAAQualificationPID is Personal Identification Data (PID).
+	EAAQualificationPID EAAQualification = "PID"
+	// EAAQualificationUnknown is an Electronic attestation of attributes
 	// of unknown or conflicting status.
-	EAAQualification_UNKNOWN EAAQualification = "UNKNOWN"
-	// EAAQualification_INDETERMINATE_QEAA is an Indeterminate qualified
+	EAAQualificationUnknown EAAQualification = "UNKNOWN"
+	// EAAQualificationIndeterminateQEAA is an Indeterminate qualified
 	// electronic attestation of attributes as defined in Regulation EU
 	// 2024/1183, Article 45d.
-	EAAQualification_INDETERMINATE_QEAA EAAQualification = "INDETERMINATE_QEAA"
-	// EAAQualification_INDETERMINATE_EAA is an Indeterminate electronic
+	EAAQualificationIndeterminateQEAA EAAQualification = "INDETERMINATE_QEAA"
+	// EAAQualificationIndeterminateEAA is an Indeterminate electronic
 	// attestation of attributes as defined in Regulation EU 2024/1183,
 	// without a qualified status.
-	EAAQualification_INDETERMINATE_EAA EAAQualification = "INDETERMINATE_EAA"
-	// EAAQualification_INDETERMINATE_PUBEAA is an Indeterminate electronic
+	EAAQualificationIndeterminateEAA EAAQualification = "INDETERMINATE_EAA"
+	// EAAQualificationIndeterminatePubEAA is an Indeterminate electronic
 	// attestation of attributes issued by or on behalf of a public sector
 	// body responsible for an authentic source as defined in Regulation EU
 	// 2024/1183, Article 45f.
-	EAAQualification_INDETERMINATE_PUBEAA EAAQualification = "INDETERMINATE_PUBEAA"
-	// EAAQualification_INDETERMINATE_PID is Indeterminate Personal
+	EAAQualificationIndeterminatePubEAA EAAQualification = "INDETERMINATE_PUBEAA"
+	// EAAQualificationIndeterminatePID is Indeterminate Personal
 	// Identification Data (PID).
-	EAAQualification_INDETERMINATE_PID EAAQualification = "INDETERMINATE_PID"
-	// EAAQualification_INDETERMINATE_UNKNOWN is an Indeterminate electronic
+	EAAQualificationIndeterminatePID EAAQualification = "INDETERMINATE_PID"
+	// EAAQualificationIndeterminateUnknown is an Indeterminate electronic
 	// attestation of attributes of unknown or conflicting status.
-	EAAQualification_INDETERMINATE_UNKNOWN EAAQualification = "INDETERMINATE_UNKNOWN"
-	// EAAQualification_NOT_EAA is Not electronic attestation of attributes.
-	EAAQualification_NOT_EAA EAAQualification = "NOT_EAA"
-	// EAAQualification_NA is Not Applicable.
-	EAAQualification_NA EAAQualification = "NA"
+	EAAQualificationIndeterminateUnknown EAAQualification = "INDETERMINATE_UNKNOWN"
+	// EAAQualificationNotEAA is Not electronic attestation of attributes.
+	EAAQualificationNotEAA EAAQualification = "NOT_EAA"
+	// EAAQualificationNA is Not Applicable.
+	EAAQualificationNA EAAQualification = "NA"
 )
 
 type eaaQualificationFields struct {
@@ -55,35 +55,35 @@ type eaaQualificationFields struct {
 // eaaQualificationData holds the (readable, label, uri) tuple for each
 // constant.
 var eaaQualificationData = map[EAAQualification]eaaQualificationFields{
-	EAAQualification_QEAA:                  {"QEAA", "Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:QEAA"},
-	EAAQualification_EAA:                   {"EAA", "Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:EAA"},
-	EAAQualification_PUBEAA:                {"PuB-EAA", "Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:PUBEAA"},
-	EAAQualification_PID:                   {"PID", "Personal Identification Data", "urn:cef:dss:eaaQualification:PID"},
-	EAAQualification_UNKNOWN:               {"Unknown", "Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:Unknown"},
-	EAAQualification_INDETERMINATE_QEAA:    {"Indeterminate QEAA", "Indeterminate Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateQEAA"},
-	EAAQualification_INDETERMINATE_EAA:     {"Indeterminate EAA", "Indeterminate Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateEAA"},
-	EAAQualification_INDETERMINATE_PUBEAA:  {"Indeterminate Pub-EAA", "Indeterminate Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:indeterminatePUBEAA"},
-	EAAQualification_INDETERMINATE_PID:     {"Indeterminate PID", "Indeterminate Personal Identification Data", "urn:cef:dss:eaaQualification:indeterminatePID"},
-	EAAQualification_INDETERMINATE_UNKNOWN: {"Indeterminate Unknown", "Indeterminate Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:indeterminateUnknown"},
-	EAAQualification_NOT_EAA:               {"Not EAA", "Not Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:NOTEAA"},
-	EAAQualification_NA:                    {"N/A", "Not applicable", "urn:cef:dss:eaaQualification:NA"},
+	EAAQualificationQEAA:                 {"QEAA", "Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:QEAA"},
+	EAAQualificationEAA:                  {"EAA", "Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:EAA"},
+	EAAQualificationPubEAA:               {"PuB-EAA", "Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:PUBEAA"},
+	EAAQualificationPID:                  {"PID", "Personal Identification Data", "urn:cef:dss:eaaQualification:PID"},
+	EAAQualificationUnknown:              {"Unknown", "Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:Unknown"},
+	EAAQualificationIndeterminateQEAA:    {"Indeterminate QEAA", "Indeterminate Qualified Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateQEAA"},
+	EAAQualificationIndeterminateEAA:     {"Indeterminate EAA", "Indeterminate Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:indeterminateEAA"},
+	EAAQualificationIndeterminatePubEAA:  {"Indeterminate Pub-EAA", "Indeterminate Electronic Attestation of Attributes issued by or on behalf of a public sector body", "urn:cef:dss:eaaQualification:indeterminatePUBEAA"},
+	EAAQualificationIndeterminatePID:     {"Indeterminate PID", "Indeterminate Personal Identification Data", "urn:cef:dss:eaaQualification:indeterminatePID"},
+	EAAQualificationIndeterminateUnknown: {"Indeterminate Unknown", "Indeterminate Electronic Attestation of Attributes of unknown type", "urn:cef:dss:eaaQualification:indeterminateUnknown"},
+	EAAQualificationNotEAA:               {"Not EAA", "Not Electronic Attestation of Attributes", "urn:cef:dss:eaaQualification:NOTEAA"},
+	EAAQualificationNA:                   {"N/A", "Not applicable", "urn:cef:dss:eaaQualification:NA"},
 }
 
 // EAAQualificationValues returns all constants in declaration order.
 func EAAQualificationValues() []EAAQualification {
 	return []EAAQualification{
-		EAAQualification_QEAA,
-		EAAQualification_EAA,
-		EAAQualification_PUBEAA,
-		EAAQualification_PID,
-		EAAQualification_UNKNOWN,
-		EAAQualification_INDETERMINATE_QEAA,
-		EAAQualification_INDETERMINATE_EAA,
-		EAAQualification_INDETERMINATE_PUBEAA,
-		EAAQualification_INDETERMINATE_PID,
-		EAAQualification_INDETERMINATE_UNKNOWN,
-		EAAQualification_NOT_EAA,
-		EAAQualification_NA,
+		EAAQualificationQEAA,
+		EAAQualificationEAA,
+		EAAQualificationPubEAA,
+		EAAQualificationPID,
+		EAAQualificationUnknown,
+		EAAQualificationIndeterminateQEAA,
+		EAAQualificationIndeterminateEAA,
+		EAAQualificationIndeterminatePubEAA,
+		EAAQualificationIndeterminatePID,
+		EAAQualificationIndeterminateUnknown,
+		EAAQualificationNotEAA,
+		EAAQualificationNA,
 	}
 }
 

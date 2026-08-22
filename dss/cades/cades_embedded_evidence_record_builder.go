@@ -168,7 +168,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecord(evidenceRecordDoc
 
 	embeddedEvidenceRecordHelper := NewCAdESEmbeddedEvidenceRecordHelper(sig, unsignedAttribute)
 	if len(detachedContents) > 0 {
-		evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(enumerations.EvidenceRecordIncorporationType_EXTERNAL_EVIDENCE_RECORD)
+		evidenceRecordAnalyzer.SetEvidenceRecordIncorporationType(enumerations.EvidenceRecordIncorporationTypeExternalEvidenceRecord)
 		embeddedEvidenceRecordHelper.SetDetachedContents(detachedContents)
 	}
 	evidenceRecordAnalyzer.SetEmbeddedEvidenceRecordHelper(embeddedEvidenceRecordHelper)
@@ -189,7 +189,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) validateTimestamps(evidenceRecord v
 	validationContext.Validate()
 
 	signatureValidationAlerter := validation.NewSignatureValidationAlerter(validationContext)
-	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperation_ADD_EVIDENCE_RECORD)
+	signatureValidationAlerter.SetSigningOperation(enumerations.SigningOperationAddEvidenceRecord)
 	signatureValidationAlerter.AssertAllTimestampsValid()
 }
 
@@ -274,26 +274,26 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) getASN1EvidenceRecord(evidenceRecor
 // #getEvidenceRecordUnsignedPropertyOID(CAdESSignature).
 func (b *CAdESEmbeddedEvidenceRecordBuilder) getEvidenceRecordUnsignedPropertyOID(sig *CAdESSignature) asn1.ObjectIdentifier {
 	if sig.CMS().IsDetachedSignature() {
-		return spi.OID_id_aa_er_external
+		return spi.OIDIdAaErExternal
 	}
-	return spi.OID_id_aa_er_internal
+	return spi.OIDIdAaErInternal
 }
 
 // assertEvidenceRecordValid ports the private #assertEvidenceRecordValid(EvidenceRecord,
 // CAdESEvidenceRecordIncorporationParameters).
 func (b *CAdESEmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceRecord validation.EvidenceRecord,
 	parameters *CAdESEvidenceRecordIncorporationParameters) error {
-	if enumerations.EvidenceRecordTypeEnum_ASN1_EVIDENCE_RECORD != evidenceRecord.EvidenceRecordType() {
+	if enumerations.EvidenceRecordTypeEnumASN1EvidenceRecord != evidenceRecord.EvidenceRecordType() {
 		return exception.NewIllegalInputException(fmt.Sprintf("Only RFC 4998 ERS type of Evidence Records is allowed "+
 			"for CAdES signatures! Identified type of evidence record: '%s'", evidenceRecord.EvidenceRecordType()))
 	}
 	for _, referenceValidation := range evidenceRecord.ReferenceValidation() {
 		if !referenceValidation.IsIntact() {
 			switch referenceValidation.Type() {
-			case enumerations.DigestMatcherType_EVIDENCE_RECORD_MASTER_SIGNATURE:
+			case enumerations.DigestMatcherTypeEvidenceRecordMasterSignature:
 				return exception.NewIllegalInputException("The digest covered by the evidence record do not correspond to " +
 					"the digest computed on the signature!")
-			case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT:
+			case enumerations.DigestMatcherTypeEvidenceRecordArchiveObject:
 				if len(parameters.DetachedContents()) == 0 {
 					return exception.NewIllegalInputException("The digest covered by the evidence record do not correspond to " +
 						"the digest computed on the detached content! " +
@@ -301,7 +301,7 @@ func (b *CAdESEmbeddedEvidenceRecordBuilder) assertEvidenceRecordValid(evidenceR
 				}
 				return exception.NewIllegalInputException("The digest covered by the evidence record do not correspond to " +
 					"the digest computed on the detached content!")
-			case enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE:
+			case enumerations.DigestMatcherTypeEvidenceRecordOrphanReference:
 				// acceptable status
 			default:
 				panic(fmt.Sprintf("Unexpected digest matcher type '%s' does not correspond to the value present in "+

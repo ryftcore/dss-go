@@ -50,13 +50,13 @@ import (
 type XPathElementPlacement string
 
 const (
-	// XPathElementPlacement_XPathAfter inserts the signature after the element referenced by
+	// XPathElementPlacementXPathAfter inserts the signature after the element referenced by
 	// XPath.
-	XPathElementPlacement_XPathAfter XPathElementPlacement = "XPathAfter"
+	XPathElementPlacementXPathAfter XPathElementPlacement = "XPathAfter"
 
-	// XPathElementPlacement_XPathFirstChildOf inserts the signature as the first child of the
+	// XPathElementPlacementXPathFirstChildOf inserts the signature as the first child of the
 	// element referenced by XPath.
-	XPathElementPlacement_XPathFirstChildOf XPathElementPlacement = "XPathFirstChildOf"
+	XPathElementPlacementXPathFirstChildOf XPathElementPlacement = "XPathFirstChildOf"
 )
 
 // XAdESSignatureParameters defines SignatureParameters to deal with XAdES signature
@@ -164,11 +164,11 @@ func NewXAdESSignatureParameters() *XAdESSignatureParameters {
 		keyInfoCanonicalizationMethod:          xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 		signedInfoCanonicalizationMethod:       xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
 		signedPropertiesCanonicalizationMethod: xmlutils.XMLCanonicalizerDefaultDSSC14NMethod,
-		signingCertificateDigestMethod:         enumerations.DigestAlgorithm_SHA512,
+		signingCertificateDigestMethod:         enumerations.DigestAlgorithmSHA512,
 		xmldsigNamespace:                       common.XMLDSigNS,
-		xadesNamespace:                         common.NewDSSNamespace(definition.XAdESNamespace_XADES_132.Uri(), "xades"),
-		xades141Namespace:                      definition.XAdESNamespace_XADES_141,
-		tokenReferencesDigestAlgorithm:         enumerations.DigestAlgorithm_SHA512,
+		xadesNamespace:                         common.NewDSSNamespace(definition.XAdESNamespaceXAdES132.Uri(), "xades"),
+		xades141Namespace:                      definition.XAdESNamespaceXAdES141,
+		tokenReferencesDigestAlgorithm:         enumerations.DigestAlgorithmSHA512,
 	}
 }
 
@@ -177,7 +177,7 @@ func NewXAdESSignatureParameters() *XAdESSignatureParameters {
 // empty or not a XAdES level (IllegalArgumentException upstream).
 func (p *XAdESSignatureParameters) SetSignatureLevel(signatureLevel enumerations.SignatureLevel) {
 	form, err := signatureLevel.SignatureForm()
-	if signatureLevel == "" || err != nil || enumerations.SignatureForm_XAdES != form {
+	if signatureLevel == "" || err != nil || enumerations.SignatureFormXAdES != form {
 		panic("Only XAdES form is allowed !")
 	}
 	p.AbstractSignatureParameters.SetSignatureLevel(signatureLevel)
@@ -494,9 +494,9 @@ func (p *XAdESSignatureParameters) SetXadesNamespace(xadesNamespace *common.DSSN
 		panic("xadesNamespace must not be null")
 	}
 	uri := xadesNamespace.Uri()
-	if definition.XAdESNamespace_XADES_111.IsSameUri(uri) ||
-		definition.XAdESNamespace_XADES_122.IsSameUri(uri) ||
-		definition.XAdESNamespace_XADES_132.IsSameUri(uri) {
+	if definition.XAdESNamespaceXAdES111.IsSameUri(uri) ||
+		definition.XAdESNamespaceXAdES122.IsSameUri(uri) ||
+		definition.XAdESNamespaceXAdES132.IsSameUri(uri) {
 		p.xadesNamespace = xadesNamespace
 	} else {
 		panic("Not accepted URI")
@@ -518,7 +518,7 @@ func (p *XAdESSignatureParameters) SetXades141Namespace(xades141Namespace *commo
 		panic("xades141Namespace must not be null")
 	}
 	uri := xades141Namespace.Uri()
-	if !definition.XAdESNamespace_XADES_141.IsSameUri(uri) {
+	if !definition.XAdESNamespaceXAdES141.IsSameUri(uri) {
 		panic("Not accepted URI")
 	}
 	p.xades141Namespace = xades141Namespace

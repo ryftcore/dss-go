@@ -66,7 +66,7 @@ func containsSignatureScope(scopes []mscope.SignatureScope, target mscope.Signat
 func (f *EvidenceRecordScopeFinder) IsSignatureEmbeddedAndValid(evidenceRecord validation.EvidenceRecord) bool {
 	if evidenceRecord.IsEmbedded() {
 		for _, referenceValidation := range evidenceRecord.ReferenceValidation() {
-			if enumerations.DigestMatcherType_EVIDENCE_RECORD_MASTER_SIGNATURE == referenceValidation.Type() && referenceValidation.IsIntact() {
+			if enumerations.DigestMatcherTypeEvidenceRecordMasterSignature == referenceValidation.Type() && referenceValidation.IsIntact() {
 				return true
 			}
 		}
@@ -86,7 +86,7 @@ func (f *EvidenceRecordScopeFinder) FindEvidenceRecordScopeForReferences(referen
 	for _, referenceValidation := range referenceValidations {
 		if referenceValidation.IsIntact() {
 			switch referenceValidation.Type() {
-			case enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT:
+			case enumerations.DigestMatcherTypeEvidenceRecordArchiveObject:
 				var detachedDocument model.DSSDocument
 				if utils.CollectionSize(detachedContents) == 1 {
 					detachedDocument = detachedContents[0]
@@ -98,7 +98,7 @@ func (f *EvidenceRecordScopeFinder) FindEvidenceRecordScopeForReferences(referen
 					signatureScopes = append(signatureScopes, NewFullSignatureScope(fileName, detachedDocument))
 					coveredDocuments = append(coveredDocuments, detachedDocument) // do not add documents with the same digests
 				}
-			case enumerations.DigestMatcherType_EVIDENCE_RECORD_MASTER_SIGNATURE:
+			case enumerations.DigestMatcherTypeEvidenceRecordMasterSignature:
 				masterSignature := f.EvidenceRecord.MasterSignature()
 				signatureScopes = append(signatureScopes, NewEvidenceRecordMasterSignatureScope(masterSignature,
 					f.CreateDigestDocument(referenceValidation.Digest())))

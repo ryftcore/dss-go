@@ -10,20 +10,20 @@ import (
 // IsQCTypeEsign checks whether the certificate contains a QC for eSignature
 // qualifier (oid "0.4.0.1862.1.6.1"). Port of isQCTypeEsign(CertificateWrapper).
 func IsQCTypeEsign(certificate *diagnostic.CertificateWrapper) bool {
-	return hasQCTypeOID(certificate, enumerations.QCTypeEnum_QCT_ESIGN)
+	return hasQCTypeOID(certificate, enumerations.QCTypeEnumQCTESign)
 }
 
 // IsQCTypeEseal checks whether the certificate contains a QC for eSeal
 // qualifier (oid "0.4.0.1862.1.6.2"). Port of isQCTypeEseal(CertificateWrapper).
 func IsQCTypeEseal(certificate *diagnostic.CertificateWrapper) bool {
-	return hasQCTypeOID(certificate, enumerations.QCTypeEnum_QCT_ESEAL)
+	return hasQCTypeOID(certificate, enumerations.QCTypeEnumQCTESeal)
 }
 
 // IsQCTypeWeb checks whether the certificate contains a QC for Web
 // Authentication qualifier (oid "0.4.0.1862.1.6.3"). Port of
 // isQCTypeWeb(CertificateWrapper).
 func IsQCTypeWeb(certificate *diagnostic.CertificateWrapper) bool {
-	return hasQCTypeOID(certificate, enumerations.QCTypeEnum_QCT_WEB)
+	return hasQCTypeOID(certificate, enumerations.QCTypeEnumQCTWeb)
 }
 
 // hasQCTypeOID ports the private static hasQCTypeOID(CertificateWrapper, QCType).

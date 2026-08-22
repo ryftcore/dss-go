@@ -83,7 +83,7 @@ func NewRevocationAcceptanceChecker(i18nProvider *i18n.I18nProvider, certificate
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *RevocationAcceptanceChecker) Title() i18n.MessageTag {
-	return i18n.MessageTag_RAC
+	return i18n.MessageTagRAC
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -104,7 +104,7 @@ func (c *RevocationAcceptanceChecker) InitChain() {
 	 * certHash extension can be present in an OCSP Response. If present, a digest match indicates the OCSP
 	 * responder knows the certificate as we have it, and so also its revocation state
 	 */
-	if enumerations.RevocationType_OCSP == c.revocationData.RevocationType() {
+	if enumerations.RevocationTypeOCSP == c.revocationData.RevocationType() {
 
 		item = item.SetNextItem(c.issuerValidAtProductionTime())
 
@@ -125,9 +125,9 @@ func (c *RevocationAcceptanceChecker) InitChain() {
 	item = item.SetNextItem(c.revocationHasInformationAboutCertificate())
 
 	for _, revocationCertificate := range c.revocationData.CertificateChain() {
-		subContext := enumerations.SubContext_CA_CERTIFICATE
+		subContext := enumerations.SubContextCACertificate
 		if c.revocationData.SigningCertificate().Id() == revocationCertificate.Id() {
-			subContext = enumerations.SubContext_SIGNING_CERT
+			subContext = enumerations.SubContextSigningCert
 		}
 
 		if c.isTrustAnchor(revocationCertificate, subContext) {
@@ -230,16 +230,16 @@ func (c *RevocationAcceptanceChecker) revocationHasInformationAboutCertificate()
 
 // revocationDataIntact ports the private revocationDataIntact().
 func (c *RevocationAcceptanceChecker) revocationDataIntact() process.ChainItem[*jaxb.XmlRAC] {
-	constraint := c.policy.SignatureIntactConstraint(enumerations.Context_REVOCATION)
-	return cv.NewSignatureIntactCheck(c.I18nProvider, c.Result, c.revocationData, enumerations.Context_REVOCATION, constraint)
+	constraint := c.policy.SignatureIntactConstraint(enumerations.ContextRevocation)
+	return cv.NewSignatureIntactCheck(c.I18nProvider, c.Result, c.revocationData, enumerations.ContextRevocation, constraint)
 }
 
 // prospectiveCertificateChain ports the private
 // prospectiveCertificateChain(CertificateWrapper).
 func (c *RevocationAcceptanceChecker) prospectiveCertificateChain(
 	signingCertificate *diagnostic.CertificateWrapper) process.ChainItem[*jaxb.XmlRAC] {
-	constraint := c.policy.ProspectiveCertificateChainConstraint(enumerations.Context_REVOCATION)
-	return NewProspectiveCertificateChainCheck(c.I18nProvider, c.Result, signingCertificate, enumerations.Context_REVOCATION, constraint)
+	constraint := c.policy.ProspectiveCertificateChainConstraint(enumerations.ContextRevocation)
+	return NewProspectiveCertificateChainCheck(c.I18nProvider, c.Result, signingCertificate, enumerations.ContextRevocation, constraint)
 }
 
 // isTokenValidated ports the private isTokenValidated(TokenProxy).
@@ -252,8 +252,8 @@ func (c *RevocationAcceptanceChecker) isTokenValidated(token diagnostic.TokenPro
 // certificateIntact ports the private certificateIntact(CertificateWrapper).
 func (c *RevocationAcceptanceChecker) certificateIntact(
 	certificate *diagnostic.CertificateWrapper) process.ChainItem[*jaxb.XmlRAC] {
-	constraint := c.policy.SignatureIntactConstraint(enumerations.Context_CERTIFICATE)
-	return cv.NewSignatureIntactWithIdCheck(c.I18nProvider, c.Result, certificate, enumerations.Context_CERTIFICATE, constraint)
+	constraint := c.policy.SignatureIntactConstraint(enumerations.ContextCertificate)
+	return cv.NewSignatureIntactWithIdCheck(c.I18nProvider, c.Result, certificate, enumerations.ContextCertificate, constraint)
 }
 
 // selfSigned ports the private selfSigned(CertificateWrapper).
@@ -266,7 +266,7 @@ func (c *RevocationAcceptanceChecker) selfSigned(
 // revocationDataPresentForRevocationChain(CertificateWrapper, SubContext).
 func (c *RevocationAcceptanceChecker) revocationDataPresentForRevocationChain(
 	certificate *diagnostic.CertificateWrapper, subContext enumerations.SubContext) process.ChainItem[*jaxb.XmlRAC] {
-	constraint := c.policy.RevocationDataAvailableConstraint(enumerations.Context_REVOCATION, subContext)
+	constraint := c.policy.RevocationDataAvailableConstraint(enumerations.ContextRevocation, subContext)
 	return NewRevocationIssuerRevocationDataAvailableCheck(c.I18nProvider, c.Result, certificate, constraint)
 }
 
@@ -274,7 +274,7 @@ func (c *RevocationAcceptanceChecker) revocationDataPresentForRevocationChain(
 // checkCertificateRevocationSelectorResult(XmlCRS, SubContext).
 func (c *RevocationAcceptanceChecker) checkCertificateRevocationSelectorResult(crsResult *jaxb.XmlCRS,
 	subContext enumerations.SubContext) process.ChainItem[*jaxb.XmlRAC] {
-	constraint := c.policy.AcceptableRevocationDataFoundConstraint(enumerations.Context_REVOCATION, subContext)
+	constraint := c.policy.AcceptableRevocationDataFoundConstraint(enumerations.ContextRevocation, subContext)
 	return NewCertificateRevocationSelectorResultCheck(c.I18nProvider, c.Result, crsResult, constraint)
 }
 
@@ -282,15 +282,15 @@ func (c *RevocationAcceptanceChecker) checkCertificateRevocationSelectorResult(c
 // revocationDataRequired(CertificateWrapper, SubContext).
 func (c *RevocationAcceptanceChecker) revocationDataRequired(certificate *diagnostic.CertificateWrapper,
 	subContext enumerations.SubContext) *RevocationDataRequiredCheck[*jaxb.XmlRAC] {
-	constraint := c.policy.RevocationDataSkipConstraint(enumerations.Context_REVOCATION, subContext)
-	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.Context_REVOCATION, subContext)
+	constraint := c.policy.RevocationDataSkipConstraint(enumerations.ContextRevocation, subContext)
+	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.ContextRevocation, subContext)
 	return NewRevocationDataRequiredCheck(c.I18nProvider, c.Result, certificate, c.controlTime, sunsetDateConstraint, constraint)
 }
 
 // isTrustAnchor ports the private isTrustAnchor(CertificateWrapper, SubContext).
 func (c *RevocationAcceptanceChecker) isTrustAnchor(certificateWrapper *diagnostic.CertificateWrapper,
 	subContext enumerations.SubContext) bool {
-	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.Context_REVOCATION, subContext)
+	sunsetDateConstraint := c.policy.CertificateSunsetDateConstraint(enumerations.ContextRevocation, subContext)
 	return process.IsTrustAnchor(certificateWrapper, c.controlTime, sunsetDateConstraint)
 }
 

@@ -135,21 +135,21 @@ func (lta *XAdESLevelBaselineLTA) incorporateValidationDataForTimestampsFromCont
 	var validationData *validation.ValidationData
 	validationDataEncapsulationStrategy := lta.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_LT_SEPARATED:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated:
 		validationData = validationDataContainer.AllValidationDataForSignatureForInclusion(signature)
 		if err := lta.IncorporateTimestampValidationData(validationData, indent); err != nil {
 			return nil, err
 		}
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData:
 		validationData = validationDataContainer.ValidationDataForSignatureTimestampsForInclusion(signature)
 		if err := lta.IncorporateTimestampValidationData(validationData, indent); err != nil {
 			return nil, err
 		}
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_ANY_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData,
+		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
 		validationData = validation.NewValidationData()
 
 	default:
@@ -170,7 +170,7 @@ func (lta *XAdESLevelBaselineLTA) incorporateAnyValidationDataFromContainer(
 	var validationData *validation.ValidationData
 	validationDataEncapsulationStrategy := lta.ValidationDataEncapsulationStrategy()
 	switch validationDataEncapsulationStrategy {
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_AND_ANY_VALIDATION_DATA:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataAndAnyValidationData:
 		validationData = validationDataContainer.ValidationDataForSignatureForInclusion(signature)
 		validationData.AddValidationData(
 			validationDataContainer.ValidationDataForCounterSignaturesForInclusion(signature))
@@ -179,14 +179,14 @@ func (lta *XAdESLevelBaselineLTA) incorporateAnyValidationDataFromContainer(
 		validationData.ExcludeValidationData(validationDataToExclude)
 		return lta.IncorporateAnyValidationData(validationData, indent)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_ANY_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_ANY_VALIDATION_DATA_ONLY:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndAnyValidationData,
+		enumerations.ValidationDataEncapsulationStrategyAnyValidationDataOnly:
 		validationData = validationDataContainer.AllValidationDataForSignatureForInclusion(signature)
 		validationData.ExcludeValidationData(validationDataToExclude)
 		return lta.IncorporateAnyValidationData(validationData, indent)
 
-	case enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA,
-		enumerations.ValidationDataEncapsulationStrategy_CERTIFICATE_REVOCATION_VALUES_AND_TIMESTAMP_VALIDATION_DATA_LT_SEPARATED:
+	case enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationData,
+		enumerations.ValidationDataEncapsulationStrategyCertificateRevocationValuesAndTimestampValidationDataLTSeparated:
 		// skip
 		return nil
 
@@ -198,7 +198,7 @@ func (lta *XAdESLevelBaselineLTA) incorporateAnyValidationDataFromContainer(
 
 // assertExtendSignatureToLTAPossible ports the private assertExtendSignatureToLTAPossible.
 func (lta *XAdESLevelBaselineLTA) assertExtendSignatureToLTAPossible() error {
-	if enumerations.SignatureLevel_XAdES_BASELINE_LTA == lta.Params.SignatureLevel() {
+	if enumerations.SignatureLevelXAdESBaselineLTA == lta.Params.SignatureLevel() {
 		return lta.AssertDetachedDocumentsContainBinaries()
 	}
 	return nil

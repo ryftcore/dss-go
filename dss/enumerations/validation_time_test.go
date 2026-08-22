@@ -4,11 +4,11 @@ import "testing"
 
 func TestValidationTimeValues(t *testing.T) {
 	want := []ValidationTime{
-		ValidationTime_CERTIFICATE_ISSUANCE_TIME,
-		ValidationTime_BEST_SIGNATURE_TIME,
-		ValidationTime_VALIDATION_TIME,
-		ValidationTime_TIMESTAMP_GENERATION_TIME,
-		ValidationTime_TIMESTAMP_POE_TIME,
+		ValidationTimeCertificateIssuanceTime,
+		ValidationTimeBESTSignatureTime,
+		ValidationTimeValidationTime,
+		ValidationTimeTimestampGenerationTime,
+		ValidationTimeTimestampPOETime,
 	}
 	got := ValidationTimeValues()
 	if len(got) != len(want) {

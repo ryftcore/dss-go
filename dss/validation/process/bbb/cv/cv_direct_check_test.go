@@ -41,7 +41,7 @@ func newSingleCheckChain(
 }
 
 func (c *singleCheckChain) InitChain() {
-	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.Level_FAIL))
+	c.FirstItem = c.factory(c.Result, process.GetLevelRule(enumerations.LevelFail))
 }
 
 // assertDirectRow runs the single-item chain and compares it against the named
@@ -78,16 +78,16 @@ func assertDirectRow(t *testing.T, name string,
 func evidenceRecordDigestMatchers(dataFound, withOrphan bool) []*diagnosticjaxb.XmlDigestMatcher {
 	var digestMatchers []*diagnosticjaxb.XmlDigestMatcher
 	first := &diagnosticjaxb.XmlDigestMatcher{DataFound: dataFound, DataIntact: dataFound}
-	setDigestMatcherType(first, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	setDigestMatcherType(first, enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	first.DocumentName = ptr("doc.xml")
 	digestMatchers = append(digestMatchers, first)
 	second := &diagnosticjaxb.XmlDigestMatcher{DataFound: false, DataIntact: false}
-	setDigestMatcherType(second, enumerations.DigestMatcherType_EVIDENCE_RECORD_ARCHIVE_OBJECT)
+	setDigestMatcherType(second, enumerations.DigestMatcherTypeEvidenceRecordArchiveObject)
 	second.DocumentName = ptr("other.xml")
 	digestMatchers = append(digestMatchers, second)
 	if withOrphan {
 		orphan := &diagnosticjaxb.XmlDigestMatcher{DataFound: true, DataIntact: true}
-		setDigestMatcherType(orphan, enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE)
+		setDigestMatcherType(orphan, enumerations.DigestMatcherTypeEvidenceRecordOrphanReference)
 		digestMatchers = append(digestMatchers, orphan)
 	}
 	return digestMatchers
@@ -97,11 +97,11 @@ func evidenceRecordDigestMatchers(dataFound, withOrphan bool) []*diagnosticjaxb.
 // not found - the oracle's manifestEntries.
 func manifestEntries(firstFound, secondFound bool) []*diagnosticjaxb.XmlDigestMatcher {
 	first := &diagnosticjaxb.XmlDigestMatcher{DataFound: firstFound, DataIntact: firstFound}
-	setDigestMatcherType(first, enumerations.DigestMatcherType_MANIFEST_ENTRY)
+	setDigestMatcherType(first, enumerations.DigestMatcherTypeManifestEntry)
 	first.Uri = ptr("doc.xml")
 	first.DocumentName = ptr("doc.xml")
 	second := &diagnosticjaxb.XmlDigestMatcher{DataFound: secondFound, DataIntact: secondFound}
-	setDigestMatcherType(second, enumerations.DigestMatcherType_MANIFEST_ENTRY)
+	setDigestMatcherType(second, enumerations.DigestMatcherTypeManifestEntry)
 	second.Uri = ptr("other.xml")
 	second.DocumentName = ptr("renamed.xml")
 	return []*diagnosticjaxb.XmlDigestMatcher{first, second}

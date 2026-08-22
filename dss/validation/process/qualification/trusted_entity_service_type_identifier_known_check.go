@@ -40,24 +40,24 @@ func (c *TrustedEntityServiceTypeIdentifierKnownCheck) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *TrustedEntityServiceTypeIdentifierKnownCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_USAGE_STI, c.stiUri)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateUsageSti, c.stiUri)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustedEntityServiceTypeIdentifierKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STI_KNOWN
+	return i18n.MessageTagCertUsageStiKnown
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustedEntityServiceTypeIdentifierKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STI_ANS
+	return i18n.MessageTagCertUsageStiANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
 // getFailedIndicationForConclusion().
 func (c *TrustedEntityServiceTypeIdentifierKnownCheck) FailedIndicationForConclusion() enumerations.Indication {
-	return enumerations.Indication_FAILED
+	return enumerations.IndicationFailed
 }
 
 // FailedSubIndicationForConclusion gets a SubIndication in case of failure.

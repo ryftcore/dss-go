@@ -14,7 +14,7 @@ func TestSignaturePolicyValidationResult_RoundTrip(t *testing.T) {
 	r.SetAsn1Processable(true)
 	r.SetDigestAlgorithmsEqual(true)
 	r.SetDigestValid(true)
-	digest := model.NewDigest(enumerations.DigestAlgorithm_SHA256, []byte{1, 2, 3})
+	digest := model.NewDigest(enumerations.DigestAlgorithmSHA256, []byte{1, 2, 3})
 	r.SetDigest(digest)
 
 	if !r.IsIdentified() || !r.IsAsn1Processable() || !r.IsDigestAlgorithmsEqual() || !r.IsDigestValid() {

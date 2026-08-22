@@ -5,37 +5,37 @@ package enumerations
 type TimestampedObjectType string
 
 const (
-	// TimestampedObjectType_SIGNED_DATA is the original document (signed
+	// TimestampedObjectTypeSignedData is the original document (signed
 	// data).
-	TimestampedObjectType_SIGNED_DATA TimestampedObjectType = "SIGNED_DATA"
-	// TimestampedObjectType_SIGNATURE is a signature.
-	TimestampedObjectType_SIGNATURE TimestampedObjectType = "SIGNATURE"
-	// TimestampedObjectType_CERTIFICATE is a certificate.
-	TimestampedObjectType_CERTIFICATE TimestampedObjectType = "CERTIFICATE"
-	// TimestampedObjectType_REVOCATION is revocation data.
-	TimestampedObjectType_REVOCATION TimestampedObjectType = "REVOCATION"
-	// TimestampedObjectType_TIMESTAMP is a timestamp.
-	TimestampedObjectType_TIMESTAMP TimestampedObjectType = "TIMESTAMP"
-	// TimestampedObjectType_EVIDENCE_RECORD is an evidence record.
-	TimestampedObjectType_EVIDENCE_RECORD TimestampedObjectType = "EVIDENCE_RECORD"
-	// TimestampedObjectType_ORPHAN_CERTIFICATE is a not used certificate
+	TimestampedObjectTypeSignedData TimestampedObjectType = "SIGNED_DATA"
+	// TimestampedObjectTypeSignature is a signature.
+	TimestampedObjectTypeSignature TimestampedObjectType = "SIGNATURE"
+	// TimestampedObjectTypeCertificate is a certificate.
+	TimestampedObjectTypeCertificate TimestampedObjectType = "CERTIFICATE"
+	// TimestampedObjectTypeRevocation is revocation data.
+	TimestampedObjectTypeRevocation TimestampedObjectType = "REVOCATION"
+	// TimestampedObjectTypeTimestamp is a timestamp.
+	TimestampedObjectTypeTimestamp TimestampedObjectType = "TIMESTAMP"
+	// TimestampedObjectTypeEvidenceRecord is an evidence record.
+	TimestampedObjectTypeEvidenceRecord TimestampedObjectType = "EVIDENCE_RECORD"
+	// TimestampedObjectTypeOrphanCertificate is a not used certificate
 	// token.
-	TimestampedObjectType_ORPHAN_CERTIFICATE TimestampedObjectType = "ORPHAN_CERTIFICATE"
-	// TimestampedObjectType_ORPHAN_REVOCATION is a not used revocation
+	TimestampedObjectTypeOrphanCertificate TimestampedObjectType = "ORPHAN_CERTIFICATE"
+	// TimestampedObjectTypeOrphanRevocation is a not used revocation
 	// token.
-	TimestampedObjectType_ORPHAN_REVOCATION TimestampedObjectType = "ORPHAN_REVOCATION"
+	TimestampedObjectTypeOrphanRevocation TimestampedObjectType = "ORPHAN_REVOCATION"
 )
 
 // TimestampedObjectTypeValues returns all constants in declaration order.
 func TimestampedObjectTypeValues() []TimestampedObjectType {
 	return []TimestampedObjectType{
-		TimestampedObjectType_SIGNED_DATA,
-		TimestampedObjectType_SIGNATURE,
-		TimestampedObjectType_CERTIFICATE,
-		TimestampedObjectType_REVOCATION,
-		TimestampedObjectType_TIMESTAMP,
-		TimestampedObjectType_EVIDENCE_RECORD,
-		TimestampedObjectType_ORPHAN_CERTIFICATE,
-		TimestampedObjectType_ORPHAN_REVOCATION,
+		TimestampedObjectTypeSignedData,
+		TimestampedObjectTypeSignature,
+		TimestampedObjectTypeCertificate,
+		TimestampedObjectTypeRevocation,
+		TimestampedObjectTypeTimestamp,
+		TimestampedObjectTypeEvidenceRecord,
+		TimestampedObjectTypeOrphanCertificate,
+		TimestampedObjectTypeOrphanRevocation,
 	}
 }

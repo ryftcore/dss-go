@@ -652,13 +652,13 @@ func certificateExtensionsKATAssertCertificateExtensions(t *testing.T, certifica
 
 	// The aggregate must expose the very same objects the individual getters build.
 	if subjectAlternativeNames := CertificateExtensionsUtilsSubjectAlternativeNames(certificateToken); subjectAlternativeNames != nil &&
-		certificateExtensionsKATHasOID(want, enumerations.CertificateExtensionEnum_SUBJECT_ALTERNATIVE_NAME.OID()) {
+		certificateExtensionsKATHasOID(want, enumerations.CertificateExtensionEnumSubjectAlternativeName.OID()) {
 		aggregated := certificateExtensions.SubjectAlternativeNames()
 		if aggregated == nil || len(aggregated.GeneralNames()) != len(subjectAlternativeNames.GeneralNames()) {
 			t.Errorf("CertificateExtensions.SubjectAlternativeNames() disagrees with the direct getter")
 		}
 	}
-	if certificateExtensionsKATHasOID(want, enumerations.CertificateExtensionEnum_QC_STATEMENTS.OID()) {
+	if certificateExtensionsKATHasOID(want, enumerations.CertificateExtensionEnumQCStatements.OID()) {
 		if certificateExtensions.QcStatements() == nil && CertificateExtensionsUtilsQcStatements(certificateToken) != nil {
 			t.Errorf("CertificateExtensions.QcStatements() disagrees with the direct getter")
 		}

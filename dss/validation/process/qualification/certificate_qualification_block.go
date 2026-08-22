@@ -96,7 +96,7 @@ func (c *CertificateQualificationBlock) InitCertificateQualificationBlock(overri
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *CertificateQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_CERT_QUALIFICATION
+	return i18n.MessageTagCertQualification
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -194,7 +194,7 @@ func (c *CertificateQualificationBlock) InitChain() {
 // Port of getCertQualificationAtIssuanceTimeBlock(List).
 func (c *CertificateQualificationBlock) CertQualificationAtIssuanceTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTime_CERTIFICATE_ISSUANCE_TIME,
+	return NewCertQualificationAtTimeBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
 		c.SigningCertificate, acceptableServices)
 }
 
@@ -203,7 +203,7 @@ func (c *CertificateQualificationBlock) CertQualificationAtIssuanceTimeBlock(
 // getCertQualificationAtValidationTimeBlock(List).
 func (c *CertificateQualificationBlock) CertQualificationAtValidationTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
-	return NewCertQualificationAtTimeBlock(c.I18nProvider, enumerations.ValidationTime_VALIDATION_TIME, &c.ValidationTime,
+	return NewCertQualificationAtTimeBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &c.ValidationTime,
 		c.SigningCertificate, acceptableServices)
 }
 
@@ -229,11 +229,11 @@ func (c *CertificateQualificationBlock) setIndication() {
 	if conclusion == nil {
 		return
 	}
-	indication := jaxb.IndicationValue(enumerations.Indication_PASSED)
+	indication := jaxb.IndicationValue(enumerations.IndicationPassed)
 	if len(conclusion.Errors) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_FAILED)
+		indication = jaxb.IndicationValue(enumerations.IndicationFailed)
 	} else if len(conclusion.Warnings) > 0 {
-		indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
+		indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
 	}
 	conclusion.Indication = indication
 }

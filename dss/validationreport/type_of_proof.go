@@ -10,9 +10,9 @@ type TypeOfProof = jaxb.TypeOfProof
 
 // The TypeOfProof values, re-exported from jaxb.
 const (
-	TypeOfProof_VALIDATION = jaxb.TypeOfProof_VALIDATION
-	TypeOfProof_PROVIDED   = jaxb.TypeOfProof_PROVIDED
-	TypeOfProof_POLICY     = jaxb.TypeOfProof_POLICY
+	TypeOfProofValidation = jaxb.TypeOfProofValidation
+	TypeOfProofProvided   = jaxb.TypeOfProofProvided
+	TypeOfProofPolicy     = jaxb.TypeOfProofPolicy
 )
 
 // TypeOfProofValues returns all TypeOfProof constants in declaration order.

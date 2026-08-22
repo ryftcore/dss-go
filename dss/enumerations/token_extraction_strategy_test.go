@@ -7,22 +7,22 @@ func TestTokenExtractionStrategy(t *testing.T) {
 		v                                                      TokenExtractionStrategy
 		certificate, timestamp, revocationData, evidenceRecord bool
 	}{
-		{TokenExtractionStrategy_EXTRACT_ALL, true, true, true, true},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_ONLY, true, false, false, false},
-		{TokenExtractionStrategy_EXTRACT_TIMESTAMPS_ONLY, false, true, false, false},
-		{TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_ONLY, false, false, true, false},
-		{TokenExtractionStrategy_EXTRACT_EVIDENCE_RECORDS_ONLY, false, false, false, true},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS, true, true, false, false},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_EVIDENCE_RECORDS, true, false, false, true},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_EVIDENCE_RECORDS, true, true, false, true},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA, true, false, true, false},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_TIMESTAMPS_AND_REVOCATION_DATA, true, true, true, false},
-		{TokenExtractionStrategy_EXTRACT_CERTIFICATES_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS, true, false, true, true},
-		{TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA, false, true, true, false},
-		{TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_EVIDENCE_RECORDS, false, true, false, true},
-		{TokenExtractionStrategy_EXTRACT_REVOCATION_DATA_AND_EVIDENCE_RECORDS, false, false, true, true},
-		{TokenExtractionStrategy_EXTRACT_TIMESTAMPS_AND_REVOCATION_DATA_AND_EVIDENCE_RECORDS, false, true, true, true},
-		{TokenExtractionStrategy_NONE, false, false, false, false},
+		{TokenExtractionStrategyExtractAll, true, true, true, true},
+		{TokenExtractionStrategyExtractCertificatesOnly, true, false, false, false},
+		{TokenExtractionStrategyExtractTimestampsOnly, false, true, false, false},
+		{TokenExtractionStrategyExtractRevocationDataOnly, false, false, true, false},
+		{TokenExtractionStrategyExtractEvidenceRecordsOnly, false, false, false, true},
+		{TokenExtractionStrategyExtractCertificatesAndTimestamps, true, true, false, false},
+		{TokenExtractionStrategyExtractCertificatesAndEvidenceRecords, true, false, false, true},
+		{TokenExtractionStrategyExtractCertificatesAndTimestampsAndEvidenceRecords, true, true, false, true},
+		{TokenExtractionStrategyExtractCertificatesAndRevocationData, true, false, true, false},
+		{TokenExtractionStrategyExtractCertificatesAndTimestampsAndRevocationData, true, true, true, false},
+		{TokenExtractionStrategyExtractCertificatesAndRevocationDataAndEvidenceRecords, true, false, true, true},
+		{TokenExtractionStrategyExtractTimestampsAndRevocationData, false, true, true, false},
+		{TokenExtractionStrategyExtractTimestampsAndEvidenceRecords, false, true, false, true},
+		{TokenExtractionStrategyExtractRevocationDataAndEvidenceRecords, false, false, true, true},
+		{TokenExtractionStrategyExtractTimestampsAndRevocationDataAndEvidenceRecords, false, true, true, true},
+		{TokenExtractionStrategyNone, false, false, false, false},
 	}
 	if len(TokenExtractionStrategyValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(TokenExtractionStrategyValues()))

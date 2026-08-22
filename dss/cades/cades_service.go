@@ -103,7 +103,7 @@ func (s *CAdESService) GetContentTimestamp(toSignDocument model.DSSDocument,
 		panic(err)
 	}
 	timestampToken, err := validation.NewTimestampToken(timeStampResponse.Bytes(),
-		enumerations.TimestampType_CONTENT_TIMESTAMP)
+		enumerations.TimestampTypeContentTimestamp)
 	if err != nil {
 		panic(model.NewDSSErrorMessageCause("Cannot create a content TimestampToken", err))
 	}
@@ -162,7 +162,7 @@ func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 	}
 
 	originalCMS := s.originalCMS(toSignDocument, parameters)
-	if originalCMS == nil && enumerations.SignaturePackaging_DETACHED == packaging {
+	if originalCMS == nil && enumerations.SignaturePackagingDetached == packaging {
 		parameters.GetContext().SetDetachedContents([]model.DSSDocument{toSignDocument})
 	}
 	contentToSign := cadesServiceContentToSign(toSignDocument, parameters, originalCMS)
@@ -182,7 +182,7 @@ func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 	}
 
 	signatureLevel := parameters.SignatureLevel()
-	if enumerations.SignatureLevel_CAdES_BASELINE_B != signatureLevel {
+	if enumerations.SignatureLevelCAdESBaselineB != signatureLevel {
 		// Only the last signature will be extended
 		newSignerInformation := cadesServiceNewSignerInformation(originalCMS, signedCMS)
 		extension := s.extensionProfile(parameters)
@@ -195,7 +195,7 @@ func (s *CAdESService) SignDocument(toSignDocument model.DSSDocument, parameters
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileNameWithPackaging(toSignDocument, enumerations.SigningOperation_SIGN,
+	name, err := s.GetFinalFileNameWithPackaging(toSignDocument, enumerations.SigningOperationSign,
 		parameters.SignatureLevel(), parameters.SignaturePackaging())
 	if err != nil {
 		panic(err)
@@ -221,7 +221,7 @@ func (s *CAdESService) ExtendDocument(toExtendDocument model.DSSDocument,
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperation_EXTEND,
+	name, err := s.GetFinalFileNameWithLevel(toExtendDocument, enumerations.SigningOperationExtend,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -295,11 +295,11 @@ func (s *CAdESService) extensionProfile(parameters *CAdESSignatureParameters) CA
 	}
 	var cadesSignatureExtension CAdESSignatureExtender
 	switch signatureLevel {
-	case enumerations.SignatureLevel_CAdES_BASELINE_T:
+	case enumerations.SignatureLevelCAdESBaselineT:
 		cadesSignatureExtension = NewCAdESLevelBaselineT(s.TspSource, s.CertificateVerifier)
-	case enumerations.SignatureLevel_CAdES_BASELINE_LT:
+	case enumerations.SignatureLevelCAdESBaselineLT:
 		cadesSignatureExtension = NewCAdESLevelBaselineLT(s.TspSource, s.CertificateVerifier)
-	case enumerations.SignatureLevel_CAdES_BASELINE_LTA:
+	case enumerations.SignatureLevelCAdESBaselineLTA:
 		cadesSignatureExtension = NewCAdESLevelBaselineLTA(s.TspSource, s.CertificateVerifier)
 	default:
 		panic(fmt.Sprintf("Unsupported signature format '%s' for extension.", signatureLevel))
@@ -338,7 +338,7 @@ func cadesServiceStartsWithSequenceTag(dssDocument model.DSSDocument) bool {
 
 // cadesServiceAssertSignaturePossible ports the private assertSignaturePossible.
 func cadesServiceAssertSignaturePossible(originalCMS *cms.CMS, parameters *CAdESSignatureParameters) {
-	if originalCMS.IsDetachedSignature() != (enumerations.SignaturePackaging_DETACHED == parameters.SignaturePackaging()) {
+	if originalCMS.IsDetachedSignature() != (enumerations.SignaturePackagingDetached == parameters.SignaturePackaging()) {
 		panic(fmt.Sprintf("Unable to create a parallel signature with packaging '%s'"+
 			" which is different than the one used in the original signature!", parameters.SignaturePackaging()))
 	}
@@ -361,7 +361,7 @@ func (s *CAdESService) InitCMSBuilderHelper(contentToSign model.DSSDocument,
 // cadesServiceAssertSignaturePackaging checks that the packaging is supported for this kind of
 // signature. Port of the private assertSignaturePackaging.
 func cadesServiceAssertSignaturePackaging(packaging enumerations.SignaturePackaging) {
-	if packaging != enumerations.SignaturePackaging_ENVELOPING && packaging != enumerations.SignaturePackaging_DETACHED {
+	if packaging != enumerations.SignaturePackagingEnveloping && packaging != enumerations.SignaturePackagingDetached {
 		panic("Unsupported signature packaging: " + string(packaging))
 	}
 }
@@ -382,7 +382,7 @@ func (s *CAdESService) AddSignaturePolicyStore(doc model.DSSDocument,
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileNameWithLevel(doc, enumerations.SigningOperation_EXTEND, "")
+	name, err := s.GetFinalFileNameWithLevel(doc, enumerations.SigningOperationExtend, "")
 	if err != nil {
 		panic(err)
 	}
@@ -477,7 +477,7 @@ func (s *CAdESService) CounterSignSignature(signatureDocument model.DSSDocument,
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperation_COUNTER_SIGN,
+	name, err := s.GetFinalFileNameWithLevel(signatureDocument, enumerations.SigningOperationCounterSign,
 		parameters.SignatureLevel())
 	if err != nil {
 		panic(err)
@@ -512,7 +512,7 @@ func (s *CAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 	if err != nil {
 		panic(err)
 	}
-	name, err := s.GetFinalFileName(signatureDocument, enumerations.SigningOperation_ADD_EVIDENCE_RECORD)
+	name, err := s.GetFinalFileName(signatureDocument, enumerations.SigningOperationAddEvidenceRecord)
 	if err != nil {
 		panic(err)
 	}
@@ -523,7 +523,7 @@ func (s *CAdESService) AddSignatureEvidenceRecord(signatureDocument, evidenceRec
 
 // cadesServiceAssertCounterSignaturePossible ports the private assertCounterSignaturePossible.
 func cadesServiceAssertCounterSignaturePossible(parameters *CAdESCounterSignatureParameters) {
-	if enumerations.SignatureLevel_CAdES_BASELINE_B != parameters.SignatureLevel() {
+	if enumerations.SignatureLevelCAdESBaselineB != parameters.SignatureLevel() {
 		panic(fmt.Sprintf("A counter signature with a level '%s' is not supported! "+
 			"Please, use CAdES-BASELINE-B", parameters.SignatureLevel()))
 	}

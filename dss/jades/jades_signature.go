@@ -99,7 +99,7 @@ func (s *JAdESSignature) Jws() *JWS {
 
 // SignatureForm specifies the format of the signature. Port of getSignatureForm().
 func (s *JAdESSignature) SignatureForm() enumerations.SignatureForm {
-	return enumerations.SignatureForm_JAdES
+	return enumerations.SignatureFormJAdES
 }
 
 // SignatureAlgorithm retrieves the signature algorithm (or cipher) used for generating the
@@ -108,7 +108,7 @@ func (s *JAdESSignature) SignatureAlgorithm() enumerations.SignatureAlgorithm {
 	signatureAlgorithm := enumerations.SignatureAlgorithmForJWADefault(s.jws.AlgorithmHeaderValue(), "")
 	if signatureAlgorithm == "" {
 		// Upstream logs "SignatureAlgorithm '{}' is not supported!".
-	} else if enumerations.EncryptionAlgorithm_EDDSA == signatureAlgorithm.EncryptionAlgorithm() {
+	} else if enumerations.EncryptionAlgorithmEDDSA == signatureAlgorithm.EncryptionAlgorithm() {
 		signatureAlgorithm = spi.DSSUtilsEdDSASignatureAlgorithm(s.SignatureValue())
 	}
 	return signatureAlgorithm
@@ -329,7 +329,7 @@ func (s *JAdESSignature) CertifiedSignerRoles() []*signature.SignerRole {
 		for _, certifiedItem := range certified {
 			certifiedVal := jadesSignatureCertifiedVal(certifiedItem)
 			if utils.IsStringNotEmpty(certifiedVal) {
-				result = append(result, signature.NewSignerRole(certifiedVal, enumerations.EndorsementType_CERTIFIED))
+				result = append(result, signature.NewSignerRole(certifiedVal, enumerations.EndorsementTypeCertified))
 			}
 		}
 	}
@@ -361,7 +361,7 @@ func (s *JAdESSignature) ClaimedSignerRoles() []*signature.SignerRole {
 	if signerAttributes.Size() != 0 {
 		claimed := DSSJsonUtilsGetAsList(signerAttributes, JAdESHeaderParameterNamesClaimed)
 		if utils.IsCollectionNotEmpty(claimed) {
-			return jadesSignatureQArraySignerRoles(claimed, enumerations.EndorsementType_CLAIMED)
+			return jadesSignatureQArraySignerRoles(claimed, enumerations.EndorsementTypeClaimed)
 		}
 	}
 	return nil
@@ -374,7 +374,7 @@ func (s *JAdESSignature) SignedAssertions() []*signature.SignerRole {
 	if signerAttributes.Size() != 0 {
 		signedAssertions := DSSJsonUtilsGetAsList(signerAttributes, JAdESHeaderParameterNamesSignedAssertions)
 		if utils.IsCollectionNotEmpty(signedAssertions) {
-			return jadesSignatureQArraySignerRoles(signedAssertions, enumerations.EndorsementType_SIGNED)
+			return jadesSignatureQArraySignerRoles(signedAssertions, enumerations.EndorsementTypeSigned)
 		}
 	}
 	return nil
@@ -599,7 +599,7 @@ func (s *JAdESSignature) BuildSignatureDigestReference(digestAlgorithm enumerati
 func (s *JAdESSignature) DataToBeSignedRepresentation() model.Digest {
 	referenceValidations := s.ReferenceValidations()
 	for _, referenceValidation := range referenceValidations {
-		if enumerations.DigestMatcherType_JWS_SIGNING_INPUT == referenceValidation.Type() {
+		if enumerations.DigestMatcherTypeJWSSigningInput == referenceValidation.Type() {
 			if referenceValidation.IsFound() {
 				return referenceValidation.Digest()
 			}
@@ -637,7 +637,7 @@ func (s *JAdESSignature) CheckSignatureIntegrity() {
 		refsIntact = true
 
 		for _, referenceValidation := range referenceValidations {
-			if enumerations.DigestMatcherType_JWS_SIGNING_INPUT == referenceValidation.Type() {
+			if enumerations.DigestMatcherTypeJWSSigningInput == referenceValidation.Type() {
 				verification.SetSignatureIntact(referenceValidation.IsIntact())
 				for _, errorMessage := range referenceValidation.ErrorMessages() {
 					verification.SetErrorMessage(errorMessage)
@@ -693,7 +693,7 @@ func (s *JAdESSignature) ReferenceValidations() []*model.ReferenceValidation {
 // values, not panics, in this port) and is accordingly not reproduced with a second recover().
 func (s *JAdESSignature) signingInputReferenceValidation() *model.ReferenceValidation {
 	signatureValueReferenceValidation := model.NewReferenceValidation()
-	signatureValueReferenceValidation.SetType(enumerations.DigestMatcherType_JWS_SIGNING_INPUT)
+	signatureValueReferenceValidation.SetType(enumerations.DigestMatcherTypeJWSSigningInput)
 
 	encodedHeader := s.jws.EncodedHeader()
 	if utils.IsStringEmpty(encodedHeader) {
@@ -754,13 +754,13 @@ func (s *JAdESSignature) jadesSignaturePayload(signatureValueReferenceValidation
 		s.jws.SetPayloadOctets(payload)
 		signatureValueReferenceValidation.SetFound(len(s.DetachedContents()) == 1)
 
-	case sigDMechanism != nil && enumerations.SigDMechanism_HTTP_HEADERS == *sigDMechanism:
+	case sigDMechanism != nil && enumerations.SigDMechanismHTTPHeaders == *sigDMechanism:
 		// detached with HTTP_HEADERS mechanism
 		payload := s.payloadForHttpHeadersMechanism()
 		s.jws.SetPayloadOctets(payload)
 		signatureValueReferenceValidation.SetFound(payload != nil)
 
-	case sigDMechanism != nil && enumerations.SigDMechanism_OBJECT_ID_BY_URI == *sigDMechanism:
+	case sigDMechanism != nil && enumerations.SigDMechanismObjectIDByURI == *sigDMechanism:
 		// detached with OBJECT_ID_BY_URI mechanism
 		signedDataUriList := s.signedDataUriList()
 		payload := s.payloadForObjectIdByUriMechanism(signedDataUriList)
@@ -768,7 +768,7 @@ func (s *JAdESSignature) jadesSignaturePayload(signatureValueReferenceValidation
 		signatureValueReferenceValidation.SetFound(payload != nil)
 		signatureValueReferenceValidation.SetDataObjectReferences(signedDataUriList)
 
-	case sigDMechanism != nil && enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH == *sigDMechanism:
+	case sigDMechanism != nil && enumerations.SigDMechanismObjectIDByURIHash == *sigDMechanism:
 		// the sigD itself is signed with OBJECT_ID_BY_URI_HASH mechanism
 		signatureValueReferenceValidation.SetFound(true)
 
@@ -788,10 +788,10 @@ func (s *JAdESSignature) detachedReferenceValidations() []*model.ReferenceValida
 	sigDMechanism := s.SigDMechanism()
 	if sigDMechanism != nil {
 		switch *sigDMechanism {
-		case enumerations.SigDMechanism_HTTP_HEADERS, enumerations.SigDMechanism_OBJECT_ID_BY_URI:
+		case enumerations.SigDMechanismHTTPHeaders, enumerations.SigDMechanismObjectIDByURI:
 			// the documents are added to the payload, not possible to extract separate
 			// reference validations
-		case enumerations.SigDMechanism_OBJECT_ID_BY_URI_HASH:
+		case enumerations.SigDMechanismObjectIDByURIHash:
 			return s.referenceValidationsByUriHashMechanism()
 		default:
 			// Upstream logs "The SigDMechanism '{}' is not supported!".
@@ -952,7 +952,7 @@ func (s *JAdESSignature) referenceValidationsByUriHashMechanism() []*model.Refer
 	if len(signedDataHashMap) == 0 {
 		// Upstream logs "The SignedData has not been found or incorrect for detached content.".
 		emptyReference := model.NewReferenceValidation()
-		emptyReference.SetType(enumerations.DigestMatcherType_SIG_D_ENTRY)
+		emptyReference.SetType(enumerations.DigestMatcherTypeSigDEntry)
 		return []*model.ReferenceValidation{emptyReference}
 	}
 
@@ -967,7 +967,7 @@ func (s *JAdESSignature) referenceValidationsByUriHashMechanism() []*model.Refer
 		expectedDigestString := signedDataHashMap[signedDataName]
 
 		referenceValidation := model.NewReferenceValidation()
-		referenceValidation.SetType(enumerations.DigestMatcherType_SIG_D_ENTRY)
+		referenceValidation.SetType(enumerations.DigestMatcherTypeSigDEntry)
 		referenceValidation.SetUri(signedDataName)
 
 		expectedDigest := DSSJsonUtilsFromBase64Url(expectedDigestString)
@@ -1002,7 +1002,7 @@ func (s *JAdESSignature) referenceValidationsByUriHashMechanism() []*model.Refer
 	if utils.IsCollectionEmpty(detachedReferenceValidations) {
 		// add an empty reference if none found
 		referenceValidation := model.NewReferenceValidation()
-		referenceValidation.SetType(enumerations.DigestMatcherType_SIG_D_ENTRY)
+		referenceValidation.SetType(enumerations.DigestMatcherTypeSigDEntry)
 		detachedReferenceValidations = append(detachedReferenceValidations, referenceValidation)
 	}
 
@@ -1141,7 +1141,7 @@ func (s *JAdESSignature) isDocumentDigestMatch(document model.DSSDocument, diges
 // counterSignatureReferenceValidation ports the private getCounterSignatureReferenceValidation().
 func (s *JAdESSignature) counterSignatureReferenceValidation() *model.ReferenceValidation {
 	referenceValidation := model.NewReferenceValidation()
-	referenceValidation.SetType(enumerations.DigestMatcherType_COUNTER_SIGNED_SIGNATURE_VALUE)
+	referenceValidation.SetType(enumerations.DigestMatcherTypeCounterSignedSignatureValue)
 
 	masterSignature, _ := s.MasterSignature().(*JAdESSignature)
 	if masterSignature != nil {
@@ -1174,7 +1174,7 @@ func (s *JAdESSignature) counterSignatureReferenceValidation() *model.ReferenceV
 // Java DSSDocument#getDigest call this reaches is not guarded by a try/catch here.
 func (s *JAdESSignature) keyBindingSignatureReferenceValidation() *model.ReferenceValidation {
 	referenceValidation := model.NewReferenceValidation()
-	referenceValidation.SetType(enumerations.DigestMatcherType_EAA_KEY_BINDING)
+	referenceValidation.SetType(enumerations.DigestMatcherTypeEAAKeyBinding)
 
 	sdHash := s.sdHash()
 	if sdHash != nil {
@@ -1283,7 +1283,7 @@ func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err
 
 		referenceValidations := s.ReferenceValidations()
 		for _, referenceValidation := range referenceValidations {
-			if enumerations.DigestMatcherType_SIG_D_ENTRY == referenceValidation.Type() && referenceValidation.IsIntact() {
+			if enumerations.DigestMatcherTypeSigDEntry == referenceValidation.Type() && referenceValidation.IsIntact() {
 				detachedDocument := referenceValidation.Document()
 				if detachedDocument != nil {
 					originalDocuments = append(originalDocuments, detachedDocument)
@@ -1299,10 +1299,10 @@ func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err
 				if len(s.DetachedContents()) == 1 {
 					return []model.DSSDocument{s.DetachedContents()[0]}, nil
 
-				} else if sigDMechanism != nil && enumerations.SigDMechanism_HTTP_HEADERS == *sigDMechanism {
+				} else if sigDMechanism != nil && enumerations.SigDMechanismHTTPHeaders == *sigDMechanism {
 					return s.SignedDocumentsByHTTPHeaderName(), nil
 
-				} else if sigDMechanism != nil && enumerations.SigDMechanism_OBJECT_ID_BY_URI == *sigDMechanism {
+				} else if sigDMechanism != nil && enumerations.SigDMechanismObjectIDByURI == *sigDMechanism {
 					return s.SignedDocumentsForObjectIdByUriMechanism(), nil
 				}
 			}
@@ -1319,21 +1319,21 @@ func (s *JAdESSignature) OriginalDocuments() (documents []model.DSSDocument, err
 // Port of getDataFoundUpToLevel().
 func (s *JAdESSignature) DataFoundUpToLevel() enumerations.SignatureLevel {
 	if !s.HasAdESProfile() {
-		return enumerations.SignatureLevel_JSON_NOT_ETSI
+		return enumerations.SignatureLevelJSONNotETSI
 	}
 	if !s.HasBProfile() {
-		return enumerations.SignatureLevel_JAdES
+		return enumerations.SignatureLevelJAdES
 	}
 	if !s.HasTProfile() {
-		return enumerations.SignatureLevel_JAdES_BASELINE_B
+		return enumerations.SignatureLevelJAdESBaselineB
 	}
 	if s.HasLTProfile() {
 		if s.HasLTAProfile() {
-			return enumerations.SignatureLevel_JAdES_BASELINE_LTA
+			return enumerations.SignatureLevelJAdESBaselineLTA
 		}
-		return enumerations.SignatureLevel_JAdES_BASELINE_LT
+		return enumerations.SignatureLevelJAdESBaselineLT
 	}
-	return enumerations.SignatureLevel_JAdES_BASELINE_T
+	return enumerations.SignatureLevelJAdESBaselineT
 }
 
 // CreateBaselineRequirementsChecker instantiates a BaselineRequirementsChecker according to the

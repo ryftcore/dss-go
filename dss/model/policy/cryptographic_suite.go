@@ -81,7 +81,7 @@ type CryptographicSuite interface {
 	// level for checking algorithms expiration after the validation
 	// policy update.
 	//
-	// Default: Level_WARN (warning message is returned in case of
+	// Default: LevelWarn (warning message is returned in case of
 	// expiration of the used cryptographic constraints after the policy
 	// update date).
 	SetAlgorithmsExpirationTimeAfterPolicyUpdateLevel(algorithmsExpirationTimeAfterPolicyUpdateLevel enumerations.Level)

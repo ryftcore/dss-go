@@ -8,35 +8,35 @@ package enumerations
 type PKIEncoding string
 
 const (
-	// PKIEncoding_DER is http://uri.etsi.org/01903/v1.2.2#DER
-	PKIEncoding_DER PKIEncoding = "DER"
-	// PKIEncoding_BER is http://uri.etsi.org/01903/v1.2.2#BER
-	PKIEncoding_BER PKIEncoding = "BER"
-	// PKIEncoding_CER is http://uri.etsi.org/01903/v1.2.2#CER
-	PKIEncoding_CER PKIEncoding = "CER"
-	// PKIEncoding_PER is http://uri.etsi.org/01903/v1.2.2#PER
-	PKIEncoding_PER PKIEncoding = "PER"
-	// PKIEncoding_XER is http://uri.etsi.org/01903/v1.2.2#XER
-	PKIEncoding_XER PKIEncoding = "XER"
+	// PKIEncodingDER is http://uri.etsi.org/01903/v1.2.2#DER
+	PKIEncodingDER PKIEncoding = "DER"
+	// PKIEncodingBER is http://uri.etsi.org/01903/v1.2.2#BER
+	PKIEncodingBER PKIEncoding = "BER"
+	// PKIEncodingCER is http://uri.etsi.org/01903/v1.2.2#CER
+	PKIEncodingCER PKIEncoding = "CER"
+	// PKIEncodingPER is http://uri.etsi.org/01903/v1.2.2#PER
+	PKIEncodingPER PKIEncoding = "PER"
+	// PKIEncodingXER is http://uri.etsi.org/01903/v1.2.2#XER
+	PKIEncodingXER PKIEncoding = "XER"
 )
 
 // pkiEncodingURIs holds the URI for each constant.
 var pkiEncodingURIs = map[PKIEncoding]string{
-	PKIEncoding_DER: "http://uri.etsi.org/01903/v1.2.2#DER",
-	PKIEncoding_BER: "http://uri.etsi.org/01903/v1.2.2#BER",
-	PKIEncoding_CER: "http://uri.etsi.org/01903/v1.2.2#CER",
-	PKIEncoding_PER: "http://uri.etsi.org/01903/v1.2.2#PER",
-	PKIEncoding_XER: "http://uri.etsi.org/01903/v1.2.2#XER",
+	PKIEncodingDER: "http://uri.etsi.org/01903/v1.2.2#DER",
+	PKIEncodingBER: "http://uri.etsi.org/01903/v1.2.2#BER",
+	PKIEncodingCER: "http://uri.etsi.org/01903/v1.2.2#CER",
+	PKIEncodingPER: "http://uri.etsi.org/01903/v1.2.2#PER",
+	PKIEncodingXER: "http://uri.etsi.org/01903/v1.2.2#XER",
 }
 
 // PKIEncodingValues returns all constants in declaration order.
 func PKIEncodingValues() []PKIEncoding {
 	return []PKIEncoding{
-		PKIEncoding_DER,
-		PKIEncoding_BER,
-		PKIEncoding_CER,
-		PKIEncoding_PER,
-		PKIEncoding_XER,
+		PKIEncodingDER,
+		PKIEncodingBER,
+		PKIEncodingCER,
+		PKIEncodingPER,
+		PKIEncodingXER,
 	}
 }
 

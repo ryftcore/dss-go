@@ -77,7 +77,7 @@ func NewEvidenceRecordValidationProcess(i18nProvider *i18n.I18nProvider, diagnos
 
 // Title returns the title of the process. Port of getTitle().
 func (c *EvidenceRecordValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPER
+	return i18n.MessageTagVPER
 }
 
 // InitChain initializes the chain. Port of initChain(): the IllegalStateException
@@ -102,7 +102,7 @@ func (c *EvidenceRecordValidationProcess) InitChain() {
 
 		for _, digestMatcher := range digestMatchers {
 			// Evidence Records optionally allow additional digests to be present within first data group
-			if enumerations.DigestMatcherType_EVIDENCE_RECORD_ORPHAN_REFERENCE != digestMatcherTypeOf(digestMatcher) {
+			if enumerations.DigestMatcherTypeEvidenceRecordOrphanReference != digestMatcherTypeOf(digestMatcher) {
 
 				referenceDataFound := c.referenceDataFound(digestMatcher)
 				if item == nil {
@@ -136,8 +136,8 @@ func (c *EvidenceRecordValidationProcess) InitChain() {
 	}
 
 	// Embedded or externally provided evidence records
-	if (enumerations.EvidenceRecordOrigin_SIGNATURE == c.evidenceRecord.Origin() ||
-		enumerations.EvidenceRecordOrigin_EXTERNAL == c.evidenceRecord.Origin()) &&
+	if (enumerations.EvidenceRecordOriginSignature == c.evidenceRecord.Origin() ||
+		enumerations.EvidenceRecordOriginExternal == c.evidenceRecord.Origin()) &&
 		utils.IsCollectionNotEmpty(c.evidenceRecord.CoveredSignatures()) {
 		item = item.SetNextItem(c.signedFilesCoveredCheck())
 	}
@@ -186,9 +186,9 @@ func (c *EvidenceRecordValidationProcess) InitChain() {
 				 */
 				timestampConclusion := timestampValidation.Conclusion
 				timestampSubIndication := subIndicationOf(timestampConclusion)
-				if enumerations.Indication_INDETERMINATE == timestampConclusion.Indication.Indication() &&
-					(enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE == timestampSubIndication ||
-						enumerations.SubIndication_CRYPTO_CONSTRAINTS_FAILURE_NO_POE == timestampSubIndication) {
+				if enumerations.IndicationIndeterminate == timestampConclusion.Indication.Indication() &&
+					(enumerations.SubIndicationCryptoConstraintsFailure == timestampSubIndication ||
+						enumerations.SubIndicationCryptoConstraintsFailureNoPOE == timestampSubIndication) {
 					tstAOV := bbbTsp.AOV
 					if xmlAOV == nil || (c.IsValid(&xmlAOV.XmlConstraintsConclusionContent) && tstAOV != nil &&
 						!c.IsValid(&tstAOV.XmlConstraintsConclusionContent)) {
@@ -307,7 +307,7 @@ func (c *EvidenceRecordValidationProcess) timestampValidationConclusive(timestam
 // becomes a panic, the caller being initChain, which cannot propagate one.
 func (c *EvidenceRecordValidationProcess) algorithmsObsolescenceValidation(aovResult *jaxb.XmlAOV,
 	lowestPOETime time.Time) process.ChainItem[*jaxb.XmlValidationProcessEvidenceRecord] {
-	position, err := process.GetCryptoPosition(enumerations.Context_EVIDENCE_RECORD)
+	position, err := process.GetCryptoPosition(enumerations.ContextEvidenceRecord)
 	if err != nil {
 		panic(err)
 	}

@@ -66,20 +66,20 @@ func (t *XPath2FilterTransform) xPath2FilterTransform() *XPath2FilterTransform {
 // Note that this override does NOT delegate to AbstractTransform#createTransform: it builds the
 // ds:Transform element itself, exactly as upstream, and returns the XPath element.
 func (t *XPath2FilterTransform) CreateTransform(document, parentNode *xmldom.Node) *xmldom.Node {
-	transform := xmlutils.DomUtilsAddElement(document, parentNode, t.namespace, common.XMLDSigElement_TRANSFORM)
-	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttribute_ALGORITHM.AttributeName()}, t.algorithm)
+	transform := xmlutils.DomUtilsAddElement(document, parentNode, t.namespace, common.XMLDSigElementTransform)
+	transform.SetAttr(xmldom.Name{Local: common.XMLDSigAttributeAlgorithm.AttributeName()}, t.algorithm)
 
 	// XPath element must have a specific namespace
-	xPathElement := xmlutils.DomUtilsAddTextElement(document, transform, definition.XAdESNamespace_XMLDSIG_FILTER2,
-		common.XMLDSigElement_XPATH, t.xPathExpression)
+	xPathElement := xmlutils.DomUtilsAddTextElement(document, transform, definition.XAdESNamespaceXMLDSIGFilter2,
+		common.XMLDSigElementXPATH, t.xPathExpression)
 
 	// Java calls Element#setPrefix here; DomUtilsAddTextElement already created the element
 	// with the Filter 2.0 prefix, so re-applying it would be a no-op and is dropped.
 	xPathElement.SetAttr(xmldom.Name{
 		Space:  xmldom.XMLNSNamespace,
-		Local:  definition.XAdESNamespace_XMLDSIG_FILTER2.Prefix(),
+		Local:  definition.XAdESNamespaceXMLDSIGFilter2.Prefix(),
 		Prefix: "xmlns",
-	}, definition.XAdESNamespace_XMLDSIG_FILTER2.Uri())
+	}, definition.XAdESNamespaceXMLDSIGFilter2.Uri())
 
 	// "xmlns" + (prefix empty ? "" : ":" + prefix): a non-empty prefix declares xmlns:<prefix>,
 	// an empty one declares the default namespace.

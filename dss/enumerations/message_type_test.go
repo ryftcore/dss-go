@@ -7,9 +7,9 @@ func TestMessageType(t *testing.T) {
 		v   MessageType
 		uri string
 	}{
-		{MessageType_ERROR, "urn:cef:dss:message:error"},
-		{MessageType_WARN, "urn:cef:dss:message:warning"},
-		{MessageType_INFO, "urn:cef:dss:message:information"},
+		{MessageTypeError, "urn:cef:dss:message:error"},
+		{MessageTypeWarn, "urn:cef:dss:message:warning"},
+		{MessageTypeInfo, "urn:cef:dss:message:information"},
 	}
 	if len(MessageTypeValues()) != len(cases) {
 		t.Fatalf("expected %d values, got %d", len(cases), len(MessageTypeValues()))

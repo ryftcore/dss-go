@@ -8,9 +8,9 @@ func TestTSLTypeEnumFields(t *testing.T) {
 		uri   string
 		label string
 	}{
-		{TSLTypeEnum_EUlistofthelists, "http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists", "EU List of the Trusted Lists"},
-		{TSLTypeEnum_EUgeneric, "http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric", "EU Trusted List"},
-		{TSLTypeEnum_AdESlistofthelists, "http://ec.europa.eu/tools/lotl/mra/ades-lotl-tsl-type", "AdES List of the Trusted Lists"},
+		{TSLTypeEnumEUlistofthelists, "http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUlistofthelists", "EU List of the Trusted Lists"},
+		{TSLTypeEnumEUgeneric, "http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric", "EU Trusted List"},
+		{TSLTypeEnumAdESlistofthelists, "http://ec.europa.eu/tools/lotl/mra/ades-lotl-tsl-type", "AdES List of the Trusted Lists"},
 	}
 	for _, tt := range tests {
 		if got := tt.v.URI(); got != tt.uri {

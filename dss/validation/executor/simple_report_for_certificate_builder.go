@@ -254,12 +254,12 @@ func (b *SimpleReportForCertificateBuilder) chainItem(certificate *diagnostic.Ce
 		}
 
 	} else if certificate.IsTrusted() || trustAnchorReached {
-		item.Indication = jaxb.IndicationValue(enumerations.Indication_PASSED)
+		item.Indication = jaxb.IndicationValue(enumerations.IndicationPassed)
 
 	} else {
 		// if certificate was not validated or not trusted
-		item.Indication = jaxb.IndicationValue(enumerations.Indication_INDETERMINATE)
-		subIndication := jaxb.SubIndicationValue(enumerations.SubIndication_NO_CERTIFICATE_CHAIN_FOUND)
+		item.Indication = jaxb.IndicationValue(enumerations.IndicationIndeterminate)
+		subIndication := jaxb.SubIndicationValue(enumerations.SubIndicationNoCertificateChainFound)
 		item.SubIndication = &subIndication
 	}
 
