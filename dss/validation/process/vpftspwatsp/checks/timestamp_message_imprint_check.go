@@ -6,22 +6,20 @@
 // dependency on the rest of vpftspwatsp (the "5.6.2.4 Validation process for
 // timestamps" orchestration classes), and it is the base class
 // vpfltvd.TimestampMessageImprintWithIdCheck (used unconditionally by
-// bbb/sav's SignatureAcceptanceValidation.contentTimestampMessageImprint(),
-// the sole caller anywhere in phase 8c) needs to extend. Every dependency
-// used here - diagnostic.TimestampWrapper, process.ChainItemBase, the
-// BBB_SAV_DMICTSTMCMI(_ANS) message tags - already existed untagged in the
-// tree before this pass.//
-// PACKAGE-BOUNDARY DEVIATION (LTVA, phase 8e): Java's vpftspwatsp.checks is a
-// package of its own, distinct from vpftspwatsp; the phase 8e layout flattens
-// ...:checks subpackages into their parent, but doing that here would close an
-// import cycle. bbb/sav (frozen) imports vpfltvd for TimestampMessageImprintWithIdCheck,
+// bbb/sav's SignatureAcceptanceValidation.contentTimestampMessageImprint())
+// needs to extend.
+//
+// Package placement deviation: Java's vpftspwatsp.checks is a package of its
+// own, distinct from vpftspwatsp; every other ...:checks subpackage in this
+// port flattens into its parent, but doing that here would close an import
+// cycle. bbb/sav imports vpfltvd for TimestampMessageImprintWithIdCheck,
 // vpfltvd imports this class, and the rest of vpftspwatsp
 // (ValidationProcessForTimestampsWithArchivalData and the three checks around
-// it) imports vpfswatsp, which imports vpfltvd and bbb/sav back. This one class
-// - a leaf ChainItem needing nothing but process and diagnostic - therefore
-// keeps Java's own vpftspwatsp/checks package boundary, and everything else of
-// vpftspwatsp is flattened into vpftspwatsp as planned. The same relocation
-// technique vpfbs and vpfltvdsig use for their own cycles.
+// it) imports vpfswatsp, which imports vpfltvd and bbb/sav back. This one
+// class - a leaf ChainItem needing nothing but process and diagnostic -
+// therefore keeps Java's own vpftspwatsp/checks package boundary, while
+// everything else of vpftspwatsp is flattened into vpftspwatsp. The same
+// relocation technique vpfbs and vpfltvdsig use for their own cycles.
 package checks
 
 import (

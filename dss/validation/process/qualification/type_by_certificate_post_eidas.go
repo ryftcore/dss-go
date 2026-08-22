@@ -19,7 +19,9 @@ func newTypeByCertificatePostEIDAS(signingCertificate *diagnostic.CertificateWra
 	return &typeByCertificatePostEIDAS{signingCertificate: signingCertificate}
 }
 
-// Type is the port of the overridden getType().
+// Type derives the certificate's usage type from its QC-type extension,
+// falling back to ESIGN when QcCompliant and no type is asserted. Port of
+// the overridden getType().
 func (t *typeByCertificatePostEIDAS) Type() enumerations.CertificateType {
 	esign := IsQCTypeEsign(t.signingCertificate)
 	eseal := IsQCTypeEseal(t.signingCertificate)

@@ -5,9 +5,9 @@
 // BuildDetachedXmlSignature, BuildDetachedXmlTimestamp and AssertConfigurationValid are called
 // back into from Build() (Java: buildXmlSignatures()/getXmlSignature(),
 // buildXmlTimestamps(), and the top of build() respectively) and are overridden by
-// QWACCertificateDiagnosticDataBuilder (this manifest, BuildDetachedXmlSignature and
-// AssertConfigurationValid) and by the forward-declared CAdES/PAdES/JAdES/ASiC
-// DiagnosticDataBuilders (out of this manifest, BuildDetachedXmlSignature and
+// QWACCertificateDiagnosticDataBuilder (in this package, BuildDetachedXmlSignature and
+// AssertConfigurationValid) and by the CAdES/PAdES/JAdES/ASiC
+// DiagnosticDataBuilders (in the CAdES/PAdES/JAdES/ASiC packages, BuildDetachedXmlSignature and
 // BuildDetachedXmlTimestamp) - so all three are collected into
 // SignedDocumentDiagnosticDataBuilderOverrides, following the same Init<TypeName> pattern as
 // DiagnosticDataBuilderOverrides.
@@ -34,8 +34,7 @@
 // below reconstructs the map from those 8 getters; it is complete for the embedded-in-signature
 // case this builder's only caller (getXmlOrphanRevocations, over a signature/timestamp/evidence
 // record's OWN CRL/OCSP source) exercises, but is flagged here since it cannot reproduce an
-// online-fetched orphan binary's origin. See the porter notes for confirmation against the
-// RPTDIAG byte-compare oracle.
+// online-fetched orphan binary's origin - not yet covered by a byte-compare oracle fixture.
 package diagnostic
 
 import (
@@ -67,18 +66,18 @@ type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// Port of the protected assertConfigurationValid().
 	AssertConfigurationValid()
 	// BuildXmlOrphanTokens builds a list of XmlOrphanTokens. Port of the protected
-	// buildXmlOrphanTokens(), overridden by PAdESDiagnosticDataBuilder (out of this manifest) to
+	// buildXmlOrphanTokens(), overridden by PAdESDiagnosticDataBuilder (in the PAdES package) to
 	// collect orphan tokens from the PDF document's own DSS dictionaries first. Added to this
 	// interface, rather than left a direct call to the embedded DiagnosticDataBuilder's method
-	// (as CertificateDiagnosticDataBuilder.Build() still does, which has no such override), during
-	// phase 8f un-gating - see DiagnosticDataBuilder.IsKnownCertificate's doc comment for the same
+	// (as CertificateDiagnosticDataBuilder.Build() still does, which has no such override) -
+	// see DiagnosticDataBuilder.IsKnownCertificate's doc comment for the same
 	// cross-package-virtual-dispatch rationale. Every existing implementer (CAdES, JAdES, QWAC)
 	// keeps its current behavior unchanged: none define their own BuildXmlOrphanTokens, so Go
 	// embedding promotes DiagnosticDataBuilder's concrete implementation for them automatically.
 	BuildXmlOrphanTokens() *jaxb.XmlOrphanTokens
 	// Build builds the XmlDiagnosticData. Port of the public @Override build(), overridden by
-	// ASiCContainerDiagnosticDataBuilder (out of this manifest) to add the container's
-	// XmlContainerInfo. Added to this interface during phase 8f un-gating so
+	// ASiCContainerDiagnosticDataBuilder (in the ASiC package) to add the container's
+	// XmlContainerInfo. Added to this interface so
 	// XmlDiagnosticDataFactory.Create() (this package, statically typed against the base
 	// *SignedDocumentDiagnosticDataBuilder) can reach the override - see BuildXmlOrphanTokens's
 	// doc comment for the same rationale. Every existing implementer keeps its current behavior:
@@ -217,8 +216,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) DefaultDigestAlgorithm(digestAlgor
 }
 
 // TokenIdentifierProvider re-declares the fluent setter (not overridden in Java, but exposed
-// here at the concrete-return level so XmlDiagnosticDataFactory's chain compiles cleanly; see
-// PORTING.md's covariant-return precedent).
+// here at the concrete-return level so XmlDiagnosticDataFactory's chain compiles cleanly).
 func (b *SignedDocumentDiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model.TokenIdentifierProvider) *SignedDocumentDiagnosticDataBuilder {
 	b.DiagnosticDataBuilder.TokenIdentifierProvider(identifierProvider)
 	return b
@@ -272,7 +270,7 @@ func (b *SignedDocumentDiagnosticDataBuilder) DocumentOCSPSource(documentOCSPSou
 }
 
 // GetDocumentCertificateSource returns the document Certificate Source set via
-// DocumentCertificateSource. Cross-package accessor added during phase 8f un-gating for
+// DocumentCertificateSource. Cross-package accessor for
 // PAdESDiagnosticDataBuilder.buildOrphanTokensFromDocumentSources() - see
 // DiagnosticDataBuilder.IsKnownCertificate's doc comment for why it is needed. Purely additive;
 // does not change DocumentCertificateSource's existing fluent-setter behavior.

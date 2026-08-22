@@ -2,31 +2,21 @@
 
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/EAAAcceptanceValidation.java (DSS 6.5.RC1).
 //
-// Gated behind the "eaa" build tag - the same technique used for
-// fc/eaa_format_checking.go (see its header for the rationale:
-// eu.europa.esig.dss.validation.process.eaa is deferred). This keeps the
-// default, untagged `go build ./...`/`go vet ./...`/`go test ./...` green;
-// AbstractAcceptanceValidation (this package) and every other sav file that
-// does not touch EAA build and are exercised today.
+// Gated behind the "eaa" build tag: without it, importing this file would
+// create a Go import cycle (bbb/sav (-eaa tag) -> eaa -> qualification ->
+// vpfswatsp -> bbb/sav, via ValidationProcessForSignaturesWithArchivalData).
+// This keeps the default, untagged `go build ./...`/`go vet ./...`/
+// `go test ./...` green; AbstractAcceptanceValidation (this package) and
+// every other sav file that does not touch EAA build and are exercised today.
 //
-// The forward dependency this
-// header originally speculated about is now real and confirmed matching
-// (eu.europa.esig.dss.validation.process.eaa.checks + eaa.status both flatten
-// into github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, constructors
-// 1:1 with their Java signatures) - EXCEPT for package name: the phase 8e EAA
-// porter (LTVB) initially landed the flattened checks directly in the eaa
-// root package (alongside EAAValidationBlock/EAAValidationProcess). That
-// created a real Go import cycle once eaa.qwac/eaa's block-level file started
-// importing package qualification: bbb/sav (-eaa tag) -> eaa -> qualification
-// -> vpfswatsp -> bbb/sav (ValidationProcessForSignaturesWithArchivalData).
-// Fixed by the integrator by splitting the checks back out into their own
-// eaa/checks package - Java's own eaa vs eaa.checks/eaa.status boundary,
-// which does not import qualification and so closes the cycle - matching the
-// same "prefer Java's own package boundary" escape hatch already used
-// elsewhere in this phase (vpftspwatsp/checks, vpfswatsp/evidencerecord).
-// EAAValidationBlock/EAAValidationProcess/KeyBindingSignatureValidationResultCheck
-// remain in the eaa root package, since KeyBindingSignatureValidationResultCheck
-// needs qualification and nothing in bbb/sav or bbb/fc references it.
+// eu.europa.esig.dss.validation.process.eaa.checks and eaa.status both
+// flatten into github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, with
+// constructors 1:1 with their Java signatures - this mirrors Java's own eaa
+// vs eaa.checks/eaa.status package boundary, which does not import
+// qualification. EAAValidationBlock/EAAValidationProcess/
+// KeyBindingSignatureValidationResultCheck remain in the eaa root package,
+// since KeyBindingSignatureValidationResultCheck needs qualification and
+// nothing in bbb/sav or bbb/fc references it.
 package sav
 
 import (

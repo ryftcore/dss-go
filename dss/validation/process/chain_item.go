@@ -21,8 +21,8 @@
 //   - buildAdditionalInfo() null -> (*string)(nil)  : the AdditionalInfo element
 //     stays absent, which is observable, hence the pointer.
 //
-// slf4j logging (the "Check skipped", "Unknown level" and undefined-MessageTag
-// records) is dropped per PORTING.md.
+// Java's slf4j logging ("Check skipped", "Unknown level", undefined-MessageTag
+// records) has no Go equivalent and is not ported.
 package process
 
 import (

@@ -29,16 +29,18 @@ func NewCertificateQualificationForQWACBlock(i18nProvider *i18n.I18nProvider, bu
 	return c
 }
 
-// CertQualificationAtIssuanceTimeBlock is the port of the overridden
-// getCertQualificationAtIssuanceTimeBlock(List).
+// CertQualificationAtIssuanceTimeBlock builds a QWAC-specific
+// certificate-issuance-time qualification block for the given acceptable
+// services. Port of the overridden getCertQualificationAtIssuanceTimeBlock(List).
 func (c *CertificateQualificationForQWACBlock) CertQualificationAtIssuanceTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
 	return NewCertQualificationAtTimeForQWACBlockAtIssuanceTime(c.I18nProvider, enumerations.ValidationTimeCertificateIssuanceTime,
 		c.SigningCertificate, acceptableServices).CertQualificationAtTimeBlock
 }
 
-// CertQualificationAtValidationTimeBlock is the port of the overridden
-// getCertQualificationAtValidationTimeBlock(List).
+// CertQualificationAtValidationTimeBlock builds a QWAC-specific
+// validation-time qualification block for the given acceptable services.
+// Port of the overridden getCertQualificationAtValidationTimeBlock(List).
 func (c *CertificateQualificationForQWACBlock) CertQualificationAtValidationTimeBlock(
 	acceptableServices []*diagnostic.TrustServiceWrapper) *CertQualificationAtTimeBlock {
 	return NewCertQualificationAtTimeForQWACBlock(c.I18nProvider, enumerations.ValidationTimeValidationTime, &c.ValidationTime,

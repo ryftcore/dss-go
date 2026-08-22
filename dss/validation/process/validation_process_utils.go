@@ -3,9 +3,9 @@
 // The three methods that take a vpfswatsp POEExtraction
 // (getLatestAcceptableRevocationData, getAcceptableRevocationDataForPSVIfExistOrReturnAll
 // and its private helper filterRevocationDataForPastSignatureValidation) live in
-// validation_process_utils_vpfswatsp.go behind the "phase8e" build tag, since
-// eu.europa.esig.dss.validation.process.vpfswatsp is ported in phase 8e (same
-// tag-split precedent as the ASiC phase8 files). Everything else is here.
+// validation_process_utils_vpfswatsp.go, which declares its own POEExtraction
+// interface to keep this package free of an import of vpfswatsp (which imports
+// this one). Everything else is here.
 //
 // Java's IllegalArgumentException becomes a returned error (PORTING.md); the
 // static utility class becomes package-level functions.

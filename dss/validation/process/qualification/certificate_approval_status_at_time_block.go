@@ -212,8 +212,7 @@ func distinctSingleValue(services []*diagnostic.TrustedEntityServiceWrapper, fie
 				// TrustedEntityServiceStatusKnownCheck depends on the
 				// difference: with a non-nil "" it appended a
 				// CERT_USAGE_STATUS_KNOWN WARNING constraint upstream never
-				// emits. Found by the phase-8f full-corpus report byte-parity
-				// run on eaa-validation/diag_data_pid.xml.
+				// emits.
 				return nil
 			}
 			return &v

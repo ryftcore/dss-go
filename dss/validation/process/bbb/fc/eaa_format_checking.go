@@ -10,12 +10,11 @@
 // (the only caller of NewEAAFormatChecking) carries the same eaa tag, so
 // no untagged code path references this file.
 //
-// INTEGRATION UPDATE (phase 8e integration pass): the forward dependency is
-// now real and confirmed matching (constructors exactly as predicted above),
-// landing in github.com/ryftcore/dss-go/dss/validation/process/eaa/checks - a
-// dedicated package split out from the eaa root package (which holds
+// The eaa-tagged import lands in
+// github.com/ryftcore/dss-go/dss/validation/process/eaa/checks - a dedicated
+// package split out from the eaa root package (which holds
 // EAAValidationBlock/EAAValidationProcess and imports qualification), so that
-// this file's eaa-tagged import doesn't re-close a
+// this file's import doesn't close a
 // bbb/fc -> eaa -> qualification -> vpfswatsp -> bbb/sav -> eaa cycle. See
 // bbb/sav/eaa_acceptance_validation.go for the full rationale.
 package fc

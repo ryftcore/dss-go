@@ -1,8 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/reports/diagnostic/lote/XmlTrustedEntityBuilder.java (DSS 6.5.RC1).
 //
 // Java package eu.europa.esig.dss.validation.reports.diagnostic.lote flattens into this same
-// Go package per S8C_BRIEF.md's collision-checked layout (pkg diagnostic); the type keeps its
-// Java name unqualified.
+// Go package (pkg diagnostic); the type keeps its Java name unqualified.
 package diagnostic
 
 import (

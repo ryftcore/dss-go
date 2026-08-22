@@ -20,7 +20,9 @@ func newQSCDByCertificatePreEIDAS(certificate *diagnostic.CertificateWrapper) *q
 	return &qscdByCertificatePreEIDAS{certificate: certificate}
 }
 
-// QSCDStatus is the port of the overridden getQSCDStatus().
+// QSCDStatus reports QSCD from the pre-eIDAS QCP+ policy OID or the
+// certificate's QC-statement SSCD flag. Port of the overridden
+// getQSCDStatus().
 func (q *qscdByCertificatePreEIDAS) QSCDStatus() enumerations.QSCDStatus {
 	// checks in policy id extension
 	policyIdSupportedByQSCD := process.IsQCPPlus(q.certificate)

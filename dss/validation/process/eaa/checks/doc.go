@@ -9,8 +9,8 @@
 // eaa package instead, which already imports qualification; see this
 // package's header for why that split matters.
 //
-// Split out from the eaa root package (phase 8e integration pass): this
-// package holds every eaa.checks/eaa.status leaf check, none of which import
+// Split out from the eaa root package: this package holds every
+// eaa.checks/eaa.status leaf check, none of which import
 // package qualification or vpfswatsp. That keeps it safe for
 // bbb/fc/eaa_format_checking.go, bbb/fc/eaa_revocation_format_checking.go,
 // bbb/sav/eaa_acceptance_validation.go and

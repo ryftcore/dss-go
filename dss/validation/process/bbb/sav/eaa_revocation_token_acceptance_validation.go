@@ -2,15 +2,13 @@
 
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/EAARevocationTokenAcceptanceValidation.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): gated behind the "eaa" build tag - see
-// eaa_acceptance_validation.go's header in this same package for the
-// rationale.
+// Gated behind the "eaa" build tag - see eaa_acceptance_validation.go's
+// header in this same package for the rationale.
 //
-// INTEGRATION UPDATE (phase 8e integration pass): see
-// eaa_acceptance_validation.go's header in this same package - the checks
-// this file wires live in github.com/ryftcore/dss-go/dss/validation/process/eaa/checks
-// (confirmed matching), a dedicated package rather than the eaa root package,
-// specifically to keep this file's import from re-closing the
+// The checks this file wires live in
+// github.com/ryftcore/dss-go/dss/validation/process/eaa/checks, a dedicated
+// package rather than the eaa root package, specifically to keep this
+// file's import from closing the
 // bbb/sav -> eaa -> qualification -> vpfswatsp -> bbb/sav cycle.
 package sav
 

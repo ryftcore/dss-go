@@ -11,10 +11,11 @@ import (
 	"github.com/ryftcore/dss-go/dss/policy/jaxb"
 )
 
-// Test-local ServiceLoader wiring: this chunk's manifest does not include (and PORTING.md
-// forbids editing) the frozen factory packages, so the concrete implementations are registered
-// here rather than via their own init() - see validation_policy_loader.go's file header. This
-// mirrors, for a test, exactly what a composing application would do once at startup.
+// Test-local ServiceLoader wiring: the concrete factory packages don't
+// self-register - only the top-level dss package's init() (validate.go)
+// does, and this package can't import that without an import cycle - so
+// the test registers them here directly. This mirrors, for a test, exactly
+// what a composing application would do once at startup.
 func init() {
 	RegisterValidationPolicyFactory(dsspolicy.NewEtsiValidationPolicyFactory())
 	RegisterCryptographicSuiteFactory(cryptoxml.NewCryptographicSuiteXmlFactory())

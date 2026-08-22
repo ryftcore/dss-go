@@ -1,6 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/usage/checks/TrustedEntityServiceStatusConsistencyCheck.java (DSS 6.5.RC1).
 //
-// HASH-ORDER (closed in phase 8f): getApplicableStatusesSet() collects into a
+// getApplicableStatusesSet() collects into a
 // HashSet<String> in Java and buildAdditionalInfo() renders that set with
 // Set#toString(), so the iteration order reaches the report on the
 // multi-status branch. utils.JavaHashMapStringKeyOrder reproduces it.
@@ -107,8 +107,7 @@ func (c *TrustedEntityServiceStatusConsistencyCheck) FailedSubIndicationForConcl
 // therefore formats into CERTIFICATE_USAGE_STATUS's {0} as the literal "null";
 // this port carries an absent status as the empty string (the convention
 // trusted_entity_service_by_status_filter.go already relies on), which would
-// otherwise render as nothing at all. Found by the phase-8f full-corpus report
-// byte-parity run on eaa-validation/diag_data_pid.xml.
+// otherwise render as nothing at all.
 func renderJavaNullableStatus(status string) string {
 	if status == "" {
 		return "null"

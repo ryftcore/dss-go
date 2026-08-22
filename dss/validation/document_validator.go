@@ -9,7 +9,7 @@
 // (FromValidationPolicyDocument / ...Reader / ...File / ...Path).
 //
 // Java's classpath-resource overloads (String policyResourcePath) have no Go
-// counterpart: Go has no classpath, so - per the precedent set by
+// counterpart: Go has no classpath, so - like
 // dss/policy/validation_policy_facade.go's GetValidationPolicyFromPath - the
 // path is read straight from the filesystem.
 //

@@ -2,26 +2,25 @@
 //
 // # Virtual dispatch
 //
-// Java's DiagnosticDataBuilder is abstract; SignedDocumentDiagnosticDataBuilder (this same
-// manifest) overrides the protected linkSigningCertificateAndChains(Set<CertificateToken>) to a
+// Java's DiagnosticDataBuilder is abstract; SignedDocumentDiagnosticDataBuilder (in this same
+// package) overrides the protected linkSigningCertificateAndChains(Set<CertificateToken>) to a
 // no-op, and DiagnosticDataBuilder.build() self-calls it - so the base's own build() needs
 // virtual dispatch to reach the override when called through a SignedDocumentDiagnosticDataBuilder
 // (or QWACCertificateDiagnosticDataBuilder) instance via super.build(). Every other protected/
-// public method below is inherited unmodified by every subclass surveyed in this manifest and
-// the forward-declared CAdES/PAdES/JAdES/ASiC/QWAC consumers, so it stays an ordinary method;
+// public method below is inherited unmodified by every subclass in this package and
+// the CAdES/PAdES/JAdES/ASiC/QWAC consumers, so it stays an ordinary method;
 // only LinkSigningCertificateAndChains is collected into DiagnosticDataBuilderOverrides,
-// following the AbstractSignatureIdentifierBuilder/DefaultDocumentAnalyzer precedent
-// (Init<TypeName> registration, see PORTING.md's "Virtual dispatch" note).
+// following the same Init<TypeName> registration pattern used elsewhere in this port (e.g.
+// AbstractSignatureIdentifierBuilder, analyzer.DefaultDocumentAnalyzer).
 //
 // # Set<T> and Map<K,V> representations
 //
 // Java's Set<CertificateToken>/Set<RevocationToken<?>> usedCertificates/usedRevocations are the
-// exact fields XmlDiagnosticDataFactory wires from the already-landed
+// exact fields XmlDiagnosticDataFactory wires from
 // SignatureValidationContext.GetProcessedCertificates() []*model.CertificateToken /
 // GetProcessedRevocations() []validation.AnyRevocationToken (spi/validation/validation_context.go)
 // - already order-preserving slices, not Go maps - so this port keeps them as slices throughout
-// (matching PORTING.md's "order-sensitive upstream iteration -> slice" rule) rather than
-// resurrecting Set semantics through a map.
+// rather than resurrecting Set semantics through a map.
 //
 // Every Java HashMap the source uses purely as a get/put cache (xmlCertsMap, xmlRevocationsMap,
 // xmlTrustedListsMap, xmlTrustSourceMap, referenceMap, certificateIdsMap, signingCertificateMap,
@@ -29,8 +28,7 @@
 // by a token/identifier's DSSIdAsString(). The two exceptions - xmlOrphanCertificateTokensMap
 // and xmlOrphanRevocationTokensMap, whose .values() feed buildXmlOrphanTokens()'s output lists -
 // carry a companion insertion-order slice so the output is built by iterating that slice, never
-// by ranging the map (S8C_BRIEF.md's "deterministic iteration only... NO map ranging into
-// output" rule). The same technique is used, function-locally, everywhere else this file
+// by ranging the map. The same technique is used, function-locally, everywhere else this file
 // resolves a Java HashMap<Identifier,XmlTrustedList>-style local variable into an output list
 // (buildXmlTrustedLists/buildXmlLoTEs and their helpers): a local ordered map is a
 // (map[string]V, []string keys) pair built and drained through the keys slice.
@@ -40,10 +38,12 @@
 // assigns from Identifier.hashCode(). Reproducing that exact bucket order in Go is impractical
 // (it would mean re-implementing java.util.HashMap's hashing/resizing algorithm bit for bit);
 // this port instead uses first-seen insertion order, which is deterministic across Go runs for
-// a given input (satisfying the brief's determinism rule) but is NOT guaranteed to byte-match
-// the Java reference dump when a diagnostic data document carries more than one trusted list or
-// list-of-trusted-entities reachable from the same certificate set. Flagged in the porter notes
-// for the RPTDIAG byte-compare oracle to confirm against real multi-TL fixtures.
+// a given input but is NOT guaranteed to byte-match the Java reference dump when a diagnostic
+// data document carries more than one trusted list or list-of-trusted-entities reachable from
+// the same certificate set.
+//
+// TODO: not yet verified against a diagnostic-data fixture with more than one trusted list or
+// list-of-trusted-entities reachable from the same certificate set.
 package diagnostic
 
 import (
@@ -169,7 +169,7 @@ func NewDiagnosticDataBuilder() *DiagnosticDataBuilder {
 
 // InitDiagnosticDataBuilder registers the concrete/intermediate builder with the base so it can
 // dispatch to DiagnosticDataBuilderOverrides. Every constructor in the DiagnosticDataBuilder
-// family must call this once (see PORTING.md's Init<TypeName> convention).
+// family must call this once.
 func (b *DiagnosticDataBuilder) InitDiagnosticDataBuilder(overrides DiagnosticDataBuilderOverrides) {
 	b.overrides = overrides
 }
@@ -214,8 +214,8 @@ func (b *DiagnosticDataBuilder) UsedRevocations(usedRevocations []validation.Any
 // allCertificateSources(ListCertificateSource).
 func (b *DiagnosticDataBuilder) AllCertificateSources(allCertificateSources *spi.ListCertificateSource) *DiagnosticDataBuilder {
 	if allCertificateSources != nil && !allCertificateSources.ContainsTrustedCertSources() {
-		// Port of LOG.warn(...): slf4j dropped per PORTING.md; the warning has no observable
-		// effect and is not load-bearing.
+		// Port of LOG.warn(...): Java's slf4j logging has no Go equivalent and is not ported;
+		// the warning has no observable effect and is not load-bearing.
 	}
 	b.allCertificateSources = allCertificateSources
 	return b
@@ -242,8 +242,8 @@ func (b *DiagnosticDataBuilder) TokenIdentifierProvider(identifierProvider model
 }
 
 // GetTokenExtractionStrategy returns the TokenExtractionStrategy set via TokenExtractionStrategy.
-// Cross-package accessor added during phase 8f un-gating for
-// ASiCWithCAdESDiagnosticDataBuilder.buildDetachedXmlSignature() (out of this manifest), which
+// Cross-package accessor for
+// ASiCWithCAdESDiagnosticDataBuilder.buildDetachedXmlSignature() (in the ASiC package), which
 // needs to propagate this field into a freshly-built nested CAdESDiagnosticDataBuilder the way
 // Java reads the protected tokenExtractionStrategy field directly - see
 // SignedDocumentDiagnosticDataBuilder.GetDocumentCertificateSource's doc comment for the same
@@ -668,8 +668,8 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLOTL(lotlInfo *tsl.LOTLI
 	// into this *TLInfo-typed map without data loss. tlInfoMap is only ever read back through
 	// XmlTrustServiceProviderBuilder.getMRA() keyed by a TrustProperties' own TLInfo() (never
 	// its LOTLInfo()), so omitting the entry here (rather than inserting a lossy placeholder)
-	// is observably equivalent for every caller in this manifest; flagged for the tech lead in
-	// case a future TSL/LOTL-owning phase needs a LOTL-keyed lookup here too.
+	// is observably equivalent for every caller today; a LOTL-keyed lookup could be added here
+	// if a future caller needs one.
 	return result
 }
 
@@ -931,8 +931,9 @@ func (b *DiagnosticDataBuilder) getXmlTrustSourceListForLoLoTE(loloteInfo *lote.
 	// Same LoLoTEInfo/LoTEInfo type-mismatch as getXmlTrustSourceListForLOTL's LOTLInfo/TLInfo
 	// case above: Java's loteInfoMap.put(id, loteInfo) upcasts the LoLoTEInfo into the
 	// Map<String, LoTEInfo> field; this port keeps the two distinct, and loteInfoMap has no
-	// reader in this manifest (it is populated but never consulted, matching the Java field's
-	// own dead-write shape here), so the entry is simply omitted rather than inserted lossy.
+	// reader anywhere in this port (it is populated but never consulted, matching the Java
+	// field's own dead-write shape here), so the entry is simply omitted rather than inserted
+	// lossy.
 	return result
 }
 
@@ -1436,7 +1437,7 @@ func (b *DiagnosticDataBuilder) getCleanedUrl(url string) string {
 // *spi.TokenCertificateSource value that has never heard of OCSPCertificateSource's override,
 // so CertificateSourceType() resolves to the base's CertificateSourceTypeOther and
 // getXmlFoundCertificates's default/else branch's cast to signatureCertificateSourceRefs panics
-// (found live via the phase 8f document-level harness on PAdES-LT.pdf: an orphan OCSP
+// (found by testing against PAdES-LT.pdf: an orphan OCSP
 // revocation identifier's certificate source hit exactly this). The interface parameter lets
 // every caller pass the OUTER value it actually has (here, ocspCertificateSource itself),
 // which correctly dispatches the override, matching Java.
@@ -1735,7 +1736,7 @@ func (b *DiagnosticDataBuilder) GetXmlOrphanCertificate(origin enumerations.Cert
 
 // IsKnownCertificate reports whether id (a CertificateToken.DSSIDAsString()) has already been
 // recorded as a non-orphan XmlCertificate (i.e. is a key of the private xmlCertsMap cache).
-// Cross-package accessor added during phase 8f un-gating: Java's PAdESDiagnosticDataBuilder.
+// Cross-package accessor: Java's PAdESDiagnosticDataBuilder.
 // buildOrphanTokensFromDocumentSources() reads the protected xmlCertsMap field directly (Java
 // `protected` grants cross-package subclass access DSS relies on here); Go embedding does not
 // expose unexported fields to an embedding type in another package, so this getter is the

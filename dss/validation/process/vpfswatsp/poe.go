@@ -1,6 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfswatsp/POE.java (DSS 6.5.RC1).
 //
-// PACKAGE FLATTENING (phase 8e). Java's
+// Package flattening: Java's
 // eu.europa.esig.dss.validation.process.vpfswatsp splits into five packages -
 // the root, checks, checks/pcv(+checks), checks/psv(+checks), checks/vts(+checks)
 // and evidencerecord(+checks) - which import each other in both directions

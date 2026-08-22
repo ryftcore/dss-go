@@ -1,4 +1,4 @@
-// Oracle test for the phase-8f executors and report builders.
+// Oracle test for the executors and report builders.
 //
 // The rows in testdata/oracle/reports.jsonl are a pure Java dump, produced by
 // testdata/oracle/gen/ReportsOracle.java, which drives the upstream classes
@@ -11,7 +11,7 @@
 //
 // The inputs are NOT a private fixture: they are the marshal-parity
 // diagnostic-data corpus already shipped at dss/diagnostic/jaxb/testdata/oracle,
-// which the phase-8c BasicBuildingBlocks corpus reads too. The four model-*.xml
+// which the BasicBuildingBlocks corpus reads too. The four model-*.xml
 // schema-coverage fixtures are excluded, for the reason given in
 // dss/validation/process/bbb/fc/testdata/README.md.
 //
@@ -158,7 +158,7 @@ func TestReportBuildersOracle(t *testing.T) {
 // Each entry names the deviation; a row that starts matching is reported as an
 // error so the entry gets removed rather than silently rotting.
 //
-// It is EMPTY: the phase-8f audit closed both entries it used to hold, by
+// It is EMPTY: both entries it used to hold were closed by
 // reproducing the real java.util.HashMap iteration order (see
 // utils.JavaHashMapStringKeyOrder / JavaHashMapComputeIfAbsentKeyOrder) at the
 // two sites concerned - dss/validation/process/vpfswatsp/evidencerecord's

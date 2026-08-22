@@ -15,7 +15,9 @@ func newTrustServiceQSCDPostEIDASConsistency() *trustServiceQSCDPostEIDASConsist
 	return &trustServiceQSCDPostEIDASConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether a post-eIDAS trust service does not mix
+// pre-eIDAS (QcWithSSCD/QcNoSSCD) and post-eIDAS (QcWithQSCD/QcNoQSCD)
+// qualifiers. Port of the overridden isConsistent(TrustServiceWrapper).
 func (c *trustServiceQSCDPostEIDASConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	if IsPostEIDAS(trustService.StartDate) {
 		capturedQualifiers := trustService.CapturedQualifierUris()

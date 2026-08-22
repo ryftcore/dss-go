@@ -20,7 +20,8 @@ func newTypeByCertificatePreEIDAS(signingCertificate *diagnostic.CertificateWrap
 	return &typeByCertificatePreEIDAS{signingCertificate: signingCertificate}
 }
 
-// Type is the port of the overridden getType().
+// Type reports ESIGN when the certificate is QcCompliant or matches
+// QCP/QCP+, else UNKNOWN. Port of the overridden getType().
 func (t *typeByCertificatePreEIDAS) Type() enumerations.CertificateType {
 	if t.signingCertificate.IsQcCompliance() || process.IsQCP(t.signingCertificate) || process.IsQCPPlus(t.signingCertificate) {
 		return enumerations.CertificateTypeESign // if QC -> ESign

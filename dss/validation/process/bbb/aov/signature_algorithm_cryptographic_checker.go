@@ -1,8 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/aov/cc/SignatureAlgorithmCryptographicChecker.java (DSS 6.5.RC1).
 //
 // Package placement deviation: Java's eu.europa.esig.dss.validation.process.bbb.aov.cc
-// package (the CryptographicChecker family) is flattened into this pkg aov,
-// per the phase 8d porter brief ("cc + both checks subpackages flattened").
+// package (the CryptographicChecker family) is flattened into this pkg aov.
 package aov
 
 import (

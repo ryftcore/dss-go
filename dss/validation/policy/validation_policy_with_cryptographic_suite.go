@@ -8,10 +8,7 @@
 // embeds the wrapped modelpolicy.ValidationPolicy interface directly: Go's method promotion
 // reproduces every one of those ~190 pure delegations automatically (identical behavior, zero
 // transcription risk across an interface this large), and the four methods that need real logic,
-// plus String() (toString), are defined explicitly below to shadow the promoted ones. This
-// mirrors the DSSDocument-embedding decorator precedent already used in this codebase (e.g.
-// asic.DSSZipEntryDocument, jades.HTTPHeadersPayloadBuilder) and PORTING.md's general license to
-// collapse Java boilerplate where Go has a native, behavior-preserving equivalent.
+// plus String() (toString), are defined explicitly below to shadow the promoted ones.
 //
 // Java's private Map<ContextAndSubContext, CryptographicSuite> cryptographicSuitesMap
 // (HashMap, so its own iteration order is unspecified and irrelevant - only exact-key lookup is

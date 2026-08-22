@@ -23,7 +23,10 @@ func newQualificationByTL(trustService *diagnostic.TrustServiceWrapper, qualifie
 	return &qualificationByTL{trustService: trustService, qualifiedInCert: qualifiedInCert}
 }
 
-// QualifiedStatus is the port of the overridden getQualifiedStatus().
+// QualifiedStatus reports qualification derived from the granted Trusted
+// Service's captured qualifiers, deferring to the certificate-derived
+// strategy where the service does not override it. Port of the overridden
+// getQualifiedStatus().
 func (q *qualificationByTL) QualifiedStatus() enumerations.CertificateQualifiedStatus {
 	if q.trustService == nil {
 		return enumerations.CertificateQualifiedStatusNotQC

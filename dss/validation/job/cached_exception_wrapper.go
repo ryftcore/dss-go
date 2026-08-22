@@ -7,8 +7,7 @@ import "time"
 //
 // DEVIATION: Java's getStackTrace() renders the wrapped exception's full stack trace via
 // printStackTrace(); Go errors carry no stack trace (see PORTING.md), so StackTrace returns
-// the wrapped error's Error() message instead, matching the precedent set by
-// DSSDataLoaderMultipleException.
+// the wrapped error's Error() message instead.
 type CachedExceptionWrapper struct {
 	// date is the first occurrence date of the exception.
 	date time.Time

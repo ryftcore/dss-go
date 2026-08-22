@@ -108,8 +108,7 @@ func (c *AbstractBasicValidationProcess[T]) InitChain() {
 	tokenBBBs := c.BBBs[c.Token.Id()]
 	if tokenBBBs == nil {
 		// Java's throw new IllegalStateException(...) becomes a panic: InitChain
-		// has no error return (process.ChainOverrides), matching the precedent in
-		// eaa_type_check.go.
+		// has no error return in the process.ChainOverrides interface.
 		panic(fmt.Sprintf("Missing Basic Building Blocks result for token with Id '%s'", c.Token.Id()))
 	}
 

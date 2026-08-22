@@ -14,19 +14,18 @@
 //
 // # Protected-superclass-method gap
 //
-// getTimestamp()'s Java body calls two DefaultDocumentAnalyzer methods this port declared
-// unexported because, at the time analyzer.DefaultDocumentAnalyzer was written, no manifest file
-// then in scope needed cross-package access to them (getTimestampedReferences(List) and
-// appendExternalEvidenceRecords(TimestampToken) are `protected` in Java - reachable by any
-// subclass - but ported as analyzer.DefaultDocumentAnalyzer's unexported
-// getTimestampedReferences/appendExternalEvidenceRecordsToTimestamp, inaccessible from this
-// different package). Per PORTING.md ("no edits to frozen packages beyond the UNGATE manifests"),
-// analyzer.DefaultDocumentAnalyzer is not edited; both bodies are instead reproduced verbatim
-// below using only analyzer.DefaultDocumentAnalyzer's already-exported surface
-// (DetachedEvidenceRecords()) plus this type's own overrides field (which - per the embedding
-// above - already exposes AddReference/IsTimestampCoveredByEvidenceRecord). Flagged as a
-// cross-chunk/integration note: a future pass could promote these two methods to exported
-// accessors on analyzer.DefaultDocumentAnalyzer to remove the duplication.
+// getTimestamp()'s Java body calls two DefaultDocumentAnalyzer methods that are
+// `protected` in Java (getTimestampedReferences(List) and
+// appendExternalEvidenceRecords(TimestampToken)) but unexported in the Go port
+// (analyzer.DefaultDocumentAnalyzer's getTimestampedReferences /
+// appendExternalEvidenceRecordsToTimestamp), so they are unreachable from this
+// package. Both bodies are reproduced verbatim below using only
+// analyzer.DefaultDocumentAnalyzer's exported surface (DetachedEvidenceRecords())
+// plus this type's own overrides field (AddReference /
+// IsTimestampCoveredByEvidenceRecord).
+//
+// TODO: exporting those two methods on analyzer.DefaultDocumentAnalyzer would let
+// this duplication go away.
 package timestamp
 
 import (
@@ -162,10 +161,9 @@ func (a *DetachedTimestampAnalyzer) IsSupported(dssDocument model.DSSDocument) b
 // detachedTimestampAnalyzerIsTimestampToken reports whether document parses as a CMS SignedData
 // whose encapsulated content type is id-ct-TSTInfo. Port of DSSUtils.isTimestampToken(DSSDocument).
 //
-// NOT PORTED IN spi/dss_utils.go: mirrors cades.cmsDocumentAnalyzerIsTimestampToken's own
-// identical porter note - completed locally per package (rather than in the frozen
-// spi/dss_utils.go, which cannot import cms) since this is the second package independently
-// needing it.
+// NOT PORTED IN spi/dss_utils.go: completed locally per package (rather than
+// in spi/dss_utils.go, which cannot import cms) since this is the second
+// package independently needing it.
 func detachedTimestampAnalyzerIsTimestampToken(document model.DSSDocument) bool {
 	parsedCMS, err := cms.CMSUtilsParseToCMS(document)
 	if err != nil {
@@ -213,7 +211,7 @@ func (a *DetachedTimestampAnalyzer) Timestamp() *validation.TimestampToken {
 // Panics when certificateVerifier, document or timestampType is missing (Java's
 // Objects.requireNonNull calls); returns an error for a malformed timestamp document (Java's
 // caught CMSException/TSPException/IOException, rethrown as a DSSException - data-dependent on
-// the validating document's bytes, so ported as an error per PORTING.md).
+// the validating document's bytes, so ported as an error).
 func (a *DetachedTimestampAnalyzer) CreateTimestampToken() (*validation.TimestampToken, error) {
 	if a.CertificateVerifier() == nil {
 		panic("CertificateVerifier is not defined")

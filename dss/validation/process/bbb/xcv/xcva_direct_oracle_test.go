@@ -80,10 +80,10 @@ func TestRacChecksAgainstJavaOracle(t *testing.T) {
 					return // the Java oracle threw on this input and recorded no row
 				}
 				if want.Title == nil {
-					// Known mapping (same as the phase 8c direct corpora): a
-					// single-item chain defines no title MessageTag, so Java leaves
-					// the attribute null where the generated non-pointer Go member
-					// spells it "". This one field is normalised and nothing else.
+					// Known mapping: a single-item chain defines no title MessageTag,
+					// so Java leaves the attribute null where the generated
+					// non-pointer Go member spells it "". This one field is
+					// normalised and nothing else.
 					empty := ""
 					want.Title = &empty
 				}

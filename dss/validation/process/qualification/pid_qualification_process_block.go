@@ -1,12 +1,11 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/eaa/pid/PIDQualificationProcessBlock.java (DSS 6.5.RC1).
 //
-// FLAGGED HASH-ORDER SITE: as in CertificateApprovalStatusBlock, Java builds
+// As in CertificateApprovalStatusBlock, Java builds
 // listsOfLists/lotes as HashSet<XmlTrustSourceList> (identity hashCode/
 // equals), iterating them directly to append checks to the report - order
 // observable in report output. This port reuses this file's
 // sortedTrustSourceLists helper (see certificate_approval_status_block.go)
-// for a deterministic (URL-sorted) surrogate order. See the porter brief's
-// hard rule on hash-order leaks.
+// for a deterministic (URL-sorted) surrogate order.
 package qualification
 
 import (

@@ -1,7 +1,6 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpftspwatsp/checks/PastTimestampValidationCheck.java (DSS 6.5.RC1).
 //
-// The Java class lives in vpftspwatsp.checks, flattened into this package the
-// way the phase 8e package layout does for every ...:checks subpackage.
+// The Java class lives in vpftspwatsp.checks, flattened into this package.
 package vpftspwatsp
 
 import (

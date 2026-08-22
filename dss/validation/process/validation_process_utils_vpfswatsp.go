@@ -2,10 +2,7 @@
 //
 // This is the vpfswatsp-dependent half of ValidationProcessUtils: the two public
 // methods that take a POEExtraction, plus the private helper one of them calls.
-// It was gated behind the "phase8e" build tag while
-// eu.europa.esig.dss.validation.process.vpfswatsp was unported; phase 8e ported
-// that package, so the gate is gone and the file is a plain member of the
-// package again. It is kept as a separate file (rather than merged back into
+// It is kept as a separate file (rather than merged back into
 // validation_process_utils.go) so that the one-Go-file-per-Java-class rule stays
 // legible: both files carry the same "Ported from ValidationProcessUtils.java"
 // header, and the split is documented in both.

@@ -19,7 +19,9 @@ func NewTrustedEntityServiceByStiFilter(stiUri string) *TrustedEntityServiceBySt
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustedEntityServiceWrapper).
+// IsAcceptable reports whether the service's Service Type Identifier
+// matches the configured STI URI. Port of the overridden
+// isAcceptable(TrustedEntityServiceWrapper).
 func (f *TrustedEntityServiceByStiFilter) IsAcceptable(service *diagnostic.TrustedEntityServiceWrapper) bool {
 	return f.stiUri != "" && f.stiUri == service.Type
 }

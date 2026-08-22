@@ -24,7 +24,9 @@ func newTrustServiceQualifierAndAdditionalServiceInfoConsistency() *trustService
 	return &trustServiceQualifierAndAdditionalServiceInfoConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether the trust service's type qualifiers and
+// additional service information are consistent with each other. Port of
+// the overridden isConsistent(TrustServiceWrapper).
 func (c *trustServiceQualifierAndAdditionalServiceInfoConsistency) IsConsistent(
 	trustService *diagnostic.TrustServiceWrapper) bool {
 	asis := trustService.AdditionalServiceInfos

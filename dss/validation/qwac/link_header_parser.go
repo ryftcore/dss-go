@@ -2,7 +2,7 @@
 //
 // This class is used to parse the "Link" HTTP response header value, according to RFC 8288
 // requirements. Fully self-contained (pure string parsing), so it carries no forward
-// dependencies on the rest of this batch.
+// dependencies.
 package qwac
 
 import (

@@ -15,7 +15,8 @@ func NewQTSTServiceFilter() *QTSTServiceFilter {
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the service's type identifier is
+// 'TSA/QTST'. Port of the overridden isAcceptable(TrustServiceWrapper).
 func (f *QTSTServiceFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	return ServiceTypeIdentifierIsQTST(service.Type)
 }

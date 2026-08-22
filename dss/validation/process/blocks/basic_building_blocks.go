@@ -1,21 +1,16 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/BasicBuildingBlocks.java (DSS 6.5.RC1).
 //
-// STRUCTURAL FIX A (phase 8d AOV porter, per S8D_BRIEF.md): this dispatcher
-// instantiates every one of the 5.2.x building blocks - isc, vci, cv (siblings
-// under bbb, ported in phase 8c), fc, sav (also bbb siblings), and aov, xcv
-// (ported in phase 8d). Every one of fc/sav/isc/vci/cv/aov/xcv itself imports
+// This dispatcher instantiates every one of the building blocks - isc, vci,
+// cv, fc, sav (all bbb siblings), aov, xcv - each of which itself imports
 // package bbb for the shared AbstractValueCheckItem/AbstractMultiValuesCheckItem/
-// AbstractCertificateCheckItem base types (bbb/abstract_*_check_item.go), so a
-// dispatcher importing all of them cannot itself live in package bbb - Go
-// (unlike Java, which resolves per-class) rejects the resulting import cycle:
-// bbb -> {fc,sav,...} -> bbb. This file therefore moves out of
-// dss/validation/process/bbb into this new, sibling package
-// dss/validation/process/blocks, breaking the cycle. It was previously gated
-// behind a //go:build phase8d tag for the same reason (before the aov/xcv
-// packages existed to import); now that they do, this file is un-tagged and
-// builds for real. See basic_building_blocks_eaa.go / _noeaa.go for the
-// companion STRUCTURAL FIX B (tag composition for the EAA-dependent calls
-// still gated behind fc/sav's own "eaa" build tag).
+// AbstractCertificateCheckItem base types (bbb/abstract_*_check_item.go), so
+// a dispatcher importing all of them cannot itself live in package bbb - Go
+// (unlike Java, which resolves per-class) rejects the resulting import
+// cycle: bbb -> {fc,sav,...} -> bbb. This file therefore lives in the
+// sibling package dss/validation/process/blocks instead, breaking the
+// cycle. See basic_building_blocks_eaa.go / _noeaa.go for the companion
+// tag composition that keeps the EAA-dependent calls gated behind fc/sav's
+// own "eaa" build tag.
 package blocks
 
 import (

@@ -1,6 +1,6 @@
 // Direct unit tests for the vpfbs package's leaf ChainItem checks.
 //
-// TESTING NOTE (LTVB, phase 8e): these are hand-constructed OK/NOT-OK cases
+// These are hand-constructed OK/NOT-OK cases
 // exercising each check's Process()/FailedIndicationForConclusion()/
 // FailedSubIndicationForConclusion()/BuildAdditionalInfo() against jaxb
 // structs built directly in Go, not a Java-oracle-generated corpus (the

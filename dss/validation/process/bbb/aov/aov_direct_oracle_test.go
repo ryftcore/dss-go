@@ -103,10 +103,10 @@ func TestAovDirectChecksAgainstJavaOracle(t *testing.T) {
 		}
 		got := &aovRow{Token: row.Token, Block: row.Block}
 		toAovRowBody(got, &produced.XmlConstraintsConclusionContent, produced.Title)
-		// Known mapping (same as the phase 8c and XCVA direct corpora): a
-		// one-item chain defines no title MessageTag, so Java leaves the Title
-		// attribute null where the generated Go model carries a plain string.
-		// This one field is normalised and nothing else.
+		// Known mapping: a one-item chain defines no title MessageTag, so
+		// Java leaves the Title attribute null where the generated Go model
+		// carries a plain string. This one field is normalised and nothing
+		// else.
 		if row.Title == nil && got.Title != nil && *got.Title == "" {
 			got.Title = nil
 		}

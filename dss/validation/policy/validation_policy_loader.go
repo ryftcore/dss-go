@@ -4,23 +4,14 @@
 //
 // Java discovers ValidationPolicyFactory/CryptographicSuiteFactory implementations via
 // ServiceLoader.load(...) against 'dss-policy-jaxb'/'dss-policy-crypto-xml'/
-// 'dss-policy-crypto-json' on the classpath. Go has no runtime service-provider discovery, so -
-// following the DocumentAnalyzerFactory / ASiCContainerExtractorFactory / CryptographicSuite
-// precedent already established across this codebase (spi/validation/analyzer,
-// asic/default_container_merger.go) - this file exposes package-level registries
-// (RegisterValidationPolicyFactory / RegisterCryptographicSuiteFactory), consulted in
-// registration order exactly like Java's ServiceLoader iterator. Nothing in THIS chunk populates
-// them: the concrete implementations (dss/policy.EtsiValidationPolicyFactory,
-// dss/policy/crypto/xml.CryptographicSuiteXmlFactory, dss/policy/crypto/json.
-// CryptographicSuiteJsonFactory) already exist as frozen packages this chunk's manifest does not
-// include and PORTING.md forbids editing; wiring an init()-time self-registration into them is
-// left for a follow-up integration step (or the composing application), matching how
-// dss/cades/cms_document_analyzer_factory.go self-registers into
-// spi/validation/analyzer.RegisterDocumentAnalyzerFactory from a package that came AFTER the
-// registry - here the registry unavoidably comes after the frozen factory packages instead, so
-// the direction of the wiring inverts, but the mechanism (a package-level registry + Register
-// func, consulted first-match-wins) matches the codebase-wide convention. This is a cross-chunk/
-// integration flag: see this batch's porter notes.
+// 'dss-policy-crypto-json' on the classpath. Go has no runtime service-provider discovery, so
+// this file exposes package-level registries (RegisterValidationPolicyFactory /
+// RegisterCryptographicSuiteFactory), consulted in registration order exactly like Java's
+// ServiceLoader iterator. The top-level dss package's init() (validate.go) registers the concrete
+// implementations (dss/policy.EtsiValidationPolicyFactory,
+// dss/policy/crypto/xml.CryptographicSuiteXmlFactory,
+// dss/policy/crypto/json.CryptographicSuiteJsonFactory); a caller that imports this package
+// directly, without the top-level dss package, must register its own.
 //
 // # Overload flattening
 //
@@ -151,8 +142,8 @@ func FromValidationPolicyFile(validationPolicyFile string) (*ValidationPolicyLoa
 
 // FromValidationPolicyPath creates a ValidationPolicyLoader from a custom validation policy file.
 // Port of the fromValidationPolicy(String) overload, whose `validationPolicyFilePath` was a
-// classpath resource path in Java; Go has no classpath, so - matching the precedent already set
-// by dss/policy/validation_policy_facade.go's GetValidationPolicyFromPath - this reads
+// classpath resource path in Java; Go has no classpath, so - like
+// dss/policy/validation_policy_facade.go's GetValidationPolicyFromPath - this reads
 // validationPolicyFilePath directly from the filesystem instead, like FromValidationPolicyFile.
 //
 // Panics when validationPolicyFilePath is empty (Java's Objects.requireNonNull("Validation

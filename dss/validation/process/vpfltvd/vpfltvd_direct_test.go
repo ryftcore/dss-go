@@ -1,8 +1,8 @@
 // Direct unit tests for the vpfltvd package's leaf ChainItem checks.
 //
-// TESTING NOTE (LTVB, phase 8e): see vpfbs/vpfbs_direct_test.go's header -
-// same rationale: hand-constructed OK/NOT-OK cases in place of a
-// Java-oracle-generated corpus, which this pass did not have time to set up.
+// See vpfbs/vpfbs_direct_test.go's header - same rationale: hand-constructed
+// OK/NOT-OK cases in place of a Java-oracle-generated corpus, which this
+// pass did not have time to set up.
 package vpfltvd
 
 import (

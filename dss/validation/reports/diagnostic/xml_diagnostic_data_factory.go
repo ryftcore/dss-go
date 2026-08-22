@@ -94,7 +94,7 @@ func (f *XmlDiagnosticDataFactory) SetTokenIdentifierProvider(tokenIdentifierPro
 // InitializeDiagnosticDataBuilder's declared return type - see validation/signed_document_validator.go),
 // so a direct .Build() call always resolves to this package's own base implementation and never
 // reaches an embedding package's override. Added to SignedDocumentDiagnosticDataBuilderOverrides
-// during phase 8f un-gating for the same reason as BuildXmlOrphanTokens - see that method's doc
+// for the same reason as BuildXmlOrphanTokens - see that method's doc
 // comment. Every existing implementer (CAdES, XAdES, JAdES, QWAC's signature-diagnostic-data use)
 // keeps its current behavior: none define their own Build, so embedding promotes this package's
 // concrete implementation for them unchanged.

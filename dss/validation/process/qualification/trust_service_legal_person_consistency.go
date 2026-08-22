@@ -15,7 +15,9 @@ func newTrustServiceLegalPersonConsistency() *trustServiceLegalPersonConsistency
 	return &trustServiceLegalPersonConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether the trust service does not carry both
+// QCForESig and QCForLegalPerson qualifiers for the same certificate. Port
+// of the overridden isConsistent(TrustServiceWrapper).
 func (c *trustServiceLegalPersonConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	capturedQualifiers := trustService.CapturedQualifierUris()
 

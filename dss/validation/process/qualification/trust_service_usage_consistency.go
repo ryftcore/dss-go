@@ -15,7 +15,9 @@ func newTrustServiceUsageConsistency() *trustServiceUsageConsistency {
 	return &trustServiceUsageConsistency{}
 }
 
-// IsConsistent is the port of the overridden isConsistent(TrustServiceWrapper).
+// IsConsistent reports whether the trust service carries at most one of
+// QcForEsig, QcForEseal, or QcForWSA. Port of the overridden
+// isConsistent(TrustServiceWrapper).
 func (c *trustServiceUsageConsistency) IsConsistent(trustService *diagnostic.TrustServiceWrapper) bool {
 	capturedQualifiers := trustService.CapturedQualifierUris()
 

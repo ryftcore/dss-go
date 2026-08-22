@@ -89,16 +89,13 @@ func (c *CertificateQualificationBlock) Title() i18n.MessageTag {
 
 // InitChain initializes the chain. Port of initChain().
 //
-// HASH-ORDER (closed in phase 8f): Java builds listOfTrustedListUrls/trustedListUrls
-// as HashSet<String> and iterates them directly to append AcceptableListOfTrustedListsCheck/
+// Java builds listOfTrustedListUrls/trustedListUrls as HashSet<String> and
+// iterates them directly to append AcceptableListOfTrustedListsCheck/
 // AcceptableTrustedListCheck constraints to the report, in HashSet bucket
 // order. That order feeds the ordering of report Constraint elements, which
-// is observable output. This port iterates the equivalent Go sets
-// (map[string]struct{}, whose range order is randomized per the language
-// spec - not just non-Java, but non-repeatable within this port too, unless
-// sorted explicitly) in sorted URL order instead: deterministic across runs,
-// but not necessarily identical to the upstream HashSet bucket order. See
-// the porter brief's hard rule on hash-order leaks.
+// is observable output. This port reproduces that HashSet iteration order
+// via orderedURLSet (below), whose iterate() calls
+// utils.JavaHashMapStringKeyOrder.
 func (c *CertificateQualificationBlock) InitChain() {
 	// cover incomplete cert chain / expired/ revoked certs
 	item := c.isAcceptableBuildingBlockConclusion(c.BuildingBlocksConclusion)
@@ -246,10 +243,7 @@ func (c *CertificateQualificationBlock) isAcceptableBuildingBlockConclusion(buil
 // Java's Collectors.toSet() does - into a java.util.HashSet<String> - and
 // records the insertion order so iterate() can reproduce that HashSet's real
 // iteration order. Upstream appends one report <Constraint> per element while
-// iterating these sets, so the order is OBSERVABLE, byte-compared output; a
-// sorted-by-URL substitute (this port's earlier, explicitly flagged reading)
-// is deterministic but not upstream's. Found by the phase-8f full-corpus
-// report byte-parity run on DSS-2049/dss2049-doubleTL.xml.
+// iterating these sets, so the order is OBSERVABLE, byte-compared output.
 type orderedURLSet struct {
 	seen  map[string]struct{}
 	order []string

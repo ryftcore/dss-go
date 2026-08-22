@@ -171,15 +171,13 @@ func TestAovBlocksAgainstJavaOracle(t *testing.T) {
 // aovKnownSignCertRefOrderDeviation lists the "<file> <token> <block>" rows whose
 // constraint sequence deviates from Java's, and only in its order.
 //
-// It is EMPTY. It used to hold the one corpus signature carrying more than one
-// distinct signing-certificate reference, because
+// It is EMPTY: utils.JavaHashMapComputeIfAbsentKeyOrder reproduces the real
+// java.util.HashMap key order that
 // SignatureValueAndSignedAttributesAlgorithmObsolescenceValidation#buildSignedAttributesValidationChain
-// groups those references into a java.util.HashMap keyed by certificate id and
-// iterates it, while the Go port substituted first-seen order. Phase 8f closed
-// that: utils.JavaHashMapComputeIfAbsentKeyOrder reproduces the real HashMap key
-// order (computeIfAbsent PREPENDS colliding keys, unlike put), so the constraint
+// relies on when grouping signing-certificate references by certificate id
+// (computeIfAbsent PREPENDS colliding keys, unlike put), so the constraint
 // sequence - and the reported signed-attributes digest algorithm, which the
-// loop's "first result wins" rule ties to the same order - now match exactly.
+// loop's "first result wins" rule ties to the same order - match exactly.
 var aovKnownSignCertRefOrderDeviation = map[string]bool{}
 
 // aovSameConstraintMultiset reports whether two rows differ only in the order of

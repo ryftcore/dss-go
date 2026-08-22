@@ -54,28 +54,18 @@
 //
 // # Unported cross-package dependency: eaa
 //
-// EAAFormatChecking and EAARevocationFormatChecking (both in this manifest,
-// ported faithfully below) wire checks from the Java packages
-// eu.europa.esig.dss.validation.process.eaa.checks and .eaa.status. Neither
-// is part of the phase 8c package layout (bbb/{isc,vci,cv,fc,sav} only) and
-// neither existed anywhere in the repository at port time - this is a
-// genuine unported dependency, flagged per the porter brief rather than
-// invented. eaa_format_checking.go and eaa_revocation_format_checking.go
-// import "github.com/ryftcore/dss-go/dss/validation/process/eaa" and call
+// EAAFormatChecking and EAARevocationFormatChecking wire checks from
+// eu.europa.esig.dss.validation.process.eaa.checks and .eaa.status.
+// eaa_format_checking.go and eaa_revocation_format_checking.go import
+// "github.com/ryftcore/dss-go/dss/validation/process/eaa/checks" and call
 // constructors (NewEAASignatureUnicityCheck, NewDisclosurePresentCheck,
 // NewDisclosureListExhaustiveCheck, NewKeyBindingSignaturePresentCheck,
-// NewEAARevocationTokenTypeCheck) that package must eventually provide, each
-// shaped like every other check constructor in this file
-// (i18nProvider, result *process.Result[*drjaxb.XmlFC], token, constraint) -> process.ChainItem[*drjaxb.XmlFC].
-// Integration pass (8c): both files are now gated `//go:build eaa` (see
-// eaa_format_checking.go's header for the rationale), so the default,
-// untagged `go build ./...`/`go vet ./...`/`go test ./...` for the whole
-// module is green without needing that package - the tag simply carries the
-// gap forward instead of leaving the package broken.
+// NewEAARevocationTokenTypeCheck), each shaped like every other check
+// constructor in this file (i18nProvider, result *process.Result[*drjaxb.XmlFC],
+// token, constraint) -> process.ChainItem[*drjaxb.XmlFC].
 //
-// Integration pass (8e): the dependency landed in
-// github.com/ryftcore/dss-go/dss/validation/process/eaa/checks (not the eaa root
-// package - see eaa_format_checking.go's header for why), constructors
-// exactly as predicted above. `go build -tags eaa ./...` is green for this
-// package.
+// Both files are gated `//go:build eaa` (see eaa_format_checking.go's header
+// for the rationale), so the default, untagged `go build ./...`/`go vet
+// ./...`/`go test ./...` for the whole module is green without that package.
+// `go build -tags eaa ./...` is green too.
 package fc

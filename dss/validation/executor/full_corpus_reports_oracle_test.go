@@ -24,7 +24,7 @@
 // asserts the unmarshal outcome of all 273 files on both sides.
 //
 // It admits NO tolerances. Five separate parity defects were found by exactly
-// this comparison during the phase-8f audit and fixed rather than recorded:
+// this comparison and fixed rather than recorded:
 // AOV_XCV constraint order and the digest algorithm reported for the signed
 // attributes (dss/validation/process/bbb/aov), <Timestamp> order under
 // <EvidenceRecord> (dss/validation/process/vpfswatsp/evidencerecord), trusted-

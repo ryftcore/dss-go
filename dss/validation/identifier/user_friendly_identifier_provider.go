@@ -314,7 +314,7 @@ func (p *UserFriendlyIdentifierProvider) IDAsString(object model.IdentifierBased
 	case loteInfoLike:
 		return p.idAsStringForLoTE(v)
 	}
-	// LOG.warn("The class '{}' is not supported! ...") dropped: not load-bearing (PORTING.md).
+	// Java's LOG.warn("The class '{}' is not supported! ...") is dropped; it was not load-bearing.
 	return object.DSSID().AsXmlID()
 }
 

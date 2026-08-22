@@ -62,7 +62,7 @@ func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
 
 // InitChain initializes the chain. Port of initChain().
 //
-// HASH-ORDER (closed in phase 8f): Java builds listsOfLists/lotes as
+// Java builds listsOfLists/lotes as
 // HashSet<XmlTrustSourceList> (identity hashCode/equals) and listsBYType as
 // a HashMap<String, List<XmlTrustSourceList>>, iterating both directly to
 // append checks to the report / to decide the order sub-blocks execute in -
@@ -71,7 +71,7 @@ func (c *CertificateApprovalStatusBlock) Title() i18n.MessageTag {
 // order is randomized per the language spec) in a deterministic surrogate
 // order instead - sorted by each list's URL - which is stable across runs
 // but not necessarily identical to the upstream HashSet/HashMap bucket
-// order. See the porter brief's hard rule on hash-order leaks.
+// order.
 func (c *CertificateApprovalStatusBlock) InitChain() {
 	// cover incomplete cert chain / expired/ revoked certs
 	item := c.isAcceptableBuildingBlockConclusion(c.BuildingBlocksConclusion)

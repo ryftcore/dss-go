@@ -1,14 +1,13 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/xcv/rac/checks/RevocationHasInformationAboutCertificateCheck.java (DSS 6.5.RC1).
 //
-// The slf4j LOG.info records of the three "is not before revocation's thisUpdate"
-// branches are dropped per PORTING.md; the branches themselves keep their (empty)
-// bodies below so the control flow stays statement-for-statement.
+// The three "is not before revocation's thisUpdate" branches have empty
+// bodies (they originally only logged); they are kept so the control flow
+// stays statement-for-statement with the check logic below.
 //
-// Java declares getNotAfterAfterCertificateNotAfterMessage() protected while the
-// five sibling message builders are private. No class in the port extends this
-// check, so all six are unexported methods here; a future subclass would export
-// that one and route the buildAdditionalInfo self-call through an overrides
-// interface, the way Chain and ChainItem do.
+// All six message-building helpers are unexported here: nothing subclasses
+// this check, so there is no need to expose the self-call for overriding
+// (a future subclass would need to route it through an overrides interface,
+// the way Chain and ChainItem do).
 package xcv
 
 import (

@@ -1,7 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/reports/diagnostic/XmlTrustServiceProviderBuilder.java (DSS 6.5.RC1).
 //
-// slf4j logging (LOG.trace/.debug/.info/.warn) is dropped per PORTING.md; none of it is
-// load-bearing (no control-flow decision depends on whether a message was logged).
+// Java's slf4j logging (LOG.trace/.debug/.info/.warn) has no Go equivalent and is not ported;
+// none of it was load-bearing (no control-flow decision depended on whether a message was
+// logged).
 package diagnostic
 
 import (

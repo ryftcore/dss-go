@@ -1,10 +1,10 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/checks/CaQcCheck.java (DSS 6.5.RC1).
 //
-// FLAGGED HASH-ORDER SITE: getStis() collects into a HashSet<String> in
+// getStis() collects into a HashSet<String> in
 // Java, whose bucket order is not reproducible here; identifiers are instead
 // sorted lexicographically for a deterministic (if not necessarily
 // Java-bucket-identical) BuildErrorMessage argument on the multi-value
-// branch. See the porter brief's hard rule on hash-order leaks.
+// branch.
 package qualification
 
 import (

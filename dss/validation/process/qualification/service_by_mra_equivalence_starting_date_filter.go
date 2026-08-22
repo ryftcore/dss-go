@@ -24,7 +24,9 @@ func NewServiceByMRAEquivalenceStartingDateFilter(date *time.Time) *ServiceByMRA
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the configured date falls within the
+// service's MRA equivalence starting/ending window. Port of the overridden
+// isAcceptable(TrustServiceWrapper).
 func (f *ServiceByMRAEquivalenceStartingDateFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	startDate := service.MraTrustServiceEquivalenceStatusStartingTime
 	if startDate == nil || f.date == nil {

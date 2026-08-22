@@ -23,7 +23,8 @@ func NewServiceByDateFilter(date *time.Time) *ServiceByDateFilter {
 	return f
 }
 
-// IsAcceptable is the port of the overridden isAcceptable(TrustServiceWrapper).
+// IsAcceptable reports whether the given service was valid at the
+// configured date. Port of the overridden isAcceptable(TrustServiceWrapper).
 func (f *ServiceByDateFilter) IsAcceptable(service *diagnostic.TrustServiceWrapper) bool {
 	startDate := service.StartDate
 	endDate := service.EndDate
