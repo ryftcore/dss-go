@@ -15,6 +15,7 @@
 package detailedreport
 
 import (
+	"slices"
 	"time"
 
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
@@ -862,7 +863,7 @@ func (r *DetailedReport) CertificateXCVConclusion(certificateId string) *jaxb.Xm
 	signatureIds := r.SignatureIds()
 	basicBuildingBlocks := r.jaxbDetailedReport.BasicBuildingBlocks
 	for _, xmlBasicBuildingBlocks := range basicBuildingBlocks {
-		if !containsString(signatureIds, xmlBasicBuildingBlocks.Id) {
+		if !slices.Contains(signatureIds, xmlBasicBuildingBlocks.Id) {
 			continue // skip for signature
 		}
 
@@ -878,7 +879,7 @@ func (r *DetailedReport) CertificateXCVConclusion(certificateId string) *jaxb.Xm
 
 	// process other certificates (certificate validation only)
 	for _, xmlBasicBuildingBlocks := range basicBuildingBlocks {
-		if containsString(signatureIds, xmlBasicBuildingBlocks.Id) {
+		if slices.Contains(signatureIds, xmlBasicBuildingBlocks.Id) {
 			continue // skip for signature
 		}
 
@@ -1132,14 +1133,4 @@ func derefString(s *string) string {
 		return ""
 	}
 	return *s
-}
-
-// containsString reports whether list contains s.
-func containsString(list []string, s string) bool {
-	for _, v := range list {
-		if v == s {
-			return true
-		}
-	}
-	return false
 }
