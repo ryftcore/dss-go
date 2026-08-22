@@ -166,7 +166,7 @@ func TestParseCertificateKeepsStdlibErrors(t *testing.T) {
 }
 
 // TestParseCertificateRSANegativeModulus covers the RSA counterpart to the Brainpool regression
-// above: a certificate out of the same eu-lotl-250.xml Phase 9 cross-validation fixture (a German
+// above: a certificate out of the same eu-lotl-250.xml cross-validation fixture (a German
 // PointerToOtherTSL's second ServiceDigitalIdentity) whose SubjectPublicKeyInfo modulus INTEGER
 // has its leading content byte's high bit set with no 0x00 DER pad, which crypto/x509 refuses
 // with "x509: RSA modulus is not a positive number".

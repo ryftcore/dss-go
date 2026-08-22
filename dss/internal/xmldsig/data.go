@@ -95,7 +95,7 @@ func (d *Data) IsOctetStream() bool {
 
 // IsElement ports isElement: a subtree, not yet turned into a node set.
 //
-// FIX (integrator, Phase 4d): Santuario's isElement()/isNodeSet() test inputOctetStreamProxy
+// Santuario's isElement()/isNodeSet() test inputOctetStreamProxy
 // (i.e. whether this value was ever constructed as an octet stream), never the cached bytes
 // getBytes() leaves behind after canonicalizing a subtree - getBytes() caches into `bytes` at
 // XMLSignatureInput.java:279 and upstream still re-canonicalizes the subtree on every call
@@ -104,9 +104,8 @@ func (d *Data) IsOctetStream() bool {
 // the next transform - breaking any identity transform (EnvelopedSignatureTransform,
 // Base64Transform) followed by another one, exactly the chain EnvelopedSignatureTransform's own
 // javadoc prescribes. IsOctetStream's node==nil && nodeSet==nil guard already keeps the three
-// branches disjoint, so dropping the hasOctets term here is safe. See the dss-xades REFS chunk's
-// porter notes for the original diagnosis (55/57 -> 56/57 KAT cases verified against the Java
-// oracle in a scratch harness).
+// branches disjoint, so dropping the hasOctets term here is safe. Verified against the Java
+// oracle: 55/57 -> 56/57 KAT cases.
 func (d *Data) IsElement() bool {
 	return d.node != nil && d.nodeSet == nil && !d.isNodeSet
 }
