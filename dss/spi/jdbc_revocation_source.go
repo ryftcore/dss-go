@@ -1,8 +1,8 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/revocation/JdbcRevocationSource.java (DSS 6.5.RC1).
 //
 // eu.europa.esig.dss.spi.client.jdbc (JdbcCacheConnector, SqlQuery, SqlSelectQuery, SqlRecord)
-// is explicitly out of Phase 2a scope per PORTING_PLAN.md's package layout ("NOT ported in 2a:
-// ... spi.client.jdbc"), yet this entire Java class is organized around it - every abstract
+// is not ported (this port has no JDBC cache layer), yet this entire Java class
+// is organized around it - every abstract
 // method and half the concrete ones are typed against it, so the reference is load-bearing
 // (compile-impossible without it). Per the porter brief, the minimal interfaces/types it needs
 // are forward-declared below with "Forward-declared for phase-2b/3:" comments and flagged in

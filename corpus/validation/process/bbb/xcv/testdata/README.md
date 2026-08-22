@@ -6,7 +6,7 @@ All `oracle/*.jsonl` files are pure Java dumps, produced by the drivers in `gen/
 | --- | --- | --- | --- |
 | `oracle/xcva_blocks.jsonl` | 1067 | `XcvaOracle.java` | `X509CertificateValidation` / `CertificateRevocationSelector` / `RevocationAcceptanceChecker` over every signature, time-stamp, revocation and used certificate of the marshal-parity diagnostic-data corpus and of the twelve synthetic dumps in `dd/`, validation time 2024-01-01T00:00:00Z |
 | `oracle/xcva_direct.jsonl` | 1341 | `XcvaDirectOracle.java` | all 12 `rac/checks` classes driven alone at `Level.FAIL` over every (certificate, certificate revocation data) pair of the same dumps |
-| `oracle/xcv_direct.jsonl` | ~33800 | `XcvOracle.java` | all 75 instantiable `checks` / `sub/checks` / `sub/checks/pseudo` / `rfc/checks` classes (the phase 8d XCVB manifest) driven alone at `Level.FAIL`, over every used certificate (and, for the revocation-facing checks, every certificate-revocation pair) of the marshal-parity corpus plus `dd/`, plus a handful of hand-built certificates/revocations (see "XCVB direct corpus" below) |
+| `oracle/xcv_direct.jsonl` | ~33800 | `XcvOracle.java` | all 75 instantiable `checks` / `sub/checks` / `sub/checks/pseudo` / `rfc/checks` classes driven alone at `Level.FAIL`, over every used certificate (and, for the revocation-facing checks, every certificate-revocation pair) of the marshal-parity corpus plus `dd/`, plus a handful of hand-built certificates/revocations (see "XCVB direct corpus" below) |
 
 The real inputs are the marshal-parity corpus in `dss/diagnostic/jaxb/testdata/oracle`
 plus `dd/`; the Go tests (`../xcva_blocks_oracle_test.go`,
@@ -16,8 +16,8 @@ plus `dd/`; the Go tests (`../xcva_blocks_oracle_test.go`,
 from `xcva_oracle_test.go`) read the very same files, so neither side gets a
 private fixture.
 
-The `XmlAOV` the blocks consume is a phase 8d product; the block corpus feeds them a
-PASSED one, the way the phase 8c sav corpus does.
+The `XmlAOV` the blocks consume is built by the `aov` package; the block corpus
+feeds them a PASSED one, the way the `sav` corpus does.
 
 ## Why `dd/` exists
 
@@ -102,7 +102,7 @@ From a `dss-upstream` checkout with the modules built:
 
 - A single-item chain defines no title `MessageTag`, so Java leaves the `Title`
   attribute null while the generated Go model carries `Title` as a plain string.
-  The direct test normalises that one field and nothing else (same as the phase 8c
+  The direct test normalises that one field and nothing else (same as the `fc`/`sav`
   direct corpora).
 - `XmlRAC/RevocationThisUpdate` and `XmlRAC/RevocationProductionDate` are required
   elements in `DetailedReport.xsd`, so the generated Go model carries them as plain
@@ -114,12 +114,12 @@ From a `dss-upstream` checkout with the modules built:
 
 ## XCVB direct corpus (`xcv_direct.jsonl`)
 
-`gen/XcvOracle.java` is the phase 8d XCVB porter's oracle, covering the 83-file
+`gen/XcvOracle.java` covers the 83-file
 manifest ported into this package's `checks` / `sub.checks` / `sub.checks.pseudo`
 / `rfc.checks` half (everything **except** the `X509CertificateValidation` /
 `crs` / `rac` root that XCVA owns and that `XcvaOracle`/`XcvaDirectOracle`
 already cover above). It follows the same "drive every check alone through a
-one-item chain at `Level.FAIL`" pattern as `FcSavDirectOracle` (phase 8c) and
+one-item chain at `Level.FAIL`" pattern as `FcSavDirectOracle` and
 `XcvaDirectOracle`.
 
 Of the 83 ported files, 75 are directly instantiable `ChainItem`s and get a row
@@ -174,10 +174,9 @@ comma-separated) - both now pre-render the list themselves before the call.
 `ProcessValuesCheck` is unchanged (an empty string is not a value any real
 policy constraint accepts, so this could not affect a verdict), only the
 message rendering was fixed. The `i18n.messageFormatArgString` gap itself is
-in a frozen package (phase 1a) and is not fixed here - any other call site
-anywhere in the tree that passes a raw `[]string`/`[]T` to
-`GetMessage`/`BuildXmlMessage` has the same latent bug; flagged for a later
-phase's audit, not chased down beyond this package in this one.
+not fixed here - any other call site in the tree that passes a raw
+`[]string`/`[]T` to `GetMessage`/`BuildXmlMessage` has the same latent bug.
+Open follow-up.
 
 ### Why some rows are synthetic
 
@@ -221,7 +220,7 @@ trusted" gap XCVB's checks hit too - still cannot reach every branch:
 
 Every one of the 75 checks has both an `OK` and a `NOT OK` row; the Go test
 fails if either property is lost for any of them (same rule as XCVA's corpus
-above and phase 8c's `sav`/`fc` corpora).
+above and the `sav`/`fc` corpora).
 
 ### Regenerating `xcv_direct.jsonl`
 

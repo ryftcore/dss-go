@@ -6,8 +6,8 @@
 // implementation (eu.europa.esig.xades.XAdES111Utils / XAdES122Utils / XAdES319132Utils) drawn
 // from the separate "dss-jaxb-xades"-family artifacts (XSD schemas bundled as JAXB resources)
 // and hands it to DSSXMLUtils.validateAgainstXSD(XSDAbstractUtils, Source), which runs a
-// javax.xml.validation.Validator against it. Nothing in PORTING_PLAN.md assigns those XSD
-// schema resources or a javax.xml.validation-equivalent Go package a home yet - there is no
+// javax.xml.validation.Validator against it. This port assigns no home to those XSD
+// schema resources or to a javax.xml.validation-equivalent Go package - there is no
 // bundled-schema or XML-Schema-validator package anywhere in this port. This file therefore
 // assumes, without being able to point at a landed package, that a sibling phase supplies:
 //

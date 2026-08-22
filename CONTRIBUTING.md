@@ -53,9 +53,9 @@ go build -tags eaa ./...
 ```
 
 `-tags eaa` builds the electronic-attestation-of-attributes (EAA)
-validation code paths, which are gated behind a build tag (see
-PORTING_PLAN.md's known-gaps list for their current status) — a PR must
-not break either the default build or the `eaa`-tagged build.
+validation code paths, which are gated behind a build tag (see the
+documentation site's "Known gaps" page for their current status) — a PR
+must not break either the default build or the `eaa`-tagged build.
 
 If your change touches a package with a large fixture corpus, see
 `dss/internal/corpustest` and the top-level `corpus/` directory: heavy
@@ -97,9 +97,9 @@ Key points worth calling out here:
   diverges from what upstream Java DSS does for the same input (a
   different validation verdict, a different byte-level signature
   output, a different error) needs a comment and, ideally, a
-  PORTING_PLAN.md / PORTING.md note explaining *why* — a known upstream
-  bug you're intentionally not reproducing, a Go-standard-library
-  limitation, an accepted gap, etc. Silent behavioral drift from
+  `dss/PORTING.md` note explaining *why* — a known upstream bug you're
+  intentionally not reproducing, a Go-standard-library limitation, an
+  accepted gap, etc. Silent behavioral drift from
   upstream is treated as a bug, not a feature, even when the new
   behavior is arguably "better."
 - New third-party dependencies are effectively out of scope: the
@@ -111,8 +111,8 @@ Key points worth calling out here:
 - Interoperability (byte-level output parity and validation-verdict
   parity against upstream Java DSS) is the project's compatibility
   contract, not API-identical mirroring of the Java class structure. See
-  PORTING_PLAN.md ("What '100% compatibility' means") for the precise
-  claims and how they're verified.
+  the documentation site's compatibility pages for the precise claims and
+  how they're verified.
 
 ## Reporting bugs / interoperability mismatches
 

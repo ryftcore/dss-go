@@ -1,6 +1,6 @@
 // Ported from dss-spi/src/main/java/eu/europa/esig/dss/spi/x509/CommonTrustedCertificateSource.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.spi.x509 flattens into the Go package spi (see PORTING_PLAN.md), so the
+// eu.europa.esig.dss.spi.x509 flattens into the Go package spi, so the
 // type keeps its Java name unqualified.
 //
 // ASSUMPTION (flagged for integrator reconciliation, see chunk X509-B which owns

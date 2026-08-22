@@ -5,9 +5,8 @@
 // itself listed in the phase 8d AOV manifest, but every file in
 // eu.europa.esig.dss.validation.process.bbb.aov.cc.checks (all manifest
 // files) calls it directly, so it cannot be left unported without leaving the
-// aov package uncompilable. Its Go home is dss/validation/policy per the
-// package-mapping table in /PORTING_PLAN.md ("dss-validation (+ ...) ->
-// validation, validation/diagnostic, validation/reports, validation/policy").
+// aov package uncompilable. Its Go home is dss/validation/policy, matching the
+// dss-validation module's package mapping.
 //
 // Java's static methods become package-level functions; the two overloaded
 // pairs Go cannot express by argument type alone

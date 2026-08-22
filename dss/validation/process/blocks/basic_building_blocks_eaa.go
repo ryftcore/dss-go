@@ -3,15 +3,14 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/BasicBuildingBlocks.java (DSS 6.5.RC1) -
 // EAA-dependent slice only.
 //
-// STRUCTURAL FIX B (phase 8d AOV porter, per S8D_BRIEF.md): fc.NewEAAFormatChecking,
+// fc.NewEAAFormatChecking,
 // fc.NewEAARevocationFormatChecking, sav.NewEAAAcceptanceValidation and
 // sav.NewEAARevocationTokenAcceptanceValidation are themselves gated behind
 // //go:build eaa in their own packages (fc/eaa_format_checking.go,
 // fc/eaa_revocation_format_checking.go, sav/eaa_acceptance_validation.go,
 // sav/eaa_revocation_token_acceptance_validation.go - eu.europa.esig.dss.validation.process.eaa
-// is listed in PORTING_PLAN.md as deferred past phase 9, so those files carry
-// the same "eaa" feature tag rather than a phaseNN one). basic_building_blocks.go
-// is un-tagged as of this phase (STRUCTURAL FIX A), so its two EAA-context
+// is deferred, so those files carry the same "eaa" feature tag).
+// basic_building_blocks.go is un-tagged, so its two EAA-context
 // branches that call into those four constructors are split into this
 // eaa-tagged file - and its basic_building_blocks_noeaa.go !eaa counterpart -
 // so the un-tagged, default `go build ./...` never references a symbol that

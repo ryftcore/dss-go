@@ -33,7 +33,7 @@ type RevocationToken[R revocation.Revocation] interface {
 	// SetRelatedCertificate sets the certificate token the current revocation data has been
 	// issued for. Java writes the protected field directly from subclasses in a different
 	// Java package (eu.europa.esig.dss.spi.x509.revocation.crl/.ocsp); the Go port flattens
-	// those into this same package (see PORTING_PLAN.md) but keeps the setter for symmetry
+	// those into this same package but keeps the setter for symmetry
 	// with the rest of this port's Init/Set pattern.
 	SetRelatedCertificate(certificate *model.CertificateToken)
 	// RelatedCertificateID gets the DSS String Id of the related certificate, "" when there is

@@ -31,9 +31,9 @@ Attribution for this port is carried at two levels:
     from. Those per-file headers are the authoritative, file-level
     attribution record and must not be removed.
 
-For the full mapping of upstream Maven modules to Go packages, and the
-porting conventions applied throughout, see PORTING_PLAN.md and
-dss/PORTING.md in this repository.
+For the full mapping of upstream Maven modules to Go packages see
+docs/migrating-from-java/index.md; for the porting conventions applied
+throughout, see dss/PORTING.md in this repository.
 
 Disclaimer
 ----------

@@ -74,7 +74,7 @@ func (f *EtsiValidationPolicyFactory) LoadValidationPolicy(validationPolicyDocum
 
 // LoadValidationPolicyFromReader ports
 // EtsiValidationPolicyFactory#loadValidationPolicy(InputStream). Named per
-// PORTING_PLAN's Java-overload convention (see
+// PORTING.md's Java-overload convention (see
 // model/policy.ValidationPolicyFactory's doc comment).
 //
 // Java wraps any failure (including the try-with-resources close) in an

@@ -71,9 +71,8 @@ than by position.
 
 `POEExtraction#extractPOE(List<XmlTimestampedObject>, Date)` is exercised only
 indirectly (it is what `EvidenceRecordTimestampsValidationBlock#getPoe` calls);
-its own corpus belongs with that block, which lives in
-`../evidencerecord` and cannot be built until the `qualification` package lands
-(it reaches `vpftsp`, which imports `qualification`).
+its own corpus belongs with that block, in `../evidencerecord`, and has not
+been built.
 
 ## Regenerating
 

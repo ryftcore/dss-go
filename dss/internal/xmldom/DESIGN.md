@@ -1,9 +1,8 @@
 # XML stack binding design: `internal/xmldom` + `internal/xmlc14n`
 
-**Status: BINDING.** Two implementers work in parallel against this document — one owns
-`internal/xmldom`, one owns `internal/xmlc14n`. Every API in §1.9 and §2.9 is pinned. If an
-implementer believes a pinned signature is wrong, they raise it with the tech lead and the doc
-changes first; they do not change the code and reconcile later.
+Design record for the two packages that replace Java DOM and Apache Santuario.
+Every API in §1.9 and §2.9 is pinned: it does not change without this document
+changing first.
 
 Upstream baseline: DSS **6.5.RC1** (`4c212986`), Apache Santuario **xmlsec 3.0.6** (the version
 resolved in `~/.m2` for `dss-xml-utils`), OpenJDK 21 / Xerces as shipped in the JDK.
@@ -13,9 +12,9 @@ Sources read for this design (all verified, not recalled):
 | What | Where |
 |---|---|
 | `XMLCanonicalizer`, `DomUtils`, `SantuarioInitializer`, `DocumentBuilderFactoryBuilder` | upstream `dss-xml-utils`, `dss-xml-common` |
-| `CanonicalizerBase`, `Canonicalizer20010315`, `Canonicalizer20010315Excl`, `CanonicalizerPhysical`, `NameSpaceSymbTable`, `XmlAttrStack`, `AttrCompare`, `C14nHelper`, `UtfHelpper`, `InclusiveNamespaces` | `xmlsec-3.0.6-sources.jar` (fetched to the maven cache; extracted at `scratchpad/xmlsec-src/`) |
+| `CanonicalizerBase`, `Canonicalizer20010315`, `Canonicalizer20010315Excl`, `CanonicalizerPhysical`, `NameSpaceSymbTable`, `XmlAttrStack`, `AttrCompare`, `C14nHelper`, `UtfHelpper`, `InclusiveNamespaces` | `xmlsec-3.0.6-sources.jar` (from the maven cache) |
 | XAdES c14n call sites, ID registration, transform pipeline | upstream `dss-xades` (`DSSXMLUtils`, `XAdESDOMDocument`, `reference/*`) |
-| Live behaviour | `scratchpad/Probe.java`, `Probe2.java`, `Probe3.java`, `Probe4.java` (Santuario 3.0.6 oracle runs) and `scratchpad/xmlprobe/` (Go `encoding/xml` probes) |
+| Live behaviour | four Santuario 3.0.6 oracle probe programs and a Go `encoding/xml` probe (run once, not committed) |
 
 Every "Santuario does X" claim below is backed by an executed probe, quoted inline.
 
@@ -26,8 +25,8 @@ Every "Santuario does X" claim below is backed by an executed probe, quoted inli
 ```
 internal/xmldom     minimal namespace-aware DOM + parser + serializer   (stdlib only)
 internal/xmlc14n    C14N 1.0 / 1.1 / exclusive / physical               (stdlib + xmldom)
-xmldsig  (phase 4b) Reference/Transform pipeline, resolvers, SignedInfo (+ spi, model)
-xades    (phase 4c) XAdES B/T/LT/LTA                                    (+ everything)
+xmldsig             Reference/Transform pipeline, resolvers, SignedInfo (+ spi, model)
+xades               XAdES B/T/LT/LTA                                    (+ everything)
 ```
 
 Per `PORTING.md`, both `internal/` packages replace machinery that upstream gets from a third
@@ -64,7 +63,7 @@ KAT oracle must construct a fresh `Canonicalizer` per document (§3.4).
 
 `encoding/xml` has no tree model at all, so the tree is ours. Its **tokenizer**, however, is
 worth reusing, and its `RawToken()` mode is exactly right for c14n. Probed behaviour
-(`scratchpad/xmlprobe`):
+(measured with a Go `encoding/xml` probe):
 
 | Behaviour | `RawToken()` result | Verdict |
 |---|---|---|
@@ -229,7 +228,8 @@ carrying line/column:
 9. `<?xml version="1.1"?>`. **Decision D4:** XML 1.1 is rejected. Xerces accepts it and then
    applies XML 1.1 line-ending normalization (NEL `U+0085`, LSEP `U+2028`), which would silently
    diverge from us. Nothing in XAdES, ETSI TS 119 612 trusted lists or eIDAS profiles uses XML
-   1.1. Failing closed beats diverging. Recorded as an accepted gap in `PORTING_PLAN.md`.
+   1.1. Failing closed beats diverging. Recorded as an accepted gap in
+   `docs/compatibility/known-gaps.md`.
    (Under XML 1.0, NEL and LSEP are *not* normalized — probe confirms `<r>a<U+0085>b</r>` and
    `<r>a<U+2028>b</r>` survive c14n unchanged.)
 10. Nesting deeper than `ParseOptions.MaxDepth` (default 500) and documents larger than
@@ -276,7 +276,7 @@ equals `"Id"` **case-insensitively**, calls `setIdAttribute(nodeName, true)` and
   `DSSXMLUtils.isDuplicateIdsDetected`. Registration never errors — the caller decides whether a
   duplicate is fatal (XAdES validation treats it as an attack indicator).
 - The index is invalidated (lazily rebuilt) by any mutation of an element's attributes or by
-  tree-structure changes. Implementers: bump a `gen` counter on the owning document in
+  tree-structure changes. Bump a `gen` counter on the owning document in
   `SetAttr`/`RemoveAttr`/`AppendChild`/`InsertBefore`/`RemoveChild`/`ReplaceChild`.
 
 `ElementByID` is what the phase-4b `SameDocumentResolver` uses for `#foo` references, and what
@@ -642,7 +642,7 @@ Santuario has two entry points and they are **not** the same algorithm:
 
 **Decision D7.** `xmlc14n` implements **both** from day one — the API and the `walk.go`
 parameterization are designed for it — but the phase-4a golden gate covers **subtree only**.
-Node-set KATs are generated in phase 4b through the real transform pipeline, because building a
+Node-set KATs are generated through the real transform pipeline, because building a
 Java-side node set by hand runs into Xerces' namespace-node identity problem (the very issue
 Santuario's `circumventBug2650` exists for) and would pin an artefact of the test harness rather
 than of DSS. `Input.Subset == nil` selects subtree mode; non-nil selects node-set mode.
@@ -879,8 +879,8 @@ walk started at the `Document` node, so the loop returns immediately:
 <r/><?pi d?>                PHYS     → <r></r>                      (physical too)
 ```
 
-Interoperability with Java DSS is the contract (`PORTING_PLAN.md` §"What 100% compatibility
-means"), so `xmlc14n` reproduces this bit-for-bit. It is implemented as the same structural
+Interoperability with Java DSS is the contract (see
+`docs/compatibility/methodology.md`), so `xmlc14n` reproduces this bit-for-bit. It is implemented as the same structural
 consequence, not as a special case: port the traversal loop literally, including the
 `if parentNode != nil { sibling = cur.NextSibling }` guard, and the behaviour falls out. A
 dedicated KAT (`prolog-epilog-empty-root`) locks it, and a comment at the call site records that
@@ -939,7 +939,7 @@ type Input struct {
 	Exclude           *xmldom.Node
 	InclusivePrefixes []string
 
-	// Added in phase 4b - see the amendment note below.
+	// See the amendment note below.
 	NodeSet bool
 	Filters []NodeFilter
 }
@@ -988,7 +988,7 @@ type RelativeNamespaceError struct {
 func (e *RelativeNamespaceError) Error() string
 ```
 
-**Amendment (phase 4b, agreed with the tech lead).** `Input` gained `NodeSet` and `Filters`, and
+**Amendment.** `Input` gained `NodeSet` and `Filters`, and
 `NodeFilter` was added. The reason is that §4's sketch assumed the transform layer could hand
 `xmlc14n` a *materialized* `NodeSet`, and it cannot:
 
@@ -1134,7 +1134,7 @@ Rules the oracle obeys:
 
 ### 3.5 Cross-validation beyond KATs
 
-Phase 4b/4c gates, listed here so nobody designs them away:
+Gates on the layer above, listed here so nobody designs them away:
 
 - Go-produced XAdES-B/T signatures validate in Java DSS (both `SignedInfo` and
   `SignedProperties` digests reproduce, which is a c14n equality proof over real inputs).
@@ -1160,8 +1160,7 @@ because three of its guesses turned out wrong in ways worth remembering:
   secure-validation flag, because a transform resolves its own namespace prefixes against the
   element that carries it.
 
-Not binding beyond the fact that `xmldom`/`xmlc14n` must be sufficient for it. Written now so the
-two implementers can see the consumers.
+Not binding beyond the fact that `xmldom`/`xmlc14n` must be sufficient for it.
 
 ```go
 package xmldsig
@@ -1233,7 +1232,7 @@ Two consequences that constrain §1 and §2 and are therefore binding:
 
 ---
 
-## 5. Review checklist for the two implementers
+## 5. Review checklist
 
 - [ ] `xml.Attr.Value` appears nowhere in `xmldom` except in the start-tag cross-check (§1.4).
 - [ ] `RawToken()`, never `Token()`.
@@ -1247,7 +1246,7 @@ Two consequences that constrain §1 and §2 and are therefore binding:
 
 ---
 
-## 6. Amendments from the phase 4c audit
+## 6. Amendments
 
 Three divergences from Xerces/Xalan found by an independent re-run of the oracles, and the
 decisions taken on them. Each is now pinned by a test whose failure was verified by mutation.

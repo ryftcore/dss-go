@@ -26,9 +26,8 @@ direction, at which levels.
 - **A library, a facade and a CLI.** ~314,000 lines of Go across 2,274 source
   files, behind a small top-level API — plus an `esig` command for the shell.
 
-> **Status.** The port is functionally complete through the trusted-list layer and
-> its parity gates are green, but this project has not been released, tagged or
-> independently security-audited, and it has no production track record. Read
+> **Status.** This project has not been released, tagged or independently
+> security-audited, and it has no production track record. Read
 > [What is not here](#what-is-not-here) before you depend on it, and read
 > [SECURITY.md](SECURITY.md) before you report a problem with it.
 
@@ -183,7 +182,8 @@ revocation data. The library ships no HTTP TSA/CRL/OCSP clients — see
 
 ## What is not here
 
-Honest gaps, all tracked in [PORTING_PLAN.md](PORTING_PLAN.md):
+Honest gaps, all tracked on the documentation site's
+[Known gaps](https://ryftcore.github.io/dss-go/compatibility/known-gaps/) page:
 
 - **No online revocation or time-stamping clients.** Upstream's `dss-service`
   module (`OnlineTSPSource`, `OnlineCRLSource`, `OnlineOCSPSource`) is out of
@@ -215,10 +215,9 @@ Honest gaps, all tracked in [PORTING_PLAN.md](PORTING_PLAN.md):
   `/Location` optionality.
   None of them is a false accept; all are enumerated in
   `dss/pades/testdata/broadgen/README.md`.
-- **Open cosmetic follow-ups**, booked when the validation engine closed: X.500
-  distinguished-name `toString` rendering, some diagnostic-data drift that no
-  verdict depends on, and executor-corpus coverage for the QWAC-certificate and
-  EAA-presentation paths.
+- **Open cosmetic follow-ups**: X.500 distinguished-name `toString` rendering,
+  some diagnostic-data drift that no verdict depends on, and executor-corpus
+  coverage for the QWAC-certificate and EAA-presentation paths.
 - **One deterministic-order sanction**: certificate-reference grouping in the
   algorithm-obsolescence process iterates in first-seen order where Java iterates
   in `java.util.HashMap` bucket order. Pinned by a permutation allow-list test;
@@ -237,7 +236,7 @@ Cross-validation runs in both directions, per format family. The left column is
 live: those tests drive a *running* Java DSS and skip unless `DSS_UPSTREAM_HOME`
 points at a built upstream checkout — so they are part of `go test`, but only
 for someone who has set that up. The "broad run" figures in the right column are
-one-time sweeps recorded in [PORTING_PLAN.md](PORTING_PLAN.md); the fixture
+one-time sweeps, not repeatable from this repository alone; the fixture
 counts beside them are committed and run on every build.
 
 | Format | Go-signed, validated by a live Java DSS | Upstream fixtures validated by Go |
@@ -251,8 +250,7 @@ counts beside them are committed and run on every build.
 And layer by layer, against Java oracles. The **Runs** column matters: ✅ means
 the comparison is a test in `go test ./...` from a full checkout, re-run on
 every build against a committed Java oracle; ⏸ means a one-time sweep over an
-upstream corpus too large to vendor, recorded in
-[PORTING_PLAN.md](PORTING_PLAN.md) and repeatable only with a JDK and an
+upstream corpus too large to vendor, repeatable only with a JDK and an
 out-of-tree checkout.
 
 | Layer | Comparison | Result | Runs |
@@ -269,20 +267,19 @@ out-of-tree checkout.
 | Diagnostic data & policies | 889 diagnostic dumps, 32 policies, 480 crypto-suite keys (the committed oracle keeps 55 dumps) | byte-identical round trips | ⏸ |
 
 The parity gates carry **no tolerance allowances**: the divergence allow-lists
-that existed during porting were deleted before the phase closed, and the
-comparators are identifier-inclusive. The methodology, the oracle-generation
-recipes and the full numbers are on the documentation site's compatibility pages;
-the phase-by-phase record is [PORTING_PLAN.md](PORTING_PLAN.md).
+that existed during porting have been deleted, and the comparators are
+identifier-inclusive. The methodology, the oracle-generation
+recipes and the full numbers are on the documentation site's compatibility pages.
 
 ## Documentation
 
 | | |
 |---|---|
 | **Guides and concepts** | [ryftcore.github.io/dss-go](https://ryftcore.github.io/dss-go/) — what the signature formats and levels mean, how validation reaches a verdict, trusted lists and eIDAS, and how to do the common tasks. Built from `docs/` by the Pages workflow |
+| **Compatibility** | [Methodology, numbers and known gaps](https://ryftcore.github.io/dss-go/compatibility/methodology/) |
 | **API reference** | [pkg.go.dev/github.com/ryftcore/dss-go/dss](https://pkg.go.dev/github.com/ryftcore/dss-go/dss) |
 | **Examples** | [`dss/examples/`](dss/examples/README.md) |
-| **Porting record** | [PORTING_PLAN.md](PORTING_PLAN.md) — module mapping, phases, gaps |
-| **Porting conventions** | [dss/PORTING.md](dss/PORTING.md) — binding rules for contributed ports |
+| **Porting conventions** | [dss/PORTING.md](dss/PORTING.md) — the rules contributed ports follow |
 | **Upstream tracking** | [UPSTREAM.md](UPSTREAM.md) — the pinned baseline and how to rebase onto a newer DSS |
 | **Contributing** | [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 | **Security** | [SECURITY.md](SECURITY.md) — report vulnerabilities privately, never as a public issue |
@@ -334,8 +331,10 @@ to `corpus/`:
   PDF comparisons: `TestWriterOverCorpus` (`PDF_CORPUS_DIR`) and
   `TestDumpWriterOutputs` (`PDFOUT`).
 - **One skips by design**: `TestDOMRoundTrip/ns-relative.xml`, a fixture
-  canonicalization is supposed to reject. Contribution rules, including the upstream-tracking rule for any
-behaviour that diverges from Java DSS, are in [CONTRIBUTING.md](CONTRIBUTING.md).
+  canonicalization is supposed to reject.
+
+Contribution rules, including the upstream-tracking rule for any behaviour that
+diverges from Java DSS, are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Attribution and license
 

@@ -1,14 +1,14 @@
-# Document-level end-to-end oracle (phase 8f harness, item B)
+# Document-level end-to-end oracle
 
-THE PHASE 8 EXIT CRITERION's item (B): `document_level_oracle_test.go`'s
-`TestDocumentLevelOracle` validates 60 real signed documents - 10 per format
+`document_level_oracle_test.go`'s `TestDocumentLevelOracle` validates 60 real
+signed documents - 10 per format
 family (CAdES, XAdES, PAdES, JAdES, ASiC-CAdES, ASiC-XAdES) - end to end, in
 BOTH implementations, and compares diagnostic-data core fields, DetailedReport
 BasicBuildingBlocks conclusions, top-level Signature/Timestamp/EvidenceRecord
 verdicts, and SimpleReport qualifications.
 
-Unlike `dss/validation/executor/testdata/oracle/full_corpus.jsonl` (item A),
-which starts from ALREADY-BUILT diagnostic data, this test starts from the
+Unlike `dss/validation/executor/testdata/oracle/full_corpus.jsonl`, which
+starts from ALREADY-BUILT diagnostic data, this test starts from the
 ORIGINAL signed document (CMS/XML/PDF/JWS/ZIP) on both sides, so it also
 exercises each format's own diagnostic-data builder - format detection,
 signature/timestamp/evidence-record extraction, identifier construction - end
@@ -44,22 +44,9 @@ Go side: `dssvalidation.SignedDocumentValidatorFromDocument`), a permissive
 fixtures with no live revocation data or reachable trust anchors),
 `ValidationLevel.ARCHIVAL_DATA`, locale `en`.
 
-## Defects found by this harness
+## Recorded divergences
 
-* **Fixed** (`dss/validation/reports/diagnostic/diagnostic_data_builder.go`,
-  `GetXmlFoundCertificatesForSource`): passing `&ocspCertificateSource.
-  TokenCertificateSource` (the address of the EMBEDDED base field) instead of
-  `ocspCertificateSource` itself lost the outer `*OCSPCertificateSource`'s
-  `CertificateSourceType()` override, so an orphan OCSP revocation
-  identifier's certificate source answered `CertificateSourceType_OTHER`
-  instead of `OCSP_RESPONSE`, panicking a runtime type assertion. Found via
-  `pades/pades-lt` (PAdES-LT.pdf). The function's parameter is now the
-  `foundCertificatesSource` interface (matching its sibling
-  `GetXmlFoundCertificatesForToken`), so callers pass the OUTER value they
-  actually have and virtual dispatch works the way Java's abstract-class
-  parameter always did.
-
-* **F2 - open, tracked** (`knownIdentifierDivergences` in
+* **F2 — `knownIdentifierDivergences`** (in
   `document_level_oracle_test.go`, 30 of 60 fixtures): a fresh-from-document
   `TimestampToken`'s `T-...` identifier embeds an `SA-...`
   `SignatureAttributeIdentifier` for its carrying attribute, itself a digest
@@ -70,23 +57,21 @@ fixtures with no live revocation data or reachable trust anchors),
   by is byte-identical - confirmed down to proving the RAW timestamp-binaries
   half of the digest matches Java's `DSSASN1Utils.getDEREncoded(TimeStampToken)`
   exactly, byte for byte, on the same input. The divergence is therefore in
-  the ATTRIBUTE-serialization half, not the timestamp-binaries half; isolating
+  the ATTRIBUTE-serialization half, not the timestamp-binaries half. Isolating
   which of `xml/utils.DomUtilsSerializeNode` (via `internal/xmldom`) or the
-  CAdES `Attribute.Encoded()` path is responsible, and fixing it, is a
-  dedicated pass this harness session did not have the budget for. NOT a
+  CAdES `Attribute.Encoded()` path is responsible is an open follow-up. NOT a
   verdict-correctness defect - every Indication/SubIndication checked matches
   exactly.
 
-* **F3 - open, tracked** (`knownContentDivergences` in
+* **F3 — `knownContentDivergences`** (in
   `document_level_oracle_test.go`, `cades/baseline-lta`): a genuine, narrower
   verdict divergence - one nested archive timestamp inside
   Signature-C-B-LTA-10.p7m's timestamp chain is `FAILED`/`HASH_FAILURE` in Go
   where Java gets `INDETERMINATE`/`NO_CERTIFICATE_CHAIN_FOUND` (i.e. Java's
   message-imprint verified; Go's did not). Root cause is somewhere in the
   CAdES archive-timestamp (RFC 5126 archive-time-stamp-v2/v3) message-imprint
-  construction in `cades_timestamp_message_digest_builder.go`; isolating the
-  exact byte difference needs a dedicated pass through that algorithm against
-  the RFC, which this harness session did not have the budget for either.
+  construction in `cades_timestamp_message_digest_builder.go`. Isolating the
+  exact byte difference against the RFC is an open follow-up.
 
 Both F2 and F3 are tracked BY NAME in `document_level_oracle_test.go`, not
 silently absorbed: the test still runs the full comparison for every listed

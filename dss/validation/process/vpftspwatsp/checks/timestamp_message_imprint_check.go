@@ -1,8 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpftspwatsp/checks/TimestampMessageImprintCheck.java (DSS 6.5.RC1).
 //
-// Integration note (phase 8c pass): this is a deliberately minimal slice of
-// Java's eu.europa.esig.dss.validation.process.vpftspwatsp package tree
-// (assigned to phase 8e - "LTV+qualification" - per PORTING_PLAN.md). Only
+// This is a deliberately minimal slice of Java's
+// eu.europa.esig.dss.validation.process.vpftspwatsp package tree. Only
 // this one check class is ported here: it is a plain leaf ChainItem with no
 // dependency on the rest of vpftspwatsp (the "5.6.2.4 Validation process for
 // timestamps" orchestration classes), and it is the base class

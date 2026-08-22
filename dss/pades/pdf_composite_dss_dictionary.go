@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/dss/PdfCompositeDssDictionary.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pades.validation.dss flattens into the Go package pades (see
-// PORTING_PLAN.md), so the type keeps its Java name unqualified.
+// eu.europa.esig.dss.pades.validation.dss flattens into the Go package pades,
+// so the type keeps its Java name unqualified.
 //
 // FORWARD DEPENDENCY (not in this chunk's manifest): PdfDssDict, the Java interface
 // eu.europa.esig.dss.pdf.PdfDssDict, which flattens into this same package. The shape every

@@ -102,6 +102,5 @@
 // The examples/ directory holds nine runnable programs, one story each, built
 // on this facade; cmd/esig is a command-line front end built on it too, and is
 // the largest worked example of the API below. The repository README states the
-// feature matrix and the accepted gaps, PORTING.md the porting conventions, and
-// /PORTING_PLAN.md the module mapping, phase roadmap and compatibility record.
+// feature matrix and the accepted gaps, and PORTING.md the porting conventions.
 package dss
