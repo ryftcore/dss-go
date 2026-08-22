@@ -58,19 +58,19 @@ func (f *CAdESSignatureScopeFinder) FindSignatureScope(cadesSignature *CAdESSign
 		if utils.IsCollectionNotEmpty(referenceValidations) {
 			reference := referenceValidations[0] // only one Reference is allowed in CAdES
 			if reference.IsIntact() {
-				return f.GetSignatureScopeFromOriginalDocument(cadesSignature, originalDocument)
+				return f.getSignatureScopeFromOriginalDocument(cadesSignature, originalDocument)
 			} else if reference.IsFound() {
-				return f.GetSignatureScopeFromReferenceValidation(reference)
+				return f.getSignatureScopeFromReferenceValidation(reference)
 			}
 		}
 	}
 	return result
 }
 
-// GetSignatureScopeFromOriginalDocument returns a list of SignatureScopes from the signed
+// getSignatureScopeFromOriginalDocument returns a list of SignatureScopes from the signed
 // document. Port of the protected getSignatureScopeFromOriginalDocument(CAdESSignature,
 // DSSDocument).
-func (f *CAdESSignatureScopeFinder) GetSignatureScopeFromOriginalDocument(cadesSignature *CAdESSignature,
+func (f *CAdESSignatureScopeFinder) getSignatureScopeFromOriginalDocument(cadesSignature *CAdESSignature,
 	originalDocument model.DSSDocument) []scope.SignatureScope {
 	result := make([]scope.SignatureScope, 0)
 	if originalDocument == nil {
@@ -91,10 +91,10 @@ func (f *CAdESSignatureScopeFinder) GetSignatureScopeFromOriginalDocument(cadesS
 	return result
 }
 
-// GetSignatureScopeFromReferenceValidation gets a list of SignatureScopes from a
+// getSignatureScopeFromReferenceValidation gets a list of SignatureScopes from a
 // ReferenceValidation. Port of the protected getSignatureScopeFromReferenceValidation(
 // ReferenceValidation).
-func (f *CAdESSignatureScopeFinder) GetSignatureScopeFromReferenceValidation(reference *model.ReferenceValidation) []scope.SignatureScope {
+func (f *CAdESSignatureScopeFinder) getSignatureScopeFromReferenceValidation(reference *model.ReferenceValidation) []scope.SignatureScope {
 	result := make([]scope.SignatureScope, 0)
 	digestDocument := f.CreateDigestDocument(reference.Digest())
 	if digestDocument != nil {
