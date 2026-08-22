@@ -3,22 +3,10 @@
 //
 // java.io.Serializable is dropped (no Go counterpart).
 //
-// FORWARD DEPENDENCIES (not in this chunk's manifest, ported by sibling chunks):
-//
-//   - PdfSignatureRevision (eu.europa.esig.dss.pdf.PdfSignatureRevision), which flattens into
-//     this same package per the phase 5b layout. Every file of this chunk that needs it was
-//     written against this assumed shape:
-//
-//     type PdfSignatureRevision struct { /* embeds PdfRevision */ }
-//     func (r *PdfSignatureRevision) CMS() *cms.CMS
-//     func (r *PdfSignatureRevision) CompositeDssDictionary() *PdfCompositeDssDictionary
-//     func (r *PdfSignatureRevision) DssDictionary() PdfDssDict
-//     func (r *PdfSignatureRevision) Fields() []*PdfSignatureField
-//
-//   - cades.CAdESCertificateSource's constructor takes the CMS and the SignerInformation
-//     directly (see cades/cades_certificate_source.go), matching
-//     PdfSignatureRevision.getCMS()/PdfSignatureRevision itself not carrying a SignerInformation
-//     of its own - the signerInformation constructor parameter is threaded through unchanged.
+// cades.CAdESCertificateSource's constructor takes the CMS and the SignerInformation
+// directly (see cades/cades_certificate_source.go), matching
+// PdfSignatureRevision.getCMS()/PdfSignatureRevision itself not carrying a SignerInformation
+// of its own - the signerInformation constructor parameter is threaded through unchanged.
 package pades
 
 import (
@@ -43,8 +31,7 @@ type PAdESCertificateSource struct {
 // SignerInformation).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
-// empty string stands for Java's null throughout this port, see
-// pdf_dss_dict_certificate_source.go).
+// empty string means no VRI-name filter, see pdf_dss_dict_certificate_source.go).
 func NewPAdESCertificateSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signerInformation *cmscore.SignerInfo) (*PAdESCertificateSource, error) {
 	if vriDictionaryName == "" {

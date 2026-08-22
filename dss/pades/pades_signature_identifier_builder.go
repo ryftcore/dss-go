@@ -1,16 +1,5 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PAdESSignatureIdentifierBuilder.java
 // (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: *PAdESSignature is owned by a sibling chunk not in this manifest (see
-// pades_baseline_requirements_checker.go and pades_certificate_source.go for the same situation
-// with other PAdESSignature-typed forward dependencies). Its shape is inferred from the calls
-// this file makes to it:
-//
-//	func (s *PAdESSignature) PdfRevision() *PdfSignatureRevision
-//
-// PdfSignatureRevision (eu.europa.esig.dss.pdf.PdfSignatureRevision), itself a forward
-// dependency of this chunk (see pades_certificate_source.go's header for its full assumed
-// shape), additionally exposes Fields() []*PdfSignatureField here.
 package pades
 
 import (

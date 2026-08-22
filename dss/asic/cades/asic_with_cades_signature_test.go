@@ -93,8 +93,8 @@ func TestDataToSignASiCSWithCAdESFromFiles(t *testing.T) {
 	}
 }
 
-// TestDataToSignHelperBuilderManifestDispatch guards the virtual-dispatch hazard flagged in
-// S7_BRIEF.md: ASiCWithCAdESDataToSignHelperBuilder#build calls the abstract getManifestBuilder,
+// TestDataToSignHelperBuilderManifestDispatch guards the virtual-dispatch hazard:
+// ASiCWithCAdESDataToSignHelperBuilder#build calls the abstract getManifestBuilder,
 // so the signature and the timestamp helper builders must produce manifests carrying their own
 // SigReference MimeType (PKCS7 vs TST). Static Go dispatch dropping the override would silently
 // yield the same manifest for both.

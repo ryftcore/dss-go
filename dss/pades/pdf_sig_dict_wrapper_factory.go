@@ -1,17 +1,16 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfSigDictWrapperFactory.java
 // (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). slf4j is dropped, per PORTING.md.
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// slf4j is dropped, per PORTING.md.
 //
 // Java's PdfSigDictWrapperFactory builds a PdfSigDictWrapper, the sole implementation of
-// PdfSignatureDictionary; both already collapsed into this port's single *PdfSignatureDictionary
+// PdfSignatureDictionary; both are collapsed into this port's single *PdfSignatureDictionary
 // type (see pdf_signature_dictionary.go's header). Create() therefore builds and returns a
-// *PdfSignatureDictionary directly, matching native_pdf_document_reader.go's already-landed call
-// site `NewPdfSigDictWrapperFactory(dictionary).Create()`. Java's DSSException, thrown unchecked
-// from the private getContents/getByteRange getters Create() calls, becomes a returned error -
-// the "protected builders keep (T, error)" convention the SIGN chunk's handoff notes document,
-// and matching the (signature, err) pair the call site already destructures.
+// *PdfSignatureDictionary directly, matching native_pdf_document_reader.go's call site
+// `NewPdfSigDictWrapperFactory(dictionary).Create()`. Java's DSSException, thrown unchecked from
+// the private getContents/getByteRange getters Create() calls, becomes a returned error,
+// matching the (signature, err) pair the call site destructures.
 package pades
 
 import (

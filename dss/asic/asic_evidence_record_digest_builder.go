@@ -14,8 +14,8 @@ import (
 // container for potential evidence-record incorporation. Ports the Java class, which extends
 // ZipContentEvidenceRecordDigestBuilder; Go embeds it. This type fully reimplements
 // BuildDigestGroup and AssertConfigurationValid (rather than relying on the embedded base's
-// dispatch), so the virtual-dispatch base-calls-overridden-subclass-method hazard flagged in
-// S7_BRIEF.md does not arise here: BuildDigestGroup below calls b.AssertConfigurationValid()
+// dispatch), so the virtual-dispatch base-calls-overridden-subclass-method hazard does not arise
+// here: BuildDigestGroup below calls b.AssertConfigurationValid()
 // on the receiver directly (Go static dispatch resolves to this type's own method, matching
 // what Java's dynamic dispatch would resolve to for a call site typed as
 // ASiCEvidenceRecordDigestBuilder).

@@ -96,10 +96,8 @@ func (e *ASiCWithCAdESLevelBaselineLTA) extendWithDigestAlgorithms(asicContent *
 		e.AssertExtendTimestampPossible(coveredByAnyManifest)
 
 		// Extending an existing archive timestamp needs to re-validate the container's
-		// signatures and detached timestamps to gather fresh validation data - that requires
-		// the dss/validation engine (Phase 8, not yet ported). See
-		// asic_with_cades_lta_validation_phase8.go / _nophase8.go for the two build-tagged
-		// implementations of this step.
+		// signatures and detached timestamps to gather fresh validation data; that step
+		// lives in asic_with_cades_lta_validation_phase8.go.
 		extendedTimestamp := e.extendLastArchiveTimestampWithValidationData(asicContent, lastTimestamp)
 		asicContent.SetTimestampDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.TimestampDocuments(), extendedTimestamp))
 	}

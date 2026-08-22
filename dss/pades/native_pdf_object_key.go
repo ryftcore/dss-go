@@ -4,7 +4,7 @@
 // COSObjectKey. Here the wrapped value is internal/pdf's pdf.ObjectKey, whose (Num, Gen) pair is
 // exactly a COSObjectKey. The type is a comparable struct, not a pointer type, because upstream
 // uses PdfObjectKey as a HashMap key over its equals/hashCode - the ported sources key Go maps
-// with it (see the FORWARD DEPENDENCIES note in pdf_composite_dss_dict_certificate_source.go).
+// with it (see pdf_composite_dss_dict_certificate_source.go).
 package pades
 
 import "github.com/ryftcore/dss-go/dss/internal/pdf"

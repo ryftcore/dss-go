@@ -4,21 +4,20 @@
 // dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfVriDict.java and
 // dss-pades/src/main/java/eu/europa/esig/dss/pdf/DSSDictionaryExtractionUtils.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Shapes match the assumed FORWARD DEPENDENCIES documented by
-// pdf_composite_dss_dict_certificate_source.go / pdf_composite_dss_dict_crl_source.go /
-// pdf_composite_dss_dict_ocsp_source.go (PdfDssDict.{CRLs,OCSPs,CERTs,VRIs}, PdfVriDict.{Name,
-// TUTime,TSStream}) and native_pdf_document_reader.go (SingleDssDictExtract(PdfDict) PdfDssDict).
+// eu.europa.esig.dss.pdf flattens across several files in this package (see pdf_object.go's
+// header). Shapes match those documented by pdf_composite_dss_dict_certificate_source.go /
+// pdf_composite_dss_dict_crl_source.go / pdf_composite_dss_dict_ocsp_source.go
+// (PdfDssDict.{CRLs,OCSPs,CERTs,VRIs}, PdfVriDict.{Name, TUTime,TSStream}) and
+// native_pdf_document_reader.go (SingleDssDictExtract(PdfDict) PdfDssDict).
 //
 // STRUCTURE DEVIATION: Java expresses SingleDssDict/PdfVriDict as two subclasses of the abstract
 // AbstractPdfDssDict, factoring the three token maps and their extraction into the base class.
 // Go has no implementation inheritance, so AbstractPdfDssDict becomes dssDictExtraction, a value
 // type embedded by both SingleDssDict and PdfVriDict (constructed once, by
 // newDssDictExtraction, from the four "which sub-dictionary/array names" abstract-method
-// results each subclass supplied in Java - now four plain constructor arguments). This mirrors
-// the "specialised subclass re-implements/embeds what it needs" convention already used
-// elsewhere in this port (e.g. cms_for_pades_builder_helper.go) rather than trying to fake
-// virtual dispatch.
+// results each subclass supplied in Java - now four plain constructor arguments), as elsewhere
+// in this port (e.g. cms_for_pades_builder_helper.go) rather than trying to fake virtual
+// dispatch.
 //
 // DSSDictionaryExtractionUtils.java's four static methods have exactly one call site each
 // (AbstractPdfDssDict's constructor, PdfVriDict's constructor) in the whole Java codebase, so
@@ -83,7 +82,7 @@ func (d dssDictExtraction) CERTs() map[PdfObjectKey]*model.CertificateToken { re
 
 // dssDictionaryExtractionUtilsGetCertsFromArray extracts the certificate object map.
 // Port of DSSDictionaryExtractionUtils#getCertsFromArray. Upstream logs and skips an entry that
-// fails to parse; kept silent here per PORTING.md's slf4j-drop convention.
+// fails to parse; this stays silent.
 func dssDictionaryExtractionUtilsGetCertsFromArray(dict PdfDict, dictionaryName, arrayName string) map[PdfObjectKey]*model.CertificateToken {
 	certMap := make(map[PdfObjectKey]*model.CertificateToken)
 	certsArray := dict.AsArray(arrayName)
@@ -240,7 +239,7 @@ func newSingleDssDict(dssDictionary PdfDict) *SingleDssDict {
 
 // singleDssDictExtractVRIs extracts the VRI dictionaries embedded in the DSS dictionary.
 // Port of SingleDssDict#extractVRIs. Upstream logs and swallows any exception raised while
-// walking the /VRI dictionary; kept silent here per PORTING.md's slf4j-drop convention.
+// walking the /VRI dictionary; this stays silent.
 func singleDssDictExtractVRIs(dssDictionary PdfDict) []*PdfVriDict {
 	vriDict := dssDictionary.AsDict(PAdESConstantsVriDictionaryName)
 	if vriDict == nil {

@@ -2,16 +2,6 @@
 // dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PdfValidationDataContainer.java
 // (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY (sibling chunk of this same phase; assumed shape, matching the accessor
-// names PdfDssDictCertificateSource/PdfDssDictCRLSource/PdfDssDictOCSPSource already expose in
-// this package - pdf_dss_dict_certificate_source.go, pdf_dss_dict_crl_source.go,
-// pdf_dss_dict_ocsp_source.go):
-//
-//	type PdfDocDssRevision struct { ... }
-//	func (r *PdfDocDssRevision) CertificateSource() *PdfDssDictCertificateSource
-//	func (r *PdfDocDssRevision) CRLSource() *PdfDssDictCRLSource
-//	func (r *PdfDocDssRevision) OCSPSource() *PdfDssDictOCSPSource
-//
 // java.util.HashMap<String, PdfObjectKey> -> a plain Go map[string]PdfObjectKey: the only
 // operation performed against it is containsKey/put/get, order never observed.
 package pades

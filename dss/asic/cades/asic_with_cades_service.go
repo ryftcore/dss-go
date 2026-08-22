@@ -5,8 +5,8 @@
 // Java's `extends AbstractASiCSignatureService<...>` becomes embedding plus the
 // InitAbstractASiCSignatureService(self) registration; the base's single-document convenience
 // wrappers (GetContentTimestamp, GetDataToSign, SignDocument, SignatureTimestamp - promoted here
-// as this type's plain-named methods) dispatch into the *Multiple methods below
-// (S7_BRIEF.md's virtual-dispatch warning), which carry the real, multi-document implementation.
+// as this type's plain-named methods) dispatch into the *Multiple methods below, which carry the
+// real, multi-document implementation.
 //
 // Go has no overloading, so this type cannot itself satisfy both
 // document.DocumentSignatureService[SP,TP] (single-document GetContentTimestamp/GetDataToSign/
@@ -14,8 +14,7 @@
 // names, list-typed) the way Java's class does. This port keeps the plain names for the
 // single-document shape - so *ASiCWithCAdESService satisfies document.DocumentSignatureService -
 // and MultipleDocumentsService() below returns a thin adapter satisfying
-// document.MultipleDocumentsSignatureService by forwarding to the *Multiple methods, matching the
-// precedent in xades/xades_service.go and jades/jades_service.go.
+// document.MultipleDocumentsSignatureService by forwarding to the *Multiple methods.
 package cades
 
 import (
@@ -114,8 +113,7 @@ func (s *ASiCWithCAdESService) assertSigningCertificateValid(
 // GetContentTimestamp with different (single-document vs list) signatures - Go cannot overload,
 // so this type keeps the plain name reserved for the single-document convenience wrapper
 // promoted from asic.AbstractASiCSignatureService, and exposes this multi-document shape via
-// MultipleDocumentsService()'s adapter (see the bottom of this file), matching the precedent in
-// xades/xades_service.go and jades/jades_service.go.
+// MultipleDocumentsService()'s adapter (see the bottom of this file).
 //
 // Panics with Java's message when parameters is nil (Objects.requireNonNull).
 func (s *ASiCWithCAdESService) GetContentTimestampMultiple(toSignDocuments []model.DSSDocument,

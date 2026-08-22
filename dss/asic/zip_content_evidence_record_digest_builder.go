@@ -71,8 +71,8 @@ func (b *ZipContentEvidenceRecordDigestBuilder) SetDataObjectDigestBuilderFactor
 }
 
 // BuildDigestGroup builds a list of hashes for the content files of the provided ZIP
-// container. Ports buildDigestGroup(). Overridden by ASiCEvidenceRecordDigestBuilder; per the
-// virtual-dispatch warning in S7_BRIEF.md, this base method is only invoked directly on a
+// container. Ports buildDigestGroup(). Overridden by ASiCEvidenceRecordDigestBuilder; this base
+// method is only invoked directly on a
 // *ZipContentEvidenceRecordDigestBuilder value (never through an overrides interface), since
 // no code in this package holds a ZipContentEvidenceRecordDigestBuilder-typed reference to an
 // embedded ASiCEvidenceRecordDigestBuilder and expects override dispatch.

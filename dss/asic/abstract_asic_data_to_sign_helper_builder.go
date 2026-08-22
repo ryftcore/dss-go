@@ -9,9 +9,9 @@ import (
 )
 
 // AbstractASiCDataToSignHelperBuilderOverrides declares the operation
-// AbstractASiCDataToSignHelperBuilder calls back into virtually from CreatePackageZip. Per
-// S7_BRIEF.md's virtual-dispatch warning, every concrete builder must call
-// InitAbstractASiCDataToSignHelperBuilder with itself before use.
+// AbstractASiCDataToSignHelperBuilder calls back into virtually from CreatePackageZip. Every
+// concrete builder must call InitAbstractASiCDataToSignHelperBuilder with itself before use, or
+// the base's virtual calls will not reach the override.
 type AbstractASiCDataToSignHelperBuilderOverrides interface {
 	// GetDataPackageName returns a name for a package zip container, containing the original
 	// signer data. Port of the protected abstract getDataPackageName(ASiCContent).

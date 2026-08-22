@@ -1,8 +1,8 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PdfCmsOCSPSource.java
 // (DSS 6.5.RC1).
 //
-// BouncyCastle replacements used here (see PORTING.md), following the precedent
-// spi/cms_ocsp_source.go established for the sibling CMSOCSPSource:
+// BouncyCastle replacements used here (see PORTING.md), as in spi/cms_ocsp_source.go for the
+// sibling CMSOCSPSource:
 //   - org.bouncycastle.asn1.cms.AttributeTable -> internal/cmscore.Attributes.
 //   - Attribute#getAttributeValues() -> Attribute.Values ([]*asn1ber.Element).
 //   - DSSASN1Utils.getAsn1Attributes(AttributeTable, ASN1ObjectIdentifier) ->
@@ -13,16 +13,6 @@
 //     spi.DSSRevocationUtilsFromRespToBasic (extracts the embedded BasicOCSPResponse), the same
 //     two calls spi/cms_ocsp_source.go's addBasicOcspRespFromIDRIOcspResponse chains for the
 //     structurally identical "full OCSPResponse, not a bare BasicOCSPResponse" case.
-//
-// FORWARD DEPENDENCIES (not in this chunk's manifest):
-//   - RevocationInfoArchival (eu.europa.esig.dss.pades.validation.RevocationInfoArchival) - a
-//     struct with OcspVals() [][]byte, each element being the DER encoding of one ASN.1
-//     OCSPResponse (RFC 6960) found in the RevocationInfoArchival ASN.1 SEQUENCE's [1] member.
-//   - PAdESUtilsRevocationInfoArchival(attrValue *asn1ber.Element) *RevocationInfoArchival - the
-//     flattened static PAdESUtils.getRevocationInfoArchival(ASN1Encodable), following the
-//     PAdESUtilsVRIsWithName precedent (pdf_composite_dss_dict_certificate_source.go) for how a
-//     flattened PAdESUtils static method is named in this port; nil stands for Java's null
-//     (RevocationInfoArchival.getInstance returns null for an unrecognised shape).
 package pades
 
 import (

@@ -8,26 +8,6 @@
 // are declared by the Java OfflineRevocationSource base but were not carried over into
 // spi.OfflineRevocationSourceBase, so every concrete source that needs them (this one included)
 // defines its own copy of the merge, rather than overriding an inherited one.
-//
-// FORWARD DEPENDENCIES (not in this chunk's manifest):
-//
-//   - PdfSignatureRevision (eu.europa.esig.dss.pdf.PdfSignatureRevision); see
-//     pades_certificate_source.go's header for its full assumed shape - this file additionally
-//     uses CompositeDssDictionary().CrlSource() and DssDictionary().
-//
-//   - PdfCmsCRLSource (eu.europa.esig.dss.pades.validation.PdfCmsCRLSource), the CRL-flavoured
-//     sibling of this chunk's PdfCmsOCSPSource (pdf_cms_ocsp_source.go), extending
-//     spi.OfflineCRLSourceBase the same way. Assumed shape, mirroring PdfCmsOCSPSource and the
-//     RevocationOrigin.ADBE_REVOCATION_INFO_ARCHIVAL-only content this class ever carries:
-//
-//     func NewPdfCmsCRLSource(signedAttributes cmscore.Attributes) *PdfCmsCRLSource
-//     func (s *PdfCmsCRLSource) RevocationTokens(certificateToken, issuerToken *model.CertificateToken) ([]spi.RevocationToken[revocation.CRL], error)
-//     func (s *PdfCmsCRLSource) ADBERevocationValuesBinaries() []spi.EncapsulatedRevocationTokenIdentifier[revocation.CRL]
-//     func (s *PdfCmsCRLSource) AllRevocationBinariesWithOrigins() []PdfCmsCRLSourceBinaryOriginsEntry
-//     func (s *PdfCmsCRLSource) AllRevocationTokensWithOrigins() []spi.RevocationTokenOriginsEntry[revocation.CRL]
-//
-//     where PdfCmsCRLSourceBinaryOriginsEntry mirrors PdfDssDictCRLSourceBinaryOriginsEntry's
-//     {Binary, Origins} shape (pdf_dss_dict_crl_source.go).
 package pades
 
 import (
@@ -54,7 +34,7 @@ type PAdESCRLSource struct {
 // PAdESCRLSource(PdfSignatureRevision, String, AttributeTable).
 //
 // Panics with the Java message when vriDictionaryName is empty (Objects.requireNonNull; the
-// empty string stands for Java's null throughout this port, see pdf_dss_dict_crl_source.go).
+// empty string means no VRI-name filter, see pdf_dss_dict_crl_source.go).
 func NewPAdESCRLSource(pdfSignatureRevision *PdfSignatureRevision, vriDictionaryName string,
 	signedAttributes cmscore.Attributes) *PAdESCRLSource {
 	if vriDictionaryName == "" {
@@ -100,8 +80,8 @@ func (s *PAdESCRLSource) RevocationTokens(certificateToken, issuerToken *model.C
 // which nothing makes for every DSS-dictionary-embedded CRL up front - so it never sees the DSS
 // dictionary/VRI-sourced binaries AllRevocationBinariesWithOrigins already exposes
 // unconditionally. Shadowing here (Go method redefinition standing in for Java's virtual
-// dispatch; see PORTING.md's "Virtual dispatch" precedent, also used by
-// pades_certificate_source.go's DSSDictionaryCertValues) is required for every caller reaching
+// dispatch, as in pades_certificate_source.go's DSSDictionaryCertValues) is required for every
+// caller reaching
 // this type through the spi.OfflineRevocationSource[R] interface (e.g.
 // PAdESSignature.CompleteCRLSource(), and thus BaselineRequirementsChecker.MinimalLTRequirement's
 // LT-level revocation-presence check) to see the DSS dictionary's CRLs at all.

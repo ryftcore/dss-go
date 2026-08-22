@@ -1,7 +1,7 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PDFSignatureService.java (DSS 6.5.RC1).
 //
 // The eu.europa.esig.dss.pdf SPI is flattened into the pades package together with the rest of
-// dss-pades (phase 5b layout). Upstream ships two interchangeable backends (pdfbox, openpdf)
+// dss-pades. Upstream ships two interchangeable backends (pdfbox, openpdf)
 // selected by a ServiceLoader; the Go port has exactly one, the native internal/pdf engine, so
 // this interface stays as the seam a caller can substitute while IPdfObjFactory collapses to a
 // constructor (internal/pdf/DESIGN.md §0.2).

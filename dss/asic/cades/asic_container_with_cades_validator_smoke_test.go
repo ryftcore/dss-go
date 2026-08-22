@@ -1,10 +1,8 @@
-// Smoke test for the un-gated ASiC-CAdES container validator tree
+// Smoke test for the ASiC-CAdES container validator tree
 // (asic_container_with_cades_analyzer.go, asic_container_with_cades_analyzer_factory.go,
 // asic_container_with_cades_validator.go, asic_container_with_cades_validator_factory.go,
 // asic_with_cades_diagnostic_data_builder.go, asic_with_cades_timestamp_analyzer.go,
-// asic_with_cades_timestamp_validator.go), now that the phase 8 validation engine
-// (dss/validation, dss/validation/executor, dss/validation/policy, dss/simplereport,
-// dss/policy) has landed and their `phase8` build tags were removed.
+// asic_with_cades_timestamp_validator.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // ASiC container extraction, the nested CAdES signature analyzers,

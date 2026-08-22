@@ -30,11 +30,6 @@ func NewDataToSignOpenDocumentHelper(asicContent *asic.ASiCContent) *DataToSignO
 }
 
 // ToBeSigned ports the @Override getToBeSigned().
-//
-// Cross-chunk assumption (XADVAL): OpenDocumentSupportUtilsGetOpenDocumentCoverage(*asic.ASiCContent)
-// []model.DSSDocument mirrors OpenDocumentSupportUtils.getOpenDocumentCoverage(ASiCContent),
-// ported alongside ASiCWithXAdESSignatureParameters in the sibling XADVAL manifest
-// (S7_BRIEF.md).
 func (h *DataToSignOpenDocumentHelper) ToBeSigned() []model.DSSDocument {
 	return OpenDocumentSupportUtilsGetOpenDocumentCoverage(h.AsicContent())
 }

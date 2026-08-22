@@ -5,15 +5,13 @@
 // org.bouncycastle.asn1.esf.OtherRevVals, org.bouncycastle.asn1.ocsp.OCSPResponse and
 // org.bouncycastle.asn1.x509.CertificateList have no DSS class of their own and no port
 // elsewhere in this codebase (PORTING.md's "machinery BouncyCastle provides upstream" rule).
-// Following the contract pdf_cms_ocsp_source.go's header already commits this type to
-// ("RevocationInfoArchival ... a struct with OcspVals() [][]byte, each element being the DER
-// encoding of one ASN.1 OCSPResponse ... found in the RevocationInfoArchival ASN.1 SEQUENCE's
-// [1] member"), CrlVals()/OcspVals() return the DER encoding of each CertificateList/OCSPResponse
-// directly - Java's CertificateList#getEncoded()/OCSPResponse#getEncoded() collapsed into the
-// getter, rather than exposing the intermediate ASN1Sequence/ASN1Encodable BouncyCastle would.
-// OtherRevVals has no caller anywhere in this port (upstream never reads it back either - only
-// the encode-direction constructor accepts it), so it is kept as the parsed *asn1ber.Element for
-// ToASN1Primitive to re-encode.
+// CrlVals()/OcspVals() return the DER encoding of each CertificateList/OCSPResponse directly -
+// Java's CertificateList#getEncoded()/OCSPResponse#getEncoded() collapsed into the getter,
+// rather than exposing the intermediate ASN1Sequence/ASN1Encodable BouncyCastle would, and each
+// OcspVals() element is the DER encoding of one ASN.1 OCSPResponse (RFC 6960) found in the
+// RevocationInfoArchival ASN.1 SEQUENCE's [1] member. OtherRevVals has no caller anywhere in
+// this port (upstream never reads it back either - only the encode-direction constructor
+// accepts it), so it is kept as the parsed *asn1ber.Element for ToASN1Primitive to re-encode.
 //
 //	RevocationInfoArchival ::= SEQUENCE {
 //	  crl [0] EXPLICIT SEQUENCE of CRLs, OPTIONAL
@@ -56,10 +54,9 @@ func NewRevocationInfoArchival(crlVals, ocspVals [][]byte, otherRevVals *asn1ber
 
 // RevocationInfoArchivalGetInstance gets the RevocationInfoArchival object from a parsed ASN.1
 // SEQUENCE. Port of the static getInstance(Object); Go has no dual-type instanceof/getInstance
-// bridge, so the caller (PAdESUtils.getRevocationInfoArchival, a forward dependency of a sibling
-// chunk) is expected to have already turned the attribute value into a parsed *asn1ber.Element
-// before calling this. obj == nil ports the "obj != null" guard, returning (nil, nil) as Java's
-// getInstance(null) does.
+// bridge, so the caller (PAdESUtilsRevocationInfoArchival) is expected to have already turned
+// the attribute value into a parsed *asn1ber.Element before calling this. obj == nil ports the
+// "obj != null" guard, returning (nil, nil) as Java's getInstance(null) does.
 func RevocationInfoArchivalGetInstance(obj *asn1ber.Element) (*RevocationInfoArchival, error) {
 	if obj == nil {
 		return nil, nil

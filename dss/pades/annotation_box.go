@@ -1,17 +1,14 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/AnnotationBox.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). Shape (NewAnnotationBox, NewAnnotationBoxFromFieldParameters,
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// Its shape (NewAnnotationBox, NewAnnotationBoxFromFieldParameters,
 // MinX/MinY/MaxX/MaxY/ToPdfPageCoordinates, used as a plain value type - see
-// native_pdf_signature_service.go's `annotationBox := AnnotationBox{}`) confirmed against every
-// already-landed call site.
+// native_pdf_signature_service.go's `annotationBox := AnnotationBox{}`) is used by every call
+// site.
 //
 // Java's isOverlap(PdfAnnotation) / isOverlap(AnnotationBox) overload pair has no Go overloading
 // counterpart; this port only introduces the plain-AnnotationBox comparison (IsOverlap) plus an
-// IsOverlapAnnotation(*PdfAnnotation) convenience that delegates to it, following the
-// established "split by suffix" convention for de-overloaded Java methods (see
-// pades_service.go's getAvailableSignatureFields{,WithPassword} precedent, cited in the SIGN
-// chunk's handoff notes).
+// IsOverlapAnnotation(*PdfAnnotation) convenience that delegates to it.
 package pades
 
 import (

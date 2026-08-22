@@ -1,8 +1,8 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/PdfCmsCRLSource.java
 // (DSS 6.5.RC1).
 //
-// BouncyCastle replacements used here (see PORTING.md), following the precedent
-// pdf_cms_ocsp_source.go established for the sibling PdfCmsOCSPSource:
+// BouncyCastle replacements used here (see PORTING.md), as in pdf_cms_ocsp_source.go for the
+// sibling PdfCmsOCSPSource:
 //   - org.bouncycastle.asn1.cms.AttributeTable -> internal/cmscore.Attributes.
 //   - Attribute#getAttributeValues() -> Attribute.Values ([]*asn1ber.Element).
 //   - DSSASN1Utils.getAsn1Attributes(AttributeTable, ASN1ObjectIdentifier) ->
@@ -12,15 +12,10 @@
 //     the same way every other malformed-revocation degradation in this port does (slf4j
 //     dropped per PORTING.md).
 //
-// FORWARD DEPENDENCY (not in this chunk's manifest, shared with pdf_cms_ocsp_source.go):
-//   - PAdESUtilsRevocationInfoArchival(attrValue *asn1ber.Element) *RevocationInfoArchival - the
-//     flattened static PAdESUtils.getRevocationInfoArchival(ASN1Encodable).
-//
 // AllRevocationBinariesWithOrigins()/AllRevocationTokensWithOrigins() are declared by the Java
 // OfflineRevocationSource base (upstream, PdfCmsCRLSource never overrides them, inheriting the
 // base's default map-field getter) but were not carried over into spi.OfflineRevocationSourceBase
-// (see pdf_dss_dict_crl_source.go's header for the same gap, and pades_crl_source.go's header
-// for the landed sibling chunk that already assumes this file defines them). Every binary this
+// (see pdf_dss_dict_crl_source.go's header for the same gap). Every binary this
 // source ever adds carries the single RevocationOriginAdbeRevocationInfoArchival origin
 // (extractRevocationInfoArchival below is the only AddBinary call site), so the two methods
 // below reproduce the base's default behaviour by pairing spi.OfflineRevocationSourceBase's

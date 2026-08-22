@@ -2,13 +2,6 @@
 // (DSS 6.5.RC1).
 //
 // java.io.Serializable is dropped (no Go counterpart), as elsewhere in this port.
-//
-// FORWARD DEPENDENCIES (sibling chunks; already referenced elsewhere in this package):
-//   - PdfSignatureField (pdf_signature_field.go's header already documents its own shape).
-//   - PdfModificationDetection - used already by native_pdf_signature_service.go
-//     (pdfModificationDetection.SetAnnotationOverlaps/SetPageDifferences/SetVisualDifferences/
-//     SetObjectModifications and NewPdfModificationDetection()); the getter this interface
-//     needs is the matching ModificationDetection() *PdfModificationDetection.
 package pades
 
 // PdfRevision permits the user to choose the underlying PDF library used to create PDF

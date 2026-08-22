@@ -1,9 +1,5 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/dss/PdfDssDictCRLSource.java (DSS 6.5.RC1).
 //
-// The forward dependencies this file shares with the rest of the chunk (PdfObjectKey,
-// PdfDssDict, PdfVriDict, PAdESUtilsVRIsWithName) and the determinism rule applied to
-// PDF-object-keyed map walks are documented in pdf_composite_dss_dict_certificate_source.go.
-//
 // Java's Map<..., Set<RevocationOrigin>> return values become slices of pairs, the convention
 // spi.OfflineRevocationSourceBase established with RevocationTokenOriginsEntry. Note that
 // getAllRevocationBinariesWithOrigins() and getAllRevocationTokensWithOrigins() are declared by

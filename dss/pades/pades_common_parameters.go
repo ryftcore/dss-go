@@ -2,13 +2,6 @@
 // (DSS 6.5.RC1).
 //
 // java.io.Serializable is dropped (no Go counterpart).
-//
-// FORWARD DEPENDENCY (eu.europa.esig.dss.pdf.PdfSignatureCache, dss-pdf module - not in this
-// chunk's manifest, flattened into this same package pades by a sibling chunk, per
-// internal/pdf/doc.go's Layering section): a struct with MessageDigest() model.DSSMessageDigest,
-// SetMessageDigest(model.DSSMessageDigest), ToBeSignedDocument() model.DSSDocument and
-// SetToBeSignedDocument(model.DSSDocument), already assumed by the landed
-// pades/native_pdf_signature_service.go (MessageDigest/ComputeDigest/Sign).
 package pades
 
 import (

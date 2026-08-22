@@ -2,20 +2,6 @@
 // dss-asic-common/src/main/java/eu/europa/esig/dss/asic/common/AbstractASiCManifestBuilder.java
 // (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCIES (same Go package, different chunks of the dss-asic-common port). The Java
-// definition/ and evidencerecord/ sub-packages flatten into this same Go package per the phase-7
-// package layout, so these are referenced unqualified. Assumed shapes, taken from the Go ports of
-// the equivalent xmldsig definitions (xml/common/xmldsig_{namespace,element,attribute}.go) and from
-// the Java sources they mirror:
-//
-//	var  ASiCManifestNS *common.DSSNamespace                        // ASiCManifestNamespace.NS
-//	type ASiCManifestElement string                                 // implements common.DSSElement
-//	     ASiCManifestElementASiCManifest, ASiCManifestElementSigReference, ASiCManifestElementDataObjectReference
-//	type ASiCManifestAttribute string                               // implements common.DSSAttribute
-//	     ASiCManifestAttributeURI, ASiCManifestAttributeMIMEType, ASiCManifestAttributeRootFile
-//	type ASiCContentDocumentFilter struct{ ... }                    // a class, not an interface
-//	func (*ASiCContentDocumentFilter) Filter(*ASiCContent) []model.DSSDocument
-//
 // The manifest bytes this builder produces are covered by the CAdES signature over
 // ASiCManifest*.xml, so the DOM is assembled through the frozen xml/utils DomUtils serializer, in
 // upstream's exact element and attribute order - do not reorder anything below.

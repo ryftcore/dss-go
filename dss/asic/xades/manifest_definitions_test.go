@@ -3,8 +3,7 @@
 // dss-asic-xades 6.5.RC1 + dss-xml-common 6.5.RC1 (java.lang.reflect over
 // ManifestAttribute/ManifestElement.getEnumConstants(), ManifestNamespace.NS's fields, and
 // ManifestPath.FILE_ENTRY_PATH.getQueryString()/getFullPathAttribute(NS)/getMediaTypeAttribute(NS)),
-// per PORTING.md's "exhaustive table test" rule for registry-like tables and this phase's
-// explicit KAT requirement for definition enums (S7_BRIEF.md).
+// per PORTING.md's "exhaustive table test" rule for registry-like tables.
 package xades
 
 import (

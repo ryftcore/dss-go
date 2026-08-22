@@ -1,27 +1,10 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfSignatureField.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf flattens into the Go package pades together with the rest of the phase
-// 5b layout (see internal/pdf/doc.go's Layering section: "pades (ported Java classes: PAdESUtils,
-// PdfSigDictWrapper, SingleDssDict, ByteRange, …)"), so the type keeps its Java name unqualified.
+// eu.europa.esig.dss.pdf flattens into the Go package pades (see internal/pdf/doc.go's Layering
+// section: "pades (ported Java classes: PAdESUtils, PdfSigDictWrapper, SingleDssDict, ByteRange,
+// …)"), so the type keeps its Java name unqualified.
 //
 // java.io.Serializable is dropped (no Go counterpart).
-//
-// FORWARD DEPENDENCIES (not in this chunk's manifest):
-//   - PdfDict (eu.europa.esig.dss.pdf.PdfDict), already landed by the SIGN chunk
-//     (pades/native_pdf_dict.go implements it); this file uses its StringValue(name string)
-//     string and AsDict(name string) PdfDict methods.
-//   - SigFieldPermissions (eu.europa.esig.dss.pdf.SigFieldPermissions) - a struct with
-//     Action() enumerations.PdfLockAction, Fields() []string and
-//     CertificationPermission() enumerations.CertificationPermission.
-//   - PAdESUtilsExtractPermissionsDictionary(lock PdfDict) *SigFieldPermissions - the flattened
-//     static PAdESUtils.extractPermissionsDictionary(PdfDict), following the
-//     PAdESUtilsVRIsWithName precedent (pdf_composite_dss_dict_certificate_source.go) for how a
-//     flattened PAdESUtils static method is named in this port.
-//   - PAdESConstantsFieldNameName / PAdESConstantsLockName (eu.europa.esig.dss.pdf.PAdESConstants
-//     .FIELD_NAME_NAME / .LOCK_NAME) - matching the PAdESConstants<FieldName> naming already
-//     observed in the landed pades/native_pdf_signature_service.go and
-//     pades/native_pdf_document_reader.go (e.g. PAdESConstantsTimestampType,
-//     PAdESConstantsSignatureDefaultSubFilter, PAdESConstantsURName).
 package pades
 
 import "fmt"

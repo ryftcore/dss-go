@@ -2,10 +2,10 @@
 //
 // Two-tier virtual dispatch, mirroring abstract_asic_container_analyzer.go's own note: this
 // base overrides validation.SignedDocumentValidatorOverrides.InitializeDiagnosticDataBuilder
-// (registered at the leaf validator via InitSignedDocumentValidator, per the
-// cades/cms_document_validator.go precedent) while itself declaring ONE further-overridable
+// (registered at the leaf validator via InitSignedDocumentValidator, as in
+// cades/cms_document_validator.go) while itself declaring ONE further-overridable
 // member, instantiateASiCDiagnosticDataBuilder() - overridden by ASiCContainerWithCAdESValidator
-// (out of this manifest) to swap in ASiCWithCAdESDiagnosticDataBuilder, left at the default by
+// to swap in ASiCWithCAdESDiagnosticDataBuilder, left at the default by
 // ASiCContainerWithXAdESValidator. That second override cannot be reached by embedding alone -
 // InitializeDiagnosticDataBuilder below self-calls it, and Go has no virtual dispatch across an
 // embedded value - so it gets its own AbstractASiCContainerValidatorOverrides interface and
@@ -54,7 +54,7 @@ type AbstractASiCContainerValidator struct {
 // Takes the concrete leaf analyzer (e.g. *ASiCContainerWithCAdESAnalyzer) rather than the
 // *AbstractASiCContainerAnalyzer it embeds: the latter never itself satisfies
 // analyzer.DocumentAnalyzer (IsSupported is left abstract, exactly as
-// analyzer.DefaultDocumentAnalyzer's own precedent - see validation.SignedDocumentValidator's
+// analyzer.DefaultDocumentAnalyzer itself leaves it - see validation.SignedDocumentValidator's
 // signatureByIDAnalyzer doc comment), so passing it directly would not compile; passing the
 // outer leaf value instead also matches Java's `super(new ASiCContainerWithCAdESAnalyzer())` more
 // directly than unwrapping to the base field would.

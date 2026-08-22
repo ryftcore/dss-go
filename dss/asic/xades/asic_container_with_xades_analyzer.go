@@ -1,20 +1,7 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCContainerWithXAdESAnalyzer.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
-// same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
-//
-// NOT gated behind `phase8`, unlike its CAdES sibling. The CAdES container analyzer is forced to
-// be: asic/cades/asic_container_with_cades_analyzer.go needs ASiCWithCAdESTimestampAnalyzer, which
-// extends dss/validation's DetachedTimestampAnalyzer - a package Phase 8 has not landed, so that
-// file cannot compile at all today. Nothing in the XAdES container analyzer reaches outside the
-// already-ported tree: asic.AbstractASiCContainerAnalyzer, spi/validation{,/analyzer} and the
-// frozen dss/xades analyzer are all live, and the type is directly usable through the ported
-// analyzer.DocumentAnalyzer interface. Gating it too would have hidden a working surface -
-// per-signature analysis of ASiC containers - from the build and from cross-validation, so it is
-// live and pinned against upstream by asic/broad_corpus_cross_validation_test.go's
-// TestBroadCorpusXAdESSignatureAnalysisMatchesUpstream over the whole fixture corpus. What
-// genuinely awaits Phase 8 is the *validator* wrapper (asic_container_with_xades_validator.go),
-// which does import dss/validation.
+// Package flattening: Java's eu.europa.esig.dss.asic.xades.validation lands in this same Go
+// package (dss/asic/xades).
 package xades
 
 import (
@@ -83,14 +70,16 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetContainerExtractor() *asic.DefaultAS
 // GetSignatureAnalyzers ports the @Override protected getSignatureAnalyzers(), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
 //
-// FLAGGED CROSS-CHUNK GAP (mirrors asic/cades/asic_container_with_cades_analyzer.go's identical
-// note): Java's getSignatureAnalyzers() forwards `this.getSignaturePolicyProvider()` (a protected
+// Java's getSignatureAnalyzers() forwards `this.getSignaturePolicyProvider()` (a protected
 // accessor on the frozen analyzer.DefaultDocumentAnalyzer, unexported in the Go port as
 // signaturePolicyProviderOrDefault and not reachable from another package) into each nested
 // XMLDocumentAnalyzer. No exported equivalent exists today, so this propagation is dropped here:
 // each nested XMLDocumentAnalyzer instead lazily instantiates its own default
 // SignaturePolicyProvider. This only differs observably when a caller has set a *custom*
-// SignaturePolicyProvider on the outer analyzer via SetSignaturePolicyProvider.
+// SignaturePolicyProvider on the outer analyzer via SetSignaturePolicyProvider - the same gap as
+// asic/cades/asic_container_with_cades_analyzer.go.
+//
+// TODO: add an exported SignaturePolicyProvider accessor on analyzer.DefaultDocumentAnalyzer.
 func (a *ASiCContainerWithXAdESAnalyzer) GetSignatureAnalyzers() []analyzer.DocumentAnalyzer {
 	if a.SignatureValidators == nil {
 		a.SignatureValidators = make([]analyzer.DocumentAnalyzer, 0)

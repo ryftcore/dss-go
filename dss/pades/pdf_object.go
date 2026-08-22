@@ -3,15 +3,12 @@
 // dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfArray.java and
 // dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfSimpleObject.java (DSS 6.5.RC1).
 //
-// INTEGRATION NOTE: eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in
-// no s5b manifest (flagged by the DSSDICT porter as a "chunk gap"). This file, together with the
-// other pdf_*.go / *_checker.go / annotation_box.go / image_rotation_utils.go /
-// pades_constants.go / pdf_memory_usage_setting.go / pdf_service_mode.go /
-// sig_field_permissions.go / pdf_signature_cache.go files added during integration, closes that
-// gap. Shapes match what the six landed chunks already assumed in their FORWARD DEPENDENCIES
-// headers and, where they diverged only in inessential ways (return-by-value vs return-by-
-// pointer, etc.), the shape actually exercised by the already-landed native_pdf_dict.go /
-// native_pdf_array.go implementations wins, since those are the sole concrete implementers.
+// eu.europa.esig.dss.pdf is implemented by this file, together with the other pdf_*.go /
+// *_checker.go / annotation_box.go / image_rotation_utils.go / pades_constants.go /
+// pdf_memory_usage_setting.go / pdf_service_mode.go / sig_field_permissions.go /
+// pdf_signature_cache.go files. Where usage and this package's shape diverge only in
+// inessential ways (return-by-value vs return-by-pointer, etc.), the shape actually exercised by
+// native_pdf_dict.go / native_pdf_array.go wins, since those are the sole concrete implementers.
 package pades
 
 import (
@@ -141,7 +138,7 @@ type pdfSimpleObject struct {
 
 // NewPdfSimpleObject wraps a simple value with an optional parent. Java splits this into a
 // 1-arg constructor (parent nil) and a 2-arg constructor; Go collapses them, matching every
-// call site already landed against this signature (native_pdf_dict.go, native_pdf_array.go).
+// call site's signature (native_pdf_dict.go, native_pdf_array.go).
 // Port of PdfSimpleObject(Object) / PdfSimpleObject(Object, PdfObject).
 func NewPdfSimpleObject(value any, parent PdfObject) *pdfSimpleObject {
 	return &pdfSimpleObject{value: value, parent: parent}

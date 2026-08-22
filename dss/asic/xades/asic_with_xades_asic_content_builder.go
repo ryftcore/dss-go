@@ -13,7 +13,7 @@ import (
 // Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
 // InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
 // embedding, so the base dispatches getContainerExtractor through
-// asic.AbstractASiCContentBuilderOverrides (S7_BRIEF.md's virtual-dispatch warning).
+// asic.AbstractASiCContentBuilderOverrides.
 type ASiCWithXAdESASiCContentBuilder struct {
 	*asic.AbstractASiCContentBuilder
 }
@@ -31,12 +31,6 @@ func NewASiCWithXAdESASiCContentBuilder() *ASiCWithXAdESASiCContentBuilder {
 }
 
 // GetContainerExtractor ports the @Override protected getContainerExtractor(DSSDocument).
-//
-// Cross-chunk assumption (XADVAL): NewASiCWithXAdESContainerExtractor(model.DSSDocument)
-// mirrors `new ASiCWithXAdESContainerExtractor(archiveDocument)`; ASiCWithXAdESContainerExtractor
-// is ported alongside ASiCWithXAdESSignatureParameters in the sibling XADVAL manifest
-// (S7_BRIEF.md), following the same shape as ASiCWithCAdESContainerExtractor in the CADVAL
-// chunk - a type embedding *asic.DefaultASiCContainerExtractor.
 func (b *ASiCWithXAdESASiCContentBuilder) GetContainerExtractor(archiveDocument model.DSSDocument) asic.ASiCContainerExtractor {
 	return NewASiCWithXAdESContainerExtractor(archiveDocument)
 }

@@ -3,8 +3,8 @@
 // dss-asic-*'s merger hierarchy (ASiCContainerMerger / DefaultContainerMerger / the four
 // ASiC{S,E}With{CAdES,XAdES}ContainerMergers) decides, for a pair of Java-built containers,
 // whether they may be merged at all and - when they may - what the merged container holds. Those
-// rules are what stand between a merge and a silently corrupted signed container, so S7_BRIEF.md
-// asks for them to be pinned against a Java oracle rather than against hand-derived expectations.
+// rules are what stand between a merge and a silently corrupted signed container, so they are
+// pinned against a Java oracle rather than against hand-derived expectations.
 //
 // testdata/merge-oracle.ndjson.gz is that oracle: testdata/gen/MergeOracle.java run against a
 // built upstream DSS 6.5.RC1 over every unordered pair (each container also paired with itself)
@@ -78,7 +78,7 @@ type mergeOraclePair struct {
 // (asic/{cades,xades}/asic_downstream_cross_validation_test.go) - but the bytes of an existing
 // signature are not preserved across a merge, which round-tripping does require. Fixing it means
 // teaching internal/cmscore to distinguish a parsed set from a freshly built one, which belongs
-// with the Phase 3 CMS work and its BouncyCastle oracle, not here.
+// in the CMS layer, not here.
 //
 // TestContainerMergeMatchesUpstream requires every triple below to STILL diverge, so this list
 // cannot rot: once cmscore preserves parsed set order, the entries stop diverging and the test

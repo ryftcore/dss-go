@@ -1,7 +1,6 @@
 // Ported from dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/validation/timestamp/ASiCWithCAdESTimestampAnalyzer.java (DSS 6.5.RC1).
 //
-// The Java `validation.timestamp` sub-package flattens into this Go package per the phase-7
-// package layout (S7_BRIEF.md).
+// The Java `validation.timestamp` sub-package flattens into this Go package.
 package cades
 
 import (

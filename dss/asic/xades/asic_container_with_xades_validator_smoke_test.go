@@ -1,8 +1,5 @@
-// Smoke test for the un-gated ASiC-XAdES container validator pair
-// (asic_container_with_xades_validator.go, asic_container_with_xades_validator_factory.go), now
-// that the phase 8 validation engine (dss/validation, dss/validation/executor,
-// dss/validation/policy, dss/simplereport, dss/policy) has landed and their `phase8` build tags
-// were removed.
+// Smoke test for the ASiC-XAdES container validator pair
+// (asic_container_with_xades_validator.go, asic_container_with_xades_validator_factory.go).
 //
 // Exercises the full pipeline end to end - SignedDocumentValidator.fromDocument dispatch, the
 // ASiC container extraction, the nested XAdES signature analyzers, the base

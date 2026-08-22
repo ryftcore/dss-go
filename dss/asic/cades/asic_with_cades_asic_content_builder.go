@@ -11,7 +11,7 @@ import (
 // Java's `extends AbstractASiCContentBuilder` becomes embedding plus the
 // InitAbstractASiCContentBuilder(self) registration: Go has no method overriding across
 // embedding, so the base dispatches getContainerExtractor through
-// asic.AbstractASiCContentBuilderOverrides (S7_BRIEF.md's virtual-dispatch warning).
+// asic.AbstractASiCContentBuilderOverrides.
 type ASiCWithCAdESASiCContentBuilder struct {
 	*asic.AbstractASiCContentBuilder
 }

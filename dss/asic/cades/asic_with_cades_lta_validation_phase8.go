@@ -1,8 +1,8 @@
 // Extracted from ASiCWithCAdESLevelBaselineLTA.extend(ASiCContent, DigestAlgorithm,
 // DigestAlgorithm) (dss-asic-cades/src/main/java/eu/europa/esig/dss/asic/cades/signature/
-// ASiCWithCAdESLevelBaselineLTA.java, DSS 6.5.RC1) during Phase 7/8 integration; un-gated in
-// phase 8f now that dss/validation has landed. Could be folded back into
-// asic_with_cades_level_baseline_lta.go as a follow-up cleanup.
+// ASiCWithCAdESLevelBaselineLTA.java, DSS 6.5.RC1).
+//
+// TODO: fold back into asic_with_cades_level_baseline_lta.go.
 package cades
 
 import (

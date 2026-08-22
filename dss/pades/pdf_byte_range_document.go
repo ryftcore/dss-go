@@ -11,13 +11,6 @@
 // OpenStream() rather than buffering into memory (unlike DOMDocument's getBytes()-based digest),
 // matching this type's own stated purpose of "reduc[ing] memory overloading during the
 // execution".
-//
-// FORWARD DEPENDENCY (not in this chunk's manifest): ByteRangeInputStream
-// (eu.europa.esig.dss.pades.validation.ByteRangeInputStream), an io.Reader-shaped wrapper that
-// reads only the two spans a ByteRange covers out of an underlying stream. Assumed shape,
-// inferred from the single call this file makes to it:
-//
-//	func NewByteRangeInputStream(wrapped io.ReadCloser, byteRange *ByteRange) io.ReadCloser
 package pades
 
 import (

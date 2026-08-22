@@ -1,14 +1,6 @@
 // Ported from
 // dss-pades/src/main/java/eu/europa/esig/dss/pades/validation/scope/PAdESTimestampScopeFinder.java
 // (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: PdfTimestampToken.PdfRevision() *PdfDocTimestampRevision - PdfTimestampToken
-// is landed by this same manifest chunk (pdf_timestamp_token.go); PdfDocTimestampRevision is the
-// forward-referenced type pdf_document_analyzer.go's header already assumes (TimestampToken()
-// *PdfTimestampToken, ByteRange() *ByteRange), extended here with the AreAllOriginalBytesCovered()
-// bool this file's embedded PdfRevisionScopeFinder.findSignatureScope needs (see
-// pdf_revision_scope_finder.go's header for PdfCMSRevision's complete assumed shape;
-// PdfDocTimestampRevision extends PdfCMSRevision in Java, so it must satisfy that interface).
 package pades
 
 import (

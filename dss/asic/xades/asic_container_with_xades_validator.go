@@ -1,7 +1,7 @@
 // Ported from dss-asic-xades/src/main/java/eu/europa/esig/dss/asic/xades/validation/ASiCContainerWithXAdESValidator.java (DSS 6.5.RC1).
 //
-// Package flattening: the Java package eu.europa.esig.dss.asic.xades.validation lands in this
-// same Go package (dss/asic/xades) per S7_BRIEF.md's package layout table.
+// Package flattening: Java's eu.europa.esig.dss.asic.xades.validation lands in this
+// same Go package (dss/asic/xades).
 //
 // NAMING (judgment call, mirrors the cades precedent's identical note): the frozen
 // asic.AbstractASiCContainerValidator names its ASiCContent overload
