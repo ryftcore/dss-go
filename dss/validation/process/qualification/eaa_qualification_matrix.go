@@ -150,7 +150,7 @@ var eaaPidQualifs = func() [3][3]enumerations.EAAQualification {
 // getEAAQualification(Indication, EAAQualification, SignatureQualification).
 func EAAQualificationMatrixGetEAAQualification(indication enumerations.Indication, claimedQualification enumerations.EAAQualification,
 	signatureQualification enumerations.SignatureQualification) enumerations.EAAQualification {
-	return eaaQualifs[eaaQualificationMatrixGetIndicationInt(indication)][eaaQualificationMatrixGetEAAQualificationInt(claimedQualification)][eaaQualificationMatrixGetSignatureQualificationInt(signatureQualification)]
+	return eaaQualifs[eaaQualificationMatrixIndicationInt(indication)][eaaQualificationMatrixEAAQualificationInt(claimedQualification)][eaaQualificationMatrixSignatureQualificationInt(signatureQualification)]
 }
 
 // EAAQualificationMatrixGetPIDQualification gets PID qualification based on
@@ -158,12 +158,12 @@ func EAAQualificationMatrixGetEAAQualification(indication enumerations.Indicatio
 // getPIDQualification(Indication, CertificateApprovalStatus).
 func EAAQualificationMatrixGetPIDQualification(indication enumerations.Indication,
 	certificateApprovalStatus enumerations.CertificateApprovalStatus) enumerations.EAAQualification {
-	return eaaPidQualifs[eaaQualificationMatrixGetIndicationInt(indication)][eaaQualificationMatrixGetCertificateApprovalStatusInt(certificateApprovalStatus)]
+	return eaaPidQualifs[eaaQualificationMatrixIndicationInt(indication)][eaaQualificationMatrixCertificateApprovalStatusInt(certificateApprovalStatus)]
 }
 
-// eaaQualificationMatrixGetIndicationInt ports the private static
+// eaaQualificationMatrixIndicationInt ports the private static
 // getInt(Indication).
-func eaaQualificationMatrixGetIndicationInt(indication enumerations.Indication) int {
+func eaaQualificationMatrixIndicationInt(indication enumerations.Indication) int {
 	switch indication {
 	case enumerations.IndicationFailed, enumerations.IndicationTotalFailed:
 		return eaaQualFailedEAA
@@ -176,9 +176,9 @@ func eaaQualificationMatrixGetIndicationInt(indication enumerations.Indication) 
 	}
 }
 
-// eaaQualificationMatrixGetEAAQualificationInt ports the private static
+// eaaQualificationMatrixEAAQualificationInt ports the private static
 // getInt(EAAQualification).
-func eaaQualificationMatrixGetEAAQualificationInt(eaaQualification enumerations.EAAQualification) int {
+func eaaQualificationMatrixEAAQualificationInt(eaaQualification enumerations.EAAQualification) int {
 	switch eaaQualification {
 	case enumerations.EAAQualificationQEAA:
 		return eaaQualQEAA
@@ -195,9 +195,9 @@ func eaaQualificationMatrixGetEAAQualificationInt(eaaQualification enumerations.
 	}
 }
 
-// eaaQualificationMatrixGetSignatureQualificationInt ports the private
+// eaaQualificationMatrixSignatureQualificationInt ports the private
 // static getInt(SignatureQualification).
-func eaaQualificationMatrixGetSignatureQualificationInt(signatureQualification enumerations.SignatureQualification) int {
+func eaaQualificationMatrixSignatureQualificationInt(signatureQualification enumerations.SignatureQualification) int {
 	switch signatureQualification {
 	case enumerations.SignatureQualificationQESig, enumerations.SignatureQualificationQESeal:
 		return eaaQualQualSigSeal
@@ -210,9 +210,9 @@ func eaaQualificationMatrixGetSignatureQualificationInt(signatureQualification e
 	}
 }
 
-// eaaQualificationMatrixGetCertificateApprovalStatusInt ports the private
+// eaaQualificationMatrixCertificateApprovalStatusInt ports the private
 // static getInt(CertificateApprovalStatus).
-func eaaQualificationMatrixGetCertificateApprovalStatusInt(certificateApprovalStatus enumerations.CertificateApprovalStatus) int {
+func eaaQualificationMatrixCertificateApprovalStatusInt(certificateApprovalStatus enumerations.CertificateApprovalStatus) int {
 	if enumerations.CertificateApprovalStatusEnumPIDProvider == certificateApprovalStatus {
 		return eaaQualCertUsagePID
 	} else if enumerations.CertificateApprovalStatusEnumNA == certificateApprovalStatus {

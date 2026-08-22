@@ -174,7 +174,7 @@ func toSAVMessage(message *jaxb.XmlMessage) *savOracleMessage {
 	return &savOracleMessage{Key: message.Key, Value: &value}
 }
 
-func mustSAVJSON(t *testing.T, value interface{}) string {
+func mustSAVJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

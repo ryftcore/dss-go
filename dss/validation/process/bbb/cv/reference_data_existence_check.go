@@ -97,7 +97,7 @@ func (c *ReferenceDataExistenceCheck[T]) FailedSubIndicationForConclusion() enum
 // BuildAdditionalInfo builds an additional information. Port of the overridden
 // buildAdditionalInfo().
 func (c *ReferenceDataExistenceCheck[T]) BuildAdditionalInfo() *string {
-	var referenceName interface{}
+	var referenceName any
 	switch digestMatcherType(c.digestMatcher) {
 	case enumerations.DigestMatcherTypeMessageImprint,
 		enumerations.DigestMatcherTypeCounterSignedSignatureValue:
@@ -107,14 +107,14 @@ func (c *ReferenceDataExistenceCheck[T]) BuildAdditionalInfo() *string {
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
 		referenceName = i18n.MessageTagTSTTypeRefERATSTSeq
 	default:
-		referenceName = c.getReferenceName(c.digestMatcher)
+		referenceName = c.referenceNameOf(c.digestMatcher)
 	}
 	message := c.I18nProvider.GetMessage(i18n.MessageTagReference, referenceName)
 	return &message
 }
 
-// getReferenceName ports the private getReferenceName(XmlDigestMatcher).
-func (c *ReferenceDataExistenceCheck[T]) getReferenceName(digestMatcher *diagnosticjaxb.XmlDigestMatcher) string {
+// referenceNameOf ports the private getReferenceName(XmlDigestMatcher).
+func (c *ReferenceDataExistenceCheck[T]) referenceNameOf(digestMatcher *diagnosticjaxb.XmlDigestMatcher) string {
 	if utils.IsStringNotBlank(digestMatcherId(digestMatcher)) {
 		return digestMatcherId(digestMatcher)
 	} else if utils.IsStringNotBlank(digestMatcherUri(digestMatcher)) {

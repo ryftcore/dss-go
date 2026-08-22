@@ -98,12 +98,12 @@ var sigQualifs = func() [3][12]enumerations.SignatureQualification {
 // getSignatureQualification(Indication, CertificateQualification).
 func SigQualificationMatrixGetSignatureQualification(ades enumerations.Indication,
 	certQualification enumerations.CertificateQualification) enumerations.SignatureQualification {
-	return sigQualifs[sigQualificationMatrixGetIndicationInt(ades)][sigQualificationMatrixGetCertQualificationInt(certQualification)]
+	return sigQualifs[sigQualificationMatrixIndicationInt(ades)][sigQualificationMatrixCertQualificationInt(certQualification)]
 }
 
-// sigQualificationMatrixGetIndicationInt ports the private static
+// sigQualificationMatrixIndicationInt ports the private static
 // getInt(Indication).
-func sigQualificationMatrixGetIndicationInt(indication enumerations.Indication) int {
+func sigQualificationMatrixIndicationInt(indication enumerations.Indication) int {
 	switch indication {
 	case enumerations.IndicationFailed, enumerations.IndicationTotalFailed:
 		return 0
@@ -116,9 +116,9 @@ func sigQualificationMatrixGetIndicationInt(indication enumerations.Indication) 
 	}
 }
 
-// sigQualificationMatrixGetCertQualificationInt ports the private static
+// sigQualificationMatrixCertQualificationInt ports the private static
 // getInt(CertificateQualification).
-func sigQualificationMatrixGetCertQualificationInt(certQualification enumerations.CertificateQualification) int {
+func sigQualificationMatrixCertQualificationInt(certQualification enumerations.CertificateQualification) int {
 	switch certQualification {
 	case enumerations.CertificateQualificationQCERTForESigQSCD:
 		return sigQualCertForEsigQscd

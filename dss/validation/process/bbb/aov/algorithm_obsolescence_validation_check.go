@@ -118,7 +118,7 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo() *string 
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.getErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.errorMessage(), dateTime)
 	return &message
 }
 
@@ -148,9 +148,9 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlM
 	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
-// getErrorMessage returns the first error/warning/info message value, or the
+// errorMessage returns the first error/warning/info message value, or the
 // empty string if the check succeeded. Port of getErrorMessage().
-func (c *AlgorithmObsolescenceValidationCheck[T]) getErrorMessage() string {
+func (c *AlgorithmObsolescenceValidationCheck[T]) errorMessage() string {
 	conclusion := c.aovResult.Conclusion
 	if utils.IsCollectionNotEmpty(conclusion.Errors) {
 		return conclusion.Errors[0].Value

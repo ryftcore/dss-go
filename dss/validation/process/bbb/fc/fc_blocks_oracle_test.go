@@ -160,7 +160,7 @@ func toFCMessage(message *jaxb.XmlMessage) *fcOracleMessage {
 	return &fcOracleMessage{Key: message.Key, Value: &value}
 }
 
-func mustFCJSON(t *testing.T, value interface{}) string {
+func mustFCJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

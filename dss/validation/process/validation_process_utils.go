@@ -225,7 +225,7 @@ func GetFormattedDate(date *time.Time) string {
 // of buildStringMessage(I18nProvider, MessageTag, Object...): Java's null result
 // (no message tag defined) is nil here, since the callers propagate it into
 // members where absent and empty differ.
-func BuildStringMessage(i18nProvider *i18n.I18nProvider, messageTag i18n.MessageTag, args ...interface{}) *string {
+func BuildStringMessage(i18nProvider *i18n.I18nProvider, messageTag i18n.MessageTag, args ...any) *string {
 	if messageTag != "" {
 		message := i18nProvider.GetMessage(messageTag, args...)
 		return &message

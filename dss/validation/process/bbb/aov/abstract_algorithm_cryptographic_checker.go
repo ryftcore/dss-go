@@ -83,12 +83,12 @@ func (c *AbstractAlgorithmCryptographicChecker) Title() i18n.MessageTag {
 // protected void addAdditionalInfo(). Java's super.addAdditionalInfo() call is
 // the Chain default, which is empty, and is therefore not ported.
 func (c *AbstractAlgorithmCryptographicChecker) AddAdditionalInfo() {
-	c.Result.Value.CryptographicValidation = c.getCryptographicValidation()
+	c.Result.Value.CryptographicValidation = c.cryptographicValidation()
 }
 
-// getCryptographicValidation builds a XmlCryptographicValidation information.
+// cryptographicValidation builds a XmlCryptographicValidation information.
 // Port of the protected XmlCryptographicValidation getCryptographicValidation().
-func (c *AbstractAlgorithmCryptographicChecker) getCryptographicValidation() *jaxb.XmlCryptographicValidation {
+func (c *AbstractAlgorithmCryptographicChecker) cryptographicValidation() *jaxb.XmlCryptographicValidation {
 	xmlCryptographicValidation := &jaxb.XmlCryptographicValidation{}
 	xmlCryptographicValidation.Algorithm = c.overrides.Algorithm()
 	if notAfter := c.overrides.NotAfter(); notAfter != nil {

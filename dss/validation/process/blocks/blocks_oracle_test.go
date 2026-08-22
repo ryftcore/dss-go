@@ -248,7 +248,7 @@ func blocksSafeExecute(fn func()) (panicked bool) {
 	return false
 }
 
-func mustBlocksJSON(t *testing.T, value interface{}) string {
+func mustBlocksJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

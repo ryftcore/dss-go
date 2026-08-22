@@ -86,7 +86,7 @@ func (c *SignatureAlgorithmCryptographicChecker) Algorithm() *jaxb.XmlCryptograp
 		if c.signatureAlgorithm != "" {
 			// if SignatureAlgorithm is defined
 			c.cryptographicAlgorithm.Name = c.signatureAlgorithm.Name()
-			c.cryptographicAlgorithm.Uri = c.getSignatureAlgorithmUri(c.signatureAlgorithm)
+			c.cryptographicAlgorithm.Uri = c.signatureAlgorithmURI(c.signatureAlgorithm)
 			// Java sets the nullable String straight through, so a null key
 			// length leaves the KeyLength element out. TokenProxy's Go form
 			// collapses that null to "" (see diagnostic.AbstractTokenProxyBase),
@@ -105,8 +105,8 @@ func (c *SignatureAlgorithmCryptographicChecker) Algorithm() *jaxb.XmlCryptograp
 	return c.cryptographicAlgorithm
 }
 
-// getSignatureAlgorithmUri ports the private getSignatureAlgorithmUri(SignatureAlgorithm).
-func (c *SignatureAlgorithmCryptographicChecker) getSignatureAlgorithmUri(signatureAlgorithm enumerations.SignatureAlgorithm) string {
+// signatureAlgorithmURI ports the private getSignatureAlgorithmUri(SignatureAlgorithm).
+func (c *SignatureAlgorithmCryptographicChecker) signatureAlgorithmURI(signatureAlgorithm enumerations.SignatureAlgorithm) string {
 	if signatureAlgorithm != "" {
 		if signatureAlgorithm.URI() != "" {
 			return signatureAlgorithm.URI()

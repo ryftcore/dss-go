@@ -332,7 +332,7 @@ func xcvaSafeExecute(fn func()) (panicked bool) {
 	return false
 }
 
-func mustXcvaJSON(t *testing.T, value interface{}) string {
+func mustXcvaJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

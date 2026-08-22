@@ -454,7 +454,7 @@ func TestChainSemanticsAgainstJavaOracle(t *testing.T) {
 	}
 }
 
-func mustJSON(t *testing.T, value interface{}) string {
+func mustJSON(t *testing.T, value any) string {
 	t.Helper()
 	encoded, err := json.Marshal(value)
 	if err != nil {

@@ -362,7 +362,7 @@ func (c *ChainItemBase[T]) addConstraint(constraint *jaxb.XmlConstraint) {
 // instead of filling the message in; I18nProvider#getMessage never returns null
 // (an undefined key resolves to the tag id itself), so the guard is unreachable
 // and only its taken branch is ported.
-func (c *ChainItemBase[T]) BuildXmlMessage(messageTag i18n.MessageTag, args ...interface{}) *jaxb.XmlMessage {
+func (c *ChainItemBase[T]) BuildXmlMessage(messageTag i18n.MessageTag, args ...any) *jaxb.XmlMessage {
 	xmlMessage := &jaxb.XmlMessage{}
 	message := c.I18nProvider.GetMessage(messageTag, args...)
 	key := messageTag.Id()

@@ -253,15 +253,15 @@ func (b *BasicBuildingBlocks) executeAlgorithmObsolescenceValidation() *jaxb.Xml
 // executeX509CertificateValidation ports the private
 // executeX509CertificateValidation(XmlAOV).
 func (b *BasicBuildingBlocks) executeX509CertificateValidation(xmlAOV *jaxb.XmlAOV) *jaxb.XmlXCV {
-	x509CertificateValidation := b.getX509CertificateValidation(xmlAOV)
+	x509CertificateValidation := b.x509CertificateValidation(xmlAOV)
 	if x509CertificateValidation != nil {
 		return x509CertificateValidation.Execute()
 	}
 	return nil
 }
 
-// getX509CertificateValidation ports the private getX509CertificateValidation(XmlAOV).
-func (b *BasicBuildingBlocks) getX509CertificateValidation(xmlAOV *jaxb.XmlAOV) *xcv.X509CertificateValidation {
+// x509CertificateValidation ports the private getX509CertificateValidation(XmlAOV).
+func (b *BasicBuildingBlocks) x509CertificateValidation(xmlAOV *jaxb.XmlAOV) *xcv.X509CertificateValidation {
 	if enumerations.ContextCertificate == b.context {
 		certificate := b.token.(*diagnostic.CertificateWrapper)
 		return xcv.NewX509CertificateValidation(b.i18nProvider, certificate, b.currentTime,

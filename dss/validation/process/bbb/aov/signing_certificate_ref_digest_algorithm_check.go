@@ -110,7 +110,7 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) validateCertReferences() 
 			continue
 		}
 
-		dacResult := c.getSigningCertificateDigestCryptographicCheckResult(certificateRefWrapper)
+		dacResult := c.signingCertificateDigestCryptographicCheckResult(certificateRefWrapper)
 
 		// overwrite only if previous checks are secure
 		if c.cryptographicValidationResult == nil || !c.validResult(c.cryptographicValidationResult) {
@@ -124,9 +124,9 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) validateCertReferences() 
 	return c.cryptographicValidationResult
 }
 
-// getSigningCertificateDigestCryptographicCheckResult ports the private
-// getSigningCertificateDigestCryptographicCheckResult(CertificateRefWrapper).
-func (c *SigningCertificateRefDigestAlgorithmCheck[T]) getSigningCertificateDigestCryptographicCheckResult(
+// signingCertificateDigestCryptographicCheckResult ports the private get
+// signingCertificateDigestCryptographicCheckResult(CertificateRefWrapper).
+func (c *SigningCertificateRefDigestAlgorithmCheck[T]) signingCertificateDigestCryptographicCheckResult(
 	certificateRef *diagnostic.CertificateRefWrapper) *jaxb.XmlCC {
 	certificateConstraint := c.validationPolicy.CertificateCryptographicConstraint(c.context, c.subContext)
 	dac := NewDigestAlgorithmCryptographicChecker(c.I18nProvider, certificateRef.DigestMethod(),

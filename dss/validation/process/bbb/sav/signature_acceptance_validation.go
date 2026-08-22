@@ -266,7 +266,7 @@ func (c *SignatureAcceptanceValidation) contentTimeStamp() process.ChainItem[*ja
 func (c *SignatureAcceptanceValidation) contentTimestampBasicValidation(timestamp *diagnostic.TimestampWrapper,
 	xmlConclusion *jaxb.XmlConclusion) process.ChainItem[*jaxb.XmlSAV] {
 	return NewContentTimestampBasicValidationCheck(c.I18nProvider, c.Result, timestamp, xmlConclusion,
-		c.getTimestampBasicValidationConstraintLevel())
+		c.timestampBasicValidationConstraintLevel())
 }
 
 func (c *SignatureAcceptanceValidation) contentTimestampMessageImprint(contentTimestamp *diagnostic.TimestampWrapper) process.ChainItem[*jaxb.XmlSAV] {
@@ -314,9 +314,9 @@ func (c *SignatureAcceptanceValidation) documentTimeStamp() process.ChainItem[*j
 	return NewDocumentTimeStampCheck(c.I18nProvider, c.Result, c.token, constraint)
 }
 
-// getTimestampBasicValidationConstraintLevel ports the private
+// timestampBasicValidationConstraintLevel ports the private
 // getTimestampBasicValidationConstraintLevel().
-func (c *SignatureAcceptanceValidation) getTimestampBasicValidationConstraintLevel() policy.LevelRule {
+func (c *SignatureAcceptanceValidation) timestampBasicValidationConstraintLevel() policy.LevelRule {
 	constraint := c.validationPolicy.TimestampValidConstraint()
 	// continue if LTA is present
 	if constraint == nil || process.IsLongTermAvailabilityAndIntegrityMaterialPresent(c.token) {
