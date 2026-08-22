@@ -334,6 +334,17 @@ supported DSS feature**, not an edge case.
 * `/Filter` other than `/Standard` (public-key / PKCS#7 handlers) → `ErrUnsupportedSecurityHandler`.
 * Wrong or missing password → `ErrInvalidPassword`. Both the user and owner password are tried, in
   that order, exactly as pdfbox does; which one matched determines `Permissions.OwnerAccess`.
+* For `/R 5`/`/R 6`, an `/Encrypt /Perms` that is absent, is not a 16-byte string, or does not
+  decrypt under the recovered file key to the `'a' 'd' 'b'` marker, the dictionary `/P` and the
+  dictionary `/EncryptMetadata` → `ErrInvalidPassword` (ISO 32000-2 Algorithm 13, `validatePerms`).
+  The check runs on both password branches, immediately before the handler is installed, so it
+  cannot be bypassed. **This is a deliberate divergence**: pdfbox's
+  `StandardSecurityHandler.validatePerms` makes the same three comparisons but answers each failure
+  with `LOG.warn` and loads the document anyway, driving `AccessPermission` from the unauthenticated
+  `/P`. For `/R 5`/`/R 6` `/P` is not mixed into the file key, so `/Perms` is the only thing that
+  authenticates it and a warning leaves `PdfPermissionsChecker`'s `CanCreateSignatureField` gate
+  defeated by a one-byte edit. See the `// DIVERGENCE, deliberate:` note on `validatePerms` in
+  `crypt.go`.
 * `/EncryptMetadata false` is honoured (metadata streams left in the clear).
 
 Never-encrypted objects, matching `SecurityHandler.decrypt`:

@@ -8,6 +8,13 @@
 // so a future change that starts accepting a document upstream's reader layer
 // refuses shows up as a named failure rather than a golden diff.
 //
+// The "pdfbox succeeded => Go must succeed" half of that biconditional holds for
+// every corpus file, and holds in general except for the deliberate refusals
+// doc.go's carve-out allows: inputs pdfbox accepts after its own integrity check
+// has failed. There is one today — an /R 5//R 6 /Encrypt /Perms that does not
+// match /P, which pdfbox answers with LOG.warn (see validatePerms in crypt.go).
+// No corpus file is in that shape, so TestOracleCorpus is unaffected.
+//
 // DESIGN.md §2.6 (rejected encryption), §2.7 ("the one thing pdfbox does not
 // recover from") and §4.2 (the error taxonomy) are the contract under test.
 

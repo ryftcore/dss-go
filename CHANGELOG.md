@@ -156,6 +156,44 @@ conventions applied throughout.
 
   `Test*`/`Example*` function names keep their underscores (idiomatic Go).
 
+### Security
+
+- **An encrypted PDF's `/Encrypt /Perms` block is now verified for `/R 5`
+  and `/R 6`, so a byte-edited `/P` no longer grants permissions.** For
+  AES-256 revisions the permission word `/P` is not mixed into the file
+  encryption key, and the native PDF reader never read `/Perms` — the
+  16-byte block that carries an authenticated copy of `/P` under that key.
+  Anyone able to edit bytes could therefore rewrite `/P` in a signed
+  document, flip `CanCreateSignatureField()` from false to true and walk
+  through `pades.PdfPermissionsChecker.CheckDocumentPermissions`, the gate
+  that refuses to add a signature to a document that forbids it.
+
+  `internal/pdf` now performs ISO 32000-2 Algorithm 13 after the file key
+  is recovered, on both the owner and the user password branch: `/Perms`
+  is decrypted with the file key and its embedded `/P`, its
+  `/EncryptMetadata` marker and its `'a' 'd' 'b'` constant must agree with
+  the dictionary. A mismatch — and an absent, non-string or wrong-length
+  `/Perms` — is `pdf.ErrInvalidPassword`, which `pades` already maps onto
+  upstream's `InvalidPasswordException`; the message says the password was
+  accepted, so the two causes are distinguishable.
+
+  Because the check compares `/Perms` against `/P` and `/EncryptMetadata`,
+  all three are now read the way `COSDictionary.getDictionaryObject` reads
+  them: an indirect reference is followed, and a `/P` written as a real is
+  accepted as `COSDictionary.getInt` accepts any `COSNumber`. Previously
+  `/P` and `/EncryptMetadata` were read direct-only, so an otherwise
+  conforming document that wrote either indirectly was silently given the
+  default.
+
+  **This is an intentional divergence from upstream.** Apache PDFBox
+  3.0.7's `StandardSecurityHandler.validatePerms` makes the same three
+  comparisons but answers every failure with `LOG.warn` and loads the
+  document anyway, so upstream Java DSS reports the tampered `/P`. The
+  divergence is documented on `validatePerms` in
+  `dss/internal/pdf/crypt.go`, in `dss/internal/pdf/DESIGN.md` §2.6 and in
+  `dss/PORTING.md`. No document in the corpus is affected: the one
+  AES-256 fixture validates cleanly.
+
 ### Documentation
 
 - **Porting-era planning documents removed.** `PORTING_PLAN.md` — the
