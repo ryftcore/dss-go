@@ -40,18 +40,18 @@ func (c *AcceptableLoTECheck[T]) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *AcceptableLoTECheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_LIST_OF_TRUSTED_ENTITIES, c.loteAnalysis.URL)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagListOfTrustedEntities, c.loteAnalysis.URL)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AcceptableLoTECheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LOTE_ACCEPT
+	return i18n.MessageTagCertUsageLoTEAccept
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *AcceptableLoTECheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LOTE_ACCEPT_ANS
+	return i18n.MessageTagCertUsageLoTEAcceptANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

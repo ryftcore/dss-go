@@ -51,20 +51,20 @@ func (c *SignatureIntactCheck[T]) Process() bool {
 func (c *SignatureIntactCheck[T]) MessageTag() i18n.MessageTag {
 	switch c.context {
 	case enumerations.ContextCertificate:
-		return i18n.MessageTag_BBB_CV_ISIC
+		return i18n.MessageTagBBBCVISIC
 	case enumerations.ContextRevocation:
-		return i18n.MessageTag_BBB_CV_ISIR
+		return i18n.MessageTagBBBCVISIR
 	case enumerations.ContextTimestamp:
-		return i18n.MessageTag_BBB_CV_ISIT
+		return i18n.MessageTagBBBCVISIT
 	default:
-		return i18n.MessageTag_BBB_CV_ISI
+		return i18n.MessageTagBBBCVISI
 	}
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureIntactCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ISI_ANS
+	return i18n.MessageTagBBBCVISIANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

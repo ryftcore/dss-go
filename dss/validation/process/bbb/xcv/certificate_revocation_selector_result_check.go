@@ -48,12 +48,12 @@ func (c *CertificateRevocationSelectorResultCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateRevocationSelectorResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC
+	return i18n.MessageTagBBBXCVIARDPFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateRevocationSelectorResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC_ANS
+	return i18n.MessageTagBBBXCVIARDPFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -81,7 +81,7 @@ func (c *CertificateRevocationSelectorResultCheck[T]) PreviousErrors() []*jaxb.X
 // buildAdditionalInfo().
 func (c *CertificateRevocationSelectorResultCheck[T]) BuildAdditionalInfo() *string {
 	if c.crsResult.LatestAcceptableRevocationId != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_LAST_ACCEPTABLE_REVOCATION, *c.crsResult.LatestAcceptableRevocationId)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagLastAcceptableRevocation, *c.crsResult.LatestAcceptableRevocationId)
 		return &message
 	}
 	return nil

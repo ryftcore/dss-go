@@ -40,12 +40,12 @@ func (c *EAACategoryForPubEAACheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAACategoryForPubEAACheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CAT_PUBEAA
+	return i18n.MessageTagEAACATPubEAA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *EAACategoryForPubEAACheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CAT_PUBEAA_ANS
+	return i18n.MessageTagEAACATPubEAAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

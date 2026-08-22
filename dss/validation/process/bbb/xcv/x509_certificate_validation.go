@@ -82,7 +82,7 @@ func NewX509CertificateValidation(i18nProvider *i18n.I18nProvider,
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *X509CertificateValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_X509_CERTIFICATE_VALIDATION
+	return i18n.MessageTagX509CertificateValidation
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -309,7 +309,7 @@ func newTrustAnchorCheckSubXCVResult(i18nProvider *i18n.I18nProvider, result *pr
 // ErrorMessageTag returns an i18n key of an error message to get. Port of the
 // overridden getErrorMessageTag().
 func (c *trustAnchorCheckSubXCVResult) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_SUB_ANS_2
+	return i18n.MessageTagBBBXCVSubANS2
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

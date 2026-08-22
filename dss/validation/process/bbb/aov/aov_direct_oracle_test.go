@@ -51,7 +51,7 @@ func TestAovDirectChecksAgainstJavaOracle(t *testing.T) {
 		t.Fatal("empty oracle")
 	}
 	fail := process.GetLevelRule(enumerations.LevelFail)
-	position := i18n.MessageTag_ACCM_POS_SIG_SIG
+	position := i18n.MessageTagACCMPosSigSig
 
 	classes := map[string]map[string]int{}
 	matched := 0

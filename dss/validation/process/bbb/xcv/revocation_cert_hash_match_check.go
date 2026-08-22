@@ -37,13 +37,13 @@ func (c *RevocationCertHashMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationCertHashMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_CERT_HASH_MATCH
+	return i18n.MessageTagBBBXCVRevocCertHashMatch
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationCertHashMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_CERT_HASH_MATCH_ANS
+	return i18n.MessageTagBBBXCVRevocCertHashMatchANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

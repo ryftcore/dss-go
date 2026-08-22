@@ -60,12 +60,12 @@ func (c *RevocationDataRequiredCheck[T]) isTrustAnchor(certificate *diagnostic.C
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDataRequiredCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDCSFC
+	return i18n.MessageTagBBBXCVIRDCSFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RevocationDataRequiredCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDCSFC_ANS
+	return i18n.MessageTagBBBXCVIRDCSFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

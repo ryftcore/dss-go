@@ -61,7 +61,7 @@ func NewEAAValidationProcess(i18nProvider *i18n.I18nProvider, eaaWrapper *diagno
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *EAAValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPEAA
+	return i18n.MessageTagVPEAA
 }
 
 // InitChain initializes the chain, fully replacing
@@ -160,11 +160,11 @@ func newEAASignatureAcceptanceValidationResultCheck(i18nProvider *i18n.I18nProvi
 }
 
 func (c *eaaSignatureAcceptanceValidationResultCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IEAAAVRC
+	return i18n.MessageTagBSVIEAAAVRC
 }
 
 func (c *eaaSignatureAcceptanceValidationResultCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IEAAAVRC_ANS
+	return i18n.MessageTagBSVIEAAAVRCANS
 }
 
 // CollectAdditionalMessages fills additional messages into the conclusion.
@@ -192,8 +192,8 @@ func (c *EAAValidationProcess) clear(messageList []*jaxb.XmlMessage) []*jaxb.Xml
 	if utils.IsCollectionEmpty(messageList) {
 		return nil
 	}
-	adestIbsvpscAnsKey := i18n.MessageTag_ADEST_IBSVPSC_ANS.Id()
-	eaaKbrcAnsKey := i18n.MessageTag_EAA_KBRC_ANS.Id()
+	adestIbsvpscAnsKey := i18n.MessageTagADESTIBSVPSCANS.Id()
+	eaaKbrcAnsKey := i18n.MessageTagEAAKBRCANS.Id()
 	kept := make([]*jaxb.XmlMessage, 0, len(messageList))
 	for _, m := range messageList {
 		if m.Key != nil && (adestIbsvpscAnsKey == *m.Key || eaaKbrcAnsKey == *m.Key) {

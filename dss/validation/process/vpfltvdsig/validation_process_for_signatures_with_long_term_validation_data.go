@@ -125,7 +125,7 @@ func NewValidationProcessForSignaturesWithLongTermValidationData(i18nProvider *i
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPFLTVD
+	return i18n.MessageTagVPFLTVD
 }
 
 // InitChain initializes the chain. Port of initChain().
@@ -706,7 +706,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) signatureValu
 	aovResult := algorithmObsolescenceValidation.Execute()
 
 	return aov.NewAlgorithmObsolescenceValidationCheck(c.I18nProvider, c.Result, aovResult, bestSignatureTime,
-		i18n.MessageTag_ACCM_POS_SIG_VAL_AND_PRT, c.currentSignature.Id())
+		i18n.MessageTagACCMPosSigValAndPrt, c.currentSignature.Id())
 }
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) signedDataObjectAlgorithmsAcceptable(
@@ -717,7 +717,7 @@ func (c *ValidationProcessForSignaturesWithLongTermValidationData) signedDataObj
 	aovResult := algorithmObsolescenceValidation.Execute()
 
 	return aov.NewAlgorithmObsolescenceValidationCheck(c.I18nProvider, c.Result, aovResult, bestSignatureTime,
-		i18n.MessageTag_ACCM_POS_SIGND_OBJ, c.currentSignature.Id())
+		i18n.MessageTagACCMPosSIGNDObj, c.currentSignature.Id())
 }
 
 func (c *ValidationProcessForSignaturesWithLongTermValidationData) signatureIsAcceptable() process.ChainItem[*jaxb.XmlValidationProcessLongTermData] {

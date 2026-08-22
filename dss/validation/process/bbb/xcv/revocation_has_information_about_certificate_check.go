@@ -191,7 +191,7 @@ func (c *RevocationHasInformationAboutCertificateCheck) checkExpiredCertsRevocat
 // notAfter. Port of getNotAfterAfterCertificateNotAfterMessage(), which reads
 // the field and not the lazy getter.
 func (c *RevocationHasInformationAboutCertificateCheck) getNotAfterAfterCertificateNotAfterMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_NOT_AFTER_AFTER,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationNotAfterAfter,
 		c.formattedDate(c.notAfterRevoc),
 		c.formattedDate(c.certificate.NotBefore()),
 		c.formattedDate(c.certificate.NotAfter()))
@@ -200,7 +200,7 @@ func (c *RevocationHasInformationAboutCertificateCheck) getNotAfterAfterCertific
 // getRevocationConsistentMessage returns the additional information message when
 // the revocation is consistent. Port of getRevocationConsistentMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationConsistent,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.certificate.NotBefore()),
 		c.formattedDate(c.certificate.NotAfter()))
@@ -209,14 +209,14 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentM
 // getRevocationCertHashOkMessage returns the additional information message when
 // certHash matches. Port of getRevocationCertHashOkMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationCertHashOkMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CERT_HASH_OK)
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationCertHashOK)
 }
 
 // getRevocationConsistentWithExpiredCertsOnCRLMessage returns the additional
 // information message when the revocation is consistent with expiredCertsOnCRL.
 // Port of getRevocationConsistentWithExpiredCertsOnCRLMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithExpiredCertsOnCRLMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_CRL,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationConsistentCRL,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.revocationData.ExpiredCertsOnCRL()),
 		c.formattedDate(c.certificate.NotBefore()),
@@ -227,7 +227,7 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentW
 // information message when the revocation is consistent with archiveCutoff.
 // Port of getRevocationConsistentWithArchiveCutoffMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithArchiveCutoffMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_OCSP,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationConsistentOCSP,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.revocationData.ArchiveCutOff()),
 		c.formattedDate(c.certificate.NotBefore()),
@@ -239,7 +239,7 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentW
 // trusted list's expiredCertsRevocationInfo. Port of
 // getRevocationConsistentWithExpiredCertsRevocationInfoMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentWithExpiredCertsRevocationInfoMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CONSISTENT_TL,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationConsistentTL,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.getExpiredCertsRevocationInfo(c.revocationData)),
 		c.formattedDate(c.certificate.NotBefore()),
@@ -249,7 +249,7 @@ func (c *RevocationHasInformationAboutCertificateCheck) getRevocationConsistentW
 // getRevocationInfoMessage returns the additional information message for
 // revocation data in case of other events. Port of getRevocationInfoMessage().
 func (c *RevocationHasInformationAboutCertificateCheck) getRevocationInfoMessage() string {
-	return c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_INFO,
+	return c.I18nProvider.GetMessage(i18n.MessageTagRevocationInfo,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.certificate.NotBefore()),
 		c.formattedDate(c.certificate.NotAfter()))
@@ -274,13 +274,13 @@ func (c *RevocationHasInformationAboutCertificateCheck) formattedDate(date *time
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationHasInformationAboutCertificateCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_HAS_CERT_INFO
+	return i18n.MessageTagBBBXCVRevocHasCertInfo
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationHasInformationAboutCertificateCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_HAS_CERT_INFO_ANS
+	return i18n.MessageTagBBBXCVRevocHasCertInfoANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

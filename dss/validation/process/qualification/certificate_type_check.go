@@ -46,11 +46,11 @@ func (c *CertificateTypeCheck) Process() bool {
 func (c *CertificateTypeCheck) MessageTag() i18n.MessageTag {
 	switch c.validationTime {
 	case enumerations.ValidationTimeBESTSignatureTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST
+		return i18n.MessageTagQualCertTypeAtST
 	case enumerations.ValidationTimeCertificateIssuanceTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC
+		return i18n.MessageTagQualCertTypeAtCC
 	case enumerations.ValidationTimeValidationTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT
+		return i18n.MessageTagQualCertTypeAtVT
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}
@@ -60,11 +60,11 @@ func (c *CertificateTypeCheck) MessageTag() i18n.MessageTag {
 func (c *CertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.validationTime {
 	case enumerations.ValidationTimeBESTSignatureTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST_ANS
+		return i18n.MessageTagQualCertTypeAtSTANS
 	case enumerations.ValidationTimeCertificateIssuanceTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_CC_ANS
+		return i18n.MessageTagQualCertTypeAtCCANS
 	case enumerations.ValidationTimeValidationTime:
-		return i18n.MessageTag_QUAL_CERT_TYPE_AT_VT_ANS
+		return i18n.MessageTagQualCertTypeAtVTANS
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}
@@ -73,7 +73,7 @@ func (c *CertificateTypeCheck) ErrorMessageTag() i18n.MessageTag {
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *CertificateTypeCheck) BuildAdditionalInfo() *string {
 	if enumerations.CertificateTypeUnknown != c.certType {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_TYPE, c.certType.Label())
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateType, c.certType.Label())
 		return &message
 	}
 	return nil

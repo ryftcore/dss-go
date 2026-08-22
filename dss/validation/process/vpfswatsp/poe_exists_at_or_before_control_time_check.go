@@ -55,7 +55,7 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) Process() bool {
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME, c.token.Id(),
+	message := c.I18nProvider.GetMessage(i18n.MessageTagControlTime, c.token.Id(),
 		process.GetFormattedDate(&c.controlTime))
 	return &message
 }
@@ -65,9 +65,9 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) BuildAdditionalInfo() *string {
 // ChainItem, which cannot propagate an error.
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
 	if enumerations.TimestampedObjectTypeCertificate == c.referenceCategory {
-		return i18n.MessageTag_PSV_ITPOCOBCT
+		return i18n.MessageTagPSVITPOCOBCT
 	} else if enumerations.TimestampedObjectTypeRevocation == c.referenceCategory {
-		return i18n.MessageTag_PSV_ITPORDAOBCT
+		return i18n.MessageTagPSVITPORDAOBCT
 	}
 	panic("Problem VTS")
 }
@@ -75,7 +75,7 @@ func (c *POEExistsAtOrBeforeControlTimeCheck[T]) MessageTag() i18n.MessageTag {
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *POEExistsAtOrBeforeControlTimeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPOOBCT_ANS
+	return i18n.MessageTagPSVITPOOBCTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

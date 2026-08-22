@@ -69,10 +69,10 @@ func (c *TimestampFilenameAdherenceCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *TimestampFilenameAdherenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFCS
+	return i18n.MessageTagBBBFCISFCS
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *TimestampFilenameAdherenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFCS_ANS
+	return i18n.MessageTagBBBFCISFCSANS
 }

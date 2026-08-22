@@ -44,12 +44,12 @@ func (c *CertificateQcEuLimitValueCurrencyCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcEuLimitValueCurrencyCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCLVHAC
+	return i18n.MessageTagBBBXCVCMDCICQCLVHAC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcEuLimitValueCurrencyCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCLVHAC_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCLVHACANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

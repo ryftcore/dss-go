@@ -110,7 +110,7 @@ func (c *CertQualificationAtTimeBlock) InitCertQualificationAtTimeBlock(override
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *CertQualificationAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_CERT_QUALIFICATION_AT_TIME
+	message := i18n.MessageTagCertQualificationAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)

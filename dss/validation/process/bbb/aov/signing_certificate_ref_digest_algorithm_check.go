@@ -130,14 +130,14 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) getSigningCertificateDige
 	certificateRef *diagnostic.CertificateRefWrapper) *jaxb.XmlCC {
 	certificateConstraint := c.validationPolicy.CertificateCryptographicConstraint(c.context, c.subContext)
 	dac := NewDigestAlgorithmCryptographicChecker(c.I18nProvider, certificateRef.DigestMethod(),
-		c.validationDate, i18n.MessageTag_ACCM_POS_SIG_CERT_REF, certificateConstraint)
+		c.validationDate, i18n.MessageTagACCMPosSigCertRef, certificateConstraint)
 	return dac.Execute()
 }
 
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *SigningCertificateRefDigestAlgorithmCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, i18n.MessageTag_ACCM_POS_SIG_CERT_REF)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, i18n.MessageTagACCMPosSigCertRef)
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
@@ -181,13 +181,13 @@ func (c *SigningCertificateRefDigestAlgorithmCheck[T]) FailedSubIndicationForCon
 func (c *SigningCertificateRefDigestAlgorithmCheck[T]) BuildAdditionalInfo() *string {
 	dateTime := process.GetFormattedDate(&c.validationDate)
 	if c.validResult(c.cryptographicValidationResult) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM_WITH_ID,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDMWithID,
 			c.cryptographicValidationResult.CryptographicValidation.Algorithm.Name, dateTime,
-			i18n.MessageTag_ACCM_POS_SIG_CERT_REF, c.certificateId)
+			i18n.MessageTagACCMPosSigCertRef, c.certificateId)
 		return &message
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_ID,
-		c.ErrorMessage(), dateTime, i18n.MessageTag_ACCM_POS_SIG_CERT_REF, c.certificateId)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithID,
+		c.ErrorMessage(), dateTime, i18n.MessageTagACCMPosSigCertRef, c.certificateId)
 	return &message
 }
 

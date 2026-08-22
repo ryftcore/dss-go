@@ -92,11 +92,11 @@ func (c *CertificateKnownToBeNotRevokedCheck[T]) BuildAdditionalInfo() *string {
 			notAfterStr = process.GetFormattedDate(revocationIssuer.NotAfter())
 		}
 		validationTime := process.GetFormattedDate(c.currentTime)
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CERT_VALIDITY,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationCertValidity,
 			revocationIssuer.Id(), c.revocationData.Id(), notBeforeStr, notAfterStr, validationTime)
 		return &message
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TOKEN_ID, c.certificate.Id())
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTokenID, c.certificate.Id())
 	return &message
 }
 
@@ -117,14 +117,14 @@ func (c *CertificateKnownToBeNotRevokedCheck[T]) FailedSubIndicationForConclusio
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateKnownToBeNotRevokedCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_LTV_ISCKNR
+	return i18n.MessageTagLTVISCKNR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *CertificateKnownToBeNotRevokedCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	if !c.isKnownToBeNotRevoked() {
-		return i18n.MessageTag_LTV_ISCKNR_ANS1
+		return i18n.MessageTagLTVISCKNRANS1
 	}
-	return i18n.MessageTag_LTV_ISCKNR_ANS0
+	return i18n.MessageTagLTVISCKNRANS0
 }

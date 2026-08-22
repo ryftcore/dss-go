@@ -61,12 +61,12 @@ func (c *TLFreshnessCheck) getMaxFreshness() int64 {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLFreshnessCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_FRESH
+	return i18n.MessageTagQualTLFresh
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLFreshnessCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_FRESH_ANS
+	return i18n.MessageTagQualTLFreshANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -42,12 +42,12 @@ func (c *PIDProviderCertificateAtIssuanceTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PIDProviderCertificateAtIssuanceTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_PROVIDER_AT_ISSUANCE_TIME
+	return i18n.MessageTagPIDProviderAtIssuanceTime
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *PIDProviderCertificateAtIssuanceTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_PROVIDER_AT_ISSUANCE_TIME_ANS
+	return i18n.MessageTagPIDProviderAtIssuanceTimeANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

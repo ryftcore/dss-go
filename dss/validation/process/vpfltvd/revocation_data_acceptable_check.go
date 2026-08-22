@@ -47,7 +47,7 @@ func (c *RevocationDataAcceptableCheck[T]) Process() bool {
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *RevocationDataAcceptableCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TOKEN_ID, c.revocationId)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTokenID, c.revocationId)
 	return &message
 }
 
@@ -68,11 +68,11 @@ func (c *RevocationDataAcceptableCheck[T]) FailedSubIndicationForConclusion() en
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDataAcceptableCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_RORPIIC
+	return i18n.MessageTagADESTRORPIIC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationDataAcceptableCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_RORPIIC_ANS
+	return i18n.MessageTagADESTRORPIICANS
 }

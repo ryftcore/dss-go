@@ -41,13 +41,13 @@ func (c *EAASignatureUnicityCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAASignatureUnicityCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_PRESENT
+	return i18n.MessageTagEAASigPresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAASignatureUnicityCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_PRESENT_ANS
+	return i18n.MessageTagEAASigPresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -30,11 +30,11 @@ func NewSignatureNotAmbiguousCheck(i18nProvider *i18n.I18nProvider, result *proc
 func (c *SignatureNotAmbiguousCheck) Process() bool { return !c.signature.IsSignatureDuplicated() }
 
 // MessageTag returns the constraint message i18n key.
-func (c *SignatureNotAmbiguousCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISD }
+func (c *SignatureNotAmbiguousCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignatureNotAmbiguousCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISD_ANS
+	return i18n.MessageTagBBBFCISDANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

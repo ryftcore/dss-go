@@ -67,13 +67,13 @@ func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) FailedSubIndicat
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCRT
+	return i18n.MessageTagBSVICTGTNASCRT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCRT_ANS
+	return i18n.MessageTagBSVICTGTNASCRTANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -87,6 +87,6 @@ func (c *TimestampGenerationTimeNotAfterRevocationTimeCheck[T]) BuildAdditionalI
 	if c.signingCertificateRevocationTime != nil {
 		revocationTime = process.GetFormattedDate(c.signingCertificateRevocationTime)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_AND_REVOCATION_TIME, c.contentTimestamp.Id(), tstGenerationTime, revocationTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampAndRevocationTime, c.contentTimestamp.Id(), tstGenerationTime, revocationTime)
 	return &message
 }

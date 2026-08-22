@@ -37,10 +37,10 @@ func (c *FullScopeCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *FullScopeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ICFD }
+func (c *FullScopeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCICFD }
 
 // ErrorMessageTag returns the error message i18n key.
-func (c *FullScopeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ICFD_ANS }
+func (c *FullScopeCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCICFDANS }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *FullScopeCheck) FailedIndicationForConclusion() enumerations.Indication {

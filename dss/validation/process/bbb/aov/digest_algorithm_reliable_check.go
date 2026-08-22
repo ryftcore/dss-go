@@ -45,14 +45,14 @@ func (c *DigestAlgorithmReliableCheck) Process() bool {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *DigestAlgorithmReliableCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_DAA, c.Name(c.digestAlgo))
+	return c.BuildXmlMessage(i18n.MessageTagASCCMDAA, c.Name(c.digestAlgo))
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *DigestAlgorithmReliableCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	if c.digestAlgo == "" {
-		return c.BuildXmlMessage(i18n.MessageTag_ASCCM_DAA_ANS_2, c.position)
+		return c.BuildXmlMessage(i18n.MessageTagASCCMDAAANS2, c.position)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_DAA_ANS, c.Name(c.digestAlgo), c.position)
+	return c.BuildXmlMessage(i18n.MessageTagASCCMDAAANS, c.Name(c.digestAlgo), c.position)
 }

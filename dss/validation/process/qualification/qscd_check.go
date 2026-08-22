@@ -45,11 +45,11 @@ func (c *QSCDCheck) Process() bool {
 func (c *QSCDCheck) MessageTag() i18n.MessageTag {
 	switch c.validationTime {
 	case enumerations.ValidationTimeBESTSignatureTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_ST
+		return i18n.MessageTagQualQSCDAtST
 	case enumerations.ValidationTimeCertificateIssuanceTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_CC
+		return i18n.MessageTagQualQSCDAtCC
 	case enumerations.ValidationTimeValidationTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_VT
+		return i18n.MessageTagQualQSCDAtVT
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}
@@ -59,11 +59,11 @@ func (c *QSCDCheck) MessageTag() i18n.MessageTag {
 func (c *QSCDCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.validationTime {
 	case enumerations.ValidationTimeBESTSignatureTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_ST_ANS
+		return i18n.MessageTagQualQSCDAtSTANS
 	case enumerations.ValidationTimeCertificateIssuanceTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_CC_ANS
+		return i18n.MessageTagQualQSCDAtCCANS
 	case enumerations.ValidationTimeValidationTime:
-		return i18n.MessageTag_QUAL_QSCD_AT_VT_ANS
+		return i18n.MessageTagQualQSCDAtVTANS
 	default:
 		panic(fmt.Sprintf("Unsupported time %s", c.validationTime))
 	}

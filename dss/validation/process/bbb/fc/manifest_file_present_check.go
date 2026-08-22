@@ -38,12 +38,12 @@ func (c *ManifestFilePresentCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *ManifestFilePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFP_ASICE
+	return i18n.MessageTagBBBFCIMFPASiCE
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ManifestFilePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IMFP_ASICE_ANS
+	return i18n.MessageTagBBBFCIMFPASiCEANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

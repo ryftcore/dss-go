@@ -45,13 +45,13 @@ func (c *SunsetDateCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SunsetDateCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ISDDTA
+	return i18n.MessageTagPSVISDDTA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SunsetDateCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ISDDTA_ANS
+	return i18n.MessageTagPSVISDDTAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -70,7 +70,7 @@ func (c *SunsetDateCheck) FailedSubIndicationForConclusion() enumerations.SubInd
 // buildAdditionalInfo(), whose null result leaves the element absent.
 func (c *SunsetDateCheck) BuildAdditionalInfo() *string {
 	if c.trustedCertificate != nil && c.trustedCertificate.TrustSunsetDate() != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_SUNSET_DATE_TRUST_ANCHOR,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateSunsetDateTrustAnchor,
 			c.trustedCertificate.Id(), process.GetFormattedDate(c.trustedCertificate.TrustSunsetDate()))
 		return &message
 	}

@@ -234,12 +234,12 @@ func appendPolicyTreeNodeOnce(nodes []*PolicyTreeNode, node *PolicyTreeNode) []*
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificatePolicyTreeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICPTV
+	return i18n.MessageTagBBBXCVICPTV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificatePolicyTreeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICPTV_ANS
+	return i18n.MessageTagBBBXCVICPTVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

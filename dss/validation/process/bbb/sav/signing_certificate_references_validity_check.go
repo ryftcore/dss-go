@@ -64,13 +64,13 @@ func (c *SigningCertificateReferencesValidityCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningCertificateReferencesValidityCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_DSCACRCC
+	return i18n.MessageTagBBBSAVDSCACRCC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningCertificateReferencesValidityCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_DSCACRCC_ANS
+	return i18n.MessageTagBBBSAVDSCACRCCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

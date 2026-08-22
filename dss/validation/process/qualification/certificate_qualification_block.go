@@ -96,7 +96,7 @@ func (c *CertificateQualificationBlock) InitCertificateQualificationBlock(overri
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *CertificateQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_CERT_QUALIFICATION
+	return i18n.MessageTagCertQualification
 }
 
 // InitChain initializes the chain. Port of initChain().

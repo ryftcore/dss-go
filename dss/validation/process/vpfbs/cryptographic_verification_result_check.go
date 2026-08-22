@@ -56,11 +56,11 @@ func (c *CryptographicVerificationResultCheck[T]) FailedSubIndicationForConclusi
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CryptographicVerificationResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICVRC
+	return i18n.MessageTagBSVICVRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *CryptographicVerificationResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICVRC_ANS
+	return i18n.MessageTagBSVICVRCANS
 }

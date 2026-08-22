@@ -63,11 +63,11 @@ func (c *SigningCertificateNotRevokedCheck[T]) FailedSubIndicationForConclusion(
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningCertificateNotRevokedCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCRAVTC
+	return i18n.MessageTagBSVISCRAVTC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningCertificateNotRevokedCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCRAVTC_ANS
+	return i18n.MessageTagBSVISCRAVTCANS
 }

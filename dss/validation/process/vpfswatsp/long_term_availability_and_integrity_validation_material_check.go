@@ -71,13 +71,13 @@ func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) Process() bool
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTAIVMP
+	return i18n.MessageTagArchLTAIVMP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *LongTermAvailabilityAndIntegrityValidationMaterialCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTAIVMP_ANS
+	return i18n.MessageTagArchLTAIVMPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

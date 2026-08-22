@@ -35,11 +35,11 @@ func (c *ArchiveTimeStampCheck) TimestampType() enumerations.TimestampType {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ArchiveTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPATSP
+	return i18n.MessageTagBBBSAVIUQPATSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ArchiveTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPATSP_ANS
+	return i18n.MessageTagBBBSAVIUQPATSPANS
 }

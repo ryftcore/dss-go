@@ -41,18 +41,18 @@ func (c *CheckSubXCVResult) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CheckSubXCVResult) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_SUB
+	return i18n.MessageTagBBBXCVSub
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CheckSubXCVResult) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_SUB_ANS
+	return i18n.MessageTagBBBXCVSubANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *CheckSubXCVResult) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_ID, c.subResult.Id)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateID, c.subResult.Id)
 	return &message
 }
 

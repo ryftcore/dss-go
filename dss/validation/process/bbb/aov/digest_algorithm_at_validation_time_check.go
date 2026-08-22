@@ -63,16 +63,16 @@ func (c *DigestAlgorithmAtValidationTimeCheck) Level() enumerations.Level {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *DigestAlgorithmAtValidationTimeCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_AR, c.Name(c.digestAlgo))
+	return c.BuildXmlMessage(i18n.MessageTagASCCMAR, c.Name(c.digestAlgo))
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *DigestAlgorithmAtValidationTimeCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	messageTag := i18n.MessageTag_ASCCM_AR_ANS_ANR_2 // other cases
+	messageTag := i18n.MessageTagASCCMARANSANR2 // other cases
 	algoExpirationDate := vpolicy.GetExpirationDateForDigestAlgorithm(c.cryptographicSuite, c.digestAlgo)
 	if algoExpirationDate != nil && algoExpirationDate.Before(c.validationDate) {
-		messageTag = i18n.MessageTag_ASCCM_AR_ANS_ANR // expired case
+		messageTag = i18n.MessageTagASCCMARANSANR // expired case
 	}
 	return c.BuildXmlMessage(messageTag, c.Name(c.digestAlgo), c.position)
 }

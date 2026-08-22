@@ -42,7 +42,7 @@ func (c *AbstractTrustedListCheck[T]) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *AbstractTrustedListCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TRUSTED_LIST, c.tlAnalysis.URL)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTrustedList, c.tlAnalysis.URL)
 	return &message
 }
 

@@ -38,13 +38,13 @@ func (c *EAARevocationAvailableCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationAvailableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_AV
+	return i18n.MessageTagEAARevAV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationAvailableCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_AV_ANS
+	return i18n.MessageTagEAARevAVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

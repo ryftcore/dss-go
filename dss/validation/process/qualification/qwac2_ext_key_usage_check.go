@@ -41,12 +41,12 @@ func (c *QWAC2ExtKeyUsageCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QWAC2ExtKeyUsageCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC2_EXT_KEY_USAGE
+	return i18n.MessageTagQWAC2ExtKeyUsage
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QWAC2ExtKeyUsageCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC2_EXT_KEY_USAGE_ANS
+	return i18n.MessageTagQWAC2ExtKeyUsageANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

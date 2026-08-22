@@ -76,26 +76,26 @@ func (c *ExtendedKeyUsageCheck) BuildAdditionalInfo() *string {
 			rendered = append(rendered, "null")
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EXTENDED_KEY_USAGE,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagExtendedKeyUsage,
 		"["+strings.Join(rendered, ", ")+"]")
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ExtendedKeyUsageCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGEKU
+	return i18n.MessageTagBBBXCVISCGEKU
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *ExtendedKeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	if enumerations.ContextCertificate == c.context {
-		return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGEKU_ANS_CERT)
+		return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGEKUANSCert)
 	}
 	position, err := process.GetSubContextPosition(c.context, c.subContext)
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGEKU_ANS, position)
+	return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGEKUANS, position)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

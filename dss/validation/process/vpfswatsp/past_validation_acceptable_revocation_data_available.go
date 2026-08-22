@@ -50,13 +50,13 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC
+	return i18n.MessageTagBBBXCVIARDPFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastValidationAcceptableRevocationDataAvailable[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IARDPFC_ANS
+	return i18n.MessageTagBBBXCVIARDPFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -102,7 +102,7 @@ func (c *PastValidationAcceptableRevocationDataAvailable[T]) BuildAdditionalInfo
 		for _, revocation := range c.revocationData {
 			revocationDataIds = append(revocationDataIds, revocation.Id())
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCEPTABLE_REVOCATION,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagAcceptableRevocation,
 			"["+strings.Join(revocationDataIds, ", ")+"]")
 		return &message
 	}

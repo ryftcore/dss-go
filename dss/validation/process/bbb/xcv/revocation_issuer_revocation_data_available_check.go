@@ -35,11 +35,11 @@ func NewRevocationIssuerRevocationDataAvailableCheck(i18nProvider *i18n.I18nProv
 // MessageTag returns the check's message tag. Port of the overridden
 // getMessageTag().
 func (c *RevocationIssuerRevocationDataAvailableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDPFRC
+	return i18n.MessageTagBBBXCVIRDPFRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the overridden
 // getErrorMessageTag().
 func (c *RevocationIssuerRevocationDataAvailableCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDPFRC_ANS
+	return i18n.MessageTagBBBXCVIRDPFRCANS
 }

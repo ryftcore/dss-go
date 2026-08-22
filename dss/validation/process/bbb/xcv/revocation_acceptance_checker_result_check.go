@@ -54,13 +54,13 @@ func (c *RevocationAcceptanceCheckerResultCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationAcceptanceCheckerResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_RAC
+	return i18n.MessageTagBBBXCVRAC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationAcceptanceCheckerResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_RAC_ANS
+	return i18n.MessageTagBBBXCVRACANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -103,7 +103,7 @@ func (c *RevocationAcceptanceCheckerResultCheck[T]) BuildAdditionalInfo() *strin
 		if c.racResult.Id != nil {
 			id = *c.racResult.Id
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_ACCEPTANCE_CHECK, id,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationAcceptanceCheck, id,
 			thisUpdate, productionDate)
 		return &message
 	}

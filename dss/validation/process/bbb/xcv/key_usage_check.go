@@ -59,25 +59,25 @@ func (c *KeyUsageCheck) BuildAdditionalInfo() *string {
 	for _, keyUsageBit := range c.certificate.KeyUsages() {
 		names = append(names, string(keyUsageBit))
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_KEY_USAGE, "["+strings.Join(names, ", ")+"]")
+	message := c.I18nProvider.GetMessage(i18n.MessageTagKeyUsage, "["+strings.Join(names, ", ")+"]")
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *KeyUsageCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGKU
+	return i18n.MessageTagBBBXCVISCGKU
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *KeyUsageCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	if enumerations.ContextCertificate == c.context {
-		return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGKU_ANS_CERT)
+		return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGKUANSCert)
 	}
 	position, err := process.GetSubContextPosition(c.context, c.subContext)
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_BBB_XCV_ISCGKU_ANS, position)
+	return c.BuildXmlMessage(i18n.MessageTagBBBXCVISCGKUANS, position)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -37,13 +37,13 @@ func (c *EAARevocationExpirationTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationExpirationTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_EXP
+	return i18n.MessageTagEAARevExp
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationExpirationTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_EXP_ANS
+	return i18n.MessageTagEAARevExpANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

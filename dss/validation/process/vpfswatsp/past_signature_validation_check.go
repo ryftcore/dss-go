@@ -39,11 +39,11 @@ func (c *PastSignatureValidationCheck) BlockType() jaxb.XmlBlockType {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastSignatureValidationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPSVC
+	return i18n.MessageTagPSVIPSVC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastSignatureValidationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPSVC_ANS
+	return i18n.MessageTagPSVIPSVCANS
 }

@@ -35,11 +35,11 @@ func (c *DocumentTimeStampCheck) TimestampType() enumerations.TimestampType {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DocumentTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IDTSP
+	return i18n.MessageTagBBBSAVIDTSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DocumentTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IDTSP_ANS
+	return i18n.MessageTagBBBSAVIDTSPANS
 }

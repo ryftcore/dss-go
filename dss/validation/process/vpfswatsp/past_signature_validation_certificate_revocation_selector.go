@@ -61,7 +61,7 @@ func NewPastSignatureValidationCertificateRevocationSelector(i18nProvider *i18n.
 // Title returns the title of the building block. Port of the overridden
 // getTitle().
 func (c *PastSignatureValidationCertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_PSV_CRS
+	return i18n.MessageTagPSVCRS
 }
 
 // VerifyRevocationData verifies the given revocation data and returns the

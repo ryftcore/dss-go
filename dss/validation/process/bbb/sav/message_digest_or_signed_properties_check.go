@@ -75,13 +75,13 @@ func messageDigestMatcherType(digestMatcher *diagnosticjaxb.XmlDigestMatcher) en
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *MessageDigestOrSignedPropertiesCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPMDOSPP
+	return i18n.MessageTagBBBSAVISQPMDOSPP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *MessageDigestOrSignedPropertiesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPMDOSPP_ANS
+	return i18n.MessageTagBBBSAVISQPMDOSPPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -58,7 +58,7 @@ func NewTimestampQualificationBlock(i18nProvider *i18n.I18nProvider, timestamp *
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *TimestampQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_TST_QUALIFICATION
+	return i18n.MessageTagTSTQualification
 }
 
 // InitChain initializes the chain. Port of initChain().

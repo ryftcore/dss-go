@@ -38,13 +38,13 @@ func (c *SignaturePolicyHashValidCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignaturePolicyHashValidCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPM
+	return i18n.MessageTagBBBVCIISPM
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignaturePolicyHashValidCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPM_ANS
+	return i18n.MessageTagBBBVCIISPMANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

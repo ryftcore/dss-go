@@ -43,12 +43,12 @@ func (c *ByteRangeAllDocumentCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *ByteRangeAllDocumentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DASTHVBR
+	return i18n.MessageTagBBBFCDASTHVBR
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ByteRangeAllDocumentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DASTHVBR_ANS
+	return i18n.MessageTagBBBFCDASTHVBRANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

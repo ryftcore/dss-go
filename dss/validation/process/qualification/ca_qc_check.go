@@ -48,18 +48,18 @@ func (c *CaQcCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CaQcCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CAQC
+	return i18n.MessageTagQualHasCAQC
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *CaQcCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	stiList := c.getStis()
-	errorTag := i18n.MessageTag_QUAL_HAS_CAQC_ANS
+	errorTag := i18n.MessageTagQualHasCAQCANS
 	var argument string
 	if len(stiList) == 1 {
 		argument = stiList[0]
 	} else {
-		errorTag = i18n.MessageTag_QUAL_HAS_CAQC_ANS_2
+		errorTag = i18n.MessageTagQualHasCAQCANS2
 		argument = "[" + strings.Join(stiList, ", ") + "]"
 	}
 	return c.BuildXmlMessage(errorTag, argument)

@@ -42,13 +42,13 @@ func (c *ReferenceDataGroupCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ReferenceDataGroupCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_DFHVLCDOG
+	return i18n.MessageTagBBBCVERDFHVLCDOG
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ReferenceDataGroupCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_DFHVLCDOG_ANS
+	return i18n.MessageTagBBBCVERDFHVLCDOGANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

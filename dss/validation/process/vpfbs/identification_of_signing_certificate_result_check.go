@@ -55,11 +55,11 @@ func (c *IdentificationOfSigningCertificateResultCheck[T]) FailedSubIndicationFo
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *IdentificationOfSigningCertificateResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IISCRC
+	return i18n.MessageTagBSVIISCRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *IdentificationOfSigningCertificateResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IISCRC_ANS
+	return i18n.MessageTagBSVIISCRCANS
 }

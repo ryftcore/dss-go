@@ -50,11 +50,11 @@ func (c *ContentTimestampsCheck[T]) FailedSubIndicationForConclusion() enumerati
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ContentTimestampsCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCCTC
+	return i18n.MessageTagBSVISCCTC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ContentTimestampsCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ISCCTC_ANS
+	return i18n.MessageTagBSVISCCTCANS
 }

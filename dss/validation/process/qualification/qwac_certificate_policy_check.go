@@ -74,7 +74,7 @@ func (c *QWACCertificatePolicyCheck) BuildConstraintMessage() *jaxb.XmlMessage {
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_CERT_POLICY, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQWACCertPolicy, tag)
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -83,7 +83,7 @@ func (c *QWACCertificatePolicyCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	if err != nil {
 		panic(err)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_CERT_POLICY_ANS, tag)
+	return c.BuildXmlMessage(i18n.MessageTagQWACCertPolicyANS, tag)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

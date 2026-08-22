@@ -60,7 +60,7 @@ func NewPIDQualificationProcessBlock(i18nProvider *i18n.I18nProvider, eaa *diagn
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *PIDQualificationProcessBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_PID_QUALIFICATION_PROCESS
+	return i18n.MessageTagPIDQualificationProcess
 }
 
 // InitChain initializes the chain. Port of initChain().

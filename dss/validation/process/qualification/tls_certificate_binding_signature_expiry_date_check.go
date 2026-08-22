@@ -78,20 +78,20 @@ func (c *TLSCertificateBindingSignatureExpiryDateCheck) getIdentifiedTLSCertific
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *TLSCertificateBindingSignatureExpiryDateCheck) BuildAdditionalInfo() *string {
 	if c.signature.ExpirationTime() != nil && !c.currentTime.Before(*c.signature.ExpirationTime()) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_QWAC_EXPIRY_EXP, process.GetFormattedDate(&c.currentTime),
+		message := c.I18nProvider.GetMessage(i18n.MessageTagQWACExpiryExp, process.GetFormattedDate(&c.currentTime),
 			process.GetFormattedDate(c.signature.ExpirationTime()))
 		return &message
 	}
 	for _, certificate := range c.getIdentifiedTLSCertificates() {
 		if certificate.NotAfter() != nil && !c.currentTime.Before(*certificate.NotAfter()) {
-			message := c.I18nProvider.GetMessage(i18n.MessageTag_QWAC_EXPIRY_EXP, process.GetFormattedDate(&c.currentTime),
+			message := c.I18nProvider.GetMessage(i18n.MessageTagQWACExpiryExp, process.GetFormattedDate(&c.currentTime),
 				process.GetFormattedDate(certificate.NotAfter()), certificate.Id())
 			return &message
 		}
 	}
 	if c.signature.SigningCertificate() != nil && c.signature.SigningCertificate().NotAfter() != nil &&
 		!c.currentTime.Before(*c.signature.SigningCertificate().NotAfter()) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_QWAC_EXPIRY_EXP, process.GetFormattedDate(&c.currentTime),
+		message := c.I18nProvider.GetMessage(i18n.MessageTagQWACExpiryExp, process.GetFormattedDate(&c.currentTime),
 			process.GetFormattedDate(c.signature.SigningCertificate().NotAfter()), c.signature.SigningCertificate().Id())
 		return &message
 	}
@@ -100,12 +100,12 @@ func (c *TLSCertificateBindingSignatureExpiryDateCheck) BuildAdditionalInfo() *s
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingSignatureExpiryDateCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_EXPIRY_DATE
+	return i18n.MessageTagTLSCertBindingSigExpiryDate
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingSignatureExpiryDateCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_EXPIRY_DATE_ANS
+	return i18n.MessageTagTLSCertBindingSigExpiryDateANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

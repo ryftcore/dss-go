@@ -36,12 +36,12 @@ func (c *CertificateSelfSignedCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateSelfSignedCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISSSC
+	return i18n.MessageTagBBBXCVISSSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateSelfSignedCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISSSC_ANS
+	return i18n.MessageTagBBBXCVISSSCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

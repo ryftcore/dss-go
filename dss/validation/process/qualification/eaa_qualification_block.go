@@ -59,7 +59,7 @@ func NewEAAQualificationBlock(i18nProvider *i18n.I18nProvider, eaa *diagnostic.E
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *EAAQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_EAA_QUALIFICATION
+	return i18n.MessageTagEAAQualification
 }
 
 // InitChain initializes the chain. Port of initChain().

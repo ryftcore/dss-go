@@ -84,13 +84,13 @@ func (c *SignatureTypeCheck) getRFC7515SignatureType(signatureType string) strin
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTYPP
+	return i18n.MessageTagBBBSAVISQPSTYPP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTYPP_ANS
+	return i18n.MessageTagBBBSAVISQPSTYPPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

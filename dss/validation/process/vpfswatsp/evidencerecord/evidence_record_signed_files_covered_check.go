@@ -88,13 +88,13 @@ func signedFileCovered(signatureDigestMatcher *diagnosticjaxb.XmlDigestMatcher,
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EvidenceRecordSignedFilesCoveredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_HASSDOC
+	return i18n.MessageTagBBBCVERHasSDoc
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EvidenceRecordSignedFilesCoveredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_HASSDOC_ANS
+	return i18n.MessageTagBBBCVERHasSDocANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

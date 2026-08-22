@@ -64,11 +64,11 @@ func (c *SigFieldLockCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *SigFieldLockCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISVASFLD }
+func (c *SigFieldLockCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISVASFLD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SigFieldLockCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISVASFLD_ANS
+	return i18n.MessageTagBBBFCISVASFLDANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

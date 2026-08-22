@@ -48,16 +48,16 @@ func (c *EAACategoryForEAAPresenceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAACategoryForEAAPresenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CAT_EAA
+	return i18n.MessageTagEAACATEAA
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *EAACategoryForEAAPresenceCheck) BuildErrorMessage() *jaxb.XmlMessage {
 	category := c.eaa.EAACategory()
 	if category == "" {
-		return c.BuildXmlMessage(i18n.MessageTag_EAA_CAT_EAA_ANS_1)
+		return c.BuildXmlMessage(i18n.MessageTagEAACATEAAANS1)
 	}
-	return c.BuildXmlMessage(i18n.MessageTag_EAA_CAT_EAA_ANS_2, category)
+	return c.BuildXmlMessage(i18n.MessageTagEAACATEAAANS2, category)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -58,11 +58,11 @@ func NewKeyBindingSignatureValidationResultCheck(i18nProvider *i18n.I18nProvider
 // MessageTag returns the check's message tag. Port of the overridden
 // getMessageTag().
 func (c *KeyBindingSignatureValidationResultCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_KBRC
+	return i18n.MessageTagEAAKBRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *KeyBindingSignatureValidationResultCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_KBRC_ANS
+	return i18n.MessageTagEAAKBRCANS
 }

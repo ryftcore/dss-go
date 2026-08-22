@@ -44,7 +44,7 @@ func (c *ManifestEntryExistenceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ManifestEntryExistenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ISMEC
+	return i18n.MessageTagBBBCVISMEC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
@@ -57,9 +57,9 @@ func (c *ManifestEntryExistenceCheck) ErrorMessageTag() i18n.MessageTag {
 		}
 	}
 	if utils.IsCollectionNotEmpty(manifestEntries) && noneDataFound(manifestEntries) {
-		return i18n.MessageTag_BBB_CV_ISMEC_ANS_2
+		return i18n.MessageTagBBBCVISMECANS2
 	}
-	return i18n.MessageTag_BBB_CV_ISMEC_ANS
+	return i18n.MessageTagBBBCVISMECANS
 }
 
 // noneDataFound ports Stream#noneMatch(XmlDigestMatcher::isDataFound).

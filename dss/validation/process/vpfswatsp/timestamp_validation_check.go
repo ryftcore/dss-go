@@ -60,19 +60,19 @@ func (c *TimestampValidationCheck[T]) BuildAdditionalInfo() *string {
 	if err != nil {
 		panic(err)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_VALIDATION, typeTag, c.timestamp.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampValidation, typeTag, c.timestamp.Id(), date)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTADC
+	return i18n.MessageTagADESTIBSVPTADC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTADC_ANS
+	return i18n.MessageTagADESTIBSVPTADCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

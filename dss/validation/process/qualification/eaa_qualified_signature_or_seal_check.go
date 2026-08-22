@@ -47,12 +47,12 @@ func (c *EAAQualifiedSignatureOrSealCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAQualifiedSignatureOrSealCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_QUAL
+	return i18n.MessageTagEAASigQual
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *EAAQualifiedSignatureOrSealCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SIG_QUAL_ANS
+	return i18n.MessageTagEAASigQualANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
@@ -62,7 +62,7 @@ func (c *EAAQualifiedSignatureOrSealCheck) BuildErrorMessage() *jaxb.XmlMessage 
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *EAAQualifiedSignatureOrSealCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_SIGNATURE_ID, c.signature.Id())
+	message := c.I18nProvider.GetMessage(i18n.MessageTagSignatureID, c.signature.Id())
 	return &message
 }
 

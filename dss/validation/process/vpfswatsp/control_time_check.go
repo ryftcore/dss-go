@@ -41,13 +41,13 @@ func (c *ControlTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ControlTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ICTD
+	return i18n.MessageTagPSVICTD
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ControlTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ICTD_ANS
+	return i18n.MessageTagPSVICTDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -66,7 +66,7 @@ func (c *ControlTimeCheck) FailedSubIndicationForConclusion() enumerations.SubIn
 // buildAdditionalInfo(), whose null result leaves the element absent.
 func (c *ControlTimeCheck) BuildAdditionalInfo() *string {
 	if c.controlTime != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_ALONE,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeAlone,
 			process.GetFormattedDate(c.controlTime))
 		return &message
 	}

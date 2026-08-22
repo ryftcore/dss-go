@@ -33,11 +33,11 @@ func (c *FormFillChangesCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *FormFillChangesCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_DSCNFFSM }
+func (c *FormFillChangesCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCDSCNFFSM }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *FormFillChangesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DSCNFFSM_ANS
+	return i18n.MessageTagBBBFCDSCNFFSMANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

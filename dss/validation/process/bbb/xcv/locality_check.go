@@ -39,12 +39,12 @@ func (c *LocalityCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LocalityCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGLOC
+	return i18n.MessageTagBBBXCVISCGLOC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *LocalityCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGLOC_ANS
+	return i18n.MessageTagBBBXCVISCGLOCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

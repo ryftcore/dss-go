@@ -60,12 +60,12 @@ func (c *ProspectiveCertificateChainAtValidationTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_HPCCVVT
+	return i18n.MessageTagBBBXCVHPCCVVT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_HPCCVVT_ANS
+	return i18n.MessageTagBBBXCVHPCCVVTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -84,6 +84,6 @@ func (c *ProspectiveCertificateChainAtValidationTimeCheck) FailedSubIndicationFo
 // buildAdditionalInfo().
 func (c *ProspectiveCertificateChainAtValidationTimeCheck) BuildAdditionalInfo() *string {
 	controlTime := c.controlTime
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_VALIDATION_TIME, process.GetFormattedDate(&controlTime))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagValidationTime, process.GetFormattedDate(&controlTime))
 	return &message
 }

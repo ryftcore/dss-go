@@ -59,13 +59,13 @@ func (c *POEExistsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *POEExistsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPOSVAOBCT
+	return i18n.MessageTagPSVITPOSVAOBCT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *POEExistsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPOSVAOBCT_ANS
+	return i18n.MessageTagPSVITPOSVAOBCTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -84,7 +84,7 @@ func (c *POEExistsCheck) FailedSubIndicationForConclusion() enumerations.SubIndi
 // buildAdditionalInfo().
 func (c *POEExistsCheck) BuildAdditionalInfo() *string {
 	lowestPOETime := c.poe.GetLowestPOETime(c.token.Id())
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_WITH_POE,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeWithPOE,
 		process.GetFormattedDate(c.controlTime), process.GetFormattedDate(&lowestPOETime))
 	return &message
 }

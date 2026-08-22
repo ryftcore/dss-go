@@ -110,7 +110,7 @@ func (c *AbstractCryptographicCheckerResultCheck[T]) Level() enumerations.Level 
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *AbstractCryptographicCheckerResultCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, c.position)
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden

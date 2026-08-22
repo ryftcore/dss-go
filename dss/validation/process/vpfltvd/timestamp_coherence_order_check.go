@@ -110,13 +110,13 @@ func (c *TimestampCoherenceOrderCheck) coversTheTimestamp(timestamp *diagnostic.
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampCoherenceOrderCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_ASTPTCT
+	return i18n.MessageTagTSVASTPTCT
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampCoherenceOrderCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_ASTPTCT_ANS
+	return i18n.MessageTagTSVASTPTCTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

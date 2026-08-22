@@ -39,13 +39,13 @@ func (c *ContentIdentifierCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ContentIdentifierCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCIP
+	return i18n.MessageTagBBBSAVISQPCIP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ContentIdentifierCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCIP_ANS
+	return i18n.MessageTagBBBSAVISQPCIPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

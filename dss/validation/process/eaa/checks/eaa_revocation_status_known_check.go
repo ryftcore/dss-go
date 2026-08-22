@@ -39,13 +39,13 @@ func (c *EAARevocationStatusKnownCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationStatusKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_KNOWN
+	return i18n.MessageTagEAARevKnown
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationStatusKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_KNOWN_ANS
+	return i18n.MessageTagEAARevKnownANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

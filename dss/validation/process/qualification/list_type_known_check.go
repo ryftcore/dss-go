@@ -37,18 +37,18 @@ func (c *ListTypeKnownCheck) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *ListTypeKnownCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_USAGE_LIST_TYPE, c.listTypeUri)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateUsageListType, c.listTypeUri)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ListTypeKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LIST_TYPE_KNOWN
+	return i18n.MessageTagCertUsageListTypeKnown
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *ListTypeKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LIST_TYPE_KNOWN_ANS
+	return i18n.MessageTagCertUsageListTypeKnownANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

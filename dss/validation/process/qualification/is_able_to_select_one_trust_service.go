@@ -41,12 +41,12 @@ func (c *IsAbleToSelectOneTrustService) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *IsAbleToSelectOneTrustService) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_ONLY_ONE
+	return i18n.MessageTagQualHasOnlyOne
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *IsAbleToSelectOneTrustService) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_ONLY_ONE_ANS
+	return i18n.MessageTagQualHasOnlyOneANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

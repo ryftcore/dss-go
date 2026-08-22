@@ -54,7 +54,7 @@ func NewValidationTimeSlidingCertificateRevocationSelector(i18nProvider *i18n.I1
 // Title returns the title of the building block. Port of the overridden
 // getTitle().
 func (c *ValidationTimeSlidingCertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_VTS_CRS
+	return i18n.MessageTagVTSCRS
 }
 
 // CertificateRevocationData returns available certificate revocation data to be

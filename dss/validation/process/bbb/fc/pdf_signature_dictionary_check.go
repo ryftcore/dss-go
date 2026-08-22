@@ -34,12 +34,12 @@ func (c *PdfSignatureDictionaryCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *PdfSignatureDictionaryCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISDC
+	return i18n.MessageTagBBBFCISDC
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfSignatureDictionaryCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISDC_ANS
+	return i18n.MessageTagBBBFCISDCANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

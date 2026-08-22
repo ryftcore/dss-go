@@ -28,7 +28,7 @@ func TestAovCryptographicCheckersAgainstJavaOracle(t *testing.T) {
 		t.Fatal("empty oracle")
 	}
 	suite := aovDefaultPolicy(t).SignatureCryptographicConstraint(enumerations.ContextSignature)
-	position := i18n.MessageTag_ACCM_POS_SIG_SIG
+	position := i18n.MessageTagACCMPosSigSig
 
 	// per check class, the statuses seen - every one must have an OK and a NOT OK
 	statuses := map[string]map[string]int{}

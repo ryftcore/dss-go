@@ -60,10 +60,10 @@ func (c *SatisfyingRevocationDataExistsCheck[T]) BuildAdditionalInfo() *string {
 	latestAcceptableRevocationId := c.crsResult.LatestAcceptableRevocationId
 	var message string
 	if latestAcceptableRevocationId != nil {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_REVOCATION_FOUND, *latestAcceptableRevocationId,
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateRevocationFound, *latestAcceptableRevocationId,
 			c.certificateWrapper.Id(), process.GetFormattedDate(&c.controlTime))
 	} else {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_REVOCATION_NOT_FOUND, c.certificateWrapper.Id(),
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateRevocationNotFound, c.certificateWrapper.Id(),
 			process.GetFormattedDate(&c.controlTime))
 	}
 	return &message
@@ -72,13 +72,13 @@ func (c *SatisfyingRevocationDataExistsCheck[T]) BuildAdditionalInfo() *string {
 // MessageTag returns the check's message tag. Port of the overridden
 // getMessageTag().
 func (c *SatisfyingRevocationDataExistsCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VTS_IRDPFC
+	return i18n.MessageTagBBBVTSIRDPFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the overridden
 // getErrorMessageTag().
 func (c *SatisfyingRevocationDataExistsCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VTS_IRDPFC_ANS
+	return i18n.MessageTagBBBVTSIRDPFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -39,12 +39,12 @@ func (c *TLSCertificateBindingSignatureFoundCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingSignatureFoundCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG
+	return i18n.MessageTagTLSCertBindingSig
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingSignatureFoundCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_ANS
+	return i18n.MessageTagTLSCertBindingSigANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

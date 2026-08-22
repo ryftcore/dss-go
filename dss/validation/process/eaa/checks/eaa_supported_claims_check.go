@@ -47,19 +47,19 @@ func (c *EAASupportedClaimsCheck) BuildAdditionalInfo() *string {
 			unsupportedClaims = append(unsupportedClaims, cl)
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_UNSUPPORTED_CLAIMS, utils.JoinStrings(unsupportedClaims, ", "))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagEAAUnsupportedClaims, utils.JoinStrings(unsupportedClaims, ", "))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAASupportedClaimsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUPPORTED_CLAIMS
+	return i18n.MessageTagEAASupportedClaims
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAASupportedClaimsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_SUPPORTED_CLAIMS_ANS
+	return i18n.MessageTagEAASupportedClaimsANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

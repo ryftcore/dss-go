@@ -42,12 +42,12 @@ func (c *CertificateQcPSBAuthSourceIdentificationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcPSBAuthSourceIdentificationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCPSBASIA
+	return i18n.MessageTagBBBXCVCMDCPSBASIA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcPSBAuthSourceIdentificationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCPSBASIA_ANS
+	return i18n.MessageTagBBBXCVCMDCPSBASIAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

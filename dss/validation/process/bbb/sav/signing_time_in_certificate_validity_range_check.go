@@ -41,13 +41,13 @@ func (c *SigningTimeInCertificateValidityRangeCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningTimeInCertificateValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTWSCVR
+	return i18n.MessageTagBBBSAVISQPSTWSCVR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningTimeInCertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTWSCVR_ANS
+	return i18n.MessageTagBBBSAVISQPSTWSCVRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

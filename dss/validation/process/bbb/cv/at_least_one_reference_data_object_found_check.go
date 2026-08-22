@@ -43,13 +43,13 @@ func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_IODOF
+	return i18n.MessageTagBBBCVERIODOF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AtLeastOneReferenceDataObjectFoundCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_ER_IODOF_ANS
+	return i18n.MessageTagBBBCVERIODOFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

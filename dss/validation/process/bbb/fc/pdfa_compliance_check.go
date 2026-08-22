@@ -29,11 +29,11 @@ func NewPDFAComplianceCheck(i18nProvider *i18n.I18nProvider, result *process.Res
 func (c *PDFAComplianceCheck) Process() bool { return c.pdfaCompliant }
 
 // MessageTag returns the constraint message i18n key.
-func (c *PDFAComplianceCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IDPDFAC }
+func (c *PDFAComplianceCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIDPDFAC }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PDFAComplianceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IDPDFAC_ANS
+	return i18n.MessageTagBBBFCIDPDFACANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

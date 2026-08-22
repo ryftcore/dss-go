@@ -55,5 +55,5 @@ func (c *RevocationDataFreshCheckWithNullConstraint) diff(nextUpdate, thisUpdate
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDataFreshCheckWithNullConstraint) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_RFC_IRIF_TUNU
+	return i18n.MessageTagBBBRFCIRIFTUNU
 }

@@ -44,6 +44,6 @@ func (c *BasicTimestampValidationWithIdCheck[T]) BuildAdditionalInfo() *string {
 	if err != nil {
 		panic(err)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_VALIDATION, typeTag, c.Timestamp.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampValidation, typeTag, c.Timestamp.Id(), date)
 	return &message
 }

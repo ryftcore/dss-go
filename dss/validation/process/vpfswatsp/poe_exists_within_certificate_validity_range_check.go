@@ -46,13 +46,13 @@ func (c *POEExistsWithinCertificateValidityRangeCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *POEExistsWithinCertificateValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCRIAIDBEDC
+	return i18n.MessageTagPSVIPCRIAIDBEDC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *POEExistsWithinCertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCRIAIDBEDC_ANS
+	return i18n.MessageTagPSVIPCRIAIDBEDCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -71,7 +71,7 @@ func (c *POEExistsWithinCertificateValidityRangeCheck[T]) FailedSubIndicationFor
 // buildAdditionalInfo(), whose null result leaves the element absent.
 func (c *POEExistsWithinCertificateValidityRangeCheck[T]) BuildAdditionalInfo() *string {
 	if c.certificate != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_ID, c.certificate.Id())
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateID, c.certificate.Id())
 		return &message
 	}
 	return nil

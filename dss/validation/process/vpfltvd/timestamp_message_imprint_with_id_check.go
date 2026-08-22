@@ -51,6 +51,6 @@ func (c *TimestampMessageImprintWithIdCheck[T]) BuildAdditionalInfo() *string {
 	if err != nil {
 		panic(err)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_VALIDATION, typeTag, timestamp.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampValidation, typeTag, timestamp.Id(), date)
 	return &message
 }

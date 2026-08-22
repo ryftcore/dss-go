@@ -64,7 +64,7 @@ func (c *RevocationIssuerValidityRangeCheck[T]) BuildAdditionalInfo() *string {
 		}
 		currentTime := c.currentTime
 		validationTime := process.GetFormattedDate(&currentTime)
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_CERT_VALIDITY,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationCertValidity,
 			certificate.Id(), c.revocationWrapper.Id(), notBeforeStr, notAfterStr, validationTime)
 		return &message
 	}
@@ -73,12 +73,12 @@ func (c *RevocationIssuerValidityRangeCheck[T]) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationIssuerValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICTIVRCIRI
+	return i18n.MessageTagBBBXCVICTIVRCIRI
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RevocationIssuerValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICTIVRCIRI_ANS
+	return i18n.MessageTagBBBXCVICTIVRCIRIANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

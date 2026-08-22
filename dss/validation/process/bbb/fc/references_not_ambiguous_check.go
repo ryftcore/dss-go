@@ -44,12 +44,12 @@ func (c *ReferencesNotAmbiguousCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *ReferencesNotAmbiguousCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISRIA
+	return i18n.MessageTagBBBFCISRIA
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ReferencesNotAmbiguousCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISRIA_ANS
+	return i18n.MessageTagBBBFCISRIAANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.
@@ -75,6 +75,6 @@ func (c *ReferencesNotAmbiguousCheck) BuildAdditionalInfo() *string {
 	if strings.TrimSpace(referenceName) == "" && c.duplicatedReference.Type != nil {
 		referenceName = string(c.duplicatedReference.Type.DigestMatcherType())
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE, referenceName)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReference, referenceName)
 	return &message
 }

@@ -42,18 +42,18 @@ func (c *ReferenceDataNameMatchCheck[T]) Process() bool {
 // takes the non-MANIFEST_ENTRY branch.
 func (c *ReferenceDataNameMatchCheck[T]) MessageTag() i18n.MessageTag {
 	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
-		return i18n.MessageTag_BBB_CV_DMENMND
+		return i18n.MessageTagBBBCVDMENMND
 	}
-	return i18n.MessageTag_BBB_CV_DRNMND
+	return i18n.MessageTagBBBCVDRNMND
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ReferenceDataNameMatchCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	if digestMatcherType(c.digestMatcher) == enumerations.DigestMatcherTypeManifestEntry {
-		return i18n.MessageTag_BBB_CV_DMENMND_ANS
+		return i18n.MessageTagBBBCVDMENMNDANS
 	}
-	return i18n.MessageTag_BBB_CV_DRNMND_ANS
+	return i18n.MessageTagBBBCVDRNMNDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -71,7 +71,7 @@ func (c *ReferenceDataNameMatchCheck[T]) FailedSubIndicationForConclusion() enum
 // BuildAdditionalInfo builds an additional information. Port of the overridden
 // buildAdditionalInfo().
 func (c *ReferenceDataNameMatchCheck[T]) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE_NAME_CHECK,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReferenceNameCheck,
 		digestMatcherUri(c.digestMatcher), digestMatcherDocumentName(c.digestMatcher))
 	return &message
 }

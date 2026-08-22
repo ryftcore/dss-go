@@ -34,12 +34,12 @@ func (c *AnnotationChangesCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *AnnotationChangesCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DSCNACMDM
+	return i18n.MessageTagBBBFCDSCNACMDM
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *AnnotationChangesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DSCNACMDM_ANS
+	return i18n.MessageTagBBBFCDSCNACMDMANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

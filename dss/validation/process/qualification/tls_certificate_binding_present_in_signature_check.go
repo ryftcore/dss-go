@@ -63,12 +63,12 @@ func (c *TLSCertificateBindingPresentInSignatureCheck) isTLSCertificateIdentifie
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingPresentInSignatureCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_CERT_IDENTIFIED
+	return i18n.MessageTagTLSCertBindingCertIdentified
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingPresentInSignatureCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_CERT_IDENTIFIED_ANS
+	return i18n.MessageTagTLSCertBindingCertIdentifiedANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

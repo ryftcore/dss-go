@@ -39,18 +39,18 @@ func (c *TrustedEntityServiceStatusKnownCheck) Process() bool {
 
 // BuildAdditionalInfo builds an additional information. Port of buildAdditionalInfo().
 func (c *TrustedEntityServiceStatusKnownCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_USAGE_STATUS, c.serviceStatusUri)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCertificateUsageStatus, c.serviceStatusUri)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustedEntityServiceStatusKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STATUS_KNOWN
+	return i18n.MessageTagCertUsageStatusKnown
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustedEntityServiceStatusKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_STATUS_KNOWN_ANS
+	return i18n.MessageTagCertUsageStatusKnownANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

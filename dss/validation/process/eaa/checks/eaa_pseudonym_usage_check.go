@@ -38,7 +38,7 @@ func (c *EAAPseudonymUsageCheck) Process() bool {
 // overridden buildAdditionalInfo().
 func (c *EAAPseudonymUsageCheck) BuildAdditionalInfo() *string {
 	if c.eaa.HolderPseudonym() != "" {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_PSEUDO, c.eaa.HolderPseudonym())
+		message := c.I18nProvider.GetMessage(i18n.MessageTagPseudo, c.eaa.HolderPseudonym())
 		return &message
 	}
 	return nil
@@ -46,13 +46,13 @@ func (c *EAAPseudonymUsageCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAPseudonymUsageCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_PSEUDO_USED
+	return i18n.MessageTagEAAPseudoUsed
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAPseudonymUsageCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_PSEUDO_USED_ANS
+	return i18n.MessageTagEAAPseudoUsedANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

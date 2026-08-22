@@ -77,7 +77,7 @@ func NewValidationProcessForTimestampsWithArchivalData(i18nProvider *i18n.I18nPr
 
 // Title returns the title of the process. Port of getTitle().
 func (c *ValidationProcessForTimestampsWithArchivalData) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPFTSPWATSP
+	return i18n.MessageTagVpftspwatsp
 }
 
 // InitChain initializes the chain. Port of initChain().

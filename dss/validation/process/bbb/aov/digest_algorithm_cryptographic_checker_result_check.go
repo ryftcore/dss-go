@@ -37,10 +37,10 @@ func NewDigestAlgorithmCryptographicCheckerResultCheck[T any](i18nProvider *i18n
 func (c *DigestAlgorithmCryptographicCheckerResultCheck[T]) BuildAdditionalInfo() *string {
 	dateTime := process.GetFormattedDate(&c.validationDate)
 	if c.IsValid(&c.ccResult.XmlConstraintsConclusionContent) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDM,
 			c.ccResult.CryptographicValidation.Algorithm.Name, dateTime, c.position)
 		return &message
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_REF, c.ErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithRef, c.ErrorMessage(), dateTime)
 	return &message
 }

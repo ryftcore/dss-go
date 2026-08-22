@@ -320,7 +320,7 @@ func TestSAVDirectChecksAgainstJavaOracle(t *testing.T) {
 		run("synthetic", "aov-"+shape, "AlgorithmObsolescenceValidationCheck",
 			func(r *process.Result[*jaxb.XmlSAV], _ policy.LevelRule) process.ChainItem[*jaxb.XmlSAV] {
 				return aov.NewAlgorithmObsolescenceValidationCheck(i18nProvider, r, aovResult,
-					savCurrentTime, i18n.MessageTag_ACCM_POS_SIG_SIG, "T-AOV")
+					savCurrentTime, i18n.MessageTagACCMPosSigSig, "T-AOV")
 			})
 	}
 

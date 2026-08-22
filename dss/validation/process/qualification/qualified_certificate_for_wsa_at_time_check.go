@@ -43,12 +43,12 @@ func (c *QualifiedCertificateForWSAAtTimeCheck) Process() bool {
 // BuildConstraintMessage builds a constraint message. Port of
 // buildConstraintMessage().
 func (c *QualifiedCertificateForWSAAtTimeCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_IS_WSA_AT_TIME, c.validationTimeMessageTag())
+	return c.BuildXmlMessage(i18n.MessageTagQWACIsWSAAtTime, c.validationTimeMessageTag())
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *QualifiedCertificateForWSAAtTimeCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_QWAC_IS_WSA_AT_TIME_ANS, c.validationTimeMessageTag())
+	return c.BuildXmlMessage(i18n.MessageTagQWACIsWSAAtTimeANS, c.validationTimeMessageTag())
 }
 
 // validationTimeMessageTag ports the ValidationProcessUtils.getValidationTimeMessageTag
@@ -70,7 +70,7 @@ func (c *QualifiedCertificateForWSAAtTimeCheck) BuildAdditionalInfo() *string {
 	if c.certificateQualification.DateTime != nil {
 		dateTime = time.Time(*c.certificateQualification.DateTime)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_VALIDATION_TIME, process.GetFormattedDate(&dateTime))
+	message := c.I18nProvider.GetMessage(i18n.MessageTagValidationTime, process.GetFormattedDate(&dateTime))
 	return &message
 }
 

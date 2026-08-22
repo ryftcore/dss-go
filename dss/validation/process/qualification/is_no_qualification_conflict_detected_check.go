@@ -63,7 +63,7 @@ func (c *IsNoQualificationConflictDetectedCheck) BuildAdditionalInfo() *string {
 		for _, v := range c.certificateQualificationsAtTime {
 			values = append(values, string(v))
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_RESULTS, "["+strings.Join(values, ", ")+"]")
+		message := c.I18nProvider.GetMessage(i18n.MessageTagResults, "["+strings.Join(values, ", ")+"]")
 		return &message
 	}
 	return nil
@@ -71,12 +71,12 @@ func (c *IsNoQualificationConflictDetectedCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *IsNoQualificationConflictDetectedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONF
+	return i18n.MessageTagQualHasConf
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *IsNoQualificationConflictDetectedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_CONF_ANS
+	return i18n.MessageTagQualHasConfANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

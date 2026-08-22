@@ -49,13 +49,13 @@ func (c *X509UrlMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *X509UrlMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAX509UA
+	return i18n.MessageTagBBBICSISAX509UA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *X509UrlMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISAX509UA_ANS
+	return i18n.MessageTagBBBICSISAX509UAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

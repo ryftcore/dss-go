@@ -37,13 +37,13 @@ func (c *RevocationDataKnownCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDataKnownCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCUKN
+	return i18n.MessageTagBBBXCVISCUKN
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationDataKnownCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCUKN_ANS
+	return i18n.MessageTagBBBXCVISCUKNANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

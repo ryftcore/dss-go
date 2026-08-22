@@ -63,13 +63,13 @@ func (c *POENotAfterCARevocationTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *POENotAfterCARevocationTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPRISCNARTCAC
+	return i18n.MessageTagPSVITPRISCNARTCAC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *POENotAfterCARevocationTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_ITPRISCNARTCAC_ANS
+	return i18n.MessageTagPSVITPRISCNARTCACANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

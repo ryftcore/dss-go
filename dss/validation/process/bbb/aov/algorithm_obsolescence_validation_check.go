@@ -122,16 +122,16 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo() *string 
 			algorithm := cryptographicValidation.Algorithm
 			var message string
 			if algorithm.KeyLength != nil && *algorithm.KeyLength != "" {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_KEY_SIZE,
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessKeySize,
 					algorithm.Name, *algorithm.KeyLength, dateTime)
 			} else {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS, algorithm.Name, dateTime)
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccess, algorithm.Name, dateTime)
 			}
 			return &message
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE, c.getErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.getErrorMessage(), dateTime)
 	return &message
 }
 
@@ -153,12 +153,12 @@ func (c *AlgorithmObsolescenceValidationCheck[T]) FailedSubIndicationForConclusi
 // BuildConstraintMessage builds a constraint message. Port of
 // buildConstraintMessage().
 func (c *AlgorithmObsolescenceValidationCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, c.position)
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *AlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM_ANS, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
 // getErrorMessage returns the first error/warning/info message value, or the

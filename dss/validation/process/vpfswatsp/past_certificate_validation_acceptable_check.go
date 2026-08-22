@@ -71,13 +71,13 @@ func (c *PastCertificateValidationAcceptableCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastCertificateValidationAcceptableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVA
+	return i18n.MessageTagPSVIPCVA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastCertificateValidationAcceptableCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPCVA_ANS
+	return i18n.MessageTagPSVIPCVAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -97,7 +97,7 @@ func (c *PastCertificateValidationAcceptableCheck) FailedSubIndicationForConclus
 func (c *PastCertificateValidationAcceptableCheck) BuildAdditionalInfo() *string {
 	if c.pcv != nil && c.pcv.ControlTime != nil {
 		controlTime := c.pcv.ControlTime.Time()
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_ALONE,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeAlone,
 			process.GetFormattedDate(&controlTime))
 		return &message
 	}

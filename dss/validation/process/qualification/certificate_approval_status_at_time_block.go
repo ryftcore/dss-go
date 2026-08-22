@@ -80,7 +80,7 @@ func NewCertificateApprovalStatusAtTimeBlock(i18nProvider *i18n.I18nProvider, va
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *CertificateApprovalStatusAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_CERT_USAGE_AT_TIME
+	message := i18n.MessageTagCertUsageAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)

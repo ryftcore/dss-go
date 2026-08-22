@@ -115,12 +115,12 @@ func (c *QWACDomainNameCheck) matchesIPAddress(hostname, subAltName string) bool
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QWACDomainNameCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_DOMAIN_NAME
+	return i18n.MessageTagQWACDomainName
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QWACDomainNameCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_DOMAIN_NAME_ANS
+	return i18n.MessageTagQWACDomainNameANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

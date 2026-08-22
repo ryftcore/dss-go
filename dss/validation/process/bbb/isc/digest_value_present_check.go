@@ -47,13 +47,13 @@ func (c *DigestValuePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DigestValuePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISACDP
+	return i18n.MessageTagBBBICSISACDP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DigestValuePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISACDP_ANS
+	return i18n.MessageTagBBBICSISACDPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

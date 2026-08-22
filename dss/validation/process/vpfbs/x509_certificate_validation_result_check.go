@@ -56,11 +56,11 @@ func (c *X509CertificateValidationResultCheck[T]) FailedSubIndicationForConclusi
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *X509CertificateValidationResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IXCVRC
+	return i18n.MessageTagBSVIXCVRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *X509CertificateValidationResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IXCVRC_ANS
+	return i18n.MessageTagBSVIXCVRCANS
 }

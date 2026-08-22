@@ -35,12 +35,12 @@ func (c *PdfVisualDifferenceCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *PdfVisualDifferenceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IVDBSFR
+	return i18n.MessageTagBBBFCIVDBSFR
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfVisualDifferenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IVDBSFR_ANS
+	return i18n.MessageTagBBBFCIVDBSFRANS
 }
 
 // BuildErrorMessage overrides the default to include the concerned pages. Port of the

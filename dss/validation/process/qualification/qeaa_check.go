@@ -39,12 +39,12 @@ func (c *QEAACheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QEAACheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_QEAA
+	return i18n.MessageTagQualHasQEAA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QEAACheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_QEAA_ANS
+	return i18n.MessageTagQualHasQEAAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

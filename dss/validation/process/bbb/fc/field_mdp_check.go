@@ -25,11 +25,11 @@ func NewFieldMDPCheck(i18nProvider *i18n.I18nProvider, result *process.Result[*d
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *FieldMDPCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISVAFMDPD }
+func (c *FieldMDPCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISVAFMDPD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *FieldMDPCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISVAFMDPD_ANS
+	return i18n.MessageTagBBBFCISVAFMDPDANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

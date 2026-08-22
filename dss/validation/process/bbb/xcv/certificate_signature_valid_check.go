@@ -37,12 +37,12 @@ func (c *CertificateSignatureValidCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateSignatureValidCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICSI
+	return i18n.MessageTagBBBXCVICSI
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateSignatureValidCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICSI_ANS
+	return i18n.MessageTagBBBXCVICSIANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

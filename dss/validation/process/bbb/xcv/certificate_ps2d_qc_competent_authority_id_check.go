@@ -44,12 +44,12 @@ func (c *CertificatePS2DQcCompetentAuthorityIdCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificatePS2DQcCompetentAuthorityIdCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCIA
+	return i18n.MessageTagBBBXCVCMDCICQCIA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificatePS2DQcCompetentAuthorityIdCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCIA_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCIAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

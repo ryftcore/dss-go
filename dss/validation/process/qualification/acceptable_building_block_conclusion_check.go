@@ -38,12 +38,12 @@ func (c *AcceptableBuildingBlockConclusionCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AcceptableBuildingBlockConclusionCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ACCEPT
+	return i18n.MessageTagBBBAccept
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *AcceptableBuildingBlockConclusionCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ACCEPT_ANS
+	return i18n.MessageTagBBBAcceptANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -55,19 +55,19 @@ func (c *EvidenceRecordValidationCheck[T]) Process() bool {
 func (c *EvidenceRecordValidationCheck[T]) BuildAdditionalInfo() *string {
 	proofOfExistenceTime := c.erValidationResult.ProofOfExistence.Time.Time()
 	date := process.GetFormattedDate(&proofOfExistenceTime)
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_EVIDENCE_RECORD_VALIDATION, c.evidenceRecord.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagEvidenceRecordValidation, c.evidenceRecord.Id(), date)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EvidenceRecordValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IRERVPC
+	return i18n.MessageTagADESTIRERVPC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EvidenceRecordValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IRERVPC_ANS
+	return i18n.MessageTagADESTIRERVPCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

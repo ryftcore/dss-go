@@ -105,11 +105,11 @@ func (c *AllFilesSignedCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *AllFilesSignedCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_CV_IAFS }
+func (c *AllFilesSignedCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBCVIAFS }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *AllFilesSignedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_IAFS_ANS
+	return i18n.MessageTagBBBCVIAFSANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

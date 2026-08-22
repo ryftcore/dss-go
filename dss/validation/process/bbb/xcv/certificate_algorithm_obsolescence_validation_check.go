@@ -119,13 +119,13 @@ func isValidAOVCryptographicConclusion(conclusion *jaxb.XmlConclusion) bool {
 // BuildConstraintMessage builds a constraint message. Port of
 // AlgorithmObsolescenceValidationCheck#buildConstraintMessage().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCM, c.position)
 }
 
 // BuildErrorMessage builds an error message. Port of
 // AlgorithmObsolescenceValidationCheck#buildErrorMessage().
 func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ACCM_ANS, c.position)
+	return c.BuildXmlMessage(i18n.MessageTagACCMANS, c.position)
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -158,7 +158,7 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) BuildAdditionalInfo
 	if base != nil {
 		baseStr = *base
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCM_DESC_WITH_ID_RESULT, baseStr, c.tokenID)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagACCMDescWithIDResult, baseStr, c.tokenID)
 	return &message
 }
 
@@ -176,16 +176,16 @@ func (c *CertificateAlgorithmObsolescenceValidationCheck[T]) baseAdditionalInfo(
 			algorithm := cryptographicValidation.Algorithm
 			var message string
 			if algorithm.KeyLength != nil && *algorithm.KeyLength != "" {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_KEY_SIZE,
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessKeySize,
 					algorithm.Name, *algorithm.KeyLength, dateTime)
 			} else {
-				message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS, algorithm.Name, dateTime)
+				message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccess, algorithm.Name, dateTime)
 			}
 			return &message
 		}
 		return nil
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE, c.overallErrorMessage(), dateTime)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailure, c.overallErrorMessage(), dateTime)
 	return &message
 }
 

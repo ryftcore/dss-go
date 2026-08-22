@@ -44,7 +44,7 @@ func (c *TrustServiceAtTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustServiceAtTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_ATTIME
+	return i18n.MessageTagQualHasAtTime
 }
 
 // BuildConstraintMessage builds a constraint message. Port of
@@ -59,7 +59,7 @@ func (c *TrustServiceAtTimeCheck) BuildConstraintMessage() *jaxb.XmlMessage {
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustServiceAtTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_HAS_ATTIME_ANS
+	return i18n.MessageTagQualHasAtTimeANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().

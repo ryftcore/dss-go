@@ -38,11 +38,11 @@ func (c *CAdESV3HashIndexCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *CAdESV3HashIndexCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IAHIV }
+func (c *CAdESV3HashIndexCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIAHIV }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *CAdESV3HashIndexCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IAHIV_ANS
+	return i18n.MessageTagBBBFCIAHIVANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

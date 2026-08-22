@@ -80,12 +80,12 @@ func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) isAnyRootLevelDocumen
 
 // MessageTag returns the constraint message i18n key.
 func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFP_ASTFORAMC
+	return i18n.MessageTagBBBFCISFPASTFORAMC
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_ISFP_ASTFORAMC_ANS
+	return i18n.MessageTagBBBFCISFPASTFORAMCANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

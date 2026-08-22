@@ -66,13 +66,13 @@ func containsValue(values []string, value string) bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignaturePolicyIdentifierCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPK
+	return i18n.MessageTagBBBVCIISPK
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignaturePolicyIdentifierCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_ISPK_ANS
+	return i18n.MessageTagBBBVCIISPKANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

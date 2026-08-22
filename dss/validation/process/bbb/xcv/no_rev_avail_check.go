@@ -60,12 +60,12 @@ func (c *NoRevAvailCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *NoRevAvailCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICNRAEV
+	return i18n.MessageTagBBBXCVICNRAEV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *NoRevAvailCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICNRAEV_ANS
+	return i18n.MessageTagBBBXCVICNRAEVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

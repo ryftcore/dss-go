@@ -68,11 +68,11 @@ func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) FailedSubIndicationFo
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVTAVRSC
+	return i18n.MessageTagBSVIVTAVRSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ValidationTimeAtCertificateValidityRangeCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IVTAVRSC_ANS
+	return i18n.MessageTagBSVIVTAVRSCANS
 }

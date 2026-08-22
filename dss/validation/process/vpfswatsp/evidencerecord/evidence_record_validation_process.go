@@ -77,7 +77,7 @@ func NewEvidenceRecordValidationProcess(i18nProvider *i18n.I18nProvider, diagnos
 
 // Title returns the title of the process. Port of getTitle().
 func (c *EvidenceRecordValidationProcess) Title() i18n.MessageTag {
-	return i18n.MessageTag_VPER
+	return i18n.MessageTagVPER
 }
 
 // InitChain initializes the chain. Port of initChain(): the IllegalStateException

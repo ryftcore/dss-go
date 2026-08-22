@@ -38,12 +38,12 @@ func (c *PseudonymCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PseudonymCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGPSEUDO
+	return i18n.MessageTagBBBXCVISCGPSEUDO
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *PseudonymCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGPSEUDO_ANS
+	return i18n.MessageTagBBBXCVISCGPSEUDOANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

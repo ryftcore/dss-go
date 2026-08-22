@@ -43,12 +43,12 @@ func (c *CertificateQcEuPDSLocationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcEuPDSLocationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCPDSLA
+	return i18n.MessageTagBBBXCVCMDCICQCPDSLA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcEuPDSLocationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCPDSLA_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCPDSLAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

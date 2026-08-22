@@ -38,12 +38,12 @@ func (c *CertificateQcComplianceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcComplianceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCC
+	return i18n.MessageTagBBBXCVCMDCICQCC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcComplianceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCICQCC_ANS
+	return i18n.MessageTagBBBXCVCMDCICQCCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

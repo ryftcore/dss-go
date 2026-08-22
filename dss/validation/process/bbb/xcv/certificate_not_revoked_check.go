@@ -63,7 +63,7 @@ func (c *CertificateNotRevokedCheck) BuildAdditionalInfo() *string {
 		if r := c.certificateRevocation.Reason(); r != "" {
 			reason = string(r)
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_REASON, reason, revocationDateStr)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationReason, reason, revocationDateStr)
 		return &message
 	}
 	return nil
@@ -71,12 +71,12 @@ func (c *CertificateNotRevokedCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateNotRevokedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCR
+	return i18n.MessageTagBBBXCVISCR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateNotRevokedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCR_ANS
+	return i18n.MessageTagBBBXCVISCRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -49,15 +49,15 @@ func (c *PublicKeySizeAcceptableCheck) Process() bool {
 // BuildConstraintMessage builds a constraint message. Port of the overridden
 // buildConstraintMessage().
 func (c *PublicKeySizeAcceptableCheck) BuildConstraintMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_ASCCM_APKSA, c.SignatureAlgorithmName(c.signatureAlgorithm), c.keyLength)
+	return c.BuildXmlMessage(i18n.MessageTagASCCMAPKSA, c.SignatureAlgorithmName(c.signatureAlgorithm), c.keyLength)
 }
 
 // BuildErrorMessage builds an error message. Port of the overridden
 // buildErrorMessage().
 func (c *PublicKeySizeAcceptableCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	messageTag := i18n.MessageTag_ASCCM_APKSA_ANS
+	messageTag := i18n.MessageTagASCCMAPKSAANS
 	if vpolicy.IsSignatureAlgorithmKeyLengthBigEnough(c.cryptographicSuite, c.signatureAlgorithm, c.keyLength) {
-		messageTag = i18n.MessageTag_ASCCM_APKSA_ANS_2
+		messageTag = i18n.MessageTagASCCMAPKSAANS2
 	}
 	return c.BuildXmlMessage(messageTag, c.SignatureAlgorithmName(c.signatureAlgorithm), c.keyLength, c.position)
 }

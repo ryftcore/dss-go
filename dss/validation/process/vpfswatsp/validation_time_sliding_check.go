@@ -51,13 +51,13 @@ func (c *ValidationTimeSlidingCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ValidationTimeSlidingCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_IVTSC
+	return i18n.MessageTagPCVIVTSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ValidationTimeSlidingCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_IVTSC_ANS
+	return i18n.MessageTagPCVIVTSCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -85,10 +85,10 @@ func (c *ValidationTimeSlidingCheck) BuildAdditionalInfo() *string {
 		controlTime := c.vts.ControlTime.Time()
 		var message string
 		if c.trustedCertificate != nil {
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_WITH_TRUST_ANCHOR,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagControlTimeWithTrustAnchor,
 				c.trustedCertificate.Id(), process.GetFormattedDate(&controlTime))
 		} else {
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_ALONE,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagControlTimeAlone,
 				process.GetFormattedDate(&controlTime))
 		}
 		return &message

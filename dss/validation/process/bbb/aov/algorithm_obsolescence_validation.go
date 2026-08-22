@@ -99,7 +99,7 @@ func (c *AlgorithmObsolescenceValidation[T]) InitAlgorithmObsolescenceValidation
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *AlgorithmObsolescenceValidation[T]) Title() i18n.MessageTag {
-	return i18n.MessageTag_AOV
+	return i18n.MessageTagAOV
 }
 
 // InitChain initializes the chain. Port of the overridden protected void

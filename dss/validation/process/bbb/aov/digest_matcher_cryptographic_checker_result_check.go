@@ -49,24 +49,24 @@ func (c *DigestMatcherCryptographicCheckerResultCheck[T]) BuildAdditionalInfo() 
 	if c.IsValid(&c.ccResult.XmlConstraintsConclusionContent) {
 		switch utils.CollectionSize(c.referenceNames) {
 		case 0:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDM,
 				c.ccResult.CryptographicValidation.Algorithm.Name, dateTime, c.position)
 		case 1:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM_WITH_NAME,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDMWithName,
 				c.ccResult.CryptographicValidation.Algorithm.Name, dateTime, c.position, c.referenceNames[0])
 		default:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_SUCCESS_DM_WITH_NAMES,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckSuccessDMWithNames,
 				c.ccResult.CryptographicValidation.Algorithm.Name, dateTime, c.position, utils.JoinStrings(c.referenceNames, ", "))
 		}
 	} else {
 		switch utils.CollectionSize(c.referenceNames) {
 		case 0:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_REF, c.ErrorMessage(), dateTime)
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithRef, c.ErrorMessage(), dateTime)
 		case 1:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_REF_WITH_NAME,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithRefWithName,
 				c.ErrorMessage(), dateTime, c.referenceNames[0])
 		default:
-			message = c.I18nProvider.GetMessage(i18n.MessageTag_CRYPTOGRAPHIC_CHECK_FAILURE_WITH_REF_WITH_NAMES,
+			message = c.I18nProvider.GetMessage(i18n.MessageTagCryptographicCheckFailureWithRefWithNames,
 				c.ErrorMessage(), dateTime, utils.JoinStrings(c.referenceNames, ", "))
 		}
 	}

@@ -54,12 +54,12 @@ func (c *EAAQualificationProcessConclusiveCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAQualificationProcessConclusiveCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_QUAL_CONCLUSIVE
+	return i18n.MessageTagEAAQualConclusive
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *EAAQualificationProcessConclusiveCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_QUAL_CONCLUSIVE_ANS
+	return i18n.MessageTagEAAQualConclusiveANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

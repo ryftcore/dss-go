@@ -37,7 +37,7 @@ func (c *TLMRACheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLMRACheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_IMRA
+	return i18n.MessageTagQualTLIMRA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
@@ -47,14 +47,14 @@ func (c *TLMRACheck) ErrorMessageTag() i18n.MessageTag {
 		tslType := parentTL.Type
 		if tslType != nil {
 			if enumerations.TSLTypeEnumEUlistofthelists.URI() == *tslType {
-				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V1
+				return i18n.MessageTagQualTLIMRAANSV1
 			} else if enumerations.TSLTypeEnumAdESlistofthelists.URI() == *tslType {
-				return i18n.MessageTag_QUAL_TL_IMRA_ANS_V2
+				return i18n.MessageTagQualTLIMRAANSV2
 			}
 		}
 	}
 	// default
-	return i18n.MessageTag_QUAL_TL_IMRA_ANS
+	return i18n.MessageTagQualTLIMRAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

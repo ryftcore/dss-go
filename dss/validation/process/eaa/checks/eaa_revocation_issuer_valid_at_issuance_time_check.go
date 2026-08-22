@@ -42,20 +42,20 @@ func (c *EAARevocationIssuerValidAtIssuanceTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationIssuerValidAtIssuanceTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_ISS_VALID
+	return i18n.MessageTagEAARevISSValid
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationIssuerValidAtIssuanceTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_ISS_VALID_ANS
+	return i18n.MessageTagEAARevISSValidANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the
 // overridden buildAdditionalInfo().
 func (c *EAARevocationIssuerValidAtIssuanceTimeCheck) BuildAdditionalInfo() *string {
 	if c.eaaStatusToken.SigningCertificate() != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_REV_ISS_CERT,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagEAARevISSCert,
 			process.GetFormattedDate(c.eaaStatusToken.IssuedAt()),
 			process.GetFormattedDate(c.eaaStatusToken.SigningCertificate().NotBefore()),
 			process.GetFormattedDate(c.eaaStatusToken.SigningCertificate().NotAfter()))

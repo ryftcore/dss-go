@@ -36,11 +36,11 @@ func (c *ContainerTypeCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *ContainerTypeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IECTF }
+func (c *ContainerTypeCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIECTF }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *ContainerTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IECTF_ANS
+	return i18n.MessageTagBBBFCIECTFANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

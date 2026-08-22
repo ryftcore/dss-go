@@ -35,11 +35,11 @@ func (c *SignatureTimeStampCheck) TimestampType() enumerations.TimestampType {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignatureTimeStampCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPSTSP
+	return i18n.MessageTagBBBSAVIUQPSTSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignatureTimeStampCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPSTSP_ANS
+	return i18n.MessageTagBBBSAVIUQPSTSPANS
 }

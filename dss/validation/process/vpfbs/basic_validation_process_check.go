@@ -59,13 +59,13 @@ func (c *BasicValidationProcessCheck[T]) FailedSubIndicationForConclusion() enum
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BasicValidationProcessCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ROBVPIIC
+	return i18n.MessageTagADESTROBVPIIC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BasicValidationProcessCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_ROBVPIIC_ANS
+	return i18n.MessageTagADESTROBVPIICANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -80,7 +80,7 @@ func (c *BasicValidationProcessCheck[T]) BuildAdditionalInfo() *string {
 			subIndicationStr = string(c.xmlConclusion.SubIndication.SubIndication())
 		}
 		indication := fmt.Sprintf("%s/%s", c.xmlConclusion.Indication.Indication(), subIndicationStr)
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_BASIC_SIGNATURE_VALIDATION_RESULT, indication)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagBasicSignatureValidationResult, indication)
 		return &message
 	}
 	return nil

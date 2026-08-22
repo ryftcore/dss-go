@@ -101,7 +101,7 @@ func (c *SignatureQualificationBlock) InitSignatureQualificationBlock(overrides 
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *SignatureQualificationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_SIG_QUALIFICATION
+	return i18n.MessageTagSigQualification
 }
 
 // InitChain initializes the chain. Port of initChain().

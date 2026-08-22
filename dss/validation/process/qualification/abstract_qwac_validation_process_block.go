@@ -73,7 +73,7 @@ func (c *AbstractQWACValidationProcessBlock) InitAbstractQWACValidationProcessBl
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *AbstractQWACValidationProcessBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_QWAC_VALIDATION_PROFILE
+	message := i18n.MessageTagQWACValidationProfile
 	param, err := process.GetQWACValidationMessageTag(c.overrides.QWACProfile())
 	if err != nil {
 		panic(err)

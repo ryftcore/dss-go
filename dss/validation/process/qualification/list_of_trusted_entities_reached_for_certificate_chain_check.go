@@ -41,12 +41,12 @@ func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CERT_LOTE_REACHED
+	return i18n.MessageTagEAACertLoTEReached
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *ListOfTrustedEntitiesReachedForCertificateChainCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_CERT_LOTE_REACHED_ANS
+	return i18n.MessageTagEAACertLoTEReachedANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

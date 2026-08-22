@@ -69,12 +69,12 @@ func (c *CertificateValidationBeforeSunsetDateCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IVTBCTSD
+	return i18n.MessageTagBBBXCVIVTBCTSD
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateValidationBeforeSunsetDateCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IVTBCTSD_ANS
+	return i18n.MessageTagBBBXCVIVTBCTSDANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -95,10 +95,10 @@ func (c *CertificateValidationBeforeSunsetDateCheck[T]) BuildAdditionalInfo() *s
 	var message string
 	if c.certificate.TrustSunsetDate() != nil {
 		controlTime := c.controlTime
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_SUNSET_DATE,
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateSunsetDate,
 			process.GetFormattedDate(&controlTime), process.GetFormattedDate(c.certificate.TrustSunsetDate()))
 	} else {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_CERTIFICATE_SUNSET_DATE_VALID)
+		message = c.I18nProvider.GetMessage(i18n.MessageTagCertificateSunsetDateValid)
 	}
 	return &message
 }

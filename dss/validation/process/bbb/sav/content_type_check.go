@@ -82,13 +82,13 @@ func (c *ContentTypeCheck) getRFC7515ContentType(mimeType string) string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ContentTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCTP
+	return i18n.MessageTagBBBSAVISQPCTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ContentTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPCTP_ANS
+	return i18n.MessageTagBBBSAVISQPCTPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

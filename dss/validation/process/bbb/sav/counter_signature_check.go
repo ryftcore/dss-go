@@ -54,13 +54,13 @@ func (c *CounterSignatureCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CounterSignatureCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPCSP
+	return i18n.MessageTagBBBSAVIUQPCSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *CounterSignatureCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_IUQPCSP_ANS
+	return i18n.MessageTagBBBSAVIUQPCSPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

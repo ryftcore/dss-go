@@ -33,12 +33,12 @@ func (c *AcceptableMimetypeFileContentCheck) Process() bool {
 
 // MessageTag returns the constraint message i18n key.
 func (c *AcceptableMimetypeFileContentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IEMCF
+	return i18n.MessageTagBBBFCIEMCF
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *AcceptableMimetypeFileContentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IEMCF_ANS
+	return i18n.MessageTagBBBFCIEMCFANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

@@ -539,7 +539,7 @@ func TestXcvChecksAgainstJavaOracle(t *testing.T) {
 						shapeExpected = map[string][]*xcvDirectRow{}
 					}
 					compareSub(t, shapeExpected, name, shapeToken, "CertificateAlgorithmObsolescenceValidationCheck", func(r *process.Result[*jaxb.XmlSubXCV], l policy.LevelRule) process.ChainItem[*jaxb.XmlSubXCV] {
-						return NewCertificateAlgorithmObsolescenceValidationCheck[*jaxb.XmlSubXCV](xcvaI18n(), r, aov, xcvDirectCurrentTime, i18n.MessageTag_SIGNING_CERTIFICATE, id)
+						return NewCertificateAlgorithmObsolescenceValidationCheck[*jaxb.XmlSubXCV](xcvaI18n(), r, aov, xcvDirectCurrentTime, i18n.MessageTagSigningCertificate, id)
 					})
 				}
 				for _, indication := range []enumerations.Indication{enumerations.IndicationPassed, enumerations.IndicationIndeterminate} {

@@ -38,13 +38,13 @@ func (c *UnicitySigningCertificateAttributeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *UnicitySigningCertificateAttributeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISASCPU
+	return i18n.MessageTagBBBICSISASCPU
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *UnicitySigningCertificateAttributeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_ICS_ISASCPU_ANS
+	return i18n.MessageTagBBBICSISASCPUANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

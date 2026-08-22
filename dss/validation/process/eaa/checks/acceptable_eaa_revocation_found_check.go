@@ -41,20 +41,20 @@ func (c *AcceptableEAARevocationFoundCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AcceptableEAARevocationFoundCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_ACC_FND
+	return i18n.MessageTagEAARevACCFND
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AcceptableEAARevocationFoundCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_ACC_FND_ANS
+	return i18n.MessageTagEAARevACCFNDANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of the
 // overridden buildAdditionalInfo().
 func (c *AcceptableEAARevocationFoundCheck) BuildAdditionalInfo() *string {
 	if c.eaaStatusToken != nil {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_TOKEN_ID, c.eaaStatusToken.Id())
+		message := c.I18nProvider.GetMessage(i18n.MessageTagTokenID, c.eaaStatusToken.Id())
 		return &message
 	}
 	return nil

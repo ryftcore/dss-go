@@ -39,13 +39,13 @@ func (c *CertifiedRolesCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertifiedRolesCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ICERRM
+	return i18n.MessageTagBBBSAVICERRM
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *CertifiedRolesCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ICERRM_ANS
+	return i18n.MessageTagBBBSAVICERRMANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

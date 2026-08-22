@@ -32,11 +32,11 @@ func (c *PdfPageDifferenceCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *PdfPageDifferenceCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_DSFREAP }
+func (c *PdfPageDifferenceCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCDSFREAP }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfPageDifferenceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DSFREAP_ANS
+	return i18n.MessageTagBBBFCDSFREAPANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

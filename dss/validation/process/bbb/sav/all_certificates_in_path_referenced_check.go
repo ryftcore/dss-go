@@ -50,13 +50,13 @@ func (c *AllCertificatesInPathReferencedCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AllCertificatesInPathReferencedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ACPCCRSCA
+	return i18n.MessageTagBBBSAVACPCCRSCA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *AllCertificatesInPathReferencedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ACPCCRSCA_ANS
+	return i18n.MessageTagBBBSAVACPCCRSCAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

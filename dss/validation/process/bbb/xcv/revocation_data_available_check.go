@@ -55,12 +55,12 @@ func (c *RevocationDataAvailableCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDataAvailableCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDPFC
+	return i18n.MessageTagBBBXCVIRDPFC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *RevocationDataAvailableCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IRDPFC_ANS
+	return i18n.MessageTagBBBXCVIRDPFCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

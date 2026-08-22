@@ -61,19 +61,19 @@ func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) BuildAdditionalI
 	if c.signingCertificate.NotBefore() != nil {
 		certNotBefore = process.GetFormattedDate(c.signingCertificate.NotBefore())
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_BEST_SIGNATURE_TIME_CERT_NOT_BEFORE, bestSignatureTimeStr, certNotBefore)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagBESTSignatureTimeCertNotBefore, bestSignatureTimeStr, certNotBefore)
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_IBSTAIDOSC
+	return i18n.MessageTagTSVIBSTAIDOSC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BestSignatureTimeNotBeforeCertificateIssuanceCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TSV_IBSTAIDOSC_ANS
+	return i18n.MessageTagTSVIBSTAIDOSCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

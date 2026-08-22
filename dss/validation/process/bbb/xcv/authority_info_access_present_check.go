@@ -39,12 +39,12 @@ func (c *AuthorityInfoAccessPresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AuthorityInfoAccessPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_AIA_PRES
+	return i18n.MessageTagBBBXCVAIAPres
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *AuthorityInfoAccessPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_AIA_PRES_ANS
+	return i18n.MessageTagBBBXCVAIAPresANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

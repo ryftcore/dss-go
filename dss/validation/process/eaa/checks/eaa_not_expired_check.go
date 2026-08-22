@@ -65,7 +65,7 @@ func (c *EAANotExpiredCheck) notAtOrAfter() bool {
 // overridden buildAdditionalInfo().
 func (c *EAANotExpiredCheck) BuildAdditionalInfo() *string {
 	if !c.notBefore() || !c.notAtOrAfter() {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_EAA_VT_ITVR_VALIDITY,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagEAAVTITVRValidity,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.EAANotBefore()),
 			process.GetFormattedDate(c.eaa.EAAExpiration()))
 		return &message
@@ -75,13 +75,13 @@ func (c *EAANotExpiredCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAANotExpiredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_VT_ITVR
+	return i18n.MessageTagEAAVTITVR
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAANotExpiredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_VT_ITVR_ANS
+	return i18n.MessageTagEAAVTITVRANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

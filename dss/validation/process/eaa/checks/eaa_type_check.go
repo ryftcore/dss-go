@@ -51,13 +51,13 @@ func (c *EAATypeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAATypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ACCEPTABLE_TYPE
+	return i18n.MessageTagEAAAcceptableType
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAATypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ACCEPTABLE_TYPE_ANS
+	return i18n.MessageTagEAAAcceptableTypeANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

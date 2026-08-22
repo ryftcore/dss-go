@@ -42,12 +42,12 @@ func (c *CertificateQcPSBCountryOfLegislationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcPSBCountryOfLegislationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCPSBCLA
+	return i18n.MessageTagBBBXCVCMDCPSBCLA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcPSBCountryOfLegislationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCPSBCLA_ANS
+	return i18n.MessageTagBBBXCVCMDCPSBCLAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

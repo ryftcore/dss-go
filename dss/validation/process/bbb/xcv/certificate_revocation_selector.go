@@ -151,7 +151,7 @@ func (c *CertificateRevocationSelector) crsOverrides() CertificateRevocationSele
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *CertificateRevocationSelector) Title() i18n.MessageTag {
-	return i18n.MessageTag_CRS
+	return i18n.MessageTagCRS
 }
 
 // InitChain initializes the chain. Port of initChain().

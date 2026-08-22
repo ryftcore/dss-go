@@ -47,13 +47,13 @@ func (c *SuccessfulValidationTimeSlidingFoundCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_ICCSVTSF
+	return i18n.MessageTagPCVICCSVTSF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SuccessfulValidationTimeSlidingFoundCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PCV_ICCSVTSF_ANS
+	return i18n.MessageTagPCVICCSVTSFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
@@ -88,7 +88,7 @@ func (c *SuccessfulValidationTimeSlidingFoundCheck) BuildAdditionalInfo() *strin
 			t := c.vts.ControlTime.Time()
 			controlTime = &t
 		}
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_CONTROL_TIME_WITH_TRUST_ANCHOR, trustAnchor,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagControlTimeWithTrustAnchor, trustAnchor,
 			process.GetFormattedDate(controlTime))
 		return &message
 	}

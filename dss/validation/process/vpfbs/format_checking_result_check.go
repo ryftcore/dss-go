@@ -53,11 +53,11 @@ func (c *FormatCheckingResultCheck[T]) FailedSubIndicationForConclusion() enumer
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *FormatCheckingResultCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IFCRC
+	return i18n.MessageTagBSVIFCRC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *FormatCheckingResultCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_IFCRC_ANS
+	return i18n.MessageTagBSVIFCRCANS
 }

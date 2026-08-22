@@ -64,7 +64,7 @@ func NewQWACForTLSCertificateValidationBlock(i18nProvider *i18n.I18nProvider, di
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *QWACForTLSCertificateValidationBlock) Title() i18n.MessageTag {
-	return i18n.MessageTag_QWAC_VALIDATION
+	return i18n.MessageTagQWACValidation
 }
 
 // InitChain initializes the chain. Port of initChain().

@@ -39,13 +39,13 @@ func (c *SigningTimeAttributePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SigningTimeAttributePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_SAV_ISQPSTP
+	return i18n.MessageTagBBBSAVISQPSTP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SigningTimeAttributePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_VFDTAOCST_ANS
+	return i18n.MessageTagADESTVFDTAOCSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

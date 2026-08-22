@@ -37,13 +37,13 @@ func (c *EAANotRevokedCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAANotRevokedCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_REV
+	return i18n.MessageTagEAARevNotRev
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAANotRevokedCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_REV_ANS
+	return i18n.MessageTagEAARevNotRevANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

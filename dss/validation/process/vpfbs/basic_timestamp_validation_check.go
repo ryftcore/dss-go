@@ -88,13 +88,13 @@ func (c *BasicTimestampValidationCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BasicTimestampValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTC
+	return i18n.MessageTagADESTIBSVPTC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *BasicTimestampValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IBSVPTC_ANS
+	return i18n.MessageTagADESTIBSVPTCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -41,21 +41,21 @@ func (c *ReferenceDataExistenceCheck[T]) Process() bool {
 func (c *ReferenceDataExistenceCheck[T]) MessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
 	case enumerations.DigestMatcherTypeMessageImprint:
-		return i18n.MessageTag_BBB_CV_TSP_IRDOF
+		return i18n.MessageTagBBBCVTSPIRDOF
 	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
-		return i18n.MessageTag_BBB_CV_CS_CSSVF
+		return i18n.MessageTagBBBCVCSCSSVF
 	case enumerations.DigestMatcherTypeManifestEntry:
-		return i18n.MessageTag_BBB_CV_IMEOF
+		return i18n.MessageTagBBBCVIMEOF
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		return i18n.MessageTag_BBB_CV_ER_ATSRF
+		return i18n.MessageTagBBBCVERATSRF
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		return i18n.MessageTag_BBB_CV_ER_ATSSRF
+		return i18n.MessageTagBBBCVERATSSRF
 	case enumerations.DigestMatcherTypeEAADisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_SDCBF
+		return i18n.MessageTagBBBCVEAASDCBF
 	case enumerations.DigestMatcherTypeEAANestedDisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_NSDCBF
+		return i18n.MessageTagBBBCVEAANSDCBF
 	default:
-		return i18n.MessageTag_BBB_CV_IRDOF
+		return i18n.MessageTagBBBCVIRDOF
 	}
 }
 
@@ -64,21 +64,21 @@ func (c *ReferenceDataExistenceCheck[T]) MessageTag() i18n.MessageTag {
 func (c *ReferenceDataExistenceCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
 	case enumerations.DigestMatcherTypeMessageImprint:
-		return i18n.MessageTag_BBB_CV_TSP_IRDOF_ANS
+		return i18n.MessageTagBBBCVTSPIRDOFANS
 	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
-		return i18n.MessageTag_BBB_CV_CS_CSSVF_ANS
+		return i18n.MessageTagBBBCVCSCSSVFANS
 	case enumerations.DigestMatcherTypeManifestEntry:
-		return i18n.MessageTag_BBB_CV_IMEOF_ANS
+		return i18n.MessageTagBBBCVIMEOFANS
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		return i18n.MessageTag_BBB_CV_ER_ATSRF_ANS
+		return i18n.MessageTagBBBCVERATSRFANS
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		return i18n.MessageTag_BBB_CV_ER_ATSSRF_ANS
+		return i18n.MessageTagBBBCVERATSSRFANS
 	case enumerations.DigestMatcherTypeEAADisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_SDCBF_ANS
+		return i18n.MessageTagBBBCVEAASDCBFANS
 	case enumerations.DigestMatcherTypeEAANestedDisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_NSDCBF_ANS
+		return i18n.MessageTagBBBCVEAANSDCBFANS
 	default:
-		return i18n.MessageTag_BBB_CV_IRDOF_ANS
+		return i18n.MessageTagBBBCVIRDOFANS
 	}
 }
 
@@ -103,13 +103,13 @@ func (c *ReferenceDataExistenceCheck[T]) BuildAdditionalInfo() *string {
 		enumerations.DigestMatcherTypeCounterSignedSignatureValue:
 		return nil
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST
+		referenceName = i18n.MessageTagTSTTypeRefERATST
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST_SEQ
+		referenceName = i18n.MessageTagTSTTypeRefERATSTSeq
 	default:
 		referenceName = c.getReferenceName(c.digestMatcher)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE, referenceName)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReference, referenceName)
 	return &message
 }
 

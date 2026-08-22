@@ -68,7 +68,7 @@ func NewTimestampQualificationAtTimeBlock(i18nProvider *i18n.I18nProvider, valid
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *TimestampQualificationAtTimeBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_TST_QUALIFICATION_AT_TIME
+	message := i18n.MessageTagTSTQualificationAtTime
 	param, err := process.GetValidationTimeMessageTag(c.validationTime)
 	if err != nil {
 		panic(err)

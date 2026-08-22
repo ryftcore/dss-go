@@ -68,13 +68,13 @@ func (c *LongTermValidationCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *LongTermValidationCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTVV
+	return i18n.MessageTagArchLTVV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *LongTermValidationCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ARCH_LTVV_ANS
+	return i18n.MessageTagArchLTVVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

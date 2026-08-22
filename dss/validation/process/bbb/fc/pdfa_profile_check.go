@@ -30,11 +30,11 @@ func NewPDFAProfileCheck(i18nProvider *i18n.I18nProvider, result *process.Result
 func (c *PDFAProfileCheck) Process() bool { return c.ProcessValueCheck(c.pdfaProfile) }
 
 // MessageTag returns the constraint message i18n key.
-func (c *PDFAProfileCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_DDAPDFAF }
+func (c *PDFAProfileCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCDDAPDFAF }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PDFAProfileCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_DDAPDFAF_ANS
+	return i18n.MessageTagBBBFCDDAPDFAFANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

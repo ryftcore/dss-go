@@ -44,12 +44,12 @@ func (c *CertificateQcIdentificationMethodCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateQcIdentificationMethodCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCDCQCIMSA
+	return i18n.MessageTagBBBXCVCMDCDCQCIMSA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateQcIdentificationMethodCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_CMDCDCQCIMSA_ANS
+	return i18n.MessageTagBBBXCVCMDCDCQCIMSAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -66,7 +66,7 @@ func NewPastCertificateValidation(i18nProvider *i18n.I18nProvider, token diagnos
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *PastCertificateValidation) Title() i18n.MessageTag {
-	return i18n.MessageTag_PAST_CERTIFICATE_VALIDATION
+	return i18n.MessageTagPastCertificateValidation
 }
 
 // InitChain initializes the chain. Port of initChain().

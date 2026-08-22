@@ -39,12 +39,12 @@ func (c *CertificateTypeAtSigningTimeCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateTypeAtSigningTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST
+	return i18n.MessageTagQualCertTypeAtST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateTypeAtSigningTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_CERT_TYPE_AT_ST_ANS
+	return i18n.MessageTagQualCertTypeAtSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

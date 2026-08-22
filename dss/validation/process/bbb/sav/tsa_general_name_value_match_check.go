@@ -38,13 +38,13 @@ func (c *TSAGeneralNameValueMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TSAGeneralNameValueMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_TAV_DTSAVM
+	return i18n.MessageTagBBBTavDTSAVM
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TSAGeneralNameValueMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_TAV_DTSAVM_ANS
+	return i18n.MessageTagBBBTavDTSAVMANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

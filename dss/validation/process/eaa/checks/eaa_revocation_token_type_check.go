@@ -67,13 +67,13 @@ func (c *EAARevocationTokenTypeCheck) getRFC7519SignatureType(mimeType string) s
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationTokenTypeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_TYPE
+	return i18n.MessageTagEAARevType
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationTokenTypeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_TYPE_ANS
+	return i18n.MessageTagEAARevTypeANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

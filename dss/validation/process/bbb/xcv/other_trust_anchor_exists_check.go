@@ -43,12 +43,12 @@ func (c *OtherTrustAnchorExistsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *OtherTrustAnchorExistsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IOTAA
+	return i18n.MessageTagBBBXCVIOTAA
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *OtherTrustAnchorExistsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_IOTAA_ANS
+	return i18n.MessageTagBBBXCVIOTAAANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

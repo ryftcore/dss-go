@@ -38,12 +38,12 @@ func (c *SerialNumberCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SerialNumberCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_UNIQUE_CERT
+	return i18n.MessageTagQualUniqueCert
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *SerialNumberCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_UNIQUE_CERT_ANS
+	return i18n.MessageTagQualUniqueCertANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

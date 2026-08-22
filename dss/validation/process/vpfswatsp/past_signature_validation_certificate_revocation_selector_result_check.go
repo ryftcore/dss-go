@@ -56,7 +56,7 @@ func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BlockT
 func (c *PastSignatureValidationCertificateRevocationSelectorResultCheck) BuildAdditionalInfo() *string {
 	acceptableRevocationId := acceptableRevocationIds(c.crsResult)
 	if utils.IsCollectionNotEmpty(acceptableRevocationId) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_ACCEPTABLE_REVOCATION,
+		message := c.I18nProvider.GetMessage(i18n.MessageTagAcceptableRevocation,
 			"["+strings.Join(acceptableRevocationId, ", ")+"]")
 		return &message
 	}

@@ -40,12 +40,12 @@ func (c *TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck) Process()
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_EXP
+	return i18n.MessageTagTLSCertBindingSigExp
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLSCertificateBindingSignatureExpProtectedHeaderPresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_TLS_CERT_BINDING_SIG_EXP_ANS
+	return i18n.MessageTagTLSCertBindingSigExpANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

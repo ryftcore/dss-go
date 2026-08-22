@@ -66,13 +66,13 @@ func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) FailedSub
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCET
+	return i18n.MessageTagBSVICTGTNASCET
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNASCET_ANS
+	return i18n.MessageTagBSVICTGTNASCETANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -86,6 +86,6 @@ func (c *TimestampGenerationTimeNotAfterCertificateExpirationCheck[T]) BuildAddi
 	if c.signingCertificateNotAfter != nil {
 		certificateNotAfter = process.GetFormattedDate(c.signingCertificateNotAfter)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_AND_REVOCATION_TIME, c.contentTimestamp.Id(), tstGenerationTime, certificateNotAfter)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampAndRevocationTime, c.contentTimestamp.Id(), tstGenerationTime, certificateNotAfter)
 	return &message
 }

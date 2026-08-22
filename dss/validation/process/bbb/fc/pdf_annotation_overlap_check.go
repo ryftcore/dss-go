@@ -32,11 +32,11 @@ func (c *PdfAnnotationOverlapCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *PdfAnnotationOverlapCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_IAOD }
+func (c *PdfAnnotationOverlapCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCIAOD }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *PdfAnnotationOverlapCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_FC_IAOD_ANS
+	return i18n.MessageTagBBBFCIAODANS
 }
 
 // BuildErrorMessage overrides the default to include the concerned pages. Port of the

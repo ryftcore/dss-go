@@ -37,13 +37,13 @@ func (c *EAARevocationSubjectMatchCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAARevocationSubjectMatchCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_SUB_MATCH
+	return i18n.MessageTagEAARevSubMatch
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAARevocationSubjectMatchCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_SUB_MATCH_ANS
+	return i18n.MessageTagEAARevSubMatchANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

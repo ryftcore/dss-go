@@ -47,13 +47,13 @@ func (c *DisclosurePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *DisclosurePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_DPEAAP
+	return i18n.MessageTagEAADPEAAP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *DisclosurePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_DPEAAP_ANS
+	return i18n.MessageTagEAADPEAAPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

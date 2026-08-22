@@ -42,12 +42,12 @@ func (c *CertificateForbiddenExtensionsCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateForbiddenExtensionsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCCFCE
+	return i18n.MessageTagBBBXCVDCCFCE
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateForbiddenExtensionsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCCFCE_ANS
+	return i18n.MessageTagBBBXCVDCCFCEANS
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage(): the

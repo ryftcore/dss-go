@@ -174,49 +174,49 @@ func (c *ETSI194721ConformanceCheck) checkSDJWTStatusConformance() bool {
 func (c *ETSI194721ConformanceCheck) BuildAdditionalInfo() *string {
 	errors := make([]string, 0)
 	if !c.checkVCTPresent() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_SDJWT_EAA_VCT_PRESENT,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagSDJWTEAAVCTPresent,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.EAANotBefore())))
 	}
 	if !c.checkVCTIntegrityPresent() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_SDJWT_EAA_VCT_INT_PRESENT,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagSDJWTEAAVCTIntPresent,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.EAANotBefore())))
 	}
 	if !c.checkNowAfterNotBefore() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_NOW_BEFORE_NBF,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAANowBeforeNBF,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.EAANotBefore())))
 	}
 	if !c.checkNowBeforeExpiration() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_NOW_AFTER_EXP,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAANowAfterExp,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.EAAExpiration())))
 	}
 	if !c.checkNowAfterAdministrativeDateIssuance() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_NOW_BEFORE_ADI,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAANowBeforeADI,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.AdministrativeIssuanceDate())))
 	}
 	if !c.checkNowBeforeAdministrativeDateExpiration() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_NOW_AFTER_ADE,
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAANowAfterADE,
 			process.GetFormattedDate(&c.validationTime), process.GetFormattedDate(c.eaa.AdministrativeExpirationDate())))
 	}
 	if !c.checkMDOCDocumentNumberPresent() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_MDOC_DOCUMENT_NUMBER_ABSENT))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAAMDocDocumentNumberAbsent))
 	}
 	if !c.checkMDOCIssuingAuthorityPresent() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_MDOC_ISSUING_AUTHORITY))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAAMDocIssuingAuthority))
 	}
 	if !c.checkSDJWTIssuingAuthorityAndCountryPresent() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_SDJWT_ISSUING_AUTHORITY))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAASDJWTIssuingAuthority))
 	}
 	if !c.checkSDJWTAdministrativeDateConformance() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_AD_SDJWT_CONFORMANCE))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAAADSDJWTConformance))
 	}
 	if !c.checkNoStatusIfShortLived() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_SHORT_LIVED_STATUS_PRESENT))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAAShortLivedStatusPresent))
 	}
 	if !c.checkStatusIsPresentIfMandatory() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_MANDATORY_STATUS_ABSENT))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAAMandatoryStatusAbsent))
 	}
 	if !c.checkSDJWTStatusConformance() {
-		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTag_EAA_REV_SDJWT_CONFORMANCE))
+		errors = append(errors, c.I18nProvider.GetMessage(i18n.MessageTagEAARevSDJWTConformance))
 	}
 
 	if utils.IsCollectionNotEmpty(errors) {
@@ -228,13 +228,13 @@ func (c *ETSI194721ConformanceCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ETSI194721ConformanceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ETSI194721
+	return i18n.MessageTagEAAETSI194721
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ETSI194721ConformanceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_ETSI194721_ANS
+	return i18n.MessageTagEAAETSI194721ANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

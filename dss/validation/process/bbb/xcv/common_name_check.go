@@ -38,12 +38,12 @@ func (c *CommonNameCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CommonNameCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGCOMMONN
+	return i18n.MessageTagBBBXCVISCGCOMMONN
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CommonNameCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ISCGCOMMONN_ANS
+	return i18n.MessageTagBBBXCVISCGCOMMONNANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

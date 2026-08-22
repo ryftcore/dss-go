@@ -67,13 +67,13 @@ func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNACCET
+	return i18n.MessageTagBSVICTGTNACCET
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BSV_ICTGTNACCET_ANS
+	return i18n.MessageTagBSVICTGTNACCETANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -97,7 +97,7 @@ func (c *TimestampGenerationTimeNotAfterCryptographicConstraintsExpirationCheck[
 		}
 	}
 
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_AND_CRYPTO_CONSTRAINTS_EXPIRATION, c.contentTimestamp.Id(),
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampAndCryptoConstraintsExpiration, c.contentTimestamp.Id(),
 		tstGenerationTime, algorithmName, cryptoConstraintsExpiration)
 	return &message
 }

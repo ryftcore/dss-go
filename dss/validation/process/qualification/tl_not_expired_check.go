@@ -50,12 +50,12 @@ func (c *TLNotExpiredCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TLNotExpiredCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_EXP
+	return i18n.MessageTagQualTLExp
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TLNotExpiredCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_TL_EXP_ANS
+	return i18n.MessageTagQualTLExpANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

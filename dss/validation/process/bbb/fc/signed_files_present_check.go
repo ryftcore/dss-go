@@ -62,17 +62,17 @@ func (c *SignedFilesPresentCheck) Process() bool {
 // MessageTag returns the constraint message i18n key.
 func (c *SignedFilesPresentCheck) MessageTag() i18n.MessageTag {
 	if c.isASiCS() {
-		return i18n.MessageTag_BBB_FC_ISFP_ASICS
+		return i18n.MessageTagBBBFCISFPASiCS
 	}
-	return i18n.MessageTag_BBB_FC_ISFP_ASICE
+	return i18n.MessageTagBBBFCISFPASiCE
 }
 
 // ErrorMessageTag returns the error message i18n key.
 func (c *SignedFilesPresentCheck) ErrorMessageTag() i18n.MessageTag {
 	if c.isASiCS() {
-		return i18n.MessageTag_BBB_FC_ISFP_ASICS_ANS
+		return i18n.MessageTagBBBFCISFPASiCSANS
 	}
-	return i18n.MessageTag_BBB_FC_ISFP_ASICE_ANS
+	return i18n.MessageTagBBBFCISFPASiCEANS
 }
 
 // FailedIndicationForConclusion returns the Indication on failure.

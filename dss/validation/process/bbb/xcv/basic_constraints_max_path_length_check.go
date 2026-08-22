@@ -69,12 +69,12 @@ func (c *BasicConstraintsMaxPathLengthCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *BasicConstraintsMaxPathLengthCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICPDV
+	return i18n.MessageTagBBBXCVICPDV
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *BasicConstraintsMaxPathLengthCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_ICPDV_ANS
+	return i18n.MessageTagBBBXCVICPDVANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

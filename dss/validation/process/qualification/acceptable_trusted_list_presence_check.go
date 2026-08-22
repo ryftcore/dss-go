@@ -38,12 +38,12 @@ func (c *AcceptableTrustedListPresenceCheck[T]) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *AcceptableTrustedListPresenceCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_VALID_TRUSTED_LIST_PRESENT
+	return i18n.MessageTagQualValidTrustedListPresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *AcceptableTrustedListPresenceCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_VALID_TRUSTED_LIST_PRESENT_ANS
+	return i18n.MessageTagQualValidTrustedListPresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

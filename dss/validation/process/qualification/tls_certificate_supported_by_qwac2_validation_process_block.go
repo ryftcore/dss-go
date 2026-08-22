@@ -65,7 +65,7 @@ func NewTLSCertificateSupportedByQWAC2ValidationProcessBlock(i18nProvider *i18n.
 
 // BuildChainTitle builds the chain title. Port of buildChainTitle().
 func (c *TLSCertificateSupportedByQWAC2ValidationProcessBlock) BuildChainTitle() string {
-	message := i18n.MessageTag_QWAC_VALIDATION_PROFILE
+	message := i18n.MessageTagQWACValidationProfile
 	param, err := process.GetQWACValidationMessageTag(c.QWACProfile())
 	if err != nil {
 		panic(err)

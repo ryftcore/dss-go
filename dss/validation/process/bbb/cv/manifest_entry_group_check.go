@@ -53,20 +53,20 @@ func (c *ManifestEntryGroupCheck) BuildAdditionalInfo() *string {
 			}
 		}
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCES_WITH_NAMES,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReferencesWithNames,
 		utils.JoinStrings(notFoundNames, ", "))
 	return &message
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *ManifestEntryGroupCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_AAMEF
+	return i18n.MessageTagBBBCVAAMEF
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *ManifestEntryGroupCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_CV_AAMEF_ANS
+	return i18n.MessageTagBBBCVAAMEFANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

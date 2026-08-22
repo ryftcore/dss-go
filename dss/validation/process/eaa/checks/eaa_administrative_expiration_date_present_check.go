@@ -37,13 +37,13 @@ func (c *EAAAdministrativeExpirationDatePresentCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAAAdministrativeExpirationDatePresentCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_AED_PRESENT
+	return i18n.MessageTagEAAAEDPresent
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAAAdministrativeExpirationDatePresentCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_AED_PRESENT_ANS
+	return i18n.MessageTagEAAAEDPresentANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

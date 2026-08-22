@@ -52,7 +52,7 @@ func NewIdentificationOfTheSigningCertificate(i18nProvider *i18n.I18nProvider, t
 
 // Title returns the title of the building block. Port of getTitle().
 func (c *IdentificationOfTheSigningCertificate) Title() i18n.MessageTag {
-	return i18n.MessageTag_IDENTIFICATION_OF_THE_SIGNING_CERTIFICATE
+	return i18n.MessageTagIdentificationOfTheSigningCertificate
 }
 
 // InitChain initializes the chain. Port of initChain().

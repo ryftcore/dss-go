@@ -45,13 +45,13 @@ func (c *PastTimestampValidationCheck[T]) BlockType() jaxb.XmlBlockType {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PastTimestampValidationCheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPTVC
+	return i18n.MessageTagPSVIPTVC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *PastTimestampValidationCheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PSV_IPTVC_ANS
+	return i18n.MessageTagPSVIPTVCANS
 }
 
 // BuildAdditionalInfo builds an additional information. Port of
@@ -63,6 +63,6 @@ func (c *PastTimestampValidationCheck[T]) BuildAdditionalInfo() *string {
 	if err != nil {
 		panic(err)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_TIMESTAMP_VALIDATION, typeTag, c.timestamp.Id(), date)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagTimestampValidation, typeTag, c.timestamp.Id(), date)
 	return &message
 }

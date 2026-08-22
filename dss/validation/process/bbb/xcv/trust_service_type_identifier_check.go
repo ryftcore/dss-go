@@ -74,7 +74,7 @@ func (c *TrustServiceTypeIdentifierCheck) Process() bool {
 // buildAdditionalInfo().
 func (c *TrustServiceTypeIdentifierCheck) BuildAdditionalInfo() *string {
 	if utils.IsStringNotEmpty(c.serviceTypeStr) {
-		message := c.I18nProvider.GetMessage(i18n.MessageTag_TRUSTED_SERVICE_TYPE, c.serviceTypeStr)
+		message := c.I18nProvider.GetMessage(i18n.MessageTagTrustedServiceType, c.serviceTypeStr)
 		return &message
 	}
 	return nil
@@ -82,20 +82,20 @@ func (c *TrustServiceTypeIdentifierCheck) BuildAdditionalInfo() *string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *TrustServiceTypeIdentifierCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_XCV_TSL_ETIP
+	return i18n.MessageTagXCVTSLETIP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *TrustServiceTypeIdentifierCheck) ErrorMessageTag() i18n.MessageTag {
 	switch c.context {
 	case enumerations.ContextSignature, enumerations.ContextCounterSignature, enumerations.ContextKeyBindingSignature:
-		return i18n.MessageTag_XCV_TSL_ETIP_SIG_ANS
+		return i18n.MessageTagXCVTSLETIPSigANS
 	case enumerations.ContextTimestamp:
-		return i18n.MessageTag_XCV_TSL_ETIP_TSP_ANS
+		return i18n.MessageTagXCVTSLETIPTSPANS
 	case enumerations.ContextRevocation:
-		return i18n.MessageTag_XCV_TSL_ETIP_REV_ANS
+		return i18n.MessageTagXCVTSLETIPRevANS
 	default:
-		return i18n.MessageTag_XCV_TSL_ETIP_ANS
+		return i18n.MessageTagXCVTSLETIPANS
 	}
 }
 

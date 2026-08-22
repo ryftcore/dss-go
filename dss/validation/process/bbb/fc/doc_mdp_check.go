@@ -59,10 +59,10 @@ func (c *DocMDPCheck) Process() bool {
 }
 
 // MessageTag returns the constraint message i18n key.
-func (c *DocMDPCheck) MessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISVADMDPD }
+func (c *DocMDPCheck) MessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISVADMDPD }
 
 // ErrorMessageTag returns the error message i18n key.
-func (c *DocMDPCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTag_BBB_FC_ISVADMDPD_ANS }
+func (c *DocMDPCheck) ErrorMessageTag() i18n.MessageTag { return i18n.MessageTagBBBFCISVADMDPDANS }
 
 // FailedIndicationForConclusion returns the Indication on failure.
 func (c *DocMDPCheck) FailedIndicationForConclusion() enumerations.Indication {

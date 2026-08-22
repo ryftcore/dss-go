@@ -74,18 +74,18 @@ func (c *RevocationDateAfterBestSignatureTimeCheck) BuildAdditionalInfo() *strin
 // used to build the additional info. Port of
 // getBestSignatureTimeRevocationCheckMessageTag().
 func (c *RevocationDateAfterBestSignatureTimeCheck) getBestSignatureTimeRevocationCheckMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BEST_SIGNATURE_TIME_CERT_REVOCATION
+	return i18n.MessageTagBESTSignatureTimeCertRevocation
 }
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationDateAfterBestSignatureTimeCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IRTPTBST
+	return i18n.MessageTagADESTIRTPTBST
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationDateAfterBestSignatureTimeCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_ADEST_IRTPTBST_ANS
+	return i18n.MessageTagADESTIRTPTBSTANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -37,13 +37,13 @@ func (c *EAANotOnHoldCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *EAANotOnHoldCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_ON_HOLD
+	return i18n.MessageTagEAARevNotOnHold
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *EAANotOnHoldCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_EAA_REV_NOT_ON_HOLD_ANS
+	return i18n.MessageTagEAARevNotOnHoldANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

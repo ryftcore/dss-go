@@ -49,7 +49,7 @@ func (c *RevocationAfterCertificateIssuanceCheck) Process() bool {
 // BuildAdditionalInfo builds an additional information. Port of
 // buildAdditionalInfo().
 func (c *RevocationAfterCertificateIssuanceCheck) BuildAdditionalInfo() *string {
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REVOCATION_INFO,
+	message := c.I18nProvider.GetMessage(i18n.MessageTagRevocationInfo,
 		c.formattedDate(c.revocationData.ThisUpdate()),
 		c.formattedDate(c.certificate.NotBefore()),
 		c.formattedDate(c.certificate.NotAfter()))
@@ -74,13 +74,13 @@ func (c *RevocationAfterCertificateIssuanceCheck) formattedDate(date *time.Time)
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *RevocationAfterCertificateIssuanceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE
+	return i18n.MessageTagBBBXCVRevocAfterCertNotBefore
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *RevocationAfterCertificateIssuanceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_REVOC_AFTER_CERT_NOT_BEFORE_ANS
+	return i18n.MessageTagBBBXCVRevocAfterCertNotBeforeANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -77,7 +77,7 @@ func (c *AbstractAlgorithmCryptographicChecker) InitAbstractAlgorithmCryptograph
 // Title returns the title of the chain (i.e. the BasicBuildingBlock title).
 // Port of the overridden protected MessageTag getTitle().
 func (c *AbstractAlgorithmCryptographicChecker) Title() i18n.MessageTag {
-	return i18n.MessageTag_CC
+	return i18n.MessageTagCC
 }
 
 // AddAdditionalInfo adds additional info to the chain. Port of the overridden

@@ -41,21 +41,21 @@ func (c *ReferenceDataIntactCheck[T]) Process() bool {
 func (c *ReferenceDataIntactCheck[T]) MessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
 	case enumerations.DigestMatcherTypeMessageImprint:
-		return i18n.MessageTag_BBB_CV_TSP_IRDOI
+		return i18n.MessageTagBBBCVTSPIRDOI
 	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
-		return i18n.MessageTag_BBB_CV_CS_CSPS
+		return i18n.MessageTagBBBCVCSCSPS
 	case enumerations.DigestMatcherTypeManifestEntry:
-		return i18n.MessageTag_BBB_CV_IMEDOI
+		return i18n.MessageTagBBBCVIMEDOI
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		return i18n.MessageTag_BBB_CV_ER_ATSRI
+		return i18n.MessageTagBBBCVERATSRI
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		return i18n.MessageTag_BBB_CV_ER_ATSSRI
+		return i18n.MessageTagBBBCVERATSSRI
 	case enumerations.DigestMatcherTypeEAADisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_SDCBI
+		return i18n.MessageTagBBBCVEAASDCBI
 	case enumerations.DigestMatcherTypeEAANestedDisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_NSDCBI
+		return i18n.MessageTagBBBCVEAANSDCBI
 	default:
-		return i18n.MessageTag_BBB_CV_IRDOI
+		return i18n.MessageTagBBBCVIRDOI
 	}
 }
 
@@ -64,21 +64,21 @@ func (c *ReferenceDataIntactCheck[T]) MessageTag() i18n.MessageTag {
 func (c *ReferenceDataIntactCheck[T]) ErrorMessageTag() i18n.MessageTag {
 	switch digestMatcherType(c.digestMatcher) {
 	case enumerations.DigestMatcherTypeMessageImprint:
-		return i18n.MessageTag_BBB_CV_TSP_IRDOI_ANS
+		return i18n.MessageTagBBBCVTSPIRDOIANS
 	case enumerations.DigestMatcherTypeCounterSignedSignatureValue:
-		return i18n.MessageTag_BBB_CV_CS_CSPS_ANS
+		return i18n.MessageTagBBBCVCSCSPSANS
 	case enumerations.DigestMatcherTypeManifestEntry:
-		return i18n.MessageTag_BBB_CV_IMEDOI_ANS
+		return i18n.MessageTagBBBCVIMEDOIANS
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		return i18n.MessageTag_BBB_CV_ER_ATSRI_ANS
+		return i18n.MessageTagBBBCVERATSRIANS
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		return i18n.MessageTag_BBB_CV_ER_ATSSRI_ANS
+		return i18n.MessageTagBBBCVERATSSRIANS
 	case enumerations.DigestMatcherTypeEAADisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_SDCBI_ANS
+		return i18n.MessageTagBBBCVEAASDCBIANS
 	case enumerations.DigestMatcherTypeEAANestedDisclosure:
-		return i18n.MessageTag_BBB_CV_EAA_NSDCBI_ANS
+		return i18n.MessageTagBBBCVEAANSDCBIANS
 	default:
-		return i18n.MessageTag_BBB_CV_IRDOI_ANS
+		return i18n.MessageTagBBBCVIRDOIANS
 	}
 }
 
@@ -103,13 +103,13 @@ func (c *ReferenceDataIntactCheck[T]) BuildAdditionalInfo() *string {
 		enumerations.DigestMatcherTypeCounterSignedSignatureValue:
 		return nil
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStamp:
-		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST
+		referenceName = i18n.MessageTagTSTTypeRefERATST
 	case enumerations.DigestMatcherTypeEvidenceRecordArchiveTimeStampSequence:
-		referenceName = i18n.MessageTag_TST_TYPE_REF_ER_ATST_SEQ
+		referenceName = i18n.MessageTagTSTTypeRefERATSTSeq
 	default:
 		referenceName = c.getReferenceName(c.digestMatcher)
 	}
-	message := c.I18nProvider.GetMessage(i18n.MessageTag_REFERENCE, referenceName)
+	message := c.I18nProvider.GetMessage(i18n.MessageTagReference, referenceName)
 	return &message
 }
 

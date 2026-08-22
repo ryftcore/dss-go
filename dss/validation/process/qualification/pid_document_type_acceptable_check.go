@@ -70,12 +70,12 @@ func (c *PIDDocumentTypeAcceptableCheck) getClaimedDocumentType() string {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *PIDDocumentTypeAcceptableCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_PID_DOCUMENT_TYPE
+	return i18n.MessageTagPIDDocumentType
 }
 
 // BuildErrorMessage builds an error message. Port of buildErrorMessage().
 func (c *PIDDocumentTypeAcceptableCheck) BuildErrorMessage() *jaxb.XmlMessage {
-	return c.BuildXmlMessage(i18n.MessageTag_PID_DOCUMENT_TYPE_ANS, c.getClaimedDocumentType())
+	return c.BuildXmlMessage(i18n.MessageTagPIDDocumentTypeANS, c.getClaimedDocumentType())
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

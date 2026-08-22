@@ -171,7 +171,7 @@ func (c *DigestAlgorithmObsolescenceValidation[T]) getMaterialDescription(digest
 	referenceNames := getReferenceNames(digestMatchers)
 	var message string
 	if utils.IsCollectionNotEmpty(referenceNames) {
-		message = c.I18nProvider.GetMessage(i18n.MessageTag_ACCM_DESC_WITH_NAME, c.position, utils.JoinStrings(referenceNames, ", "))
+		message = c.I18nProvider.GetMessage(i18n.MessageTagACCMDescWithName, c.position, utils.JoinStrings(referenceNames, ", "))
 	} else {
 		message = c.I18nProvider.GetMessage(c.position)
 	}

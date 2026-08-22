@@ -592,12 +592,12 @@ func generalSubtreeTypeOf(generalSubtree *diagjaxb.XmlGeneralSubtree) enumeratio
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *CertificateNameConstraintsCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCSBSINC
+	return i18n.MessageTagBBBXCVDCSBSINC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *CertificateNameConstraintsCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_XCV_DCSBSINC_ANS
+	return i18n.MessageTagBBBXCVDCSBSINCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

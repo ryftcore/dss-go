@@ -27,11 +27,11 @@ func NewAcceptableLoLoTECheck[T any](i18nProvider *i18n.I18nProvider, result *pr
 
 // MessageTag returns the check's message tag. Port of the overridden getMessageTag().
 func (c *AcceptableLoLoTECheck[T]) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LOLOTE_ACCEPT
+	return i18n.MessageTagCertUsageLoLoTEAccept
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of the
 // overridden getErrorMessageTag().
 func (c *AcceptableLoLoTECheck[T]) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_CERT_USAGE_LOLOTE_ACCEPT_ANS
+	return i18n.MessageTagCertUsageLoLoTEAcceptANS
 }

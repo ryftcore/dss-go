@@ -37,13 +37,13 @@ func (c *SignaturePolicyZeroHashCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *SignaturePolicyZeroHashCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_IZHSP
+	return i18n.MessageTagBBBVCIIZHSP
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of
 // getErrorMessageTag().
 func (c *SignaturePolicyZeroHashCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_BBB_VCI_IZHSP_ANS
+	return i18n.MessageTagBBBVCIIZHSPANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of

@@ -40,12 +40,12 @@ func (c *QualifiedCertificateAtCertificateIssuanceCheck) Process() bool {
 
 // MessageTag returns the check's message tag. Port of getMessageTag().
 func (c *QualifiedCertificateAtCertificateIssuanceCheck) MessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_QC_AT_CC
+	return i18n.MessageTagQualQCAtCC
 }
 
 // ErrorMessageTag returns the check's error message tag. Port of getErrorMessageTag().
 func (c *QualifiedCertificateAtCertificateIssuanceCheck) ErrorMessageTag() i18n.MessageTag {
-	return i18n.MessageTag_QUAL_QC_AT_CC_ANS
+	return i18n.MessageTagQualQCAtCCANS
 }
 
 // FailedIndicationForConclusion gets an Indication in case of failure. Port of
