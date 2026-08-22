@@ -73,6 +73,11 @@ func (d *Document) encryptForWrite(k ObjectKey, data []byte, isString bool) ([]b
 	}
 	key := h.objectKeyFor(k.Num, k.Gen)
 	if !h.useAES {
+		// The write half of issue #33's sink. Reaching this with a 32-byte
+		// AES-256 file key would re-encrypt the increment under RC4-128 in a
+		// file that declares AES-256; it cannot, because setupEncryption
+		// refuses to publish such a handler (checkCryptFilters plus the
+		// postcondition guard just before d.sec = h).
 		return rc4Apply(key, data), nil
 	}
 	block, err := aes.NewCipher(key)

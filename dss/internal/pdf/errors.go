@@ -17,7 +17,14 @@ var (
 	ErrBrokenCatalog = errors.New("pdf: page tree root must be a dictionary")
 	// ErrInvalidPassword maps onto upstream InvalidPasswordException.
 	ErrInvalidPassword = errors.New("pdf: invalid password")
-	// ErrUnsupportedSecurityHandler is returned for any /Filter other than /Standard.
+	// ErrUnsupportedSecurityHandler is returned for a security handler this
+	// package does not implement: a /Filter other than /Standard, a /V outside
+	// {1, 2, 4, 5}, a /V 5 paired with an /R other than 5 or 6, a crypt filter
+	// a /V 4 //V 5 document selects (/StmF or /StrF, not /Identity) that does
+	// not resolve through /CF to an implemented /CFM, or that disagrees with
+	// the other selected filter (DESIGN.md §2.6, crypt.go's
+	// checkCryptFilters), or a /UE //OE that is not exactly 32 bytes for
+	// /R 5//R 6 (crypt.go's computeEncryptionKey).
 	ErrUnsupportedSecurityHandler = errors.New("pdf: unsupported security handler")
 	// ErrUnsupportedFilter is what a *FilterError unwraps to.
 	ErrUnsupportedFilter = errors.New("pdf: unsupported stream filter")

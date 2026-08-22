@@ -428,16 +428,30 @@ func TestEncryptionAES256PermsMustMatchP(t *testing.T) {
 	})
 
 	t.Run("a file key that is not an AES key size is rejected, not a panic", func(t *testing.T) {
-		// For /R 5 and /R 6 the file key is whatever /UE unwraps to, and nothing
-		// constrains its length to 32: computeEncryptionKey only requires a
-		// non-empty multiple of the block size. aes.NewCipher answers 48 bytes with
-		// an error, which validatePerms must turn into a rejection.
+		// For /R 5 and /R 6 the file key is whatever /UE unwraps to.
+		// computeEncryptionKey's own exact-32-byte check (issue #33's S3) is what
+		// catches a 48-byte /UE now, before the malformed "key" it would have
+		// produced ever reaches validatePerms's aes.NewCipher(fileKey) - a 48-byte
+		// key is not a valid AES key size, and validatePerms turning that failure
+		// into a rejection is exercised separately by
+		// TestValidatePermsRejectsAWrongSizeFileKey below, which bypasses
+		// computeEncryptionKey's check entirely to reach it. Either way the
+		// outcome pinned here is the same: rejected cleanly, not a panic, and the
+		// error blames /UE or /OE, the entry that is actually malformed - not
+		// /Perms, which never gets read.
+		//
+		// The error is ErrUnsupportedSecurityHandler, not ErrInvalidPassword: a
+		// malformed /UE is not a wrong password (see computeEncryptionKey's
+		// // DIVERGENCE, deliberate: note in crypt.go), and pades maps the two
+		// onto different exceptions - a caller retrying passwords against
+		// ErrInvalidPassword would otherwise spin on a document no password can
+		// open.
 		data := buildAES256Doc(t, aes256Spec{
 			cfEntry: stdCFAESV3, pValue: "-1052", fileKey: bytes.Repeat([]byte{0x5A}, 48),
 			permsRaw: make([]byte, aes.BlockSize)})
 		_, err := OpenBytes(data, nil)
-		if !errors.Is(err, ErrInvalidPassword) {
-			t.Errorf("error is %v, want ErrInvalidPassword", err)
+		if !errors.Is(err, ErrUnsupportedSecurityHandler) {
+			t.Errorf("error is %v, want ErrUnsupportedSecurityHandler", err)
 		}
 		// The bad key size comes from /UE or /OE, not from /Perms; the message
 		// must blame the right entry.
@@ -498,6 +512,27 @@ func TestEncryptionAES256PermsMustMatchP(t *testing.T) {
 			t.Errorf("error is %v, want ErrInvalidPassword", err)
 		}
 	})
+}
+
+// TestValidatePermsRejectsAWrongSizeFileKey pins validatePerms's own defence
+// directly, calling it below OpenBytes: computeEncryptionKey's exact-32-byte
+// /UE//OE check (issue #33's S3) means a document opened through OpenBytes can
+// no longer hand validatePerms anything but a 32-byte file key, so
+// validatePerms's own `aes.NewCipher(fileKey)` failure - a leftover from
+// before S3 existed, when a malformed /UE could reach validatePerms with
+// whatever length AES-CBC happened to decrypt - is unreachable end to end.
+// It stays in place as defence in depth (validatePerms is not otherwise
+// guaranteed only ever to be called with a 32-byte key), so it keeps its own
+// direct test rather than losing coverage silently.
+func TestValidatePermsRejectsAWrongSizeFileKey(t *testing.T) {
+	fileKey := bytes.Repeat([]byte{0x5A}, 48) // not a valid AES key size
+	err := validatePerms(make([]byte, aes.BlockSize), fileKey, -1052, true)
+	if !errors.Is(err, ErrInvalidPassword) {
+		t.Errorf("error is %v, want ErrInvalidPassword", err)
+	}
+	if err == nil || !strings.Contains(err.Error(), "/UE or /OE") {
+		t.Errorf("error is %q, want it to blame /UE or /OE", err)
+	}
 }
 
 // TestPermissionWordMatchesJavaNarrowing pins permissionWord against Java's two
