@@ -45,25 +45,25 @@ func newCryptographicSuiteJsonCatalogue(securitySuitabilityPolicy jsonObject) *m
 func buildJSONMetadata(securitySuitabilityPolicy jsonObject) *modelpolicy.CryptographicSuiteMetadata {
 	metadata := modelpolicy.NewCryptographicSuiteMetadata()
 
-	if policyName := securitySuitabilityPolicy.getAsObject(jsonConstraintPolicyName); policyName != nil {
-		metadata.SetPolicyName(policyName.getAsString(jsonConstraintNameC))
-		metadata.SetPolicyOID(policyName.getAsString(jsonConstraintObjectIdentifier))
-		metadata.SetPolicyURI(policyName.getAsString(jsonConstraintURI))
+	if policyName := securitySuitabilityPolicy.asObject(jsonConstraintPolicyName); policyName != nil {
+		metadata.SetPolicyName(policyName.asString(jsonConstraintNameC))
+		metadata.SetPolicyOID(policyName.asString(jsonConstraintObjectIdentifier))
+		metadata.SetPolicyURI(policyName.asString(jsonConstraintURI))
 	}
 
-	if publisher := securitySuitabilityPolicy.getAsObject(jsonConstraintPublisher); publisher != nil {
-		metadata.SetPublisherName(publisher.getAsString(jsonConstraintNameC))
-		metadata.SetPublisherAddress(publisher.getAsString(jsonConstraintAddress))
-		metadata.SetPublisherURI(publisher.getAsString(jsonConstraintURI))
+	if publisher := securitySuitabilityPolicy.asObject(jsonConstraintPublisher); publisher != nil {
+		metadata.SetPublisherName(publisher.asString(jsonConstraintNameC))
+		metadata.SetPublisherAddress(publisher.asString(jsonConstraintAddress))
+		metadata.SetPublisherURI(publisher.asString(jsonConstraintURI))
 	}
 
-	metadata.SetPolicyIssueDate(getAsDateTime(securitySuitabilityPolicy, jsonConstraintPolicyIssueDate))
-	metadata.SetNextUpdate(getAsDateTime(securitySuitabilityPolicy, jsonConstraintNextUpdate))
-	metadata.SetUsage(securitySuitabilityPolicy.getAsString(jsonConstraintUsage))
+	metadata.SetPolicyIssueDate(asDateTime(securitySuitabilityPolicy, jsonConstraintPolicyIssueDate))
+	metadata.SetNextUpdate(asDateTime(securitySuitabilityPolicy, jsonConstraintNextUpdate))
+	metadata.SetUsage(securitySuitabilityPolicy.asString(jsonConstraintUsage))
 
 	metadata.SetVersion(jsonCatalogueVersion(securitySuitabilityPolicy))
 	metadata.SetLang(jsonCatalogueLang(securitySuitabilityPolicy))
-	metadata.SetId(securitySuitabilityPolicy.getAsString(jsonConstraintID))
+	metadata.SetId(securitySuitabilityPolicy.asString(jsonConstraintID))
 
 	return metadata
 }
@@ -71,7 +71,7 @@ func buildJSONMetadata(securitySuitabilityPolicy jsonObject) *modelpolicy.Crypto
 // buildJSONAlgorithmList ports the protected buildAlgorithmList() method.
 func buildJSONAlgorithmList(securitySuitabilityPolicy jsonObject) []*modelpolicy.CryptographicSuiteAlgorithm {
 	var algorithmList []*modelpolicy.CryptographicSuiteAlgorithm
-	for _, algorithmType := range securitySuitabilityPolicy.getAsObjectList(jsonConstraintAlgorithm) {
+	for _, algorithmType := range securitySuitabilityPolicy.asObjectList(jsonConstraintAlgorithm) {
 		if algorithm := buildJSONAlgorithm(algorithmType); algorithm != nil {
 			algorithmList = append(algorithmList, algorithm)
 		}
@@ -91,13 +91,13 @@ func buildJSONAlgorithmList(securitySuitabilityPolicy jsonObject) []*modelpolicy
 func buildJSONAlgorithm(algorithmType jsonObject) *modelpolicy.CryptographicSuiteAlgorithm {
 	algorithm := modelpolicy.NewCryptographicSuiteAlgorithm()
 
-	if algorithmIdentifier := algorithmType.getAsObject(jsonConstraintAlgorithmIdentifier); algorithmIdentifier != nil {
-		algorithm.SetAlgorithmIdentifierName(algorithmIdentifier.getAsString(jsonConstraintNameC))
+	if algorithmIdentifier := algorithmType.asObject(jsonConstraintAlgorithmIdentifier); algorithmIdentifier != nil {
+		algorithm.SetAlgorithmIdentifierName(algorithmIdentifier.asString(jsonConstraintNameC))
 		algorithm.SetAlgorithmIdentifierOIDs(algorithmIdentifierOIDs(algorithmIdentifier))
 		algorithm.SetAlgorithmIdentifierURIs(algorithmIdentifierURIs(algorithmIdentifier))
 	}
 
-	algorithm.SetEvaluationList(buildJSONEvaluationList(algorithmType.getAsObjectList(jsonConstraintEvaluation)))
+	algorithm.SetEvaluationList(buildJSONEvaluationList(algorithmType.asObjectList(jsonConstraintEvaluation)))
 	algorithm.SetInformationTextList(jsonInformationText(algorithmType))
 
 	return algorithm
@@ -106,7 +106,7 @@ func buildJSONAlgorithm(algorithmType jsonObject) *modelpolicy.CryptographicSuit
 // algorithmIdentifierOIDs ports the private
 // getAlgorithmIdentifierOIDs(JsonObjectWrapper) helper.
 func algorithmIdentifierOIDs(algorithmIdentifier jsonObject) []string {
-	if algorithmOID := algorithmIdentifier.getAsString(jsonConstraintObjectIdentifier); algorithmOID != "" {
+	if algorithmOID := algorithmIdentifier.asString(jsonConstraintObjectIdentifier); algorithmOID != "" {
 		return []string{algorithmOID}
 	}
 	return nil
@@ -115,7 +115,7 @@ func algorithmIdentifierOIDs(algorithmIdentifier jsonObject) []string {
 // algorithmIdentifierURIs ports the private
 // getAlgorithmIdentifierURIs(JsonObjectWrapper) helper.
 func algorithmIdentifierURIs(algorithmIdentifier jsonObject) []string {
-	if algorithmURI := algorithmIdentifier.getAsString(jsonConstraintURI); algorithmURI != "" {
+	if algorithmURI := algorithmIdentifier.asString(jsonConstraintURI); algorithmURI != "" {
 		return []string{algorithmURI}
 	}
 	return nil
@@ -134,22 +134,22 @@ func buildJSONEvaluationList(evaluations []jsonObject) []*modelpolicy.Cryptograp
 // jsonInformationText ports the private
 // getInformationText(JsonObjectWrapper) helper.
 func jsonInformationText(algorithmType jsonObject) []string {
-	information := algorithmType.getAsObject(jsonConstraintInformation)
+	information := algorithmType.asObject(jsonConstraintInformation)
 	if information == nil {
 		return nil
 	}
-	return information.getAsStringList(jsonConstraintText)
+	return information.asStringList(jsonConstraintText)
 }
 
 // buildJSONEvaluation ports the private
 // buildEvaluation(JsonObjectWrapper) helper.
 func buildJSONEvaluation(evaluationType jsonObject) *modelpolicy.CryptographicSuiteEvaluation {
 	evaluation := modelpolicy.NewCryptographicSuiteEvaluation()
-	evaluation.SetParameterList(buildJSONParameterList(evaluationType.getAsObjectList(jsonConstraintParameter)))
+	evaluation.SetParameterList(buildJSONParameterList(evaluationType.asObjectList(jsonConstraintParameter)))
 
-	if validity := evaluationType.getAsObject(jsonConstraintValidity); validity != nil {
-		evaluation.SetValidityStart(getAsDate(validity, jsonConstraintStart))
-		evaluation.SetValidityEnd(getAsDate(validity, jsonConstraintEnd))
+	if validity := evaluationType.asObject(jsonConstraintValidity); validity != nil {
+		evaluation.SetValidityStart(asDate(validity, jsonConstraintStart))
+		evaluation.SetValidityEnd(asDate(validity, jsonConstraintEnd))
 	}
 
 	evaluation.SetAlgorithmUsage(jsonAlgorithmUsage(evaluationType))
@@ -175,7 +175,7 @@ func buildJSONParameterList(parameters []jsonObject) []*modelpolicy.Cryptographi
 // helper.
 func buildJSONParameter(parameterType jsonObject) *modelpolicy.CryptographicSuiteParameter {
 	parameter := modelpolicy.NewCryptographicSuiteParameter()
-	parameter.SetName(parameterType.getAsString(jsonConstraintName))
+	parameter.SetName(parameterType.asString(jsonConstraintName))
 	parameter.SetMin(jsonToInteger(parameterType, jsonConstraintMin))
 	parameter.SetMax(jsonToInteger(parameterType, jsonConstraintMax))
 	return parameter
@@ -184,7 +184,7 @@ func buildJSONParameter(parameterType jsonObject) *modelpolicy.CryptographicSuit
 // jsonAlgorithmUsage ports the private
 // getAlgorithmUsage(JsonObjectWrapper) helper.
 func jsonAlgorithmUsage(evaluationType jsonObject) []enumerations.CryptographicSuiteAlgorithmUsage {
-	algorithmUsageStr := evaluationType.getAsString(jsonConstraintAlgorithmUsage)
+	algorithmUsageStr := evaluationType.asString(jsonConstraintAlgorithmUsage)
 	if algorithmUsageStr == "" {
 		return nil
 	}
@@ -198,7 +198,7 @@ func jsonAlgorithmUsage(evaluationType jsonObject) []enumerations.CryptographicS
 // jsonRecommendation ports the private
 // getRecommendation(JsonObjectWrapper) helper.
 func jsonRecommendation(evaluationType jsonObject) enumerations.CryptographicSuiteRecommendation {
-	recommendation := evaluationType.getAsString(jsonConstraintRecommendation)
+	recommendation := evaluationType.asString(jsonConstraintRecommendation)
 	if recommendation == "" {
 		return ""
 	}
@@ -207,7 +207,7 @@ func jsonRecommendation(evaluationType jsonObject) enumerations.CryptographicSui
 
 // jsonCatalogueVersion ports the private getVersion() helper.
 func jsonCatalogueVersion(securitySuitabilityPolicy jsonObject) string {
-	if version := securitySuitabilityPolicy.getAsString(jsonConstraintVersion); version != "" {
+	if version := securitySuitabilityPolicy.asString(jsonConstraintVersion); version != "" {
 		return version
 	}
 	return cryptographicSuiteJsonCatalogueDefaultVersion
@@ -215,17 +215,17 @@ func jsonCatalogueVersion(securitySuitabilityPolicy jsonObject) string {
 
 // jsonCatalogueLang ports the private getLang() helper.
 func jsonCatalogueLang(securitySuitabilityPolicy jsonObject) string {
-	if lang := securitySuitabilityPolicy.getAsString(jsonConstraintLang); lang != "" {
+	if lang := securitySuitabilityPolicy.asString(jsonConstraintLang); lang != "" {
 		return lang
 	}
 	return cryptographicSuiteJsonCatalogueDefaultLang
 }
 
 // jsonToInteger ports the private toInteger(Number) helper, folded
-// together with its getAsNumber(name) call site (both buildParameter call
-// sites pass the immediate result of getAsNumber straight to toInteger).
+// together with its asNumber(name) call site (both buildParameter call
+// sites pass the immediate result of asNumber straight to toInteger).
 func jsonToInteger(parameterType jsonObject, name string) *int {
-	n, ok := parameterType.getAsNumber(name)
+	n, ok := parameterType.asNumber(name)
 	if !ok {
 		return nil
 	}
@@ -233,7 +233,7 @@ func jsonToInteger(parameterType jsonObject, name string) *int {
 	return &v
 }
 
-// getAsDate gets a value of the header name as a time.Time (date only). If
+// asDate gets a value of the header name as a time.Time (date only). If
 // not present, or not able to convert, returns nil. Ports the private
 // getAsDate(JsonObjectWrapper, String) helper.
 //
@@ -246,8 +246,8 @@ func jsonToInteger(parameterType jsonObject, name string) *int {
 // (returns nil), which is more permissive for a single malformed date but
 // avoids introducing panic/recover control flow for a case the upstream
 // resources this package ports (dss-crypto-suite.json) never exercise.
-func getAsDate(jsonObj jsonObject, name string) *time.Time {
-	dateString := jsonObj.getAsString(name)
+func asDate(jsonObj jsonObject, name string) *time.Time {
+	dateString := jsonObj.asString(name)
 	if dateString == "" {
 		return nil
 	}
@@ -258,16 +258,16 @@ func getAsDate(jsonObj jsonObject, name string) *time.Time {
 	return &t
 }
 
-// getAsDateTime gets a value of the header name as a time.Time (with
+// asDateTime gets a value of the header name as a time.Time (with
 // time). If not present, or not able to convert, returns nil. Ports the
-// private getAsDateTime(JsonObjectWrapper, String) helper; see getAsDate's
+// private getAsDateTime(JsonObjectWrapper, String) helper; see asDate's
 // doc comment for the same malformed-input handling note (buildMetadata,
 // this method's only caller, has no enclosing try/catch in Java either -
 // an unparseable PolicyIssueDate/NextUpdate propagates all the way out of
 // getCryptographicSuite in Java, but callers here never observe
 // that path since dss-crypto-suite.json's dates are well-formed).
-func getAsDateTime(jsonObj jsonObject, name string) *time.Time {
-	dateString := jsonObj.getAsString(name)
+func asDateTime(jsonObj jsonObject, name string) *time.Time {
+	dateString := jsonObj.asString(name)
 	if dateString == "" {
 		return nil
 	}

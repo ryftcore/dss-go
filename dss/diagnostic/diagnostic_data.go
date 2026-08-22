@@ -64,71 +64,71 @@ func (d *DiagnosticData) SignatureIdList() []string {
 
 // FirstSignatureId returns the first signature id. Port of getFirstSignatureId().
 func (d *DiagnosticData) FirstSignatureId() string {
-	return d.getFirstSignatureNullSafe().Id()
+	return d.firstSignatureNullSafe().Id()
 }
 
 // FirstSignatureDate returns the first signature time. Port of getFirstSignatureDate().
 func (d *DiagnosticData) FirstSignatureDate() *time.Time {
-	return d.getFirstSignatureNullSafe().ClaimedSigningTime()
+	return d.firstSignatureNullSafe().ClaimedSigningTime()
 }
 
 // SignatureDate returns the claimed signing time. Port of getSignatureDate(String).
 func (d *DiagnosticData) SignatureDate(signatureId string) *time.Time {
-	return d.getSignatureByIdNullSafe(signatureId).ClaimedSigningTime()
+	return d.signatureByIdNullSafe(signatureId).ClaimedSigningTime()
 }
 
 // FirstSignatureFormat returns the signature format for the first signature. Port of
 // getFirstSignatureFormat().
 func (d *DiagnosticData) FirstSignatureFormat() enumerations.SignatureLevel {
-	return d.getFirstSignatureNullSafe().SignatureFormat()
+	return d.firstSignatureNullSafe().SignatureFormat()
 }
 
 // SignatureFormat returns the signature format for the given signature. Port of
 // getSignatureFormat(String).
 func (d *DiagnosticData) SignatureFormat(signatureId string) enumerations.SignatureLevel {
-	return d.getSignatureByIdNullSafe(signatureId).SignatureFormat()
+	return d.signatureByIdNullSafe(signatureId).SignatureFormat()
 }
 
 // SignedAssertionsInFirstSignature returns the signed assertions for the first signature.
 // Port of getSignedAssertionsInFirstSignature().
 func (d *DiagnosticData) SignedAssertionsInFirstSignature() []*jaxb.XmlSignerRole {
-	return d.getFirstSignatureNullSafe().SignedAssertions()
+	return d.firstSignatureNullSafe().SignedAssertions()
 }
 
 // SignedAssertions returns the signed assertions for the given signature. Port of
 // getSignedAssertions(String).
 func (d *DiagnosticData) SignedAssertions(signatureId string) []*jaxb.XmlSignerRole {
-	return d.getSignatureByIdNullSafe(signatureId).SignedAssertions()
+	return d.signatureByIdNullSafe(signatureId).SignedAssertions()
 }
 
 // FirstSignatureDigestAlgorithm returns the DigestAlgorithm of the first signature. Port of
 // getFirstSignatureDigestAlgorithm().
 func (d *DiagnosticData) FirstSignatureDigestAlgorithm() enumerations.DigestAlgorithm {
-	return d.getFirstSignatureNullSafe().DigestAlgorithm()
+	return d.firstSignatureNullSafe().DigestAlgorithm()
 }
 
 // SignatureDigestAlgorithm returns the DigestAlgorithm for the given signature. Port of
 // getSignatureDigestAlgorithm(String).
 func (d *DiagnosticData) SignatureDigestAlgorithm(signatureId string) enumerations.DigestAlgorithm {
-	return d.getSignatureByIdNullSafe(signatureId).DigestAlgorithm()
+	return d.signatureByIdNullSafe(signatureId).DigestAlgorithm()
 }
 
 // FirstSignatureEncryptionAlgorithm returns the EncryptionAlgorithm of the first signature.
 // Port of getFirstSignatureEncryptionAlgorithm().
 func (d *DiagnosticData) FirstSignatureEncryptionAlgorithm() enumerations.EncryptionAlgorithm {
-	return d.getFirstSignatureNullSafe().EncryptionAlgorithm()
+	return d.firstSignatureNullSafe().EncryptionAlgorithm()
 }
 
 // SignatureEncryptionAlgorithm returns the EncryptionAlgorithm for the given signature. Port
 // of getSignatureEncryptionAlgorithm(String).
 func (d *DiagnosticData) SignatureEncryptionAlgorithm(signatureId string) enumerations.EncryptionAlgorithm {
-	return d.getSignatureByIdNullSafe(signatureId).EncryptionAlgorithm()
+	return d.signatureByIdNullSafe(signatureId).EncryptionAlgorithm()
 }
 
 // SigningCertificateId returns signing certificate dss id for the given signature. Port of
 // getSigningCertificateId(String).
 func (d *DiagnosticData) SigningCertificateId(signatureId string) string {
-	signature := d.getSignatureByIdNullSafe(signatureId)
+	signature := d.signatureByIdNullSafe(signatureId)
 	if signature.SigningCertificate() != nil {
 		return signature.SigningCertificate().Id()
 	}
@@ -138,19 +138,19 @@ func (d *DiagnosticData) SigningCertificateId(signatureId string) string {
 // IsSigningCertificateIdentified indicates if the digest value and the issuer and serial
 // match for the signing certificate. Port of isSigningCertificateIdentified(String).
 func (d *DiagnosticData) IsSigningCertificateIdentified(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsSigningCertificateIdentified()
+	return d.signatureByIdNullSafe(signatureId).IsSigningCertificateIdentified()
 }
 
 // SignatureCertificateChain returns the list of certificates in the chain of the main
 // signature. Port of getSignatureCertificateChain(String).
 func (d *DiagnosticData) SignatureCertificateChain(signatureId string) []*CertificateWrapper {
-	return d.getSignatureByIdNullSafe(signatureId).CertificateChain()
+	return d.signatureByIdNullSafe(signatureId).CertificateChain()
 }
 
 // SignatureCertificateChainIds returns the list of certificate identifiers in the chain of the
 // main signature. Port of getSignatureCertificateChainIds(String).
 func (d *DiagnosticData) SignatureCertificateChainIds(signatureId string) []string {
-	signature := d.getSignatureByIdNullSafe(signatureId)
+	signature := d.signatureByIdNullSafe(signatureId)
 	var result []string
 	for _, certWrapper := range signature.CertificateChain() {
 		result = append(result, certWrapper.Id())
@@ -161,24 +161,24 @@ func (d *DiagnosticData) SignatureCertificateChainIds(signatureId string) []stri
 // FirstPolicyId returns the identifier of the policy of the first signature. Port of
 // getFirstPolicyId().
 func (d *DiagnosticData) FirstPolicyId() string {
-	return d.getFirstSignatureNullSafe().PolicyId()
+	return d.firstSignatureNullSafe().PolicyId()
 }
 
 // PolicyId returns the identifier of the policy. Port of getPolicyId(String).
 func (d *DiagnosticData) PolicyId(signatureId string) string {
-	return d.getSignatureByIdNullSafe(signatureId).PolicyId()
+	return d.signatureByIdNullSafe(signatureId).PolicyId()
 }
 
 // PolicyDescription returns the description of the policy. Port of
 // getPolicyDescription(String).
 func (d *DiagnosticData) PolicyDescription(signatureId string) string {
-	return d.getSignatureByIdNullSafe(signatureId).PolicyDescription()
+	return d.signatureByIdNullSafe(signatureId).PolicyDescription()
 }
 
 // PolicyDocumentationReferences returns the documentation references of the policy. Port of
 // getPolicyDocumentationReferences(String).
 func (d *DiagnosticData) PolicyDocumentationReferences(signatureId string) []string {
-	return d.getSignatureByIdNullSafe(signatureId).PolicyDocumentationReferences()
+	return d.signatureByIdNullSafe(signatureId).PolicyDocumentationReferences()
 }
 
 // TimestampIdList returns the list of identifier of all timestamps found during the
@@ -194,59 +194,59 @@ func (d *DiagnosticData) TimestampIdList() []string {
 // TimestampIdListForSignature returns the list of identifier of the timestamps related to the
 // given signature. Port of getTimestampIdList(String).
 func (d *DiagnosticData) TimestampIdListForSignature(signatureId string) []string {
-	return d.getSignatureByIdNullSafe(signatureId).TimestampIdsList()
+	return d.signatureByIdNullSafe(signatureId).TimestampIdsList()
 }
 
 // TimestampListForSignature returns the list of timestamps wrappers which cover the given
 // signature. Port of getTimestampList(String).
 func (d *DiagnosticData) TimestampListForSignature(signatureId string) []*TimestampWrapper {
-	return d.getSignatureByIdNullSafe(signatureId).TimestampList()
+	return d.signatureByIdNullSafe(signatureId).TimestampList()
 }
 
 // IsBLevelTechnicallyValid indicates if the -B level is technically valid. It means that the
 // signature value is valid. Port of isBLevelTechnicallyValid(String).
 func (d *DiagnosticData) IsBLevelTechnicallyValid(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsBLevelTechnicallyValid()
+	return d.signatureByIdNullSafe(signatureId).IsBLevelTechnicallyValid()
 }
 
 // IsThereTLevel indicates if there is a signature timestamp. Port of isThereTLevel(String).
 func (d *DiagnosticData) IsThereTLevel(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsThereTLevel()
+	return d.signatureByIdNullSafe(signatureId).IsThereTLevel()
 }
 
 // IsTLevelTechnicallyValid indicates if the -T level is technically valid. It means that the
 // signature and the digest are valid. Port of isTLevelTechnicallyValid(String).
 func (d *DiagnosticData) IsTLevelTechnicallyValid(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsTLevelTechnicallyValid()
+	return d.signatureByIdNullSafe(signatureId).IsTLevelTechnicallyValid()
 }
 
 // IsThereXLevel indicates if there is an -X1 or -X2 timestamp. Port of isThereXLevel(String).
 func (d *DiagnosticData) IsThereXLevel(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsThereXLevel()
+	return d.signatureByIdNullSafe(signatureId).IsThereXLevel()
 }
 
 // IsXLevelTechnicallyValid indicates if the -X level is technically valid. It means that the
 // signature and the digest are valid. Port of isXLevelTechnicallyValid(String).
 func (d *DiagnosticData) IsXLevelTechnicallyValid(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsXLevelTechnicallyValid()
+	return d.signatureByIdNullSafe(signatureId).IsXLevelTechnicallyValid()
 }
 
 // IsThereALevel indicates if there is an archive timestamp. Port of isThereALevel(String).
 func (d *DiagnosticData) IsThereALevel(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsThereALevel()
+	return d.signatureByIdNullSafe(signatureId).IsThereALevel()
 }
 
 // IsALevelTechnicallyValid indicates if the -A (-LTA) level is technically valid. It means
 // that the signature of the archive timestamps are valid and their imprint is valid too. Port
 // of isALevelTechnicallyValid(String).
 func (d *DiagnosticData) IsALevelTechnicallyValid(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsALevelTechnicallyValid()
+	return d.signatureByIdNullSafe(signatureId).IsALevelTechnicallyValid()
 }
 
 // IsThereERSLevel indicates if there is an embedded evidence record. Port of
 // isThereERSLevel(String).
 func (d *DiagnosticData) IsThereERSLevel(signatureId string) bool {
-	return d.getSignatureByIdNullSafe(signatureId).IsThereERSLevel()
+	return d.signatureByIdNullSafe(signatureId).IsThereERSLevel()
 }
 
 // SignerDocuments returns a list of all Signer's documents used to create a signature. NOTE:
@@ -254,7 +254,7 @@ func (d *DiagnosticData) IsThereERSLevel(signatureId string) bool {
 // Port of getSignerDocuments(String).
 func (d *DiagnosticData) SignerDocuments(signatureId string) []*SignerDataWrapper {
 	var result []*SignerDataWrapper
-	signatureWrapper := d.getSignatureByIdNullSafe(signatureId)
+	signatureWrapper := d.signatureByIdNullSafe(signatureId)
 	signatureScopes := signatureWrapper.SignatureScopes()
 	for _, xmlSignatureScope := range signatureScopes {
 		signerData := xmlSignatureScope.SignerData
@@ -269,13 +269,13 @@ func (d *DiagnosticData) SignerDocuments(signatureId string) []*SignerDataWrappe
 // TimestampSigningCertificateId returns the identifier of the timestamp signing certificate.
 // Port of getTimestampSigningCertificateId(String).
 func (d *DiagnosticData) TimestampSigningCertificateId(timestampId string) string {
-	return d.getTimestampByIdNullSafe(timestampId).SigningCertificate().Id()
+	return d.timestampByIdNullSafe(timestampId).SigningCertificate().Id()
 }
 
 // TimestampType returns the timestamp type of the given timestamp. Port of
 // getTimestampType(String).
 func (d *DiagnosticData) TimestampType(timestampId string) enumerations.TimestampType {
-	return d.getTimestampByIdNullSafe(timestampId).Type()
+	return d.timestampByIdNullSafe(timestampId).Type()
 }
 
 // TimestampsByType returns a list of TimestampWrapper for the given TimestampType. Port of
@@ -353,10 +353,10 @@ func (d *DiagnosticData) CertificateRevocationReason(dssCertificateId string) en
 // ErrorMessage retrieves the error message for the given signature id. Port of
 // getErrorMessage(String).
 func (d *DiagnosticData) ErrorMessage(signatureId string) string {
-	return d.getSignatureByIdNullSafe(signatureId).ErrorMessage()
+	return d.signatureByIdNullSafe(signatureId).ErrorMessage()
 }
 
-func (d *DiagnosticData) getFirstSignatureNullSafe() *SignatureWrapper {
+func (d *DiagnosticData) firstSignatureNullSafe() *SignatureWrapper {
 	signatures := d.Signatures()
 	if len(signatures) != 0 {
 		return signatures[0]
@@ -375,7 +375,7 @@ func (d *DiagnosticData) SignatureById(id string) *SignatureWrapper {
 	return nil
 }
 
-func (d *DiagnosticData) getSignatureByIdNullSafe(id string) *SignatureWrapper {
+func (d *DiagnosticData) signatureByIdNullSafe(id string) *SignatureWrapper {
 	for _, xmlSignature := range d.Signatures() {
 		if id == xmlSignature.Id() {
 			return xmlSignature
@@ -384,7 +384,7 @@ func (d *DiagnosticData) getSignatureByIdNullSafe(id string) *SignatureWrapper {
 	return NewSignatureWrapper(&jaxb.XmlSignature{}) // TODO improve ?
 }
 
-func (d *DiagnosticData) getTimestampByIdNullSafe(id string) *TimestampWrapper {
+func (d *DiagnosticData) timestampByIdNullSafe(id string) *TimestampWrapper {
 	timestamp := d.TimestampById(id)
 	if timestamp != nil {
 		return timestamp
@@ -659,10 +659,10 @@ func (d *DiagnosticData) EAAById(id string) *EAAWrapper {
 
 // FirstEAAId returns the first EAA id. Port of getFirstEAAId().
 func (d *DiagnosticData) FirstEAAId() string {
-	return d.getFirstEAANullSafe().Id()
+	return d.firstEAANullSafe().Id()
 }
 
-func (d *DiagnosticData) getFirstEAANullSafe() *EAAWrapper {
+func (d *DiagnosticData) firstEAANullSafe() *EAAWrapper {
 	eaas := d.EAAs()
 	if len(eaas) != 0 {
 		return eaas[0]

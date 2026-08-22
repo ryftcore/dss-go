@@ -31,24 +31,24 @@ func (b *TLSourceBuilder) Build() []*TLSource {
 		cachedResult := b.parsingResults[lotlSource.CacheKey()]
 		if cachedResult != nil && cachedResult.IsResultExist() {
 			for _, otherTSLPointerDTO := range cachedResult.TlOtherPointers() {
-				result = append(result, b.getTLSource(otherTSLPointerDTO, lotlSource))
+				result = append(result, b.tLSource(otherTSLPointerDTO, lotlSource))
 			}
 		}
 	}
 	return result
 }
 
-func (b *TLSourceBuilder) getTLSource(otherTSLPointerDTO *tslmodel.OtherTSLPointer, lotlSource *LOTLSource) *TLSource {
+func (b *TLSourceBuilder) tLSource(otherTSLPointerDTO *tslmodel.OtherTSLPointer, lotlSource *LOTLSource) *TLSource {
 	tlSource := NewTLSource()
 	tlSource.SetUrl(otherTSLPointerDTO.TSLLocation())
-	tlSource.SetCertificateSource(b.getCertificateSource(otherTSLPointerDTO.SdiCertificates()))
+	tlSource.SetCertificateSource(b.certificateSource(otherTSLPointerDTO.SdiCertificates()))
 	tlSource.SetTrustServiceProviderPredicate(lotlSource.TrustServiceProviderPredicate())
 	tlSource.SetTrustServicePredicate(lotlSource.TrustServicePredicate())
 	tlSource.SetTLVersions(lotlSource.TLVersions())
 	return tlSource
 }
 
-func (b *TLSourceBuilder) getCertificateSource(certificates []*model.CertificateToken) spi.CertificateSource {
+func (b *TLSourceBuilder) certificateSource(certificates []*model.CertificateToken) spi.CertificateSource {
 	certificateSource := spi.NewCommonCertificateSource()
 	for _, certificate := range certificates {
 		certificateSource.AddCertificate(certificate)

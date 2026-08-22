@@ -23,10 +23,10 @@ func NewPivotProcessingResultFromCacheAccessBuilder(cacheAccessByKey *TLCacheAcc
 func (b *PivotProcessingResultFromCacheAccessBuilder) Build() *PivotProcessingResult {
 	parsingCacheEntry, _ := b.cacheAccessByKey.GetParsingReadOnlyResult().(*TLParsingCacheDTO)
 	xmlLotlPointer := ParsingUtilsXMLLOTLPointer(parsingCacheEntry)
-	return NewPivotProcessingResult(b.getDocument(), b.getCertificateSource(xmlLotlPointer), b.getLotlLocation(xmlLotlPointer))
+	return NewPivotProcessingResult(b.document(), b.certificateSource(xmlLotlPointer), b.lotlLocation(xmlLotlPointer))
 }
 
-func (b *PivotProcessingResultFromCacheAccessBuilder) getDocument() model.DSSDocument {
+func (b *PivotProcessingResultFromCacheAccessBuilder) document() model.DSSDocument {
 	downloadResult := b.cacheAccessByKey.GetDownloadReadOnlyResult()
 	if downloadResult != nil && downloadResult.IsResultExist() {
 		return downloadResult.Document()
@@ -34,14 +34,14 @@ func (b *PivotProcessingResultFromCacheAccessBuilder) getDocument() model.DSSDoc
 	return nil
 }
 
-func (b *PivotProcessingResultFromCacheAccessBuilder) getCertificateSource(xmlLotlPointer *tslmodel.OtherTSLPointer) spi.CertificateSource {
+func (b *PivotProcessingResultFromCacheAccessBuilder) certificateSource(xmlLotlPointer *tslmodel.OtherTSLPointer) spi.CertificateSource {
 	if xmlLotlPointer != nil {
 		return ParsingUtilsLOTLAnnouncedCertificateSource(xmlLotlPointer)
 	}
 	return nil
 }
 
-func (b *PivotProcessingResultFromCacheAccessBuilder) getLotlLocation(xmlLotlPointer *tslmodel.OtherTSLPointer) string {
+func (b *PivotProcessingResultFromCacheAccessBuilder) lotlLocation(xmlLotlPointer *tslmodel.OtherTSLPointer) string {
 	if xmlLotlPointer != nil {
 		return xmlLotlPointer.TSLLocation()
 	}

@@ -38,11 +38,11 @@ func parseJSONObject(r io.Reader) (jsonObject, error) {
 	return jsonObject(obj), nil
 }
 
-// getAsObject gets a value of the header name as a JSON object. If not
+// asObject gets a value of the header name as a JSON object. If not
 // present, or not able to convert, returns nil. Ports
 // JsonObjectWrapper#getAsObject; slf4j warnings are dropped throughout,
 // per PORTING.md.
-func (o jsonObject) getAsObject(name string) jsonObject {
+func (o jsonObject) asObject(name string) jsonObject {
 	v, ok := o[name]
 	if !ok {
 		return nil
@@ -54,13 +54,13 @@ func (o jsonObject) getAsObject(name string) jsonObject {
 	return jsonObject(m)
 }
 
-// getAsString gets a value of the header name as a string. If not present,
+// asString gets a value of the header name as a string. If not present,
 // or not able to convert, returns "" - the Go zero value stands in for
 // Java's null return, matching every caller in this package, whose
 // underlying model fields (dss/model/policy.CryptographicSuiteMetadata et
 // al.) are plain (non-pointer) strings with the same "" empty/unset
 // default. Ports JsonObjectWrapper#getAsString.
-func (o jsonObject) getAsString(name string) string {
+func (o jsonObject) asString(name string) string {
 	v, ok := o[name]
 	if !ok {
 		return ""
@@ -72,13 +72,13 @@ func (o jsonObject) getAsString(name string) string {
 	return s
 }
 
-// getAsNumber gets a value of the header name as a float64 (encoding/json's
+// asNumber gets a value of the header name as a float64 (encoding/json's
 // decoding target for every JSON number) and whether it was present and of
 // the expected type. Ports JsonObjectWrapper#getAsNumber, whose null return
 // this package's only caller (buildParameter, via toInteger) distinguishes
 // from a present value - hence the explicit ok return instead of a
 // zero-value sentinel.
-func (o jsonObject) getAsNumber(name string) (float64, bool) {
+func (o jsonObject) asNumber(name string) (float64, bool) {
 	v, ok := o[name]
 	if !ok {
 		return 0, false
@@ -90,11 +90,11 @@ func (o jsonObject) getAsNumber(name string) (float64, bool) {
 	return n, true
 }
 
-// getAsObjectList gets a value of the header name as a list of JSON
+// asObjectList gets a value of the header name as a list of JSON
 // objects. If not present, or not able to convert, returns nil (ranges
 // identically to Java's Collections.emptyList()). Ports
 // JsonObjectWrapper#getAsObjectList.
-func (o jsonObject) getAsObjectList(name string) []jsonObject {
+func (o jsonObject) asObjectList(name string) []jsonObject {
 	v, ok := o[name]
 	if !ok {
 		return nil
@@ -114,11 +114,11 @@ func (o jsonObject) getAsObjectList(name string) []jsonObject {
 	return result
 }
 
-// getAsStringList gets a value of the header name as a list of strings. If
+// asStringList gets a value of the header name as a list of strings. If
 // not present, or not able to convert, returns nil (ranges identically to
 // Java's Collections.emptyList()). Ports
 // JsonObjectWrapper#getAsStringList.
-func (o jsonObject) getAsStringList(name string) []string {
+func (o jsonObject) asStringList(name string) []string {
 	v, ok := o[name]
 	if !ok {
 		return nil

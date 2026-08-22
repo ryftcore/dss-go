@@ -108,7 +108,7 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 			var tlInfos []*tslmodel.TLInfo
 			currentTLSources := b.extractTLSources(lotlParsingResult)
 			for _, tlSource := range currentTLSources {
-				otherTSLPointer := b.getOtherTSLPointer(lotlParsingResult.TlOtherPointers(), tlSource.Url())
+				otherTSLPointer := b.otherTSLPointer(lotlParsingResult.TlOtherPointers(), tlSource.Url())
 				tlInfos = append(tlInfos, b.buildTLInfoWithParent(tlSource, &lotlInfo, otherTSLPointer))
 			}
 			lotlInfo.SetTlInfos(tlInfos)
@@ -116,14 +116,14 @@ func (b *TLValidationJobSummaryBuilder) Build() *tslmodel.TLValidationJobSummary
 			if lotlSource.IsPivotSupport() {
 				var pivotInfos []*tslmodel.PivotInfo
 
-				currentCertificates := b.getLOTLKeystoreCertificates(lotlSource)
+				currentCertificates := b.lOTLKeystoreCertificates(lotlSource)
 
 				pivotSources := b.extractPivotSources(lotlParsingResult)
 				for _, pivotSource := range pivotSources {
 					pivotParsingCacheDTO := b.readOnlyCacheAccess.GetParsingInfoRecordTyped(pivotSource.CacheKey())
-					pivotCertificateTokens := b.getPivotCertificateTokens(pivotParsingCacheDTO)
-					certificateChangesMap := b.getCertificateChangesMap(pivotCertificateTokens, currentCertificates)
-					associatedLOTLLocation := b.getAssociatedLOTLLocation(pivotParsingCacheDTO)
+					pivotCertificateTokens := b.pivotCertificateTokens(pivotParsingCacheDTO)
+					certificateChangesMap := b.certificateChangesMap(pivotCertificateTokens, currentCertificates)
+					associatedLOTLLocation := b.associatedLOTLLocation(pivotParsingCacheDTO)
 					pivotInfos = append(pivotInfos, b.buildPivotInfo(pivotSource, certificateChangesMap, associatedLOTLLocation))
 
 					currentCertificates = pivotCertificateTokens
@@ -179,7 +179,7 @@ func (b *TLValidationJobSummaryBuilder) buildPivotInfo(pivotSource *LOTLSource, 
 		certificateChangesMap, associatedLOTLLocation)
 }
 
-func (b *TLValidationJobSummaryBuilder) getOtherTSLPointer(tlOtherPointers []*tslmodel.OtherTSLPointer, tslPointerLocation string) *tslmodel.OtherTSLPointer {
+func (b *TLValidationJobSummaryBuilder) otherTSLPointer(tlOtherPointers []*tslmodel.OtherTSLPointer, tslPointerLocation string) *tslmodel.OtherTSLPointer {
 	for _, otherTSLPointer := range tlOtherPointers {
 		if tslPointerLocation == otherTSLPointer.TSLLocation() {
 			return otherTSLPointer
@@ -200,7 +200,7 @@ func (b *TLValidationJobSummaryBuilder) extractTLSources(lotlParsingResult *TLPa
 	return result
 }
 
-func (b *TLValidationJobSummaryBuilder) getLOTLKeystoreCertificates(lotlSource *LOTLSource) []*model.CertificateToken {
+func (b *TLValidationJobSummaryBuilder) lOTLKeystoreCertificates(lotlSource *LOTLSource) []*model.CertificateToken {
 	certificateSource := lotlSource.CertificateSource()
 	if certificateSource != nil {
 		return certificateSource.Certificates()
@@ -220,7 +220,7 @@ func (b *TLValidationJobSummaryBuilder) extractPivotSources(lotlParsingResult *T
 	return utils.ReverseList(result)
 }
 
-func (b *TLValidationJobSummaryBuilder) getPivotCertificateTokens(parsingCacheDTO *TLParsingCacheDTO) []*model.CertificateToken {
+func (b *TLValidationJobSummaryBuilder) pivotCertificateTokens(parsingCacheDTO *TLParsingCacheDTO) []*model.CertificateToken {
 	lotlOtherPointers := parsingCacheDTO.LotlOtherPointers()
 	if len(lotlOtherPointers) == 1 {
 		return lotlOtherPointers[0].SdiCertificates()
@@ -228,7 +228,7 @@ func (b *TLValidationJobSummaryBuilder) getPivotCertificateTokens(parsingCacheDT
 	return nil
 }
 
-func (b *TLValidationJobSummaryBuilder) getCertificateChangesMap(pivotSourceCertificates, currentCertificates []*model.CertificateToken) map[*model.CertificateToken]tslmodel.CertificatePivotStatus {
+func (b *TLValidationJobSummaryBuilder) certificateChangesMap(pivotSourceCertificates, currentCertificates []*model.CertificateToken) map[*model.CertificateToken]tslmodel.CertificatePivotStatus {
 	certificateChangesMap := make(map[*model.CertificateToken]tslmodel.CertificatePivotStatus)
 
 	var commonCertificates []*model.CertificateToken
@@ -260,7 +260,7 @@ func (b *TLValidationJobSummaryBuilder) getCertificateChangesMap(pivotSourceCert
 	return certificateChangesMap
 }
 
-func (b *TLValidationJobSummaryBuilder) getAssociatedLOTLLocation(parsingCacheDTO *TLParsingCacheDTO) string {
+func (b *TLValidationJobSummaryBuilder) associatedLOTLLocation(parsingCacheDTO *TLParsingCacheDTO) string {
 	xmllotlPointer := ParsingUtilsXMLLOTLPointer(parsingCacheDTO)
 	if xmllotlPointer != nil {
 		return xmllotlPointer.TSLLocation()

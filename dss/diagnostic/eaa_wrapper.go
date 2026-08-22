@@ -67,7 +67,7 @@ func (w *EAAWrapper) EAADocumentType() string {
 // CurrentBasicSignature is the AbstractTokenProxy override. Port of
 // getCurrentBasicSignature().
 func (w *EAAWrapper) CurrentBasicSignature() *jaxb.XmlBasicSignature {
-	eaaSignature := w.getEAASignature()
+	eaaSignature := w.eAASignature()
 	if eaaSignature != nil {
 		return eaaSignature.CurrentBasicSignature()
 	}
@@ -77,7 +77,7 @@ func (w *EAAWrapper) CurrentBasicSignature() *jaxb.XmlBasicSignature {
 // CurrentCertificateChain is the AbstractTokenProxy override. Port of
 // getCurrentCertificateChain().
 func (w *EAAWrapper) CurrentCertificateChain() []*jaxb.XmlChainItem {
-	eaaSignature := w.getEAASignature()
+	eaaSignature := w.eAASignature()
 	if eaaSignature != nil {
 		return eaaSignature.CurrentCertificateChain()
 	}
@@ -87,14 +87,14 @@ func (w *EAAWrapper) CurrentCertificateChain() []*jaxb.XmlChainItem {
 // CurrentSigningCertificate is the AbstractTokenProxy override. Port of
 // getCurrentSigningCertificate().
 func (w *EAAWrapper) CurrentSigningCertificate() *jaxb.XmlSigningCertificate {
-	eaaSignature := w.getEAASignature()
+	eaaSignature := w.eAASignature()
 	if eaaSignature != nil {
 		return eaaSignature.CurrentSigningCertificate()
 	}
 	return nil
 }
 
-func (w *EAAWrapper) getEAASignature() *SignatureWrapper {
+func (w *EAAWrapper) eAASignature() *SignatureWrapper {
 	eaaSignatures := w.EAASignatures()
 	if len(eaaSignatures) == 1 {
 		return eaaSignatures[0]

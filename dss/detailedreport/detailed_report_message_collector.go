@@ -226,7 +226,7 @@ func (c *DetailedReportMessageCollector) collectQualificationMessages(t messageT
 	if eaaById := c.detailedReport.XmlEAAById(tokenId); eaaById != nil {
 		return c.collectEAAQualification(t, eaaById)
 	}
-	if certificateById := c.getCertificateQualificationProcess(tokenId); certificateById != nil {
+	if certificateById := c.certificateQualificationProcess(tokenId); certificateById != nil {
 		return c.collectCertificateQualification(t, certificateById)
 	}
 	return []Message{}
@@ -239,16 +239,16 @@ func (c *DetailedReportMessageCollector) collectSignatureValidation(t messageTyp
 	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessBasicSignature != nil &&
 		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessBasicSignature.Conclusion)) {
 		if xmlSignature.ValidationProcessBasicSignature != nil {
-			addMessages(&result, getMessages(t, xmlSignature.ValidationProcessBasicSignature.Conclusion))
+			addMessages(&result, messages(t, xmlSignature.ValidationProcessBasicSignature.Conclusion))
 		}
 	}
 	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessLongTermData != nil &&
 		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessLongTermData.Conclusion)) {
 		if xmlSignature.ValidationProcessLongTermData != nil {
-			addMessages(&result, getMessages(t, xmlSignature.ValidationProcessLongTermData.Conclusion))
+			addMessages(&result, messages(t, xmlSignature.ValidationProcessLongTermData.Conclusion))
 		}
 	}
-	addMessages(&result, getMessages(t, highestConclusion.Conclusion))
+	addMessages(&result, messages(t, highestConclusion.Conclusion))
 	return result
 }
 
@@ -260,11 +260,11 @@ func (c *DetailedReportMessageCollector) collectTimestampValidation(t messageTyp
 	if timestampArchivalData == nil || enumerations.MessageTypeError != t ||
 		enumerations.IndicationPassed != indicationOf(timestampArchivalData.Conclusion) {
 		if timestampBasic != nil {
-			addMessages(&result, getMessages(t, timestampBasic.Conclusion))
+			addMessages(&result, messages(t, timestampBasic.Conclusion))
 		}
 	}
 	if timestampArchivalData != nil {
-		addMessages(&result, getMessages(t, timestampArchivalData.Conclusion))
+		addMessages(&result, messages(t, timestampArchivalData.Conclusion))
 	}
 	return result
 }
@@ -274,7 +274,7 @@ func (c *DetailedReportMessageCollector) collectEvidenceRecordValidation(t messa
 
 	validationProcessEvidenceRecord := xmlEvidenceRecord.ValidationProcessEvidenceRecord
 	if validationProcessEvidenceRecord != nil {
-		addMessages(&result, getMessages(t, validationProcessEvidenceRecord.Conclusion))
+		addMessages(&result, messages(t, validationProcessEvidenceRecord.Conclusion))
 	}
 	return result
 }
@@ -284,33 +284,33 @@ func (c *DetailedReportMessageCollector) collectEAAValidation(t messageType, xml
 
 	validationProcessEAA := xmlEAA.ValidationProcessEAA
 	if validationProcessEAA != nil {
-		addMessages(&result, getMessages(t, validationProcessEAA.Conclusion))
+		addMessages(&result, messages(t, validationProcessEAA.Conclusion))
 	}
 	return result
 }
 
 func (c *DetailedReportMessageCollector) collectTLAnalysisValidation(t messageType, tlAnalysisById *jaxb.XmlTLAnalysis) []Message {
 	result := []Message{}
-	addMessages(&result, getMessages(t, tlAnalysisById.Conclusion))
+	addMessages(&result, messages(t, tlAnalysisById.Conclusion))
 	return result
 }
 
 func (c *DetailedReportMessageCollector) collectBBBValidation(t messageType, bbbById *jaxb.XmlBasicBuildingBlocks) []Message {
 	result := []Message{}
-	addMessages(&result, getMessages(t, bbbById.Conclusion))
+	addMessages(&result, messages(t, bbbById.Conclusion))
 	return result
 }
 
 func (c *DetailedReportMessageCollector) collectXmlConclusionValidation(t messageType, xmlConclusion *jaxb.XmlConclusion) []Message {
 	result := []Message{}
-	addMessages(&result, getMessages(t, xmlConclusion))
+	addMessages(&result, messages(t, xmlConclusion))
 	return result
 }
 
 func (c *DetailedReportMessageCollector) collectSignatureQualification(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
 	result := []Message{}
 	if v := xmlSignature.ValidationSignatureQualification; v != nil {
-		addMessages(&result, getMessages(t, v.Conclusion))
+		addMessages(&result, messages(t, v.Conclusion))
 	}
 	return result
 }
@@ -318,7 +318,7 @@ func (c *DetailedReportMessageCollector) collectSignatureQualification(t message
 func (c *DetailedReportMessageCollector) collectTimestampQualification(t messageType, xmlTimestamp *jaxb.XmlTimestamp) []Message {
 	result := []Message{}
 	if v := xmlTimestamp.ValidationTimestampQualification; v != nil {
-		addMessages(&result, getMessages(t, v.Conclusion))
+		addMessages(&result, messages(t, v.Conclusion))
 	}
 	return result
 }
@@ -326,7 +326,7 @@ func (c *DetailedReportMessageCollector) collectTimestampQualification(t message
 func (c *DetailedReportMessageCollector) collectEAAQualification(t messageType, xmlEAA *jaxb.XmlEAA) []Message {
 	result := []Message{}
 	if v := xmlEAA.ValidationEAAQualification; v != nil {
-		addMessages(&result, getMessages(t, v.Conclusion))
+		addMessages(&result, messages(t, v.Conclusion))
 	}
 	return result
 }
@@ -352,14 +352,14 @@ func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValida
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtIssuanceTime(t messageType, certificateId string) []Message {
-	certificateQualificationProcess := c.getCertificateQualificationProcess(certificateId)
+	certificateQualificationProcess := c.certificateQualificationProcess(certificateId)
 	if certificateQualificationProcess != nil {
 		return c.collectCertificateQualificationAtIssuanceTimeFrom(t, certificateQualificationProcess)
 	}
 	return []Message{}
 }
 
-func (c *DetailedReportMessageCollector) getCertificateQualificationProcess(certificateId string) []*jaxb.XmlValidationCertificateQualification {
+func (c *DetailedReportMessageCollector) certificateQualificationProcess(certificateId string) []*jaxb.XmlValidationCertificateQualification {
 	xmlCertificate := c.detailedReport.XmlCertificateById(certificateId)
 	if xmlCertificate != nil && xmlCertificate.CertificateQualificationProcess != nil {
 		return xmlCertificate.CertificateQualificationProcess.ValidationCertificateQualification
@@ -379,7 +379,7 @@ func (c *DetailedReportMessageCollector) getCertificateQualificationProcess(cert
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateQualificationAtValidationTime(t messageType, certificateId string) []Message {
-	certificateQualificationProcess := c.getCertificateQualificationProcess(certificateId)
+	certificateQualificationProcess := c.certificateQualificationProcess(certificateId)
 	if certificateQualificationProcess != nil {
 		return c.collectCertificateQualificationAtValidationTimeFrom(t, certificateQualificationProcess)
 	}
@@ -390,7 +390,7 @@ func (c *DetailedReportMessageCollector) collectCertificateQualificationAtTime(t
 	if certificateQualificationProcess != nil {
 		for _, cq := range certificateQualificationProcess {
 			if validationTime == validationTimeOf(cq.ValidationTime) {
-				return getMessages(t, cq.Conclusion)
+				return messages(t, cq.Conclusion)
 			}
 		}
 	}
@@ -422,22 +422,22 @@ func (c *DetailedReportMessageCollector) collectQWACValidationDetails(t messageT
 	}
 
 	if qwacProcess != nil {
-		return getMessages(t, qwacProcess.Conclusion)
+		return messages(t, qwacProcess.Conclusion)
 	}
 	return []Message{}
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtIssuanceTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	certificateApprovalStatusProcess := c.getCertificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
+	certificateApprovalStatusProcess := c.certificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
 	return c.collectCertificateApprovalStatusAtIssuanceTimeFrom(t, certificateApprovalStatusProcess)
 }
 
 func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtValidationTime(t messageType, certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []Message {
-	certificateApprovalStatusProcess := c.getCertificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
+	certificateApprovalStatusProcess := c.certificateApprovalStatusProcess(certificateId, certificateApprovalStatus)
 	return c.collectCertificateApprovalStatusAtValidationTimeFrom(t, certificateApprovalStatusProcess)
 }
 
-func (c *DetailedReportMessageCollector) getCertificateApprovalStatusProcess(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []*jaxb.XmlValidationCertificateApprovalStatus {
+func (c *DetailedReportMessageCollector) certificateApprovalStatusProcess(certificateId string, certificateApprovalStatus enumerations.CertificateApprovalStatus) []*jaxb.XmlValidationCertificateApprovalStatus {
 	result := []*jaxb.XmlValidationCertificateApprovalStatus{}
 
 	xmlCertificate := c.detailedReport.XmlCertificateById(certificateId)
@@ -469,14 +469,14 @@ func (c *DetailedReportMessageCollector) collectCertificateApprovalStatusAtTime(
 	if certificateApprovalStatusProcesses != nil {
 		for _, cas := range certificateApprovalStatusProcesses {
 			if validationTime == validationTimeOf(cas.ValidationTime) {
-				return getMessages(t, cas.Conclusion)
+				return messages(t, cas.Conclusion)
 			}
 		}
 	}
 	return []Message{}
 }
 
-func getMessages(t messageType, conclusion *jaxb.XmlConclusion) []Message {
+func messages(t messageType, conclusion *jaxb.XmlConclusion) []Message {
 	if conclusion != nil {
 		switch t {
 		case enumerations.MessageTypeError:

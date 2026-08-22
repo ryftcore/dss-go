@@ -167,13 +167,13 @@ func (s *TrustedListCertificateSourceSynchronizer) addCertificatesFromTLs(trustP
 		if !utils.IsCollectionNotEmpty(trustServiceProviders) {
 			continue
 		}
-		trustAnchorValidityPredicate := s.getTrustAnchorValidityPredicate(tlInfo, relatedLOTL)
+		trustAnchorValidityPredicate := s.trustAnchorValidityPredicate(tlInfo, relatedLOTL)
 		for _, original := range trustServiceProviders {
-			detached := s.getDetached(original)
+			detached := s.detached(original)
 			for _, trustService := range original.Services() {
 				statusAndInformationExtensions := trustService.StatusAndInformationExtensions()
-				trustProperties := s.getTrustProperties(relatedLOTL, tlInfo, detached, statusAndInformationExtensions)
-				certificateTrustTimes := s.getCertificateTrustTimes(statusAndInformationExtensions, trustAnchorValidityPredicate)
+				trustProperties := s.trustProperties(relatedLOTL, tlInfo, detached, statusAndInformationExtensions)
+				certificateTrustTimes := s.certificateTrustTimes(statusAndInformationExtensions, trustAnchorValidityPredicate)
 				for _, certificate := range trustService.Certificates() {
 					s.addCertificate(trustPropertiesByCerts, trustTimeByCerts, certificate, trustProperties, certificateTrustTimes)
 				}
@@ -200,7 +200,7 @@ func (s *TrustedListCertificateSourceSynchronizer) addCertificate(trustPropertie
 	trustTimeByCerts.put(certificate, certificateTrustTimeList)
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) getDetached(original *tslmodel.TrustServiceProvider) *tslmodel.TrustServiceProvider {
+func (s *TrustedListCertificateSourceSynchronizer) detached(original *tslmodel.TrustServiceProvider) *tslmodel.TrustServiceProvider {
 	builder := NewTrustServiceProviderBuilderFromOriginal(original)
 	builder.SetServices(nil)
 	return builder.Build()
@@ -227,7 +227,7 @@ func (s *TrustedListCertificateSourceSynchronizer) syncTLInfosCache(tlInfos []*t
 	}
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) getTrustProperties(relatedLOTL *tslmodel.LOTLInfo, tlInfo *tslmodel.TLInfo, detached *tslmodel.TrustServiceProvider,
+func (s *TrustedListCertificateSourceSynchronizer) trustProperties(relatedLOTL *tslmodel.LOTLInfo, tlInfo *tslmodel.TLInfo, detached *tslmodel.TrustServiceProvider,
 	statusAndInformationExtensions *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions]) *tslmodel.TrustProperties {
 	if relatedLOTL != nil {
 		return tslmodel.NewTrustPropertiesWithLOTL(relatedLOTL, tlInfo, detached, statusAndInformationExtensions)
@@ -235,7 +235,7 @@ func (s *TrustedListCertificateSourceSynchronizer) getTrustProperties(relatedLOT
 	return tslmodel.NewTrustProperties(tlInfo, detached, statusAndInformationExtensions)
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) getCertificateTrustTimes(
+func (s *TrustedListCertificateSourceSynchronizer) certificateTrustTimes(
 	statusAndInformationExtensions *timedependent.TimeDependentValues[*tslmodel.TrustServiceStatusAndInformationExtensions],
 	trustAnchorValidityPredicate TrustAnchorPeriodPredicate) []*tslmodel.CertificateTrustTime {
 	if trustAnchorValidityPredicate == nil {
@@ -255,15 +255,15 @@ func (s *TrustedListCertificateSourceSynchronizer) getCertificateTrustTimes(
 	return result
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) getTrustAnchorValidityPredicate(tlInfo *tslmodel.TLInfo, relatedLOTLInfo *tslmodel.LOTLInfo) TrustAnchorPeriodPredicate {
-	tlSource := s.getRelatedTLSource(tlInfo, relatedLOTLInfo)
+func (s *TrustedListCertificateSourceSynchronizer) trustAnchorValidityPredicate(tlInfo *tslmodel.TLInfo, relatedLOTLInfo *tslmodel.LOTLInfo) TrustAnchorPeriodPredicate {
+	tlSource := s.relatedTLSource(tlInfo, relatedLOTLInfo)
 	if tlSource != nil {
 		return tlSource.TrustAnchorValidityPredicate()
 	}
 	return nil
 }
 
-func (s *TrustedListCertificateSourceSynchronizer) getRelatedTLSource(tlInfo *tslmodel.TLInfo, relatedLOTLInfo *tslmodel.LOTLInfo) *TLSource {
+func (s *TrustedListCertificateSourceSynchronizer) relatedTLSource(tlInfo *tslmodel.TLInfo, relatedLOTLInfo *tslmodel.LOTLInfo) *TLSource {
 	if relatedLOTLInfo != nil {
 		for _, lotlSource := range s.lotlSources {
 			if lotlSource.Url() == relatedLOTLInfo.Url() {
@@ -284,7 +284,7 @@ func (s *TrustedListCertificateSourceSynchronizer) getRelatedTLSource(tlInfo *ts
 // DEVIATION: model/tsl.TrustProperties exposes no Equals method, so this compares by pointer
 // identity rather than Java's List#contains (which delegates to TrustProperties#equals()).
 // Within one addCertificatesFromTLs pass the same *TrustProperties instance is reused for every
-// certificate of one trust service (see getTrustProperties's single call site above the
+// certificate of one trust service (see trustProperties's single call site above the
 // certificates loop), so pointer identity still dedups the common case exactly; it only
 // under-dedups two structurally-equal but separately-constructed TrustProperties values, which
 // addCertificatesFromTLs never produces for the same certificate within one summary.

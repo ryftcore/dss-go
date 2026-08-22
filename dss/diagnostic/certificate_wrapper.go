@@ -152,42 +152,42 @@ func (w *CertificateWrapper) CertificateExtensionsOids() []string {
 // SubjectAlternativeNames returns subject alternative names. Port of
 // getSubjectAlternativeNames().
 func (w *CertificateWrapper) SubjectAlternativeNames() []*jaxb.XmlGeneralName {
-	subjectAlternativeNames := w.getXmlSubjectAlternativeNames()
+	subjectAlternativeNames := w.xmlSubjectAlternativeNames()
 	if subjectAlternativeNames != nil {
 		return subjectAlternativeNames.SubjectAlternativeName
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlSubjectAlternativeNames() *jaxb.XmlSubjectAlternativeNames {
+func (w *CertificateWrapper) xmlSubjectAlternativeNames() *jaxb.XmlSubjectAlternativeNames {
 	return w.CertificateExtensionForOid[*jaxb.XmlSubjectAlternativeNames](enumerations.CertificateExtensionEnumSubjectAlternativeName.OID())
 }
 
 // IsCA reports whether the certificate defines BasicConstraints.cA extension set to TRUE. Port
 // of isCA().
 func (w *CertificateWrapper) IsCA() bool {
-	basicConstraints := w.getXmlBasicConstraints()
+	basicConstraints := w.xmlBasicConstraints()
 	return basicConstraints != nil && basicConstraints.CA
 }
 
 // PathLenConstraint returns value of BasicConstraints.PathLenConstraint if present and
 // BasicConstraints.cA is set to true. Port of getPathLenConstraint().
 func (w *CertificateWrapper) PathLenConstraint() int {
-	basicConstraints := w.getXmlBasicConstraints()
+	basicConstraints := w.xmlBasicConstraints()
 	if basicConstraints != nil && basicConstraints.CA && basicConstraints.PathLenConstraint != nil {
 		return *basicConstraints.PathLenConstraint
 	}
 	return -1
 }
 
-func (w *CertificateWrapper) getXmlBasicConstraints() *jaxb.XmlBasicConstraints {
+func (w *CertificateWrapper) xmlBasicConstraints() *jaxb.XmlBasicConstraints {
 	return w.CertificateExtensionForOid[*jaxb.XmlBasicConstraints](enumerations.CertificateExtensionEnumBasicConstraints.OID())
 }
 
 // RequireExplicitPolicy returns value of the requireExplicitPolicy field of
 // policyConstraints certificate extension. Port of getRequireExplicitPolicy().
 func (w *CertificateWrapper) RequireExplicitPolicy() int {
-	policyConstraints := w.getXmlPolicyConstraints()
+	policyConstraints := w.xmlPolicyConstraints()
 	if policyConstraints != nil && policyConstraints.RequireExplicitPolicy != nil {
 		return *policyConstraints.RequireExplicitPolicy
 	}
@@ -197,35 +197,35 @@ func (w *CertificateWrapper) RequireExplicitPolicy() int {
 // InhibitPolicyMapping returns value of the inhibitPolicyMapping field of
 // policyConstraints certificate extension. Port of getInhibitPolicyMapping().
 func (w *CertificateWrapper) InhibitPolicyMapping() int {
-	policyConstraints := w.getXmlPolicyConstraints()
+	policyConstraints := w.xmlPolicyConstraints()
 	if policyConstraints != nil && policyConstraints.InhibitPolicyMapping != nil {
 		return *policyConstraints.InhibitPolicyMapping
 	}
 	return -1
 }
 
-func (w *CertificateWrapper) getXmlPolicyConstraints() *jaxb.XmlPolicyConstraints {
+func (w *CertificateWrapper) xmlPolicyConstraints() *jaxb.XmlPolicyConstraints {
 	return w.CertificateExtensionForOid[*jaxb.XmlPolicyConstraints](enumerations.CertificateExtensionEnumPolicyConstraints.OID())
 }
 
 // InhibitAnyPolicy returns value of the inhibitAnyPolicy certificate extension's value.
 // Port of getInhibitAnyPolicy().
 func (w *CertificateWrapper) InhibitAnyPolicy() int {
-	inhibitAnyPolicy := w.getXmlInhibitAnyPolicy()
+	inhibitAnyPolicy := w.xmlInhibitAnyPolicy()
 	if inhibitAnyPolicy != nil && inhibitAnyPolicy.Value != nil {
 		return *inhibitAnyPolicy.Value
 	}
 	return -1
 }
 
-func (w *CertificateWrapper) getXmlInhibitAnyPolicy() *jaxb.XmlInhibitAnyPolicy {
+func (w *CertificateWrapper) xmlInhibitAnyPolicy() *jaxb.XmlInhibitAnyPolicy {
 	return w.CertificateExtensionForOid[*jaxb.XmlInhibitAnyPolicy](enumerations.CertificateExtensionEnumInhibitAnyPolicy.OID())
 }
 
 // PermittedSubtrees returns value of the permittedSubtrees field of nameConstraints
 // certificate extension, when present. Port of getPermittedSubtrees().
 func (w *CertificateWrapper) PermittedSubtrees() []*jaxb.XmlGeneralSubtree {
-	nameConstraints := w.getXmlNameConstraints()
+	nameConstraints := w.xmlNameConstraints()
 	if nameConstraints != nil {
 		return nameConstraints.PermittedSubtree
 	}
@@ -235,20 +235,20 @@ func (w *CertificateWrapper) PermittedSubtrees() []*jaxb.XmlGeneralSubtree {
 // ExcludedSubtrees returns value of the excludedSubtrees field of nameConstraints
 // certificate extension, when present. Port of getExcludedSubtrees().
 func (w *CertificateWrapper) ExcludedSubtrees() []*jaxb.XmlGeneralSubtree {
-	nameConstraints := w.getXmlNameConstraints()
+	nameConstraints := w.xmlNameConstraints()
 	if nameConstraints != nil {
 		return nameConstraints.ExcludedSubtree
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlNameConstraints() *jaxb.XmlNameConstraints {
+func (w *CertificateWrapper) xmlNameConstraints() *jaxb.XmlNameConstraints {
 	return w.CertificateExtensionForOid[*jaxb.XmlNameConstraints](enumerations.CertificateExtensionEnumNameConstraints.OID())
 }
 
 // KeyUsages returns the defined key-usages for the certificate. Port of getKeyUsages().
 func (w *CertificateWrapper) KeyUsages() []enumerations.KeyUsageBit {
-	keyUsage := w.getXmlKeyUsage()
+	keyUsage := w.xmlKeyUsage()
 	if keyUsage == nil {
 		return nil
 	}
@@ -259,7 +259,7 @@ func (w *CertificateWrapper) KeyUsages() []enumerations.KeyUsageBit {
 	return result
 }
 
-func (w *CertificateWrapper) getXmlKeyUsage() *jaxb.XmlKeyUsages {
+func (w *CertificateWrapper) xmlKeyUsage() *jaxb.XmlKeyUsages {
 	return w.CertificateExtensionForOid[*jaxb.XmlKeyUsages](enumerations.CertificateExtensionEnumKeyUsage.OID())
 }
 
@@ -306,18 +306,18 @@ func (w *CertificateWrapper) RevocationDataById(revocationId string) *Certificat
 // IsIdPkixOcspNoCheck reports whether the certificate has id-pkix-ocsp-no-check attribute.
 // Port of isIdPkixOcspNoCheck().
 func (w *CertificateWrapper) IsIdPkixOcspNoCheck() bool {
-	ocspNoCheck := w.getXmlIdPkixOcspNoCheck()
+	ocspNoCheck := w.xmlIdPkixOcspNoCheck()
 	return ocspNoCheck != nil && ocspNoCheck.Present != nil && *ocspNoCheck.Present
 }
 
-func (w *CertificateWrapper) getXmlIdPkixOcspNoCheck() *jaxb.XmlIdPkixOcspNoCheck {
+func (w *CertificateWrapper) xmlIdPkixOcspNoCheck() *jaxb.XmlIdPkixOcspNoCheck {
 	return w.CertificateExtensionForOid[*jaxb.XmlIdPkixOcspNoCheck](enumerations.CertificateExtensionEnumOCSPNoCheck.OID())
 }
 
 // IsIdKpOCSPSigning checks if the certificate has an extended-key-usage "ocspSigning"
 // (1.3.6.1.5.5.7.3.9). Port of isIdKpOCSPSigning().
 func (w *CertificateWrapper) IsIdKpOCSPSigning() bool {
-	extendedKeyUsage := w.getXmlExtendedKeyUsages()
+	extendedKeyUsage := w.xmlExtendedKeyUsages()
 	if extendedKeyUsage != nil {
 		for _, xmlOID := range extendedKeyUsage.ExtendedKeyUsageOid {
 			if enumerations.ExtendedKeyUsageOCSPSigning.OID() == xmlOID.Value {
@@ -333,11 +333,11 @@ func (w *CertificateWrapper) IsIdKpOCSPSigning() bool {
 // Extensions regarding Validity Assured Certificate". Port of
 // isValAssuredShortTermCertificate().
 func (w *CertificateWrapper) IsValAssuredShortTermCertificate() bool {
-	valAssuredShortTermCertificate := w.getXmlValAssuredShortTermCertificate()
+	valAssuredShortTermCertificate := w.xmlValAssuredShortTermCertificate()
 	return valAssuredShortTermCertificate != nil && valAssuredShortTermCertificate.Present != nil && *valAssuredShortTermCertificate.Present
 }
 
-func (w *CertificateWrapper) getXmlValAssuredShortTermCertificate() *jaxb.XmlValAssuredShortTermCertificate {
+func (w *CertificateWrapper) xmlValAssuredShortTermCertificate() *jaxb.XmlValAssuredShortTermCertificate {
 	return w.CertificateExtensionForOid[*jaxb.XmlValAssuredShortTermCertificate](enumerations.CertificateExtensionEnumValidityAssuredShortTerm.OID())
 }
 
@@ -345,24 +345,24 @@ func (w *CertificateWrapper) getXmlValAssuredShortTermCertificate() *jaxb.XmlVal
 // RFC 9608 "No Revocation Available for X.509 Public Key Certificates". Port of
 // isNoRevAvail().
 func (w *CertificateWrapper) IsNoRevAvail() bool {
-	noRevAvail := w.getXmlNoRevAvail()
+	noRevAvail := w.xmlNoRevAvail()
 	return noRevAvail != nil && noRevAvail.Present != nil && *noRevAvail.Present
 }
 
-func (w *CertificateWrapper) getXmlNoRevAvail() *jaxb.XmlNoRevAvail {
+func (w *CertificateWrapper) xmlNoRevAvail() *jaxb.XmlNoRevAvail {
 	return w.CertificateExtensionForOid[*jaxb.XmlNoRevAvail](enumerations.CertificateExtensionEnumNoRevocationAvailable.OID())
 }
 
 // ExtendedKeyUsages returns a list of extended-key-usages. Port of getExtendedKeyUsages().
 func (w *CertificateWrapper) ExtendedKeyUsages() []*jaxb.XmlOID {
-	extendedKeyUsage := w.getXmlExtendedKeyUsages()
+	extendedKeyUsage := w.xmlExtendedKeyUsages()
 	if extendedKeyUsage != nil {
 		return extendedKeyUsage.ExtendedKeyUsageOid
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlExtendedKeyUsages() *jaxb.XmlExtendedKeyUsages {
+func (w *CertificateWrapper) xmlExtendedKeyUsages() *jaxb.XmlExtendedKeyUsages {
 	return w.CertificateExtensionForOid[*jaxb.XmlExtendedKeyUsages](enumerations.CertificateExtensionEnumExtendedKeyUsage.OID())
 }
 
@@ -660,34 +660,34 @@ func (w *CertificateWrapper) CertificateIssuerDN() string {
 // CRLDistributionPoints returns the CRL Distribution Points URLs. Port of
 // getCRLDistributionPoints().
 func (w *CertificateWrapper) CRLDistributionPoints() []string {
-	crlDistributionPoints := w.getXmlCRLDistributionPoints()
+	crlDistributionPoints := w.xmlCRLDistributionPoints()
 	if crlDistributionPoints != nil {
 		return crlDistributionPoints.CrlUrl
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlCRLDistributionPoints() *jaxb.XmlCRLDistributionPoints {
+func (w *CertificateWrapper) xmlCRLDistributionPoints() *jaxb.XmlCRLDistributionPoints {
 	return w.CertificateExtensionForOid[*jaxb.XmlCRLDistributionPoints](enumerations.CertificateExtensionEnumCRLDistributionPoints.OID())
 }
 
 // FreshestCRLUrls returns the Freshest CRL URLs. Port of getFreshestCRLUrls().
 func (w *CertificateWrapper) FreshestCRLUrls() []string {
-	freshestCRL := w.getXmlFreshestCRL()
+	freshestCRL := w.xmlFreshestCRL()
 	if freshestCRL != nil {
 		return freshestCRL.CrlUrl
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlFreshestCRL() *jaxb.XmlFreshestCRL {
+func (w *CertificateWrapper) xmlFreshestCRL() *jaxb.XmlFreshestCRL {
 	return w.CertificateExtensionForOid[*jaxb.XmlFreshestCRL](enumerations.CertificateExtensionEnumFreshestCRL.OID())
 }
 
 // CAIssuersAccessUrls returns the Authority Information Access URLs. Port of
 // getCAIssuersAccessUrls().
 func (w *CertificateWrapper) CAIssuersAccessUrls() []string {
-	authorityInformationAccess := w.getXmlAuthorityInformationAccess()
+	authorityInformationAccess := w.xmlAuthorityInformationAccess()
 	if authorityInformationAccess != nil {
 		return authorityInformationAccess.CaIssuersUrl
 	}
@@ -696,21 +696,21 @@ func (w *CertificateWrapper) CAIssuersAccessUrls() []string {
 
 // OCSPAccessUrls returns the OCSP Access URLs. Port of getOCSPAccessUrls().
 func (w *CertificateWrapper) OCSPAccessUrls() []string {
-	authorityInformationAccess := w.getXmlAuthorityInformationAccess()
+	authorityInformationAccess := w.xmlAuthorityInformationAccess()
 	if authorityInformationAccess != nil {
 		return authorityInformationAccess.OcspUrl
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlAuthorityInformationAccess() *jaxb.XmlAuthorityInformationAccess {
+func (w *CertificateWrapper) xmlAuthorityInformationAccess() *jaxb.XmlAuthorityInformationAccess {
 	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityInformationAccess](enumerations.CertificateExtensionEnumAuthorityInformationAccess.OID())
 }
 
 // AuthorityKeyIdentifier returns the Authority Key Identifier certificate extension's
 // value, when present. Port of getAuthorityKeyIdentifier().
 func (w *CertificateWrapper) AuthorityKeyIdentifier() []byte {
-	xmlAuthorityKeyIdentifier := w.getXmlAuthorityKeyIdentifier()
+	xmlAuthorityKeyIdentifier := w.xmlAuthorityKeyIdentifier()
 	if xmlAuthorityKeyIdentifier != nil && xmlAuthorityKeyIdentifier.KeyIdentifier != nil {
 		return []byte(*xmlAuthorityKeyIdentifier.KeyIdentifier)
 	}
@@ -722,35 +722,35 @@ func (w *CertificateWrapper) AuthorityKeyIdentifier() []byte {
 // authorityCertSerialNumber fields, when present. Port of
 // getAuthorityKeyIdentifierIssuerSerial().
 func (w *CertificateWrapper) AuthorityKeyIdentifierIssuerSerial() []byte {
-	xmlAuthorityKeyIdentifier := w.getXmlAuthorityKeyIdentifier()
+	xmlAuthorityKeyIdentifier := w.xmlAuthorityKeyIdentifier()
 	if xmlAuthorityKeyIdentifier != nil && xmlAuthorityKeyIdentifier.AuthorityCertIssuerSerial != nil {
 		return []byte(*xmlAuthorityKeyIdentifier.AuthorityCertIssuerSerial)
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlAuthorityKeyIdentifier() *jaxb.XmlAuthorityKeyIdentifier {
+func (w *CertificateWrapper) xmlAuthorityKeyIdentifier() *jaxb.XmlAuthorityKeyIdentifier {
 	return w.CertificateExtensionForOid[*jaxb.XmlAuthorityKeyIdentifier](enumerations.CertificateExtensionEnumAuthorityKeyIdentifier.OID())
 }
 
 // SubjectKeyIdentifier returns the Subject Key Identifier certificate extension's value,
 // when present. Port of getSubjectKeyIdentifier().
 func (w *CertificateWrapper) SubjectKeyIdentifier() []byte {
-	xmlSubjectKeyIdentifier := w.getXmlSubjectKeyIdentifier()
+	xmlSubjectKeyIdentifier := w.xmlSubjectKeyIdentifier()
 	if xmlSubjectKeyIdentifier != nil && xmlSubjectKeyIdentifier.Ski != nil {
 		return []byte(*xmlSubjectKeyIdentifier.Ski)
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlSubjectKeyIdentifier() *jaxb.XmlSubjectKeyIdentifier {
+func (w *CertificateWrapper) xmlSubjectKeyIdentifier() *jaxb.XmlSubjectKeyIdentifier {
 	return w.CertificateExtensionForOid[*jaxb.XmlSubjectKeyIdentifier](enumerations.CertificateExtensionEnumSubjectKeyIdentifier.OID())
 }
 
 // CpsUrls returns the certificate policies URLs. Port of getCpsUrls().
 func (w *CertificateWrapper) CpsUrls() []string {
 	var result []string
-	xmlCertificatePolicies := w.getXmlCertificatePolicies()
+	xmlCertificatePolicies := w.xmlCertificatePolicies()
 	if xmlCertificatePolicies != nil {
 		for _, xmlCertificatePolicy := range xmlCertificatePolicies.CertificatePolicy {
 			cpsUrl := xmlCertificatePolicy.CpsUrl
@@ -766,7 +766,7 @@ func (w *CertificateWrapper) CpsUrls() []string {
 // XmlCertificatePolicy extends XmlOID, ported here as XmlCertificatePolicy embedding
 // jaxb.XmlOID so its Value field is promoted directly.
 func (w *CertificateWrapper) PolicyIds() []string {
-	xmlCertificatePolicies := w.getXmlCertificatePolicies()
+	xmlCertificatePolicies := w.xmlCertificatePolicies()
 	if xmlCertificatePolicies == nil {
 		return nil
 	}
@@ -780,14 +780,14 @@ func (w *CertificateWrapper) PolicyIds() []string {
 // CertificatePolicies returns the certificate policies Ids. Port of
 // getCertificatePolicies().
 func (w *CertificateWrapper) CertificatePolicies() []*jaxb.XmlCertificatePolicy {
-	xmlCertificatePolicies := w.getXmlCertificatePolicies()
+	xmlCertificatePolicies := w.xmlCertificatePolicies()
 	if xmlCertificatePolicies != nil {
 		return xmlCertificatePolicies.CertificatePolicy
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlCertificatePolicies() *jaxb.XmlCertificatePolicies {
+func (w *CertificateWrapper) xmlCertificatePolicies() *jaxb.XmlCertificatePolicies {
 	return w.CertificateExtensionForOid[*jaxb.XmlCertificatePolicies](enumerations.CertificateExtensionEnumCertificatePolicies.OID())
 }
 
@@ -807,14 +807,14 @@ func (w *CertificateWrapper) CertificatePoliciesOids() []string {
 // IsQcCompliance reports whether the certificate is QC compliant (has id-etsi-qcs-QcCompliance
 // extension). Port of isQcCompliance().
 func (w *CertificateWrapper) IsQcCompliance() bool {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	return xmlQcStatements != nil && xmlQcStatements.QcCompliance != nil && xmlQcStatements.QcCompliance.Present
 }
 
 // IsSupportedByQSCD reports whether the certificate is supported by QSCD (has
 // id-etsi-qcs-QcSSCD extension). Port of isSupportedByQSCD().
 func (w *CertificateWrapper) IsSupportedByQSCD() bool {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	return xmlQcStatements != nil && xmlQcStatements.QcSSCD != nil && xmlQcStatements.QcSSCD.Present
 }
 
@@ -822,7 +822,7 @@ func (w *CertificateWrapper) IsSupportedByQSCD() bool {
 // getQcTypes().
 func (w *CertificateWrapper) QcTypes() []enumerations.QCType {
 	var result []enumerations.QCType
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		for _, oid := range xmlQcStatements.QcTypes.All() {
 			result = append(result, enumerations.QCTypeFromOID(oid.Value))
@@ -834,7 +834,7 @@ func (w *CertificateWrapper) QcTypes() []enumerations.QCType {
 // QcLegislationCountryCodes returns a list of QCLegislation Country Codes (present inside
 // id-etsi-qcs-QcCClegislation extension). Port of getQcLegislationCountryCodes().
 func (w *CertificateWrapper) QcLegislationCountryCodes() []string {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return xmlQcStatements.QcCClegislation.All()
 	}
@@ -844,7 +844,7 @@ func (w *CertificateWrapper) QcLegislationCountryCodes() []string {
 // PSD2Info returns the PSD2 QCStatement (id-etsi-psd2-qcStatement extension, ETSI TS 119
 // 495). Port of getPSD2Info().
 func (w *CertificateWrapper) PSD2Info() *PSD2InfoWrapper {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.PSD2QcInfo != nil {
 		return NewPSD2InfoWrapper(xmlQcStatements.PSD2QcInfo)
 	}
@@ -853,7 +853,7 @@ func (w *CertificateWrapper) PSD2Info() *PSD2InfoWrapper {
 
 // QCLimitValue returns the QCEuLimitValue. Port of getQCLimitValue().
 func (w *CertificateWrapper) QCLimitValue() *QCLimitValueWrapper {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.QcEuLimitValue != nil {
 		return NewQCLimitValueWrapper(xmlQcStatements.QcEuLimitValue)
 	}
@@ -862,7 +862,7 @@ func (w *CertificateWrapper) QCLimitValue() *QCLimitValueWrapper {
 
 // QCEuRetentionPeriod returns QcEuRetentionPeriod. Port of getQCEuRetentionPeriod().
 func (w *CertificateWrapper) QCEuRetentionPeriod() *int {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return xmlQcStatements.QcEuRetentionPeriod
 	}
@@ -871,7 +871,7 @@ func (w *CertificateWrapper) QCEuRetentionPeriod() *int {
 
 // QCPDSLocations returns QcEuPDS Locations. Port of getQCPDSLocations().
 func (w *CertificateWrapper) QCPDSLocations() []*jaxb.XmlLangAndValue {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return xmlQcStatements.QcEuPDS.All()
 	}
@@ -880,7 +880,7 @@ func (w *CertificateWrapper) QCPDSLocations() []*jaxb.XmlLangAndValue {
 
 // SemanticsIdentifier returns the semantics identifier. Port of getSemanticsIdentifier().
 func (w *CertificateWrapper) SemanticsIdentifier() enumerations.SemanticsIdentifier {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.SemanticsIdentifier != nil {
 		xmlOID := xmlQcStatements.SemanticsIdentifier
 		if xmlOID != nil {
@@ -893,7 +893,7 @@ func (w *CertificateWrapper) SemanticsIdentifier() enumerations.SemanticsIdentif
 // QcQSCDLegislation returns a list of QcQSCDlegislation country codes (present inside
 // id-etsi-qcs-QcQSCDlegislation extension). Port of getQcQSCDLegislation().
 func (w *CertificateWrapper) QcQSCDLegislation() []string {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return xmlQcStatements.QcQSCDlegislation.All()
 	}
@@ -903,7 +903,7 @@ func (w *CertificateWrapper) QcQSCDLegislation() []string {
 // QcIdentMethod returns a QCIdentMethod (present inside id-etsi-qcs-QcIdentMethod
 // extension). Port of getQcIdentMethod().
 func (w *CertificateWrapper) QcIdentMethod() enumerations.QCIdentMethod {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.QcIdentMethod != nil {
 		return enumerations.QCIdentMethodFromOID(xmlQcStatements.QcIdentMethod.Value)
 	}
@@ -913,7 +913,7 @@ func (w *CertificateWrapper) QcIdentMethod() enumerations.QCIdentMethod {
 // QcPSB gets QcPSB defined in the QcStatements of the certificate, when present. Port of
 // getQcPSB().
 func (w *CertificateWrapper) QcPSB() *QCPSBWrapper {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.QcPSB != nil {
 		return NewQCPSBWrapper(xmlQcStatements.QcPSB)
 	}
@@ -923,7 +923,7 @@ func (w *CertificateWrapper) QcPSB() *QCPSBWrapper {
 // OtherQcStatements returns a list of QcStatements OIDs not supported by the
 // implementation. Port of getOtherQcStatements().
 func (w *CertificateWrapper) OtherQcStatements() []string {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return oidValues(xmlQcStatements.OtherOIDs.All())
 	}
@@ -932,7 +932,7 @@ func (w *CertificateWrapper) OtherQcStatements() []string {
 
 // IsEnactedMRA reports whether the MRA has been enacted. Port of isEnactedMRA().
 func (w *CertificateWrapper) IsEnactedMRA() bool {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil {
 		return xmlQcStatements.EnactedMRA != nil && *xmlQcStatements.EnactedMRA
 	}
@@ -943,7 +943,7 @@ func (w *CertificateWrapper) IsEnactedMRA() bool {
 // translation for the certificate QcStatements based on the defined Mutual Recognition
 // Agreement scheme. Port of getMRAEnactedTrustServiceLegalIdentifier().
 func (w *CertificateWrapper) MRAEnactedTrustServiceLegalIdentifier() string {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.MRACertificateMapping != nil &&
 		xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation != nil {
 		return stringOrEmpty(xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.TrustServiceLegalIdentifier)
@@ -955,7 +955,7 @@ func (w *CertificateWrapper) MRAEnactedTrustServiceLegalIdentifier() string {
 // corresponding to the matching MRA information. Port of
 // getMRACertificateContentEquivalenceList().
 func (w *CertificateWrapper) MRACertificateContentEquivalenceList() []*jaxb.XmlCertificateContentEquivalence {
-	xmlQcStatements := w.getXmlQcStatements()
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.MRACertificateMapping != nil &&
 		xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation != nil {
 		return xmlQcStatements.MRACertificateMapping.TrustServiceEquivalenceInformation.CertificateContentEquivalenceList.All()
@@ -963,15 +963,15 @@ func (w *CertificateWrapper) MRACertificateContentEquivalenceList() []*jaxb.XmlC
 	return nil
 }
 
-func (w *CertificateWrapper) getOriginalThirdCountryMapping() *jaxb.XmlOriginalThirdCountryQcStatementsMapping {
-	xmlQcStatements := w.getXmlQcStatements()
+func (w *CertificateWrapper) originalThirdCountryMapping() *jaxb.XmlOriginalThirdCountryQcStatementsMapping {
+	xmlQcStatements := w.xmlQcStatements()
 	if xmlQcStatements != nil && xmlQcStatements.MRACertificateMapping != nil {
 		return xmlQcStatements.MRACertificateMapping.OriginalThirdCountryMapping
 	}
 	return nil
 }
 
-func (w *CertificateWrapper) getXmlQcStatements() *jaxb.XmlQcStatements {
+func (w *CertificateWrapper) xmlQcStatements() *jaxb.XmlQcStatements {
 	return w.CertificateExtensionForOid[*jaxb.XmlQcStatements](enumerations.CertificateExtensionEnumQCStatements.OID())
 }
 
@@ -987,7 +987,7 @@ func oidValues(xmlOids []*jaxb.XmlOID) []string {
 // compliant in a third-country Trusted List before MRA mapping. Port of
 // isOriginalThirdCountryQcCompliance().
 func (w *CertificateWrapper) IsOriginalThirdCountryQcCompliance() bool {
-	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
+	originalThirdCountryMapping := w.originalThirdCountryMapping()
 	return originalThirdCountryMapping != nil && originalThirdCountryMapping.QcCompliance != nil && originalThirdCountryMapping.QcCompliance.Present
 }
 
@@ -995,7 +995,7 @@ func (w *CertificateWrapper) IsOriginalThirdCountryQcCompliance() bool {
 // supported by QSCD in a third-country Trusted List before MRA mapping. Port of
 // isOriginalThirdCountrySupportedByQSCD().
 func (w *CertificateWrapper) IsOriginalThirdCountrySupportedByQSCD() bool {
-	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
+	originalThirdCountryMapping := w.originalThirdCountryMapping()
 	return originalThirdCountryMapping != nil && originalThirdCountryMapping.QcSSCD != nil && originalThirdCountryMapping.QcSSCD.Present
 }
 
@@ -1003,7 +1003,7 @@ func (w *CertificateWrapper) IsOriginalThirdCountrySupportedByQSCD() bool {
 // List before MRA mapping. Port of getOriginalThirdCountryQCTypes().
 func (w *CertificateWrapper) OriginalThirdCountryQCTypes() []enumerations.QCType {
 	var result []enumerations.QCType
-	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
+	originalThirdCountryMapping := w.originalThirdCountryMapping()
 	if originalThirdCountryMapping != nil {
 		for _, oid := range originalThirdCountryMapping.QcTypes.All() {
 			result = append(result, enumerations.QCTypeFromOID(oid.Value))
@@ -1016,7 +1016,7 @@ func (w *CertificateWrapper) OriginalThirdCountryQCTypes() []enumerations.QCType
 // Codes defined in a third-country Trusted List before MRA mapping. Port of
 // getOriginalThirdCountryQcLegislationCountryCodes().
 func (w *CertificateWrapper) OriginalThirdCountryQcLegislationCountryCodes() []string {
-	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
+	originalThirdCountryMapping := w.originalThirdCountryMapping()
 	if originalThirdCountryMapping != nil {
 		return originalThirdCountryMapping.QcCClegislation.All()
 	}
@@ -1027,7 +1027,7 @@ func (w *CertificateWrapper) OriginalThirdCountryQcLegislationCountryCodes() []s
 // by the implementation defined in a third-country Trusted List before MRA mapping. Port of
 // getOriginalThirdCountryOtherQcStatements().
 func (w *CertificateWrapper) OriginalThirdCountryOtherQcStatements() []string {
-	originalThirdCountryMapping := w.getOriginalThirdCountryMapping()
+	originalThirdCountryMapping := w.originalThirdCountryMapping()
 	if originalThirdCountryMapping != nil {
 		return oidValues(originalThirdCountryMapping.OtherOIDs.All())
 	}

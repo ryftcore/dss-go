@@ -53,7 +53,7 @@ func (f *CryptographicSuiteJsonFactory) IsSupported(cryptographicSuiteDocument m
 	if err != nil {
 		return false
 	}
-	return obj.getAsObject(jsonConstraintSecuritySuitabilityPolicy) != nil
+	return obj.asObject(jsonConstraintSecuritySuitabilityPolicy) != nil
 }
 
 // LoadDefaultCryptographicSuite ports
@@ -89,7 +89,7 @@ func (f *CryptographicSuiteJsonFactory) LoadCryptographicSuiteFromReader(cryptog
 	if err != nil {
 		panic(fmt.Sprintf("Unable to load the default policy document. Reason : %s", err.Error()))
 	}
-	securitySuitabilityPolicyType := jsonObj.getAsObject(jsonConstraintSecuritySuitabilityPolicy)
+	securitySuitabilityPolicyType := jsonObj.asObject(jsonConstraintSecuritySuitabilityPolicy)
 	if securitySuitabilityPolicyType == nil {
 		panic(fmt.Sprintf("Unable to load the default policy document. Reason : The root element of JSON shall be a JSON object of '%s' type!", jsonConstraintSecuritySuitabilityPolicy))
 	}

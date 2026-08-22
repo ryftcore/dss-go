@@ -46,7 +46,7 @@ func (c *TrustServiceConverter) extractStatusAndHistory(original *jaxb.TSPServic
 	statusBuilder.SetNames(converter.Apply(serviceInfo.ServiceName))
 	statusBuilder.SetType(serviceInfo.ServiceTypeIdentifier)
 	statusBuilder.SetStatus(serviceInfo.ServiceStatus)
-	statusBuilder.SetServiceSupplyPoints(c.getServiceSupplyPoints(serviceInfo.ServiceSupplyPoints))
+	statusBuilder.SetServiceSupplyPoints(c.serviceSupplyPoints(serviceInfo.ServiceSupplyPoints))
 
 	c.parseExtensionsList(serviceInfo.ServiceInformationExtensions, statusBuilder)
 
@@ -161,7 +161,7 @@ func (c *TrustServiceConverter) extractQualifiers(qualificationElement *jaxb.Qua
 	return qualifiers
 }
 
-func (c *TrustServiceConverter) getServiceSupplyPoints(serviceSupplyPoints *jaxb.ServiceSupplyPointsType) []string {
+func (c *TrustServiceConverter) serviceSupplyPoints(serviceSupplyPoints *jaxb.ServiceSupplyPointsType) []string {
 	var result []string
 	if serviceSupplyPoints != nil && utils.IsCollectionNotEmpty(serviceSupplyPoints.ServiceSupplyPoint) {
 		for _, nonEmptyURI := range serviceSupplyPoints.ServiceSupplyPoint {

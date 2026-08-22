@@ -79,14 +79,14 @@ func (c *TrustServiceProviderConverter) extractPostalAddress(postalAddressList *
 		for _, postalAddress := range postalAddressList.PostalAddress {
 			lang := postalAddress.Lang
 			if _, exists := result[lang]; !exists {
-				result[lang] = c.getPostalAddress(postalAddress)
+				result[lang] = c.postalAddress(postalAddress)
 			}
 		}
 	}
 	return result
 }
 
-func (c *TrustServiceProviderConverter) getPostalAddress(postalAddress *jaxb.PostalAddressType) string {
+func (c *TrustServiceProviderConverter) postalAddress(postalAddress *jaxb.PostalAddressType) string {
 	var sb string
 	if utils.IsStringNotEmpty(postalAddress.StreetAddress) {
 		sb += postalAddress.StreetAddress + ", "
