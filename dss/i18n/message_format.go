@@ -27,7 +27,7 @@ import (
 // java.text.MessageFormat#format(String, Object...) (as invoked via the
 // static convenience method MessageFormat.format(pattern, args) used by
 // I18nProvider).
-func messageFormat(pattern string, args []interface{}) string {
+func messageFormat(pattern string, args []any) string {
 	var out strings.Builder
 	inQuote := false
 
@@ -116,8 +116,8 @@ func messageFormat(pattern string, args []interface{}) string {
 // argument DSS ever substitutes - always a String, produced either
 // directly by callers or by I18nProvider's nested-MessageTag resolution).
 // fmt.Sprint mirrors that default toString() fallback for the argument
-// types this port passes through I18nProvider.
-func messageFormatArgString(arg interface{}) string {
+// types passed through I18nProvider.
+func messageFormatArgString(arg any) string {
 	if s, ok := arg.(string); ok {
 		return s
 	}

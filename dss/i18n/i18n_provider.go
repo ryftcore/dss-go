@@ -55,16 +55,16 @@ func NewI18nProviderForLocale(locale string) *I18nProvider {
 // Panics with the Java exception's message if messageTag is the empty
 // MessageTag (""), the Go stand-in for Java's null messageTag (a
 // requireNonNull-style check on a value type - see PORTING.md).
-func (p *I18nProvider) GetMessage(messageTag MessageTag, args ...interface{}) string {
+func (p *I18nProvider) GetMessage(messageTag MessageTag, args ...any) string {
 	if messageTag == "" {
 		panic("messageTag cannot be null!")
 	}
 
 	patternString, ok := p.bundle[messageTag.Id()]
 	if !ok {
-		// In case a value for the message tag does not exist. Upstream
-		// also logs a slf4j warning here; slf4j logging is dropped
-		// throughout this port (see PORTING.md).
+		// In case a value for the message tag does not exist, Java logs a slf4j warning and
+		// continues; slf4j has no Go equivalent and is not ported, but messageTag.Id() is
+		// still returned.
 		return messageTag.Id()
 	}
 	return messageFormat(patternString, p.translateArgs(args))
@@ -72,11 +72,11 @@ func (p *I18nProvider) GetMessage(messageTag MessageTag, args ...interface{}) st
 
 // translateArgs allows nested MessageTags. Ports the private
 // getArgs(Object[]) helper.
-func (p *I18nProvider) translateArgs(args []interface{}) []interface{} {
+func (p *I18nProvider) translateArgs(args []any) []any {
 	if args == nil {
 		return nil
 	}
-	translated := make([]interface{}, len(args))
+	translated := make([]any, len(args))
 	copy(translated, args)
 	for i, a := range args {
 		if nested, ok := a.(MessageTag); ok {
